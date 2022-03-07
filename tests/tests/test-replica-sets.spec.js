@@ -27,7 +27,7 @@ context('Test Replica Sets', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Replica Set name"]')
+      .find('[ariaLabel="Replica Set name"]')
       .clear()
       .type(REPLICA_SET_NAME);
 
@@ -56,7 +56,9 @@ context('Test Replica Sets', () => {
       .contains(`${REPLICA_SET_NAME}-`)
       .click();
 
-    cy.getIframeBody().contains(`Name${REPLICA_SET_NAME}`);
+    cy.getIframeBody().contains(REPLICA_SET_NAME);
+
+    cy.getIframeBody().contains('Always');
 
     cy.getIframeBody().contains(`Image${DOCKER_IMAGE_TAG}`);
   });

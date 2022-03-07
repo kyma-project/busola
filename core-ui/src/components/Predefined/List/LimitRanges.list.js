@@ -12,6 +12,11 @@ export const LimitRangesList = ({ DefaultRenderer, ...otherParams }) => {
         limit.spec.limits?.[0]?.max?.memory || EMPTY_TEXT_PLACEHOLDER,
     },
     {
+      header: t('limit-ranges.headers.min'),
+      value: limit =>
+        limit.spec.limits?.[0]?.min?.memory || EMPTY_TEXT_PLACEHOLDER,
+    },
+    {
       header: t('limit-ranges.headers.default'),
       value: limit =>
         limit.spec.limits?.[0]?.default?.memory || EMPTY_TEXT_PLACEHOLDER,

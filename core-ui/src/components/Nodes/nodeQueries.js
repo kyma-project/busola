@@ -18,19 +18,19 @@ const formatMemory = memoryStr =>
 const createUsageMetrics = (node, metricsForNode) => {
   const cpuUsage = formatCpu(metricsForNode?.usage.cpu);
   const memoryUsage = formatMemory(metricsForNode?.usage.memory);
-  const allocatableCpu = parseInt(node.status.allocatable?.cpu || '0');
-  const allocatableMemory = formatMemory(node.status.allocatable?.memory);
+  const cpuCapacity = parseInt(node.status.capacity?.cpu || '0') * 1000;
+  const memoryCapacity = formatMemory(node.status.capacity?.memory);
 
   return {
     cpu: {
       usage: cpuUsage,
-      allocatable: allocatableCpu,
-      percentage: percentage(cpuUsage, allocatableCpu),
+      capacity: cpuCapacity,
+      percentage: percentage(cpuUsage, cpuCapacity),
     },
     memory: {
       usage: memoryUsage,
-      allocatable: allocatableMemory,
-      percentage: percentage(memoryUsage, allocatableMemory),
+      capacity: memoryCapacity,
+      percentage: percentage(memoryUsage, memoryCapacity),
     },
   };
 };

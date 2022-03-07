@@ -24,7 +24,7 @@ context('Test Config Maps', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Config Map name"]:visible')
+      .find('[ariaLabel="Config Map name"]:visible')
       .type(CONFIG_MAP_NAME)
       .click();
 
@@ -88,7 +88,7 @@ context('Test Config Maps', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Config Map name"]:visible')
+      .find('[ariaLabel="Config Map name"]:visible')
       .type(CLONE_NAME)
       .click();
 

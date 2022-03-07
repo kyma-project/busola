@@ -10,6 +10,7 @@ import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBi
 import { EmptyList } from './styled';
 import { SERVICE_BINDINGS_PANEL } from './ServiceInstanceBindings/constants';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 const ServiceInstanceBindingsWrapper = ({
   serviceInstance,
@@ -37,11 +38,13 @@ const ServiceInstanceBindingsWrapper = ({
   );
 };
 
-export default function ServiceInstanceDetails({ match }) {
+export default function ServiceInstanceDetails() {
+  const { name } = useParams();
+
   const { i18n } = useTranslation();
   const { namespaceId } = useMicrofrontendContext();
   const { data: serviceInstance, loading = true, error } = useGet(
-    `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceinstances/${match.params.name}`,
+    `/apis/servicecatalog.k8s.io/v1beta1/namespaces/${namespaceId}/serviceinstances/${name}`,
     {
       pollingInterval: 3000,
     },

@@ -9,6 +9,7 @@ import yaml from 'js-yaml';
 import './index.scss';
 import './fiori-helpers.scss';
 import App from './components/App/App';
+
 // NOTE react-shared has to be imported after App for some unknown reason
 import { Microfrontend, Spinner } from 'react-shared';
 import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';

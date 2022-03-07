@@ -243,6 +243,22 @@ function handleListDataReceived(filter) {
       newData.items = newData.items.filter(filter);
     }
 
+    newData.items = newData.items.map(item => {
+      if (!item.kind && newData.kind?.endsWith('List')) {
+        item = {
+          kind: newData.kind.substring(0, newData.kind.length - 4),
+          ...item,
+        };
+      }
+      if (!item.apiVersion && newData.apiVersion) {
+        item = {
+          apiVersion: newData.apiVersion,
+          ...item,
+        };
+      }
+      return item;
+    });
+
     if (
       !oldData ||
       newData.items.length !== oldData.length ||
