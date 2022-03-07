@@ -48,7 +48,6 @@ const isDocker = process.env.IS_DOCKER === 'true';
 if (isDocker) {
   // yup, order matters here
   serveStaticApp(app, '/core-ui/', '/core-ui');
-  serveStaticApp(app, '/service-catalog', '/service-catalog-ui');
   serveMonaco(app);
   app.use('/backend', handleRequest);
   serveStaticApp(app, '/', '/core');
