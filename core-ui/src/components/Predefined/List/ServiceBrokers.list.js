@@ -16,13 +16,19 @@ export const ServiceBrokersList = ({ DefaultRenderer, ...otherParams }) => {
       header: t('common.headers.status'),
       value: ({ status }) => {
         const lastCondition = status.conditions[status.conditions.length - 1];
+
+        let type = 'info';
+        if (lastCondition.type === 'Ready') type = 'ready';
+        if (lastCondition.reason.toUpperCase().includes('ERROR'))
+          type = 'error';
+
         return (
           <StatusBadge
             autoResolveType
             additionalContent={lastCondition?.message}
             i18n={i18n}
           >
-            {lastCondition?.type || status.lastConditionState}
+            {type || status.lastConditionState}
           </StatusBadge>
         );
       },

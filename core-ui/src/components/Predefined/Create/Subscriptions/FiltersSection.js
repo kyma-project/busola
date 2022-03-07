@@ -57,7 +57,6 @@ function SingleFilterInputs({ filter, setFilter }) {
         propertyPath="$.eventSource.value"
         label={t('subscriptions.create.labels.event-source')}
         input={Inputs.Text}
-        placeholder={t('subscriptions.create.placeholders.event-source')}
         tooltipContent={t('subscriptions.tooltips.event-source')}
       />
     </ResourceForm.Wrapper>

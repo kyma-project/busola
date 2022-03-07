@@ -37,6 +37,10 @@ export function isTLSProtocol(protocol) {
   return protocol === 'HTTPS' || protocol === 'TLS';
 }
 
+export function isHTTPProtocol(protocol) {
+  return protocol === 'HTTP';
+}
+
 export function validateTLS(server) {
   if (!server?.tls) return true;
 
