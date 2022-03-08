@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 
-context('Clean up Namespace and Application', () => {
+context('Clean up Namespace', () => {
   Cypress.skipAfterFail();
 
   before(() => {
@@ -30,21 +30,5 @@ context('Clean up Namespace and Application', () => {
     cy.getIframeBody()
       .find('tbody tr [role="status"]')
       .should('have.text', 'Terminating');
-  });
-
-  it('Delete the Application', () => {
-    cy.navigateTo('Integration', 'Applications');
-
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="open-search"]')
-      .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`);
-
-    cy.getIframeBody()
-      .find('tbody tr [aria-label="Delete"]')
-      .click({ force: true });
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
   });
 });

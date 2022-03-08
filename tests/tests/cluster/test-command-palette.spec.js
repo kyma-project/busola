@@ -79,7 +79,7 @@ context('Test Command Palette navigation', () => {
     getQueryInput().type('applications ');
 
     cy.getIframeBody()
-      .contains(`${Cypress.env('APP_NAME')}`)
+      .contains(Cypress.env('APP_NAME'))
       .click();
 
     cy.url().should('match', new RegExp(`/applications/details/`));

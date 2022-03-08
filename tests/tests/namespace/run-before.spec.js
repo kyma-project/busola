@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-context('Create Namespace and Application', () => {
+context('Create Namespace', () => {
   Cypress.skipAfterFail({ skipAllSuits: true });
 
   before(cy.loginAndSelectCluster);
@@ -58,31 +58,5 @@ context('Create Namespace and Application', () => {
       .find('[role=dialog]')
       .contains('button', 'Update')
       .click();
-  });
-
-  it('Create Application', () => {
-    cy.getLeftNav()
-      .contains('Back to Cluster Overview')
-      .click();
-
-    cy.navigateTo('Integration', 'Applications');
-
-    cy.getIframeBody()
-      .contains('Create Application')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role=dialog]')
-      .find("input[ariaLabel='Application name']:visible")
-      .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`);
-
-    cy.getIframeBody()
-      .find('[role="dialog"]')
-      .contains('button', 'Create')
-      .click();
-
-    cy.getIframeBody()
-      .contains(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
-      .should('be.visible');
   });
 });
