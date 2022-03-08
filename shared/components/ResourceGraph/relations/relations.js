@@ -90,6 +90,22 @@ export const relations = {
     {
       kind: 'ConfigMap',
     },
+    {
+      kind: 'Job',
+    },
+  ],
+  Job: [
+    {
+      kind: 'Pod',
+    },
+    {
+      kind: 'CronJob',
+    },
+  ],
+  CronJob: [
+    {
+      kind: 'Job',
+    },
   ],
   Service: [
     {

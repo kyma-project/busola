@@ -1,4 +1,4 @@
-import { relations } from './../relations/relations';
+import { match, relations } from './../relations/relations';
 import { makeEdge, makeNode } from './helpers';
 
 export function buildStructuralGraph({ initialResource, depth, store }) {
@@ -27,6 +27,10 @@ export function buildStructuralGraph({ initialResource, depth, store }) {
       for (const relatedResource of store[relation.kind] || []) {
         // don't backtrack
         if (relatedResource.kind === node.fromKind) {
+          continue;
+        }
+
+        if (!match(node.resource, relatedResource)) {
           continue;
         }
 

@@ -1,7 +1,8 @@
-function matchBySelector(originalSelector, selector) {
-  if (!originalSelector || !selector) return false;
-  for (const [key, value] of Object.entries(originalSelector)) {
-    if (selector?.[key] !== value) {
+// ownerSelector should be a subset of labels
+function matchBySelector(ownerSelector, labels) {
+  if (!ownerSelector || !labels) return false;
+  for (const [key, value] of Object.entries(ownerSelector)) {
+    if (labels?.[key] !== value) {
       return false;
     }
   }
@@ -33,6 +34,14 @@ export function matchRoleBindingAndServiceAccount(rb, sa) {
   return rb.subjects?.find(
     sub => sub.kind === 'ServiceAccount' && sub.name === sa.metadata.name,
   );
+}
+
+export function matchPodAndJob(pod, job) {
+  return matchBySelector(job.spec.selector.matchLabels, pod.metadata.labels);
+}
+
+export function matchJobAndCronJob(job, cronJob) {
+  return matchByOwnerReference({ resource: job, owner: cronJob });
 }
 
 export function matchSecretAndServiceAccount(secret, sa) {
