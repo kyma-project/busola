@@ -1,0 +1,65 @@
+{
+  "config": {
+    "defaultStorage": "localStorage",
+    "features": {
+      "LEGAL_LINKS": {
+        "config": {
+          "legal-disclosure": {
+            "default": "https://www.sap.com/corporate/en/legal/impressum.html",
+            "de": "https://www.sap.com/corporate/de/legal/impressum.html"
+          },
+          "privacy": {
+            "default": "https://help.sap.com/viewer/82bdf2271c6041f79387c122147cf774/Cloud/en-US"
+          },
+          "copyright": {
+            "default": "https://www.sap.com/corporate/en/legal/copyright.html",
+            "de": "https://www.sap.com/corporate/de/legal/copyright.html"
+          },
+          "trademark": {
+            "default": "https://www.sap.com/corporate/en/legal/trademark.html",
+            "de": "https://www.sap.com/corporate/de/legal/trademark.html"
+          }
+        }
+      },
+      "SSO_LOGIN": {
+        "isEnabled": false,
+        "config": {
+          "issuerUrl": "https://apskyxzcl.accounts400.ondemand.com",
+          "scope": "openid",
+          "clientId": "d0316c58-b0fe-45cd-9960-0fea0708355a"
+        }
+      },
+      "KUBECONFIG_ID": {
+        "config": {
+          "kubeconfigUrl": "/kubeconfig"
+        }
+      },
+      "SENTRY": {
+        "isEnabled": true,
+        "selectors": [],
+        "config": {
+          "dsn": ""
+        }
+      },
+      "OBSERVABILITY": {
+        "isEnabled": false,
+        "config": {
+          "links": [
+            {
+              "label": "Grafana",
+              "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana"
+            },
+            {
+              "label": "Kiali",
+              "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali"
+            },
+            {
+              "label": "Jaeger",
+              "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
