@@ -78,22 +78,6 @@ context('Test Cluster Role Bindings', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('ServiceAccount')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Service Account Namespace')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Service Account Name')
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('ServiceAccount')
-      .click();
-
-    cy.getIframeBody()
       .contains('Group')
       .click();
 

@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-context('Create Namespace', () => {
+context('Create Namespace and Application', () => {
   Cypress.skipAfterFail({ skipAllSuits: true });
 
   before(cy.loginAndSelectCluster);
@@ -60,7 +60,7 @@ context('Create Namespace', () => {
       .click();
   });
 
-  it('Create application', () => {
+  it('Create Application', () => {
     cy.getLeftNav()
       .contains('Back to Cluster Overview')
       .click();

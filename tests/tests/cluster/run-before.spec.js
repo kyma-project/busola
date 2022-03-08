@@ -1,11 +1,11 @@
 /// <reference types="cypress" />
 
-context('Create Namespace', () => {
+context('Create Application', () => {
   Cypress.skipAfterFail({ skipAllSuits: true });
 
   before(cy.loginAndSelectCluster);
 
-  it('Create application', () => {
+  it('Create Application', () => {
     cy.navigateTo('Integration', 'Applications');
 
     cy.getIframeBody()
