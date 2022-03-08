@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 import config from '../config';
-import { loadFile } from '../support/loadFile';
+import { loadFile } from '../../support/loadFile';
 import jsyaml from 'js-yaml';
 
 context('Test other login options', () => {
