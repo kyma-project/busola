@@ -15,7 +15,7 @@
   "videoCompression": false,
   "experimentalInteractiveRunEvents": true,
   "testFiles": [
-    "namespace/aa-run-before.spec.js",
+    "namespace/run-before.spec.js",
     "namespace/run-prepare-functions.spec.js",
     "namespace/test-namespace-overview.spec.js",
     "namespace/test-deployments.spec.js",
@@ -50,8 +50,8 @@
     "namespace/test-ingresses.spec.js",
     "namespace/test-service-entries.spec.js",
     "namespace/test-network-policies.spec.js",
-    "namespace/zz-run-after.spec.js",
-    "cluster/aa-run-before.spec.js",
+    "namespace/run-after.spec.js",
+    "cluster/run-before.spec.js",
     "cluster/test-edit-cluster.spec.js",
     "cluster/test-applications.spec.js",
     "cluster/test-download-a-kubeconfig.spec.js",
@@ -70,6 +70,6 @@
     "cluster/test-cluster-configuration.spec.js",
     "cluster/test-settings.spec.js",
     "cluster/test-command-palette.spec.js",
-    "cluster/zz-run-after.spec.js"
+    "cluster/run-after.spec.js"
   ]
 }
