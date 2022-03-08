@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import config from '../config';
+import config from '../../config';
 import { loadFile } from '../../support/loadFile';
 
 const kubeconfigIdAddress = `${config.clusterAddress}/kubeconfig`;
