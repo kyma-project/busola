@@ -11,10 +11,5 @@ function GenericRoleDetails({ DefaultRenderer, ...otherParams }) {
   );
 }
 
-export function RolesDetails(props) {
-  return <GenericRoleDetails {...props} />;
-}
-
-export function ClusterRolesDetails(props) {
-  return <GenericRoleDetails {...props} />;
-}
+export const RolesDetails = GenericRoleDetails;
+export const ClusterRolesDetails = GenericRoleDetails;

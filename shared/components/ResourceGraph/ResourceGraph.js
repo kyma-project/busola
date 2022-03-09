@@ -86,7 +86,7 @@ export function ResourceGraph({
               dot={dotSrc}
               // https://github.com/magjac/d3-graphviz#selection_graphviz
               options={{
-                height: '500px',
+                height: '100%',
                 width: '100%',
                 zoom: isReady, // if always true, then the graph will jump on first pan or zoom
                 useWorker: false,
