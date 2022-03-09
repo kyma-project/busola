@@ -22,7 +22,7 @@ module.exports = (on, config) => {
       return null;
     },
     listDownloads(downloadsDirectory) {
-      return fs.readdirSync(downloadsDirectory);
+      return fs.readdirSync('/tests/cypress');
     },
     // invoke setter cy.task('dynamicSharedStore', { name: 'cancelTests', value: true })
     // invoke getter cy.task('dynamicSharedStore', { name: 'cancelTests' })
