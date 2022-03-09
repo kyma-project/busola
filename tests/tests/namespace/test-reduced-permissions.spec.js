@@ -180,6 +180,8 @@ context('Test reduced permissions', () => {
 
     cy.task('listDownloads', Cypress.config('downloadsFolder')).then(
       fileNames => {
+        console.log('filenames - ', fileNames);
+        console.log('SA_NAME - ', SA_NAME);
         let kubeconfigFileName = fileNames.find(name => name.includes(SA_NAME));
 
         // make sure we don't take temporary Chrome download file
