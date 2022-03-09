@@ -12,6 +12,22 @@ function RoleBindingsCreate(props) {
   );
 }
 RoleBindingsCreate.allowEdit = true;
+RoleBindingsCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'ClusterRole',
+      clusterwide: true,
+    },
+    {
+      kind: 'Role',
+    },
+    {
+      kind: 'ServiceAccount',
+    },
+  ],
+  depth: 1,
+});
+
 function ClusterRoleBindingsCreate(props) {
   const { t } = useTranslation();
   return (
@@ -23,4 +39,16 @@ function ClusterRoleBindingsCreate(props) {
   );
 }
 ClusterRoleBindingsCreate.allowEdit = true;
+ClusterRoleBindingsCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'ClusterRole',
+    },
+    {
+      kind: 'ServiceAccount',
+    },
+  ],
+  depth: 1,
+});
+
 export { RoleBindingsCreate, ClusterRoleBindingsCreate };

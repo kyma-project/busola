@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import pluralize from 'pluralize';
 import { useMicrofrontendContext, useSingleGet, getApiPath } from '../../';
-import { match, relations } from './relations/relations';
+import { match } from './relations/relations';
 
 function getNamespacePart({
   resourceToFetch,
@@ -33,7 +33,7 @@ function getNamespacePart({
 }
 
 // BFS
-async function cycle(store, depth, context) {
+async function cycle(store, depth, config, context) {
   const { fetch, namespaceNodes, clusterNodes, namespace, events } = context;
   const kindsToHandle = Object.keys(store.current);
 
@@ -44,7 +44,7 @@ async function cycle(store, depth, context) {
       continue;
     }
 
-    for (const relation of relations[kind] || []) {
+    for (const relation of config[kind]?.relations || []) {
       const alreadyInStore = !!store.current[relation.kind];
       const alreadyToFetch = !!resourcesToFetch.find(
         r => r.kind === relation.kind,
@@ -109,13 +109,13 @@ async function cycle(store, depth, context) {
 
   events.onRelatedResourcesRefresh();
   if (resourcesToFetch.length && depth - 1 > 0) {
-    cycle(store, depth - 1, context);
+    cycle(store, depth - 1, config, context);
   } else {
     events.onAllLoaded();
   }
 }
 
-export function useRelatedResources({ resource, depth, events }) {
+export function useRelatedResources({ resource, config, events }) {
   const { namespaceNodes, clusterNodes } = useMicrofrontendContext();
   const [startedLoading, setStartedLoading] = useState(false);
   const fetch = useSingleGet();
@@ -127,7 +127,8 @@ export function useRelatedResources({ resource, depth, events }) {
   useEffect(() => {
     const loadRelatedResources = async () => {
       store.current = { [kind]: [resource] };
-      await cycle(store, depth, {
+      const depth = config[kind]?.depth || Number.POSITIVE_INFINITY;
+      await cycle(store, depth, config, {
         fetch,
         namespaceNodes,
         clusterNodes,

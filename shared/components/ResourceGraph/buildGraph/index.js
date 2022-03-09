@@ -1,13 +1,10 @@
-import {
-  buildNetworkGraph,
-  networkFlowResources,
-} from './buildNetworkGraph.js';
+import { buildNetworkGraph } from './buildNetworkGraph.js';
 import { buildStructuralGraph } from './buildStructuralGraph';
 
-export function buildGraph(data) {
-  const isStructural = !networkFlowResources.includes(
-    data.initialResource.kind,
-  );
+export function buildGraph(data, config) {
+  const buildGraphFn = config[data.initialResource.kind]?.networkFlowKind
+    ? buildNetworkGraph
+    : buildStructuralGraph;
 
-  return isStructural ? buildStructuralGraph(data) : buildNetworkGraph(data);
+  return buildGraphFn(data, config);
 }

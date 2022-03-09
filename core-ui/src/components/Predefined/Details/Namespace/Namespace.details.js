@@ -91,7 +91,6 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
       windowTitle={t('namespaces.overview.title')}
       customColumns={customColumns}
       headerActions={headerActions}
-      resourceGraphProps={{ enabled: false }}
     >
       <div className="panel-grid">
         <NamespaceWorkloads namespace={otherParams.resourceName} />

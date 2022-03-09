@@ -208,4 +208,18 @@ function DeploymentsCreate({
 }
 
 DeploymentsCreate.allowEdit = true;
+DeploymentsCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  relations: [
+    {
+      kind: 'Service',
+    },
+    {
+      kind: 'HorizontalPodAutoscaler',
+    },
+    {
+      kind: 'ReplicaSet',
+    },
+  ],
+});
 export { DeploymentsCreate };

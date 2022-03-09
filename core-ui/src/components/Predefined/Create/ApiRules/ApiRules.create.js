@@ -172,4 +172,19 @@ function ApiRulesCreate({
 }
 
 ApiRulesCreate.allowEdit = true;
+ApiRulesCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  relations: [
+    {
+      kind: 'Service',
+    },
+    {
+      kind: 'VirtualService',
+    },
+    {
+      kind: 'Gateway',
+      clusterwide: true,
+    },
+  ],
+});
 export { ApiRulesCreate };

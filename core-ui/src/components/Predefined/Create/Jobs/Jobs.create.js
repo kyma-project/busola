@@ -152,4 +152,14 @@ function JobsCreate({
   );
 }
 JobsCreate.allowEdit = true;
+JobsCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'Pod',
+    },
+    {
+      kind: 'CronJob',
+    },
+  ],
+});
 export { JobsCreate };

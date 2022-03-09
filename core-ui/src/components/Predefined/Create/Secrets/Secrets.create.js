@@ -115,6 +115,20 @@ function SecretsCreate({
   );
 }
 SecretsCreate.allowEdit = true;
+SecretsCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'Pod',
+    },
+    {
+      kind: 'ServiceAccount',
+    },
+    {
+      kind: 'OAuth2Client',
+    },
+  ],
+  depth: 1,
+});
 SecretsCreate.secrets = (t, context) => [
   {
     type: 'kubernetes.io/service-account-token',

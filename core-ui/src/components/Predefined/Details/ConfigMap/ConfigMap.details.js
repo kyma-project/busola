@@ -27,7 +27,6 @@ export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customComponents={[ConfigMapEditor]}
       customColumns={customColumns}
-      resourceGraphProps={{ depth: 1 }}
       {...otherParams}
     />
   );

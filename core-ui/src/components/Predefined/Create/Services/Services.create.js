@@ -28,4 +28,18 @@ function ServicesCreate({
     />
   );
 }
+ServicesCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  relations: [
+    {
+      kind: 'Deployment',
+    },
+    {
+      kind: 'APIRule',
+    },
+    {
+      kind: 'Function',
+    },
+  ],
+});
 export { ServicesCreate };

@@ -149,4 +149,11 @@ function CronJobsCreate({
   );
 }
 CronJobsCreate.allowEdit = true;
+CronJobsCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'Job',
+    },
+  ],
+});
 export { CronJobsCreate };

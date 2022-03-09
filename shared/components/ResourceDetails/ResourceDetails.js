@@ -136,7 +136,7 @@ function Resource({
   updateResourceMutation,
   windowTitle,
   resourceTitle,
-  resourceGraphProps,
+  resourceGraphConfig,
 }) {
   const { t } = useTranslation(['translation'], { i18n });
   useWindowTitle(
@@ -303,11 +303,11 @@ function Resource({
       <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
       {customComponents.map(component => component(resource, resourceUrl))}
       {children}
-      {resourceGraphProps?.enabled !== false && (
+      {resourceGraphConfig[resource.kind] && (
         <ResourceGraph
           resource={resource}
           i18n={i18n}
-          depth={resourceGraphProps?.depth}
+          config={resourceGraphConfig}
         />
       )}
     </>

@@ -19,6 +19,14 @@ function RolesCreate(props) {
 }
 RolesCreate.allowEdit = true;
 RolesCreate.allowClone = true;
+RolesCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'RoleBinding',
+    },
+  ],
+  depth: 2,
+});
 
 function ClusterRolesCreate(props) {
   const { t } = useTranslation();
@@ -33,5 +41,16 @@ function ClusterRolesCreate(props) {
 }
 ClusterRolesCreate.allowEdit = true;
 ClusterRolesCreate.allowClone = true;
+ClusterRolesCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'ClusterRoleBinding',
+    },
+    {
+      kind: 'RoleBinding',
+    },
+  ],
+  depth: 2,
+});
 
 export { RolesCreate, ClusterRolesCreate };

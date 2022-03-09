@@ -32,11 +32,7 @@ export const AddonsConfigurationsDetails = ({
   ...otherParams
 }) => {
   return (
-    <DefaultRenderer
-      customComponents={[RepositoryUrls]}
-      resourceGraphProps={{ enabled: false }}
-      {...otherParams}
-    />
+    <DefaultRenderer customComponents={[RepositoryUrls]} {...otherParams} />
   );
 };
 export const ClusterAddonsConfigurationsDetails = AddonsConfigurationsDetails;

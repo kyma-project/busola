@@ -26,7 +26,6 @@ function GenericRoleBindingDetails({ DefaultRenderer, ...otherParams }) {
       {...otherParams}
       customColumns={customColumns}
       customComponents={[RoleSubjects]}
-      resourceGraphProps={{ depth: 1 }}
     />
   );
 }

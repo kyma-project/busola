@@ -122,7 +122,6 @@ export function HorizontalPodAutoscalersDetails({
       resourceName={t('hpas.name_singular')}
       customColumns={customColumns}
       customComponents={[HPASpec, HPAMetrics, Events]}
-      resourceGraphProps={{ depth: 1 }}
       {...otherParams}
     />
   );

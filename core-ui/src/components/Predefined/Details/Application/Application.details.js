@@ -26,7 +26,6 @@ export const ApplicationsDetails = ({ DefaultRenderer, ...otherParams }) => {
         <ConnectApplicationModal applicationName={otherParams.resourceName} />
       }
       customComponents={[NamespaceBindings, ApplicationServices]}
-      resourceGraphProps={{ enabled: false }}
       {...otherParams}
     ></DefaultRenderer>
   );

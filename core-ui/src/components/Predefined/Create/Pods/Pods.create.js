@@ -23,4 +23,21 @@ function PodsCreate({ formElementRef, onChange, setCustomValid, resourceUrl }) {
     />
   );
 }
+PodsCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  relations: [
+    {
+      kind: 'ReplicaSet',
+    },
+    {
+      kind: 'Secret',
+    },
+    {
+      kind: 'ConfigMap',
+    },
+    {
+      kind: 'Job',
+    },
+  ],
+});
 export { PodsCreate };

@@ -71,7 +71,6 @@ export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customColumns={customColumns}
       customComponents={[HPASubcomponent, MatchSelector]}
-      resourceGraphProps={{ depth: 1 }}
       {...otherParams}
     />
   );

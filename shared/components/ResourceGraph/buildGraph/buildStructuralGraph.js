@@ -1,10 +1,10 @@
-import { match, relations } from './../relations/relations';
+import { match } from './../relations/relations';
 import { makeEdge, makeNode } from './helpers';
 
-export function buildStructuralGraph({ initialResource, depth, store }) {
+export function buildStructuralGraph({ initialResource, store }, config) {
   const rootNode = {
     resource: initialResource,
-    depth,
+    depth: config.depth,
   };
 
   const nodes = [rootNode];
@@ -18,12 +18,17 @@ export function buildStructuralGraph({ initialResource, depth, store }) {
 
     const kind = node.resource.kind;
 
-    if (!relations[kind]) {
-      console.warn('relation for kind not found', kind);
+    if (!config[kind]?.relations) {
+      console.warn(
+        'relation for kind not found',
+        kind,
+        'config:',
+        config[kind],
+      );
       continue;
     }
 
-    for (const relation of relations[kind]) {
+    for (const relation of config[kind]?.relations) {
       for (const relatedResource of store[relation.kind] || []) {
         // don't backtrack
         if (relatedResource.kind === node.fromKind) {

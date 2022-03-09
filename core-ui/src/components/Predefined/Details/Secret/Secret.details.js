@@ -41,7 +41,6 @@ export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customComponents={[Secret, CertificateData, HelmReleaseDataWrapper]}
       customColumns={customColumns}
-      resourceGraphProps={{ depth: 1 }}
       {...otherParams}
     />
   );

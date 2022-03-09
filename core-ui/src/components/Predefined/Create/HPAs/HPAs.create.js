@@ -28,4 +28,12 @@ function HorizontalPodAutoscalersCreate({
     />
   );
 }
+HorizontalPodAutoscalersCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'Deployment',
+    },
+  ],
+  depth: 1,
+});
 export { HorizontalPodAutoscalersCreate };

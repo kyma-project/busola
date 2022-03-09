@@ -182,4 +182,11 @@ OAuth2ClientsCreate.secrets = (t, context) => [
     data: ['client_id', 'client_secret'],
   },
 ];
+OAuth2ClientsCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'Secret',
+    },
+  ],
+});
 export { OAuth2ClientsCreate };

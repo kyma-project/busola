@@ -12,17 +12,6 @@ export const networkFlowKinds = [
   'ServiceAccount',
 ];
 
-// resources that use network flow graph
-export const networkFlowResources = [
-  'APIRule',
-  'Deployment',
-  'Function',
-  'ReplicaSet',
-  'Pod',
-  'Service',
-  'VirtualService',
-];
-
 function isWorkloadLayer(layer) {
   return layer[0].kind === 'Pod';
 }

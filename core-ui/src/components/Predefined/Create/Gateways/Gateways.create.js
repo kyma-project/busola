@@ -107,4 +107,12 @@ function GatewaysCreate({
 }
 
 GatewaysCreate.allowEdit = true;
+GatewaysCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'APIRule',
+      clusterwide: true,
+    },
+  ],
+});
 export { GatewaysCreate };

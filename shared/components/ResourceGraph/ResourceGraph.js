@@ -9,11 +9,7 @@ import { LayoutPanel, Button } from 'fundamental-react';
 import { SaveGraphControls } from './SaveGraphControls';
 import './ResourceGraph.scss';
 
-export function ResourceGraph({
-  resource,
-  i18n,
-  depth = Number.POSITIVE_INFINITY,
-}) {
+export function ResourceGraph({ resource, i18n, config }) {
   const { t } = useTranslation(['translation'], { i18n });
   const [dotSrc, setDotSrc] = useState('');
   const [isReady, setReady] = useState(false);
@@ -21,10 +17,9 @@ export function ResourceGraph({
   const redraw = () => {
     const data = {
       initialResource: resource,
-      depth,
       store: resourcesStore.current,
     };
-    setDotSrc(buildGraph(data));
+    setDotSrc(buildGraph(data, config));
   };
 
   const onAllLoaded = () => {
@@ -54,7 +49,7 @@ export function ResourceGraph({
 
   const [resourcesStore, startedLoading, startLoading] = useRelatedResources({
     resource,
-    depth,
+    config,
     events: {
       onRelatedResourcesRefresh: redraw,
       onAllLoaded,
