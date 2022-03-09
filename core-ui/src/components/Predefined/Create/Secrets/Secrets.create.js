@@ -129,6 +129,13 @@ SecretsCreate.resourceGraphConfig = (t, context) => ({
   ],
   depth: 1,
   networkFlowLevel: 1,
+  matchers: {
+    ServiceAccount: (secret, sa) =>
+      sa.secrets?.find(s => s.name === secret.metadata.name) ||
+      sa.imagePullSecrets?.find(s => s.name === secret.metadata.name),
+    OAuth2Client: (secret, client) =>
+      client.spec.secretName === secret.metadata.name,
+  },
 });
 SecretsCreate.secrets = (t, context) => [
   {

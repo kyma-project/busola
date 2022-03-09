@@ -1,6 +1,23 @@
 import { randomNamesGenerator } from './randomNamesGenerator/randomNamesGenerator';
 import pluralize from 'pluralize';
 
+// ownerSelector should be a subset of labels
+export function matchBySelector(ownerSelector, labels) {
+  if (!ownerSelector || !labels) return false;
+  for (const [key, value] of Object.entries(ownerSelector)) {
+    if (labels?.[key] !== value) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export function matchByOwnerReference({ resource, owner }) {
+  return resource.metadata.ownerReferences?.some(
+    oR => oR.kind === owner.kind && oR.name === owner.metadata.name,
+  );
+}
+
 export function getApiPath(resourceType, nodes) {
   const matchedNode = nodes.find(
     n =>

@@ -25,6 +25,10 @@ RolesCreate.resourceGraphConfig = (t, context) => ({
       kind: 'RoleBinding',
     },
   ],
+  matchers: {
+    RoleBinding: (cr, rb) =>
+      rb.roleRef.kind === 'Role' && rb.roleRef.name === cr.metadata.name,
+  },
   depth: 2,
 });
 
@@ -51,6 +55,13 @@ ClusterRolesCreate.resourceGraphConfig = (t, context) => ({
     },
   ],
   depth: 2,
+  matchers: {
+    ClusterRoleBinding: (cr, crb) =>
+      crb.roleRef.kind === 'ClusterRole' &&
+      crb.roleRef.name === cr.metadata.name,
+    RoleBinding: (cr, rb) =>
+      rb.roleRef.kind === 'ClusterRole' && rb.roleRef.name === cr.metadata.name,
+  },
 });
 
 export { RolesCreate, ClusterRolesCreate };

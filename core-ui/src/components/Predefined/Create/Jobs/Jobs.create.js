@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { Switch } from 'fundamental-react';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext, matchByOwnerReference } from 'react-shared';
 
 import { cloneDeep } from 'lodash';
 
@@ -161,5 +161,9 @@ JobsCreate.resourceGraphConfig = (t, context) => ({
       kind: 'CronJob',
     },
   ],
+  matchers: {
+    CronJob: (job, cronJob) =>
+      matchByOwnerReference({ resource: job, owner: cronJob }),
+  },
 });
 export { JobsCreate };

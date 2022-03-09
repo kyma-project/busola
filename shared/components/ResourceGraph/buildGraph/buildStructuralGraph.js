@@ -1,5 +1,4 @@
-import { match } from './../relations/relations';
-import { makeNode } from './helpers';
+import { makeNode, match } from './helpers';
 
 function makeEdge(id1, id2) {
   return `"${id1}" -- "${id2}"`;
@@ -39,7 +38,7 @@ export function buildStructuralGraph({ initialResource, store }, config) {
           continue;
         }
 
-        if (!match(node.resource, relatedResource)) {
+        if (!match(node.resource, relatedResource, config)) {
           continue;
         }
 

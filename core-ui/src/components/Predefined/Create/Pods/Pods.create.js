@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext, matchBySelector } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { createPodTemplate } from './templates';
 
+function matchByEnv(valueFromKey) {
+  return (pod, resource) =>
+    pod.spec.containers.some(container =>
+      container.env.find(
+        e => e.valueFrom?.[valueFromKey]?.name === resource.metadata.name,
+      ),
+    );
+}
 function PodsCreate({ formElementRef, onChange, setCustomValid, resourceUrl }) {
   const { namespaceId } = useMicrofrontendContext();
   const [pod, setPod] = useState(createPodTemplate(namespaceId));
@@ -40,5 +48,16 @@ PodsCreate.resourceGraphConfig = (t, context) => ({
       kind: 'Job',
     },
   ],
+  matchers: {
+    Job: (pod, job) =>
+      matchBySelector(job.spec.selector.matchLabels, pod.metadata.labels),
+    ConfigMap: (pod, cm) => matchByEnv('configMapKeyRef')(pod, cm),
+    Secret: (pod, secret) => matchByEnv('secretKeyRef')(pod, secret),
+    ReplicaSet: (pod, replicaSet) =>
+      matchBySelector(
+        replicaSet.spec.selector.matchLabels,
+        pod.metadata.labels,
+      ),
+  },
 });
 export { PodsCreate };

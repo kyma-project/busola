@@ -1,5 +1,4 @@
-import { wrap, makeNode, makeRank, makeCluster } from './helpers';
-import { match } from './../relations/relations';
+import { wrap, makeNode, makeRank, makeCluster, match } from './helpers';
 import { findCommonPrefix } from './../../..';
 
 const networkFlowLevels = [
@@ -105,7 +104,7 @@ export function buildNetworkGraph({ store }, config) {
         for (const layerResource of currentLayer) {
           for (const nextLayerResource of nextLayer) {
             // connect if match exists
-            if (match(layerResource, nextLayerResource)) {
+            if (match(layerResource, nextLayerResource, config)) {
               strEdges.push(
                 makeEdge(
                   layerResource.metadata.uid,

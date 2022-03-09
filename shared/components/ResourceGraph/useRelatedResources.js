@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import pluralize from 'pluralize';
 import { useMicrofrontendContext, useSingleGet, getApiPath } from '../../';
-import { match } from './relations/relations';
+import { match } from './buildGraph/helpers';
 
 function getNamespacePart({
   resourceToFetch,
@@ -94,7 +94,7 @@ async function cycle(store, depth, config, context) {
 
       const filterOnlyRelated = possiblyRelatedResource =>
         store.current[resource.fromKind].some(oR =>
-          match(possiblyRelatedResource, oR),
+          match(possiblyRelatedResource, oR, config),
         );
 
       store.current[resource.kind] = allResourcesForKind.filter(

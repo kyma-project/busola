@@ -25,6 +25,12 @@ RoleBindingsCreate.resourceGraphConfig = (t, context) => ({
       kind: 'ServiceAccount',
     },
   ],
+  matchers: {
+    ServiceAccount: (rb, sa) =>
+      rb.subjects?.find(
+        sub => sub.kind === 'ServiceAccount' && sub.name === sa.metadata.name,
+      ),
+  },
   depth: 1,
 });
 
@@ -48,6 +54,15 @@ ClusterRoleBindingsCreate.resourceGraphConfig = (t, context) => ({
       kind: 'ServiceAccount',
     },
   ],
+  matchers: {
+    ServiceAccount: (crb, sa) =>
+      crb.subjects?.find(
+        sub =>
+          sub.kind === 'ServiceAccount' &&
+          sub.name === sa.metadata.name &&
+          sub.namespace === sa.metadata.namespace,
+      ),
+  },
   depth: 1,
 });
 

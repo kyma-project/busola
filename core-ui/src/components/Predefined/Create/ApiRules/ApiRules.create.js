@@ -187,5 +187,18 @@ APIRulesCreate.resourceGraphConfig = (t, context) => ({
       clusterwide: true,
     },
   ],
+  matchers: {
+    Service: (apiRule, service) =>
+      apiRule.spec.service?.name === service.metadata.name,
+    VirtualService: (apiRule, virtualService) =>
+      virtualService.spec.hosts.includes(apiRule.spec.service.host),
+    Gateway: (apiRule, gateway) => {
+      const [name, namespace] = apiRule.spec.gateway.split('.');
+      return (
+        name === gateway.metadata.name &&
+        namespace === gateway.metadata.namespace
+      );
+    },
+  },
 });
 export { APIRulesCreate };

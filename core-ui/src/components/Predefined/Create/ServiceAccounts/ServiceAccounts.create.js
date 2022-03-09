@@ -153,6 +153,7 @@ ServiceAccountsCreate.resourceGraphConfig = (t, context) => ({
       kind: 'Secret',
     },
   ],
+  depth: 2,
   networkFlowLevel: 2,
 });
 export { ServiceAccountsCreate };

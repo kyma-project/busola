@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext, matchByOwnerReference } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { createServiceTemplate } from './templates';
@@ -42,5 +42,12 @@ ServicesCreate.resourceGraphConfig = (t, context) => ({
       kind: 'Function',
     },
   ],
+  matchers: {
+    Function: (service, functión) =>
+      matchByOwnerReference({
+        resource: service,
+        owner: functión,
+      }),
+  },
 });
 export { ServicesCreate };
