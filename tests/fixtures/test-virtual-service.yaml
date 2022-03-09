@@ -112,7 +112,7 @@ spec:
       redirect:
         uri: /foo/bar
         authority: auth.kyma-system.svc.cluster.local
-        derivePort: FROM_REQUEST_PORT
+        port: 123
         scheme: https
         redirectCode: 301
     - name: third route

@@ -12,13 +12,14 @@ RUN npm ci
 
 # build to a naked Javascript
 RUN npm run build
- 
+
 
 
 # ---- Serve ----
 FROM base AS release
 WORKDIR /app
 COPY --from=build /app/backend-production.js ./
+COPY settings settings/
 COPY certs.pem certs.pem
 COPY package* ./
 RUN npm ci --only=production
