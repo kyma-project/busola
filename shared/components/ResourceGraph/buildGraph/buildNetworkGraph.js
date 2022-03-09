@@ -2,47 +2,48 @@ import { wrap, makeNode, makeEdge, makeRank, makeCluster } from './helpers';
 import { match } from './../relations/relations';
 import { findCommonPrefix } from './../../..';
 
-// layers of network graph
-export const networkFlowKinds = [
-  ['VirtualService', 'Gateway'],
-  ['APIRule', 'Function'],
-  'Service',
-  'Pod',
-  ['Secret', 'ConfigMap'],
-  'ServiceAccount',
+const networkFlowLevels = [
+  -3, // virtual services & gateways
+  -2, // apirules & functions
+  -1, // services
+  0, // workloads
+  1, // configuration resources
+  2, // service accounts
 ];
 
 function isWorkloadLayer(layer) {
   return layer[0].kind === 'Pod';
 }
 
-// in case there are multiple pods, we don't show them all on network graph
+// in some cases there are multiple resource of the same type and we don't show them all on network graph
 // just get the common part of name with '*' as suffix
-function getCombinedPodName(store) {
-  return store['Pod'].length > 1
+function getCombinedResourceName(resources) {
+  return resources.length > 1
     ? findCommonPrefix(
         '',
-        store['Pod'].map(pod => pod.metadata.name),
+        resources.map(pod => pod.metadata.name),
       ) + '*'
-    : store['Pod'][0].metadata.name;
+    : resources[0].metadata.name;
 }
 
-function getResourcesOnLayers(store) {
-  return networkFlowKinds
-    .map(kind => {
-      if (Array.isArray(kind)) {
-        // multiple kinds
-        return kind.flatMap(k => store[k]).filter(Boolean);
-      } else {
-        // single kind
-        return store[kind];
+function getResourcesOnLayers(store, config) {
+  const getResourcesForLayer = level => {
+    const resourcesOnLevel = [];
+    for (const kind in store) {
+      if (config[kind]?.networkFlowLevel === level) {
+        resourcesOnLevel.push(store[kind]);
       }
-    })
+    }
+    return resourcesOnLevel.flat();
+  };
+
+  return networkFlowLevels
+    .map(getResourcesForLayer)
     .filter(layer => layer?.length);
 }
 
-export function buildNetworkGraph({ store }) {
-  const layers = getResourcesOnLayers(store);
+export function buildNetworkGraph({ store }, config) {
+  const layers = getResourcesOnLayers(store, config);
 
   const strLayers = [];
   const strEdges = [];
@@ -56,7 +57,7 @@ export function buildNetworkGraph({ store }) {
       const podId = multiplePods
         ? 'composite-pod'
         : store['Pod'][0].metadata.uid;
-      const podName = getCombinedPodName(store);
+      const podName = getCombinedResourceName(store['Pod']);
 
       const label = `Pod\n${wrap(podName)}`;
       let pod = `"${podId}" [id="${podId}" label="${label}"][shape=box]`;

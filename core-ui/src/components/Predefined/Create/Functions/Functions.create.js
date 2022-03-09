@@ -251,6 +251,7 @@ export function FunctionsCreate({
 }
 FunctionsCreate.resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
+  networkFlowLevel: -2,
   relations: [
     {
       kind: 'Service',

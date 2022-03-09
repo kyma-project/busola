@@ -23,7 +23,7 @@ import {
   validateApiRule,
 } from './helpers';
 
-function ApiRulesCreate({
+function APIRulesCreate({
   formElementRef,
   namespace,
   onChange,
@@ -171,9 +171,10 @@ function ApiRulesCreate({
   );
 }
 
-ApiRulesCreate.allowEdit = true;
-ApiRulesCreate.resourceGraphConfig = (t, context) => ({
+APIRulesCreate.allowEdit = true;
+APIRulesCreate.resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
+  networkFlowLevel: -2,
   relations: [
     {
       kind: 'Service',
@@ -187,4 +188,4 @@ ApiRulesCreate.resourceGraphConfig = (t, context) => ({
     },
   ],
 });
-export { ApiRulesCreate };
+export { APIRulesCreate };

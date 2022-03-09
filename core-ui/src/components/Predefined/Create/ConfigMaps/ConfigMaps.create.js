@@ -77,4 +77,5 @@ ConfigMapsCreate.resourceGraphConfig = (t, context) => ({
     },
   ],
   depth: 1,
+  networkFlowLevel: 1,
 });

@@ -114,5 +114,6 @@ GatewaysCreate.resourceGraphConfig = (t, context) => ({
       clusterwide: true,
     },
   ],
+  networkFlowLevel: -3,
 });
 export { GatewaysCreate };

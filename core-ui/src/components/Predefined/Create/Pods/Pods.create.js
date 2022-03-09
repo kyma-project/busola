@@ -25,6 +25,7 @@ function PodsCreate({ formElementRef, onChange, setCustomValid, resourceUrl }) {
 }
 PodsCreate.resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
+  networkFlowLevel: 0,
   relations: [
     {
       kind: 'ReplicaSet',
