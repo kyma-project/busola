@@ -18,6 +18,7 @@ async function importJsYaml() {
 function toSearchParamsString(object) {
   return new URLSearchParams(object).toString();
 }
+
 async function downloadKubeconfig() {
   const jsyaml = await importJsYaml();
 
@@ -46,7 +47,6 @@ async function downloadKubeconfig() {
       });
     }
   }
-
   return false; // cancel Luigi navigation
 }
 
@@ -77,7 +77,6 @@ export function getStaticChildrenNodesForNamespace(
       icon: 'product',
       viewGroup: coreUIViewGroupName,
     },
-
     {
       pathSegment: 'events',
       resourceType: 'events',
