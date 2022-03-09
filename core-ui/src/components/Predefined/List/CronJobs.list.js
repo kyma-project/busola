@@ -2,11 +2,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { CronJobLastScheduleTime } from 'shared/components/CronJob/CronJobLastScheduleTime';
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
-import { Link } from 'react-shared';
+import { Link, ResourcesList } from 'react-shared';
 import { Trans } from 'react-i18next';
+import { usePrepareListProps } from 'routing/common';
+import { CronJobsCreate } from 'components/Predefined/Create/Jobs/CronJobs.create';
 
-export const CronJobsList = ({ DefaultRenderer, ...otherParams }) => {
+const CronJobsList = () => {
+  const params = usePrepareListProps('CronJobs');
   const { t } = useTranslation();
+
   const customColumns = [
     {
       header: t('cron-jobs.schedule'),
@@ -32,11 +36,14 @@ export const CronJobsList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       resourceName={t('cron-jobs.title')}
       description={description}
-      {...otherParams}
+      createResourceForm={CronJobsCreate}
+      {...params}
     />
   );
 };
+
+export default CronJobsList;

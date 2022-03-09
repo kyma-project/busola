@@ -22,6 +22,8 @@ import { HelmReleasesList } from 'components/HelmReleases/HelmReleasesList';
 import { HelmReleasesDetails } from 'components/HelmReleases/HelmReleasesDetails';
 import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
 
+import appRouting from '../../routing';
+
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
@@ -110,15 +112,19 @@ export default function App() {
         path="/customresourcedefinitions/:customResourceDefinitionName/:resourceVersion/:resourceName"
         element={<RoutedCustomResourceDetails />}
       />
+      {/*te dwa*/}
 
-      <Route
-        path="/namespaces/:namespaceId/:resourceType/:resourceName"
-        element={<RoutedResourceDetails />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/:resourceType"
-        element={<RoutedResourcesList />}
-      />
+      {appRouting}
+
+      {/*<Route*/}
+      {/*  path="/namespaces/:namespaceId/:resourceType/:resourceName"*/}
+      {/*  element={<RoutedResourceDetails />}*/}
+      {/*/>*/}
+      {/*<Route*/}
+      {/*  path="/namespaces/:namespaceId/:resourceType"*/}
+      {/*  element={<RoutedResourcesList />}*/}
+      {/*/>*/}
+      {/*  dwa powyzsze */}
       <Route
         path="/:resourceType/:resourceName"
         element={<RoutedResourceDetails />}

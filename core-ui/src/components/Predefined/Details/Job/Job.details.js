@@ -5,6 +5,7 @@ import {
   ControlledBy,
   ReadableCreationTimestamp,
   EMPTY_TEXT_PLACEHOLDER,
+  ResourceDetails,
 } from 'react-shared';
 
 import { JobCompletions } from './JobCompletions';
@@ -14,7 +15,11 @@ import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { Selector } from 'shared/components/Selector/Selector';
 
-export function JobsDetails({ DefaultRenderer, ...otherParams }) {
+import { usePrepareDetailsProps } from 'routing/common';
+import { JobsCreate } from '../../Create/Jobs/Jobs.create';
+
+function JobsDetails() {
+  const params = usePrepareDetailsProps('Jobs');
   const { t } = useTranslation();
 
   const customColumns = [
@@ -56,8 +61,8 @@ export function JobsDetails({ DefaultRenderer, ...otherParams }) {
 
   const Events = () => (
     <EventsList
-      namespace={otherParams.namespace}
-      filter={filterByResource('Job', otherParams.resourceName)}
+      namespace={params.namespace}
+      filter={filterByResource('Job', params.resourceName)}
       hideInvolvedObjects={true}
     />
   );
@@ -73,10 +78,13 @@ export function JobsDetails({ DefaultRenderer, ...otherParams }) {
   const customComponents = [JobConditions, MatchSelector, Events];
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={customComponents}
-      {...otherParams}
+      createResourceForm={JobsCreate}
+      {...params}
     />
   );
 }
+
+export default JobsDetails;

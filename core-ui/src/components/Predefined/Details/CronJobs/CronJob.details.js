@@ -6,11 +6,14 @@ import { CronJobLastScheduleTime } from '../../../../shared/components/CronJob/C
 import { useTranslation } from 'react-i18next';
 import { navigateToFixedPathResourceDetails } from 'react-shared';
 import { Link } from 'fundamental-react';
-
+import { ResourceDetails } from 'react-shared';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
+import { usePrepareDetailsProps } from 'routing/common';
+import { CronJobsCreate } from 'components/Predefined/Create/Jobs/CronJobs.create';
 
-export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
+const CronJobsDetails = () => {
+  const params = usePrepareDetailsProps('CronJobs');
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -55,17 +58,20 @@ export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   const Events = () => (
     <EventsList
-      namespace={otherParams.namespace}
-      filter={filterByResource('CronJob', otherParams.resourceName)}
+      namespace={params.namespace}
+      filter={filterByResource('CronJob', params.resourceName)}
       hideInvolvedObjects={true}
     />
   );
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customComponents={[CronJobJobs, Events]}
       customColumns={customColumns}
-      {...otherParams}
+      createResourceForm={CronJobsCreate}
+      {...params}
     />
   );
 };
+
+export default CronJobsDetails;
