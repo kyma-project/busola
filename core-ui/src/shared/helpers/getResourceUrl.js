@@ -3,7 +3,7 @@ export function getResourceUrl() {
   const fullResourceApiPath = queryParams.get('fullResourceApiPath');
   const resourceApiPath = queryParams.get('resourceApiPath');
 
-  // Validation for Role Bindings - there could be name with upper case
+  // resource names can't be lowercased - Role Bindings there could be name with upper case
   const tokens = window.location.pathname.split('/');
   let tokensLength = tokens.length;
 
