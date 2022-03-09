@@ -1,8 +1,11 @@
 import React from 'react';
-import { Link } from 'react-shared';
+import { Link, ResourcesList } from 'react-shared';
+import { usePrepareListProps } from 'routing/common';
+import { StorageClassesCreate } from '../Create/StorageClasses/StorageClasses.create';
 import { Trans } from 'react-i18next';
 
-export const StorageClassesList = ({ DefaultRenderer, ...otherParams }) => {
+const StorageClassesList = () => {
+  const params = usePrepareListProps('StorageClasses');
   const description = (
     <Trans i18nKey="storage-classes.description">
       <Link
@@ -12,5 +15,13 @@ export const StorageClassesList = ({ DefaultRenderer, ...otherParams }) => {
     </Trans>
   );
 
-  return <DefaultRenderer description={description} {...otherParams} />;
+  return (
+    <ResourcesList
+      description={description}
+      {...params}
+      createResourceForm={StorageClassesCreate}
+    />
+  );
 };
+
+export default StorageClassesList;

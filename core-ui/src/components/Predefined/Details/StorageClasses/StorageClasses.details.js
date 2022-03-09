@@ -6,11 +6,15 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { PersistentVolumesList } from './PersistentVolumesList';
 import { PersistentVolumeClaimsList } from './PersistentVolumeClaimsList';
 
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER, ResourceDetails } from 'react-shared';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
+import { usePrepareDetailsProps } from 'routing/common';
+import { StorageClassesCreate } from '../../Create/StorageClasses/StorageClasses.create';
 
-export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
+const StorageClassesDetails = () => {
+  const params = usePrepareDetailsProps('StorageClasses');
+
   const { t } = useTranslation();
 
   const StorageClassParameters = storageclass => {
@@ -59,14 +63,14 @@ export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   const Events = () => (
     <EventsList
-      namespace={otherParams.namespace}
-      filter={filterByResource('StorageClass', otherParams.resourceName)}
+      namespace={params.namespace}
+      filter={filterByResource('StorageClass', params.resourceName)}
       hideInvolvedObjects={true}
     />
   );
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customComponents={[
         StorageClassParameters,
         PersistentVolumesList,
@@ -75,7 +79,9 @@ export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
       ]}
       customColumns={customColumns}
       singularName={t('storage-classes.name_singular')}
-      {...otherParams}
+      createResourceForm={StorageClassesCreate}
+      {...params}
     />
   );
 };
+export default StorageClassesDetails;

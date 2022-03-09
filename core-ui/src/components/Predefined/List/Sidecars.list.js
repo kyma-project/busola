@@ -1,11 +1,18 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, EMPTY_TEXT_PLACEHOLDER, Labels } from 'react-shared';
+import {
+  Link,
+  EMPTY_TEXT_PLACEHOLDER,
+  Labels,
+  ResourcesList,
+} from 'react-shared';
 import { Trans } from 'react-i18next';
+import { usePrepareListProps } from 'routing/common';
+import { SidecarsCreate } from '../Create/Sidecars/Sidecars.create';
 
-export function SidecarsList({ DefaultRenderer, ...otherParams }) {
+export function SidecarsList() {
+  const params = usePrepareListProps('Sidecars');
   const { t } = useTranslation();
-
   const customColumns = [
     {
       header: t('sidecars.headers.outbound-traffic-policy'),
@@ -30,10 +37,12 @@ export function SidecarsList({ DefaultRenderer, ...otherParams }) {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
-      {...otherParams}
+      createResourceForm={SidecarsCreate}
+      {...params}
     />
   );
 }
+export default SidecarsList;

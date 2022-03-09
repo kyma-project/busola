@@ -1,11 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER, ResourceDetails } from 'react-shared';
 import { Selector } from 'shared/components/Selector/Selector';
 import { IstioListeners } from './IstioListeners';
+import { usePrepareDetailsProps } from 'routing/common';
+import { SidecarsCreate } from '../../Create/Sidecars/Sidecars.create';
 
-export const SidecarsDetails = ({ DefaultRenderer, ...otherParams }) => {
+export const SidecarsDetails = () => {
+  const params = usePrepareDetailsProps('Sidecars');
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -26,11 +29,14 @@ export const SidecarsDetails = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customComponents={[IstioListeners, WorkloadSelector]}
       customColumns={customColumns}
       singularName={t('persistent-volume-claims.name_singular')}
-      {...otherParams}
+      createResourceForm={SidecarsCreate}
+      {...params}
     />
   );
 };
+
+export default SidecarsDetails;
