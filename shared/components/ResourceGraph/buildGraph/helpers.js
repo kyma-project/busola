@@ -6,13 +6,6 @@ export function wrap(str) {
     .join('\n');
 }
 
-// lhead overrides actual arrow end
-export function makeEdge(id1, id2, { lhead } = {}) {
-  const lHeadStr = lhead ? `[lhead="${lhead}"]` : '';
-  const edge = `"${id1}" -> "${id2}"`;
-  return `${edge} ${lHeadStr}`;
-}
-
 export function makeNode(resource) {
   const { kind, metadata } = resource;
   const { name, uid } = metadata;

@@ -1,4 +1,4 @@
-import { wrap, makeNode, makeEdge, makeRank, makeCluster } from './helpers';
+import { wrap, makeNode, makeRank, makeCluster } from './helpers';
 import { match } from './../relations/relations';
 import { findCommonPrefix } from './../../..';
 
@@ -13,6 +13,13 @@ const networkFlowLevels = [
 
 function isWorkloadLayer(layer) {
   return layer[0].kind === 'Pod';
+}
+
+// lhead overrides actual arrow end
+function makeEdge(id1, id2, { lhead } = {}) {
+  const lHeadStr = lhead ? `[lhead="${lhead}"]` : '';
+  const edge = `"${id1}" -> "${id2}"`;
+  return `${edge} ${lHeadStr}`;
 }
 
 // in some cases there are multiple resource of the same type and we don't show them all on network graph

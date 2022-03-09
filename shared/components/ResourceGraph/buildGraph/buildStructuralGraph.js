@@ -1,5 +1,9 @@
 import { match } from './../relations/relations';
-import { makeEdge, makeNode } from './helpers';
+import { makeNode } from './helpers';
+
+function makeEdge(id1, id2) {
+  return `"${id1}" -- "${id2}"`;
+}
 
 export function buildStructuralGraph({ initialResource, store }, config) {
   const rootNode = {
@@ -62,7 +66,7 @@ export function buildStructuralGraph({ initialResource, store }, config) {
     }
   }
 
-  return `digraph "Graph" {
+  return `graph "Graph" {
     fontname="sans-serif";
 
     ${nodes.map(node => makeNode(node.resource)).join('\n\t')}
