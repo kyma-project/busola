@@ -22,8 +22,11 @@ module.exports = (on, config) => {
       return null;
     },
     listDownloads(downloadsDirectory) {
-      const dir = fs.readdirSync('/tests/cypress/downloads');
-      console.log('dir ->', dir);
+      console.log('downloadsDirectory ->', downloadsDirectory);
+      const dir = fs.readdirSync('/tests/cypress');
+      console.log('cypress dir ->', dir);
+      const dir2 = fs.readdirSync('/tests/cypress/downloads');
+      console.log('downloads dir ->', dir2);
       console.log('downloadsDirectory ->', downloadsDirectory);
       return dir;
     },
