@@ -42,12 +42,12 @@ COPY --from=builder /app/backend/package* /app/
 RUN npm ci --only=production
 
 # use sessionStorage as default
-RUN sed -i 's/"storage": "localStorage",/"storage": "sessionStorage",/g' core/assets/config/config.json
+RUN sed -i 's/"storage": "localStorage",/"storage": "sessionStorage",/g' core/assets/defaultConfig.json
 # enable OBSERVABILITY & SHOW_KYMA_VERSION for production
-RUN cat core/assets/config/config.json \
+RUN cat core/assets/defaultConfig.json \
   | jq '.config.features.OBSERVABILITY.isEnabled = true' \
   | jq '.config.features.SHOW_KYMA_VERSION.isEnabled = true' \
-  | tee core/assets/config/config.json > /dev/null
+  | tee core/assets/defaultConfig.json > /dev/null
 
 EXPOSE 3001
 ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true

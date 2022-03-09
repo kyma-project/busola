@@ -22,6 +22,7 @@ export const GenericSecrets = ({
       disabledHandler: secret =>
         secret.type !== 'kubernetes.io/service-account-token',
       handler: downloadKubeconfig,
+      tooltip: t('service-accounts.headers.download-kubeconfig'),
     },
   ];
 
