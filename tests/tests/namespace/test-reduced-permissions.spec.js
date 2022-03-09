@@ -178,6 +178,8 @@ context('Test reduced permissions', () => {
       .find('[aria-label="Download Kubeconfig"]')
       .click();
 
+    cy.wait(200);
+
     cy.task('listDownloads', Cypress.config('downloadsFolder')).then(
       fileNames => {
         console.log('filenames - ', fileNames);
