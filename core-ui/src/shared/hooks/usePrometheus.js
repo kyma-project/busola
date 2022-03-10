@@ -53,6 +53,10 @@ const getPrometheusNetworkTransmittedQuery = (type, data, step) => {
   }
 };
 
+const getPrometheusNodesQuery = () => {
+  return `sum(kubelet_node_name)`;
+};
+
 export function getMetric(type, metric, { step, ...data }) {
   const metrics = {
     cpu: {
@@ -72,6 +76,10 @@ export function getMetric(type, metric, { step, ...data }) {
       prometheusQuery: getPrometheusNetworkTransmittedQuery(type, data, step),
       unit: 'B/s',
     },
+    nodes: {
+      prometheusQuery: getPrometheusNodesQuery(),
+      unit: '',
+    },
   };
   return metrics[metric];
 }
@@ -89,13 +97,11 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
 
     newEndDate.setTime(Date.now());
     newStartDate.setTime(newEndDate.getTime() - (timeSpan - 1) * 1000);
-
     setEndDate(newEndDate);
     setStartDate(newStartDate);
 
     setStep(timeSpan / items);
   };
-
   useEffect(() => {
     tick();
     const loop = setInterval(tick, step * 1000);

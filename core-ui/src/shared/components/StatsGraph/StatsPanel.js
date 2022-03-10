@@ -1,5 +1,5 @@
 import { zip } from 'lodash';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   LayoutPanel,
   Button,
@@ -111,10 +111,20 @@ export function StatsPanel({ type, ...props }) {
     '1h': 60 * 60,
     '3h': 3 * 60 * 60,
     '6h': 6 * 60 * 60,
+    '24h': 24 * 60 * 60,
+    '7d': 7 * 24 * 60 * 60,
   };
-  const [timeSpan, setTimeSpan] = useState('1h');
   const [metric, setMetric] = useState('cpu');
+
+  const visibleTimeSpans =
+    metric === 'nodes' ? ['6h', '24h', '7d'] : ['1h', '3h', '6h'];
+  const [timeSpan, setTimeSpan] = useState(visibleTimeSpans.at(0));
+
   const { t } = useTranslation();
+
+  useEffect(() => {
+    setTimeSpan(visibleTimeSpans.at(0));
+  }, [metric]);
 
   return (
     <LayoutPanel className="fd-margin--md stats-panel">
@@ -123,7 +133,7 @@ export function StatsPanel({ type, ...props }) {
           <Dropdown
             selectedKey={metric}
             onSelect={(e, val) => setMetric(val.key)}
-            options={['cpu', 'memory', 'network'].map(option => ({
+            options={['cpu', 'memory', 'network', 'nodes'].map(option => ({
               key: option,
               text: t(`graphs.${option}`),
             }))}
@@ -131,7 +141,7 @@ export function StatsPanel({ type, ...props }) {
         </LayoutPanel.Filters>
         <LayoutPanel.Actions>
           <ButtonSegmented>
-            {Object.keys(timeSpans).map(ts => (
+            {visibleTimeSpans.map(ts => (
               <Button
                 compact
                 key={ts}
