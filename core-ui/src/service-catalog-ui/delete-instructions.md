@@ -1,4 +1,4 @@
-While removing, those can be uninstalled together with service catalog
+You can uninstall the following elements together with Service Catalog:
 
 ```json
 {
