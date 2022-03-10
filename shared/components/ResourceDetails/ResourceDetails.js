@@ -28,6 +28,7 @@ import {
   useDeleteResource,
 } from '../../hooks';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
+import { ResourceGraph } from '../ResourceGraph/ResourceGraph';
 
 ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -135,6 +136,7 @@ function Resource({
   updateResourceMutation,
   windowTitle,
   resourceTitle,
+  resourceGraphConfig,
 }) {
   const { t } = useTranslation(['translation'], { i18n });
   useWindowTitle(
@@ -301,6 +303,13 @@ function Resource({
       <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
       {customComponents.map(component => component(resource, resourceUrl))}
       {children}
+      {resourceGraphConfig?.[resource.kind] && (
+        <ResourceGraph
+          resource={resource}
+          i18n={i18n}
+          config={resourceGraphConfig}
+        />
+      )}
     </>
   );
 }

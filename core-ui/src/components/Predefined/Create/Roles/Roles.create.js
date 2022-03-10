@@ -19,6 +19,18 @@ function RolesCreate(props) {
 }
 RolesCreate.allowEdit = true;
 RolesCreate.allowClone = true;
+RolesCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'RoleBinding',
+    },
+  ],
+  matchers: {
+    RoleBinding: (cr, rb) =>
+      rb.roleRef.kind === 'Role' && rb.roleRef.name === cr.metadata.name,
+  },
+  depth: 2,
+});
 
 function ClusterRolesCreate(props) {
   const { t } = useTranslation();
@@ -33,5 +45,23 @@ function ClusterRolesCreate(props) {
 }
 ClusterRolesCreate.allowEdit = true;
 ClusterRolesCreate.allowClone = true;
+ClusterRolesCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'ClusterRoleBinding',
+    },
+    {
+      kind: 'RoleBinding',
+    },
+  ],
+  depth: 2,
+  matchers: {
+    ClusterRoleBinding: (cr, crb) =>
+      crb.roleRef.kind === 'ClusterRole' &&
+      crb.roleRef.name === cr.metadata.name,
+    RoleBinding: (cr, rb) =>
+      rb.roleRef.kind === 'ClusterRole' && rb.roleRef.name === cr.metadata.name,
+  },
+});
 
 export { RolesCreate, ClusterRolesCreate };
