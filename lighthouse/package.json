@@ -1,0 +1,16 @@
+{
+  "name": "lighthouse",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.19.2",
+    "lighthouse": "^9.4.0",
+    "playwright": "^1.19.2",
+    "playwright-lighthouse": "^2.1.1"
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
