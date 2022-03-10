@@ -442,7 +442,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('api-rules.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/ApiRules?' +
+        '/namespaces/:namespaceId/APIRules?' +
         toSearchParamsString({
           resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
           hasDetailsView: true,
@@ -461,7 +461,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'apirules',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/ApiRules/:apiName?' +
+                '/namespaces/:namespaceId/APIRules/:apiName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
                 }),
@@ -560,7 +560,7 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('discovery-and-network.title'),
-      pathSegment: 'hpas',
+      pathSegment: 'horizontalpodautoscalers',
       resourceType: 'hpas',
       navigationContext: 'horizontalpodautoscalers',
       label: i18next.t('hpas.title'),

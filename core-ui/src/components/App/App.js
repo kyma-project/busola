@@ -20,6 +20,7 @@ import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 import { useSentry } from '../../hooks/useSentry';
 import { HelmReleasesList } from 'components/HelmReleases/HelmReleasesList';
 import { HelmReleasesDetails } from 'components/HelmReleases/HelmReleasesDetails';
+import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -212,6 +213,8 @@ function RoutedResourcesList() {
 }
 
 function RoutedResourceDetails() {
+  const { t } = useTranslation();
+  const context = useMicrofrontendContext();
   const { resourceName, resourceType, namespaceId } = useParams();
   const queryParams = new URLSearchParams(window.location.search);
 
@@ -226,6 +229,7 @@ function RoutedResourceDetails() {
     resourceName: decodedResourceName,
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
+    resourceGraphConfig: getPerResourceDefs('resourceGraphConfig', t, context),
   };
 
   const rendererName = params.resourceType + 'Details';
