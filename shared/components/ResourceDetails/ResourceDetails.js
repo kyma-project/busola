@@ -303,7 +303,7 @@ function Resource({
       <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
       {customComponents.map(component => component(resource, resourceUrl))}
       {children}
-      {resourceGraphConfig[resource.kind] && (
+      {resourceGraphConfig?.[resource.kind] && (
         <ResourceGraph
           resource={resource}
           i18n={i18n}
