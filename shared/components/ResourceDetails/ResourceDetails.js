@@ -138,6 +138,7 @@ function Resource({
   resourceTitle,
   resourceGraphConfig,
 }) {
+  console.log(resourceType);
   const { t } = useTranslation(['translation'], { i18n });
   useWindowTitle(
     windowTitle || resourceTitle || prettifyNamePlural(null, resourceType),
@@ -157,9 +158,9 @@ function Resource({
 
   const breadcrumbItems = breadcrumbs || [
     {
-      name: resourceTitle || prettifyNamePlural(null, resourceType),
+      name: prettifyNameSingular(null, resource.kind) + 's',
       path: '/',
-      fromContext: resourceType.toLowerCase(),
+      fromContext: resource.kind.toLowerCase() + 's',
     },
     { name: '' },
   ];
