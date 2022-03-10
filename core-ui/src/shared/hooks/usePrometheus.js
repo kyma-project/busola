@@ -102,6 +102,7 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
 
     setStep(timeSpan / items);
   };
+
   useEffect(() => {
     tick();
     const loop = setInterval(tick, step * 1000);

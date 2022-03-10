@@ -124,7 +124,7 @@ export function StatsPanel({ type, ...props }) {
 
   useEffect(() => {
     setTimeSpan(visibleTimeSpans.at(0));
-  }, [metric]);
+  }, [metric]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <LayoutPanel className="fd-margin--md stats-panel">
