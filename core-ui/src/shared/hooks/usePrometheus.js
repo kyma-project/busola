@@ -125,26 +125,26 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
   const DATA_POINTS = 60;
   let stepCounter = 0;
   let helpIndex = 0;
-  const prometheusData = data?.data.result[0]?.values;
-  let dataValues = [];
+  const dataValues = data?.data.result[0]?.values;
+  let prometheusData = [];
 
-  if (prometheusData?.length > 0) {
+  if (dataValues?.length > 0) {
     for (let i = 0; i < DATA_POINTS; i++) {
-      const [timestamp, graphValue] = prometheusData[helpIndex];
+      const [timestamp, graphValue] = dataValues[helpIndex];
       const temp = Math.floor(startDate.getTime() / 1000 - timestamp);
 
       if (stepCounter === Math.abs(temp)) {
         helpIndex++;
-        dataValues.push(graphValue);
+        prometheusData.push(graphValue);
       } else {
-        dataValues.push(null);
+        prometheusData.push(null);
       }
       stepCounter += step;
     }
   }
 
   return {
-    data: dataValues,
+    data: prometheusData,
     error,
     loading,
     step,
