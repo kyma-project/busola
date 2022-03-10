@@ -20,7 +20,7 @@ export function SaveGraphControls({ content, name, i18n }) {
         glyph="download"
         className="fd-margin-end--tiny"
       />
-      {t('resource-graph.controls.save-as')}
+      {t('resource-graph.save-as-dot')}
     </Button>
   );
 }
