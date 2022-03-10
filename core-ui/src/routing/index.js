@@ -1,44 +1,56 @@
 import React from 'react';
 
-import jobRoutes from './namespaceResources/jobs.routes';
-import sidecarsRoutes from './namespaceResources/sidecars.routes';
-import cronJobRoutes from './namespaceResources/cronJobs.routes';
-import virtualServicesRoutes from './namespaceResources/virtualServices.routes';
-import serviceEntriesRoutes from './namespaceResources/serviceEntries.routes';
-import statefulSetsRoutes from './namespaceResources/statefulSets.routes';
-import servicesRoutes from './namespaceResources/services.routes';
-import serviceInstancesRoutes from './namespaceResources/serviceInstances.routes';
-import serviceBrokersRoutes from './namespaceResources/serviceBrokers.routes';
+//namespaced
+import jobs from './namespaceResources/jobs.routes';
+import sidecars from './namespaceResources/sidecars.routes';
+import cronJob from './namespaceResources/cronJobs.routes';
+import virtualServices from './namespaceResources/virtualServices.routes';
+import serviceEntries from './namespaceResources/serviceEntries.routes';
+import statefulSets from './namespaceResources/statefulSets.routes';
+import services from './namespaceResources/services.routes';
+import serviceInstances from './namespaceResources/serviceInstances.routes';
+import serviceBrokers from './namespaceResources/serviceBrokers.routes';
+import serviceBindings from './namespaceResources/serviceBindings.routes';
+import secrets from './namespaceResources/secrets.routes';
+import roles from './namespaceResources/roles.routes';
+import roleBindings from './namespaceResources/roleBindings.routes';
+import replicaSets from './namespaceResources/replicaSets.routes';
 
-import clusterRolesRoutes from './clusterResources/clusterRoles.routes';
-import storageClassesRoutes from './clusterResources/storageClases.routes';
+//cluster
+import clusterRoles from './clusterResources/clusterRoles.routes';
+import storageClasses from './clusterResources/storageClases.routes';
 
-const ApplicationRoutes = (
+const Application = (
   <>
     {/* namespace resources*/}
     <>
       {/* workloads */}
-      {statefulSetsRoutes}
-      {jobRoutes}
-
-      {cronJobRoutes}
+      {statefulSets}
+      {jobs}
+      {replicaSets}
+      {cronJob}
       {/* istio */}
-      {virtualServicesRoutes}
-      {sidecarsRoutes}
-      {serviceEntriesRoutes}
+      {virtualServices}
+      {sidecars}
+      {serviceEntries}
       {/* discovery and network */}
-      {servicesRoutes}
+      {services}
       {/* service management */}
-      {serviceInstancesRoutes}
-      {serviceBrokersRoutes}
+      {serviceInstances}
+      {serviceBindings}
+      {serviceBrokers}
+      {/* configuration */}
+      {secrets}
+      {roles}
+      {roleBindings}
     </>
 
-    {/*cluster resources */}
+    {/* cluster resources */}
     <>
-      {clusterRolesRoutes}
-      {storageClassesRoutes}
+      {clusterRoles}
+      {storageClasses}
     </>
   </>
 );
 
-export default ApplicationRoutes;
+export default Application;

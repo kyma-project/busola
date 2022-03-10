@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, ResourcesList } from 'react-shared';
 import { Trans } from 'react-i18next';
+import { RolesCreate } from '../Create/Roles/Roles.create';
 
 export function GenericRolesList({ descriptionKey, ...otherParams }) {
   const description = (
@@ -15,6 +16,14 @@ export function GenericRolesList({ descriptionKey, ...otherParams }) {
   return <ResourcesList description={description} {...otherParams} />;
 }
 
-export function RolesList(props) {
-  return <GenericRolesList descriptionKey={'roles.description'} {...props} />;
+function RolesList(props) {
+  return (
+    <GenericRolesList
+      descriptionKey={'roles.description'}
+      {...props}
+      createResourceForm={RolesCreate}
+    />
+  );
 }
+
+export default RolesList;

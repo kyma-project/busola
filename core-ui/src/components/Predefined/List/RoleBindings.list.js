@@ -2,11 +2,12 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'fundamental-react';
-import { Tooltip } from 'react-shared';
+import { Tooltip, ResourcesList } from 'react-shared';
 import { Link as ReactSharedLink } from 'react-shared';
 import { Trans } from 'react-i18next';
+import { RoleBindingsCreate } from '../Create/RoleBindings/RoleBindings.create';
 
-function BindingsList({ descriptionKey, DefaultRenderer, ...params }) {
+function BindingsList({ descriptionKey, ...params }) {
   const { t } = useTranslation();
 
   const navigateToRole = role => {
@@ -97,7 +98,7 @@ function BindingsList({ descriptionKey, DefaultRenderer, ...params }) {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
       textSearchProperties={textSearchProperties}
@@ -106,9 +107,13 @@ function BindingsList({ descriptionKey, DefaultRenderer, ...params }) {
   );
 }
 
-export function RoleBindingsList(props) {
+function RoleBindingsList(props) {
   return (
-    <BindingsList descriptionKey={'role-bindings.description'} {...props} />
+    <BindingsList
+      descriptionKey={'role-bindings.description'}
+      {...props}
+      createResourceForm={RoleBindingsCreate}
+    />
   );
 }
 
@@ -120,3 +125,5 @@ export function ClusterRoleBindingsList(props) {
     />
   );
 }
+
+export default RoleBindingsList;
