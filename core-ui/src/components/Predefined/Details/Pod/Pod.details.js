@@ -1,5 +1,5 @@
 import React from 'react';
-import { ControlledBy, GenericList } from 'react-shared';
+import { ControlledBy, GenericList, ResourceDetails } from 'react-shared';
 
 import { PodStatus } from './PodStatus';
 import ContainersData from './ContainersData';
@@ -8,6 +8,7 @@ import { Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
+import { PodsCreate } from '../../Create/Pods/Pods.create';
 
 import { PodStatsGraph } from './PodStatsGraph';
 
@@ -32,13 +33,13 @@ function goToSecretDetails(resourceKind, name) {
     .navigate(`${preperedResourceKind}s/details/${name}`);
 }
 
-export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
+const PodsDetails = props => {
   const { t, i18n } = useTranslation();
 
   const Events = () => (
     <EventsList
-      namespace={otherParams.namespace}
-      filter={filterByResource('Pod', otherParams.resourceName)}
+      namespace={props.namespace}
+      filter={filterByResource('Pod', props.resourceName)}
       hideInvolvedObjects={true}
     />
   );
@@ -119,7 +120,7 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customComponents={[
         PodStatsGraph,
         VolumesList,
@@ -128,7 +129,9 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
         Events,
       ]}
       customColumns={customColumns}
-      {...otherParams}
-    ></DefaultRenderer>
+      createResourceForm={PodsCreate}
+      {...props}
+    />
   );
 };
+export default PodsDetails;

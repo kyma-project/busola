@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext, ResourceDetails } from 'react-shared';
 
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
@@ -10,16 +10,17 @@ import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
 import './Namespace.details.scss';
 import { useTranslation } from 'react-i18next';
+import { NamespacesCreate } from '../../Create/Namespaces/Namespaces.create';
 
-export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
+export const NamespacesDetails = props => {
   const { t } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
   const limitRangesParams = {
     hasDetailsView: false,
-    resourceUrl: `/api/v1/namespaces/${otherParams.resourceName}/limitranges`,
+    resourceUrl: `/api/v1/namespaces/${props.resourceName}/limitranges`,
     resourceType: 'LimitRanges',
-    namespace: otherParams.resourceName,
+    namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
   };
@@ -34,9 +35,9 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   const resourceQuotasParams = {
     hasDetailsView: false,
-    resourceUrl: `/api/v1/namespaces/${otherParams.resourceName}/resourcequotas`,
+    resourceUrl: `/api/v1/namespaces/${props.resourceName}/resourcequotas`,
     resourceType: 'ResourceQuotas',
-    namespace: otherParams.resourceName,
+    namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
   };
@@ -51,9 +52,9 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   const applicationMappingsParams = {
     hasDetailsView: false,
-    resourceUrl: `/apis/applicationconnector.kyma-project.io/v1alpha1/namespaces/${otherParams.resourceName}/applicationmappings`,
+    resourceUrl: `/apis/applicationconnector.kyma-project.io/v1alpha1/namespaces/${props.resourceName}/applicationmappings`,
     resourceType: 'ApplicationMappings',
-    namespace: otherParams.resourceName,
+    namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
   };
@@ -67,13 +68,13 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   const Events = (
     <EventsList
-      namespace={otherParams.resourceName}
+      namespace={props.resourceName}
       defaultType={EVENT_MESSAGE_TYPE.WARNING}
     />
   );
 
   const headerActions = (
-    <DeployNewWorkload namespaceName={otherParams.resourceName} />
+    <DeployNewWorkload namespaceName={props.resourceName} />
   );
 
   const customColumns = [
@@ -86,20 +87,22 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   return (
-    <DefaultRenderer
-      {...otherParams}
+    <ResourceDetails
+      createResourceForm={NamespacesCreate}
+      {...props}
       windowTitle={t('namespaces.overview.title')}
       customColumns={customColumns}
       headerActions={headerActions}
     >
       <div className="panel-grid">
-        <NamespaceWorkloads namespace={otherParams.resourceName} />
-        <ResourcesUsage namespace={otherParams.resourceName} />
+        <NamespaceWorkloads namespace={props.resourceName} />
+        <ResourcesUsage namespace={props.resourceName} />
       </div>
       {LimitrangesList}
       {ResourceQuotasList}
       {ApplicationMappings}
       {Events}
-    </DefaultRenderer>
+    </ResourceDetails>
   );
 };
+export default NamespacesDetails;

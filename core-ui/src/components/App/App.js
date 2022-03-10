@@ -125,12 +125,12 @@ export default function App() {
       {/*  element={<RoutedResourcesList />}*/}
       {/*/>*/}
       {/*  dwa powyzsze */}
-      <Route
-        path="/:resourceType/:resourceName"
-        element={<RoutedResourceDetails />}
-      />
+      {/*<Route*/}
+      {/*  path="/:resourceType/:resourceName"*/}
+      {/*  element={<RoutedResourceDetails />}*/}
+      {/*/>*/}
 
-      <Route path="/:resourceType" element={<RoutedResourcesList />} />
+      {/*<Route path="/:resourceType" element={<RoutedResourcesList />} />*/}
       <Route path="" element={<MainFrameRedirection />} />
     </Routes>
   );
