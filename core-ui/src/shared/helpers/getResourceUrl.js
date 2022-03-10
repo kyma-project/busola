@@ -12,10 +12,10 @@ export function getResourceUrl() {
     else if (tokensLength === 7) tokensLength = 6;
     else if (tokensLength === 9) tokensLength = 8;
   } else {
-    throw Error("We could't be here");
-    if (tokensLength === 3) tokensLength = 2;
-    else if (tokensLength === 5) tokensLength = 4;
-    else if (tokensLength === 7) tokensLength = 6;
+    throw Error("We could't be here" + window.location.pathname);
+    // if (tokensLength === 3) tokensLength = 2;
+    // else if (tokensLength === 5) tokensLength = 4;
+    // else if (tokensLength === 7) tokensLength = 6;
   }
 
   for (let i = 0; i < tokensLength; i++) {
