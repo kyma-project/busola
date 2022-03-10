@@ -9,7 +9,6 @@ import {
 import { hasPermissionsFor, hasWildcardPermission } from './permissions';
 
 export const coreUIViewGroupName = '_core_ui_';
-export const catalogViewGroupName = '_catalog_';
 
 async function importJsYaml() {
   return (await import('js-yaml')).default;
@@ -874,9 +873,10 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'catalog',
       navigationContext: 'catalog',
       label: i18next.t('catalog.menu-title'),
-      viewUrl: config.serviceCatalogModuleUrl + '/catalog',
+      viewUrl: config.coreUIModuleUrl + '/catalog',
+
       keepSelectedForChildren: true,
-      viewGroup: catalogViewGroupName,
+      viewGroup: coreUIViewGroupName,
       context: {
         requiredFeatures: [features.SERVICE_CATALOG],
       },
@@ -887,13 +887,12 @@ export function getStaticChildrenNodesForNamespace(
             {
               pathSegment: ':serviceId',
               viewUrl:
-                config.serviceCatalogModuleUrl +
-                '/catalog/ServiceClass/:serviceId',
+                config.coreUIModuleUrl + '/catalog/ServiceClass/:serviceId',
               children: [
                 {
                   pathSegment: 'plans',
                   viewUrl:
-                    config.serviceCatalogModuleUrl +
+                    config.coreUIModuleUrl +
                     '/catalog/ServiceClass/:serviceId/plans',
                 },
                 {
@@ -902,7 +901,7 @@ export function getStaticChildrenNodesForNamespace(
                     {
                       pathSegment: ':planId',
                       viewUrl:
-                        config.serviceCatalogModuleUrl +
+                        config.coreUIModuleUrl +
                         '/catalog/ServiceClass/:serviceId/plan/:planId',
                     },
                   ],
@@ -917,13 +916,13 @@ export function getStaticChildrenNodesForNamespace(
             {
               pathSegment: ':serviceId',
               viewUrl:
-                config.serviceCatalogModuleUrl +
+                config.coreUIModuleUrl +
                 '/catalog/ClusterServiceClass/:serviceId',
               children: [
                 {
                   pathSegment: 'plans',
                   viewUrl:
-                    config.serviceCatalogModuleUrl +
+                    config.coreUIModuleUrl +
                     '/catalog/ClusterServiceClass/:serviceId/plans',
                 },
                 {
@@ -932,7 +931,7 @@ export function getStaticChildrenNodesForNamespace(
                     {
                       pathSegment: ':planId',
                       viewUrl:
-                        config.serviceCatalogModuleUrl +
+                        config.coreUIModuleUrl +
                         '/catalog/ClusterServiceClass/:serviceId/plan/:planId',
                     },
                   ],
@@ -948,8 +947,8 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'instances',
       navigationContext: 'instances',
       label: i18next.t('instances.title'),
-      viewUrl: config.serviceCatalogModuleUrl + '/instances',
-      viewGroup: catalogViewGroupName,
+      viewUrl: config.coreUIModuleUrl + '/instances',
+      viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
       context: {
         requiredFeatures: [features.SERVICE_CATALOG],
@@ -961,8 +960,7 @@ export function getStaticChildrenNodesForNamespace(
             {
               pathSegment: ':instanceName',
               viewUrl:
-                config.serviceCatalogModuleUrl +
-                '/instances/details/:instanceName',
+                config.coreUIModuleUrl + '/instances/details/:instanceName',
             },
           ],
         },
