@@ -8,9 +8,9 @@ export function getResourceUrl() {
   let tokensLength = tokens.length;
 
   if (window.location.pathname.startsWith('/backend')) {
-    if (tokensLength === 4) tokensLength = 3;
-    else if (tokensLength === 6) tokensLength = 5;
-    else if (tokensLength === 8) tokensLength = 9;
+    if (tokensLength === 5) tokensLength = 4;
+    else if (tokensLength === 7) tokensLength = 6;
+    else if (tokensLength === 9) tokensLength = 8;
   } else {
     if (tokensLength === 3) tokensLength = 2;
     else if (tokensLength === 5) tokensLength = 4;
