@@ -9,6 +9,7 @@ export function getResourceUrl() {
 
   if (tokensLength === 3) tokensLength = 2;
   else if (tokensLength === 5) tokensLength = 4;
+  else if (tokensLength === 7) tokensLength = 6;
 
   for (let i = 0; i < tokensLength; i++) {
     tokens[i] = tokens[i].toLocaleLowerCase();
