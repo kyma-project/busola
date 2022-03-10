@@ -15,12 +15,11 @@
   "videoCompression": false,
   "experimentalInteractiveRunEvents": true,
   "testFiles": [
-    "run-before.spec.js",
-    "create-a-deployment.spec.js",
-    "test-cluster-overview.spec.js",
-    "smoke-tests.spec.js",
-    "kyma-version.spec.js",
-    "login-kubeconfigID.spec.js",
-    "run-after.spec.js"
+    "namespace/run-before.spec.js",
+    "namespace/create-a-deployment.spec.js",
+    "namespace/run-after.spec.js",
+    "cluster/test-cluster-overview.spec.js",
+    "cluster/kyma-version.spec.js",
+    "cluster/login-kubeconfigID.spec.js"
   ]
 }
