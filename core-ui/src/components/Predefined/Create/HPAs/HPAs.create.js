@@ -34,6 +34,5 @@ HorizontalPodAutoscalersCreate.resourceGraphConfig = (t, context) => ({
       kind: 'Deployment',
     },
   ],
-  depth: 1,
 });
 export { HorizontalPodAutoscalersCreate };

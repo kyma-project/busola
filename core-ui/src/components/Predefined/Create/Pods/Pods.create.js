@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { useMicrofrontendContext, matchBySelector } from 'react-shared';
+import {
+  useMicrofrontendContext,
+  matchBySelector,
+  matchByOwnerReference,
+} from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { createPodTemplate } from './templates';
@@ -35,28 +39,47 @@ PodsCreate.resourceGraphConfig = (t, context) => ({
   networkFlowLevel: 0,
   relations: [
     {
+      kind: 'ConfigMap',
+    },
+    {
+      kind: 'DaemonSet',
+    },
+    {
+      kind: 'Job',
+    },
+    {
       kind: 'ReplicaSet',
     },
     {
       kind: 'Secret',
     },
     {
-      kind: 'ConfigMap',
-    },
-    {
-      kind: 'Job',
+      kind: 'StatefulSet',
     },
   ],
   matchers: {
-    Job: (pod, job) =>
-      matchBySelector(job.spec.selector.matchLabels, pod.metadata.labels),
     ConfigMap: (pod, cm) => matchByEnv('configMapKeyRef')(pod, cm),
-    Secret: (pod, secret) => matchByEnv('secretKeyRef')(pod, secret),
+    DaemonSet: (pod, ds) =>
+      matchByOwnerReference({
+        resource: pod,
+        owner: ds,
+      }),
+    Job: (pod, job) =>
+      matchByOwnerReference({
+        resource: pod,
+        owner: job,
+      }),
     ReplicaSet: (pod, replicaSet) =>
       matchBySelector(
         replicaSet.spec.selector.matchLabels,
         pod.metadata.labels,
       ),
+    Secret: (pod, secret) => matchByEnv('secretKeyRef')(pod, secret),
+    StatefulSet: (pod, ss) =>
+      matchByOwnerReference({
+        resource: pod,
+        owner: ss,
+      }),
   },
 });
 export { PodsCreate };

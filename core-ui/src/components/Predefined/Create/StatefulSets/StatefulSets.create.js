@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext, matchByOwnerReference } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { createStatefulSetTemplate } from './templates';
@@ -30,4 +30,18 @@ function StatefulSetsCreate({
     />
   );
 }
+StatefulSetsCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'Pod',
+    },
+  ],
+  matchers: {
+    Pod: (ss, pod) =>
+      matchByOwnerReference({
+        resource: pod,
+        owner: ss,
+      }),
+  },
+});
 export { StatefulSetsCreate };
