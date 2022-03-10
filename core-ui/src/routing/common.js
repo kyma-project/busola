@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { ResourcesList, ResourceDetails, Spinner } from 'react-shared';
+import { Spinner } from 'react-shared';
 import { Route, useParams } from 'react-router-dom';
 import { getResourceUrl } from 'shared/helpers';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +21,6 @@ export const usePrepareListProps = resourceType => {
   const { i18n } = useTranslation();
   const resourceUrl = getResourceUrl();
   return {
-    DefaultRenderer: ResourcesList,
     hasDetailsView: queryParams.get('hasDetailsView') === 'true',
     readOnly: queryParams.get('readOnly') === 'true',
     resourceUrl,
@@ -41,7 +40,6 @@ export const usePrepareDetailsProps = resourceType => {
   const decodedResourceName = decodeURIComponent(resourceName);
 
   return {
-    DefaultRenderer: ResourceDetails,
     resourceUrl: decodedResourceUrl,
     resourceType: resourceType,
     resourceName: decodedResourceName,
@@ -51,17 +49,28 @@ export const usePrepareDetailsProps = resourceType => {
   };
 };
 
+const ListWrapper = ({ children, resourceType }) => {
+  const props = usePrepareListProps(resourceType);
+  return React.cloneElement(children, props);
+};
+const DetailsWrapper = ({ children, resourceType }) => {
+  const props = usePrepareDetailsProps(resourceType);
+  return React.cloneElement(children, props);
+};
+
 export const createResourceRoutes = (
   Components = { List: null, Details: null },
   config = {
     namespaced: true,
-    pathSegment: '',
+    resourceType: '',
   },
 ) => {
-  const { namespaced = true, pathSegment = '' } = config;
+  const { namespaced = true, resourceType = '' } = config;
+
+  const pathSegment = resourceType.toLowerCase();
 
   const listPath = createPath({ namespaced, pathSegment });
-  const detailsPath = Components.List
+  const detailsPath = Components.Details
     ? createPath({ namespaced, pathSegment, detailsView: true })
     : '';
 
@@ -72,7 +81,9 @@ export const createResourceRoutes = (
         exact
         element={
           <Suspense fallback={<Spinner />}>
-            <Components.List />
+            <ListWrapper resourceType={resourceType}>
+              <Components.List />
+            </ListWrapper>
           </Suspense>
         }
       />
@@ -81,7 +92,9 @@ export const createResourceRoutes = (
           path={detailsPath}
           element={
             <Suspense fallback={<Spinner />}>
-              <Components.Details />
+              <DetailsWrapper resourceType={resourceType}>
+                <Components.Details />
+              </DetailsWrapper>
             </Suspense>
           }
         />

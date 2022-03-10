@@ -2,15 +2,15 @@ import React from 'react';
 import { createResourceRoutes } from '../common';
 
 const List = React.lazy(() =>
-  import('../../components/Predefined/List/StatefulSets.list'),
+  import('../../components/Predefined/List/ServiceEntries.list'),
 );
 const Details = React.lazy(() =>
   import(
-    '../../components/Predefined/Details/StatefulSet/StatefulSets.details'
+    '../../components/Predefined/Details/ServiceEntries/ServiceEntries.details'
   ),
 );
 
 export default createResourceRoutes(
   { List, Details },
-  { resourceType: 'StatefulSets', namespaced: true },
+  { resourceType: 'ServiceEntries', namespaced: true },
 );

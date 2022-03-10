@@ -1,13 +1,17 @@
 import React from 'react';
 import { InfoLabel, Icon, Token } from 'fundamental-react';
-import { ControlledBy, useMicrofrontendContext } from 'react-shared';
+import {
+  ControlledBy,
+  useMicrofrontendContext,
+  ResourceDetails,
+} from 'react-shared';
 import { useTranslation } from 'react-i18next';
-
+import { ServicesCreate } from '../../Create/Services/Services.create';
 import './Service.details.scss';
 import { ApiRulesList } from 'components/ApiRules/ApiRulesList';
 import { SubscriptionsList } from 'shared/components/SubscriptionsList';
 
-export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
+export const ServicesDetails = props => {
   const { t } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
@@ -100,10 +104,13 @@ export const ServicesDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={customComponents}
-      {...otherParams}
+      createResourceForm={ServicesCreate}
+      {...props}
     />
   );
 };
+
+export default ServicesDetails;

@@ -6,14 +6,11 @@ import { Trans } from 'react-i18next';
 
 import { StatefulSetPods } from '../Details/StatefulSet/StatefulSetPods';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
-
-import { usePrepareListProps } from 'routing/common';
 import { StatefulSetsCreate } from '../Create/StatefulSets/StatefulSets.create';
 
-export const StatefulSetsList = () => {
-  const params = usePrepareListProps('StatefulSets');
+export const StatefulSetsList = props => {
   const { t } = useTranslation();
-  const restartAction = useRestartAction(params.resourceUrl);
+  const restartAction = useRestartAction(props.resourceUrl);
 
   const customColumns = [
     {
@@ -44,7 +41,7 @@ export const StatefulSetsList = () => {
       description={description}
       customListActions={[restartAction]}
       createResourceForm={StatefulSetsCreate}
-      {...params}
+      {...props}
     />
   );
 };

@@ -1,14 +1,12 @@
 import React from 'react';
 import { GenericRolesList } from './Roles.list';
 import { ClusterRolesCreate } from '../Create/Roles/Roles.create';
-import { usePrepareListProps } from 'routing/common';
 
-const ClusterList = () => {
-  const params = usePrepareListProps('clusterroles');
+const ClusterList = props => {
   return (
     <GenericRolesList
       descriptionKey={'cluster-roles.description'}
-      {...params}
+      {...props}
       createResourceForm={ClusterRolesCreate}
     />
   );

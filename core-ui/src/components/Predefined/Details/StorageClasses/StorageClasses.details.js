@@ -9,12 +9,9 @@ import { PersistentVolumeClaimsList } from './PersistentVolumeClaimsList';
 import { EMPTY_TEXT_PLACEHOLDER, ResourceDetails } from 'react-shared';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
-import { usePrepareDetailsProps } from 'routing/common';
 import { StorageClassesCreate } from '../../Create/StorageClasses/StorageClasses.create';
 
-const StorageClassesDetails = () => {
-  const params = usePrepareDetailsProps('StorageClasses');
-
+const StorageClassesDetails = props => {
   const { t } = useTranslation();
 
   const StorageClassParameters = storageclass => {
@@ -63,8 +60,8 @@ const StorageClassesDetails = () => {
 
   const Events = () => (
     <EventsList
-      namespace={params.namespace}
-      filter={filterByResource('StorageClass', params.resourceName)}
+      namespace={props.namespace}
+      filter={filterByResource('StorageClass', props.resourceName)}
       hideInvolvedObjects={true}
     />
   );
@@ -80,7 +77,7 @@ const StorageClassesDetails = () => {
       customColumns={customColumns}
       singularName={t('storage-classes.name_singular')}
       createResourceForm={StorageClassesCreate}
-      {...params}
+      {...props}
     />
   );
 };

@@ -5,11 +5,9 @@ import { ControlledBy, ResourceDetails } from 'react-shared';
 import { StatefulSetPods } from './StatefulSetPods';
 import { HPASubcomponent } from '../HPA/HPASubcomponent';
 import { Selector } from 'shared/components/Selector/Selector';
-import { usePrepareDetailsProps } from 'routing/common';
 import { StatefulSetsCreate } from '../../Create/StatefulSets/StatefulSets.create';
 
-function StatefulSetsDetails() {
-  const params = usePrepareDetailsProps('StatefulSets');
+function StatefulSetsDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -38,7 +36,7 @@ function StatefulSetsDetails() {
       customColumns={customColumns}
       customComponents={[HPASubcomponent, MatchSelector]}
       createResourceForm={StatefulSetsCreate}
-      {...params}
+      {...props}
     />
   );
 }

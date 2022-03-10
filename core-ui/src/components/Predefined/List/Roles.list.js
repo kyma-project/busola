@@ -1,12 +1,8 @@
 import React from 'react';
-import { Link } from 'react-shared';
+import { Link, ResourcesList } from 'react-shared';
 import { Trans } from 'react-i18next';
 
-export function GenericRolesList({
-  descriptionKey,
-  DefaultRenderer,
-  ...otherParams
-}) {
+export function GenericRolesList({ descriptionKey, ...otherParams }) {
   const description = (
     <Trans i18nKey={descriptionKey}>
       <Link
@@ -16,7 +12,7 @@ export function GenericRolesList({
     </Trans>
   );
 
-  return <DefaultRenderer description={description} {...otherParams} />;
+  return <ResourcesList description={description} {...otherParams} />;
 }
 
 export function RolesList(props) {

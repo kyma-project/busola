@@ -15,11 +15,9 @@ import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { Selector } from 'shared/components/Selector/Selector';
 
-import { usePrepareDetailsProps } from 'routing/common';
 import { JobsCreate } from '../../Create/Jobs/Jobs.create';
 
-function JobsDetails() {
-  const params = usePrepareDetailsProps('Jobs');
+function JobsDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -61,8 +59,8 @@ function JobsDetails() {
 
   const Events = () => (
     <EventsList
-      namespace={params.namespace}
-      filter={filterByResource('Job', params.resourceName)}
+      namespace={props.namespace}
+      filter={filterByResource('Job', props.resourceName)}
       hideInvolvedObjects={true}
     />
   );
@@ -82,7 +80,7 @@ function JobsDetails() {
       customColumns={customColumns}
       customComponents={customComponents}
       createResourceForm={JobsCreate}
-      {...params}
+      {...props}
     />
   );
 }

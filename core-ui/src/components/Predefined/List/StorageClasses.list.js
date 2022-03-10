@@ -1,11 +1,9 @@
 import React from 'react';
 import { Link, ResourcesList } from 'react-shared';
-import { usePrepareListProps } from 'routing/common';
 import { StorageClassesCreate } from '../Create/StorageClasses/StorageClasses.create';
 import { Trans } from 'react-i18next';
 
-const StorageClassesList = () => {
-  const params = usePrepareListProps('StorageClasses');
+const StorageClassesList = props => {
   const description = (
     <Trans i18nKey="storage-classes.description">
       <Link
@@ -18,7 +16,7 @@ const StorageClassesList = () => {
   return (
     <ResourcesList
       description={description}
-      {...params}
+      {...props}
       createResourceForm={StorageClassesCreate}
     />
   );

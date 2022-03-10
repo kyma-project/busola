@@ -10,5 +10,5 @@ const Details = React.lazy(() =>
 
 export default createResourceRoutes(
   { List, Details },
-  { pathSegment: 'clusterroles', namespaced: false },
+  { resourceType: 'ClusterRoles', namespaced: false },
 );

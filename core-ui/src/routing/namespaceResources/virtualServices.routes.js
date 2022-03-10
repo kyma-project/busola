@@ -12,5 +12,5 @@ const Details = React.lazy(() =>
 
 export default createResourceRoutes(
   { List, Details },
-  { pathSegment: 'virtualservices', namespaced: true },
+  { resourceType: 'VirtualServices', namespaced: true },
 );

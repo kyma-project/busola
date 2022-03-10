@@ -3,11 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Link, ControlledBy, ResourcesList } from 'react-shared';
 import { Trans } from 'react-i18next';
 import { JobCompletions } from '../Details/Job/JobCompletions';
-import { usePrepareListProps } from 'routing/common';
 import { JobsCreate } from '../Create/Jobs/Jobs.create';
 
-const JobsList = () => {
-  const params = usePrepareListProps('Jobs');
+const JobsList = props => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -36,7 +34,7 @@ const JobsList = () => {
       customColumns={customColumns}
       description={description}
       createResourceForm={JobsCreate}
-      {...params}
+      {...props}
     />
   );
 };

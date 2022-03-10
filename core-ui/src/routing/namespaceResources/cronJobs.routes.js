@@ -10,5 +10,5 @@ const Details = React.lazy(() =>
 
 export default createResourceRoutes(
   { List, Details },
-  { pathSegment: 'cronjobs', namespaced: true },
+  { resourceType: 'CronJobs', namespaced: true },
 );

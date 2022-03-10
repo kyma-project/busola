@@ -9,11 +9,9 @@ import { Link } from 'fundamental-react';
 import { ResourceDetails } from 'react-shared';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
-import { usePrepareDetailsProps } from 'routing/common';
 import { CronJobsCreate } from 'components/Predefined/Create/Jobs/CronJobs.create';
 
-const CronJobsDetails = () => {
-  const params = usePrepareDetailsProps('CronJobs');
+const CronJobsDetails = props => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -58,8 +56,8 @@ const CronJobsDetails = () => {
 
   const Events = () => (
     <EventsList
-      namespace={params.namespace}
-      filter={filterByResource('CronJob', params.resourceName)}
+      namespace={props.namespace}
+      filter={filterByResource('CronJob', props.resourceName)}
       hideInvolvedObjects={true}
     />
   );
@@ -69,7 +67,7 @@ const CronJobsDetails = () => {
       customComponents={[CronJobJobs, Events]}
       customColumns={customColumns}
       createResourceForm={CronJobsCreate}
-      {...params}
+      {...props}
     />
   );
 };

@@ -4,11 +4,9 @@ import { CronJobLastScheduleTime } from 'shared/components/CronJob/CronJobLastSc
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
 import { Link, ResourcesList } from 'react-shared';
 import { Trans } from 'react-i18next';
-import { usePrepareListProps } from 'routing/common';
 import { CronJobsCreate } from 'components/Predefined/Create/Jobs/CronJobs.create';
 
-const CronJobsList = () => {
-  const params = usePrepareListProps('CronJobs');
+const CronJobsList = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -41,7 +39,7 @@ const CronJobsList = () => {
       resourceName={t('cron-jobs.title')}
       description={description}
       createResourceForm={CronJobsCreate}
-      {...params}
+      {...props}
     />
   );
 };

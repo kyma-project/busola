@@ -7,11 +7,9 @@ import {
   ResourcesList,
 } from 'react-shared';
 import { Trans } from 'react-i18next';
-import { usePrepareListProps } from 'routing/common';
 import { SidecarsCreate } from '../Create/Sidecars/Sidecars.create';
 
-export function SidecarsList() {
-  const params = usePrepareListProps('Sidecars');
+export function SidecarsList(props) {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -41,7 +39,7 @@ export function SidecarsList() {
       customColumns={customColumns}
       description={description}
       createResourceForm={SidecarsCreate}
-      {...params}
+      {...props}
     />
   );
 }

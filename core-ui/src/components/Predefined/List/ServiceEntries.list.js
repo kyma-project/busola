@@ -1,9 +1,10 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link, ResourcesList } from 'react-shared';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { ServiceEntriesCreate } from '../Create/ServiceEntries/ServiceEntries.create';
 
-export const ServiceEntriesList = ({ DefaultRenderer, ...otherParams }) => {
+const ServiceEntriesList = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -27,10 +28,12 @@ export const ServiceEntriesList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       description={description}
       customColumns={customColumns}
-      {...otherParams}
+      createResourceForm={ServiceEntriesCreate}
+      {...props}
     />
   );
 };
+export default ServiceEntriesList;

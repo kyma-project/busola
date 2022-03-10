@@ -10,5 +10,5 @@ const Details = React.lazy(() =>
 
 export default createResourceRoutes(
   { List, Details },
-  { pathSegment: 'sidecars', namespaced: true },
+  { resourceType: 'Sidecars', namespaced: true },
 );

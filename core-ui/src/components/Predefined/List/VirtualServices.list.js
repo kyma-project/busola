@@ -1,12 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, ResourcesList } from 'react-shared';
-import { usePrepareListProps } from 'routing/common';
 import { VirtualServicesCreate } from '../Create/VirtualServices/VirtualServices.create';
 import { Trans } from 'react-i18next';
 
-function VirtualServicesList() {
-  const params = usePrepareListProps('VirtualServices');
+function VirtualServicesList(props) {
   const { t } = useTranslation();
 
   // State | Name | Gateways | Hosts | Age - as a starting point
@@ -36,7 +34,7 @@ function VirtualServicesList() {
       description={description}
       resourceName={t('virtualservices.title')}
       createResourceForm={VirtualServicesCreate}
-      {...params}
+      {...props}
     />
   );
 }

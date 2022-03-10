@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { ResourceDetails } from 'react-shared';
-import { usePrepareDetailsProps } from 'routing/common';
 import { VirtualServicesCreate } from '../../Create/VirtualServices/VirtualServices.create';
 
 import { ServiceGateways } from './ServiceGateways';
@@ -12,8 +11,7 @@ import { TcpRoutes } from './TcpRoutes';
 
 import './VirtualServicesDetails.scss';
 
-function VirtualServicesDetails() {
-  const params = usePrepareDetailsProps('VirtualServices');
+function VirtualServicesDetails(props) {
   return (
     <ResourceDetails
       customComponents={[
@@ -24,7 +22,7 @@ function VirtualServicesDetails() {
         TcpRoutes,
       ]}
       createResourceForm={VirtualServicesCreate}
-      {...params}
+      {...props}
     />
   );
 }

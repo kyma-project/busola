@@ -12,5 +12,5 @@ const Details = React.lazy(() =>
 
 export default createResourceRoutes(
   { List, Details },
-  { pathSegment: 'storageclasses', namespaced: false },
+  { resourceType: 'StorageClasses', namespaced: false },
 );
