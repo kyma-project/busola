@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Route, Routes, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -20,6 +20,7 @@ import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 import { useSentry } from '../../hooks/useSentry';
 import { HelmReleasesList } from 'components/HelmReleases/HelmReleasesList';
 import { HelmReleasesDetails } from 'components/HelmReleases/HelmReleasesDetails';
+import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -31,9 +32,25 @@ export default function App() {
 
   useSentry();
 
+  const serviceCatalogRoutes = useMemo(() => {
+    return [
+      '/catalog',
+      '/catalog/ServiceClass/:serviceId',
+      '/catalog/ServiceClass/:serviceId/plans',
+      '/catalog/ServiceClass/:serviceId/plan/:planId',
+      '/catalog/ClusterServiceClass/:serviceId',
+      '/catalog/ClusterServiceClass/:serviceId/plans',
+      '/catalog/ClusterServiceClass/:serviceId/plan/:planId',
+      '/instances',
+      '/instances/details/:instanceName',
+    ].map(route => <Route key="route" path={route} element={null} />);
+  }, []);
+
   return (
     // force rerender on cluster change
     <Routes key={cluster?.name}>
+      {serviceCatalogRoutes}
+
       <Route
         path="/no-permissions"
         element={
@@ -196,6 +213,8 @@ function RoutedResourcesList() {
 }
 
 function RoutedResourceDetails() {
+  const { t } = useTranslation();
+  const context = useMicrofrontendContext();
   const { resourceName, resourceType, namespaceId } = useParams();
   const queryParams = new URLSearchParams(window.location.search);
 
@@ -210,6 +229,7 @@ function RoutedResourceDetails() {
     resourceName: decodedResourceName,
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
+    resourceGraphConfig: getPerResourceDefs('resourceGraphConfig', t, context),
   };
 
   const rendererName = params.resourceType + 'Details';

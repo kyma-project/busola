@@ -439,6 +439,7 @@ common:
     delete: Delete
     edit: Edit
     edit-yaml: Edit YAML
+    load: Load
     ok: OK
     restart: Restart
     save: Save
@@ -1217,6 +1218,7 @@ graphs:
   network: Network
   network-down: Download
   network-up: Upload
+  nodes: Nodes
   total: Total
 helm-releases:
   description: <0>Helm Release</0> tracks the installed charts. For each installed chart, a new release is created.
@@ -1720,6 +1722,10 @@ replica-sets:
   tooltips:
     error: At least one of the Pods has failed.
     running: All the Pods are running correctly.
+resource-graph:
+  error: Something went wrong during rendering the graph.
+  save-as-dot: DOT format
+  title: Resource Graph
 resource-quotas:
   headers:
     limits: Limits
