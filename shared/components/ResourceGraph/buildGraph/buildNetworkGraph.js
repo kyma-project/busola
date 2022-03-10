@@ -1,15 +1,6 @@
 import { wrap, makeNode, makeRank, makeCluster, match } from './helpers';
 import { findCommonPrefix } from './../../..';
 
-const networkFlowLevels = [
-  -3, // virtual services & gateways
-  -2, // apirules & functions
-  -1, // services
-  0, // workloads
-  1, // configuration resources
-  2, // service accounts
-];
-
 function isWorkloadLayer(layer) {
   return layer[0].kind === 'Pod';
 }
@@ -43,9 +34,17 @@ function getResourcesOnLayers(store, config) {
     return resourcesOnLevel.flat();
   };
 
-  return networkFlowLevels
-    .map(getResourcesForLayer)
-    .filter(layer => layer?.length);
+  const networkFlowLevels = Object.values(config)
+    .map(c => c.networkFlowLevel)
+    .filter(c => typeof c === 'number');
+  const minLevel = Math.min(...networkFlowLevels);
+  const maxLevel = Math.max(...networkFlowLevels);
+
+  const layers = [];
+  for (let i = minLevel; i <= maxLevel; i++) {
+    layers.push(getResourcesForLayer(i));
+  }
+  return layers.filter(layer => layer?.length);
 }
 
 export function buildNetworkGraph({ store }, config) {
