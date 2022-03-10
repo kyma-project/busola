@@ -48,15 +48,8 @@ PodsCreate.resourceGraphConfig = (t, context) => ({
     },
   ],
   matchers: {
-    Job: (pod, job) => {
-      if (matchBySelector(job.spec.selector.matchLabels, pod.metadata.labels)) {
-        console.log(job.spec.selector.matchLabels, pod.metadata.labels);
-      }
-      return matchBySelector(
-        job.spec.selector.matchLabels,
-        pod.metadata.labels,
-      );
-    },
+    Job: (pod, job) =>
+      matchBySelector(job.spec.selector.matchLabels, pod.metadata.labels),
     ConfigMap: (pod, cm) => matchByEnv('configMapKeyRef')(pod, cm),
     Secret: (pod, secret) => matchByEnv('secretKeyRef')(pod, secret),
     ReplicaSet: (pod, replicaSet) =>

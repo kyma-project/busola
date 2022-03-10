@@ -6,13 +6,14 @@ import { BrowserRouter } from 'react-router-dom';
 import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
 
-import './index.scss';
-import './fiori-helpers.scss';
 import App from './components/App/App';
-
 // NOTE react-shared has to be imported after App for some unknown reason
 import { Microfrontend, Spinner } from 'react-shared';
 import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
+import ServiceCatalogUIWrapper from './service-catalog-ui/Wrapper';
+
+import './index.scss';
+import './fiori-helpers.scss';
 
 i18next
   .use(initReactI18next)
@@ -44,6 +45,7 @@ ReactDOM.render(
       <Suspense fallback={<Spinner />}>
         <CommandPaletteProvider>
           <App />
+          <ServiceCatalogUIWrapper />
         </CommandPaletteProvider>
       </Suspense>
     </BrowserRouter>

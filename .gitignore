@@ -53,4 +53,3 @@ tests/fixtures/kubeconfig.yaml
 tests/fixtures/sa-kubeconfig.yaml
 
 core-ui/public/themes/@sap-theming/*
-service-catalog-ui/public/themes/@sap-theming/*

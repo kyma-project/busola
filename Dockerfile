@@ -20,7 +20,6 @@ RUN make validate
 RUN make pull-licenses
 
 RUN cd /app/core && make test && make build
-RUN cd /app/service-catalog-ui && make test && make build
 RUN cd /app/core-ui && make test && make build
 
 # ---- Serve ----
@@ -33,7 +32,6 @@ RUN apk --no-cache upgrade &&\
 # apps
 COPY --from=builder /app/core/src /app/core
 COPY --from=builder /app/core-ui/build /app/core-ui
-COPY --from=builder /app/service-catalog-ui/build /app/service-catalog
 
 # nginx
 COPY --from=builder /app/nginx/nginx.conf /etc/nginx/
