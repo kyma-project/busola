@@ -332,6 +332,7 @@ export function getStaticChildrenNodesForNamespace(
       category: i18next.t('workloads.title'),
       resourceType: 'replicasets',
       pathSegment: 'replicasets',
+      navigationContext: 'replicasets',
       label: i18next.t('replica-sets.title'),
       viewUrl:
         config.coreUIModuleUrl +
@@ -342,11 +343,10 @@ export function getStaticChildrenNodesForNamespace(
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
-
-      navigationContext: 'replicasets',
       children: [
         {
           pathSegment: 'details',
+          resourceType: 'replicasets',
           children: [
             {
               pathSegment: ':replicaSetName',

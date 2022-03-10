@@ -1,8 +1,11 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
 
 export const NetworkPoliciesList = ({ DefaultRenderer, ...otherParams }) => {
+  const { t } = useTranslation();
+
   const description = (
     <Trans i18nKey="network-policies.description">
       <Link
@@ -12,5 +15,11 @@ export const NetworkPoliciesList = ({ DefaultRenderer, ...otherParams }) => {
     </Trans>
   );
 
-  return <DefaultRenderer description={description} {...otherParams} />;
+  return (
+    <DefaultRenderer
+      resourceName={t('network-policies.title')}
+      description={description}
+      {...otherParams}
+    />
+  );
 };
