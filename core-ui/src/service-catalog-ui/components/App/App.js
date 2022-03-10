@@ -2,13 +2,10 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes, useParams } from 'react-router-dom';
 
-import ServiceClassList from '../ServiceClassList/ServiceClassList';
 import {
   ServiceClassDetailsContainer,
   ClusterServiceClassDetailsContainer,
 } from '../ServiceClassDetails/ServiceClassDetails.container';
-import ServiceInstancesList from '../ServiceInstanceList/ServiceInstanceList';
-import ServiceInstanceDetails from '../ServiceInstanceDetails/ServiceInstanceDetails';
 import {
   NotificationProvider,
   MainFrameRedirection,
@@ -17,18 +14,27 @@ import {
 } from 'react-shared';
 
 import { CATALOG_TITLE, INSTANCES_TITLE } from '../../shared/constants';
-const App = () => {
-  const { language } = useMicrofrontendContext();
+import './app.scss';
+
+import ServiceInstancesList from '../ServiceInstanceList/ServiceInstanceList';
+import ServiceClassList from '../ServiceClassList/ServiceClassList';
+import ServiceInstanceDetails from '../../components/ServiceInstanceDetails/ServiceInstanceDetails';
+
+const App = ({ id }) => {
+  const isCatalog = id === 'catalog';
+  const isInstances = id === 'instances';
+
+  const { language, cluster } = useMicrofrontendContext();
   const { i18n } = useTranslation();
   useEffect(() => {
     i18n.changeLanguage(language);
   }, [language, i18n]);
   return (
     <NotificationProvider>
-      <Routes>
+      <Routes key={cluster?.name}>
         <Route
           exact
-          path="/catalog"
+          index={isCatalog}
           element={
             <WithTitle title={CATALOG_TITLE}>
               <ServiceClassList />
@@ -38,7 +44,7 @@ const App = () => {
 
         <Route
           exact
-          path="/catalog/ServiceClass/:name"
+          path={isCatalog ? '/ServiceClass/:name' : null}
           element={
             <WithTitle title={CATALOG_TITLE}>
               <RoutedServiceClassDetails />
@@ -48,7 +54,7 @@ const App = () => {
 
         <Route
           exact
-          path="/catalog/ClusterServiceClass/:name"
+          path={isCatalog ? '/ClusterServiceClass/:name' : null}
           element={
             <WithTitle title={CATALOG_TITLE}>
               <RoutedClusterServiceClassDetails />
@@ -58,7 +64,7 @@ const App = () => {
 
         <Route
           exact
-          path="/instances"
+          index={isInstances}
           element={
             <WithTitle title={INSTANCES_TITLE}>
               <ServiceInstancesList />
@@ -67,7 +73,7 @@ const App = () => {
         />
         <Route
           exact
-          path="/instances/details/:name"
+          path={isInstances ? '/details/:name' : null}
           element={
             <WithTitle title={INSTANCES_TITLE}>
               <ServiceInstanceDetails />

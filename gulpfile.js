@@ -98,7 +98,7 @@ gulp.task('watch:libraries', () => {
 });
 
 // APPS
-const apps = ['core', 'core-ui', 'service-catalog-ui', 'backend'];
+const apps = ['core', 'core-ui', 'backend'];
 
 // Installing apps
 apps.forEach(app => {
@@ -127,8 +127,7 @@ gulp.task('copy-themes', function() {
             path,
         )
         .pipe(rename(name + '.css'))
-        .pipe(gulp.dest(`./core-ui/public/themes/@sap-theming`))
-        .pipe(gulp.dest(`./service-catalog-ui/public/themes/@sap-theming`)),
+        .pipe(gulp.dest(`./core-ui/public/themes/@sap-theming`)),
     ),
   );
 });

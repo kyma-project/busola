@@ -32,6 +32,7 @@ class SecretDataModal extends React.Component {
   };
 
   populateItems = (data, encoded) => {
+    //TODO fix the grid, plugin is not compativble wiht react
     return Object.entries(data).map(([key, value]) => (
       <Grid key={key}>
         <Grid.Unit size={0.45}>
