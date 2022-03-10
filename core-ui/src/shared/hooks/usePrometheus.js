@@ -121,10 +121,68 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
       `query=${metric.prometheusQuery}`,
     { pollingInterval: 0 },
   );
+  const DATA_POINTS = 60;
+  console.log('------start---------');
+  console.log('step', step);
+  let stepCounter = 0;
+  let counter = 0;
+  console.log(data?.data.result[0]?.values[0]);
+  // let dataValues = new Array(DATA_POINTS).fill(undefined);
+  // data?.data.result[0]?.values.forEach(([timestamp, value]) => {
+  //   counter += step;
+  //   console.log(Math.floor(startDate.getTime() / 1000 - timestamp));
+  //   console.log('counter', counter);
+  // });
 
-  let dataValues = data?.data.result[0]?.values.map(
-    ([timestamp, value]) => value,
-  );
+  const prometheusData = data?.data.result[0]?.values;
+  let helpIndex = 0;
+  let dataValues = [];
+  if (prometheusData?.length > 0) {
+    for (let i = 0; i < DATA_POINTS; i++) {
+      const [timestamp, graphValue] = prometheusData[helpIndex];
+      const temp = Math.floor(startDate.getTime() / 1000 - timestamp);
+      if (stepCounter === Math.abs(temp)) {
+        stepCounter += step;
+        helpIndex++;
+        dataValues.push(graphValue);
+      } else {
+        stepCounter += step;
+        dataValues.push(null);
+      }
+    }
+
+    // dataValues = dataValues.map((value, i) => {
+    //   const [timestamp, graphValue] = prometheusData[helpIndex];
+    //   console.log('timestamp', timestamp);
+    //   const temp = Math.floor(startDate.getTime() / 1000 - timestamp);
+    //   stepCounter += step;
+    //   console.log('temp', temp);
+    //   console.log('stepc', stepCounter);
+    //   if (stepCounter === Math.abs(temp)) {
+    //     helpIndex++;
+    //     return graphValue;
+    //   } else {
+    //     return null;
+    //   }
+    // });
+  }
+
+  // let dataValues = new Array(DATA_POINTS).fill(undefined);
+  // dataValues = data?.data.result[0]?.values.map(([timestamp, value]) => {
+  //   const temp = Math.floor(startDate.getTime() / 1000 - timestamp);
+  //   console.log('temp', temp);
+  //   console.log('counter', counter);
+  //   if (counter === Math.abs(temp)) {
+  //     counter += step;
+
+  //     return value;
+  //   } else {
+  //     counter += step;
+
+  //     return null;
+  //   }
+  // });
+  console.log('DATAVAL', dataValues);
 
   return {
     data: dataValues,
