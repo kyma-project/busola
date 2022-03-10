@@ -1,8 +1,9 @@
 import React from 'react';
-import { GenericList, ResourceStatus } from 'react-shared';
+import { GenericList, ResourceStatus, ResourceDetails } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+import { AddonsConfigurationsCreate } from '../../Create/AddonsConfigurations/AddonsConfigurations.create';
 
-const RepositoryUrls = addon => {
+export const RepositoryUrls = addon => {
   const { t, i18n } = useTranslation();
 
   const headerRenderer = _ => [
@@ -27,12 +28,14 @@ const RepositoryUrls = addon => {
   );
 };
 
-export const AddonsConfigurationsDetails = ({
-  DefaultRenderer,
-  ...otherParams
-}) => {
+const AddonsConfigurationsDetailsNamespace = props => {
   return (
-    <DefaultRenderer customComponents={[RepositoryUrls]} {...otherParams} />
+    <ResourceDetails
+      customComponents={[RepositoryUrls]}
+      createResourceForm={AddonsConfigurationsCreate}
+      {...props}
+    />
   );
 };
-export const ClusterAddonsConfigurationsDetails = AddonsConfigurationsDetails;
+
+export default AddonsConfigurationsDetailsNamespace;

@@ -22,16 +22,31 @@ import networkPolicies from './namespaceResources/networkPolicies.routes';
 import issuers from './namespaceResources/issuers.routes';
 import ingresses from './namespaceResources/ingresses.routes';
 import hpas from './namespaceResources/hpa.routes';
+import gateways from './namespaceResources/gateways.routes';
+import eventsNamespace from './namespaceResources/eventsNamespace.routes';
+import dnsProvider from './namespaceResources/dnsProviders.routes';
+import dnsEntries from './namespaceResources/dnsEntries.routes';
+import destinationRules from './namespaceResources/destinationRules.routes';
+import deployments from './namespaceResources/deployments.routes';
+import daemonSets from './namespaceResources/daemonSets.routes';
+import configMaps from './namespaceResources/configMaps.routes';
+import certificates from './namespaceResources/certificates.routes';
+import authorizationPolicies from './namespaceResources/authorizationPolicies.routes';
+import apiRules from './namespaceResources/apiRules.routes';
+import addonsConfigurationNamespace from './namespaceResources/addonsConfigurationNamespace.routes';
 
 //cluster
 import clusterRoles from './clusterResources/clusterRoles.routes';
 import storageClasses from './clusterResources/storageClases.routes';
 import persistentVolumes from './clusterResources/persistentVolumes.routes';
 import namespaces from './clusterResources/namespaces.routes';
+import eventsCluster from './clusterResources/eventsCluster.routes';
+import addonsConfigurationCluster from './clusterResources/addonsConfigurationCluster.routes';
 
 const Application = (
   <>
     {/* namespace resources*/}
+    {eventsNamespace}
     <>
       {/* workloads */}
       {statefulSets}
@@ -39,15 +54,21 @@ const Application = (
       {replicaSets}
       {cronJob}
       {pods}
+      {deployments}
+      {daemonSets}
       {/* istio */}
       {virtualServices}
+      {gateways}
       {sidecars}
       {serviceEntries}
+      {destinationRules}
+      {authorizationPolicies}
       {/* discovery and network */}
       {services}
       {ingresses}
       {networkPolicies}
       {hpas}
+      {apiRules}
       {/* storage */}
       {persistentVolumeClaims}
       {/* service management */}
@@ -60,14 +81,21 @@ const Application = (
       {roleBindings}
       {oAuth2Clients}
       {issuers}
+      {dnsProvider}
+      {dnsEntries}
+      {configMaps}
+      {certificates}
+      {addonsConfigurationNamespace}
     </>
 
     {/* cluster resources */}
     <>
+      {eventsCluster}
       {namespaces}
       {clusterRoles}
       {storageClasses}
       {persistentVolumes}
+      {addonsConfigurationCluster}
     </>
   </>
 );

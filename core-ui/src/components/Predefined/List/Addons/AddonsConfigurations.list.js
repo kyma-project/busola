@@ -1,14 +1,12 @@
 import React from 'react';
-import { ResourceStatus } from 'react-shared';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
-import { Trans } from 'react-i18next';
+import { ResourceStatus, Link, ResourcesList } from 'react-shared';
+import { useTranslation, Trans } from 'react-i18next';
+import { AddonsConfigurationsCreate } from '../../Create/AddonsConfigurations/AddonsConfigurations.create';
 
 export const GenericAddonsConfigurationsList = ({
   descriptionKey,
   documentationLink,
-  DefaultRenderer,
-  ...otherParams
+  ...props
 }) => {
   const { t, i18n } = useTranslation();
 
@@ -27,34 +25,25 @@ export const GenericAddonsConfigurationsList = ({
 
   const customColumns = [statusColumn];
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
-      {...otherParams}
+      {...props}
     />
   );
 };
 
-export function AddonsConfigurationsList(props) {
+function AddonsConfigurationsList(props) {
   return (
     <GenericAddonsConfigurationsList
       descriptionKey={'addons.description'}
       documentationLink={
         'https://kyma-project-old.netlify.app/docs/components/helm-broker#custom-resource-addons-configuration'
       }
+      createResourceForm={AddonsConfigurationsCreate}
       {...props}
     />
   );
 }
 
-export function ClusterAddonsConfigurationsList(props) {
-  return (
-    <GenericAddonsConfigurationsList
-      descriptionKey={'cluster-addons.description'}
-      documentationLink={
-        'https://kyma-project-old.netlify.app/docs/components/helm-broker#custom-resource-cluster-addons-configuration'
-      }
-      {...props}
-    />
-  );
-}
+export default AddonsConfigurationsList;

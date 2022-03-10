@@ -5,9 +5,11 @@ import {
   ControlledBy,
   GenericList,
   EMPTY_TEXT_PLACEHOLDER,
+  ResourceDetails,
 } from 'react-shared';
 import { Selector } from 'shared/components/Selector/Selector';
 import { DaemonSetStatus } from './DaemonSetStatus';
+import { DaemonSetsCreate } from '../../Create/DaemonSets/DaemonSets.create';
 
 const Tolerations = resource => {
   const { t, i18n } = useTranslation();
@@ -71,7 +73,7 @@ const Images = resource => {
   );
 };
 
-export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
+const DaemonSetsDetails = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -97,10 +99,12 @@ export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customComponents={[Tolerations, Images, MatchSelector]}
       customColumns={customColumns}
-      {...otherParams}
+      createResourceForm={DaemonSetsCreate}
+      {...props}
     />
   );
 };
+export default DaemonSetsDetails;

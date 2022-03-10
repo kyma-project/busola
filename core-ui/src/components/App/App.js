@@ -112,7 +112,6 @@ export default function App() {
         path="/customresourcedefinitions/:customResourceDefinitionName/:resourceVersion/:resourceName"
         element={<RoutedCustomResourceDetails />}
       />
-      {/*te dwa*/}
 
       {appRouting}
 
@@ -124,13 +123,12 @@ export default function App() {
       {/*  path="/namespaces/:namespaceId/:resourceType"*/}
       {/*  element={<RoutedResourcesList />}*/}
       {/*/>*/}
-      {/*  dwa powyzsze */}
       {/*<Route*/}
       {/*  path="/:resourceType/:resourceName"*/}
       {/*  element={<RoutedResourceDetails />}*/}
       {/*/>*/}
-
       {/*<Route path="/:resourceType" element={<RoutedResourcesList />} />*/}
+
       <Route path="" element={<MainFrameRedirection />} />
     </Routes>
   );

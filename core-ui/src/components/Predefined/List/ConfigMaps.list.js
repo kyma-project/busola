@@ -1,10 +1,11 @@
 import React from 'react';
-import { ControlledByKind } from 'react-shared';
+import { ControlledByKind, ResourcesList } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
+import { ConfigMapsCreate } from '../Create/ConfigMaps/ConfigMaps.create';
 
-export const ConfigMapsList = ({ DefaultRenderer, ...otherParams }) => {
+const ConfigMapsList = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -26,10 +27,12 @@ export const ConfigMapsList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
-      {...otherParams}
+      createResourceForm={ConfigMapsCreate}
+      {...props}
     />
   );
 };
+export default ConfigMapsList;
