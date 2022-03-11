@@ -131,9 +131,8 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
   if (dataValues?.length > 0) {
     for (let i = 0; i < DATA_POINTS; i++) {
       const [timestamp, graphValue] = dataValues[helpIndex];
-      const temp = Math.floor(startDate.getTime() / 1000 - timestamp);
-
-      if (stepMultiplier === Math.abs(temp)) {
+      const temp = Math.floor(timestamp - startDate.getTime() / 1000);
+      if (stepMultiplier === temp) {
         helpIndex++;
         prometheusData.push(graphValue);
       } else {
