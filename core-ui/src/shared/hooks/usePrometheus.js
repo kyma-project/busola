@@ -123,7 +123,7 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
   );
 
   const DATA_POINTS = 60;
-  let stepCounter = 0;
+  let stepMultiplier = 0;
   let helpIndex = 0;
   const dataValues = data?.data.result[0]?.values;
   let prometheusData = [];
@@ -133,13 +133,13 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
       const [timestamp, graphValue] = dataValues[helpIndex];
       const temp = Math.floor(startDate.getTime() / 1000 - timestamp);
 
-      if (stepCounter === Math.abs(temp)) {
+      if (stepMultiplier === Math.abs(temp)) {
         helpIndex++;
         prometheusData.push(graphValue);
       } else {
         prometheusData.push(null);
       }
-      stepCounter += step;
+      stepMultiplier += step;
     }
   }
 
