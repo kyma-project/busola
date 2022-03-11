@@ -14,7 +14,7 @@ test('Busola Lighthouse audit', async () => {
 
   await page.goto(ADDRESS);
 
-  await page.evaluate(() => window.localaStorage.clear());
+  await page.evaluate(() => window.localStorage.clear());
 
   await page.goto(ADDRESS + '/clusters');
 
