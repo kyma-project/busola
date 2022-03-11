@@ -43,6 +43,7 @@ export const OAuth2ClientsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
+      resourceTitle={t('oauth2-clients.title')}
       customColumns={[statusColumn]}
       customComponents={[Configuration, Secret]}
       {...otherParams}
