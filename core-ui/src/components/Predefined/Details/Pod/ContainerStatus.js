@@ -11,21 +11,23 @@ export function ContainerStatus({ status }) {
     status?.state?.waiting ||
     status?.state?.terminated;
 
+  const containerStatus =
+    state?.reason || Object.keys(status?.state || {})?.[0] || 'Unknown';
   const message = state?.message || null;
 
   const badgeType = status => {
-    switch (status) {
-      case 'Running':
-      case 'Completed':
-      case 'Succeeded':
+    switch (status?.toLowerCase()) {
+      case 'running':
+      case 'completed':
+      case 'succeeded':
         return 'success';
-      case 'ContainerCreating':
-      case 'Initing':
-      case 'Pending':
-      case 'PodInitializing':
-      case 'Terminating':
+      case 'containercreating':
+      case 'initing':
+      case 'pending':
+      case 'podinitializing':
+      case 'terminating':
         return 'info';
-      case 'Unknown':
+      case 'unknown':
         return undefined;
       default:
         return 'error';
@@ -38,9 +40,9 @@ export function ContainerStatus({ status }) {
         i18n={i18n}
         resourceKind="containers"
         additionalContent={message}
-        type={badgeType(state?.reason || 'Unknown')}
+        type={badgeType(containerStatus)}
       >
-        {state?.reason || 'Unknown'}
+        {containerStatus}
       </StatusBadge>
     </div>
   );
