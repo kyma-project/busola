@@ -648,6 +648,7 @@ containers:
     imagepullbackoff: Error
     invalidimagename: Error
     networkpluginnotready: Error
+    pending: Pending
     podinitializing: Initializing
     poststarthookerror: Error
     registryunavailable: Error
@@ -655,6 +656,7 @@ containers:
     running: Running
     terminated: Terminated
     terminating: Terminating
+    unknown: Unknown
   tooltips:
     completed: Container completed
     containercreating: Creating container
@@ -672,6 +674,7 @@ containers:
     invalidimagename: Invalid image name
     networkpluginnotready: Network plugin not ready
     no-restarts: Container has not restarted
+    pending: Container scheduled
     podinitializing: Initializing the Pod
     poststarthookerror: Post-start hook error
     registryunavailable: Registry unavailable
@@ -679,6 +682,7 @@ containers:
     running: Container running correctly
     terminated: Container terminated
     terminating: Terminating the Container
+    unknown: Container state unknown
 cron-jobs:
   concurrency-policy:
     title: Concurrency Policy
@@ -1635,6 +1639,7 @@ pods:
     imagepullbackoff: Error
     invalidimagename: Error
     networkpluginnotready: Error
+    pending: Pending
     podinitializing: Initializing
     poststarthookerror: Error
     registryunavailable: Error
@@ -1642,6 +1647,7 @@ pods:
     running: Running
     terminated: Terminated
     terminating: Terminating
+    unknown: Unknown
   title: Pods
   tooltips:
     completed: Pod completed
@@ -1661,6 +1667,7 @@ pods:
     invalidimagename: Invalid image name
     networkpluginnotready: Network plugin not ready
     no-restarts: None of the containers has restarted
+    pending: Pod scheduled
     podinitializing: Initializing the Pod
     poststarthookerror: Post-start hook error
     registryunavailable: Registry unavailable
@@ -1668,6 +1675,7 @@ pods:
     running: Pod running correctly
     terminated: Pod terminated
     terminating: Terminating the Pod
+    unknown: Pod state unknown
 preferences:
   title: Preferences
 pv:
