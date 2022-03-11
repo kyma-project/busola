@@ -160,7 +160,8 @@ function Resource({
 
   const breadcrumbItems = breadcrumbs || [
     {
-      name: pluralize(prettifyNameSingular(null, resource.kind)),
+      name:
+        resourceTitle || pluralize(prettifyNameSingular(null, resource.kind)),
       path: '/',
       fromContext: pluralize(resource.kind).toLowerCase(),
     },
