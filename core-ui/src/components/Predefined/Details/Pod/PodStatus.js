@@ -25,7 +25,7 @@ const calculatePodState = pod => {
       }
     }
   }
-  return { status: 'Running' };
+  return { status: pod.status?.phase || 'Unknown' };
 };
 
 const badgeType = status => {

@@ -7,9 +7,11 @@ export function ContainerStatus({ status }) {
   const { i18n } = useTranslation();
 
   const state =
-    status.state.running || status.state.waiting || status.state.terminated;
+    status?.state?.running ||
+    status?.state?.waiting ||
+    status?.state?.terminated;
 
-  const message = state.message || null;
+  const message = state?.message || null;
 
   const badgeType = status => {
     switch (status) {
@@ -36,9 +38,9 @@ export function ContainerStatus({ status }) {
         i18n={i18n}
         resourceKind="containers"
         additionalContent={message}
-        type={badgeType(state.reason || 'Running')}
+        type={badgeType(state?.reason || 'Unknown')}
       >
-        {state.reason || 'Running'}
+        {state?.reason || 'Unknown'}
       </StatusBadge>
     </div>
   );
