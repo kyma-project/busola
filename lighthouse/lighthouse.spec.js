@@ -3,17 +3,19 @@ import { playAudit } from 'playwright-lighthouse';
 import { chromium } from 'playwright';
 import { tmpdir } from 'os';
 
+const ADDRESS = 'https://local.kyma.dev';
+
 test('Busola Lighthouse audit', async () => {
   const context = await chromium.launchPersistentContext(tmpdir(), {
     args: ['--remote-debugging-port=9222'],
   });
   const page = await context.newPage();
 
-  await page.goto('http://localhost:8080');
+  await page.goto(ADDRESS);
 
-  await page.evaluate(() => window.localStorage.clear());
+  await page.evaluate(() => window.localaStorage.clear());
 
-  await page.goto('http://localhost:8080/clusters');
+  await page.goto(ADDRESS + '/clusters');
 
   await page
     .frameLocator('iframe')
@@ -52,11 +54,11 @@ test('Busola Lighthouse audit', async () => {
     page,
     port: 9222,
     thresholds: {
-      performance: 3,
-      accessibility: 3,
-      'best-practices': 3,
-      seo: 3,
-      pwa: 3,
+      performance: 73,
+      accessibility: 77,
+      'best-practices': 100,
+      seo: 0, // ignored
+      pwa: 0, // ignored
     },
   });
 
