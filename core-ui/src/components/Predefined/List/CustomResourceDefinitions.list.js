@@ -42,7 +42,10 @@ const CustomResourceDefinitionsList = props => {
       textSearchProperties={['spec.names.categories']}
       filter={crd => filterCRDs(crd, namespace)}
       description={description}
-      createResourceForm={CustomResourceDefinitionsCreate}
+      customColumns={customColumns}
+      createResourceForm={
+        props.hideCreateOption ? null : CustomResourceDefinitionsCreate
+      }
       {...props}
     />
   );

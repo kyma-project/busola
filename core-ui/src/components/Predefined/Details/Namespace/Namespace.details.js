@@ -11,9 +11,11 @@ import { ResourcesUsage } from './ResourcesUsage';
 import './Namespace.details.scss';
 import { useTranslation } from 'react-i18next';
 import { NamespacesCreate } from '../../Create/Namespaces/Namespaces.create';
+import LimitRangesList from 'components/Predefined/List/LimitRanges.list';
+import ResourceQuotasListComponent from 'components/Predefined/List/ResourceQuotas.list';
 
 export const NamespacesDetails = props => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
   const limitRangesParams = {
@@ -23,15 +25,10 @@ export const NamespacesDetails = props => {
     namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
+    i18n,
   };
 
-  const LimitrangesList = (
-    <ComponentForList
-      name="LimitRangesList"
-      params={limitRangesParams}
-      nameForCreate="LimitRangesCreate"
-    />
-  );
+  const LimitrangesList = <LimitRangesList {...limitRangesParams} />;
 
   const resourceQuotasParams = {
     hasDetailsView: false,
@@ -40,14 +37,11 @@ export const NamespacesDetails = props => {
     namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
+    i18n,
   };
 
   const ResourceQuotasList = (
-    <ComponentForList
-      name="ResourceQuotasList"
-      params={resourceQuotasParams}
-      nameForCreate="ResourceQuotasCreate"
-    />
+    <ResourceQuotasListComponent {...resourceQuotasParams} />
   );
 
   const applicationMappingsParams = {
@@ -59,6 +53,7 @@ export const NamespacesDetails = props => {
     showTitle: true,
   };
 
+  // TODO verify if such components exist
   const ApplicationMappings = features?.APPLICATIONS?.isEnabled ? (
     <ComponentForList
       name="applicationMappingsList"

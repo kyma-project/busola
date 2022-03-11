@@ -21,6 +21,7 @@ export const ServicesDetails = props => {
       <SubscriptionsList
         serviceName={service.metadata.name}
         namespace={service.metadata.namespace}
+        key="subscriptionList"
       />
     ));
   }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
 import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
-import { CronJobJobs } from './CronJobJobs.js';
+import CronJobJobs from './CronJobJobs.js';
 import { CronJobLastScheduleTime } from '../../../../shared/components/CronJob/CronJobLastScheduleTime';
 import { useTranslation } from 'react-i18next';
 import { navigateToFixedPathResourceDetails } from 'react-shared';

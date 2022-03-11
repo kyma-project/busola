@@ -11,14 +11,6 @@ module.exports = {
       ...config.resolve.alias,
     };
 
-    console.log(1111, config);
-    // enabling dot in paths is needed for customResources
-    config.devServer = {
-      historyApiFallback: {
-        disableDotRule: true,
-      },
-    };
-
     return config;
   },
   jest: function(config) {
