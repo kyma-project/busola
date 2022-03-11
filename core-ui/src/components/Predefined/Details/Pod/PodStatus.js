@@ -51,11 +51,12 @@ export function PodStatus({ pod }) {
   const { i18n } = useTranslation();
 
   const podState = calculatePodState(pod);
+  const message = podState?.message || pod.status?.conditions?.[0]?.message;
 
   return (
     <StatusBadge
       i18n={i18n}
-      additionalContent={podState.message}
+      additionalContent={message}
       resourceKind="pods"
       type={badgeType(podState.status)}
     >
