@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
+import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
@@ -138,10 +139,11 @@ function Resource({
   resourceTitle,
   resourceGraphConfig,
 }) {
-  console.log(resourceType);
   const { t } = useTranslation(['translation'], { i18n });
   useWindowTitle(
-    windowTitle || resourceTitle || prettifyNamePlural(null, resourceType),
+    windowTitle ||
+      resourceTitle ||
+      pluralize(prettifyNameSingular(null, resource.kind)),
   );
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
@@ -158,9 +160,9 @@ function Resource({
 
   const breadcrumbItems = breadcrumbs || [
     {
-      name: prettifyNameSingular(null, resource.kind) + 's',
+      name: pluralize(prettifyNameSingular(null, resource.kind)),
       path: '/',
-      fromContext: resource.kind.toLowerCase() + 's',
+      fromContext: pluralize(resource.kind).toLowerCase(),
     },
     { name: '' },
   ];
