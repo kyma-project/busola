@@ -4,13 +4,9 @@ import { createResourceRoutes } from '../common';
 const List = React.lazy(() =>
   import('../../components/Predefined/List/CustomResourceDefinitions.list'),
 );
-const Details = React.lazy(() =>
-  import(
-    '../../components/Predefined/Details/CustomResourceDefinitions/CustomResourceDefinitions.details'
-  ),
-);
 
+// Details are not listed intentionally. For some reason React Router interprets namespaced CRD details as cluster CRD details, despite correct URLs.
 export default createResourceRoutes(
-  { List, Details },
+  { List },
   { resourceType: 'CustomResourceDefinitions', namespaced: true },
 );

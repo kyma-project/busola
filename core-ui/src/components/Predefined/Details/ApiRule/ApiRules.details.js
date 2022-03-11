@@ -10,7 +10,7 @@ import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import AccessStrategies from 'components/ApiRules/AccessStrategies/AccessStrategies';
 import { ApiRuleServices } from './Services';
 import { ResourceDetails } from 'react-shared';
-import { ApiRulesCreate } from '../../Create/ApiRules/ApiRules.create';
+import { APIRulesCreate } from '../../Create/ApiRules/ApiRules.create';
 
 const ApiRulesDetails = props => {
   const { t } = useTranslation();
@@ -43,7 +43,7 @@ const ApiRulesDetails = props => {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={[ApiRulesAccessStrategies, ApiRuleServices]}
-      createResourceForm={ApiRulesCreate}
+      createResourceForm={APIRulesCreate}
       {...props}
     />
   );

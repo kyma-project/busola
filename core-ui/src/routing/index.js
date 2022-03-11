@@ -43,6 +43,7 @@ import persistentVolumes from './clusterResources/persistentVolumes.routes';
 import namespaces from './clusterResources/namespaces.routes';
 import eventsCluster from './clusterResources/eventsCluster.routes';
 import addonsConfigurationCluster from './clusterResources/addonsConfigurationCluster.routes';
+import customResourceDefinitionsCl from './clusterResources/customResourceDefinitionsCl.routes';
 
 const Application = (
   <>
@@ -98,6 +99,7 @@ const Application = (
       {storageClasses}
       {persistentVolumes}
       {addonsConfigurationCluster}
+      {customResourceDefinitionsCl}
     </>
   </>
 );

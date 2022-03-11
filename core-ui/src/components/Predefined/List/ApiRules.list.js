@@ -6,7 +6,7 @@ import {
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import { useTranslation, Trans } from 'react-i18next';
 import { Link, ResourcesList } from 'react-shared';
-import { ApiRulesCreate } from '../Create/ApiRules/ApiRules.create';
+import { APIRulesCreate } from '../Create/ApiRules/ApiRules.create';
 
 const ApiRulesList = props => {
   const { t } = useTranslation();
@@ -40,7 +40,7 @@ const ApiRulesList = props => {
       customColumns={customColumns}
       resourceName={t('api-rules.title')}
       description={description}
-      createResourceForm={ApiRulesCreate}
+      createResourceForm={APIRulesCreate}
       {...props}
     />
   );
