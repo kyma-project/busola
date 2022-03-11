@@ -40,6 +40,7 @@ export const ApiRulesDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
+      resourceTitle={t('api-rules.title')}
       customColumns={customColumns}
       customComponents={[ApiRulesAccessStrategies, ApiRuleServices]}
       {...otherParams}

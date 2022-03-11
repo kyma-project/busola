@@ -50,6 +50,7 @@ export const ReplicaSetsList = ({ DefaultRenderer, ...otherParams }) => {
   return (
     <DefaultRenderer
       customColumns={customColumns}
+      resourceName={t('replica-sets.title')}
       description={description}
       {...otherParams}
     />
