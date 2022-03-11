@@ -8,6 +8,7 @@ const ADDRESS = 'https://local.kyma.dev';
 test('Busola Lighthouse audit', async () => {
   const context = await chromium.launchPersistentContext(tmpdir(), {
     args: ['--remote-debugging-port=9222'],
+    ignoreHTTPSErrors: true,
   });
   const page = await context.newPage();
 
