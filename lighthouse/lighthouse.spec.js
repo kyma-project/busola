@@ -11,13 +11,9 @@ test('Busola Lighthouse audit', async () => {
 
   await page.goto('http://localhost:8080');
 
-  // on dev chromium may remember previous state - get back to clusters list
-  if (!page.url().endsWith('/clusters')) {
-    // Click [data-testid="app-switcher"]
-    await page.locator('[data-testid="app-switcher"]').click();
-    // Click [data-testid="clusters-overview"]
-    await page.locator('[data-testid="clusters-overview"]').click();
-  }
+  await page.evaluate(() => window.localStorage.clear());
+
+  await page.goto('http://localhost:8080/clusters');
 
   await page
     .frameLocator('iframe')
