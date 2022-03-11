@@ -29,6 +29,7 @@ import dnsEntries from './namespaceResources/dnsEntries.routes';
 import destinationRules from './namespaceResources/destinationRules.routes';
 import deployments from './namespaceResources/deployments.routes';
 import daemonSets from './namespaceResources/daemonSets.routes';
+import customResourcesDefinitionsNamespace from './namespaceResources/customResourceDefinitionsNs.routes';
 import configMaps from './namespaceResources/configMaps.routes';
 import certificates from './namespaceResources/certificates.routes';
 import authorizationPolicies from './namespaceResources/authorizationPolicies.routes';
@@ -83,6 +84,7 @@ const Application = (
       {issuers}
       {dnsProvider}
       {dnsEntries}
+      {customResourcesDefinitionsNamespace}
       {configMaps}
       {certificates}
       {addonsConfigurationNamespace}
