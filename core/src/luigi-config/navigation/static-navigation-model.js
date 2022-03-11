@@ -1150,7 +1150,7 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'addons',
       resourceType: 'addonsconfigurations',
       navigationContext: 'addonsconfigurations',
-      label: i18next.t('addons.title'),
+      label: i18next.t('addons.navigation-title'),
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/addonsconfigurations?' +
@@ -1831,7 +1831,7 @@ export function getStaticRootNodes(
       pathSegment: 'addons-configs',
       navigationContext: 'clusteraddonsconfigurations',
       resourceType: 'clusteraddonsconfigurations',
-      label: i18next.t('cluster-addons.title'),
+      label: i18next.t('cluster-addons.navigation-title'),
       category: {
         label: i18next.t('integration.title'),
         icon: 'settings',
