@@ -22,7 +22,7 @@ import { HelmReleasesList } from 'components/HelmReleases/HelmReleasesList';
 import { HelmReleasesDetails } from 'components/HelmReleases/HelmReleasesDetails';
 import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
 
-import appRouting from '../../routing';
+import resources from '../../routing/resources';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -112,22 +112,8 @@ export default function App() {
         path="/customresourcedefinitions/:customResourceDefinitionName/:resourceVersion/:resourceName"
         element={<RoutedCustomResourceDetails />}
       />
-
-      {appRouting}
-
-      {/*<Route*/}
-      {/*  path="/namespaces/:namespaceId/:resourceType/:resourceName"*/}
-      {/*  element={<RoutedResourceDetails />}*/}
-      {/*/>*/}
-      {/*<Route*/}
-      {/*  path="/namespaces/:namespaceId/:resourceType"*/}
-      {/*  element={<RoutedResourcesList />}*/}
-      {/*/>*/}
-      {/*<Route*/}
-      {/*  path="/:resourceType/:resourceName"*/}
-      {/*  element={<RoutedResourceDetails />}*/}
-      {/*/>*/}
-      {/*<Route path="/:resourceType" element={<RoutedResourcesList />} />*/}
+      {/* handles namespace and cluster resources */}
+      {resources}
 
       <Route path="" element={<MainFrameRedirection />} />
     </Routes>

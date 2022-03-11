@@ -35,6 +35,10 @@ import certificates from './namespaceResources/certificates.routes';
 import authorizationPolicies from './namespaceResources/authorizationPolicies.routes';
 import apiRules from './namespaceResources/apiRules.routes';
 import addonsConfigurationNamespace from './namespaceResources/addonsConfigurationNamespace.routes';
+import subscriptions from './namespaceResources/subscriptions.routes';
+import serviceAccounts from './namespaceResources/serviceAccounts.routes';
+import gitRepositories from './namespaceResources/gitRepositories.routes';
+import functions from './namespaceResources/functions.routes';
 
 //cluster
 import clusterRoles from './clusterResources/clusterRoles.routes';
@@ -45,12 +49,13 @@ import eventsCluster from './clusterResources/eventsCluster.routes';
 import addonsConfigurationCluster from './clusterResources/addonsConfigurationCluster.routes';
 import customResourceDefinitionsCl from './clusterResources/customResourceDefinitionsCl.routes';
 
-const Application = (
+const resources = (
   <>
     {/* namespace resources*/}
     {eventsNamespace}
     <>
       {/* workloads */}
+      {functions}
       {statefulSets}
       {jobs}
       {replicaSets}
@@ -89,6 +94,9 @@ const Application = (
       {configMaps}
       {certificates}
       {addonsConfigurationNamespace}
+      {subscriptions}
+      {serviceAccounts}
+      {gitRepositories}
     </>
 
     {/* cluster resources */}
@@ -104,4 +112,4 @@ const Application = (
   </>
 );
 
-export default Application;
+export default resources;

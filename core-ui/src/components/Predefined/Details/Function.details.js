@@ -5,15 +5,17 @@ import LambdaDetailsWrapper from 'components/Lambdas/LambdaDetails/LambdaDetails
 import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
+import { ResourceDetails } from 'react-shared';
+import { FunctionsCreate } from '../Create/Functions/Functions.create';
 
-export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
+const FunctionsDetails = props => {
   const { t } = useTranslation();
   const customColumns = [
     {
       header: t('common.headers.status'),
       value: resource => (
         <LambdaStatusBadge
-          resourceKind={otherParams.resourceType}
+          resourceKind={props.resourceType}
           status={resource.status}
         />
       ),
@@ -32,10 +34,13 @@ export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
     return <LambdaDetailsWrapper key="lambdaDetails" lambda={resource} />;
   };
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={[Functions]}
-      {...otherParams}
+      createResourceForm={FunctionsCreate}
+      {...props}
     />
   );
 };
+
+export default FunctionsDetails;
