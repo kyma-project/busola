@@ -271,6 +271,8 @@ export function StatsGraph({
     });
 
     dataWithGeometry.forEach(({ value, left, bars }, index) => {
+      if (!value[0]) return;
+
       if (activeBar !== null && index === activeBar - dataOffset) {
         bars.reduce((top, bottom, idx) => {
           if (highlightColor) {
@@ -308,6 +310,8 @@ export function StatsGraph({
     });
 
     dataWithGeometry.forEach(({ value, left, bars }, index) => {
+      if (!value[0]) return;
+
       if (!Array.isArray(value)) {
         value = [value];
       }
