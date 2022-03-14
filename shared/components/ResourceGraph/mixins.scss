@@ -1,0 +1,46 @@
+@mixin graph-node(
+  $kind,
+  $text: --sapTextColor,
+  $background: --sapGroup_ContentBackground,
+  $border: --sapTextColor,
+  $hover-background: $background,
+  $hover-text: $text,
+  $hover-border: $border
+) {
+  #graph-area {
+    .node,
+    .cluster {
+      &.#{$kind} {
+        > polygon {
+          fill: var($background);
+          stroke: var($border);
+        }
+        > text {
+          fill: var($text);
+        }
+        &:hover {
+          > polygon {
+            fill: var($hover-background);
+            stroke: var($hover-border);
+          }
+          > text {
+            fill: var($hover-text);
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin graph-node-border($kind, $id) {
+  @include graph-node($kind, $border: --sapIndicationColor_#{$id});
+}
+
+@mixin graph-node-filled($kind, $id) {
+  @include graph-node(
+    $kind,
+    $background: --sapIndicationColor_#{$id},
+    $text: --sapIndicationColor_#{$id}_TextColor,
+    $hover-background: --sapIndicationColor_#{$id}_Hover_Background
+  );
+}

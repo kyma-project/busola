@@ -16,9 +16,11 @@
     width: 100%;
   }
 
-  .node > polygon,
-  .cluster > polygon {
-    fill: var(--sapGroup_ContentBackground);
+  .node,
+  .cluster {
+    & > polygon {
+      fill: var(--sapGroup_ContentBackground);
+    }
   }
 
   #graph0 > polygon {

@@ -9,15 +9,20 @@ export function wrap(str) {
 export function makeNode(resource) {
   const { kind, metadata } = resource;
   const { name, uid } = metadata;
+  console.log('makeNode', resource, metadata);
   // first is for rendering engine, second goes into actual DOM element
-  return `"${uid}" [id="${uid}" label="${kind}\n${wrap(name)}"][shape=box]`;
+  return `"${uid}" [id="${uid}" class="${kind.toLowerCase()}" label="${kind}\n${wrap(
+    name,
+  )}"][shape=box]`;
 }
 
 // cluster is a subgraph - the id needs to be prefixed with 'cluster'
 export function makeCluster(resource, content) {
+  const { kind } = resource;
   const { uid, name } = resource.metadata;
   return `subgraph "cluster_${uid}" {
     id="${uid}"
+    class="${kind.toLowerCase()}"
     label="Deployment ${name}";
       ${content}
     }`;

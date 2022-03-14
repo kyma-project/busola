@@ -1,0 +1,3 @@
+@import '../../../../../../shared/components/ResourceGraph/mixins.scss';
+@include graph-node-filled(pod, 5);
+@include graph-node-filled(deployment, 6);
