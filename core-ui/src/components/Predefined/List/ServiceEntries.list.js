@@ -28,6 +28,7 @@ export const ServiceEntriesList = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
+      resourceName={t('service-entries.title')}
       description={description}
       customColumns={customColumns}
       {...otherParams}
