@@ -31,6 +31,8 @@ function StatefulSetsCreate({
   );
 }
 StatefulSetsCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  networkFlowLevel: -1,
   relations: [
     {
       kind: 'Pod',

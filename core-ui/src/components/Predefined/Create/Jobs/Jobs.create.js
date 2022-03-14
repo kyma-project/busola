@@ -153,6 +153,8 @@ function JobsCreate({
 }
 JobsCreate.allowEdit = true;
 JobsCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  networkFlowLevel: -1,
   relations: [
     {
       kind: 'Pod',

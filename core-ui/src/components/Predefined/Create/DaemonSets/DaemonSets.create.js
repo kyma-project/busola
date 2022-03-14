@@ -31,6 +31,8 @@ function DaemonSetsCreate({
   );
 }
 DaemonSetsCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  networkFlowLevel: -1,
   relations: [
     {
       kind: 'Pod',

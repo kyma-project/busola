@@ -1,8 +1,12 @@
 import { wrap, makeNode, makeRank, makeCluster, match } from './helpers';
 import { findCommonPrefix } from './../../..';
 
-function isWorkloadLayer(layer) {
-  return layer[0].kind === 'Pod';
+function isWorkloadLayer(layer, store) {
+  return (
+    layer[0].kind === 'Pod' &&
+    store['Pod']?.length > 0 &&
+    store['Deployment']?.length > 0
+  );
 }
 
 // lhead overrides actual arrow end
@@ -56,8 +60,7 @@ export function buildNetworkGraph({ store }, config) {
   for (let i = 0; i < layers.length; i++) {
     const currentLayer = layers[i];
     const nextLayer = layers[i + 1];
-
-    if (isWorkloadLayer(currentLayer) && store['Pod'].length > 0) {
+    if (isWorkloadLayer(currentLayer, store)) {
       const multiplePods = store['Pod'].length > 1;
       const podId = multiplePods
         ? 'composite-pod'
@@ -99,7 +102,7 @@ export function buildNetworkGraph({ store }, config) {
 
       if (!nextLayer) continue;
       // normal layers, connect matching resources
-      if (!isWorkloadLayer(nextLayer)) {
+      if (!isWorkloadLayer(nextLayer, store)) {
         for (const layerResource of currentLayer) {
           for (const nextLayerResource of nextLayer) {
             // connect if match exists
