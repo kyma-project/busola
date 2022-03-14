@@ -54,6 +54,7 @@ export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
+      resourceName={t('git-repositories.title')}
       customColumns={customColumns}
       createActionLabel={t('git-repositories.labels.create')}
       description={description}

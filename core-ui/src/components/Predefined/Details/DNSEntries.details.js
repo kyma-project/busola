@@ -86,6 +86,7 @@ export const DNSEntriesDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
+      resourceTitle={t('dnsentries.title')}
       customComponents={[Provider, Spec]}
       customColumns={customColumns}
       {...otherParams}

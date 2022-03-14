@@ -7,9 +7,10 @@ addons:
     url: URL
   messages:
     created: Addons Configuration {{name}} created
+  navigation-title: Addons
   repository-urls: Repository URLs
   singular_name: Addons Configuration
-  title: Addons
+  title: Addons Configurations
   tooltips:
     failed: One of the repositories failed.
     pending: Processing the addon
@@ -270,8 +271,9 @@ certificates:
   with-csr: Use a CSR
 cluster-addons:
   description: <0>Cluster Addons Configuration</0> defines cluster-wide addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
+  navigation-title: Cluster Addons
   singular_name: Cluster Addons Configuration
-  title: Cluster Addons
+  title: Cluster Addons Configurations
 cluster-role-bindings:
   description: <0>Cluster Role Binding</0> assigns the permissions defined in a Cluster Role to a user.
   name_singular: Cluster Role Binding
@@ -646,6 +648,7 @@ containers:
     imagepullbackoff: Error
     invalidimagename: Error
     networkpluginnotready: Error
+    pending: Pending
     podinitializing: Initializing
     poststarthookerror: Error
     registryunavailable: Error
@@ -653,6 +656,7 @@ containers:
     running: Running
     terminated: Terminated
     terminating: Terminating
+    unknown: Unknown
   tooltips:
     completed: Container completed
     containercreating: Creating container
@@ -670,6 +674,7 @@ containers:
     invalidimagename: Invalid image name
     networkpluginnotready: Network plugin not ready
     no-restarts: Container has not restarted
+    pending: Container scheduled
     podinitializing: Initializing the Pod
     poststarthookerror: Post-start hook error
     registryunavailable: Registry unavailable
@@ -677,6 +682,7 @@ containers:
     running: Container running correctly
     terminated: Container terminated
     terminating: Terminating the Container
+    unknown: Container state unknown
 cron-jobs:
   concurrency-policy:
     title: Concurrency Policy
@@ -1633,6 +1639,7 @@ pods:
     imagepullbackoff: Error
     invalidimagename: Error
     networkpluginnotready: Error
+    pending: Pending
     podinitializing: Initializing
     poststarthookerror: Error
     registryunavailable: Error
@@ -1640,6 +1647,7 @@ pods:
     running: Running
     terminated: Terminated
     terminating: Terminating
+    unknown: Unknown
   title: Pods
   tooltips:
     completed: Pod completed
@@ -1659,6 +1667,7 @@ pods:
     invalidimagename: Invalid image name
     networkpluginnotready: Network plugin not ready
     no-restarts: None of the containers has restarted
+    pending: Pod scheduled
     podinitializing: Initializing the Pod
     poststarthookerror: Post-start hook error
     registryunavailable: Registry unavailable
@@ -1666,6 +1675,7 @@ pods:
     running: Pod running correctly
     terminated: Pod terminated
     terminating: Terminating the Pod
+    unknown: Pod state unknown
 preferences:
   title: Preferences
 pv:
