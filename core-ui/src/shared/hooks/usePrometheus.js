@@ -122,17 +122,16 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     { pollingInterval: 0 },
   );
 
-  const DATA_POINTS = 60;
   let stepMultiplier = 0;
   let helpIndex = 0;
   const dataValues = data?.data.result[0]?.values;
   let prometheusData = [];
 
   if (dataValues?.length > 0) {
-    for (let i = 0; i < DATA_POINTS; i++) {
+    for (let i = 0; i < items; i++) {
       const [timestamp, graphValue] = dataValues[helpIndex];
-      const temp = Math.floor(timestamp - startDate.getTime() / 1000);
-      if (stepMultiplier === temp) {
+      const timeDifference = Math.floor(timestamp - startDate.getTime() / 1000);
+      if (stepMultiplier === timeDifference) {
         helpIndex++;
         prometheusData.push(graphValue);
       } else {
