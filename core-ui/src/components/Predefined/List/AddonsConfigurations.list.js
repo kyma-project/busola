@@ -36,8 +36,11 @@ export const GenericAddonsConfigurationsList = ({
 };
 
 export function AddonsConfigurationsList(props) {
+  const { t } = useTranslation();
+
   return (
     <GenericAddonsConfigurationsList
+      resourceName={t('addons.title')}
       descriptionKey={'addons.description'}
       documentationLink={
         'https://kyma-project-old.netlify.app/docs/components/helm-broker#custom-resource-addons-configuration'
@@ -48,8 +51,11 @@ export function AddonsConfigurationsList(props) {
 }
 
 export function ClusterAddonsConfigurationsList(props) {
+  const { t } = useTranslation();
+
   return (
     <GenericAddonsConfigurationsList
+      resourceName={t('cluster-addons.title')}
       descriptionKey={'cluster-addons.description'}
       documentationLink={
         'https://kyma-project-old.netlify.app/docs/components/helm-broker#custom-resource-cluster-addons-configuration'

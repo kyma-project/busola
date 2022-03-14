@@ -65,6 +65,7 @@ export const DNSProvidersDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
+      resourceTitle={t('dnsproviders.title')}
       customComponents={[Domains]}
       customColumns={customColumns}
       {...otherParams}

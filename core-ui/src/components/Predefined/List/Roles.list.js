@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 import { Trans } from 'react-i18next';
 
 function GenericRolesList({ descriptionKey, DefaultRenderer, ...otherParams }) {
@@ -16,11 +17,25 @@ function GenericRolesList({ descriptionKey, DefaultRenderer, ...otherParams }) {
 }
 
 export function RolesList(props) {
-  return <GenericRolesList descriptionKey={'roles.description'} {...props} />;
+  const { t } = useTranslation();
+
+  return (
+    <GenericRolesList
+      resourceName={t('roles.title')}
+      descriptionKey={'roles.description'}
+      {...props}
+    />
+  );
 }
 
 export function ClusterRolesList(props) {
+  const { t } = useTranslation();
+
   return (
-    <GenericRolesList descriptionKey={'cluster-roles.description'} {...props} />
+    <GenericRolesList
+      resourceName={t('cluster-roles.title')}
+      descriptionKey={'cluster-roles.description'}
+      {...props}
+    />
   );
 }
