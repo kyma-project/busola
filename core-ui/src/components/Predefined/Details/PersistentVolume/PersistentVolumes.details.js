@@ -9,6 +9,7 @@ import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
+import { Selector } from 'shared/components/Selector/Selector';
 
 export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -112,10 +113,19 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
     />
   );
 
+  const MatchSelector = job => (
+    <Selector
+      namespace={job.metadata.namespace}
+      labels={job.spec?.selector?.matchLabels}
+      expressions={job.spec?.selector?.matchExpressions}
+      selector={job.spec?.selector}
+    />
+  );
+
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[PvDetails, Events]}
+      customComponents={[PvDetails, Events, MatchSelector]}
       {...otherParams}
     />
   );

@@ -114,7 +114,9 @@ function SecretsCreate({
     </ResourceForm>
   );
 }
+
 SecretsCreate.allowEdit = true;
+
 SecretsCreate.resourceGraphConfig = (t, context) => ({
   relations: [
     {
@@ -130,13 +132,16 @@ SecretsCreate.resourceGraphConfig = (t, context) => ({
   depth: 1,
   networkFlowLevel: 1,
   matchers: {
-    ServiceAccount: (secret, sa) =>
-      sa.secrets?.find(s => s.name === secret.metadata.name) ||
-      sa.imagePullSecrets?.find(s => s.name === secret.metadata.name),
-    OAuth2Client: (secret, client) =>
-      client.spec.secretName === secret.metadata.name,
+    Pod: (secret, pod) => console.log(secret),
+    // pod.spec.volumes.secret?.find(s => s.secretName === secret.metadata.name),
+    ServiceAccount: (secret, sa) => console.log(sa),
+    // sa.secrets?.find(s => s.name === secret.metadata.name) ||
+    // sa.imagePullSecrets?.find(s => s.name === secret.metadata.name),
+    OAuth2Client: (secret, client) => console.log(client),
+    // client.spec.secretName === secret.metadata.name,
   },
 });
+
 SecretsCreate.secrets = (t, context) => [
   {
     type: 'kubernetes.io/service-account-token',
