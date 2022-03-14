@@ -41,6 +41,7 @@ export const CustomResourceDefinitionsList = ({
 
   return (
     <DefaultRenderer
+      resourceName={t('custom-resource-definitions.title')}
       textSearchProperties={['spec.names.categories']}
       filter={crd => filterCRDs(crd, namespace)}
       description={description}

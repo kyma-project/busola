@@ -107,14 +107,23 @@ function BindingsList({ descriptionKey, DefaultRenderer, ...params }) {
 }
 
 export function RoleBindingsList(props) {
+  const { t } = useTranslation();
+
   return (
-    <BindingsList descriptionKey={'role-bindings.description'} {...props} />
+    <BindingsList
+      resourceName={t('role-bindings.title')}
+      descriptionKey={'role-bindings.description'}
+      {...props}
+    />
   );
 }
 
 export function ClusterRoleBindingsList(props) {
+  const { t } = useTranslation();
+
   return (
     <BindingsList
+      resourceName={t('cluster-role-bindings.title')}
       descriptionKey={'cluster-role-bindings.description'}
       {...props}
     />
