@@ -162,10 +162,18 @@ JobsCreate.resourceGraphConfig = (t, context) => ({
     {
       kind: 'CronJob',
     },
+    {
+      kind: 'Function',
+    },
   ],
   matchers: {
     CronJob: (job, cronJob) =>
       matchByOwnerReference({ resource: job, owner: cronJob }),
+    Function: (job, functión) =>
+      matchByOwnerReference({
+        resource: job,
+        owner: functión,
+      }),
   },
 });
 export { JobsCreate };

@@ -254,6 +254,9 @@ FunctionsCreate.resourceGraphConfig = (t, context) => ({
   networkFlowLevel: -2,
   relations: [
     {
+      kind: 'Job',
+    },
+    {
       kind: 'Service',
     },
   ],
