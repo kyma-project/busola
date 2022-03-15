@@ -23,7 +23,7 @@ RUN cd /app/core && make test && make build
 RUN cd /app/core-ui && make test && make build
 
 # ---- Serve ----
-FROM alpine:3.14.3
+FROM alpine:3.15
 WORKDIR /app
 
 RUN apk --no-cache upgrade &&\
