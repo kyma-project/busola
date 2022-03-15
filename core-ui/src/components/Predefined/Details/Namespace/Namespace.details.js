@@ -1,18 +1,21 @@
 import React from 'react';
-import { useMicrofrontendContext, ResourceDetails } from 'react-shared';
+import {
+  useMicrofrontendContext,
+  ResourceDetails,
+  ResourcesList,
+} from 'react-shared';
 
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
-import { ComponentForList } from 'shared/getComponents';
 import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
-import './Namespace.details.scss';
 import { useTranslation } from 'react-i18next';
 import { NamespacesCreate } from '../../Create/Namespaces/Namespaces.create';
 import LimitRangesList from 'components/Predefined/List/LimitRanges.list';
 import ResourceQuotasListComponent from 'components/Predefined/List/ResourceQuotas.list';
+import './Namespace.details.scss';
 
 export const NamespacesDetails = props => {
   const { t, i18n } = useTranslation();
@@ -53,12 +56,8 @@ export const NamespacesDetails = props => {
     showTitle: true,
   };
 
-  // TODO verify if such components exist
   const ApplicationMappings = features?.APPLICATIONS?.isEnabled ? (
-    <ComponentForList
-      name="applicationMappingsList"
-      params={applicationMappingsParams}
-    />
+    <ResourcesList {...applicationMappingsParams} />
   ) : null;
 
   const Events = (
