@@ -188,5 +188,9 @@ OAuth2ClientsCreate.resourceGraphConfig = (t, context) => ({
       kind: 'Secret',
     },
   ],
+  matchers: {
+    OAuth2Client: (client, secret) =>
+      client.spec.secretName === secret.metadata.name,
+  },
 });
 export { OAuth2ClientsCreate };
