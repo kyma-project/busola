@@ -18,6 +18,10 @@ test('Busola Lighthouse audit', async () => {
 
   await page.goto(ADDRESS + '/clusters');
 
+  await page.evaluate(() => {
+    return new Promise(resolve => setTimeout(resolve, 5000));
+  });
+
   await page
     .frameLocator('iframe')
     .locator('button:has-text("Connect cluster")')
