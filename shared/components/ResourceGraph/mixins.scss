@@ -1,8 +1,8 @@
 @mixin graph-node(
   $kind,
-  $text: --sapTextColor,
-  $background: --sapGroup_ContentBackground,
-  $border: --sapTextColor,
+  $text: var(--sapTextColor),
+  $background: var(--sapGroup_ContentBackground),
+  $border: var(--sapTextColor),
   $hover-background: $background,
   $hover-text: $text,
   $hover-border: $border
@@ -12,19 +12,19 @@
     .cluster {
       &.#{$kind} {
         > polygon {
-          fill: var($background);
-          stroke: var($border);
+          fill: $background;
+          stroke: $border;
         }
         > text {
-          fill: var($text);
+          fill: $text;
         }
         &:hover {
           > polygon {
-            fill: var($hover-background);
-            stroke: var($hover-border);
+            fill: $hover-background;
+            stroke: $hover-border;
           }
           > text {
-            fill: var($hover-text);
+            fill: $hover-text;
           }
         }
       }
@@ -32,15 +32,15 @@
   }
 }
 
-@mixin graph-node-border($kind, $id) {
-  @include graph-node($kind, $border: --sapIndicationColor_#{$id});
+@mixin graph-node-border($kind, $id, $variant: '') {
+  @include graph-node($kind, $border: var(--sapChart_Sequence_#{$id}));
 }
 
-@mixin graph-node-filled($kind, $id) {
+@mixin graph-node-filled($kind, $id, $variant: '') {
   @include graph-node(
     $kind,
-    $background: --sapIndicationColor_#{$id},
-    $text: --sapIndicationColor_#{$id}_TextColor,
-    $hover-background: --sapIndicationColor_#{$id}_Hover_Background
+    $background: var(--sapIndicationColor_#{$id}),
+    $text: var(--sapIndicationColor_#{$id}_TextColor),
+    $hover-background: var(--sapIndicationColor_#{$id}_Hover_Background)
   );
 }

@@ -16,10 +16,23 @@
     width: 100%;
   }
 
+  text {
+    font-family: inherit;
+  }
+
   .node,
   .cluster {
     & > polygon {
       fill: var(--sapGroup_ContentBackground);
+      stroke-width: 2px;
+    }
+    & > text {
+      font-weight: bold;
+      color: #0f0;
+    }
+    & > text + text {
+      font-weight: normal;
+      font-size: 12;
     }
   }
 
