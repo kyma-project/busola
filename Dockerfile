@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM alpine:3.13.6 AS builder
+FROM alpine:3.14.3 AS builder
 RUN apk add --update nodejs=v16.14.0 npm=8.3.1
 
 RUN node -v
