@@ -2,9 +2,6 @@
 FROM alpine:3.15 AS builder
 RUN apk add --update nodejs=16.14.0-r0 npm=8.1.3-r0
 
-RUN node -v
-RUN npm -v
-
 WORKDIR /app
 
 # Install global dependencies
