@@ -18,12 +18,14 @@
 
   text {
     font-family: inherit;
+    fill: var(--sapTextColor);
   }
 
   .node,
   .cluster {
     & > polygon {
       fill: var(--sapGroup_ContentBackground);
+      stroke: var(--sapTextColor);
       stroke-width: 2px;
     }
     & > text {
