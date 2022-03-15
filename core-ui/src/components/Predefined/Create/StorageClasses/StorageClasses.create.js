@@ -35,7 +35,14 @@ StorageClassesCreate.resourceGraphConfig = (t, context) => ({
       kind: 'PersistentVolumeClaim',
       clusterwide: true,
     },
+    {
+      kind: 'Secret',
+      clusterwide: true,
+    },
   ],
+  matchers: {
+    Secret: (sc, secret) => sc.parameters?.secretName === secret.metadata.name,
+  },
   depth: 1,
 });
 

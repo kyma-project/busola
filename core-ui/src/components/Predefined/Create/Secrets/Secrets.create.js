@@ -132,6 +132,10 @@ SecretsCreate.resourceGraphConfig = (t, context) => ({
       kind: 'Gateway',
       clusterwide: true,
     },
+    {
+      kind: 'StorageClass',
+      clusterwide: true,
+    },
   ],
   depth: 1,
   networkFlowLevel: 1,
