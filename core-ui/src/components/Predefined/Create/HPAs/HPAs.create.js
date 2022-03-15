@@ -29,6 +29,7 @@ function HorizontalPodAutoscalersCreate({
   );
 }
 HorizontalPodAutoscalersCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
   relations: [
     {
       kind: 'Deployment',
