@@ -114,6 +114,7 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
 
   return (
     <DefaultRenderer
+      resourceTitle={t('pv.title')}
       customColumns={customColumns}
       customComponents={[PvDetails, Events]}
       {...otherParams}

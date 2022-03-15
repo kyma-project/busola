@@ -119,7 +119,7 @@ export function HorizontalPodAutoscalersDetails({
   );
   return (
     <DefaultRenderer
-      resourceName={t('hpas.name_singular')}
+      resourceTitle={t('hpas.title')}
       customColumns={customColumns}
       customComponents={[HPASpec, HPAMetrics, Events]}
       {...otherParams}

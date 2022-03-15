@@ -23,6 +23,7 @@ function GenericRoleBindingDetails({ DefaultRenderer, ...otherParams }) {
   ];
   return (
     <DefaultRenderer
+      resourceTitle={t('cluster-role-bindings.title')}
       {...otherParams}
       customColumns={customColumns}
       customComponents={[RoleSubjects]}

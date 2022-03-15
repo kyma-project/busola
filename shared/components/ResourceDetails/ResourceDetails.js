@@ -76,7 +76,7 @@ function ResourceDetailsRenderer(props) {
   if (error) {
     const breadcrumbItems = props.breadcrumbs || [
       {
-        name: props.resourceType,
+        name: prettifyNamePlural(props.resourceTitle || props.resourceType),
         path: '/',
         fromContext: props.resourceType.toLowerCase(),
       },
@@ -85,7 +85,10 @@ function ResourceDetailsRenderer(props) {
     if (error.code === 404) {
       return (
         <ResourceNotFound
-          resource={prettifyNameSingular(undefined, props.resourceType)}
+          resource={prettifyNameSingular(
+            props.resourceTitle,
+            props.resourceType,
+          )}
           breadcrumbs={breadcrumbItems}
           i18n={props.i18n}
         />
@@ -93,7 +96,7 @@ function ResourceDetailsRenderer(props) {
     }
     return (
       <ResourceNotFound
-        resource={prettifyNameSingular(undefined, props.resourceType)}
+        resource={prettifyNameSingular(props.resourceTitle, props.resourceType)}
         breadcrumbs={breadcrumbItems}
         customMessage={getErrorMessage(error)}
         i18n={props.i18n}
@@ -141,9 +144,7 @@ function Resource({
 }) {
   const { t } = useTranslation(['translation'], { i18n });
   useWindowTitle(
-    windowTitle ||
-      resourceTitle ||
-      pluralize(prettifyNameSingular(null, resource.kind)),
+    windowTitle || resourceTitle || prettifyNamePlural(null, resource.kind),
   );
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
@@ -160,8 +161,7 @@ function Resource({
 
   const breadcrumbItems = breadcrumbs || [
     {
-      name:
-        resourceTitle || pluralize(prettifyNameSingular(null, resource.kind)),
+      name: resourceTitle || prettifyNamePlural(null, resource.kind),
       path: '/',
       fromContext: pluralize(resource.kind).toLowerCase(),
     },
