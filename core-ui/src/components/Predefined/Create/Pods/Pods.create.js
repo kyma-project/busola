@@ -12,6 +12,12 @@ function matchByEnv(valueFromKey) {
       ),
     );
 }
+
+function matchByVolumes(pod, resource) {
+  return pod.spec.volumes.some(
+    volume => volume.secret?.secretName === resource.metadata.name,
+  );
+}
 function PodsCreate({ formElementRef, onChange, setCustomValid, resourceUrl }) {
   const { namespaceId } = useMicrofrontendContext();
   const [pod, setPod] = useState(createPodTemplate(namespaceId));
@@ -51,7 +57,8 @@ PodsCreate.resourceGraphConfig = (t, context) => ({
     Job: (pod, job) =>
       matchBySelector(job.spec.selector.matchLabels, pod.metadata.labels),
     ConfigMap: (pod, cm) => matchByEnv('configMapKeyRef')(pod, cm),
-    Secret: (pod, secret) => matchByEnv('secretKeyRef')(pod, secret),
+    Secret: (pod, secret) =>
+      matchByEnv('secretKeyRef')(pod, secret) || matchByVolumes(pod, secret),
     ReplicaSet: (pod, replicaSet) =>
       matchBySelector(
         replicaSet.spec.selector.matchLabels,
