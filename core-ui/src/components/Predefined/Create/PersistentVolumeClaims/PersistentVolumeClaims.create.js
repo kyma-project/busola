@@ -3,6 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { createPersistentVolumeClaimsTemplate } from './templates';
 
+PersistentVolumeClaimsCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'Pod',
+    },
+  ],
+  depth: 1,
+  networkFlowLevel: 1,
+});
+
 function PersistentVolumeClaimsCreate({
   namespace,
   formElementRef,

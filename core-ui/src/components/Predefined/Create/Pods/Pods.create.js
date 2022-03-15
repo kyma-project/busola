@@ -52,6 +52,9 @@ PodsCreate.resourceGraphConfig = (t, context) => ({
     {
       kind: 'Job',
     },
+    {
+      kind: 'PersistentVolumeClaim',
+    },
   ],
   matchers: {
     Job: (pod, job) =>
@@ -63,6 +66,10 @@ PodsCreate.resourceGraphConfig = (t, context) => ({
       matchBySelector(
         replicaSet.spec.selector.matchLabels,
         pod.metadata.labels,
+      ),
+    PersistentVolumeClaim: (pod, pvc) =>
+      pod.spec.volumes.some(
+        volume => volume.persistentVolumeClaim?.claimName === pvc.metadata.name,
       ),
   },
 });
