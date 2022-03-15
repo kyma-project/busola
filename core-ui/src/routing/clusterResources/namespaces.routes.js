@@ -10,5 +10,5 @@ const Details = React.lazy(() =>
 
 export default createResourceRoutes(
   { List, Details },
-  { resourceType: 'Namespaces', namespaced: false },
+  { resourceType: 'namespaces', namespaced: false },
 );
