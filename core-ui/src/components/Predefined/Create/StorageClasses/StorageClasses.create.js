@@ -32,6 +32,10 @@ function StorageClassesCreate({
 StorageClassesCreate.resourceGraphConfig = (t, context) => ({
   relations: [
     {
+      kind: 'PersistentVolume',
+      clusterwide: true,
+    },
+    {
       kind: 'PersistentVolumeClaim',
       clusterwide: true,
     },
