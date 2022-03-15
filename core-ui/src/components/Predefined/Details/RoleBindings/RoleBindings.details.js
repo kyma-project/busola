@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 
 import { RoleSubjects } from './RoleSubjects.js';
 import { RoleRef } from './RoleRef';
-import { RoleBindingsCreate } from '../../Create/RoleBindings/RoleBindings.create';
+import { ClusterRoleBindingsCreate } from '../../Create/RoleBindings/RoleBindings.create';
 import { ResourceDetails } from 'react-shared';
 
 function RoleBindingsDetails(props) {
   return (
     <GenericRoleBindingDetails
       {...props}
-      createResourceForm={RoleBindingsCreate}
+      createResourceForm={ClusterRoleBindingsCreate}
     />
   );
 }
