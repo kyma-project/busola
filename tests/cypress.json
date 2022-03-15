@@ -16,8 +16,8 @@
   "experimentalInteractiveRunEvents": true,
   "testFiles": [
     "namespace/run-before.spec.js",
-    "namespace/run-prepare-functions.spec.js",
     "namespace/test-namespace-overview.spec.js",
+    "namespace/run-prepare-functions.spec.js",
     "namespace/test-deployments.spec.js",
     "namespace/test-events.spec.js",
     "namespace/test-roles.spec.js",

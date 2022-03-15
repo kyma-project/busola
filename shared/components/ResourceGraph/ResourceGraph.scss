@@ -1,0 +1,40 @@
+.resource-graph {
+  .fd-layout-panel__header {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+#graph-area {
+  display: flex;
+  justify-content: center;
+  background: var(--sapNeutralBackground);
+  height: 500px;
+  position: relative;
+
+  & > :first-child {
+    width: 100%;
+  }
+
+  .node > polygon,
+  .cluster > polygon {
+    fill: var(--sapGroup_ContentBackground);
+  }
+
+  #graph0 > polygon {
+    fill: var(--sapNeutralBackground);
+  }
+
+  .node:not(.root-node),
+  .cluster:not(.root-node) *,
+  .node:not(.root-node) > polygon,
+  .cluster > polygon {
+    cursor: pointer;
+  }
+
+  .controls {
+    bottom: 10px;
+    position: absolute;
+    right: 10px;
+  }
+}

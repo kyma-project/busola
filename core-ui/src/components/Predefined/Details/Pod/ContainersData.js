@@ -84,7 +84,7 @@ export default function ContainersData({ type, containers, statuses }) {
         <ContainerComponent
           key={container.name}
           container={container}
-          status={statuses.find(status => status.name === container.name)}
+          status={statuses?.find(status => status.name === container.name)}
         />
       ))}
     </LayoutPanel>

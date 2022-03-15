@@ -16,7 +16,7 @@ function HorizontalPodAutoscalersCreate({
 
   return (
     <ResourceForm
-      pluralKind="HPAs"
+      pluralKind="HorizontalPodAutoscalers"
       singularName={t('hpas.name_singular')}
       resource={HPA}
       setResource={setHPA}
@@ -28,4 +28,12 @@ function HorizontalPodAutoscalersCreate({
     />
   );
 }
+HorizontalPodAutoscalersCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'Deployment',
+    },
+  ],
+  depth: 1,
+});
 export { HorizontalPodAutoscalersCreate };

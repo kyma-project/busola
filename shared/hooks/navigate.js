@@ -1,4 +1,5 @@
 import LuigiClient from '@luigi-project/client';
+import pluralize from 'pluralize';
 
 function navigateToResourceDetails(resourceName) {
   LuigiClient.linkManager()
@@ -40,7 +41,7 @@ function navigateToNamespaceDetails(namespaceName) {
 export function navigateToDetails(resourceType, name) {
   const encodedName = encodeURIComponent(name);
   switch (resourceType) {
-    case 'Namespaces':
+    case 'namespaces':
       navigateToNamespaceDetails(encodedName);
       break;
     default:
@@ -68,7 +69,7 @@ function navigateToCustomResourceDefinitionsList() {
 
 export function navigateToList(resourceType) {
   switch (resourceType) {
-    case 'Namespaces':
+    case 'namespaces':
       navigateToNamespaceList();
       break;
     case 'CustomResourceDefinitions':
@@ -78,4 +79,19 @@ export function navigateToList(resourceType) {
       navigateToResourceList();
       break;
   }
+}
+
+export function navigateToResource(resource) {
+  const {
+    metadata: { name, namespace },
+    kind,
+  } = resource;
+
+  let path = `${pluralize(kind.toLowerCase())}/details/${name}`;
+  if (namespace) {
+    path = `namespaces/${namespace}/${path}`;
+  }
+  return LuigiClient.linkManager()
+    .fromContext('cluster')
+    .navigate(path);
 }
