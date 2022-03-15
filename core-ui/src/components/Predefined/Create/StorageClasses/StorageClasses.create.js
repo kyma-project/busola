@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { createStorageClassTemplate } from './templates';
 
-const StorageClassesCreate = ({
+function StorageClassesCreate({
   onChange,
   formElementRef,
   resourceUrl,
   setCustomValid,
-}) => {
+}) {
   const { t } = useTranslation();
   const [storageClass, setStorageClass] = useState(
     createStorageClassTemplate(),
@@ -27,5 +27,16 @@ const StorageClassesCreate = ({
       onlyYaml
     ></ResourceForm>
   );
-};
+}
+
+StorageClassesCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'PersistentVolumeClaim',
+      clusterwide: true,
+    },
+  ],
+  depth: 1,
+});
+
 export { StorageClassesCreate };
