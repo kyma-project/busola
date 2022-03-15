@@ -10,5 +10,9 @@ const Details = React.lazy(() =>
 
 export default createResourceRoutes(
   { List, Details },
-  { resourceType: 'ApiRules', namespaced: true },
+  {
+    resourceType: 'ApiRules',
+    namespaced: true,
+    resourceI18Key: 'api-rules.title',
+  },
 );

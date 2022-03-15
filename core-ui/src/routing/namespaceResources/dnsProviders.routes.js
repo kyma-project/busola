@@ -10,5 +10,9 @@ const Details = React.lazy(() =>
 
 export default createResourceRoutes(
   { List, Details },
-  { resourceType: 'DnsProviders', namespaced: true },
+  {
+    resourceType: 'DnsProviders',
+    namespaced: true,
+    resourceI18Key: 'dnsproviders.title',
+  },
 );
