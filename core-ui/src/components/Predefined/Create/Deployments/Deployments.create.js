@@ -228,13 +228,9 @@ DeploymentsCreate.resourceGraphConfig = (t, context) => ({
     },
   ],
   matchers: {
-    HorizontalPodAutoscaler: (deployment, hpa) => {
-      console.log('HorizontalPodAutoscaler', deployment, hpa);
-      return (
-        hpa.spec.scaleTargetRef?.kind === 'Deployment' &&
-        hpa.spec.scaleTargetRef?.name === deployment.metadata.name
-      );
-    },
+    HorizontalPodAutoscaler: (deployment, hpa) =>
+      hpa.spec.scaleTargetRef?.kind === 'Deployment' &&
+      hpa.spec.scaleTargetRef?.name === deployment.metadata.name,
     Service: (deployment, service) =>
       matchBySelector(
         deployment.spec.selector.matchLabels,
