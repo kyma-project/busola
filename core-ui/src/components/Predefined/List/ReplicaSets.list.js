@@ -50,6 +50,7 @@ const ReplicaSetsList = params => {
   return (
     <ResourcesList
       customColumns={customColumns}
+      resourceName={t('replica-sets.title')}
       description={description}
       createResourceForm={ReplicaSetsCreate}
       {...params}

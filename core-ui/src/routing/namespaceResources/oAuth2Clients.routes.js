@@ -12,5 +12,9 @@ const Details = React.lazy(() =>
 
 export default createResourceRoutes(
   { List, Details },
-  { resourceType: 'OAuth2Clients', namespaced: true },
+  {
+    resourceType: 'OAuth2Clients',
+    namespaced: true,
+    resourceI18Key: 'oauth2-clients.title',
+  },
 );

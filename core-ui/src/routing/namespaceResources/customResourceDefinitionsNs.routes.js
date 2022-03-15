@@ -11,6 +11,5 @@ export default createResourceRoutes(
   {
     resourceType: 'CustomResourceDefinitions',
     namespaced: true,
-    resourceName: '',
   },
 );

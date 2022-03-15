@@ -15,27 +15,26 @@ export const createPath = (
   return `${namespacePrefix}/${pathSegment}${details}`;
 };
 
-export const usePrepareListProps = (resourceType, resourceName) => {
+export const usePrepareListProps = (resourceType, resourceI18Key) => {
   const routerParams = useParams();
   const queryParams = new URLSearchParams(window.location.search);
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const resourceUrl = getResourceUrl();
-  console.log(resourceName);
   return {
     hasDetailsView: queryParams.get('hasDetailsView') === 'true',
     readOnly: queryParams.get('readOnly') === 'true',
     resourceUrl,
     resourceType: resourceType,
-    resourceName,
+    resourceName: resourceI18Key ? t(resourceI18Key) : '',
     namespace: routerParams.namespaceId,
     i18n,
   };
 };
 
-export const usePrepareDetailsProps = resourceType => {
+export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
   const { resourceName, namespaceId } = useParams();
   const queryParams = new URLSearchParams(window.location.search);
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const resourceUrl = getResourceUrl();
 
   const decodedResourceUrl = decodeURIComponent(resourceUrl);
@@ -44,6 +43,7 @@ export const usePrepareDetailsProps = resourceType => {
   return {
     resourceUrl: decodedResourceUrl,
     resourceType: resourceType,
+    resourceTitle: resourceI18Key ? t(resourceI18Key) : '',
     resourceName: decodedResourceName,
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
@@ -51,12 +51,12 @@ export const usePrepareDetailsProps = resourceType => {
   };
 };
 
-const ListWrapper = ({ children, resourceType, resourceName }) => {
-  const props = usePrepareListProps(resourceType, resourceName);
+const ListWrapper = ({ children, resourceType, resourceI18Key }) => {
+  const props = usePrepareListProps(resourceType, resourceI18Key);
   return React.cloneElement(children, props);
 };
-const DetailsWrapper = ({ children, resourceType }) => {
-  const props = usePrepareDetailsProps(resourceType);
+const DetailsWrapper = ({ children, resourceType, resourceI18Key }) => {
+  const props = usePrepareDetailsProps(resourceType, resourceI18Key);
   return React.cloneElement(children, props);
 };
 
@@ -65,11 +65,11 @@ export const createResourceRoutes = (
   config = {
     namespaced: true,
     resourceType: '',
-    resourceName: '',
+    resourceI18Key: '',
   },
 ) => {
-  // use resourceName to set custom list name, for example to fix capitalization
-  const { namespaced = true, resourceType = '', resourceName = '' } = config;
+  // define resourceI18Key when calling the function, to set a custom plural resource name, for example to fix the capitalization
+  const { namespaced = true, resourceType = '', resourceI18Key = '' } = config;
 
   const pathSegment = resourceType.toLowerCase();
 
@@ -87,7 +87,7 @@ export const createResourceRoutes = (
           <Suspense fallback={<Spinner />}>
             <ListWrapper
               resourceType={resourceType}
-              resourceName={resourceName}
+              resourceI18Key={resourceI18Key}
             >
               <Components.List />
             </ListWrapper>
@@ -99,7 +99,10 @@ export const createResourceRoutes = (
           path={detailsPath}
           element={
             <Suspense fallback={<Spinner />}>
-              <DetailsWrapper resourceType={resourceType}>
+              <DetailsWrapper
+                resourceType={resourceType}
+                resourceI18Key={resourceI18Key}
+              >
                 <Components.Details />
               </DetailsWrapper>
             </Suspense>

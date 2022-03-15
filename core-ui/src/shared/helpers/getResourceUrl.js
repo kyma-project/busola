@@ -5,6 +5,5 @@ export function getResourceUrl() {
 
   return fullResourceApiPath
     ? fullResourceApiPath
-    : resourceApiPath +
-        window.location.pathname.toLocaleLowerCase().replace(/^\/core-ui/, '');
+    : resourceApiPath + window.location.pathname.replace(/^\/core-ui/, '');
 }
