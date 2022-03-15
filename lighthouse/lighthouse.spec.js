@@ -3,7 +3,7 @@ import { playAudit } from 'playwright-lighthouse';
 import { chromium } from 'playwright';
 import { tmpdir } from 'os';
 
-const ADDRESS = 'http://localhost:8080';
+const ADDRESS = 'https://local.kyma.dev';
 
 test('Busola Lighthouse audit', async () => {
   const context = await chromium.launchPersistentContext(tmpdir(), {
