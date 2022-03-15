@@ -15,16 +15,18 @@ export const createPath = (
   return `${namespacePrefix}/${pathSegment}${details}`;
 };
 
-export const usePrepareListProps = resourceType => {
+export const usePrepareListProps = (resourceType, resourceName) => {
   const routerParams = useParams();
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n } = useTranslation();
   const resourceUrl = getResourceUrl();
+  console.log(resourceName);
   return {
     hasDetailsView: queryParams.get('hasDetailsView') === 'true',
     readOnly: queryParams.get('readOnly') === 'true',
     resourceUrl,
     resourceType: resourceType,
+    resourceName,
     namespace: routerParams.namespaceId,
     i18n,
   };
@@ -49,8 +51,8 @@ export const usePrepareDetailsProps = resourceType => {
   };
 };
 
-const ListWrapper = ({ children, resourceType }) => {
-  const props = usePrepareListProps(resourceType);
+const ListWrapper = ({ children, resourceType, resourceName }) => {
+  const props = usePrepareListProps(resourceType, resourceName);
   return React.cloneElement(children, props);
 };
 const DetailsWrapper = ({ children, resourceType }) => {
@@ -63,9 +65,11 @@ export const createResourceRoutes = (
   config = {
     namespaced: true,
     resourceType: '',
+    resourceName: '',
   },
 ) => {
-  const { namespaced = true, resourceType = '' } = config;
+  // use resourceName to set custom list name, for example to fix capitalization
+  const { namespaced = true, resourceType = '', resourceName = '' } = config;
 
   const pathSegment = resourceType.toLowerCase();
 
@@ -81,7 +85,10 @@ export const createResourceRoutes = (
         exact
         element={
           <Suspense fallback={<Spinner />}>
-            <ListWrapper resourceType={resourceType}>
+            <ListWrapper
+              resourceType={resourceType}
+              resourceName={resourceName}
+            >
               <Components.List />
             </ListWrapper>
           </Suspense>

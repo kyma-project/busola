@@ -8,5 +8,9 @@ const List = React.lazy(() =>
 // Details are not listed intentionally. For some reason React Router interprets namespaced CRD details as cluster CRD details, despite correct URLs.
 export default createResourceRoutes(
   { List },
-  { resourceType: 'CustomResourceDefinitions', namespaced: true },
+  {
+    resourceType: 'CustomResourceDefinitions',
+    namespaced: true,
+    resourceName: '',
+  },
 );
