@@ -41,6 +41,7 @@ import gitRepositories from './namespaceResources/gitRepositories.routes';
 import functions from './namespaceResources/functions.routes';
 
 //cluster
+import applications from './clusterResources/applications.routes';
 import clusterRoles from './clusterResources/clusterRoles.routes';
 import storageClasses from './clusterResources/storageClases.routes';
 import persistentVolumes from './clusterResources/persistentVolumes.routes';
@@ -48,6 +49,7 @@ import namespaces from './clusterResources/namespaces.routes';
 import eventsCluster from './clusterResources/eventsCluster.routes';
 import addonsConfigurationCluster from './clusterResources/addonsConfigurationCluster.routes';
 import customResourceDefinitionsCl from './clusterResources/customResourceDefinitionsCl.routes';
+import clusterRoleBindings from './clusterResources/clusterRoleBindings.routes';
 
 const resources = (
   <>
@@ -101,6 +103,7 @@ const resources = (
 
     {/* cluster resources */}
     <>
+      {applications}
       {eventsCluster}
       {namespaces}
       {clusterRoles}
@@ -108,6 +111,7 @@ const resources = (
       {persistentVolumes}
       {addonsConfigurationCluster}
       {customResourceDefinitionsCl}
+      {clusterRoleBindings}
     </>
   </>
 );

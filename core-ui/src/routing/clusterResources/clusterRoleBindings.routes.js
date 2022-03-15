@@ -1,8 +1,10 @@
 import React from 'react';
-import { createResourceRoutes } from '../common';
+import { createResourceRoutes } from 'routing/common';
 
 const List = React.lazy(() =>
-  import('../../components/Predefined/List/RoleBindings/RoleBindings.list'),
+  import(
+    '../../components/Predefined/List/RoleBindings/ClusterRoleBindings.list'
+  ),
 );
 const Details = React.lazy(() =>
   import(
@@ -12,5 +14,5 @@ const Details = React.lazy(() =>
 
 export default createResourceRoutes(
   { List, Details },
-  { resourceType: 'RoleBindings', namespaced: true },
+  { resourceType: 'ClusterRoleBindings', namespaced: false },
 );

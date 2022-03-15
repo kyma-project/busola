@@ -5,9 +5,9 @@ import { Link } from 'fundamental-react';
 import { Tooltip, ResourcesList } from 'react-shared';
 import { Link as ReactSharedLink } from 'react-shared';
 import { Trans } from 'react-i18next';
-import { RoleBindingsCreate } from '../Create/RoleBindings/RoleBindings.create';
+import { RoleBindingsCreate } from '../../Create/RoleBindings/RoleBindings.create';
 
-function BindingsList({ descriptionKey, ...params }) {
+export function BindingsList({ descriptionKey, ...params }) {
   const { t } = useTranslation();
 
   const navigateToRole = role => {
@@ -113,15 +113,6 @@ function RoleBindingsList(props) {
       descriptionKey={'role-bindings.description'}
       {...props}
       createResourceForm={RoleBindingsCreate}
-    />
-  );
-}
-
-export function ClusterRoleBindingsList(props) {
-  return (
-    <BindingsList
-      descriptionKey={'cluster-role-bindings.description'}
-      {...props}
     />
   );
 }
