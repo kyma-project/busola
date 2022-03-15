@@ -16,13 +16,6 @@ function SingleFilterInputs({ filter, setFilter }) {
       return t('subscriptions.errors.event-type-required');
     }
 
-    const natsFriendlyValue = value.replaceAll(/[^-a-zA-Z0-9.]/g, '');
-    if (natsFriendlyValue !== value) {
-      return t('subscriptions.errors.event-type-allowed-charset');
-    }
-
-    value = natsFriendlyValue;
-
     if (!value.startsWith(DEFAULT_EVENT_TYPE_PREFIX)) {
       return t('subscriptions.errors.event-type-prefix', {
         prefix: DEFAULT_EVENT_TYPE_PREFIX,
