@@ -9,9 +9,8 @@ export function wrap(str) {
 export function makeNode(resource) {
   const { kind, metadata } = resource;
   const { name, uid } = metadata;
-  console.log('makeNode', resource, metadata);
   // first is for rendering engine, second goes into actual DOM element
-  return `"${uid}" [id="${uid}" class="${kind.toLowerCase()}" label="${kind}\n${wrap(
+  return `"${uid}" [id="${uid}" class="${kind.toLowerCase()}" margin="0.2,0.2" label="${kind}\n${wrap(
     name,
   )}"][shape=box]`;
 }
