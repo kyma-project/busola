@@ -26,4 +26,22 @@ function PersistentVolumesCreate({
     />
   );
 }
+
+PersistentVolumesCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'StorageClass',
+    },
+    {
+      kind: 'PersistentVolumeClaim',
+      clusterwide: true,
+    },
+  ],
+  depth: 1,
+  networkFlowLevel: 1,
+  matchers: {
+    StorageClass: (pv, sc) => pv.spec.storageClassName === sc.metadata.name,
+  },
+});
+
 export { PersistentVolumesCreate };
