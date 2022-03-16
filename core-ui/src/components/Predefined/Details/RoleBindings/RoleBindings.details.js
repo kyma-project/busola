@@ -5,11 +5,23 @@ import { RoleSubjects } from './RoleSubjects.js';
 import { RoleRef } from './RoleRef';
 
 export function RoleBindingsDetails(props) {
-  return <GenericRoleBindingDetails {...props} />;
+  const { t } = useTranslation();
+  return (
+    <GenericRoleBindingDetails
+      resourceTitle={t('role-bindings.title')}
+      {...props}
+    />
+  );
 }
 
 export function ClusterRoleBindingsDetails(props) {
-  return <GenericRoleBindingDetails {...props} />;
+  const { t } = useTranslation();
+  return (
+    <GenericRoleBindingDetails
+      resourceTitle={t('cluster-role-bindings.title')}
+      {...props}
+    />
+  );
 }
 
 function GenericRoleBindingDetails({ DefaultRenderer, ...otherParams }) {
@@ -23,7 +35,6 @@ function GenericRoleBindingDetails({ DefaultRenderer, ...otherParams }) {
   ];
   return (
     <DefaultRenderer
-      resourceTitle={t('cluster-role-bindings.title')}
       {...otherParams}
       customColumns={customColumns}
       customComponents={[RoleSubjects]}
