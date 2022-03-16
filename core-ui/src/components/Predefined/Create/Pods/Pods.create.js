@@ -80,14 +80,13 @@ PodsCreate.resourceGraphConfig = (t, context) => ({
         resource: pod,
         owner: job,
       }),
-    Secret: (pod, secret) =>
-      matchByEnv('secretKeyRef')(pod, secret) || matchByVolumes(pod, secret),
     ReplicaSet: (pod, replicaSet) =>
       matchBySelector(
         replicaSet.spec.selector.matchLabels,
         pod.metadata.labels,
       ),
-    Secret: (pod, secret) => matchByEnv('secretKeyRef')(pod, secret),
+    Secret: (pod, secret) =>
+      matchByEnv('secretKeyRef')(pod, secret) || matchByVolumes(pod, secret),
     StatefulSet: (pod, ss) =>
       matchByOwnerReference({
         resource: pod,
