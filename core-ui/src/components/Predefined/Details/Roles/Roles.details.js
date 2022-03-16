@@ -23,3 +23,4 @@ export function ClusterRolesDetails({ DefaultRenderer, ...otherParams }) {
       customComponents={[Rules]}
     />
   );
+}

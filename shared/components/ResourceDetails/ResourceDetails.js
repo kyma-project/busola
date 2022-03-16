@@ -143,9 +143,12 @@ function Resource({
   resourceGraphConfig,
 }) {
   const { t } = useTranslation(['translation'], { i18n });
-  useWindowTitle(
-    windowTitle || prettifyNamePlural(resourceTitle, resource.kind),
+  const prettifiedResourceKind = prettifyNameSingular(
+    resourceTitle,
+    resource.kind,
   );
+  const pluralizedResourceKind = pluralize(prettifiedResourceKind);
+  useWindowTitle(windowTitle || pluralizedResourceKind);
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
@@ -157,11 +160,9 @@ function Resource({
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
   const notification = useNotification();
 
-  const prettifiedResourceName = prettifyNameSingular(undefined, resourceType);
-
   const breadcrumbItems = breadcrumbs || [
     {
-      name: prettifyNamePlural(resourceTitle, resource.kind),
+      name: pluralizedResourceKind,
       path: '/',
       fromContext: pluralize(resource.kind).toLowerCase(),
     },
@@ -196,14 +197,14 @@ function Resource({
           title={
             editActionLabel ||
             t('components.resource-details.edit', {
-              resourceType: prettifiedResourceName,
+              resourceType: prettifiedResourceKind,
             })
           }
           modalOpeningComponent={
             <Button className="fd-margin-end--tiny" option="emphasized">
               {editActionLabel ||
                 t('components.resource-details.edit', {
-                  resourceType: prettifiedResourceName,
+                  resourceType: prettifiedResourceKind,
                 })}
             </Button>
           }
@@ -262,14 +263,14 @@ function Resource({
       silentRefetch();
       notification.notifySuccess({
         content: t('components.resource-details.messages.success', {
-          resourceType: prettifiedResourceName,
+          resourceType: prettifiedResourceKind,
         }),
       });
     } catch (e) {
       console.error(e);
       notification.notifyError({
         content: t('components.resource-details.messages.failure', {
-          resourceType: prettifiedResourceName,
+          resourceType: prettifiedResourceKind,
           error: e.message,
         }),
       });
