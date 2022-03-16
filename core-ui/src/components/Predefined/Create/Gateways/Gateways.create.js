@@ -13,6 +13,12 @@ import { validateGateway } from './helpers';
 import { MessageStrip } from 'fundamental-react';
 import { cloneDeep } from 'lodash';
 
+function matchByTlsCredentials(gateway, secret) {
+  return gateway.spec.servers.some(
+    server => server?.tls?.credentialName === secret.metadata.name,
+  );
+}
+
 function GatewaysCreate({
   formElementRef,
   namespace,
@@ -113,7 +119,14 @@ GatewaysCreate.resourceGraphConfig = (t, context) => ({
       kind: 'APIRule',
       clusterwide: true,
     },
+    {
+      kind: 'Secret',
+      clusterwide: true,
+    },
   ],
   networkFlowLevel: -3,
+  matchers: {
+    Secret: (gateway, secret) => matchByTlsCredentials(secret, gateway),
+  },
 });
 export { GatewaysCreate };
