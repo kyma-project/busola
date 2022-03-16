@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { GenericSecrets } from './GenericSecrets';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
 
+import './ServiceAccountsDetails.scss';
+
 const ServiceAccountSecrets = serviceAccount => {
   const namespace = serviceAccount.metadata.namespace;
   const listKey = 'service-account-secrets';

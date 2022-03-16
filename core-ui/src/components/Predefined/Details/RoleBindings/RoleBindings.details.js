@@ -4,13 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { RoleSubjects } from './RoleSubjects.js';
 import { RoleRef } from './RoleRef';
 
-export function RoleBindingsDetails(props) {
-  return <GenericRoleBindingDetails {...props} />;
-}
-
-export function ClusterRoleBindingsDetails(props) {
-  return <GenericRoleBindingDetails {...props} />;
-}
+import './RoleBindingsDetails.scss';
 
 function GenericRoleBindingDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -29,3 +23,6 @@ function GenericRoleBindingDetails({ DefaultRenderer, ...otherParams }) {
     />
   );
 }
+
+export const RoleBindingsDetails = GenericRoleBindingDetails;
+export const ClusterRoleBindingsDetails = GenericRoleBindingDetails;
