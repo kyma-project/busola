@@ -144,7 +144,7 @@ function Resource({
 }) {
   const { t } = useTranslation(['translation'], { i18n });
   useWindowTitle(
-    windowTitle || resourceTitle || prettifyNamePlural(null, resource.kind),
+    windowTitle || prettifyNamePlural(resourceTitle, resource.kind),
   );
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
@@ -161,7 +161,7 @@ function Resource({
 
   const breadcrumbItems = breadcrumbs || [
     {
-      name: resourceTitle || prettifyNamePlural(null, resource.kind),
+      name: prettifyNamePlural(resourceTitle, resource.kind),
       path: '/',
       fromContext: pluralize(resource.kind).toLowerCase(),
     },
