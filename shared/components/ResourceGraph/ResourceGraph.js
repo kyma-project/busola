@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Graphviz } from 'graphviz-react';
 
-import { ErrorBoundary, navigateToResource } from '../..';
+import {
+  ErrorBoundary,
+  navigateToResource,
+  useMicrofrontendContext,
+} from '../..';
 import { useRelatedResources } from './useRelatedResources';
 import { buildGraph } from './buildGraph';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +14,7 @@ import { SaveGraphControls } from './SaveGraphControls';
 import './ResourceGraph.scss';
 
 export function ResourceGraph({ resource, i18n, config }) {
+  const { features } = useMicrofrontendContext();
   const { t } = useTranslation(['translation'], { i18n });
   const [dotSrc, setDotSrc] = useState('');
   const [isReady, setReady] = useState(false);
@@ -55,6 +60,10 @@ export function ResourceGraph({ resource, i18n, config }) {
       onAllLoaded,
     },
   });
+
+  if (!features.VISUAL_RESOURCES?.isEnabled) {
+    return '';
+  }
 
   const actions = !startedLoading && (
     <Button

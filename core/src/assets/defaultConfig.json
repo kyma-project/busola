@@ -59,6 +59,9 @@
             }
           ]
         }
+      },
+      "VISUAL_RESOURCES": {
+        "isEnabled": true
       }
     }
   }
