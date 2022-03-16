@@ -18,6 +18,19 @@ test('Busola Lighthouse audit', async () => {
 
   await page.goto(ADDRESS + '/clusters');
 
+  await playAudit({
+    page,
+    port: 9222,
+    thresholds: {
+      performance: 0, // ignored
+      accessibility: 77,
+      'best-practices': 90,
+      seo: 0, // ignored
+      pwa: 0, // ignored
+    },
+  });
+
+  // fix opening "connect cluster" modal
   await page.evaluate(() => {
     return new Promise(resolve => setTimeout(resolve, 5000));
   });
