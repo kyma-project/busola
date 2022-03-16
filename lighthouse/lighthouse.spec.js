@@ -61,7 +61,7 @@ test('Busola Lighthouse audit', async () => {
     thresholds: {
       performance: 0, // ignored
       accessibility: 77,
-      'best-practices': 100,
+      'best-practices': 90,
       seo: 0, // ignored
       pwa: 0, // ignored
     },
