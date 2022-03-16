@@ -57,7 +57,6 @@ async function cycle(store, depth, config, context) {
           ...namespaceNodes,
           ...clusterNodes,
         ]);
-
         if (apiPath) {
           resourcesToFetch.push({
             fromKind: kind,
@@ -91,11 +90,10 @@ async function cycle(store, depth, config, context) {
         ...item,
         kind: resource.kind, // add kind, as it's not present on list call
       }));
-
       const filterOnlyRelated = possiblyRelatedResource =>
-        store.current[resource.fromKind].some(oR =>
-          match(possiblyRelatedResource, oR, config),
-        );
+        store.current[resource.fromKind].some(oR => {
+          return match(possiblyRelatedResource, oR, config);
+        });
 
       store.current[resource.kind] = allResourcesForKind.filter(
         filterOnlyRelated,
@@ -106,7 +104,6 @@ async function cycle(store, depth, config, context) {
   };
 
   await Promise.all(resourcesToFetch.map(fetchResource));
-
   events.onRelatedResourcesRefresh();
   if (resourcesToFetch.length && depth - 1 > 0) {
     cycle(store, depth - 1, config, context);

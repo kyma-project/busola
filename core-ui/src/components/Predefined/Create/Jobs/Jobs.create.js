@@ -153,6 +153,8 @@ function JobsCreate({
 }
 JobsCreate.allowEdit = true;
 JobsCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  networkFlowLevel: -1,
   relations: [
     {
       kind: 'Pod',
@@ -160,10 +162,19 @@ JobsCreate.resourceGraphConfig = (t, context) => ({
     {
       kind: 'CronJob',
     },
+    {
+      kind: 'Function',
+    },
   ],
+  depth: 1,
   matchers: {
     CronJob: (job, cronJob) =>
       matchByOwnerReference({ resource: job, owner: cronJob }),
+    Function: (job, functión) =>
+      matchByOwnerReference({
+        resource: job,
+        owner: functión,
+      }),
   },
 });
 export { JobsCreate };

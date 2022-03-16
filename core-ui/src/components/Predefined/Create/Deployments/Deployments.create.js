@@ -215,6 +215,7 @@ function DeploymentsCreate({
 DeploymentsCreate.allowEdit = true;
 DeploymentsCreate.resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
+  networkFlowLevel: -2,
   relations: [
     {
       kind: 'Service',
