@@ -1,4 +1,4 @@
-@import '../../../../../../shared/components/ResourceGraph/mixins.scss';
+@import '../../../../shared-repo/components/ResourceGraph/mixins.scss';
 
 @include graph-node-border(role, 1);
 @include graph-node-border(clusterrole, 1);
