@@ -71,6 +71,7 @@ export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
+      resourceTitle={t('replica-sets.title')}
       customColumns={customColumns}
       customComponents={[HPASubcomponent, MatchSelector]}
       {...otherParams}

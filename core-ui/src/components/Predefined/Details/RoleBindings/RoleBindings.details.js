@@ -6,6 +6,26 @@ import { RoleRef } from './RoleRef';
 
 import './RoleBindingsDetails.scss';
 
+export function RoleBindingsDetails(props) {
+  const { t } = useTranslation();
+  return (
+    <GenericRoleBindingDetails
+      resourceTitle={t('role-bindings.title')}
+      {...props}
+    />
+  );
+}
+
+export function ClusterRoleBindingsDetails(props) {
+  const { t } = useTranslation();
+  return (
+    <GenericRoleBindingDetails
+      resourceTitle={t('cluster-role-bindings.title')}
+      {...props}
+    />
+  );
+}
+
 function GenericRoleBindingDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
 
@@ -23,6 +43,3 @@ function GenericRoleBindingDetails({ DefaultRenderer, ...otherParams }) {
     />
   );
 }
-
-export const RoleBindingsDetails = GenericRoleBindingDetails;
-export const ClusterRoleBindingsDetails = GenericRoleBindingDetails;

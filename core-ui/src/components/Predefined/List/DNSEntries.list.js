@@ -32,7 +32,7 @@ export const DNSEntriesList = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customColumns={customColumns}
       description={description}
-      resourceName="DNS Entries"
+      resourceName={t('dnsentries.title')}
       {...otherParams}
     />
   );
