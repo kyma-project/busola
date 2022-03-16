@@ -59,6 +59,9 @@
             }
           ]
         }
+      },
+      "PROMETHEUS": {
+        "isEnabled": true
       }
     }
   }

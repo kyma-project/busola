@@ -79,6 +79,9 @@ data:
           },
           "GZIP": {
             "isEnabled": true
+          },
+          "PROMETHEUS": {
+            "isEnabled": false
           }
         }
       }
