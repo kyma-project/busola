@@ -8,6 +8,7 @@ module.exports = {
       // register aliases also in jsconfig.json
       helpers: path.resolve(__dirname, 'src/service-catalog-ui/helpers'),
       shared: path.resolve(__dirname, 'src/shared'),
+      'react-shared': path.resolve(__dirname, 'src/shared-repo'),
       ...config.resolve.alias,
     };
 
@@ -17,6 +18,7 @@ module.exports = {
     config.moduleNameMapper = {
       '^helpers/?(.*)': '<rootDir>/src/service-catalog-ui/helpers/$1',
       '^shared/?(.*)': '<rootDir>/src/shared/$1',
+      '^react-shared/?(.*)': '<rootDir>/src/shared-repo/$1',
       ...config.moduleNameMapper,
     };
     config.snapshotSerializers = [
