@@ -166,6 +166,7 @@ JobsCreate.resourceGraphConfig = (t, context) => ({
       kind: 'Function',
     },
   ],
+  depth: 1,
   matchers: {
     CronJob: (job, cronJob) =>
       matchByOwnerReference({ resource: job, owner: cronJob }),
