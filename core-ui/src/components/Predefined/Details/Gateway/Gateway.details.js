@@ -5,6 +5,8 @@ import { GatewayServers } from './GatewayServers';
 import { GatewaySelector } from './GatewaySelector';
 import { Selector } from 'shared/components/Selector/Selector';
 
+import './GatewaysDetails.scss';
+
 function MatchSelector(gateway) {
   return (
     <Selector

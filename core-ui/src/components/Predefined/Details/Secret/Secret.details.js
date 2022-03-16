@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { CertificateData } from './CertificateData';
 import { HelmReleaseData } from 'components/HelmReleases/HelmReleaseData';
 
+import './SecretsDetails.scss';
+
 function HelmReleaseDataWrapper(secret) {
   if (secret.type !== 'helm.sh/release.v1') {
     return null;
