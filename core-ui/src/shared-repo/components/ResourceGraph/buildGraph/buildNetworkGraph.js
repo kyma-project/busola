@@ -4,6 +4,18 @@ import { findCommonPrefix } from './../../..';
 function isWorkloadLayer(layer) {
   return layer[0].kind === 'Pod';
 }
+const DEPLOYMENT_SUBGRAPH_ITEMS = [
+  { kind: 'Pod', required: true, root: true },
+  { kind: 'Deployment', required: true },
+  { kind: 'ReplicaSet', required: false },
+  { kind: 'HorizontalPodAutoscaler', required: false },
+];
+
+function canDrawWorkload(store) {
+  return DEPLOYMENT_SUBGRAPH_ITEMS.every(item => {
+    return item.required ? store[item.kind]?.length > 0 : true;
+  });
+}
 
 // lhead overrides actual arrow end
 function makeEdge(id1, id2, { lhead } = {}) {
@@ -23,11 +35,16 @@ function getCombinedResourceName(resources) {
     : resources[0].metadata.name;
 }
 
-function getResourcesOnLayers(store, config) {
+function getResourcesOnLayers(store, config, extract) {
   const getResourcesForLayer = level => {
     const resourcesOnLevel = [];
     for (const kind in store) {
-      if (config[kind]?.networkFlowLevel === level) {
+      if (
+        extract &&
+        DEPLOYMENT_SUBGRAPH_ITEMS.some(i => (i.root ? false : i.kind === kind))
+      ) {
+        continue;
+      } else if (config[kind]?.networkFlowLevel === level) {
         resourcesOnLevel.push(store[kind]);
       }
     }
@@ -48,7 +65,8 @@ function getResourcesOnLayers(store, config) {
 }
 
 export function buildNetworkGraph({ store }, config) {
-  const layers = getResourcesOnLayers(store, config);
+  const isWorkload = canDrawWorkload(store);
+  const layers = getResourcesOnLayers(store, config, isWorkload);
 
   const strLayers = [];
   const strEdges = [];
@@ -57,7 +75,7 @@ export function buildNetworkGraph({ store }, config) {
     const currentLayer = layers[i];
     const nextLayer = layers[i + 1];
 
-    if (isWorkloadLayer(currentLayer) && store['Pod'].length > 0) {
+    if (isWorkloadLayer(currentLayer) && isWorkload) {
       const multiplePods = store['Pod'].length > 1;
       const podId = multiplePods
         ? 'composite-pod'
@@ -99,7 +117,7 @@ export function buildNetworkGraph({ store }, config) {
 
       if (!nextLayer) continue;
       // normal layers, connect matching resources
-      if (!isWorkloadLayer(nextLayer)) {
+      if (!(isWorkloadLayer(nextLayer) && isWorkload)) {
         for (const layerResource of currentLayer) {
           for (const nextLayerResource of nextLayer) {
             // connect if match exists
