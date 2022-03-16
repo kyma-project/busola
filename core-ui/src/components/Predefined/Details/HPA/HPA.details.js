@@ -10,6 +10,8 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 
+import './HorizontalPodAutoscalersDetails.scss';
+
 export function HorizontalPodAutoscalersDetails({
   DefaultRenderer,
   ...otherParams

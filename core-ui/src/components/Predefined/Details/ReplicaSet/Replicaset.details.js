@@ -6,6 +6,8 @@ import { ReplicaSetStatus } from './ReplicaSetStatus';
 import { HPASubcomponent } from '../HPA/HPASubcomponent';
 import { Selector } from 'shared/components/Selector/Selector';
 
+import './ReplicasetsDetails.scss';
+
 export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
 

@@ -65,7 +65,7 @@ export function buildNetworkGraph({ store }, config) {
       const podName = getCombinedResourceName(store['Pod']);
 
       const label = `Pod\n${wrap(podName)}`;
-      let pod = `"${podId}" [id="${podId}" label="${label}"][shape=box]`;
+      let pod = `"${podId}" [id="${podId}" class="pod" margin="0.2,0.2" label="${label}"][shape=box]`;
       // assume only one deployment
       const deployment = store['Deployment']?.[0];
       // and one replicaSet

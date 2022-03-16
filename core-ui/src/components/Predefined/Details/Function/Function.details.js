@@ -6,6 +6,8 @@ import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
 
+import './FunctionsDetails.scss';
+
 export const FunctionsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
   const customColumns = [

@@ -12,6 +12,12 @@ function matchByEnv(valueFromKey) {
       ),
     );
 }
+
+function matchByVolumes(pod, resource) {
+  return pod.spec.volumes.some(
+    volume => volume.secret?.secretName === resource.metadata.name,
+  );
+}
 function PodsCreate({ formElementRef, onChange, setCustomValid, resourceUrl }) {
   const { namespaceId } = useMicrofrontendContext();
   const [pod, setPod] = useState(createPodTemplate(namespaceId));
@@ -31,6 +37,7 @@ function PodsCreate({ formElementRef, onChange, setCustomValid, resourceUrl }) {
     />
   );
 }
+
 PodsCreate.resourceGraphConfig = (t, context) => ({
   networkFlowLevel: 0,
   relations: [
@@ -46,16 +53,24 @@ PodsCreate.resourceGraphConfig = (t, context) => ({
     {
       kind: 'Job',
     },
+    {
+      kind: 'PersistentVolumeClaim',
+    },
   ],
   matchers: {
     Job: (pod, job) =>
       matchBySelector(job.spec.selector.matchLabels, pod.metadata.labels),
     ConfigMap: (pod, cm) => matchByEnv('configMapKeyRef')(pod, cm),
-    Secret: (pod, secret) => matchByEnv('secretKeyRef')(pod, secret),
+    Secret: (pod, secret) =>
+      matchByEnv('secretKeyRef')(pod, secret) || matchByVolumes(pod, secret),
     ReplicaSet: (pod, replicaSet) =>
       matchBySelector(
         replicaSet.spec.selector.matchLabels,
         pod.metadata.labels,
+      ),
+    PersistentVolumeClaim: (pod, pvc) =>
+      pod.spec.volumes.some(
+        volume => volume.persistentVolumeClaim?.claimName === pvc.metadata.name,
       ),
   },
 });
