@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { LayoutPanel, Button } from 'fundamental-react';
 import './ContainersData.scss';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ContainerStatus } from './ContainerStatus';
 
 const getPorts = ports => {
   if (ports?.length) {
@@ -24,10 +25,10 @@ ContainersData.propTypes = {
   containers: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default function ContainersData({ type, containers }) {
+export default function ContainersData({ type, containers, statuses }) {
   const { t } = useTranslation();
 
-  const ContainerComponent = ({ container }) => (
+  const ContainerComponent = ({ container, status }) => (
     <>
       <LayoutPanel.Header>
         <LayoutPanel.Head title={container.name} />
@@ -44,8 +45,8 @@ export default function ContainersData({ type, containers }) {
       </LayoutPanel.Header>
       <LayoutPanel.Body>
         <LayoutPanelRow
-          name={t('common.headers.name')}
-          value={container.name}
+          name={t('common.headers.status')}
+          value={<ContainerStatus status={status} />}
         />
         {container.image && (
           <LayoutPanelRow
@@ -80,7 +81,11 @@ export default function ContainersData({ type, containers }) {
       </LayoutPanel.Header>
 
       {containers.map(container => (
-        <ContainerComponent key={container.name} container={container} />
+        <ContainerComponent
+          key={container.name}
+          container={container}
+          status={statuses?.find(status => status.name === container.name)}
+        />
       ))}
     </LayoutPanel>
   );

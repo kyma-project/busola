@@ -3,30 +3,37 @@ const compression = require('compression');
 const cors = require('cors');
 const http = require('http');
 const fs = require('fs');
+const merge = require('lodash.merge');
+
 import { handleRequest, serveStaticApp, serveMonaco } from './common';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 const { setupJWTCheck } = require('./jwtCheck');
 
-let gzipEnabled;
+global.config = {};
+
 try {
-  gzipEnabled = JSON.parse(fs.readFileSync('./config/config.json'))?.config
-    ?.features?.GZIP?.isEnabled;
+  // config from the copnfiguration file
+  const defaultConfig = JSON.parse(
+    fs.readFileSync('./settings/defaultConfig.json'),
+  );
+  // config retrieved from busola's config map
+  const configFromMap = JSON.parse(fs.readFileSync('./config/config.json'));
+
+  global.config = merge(defaultConfig, configFromMap).config;
 } catch (e) {
-  console.log('Error while reading the configuration file', e?.message || e);
+  console.log('Error while reading the configuration files', e?.message || e);
 }
 
 const app = express();
 app.disable('x-powered-by');
 app.use(express.raw({ type: '*/*', limit: '100mb' }));
+
+const gzipEnabled = global.config.features?.GZIP?.isEnabled;
 if (gzipEnabled)
   app.use(
     compression({
       filter: (req, res) => {
-        //TODO change it to a custom header, pass the header from the front
-        if (
-          req.originalUrl.includes('watch=') ||
-          req.originalUrl.includes('follow=')
-        ) {
+        if (/\?.*(follow|watch)=/.test(req.originalUrl)) {
           // compression interferes with ReadableStreams. Small chunks are not transmitted for unknown reason
           return false;
         }
@@ -52,7 +59,6 @@ const isDocker = process.env.IS_DOCKER === 'true';
 if (isDocker) {
   // yup, order matters here
   serveStaticApp(app, '/core-ui/', '/core-ui');
-  serveStaticApp(app, '/service-catalog', '/service-catalog-ui');
   serveMonaco(app);
   app.use('/backend', handleRequest);
   serveStaticApp(app, '/', '/core');

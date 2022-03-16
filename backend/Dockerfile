@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM alpine:3.14.3 AS base
+FROM alpine:3.15.0 AS base
 # install node
 RUN apk add --update nodejs npm openssl nghttp2
 
@@ -12,13 +12,14 @@ RUN npm ci
 
 # build to a naked Javascript
 RUN npm run build
- 
+
 
 
 # ---- Serve ----
 FROM base AS release
 WORKDIR /app
 COPY --from=build /app/backend-production.js ./
+COPY settings settings/
 COPY certs.pem certs.pem
 COPY package* ./
 RUN npm ci --only=production

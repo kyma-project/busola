@@ -39,6 +39,7 @@ export const PersistentVolumeClaimsList = ({
   );
   return (
     <DefaultRenderer
+      resourceName={t('persistent-volume-claims.title')}
       description={description}
       customColumns={customColumns}
       {...otherParams}

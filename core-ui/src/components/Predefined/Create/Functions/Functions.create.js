@@ -249,3 +249,12 @@ export function FunctionsCreate({
     </ResourceForm>
   );
 }
+FunctionsCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  networkFlowLevel: -2,
+  relations: [
+    {
+      kind: 'Service',
+    },
+  ],
+});

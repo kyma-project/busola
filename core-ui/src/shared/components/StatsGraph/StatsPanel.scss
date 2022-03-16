@@ -1,4 +1,9 @@
 .stats-panel {
+  .fd-layout-panel__filters {
+    border: 0;
+    padding: 0;
+  }
+
   .fd-layout-panel__body {
     position: relative;
   }
@@ -18,11 +23,20 @@
     &.memory {
       --bar-color: var(--sapIndicationColor_6);
     }
-    &.network-up {
-      --bar-color: var(--sapIndicationColor_5);
+    &.network {
+      --bar-color: var(--sapIndicationColor_5) var(--sapIndicationColor_4);
     }
-    &.network-down {
-      --bar-color: var(--sapIndicationColor_4);
-    }
+  }
+}
+
+.error-message {
+  display: flex;
+  aspect-ratio: 6/1;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+
+  p {
+    font-size: 18px;
   }
 }

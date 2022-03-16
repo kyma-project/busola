@@ -87,12 +87,12 @@ export function RoleBindings({
       <ResourceForm.FormField
         required
         label={t('common.labels.name')}
-        placeholder={t('components.k8s-name-input.placeholder', {
-          resourceType: singularName,
-        })}
         input={Inputs.Text}
         propertyPath="$.metadata.name"
         readOnly={!!initialRoleBinding}
+        ariaLabel={t('components.k8s-name-input.aria-label', {
+          resourceType: singularName,
+        })}
       />
       <KeyValueField
         advanced

@@ -23,7 +23,7 @@ export const RESOURCE_PATH = {
   Event: 'events',
   Function: 'functions',
   Gateway: 'gateways',
-  HorizontalPodAutoscaler: 'hpas',
+  HorizontalPodAutoscaler: 'horizontalpodautoscalers',
   Ingress: 'ingresses',
   Issuer: 'issuers',
   Job: 'jobs',

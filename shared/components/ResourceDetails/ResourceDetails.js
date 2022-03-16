@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
+import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
@@ -28,6 +29,7 @@ import {
   useDeleteResource,
 } from '../../hooks';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
+import { ResourceGraph } from '../ResourceGraph/ResourceGraph';
 
 ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -135,10 +137,13 @@ function Resource({
   updateResourceMutation,
   windowTitle,
   resourceTitle,
+  resourceGraphConfig,
 }) {
   const { t } = useTranslation(['translation'], { i18n });
   useWindowTitle(
-    windowTitle || resourceTitle || prettifyNamePlural(null, resourceType),
+    windowTitle ||
+      resourceTitle ||
+      pluralize(prettifyNameSingular(null, resource.kind)),
   );
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
@@ -155,9 +160,10 @@ function Resource({
 
   const breadcrumbItems = breadcrumbs || [
     {
-      name: resourceTitle || prettifyNamePlural(null, resourceType),
+      name:
+        resourceTitle || pluralize(prettifyNameSingular(null, resource.kind)),
       path: '/',
-      fromContext: resourceType.toLowerCase(),
+      fromContext: pluralize(resource.kind).toLowerCase(),
     },
     { name: '' },
   ];
@@ -301,6 +307,13 @@ function Resource({
       <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
       {customComponents.map(component => component(resource, resourceUrl))}
       {children}
+      {resourceGraphConfig?.[resource.kind] && (
+        <ResourceGraph
+          resource={resource}
+          i18n={i18n}
+          config={resourceGraphConfig}
+        />
+      )}
     </>
   );
 }

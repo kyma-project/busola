@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useMicrofrontendContext } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+
 import { ResourceForm } from 'shared/ResourceForm';
 import { createLimitRangeTemplate } from './templates';
 

@@ -70,3 +70,12 @@ export function ConfigMapsCreate({
 }
 ConfigMapsCreate.allowEdit = true;
 ConfigMapsCreate.allowClone = true;
+ConfigMapsCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'Pod',
+    },
+  ],
+  depth: 1,
+  networkFlowLevel: 1,
+});

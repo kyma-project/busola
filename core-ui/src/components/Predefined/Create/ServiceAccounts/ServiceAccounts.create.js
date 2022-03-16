@@ -140,4 +140,20 @@ const ServiceAccountsCreate = ({
   );
 };
 ServiceAccountsCreate.allowEdit = true;
+ServiceAccountsCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'ClusterRoleBinding',
+    },
+    {
+      kind: 'RoleBinding',
+      clusterwide: true,
+    },
+    {
+      kind: 'Secret',
+    },
+  ],
+  depth: 2,
+  networkFlowLevel: 2,
+});
 export { ServiceAccountsCreate };
