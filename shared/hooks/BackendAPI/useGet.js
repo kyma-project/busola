@@ -1,6 +1,7 @@
 import React from 'react';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
 import { useFetch } from './useFetch';
+import shortid from 'shortid';
 
 // allow <n> consecutive requests to fail before displaying error
 const ERROR_TOLERANCY = 2;
@@ -16,6 +17,8 @@ const useGetHook = processDataFn =>
     const fetch = useFetch();
     const abortController = React.useRef(new AbortController());
     const errorTolerancyCounter = React.useRef(0);
+    const currentRequestId = shortid();
+    const requestData = React.useRef({});
 
     const refetch = (isSilent, currentData) => async () => {
       if (skip || !authData || abortController.current.signal.aborted) return;
@@ -34,11 +37,21 @@ const useGetHook = processDataFn =>
       }
 
       try {
+        requestData.current[currentRequestId] = { start: Date.now() };
         const response = await fetch({
           relativeUrl: path,
           abortController: abortController.current,
         });
         const payload = await response.json();
+
+        const currentRequest = requestData.current[currentRequestId];
+        const newerRequests = Object.values(requestData.current).filter(
+          request => request.start > currentRequest.start,
+        );
+        if (newerRequests.length) {
+          // don't override returned value with stale data
+          return;
+        }
 
         if (abortController.current.signal.aborted) return;
         if (typeof onDataReceived === 'function') onDataReceived(payload.items);
@@ -81,7 +94,7 @@ const useGetHook = processDataFn =>
     }, [skip]);
 
     React.useEffect(() => {
-      if (JSON.stringify(lastAuthData.current) != JSON.stringify(authData)) {
+      if (JSON.stringify(lastAuthData.current) !== JSON.stringify(authData)) {
         // authData reference is updated multiple times during the route change but the value stays the same (see MicrofrontendContext).
         // To avoid unnecessary refetch(), we 'cache' the last value and do the refetch only if there was an actual change
         lastAuthData.current = authData;
