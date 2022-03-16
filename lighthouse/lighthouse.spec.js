@@ -23,7 +23,7 @@ test('Busola Lighthouse audit', async () => {
     port: 9222,
     thresholds: {
       performance: 0, // ignored
-      accessibility: 77,
+      accessibility: 75,
       'best-practices': 90,
       seo: 0, // ignored
       pwa: 0, // ignored
@@ -73,7 +73,7 @@ test('Busola Lighthouse audit', async () => {
     port: 9222,
     thresholds: {
       performance: 0, // ignored
-      accessibility: 77,
+      accessibility: 75,
       'best-practices': 90,
       seo: 0, // ignored
       pwa: 0, // ignored
