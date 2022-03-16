@@ -124,12 +124,12 @@ export function StatsPanel({ type, ...props }) {
 
   const visibleTimeSpans =
     metric === 'nodes' ? ['6h', '24h', '7d'] : ['1h', '3h', '6h'];
-  const [timeSpan, setTimeSpan] = useState(visibleTimeSpans.at(0));
+  const [timeSpan, setTimeSpan] = useState(visibleTimeSpans[0]);
 
   const { t } = useTranslation();
 
   useEffect(() => {
-    setTimeSpan(visibleTimeSpans.at(0));
+    setTimeSpan(visibleTimeSpans[0]);
   }, [metric]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!features.PROMETHEUS?.isEnabled) {

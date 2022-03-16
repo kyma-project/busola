@@ -10,6 +10,7 @@ import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 
 import { PodStatsGraph } from './PodStatsGraph';
+import './PodDetails.scss';
 
 function toSnakeCase(inputString) {
   return inputString

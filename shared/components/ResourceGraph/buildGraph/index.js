@@ -1,4 +1,4 @@
-import { buildNetworkGraph } from './buildNetworkGraph.js';
+import { buildNetworkGraph } from './buildNetworkGraph';
 import { buildStructuralGraph } from './buildStructuralGraph';
 
 export function buildGraph(data, config) {
