@@ -14,6 +14,8 @@ import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { Selector } from 'shared/components/Selector/Selector';
 
+import './JobsDetails.scss';
+
 export function JobsDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
 

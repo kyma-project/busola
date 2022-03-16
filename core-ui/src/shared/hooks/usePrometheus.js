@@ -122,12 +122,27 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     { pollingInterval: 0 },
   );
 
-  let dataValues = data?.data.result[0]?.values.map(
-    ([timestamp, value]) => value,
-  );
+  let stepMultiplier = 0;
+  let helpIndex = 0;
+  const dataValues = data?.data.result[0]?.values;
+  let prometheusData = [];
+
+  if (dataValues?.length > 0) {
+    for (let i = 0; i < items; i++) {
+      const [timestamp, graphValue] = dataValues[helpIndex];
+      const timeDifference = Math.floor(timestamp - startDate.getTime() / 1000);
+      if (stepMultiplier === timeDifference) {
+        helpIndex++;
+        prometheusData.push(graphValue);
+      } else {
+        prometheusData.push(null);
+      }
+      stepMultiplier += step;
+    }
+  }
 
   return {
-    data: dataValues,
+    data: prometheusData,
     error,
     loading,
     step,
