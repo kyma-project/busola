@@ -14,8 +14,8 @@ test('Busola Lighthouse audit', async () => {
   });
   const page = await context.newPage();
 
+  // clear localStorage data
   await page.goto(ADDRESS);
-
   await page.evaluate(() => window.localStorage.clear());
 
   await page.goto(ADDRESS + '/clusters');
@@ -28,7 +28,7 @@ test('Busola Lighthouse audit', async () => {
     thresholds: {
       performance: 0, // ignored
       accessibility: 75,
-      'best-practices': 95,
+      'best-practices': 90,
       seo: 0, // ignored
       pwa: 0, // ignored
     },
@@ -39,6 +39,7 @@ test('Busola Lighthouse audit', async () => {
     return new Promise(resolve => setTimeout(resolve, 5000));
   });
 
+  // add a cluster
   await page
     .frameLocator('iframe')
     .locator('button:has-text("Connect cluster")')
