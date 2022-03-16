@@ -25,3 +25,21 @@ export function ClusterRoleBindingsDetails(props) {
     />
   );
 }
+
+function GenericRoleBindingDetails({ DefaultRenderer, ...otherParams }) {
+  const { t } = useTranslation();
+
+  const customColumns = [
+    {
+      header: t('role-bindings.headers.role-ref'),
+      value: resource => <RoleRef roleRef={resource.roleRef} />,
+    },
+  ];
+  return (
+    <DefaultRenderer
+      {...otherParams}
+      customColumns={customColumns}
+      customComponents={[RoleSubjects]}
+    />
+  );
+}
