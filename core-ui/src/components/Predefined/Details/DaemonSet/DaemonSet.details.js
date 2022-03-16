@@ -98,6 +98,7 @@ export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
+      resourceTitle={t('daemon-sets.title')}
       customComponents={[Tolerations, Images, MatchSelector]}
       customColumns={customColumns}
       {...otherParams}

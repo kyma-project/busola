@@ -91,7 +91,7 @@ export function isPrimitive(type = null) {
 }
 
 const capitalize = str => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  return str?.charAt(0)?.toUpperCase() + str?.slice(1);
 };
 
 const splitName = name => {
@@ -100,7 +100,7 @@ const splitName = name => {
 };
 
 export const prettifyNamePlural = (resourceName, resourceType) => {
-  return resourceName || splitName(capitalize(resourceType));
+  return capitalize(resourceName) || splitName(capitalize(resourceType));
 };
 
 export const prettifyNameSingular = (resourceName, resourceType) => {

@@ -175,6 +175,7 @@ export const PersistentVolumeClaimsDetails = ({
       ]}
       customColumns={customColumns}
       singularName={t('persistent-volume-claims.name_singular')}
+      resourceTitle={t('persistent-volume-claims.title')}
       {...otherParams}
     />
   );

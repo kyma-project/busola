@@ -44,6 +44,8 @@ StorageClassesCreate.resourceGraphConfig = (t, context) => ({
       clusterwide: true,
     },
   ],
+  networkFlowLevel: -2,
+
   matchers: {
     Secret: (sc, secret) => sc.parameters?.secretName === secret.metadata.name,
   },
