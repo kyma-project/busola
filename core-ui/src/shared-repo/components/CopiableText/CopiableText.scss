@@ -1,0 +1,9 @@
+.copiable-text {
+  display: flex;
+  align-items: center;
+  overflow-wrap: anywhere;
+
+  > button {
+    flex-grow: -1;
+  }
+}

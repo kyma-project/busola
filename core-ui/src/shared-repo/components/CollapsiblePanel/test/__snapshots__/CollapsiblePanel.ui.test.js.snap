@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Collapsible Panel Renders in closed state 1`] = `
+<div
+  className="fd-layout-panel collapsible-panel"
+>
+  <div
+    className="fd-layout-panel__header"
+    onClick={[Function]}
+  >
+    <h3
+      className="fd-panel__title"
+      onClick={[Function]}
+    >
+      Collapsible panel test
+    </h3>
+    <div
+      className="fd-layout-panel__actions"
+    >
+      <button
+        className="fd-button fd-button--transparent"
+        onClick={[Function]}
+        type="button"
+      >
+        <i
+          aria-hidden={true}
+          className="sap-icon--navigation-down-arrow"
+          role="img"
+        />
+      </button>
+    </div>
+  </div>
+  <div
+    className="fd-layout-panel__body body body--closed"
+  >
+    <p>
+      test
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Collapsible Panel Renders with minimal props (opened state) 1`] = `
+<div
+  className="fd-layout-panel collapsible-panel"
+>
+  <div
+    className="fd-layout-panel__header"
+    onClick={[Function]}
+  >
+    <h3
+      className="fd-panel__title"
+      onClick={[Function]}
+    >
+      Collapsible panel test
+    </h3>
+    <div
+      className="fd-layout-panel__actions"
+    >
+      <button
+        className="fd-button fd-button--transparent"
+        onClick={[Function]}
+        type="button"
+      >
+        <i
+          aria-hidden={true}
+          className="sap-icon--navigation-up-arrow"
+          role="img"
+        />
+      </button>
+    </div>
+  </div>
+  <div
+    className="fd-layout-panel__body body body--open"
+  >
+    <p>
+      test
+    </p>
+  </div>
+</div>
+`;

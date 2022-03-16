@@ -1,0 +1,10 @@
+.vertical-tabs-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+
+  background: var(--sapBackgroundColor);
+
+  & > :first-child {
+    border-right: 1px solid var(--sapList_GroupHeaderBorderColor);
+  }
+}

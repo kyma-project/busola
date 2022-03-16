@@ -1,0 +1,33 @@
+{
+  "name": "shared",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "build": "webpack --mode=production",
+    "start:kyma": "webpack --mode=development --watch"
+  },
+  "author": "hasselhoff-team@kyma",
+  "devDependencies": {
+    "webpack": "^5.38.1"
+  },
+  "peerDependencies": {
+    "fundamental-react": "^0.14.0"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/jestSetup.js"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|scss)$": "identity-obj-proxy"
+    }
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.3.1",
+    "buffer": "^6.0.3",
+    "graphviz-react": "^1.2.0",
+    "react": "../node_modules/react",
+    "react-tippy": "^1.4.0"
+  }
+}
