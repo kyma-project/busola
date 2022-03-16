@@ -16,9 +16,36 @@
     width: 100%;
   }
 
-  .node > polygon,
-  .cluster > polygon {
-    fill: var(--sapGroup_ContentBackground);
+  text {
+    font-family: inherit;
+    fill: var(--sapTextColor);
+  }
+
+  .edge {
+    > path {
+      stroke: var(--sapTextColor);
+    }
+    > polygon {
+      stroke: var(--sapTextColor);
+      fill: var(--sapTextColor);
+    }
+  }
+
+  .node,
+  .cluster {
+    & > polygon {
+      fill: var(--sapGroup_ContentBackground);
+      stroke: var(--sapTextColor);
+      stroke-width: 2px;
+    }
+    & > text {
+      font-weight: bold;
+      color: #0f0;
+    }
+    & > text + text {
+      font-weight: normal;
+      font-size: 12;
+    }
   }
 
   #graph0 > polygon {

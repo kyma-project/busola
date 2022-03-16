@@ -11,6 +11,8 @@ import AccessStrategies from 'components/ApiRules/AccessStrategies/AccessStrateg
 
 import { ApiRuleServices } from './Services';
 
+import './ApiRulesDetails.scss';
+
 export const ApiRulesDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
 

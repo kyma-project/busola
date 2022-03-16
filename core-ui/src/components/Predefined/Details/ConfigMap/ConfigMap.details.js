@@ -5,6 +5,8 @@ import { ControlledBy } from 'react-shared';
 
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
+import './ConfigMapsDetails.scss';
+
 export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
   const ConfigMapEditor = resource => {
