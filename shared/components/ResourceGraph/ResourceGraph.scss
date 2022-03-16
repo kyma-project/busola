@@ -21,6 +21,16 @@
     fill: var(--sapTextColor);
   }
 
+  .edge {
+    > path {
+      stroke: var(--sapTextColor);
+    }
+    > polygon {
+      stroke: var(--sapTextColor);
+      fill: var(--sapTextColor);
+    }
+  }
+
   .node,
   .cluster {
     & > polygon {
