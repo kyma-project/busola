@@ -65,6 +65,7 @@ export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
+      resourceTitle={t('cron-jobs.title')}
       customComponents={[CronJobJobs, Events]}
       customColumns={customColumns}
       {...otherParams}

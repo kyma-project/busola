@@ -75,6 +75,7 @@ export const CustomResourceDefinitionsDetails = ({
 
   return (
     <DefaultRenderer
+      resourceTitle={t('custom-resource-definitions.title')}
       customColumns={customColumns}
       customComponents={[
         ResourceNames,
