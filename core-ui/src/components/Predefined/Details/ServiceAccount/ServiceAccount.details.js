@@ -60,6 +60,7 @@ export const ServiceAccountsDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
   return (
     <DefaultRenderer
+      resourceTitle={t('service-accounts.title')}
       customComponents={[ServiceAccountSecrets, ServiceAccountImagePullSecrets]}
       customColumns={customColumns}
       {...otherParams}

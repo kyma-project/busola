@@ -74,6 +74,7 @@ export const StorageClassesDetails = ({ DefaultRenderer, ...otherParams }) => {
         Events,
       ]}
       customColumns={customColumns}
+      resourceTitle={t('storage-classes.title')}
       singularName={t('storage-classes.name_singular')}
       {...otherParams}
     />

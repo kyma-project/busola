@@ -41,5 +41,11 @@ export const GitRepositoriesDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  return <DefaultRenderer {...otherParams} customColumns={customColumns} />;
+  return (
+    <DefaultRenderer
+      resourceTitle={t('git-repositories.title')}
+      {...otherParams}
+      customColumns={customColumns}
+    />
+  );
 };

@@ -78,6 +78,7 @@ export function NetworkPoliciesDetails({ DefaultRenderer, ...otherParams }) {
 
   return (
     <DefaultRenderer
+      resourceTitle={t('network-policies.title')}
       customColumns={customColumns}
       customComponents={customComponents}
       {...otherParams}

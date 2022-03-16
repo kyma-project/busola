@@ -32,6 +32,7 @@ export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
   );
   return (
     <DefaultRenderer
+      resourceTitle={t('stateful-sets.title')}
       customColumns={customColumns}
       customComponents={[HPASubcomponent, MatchSelector]}
       {...otherParams}
