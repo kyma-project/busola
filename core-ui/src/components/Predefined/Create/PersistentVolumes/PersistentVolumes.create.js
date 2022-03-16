@@ -32,6 +32,10 @@ PersistentVolumesCreate.resourceGraphConfig = (t, context) => ({
     {
       kind: 'StorageClass',
     },
+    {
+      kind: 'PersistentVolumeClaim',
+      clusterwide: true,
+    },
   ],
   depth: 1,
   networkFlowLevel: 1,
