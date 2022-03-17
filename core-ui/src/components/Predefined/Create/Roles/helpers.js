@@ -57,9 +57,9 @@ export function createRolePresets(namespace, translate) {
         name: 'view-only',
         rules: [
           {
-            verbs: ['*'],
+            verbs: ['get', 'list', 'watch'],
             apiGroups: ['*'],
-            resources: ['get', 'list', 'watch'],
+            resources: ['*'],
             resourceNames: [],
           },
         ],
