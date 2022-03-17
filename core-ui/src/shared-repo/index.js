@@ -10,7 +10,6 @@ export {
   isK8SNameValid,
 } from './components/K8sNameInput/K8sNameInput';
 export { StringInput } from './components/StringInput/StringInput';
-export { InputWithSuffix } from './components/InputWithSuffix/InputWithSuffix';
 export { InputWithPrefix } from './components/InputWithPrefix/InputWithPrefix';
 export { CollapsiblePanel } from './components/CollapsiblePanel/CollapsiblePanel';
 export { Tooltip } from './components/Tooltip/Tooltip';
