@@ -10,6 +10,7 @@ import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 
 import { PodStatsGraph } from './PodStatsGraph';
+import './PodDetails.scss';
 
 function toSnakeCase(inputString) {
   return inputString
@@ -106,6 +107,7 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
       key="containers"
       type={t('pods.labels.constainers')}
       containers={resource.spec.containers}
+      statuses={resource.status.containerStatuses}
     />
   );
   const InitContainers = resource => (
@@ -113,6 +115,7 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
       key="init-containers"
       type={t('pods.labels.init-constainers')}
       containers={resource.spec.initContainers}
+      statuses={resource.status.initContainerStatuses}
     />
   );
 

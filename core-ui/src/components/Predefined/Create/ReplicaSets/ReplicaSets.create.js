@@ -116,4 +116,16 @@ function ReplicaSetsCreate({
   );
 }
 ReplicaSetsCreate.allowEdit = true;
+ReplicaSetsCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  networkFlowLevel: -1,
+  relations: [
+    {
+      kind: 'Deployment',
+    },
+    {
+      kind: 'Pod',
+    },
+  ],
+});
 export { ReplicaSetsCreate };

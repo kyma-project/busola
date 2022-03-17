@@ -31,6 +31,7 @@ export function VirtualServicesList({ DefaultRenderer, ...otherParams }) {
     <DefaultRenderer
       customColumns={customColumns}
       description={description}
+      resourceName={t('virtualservices.title')}
       {...otherParams}
     />
   );

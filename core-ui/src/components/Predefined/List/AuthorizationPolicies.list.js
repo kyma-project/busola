@@ -27,6 +27,7 @@ export const AuthorizationPoliciesList = ({
 
   return (
     <DefaultRenderer
+      resourceName={t('authorization-policies.title')}
       description={description}
       customColumns={customColumns}
       {...otherParams}

@@ -10,6 +10,8 @@ import { Link } from 'fundamental-react';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 
+import './CronJobsDetails.scss';
+
 export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
   const customColumns = [
@@ -63,6 +65,7 @@ export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
+      resourceTitle={t('cron-jobs.title')}
       customComponents={[CronJobJobs, Events]}
       customColumns={customColumns}
       {...otherParams}

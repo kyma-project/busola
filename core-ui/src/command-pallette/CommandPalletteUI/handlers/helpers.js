@@ -4,41 +4,9 @@ export function getSuggestion(phrase, itemList) {
   return didYouMean(phrase, itemList);
 }
 
-export function getApiPath(resourceType, nodes) {
-  const matchedNode = nodes.find(
-    n =>
-      n.resourceType === resourceType || n.navigationContext === resourceType,
-  );
-  try {
-    const url = new URL(matchedNode?.viewUrl);
-    return url.searchParams.get('resourceApiPath');
-  } catch (e) {
-    return null;
-  }
-}
-
 // assume first item is the full name
 export function toFullResourceType(resourceType, resources) {
   return resources.find(r => r.includes(resourceType))?.[0] || resourceType;
-}
-
-export function findCommonPrefix(initialPrefix, words) {
-  if (!words?.length) {
-    return initialPrefix;
-  }
-
-  words.sort();
-  const first = words[0];
-  const last = words[words.length - 1];
-  let biggestCommonPrefix = initialPrefix;
-  while (
-    first[biggestCommonPrefix.length] &&
-    first[biggestCommonPrefix.length] === last[biggestCommonPrefix.length]
-  ) {
-    biggestCommonPrefix += first[biggestCommonPrefix.length];
-  }
-
-  return biggestCommonPrefix;
 }
 
 export function getSuggestionsForSingleResource({

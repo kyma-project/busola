@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePost, useNotification } from 'react-shared';
+import {
+  usePost,
+  useNotification,
+  matchBySelector,
+  matchByOwnerReference,
+} from 'react-shared';
 import { Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import * as _ from 'lodash';
@@ -208,4 +213,34 @@ function DeploymentsCreate({
 }
 
 DeploymentsCreate.allowEdit = true;
+DeploymentsCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  networkFlowLevel: -2,
+  relations: [
+    {
+      kind: 'Service',
+    },
+    {
+      kind: 'HorizontalPodAutoscaler',
+    },
+    {
+      kind: 'ReplicaSet',
+    },
+  ],
+  matchers: {
+    HorizontalPodAutoscaler: (deployment, hpa) =>
+      hpa.spec.scaleTargetRef?.kind === 'Deployment' &&
+      hpa.spec.scaleTargetRef?.name === deployment.metadata.name,
+    Service: (deployment, service) =>
+      matchBySelector(
+        deployment.spec.selector.matchLabels,
+        service.spec.selector,
+      ),
+    ReplicaSet: (deployment, replicaSet) =>
+      matchByOwnerReference({
+        resource: replicaSet,
+        owner: deployment,
+      }),
+  },
+});
 export { DeploymentsCreate };

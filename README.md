@@ -9,7 +9,6 @@ Busola is a web-based UI for managing resources within Kyma or any Kubernetes cl
 Busola project consists of the following UI projects:
 
 - [`Core`](./core) - The main frame
-- [`Service-Catalog-UI`](./service-catalog-ui) - The UI layer for Service Catalog, Instances and Brokers
 - [`Backend`](./backend) - A kind of a proxy between Busola and the Kubernetes cluster
 - [`Tests`](./tests) - Acceptance and end-to-end tests
 
@@ -54,8 +53,20 @@ Busola is delivered with the following default settings:
 
 Busola configuration is the product of gathering and merging the configurations from several individual sources. The following list presents the sources in the order of precedence:
 
+**Backend:**
+
+- Busola backend default cluster configuration, acquired from the [defaultConfig.json](backend/settings/defaultConfig.json) file.
+- Busola cluster configuration, available on the Busola cluster in the Config Map "busola/busola-config" under the key "config".
+  This data is mounted to the Busola `web` and `backend` Pods, and during the local development,
+  the [defaultConfig.json](backend/settings/defaultConfig.json) file is used.
+
+**Frontend:**
+
 - Built-in, hardcoded defaults.
-- Busola cluster configuration, available on the Busola cluster in ConfigMap "busola/busola-config" under the key "config". This data is mounted to the Busola `web` pod, and during the local development, the [config.json](core/src/assets/config/config.json) file is used.
+- Busola frontend default cluster configuration, acquired from the [defaultConfig.json](core/src/assets/defaultConfig.json) file.
+- Busola cluster configuration, available on the Busola cluster in the Config Map "busola/busola-config" under the key "config".
+  This data is mounted to the Busola `web` and `backend` Pods, and during the local development,
+  the [defaultConfig.json](core/src/assets/defaultConfig.json) file is used.
 - Target cluster configuration, available on the target cluster in ConfigMap "kube-public/busola-config" under the key "config". Busola performs a request for that resource during the bootstrap process.
 
 ### Change the Configuration
@@ -90,7 +101,6 @@ The apps you started run at the following addresses:
 
 - `Core` - [http://localhost:8080](http://localhost:8080)
 - `Core-UI` - [http://localhost:8889](http://localhost:8889)
-- `Service-Catalog-UI` - [http://localhost:8000](http://localhost:8000)
 - `Backend` - [http://localhost:3001](http://localhost:3001)
 
 ### Security countermeasures

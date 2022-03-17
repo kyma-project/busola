@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { Switch } from 'fundamental-react';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext, matchByOwnerReference } from 'react-shared';
 
 import { cloneDeep } from 'lodash';
 
@@ -152,4 +152,29 @@ function JobsCreate({
   );
 }
 JobsCreate.allowEdit = true;
+JobsCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  networkFlowLevel: -1,
+  relations: [
+    {
+      kind: 'Pod',
+    },
+    {
+      kind: 'CronJob',
+    },
+    {
+      kind: 'Function',
+    },
+  ],
+  depth: 1,
+  matchers: {
+    CronJob: (job, cronJob) =>
+      matchByOwnerReference({ resource: job, owner: cronJob }),
+    Function: (job, functión) =>
+      matchByOwnerReference({
+        resource: job,
+        owner: functión,
+      }),
+  },
+});
 export { JobsCreate };

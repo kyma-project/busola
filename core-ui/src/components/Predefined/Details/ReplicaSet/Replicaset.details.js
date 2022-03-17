@@ -2,9 +2,11 @@ import React from 'react';
 import { ControlledBy } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-import { ResourcePods } from '../ResourcePods';
 import { ReplicaSetStatus } from './ReplicaSetStatus';
 import { HPASubcomponent } from '../HPA/HPASubcomponent';
+import { Selector } from 'shared/components/Selector/Selector';
+
+import './ReplicasetsDetails.scss';
 
 export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   const { t } = useTranslation();
@@ -58,10 +60,20 @@ export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const MatchSelector = replicaset => (
+    <Selector
+      namespace={replicaset.metadata.namespace}
+      labels={replicaset.spec?.selector?.matchLabels}
+      expressions={replicaset.spec?.selector?.matchExpressions}
+      selector={replicaset.spec?.selector}
+    />
+  );
+
   return (
     <DefaultRenderer
+      resourceTitle={t('replica-sets.title')}
       customColumns={customColumns}
-      customComponents={[ResourcePods, HPASubcomponent]}
+      customComponents={[HPASubcomponent, MatchSelector]}
       {...otherParams}
     />
   );

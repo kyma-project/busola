@@ -100,9 +100,6 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         <TextArrayInput
           title={t('roles.headers.resource-names')}
           propertyPath="$.resourceNames"
-          inputProps={{
-            placeholder: t('roles.headers.resource-names'),
-          }}
         />
       )}
       {isAdvanced && !namespaceId && (

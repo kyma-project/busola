@@ -39,7 +39,7 @@ context('Test app settings and preferences', () => {
       .click();
 
     cy.getIframeBody()
-      .find('input[placeholder="Config Map name"]:visible')
+      .find('input[ariaLabel="Config Map name"]:visible')
       .type(NAME);
 
     cy.getIframeBody()

@@ -7,12 +7,14 @@ import {
   EMPTY_TEXT_PLACEHOLDER,
 } from 'react-shared';
 
-import { ResourcePods } from '../ResourcePods';
 import { JobCompletions } from './JobCompletions';
 import { JobConditions } from './JobConditions';
 
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
+import { Selector } from 'shared/components/Selector/Selector';
+
+import './JobsDetails.scss';
 
 export function JobsDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -62,13 +64,21 @@ export function JobsDetails({ DefaultRenderer, ...otherParams }) {
     />
   );
 
-  const customComponents = [JobConditions, ResourcePods, Events];
+  const MatchSelector = job => (
+    <Selector
+      namespace={job.metadata.namespace}
+      labels={job.spec?.selector?.matchLabels}
+      expressions={job.spec?.selector?.matchExpressions}
+      selector={job.spec?.selector}
+    />
+  );
+  const customComponents = [JobConditions, MatchSelector, Events];
 
   return (
     <DefaultRenderer
       customColumns={customColumns}
       customComponents={customComponents}
       {...otherParams}
-    ></DefaultRenderer>
+    />
   );
 }

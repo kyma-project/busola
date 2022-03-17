@@ -3,6 +3,20 @@ import { useTranslation } from 'react-i18next';
 
 import { GatewayServers } from './GatewayServers';
 import { GatewaySelector } from './GatewaySelector';
+import { Selector } from 'shared/components/Selector/Selector';
+
+import './GatewaysDetails.scss';
+
+function MatchSelector(gateway) {
+  return (
+    <Selector
+      namespace={gateway.metadata.namespace}
+      labels={gateway.spec?.selector}
+      selector={gateway.spec?.selector}
+      isIstioSelector
+    />
+  );
+}
 
 export function GatewaysDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -17,8 +31,8 @@ export function GatewaysDetails({ DefaultRenderer, ...otherParams }) {
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[GatewayServers]}
+      customComponents={[GatewayServers, MatchSelector]}
       {...otherParams}
-    ></DefaultRenderer>
+    />
   );
 }

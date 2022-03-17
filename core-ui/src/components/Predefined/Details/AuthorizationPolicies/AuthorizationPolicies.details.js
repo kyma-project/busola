@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
+import { Selector } from 'shared/components/Selector/Selector';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 
@@ -23,21 +23,19 @@ export const AuthorizationPoliciesDetails = ({
     },
   ];
 
-  const WorkloadSelectorLabels = policy => {
-    const { t } = useTranslation();
-    return (
-      <WorkloadSelector
-        resource={policy}
-        labels={policy.spec.selector?.matchLabels}
-        title={t('authorization-policies.headers.selector')}
-      />
-    );
-  };
+  const MatchSelector = policy => (
+    <Selector
+      namespace={policy.metadata.namespace}
+      labels={policy.spec?.selector?.matchLabels}
+      isIstioSelector
+      selector={policy.spec?.selector}
+    />
+  );
 
   return (
     <DefaultRenderer
       customColumns={customColumns}
-      customComponents={[Rules, WorkloadSelectorLabels]}
+      customComponents={[Rules, MatchSelector]}
       {...otherParams}
     ></DefaultRenderer>
   );

@@ -4,7 +4,7 @@ import { Tokens } from 'shared/components/Tokens';
 import { LayoutPanel } from 'fundamental-react';
 import { NetworkPolicyPorts } from './Ports';
 import { NetworkPolicyPeers } from './Peers';
-import { WorkloadSelector } from 'shared/components/WorkloadSelector/WorkloadSelector';
+import { Selector } from 'shared/components/Selector/Selector';
 
 export function NetworkPoliciesDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -64,10 +64,12 @@ export function NetworkPoliciesDetails({ DefaultRenderer, ...otherParams }) {
     const { t } = useTranslation();
 
     return (
-      <WorkloadSelector
-        resource={policy}
+      <Selector
+        namespace={policy.metadata.namespace}
         labels={policy.spec.podSelector?.matchLabels}
+        expressions={policy.spec.podSelector?.matchExpressions}
         title={t('network-policies.headers.pod-selector')}
+        selector={policy.spec.podSelector}
       />
     );
   };
@@ -76,6 +78,7 @@ export function NetworkPoliciesDetails({ DefaultRenderer, ...otherParams }) {
 
   return (
     <DefaultRenderer
+      resourceTitle={t('network-policies.title')}
       customColumns={customColumns}
       customComponents={customComponents}
       {...otherParams}

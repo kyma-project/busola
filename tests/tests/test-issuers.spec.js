@@ -15,7 +15,7 @@ context('Test Issuers', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Secret name"]:visible')
+      .find('[ariaLabel="Secret name"]:visible')
       .type(SECRET_NAME);
 
     cy.getIframeBody()
@@ -36,7 +36,7 @@ context('Test Issuers', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Issuer name"]:visible')
+      .find('[ariaLabel="Issuer name"]:visible')
       .type(ISSUER_NAME);
 
     cy.getIframeBody()

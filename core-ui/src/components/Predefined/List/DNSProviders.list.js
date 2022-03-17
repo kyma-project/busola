@@ -38,7 +38,7 @@ export const DNSProvidersList = ({ DefaultRenderer, ...otherParams }) => {
     <DefaultRenderer
       customColumns={customColumns}
       description={description}
-      resourceName="DNS Providers"
+      resourceName={t('dnsproviders.title')}
       {...otherParams}
     />
   );
