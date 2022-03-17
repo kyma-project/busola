@@ -82,6 +82,9 @@ data:
           },
           "PROMETHEUS": {
             "isEnabled": false
+          },
+          "VISUAL_RESOURCES": {
+            "isEnabled": true
           }
         }
       }
