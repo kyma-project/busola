@@ -118,6 +118,7 @@ function ReplicaSetsCreate({
 ReplicaSetsCreate.allowEdit = true;
 ReplicaSetsCreate.resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
+  networkFlowLevel: -1,
   relations: [
     {
       kind: 'Deployment',
@@ -126,6 +127,5 @@ ReplicaSetsCreate.resourceGraphConfig = (t, context) => ({
       kind: 'Pod',
     },
   ],
-  depth: 1,
 });
 export { ReplicaSetsCreate };
