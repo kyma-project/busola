@@ -1,8 +1,8 @@
 import { wrap, makeNode, makeRank, makeCluster, match } from './helpers';
 import { findCommonPrefix } from './../../..';
 
-function isWorkloadLayer(layer) {
-  return layer[0].kind === 'Pod';
+function isWorkloadLayer(layers) {
+  return (layers || {}).some(layer => layer.kind === 'Pod');
 }
 const DEPLOYMENT_SUBGRAPH_ITEMS = [
   { kind: 'Pod', required: true, root: true },
@@ -76,40 +76,47 @@ export function buildNetworkGraph({ store }, config) {
     const nextLayer = layers[i + 1];
 
     if (isWorkloadLayer(currentLayer) && isWorkload) {
-      const multiplePods = store['Pod'].length > 1;
-      const podId = multiplePods
-        ? 'composite-pod'
-        : store['Pod'][0].metadata.uid;
-      const podName = getCombinedResourceName(store['Pod']);
+      for (const layerResource of currentLayer) {
+        if (layerResource.kind !== 'Pod') {
+          strLayers.push(makeNode(layerResource));
+          strLayers.push(makeRank([layerResource]));
+          continue;
+        }
+        const multiplePods = store['Pod'].length > 1;
+        const podId = multiplePods
+          ? 'composite-pod'
+          : store['Pod'][0].metadata.uid;
+        const podName = getCombinedResourceName(store['Pod']);
 
-      const label = `Pod\n${wrap(podName)}`;
-      let pod = `"${podId}" [id="${podId}" class="pod" margin="0.2,0.2" label="${label}"][shape=box]`;
-      // assume only one deployment
-      const deployment = store['Deployment']?.[0];
-      // and one replicaSet
-      const replicaSet = store['ReplicaSet']?.[0];
-      const hpas = store['HorizontalPodAutoscaler'] || [];
-      if (deployment) {
-        pod = makeCluster(
-          deployment,
-          `${pod}
+        const label = `Pod\n${wrap(podName)}`;
+        let pod = `"${podId}" [id="${podId}" class="pod" margin="0.2,0.2" label="${label}"][shape=box]`;
+        // assume only one deployment
+        const deployment = store['Deployment']?.[0];
+        // and one replicaSet
+        const replicaSet = store['ReplicaSet']?.[0];
+        const hpas = store['HorizontalPodAutoscaler'] || [];
+        if (deployment) {
+          pod = makeCluster(
+            deployment,
+            `${pod}
          ${replicaSet ? makeNode(replicaSet) : ''}
          ${hpas.map(makeNode)}`,
-        );
-      } else {
-        // no wrapping deployment, at least add connection between Pod and RS
-        if (!deployment && !!replicaSet) {
-          strLayers.push(makeNode(replicaSet));
-          strEdges.push(makeEdge(podId, replicaSet.metadata.uid));
+          );
+        } else {
+          // no wrapping deployment, at least add connection between Pod and RS
+          if (!deployment && !!replicaSet) {
+            strLayers.push(makeNode(replicaSet));
+            strEdges.push(makeEdge(podId, replicaSet.metadata.uid));
+          }
         }
-      }
-      strLayers.push(pod);
+        strLayers.push(pod);
 
-      // edges for workoad layer: connect pod to resources below
-      if (nextLayer) {
-        nextLayer.forEach(resource => {
-          strEdges.push(makeEdge(podId, resource.metadata.uid));
-        });
+        // edges for workoad layer: connect pod to resources below
+        if (nextLayer) {
+          nextLayer.forEach(resource => {
+            strEdges.push(makeEdge(podId, resource.metadata.uid));
+          });
+        }
       }
     } else {
       strLayers.push(currentLayer.map(makeNode).join('\n'));
@@ -139,15 +146,21 @@ export function buildNetworkGraph({ store }, config) {
           const podId = multiplePods
             ? 'composite-pod'
             : store['Pod'][0].metadata.uid;
-          if (!!deployment && store['Pod']?.length) {
-            currentLayer.forEach(svc => {
+          const subscriptionId = store['Subscription'].map(
+            subscription => subscription.metadata.uid,
+          );
+          currentLayer.forEach(svc => {
+            if (!!deployment && store['Pod']?.length) {
               strEdges.push(
                 makeEdge(svc.metadata.uid, podId, {
                   lhead: `cluster_${deployment.metadata.uid}`,
                 }),
               );
-            });
-          }
+            }
+            subscriptionId.forEach(subscription =>
+              strEdges.push(makeEdge(svc.metadata.uid, subscription)),
+            );
+          });
         }
       }
     }
