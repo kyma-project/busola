@@ -47,6 +47,8 @@ const resolveType = status => {
 
 const translate = (i18n, arrayOfVariableNames, fallbackValue) => {
   if (!i18n) return fallbackValue;
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { t } = useTranslation(null, { i18n });
   return t(arrayOfVariableNames, { defaultValue: fallbackValue });
 };

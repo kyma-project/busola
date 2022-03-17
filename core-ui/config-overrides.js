@@ -23,7 +23,7 @@ module.exports = {
     };
     config.snapshotSerializers = [
       'enzyme-to-json/serializer',
-      ...config.snapshotSerializers,
+      ...(config.snapshotSerializers || []),
     ];
     config.testPathIgnorePatterns = [
       '/node_modules/',

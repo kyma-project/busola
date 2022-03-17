@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useFetch } from './useFetch';
 
 const useMutation = method => {

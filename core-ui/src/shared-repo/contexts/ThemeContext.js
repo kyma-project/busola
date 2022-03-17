@@ -51,8 +51,8 @@ export const ThemeProvider = ({ children, env }) => {
       if (event.data.msg === 'busola.getCurrentTheme.response')
         setTheme(event.data.name);
     };
-    addEventListener('message', changeTheme);
-    return _ => removeEventListener('message', changeTheme);
+    window.addEventListener('message', changeTheme);
+    return _ => window.removeEventListener('message', changeTheme);
   }, []);
 
   useEffect(() => {

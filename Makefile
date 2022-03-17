@@ -14,12 +14,10 @@ resolve:
 .PHONY: validate
 validate:
 	npm run lint-check
-	npm run test-shared-lib
 
 .PHONY: validate-libraries
 validate-libraries:
 	cd common && npm run type-check
-	cd components/shared && npm run type-check
 	cd components/generic-documentation && npm run type-check
 
 .PHONY: lint
@@ -37,7 +35,7 @@ release: build-image push-image
 
 release-local: build-image-local push-image-local
 
-build-image: 
+build-image:
 	sed -i '/version/c\   \"version\" : \"$(TAG)\"' core/src/assets/version.json
 	docker build -t $(IMG_NAME) -f Dockerfile .
 

@@ -46,11 +46,6 @@
   "config": {
     "unsafe-perm": true
   },
-  "jest": {
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ]
-  },
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
     "react-jsonschema-form": "1.7.0"

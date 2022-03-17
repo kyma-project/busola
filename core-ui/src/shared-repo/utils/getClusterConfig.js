@@ -1,8 +1,8 @@
-const domain = location.hostname;
+const domain = window.location.hostname;
 
 function getBackendAddress() {
   // dev busola
-  if (location.hostname.startsWith('localhost')) {
+  if (window.location.hostname.startsWith('localhost')) {
     return 'http://localhost:3001/backend';
     // on cluster
   } else {

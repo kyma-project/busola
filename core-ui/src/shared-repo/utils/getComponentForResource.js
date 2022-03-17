@@ -23,7 +23,8 @@ export const ComponentFor = ({
 
   const predefined = findByName(PredefinedRenderersCollection, name);
   const Renderer = predefined
-    ? useMemo(() => predefined, [predefined, defaultRenderer])
+    ? // eslint-disable-next-line react-hooks/rules-of-hooks
+      useMemo(() => predefined, [predefined, defaultRenderer])
     : defaultRenderer;
   const CreateFormRenderer = nameForCreate
     ? findByName(PredefinedRenderersCollection, nameForCreate) || null

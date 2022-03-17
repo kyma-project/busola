@@ -80,6 +80,4 @@ export * from '@monaco-editor/react';
 import Editor from '@monaco-editor/react';
 export const MonacoEditor = Editor;
 
-import './extend-jsonpath';
-
 setupMonaco(loader);

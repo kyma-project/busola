@@ -2,7 +2,6 @@ import { handleDelete } from '../simpleDelete';
 
 const mockModal = jest.fn();
 
-const type = 'resource';
 const typePlurar = 'resources';
 const id = 'some-id';
 const name = 'some-name';
@@ -13,11 +12,12 @@ jest.mock('@luigi-project/client', () => ({
   }),
 }));
 
-const t = jest.fn(key => key);
+const t = key => key;
 
 describe('simpleDelete', () => {
   it('Calls delete function and custom callback with valid parameters', async () => {
     mockModal.mockImplementation(() => new Promise(resolve => resolve()));
+
     const notificationManager = {
       notifyError: jest.fn(),
       notifySuccess: jest.fn(),
@@ -34,7 +34,6 @@ describe('simpleDelete', () => {
       customCallback,
       t,
     );
-
     expect(mockModal).toHaveBeenCalled();
     expect(mockModal.mock.calls[0][0].body).toBe(
       'components.generic-list.acion-header.messages.confirmation',
