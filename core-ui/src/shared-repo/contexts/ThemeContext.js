@@ -43,6 +43,7 @@ export const ThemeProvider = ({ children, env }) => {
   useEffect(() => {
     if (typeof env.PUBLIC_URL === 'undefined') return;
     applyThemeToLinkNode(theme, env.PUBLIC_URL);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme]);
 
   useEffect(() => {

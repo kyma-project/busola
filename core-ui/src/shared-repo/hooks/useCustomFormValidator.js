@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 
 export function useCustomFormValidator() {
   const formElementRef = useRef(null);

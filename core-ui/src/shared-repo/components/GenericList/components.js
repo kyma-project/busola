@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Button } from 'fundamental-react';
-
 import ListActions from '../ListActions/ListActions';
 import classNames from 'classnames';
 
@@ -96,7 +94,7 @@ const DefaultRowRenderer = ({
   );
   return (
     <tr
-      role="datarow"
+      role="row"
       className={classNames('fd-table__row', { 'is-edited': isBeingEdited })}
     >
       {cells}

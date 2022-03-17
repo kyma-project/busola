@@ -30,6 +30,7 @@ export function MicrofrontendContextProvider({ children }) {
       LuigiClient.removeInitListener(initHandle);
       LuigiClient.removeCustomMessageListener(customMessageHandle);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context]);
 
   function handleContextChanged(newContext) {

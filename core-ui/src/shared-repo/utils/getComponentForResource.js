@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 function findByName(object, propertyName) {
   return object[
@@ -22,10 +22,7 @@ export const ComponentFor = ({
   } = componentProps;
 
   const predefined = findByName(PredefinedRenderersCollection, name);
-  const Renderer = predefined
-    ? // eslint-disable-next-line react-hooks/rules-of-hooks
-      useMemo(() => predefined, [predefined, defaultRenderer])
-    : defaultRenderer;
+  const Renderer = predefined || defaultRenderer;
   const CreateFormRenderer = nameForCreate
     ? findByName(PredefinedRenderersCollection, nameForCreate) || null
     : null;

@@ -26,6 +26,7 @@ export function YamlContent({
 
     // close search
     editor?.trigger('', 'closeFindWidget');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [yaml]);
 
   return (

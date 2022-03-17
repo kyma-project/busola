@@ -66,9 +66,11 @@ const customColumn = PropTypes.exact({
 
 export const customColumnsType = PropTypes.arrayOf(customColumn);
 
-export default {
+const customPropTypes = {
   customColumnsType,
   button,
   ref,
   listActions,
 };
+
+export default customPropTypes;

@@ -73,13 +73,14 @@ export const SideDrawer = ({
     document.addEventListener('mouseleave', stopResizing, { once: true });
   };
 
-  const keyDown = React.useCallback(({ key }) => {
+  const keyDown = ({ key }) => {
     if (key === 'Escape') setOpen(false);
-  });
+  };
 
   useEffect(() => {
     document.addEventListener('keydown', keyDown);
     return () => document.removeEventListener('keydown', keyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const style = { width: `max(${width}vw, 360px)` };

@@ -43,7 +43,6 @@ export const K8sNameInput = ({
 
   const input = (
     <FormInput
-      role="input"
       ref={_ref}
       type="text"
       id={id}

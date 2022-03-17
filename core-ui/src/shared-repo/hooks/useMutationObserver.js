@@ -17,5 +17,6 @@ export default function useMutationObserver(ref, changeCallback, options) {
       observer.observe(ref.current, options);
       return () => observer.disconnect();
     }
-  }, [ref.current]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 }

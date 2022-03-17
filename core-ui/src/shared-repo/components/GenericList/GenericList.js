@@ -69,6 +69,7 @@ export const GenericList = ({
     setFilteredEntries(
       filterEntries([...entries], searchQuery, textSearchProperties),
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery, setFilteredEntries, entries, pagination?.itemsPerPage]);
 
   React.useEffect(() => setCurrentPage(1), [searchQuery]);

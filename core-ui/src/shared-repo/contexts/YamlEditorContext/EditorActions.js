@@ -50,6 +50,7 @@ export function EditorActions({
     if (editor && !visible) {
       setTimeout(() => hideReadOnlyLines(), 500);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor]);
 
   const openSearch = () => {

@@ -19,6 +19,7 @@ export function useFeatureToggle(key) {
       ({ value }) => setValue(value),
     );
     return () => LuigiClient.removeCustomMessageListener(customMsgId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return [value, setValue];

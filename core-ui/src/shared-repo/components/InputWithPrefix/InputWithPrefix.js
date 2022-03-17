@@ -31,7 +31,6 @@ export const InputWithPrefix = ({
       <input
         ref={_ref}
         data-prefix={prefix}
-        role="input"
         className="fd-input"
         required={required}
         type="text"

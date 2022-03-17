@@ -1,4 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import React from 'react';
 import { useMicrofrontendContext } from '../../contexts/MicrofrontendContext';
 import { useFetch } from './useFetch';
@@ -235,7 +237,7 @@ export const useGetStream = path => {
   React.useEffect(() => {
     if (
       authData &&
-      JSON.stringify(lastAuthData.current) != JSON.stringify(authData)
+      JSON.stringify(lastAuthData.current) !== JSON.stringify(authData)
     ) {
       lastAuthData.current = authData;
       refetchData();

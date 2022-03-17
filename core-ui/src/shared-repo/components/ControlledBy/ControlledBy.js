@@ -58,6 +58,7 @@ export const GoToDetailsLink = ({
     if (resource && !viewPath) {
       checkIfPathExists();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, resource]);
 
   if (!resource || viewPath === null) return null;
