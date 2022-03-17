@@ -61,16 +61,13 @@ context('Test Command Palette navigation', () => {
       .find('[aria-label="Remove Namespace context"]')
       .should('not.exist');
 
-    getQueryInput().type('ns ' + Cypress.env('NAMESPACE_NAME'));
+    getQueryInput().type('ns default');
 
     cy.getIframeBody()
-      .contains(Cypress.env('NAMESPACE_NAME'))
+      .contains('default')
       .click();
 
-    cy.url().should(
-      'match',
-      new RegExp(`namespaces/${Cypress.env('NAMESPACE_NAME')}/details`),
-    );
+    cy.url().should('match', new RegExp('namespaces/default/details'));
 
     // navigate to pod details
     openCommandPalette();
@@ -79,13 +76,13 @@ context('Test Command Palette navigation', () => {
       .find('[aria-label="Remove Namespace context"]')
       .should('be.visible');
 
-    getQueryInput().type('pods ');
+    getQueryInput().type('applications ');
 
     cy.getIframeBody()
-      .contains('in-cluster-eventing-publisher')
+      .contains(Cypress.env('APP_NAME'))
       .click();
 
-    cy.url().should('match', new RegExp(`/pods/details/`));
+    cy.url().should('match', new RegExp(`/applications/details/`));
 
     // navigate to list of cluster role bindings
     openCommandPalette();

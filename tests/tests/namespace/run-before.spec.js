@@ -59,30 +59,4 @@ context('Create Namespace', () => {
       .contains('button', 'Update')
       .click();
   });
-
-  it('Create application', () => {
-    cy.getLeftNav()
-      .contains('Back to Cluster Overview')
-      .click();
-
-    cy.navigateTo('Integration', 'Applications');
-
-    cy.getIframeBody()
-      .contains('Create Application')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role=dialog]')
-      .find("input[ariaLabel='Application name']:visible")
-      .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`);
-
-    cy.getIframeBody()
-      .find('[role="dialog"]')
-      .contains('button', 'Create')
-      .click();
-
-    cy.getIframeBody()
-      .contains(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
-      .should('be.visible');
-  });
 });
