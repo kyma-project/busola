@@ -1,7 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { createRoleTemplate, createClusterRoleTemplate } from './helpers';
+import {
+  createRoleTemplate,
+  createClusterRoleTemplate,
+  createRolePresets,
+  createClusterRolePresets,
+} from './helpers';
 import { useMicrofrontendContext } from 'react-shared';
 import { GenericRoleCreate } from './GenericRoleCreate';
 
@@ -14,6 +19,7 @@ function RolesCreate(props) {
       pluralKind="roles"
       singularName={t('roles.name_singular')}
       createTemplate={() => createRoleTemplate(namespace)}
+      presets={createRolePresets(namespace, t)}
     />
   );
 }
@@ -40,6 +46,7 @@ function ClusterRolesCreate(props) {
       pluralKind="clusterroles"
       singularName={t('cluster-roles.name_singular')}
       createTemplate={createClusterRoleTemplate}
+      presets={createClusterRolePresets(t)}
     />
   );
 }

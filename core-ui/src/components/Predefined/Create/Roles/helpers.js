@@ -1,21 +1,27 @@
-export function createRoleTemplate(namespace) {
+export function createRoleTemplate(namespace, { name = '', rules } = {}) {
+  if (!rules) {
+    rules = [createRuleTemplate(true)];
+  }
   return {
     apiVersion: 'rbac.authorization.k8s.io/v1',
     kind: 'Role',
     metadata: {
-      name: '',
+      name,
       namespace,
     },
-    rules: [createRuleTemplate(true)],
+    rules,
   };
 }
 
-export function createClusterRoleTemplate() {
+export function createClusterRoleTemplate({ name = '', rules } = {}) {
+  if (!rules) {
+    rules = [createRuleTemplate(false)];
+  }
   return {
     apiVersion: 'rbac.authorization.k8s.io/v1',
     kind: 'ClusterRole',
-    metadata: { name: '' },
-    rules: [createRuleTemplate(false)],
+    metadata: { name },
+    rules,
   };
 }
 
@@ -27,6 +33,74 @@ export function createRuleTemplate(isNamespaced) {
     resourceNames: [],
     ...(isNamespaced ? { nonResourceURLs: [] } : null),
   };
+}
+
+export function createRolePresets(namespace, translate) {
+  return [
+    {
+      name: translate('roles.templates.all-permissions'),
+      value: createRoleTemplate(namespace, {
+        name: 'all-permissions',
+        rules: [
+          {
+            verbs: ['*'],
+            apiGroups: ['*'],
+            resources: ['*'],
+            resourceNames: [],
+          },
+        ],
+      }),
+    },
+    {
+      name: translate('roles.templates.view-only'),
+      value: createRoleTemplate(namespace, {
+        name: 'view-only',
+        rules: [
+          {
+            verbs: ['*'],
+            apiGroups: ['*'],
+            resources: ['get', 'list', 'watch'],
+            resourceNames: [],
+          },
+        ],
+      }),
+    },
+  ];
+}
+
+export function createClusterRolePresets(translate) {
+  return [
+    {
+      name: translate('roles.templates.all-permissions'),
+      value: createClusterRoleTemplate({
+        name: 'all-permissions',
+        rules: [
+          {
+            verbs: ['*'],
+            apiGroups: ['*'],
+            resources: ['*'],
+            resourceNames: [],
+            nonResourceURLs: [],
+          },
+        ],
+      }),
+    },
+    {
+      name: translate('roles.templates.view-only'),
+      value: createClusterRoleTemplate({
+        name: 'view-only',
+        rules: [
+          {
+            verbs: ['get', 'list', 'watch'],
+            apiGroups: ['*'],
+            resources: ['*'],
+            resourceNames: [],
+            nonResourceURLs: [],
+          },
+        ],
+      }),
+    },
+  ];
 }
 
 function isResourceRule(rule) {
