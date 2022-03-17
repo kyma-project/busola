@@ -21,16 +21,12 @@ test('Busola Lighthouse audit', async () => {
   await page.goto(ADDRESS + '/clusters');
 
   console.log('Running audit on /clusters...');
-
   await playAudit({
     page,
     port: 9222,
     thresholds: {
-      performance: 0, // ignored
       accessibility: 75,
       'best-practices': 90,
-      seo: 0, // ignored
-      pwa: 0, // ignored
     },
   });
 
@@ -78,11 +74,8 @@ test('Busola Lighthouse audit', async () => {
     page,
     port: 9222,
     thresholds: {
-      performance: 0, // ignored
       accessibility: 75,
       'best-practices': 90,
-      seo: 0, // ignored
-      pwa: 0, // ignored
     },
   });
 
