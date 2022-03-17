@@ -25,7 +25,7 @@ test('Busola Lighthouse audit', async () => {
     page,
     port: 9222,
     thresholds: {
-      accessibility: 75,
+      accessibility: 72,
       'best-practices': 90,
     },
   });
