@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadFile } from '../support/loadFile';
+import { loadFile } from '../../support/loadFile';
 
 const random = Math.floor(Math.random() * 9999) + 1000;
 const FUNCTION_RECEIVER_NAME = 'in-cluster-eventing-receiver';
@@ -203,7 +203,7 @@ context('Test in-cluster eventing', () => {
     cy.getIframeBody()
       .find('[placeholder="Choose Application name"]:visible')
       .clear()
-      .type(`test-mock-app-${Cypress.env('NAMESPACE_NAME')}`)
+      .type(Cypress.env('APP_NAME'))
       .click();
 
     cy.getIframeBody()
@@ -251,11 +251,7 @@ context('Test in-cluster eventing', () => {
         '[placeholder="Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1"]',
       )
       .clear()
-      .type(
-        `sap.kyma.custom.test-mock-app-${Cypress.env(
-          'NAMESPACE_NAME',
-        )}.order.canceled.v2`,
-      );
+      .type(`sap.kyma.custom.${Cypress.env('APP_NAME')}.order.canceled.v2`);
 
     cy.getIframeBody()
       .find('[role="dialog"]')
