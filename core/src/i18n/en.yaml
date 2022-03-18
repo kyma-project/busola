@@ -1522,7 +1522,7 @@ network-policies:
   present-but-empty: Present but empty selector selects all pods / namespaces.
   title: Network Policies
 no-permissions:
-  enter-namespace-name: 'If you expect to have access to some Namespace please enter it here:'
+  enter-namespace-name: 'If you expect to have access to a Namespace, please enter its name here:'
   enter-namespace-name-placeholder: Enter Namespace name
   title: No Permissions
 node-details:
