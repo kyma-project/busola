@@ -18,12 +18,20 @@ export function deleteFromGenericList(searchTerm, confirmationEnabled = true) {
     .type(searchTerm);
 
   cy.getIframeBody()
+    .contains(searchTerm)
+    .should('be.visible');
+
+  cy.getIframeBody()
     .find('[aria-label="Delete"]')
     .click();
 
   if (confirmationEnabled) {
     cy.getIframeBody()
       .contains('button', 'Delete')
-      .click();
+      .click({ force: true });
+
+    cy.getIframeBody()
+      .contains(/deleted/)
+      .should('be.visible');
   }
 }

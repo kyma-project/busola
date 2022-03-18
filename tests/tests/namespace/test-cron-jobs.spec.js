@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { deleteFromGenericList } from '../../support/helpers';
 
 const CRON_JOB_NAME = 'test-cron-job';
 
@@ -167,5 +168,13 @@ context('Test Cron Jobs', () => {
     cy.getIframeBody()
       .contains('0 * * * *')
       .should('be.visible');
+  });
+
+  it('Inspect list and delete', () => {
+    cy.getIframeBody()
+      .contains('Cron Jobs')
+      .click();
+
+    deleteFromGenericList(CRON_JOB_NAME);
   });
 });

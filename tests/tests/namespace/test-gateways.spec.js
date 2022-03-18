@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { deleteFromGenericList } from '../../support/helpers';
 
 const GATEWAY_NAME =
   'test-gateway-' +
@@ -131,12 +132,11 @@ context('Test Gateways', () => {
     cy.getIframeBody().contains(KYMA_GATEWAY_CERTS);
   });
 
-  it('Inspect list', () => {
+  it('Inspect list and delete', () => {
     cy.getIframeBody()
       .contains('Gateways')
       .click();
 
-    // name
-    cy.getIframeBody().contains(GATEWAY_NAME);
+    deleteFromGenericList(GATEWAY_NAME);
   });
 });

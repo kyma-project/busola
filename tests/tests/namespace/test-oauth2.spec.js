@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { deleteFromGenericList } from '../../support/helpers';
 
 const CLIENT_NAME = 'test-oauth2-client';
 
@@ -143,5 +144,13 @@ context('Test OAuth2 Clients', () => {
     // cy.getIframeBody()
     //   .contains('client_secret')
     //   .should('be.visible');
+  });
+
+  it('Inpect list and delete', () => {
+    cy.getIframeBody()
+      .contains('a', 'OAuth2 Clients')
+      .click();
+
+    deleteFromGenericList(CLIENT_NAME);
   });
 });

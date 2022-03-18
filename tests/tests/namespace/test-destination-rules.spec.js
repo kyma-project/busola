@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 import { loadFile } from '../../support/loadFile';
+import { deleteFromGenericList } from '../../support/helpers';
 
 const DR_NAME =
   'test-' +
@@ -55,28 +56,11 @@ context('Test Destination Rules', () => {
       .should('be.visible');
   });
 
-  it('Check the Destination Rule list', () => {
-    cy.getLeftNav()
-      .contains('Destination Rules')
+  it('Check the Destination Rule list and delete', () => {
+    cy.getIframeBody()
+      .contains('a', 'Destination Rules')
       .click();
 
-    cy.getIframeBody()
-      .contains(DR_NAME)
-      .should('be.visible');
-  });
-
-  it('Delete a Destination Rule', () => {
-    cy.getIframeBody()
-      .contains('.fd-table__row', DR_NAME)
-      .find('button[data-testid="delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .contains('.fd-table__row', DR_NAME)
-      .should('not.exist');
+    deleteFromGenericList(DR_NAME);
   });
 });

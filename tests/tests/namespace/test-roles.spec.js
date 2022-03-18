@@ -127,6 +127,10 @@ context('Test Roles', () => {
       .should('not.have.text', '-');
   });
 
+  it('Inspect list', () => {
+    cy.inspectList('Roles', ROLE_NAME);
+  });
+
   it('Clone the Role', () => {
     cy.getLeftNav()
       .contains('Roles')
@@ -170,5 +174,19 @@ context('Test Roles', () => {
       .find('[data-testid=rules-list]')
       .find('[data-testid=list]')
       .should('have.text', '-');
+  });
+
+  it('Delete Roles', () => {
+    cy.getLeftNav()
+      .contains('Roles')
+      .click();
+
+    deleteFromGenericList(CLONE_NAME);
+
+    cy.getLeftNav()
+      .contains('Roles')
+      .click();
+
+    deleteFromGenericList(ROLE_NAME);
   });
 });

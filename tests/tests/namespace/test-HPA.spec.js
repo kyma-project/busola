@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const HPA_NAME = 'test-hpa';
@@ -83,13 +84,7 @@ context('Test HPA', () => {
   });
 
   it('Check HPA list', () => {
-    cy.getLeftNav()
-      .contains('Horizontal Pod')
-      .click();
-
-    cy.getIframeBody()
-      .contains(HPA_NAME)
-      .should('be.visible');
+    cy.inspectList('Horizontal Pod', HPA_NAME);
   });
 
   it('Check HPA subcomponent', () => {
@@ -107,17 +102,6 @@ context('Test HPA', () => {
   it('Delete HPA ', () => {
     cy.navigateTo('Discovery and Network', 'Horizontal Pod');
 
-    cy.getIframeBody()
-      .contains('.fd-table__row', HPA_NAME)
-      .find('button[data-testid="delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .contains('.fd-table__row', HPA_NAME)
-      .should('not.exist');
+    deleteFromGenericList(HPA_NAME);
   });
 });

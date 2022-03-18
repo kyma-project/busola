@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const random = Math.floor(Math.random() * 9999) + 1000;
@@ -277,7 +278,19 @@ context('Test in-cluster eventing', () => {
       .should('be.visible');
   });
 
-  it('Delete Subscription', () => {
-    cy.deleteInDetails();
+  it('Inspect Subscription list and delete', () => {
+    cy.getIframeBody()
+      .contains('a', 'Subscriptions')
+      .click();
+
+    deleteFromGenericList(`${API_RULE_AND_FUNCTION_NAME}-subscription`);
+  });
+
+  it('Inspect Function list and delete', () => {
+    cy.getLeftNav()
+      .contains('Functions')
+      .click();
+
+    deleteFromGenericList(FUNCTION_RECEIVER_NAME);
   });
 });

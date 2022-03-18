@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const FILE_NAME = 'test-sidecar.yaml';
@@ -70,30 +71,11 @@ context('Test Sidecars', () => {
     cy.getIframeBody().contains(PORT_NAME);
   });
 
-  it('Check the Sidecars list', () => {
-    cy.getLeftNav()
-      .contains('Sidecars')
+  it('Check the Sidecars list and delete', () => {
+    cy.getIframeBody()
+      .contains('a', 'Sidecars')
       .click();
 
-    cy.getIframeBody()
-      .contains(SIDECAR_NAME)
-      .parent()
-      .getIframeBody()
-      .contains(OUTBOUND_TRAFFIC_POLICY);
-  });
-
-  it('Delete a Sidecar', () => {
-    cy.getIframeBody()
-      .contains('.fd-table__row', SIDECAR_NAME)
-      .find('button[data-testid="delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .contains('.fd-table__row', SIDECAR_NAME)
-      .should('not.exist');
+    deleteFromGenericList(SIDECAR_NAME);
   });
 });

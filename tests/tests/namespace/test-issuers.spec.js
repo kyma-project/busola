@@ -1,3 +1,5 @@
+const { deleteFromGenericList } = require('../../support/helpers');
+
 const ISSUER_NAME = `test-issuer-${Math.floor(Math.random() * 9999) + 1000}`;
 const SECRET_NAME = `issuer-secret-${Math.floor(Math.random() * 9999) + 1000}`;
 
@@ -120,28 +122,11 @@ context('Test Issuers', () => {
     cy.getIframeBody().contains('another.server.com');
   });
 
-  it('Inspect issuer list', () => {
+  it('Inspect issuer list and delete', () => {
     cy.getIframeBody()
-      .contains('Issuers')
+      .contains('a', 'Issuers')
       .click();
 
-    cy.getIframeBody().contains(ISSUER_NAME);
-  });
-
-  it('Delete issuer', () => {
-    cy.getLeftNav()
-      .contains('Issuers')
-      .click();
-
-    cy.url().should('match', /issuers$/);
-
-    cy.getIframeBody()
-      .contains('tr', ISSUER_NAME)
-      .find('[aria-label="Delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('.fd-message-box button', 'Delete')
-      .click();
+    deleteFromGenericList(ISSUER_NAME);
   });
 });

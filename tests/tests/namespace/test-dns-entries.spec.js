@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { deleteFromGenericList } from '../../support/helpers';
 
 const random = Math.random()
   .toString()
@@ -95,11 +96,11 @@ context('Test DNS Entries', () => {
     cy.getIframeBody().contains(/Targets.*, example\.com/);
   });
 
-  it('Inspect list', () => {
+  it('Inspect list and delete', () => {
     cy.getIframeBody()
       .contains('Entries')
       .click();
 
-    cy.getIframeBody().contains(DNS_ENTRY_NAME);
+    deleteFromGenericList(DNS_ENTRY_NAME);
   });
 });

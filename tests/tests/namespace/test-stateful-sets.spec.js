@@ -1,3 +1,5 @@
+const { deleteFromGenericList } = require('../../support/helpers');
+
 const SET_NAME = 'alertmanager-monitoring-alertmanager';
 
 context('Test Stateful Sets', () => {
@@ -31,7 +33,7 @@ context('Test Stateful Sets', () => {
     cy.navigateTo('Workloads', 'Stateful Sets');
   });
 
-  it('Inspect list', () => {
+  it('Create and inspect list', () => {
     cy.url().should('match', /statefulsets$/);
     cy.getIframeBody().contains(SET_NAME);
   });
@@ -54,5 +56,13 @@ context('Test Stateful Sets', () => {
     cy.getIframeBody().contains('Alertmanager');
     // pod
     cy.getIframeBody().contains('alertmanager-monitoring-alertmanager-0');
+  });
+
+  it('Delete Stateful Set', () => {
+    cy.getIframeBody()
+      .contains('a', 'Stateful Sets')
+      .click();
+
+    deleteFromGenericList(SET_NAME);
   });
 });

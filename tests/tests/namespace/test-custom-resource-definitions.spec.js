@@ -63,13 +63,7 @@ context('Test Custom Resource Definitions', () => {
   });
 
   it('Check Custom Resource Definitions list', () => {
-    cy.getLeftNav()
-      .find('[data-testid=customresourcedefinitions_customresourcedefinitions]')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="search-input"]')
-      .type(CRD_NAME, { force: true });
+    cy.inspectList('Custom Resource Definitions', CRD_NAME);
 
     cy.getIframeBody().contains('Namespaced');
 

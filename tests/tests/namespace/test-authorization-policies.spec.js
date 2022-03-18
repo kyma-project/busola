@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 import { loadFile } from '../../support/loadFile';
+import { deleteFromGenericList } from '../../support/helpers';
 
 context('Test Authorization Policies', () => {
   Cypress.skipAfterFail();
@@ -60,14 +61,6 @@ context('Test Authorization Policies', () => {
       .contains('Authorization Policies')
       .click();
 
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="search-input"]')
-      .type('test-ap', { force: true });
-
-    cy.getIframeBody()
-      .contains('tbody tr td a', 'test-ap')
-      .click({ force: true });
-
-    cy.deleteInDetails();
+    deleteFromGenericList('test-ap');
   });
 });

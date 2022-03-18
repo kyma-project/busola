@@ -1,4 +1,5 @@
 import jsyaml from 'js-yaml';
+import { deleteFromGenericList } from '../../support/helpers';
 
 const SERVICE_NAME = `test-virtual-service-${Math.floor(Math.random() * 9999) +
   1000}`;
@@ -68,26 +69,11 @@ context('Test Virtual Services', () => {
     cy.getIframeBody().contains('Delegate');
   });
 
-  it('Inspect service list', () => {
+  it('Inspect service list and delete', () => {
     cy.getIframeBody()
       .contains('Virtual Services')
       .click();
 
-    cy.getIframeBody().contains(SERVICE_NAME);
-  });
-
-  it('Delete Virtual Service', () => {
-    cy.getIframeBody()
-      .contains('.fd-table__row', SERVICE_NAME)
-      .find('[aria-label="Delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('.fd-message-box button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .contains('.fd-table__row', SERVICE_NAME)
-      .should('not.exist');
+    deleteFromGenericList(SERVICE_NAME);
   });
 });

@@ -1,3 +1,5 @@
+import { deleteFromGenericList } from '../../support/helpers';
+
 const CONFIG_MAP_NAME = `test-config-map-${Math.floor(Math.random() * 9999) +
   1000}`;
 const CLONE_NAME = `${CONFIG_MAP_NAME}-clone`;
@@ -74,14 +76,14 @@ context('Test Config Maps', () => {
   });
 
   it('Inspect list', () => {
+    cy.inspectList('Config Maps', CONFIG_MAP_NAME);
+  });
+
+  it('Clone the secret', () => {
     cy.getLeftNav()
       .contains('Config Maps')
       .click();
 
-    cy.getIframeBody().contains('tr', CONFIG_MAP_NAME);
-  });
-
-  it('Clone the secret', () => {
     cy.getIframeBody()
       .contains('.fd-table__row', CONFIG_MAP_NAME)
       .find('button[data-testid="clone"]')
@@ -107,5 +109,19 @@ context('Test Config Maps', () => {
     cy.getIframeBody()
       .contains('.fd-layout-panel', ENTRY_KEY2)
       .contains(ENTRY_VALUE2);
+  });
+
+  it('Delete Config Maps', () => {
+    cy.getLeftNav()
+      .contains('Config Maps')
+      .click();
+
+    deleteFromGenericList(CLONE_NAME);
+
+    cy.getLeftNav()
+      .contains('Config Maps')
+      .click();
+
+    deleteFromGenericList(CONFIG_MAP_NAME);
   });
 });

@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { deleteFromGenericList } from '../../support/helpers';
 
 const JOB_NAME =
   'test-job-' +
@@ -185,9 +186,9 @@ context('Test Jobs', () => {
 
   it('Inspect list', () => {
     cy.getIframeBody()
-      .contains('Jobs')
+      .contains('a', /^Jobs/)
       .click();
 
-    cy.getIframeBody().contains(JOB_NAME);
+    deleteFromGenericList(JOB_NAME);
   });
 });

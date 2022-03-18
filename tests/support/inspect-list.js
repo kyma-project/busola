@@ -1,0 +1,13 @@
+Cypress.Commands.add('inspectList', (resource, resourceName) => {
+  cy.getLeftNav()
+    .contains(resource)
+    .click();
+
+  cy.getIframeBody()
+    .find('[role="search"] [aria-label="open-search"]')
+    .type(resourceName);
+
+  cy.getIframeBody()
+    .contains(resourceName)
+    .should('be.visible');
+});
