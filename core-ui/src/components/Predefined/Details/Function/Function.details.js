@@ -6,7 +6,7 @@ import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
 import { ResourceDetails } from 'react-shared';
-import { FunctionsCreate } from '../Create/Functions/Functions.create';
+import { FunctionsCreate } from '../../Create/Functions/Functions.create';
 
 const FunctionsDetails = props => {
   const { t } = useTranslation();

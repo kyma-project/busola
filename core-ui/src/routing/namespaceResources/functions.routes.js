@@ -5,7 +5,7 @@ const List = React.lazy(() =>
   import('../../components/Predefined/List/Function/Functions.list'),
 );
 const Details = React.lazy(() =>
-  import('../../components/Predefined/Details/Function.details'),
+  import('../../components/Predefined/Details/Function/Function.details'),
 );
 
 export default createResourceRoutes(
