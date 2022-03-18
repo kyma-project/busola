@@ -41,6 +41,9 @@ ServicesCreate.resourceGraphConfig = (t, context) => ({
     {
       kind: 'Function',
     },
+    {
+      kind: 'Subscription',
+    },
   ],
   matchers: {
     Function: (service, functión) =>
