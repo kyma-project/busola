@@ -2,8 +2,8 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { useGet } from './../useGet';
 import { MicrofrontendContext, ConfigContext } from '../../..';
-import wait from 'waait';
 import { act } from 'react-dom/test-utils';
+import { waitFor } from '@testing-library/react';
 
 const mockUseFetch = jest.fn();
 jest.mock('./../useFetch', () => ({
@@ -52,21 +52,26 @@ describe('useGet', () => {
     await act(async () => {
       // first call - loading
       expect(mock).toHaveBeenCalledWith(true, null, null);
-      await wait(150);
       // first call - valid data
-      expect(mock).toHaveBeenCalledWith(false, null, expect.any(Object));
+      await waitFor(() =>
+        expect(mock).toHaveBeenCalledWith(false, null, expect.any(Object)),
+      );
       // second call - error, but still show data (1/2)
-      await wait(100);
-      expect(mock).toHaveBeenCalledWith(false, null, expect.any(Object));
+
+      await waitFor(() =>
+        expect(mock).toHaveBeenCalledWith(false, null, expect.any(Object)),
+      );
       // third call - error, but still show data (2/2)
-      await wait(100);
-      expect(mock).toHaveBeenCalledWith(false, null, expect.any(Object));
+      await waitFor(() =>
+        expect(mock).toHaveBeenCalledWith(false, null, expect.any(Object)),
+      );
       // fourth call - error, start displaying error
-      await wait(100);
-      expect(mock).toHaveBeenCalledWith(
-        false,
-        expect.any(Error),
-        expect.any(Object),
+      await waitFor(() =>
+        expect(mock).toHaveBeenCalledWith(
+          false,
+          expect.any(Error),
+          expect.any(Object),
+        ),
       );
     });
   });
