@@ -16,11 +16,11 @@ ENV CI true
 COPY . /app
 
 RUN make resolve
-RUN make validate
-RUN make pull-licenses
+# RUN make validate
+# RUN make pull-licenses
 
-RUN cd /app/core && make test && make build
-RUN cd /app/core-ui && make test && make build
+RUN cd /app/core && make build
+RUN cd /app/core-ui && make build
 
 # ---- Serve ----
 FROM alpine:3.15.0
