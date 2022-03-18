@@ -2,7 +2,7 @@ import { wrap, makeNode, makeRank, makeCluster, match } from './helpers';
 import { findCommonPrefix } from './../../..';
 
 function isWorkloadLayer(layers) {
-  return (layers || {}).some(layer => layer.kind === 'Pod');
+  return (layers || []).some(layer => layer.kind === 'Pod');
 }
 const DEPLOYMENT_SUBGRAPH_ITEMS = [
   { kind: 'Pod', required: true, root: true },
@@ -146,7 +146,7 @@ export function buildNetworkGraph({ store }, config) {
           const podId = multiplePods
             ? 'composite-pod'
             : store['Pod'][0].metadata.uid;
-          const subscriptionId = store['Subscription'].map(
+          const subscriptionIds = store['Subscription']?.map(
             subscription => subscription.metadata.uid,
           );
           currentLayer.forEach(svc => {
@@ -157,7 +157,7 @@ export function buildNetworkGraph({ store }, config) {
                 }),
               );
             }
-            subscriptionId.forEach(subscription =>
+            (subscriptionIds || []).forEach(subscription =>
               strEdges.push(makeEdge(svc.metadata.uid, subscription)),
             );
           });
