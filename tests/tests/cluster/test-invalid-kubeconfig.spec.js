@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-import config from '../config';
+import config from '../../config';
 
 context('Test invalid kubeconfig', () => {
   Cypress.skipAfterFail();

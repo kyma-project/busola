@@ -4,7 +4,7 @@ import jsyaml from 'js-yaml';
 import {
   chooseComboboxOption,
   deleteFromGenericList,
-} from '../support/helpers';
+} from '../../support/helpers';
 
 const id = Math.random()
   .toString()
@@ -177,6 +177,8 @@ context('Test reduced permissions', () => {
     cy.getIframeBody()
       .find('[aria-label="Download Kubeconfig"]')
       .click();
+
+    cy.wait(200);
 
     cy.task('listDownloads', Cypress.config('downloadsFolder')).then(
       fileNames => {
