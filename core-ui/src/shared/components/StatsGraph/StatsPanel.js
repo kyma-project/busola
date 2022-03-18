@@ -6,7 +6,11 @@ import {
   ButtonSegmented,
   BusyIndicator,
 } from 'fundamental-react';
-import { Dropdown, getErrorMessage } from 'react-shared';
+import {
+  Dropdown,
+  getErrorMessage,
+  useMicrofrontendContext,
+} from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 import { usePrometheus } from 'shared/hooks/usePrometheus';
@@ -107,6 +111,8 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
 }
 
 export function StatsPanel({ type, ...props }) {
+  const { features } = useMicrofrontendContext();
+
   const timeSpans = {
     '1h': 60 * 60,
     '3h': 3 * 60 * 60,
@@ -125,6 +131,10 @@ export function StatsPanel({ type, ...props }) {
   useEffect(() => {
     setTimeSpan(visibleTimeSpans[0]);
   }, [metric]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!features.PROMETHEUS?.isEnabled) {
+    return '';
+  }
 
   return (
     <LayoutPanel className="fd-margin--md stats-panel">

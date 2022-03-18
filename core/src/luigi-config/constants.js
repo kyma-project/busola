@@ -9,6 +9,7 @@ const DEFAULT_MODULES = {
   SERVERLESS: 'serverless.kyma-project.io',
   CUSTOM_DOMAINS: 'dns.gardener.cloud',
   ISTIO: 'networking.istio.io',
+  PROMETHEUS: 'monitoring.coreos.com',
 };
 
 export const DEFAULT_FEATURES = {
