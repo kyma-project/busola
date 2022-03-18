@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadFile } from '../support/loadFile';
+import { loadFile } from '../../support/loadFile';
 
 const CRD_PLURAL_NAME =
   'test-' +

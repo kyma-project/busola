@@ -1,11 +1,9 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadFile } from '../support/loadFile';
+import { loadFile } from '../../support/loadFile';
 import jsyaml from 'js-yaml';
 
-const APPLICATION_NAME = `test-mock-app-${Cypress.env(
-  'NAMESPACE_NAME',
-)}-upload-yaml`;
+const APPLICATION_NAME = `${Cypress.env('APP_NAME')}-upload-yaml`;
 
 async function loadValidResources(namespaceName) {
   const resources = await loadFile('yaml-upload--valid.yaml', false);

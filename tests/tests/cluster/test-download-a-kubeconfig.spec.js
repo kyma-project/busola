@@ -9,7 +9,6 @@ context('Test Download a Kubeconfig', () => {
 
   before(() => {
     cy.loginAndSelectCluster();
-    cy.goToNamespaceDetails();
   });
 
   it('Download a Kubeconfig from the Clusters list', () => {
