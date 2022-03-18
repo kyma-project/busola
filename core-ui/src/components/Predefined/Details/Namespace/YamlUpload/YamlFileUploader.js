@@ -21,7 +21,7 @@ export function YamlFileUploader({ onYamlContentAdded }) {
   return (
     <FileInput
       fileInputChanged={onYamlContentUploaded}
-      acceptedFileFormats=".yaml"
+      acceptedFileFormats=".yaml,.yml"
       i18n={i18n}
     />
   );

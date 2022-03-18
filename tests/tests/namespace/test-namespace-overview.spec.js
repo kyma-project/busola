@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadFile } from '../support/loadFile';
+import { loadFile } from '../../support/loadFile';
 
 const LIMIT_NAME = `${Cypress.env('NAMESPACE_NAME')}-limits`;
 const QUOTA_NAME = `${Cypress.env('NAMESPACE_NAME')}-quotas`;

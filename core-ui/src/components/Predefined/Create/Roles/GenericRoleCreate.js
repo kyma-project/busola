@@ -20,6 +20,7 @@ export function GenericRoleCreate({
   pluralKind,
   singularName,
   resourceUrl,
+  presets,
   createTemplate,
   resource: initialRole,
 }) {
@@ -41,6 +42,7 @@ export function GenericRoleCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
+      presets={presets}
     >
       <K8sNameField
         required
