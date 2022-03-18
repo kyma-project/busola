@@ -8,8 +8,6 @@ import { OAuth2ClientsCreate } from '../../Create/OAuthClients/OAuthClients.crea
 
 import { useGet, ResourceDetails } from 'react-shared';
 
-import './OAuth2ClientsDetails.scss';
-
 function SecretComponent({ namespaceName, secretName }) {
   const { t } = useTranslation();
   const { data: secret, error, loading = true } = useGet(
