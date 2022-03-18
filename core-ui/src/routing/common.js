@@ -1,8 +1,9 @@
 import React, { Suspense } from 'react';
-import { Spinner } from 'react-shared';
+import { Spinner, useMicrofrontendContext } from 'react-shared';
 import { Route, useParams } from 'react-router-dom';
 import { getResourceUrl } from 'shared/helpers';
 import { useTranslation } from 'react-i18next';
+import { getPerResourceDefs } from '../shared/helpers/getResourceDefs';
 
 export const createPath = (
   config = { namespaced: true, detailsView: false, pathSegment: '' },
@@ -40,6 +41,14 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
   const decodedResourceUrl = decodeURIComponent(resourceUrl);
   const decodedResourceName = decodeURIComponent(resourceName);
 
+  //TODO calculate the list once per app
+  const context = useMicrofrontendContext();
+  const resourceGraphConfig = getPerResourceDefs(
+    'resourceGraphConfig',
+    t,
+    context,
+  );
+
   return {
     resourceUrl: decodedResourceUrl,
     resourceType: resourceType,
@@ -47,6 +56,7 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
     resourceName: decodedResourceName,
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
+    resourceGraphConfig,
     i18n,
   };
 };
