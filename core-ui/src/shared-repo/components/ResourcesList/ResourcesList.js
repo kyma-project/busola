@@ -194,12 +194,12 @@ function Resources({
   const handleResourceClone = resource => {
     let activeResource = cloneDeep(resource);
     jp.value(activeResource, '$.metadata.name', '');
-    jp.remove(activeResource, '$.metadata.uid');
-    jp.remove(activeResource, '$.metadata.resourceVersion');
-    jp.remove(activeResource, '$.metadata.creationTimestamp');
-    jp.remove(activeResource, '$.metadata.managedFields');
-    jp.remove(activeResource, '$.metadata.ownerReferences');
-    jp.remove(activeResource, '$.status');
+    delete activeResource.metadata.uid;
+    delete activeResource.metadata.resourceVersion;
+    delete activeResource.metadata.creationTimestamp;
+    delete activeResource.metadata.managedFields;
+    delete activeResource.metadata.ownerReferences;
+    delete activeResource.status;
 
     if (Array.isArray(CreateResourceForm.sanitizeClone)) {
       CreateResourceForm.sanitizeClone.forEach(path =>
@@ -208,11 +208,9 @@ function Resources({
     } else if (typeof CreateResourceForm.sanitizeClone === 'function') {
       activeResource = CreateResourceForm.sanitizeClone(activeResource);
     }
-
     setActiveResource(activeResource);
     setShowEditDialog(true);
   };
-
   const actions = readOnly
     ? customListActions
     : [
