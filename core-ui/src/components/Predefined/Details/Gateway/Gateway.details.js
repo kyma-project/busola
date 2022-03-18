@@ -7,6 +7,8 @@ import { Selector } from 'shared/components/Selector/Selector';
 import { ResourceDetails } from 'react-shared';
 import { GatewaysCreate } from '../../Create/Gateways/Gateways.create';
 
+import './GatewaysDetails.scss';
+
 function MatchSelector(gateway) {
   return (
     <Selector

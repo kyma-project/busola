@@ -7,6 +7,8 @@ import { HelmReleaseData } from 'components/HelmReleases/HelmReleaseData';
 import { SecretsCreate } from '../../Create/Secrets/Secrets.create';
 import { ResourceDetails } from 'react-shared';
 
+import './SecretsDetails.scss';
+
 function HelmReleaseDataWrapper(secret) {
   if (secret.type !== 'helm.sh/release.v1') {
     return null;

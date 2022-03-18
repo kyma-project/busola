@@ -155,5 +155,10 @@ ServiceAccountsCreate.resourceGraphConfig = (t, context) => ({
   ],
   depth: 2,
   networkFlowLevel: 2,
+  matchers: {
+    Secret: (sa, secret) =>
+      sa.secrets?.find(s => s.name === secret.metadata.name) ||
+      sa.imagePullSecrets?.find(s => s.name === secret.metadata.name),
+  },
 });
 export { ServiceAccountsCreate };

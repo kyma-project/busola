@@ -75,6 +75,7 @@ const StorageClassesDetails = props => {
         Events,
       ]}
       customColumns={customColumns}
+      resourceTitle={t('storage-classes.title')}
       singularName={t('storage-classes.name_singular')}
       createResourceForm={StorageClassesCreate}
       {...props}

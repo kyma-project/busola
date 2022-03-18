@@ -79,6 +79,12 @@ data:
           },
           "GZIP": {
             "isEnabled": true
+          },
+          "PROMETHEUS": {
+            "isEnabled": false
+          },
+          "VISUAL_RESOURCES": {
+            "isEnabled": true
           }
         }
       }

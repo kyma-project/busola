@@ -11,6 +11,7 @@ import { filterByResource } from 'hooks/useMessageList';
 import { PodsCreate } from '../../Create/Pods/Pods.create';
 
 import { PodStatsGraph } from './PodStatsGraph';
+import './PodDetails.scss';
 
 function toSnakeCase(inputString) {
   return inputString
