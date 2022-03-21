@@ -5,10 +5,11 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
 import { InvalidRoleError } from './InvalidRoleError';
 import { useResourcesForApiGroups } from './useResourcesForApiGroups';
-
-function unique(arr) {
-  return [...new Set(arr)];
-}
+import {
+  EMPTY_API_GROUP_KEY,
+  getApiGroupInputOptions,
+  unique,
+} from './helpers';
 
 const nonResourceUrls = [
   '/healthz/ready',
@@ -37,13 +38,6 @@ const verbs = [
   '*',
 ];
 
-const extractApiGroup = groupVersion => {
-  // handle core ('') group
-  if (groupVersion === 'v1') return '';
-  const [apiGroup] = groupVersion.split('/');
-  return apiGroup;
-};
-
 export function RuleInput({ rule, rules, setRules, isAdvanced }) {
   const { namespaceId, groupVersions } = useMicrofrontendContext();
   const { t } = useTranslation();
@@ -53,13 +47,8 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
   const { cache: resourcesCache, fetchResources } = useResourcesForApiGroups(
     apiRules ? [...new Set(apiRules)] : [],
   );
-  const EMPTY_STRING_KEY = 'core-api-group';
   // introduce special option for '' apiGroup - Combobox doesn't accept empty string key
-  const apiGroupsInputOptions = unique(
-    groupVersions.map(extractApiGroup),
-  ).map(g =>
-    g === '' ? { key: EMPTY_STRING_KEY, text: '(core)' } : { key: g, text: g },
-  );
+  const apiGroupsInputOptions = getApiGroupInputOptions(groupVersions);
 
   // there's no endpoint for "all resources" - add just a '*' and specific resources
   // for already choosen apiGroups
@@ -80,7 +69,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         title={t('roles.headers.api-groups')}
         propertyPath="$.apiGroups"
         options={apiGroupsInputOptions}
-        emptyStringKey={EMPTY_STRING_KEY}
+        emptyStringKey={EMPTY_API_GROUP_KEY}
         defaultOpen
         onBlur={fetchResources}
       />
