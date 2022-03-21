@@ -55,7 +55,10 @@ context('Test Daemon Sets', () => {
   });
 
   it('Inspect Daemon Sets list', () => {
-    cy.navigateTo('Workloads', 'Daemon Sets');
+    cy.getIframeBody()
+      .contains('Daemon Sets')
+      .click();
+
     cy.inspectList('Daemon Sets', DAEMONSET_NAME);
   });
 });
