@@ -1,7 +1,8 @@
 import React from 'react';
-import { ComponentForList } from 'shared/getComponents';
-
+import PodsListComponent from 'components/Predefined/List/Pod/Pods.list';
+import { useTranslation } from 'react-i18next';
 export const RelatedPods = ({ namespace = '', labelSelector }) => {
+  const { i18n } = useTranslation();
   const podListParams = {
     hasDetailsView: true,
     fixedPath: true,
@@ -10,9 +11,8 @@ export const RelatedPods = ({ namespace = '', labelSelector }) => {
     namespace,
     isCompact: true,
     showTitle: true,
+    i18n,
   };
 
-  return (
-    <ComponentForList name="podsList" params={podListParams} key="pods-list" />
-  );
+  return <PodsListComponent {...podListParams} />;
 };

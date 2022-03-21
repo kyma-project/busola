@@ -1,16 +1,15 @@
 import React from 'react';
 import { Button } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext, Link, ResourcesList } from 'react-shared';
 
 import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
-import { Trans } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
+import { FunctionsCreate } from 'components/Predefined/Create/Functions/Functions.create';
 
-export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
+const FunctionsList = props => {
   const { t } = useTranslation();
 
   const microfrontendContext = useMicrofrontendContext();
@@ -45,7 +44,7 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
       header: t('common.headers.status'),
       value: resource => (
         <LambdaStatusBadge
-          resourceKind={otherParams.resourceType}
+          resourceKind={props.resourceType}
           status={resource.status}
         />
       ),
@@ -62,11 +61,14 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customHeaderActions={headerActions}
       customColumns={customColumns}
       description={description}
-      {...otherParams}
+      createResourceForm={FunctionsCreate}
+      {...props}
     />
   );
 };
+
+export default FunctionsList;

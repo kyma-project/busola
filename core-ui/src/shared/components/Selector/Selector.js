@@ -59,7 +59,11 @@ export const Selector = ({
   const selectorLabels = !isEmpty(labels) ? labels : null;
 
   return (
-    <LayoutPanel className="fd-margin--md" key="workload-selector">
+    <LayoutPanel
+      className="fd-margin--md"
+      key="workload-selector"
+      data-test-id="workload-selector"
+    >
       <LayoutPanel.Header>
         <LayoutPanel.Head
           title={title || t('selector.title')}

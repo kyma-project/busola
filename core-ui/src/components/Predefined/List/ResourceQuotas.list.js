@@ -1,8 +1,9 @@
 import React from 'react';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER, ResourcesList } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+import { ResourceQuotasCreate } from '../Create/ResourceQuotas/ResourceQuotas.create';
 
-export const ResourceQuotasList = ({ DefaultRenderer, ...otherParams }) => {
+const ResourceQuotasList = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -21,10 +22,12 @@ export const ResourceQuotasList = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       resourceName={t('resource-quotas.title')}
       customColumns={customColumns}
-      {...otherParams}
+      createResourceForm={ResourceQuotasCreate}
+      {...props}
     />
   );
 };
+export default ResourceQuotasList;

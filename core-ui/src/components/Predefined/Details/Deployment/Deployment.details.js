@@ -1,12 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ControlledBy } from 'react-shared';
-
+import { ControlledBy, ResourceDetails } from 'react-shared';
+import { DeploymentsCreate } from '../../Create/Deployments/Deployments.create';
 import { DeploymentStatus } from './DeploymentStatus';
 import { HPASubcomponent } from '../HPA/HPASubcomponent';
 import { Selector } from 'shared/components/Selector/Selector.js';
 
-export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
+const DeploymentsDetails = props => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -31,10 +31,13 @@ export const DeploymentsDetails = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customComponents={[HPASubcomponent, MatchSelector]}
       customColumns={customColumns}
-      {...otherParams}
+      createResourceForm={DeploymentsCreate}
+      {...props}
     />
   );
 };
+
+export default DeploymentsDetails;

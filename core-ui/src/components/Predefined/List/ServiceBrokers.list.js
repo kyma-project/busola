@@ -1,12 +1,11 @@
 import React from 'react';
-import { StatusBadge } from 'react-shared';
+import { StatusBadge, ResourcesList } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-shared';
 import { Trans } from 'react-i18next';
 
-export const ServiceBrokersList = ({ DefaultRenderer, ...otherParams }) => {
+const ServiceBrokersList = props => {
   const { t, i18n } = useTranslation();
-
   const customColumns = [
     {
       header: t('brokers.headers.url'),
@@ -45,10 +44,11 @@ export const ServiceBrokersList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
-      {...otherParams}
+      {...props}
     />
   );
 };
+export default ServiceBrokersList;

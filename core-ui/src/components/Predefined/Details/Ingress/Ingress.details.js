@@ -2,9 +2,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Rules } from './Rules';
 import { DefaultBackendPanel } from './DefaultBackendPanel';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER, ResourceDetails } from 'react-shared';
+import { IngressesCreate } from '../../Create/Ingresses/Ingresses.create';
 
-export const IngressesDetails = ({ DefaultRenderer, ...otherParams }) => {
+const IngressesDetails = props => {
   const { t } = useTranslation();
 
   const getLoadBalancer = ingress => {
@@ -40,10 +41,13 @@ export const IngressesDetails = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={customComponents}
-      {...otherParams}
+      createResourceForm={IngressesCreate}
+      {...props}
     />
   );
 };
+
+export default IngressesDetails;
