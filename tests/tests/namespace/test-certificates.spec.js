@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { deleteFromGenericList } from '../../support/helpers';
 
 const CERT_NAME = 'cypress-test-name';
 const CERT_COMMON_NAME = 'cypress-test-common-name';
@@ -91,20 +92,6 @@ context('Test Certificates', () => {
       .contains('Certificates')
       .click();
 
-    cy.getIframeBody()
-      .contains('a', CERT_NAME)
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .find('button[data-testid="delete"]:visible')
-      .click();
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .contains('a', CERT_NAME)
-      .should('not.exist');
+    deleteFromGenericList(CERT_NAME);
   });
 });

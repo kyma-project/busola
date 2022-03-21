@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const RANDOM_NUMBER = Math.random()
@@ -65,17 +66,11 @@ context('Test Network Policy', () => {
       .should('be.visible');
   });
 
-  it('Check Network Policy list', () => {
-    cy.getLeftNav()
-      .find('[data-testid=networkpolicies_networkpolicies]')
+  it('Check Network Policy list and delete', () => {
+    cy.getIframeBody()
+      .contains('a', 'Network Policies')
       .click();
 
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="search-input"]')
-      .type(NAME, { force: true });
-
-    cy.getIframeBody()
-      .contains('tbody tr td a', NAME)
-      .click({ force: true });
+    deleteFromGenericList(NAME);
   });
 });

@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const FILE_NAME = 'test-service-entry.yaml';
@@ -67,30 +68,13 @@ context('Test Service Entries', () => {
       .and('include.text', WORKLOAD_SELECTOR_LABEL);
   });
 
-  it('Check the Service Entries list', () => {
-    cy.getLeftNav()
-      .contains('Service Entries')
+  it('Check the Service Entries list and delete', () => {
+    cy.getIframeBody()
+      .contains('a', 'Service Entries')
       .click();
 
-    cy.getIframeBody()
-      .contains(SE_NAME)
-      .parent()
-      .getIframeBody()
-      .contains(RESOLUTION);
-  });
+    cy.getIframeBody().contains(RESOLUTION);
 
-  it('Delete a Service Entry', () => {
-    cy.getIframeBody()
-      .contains('.fd-table__row', SE_NAME)
-      .find('button[data-testid="delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .contains('.fd-table__row', SE_NAME)
-      .should('not.exist');
+    deleteFromGenericList(SE_NAME);
   });
 });

@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const RANDOM_NUMBER = Math.random()
@@ -70,16 +71,10 @@ context('Test Ingresses', () => {
   });
 
   it('Check Ingresses list', () => {
-    cy.getLeftNav()
-      .find('[data-testid=ingresses_ingresses]')
+    cy.getIframeBody()
+      .contains('a', 'Ingresses')
       .click();
 
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="search-input"]')
-      .type(NAME, { force: true });
-
-    cy.getIframeBody()
-      .contains('tbody tr td a', NAME)
-      .click({ force: true });
+    deleteFromGenericList(NAME);
   });
 });
