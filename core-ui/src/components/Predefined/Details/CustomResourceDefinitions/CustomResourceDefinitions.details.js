@@ -49,7 +49,7 @@ const CustomResourceDefinitionsDetails = props => {
         title={t('custom-resource-definitions.subtitle.names')}
         entries={resource.spec.names ? [resource.spec.names] : []}
         headerRenderer={headerRenderer}
-        textSearchProperties={['spec.names.categories']}
+        showSearchField={false}
         rowRenderer={rowRenderer}
         testid="crd-names"
         i18n={i18n}
