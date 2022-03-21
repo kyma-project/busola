@@ -287,4 +287,18 @@ const SubscriptionsCreate = ({
   );
 };
 SubscriptionsCreate.allowEdit = true;
+
+SubscriptionsCreate.resourceGraphConfig = () => ({
+  depth: 1,
+  networkFlowLevel: 0,
+  relations: [
+    {
+      kind: 'Service',
+    },
+  ],
+  matchers: {
+    Service: (subscription, service) =>
+      getServiceName(subscription.spec.sink) === service.metadata.name,
+  },
+});
 export { SubscriptionsCreate };

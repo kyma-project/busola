@@ -126,6 +126,9 @@ SecretsCreate.resourceGraphConfig = (t, context) => ({
       kind: 'ServiceAccount',
     },
     {
+      kind: 'Ingress',
+    },
+    {
       kind: 'OAuth2Client',
     },
     {
