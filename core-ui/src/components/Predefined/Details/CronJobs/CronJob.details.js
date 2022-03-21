@@ -1,18 +1,17 @@
 import React from 'react';
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
 import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
-import { CronJobJobs } from './CronJobJobs.js';
+import CronJobJobs from './CronJobJobs.js';
 import { CronJobLastScheduleTime } from '../../../../shared/components/CronJob/CronJobLastScheduleTime';
 import { useTranslation } from 'react-i18next';
 import { navigateToFixedPathResourceDetails } from 'react-shared';
 import { Link } from 'fundamental-react';
-
+import { ResourceDetails } from 'react-shared';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
+import { CronJobsCreate } from 'components/Predefined/Create/Jobs/CronJobs.create';
 
-import './CronJobsDetails.scss';
-
-export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
+const CronJobsDetails = props => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -57,18 +56,20 @@ export const CronJobsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   const Events = () => (
     <EventsList
-      namespace={otherParams.namespace}
-      filter={filterByResource('CronJob', otherParams.resourceName)}
+      namespace={props.namespace}
+      filter={filterByResource('CronJob', props.resourceName)}
       hideInvolvedObjects={true}
     />
   );
 
   return (
-    <DefaultRenderer
-      resourceTitle={t('cron-jobs.title')}
+    <ResourceDetails
       customComponents={[CronJobJobs, Events]}
       customColumns={customColumns}
-      {...otherParams}
+      createResourceForm={CronJobsCreate}
+      {...props}
     />
   );
 };
+
+export default CronJobsDetails;

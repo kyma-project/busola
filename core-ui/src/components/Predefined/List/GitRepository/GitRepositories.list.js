@@ -1,12 +1,17 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { StatusBadge, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import {
+  StatusBadge,
+  EMPTY_TEXT_PLACEHOLDER,
+  Link as ReactSharedLink,
+  ResourcesList,
+} from 'react-shared';
 import { Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { Link as ReactSharedLink } from 'react-shared';
 import { Trans } from 'react-i18next';
+import { GitRepositoriesCreate } from '../../Create/GitRepositories/GitRepositories.create';
 
-export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
+const GitRepositoriesList = props => {
   const { t, i18n } = useTranslation();
 
   const customColumns = [
@@ -53,12 +58,14 @@ export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
-      resourceName={t('git-repositories.title')}
+    <ResourcesList
       customColumns={customColumns}
       createActionLabel={t('git-repositories.labels.create')}
       description={description}
-      {...otherParams}
+      createResourceForm={GitRepositoriesCreate}
+      {...props}
     />
   );
 };
+
+export default GitRepositoriesList;

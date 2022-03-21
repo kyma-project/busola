@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { LayoutPanel } from 'fundamental-react';
-import { ResourceStatus } from 'react-shared';
+import { ResourceStatus, ResourceDetails } from 'react-shared';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { DNSEntriesCreate } from '../Create/DNSEntries/DNSEntries.create';
 
 const RowComponent = ({ name, value }) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
@@ -68,7 +68,7 @@ const Spec = resource => {
   );
 };
 
-export const DNSEntriesDetails = ({ DefaultRenderer, ...otherParams }) => {
+const DNSEntriesDetails = props => {
   const { t, i18n } = useTranslation();
 
   const customColumns = [
@@ -85,11 +85,12 @@ export const DNSEntriesDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   return (
-    <DefaultRenderer
-      resourceTitle={t('dnsentries.title')}
+    <ResourceDetails
       customComponents={[Provider, Spec]}
       customColumns={customColumns}
-      {...otherParams}
-    ></DefaultRenderer>
+      createResourceForm={DNSEntriesCreate}
+      {...props}
+    />
   );
 };
+export default DNSEntriesDetails;

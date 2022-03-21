@@ -1,13 +1,11 @@
 import React from 'react';
-import { Link } from 'react-shared';
+import { Link, ResourcesList } from 'react-shared';
 import { Trans, useTranslation } from 'react-i18next';
 import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeClaimStatus';
 import { Tokens } from 'shared/components/Tokens';
+import { PersistentVolumeClaimsCreate } from '../Create/PersistentVolumeClaims/PersistentVolumeClaims.create';
 
-export const PersistentVolumeClaimsList = ({
-  DefaultRenderer,
-  ...otherParams
-}) => {
+const PersistentVolumeClaimsList = props => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -38,11 +36,12 @@ export const PersistentVolumeClaimsList = ({
     </Trans>
   );
   return (
-    <DefaultRenderer
-      resourceName={t('persistent-volume-claims.title')}
+    <ResourcesList
       description={description}
       customColumns={customColumns}
-      {...otherParams}
+      createResourceForm={PersistentVolumeClaimsCreate}
+      {...props}
     />
   );
 };
+export default PersistentVolumeClaimsList;

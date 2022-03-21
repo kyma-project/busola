@@ -2,8 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { GenericSecrets } from './GenericSecrets';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
-
-import './ServiceAccountsDetails.scss';
+import { ResourceDetails } from 'react-shared';
+import { ServiceAccountsCreate } from '../../Create/ServiceAccounts/ServiceAccounts.create';
 
 const ServiceAccountSecrets = serviceAccount => {
   const namespace = serviceAccount.metadata.namespace;
@@ -46,7 +46,7 @@ const ServiceAccountImagePullSecrets = serviceAccount => {
   ) : null;
 };
 
-export const ServiceAccountsDetails = ({ DefaultRenderer, ...otherParams }) => {
+export const ServiceAccountsDetails = props => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -59,11 +59,13 @@ export const ServiceAccountsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
   return (
-    <DefaultRenderer
-      resourceTitle={t('service-accounts.title')}
+    <ResourceDetails
       customComponents={[ServiceAccountSecrets, ServiceAccountImagePullSecrets]}
       customColumns={customColumns}
-      {...otherParams}
+      createResourceForm={ServiceAccountsCreate}
+      {...props}
     />
   );
 };
+
+export default ServiceAccountsDetails;

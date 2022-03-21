@@ -9,10 +9,10 @@ import {
   prettifyNamePlural,
   EMPTY_TEXT_PLACEHOLDER,
   useMicrofrontendContext,
+  ResourcesList,
 } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-import { ComponentForList } from 'shared/getComponents';
 import { SchemaViewer } from 'shared/components/SchemaViewer/SchemaViewer';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 import './CustomResourceDefinitionVersions.scss';
@@ -101,9 +101,10 @@ const CustomResources = ({ resource, namespace, version, i18n }) => {
     showTitle: true,
     customColumns,
     testid: 'crd-custom-resources',
+    i18n,
   };
 
-  return <ComponentForList name={name} params={params} />;
+  return <ResourcesList {...params} />;
 };
 
 const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {

@@ -3,27 +3,20 @@ import { useTranslation } from 'react-i18next';
 
 import { RoleSubjects } from './RoleSubjects.js';
 import { RoleRef } from './RoleRef';
+import { ClusterRoleBindingsCreate } from '../../Create/RoleBindings/RoleBindings.create';
+import { ResourceDetails } from 'react-shared';
 
-import './RoleBindingsDetails.scss';
-
-export function RoleBindingsDetails(props) {
-  const { t } = useTranslation();
+function RoleBindingsDetails(props) {
   return (
     <GenericRoleBindingDetails
-      resourceTitle={t('role-bindings.title')}
       {...props}
+      createResourceForm={ClusterRoleBindingsCreate}
     />
   );
 }
 
 export function ClusterRoleBindingsDetails(props) {
-  const { t } = useTranslation();
-  return (
-    <GenericRoleBindingDetails
-      resourceTitle={t('cluster-role-bindings.title')}
-      {...props}
-    />
-  );
+  return <GenericRoleBindingDetails {...props} />;
 }
 
 function GenericRoleBindingDetails({ DefaultRenderer, ...otherParams }) {
@@ -36,10 +29,11 @@ function GenericRoleBindingDetails({ DefaultRenderer, ...otherParams }) {
     },
   ];
   return (
-    <DefaultRenderer
+    <ResourceDetails
       {...otherParams}
       customColumns={customColumns}
       customComponents={[RoleSubjects]}
     />
   );
 }
+export default RoleBindingsDetails;

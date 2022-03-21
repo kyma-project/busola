@@ -1,11 +1,9 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link, ResourcesList } from 'react-shared';
 import { Trans } from 'react-i18next';
+import { NetworkPoliciesCreate } from '../Create/NetworkPolicies/NetworkPolicies.create';
 
-export const NetworkPoliciesList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
-
+const NetworkPoliciesList = props => {
   const description = (
     <Trans i18nKey="network-policies.description">
       <Link
@@ -16,10 +14,12 @@ export const NetworkPoliciesList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
-      resourceName={t('network-policies.title')}
+    <ResourcesList
       description={description}
-      {...otherParams}
+      createResourceForm={NetworkPoliciesCreate}
+      {...props}
     />
   );
 };
+
+export default NetworkPoliciesList;

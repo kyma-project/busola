@@ -1,21 +1,20 @@
 import React from 'react';
 
-import { ComponentForList } from 'shared/getComponents';
-
-export const ApiRuleServices = apiRule => {
+import VirtualServicesList from 'components/Predefined/List/VirtualServices.list';
+import { useTranslation } from 'react-i18next';
+const ApiRuleServices = apiRule => {
   const namespace = apiRule.metadata.namespace;
   const url = `/apis/networking.istio.io/v1beta1/namespaces/${namespace}/virtualservices`;
-
+  const { i18n } = useTranslation();
   const filterByOwnerRef = ({ metadata }) =>
     metadata.ownerReferences?.find(
       ref => ref.kind === 'APIRule' && ref.name === apiRule.metadata.name,
     );
 
   return (
-    <ComponentForList
-      name="virtualServicesList"
+    <VirtualServicesList
       key="api-rule-services"
-      params={{
+      {...{
         hasDetailsView: true,
         fixedPath: true,
         resourceUrl: url,
@@ -24,7 +23,9 @@ export const ApiRuleServices = apiRule => {
         isCompact: true,
         showTitle: true,
         filter: filterByOwnerRef,
+        i18n,
       }}
     />
   );
 };
+export default ApiRuleServices;
