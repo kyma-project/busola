@@ -15,13 +15,7 @@ aliases:
     - Sawthis
     - valentinvieriu
     - wchrapka
-    documentation-reviewers:
-    - klaudiagrz
-    - mmitoraj
-    - majakurcius
-    - grego952
-    - NHingerl
-    documentation-approvers:
+    technical-writers:
     - klaudiagrz
     - mmitoraj
     - majakurcius
