@@ -4,11 +4,11 @@ import { ServiceBindingList } from './ServiceBindingList';
 import { ServiceInstanceData } from './ServiceInstanceData';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { useTranslation } from 'react-i18next';
+import { ResourceDetails } from 'react-shared';
 
-export const ServiceInstancesDetails = ({
-  DefaultRenderer,
-  ...otherParams
-}) => {
+import { ServiceInstancesCreate } from '../../Create/ServiceInstances/ServiceInstances.create';
+
+const ServiceInstancesDetails = props => {
   const { t } = useTranslation();
 
   const ServiceInstanceParameters = ({ spec }) => {
@@ -37,14 +37,17 @@ export const ServiceInstancesDetails = ({
   ];
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={[
         ServiceInstanceData,
         ServiceBindingList,
         ServiceInstanceParameters,
       ]}
-      {...otherParams}
+      createResourceForm={ServiceInstancesCreate}
+      {...props}
     />
   );
 };
+
+export default ServiceInstancesDetails;

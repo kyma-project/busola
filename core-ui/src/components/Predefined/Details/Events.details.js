@@ -7,7 +7,11 @@ import {
 } from 'hooks/useMessageList';
 
 import { Icon, LayoutPanel, Link } from 'fundamental-react';
-import { ReadableCreationTimestamp, Tooltip } from 'react-shared';
+import {
+  ReadableCreationTimestamp,
+  Tooltip,
+  ResourceDetails,
+} from 'react-shared';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 const RowComponent = ({ name, value }) =>
@@ -39,7 +43,7 @@ const Message = event => {
   );
 };
 
-export const EventsDetails = ({ DefaultRenderer, ...otherParams }) => {
+const EventsDetails = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -103,11 +107,13 @@ export const EventsDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customComponents={[Message]}
       customColumns={customColumns}
-      {...otherParams}
+      {...props}
       readOnly={true}
-    ></DefaultRenderer>
+    />
   );
 };
+
+export default EventsDetails;

@@ -1,8 +1,9 @@
 import React from 'react';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER, ResourcesList } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+import { LimitRangesCreate } from '../Create/LimitRanges/LimitRanges.create';
 
-export const LimitRangesList = ({ DefaultRenderer, ...otherParams }) => {
+const LimitRangesList = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -30,10 +31,12 @@ export const LimitRangesList = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       resourceName={t('limit-ranges.title')}
       customColumns={customColumns}
-      {...otherParams}
+      createResourceForm={LimitRangesCreate}
+      {...props}
     />
   );
 };
+export default LimitRangesList;

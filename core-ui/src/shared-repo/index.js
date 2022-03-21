@@ -61,7 +61,6 @@ export * from './contexts/YamlEditorContext/EditorActions';
 export * from './contexts/ThemeContext';
 export * from './utils/helpers';
 export * from './utils/handleSubscriptionArrayEvent';
-export * from './utils/getComponentForResource';
 export * from './utils/randomNamesGenerator/randomNamesGenerator';
 export * from './utils/setupMonaco';
 export * from './components/GenericList/actionHandlers/simpleDelete';

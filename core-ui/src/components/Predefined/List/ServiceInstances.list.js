@@ -1,10 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
-import { Link } from 'react-shared';
+import { Link, ResourcesList } from 'react-shared';
 import { Trans } from 'react-i18next';
+import { ServiceInstancesCreate } from '../Create/ServiceInstances/ServiceInstances.create';
 
-export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
+const ServiceInstancesList = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -41,7 +42,7 @@ export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       resourceName={t('btp-instances.title')}
       textSearchProperties={[
@@ -50,7 +51,9 @@ export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
         'spec.externalName',
       ]}
       description={description}
-      {...otherParams}
+      createResourceForm={ServiceInstancesCreate}
+      {...props}
     />
   );
 };
+export default ServiceInstancesList;
