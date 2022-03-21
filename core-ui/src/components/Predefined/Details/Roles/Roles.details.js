@@ -1,26 +1,19 @@
 import React from 'react';
 import { Rules } from './Rules.js';
-import { useTranslation } from 'react-i18next';
+import { ResourceDetails } from 'react-shared';
+import { RolesCreate } from '../../Create/Roles/Roles.create';
 
-import './RolesDetails.scss';
-
-export function RolesDetails({ DefaultRenderer, ...otherParams }) {
-  const { t } = useTranslation();
+export const RolesDetails = props => {
   return (
-    <DefaultRenderer
-      resourceTitle={t('roles.title')}
-      {...otherParams}
+    <ResourceDetails
+      {...props}
       customComponents={[Rules]}
+      createResourceForm={RolesCreate}
     />
   );
-}
-export function ClusterRolesDetails({ DefaultRenderer, ...otherParams }) {
-  const { t } = useTranslation();
-  return (
-    <DefaultRenderer
-      resourceTitle={t('cluster-roles.title')}
-      {...otherParams}
-      customComponents={[Rules]}
-    />
-  );
-}
+};
+
+export const ClusterRolesDetails = ({ DefaultRenderer, ...otherParams }) => {
+  return <DefaultRenderer {...otherParams} customComponents={[Rules]} />;
+};
+export default RolesDetails;

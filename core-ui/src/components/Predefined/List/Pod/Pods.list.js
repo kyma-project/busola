@@ -2,15 +2,15 @@ import React from 'react';
 import { Link } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
-import { ControlledByKind } from 'react-shared';
+import { ControlledByKind, ResourcesList } from 'react-shared';
 import { Link as ReactSharedLink } from 'react-shared';
 import { Trans } from 'react-i18next';
-
+import { PodsCreate } from '../../Create/Pods/Pods.create';
 import { PodStatus } from '../../Details/Pod/PodStatus';
 import PodRestarts from './PodRestarts';
 
-export const PodsList = ({ DefaultRenderer, ...otherParams }) => {
-  const { showNodeName } = otherParams;
+const PodsList = params => {
+  const { showNodeName } = params;
   const { t } = useTranslation();
 
   let customColumns = [
@@ -63,10 +63,13 @@ export const PodsList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
-      {...otherParams}
+      createResourceForm={PodsCreate}
+      {...params}
     />
   );
 };
+
+export default PodsList;

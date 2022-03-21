@@ -5,8 +5,10 @@ import NamespaceBindings from './NamespaceBindings';
 import ConnectApplicationModal from './ConnectApplicationModal';
 import { ApplicationStatus } from './ApplicationStatus';
 import { useTranslation } from 'react-i18next';
+import { ResourceDetails } from 'react-shared';
+import { ApplicationsCreate } from '../../Create/Applications/Applications.create';
 
-export const ApplicationsDetails = ({ DefaultRenderer, ...otherParams }) => {
+const ApplicationsDetails = props => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -20,13 +22,16 @@ export const ApplicationsDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       headerActions={
-        <ConnectApplicationModal applicationName={otherParams.resourceName} />
+        <ConnectApplicationModal applicationName={props.resourceName} />
       }
       customComponents={[NamespaceBindings, ApplicationServices]}
-      {...otherParams}
-    ></DefaultRenderer>
+      createResourceForm={ApplicationsCreate}
+      {...props}
+    />
   );
 };
+
+export default ApplicationsDetails;

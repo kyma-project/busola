@@ -124,7 +124,6 @@ function Resources({
 }) {
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { t } = useTranslation(['translation'], { i18n });
-
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({

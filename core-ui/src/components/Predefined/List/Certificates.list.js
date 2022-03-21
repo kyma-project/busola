@@ -1,12 +1,16 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormattedDatetime, ResourceStatus } from 'react-shared';
-import { Link } from 'react-shared';
+import {
+  FormattedDatetime,
+  ResourceStatus,
+  ResourcesList,
+  Link,
+} from 'react-shared';
 import { Trans } from 'react-i18next';
-
+import { CertificatesCreate } from '../Create/Certificates/Certificates.create';
 import { IssuerLink } from '../Details/Certificate/IssuerLink';
 
-export const CertificatesList = ({ DefaultRenderer, ...otherParams }) => {
+const CertificatesList = props => {
   const { t, i18n } = useTranslation();
 
   const customColumns = [
@@ -54,10 +58,12 @@ export const CertificatesList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
-      {...otherParams}
+      createResourceForm={CertificatesCreate}
+      {...props}
     />
   );
 };
+export default CertificatesList;

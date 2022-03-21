@@ -1,13 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ControlledBy } from 'react-shared';
-
+import { ControlledBy, ResourceDetails } from 'react-shared';
+import { ConfigMapsCreate } from '../../Create/ConfigMaps/ConfigMaps.create';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
-import './ConfigMapsDetails.scss';
-
-export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
+const ConfigMapsDetails = props => {
   const { t } = useTranslation();
   const ConfigMapEditor = resource => {
     const { data } = resource;
@@ -26,10 +24,13 @@ export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customComponents={[ConfigMapEditor]}
       customColumns={customColumns}
-      {...otherParams}
+      createResourceForm={ConfigMapsCreate}
+      {...props}
     />
   );
 };
+
+export default ConfigMapsDetails;

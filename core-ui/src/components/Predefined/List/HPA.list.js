@@ -1,14 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link, ResourcesList } from 'react-shared';
 import { Trans } from 'react-i18next';
 import { Tokens } from 'shared/components/Tokens';
 import { MetricsBrief } from '../Details/HPA/helpers';
+import { HorizontalPodAutoscalersCreate } from '../Create/HPAs/HPAs.create';
 
-export const HorizontalPodAutoscalersList = ({
-  DefaultRenderer,
-  ...otherParams
-}) => {
+const HorizontalPodAutoscalersList = props => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -54,11 +52,14 @@ export const HorizontalPodAutoscalersList = ({
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       resourceName={t('hpas.title')}
       description={description}
-      {...otherParams}
+      createResourceForm={HorizontalPodAutoscalersCreate}
+      {...props}
     />
   );
 };
+
+export default HorizontalPodAutoscalersList;
