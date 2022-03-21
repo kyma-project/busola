@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMicrofrontendContext } from 'react-shared';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -43,10 +43,15 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
   const { t } = useTranslation();
 
   // dictionary of pairs (apiGroup: resources in that apiGroup)
+
   const apiRules = rule?.apiGroups?.flat();
   const { cache: resourcesCache, fetchResources } = useResourcesForApiGroups(
     apiRules ? [...new Set(apiRules)] : [],
   );
+  const apiRulesString = apiRules?.toString();
+  useEffect(() => {
+    fetchResources();
+  }, [apiRulesString]); // eslint-disable-line react-hooks/exhaustive-deps
   // introduce special option for '' apiGroup - Combobox doesn't accept empty string key
   const apiGroupsInputOptions = getApiGroupInputOptions(groupVersions);
 
@@ -71,7 +76,6 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         options={apiGroupsInputOptions}
         emptyStringKey={EMPTY_API_GROUP_KEY}
         defaultOpen
-        onBlur={fetchResources}
       />
       <ComboboxArrayInput
         title={t('roles.headers.resources')}
