@@ -1,5 +1,5 @@
 reviewers:
-    - technical-writers
+    - documentation-reviewers
 
 approvers:
-    - technical-writers
+    - documentation-approvers

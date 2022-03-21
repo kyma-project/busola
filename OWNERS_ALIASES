@@ -15,6 +15,18 @@ aliases:
     - Sawthis
     - valentinvieriu
     - wchrapka
+    documentation-reviewers:
+    - klaudiagrz
+    - mmitoraj
+    - majakurcius
+    - grego952
+    - NHingerl
+    documentation-approvers:
+    - klaudiagrz
+    - mmitoraj
+    - majakurcius
+    - grego952
+    - NHingerl
     technical-writers:
     - klaudiagrz
     - mmitoraj
