@@ -2,14 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Selector } from 'shared/components/Selector/Selector';
 
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
-
+import { EMPTY_TEXT_PLACEHOLDER, ResourceDetails } from 'react-shared';
+import { AuthorizationPoliciesCreate } from '../../Create/AuthorizationPolicies/AuthorizationPolicies.create';
 import { Rules } from './Rules';
 
-export const AuthorizationPoliciesDetails = ({
-  DefaultRenderer,
-  ...otherParams
-}) => {
+const AuthorizationPoliciesDetails = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -33,10 +30,13 @@ export const AuthorizationPoliciesDetails = ({
   );
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={[Rules, MatchSelector]}
-      {...otherParams}
-    ></DefaultRenderer>
+      createResourceForm={AuthorizationPoliciesCreate}
+      {...props}
+    />
   );
 };
+
+export default AuthorizationPoliciesDetails;

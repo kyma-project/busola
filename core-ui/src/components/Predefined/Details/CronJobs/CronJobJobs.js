@@ -1,20 +1,20 @@
 import React from 'react';
-import { ComponentForList } from 'shared/getComponents';
+import JobsList from 'components/Predefined/List/Jobs.list';
+import { useTranslation } from 'react-i18next';
 
-export function CronJobJobs(cronJob) {
+function CronJobJobs(cronJob) {
   const namespace = cronJob.metadata.namespace;
   const jobsUrl = `/apis/batch/v1/namespaces/${namespace}/jobs`;
-
+  const { i18n } = useTranslation();
   const filterByOwnerRef = ({ metadata }) =>
     metadata.ownerReferences?.find(
       ref => ref.kind === 'CronJob' && ref.name === cronJob.metadata.name,
     );
 
   return (
-    <ComponentForList
-      name="jobsList"
-      key="cron-job-jobs"
-      params={{
+    <JobsList
+      key="cronJobJobs"
+      {...{
         hasDetailsView: true,
         fixedPath: true,
         resourceUrl: jobsUrl,
@@ -23,7 +23,10 @@ export function CronJobJobs(cronJob) {
         isCompact: true,
         showTitle: true,
         filter: filterByOwnerRef,
+        i18n,
       }}
     />
   );
 }
+
+export default CronJobJobs;

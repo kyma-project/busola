@@ -1,7 +1,8 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 
-import { ComponentForList } from 'shared/getComponents';
+import PersistentVolumesListComponent from 'components/Predefined/List/PersistentVolumes.list';
+import { useTranslation } from 'react-i18next';
 
 export function PersistentVolumesList(storageclass) {
   const navigateFn = resource => {
@@ -10,6 +11,7 @@ export function PersistentVolumesList(storageclass) {
       .navigate(`/persistentvolumes/details/${resource.metadata.name}`);
   };
 
+  const { i18n } = useTranslation();
   const params = {
     hasDetailsView: true,
     navigateFn,
@@ -20,13 +22,8 @@ export function PersistentVolumesList(storageclass) {
     showTitle: true,
     filter: persistentvolumes =>
       persistentvolumes.spec.storageClassName === storageclass.metadata.name,
+    i18n,
   };
 
-  return (
-    <ComponentForList
-      name="persistentVolumesList"
-      params={params}
-      key="persistentvolumes"
-    />
-  );
+  return <PersistentVolumesListComponent {...params} />;
 }

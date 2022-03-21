@@ -60,7 +60,7 @@ context('Test Cluster configuration', () => {
     cy.navigateTo('Configuration', 'Cluster Roles');
 
     cy.getIframeBody()
-      .find('[role=datarow]')
+      .find('[role=row]')
       .should('have.length', 20);
 
     cy.get('[data-testid="luigi-topnav-profile-btn"]').click();
@@ -82,7 +82,7 @@ context('Test Cluster configuration', () => {
     cy.get('[aria-label="close"]').click();
 
     cy.getIframeBody()
-      .find('[role=datarow]')
+      .find('[role=row]')
       .should('have.length', 10);
   });
 });

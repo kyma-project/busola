@@ -1,16 +1,14 @@
 import React from 'react';
-import { ComponentForList } from 'shared/getComponents';
 import { useTranslation } from 'react-i18next';
 import { useDownloadSecretKubeconfig } from './useDownloadSecretKubeconfig';
-
+import SecretsList from 'components/Predefined/List/Secrets.list';
 export const GenericSecrets = ({
   namespace,
-  listKey,
   filter,
   title,
   allowKubeconfigDownload,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const downloadKubeconfig = useDownloadSecretKubeconfig();
 
   const secretsUrl = `/api/v1/namespaces/${namespace}/secrets`;
@@ -27,10 +25,9 @@ export const GenericSecrets = ({
   ];
 
   return (
-    <ComponentForList
-      name={title}
-      key={listKey}
-      params={{
+    <SecretsList
+      {...{
+        name: title,
         hasDetailsView: true,
         fixedPath: true,
         resourceUrl: secretsUrl,
@@ -42,6 +39,7 @@ export const GenericSecrets = ({
         customListActions,
         title,
         readOnly: true,
+        i18n,
       }}
     />
   );
