@@ -55,7 +55,7 @@ context('Test Daemon Sets', () => {
   });
 
   it('Inspect Daemon Sets list', () => {
-    cy.getIframeBody()
+    cy.getLeftNav()
       .contains('Daemon Sets')
       .click();
 

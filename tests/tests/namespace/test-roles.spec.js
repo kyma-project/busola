@@ -184,9 +184,7 @@ context('Test Roles', () => {
 
     deleteFromGenericList(CLONE_NAME);
 
-    cy.getLeftNav()
-      .contains('Roles')
-      .click();
+    cy.reload();
 
     deleteFromGenericList(ROLE_NAME);
   });
