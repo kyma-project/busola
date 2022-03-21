@@ -28,10 +28,14 @@ export function deleteFromGenericList(searchTerm, confirmationEnabled = true) {
   if (confirmationEnabled) {
     cy.getIframeBody()
       .contains('button', 'Delete')
-      .click({ force: true });
+      .click();
 
     cy.getIframeBody()
       .contains(/deleted/)
       .should('be.visible');
+
+    cy.getIframeBody()
+      .contains(searchTerm)
+      .should('not.exist');
   }
 }
