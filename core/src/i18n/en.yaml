@@ -1779,6 +1779,9 @@ roles:
   messages:
     invalid: Rules cannot apply to both regular resources and non-resource URLs.
   name_singular: Role
+  templates:
+    all-permissions: All permissions
+    view-only: View only
   title: Roles
 schema:
   array-item: ({{name}} item)

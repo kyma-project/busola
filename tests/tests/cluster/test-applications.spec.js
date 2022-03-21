@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-const APPLICATION_NAME = `test-mock-app-${Cypress.env('NAMESPACE_NAME')}`;
+const APPLICATION_NAME = Cypress.env('APP_NAME');
 const APPLICATION_DESCRIPTION = `test description`;
 
 context('Test Applications', () => {
