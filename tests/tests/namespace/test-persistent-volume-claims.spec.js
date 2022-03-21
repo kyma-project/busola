@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const FILE_NAME = 'test-persistent-volume-claim.yaml';
@@ -84,31 +85,14 @@ context('Test Persistent Volume Claims', () => {
       .should('be.visible');
   });
 
-  it('Check the Persistent Volume Claims list', () => {
-    cy.getLeftNav()
-      .contains('Persistent Volume Claims')
+  it('Check the Persistent Volume Claims list and delete', () => {
+    cy.getIframeBody()
+      .contains('a', 'Persistent Volume Claims')
       .click();
 
-    cy.getIframeBody()
-      .contains(PVC_NAME)
-      .parent()
-      .getIframeBody()
-      .contains(CAPACITY_VALUE);
-  });
+    cy.getIframeBody().contains(CAPACITY_VALUE);
 
-  it('Delete a Persistent Volume Claim', () => {
-    cy.getIframeBody()
-      .contains('.fd-table__row', PVC_NAME)
-      .find('button[data-testid="delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .contains('.fd-table__row', PVC_NAME)
-      .should('not.exist');
+    deleteFromGenericList(PVC_NAME);
   });
 
   it('Delete the connected Storage Class', () => {

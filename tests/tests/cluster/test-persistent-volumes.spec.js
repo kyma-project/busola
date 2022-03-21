@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const PV_NAME = `test-pv-${Math.random()
@@ -54,32 +55,11 @@ context('Test Persistent Volumes', () => {
       .should('be.visible');
   });
 
-  it('Check PV list', () => {
-    cy.getLeftNav()
-      .contains('Persistent Volumes')
+  it('Check PV list and delete', () => {
+    cy.getIframeBody()
+      .contains('a', 'Persistent Volumes')
       .click();
 
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="open-search"]')
-      .type(PV_NAME);
-
-    cy.getIframeBody()
-      .contains(PV_NAME)
-      .should('be.visible');
-  });
-
-  it('Delete PV ', () => {
-    cy.getIframeBody()
-      .contains('.fd-table__row', PV_NAME)
-      .find('button[data-testid="delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .contains('.fd-table__row', PV_NAME)
-      .should('not.exist');
+    deleteFromGenericList(PV_NAME);
   });
 });

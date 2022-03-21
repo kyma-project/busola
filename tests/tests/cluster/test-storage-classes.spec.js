@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 async function loadSC(scName) {
@@ -52,5 +53,9 @@ context('Test Storage Classes', () => {
     cy.getIframeBody()
       .contains('Retain')
       .should('be.visible');
+  });
+
+  it('Checking list', () => {
+    cy.inspectList('Storage Classes', Cypress.env('STORAGE_CLASS_NAME'));
   });
 });
