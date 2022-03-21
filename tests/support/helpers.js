@@ -8,7 +8,11 @@ export function chooseComboboxOption(selector, optionText) {
     .click();
 }
 
-export function deleteFromGenericList(searchTerm, confirmationEnabled = true) {
+export function deleteFromGenericList(
+  searchTerm,
+  confirmationEnabled = true,
+  deletedVisible = true,
+) {
   cy.getIframeBody()
     .find('[aria-label="open-search"]')
     .click();
@@ -29,10 +33,11 @@ export function deleteFromGenericList(searchTerm, confirmationEnabled = true) {
     cy.getIframeBody()
       .contains('button', 'Delete')
       .click();
-
-    cy.getIframeBody()
-      .contains(/deleted/)
-      .should('be.visible');
+    if (deletedVisible) {
+      cy.getIframeBody()
+        .contains(/deleted/)
+        .should('be.visible');
+    }
 
     cy.getIframeBody()
       .contains(searchTerm)

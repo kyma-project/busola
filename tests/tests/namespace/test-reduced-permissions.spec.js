@@ -287,7 +287,7 @@ context('Test reduced permissions', () => {
     cy.get('[data-testid="app-switcher"]').click();
     cy.contains('Clusters Overview').click();
 
-    deleteFromGenericList(SA_NAME);
+    deleteFromGenericList(SA_NAME, true, false);
 
     cy.getIframeBody()
       .contains(/No clusters found/)
