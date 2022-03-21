@@ -136,6 +136,11 @@ export function StatsPanel({ type, ...props }) {
     return '';
   }
 
+  const options = ['cpu', 'memory', 'network'];
+  if (type === 'cluster') {
+    options.push('nodes');
+  }
+
   return (
     <LayoutPanel className="fd-margin--md stats-panel">
       <LayoutPanel.Header>
@@ -143,7 +148,7 @@ export function StatsPanel({ type, ...props }) {
           <Dropdown
             selectedKey={metric}
             onSelect={(e, val) => setMetric(val.key)}
-            options={['cpu', 'memory', 'network', 'nodes'].map(option => ({
+            options={options.map(option => ({
               key: option,
               text: t(`graphs.${option}`),
             }))}
