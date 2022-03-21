@@ -177,8 +177,8 @@ context('Test Roles', () => {
   });
 
   it('Delete Roles', () => {
-    cy.getLeftNav()
-      .contains('Roles')
+    cy.getIframeBody()
+      .contains('a', 'Roles')
       .click();
 
     deleteFromGenericList(CLONE_NAME);

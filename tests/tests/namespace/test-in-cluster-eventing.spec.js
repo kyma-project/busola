@@ -287,9 +287,7 @@ context('Test in-cluster eventing', () => {
   });
 
   it('Inspect Function list and delete', () => {
-    cy.getLeftNav()
-      .contains('Functions')
-      .click();
+    cy.navigateTo('Workloads', 'Functions');
 
     deleteFromGenericList(FUNCTION_RECEIVER_NAME);
   });
