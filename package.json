@@ -4,19 +4,14 @@
   "name": "@kyma-project/busola",
   "version": "0.0.1-rc.8",
   "scripts": {
-    "bootstrap": "npm install && npm run install:libraries && npm run build:libraries && npm run install:apps",
-    "bootstrap:ci": "npm ci && npm run ci:libraries && npm run build:libraries && npm run install:apps",
-    "install:libraries": "gulp install:libraries",
-    "ci:libraries": "gulp ci:libraries",
-    "build:libraries": "gulp build:libraries",
-    "watch:libraries": "gulp watch:libraries",
+    "bootstrap": "npm install &&  npm run install:apps",
+    "bootstrap:ci": "npm ci && npm run install:apps",
     "install:apps": "gulp install:apps",
     "start": "./scripts/pre-start-warning.sh && lerna exec --parallel -- npm run start:kyma",
     "start:api": "./scripts/pre-start-warning.sh && lerna exec --parallel -- npm run start:kyma:api",
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-staged": "lint-staged",
-    "test-shared-lib": "cd shared && jest",
     "copy-themes": "gulp copy-themes"
   },
   "eslintConfig": {
