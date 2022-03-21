@@ -57,12 +57,4 @@ context('Test Stateful Sets', () => {
     // pod
     cy.getIframeBody().contains('alertmanager-monitoring-alertmanager-0');
   });
-
-  it('Delete Stateful Set', () => {
-    cy.getIframeBody()
-      .contains('a', 'Stateful Sets')
-      .click();
-
-    deleteFromGenericList(SET_NAME);
-  });
 });

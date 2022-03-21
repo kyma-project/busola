@@ -35,6 +35,8 @@ context('Test Daemon Sets', () => {
   });
 
   it('Inspect details', () => {
+    cy.navigateTo('Workloads', 'Daemon Sets');
+
     cy.getIframeBody()
       .contains('a', DAEMONSET_NAME)
       .click();
@@ -52,9 +54,8 @@ context('Test Daemon Sets', () => {
     cy.getIframeBody().contains(/envoyproxy\/envoy-alpine/);
   });
 
-  it('Inspect Daemon Sets list and delete', () => {
+  it('Inspect Daemon Sets list', () => {
     cy.navigateTo('Workloads', 'Daemon Sets');
-
-    deleteFromGenericList(DAEMONSET_NAME);
+    cy.inspectList('Daemon Sets', DAEMONSET_NAME);
   });
 });
