@@ -51,31 +51,8 @@ import addonsConfigurationCluster from './clusterResources/addonsConfigurationCl
 import customResourceDefinitionsCl from './clusterResources/customResourceDefinitionsCl.routes';
 import clusterRoleBindings from './clusterResources/clusterRoleBindings.routes';
 
-//other
-import noPermissions from './other/noPermissions';
-import nodeOverview from './other/nodeOverview';
-import clusterList from './other/clusters';
-import preferences from './other/preferences';
-import appServiceDetails from './other/appServiceDetails';
-import containerDetails from './other/containerDetails';
-import helmReleasesList from './other/helmReleasesList';
-import helmReleaseDetails from './other/helmReleaseDetails';
-import CRDetails from './other/CRDetails';
-
 const resources = (
   <>
-    {/* other */}
-    <>
-      {noPermissions}
-      {nodeOverview}
-      {clusterList}
-      {preferences}
-      {appServiceDetails}
-      {containerDetails}
-      {helmReleasesList}
-      {helmReleaseDetails}
-      {CRDetails}
-    </>
     {/* namespace resources*/}
     {eventsNamespace}
     <>

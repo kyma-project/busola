@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import { Route, useParams } from 'react-router-dom';
 import { Spinner } from 'react-shared';
-import { CustomResource } from 'components/Predefined/Details/CustomResourceDefinitions/CustomResources.details';
 
 const CRDetails = React.lazy(() =>
   import(
