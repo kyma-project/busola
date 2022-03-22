@@ -471,7 +471,7 @@ common:
     no-permissions: You don't have enough permissions to view this content.
     no-permissions-header: Not enough permissions
     no-permissions-message: Contact your administrator to grant you access.
-    no-permissions-no-role: You have no role assigned
+    no-permissions-no-role: You have no role assigned.
   headers:
     annotations: Annotations
     created: Created
@@ -1522,6 +1522,8 @@ network-policies:
   present-but-empty: Present but empty selector selects all pods / namespaces.
   title: Network Policies
 no-permissions:
+  enter-namespace-name: 'If you expect to have access to a Namespace, please enter its name here:'
+  enter-namespace-name-placeholder: Enter Namespace name
   title: No Permissions
 node-details:
   all: All messages

@@ -14,7 +14,7 @@ import { MessageStrip } from 'fundamental-react';
 import { cloneDeep } from 'lodash';
 
 function matchByTlsCredentials(gateway, secret) {
-  return gateway.spec.servers.some(
+  return (gateway.spec?.servers || []).some(
     server => server?.tls?.credentialName === secret.metadata.name,
   );
 }
