@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const FILE_NAME = 'test-sidecar.yaml';
@@ -71,11 +70,7 @@ context('Test Sidecars', () => {
     cy.getIframeBody().contains(PORT_NAME);
   });
 
-  it('Check the Sidecars list and delete', () => {
-    cy.getIframeBody()
-      .contains('a', 'Sidecars')
-      .click();
-
-    deleteFromGenericList(SIDECAR_NAME);
+  it('Check the Sidecars list', () => {
+    cy.inspectList('Sidecars', SIDECAR_NAME);
   });
 });

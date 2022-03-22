@@ -1,5 +1,3 @@
-import { deleteFromGenericList } from '../../support/helpers';
-
 const SECRET_NAME = `secret-${Math.floor(Math.random() * 9999) + 1000}`;
 
 const SECRET_KEY = 'secret-key';
@@ -119,11 +117,7 @@ context('Test Secrets', () => {
       .contains(btoa(SECRET3_VALUE));
   });
 
-  it('Check listand delete', () => {
-    cy.getIframeBody()
-      .contains('a', 'Secrets')
-      .click();
-
-    deleteFromGenericList(SECRET_NAME);
+  it('Check list', () => {
+    cy.inspectList('Secrets', SECRET_NAME);
   });
 });

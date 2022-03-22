@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { deleteFromGenericList } from '../../support/helpers';
 
 const REPLICA_SET_NAME = 'test-replica-set';
 const REPLICAS_AMOUNT = 2;
@@ -122,13 +121,5 @@ context('Test Replica Sets', () => {
       `${EDITED_REPLICAS_AMOUNT} / ${EDITED_REPLICAS_AMOUNT}`,
       { timeout: 15 * 1000 },
     );
-  });
-
-  it('Delete Replica Sets', () => {
-    cy.getIframeBody()
-      .contains('a', 'Replica Sets')
-      .click();
-
-    deleteFromGenericList(REPLICA_SET_NAME);
   });
 });

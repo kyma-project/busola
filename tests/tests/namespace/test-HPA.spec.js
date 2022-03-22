@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const HPA_NAME = 'test-hpa';
@@ -97,11 +96,5 @@ context('Test HPA', () => {
     cy.getIframeBody()
       .contains(HPA_NAME)
       .should('be.visible');
-  });
-
-  it('Delete HPA ', () => {
-    cy.navigateTo('Discovery and Network', 'Horizontal Pod');
-
-    deleteFromGenericList(HPA_NAME);
   });
 });

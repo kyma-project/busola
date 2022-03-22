@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const PV_NAME = `test-pv-${Math.random()
@@ -60,6 +59,6 @@ context('Test Persistent Volumes', () => {
       .contains('a', 'Persistent Volumes')
       .click();
 
-    deleteFromGenericList(PV_NAME);
+    cy.deleteFromGenericList(PV_NAME);
   });
 });

@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const FILE_NAME = 'test-service-entry.yaml';
@@ -68,13 +67,8 @@ context('Test Service Entries', () => {
       .and('include.text', WORKLOAD_SELECTOR_LABEL);
   });
 
-  it('Check the Service Entries list and delete', () => {
-    cy.getIframeBody()
-      .contains('a', 'Service Entries')
-      .click();
-
+  it('Check the Service Entries list', () => {
+    cy.inspectList('Service Entries', SE_NAME);
     cy.getIframeBody().contains(RESOLUTION);
-
-    deleteFromGenericList(SE_NAME);
   });
 });

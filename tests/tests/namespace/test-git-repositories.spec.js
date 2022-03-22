@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { deleteFromGenericList } from '../../support/helpers';
 
 const REPOSITORY_NAME =
   'test-repo-' +
@@ -140,10 +139,6 @@ context('Test Git Repositories', () => {
     cy.getIframeBody().contains('Secrets');
     cy.getIframeBody().contains(/default-token/);
 
-    cy.getLeftNav()
-      .contains('Git Repositories')
-      .click();
-
-    deleteFromGenericList(REPOSITORY_NAME);
+    cy.inspectList('Git Repositories', REPOSITORY_NAME);
   });
 });

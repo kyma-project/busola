@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { deleteFromGenericList } from '../../support/helpers';
 
 const NAMESPACE = 'kube-system';
 const DAEMONSET_NAME = 'apiserver-proxy';
@@ -55,10 +54,6 @@ context('Test Daemon Sets', () => {
   });
 
   it('Inspect Daemon Sets list', () => {
-    cy.getLeftNav()
-      .contains('Daemon Sets')
-      .click();
-
     cy.inspectList('Daemon Sets', DAEMONSET_NAME);
   });
 });

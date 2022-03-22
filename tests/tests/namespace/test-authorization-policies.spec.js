@@ -1,7 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 import { loadFile } from '../../support/loadFile';
-import { deleteFromGenericList } from '../../support/helpers';
 
 context('Test Authorization Policies', () => {
   Cypress.skipAfterFail();
@@ -56,11 +55,7 @@ context('Test Authorization Policies', () => {
       .should('be.visible');
   });
 
-  it('Inspect list and delete Authorization Policy', () => {
-    cy.getIframeBody()
-      .contains('Authorization Policies')
-      .click();
-
-    deleteFromGenericList('test-ap');
+  it('Inspect list', () => {
+    cy.inspectList('Authorization Policies', 'test-ap');
   });
 });

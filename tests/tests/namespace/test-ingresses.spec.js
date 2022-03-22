@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const RANDOM_NUMBER = Math.random()
@@ -71,10 +70,6 @@ context('Test Ingresses', () => {
   });
 
   it('Check Ingresses list', () => {
-    cy.getIframeBody()
-      .contains('a', 'Ingresses')
-      .click();
-
-    deleteFromGenericList(NAME);
+    cy.inspectList('Ingresses', NAME);
   });
 });

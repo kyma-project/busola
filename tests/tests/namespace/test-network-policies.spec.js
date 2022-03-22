@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const RANDOM_NUMBER = Math.random()
@@ -66,11 +65,7 @@ context('Test Network Policy', () => {
       .should('be.visible');
   });
 
-  it('Check Network Policy list and delete', () => {
-    cy.getIframeBody()
-      .contains('a', 'Network Policies')
-      .click();
-
-    deleteFromGenericList(NAME);
+  it('Check Network Policy list', () => {
+    cy.inspectList('Network Policies', NAME);
   });
 });

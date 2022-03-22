@@ -1,7 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 import { loadFile } from '../../support/loadFile';
-import { deleteFromGenericList } from '../../support/helpers';
 
 const DR_NAME =
   'test-' +
@@ -56,11 +55,7 @@ context('Test Destination Rules', () => {
       .should('be.visible');
   });
 
-  it('Check the Destination Rule list and delete', () => {
-    cy.getIframeBody()
-      .contains('a', 'Destination Rules')
-      .click();
-
-    deleteFromGenericList(DR_NAME);
+  it('Check the Destination Rule list', () => {
+    cy.inspectList('Destination Rules', DR_NAME);
   });
 });

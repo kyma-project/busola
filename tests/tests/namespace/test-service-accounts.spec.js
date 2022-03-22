@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-import { deleteFromGenericList } from '../../support/helpers';
 
 const SERVICE_NAME = 'test-sa-name';
 
@@ -113,11 +112,7 @@ context('Test Service Accounts', () => {
       .should('be.visible');
   });
 
-  it('Inspect list and delete Service Account', () => {
-    cy.getIframeBody()
-      .contains('a', 'Service Accounts')
-      .click();
-
-    deleteFromGenericList(SERVICE_NAME);
+  it('Inspect list', () => {
+    cy.inspectList('Service Accounts', SERVICE_NAME);
   });
 });

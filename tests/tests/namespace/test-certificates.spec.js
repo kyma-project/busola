@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { deleteFromGenericList } from '../../support/helpers';
 
 const CERT_NAME = 'cypress-test-name';
 const CERT_COMMON_NAME = 'cypress-test-common-name';
@@ -87,11 +86,7 @@ context('Test Certificates', () => {
       .should('be.visible');
   });
 
-  it('Deletes a certificate', () => {
-    cy.getLeftNav()
-      .contains('Certificates')
-      .click();
-
-    deleteFromGenericList(CERT_NAME);
+  it('Inspect a certificate list', () => {
+    cy.inspectList('Certificates', CERT_NAME);
   });
 });

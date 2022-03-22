@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 async function loadSC(scName) {
@@ -60,6 +59,6 @@ context('Test Storage Classes', () => {
       .contains('Storage Classes')
       .click();
 
-    deleteFromGenericList(Cypress.env('STORAGE_CLASS_NAME'));
+    cy.deleteFromGenericList(Cypress.env('STORAGE_CLASS_NAME'));
   });
 });

@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { deleteFromGenericList } from '../../support/helpers';
 
 const PROVIDER_NAME = 'test-provider';
 const PROVIDER_TYPE = 'cloudflare-dns';
@@ -140,18 +139,12 @@ context('Test DNS Providers', () => {
     cy.getIframeBody().contains(PROVIDER_EXCLUDED_DOMAIN);
   });
 
-  it('Inspect list and delete', () => {
-    cy.getLeftNav()
-      .contains('DNS Providers')
-      .click();
+  it('Inspect list', () => {
+    cy.inspectList('DNS Providers', PROVIDER_NAME);
 
-    // name
-    cy.getIframeBody().contains(PROVIDER_NAME);
     // label
     cy.getIframeBody().contains('is-edited=yes');
     // type
     cy.getIframeBody().contains(PROVIDER_TYPE);
-
-    deleteFromGenericList(PROVIDER_NAME);
   });
 });

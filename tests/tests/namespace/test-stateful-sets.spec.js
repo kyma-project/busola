@@ -1,5 +1,3 @@
-const { deleteFromGenericList } = require('../../support/helpers');
-
 const SET_NAME = 'alertmanager-monitoring-alertmanager';
 
 context('Test Stateful Sets', () => {

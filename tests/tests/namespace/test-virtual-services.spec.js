@@ -1,5 +1,4 @@
 import jsyaml from 'js-yaml';
-import { deleteFromGenericList } from '../../support/helpers';
 
 const SERVICE_NAME = `test-virtual-service-${Math.floor(Math.random() * 9999) +
   1000}`;
@@ -69,11 +68,7 @@ context('Test Virtual Services', () => {
     cy.getIframeBody().contains('Delegate');
   });
 
-  it('Inspect service list and delete', () => {
-    cy.getIframeBody()
-      .contains('Virtual Services')
-      .click();
-
-    deleteFromGenericList(SERVICE_NAME);
+  it('Inspect service list', () => {
+    cy.inspectList('Virtual Services', SERVICE_NAME);
   });
 });

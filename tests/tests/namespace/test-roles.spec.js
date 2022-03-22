@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { deleteFromGenericList } from '../../support/helpers';
 
 const ROLE_NAME = `test-role-${Math.floor(Math.random() * 9999) + 1000}`;
 const CLONE_NAME = `${ROLE_NAME}-clone`;
@@ -175,17 +174,5 @@ context('Test Roles', () => {
       .find('[data-testid=rules-list]')
       .find('[data-testid=list]')
       .should('have.text', '-');
-  });
-
-  it('Delete Role and Clone', () => {
-    cy.getIframeBody()
-      .contains('a', 'Roles')
-      .click();
-
-    deleteFromGenericList(CLONE_NAME);
-
-    cy.reload();
-
-    deleteFromGenericList(ROLE_NAME);
   });
 });
