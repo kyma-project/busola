@@ -33,7 +33,7 @@ context('Test Daemon Sets', () => {
       .click();
   });
 
-  it('Inspect details', () => {
+  it('Inspect details and list', () => {
     cy.navigateTo('Workloads', 'Daemon Sets');
 
     cy.getIframeBody()
@@ -43,6 +43,12 @@ context('Test Daemon Sets', () => {
     // name
     cy.getIframeBody().contains(DAEMONSET_NAME);
 
+    cy.inspectList('Daemon Sets', DAEMONSET_NAME);
+
+    cy.getIframeBody()
+      .contains('a', DAEMONSET_NAME)
+      .click();
+
     // created pod
     cy.getIframeBody()
       .contains(new RegExp(DAEMONSET_NAME + '-'))
@@ -51,9 +57,5 @@ context('Test Daemon Sets', () => {
     // images
     cy.getIframeBody().contains(/gardener\/apiserver-proxy/);
     cy.getIframeBody().contains(/envoyproxy\/envoy-alpine/);
-  });
-
-  it('Inspect Daemon Sets list', () => {
-    cy.inspectList('Daemon Sets', DAEMONSET_NAME);
   });
 });

@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { contains } from 'cypress/types/jquery';
 
 const REPOSITORY_NAME =
   'test-repo-' +
@@ -39,13 +40,19 @@ context('Test Git Repositories', () => {
       .click();
   });
 
-  it('Inspect details', () => {
+  it('Inspect details and list', () => {
     // name
     cy.getIframeBody().contains(REPOSITORY_NAME);
     // url
     cy.getIframeBody().contains('https://test-repo');
     // authorization
     cy.getIframeBody().contains(/none/i);
+
+    cy.inspectList('Git Repositories', REPOSITORY_NAME);
+
+    cy.getIframeBody()
+      .contains(REPOSITORY_NAME)
+      .click();
   });
 
   it('Edit Repository', () => {
@@ -119,7 +126,7 @@ context('Test Git Repositories', () => {
     cy.getIframeBody().contains(/basic/i);
   });
 
-  it('Inspect list and delete', () => {
+  it('Inspect list', () => {
     cy.getIframeBody()
       .contains('Git Repositories')
       .click();
@@ -138,7 +145,5 @@ context('Test Git Repositories', () => {
 
     cy.getIframeBody().contains('Secrets');
     cy.getIframeBody().contains(/default-token/);
-
-    cy.inspectList('Git Repositories', REPOSITORY_NAME);
   });
 });

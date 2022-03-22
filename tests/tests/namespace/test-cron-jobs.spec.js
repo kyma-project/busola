@@ -170,6 +170,6 @@ context('Test Cron Jobs', () => {
   });
 
   it('Inspect list', () => {
-    cy.inspectList().contains('Cron Jobs', CRON_JOB_NAME);
+    cy.inspectList('Cron Jobs', CRON_JOB_NAME);
   });
 });
