@@ -103,6 +103,7 @@ context('Test Jobs', () => {
 
     // created pod
     cy.getIframeBody()
+      .find('[data-test-id="workload-selector"]')
       .contains(new RegExp(JOB_NAME + '-'))
       .click();
 

@@ -1,5 +1,6 @@
 @import '~fundamental-styles/dist/margins.css';
 @import '~@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/css_variables.css';
+@import './shared-repo/components/ResourceGraph/mixins.scss';
 
 html {
   font-size: 16px;
@@ -386,3 +387,21 @@ input[type='checkbox'] {
   color: var(--sapLinkColor);
   cursor: pointer;
 }
+
+@include graph-node-border(pod, 4);
+@include graph-node-border(virtualservice, 1);
+@include graph-node-border(rolebinding, 2);
+@include graph-node-border(apirule, 2);
+@include graph-node-border(configmap, 5);
+@include graph-node-border(cronjob, 2);
+@include graph-node-border(function, 2);
+@include graph-node-border(gateway, 1, Light1);
+@include graph-node-border(horizontalpodautoscaler, 6);
+@include graph-node-border(job, 1);
+@include graph-node-border(oauth2client, 1);
+@include graph-node-border(replicaset, 6);
+@include graph-node-border(clusterrolebinding, 2);
+@include graph-node-border(role, 1);
+@include graph-node-border(clusterrole, 1);
+@include graph-node-border(secret, 5);
+@include graph-node-border(service, 3);

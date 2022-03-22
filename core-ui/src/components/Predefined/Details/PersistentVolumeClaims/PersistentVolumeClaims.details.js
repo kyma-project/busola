@@ -13,11 +13,13 @@ import { LayoutPanel, Link } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
 import { RelatedPods } from 'shared/components/RelatedPods';
-import { ComponentForList } from 'shared/getComponents';
 import { Selector } from 'shared/components/Selector/Selector';
+import { ResourceDetails } from 'react-shared';
+import { PersistentVolumeClaimsCreate } from '../../Create/PersistentVolumeClaims/PersistentVolumeClaims.create';
+import PersistentVolumesList from 'components/Predefined/List/PersistentVolumes.list';
 
 const RelatedVolumes = ({ labelSelector }) => {
-  const podListParams = {
+  const PVParams = {
     hasDetailsView: true,
     fixedPath: true,
     resourceUrl: `/api/v1/persistentvolumes?labelSelector=${labelSelector}`,
@@ -26,13 +28,7 @@ const RelatedVolumes = ({ labelSelector }) => {
     showTitle: true,
   };
 
-  return (
-    <ComponentForList
-      name="persistentVolumesList"
-      params={podListParams}
-      key="pv-list"
-    />
-  );
+  return <PersistentVolumesList params={{ ...PVParams }} key="pv-list" />;
 };
 
 function PVCSelectorSpecification(pvc) {
@@ -40,6 +36,7 @@ function PVCSelectorSpecification(pvc) {
 
   return (
     <Selector
+      key="PVCSelector"
       namespace={pvc.metadata.namespace}
       labels={pvc.spec.selector?.matchLabels}
       expressions={pvc.spec.selector?.matchExpressions}
@@ -125,10 +122,7 @@ export const PVCConfiguration = pvc => {
   );
 };
 
-export const PersistentVolumeClaimsDetails = ({
-  DefaultRenderer,
-  ...otherParams
-}) => {
+const PersistentVolumeClaimsDetails = props => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -146,11 +140,9 @@ export const PersistentVolumeClaimsDetails = ({
 
   const Events = () => (
     <EventsList
-      namespace={otherParams.namespace}
-      filter={filterByResource(
-        'PersistentVolumeClaim',
-        otherParams.resourceName,
-      )}
+      key="events"
+      namespace={props.namespace}
+      filter={filterByResource('PersistentVolumeClaim', props.resourceName)}
       hideInvolvedObjects={true}
     />
   );
@@ -162,11 +154,11 @@ export const PersistentVolumeClaimsDetails = ({
           volume?.persistentVolumeClaim?.claimName === pvc.metadata.name,
       );
 
-    return <RelatedPods resource={pvc} filter={filterByClaim} />;
+    return <RelatedPods resource={pvc} filter={filterByClaim} key="pvcPods" />;
   };
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customComponents={[
         PVCConfiguration,
         PVCPods,
@@ -175,8 +167,10 @@ export const PersistentVolumeClaimsDetails = ({
       ]}
       customColumns={customColumns}
       singularName={t('persistent-volume-claims.name_singular')}
-      resourceTitle={t('persistent-volume-claims.title')}
-      {...otherParams}
+      createResourceForm={PersistentVolumeClaimsCreate}
+      {...props}
     />
   );
 };
+
+export default PersistentVolumeClaimsDetails;

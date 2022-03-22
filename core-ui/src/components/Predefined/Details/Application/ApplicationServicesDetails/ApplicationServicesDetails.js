@@ -102,7 +102,7 @@ export function ApplicationServiceDetails({ applicationName, serviceName }) {
           <PageHeader
             title={service?.displayName || serviceName}
             breadcrumbItems={breadcrumbItems}
-          ></PageHeader>
+          />
 
           <GenericList
             key="application-service-apis"

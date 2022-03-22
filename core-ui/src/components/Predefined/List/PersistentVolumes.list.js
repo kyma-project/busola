@@ -1,12 +1,17 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link as DescLink, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import {
+  Link as DescLink,
+  EMPTY_TEXT_PLACEHOLDER,
+  ResourcesList,
+} from 'react-shared';
 import { Link } from 'fundamental-react';
 import { Trans } from 'react-i18next';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 import { PersistentVolumeStatus } from '../Details/PersistentVolume/PersistentVolumeStatus';
+import { PersistentVolumesCreate } from '../Create/PersistentVolumes/PersistentVolumes.create';
 
-export const PersistentVolumesList = ({ DefaultRenderer, ...otherParams }) => {
+const PersistentVolumesList = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -70,11 +75,13 @@ export const PersistentVolumesList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       resourceName={t('pv.title')}
       customColumns={customColumns}
       description={description}
-      {...otherParams}
+      createResourceForm={PersistentVolumesCreate}
+      {...props}
     />
   );
 };
+export default PersistentVolumesList;

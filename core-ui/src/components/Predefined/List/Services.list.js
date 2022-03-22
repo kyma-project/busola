@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ControlledByKind } from 'react-shared';
-import { Link } from 'react-shared';
+import { ControlledByKind, ResourcesList, Link } from 'react-shared';
 import { Trans } from 'react-i18next';
+import { ServicesCreate } from '../Create/Services/Services.create';
 
-export const ServicesList = ({ DefaultRenderer, ...otherParams }) => {
+const ServicesList = props => {
   const { t } = useTranslation();
 
   const getPortString = port => {
@@ -70,10 +70,13 @@ export const ServicesList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
-      {...otherParams}
+      createResourceForm={ServicesCreate}
+      {...props}
     />
   );
 };
+
+export default ServicesList;

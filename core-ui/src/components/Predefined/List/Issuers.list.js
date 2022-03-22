@@ -1,9 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, ResourceStatus } from 'react-shared';
+import { Link, ResourceStatus, ResourcesList } from 'react-shared';
 import { Trans } from 'react-i18next';
+import { IssuersCreate } from '../Create/Issuers/Issuers.create';
 
-export const IssuersList = ({ DefaultRenderer, ...otherParams }) => {
+const IssuersList = props => {
   const { t, i18n } = useTranslation();
 
   const customColumns = [
@@ -33,10 +34,13 @@ export const IssuersList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
-      {...otherParams}
+      createResourceForm={IssuersCreate}
+      {...props}
     />
   );
 };
+
+export default IssuersList;
