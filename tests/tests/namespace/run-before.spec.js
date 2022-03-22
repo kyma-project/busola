@@ -27,6 +27,15 @@ context('Create Namespace', () => {
       .click();
 
     cy.getIframeBody()
+      .find('[aria-label="expand Apply Total Memory Quotas"]')
+      .contains('Choose option')
+      .click();
+
+    cy.getIframeBody()
+      .contains('XL (limits: 9Gi')
+      .click();
+
+    cy.getIframeBody()
       .find('[role=dialog]')
       .find('input[ariaLabel="Namespace name"]:visible')
       .type(Cypress.env('NAMESPACE_NAME'));
