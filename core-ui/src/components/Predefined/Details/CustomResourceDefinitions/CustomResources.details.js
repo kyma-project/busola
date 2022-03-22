@@ -11,7 +11,7 @@ import {
 } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-export function CustomResource({ params }) {
+function CustomResource({ params }) {
   const { t, i18n } = useTranslation();
 
   const { namespaceId: namespace } = useMicrofrontendContext();
@@ -93,3 +93,4 @@ export function CustomResource({ params }) {
     />
   );
 }
+export default CustomResource;
