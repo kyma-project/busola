@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { KeyValueForm } from '../KeyValueForm';
 import * as helpers from '../helpers';
-import wait from 'waait';
+import { waitFor } from '@testing-library/react';
 
 describe('KeyValueForm', () => {
   it('Adds and removes entries, showing proper warnings', () => {
@@ -63,7 +63,7 @@ describe('KeyValueForm', () => {
 
     fireEvent.click(getByText('components.key-value-form.read-value'));
 
-    await wait(() =>
+    await waitFor(() =>
       expect(setData).toHaveBeenLastCalledWith({
         'file-name': 'file-content',
       }),

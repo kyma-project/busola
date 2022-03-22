@@ -74,7 +74,6 @@
     "react-scripts": "5.0.0",
     "regenerator-runtime": "^0.13.9",
     "sass-loader": "^12.4.0",
-    "waait": "^1.0.5",
     "webpack-cli": "^4.9.2",
     "yaml-sort": "^1.1.0"
   },
