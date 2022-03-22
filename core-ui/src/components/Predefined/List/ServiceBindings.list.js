@@ -3,11 +3,15 @@ import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'fundamental-react';
 import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
-import { ControlledByKind } from 'react-shared';
-import { Link as ReactSharedLink } from 'react-shared';
+import {
+  ControlledByKind,
+  Link as ReactSharedLink,
+  ResourcesList,
+} from 'react-shared';
+import { ServiceBindingsCreate } from '../Create/ServiceBindings/ServiceBindings.create';
 import { Trans } from 'react-i18next';
 
-export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
+const ServiceBindingsList = props => {
   const { t } = useTranslation();
 
   const navigateToInstance = instanceName =>
@@ -59,12 +63,14 @@ export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       resourceName={t('btp-service-bindings.title')}
       textSearchProperties={['spec.serviceInstanceName', 'spec.externalName']}
       description={description}
-      {...otherParams}
+      createResourceForm={ServiceBindingsCreate}
+      {...props}
     />
   );
 };
+export default ServiceBindingsList;

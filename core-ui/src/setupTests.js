@@ -46,6 +46,11 @@ global.document.createRange = () => ({
 
 window.postMessage = jest.fn();
 
+// graphviz-react uses es modules which jest doesn't understand
+jest.mock('graphviz-react', () => ({
+  Graphviz: () => 'Graphviz mock',
+}));
+
 Enzyme.configure({ adapter: new Adapter() });
 
 export async function expectToSolveWithin(

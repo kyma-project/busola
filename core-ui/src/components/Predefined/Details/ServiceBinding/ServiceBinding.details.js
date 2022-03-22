@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
 import { ServiceBindingData } from './ServiceBindingData';
-import { ControlledBy } from 'react-shared';
+import { ControlledBy, ResourceDetails } from 'react-shared';
+import { ServiceBindingsCreate } from '../../Create/ServiceBindings/ServiceBindings.create';
 
-export const ServiceBindingsDetails = ({ DefaultRenderer, ...otherParams }) => {
+const ServiceBindingsDetails = props => {
   const { t } = useTranslation();
 
   const ServiceBindingParameters = ({ spec }) => {
@@ -53,14 +54,16 @@ export const ServiceBindingsDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={[
         ServiceBindingData,
         ServiceBindingParameters,
         ServiceBindingParametersFrom,
       ]}
-      {...otherParams}
+      createResourceForm={ServiceBindingsCreate}
+      {...props}
     />
   );
 };
+export default ServiceBindingsDetails;

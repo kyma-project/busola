@@ -1,11 +1,9 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link, ResourcesList } from 'react-shared';
+import { StorageClassesCreate } from '../Create/StorageClasses/StorageClasses.create';
 import { Trans } from 'react-i18next';
 
-export const StorageClassesList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
-
+const StorageClassesList = props => {
   const description = (
     <Trans i18nKey="storage-classes.description">
       <Link
@@ -16,10 +14,12 @@ export const StorageClassesList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
-      resourceName={t('storage-classes.title')}
+    <ResourcesList
       description={description}
-      {...otherParams}
+      {...props}
+      createResourceForm={StorageClassesCreate}
     />
   );
 };
+
+export default StorageClassesList;

@@ -1,7 +1,9 @@
 import React from 'react';
-import { ComponentForList } from 'shared/getComponents';
+import ApiRulesListComponent from 'components/Predefined/List/ApiRules.list';
+import { useTranslation } from 'react-i18next';
 
 export function ApiRulesList({ serviceName, namespace }) {
+  const { i18n } = useTranslation();
   const params = {
     hasDetailsView: true,
     fixedPath: true,
@@ -12,14 +14,8 @@ export function ApiRulesList({ serviceName, namespace }) {
     showTitle: true,
     createFormProps: { serviceName },
     filter: apiRule => apiRule.spec.service.name === serviceName,
+    i18n,
   };
 
-  return (
-    <ComponentForList
-      name="apiRulesList"
-      params={params}
-      key="apirules"
-      nameForCreate="ApiRulesCreate"
-    />
-  );
+  return <ApiRulesListComponent {...params} />;
 }

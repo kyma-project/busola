@@ -1,13 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, ControlledBy } from 'react-shared';
+import { Link, ControlledBy, ResourcesList } from 'react-shared';
 import { Trans } from 'react-i18next';
-
 import { JobCompletions } from '../Details/Job/JobCompletions';
+import { JobsCreate } from '../Create/Jobs/Jobs.create';
 
-export const JobsList = ({ DefaultRenderer, ...otherParams }) => {
+const JobsList = props => {
   const { t } = useTranslation();
-
   const customColumns = [
     {
       header: t('jobs.completions'),
@@ -31,10 +30,13 @@ export const JobsList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
-      {...otherParams}
+      createResourceForm={JobsCreate}
+      {...props}
     />
   );
 };
+
+export default JobsList;

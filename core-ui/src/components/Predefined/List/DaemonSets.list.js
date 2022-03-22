@@ -1,15 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ControlledByKind, Labels } from 'react-shared';
-import { Link } from 'react-shared';
+import { ControlledByKind, Labels, Link, ResourcesList } from 'react-shared';
 import { Trans } from 'react-i18next';
-
+import { DaemonSetsCreate } from '../Create/DaemonSets/DaemonSets.create';
 import { DaemonSetStatus } from '../Details/DaemonSet/DaemonSetStatus';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 
-export const DaemonSetsList = ({ DefaultRenderer, ...otherParams }) => {
+const DaemonSetsList = props => {
   const { t } = useTranslation();
-  const restartAction = useRestartAction(otherParams.resourceUrl);
+  const restartAction = useRestartAction(props.resourceUrl);
 
   const customColumns = [
     {
@@ -43,12 +42,14 @@ export const DaemonSetsList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       resourceName={t('daemon-sets.title')}
       description={description}
       customListActions={[restartAction]}
-      {...otherParams}
+      createResourceForm={DaemonSetsCreate}
+      {...props}
     />
   );
 };
+export default DaemonSetsList;
