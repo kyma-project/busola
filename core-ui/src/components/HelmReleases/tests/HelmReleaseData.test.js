@@ -6,14 +6,10 @@ const mockDecodeHelmRelease = jest.fn();
 jest.mock('components/HelmReleases/decodeHelmRelease', () => ({
   decodeHelmRelease: release => mockDecodeHelmRelease(release),
 }));
+
 const originalDecodeHelmRelease = jest.requireActual(
   'components/HelmReleases/decodeHelmRelease',
 );
-
-jest.mock('react-shared', () => ({
-  ...jest.requireActual('react-shared'),
-  MonacoEditor: () => "MonacoEditor mock cause Monaco won't work in tests",
-}));
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
