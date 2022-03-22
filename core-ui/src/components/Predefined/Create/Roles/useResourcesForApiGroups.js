@@ -31,9 +31,8 @@ export function useResourcesForApiGroups(apiGroups = []) {
   };
 
   const fetchResources = useCallback(() => {
-    const cacheObject = apiGroups.reduce((a, v) => ({ ...a, [v]: [] }), {});
-    setCache(cacheObject);
     for (const apiGroup of apiGroups) {
+      if (cache[apiGroup]?.length) continue;
       for (const groupVersion of findMatchingGroupVersions(apiGroup)) {
         void fetchApiGroup(groupVersion, apiGroup);
       }
