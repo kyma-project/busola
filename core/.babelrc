@@ -1,8 +1,13 @@
 {
+  "plugins": ["@babel/plugin-transform-runtime"],
   "presets": [
     [
       "@babel/preset-env",
-      "@babel/plugin-transform-runtime"
+      {
+        "targets": {
+          "esmodules": true
+        }
+      }
       // {
       // "useBuiltIns": "usage",
       // "targets": "> 0.25%, not dead"
