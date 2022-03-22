@@ -6,13 +6,14 @@
     "start": "../node_modules/concurrently/bin/concurrently.js \"npm run buildConfig:watch\" \"npm run serve\"",
     "serve": "sirv src -s -D -q -p 8080",
     "start:kyma": "npm run start",
-    "build": "npm run buildConfig",
+    "build": "npm run copy-luigi && npm run buildConfig",
     "test": "../node_modules/.bin/jest",
     "lint-check": "prettier --config ./../.prettierrc --ignore-path ./../.prettierignore -l '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "lint-fix": "prettier --config ./../.prettierrc --ignore-path ./../.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
-    "buildConfig": "webpack --mode production --config webpack.config.js",
-    "build:docker": "webpack --mode production --config webpack.config.js --env IS_DOCKER=true",
-    "buildConfig:watch": "webpack --config webpack.config.js --watch"
+    "buildConfig": "npm run copy-luigi && webpack --mode production --config webpack.config.js",
+    "build:docker": "npm run copy-luigi && webpack --mode production --config webpack.config.js --env IS_DOCKER=true",
+    "buildConfig:watch": "npm run copy-luigi && webpack --config webpack.config.js --watch",
+    "copy-luigi": "cp -a ./node_modules/@luigi-project/core ./src/assets/libs/luigi-core"
   },
   "private": true,
   "dependencies": {
@@ -24,10 +25,11 @@
   "devDependencies": {
     "babel-loader": "^8.2.3",
     "copy-webpack-plugin": "^5.0.0",
+    "fs-extra": "^10.0.1",
+    "html-webpack-plugin": "^5.5.0",
     "prettier": "^1.18.2",
     "sirv-cli": "^1.0.11",
-    "webpack": "^5.70.0",
-    "html-webpack-plugin": "^5.5.0"
+    "webpack": "^5.70.0"
   },
   "jest": {
     "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.js$"
