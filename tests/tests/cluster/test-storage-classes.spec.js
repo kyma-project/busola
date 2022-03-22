@@ -55,7 +55,7 @@ context('Test Storage Classes', () => {
       .should('be.visible');
   });
 
-  it('Checking list', () => {
+  it('Checking list and delete', () => {
     cy.getIframeBody()
       .contains('Storage Classes')
       .click();
