@@ -56,6 +56,10 @@ context('Test Storage Classes', () => {
   });
 
   it('Checking list', () => {
-    cy.inspectList('Storage Classes', Cypress.env('STORAGE_CLASS_NAME'));
+    cy.getIframeBody()
+      .contains('Storage Classes')
+      .click();
+
+    deleteFromGenericList(Cypress.env('STORAGE_CLASS_NAME'));
   });
 });

@@ -77,7 +77,7 @@ context('Test Persistent Volume Claims', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('a', Cypress.env('STORAGE_CLASS_NAME'))
+      .contains(Cypress.env('STORAGE_CLASS_NAME'))
       .should('be.visible');
 
     cy.getIframeBody()
@@ -93,29 +93,5 @@ context('Test Persistent Volume Claims', () => {
     cy.getIframeBody().contains(CAPACITY_VALUE);
 
     deleteFromGenericList(PVC_NAME);
-  });
-
-  it('Delete the connected Storage Class', () => {
-    cy.get('[data-testid=luigi-topnav-logo]').click();
-
-    cy.navigateTo('Storage', 'Storage Classes');
-
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="open-search"]')
-      .type(Cypress.env('STORAGE_CLASS_NAME'));
-
-    cy.getIframeBody()
-      .find('tbody tr [aria-label="Delete"]')
-      .click({ force: true });
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .contains(Cypress.env('STORAGE_CLASS_NAME'), {
-        timeout: 10000,
-      })
-      .should('not.exist');
   });
 });
