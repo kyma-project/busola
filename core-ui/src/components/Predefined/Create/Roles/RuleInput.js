@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'fundamental-react';
+import { Button, BusyIndicator } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import { useMicrofrontendContext } from 'react-shared';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -47,9 +47,11 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
   // dictionary of pairs (apiGroup: resources in that apiGroup)
 
   const apiRules = rule?.apiGroups?.flat();
-  const { cache: resourcesCache, fetchResources } = useResourcesForApiGroups(
-    apiRules ? [...new Set(apiRules)] : [],
-  );
+  const {
+    cache: resourcesCache,
+    fetchResources,
+    loading,
+  } = useResourcesForApiGroups(apiRules ? [...new Set(apiRules)] : []);
   const apiRulesString = apiRules?.toString();
   useEffect(() => {
     fetchResources();
@@ -116,22 +118,24 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         propertyPath="$.resources"
         options={availableResources.map(i => ({ key: i, text: i }))}
         defaultOpen
-        actions={
-          <Button compact onClick={addAllResources}>
+        actions={[
+          <BusyIndicator size="s" show={loading} />,
+          <Button compact onClick={addAllResources} disabled={loading}>
             {t('roles.add-all')}
-          </Button>
-        }
+          </Button>,
+        ]}
       />
       <ComboboxArrayInput
         title={t('roles.headers.verbs')}
         propertyPath="$.verbs"
         options={verbs.map(i => ({ key: i, text: i }))}
         defaultOpen
-        actions={
-          <Button compact onClick={addAllVerbs}>
+        actions={[
+          <BusyIndicator size="s" show={loading} />,
+          <Button compact onClick={addAllVerbs} disabled={loading}>
             {t('roles.add-all')}
-          </Button>
-        }
+          </Button>,
+        ]}
       />
       {isAdvanced && (
         <TextArrayInput

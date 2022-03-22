@@ -4,6 +4,7 @@ import { useComponentDidMount } from 'shared/useComponentDidMount';
 
 export function useResourcesForApiGroups(apiGroups = []) {
   const [cache, setCache] = useState({});
+  const [loading, setLoading] = useState(0);
   const fetch = useSingleGet();
   const { groupVersions } = useMicrofrontendContext();
 
@@ -25,7 +26,9 @@ export function useResourcesForApiGroups(apiGroups = []) {
           ? [...cache[apiGroup], ...json.resources]
           : json.resources,
       }));
+      setLoading(l => l - 1);
     } catch (e) {
+      setLoading(l => l - 1);
       console.warn(e);
     }
   };
@@ -34,6 +37,7 @@ export function useResourcesForApiGroups(apiGroups = []) {
     for (const apiGroup of apiGroups) {
       if (cache[apiGroup]?.length) continue;
       for (const groupVersion of findMatchingGroupVersions(apiGroup)) {
+        setLoading(l => l + 1);
         void fetchApiGroup(groupVersion, apiGroup);
       }
     }
@@ -42,5 +46,9 @@ export function useResourcesForApiGroups(apiGroups = []) {
 
   useComponentDidMount(fetchResources);
 
-  return { cache, fetchResources };
+  return {
+    cache,
+    fetchResources,
+    loading,
+  };
 }
