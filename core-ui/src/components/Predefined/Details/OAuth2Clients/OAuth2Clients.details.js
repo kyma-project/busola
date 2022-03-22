@@ -4,8 +4,9 @@ import SecretData from 'shared/components/Secret/SecretData';
 import OAuthClientSpecPanel from './OAuthClientSpecPanel';
 import { OAuth2ClientStatus } from 'shared/components/OAuth2ClientStatus/OAuth2ClientStatus';
 import { useTranslation } from 'react-i18next';
+import { OAuth2ClientsCreate } from '../../Create/OAuthClients/OAuthClients.create';
 
-import { useGet } from 'react-shared';
+import { useGet, ResourceDetails } from 'react-shared';
 
 function SecretComponent({ namespaceName, secretName }) {
   const { t } = useTranslation();
@@ -22,7 +23,7 @@ function SecretComponent({ namespaceName, secretName }) {
   return <SecretData secret={secret} />;
 }
 
-export const OAuth2ClientsDetails = ({ DefaultRenderer, ...otherParams }) => {
+const OAuth2ClientsDetails = props => {
   const { t } = useTranslation();
 
   const Secret = resource => (
@@ -42,10 +43,13 @@ export const OAuth2ClientsDetails = ({ DefaultRenderer, ...otherParams }) => {
   };
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={[statusColumn]}
       customComponents={[Configuration, Secret]}
-      {...otherParams}
+      createResourceForm={OAuth2ClientsCreate}
+      {...props}
     />
   );
 };
+
+export default OAuth2ClientsDetails;

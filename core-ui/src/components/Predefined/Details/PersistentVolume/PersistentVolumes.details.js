@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, LayoutPanel } from 'fundamental-react';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER, ResourceDetails } from 'react-shared';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
@@ -9,8 +9,9 @@ import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
+import { PersistentVolumesCreate } from '../../Create/PersistentVolumes/PersistentVolumes.create';
 
-export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
+function PersistentVolumesDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -107,16 +108,19 @@ export function PersistentVolumesDetails({ DefaultRenderer, ...otherParams }) {
 
   const Events = () => (
     <EventsList
-      filter={filterByResource('PersistentVolume', otherParams.resourceName)}
+      filter={filterByResource('PersistentVolume', props.resourceName)}
       hideInvolvedObjects={true}
     />
   );
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={[PvDetails, Events]}
-      {...otherParams}
+      createResourceForm={PersistentVolumesCreate}
+      {...props}
     />
   );
 }
+
+export default PersistentVolumesDetails;

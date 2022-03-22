@@ -4,16 +4,14 @@ import { Link, LayoutPanel } from 'fundamental-react';
 import { Tokens } from 'shared/components/Tokens';
 import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER, ResourceDetails } from 'react-shared';
 import { currentMetricsParser, metricsParser } from './helpers';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
+import { HorizontalPodAutoscalersCreate } from '../../Create/HPAs/HPAs.create';
 
-export function HorizontalPodAutoscalersDetails({
-  DefaultRenderer,
-  ...otherParams
-}) {
+function HorizontalPodAutoscalersDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -109,20 +107,19 @@ export function HorizontalPodAutoscalersDetails({
 
   const Events = () => (
     <EventsList
-      namespace={otherParams.namespace}
-      filter={filterByResource(
-        'HorizontalPodAutoscaler',
-        otherParams.resourceName,
-      )}
+      namespace={props.namespace}
+      filter={filterByResource('HorizontalPodAutoscaler', props.resourceName)}
       hideInvolvedObjects={true}
     />
   );
   return (
-    <DefaultRenderer
+    <ResourceDetails
       resourceName={t('hpas.name_singular')}
       customColumns={customColumns}
       customComponents={[HPASpec, HPAMetrics, Events]}
-      {...otherParams}
+      createResourceForm={HorizontalPodAutoscalersCreate}
+      {...props}
     />
   );
 }
+export default HorizontalPodAutoscalersDetails;

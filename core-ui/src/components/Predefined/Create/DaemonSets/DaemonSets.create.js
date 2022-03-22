@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext, matchByOwnerReference } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { createDaemonSetTemplate } from './templates';
@@ -30,4 +30,20 @@ function DaemonSetsCreate({
     />
   );
 }
+DaemonSetsCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  networkFlowLevel: -1,
+  relations: [
+    {
+      kind: 'Pod',
+    },
+  ],
+  matchers: {
+    Pod: (ds, pod) =>
+      matchByOwnerReference({
+        resource: pod,
+        owner: ds,
+      }),
+  },
+});
 export { DaemonSetsCreate };

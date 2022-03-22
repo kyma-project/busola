@@ -17,6 +17,7 @@ async function importJsYaml() {
 function toSearchParamsString(object) {
   return new URLSearchParams(object).toString();
 }
+
 async function downloadKubeconfig() {
   const jsyaml = await importJsYaml();
 
@@ -45,7 +46,6 @@ async function downloadKubeconfig() {
       });
     }
   }
-
   return false; // cancel Luigi navigation
 }
 
@@ -69,14 +69,13 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('namespaces.overview.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/Namespaces/:namespaceId?' +
+        '/namespaces/:namespaceId?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
         }),
       icon: 'product',
       viewGroup: coreUIViewGroupName,
     },
-
     {
       pathSegment: 'events',
       resourceType: 'events',
@@ -84,7 +83,7 @@ export function getStaticChildrenNodesForNamespace(
       icon: 'message-warning',
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Events?' +
+        '/namespaces/:namespaceId/events?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
@@ -101,7 +100,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'events',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Events/:eventName?' +
+                '/namespaces/:namespaceId/events/:eventName?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
@@ -130,7 +129,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('functions.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Functions?' +
+        '/namespaces/:namespaceId/functions?' +
         toSearchParamsString({
           resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
           hasDetailsView: true,
@@ -149,7 +148,7 @@ export function getStaticChildrenNodesForNamespace(
               pathSegment: ':functionName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Functions/:functionName?' +
+                '/namespaces/:namespaceId/functions/:functionName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
                 }),
@@ -168,7 +167,7 @@ export function getStaticChildrenNodesForNamespace(
       keepSelectedForChildren: true,
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Deployments?' +
+        '/namespaces/:namespaceId/deployments?' +
         toSearchParamsString({
           resourceApiPath: '/apis/apps/v1',
           hasDetailsView: true,
@@ -184,7 +183,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'deployments',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Deployments/:deploymentName?' +
+                '/namespaces/:namespaceId/deployments/:deploymentName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/apps/v1',
                 }),
@@ -234,7 +233,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('daemon-sets.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/DaemonSets?' +
+        '/namespaces/:namespaceId/daemonsets?' +
         toSearchParamsString({
           resourceApiPath: '/apis/apps/v1',
           hasDetailsView: true,
@@ -252,7 +251,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'daemonsets',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/DaemonSets/:daemonSetName?' +
+                '/namespaces/:namespaceId/daemonsets/:daemonSetName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/apps/v1',
                 }),
@@ -333,28 +332,28 @@ export function getStaticChildrenNodesForNamespace(
       category: i18next.t('workloads.title'),
       resourceType: 'replicasets',
       pathSegment: 'replicasets',
+      navigationContext: 'replicasets',
       label: i18next.t('replica-sets.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/ReplicaSets?' +
+        '/namespaces/:namespaceId/replicasets?' +
         toSearchParamsString({
           resourceApiPath: '/apis/apps/v1',
           hasDetailsView: true,
         }),
       viewGroup: coreUIViewGroupName,
       keepSelectedForChildren: true,
-
-      navigationContext: 'replicasets',
       children: [
         {
           pathSegment: 'details',
+          resourceType: 'replicasets',
           children: [
             {
               pathSegment: ':replicaSetName',
               resourceType: 'replicasets',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/ReplicaSets/:replicaSetName?' +
+                '/namespaces/:namespaceId/replicasets/:replicaSetName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/apps/v1',
                 }),
@@ -370,7 +369,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('pods.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Pods?' +
+        '/namespaces/:namespaceId/pods?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
@@ -387,7 +386,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'pods',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Pods/:podName?' +
+                '/namespaces/:namespaceId/pods/:podName?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
@@ -401,7 +400,7 @@ export function getStaticChildrenNodesForNamespace(
                       pathSegment: ':containerName',
                       viewUrl:
                         config.coreUIModuleUrl +
-                        '/namespaces/:namespaceId/Pods/:podName/Containers/:containerName',
+                        '/namespaces/:namespaceId/pods/:podName/containers/:containerName',
                     },
                   ],
                 },
@@ -413,7 +412,7 @@ export function getStaticChildrenNodesForNamespace(
                       pathSegment: ':containerName',
                       viewUrl:
                         config.coreUIModuleUrl +
-                        '/namespaces/:namespaceId/Pods/:podName/InitContainers/:containerName',
+                        '/namespaces/:namespaceId/pods/:podName/initcontainers/:containerName',
                     },
                   ],
                 },
@@ -442,7 +441,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('api-rules.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/APIRules?' +
+        '/namespaces/:namespaceId/apirules?' +
         toSearchParamsString({
           resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
           hasDetailsView: true,
@@ -461,7 +460,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'apirules',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/APIRules/:apiName?' +
+                '/namespaces/:namespaceId/apirules/:apiName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
                 }),
@@ -472,7 +471,7 @@ export function getStaticChildrenNodesForNamespace(
           pathSegment: 'create',
           viewUrl:
             config.coreUIModuleUrl +
-            '/ApiRules/create?' +
+            '/apirules/create?' +
             toSearchParamsString({
               resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
               hasDetailsView: true,
@@ -482,7 +481,7 @@ export function getStaticChildrenNodesForNamespace(
           pathSegment: 'edit/:apiName',
           viewUrl:
             config.coreUIModuleUrl +
-            '/ApiRules/edit/:apiName?' +
+            '/apirules/edit/:apiName?' +
             toSearchParamsString({
               resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
               hasDetailsView: true,
@@ -498,7 +497,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('ingresses.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Ingresses?' +
+        '/namespaces/:namespaceId/ingresses?' +
         toSearchParamsString({
           resourceApiPath: '/apis/networking.k8s.io/v1',
           hasDetailsView: true,
@@ -514,7 +513,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'ingresses',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Ingresses/:ingressName?' +
+                '/namespaces/:namespaceId/ingresses/:ingressName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/networking.k8s.io/v1',
                 }),
@@ -532,7 +531,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('services.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Services?' +
+        '/namespaces/:namespaceId/services?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
@@ -548,7 +547,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'services',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Services/:serviceName?' +
+                '/namespaces/:namespaceId/services/:serviceName?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
@@ -566,7 +565,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('hpas.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/horizontalPodAutoscalers?' +
+        '/namespaces/:namespaceId/horizontalpodautoscalers?' +
         toSearchParamsString({
           resourceApiPath: '/apis/autoscaling/v2beta2',
           hasDetailsView: true,
@@ -582,7 +581,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'hpas',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/horizontalPodAutoscalers/:horizontalPodAutoscalersName?' +
+                '/namespaces/:namespaceId/horizontalpodautoscalers/:horizontalPodAutoscalersName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/autoscaling/v2beta2',
                 }),
@@ -600,7 +599,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('network-policies.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/networkPolicies?' +
+        '/namespaces/:namespaceId/networkpolicies?' +
         toSearchParamsString({
           resourceApiPath: '/apis/networking.k8s.io/v1',
           hasDetailsView: true,
@@ -616,7 +615,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'networkpolicies',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/networkPolicies/:networkPolicyName?' +
+                '/namespaces/:namespaceId/networkpolicies/:networkPolicyName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/networking.k8s.io/v1',
                 }),
@@ -680,7 +679,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('destination-rules.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/destinationRules?' +
+        '/namespaces/:namespaceId/destinationrules?' +
         toSearchParamsString({
           resourceApiPath: '/apis/networking.istio.io/v1alpha3',
           hasDetailsView: true,
@@ -701,7 +700,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'destinationrules',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/destinationRules/:destinationRuleName?' +
+                '/namespaces/:namespaceId/destinationrules/:destinationRuleName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/networking.istio.io/v1beta1',
                 }),
@@ -717,7 +716,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('virtualservices.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/virtualServices?' +
+        '/namespaces/:namespaceId/virtualservices?' +
         toSearchParamsString({
           resourceApiPath: '/apis/networking.istio.io/v1beta1',
           hasDetailsView: true,
@@ -738,7 +737,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'virtualservices',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/virtualServices/:virtualserviceName?' +
+                '/namespaces/:namespaceId/virtualservices/:virtualserviceName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/networking.istio.io/v1beta1',
                 }),
@@ -791,7 +790,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('authorization-policies.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/authorizationPolicies?' +
+        '/namespaces/:namespaceId/authorizationpolicies?' +
         toSearchParamsString({
           resourceApiPath: '/apis/security.istio.io/v1beta1',
           hasDetailsView: true,
@@ -812,7 +811,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'authorizationpolicies',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/authorizationPolicies/:authorizationpolicyName?' +
+                '/namespaces/:namespaceId/authorizationpolicies/:authorizationpolicyName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/security.istio.io/v1beta1',
                 }),
@@ -828,7 +827,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('service-entries.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/serviceEntries?' +
+        '/namespaces/:namespaceId/serviceentries?' +
         toSearchParamsString({
           resourceApiPath: '/apis/networking.istio.io/v1beta1',
           hasDetailsView: true,
@@ -849,7 +848,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'serviceentries',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/serviceEntries/:serviceEntryName?' +
+                '/namespaces/:namespaceId/serviceentries/:serviceEntryName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/networking.istio.io/v1beta1',
                 }),
@@ -888,13 +887,13 @@ export function getStaticChildrenNodesForNamespace(
             {
               pathSegment: ':serviceId',
               viewUrl:
-                config.coreUIModuleUrl + '/catalog/ServiceClass/:serviceId',
+                config.coreUIModuleUrl + '/catalog/serviceclass/:serviceId',
               children: [
                 {
                   pathSegment: 'plans',
                   viewUrl:
                     config.coreUIModuleUrl +
-                    '/catalog/ServiceClass/:serviceId/plans',
+                    '/catalog/serviceclass/:serviceId/plans',
                 },
                 {
                   pathSegment: 'plan',
@@ -903,7 +902,7 @@ export function getStaticChildrenNodesForNamespace(
                       pathSegment: ':planId',
                       viewUrl:
                         config.coreUIModuleUrl +
-                        '/catalog/ServiceClass/:serviceId/plan/:planId',
+                        '/catalog/serviceclass/:serviceId/plan/:planId',
                     },
                   ],
                 },
@@ -918,13 +917,13 @@ export function getStaticChildrenNodesForNamespace(
               pathSegment: ':serviceId',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/catalog/ClusterServiceClass/:serviceId',
+                '/catalog/clusterserviceclass/:serviceId',
               children: [
                 {
                   pathSegment: 'plans',
                   viewUrl:
                     config.coreUIModuleUrl +
-                    '/catalog/ClusterServiceClass/:serviceId/plans',
+                    '/catalog/clusterserviceclass/:serviceId/plans',
                 },
                 {
                   pathSegment: 'plan',
@@ -933,7 +932,7 @@ export function getStaticChildrenNodesForNamespace(
                       pathSegment: ':planId',
                       viewUrl:
                         config.coreUIModuleUrl +
-                        '/catalog/ClusterServiceClass/:serviceId/plan/:planId',
+                        '/catalog/clusterserviceclass/:serviceId/plan/:planId',
                     },
                   ],
                 },
@@ -974,7 +973,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('brokers.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/ServiceBrokers?' +
+        '/namespaces/:namespaceId/servicebrokers?' +
         toSearchParamsString({
           resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
           readOnly: true,
@@ -993,7 +992,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('btp-instances.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/serviceInstances?' +
+        '/namespaces/:namespaceId/serviceinstances?' +
         toSearchParamsString({
           resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
           readOnly: false,
@@ -1012,7 +1011,7 @@ export function getStaticChildrenNodesForNamespace(
               pathSegment: ':instanceName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/serviceInstances/:instanceName?' +
+                '/namespaces/:namespaceId/serviceinstances/:instanceName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
                 }),
@@ -1029,7 +1028,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('btp-service-bindings.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/serviceBindings?' +
+        '/namespaces/:namespaceId/servicebindings?' +
         toSearchParamsString({
           resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
           readOnly: false,
@@ -1048,7 +1047,7 @@ export function getStaticChildrenNodesForNamespace(
               pathSegment: ':bindingName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/serviceBindings/:bindingName?' +
+                '/namespaces/:namespaceId/servicebindings/:bindingName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
                 }),
@@ -1075,7 +1074,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('persistent-volume-claims.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/PersistentVolumeClaims?' +
+        '/namespaces/:namespaceId/persistentvolumeclaims?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
@@ -1093,7 +1092,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'persistentvolumeclaims',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/PersistentVolumeClaims/:persistentVolumeClaimName?' +
+                '/namespaces/:namespaceId/persistentvolumeclaims/:persistentVolumeClaimName?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
@@ -1151,10 +1150,10 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'addons',
       resourceType: 'addonsconfigurations',
       navigationContext: 'addonsconfigurations',
-      label: i18next.t('addons.title'),
+      label: i18next.t('addons.navigation-title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/AddonsConfigurations?' +
+        '/namespaces/:namespaceId/addonsconfigurations?' +
         toSearchParamsString({
           resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
           hasDetailsView: true,
@@ -1173,7 +1172,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'addonsconfigurations',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/AddonsConfigurations/:addonName?' +
+                '/namespaces/:namespaceId/addonsconfigurations/:addonName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
                 }),
@@ -1191,7 +1190,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('config-maps.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/ConfigMaps?' +
+        '/namespaces/:namespaceId/configmaps?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
@@ -1207,7 +1206,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'configmaps',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/ConfigMaps/:name?' +
+                '/namespaces/:namespaceId/configmaps/:name?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
@@ -1224,7 +1223,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('secrets.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Secrets?' +
+        '/namespaces/:namespaceId/secrets?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
@@ -1240,7 +1239,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'secrets',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Secrets/:name?' +
+                '/namespaces/:namespaceId/secrets/:name?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
@@ -1258,7 +1257,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('subscriptions.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Subscriptions?' +
+        '/namespaces/:namespaceId/subscriptions?' +
         toSearchParamsString({
           resourceApiPath: '/apis/eventing.kyma-project.io/v1alpha1',
           hasDetailsView: true,
@@ -1274,7 +1273,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'subscriptions',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Subscriptions/:subscriptionName?' +
+                '/namespaces/:namespaceId/subscriptions/:subscriptionName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/eventing.kyma-project.io/v1alpha1',
                 }),
@@ -1292,7 +1291,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('roles.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Roles?' +
+        '/namespaces/:namespaceId/roles?' +
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
@@ -1308,7 +1307,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'roles',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Roles/:roleName?' +
+                '/namespaces/:namespaceId/roles/:roleName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
                 }),
@@ -1326,7 +1325,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('role-bindings.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/RoleBindings?' +
+        '/namespaces/:namespaceId/rolebindings?' +
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
@@ -1342,7 +1341,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'rolebindings',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/RoleBindings/:roleBindingName?' +
+                '/namespaces/:namespaceId/rolebindings/:roleBindingName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
                 }),
@@ -1360,7 +1359,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('oauth2-clients.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/Oauth2Clients?' +
+        '/namespaces/:namespaceId/oauth2clients?' +
         toSearchParamsString({
           resourceApiPath: '/apis/hydra.ory.sh/v1alpha1',
           hasDetailsView: true,
@@ -1383,7 +1382,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'oauth2clients',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/Oauth2Clients/:clientName?' +
+                '/namespaces/:namespaceId/oauth2clients/:clientName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/hydra.ory.sh/v1alpha1',
                 }),
@@ -1401,7 +1400,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('git-repositories.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/GitRepositories?' +
+        '/namespaces/:namespaceId/gitrepositories?' +
         toSearchParamsString({
           resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
           hasDetailsView: true,
@@ -1420,7 +1419,7 @@ export function getStaticChildrenNodesForNamespace(
               pathSegment: ':gitreponame',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/gitRepositories/:gitreponame?' +
+                '/namespaces/:namespaceId/gitrepositories/:gitreponame?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
                 }),
@@ -1438,7 +1437,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('dnsentries.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/DNSEntries?' +
+        '/namespaces/:namespaceId/dnsentries?' +
         toSearchParamsString({
           resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
           hasDetailsView: true,
@@ -1457,7 +1456,7 @@ export function getStaticChildrenNodesForNamespace(
               pathSegment: ':dnsentryName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/DNSEntries/:dnsentryName?' +
+                '/namespaces/:namespaceId/dnsentries/:dnsentryName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
                 }),
@@ -1475,7 +1474,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('dnsproviders.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/DNSProviders?' +
+        '/namespaces/:namespaceId/dnsproviders?' +
         toSearchParamsString({
           resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
           hasDetailsView: true,
@@ -1494,7 +1493,7 @@ export function getStaticChildrenNodesForNamespace(
               pathSegment: ':dnsproviderName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/DNSProviders/:dnsproviderName?' +
+                '/namespaces/:namespaceId/dnsproviders/:dnsproviderName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/dns.gardener.cloud/v1alpha1',
                 }),
@@ -1512,7 +1511,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('custom-resource-definitions.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/CustomResourceDefinitions?' +
+        '/namespaces/:namespaceId/customresourcedefinitions?' +
         toSearchParamsString({
           fullResourceApiPath:
             '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
@@ -1530,7 +1529,7 @@ export function getStaticChildrenNodesForNamespace(
               navigationContext: 'customresourcedefinition',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/CustomResourceDefinitions/:CustomResourceDefinitionName?' +
+                '/customresourcedefinitions/:CustomResourceDefinitionName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/apiextensions.k8s.io/v1',
                 }),
@@ -1544,7 +1543,7 @@ export function getStaticChildrenNodesForNamespace(
                       resourceType: 'customresource',
                       viewUrl:
                         config.coreUIModuleUrl +
-                        '/CustomResourceDefinitions/:CustomResourceDefinitionName/:resourceVersion/:resourceName',
+                        '/customresourcedefinitions/:CustomResourceDefinitionName/:resourceVersion/:resourceName',
                       viewGroup: coreUIViewGroupName,
                     },
                   ],
@@ -1636,7 +1635,7 @@ export function getStaticChildrenNodesForNamespace(
       label: i18next.t('service-accounts.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/ServiceAccounts?' +
+        '/namespaces/:namespaceId/serviceaccounts?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
@@ -1654,7 +1653,7 @@ export function getStaticChildrenNodesForNamespace(
               resourceType: 'serviceaccounts',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/ServiceAccounts/:serviceAccountName?' +
+                '/namespaces/:namespaceId/serviceaccounts/:serviceAccountName?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
@@ -1701,7 +1700,7 @@ export function getStaticRootNodes(
       icon: 'dimension',
       viewUrl:
         config.coreUIModuleUrl +
-        '/Namespaces?' +
+        '/namespaces?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
@@ -1736,7 +1735,7 @@ export function getStaticRootNodes(
       icon: 'message-warning',
       viewUrl:
         config.coreUIModuleUrl +
-        '/Events?' +
+        '/events?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
@@ -1753,7 +1752,7 @@ export function getStaticRootNodes(
               resourceType: 'events',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/Events/:eventName?' +
+                '/events/:eventName?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
@@ -1783,7 +1782,7 @@ export function getStaticRootNodes(
       category: i18next.t('integration.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/Applications?' +
+        '/applications?' +
         toSearchParamsString({
           resourceApiPath:
             '/apis/applicationconnector.kyma-project.io/v1alpha1',
@@ -1803,7 +1802,7 @@ export function getStaticRootNodes(
               resourceType: 'applications',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/Applications/:name?' +
+                '/applications/:name?' +
                 toSearchParamsString({
                   resourceApiPath:
                     '/apis/applicationconnector.kyma-project.io/v1alpha1',
@@ -1815,7 +1814,7 @@ export function getStaticRootNodes(
                   resourceType: 'applications',
                   viewUrl:
                     config.coreUIModuleUrl +
-                    '/Applications/:name/:serviceName?' +
+                    '/applications/:name/:serviceName?' +
                     toSearchParamsString({
                       resourceApiPath:
                         '/apis/applicationconnector.kyma-project.io/v1alpha1',
@@ -1832,7 +1831,7 @@ export function getStaticRootNodes(
       pathSegment: 'addons-configs',
       navigationContext: 'clusteraddonsconfigurations',
       resourceType: 'clusteraddonsconfigurations',
-      label: i18next.t('cluster-addons.title'),
+      label: i18next.t('cluster-addons.navigation-title'),
       category: {
         label: i18next.t('integration.title'),
         icon: 'settings',
@@ -1840,7 +1839,7 @@ export function getStaticRootNodes(
       },
       viewUrl:
         config.coreUIModuleUrl +
-        '/ClusterAddonsConfigurations?' +
+        '/clusteraddonsconfigurations?' +
         toSearchParamsString({
           resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
           hasDetailsView: true,
@@ -1859,7 +1858,7 @@ export function getStaticRootNodes(
               resourceType: 'clusteraddonsconfigurations',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/ClusterAddonsConfigurations/:addonName?' +
+                '/clusteraddonsconfigurations/:addonName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
                 }),
@@ -1888,7 +1887,7 @@ export function getStaticRootNodes(
       category: i18next.t('storage.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/StorageClasses?' +
+        '/storageclasses?' +
         toSearchParamsString({
           resourceApiPath: '/apis/storage.k8s.io/v1',
           hasDetailsView: true,
@@ -1904,7 +1903,7 @@ export function getStaticRootNodes(
               resourceType: 'storageclasses',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/StorageClasses/:storageClassName?' +
+                '/storageclasses/:storageClassName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/storage.k8s.io/v1',
                 }),
@@ -1921,7 +1920,7 @@ export function getStaticRootNodes(
       label: i18next.t('pv.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/persistentVolumes?' +
+        '/persistentvolumes?' +
         toSearchParamsString({
           resourceApiPath: '/api/v1',
           hasDetailsView: true,
@@ -1938,7 +1937,7 @@ export function getStaticRootNodes(
               resourceType: 'persistentvolumes',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/persistentVolumes/:persistentVolumesName?' +
+                '/persistentvolumes/:persistentVolumesName?' +
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
@@ -1966,7 +1965,7 @@ export function getStaticRootNodes(
       label: i18next.t('cluster-roles.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/ClusterRoles?' +
+        '/clusterroles?' +
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
@@ -1982,7 +1981,7 @@ export function getStaticRootNodes(
               resourceType: 'clusterroles',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/ClusterRoles/:roleName?' +
+                '/clusterroles/:roleName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
                 }),
@@ -2000,7 +1999,7 @@ export function getStaticRootNodes(
       category: i18next.t('configuration.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/ClusterRoleBindings?' +
+        '/clusterrolebindings?' +
         toSearchParamsString({
           resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
           hasDetailsView: true,
@@ -2017,7 +2016,7 @@ export function getStaticRootNodes(
               resourceType: 'clusterrolebindings',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/ClusterRoleBindings/:clusterRoleBindingName?' +
+                '/clusterrolebindings/:clusterRoleBindingName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/rbac.authorization.k8s.io/v1',
                 }),
@@ -2035,7 +2034,7 @@ export function getStaticRootNodes(
       label: i18next.t('custom-resource-definitions.title'),
       viewUrl:
         config.coreUIModuleUrl +
-        '/CustomResourceDefinitions?' +
+        '/customresourcedefinitions?' +
         toSearchParamsString({
           resourceApiPath: '/apis/apiextensions.k8s.io/v1',
           hasDetailsView: true,
@@ -2052,7 +2051,7 @@ export function getStaticRootNodes(
               navigationContext: 'customresourcedefinition',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/CustomResourceDefinitions/:CustomResourceDefinitionName?' +
+                '/customresourcedefinitions/:CustomResourceDefinitionName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/apiextensions.k8s.io/v1',
                 }),
@@ -2066,7 +2065,7 @@ export function getStaticRootNodes(
                       resourceType: 'customresource',
                       viewUrl:
                         config.coreUIModuleUrl +
-                        '/CustomResourceDefinitions/:CustomResourceDefinitionName/:resourceVersion/:resourceName',
+                        '/customresourcedefinitions/:CustomResourceDefinitionName/:resourceVersion/:resourceName',
                       viewGroup: coreUIViewGroupName,
                     },
                   ],

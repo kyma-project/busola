@@ -1,12 +1,13 @@
 import React from 'react';
-import { ControlledBy } from 'react-shared';
+import { ControlledBy, ResourceDetails } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 import { ReplicaSetStatus } from './ReplicaSetStatus';
 import { HPASubcomponent } from '../HPA/HPASubcomponent';
 import { Selector } from 'shared/components/Selector/Selector';
+import { ReplicaSetsCreate } from '../../Create/ReplicaSets/ReplicaSets.create';
 
-export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
+export const ReplicasetsDetails = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -68,10 +69,12 @@ export const ReplicasetsDetails = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={[HPASubcomponent, MatchSelector]}
-      {...otherParams}
+      createResourceForm={ReplicaSetsCreate}
+      {...props}
     />
   );
 };
+export default ReplicasetsDetails;

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Link } from 'react-shared';
+import { Link, ResourcesList } from 'react-shared';
 import { Trans } from 'react-i18next';
+import { RolesCreate } from '../Create/Roles/Roles.create';
 
-function GenericRolesList({ descriptionKey, DefaultRenderer, ...otherParams }) {
+export function GenericRolesList({ descriptionKey, ...otherParams }) {
   const description = (
     <Trans i18nKey={descriptionKey}>
       <Link
@@ -12,15 +13,17 @@ function GenericRolesList({ descriptionKey, DefaultRenderer, ...otherParams }) {
     </Trans>
   );
 
-  return <DefaultRenderer description={description} {...otherParams} />;
+  return <ResourcesList description={description} {...otherParams} />;
 }
 
-export function RolesList(props) {
-  return <GenericRolesList descriptionKey={'roles.description'} {...props} />;
-}
-
-export function ClusterRolesList(props) {
+function RolesList(props) {
   return (
-    <GenericRolesList descriptionKey={'cluster-roles.description'} {...props} />
+    <GenericRolesList
+      descriptionKey={'roles.description'}
+      {...props}
+      createResourceForm={RolesCreate}
+    />
   );
 }
+
+export default RolesList;

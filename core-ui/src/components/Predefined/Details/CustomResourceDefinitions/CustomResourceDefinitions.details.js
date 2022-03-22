@@ -5,6 +5,7 @@ import {
   GenericList,
   EMPTY_TEXT_PLACEHOLDER,
   ModalWithForm,
+  ResourceDetails,
 } from 'react-shared';
 import { Button } from 'fundamental-react';
 
@@ -12,11 +13,9 @@ import { CRCreate } from './CRCreate';
 import { RelatedCRDsList } from './RelatedCRDsList';
 import { Tokens } from 'shared/components/Tokens';
 import { EventsList } from 'shared/components/EventsList';
+import { CustomResourceDefinitionsCreate } from '../../Create/CustomResourceDefinitions/CustomResourceDefinitons.create';
 
-export const CustomResourceDefinitionsDetails = ({
-  DefaultRenderer,
-  ...otherParams
-}) => {
+const CustomResourceDefinitionsDetails = props => {
   const { t, i18n } = useTranslation();
 
   const customColumns = [
@@ -50,7 +49,7 @@ export const CustomResourceDefinitionsDetails = ({
         title={t('custom-resource-definitions.subtitle.names')}
         entries={resource.spec.names ? [resource.spec.names] : []}
         headerRenderer={headerRenderer}
-        textSearchProperties={['spec.names.categories']}
+        showSearchField={false}
         rowRenderer={rowRenderer}
         testid="crd-names"
         i18n={i18n}
@@ -65,7 +64,7 @@ export const CustomResourceDefinitionsDetails = ({
 
     return (
       <EventsList
-        namespace={otherParams?.namespace}
+        namespace={props?.namespace}
         filter={eventFilter(spec?.names?.kind)}
       />
     );
@@ -74,7 +73,7 @@ export const CustomResourceDefinitionsDetails = ({
   const [showEditDialog, setShowEditDialog] = useState(false);
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={[
         ResourceNames,
@@ -111,7 +110,10 @@ export const CustomResourceDefinitionsDetails = ({
           );
         },
       ]}
-      {...otherParams}
+      createResourceForm={CustomResourceDefinitionsCreate}
+      {...props}
     />
   );
 };
+
+export default CustomResourceDefinitionsDetails;

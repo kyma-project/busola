@@ -1,8 +1,9 @@
 import React from 'react';
-import { ControlledByKind, Link } from 'react-shared';
+import { ControlledByKind, Link, ResourcesList } from 'react-shared';
 import { useTranslation, Trans } from 'react-i18next';
 import { DeploymentStatus } from '../Details/Deployment/DeploymentStatus';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
+import { DeploymentsCreate } from '../Create/Deployments/Deployments.create';
 
 const getImages = deployment => {
   const images =
@@ -12,9 +13,9 @@ const getImages = deployment => {
   return images;
 };
 
-export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
+const DeploymentsList = props => {
   const { t } = useTranslation();
-  const restartAction = useRestartAction(otherParams.resourceUrl);
+  const restartAction = useRestartAction(props.resourceUrl);
 
   const customColumns = [
     {
@@ -51,11 +52,13 @@ export const DeploymentsList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
       customListActions={[restartAction]}
-      {...otherParams}
+      createResourceForm={DeploymentsCreate}
+      {...props}
     />
   );
 };
+export default DeploymentsList;

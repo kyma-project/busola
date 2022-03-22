@@ -3,9 +3,16 @@ import { useTranslation } from 'react-i18next';
 
 import { RoleSubjects } from './RoleSubjects.js';
 import { RoleRef } from './RoleRef';
+import { ClusterRoleBindingsCreate } from '../../Create/RoleBindings/RoleBindings.create';
+import { ResourceDetails } from 'react-shared';
 
-export function RoleBindingsDetails(props) {
-  return <GenericRoleBindingDetails {...props} />;
+function RoleBindingsDetails(props) {
+  return (
+    <GenericRoleBindingDetails
+      {...props}
+      createResourceForm={ClusterRoleBindingsCreate}
+    />
+  );
 }
 
 export function ClusterRoleBindingsDetails(props) {
@@ -22,10 +29,11 @@ function GenericRoleBindingDetails({ DefaultRenderer, ...otherParams }) {
     },
   ];
   return (
-    <DefaultRenderer
+    <ResourceDetails
       {...otherParams}
       customColumns={customColumns}
       customComponents={[RoleSubjects]}
     />
   );
 }
+export default RoleBindingsDetails;

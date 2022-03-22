@@ -4,6 +4,8 @@ import SecretData from 'shared/components/Secret/SecretData';
 import { useTranslation } from 'react-i18next';
 import { CertificateData } from './CertificateData';
 import { HelmReleaseData } from 'components/HelmReleases/HelmReleaseData';
+import { SecretsCreate } from '../../Create/Secrets/Secrets.create';
+import { ResourceDetails } from 'react-shared';
 
 function HelmReleaseDataWrapper(secret) {
   if (secret.type !== 'helm.sh/release.v1') {
@@ -18,7 +20,7 @@ function HelmReleaseDataWrapper(secret) {
   );
 }
 
-export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
+const SecretsDetails = props => {
   const { t } = useTranslation();
   const Secret = resource => <SecretData key="secret-data" secret={resource} />;
 
@@ -38,10 +40,12 @@ export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customComponents={[Secret, CertificateData, HelmReleaseDataWrapper]}
       customColumns={customColumns}
-      {...otherParams}
+      createResourceForm={SecretsCreate}
+      {...props}
     />
   );
 };
+export default SecretsDetails;

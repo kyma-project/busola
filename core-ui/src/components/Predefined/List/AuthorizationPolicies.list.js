@@ -1,12 +1,9 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
-import { Trans } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
+import { Link, ResourcesList } from 'react-shared';
+import { AuthorizationPoliciesCreate } from '../Create/AuthorizationPolicies/AuthorizationPolicies.create';
 
-export const AuthorizationPoliciesList = ({
-  DefaultRenderer,
-  ...otherParams
-}) => {
+const AuthorizationPoliciesList = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -26,10 +23,12 @@ export const AuthorizationPoliciesList = ({
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       description={description}
       customColumns={customColumns}
-      {...otherParams}
+      createResourceForm={AuthorizationPoliciesCreate}
+      {...props}
     />
   );
 };
+export default AuthorizationPoliciesList;

@@ -8,10 +8,11 @@ import {
 } from 'components/ApiRules/components';
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import AccessStrategies from 'components/ApiRules/AccessStrategies/AccessStrategies';
+import ApiRuleServices from './Services';
+import { ResourceDetails } from 'react-shared';
+import { APIRulesCreate } from '../../Create/ApiRules/ApiRules.create';
 
-import { ApiRuleServices } from './Services';
-
-export const ApiRulesDetails = ({ DefaultRenderer, ...otherParams }) => {
+const ApiRulesDetails = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -39,10 +40,12 @@ export const ApiRulesDetails = ({ DefaultRenderer, ...otherParams }) => {
   };
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={[ApiRulesAccessStrategies, ApiRuleServices]}
-      {...otherParams}
+      createResourceForm={APIRulesCreate}
+      {...props}
     />
   );
 };
+export default ApiRulesDetails;

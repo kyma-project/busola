@@ -5,8 +5,10 @@ import { LayoutPanel } from 'fundamental-react';
 import { NetworkPolicyPorts } from './Ports';
 import { NetworkPolicyPeers } from './Peers';
 import { Selector } from 'shared/components/Selector/Selector';
+import { ResourceDetails } from 'react-shared';
+import { NetworkPoliciesCreate } from '../../Create/NetworkPolicies/NetworkPolicies.create';
 
-export function NetworkPoliciesDetails({ DefaultRenderer, ...otherParams }) {
+function NetworkPoliciesDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -77,10 +79,13 @@ export function NetworkPoliciesDetails({ DefaultRenderer, ...otherParams }) {
   const customComponents = [Ingresses, Egresses, PodSelector];
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={customComponents}
-      {...otherParams}
+      createResourceForm={NetworkPoliciesCreate}
+      {...props}
     />
   );
 }
+
+export default NetworkPoliciesDetails;
