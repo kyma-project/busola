@@ -13,7 +13,7 @@
     "buildConfig": "npm run copy-luigi && webpack --mode production --config webpack.config.js",
     "build:docker": "npm run copy-luigi && webpack --mode production --config webpack.config.js --env IS_DOCKER=true",
     "buildConfig:watch": "npm run copy-luigi && webpack --config webpack.config.js --watch",
-    "copy-luigi": "cp -a ./node_modules/@luigi-project/core ./src/assets/libs/luigi-core"
+    "copy-luigi": "mkdir -p src/assets/libs/luigi-core && cp -a node_modules/@luigi-project/core/* src/assets/libs/luigi-core"
   },
   "private": true,
   "dependencies": {

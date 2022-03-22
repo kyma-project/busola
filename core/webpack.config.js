@@ -5,6 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = env => {
   return {
@@ -28,9 +29,16 @@ module.exports = env => {
             rootMode: 'root',
           },
         },
+        {
+          test: /\.css$/,
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        },
       ],
     },
     plugins: [
+      new MiniCssExtractPlugin({
+        filename: './src/assets/libs/luigi-core/luigi.[contenthash].css',
+      }),
       new CopyWebpackPlugin([
         {
           from:
