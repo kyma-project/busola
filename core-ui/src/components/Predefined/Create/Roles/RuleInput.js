@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Button } from 'fundamental-react';
+import * as jp from 'jsonpath';
 import { useMicrofrontendContext } from 'react-shared';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
@@ -64,6 +66,33 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
     '*',
   ]);
 
+  const addAllApiGroups = () => {
+    jp.value(
+      rule,
+      '$.apiGroups',
+      apiGroupsInputOptions.map(g => g.key),
+    );
+    setRules([...rules]);
+  };
+
+  const addAllResources = () => {
+    jp.value(
+      rule,
+      '$.resources',
+      availableResources.filter(r => r !== '*'),
+    );
+    setRules([...rules]);
+  };
+
+  const addAllVerbs = () => {
+    jp.value(
+      rule,
+      '$.verbs',
+      verbs.filter(r => r !== '*'),
+    );
+    setRules([...rules]);
+  };
+
   return (
     <ResourceForm.Wrapper
       isAdvanced={isAdvanced}
@@ -76,18 +105,33 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         options={apiGroupsInputOptions}
         emptyStringKey={EMPTY_API_GROUP_KEY}
         defaultOpen
+        actions={
+          <Button compact onClick={addAllApiGroups}>
+            {t('roles.add-all')}
+          </Button>
+        }
       />
       <ComboboxArrayInput
         title={t('roles.headers.resources')}
         propertyPath="$.resources"
         options={availableResources.map(i => ({ key: i, text: i }))}
         defaultOpen
+        actions={
+          <Button compact onClick={addAllResources}>
+            {t('roles.add-all')}
+          </Button>
+        }
       />
       <ComboboxArrayInput
         title={t('roles.headers.verbs')}
         propertyPath="$.verbs"
         options={verbs.map(i => ({ key: i, text: i }))}
         defaultOpen
+        actions={
+          <Button compact onClick={addAllVerbs}>
+            {t('roles.add-all')}
+          </Button>
+        }
       />
       {isAdvanced && (
         <TextArrayInput
