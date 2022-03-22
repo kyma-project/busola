@@ -1505,50 +1505,28 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
-      pathSegment: 'customresourcedefinitions',
-      resourceType: 'customresourcedefinitions',
-      navigationContext: 'customresourcedefinitions',
-      label: i18next.t('custom-resource-definitions.title'),
+      pathSegment: 'customresources',
+      navigationContext: 'customresources',
+      label: i18next.t('custom-resources.title'),
       viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/customresourcedefinitions?' +
-        toSearchParamsString({
-          fullResourceApiPath:
-            '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
-          hasDetailsView: true,
-        }),
+        config.coreUIModuleUrl + '/namespaces/:namespaceId/customresources',
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
       children: [
         {
-          pathSegment: 'details',
+          pathSegment: ':crdName',
+          viewUrl:
+            config.coreUIModuleUrl +
+            '/namespaces/:namespaceId/customresources/:crdName',
+          navigationContext: 'customresourcedefinition',
+          viewGroup: coreUIViewGroupName,
           children: [
             {
-              pathSegment: ':CustomResourceDefinitionName',
-              resourceType: 'customresourcedefinitions',
-              navigationContext: 'customresourcedefinition',
+              pathSegment: ':crName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/customresourcedefinitions/:CustomResourceDefinitionName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/apiextensions.k8s.io/v1',
-                }),
+                '/namespaces/:namespaceId/customresources/details/:crdName/:crName',
               viewGroup: coreUIViewGroupName,
-              children: [
-                {
-                  pathSegment: ':resourceVersion',
-                  children: [
-                    {
-                      pathSegment: ':resourceName',
-                      resourceType: 'customresource',
-                      viewUrl:
-                        config.coreUIModuleUrl +
-                        '/customresourcedefinitions/:CustomResourceDefinitionName/:resourceVersion/:resourceName',
-                      viewGroup: coreUIViewGroupName,
-                    },
-                  ],
-                },
-              ],
             },
           ],
         },
@@ -2056,27 +2034,51 @@ export function getStaticRootNodes(
                   resourceApiPath: '/apis/apiextensions.k8s.io/v1',
                 }),
               viewGroup: coreUIViewGroupName,
-              children: [
-                {
-                  pathSegment: ':resourceVersion',
-                  children: [
-                    {
-                      pathSegment: ':resourceName',
-                      resourceType: 'customresource',
-                      viewUrl:
-                        config.coreUIModuleUrl +
-                        '/customresourcedefinitions/:CustomResourceDefinitionName/:resourceVersion/:resourceName',
-                      viewGroup: coreUIViewGroupName,
-                    },
-                  ],
-                },
-              ],
+              // children: [
+              //   {
+              //     pathSegment: ':resourceVersion',
+              //     children: [
+              //       {
+              //         pathSegment: ':resourceName',
+              //         resourceType: 'customresource',
+              //         viewUrl:
+              //           config.coreUIModuleUrl +
+              //           '/customresourcedefinitions/:CustomResourceDefinitionName/:resourceVersion/:resourceName',
+              //         viewGroup: coreUIViewGroupName,
+              //       },
+              //     ],
+              //   },
+              // ],
             },
           ],
         },
       ],
     },
-
+    {
+      category: i18next.t('configuration.title'),
+      pathSegment: 'customresources',
+      navigationContext: 'customresources',
+      label: i18next.t('custom-resources.title'),
+      viewUrl: config.coreUIModuleUrl + '/customresources',
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: ':crdName',
+          viewUrl: config.coreUIModuleUrl + '/customresources/:crdName',
+          navigationContext: 'customresourcedefinition',
+          viewGroup: coreUIViewGroupName,
+          children: [
+            {
+              pathSegment: ':crName',
+              viewUrl:
+                config.coreUIModuleUrl + '/customresources/:crdName/:crName',
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
     // OTHER
     {
       pathSegment: 'preferences',

@@ -481,6 +481,7 @@ common:
     loading: Loading...
     logs: Logs
     name: Name
+    namespace: Namespace
     owner: Controlled By
     pods: Pods
     resources: Resources
@@ -757,6 +758,10 @@ custom-resource-definitions:
     not-served: This version is not served using REST APIs.
     served: This version is served using REST APIs.
     storage: Use this version when persisting custom resources to storage.
+custom-resources:
+  description: <0>Custom Resources</0> extend the Kubernetes API. You can define your own Custom Resource by creating a <1>Custom Resource Definition</1> first.
+  schema-preview: Schema Preview
+  title: Custom Resources
 daemon-sets:
   description: <0>Daemon Set</0> ensures that replicated Pods are running across a set of available nodes.
   images: Images

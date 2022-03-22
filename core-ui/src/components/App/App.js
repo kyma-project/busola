@@ -10,7 +10,6 @@ import {
 } from 'react-shared';
 import { ApplicationServiceDetails } from 'components/Predefined/Details/Application/ApplicationServicesDetails/ApplicationServicesDetails';
 import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
-import { CustomResource } from 'components/Predefined/Details/CustomResourceDefinitions/CustomResources.details';
 import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
 import { getResourceUrl } from 'shared/helpers';
 import { ClusterList } from 'components/Clusters/views/ClusterList';
@@ -21,6 +20,9 @@ import { useSentry } from '../../hooks/useSentry';
 import { HelmReleasesList } from 'components/HelmReleases/HelmReleasesList';
 import { HelmReleasesDetails } from 'components/HelmReleases/HelmReleasesDetails';
 import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
+import { CRDGroupList, CustomResourceGroupList } from './CRDGroupList';
+import { CustomResourcesGroup } from './CustomResourcesGroup';
+import { CustomResource } from './../Predefined/Details/CustomResourceDefinitions/CustomResources.details';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -50,7 +52,6 @@ export default function App() {
     // force rerender on cluster change
     <Routes key={cluster?.name}>
       {serviceCatalogRoutes}
-
       <Route
         path="/no-permissions"
         element={
@@ -77,17 +78,14 @@ export default function App() {
         }
       />
       <Route path="/preferences" element={<Preferences />} />
-
       <Route
         path="/applications/:name/:serviceName"
         element={<RoutedApplicationServiceDetails />}
       />
-
       <Route
         path="/namespaces/:namespaceId/pods/:podName/containers/:containerName"
         element={<RoutedContainerDetails />}
       />
-
       <Route
         path="/namespaces/:namespaceId/helm-releases"
         element={
@@ -96,7 +94,6 @@ export default function App() {
           </WithTitle>
         }
       />
-
       <Route
         path="/namespaces/:namespaceId/helm-releases/:releaseName"
         element={
@@ -105,12 +102,35 @@ export default function App() {
           </WithTitle>
         }
       />
-
       <Route
-        path="/customresourcedefinitions/:customResourceDefinitionName/:resourceVersion/:resourceName"
-        element={<RoutedCustomResourceDetails />}
+        path="/customresources"
+        element={
+          <WithTitle title={t('custom-resources.title')}>
+            <CustomResourceGroupList />
+          </WithTitle>
+        }
       />
-
+      <Route
+        path="/customresourcedefinitions"
+        element={
+          <WithTitle title={t('custom-resource-definitions.title')}>
+            <CRDGroupList />
+          </WithTitle>
+        }
+      />
+      <Route path="/customresources/:crdName" element={<RoutedCRDList />} />
+      <Route
+        path="/customresources/:crdName/:crName"
+        element={<RoutedCRDDetails />}
+      />
+      <Route
+        path="/namespaces/:namespaceId/customresources/"
+        element={<RoutedNamespacedCRDGroupList />}
+      />
+      <Route
+        path="/namespaces/:namespaceId/customresources/:crdName"
+        element={<RoutedCRDList />}
+      />
       <Route
         path="/namespaces/:namespaceId/:resourceType/:resourceName"
         element={<RoutedResourceDetails />}
@@ -123,7 +143,6 @@ export default function App() {
         path="/:resourceType/:resourceName"
         element={<RoutedResourceDetails />}
       />
-
       <Route path="/:resourceType" element={<RoutedResourcesList />} />
       <Route path="" element={<MainFrameRedirection />} />
     </Routes>
@@ -169,21 +188,45 @@ function RoutedContainerDetails() {
   );
 }
 
-function RoutedCustomResourceDetails() {
-  const routerParams = useParams();
-  const customResourceDefinitionName = decodeURIComponent(
-    routerParams.customResourceDefinitionName,
+function RoutedNamespacedCRDGroupList() {
+  const { t } = useTranslation();
+  const { namespaceId } = useParams();
+
+  return (
+    <WithTitle title={t('custom-resources.title')}>
+      <CustomResourceGroupList namespace={namespaceId} />
+    </WithTitle>
   );
-  const resourceVersion = decodeURIComponent(routerParams.resourceVersion);
-  const resourceName = decodeURIComponent(routerParams.resourceName);
+}
 
-  const params = {
-    customResourceDefinitionName,
-    resourceVersion,
-    resourceName,
-  };
+// function RoutedNamespacedCRDList() {
+//   const { t } = useTranslation();
+//   const { namespaceId, crdName } = useParams();
 
-  return <CustomResource params={params} />;
+//   return (
+//     <WithTitle title={t('custom-resources.title')}>
+//       <CustomResourcesGroup namespace={namespaceId} crdName={crdName} />
+//     </WithTitle>
+//   );
+// }
+
+function RoutedCRDList() {
+  const { crdName, namespaceId } = useParams();
+
+  return <CustomResourcesGroup crdName={crdName} namespace={namespaceId} />;
+}
+
+function RoutedCRDDetails() {
+  const { crdName, crName } = useParams();
+
+  return (
+    <CustomResource
+      params={{
+        customResourceDefinitionName: crdName,
+        resourceName: crName,
+      }}
+    />
+  );
 }
 
 function RoutedResourcesList() {

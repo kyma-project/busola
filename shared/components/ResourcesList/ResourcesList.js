@@ -95,25 +95,51 @@ export function ResourcesList(props) {
   );
 }
 
-function Resources({
+function Resources(props) {
+  const {
+    windowTitle,
+    resourceName,
+    resourceType,
+    filter,
+    resourceUrl,
+    skipDataLoading,
+  } = props;
+  useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
+
+  const { loading, error, data: resources, silentRefetch } = useGetList(filter)(
+    resourceUrl,
+    {
+      pollingInterval: 3000,
+      skip: skipDataLoading,
+    },
+  );
+
+  return (
+    <ResourceListRenderer
+      loading={loading}
+      error={error}
+      resources={resources}
+      silentRefetch={silentRefetch}
+      {...props}
+    />
+  );
+}
+
+export function ResourceListRenderer({
   resourceUrl,
   resourceType,
   resourceName,
   namespace,
-  customColumns,
+  customColumns = [],
   createResourceForm: CreateResourceForm,
   createActionLabel,
   hasDetailsView,
   fixedPath,
   title,
   showTitle,
-  filter,
   listHeaderActions,
-  windowTitle,
   readOnly,
-  isCompact = false,
   navigateFn,
-  skipDataLoading = false,
   testid,
   i18n,
   textSearchProperties = [],
@@ -121,8 +147,14 @@ function Resources({
   customListActions = [],
   createFormProps,
   pagination,
+  showNamespace = false,
+  loading,
+  error,
+  resources,
+  silentRefetch = () => {},
+  showSearchField = true,
+  nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
 }) {
-  useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
   const { t } = useTranslation(['translation'], { i18n });
 
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
@@ -141,10 +173,6 @@ function Resources({
   } = useYamlEditor();
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);
-
-  const { loading = true, error, data: resources, silentRefetch } = useGetList(
-    filter,
-  )(resourceUrl, { pollingInterval: 3000, skip: skipDataLoading });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => closeEditor(), [namespace]);
@@ -185,7 +213,7 @@ function Resources({
   const handleResourceEdit = resource => {
     setEditedSpec(
       resource,
-      resource.metadata.name + '.yaml',
+      nameSelector(resource) + '.yaml',
       handleSaveClick(resource),
       isProtected(resource),
     );
@@ -247,6 +275,7 @@ function Resources({
 
   const headerRenderer = () => [
     t('common.headers.name'),
+    ...(showNamespace ? [t('common.headers.namespace')] : []),
     t('common.headers.created'),
     t('common.headers.labels'),
     ...customColumns.map(col => col.header),
@@ -267,11 +296,12 @@ function Resources({
           navigateToDetails(resourceType, entry.metadata.name);
         }}
       >
-        {entry.metadata.name}
+        {nameSelector(entry)}
       </Link>
     ) : (
-      <b>{entry.metadata.name}</b>
+      <b>{nameSelector(entry)}</b>
     ),
+    ...(showNamespace ? [entry.metadata.namespace] : []),
     <ReadableCreationTimestamp timestamp={entry.metadata.creationTimestamp} />,
     <div style={{ maxWidth: '36rem' /*TODO*/ }}>
       <Labels labels={entry.metadata.labels} shortenLongLabels />
@@ -330,7 +360,7 @@ function Resources({
       />
       <DeleteMessageBox
         resource={activeResource}
-        resourceUrl={`${resourceUrl}/${activeResource?.metadata.name}`}
+        resourceUrl={`${resourceUrl}/${nameSelector(activeResource)}`}
       />
       <GenericList
         title={
@@ -340,9 +370,11 @@ function Resources({
         }
         textSearchProperties={[
           'metadata.name',
+          'metadata.namespace',
           'metadata.labels',
           ...textSearchProperties,
         ]}
+        showSearchField={showSearchField}
         actions={actions}
         entries={resources || []}
         headerRenderer={headerRenderer}

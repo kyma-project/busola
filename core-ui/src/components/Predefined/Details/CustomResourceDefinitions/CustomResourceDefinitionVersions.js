@@ -1,110 +1,13 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { LayoutPanel } from 'fundamental-react';
-import * as jp from 'jsonpath';
 
-import {
-  GenericList,
-  StatusBadge,
-  prettifyNamePlural,
-  EMPTY_TEXT_PLACEHOLDER,
-  useMicrofrontendContext,
-} from 'react-shared';
+import { GenericList, StatusBadge, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
-import { ComponentForList } from 'shared/getComponents';
 import { SchemaViewer } from 'shared/components/SchemaViewer/SchemaViewer';
-import { navigateToResource } from 'shared/helpers/universalLinks';
 import './CustomResourceDefinitionVersions.scss';
-
-const CustomResources = ({ resource, namespace, version, i18n }) => {
-  const { t } = useTranslation();
-  const { group, names } = resource.spec;
-  const name = names.plural;
-  const {
-    clusterNodes,
-    namespaceNodes,
-    namespaceId,
-  } = useMicrofrontendContext();
-
-  if (!version.served) {
-    return (
-      <GenericList
-        title={prettifyNamePlural(undefined, name)}
-        notFoundMessage={t('custom-resource-definitions.messages.no-entries')}
-        entries={[]}
-        headerRenderer={() => []}
-        rowRenderer={() => []}
-        i18n={i18n}
-      />
-    );
-  }
-
-  const resourceUrl = namespace
-    ? `/apis/${group}/${version.name}/namespaces/${namespace}/${name}`
-    : `/apis/${group}/${version.name}/${name}`;
-
-  const navigateFn = cr => {
-    const crdNamePlural = resource.spec.names.plural;
-    const clusterNode = clusterNodes.find(
-      res => res.resourceType === crdNamePlural,
-    );
-    const namespaceNode = namespaceNodes.find(
-      res => res.resourceType === crdNamePlural,
-    );
-
-    if (clusterNode) {
-      navigateToResource({
-        name: cr.metadata.name,
-        kind: clusterNode.pathSegment,
-      });
-    } else if (namespaceNode) {
-      navigateToResource({
-        namespace: namespaceId,
-        name: cr.metadata.name,
-        kind: namespaceNode.pathSegment,
-      });
-    } else {
-      LuigiClient.linkManager()
-        .fromClosestContext()
-        .navigate(`${version.name}/${cr.metadata.name}`);
-    }
-  };
-
-  const getJsonPath = (resource, jsonPath) => {
-    const value =
-      jp.value(resource, jsonPath.substring(1)) || EMPTY_TEXT_PLACEHOLDER;
-
-    if (typeof value === 'boolean') {
-      return value.toString();
-    } else if (typeof value === 'object') {
-      return JSON.stringify(value);
-    } else {
-      return value;
-    }
-  };
-
-  const customColumns = version.additionalPrinterColumns?.map(column => ({
-    header: column.name,
-    value: resource => getJsonPath(resource, column.jsonPath),
-  }));
-  // CRD can have infinite number of additionalPrinterColumns what would be impossible to fit into the table
-  if (customColumns?.length > 5) customColumns.length = 5;
-
-  const params = {
-    hasDetailsView: true,
-    navigateFn,
-    resourceUrl,
-    resourceType: name,
-    namespace,
-    isCompact: true,
-    showTitle: true,
-    customColumns,
-    testid: 'crd-custom-resources',
-  };
-
-  return <ComponentForList name={name} params={params} />;
-};
+import { CustomResources } from './CustomResources';
 
 const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
   const { t, i18n } = useTranslation();
@@ -175,7 +78,7 @@ export const CustomResourceDefinitionVersions = resource => {
         )}
       </LayoutPanel.Header>
       <CustomResources
-        resource={resource}
+        crd={resource}
         version={storageVersion}
         namespace={namespace}
         i18n={i18n}

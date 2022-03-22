@@ -10,12 +10,6 @@ export const CustomResourceDefinitionsList = ({
 }) => {
   const { t } = useTranslation();
 
-  const { namespace } = otherParams;
-
-  // to decide if we want 2 separate lists for namespaced/cluster scoped CRDs
-  const filterCRDs = (crd, namespace) =>
-    (namespace && crd.spec.scope === 'Namespaced') ||
-    (!namespace && crd.spec.scope === 'Cluster');
   const customColumns = [
     {
       header: t('custom-resource-definitions.headers.scope'),
@@ -43,7 +37,6 @@ export const CustomResourceDefinitionsList = ({
     <DefaultRenderer
       resourceName={t('custom-resource-definitions.title')}
       textSearchProperties={['spec.names.categories']}
-      filter={crd => filterCRDs(crd, namespace)}
       description={description}
       customColumns={customColumns}
       {...otherParams}
