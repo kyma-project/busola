@@ -20,7 +20,7 @@ import './StatsPanel.scss';
 
 const DATA_POINTS = 60;
 
-export function SingleGraph({ type, timeSpan, metric, ...props }) {
+export function SingleGraph({ type, timeSpan, metric, path, ...props }) {
   const { t } = useTranslation();
   const {
     data,
@@ -30,7 +30,7 @@ export function SingleGraph({ type, timeSpan, metric, ...props }) {
     loading,
     startDate,
     endDate,
-  } = usePrometheus(type, metric, {
+  } = usePrometheus(type, metric, path, {
     items: DATA_POINTS,
     timeSpan,
     ...props,
@@ -58,7 +58,14 @@ export function SingleGraph({ type, timeSpan, metric, ...props }) {
   );
 }
 
-export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
+export function DualGraph({
+  type,
+  timeSpan,
+  metric1,
+  metric2,
+  path,
+  ...props
+}) {
   const { t } = useTranslation();
   const {
     data: data1,
@@ -76,6 +83,7 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
   const { data: data2, error: error2, loading: loading2 } = usePrometheus(
     type,
     metric2,
+    path,
     {
       items: DATA_POINTS,
       timeSpan,
@@ -136,6 +144,10 @@ export function StatsPanel({ type, ...props }) {
     return '';
   }
 
+  let path = features.PROMETHEUS?.config?.path;
+  path = path.startsWith('/') ? path.substring(1) : path;
+  path = path.endsWith('/') ? path.substring(0, path.length - 1) : path;
+
   const graphOptions =
     type === 'pod'
       ? ['cpu', 'memory', 'network']
@@ -176,6 +188,7 @@ export function StatsPanel({ type, ...props }) {
             metric={metric}
             className={metric}
             timeSpan={timeSpans[timeSpan]}
+            path={path}
             {...props}
           />
         )}
@@ -187,6 +200,7 @@ export function StatsPanel({ type, ...props }) {
             className={metric}
             timeSpan={timeSpans[timeSpan]}
             labels={[t('graphs.network-up'), t('graphs.network-down')]}
+            path={path}
             {...props}
           />
         )}
