@@ -3,7 +3,8 @@
     "baseUrl": "src",
     "paths": {
       "helpers/*": ["./service-catalog-ui/helpers/*"],
-      "shared/*": ["./shared/*"]
+      "shared/*": ["./shared/*"],
+      "react-shared/*": ["./shared-repo/*"]
     }
   },
   "include": ["src"]

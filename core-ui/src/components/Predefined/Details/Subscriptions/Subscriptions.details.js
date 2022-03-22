@@ -3,13 +3,18 @@ import { useTranslation } from 'react-i18next';
 
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { GoToDetailsLink, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import {
+  GoToDetailsLink,
+  EMPTY_TEXT_PLACEHOLDER,
+  ResourceDetails,
+} from 'react-shared';
 
 import { SubscriptionConditionStatus } from 'shared/components/SubscriptionConditionStatus';
 import { SubscriptionConditions } from './SubscriptionConditions';
 
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
+import { SubscriptionsCreate } from '../../Create/Subscriptions/Subscriptions.create';
 
 import './EventFilters.scss';
 
@@ -79,7 +84,7 @@ const SubscriptionsFilter = subscription => {
   );
 };
 
-export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
+const SubscriptionsDetails = props => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -114,19 +119,22 @@ export const SubscriptionsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   const Events = () => (
     <EventsList
-      namespace={otherParams.namespace}
-      filter={filterByResource('Subscription', otherParams.resourceName)}
+      namespace={props.namespace}
+      filter={filterByResource('Subscription', props.resourceName)}
       hideInvolvedObjects={true}
     />
   );
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customComponents={[SubscriptionConditions, SubscriptionsFilter, Events]}
       customColumns={customColumns}
       resourceTitle={t('subscriptions.title')}
       singularName={t('subscriptions.name_singular')}
-      {...otherParams}
+      createResourceForm={SubscriptionsCreate}
+      {...props}
     />
   );
 };
+
+export default SubscriptionsDetails;

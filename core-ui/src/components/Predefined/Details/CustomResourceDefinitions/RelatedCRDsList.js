@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ComponentForList } from 'shared/getComponents';
+import CustomResourceDefinitionsList from 'components/Predefined/List/CustomResourceDefinitions.list';
 
 export function RelatedCRDsList(resource) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const resourceUrl = '/apis/apiextensions.k8s.io/v1/customresourcedefinitions';
 
   const filterByCategories = crd => {
@@ -16,10 +16,8 @@ export function RelatedCRDsList(resource) {
     );
   };
   return (
-    <ComponentForList
-      name="customResourceDefinitionsList"
-      key="common-categories-list"
-      params={{
+    <CustomResourceDefinitionsList
+      {...{
         hasDetailsView: true,
         fixedPath: true,
         resourceUrl,
@@ -29,6 +27,8 @@ export function RelatedCRDsList(resource) {
         filter: filterByCategories,
         title: t('custom-resource-definitions.subtitle.related-crds'),
         pagination: { itemsPerPage: 5 },
+        hideCreateOption: true,
+        i18n,
       }}
     />
   );
