@@ -1,6 +1,6 @@
 Cypress.Commands.add('inspectList', (resource, resourceName) => {
   cy.getLeftNav()
-    .contains(resource)
+    .contains('a', resource)
     .click();
 
   cy.getIframeBody()
