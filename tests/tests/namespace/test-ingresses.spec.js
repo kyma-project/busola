@@ -70,16 +70,6 @@ context('Test Ingresses', () => {
   });
 
   it('Check Ingresses list', () => {
-    cy.getLeftNav()
-      .find('[data-testid=ingresses_ingresses]')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="search-input"]')
-      .type(NAME, { force: true });
-
-    cy.getIframeBody()
-      .contains('tbody tr td a', NAME)
-      .click({ force: true });
+    cy.inspectList('Ingresses', NAME);
   });
 });

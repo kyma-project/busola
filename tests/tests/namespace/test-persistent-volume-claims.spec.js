@@ -76,7 +76,7 @@ context('Test Persistent Volume Claims', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('a', Cypress.env('STORAGE_CLASS_NAME'))
+      .contains(Cypress.env('STORAGE_CLASS_NAME'))
       .should('be.visible');
 
     cy.getIframeBody()
@@ -84,54 +84,13 @@ context('Test Persistent Volume Claims', () => {
       .should('be.visible');
   });
 
-  it('Check the Persistent Volume Claims list', () => {
-    cy.getLeftNav()
-      .contains('Persistent Volume Claims')
+  it('Check the Persistent Volume Claims list and delete', () => {
+    cy.getIframeBody()
+      .contains('a', 'Persistent Volume Claims')
       .click();
 
-    cy.getIframeBody()
-      .contains(PVC_NAME)
-      .parent()
-      .getIframeBody()
-      .contains(CAPACITY_VALUE);
-  });
+    cy.getIframeBody().contains(CAPACITY_VALUE);
 
-  it('Delete a Persistent Volume Claim', () => {
-    cy.getIframeBody()
-      .contains('.fd-table__row', PVC_NAME)
-      .find('button[data-testid="delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .contains('.fd-table__row', PVC_NAME)
-      .should('not.exist');
-  });
-
-  it('Delete the connected Storage Class', () => {
-    cy.get('[data-testid=luigi-topnav-logo]').click();
-
-    cy.navigateTo('Storage', 'Storage Classes');
-
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="open-search"]')
-      .type(Cypress.env('STORAGE_CLASS_NAME'));
-
-    cy.getIframeBody()
-      .find('tbody tr [aria-label="Delete"]')
-      .click({ force: true });
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .contains(Cypress.env('STORAGE_CLASS_NAME'), {
-        timeout: 10000,
-      })
-      .should('not.exist');
+    cy.deleteFromGenericList(PVC_NAME);
   });
 });

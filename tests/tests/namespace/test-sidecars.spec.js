@@ -71,29 +71,6 @@ context('Test Sidecars', () => {
   });
 
   it('Check the Sidecars list', () => {
-    cy.getLeftNav()
-      .contains('Sidecars')
-      .click();
-
-    cy.getIframeBody()
-      .contains(SIDECAR_NAME)
-      .parent()
-      .getIframeBody()
-      .contains(OUTBOUND_TRAFFIC_POLICY);
-  });
-
-  it('Delete a Sidecar', () => {
-    cy.getIframeBody()
-      .contains('.fd-table__row', SIDECAR_NAME)
-      .find('button[data-testid="delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .contains('.fd-table__row', SIDECAR_NAME)
-      .should('not.exist');
+    cy.inspectList('Sidecars', SIDECAR_NAME);
   });
 });

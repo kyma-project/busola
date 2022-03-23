@@ -140,12 +140,8 @@ context('Test DNS Providers', () => {
   });
 
   it('Inspect list', () => {
-    cy.getLeftNav()
-      .contains('DNS Providers')
-      .click();
+    cy.inspectList('DNS Providers', PROVIDER_NAME);
 
-    // name
-    cy.getIframeBody().contains(PROVIDER_NAME);
     // label
     cy.getIframeBody().contains('is-edited=yes');
     // type
