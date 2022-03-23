@@ -1,12 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ControlledBy } from 'react-shared';
+import { ControlledBy, ResourceDetails } from 'react-shared';
 
 import { StatefulSetPods } from './StatefulSetPods';
 import { HPASubcomponent } from '../HPA/HPASubcomponent';
 import { Selector } from 'shared/components/Selector/Selector';
+import { StatefulSetsCreate } from '../../Create/StatefulSets/StatefulSets.create';
 
-export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
+function StatefulSetsDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -31,11 +32,12 @@ export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
     />
   );
   return (
-    <DefaultRenderer
-      resourceTitle={t('stateful-sets.title')}
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={[HPASubcomponent, MatchSelector]}
-      {...otherParams}
+      createResourceForm={StatefulSetsCreate}
+      {...props}
     />
   );
 }
+export default StatefulSetsDetails;

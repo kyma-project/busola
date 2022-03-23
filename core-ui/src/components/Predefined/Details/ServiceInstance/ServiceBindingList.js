@@ -1,11 +1,10 @@
 import React from 'react';
-import { ComponentForList } from 'shared/getComponents';
-
+import ServiceBindingsList from 'components/Predefined/List/ServiceBindings.list';
+import { useTranslation } from 'react-i18next';
 export function ServiceBindingList(instance) {
+  const { i18n } = useTranslation();
   if (!instance) return null;
-
   const namespace = instance.metadata.namespace;
-
   const listParams = {
     hasDetailsView: true,
     fixedPath: true,
@@ -17,12 +16,7 @@ export function ServiceBindingList(instance) {
     filter: binding =>
       binding.spec.serviceInstanceName === instance.metadata.name,
     omitColumnsIds: ['service-instance-name'],
+    i18n,
   };
-  return (
-    <ComponentForList
-      name="serviceBindingsList"
-      params={listParams}
-      key="instance-binding-list"
-    />
-  );
+  return <ServiceBindingsList {...listParams} />;
 }

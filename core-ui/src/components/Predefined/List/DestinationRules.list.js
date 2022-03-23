@@ -1,9 +1,10 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
-import { Trans } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
+import { Link, ResourcesList } from 'react-shared';
 
-export const DestinationRulesList = ({ DefaultRenderer, ...otherParams }) => {
+import { DestinationRulesCreate } from '../Create/DestinationRules/DestinationRules.create';
+
+const DestinationRulesList = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -23,11 +24,14 @@ export const DestinationRulesList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       resourceName={t('destination-rules.title')}
       customColumns={customColumns}
       description={description}
-      {...otherParams}
+      createResourceForm={DestinationRulesCreate}
+      {...props}
     />
   );
 };
+
+export default DestinationRulesList;

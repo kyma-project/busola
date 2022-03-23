@@ -8,7 +8,6 @@ import {
   useMicrofrontendContext,
 } from 'react-shared';
 import { useTranslation } from 'react-i18next';
-import { ComponentForList } from 'shared/getComponents';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 
 export function CustomResources({
@@ -110,5 +109,7 @@ export function CustomResources({
     showNamespace,
   };
 
-  return <ComponentForList name={name} params={params} />;
+  return null;
+
+  // return <ComponentForList name={name} params={params} />;
 }

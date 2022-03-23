@@ -1,13 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link, ResourcesList } from 'react-shared';
 import { Trans } from 'react-i18next';
 import { Tokens } from 'shared/components/Tokens';
+import { CustomResourceDefinitionsCreate } from '../Create/CustomResourceDefinitions/CustomResourceDefinitons.create';
 
-export const CustomResourceDefinitionsList = ({
-  DefaultRenderer,
-  ...otherParams
-}) => {
+const CustomResourceDefinitionsList = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -34,12 +32,16 @@ export const CustomResourceDefinitionsList = ({
   );
 
   return (
-    <DefaultRenderer
-      resourceName={t('custom-resource-definitions.title')}
+    <ResourcesList
       textSearchProperties={['spec.names.categories']}
       description={description}
       customColumns={customColumns}
-      {...otherParams}
+      createResourceForm={
+        props.hideCreateOption ? null : CustomResourceDefinitionsCreate
+      }
+      {...props}
     />
   );
 };
+
+export default CustomResourceDefinitionsList;

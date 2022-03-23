@@ -10,8 +10,7 @@ import {
 } from 'react-shared';
 import { ApplicationServiceDetails } from 'components/Predefined/Details/Application/ApplicationServicesDetails/ApplicationServicesDetails';
 import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
-import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
-import { getResourceUrl } from 'shared/helpers';
+import { CustomResource } from 'components/Predefined/Details/CustomResourceDefinitions/CustomResources.details';
 import { ClusterList } from 'components/Clusters/views/ClusterList';
 import { NoPermissions } from 'components/NoPermissions/NoPermissions';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
@@ -19,10 +18,10 @@ import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 import { useSentry } from '../../hooks/useSentry';
 import { HelmReleasesList } from 'components/HelmReleases/HelmReleasesList';
 import { HelmReleasesDetails } from 'components/HelmReleases/HelmReleasesDetails';
-import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
 import { CRDGroupList, CustomResourceGroupList } from './CRDGroupList';
 import { CustomResourcesGroup } from './CustomResourcesGroup';
-import { CustomResource } from './../Predefined/Details/CustomResourceDefinitions/CustomResources.details';
+
+import resources from '../../routing/resources';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -60,6 +59,8 @@ export default function App() {
           </WithTitle>
         }
       />
+
+      {/* /overview route should stay static  */}
       <Route
         path="/overview"
         element={
@@ -131,19 +132,9 @@ export default function App() {
         path="/namespaces/:namespaceId/customresources/:crdName"
         element={<RoutedCRDList />}
       />
-      <Route
-        path="/namespaces/:namespaceId/:resourceType/:resourceName"
-        element={<RoutedResourceDetails />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/:resourceType"
-        element={<RoutedResourcesList />}
-      />
-      <Route
-        path="/:resourceType/:resourceName"
-        element={<RoutedResourceDetails />}
-      />
-      <Route path="/:resourceType" element={<RoutedResourcesList />} />
+      {/* handles namespace and cluster resources */}
+      {resources}
+
       <Route path="" element={<MainFrameRedirection />} />
     </Routes>
   );
@@ -225,64 +216,6 @@ function RoutedCRDDetails() {
         customResourceDefinitionName: crdName,
         resourceName: crName,
       }}
-    />
-  );
-}
-
-function RoutedResourcesList() {
-  const routerParams = useParams();
-  const queryParams = new URLSearchParams(window.location.search);
-
-  const resourceUrl = getResourceUrl();
-
-  const params = {
-    hasDetailsView: queryParams.get('hasDetailsView') === 'true',
-    readOnly: queryParams.get('readOnly') === 'true',
-    resourceUrl,
-    resourceType: routerParams.resourceType,
-    namespace: routerParams.namespaceId,
-  };
-
-  const rendererName = params.resourceType + 'List';
-  const rendererNameForCreate = params.resourceType + 'Create';
-
-  return (
-    <ComponentForList
-      name={rendererName}
-      params={params}
-      nameForCreate={rendererNameForCreate}
-    />
-  );
-}
-
-function RoutedResourceDetails() {
-  const { t } = useTranslation();
-  const context = useMicrofrontendContext();
-  const { resourceName, resourceType, namespaceId } = useParams();
-  const queryParams = new URLSearchParams(window.location.search);
-
-  const resourceUrl = getResourceUrl();
-
-  const decodedResourceUrl = decodeURIComponent(resourceUrl);
-  const decodedResourceName = decodeURIComponent(resourceName);
-
-  const params = {
-    resourceUrl: decodedResourceUrl,
-    resourceType: resourceType,
-    resourceName: decodedResourceName,
-    namespace: namespaceId,
-    readOnly: queryParams.get('readOnly') === 'true',
-    resourceGraphConfig: getPerResourceDefs('resourceGraphConfig', t, context),
-  };
-
-  const rendererName = params.resourceType + 'Details';
-  const rendererNameForCreate = params.resourceType + 'Create';
-
-  return (
-    <ComponentForDetails
-      name={rendererName}
-      nameForCreate={rendererNameForCreate}
-      params={params}
     />
   );
 }
