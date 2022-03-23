@@ -64,9 +64,13 @@ export function EditorActions({
     const READONLY_FIELDS = ['^ *managedFields:$', '^status:$'];
     let arrayOfPositions = [];
     READONLY_FIELDS.forEach(fieldName => {
-      arrayOfPositions = arrayOfPositions.concat(
-        editor.getModel().findMatches(fieldName, true, true, true, null, true),
-      );
+      if (!!editor.getModel()) {
+        arrayOfPositions = arrayOfPositions.concat(
+          editor
+            .getModel()
+            .findMatches(fieldName, true, true, true, null, true),
+        );
+      }
     });
     return arrayOfPositions.sort(
       (a, b) => b.range.startLineNumber - a.range.startLineNumber,
