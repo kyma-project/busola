@@ -39,19 +39,13 @@ context('Test Git Repositories', () => {
       .click();
   });
 
-  it('Inspect details and list', () => {
+  it('Inspect details', () => {
     // name
     cy.getIframeBody().contains(REPOSITORY_NAME);
     // url
     cy.getIframeBody().contains('https://test-repo');
     // authorization
     cy.getIframeBody().contains(/none/i);
-
-    cy.inspectList('Git Repositories', REPOSITORY_NAME);
-
-    cy.getIframeBody()
-      .contains('a', REPOSITORY_NAME)
-      .click();
   });
 
   it('Edit Repository', () => {
