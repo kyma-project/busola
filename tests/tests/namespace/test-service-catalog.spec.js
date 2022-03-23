@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+const SERVICE_INSTANCE_PREFIX = 'gcp-service-broker';
+
 context('Test Service Catalog', () => {
   Cypress.skipAfterFail();
 
@@ -33,10 +35,13 @@ context('Test Service Catalog', () => {
     cy.getIframeBody()
       .contains('Create')
       .click();
+
+    cy.getIframeBody()
+      .contains('h3', SERVICE_INSTANCE_PREFIX)
+      .should('be.visible');
   });
 
   it('Go to the Service Instances list, delete the instance', () => {
-    const searchTerm = 'gcp-service-broker';
     cy.getIframeBody()
       .contains('a', 'Instances - Addons')
       .click();
@@ -51,10 +56,10 @@ context('Test Service Catalog', () => {
       .find('[placeholder="Search"]')
       .filter(':visible', { log: false })
       .first()
-      .type(searchTerm);
+      .type(SERVICE_INSTANCE_PREFIX);
 
     cy.getIframeBody()
-      .contains(searchTerm)
+      .contains(SERVICE_INSTANCE_PREFIX)
       .should('be.visible');
 
     cy.getIframeBody()
