@@ -145,8 +145,8 @@ export function StatsPanel({ type, ...props }) {
   }
 
   let path = features.PROMETHEUS?.config?.path;
-  path = path.startsWith('/') ? path.substring(1) : path;
-  path = path.endsWith('/') ? path.substring(0, path.length - 1) : path;
+  path = path?.startsWith('/') ? path.substring(1) : path;
+  path = path?.endsWith('/') ? path.substring(0, path.length - 1) : path;
 
   const graphOptions =
     type === 'pod'
