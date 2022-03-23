@@ -1,6 +1,3 @@
-// working luigiconfig
-//
-
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
@@ -25,31 +22,26 @@ module.exports = env => {
       rules: [
         {
           loader: 'babel-loader',
-          exclude: /html/,
+          exclude: /html|css|woff|woff2/,
           options: {
             rootMode: 'root',
           },
         },
         {
-          test: /\.css$/,
+          test: /\.css$/i,
           use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },
         {
-          test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-          use: [
-            {
-              loader: 'file-loader',
-              options: {
-                name: '[name].[ext]',
-                outputPath: 'fonts/',
-              },
-            },
-          ],
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          type: 'asset/resource',
+        },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/i,
+          type: 'asset/resource',
         },
       ],
     },
     plugins: [
-      // new CleanWebpackPlugin(),
       new MiniCssExtractPlugin({ filename: 'index.[contenthash].css' }),
       new CopyWebpackPlugin([
         {
