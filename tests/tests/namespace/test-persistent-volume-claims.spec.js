@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { deleteFromGenericList } from '../../support/helpers';
 import { loadFile } from '../../support/loadFile';
 
 const FILE_NAME = 'test-persistent-volume-claim.yaml';
@@ -86,12 +85,6 @@ context('Test Persistent Volume Claims', () => {
   });
 
   it('Check the Persistent Volume Claims list and delete', () => {
-    cy.getIframeBody()
-      .contains('a', 'Persistent Volume Claims')
-      .click();
-
-    cy.getIframeBody().contains(CAPACITY_VALUE);
-
-    deleteFromGenericList(PVC_NAME);
+    cy.deleteFromGenericList('Persistent Volume Claims', PVC_NAME);
   });
 });
