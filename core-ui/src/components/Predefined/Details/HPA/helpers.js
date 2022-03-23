@@ -5,6 +5,7 @@ import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+import { Labels } from 'react-shared/';
 
 const metricsTargetParser = (mt, type) => {
   let value = null;
@@ -61,7 +62,7 @@ export const metricsParser = metrics => {
         i18label = 'hpas.object';
         name = (
           <>
-            {m[type].metric.selector || m[type].metric.name} {i18n.t('hpas.on')}{' '}
+            {m[type].metric.name} {i18n.t('hpas.on')}{' '}
             <Link
               className="fd-link"
               data-test-id="service-instance-name"
@@ -78,6 +79,7 @@ export const metricsParser = metrics => {
               {pluralize(m[type].describedObject.kind).toLowerCase()}/
               {m[type].describedObject.name}
             </Link>
+            <Labels labels={m[type].metric.selector?.matchLabels} />
           </>
         );
         break;
