@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { contains } from 'cypress/types/jquery';
 
 const REPOSITORY_NAME =
   'test-repo-' +
