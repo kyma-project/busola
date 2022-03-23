@@ -1,14 +1,12 @@
 import React from 'react';
 import * as jp from 'jsonpath';
 
-import {
-  ResourceDetails,
-  useGet,
-  EMPTY_TEXT_PLACEHOLDER,
-  GenericList,
-  Spinner,
-  useMicrofrontendContext,
-} from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 
 function CustomResource({ params }) {

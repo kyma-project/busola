@@ -6,12 +6,10 @@ import {
   ServiceClassDetailsContainer,
   ClusterServiceClassDetailsContainer,
 } from '../ServiceClassDetails/ServiceClassDetails.container';
-import {
-  NotificationProvider,
-  MainFrameRedirection,
-  useMicrofrontendContext,
-  WithTitle,
-} from 'react-shared';
+import { MainFrameRedirection } from 'shared/components/MainFrameRedirection/MainFrameRedirection';
+import { WithTitle } from 'shared/hooks/useWindowTitle';
+import { NotificationProvider } from 'shared/contexts/NotificationContext';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 import { CATALOG_TITLE, INSTANCES_TITLE } from '../../shared/constants';
 import './app.scss';

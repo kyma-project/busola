@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Switch, FormInput, ComboboxInput } from 'fundamental-react';
 import classnames from 'classnames';
-import { useGetList, Spinner } from 'react-shared';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { ResourceForm } from 'shared/ResourceForm';
 

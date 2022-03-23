@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
 import { InvalidRoleError } from './InvalidRoleError';

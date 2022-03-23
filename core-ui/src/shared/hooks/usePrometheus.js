@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useGet, useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 const getPrometheusSelector = data => {
   const selector = `cluster="", container!="", namespace="${data.namespace}"`;

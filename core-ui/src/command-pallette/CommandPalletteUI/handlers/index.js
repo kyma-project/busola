@@ -5,7 +5,7 @@ import { nodesHandler } from './nodesHandler';
 import { logsHandler } from './logsHandler';
 import { crdHandler } from './crdHandler';
 import { helmReleaseHandler } from './helmReleaseHandler';
-import { findCommonPrefix } from 'react-shared';
+import { findCommonPrefix } from 'shared/utils/helpers';
 
 const handlers = [
   nonResourceHandler,

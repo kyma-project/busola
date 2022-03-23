@@ -1,8 +1,6 @@
-import {
-  useUpdate,
-  useNotification,
-  useProtectedResources,
-} from 'react-shared';
+import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
+import { useProtectedResources } from 'shared/hooks/useProtectedResources';
+import { useNotification } from 'shared/contexts/NotificationContext';
 import * as jp from 'jsonpath';
 import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';

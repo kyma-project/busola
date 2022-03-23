@@ -1,10 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Link as DescLink,
-  EMPTY_TEXT_PLACEHOLDER,
-  ResourcesList,
-} from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Link as DescLink } from 'shared/components/Link/Link';
 import { Link } from 'fundamental-react';
 import { Trans } from 'react-i18next';
 import { navigateToResource } from 'shared/helpers/universalLinks';

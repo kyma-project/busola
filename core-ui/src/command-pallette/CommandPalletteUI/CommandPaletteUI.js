@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import {
   CommandPalletteHelp,
   NamespaceContextDisplay,

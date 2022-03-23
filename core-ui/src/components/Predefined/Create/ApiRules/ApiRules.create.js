@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
-import { useNotification } from 'react-shared';
+import { useNotification } from 'shared/contexts/NotificationContext';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import {

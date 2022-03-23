@@ -1,5 +1,6 @@
 import React from 'react';
-import { MonacoEditor, useTheme } from 'react-shared';
+import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
+import { useTheme } from 'shared/contexts/ThemeContext';
 import { LayoutPanel } from 'fundamental-react';
 
 export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {

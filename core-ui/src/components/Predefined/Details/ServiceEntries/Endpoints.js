@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { EMPTY_TEXT_PLACEHOLDER, GenericList, Labels } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Labels } from 'shared/components/Labels/Labels';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 import { Link } from 'fundamental-react';
 

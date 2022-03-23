@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
-import { useSingleGet, useMicrofrontendContext } from 'react-shared';
+import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useComponentDidMount } from 'shared/useComponentDidMount';
 
 export function useResourcesForApiGroups(apiGroups = []) {

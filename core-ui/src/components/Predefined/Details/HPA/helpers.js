@@ -3,7 +3,7 @@ import i18n from 'i18next';
 import { Link } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
 import { Labels } from 'react-shared/';
 

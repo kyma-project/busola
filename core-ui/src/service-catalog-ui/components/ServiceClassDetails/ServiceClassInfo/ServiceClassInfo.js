@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'fundamental-react';
-import { ReadableCreationTimestamp, PageHeader } from 'react-shared';
+import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { ExternalLink, Image } from './styled';
 
 import { serviceClassTileTitles } from 'helpers/constants';

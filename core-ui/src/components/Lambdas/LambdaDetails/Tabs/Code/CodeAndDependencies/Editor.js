@@ -1,5 +1,7 @@
 import React, { useRef, useEffect } from 'react';
-import { MonacoEditor, DiffEditor, useTheme } from 'react-shared';
+import { DiffEditor } from 'react-shared';
+import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
+import { useTheme } from 'shared/contexts/ThemeContext';
 
 export default function Editor({
   id,

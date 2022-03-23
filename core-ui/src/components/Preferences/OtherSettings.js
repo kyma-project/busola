@@ -1,6 +1,6 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useTranslation } from 'react-i18next';
 import { Select } from 'shared/components/Select/Select';
 

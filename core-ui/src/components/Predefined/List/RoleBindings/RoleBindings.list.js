@@ -2,8 +2,9 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'fundamental-react';
-import { Tooltip, ResourcesList } from 'react-shared';
-import { Link as ReactSharedLink } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { Link as ReactSharedLink } from 'shared/components/Link/Link';
 import { Trans } from 'react-i18next';
 import { RoleBindingsCreate } from '../../Create/RoleBindings/RoleBindings.create';
 

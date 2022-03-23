@@ -3,14 +3,12 @@ import LuigiClient from '@luigi-project/client';
 import { LayoutPanel } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
-import {
-  GenericList,
-  StatusBadge,
-  prettifyNamePlural,
-  EMPTY_TEXT_PLACEHOLDER,
-  useMicrofrontendContext,
-  ResourcesList,
-} from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { prettifyNamePlural } from 'shared/utils/helpers';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 
 import { SchemaViewer } from 'shared/components/SchemaViewer/SchemaViewer';

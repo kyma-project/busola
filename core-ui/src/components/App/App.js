@@ -1,13 +1,12 @@
 import React, { useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  WithTitle,
-  useMicrofrontendContext,
-  MainFrameRedirection,
-} from 'react-shared';
+
+import { MainFrameRedirection } from 'shared/components/MainFrameRedirection/MainFrameRedirection';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
-import { useSentry } from '../../hooks/useSentry';
+import { useSentry } from 'hooks/useSentry';
 
 import resourcesRoutes from '../../routing/resources';
 import otherRoutes from '../../routing/other';

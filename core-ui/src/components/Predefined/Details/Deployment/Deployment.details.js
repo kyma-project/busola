@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ControlledBy, ResourceDetails } from 'react-shared';
+import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { DeploymentsCreate } from '../../Create/Deployments/Deployments.create';
 import { DeploymentStatus } from './DeploymentStatus';
 import { HPASubcomponent } from '../HPA/HPASubcomponent';

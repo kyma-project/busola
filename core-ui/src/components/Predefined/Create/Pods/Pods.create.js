@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import {
-  useMicrofrontendContext,
-  matchBySelector,
-  matchByOwnerReference,
-} from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { createPodTemplate } from './templates';

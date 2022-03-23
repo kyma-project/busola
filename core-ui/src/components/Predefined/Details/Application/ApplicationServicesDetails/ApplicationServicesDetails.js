@@ -1,18 +1,16 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  GenericList,
-  PageHeader,
-  useGet,
-  ResourceNotFound,
-  getErrorMessage,
-  Spinner,
-  useWindowTitle,
-  EMPTY_TEXT_PLACEHOLDER,
-  CopiableText,
-  Tooltip,
-} from 'react-shared';
+import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { useWindowTitle } from 'shared/hooks/useWindowTitle';
+import { getErrorMessage } from 'shared/utils/helpers';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { CopiableText } from 'shared/components/CopiableText/CopiableText';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import './ApplicationServicesDetails.scss';
 
 function ApplicationServiceDetails({ applicationName, serviceName }) {

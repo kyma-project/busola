@@ -1,4 +1,4 @@
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 

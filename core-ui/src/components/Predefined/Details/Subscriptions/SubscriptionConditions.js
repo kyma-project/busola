@@ -1,11 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  EMPTY_TEXT_PLACEHOLDER,
-  ReadableCreationTimestamp,
-  GenericList,
-} from 'react-shared';
+import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import { SubscriptionConditionStatus } from 'shared/components/SubscriptionConditionStatus';
 

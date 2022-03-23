@@ -2,7 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Rules } from './Rules';
 import { DefaultBackendPanel } from './DefaultBackendPanel';
-import { EMPTY_TEXT_PLACEHOLDER, ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { IngressesCreate } from '../../Create/Ingresses/Ingresses.create';
 
 const IngressesDetails = props => {

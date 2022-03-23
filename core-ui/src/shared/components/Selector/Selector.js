@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Labels } from 'react-shared';
+import { Labels } from 'shared/components/Labels/Labels';
 import { LayoutPanel } from 'fundamental-react';
 import './Selector.scss';
 import { RelatedPods } from '../RelatedPods';

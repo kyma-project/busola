@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
 import LuigiClient from '@luigi-project/client';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { createTemplate } from './templates';
 
 function CRCreate({ onChange, formElementRef, crd }) {

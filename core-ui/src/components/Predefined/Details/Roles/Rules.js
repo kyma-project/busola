@@ -1,5 +1,6 @@
 import React from 'react';
-import { GenericList, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 import { Icon } from 'fundamental-react';
 

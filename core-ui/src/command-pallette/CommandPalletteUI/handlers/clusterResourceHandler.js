@@ -1,7 +1,7 @@
 import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import { LOADING_INDICATOR } from '../useSearchResults';
-import { getApiPath } from 'react-shared';
+import { getApiPath } from 'shared/utils/helpers';
 import {
   getSuggestion,
   toFullResourceType,

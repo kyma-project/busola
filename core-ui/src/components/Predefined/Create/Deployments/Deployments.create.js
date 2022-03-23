@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  usePost,
-  useNotification,
-  matchBySelector,
-  matchByOwnerReference,
-} from 'react-shared';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
 import { Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import * as _ from 'lodash';

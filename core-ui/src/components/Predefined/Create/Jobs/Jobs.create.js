@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { Switch } from 'fundamental-react';
-import { useMicrofrontendContext, matchByOwnerReference } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { matchByOwnerReference } from 'shared/utils/helpers';
 
 import { cloneDeep } from 'lodash';
 

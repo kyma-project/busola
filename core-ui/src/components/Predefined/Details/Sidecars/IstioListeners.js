@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';

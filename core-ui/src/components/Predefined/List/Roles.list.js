@@ -1,5 +1,7 @@
 import React from 'react';
-import { Link, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { Link } from 'shared/components/Link/Link';
+
 import { Trans } from 'react-i18next';
 import { RolesCreate } from '../Create/Roles/Roles.create';
 

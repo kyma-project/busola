@@ -1,12 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  ControlledBy,
-  ReadableCreationTimestamp,
-  EMPTY_TEXT_PLACEHOLDER,
-  ResourceDetails,
-} from 'react-shared';
+import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 import { JobCompletions } from './JobCompletions';
 import { JobConditions } from './JobConditions';

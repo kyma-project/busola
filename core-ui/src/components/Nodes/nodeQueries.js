@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGet } from 'react-shared';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 const round = (num, places) =>
   Math.round(num * Math.pow(10, places)) / Math.pow(10, places);

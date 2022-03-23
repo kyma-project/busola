@@ -1,7 +1,8 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link, ResourcesList } from 'react-shared';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Link } from 'shared/components/Link/Link';
 import { ServiceEntriesCreate } from '../Create/ServiceEntries/ServiceEntries.create';
 
 const ServiceEntriesList = props => {

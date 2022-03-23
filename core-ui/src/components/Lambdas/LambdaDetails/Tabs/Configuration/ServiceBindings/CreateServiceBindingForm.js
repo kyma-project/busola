@@ -8,7 +8,9 @@ import {
 } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
-import { useCreateServiceBindingUsage, Checkbox, Dropdown } from 'react-shared';
+import { Dropdown } from 'shared/components/Dropdown/Dropdown';
+import { Checkbox } from 'shared/components/Checkbox/Checkbox';
+import { useCreateServiceBindingUsage } from 'shared/hooks/useCreateServiceBindingUsage';
 import { SERVICE_BINDINGS_PANEL } from 'components/Lambdas/constants';
 import { CONFIG } from 'components/Lambdas/config';
 

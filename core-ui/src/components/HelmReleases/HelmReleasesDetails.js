@@ -1,14 +1,12 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
-import {
-  PageHeader,
-  useMicrofrontendContext,
-  useGetList,
-  Spinner,
-  prettifyNameSingular,
-  ResourceNotFound,
-} from 'react-shared';
+import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { prettifyNameSingular } from 'shared/utils/helpers';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { HelmReleaseData } from './HelmReleaseData';
 import { Link } from 'fundamental-react';
 import { HelmReleaseStatus } from './HelmReleaseStatus';

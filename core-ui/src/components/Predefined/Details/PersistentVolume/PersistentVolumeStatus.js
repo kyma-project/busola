@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { StatusBadge } from 'react-shared';
+import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export function PersistentVolumeStatus({ status }) {
   const { i18n } = useTranslation();

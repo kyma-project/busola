@@ -1,5 +1,7 @@
 import React from 'react';
-import { GenericList, ResourceStatus, ResourceDetails } from 'react-shared';
+import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 import { AddonsConfigurationsCreate } from '../../Create/AddonsConfigurations/AddonsConfigurations.create';
 

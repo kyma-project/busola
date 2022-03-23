@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useGet } from 'react-shared';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { WEBHOOK_ENVS, updateConfig } from 'components/Lambdas/config';
 
 export const useConfigData = () => {
