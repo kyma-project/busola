@@ -20,7 +20,7 @@ export const PlanColumnContent = ({ onPlanChange, dropdownRef, allPlans }) => {
   }));
   const selectedPlan = dropdownRef?.current
     ? dropdownRef.current
-    : options[0].key;
+    : options[0]?.key;
 
   return (
     <FormItem>
