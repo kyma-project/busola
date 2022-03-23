@@ -85,6 +85,12 @@ context('Test Persistent Volume Claims', () => {
   });
 
   it('Check the Persistent Volume Claims list and delete', () => {
-    cy.deleteFromGenericList('Persistent Volume Claims', PVC_NAME);
+    cy.getIframeBody()
+      .contains('a', 'Persistent Volume Claims')
+      .click();
+
+    cy.getIframeBody().contains(CAPACITY_VALUE);
+
+    cy.deleteFromGenericList(PVC_NAME);
   });
 });
