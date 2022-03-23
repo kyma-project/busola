@@ -53,11 +53,8 @@ export function CustomResource({ params }) {
     { name: '' },
   ];
 
-  const SchemaPreview = resource => (
-    <ReadonlyEditorPanel
-      title={t('custom-resources.schema-preview')}
-      value={jsyaml.dump(resource)}
-    />
+  const yamlPreview = resource => (
+    <ReadonlyEditorPanel title="YAML" value={jsyaml.dump(resource)} />
   );
 
   return (
@@ -67,7 +64,7 @@ export function CustomResource({ params }) {
       resourceName={resourceName}
       namespace={namespace}
       breadcrumbs={breadcrumbs}
-      customComponents={[SchemaPreview]}
+      customComponents={[yamlPreview]}
       i18n={i18n}
     />
   );

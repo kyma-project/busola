@@ -25,7 +25,7 @@ export function CustomResourcesGroup({ crdName, namespace }) {
   ];
 
   const navigateToCRD = () =>
-    LuigiClient.linkManager() //todo
+    LuigiClient.linkManager()
       .fromContext('cluster')
       .navigate(`customresourcedefinitions/details/${crd.metadata.name}`);
 
@@ -49,6 +49,7 @@ export function CustomResourcesGroup({ crdName, namespace }) {
         version={version}
         i18n={i18n}
         showTitle={false}
+        showNamespace={false}
       />
     </>
   );

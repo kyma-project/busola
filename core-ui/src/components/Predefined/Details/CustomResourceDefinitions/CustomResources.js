@@ -17,9 +17,10 @@ export function CustomResources({
   version,
   i18n,
   showTitle = true,
+  showNamespace,
 }) {
   const { t } = useTranslation();
-  const { group, names, scope } = crd.spec;
+  const { group, names } = crd.spec;
   const name = names.plural;
   const { clusterNodes, namespaceNodes } = useMicrofrontendContext();
 
@@ -106,7 +107,7 @@ export function CustomResources({
     showTitle,
     customColumns,
     testid: 'crd-custom-resources',
-    showNamespace: scope === 'Namespaced' || !namespace,
+    showNamespace,
   };
 
   return <ComponentForList name={name} params={params} />;
