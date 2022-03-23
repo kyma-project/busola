@@ -36,10 +36,32 @@ context('Test Service Catalog', () => {
   });
 
   it('Go to the Service Instances list, delete the instance', () => {
+    const searchTerm = 'gcp-service-broker';
     cy.getIframeBody()
       .contains('a', 'Instances - Addons')
       .click();
 
-    cy.deleteFromGenericList('gcp-service-broker');
+    //we don't use the deleteFromGenericList function since Catalog code is a bit different
+    cy.getIframeBody()
+      .find('[aria-label="open-search"]')
+      .filter(':visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Search"]')
+      .filter(':visible', { log: false })
+      .first()
+      .type(searchTerm);
+
+    cy.getIframeBody()
+      .contains(searchTerm)
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .find('[aria-label="Delete Instance"]')
+      .first()
+      .click();
+
+    cy.contains('button', 'Delete').click();
   });
 });
