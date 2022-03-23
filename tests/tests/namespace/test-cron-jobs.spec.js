@@ -168,4 +168,8 @@ context('Test Cron Jobs', () => {
       .contains('0 * * * *')
       .should('be.visible');
   });
+
+  it('Inspect list', () => {
+    cy.inspectList('Cron Jobs', CRON_JOB_NAME);
+  });
 });

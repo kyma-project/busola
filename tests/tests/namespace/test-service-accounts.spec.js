@@ -112,7 +112,7 @@ context('Test Service Accounts', () => {
       .should('be.visible');
   });
 
-  it('Delete Service Account', () => {
-    cy.deleteInDetails();
+  it('Inspect list', () => {
+    cy.inspectList('Service Accounts', SERVICE_NAME);
   });
 });

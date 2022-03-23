@@ -86,25 +86,7 @@ context('Test Certificates', () => {
       .should('be.visible');
   });
 
-  it('Deletes a certificate', () => {
-    cy.getLeftNav()
-      .contains('Certificates')
-      .click();
-
-    cy.getIframeBody()
-      .contains('a', CERT_NAME)
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .find('button[data-testid="delete"]:visible')
-      .click();
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .contains('a', CERT_NAME)
-      .should('not.exist');
+  it('Inspect a certificate list', () => {
+    cy.inspectList('Certificates', CERT_NAME);
   });
 });
