@@ -50,7 +50,7 @@ context('Test Git Repositories', () => {
     cy.inspectList('Git Repositories', REPOSITORY_NAME);
 
     cy.getIframeBody()
-      .contains(REPOSITORY_NAME)
+      .contains('a', REPOSITORY_NAME)
       .click();
   });
 
