@@ -1,5 +1,5 @@
 {
-  "plugins": ["@babel/plugin-transform-runtime"],
+  "plugins": ["@babel/plugin-transform-runtime", "@babel/plugin-syntax-jsx"],
   "presets": [
     [
       "@babel/preset-env",

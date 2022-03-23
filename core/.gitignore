@@ -44,3 +44,7 @@ Thumbs.db
 pkup.sh
 
 src/assets/libs
+
+src/assets/*.woff*
+src/assets/fonts/
+src/assets/index.*.css
