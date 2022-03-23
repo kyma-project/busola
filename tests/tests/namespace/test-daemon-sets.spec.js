@@ -43,12 +43,6 @@ context('Test Daemon Sets', () => {
     // name
     cy.getIframeBody().contains(DAEMONSET_NAME);
 
-    cy.inspectList('Daemon Sets', DAEMONSET_NAME);
-
-    cy.getIframeBody()
-      .contains('a', DAEMONSET_NAME)
-      .click();
-
     // created pod
     cy.getIframeBody()
       .contains(new RegExp(DAEMONSET_NAME + '-'))
