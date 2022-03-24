@@ -381,10 +381,13 @@ clusters:
     update: Provide Authentication
 command-palette:
   crds:
-    cluster: Cluster CRDs
     name-short: CRD
     name-short_plural: CRDs
-    namespaced: Namespaced CRDs
+  crs:
+    cluster: Cluster CRs
+    name-short: CR
+    name-short_plural: CRs
+    namespaced: Namespaced CRs
   help:
     choose-cluster: Choose Cluster
     full: Use <0>↑</0> and <0>↓</0> to navigate between results, <0>⏎</0> to choose, <0>Tab</0> to autocomplete.
@@ -740,8 +743,6 @@ custom-resource-definitions:
     singular: Singular
     type: Type
     value: Value
-  messages:
-    no-entries: No entries found. The version is not served.
   name_singular: Custom Resource Definition
   status:
     not-served: Not Served

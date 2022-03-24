@@ -92,7 +92,7 @@ function GroupingList({ filter, searchQuery, resourceListProps, a }) {
   return <YamlEditorProvider i18n={i18n}>{lists}</YamlEditorProvider>;
 }
 
-export function CustomResourceGroupList({ namespace }) {
+export function CustomResourcesByGroup({ namespace }) {
   const { t } = useTranslation();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -159,7 +159,7 @@ export function CustomResourceGroupList({ namespace }) {
   );
 }
 
-export function CRDGroupList() {
+export function CRDList() {
   const { t } = useTranslation();
 
   const [searchQuery, setSearchQuery] = useState('');

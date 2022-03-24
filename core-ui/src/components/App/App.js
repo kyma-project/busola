@@ -18,9 +18,11 @@ import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 import { useSentry } from '../../hooks/useSentry';
 import { HelmReleasesList } from 'components/HelmReleases/HelmReleasesList';
 import { HelmReleasesDetails } from 'components/HelmReleases/HelmReleasesDetails';
-import { CRDGroupList, CustomResourceGroupList } from './CRDGroupList';
-import { CustomResourcesGroup } from './CustomResourcesGroup';
-
+import {
+  CRDList,
+  CustomResourcesByGroup,
+} from '../CustomResources/GroupingList';
+import { CustomResourcesOfType } from '../CustomResources/CustomResourcesOfType';
 import resources from '../../routing/resources';
 
 export default function App() {
@@ -107,7 +109,7 @@ export default function App() {
         path="/customresources"
         element={
           <WithTitle title={t('custom-resources.title')}>
-            <CustomResourceGroupList />
+            <CustomResourcesByGroup />
           </WithTitle>
         }
       />
@@ -115,22 +117,25 @@ export default function App() {
         path="/customresourcedefinitions"
         element={
           <WithTitle title={t('custom-resource-definitions.title')}>
-            <CRDGroupList />
+            <CRDList />
           </WithTitle>
         }
       />
-      <Route path="/customresources/:crdName" element={<RoutedCRDList />} />
+      <Route
+        path="/customresources/:crdName"
+        element={<RoutedCustomResourcesOfType />}
+      />
       <Route
         path="/customresources/:crdName/:crName"
         element={<RoutedCRDDetails />}
       />
       <Route
         path="/namespaces/:namespaceId/customresources/"
-        element={<RoutedNamespacedCRDGroupList />}
+        element={<RoutedCustomResourcesList />}
       />
       <Route
         path="/namespaces/:namespaceId/customresources/:crdName"
-        element={<RoutedCRDList />}
+        element={<RoutedCustomResourcesOfType />}
       />
       <Route
         path="/namespaces/:namespaceId/customresources/:crdName/:crName"
@@ -183,21 +188,21 @@ function RoutedContainerDetails() {
   );
 }
 
-function RoutedNamespacedCRDGroupList() {
+function RoutedCustomResourcesList() {
   const { t } = useTranslation();
   const { namespaceId } = useParams();
 
   return (
     <WithTitle title={t('custom-resources.title')}>
-      <CustomResourceGroupList namespace={namespaceId} />
+      <CustomResourcesByGroup namespace={namespaceId} />
     </WithTitle>
   );
 }
 
-function RoutedCRDList() {
+function RoutedCustomResourcesOfType() {
   const { crdName, namespaceId } = useParams();
 
-  return <CustomResourcesGroup crdName={crdName} namespace={namespaceId} />;
+  return <CustomResourcesOfType crdName={crdName} namespace={namespaceId} />;
 }
 
 function RoutedCRDDetails() {

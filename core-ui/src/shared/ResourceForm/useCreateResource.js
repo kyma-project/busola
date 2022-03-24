@@ -20,7 +20,7 @@ export function useCreateResource({
 
   const isEdit = !!initialResource?.metadata?.name;
 
-  const notifySuccess = () =>
+  const defaultAfterCreatedFn = () => {
     notification.notifySuccess({
       content: t(
         isEdit
@@ -31,9 +31,6 @@ export function useCreateResource({
         },
       ),
     });
-
-  const defaultAfterCreatedFn = () => {
-    notifySuccess();
     if (!isEdit) {
       if (namespaceId) {
         LuigiClient.linkManager()
@@ -68,7 +65,7 @@ export function useCreateResource({
       }
 
       if (afterCreatedFn) {
-        afterCreatedFn(defaultAfterCreatedFn, notifySuccess);
+        afterCreatedFn(defaultAfterCreatedFn);
       } else {
         defaultAfterCreatedFn();
       }

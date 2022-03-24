@@ -3,16 +3,18 @@ import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import { useGet, PageHeader } from 'react-shared';
-import { CustomResources } from 'components/Predefined/Details/CustomResourceDefinitions/CustomResources';
+import { CustomResources } from 'components/CustomResources/CustomResources';
 import { Link } from 'fundamental-react';
+import { Spinner } from 'react-shared/';
 
-export function CustomResourcesGroup({ crdName, namespace }) {
+export function CustomResourcesOfType({ crdName, namespace }) {
   const { t, i18n } = useTranslation();
   const { data: crd, loading, error } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/` + crdName,
   );
 
-  if (!crd) return null;
+  if (loading) return <Spinner />;
+  if (error) return error.message; //todo x2
 
   const version = crd.spec.versions.find(v => v.served);
   const breadcrumbItems = [

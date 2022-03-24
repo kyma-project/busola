@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { SchemaViewer } from 'shared/components/SchemaViewer/SchemaViewer';
 import './CustomResourceDefinitionVersions.scss';
-import { CustomResources } from './CustomResources';
+import { CustomResources } from '../../../CustomResources/CustomResources';
 
 const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
   const { t, i18n } = useTranslation();

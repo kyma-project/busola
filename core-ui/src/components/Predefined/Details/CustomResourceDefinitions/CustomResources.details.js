@@ -54,7 +54,11 @@ export function CustomResource({ params }) {
   ];
 
   const yamlPreview = resource => (
-    <ReadonlyEditorPanel title="YAML" value={jsyaml.dump(resource)} />
+    <ReadonlyEditorPanel
+      title="YAML"
+      value={jsyaml.dump(resource)}
+      editorProps={{ language: 'yaml' }}
+    />
   );
 
   return (

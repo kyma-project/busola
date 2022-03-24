@@ -1,41 +1,21 @@
 import React from 'react';
 import * as jp from 'jsonpath';
-import {
-  GenericList,
-  prettifyNamePlural,
-  EMPTY_TEXT_PLACEHOLDER,
-} from 'react-shared';
-import { useTranslation } from 'react-i18next';
-import { useNavigateToCustomResource } from './useNavigateToCustomResource';
-import CustomResourcesList from 'components/Predefined/List/CustomResourceDefinitions.list';
+import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { useNavigateToCustomResource } from '../Predefined/Details/CustomResourceDefinitions/useNavigateToCustomResource';
+import { ResourcesList } from 'react-shared/';
+import { CRCreate } from 'components/Predefined/Details/CustomResourceDefinitions/CRCreate';
 
 export function CustomResources({
   crd,
   namespace,
   version,
-  i18n,
   showTitle = true,
   showNamespace,
   hideCreateOption,
 }) {
-  const { t } = useTranslation();
   const { group, names } = crd.spec;
   const name = names.plural;
   const navigateFn = useNavigateToCustomResource();
-
-  if (!version.served) {
-    return (
-      <GenericList
-        title={prettifyNamePlural(undefined, name)}
-        notFoundMessage={t('custom-resource-definitions.messages.no-entries')}
-        entries={[]}
-        headerRenderer={() => []}
-        rowRenderer={() => []}
-        showTitle={showTitle}
-        i18n={i18n}
-      />
-    );
-  }
 
   const resourceUrl = namespace
     ? `/apis/${group}/${version.name}/namespaces/${namespace}/${name}`
@@ -73,7 +53,8 @@ export function CustomResources({
     testid: 'crd-custom-resources',
     showNamespace,
     hideCreateOption,
+    createResourceForm: props => <CRCreate {...props} crd={crd} />,
   };
 
-  return <CustomResourcesList {...params} />;
+  return <ResourcesList {...params} />;
 }
