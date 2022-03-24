@@ -68,29 +68,7 @@ context('Test Service Entries', () => {
   });
 
   it('Check the Service Entries list', () => {
-    cy.getLeftNav()
-      .contains('Service Entries')
-      .click();
-
-    cy.getIframeBody()
-      .contains(SE_NAME)
-      .parent()
-      .getIframeBody()
-      .contains(RESOLUTION);
-  });
-
-  it('Delete a Service Entry', () => {
-    cy.getIframeBody()
-      .contains('.fd-table__row', SE_NAME)
-      .find('button[data-testid="delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .contains('.fd-table__row', SE_NAME)
-      .should('not.exist');
+    cy.inspectList('Service Entries', SE_NAME);
+    cy.getIframeBody().contains(RESOLUTION);
   });
 });

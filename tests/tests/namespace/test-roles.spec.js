@@ -127,6 +127,10 @@ context('Test Roles', () => {
       .should('not.have.text', '-');
   });
 
+  it('Inspect list', () => {
+    cy.inspectList('Roles', ROLE_NAME);
+  });
+
   it('Clone the Role', () => {
     cy.getLeftNav()
       .contains('Roles')

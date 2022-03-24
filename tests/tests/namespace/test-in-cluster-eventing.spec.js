@@ -277,7 +277,10 @@ context('Test in-cluster eventing', () => {
       .should('be.visible');
   });
 
-  it('Delete Subscription', () => {
-    cy.deleteInDetails();
+  it('Inspect Subscription list', () => {
+    cy.inspectList(
+      'Subscriptions',
+      `${API_RULE_AND_FUNCTION_NAME}-subscription`,
+    );
   });
 });

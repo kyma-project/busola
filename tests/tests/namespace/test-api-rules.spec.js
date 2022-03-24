@@ -145,4 +145,8 @@ context('Test API Rules in the Function details view', () => {
       .contains('Allow')
       .should('exist');
   });
+
+  it('Inspect list', () => {
+    cy.inspectList('API Rules', API_RULE_NAME);
+  });
 });
