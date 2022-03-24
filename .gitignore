@@ -53,7 +53,3 @@ tests/fixtures/kubeconfig.yaml
 tests/fixtures/sa-kubeconfig.yaml
 
 core-ui/public/themes/@sap-theming/*
-core/src/assets/*.woff2
-core/src/assets/*.woff
-core/src/assets/fonts/
-core/src/assets/index.*.css
