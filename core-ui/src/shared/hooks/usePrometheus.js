@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useGet } from 'react-shared';
+import { useGet, useMicrofrontendContext } from 'react-shared';
 
 const getPrometheusSelector = data => {
   const selector = `cluster="", container!="", namespace="${data.namespace}"`;
@@ -89,9 +89,14 @@ export function getMetric(type, metric, { step, ...data }) {
 }
 
 export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
+  const { features } = useMicrofrontendContext();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);
+
+  let path = features.PROMETHEUS?.config?.path;
+  path = path?.startsWith('/') ? path.substring(1) : path;
+  path = path?.endsWith('/') ? path.substring(0, path.length - 1) : path;
 
   const metric = getMetric(type, metricId, { step, ...props });
 
@@ -113,12 +118,8 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     return () => clearInterval(loop);
   }, [metricId, timeSpan]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const {
-    data,
-    error,
-    loading,
-  } = useGet(
-    `/api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1/query_range?` +
+  const { data, error, loading } = useGet(
+    `/${path}/query_range?` +
       `start=${startDate.toISOString()}&` +
       `end=${endDate.toISOString()}&` +
       `step=${step}&` +
