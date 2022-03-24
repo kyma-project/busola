@@ -78,7 +78,7 @@
     "yaml-sort": "^1.2.1"
   },
   "lint-staged": {
-    "core/src/i18n/*.yaml": "yaml-sort --lineWidth=-1  -i",
+    "core/src/i18n/*.yaml": "yaml-sort --lineWidth=-1  -i -q=double",
     "*.{ts,tsx,js,jsx,json,html,css,scss,yaml,md}": "prettier --write"
   },
   "husky": {
