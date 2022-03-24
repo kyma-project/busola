@@ -45,17 +45,13 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
   const { t } = useTranslation();
 
   // dictionary of pairs (apiGroup: resources in that apiGroup)
-
   const apiRules = rule?.apiGroups?.flat();
   const {
     cache: resourcesCache,
     fetchResources,
+    loadable,
     loading,
   } = useResourcesForApiGroups(apiRules ? [...new Set(apiRules)] : []);
-  const apiRulesString = apiRules?.toString();
-  useEffect(() => {
-    fetchResources();
-  }, [apiRulesString]); // eslint-disable-line react-hooks/exhaustive-deps
   // introduce special option for '' apiGroup - Combobox doesn't accept empty string key
   const apiGroupsInputOptions = getApiGroupInputOptions(groupVersions);
 
@@ -78,12 +74,14 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
   };
 
   const addAllResources = () => {
-    jp.value(
-      rule,
-      '$.resources',
-      availableResources.filter(r => r !== '*'),
-    );
-    setRules([...rules]);
+    fetchResources().then(() => {
+      jp.value(
+        rule,
+        '$.resources',
+        availableResources.filter(r => r !== '*'),
+      );
+      setRules([...rules]);
+    });
   };
 
   const addAllVerbs = () => {
@@ -122,6 +120,14 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
           <BusyIndicator size="s" show={loading} />,
           <Button
             compact
+            glyph="refresh"
+            onClick={fetchResources}
+            disabled={!loadable || loading}
+          >
+            {t('roles.load')}
+          </Button>,
+          <Button
+            compact
             glyph="add"
             onClick={addAllResources}
             disabled={loading}
@@ -137,6 +143,14 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         defaultOpen
         actions={[
           <BusyIndicator size="s" show={loading} />,
+          <Button
+            compact
+            glyph="refresh"
+            onClick={fetchResources}
+            disabled={!loadable || loading}
+          >
+            {t('roles.load')}
+          </Button>,
           <Button compact glyph="add" onClick={addAllVerbs} disabled={loading}>
             {t('roles.add-all')}
           </Button>,

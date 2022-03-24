@@ -1,12 +1,13 @@
 import { useState, useCallback } from 'react';
 import { useSingleGet, useMicrofrontendContext } from 'react-shared';
-import { useComponentDidMount } from 'shared/useComponentDidMount';
 
 export function useResourcesForApiGroups(apiGroups = []) {
   const [cache, setCache] = useState({});
-  const [loading, setLoading] = useState(0);
+  const [loading, setLoading] = useState(false);
   const fetch = useSingleGet();
   const { groupVersions } = useMicrofrontendContext();
+
+  const loadable = apiGroups.some(apiGroup => !cache[apiGroup]);
 
   const findMatchingGroupVersions = apiGroup => {
     // core api group
@@ -26,29 +27,30 @@ export function useResourcesForApiGroups(apiGroups = []) {
           ? [...cache[apiGroup], ...json.resources]
           : json.resources,
       }));
-      setLoading(l => l - 1);
     } catch (e) {
-      setLoading(l => l - 1);
       console.warn(e);
     }
   };
 
   const fetchResources = useCallback(() => {
+    if (loading) return;
+
+    const loaders = [];
     for (const apiGroup of apiGroups) {
       if (cache[apiGroup]?.length) continue;
       for (const groupVersion of findMatchingGroupVersions(apiGroup)) {
-        setLoading(l => l + 1);
-        void fetchApiGroup(groupVersion, apiGroup);
+        setLoading(true);
+        const loader = fetchApiGroup(groupVersion, apiGroup);
+        loaders.push(loader);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiGroups]);
-
-  useComponentDidMount(fetchResources);
+    return Promise.all(loaders).then(() => setLoading(false));
+  }, [apiGroups]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     cache,
     fetchResources,
+    loadable,
     loading,
   };
 }
