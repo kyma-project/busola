@@ -63,8 +63,7 @@
       "PROMETHEUS": {
         "isEnabled": true,
         "config": {
-          "serviceName": "monitoring-prometheus",
-          "port": "web"
+          "path": "api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1"
         }
       },
       "VISUAL_RESOURCES": {

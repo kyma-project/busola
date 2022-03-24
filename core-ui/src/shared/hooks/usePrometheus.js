@@ -90,8 +90,9 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);
 
-  const { serviceName, port } = features.PROMETHEUS?.config || {};
-  const path = `api/v1/namespaces/kyma-system/services/${serviceName}:${port}/proxy/api/v1`;
+  let path = features.PROMETHEUS?.config?.path;
+  path = path?.startsWith('/') ? path.substring(1) : path;
+  path = path?.endsWith('/') ? path.substring(0, path.length - 1) : path;
 
   const metric = getMetric(type, metricId, { step, ...props });
 
