@@ -30,7 +30,7 @@ export function Dropdown({
         text: emptyListMessage || t('components.dropdown.empty-list'),
       },
     ];
-    selectedKey = options[0].key;
+    selectedKey = options[0]?.key;
     disabled = true;
   }
   id = id || 'select-dropdown';

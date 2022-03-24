@@ -66,16 +66,6 @@ context('Test Network Policy', () => {
   });
 
   it('Check Network Policy list', () => {
-    cy.getLeftNav()
-      .find('[data-testid=networkpolicies_networkpolicies]')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="search-input"]')
-      .type(NAME, { force: true });
-
-    cy.getIframeBody()
-      .contains('tbody tr td a', NAME)
-      .click({ force: true });
+    cy.inspectList('Network Policies', NAME);
   });
 });

@@ -4,6 +4,7 @@ import {
   ResourceDetails,
   ResourcesList,
 } from 'react-shared';
+import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
@@ -92,6 +93,7 @@ export const NamespacesDetails = props => {
         <NamespaceWorkloads namespace={props.resourceName} />
         <ResourcesUsage namespace={props.resourceName} />
       </div>
+      <StatsPanel type="pod" namespace={props.resourceName} />
       {LimitrangesList}
       {ResourceQuotasList}
       {ApplicationMappings}

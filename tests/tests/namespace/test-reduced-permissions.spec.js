@@ -1,10 +1,7 @@
 /// <reference types="cypress" />
 import jsyaml from 'js-yaml';
 
-import {
-  chooseComboboxOption,
-  deleteFromGenericList,
-} from '../../support/helpers';
+import { chooseComboboxOption } from '../../support/helpers';
 
 const id = Math.random()
   .toString()
@@ -275,19 +272,19 @@ context('Test reduced permissions', () => {
     cy.getLeftNav()
       .contains('Cluster Role Bindings')
       .click();
-    deleteFromGenericList(CRB_NAME);
+    cy.deleteFromGenericList(CRB_NAME);
 
     // delete role
     cy.getLeftNav()
       .contains('Cluster Roles')
       .click();
-    deleteFromGenericList(CR_NAME);
+    cy.deleteFromGenericList(CR_NAME);
 
     // remove cluster
     cy.get('[data-testid="app-switcher"]').click();
     cy.contains('Clusters Overview').click();
 
-    deleteFromGenericList(SA_NAME);
+    cy.deleteFromGenericList(SA_NAME, true, false);
 
     cy.getIframeBody()
       .contains(/No clusters found/)

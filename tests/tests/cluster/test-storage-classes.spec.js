@@ -53,4 +53,12 @@ context('Test Storage Classes', () => {
       .contains('Retain')
       .should('be.visible');
   });
+
+  it('Checking list and delete', () => {
+    cy.getIframeBody()
+      .contains('Storage Classes')
+      .click();
+
+    cy.deleteFromGenericList(Cypress.env('STORAGE_CLASS_NAME'));
+  });
 });

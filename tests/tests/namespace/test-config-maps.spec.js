@@ -74,14 +74,14 @@ context('Test Config Maps', () => {
   });
 
   it('Inspect list', () => {
+    cy.inspectList('Config Maps', CONFIG_MAP_NAME);
+  });
+
+  it('Clone the secret', () => {
     cy.getLeftNav()
       .contains('Config Maps')
       .click();
 
-    cy.getIframeBody().contains('tr', CONFIG_MAP_NAME);
-  });
-
-  it('Clone the secret', () => {
     cy.getIframeBody()
       .contains('.fd-table__row', CONFIG_MAP_NAME)
       .find('button[data-testid="clone"]')
