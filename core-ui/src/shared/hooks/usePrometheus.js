@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react';
 import { useGet, useMicrofrontendContext } from 'react-shared';
 
 const getPrometheusSelector = data => {
-  return `cluster="", container!="", namespace="${data.namespace}", pod="${data.pod}"`;
+  const selector = `cluster="", container!="", namespace="${data.namespace}"`;
+  if (data.pod) {
+    selector.concat(', ', `pod="${data.pod}"`);
+  }
+  return selector;
 };
 
 const getPrometheusCPUQuery = (type, data, step) => {
