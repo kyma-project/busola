@@ -1,14 +1,13 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
 import * as jp from 'jsonpath';
 import {
   GenericList,
   prettifyNamePlural,
   EMPTY_TEXT_PLACEHOLDER,
-  useMicrofrontendContext,
 } from 'react-shared';
 import { useTranslation } from 'react-i18next';
-import { navigateToResource } from 'shared/helpers/universalLinks';
+import { useNavigateToCustomResource } from './useNavigateToCustomResource';
+import CustomResourcesList from 'components/Predefined/List/CustomResourceDefinitions.list';
 
 export function CustomResources({
   crd,
@@ -17,11 +16,12 @@ export function CustomResources({
   i18n,
   showTitle = true,
   showNamespace,
+  hideCreateOption,
 }) {
   const { t } = useTranslation();
   const { group, names } = crd.spec;
   const name = names.plural;
-  const { clusterNodes, namespaceNodes } = useMicrofrontendContext();
+  const navigateFn = useNavigateToCustomResource();
 
   if (!version.served) {
     return (
@@ -40,41 +40,6 @@ export function CustomResources({
   const resourceUrl = namespace
     ? `/apis/${group}/${version.name}/namespaces/${namespace}/${name}`
     : `/apis/${group}/${version.name}/${name}`;
-
-  const navigateFn = cr => {
-    const crdNamePlural = crd.spec.names.plural;
-    const clusterNode = clusterNodes.find(
-      res => res.resourceType === crdNamePlural,
-    );
-    const namespaceNode = namespaceNodes.find(
-      res => res.resourceType === crdNamePlural,
-    );
-
-    if (clusterNode) {
-      navigateToResource({
-        name: cr.metadata.name,
-        kind: clusterNode.pathSegment,
-      });
-    } else if (namespaceNode) {
-      navigateToResource({
-        namespace: cr.metadata.namespace,
-        name: cr.metadata.name,
-        kind: namespaceNode.pathSegment,
-      });
-    } else {
-      if (crd.spec.scope === 'Cluster') {
-        LuigiClient.linkManager()
-          .fromContext('cluster')
-          .navigate(`customresources/${crd.metadata.name}/${cr.metadata.name}`);
-      } else {
-        LuigiClient.linkManager()
-          .fromContext('cluster')
-          .navigate(
-            `namespaces/${cr.metadata.namespace}/customresources/${crd.metadata.name}/${cr.metadata.name}`,
-          );
-      }
-    }
-  };
 
   const getJsonPath = (resource, jsonPath) => {
     const value =
@@ -98,7 +63,7 @@ export function CustomResources({
 
   const params = {
     hasDetailsView: true,
-    navigateFn,
+    navigateFn: cr => navigateFn(cr, crd),
     resourceUrl,
     resourceType: name,
     namespace,
@@ -107,9 +72,8 @@ export function CustomResources({
     customColumns,
     testid: 'crd-custom-resources',
     showNamespace,
+    hideCreateOption,
   };
 
-  return null;
-
-  // return <ComponentForList name={name} params={params} />;
+  return <CustomResourcesList {...params} />;
 }

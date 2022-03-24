@@ -83,6 +83,7 @@ export const CustomResourceDefinitionVersions = resource => {
         namespace={namespace}
         i18n={i18n}
         showNamespace={resource.spec.scope === 'Namespaced'}
+        hideCreateOption={true}
       />
       <AdditionalPrinterColumns
         additionalPrinterColumns={

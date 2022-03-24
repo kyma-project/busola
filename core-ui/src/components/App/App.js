@@ -132,6 +132,10 @@ export default function App() {
         path="/namespaces/:namespaceId/customresources/:crdName"
         element={<RoutedCRDList />}
       />
+      <Route
+        path="/namespaces/:namespaceId/customresources/:crdName/:crName"
+        element={<RoutedCRDDetails />}
+      />
       {/* handles namespace and cluster resources */}
       {resources}
 
@@ -189,17 +193,6 @@ function RoutedNamespacedCRDGroupList() {
     </WithTitle>
   );
 }
-
-// function RoutedNamespacedCRDList() {
-//   const { t } = useTranslation();
-//   const { namespaceId, crdName } = useParams();
-
-//   return (
-//     <WithTitle title={t('custom-resources.title')}>
-//       <CustomResourcesGroup namespace={namespaceId} crdName={crdName} />
-//     </WithTitle>
-//   );
-// }
 
 function RoutedCRDList() {
   const { crdName, namespaceId } = useParams();

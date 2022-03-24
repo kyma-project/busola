@@ -1525,7 +1525,7 @@ export function getStaticChildrenNodesForNamespace(
               pathSegment: ':crName',
               viewUrl:
                 config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/customresources/details/:crdName/:crName',
+                '/namespaces/:namespaceId/customresources/:crdName/:crName',
               viewGroup: coreUIViewGroupName,
             },
           ],

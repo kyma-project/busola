@@ -36,41 +36,45 @@ function GroupingList({ filter, searchQuery, resourceListProps, a }) {
       .filter(removeEmpty);
   }
 
-  const lists = entries
-    .sort(([groupA], [groupB]) => groupA.localeCompare(groupB))
-    .map(([group, crds]) => (
-      <ul>
-        <li key={group}>
-          <ResourceListRenderer
-            resourceUrl={resourceUrl}
-            resourceType="CustomResourceDefinition"
-            resourceName="customresourcedefinition"
-            hasDetailsView={true}
-            showSearchField={false}
-            showTitle={true}
-            title={group}
-            i18n={i18n}
-            resources={crds}
-            customColumns={[
-              {
-                header: t('custom-resource-definitions.headers.categories'),
-                value: entry => <Tokens tokens={entry.spec.names.categories} />,
-              },
-              ...(a
-                ? [
-                    {
-                      //todo
-                      header: t('scope'),
-                      value: entry => entry.spec.scope,
-                    },
-                  ]
-                : []),
-            ]}
-            {...resourceListProps}
-          />
-        </li>
-      </ul>
-    ));
+  const lists = (
+    <ul>
+      {entries
+        .sort(([groupA], [groupB]) => groupA.localeCompare(groupB))
+        .map(([group, crds]) => (
+          <li key={group}>
+            <ResourceListRenderer
+              resourceUrl={resourceUrl}
+              resourceType="CustomResourceDefinition"
+              resourceName="customresourcedefinition"
+              hasDetailsView={true}
+              showSearchField={false}
+              showTitle={true}
+              title={group}
+              i18n={i18n}
+              resources={crds}
+              customColumns={[
+                {
+                  header: t('custom-resource-definitions.headers.categories'),
+                  value: entry => (
+                    <Tokens tokens={entry.spec.names.categories} />
+                  ),
+                },
+                ...(a
+                  ? [
+                      {
+                        //todo
+                        header: t('scope'),
+                        value: entry => entry.spec.scope,
+                      },
+                    ]
+                  : []),
+              ]}
+              {...resourceListProps}
+            />
+          </li>
+        ))}
+    </ul>
+  );
 
   if (loading) {
     return (
@@ -155,7 +159,7 @@ export function CustomResourceGroupList({ namespace }) {
   );
 }
 
-export function CRDGroupList({ namespace }) {
+export function CRDGroupList() {
   const { t } = useTranslation();
 
   const [searchQuery, setSearchQuery] = useState('');
