@@ -45,9 +45,9 @@ export default function CRDList() {
     <>
       {header}
       <GroupingList
-        a
         searchQuery={searchQuery}
         resourceListProps={{ navigateFn: navigateToCrdDetails }}
+        showCrdScope
       />
     </>
   );

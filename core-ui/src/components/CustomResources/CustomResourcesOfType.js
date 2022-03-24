@@ -4,7 +4,7 @@ import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import { useGet, PageHeader } from 'react-shared';
 import { CustomResources } from 'components/CustomResources/CustomResources';
-import { Link } from 'fundamental-react';
+import { LayoutPanel, Link } from 'fundamental-react';
 import { Spinner } from 'react-shared/';
 
 export default function CustomResourcesOfType({ crdName, namespace }) {
@@ -14,7 +14,13 @@ export default function CustomResourcesOfType({ crdName, namespace }) {
   );
 
   if (loading) return <Spinner />;
-  if (error) return error.message; //todo x2
+  if (error) {
+    return (
+      <LayoutPanel className="fd-has-padding-regular fd-margin--md">
+        {error.message}
+      </LayoutPanel>
+    );
+  }
 
   const version = crd.spec.versions.find(v => v.served);
   const breadcrumbItems = [

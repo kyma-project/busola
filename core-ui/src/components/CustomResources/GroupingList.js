@@ -8,8 +8,14 @@ import {
 } from 'react-shared';
 import { groupBy } from 'lodash';
 import { Tokens } from 'shared/components/Tokens';
+import { LayoutPanel } from 'fundamental-react';
 
-export function GroupingList({ filter, searchQuery, resourceListProps, a }) {
+export function GroupingList({
+  filter,
+  searchQuery,
+  resourceListProps,
+  showCrdScope,
+}) {
   const { t, i18n } = useTranslation();
 
   const resourceUrl = `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
@@ -54,10 +60,9 @@ export function GroupingList({ filter, searchQuery, resourceListProps, a }) {
                     <Tokens tokens={entry.spec.names.categories} />
                   ),
                 },
-                ...(a
+                ...(showCrdScope
                   ? [
                       {
-                        //todo
                         header: t('scope'),
                         value: entry => entry.spec.scope,
                       },
@@ -80,8 +85,11 @@ export function GroupingList({ filter, searchQuery, resourceListProps, a }) {
   }
 
   if (error) {
-    // todo
-    return error.message;
+    return (
+      <LayoutPanel className="fd-has-padding-regular fd-margin--md">
+        {error.message}
+      </LayoutPanel>
+    );
   }
 
   return <YamlEditorProvider i18n={i18n}>{lists}</YamlEditorProvider>;
