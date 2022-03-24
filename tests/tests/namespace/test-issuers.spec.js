@@ -121,27 +121,6 @@ context('Test Issuers', () => {
   });
 
   it('Inspect issuer list', () => {
-    cy.getIframeBody()
-      .contains('Issuers')
-      .click();
-
-    cy.getIframeBody().contains(ISSUER_NAME);
-  });
-
-  it('Delete issuer', () => {
-    cy.getLeftNav()
-      .contains('Issuers')
-      .click();
-
-    cy.url().should('match', /issuers$/);
-
-    cy.getIframeBody()
-      .contains('tr', ISSUER_NAME)
-      .find('[aria-label="Delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('.fd-message-box button', 'Delete')
-      .click();
+    cy.inspectList('Issuers', ISSUER_NAME);
   });
 });
