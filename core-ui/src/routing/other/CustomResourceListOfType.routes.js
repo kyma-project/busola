@@ -9,26 +9,22 @@ const CustomResourcesOfType = React.lazy(() =>
 function RoutedCustomResourcesOfType() {
   const { crdName, namespaceId } = useParams();
 
-  return <CustomResourcesOfType crdName={crdName} namespace={namespaceId} />;
+  return (
+    <Suspense fallback={<Spinner />}>
+      <CustomResourcesOfType crdName={crdName} namespace={namespaceId} />
+    </Suspense>
+  );
 }
 
 export default (
   <>
     <Route
       path="/customresources/:crdName"
-      element={
-        <Suspense fallback={<Spinner />}>
-          <RoutedCustomResourcesOfType />
-        </Suspense>
-      }
+      element={<RoutedCustomResourcesOfType />}
     />
     <Route
       path="/namespaces/:namespaceId/customresources/:crdName"
-      element={
-        <Suspense fallback={<Spinner />}>
-          <RoutedCustomResourcesOfType />
-        </Suspense>
-      }
+      element={<RoutedCustomResourcesOfType />}
     />
   </>
 );

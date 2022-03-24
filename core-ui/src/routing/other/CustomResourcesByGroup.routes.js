@@ -6,6 +6,12 @@ const CustomResourcesByGroup = React.lazy(() =>
   import('../../components/CustomResources/CustomResourcesByGroup'),
 );
 
+function RoutedCustomResourcesList() {
+  const { namespaceId } = useParams();
+
+  return <CustomResourcesByGroup namespace={namespaceId} />;
+}
+
 export default (
   <>
     <Route
@@ -26,9 +32,3 @@ export default (
     />
   </>
 );
-
-function RoutedCustomResourcesList() {
-  const { namespaceId } = useParams();
-
-  return <CustomResourcesByGroup namespace={namespaceId} />;
-}

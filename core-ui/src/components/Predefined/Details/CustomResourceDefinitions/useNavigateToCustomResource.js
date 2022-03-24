@@ -2,7 +2,6 @@ import LuigiClient from '@luigi-project/client';
 import { useMicrofrontendContext } from 'react-shared/';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 
-// todo move to better place
 export function useNavigateToCustomResource() {
   const { clusterNodes, namespaceNodes } = useMicrofrontendContext();
 

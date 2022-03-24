@@ -22,7 +22,6 @@ export default function CustomResourcesOfType({ crdName, namespace }) {
     );
   }
 
-  const version = crd.spec.versions.find(v => v.served);
   const breadcrumbItems = [
     {
       name: t('custom-resources.title'),
@@ -54,7 +53,7 @@ export default function CustomResourcesOfType({ crdName, namespace }) {
       <CustomResources
         namespace={namespace}
         crd={crd}
-        version={version}
+        version={crd.spec.versions.find(v => v.served)}
         i18n={i18n}
         showTitle={false}
         showNamespace={false}

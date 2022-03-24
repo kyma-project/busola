@@ -28,6 +28,22 @@ export function GroupingListPage({
   const { data, loading, error } = useGetList(filter)(resourceUrl);
   const crdsByGroup = groupBy(data, e => e.spec.group);
 
+  if (loading) {
+    return (
+      <div style={{ width: '100%' }}>
+        <Spinner compact={true} />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <LayoutPanel className="fd-has-padding-regular fd-margin--md">
+        {error.message}
+      </LayoutPanel>
+    );
+  }
+
   let entries = Object.entries(crdsByGroup);
   if (searchQuery) {
     const query = searchQuery.toLowerCase();
@@ -42,6 +58,21 @@ export function GroupingListPage({
       .map(([group, crds]) => [group, crds.filter(filterBySearchQuery)])
       .filter(removeEmpty);
   }
+
+  const header = (
+    <PageHeader
+      title={title}
+      description={description}
+      actions={
+        <FormInput
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          className="fd-margin-begin--lg search-with-magnifying-glass group-list-search"
+          type="search"
+        />
+      }
+    />
+  );
 
   const lists = (
     <ul>
@@ -81,37 +112,6 @@ export function GroupingListPage({
         ))}
     </ul>
   );
-
-  const header = (
-    <PageHeader
-      title={title}
-      description={description}
-      actions={
-        <FormInput
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          className="fd-margin-begin--lg search-with-magnifying-glass group-list-search"
-          type="search"
-        />
-      }
-    />
-  );
-
-  if (loading) {
-    return (
-      <div style={{ width: '100%' }}>
-        <Spinner compact={true} />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <LayoutPanel className="fd-has-padding-regular fd-margin--md">
-        {error.message}
-      </LayoutPanel>
-    );
-  }
 
   return (
     <>

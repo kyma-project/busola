@@ -6,7 +6,7 @@ import { GenericList, StatusBadge, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 import { SchemaViewer } from 'shared/components/SchemaViewer/SchemaViewer';
-import './CustomResourceDefinitionVersions.scss';
+import './CurrentCRDVersion.scss';
 import { CustomResources } from '../../../CustomResources/CustomResources';
 
 const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
@@ -38,7 +38,7 @@ const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
   );
 };
 
-export const CustomResourceDefinitionVersions = resource => {
+export const CurrentCRDVersion = resource => {
   const { t, i18n } = useTranslation();
 
   const namespace = LuigiClient.getContext().namespaceId;

@@ -12,12 +12,14 @@ function RoutedCRDDetails() {
   const { crdName, crName } = useParams();
 
   return (
-    <CustomResource
-      params={{
-        customResourceDefinitionName: crdName,
-        resourceName: crName,
-      }}
-    />
+    <Suspense fallback={<Spinner />}>
+      <CustomResource
+        params={{
+          customResourceDefinitionName: crdName,
+          resourceName: crName,
+        }}
+      />
+    </Suspense>
   );
 }
 
@@ -25,19 +27,11 @@ export default (
   <>
     <Route
       path="/namespaces/:namespaceId/customresources/:crdName/:crName"
-      element={
-        <Suspense fallback={<Spinner />}>
-          <RoutedCRDDetails />
-        </Suspense>
-      }
+      element={<RoutedCRDDetails />}
     />
     <Route
       path="/customresources/:crdName/:crName"
-      element={
-        <Suspense fallback={<Spinner />}>
-          <RoutedCRDDetails />
-        </Suspense>
-      }
+      element={<RoutedCRDDetails />}
     />
   </>
 );

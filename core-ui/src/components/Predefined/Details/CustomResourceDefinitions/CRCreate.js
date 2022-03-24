@@ -5,7 +5,7 @@ import { useNavigateToCustomResource } from './useNavigateToCustomResource';
 
 function CRCreate({ onChange, formElementRef, crd }) {
   const [CR, setCR] = useState(createTemplate(crd));
-  const navigateFn = useNavigateToCustomResource();
+  const navigateToCustomResource = useNavigateToCustomResource();
 
   const createResourceUrl = (cr, crd) => {
     const currentVersion = crd.spec.versions.find(ver => ver.storage).name;
@@ -26,7 +26,7 @@ function CRCreate({ onChange, formElementRef, crd }) {
       formElementRef={formElementRef}
       createUrl={createResourceUrl(CR, crd)}
       onlyYaml
-      afterCreatedFn={() => navigateFn(CR, crd)}
+      afterCreatedFn={() => navigateToCustomResource(CR, crd)}
     />
   );
 }

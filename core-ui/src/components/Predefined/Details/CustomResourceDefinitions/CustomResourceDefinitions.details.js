@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CustomResourceDefinitionVersions } from './CustomResourceDefinitionVersions';
+import { CurrentCRDVersion } from './CurrentCRDVersion';
 import { useTranslation } from 'react-i18next';
 import {
   GenericList,
@@ -14,37 +14,6 @@ import { RelatedCRDsList } from './RelatedCRDsList';
 import { Tokens } from 'shared/components/Tokens';
 import { EventsList } from 'shared/components/EventsList';
 import { CustomResourceDefinitionsCreate } from '../../Create/CustomResourceDefinitions/CustomResourceDefinitons.create';
-
-function CustomResourceCreateModal({ crd }) {
-  const [showEditDialog, setShowEditDialog] = useState(false);
-  const { t, i18n } = useTranslation();
-
-  return (
-    <>
-      <ModalWithForm
-        title={t('components.resources-list.create', {
-          resourceType: crd.spec.names.kind,
-        })}
-        opened={showEditDialog}
-        confirmText={t('common.buttons.create')}
-        id={`add-${crd.spec.names.kind}-modal`}
-        className="modal-size--l create-resource-modal"
-        renderForm={props => <CRCreate crd={crd} {...props} />}
-        i18n={i18n}
-        modalOpeningComponent={<></>}
-        customCloseAction={() => setShowEditDialog(false)}
-      />
-      <Button
-        glyph="add"
-        option="transparent"
-        onClick={() => setShowEditDialog(true)}
-        className="fd-margin-end--tiny"
-      >
-        {t('common.buttons.create')} {crd.spec.names.kind}
-      </Button>
-    </>
-  );
-}
 
 const CustomResourceDefinitionsDetails = props => {
   const { t, i18n } = useTranslation();
@@ -101,18 +70,44 @@ const CustomResourceDefinitionsDetails = props => {
     );
   };
 
+  const [showEditDialog, setShowEditDialog] = useState(false);
+
   return (
     <ResourceDetails
       customColumns={customColumns}
       customComponents={[
         ResourceNames,
-        CustomResourceDefinitionVersions,
+        CurrentCRDVersion,
         RelatedCRDsList,
         Events,
       ]}
       resourceHeaderActions={[
         crd => {
-          return <CustomResourceCreateModal crd={crd} />;
+          return (
+            <>
+              <ModalWithForm
+                title={t('components.resources-list.create', {
+                  resourceType: crd.spec.names.kind,
+                })}
+                opened={showEditDialog}
+                confirmText={t('common.buttons.create')}
+                id={`add-${crd.spec.names.kind}-modal`}
+                className="modal-size--l create-resource-modal"
+                renderForm={props => <CRCreate crd={crd} {...props} />}
+                i18n={i18n}
+                modalOpeningComponent={<></>}
+                customCloseAction={() => setShowEditDialog(false)}
+              />
+              <Button
+                glyph="add"
+                option="transparent"
+                onClick={() => setShowEditDialog(true)}
+                className="fd-margin-end--tiny"
+              >
+                {t('common.buttons.create')} {crd.spec.names.kind}
+              </Button>
+            </>
+          );
         },
       ]}
       createResourceForm={CustomResourceDefinitionsCreate}
