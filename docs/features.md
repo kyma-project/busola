@@ -370,7 +370,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-- **VISUAL_RESOURCES** – configures if the resource graphs should be rendered at resources details views.
+- **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at a resource details view.
 
   ```bash
   "VISUAL_RESOURCES": {
