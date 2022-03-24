@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import { Spinner } from 'react-shared/';
 
 const CRDList = React.lazy(() =>
-  import('../../components/CustomResources/GroupingList'),
+  import('../../components/CustomResources/CRDList'),
 );
 
 export default (

@@ -1,28 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Trans, useTranslation } from 'react-i18next';
-import { PageHeader, Link } from 'react-shared';
-import { FormInput, Link as FdLink } from 'fundamental-react';
+import { Link } from 'react-shared';
+import { Link as FdLink } from 'fundamental-react';
 import pluralize from 'pluralize';
-import { GroupingList } from './GroupingList';
-import { useWindowTitle } from 'react-shared/hooks';
+import { GroupingListPage } from './GroupingListPage/GroupingListPage';
 
 export default function CustomResourcesByGroup({ namespace }) {
   const { t } = useTranslation();
-  useWindowTitle(t('custom-resources.title'));
-
-  const [searchQuery, setSearchQuery] = useState('');
 
   const navigateToCustomResourceList = crd => {
-    if (namespace) {
-      LuigiClient.linkManager()
-        .fromContext('namespace')
-        .navigate('/customresources/' + crd.metadata.name);
-    } else {
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate('/customresources/' + crd.metadata.name);
-    }
+    LuigiClient.linkManager()
+      .fromContext(namespace ? 'namespace' : 'cluster')
+      .navigate('/customresources/' + crd.metadata.name);
   };
 
   const description = (
@@ -42,35 +32,16 @@ export default function CustomResourcesByGroup({ namespace }) {
     </Trans>
   );
 
-  const header = (
-    <PageHeader
+  return (
+    <GroupingListPage
       title={t('custom-resources.title')}
       description={description}
-      actions={
-        <FormInput
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          className="fd-margin-begin--lg this-will-be-removed-later"
-          type="search"
-        />
-      }
+      filter={crd => crd.spec.scope === (namespace ? 'Namespaced' : 'Cluster')}
+      resourceListProps={{
+        navigateFn: navigateToCustomResourceList,
+        nameSelector: entry => pluralize(entry?.spec.names.kind || ''),
+        readOnly: true,
+      }}
     />
-  );
-
-  return (
-    <>
-      {header}
-      <GroupingList
-        searchQuery={searchQuery}
-        filter={crd =>
-          crd.spec.scope === (namespace ? 'Namespaced' : 'Cluster')
-        }
-        resourceListProps={{
-          navigateFn: navigateToCustomResourceList,
-          nameSelector: entry => pluralize(entry?.spec.names.kind || ''),
-          readOnly: true,
-        }}
-      />
-    </>
   );
 }

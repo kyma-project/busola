@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   useGetList,
@@ -8,15 +8,21 @@ import {
 } from 'react-shared';
 import { groupBy } from 'lodash';
 import { Tokens } from 'shared/components/Tokens';
-import { LayoutPanel } from 'fundamental-react';
+import { FormInput, LayoutPanel } from 'fundamental-react';
+import { PageHeader } from 'react-shared/';
+import './GroupingListPage.scss';
+import { useWindowTitle } from 'react-shared/';
 
-export function GroupingList({
+export function GroupingListPage({
+  title,
+  description,
   filter,
-  searchQuery,
   resourceListProps,
   showCrdScope,
 }) {
+  const [searchQuery, setSearchQuery] = useState('');
   const { t, i18n } = useTranslation();
+  useWindowTitle(title);
 
   const resourceUrl = `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
   const { data, loading, error } = useGetList(filter)(resourceUrl);
@@ -76,6 +82,21 @@ export function GroupingList({
     </ul>
   );
 
+  const header = (
+    <PageHeader
+      title={title}
+      description={description}
+      actions={
+        <FormInput
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          className="fd-margin-begin--lg search-with-magnifying-glass group-list-search"
+          type="search"
+        />
+      }
+    />
+  );
+
   if (loading) {
     return (
       <div style={{ width: '100%' }}>
@@ -92,5 +113,10 @@ export function GroupingList({
     );
   }
 
-  return <YamlEditorProvider i18n={i18n}>{lists}</YamlEditorProvider>;
+  return (
+    <>
+      {header}
+      <YamlEditorProvider i18n={i18n}>{lists}</YamlEditorProvider>
+    </>
+  );
 }

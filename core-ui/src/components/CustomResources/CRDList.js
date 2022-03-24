@@ -1,16 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Trans, useTranslation } from 'react-i18next';
-import { PageHeader, Link } from 'react-shared';
-import { FormInput } from 'fundamental-react';
-import { useWindowTitle } from 'react-shared/hooks';
-import { GroupingList } from './GroupingList';
+import { Link } from 'react-shared';
+import { GroupingListPage } from './GroupingListPage/GroupingListPage';
 
 export default function CRDList() {
   const { t } = useTranslation();
-  useWindowTitle(t('custom-resource-definitions.title'));
-
-  const [searchQuery, setSearchQuery] = useState('');
 
   const navigateToCrdDetails = crd =>
     LuigiClient.linkManager()
@@ -26,29 +21,12 @@ export default function CRDList() {
     </Trans>
   );
 
-  const header = (
-    <PageHeader
+  return (
+    <GroupingListPage
       title={t('custom-resource-definitions.title')}
       description={description}
-      actions={
-        <FormInput
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          className="fd-margin-begin--lg this-will-be-removed-later"
-          type="search"
-        />
-      }
+      resourceListProps={{ navigateFn: navigateToCrdDetails }}
+      showCrdScope
     />
-  );
-
-  return (
-    <>
-      {header}
-      <GroupingList
-        searchQuery={searchQuery}
-        resourceListProps={{ navigateFn: navigateToCrdDetails }}
-        showCrdScope
-      />
-    </>
   );
 }
