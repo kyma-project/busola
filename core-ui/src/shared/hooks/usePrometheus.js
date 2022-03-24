@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useGet } from 'react-shared';
+import { useGet, useMicrofrontendContext } from 'react-shared';
 
 const getPrometheusSelector = data => {
   return `cluster="", container!="", namespace="${data.namespace}", pod="${data.pod}"`;
@@ -84,15 +84,14 @@ export function getMetric(type, metric, { step, ...data }) {
   return metrics[metric];
 }
 
-export function usePrometheus(
-  type,
-  metricId,
-  path,
-  { items, timeSpan, ...props },
-) {
+export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
+  const { features } = useMicrofrontendContext();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);
+
+  const { serviceName, port } = features.PROMETHEUS?.config || {};
+  const path = `api/v1/namespaces/kyma-system/services/${serviceName}:${port}/proxy/api/v1`;
 
   const metric = getMetric(type, metricId, { step, ...props });
 
