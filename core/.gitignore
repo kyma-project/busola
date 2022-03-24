@@ -37,14 +37,14 @@ testem.log
 /src/assets/luigi*
 /src/assets/240*
 /src/index.html
+/src/assets/*.woff2
+/src/assets/*.woff
+/src/assets/fonts/
+/src/assets/index.*.css
+src/assets/libs
 
 # System Files
 .DS_Store
 Thumbs.db
 pkup.sh
 
-src/assets/libs
-
-src/assets/*.woff*
-src/assets/fonts/
-src/assets/index.*.css
