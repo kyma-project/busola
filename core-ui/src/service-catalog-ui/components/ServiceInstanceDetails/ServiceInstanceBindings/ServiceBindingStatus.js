@@ -7,7 +7,7 @@ export const ServiceBindingStatus = ({ status }) => {
   let type = 'info';
   const lastCondition = status?.conditions[status?.conditions.length - 1];
 
-  if (!status.conditions?.length) {
+  if (!status?.conditions?.length) {
     return null;
   }
 
