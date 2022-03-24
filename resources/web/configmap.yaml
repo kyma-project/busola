@@ -81,7 +81,10 @@ data:
             "isEnabled": true
           },
           "PROMETHEUS": {
-            "isEnabled": false
+            "isEnabled": false,
+            "config": {
+              "path": "api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1"
+            }
           },
           "VISUAL_RESOURCES": {
             "isEnabled": true
