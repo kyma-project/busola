@@ -33,17 +33,9 @@ context('Test Daemon Sets', () => {
       .click();
   });
 
-  it('Inspect Daemon Sets list', () => {
+  it('Inspect details and list', () => {
     cy.navigateTo('Workloads', 'Daemon Sets');
 
-    cy.getIframeBody()
-      .contains('h3', 'Daemon Sets')
-      .should('be.visible');
-
-    cy.getIframeBody().contains(DAEMONSET_NAME);
-  });
-
-  it('Inspect details', () => {
     cy.getIframeBody()
       .contains('a', DAEMONSET_NAME)
       .click();
