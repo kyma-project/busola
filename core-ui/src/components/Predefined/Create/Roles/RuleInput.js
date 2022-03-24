@@ -75,12 +75,14 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
 
   const addAllResources = () => {
     fetchResources().then(() => {
-      jp.value(
-        rule,
-        '$.resources',
-        availableResources.filter(r => r !== '*'),
-      );
-      setRules([...rules]);
+      setTimeout(() => {
+        jp.value(
+          rule,
+          '$.resources',
+          availableResources.filter(r => r !== '*'),
+        );
+        setRules([...rules]);
+      });
     });
   };
 
@@ -100,6 +102,8 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
       setResource={() => setRules([...rules])}
     >
       <ComboboxArrayInput
+        noEdit
+        filterOptions
         title={t('roles.headers.api-groups')}
         propertyPath="$.apiGroups"
         options={apiGroupsInputOptions}
@@ -112,6 +116,8 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         }
       />
       <ComboboxArrayInput
+        noEdit
+        filterOptions
         title={t('roles.headers.resources')}
         propertyPath="$.resources"
         options={availableResources.map(i => ({ key: i, text: i }))}
@@ -137,20 +143,14 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         ]}
       />
       <ComboboxArrayInput
+        noEdit
+        filterOptions
         title={t('roles.headers.verbs')}
         propertyPath="$.verbs"
         options={verbs.map(i => ({ key: i, text: i }))}
         defaultOpen
         actions={[
           <BusyIndicator size="s" show={loading} />,
-          <Button
-            compact
-            glyph="refresh"
-            onClick={fetchResources}
-            disabled={!loadable || loading}
-          >
-            {t('roles.load')}
-          </Button>,
           <Button compact glyph="add" onClick={addAllVerbs} disabled={loading}>
             {t('roles.add-all')}
           </Button>,
