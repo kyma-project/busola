@@ -10,7 +10,6 @@ import {
 } from 'react-shared';
 import { ApplicationServiceDetails } from 'components/Predefined/Details/Application/ApplicationServicesDetails/ApplicationServicesDetails';
 import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
-import { CustomResource } from 'components/Predefined/Details/CustomResourceDefinitions/CustomResources.details';
 import { ClusterList } from 'components/Clusters/views/ClusterList';
 import { NoPermissions } from 'components/NoPermissions/NoPermissions';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
@@ -18,12 +17,8 @@ import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 import { useSentry } from '../../hooks/useSentry';
 import { HelmReleasesList } from 'components/HelmReleases/HelmReleasesList';
 import { HelmReleasesDetails } from 'components/HelmReleases/HelmReleasesDetails';
-import {
-  CRDList,
-  CustomResourcesByGroup,
-} from '../CustomResources/GroupingList';
-import { CustomResourcesOfType } from '../CustomResources/CustomResourcesOfType';
 import resources from '../../routing/resources';
+import otherRoutes from 'routing/other';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -105,44 +100,9 @@ export default function App() {
           </WithTitle>
         }
       />
-      <Route
-        path="/customresources"
-        element={
-          <WithTitle title={t('custom-resources.title')}>
-            <CustomResourcesByGroup />
-          </WithTitle>
-        }
-      />
-      <Route
-        path="/customresourcedefinitions"
-        element={
-          <WithTitle title={t('custom-resource-definitions.title')}>
-            <CRDList />
-          </WithTitle>
-        }
-      />
-      <Route
-        path="/customresources/:crdName"
-        element={<RoutedCustomResourcesOfType />}
-      />
-      <Route
-        path="/customresources/:crdName/:crName"
-        element={<RoutedCRDDetails />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/customresources/"
-        element={<RoutedCustomResourcesList />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/customresources/:crdName"
-        element={<RoutedCustomResourcesOfType />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/customresources/:crdName/:crName"
-        element={<RoutedCRDDetails />}
-      />
       {/* handles namespace and cluster resources */}
       {resources}
+      {otherRoutes}
 
       <Route path="" element={<MainFrameRedirection />} />
     </Routes>
@@ -183,36 +143,6 @@ function RoutedContainerDetails() {
         podName: decodedPodName,
         containerName: decodedContainerName,
         namespace: params.namespaceId,
-      }}
-    />
-  );
-}
-
-function RoutedCustomResourcesList() {
-  const { t } = useTranslation();
-  const { namespaceId } = useParams();
-
-  return (
-    <WithTitle title={t('custom-resources.title')}>
-      <CustomResourcesByGroup namespace={namespaceId} />
-    </WithTitle>
-  );
-}
-
-function RoutedCustomResourcesOfType() {
-  const { crdName, namespaceId } = useParams();
-
-  return <CustomResourcesOfType crdName={crdName} namespace={namespaceId} />;
-}
-
-function RoutedCRDDetails() {
-  const { crdName, crName } = useParams();
-
-  return (
-    <CustomResource
-      params={{
-        customResourceDefinitionName: crdName,
-        resourceName: crName,
       }}
     />
   );

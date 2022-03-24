@@ -7,7 +7,7 @@ import { CustomResources } from 'components/CustomResources/CustomResources';
 import { Link } from 'fundamental-react';
 import { Spinner } from 'react-shared/';
 
-export function CustomResourcesOfType({ crdName, namespace }) {
+export default function CustomResourcesOfType({ crdName, namespace }) {
   const { t, i18n } = useTranslation();
   const { data: crd, loading, error } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/` + crdName,

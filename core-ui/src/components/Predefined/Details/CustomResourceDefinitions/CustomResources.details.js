@@ -10,7 +10,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
-export function CustomResource({ params }) {
+export default function CustomResource({ params }) {
   const { t, i18n } = useTranslation();
 
   const { namespaceId: namespace } = useMicrofrontendContext();
@@ -57,7 +57,7 @@ export function CustomResource({ params }) {
     <ReadonlyEditorPanel
       title="YAML"
       value={jsyaml.dump(resource)}
-      editorProps={{ language: 'yaml' }}
+      editorProps={{ language: 'yaml', height: '500px' }}
     />
   );
 

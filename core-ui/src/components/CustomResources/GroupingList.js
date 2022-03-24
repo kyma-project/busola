@@ -1,20 +1,15 @@
-import React, { useState } from 'react';
-import LuigiClient from '@luigi-project/client';
-import { Trans, useTranslation } from 'react-i18next';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   useGetList,
   YamlEditorProvider,
-  PageHeader,
-  Link,
   ResourceListRenderer,
   Spinner,
 } from 'react-shared';
 import { groupBy } from 'lodash';
-import { FormInput, Link as FdLink } from 'fundamental-react';
 import { Tokens } from 'shared/components/Tokens';
-import pluralize from 'pluralize';
 
-function GroupingList({ filter, searchQuery, resourceListProps, a }) {
+export function GroupingList({ filter, searchQuery, resourceListProps, a }) {
   const { t, i18n } = useTranslation();
 
   const resourceUrl = `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
@@ -90,117 +85,4 @@ function GroupingList({ filter, searchQuery, resourceListProps, a }) {
   }
 
   return <YamlEditorProvider i18n={i18n}>{lists}</YamlEditorProvider>;
-}
-
-export function CustomResourcesByGroup({ namespace }) {
-  const { t } = useTranslation();
-
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const navigateToCustomResourceList = crd => {
-    if (namespace) {
-      LuigiClient.linkManager()
-        .fromContext('namespace')
-        .navigate('/customresources/' + crd.metadata.name);
-    } else {
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate('/customresources/' + crd.metadata.name);
-    }
-  };
-
-  const description = (
-    <Trans i18nKey="custom-resources.description">
-      <Link
-        className="fd-link"
-        url="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/"
-      />
-      <FdLink
-        className="fd-link"
-        onClick={() =>
-          LuigiClient.linkManager()
-            .fromContext('cluster')
-            .navigate('/customresourcedefinitions')
-        }
-      />
-    </Trans>
-  );
-
-  const header = (
-    <PageHeader
-      title={t('custom-resources.title')}
-      description={description}
-      actions={
-        <FormInput
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          className="fd-margin-begin--lg this-will-be-removed-later"
-          type="search"
-        />
-      }
-    />
-  );
-
-  return (
-    <>
-      {header}
-      <GroupingList
-        searchQuery={searchQuery}
-        filter={crd =>
-          crd.spec.scope === (namespace ? 'Namespaced' : 'Cluster')
-        }
-        resourceListProps={{
-          navigateFn: navigateToCustomResourceList,
-          nameSelector: entry => pluralize(entry?.spec.names.kind || ''),
-          readOnly: true,
-        }}
-      />
-    </>
-  );
-}
-
-export function CRDList() {
-  const { t } = useTranslation();
-
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const navigateToCrdDetails = crd =>
-    LuigiClient.linkManager()
-      .fromContext('cluster')
-      .navigate('/customresourcedefinitions/details/' + crd.metadata.name);
-
-  const description = (
-    <Trans i18nKey="custom-resource-definitions.description">
-      <Link
-        className="fd-link"
-        url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/"
-      />
-    </Trans>
-  );
-
-  const header = (
-    <PageHeader
-      title={t('custom-resource-definitions.title')}
-      description={description}
-      actions={
-        <FormInput
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          className="fd-margin-begin--lg this-will-be-removed-later"
-          type="search"
-        />
-      }
-    />
-  );
-
-  return (
-    <>
-      {header}
-      <GroupingList
-        a
-        searchQuery={searchQuery}
-        resourceListProps={{ navigateFn: navigateToCrdDetails }}
-      />
-    </>
-  );
 }
