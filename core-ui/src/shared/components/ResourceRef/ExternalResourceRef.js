@@ -12,7 +12,7 @@ import './ExternalResourceRef.scss';
 
 export function ExternalResourceRef({
   value,
-  resources,
+  resources = [],
   loading,
   title,
   labelPrefix,
