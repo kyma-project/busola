@@ -144,4 +144,8 @@ context('Test OAuth2 Clients', () => {
     //   .contains('client_secret')
     //   .should('be.visible');
   });
+
+  it('Inpect list', () => {
+    cy.inspectList('OAuth2 Clients', CLIENT_NAME);
+  });
 });

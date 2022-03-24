@@ -132,11 +132,6 @@ context('Test Gateways', () => {
   });
 
   it('Inspect list', () => {
-    cy.getIframeBody()
-      .contains('Gateways')
-      .click();
-
-    // name
-    cy.getIframeBody().contains(GATEWAY_NAME);
+    cy.inspectList('Gateways', GATEWAY_NAME);
   });
 });

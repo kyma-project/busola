@@ -31,7 +31,7 @@ context('Test Stateful Sets', () => {
     cy.navigateTo('Workloads', 'Stateful Sets');
   });
 
-  it('Inspect list', () => {
+  it('Create and inspect list', () => {
     cy.url().should('match', /statefulsets$/);
     cy.getIframeBody().contains(SET_NAME);
   });

@@ -118,12 +118,6 @@ context('Test Secrets', () => {
   });
 
   it('Check list', () => {
-    cy.getIframeBody()
-      .contains('a', 'Secrets')
-      .click();
-
-    cy.getIframeBody()
-      .contains('tr', SECRET_NAME)
-      .contains('Opaque');
+    cy.inspectList('Secrets', SECRET_NAME);
   });
 });

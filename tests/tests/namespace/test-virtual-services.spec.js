@@ -69,25 +69,6 @@ context('Test Virtual Services', () => {
   });
 
   it('Inspect service list', () => {
-    cy.getIframeBody()
-      .contains('Virtual Services')
-      .click();
-
-    cy.getIframeBody().contains(SERVICE_NAME);
-  });
-
-  it('Delete Virtual Service', () => {
-    cy.getIframeBody()
-      .contains('.fd-table__row', SERVICE_NAME)
-      .find('[aria-label="Delete"]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('.fd-message-box button', 'Delete')
-      .click();
-
-    cy.getIframeBody()
-      .contains('.fd-table__row', SERVICE_NAME)
-      .should('not.exist');
+    cy.inspectList('Virtual Services', SERVICE_NAME);
   });
 });
