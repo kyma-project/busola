@@ -342,7 +342,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   ```bash
   "SHOW_KYMA_VERSION": {
-  "isEnabled": true
+    "isEnabled": true
   },
   ```
 
@@ -350,12 +350,12 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   ```bash
   "SSO_LOGIN": {
-  "isEnabled": true,
-  "config": {
-    "issuerUrl": "https://kymatest.accounts400.ondemand.com",
-    "scope": "openid",
-    "clientId": "9bd05ed7-a930-44e6-8c79-e6defeb7dec9"
-  }
+    "isEnabled": true,
+    "config": {
+      "issuerUrl": "https://kymatest.accounts400.ondemand.com",
+      "scope": "openid",
+      "clientId": "9bd05ed7-a930-44e6-8c79-e6defeb7dec9"
+    }
   },
   ```
 
@@ -363,10 +363,18 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   ```bash
   "PROMETHEUS": {
-  "isEnabled": true,
-  "config": {
-    "serviceName": "monitoring-prometheus",
-    "port": "web"
-  }
+    "isEnabled": true,
+    "config": {
+      "serviceName": "monitoring-prometheus",
+      "port": "web"
+    }
+  },
+  ```
+
+- **VISUAL_RESOURCES** – configures if the resource graphs should be rendered at resources details views.
+
+  ```bash
+  "VISUAL_RESOURCES": {
+    "isEnabled": true,
   },
   ```
