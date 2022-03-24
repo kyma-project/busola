@@ -17,6 +17,7 @@ import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 import { useSentry } from '../../hooks/useSentry';
 import { HelmReleasesList } from 'components/HelmReleases/HelmReleasesList';
 import { HelmReleasesDetails } from 'components/HelmReleases/HelmReleasesDetails';
+
 import resources from '../../routing/resources';
 import otherRoutes from 'routing/other';
 
@@ -48,6 +49,7 @@ export default function App() {
     // force rerender on cluster change
     <Routes key={cluster?.name}>
       {serviceCatalogRoutes}
+
       <Route
         path="/no-permissions"
         element={
@@ -76,14 +78,17 @@ export default function App() {
         }
       />
       <Route path="/preferences" element={<Preferences />} />
+
       <Route
         path="/applications/:name/:serviceName"
         element={<RoutedApplicationServiceDetails />}
       />
+
       <Route
         path="/namespaces/:namespaceId/pods/:podName/containers/:containerName"
         element={<RoutedContainerDetails />}
       />
+
       <Route
         path="/namespaces/:namespaceId/helm-releases"
         element={
@@ -92,6 +97,7 @@ export default function App() {
           </WithTitle>
         }
       />
+
       <Route
         path="/namespaces/:namespaceId/helm-releases/:releaseName"
         element={
