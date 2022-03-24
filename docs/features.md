@@ -358,3 +358,15 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   }
   },
   ```
+
+- **PROMETHEUS** – is used to show or hide the **Prometheus** metrics graphs. You can configure which Service exposes the data by providing the Service name and port in the configuration section.
+
+  ```bash
+  "PROMETHEUS": {
+  "isEnabled": true,
+  "config": {
+    "serviceName": "monitoring-prometheus",
+    "port": "web"
+  }
+  },
+  ```
