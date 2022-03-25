@@ -149,7 +149,10 @@ const convertToObject = paramsString => {
 function addCommandPaletteHandler() {
   window.addEventListener('keydown', e => {
     const { key, metaKey, ctrlKey } = e;
-    const isMac = navigator.platform.toLowerCase().startsWith('mac');
+    // for (Edge, Chrome) || (Firefox, Safari)
+    const isMac = (navigator.userAgentData?.platform || navigator.platform)
+      .toLowerCase()
+      .startsWith('mac');
     const modifierKeyPressed = (isMac && metaKey) || (!isMac && ctrlKey);
 
     const isMFModalPresent = !!document.querySelector('.lui-modal-mf');
