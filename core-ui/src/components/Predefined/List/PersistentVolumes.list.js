@@ -4,6 +4,7 @@ import {
   Link as DescLink,
   EMPTY_TEXT_PLACEHOLDER,
   ResourcesList,
+  useGetList,
 } from 'react-shared';
 import { Link } from 'fundamental-react';
 import { Trans } from 'react-i18next';
@@ -14,23 +15,35 @@ import { PersistentVolumesCreate } from '../Create/PersistentVolumes/PersistentV
 const PersistentVolumesList = props => {
   const { t } = useTranslation();
 
+  const { data: storageClasses } = useGetList()(
+    '/apis/storage.k8s.io/v1/storageclasses',
+  );
+
+  const { data: persistentVolumeClaims } = useGetList()(
+    '/api/v1/persistentvolumeclaims',
+  );
+
   const customColumns = [
     {
       header: t('pv.headers.storage-class'),
+
       value: pv =>
-        (pv.spec?.storageClassName && (
+        storageClasses?.find(
+          ({ metadata }) => metadata.name === pv.spec?.storageClassName,
+        ) ? (
           <Link
             onClick={() =>
               navigateToResource({
-                name: pv.spec?.storageClassName,
                 kind: 'StorageClass',
+                name: pv.spec?.storageClassName,
               })
             }
           >
             {pv.spec?.storageClassName}
           </Link>
-        )) ||
-        EMPTY_TEXT_PLACEHOLDER,
+        ) : (
+          <p>{pv.spec?.storageClassName || EMPTY_TEXT_PLACEHOLDER}</p>
+        ),
     },
     {
       header: t('pv.headers.capacity'),
@@ -39,20 +52,22 @@ const PersistentVolumesList = props => {
     {
       header: t('pv.headers.claim'),
       value: pv =>
-        pv.spec?.claimRef?.name ? (
+        persistentVolumeClaims?.find(
+          ({ metadata }) => metadata.name === pv.spec?.claimRef?.name,
+        ) ? (
           <Link
             onClick={() =>
               navigateToResource({
-                namespace: pv.spec?.claimRef?.namespace,
                 name: pv.spec?.claimRef?.name,
-                kind: pv.spec?.claimRef?.kind,
+                kind: 'PersistentVolumeClaim',
+                namespace: pv.spec?.claimRef?.namespace,
               })
             }
           >
             {pv.spec?.claimRef?.name}
           </Link>
         ) : (
-          EMPTY_TEXT_PLACEHOLDER
+          <p>{pv.spec?.claimRef?.name || EMPTY_TEXT_PLACEHOLDER}</p>
         ),
     },
     {
