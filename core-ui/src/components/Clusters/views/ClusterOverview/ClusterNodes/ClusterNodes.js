@@ -8,7 +8,7 @@ import { useNodesQuery } from 'components/Nodes/nodeQueries';
 import { NodeResources } from 'components/Nodes/NodeResources/NodeResources';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
-import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
+// import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import Skeleton from 'shared/components/Skeleton/Skeleton';
 
 import './ClusterNodes.scss';
@@ -70,7 +70,7 @@ export function ClusterNodes() {
           />
         </LayoutPanel.Footer>
       )}
-      <StatsPanel type="cluster" />
+      {/* <StatsPanel type="cluster" /> */}
       {Events}
     </>
   );
