@@ -67,7 +67,8 @@ const useGetHook = processDataFn =>
         }
 
         if (abortController.current.signal.aborted) return;
-        if (typeof onDataReceived === 'function') onDataReceived(payload.items);
+        if (typeof onDataReceived === 'function')
+          onDataReceived({ data: payload });
         if (error) setTimeout(_ => setError(null)); // bring back the data and clear the error once the connection started working again
         errorTolerancyCounter.current = 0;
         setTimeout(_ =>
@@ -75,6 +76,7 @@ const useGetHook = processDataFn =>
         );
       } catch (e) {
         previousRequestNotFinished.current = null;
+        if (typeof onDataReceived === 'function') onDataReceived({ error: e });
         setTimeout(_ => processError(e));
       }
 

@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import LuigiClient from '@luigi-project/client';
+
 import { useGet, useMicrofrontendContext } from 'react-shared';
 
 const getPrometheusSelector = data => {
@@ -94,9 +96,14 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);
 
-  let path = features.PROMETHEUS?.config?.path;
-  path = path?.startsWith('/') ? path.substring(1) : path;
-  path = path?.endsWith('/') ? path.substring(0, path.length - 1) : path;
+  let faturePath = features.PROMETHEUS?.config?.path;
+  faturePath = faturePath?.startsWith('/')
+    ? faturePath.substring(1)
+    : faturePath;
+  faturePath = faturePath?.endsWith('/')
+    ? faturePath.substring(0, faturePath.length - 1)
+    : faturePath;
+  const [path, setPath] = useState(faturePath);
 
   const metric = getMetric(type, metricId, { step, ...props });
 
@@ -118,14 +125,45 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     return () => clearInterval(loop);
   }, [metricId, timeSpan]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { data, error, loading } = useGet(
-    `/${path}/query_range?` +
-      `start=${startDate.toISOString()}&` +
-      `end=${endDate.toISOString()}&` +
-      `step=${step}&` +
-      `query=${metric.prometheusQuery}`,
-    { pollingInterval: 0 },
-  );
+  const query =
+    `query_range?` +
+    `start=${startDate.toISOString()}&` +
+    `end=${endDate.toISOString()}&` +
+    `step=${step}&` +
+    `query=${metric.prometheusQuery}`;
+
+  const onDataReceived = data => {
+    const Kyma2_0path =
+      'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
+    const Kyma2_1path =
+      'api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1';
+
+    if (data?.error) {
+      if (path !== Kyma2_0path && path !== Kyma2_1path) {
+        LuigiClient.sendCustomMessage({
+          id: 'busola.setPrometheusPath',
+          path: Kyma2_0path,
+        });
+        setPath(Kyma2_0path);
+      } else if (path == Kyma2_0path) {
+        LuigiClient.sendCustomMessage({
+          id: 'busola.setPrometheusPath',
+          path: Kyma2_1path,
+        });
+        setPath(Kyma2_1path);
+      }
+      // return;
+    }
+  };
+
+  let { data, error, loading } = useGet(`/${path}/${query}`, {
+    pollingInterval: 0,
+    onDataReceived: data => onDataReceived(data),
+  });
+
+  if (data) {
+    error = null;
+  }
 
   let stepMultiplier = 0;
   let helpIndex = 0;
