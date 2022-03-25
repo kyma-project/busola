@@ -31,7 +31,8 @@ function getGeometry(ctx, { scale, hScale, dataPoints }) {
   const width = ctx?.canvas.width - geo.scaleWidth;
   const height = ctx?.canvas.height - geo.scaleHeight;
 
-  geo.sectionWidth = (width - 2 * geo.graphPaddingH) / dataPoints;
+  // make sure geo.sectionWidth is not negative on really tiny screens
+  geo.sectionWidth = Math.abs((width - 2 * geo.graphPaddingH) / dataPoints);
   geo.barWidth = geo.sectionWidth / 2;
 
   const vSpacing = geo.barWidth / 2;
