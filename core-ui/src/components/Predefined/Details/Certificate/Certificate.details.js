@@ -25,15 +25,17 @@ function CertificatesDetails(props) {
     },
     {
       header: t('certificates.expiration-date'),
-      value: certificate =>
-        certificate.status?.expirationDate ? (
+      value: certificate => {
+        console.log(certificate);
+        return certificate.status?.expirationDate ? (
           <FormattedDatetime
             date={certificate.status.expirationDate}
             lang={i18n.language}
           />
         ) : (
           EMPTY_TEXT_PLACEHOLDER
-        ),
+        );
+      },
     },
     {
       header: t('certificates.common-name'),

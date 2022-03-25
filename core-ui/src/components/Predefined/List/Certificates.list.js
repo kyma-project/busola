@@ -5,10 +5,64 @@ import {
   ResourceStatus,
   ResourcesList,
   Link,
+  Tooltip,
+  EMPTY_TEXT_PLACEHOLDER,
 } from 'react-shared';
 import { Trans } from 'react-i18next';
 import { CertificatesCreate } from '../Create/Certificates/Certificates.create';
 import { IssuerLink } from '../Details/Certificate/IssuerLink';
+import { Icon } from 'fundamental-react';
+
+const ExpirationDate = ({ date, lang }) => {
+  const currentDate = Date.now();
+
+  const dateDifference = Date.parse(date) - currentDate;
+  let certificateDetails = {};
+  const dayInMiliseconds = 1000 * 60 * 60 * 24;
+
+  if (dateDifference < 0) {
+    certificateDetails = {
+      tooltipContent: 'Certificate expired',
+      ariaLabel: 'Error',
+      glyph: 'message-error',
+      colorIndex: '3',
+    };
+  } else if (dateDifference < 30 * dayInMiliseconds && dateDifference > 0) {
+    certificateDetails = {
+      tooltipContent: `Certificate will expire in ${Math.floor(
+        dateDifference / dayInMiliseconds,
+      )} days`,
+      ariaLabel: 'Warning',
+      glyph: 'message-warning',
+      colorIndex: '2',
+    };
+  }
+  return (
+    <div
+      style={{
+        display: 'flex',
+      }}
+    >
+      <p
+        style={{
+          marginRight: '5px',
+        }}
+      >
+        <FormattedDatetime date={date} lang={lang} />
+      </p>
+      {Object.keys(certificateDetails).length > 0 ? (
+        <Tooltip content={certificateDetails.tooltipContent}>
+          <Icon
+            ariaLabel={certificateDetails.ariaLabel}
+            glyph={certificateDetails.glyph}
+            size="s"
+            className={`fd-has-color-status-${certificateDetails.colorIndex} has-tooltip`}
+          />
+        </Tooltip>
+      ) : null}
+    </div>
+  );
+};
 
 const CertificatesList = props => {
   const { t, i18n } = useTranslation();
@@ -28,12 +82,12 @@ const CertificatesList = props => {
       header: t('certificates.expiration-date'),
       value: certificate =>
         certificate.status?.expirationDate ? (
-          <FormattedDatetime
+          <ExpirationDate
             date={certificate.status.expirationDate}
             lang={i18n.language}
           />
         ) : (
-          '-'
+          EMPTY_TEXT_PLACEHOLDER
         ),
     },
     {
