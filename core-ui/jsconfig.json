@@ -2,8 +2,7 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
-      "helpers/*": ["./service-catalog-ui/helpers/*"],
-      "react-shared/*": ["./shared-repo/*"]
+      "helpers/*": ["./service-catalog-ui/helpers/*"]
     }
   },
   "include": ["src"]
