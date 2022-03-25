@@ -568,7 +568,7 @@ components:
   error-panel:
     error: An error occured. The component cannot be rendered.
   file-input:
-    drag-file: Drag file here
+    drag-file: Drag file here commit-suggestionv2
   generic-list:
     acion-header:
       messages:
