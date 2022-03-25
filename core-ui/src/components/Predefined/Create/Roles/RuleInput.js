@@ -57,12 +57,14 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
 
   // there's no endpoint for "all resources" - add just a '*' and specific resources
   // for already choosen apiGroups
-  const availableResources = unique([
-    ...(rule.apiGroups
-      ?.flatMap(apiGroup => resourcesCache[apiGroup] || [])
-      .map(r => r.name) || []),
-    '*',
-  ]);
+  const getAvailableResources = resourcesCache =>
+    unique([
+      ...(rule.apiGroups
+        ?.flatMap(apiGroup => resourcesCache[apiGroup] || [])
+        .map(r => r.name) || []),
+      '*',
+    ]);
+  const availableResources = getAvailableResources(resourcesCache);
 
   const addAllApiGroups = () => {
     jp.value(
@@ -74,15 +76,14 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
   };
 
   const addAllResources = () => {
-    fetchResources().then(() => {
-      setTimeout(() => {
-        jp.value(
-          rule,
-          '$.resources',
-          availableResources.filter(r => r !== '*'),
-        );
-        setRules([...rules]);
-      });
+    fetchResources().then(resourcesCache => {
+      const availableResources = getAvailableResources(resourcesCache);
+      jp.value(
+        rule,
+        '$.resources',
+        availableResources.filter(r => r !== '*'),
+      );
+      setRules([...rules]);
     });
   };
 
@@ -150,8 +151,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         options={verbs.map(i => ({ key: i, text: i }))}
         defaultOpen
         actions={[
-          <BusyIndicator size="s" show={loading} />,
-          <Button compact glyph="add" onClick={addAllVerbs} disabled={loading}>
+          <Button compact glyph="add" onClick={addAllVerbs}>
             {t('roles.add-all')}
           </Button>,
         ]}

@@ -21,30 +21,41 @@ export function useResourcesForApiGroups(apiGroups = []) {
     try {
       const response = await fetch(url);
       const json = await response.json();
-      setCache(cache => ({
-        ...cache,
-        [apiGroup]: cache[apiGroup]
-          ? [...cache[apiGroup], ...json.resources]
-          : json.resources,
-      }));
+      return json.resources;
     } catch (e) {
       console.warn(e);
     }
   };
 
   const fetchResources = useCallback(() => {
-    if (loading) return;
+    if (loading) return Promise.resolve(cache);
 
     const loaders = [];
     for (const apiGroup of apiGroups) {
       if (cache[apiGroup]?.length) continue;
       for (const groupVersion of findMatchingGroupVersions(apiGroup)) {
         setLoading(true);
-        const loader = fetchApiGroup(groupVersion, apiGroup);
+        const loader = fetchApiGroup(
+          groupVersion,
+          apiGroup,
+        ).then(resources => ({ apiGroup, resources }));
         loaders.push(loader);
       }
     }
-    return Promise.all(loaders).then(() => setLoading(false));
+    return Promise.all(loaders).then(jsons => {
+      const newCache = jsons.reduce(
+        (cache, { apiGroup, resources }) => ({
+          ...cache,
+          [apiGroup]: cache[apiGroup]
+            ? [...cache[apiGroup], ...resources]
+            : resources,
+        }),
+        cache,
+      );
+      setCache(newCache);
+      setLoading(false);
+      return newCache;
+    });
   }, [apiGroups]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
