@@ -2,14 +2,17 @@ import { useEffect, useState } from 'react';
 import { useGet, useMicrofrontendContext } from 'react-shared';
 
 const getPrometheusSelector = data => {
-  const selector = `cluster="", container!="", namespace="${data.namespace}"`;
+  let selector = `cluster="", container!="", namespace="${data.namespace}"`;
   if (data.pod) {
-    selector.concat(', ', `pod="${data.pod}"`);
+    selector = `${selector}, pod="${data.pod}"`;
+    console.log('!!!!!! pod', selector);
   }
+  console.log('getPrometheusSelector selector', selector, 'data', data);
   return selector;
 };
 
 const getPrometheusCPUQuery = (type, data, step) => {
+  console.log('getPrometheusCPUQuery data', data);
   if (type === 'cluster') {
     return `count(node_cpu_seconds_total{mode="idle"}) - sum(rate(node_cpu_seconds_total{mode="idle"}[${step}s]))`;
   } else if (type === 'pod') {
@@ -22,6 +25,8 @@ const getPrometheusCPUQuery = (type, data, step) => {
 };
 
 const getPrometheusMemoryQuery = (type, data) => {
+  console.log('getPrometheusMemoryQuery data', data);
+
   if (type === 'cluster') {
     return `sum(node_memory_MemTotal_bytes - node_memory_MemFree_bytes)`;
   } else if (type === 'pod') {
@@ -34,6 +39,8 @@ const getPrometheusMemoryQuery = (type, data) => {
 };
 
 const getPrometheusNetworkReceivedQuery = (type, data, step) => {
+  console.log('getPrometheusNetworkReceivedQuery data', data);
+
   if (type === 'cluster') {
     return `sum(rate(node_network_receive_bytes_total{device!="lo"}[${step}s]))`;
   } else if (type === 'pod') {
@@ -46,6 +53,8 @@ const getPrometheusNetworkReceivedQuery = (type, data, step) => {
 };
 
 const getPrometheusNetworkTransmittedQuery = (type, data, step) => {
+  console.log('getPrometheusNetworkTransmittedQuery data', data);
+
   if (type === 'cluster') {
     return `sum(rate(node_network_transmit_bytes_total{device!="lo"}[${step}s]))`;
   } else if (type === 'pod') {
@@ -117,7 +126,15 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     const loop = setInterval(tick, step * 1000);
     return () => clearInterval(loop);
   }, [metricId, timeSpan]); // eslint-disable-line react-hooks/exhaustive-deps
-
+  console.log('metric.prometheusQuery', metric.prometheusQuery);
+  console.log(
+    '!!!!! all query',
+    `/${path}/query_range?` +
+      `start=${startDate.toISOString()}&` +
+      `end=${endDate.toISOString()}&` +
+      `step=${step}&` +
+      `query=${metric.prometheusQuery}`,
+  );
   const { data, error, loading } = useGet(
     `/${path}/query_range?` +
       `start=${startDate.toISOString()}&` +
