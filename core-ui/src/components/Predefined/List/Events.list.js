@@ -57,7 +57,7 @@ export const Events = ({ ...otherParams }) => {
         i => !prevItems.find(pI => pI.metadata.uid === i.metadata.uid),
       );
       console.log(newItems.length);
-      if (newItems.length || true) {
+      if (newItems.length) {
         if (Notification.permission !== 'granted') {
           Notification.requestPermission()
             .then(console.log)
