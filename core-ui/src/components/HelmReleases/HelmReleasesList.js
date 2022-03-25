@@ -15,7 +15,7 @@ import { findRecentRelease } from './findRecentRelease';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { groupBy } from 'lodash';
 
-export function HelmReleasesList() {
+function HelmReleasesList() {
   const { t, i18n } = useTranslation();
   const { namespaceId: namespace } = useMicrofrontendContext();
 
@@ -87,3 +87,4 @@ export function HelmReleasesList() {
     </>
   );
 }
+export default HelmReleasesList;
