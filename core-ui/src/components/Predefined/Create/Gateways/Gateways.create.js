@@ -124,6 +124,10 @@ GatewaysCreate.resourceGraphConfig = (t, context) => ({
       kind: 'Secret',
       clusterwide: true,
     },
+    {
+      kind: 'VirtualService',
+      clusterwide: true,
+    },
   ],
   depth: 1,
   networkFlowLevel: -3,
