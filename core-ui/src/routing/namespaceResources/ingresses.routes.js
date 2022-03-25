@@ -1,5 +1,5 @@
 import React from 'react';
-import { createResourceRoutes } from '../common';
+import { createResourceRoutes } from 'routing/createResourceRoutes';
 
 const List = React.lazy(() =>
   import('../../components/Predefined/List/Ingresses.list'),

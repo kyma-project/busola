@@ -1,5 +1,5 @@
 import React from 'react';
-import { createResourceRoutes } from 'routing/common';
+import { createResourceRoutes } from 'routing/createResourceRoutes';
 
 const List = React.lazy(() =>
   import('../../components/Predefined/List/StorageClasses.list'),
