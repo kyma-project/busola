@@ -535,7 +535,7 @@ common:
     error: Error
     failed: Failed
     'false': 'false'
-    invalid: Invalid test-commit-suggestion
+    invalid: Invalid
     ok: OK
     pending: Pending
     ready: Ready
