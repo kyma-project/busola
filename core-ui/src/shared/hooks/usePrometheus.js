@@ -145,7 +145,7 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
           path: Kyma2_0path,
         });
         setPath(Kyma2_0path);
-      } else if (path == Kyma2_0path) {
+      } else if (path === Kyma2_0path) {
         LuigiClient.sendCustomMessage({
           id: 'busola.setPrometheusPath',
           path: Kyma2_1path,
