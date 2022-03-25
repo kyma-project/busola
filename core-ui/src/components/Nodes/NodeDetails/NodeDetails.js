@@ -11,6 +11,7 @@ import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 import './NodeDetails.scss';
 
+//TODO usun ten export
 export function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
   const { t } = useTranslation();
@@ -52,3 +53,5 @@ export function NodeDetails({ nodeName }) {
     </div>
   );
 }
+
+export default NodeDetails;
