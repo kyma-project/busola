@@ -124,9 +124,6 @@ export const communication = {
         pathId,
       });
     },
-    'busola.setPrometheusPath': async ({ path, pathId }) => {
-      console.log('dupa');
-    },
     ...pageSizeCommunicationEntry,
     ...prometheusCommunicationEntry,
   },

@@ -152,7 +152,6 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
         });
         setPath(Kyma2_1path);
       }
-      // return;
     }
   };
 
