@@ -96,14 +96,18 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);
 
-  let faturePath = features.PROMETHEUS?.config?.path;
-  faturePath = faturePath?.startsWith('/')
-    ? faturePath.substring(1)
-    : faturePath;
-  faturePath = faturePath?.endsWith('/')
-    ? faturePath.substring(0, faturePath.length - 1)
-    : faturePath;
-  const [path, setPath] = useState(faturePath);
+  let featurePath = features.PROMETHEUS?.config?.path;
+  featurePath = featurePath?.startsWith('/')
+    ? featurePath.substring(1)
+    : featurePath;
+  featurePath = featurePath?.endsWith('/')
+    ? featurePath.substring(0, featurePath.length - 1)
+    : featurePath;
+  const kyma2_0path =
+    'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
+  const kyma2_1path =
+    'api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1';
+  const [path, setPath] = useState(featurePath || kyma2_0path);
 
   const metric = getMetric(type, metricId, { step, ...props });
 
@@ -133,24 +137,19 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     `query=${metric.prometheusQuery}`;
 
   const onDataReceived = data => {
-    const Kyma2_0path =
-      'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
-    const Kyma2_1path =
-      'api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1';
-
     if (data?.error) {
-      if (path !== Kyma2_0path && path !== Kyma2_1path) {
+      if (path !== kyma2_0path && path !== kyma2_1path) {
         LuigiClient.sendCustomMessage({
           id: 'busola.setPrometheusPath',
-          path: Kyma2_0path,
+          path: kyma2_0path,
         });
-        setPath(Kyma2_0path);
-      } else if (path === Kyma2_0path) {
+        setPath(kyma2_0path);
+      } else if (path === kyma2_0path) {
         LuigiClient.sendCustomMessage({
           id: 'busola.setPrometheusPath',
-          path: Kyma2_1path,
+          path: kyma2_1path,
         });
-        setPath(Kyma2_1path);
+        setPath(kyma2_1path);
       }
     }
   };
