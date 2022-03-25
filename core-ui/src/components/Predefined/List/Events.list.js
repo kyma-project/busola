@@ -63,6 +63,17 @@ export const Events = ({ ...otherParams }) => {
             .then(console.log)
             .catch(console.warn);
         }
+        /*Desktop notifications - simple to trigger, work as long as the page is open, and may disappear automatically after a few seconds
+Service Worker notifications - a bit more complicated, but they can work in the background (even after the page is closed), are persistent, and support action buttons */
+
+        /*Display the notification only if the user is not in the current tab. To check if the current tab you can user document.visibilityState.
+If the visiblityState != visible then show the notification
+
+
+notification.onclick = function(){
+                         window.parent.focus();
+                         notification.close();
+                        }*/
 
         new Notification('new events', {
           icon:
