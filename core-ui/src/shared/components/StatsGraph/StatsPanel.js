@@ -111,87 +111,86 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
 }
 
 export function StatsPanel({ type, ...props }) {
-  const { features } = useMicrofrontendContext();
-
-  const timeSpans = {
-    '1h': 60 * 60,
-    '3h': 3 * 60 * 60,
-    '6h': 6 * 60 * 60,
-    '24h': 24 * 60 * 60,
-    '7d': 7 * 24 * 60 * 60,
-  };
-  const [metric, setMetric] = useState('cpu');
-
-  const visibleTimeSpans =
-    metric === 'nodes' ? ['6h', '24h', '7d'] : ['1h', '3h', '6h'];
-  const [timeSpan, setTimeSpan] = useState(visibleTimeSpans[0]);
-
-  const { t } = useTranslation();
-
-  useEffect(() => {
-    setTimeSpan(visibleTimeSpans[0]);
-  }, [metric]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  if (!features.PROMETHEUS?.isEnabled) {
-    return '';
-  }
   return null;
+  // const { features } = useMicrofrontendContext();
 
-  const graphOptions =
-    type === 'pod'
-      ? ['cpu', 'memory', 'network']
-      : ['cpu', 'memory', 'network', 'nodes'];
+  // const timeSpans = {
+  //   '1h': 60 * 60,
+  //   '3h': 3 * 60 * 60,
+  //   '6h': 6 * 60 * 60,
+  //   '24h': 24 * 60 * 60,
+  //   '7d': 7 * 24 * 60 * 60,
+  // };
+  // const [metric, setMetric] = useState('cpu');
 
-  return (
-    <LayoutPanel className="fd-margin--md stats-panel">
-      <LayoutPanel.Header>
-        <LayoutPanel.Filters>
-          <Dropdown
-            selectedKey={metric}
-            onSelect={(e, val) => setMetric(val.key)}
-            options={graphOptions.map(option => ({
-              key: option,
-              text: t(`graphs.${option}`),
-            }))}
-          />
-        </LayoutPanel.Filters>
-        <LayoutPanel.Actions>
-          <ButtonSegmented>
-            {visibleTimeSpans.map(ts => (
-              <Button
-                compact
-                key={ts}
-                selected={timeSpan === ts}
-                onClick={() => setTimeSpan(ts)}
-              >
-                {ts}
-              </Button>
-            ))}
-          </ButtonSegmented>
-        </LayoutPanel.Actions>
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        {metric !== 'network' && (
-          <SingleGraph
-            type={type}
-            metric={metric}
-            className={metric}
-            timeSpan={timeSpans[timeSpan]}
-            {...props}
-          />
-        )}
-        {metric === 'network' && (
-          <DualGraph
-            type={type}
-            metric1={'network-up'}
-            metric2={'network-down'}
-            className={metric}
-            timeSpan={timeSpans[timeSpan]}
-            labels={[t('graphs.network-up'), t('graphs.network-down')]}
-            {...props}
-          />
-        )}
-      </LayoutPanel.Body>
-    </LayoutPanel>
-  );
+  // const visibleTimeSpans =
+  //   metric === 'nodes' ? ['6h', '24h', '7d'] : ['1h', '3h', '6h'];
+  // const [timeSpan, setTimeSpan] = useState(visibleTimeSpans[0]);
+
+  // const { t } = useTranslation();
+
+  // useEffect(() => {
+  //   setTimeSpan(visibleTimeSpans[0]);
+  // }, [metric]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // if (!features.PROMETHEUS?.isEnabled) {
+  //   return '';
+  // }
+  // const graphOptions =
+  //   type === 'pod'
+  //     ? ['cpu', 'memory', 'network']
+  //     : ['cpu', 'memory', 'network', 'nodes'];
+
+  // return (
+  //   <LayoutPanel className="fd-margin--md stats-panel">
+  //     <LayoutPanel.Header>
+  //       <LayoutPanel.Filters>
+  //         <Dropdown
+  //           selectedKey={metric}
+  //           onSelect={(e, val) => setMetric(val.key)}
+  //           options={graphOptions.map(option => ({
+  //             key: option,
+  //             text: t(`graphs.${option}`),
+  //           }))}
+  //         />
+  //       </LayoutPanel.Filters>
+  //       <LayoutPanel.Actions>
+  //         <ButtonSegmented>
+  //           {visibleTimeSpans.map(ts => (
+  //             <Button
+  //               compact
+  //               key={ts}
+  //               selected={timeSpan === ts}
+  //               onClick={() => setTimeSpan(ts)}
+  //             >
+  //               {ts}
+  //             </Button>
+  //           ))}
+  //         </ButtonSegmented>
+  //       </LayoutPanel.Actions>
+  //     </LayoutPanel.Header>
+  //     <LayoutPanel.Body>
+  //       {metric !== 'network' && (
+  //         <SingleGraph
+  //           type={type}
+  //           metric={metric}
+  //           className={metric}
+  //           timeSpan={timeSpans[timeSpan]}
+  //           {...props}
+  //         />
+  //       )}
+  //       {metric === 'network' && (
+  //         <DualGraph
+  //           type={type}
+  //           metric1={'network-up'}
+  //           metric2={'network-down'}
+  //           className={metric}
+  //           timeSpan={timeSpans[timeSpan]}
+  //           labels={[t('graphs.network-up'), t('graphs.network-down')]}
+  //           {...props}
+  //         />
+  //       )}
+  //     </LayoutPanel.Body>
+  //   </LayoutPanel>
+  // );
 }
