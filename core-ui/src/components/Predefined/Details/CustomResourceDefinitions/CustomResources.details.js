@@ -10,7 +10,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
-export default function CustomResource({ params }) {
+function CustomResource({ params }) {
   const { t, i18n } = useTranslation();
 
   const { namespaceId: namespace } = useMicrofrontendContext();
@@ -73,3 +73,4 @@ export default function CustomResource({ params }) {
     />
   );
 }
+export default CustomResource;

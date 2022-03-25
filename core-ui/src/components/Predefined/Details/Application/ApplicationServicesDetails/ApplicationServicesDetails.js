@@ -15,7 +15,7 @@ import {
 } from 'react-shared';
 import './ApplicationServicesDetails.scss';
 
-export function ApplicationServiceDetails({ applicationName, serviceName }) {
+function ApplicationServiceDetails({ applicationName, serviceName }) {
   useWindowTitle('Application Service');
   const { t, i18n } = useTranslation();
   const resourceUrl = `/apis/applicationconnector.kyma-project.io/v1alpha1/applications/${applicationName}`;
@@ -130,3 +130,4 @@ export function ApplicationServiceDetails({ applicationName, serviceName }) {
     </>
   );
 }
+export default ApplicationServiceDetails;

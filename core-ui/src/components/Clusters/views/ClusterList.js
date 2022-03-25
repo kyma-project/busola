@@ -22,7 +22,7 @@ import { ClusterStorageType } from './ClusterStorageType';
 
 import './ClusterList.scss';
 
-export function ClusterList() {
+function ClusterList() {
   const { clusters, activeClusterName } = useMicrofrontendContext();
   const notification = useNotification();
   const { t, i18n } = useTranslation();
@@ -208,3 +208,5 @@ export function ClusterList() {
     </>
   );
 }
+
+export default ClusterList;
