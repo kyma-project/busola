@@ -1,11 +1,4 @@
 {
-  "presets": [
-    [
-      "@babel/preset-env"
-      // {
-      // "useBuiltIns": "usage",
-      // "targets": "> 0.25%, not dead"
-      // }
-    ]
-  ]
+  "plugins": ["@babel/plugin-transform-runtime", "@babel/plugin-syntax-jsx"],
+  "presets": ["@babel/preset-env"]
 }

@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
+import './../assets/libs/luigi-core/luigi.css';
 
 import {
   saveCurrentLocation,
