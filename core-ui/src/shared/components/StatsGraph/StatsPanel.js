@@ -135,6 +135,7 @@ export function StatsPanel({ type, ...props }) {
   if (!features.PROMETHEUS?.isEnabled) {
     return '';
   }
+  return null;
 
   const graphOptions =
     type === 'pod'

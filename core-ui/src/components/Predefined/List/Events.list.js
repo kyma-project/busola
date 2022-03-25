@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   GenericList,
   useGetList,
@@ -13,6 +13,7 @@ import {
 } from 'react-shared';
 import { Icon, Link } from 'fundamental-react';
 import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
+import { usePrevious } from '../Create';
 
 const EventsList = props => {
   const description = (
@@ -46,6 +47,33 @@ export const Events = ({ ...otherParams }) => {
       pollingInterval: 3300,
     },
   );
+
+  const [was, setWas] = useState(false);
+  const prevItems = usePrevious(items);
+  useEffect(() => {
+    if (was) {
+      console.log(prevItems, '->', items);
+      const newItems = items.filter(
+        i => !prevItems.find(pI => pI.metadata.uid === i.metadata.uid),
+      );
+      console.log(newItems.length);
+      if (newItems.length || true) {
+        if (Notification.permission !== 'granted') {
+          Notification.requestPermission()
+            .then(console.log)
+            .catch(console.warn);
+        }
+
+        new Notification('new events', {
+          icon:
+            'https://emoji.slack-edge.com/T7RBBBXHB/blobattention/a13ca1081ca01454.gif',
+          body: 'name',
+        });
+      }
+    } else if (items) {
+      setWas(true);
+    }
+  }, [items, was, setWas, prevItems]);
 
   const {
     displayType,

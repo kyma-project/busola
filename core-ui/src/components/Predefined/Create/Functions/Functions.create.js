@@ -20,7 +20,7 @@ import { useConfigData } from 'components/Lambdas/helpers/misc/useConfigData';
 
 import { createFunctionTemplate } from './helpers';
 
-function usePrevious(value) {
+export function usePrevious(value) {
   const ref = useRef('');
   useEffect(() => {
     ref.current = value;
