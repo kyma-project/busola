@@ -22,14 +22,14 @@ const useGetHook = processDataFn =>
     const errorTolerancyCounter = React.useRef(0);
     const currentRequestId = shortid();
     const requestData = React.useRef({});
-    const previousRequestNotFinished = React.useRef(false);
+    const previousRequestNotFinished = React.useRef(null);
 
     const refetch = (isSilent, currentData) => async () => {
       if (
         skip ||
         !authData ||
         abortController.current.signal.aborted ||
-        previousRequestNotFinished.current
+        previousRequestNotFinished.current === path
       )
         return;
       if (!isSilent) setTimeout(_ => setLoading(true));
@@ -47,7 +47,7 @@ const useGetHook = processDataFn =>
       }
 
       try {
-        previousRequestNotFinished.current = true;
+        previousRequestNotFinished.current = path;
         requestData.current[currentRequestId] = { start: Date.now() };
         const response = await fetch({
           relativeUrl: path,
@@ -55,7 +55,7 @@ const useGetHook = processDataFn =>
         });
         const payload = await response.json();
 
-        previousRequestNotFinished.current = false;
+        previousRequestNotFinished.current = null;
 
         const currentRequest = requestData.current[currentRequestId];
         const newerRequests = Object.values(requestData.current).filter(
@@ -74,7 +74,7 @@ const useGetHook = processDataFn =>
           processDataFn(payload, currentData, setData, lastResourceVersion),
         );
       } catch (e) {
-        previousRequestNotFinished.current = false;
+        previousRequestNotFinished.current = null;
         setTimeout(_ => processError(e));
       }
 

@@ -342,7 +342,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   ```bash
   "SHOW_KYMA_VERSION": {
-  "isEnabled": true
+    "isEnabled": true
   },
   ```
 
@@ -350,11 +350,30 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   ```bash
   "SSO_LOGIN": {
-  "isEnabled": true,
-  "config": {
-    "issuerUrl": "https://kymatest.accounts400.ondemand.com",
-    "scope": "openid",
-    "clientId": "9bd05ed7-a930-44e6-8c79-e6defeb7dec9"
-  }
+    "isEnabled": true,
+    "config": {
+      "issuerUrl": "https://kymatest.accounts400.ondemand.com",
+      "scope": "openid",
+      "clientId": "9bd05ed7-a930-44e6-8c79-e6defeb7dec9"
+    }
+  },
+  ```
+
+- **PROMETHEUS** – is used to show or hide the **Prometheus** metrics graphs. You can configure which endpoint exposes the metrics data in the **path** field.
+
+  ```bash
+  "PROMETHEUS": {
+    "isEnabled": true,
+    "config": {
+      "path": "api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1"
+    }
+  },
+  ```
+
+- **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at a resource details view.
+
+  ```bash
+  "VISUAL_RESOURCES": {
+    "isEnabled": true,
   },
   ```

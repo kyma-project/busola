@@ -96,10 +96,6 @@ context('Test DNS Entries', () => {
   });
 
   it('Inspect list', () => {
-    cy.getIframeBody()
-      .contains('Entries')
-      .click();
-
-    cy.getIframeBody().contains(DNS_ENTRY_NAME);
+    cy.inspectList('Entries', DNS_ENTRY_NAME);
   });
 });

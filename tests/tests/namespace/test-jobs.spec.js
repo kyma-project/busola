@@ -185,10 +185,6 @@ context('Test Jobs', () => {
   });
 
   it('Inspect list', () => {
-    cy.getIframeBody()
-      .contains('Jobs')
-      .click();
-
-    cy.getIframeBody().contains(JOB_NAME);
+    cy.inspectList(/^Jobs/, JOB_NAME);
   });
 });
