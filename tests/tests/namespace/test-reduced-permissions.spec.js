@@ -109,7 +109,7 @@ context('Test reduced permissions', () => {
 
   it('Create a ClusterRoleBinding for SA and CR', () => {
     cy.getLeftNav()
-      .contains('Back to Cluster Overview')
+      .contains('Back to Cluster Details')
       .click();
 
     cy.navigateTo('Configuration', 'Cluster Role Bindings');
@@ -239,7 +239,7 @@ context('Test reduced permissions', () => {
       .should('be.visible');
 
     cy.getLeftNav()
-      .contains('Back to Cluster Overview')
+      .contains('Back to Cluster Details')
       .click();
 
     cy.getLeftNav()

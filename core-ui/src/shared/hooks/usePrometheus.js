@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import LuigiClient from '@luigi-project/client';
+
 import { useGet, useMicrofrontendContext } from 'react-shared';
 
 const getPrometheusSelector = data => {
@@ -94,9 +96,18 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);
 
-  let path = features.PROMETHEUS?.config?.path;
-  path = path?.startsWith('/') ? path.substring(1) : path;
-  path = path?.endsWith('/') ? path.substring(0, path.length - 1) : path;
+  let featurePath = features.PROMETHEUS?.config?.path;
+  featurePath = featurePath?.startsWith('/')
+    ? featurePath.substring(1)
+    : featurePath;
+  featurePath = featurePath?.endsWith('/')
+    ? featurePath.substring(0, featurePath.length - 1)
+    : featurePath;
+  const kyma2_0path =
+    'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
+  const kyma2_1path =
+    'api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1';
+  const [path, setPath] = useState(featurePath || kyma2_0path);
 
   const metric = getMetric(type, metricId, { step, ...props });
 
@@ -118,14 +129,39 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     return () => clearInterval(loop);
   }, [metricId, timeSpan]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { data, error, loading } = useGet(
-    `/${path}/query_range?` +
-      `start=${startDate.toISOString()}&` +
-      `end=${endDate.toISOString()}&` +
-      `step=${step}&` +
-      `query=${metric.prometheusQuery}`,
-    { pollingInterval: 0 },
-  );
+  const query =
+    `query_range?` +
+    `start=${startDate.toISOString()}&` +
+    `end=${endDate.toISOString()}&` +
+    `step=${step}&` +
+    `query=${metric.prometheusQuery}`;
+
+  const onDataReceived = data => {
+    if (data?.error) {
+      if (path !== kyma2_0path && path !== kyma2_1path) {
+        LuigiClient.sendCustomMessage({
+          id: 'busola.setPrometheusPath',
+          path: kyma2_0path,
+        });
+        setPath(kyma2_0path);
+      } else if (path === kyma2_0path) {
+        LuigiClient.sendCustomMessage({
+          id: 'busola.setPrometheusPath',
+          path: kyma2_1path,
+        });
+        setPath(kyma2_1path);
+      }
+    }
+  };
+
+  let { data, error, loading } = useGet(`/${path}/${query}`, {
+    pollingInterval: 0,
+    onDataReceived: data => onDataReceived(data),
+  });
+
+  if (data) {
+    error = null;
+  }
 
   let stepMultiplier = 0;
   let helpIndex = 0;
@@ -134,7 +170,7 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
 
   if (dataValues?.length > 0) {
     for (let i = 0; i < items; i++) {
-      const [timestamp, graphValue] = dataValues[helpIndex];
+      const [timestamp, graphValue] = dataValues[helpIndex] || [];
       const timeDifference = Math.floor(timestamp - startDate.getTime() / 1000);
       if (stepMultiplier === timeDifference) {
         helpIndex++;
