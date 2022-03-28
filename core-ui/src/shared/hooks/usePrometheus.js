@@ -27,7 +27,7 @@ const getPrometheusMemoryQuery = (type, data) => {
   if (type === 'cluster') {
     return `sum(node_memory_MemTotal_bytes - node_memory_MemFree_bytes)`;
   } else if (type === 'pod') {
-    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{${getPrometheusSelector(
+    return `sum(node_namespace_pod_container:container_memory_working_set_bytes{${getPrometheusSelector(
       data,
     )}})`;
   } else {
