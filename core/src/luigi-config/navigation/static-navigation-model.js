@@ -1505,41 +1505,6 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
-      pathSegment: 'customresources',
-      navigationContext: 'customresources',
-      label: i18next.t('custom-resources.title'),
-      viewUrl:
-        config.coreUIModuleUrl + '/namespaces/:namespaceId/customresources',
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      context: {
-        requiredGroupResource: {
-          group: 'apiextensions.k8s.io',
-          resource: 'customresourcedefinitions',
-        },
-      },
-      children: [
-        {
-          pathSegment: ':crdName',
-          viewUrl:
-            config.coreUIModuleUrl +
-            '/namespaces/:namespaceId/customresources/:crdName',
-          navigationContext: 'customresourcedefinition',
-          viewGroup: coreUIViewGroupName,
-          children: [
-            {
-              pathSegment: ':crName',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/customresources/:crdName/:crName',
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('configuration.title'),
       resourceType: 'issuers',
       pathSegment: 'issuers',
       label: i18next.t('issuers.title'),
@@ -1641,6 +1606,41 @@ export function getStaticChildrenNodesForNamespace(
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
+      pathSegment: 'customresources',
+      navigationContext: 'customresources',
+      label: i18next.t('custom-resources.title'),
+      viewUrl:
+        config.coreUIModuleUrl + '/namespaces/:namespaceId/customresources',
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      context: {
+        requiredGroupResource: {
+          group: 'apiextensions.k8s.io',
+          resource: 'customresourcedefinitions',
+        },
+      },
+      children: [
+        {
+          pathSegment: ':crdName',
+          viewUrl:
+            config.coreUIModuleUrl +
+            '/namespaces/:namespaceId/customresources/:crdName',
+          navigationContext: 'customresourcedefinition',
+          viewGroup: coreUIViewGroupName,
+          children: [
+            {
+              pathSegment: ':crName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/customresources/:crdName/:crName',
+              viewGroup: coreUIViewGroupName,
             },
           ],
         },

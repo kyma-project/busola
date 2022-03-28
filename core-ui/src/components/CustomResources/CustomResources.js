@@ -4,6 +4,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
 import { useNavigateToCustomResource } from '../Predefined/Details/CustomResourceDefinitions/useNavigateToCustomResource';
 import { ResourcesList } from 'react-shared/';
 import { CRCreate } from 'components/Predefined/Details/CustomResourceDefinitions/CRCreate';
+import pluralize from 'pluralize';
 
 export function CustomResources({
   crd,
@@ -46,6 +47,7 @@ export function CustomResources({
     navigateFn: cr => navigateFn(cr, crd),
     resourceUrl,
     resourceName: crd.spec.names.kind,
+    title: pluralize(crd.spec.names.kind),
     resourceType: crd.spec.names.kind,
     namespace,
     isCompact: true,
