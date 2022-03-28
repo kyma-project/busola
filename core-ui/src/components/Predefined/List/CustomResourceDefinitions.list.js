@@ -8,12 +8,6 @@ import { CustomResourceDefinitionsCreate } from '../Create/CustomResourceDefinit
 const CustomResourceDefinitionsList = props => {
   const { t } = useTranslation();
 
-  const { namespace } = props;
-
-  // to decide if we want 2 separate lists for namespaced/cluster scoped CRDs
-  const filterCRDs = (crd, namespace) =>
-    (namespace && crd.spec.scope === 'Namespaced') ||
-    (!namespace && crd.spec.scope === 'Cluster');
   const customColumns = [
     {
       header: t('custom-resource-definitions.headers.scope'),
@@ -32,7 +26,7 @@ const CustomResourceDefinitionsList = props => {
     <Trans i18nKey="custom-resource-definitions.description">
       <Link
         className="fd-link"
-        url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/"
+        url="https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/"
       />
     </Trans>
   );
@@ -40,7 +34,6 @@ const CustomResourceDefinitionsList = props => {
   return (
     <ResourcesList
       textSearchProperties={['spec.names.categories']}
-      filter={crd => filterCRDs(crd, namespace)}
       description={description}
       customColumns={customColumns}
       createResourceForm={
