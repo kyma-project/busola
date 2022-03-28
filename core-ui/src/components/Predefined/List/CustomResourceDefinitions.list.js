@@ -26,7 +26,7 @@ const CustomResourceDefinitionsList = props => {
     <Trans i18nKey="custom-resource-definitions.description">
       <Link
         className="fd-link"
-        url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/"
+        url="https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/"
       />
     </Trans>
   );
