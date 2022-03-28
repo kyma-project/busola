@@ -170,7 +170,7 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
 
   if (dataValues?.length > 0) {
     for (let i = 0; i < items; i++) {
-      const [timestamp, graphValue] = dataValues[helpIndex];
+      const [timestamp, graphValue] = dataValues[helpIndex] || [];
       const timeDifference = Math.floor(timestamp - startDate.getTime() / 1000);
       if (stepMultiplier === timeDifference) {
         helpIndex++;
