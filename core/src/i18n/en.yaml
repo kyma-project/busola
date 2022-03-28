@@ -323,11 +323,11 @@ clusters:
   name_singular: Cluster
   oidc: OIDC
   overview:
-    back: Back to Cluster Overview
+    back: Back to Cluster Details
     messages:
       no-metrics: No metrics available for this node
     title-all-clusters: Clusters Overview
-    title-current-cluster: Cluster Overview
+    title-current-cluster: Cluster Details
     title-no-clusters-available: No clusters available
     version: Version
   statuses:
@@ -551,7 +551,7 @@ common:
     duplicate-key: Duplicate key
     error: Error
     hide: Hide Read-Only Fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -1428,7 +1428,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
@@ -1537,7 +1537,7 @@ node-details:
   internal-ip: Internal IP
   involved-object: Involved Object
   messages: Messages
-  name: Cluster Overview - Nodes
+  name: Cluster Details - Nodes
   pod-cidr: Pod CIDR
   timestamp: Timestamp
   warnings: Warnings
