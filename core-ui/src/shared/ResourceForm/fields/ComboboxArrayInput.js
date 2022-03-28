@@ -16,6 +16,7 @@ export function ComboboxArrayInput({
   emptyStringKey,
   onBlur,
   filterOptions,
+  noEdit,
   ...props
 }) {
   const { t } = useTranslation();
@@ -42,6 +43,7 @@ export function ComboboxArrayInput({
   return (
     <MultiInput
       title={title}
+      noEdit={noEdit}
       defaultOpen={defaultOpen}
       isAdvanced={isAdvanced}
       toInternal={toInternal}
@@ -78,6 +80,10 @@ export function ComboboxArrayInput({
               onKeyDown={focus}
               onBlur={onBlur}
               onSelectionChange={(_, selected) => {
+                console.log('onSelectionChange', selected);
+                if ((noEdit && !selected) || selected.key === -1) {
+                  return;
+                }
                 if (!selected.text) {
                   setValue(null);
                   updateValue(null);
