@@ -1,4 +1,5 @@
 import React from 'react';
+import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import CustomResourceDefinitionsList from 'components/Predefined/List/CustomResourceDefinitions.list';
 
@@ -29,6 +30,13 @@ export function RelatedCRDsList(resource) {
         pagination: { itemsPerPage: 5 },
         hideCreateOption: true,
         i18n,
+        navigateFn: crd => {
+          LuigiClient.linkManager()
+            .fromContext('cluster')
+            .navigate(
+              '/customresourcedefinitions/details/' + crd.metadata.name,
+            );
+        },
       }}
     />
   );

@@ -38,7 +38,6 @@ PersistentVolumesCreate.resourceGraphConfig = (t, context) => ({
     },
   ],
   depth: 1,
-  networkFlowLevel: -2,
   matchers: {
     StorageClass: (pv, sc) => pv.spec.storageClassName === sc.metadata.name,
   },
