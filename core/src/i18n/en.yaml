@@ -760,7 +760,7 @@ custom-resource-definitions:
     served: This version is served using REST APIs.
     storage: Use this version when persisting custom resources to storage.
 custom-resources:
-  description: <0>Custom Resources</0> extend the Kubernetes API. You can define your own Custom Resource by creating a <1>Custom Resource Definition</1> first.
+  description: <0>Custom resource</0> extends the Kubernetes API. You can define your own custom resource by creating a <1>Custom Resource Definition</1> first.
   schema-preview: Schema Preview
   title: Custom Resources
 daemon-sets:
