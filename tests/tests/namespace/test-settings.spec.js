@@ -121,7 +121,7 @@ context('Test app settings and preferences', () => {
     cy.get('[aria-label="close"]').click();
 
     cy.getLeftNav()
-      .contains('Back to Cluster Overview')
+      .contains('Back to Cluster Details')
       .click();
 
     cy.getLeftNav()
