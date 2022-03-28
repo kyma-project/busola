@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
@@ -29,8 +29,10 @@ import {
   useDeleteResource,
 } from '../../hooks';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
-import { ResourceGraph } from '../ResourceGraph/ResourceGraph';
 
+const ResourceGraph = React.lazy(() =>
+  import('../ResourceGraph/ResourceGraph'),
+);
 ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
   children: PropTypes.node,
@@ -309,11 +311,13 @@ function Resource({
       {customComponents.map(component => component(resource, resourceUrl))}
       {children}
       {resourceGraphConfig?.[resource.kind] && (
-        <ResourceGraph
-          resource={resource}
-          i18n={i18n}
-          config={resourceGraphConfig}
-        />
+        <Suspense fallback={<Spinner />}>
+          <ResourceGraph
+            resource={resource}
+            i18n={i18n}
+            config={resourceGraphConfig}
+          />
+        </Suspense>
       )}
     </>
   );

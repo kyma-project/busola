@@ -13,7 +13,7 @@ import { LayoutPanel, Button } from 'fundamental-react';
 import { SaveGraphControls } from './SaveGraphControls';
 import './ResourceGraph.scss';
 
-export function ResourceGraph({ resource, i18n, config }) {
+function ResourceGraph({ resource, i18n, config }) {
   const { features } = useMicrofrontendContext();
   const { t } = useTranslation(['translation'], { i18n });
   const [dotSrc, setDotSrc] = useState('');
@@ -108,3 +108,4 @@ export function ResourceGraph({ resource, i18n, config }) {
     </LayoutPanel>
   );
 }
+export default ResourceGraph;
