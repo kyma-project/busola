@@ -14,7 +14,7 @@ export const DefaultBackendPanel = ({ backend, namespace }) => {
   const { t } = useTranslation();
 
   const { data: services } = useGetList()(
-    `/apis/v1/namespaces/${namespace}/storageclasses`,
+    `/api/v1/namespaces/${namespace}/services`,
   );
 
   return (
