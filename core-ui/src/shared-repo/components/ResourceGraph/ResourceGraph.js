@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Graphviz } from 'graphviz-react';
 
 import {
   ErrorBoundary,
   navigateToResource,
+  Spinner,
   useMicrofrontendContext,
 } from '../..';
+import { useIntersectionObserver } from 'shared/hooks/useIntersectionObserver';
 import { useRelatedResources } from './useRelatedResources';
 import { buildGraph } from './buildGraph';
 import { useTranslation } from 'react-i18next';
-import { LayoutPanel, Button } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 import { SaveGraphControls } from './SaveGraphControls';
 import './ResourceGraph.scss';
 
@@ -18,6 +20,9 @@ function ResourceGraph({ resource, i18n, config }) {
   const { t } = useTranslation(['translation'], { i18n });
   const [dotSrc, setDotSrc] = useState('');
   const [isReady, setReady] = useState(false);
+
+  const [graphEl, setGraphEl] = React.useState(null);
+  const { hasBeenInView } = useIntersectionObserver(graphEl);
 
   const redraw = () => {
     const data = {
@@ -61,30 +66,32 @@ function ResourceGraph({ resource, i18n, config }) {
     },
   });
 
+  useEffect(() => {
+    if (hasBeenInView) {
+      startLoading();
+      setTimeout(() => window.scroll(0, document.body.scrollHeight), 500);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasBeenInView]);
   if (!features.VISUAL_RESOURCES?.isEnabled) {
     return '';
   }
 
-  const actions = !startedLoading && (
-    <Button
-      option="emphasized"
-      onClick={() => {
-        startLoading();
-        setTimeout(() => window.scroll(0, document.body.scrollHeight), 500);
-      }}
-    >
-      {t('common.buttons.load')}
-    </Button>
-  );
+  const actions = !startedLoading && null;
 
   return (
-    <LayoutPanel className="fd-margin--md resource-graph">
+    <LayoutPanel
+      className="fd-margin--md resource-graph"
+      ref={node => {
+        setGraphEl(node);
+      }}
+    >
       <LayoutPanel.Header>
         <LayoutPanel.Head title={t('resource-graph.title')} />
         {actions}
       </LayoutPanel.Header>
       <ErrorBoundary i18n={i18n} customMessage={t('resource-graph.error')}>
-        {startedLoading && dotSrc && (
+        {startedLoading && dotSrc ? (
           <div id="graph-area">
             <Graphviz
               dot={dotSrc}
@@ -102,6 +109,10 @@ function ResourceGraph({ resource, i18n, config }) {
               name={`${resource.kind} ${resource.metadata.name}.gv`}
               i18n={i18n}
             />
+          </div>
+        ) : (
+          <div className="loader">
+            <Spinner />
           </div>
         )}
       </ErrorBoundary>
