@@ -67,6 +67,9 @@ PodsCreate.resourceGraphConfig = (t, context) => ({
     {
       kind: 'PersistentVolumeClaim',
     },
+    {
+      kind: 'NetworkPolicy',
+    },
   ],
   matchers: {
     ConfigMap: (pod, cm) => matchByEnv('configMapKeyRef')(pod, cm),
