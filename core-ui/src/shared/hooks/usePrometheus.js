@@ -51,7 +51,7 @@ const getPrometheusNetworkTransmittedQuery = (type, data, step) => {
   if (type === 'cluster') {
     return `sum(rate(node_network_transmit_bytes_total{device!="lo"}[${step}s]))`;
   } else if (type === 'pod') {
-    return `sum(irate(container_network_receive_bytes_total{${getPrometheusSelector(
+    return `sum(irate(container_network_transmit_bytes_total{${getPrometheusSelector(
       data,
     )}}[${step}s]))`;
   } else {
