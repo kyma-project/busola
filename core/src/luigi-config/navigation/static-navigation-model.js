@@ -1512,6 +1512,12 @@ export function getStaticChildrenNodesForNamespace(
         config.coreUIModuleUrl + '/namespaces/:namespaceId/customresources',
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
+      context: {
+        requiredGroupResource: {
+          group: 'apiextensions.k8s.io',
+          resource: 'customresourcedefinitions',
+        },
+      },
       children: [
         {
           pathSegment: ':crdName',
@@ -2062,6 +2068,12 @@ export function getStaticRootNodes(
       viewUrl: config.coreUIModuleUrl + '/customresources',
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
+      context: {
+        requiredGroupResource: {
+          group: 'apiextensions.k8s.io',
+          resource: 'customresourcedefinitions',
+        },
+      },
       children: [
         {
           pathSegment: ':crdName',
@@ -2117,7 +2129,15 @@ function filterNodesByAvailablePaths(nodes, groupVersions, permissionSet) {
 }
 
 function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
-  if (!node.viewUrl || !node.resourceType) return;
+  if (!node.viewUrl || !node.resourceType) {
+    if (node.context?.requiredGroupResource) {
+      const { group, resource } = node.context.requiredGroupResource;
+      if (!hasPermissionsFor(group, resource, permissionSet)) {
+        removeNode();
+      }
+    }
+    return;
+  }
   const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
   if (!apiPath) return;
 
