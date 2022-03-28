@@ -338,7 +338,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-- **SHOW_KYMA_VERSION** – determines if Kyma version should be visible on the Cluster Details page. Displayed version is the value of `reconciler.kyma-project.io/origin-version` label of `kyma-system` Namespace. If the value of the label is missing or there is no `kyma-system` Namespace, the `Unknown` version will be displayed.
+- **SHOW_KYMA_VERSION** – determines if the Kyma version should be visible on the Cluster Details page. The displayed version is the value of the `reconciler.kyma-project.io/origin-version` label in the `kyma-system` Namespace. If the value of the label is missing or there is no `kyma-system` Namespace, the `Unknown` version will be displayed.
 
   ```bash
   "SHOW_KYMA_VERSION": {
