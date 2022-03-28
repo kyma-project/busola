@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const defaultOptions = {
   root: null,
@@ -7,9 +7,9 @@ const defaultOptions = {
 };
 
 export const useIntersectionObserver = (target, options = {}) => {
-  const [hasBeenInView, setHasBeenInView] = useState(false);
+  const { skip, root, rootMargin, threshold } = options;
 
-  const { root, rootMargin, threshold } = options;
+  const [hasBeenInView, setHasBeenInView] = useState(false);
 
   const memoizedOptions = useMemo(() => {
     return {
@@ -20,10 +20,12 @@ export const useIntersectionObserver = (target, options = {}) => {
   }, [root, rootMargin, threshold]);
 
   useEffect(() => {
+    if (skip) {
+      return;
+    }
     if (options.root === null || !target) {
-      // break if target is not yet defined
-      // allows for undefined roots (defaults to window), but waits if null is passed,
-      // null is interpreted that the element hasn't been assigned to a ref yet
+      // break if target element is not yet defined (waiting for ref)
+      // allows for undefined roots (defaults to window), but waits if null is passed, in case of waiting for ref
       return;
     }
 
@@ -40,7 +42,7 @@ export const useIntersectionObserver = (target, options = {}) => {
     return () => {
       observer.disconnect();
     };
-  }, [target, hasBeenInView, memoizedOptions, options.root]);
+  }, [target, hasBeenInView, memoizedOptions, options.root, skip]);
 
   return { hasBeenInView };
 };

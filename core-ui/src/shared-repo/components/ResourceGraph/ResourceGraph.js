@@ -8,6 +8,7 @@ import {
   useMicrofrontendContext,
 } from '../..';
 import { useIntersectionObserver } from 'shared/hooks/useIntersectionObserver';
+import { useMinWidth, TABLET } from 'hooks/useMinWidth';
 import { useRelatedResources } from './useRelatedResources';
 import { buildGraph } from './buildGraph';
 import { useTranslation } from 'react-i18next';
@@ -21,9 +22,12 @@ function ResourceGraph({ resource, i18n, config }) {
   const [dotSrc, setDotSrc] = useState('');
   const [isReady, setReady] = useState(false);
 
-  const [graphEl, setGraphEl] = React.useState(null);
-  const { hasBeenInView } = useIntersectionObserver(graphEl);
+  const [graphEl, setGraphEl] = useState(null);
 
+  const isTabletOrWider = useMinWidth(TABLET);
+  const { hasBeenInView } = useIntersectionObserver(graphEl, {
+    skip: !isTabletOrWider,
+  });
   const redraw = () => {
     const data = {
       initialResource: resource,
@@ -69,7 +73,6 @@ function ResourceGraph({ resource, i18n, config }) {
   useEffect(() => {
     if (hasBeenInView) {
       startLoading();
-      setTimeout(() => window.scroll(0, document.body.scrollHeight), 500);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasBeenInView]);
@@ -79,6 +82,9 @@ function ResourceGraph({ resource, i18n, config }) {
 
   const actions = !startedLoading && null;
 
+  if (!isTabletOrWider) {
+    return null;
+  }
   return (
     <LayoutPanel
       className="fd-margin--md resource-graph"
