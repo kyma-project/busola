@@ -30,7 +30,7 @@ export function VirtualServicesCreate({
 }
 VirtualServicesCreate.resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
-  networkFlowLevel: -4,
+  networkFlowLevel: -2,
   relations: [
     {
       kind: 'APIRule',
