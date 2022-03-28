@@ -23,7 +23,7 @@ context('Test resource upload', () => {
 
   it('Creates resources', () => {
     cy.getLeftNav()
-      .contains('Cluster Overview')
+      .contains('Cluster Details')
       .click();
 
     cy.getIframeBody()
