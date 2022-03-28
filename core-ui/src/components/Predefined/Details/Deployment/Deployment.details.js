@@ -35,7 +35,7 @@ const DeploymentsDetails = props => {
     console.log('deployment', deployment);
     return (
       <StatsPanel
-        type="pod"
+        type="multipleMetrics"
         namespace={deployment.metadata.namespace}
         deployment={deployment.metadata.name}
       />

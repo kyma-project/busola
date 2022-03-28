@@ -82,7 +82,6 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
       ...props,
     },
   );
-
   return (
     <>
       {!error1 && !error2 ? (
@@ -106,6 +105,54 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
         </div>
       )}
       <BusyIndicator className="throbber" show={loading1 || loading2} />
+    </>
+  );
+}
+
+export function SingleMetricMultipeGraph({
+  type,
+  timeSpan,
+  metric,
+  labels,
+  ...props
+}) {
+  console.log('SingleMetricMultipeGraph props', props);
+
+  const { t } = useTranslation();
+  const {
+    data,
+    defaultLabels,
+    binary,
+    unit,
+    error,
+    loading,
+    startDate,
+    endDate,
+  } = usePrometheus(type, metric, {
+    items: DATA_POINTS,
+    timeSpan,
+    ...props,
+  });
+  console.log('SingleMetricMultipeGraph', data, zip(data), props);
+  return (
+    <>
+      {!error ? (
+        <StatsGraph
+          data={zip(...data)}
+          binary={binary}
+          unit={unit}
+          startDate={startDate}
+          endDate={endDate}
+          dataPoints={DATA_POINTS}
+          labels={labels ? labels : defaultLabels}
+          {...props}
+        />
+      ) : (
+        <div className="error-message">
+          <p>{getErrorMessage(error, t('components.error-panel.error'))}</p>
+        </div>
+      )}
+      <BusyIndicator className="throbber" show={loading} />
     </>
   );
 }
@@ -170,7 +217,16 @@ export function StatsPanel({ type, ...props }) {
         </LayoutPanel.Actions>
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        {metric !== 'network' && (
+        {type == 'multipleMetrics' && metric == 'cpu' && (
+          <SingleMetricMultipeGraph
+            type={type}
+            metric={metric}
+            className={metric}
+            timeSpan={timeSpans[timeSpan]}
+            {...props}
+          />
+        )}
+        {metric !== 'network' && metric !== 'cpu' && (
           <SingleGraph
             type={type}
             metric={metric}

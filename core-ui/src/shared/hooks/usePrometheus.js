@@ -15,6 +15,10 @@ const getPrometheusCPUQuery = (type, data, step) => {
   console.log('getPrometheusCPUQuery data', data);
   if (type === 'cluster') {
     return `count(node_cpu_seconds_total{mode="idle"}) - sum(rate(node_cpu_seconds_total{mode="idle"}[${step}s]))`;
+  } else if (type === 'multipleMetrics') {
+    return `node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{${getPrometheusSelector(
+      data,
+    )}}`;
   } else if (type === 'pod') {
     return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{${getPrometheusSelector(
       data,
@@ -126,15 +130,7 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     const loop = setInterval(tick, step * 1000);
     return () => clearInterval(loop);
   }, [metricId, timeSpan]); // eslint-disable-line react-hooks/exhaustive-deps
-  console.log('metric.prometheusQuery', metric.prometheusQuery);
-  console.log(
-    '!!!!! all query',
-    `/${path}/query_range?` +
-      `start=${startDate.toISOString()}&` +
-      `end=${endDate.toISOString()}&` +
-      `step=${step}&` +
-      `query=${metric.prometheusQuery}`,
-  );
+
   const { data, error, loading } = useGet(
     `/${path}/query_range?` +
       `start=${startDate.toISOString()}&` +
@@ -143,28 +139,68 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
       `query=${metric.prometheusQuery}`,
     { pollingInterval: 0 },
   );
+  console.log('metric.prometheusQuery', metricId, metric.prometheusQuery);
+  console.log('data', data);
 
-  let stepMultiplier = 0;
-  let helpIndex = 0;
-  const dataValues = data?.data.result[0]?.values;
   let prometheusData = [];
+  let prometheusLabels = [];
 
-  if (dataValues?.length > 0) {
-    for (let i = 0; i < items; i++) {
-      const [timestamp, graphValue] = dataValues[helpIndex];
-      const timeDifference = Math.floor(timestamp - startDate.getTime() / 1000);
-      if (stepMultiplier === timeDifference) {
-        helpIndex++;
-        prometheusData.push(graphValue);
-      } else {
-        prometheusData.push(null);
+  if (type === 'multipleMetrics') {
+    (data?.data.result || []).forEach(d => {
+      let tempPrometheusData = [];
+
+      let stepMultiplier = 0;
+      let helpIndex = 0;
+      const dataValues = d?.values;
+      const metric = d?.metric;
+      console.log('multipleMetrics dataValues', dataValues);
+      if (dataValues?.length > 0) {
+        for (let i = 0; i < items; i++) {
+          const [timestamp, graphValue] = dataValues[helpIndex];
+          const timeDifference = Math.floor(
+            timestamp - startDate.getTime() / 1000,
+          );
+          if (stepMultiplier === timeDifference) {
+            helpIndex++;
+            tempPrometheusData.push(graphValue);
+          } else {
+            tempPrometheusData.push(null);
+          }
+          stepMultiplier += step;
+        }
+        prometheusLabels.push(
+          `container="${metric.container}, pod="${metric.pod}"`,
+        );
+        prometheusData.push(tempPrometheusData);
       }
-      stepMultiplier += step;
+    });
+  } else {
+    const dataValues = data?.data.result[0]?.values;
+    console.log('dataValues', dataValues);
+
+    let stepMultiplier = 0;
+    let helpIndex = 0;
+    if (dataValues?.length > 0) {
+      for (let i = 0; i < items; i++) {
+        const [timestamp, graphValue] = dataValues[helpIndex];
+        const timeDifference = Math.floor(
+          timestamp - startDate.getTime() / 1000,
+        );
+        if (stepMultiplier === timeDifference) {
+          helpIndex++;
+          prometheusData.push(graphValue);
+        } else {
+          prometheusData.push(null);
+        }
+        stepMultiplier += step;
+      }
     }
   }
+  console.log('prometheusData', prometheusData);
 
   return {
     data: prometheusData,
+    defaultLabels: prometheusLabels,
     error,
     loading,
     step,
