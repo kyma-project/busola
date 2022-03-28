@@ -174,7 +174,7 @@ function APIRulesCreate({
 APIRulesCreate.allowEdit = true;
 APIRulesCreate.resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
-  networkFlowLevel: -4,
+  networkFlowLevel: -3,
   relations: [
     {
       kind: 'Service',
