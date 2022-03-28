@@ -15,7 +15,7 @@ const getPrometheusCPUQuery = (type, data, step) => {
   if (type === 'cluster') {
     return `count(node_cpu_seconds_total{mode="idle"}) - sum(rate(node_cpu_seconds_total{mode="idle"}[${step}s]))`;
   } else if (type === 'pod') {
-    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{${getPrometheusSelector(
+    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{${getPrometheusSelector(
       data,
     )}})`;
   } else {
