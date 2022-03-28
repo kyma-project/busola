@@ -4,9 +4,9 @@ import LuigiClient from '@luigi-project/client';
 import { useGet, useMicrofrontendContext } from 'react-shared';
 
 const getPrometheusSelector = data => {
-  const selector = `cluster="", container!="", namespace="${data.namespace}"`;
+  let selector = `cluster="", container!="", namespace="${data.namespace}"`;
   if (data.pod) {
-    selector.concat(', ', `pod="${data.pod}"`);
+    selector = `${selector}, pod="${data.pod}"`;
   }
   return selector;
 };
