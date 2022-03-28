@@ -82,15 +82,11 @@ export function ResourcesList(props) {
     return <></>; // wait for the context update
   }
 
-  const prettifiedResourceName = props.noPrettifyName
-    ? props.resourceName || props.resourceType
-    : prettifyNameSingular(props.resourceName, props.resourceType);
-
   return (
     <YamlEditorProvider i18n={props.i18n}>
       {!props.isCompact && (
         <PageHeader
-          title={prettifiedResourceName}
+          title={prettifyNameSingular(props.resourceName, props.resourceType)}
           actions={props.customHeaderActions}
           description={props.description}
         />
@@ -159,7 +155,6 @@ export function ResourceListRenderer({
   silentRefetch = () => {},
   showSearchField = true,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
-  noPrettifyName,
 }) {
   const { t } = useTranslation(['translation'], { i18n });
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
@@ -182,9 +177,10 @@ export function ResourceListRenderer({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => closeEditor(), [namespace]);
 
-  const prettifiedResourceName = noPrettifyName
-    ? resourceName || resourceType
-    : prettifyNameSingular(resourceName, resourceType);
+  const prettifiedResourceName = prettifyNameSingular(
+    resourceName,
+    resourceType,
+  );
 
   customColumns = customColumns.filter(col => !omitColumnsIds.includes(col.id));
 

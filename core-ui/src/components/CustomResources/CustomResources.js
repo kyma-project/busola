@@ -45,6 +45,7 @@ export function CustomResources({
     hasDetailsView: true,
     navigateFn: cr => navigateFn(cr, crd),
     resourceUrl,
+    resourceName: crd.spec.names.kind,
     resourceType: crd.spec.names.kind,
     namespace,
     isCompact: true,
@@ -54,7 +55,6 @@ export function CustomResources({
     showNamespace,
     hideCreateOption,
     createResourceForm: props => <CRCreate {...props} crd={crd} />,
-    noPrettifyName: true,
   };
 
   return <ResourcesList {...params} />;
