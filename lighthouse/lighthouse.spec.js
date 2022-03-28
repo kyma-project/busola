@@ -66,7 +66,7 @@ test('Busola Lighthouse audit', async () => {
     .click();
 
   await expect(
-    page.frameLocator('iframe').locator('text=Cluster Overview'),
+    page.frameLocator('iframe').locator('text=Cluster Details'),
   ).toBeVisible();
 
   console.log('Running audit on cluster details...');

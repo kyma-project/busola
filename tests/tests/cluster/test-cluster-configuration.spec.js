@@ -49,7 +49,7 @@ context('Test Cluster configuration', () => {
 
     // custom storage type should be set
     cy.getLeftNav()
-      .contains('Cluster Overview')
+      .contains('Cluster Details')
       .click();
     cy.contains('sessionStorage').should('be.visible');
   });
