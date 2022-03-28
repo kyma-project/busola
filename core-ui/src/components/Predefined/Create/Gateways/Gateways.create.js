@@ -114,6 +114,7 @@ function GatewaysCreate({
 
 GatewaysCreate.allowEdit = true;
 GatewaysCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
   relations: [
     {
       kind: 'APIRule',
@@ -123,7 +124,12 @@ GatewaysCreate.resourceGraphConfig = (t, context) => ({
       kind: 'Secret',
       clusterwide: true,
     },
+    {
+      kind: 'VirtualService',
+      clusterwide: true,
+    },
   ],
+  depth: 1,
   networkFlowLevel: -3,
   matchers: {
     Secret: (gateway, secret) => matchByTlsCredentials(secret, gateway),
