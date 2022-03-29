@@ -30,6 +30,7 @@ export function MultiInput({
   fullWidth = false,
   isEntryLocked = () => false,
   readOnly,
+  noEdit,
   ...props
 }) {
   const { t } = useTranslation();
@@ -187,9 +188,13 @@ export function MultiInput({
         <ul className={listClasses}>
           {internalValue.map((entry, index) => (
             <li key={index}>
-              {inputs.map(
-                (input, inputIndex) => inputComponents[index][inputIndex],
+              {noEdit && !isLast(index) && (
+                <span class="readonly-value">{entry}</span>
               )}
+              {(!noEdit || isLast(index)) &&
+                inputs.map(
+                  (input, inputIndex) => inputComponents[index][inputIndex],
+                )}
               <Button
                 disabled={readOnly}
                 compact

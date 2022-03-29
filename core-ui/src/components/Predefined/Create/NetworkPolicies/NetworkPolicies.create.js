@@ -3,6 +3,7 @@ import { useMicrofrontendContext } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { createNetworkPolicyTemplate } from './templates';
+import { matchBySelector } from 'shared-repo';
 
 function NetworkPoliciesCreate({
   formElementRef,
@@ -30,4 +31,17 @@ function NetworkPoliciesCreate({
     />
   );
 }
+NetworkPoliciesCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  networkFlowLevel: -1,
+  relations: [
+    {
+      kind: 'Pod',
+    },
+  ],
+  matchers: {
+    Pod: (policy, pod) =>
+      matchBySelector(policy.spec.podSelector.matchLabels, pod.metadata.labels),
+  },
+});
 export { NetworkPoliciesCreate };

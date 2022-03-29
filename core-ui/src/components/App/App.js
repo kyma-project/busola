@@ -9,8 +9,8 @@ import {
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { useSentry } from '../../hooks/useSentry';
 
-import resourcesRoutes from '../../routing/resources';
-import otherRoutes from '../../routing/other';
+import resources from 'routing/resources';
+import otherRoutes from 'routing/other';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -48,7 +48,7 @@ export default function App() {
           </WithTitle>
         }
       />
-      {resourcesRoutes}
+      {resources}
       {otherRoutes}
       <Route path="" element={<MainFrameRedirection />} />
     </Routes>
