@@ -5,15 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
 import { Link, Button, MessagePage } from 'fundamental-react';
 
-import {
-  useMicrofrontendContext,
-  PageHeader,
-  GenericList,
-  useNotification,
-  ModalWithForm,
-  useDeleteResource,
-  EMPTY_TEXT_PLACEHOLDER,
-} from 'react-shared';
+import { useDeleteResource } from 'shared/hooks/useDeleteResource';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import { setCluster, deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';

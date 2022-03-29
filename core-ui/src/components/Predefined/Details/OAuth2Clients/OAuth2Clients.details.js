@@ -6,7 +6,8 @@ import { OAuth2ClientStatus } from 'shared/components/OAuth2ClientStatus/OAuth2C
 import { useTranslation } from 'react-i18next';
 import { OAuth2ClientsCreate } from '../../Create/OAuthClients/OAuthClients.create';
 
-import { useGet, ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 function SecretComponent({ namespaceName, secretName }) {
   const { t } = useTranslation();

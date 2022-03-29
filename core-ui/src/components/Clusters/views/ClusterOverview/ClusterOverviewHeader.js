@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
-import {
-  useGet,
-  useMicrofrontendContext,
-  PageHeader,
-  getErrorMessage,
-} from 'react-shared';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { getErrorMessage } from 'shared/utils/helpers';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { Button } from 'fundamental-react';
 import { ClusterStorageType } from '../ClusterStorageType';
 import { useKymaVersionQuery } from './useKymaVersionQuery';

@@ -1,10 +1,8 @@
 import React from 'react';
 import { InfoLabel, Icon, Token } from 'fundamental-react';
-import {
-  ControlledBy,
-  useMicrofrontendContext,
-  ResourceDetails,
-} from 'react-shared';
+import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useTranslation } from 'react-i18next';
 import { ServicesCreate } from '../../Create/Services/Services.create';
 import './Service.details.scss';

@@ -1,12 +1,10 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 
-import {
-  GenericList,
-  useNotification,
-  useDelete,
-  useMicrofrontendContext,
-} from 'react-shared';
+import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 

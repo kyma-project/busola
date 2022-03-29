@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LayoutPanel } from 'fundamental-react';
-import { ResourceStatus, ResourceDetails } from 'react-shared';
+import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { DNSEntriesCreate } from '../Create/DNSEntries/DNSEntries.create';
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FormInput, Button } from 'fundamental-react';
-import { Tooltip } from 'react-shared';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useTranslation } from 'react-i18next';
 
 import { base64Decode, base64Encode, readFromFile } from 'shared/helpers';

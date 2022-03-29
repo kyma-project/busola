@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { LayoutPanel, Button, ButtonSegmented } from 'fundamental-react';
-import { MonacoEditor, useTheme } from 'react-shared';
+import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
+import { useTheme } from 'shared/contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 

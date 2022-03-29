@@ -1,5 +1,6 @@
 import React from 'react';
-import { ControlledBy, ResourceDetails } from 'react-shared';
+import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { useTranslation } from 'react-i18next';
 
 import { ReplicaSetStatus } from './ReplicaSetStatus';

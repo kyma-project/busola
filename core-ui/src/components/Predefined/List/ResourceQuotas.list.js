@@ -1,5 +1,6 @@
 import React from 'react';
-import { EMPTY_TEXT_PLACEHOLDER, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
 import { ResourceQuotasCreate } from '../Create/ResourceQuotas/ResourceQuotas.create';
 

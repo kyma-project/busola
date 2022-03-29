@@ -8,7 +8,7 @@ import {
 } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
-import { Dropdown } from 'react-shared';
+import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 
 import { ResourceForm } from '..';
 import * as Inputs from '../inputs';

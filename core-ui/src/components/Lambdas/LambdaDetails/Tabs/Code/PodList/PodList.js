@@ -1,6 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { GenericList, useGetList } from 'react-shared';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Link, Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import './PodList.scss';

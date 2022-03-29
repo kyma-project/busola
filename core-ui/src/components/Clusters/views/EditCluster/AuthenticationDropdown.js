@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dropdown } from 'react-shared';
+import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 
 export function AuthenticationTypeDropdown({ type, setType }) {
   const { t, i18n } = useTranslation();

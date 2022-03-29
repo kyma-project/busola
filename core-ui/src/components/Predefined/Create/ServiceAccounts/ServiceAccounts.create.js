@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGetList } from 'react-shared';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { ResourceForm } from 'shared/ResourceForm';
 import {
   K8sNameField,

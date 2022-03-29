@@ -7,7 +7,9 @@ import ThemeChooser from './ThemeChooser';
 import LanguageSettings from './LanguageSettings';
 import OtherSettings from './OtherSettings';
 import ConfirmationSettings from './ConfirmationSettings';
-import { VerticalTabs, Tabs, Tab } from 'react-shared';
+import { Tab } from 'shared/components/Tabs/Tab';
+import { Tabs } from 'shared/components/Tabs/Tabs';
+import { VerticalTabs } from 'shared/components/VerticalTabs/VerticalTabs';
 import { useTranslation } from 'react-i18next';
 import { Icon } from 'fundamental-react';
 

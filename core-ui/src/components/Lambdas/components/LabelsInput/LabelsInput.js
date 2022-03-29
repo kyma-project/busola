@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FormLabel } from 'fundamental-react';
-import { LabelSelectorInput } from 'react-shared';
+import { LabelSelectorInput } from 'shared/components/LabelSelectorInput/LabelSelectorInput';
 import { useTranslation } from 'react-i18next';
 
 import './LabelsInput.scss';

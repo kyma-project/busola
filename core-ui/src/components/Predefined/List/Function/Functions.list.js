@@ -1,7 +1,9 @@
 import React from 'react';
 import { Button } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
-import { useMicrofrontendContext, Link, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { Link } from 'shared/components/Link/Link';
 
 import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';

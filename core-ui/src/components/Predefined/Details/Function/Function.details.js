@@ -5,7 +5,7 @@ import LambdaDetailsWrapper from 'components/Lambdas/LambdaDetails/LambdaDetails
 import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
-import { ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { FunctionsCreate } from '../../Create/Functions/Functions.create';
 
 const FunctionsDetails = props => {

@@ -2,7 +2,7 @@ import { mount } from 'enzyme';
 import ServiceInstanceInfo from '../ServiceInstanceInfo';
 import React from 'react';
 import { instanceAllAttributes } from './mocks';
-import { Modal } from 'react-shared';
+import { Modal } from 'shared/components/Modal/Modal';
 import { serviceInstanceConstants } from 'helpers/constants';
 
 const mockNavigate = jest.fn();

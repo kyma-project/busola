@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FormItem, FormLabel, MessageStrip } from 'fundamental-react';
-import { K8sNameInput } from 'react-shared';
+import { K8sNameInput } from 'shared/components/K8sNameInput/K8sNameInput';
 import { useTranslation } from 'react-i18next';
 
 import './ResourceNameInput.scss';

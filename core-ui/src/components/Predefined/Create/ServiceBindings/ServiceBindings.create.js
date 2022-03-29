@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 
-import { useGetList } from 'react-shared';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { ResourceForm } from 'shared/ResourceForm';
 import {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { Link } from 'shared/components/Link/Link';
 import { Trans } from 'react-i18next';
 import { Tokens } from 'shared/components/Tokens';
 import { CustomResourceDefinitionsCreate } from '../Create/CustomResourceDefinitions/CustomResourceDefinitons.create';

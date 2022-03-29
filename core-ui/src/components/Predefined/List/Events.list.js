@@ -1,16 +1,12 @@
 import React from 'react';
-import {
-  GenericList,
-  useGetList,
-  ReadableCreationTimestamp,
-} from 'react-shared';
+import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { prettifyNamePlural } from 'shared/utils/helpers';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation, Trans } from 'react-i18next';
-import {
-  Link as DescriptionLink,
-  PageHeader,
-  prettifyNamePlural,
-  Tooltip,
-} from 'react-shared';
+import { Link as DescriptionLink } from 'shared/components/Link/Link';
 import { Icon, Link } from 'fundamental-react';
 import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 

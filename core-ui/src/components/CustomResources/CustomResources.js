@@ -1,8 +1,8 @@
 import React from 'react';
 import * as jp from 'jsonpath';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useNavigateToCustomResource } from '../Predefined/Details/CustomResourceDefinitions/useNavigateToCustomResource';
-import { ResourcesList } from 'react-shared/';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { CRCreate } from 'components/Predefined/Details/CustomResourceDefinitions/CRCreate';
 import pluralize from 'pluralize';
 

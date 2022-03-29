@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
-import { EditorActions } from 'react-shared';
+import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
 import { useTranslation } from 'react-i18next';
 
 import { ModeSelector } from './ModeSelector';

@@ -1,7 +1,8 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { LayoutPanel } from 'fundamental-react';
-import { ReadableCreationTimestamp, StatusBadge } from 'react-shared';
+import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { HelmReleaseStatus } from 'components/HelmReleases/HelmReleaseStatus';
 import { useTranslation } from 'react-i18next';

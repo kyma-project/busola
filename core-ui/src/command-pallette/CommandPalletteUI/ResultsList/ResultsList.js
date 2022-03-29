@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useEventListener } from 'hooks/useEventListener';
 import { Result } from './Result';
-import { Spinner } from 'react-shared';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import { addHistoryEntry } from '../search-history';
 import './ResultsList.scss';
 import { LOADING_INDICATOR } from '../useSearchResults';

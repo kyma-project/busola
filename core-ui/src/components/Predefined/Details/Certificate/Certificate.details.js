@@ -1,11 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  FormattedDatetime,
-  ResourceStatus,
-  EMPTY_TEXT_PLACEHOLDER,
-  ResourceDetails,
-} from 'react-shared';
+import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { FormattedDatetime } from 'shared/components/FormattedDate/FormattedDate';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { CertificatesCreate } from '../../Create/Certificates/Certificates.create';
 import { CertificateRefs } from './CertificateRefs';
 

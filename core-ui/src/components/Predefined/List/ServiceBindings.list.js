@@ -3,11 +3,9 @@ import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'fundamental-react';
 import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
-import {
-  ControlledByKind,
-  Link as ReactSharedLink,
-  ResourcesList,
-} from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
+import { Link as ReactSharedLink } from 'shared/components/Link/Link';
 import { ServiceBindingsCreate } from '../Create/ServiceBindings/ServiceBindings.create';
 import { Trans } from 'react-i18next';
 

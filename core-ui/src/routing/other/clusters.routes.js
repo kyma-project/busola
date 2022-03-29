@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { Route } from 'react-router-dom';
-import { Spinner } from 'react-shared';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 const ClusterList = React.lazy(() =>
   import('../../components/Clusters/views/ClusterList'),

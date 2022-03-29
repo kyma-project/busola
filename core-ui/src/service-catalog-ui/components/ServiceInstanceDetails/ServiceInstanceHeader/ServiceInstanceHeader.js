@@ -2,15 +2,13 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { serviceInstanceConstants } from 'helpers/constants';
 import { Button } from 'fundamental-react';
-import {
-  PageHeader,
-  useGet,
-  Spinner,
-  useDelete,
-  useNotification,
-  useMicrofrontendContext,
-  Tooltip,
-} from 'react-shared';
+import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { isService } from 'helpers';
 import ServiceserviceClassInfo from '../ServiceInstanceInfo/ServiceInstanceInfo';
 

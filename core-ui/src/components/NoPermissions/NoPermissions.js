@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Button, FormInput, Icon } from 'fundamental-react';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useTranslation } from 'react-i18next';
 import './NoPermissions.scss';
 import { addCluster } from 'components/Clusters/shared';

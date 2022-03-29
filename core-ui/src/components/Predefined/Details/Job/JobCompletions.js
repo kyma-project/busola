@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { TooltipBadge } from 'react-shared';
+import { TooltipBadge } from 'shared/components/TooltipBadge/TooltipBadge';
 
 export function JobCompletions({ job }) {
   const { t } = useTranslation();

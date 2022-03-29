@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { ComboboxInput } from 'fundamental-react';
 
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
 import {
   K8sNameField,

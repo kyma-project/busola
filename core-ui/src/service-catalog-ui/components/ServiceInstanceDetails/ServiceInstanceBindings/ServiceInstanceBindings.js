@@ -3,15 +3,13 @@ import LuigiClient from '@luigi-project/client';
 import CreateServiceBindingUsageModal from './CreateServiceBindingUsageForm/CreateServiceBindingUsageModal';
 import SecretDataModal from './SecretDataModal/SecretDataModal.component';
 import { Link } from 'fundamental-react';
-import {
-  GenericList,
-  handleDelete,
-  StatusBadge,
-  useGetList,
-  useNotification,
-  useDelete,
-  useMicrofrontendContext,
-} from 'react-shared';
+import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { handleDelete } from 'shared/components/GenericList/actionHandlers/simpleDelete';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 
 import { TextOverflowWrapper } from '../../ServiceInstanceList/ServiceInstanceTable/styled';
