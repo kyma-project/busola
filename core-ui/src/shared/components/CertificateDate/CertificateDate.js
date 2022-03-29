@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { Tooltip, FormattedDatetime } from 'react-shared';
+import './CertificateDate.scss';
 
 export function CertificateDate({ date, lang }) {
   const { t } = useTranslation();
@@ -47,19 +48,9 @@ export function CertificateDate({ date, lang }) {
     };
   }
   return (
-    <div
-      style={{
-        display: 'flex',
-      }}
-    >
-      <p
-        style={{
-          marginRight: '5px',
-        }}
-      >
-        <FormattedDatetime date={date} lang={lang} />
-      </p>
-      <Tooltip content={certificateDetails.tooltipContent}>
+    <div className="cert-date-wrapper">
+      <FormattedDatetime date={date} lang={lang} />
+      <Tooltip content={certificateDetails.tooltipContent} className="tooltip">
         <Icon
           ariaLabel={certificateDetails.ariaLabel}
           glyph={certificateDetails.glyph}

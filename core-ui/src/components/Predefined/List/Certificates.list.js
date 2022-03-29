@@ -28,17 +28,15 @@ const CertificatesList = props => {
     },
     {
       header: t('certificates.expiration-date'),
-      value: certificate => {
-        console.log(certificate);
-        return certificate.status?.expirationDate ? (
+      value: certificate =>
+        certificate.status?.expirationDate ? (
           <CertificateDate
             date={certificate.status.expirationDate}
             lang={i18n.language}
           />
         ) : (
           EMPTY_TEXT_PLACEHOLDER
-        );
-      },
+        ),
     },
     {
       header: t('certificates.state'),
