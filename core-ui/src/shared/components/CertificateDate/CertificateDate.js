@@ -1,7 +1,10 @@
 import React from 'react';
 import { Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { Tooltip, FormattedDatetime } from 'react-shared';
+import {
+  Tooltip,
+  FormattedDatetime,
+} from 'shared/components/FormattedDate/FormattedDatetime';
 import './CertificateDate.scss';
 
 export function CertificateDate({ date, lang }) {
