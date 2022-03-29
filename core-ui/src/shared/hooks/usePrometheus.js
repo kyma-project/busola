@@ -7,19 +7,15 @@ const getPrometheusSelector = data => {
   let selector = `cluster="", container!="", namespace="${data.namespace}"`;
   if (data.pod) {
     selector = `${selector}, pod="${data.pod}"`;
-    console.log('!!!!!! pod', selector);
   }
-  console.log('getPrometheusSelector selector', selector, 'data', data);
   return selector;
 };
 
 const getPrometheusCPUQuery = (type, data, step, cpuQuery = 'sum_irate') => {
-  console.log('getPrometheusCPUQuery data', data);
-
   if (type === 'cluster') {
     return `count(node_cpu_seconds_total{mode="idle"}) - sum(rate(node_cpu_seconds_total{mode="idle"}[${step}s]))`;
   } else if (type === 'multipleMetrics') {
-    return `node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{${getPrometheusSelector(
+    return `node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
       data,
     )}}`;
   } else if (type === 'pod') {
@@ -32,10 +28,12 @@ const getPrometheusCPUQuery = (type, data, step, cpuQuery = 'sum_irate') => {
 };
 
 const getPrometheusMemoryQuery = (type, data) => {
-  console.log('getPrometheusMemoryQuery data', data);
-
   if (type === 'cluster') {
     return `sum(node_memory_MemTotal_bytes - node_memory_MemFree_bytes)`;
+  } else if (type === 'multipleMetrics') {
+    return `node_namespace_pod_container:container_memory_working_set_bytes{${getPrometheusSelector(
+      data,
+    )}}`;
   } else if (type === 'pod') {
     return `sum(node_namespace_pod_container:container_memory_working_set_bytes{${getPrometheusSelector(
       data,
@@ -46,8 +44,6 @@ const getPrometheusMemoryQuery = (type, data) => {
 };
 
 const getPrometheusNetworkReceivedQuery = (type, data, step) => {
-  console.log('getPrometheusNetworkReceivedQuery data', data);
-
   if (type === 'cluster') {
     return `sum(rate(node_network_receive_bytes_total{device!="lo"}[${step}s]))`;
   } else if (type === 'pod') {
@@ -60,8 +56,6 @@ const getPrometheusNetworkReceivedQuery = (type, data, step) => {
 };
 
 const getPrometheusNetworkTransmittedQuery = (type, data, step) => {
-  console.log('getPrometheusNetworkTransmittedQuery data', data);
-
   if (type === 'cluster') {
     return `sum(rate(node_network_transmit_bytes_total{device!="lo"}[${step}s]))`;
   } else if (type === 'pod') {
@@ -104,7 +98,12 @@ export function getMetric(type, metric, cpuQuery, { step, ...data }) {
   return metrics[metric];
 }
 
-export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
+export function usePrometheus(
+  type,
+  metricId,
+  filter,
+  { items, timeSpan, ...props },
+) {
   const { features } = useMicrofrontendContext();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -180,21 +179,21 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
   if (data) {
     error = null;
   }
-  console.log('metric.prometheusQuery', metricId, metric.prometheusQuery);
-  console.log('data', data);
 
   let prometheusData = [];
   let prometheusLabels = [];
 
   if (type === 'multipleMetrics') {
-    (data?.data.result || []).forEach(d => {
+    const filteredResults = (data?.data.result || []).filter(filter);
+    console.log('filteredResults', filteredResults);
+
+    (filteredResults || []).forEach(d => {
       let tempPrometheusData = [];
 
       let stepMultiplier = 0;
       let helpIndex = 0;
       const dataValues = d?.values;
       const metric = d?.metric;
-      console.log('multipleMetrics dataValues', dataValues);
       if (dataValues?.length > 0) {
         for (let i = 0; i < items; i++) {
           const [timestamp, graphValue] = dataValues[helpIndex] || [];
@@ -217,7 +216,6 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     });
   } else {
     const dataValues = data?.data.result[0]?.values;
-    console.log('dataValues', dataValues);
 
     let stepMultiplier = 0;
     let helpIndex = 0;

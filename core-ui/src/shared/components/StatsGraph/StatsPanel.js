@@ -113,11 +113,10 @@ export function SingleMetricMultipeGraph({
   type,
   timeSpan,
   metric,
+  filter,
   labels,
   ...props
 }) {
-  console.log('SingleMetricMultipeGraph props', props);
-
   const { t } = useTranslation();
   const {
     data,
@@ -128,12 +127,11 @@ export function SingleMetricMultipeGraph({
     loading,
     startDate,
     endDate,
-  } = usePrometheus(type, metric, {
+  } = usePrometheus(type, metric, filter, {
     items: DATA_POINTS,
     timeSpan,
     ...props,
   });
-  console.log('SingleMetricMultipeGraph', data, zip(data), props);
   return (
     <>
       {!error ? (
@@ -157,9 +155,8 @@ export function SingleMetricMultipeGraph({
   );
 }
 
-export function StatsPanel({ type, ...props }) {
+export function StatsPanel({ type, filter, ...props }) {
   const { features } = useMicrofrontendContext();
-
   const timeSpans = {
     '1h': 60 * 60,
     '3h': 3 * 60 * 60,
@@ -217,16 +214,18 @@ export function StatsPanel({ type, ...props }) {
         </LayoutPanel.Actions>
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        {type == 'multipleMetrics' && metric == 'cpu' && (
-          <SingleMetricMultipeGraph
-            type={type}
-            metric={metric}
-            className={metric}
-            timeSpan={timeSpans[timeSpan]}
-            {...props}
-          />
-        )}
-        {metric !== 'network' && metric !== 'cpu' && (
+        {type === 'multipleMetrics' &&
+          (metric === 'cpu' || metric === 'memory') && (
+            <SingleMetricMultipeGraph
+              type={type}
+              metric={metric}
+              filter={filter}
+              className={metric}
+              timeSpan={timeSpans[timeSpan]}
+              {...props}
+            />
+          )}
+        {metric !== 'network' && metric !== 'cpu' && metric !== 'memory' && (
           <SingleGraph
             type={type}
             metric={metric}
