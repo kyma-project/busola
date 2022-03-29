@@ -80,7 +80,6 @@ export function ComboboxArrayInput({
               onKeyDown={focus}
               onBlur={onBlur}
               onSelectionChange={(_, selected) => {
-                console.log('onSelectionChange', selected);
                 if ((noEdit && !selected) || selected.key === -1) {
                   return;
                 }
