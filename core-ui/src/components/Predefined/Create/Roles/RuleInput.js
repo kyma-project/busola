@@ -112,7 +112,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         defaultOpen
         actions={
           <Button compact glyph="add" onClick={addAllApiGroups}>
-            {t('roles.add-all')}
+            {t('roles.buttons.add-all')}
           </Button>
         }
       />
@@ -131,7 +131,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
             onClick={fetchResources}
             disabled={!loadable || loading}
           >
-            {t('roles.load')}
+            {t('roles.buttons.load')}
           </Button>,
           <Button
             compact
@@ -139,7 +139,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
             onClick={addAllResources}
             disabled={loading}
           >
-            {t('roles.add-all')}
+            {t('roles.buttons.add-all')}
           </Button>,
         ]}
       />
@@ -152,7 +152,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         defaultOpen
         actions={[
           <Button compact glyph="add" onClick={addAllVerbs}>
-            {t('roles.add-all')}
+            {t('roles.buttons.add-all')}
           </Button>,
         ]}
       />
