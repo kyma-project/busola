@@ -33,7 +33,10 @@ const IngressesDetails = props => {
 
   customComponents.push(resource =>
     resource.spec.defaultBackend ? (
-      <DefaultBackendPanel backend={resource.spec.defaultBackend} />
+      <DefaultBackendPanel
+        backend={resource.spec.defaultBackend}
+        namespace={resource.metadata.namespace}
+      />
     ) : null,
   );
   customComponents.push(resource =>

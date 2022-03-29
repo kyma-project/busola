@@ -10,11 +10,11 @@ context('Test Cluster Overview', () => {
 
   it('Check Cluster Overview details', () => {
     cy.getLeftNav()
-      .contains('Cluster Overview')
+      .contains('Cluster Details')
       .click();
 
     cy.getIframeBody()
-      .contains('h3', 'Cluster Overview')
+      .contains('h3', 'Cluster Details')
       .should('be.visible');
 
     cy.getIframeBody()

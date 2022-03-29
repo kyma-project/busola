@@ -11,7 +11,7 @@ function decodeHTMLEncoded(str) {
   return str.replaceAll('&quot;', '"');
 }
 
-export function NoPermissions() {
+function NoPermissions() {
   const { t } = useTranslation();
   const [namespaceName, setNamespaceName] = useState('');
   const {
@@ -72,3 +72,5 @@ export function NoPermissions() {
     </section>
   );
 }
+
+export default NoPermissions;
