@@ -10,7 +10,7 @@ export const extractApiGroup = groupVersion => {
 };
 
 export const getApiGroupInputOptions = groupVersions =>
-  unique(groupVersions.map(extractApiGroup))?.map(g =>
+  unique(groupVersions?.map(extractApiGroup))?.map(g =>
     g === ''
       ? { key: EMPTY_API_GROUP_KEY, text: '(core)' }
       : { key: g, text: g },
