@@ -19,10 +19,13 @@ const PersistentVolumesList = props => {
     '/apis/storage.k8s.io/v1/storageclasses',
   );
 
+  const { data: persistentVolumeClaims } = useGetList()(
+    '/api/v1/persistentvolumeclaims',
+  );
+
   const customColumns = [
     {
       header: t('pv.headers.storage-class'),
-
       value: pv =>
         storageClasses?.find(
           ({ metadata }) => metadata.name === pv.spec?.storageClassName,
@@ -47,26 +50,24 @@ const PersistentVolumesList = props => {
     },
     {
       header: t('pv.headers.claim'),
-      value: pv => {
-        if (!pv.spec?.claimRef?.name) {
-          return <p>{EMPTY_TEXT_PLACEHOLDER}</p>;
-        } else if (pv.status.phase === 'Released') {
-          return <p>{pv.spec?.claimRef?.name || EMPTY_TEXT_PLACEHOLDER}</p>;
-        } else
-          return (
-            <Link
-              onClick={() =>
-                navigateToResource({
-                  name: pv.spec?.claimRef?.name,
-                  kind: 'PersistentVolumeClaim',
-                  namespace: pv.spec?.claimRef?.namespace,
-                })
-              }
-            >
-              {pv.spec?.claimRef?.name}
-            </Link>
-          );
-      },
+      value: pv =>
+        persistentVolumeClaims?.find(
+          ({ metadata }) => metadata.name === pv.spec?.claimRef?.name,
+        ) ? (
+          <Link
+            onClick={() =>
+              navigateToResource({
+                name: pv.spec?.claimRef?.name,
+                kind: 'PersistentVolumeClaim',
+                namespace: pv.spec?.claimRef?.namespace,
+              })
+            }
+          >
+            {pv.spec?.claimRef?.name}
+          </Link>
+        ) : (
+          <p>{pv.spec?.claimRef?.name || EMPTY_TEXT_PLACEHOLDER}</p>
+        ),
     },
     {
       header: t('common.headers.status'),
