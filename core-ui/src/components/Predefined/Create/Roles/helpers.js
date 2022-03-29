@@ -1,3 +1,21 @@
+export function unique(arr) {
+  return [...new Set(arr)];
+}
+export const EMPTY_API_GROUP_KEY = 'core-api-group';
+export const extractApiGroup = groupVersion => {
+  // handle core ('') group
+  if (groupVersion === 'v1') return '';
+  const [apiGroup] = groupVersion.split('/');
+  return apiGroup;
+};
+
+export const getApiGroupInputOptions = groupVersions =>
+  unique(groupVersions?.map(extractApiGroup))?.map(g =>
+    g === ''
+      ? { key: EMPTY_API_GROUP_KEY, text: '(core)' }
+      : { key: g, text: g },
+  ) ?? [];
+
 export function createRoleTemplate(namespace, { name = '', rules } = {}) {
   if (!rules) {
     rules = [createRuleTemplate(true)];
@@ -35,7 +53,9 @@ export function createRuleTemplate(isNamespaced) {
   };
 }
 
-export function createRolePresets(namespace, translate) {
+export function createRolePresets(namespace, translate, groupVersions) {
+  const apiGroups = getApiGroupInputOptions(groupVersions).map(g => g.key);
+
   return [
     {
       name: translate('roles.templates.all-permissions'),
@@ -44,7 +64,7 @@ export function createRolePresets(namespace, translate) {
         rules: [
           {
             verbs: ['*'],
-            apiGroups: ['*'],
+            apiGroups,
             resources: ['*'],
             resourceNames: [],
           },
@@ -58,7 +78,7 @@ export function createRolePresets(namespace, translate) {
         rules: [
           {
             verbs: ['get', 'list', 'watch'],
-            apiGroups: ['*'],
+            apiGroups,
             resources: ['*'],
             resourceNames: [],
           },
@@ -68,7 +88,8 @@ export function createRolePresets(namespace, translate) {
   ];
 }
 
-export function createClusterRolePresets(translate) {
+export function createClusterRolePresets(translate, groupVersions) {
+  const apiGroups = getApiGroupInputOptions(groupVersions).map(g => g.key);
   return [
     {
       name: translate('roles.templates.all-permissions'),
@@ -77,7 +98,7 @@ export function createClusterRolePresets(translate) {
         rules: [
           {
             verbs: ['*'],
-            apiGroups: ['*'],
+            apiGroups,
             resources: ['*'],
             resourceNames: [],
             nonResourceURLs: [],
@@ -92,7 +113,7 @@ export function createClusterRolePresets(translate) {
         rules: [
           {
             verbs: ['get', 'list', 'watch'],
-            apiGroups: ['*'],
+            apiGroups,
             resources: ['*'],
             resourceNames: [],
             nonResourceURLs: [],
