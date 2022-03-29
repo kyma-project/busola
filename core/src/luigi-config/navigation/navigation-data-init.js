@@ -32,6 +32,7 @@ import {
   saveActiveClusterName,
   getCurrentContextNamespace,
   saveCARequired,
+  getAfterLoginLocation,
 } from '../cluster-management/cluster-management';
 import { getFeatureToggle } from '../utils/feature-toggles';
 import { saveLocation } from './previous-location';
@@ -46,12 +47,12 @@ async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
 
   const clusterNodes = Object.entries(await getClusters()).map(
-    ([clusterName, { currentContext }]) => ({
+    ([clusterName, { currentContext, kubeconfig }]) => ({
       title: clusterName,
       subTitle: currentContext.cluster.server,
       link:
         activeClusterName === clusterName
-          ? `/cluster/${encodeURIComponent(clusterName)}`
+          ? getAfterLoginLocation(clusterName, kubeconfig)
           : `/set-cluster/${encodeURIComponent(clusterName)}`,
     }),
   );
@@ -433,7 +434,14 @@ export async function createNavigationNodes(
 }
 
 async function getNamespaces() {
-  const { hiddenNamespaces = [] } = (await getActiveCluster())?.config || {};
+  const activeCluster = await getActiveCluster();
+  const namespace = getCurrentContextNamespace(activeCluster.kubeconfig);
+
+  if (namespace) {
+    return createNamespacesList([{ name: namespace }]);
+  }
+
+  const { hiddenNamespaces = [] } = activeCluster?.config || {};
   try {
     let namespaces = await fetchNamespaces(getAuthData());
     if (!getFeatureToggle('showHiddenNamespaces')) {

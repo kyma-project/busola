@@ -65,7 +65,7 @@ export async function setCluster(clusterName) {
       await loadTargetClusterConfig();
       await clusterStorage.checkClusterStorageType(originalStorage);
       await reloadNavigation();
-      Luigi.navigation().navigate(targetLocation);
+      setTimeout(() => Luigi.navigation().navigate(targetLocation));
     } else {
       saveLocation(targetLocation);
       location = location.origin;
