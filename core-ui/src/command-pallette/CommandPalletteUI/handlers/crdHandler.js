@@ -34,26 +34,18 @@ function getSuggestions({ tokens, resourceCache }) {
   });
 }
 
-function makeListItem(item, namespace, t) {
+function makeListItem(item, t) {
   const name = item.metadata.name;
-  const isNamespaced = item.spec.scope === 'Namespaced';
 
   return {
     label: name,
     category:
-      t('configuration.title') +
-      ' > ' +
-      (isNamespaced
-        ? t('command-palette.crds.namespaced')
-        : t('command-palette.crds.cluster')),
+      t('configuration.title') + ' > ' + t('custom-resource-definitions.title'),
     query: `crds ${name}`,
     onActivate: () =>
       LuigiClient.linkManager()
         .fromContext('cluster')
-        .navigate(
-          (isNamespaced ? `/namespaces/${namespace}` : '') +
-            `/customresourcedefinitions/details/${name}`,
-        ),
+        .navigate(`/customresourcedefinitions/details/${name}`),
   };
 }
 
@@ -83,37 +75,25 @@ function createResults(context) {
     return;
   }
 
-  const { resourceCache, tokens, namespace, t } = context;
+  const { resourceCache, tokens, t } = context;
 
   const listLabel = t('command-palette.results.list-of', {
     resourceType: t('command-palette.crds.name-short_plural'),
   });
-  const linksToLists = [
-    {
-      label: listLabel,
-      category:
-        t('configuration.title') + ' > ' + t('command-palette.crds.cluster'),
-      query: 'crds',
-      onActivate: () =>
-        LuigiClient.linkManager()
-          .fromContext('cluster')
-          .navigate(`/customresourcedefinitions`),
-    },
-    {
-      label: listLabel,
-      category:
-        t('configuration.title') + ' > ' + t('command-palette.crds.namespaced'),
-      query: 'crds',
-      onActivate: () =>
-        LuigiClient.linkManager()
-          .fromContext('cluster')
-          .navigate(`namespaces/${namespace}/customresourcedefinitions`),
-    },
-  ];
+  const linkToList = {
+    label: listLabel,
+    category:
+      t('configuration.title') + ' > ' + t('custom-resource-definitions.title'),
+    query: 'crds',
+    onActivate: () =>
+      LuigiClient.linkManager()
+        .fromContext('cluster')
+        .navigate(`/customresourcedefinitions`),
+  };
 
   const crds = resourceCache['customresourcedefinitions'];
   if (typeof crds !== 'object') {
-    return [...linksToLists, { type: LOADING_INDICATOR }];
+    return [linkToList, { type: LOADING_INDICATOR }];
   }
 
   const name = tokens[1];
@@ -122,14 +102,11 @@ function createResults(context) {
       item.metadata.name.includes(name),
     );
     if (matchedByName) {
-      return matchedByName.map(item => makeListItem(item, namespace, t));
+      return matchedByName.map(item => makeListItem(item, t));
     }
     return null;
   } else {
-    return [
-      ...linksToLists,
-      ...crds.map(item => makeListItem(item, namespace, t)),
-    ];
+    return [linkToList, ...crds.map(item => makeListItem(item, t))];
   }
 }
 
