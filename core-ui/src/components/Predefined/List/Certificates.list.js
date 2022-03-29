@@ -9,7 +9,7 @@ import {
 import { Trans } from 'react-i18next';
 import { CertificatesCreate } from '../Create/Certificates/Certificates.create';
 import { IssuerLink } from '../Details/Certificate/IssuerLink';
-import { ExpirationDate } from 'shared/components/ExpirationDate/ExpirationDate';
+import { CertificateDate } from 'shared/components/CertificateDate/CertificateDate';
 
 const CertificatesList = props => {
   const { t, i18n } = useTranslation();
@@ -31,7 +31,7 @@ const CertificatesList = props => {
       value: certificate => {
         console.log(certificate);
         return certificate.status?.expirationDate ? (
-          <ExpirationDate
+          <CertificateDate
             date={certificate.status.expirationDate}
             lang={i18n.language}
           />

@@ -3,7 +3,7 @@ import { Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { Tooltip, FormattedDatetime } from 'react-shared';
 
-export function ExpirationDate({ date, lang }) {
+export function CertificateDate({ date, lang }) {
   const { t } = useTranslation();
   const currentDate = Date.now();
   const dayInMilliseconds = 1000 * 60 * 60 * 24;
@@ -15,7 +15,7 @@ export function ExpirationDate({ date, lang }) {
 
   let certificateDetails = {};
 
-  if (dateDifference > 0) {
+  if (dateDifference < 0) {
     certificateDetails = {
       tooltipContent: t('certificates.tooltips.expired'),
       ariaLabel: 'Error',
@@ -59,16 +59,14 @@ export function ExpirationDate({ date, lang }) {
       >
         <FormattedDatetime date={date} lang={lang} />
       </p>
-      {Object.keys(certificateDetails).length > 0 ? (
-        <Tooltip content={certificateDetails.tooltipContent}>
-          <Icon
-            ariaLabel={certificateDetails.ariaLabel}
-            glyph={certificateDetails.glyph}
-            size="s"
-            className={`fd-has-color-status-${certificateDetails.colorIndex} has-tooltip`}
-          />
-        </Tooltip>
-      ) : null}
+      <Tooltip content={certificateDetails.tooltipContent}>
+        <Icon
+          ariaLabel={certificateDetails.ariaLabel}
+          glyph={certificateDetails.glyph}
+          size="s"
+          className={`fd-has-color-status-${certificateDetails.colorIndex} has-tooltip`}
+        />
+      </Tooltip>
     </div>
   );
 }

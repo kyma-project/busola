@@ -2,7 +2,7 @@ import React from 'react';
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useTranslation } from 'react-i18next';
-import { ExpirationDate } from 'shared/components/ExpirationDate/ExpirationDate';
+import { CertificateDate } from 'shared/components/CertificateDate/CertificateDate';
 
 export function CertificatePanel({ name, certificate }) {
   const { t, i18n } = useTranslation();
@@ -31,7 +31,7 @@ export function CertificatePanel({ name, certificate }) {
         <LayoutPanelRow
           name={t('secrets.certificate-panel.expires')}
           value={
-            <ExpirationDate lang={i18n.language} date={certificate.notAfter} />
+            <CertificateDate lang={i18n.language} date={certificate.notAfter} />
           }
         />
       </LayoutPanel.Body>
