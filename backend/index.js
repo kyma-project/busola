@@ -24,9 +24,13 @@ if (process.env.NODE_ENV === 'development') {
 }
 setupJWTCheck(app);
 
-let server = null
+let server = null;
 
-if (process.env.BUSOLA_SSL_ENABLED == 1 && process.env.BUSOLA_SSL_KEY_FILE != "" && process.env.BUSOLA_SSL_CRT_FILE != "" && process.env.BUSOLA_SSL_CA_FILE != "") {
+if (
+  process.env.BUSOLA_SSL_ENABLED == 1 && 
+  process.env.BUSOLA_SSL_KEY_FILE != "" && 
+  process.env.BUSOLA_SSL_CRT_FILE != ""
+) {
   const https = require('https');
   const fs = require('fs');
   const options = {
@@ -34,7 +38,6 @@ if (process.env.BUSOLA_SSL_ENABLED == 1 && process.env.BUSOLA_SSL_KEY_FILE != ""
     rejectUnauthorized: false,
     key: fs.readFileSync(process.env.BUSOLA_SSL_KEY_FILE),
     cert: fs.readFileSync(process.env.BUSOLA_SSL_CRT_FILE),
-    ca: fs.readFileSync(process.env.BUSOLA_SSL_CA_FILE),
   };
   server = https.createServer(options, app);
 } else {
