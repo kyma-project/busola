@@ -14,6 +14,7 @@ import { setFeatureToggle } from './utils/feature-toggles';
 import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
+import { communicationEntry as prometheusCommunicationEntry } from './settings/prometheus';
 
 addCommandPaletteHandler();
 
@@ -124,6 +125,7 @@ export const communication = {
       });
     },
     ...pageSizeCommunicationEntry,
+    ...prometheusCommunicationEntry,
   },
 };
 

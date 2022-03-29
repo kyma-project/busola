@@ -52,7 +52,7 @@ context('Test Command Palette navigation', () => {
   it('Basic navigation', () => {
     // reloading seems to fix the strange issue where Luigi navigates us back to previous page
     cy.reload();
-    cy.getIframeBody().contains('Cluster Overview');
+    cy.getIframeBody().contains('Cluster Details');
 
     // navigate to namespace
     openCommandPalette();
@@ -101,12 +101,12 @@ context('Test Command Palette navigation', () => {
     getQueryInput().type('nodes ');
 
     cy.getIframeBody()
-      .contains('Cluster Overview > Nodes')
+      .contains('Cluster Details > Nodes')
       .first()
       .click();
 
     cy.getIframeBody()
-      .contains('Cluster Overview - Nodes')
+      .contains('Cluster Details - Nodes')
       .should('be.visible');
 
     // navigate to cluster overview
@@ -200,7 +200,7 @@ context('Test Command Palette navigation', () => {
 
     // nav is broken again
     cy.reload();
-    cy.getIframeBody().contains('Cluster Overview');
+    cy.getIframeBody().contains('Cluster Details');
 
     openCommandPalette();
 

@@ -1505,57 +1505,6 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
-      pathSegment: 'customresourcedefinitions',
-      resourceType: 'customresourcedefinitions',
-      navigationContext: 'customresourcedefinitions',
-      label: i18next.t('custom-resource-definitions.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/customresourcedefinitions?' +
-        toSearchParamsString({
-          fullResourceApiPath:
-            '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':CustomResourceDefinitionName',
-              resourceType: 'customresourcedefinitions',
-              navigationContext: 'customresourcedefinition',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/customresourcedefinitions/:CustomResourceDefinitionName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/apiextensions.k8s.io/v1',
-                }),
-              viewGroup: coreUIViewGroupName,
-              children: [
-                {
-                  pathSegment: ':resourceVersion',
-                  children: [
-                    {
-                      pathSegment: ':resourceName',
-                      resourceType: 'customresource',
-                      viewUrl:
-                        config.coreUIModuleUrl +
-                        '/customresourcedefinitions/:CustomResourceDefinitionName/:resourceVersion/:resourceName',
-                      viewGroup: coreUIViewGroupName,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('configuration.title'),
       resourceType: 'issuers',
       pathSegment: 'issuers',
       label: i18next.t('issuers.title'),
@@ -1657,6 +1606,41 @@ export function getStaticChildrenNodesForNamespace(
                 toSearchParamsString({
                   resourceApiPath: '/api/v1',
                 }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      category: i18next.t('configuration.title'),
+      pathSegment: 'customresources',
+      navigationContext: 'customresources',
+      label: i18next.t('custom-resources.title'),
+      viewUrl:
+        config.coreUIModuleUrl + '/namespaces/:namespaceId/customresources',
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      context: {
+        requiredGroupResource: {
+          group: 'apiextensions.k8s.io',
+          resource: 'customresourcedefinitions',
+        },
+      },
+      children: [
+        {
+          pathSegment: ':crdName',
+          viewUrl:
+            config.coreUIModuleUrl +
+            '/namespaces/:namespaceId/customresources/:crdName',
+          navigationContext: 'customresourcedefinition',
+          viewGroup: coreUIViewGroupName,
+          children: [
+            {
+              pathSegment: ':crName',
+              viewUrl:
+                config.coreUIModuleUrl +
+                '/namespaces/:namespaceId/customresources/:crdName/:crName',
+              viewGroup: coreUIViewGroupName,
             },
           ],
         },
@@ -2056,27 +2040,57 @@ export function getStaticRootNodes(
                   resourceApiPath: '/apis/apiextensions.k8s.io/v1',
                 }),
               viewGroup: coreUIViewGroupName,
-              children: [
-                {
-                  pathSegment: ':resourceVersion',
-                  children: [
-                    {
-                      pathSegment: ':resourceName',
-                      resourceType: 'customresource',
-                      viewUrl:
-                        config.coreUIModuleUrl +
-                        '/customresourcedefinitions/:CustomResourceDefinitionName/:resourceVersion/:resourceName',
-                      viewGroup: coreUIViewGroupName,
-                    },
-                  ],
-                },
-              ],
+              // children: [
+              //   {
+              //     pathSegment: ':resourceVersion',
+              //     children: [
+              //       {
+              //         pathSegment: ':resourceName',
+              //         resourceType: 'customresource',
+              //         viewUrl:
+              //           config.coreUIModuleUrl +
+              //           '/customresourcedefinitions/:CustomResourceDefinitionName/:resourceVersion/:resourceName',
+              //         viewGroup: coreUIViewGroupName,
+              //       },
+              //     ],
+              //   },
+              // ],
             },
           ],
         },
       ],
     },
-
+    {
+      category: i18next.t('configuration.title'),
+      pathSegment: 'customresources',
+      navigationContext: 'customresources',
+      label: i18next.t('custom-resources.title'),
+      viewUrl: config.coreUIModuleUrl + '/customresources',
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      context: {
+        requiredGroupResource: {
+          group: 'apiextensions.k8s.io',
+          resource: 'customresourcedefinitions',
+        },
+      },
+      children: [
+        {
+          pathSegment: ':crdName',
+          viewUrl: config.coreUIModuleUrl + '/customresources/:crdName',
+          navigationContext: 'customresourcedefinition',
+          viewGroup: coreUIViewGroupName,
+          children: [
+            {
+              pathSegment: ':crName',
+              viewUrl:
+                config.coreUIModuleUrl + '/customresources/:crdName/:crName',
+              viewGroup: coreUIViewGroupName,
+            },
+          ],
+        },
+      ],
+    },
     // OTHER
     {
       pathSegment: 'preferences',
@@ -2115,7 +2129,15 @@ function filterNodesByAvailablePaths(nodes, groupVersions, permissionSet) {
 }
 
 function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
-  if (!node.viewUrl || !node.resourceType) return;
+  if (!node.viewUrl || !node.resourceType) {
+    if (node.context?.requiredGroupResource) {
+      const { group, resource } = node.context.requiredGroupResource;
+      if (!hasPermissionsFor(group, resource, permissionSet)) {
+        removeNode();
+      }
+    }
+    return;
+  }
   const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
   if (!apiPath) return;
 

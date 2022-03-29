@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { useNotification } from 'shared/contexts/NotificationContext';
-
+import { matchByOwnerReference } from 'shared/utils/helpers';
 import { ResourceForm } from 'shared/ResourceForm';
 import {
   K8sNameField,
@@ -174,7 +174,7 @@ function APIRulesCreate({
 APIRulesCreate.allowEdit = true;
 APIRulesCreate.resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
-  networkFlowLevel: -2,
+  networkFlowLevel: -3,
   relations: [
     {
       kind: 'Service',
@@ -191,7 +191,11 @@ APIRulesCreate.resourceGraphConfig = (t, context) => ({
     Service: (apiRule, service) =>
       apiRule.spec.service?.name === service.metadata.name,
     VirtualService: (apiRule, virtualService) =>
-      virtualService.spec.hosts.includes(apiRule.spec.service.host),
+      virtualService.spec.hosts.includes(apiRule.spec.service.host) ||
+      matchByOwnerReference({
+        resource: virtualService,
+        owner: apiRule,
+      }),
     Gateway: (apiRule, gateway) => {
       const [name, namespace] = apiRule.spec.gateway.split('.');
       return (

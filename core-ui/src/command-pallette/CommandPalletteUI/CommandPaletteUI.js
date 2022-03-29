@@ -148,7 +148,7 @@ export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
               }
             }}
             autoFocus
-            className="search-input"
+            className="search-with-magnifying-glass"
             type="search"
             ref={inputRef}
           />

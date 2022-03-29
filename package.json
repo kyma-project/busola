@@ -11,7 +11,7 @@
     "start:api": "./scripts/pre-start-warning.sh && lerna exec --parallel -- npm run start:kyma:api",
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
-    "lint-staged": "lint-staged",
+    "lint-staged": "lint-staged --concurrent=false",
     "copy-themes": "gulp copy-themes"
   },
   "eslintConfig": {
@@ -75,10 +75,10 @@
     "regenerator-runtime": "^0.13.9",
     "sass-loader": "^12.4.0",
     "webpack-cli": "^4.9.2",
-    "yaml-sort": "^1.1.0"
+    "yaml-sort": "^1.2.1"
   },
   "lint-staged": {
-    "core/src/i18n/*.yaml": "yaml-sort --lineWidth=-1  -i",
+    "core/src/i18n/*.yaml": "yaml-sort --lineWidth=-1 -i ",
     "*.{ts,tsx,js,jsx,json,html,css,scss,yaml,md}": "prettier --write"
   },
   "husky": {

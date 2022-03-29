@@ -43,7 +43,8 @@ IngressesCreate.resourceGraphConfig = (t, context) => ({
         (rule.http?.paths || []).some(
           path => path.backend?.service?.name === service.metadata.name,
         ),
-      ),
+      ) ||
+      ingress.spec?.defaultBackend?.resource?.name === service.metadata.name,
   },
 });
 export { IngressesCreate };

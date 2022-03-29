@@ -1,13 +1,12 @@
 import React from 'react';
-import * as jp from 'jsonpath';
+import jsyaml from 'js-yaml';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
+import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
 function CustomResource({ params }) {
   const { t, i18n } = useTranslation();
@@ -28,48 +27,21 @@ function CustomResource({ params }) {
   if (loading) return <Spinner />;
 
   const versions = data?.spec?.versions;
-  const version = versions?.find(version => version.name === resourceVersion);
-  const AdditionalPrinterColumns = resource => {
-    const getJsonPath = (resource, jsonPath) => {
-      const value =
-        jp.value(resource, jsonPath.substring(1)) || EMPTY_TEXT_PLACEHOLDER;
-      return typeof value === 'boolean' ? value.toString() : value;
-    };
-
-    const headerRenderer = () => [
-      t('common.headers.name'),
-      t('custom-resource-definitions.headers.description'),
-      t('custom-resource-definitions.headers.value'),
-    ];
-    const rowRenderer = entry => [
-      entry.name,
-      entry.description || EMPTY_TEXT_PLACEHOLDER,
-      getJsonPath(resource, entry.jsonPath),
-    ];
-
-    return (
-      <GenericList
-        title={t('custom-resource-definitions.subtitle.additional-columns')}
-        entries={version?.additionalPrinterColumns || []}
-        headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
-        testid="cr-additional-printer-columns"
-        i18n={i18n}
-      />
-    );
-  };
+  const version =
+    versions?.find(version => version.name === resourceVersion) ||
+    versions?.find(version => version.storage);
 
   const crdName = customResourceDefinitionName.split('.')[0];
   const crdGroup = customResourceDefinitionName.replace(`${crdName}.`, '');
-  const resourceUrl = `/apis/${crdGroup}/${resourceVersion}/${
+  const resourceUrl = `/apis/${crdGroup}/${version.name}/${
     namespace ? `namespaces/${namespace}/` : ''
   }${crdName}/${resourceName}`;
 
   const breadcrumbs = [
     {
-      name: 'CustomResourceDefinitions',
+      name: t('custom-resources.title'),
       path: '/',
-      fromContext: 'customresourcedefinitions',
+      fromContext: 'customresources',
     },
     {
       name: customResourceDefinitionName,
@@ -79,6 +51,14 @@ function CustomResource({ params }) {
     { name: '' },
   ];
 
+  const yamlPreview = resource => (
+    <ReadonlyEditorPanel
+      title="YAML"
+      value={jsyaml.dump(resource)}
+      editorProps={{ language: 'yaml', height: '500px' }}
+    />
+  );
+
   return (
     <ResourceDetails
       resourceUrl={resourceUrl}
@@ -86,7 +66,7 @@ function CustomResource({ params }) {
       resourceName={resourceName}
       namespace={namespace}
       breadcrumbs={breadcrumbs}
-      customComponents={[AdditionalPrinterColumns]}
+      customComponents={[yamlPreview]}
       i18n={i18n}
     />
   );

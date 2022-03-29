@@ -1,12 +1,14 @@
 import { useState, useCallback } from 'react';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { useComponentDidMount } from 'shared/useComponentDidMount';
 
 export function useResourcesForApiGroups(apiGroups = []) {
   const [cache, setCache] = useState({});
+  const [loading, setLoading] = useState(false);
   const fetch = useSingleGet();
   const { groupVersions } = useMicrofrontendContext();
+
+  const loadable = apiGroups.some(apiGroup => !cache[apiGroup]);
 
   const findMatchingGroupVersions = apiGroup => {
     // core api group
@@ -20,29 +22,47 @@ export function useResourcesForApiGroups(apiGroups = []) {
     try {
       const response = await fetch(url);
       const json = await response.json();
-      setCache(cache => ({
-        ...cache,
-        [apiGroup]: cache[apiGroup]
-          ? [...cache[apiGroup], ...json.resources]
-          : json.resources,
-      }));
+      return json.resources;
     } catch (e) {
       console.warn(e);
     }
   };
 
   const fetchResources = useCallback(() => {
-    const cacheObject = apiGroups.reduce((a, v) => ({ ...a, [v]: [] }), {});
-    setCache(cacheObject);
+    if (loading) return Promise.resolve(cache);
+
+    const loaders = [];
     for (const apiGroup of apiGroups) {
+      if (cache[apiGroup]?.length) continue;
       for (const groupVersion of findMatchingGroupVersions(apiGroup)) {
-        void fetchApiGroup(groupVersion, apiGroup);
+        setLoading(true);
+        const loader = fetchApiGroup(
+          groupVersion,
+          apiGroup,
+        ).then(resources => ({ apiGroup, resources }));
+        loaders.push(loader);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiGroups]);
+    return Promise.all(loaders).then(jsons => {
+      const newCache = jsons.reduce(
+        (cache, { apiGroup, resources }) => ({
+          ...cache,
+          [apiGroup]: cache[apiGroup]
+            ? [...cache[apiGroup], ...resources]
+            : resources,
+        }),
+        cache,
+      );
+      setCache(newCache);
+      setLoading(false);
+      return newCache;
+    });
+  }, [apiGroups]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useComponentDidMount(fetchResources);
-
-  return { cache, fetchResources };
+  return {
+    cache,
+    fetchResources,
+    loadable,
+    loading,
+  };
 }

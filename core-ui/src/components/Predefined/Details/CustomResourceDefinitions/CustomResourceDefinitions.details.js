@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CustomResourceDefinitionVersions } from './CustomResourceDefinitionVersions';
+import { CurrentCRDVersion } from './CurrentCRDVersion';
 import { useTranslation } from 'react-i18next';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
@@ -75,7 +75,7 @@ const CustomResourceDefinitionsDetails = props => {
       customColumns={customColumns}
       customComponents={[
         ResourceNames,
-        CustomResourceDefinitionVersions,
+        CurrentCRDVersion,
         RelatedCRDsList,
         Events,
       ]}

@@ -3,27 +3,36 @@ import { useTranslation } from 'react-i18next';
 import { GoToDetailsLink } from 'shared/components/ControlledBy/ControlledBy';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { LayoutPanel, Link } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import pluralize from 'pluralize';
 
-const getPort = (serviceName, port) => {
+const getPort = (serviceName, port, services) => {
+  const serviceLink = services?.find(
+    ({ metadata }) => metadata.name === serviceName,
+  ) ? (
+    <Link
+      onClick={() =>
+        LuigiClient.linkManager()
+          .fromContext('namespace')
+          .navigate(`services/details/${serviceName}`)
+      }
+    >
+      {serviceName}
+    </Link>
+  ) : (
+    <span>{serviceName || EMPTY_TEXT_PLACEHOLDER}</span>
+  );
+
   if (port?.number) {
     return port.name ? (
       `${port.name}:${port.number}`
     ) : (
       <>
-        <Link
-          onClick={() =>
-            LuigiClient.linkManager()
-              .fromContext('namespace')
-              .navigate(`services/details/${serviceName}`)
-          }
-        >
-          {serviceName}
-        </Link>
-        :{port.number}
+        {serviceLink}:{port.number}
       </>
     );
   } else {
@@ -33,10 +42,15 @@ const getPort = (serviceName, port) => {
 
 export const Rules = ({ rules }) => {
   const { t, i18n } = useTranslation();
+  const { namespaceId: namespace } = useMicrofrontendContext();
 
-  const Backend = ({ backend }) => {
+  const { data: services } = useGetList()(
+    `/api/v1/namespaces/${namespace}/services`,
+  );
+
+  const Backend = ({ backend, services }) => {
     if (backend.service) {
-      return getPort(backend?.service.name, backend?.service?.port);
+      return getPort(backend?.service.name, backend?.service?.port, services);
     } else if (backend.resource) {
       return (
         <>
@@ -91,7 +105,7 @@ export const Rules = ({ rules }) => {
             rowRenderer={path => [
               path.path,
               path.pathType,
-              <Backend backend={path.backend} />,
+              <Backend backend={path.backend} services={services} />,
             ]}
             entries={rule?.http?.paths}
             i18n={i18n}
