@@ -1774,6 +1774,9 @@ role-bindings:
     api-group: API Group
   title: Role Bindings
 roles:
+  buttons:
+    add-all: Add all
+    load: Load
   description: <0>Role</0> is a set of permissions within a Namespace that can be assigned to a user.
   headers:
     api-groups: API Groups
