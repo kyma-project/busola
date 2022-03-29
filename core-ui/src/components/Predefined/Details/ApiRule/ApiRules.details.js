@@ -9,7 +9,7 @@ import {
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import AccessStrategies from 'components/ApiRules/AccessStrategies/AccessStrategies';
 import ApiRuleServices from './Services';
-import { ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { APIRulesCreate } from '../../Create/ApiRules/ApiRules.create';
 
 const ApiRulesDetails = props => {

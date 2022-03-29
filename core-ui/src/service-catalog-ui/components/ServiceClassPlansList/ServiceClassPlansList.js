@@ -1,9 +1,10 @@
 import React from 'react';
 
 import LuigiClient from '@luigi-project/client';
-
 import { serviceClassConstants } from 'helpers/constants';
-import { Spinner, PageHeader, GenericList } from 'react-shared';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { getResourceDisplayName, isService } from 'helpers';
 
 import { Link } from 'fundamental-react';

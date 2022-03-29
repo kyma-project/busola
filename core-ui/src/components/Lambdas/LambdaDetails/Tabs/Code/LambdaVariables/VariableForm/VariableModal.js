@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { ModalWithForm } from 'react-shared';
+import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 
 import VariableForm, { FORM_TYPE } from '../VariableForm/VariableForm';
 import { VARIABLE_TYPE } from 'components/Lambdas/helpers/lambdaVariables';

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Dialog } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { ErrorBoundary } from 'react-shared';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { AddClusterWizard } from './AddClusterWizard';
 import './AddClusterDialog.scss';
 

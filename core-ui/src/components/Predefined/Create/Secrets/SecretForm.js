@@ -1,11 +1,9 @@
 import React from 'react';
-import {
-  K8sNameInput,
-  useMicrofrontendContext,
-  LabelSelectorInput,
-  TextFormItem,
-  KeyValueForm,
-} from 'react-shared';
+import { TextFormItem } from 'shared/components/TextFormItem/TextFormItem';
+import { LabelSelectorInput } from 'shared/components/LabelSelectorInput/LabelSelectorInput';
+import { KeyValueForm } from 'shared/components/KeyValueForm/KeyValueForm';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { K8sNameInput } from 'shared/components/K8sNameInput/K8sNameInput';
 import { Tab, TabGroup } from 'fundamental-react';
 import { createSecretInput, mapObjectValues } from './helpers';
 import './SecretForm.scss';

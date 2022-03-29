@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { EMPTY_TEXT_PLACEHOLDER, Link, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Link } from 'shared/components/Link/Link';
 import { IngressesCreate } from '../Create/Ingresses/Ingresses.create';
 import { Trans } from 'react-i18next';
 

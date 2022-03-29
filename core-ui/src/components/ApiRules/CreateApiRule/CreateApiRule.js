@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { usePost } from 'react-shared';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import ApiRuleForm from '../ApiRuleForm/ApiRuleForm';
 import { supportedMethodsList } from '../accessStrategyTypes';
 

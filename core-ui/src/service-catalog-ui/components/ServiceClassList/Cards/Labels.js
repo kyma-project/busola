@@ -1,6 +1,6 @@
 import React from 'react';
 import { Token } from 'fundamental-react';
-import { Tooltip } from 'react-shared';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import './Labels.scss';
 import { isStringValueEqualToTrue } from 'helpers';
 const labelsDescription = {

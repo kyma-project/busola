@@ -1,9 +1,10 @@
 import React, { Suspense } from 'react';
-import { Spinner, useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import { Route, useParams } from 'react-router-dom';
 import { getResourceUrl } from 'shared/helpers';
 import { useTranslation } from 'react-i18next';
-import { getPerResourceDefs } from '../shared/helpers/getResourceDefs';
+import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
 
 export const createPath = (
   config = { namespaced: true, detailsView: false, pathSegment: '' },

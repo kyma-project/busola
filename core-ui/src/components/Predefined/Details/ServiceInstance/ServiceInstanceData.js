@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { DefinitionList } from '../../../../shared/components/DefinitionList/DefinitionList';
 
 export function ServiceInstanceData({ spec, status }) {

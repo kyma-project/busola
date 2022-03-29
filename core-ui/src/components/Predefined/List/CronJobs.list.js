@@ -2,7 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { CronJobLastScheduleTime } from 'shared/components/CronJob/CronJobLastScheduleTime';
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
-import { Link, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { Link } from 'shared/components/Link/Link';
 import { Trans } from 'react-i18next';
 import { CronJobsCreate } from 'components/Predefined/Create/Jobs/CronJobs.create';
 

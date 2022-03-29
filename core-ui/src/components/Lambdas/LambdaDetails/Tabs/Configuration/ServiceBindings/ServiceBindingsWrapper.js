@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ServiceBindings from './ServiceBindings';
-import { Spinner } from 'react-shared';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useGetBindingsCombined } from 'components/Lambdas/hooks/useGetBindingsCombined';
 
 export default function ServiceBindingsWrapper({ lambda, isActive }) {

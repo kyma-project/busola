@@ -3,7 +3,7 @@ import { Button, Switch } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { Tooltip } from 'react-shared';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { TabsWithActions } from 'components/Lambdas/components';
 
 import Editor from './Editor';

@@ -5,7 +5,8 @@ import {
 } from 'components/ApiRules/components';
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import { useTranslation, Trans } from 'react-i18next';
-import { Link, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { Link } from 'shared/components/Link/Link';
 import { APIRulesCreate } from '../Create/ApiRules/ApiRules.create';
 
 const ApiRulesList = props => {

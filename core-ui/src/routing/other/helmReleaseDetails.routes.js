@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { Route, useParams } from 'react-router-dom';
-import { Spinner } from 'react-shared';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 const HelmReleaseDetails = React.lazy(() =>
   import('../../components/HelmReleases/HelmReleasesDetails'),

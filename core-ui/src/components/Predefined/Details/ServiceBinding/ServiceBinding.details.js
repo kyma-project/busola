@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
 import { ServiceBindingData } from './ServiceBindingData';
-import { ControlledBy, ResourceDetails } from 'react-shared';
+import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ServiceBindingsCreate } from '../../Create/ServiceBindings/ServiceBindings.create';
 
 const ServiceBindingsDetails = props => {

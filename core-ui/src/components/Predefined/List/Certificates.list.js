@@ -1,15 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  ResourceStatus,
-  ResourcesList,
-  Link,
-  EMPTY_TEXT_PLACEHOLDER,
-} from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
+import { Link } from 'shared/components/Link/Link';
 import { Trans } from 'react-i18next';
 import { CertificatesCreate } from '../Create/Certificates/Certificates.create';
 import { IssuerLink } from '../Details/Certificate/IssuerLink';
 import { CertificateDate } from 'shared/components/CertificateDate/CertificateDate';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 const CertificatesList = props => {
   const { t, i18n } = useTranslation();

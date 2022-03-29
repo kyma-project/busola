@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
-import { useGet } from 'react-shared';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { cloneDeep } from 'lodash';
 import { ResourceForm } from 'shared/ResourceForm';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';

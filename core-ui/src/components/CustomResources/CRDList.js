@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link } from 'shared/components/Link/Link';
 import { GroupingListPage } from './GroupingListPage/GroupingListPage';
 
 export default function CRDList() {

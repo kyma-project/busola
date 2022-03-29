@@ -1,5 +1,6 @@
 import React from 'react';
-import { ResourceStatus, ResourceDetails } from 'react-shared';
+import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { useTranslation } from 'react-i18next';
 
 import { IssuerDomains } from './IssuerDomains';

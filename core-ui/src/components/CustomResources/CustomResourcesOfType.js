@@ -2,10 +2,11 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
-import { useGet, PageHeader } from 'react-shared';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import { CustomResources } from 'components/CustomResources/CustomResources';
 import { LayoutPanel, Link } from 'fundamental-react';
-import { Spinner } from 'react-shared/';
 
 export default function CustomResourcesOfType({ crdName, namespace }) {
   const { t, i18n } = useTranslation();

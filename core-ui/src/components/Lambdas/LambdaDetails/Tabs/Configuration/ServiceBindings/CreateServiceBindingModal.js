@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 
 import { Button, MessageStrip } from 'fundamental-react';
-import {
-  Spinner,
-  Tooltip,
-  useGetList,
-  useMicrofrontendContext,
-} from 'react-shared';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
-import { ModalWithForm } from 'react-shared';
 import CreateServiceBindingForm from './CreateServiceBindingForm';
 import { SERVICE_BINDINGS_PANEL } from 'components/Lambdas/constants';
 

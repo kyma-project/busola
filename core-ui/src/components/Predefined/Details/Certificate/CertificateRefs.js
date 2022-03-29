@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
-import { EMPTY_TEXT_PLACEHOLDER, Labels } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Labels } from 'shared/components/Labels/Labels';
 
 import { IssuerLink } from './IssuerLink';
 import { SecretLink } from './SecretLink';

@@ -1,7 +1,8 @@
 import React from 'react';
 
 import LuigiClient from '@luigi-project/client';
-import { GenericList, Spinner } from 'react-shared';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import { serviceClassConstants } from 'helpers/constants';
 import { ServiceInstanceStatus } from '../../../shared/ServiceInstanceStatus';

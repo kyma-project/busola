@@ -1,4 +1,5 @@
-import { useNotification, useUpdate } from 'react-shared';
+import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
+import { useNotification } from 'shared/contexts/NotificationContext';
 
 import { createPatch } from 'rfc6902';
 

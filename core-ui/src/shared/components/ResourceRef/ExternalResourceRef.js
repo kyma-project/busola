@@ -4,7 +4,9 @@ import { ComboboxInput } from 'fundamental-react';
 import classnames from 'classnames';
 import LuigiClient from '@luigi-project/client';
 
-import { useGetList, getFeatureToggle, Spinner } from 'react-shared';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { getFeatureToggle } from 'shared/hooks/useFeatureToggle';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { ResourceForm } from 'shared/ResourceForm';
 

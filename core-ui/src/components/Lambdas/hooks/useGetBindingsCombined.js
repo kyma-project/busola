@@ -1,4 +1,4 @@
-import { useGetList } from 'react-shared';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { CONFIG } from 'components/Lambdas/config.js';
 
 export const useGetBindingsCombined = (lambda, isActive) => {

@@ -3,16 +3,13 @@ import PropTypes from 'prop-types';
 import { FormItem, FormLabel, Icon, Link } from 'fundamental-react';
 import * as LuigiClient from '@luigi-project/client';
 
-import {
-  Tooltip,
-  CopiableLink,
-  usePost,
-  useNotification,
-  randomNameGenerator,
-  MonacoEditor,
-  useTheme,
-} from 'react-shared';
-
+import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useTheme } from 'shared/contexts/ThemeContext';
+import { randomNameGenerator } from 'shared/utils/helpers';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { CopiableLink } from 'shared/components/Link/CopiableLink';
 import SchemaData from './SchemaData';
 import './CreateInstanceForm.scss';
 import { PlanColumnContent } from './PlanColumnContent';
