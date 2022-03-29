@@ -23,7 +23,7 @@ const HOUR_IN_SECONDS = 3600;
 const MAX_TIMEFRAME_IN_SECONDS = Number.MAX_SAFE_INTEGER;
 const DEFAULT_TIMEFRAME = HOUR_IN_SECONDS * 6;
 
-export const ContainersLogs = ({ params }) => {
+const ContainersLogs = ({ params }) => {
   const { t, i18n } = useTranslation();
 
   useWindowTitle('Logs');
@@ -245,3 +245,5 @@ export const ContainersLogs = ({ params }) => {
     </div>
   );
 };
+
+export default ContainersLogs;

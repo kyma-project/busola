@@ -1,10 +1,10 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
-import { Link } from 'react-shared';
-import { Trans } from 'react-i18next';
+import { Link, ResourcesList } from 'react-shared';
+import { ServiceAccountsCreate } from '../../Create/ServiceAccounts/ServiceAccounts.create';
 
-export const ServiceAccountsList = ({ DefaultRenderer, ...otherParams }) => {
+const ServiceAccountsList = props => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -27,11 +27,14 @@ export const ServiceAccountsList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
       resourceName={t('service-accounts.title')}
-      {...otherParams}
+      createResourceForm={ServiceAccountsCreate}
+      {...props}
     />
   );
 };
+
+export default ServiceAccountsList;

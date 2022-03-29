@@ -152,6 +152,7 @@ async function createClusterManagementNodes(features) {
     hideFromNav: true,
     hideSideNav: true,
     viewUrl: config.coreUIModuleUrl + '/no-permissions',
+    context: { currentCluster: await getActiveCluster() },
   };
 
   return [clusterManagementNode, clusterNode, noPermissionsNode];
@@ -372,9 +373,10 @@ export async function createNavigationNodes(
 
   const clusterNodes = await createClusterNodes();
 
-  const namespaceNodes = await clusterNodes
-    .find(n => n.resourceType === 'namespaces')
-    .children[0].children();
+  const namespaceNodes =
+    (await clusterNodes
+      .find(n => n.resourceType === 'namespaces')
+      ?.children[0]?.children?.()) || [];
 
   const simplifyNodes = nodes =>
     nodes

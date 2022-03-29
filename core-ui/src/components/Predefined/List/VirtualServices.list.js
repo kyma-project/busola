@@ -1,9 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link, ResourcesList } from 'react-shared';
+import { VirtualServicesCreate } from '../Create/VirtualServices/VirtualServices.create';
 import { Trans } from 'react-i18next';
 
-export function VirtualServicesList({ DefaultRenderer, ...otherParams }) {
+function VirtualServicesList(props) {
   const { t } = useTranslation();
 
   // State | Name | Gateways | Hosts | Age - as a starting point
@@ -28,11 +29,14 @@ export function VirtualServicesList({ DefaultRenderer, ...otherParams }) {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
       resourceName={t('virtualservices.title')}
-      {...otherParams}
+      createResourceForm={VirtualServicesCreate}
+      {...props}
     />
   );
 }
+
+export default VirtualServicesList;

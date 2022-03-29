@@ -14,6 +14,7 @@ import { setFeatureToggle } from './utils/feature-toggles';
 import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
+import { communicationEntry as prometheusCommunicationEntry } from './settings/prometheus';
 
 addCommandPaletteHandler();
 
@@ -90,7 +91,7 @@ export const communication = {
     'busola.addCluster': async ({ params, switchCluster = true }) => {
       await saveClusterParams(params);
       if (switchCluster) {
-        setCluster(params.kubeconfig['current-context']);
+        await setCluster(params.kubeconfig['current-context']);
       }
     },
     'busola.deleteCluster': async ({ clusterName }) => {
@@ -124,6 +125,7 @@ export const communication = {
       });
     },
     ...pageSizeCommunicationEntry,
+    ...prometheusCommunicationEntry,
   },
 };
 
@@ -149,7 +151,10 @@ const convertToObject = paramsString => {
 function addCommandPaletteHandler() {
   window.addEventListener('keydown', e => {
     const { key, metaKey, ctrlKey } = e;
-    const isMac = navigator.platform.toLowerCase().startsWith('mac');
+    // for (Edge, Chrome) || (Firefox, Safari)
+    const isMac = (navigator.userAgentData?.platform || navigator.platform)
+      .toLowerCase()
+      .startsWith('mac');
     const modifierKeyPressed = (isMac && metaKey) || (!isMac && ctrlKey);
 
     const isMFModalPresent = !!document.querySelector('.lui-modal-mf');

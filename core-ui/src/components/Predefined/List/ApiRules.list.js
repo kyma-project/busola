@@ -4,11 +4,11 @@ import {
   ApiRuleServiceInfo,
 } from 'components/ApiRules/components';
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
-import { Trans } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
+import { Link, ResourcesList } from 'react-shared';
+import { APIRulesCreate } from '../Create/ApiRules/ApiRules.create';
 
-export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
+const ApiRulesList = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -36,11 +36,14 @@ export const ApiRulesList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       resourceName={t('api-rules.title')}
       description={description}
-      {...otherParams}
+      createResourceForm={APIRulesCreate}
+      {...props}
     />
   );
 };
+
+export default ApiRulesList;

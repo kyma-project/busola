@@ -28,4 +28,23 @@ function IngressesCreate({
     />
   );
 }
+IngressesCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'Service',
+    },
+  ],
+  networkFlowLevel: 0,
+  networkFlowKind: true,
+
+  matchers: {
+    Service: (ingress, service) =>
+      (ingress.spec.rules || []).some(rule =>
+        (rule.http?.paths || []).some(
+          path => path.backend?.service?.name === service.metadata.name,
+        ),
+      ) ||
+      ingress.spec?.defaultBackend?.resource?.name === service.metadata.name,
+  },
+});
 export { IngressesCreate };

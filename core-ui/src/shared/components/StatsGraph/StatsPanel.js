@@ -6,7 +6,11 @@ import {
   ButtonSegmented,
   BusyIndicator,
 } from 'fundamental-react';
-import { Dropdown, getErrorMessage } from 'react-shared';
+import {
+  Dropdown,
+  getErrorMessage,
+  useMicrofrontendContext,
+} from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 import { usePrometheus } from 'shared/hooks/usePrometheus';
@@ -107,6 +111,8 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
 }
 
 export function StatsPanel({ type, ...props }) {
+  const { features } = useMicrofrontendContext();
+
   const timeSpans = {
     '1h': 60 * 60,
     '3h': 3 * 60 * 60,
@@ -126,6 +132,15 @@ export function StatsPanel({ type, ...props }) {
     setTimeSpan(visibleTimeSpans[0]);
   }, [metric]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  if (!features.PROMETHEUS?.isEnabled) {
+    return '';
+  }
+
+  const graphOptions =
+    type === 'pod'
+      ? ['cpu', 'memory', 'network']
+      : ['cpu', 'memory', 'network', 'nodes'];
+
   return (
     <LayoutPanel className="fd-margin--md stats-panel">
       <LayoutPanel.Header>
@@ -133,7 +148,7 @@ export function StatsPanel({ type, ...props }) {
           <Dropdown
             selectedKey={metric}
             onSelect={(e, val) => setMetric(val.key)}
-            options={['cpu', 'memory', 'network', 'nodes'].map(option => ({
+            options={graphOptions.map(option => ({
               key: option,
               text: t(`graphs.${option}`),
             }))}
