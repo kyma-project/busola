@@ -33,6 +33,7 @@
     "cluster/test-cluster-configuration.spec.js",
     "cluster/test-settings.spec.js",
     "cluster/test-command-palette.spec.js",
+    "cluster/test-custom-resources.spec.js",
     "cluster/run-after.spec.js",
     "namespace/run-before.spec.js",
     "namespace/test-namespace-overview.spec.js",
@@ -70,6 +71,7 @@
     "namespace/test-service-entries.spec.js",
     "namespace/test-network-policies.spec.js",
     "namespace/test-persistent-volume-claims.spec.js",
+    "namespace/test-custom-resources.spec.js",
     "namespace/test-service-catalog.spec.js",
     "namespace/run-after.spec.js"
   ]

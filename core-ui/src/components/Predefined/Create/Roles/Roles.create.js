@@ -12,14 +12,15 @@ import { GenericRoleCreate } from './GenericRoleCreate';
 
 function RolesCreate(props) {
   const { t } = useTranslation();
-  const { namespaceId: namespace } = useMicrofrontendContext();
+  const { namespaceId: namespace, groupVersions } = useMicrofrontendContext();
+
   return (
     <GenericRoleCreate
       {...props}
       pluralKind="roles"
       singularName={t('roles.name_singular')}
       createTemplate={() => createRoleTemplate(namespace)}
-      presets={createRolePresets(namespace, t)}
+      presets={createRolePresets(namespace, t, groupVersions)}
     />
   );
 }
@@ -40,13 +41,14 @@ RolesCreate.resourceGraphConfig = (t, context) => ({
 
 function ClusterRolesCreate(props) {
   const { t } = useTranslation();
+  const { groupVersions } = useMicrofrontendContext();
   return (
     <GenericRoleCreate
       {...props}
       pluralKind="clusterroles"
       singularName={t('cluster-roles.name_singular')}
       createTemplate={createClusterRoleTemplate}
-      presets={createClusterRolePresets(t)}
+      presets={createClusterRolePresets(t, groupVersions)}
     />
   );
 }

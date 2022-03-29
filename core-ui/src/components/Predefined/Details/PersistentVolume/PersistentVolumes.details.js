@@ -1,7 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, LayoutPanel } from 'fundamental-react';
-import { EMPTY_TEXT_PLACEHOLDER, ResourceDetails } from 'react-shared';
+import {
+  EMPTY_TEXT_PLACEHOLDER,
+  ResourceDetails,
+  useGetList,
+} from 'react-shared';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
@@ -21,7 +25,15 @@ function PersistentVolumesDetails(props) {
     },
   ];
 
-  const PvDetails = ({ spec, metadata }) => (
+  const { data: storageClasses } = useGetList()(
+    '/apis/storage.k8s.io/v1/storageclasses',
+  );
+
+  const { data: persistentVolumeClaims } = useGetList()(
+    '/api/v1/persistentvolumeclaims',
+  );
+
+  const PvDetails = ({ spec, metadata, status }) => (
     <div key="persistent-volumes-ref" data-testid="persistent-volumes-ref">
       <LayoutPanel className="fd-margin--md">
         <LayoutPanel.Header>
@@ -51,25 +63,30 @@ function PersistentVolumesDetails(props) {
           <LayoutPanelRow
             name={t('pv.headers.storage-class-name')}
             value={
-              (spec?.storageClassName && (
+              storageClasses?.find(
+                ({ metadata }) => metadata.name === spec?.storageClassName,
+              ) ? (
                 <Link
                   onClick={() =>
                     navigateToResource({
-                      name: spec?.storageClassName,
                       kind: 'StorageClass',
+                      name: spec?.storageClassName,
                     })
                   }
                 >
                   {spec?.storageClassName}
                 </Link>
-              )) ||
-              EMPTY_TEXT_PLACEHOLDER
+              ) : (
+                <p>{spec?.storageClassName || EMPTY_TEXT_PLACEHOLDER}</p>
+              )
             }
           />
           <LayoutPanelRow
             name={t('pv.headers.claim-name')}
             value={
-              (spec?.claimRef?.name && (
+              persistentVolumeClaims?.find(
+                ({ metadata }) => metadata.name === spec?.claimRef?.name,
+              ) ? (
                 <Link
                   onClick={() =>
                     navigateToResource({
@@ -81,8 +98,9 @@ function PersistentVolumesDetails(props) {
                 >
                   {spec?.claimRef?.name}
                 </Link>
-              )) ||
-              EMPTY_TEXT_PLACEHOLDER
+              ) : (
+                <p>{spec?.claimRef?.name || EMPTY_TEXT_PLACEHOLDER}</p>
+              )
             }
           />
         </LayoutPanel.Body>
