@@ -14,7 +14,7 @@ import {
 import { Icon, Link } from 'fundamental-react';
 import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
-export const EventsList = ({ ...otherParams }) => {
+const EventsList = props => {
   const description = (
     <Trans i18nKey="events.description">
       <DescriptionLink
@@ -26,16 +26,13 @@ export const EventsList = ({ ...otherParams }) => {
 
   return (
     <>
-      {!otherParams.isCompact && (
+      {!props.isCompact && (
         <PageHeader
-          title={prettifyNamePlural(
-            otherParams.resourceName,
-            otherParams.resourceType,
-          )}
+          title={prettifyNamePlural(props.resourceName, props.resourceType)}
           description={description}
         />
       )}
-      <Events {...otherParams} />
+      <Events {...props} />
     </>
   );
 };
@@ -153,3 +150,5 @@ export const Events = ({ ...otherParams }) => {
     />
   );
 };
+
+export default EventsList;

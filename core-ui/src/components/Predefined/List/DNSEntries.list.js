@@ -1,10 +1,10 @@
 import React from 'react';
-import { ResourceStatus } from 'react-shared';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link, ResourcesList, ResourceStatus } from 'react-shared';
 import { Trans } from 'react-i18next';
+import { DNSEntriesCreate } from '../Create/DNSEntries/DNSEntries.create';
 
-export const DNSEntriesList = ({ DefaultRenderer, ...otherParams }) => {
+const DNSEntriesList = params => {
   const { t, i18n } = useTranslation();
   const customColumns = [
     {
@@ -29,11 +29,13 @@ export const DNSEntriesList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
-      resourceName={t('dnsentries.title')}
-      {...otherParams}
+      resourceName="DNS Entries"
+      createResourceForm={DNSEntriesCreate}
+      {...params}
     />
   );
 };
+export default DNSEntriesList;

@@ -1,9 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { EMPTY_TEXT_PLACEHOLDER, Link } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER, Link, ResourcesList } from 'react-shared';
+import { IngressesCreate } from '../Create/Ingresses/Ingresses.create';
 import { Trans } from 'react-i18next';
 
-export const IngressesList = ({ DefaultRenderer, ...otherParams }) => {
+const IngressesList = props => {
   const { t } = useTranslation();
 
   const getLoadBalancer = service => {
@@ -33,10 +34,13 @@ export const IngressesList = ({ DefaultRenderer, ...otherParams }) => {
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
-      {...otherParams}
+      createResourceForm={IngressesCreate}
+      {...props}
     />
   );
 };
+
+export default IngressesList;

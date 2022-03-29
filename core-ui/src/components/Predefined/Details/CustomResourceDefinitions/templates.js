@@ -1,5 +1,5 @@
 import * as jp from 'jsonpath';
-export function createTemplate(namespace, crd) {
+export function createTemplate(crd) {
   const spec = {};
   const currentVersion = crd.spec.versions.find(ver => ver.storage);
 
@@ -8,7 +8,7 @@ export function createTemplate(namespace, crd) {
     kind: crd.spec.names.kind,
     metadata: {
       name: '',
-      namespace,
+      namespace: crd.spec.scope === 'Namespaced' ? 'default' : undefined,
     },
     spec:
       convert(

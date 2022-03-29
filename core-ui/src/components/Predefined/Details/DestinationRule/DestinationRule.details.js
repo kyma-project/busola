@@ -1,18 +1,22 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { DestinationRuleRefs } from './DestinationRuleRefs';
 import { TrafficPolicy } from './TrafficPolicy';
 import { Subset } from './Subset';
+import { ResourceDetails } from 'react-shared';
+import { DestinationRulesCreate } from '../../Create/DestinationRules/DestinationRules.create';
 
-export function DestinationRulesDetails({ DefaultRenderer, ...otherParams }) {
+function DestinationRulesDetails(props) {
   const { t } = useTranslation();
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       resourceName={t('destination-rules.title')}
       customComponents={[DestinationRuleRefs, TrafficPolicy, Subset]}
-      {...otherParams}
+      createResourceForm={DestinationRulesCreate}
+      {...props}
     />
   );
 }
+
+export default DestinationRulesDetails;

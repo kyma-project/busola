@@ -15,7 +15,7 @@ import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { OtherReleaseVersions } from './OtherReleaseVersions';
 import { findRecentRelease } from './findRecentRelease';
 
-export function HelmReleasesDetails({ releaseName }) {
+function HelmReleasesDetails({ releaseName }) {
   const { t, i18n } = useTranslation();
   const { namespaceId: namespace } = useMicrofrontendContext();
   const breadcrumbItems = [
@@ -76,3 +76,4 @@ export function HelmReleasesDetails({ releaseName }) {
     </>
   );
 }
+export default HelmReleasesDetails;

@@ -21,7 +21,7 @@ export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
   return (
     <FileInput
       fileInputChanged={onKubeconfigFileUploaded}
-      acceptedFileFormats=".yaml"
+      acceptedFileFormats=".yaml,.yml"
       i18n={i18n}
     />
   );

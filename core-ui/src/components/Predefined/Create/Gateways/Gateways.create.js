@@ -14,7 +14,7 @@ import { MessageStrip } from 'fundamental-react';
 import { cloneDeep } from 'lodash';
 
 function matchByTlsCredentials(gateway, secret) {
-  return gateway.spec.servers.some(
+  return (gateway.spec?.servers || []).some(
     server => server?.tls?.credentialName === secret.metadata.name,
   );
 }
@@ -114,6 +114,7 @@ function GatewaysCreate({
 
 GatewaysCreate.allowEdit = true;
 GatewaysCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
   relations: [
     {
       kind: 'APIRule',
@@ -123,7 +124,12 @@ GatewaysCreate.resourceGraphConfig = (t, context) => ({
       kind: 'Secret',
       clusterwide: true,
     },
+    {
+      kind: 'VirtualService',
+      clusterwide: true,
+    },
   ],
+  depth: 1,
   networkFlowLevel: -3,
   matchers: {
     Secret: (gateway, secret) => matchByTlsCredentials(secret, gateway),
