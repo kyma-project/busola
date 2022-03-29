@@ -1,5 +1,6 @@
 @import '~fundamental-styles/dist/margins.css';
 @import '~@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/css_variables.css';
+@import './shared-repo/components/ResourceGraph/mixins.scss';
 
 html {
   font-size: 16px;
@@ -39,10 +40,6 @@ body {
 .fd-checkbox:focus + .fd-checkbox__label,
 .fd-radio:focus + .fd-radio__label {
   outline: none; // disable a weird outline on clicked checkbox
-}
-
-.fd-radio__label:after {
-  top: 6px;
 }
 
 .fd-checkbox__text {
@@ -116,29 +113,6 @@ body {
 .modal--no-padding {
   .fd-dialog__body {
     padding: 0 !important;
-  }
-}
-
-.fd-dialog--xl-size {
-  .modal-demo-bg {
-    min-width: 1036px;
-  }
-
-  .fd-dialog__body {
-    max-height: calc(100vh - 184px);
-  }
-
-  @media (max-width: 1100px) {
-    .modal-demo-bg {
-      min-width: 100%;
-      padding: 0 32px;
-    }
-
-    .fd-dialog,
-    .fd-dialog__content,
-    .fd-dialog__body {
-      min-width: 100%;
-    }
   }
 }
 
@@ -277,6 +251,9 @@ input[type='checkbox'] {
   .fd-list--dropdown {
     max-width: 100% !important;
   }
+  .fd-form-message {
+    max-width: 100%;
+  }
 }
 .fd-popover__popper {
   max-height: 200px !important;
@@ -383,6 +360,56 @@ input[type='checkbox'] {
   justify-content: space-between;
 }
 
+.fd-margin-0 {
+  margin: 0;
+}
+
 .fd-link {
   cursor: pointer;
 }
+
+.fd-popover__popper b {
+  font-weight: bold;
+}
+
+.fd-color--warning {
+  color: var(--sapCriticalColor) !important;
+}
+
+.break-word {
+  word-break: break-word;
+}
+
+.button-link {
+  border: none;
+  background: none;
+  text-decoration: underline;
+  color: var(--sapLinkColor);
+  cursor: pointer;
+}
+
+.search-with-magnifying-glass {
+  padding-left: 48px !important;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNiIgaGVpZ2h0PSIyNiI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBmaWxsPSIjNEQ1QTZDIiBkPSJNOS43NTQgMTkuNDk2YTkuNjg0IDkuNjg0IDAgMCAwIDYuMDk3LTIuMTU4bDguMjg5IDguMzRhMS4wODQgMS4wODQgMCAwIDAgMS41MzUtMS41MjlsLTguMy04LjM1YTkuNjg5IDkuNjg5IDAgMCAwIDIuMTItNi4wNTRjMC01LjM3Ny00LjM2OS05Ljc1MS05Ljc0MS05Ljc1MVMuMDEzIDQuMzY4LjAxMyA5Ljc0NXM0LjM2OSA5Ljc1MSA5Ljc0MSA5Ljc1MXptMC0xNy4zMzVjNC4xNzcgMCA3LjU3NyAzLjQwMiA3LjU3NyA3LjU4NCAwIDQuMTgyLTMuNCA3LjU4NC03LjU3NyA3LjU4NC00LjE3OCAwLTcuNTc3LTMuNDAyLTcuNTc3LTcuNTg0IDAtNC4xODIgMy4zOTktNy41ODQgNy41NzctNy41ODR6Ii8+PC9zdmc+);
+  background-repeat: no-repeat;
+  background-position: 16px center;
+  background-size: 16px;
+}
+
+@include graph-node-border(pod, 4);
+@include graph-node-border(virtualservice, 1);
+@include graph-node-border(rolebinding, 2);
+@include graph-node-border(apirule, 2);
+@include graph-node-border(configmap, 5);
+@include graph-node-border(cronjob, 2);
+@include graph-node-border(function, 2);
+@include graph-node-border(gateway, 1, Light1);
+@include graph-node-border(horizontalpodautoscaler, 6);
+@include graph-node-border(job, 1);
+@include graph-node-border(oauth2client, 1);
+@include graph-node-border(replicaset, 6);
+@include graph-node-border(clusterrolebinding, 2);
+@include graph-node-border(role, 1);
+@include graph-node-border(clusterrole, 1);
+@include graph-node-border(secret, 5);
+@include graph-node-border(service, 3);

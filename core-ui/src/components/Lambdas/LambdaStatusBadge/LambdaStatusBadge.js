@@ -11,29 +11,31 @@ import {
 import { statusType } from 'components/Lambdas/helpers/lambdas';
 import { getLambdaStatus } from '../helpers/lambdas/getLambdaStatus';
 
-export function LambdaStatusBadge({ status }) {
+export function LambdaStatusBadge({ resourceKind, status }) {
   const translatedStatus = getLambdaStatus(status);
   const statusPhase = translatedStatus.phase;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
-  const texts = LAMBDA_PHASES[statusPhase];
   let badgeType = statusType(statusPhase);
   if (badgeType === 'info') {
     badgeType = undefined;
   }
-
   let tooltipText;
 
   if (LAMBDA_ERROR_PHASES.includes(statusPhase)) {
     const formattedError = t('common.messages.error', {
       error: translatedStatus.message,
     });
-    tooltipText = `${t(texts.MESSAGE)} ${formattedError}`;
+    tooltipText = formattedError;
   }
-
   return (
-    <StatusBadge tooltipContent={tooltipText} type={badgeType}>
-      {t(texts.TITLE)}
+    <StatusBadge
+      i18n={i18n}
+      resourceKind={resourceKind}
+      additionalContent={tooltipText}
+      type={badgeType}
+    >
+      {LAMBDA_PHASES[statusPhase]}
     </StatusBadge>
   );
 }

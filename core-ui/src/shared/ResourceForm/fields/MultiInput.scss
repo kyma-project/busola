@@ -1,0 +1,10 @@
+.multi-input {
+  > .fd-col {
+    padding-top: 0;
+  }
+  .readonly-value {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+}

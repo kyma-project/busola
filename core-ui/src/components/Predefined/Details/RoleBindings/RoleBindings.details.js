@@ -1,12 +1,39 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { RoleBindings } from './RoleBindings.js';
+import { RoleSubjects } from './RoleSubjects.js';
+import { RoleRef } from './RoleRef';
+import { ClusterRoleBindingsCreate } from '../../Create/RoleBindings/RoleBindings.create';
+import { ResourceDetails } from 'react-shared';
 
-export const RoleBindingsDetails = ({ DefaultRenderer, ...otherParams }) => (
-  <DefaultRenderer {...otherParams} customComponents={[RoleBindings]} />
-);
+function RoleBindingsDetails(props) {
+  return (
+    <GenericRoleBindingDetails
+      {...props}
+      createResourceForm={ClusterRoleBindingsCreate}
+    />
+  );
+}
 
-export const ClusterRoleBindingsDetails = ({
-  DefaultRenderer,
-  ...otherParams
-}) => <DefaultRenderer {...otherParams} customComponents={[RoleBindings]} />;
+export function ClusterRoleBindingsDetails(props) {
+  return <GenericRoleBindingDetails {...props} />;
+}
+
+function GenericRoleBindingDetails({ DefaultRenderer, ...otherParams }) {
+  const { t } = useTranslation();
+
+  const customColumns = [
+    {
+      header: t('role-bindings.headers.role-ref'),
+      value: resource => <RoleRef roleRef={resource.roleRef} />,
+    },
+  ];
+  return (
+    <ResourceDetails
+      {...otherParams}
+      customColumns={customColumns}
+      customComponents={[RoleSubjects]}
+    />
+  );
+}
+export default RoleBindingsDetails;

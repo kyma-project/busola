@@ -1,5 +1,6 @@
 import React from 'react';
 import { StatusBadge } from 'react-shared';
+import { useTranslation } from 'react-i18next';
 
 const calculatePodState = pod => {
   const containerStatuses = pod?.status?.containerStatuses;
@@ -24,29 +25,39 @@ const calculatePodState = pod => {
       }
     }
   }
-  return { status: 'Running' };
+  return { status: pod.status?.phase || 'Unknown' };
 };
 
 const badgeType = status => {
   switch (status) {
     case 'Running':
+    case 'Succeeded':
     case 'Completed':
       return 'success';
     case 'Terminated':
+    case 'Pending':
     case 'Terminating':
     case 'PodInitializing':
     case 'ContainerCreating':
       return 'info';
+    case 'Unknown':
+      return undefined;
     default:
       return 'error';
   }
 };
 
 export function PodStatus({ pod }) {
+  const { i18n } = useTranslation();
+
   const podState = calculatePodState(pod);
+  const message = podState?.message || pod.status?.conditions?.[0]?.message;
+
   return (
     <StatusBadge
-      tooltipContent={podState.message}
+      i18n={i18n}
+      additionalContent={message}
+      resourceKind="pods"
       type={badgeType(podState.status)}
     >
       {podState.status}

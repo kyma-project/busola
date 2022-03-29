@@ -46,11 +46,6 @@ const defaultCodeAndDeps = {
   nodejs10: { ...jsCodeAndDeps },
   nodejs12: { ...jsCodeAndDeps },
   nodejs14: { ...jsCodeAndDeps },
-  python38: {
-    code: `def main(event, context):
-    return "Hello World"`,
-    deps: '',
-  },
   python39: {
     code: `def main(event, context):
     return "Hello World"`,

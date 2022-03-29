@@ -44,6 +44,7 @@ export function createDeploymentTemplate(namespaceId) {
           },
         },
         spec: {
+          imagePullSecrets: [],
           containers: [createContainerTemplate()],
         },
       },
@@ -54,7 +55,7 @@ export function createDeploymentTemplate(namespaceId) {
 export function createPresets(namespace, translate) {
   return [
     {
-      name: translate('deployments.create-modal.presets.default'),
+      name: translate('common.labels.default-preset'),
       value: {
         deployment: createDeploymentTemplate(namespace),
       },

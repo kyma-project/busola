@@ -1,25 +1,16 @@
-import React, { useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, { useEffect, useMemo } from 'react';
+import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
-import Preferences from 'components/Preferences/Preferences';
 import {
-  withTitle,
+  WithTitle,
   useMicrofrontendContext,
   MainFrameRedirection,
 } from 'react-shared';
-import CreateApiRule from '../ApiRules/CreateApiRule/CreateApiRule';
-import EditApiRule from 'components/ApiRules/EditApiRule/EditApiRule';
-import { ContainersLogs } from 'components/Predefined/Details/Pod/ContainersLogs';
-import { CustomResource } from 'components/Predefined/Details/CustomResourceDefinitions/CustomResources.details';
-import { ComponentForList, ComponentForDetails } from 'shared/getComponents';
-import { getResourceUrl } from 'shared/helpers';
-import { ClusterList } from 'components/Clusters/views/ClusterList';
-import { NoPermissions } from 'components/NoPermissions/NoPermissions';
-import { AddCluster } from 'components/Clusters/views/AddCluster/AddCluster';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
-import { NodeDetails } from 'components/Nodes/NodeDetails/NodeDetails';
 import { useSentry } from '../../hooks/useSentry';
+
+import resources from 'routing/resources';
+import otherRoutes from 'routing/other';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -31,156 +22,35 @@ export default function App() {
 
   useSentry();
 
+  const serviceCatalogRoutes = useMemo(() => {
+    return [
+      '/catalog',
+      '/catalog/ServiceClass/:serviceId',
+      '/catalog/ServiceClass/:serviceId/plans',
+      '/catalog/ServiceClass/:serviceId/plan/:planId',
+      '/catalog/ClusterServiceClass/:serviceId',
+      '/catalog/ClusterServiceClass/:serviceId/plans',
+      '/catalog/ClusterServiceClass/:serviceId/plan/:planId',
+      '/instances',
+      '/instances/details/:instanceName',
+    ].map(route => <Route key="route" path={route} element={null} />);
+  }, []);
+
   return (
     // force rerender on cluster change
-    <Switch key={cluster?.name}>
+    <Routes key={cluster?.name}>
+      {serviceCatalogRoutes}
       <Route
-        path="/no-permissions"
-        exact
-        component={withTitle(t('no-permissions.title'), NoPermissions)}
+        path="/overview" // overview route should stay static
+        element={
+          <WithTitle title={t('clusters.overview.title-current-cluster')}>
+            <ClusterOverview />
+          </WithTitle>
+        }
       />
-      <Route
-        path="/overview"
-        exact
-        component={withTitle(t('clusters.overview.title'), ClusterOverview)}
-      />
-      <Route path="/overview/nodes/:nodeName" component={RoutedNodeDetails} />
-      <Route
-        path="/clusters"
-        exact
-        component={withTitle(t('clusters.list.title'), ClusterList)}
-      />
-      <Route
-        path="/clusters/add"
-        exact
-        component={withTitle(t('clusters.add.title'), AddCluster)}
-      />
-      <Route path="/preferences" render={Preferences} />
-      <Route
-        exact
-        path="/apirules/create"
-        render={withTitle(t('api-rules.title'), CreateApiRule)}
-      />
-
-      <Route
-        exact
-        path="/apirules/edit/:apiName"
-        render={withTitle(t('api-rules.title'), RoutedEditApiRule)}
-      />
-
-      <Route
-        exact
-        path="/namespaces/:namespaceId/pods/:podName/containers/:containerName"
-        component={RoutedContainerDetails}
-      />
-
-      <Route
-        exact
-        path="/customresourcedefinitions/:customResourceDefinitionName/:resourceVersion/:resourceName"
-        component={RoutedCustomResourceDetails}
-      />
-
-      <Route
-        exact
-        path="/namespaces/:namespaceId/:resourceType/:resourceName"
-        component={RoutedResourceDetails}
-      />
-      <Route
-        exact
-        path="/namespaces/:namespaceId/:resourceType"
-        component={RoutedResourcesList}
-      />
-      <Route
-        exact
-        path="/:resourceType/:resourceName"
-        component={RoutedResourceDetails}
-      />
-
-      <Route exact path="/:resourceType" component={RoutedResourcesList} />
-      <Route exact path="" component={MainFrameRedirection} />
-    </Switch>
+      {resources}
+      {otherRoutes}
+      <Route path="" element={<MainFrameRedirection />} />
+    </Routes>
   );
-}
-
-function RoutedEditApiRule({ match }) {
-  return <EditApiRule apiName={match.params.apiName} />;
-}
-
-function RoutedNodeDetails({ match }) {
-  return <NodeDetails nodeName={match.params.nodeName} />;
-}
-
-function RoutedContainerDetails({ match }) {
-  const decodedPodName = decodeURIComponent(match.params.podName);
-  const decodedContainerName = decodeURIComponent(match.params.containerName);
-
-  const params = {
-    podName: decodedPodName,
-    containerName: decodedContainerName,
-    namespace: match.params.namespaceId,
-  };
-
-  return <ContainersLogs params={params} />;
-}
-
-function RoutedCustomResourceDetails({ match }) {
-  const customResourceDefinitionName = decodeURIComponent(
-    match.params.customResourceDefinitionName,
-  );
-  const resourceVersion = decodeURIComponent(match.params.resourceVersion);
-  const resourceName = decodeURIComponent(match.params.resourceName);
-
-  const params = {
-    customResourceDefinitionName,
-    resourceVersion,
-    resourceName,
-  };
-
-  return <CustomResource params={params} />;
-}
-
-function RoutedResourcesList({ match }) {
-  const queryParams = new URLSearchParams(window.location.search);
-
-  const resourceUrl = getResourceUrl();
-
-  const params = {
-    hasDetailsView: queryParams.get('hasDetailsView') === 'true',
-    readOnly: queryParams.get('readOnly') === 'true',
-    resourceUrl,
-    resourceType: match.params.resourceType,
-    namespace: match.params.namespaceId,
-  };
-
-  const rendererName = params.resourceType + 'List';
-  const rendererNameForCreate = params.resourceType + 'Create';
-
-  return (
-    <ComponentForList
-      name={rendererName}
-      params={params}
-      nameForCreate={rendererNameForCreate}
-    />
-  );
-}
-
-function RoutedResourceDetails({ match }) {
-  const queryParams = new URLSearchParams(window.location.search);
-
-  const resourceUrl = getResourceUrl();
-
-  const decodedResourceUrl = decodeURIComponent(resourceUrl);
-  const decodedResourceName = decodeURIComponent(match.params.resourceName);
-
-  const params = {
-    resourceUrl: decodedResourceUrl,
-    resourceType: match.params.resourceType,
-    resourceName: decodedResourceName,
-    namespace: match.params.namespaceId,
-    readOnly: queryParams.get('readOnly') === 'true',
-  };
-
-  const rendererName = params.resourceType + 'Details';
-
-  return <ComponentForDetails name={rendererName} params={params} />;
 }

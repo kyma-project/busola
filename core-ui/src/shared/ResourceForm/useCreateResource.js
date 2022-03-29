@@ -1,35 +1,69 @@
 import LuigiClient from '@luigi-project/client';
 import { useNotification } from 'react-shared';
 import { useTranslation } from 'react-i18next';
-import { usePost } from 'react-shared';
+import { usePost, useUpdate, useMicrofrontendContext } from 'react-shared';
+import { createPatch } from 'rfc6902';
 
-export function useCreateResource(
+export function useCreateResource({
   singularName,
   pluralKind,
   resource,
+  initialResource,
   createUrl,
   afterCreatedFn,
-) {
+}) {
   const { t } = useTranslation();
   const notification = useNotification();
+  const { namespaceId } = useMicrofrontendContext();
   const postRequest = usePost();
+  const patchRequest = useUpdate();
+
+  const isEdit = !!initialResource?.metadata?.name;
 
   const defaultAfterCreatedFn = () => {
     notification.notifySuccess({
-      content: t('common.create-form.messages.success', {
-        resourceType: singularName,
-      }),
+      content: t(
+        isEdit
+          ? 'common.create-form.messages.patch-success'
+          : 'common.create-form.messages.create-success',
+        {
+          resourceType: singularName,
+        },
+      ),
     });
-    LuigiClient.linkManager()
-      .fromContext('namespace')
-      .navigate(
-        `/${pluralKind.toLowerCase()}/details/${resource.metadata.name}`,
-      );
+    if (!isEdit) {
+      if (namespaceId) {
+        LuigiClient.linkManager()
+          .fromContext('namespace')
+          .navigate(
+            `/${pluralKind.toLowerCase()}/details/${resource.metadata.name}`,
+          );
+      } else {
+        LuigiClient.linkManager().navigate(`details/${resource.metadata.name}`);
+      }
+    }
   };
 
-  return async () => {
+  return async e => {
+    if (e) {
+      e.preventDefault();
+    }
+
     try {
-      await postRequest(createUrl, resource);
+      if (isEdit) {
+        const mergedResource = {
+          ...initialResource,
+          ...resource,
+          metadata: { ...initialResource.metadata, ...resource.metadata },
+        };
+        await patchRequest(
+          createUrl,
+          createPatch(initialResource, mergedResource),
+        );
+      } else {
+        await postRequest(createUrl, resource);
+      }
+
       if (afterCreatedFn) {
         afterCreatedFn(defaultAfterCreatedFn);
       } else {
@@ -38,10 +72,15 @@ export function useCreateResource(
     } catch (e) {
       console.error(e);
       notification.notifyError({
-        content: t('common.create-form.messages.failure', {
-          resourceType: singularName,
-          error: e.message,
-        }),
+        content: t(
+          isEdit
+            ? 'common.create-form.messages.patch-failure'
+            : 'common.create-form.messages.create-failure',
+          {
+            resourceType: singularName,
+            error: e.message,
+          },
+        ),
       });
       return false;
     }

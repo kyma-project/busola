@@ -1,25 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ControlledByKind, Labels, StatusBadge } from 'react-shared';
+import { ControlledByKind, Labels, Link, ResourcesList } from 'react-shared';
+import { Trans } from 'react-i18next';
+import { DaemonSetsCreate } from '../Create/DaemonSets/DaemonSets.create';
+import { DaemonSetStatus } from '../Details/DaemonSet/DaemonSetStatus';
+import { useRestartAction } from 'shared/hooks/useRestartResource';
 
-const isStatusOk = daemonSet => {
-  const allPods =
-    daemonSet.status.numberReady + (daemonSet.status.numberUnavailable || 0);
-  return daemonSet.status.numberReady === allPods;
-};
-
-export const getStatusType = daemonSet => {
-  return isStatusOk(daemonSet) ? 'success' : 'error';
-};
-
-export const getPodsCount = daemonSet => {
-  const allPods =
-    daemonSet.status.numberReady + (daemonSet.status.numberUnavailable || 0);
-  return `${daemonSet.status.numberReady || 0} / ${allPods || 0}`;
-};
-
-export const DaemonSetsList = ({ DefaultRenderer, ...otherParams }) => {
+const DaemonSetsList = props => {
   const { t } = useTranslation();
+  const restartAction = useRestartAction(props.resourceUrl);
 
   const customColumns = [
     {
@@ -38,20 +27,29 @@ export const DaemonSetsList = ({ DefaultRenderer, ...otherParams }) => {
       ),
     },
     {
-      header: t('daemon-sets.pods'),
-      value: resource => {
-        const podsCount = getPodsCount(resource);
-        const statusType = getStatusType(resource);
-        return <StatusBadge type={statusType}>{podsCount}</StatusBadge>;
-      },
+      header: t('common.headers.pods'),
+      value: resource => <DaemonSetStatus daemonSet={resource} />,
     },
   ];
 
+  const description = (
+    <Trans i18nKey="daemon-sets.description">
+      <Link
+        className="fd-link"
+        url="https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/"
+      />
+    </Trans>
+  );
+
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       resourceName={t('daemon-sets.title')}
-      {...otherParams}
+      description={description}
+      customListActions={[restartAction]}
+      createResourceForm={DaemonSetsCreate}
+      {...props}
     />
   );
 };
+export default DaemonSetsList;

@@ -44,3 +44,50 @@ export function createExternalAccountBinding({ keySecretRef, keyId }) {
   jp.value(externalAccountBinding, '$.keySecretRef', keySecretRef);
   return externalAccountBinding;
 }
+
+export function createPresets(namespace, translate) {
+  return [
+    {
+      name: translate('common.labels.default-preset'),
+      value: createIssuerTemplate(namespace),
+    },
+    {
+      name: 'Lets Encrypt Stage',
+      value: {
+        apiVersion: 'cert.gardener.cloud/v1alpha1',
+        kind: 'Issuer',
+        metadata: {
+          name: 'lets-encrypt-stage',
+          namespace: namespace,
+        },
+        spec: {
+          requestsPerDayQuota: 0,
+          acme: {
+            server: 'https://acme-staging-v02.api.letsencrypt.org/directory',
+            email: '',
+            autoRegistration: true,
+          },
+        },
+      },
+    },
+    {
+      name: 'Lets Encrypt Production',
+      value: {
+        apiVersion: 'cert.gardener.cloud/v1alpha1',
+        kind: 'Issuer',
+        metadata: {
+          name: 'lets-encrypt-prod',
+          namespace: namespace,
+        },
+        spec: {
+          requestsPerDayQuota: 0,
+          acme: {
+            server: 'https://acme-v02.api.letsencrypt.org/directory',
+            email: '',
+            autoRegistration: true,
+          },
+        },
+      },
+    },
+  ];
+}

@@ -1,26 +1,9 @@
 import React from 'react';
 import { Button } from 'fundamental-react';
-import { Modal, usePost, useDelete, useSingleGet } from 'react-shared';
+import { Modal, usePost, useDelete, useSingleGet, Tooltip } from 'react-shared';
 import copyToCliboard from 'copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
-
-function Actions({ close, textToCopy, canCopy }) {
-  const { t } = useTranslation();
-
-  return [
-    <Button
-      disabled={!canCopy}
-      option="emphasized"
-      onClick={() => copyToCliboard(textToCopy)}
-      key="copy"
-    >
-      {t('common.tooltips.copy-to-clipboard')}
-    </Button>,
-    <Button onClick={close} key="close">
-      {t('applications.buttons.close')}
-    </Button>,
-  ];
-}
+import { useIsSKR } from './useIsSKR';
 
 export default function ConnectApplicationModal({ applicationName }) {
   const [url, setUrl] = React.useState();
@@ -29,6 +12,7 @@ export default function ConnectApplicationModal({ applicationName }) {
   const postRequest = usePost();
   const deleteTokenRequest = useDelete();
   const getRequest = useSingleGet();
+  const isSKR = useIsSKR();
 
   async function performUrlFetch() {
     setUrl(t('common.headers.loading'));
@@ -70,22 +54,38 @@ export default function ConnectApplicationModal({ applicationName }) {
     }
   }
 
+  let modalOpeningComponent = (
+    <Button className="fd-margin-end--sm" disabled={isSKR}>
+      {t('applications.buttons.connect')}
+    </Button>
+  );
+
+  if (isSKR) {
+    modalOpeningComponent = (
+      <Tooltip delay={0} content={t('applications.messages.connect-disabled')}>
+        {modalOpeningComponent}
+      </Tooltip>
+    );
+  }
+
   return (
     <Modal
       onShow={performUrlFetch}
-      actions={onClose => (
-        <Actions
-          close={onClose}
-          textToCopy={url}
-          canCopy={url !== t('common.headers.loading')}
-        />
-      )}
+      actions={onClose => [
+        <Button
+          disabled={url === t('common.headers.loading')}
+          option="emphasized"
+          onClick={() => copyToCliboard(url)}
+          key="copy"
+        >
+          {t('common.tooltips.copy-to-clipboard')}
+        </Button>,
+        <Button onClick={onClose} key="close">
+          {t('common.buttons.close')}
+        </Button>,
+      ]}
       title={t('applications.subtitle.connect-app')}
-      modalOpeningComponent={
-        <Button className="fd-margin-end--sm">
-          {t('applications.buttons.connect')}
-        </Button>
-      }
+      modalOpeningComponent={modalOpeningComponent}
       i18n={i18n}
     >
       <p className="fd-has-color-status-4 fd-has-font-style-italic">

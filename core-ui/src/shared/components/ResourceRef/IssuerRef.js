@@ -6,13 +6,14 @@ import { ExternalResourceRef } from './ExternalResourceRef';
 
 export function IssuerRef(props) {
   const { t } = useTranslation();
-  const { data: issuers } = useGetList()(
+  const { data: issuers, loading } = useGetList()(
     '/apis/cert.gardener.cloud/v1alpha1/issuers',
   );
 
   return (
     <ExternalResourceRef
       resources={issuers}
+      loading={loading}
       labelPrefix={t('common.labels.issuer')}
       {...props}
     />

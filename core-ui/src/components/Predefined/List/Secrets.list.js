@@ -1,8 +1,11 @@
 import React from 'react';
-import { ControlledByKind } from 'react-shared';
+import { ControlledByKind, ResourcesList } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-shared';
+import { Trans } from 'react-i18next';
+import { SecretsCreate } from '../Create/Secrets/Secrets.create';
 
-export const SecretsList = ({ DefaultRenderer, ...otherParams }) => {
+const SecretsList = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -20,5 +23,22 @@ export const SecretsList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
+  const description = (
+    <Trans i18nKey="secrets.description">
+      <Link
+        className="fd-link"
+        url="https://kubernetes.io/docs/concepts/configuration/secret/"
+      />
+    </Trans>
+  );
+
+  return (
+    <ResourcesList
+      customColumns={customColumns}
+      description={description}
+      createResourceForm={SecretsCreate}
+      {...props}
+    />
+  );
 };
+export default SecretsList;

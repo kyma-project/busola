@@ -9,14 +9,13 @@ Busola is a web-based UI for managing resources within Kyma or any Kubernetes cl
 Busola project consists of the following UI projects:
 
 - [`Core`](./core) - The main frame
-- [`Service-Catalog-UI`](./service-catalog-ui) - The UI layer for Service Catalog, Instances and Brokers
 - [`Backend`](./backend) - A kind of a proxy between Busola and the Kubernetes cluster
 - [`Tests`](./tests) - Acceptance and end-to-end tests
 
 ## Prerequisites
 
-- [`npm`](https://www.npmjs.com/): >= 6.14.12
-- [`node`](https://nodejs.org/en/): >= 14.16.1
+- [`npm`](https://www.npmjs.com/): >= 8.1.2
+- [`node`](https://nodejs.org/en/): >= 16.13.2
 
 ## Installation
 
@@ -32,6 +31,8 @@ npm run bootstrap:ci
 > - Installs dependencies for the [libraries](#components).
 > - Builds all the [libraries](#components).
 
+Read [Install Kyma Dashboard manually](docs/install-kyma-dashboard-manually.md) to learn how to install the Dashboard with Istio Ingress and how to install it on a Kyma cluster.
+
 ## Configuration
 
 Learn about the [default configuration](#default-configuration) in Busola and [how to change it](#change-the-configuration).
@@ -40,23 +41,33 @@ Learn about the [default configuration](#default-configuration) in Busola and [h
 
 Busola is delivered with the following default settings:
 
-| Parameter                  | Comment                                                                                                                                           | Default Value                                                                                                                                                                                           |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kubeconfig`               | The kubeconfig as JSON                                                                                                                            | `null`                                                                                                                                                                                                  |
-| `hiddenNamespaces`         | A list of Namespace names that are considered system, and are hidden by default.                                                                  | default list: `istio-system`, `kube-public`, `kube-system`, `kyma-backup`, `kyma-installer`, `kyma-integration`, `kyma-system`, `natss`, `kube-node-lease`, `kubernetes-dashboard`, `serverless-system` |
-| `features`                 | Switches a set of Busola features on and off. Use selectors to configure conditions for the features. To switch them off, set `isEnabled=false`.  | `isEnabled=true`                                                                                                                                                                                        |
-| `navigation.disabledNodes` | Array of IDs of navigation nodes that are hidden from navigation. Format: `<category>.<nodeName>` or `<namespace>.<category>.<nodeName>`)         | empty                                                                                                                                                                                                   |
-| `navigation.externalNodes` | A nested list of links to external websites. `category`, `icon`: a category name and optional icon / `children`: a list of pairs (label and link) | category: `Learn more` / children: `Kyma Documentation`, `Our Slack`, `Github`                                                                                                                          |
-| `version`                  | Configuration version. Don’t edit this. Can be empty.                                                                                             | the most recent release                                                                                                                                                                                 |
+| Parameter                  | Comment                                                                                                                                           | Default Value                                                                                                                                                                                     |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `hiddenNamespaces`         | A list of Namespace names that are considered system, and are hidden by default.                                                                  | default list: `compass-system`, `istio-system`, `kube-public`, `kube-system`, `kyma-backup`, `kyma-installer`, `kyma-integration`, `kyma-system`, `natss`, `kube-node-lease`, `serverless-system` |
+| `features`                 | Switches a set of Busola features on and off. Use selectors to configure conditions for the features. To switch them off, set `isEnabled=false`.  | `isEnabled=true`                                                                                                                                                                                  |
+| `navigation.disabledNodes` | Array of IDs of navigation nodes that are hidden from navigation. Format: `<category>.<nodeName>` or `<namespace>.<category>.<nodeName>`)         | empty                                                                                                                                                                                             |
+| `navigation.externalNodes` | A nested list of links to external websites. `category`, `icon`: a category name and optional icon / `children`: a list of pairs (label and link) | category: `Learn more` / children: `Kyma Documentation`, `Our Slack`, `Github`                                                                                                                    |
+| `version`                  | Configuration version. Don’t edit this. Can be empty.                                                                                             | the most recent release                                                                                                                                                                           |
 
 ### Configuration sources
 
-Busola configuration is the product of gathering and merging the configurations from several individual sources. The following list presents the sources in the order of precedence, with init params having the highest priority over the others:
+Busola configuration is the product of gathering and merging the configurations from several individual sources. The following list presents the sources in the order of precedence:
+
+**Backend:**
+
+- Busola backend default cluster configuration, acquired from the [defaultConfig.json](backend/settings/defaultConfig.json) file.
+- Busola cluster configuration, available on the Busola cluster in the Config Map "busola/busola-config" under the key "config".
+  This data is mounted to the Busola `web` and `backend` Pods, and during the local development,
+  the [defaultConfig.json](backend/settings/defaultConfig.json) file is used.
+
+**Frontend:**
 
 - Built-in, hardcoded defaults.
-- Busola cluster configuration, available on the Busola cluster in ConfigMap "busola/busola-config" under the key "config". This data is mounted to the Busola `web` pod, and during the local development, the [config.json](core/src/assets/config/config.json) file is used.
-- Target cluster configuration, available on the target cluster in ConfigMap "kube-system/busola-config" under the key "config". Busola performs a request for that resource during the bootstrap process.
-- Configuration from initialisation parameters. By default, init parameters are disabled. To switch them on, set the feature `INIT_PARAMS` to `isEnabled=true`.
+- Busola frontend default cluster configuration, acquired from the [defaultConfig.json](core/src/assets/defaultConfig.json) file.
+- Busola cluster configuration, available on the Busola cluster in the Config Map "busola/busola-config" under the key "config".
+  This data is mounted to the Busola `web` and `backend` Pods, and during the local development,
+  the [defaultConfig.json](core/src/assets/defaultConfig.json) file is used.
+- Target cluster configuration, available on the target cluster in ConfigMap "kube-public/busola-config" under the key "config". Busola performs a request for that resource during the bootstrap process.
 
 ### Change the Configuration
 
@@ -67,12 +78,10 @@ Features comprise the following elements:
 
 - `FEATURE_ID`: Unique identifier, as defined in the Busola source code
 - `selector`: The k8s resources that can activate the feature
-- `isActive`: Activates or deactivates the feature, overwriting the status set by `selector`
+- `isEnabled`: Activates or deactivates the feature, overwriting the status set by `selector`
 - `config`: Provides additional configuration options as needed for each feature. For details, see the README in the specific component or feature.
 
-## Usage
-
-See the [Development](#development) section.
+See the available Busola [feature flags](docs/features.md) for more information.
 
 ## Development
 
@@ -84,7 +93,7 @@ Use the following command to run Busola with the [`core`](./core) and all other 
 npm run start
 ```
 
-After a while, open the [http://localhost:8080](http://localhost:8080) address in your browser, and add your **init params** to the address to make it look like `http://localhost:8080?init=yourInitParams`. You can generate the params with [this generator](http://enkode.surge.sh/).
+After a while, open the [http://localhost:8080](http://localhost:8080) address in your browser, and provide your kubeconfig in the **Connect cluster** wizard.
 
 Once you started Busola locally, you can begin the development. All modules have the hot-reload feature enabled, therefore, you can edit the code in real-time and see the changes in your browser.
 
@@ -92,7 +101,6 @@ The apps you started run at the following addresses:
 
 - `Core` - [http://localhost:8080](http://localhost:8080)
 - `Core-UI` - [http://localhost:8889](http://localhost:8889)
-- `Service-Catalog-UI` - [http://localhost:8000](http://localhost:8000)
 - `Backend` - [http://localhost:3001](http://localhost:3001)
 
 ### Security countermeasures
@@ -115,6 +123,16 @@ When developing new features in Busola UI, adhere to the following rules. This w
 ### Run tests
 
 For the information on how to run tests and configure them, go to the [`tests`](tests) directory.
+
+## Busola in Docker: adding a cluster via kubeconfig ID
+
+1. If you run Busola in Docker, you can mount your kubeconfig as a bind mount for Busola container. Execute the following command:
+
+   ```bash
+   docker run --rm -it -p 3001:3001 -v <path to your kubeconfig>:/app/core/kubeconfig/<your kubeconfig file name> --pid=host --name busola eu.gcr.io/kyma-project/busola:latest
+   ```
+
+2. When you open Busola in your browser, go to `http://localhost:3001?kubeconfigID={YOUR_KUBECONFIG_FILE_NAME}`. Busola will try to download that file and add it for your Busola instance.
 
 ## Troubleshooting
 

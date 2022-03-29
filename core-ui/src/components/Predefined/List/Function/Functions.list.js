@@ -1,15 +1,15 @@
 import React from 'react';
 import { Button } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext, Link, ResourcesList } from 'react-shared';
 
 import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
-import CreateNewFunction from './CreateNewFunction';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
+import { FunctionsCreate } from 'components/Predefined/Create/Functions/Functions.create';
 
-export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
+const FunctionsList = props => {
   const { t } = useTranslation();
 
   const microfrontendContext = useMicrofrontendContext();
@@ -27,10 +27,6 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
     </Button>
   ) : null;
 
-  const listActions = (
-    <CreateNewFunction namespaceName={otherParams.namespace} />
-  );
-
   const customColumns = [
     {
       header: t('functions.headers.runtime'),
@@ -46,16 +42,33 @@ export const FunctionsList = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('common.headers.status'),
-      value: resource => <LambdaStatusBadge status={resource.status} />,
+      value: resource => (
+        <LambdaStatusBadge
+          resourceKind={props.resourceType}
+          status={resource.status}
+        />
+      ),
     },
   ];
 
+  const description = (
+    <Trans i18nKey="functions.description">
+      <Link
+        className="fd-link"
+        url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/svls-01-function/#documentation-content/"
+      />
+    </Trans>
+  );
+
   return (
-    <DefaultRenderer
+    <ResourcesList
       customHeaderActions={headerActions}
-      listHeaderActions={listActions}
       customColumns={customColumns}
-      {...otherParams}
+      description={description}
+      createResourceForm={FunctionsCreate}
+      {...props}
     />
   );
 };
+
+export default FunctionsList;

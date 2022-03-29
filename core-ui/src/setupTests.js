@@ -1,8 +1,8 @@
 import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import 'jsdom-worker-fix';
 import { act } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import 'babel-polyfill';
 
 const originalConsoleError = console.error;
@@ -14,6 +14,10 @@ export const ignoreConsoleErrors = patterns => {
     originalConsoleError(...data);
   };
 };
+// shutup popper error
+ignoreConsoleErrors([
+  'Element passed as the argument does not exist in the instance',
+]);
 
 var nodeCrypto = require('crypto');
 global.crypto = {
@@ -41,6 +45,11 @@ global.document.createRange = () => ({
 });
 
 window.postMessage = jest.fn();
+
+// graphviz-react uses es modules which jest doesn't understand
+jest.mock('graphviz-react', () => ({
+  Graphviz: () => 'Graphviz mock',
+}));
 
 Enzyme.configure({ adapter: new Adapter() });
 

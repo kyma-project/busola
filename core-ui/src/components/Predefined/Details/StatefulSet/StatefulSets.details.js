@@ -1,11 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ControlledBy } from 'react-shared';
+import { ControlledBy, ResourceDetails } from 'react-shared';
 
-import { ResourcePods } from '../ResourcePods';
-import { StatefulSetReplicas } from './StatefulSetReplicas';
+import { StatefulSetPods } from './StatefulSetPods';
+import { HPASubcomponent } from '../HPA/HPASubcomponent';
+import { Selector } from 'shared/components/Selector/Selector';
+import { StatefulSetsCreate } from '../../Create/StatefulSets/StatefulSets.create';
 
-export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
+function StatefulSetsDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -16,16 +18,26 @@ export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
       ),
     },
     {
-      header: t('stateful-sets.replicas'),
-      value: set => <StatefulSetReplicas key="replicas" set={set} />,
+      header: t('common.headers.pods'),
+      value: set => <StatefulSetPods key="replicas" set={set} />,
     },
   ];
 
+  const MatchSelector = statefulset => (
+    <Selector
+      namespace={statefulset.metadata.namespace}
+      labels={statefulset.spec?.selector?.matchLabels}
+      selector={statefulset.spec?.selector}
+      expressions={statefulset.spec?.selector?.matchExpressions}
+    />
+  );
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
-      customComponents={[ResourcePods]}
-      {...otherParams}
-    ></DefaultRenderer>
+      customComponents={[HPASubcomponent, MatchSelector]}
+      createResourceForm={StatefulSetsCreate}
+      {...props}
+    />
   );
 }
+export default StatefulSetsDetails;

@@ -3,8 +3,22 @@ import { useTranslation } from 'react-i18next';
 
 import { GatewayServers } from './GatewayServers';
 import { GatewaySelector } from './GatewaySelector';
+import { Selector } from 'shared/components/Selector/Selector';
+import { ResourceDetails } from 'react-shared';
+import { GatewaysCreate } from '../../Create/Gateways/Gateways.create';
 
-export function GatewaysDetails({ DefaultRenderer, ...otherParams }) {
+function MatchSelector(gateway) {
+  return (
+    <Selector
+      namespace={gateway.metadata.namespace}
+      labels={gateway.spec?.selector}
+      selector={gateway.spec?.selector}
+      isIstioSelector
+    />
+  );
+}
+
+function GatewaysDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -15,10 +29,12 @@ export function GatewaysDetails({ DefaultRenderer, ...otherParams }) {
   ];
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
-      customComponents={[GatewayServers]}
-      {...otherParams}
-    ></DefaultRenderer>
+      customComponents={[GatewayServers, MatchSelector]}
+      createResourceForm={GatewaysCreate}
+      {...props}
+    />
   );
 }
+export default GatewaysDetails;

@@ -43,7 +43,7 @@ export default function CodeAndDependencies({ lambda }) {
     lambda.spec.deps,
   );
 
-  const [debouncedCallback] = useDebouncedCallback(() => {
+  const debouncedCallback = useDebouncedCallback(() => {
     checkValidity();
   }, 150);
 
@@ -120,6 +120,7 @@ export default function CodeAndDependencies({ lambda }) {
   const button = (
     <Button
       glyph="save"
+      compact
       option={disabled ? 'transparent' : 'emphasized'}
       typeAttr="button"
       disabled={disabled}

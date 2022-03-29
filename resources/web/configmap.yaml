@@ -8,107 +8,84 @@ data:
       "config": {
         "storage": "localStorage",
         "features":{
-            "INIT_PARAMS": {
-              "isEnabled": false
-            },
-            "SENTRY": {
-              "isEnabled": true,
-              "selectors": [],
-              "config": {
-                "dsn": ""
-              }
-            },
-            "SERVICE_CATALOG":{
-              "selectors":[
-                  {
-                    "type":"apiGroup",
-                    "apiGroup":"servicecatalog.k8s.io"
-                  }
-              ]
-            },
-            "BTP_CATALOG":{
-              "selectors":[
-                  {
-                    "type":"apiGroup",
-                    "apiGroup":"services.cloud.sap.com"
-                  }
-              ]
-            },
-            "SERVICE_CATALOG_ADDONS":{
-              "selectors":[
-                  {
-                    "type":"apiGroup",
-                    "apiGroup":"servicecatalog.kyma-project.io"
-                  }
-              ]
-            },
-            "EVENTING":{
-              "selectors":[
-                  {
-                    "type":"apiGroup",
-                    "apiGroup":"eventing.kyma-project.io"
-                  }
-              ]
-            },
-            "API_GATEWAY":{
-              "selectors":[
-                  {
-                    "type":"apiGroup",
-                    "apiGroup":"gateway.kyma-project.io"
-                  }
-              ]
-            },
-            "APPLICATIONS":{
-              "selectors":[
-                  {
-                    "type":"apiGroup",
-                    "apiGroup":"applicationconnector.kyma-project.io"
-                  }
-              ]
-            },
-            "ADDONS":{
-              "selectors":[
-                  {
-                    "type":"apiGroup",
-                    "apiGroup":"addons.kyma-project.io"
-                  }
-              ]
-            },
-            "SERVERLESS":{
-              "selectors":[
-                  {
-                    "type":"apiGroup",
-                    "apiGroup":"serverless.kyma-project.io"
-                  }
-              ]
-            },
-            "CUSTOM_DOMAINS": {
-              "selectors":[
-                {
-                  "type": "apiGroup",
-                  "apiGroup": "dns.gardener.cloud"
-                }
-              ]
-            },
-            "OBSERVABILITY": {
-              "isEnabled": true,
-              "config": {
-                "links": [
-                  {
-                    "label": "Grafana",
-                    "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana"
-                  },
-                  {
-                    "label": "Kiali",
-                    "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali"
-                  },
-                  {
-                    "label": "Tracing",
-                    "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing"
-                  }
-                ]
+          "LEGAL_LINKS": {
+            "config": {
+              "legal-disclosure": {
+                "default": "https://www.sap.com/corporate/en/legal/impressum.html",
+                "de": "https://www.sap.com/corporate/de/legal/impressum.html"
+              },
+              "privacy": {
+                "default":
+                  "https://help.sap.com/viewer/82bdf2271c6041f79387c122147cf774/Cloud/en-US"
+              },
+              "copyright": {
+                "default": "https://www.sap.com/corporate/en/legal/copyright.html",
+                "de": "https://www.sap.com/corporate/de/legal/copyright.html"
+              },
+              "trademark": {
+                "default": "https://www.sap.com/corporate/en/legal/trademark.html",
+                "de": "https://www.sap.com/corporate/de/legal/trademark.html"
               }
             }
+          },
+          "SSO_LOGIN": {
+            "isEnabled": false,
+            "config": {
+              "issuerUrl": "https://apskyxzcl.accounts400.ondemand.com",
+              "scope": "email",
+              "clientId": "d0316c58-b0fe-45cd-9960-0fea0708355a"
+            }
+          },
+          "SERVICE_CATALOG_READ_ONLY": {
+            "isReadOnly": false
+          },
+          "SENTRY": {
+            "isEnabled": true,
+            "selectors": [],
+            "config": {
+              "dsn": ""
+            }
+          },
+          "OBSERVABILITY": {
+            "isEnabled": true,
+            "config": {
+              "links": [
+                {
+                  "label": "Grafana",
+                  "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana"
+                },
+                {
+                  "label": "Kiali",
+                  "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/kiali"
+                },
+                {
+                  "label": "Jaeger",
+                  "path": "apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/tracing"
+                }
+              ]
+            }
+          },
+          "KUBECONFIG_ID": {
+            "config": {
+              "kubeconfigUrl": "/kubeconfig"
+            }
+          },
+          "JWT_CHECK_CONFIG": {
+            "isEnabled": false,
+            "config": {
+              "issuer": "https://apskyxzcl.accounts400.ondemand.com",
+              "jwksUri": "https://apskyxzcl.accounts400.ondemand.com/oauth2/certs"
+            }
+          },
+          "GZIP": {
+            "isEnabled": true
+          },
+          "PROMETHEUS": {
+            "isEnabled": false
+          },
+          "VISUAL_RESOURCES": {
+            "isEnabled": true
+          }
         }
       }
     }

@@ -25,22 +25,21 @@ export default function CreateServiceBindingForm({
   setPopupModalMessage = () => void 0,
   onChange,
   formElementRef,
-  setValidity = () => void 0,
+  setCustomValid = () => void 0,
 }) {
   const createServiceBindingUsageSet = useCreateServiceBindingUsage();
   const { i18n } = useTranslation();
 
   const [existingInstanceName, setExistingInstanceName] = useState(
-    availableServiceInstances[0].metadata.name,
+    availableServiceInstances[0]?.metadata.name,
   );
   const [existingSecretName, setExistingSecretName] = useState(null);
   const [envPrefix, setEnvPrefix] = useState('');
   const [createCredentials, setCreateCredentials] = useState(true);
   const [secrets, setSecrets] = useState([]);
-
   useEffect(() => {
-    setValidity(false);
-  }, [setValidity]);
+    setCustomValid(false);
+  }, [setCustomValid]);
 
   useEffect(() => {
     if (!existingInstanceName || !serviceBindings?.length) {
@@ -49,11 +48,12 @@ export default function CreateServiceBindingForm({
       setSecrets([]);
       return;
     }
-    const bindingsForThisInstance = serviceBindings.filter(
-      b => b.spec.instanceRef.name === existingInstanceName,
-    );
-    setSecrets(bindingsForThisInstance.map(b => b.spec.secretName));
-    setExistingSecretName(bindingsForThisInstance[0].spec.secretName);
+    const bindingsForThisInstance = serviceBindings.filter(b => {
+      return b?.spec?.instanceRef?.name === existingInstanceName;
+    });
+
+    setSecrets(bindingsForThisInstance.map(b => b?.spec?.secretName));
+    setExistingSecretName(bindingsForThisInstance[0]?.spec?.secretName);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existingInstanceName, availableServiceInstances]);
 
@@ -63,7 +63,7 @@ export default function CreateServiceBindingForm({
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
           .NO_SERVICE_INSTANCE_SELECTED,
       );
-      setValidity(false);
+      setCustomValid(false);
       return;
     }
 
@@ -72,16 +72,16 @@ export default function CreateServiceBindingForm({
         SERVICE_BINDINGS_PANEL.CREATE_MODAL.CONFIRM_BUTTON.POPUP_MESSAGES
           .NO_SECRET_SELECTED,
       );
-      setValidity(false);
+      setCustomValid(false);
       return;
     }
 
-    setValidity(true);
+    setCustomValid(true);
   }, [
     existingInstanceName,
     createCredentials,
     existingSecretName,
-    setValidity,
+    setCustomValid,
     setPopupModalMessage,
   ]);
 
@@ -111,7 +111,6 @@ export default function CreateServiceBindingForm({
       text: metadata.name,
     }),
   );
-
   const secretsOptions = secrets?.map(secret => ({
     key: secret,
     text: secret,

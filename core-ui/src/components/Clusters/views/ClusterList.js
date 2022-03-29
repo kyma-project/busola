@@ -2,30 +2,41 @@ import React, { useState } from 'react';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
+import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
+import { Link, Button, MessagePage } from 'fundamental-react';
 
-import { useShowNodeParamsError } from 'shared/useShowNodeParamsError';
-import { Link, Button, Icon, MessagePage } from 'fundamental-react';
 import {
   useMicrofrontendContext,
   PageHeader,
   GenericList,
   useNotification,
-  Tooltip,
+  ModalWithForm,
+  useDeleteResource,
+  EMPTY_TEXT_PLACEHOLDER,
 } from 'react-shared';
 
 import { setCluster, deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
-import { areParamsCompatible } from '../params-version';
+import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
 
 import './ClusterList.scss';
 
-export function ClusterList() {
+function ClusterList() {
   const { clusters, activeClusterName } = useMicrofrontendContext();
   const notification = useNotification();
   const { t, i18n } = useTranslation();
 
+  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
+    i18n,
+    resourceType: t('clusters.labels.name'),
+  });
+
+  const [chosenCluster, setChosenCluster] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
+
+  const [showEdit, setShowEdit] = useState(false);
+  const [editedCluster, setEditedCluster] = useState(null);
 
   useShowNodeParamsError();
 
@@ -34,7 +45,7 @@ export function ClusterList() {
   }
 
   const styleActiveCluster = entry => {
-    return entry.currentContext.cluster.name === activeClusterName
+    return entry.kubeconfig['current-context'] === activeClusterName
       ? { fontWeight: 'bolder' }
       : {};
   };
@@ -46,7 +57,7 @@ export function ClusterList() {
         const blob = new Blob([kubeconfigYaml], {
           type: 'application/yaml;charset=utf-8',
         });
-        saveAs(blob, 'kubeconfig.yaml');
+        saveAs(blob, `kubeconfig--${entry.kubeconfig['current-context']}.yaml`);
       } catch (e) {
         console.error(e);
         notification.notifyError({
@@ -62,14 +73,18 @@ export function ClusterList() {
     }
   };
 
-  const entries = Object.values(clusters);
+  const entries = Object.entries(clusters).map(([name, cluster]) => ({
+    name,
+    ...cluster,
+  }));
   const headerRenderer = () => [
     t('common.headers.name'),
     t('clusters.common.api-server-address'),
     t('clusters.storage.title'),
+    t('common.headers.description'),
   ];
   const textSearchProperties = [
-    'currentContext.cluster.name',
+    'kubeconfig.current-context',
     'currentContext.cluster.cluster.server',
   ];
 
@@ -78,25 +93,26 @@ export function ClusterList() {
       <Link
         className="fd-link"
         style={styleActiveCluster(entry)}
-        onClick={() => setCluster(entry.currentContext.cluster.name)}
+        onClick={() => setCluster(entry.name)}
       >
-        {entry.currentContext.cluster.name}
+        {entry.name}
       </Link>
-      {!areParamsCompatible(entry.config?.version) && (
-        <Tooltip content={t('clusters.list.outdated.tooltip')}>
-          <Icon
-            ariaLabel="version incompatible warning"
-            className="params-warning-icon"
-            glyph="message-warning"
-          />
-        </Tooltip>
-      )}
     </>,
     entry.currentContext.cluster.cluster.server,
     <ClusterStorageType clusterConfig={entry.config} />,
+    entry.config.description || EMPTY_TEXT_PLACEHOLDER,
   ];
 
   const actions = [
+    {
+      name: t('common.buttons.edit'),
+      icon: 'edit',
+      tooltip: t('clusters.edit-cluster'),
+      handler: cluster => {
+        setEditedCluster(cluster);
+        setShowEdit(true);
+      },
+    },
     {
       name: t('clusters.common.download-kubeconfig'),
       icon: 'download',
@@ -104,8 +120,14 @@ export function ClusterList() {
       handler: e => downloadKubeconfig(e),
     },
     {
-      name: 'Delete',
-      handler: e => deleteCluster(e.currentContext.cluster.name),
+      name: t('common.buttons.delete'),
+      icon: 'delete',
+      handler: resource => {
+        setChosenCluster(resource);
+        handleResourceDelete({
+          deleteFn: () => deleteCluster(resource?.name),
+        });
+      },
     },
   ];
 
@@ -120,14 +142,29 @@ export function ClusterList() {
     </Button>
   );
 
-  const dialog = (
+  const addDialog = (
     <AddClusterDialog show={showAdd} onCancel={() => setShowAdd(false)} />
+  );
+  const editDialog = (
+    <ModalWithForm
+      opened={showEdit}
+      className="modal-size--l create-resource-modal"
+      title={t('clusters.edit-cluster')}
+      id="edit-cluster"
+      renderForm={props => (
+        <EditCluster {...props} editedCluster={editedCluster} />
+      )}
+      modalOpeningComponent={<></>}
+      customCloseAction={() => setShowEdit(false)}
+      confirmText={t('common.buttons.update')}
+    />
   );
 
   if (!entries.length) {
+    const subtitle = t('clusters.empty.subtitle');
     return (
       <>
-        {dialog}
+        {addDialog}
         <MessagePage
           className="empty-cluster-list"
           image={
@@ -136,7 +173,7 @@ export function ClusterList() {
             </svg>
           }
           title={t('clusters.empty.title')}
-          subtitle={t('clusters.empty.subtitle')}
+          subtitle={subtitle}
           actions={
             <Button onClick={() => setShowAdd(true)}>
               {t('clusters.add.title')}
@@ -149,8 +186,9 @@ export function ClusterList() {
 
   return (
     <>
-      {dialog}
-      <PageHeader title={t('clusters.overview.title')} />
+      {addDialog}
+      {editDialog}
+      <PageHeader title={t('clusters.overview.title-all-clusters')} />
       <GenericList
         textSearchProperties={textSearchProperties}
         showSearchSuggestion={false}
@@ -162,6 +200,13 @@ export function ClusterList() {
         noSearchResultMessage={t('clusters.list.no-clusters-found')}
         i18n={i18n}
       />
+      <DeleteMessageBox
+        resource={chosenCluster}
+        resourceName={chosenCluster?.kubeconfig['current-context']}
+        deleteFn={e => deleteCluster(e.name)}
+      />
     </>
   );
 }
+
+export default ClusterList;

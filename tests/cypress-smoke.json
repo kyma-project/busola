@@ -1,0 +1,25 @@
+{
+  "defaultCommandTimeout": 7000,
+  "execTimeout": 7000,
+  "taskTimeout": 7000,
+  "pageLoadTimeout": 7000,
+  "requestTimeout": 7000,
+  "responseTimeout": 7000,
+  "fixturesFolder": "fixtures",
+  "integrationFolder": "tests",
+  "supportFile": "support/index.js",
+  "pluginsFile": "plugins",
+  "chromeWebSecurity": false,
+  "viewportWidth": 1500,
+  "viewportHeight": 1500,
+  "videoCompression": false,
+  "experimentalInteractiveRunEvents": true,
+  "testFiles": [
+    "namespace/run-before.spec.js",
+    "namespace/create-a-deployment.spec.js",
+    "namespace/run-after.spec.js",
+    "cluster/test-cluster-overview.spec.js",
+    "cluster/kyma-version.spec.js",
+    "cluster/login-kubeconfigID.spec.js"
+  ]
+}

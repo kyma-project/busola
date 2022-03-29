@@ -1,8 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ControlledByKind } from 'react-shared';
+import { ControlledByKind, ResourcesList, Link } from 'react-shared';
+import { Trans } from 'react-i18next';
+import { ServicesCreate } from '../Create/Services/Services.create';
 
-export const ServicesList = ({ DefaultRenderer, ...otherParams }) => {
+const ServicesList = props => {
   const { t } = useTranslation();
 
   const getPortString = port => {
@@ -58,5 +60,23 @@ export const ServicesList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
+  const description = (
+    <Trans i18nKey="services.description">
+      <Link
+        className="fd-link"
+        url="https://kubernetes.io/docs/concepts/services-networking/service/"
+      />
+    </Trans>
+  );
+
+  return (
+    <ResourcesList
+      customColumns={customColumns}
+      description={description}
+      createResourceForm={ServicesCreate}
+      {...props}
+    />
+  );
 };
+
+export default ServicesList;

@@ -13,6 +13,7 @@ import {
   PageHeader,
   SearchInput,
   useNotification,
+  LogsLink,
 } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
@@ -22,7 +23,7 @@ const HOUR_IN_SECONDS = 3600;
 const MAX_TIMEFRAME_IN_SECONDS = Number.MAX_SAFE_INTEGER;
 const DEFAULT_TIMEFRAME = HOUR_IN_SECONDS * 6;
 
-export const ContainersLogs = ({ params }) => {
+const ContainersLogs = ({ params }) => {
   const { t, i18n } = useTranslation();
 
   useWindowTitle('Logs');
@@ -179,10 +180,10 @@ export const ContainersLogs = ({ params }) => {
         <PageHeader
           title={params.containerName}
           breadcrumbItems={breadcrumbs}
-        ></PageHeader>
+        />
       </div>
       <LayoutPanel className="fd-margin--md logs-panel">
-        <LayoutPanel.Header>
+        <LayoutPanel.Header className="logs-panel-header">
           <LayoutPanel.Head title="Logs" className="logs-title" />
           <LayoutPanel.Actions className="logs-actions">
             <FormLabel htmlFor="context-chooser">
@@ -209,6 +210,13 @@ export const ContainersLogs = ({ params }) => {
             >
               {t('pods.labels.reverse-logs')}
             </Switch>
+            <LogsLink
+              className="fd-margin-begin--tiny"
+              i18n={i18n}
+              query={`{namespace="${params.namespace}",pod="${params.podName}",container="${params.containerName}"}`}
+            >
+              {t('grafana.open-in-grafana')}
+            </LogsLink>
             <Button
               disabled={!logsToSave?.length}
               className="logs-download"
@@ -237,3 +245,5 @@ export const ContainersLogs = ({ params }) => {
     </div>
   );
 };
+
+export default ContainersLogs;

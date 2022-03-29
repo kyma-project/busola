@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePost, useNotification } from 'react-shared';
-import { Button, Checkbox } from 'fundamental-react';
+import {
+  usePost,
+  useNotification,
+  matchBySelector,
+  matchByOwnerReference,
+} from 'react-shared';
+import { Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
+import * as _ from 'lodash';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 
 import './Deployments.create.scss';
 import {
@@ -14,27 +21,32 @@ import {
   createPresets,
   createServiceTemplate,
 } from './templates';
-import { Containers } from './Containers';
+import {
+  SimpleContainersView,
+  AdvancedContainersView,
+} from 'shared/components/Deployment/ContainersViews';
 
-export function DeploymentsCreate({
+function DeploymentsCreate({
   formElementRef,
   namespace,
   onChange,
   setCustomValid,
+  resource: initialDeployment,
+  resourceUrl,
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
   const postRequest = usePost();
 
-  const [deployment, setDeployment] = React.useState(
-    createDeploymentTemplate(namespace),
+  const [deployment, setDeployment] = useState(
+    initialDeployment
+      ? _.cloneDeep(initialDeployment)
+      : createDeploymentTemplate(namespace),
   );
-  const [service, setService] = React.useState(
-    createServiceTemplate(namespace),
-  );
-  const [createService, setCreateService] = React.useState(false);
+  const [service, setService] = useState(createServiceTemplate(namespace));
+  const [createService, setCreateService] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const hasAnyContainers = !!(
       jp.value(deployment, '$.spec.template.spec.containers') || []
     ).length;
@@ -58,6 +70,8 @@ export function DeploymentsCreate({
       <ResourceForm.CollapsibleSection
         title={t('deployments.name_singular')}
         defaultOpen
+        resource={deployment}
+        setResource={setDeployment}
       >
         {defaultEditor}
       </ResourceForm.CollapsibleSection>
@@ -66,9 +80,9 @@ export function DeploymentsCreate({
         actions={serviceActions}
       >
         <Editor
-          resource={service}
-          setResource={setService}
           readonly={!createService}
+          value={service}
+          setValue={setService}
         />
       </ResourceForm.CollapsibleSection>
     </div>
@@ -79,7 +93,7 @@ export function DeploymentsCreate({
     jp.value(deployment, "$.metadata.labels['app.kubernetes.io/name']", name);
     jp.value(deployment, '$.spec.template.spec.containers[0].name', name);
     jp.value(deployment, '$.spec.selector.matchLabels.app', name); // match labels
-    jp.value(deployment, `$.spec.template.metadata.labels.app`, name); // pod labels
+    jp.value(deployment, '$.spec.template.metadata.labels.app', name); // pod labels
     setDeployment({ ...deployment });
 
     jp.value(service, '$.metadata.name', name);
@@ -113,7 +127,7 @@ export function DeploymentsCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       afterCreatedFn={afterCreatedFn}
-      renderEditor={renderEditor}
+      renderEditor={!initialDeployment ? renderEditor : null}
       presets={createPresets(namespace, t)}
       onPresetSelected={value => {
         setDeployment(value.deployment);
@@ -122,92 +136,111 @@ export function DeploymentsCreate({
           setService(value.service);
         }
       }}
-      createUrl={`/apis/apps/v1/namespaces/${namespace}/deployments/`}
+      // create modal on a namespace details doesn't have the resourceUrl
+      createUrl={
+        resourceUrl || `/apis/apps/v1/namespaces/${namespace}/deployments/`
+      }
+      initialResource={initialDeployment}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
+        readOnly={!!initialDeployment}
         propertyPath="$.metadata.name"
         kind={t('deployments.name_singular')}
-        customSetValue={handleNameChange}
+        setValue={handleNameChange}
+        validate={value => !!value}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
         className="fd-margin-top--sm"
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
 
-      <ResourceForm.FormField
-        required
+      <SimpleContainersView
         simple
-        propertyPath="$.spec.template.spec.containers[0].image"
-        label={t('deployments.create-modal.simple.docker-image')}
-        input={Inputs.Text}
-        placeholder={t(
-          'deployments.create-modal.simple.docker-image-placeholder',
-        )}
-      />
-      <ResourceForm.CollapsibleSection
-        advanced
-        title="Containers"
-        defaultOpen
         resource={deployment}
         setResource={setDeployment}
-        actions={setOpen => (
-          <Button
-            glyph="add"
-            compact
-            onClick={() => {
-              const path = '$.spec.template.spec.containers';
-              const nextContainers = [
-                ...(jp.value(deployment, path) || []),
-                createContainerTemplate(),
-              ];
-              jp.value(deployment, path, nextContainers);
+      />
 
-              setDeployment({ ...deployment });
-              onChange(new Event('input', { bubbles: true }));
-              setOpen(true);
-            }}
-          >
-            Add Container
-          </Button>
-        )}
-      >
-        <Containers propertyPath="$.spec.template.spec.containers" />
-      </ResourceForm.CollapsibleSection>
-      <ResourceForm.CollapsibleSection
+      <AdvancedContainersView
         advanced
-        title="Service"
-        resource={service}
-        setResource={setService}
-        actions={serviceActions}
-      >
-        <ResourceForm.FormField
+        resource={deployment}
+        setResource={setDeployment}
+        onChange={onChange}
+        namespace={namespace}
+        createContainerTemplate={createContainerTemplate}
+      />
+
+      {!initialDeployment && (
+        <ResourceForm.CollapsibleSection
           advanced
-          required
-          disabled={!createService}
-          propertyPath="$.spec.ports[0].port"
-          label={t('deployments.create-modal.advanced.port')}
-          input={Inputs.Port}
-          placeholder={t('deployments.create-modal.advanced.port-placeholder')}
-        />
-        <ResourceForm.FormField
-          advanced
-          required
-          disabled={!createService}
-          propertyPath="$.spec.ports[0].targetPort"
-          label={t('deployments.create-modal.advanced.target-port')}
-          input={Inputs.Port}
-          placeholder={t(
-            'deployments.create-modal.advanced.target-port-placeholder',
-          )}
-        />
-      </ResourceForm.CollapsibleSection>
+          title={t('deployments.create-modal.advanced.service')}
+          resource={service}
+          setResource={setService}
+          actions={serviceActions}
+        >
+          <ResourceForm.FormField
+            advanced
+            required
+            disabled={!createService}
+            propertyPath="$.spec.ports[0].port"
+            label={t('deployments.create-modal.advanced.port')}
+            input={Inputs.Port}
+            placeholder={t(
+              'deployments.create-modal.advanced.port-placeholder',
+            )}
+          />
+          <ResourceForm.FormField
+            advanced
+            required
+            disabled={!createService}
+            propertyPath="$.spec.ports[0].targetPort"
+            label={t('deployments.create-modal.advanced.target-port')}
+            input={Inputs.Port}
+            placeholder={t(
+              'deployments.create-modal.advanced.target-port-placeholder',
+            )}
+          />
+        </ResourceForm.CollapsibleSection>
+      )}
     </ResourceForm>
   );
 }
+
+DeploymentsCreate.allowEdit = true;
+DeploymentsCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  networkFlowLevel: -2,
+  relations: [
+    {
+      kind: 'Service',
+    },
+    {
+      kind: 'HorizontalPodAutoscaler',
+    },
+    {
+      kind: 'ReplicaSet',
+    },
+  ],
+  matchers: {
+    HorizontalPodAutoscaler: (deployment, hpa) =>
+      hpa.spec.scaleTargetRef?.kind === 'Deployment' &&
+      hpa.spec.scaleTargetRef?.name === deployment.metadata.name,
+    Service: (deployment, service) =>
+      matchBySelector(
+        deployment.spec.selector.matchLabels,
+        service.spec.selector,
+      ),
+    ReplicaSet: (deployment, replicaSet) =>
+      matchByOwnerReference({
+        resource: replicaSet,
+        owner: deployment,
+      }),
+  },
+});
+export { DeploymentsCreate };

@@ -26,3 +26,21 @@ function addLinkNode() {
 export const getTheme = () => {
   return localStorage.getItem('busola.theme') || 'light_dark';
 };
+
+export function initTheme() {
+  setTheme(getTheme());
+
+  window.addEventListener(
+    'message',
+    event => {
+      if (event.data.msg === 'busola.getCurrentTheme') {
+        event.source &&
+          event.source.postMessage(
+            { msg: 'busola.getCurrentTheme.response', name: getTheme() },
+            event.origin,
+          );
+      }
+    },
+    false,
+  );
+}

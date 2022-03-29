@@ -1,10 +1,6 @@
 import LuigiClient from '@luigi-project/client';
 
-import createEncoder from 'json-url';
 import { tryParseOIDCparams } from './components/oidc-params';
-import { PARAMS_VERSION } from 'react-shared';
-
-const encoder = createEncoder('lzma');
 
 export function setCluster(clusterName) {
   LuigiClient.sendCustomMessage({
@@ -13,11 +9,11 @@ export function setCluster(clusterName) {
   });
 }
 
-export function addCluster(params) {
-  params.config.version = PARAMS_VERSION;
+export function addCluster(params, switchCluster = true) {
   LuigiClient.sendCustomMessage({
     id: 'busola.addCluster',
     params,
+    switchCluster,
   });
 }
 
@@ -27,10 +23,6 @@ export function deleteCluster(clusterName) {
     clusterName,
   });
 }
-
-export const decompressParams = async initParams => {
-  return await encoder.decompress(initParams);
-};
 
 export function getContext(kubeconfig, contextName) {
   const contexts = kubeconfig.contexts;
@@ -52,15 +44,18 @@ export function getContext(kubeconfig, contextName) {
 
 export function getUserIndex(kubeconfig) {
   const contextName = kubeconfig?.['current-context'];
-  const context = kubeconfig?.contexts?.find(c => c.name === contextName)
-    .context;
-  return kubeconfig?.users?.findIndex(u => u.name === context?.user);
+  const context =
+    contextName === '-all-'
+      ? kubeconfig?.contexts[0]?.context
+      : kubeconfig?.contexts?.find(c => c.name === contextName)?.context;
+  const index = kubeconfig?.users?.findIndex(u => u.name === context?.user);
+  return index > 0 ? index : 0;
 }
 
 export function getUser(kubeconfig) {
   const contextName = kubeconfig?.['current-context'];
   const context = kubeconfig?.contexts?.find(c => c.name === contextName)
-    .context;
+    ?.context;
   return kubeconfig?.users?.find(u => u.name === context?.user)?.user;
 }
 

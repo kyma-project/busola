@@ -1,43 +1,18 @@
 import React from 'react';
-import { ControlledBy, ModalWithForm } from 'react-shared';
-import { Button } from 'fundamental-react';
-import { EditConfigMapForm } from './EditConfigMapForm';
-import { ReadonlyEditorPanel } from '../../../../shared/components/ReadonlyEditorPanel';
 import { useTranslation } from 'react-i18next';
 
-export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { t, i18n } = useTranslation();
+import { ControlledBy, ResourceDetails } from 'react-shared';
+import { ConfigMapsCreate } from '../../Create/ConfigMaps/ConfigMaps.create';
+import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
+
+const ConfigMapsDetails = props => {
+  const { t } = useTranslation();
   const ConfigMapEditor = resource => {
     const { data } = resource;
     return Object.keys(data || {}).map(key => (
       <ReadonlyEditorPanel title={key} value={data[key]} key={key} />
     ));
   };
-
-  const headerActions = [
-    configMap => (
-      <ModalWithForm
-        key="edit-config-map-modal"
-        title={t('config-maps.subtitle.edit-config-map')}
-        modalOpeningComponent={
-          <Button className="fd-margin-end--tiny" option="transparent">
-            {t('common.buttons.edit')}
-          </Button>
-        }
-        confirmText={t('common.buttons.edit')}
-        className="fd-dialog--xl-size modal-size--l"
-        renderForm={props => (
-          <EditConfigMapForm
-            configMap={configMap}
-            resourceUrl={otherParams.resourceUrl}
-            readonlyName={true}
-            {...props}
-          />
-        )}
-        i18n={i18n}
-      />
-    ),
-  ];
 
   const customColumns = [
     {
@@ -49,11 +24,13 @@ export const ConfigMapsDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customComponents={[ConfigMapEditor]}
       customColumns={customColumns}
-      resourceHeaderActions={headerActions}
-      {...otherParams}
+      createResourceForm={ConfigMapsCreate}
+      {...props}
     />
   );
 };
+
+export default ConfigMapsDetails;

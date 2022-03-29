@@ -1,40 +1,36 @@
 import React from 'react';
-import { ControlledBy, ModalWithForm } from 'react-shared';
-import { Button } from 'fundamental-react';
+import { ControlledBy } from 'react-shared';
 import SecretData from 'shared/components/Secret/SecretData';
-import { EditSecretForm } from './EditSecretForm';
 import { useTranslation } from 'react-i18next';
+import { CertificateData } from './CertificateData';
+import { HelmReleaseData } from 'components/HelmReleases/HelmReleaseData';
+import { SecretsCreate } from '../../Create/Secrets/Secrets.create';
+import { ResourceDetails } from 'react-shared';
 
-export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { t, i18n } = useTranslation();
+function HelmReleaseDataWrapper(secret) {
+  if (secret.type !== 'helm.sh/release.v1') {
+    return null;
+  }
+
+  return (
+    <HelmReleaseData
+      key="helm-release-data"
+      encodedRelease={secret.data.release}
+    />
+  );
+}
+
+const SecretsDetails = props => {
+  const { t } = useTranslation();
   const Secret = resource => <SecretData key="secret-data" secret={resource} />;
 
-  const headerActions = [
-    secret => (
-      <ModalWithForm
-        key="edit-secret-modal"
-        title={t('secrets.title-edit-secret')}
-        modalOpeningComponent={
-          <Button className="fd-margin-end--tiny" option="transparent">
-            {t('common.buttons.edit')}
-          </Button>
-        }
-        confirmText={t('common.buttons.update')}
-        className="fd-dialog--xl-size modal-size--l"
-        renderForm={props => (
-          <EditSecretForm
-            secret={secret}
-            resourceUrl={otherParams.resourceUrl}
-            readonlyName={true}
-            {...props}
-          />
-        )}
-        i18n={i18n}
-      />
-    ),
-  ];
-
   const customColumns = [
+    {
+      header: t('secrets.headers.type'),
+      value: secret => {
+        return secret.type;
+      },
+    },
     {
       header: t('common.headers.owner'),
       value: secret => (
@@ -44,11 +40,12 @@ export const SecretsDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   return (
-    <DefaultRenderer
-      customComponents={[Secret]}
+    <ResourceDetails
+      customComponents={[Secret, CertificateData, HelmReleaseDataWrapper]}
       customColumns={customColumns}
-      resourceHeaderActions={headerActions}
-      {...otherParams}
+      createResourceForm={SecretsCreate}
+      {...props}
     />
   );
 };
+export default SecretsDetails;

@@ -8,10 +8,13 @@ export function SecretRef({ fieldSelector, labelSelector, ...props }) {
   const { t } = useTranslation();
   const url = `/api/v1/secrets?labelSelector=${labelSelector ||
     ''}&fieldSelector=${fieldSelector || ''}`;
-  const { data: secrets } = useGetList()(url);
+  const { data: secrets, loading } = useGetList()(url);
+
   return (
     <ExternalResourceRef
+      defaultOpen={true}
       resources={secrets}
+      loading={loading}
       labelPrefix={t('common.labels.secret')}
       {...props}
     />

@@ -8,11 +8,18 @@ export const OAuth2ClientStatus = ({ client }) => {
   const { code, description } = error;
 
   if (!code) {
-    return <StatusBadge type="success">{t('common.buttons.ok')}</StatusBadge>;
+    return (
+      <StatusBadge
+        type="success"
+        additionalContent={t('oauth2-clients.tooltips.ok')}
+      >
+        {t('common.buttons.ok')}
+      </StatusBadge>
+    );
   }
 
   return (
-    <StatusBadge type="error" tooltipContent={description}>
+    <StatusBadge type="error" additionalContent={description}>
       {code}
     </StatusBadge>
   );

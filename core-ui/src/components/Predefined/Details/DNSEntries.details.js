@@ -1,24 +1,18 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
-import { StatusBadge } from 'react-shared';
+import { LayoutPanel } from 'fundamental-react';
+import { ResourceStatus, ResourceDetails } from 'react-shared';
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { DNSEntriesCreate } from '../Create/DNSEntries/DNSEntries.create';
 
 const RowComponent = ({ name, value }) =>
-  value ? (
-    <FormItem className="item-wrapper">
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr' }}>
-        <FormLabel className="form-label">{name}:</FormLabel>
-        <div>{value}</div>
-      </div>
-    </FormItem>
-  ) : null;
+  value ? <LayoutPanelRow name={name} value={value} /> : null;
 
 const Provider = resource => {
   const { t } = useTranslation();
 
   return (
-    <LayoutPanel className="fd-margin--md">
+    <LayoutPanel key="provider-panel" className="fd-margin--md">
       <LayoutPanel.Header>
         <LayoutPanel.Head title={t('dnsentries.headers.provider')} />
       </LayoutPanel.Header>
@@ -46,7 +40,7 @@ const Spec = resource => {
     .toString()
     .replaceAll(',', ', ');
   return (
-    <LayoutPanel className="fd-margin--md">
+    <LayoutPanel key="specification-panel" className="fd-margin--md">
       <LayoutPanel.Header>
         <LayoutPanel.Head title={t('dnsentries.headers.spec')} />
       </LayoutPanel.Header>
@@ -74,25 +68,29 @@ const Spec = resource => {
   );
 };
 
-export const DNSEntriesDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+const DNSEntriesDetails = props => {
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
       header: t('dnsentries.headers.status'),
       value: dnsentry => (
-        <StatusBadge autoResolveType>
-          {dnsentry.status?.state || 'UNKNOWN'}
-        </StatusBadge>
+        <ResourceStatus
+          status={dnsentry.status}
+          resourceKind="dnsentries"
+          i18n={i18n}
+        />
       ),
     },
   ];
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customComponents={[Provider, Spec]}
       customColumns={customColumns}
-      {...otherParams}
-    ></DefaultRenderer>
+      createResourceForm={DNSEntriesCreate}
+      {...props}
+    />
   );
 };
+export default DNSEntriesDetails;

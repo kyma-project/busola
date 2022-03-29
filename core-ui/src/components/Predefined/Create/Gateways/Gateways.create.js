@@ -1,21 +1,39 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
+import { ResourceForm } from 'shared/ResourceForm';
+import {
+  K8sNameField,
+  KeyValueField,
+  ItemArray,
+} from 'shared/ResourceForm/fields';
 import * as jp from 'jsonpath';
 import { createGatewayTemplate, createPresets, newServer } from './templates';
 import { SingleServerForm, SingleServerInput } from './Forms/ServersForm';
 import { validateGateway } from './helpers';
 import { MessageStrip } from 'fundamental-react';
+import { cloneDeep } from 'lodash';
 
-export function GatewaysCreate({
+function matchByTlsCredentials(gateway, secret) {
+  return (gateway.spec?.servers || []).some(
+    server => server?.tls?.credentialName === secret.metadata.name,
+  );
+}
+
+function GatewaysCreate({
   formElementRef,
   namespace,
   onChange,
   setCustomValid,
+  resource: initialGateway,
+  resourceUrl,
 }) {
   const { t } = useTranslation();
 
-  const [gateway, setGateway] = useState(createGatewayTemplate(namespace));
+  const [gateway, setGateway] = useState(
+    initialGateway
+      ? cloneDeep(initialGateway)
+      : createGatewayTemplate(namespace),
+  );
 
   React.useEffect(() => {
     setCustomValid(validateGateway(gateway));
@@ -28,49 +46,42 @@ export function GatewaysCreate({
     setGateway({ ...gateway });
   };
 
-  const selectorField = () => {
-    const commonProps = {
-      required: true,
-      propertyPath: '$.spec.selector',
-      title: t('gateways.create-modal.simple.selector'),
-      tooltipContent: t('gateways.create-modal.tooltips.selector'),
-    };
-    return (
-      <>
-        <ResourceForm.KeyValueField simple defaultOpen {...commonProps} />
-        <ResourceForm.KeyValueField advanced {...commonProps} />
-      </>
-    );
-  };
-
   return (
     <ResourceForm
       pluralKind="gateways"
       singularName={t(`gateways.name_singular`)}
       resource={gateway}
       setResource={setGateway}
+      initialResource={initialGateway}
       onChange={onChange}
       formElementRef={formElementRef}
       presets={createPresets(namespace, t)}
-      createUrl={`/apis/networking.istio.io/v1alpha3/namespaces/${namespace}/gateways/`}
+      createUrl={resourceUrl}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.metadata.name"
         kind={t('gateways.name_singular')}
-        customSetValue={handleNameChange}
+        setValue={handleNameChange}
         className="fd-margin-bottom--sm"
+        readOnly={!!initialGateway}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      {selectorField()}
+      <KeyValueField
+        defaultOpen
+        required={true}
+        propertyPath="$.spec.selector"
+        title={t('gateways.create-modal.simple.selector')}
+        tooltipContent={t('gateways.create-modal.tooltips.selector')}
+      />
       {jp.value(gateway, '$.spec.servers.length') ? (
         <SingleServerInput simple propertyPath="$.spec.servers" />
       ) : (
@@ -78,7 +89,7 @@ export function GatewaysCreate({
           {t('gateways.create-modal.at-least-one-server-required')}
         </MessageStrip>
       )}
-      <ResourceForm.ItemArray
+      <ItemArray
         advanced
         propertyPath="$.spec.servers"
         listTitle={t('gateways.create-modal.simple.servers')}
@@ -87,12 +98,12 @@ export function GatewaysCreate({
         atLeastOneRequiredMessage={t(
           'gateways.create-modal.at-least-one-server-required',
         )}
-        itemRenderer={(current, allValues, setAllValues) => (
+        itemRenderer={({ item, values, setValues, isAdvanced }) => (
           <SingleServerForm
-            server={current}
-            servers={allValues}
-            setServers={setAllValues}
-            advanced
+            server={item}
+            servers={values}
+            setServers={setValues}
+            isAdvanced={isAdvanced}
           />
         )}
         newResourceTemplateFn={newServer}
@@ -100,3 +111,28 @@ export function GatewaysCreate({
     </ResourceForm>
   );
 }
+
+GatewaysCreate.allowEdit = true;
+GatewaysCreate.resourceGraphConfig = (t, context) => ({
+  networkFlowKind: true,
+  relations: [
+    {
+      kind: 'APIRule',
+      clusterwide: true,
+    },
+    {
+      kind: 'Secret',
+      clusterwide: true,
+    },
+    {
+      kind: 'VirtualService',
+      clusterwide: true,
+    },
+  ],
+  depth: 1,
+  networkFlowLevel: -3,
+  matchers: {
+    Secret: (gateway, secret) => matchByTlsCredentials(secret, gateway),
+  },
+});
+export { GatewaysCreate };

@@ -3,14 +3,7 @@ import { reloadNavigation } from '../navigation/navigation-data-init';
 import { reloadAuth, hasNonOidcAuth } from '../auth/auth';
 import { saveLocation } from '../navigation/previous-location';
 import { parseOIDCParams } from '../auth/oidc-params';
-import {
-  areParamsCompatible,
-  showIncompatibleParamsWarning,
-} from '../init-params/params-version';
-import {
-  DEFAULT_HIDDEN_NAMESPACES,
-  DEFAULT_FEATURES,
-} from '../init-params/constants';
+import { DEFAULT_HIDDEN_NAMESPACES, DEFAULT_FEATURES } from '../constants';
 import { getBusolaClusterParams } from '../busola-cluster-params';
 import {
   getTargetClusterConfig,
@@ -39,26 +32,32 @@ export function getCurrentContextNamespace(kubeconfig) {
   return context?.context.namespace;
 }
 
+export function getAfterLoginLocation(clusterName, kubeconfig) {
+  const preselectedNamespace = getCurrentContextNamespace(kubeconfig);
+
+  return `/cluster/${encodeURIComponent(clusterName)}/${
+    preselectedNamespace
+      ? `namespaces/${preselectedNamespace}/details`
+      : 'overview'
+  }`;
+}
+
 export async function setCluster(clusterName) {
   const clusters = await getClusters();
   const params = clusters[clusterName];
 
   const originalStorage = clusters[clusterName].config.storage;
 
-  if (!areParamsCompatible(params?.config?.version)) {
-    showIncompatibleParamsWarning(params?.config?.version);
-  }
-
   saveActiveClusterName(clusterName);
   try {
     await reloadAuth();
 
-    const preselectedNamespace = getCurrentContextNamespace(params.kubeconfig);
     const kubeconfigUser = params.currentContext.user.user;
 
-    const targetLocation =
-      `/cluster/${encodeURIComponent(clusterName)}/namespaces` +
-      (preselectedNamespace ? `/${preselectedNamespace}/details` : '');
+    const targetLocation = getAfterLoginLocation(
+      clusterName,
+      params.kubeconfig,
+    );
 
     if (hasNonOidcAuth(kubeconfigUser)) {
       setAuthData(kubeconfigUser);
@@ -91,9 +90,13 @@ export async function saveClusterParams(params) {
     });
   }
 
-  const clusterName = params.currentContext.cluster.name;
+  const clusterName = params.kubeconfig['current-context'];
   const clusters = await getClusters();
-  clusters[clusterName] = params;
+  const prevConfig = clusters[clusterName]?.config || {};
+  clusters[clusterName] = {
+    ...params,
+    config: { ...prevConfig, ...params.config },
+  };
   await saveClusters(clusters);
 }
 
@@ -121,20 +124,9 @@ export async function getActiveCluster() {
   // add target cluster config
   clusters[clusterName].config = merge(
     {},
-    targetClusterConfig,
     clusters[clusterName].config,
+    targetClusterConfig.config,
   );
-
-  // init params can't override target cluster storage
-  if (targetClusterConfig.storage) {
-    clusters[clusterName].config.storage = targetClusterConfig.storage;
-  }
-
-  // merge keys of config.features
-  clusters[clusterName].config.features = {
-    ...clusters[clusterName].config.features,
-    ...targetClusterConfig.features,
-  };
 
   clusters[clusterName] = await mergeParams(clusters[clusterName]);
   return clusters[clusterName];
@@ -145,11 +137,15 @@ export function getActiveClusterName() {
 }
 
 export function saveActiveClusterName(clusterName) {
-  localStorage.setItem(CURRENT_CLUSTER_NAME_KEY, clusterName);
+  if (clusterName) {
+    localStorage.setItem(CURRENT_CLUSTER_NAME_KEY, clusterName);
+  } else {
+    localStorage.removeItem(CURRENT_CLUSTER_NAME_KEY);
+  }
 }
 
 // setup params:
-// defaults < config from Busola cluster CM < (config from target cluster CM + init params)
+// defaults < config from Busola cluster CM < (config from target cluster CM)
 async function mergeParams(params) {
   const defaultConfig = {
     navigation: {

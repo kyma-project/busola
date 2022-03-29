@@ -10,7 +10,7 @@ export function ServiceBindingData({ metadata, spec, status }) {
   const navigateToInstance = instanceName =>
     LuigiClient.linkManager()
       .fromContext('namespace')
-      .navigate(`/btp-instances/details/${instanceName}`);
+      .navigate(`/serviceinstances/details/${instanceName}`);
 
   const { data, loading } = useGet(
     `/api/v1/namespaces/${metadata.namespace}/secrets/${spec.secretName}`,
@@ -48,7 +48,9 @@ export function ServiceBindingData({ metadata, spec, status }) {
             {spec.secretName}
           </Link>
         ) : (
-          <Tooltip content={t('btp-service-bindings.secret-not-found')}>
+          <Tooltip
+            content={t('btp-service-bindings.tooltips.secret-not-found')}
+          >
             {spec.secretName}
           </Tooltip>
         ),

@@ -20,6 +20,7 @@ export default function EditNamespaceBinding({ application, binding }) {
     newBinding.spec.services = application.spec.services.filter(s =>
       servicesToBind.find(svc => svc.id === s.id),
     );
+    if (newBinding.spec.services.lenght === 0) newBinding.spec.services = [];
 
     try {
       await patchRequest(
@@ -40,7 +41,7 @@ export default function EditNamespaceBinding({ application, binding }) {
       })}
       modalOpeningComponent={modalOpeningComponent}
       onConfirm={updateBinding}
-      onShow={() => setServicesToBind(binding.spec.services)}
+      onShow={() => setServicesToBind(binding.spec?.services)}
       i18n={i18n}
     >
       <FormFieldset>

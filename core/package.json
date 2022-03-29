@@ -10,22 +10,28 @@
     "test": "../node_modules/.bin/jest",
     "lint-check": "prettier --config ./../.prettierrc --ignore-path ./../.prettierignore -l '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
     "lint-fix": "prettier --config ./../.prettierrc --ignore-path ./../.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml}'",
-    "buildConfig": "webpack --mode production --config webpack.config.js",
-    "build:docker": "webpack --mode production --config webpack.config.js --env IS_DOCKER=true",
-    "buildConfig:watch": "webpack --config webpack.config.js --watch"
+    "buildConfig": "npm run copy-luigi && webpack --mode production --config webpack.config.js",
+    "build:docker": "npm run copy-luigi && webpack --mode production --config webpack.config.js --env IS_DOCKER=true",
+    "buildConfig:watch": "npm run copy-luigi && webpack --config webpack.config.js --watch",
+    "copy-luigi": "npm run clean && mkdir -p src/assets/libs/luigi-core && cp -a node_modules/@luigi-project/core/* src/assets/libs/luigi-core",
+    "clean": "(rm -r src/assets/*.woff* ; rm -r src/assets/*.LICENSE.txt ; rm -r src/assets/*.bundle.js ; rm -r src/assets/index.*.css) || :"
   },
   "private": true,
   "dependencies": {
-    "@luigi-project/core": "^1.14.3",
+    "@luigi-project/core": "^1.20.1",
     "@luigi-project/plugin-auth-oidc": "1.8.1",
+    "@sentry/browser": "^6.17.4",
     "file-saver": "2.0.2"
   },
   "devDependencies": {
+    "babel-loader": "^8.2.3",
     "copy-webpack-plugin": "^5.0.0",
-    "babel-loader": "^8.0.4",
+    "fs-extra": "^10.0.1",
+    "html-webpack-plugin": "^5.5.0",
+    "prettier": "^1.18.2",
+    "remove-files-webpack-plugin": "^1.5.0",
     "sirv-cli": "^1.0.11",
-    "webpack": "^4.44.2",
-    "prettier": "^1.18.2"
+    "webpack": "^5.70.0"
   },
   "jest": {
     "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.js$"

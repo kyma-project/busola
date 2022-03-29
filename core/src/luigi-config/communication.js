@@ -12,6 +12,24 @@ import { reloadNavigation } from './navigation/navigation-data-init';
 import { reloadAuth } from './auth/auth';
 import { setFeatureToggle } from './utils/feature-toggles';
 import { setTheme } from './utils/theme';
+import { setSSOAuthData } from './auth/sso';
+import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
+import { communicationEntry as prometheusCommunicationEntry } from './settings/prometheus';
+
+addCommandPaletteHandler();
+
+window.addEventListener('click', () => {
+  Luigi.customMessages().sendToAll({
+    id: 'busola.main-frame-click',
+  });
+});
+
+window.addEventListener('keydown', e => {
+  Luigi.customMessages().sendToAll({
+    id: 'busola.main-frame-keydown',
+    key: e.key,
+  });
+});
 
 export const communication = {
   customMessagesListeners: {
@@ -29,9 +47,11 @@ export const communication = {
     'busola.showHiddenNamespaces': ({ showHiddenNamespaces }) => {
       setFeatureToggle('showHiddenNamespaces', showHiddenNamespaces);
     },
+    'busola.disableResourceProtection': ({ disableResourceProtection }) => {
+      setFeatureToggle('disableResourceProtection', disableResourceProtection);
+    },
     'busola.dontConfirmDelete': ({ value }) => {
       setFeatureToggle('dontConfirmDelete', value);
-      Luigi.configChanged();
     },
     'busola.refreshNavigation': () => {
       Luigi.configChanged('navigation.nodes');
@@ -62,10 +82,17 @@ export const communication = {
         pathname + newParamsString,
       );
     },
-    'busola.reload': () => location.reload(),
-    'busola.addCluster': async ({ params }) => {
+    'busola.reload': ({ reason }) => {
+      if (reason === 'sso-expiration') {
+        setSSOAuthData(null);
+      }
+      location.reload();
+    },
+    'busola.addCluster': async ({ params, switchCluster = true }) => {
       await saveClusterParams(params);
-      setCluster(params.currentContext.cluster.name);
+      if (switchCluster) {
+        await setCluster(params.kubeconfig['current-context']);
+      }
     },
     'busola.deleteCluster': async ({ clusterName }) => {
       await deleteCluster(clusterName);
@@ -97,6 +124,8 @@ export const communication = {
         pathId,
       });
     },
+    ...pageSizeCommunicationEntry,
+    ...prometheusCommunicationEntry,
   },
 };
 
@@ -118,3 +147,24 @@ const convertToObject = paramsString => {
     });
   return result;
 };
+
+function addCommandPaletteHandler() {
+  window.addEventListener('keydown', e => {
+    const { key, metaKey, ctrlKey } = e;
+    // for (Edge, Chrome) || (Firefox, Safari)
+    const isMac = (navigator.userAgentData?.platform || navigator.platform)
+      .toLowerCase()
+      .startsWith('mac');
+    const modifierKeyPressed = (isMac && metaKey) || (!isMac && ctrlKey);
+
+    const isMFModalPresent = !!document.querySelector('.lui-modal-mf');
+
+    if (isMFModalPresent) return;
+
+    if (key.toLowerCase() === 'k' && modifierKeyPressed) {
+      // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
+      e.preventDefault();
+      Luigi.customMessages().sendToAll({ id: 'busola.toggle-command-palette' });
+    }
+  });
+}

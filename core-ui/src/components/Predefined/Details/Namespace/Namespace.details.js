@@ -1,68 +1,75 @@
 import React from 'react';
-import { useMicrofrontendContext } from 'react-shared';
+import {
+  useMicrofrontendContext,
+  ResourceDetails,
+  ResourcesList,
+} from 'react-shared';
+import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 
-import { ComponentForList } from 'shared/getComponents';
+import { EventsList } from 'shared/components/EventsList';
+import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
-import './Namespace.details.scss';
 import { useTranslation } from 'react-i18next';
+import { NamespacesCreate } from '../../Create/Namespaces/Namespaces.create';
+import LimitRangesList from 'components/Predefined/List/LimitRanges.list';
+import ResourceQuotasListComponent from 'components/Predefined/List/ResourceQuotas.list';
+import './Namespace.details.scss';
 
-export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+export const NamespacesDetails = props => {
+  const { t, i18n } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
   const limitRangesParams = {
     hasDetailsView: false,
-    resourceUrl: `/api/v1/namespaces/${otherParams.resourceName}/limitranges`,
+    resourceUrl: `/api/v1/namespaces/${props.resourceName}/limitranges`,
     resourceType: 'LimitRanges',
-    namespace: otherParams.resourceName,
+    namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
+    i18n,
   };
 
-  const LimitrangesList = (
-    <ComponentForList name="limitrangesList" params={limitRangesParams} />
-  );
+  const LimitrangesList = <LimitRangesList {...limitRangesParams} />;
 
   const resourceQuotasParams = {
     hasDetailsView: false,
-    resourceUrl: `/api/v1/namespaces/${otherParams.resourceName}/resourcequotas`,
+    resourceUrl: `/api/v1/namespaces/${props.resourceName}/resourcequotas`,
     resourceType: 'ResourceQuotas',
-    namespace: otherParams.resourceName,
+    namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
+    i18n,
   };
 
   const ResourceQuotasList = (
-    <ComponentForList name="resourcequotaslist" params={resourceQuotasParams} />
+    <ResourceQuotasListComponent {...resourceQuotasParams} />
   );
 
   const applicationMappingsParams = {
     hasDetailsView: false,
-    resourceUrl: `/apis/applicationconnector.kyma-project.io/v1alpha1/namespaces/${otherParams.resourceName}/applicationmappings`,
+    resourceUrl: `/apis/applicationconnector.kyma-project.io/v1alpha1/namespaces/${props.resourceName}/applicationmappings`,
     resourceType: 'ApplicationMappings',
-    namespace: otherParams.resourceName,
+    namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
   };
 
   const ApplicationMappings = features?.APPLICATIONS?.isEnabled ? (
-    <ComponentForList
-      name="applicationMappingsList"
-      params={applicationMappingsParams}
-    />
+    <ResourcesList {...applicationMappingsParams} />
   ) : null;
 
-  const eventsParams = {
-    namespace: otherParams.resourceName,
-  };
-
-  const Events = <ComponentForList name="eventsList" params={eventsParams} />;
+  const Events = (
+    <EventsList
+      namespace={props.resourceName}
+      defaultType={EVENT_MESSAGE_TYPE.WARNING}
+    />
+  );
 
   const headerActions = (
-    <DeployNewWorkload namespaceName={otherParams.resourceName} />
+    <DeployNewWorkload namespaceName={props.resourceName} />
   );
 
   const customColumns = [
@@ -75,20 +82,23 @@ export const NamespacesDetails = ({ DefaultRenderer, ...otherParams }) => {
   ];
 
   return (
-    <DefaultRenderer
-      {...otherParams}
+    <ResourceDetails
+      createResourceForm={NamespacesCreate}
+      {...props}
       windowTitle={t('namespaces.overview.title')}
       customColumns={customColumns}
       headerActions={headerActions}
     >
       <div className="panel-grid">
-        <NamespaceWorkloads namespace={otherParams.resourceName} />
-        <ResourcesUsage namespace={otherParams.resourceName} />
+        <NamespaceWorkloads namespace={props.resourceName} />
+        <ResourcesUsage namespace={props.resourceName} />
       </div>
+      <StatsPanel type="pod" namespace={props.resourceName} />
       {LimitrangesList}
       {ResourceQuotasList}
       {ApplicationMappings}
       {Events}
-    </DefaultRenderer>
+    </ResourceDetails>
   );
 };
+export default NamespacesDetails;

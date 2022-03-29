@@ -18,19 +18,19 @@ const formatMemory = memoryStr =>
 const createUsageMetrics = (node, metricsForNode) => {
   const cpuUsage = formatCpu(metricsForNode?.usage.cpu);
   const memoryUsage = formatMemory(metricsForNode?.usage.memory);
-  const allocatableCpu = parseInt(node.status.allocatable?.cpu || '0');
-  const allocatableMemory = formatMemory(node.status.allocatable?.memory);
+  const cpuCapacity = parseInt(node.status.capacity?.cpu || '0') * 1000;
+  const memoryCapacity = formatMemory(node.status.capacity?.memory);
 
   return {
     cpu: {
       usage: cpuUsage,
-      allocatable: allocatableCpu,
-      percentage: percentage(cpuUsage, allocatableCpu),
+      capacity: cpuCapacity,
+      percentage: percentage(cpuUsage, cpuCapacity),
     },
     memory: {
       usage: memoryUsage,
-      allocatable: allocatableMemory,
-      percentage: percentage(memoryUsage, allocatableMemory),
+      capacity: memoryCapacity,
+      percentage: percentage(memoryUsage, memoryCapacity),
     },
   };
 };
@@ -52,7 +52,7 @@ export function useNodesQuery() {
   } = useGet('/api/v1/nodes', { pollingInterval: 5500 });
 
   React.useEffect(() => {
-    if (nodes && nodeMetrics) {
+    if (nodes) {
       const getNodeMetrics = node => {
         const metricsForNode = nodeMetrics.items.find(
           metrics => node.metadata.name === metrics.metadata.name,
@@ -64,7 +64,7 @@ export function useNodesQuery() {
         nodes.items.map(n => ({
           name: n.metadata.name,
           creationTimestamp: n.metadata.creationTimestamp,
-          metrics: getNodeMetrics(n),
+          metrics: nodeMetrics ? getNodeMetrics(n) : {},
         })),
       );
     }
@@ -94,10 +94,10 @@ export function useNodeQuery(nodeName) {
   } = useGet(`/api/v1/nodes/${nodeName}`, { pollingInterval: 3000 });
 
   React.useEffect(() => {
-    if (node && nodeMetrics) {
+    if (node) {
       setData({
         node,
-        metrics: createUsageMetrics(node, nodeMetrics),
+        metrics: nodeMetrics ? createUsageMetrics(node, nodeMetrics) : {},
       });
     }
   }, [node, nodeMetrics]);

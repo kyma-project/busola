@@ -1,11 +1,16 @@
 import React from 'react';
-import { ControlledBy, GenericList } from 'react-shared';
+import { ControlledBy, GenericList, ResourceDetails } from 'react-shared';
 
 import { PodStatus } from './PodStatus';
 import ContainersData from './ContainersData';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
+import { PodsCreate } from '../../Create/Pods/Pods.create';
+
+import { PodStatsGraph } from './PodStatsGraph';
 
 function toSnakeCase(inputString) {
   return inputString
@@ -19,6 +24,7 @@ function toSnakeCase(inputString) {
     })
     .join('');
 }
+
 function goToSecretDetails(resourceKind, name) {
   const preperedResourceKind = toSnakeCase(resourceKind);
 
@@ -27,8 +33,17 @@ function goToSecretDetails(resourceKind, name) {
     .navigate(`${preperedResourceKind}s/details/${name}`);
 }
 
-export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
+const PodsDetails = props => {
   const { t, i18n } = useTranslation();
+
+  const Events = () => (
+    <EventsList
+      namespace={props.namespace}
+      filter={filterByResource('Pod', props.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
+
   const customColumns = [
     {
       header: t('pods.headers.pod-ip'),
@@ -59,9 +74,18 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
         volumeType,
         <Link
           className="fd-link"
-          onClick={() => goToSecretDetails(volumeType, volume[volumeType].name)}
+          onClick={() =>
+            goToSecretDetails(
+              volumeType.toLowerCase(),
+              volume[volumeType].name ||
+                volume[volumeType].secretName ||
+                volume[volumeType].claimName,
+            )
+          }
         >
-          {volume[volumeType].name}
+          {volume[volumeType].name ||
+            volume[volumeType].secretName ||
+            volume[volumeType].claimName}
         </Link>,
       ];
     };
@@ -83,6 +107,7 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
       key="containers"
       type={t('pods.labels.constainers')}
       containers={resource.spec.containers}
+      statuses={resource.status.containerStatuses}
     />
   );
   const InitContainers = resource => (
@@ -90,14 +115,23 @@ export const PodsDetails = ({ DefaultRenderer, ...otherParams }) => {
       key="init-containers"
       type={t('pods.labels.init-constainers')}
       containers={resource.spec.initContainers}
+      statuses={resource.status.initContainerStatuses}
     />
   );
 
   return (
-    <DefaultRenderer
-      customComponents={[VolumesList, Containers, InitContainers]}
+    <ResourceDetails
+      customComponents={[
+        PodStatsGraph,
+        VolumesList,
+        Containers,
+        InitContainers,
+        Events,
+      ]}
       customColumns={customColumns}
-      {...otherParams}
-    ></DefaultRenderer>
+      createResourceForm={PodsCreate}
+      {...props}
+    />
   );
 };
+export default PodsDetails;

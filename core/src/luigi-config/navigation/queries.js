@@ -1,11 +1,14 @@
 import { config } from './../config';
 import { getActiveCluster } from './../cluster-management/cluster-management';
-import { HttpError } from '../../../../shared/hooks/BackendAPI/config';
+import { HttpError } from '../../../../core-ui/src/shared-repo/hooks/BackendAPI/config';
+import { getSSOAuthData } from '../auth/sso';
 
 export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {
     if (auth.token) {
-      return { 'X-K8s-Authorization': `Bearer ${auth.token}` };
+      return {
+        'X-K8s-Authorization': `Bearer ${auth.token}`,
+      };
     } else if (
       auth &&
       auth['client-certificate-data'] &&
@@ -20,22 +23,33 @@ export async function failFastFetch(input, auth, init = {}) {
     }
   }
 
+  function createSSOHeader() {
+    const ssoData = getSSOAuthData();
+    if (ssoData) {
+      return { Authorization: 'Bearer ' + ssoData.idToken };
+    } else {
+      return null;
+    }
+  }
+
   async function createHeaders(auth) {
     const params = await getActiveCluster();
     const cluster = params.currentContext.cluster.cluster;
     const requiresCA = params.config?.requiresCA;
 
     return {
+      ...createSSOHeader(),
       ...createAuthHeaders(auth),
       'Content-Type': 'application/json',
       'X-Cluster-Url': cluster?.server,
-      'X-Cluster-Certificate-Authority-Data': requiresCA
-        ? cluster['certificate-authority-data']
-        : undefined,
+      'X-Cluster-Certificate-Authority-Data':
+        requiresCA === true || requiresCA === undefined
+          ? cluster['certificate-authority-data']
+          : undefined,
     };
   }
 
-  init.headers = await createHeaders(auth);
+  init.headers = await createHeaders(auth, input);
 
   const response = await fetch(input, init);
   if (response.ok) {
@@ -57,12 +71,12 @@ export async function failFastFetch(input, auth, init = {}) {
 
 export async function checkIfClusterRequiresCA(auth) {
   try {
-    // try to fetch without CA (requiresCA is undefined)
+    // try to fetch with CA (if 'requiresCA' is undefined => send CA)
     await failFastFetch(config.backendAddress + '/api', auth);
-    return false;
-  } catch (_) {
-    // if it fails, use CA
     return true;
+  } catch (_) {
+    // if it fails, don't send CA anymore
+    return false;
   }
 }
 

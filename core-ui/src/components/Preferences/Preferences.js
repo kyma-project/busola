@@ -2,8 +2,10 @@ import React from 'react';
 
 import './Preferences.scss';
 import NamespaceSettings from './NamespaceSettings';
+import ProtectedSettings from './ProtectedSettings';
 import ThemeChooser from './ThemeChooser';
 import LanguageSettings from './LanguageSettings';
+import OtherSettings from './OtherSettings';
 import ConfirmationSettings from './ConfirmationSettings';
 import { VerticalTabs, Tabs, Tab } from 'react-shared';
 import { useTranslation } from 'react-i18next';
@@ -39,7 +41,7 @@ function Preferences() {
     },
   ];
   return (
-    <VerticalTabs tabs={tabs} height="508px">
+    <VerticalTabs tabs={tabs} height="100vh">
       <VerticalTabs.Content id={1}>
         <Tabs className="fd-tabs fd-has-padding-left-regular">
           <Tab
@@ -56,12 +58,20 @@ function Preferences() {
           >
             <LanguageSettings />
           </Tab>
+          <Tab
+            key="other-settings"
+            id="other-settings"
+            title={t('settings.other.title')}
+          >
+            <OtherSettings />
+          </Tab>
         </Tabs>
       </VerticalTabs.Content>
       <VerticalTabs.Content id={2}>
         <div>
           <NamespaceSettings />
           <ConfirmationSettings />
+          <ProtectedSettings />
         </div>
       </VerticalTabs.Content>
     </VerticalTabs>
@@ -70,4 +80,6 @@ function Preferences() {
 
 /* for some mysterious reason hooks fail in root component, so instead a
  * wrapper component has to be exported */
-export default () => <Preferences />;
+export default function Preferencs() {
+  return <Preferences />;
+}

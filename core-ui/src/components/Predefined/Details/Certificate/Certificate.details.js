@@ -1,17 +1,27 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormattedDatetime } from 'react-shared';
-
+import {
+  FormattedDatetime,
+  ResourceStatus,
+  EMPTY_TEXT_PLACEHOLDER,
+  ResourceDetails,
+} from 'react-shared';
+import { CertificatesCreate } from '../../Create/Certificates/Certificates.create';
 import { CertificateRefs } from './CertificateRefs';
-import { CertificateStatus } from './CertificateStatus';
 
-export function CertificatesDetails({ DefaultRenderer, ...otherParams }) {
+function CertificatesDetails(props) {
   const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
       header: t('certificates.state'),
-      value: certificate => <CertificateStatus status={certificate.status} />,
+      value: certificate => (
+        <ResourceStatus
+          status={certificate.status}
+          resourceKind="certificates"
+          i18n={i18n}
+        />
+      ),
     },
     {
       header: t('certificates.expiration-date'),
@@ -22,20 +32,26 @@ export function CertificatesDetails({ DefaultRenderer, ...otherParams }) {
             lang={i18n.language}
           />
         ) : (
-          '-'
+          EMPTY_TEXT_PLACEHOLDER
         ),
     },
     {
       header: t('certificates.common-name'),
-      value: certificate => certificate.spec.commonName,
+      value: certificate =>
+        certificate.spec?.commonName
+          ? certificate.spec.commonName
+          : EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={[CertificateRefs]}
-      {...otherParams}
-    ></DefaultRenderer>
+      createResourceForm={CertificatesCreate}
+      {...props}
+    />
   );
 }
+
+export default CertificatesDetails;

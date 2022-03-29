@@ -14,6 +14,10 @@
   max-width: unset;
 }
 
+.fd-shellbar__logo img {
+  width: 88px;
+}
+
 /* luigi adds "Sign out" for OIDC clusters - we don't need it */
 [data-testid='signout'] {
   display: none;
@@ -22,4 +26,24 @@
 .fd-page.spinnerContainer,
 body.lui-semiCollapsible {
   background: var(--sapBackgroundColor);
+}
+
+.lui-side-nav__footer--text ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.lui-side-nav__footer--text a {
+  color: var(--sapLinkColor);
+  padding-right: 10px;
+}
+
+.lui-side-nav__footer--text p {
+  margin: 0;
+}
+
+#app .iframeContainer {
+  overflow: hidden;
 }

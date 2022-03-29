@@ -1,10 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link, ResourceStatus, ResourcesList } from 'react-shared';
+import { Trans } from 'react-i18next';
+import { IssuersCreate } from '../Create/Issuers/Issuers.create';
 
-import { IssuerStatus } from '../Details/Issuer/IssuerStatus';
-
-export const IssuersList = ({ DefaultRenderer, ...otherParams }) => {
-  const { t } = useTranslation();
+const IssuersList = props => {
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
@@ -13,9 +14,33 @@ export const IssuersList = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('issuers.state'),
-      value: issuer => <IssuerStatus status={issuer.status} />,
+      value: issuer => (
+        <ResourceStatus
+          status={issuer.status}
+          resourceKind="issuers"
+          i18n={i18n}
+        />
+      ),
     },
   ];
 
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
+  const description = (
+    <Trans i18nKey="issuers.description">
+      <Link
+        className="fd-link"
+        url="https://cert-manager.io/docs/concepts/issuer/"
+      />
+    </Trans>
+  );
+
+  return (
+    <ResourcesList
+      customColumns={customColumns}
+      description={description}
+      createResourceForm={IssuersCreate}
+      {...props}
+    />
+  );
 };
+
+export default IssuersList;

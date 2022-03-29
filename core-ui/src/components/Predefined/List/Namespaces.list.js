@@ -1,8 +1,11 @@
 import React from 'react';
 import { NamespaceStatus } from '../Details/Namespace/NamespaceStatus';
 import LuigiClient from '@luigi-project/client';
-import { getFeatureToggle } from 'react-shared';
+import { getFeatureToggle, ResourcesList } from 'react-shared';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-shared';
+import { Trans } from 'react-i18next';
+import { NamespacesCreate } from '../Create/Namespaces/Namespaces.create';
 
 const FilterNamespaces = namespace => {
   const showHiddenNamespaces = getFeatureToggle('showHiddenNamespaces');
@@ -13,7 +16,7 @@ const FilterNamespaces = namespace => {
     : !hiddenNamespaces.includes(namespace.metadata.name);
 };
 
-export const NamespacesList = ({ DefaultRenderer, ...otherParams }) => {
+const NamespacesList = props => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -24,11 +27,24 @@ export const NamespacesList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const description = (
+    <Trans i18nKey="namespaces.description">
+      <Link
+        className="fd-link"
+        url="https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces"
+      />
+    </Trans>
+  );
+
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
+      description={description}
       filter={FilterNamespaces}
-      {...otherParams}
+      createResourceForm={NamespacesCreate}
+      {...props}
     />
   );
 };
+
+export default NamespacesList;

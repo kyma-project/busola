@@ -1,9 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link, ResourcesList } from 'react-shared';
+import { GatewaysCreate } from '../Create/Gateways/Gateways.create';
 import { GatewaySelector } from '../Details/Gateway/GatewaySelector';
+import { Trans } from 'react-i18next';
 
-export function GatewaysList({ DefaultRenderer, ...otherParams }) {
+function GatewaysList(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -14,21 +16,22 @@ export function GatewaysList({ DefaultRenderer, ...otherParams }) {
   ];
 
   const description = (
-    <span>
+    <Trans i18nKey="gateways.description">
       <Link
-        className="fd-link fd-link"
+        className="fd-link"
         url="https://istio.io/latest/docs/reference/config/networking/gateway/"
-        text="Gateway" // no translations here
       />
-      {t('gateways.description')}
-    </span>
+    </Trans>
   );
 
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       description={description}
-      {...otherParams}
+      createResourceForm={GatewaysCreate}
+      {...props}
     />
   );
 }
+
+export default GatewaysList;

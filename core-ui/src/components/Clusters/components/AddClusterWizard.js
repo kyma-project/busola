@@ -1,9 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Button, Wizard, MessageStrip } from 'fundamental-react';
+import React, { useEffect, useState } from 'react';
+import { Wizard, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { useNotification, useMicrofrontendContext } from 'react-shared';
+import { ResourceForm } from 'shared/ResourceForm';
+import {
+  useNotification,
+  useMicrofrontendContext,
+  useCustomFormValidator,
+} from 'react-shared';
 
 import { hasKubeconfigAuth, getUser, getContext, addCluster } from '../shared';
 import { AuthForm } from './AuthForm';
@@ -24,17 +28,19 @@ export function AddClusterWizard({
   const notification = useNotification();
 
   const [hasAuth, setHasAuth] = useState(false);
-  const [authValid, setAuthValid] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);
-  const [lastStep, setLastStep] = useState(false);
   const [storage, setStorage] = useState(
-    busolaClusterParams?.config.storage || 'localStorage',
+    busolaClusterParams?.config?.storage || 'localStorage',
   );
-
-  const authFormRef = useRef();
+  const {
+    isValid: authValid,
+    formElementRef: authFormRef,
+    setCustomValid,
+    revalidate,
+  } = useCustomFormValidator();
 
   useEffect(() => {
-    if (kubeconfig) {
+    if (Array.isArray(kubeconfig?.contexts)) {
       if (getUser(kubeconfig)?.token) {
         setStorage('sessionStorage');
       } else {
@@ -43,7 +49,7 @@ export function AddClusterWizard({
     }
   }, [kubeconfig]);
 
-  function updateKubeconfig(kubeconfig) {
+  const updateKubeconfig = kubeconfig => {
     if (!kubeconfig) {
       setKubeconfig(null);
       return;
@@ -51,21 +57,56 @@ export function AddClusterWizard({
 
     const hasOneContext = kubeconfig?.contexts?.length === 1;
     const hasAuth = hasKubeconfigAuth(kubeconfig);
-
     setHasOneContext(hasOneContext);
     setHasAuth(hasAuth);
 
     setKubeconfig(kubeconfig);
-  }
+  };
+
+  const addByContext = (kubeconfig, context, switchCluster = true) => {
+    const cluster = kubeconfig.clusters.find(
+      c => c.name === context.context.cluster,
+    );
+    const user = kubeconfig.users.find(u => u.name === context.context.user);
+    const newKubeconfig = {
+      ...kubeconfig,
+      'current-context': context.name,
+      contexts: [context],
+      clusters: [cluster],
+      users: [user],
+    };
+    addCluster(
+      {
+        kubeconfig: newKubeconfig,
+        contextName: context.name,
+        config: { ...(config || {}), storage },
+        currentContext: getContext(newKubeconfig, context.name),
+      },
+      switchCluster,
+    );
+  };
 
   const onComplete = () => {
     try {
       const contextName = kubeconfig['current-context'];
-      addCluster({
-        kubeconfig,
-        config: { ...(config || {}), storage },
-        currentContext: getContext(kubeconfig, contextName),
-      });
+      if (!kubeconfig.contexts?.length) {
+        addByContext(kubeconfig, {
+          name: kubeconfig.clusters[0].name,
+          context: {
+            cluster: kubeconfig.clusters[0].name,
+            user: kubeconfig.users[0].name,
+          },
+        });
+      } else if (contextName === '-all-') {
+        kubeconfig.contexts.forEach((context, index) => {
+          addByContext(kubeconfig, context, !index);
+        });
+      } else {
+        const context = kubeconfig.contexts.find(
+          context => context.name === contextName,
+        );
+        addByContext(kubeconfig, context);
+      }
     } catch (e) {
       notification.notifyError({
         title: t('clusters.messages.wrong-configuration'),
@@ -74,30 +115,23 @@ export function AddClusterWizard({
       console.warn(e);
     }
   };
+
   return (
     <Wizard
       onCancel={onCancel}
       onComplete={onComplete}
-      onStepChange={(e, step, index, count) => setLastStep(index === count - 1)}
+      navigationType="tabs"
       headerSize="md"
       contentSize="md"
-      footerProps={
-        lastStep
-          ? {
-              children: (
-                <Button compact option="emphasized" onClick={onComplete}>
-                  {t('clusters.buttons.verify-and-add')}
-                </Button>
-              ),
-            }
-          : {}
-      }
+      className="add-cluster-wizard"
     >
       <Wizard.Step
         title={t('clusters.wizard.kubeconfig')}
         branching={!kubeconfig}
         indicator="1"
         valid={!!kubeconfig}
+        previousLabel={t('clusters.buttons.previous-step')}
+        nextLabel={t('clusters.buttons.next-step')}
       >
         <p>{t('clusters.wizard.intro')}</p>
         <MessageStrip
@@ -117,15 +151,20 @@ export function AddClusterWizard({
           title={t('clusters.wizard.update')}
           indicator="2"
           valid={authValid}
+          previousLabel={t('clusters.buttons.previous-step')}
+          nextLabel={t('clusters.buttons.next-step')}
         >
           <ResourceForm.Single
             formElementRef={authFormRef}
             resource={kubeconfig}
             setResource={setKubeconfig}
-            onValid={setAuthValid}
+            setCustomValid={setCustomValid}
+            createResource={e => {
+              e.preventDefault();
+            }}
           >
             {!hasOneContext && <ContextChooser />}
-            {!hasAuth && <AuthForm onValid={setAuthValid} />}
+            {!hasAuth && <AuthForm revalidate={revalidate} />}
           </ResourceForm.Single>
         </Wizard.Step>
       )}
@@ -133,7 +172,9 @@ export function AddClusterWizard({
       <Wizard.Step
         title={t('clusters.wizard.storage')}
         indicator="2"
-        valid={false}
+        valid={!!storage}
+        previousLabel={t('clusters.buttons.previous-step')}
+        nextLabel={t('clusters.buttons.verify-and-add')}
       >
         <ChooseStorage storage={storage} setStorage={setStorage} />
       </Wizard.Step>

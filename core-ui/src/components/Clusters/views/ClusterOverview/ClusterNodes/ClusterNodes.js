@@ -1,11 +1,16 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { Pagination, Spinner, ErrorPanel } from 'react-shared';
+import { Pagination, ErrorPanel } from 'react-shared';
 import { LayoutPanel, Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+
 import { useNodesQuery } from 'components/Nodes/nodeQueries';
-import { NodeResources } from '../../../../Nodes/NodeResources/NodeResources';
-import { ClusterNodesWarnings } from './NodeWarningsList';
+import { NodeResources } from 'components/Nodes/NodeResources/NodeResources';
+import { EventsList } from 'shared/components/EventsList';
+import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
+import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
+import Skeleton from 'shared/components/Skeleton/Skeleton';
+
 import './ClusterNodes.scss';
 
 const NodeHeader = ({ nodeName }) => {
@@ -34,10 +39,18 @@ export function ClusterNodes() {
       currentPage * itemsPerPage,
     ) || [];
 
+  const Events = <EventsList defaultType={EVENT_MESSAGE_TYPE.WARNING} />;
+
   return (
     <>
-      {loading && <Spinner compact={true} />}
-      {error && <ErrorPanel error={error} title="Metrics" i18n={i18n} />}
+      {loading && (
+        <div className="cluster-overview__nodes">
+          <Skeleton height="220px" />
+        </div>
+      )}
+      {error && !nodes && (
+        <ErrorPanel error={error} title="Metrics" i18n={i18n} />
+      )}
       <div className="cluster-overview__nodes">
         {pagedNodes.map(node => (
           <NodeResources
@@ -57,7 +70,8 @@ export function ClusterNodes() {
           />
         </LayoutPanel.Footer>
       )}
-      <ClusterNodesWarnings nodesNames={nodes?.map(n => n.name) || []} />
+      <StatsPanel type="cluster" />
+      {Events}
     </>
   );
 }

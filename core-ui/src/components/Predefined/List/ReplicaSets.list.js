@@ -1,6 +1,8 @@
 import React from 'react';
-import { ControlledByKind, StatusBadge } from 'react-shared';
-import { useTranslation } from 'react-i18next';
+import { ControlledByKind, Link, ResourcesList } from 'react-shared';
+import { useTranslation, Trans } from 'react-i18next';
+import { ReplicaSetsCreate } from '../Create/ReplicaSets/ReplicaSets.create';
+import { ReplicaSetStatus } from '../Details/ReplicaSet/ReplicaSetStatus';
 
 const getImages = replicaSet => {
   const images =
@@ -10,19 +12,7 @@ const getImages = replicaSet => {
   return images;
 };
 
-const isStatusOk = replicaSet => {
-  return replicaSet.status.readyReplicas === replicaSet.status.replicas;
-};
-
-const getStatus = replicaSet => {
-  return isStatusOk(replicaSet) ? 'running' : 'error';
-};
-
-const getStatusType = replicaSet => {
-  return isStatusOk(replicaSet) ? 'success' : 'error';
-};
-
-export const ReplicaSetsList = ({ DefaultRenderer, ...otherParams }) => {
+const ReplicaSetsList = params => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -43,14 +33,29 @@ export const ReplicaSetsList = ({ DefaultRenderer, ...otherParams }) => {
       },
     },
     {
-      header: t('common.headers.status'),
-      value: replicaSet => {
-        const status = getStatus(replicaSet);
-        const statusType = getStatusType(replicaSet);
-        return <StatusBadge type={statusType}>{status}</StatusBadge>;
-      },
+      header: t('common.headers.pods'),
+      value: replicaSet => <ReplicaSetStatus replicaSet={replicaSet} />,
     },
   ];
 
-  return <DefaultRenderer customColumns={customColumns} {...otherParams} />;
+  const description = (
+    <Trans i18nKey="replica-sets.description">
+      <Link
+        className="fd-link"
+        url="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/"
+      />
+    </Trans>
+  );
+
+  return (
+    <ResourcesList
+      customColumns={customColumns}
+      resourceName={t('replica-sets.title')}
+      description={description}
+      createResourceForm={ReplicaSetsCreate}
+      {...params}
+    />
+  );
 };
+
+export default ReplicaSetsList;

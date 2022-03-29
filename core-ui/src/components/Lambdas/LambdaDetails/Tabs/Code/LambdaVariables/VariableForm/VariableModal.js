@@ -30,7 +30,6 @@ export default function VariableModal({
       confirmText={confirmText}
       invalidPopupMessage={invalidModalPopupMessage}
       id="add-lambda-variables-modal"
-      className="fd-dialog--xl-size modal-size--l"
       onModalOpenStateChange={onModalOpenStateChange}
       alwaysOpen={alwaysOpen}
       renderForm={props => (

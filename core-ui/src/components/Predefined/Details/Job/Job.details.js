@@ -2,15 +2,22 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
+  ControlledBy,
   ReadableCreationTimestamp,
   EMPTY_TEXT_PLACEHOLDER,
+  ResourceDetails,
 } from 'react-shared';
 
-import { ResourcePods } from '../ResourcePods';
 import { JobCompletions } from './JobCompletions';
 import { JobConditions } from './JobConditions';
 
-export function JobsDetails({ DefaultRenderer, ...otherParams }) {
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
+import { Selector } from 'shared/components/Selector/Selector';
+
+import { JobsCreate } from '../../Create/Jobs/Jobs.create';
+
+function JobsDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -42,15 +49,40 @@ export function JobsDetails({ DefaultRenderer, ...otherParams }) {
           EMPTY_TEXT_PLACEHOLDER
         ),
     },
+    {
+      header: t('common.headers.owner'),
+      value: job => (
+        <ControlledBy ownerReferences={job.metadata.ownerReferences} />
+      ),
+    },
   ];
 
-  const customComponents = [JobConditions, ResourcePods];
+  const Events = () => (
+    <EventsList
+      namespace={props.namespace}
+      filter={filterByResource('Job', props.resourceName)}
+      hideInvolvedObjects={true}
+    />
+  );
+
+  const MatchSelector = job => (
+    <Selector
+      namespace={job.metadata.namespace}
+      labels={job.spec?.selector?.matchLabels}
+      expressions={job.spec?.selector?.matchExpressions}
+      selector={job.spec?.selector}
+    />
+  );
+  const customComponents = [JobConditions, MatchSelector, Events];
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={customComponents}
-      {...otherParams}
-    ></DefaultRenderer>
+      createResourceForm={JobsCreate}
+      {...props}
+    />
   );
 }
+
+export default JobsDetails;

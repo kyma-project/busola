@@ -6,46 +6,20 @@ export const ERRORS = {
 };
 
 export const LAMBDA_PHASES = {
-  INITIALIZING: {
-    TYPE: 'INITIALIZING',
-    TITLE: 'functions.statuses.initializing',
-  },
-  BUILDING: {
-    TYPE: 'BUILDING',
-    TITLE: 'functions.statuses.building',
-  },
-  DEPLOYING: {
-    TYPE: 'DEPLOYING',
-    TITLE: 'functions.statuses.deploying',
-  },
-  UNHEALTHY: {
-    TYPE: 'UNHEALTHY',
-    TITLE: 'functions.statuses.unhealthy',
-  },
-  RUNNING: {
-    TYPE: 'RUNNING',
-    TITLE: 'functions.statuses.running',
-  },
-  NEW_REVISION_ERROR: {
-    TYPE: 'NEW_REVISION_ERROR',
-    TITLE: 'functions.statuses.new-revision-error',
-  },
-  FAILED: {
-    TYPE: 'FAILED',
-    TITLE: 'functions.statuses.failed',
-    MESSAGE: `functions.statuses.failed-message`,
-  },
+  INITIALIZING: 'INITIALIZING',
+  BUILDING: 'BUILDING',
+  DEPLOYING: 'DEPLOYING',
+  UNHEALTHY: 'UNHEALTHY',
+  RUNNING: 'RUNNING',
+  NEW_REVISION_ERROR: 'NEW REVISION ERROR',
+  FAILED: 'FAILED',
 };
 
-export const PRETTY_RUNTIME_NODEJS12_NAME = 'Node.js 12';
+export const PRETTY_RUNTIME_NODEJS12_NAME = 'Node.js 12 - Deprecated';
 export const PRETTY_RUNTIME_NODEJS14_NAME = 'Node.js 14';
-export const PRETTY_RUNTIME_PYTHON38_NAME = 'Python 3.8 - Deprecated';
 export const PRETTY_RUNTIME_PYTHON39_NAME = 'Python 3.9';
 
-export const LAMBDA_ERROR_PHASES = [
-  LAMBDA_PHASES.FAILED.TYPE,
-  LAMBDA_PHASES.NEW_REVISION_ERROR.TYPE,
-];
+export const LAMBDA_ERROR_PHASES = ['FAILED', 'NEW REVISION ERROR'];
 
 export const LAMBDAS_LIST = {
   CREATE_MODAL: {
@@ -82,45 +56,6 @@ export const LAMBDAS_LIST = {
 export const FUNCTION_SOURCE_TYPE = {
   INLINE: 'functions.create-view.labels.inline-editor',
   GIT: 'functions.create-view.labels.git-repository',
-};
-
-export const REPOSITORIES_LIST = {
-  MODAL_INPUTS: {
-    NAME: {
-      ERRORS: {
-        EMPTY: 'functions.repository-list.errors.req-name',
-        INVALID: 'functions.repository-list.errors.invalid-url',
-        TOO_LONG: 'functions.repository-list.errors.too-long-name',
-      },
-    },
-    URL: {
-      PLACEHOLDER: 'Enter the URL address of your Git repository (Required)',
-    },
-    AUTH_TYPE: {
-      OPTIONS: [
-        {
-          VALUE: 'Public',
-          KEY: '',
-        },
-        {
-          VALUE: 'Basic',
-          KEY: 'basic',
-        },
-        {
-          VALUE: 'SSH key',
-          KEY: 'key',
-        },
-      ],
-    },
-    SECRET_NAME: {
-      PLACEHOLDER: 'Enter a Secret name with credentials (Required)',
-      ERRORS: {
-        INVALID: `common.tooltips.k8s-name-input`,
-        EMPTY: 'functions.repository-list.errors.req-sec-name',
-        TOO_LONG: 'functions.repository-list.errors.too-long-sec-name',
-      },
-    },
-  },
 };
 
 export const SERVICE_URL = `/api/v1/namespaces/{namespace}/services/{name}`;

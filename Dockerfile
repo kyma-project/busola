@@ -1,5 +1,5 @@
 # ---- Base Alpine with Node ----
-FROM alpine:3.13.6 AS builder
+FROM alpine:3.15.0 AS builder
 RUN apk add --update nodejs npm
 
 WORKDIR /app
@@ -16,15 +16,14 @@ ENV CI true
 COPY . /app
 
 RUN make resolve
-RUN make lint
+RUN make validate
 RUN make pull-licenses
 
 RUN cd /app/core && make test && make build
-RUN cd /app/service-catalog-ui && make test && make build
 RUN cd /app/core-ui && make test && make build
 
 # ---- Serve ----
-FROM alpine:3.14.2
+FROM alpine:3.15.0
 WORKDIR /app
 
 RUN apk --no-cache upgrade &&\
@@ -33,16 +32,12 @@ RUN apk --no-cache upgrade &&\
 # apps
 COPY --from=builder /app/core/src /app/core
 COPY --from=builder /app/core-ui/build /app/core-ui
-COPY --from=builder /app/service-catalog-ui/build /app/service-catalog
 
 # nginx
 COPY --from=builder /app/nginx/nginx.conf /etc/nginx/
+COPY --from=builder /app/nginx/core.conf /etc/nginx/
+COPY --from=builder /app/nginx/core-ui.conf /etc/nginx/
 COPY --from=builder /app/nginx/mime.types /etc/nginx/
-
-# # licenses
-# COPY --from=builder /app/core/licenses/ /app/licenses/
-# COPY --from=builder /app/core-ui/licenses/ /app/licenses/
-# COPY --from=builder /app/service-catalog-ui/licenses/ /app/licenses/
 
 
 RUN touch /var/run/nginx.pid && \

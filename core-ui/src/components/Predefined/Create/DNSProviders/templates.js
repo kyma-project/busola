@@ -1,3 +1,5 @@
+import { cloneDeep } from 'lodash';
+
 export function createDNSProviderTemplate(namespace) {
   return {
     apiVersion: 'dns.gardener.cloud/v1alpha1',
@@ -21,3 +23,14 @@ export function createDNSProviderTemplate(namespace) {
     },
   };
 }
+
+export const createDNSProviderTemplateForGardener = (
+  namespace,
+  initialDnsProvider,
+) => {
+  const dnsProvider = initialDnsProvider
+    ? cloneDeep(initialDnsProvider)
+    : createDNSProviderTemplate(namespace);
+  dnsProvider.metadata.annotations = { 'dns.gardener.cloud/class': 'garden' };
+  return dnsProvider;
+};

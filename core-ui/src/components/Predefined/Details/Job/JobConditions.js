@@ -9,7 +9,6 @@ import {
 
 export function JobConditions(job) {
   const { t, i18n } = useTranslation();
-
   const headerRenderer = () => [
     t('jobs.conditions.type'),
     t('jobs.conditions.status'),
@@ -27,7 +26,12 @@ export function JobConditions(job) {
   };
   const rowRenderer = condition => {
     return [
-      <StatusBadge type={conditionTypeStatus(condition.type)}>
+      <StatusBadge
+        i18n={i18n}
+        resourceKind="jobs"
+        additionalContent={condition.message}
+        type={conditionTypeStatus(condition.type)}
+      >
         {condition.type}
       </StatusBadge>,
       condition.status,

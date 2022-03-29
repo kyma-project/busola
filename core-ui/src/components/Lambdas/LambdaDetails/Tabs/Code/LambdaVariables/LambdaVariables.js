@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { Icon, InfoLabel } from 'fundamental-react';
@@ -7,6 +7,7 @@ import {
   GenericList,
   ControlledBy,
   Tooltip,
+  useDeleteResource,
 } from 'react-shared';
 
 import CreateVariable from './CreateVariable/CreateVariable';
@@ -180,6 +181,13 @@ export default function LambdaVariables({
 }) {
   const { t, i18n } = useTranslation();
 
+  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
+    i18n,
+    resourceType: t('functions.variable.title.environment-variables'),
+  });
+
+  const [chosenVariable, setChosenVariable] = useState(null);
+
   const headerRenderer = () => [
     t('functions.variable.header.name'),
     '',
@@ -206,16 +214,14 @@ export default function LambdaVariables({
   ];
 
   const addEnvModal = (
-    <>
-      <CreateVariable
-        lambda={lambda}
-        secrets={secrets}
-        configmaps={configmaps}
-        customVariables={customVariables}
-        customValueFromVariables={customValueFromVariables}
-        injectedVariables={injectedVariables}
-      />
-    </>
+    <CreateVariable
+      lambda={lambda}
+      secrets={secrets}
+      configmaps={configmaps}
+      customVariables={customVariables}
+      customValueFromVariables={customValueFromVariables}
+      injectedVariables={injectedVariables}
+    />
   );
 
   const entries = [
@@ -256,7 +262,8 @@ export default function LambdaVariables({
 
   const actions = [
     {
-      name: 'Edit',
+      name: t('common.buttons.edit'),
+      icon: 'edit',
       component: variable => (
         <EditVariable
           lambda={lambda}
@@ -270,8 +277,14 @@ export default function LambdaVariables({
       ),
     },
     {
-      name: 'Delete',
-      handler: variable => onDeleteVariables(variable),
+      name: t('common.buttons.delete'),
+      icon: 'delete',
+      handler: variable => {
+        setChosenVariable(variable);
+        handleResourceDelete({
+          deleteFn: () => onDeleteVariables(variable),
+        });
+      },
     },
   ];
 
@@ -290,6 +303,11 @@ export default function LambdaVariables({
         notFoundMessage={t('functions.variable.not-found')}
         noSearchResultMessage={t('functions.variable.not-match')}
         i18n={i18n}
+      />
+      <DeleteMessageBox
+        resource={chosenVariable}
+        resourceName={chosenVariable?.name}
+        deleteFn={v => onDeleteVariables(v)}
       />
     </div>
   );

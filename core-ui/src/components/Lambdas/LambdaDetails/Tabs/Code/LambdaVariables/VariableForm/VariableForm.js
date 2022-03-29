@@ -57,7 +57,6 @@ const EMPTY_VARIABLE = {
 };
 export default function VariableForm({
   formElementRef,
-  setValidity = () => void 0,
   setCustomValid = () => void 0,
   setInvalidModalPopupMessage = () => void 0,
   lambda,
@@ -160,7 +159,7 @@ export default function VariableForm({
           variables={[...customVariables, ...customValueFromVariables]}
           injectedVariables={injectedVariables}
           onUpdateVariable={onUpdateVariable}
-          setValidity={setValidity}
+          setValidity={setCustomValid}
           setCustomValid={setCustomValid}
           setInvalidModalPopupMessage={setInvalidModalPopupMessage}
         />
@@ -173,7 +172,7 @@ export default function VariableForm({
           variables={[...customVariables, ...customValueFromVariables]}
           injectedVariables={injectedVariables}
           onUpdateVariable={onUpdateVariable}
-          setValidity={setValidity}
+          setValidity={setCustomValid}
           setCustomValid={setCustomValid}
           setInvalidModalPopupMessage={setInvalidModalPopupMessage}
           isEdit={isEdit}

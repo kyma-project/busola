@@ -1,32 +1,30 @@
 import i18next from 'i18next';
 import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
+import './../assets/libs/luigi-core/luigi.css';
 
 import {
   saveCurrentLocation,
   tryRestorePreviousLocation,
 } from './navigation/previous-location';
-import { getAuthData, setAuthData } from './auth/auth-storage';
 import { communication } from './communication';
 import { createSettings } from './settings';
-import { createAuth, hasNonOidcAuth } from './auth/auth.js';
-import { saveQueryParamsIfPresent } from './init-params/init-params.js';
+import { clusterLogin } from './auth/auth';
+import { handleKubeconfigIdIfPresent } from './kubeconfig-id';
 import {
   getActiveCluster,
   handleResetEndpoint,
-  saveCARequired,
   setActiveClusterIfPresentInUrl,
 } from './cluster-management/cluster-management';
 import { initSentry } from './sentry';
 
-import {
-  createNavigation,
-  addClusterNodes,
-} from './navigation/navigation-data-init';
-import { setTheme, getTheme } from './utils/theme';
+import { createNavigation } from './navigation/navigation-data-init';
+import { initTheme } from './utils/theme';
 import { readFeatureToggles } from './utils/feature-toggles';
-import { loadTargetClusterConfig } from './utils/target-cluster-config';
-import { checkClusterStorageType } from './cluster-management/clusters-storage';
+import { ssoLogin } from './auth/sso';
+import { setNavFooterText } from './nav-footer';
+
+const luigiAfterInit = () => Luigi.ux().hideAppLoadingIndicator();
 
 export const i18n = i18next.use(i18nextBackend).init({
   lng: localStorage.getItem('busola.language') || 'en',
@@ -43,39 +41,32 @@ export const i18n = i18next.use(i18nextBackend).init({
 
 export const NODE_PARAM_PREFIX = `~`;
 
-async function luigiAfterInit() {
-  Luigi.ux().hideAppLoadingIndicator();
+async function initializeBusola() {
+  initTheme();
 
-  const params = await getActiveCluster();
-  const isClusterChoosen = !!params;
+  const activeCluster = await getActiveCluster();
 
-  // save location, as we'll be logged out in a moment
-  if (!getAuthData()) {
-    saveCurrentLocation();
-    return;
-  }
+  Luigi.setConfig({
+    communication,
+    navigation: await createNavigation(),
+    routing: {
+      nodeParamPrefix: NODE_PARAM_PREFIX,
+      skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],
+    },
+    settings: createSettings(activeCluster),
+    lifecycleHooks: { luigiAfterInit },
+  });
 
-  readFeatureToggles(['dontConfirmDelete', 'showHiddenNamespaces']);
+  // make sure Luigi config is set - we can't use luigiAfterInit as it won't
+  // be fired if we had already ran Luigi.setConfig during sso/cluster login
+  await new Promise(resolve => setTimeout(resolve, 100));
 
-  if (!isClusterChoosen) {
+  await setNavFooterText();
+  if (!(await getActiveCluster())) {
     if (!window.location.pathname.startsWith('/clusters')) {
       Luigi.navigation().navigate('/clusters');
     }
   } else {
-    try {
-      if (getAuthData() && !hasNonOidcAuth(params.currentContext?.user?.user)) {
-        await saveCARequired();
-        await loadTargetClusterConfig();
-        await checkClusterStorageType(params.config.storage);
-        await addClusterNodes();
-      }
-    } catch (e) {
-      console.warn(e);
-      Luigi.ux().showAlert({
-        text: 'Cannot load navigation nodes',
-        type: 'error',
-      });
-    }
     tryRestorePreviousLocation();
   }
 }
@@ -89,41 +80,23 @@ async function luigiAfterInit() {
 
   await setActiveClusterIfPresentInUrl();
 
-  await saveQueryParamsIfPresent();
+  // save location, as we'll may be logged out in a moment
+  saveCurrentLocation();
 
-  const params = await getActiveCluster();
+  await handleKubeconfigIdIfPresent();
 
-  const kubeconfigUser = params?.currentContext.user.user;
-  if (hasNonOidcAuth(kubeconfigUser)) {
-    setAuthData(kubeconfigUser);
-    await saveCARequired();
-    await loadTargetClusterConfig();
-  }
+  readFeatureToggles([
+    'dontConfirmDelete',
+    'showHiddenNamespaces',
+    'disableResourceProtection',
+  ]);
 
-  const luigiConfig = {
-    auth: await createAuth(kubeconfigUser),
-    communication,
-    navigation: await createNavigation(),
-    routing: {
-      nodeParamPrefix: NODE_PARAM_PREFIX,
-      skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],
-    },
-    settings: createSettings(params),
-    lifecycleHooks: { luigiAfterInit },
-  };
-  Luigi.setConfig(luigiConfig);
-  setTheme(getTheme());
+  await ssoLogin(luigiAfterInit);
+
+  // workaround for luigi issue
+  await new Promise(resolve => setTimeout(resolve, 500));
+
+  await clusterLogin(luigiAfterInit);
+
+  await initializeBusola();
 })();
-
-window.addEventListener(
-  'message',
-  event => {
-    if (event.data.msg === 'busola.getCurrentTheme') {
-      event.source.postMessage(
-        { msg: 'busola.getCurrentTheme.response', name: getTheme() },
-        event.origin,
-      );
-    }
-  },
-  false,
-);

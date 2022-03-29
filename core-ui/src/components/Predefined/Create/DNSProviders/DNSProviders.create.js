@@ -1,23 +1,52 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { createDNSProviderTemplate } from './templates';
-import { ProviderTypeDropdown } from './ProviderTypeDropdown';
-import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
+import React, { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
+import { useTranslation } from 'react-i18next';
+import { useGet } from 'react-shared';
+import { cloneDeep } from 'lodash';
+import { ResourceForm } from 'shared/ResourceForm';
+import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
+import {
+  K8sNameField,
+  KeyValueField,
+  TextArrayInput,
+} from 'shared/ResourceForm/fields';
+import {
+  createDNSProviderTemplate,
+  createDNSProviderTemplateForGardener,
+} from './templates';
+import { ProviderTypeDropdown } from './ProviderTypeDropdown';
 
-export function DNSProvidersCreate({
+function DNSProvidersCreate({
   formElementRef,
   namespace,
   onChange,
   setCustomValid,
+  resource: initialDnsProvider,
+  resourceUrl,
 }) {
-  const [dnsProvider, setDNSProvider] = React.useState(
-    createDNSProviderTemplate(namespace),
-  );
   const { t } = useTranslation();
 
-  React.useEffect(() => {
+  const [dnsProvider, setDNSProvider] = useState(
+    initialDnsProvider
+      ? cloneDeep(initialDnsProvider)
+      : createDNSProviderTemplate(namespace),
+  );
+  const { data: configmap } = useGet(
+    `/api/v1/namespaces/kube-system/configmaps/shoot-info`,
+    {
+      pollingInterval: 0,
+    },
+  );
+
+  useEffect(() => {
+    if (configmap) {
+      setDNSProvider(
+        createDNSProviderTemplateForGardener(namespace, initialDnsProvider),
+      );
+    }
+  }, [configmap, namespace, setDNSProvider]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
     const isTypeSet = jp.value(dnsProvider, '$.spec.type');
     const isSecretRefSet =
       jp.value(dnsProvider, '$.spec.secretRef.name') &&
@@ -35,15 +64,16 @@ export function DNSProvidersCreate({
       pluralKind="dnsProviders"
       singularName={t('dnsproviders.name_singular')}
       resource={dnsProvider}
+      initialResource={initialDnsProvider}
       setResource={setDNSProvider}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={`/apis/dns.gardener.cloud/v1alpha1/namespaces/${namespace}/dnsproviders/`}
+      createUrl={resourceUrl}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.metadata.name"
         kind={t('dnsproviders.name_singular')}
-        customSetValue={name => {
+        setValue={name => {
           jp.value(dnsProvider, '$.metadata.name', name);
           jp.value(
             dnsProvider,
@@ -52,41 +82,39 @@ export function DNSProvidersCreate({
           );
           setDNSProvider({ ...dnsProvider });
         }}
+        readOnly={!!initialDnsProvider}
       />
       <ResourceForm.FormField
         propertyPath="$.spec.type"
         label={t('dnsproviders.labels.type')}
         required
         input={({ value, setValue }) => (
-          <ProviderTypeDropdown type={value} setType={setValue} />
+          <ProviderTypeDropdown
+            type={value}
+            setType={setValue}
+            dnsProvider={dnsProvider}
+          />
         )}
-        className="fd-margin-bottom--sm"
       />
+
       <SecretRef
         required
         className={'fd-margin-top--sm'}
         id="secretRef"
-        resourceRef={jp.value(dnsProvider, '$.spec.secretRef') || {}}
+        propertyPath="$.spec.secretRef"
         title={t('dnsproviders.labels.secret-reference')}
-        onChange={secretRef => {
-          jp.value(dnsProvider, '$.spec.secretRef', secretRef);
-          setDNSProvider({
-            ...dnsProvider,
-            spec: { ...dnsProvider.spec, secretRef },
-          });
-        }}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
       />
-      <ResourceForm.KeyValueField
+      <KeyValueField
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <ResourceForm.TextArrayInput
+      <TextArrayInput
         required
         propertyPath="$.spec.domains.include"
         title={t('domains.include.label')}
@@ -95,7 +123,7 @@ export function DNSProvidersCreate({
           placeholder: t('domains.include.placeholder'),
         }}
       />
-      <ResourceForm.TextArrayInput
+      <TextArrayInput
         advanced
         propertyPath="$.spec.domains.exclude"
         title={t('domains.exclude.label')}
@@ -107,3 +135,72 @@ export function DNSProvidersCreate({
     </ResourceForm>
   );
 }
+DNSProvidersCreate.allowEdit = true;
+DNSProvidersCreate.secrets = (t, { features } = {}) => {
+  if (!features?.CUSTOM_DOMAINS?.isEnabled) {
+    return [];
+  }
+  return [
+    {
+      title: 'Amazon Route53',
+      name: 'amazon-route53',
+      data: ['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY'],
+    },
+    {
+      title: 'GoogleCloud DNS',
+      name: 'google-cloud-dns',
+      data: ['serviceaccount.json'],
+    },
+    {
+      title: 'AliCloud DNS',
+      name: 'ali-cloud-dns',
+      data: ['ACCESS_KEY_ID', 'SECRET_ACCESS_KEY'],
+    },
+    {
+      title: 'Azure DNS',
+      name: 'azure-dns',
+      data: [
+        'AZURE_SUBSCRIPTION_ID',
+        'AZURE_TENANT_ID',
+        'AZURE_CLIENT_ID',
+        'AZURE_CLIENT_SECRET',
+      ],
+    },
+    {
+      title: 'OpenStack Designate',
+      name: 'openstack-designate',
+      data: [
+        'OS_AUTH_URL',
+        'OS_DOMAIN_NAME',
+        'OS_PROJECT_NAME',
+        'OS_USERNAME',
+        'OS_PASSWORD',
+        'OS_PROJECT_ID',
+        'OS_REGION_NAME',
+        'OS_TENANT_NAME',
+        'OS_APPLICATION_CREDENTIAL_ID',
+        'OS_APPLICATION_CREDENTIAL_NAME',
+        'OS_APPLICATION_CREDENTIAL_SECRET',
+        'OS_DOMAIN_ID',
+        'OS_USER_DOMAIN_NAME',
+        'OS_USER_DOMAIN_ID',
+      ],
+    },
+    {
+      title: 'Cloudflare DNS',
+      name: 'cloudflare-dns',
+      data: ['CLOUDFLARE_API_TOKEN'],
+    },
+    {
+      title: 'Infoblox',
+      name: 'infoblox',
+      data: ['USERNAME', 'PASSWORD'],
+    },
+    {
+      title: 'Netlify DNS',
+      name: 'netlify-dns',
+      data: ['NETLIFY_AUTH_TOKEN'],
+    },
+  ];
+};
+export { DNSProvidersCreate };

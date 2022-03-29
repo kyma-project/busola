@@ -37,6 +37,10 @@ export function isTLSProtocol(protocol) {
   return protocol === 'HTTPS' || protocol === 'TLS';
 }
 
+export function isHTTPProtocol(protocol) {
+  return protocol === 'HTTP';
+}
+
 export function validateTLS(server) {
   if (!server?.tls) return true;
 
@@ -50,10 +54,11 @@ export function validateTLS(server) {
 }
 
 export function validateGateway(gateway) {
+  const hasName = !!gateway?.metadata?.name;
   const hasServer = gateway?.spec?.servers?.length;
   const hasSelector = Object.keys(gateway?.spec?.selector || {}).length;
   const serversHaveHosts = gateway?.spec?.servers?.every(s => s?.hosts?.length);
   const tlsValid = gateway?.spec?.servers?.every(validateTLS);
 
-  return hasServer && hasSelector && serversHaveHosts && tlsValid;
+  return hasName && hasServer && hasSelector && serversHaveHosts && tlsValid;
 }

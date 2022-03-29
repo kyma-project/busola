@@ -1,0 +1,64 @@
+.resource-form__collapsible-section {
+  background: var(--sapNeutralBackground);
+  display: flex;
+  flex-direction: column;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-top: 1px solid var(--sapList_GroupHeaderBorderColor);
+
+    .control-icon {
+      margin-right: 8px;
+    }
+  }
+
+  &.disabled {
+    header {
+      cursor: unset;
+    }
+  }
+
+  &:last-child > header {
+    border-bottom: 1px solid var(--sapList_GroupHeaderBorderColor);
+  }
+
+  .content {
+    padding: 16px;
+    background: var(--sapPageHeader_Background);
+    flex-grow: 1;
+  }
+
+  .fd-message-strip {
+    min-height: unset;
+    cursor: unset;
+  }
+
+  .fd-message-strip--warning:before {
+    top: 25%;
+  }
+
+  &.required .title-content::after {
+    content: '*';
+    font-size: var(--sapFontSize);
+    font-weight: 700;
+    color: var(--sapField_RequiredColor);
+    margin-left: 4px;
+  }
+
+  .title-content {
+    margin-right: 0.5rem;
+  }
+
+  .info-tooltip {
+    cursor: help;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}

@@ -53,12 +53,12 @@ export default function CreateBindingModal({
         applicationBinding,
       );
       notification.notifySuccess({
-        content: t('applications.messages.created'),
+        content: t('applications.messages.binding-created'),
       });
     } catch (e) {
       console.warn(e);
       notification.notifyError({
-        title: t('applications.messages.create-failed'),
+        title: t('applications.messages.binding-create-failed'),
         content: e.message,
       });
     }
@@ -86,6 +86,8 @@ export default function CreateBindingModal({
         <FormFieldset>
           <FormLabel required>{t('applications.labels.namespace')}</FormLabel>
           <ComboboxInput
+            showAllEntries
+            searchFullString
             id="namespace-bindings-combobox"
             ariaLabel={t('applications.aria.namespace')}
             placeholder={t('applications.labels.namespace')}
@@ -96,7 +98,7 @@ export default function CreateBindingModal({
               text: name,
             }))}
             arrowLabel={t('applications.messages.show-namespaces')}
-            selectionType="auto-inline"
+            selectionType="manual"
             onSelectionChange={(_, selected) =>
               setNamespaceName(
                 typeof selected.key === 'string' ? selected.key : undefined,

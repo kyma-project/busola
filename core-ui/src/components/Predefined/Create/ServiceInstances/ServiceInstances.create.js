@@ -1,61 +1,97 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'fundamental-react';
+import * as jp from 'jsonpath';
 
-import { CreateForm } from 'shared/components/CreateForm/CreateForm';
-import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
+import { ResourceForm } from 'shared/ResourceForm';
 import {
-  serviceInstanceToYaml,
-  yamlToServiceInstance,
-  createServiceInstanceTemplate,
-} from './helpers.js';
-import { SimpleForm } from './SimpleForm';
-import { AdvancedForm } from './AdvancedForm.js';
+  Editor,
+  K8sNameField,
+  KeyValueField,
+} from 'shared/ResourceForm/fields';
+import * as Inputs from 'shared/ResourceForm/inputs';
 
-export function ServiceInstancesCreate(props) {
-  return <ServiceInstancesForm namespaceId={props.namespace} {...props} />;
-}
+import { createServiceInstanceTemplate } from './helpers.js';
 
-function ServiceInstancesForm({ namespaceId, formElementRef, onChange }) {
+export function ServiceInstancesCreate({
+  namespace,
+  formElementRef,
+  onChange,
+  resourceUrl,
+}) {
   const { t } = useTranslation();
   const [serviceInstance, setServiceInstance] = React.useState(
-    createServiceInstanceTemplate(namespaceId),
+    createServiceInstanceTemplate(namespace),
   );
-
-  const createServiceInstance = useCreateResource(
-    'Service Instance',
-    'serviceinstances',
-    serviceInstanceToYaml(serviceInstance),
-    `/apis/services.cloud.sap.com/v1alpha1/namespaces/${namespaceId}/serviceinstances/`,
-  );
-
   return (
-    <CreateForm
-      simpleForm={
-        <SimpleForm
-          serviceInstance={serviceInstance}
-          setServiceInstance={setServiceInstance}
-        />
-      }
-      advancedForm={
-        <AdvancedForm
-          serviceInstance={serviceInstance}
-          setServiceInstance={setServiceInstance}
-        />
-      }
-      modalOpeningComponent={
-        <Button glyph="add">{t('btp-instances.create.title')}</Button>
-      }
+    <ResourceForm
+      className="create-service-instance-form"
+      pluralKind="serviceinstances"
+      singularName={t('btp-instances.name_singular')}
       resource={serviceInstance}
       setResource={setServiceInstance}
-      onClose={() =>
-        setServiceInstance(createServiceInstanceTemplate(namespaceId))
-      }
-      toYaml={serviceInstanceToYaml}
-      fromYaml={yamlToServiceInstance}
-      onCreate={createServiceInstance}
       onChange={onChange}
       formElementRef={formElementRef}
-    />
+      createUrl={resourceUrl}
+    >
+      <K8sNameField
+        propertyPath="$.metadata.name"
+        kind={t('btp-instances.name_singular')}
+        setValue={name => {
+          jp.value(serviceInstance, '$.metadata.name', name);
+          jp.value(
+            serviceInstance,
+            "$.metadata.labels['app.kubernetes.io/name']",
+            name,
+          );
+          setServiceInstance({ ...serviceInstance });
+        }}
+      />
+      <KeyValueField
+        advanced
+        propertyPath="$.metadata.labels"
+        title={t('common.headers.labels')}
+      />
+      <KeyValueField
+        advanced
+        propertyPath="$.metadata.annotations"
+        title={t('common.headers.annotations')}
+      />
+      <ResourceForm.FormField
+        required
+        label={t('btp-instances.offering-name')}
+        propertyPath="$.spec.serviceOfferingName"
+        input={Inputs.Text}
+        tooltipContent={t('btp-instances.tooltips.offering-name')}
+      />
+      <ResourceForm.FormField
+        required
+        label={t('btp-instances.plan-name')}
+        propertyPath="$.spec.servicePlanName"
+        input={Inputs.Text}
+        placeholder={t('btp-instances.placeholders.plan-name')}
+        tooltipContent={t('btp-instances.tooltips.plan-name')}
+      />
+      <ResourceForm.FormField
+        advanced
+        label={t('btp-instances.external-name')}
+        propertyPath="$.spec.externalName"
+        input={Inputs.Text}
+        placeholder={t('btp-instances.placeholders.external-name')}
+      />
+      <ResourceForm.CollapsibleSection
+        advanced
+        title={t('btp-instances.parameters')}
+        resource={serviceInstance}
+        setResource={setServiceInstance}
+      >
+        <Editor
+          propertyPath="$.spec.parameters"
+          language="json"
+          validate={parsed => !!parsed && typeof parsed === 'object'}
+          invalidValueMessage={t('btp-instances.messages.params-invalid')}
+          height="10em"
+        />
+      </ResourceForm.CollapsibleSection>
+    </ResourceForm>
   );
 }

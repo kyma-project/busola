@@ -1,0 +1,42 @@
+.stats-panel {
+  .fd-layout-panel__filters {
+    border: 0;
+    padding: 0;
+  }
+
+  .fd-layout-panel__body {
+    position: relative;
+  }
+
+  .throbber {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .stats-graph {
+    aspect-ratio: 6/1;
+    &.cpu {
+      --bar-color: var(--sapIndicationColor_7);
+    }
+    &.memory {
+      --bar-color: var(--sapIndicationColor_6);
+    }
+    &.network {
+      --bar-color: var(--sapIndicationColor_5) var(--sapIndicationColor_4);
+    }
+  }
+}
+
+.error-message {
+  display: flex;
+  aspect-ratio: 6/1;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+
+  p {
+    font-size: 18px;
+  }
+}

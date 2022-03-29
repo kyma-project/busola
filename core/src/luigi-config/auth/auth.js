@@ -39,7 +39,7 @@ export async function reloadAuth() {
     updateLuigiAuth(null);
   } else {
     // we need to use OIDC flow
-    updateLuigiAuth(createAuth(kubeconfigUser));
+    updateLuigiAuth(createAuth(() => {}, kubeconfigUser));
   }
 }
 
@@ -47,14 +47,7 @@ async function importOpenIdConnect() {
   return (await import('@luigi-project/plugin-auth-oidc')).default;
 }
 
-export const createAuth = async kubeconfigUser => {
-  if (hasNonOidcAuth(kubeconfigUser)) {
-    return null;
-  }
-  if (!kubeconfigUser?.exec) {
-    return null;
-  }
-
+async function createAuth(callback, kubeconfigUser) {
   try {
     const { issuerUrl, clientId, scope } = parseOIDCParams(kubeconfigUser);
 
@@ -69,18 +62,17 @@ export const createAuth = async kubeconfigUser => {
         scope: scope || 'openid',
         response_type: 'code',
         response_mode: 'query',
-        loadUserInfo: false,
-        userInfoFn: (_, authData) => {
-          // rename received "idToken" to keep consistency with kubeconfig "token"
+        userInfoFn: async (_, authData) => {
           setAuthData({ token: authData.idToken });
-          groups = authData.profile['http://k8s/groups'];
+          groups = authData.profile?.['http://k8s/groups'];
+
+          callback();
           return Promise.resolve({
-            name: authData.profile.name,
-            email: authData.profile.email,
+            name: authData.profile?.name || '',
+            email: authData.profile?.email || '',
           });
         },
       },
-
       events: {
         onLogout: () => {
           console.log('onLogout');
@@ -100,4 +92,28 @@ export const createAuth = async kubeconfigUser => {
     console.warn(e);
     alert('Cannot setup OIDC auth: ' + e.message);
   }
-};
+}
+
+export async function clusterLogin(luigiAfterInit) {
+  return new Promise(async resolve => {
+    const params = await getActiveCluster();
+
+    const kubeconfigUser = params?.currentContext.user.user;
+
+    // don't create auth for non OIDC user
+    if (hasNonOidcAuth(kubeconfigUser) || !kubeconfigUser?.exec) {
+      setAuthData(kubeconfigUser);
+      resolve();
+      return;
+    }
+
+    // remove SSO data
+    Luigi.auth().store.removeAuthData();
+    Luigi.unload();
+
+    Luigi.setConfig({
+      auth: await createAuth(resolve, kubeconfigUser),
+      lifecycleHooks: { luigiAfterInit },
+    });
+  });
+}

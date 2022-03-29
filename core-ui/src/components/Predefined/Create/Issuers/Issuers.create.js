@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ResourceForm } from '../../../../shared/ResourceForm/ResourceForm';
 import {
+  createPresets,
   createIssuerTemplate,
   createCATypeTemplate,
   createACMETypeTemplate,
@@ -13,17 +13,27 @@ import { IssuerTypeDropdown } from './IssuerTypeDropdown';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
 import { Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import {
+  TextArrayInput,
+  KeyValueField,
+  K8sNameField,
+} from 'shared/ResourceForm/fields';
 
-export function IssuersCreate({
+function IssuersCreate({
   onChange,
   formElementRef,
   namespace,
+  resource: initialIssuer,
+  resourceUrl,
   setCustomValid,
 }) {
   const { t } = useTranslation();
 
-  const [issuer, setIssuer] = useState(createIssuerTemplate(namespace));
+  const [issuer, setIssuer] = useState(
+    initialIssuer || createIssuerTemplate(namespace),
+  );
   const [issuerType, setIssuerType] = useState('');
 
   React.useEffect(() => {
@@ -31,25 +41,15 @@ export function IssuersCreate({
   }, [issuer, issuerType, setCustomValid]);
 
   React.useEffect(() => {
-    let issuerTypeObject = {};
-    if (issuerType === 'ca') issuerTypeObject = createCATypeTemplate();
-    else if (issuerType === 'acme') issuerTypeObject = createACMETypeTemplate();
-    const spec = jp.value(issuer, '$.spec') || [];
-    delete spec.ca;
-    delete spec.acme;
+    if (issuer.spec.ca) setIssuerType('ca');
+    else if (issuer.spec.acme) setIssuerType('acme');
+    else setIssuerType('');
 
-    setIssuer({
-      ...issuer,
-      spec: {
-        ...spec,
-        ...issuerTypeObject,
-      },
-    });
     // eslint-disable-next-line
-  }, [issuerType, setIssuerType]);
+  }, [issuer, setIssuer]);
 
   const issuerCAFields = () => {
-    if (!issuerType || issuerType !== 'ca') return <></>;
+    if (!issuerType || issuerType !== 'ca') return undefined;
     if (issuerType === 'ca') {
       return (
         <SecretRef
@@ -57,20 +57,16 @@ export function IssuersCreate({
           className={'fd-margin-top--sm'}
           id="secret-ref-ca-input"
           key="secret-ref-ca-input"
-          resourceRef={jp.value(issuer, '$.spec.ca.privateKeySecretRef') || {}}
+          propertyPath="$.spec.ca.privateKeySecretRef"
           title={t('issuers.private-key')}
           tooltipContent={t('issuers.tooltips.secret-ref-ca')}
-          onChange={value => {
-            jp.value(issuer, '$.spec.ca.privateKeySecretRef', value);
-            setIssuer({ ...issuer });
-          }}
         />
       );
     }
   };
 
   const issuerSimpleACMEFields = () => {
-    if (!issuerType || issuerType !== 'acme') return <></>;
+    if (!issuerType || issuerType !== 'acme') return undefined;
     if (issuerType === 'acme') {
       return [
         <ResourceForm.FormField
@@ -96,7 +92,7 @@ export function IssuersCreate({
   };
 
   const issuerAdvancedACMEFields = () => {
-    if (!issuerType || issuerType !== 'acme') return <></>;
+    if (!issuerType || issuerType !== 'acme') return undefined;
     if (issuerType === 'acme') {
       return [
         <ResourceForm.FormField
@@ -128,15 +124,9 @@ export function IssuersCreate({
           advanced
           id="secret-ref-acme-input"
           key="secret-ref-acme-input"
-          resourceRef={
-            jp.value(issuer, '$.spec.acme.privateKeySecretRef') || {}
-          }
+          propertyPath="$.spec.acme.privateKeySecretRef"
           title={t('issuers.private-key')}
           tooltipContent={t('issuers.tooltips.secret-ref-acme')}
-          onChange={value => {
-            jp.value(issuer, '$.spec.acme.privateKeySecretRef', value);
-            setIssuer({ ...issuer });
-          }}
           required={!jp.value(issuer, '$.spec.acme.autoRegistration')}
           actions={
             <Checkbox
@@ -156,7 +146,7 @@ export function IssuersCreate({
             </Checkbox>
           }
         />,
-        <ResourceForm.TextArrayInput
+        <TextArrayInput
           key="domains-simple-include"
           simple
           propertyPath="$.spec.acme.domains.include"
@@ -167,7 +157,7 @@ export function IssuersCreate({
           }}
           className={'fd-margin-top--sm'}
         />,
-        <ResourceForm.TextArrayInput
+        <TextArrayInput
           key="domains-include"
           advanced
           propertyPath="$.spec.acme.domains.include"
@@ -177,7 +167,7 @@ export function IssuersCreate({
             placeholder: t('domains.include.placeholder'),
           }}
         />,
-        <ResourceForm.TextArrayInput
+        <TextArrayInput
           key="domains-exclude"
           advanced
           propertyPath="$.spec.acme.domains.exclude"
@@ -228,15 +218,10 @@ export function IssuersCreate({
             advanced
             id="externalAccountBinding"
             key="externalAccountBinding"
-            resourceRef={
-              jp.value(
-                issuer,
-                '$.spec.acme.externalAccountBinding.keySecretRef',
-              ) || {}
-            }
+            propertyPath="$.spec.acme.externalAccountBinding.keySecretRef"
             title={t('issuers.external-account.secret')}
             tooltipContent={t('issuers.tooltips.key-secret-ref')}
-            onChange={value => {
+            setValue={value => {
               const externalAccountBinding = createExternalAccountBinding({
                 keySecretRef: value,
                 keyId: jp.value(
@@ -269,19 +254,32 @@ export function IssuersCreate({
       pluralKind="issuers"
       singularName={t('issuers.name_singular')}
       resource={issuer}
+      initialResource={initialIssuer}
       setResource={setIssuer}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={`/apis/cert.gardener.cloud/v1alpha1/namespaces/${namespace}/issuers/`}
+      presets={createPresets(namespace, t)}
+      createUrl={resourceUrl}
     >
-      <ResourceForm.K8sNameField
+      <K8sNameField
         propertyPath="$.metadata.name"
+        readOnly={!!initialIssuer}
         kind={t('issuers.name_singular')}
-        customSetValue={name => {
+        setValue={name => {
           jp.value(issuer, '$.metadata.name', name);
           jp.value(issuer, "$.metadata.labels['app.kubernetes.io/name']", name);
           setIssuer({ ...issuer });
         }}
+      />
+      <KeyValueField
+        advanced
+        propertyPath="$.metadata.labels"
+        title={t('common.headers.labels')}
+      />
+      <KeyValueField
+        advanced
+        propertyPath="$.metadata.annotations"
+        title={t('common.headers.annotations')}
       />
       <ResourceForm.FormField
         label={t('issuers.type')}
@@ -289,7 +287,20 @@ export function IssuersCreate({
         required
         value={issuerType}
         setValue={type => {
-          setIssuerType(type);
+          let issuerTypeObject = {};
+          if (type === 'ca') issuerTypeObject = createCATypeTemplate();
+          else if (type === 'acme') issuerTypeObject = createACMETypeTemplate();
+          const spec = jp.value(issuer, '$.spec') || [];
+          delete spec.ca;
+          delete spec.acme;
+
+          setIssuer({
+            ...issuer,
+            spec: {
+              ...spec,
+              ...issuerTypeObject,
+            },
+          });
         }}
         input={({ value, setValue }) => (
           <IssuerTypeDropdown type={value} setType={setValue} />
@@ -306,8 +317,8 @@ export function IssuersCreate({
         key={t('issuers.requests-per-day')}
         propertyPath="$.spec.requestsPerDayQuota"
         tooltipContent={t('issuers.tooltips.requests')}
-        placeholder={t('issuers.placeholders.requests-per-day')}
         input={Inputs.Number}
+        min={0}
       />
 
       {issuerAdvancedACMEFields()}
@@ -315,3 +326,5 @@ export function IssuersCreate({
     </ResourceForm>
   );
 }
+IssuersCreate.allowEdit = true;
+export { IssuersCreate };

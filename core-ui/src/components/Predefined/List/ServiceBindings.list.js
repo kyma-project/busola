@@ -3,15 +3,21 @@ import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'fundamental-react';
 import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
-import { ControlledByKind } from 'react-shared';
+import {
+  ControlledByKind,
+  Link as ReactSharedLink,
+  ResourcesList,
+} from 'react-shared';
+import { ServiceBindingsCreate } from '../Create/ServiceBindings/ServiceBindings.create';
+import { Trans } from 'react-i18next';
 
-export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
+const ServiceBindingsList = props => {
   const { t } = useTranslation();
 
   const navigateToInstance = instanceName =>
     LuigiClient.linkManager()
       .fromContext('namespace')
-      .navigate(`/btp-instances/details/${instanceName}`);
+      .navigate(`/serviceinstances/details/${instanceName}`);
 
   const customColumns = [
     {
@@ -38,16 +44,33 @@ export const ServiceBindingsList = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('common.headers.status'),
-      value: resource => <BTPResourceStatus status={resource.status} />,
+      value: resource => (
+        <BTPResourceStatus
+          status={resource.status}
+          resourceKind="btp-instances"
+        />
+      ),
     },
   ];
 
+  const description = (
+    <Trans i18nKey="btp-service-bindings.description">
+      <ReactSharedLink
+        className="fd-link"
+        url="https://github.com/SAP/sap-btp-service-operator#step-2-create-a-service-binding"
+      />
+    </Trans>
+  );
+
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       resourceName={t('btp-service-bindings.title')}
       textSearchProperties={['spec.serviceInstanceName', 'spec.externalName']}
-      {...otherParams}
+      description={description}
+      createResourceForm={ServiceBindingsCreate}
+      {...props}
     />
   );
 };
+export default ServiceBindingsList;

@@ -1,8 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
+import { Link, ResourcesList } from 'react-shared';
+import { Trans } from 'react-i18next';
+import { ServiceInstancesCreate } from '../Create/ServiceInstances/ServiceInstances.create';
 
-export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
+const ServiceInstancesList = props => {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -20,12 +23,26 @@ export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
     },
     {
       header: t('common.headers.status'),
-      value: resource => <BTPResourceStatus status={resource.status} />,
+      value: resource => (
+        <BTPResourceStatus
+          status={resource.status}
+          resourceKind="btp-instances"
+        />
+      ),
     },
   ];
 
+  const description = (
+    <Trans i18nKey="btp-instances.description">
+      <Link
+        className="fd-link"
+        url="https://github.com/SAP/sap-btp-service-operator#step-1-create-a-service-instance"
+      />
+    </Trans>
+  );
+
   return (
-    <DefaultRenderer
+    <ResourcesList
       customColumns={customColumns}
       resourceName={t('btp-instances.title')}
       textSearchProperties={[
@@ -33,7 +50,10 @@ export const ServiceInstancesList = ({ DefaultRenderer, ...otherParams }) => {
         'spec.servicePlanName',
         'spec.externalName',
       ]}
-      {...otherParams}
+      description={description}
+      createResourceForm={ServiceInstancesCreate}
+      {...props}
     />
   );
 };
+export default ServiceInstancesList;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import {
+  ComboboxInput,
   FormItem,
   FormInput,
   FormLabel,
@@ -31,7 +32,7 @@ export default function ResourceVariableInput({
 }) {
   const { t, i18n } = useTranslation();
   const [variable, setVariable] = useState(currentVariable);
-  const [debouncedCallback] = useDebouncedCallback(newVariable => {
+  const debouncedCallback = useDebouncedCallback(newVariable => {
     onUpdateVariable(newVariable);
   }, 200);
 
@@ -185,7 +186,7 @@ export default function ResourceVariableInput({
     text: metadata.name,
   }));
 
-  const resourceKeysOptions = Object.keys(selectedResource.data || []).map(
+  const resourceKeysOptions = Object.keys(selectedResource?.data || []).map(
     key => ({
       key: key,
       text: key,
@@ -220,16 +221,20 @@ export default function ResourceVariableInput({
             <FormLabel required={true}>
               {t('functions.variable.form.secret')}
             </FormLabel>
-            <Dropdown
+            <ComboboxInput
+              showAllEntries
+              searchFullString
+              selectionType="manual"
+              required
               id={`variableValueFromSecret-${currentVariable.id}`}
               options={resourceOptions}
-              onSelect={(_, selected) => {
+              onSelectionChange={(_, selected) => {
                 setSelectedResource(
-                  getCurrentResource(selected.key, resources),
+                  getCurrentResource(selected?.key, resources),
                 );
                 onChangeValueFrom({
                   secretKeyRef: {
-                    name: selected.key,
+                    name: selected?.key,
                     key: null,
                   },
                 });
@@ -237,7 +242,6 @@ export default function ResourceVariableInput({
               selectedKey={
                 currentVariable?.valueFrom?.secretKeyRef?.name || null
               }
-              i18n={i18n}
             />
           </FormItem>
           <FormItem className="grid-input-fields">

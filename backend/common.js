@@ -7,7 +7,7 @@ import { handleDockerDesktopSubsitution } from './docker-desktop-substitution';
 import { filters } from './request-filters';
 
 const logger = require('pino-http')({
-  autoLogging: process.env.NODE_ENV === 'production', //to disable the automatic "request completed" and "request errored" logging.
+  autoLogging: process.env.NODE_ENV !== 'production', //to disable the automatic "request completed" and "request errored" logging.
   genReqId: req => {
     req.id = uuid();
     return req.id;
@@ -69,10 +69,14 @@ export const handleRequest = async (req, res) => {
 
   const { targetApiServer, ca, cert, key, authorization } = headersData;
 
+  const headers = authorization
+    ? { ...req.headers, authorization }
+    : req.headers;
+
   const options = {
     hostname: targetApiServer.hostname,
     path: req.originalUrl.replace(/^\/backend/, ''),
-    headers: { ...req.headers, authorization },
+    headers,
     body: req.body,
     method: req.method,
     port: targetApiServer.port || 443,

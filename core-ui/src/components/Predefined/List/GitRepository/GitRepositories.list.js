@@ -1,32 +1,36 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import CreateNewRepository from './CreateNewRepository';
-import { StatusBadge } from 'react-shared';
+import {
+  StatusBadge,
+  EMPTY_TEXT_PLACEHOLDER,
+  Link as ReactSharedLink,
+  ResourcesList,
+} from 'react-shared';
 import { Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
+import { GitRepositoriesCreate } from '../../Create/GitRepositories/GitRepositories.create';
 
-export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
+const GitRepositoriesList = props => {
   const { t, i18n } = useTranslation();
-
-  const listActions = (
-    <CreateNewRepository namespaceName={otherParams.resourceName} i18n={i18n} />
-  );
 
   const customColumns = [
     {
-      header: t('git-repositories.headers.url'),
+      header: t('git-repositories.labels.url'),
       value: repo => repo.spec.url,
     },
     {
-      header: t('git-repositories.headers.authentication'),
+      header: t('git-repositories.labels.auth'),
       value: repo => (
-        <StatusBadge type="info">{repo.spec.auth?.type || 'none'}</StatusBadge>
+        <StatusBadge i18n={i18n} resourceKind="git-repositories" type="info">
+          {repo.spec.auth?.type || 'none'}
+        </StatusBadge>
       ),
     },
     {
-      header: t('git-repositories.headers.secret'),
+      header: t('git-repositories.labels.secret'),
       value: repo => {
-        if (!repo.spec.auth) return '-';
+        if (!repo.spec.auth) return EMPTY_TEXT_PLACEHOLDER;
         const secretName = repo.spec.auth.secretName;
         return (
           <Link
@@ -44,11 +48,24 @@ export const GitRepositoriesList = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const description = (
+    <Trans i18nKey="git-repositories.description">
+      <ReactSharedLink
+        className="fd-link"
+        url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/svls-02-gitrepository#documentation-content"
+      />
+    </Trans>
+  );
+
   return (
-    <DefaultRenderer
-      listHeaderActions={listActions}
+    <ResourcesList
       customColumns={customColumns}
-      {...otherParams}
+      createActionLabel={t('git-repositories.labels.create')}
+      description={description}
+      createResourceForm={GitRepositoriesCreate}
+      {...props}
     />
   );
 };
+
+export default GitRepositoriesList;

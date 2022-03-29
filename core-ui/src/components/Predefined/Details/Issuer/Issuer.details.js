@@ -1,11 +1,12 @@
 import React from 'react';
+import { ResourceStatus, ResourceDetails } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
 import { IssuerDomains } from './IssuerDomains';
-import { IssuerStatus } from './IssuerStatus';
+import { IssuersCreate } from '../../Create/Issuers/Issuers.create';
 
-export function IssuersDetails({ DefaultRenderer, ...otherParams }) {
-  const { t } = useTranslation();
+function IssuersDetails(props) {
+  const { t, i18n } = useTranslation();
 
   const customColumns = [
     {
@@ -14,7 +15,13 @@ export function IssuersDetails({ DefaultRenderer, ...otherParams }) {
     },
     {
       header: t('issuers.state'),
-      value: issuer => <IssuerStatus status={issuer.status} />,
+      value: issuer => (
+        <ResourceStatus
+          status={issuer.status}
+          resourceKind="issuers"
+          i18n={i18n}
+        />
+      ),
     },
     {
       header: t('issuers.server'),
@@ -23,10 +30,13 @@ export function IssuersDetails({ DefaultRenderer, ...otherParams }) {
   ];
 
   return (
-    <DefaultRenderer
+    <ResourceDetails
       customColumns={customColumns}
       customComponents={[IssuerDomains]}
-      {...otherParams}
-    ></DefaultRenderer>
+      createResourceForm={IssuersCreate}
+      {...props}
+    />
   );
 }
+
+export default IssuersDetails;
