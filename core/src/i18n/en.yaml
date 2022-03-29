@@ -258,15 +258,18 @@ certificates:
   state: Status
   title: Certificates
   tooltips:
+    close-expiration: Certificate will expire in less than one day
     common-name: Common Name is the primary domain name of the certificate.
     csr: Certificate Signing Request is an alternative way to provide common name, DNS names, and other information.
     dns-names: DNS Names are the optional additional domain names of the certificate.
     existing-secret: Use an existing Secret for storing the certificate if enabled. Otherwise a new Secret will be created.
+    expired: Certificate expired
     issuer: Certificate issuer. If no issuer is given, the default issuer is used.
     ready: Certificate issued
     renew: Trigger a certificate renewal if enabled.
     secret-name: Name of the Secret object to use for storing the certificate.
     secret-ref: Reference of the existing Secret object to use for storing the certificate.
+    will-expire: Certificate will expire in {{daysToExpire}} {{daysForm}}
     with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
   with-csr: Use a CSR
 cluster-addons:
@@ -547,7 +550,7 @@ common:
     duplicate-key: Duplicate key
     error: Error
     hide: Hide Read-Only Fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     read-file: Read file content as a single value, with file name as a key.
@@ -1422,7 +1425,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright

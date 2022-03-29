@@ -11,7 +11,6 @@ export const FormattedDatetime = ({ date, lang }) => {
       timeStyle: 'short',
     }).format(Date.parse(date));
   } catch {
-    console.log(date);
     return 'Unknown date';
   }
 };

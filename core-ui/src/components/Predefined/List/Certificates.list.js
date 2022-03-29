@@ -14,24 +14,43 @@ import { IssuerLink } from '../Details/Certificate/IssuerLink';
 import { Icon } from 'fundamental-react';
 
 const ExpirationDate = ({ date, lang }) => {
+  const { t } = useTranslation();
   const currentDate = Date.now();
+  const dayInMilliseconds = 1000 * 60 * 60 * 24;
+  const dateDifference = (Date.parse(date) - currentDate) / dayInMilliseconds;
+  const EXPIRATION_LIMIT = 30;
 
-  const dateDifference = Date.parse(date) - currentDate;
+  if (dateDifference > EXPIRATION_LIMIT)
+    return <FormattedDatetime date={date} lang={lang} />;
+
   let certificateDetails = {};
-  const dayInMiliseconds = 1000 * 60 * 60 * 24;
 
   if (dateDifference < 0) {
     certificateDetails = {
-      tooltipContent: 'Certificate expired',
+      tooltipContent: t('certificates.tooltips.expired'),
       ariaLabel: 'Error',
-      glyph: 'message-error',
+      glyph: 'message-warning',
       colorIndex: '3',
     };
-  } else if (dateDifference < 30 * dayInMiliseconds && dateDifference > 0) {
+  } else if (dateDifference < EXPIRATION_LIMIT && dateDifference > 0) {
+    let tooltipContent;
+
+    if (dateDifference < 1)
+      tooltipContent = t('certificates.tooltips.close-expiration');
+    else if (Math.floor(dateDifference) === 1)
+      tooltipContent = t('certificates.tooltips.will-expire', {
+        daysToExpire: 1,
+        daysForm: 'day',
+      });
+    else {
+      tooltipContent = t('certificates.tooltips.will-expire', {
+        daysToExpire: Math.floor(dateDifference),
+        daysForm: 'days',
+      });
+    }
+
     certificateDetails = {
-      tooltipContent: `Certificate will expire in ${Math.floor(
-        dateDifference / dayInMiliseconds,
-      )} days`,
+      tooltipContent,
       ariaLabel: 'Warning',
       glyph: 'message-warning',
       colorIndex: '2',
@@ -70,7 +89,8 @@ const CertificatesList = props => {
   const customColumns = [
     {
       header: t('certificates.common-name'),
-      value: certificate => certificate.status?.commonName || '-',
+      value: certificate =>
+        certificate.status?.commonName || EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('certificates.issuer'),
