@@ -50,9 +50,9 @@ setupJWTCheck(app);
 let server = null;
 
 if (
-  process.env.BUSOLA_SSL_ENABLED == 1 && 
-  process.env.BUSOLA_SSL_KEY_FILE != "" && 
-  process.env.BUSOLA_SSL_CRT_FILE != ""
+  process.env.BUSOLA_SSL_ENABLED == 1 &&
+  process.env.BUSOLA_SSL_KEY_FILE != '' &&
+  process.env.BUSOLA_SSL_CRT_FILE != ''
 ) {
   const https = require('https');
   const fs = require('fs');
