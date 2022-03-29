@@ -23,7 +23,7 @@ export function CertificateDate({ date, lang }) {
       glyph: 'message-warning',
       colorIndex: '3',
     };
-  } else if (dateDifference < EXPIRATION_LIMIT && dateDifference > 0) {
+  } else if (dateDifference < EXPIRATION_LIMIT) {
     let tooltipContent;
 
     if (dateDifference < 1)
