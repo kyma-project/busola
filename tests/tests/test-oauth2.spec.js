@@ -23,7 +23,7 @@ context('Test OAuth2 Clients', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="OAuth2 Client name"]')
+      .find('[ariaLabel="OAuth2 Client name"]')
       .clear()
       .type(CLIENT_NAME);
 
@@ -36,7 +36,8 @@ context('Test OAuth2 Clients', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="OAuth2 scope"]')
+      .find('[ariaLabel="OAuth2 Client scope"]')
+      .first()
       .clear()
       .type('openid', {
         //for unknown reason Cypress can lose 'e' when typing openid, therefore slowing down the typing

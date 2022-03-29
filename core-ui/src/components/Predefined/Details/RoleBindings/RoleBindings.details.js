@@ -4,12 +4,26 @@ import { useTranslation } from 'react-i18next';
 import { RoleSubjects } from './RoleSubjects.js';
 import { RoleRef } from './RoleRef';
 
+import './RoleBindingsDetails.scss';
+
 export function RoleBindingsDetails(props) {
-  return <GenericRoleBindingDetails {...props} />;
+  const { t } = useTranslation();
+  return (
+    <GenericRoleBindingDetails
+      resourceTitle={t('role-bindings.title')}
+      {...props}
+    />
+  );
 }
 
 export function ClusterRoleBindingsDetails(props) {
-  return <GenericRoleBindingDetails {...props} />;
+  const { t } = useTranslation();
+  return (
+    <GenericRoleBindingDetails
+      resourceTitle={t('cluster-role-bindings.title')}
+      {...props}
+    />
+  );
 }
 
 function GenericRoleBindingDetails({ DefaultRenderer, ...otherParams }) {

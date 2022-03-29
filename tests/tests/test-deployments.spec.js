@@ -23,7 +23,7 @@ context('Test Deployments', () => {
       .click({ force: true });
 
     cy.getIframeBody()
-      .find('[placeholder="Deployment name"]:visible')
+      .find('[ariaLabel="Deployment name"]:visible')
       .clear()
       .type(DEPLOYMENT_NAME);
 

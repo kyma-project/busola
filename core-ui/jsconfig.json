@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "paths": {
+      "helpers/*": ["./service-catalog-ui/helpers/*"],
+      "shared/*": ["./shared/*"]
+    }
   },
   "include": ["src"]
 }

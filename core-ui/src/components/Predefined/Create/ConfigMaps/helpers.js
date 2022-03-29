@@ -1,8 +1,3 @@
-import { getResourceDefs } from 'shared/helpers/getResourceDefs';
-
-export const getConfigMapDefs = (t, context) =>
-  getResourceDefs('configMaps', t, context);
-
 export function createConfigMapTemplate(namespace) {
   return {
     apiVersion: 'v1',

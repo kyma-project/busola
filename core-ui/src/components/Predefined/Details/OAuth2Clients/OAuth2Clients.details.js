@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next';
 
 import { useGet } from 'react-shared';
 
+import './OAuth2ClientsDetails.scss';
+
 function SecretComponent({ namespaceName, secretName }) {
   const { t } = useTranslation();
   const { data: secret, error, loading = true } = useGet(
@@ -43,6 +45,7 @@ export const OAuth2ClientsDetails = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
+      resourceTitle={t('oauth2-clients.title')}
       customColumns={[statusColumn]}
       customComponents={[Configuration, Secret]}
       {...otherParams}

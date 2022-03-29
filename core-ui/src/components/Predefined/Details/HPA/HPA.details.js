@@ -10,6 +10,8 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 
+import './HorizontalPodAutoscalersDetails.scss';
+
 export function HorizontalPodAutoscalersDetails({
   DefaultRenderer,
   ...otherParams
@@ -119,7 +121,7 @@ export function HorizontalPodAutoscalersDetails({
   );
   return (
     <DefaultRenderer
-      resourceName={t('hpas.name_singular')}
+      resourceTitle={t('hpas.title')}
       customColumns={customColumns}
       customComponents={[HPASpec, HPAMetrics, Events]}
       {...otherParams}

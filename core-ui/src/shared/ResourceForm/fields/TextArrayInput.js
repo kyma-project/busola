@@ -14,6 +14,7 @@ export function TextArrayInput({
   toExternal = value => value.filter(val => typeof val === 'string'),
   readOnly,
   customFormatFn,
+  ariaLabel,
   ...props
 }) {
   const { validate, ...inputProps } = _inputProps || {};
@@ -56,6 +57,7 @@ export function TextArrayInput({
             }}
             readOnly={readOnly}
             {...inputProps}
+            ariaLabel={ariaLabel}
           />
         ),
       ]}

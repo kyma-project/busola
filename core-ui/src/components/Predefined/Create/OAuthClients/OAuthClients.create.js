@@ -152,7 +152,7 @@ const OAuth2ClientsCreate = ({
           typeof value === 'string' ? value.split(' ') : value
         }
         customFormatFn={arr => arr.join(' ')}
-        placeholder={t('oauth2-clients.placeholders.scope')}
+        ariaLabel={t('oauth2-clients.aria-labels.scope')}
       />
       <TextArrayInput
         advanced
@@ -182,4 +182,14 @@ OAuth2ClientsCreate.secrets = (t, context) => [
     data: ['client_id', 'client_secret'],
   },
 ];
+OAuth2ClientsCreate.resourceGraphConfig = (t, context) => ({
+  relations: [
+    {
+      kind: 'Secret',
+    },
+  ],
+  matchers: {
+    Secret: (client, secret) => client.spec.secretName === secret.metadata.name,
+  },
+});
 export { OAuth2ClientsCreate };

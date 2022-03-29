@@ -58,7 +58,7 @@ export const HPASubcomponent = props => {
           onClick={() =>
             navigateToResource({
               name: hpa.metadata.name,
-              kind: 'hpa',
+              kind: 'horizontalpodautoscaler',
               namespace: namespaceId,
             })
           }

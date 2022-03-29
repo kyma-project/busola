@@ -27,6 +27,7 @@ export const ConfigMapsList = ({ DefaultRenderer, ...otherParams }) => {
 
   return (
     <DefaultRenderer
+      resourceName={t('config-maps.title')}
       customColumns={customColumns}
       description={description}
       {...otherParams}

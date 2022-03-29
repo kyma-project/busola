@@ -13,6 +13,7 @@ import {
   PageHeader,
   SearchInput,
   useNotification,
+  LogsLink,
 } from 'react-shared';
 import { useTranslation } from 'react-i18next';
 
@@ -209,6 +210,13 @@ export const ContainersLogs = ({ params }) => {
             >
               {t('pods.labels.reverse-logs')}
             </Switch>
+            <LogsLink
+              className="fd-margin-begin--tiny"
+              i18n={i18n}
+              query={`{namespace="${params.namespace}",pod="${params.podName}",container="${params.containerName}"}`}
+            >
+              {t('grafana.open-in-grafana')}
+            </LogsLink>
             <Button
               disabled={!logsToSave?.length}
               className="logs-download"

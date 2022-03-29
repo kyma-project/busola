@@ -3,7 +3,7 @@ export * from './Deployment/Deployment.details';
 export * from './Pod/Pod.details';
 export * from './ReplicaSet/Replicaset.details';
 export * from './Namespace/Namespace.details';
-export * from './Function.details';
+export * from './Function/Function.details';
 export * from './Secret/Secret.details';
 export * from './Service/Service.details.js';
 export * from './Application/Application.details.js';

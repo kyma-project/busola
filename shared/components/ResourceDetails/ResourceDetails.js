@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
+import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'fundamental-react';
 import { createPatch } from 'rfc6902';
@@ -28,6 +29,7 @@ import {
   useDeleteResource,
 } from '../../hooks';
 import { ModalWithForm } from '../ModalWithForm/ModalWithForm';
+import { ResourceGraph } from '../ResourceGraph/ResourceGraph';
 
 ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
@@ -74,7 +76,7 @@ function ResourceDetailsRenderer(props) {
   if (error) {
     const breadcrumbItems = props.breadcrumbs || [
       {
-        name: props.resourceType,
+        name: prettifyNamePlural(props.resourceTitle || props.resourceType),
         path: '/',
         fromContext: props.resourceType.toLowerCase(),
       },
@@ -83,7 +85,10 @@ function ResourceDetailsRenderer(props) {
     if (error.code === 404) {
       return (
         <ResourceNotFound
-          resource={prettifyNameSingular(undefined, props.resourceType)}
+          resource={prettifyNameSingular(
+            props.resourceTitle,
+            props.resourceType,
+          )}
           breadcrumbs={breadcrumbItems}
           i18n={props.i18n}
         />
@@ -91,7 +96,7 @@ function ResourceDetailsRenderer(props) {
     }
     return (
       <ResourceNotFound
-        resource={prettifyNameSingular(undefined, props.resourceType)}
+        resource={prettifyNameSingular(props.resourceTitle, props.resourceType)}
         breadcrumbs={breadcrumbItems}
         customMessage={getErrorMessage(error)}
         i18n={props.i18n}
@@ -135,11 +140,15 @@ function Resource({
   updateResourceMutation,
   windowTitle,
   resourceTitle,
+  resourceGraphConfig,
 }) {
   const { t } = useTranslation(['translation'], { i18n });
-  useWindowTitle(
-    windowTitle || resourceTitle || prettifyNamePlural(null, resourceType),
+  const prettifiedResourceKind = prettifyNameSingular(
+    resourceTitle,
+    resource.kind,
   );
+  const pluralizedResourceKind = pluralize(prettifiedResourceKind);
+  useWindowTitle(windowTitle || pluralizedResourceKind);
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
@@ -151,13 +160,11 @@ function Resource({
   const { setEditedYaml: setEditedSpec } = useYamlEditor();
   const notification = useNotification();
 
-  const prettifiedResourceName = prettifyNameSingular(undefined, resourceType);
-
   const breadcrumbItems = breadcrumbs || [
     {
-      name: resourceTitle || prettifyNamePlural(null, resourceType),
+      name: pluralizedResourceKind,
       path: '/',
-      fromContext: resourceType.toLowerCase(),
+      fromContext: pluralize(resource.kind).toLowerCase(),
     },
     { name: '' },
   ];
@@ -190,14 +197,14 @@ function Resource({
           title={
             editActionLabel ||
             t('components.resource-details.edit', {
-              resourceType: prettifiedResourceName,
+              resourceType: prettifiedResourceKind,
             })
           }
           modalOpeningComponent={
             <Button className="fd-margin-end--tiny" option="emphasized">
               {editActionLabel ||
                 t('components.resource-details.edit', {
-                  resourceType: prettifiedResourceName,
+                  resourceType: prettifiedResourceKind,
                 })}
             </Button>
           }
@@ -256,14 +263,14 @@ function Resource({
       silentRefetch();
       notification.notifySuccess({
         content: t('components.resource-details.messages.success', {
-          resourceType: prettifiedResourceName,
+          resourceType: prettifiedResourceKind,
         }),
       });
     } catch (e) {
       console.error(e);
       notification.notifyError({
         content: t('components.resource-details.messages.failure', {
-          resourceType: prettifiedResourceName,
+          resourceType: prettifiedResourceKind,
           error: e.message,
         }),
       });
@@ -301,6 +308,13 @@ function Resource({
       <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
       {customComponents.map(component => component(resource, resourceUrl))}
       {children}
+      {resourceGraphConfig?.[resource.kind] && (
+        <ResourceGraph
+          resource={resource}
+          i18n={i18n}
+          config={resourceGraphConfig}
+        />
+      )}
     </>
   );
 }

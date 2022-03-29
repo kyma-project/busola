@@ -2,9 +2,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ControlledBy } from 'react-shared';
 
-import { ResourcePods } from '../ResourcePods';
 import { StatefulSetPods } from './StatefulSetPods';
 import { HPASubcomponent } from '../HPA/HPASubcomponent';
+import { Selector } from 'shared/components/Selector/Selector';
 
 export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
   const { t } = useTranslation();
@@ -22,10 +22,19 @@ export function StatefulSetsDetails({ DefaultRenderer, ...otherParams }) {
     },
   ];
 
+  const MatchSelector = statefulset => (
+    <Selector
+      namespace={statefulset.metadata.namespace}
+      labels={statefulset.spec?.selector?.matchLabels}
+      selector={statefulset.spec?.selector}
+      expressions={statefulset.spec?.selector?.matchExpressions}
+    />
+  );
   return (
     <DefaultRenderer
+      resourceTitle={t('stateful-sets.title')}
       customColumns={customColumns}
-      customComponents={[ResourcePods, HPASubcomponent]}
+      customComponents={[HPASubcomponent, MatchSelector]}
       {...otherParams}
     />
   );

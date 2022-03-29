@@ -6,7 +6,7 @@ import {
   GenericList,
   EMPTY_TEXT_PLACEHOLDER,
 } from 'react-shared';
-import { ResourcePods } from '../ResourcePods.js';
+import { Selector } from 'shared/components/Selector/Selector';
 import { DaemonSetStatus } from './DaemonSetStatus';
 
 const Tolerations = resource => {
@@ -87,15 +87,21 @@ export const DaemonSetsDetails = ({ DefaultRenderer, ...otherParams }) => {
     },
   ];
 
+  const MatchSelector = daemonSet => (
+    <Selector
+      namespace={daemonSet.metadata.namespace}
+      labels={daemonSet.spec?.selector?.matchLabels}
+      expressions={daemonSet.spec?.selector?.matchExpressions}
+      selector={daemonSet.spec?.selector}
+    />
+  );
+
   return (
     <DefaultRenderer
-      customComponents={[
-        Tolerations,
-        Images,
-        resource => ResourcePods(resource, null, true),
-      ]}
+      resourceTitle={t('daemon-sets.title')}
+      customComponents={[Tolerations, Images, MatchSelector]}
       customColumns={customColumns}
       {...otherParams}
-    ></DefaultRenderer>
+    />
   );
 };

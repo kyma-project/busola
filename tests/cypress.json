@@ -16,8 +16,8 @@
   "experimentalInteractiveRunEvents": true,
   "testFiles": [
     "run-before.spec.js",
-    "run-prepare-functions.spec.js",
     "test-namespace-overview.spec.js",
+    "run-prepare-functions.spec.js",
     "test-edit-cluster.spec.js",
     "test-applications.spec.js",
     "test-deployments.spec.js",

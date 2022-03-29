@@ -1,6 +1,55 @@
 import { randomNamesGenerator } from './randomNamesGenerator/randomNamesGenerator';
 import pluralize from 'pluralize';
 
+// ownerSelector should be a subset of labels
+export function matchBySelector(ownerSelector, labels) {
+  if (!ownerSelector || !labels) return false;
+  for (const [key, value] of Object.entries(ownerSelector)) {
+    if (labels?.[key] !== value) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export function matchByOwnerReference({ resource, owner }) {
+  return resource.metadata.ownerReferences?.some(
+    oR => oR.kind === owner.kind && oR.name === owner.metadata.name,
+  );
+}
+
+export function getApiPath(resourceType, nodes) {
+  const matchedNode = nodes.find(
+    n =>
+      n.resourceType === resourceType || n.navigationContext === resourceType,
+  );
+  try {
+    const url = new URL(matchedNode?.viewUrl);
+    return url.searchParams.get('resourceApiPath');
+  } catch (e) {
+    return null;
+  }
+}
+
+export function findCommonPrefix(initialPrefix, words) {
+  if (!words?.length) {
+    return initialPrefix;
+  }
+
+  words.sort();
+  const first = words[0];
+  const last = words[words.length - 1];
+  let biggestCommonPrefix = initialPrefix;
+  while (
+    first[biggestCommonPrefix.length] &&
+    first[biggestCommonPrefix.length] === last[biggestCommonPrefix.length]
+  ) {
+    biggestCommonPrefix += first[biggestCommonPrefix.length];
+  }
+
+  return biggestCommonPrefix;
+}
+
 export function formatMessage(message = '', variables = {}) {
   const serializedVariables = {};
   for (let [key, value] of Object.entries(variables)) {
@@ -42,7 +91,7 @@ export function isPrimitive(type = null) {
 }
 
 const capitalize = str => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  return str?.charAt(0)?.toUpperCase() + str?.slice(1);
 };
 
 const splitName = name => {
@@ -51,7 +100,7 @@ const splitName = name => {
 };
 
 export const prettifyNamePlural = (resourceName, resourceType) => {
-  return resourceName || splitName(capitalize(resourceType));
+  return capitalize(resourceName) || splitName(capitalize(resourceType));
 };
 
 export const prettifyNameSingular = (resourceName, resourceType) => {

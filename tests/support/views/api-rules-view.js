@@ -13,7 +13,7 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
     .click();
 
   cy.getIframeBody()
-    .find('[placeholder="API Rule name"]:visible', { log: false })
+    .find('[ariaLabel="API Rule name"]:visible', { log: false })
     .type(ApiRuleName);
 
   cy.getIframeBody()

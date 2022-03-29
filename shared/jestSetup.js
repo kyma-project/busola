@@ -3,6 +3,11 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import '@testing-library/jest-dom';
 import { act } from '@testing-library/react';
 
+// graphviz-react uses es modules which jest doesn't understand
+jest.mock('graphviz-react', () => ({
+  Graphviz: () => 'Graphviz mock',
+}));
+
 Enzyme.configure({ adapter: new Adapter() });
 
 global.document.createRange = () => ({

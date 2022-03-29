@@ -29,7 +29,7 @@ context('Test Gateways', () => {
 
     // name
     cy.getIframeBody()
-      .find('[placeholder="Gateway name"]:visible', { log: false })
+      .find('[ariaLabel="Gateway name"]:visible', { log: false })
       .type(GATEWAY_NAME);
 
     // selector
@@ -46,17 +46,17 @@ context('Test Gateways', () => {
 
     // server name
     cy.getIframeBody()
-      .find('[placeholder^="Enter the name"]:visible', { log: false })
+      .find('[ariaLabel^="Port name"]:visible', { log: false })
       .type(SERVER_NAME);
 
     // hosts
     cy.getIframeBody()
-      .find('[placeholder^="Enter the hosts"]:visible', { log: false })
+      .find('[ariaLabel^="Host"]:visible', { log: false })
       .type('example.com{downarrow}*.example.com');
 
     // server target port
     cy.getIframeBody()
-      .find('[placeholder^="Enter the target port"]:visible', { log: false })
+      .find('[ariaLabel^="Target port"]:visible', { log: false })
       .type(TARGET_PORT);
 
     // create
@@ -96,11 +96,11 @@ context('Test Gateways', () => {
 
     // name should be disabled for edit
     cy.getIframeBody()
-      .find('[placeholder="Gateway name"]:visible', { log: false })
+      .find('[ariaLabel="Gateway name"]:visible', { log: false })
       .should('have.attr', 'readonly');
 
     cy.getIframeBody()
-      .contains('TLS settings are not available for a non-HTTPS protocol.')
+      .contains('HTTPS Redirect')
       .should('be.visible');
 
     // change server to HTTPS

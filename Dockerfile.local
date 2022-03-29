@@ -1,7 +1,7 @@
 # this is a Dockerfile for single deployment app - both backend and frontends
 
 # ---- Base Alpine with Node ----
-FROM alpine:3.13.6 AS builder
+FROM alpine:3.15.0 AS builder
 RUN apk add --update nodejs npm
 
 WORKDIR /app
@@ -22,12 +22,11 @@ RUN make validate
 RUN make pull-licenses
 
 RUN cd /app/core && make test && make build-docker
-RUN cd /app/service-catalog-ui && make test && make build
 RUN cd /app/core-ui && make test && make build
 RUN cd /app/backend && npm run build
 
 # ---- Serve ----
-FROM alpine:3.14.3
+FROM alpine:3.15.0
 WORKDIR /app
 
 RUN apk --no-cache upgrade && \
@@ -37,19 +36,18 @@ WORKDIR /app
 
 COPY --from=builder /app/core/src /app/core
 COPY --from=builder /app/core-ui/build /app/core-ui
-COPY --from=builder /app/service-catalog-ui/build /app/service-catalog-ui
 COPY --from=builder /app/backend/backend-production.js /app/backend-production.js
 COPY --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --from=builder /app/backend/package* /app/
 RUN npm ci --only=production
 
 # use sessionStorage as default
-RUN sed -i 's/"storage": "localStorage",/"storage": "sessionStorage",/g' core/assets/config/config.json 
+RUN sed -i 's/"storage": "localStorage",/"storage": "sessionStorage",/g' core/assets/defaultConfig.json
 # enable OBSERVABILITY & SHOW_KYMA_VERSION for production
-RUN cat core/assets/config/config.json \
+RUN cat core/assets/defaultConfig.json \
   | jq '.config.features.OBSERVABILITY.isEnabled = true' \
   | jq '.config.features.SHOW_KYMA_VERSION.isEnabled = true' \
-  | tee core/assets/config/config.json > /dev/null
+  | tee core/assets/defaultConfig.json > /dev/null
 
 EXPOSE 3001
 ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true

@@ -75,6 +75,7 @@
     "lint-staged": "^10.4.0",
     "node-sass": "^7.0.1",
     "prettier": "^1.18.2",
+    "react-app-rewired": "^2.2.1",
     "react-scripts": "5.0.0",
     "regenerator-runtime": "^0.13.9",
     "sass-loader": "^12.4.0",

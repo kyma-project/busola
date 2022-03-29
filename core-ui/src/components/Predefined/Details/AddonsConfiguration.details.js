@@ -31,8 +31,26 @@ export const AddonsConfigurationsDetails = ({
   DefaultRenderer,
   ...otherParams
 }) => {
+  const { t } = useTranslation();
   return (
-    <DefaultRenderer customComponents={[RepositoryUrls]} {...otherParams} />
+    <DefaultRenderer
+      resourceTitle={t('addons.title')}
+      customComponents={[RepositoryUrls]}
+      {...otherParams}
+    />
   );
 };
-export const ClusterAddonsConfigurationsDetails = AddonsConfigurationsDetails;
+
+export const ClusterAddonsConfigurationsDetails = ({
+  DefaultRenderer,
+  ...otherParams
+}) => {
+  const { t } = useTranslation();
+  return (
+    <DefaultRenderer
+      resourceTitle={t('cluster-addons.title')}
+      customComponents={[RepositoryUrls]}
+      {...otherParams}
+    />
+  );
+};

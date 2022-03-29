@@ -1,16 +1,15 @@
 import React from 'react';
 import { ComponentForList } from 'shared/getComponents';
 
-export const RelatedPods = ({ resource, filter }) => {
+export const RelatedPods = ({ namespace = '', labelSelector }) => {
   const podListParams = {
     hasDetailsView: true,
     fixedPath: true,
-    resourceUrl: `/api/v1/namespaces/${resource.metadata?.namespace}/pods`,
+    resourceUrl: `/api/v1/namespaces/${namespace}/pods?labelSelector=${labelSelector}`,
     resourceType: 'pods',
-    namespace: resource.metadata?.namespace,
+    namespace,
     isCompact: true,
     showTitle: true,
-    filter,
   };
 
   return (
