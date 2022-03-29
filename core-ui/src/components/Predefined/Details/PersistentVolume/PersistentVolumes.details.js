@@ -29,13 +29,28 @@ function PersistentVolumesDetails(props) {
     '/apis/storage.k8s.io/v1/storageclasses',
   );
 
-  const { data: persistentVolumeClaims } = useGetList()(
-    '/api/v1/persistentvolumeclaims',
-  );
+  const getClaimLink = pv => {
+    if (!pv.spec?.claimRef?.name) {
+      return <p>{EMPTY_TEXT_PLACEHOLDER}</p>;
+    } else if (pv.status.phase === 'Released') {
+      return <p>{pv.spec?.claimRef?.name || EMPTY_TEXT_PLACEHOLDER}</p>;
+    } else
+      return (
+        <Link
+          onClick={() =>
+            navigateToResource({
+              name: pv.spec?.claimRef?.name,
+              kind: 'PersistentVolumeClaim',
+              namespace: pv.spec?.claimRef?.namespace,
+            })
+          }
+        >
+          {pv.spec?.claimRef?.name}
+        </Link>
+      );
+  };
 
-  console.log(persistentVolumeClaims);
-
-  const PvDetails = ({ spec, metadata }) => (
+  const PvDetails = ({ spec, metadata, status }) => (
     <div key="persistent-volumes-ref" data-testid="persistent-volumes-ref">
       <LayoutPanel className="fd-margin--md">
         <LayoutPanel.Header>
@@ -85,25 +100,7 @@ function PersistentVolumesDetails(props) {
           />
           <LayoutPanelRow
             name={t('pv.headers.claim-name')}
-            value={
-              persistentVolumeClaims?.find(
-                ({ metadata }) => metadata.name === spec?.claimRef?.name,
-              ) ? (
-                <Link
-                  onClick={() =>
-                    navigateToResource({
-                      name: spec?.claimRef?.name,
-                      kind: 'PersistentVolumeClaim',
-                      namespace: spec?.claimRef?.namespace,
-                    })
-                  }
-                >
-                  {spec?.claimRef?.name}
-                </Link>
-              ) : (
-                <p>{spec?.claimRef?.name || EMPTY_TEXT_PLACEHOLDER}</p>
-              )
-            }
+            value={getClaimLink({ spec, status })}
           />
         </LayoutPanel.Body>
       </LayoutPanel>
