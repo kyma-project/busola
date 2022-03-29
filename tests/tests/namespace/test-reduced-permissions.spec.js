@@ -54,7 +54,7 @@ context('Test reduced permissions', () => {
     );
 
     cy.getIframeBody()
-      .contains('Load')
+      .find('[ariaLabel="Load"]', { log: false })
       .click();
 
     // resources

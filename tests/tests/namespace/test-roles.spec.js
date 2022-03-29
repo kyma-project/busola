@@ -37,7 +37,7 @@ context('Test Roles', () => {
     );
 
     cy.getIframeBody()
-      .contains('Load')
+      .find('[ariaLabel="Load"]:visible', { log: false })
       .click();
 
     chooseComboboxOption(
