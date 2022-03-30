@@ -101,7 +101,7 @@ export function getMetric(type, metric, cpuQuery, { step, ...data }) {
 export function usePrometheus(
   type,
   metricId,
-  filter,
+  filter = () => {},
   { items, timeSpan, ...props },
 ) {
   const { features } = useMicrofrontendContext();

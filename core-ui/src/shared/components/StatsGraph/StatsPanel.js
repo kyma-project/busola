@@ -20,7 +20,7 @@ import './StatsPanel.scss';
 
 const DATA_POINTS = 60;
 
-export function SingleGraph({ type, timeSpan, metric, ...props }) {
+export function SingleGraph({ type, timeSpan, metric, filter, ...props }) {
   const { t } = useTranslation();
   const {
     data,
@@ -30,7 +30,7 @@ export function SingleGraph({ type, timeSpan, metric, ...props }) {
     loading,
     startDate,
     endDate,
-  } = usePrometheus(type, metric, {
+  } = usePrometheus(type, metric, filter, {
     items: DATA_POINTS,
     timeSpan,
     ...props,
@@ -58,7 +58,14 @@ export function SingleGraph({ type, timeSpan, metric, ...props }) {
   );
 }
 
-export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
+export function DualGraph({
+  type,
+  timeSpan,
+  metric1,
+  metric2,
+  filter,
+  ...props
+}) {
   const { t } = useTranslation();
   const {
     data: data1,
@@ -68,7 +75,7 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
     loading: loading1,
     startDate,
     endDate,
-  } = usePrometheus(type, metric1, {
+  } = usePrometheus(type, metric1, filter, {
     items: DATA_POINTS,
     timeSpan,
     ...props,
@@ -76,6 +83,7 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
   const { data: data2, error: error2, loading: loading2 } = usePrometheus(
     type,
     metric2,
+    filter,
     {
       items: DATA_POINTS,
       timeSpan,
@@ -155,7 +163,7 @@ export function SingleMetricMultipeGraph({
   );
 }
 
-export function StatsPanel({ type, filter, ...props }) {
+export function StatsPanel({ type, filter = () => {}, ...props }) {
   const { features } = useMicrofrontendContext();
   const timeSpans = {
     '1h': 60 * 60,
@@ -184,7 +192,7 @@ export function StatsPanel({ type, filter, ...props }) {
     type === 'pod'
       ? ['cpu', 'memory', 'network']
       : ['cpu', 'memory', 'network', 'nodes'];
-
+  console.log('type', type, 'metric', metric);
   return (
     <LayoutPanel className="fd-margin--md stats-panel">
       <LayoutPanel.Header>
@@ -225,10 +233,11 @@ export function StatsPanel({ type, filter, ...props }) {
               {...props}
             />
           )}
-        {metric !== 'network' && metric !== 'cpu' && metric !== 'memory' && (
+        {type !== 'multipleMetrics' && metric !== 'network' && (
           <SingleGraph
             type={type}
             metric={metric}
+            filter={filter}
             className={metric}
             timeSpan={timeSpans[timeSpan]}
             {...props}
@@ -239,6 +248,7 @@ export function StatsPanel({ type, filter, ...props }) {
             type={type}
             metric1={'network-up'}
             metric2={'network-down'}
+            filter={filter}
             className={metric}
             timeSpan={timeSpans[timeSpan]}
             labels={[t('graphs.network-up'), t('graphs.network-down')]}
