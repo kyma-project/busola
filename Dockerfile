@@ -36,9 +36,5 @@ COPY --from=builder /app/nginx/core.conf /etc/nginx/
 COPY --from=builder /app/nginx/core-ui.conf /etc/nginx/
 COPY --from=builder /app/nginx/mime.types /etc/nginx/
 
-
-RUN touch /var/run/nginx.pid && \
-  chown -R nginx:nginx /var/run/nginx.pid
-
 EXPOSE 8080
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
