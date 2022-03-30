@@ -1,6 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { Pagination, ErrorPanel } from 'react-shared';
+import { ErrorPanel } from 'shared/components/ErrorPanel/ErrorPanel';
+import { Pagination } from 'shared/components/GenericList/Pagination/Pagination';
 import { LayoutPanel, Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 

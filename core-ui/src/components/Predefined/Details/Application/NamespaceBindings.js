@@ -3,13 +3,11 @@ import React from 'react';
 import CreateBindingModal from './CreateBindingModal/CreateBindingModal';
 import EditNamespaceBinding from './EditNamespaceBinding';
 import ServicesBoundModal from './ServicesBoundModal';
-import {
-  GenericList,
-  useGetList,
-  useDelete,
-  handleDelete,
-  useNotification,
-} from 'react-shared';
+import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { handleDelete } from 'shared/components/GenericList/actionHandlers/simpleDelete';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 
 export default function NamespaceBindings(application) {

@@ -3,18 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeClaimStatus';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
-
-import {
-  EMPTY_TEXT_PLACEHOLDER,
-  navigateToClusterResourceDetails,
-  useGetList,
-} from 'react-shared';
 import { LayoutPanel, Link } from 'fundamental-react';
+
+import { navigateToClusterResourceDetails } from 'shared/hooks/navigate';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
 import { RelatedPods } from 'shared/components/RelatedPods';
 import { Selector } from 'shared/components/Selector/Selector';
-import { ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { PersistentVolumeClaimsCreate } from '../../Create/PersistentVolumeClaims/PersistentVolumeClaims.create';
 import PersistentVolumesList from 'components/Predefined/List/PersistentVolumes.list';
 

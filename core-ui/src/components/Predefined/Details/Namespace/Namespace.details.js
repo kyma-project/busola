@@ -1,11 +1,8 @@
 import React from 'react';
-import {
-  useMicrofrontendContext,
-  ResourceDetails,
-  ResourcesList,
-} from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
-
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import DeployNewWorkload from './DeployNewWorkload';

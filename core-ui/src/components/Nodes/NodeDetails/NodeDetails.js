@@ -1,5 +1,5 @@
 import React from 'react';
-import { useWindowTitle } from 'react-shared';
+import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useTranslation } from 'react-i18next';
 import { Title } from 'fundamental-react';
 import { useNodeQuery } from '../nodeQueries';

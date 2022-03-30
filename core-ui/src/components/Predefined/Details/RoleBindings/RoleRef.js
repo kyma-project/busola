@@ -1,6 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { EMPTY_TEXT_PLACEHOLDER, Tooltip } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Link } from 'fundamental-react';
 
 const shortRoleKind = roleRefKind => {

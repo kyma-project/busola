@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react';
 import LuigiClient from '@luigi-project/client';
-
-import { useGet, useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 const getPrometheusSelector = data => {
-  const selector = `cluster="", container!="", namespace="${data.namespace}"`;
+  let selector = `cluster="", container!="", namespace="${data.namespace}"`;
   if (data.pod) {
-    selector.concat(', ', `pod="${data.pod}"`);
+    selector = `${selector}, pod="${data.pod}"`;
   }
   return selector;
 };
 
-const getPrometheusCPUQuery = (type, data, step) => {
+const getPrometheusCPUQuery = (type, data, step, cpuQuery = 'sum_irate') => {
   if (type === 'cluster') {
     return `count(node_cpu_seconds_total{mode="idle"}) - sum(rate(node_cpu_seconds_total{mode="idle"}[${step}s]))`;
   } else if (type === 'pod') {
-    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{${getPrometheusSelector(
+    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
       data,
     )}})`;
   } else {
@@ -27,7 +27,7 @@ const getPrometheusMemoryQuery = (type, data) => {
   if (type === 'cluster') {
     return `sum(node_memory_MemTotal_bytes - node_memory_MemFree_bytes)`;
   } else if (type === 'pod') {
-    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{${getPrometheusSelector(
+    return `sum(node_namespace_pod_container:container_memory_working_set_bytes{${getPrometheusSelector(
       data,
     )}})`;
   } else {
@@ -51,7 +51,7 @@ const getPrometheusNetworkTransmittedQuery = (type, data, step) => {
   if (type === 'cluster') {
     return `sum(rate(node_network_transmit_bytes_total{device!="lo"}[${step}s]))`;
   } else if (type === 'pod') {
-    return `sum(irate(container_network_receive_bytes_total{${getPrometheusSelector(
+    return `sum(irate(container_network_transmit_bytes_total{${getPrometheusSelector(
       data,
     )}}[${step}s]))`;
   } else {
@@ -63,10 +63,10 @@ const getPrometheusNodesQuery = () => {
   return `sum(kubelet_node_name)`;
 };
 
-export function getMetric(type, metric, { step, ...data }) {
+export function getMetric(type, metric, cpuQuery, { step, ...data }) {
   const metrics = {
     cpu: {
-      prometheusQuery: getPrometheusCPUQuery(type, data, step),
+      prometheusQuery: getPrometheusCPUQuery(type, data, step, cpuQuery),
       unit: '',
     },
     memory: {
@@ -107,9 +107,12 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
   const kyma2_1path =
     'api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1';
-  const [path, setPath] = useState(featurePath || kyma2_0path);
+  const cpu2_0_partial_query = 'sum_rate';
+  const cpu2_1_partial_query = 'sum_irate';
+  const [path, setPath] = useState(featurePath || kyma2_1path);
+  const [cpuQuery, setCpuQuery] = useState(cpu2_1_partial_query);
 
-  const metric = getMetric(type, metricId, { step, ...props });
+  const metric = getMetric(type, metricId, cpuQuery, { step, ...props });
 
   const tick = () => {
     const newEndDate = new Date();
@@ -141,19 +144,20 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
       if (path !== kyma2_0path && path !== kyma2_1path) {
         LuigiClient.sendCustomMessage({
           id: 'busola.setPrometheusPath',
-          path: kyma2_0path,
-        });
-        setPath(kyma2_0path);
-      } else if (path === kyma2_0path) {
-        LuigiClient.sendCustomMessage({
-          id: 'busola.setPrometheusPath',
           path: kyma2_1path,
         });
+        setCpuQuery(cpu2_1_partial_query);
         setPath(kyma2_1path);
+      } else if (path === kyma2_1path) {
+        LuigiClient.sendCustomMessage({
+          id: 'busola.setPrometheusPath',
+          path: kyma2_0path,
+        });
+        setCpuQuery(cpu2_0_partial_query);
+        setPath(kyma2_0path);
       }
     }
   };
-
   let { data, error, loading } = useGet(`/${path}/${query}`, {
     pollingInterval: 0,
     onDataReceived: data => onDataReceived(data),

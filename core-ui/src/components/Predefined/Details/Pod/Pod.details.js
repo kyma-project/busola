@@ -1,5 +1,7 @@
 import React from 'react';
-import { ControlledBy, GenericList, ResourceDetails } from 'react-shared';
+import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import { PodStatus } from './PodStatus';
 import ContainersData from './ContainersData';

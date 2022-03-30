@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Modal } from 'react-shared';
+import { Modal } from 'shared/components/Modal/Modal';
 import { serviceInstanceConstants } from 'helpers/constants';
 
 InstanceParametersModal.propTypes = {

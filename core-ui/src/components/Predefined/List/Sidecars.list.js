@@ -1,11 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Link,
-  EMPTY_TEXT_PLACEHOLDER,
-  Labels,
-  ResourcesList,
-} from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Labels } from 'shared/components/Labels/Labels';
+import { Link } from 'shared/components/Link/Link';
 import { Trans } from 'react-i18next';
 import { SidecarsCreate } from '../Create/Sidecars/Sidecars.create';
 

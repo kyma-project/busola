@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { Link } from 'fundamental-react';
-import { Modal } from 'react-shared';
+import { Modal } from 'shared/components/Modal/Modal';
 import ServiceListItem from './ServiceListItem';
 import { useTranslation } from 'react-i18next';
 
-export default function ServicesBoundModal({ binding, appSpec }) {
+export default function ServicesBound({ binding, appSpec }) {
   const { t, i18n } = useTranslation();
   const namespace = binding.metadata.namespace;
 

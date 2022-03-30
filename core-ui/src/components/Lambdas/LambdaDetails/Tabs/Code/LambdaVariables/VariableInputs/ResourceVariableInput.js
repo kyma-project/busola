@@ -7,7 +7,7 @@ import {
   FormLabel,
   MessageStrip,
 } from 'fundamental-react';
-import { Dropdown } from 'react-shared';
+import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 
 import {
   ALL_KEYS,

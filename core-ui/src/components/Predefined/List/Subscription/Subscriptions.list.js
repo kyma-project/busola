@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { Link, EMPTY_TEXT_PLACEHOLDER, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Link } from 'shared/components/Link/Link';
 import { SubscriptionConditionStatus } from 'shared/components/SubscriptionConditionStatus';
 import { SubscriptionsCreate } from '../../Create/Subscriptions/Subscriptions.create';
 import './Subscriptions.scss';

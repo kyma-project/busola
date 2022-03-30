@@ -1,7 +1,7 @@
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
-import { GenericList } from 'react-shared';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

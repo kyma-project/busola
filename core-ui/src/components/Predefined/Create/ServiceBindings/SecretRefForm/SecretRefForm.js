@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Dropdown } from 'react-shared';
+import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { base64Decode } from 'shared/helpers';
 import { MultiInput } from 'shared/ResourceForm/fields';
 

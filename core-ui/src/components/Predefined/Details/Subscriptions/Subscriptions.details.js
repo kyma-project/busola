@@ -3,11 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import {
-  GoToDetailsLink,
-  EMPTY_TEXT_PLACEHOLDER,
-  ResourceDetails,
-} from 'react-shared';
+import { GoToDetailsLink } from 'shared/components/ControlledBy/ControlledBy';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 import { SubscriptionConditionStatus } from 'shared/components/SubscriptionConditionStatus';
 import { SubscriptionConditions } from './SubscriptionConditions';

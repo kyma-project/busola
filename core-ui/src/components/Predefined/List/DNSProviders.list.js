@@ -1,7 +1,8 @@
 import React from 'react';
-import { ResourceStatus, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
 import { useTranslation, Trans } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link } from 'shared/components/Link/Link';
 import { DNSProvidersCreate } from '../Create/DNSProviders/DNSProviders.create';
 
 const DNSProvidersList = props => {

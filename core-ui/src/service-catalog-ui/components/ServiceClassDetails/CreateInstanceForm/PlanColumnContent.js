@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { FormItem, FormLabel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
-import { CustomPropTypes, Dropdown } from 'react-shared';
+import { Dropdown } from 'shared/components/Dropdown/Dropdown';
+import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { getResourceDisplayName } from 'helpers';
 
 const SERVICE_PLAN_SHAPE = PropTypes.shape({

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { CircleProgress } from 'react-shared';
+import { CircleProgress } from 'shared/components/CircleProgress/CircleProgress';
 import { LayoutPanel } from 'fundamental-react';
 
 import './NodeResources.scss';

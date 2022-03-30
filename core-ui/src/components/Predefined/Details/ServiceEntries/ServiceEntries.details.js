@@ -1,11 +1,9 @@
 import { LayoutPanel } from 'fundamental-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  EMPTY_TEXT_PLACEHOLDER,
-  GenericList,
-  ResourceDetails,
-} from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Selector } from 'shared/components/Selector/Selector';
 import { Tokens } from 'shared/components/Tokens';

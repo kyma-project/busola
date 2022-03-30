@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button, FormLabel } from 'fundamental-react';
-import { K8sNameInput, LabelSelectorInput, usePost } from 'react-shared';
+import { LabelSelectorInput } from 'shared/components/LabelSelectorInput/LabelSelectorInput';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { K8sNameInput } from 'shared/components/K8sNameInput/K8sNameInput';
 import { useTranslation } from 'react-i18next';
 
 import './AddonsConfigurations.scss';

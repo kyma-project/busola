@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { DestinationRuleRefs } from './DestinationRuleRefs';
 import { TrafficPolicy } from './TrafficPolicy';
 import { Subset } from './Subset';
-import { ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { DestinationRulesCreate } from '../../Create/DestinationRules/DestinationRules.create';
 
 function DestinationRulesDetails(props) {

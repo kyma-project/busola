@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'fundamental-react';
 
-import { useNotification } from 'react-shared';
+import { useNotification } from 'shared/contexts/NotificationContext';
 import { base64Decode, base64Encode } from 'shared/helpers';
 import { useTranslation } from 'react-i18next';
 

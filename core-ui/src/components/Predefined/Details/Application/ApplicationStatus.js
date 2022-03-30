@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { StatusBadge } from 'react-shared';
+import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 const isStatusOk = application => {
   return application.status?.installationStatus?.status === 'deployed';

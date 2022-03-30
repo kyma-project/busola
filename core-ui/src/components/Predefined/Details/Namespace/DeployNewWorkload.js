@@ -1,6 +1,7 @@
 import React from 'react';
 import { Popover, Menu, Button } from 'fundamental-react';
-import { ModalWithForm, useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { DeploymentsCreate } from '../../Create/Deployments/Deployments.create';
 import { FunctionsCreate } from '../../Create/Functions/Functions.create';
 import { useTranslation } from 'react-i18next';

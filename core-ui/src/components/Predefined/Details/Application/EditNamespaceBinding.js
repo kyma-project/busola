@@ -2,7 +2,8 @@ import React from 'react';
 
 import { BindableServicesList } from './BindableServicesList';
 import { Button, FormFieldset } from 'fundamental-react';
-import { Modal, useUpdate } from 'react-shared';
+import { Modal } from 'shared/components/Modal/Modal';
+import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { createPatch } from 'rfc6902';
 import { useTranslation } from 'react-i18next';
 

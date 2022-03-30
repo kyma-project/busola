@@ -1,5 +1,6 @@
 import React from 'react';
-import { useGetList, useMicrofrontendContext } from 'react-shared';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 import CodeAndDependencies from './CodeAndDependencies/CodeAndDependencies';
 import RepositoryConfig from './RepositoryConfig/RepositoryConfig';

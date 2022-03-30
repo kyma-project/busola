@@ -1,5 +1,7 @@
 import React from 'react';
-import { ControlledByKind, Link, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
+import { Link } from 'shared/components/Link/Link';
 import { useTranslation, Trans } from 'react-i18next';
 import { ReplicaSetsCreate } from '../Create/ReplicaSets/ReplicaSets.create';
 import { ReplicaSetStatus } from '../Details/ReplicaSet/ReplicaSetStatus';

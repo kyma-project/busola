@@ -1,6 +1,6 @@
 import { config } from './../config';
 import { getActiveCluster } from './../cluster-management/cluster-management';
-import { HttpError } from '../../../../core-ui/src/shared-repo/hooks/BackendAPI/config';
+import { HttpError } from '../../../../core-ui/src/shared/hooks/BackendAPI/config';
 import { getSSOAuthData } from '../auth/sso';
 
 export async function failFastFetch(input, auth, init = {}) {

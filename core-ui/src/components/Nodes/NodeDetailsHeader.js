@@ -1,5 +1,6 @@
 import React from 'react';
-import { PageHeader, ReadableCreationTimestamp } from 'react-shared';
+import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { useTranslation } from 'react-i18next';
 
 export function NodeDetailsHeader({ nodeName, node, loading, error }) {
