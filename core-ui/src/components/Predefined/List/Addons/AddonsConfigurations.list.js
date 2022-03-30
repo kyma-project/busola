@@ -1,5 +1,7 @@
 import React from 'react';
-import { ResourceStatus, Link, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
+import { Link } from 'shared/components/Link/Link';
 import { useTranslation, Trans } from 'react-i18next';
 import { AddonsConfigurationsCreate } from '../../Create/AddonsConfigurations/AddonsConfigurations.create';
 

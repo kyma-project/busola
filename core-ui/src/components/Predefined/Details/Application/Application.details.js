@@ -5,7 +5,7 @@ import NamespaceBindings from './NamespaceBindings';
 import ConnectApplicationModal from './ConnectApplicationModal';
 import { ApplicationStatus } from './ApplicationStatus';
 import { useTranslation } from 'react-i18next';
-import { ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ApplicationsCreate } from '../../Create/Applications/Applications.create';
 
 const ApplicationsDetails = props => {

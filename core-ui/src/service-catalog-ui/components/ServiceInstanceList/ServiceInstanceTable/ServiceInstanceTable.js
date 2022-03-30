@@ -1,13 +1,11 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Button } from 'fundamental-react';
-import {
-  GenericList,
-  handleDelete,
-  useNotification,
-  useMicrofrontendContext,
-  Tooltip,
-} from 'react-shared';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { handleDelete } from 'shared/components/GenericList/actionHandlers/simpleDelete';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 
 import renderRow from './ServiceInstanceRowRenderer';

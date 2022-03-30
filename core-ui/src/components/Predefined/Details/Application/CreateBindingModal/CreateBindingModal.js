@@ -5,22 +5,17 @@ import {
   FormFieldset,
   ComboboxInput,
 } from 'fundamental-react';
-import {
-  Modal,
-  useGetList,
-  usePost,
-  useMicrofrontendContext,
-  useNotification,
-} from 'react-shared';
+import { Modal } from 'shared/components/Modal/Modal';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import './CreateBindingModal.scss';
 import { BindableServicesList } from '../BindableServicesList';
 import { createApplicationBinding } from './createApplicationBinding';
 import { useTranslation } from 'react-i18next';
 
-export default function CreateBindingModal({
-  application,
-  alreadyBoundNamespaces,
-}) {
+export default function CreateBinding({ application, alreadyBoundNamespaces }) {
   const { t, i18n } = useTranslation();
 
   const { hiddenNamespaces } = useMicrofrontendContext();

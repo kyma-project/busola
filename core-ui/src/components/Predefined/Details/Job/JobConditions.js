@@ -1,11 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  GenericList,
-  ReadableCreationTimestamp,
-  StatusBadge,
-} from 'react-shared';
+import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 
 export function JobConditions(job) {
   const { t, i18n } = useTranslation();

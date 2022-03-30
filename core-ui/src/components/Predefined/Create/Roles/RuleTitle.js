@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { isRuleInvalid, hasRuleRequiredProperties } from './helpers';
-import { Tooltip } from 'react-shared';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Icon } from 'fundamental-react';
 
 export function RuleTitle({ rule, i }) {

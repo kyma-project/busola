@@ -9,7 +9,7 @@ import { RoleForm } from './RoleForm.js';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { KeyValueField, ItemArray } from 'shared/ResourceForm/fields';
-import { useGetList } from 'react-shared';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import _ from 'lodash';
 
 export function RoleBindings({

@@ -54,7 +54,6 @@ describe('serializeVariables', () => {
     const expectedCustomValueFromVariable = {
       name: 'PICO',
       dirty: true,
-      name: 'PICO',
       owners: [],
       type: 'SECRET',
       validation: 'NONE',

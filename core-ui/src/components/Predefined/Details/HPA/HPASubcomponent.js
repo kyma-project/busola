@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import {
-  useGet,
-  GenericList,
-  EMPTY_TEXT_PLACEHOLDER,
-  useMicrofrontendContext,
-} from 'react-shared';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'fundamental-react';
 import { navigateToResource } from 'shared/helpers/universalLinks';

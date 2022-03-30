@@ -4,7 +4,7 @@ import { ServiceBindingList } from './ServiceBindingList';
 import { ServiceInstanceData } from './ServiceInstanceData';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { useTranslation } from 'react-i18next';
-import { ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 
 import { ServiceInstancesCreate } from '../../Create/ServiceInstances/ServiceInstances.create';
 

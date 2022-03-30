@@ -6,12 +6,10 @@ import {
   FormInput,
   MessageStrip,
 } from 'fundamental-react';
-import {
-  Checkbox,
-  useGetList,
-  useCreateServiceBindingUsage,
-  Dropdown,
-} from 'react-shared';
+import { Dropdown } from 'shared/components/Dropdown/Dropdown';
+import { Checkbox } from 'shared/components/Checkbox/Checkbox';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useCreateServiceBindingUsage } from 'shared/hooks/useCreateServiceBindingUsage';
 import { useTranslation } from 'react-i18next';
 
 import { SERVICE_BINDINGS_PANEL } from '../constants';

@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { Button } from 'fundamental-react';
-import { Tooltip, useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import './ServiceClassDetails.scss';
 import { getResourceDisplayName, isStringValueEqualToTrue } from 'helpers';

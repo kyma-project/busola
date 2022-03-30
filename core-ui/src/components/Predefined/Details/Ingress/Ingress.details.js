@@ -2,7 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Rules } from './Rules';
 import { DefaultBackendPanel } from './DefaultBackendPanel';
-import { EMPTY_TEXT_PLACEHOLDER, ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { IngressesCreate } from '../../Create/Ingresses/Ingresses.create';
 
 const IngressesDetails = props => {
@@ -33,7 +34,10 @@ const IngressesDetails = props => {
 
   customComponents.push(resource =>
     resource.spec.defaultBackend ? (
-      <DefaultBackendPanel backend={resource.spec.defaultBackend} />
+      <DefaultBackendPanel
+        backend={resource.spec.defaultBackend}
+        namespace={resource.metadata.namespace}
+      />
     ) : null,
   );
   customComponents.push(resource =>

@@ -1,4 +1,4 @@
-import { randomNameGenerator } from 'react-shared';
+import { randomNameGenerator } from 'shared/utils/helpers';
 
 export function createFunctionTemplate(namespace) {
   const name = randomNameGenerator();

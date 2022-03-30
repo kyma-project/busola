@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { MonacoEditor, useTheme } from 'react-shared';
+import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
+import { useTheme } from 'shared/contexts/ThemeContext';
 import jsyaml from 'js-yaml';
 
 import { YamlFileUploader } from './YamlFileUploader';

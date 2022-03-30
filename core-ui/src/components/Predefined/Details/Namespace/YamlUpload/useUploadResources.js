@@ -1,12 +1,10 @@
 import { merge } from 'lodash';
 import pluralize from 'pluralize';
 import { useCallback } from 'react';
-import {
-  useSingleGet,
-  useMicrofrontendContext,
-  usePost,
-  useUpdate,
-} from 'react-shared';
+import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
+import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { createPatch } from 'rfc6902';
 
 import { useComponentDidMount } from 'shared/useComponentDidMount';

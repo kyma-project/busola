@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormInput } from 'fundamental-react';
-import { useValidation } from 'react-shared';
+import { useValidation } from 'shared/hooks/useValidation';
 
 export function Text(props) {
   return <WrappedText {...props} />;

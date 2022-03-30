@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { useMicrofrontendContext, Tabs, Tab } from 'react-shared';
+import { Tab } from 'shared/components/Tabs/Tab';
+import { Tabs } from 'shared/components/Tabs/Tabs';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useTranslation } from 'react-i18next';
 
 import CodeTab from './Tabs/Code/CodeTab';

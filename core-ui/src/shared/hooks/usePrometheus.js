@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import LuigiClient from '@luigi-project/client';
-
-import { useGet, useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 const getPrometheusSelector = data => {
   let selector = `cluster="", container!="", namespace="${data.namespace}"`;
@@ -140,7 +140,7 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     `query=${metric.prometheusQuery}`;
 
   const onDataReceived = data => {
-    if (data?.error) {
+    if (data?.error && data?.error?.statusCode === 'Failure') {
       if (path !== kyma2_0path && path !== kyma2_1path) {
         LuigiClient.sendCustomMessage({
           id: 'busola.setPrometheusPath',

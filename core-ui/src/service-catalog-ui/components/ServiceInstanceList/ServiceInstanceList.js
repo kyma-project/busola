@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link } from 'shared/components/Link/Link';
 import { Trans } from 'react-i18next';
 
-import {
-  Tab,
-  Tabs,
-  Spinner,
-  Tooltip,
-  useGetList,
-  useMicrofrontendContext,
-  useDelete,
-  PageHeader,
-} from 'react-shared';
+import { Tab } from 'shared/components/Tabs/Tab';
+import { Tabs } from 'shared/components/Tabs/Tabs';
+import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { InfoLabel, FormInput } from 'fundamental-react';
 
 import { instancesTabUtils } from 'helpers/instances-tab-utils';

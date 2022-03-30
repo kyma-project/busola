@@ -2,7 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Selector } from 'shared/components/Selector/Selector';
 
-import { EMPTY_TEXT_PLACEHOLDER, ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { AuthorizationPoliciesCreate } from '../../Create/AuthorizationPolicies/AuthorizationPolicies.create';
 import { Rules } from './Rules';
 

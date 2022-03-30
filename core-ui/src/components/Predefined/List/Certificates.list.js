@@ -1,11 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  FormattedDatetime,
-  ResourceStatus,
-  ResourcesList,
-  Link,
-} from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
+import { FormattedDatetime } from 'shared/components/FormattedDate/FormattedDate';
+import { Link } from 'shared/components/Link/Link';
 import { Trans } from 'react-i18next';
 import { CertificatesCreate } from '../Create/Certificates/Certificates.create';
 import { IssuerLink } from '../Details/Certificate/IssuerLink';

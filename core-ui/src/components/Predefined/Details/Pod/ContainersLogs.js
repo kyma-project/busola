@@ -7,14 +7,12 @@ import {
   Select,
   FormLabel,
 } from 'fundamental-react';
-import {
-  useGetStream,
-  useWindowTitle,
-  PageHeader,
-  SearchInput,
-  useNotification,
-  LogsLink,
-} from 'react-shared';
+import { LogsLink } from 'shared/components/LogsLink/LogsLink';
+import { useGetStream } from 'shared/hooks/BackendAPI/useGet';
+import { useWindowTitle } from 'shared/hooks/useWindowTitle';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import { useTranslation } from 'react-i18next';
 
 import './ContainersLogs.scss';

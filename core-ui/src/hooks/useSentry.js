@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import * as Sentry from '@sentry/react';
 import { Integrations } from '@sentry/tracing';
 

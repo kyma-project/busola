@@ -3,7 +3,9 @@ import LuigiClient from '@luigi-project/client';
 import PropTypes from 'prop-types';
 
 import { LayoutPanel, Icon } from 'fundamental-react';
-import { useGetList, Spinner, CircleProgress } from 'react-shared';
+import { CircleProgress } from 'shared/components/CircleProgress/CircleProgress';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
 
 import {

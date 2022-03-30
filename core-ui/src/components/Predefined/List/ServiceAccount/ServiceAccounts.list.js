@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
-import { Link, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { Link } from 'shared/components/Link/Link';
 import { ServiceAccountsCreate } from '../../Create/ServiceAccounts/ServiceAccounts.create';
 
 const ServiceAccountsList = props => {

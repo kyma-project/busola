@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, ResourceStatus, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
+import { Link } from 'shared/components/Link/Link';
 import { Trans } from 'react-i18next';
 import { IssuersCreate } from '../Create/Issuers/Issuers.create';
 

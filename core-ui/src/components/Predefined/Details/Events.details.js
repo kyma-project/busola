@@ -7,11 +7,9 @@ import {
 } from 'hooks/useMessageList';
 
 import { Icon, LayoutPanel, Link } from 'fundamental-react';
-import {
-  ReadableCreationTimestamp,
-  Tooltip,
-  ResourceDetails,
-} from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 const RowComponent = ({ name, value }) =>

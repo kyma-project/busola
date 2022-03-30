@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tokens } from 'shared/components/Tokens';
 import { useTranslation } from 'react-i18next';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { LayoutPanel } from 'fundamental-react';
 import { LabelSelector } from './LabelSelector';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';

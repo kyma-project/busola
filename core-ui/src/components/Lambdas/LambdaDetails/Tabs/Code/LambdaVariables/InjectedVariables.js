@@ -2,7 +2,9 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { Icon, InfoLabel } from 'fundamental-react';
-import { EMPTY_TEXT_PLACEHOLDER, GenericList, Tooltip } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import {
   VARIABLE_VALIDATION,

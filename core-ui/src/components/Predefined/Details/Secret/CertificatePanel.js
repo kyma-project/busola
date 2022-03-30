@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon, LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useTranslation } from 'react-i18next';
-import { Tooltip } from 'react-shared';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 export function CertificatePanel({ name, certificate }) {
   const { t } = useTranslation();

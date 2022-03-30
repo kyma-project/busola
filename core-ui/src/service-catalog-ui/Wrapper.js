@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Spinner, useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 const ServiceCatalogUI = React.lazy(() => import('./components/App/App'));
 

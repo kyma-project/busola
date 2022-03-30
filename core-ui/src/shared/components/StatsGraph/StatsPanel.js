@@ -6,11 +6,9 @@ import {
   ButtonSegmented,
   BusyIndicator,
 } from 'fundamental-react';
-import {
-  Dropdown,
-  getErrorMessage,
-  useMicrofrontendContext,
-} from 'react-shared';
+import { Dropdown } from 'shared/components/Dropdown/Dropdown';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { getErrorMessage } from 'shared/utils/helpers';
 import { useTranslation } from 'react-i18next';
 
 import { usePrometheus } from 'shared/hooks/usePrometheus';
