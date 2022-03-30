@@ -7,7 +7,7 @@ import {
   createRolePresets,
   createClusterRolePresets,
 } from './helpers';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { GenericRoleCreate } from './GenericRoleCreate';
 
 function RolesCreate(props) {

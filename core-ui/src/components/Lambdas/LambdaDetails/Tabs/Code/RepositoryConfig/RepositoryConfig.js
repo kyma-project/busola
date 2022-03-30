@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import { LayoutPanel, Button } from 'fundamental-react';
-import { Tooltip } from 'react-shared';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { FormInput } from 'components/Lambdas/components';
 import { useTranslation } from 'react-i18next';
 

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { MessageStrip } from 'fundamental-react';
 
-import { useGetList } from 'react-shared';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import {

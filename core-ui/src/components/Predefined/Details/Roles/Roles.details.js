@@ -1,6 +1,6 @@
 import React from 'react';
 import { Rules } from './Rules.js';
-import { ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { RolesCreate } from '../../Create/Roles/Roles.create';
 
 export const RolesDetails = props => {

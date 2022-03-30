@@ -1,7 +1,9 @@
 import { FormItem, MessageStrip } from 'fundamental-react';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { randomNameGenerator, K8sNameInput, useGetList } from 'react-shared';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { randomNameGenerator } from 'shared/utils/helpers';
+import { K8sNameInput } from 'shared/components/K8sNameInput/K8sNameInput';
 
 export function CreateServiceBindingForm({
   onChange,

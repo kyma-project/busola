@@ -43,7 +43,8 @@ context('Test edit cluster', () => {
       .should('be.visible')
       .click();
 
-    cy.contains('Clusters Overview').click();
+    cy.get('[data-testid=app-switcher]').click();
+    cy.get('[data-testid=clusters-overview]').click();
 
     cy.getIframeBody()
       .contains(DESC)

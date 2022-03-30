@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 import { useIsSKR } from '../useIsSKR';
 
 let mockUseSingleGet;
-jest.mock('react-shared', () => ({
+jest.mock('shared/hooks/BackendAPI/useGet', () => ({
   useSingleGet: () => () => ({ json: () => Promise.resolve(mockUseSingleGet) }),
 }));
 

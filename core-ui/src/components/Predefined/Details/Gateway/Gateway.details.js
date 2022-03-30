@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { GatewayServers } from './GatewayServers';
 import { GatewaySelector } from './GatewaySelector';
 import { Selector } from 'shared/components/Selector/Selector';
-import { ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { GatewaysCreate } from '../../Create/Gateways/Gateways.create';
 
 function MatchSelector(gateway) {

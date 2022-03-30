@@ -5,7 +5,7 @@ import { LayoutPanel } from 'fundamental-react';
 import { NetworkPolicyPorts } from './Ports';
 import { NetworkPolicyPeers } from './Peers';
 import { Selector } from 'shared/components/Selector/Selector';
-import { ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { NetworkPoliciesCreate } from '../../Create/NetworkPolicies/NetworkPolicies.create';
 
 function NetworkPoliciesDetails(props) {

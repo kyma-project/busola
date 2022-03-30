@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { RoleSubjects } from './RoleSubjects.js';
 import { RoleRef } from './RoleRef';
 import { ClusterRoleBindingsCreate } from '../../Create/RoleBindings/RoleBindings.create';
-import { ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 
 function RoleBindingsDetails(props) {
   return (

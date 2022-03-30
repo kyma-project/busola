@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { Link, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { Link } from 'shared/components/Link/Link';
 import { AuthorizationPoliciesCreate } from '../Create/AuthorizationPolicies/AuthorizationPolicies.create';
 
 const AuthorizationPoliciesList = props => {

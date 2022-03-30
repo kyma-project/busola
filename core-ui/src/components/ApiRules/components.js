@@ -2,7 +2,9 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { Link } from 'fundamental-react';
-import { CopiableLink, useGet } from 'react-shared';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { CopiableLink } from 'shared/components/Link/CopiableLink';
+
 import { useTranslation } from 'react-i18next';
 
 import AccessStrategies from 'components/ApiRules/AccessStrategies/AccessStrategies';

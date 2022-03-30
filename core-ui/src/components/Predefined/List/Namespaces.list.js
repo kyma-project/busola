@@ -1,9 +1,10 @@
 import React from 'react';
 import { NamespaceStatus } from '../Details/Namespace/NamespaceStatus';
 import LuigiClient from '@luigi-project/client';
-import { getFeatureToggle, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { getFeatureToggle } from 'shared/hooks/useFeatureToggle';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link } from 'shared/components/Link/Link';
 import { Trans } from 'react-i18next';
 import { NamespacesCreate } from '../Create/Namespaces/Namespaces.create';
 

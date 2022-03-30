@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useGet } from 'react-shared';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 export function useKymaVersionQuery({ skip }) {
   const { t } = useTranslation();

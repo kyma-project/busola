@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StatusBadge } from 'react-shared';
+import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useTranslation } from 'react-i18next';
 
 import {

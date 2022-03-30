@@ -1,12 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, LayoutPanel } from 'fundamental-react';
-import {
-  EMPTY_TEXT_PLACEHOLDER,
-  ResourceDetails,
-  useGetList,
-} from 'react-shared';
-
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
 import { EventsList } from 'shared/components/EventsList';

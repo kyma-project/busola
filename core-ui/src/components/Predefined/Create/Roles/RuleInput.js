@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, BusyIndicator } from 'fundamental-react';
 import * as jp from 'jsonpath';
-import { useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
 import { InvalidRoleError } from './InvalidRoleError';
@@ -123,16 +123,20 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         propertyPath="$.resources"
         options={availableResources.map(i => ({ key: i, text: i }))}
         defaultOpen
+        newItemAction={
+          loading ? (
+            <BusyIndicator size="s" show={true} />
+          ) : (
+            <Button
+              compact
+              glyph="refresh"
+              onClick={fetchResources}
+              disabled={!loadable}
+              ariaLabel={t('roles.buttons.load')}
+            />
+          )
+        }
         actions={[
-          <BusyIndicator size="s" show={loading} />,
-          <Button
-            compact
-            glyph="refresh"
-            onClick={fetchResources}
-            disabled={!loadable || loading}
-          >
-            {t('roles.buttons.load')}
-          </Button>,
           <Button
             compact
             glyph="add"
@@ -144,7 +148,6 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         ]}
       />
       <ComboboxArrayInput
-        noEdit
         filterOptions
         title={t('roles.headers.verbs')}
         propertyPath="$.verbs"

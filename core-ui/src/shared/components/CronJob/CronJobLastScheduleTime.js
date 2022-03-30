@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ReadableCreationTimestamp } from 'react-shared';
+import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 
 export function CronJobLastScheduleTime({ lastScheduleTime }) {
   const { t } = useTranslation();

@@ -1,11 +1,11 @@
 import React from 'react';
-import { ControlledBy } from 'react-shared';
+import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import SecretData from 'shared/components/Secret/SecretData';
 import { useTranslation } from 'react-i18next';
 import { CertificateData } from './CertificateData';
 import { HelmReleaseData } from 'components/HelmReleases/HelmReleaseData';
 import { SecretsCreate } from '../../Create/Secrets/Secrets.create';
-import { ResourceDetails } from 'react-shared';
 
 function HelmReleaseDataWrapper(secret) {
   if (secret.type !== 'helm.sh/release.v1') {

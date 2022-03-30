@@ -2,7 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { Icon } from 'fundamental-react';
-import { Modal } from 'react-shared';
+import { Modal } from 'shared/components/Modal/Modal';
 import {
   LinkButton,
   Link,

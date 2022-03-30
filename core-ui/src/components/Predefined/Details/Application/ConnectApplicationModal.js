@@ -1,11 +1,15 @@
 import React from 'react';
 import { Button } from 'fundamental-react';
-import { Modal, usePost, useDelete, useSingleGet, Tooltip } from 'react-shared';
+import { Modal } from 'shared/components/Modal/Modal';
+import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
+import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import copyToCliboard from 'copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 import { useIsSKR } from './useIsSKR';
 
-export default function ConnectApplicationModal({ applicationName }) {
+export default function ConnectApplication({ applicationName }) {
   const [url, setUrl] = React.useState();
   const { i18n, t } = useTranslation();
 

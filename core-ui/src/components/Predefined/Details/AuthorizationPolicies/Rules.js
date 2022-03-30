@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Link, LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { GenericList } from 'react-shared';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Tokens } from 'shared/components/Tokens';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 

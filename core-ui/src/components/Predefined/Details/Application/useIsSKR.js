@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSingleGet } from 'react-shared';
+import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 
 export function useIsSKR() {
   const fetch = useSingleGet();

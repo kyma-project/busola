@@ -1,6 +1,8 @@
 import React from 'react';
 import { LayoutPanel, Icon } from 'fundamental-react';
-import { useGetList, Spinner, CircleProgress } from 'react-shared';
+import { CircleProgress } from 'shared/components/CircleProgress/CircleProgress';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
 
 import { getSIPrefix } from 'shared/helpers/siPrefixes';

@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Switch } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
-import { useFeatureToggle } from 'react-shared';
+import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
 
 export default function ConfirmationSettings() {
   const { t } = useTranslation();

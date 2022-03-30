@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGet } from 'react-shared';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 

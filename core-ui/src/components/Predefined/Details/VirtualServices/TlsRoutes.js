@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LayoutPanel } from 'fundamental-react';
-import { GenericList } from 'react-shared';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import { RouteDestinations, CommonMatchAttributes } from './common';
 

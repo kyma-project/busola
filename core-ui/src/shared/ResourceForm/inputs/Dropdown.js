@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown as BusolaDropown } from 'react-shared';
+import { Dropdown as BusolaDropown } from 'shared/components/Dropdown/Dropdown';
 import { useTranslation } from 'react-i18next';
 
 export function Dropdown({ value, setValue, error, loading, ...props }) {

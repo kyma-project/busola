@@ -4,7 +4,7 @@ import { render, fireEvent } from '@testing-library/react';
 import NamespaceSettings from '../NamespaceSettings';
 
 let mockGroups = [];
-jest.mock('react-shared', () => ({
+jest.mock('shared/contexts/MicrofrontendContext', () => ({
   useMicrofrontendContext: () => ({
     groups: mockGroups,
   }),

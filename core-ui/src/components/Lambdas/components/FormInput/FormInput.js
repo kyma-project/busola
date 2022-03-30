@@ -11,7 +11,7 @@ import {
   FormInput as FioriFormInput,
   MessageStrip,
 } from 'fundamental-react';
-import { Tooltip } from 'react-shared';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import './FormInput.scss';
 

@@ -1,11 +1,9 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import {
-  EMPTY_TEXT_PLACEHOLDER,
-  GoToDetailsLink,
-  useGetList,
-} from 'react-shared';
 import { LayoutPanel, Link } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
+import { GoToDetailsLink } from 'shared/components/ControlledBy/ControlledBy';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';

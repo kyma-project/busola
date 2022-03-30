@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'fundamental-react';
-import { GenericList } from 'react-shared';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
 

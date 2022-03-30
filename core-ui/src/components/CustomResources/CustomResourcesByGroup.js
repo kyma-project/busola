@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link } from 'shared/components/Link/Link';
 import { Link as FdLink } from 'fundamental-react';
 import pluralize from 'pluralize';
 import { GroupingListPage } from './GroupingListPage/GroupingListPage';

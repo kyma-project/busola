@@ -1,12 +1,10 @@
 import React from 'react';
 import jsyaml from 'js-yaml';
 
-import {
-  ResourceDetails,
-  useGet,
-  Spinner,
-  useMicrofrontendContext,
-} from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 

@@ -1,7 +1,8 @@
 import React from 'react';
-import { MonacoEditor, useTheme } from 'react-shared';
+import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
+import { useTheme } from 'shared/contexts/ThemeContext';
 import { LayoutPanel } from 'fundamental-react';
-import { EditorActions } from 'react-shared/';
+import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
 import { useTranslation } from 'react-i18next';
 
 export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
