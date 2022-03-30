@@ -47,12 +47,12 @@ async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
 
   const clusterNodes = Object.entries(await getClusters()).map(
-    ([clusterName, { currentContext, kubeconfig }]) => ({
+    ([clusterName, { currentContext }]) => ({
       title: clusterName,
       subTitle: currentContext.cluster.server,
       link:
         activeClusterName === clusterName
-          ? getAfterLoginLocation(clusterName, kubeconfig)
+          ? `/cluster/${encodeURIComponent(clusterName)}`
           : `/set-cluster/${encodeURIComponent(clusterName)}`,
     }),
   );
@@ -89,6 +89,7 @@ export async function reloadNavigation() {
 
 async function createClusterManagementNodes(features) {
   const activeClusterName = getActiveClusterName();
+  console.log('activeClusterName', activeClusterName);
 
   const childrenNodes = [
     {
