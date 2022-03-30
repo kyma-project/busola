@@ -140,7 +140,7 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     `query=${metric.prometheusQuery}`;
 
   const onDataReceived = data => {
-    if (data?.error) {
+    if (data?.error && data?.error?.statusCode === 'Failure') {
       if (path !== kyma2_0path && path !== kyma2_1path) {
         LuigiClient.sendCustomMessage({
           id: 'busola.setPrometheusPath',

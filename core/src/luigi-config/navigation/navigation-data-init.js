@@ -433,7 +433,14 @@ export async function createNavigationNodes(
 }
 
 async function getNamespaces() {
-  const { hiddenNamespaces = [] } = (await getActiveCluster())?.config || {};
+  const activeCluster = await getActiveCluster();
+  const namespace = getCurrentContextNamespace(activeCluster.kubeconfig);
+
+  if (namespace) {
+    return createNamespacesList([{ name: namespace }]);
+  }
+
+  const { hiddenNamespaces = [] } = activeCluster?.config || {};
   try {
     let namespaces = await fetchNamespaces(getAuthData());
     if (!getFeatureToggle('showHiddenNamespaces')) {
