@@ -61,6 +61,7 @@ export async function setCluster(clusterName) {
 
     if (hasNonOidcAuth(kubeconfigUser)) {
       setAuthData(kubeconfigUser);
+      Luigi.navigation().navigate(targetLocation);
       await saveCARequired();
       await loadTargetClusterConfig();
       await clusterStorage.checkClusterStorageType(originalStorage);
