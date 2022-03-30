@@ -123,16 +123,20 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         propertyPath="$.resources"
         options={availableResources.map(i => ({ key: i, text: i }))}
         defaultOpen
+        newItemAction={
+          loading ? (
+            <BusyIndicator size="s" show={true} />
+          ) : (
+            <Button
+              compact
+              glyph="refresh"
+              onClick={fetchResources}
+              disabled={!loadable}
+              ariaLabel={t('roles.buttons.load')}
+            />
+          )
+        }
         actions={[
-          <BusyIndicator size="s" show={loading} />,
-          <Button
-            compact
-            glyph="refresh"
-            onClick={fetchResources}
-            disabled={!loadable || loading}
-          >
-            {t('roles.buttons.load')}
-          </Button>,
           <Button
             compact
             glyph="add"
@@ -144,7 +148,6 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         ]}
       />
       <ComboboxArrayInput
-        noEdit
         filterOptions
         title={t('roles.headers.verbs')}
         propertyPath="$.verbs"
