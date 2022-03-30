@@ -32,7 +32,6 @@ import {
   saveActiveClusterName,
   getCurrentContextNamespace,
   saveCARequired,
-  getAfterLoginLocation,
 } from '../cluster-management/cluster-management';
 import { getFeatureToggle } from '../utils/feature-toggles';
 import { saveLocation } from './previous-location';
@@ -89,7 +88,6 @@ export async function reloadNavigation() {
 
 async function createClusterManagementNodes(features) {
   const activeClusterName = getActiveClusterName();
-  console.log('activeClusterName', activeClusterName);
 
   const childrenNodes = [
     {
