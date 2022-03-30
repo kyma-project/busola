@@ -89,7 +89,6 @@ export async function reloadNavigation() {
 
 async function createClusterManagementNodes(features) {
   const activeClusterName = getActiveClusterName();
-  console.log('activeClusterName', activeClusterName);
 
   const childrenNodes = [
     {
