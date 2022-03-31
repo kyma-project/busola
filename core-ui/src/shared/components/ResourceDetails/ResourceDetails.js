@@ -28,9 +28,13 @@ import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 
+// This component is loaded after the page mounts.
+// Don't try to load it on scroll. It was tested.
+// It doesn't affect the lighthouse score, but it prolongs the graph waiting time.
 const ResourceGraph = React.lazy(() =>
   import('../ResourceGraph/ResourceGraph'),
 );
+
 ResourceDetails.propTypes = {
   customColumns: CustomPropTypes.customColumnsType,
   children: PropTypes.node,
