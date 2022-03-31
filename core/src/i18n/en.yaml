@@ -269,7 +269,7 @@ certificates:
     renew: Trigger a certificate renewal if enabled.
     secret-name: Name of the Secret object to use for storing the certificate.
     secret-ref: Reference of the existing Secret object to use for storing the certificate.
-    will-expire: Certificate will expire in {{daysToExpire}} {{daysForm}}
+    will-expire: Certificate will expire in {{daysToExpire}} {{daysForm}}.
     with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
   with-csr: Use a CSR
 cluster-addons:
