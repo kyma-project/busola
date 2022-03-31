@@ -1,22 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Graphviz } from 'graphviz-react';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { navigateToResource } from 'shared/hooks/navigate';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useRelatedResources } from 'shared/components/ResourceGraph/useRelatedResources';
+import { useIntersectionObserver } from 'shared/hooks/useIntersectionObserver';
 import { buildGraph } from 'shared/components/ResourceGraph/buildGraph';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
-import { LayoutPanel, Button } from 'fundamental-react';
-import { SaveGraphControls } from 'shared/components/ResourceGraph/SaveGraphControls';
+import { useMinWidth, TABLET } from 'hooks/useMinWidth';
+import { LayoutPanel } from 'fundamental-react';
+import { SaveGraphControls } from './SaveGraphControls';
 import './ResourceGraph.scss';
 
-export function ResourceGraph({ resource, i18n, config }) {
+function ResourceGraph({ resource, i18n, config }) {
   const { features } = useMicrofrontendContext();
   const { t } = useTranslation(['translation'], { i18n });
   const [dotSrc, setDotSrc] = useState('');
   const [isReady, setReady] = useState(false);
 
+  const [graphEl, setGraphEl] = useState(null);
+
+  const isTabletOrWider = useMinWidth(TABLET);
+  const { hasBeenInView } = useIntersectionObserver(graphEl, {
+    skip: !isTabletOrWider,
+  });
   const redraw = () => {
     const data = {
       initialResource: resource,
@@ -59,29 +68,33 @@ export function ResourceGraph({ resource, i18n, config }) {
     },
   });
 
+  useEffect(() => {
+    if (hasBeenInView) {
+      startLoading();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasBeenInView]);
   if (!features.VISUAL_RESOURCES?.isEnabled) {
     return '';
   }
 
-  const actions = !startedLoading && (
-    <Button
-      option="emphasized"
-      onClick={() => {
-        startLoading();
-        setTimeout(() => window.scroll(0, document.body.scrollHeight), 500);
+  const actions = !startedLoading && null;
+
+  if (!isTabletOrWider) {
+    return null;
+  }
+  return (
+    <LayoutPanel
+      className="fd-margin--md resource-graph"
+      ref={node => {
+        setGraphEl(node);
       }}
     >
-      {t('common.buttons.load')}
-    </Button>
-  );
-
-  return (
-    <LayoutPanel className="fd-margin--md resource-graph">
       <LayoutPanel.Header>
         <LayoutPanel.Head title={t('resource-graph.title')} />
         {actions}
       </LayoutPanel.Header>
-      {startedLoading && dotSrc && (
+      {startedLoading && dotSrc ? (
         <LayoutPanel.Body>
           <ErrorBoundary i18n={i18n} customMessage={t('resource-graph.error')}>
             <div id="graph-area">
@@ -104,7 +117,12 @@ export function ResourceGraph({ resource, i18n, config }) {
             </div>
           </ErrorBoundary>
         </LayoutPanel.Body>
+      ) : (
+        <div className="loader">
+          <Spinner />
+        </div>
       )}
     </LayoutPanel>
   );
 }
+export default ResourceGraph;
