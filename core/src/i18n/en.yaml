@@ -258,7 +258,7 @@ certificates:
   state: Status
   title: Certificates
   tooltips:
-    close-expiration: Certificate will expire in less than one day
+    close-expiration: Certificate will expire in less than one day.
     common-name: Common Name is the primary domain name of the certificate.
     csr: Certificate Signing Request is an alternative way to provide common name, DNS names, and other information.
     dns-names: DNS Names are the optional additional domain names of the certificate.
