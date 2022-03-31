@@ -2,11 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
-import { FormattedDatetime } from 'shared/components/FormattedDate/FormattedDate';
 import { Link } from 'shared/components/Link/Link';
 import { Trans } from 'react-i18next';
 import { CertificatesCreate } from '../Create/Certificates/Certificates.create';
 import { IssuerLink } from '../Details/Certificate/IssuerLink';
+import { CertificateDate } from 'shared/components/CertificateDate/CertificateDate';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 const CertificatesList = props => {
   const { t, i18n } = useTranslation();
@@ -14,7 +15,8 @@ const CertificatesList = props => {
   const customColumns = [
     {
       header: t('certificates.common-name'),
-      value: certificate => certificate.status?.commonName || '-',
+      value: certificate =>
+        certificate.status?.commonName || EMPTY_TEXT_PLACEHOLDER,
     },
     {
       header: t('certificates.issuer'),
@@ -26,12 +28,12 @@ const CertificatesList = props => {
       header: t('certificates.expiration-date'),
       value: certificate =>
         certificate.status?.expirationDate ? (
-          <FormattedDatetime
+          <CertificateDate
             date={certificate.status.expirationDate}
             lang={i18n.language}
           />
         ) : (
-          '-'
+          EMPTY_TEXT_PLACEHOLDER
         ),
     },
     {
