@@ -6,7 +6,11 @@ import { useGet, useMicrofrontendContext } from 'react-shared';
 const getPrometheusSelector = data => {
   let selector = `cluster="", container!="", namespace="${data.namespace}"`;
   if (data.pod) {
-    selector = `${selector}, pod="${data.pod}"`;
+    let pods = data.pod;
+    if (Array.isArray(data.pod)) {
+      pods = data.pod.join('|');
+    }
+    selector = `${selector}, pod=~"${pods}"`;
   }
   return selector;
 };
@@ -21,9 +25,9 @@ const getPrometheusCPUQuery = (
   if (type === 'cluster') {
     return `count(node_cpu_seconds_total{mode="idle"}) - sum(rate(node_cpu_seconds_total{mode="idle"}[${step}s]))`;
   } else if (type === 'pod' && mode === 'multiple') {
-    return `node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
+    return `sum by(container)(node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
       data,
-    )}}`;
+    )}, container != "POD"})`;
   } else if (type === 'pod' && mode === 'single') {
     return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
       data,
@@ -37,9 +41,9 @@ const getPrometheusMemoryQuery = (type, mode, data) => {
   if (type === 'cluster') {
     return `sum(node_memory_MemTotal_bytes - node_memory_MemFree_bytes)`;
   } else if (type === 'pod' && mode === 'multiple') {
-    return `node_namespace_pod_container:container_memory_working_set_bytes{${getPrometheusSelector(
+    return `sum by(container)(node_namespace_pod_container:container_memory_working_set_bytes{${getPrometheusSelector(
       data,
-    )}}`;
+    )}, container != "POD"})`;
   } else if (type === 'pod' && mode === 'single') {
     return `sum(node_namespace_pod_container:container_memory_working_set_bytes{${getPrometheusSelector(
       data,
@@ -177,7 +181,6 @@ export function usePrometheus(
       }
     }
   };
-
   let { data, error, loading } = useGet(`/${path}/${query}`, {
     pollingInterval: 0,
     onDataReceived: data => onDataReceived(data),
@@ -212,9 +215,7 @@ export function usePrometheus(
           }
           stepMultiplier += step;
         }
-        prometheusLabels.push(
-          `container="${metric.container}, pod="${metric.pod}"`,
-        );
+        prometheusLabels.push(`container="${metric.container}"`);
         prometheusData.push(tempPrometheusData);
       }
     });

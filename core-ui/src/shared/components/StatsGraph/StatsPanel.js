@@ -58,14 +58,7 @@ export function SingleGraph({ type, mode, timeSpan, metric, ...props }) {
   );
 }
 
-export function DualGraph({
-  type,
-  mode,
-  timeSpan,
-  metric1,
-  metric2,
-  ...props
-}) {
+export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
   const { t } = useTranslation();
   const {
     data: data1,
@@ -75,14 +68,14 @@ export function DualGraph({
     loading: loading1,
     startDate,
     endDate,
-  } = usePrometheus(type, mode, metric1, {
+  } = usePrometheus(type, 'single', metric1, {
     items: DATA_POINTS,
     timeSpan,
     ...props,
   });
   const { data: data2, error: error2, loading: loading2 } = usePrometheus(
     type,
-    mode,
+    'single',
     metric2,
     {
       items: DATA_POINTS,
@@ -245,7 +238,6 @@ export function StatsPanel({ type, mode = 'single', ...props }) {
         {metric === 'network' && (
           <DualGraph
             type={type}
-            mode={mode}
             metric1={'network-up'}
             metric2={'network-down'}
             className={metric}
