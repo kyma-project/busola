@@ -95,28 +95,26 @@ function ResourceGraph({ resource, i18n, config }) {
         {actions}
       </LayoutPanel.Header>
       {startedLoading && dotSrc ? (
-        <LayoutPanel.Body>
-          <ErrorBoundary i18n={i18n} customMessage={t('resource-graph.error')}>
-            <div id="graph-area">
-              <Graphviz
-                dot={dotSrc}
-                // https://github.com/magjac/d3-graphviz#selection_graphviz
-                options={{
-                  height: '100%',
-                  width: '100%',
-                  zoom: isReady, // if always true, then the graph will jump on first pan or zoom
-                  useWorker: false,
-                }}
-              />
-              <SaveGraphControls
-                content={dotSrc}
-                // .gv extension is preferred instead of .dot
-                name={`${resource.kind} ${resource.metadata.name}.gv`}
-                i18n={i18n}
-              />
-            </div>
-          </ErrorBoundary>
-        </LayoutPanel.Body>
+        <ErrorBoundary i18n={i18n} customMessage={t('resource-graph.error')}>
+          <div id="graph-area">
+            <Graphviz
+              dot={dotSrc}
+              // https://github.com/magjac/d3-graphviz#selection_graphviz
+              options={{
+                height: '100%',
+                width: '100%',
+                zoom: isReady, // if always true, then the graph will jump on first pan or zoom
+                useWorker: false,
+              }}
+            />
+            <SaveGraphControls
+              content={dotSrc}
+              // .gv extension is preferred instead of .dot
+              name={`${resource.kind} ${resource.metadata.name}.gv`}
+              i18n={i18n}
+            />
+          </div>
+        </ErrorBoundary>
       ) : (
         <div className="loader">
           <Spinner />
