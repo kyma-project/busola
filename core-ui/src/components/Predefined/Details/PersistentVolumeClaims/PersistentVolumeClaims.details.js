@@ -15,13 +15,26 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { PersistentVolumeClaimsCreate } from '../../Create/PersistentVolumeClaims/PersistentVolumeClaims.create';
 import PersistentVolumesList from 'components/Predefined/List/PersistentVolumes.list';
+import { isEqual } from 'lodash';
 
-const RelatedVolumes = ({ labelSelector }) => {
+const RelatedVolumes = ({ labels }) => {
+  console.log(labels);
+
   const PVParams = {
     hasDetailsView: true,
     fixedPath: true,
-    resourceUrl: `/api/v1/persistentvolumes?labelSelector=${labelSelector}`,
+    resourceUrl: '/api/v1/persistentvolumes',
     resourceType: 'persistentVolumes',
+    filter: pv => {
+      console.log('dupa');
+      const pvLabels = Object.entries(pv.metadata?.labels);
+      console.log('pvlabels', pvLabels);
+      const pvcLabels = Object.entries(labels);
+      console.log('pvc-labels', pvcLabels);
+      return pvcLabels.every(resLabel =>
+        pvLabels.some(podLabel => isEqual(resLabel, podLabel)),
+      );
+    },
     isCompact: true,
     showTitle: true,
   };
@@ -152,7 +165,13 @@ const PersistentVolumeClaimsDetails = props => {
           volume?.persistentVolumeClaim?.claimName === pvc.metadata.name,
       );
 
-    return <RelatedPods resource={pvc} filter={filterByClaim} key="pvcPods" />;
+    return (
+      <RelatedPods
+        filter={filterByClaim}
+        key="pvcPods"
+        namespace={pvc.metadata.namespace}
+      />
+    );
   };
 
   return (
