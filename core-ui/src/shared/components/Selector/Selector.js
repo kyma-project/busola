@@ -15,6 +15,8 @@ const SelectorDetails = ({
   RelatedResources,
 }) => {
   const filterByLabels = pod => {
+    if (!pod.metadata?.labels) return false;
+
     const podLabels = Object?.entries(pod.metadata?.labels);
     const resourceLabels = Object?.entries(labels);
     return resourceLabels.every(resLabel =>

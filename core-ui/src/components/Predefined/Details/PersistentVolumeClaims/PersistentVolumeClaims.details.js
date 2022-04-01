@@ -25,6 +25,7 @@ const RelatedVolumes = ({ labels }) => {
     resourceType: 'persistentVolumes',
     filter: pv => {
       if (!pv.metadata?.labels) return false;
+
       const pvLabels = Object?.entries(pv.metadata?.labels);
       const pvcLabels = Object?.entries(labels);
       return pvcLabels.every(pvcLabel =>
