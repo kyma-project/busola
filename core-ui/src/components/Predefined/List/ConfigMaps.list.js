@@ -1,7 +1,8 @@
 import React from 'react';
-import { ControlledByKind, ResourcesList } from 'react-shared';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-shared';
+import { Link } from 'shared/components/Link/Link';
 import { Trans } from 'react-i18next';
 import { ConfigMapsCreate } from '../Create/ConfigMaps/ConfigMaps.create';
 

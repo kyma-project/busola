@@ -1,7 +1,9 @@
 import LuigiClient from '@luigi-project/client';
-import { useNotification } from 'react-shared';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useTranslation } from 'react-i18next';
-import { usePost, useUpdate, useMicrofrontendContext } from 'react-shared';
+import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { createPatch } from 'rfc6902';
 
 export function useCreateResource({

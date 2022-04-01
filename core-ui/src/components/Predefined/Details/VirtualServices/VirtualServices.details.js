@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { VirtualServicesCreate } from '../../Create/VirtualServices/VirtualServices.create';
 
 import { ServiceGateways } from './ServiceGateways';

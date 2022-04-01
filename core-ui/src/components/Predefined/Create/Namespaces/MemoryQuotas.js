@@ -2,7 +2,7 @@ import React from 'react';
 import { FormItem, FormInput, FormLabel } from 'fundamental-react';
 import * as jp from 'jsonpath';
 
-import { Dropdown } from 'react-shared';
+import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 
 export function MemoryInput({
   label,

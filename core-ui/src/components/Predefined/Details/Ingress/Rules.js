@@ -1,12 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  EMPTY_TEXT_PLACEHOLDER,
-  GenericList,
-  GoToDetailsLink,
-  useMicrofrontendContext,
-  useGetList,
-} from 'react-shared';
+import { GoToDetailsLink } from 'shared/components/ControlledBy/ControlledBy';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { GenericList } from 'shared/components/GenericList/GenericList';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { LayoutPanel, Link } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';

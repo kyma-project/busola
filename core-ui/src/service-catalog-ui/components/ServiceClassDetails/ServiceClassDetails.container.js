@@ -1,11 +1,8 @@
 import React from 'react';
-import {
-  Spinner,
-  useGetList,
-  useGet,
-  useMicrofrontendContext,
-  ResourceNotFound,
-} from 'react-shared';
+import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
+import { useGet, useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useTranslation } from 'react-i18next';
 
 import { sortByDisplayName } from 'helpers/sorting';

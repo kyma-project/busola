@@ -1,6 +1,6 @@
 import React from 'react';
 import { RepositoryUrls } from './AddonsConfigurationNamespace.details';
-import { ResourceDetails } from 'react-shared';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ClusterAddonsConfigurationsCreate } from 'components/Predefined/Create/AddonsConfigurations/AddonsConfigurations.create';
 
 const AddonsConfigurationsDetailsCluster = props => {

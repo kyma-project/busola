@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ControlledBy, ResourceDetails } from 'react-shared';
+import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ConfigMapsCreate } from '../../Create/ConfigMaps/ConfigMaps.create';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 

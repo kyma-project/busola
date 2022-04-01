@@ -1,11 +1,9 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
-import {
-  StatusBadge,
-  EMPTY_TEXT_PLACEHOLDER,
-  ResourceDetails,
-} from 'react-shared';
+import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GitRepositoriesCreate } from '../Create/GitRepositories/GitRepositories.create';
 import { useTranslation } from 'react-i18next';
 

@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 
 import { Icon, InfoLabel } from 'fundamental-react';
-import {
-  EMPTY_TEXT_PLACEHOLDER,
-  GenericList,
-  ControlledBy,
-  Tooltip,
-  useDeleteResource,
-} from 'react-shared';
+import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+import { useDeleteResource } from 'shared/hooks/useDeleteResource';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import CreateVariable from './CreateVariable/CreateVariable';
 import EditVariable from './EditVariable/EditVariable';

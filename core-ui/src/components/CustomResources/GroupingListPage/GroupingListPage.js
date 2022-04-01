@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  useGetList,
-  YamlEditorProvider,
-  ResourceListRenderer,
-  Spinner,
-} from 'react-shared';
 import { groupBy } from 'lodash';
-import { Tokens } from 'shared/components/Tokens';
 import { FormInput, LayoutPanel } from 'fundamental-react';
-import { PageHeader } from 'react-shared/';
+import { Tokens } from 'shared/components/Tokens';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { useWindowTitle } from 'shared/hooks/useWindowTitle';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
+import { ResourceListRenderer } from 'shared/components/ResourcesList/ResourcesList';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+
 import './GroupingListPage.scss';
-import { useWindowTitle } from 'react-shared/';
 
 export function GroupingListPage({
   title,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormItem, FormLabel, LayoutPanel } from 'fundamental-react';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Tokens } from 'shared/components/Tokens';
 
 export const TlsSettings = ({ tls }) => {

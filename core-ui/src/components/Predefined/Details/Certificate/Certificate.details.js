@@ -1,11 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  FormattedDatetime,
-  ResourceStatus,
-  EMPTY_TEXT_PLACEHOLDER,
-  ResourceDetails,
-} from 'react-shared';
+import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { CertificateDate } from 'shared/components/CertificateDate/CertificateDate';
+
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { CertificatesCreate } from '../../Create/Certificates/Certificates.create';
 import { CertificateRefs } from './CertificateRefs';
 
@@ -27,7 +26,7 @@ function CertificatesDetails(props) {
       header: t('certificates.expiration-date'),
       value: certificate =>
         certificate.status?.expirationDate ? (
-          <FormattedDatetime
+          <CertificateDate
             date={certificate.status.expirationDate}
             lang={i18n.language}
           />

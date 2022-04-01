@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Spinner } from 'react-shared';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ComboboxInput } from 'fundamental-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useTranslation } from 'react-i18next';

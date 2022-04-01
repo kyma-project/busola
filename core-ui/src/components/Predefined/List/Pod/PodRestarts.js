@@ -1,5 +1,5 @@
 import React from 'react';
-import { TooltipBadge } from 'react-shared';
+import { TooltipBadge } from 'shared/components/TooltipBadge/TooltipBadge';
 import { useTranslation } from 'react-i18next';
 
 export default function PodRestarts({ statuses }) {

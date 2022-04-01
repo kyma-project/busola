@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { ComboboxInput, MessageStrip } from 'fundamental-react';
 
-import { useGetList, useNotification } from 'react-shared';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useNotification } from 'shared/contexts/NotificationContext';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 import * as Inputs from 'shared/ResourceForm/inputs';

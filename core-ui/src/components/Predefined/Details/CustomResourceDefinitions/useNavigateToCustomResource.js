@@ -1,5 +1,5 @@
 import LuigiClient from '@luigi-project/client';
-import { useMicrofrontendContext } from 'react-shared/';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 
 export function useNavigateToCustomResource() {

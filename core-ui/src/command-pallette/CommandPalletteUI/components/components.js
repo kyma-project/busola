@@ -1,7 +1,7 @@
 import React from 'react';
 import { Token } from 'fundamental-react';
 import { Trans, useTranslation } from 'react-i18next';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import './components.scss';
 
 export function SuggestedQuery({ suggestedQuery, setQuery }) {

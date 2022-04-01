@@ -1,12 +1,10 @@
 import React from 'react';
 import { Button } from 'fundamental-react';
-import {
-  usePost,
-  ModalWithForm,
-  useMicrofrontendContext,
-  Tooltip,
-  useNotification,
-} from 'react-shared';
+import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { SERVICE_BINDINGS_PANEL } from './constants';
 import { CreateServiceBindingForm } from './CreateServiceBindingForm';
 

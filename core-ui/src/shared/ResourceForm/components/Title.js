@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon } from 'fundamental-react';
-import { Tooltip } from 'react-shared';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 export function Title({
   tooltipContent,
@@ -17,7 +17,7 @@ export function Title({
       <span className="title-content">{title}</span>
       {tooltipContent && (
         <Tooltip className="info-tooltip" delay={0} content={tooltipContent}>
-          <Icon ariaLabel="Tooltip" glyph="question-mark" />
+          <Icon ariaLabel="" glyph="question-mark" />
         </Tooltip>
       )}
     </div>

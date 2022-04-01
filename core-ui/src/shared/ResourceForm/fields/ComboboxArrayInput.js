@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { MultiInput } from './MultiInput';
 import * as Inputs from '../inputs';
+import './ComboboxArrayInput.scss';
 
 export function ComboboxArrayInput({
   title,
@@ -50,6 +51,7 @@ export function ComboboxArrayInput({
       toExternal={toExternal}
       tooltipContent={tooltipContent}
       sectionTooltipContent={sectionTooltipContent}
+      className="combobox-array-input"
       inputs={[
         ({
           value,

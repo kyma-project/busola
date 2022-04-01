@@ -2,12 +2,14 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { LayoutPanel } from 'fundamental-react';
 
-import { GenericList, StatusBadge, EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { GenericList } from 'shared/components/GenericList/GenericList';
+import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useTranslation } from 'react-i18next';
 
 import { SchemaViewer } from 'shared/components/SchemaViewer/SchemaViewer';
-import './CurrentCRDVersion.scss';
 import { CustomResources } from '../../../CustomResources/CustomResources';
+import './CurrentCRDVersion.scss';
 
 const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
   const { t, i18n } = useTranslation();

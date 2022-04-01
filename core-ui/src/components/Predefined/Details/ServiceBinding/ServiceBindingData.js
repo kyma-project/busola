@@ -1,7 +1,9 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
-import { EMPTY_TEXT_PLACEHOLDER, useGet, Tooltip } from 'react-shared';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { DefinitionList } from '../../../../shared/components/DefinitionList/DefinitionList';
 import { useTranslation } from 'react-i18next';
 

@@ -1,10 +1,8 @@
 import React from 'react';
-import {
-  Spinner,
-  useGet,
-  useMicrofrontendContext,
-  ResourceNotFound,
-} from 'react-shared';
+import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import ServiceInstanceHeader from './ServiceInstanceHeader/ServiceInstanceHeader';
 import ServiceInstanceBindings from './ServiceInstanceBindings/ServiceInstanceBindings';
 import { EmptyList } from './styled';

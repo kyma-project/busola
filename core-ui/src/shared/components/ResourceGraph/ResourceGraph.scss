@@ -1,0 +1,70 @@
+.resource-graph {
+  .fd-layout-panel__header {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+.loader {
+  height: 500px;
+}
+#graph-area {
+  display: flex;
+  justify-content: center;
+  background: var(--sapNeutralBackground);
+  height: 500px;
+  position: relative;
+
+  & > :first-child {
+    height: 100%;
+    width: 100%;
+  }
+
+  text {
+    font-family: inherit;
+    fill: var(--sapTextColor);
+  }
+
+  .edge {
+    > path {
+      stroke: var(--sapTextColor);
+    }
+    > polygon {
+      stroke: var(--sapTextColor);
+      fill: var(--sapTextColor);
+    }
+  }
+
+  .node,
+  .cluster {
+    & > polygon {
+      fill: var(--sapGroup_ContentBackground);
+      stroke: var(--sapTextColor);
+      stroke-width: 2px;
+    }
+    & > text {
+      font-weight: bold;
+      color: #0f0;
+    }
+    & > text + text {
+      font-weight: normal;
+      font-size: 12;
+    }
+  }
+
+  #graph0 > polygon {
+    fill: var(--sapNeutralBackground);
+  }
+
+  .node:not(.root-node),
+  .cluster:not(.root-node) *,
+  .node:not(.root-node) > polygon,
+  .cluster > polygon {
+    cursor: pointer;
+  }
+
+  .controls {
+    bottom: 10px;
+    position: absolute;
+    right: 10px;
+  }
+}

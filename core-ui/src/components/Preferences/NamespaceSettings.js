@@ -1,6 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { useMicrofrontendContext, useFeatureToggle } from 'react-shared';
+import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { Switch } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 

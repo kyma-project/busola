@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import LuigiClient from '@luigi-project/client';
-
-import { useGet, useMicrofrontendContext } from 'react-shared';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 const getPrometheusSelector = data => {
   let selector = `cluster="", container!="", namespace="${data.namespace}"`;
