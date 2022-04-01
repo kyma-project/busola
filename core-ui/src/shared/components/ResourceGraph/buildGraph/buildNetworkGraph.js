@@ -106,7 +106,7 @@ export function buildNetworkGraph({ store }, config) {
             deployment,
             `${pod}
          ${replicaSet ? makeNode(replicaSet) : ''}
-         ${hpas.map(makeNode)}`,
+         ${hpas.map(makeNode).join('\n')}`,
           );
         } else {
           // no wrapping deployment, at least add connection between Pod and RS
