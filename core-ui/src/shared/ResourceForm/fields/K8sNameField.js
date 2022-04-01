@@ -1,13 +1,29 @@
 import React from 'react';
-import { K8sNameInput } from 'shared/components/K8sNameInput/K8sNameInput';
+import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
-import { ResourceForm } from '..';
+import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
+import { K8sNameInput } from 'shared/components/K8sNameInput/K8sNameInput';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { randomNamesGenerator } from 'shared/utils/randomNamesGenerator/randomNamesGenerator';
+import './K8sNameField.scss';
 
-export function K8sNameField({ kind, value, setValue, className, ...props }) {
+export function K8sNameField({
+  kind,
+  value,
+  setValue,
+  className,
+  prefix,
+  ...props
+}) {
   const { t, i18n } = useTranslation();
 
   const { isAdvanced, propertyPath, validate, ...inputProps } = props;
+
+  const generateName = () => {
+    const name = randomNamesGenerator();
+    setValue(prefix ? `${prefix}-${name}` : name);
+  };
 
   return (
     <ResourceForm.FormField
@@ -18,17 +34,27 @@ export function K8sNameField({ kind, value, setValue, className, ...props }) {
       tooltipContent={t('common.tooltips.k8s-name-input')}
       input={() => {
         return (
-          <K8sNameInput
-            kind={kind}
-            compact
-            required
-            showHelp={false}
-            showLabel={false}
-            onChange={e => setValue(e.target.value)}
-            value={value}
-            i18n={i18n}
-            {...inputProps}
-          />
+          <div className="k8s-name-field">
+            <K8sNameInput
+              kind={kind}
+              compact
+              required
+              showHelp={false}
+              showLabel={false}
+              onChange={e => setValue(e.target.value)}
+              value={value}
+              i18n={i18n}
+              {...inputProps}
+            />
+            <Tooltip className="actions-tooltip" content={'generate name'}>
+              <Button
+                compact
+                className="k8s-name-field-action"
+                onClick={generateName}
+                glyph="synchronize"
+              />
+            </Tooltip>
+          </div>
         );
       }}
     />
