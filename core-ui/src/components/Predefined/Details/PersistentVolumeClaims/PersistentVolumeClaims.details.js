@@ -18,28 +18,24 @@ import PersistentVolumesList from 'components/Predefined/List/PersistentVolumes.
 import { isEqual } from 'lodash';
 
 const RelatedVolumes = ({ labels }) => {
-  console.log(labels);
-
   const PVParams = {
     hasDetailsView: true,
     fixedPath: true,
     resourceUrl: '/api/v1/persistentvolumes',
     resourceType: 'persistentVolumes',
     filter: pv => {
-      console.log('dupa');
-      const pvLabels = Object.entries(pv.metadata?.labels);
-      console.log('pvlabels', pvLabels);
-      const pvcLabels = Object.entries(labels);
-      console.log('pvc-labels', pvcLabels);
-      return pvcLabels.every(resLabel =>
-        pvLabels.some(podLabel => isEqual(resLabel, podLabel)),
+      if (!pv.metadata?.labels) return false;
+      const pvLabels = Object?.entries(pv.metadata?.labels);
+      const pvcLabels = Object?.entries(labels);
+      return pvcLabels.every(pvcLabel =>
+        pvLabels.some(pvLabel => isEqual(pvcLabel, pvLabel)),
       );
     },
     isCompact: true,
     showTitle: true,
   };
 
-  return <PersistentVolumesList params={{ ...PVParams }} key="pv-list" />;
+  return <PersistentVolumesList {...PVParams} key="pv-list" />;
 };
 
 function PVCSelectorSpecification(pvc) {
