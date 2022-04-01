@@ -11,14 +11,20 @@ const getPrometheusSelector = data => {
   return selector;
 };
 
-const getPrometheusCPUQuery = (type, data, step, cpuQuery = 'sum_irate') => {
+const getPrometheusCPUQuery = (
+  type,
+  mode,
+  data,
+  step,
+  cpuQuery = 'sum_irate',
+) => {
   if (type === 'cluster') {
     return `count(node_cpu_seconds_total{mode="idle"}) - sum(rate(node_cpu_seconds_total{mode="idle"}[${step}s]))`;
-  } else if (type === 'multipleMetrics') {
+  } else if (type === 'pod' && mode === 'multiple') {
     return `node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
       data,
     )}}`;
-  } else if (type === 'pod') {
+  } else if (type === 'pod' && mode === 'single') {
     return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
       data,
     )}})`;
@@ -27,14 +33,14 @@ const getPrometheusCPUQuery = (type, data, step, cpuQuery = 'sum_irate') => {
   }
 };
 
-const getPrometheusMemoryQuery = (type, data) => {
+const getPrometheusMemoryQuery = (type, mode, data) => {
   if (type === 'cluster') {
     return `sum(node_memory_MemTotal_bytes - node_memory_MemFree_bytes)`;
-  } else if (type === 'multipleMetrics') {
+  } else if (type === 'pod' && mode === 'multiple') {
     return `node_namespace_pod_container:container_memory_working_set_bytes{${getPrometheusSelector(
       data,
     )}}`;
-  } else if (type === 'pod') {
+  } else if (type === 'pod' && mode === 'single') {
     return `sum(node_namespace_pod_container:container_memory_working_set_bytes{${getPrometheusSelector(
       data,
     )}})`;
@@ -71,14 +77,14 @@ const getPrometheusNodesQuery = () => {
   return `sum(kubelet_node_name)`;
 };
 
-export function getMetric(type, metric, cpuQuery, { step, ...data }) {
+export function getMetric(type, mode, metric, cpuQuery, { step, ...data }) {
   const metrics = {
     cpu: {
-      prometheusQuery: getPrometheusCPUQuery(type, data, step, cpuQuery),
+      prometheusQuery: getPrometheusCPUQuery(type, mode, data, step, cpuQuery),
       unit: '',
     },
     memory: {
-      prometheusQuery: getPrometheusMemoryQuery(type, data),
+      prometheusQuery: getPrometheusMemoryQuery(type, mode, data),
       binary: true,
       unit: 'B',
     },
@@ -100,8 +106,8 @@ export function getMetric(type, metric, cpuQuery, { step, ...data }) {
 
 export function usePrometheus(
   type,
+  mode,
   metricId,
-  filter = () => {},
   { items, timeSpan, ...props },
 ) {
   const { features } = useMicrofrontendContext();
@@ -125,7 +131,7 @@ export function usePrometheus(
   const [path, setPath] = useState(featurePath || kyma2_1path);
   const [cpuQuery, setCpuQuery] = useState(cpu2_1_partial_query);
 
-  const metric = getMetric(type, metricId, cpuQuery, { step, ...props });
+  const metric = getMetric(type, mode, metricId, cpuQuery, { step, ...props });
 
   const tick = () => {
     const newEndDate = new Date();
@@ -153,7 +159,7 @@ export function usePrometheus(
     `query=${metric.prometheusQuery}`;
 
   const onDataReceived = data => {
-    if (data?.error) {
+    if (data?.error && data?.error?.statusCode === 'Failure') {
       if (path !== kyma2_0path && path !== kyma2_1path) {
         LuigiClient.sendCustomMessage({
           id: 'busola.setPrometheusPath',
@@ -171,6 +177,7 @@ export function usePrometheus(
       }
     }
   };
+
   let { data, error, loading } = useGet(`/${path}/${query}`, {
     pollingInterval: 0,
     onDataReceived: data => onDataReceived(data),
@@ -183,11 +190,8 @@ export function usePrometheus(
   let prometheusData = [];
   let prometheusLabels = [];
 
-  if (type === 'multipleMetrics') {
-    const filteredResults = (data?.data.result || []).filter(filter);
-    console.log('filteredResults', filteredResults);
-
-    (filteredResults || []).forEach(d => {
+  if (mode === 'multiple') {
+    (data?.data.result || []).forEach(d => {
       let tempPrometheusData = [];
 
       let stepMultiplier = 0;
@@ -235,7 +239,6 @@ export function usePrometheus(
       }
     }
   }
-  console.log('prometheusData', prometheusData);
 
   return {
     data: prometheusData,

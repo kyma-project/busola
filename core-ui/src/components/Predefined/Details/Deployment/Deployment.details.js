@@ -34,7 +34,7 @@ const DeploymentsDetails = props => {
   const filterByPods = pods => prometheusResult => {
     return (
       pods.includes(prometheusResult?.metric?.pod) &&
-      prometheusResult?.metric?.container != 'POD'
+      prometheusResult?.metric?.container !== 'POD'
     );
   };
 
@@ -48,7 +48,8 @@ const DeploymentsDetails = props => {
 
     return (
       <StatsPanel
-        type="multipleMetrics"
+        type="pod"
+        mode="multiple"
         namespace={deployment.metadata.namespace}
         filter={filterByPods(connectedPods)}
       />
