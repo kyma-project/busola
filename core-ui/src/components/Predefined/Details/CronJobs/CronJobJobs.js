@@ -24,6 +24,7 @@ function CronJobJobs(cronJob) {
         showTitle: true,
         filter: filterByOwnerRef,
         i18n,
+        createFormProps: { prefix: cronJob.metadata.name },
       }}
     />
   );
