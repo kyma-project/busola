@@ -1034,6 +1034,7 @@ functions:
     server: Server error. Contact your cluster admin.
   headers:
     runtime: Runtime
+    runtime-image-override: Runtime Image Override
     source-type: Source Type
   name_singular: Function
   pod-list:
@@ -1057,6 +1058,7 @@ functions:
     initializing: Initializing the Function
     new-revision-error: New revision error
     running: Function created
+    runtime-image-override: Provide custom runtime image :)
     unhealthy: Waiting for the required number of replicas
   variable:
     buttons:

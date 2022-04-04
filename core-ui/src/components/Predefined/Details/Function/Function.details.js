@@ -28,6 +28,11 @@ const FunctionsDetails = props => {
       header: t('functions.headers.runtime'),
       value: resource => prettyRuntime(resource.spec.runtime),
     },
+    {
+      header: t('functions.headers.runtime-image-override'),
+      value: resource => resource.spec.runtimeImageOverride,
+      enabled: resource => resource.spec.runtimeImageOverride,
+    },
   ];
 
   const Functions = resource => {

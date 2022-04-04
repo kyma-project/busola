@@ -297,11 +297,15 @@ function Resource({
           />
         </PageHeader.Column>
 
-        {customColumns.map(col => (
-          <PageHeader.Column key={col.header} title={col.header}>
-            {col.value(resource)}
-          </PageHeader.Column>
-        ))}
+        {customColumns
+          .filter(col =>
+            col.enabled === undefined ? true : col.enabled(resource),
+          )
+          .map(col => (
+            <PageHeader.Column key={col.header} title={col.header}>
+              {col.value(resource)}
+            </PageHeader.Column>
+          ))}
       </PageHeader>
       <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
       {customComponents.map(component => component(resource, resourceUrl))}

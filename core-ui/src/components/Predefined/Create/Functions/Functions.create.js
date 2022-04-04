@@ -169,6 +169,13 @@ export function FunctionsCreate({
       />
       <ResourceForm.FormField
         advanced
+        propertyPath="$.spec.runtimeImageOverride"
+        label={t('functions.headers.runtime-image-override')}
+        tooltipContent={t('functions.tooltips.runtime-image-override')}
+        input={Inputs.Text}
+      />
+      <ResourceForm.FormField
+        advanced
         required
         propertyPath="$.spec.type"
         label={t('functions.headers.source-type')}
