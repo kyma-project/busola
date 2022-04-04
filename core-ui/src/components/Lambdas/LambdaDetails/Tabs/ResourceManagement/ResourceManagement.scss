@@ -2,6 +2,11 @@
   box-shadow: none;
   -webkit-box-shadow: none;
 
+  .error_message {
+    padding-top: 5px;
+    color: #ee0000;
+  }
+
   > form > .fd-panel__header {
     border-radius: 4px;
   }
@@ -66,11 +71,6 @@
       > input.resource_input:disabled {
         color: black;
         opacity: 0.5;
-      }
-
-      > div.error_message {
-        padding-top: 5px;
-        color: #ee0000;
       }
     }
   }
