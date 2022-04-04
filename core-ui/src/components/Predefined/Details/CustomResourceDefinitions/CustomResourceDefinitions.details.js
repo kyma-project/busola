@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { CurrentCRDVersion } from './CurrentCRDVersion';
 import { useTranslation } from 'react-i18next';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { Button } from 'fundamental-react';
 
-import { CRCreate } from './CRCreate';
 import { RelatedCRDsList } from './RelatedCRDsList';
 import { Tokens } from 'shared/components/Tokens';
 import { EventsList } from 'shared/components/EventsList';
@@ -68,8 +65,6 @@ const CustomResourceDefinitionsDetails = props => {
     );
   };
 
-  const [showEditDialog, setShowEditDialog] = useState(false);
-
   return (
     <ResourceDetails
       customColumns={customColumns}
@@ -78,35 +73,6 @@ const CustomResourceDefinitionsDetails = props => {
         CurrentCRDVersion,
         RelatedCRDsList,
         Events,
-      ]}
-      resourceHeaderActions={[
-        crd => {
-          return (
-            <>
-              <ModalWithForm
-                title={t('components.resources-list.create', {
-                  resourceType: crd.spec.names.kind,
-                })}
-                opened={showEditDialog}
-                confirmText={t('common.buttons.create')}
-                id={`add-${crd.spec.names.kind}-modal`}
-                className="modal-size--l create-resource-modal"
-                renderForm={props => <CRCreate crd={crd} {...props} />}
-                i18n={i18n}
-                modalOpeningComponent={<></>}
-                customCloseAction={() => setShowEditDialog(false)}
-              />
-              <Button
-                glyph="add"
-                option="transparent"
-                onClick={() => setShowEditDialog(true)}
-                className="fd-margin-end--tiny"
-              >
-                {t('common.buttons.create')} {crd.spec.names.kind}
-              </Button>
-            </>
-          );
-        },
       ]}
       createResourceForm={CustomResourceDefinitionsCreate}
       {...props}
