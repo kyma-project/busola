@@ -91,25 +91,17 @@ export function getMetric(type, metric, cpuQuery, { step, ...data }) {
 }
 
 export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
-  const { features } = useMicrofrontendContext();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);
 
-  let featurePath = features.PROMETHEUS?.config?.path;
-  featurePath = featurePath?.startsWith('/')
-    ? featurePath.substring(1)
-    : featurePath;
-  featurePath = featurePath?.endsWith('/')
-    ? featurePath.substring(0, featurePath.length - 1)
-    : featurePath;
   const kyma2_0path =
     'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
   const kyma2_1path =
     'api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1';
   const cpu2_0_partial_query = 'sum_rate';
   const cpu2_1_partial_query = 'sum_irate';
-  const [path, setPath] = useState(featurePath || kyma2_1path);
+  const [path, setPath] = useState(kyma2_1path);
   const [cpuQuery, setCpuQuery] = useState(cpu2_1_partial_query);
 
   const metric = getMetric(type, metricId, cpuQuery, { step, ...props });
