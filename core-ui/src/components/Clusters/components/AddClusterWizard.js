@@ -105,9 +105,6 @@ export function AddClusterWizard({
         );
         addByContext(kubeconfig, context);
       }
-      notification.notifySuccess({
-        content: t('clusters.add.success'),
-      });
     } catch (e) {
       notification.notifyError({
         title: t('clusters.messages.wrong-configuration'),
