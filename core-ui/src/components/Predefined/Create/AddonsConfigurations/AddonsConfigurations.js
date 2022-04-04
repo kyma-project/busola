@@ -111,7 +111,7 @@ export const AddonsConfigurations = ({
       noValidate
     >
       <div className="fd-form-group">
-        <div className="fd-form-item">
+        <div className="fd-form-item addons-name">
           <K8sNameInput
             onChange={handleNameChanged}
             id={`${resourceType}-name`}
