@@ -12,7 +12,6 @@ import { PersistentVolumesCreate } from '../Create/PersistentVolumes/PersistentV
 
 const PersistentVolumesList = props => {
   const { t } = useTranslation();
-
   const { data: storageClasses } = useGetList()(
     '/apis/storage.k8s.io/v1/storageclasses',
   );

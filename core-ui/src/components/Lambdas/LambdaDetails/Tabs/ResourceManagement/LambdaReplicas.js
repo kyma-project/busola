@@ -6,12 +6,7 @@ import { Row } from './TableElements/Row';
 
 import { ErrorMessage, inputClassName, inputNames } from './shared';
 
-export default function LambdaReplicas({
-  disabledForm,
-  register,
-  errors,
-  triggerValidation = () => void 0,
-}) {
+export default function LambdaReplicas({ disabledForm, register, errors }) {
   const { t } = useTranslation();
   const panels = [
     {
@@ -25,10 +20,9 @@ export default function LambdaReplicas({
             id={inputNames.replicas.min}
             disabled={disabledForm}
             type="number"
-            _ref={register}
-            onChange={async () => {
-              await triggerValidation(inputNames.replicas.max);
-            }}
+            {...register(inputNames.replicas.min, {
+              valueAsNumber: true,
+            })}
             min="0"
           />
           <ErrorMessage errors={errors} field={inputNames.replicas.min} />
@@ -47,10 +41,9 @@ export default function LambdaReplicas({
             min="0"
             name={inputNames.replicas.max}
             type="number"
-            onChange={async () => {
-              await triggerValidation(inputNames.replicas.min);
-            }}
-            _ref={register}
+            {...register(inputNames.replicas.max, {
+              valueAsNumber: true,
+            })}
           />
           <ErrorMessage errors={errors} field={inputNames.replicas.max} />
         </>
