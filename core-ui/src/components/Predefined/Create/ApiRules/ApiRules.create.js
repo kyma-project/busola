@@ -31,6 +31,7 @@ function APIRulesCreate({
   resourceUrl,
   setCustomValid,
   serviceName,
+  prefix,
 }) {
   const { t } = useTranslation();
   // queries are moved up here so that the network calls are not doubled
@@ -121,6 +122,7 @@ function APIRulesCreate({
         setValue={handleNameChange}
         readOnly={!!initialApiRule}
         validate={value => !!value}
+        prefix={prefix}
       />
       <ServiceDropdown
         propertyPath="$.spec.service"

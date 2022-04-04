@@ -10,7 +10,7 @@ const getServiceName = sink => {
   return sink?.substring(startIndex, nextDot);
 };
 
-export function SubscriptionsList({ serviceName, namespace }) {
+export function SubscriptionsList({ serviceName, namespace, prefix }) {
   const { i18n } = useTranslation();
   const params = {
     hasDetailsView: true,
@@ -20,7 +20,7 @@ export function SubscriptionsList({ serviceName, namespace }) {
     namespace,
     isCompact: true,
     showTitle: true,
-    createFormProps: { serviceName },
+    createFormProps: { serviceName, prefix },
     filter: subscription => {
       return getServiceName(subscription.spec.sink) === serviceName;
     },
