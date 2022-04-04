@@ -7,12 +7,10 @@
     "bootstrap": "npm install &&  npm run install:apps",
     "bootstrap:ci": "npm ci && npm run install:apps",
     "install:apps": "gulp install:apps",
-    "start": "./scripts/pre-start-warning.sh && lerna exec --parallel -- npm run start:kyma",
-    "start:api": "./scripts/pre-start-warning.sh && lerna exec --parallel -- npm run start:kyma:api",
+    "start": "./scripts/pre-start-warning.sh && lerna exec --parallel -- npm run start",
     "lint-check": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --check '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
     "lint-fix": "prettier --config ./.prettierrc --ignore-path ./.prettierignore --write '**/*.{ts,tsx,js,jsx,json,html,css,yaml,md}'",
-    "lint-staged": "lint-staged --concurrent=false",
-    "copy-themes": "gulp copy-themes"
+    "lint-staged": "lint-staged --concurrent=false"
   },
   "eslintConfig": {
     "extends": "react-app"
