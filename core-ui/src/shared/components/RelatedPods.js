@@ -1,5 +1,5 @@
 import React from 'react';
-import PodsListComponent from 'components/Predefined/List/Pod/Pods.list';
+import PodsListComponent from 'resources/Pods/PodsList';
 import { useTranslation } from 'react-i18next';
 export const RelatedPods = ({ namespace = '', labelSelector }) => {
   const { i18n } = useTranslation();
