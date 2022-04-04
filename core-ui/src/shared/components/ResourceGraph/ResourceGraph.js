@@ -21,7 +21,6 @@ function ResourceGraph({ resource, i18n, config }) {
   const [isReady, setReady] = useState(false);
 
   const [graphEl, setGraphEl] = useState(null);
-
   const isTabletOrWider = useMinWidth(TABLET);
   const { hasBeenInView } = useIntersectionObserver(graphEl, {
     skip: !isTabletOrWider,
@@ -34,13 +33,51 @@ function ResourceGraph({ resource, i18n, config }) {
     setDotSrc(buildGraph(data, config));
   };
 
-  const onAllLoaded = () => {
+  React.useEffect(() => {
+    if (!setReady) return;
+
     const initEventListeners = () => {
       for (const resourcesOfKind of Object.keys(resourcesStore.current)) {
         for (const res of resourcesStore.current[resourcesOfKind]) {
           const node = document.getElementById(res.metadata.uid);
-
           if (!node) continue;
+
+          // add status bar
+          const nodePosition =
+            [...node.children]
+              .find(el => {
+                return el.nodeName === 'polygon';
+              })
+              ?.getAttribute('points')
+              ?.split(/[,\s]/)
+              .map(x => parseFloat(x)) || [];
+
+          if (nodePosition.length) {
+            // the highest x coordinate from the opposite box vertexes
+            const biggestX = Math.max(nodePosition[0], nodePosition[4]);
+
+            // these are the y coordinates of the opposite box vertexes
+            const y1 = nodePosition[1];
+            const y2 = nodePosition[5];
+            const smallestY = Math.min(y1, y2);
+            const rangeY = Math.max(y1, y2) - smallestY;
+
+            const rect = document.createElementNS(
+              'http://www.w3.org/2000/svg',
+              'rect',
+            );
+            rect.setAttribute('x', biggestX.toString());
+            rect.setAttribute('y', smallestY.toString());
+            rect.setAttribute('width', '5');
+            rect.setAttribute('height', rangeY.toString());
+            rect.setAttribute('fill', 'orange');
+            rect.classList.add(
+              'resource_status',
+              `resource_status_${res.metadata.uid}`,
+            );
+
+            node.appendChild(rect);
+          }
 
           if (res.metadata.uid === resource.metadata.uid) {
             node.classList.add('root-node');
@@ -50,24 +87,30 @@ function ResourceGraph({ resource, i18n, config }) {
         }
       }
     };
+    initEventListeners();
 
-    setTimeout(() => {
-      initEventListeners();
-      // wait until Graphviz renders the nodes
-    }, 100);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isReady, resource]);
 
-    setReady(true);
-  };
+  React.useLayoutEffect(() => {
+    return () => {
+      const statuses = document.querySelectorAll('.resource_status');
+      statuses.forEach(box => {
+        box.remove();
+      });
+    };
+  }, [resource]);
 
   const [resourcesStore, startedLoading, startLoading] = useRelatedResources({
     resource,
     config,
     events: {
       onRelatedResourcesRefresh: redraw,
-      onAllLoaded,
+      onAllLoaded: a => {
+        setReady(true);
+      },
     },
   });
-
   useEffect(() => {
     if (hasBeenInView) {
       startLoading();
