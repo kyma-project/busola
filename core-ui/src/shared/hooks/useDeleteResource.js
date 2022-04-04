@@ -37,6 +37,11 @@ export function useDeleteResource({
     try {
       if (deleteFn) {
         deleteFn(resource, url);
+        notification.notifySuccess({
+          content: t('components.resources-list.messages.delete.success', {
+            resourceType: prettifiedResourceName,
+          }),
+        });
       } else {
         await deleteResourceMutation(url);
         notification.notifySuccess({
