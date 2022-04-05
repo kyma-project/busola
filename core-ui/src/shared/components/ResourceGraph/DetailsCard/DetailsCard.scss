@@ -2,12 +2,17 @@
   position: absolute;
   top: 10px;
   right: 10px;
+  display: flex;
+  flex-direction: column;
   height: 90%;
   width: 25%;
+  max-width: 500px;
   background-color: var(--sapBaseColor);
+  box-shadow: 0 0 10px var(--sapList_SelectionBackgroundColor);
 }
 
 .details-card-header {
+  height: 15%;
   display: flex;
   flex-direction: column;
   border-bottom: 1px solid var(--sapList_SelectionBackgroundColor);
@@ -23,5 +28,20 @@
     max-height: 30%;
     padding: 10px 0 10px 20px;
     color: var(--sapContent_LabelColor);
+  }
+}
+
+.details-content {
+  height: 70%;
+}
+
+.buttons-wrapper {
+  height: 15%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+
+  button {
+    margin: 0 10px 0 10px;
   }
 }

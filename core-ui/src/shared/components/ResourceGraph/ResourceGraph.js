@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Graphviz } from 'graphviz-react';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { navigateToResource } from 'shared/hooks/navigate';
+
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useRelatedResources } from 'shared/components/ResourceGraph/useRelatedResources';
 import { useIntersectionObserver } from 'shared/hooks/useIntersectionObserver';
@@ -21,7 +21,7 @@ function ResourceGraph({ resource, i18n, config }) {
   const { t } = useTranslation(['translation'], { i18n });
   const [dotSrc, setDotSrc] = useState('');
   const [isReady, setReady] = useState(false);
-  const [isDetailsCardHidden, setIsDetailsCardHidden] = useState(false);
+  const [isDetailsCardOpened, setIsDetailsCardOpened] = useState(false);
   const [graphEl, setGraphEl] = useState(null);
   const [clickedResource, setClickedResource] = useState('');
   const isTabletOrWider = useMinWidth(TABLET);
@@ -48,7 +48,7 @@ function ResourceGraph({ resource, i18n, config }) {
             node.classList.add('root-node');
           } else {
             node.onclick = () => {
-              setIsDetailsCardHidden(true);
+              setIsDetailsCardOpened(true);
               setClickedResource(res);
             };
           }
@@ -119,8 +119,11 @@ function ResourceGraph({ resource, i18n, config }) {
                 name={`${resource.kind} ${resource.metadata.name}.gv`}
                 i18n={i18n}
               />
-              {isDetailsCardHidden ? (
-                <DetailsCard resource={clickedResource} />
+              {isDetailsCardOpened ? (
+                <DetailsCard
+                  resource={clickedResource}
+                  handleCloseModal={() => setIsDetailsCardOpened(false)}
+                />
               ) : null}
             </div>
           </ErrorBoundary>
