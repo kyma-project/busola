@@ -23,7 +23,7 @@ function ResourceGraph({ resource, i18n, config }) {
   const [isReady, setReady] = useState(false);
   const [isDetailsCardOpened, setIsDetailsCardOpened] = useState(false);
   const [graphEl, setGraphEl] = useState(null);
-  const [clickedResource, setClickedResource] = useState('');
+  const [clickedResource, setClickedResource] = useState(null);
   const isTabletOrWider = useMinWidth(TABLET);
   const { hasBeenInView } = useIntersectionObserver(graphEl, {
     skip: !isTabletOrWider,
