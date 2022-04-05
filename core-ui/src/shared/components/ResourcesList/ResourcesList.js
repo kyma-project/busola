@@ -10,7 +10,10 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { navigateToDetails } from 'shared/hooks/navigate';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { navigateToFixedPathResourceDetails } from 'shared/hooks/navigate';
+import {
+  navigateToFixedPathResourceDetails,
+  navigateToResource,
+} from 'shared/hooks/navigate';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
@@ -281,11 +284,12 @@ export function ResourceListRenderer({
         className="fd-link"
         onClick={_ => {
           if (navigateFn) return navigateFn(entry);
-          if (fixedPath)
+          if (fixedPath && namespace)
             return navigateToFixedPathResourceDetails(
               resourceType,
               entry.metadata.name,
             );
+          if (fixedPath && !namespace) return navigateToResource(entry);
           navigateToDetails(resourceType, entry.metadata.name);
         }}
       >
