@@ -13,9 +13,12 @@ export function YamlFileUploader({ onYamlContentAdded }) {
     });
   };
 
-  const onYamlContentUploaded = async file => {
-    const fileContent = await readFile(file);
-    onYamlContentAdded(fileContent);
+  const onYamlContentUploaded = files => {
+    void Promise.all([...files].map(readFile))
+      .then(contents => {
+        onYamlContentAdded(contents.join('\n---\n'));
+      })
+      .catch(e => console.error(e));
   };
 
   return (
@@ -23,6 +26,7 @@ export function YamlFileUploader({ onYamlContentAdded }) {
       fileInputChanged={onYamlContentUploaded}
       acceptedFileFormats=".yaml,.yml"
       i18n={i18n}
+      allowMultiple
     />
   );
 }
