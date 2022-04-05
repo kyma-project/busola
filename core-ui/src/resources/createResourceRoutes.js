@@ -77,7 +77,6 @@ export const createResourceRoutes = ({
   resourceType = '',
   resourceI18Key = '',
 }) => {
-  console.log({ List, Details });
   // define resourceI18Key when calling the function, to set a custom plural resource name, for example to fix the capitalization
   // const { namespaced = true, resourceType = '', resourceI18Key = '' } = config;
 

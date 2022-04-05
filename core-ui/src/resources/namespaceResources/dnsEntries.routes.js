@@ -1,5 +1,5 @@
 import React from 'react';
-import { createResourceRoutes } from 'routing/createResourceRoutes';
+import { createResourceRoutes } from '../createResourceRoutes';
 
 const List = React.lazy(() =>
   import('../../components/Predefined/List/DNSEntries.list'),

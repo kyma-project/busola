@@ -1,4 +1,5 @@
 import { createResourceRoutes } from './createResourceRoutes';
+import transitionalRoutes from './transitionalRoutes';
 
 //namespaced
 import * as Jobs from './Jobs';
@@ -111,4 +112,9 @@ export const resources = {
   // clusterRoleBindings,
 };
 
-export const routes = Object.values(resources).map(createResourceRoutes);
+export const routes = (
+  <>
+    {Object.values(resources).map(createResourceRoutes)}
+    {transitionalRoutes}
+  </>
+);

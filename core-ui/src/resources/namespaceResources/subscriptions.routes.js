@@ -1,5 +1,5 @@
 import React from 'react';
-import { createResourceRoutes } from 'routing/createResourceRoutes';
+import { createResourceRoutes } from '../createResourceRoutes';
 
 const List = React.lazy(() =>
   import('../../components/Predefined/List/Subscription/Subscriptions.list'),
@@ -10,7 +10,9 @@ const Details = React.lazy(() =>
   ),
 );
 
-export default createResourceRoutes(
-  { List, Details },
-  { resourceType: 'Subscriptions', namespaced: true },
-);
+export default createResourceRoutes({
+  List,
+  Details,
+  resourceType: 'Subscriptions',
+  namespaced: true,
+});
