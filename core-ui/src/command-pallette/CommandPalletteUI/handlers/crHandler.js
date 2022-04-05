@@ -34,11 +34,10 @@ function getResourceKey(crd, namespace) {
 function findMatchingNode(crd, context) {
   const { namespaceNodes, clusterNodes } = context;
   const resourceType = crd.spec.names.plural;
-  const isNamespaced = crd.spec.scope === 'Namespaced';
 
-  // nodes to search within
-  const nodes = isNamespaced ? namespaceNodes : clusterNodes;
-  return nodes.find(n => n.resourceType === resourceType);
+  return [...namespaceNodes, ...clusterNodes].find(
+    n => n.resourceType === resourceType,
+  );
 }
 
 function navigateTo({ matchingNode, namespace, crd, crName = '' }) {
