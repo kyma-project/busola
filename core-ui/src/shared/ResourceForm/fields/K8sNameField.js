@@ -26,6 +26,7 @@ export function K8sNameField({
 
   useEffect(() => {
     if (prefix) generateName();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
