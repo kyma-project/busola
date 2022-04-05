@@ -2,11 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Link } from 'shared/components/Link/Link';
-import { GatewaysCreate } from '../Create/Gateways/Gateways.create';
-import { GatewaySelector } from '../Details/Gateway/GatewaySelector';
+import { GatewayCreate } from './GatewayCreate';
+import { GatewaySelector } from './GatewaySelector';
 import { Trans } from 'react-i18next';
 
-function GatewaysList(props) {
+export function GatewayList(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -29,10 +29,10 @@ function GatewaysList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={GatewaysCreate}
+      createResourceForm={GatewayCreate}
       {...props}
     />
   );
 }
 
-export default GatewaysList;
+export default GatewayList;

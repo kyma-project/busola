@@ -5,7 +5,7 @@ import { GatewayServers } from './GatewayServers';
 import { GatewaySelector } from './GatewaySelector';
 import { Selector } from 'shared/components/Selector/Selector';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { GatewaysCreate } from '../../Create/Gateways/Gateways.create';
+import { GatewayCreate } from './GatewayCreate';
 
 function MatchSelector(gateway) {
   return (
@@ -18,7 +18,7 @@ function MatchSelector(gateway) {
   );
 }
 
-function GatewaysDetails(props) {
+export function GatewayDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -32,9 +32,9 @@ function GatewaysDetails(props) {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={[GatewayServers, MatchSelector]}
-      createResourceForm={GatewaysCreate}
+      createResourceForm={GatewayCreate}
       {...props}
     />
   );
 }
-export default GatewaysDetails;
+export default GatewayDetails;

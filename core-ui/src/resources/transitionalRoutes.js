@@ -13,7 +13,6 @@ import oAuth2Clients from './namespaceResources/oAuth2Clients.routes';
 import networkPolicies from './namespaceResources/networkPolicies.routes';
 import issuers from './namespaceResources/issuers.routes';
 import ingresses from './namespaceResources/ingresses.routes';
-import gateways from './namespaceResources/gateways.routes';
 import eventsNamespace from './namespaceResources/eventsNamespace.routes';
 import dnsProvider from './namespaceResources/dnsProviders.routes';
 import dnsEntries from './namespaceResources/dnsEntries.routes';
@@ -44,7 +43,6 @@ const resources = (
     {eventsNamespace}
     <>
       {/* istio */}
-      {gateways}
       {serviceEntries}
       {destinationRules}
       {authorizationPolicies}

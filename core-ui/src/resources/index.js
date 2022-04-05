@@ -23,7 +23,7 @@ import * as Pods from './Pods';
 // import issuers from './namespaceResources/issuers.routes';
 // import ingresses from './namespaceResources/ingresses.routes';
 import * as HorizontalPodAutoscalers from './HorizontalPodAutoscalers';
-// import gateways from './namespaceResources/gateways.routes';
+import * as Gateways from './Gateways';
 // import eventsNamespace from './namespaceResources/eventsNamespace.routes';
 // import dnsProvider from './namespaceResources/dnsProviders.routes';
 // import dnsEntries from './namespaceResources/dnsEntries.routes';
@@ -67,7 +67,7 @@ export const resources = {
   DaemonSets,
   // // istio
   VirtualServices,
-  // gateways,
+  Gateways,
   Sidecars,
   // serviceEntries,
   // destinationRules,
