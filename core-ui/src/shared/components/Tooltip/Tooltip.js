@@ -12,7 +12,7 @@ export const Tooltip = ({
   trigger,
   tippyProps,
   className,
-  delay = [1500, 0],
+  delay = [200, 0],
 }) => {
   return (
     <TippyTooltip
