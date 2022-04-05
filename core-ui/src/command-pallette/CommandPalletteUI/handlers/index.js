@@ -43,6 +43,11 @@ export function getAutocompleteEntries(context) {
     .flatMap(handler => handler.getAutocompleteEntries(context))
     .filter(Boolean);
 
+  // don't try to autocomplete if correct word is already here
+  if (allEntries.includes(context.query)) {
+    return null;
+  }
+
   const prefix = findCommonPrefix(context.query, allEntries);
   return prefix === context.query ? null : prefix;
 }

@@ -14,7 +14,6 @@ function getCRAliases(crds) {
     return {
       crd,
       aliases: [
-        crd.metadata.name,
         names.plural,
         names.singular,
         ...(names.shortNames || []),
@@ -90,7 +89,7 @@ function getSuggestions({ tokens, resourceCache, namespace }) {
   const crdAlias = crdAliases.find(c => c.aliases.includes(suggestedALias));
   if (!crdAlias) return;
 
-  const suggestedType = crdAlias.crd.metadata.name;
+  const suggestedType = crdAlias.crd.spec.names.plural;
 
   if (name) {
     const resourceKey = getResourceKey(crdAlias.crd, namespace);
@@ -189,13 +188,13 @@ function createResults(context) {
 
   const matchingNode = findMatchingNode(crd, context);
 
+  const defaultCategory = isNamespaced
+    ? t('command-palette.crs.namespaced')
+    : t('command-palette.crs.cluster');
   const category =
-    t('configuration.title') +
+    (matchingNode?.category || defaultCategory) +
     ' > ' +
-    (matchingNode?.category ||
-      (isNamespaced
-        ? t('command-palette.crs.namespaced')
-        : t('command-palette.crs.cluster')));
+    pluralize(crd.spec.names.kind);
 
   const linkToList = {
     label: listLabel,
