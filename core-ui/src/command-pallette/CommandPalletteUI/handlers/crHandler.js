@@ -1,6 +1,7 @@
 import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import { prettifyKind } from 'shared/utils/helpers';
+import { autocompleteForResources, getSuggestion } from './helpers';
 
 // get all possible aliases for a cr
 function getCRAliases(crds) {
@@ -21,6 +22,13 @@ function getCRAliases(crds) {
       ],
     };
   });
+}
+
+function getResourceKey(crd, namespace) {
+  const { names, scope } = crd.spec;
+  const isNamespaced = scope === 'Namespaced';
+
+  return isNamespaced ? `${namespace}/${names.plural}` : names.plural;
 }
 
 function findMatchingNode(crd, context) {
@@ -48,33 +56,53 @@ function navigateTo({ matchingNode, namespace, crd, crName = '' }) {
   }
 }
 
-function getAutocompleteEntries({ tokens, resourceCache }) {
-  //   const tokenToAutocomplete = tokens[tokens.length - 1];
-  //   switch (tokens.length) {
-  //     case 1: // type
-  //       if ('customresources'.startsWith(tokenToAutocomplete)) {
-  //         return 'customresources ';
-  //       }
-  //       break;
-  //     case 2: // name
-  //       const crdNames = (resourceCache['customresources'] || []).map(
-  //         n => n.metadata.name,
-  //       );
-  //       return crdNames
-  //         .filter(name => name.startsWith(tokenToAutocomplete))
-  //         .map(name => `${tokens[0]} ${name} `);
-  //     default:
-  //       return [];
-  //   }
+function getAutocompleteEntries({ tokens, resourceCache, namespace }) {
+  const crds = resourceCache['customresourcedefinitions'] || [];
+
+  const crdAliases = getCRAliases(crds);
+  const suggestedALias = getSuggestion(
+    tokens[0],
+    crdAliases.flatMap(a => a.aliases),
+  );
+
+  const crdAlias = crdAliases.find(c => c.aliases.includes(suggestedALias));
+
+  const resources =
+    (crdAlias && resourceCache[getResourceKey(crdAlias.crd, namespace)]) || [];
+
+  return autocompleteForResources({
+    tokens,
+    resources,
+    resourceTypes: crdAliases.map(c => c.aliases),
+  });
 }
 
-function getSuggestions({ tokens, resourceCache }) {
-  //   return getSuggestionsForSingleResource({
-  //     tokens,
-  //     resources: resourceCache['customresources'] || [],
-  //     resourceTypeNames: ['customresources'],
-  //   });
-  return [];
+function getSuggestions({ tokens, resourceCache, namespace }) {
+  const crds = resourceCache['customresourcedefinitions'] || [];
+
+  const [type, name] = tokens;
+
+  const crdAliases = getCRAliases(crds);
+  const suggestedALias = getSuggestion(
+    type,
+    crdAliases.flatMap(a => a.aliases),
+  );
+
+  const crdAlias = crdAliases.find(c => c.aliases.includes(suggestedALias));
+  if (!crdAlias) return;
+
+  const suggestedType = crdAlias.crd.metadata.name;
+
+  if (name) {
+    const resourceKey = getResourceKey(crdAlias.crd, namespace);
+    const resourceNames = (resourceCache[resourceKey] || []).map(
+      n => n.metadata.name,
+    );
+    const suggestedName = getSuggestion(name, resourceNames);
+    return `${suggestedType || type} ${suggestedName || name}`;
+  } else {
+    return suggestedType;
+  }
 }
 
 async function fetchResources(context) {
@@ -101,17 +129,15 @@ async function fetchResources(context) {
     ).find(c => c.aliases.find(alias => alias === tokens[0]))?.crd;
     if (!crd) return;
 
-    const resourceType = crd.spec.names.plural;
-    const isNamespaced = crd.spec.scope === 'Namespaced';
-    const resourceKey = isNamespaced
-      ? `${namespace}/${resourceType}`
-      : resourceType;
+    const resourceKey = getResourceKey(crd, namespace);
 
     if (!resourceCache[resourceKey]) {
       const groupVersion = `/apis/${crd.spec.group}/${
         crd.spec.versions.find(v => v.served).name
       }`;
+      const isNamespaced = crd.spec.scope === 'Namespaced';
       const namespacePart = isNamespaced ? `namespaces/${namespace}/` : '';
+      const resourceType = crd.spec.names.plural;
 
       try {
         const response = await fetch(
@@ -160,7 +186,6 @@ function createResults(context) {
     resourceType: pluralize(prettifyKind(crd.spec.names.kind)),
   });
 
-  const resourceType = crd.spec.names.plural;
   const isNamespaced = crd.spec.scope === 'Namespaced';
 
   const matchingNode = findMatchingNode(crd, context);
@@ -180,12 +205,9 @@ function createResults(context) {
     onActivate: () => navigateTo({ matchingNode, namespace, crd }),
   };
 
-  const resourceKey = isNamespaced
-    ? `${namespace}/${resourceType}`
-    : resourceType;
   return [
     linkToList,
-    ...(resourceCache[resourceKey] || []).map(item =>
+    ...(resourceCache[getResourceKey(crd, namespace)] || []).map(item =>
       makeListItem({ crd, item, category, context }),
     ),
   ];
@@ -196,5 +218,5 @@ export const crHandler = {
   getSuggestions,
   fetchResources,
   createResults,
-  getNavigationHelp: () => [], //todo
+  getNavigationHelp: () => [],
 };
