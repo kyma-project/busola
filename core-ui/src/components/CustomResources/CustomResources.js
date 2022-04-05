@@ -46,7 +46,6 @@ export function CustomResources({
     hasDetailsView: true,
     navigateFn: cr => navigateFn(cr, crd),
     resourceUrl,
-    resourceName: crd.spec.names.kind,
     title: pluralize(crd.spec.names.kind),
     resourceType: crd.spec.names.kind,
     namespace,
