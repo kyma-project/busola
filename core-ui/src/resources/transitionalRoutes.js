@@ -1,7 +1,6 @@
 import React from 'react';
 
 //namespaced
-import virtualServices from './namespaceResources/virtualServices.routes';
 import serviceEntries from './namespaceResources/serviceEntries.routes';
 import serviceInstances from './namespaceResources/serviceInstances.routes';
 import serviceBrokers from './namespaceResources/serviceBrokers.routes';
@@ -19,7 +18,6 @@ import eventsNamespace from './namespaceResources/eventsNamespace.routes';
 import dnsProvider from './namespaceResources/dnsProviders.routes';
 import dnsEntries from './namespaceResources/dnsEntries.routes';
 import destinationRules from './namespaceResources/destinationRules.routes';
-import daemonSets from './namespaceResources/daemonSets.routes';
 import customResourcesDefinitionsNamespace from './namespaceResources/customResourceDefinitionsNs.routes';
 import configMaps from './namespaceResources/configMaps.routes';
 import certificates from './namespaceResources/certificates.routes';
@@ -45,10 +43,7 @@ const resources = (
     {/* namespace resources*/}
     {eventsNamespace}
     <>
-      {/* workloads */}
-      {daemonSets}
       {/* istio */}
-      {virtualServices}
       {gateways}
       {serviceEntries}
       {destinationRules}

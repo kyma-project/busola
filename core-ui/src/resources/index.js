@@ -5,7 +5,7 @@ import transitionalRoutes from './transitionalRoutes';
 import * as Jobs from './Jobs';
 import * as Sidecars from './Sidecars';
 import * as CronJobs from './CronJobs';
-// import virtualServices from './namespaceResources/virtualServices.routes';
+import * as VirtualServices from './VirtualServices';
 // import serviceEntries from './namespaceResources/serviceEntries.routes';
 import * as StatefulSets from './StatefulSets';
 import * as Services from './Services';
@@ -29,7 +29,7 @@ import * as HorizontalPodAutoscalers from './HorizontalPodAutoscalers';
 // import dnsEntries from './namespaceResources/dnsEntries.routes';
 // import destinationRules from './namespaceResources/destinationRules.routes';
 import * as Deployments from './Deployments';
-// import daemonSets from './namespaceResources/daemonSets.routes';
+import * as DaemonSets from './DaemonSets';
 // import customResourcesDefinitionsNamespace from './namespaceResources/customResourceDefinitionsNs.routes';
 // import configMaps from './namespaceResources/configMaps.routes';
 // import certificates from './namespaceResources/certificates.routes';
@@ -64,9 +64,9 @@ export const resources = {
   CronJobs,
   Pods,
   Deployments,
-  // daemonSets,
+  DaemonSets,
   // // istio
-  // virtualServices,
+  VirtualServices,
   // gateways,
   Sidecars,
   // serviceEntries,

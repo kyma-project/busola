@@ -1,15 +1,16 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
 import { Labels } from 'shared/components/Labels/Labels';
 import { Link } from 'shared/components/Link/Link';
-import { Trans } from 'react-i18next';
-import { DaemonSetsCreate } from '../Create/DaemonSets/DaemonSets.create';
-import { DaemonSetStatus } from '../Details/DaemonSet/DaemonSetStatus';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 
-const DaemonSetsList = props => {
+import { DaemonSetCreate } from './DaemonSetCreate';
+import { DaemonSetStatus } from './DaemonSetStatus';
+
+export function DaemonSetList(props) {
   const { t } = useTranslation();
   const restartAction = useRestartAction(props.resourceUrl);
 
@@ -50,9 +51,9 @@ const DaemonSetsList = props => {
       resourceName={t('daemon-sets.title')}
       description={description}
       customListActions={[restartAction]}
-      createResourceForm={DaemonSetsCreate}
+      createResourceForm={DaemonSetCreate}
       {...props}
     />
   );
-};
-export default DaemonSetsList;
+}
+export default DaemonSetList;

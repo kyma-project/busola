@@ -7,7 +7,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Selector } from 'shared/components/Selector/Selector';
 import { DaemonSetStatus } from './DaemonSetStatus';
-import { DaemonSetsCreate } from '../../Create/DaemonSets/DaemonSets.create';
+import { DaemonSetCreate } from './DaemonSetCreate';
 
 const Tolerations = resource => {
   const { t, i18n } = useTranslation();
@@ -71,7 +71,7 @@ const Images = resource => {
   );
 };
 
-const DaemonSetsDetails = props => {
+export function DaemonSetDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -100,9 +100,9 @@ const DaemonSetsDetails = props => {
     <ResourceDetails
       customComponents={[Tolerations, Images, MatchSelector]}
       customColumns={customColumns}
-      createResourceForm={DaemonSetsCreate}
+      createResourceForm={DaemonSetCreate}
       {...props}
     />
   );
-};
-export default DaemonSetsDetails;
+}
+export default DaemonSetDetails;

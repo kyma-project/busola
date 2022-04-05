@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { VirtualServicesCreate } from '../../Create/VirtualServices/VirtualServices.create';
+import { VirtualServiceCreate } from './VirtualServiceCreate';
 
 import { ServiceGateways } from './ServiceGateways';
 import { ServiceHosts } from './ServiceHosts';
@@ -9,9 +9,9 @@ import { HttpRoutes } from './HttpRoutes';
 import { TlsRoutes } from './TlsRoutes';
 import { TcpRoutes } from './TcpRoutes';
 
-import './VirtualServicesDetails.scss';
+import './VirtualServiceDetails.scss';
 
-function VirtualServicesDetails(props) {
+export function VirtualServiceDetails(props) {
   return (
     <ResourceDetails
       customComponents={[
@@ -21,9 +21,9 @@ function VirtualServicesDetails(props) {
         TlsRoutes,
         TcpRoutes,
       ]}
-      createResourceForm={VirtualServicesCreate}
+      createResourceForm={VirtualServiceCreate}
       {...props}
     />
   );
 }
-export default VirtualServicesDetails;
+export default VirtualServiceDetails;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import VirtualServicesList from 'components/Predefined/List/VirtualServices.list';
+import { VirtualServiceList } from 'resources/VirtualServices/VirtualServiceList';
 import { useTranslation } from 'react-i18next';
 const ApiRuleServices = apiRule => {
   const namespace = apiRule.metadata.namespace;
@@ -12,7 +12,7 @@ const ApiRuleServices = apiRule => {
     );
 
   return (
-    <VirtualServicesList
+    <VirtualServiceList
       key="api-rule-services"
       {...{
         hasDetailsView: true,
