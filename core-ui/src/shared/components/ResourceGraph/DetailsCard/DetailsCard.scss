@@ -4,7 +4,7 @@
   right: 10px;
   display: flex;
   flex-direction: column;
-  height: 90%;
+  height: 95%;
   width: 25%;
   max-width: 500px;
   background-color: var(--sapBaseColor);
@@ -32,14 +32,28 @@
 }
 
 .details-content {
-  height: 70%;
+  height: 75%;
+  width: 90%;
+  margin: 5px auto 5px auto;
+  overflow-y: scroll;
+}
+
+.title {
+  color: var(--sapNeutralColor);
+  margin-bottom: 5px;
+
+  span {
+    color: var(--sapTextColor);
+  }
 }
 
 .buttons-wrapper {
-  height: 15%;
   display: flex;
   text-align: center;
   justify-content: center;
+  height: 10%;
+  padding-top: 5px;
+  border-top: 1px solid var(--sapList_SelectionBackgroundColor);
 
   button {
     margin: 0 10px 0 10px;

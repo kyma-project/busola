@@ -122,7 +122,7 @@ function ResourceGraph({ resource, i18n, config }) {
               {isDetailsCardOpened ? (
                 <DetailsCard
                   resource={clickedResource}
-                  handleCloseModal={() => setIsDetailsCardOpened(false)}
+                  handleCloseCard={() => setIsDetailsCardOpened(false)}
                 />
               ) : null}
             </div>
