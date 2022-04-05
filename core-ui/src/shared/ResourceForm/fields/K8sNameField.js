@@ -50,7 +50,10 @@ export function K8sNameField({
               i18n={i18n}
               {...inputProps}
             />
-            <Tooltip className="actions-tooltip" content={'generate name'}>
+            <Tooltip
+              className="actions-tooltip"
+              content={t('common.tooltips.generate-name')}
+            >
               <Button
                 compact
                 className="k8s-name-field-action"
