@@ -112,6 +112,9 @@ function createResults({
   const [type, name] = tokens;
 
   const resourceType = toFullResourceType(type, extendedResourceTypes);
+  if (!extendedResourceTypes.flat().includes(resourceType)) {
+    return;
+  }
   const matchedNode = clusterNodes.find(n => n.resourceType === resourceType);
 
   if (!matchedNode) {

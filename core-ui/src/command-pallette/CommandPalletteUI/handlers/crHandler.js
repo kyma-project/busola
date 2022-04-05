@@ -1,6 +1,7 @@
 import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import { prettifyKind } from 'shared/utils/helpers';
+import { LOADING_INDICATOR } from '../useSearchResults';
 import { autocompleteForResources, getSuggestion } from './helpers';
 
 // get all possible aliases for a cr
@@ -111,41 +112,43 @@ async function fetchResources(context) {
     tokens,
     namespace,
   } = context;
-  if (!resourceCache['customresourcedefinitions']) {
+
+  let crds = resourceCache['customresourcedefinitions'];
+  if (!crds) {
     try {
       const response = await fetch(
         '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
       );
-      const { items: crds } = await response.json();
+      crds = (await response.json()).items;
       updateResourceCache('customresourcedefinitions', crds);
     } catch (e) {
       console.warn(e);
     }
-  } else {
-    const crd = getCRAliases(
-      resourceCache['customresourcedefinitions'],
-    ).find(c => c.aliases.find(alias => alias === tokens[0]))?.crd;
-    if (!crd) return;
+  }
 
-    const resourceKey = getResourceKey(crd, namespace);
+  const crd = getCRAliases(crds).find(c =>
+    c.aliases.find(alias => alias === tokens[0]),
+  )?.crd;
+  if (!crd) return;
 
-    if (!resourceCache[resourceKey]) {
-      const groupVersion = `/apis/${crd.spec.group}/${
-        crd.spec.versions.find(v => v.served).name
-      }`;
-      const isNamespaced = crd.spec.scope === 'Namespaced';
-      const namespacePart = isNamespaced ? `namespaces/${namespace}/` : '';
-      const resourceType = crd.spec.names.plural;
+  const resourceKey = getResourceKey(crd, namespace);
 
-      try {
-        const response = await fetch(
-          `${groupVersion}/${namespacePart}${resourceType}`,
-        );
-        const { items } = await response.json();
-        updateResourceCache(resourceKey, items);
-      } catch (e) {
-        console.warn(e);
-      }
+  if (!resourceCache[resourceKey]) {
+    const groupVersion = `/apis/${crd.spec.group}/${
+      crd.spec.versions.find(v => v.served).name
+    }`;
+    const isNamespaced = crd.spec.scope === 'Namespaced';
+    const namespacePart = isNamespaced ? `namespaces/${namespace}/` : '';
+    const resourceType = crd.spec.names.plural;
+
+    try {
+      const response = await fetch(
+        `${groupVersion}/${namespacePart}${resourceType}`,
+      );
+      const { items } = await response.json();
+      updateResourceCache(resourceKey, items);
+    } catch (e) {
+      console.warn(e);
     }
   }
 }
@@ -194,7 +197,7 @@ function createResults(context) {
   const category =
     (matchingNode?.category || defaultCategory) +
     ' > ' +
-    pluralize(crd.spec.names.kind);
+    pluralize(prettifyKind(crd.spec.names.kind));
 
   const linkToList = {
     label: listLabel,
@@ -203,12 +206,12 @@ function createResults(context) {
     onActivate: () => navigateTo({ matchingNode, namespace, crd }),
   };
 
-  return [
-    linkToList,
-    ...(resourceCache[getResourceKey(crd, namespace)] || []).map(item =>
-      makeListItem({ crd, item, category, context }),
-    ),
-  ];
+  const resources = resourceCache[getResourceKey(crd, namespace)];
+  const listItems = resources
+    ? resources.map(item => makeListItem({ crd, item, category, context }))
+    : [{ type: LOADING_INDICATOR }];
+
+  return [linkToList, ...listItems];
 }
 
 function getCRsHelp({ resourceCache }) {

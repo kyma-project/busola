@@ -119,6 +119,9 @@ function createResults({
   const [type, name] = tokens;
 
   const resourceType = toFullResourceType(type, extendedResourceTypes);
+  if (!extendedResourceTypes.flat().includes(resourceType)) {
+    return;
+  }
   const matchedNode = namespaceNodes.find(
     n =>
       n.resourceType === resourceType || n.navigationContext === resourceType,
