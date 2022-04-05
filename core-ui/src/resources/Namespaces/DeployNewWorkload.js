@@ -2,8 +2,8 @@ import React from 'react';
 import { Popover, Menu, Button } from 'fundamental-react';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
-import { DeploymentsCreate } from 'resources/Deployments/DeploymentsCreate';
-import { FunctionsCreate } from 'components/Predefined/Create/Functions/Functions.create';
+import { DeploymentCreate } from 'resources/Deployments/DeploymentCreate';
+import { FunctionCreate } from 'resources/Functions/FunctionCreate';
 import { useTranslation } from 'react-i18next';
 
 export default function DeployNewWorkload({ namespaceName }) {
@@ -24,7 +24,7 @@ export default function DeployNewWorkload({ namespaceName }) {
         </Menu.Item>
       }
       renderForm={props => (
-        <FunctionsCreate {...props} namespace={namespaceName} />
+        <FunctionCreate {...props} namespace={namespaceName} />
       )}
       i18n={i18n}
     />
@@ -41,7 +41,7 @@ export default function DeployNewWorkload({ namespaceName }) {
         </Menu.Item>
       }
       renderForm={props => (
-        <DeploymentsCreate {...props} namespace={namespaceName} />
+        <DeploymentCreate {...props} namespace={namespaceName} />
       )}
       i18n={i18n}
     />

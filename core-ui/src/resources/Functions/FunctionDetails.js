@@ -6,9 +6,9 @@ import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { FunctionsCreate } from '../../Create/Functions/Functions.create';
+import { FunctionCreate } from './FunctionCreate';
 
-const FunctionsDetails = props => {
+export function FunctionDetails(props) {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -37,10 +37,10 @@ const FunctionsDetails = props => {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={[Functions]}
-      createResourceForm={FunctionsCreate}
+      createResourceForm={FunctionCreate}
       {...props}
     />
   );
-};
+}
 
-export default FunctionsDetails;
+export default FunctionDetails;

@@ -5,17 +5,15 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-
-import { JobCompletions } from './JobCompletions';
-import { JobConditions } from './JobConditions';
-
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { Selector } from 'shared/components/Selector/Selector';
 
-import { JobsCreate } from '../../Create/Jobs/Jobs.create';
+import { JobCreate } from './JobCreate';
+import { JobCompletions } from './JobCompletions';
+import { JobConditions } from './JobConditions';
 
-function JobsDetails(props) {
+export function JobDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -77,10 +75,10 @@ function JobsDetails(props) {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={customComponents}
-      createResourceForm={JobsCreate}
+      createResourceForm={JobCreate}
       {...props}
     />
   );
 }
 
-export default JobsDetails;
+export default JobDetails;

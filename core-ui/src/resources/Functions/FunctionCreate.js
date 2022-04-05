@@ -29,7 +29,7 @@ function usePrevious(value) {
   return ref.current;
 }
 
-export function FunctionsCreate({
+export function FunctionCreate({
   namespace,
   formElementRef,
   onChange,
@@ -249,12 +249,3 @@ export function FunctionsCreate({
     </ResourceForm>
   );
 }
-FunctionsCreate.resourceGraphConfig = (t, context) => ({
-  networkFlowKind: true,
-  networkFlowLevel: -2,
-  relations: [
-    {
-      kind: 'Service',
-    },
-  ],
-});

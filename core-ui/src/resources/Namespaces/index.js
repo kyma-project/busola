@@ -1,12 +1,7 @@
 import React from 'react';
 
-const List = React.lazy(() => import('./NamespacesList'));
-const Details = React.lazy(() => import('./NamespacesDetails'));
+export const resourceType = 'namespaces';
+export const namespaced = false;
 
-const resource = {
-  List,
-  Details,
-  resourceType: 'namespaces',
-  namespaced: false,
-};
-export default resource;
+export const List = React.lazy(() => import('./NamespacesList'));
+export const Details = React.lazy(() => import('./NamespacesDetails'));

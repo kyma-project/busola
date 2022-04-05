@@ -1,13 +1,14 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { Link } from 'shared/components/Link/Link';
-import { Trans } from 'react-i18next';
-import { JobCompletions } from '../Details/Job/JobCompletions';
-import { JobsCreate } from '../Create/Jobs/Jobs.create';
 
-const JobsList = props => {
+import { JobCompletions } from './JobCompletions';
+import { JobCreate } from './JobCreate';
+
+export const JobList = props => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -35,10 +36,10 @@ const JobsList = props => {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={JobsCreate}
+      createResourceForm={JobCreate}
       {...props}
     />
   );
 };
 
-export default JobsList;
+export default JobList;

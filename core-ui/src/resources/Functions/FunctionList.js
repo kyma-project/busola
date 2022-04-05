@@ -9,9 +9,10 @@ import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
 import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
 import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
 import { useTranslation, Trans } from 'react-i18next';
-import { FunctionsCreate } from 'components/Predefined/Create/Functions/Functions.create';
 
-const FunctionsList = props => {
+import { FunctionCreate } from './FunctionCreate';
+
+export function FunctionList(props) {
   const { t } = useTranslation();
 
   const microfrontendContext = useMicrofrontendContext();
@@ -67,10 +68,10 @@ const FunctionsList = props => {
       customHeaderActions={headerActions}
       customColumns={customColumns}
       description={description}
-      createResourceForm={FunctionsCreate}
+      createResourceForm={FunctionCreate}
       {...props}
     />
   );
-};
+}
 
-export default FunctionsList;
+export default FunctionList;

@@ -3,7 +3,6 @@ import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { Switch } from 'fundamental-react';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { matchByOwnerReference } from 'shared/utils/helpers';
 
 import { cloneDeep } from 'lodash';
 
@@ -28,7 +27,7 @@ function isJobValid(job) {
   return isNameValid && areContainersValid;
 }
 
-function JobsCreate({
+export function JobCreate({
   formElementRef,
   namespace,
   onChange,
@@ -152,30 +151,4 @@ function JobsCreate({
     </ResourceForm>
   );
 }
-JobsCreate.allowEdit = true;
-JobsCreate.resourceGraphConfig = (t, context) => ({
-  networkFlowKind: true,
-  networkFlowLevel: -1,
-  relations: [
-    {
-      kind: 'Pod',
-    },
-    {
-      kind: 'CronJob',
-    },
-    {
-      kind: 'Function',
-    },
-  ],
-  depth: 1,
-  matchers: {
-    CronJob: (job, cronJob) =>
-      matchByOwnerReference({ resource: job, owner: cronJob }),
-    Function: (job, functión) =>
-      matchByOwnerReference({
-        resource: job,
-        owner: functión,
-      }),
-  },
-});
-export { JobsCreate };
+JobCreate.allowEdit = true;

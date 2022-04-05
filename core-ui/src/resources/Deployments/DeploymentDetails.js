@@ -6,10 +6,10 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { Selector } from 'shared/components/Selector/Selector.js';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
 
-import { DeploymentsCreate } from './DeploymentsCreate';
+import { DeploymentCreate } from './DeploymentCreate';
 import { DeploymentStatus } from './DeploymentStatus';
 
-const DeploymentsDetails = props => {
+export const DeploymentDetails = props => {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -37,10 +37,10 @@ const DeploymentsDetails = props => {
     <ResourceDetails
       customComponents={[HPASubcomponent, MatchSelector]}
       customColumns={customColumns}
-      createResourceForm={DeploymentsCreate}
+      createResourceForm={DeploymentCreate}
       {...props}
     />
   );
 };
 
-export default DeploymentsDetails;
+export default DeploymentDetails;

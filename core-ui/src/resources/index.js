@@ -1,7 +1,7 @@
 import { createResourceRoutes } from './createResourceRoutes';
 
 //namespaced
-// import jobs from './namespaceResources/jobs.routes';
+import * as Jobs from './Jobs';
 // import sidecars from './namespaceResources/sidecars.routes';
 // import cronJob from './namespaceResources/cronJobs.routes';
 // import virtualServices from './namespaceResources/virtualServices.routes';
@@ -37,15 +37,15 @@ import * as Deployments from './Deployments';
 // import addonsConfigurationNamespace from './namespaceResources/addonsConfigurationNamespace.routes';
 // import subscriptions from './namespaceResources/subscriptions.routes';
 // import serviceAccounts from './namespaceResources/serviceAccounts.routes';
-// import gitRepositories from './namespaceResources/gitRepositories.routes';
-// import functions from './namespaceResources/functions.routes';
+// import gitRepositoies from './namespaceResources/gitRepositories.routes';
+import * as Functions from './Functions';
 
 // //cluster
 // import applications from './clusterResources/applications.routes';
 // import clusterRoles from './clusterResources/clusterRoles.routes';
 // import storageClasses from './clusterResources/storageClases.routes';
 // import persistentVolumes from './clusterResources/persistentVolumes.routes';
-import namespaces from './Namespaces';
+import * as Namespaces from './Namespaces';
 // import eventsCluster from './clusterResources/eventsCluster.routes';
 // import addonsConfigurationCluster from './clusterResources/addonsConfigurationCluster.routes';
 // import customResourceDefinitionsCl from './clusterResources/customResourceDefinitionsCl.routes';
@@ -56,10 +56,10 @@ export const resources = {
   // eventsNamespace,
 
   // // workloads
-  // functions,
+  Functions,
   // statefulSets,
-  // jobs,
-  // replicaSets,
+  Jobs,
+  ReplicaSets,
   // cronJob,
   Pods,
   Deployments,
@@ -102,7 +102,7 @@ export const resources = {
   // // cluster resources
   // applications,
   // eventsCluster,
-  namespaces,
+  Namespaces,
   // clusterRoles,
   // storageClasses,
   // persistentVolumes,

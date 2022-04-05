@@ -9,20 +9,21 @@ import * as _ from 'lodash';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
+import {
+  SimpleContainersView,
+  AdvancedContainersView,
+} from 'shared/components/Deployment/ContainersViews';
 
-import './Deployments.create.scss';
 import {
   createContainerTemplate,
   createDeploymentTemplate,
   createPresets,
   createServiceTemplate,
 } from './templates';
-import {
-  SimpleContainersView,
-  AdvancedContainersView,
-} from 'shared/components/Deployment/ContainersViews';
 
-function DeploymentsCreate({
+import './DeploymentCreate.scss';
+
+export function DeploymentCreate({
   formElementRef,
   namespace,
   onChange,
@@ -207,5 +208,4 @@ function DeploymentsCreate({
     </ResourceForm>
   );
 }
-DeploymentsCreate.allowEdit = true;
-export { DeploymentsCreate };
+DeploymentCreate.allowEdit = true;

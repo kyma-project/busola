@@ -6,7 +6,7 @@ import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
 import { Link } from 'shared/components/Link/Link';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 
-import { DeploymentsCreate } from './DeploymentsCreate';
+import { DeploymentCreate } from './DeploymentCreate';
 import { DeploymentStatus } from './DeploymentStatus';
 
 const getImages = deployment => {
@@ -17,7 +17,7 @@ const getImages = deployment => {
   return images;
 };
 
-const DeploymentsList = props => {
+export const DeploymentList = props => {
   const { t } = useTranslation();
   const restartAction = useRestartAction(props.resourceUrl);
 
@@ -60,9 +60,9 @@ const DeploymentsList = props => {
       customColumns={customColumns}
       description={description}
       customListActions={[restartAction]}
-      createResourceForm={DeploymentsCreate}
+      createResourceForm={DeploymentCreate}
       {...props}
     />
   );
 };
-export default DeploymentsList;
+export default DeploymentList;
