@@ -413,6 +413,7 @@ command-palette:
     clusterroles: Cluster Roles
     configmaps: Config Maps
     cronjobs: Cron Jobs
+    customresourcedefinitions: Custom Resource Definitions
     daemonsets: Daemon Sets
     destinationrules: Destination Rules
     gitrepositories: Git Repositories
