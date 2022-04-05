@@ -55,6 +55,7 @@ export function K8sNameField({
                 className="k8s-name-field-action"
                 onClick={generateName}
                 glyph="synchronize"
+                ariaLabel="Generate name button"
               />
             </Tooltip>
           </div>
