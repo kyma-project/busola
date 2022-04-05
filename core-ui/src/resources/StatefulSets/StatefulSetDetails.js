@@ -1,14 +1,15 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { Selector } from 'shared/components/Selector/Selector';
+import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
 
 import { StatefulSetPods } from './StatefulSetPods';
-import { HPASubcomponent } from '../HPA/HPASubcomponent';
-import { Selector } from 'shared/components/Selector/Selector';
-import { StatefulSetsCreate } from '../../Create/StatefulSets/StatefulSets.create';
+import { StatefulSetCreate } from './StatefulSetCreate';
 
-function StatefulSetsDetails(props) {
+export function StatefulSetDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -36,9 +37,9 @@ function StatefulSetsDetails(props) {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={[HPASubcomponent, MatchSelector]}
-      createResourceForm={StatefulSetsCreate}
+      createResourceForm={StatefulSetCreate}
       {...props}
     />
   );
 }
-export default StatefulSetsDetails;
+export default StatefulSetDetails;

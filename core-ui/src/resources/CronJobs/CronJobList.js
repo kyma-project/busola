@@ -1,13 +1,13 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
+
 import { CronJobLastScheduleTime } from 'shared/components/CronJob/CronJobLastScheduleTime';
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Link } from 'shared/components/Link/Link';
-import { Trans } from 'react-i18next';
-import { CronJobsCreate } from 'components/Predefined/Create/Jobs/CronJobs.create';
+import { CronJobCreate } from './CronJobCreate';
 
-const CronJobsList = props => {
+export function CronJobList(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -39,10 +39,10 @@ const CronJobsList = props => {
       customColumns={customColumns}
       resourceName={t('cron-jobs.title')}
       description={description}
-      createResourceForm={CronJobsCreate}
+      createResourceForm={CronJobCreate}
       {...props}
     />
   );
-};
+}
 
-export default CronJobsList;
+export default CronJobList;

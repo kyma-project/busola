@@ -2,16 +2,24 @@ import React, { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { Switch } from 'fundamental-react';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { cloneDeep } from 'lodash';
 
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
-
-import { createCronJobTemplate, createCronJobPresets } from './templates';
-import { CronJobSpecSection } from './SpecSection';
-import { isCronExpressionValid, ScheduleSection } from './ScheduleSection';
-import { ContainerSection, ContainersSection } from './ContainersSection';
-import { cloneDeep } from 'lodash';
+import { CronJobSpecSection } from 'resources/Jobs/SpecSection';
+import {
+  isCronExpressionValid,
+  ScheduleSection,
+} from 'resources/Jobs/ScheduleSection';
+import {
+  ContainerSection,
+  ContainersSection,
+} from 'resources/Jobs/ContainersSection';
+import {
+  createCronJobTemplate,
+  createCronJobPresets,
+} from 'resources/Jobs/templates';
 
 const SIDECAR_INJECTION_LABEL = 'sidecar.istio.io/inject';
 const SIDECAR_INJECTION_VALUE = 'false';
@@ -25,7 +33,7 @@ function isCronJobValid(cronJob) {
   return areContainersValid && isCronExpressionValid(cronJob?.spec?.schedule);
 }
 
-function CronJobsCreate({
+export function CronJobCreate({
   formElementRef,
   resource: initialCronJob,
   namespace,
@@ -148,14 +156,4 @@ function CronJobsCreate({
     </ResourceForm>
   );
 }
-CronJobsCreate.allowEdit = true;
-CronJobsCreate.resourceGraphConfig = (t, context) => ({
-  networkFlowKind: true,
-  networkFlowLevel: -2,
-  relations: [
-    {
-      kind: 'Job',
-    },
-  ],
-});
-export { CronJobsCreate };
+CronJobCreate.allowEdit = true;

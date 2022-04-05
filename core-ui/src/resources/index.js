@@ -3,10 +3,10 @@ import { createResourceRoutes } from './createResourceRoutes';
 //namespaced
 import * as Jobs from './Jobs';
 import * as Sidecars from './Sidecars';
-// import cronJob from './namespaceResources/cronJobs.routes';
+import * as CronJobs from './CronJobs';
 // import virtualServices from './namespaceResources/virtualServices.routes';
 // import serviceEntries from './namespaceResources/serviceEntries.routes';
-// import statefulSets from './namespaceResources/statefulSets.routes';
+import * as StatefulSets from './StatefulSets';
 import * as Services from './Services';
 // import serviceInstances from './namespaceResources/serviceInstances.routes';
 // import serviceBrokers from './namespaceResources/serviceBrokers.routes';
@@ -55,12 +55,12 @@ export const resources = {
   // // namespace resources
   // eventsNamespace,
 
-  // // workloads
+  // workloads
   Functions,
-  // statefulSets,
+  StatefulSets,
   Jobs,
   ReplicaSets,
-  // cronJob,
+  CronJobs,
   Pods,
   Deployments,
   // daemonSets,
@@ -110,10 +110,5 @@ export const resources = {
   // customResourceDefinitionsCl,
   // clusterRoleBindings,
 };
+
 export const routes = Object.values(resources).map(createResourceRoutes);
-// export const routes = <>
-// {Object.entries(resources).map(([key, resource]) => {
-// const Route = createResourceRoutes(resource);
-// return <Route key={key} />;
-// })}
-// </>;

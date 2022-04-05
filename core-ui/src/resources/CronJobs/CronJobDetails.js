@@ -1,17 +1,19 @@
 import React from 'react';
+import { Link } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
+
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
 import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
-import CronJobJobs from './CronJobJobs.js';
-import { CronJobLastScheduleTime } from '../../../../shared/components/CronJob/CronJobLastScheduleTime';
-import { useTranslation } from 'react-i18next';
 import { navigateToFixedPathResourceDetails } from 'shared/hooks/navigate';
-import { Link } from 'fundamental-react';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
-import { CronJobsCreate } from 'components/Predefined/Create/Jobs/CronJobs.create';
+import { CronJobLastScheduleTime } from 'shared/components/CronJob/CronJobLastScheduleTime';
 
-const CronJobsDetails = props => {
+import { CronJobCreate } from './CronJobCreate';
+import { CronJobJobs } from './CronJobJobs';
+
+export function CronJobDetails(props) {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -66,10 +68,10 @@ const CronJobsDetails = props => {
     <ResourceDetails
       customComponents={[CronJobJobs, Events]}
       customColumns={customColumns}
-      createResourceForm={CronJobsCreate}
+      createResourceForm={CronJobCreate}
       {...props}
     />
   );
-};
+}
 
-export default CronJobsDetails;
+export default CronJobDetails;

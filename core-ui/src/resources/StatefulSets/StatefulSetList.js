@@ -1,15 +1,15 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
 import { Link } from 'shared/components/Link/Link';
-import { Trans } from 'react-i18next';
 
-import { StatefulSetPods } from '../Details/StatefulSet/StatefulSetPods';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
-import { StatefulSetsCreate } from '../Create/StatefulSets/StatefulSets.create';
+import { StatefulSetCreate } from './StatefulSetCreate';
+import { StatefulSetPods } from './StatefulSetPods';
 
-export const StatefulSetsList = props => {
+export function StatefulSetList(props) {
   const { t } = useTranslation();
   const restartAction = useRestartAction(props.resourceUrl);
 
@@ -41,9 +41,9 @@ export const StatefulSetsList = props => {
       customColumns={customColumns}
       description={description}
       customListActions={[restartAction]}
-      createResourceForm={StatefulSetsCreate}
+      createResourceForm={StatefulSetCreate}
       {...props}
     />
   );
-};
-export default StatefulSetsList;
+}
+export default StatefulSetList;

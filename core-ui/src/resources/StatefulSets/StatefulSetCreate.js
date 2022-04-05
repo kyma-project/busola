@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { matchByOwnerReference } from 'shared/utils/helpers';
 import { useTranslation } from 'react-i18next';
+
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
+
 import { createStatefulSetTemplate } from './templates';
 
-function StatefulSetsCreate({
+export function StatefulSetCreate({
   formElementRef,
   onChange,
   setCustomValid,
@@ -31,20 +32,3 @@ function StatefulSetsCreate({
     />
   );
 }
-StatefulSetsCreate.resourceGraphConfig = (t, context) => ({
-  networkFlowKind: true,
-  networkFlowLevel: -1,
-  relations: [
-    {
-      kind: 'Pod',
-    },
-  ],
-  matchers: {
-    Pod: (ss, pod) =>
-      matchByOwnerReference({
-        resource: pod,
-        owner: ss,
-      }),
-  },
-});
-export { StatefulSetsCreate };

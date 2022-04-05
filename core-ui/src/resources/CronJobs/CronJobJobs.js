@@ -1,8 +1,8 @@
 import React from 'react';
-import JobsList from 'components/Predefined/List/Jobs.list';
+import JobList from 'resources/Jobs/JobList';
 import { useTranslation } from 'react-i18next';
 
-function CronJobJobs(cronJob) {
+export function CronJobJobs(cronJob) {
   const namespace = cronJob.metadata.namespace;
   const jobsUrl = `/apis/batch/v1/namespaces/${namespace}/jobs`;
   const { i18n } = useTranslation();
@@ -12,7 +12,7 @@ function CronJobJobs(cronJob) {
     );
 
   return (
-    <JobsList
+    <JobList
       key="cronJobJobs"
       {...{
         hasDetailsView: true,
@@ -28,5 +28,3 @@ function CronJobJobs(cronJob) {
     />
   );
 }
-
-export default CronJobJobs;
