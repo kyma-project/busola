@@ -58,7 +58,7 @@ export function ShortHelpText({ showFullHelp }) {
   );
 }
 
-export function CommandPalletteHelp({ helpEntries, crds }) {
+export function CommandPalletteHelp({ helpEntries }) {
   const { t } = useTranslation();
 
   return (
@@ -100,29 +100,17 @@ export function CommandPalletteHelp({ helpEntries, crds }) {
           ))}
         </tbody>
       </table>
-      {crds && (
-        <>
-          <h1 className="help-header">
-            {t('command-palette.help.crd-aliases')}
-          </h1>
-          <table className="help-text">
-            <tbody>
-              {crds
-                .map(t => ({
-                  name: t.metadata.name,
-                  shortName:
-                    t.spec.names.shortNames?.[0] || t.spec.names.singular,
-                }))
-                .map(({ name, shortName }) => (
-                  <tr key={name}>
-                    <td>{name}</td>
-                    <td>{shortName}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </>
-      )}
+      <h1 className="help-header">{t('command-palette.help.crd-aliases')}</h1>
+      <table className="help-text">
+        <tbody>
+          {helpEntries.crds.map(({ name, shortName }) => (
+            <tr key={name}>
+              <td>{name}</td>
+              <td>{shortName}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

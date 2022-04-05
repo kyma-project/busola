@@ -213,10 +213,17 @@ function createResults(context) {
   ];
 }
 
+function getCRsHelp({ resourceCache }) {
+  return (resourceCache['customresourcedefinitions'] || []).map(t => ({
+    name: t.metadata.name,
+    shortName: t.spec.names.shortNames?.[0] || t.spec.names.singular,
+  }));
+}
+
 export const crHandler = {
   getAutocompleteEntries,
   getSuggestions,
   fetchResources,
   createResults,
-  getNavigationHelp: () => [],
+  getCRsHelp,
 };

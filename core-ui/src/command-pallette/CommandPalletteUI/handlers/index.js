@@ -76,6 +76,10 @@ export function getHelpEntries(context) {
       .map(handler => handler.getOthersHelp?.(context))
       .filter(Boolean)
       .flatMap(e => e),
+    crds: handlers
+      .map(handler => handler.getCRsHelp?.(context))
+      .filter(Boolean)
+      .flatMap(e => e),
   };
 
   helpEntries.navigation.sort((a, b) => a[0].localeCompare(b[0]));
