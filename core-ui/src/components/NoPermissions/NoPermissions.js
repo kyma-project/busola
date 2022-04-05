@@ -53,7 +53,7 @@ function NoPermissions() {
       <p className="fd-margin-top--md fd-margin-bottom--sm">
         {t('no-permissions.enter-namespace-name')}
       </p>
-      <form className="fd-display-flex">
+      <form className="fd-display-flex" onSubmit={updateKubeconfig}>
         <FormInput
           className="fd-margin-0"
           placeholder={t('no-permissions.enter-namespace-name-placeholder')}
@@ -61,10 +61,10 @@ function NoPermissions() {
           onChange={e => setNamespaceName(e.target.value)}
         />
         <Button
+          typeAttr="submit"
           option="emphasized"
           className="update-namespace-button"
           disabled={!namespaceName}
-          onClick={updateKubeconfig}
         >
           Save
         </Button>
