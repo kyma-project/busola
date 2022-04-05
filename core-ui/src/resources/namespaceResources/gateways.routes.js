@@ -8,7 +8,9 @@ const Details = React.lazy(() =>
   import('../../components/Predefined/Details/Gateway/Gateway.details'),
 );
 
-export default createResourceRoutes(
-  { List, Details },
-  { resourceType: 'Gateways', namespaced: true },
-);
+export default createResourceRoutes({
+  List,
+  Details,
+  resourceType: 'Gateways',
+  namespaced: true,
+});

@@ -8,11 +8,10 @@ const Details = React.lazy(() =>
   import('../../components/Predefined/Details/DNSEntries.details'),
 );
 
-export default createResourceRoutes(
-  { List, Details },
-  {
-    resourceType: 'DnsEntries',
-    namespaced: true,
-    resourceI18Key: 'dnsentries.title',
-  },
-);
+export default createResourceRoutes({
+  List,
+  Details,
+  resourceType: 'DnsEntries',
+  namespaced: true,
+  resourceI18Key: 'dnsentries.title',
+});

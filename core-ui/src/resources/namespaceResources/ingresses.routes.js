@@ -8,7 +8,9 @@ const Details = React.lazy(() =>
   import('../../components/Predefined/Details/Ingress/Ingress.details'),
 );
 
-export default createResourceRoutes(
-  { List, Details },
-  { resourceType: 'Ingresses', namespaced: true },
-);
+export default createResourceRoutes({
+  List,
+  Details,
+  resourceType: 'Ingresses',
+  namespaced: true,
+});

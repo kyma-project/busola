@@ -8,7 +8,9 @@ const Details = React.lazy(() =>
   import('../../components/Predefined/Details/Issuer/Issuer.details'),
 );
 
-export default createResourceRoutes(
-  { List, Details },
-  { resourceType: 'Issuers', namespaced: true },
-);
+export default createResourceRoutes({
+  List,
+  Details,
+  resourceType: 'Issuers',
+  namespaced: true,
+});

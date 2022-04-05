@@ -12,7 +12,9 @@ const Details = React.lazy(() =>
   ),
 );
 
-export default createResourceRoutes(
-  { List, Details },
-  { resourceType: 'ClusterAddonsConfigurations', namespaced: false },
-);
+export default createResourceRoutes({
+  List,
+  Details,
+  resourceType: 'ClusterAddonsConfigurations',
+  namespaced: false,
+});

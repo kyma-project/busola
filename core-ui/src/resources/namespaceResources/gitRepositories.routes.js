@@ -8,7 +8,9 @@ const Details = React.lazy(() =>
   import('../../components/Predefined/Details/GitRepositories.details'),
 );
 
-export default createResourceRoutes(
-  { List, Details },
-  { resourceType: 'GitRepositories', namespaced: true },
-);
+export default createResourceRoutes({
+  List,
+  Details,
+  resourceType: 'GitRepositories',
+  namespaced: true,
+});

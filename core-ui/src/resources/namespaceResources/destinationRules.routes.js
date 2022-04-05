@@ -10,7 +10,9 @@ const Details = React.lazy(() =>
   ),
 );
 
-export default createResourceRoutes(
-  { List, Details },
-  { resourceType: 'DestinationRules', namespaced: true },
-);
+export default createResourceRoutes({
+  List,
+  Details,
+  resourceType: 'DestinationRules',
+  namespaced: true,
+});
