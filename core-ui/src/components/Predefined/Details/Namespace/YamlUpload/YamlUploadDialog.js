@@ -17,6 +17,7 @@ export const OPERATION_STATE_SOME_FAILED = 'SOME_FAILED';
 
 export function YamlUploadDialog({ show, onCancel }) {
   const { t } = useTranslation();
+
   const [resourcesData, setResourcesData] = useState();
   const [resourcesWithStatuses, setResourcesWithStatuses] = useState();
   const oldYaml = useRef();
@@ -40,6 +41,7 @@ export function YamlUploadDialog({ show, onCancel }) {
       setResourcesData(null);
       setResourcesWithStatuses(null);
       setLastOperationState(OPERATION_STATE_INITIAL);
+      oldYaml.current = null;
     }
   }, [show]);
 
