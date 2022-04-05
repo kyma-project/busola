@@ -19,8 +19,9 @@ export function FileInput({
   inputRef,
   required,
   i18n,
+  allowMultiple,
 }) {
-  const [fileName, setFileName] = useState('');
+  const [fileNames, setFileNames] = useState([]);
   const [draggingOverCounter, setDraggingCounter] = useState(0);
   const { t } = useTranslation(null, { i18n });
 
@@ -30,10 +31,10 @@ export function FileInput({
     e.preventDefault();
   }
 
-  function fileChanged(file) {
-    setFileName(file ? file.name : '');
-    if (file) {
-      fileInputChanged(file);
+  function fileChanged(files) {
+    setFileNames([...files].map(file => file.name || ''));
+    if (files.length) {
+      fileInputChanged(files);
     }
   }
 
@@ -41,7 +42,7 @@ export function FileInput({
     setDraggingCounter(0);
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation(); // to avoid event.js error
-    fileChanged(e.dataTransfer.files[0]);
+    fileChanged(e.dataTransfer.files);
   }
 
   const containerClass = classNames('file-input', {
@@ -57,15 +58,18 @@ export function FileInput({
       onDragLeave={() => setDraggingCounter(draggingOverCounter - 1)}
       onDragOver={dragOver}
     >
-      {!!fileName && <p className="file-input__secondary">{fileName}</p>}
+      {!!fileNames.length && (
+        <p className="file-input__secondary">{fileNames.join(', ')}</p>
+      )}
       <input
         ref={inputRef}
         type="file"
         id="file-upload"
-        onChange={e => fileChanged(e.target.files[0])}
+        onChange={e => fileChanged(e.target.files)}
         aria-hidden="true"
         accept={acceptedFileFormats}
         required={required}
+        multiple={allowMultiple}
       />
       <div>
         <Icon glyph="upload" ariaLabel="file upload" />
