@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
@@ -17,13 +17,16 @@ export function K8sNameField({
   ...props
 }) {
   const { t, i18n } = useTranslation();
-
   const { isAdvanced, propertyPath, validate, ...inputProps } = props;
 
   const generateName = () => {
     const name = randomNamesGenerator();
     setValue(prefix ? `${prefix}-${name}` : name);
   };
+
+  useEffect(() => {
+    if (prefix) generateName();
+  }, []);
 
   return (
     <ResourceForm.FormField
