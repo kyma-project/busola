@@ -177,7 +177,12 @@ export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
               setActiveIndex={setActiveResultIndex}
             />
           )}
-          {showHelp && <CommandPalletteHelp helpEntries={helpEntries} />}
+          {showHelp && (
+            <CommandPalletteHelp
+              helpEntries={helpEntries}
+              crds={resourceCache['customresourcedefinitions']}
+            />
+          )}
         </div>
       </div>
     </Background>
