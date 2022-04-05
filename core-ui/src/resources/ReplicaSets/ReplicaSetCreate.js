@@ -6,15 +6,16 @@ import * as _ from 'lodash';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
-
-import './ReplicaSets.create.scss';
-import { createContainerTemplate, createReplicaSetTemplate } from './templates';
 import {
   SimpleContainersView,
   AdvancedContainersView,
 } from 'shared/components/Deployment/ContainersViews';
 
-function ReplicaSetsCreate({
+import { createContainerTemplate, createReplicaSetTemplate } from './templates';
+
+import './ReplicaSetCreate.scss';
+
+export function ReplicaSetCreate({
   resourceUrl,
   resource: initialReplicaSet,
   formElementRef,
@@ -115,17 +116,4 @@ function ReplicaSetsCreate({
     </ResourceForm>
   );
 }
-ReplicaSetsCreate.allowEdit = true;
-ReplicaSetsCreate.resourceGraphConfig = (t, context) => ({
-  networkFlowKind: true,
-  networkFlowLevel: -1,
-  relations: [
-    {
-      kind: 'Deployment',
-    },
-    {
-      kind: 'Pod',
-    },
-  ],
-});
-export { ReplicaSetsCreate };
+ReplicaSetCreate.allowEdit = true;

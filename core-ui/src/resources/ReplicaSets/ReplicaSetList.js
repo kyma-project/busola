@@ -1,9 +1,11 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
 import { Link } from 'shared/components/Link/Link';
-import { useTranslation, Trans } from 'react-i18next';
-import { ReplicaSetsCreate } from './ReplicaSetsCreate';
+
+import { ReplicaSetCreate } from './ReplicaSetCreate';
 import { ReplicaSetStatus } from './ReplicaSetStatus';
 
 const getImages = replicaSet => {
@@ -14,7 +16,7 @@ const getImages = replicaSet => {
   return images;
 };
 
-const ReplicaSetsList = params => {
+export function ReplicaSetList(params) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -54,10 +56,10 @@ const ReplicaSetsList = params => {
       customColumns={customColumns}
       resourceName={t('replica-sets.title')}
       description={description}
-      createResourceForm={ReplicaSetsCreate}
+      createResourceForm={ReplicaSetCreate}
       {...params}
     />
   );
-};
+}
 
-export default ReplicaSetsList;
+export default ReplicaSetList;

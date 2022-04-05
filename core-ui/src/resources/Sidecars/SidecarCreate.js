@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useTranslation } from 'react-i18next';
-import { ResourceForm } from 'shared/ResourceForm';
-import { createPodTemplate } from './templates';
 
-export function PodsCreate({
+import { ResourceForm } from 'shared/ResourceForm';
+
+import { createSidecarTemplate } from './templates';
+
+export function SidecarCreate({
   formElementRef,
   onChange,
   setCustomValid,
   resourceUrl,
+  namespace,
 }) {
-  const { namespaceId } = useMicrofrontendContext();
-  const [pod, setPod] = useState(createPodTemplate(namespaceId));
+  const [sidecar, setSidecar] = useState(createSidecarTemplate(namespace));
   const { t } = useTranslation();
 
   return (
     <ResourceForm
-      pluralKind="pods"
-      singularName={t('pods.name_singular')}
-      resource={pod}
-      setResource={setPod}
+      pluralKind="sidecars"
+      singularName={t('sidecars.name_singular')}
+      resource={sidecar}
+      setResource={setSidecar}
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}

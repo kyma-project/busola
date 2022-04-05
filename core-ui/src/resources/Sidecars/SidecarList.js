@@ -1,13 +1,14 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Labels } from 'shared/components/Labels/Labels';
 import { Link } from 'shared/components/Link/Link';
-import { Trans } from 'react-i18next';
-import { SidecarsCreate } from '../Create/Sidecars/Sidecars.create';
 
-export function SidecarsList(props) {
+import { SidecarCreate } from './SidecarCreate';
+
+export function SidecarList(props) {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -36,9 +37,9 @@ export function SidecarsList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={SidecarsCreate}
+      createResourceForm={SidecarCreate}
       {...props}
     />
   );
 }
-export default SidecarsList;
+export default SidecarList;

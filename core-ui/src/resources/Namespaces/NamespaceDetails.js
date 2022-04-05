@@ -1,21 +1,24 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
+import LimitRangesList from 'components/Predefined/List/LimitRanges.list';
+import ResourceQuotasListComponent from 'components/Predefined/List/ResourceQuotas.list';
+
 import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
-import { useTranslation } from 'react-i18next';
-import { NamespacesCreate } from './NamespacesCreate';
-import LimitRangesList from 'components/Predefined/List/LimitRanges.list';
-import ResourceQuotasListComponent from 'components/Predefined/List/ResourceQuotas.list';
-import './Namespace.details.scss';
+import { NamespaceCreate } from './NamespaceCreate';
 
-export const NamespacesDetails = props => {
+import './NamespaceDetails.scss';
+
+export function NamespaceDetails(props) {
   const { t, i18n } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
@@ -80,7 +83,7 @@ export const NamespacesDetails = props => {
 
   return (
     <ResourceDetails
-      createResourceForm={NamespacesCreate}
+      createResourceForm={NamespaceCreate}
       {...props}
       windowTitle={t('namespaces.overview.title')}
       customColumns={customColumns}
@@ -97,5 +100,5 @@ export const NamespacesDetails = props => {
       {Events}
     </ResourceDetails>
   );
-};
-export default NamespacesDetails;
+}
+export default NamespaceDetails;

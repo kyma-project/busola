@@ -5,8 +5,8 @@ import { matchByOwnerReference } from 'shared/utils/helpers';
 export const resourceType = 'Services';
 export const namespaced = true;
 
-export const List = React.lazy(() => import('./ServicesList'));
-export const Details = React.lazy(() => import('./ServicesDetails'));
+export const List = React.lazy(() => import('./ServiceList'));
+export const Details = React.lazy(() => import('./ServiceDetails'));
 
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,

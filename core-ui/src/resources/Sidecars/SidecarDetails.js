@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Selector } from 'shared/components/Selector/Selector';
+
 import { IstioListeners } from './IstioListeners';
+import { SidecarCreate } from './SidecarCreate';
 
-import { SidecarsCreate } from '../../Create/Sidecars/Sidecars.create';
-
-export const SidecarsDetails = props => {
+export function SidecarDetails(props) {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -33,10 +33,10 @@ export const SidecarsDetails = props => {
       customComponents={[IstioListeners, WorkloadSelector]}
       customColumns={customColumns}
       singularName={t('persistent-volume-claims.name_singular')}
-      createResourceForm={SidecarsCreate}
+      createResourceForm={SidecarCreate}
       {...props}
     />
   );
-};
+}
 
-export default SidecarsDetails;
+export default SidecarDetails;

@@ -5,9 +5,9 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
 import { Link } from 'shared/components/Link/Link';
 
-import { ServicesCreate } from './ServicesCreate';
+import { ServiceCreate } from './ServiceCreate';
 
-const ServicesList = props => {
+export function ServiceList(props) {
   const { t } = useTranslation();
 
   const getPortString = port => {
@@ -76,10 +76,10 @@ const ServicesList = props => {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={ServicesCreate}
+      createResourceForm={ServiceCreate}
       {...props}
     />
   );
-};
+}
 
-export default ServicesList;
+export default ServiceList;

@@ -8,10 +8,10 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { SubscriptionsList } from 'shared/components/SubscriptionsList';
 import { ApiRulesList } from 'components/ApiRules/ApiRulesList';
 
-import { ServicesCreate } from './ServicesCreate';
-import './Service.details.scss';
+import { ServiceCreate } from './ServiceCreate';
+import './ServiceDetails.scss';
 
-export const ServicesDetails = props => {
+export function ServiceDetails(props) {
   const { t } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
@@ -108,10 +108,10 @@ export const ServicesDetails = props => {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={customComponents}
-      createResourceForm={ServicesCreate}
+      createResourceForm={ServiceCreate}
       {...props}
     />
   );
-};
+}
 
-export default ServicesDetails;
+export default ServiceDetails;

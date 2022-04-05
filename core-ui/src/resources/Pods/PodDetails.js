@@ -1,17 +1,17 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import LuigiClient from '@luigi-project/client';
+import { Link } from 'fundamental-react';
+
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { GenericList } from 'shared/components/GenericList/GenericList';
+import { EventsList } from 'shared/components/EventsList';
+import { filterByResource } from 'hooks/useMessageList';
 
 import { PodStatus } from './PodStatus';
 import ContainersData from './ContainersData';
-import LuigiClient from '@luigi-project/client';
-import { Link } from 'fundamental-react';
-import { useTranslation } from 'react-i18next';
-import { EventsList } from 'shared/components/EventsList';
-import { filterByResource } from 'hooks/useMessageList';
-import { PodsCreate } from './PodsCreate';
-
+import { PodCreate } from './PodCreate';
 import { PodStatsGraph } from './PodStatsGraph';
 
 function toSnakeCase(inputString) {
@@ -35,7 +35,7 @@ function goToSecretDetails(resourceKind, name) {
     .navigate(`${preparedResourceKind}s/details/${name}`);
 }
 
-const PodsDetails = props => {
+export function PodDetails(props) {
   const { t, i18n } = useTranslation();
 
   const Events = () => (
@@ -131,9 +131,9 @@ const PodsDetails = props => {
         Events,
       ]}
       customColumns={customColumns}
-      createResourceForm={PodsCreate}
+      createResourceForm={PodCreate}
       {...props}
     />
   );
-};
-export default PodsDetails;
+}
+export default PodDetails;

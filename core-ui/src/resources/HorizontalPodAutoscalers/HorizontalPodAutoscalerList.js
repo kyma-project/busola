@@ -6,9 +6,9 @@ import { Link } from 'shared/components/Link/Link';
 import { Tokens } from 'shared/components/Tokens';
 
 import { MetricsBrief } from './helpers';
-import { HorizontalPodAutoscalersCreate } from './HorizontalPodAutoscalersCreate';
+import { HorizontalPodAutoscalerCreate } from './HorizontalPodAutoscalerCreate';
 
-const HorizontalPodAutoscalersList = props => {
+export function HorizontalPodAutoscalerList(props) {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -58,10 +58,10 @@ const HorizontalPodAutoscalersList = props => {
       customColumns={customColumns}
       resourceName={t('hpas.title')}
       description={description}
-      createResourceForm={HorizontalPodAutoscalersCreate}
+      createResourceForm={HorizontalPodAutoscalerCreate}
       {...props}
     />
   );
-};
+}
 
-export default HorizontalPodAutoscalersList;
+export default HorizontalPodAutoscalerList;

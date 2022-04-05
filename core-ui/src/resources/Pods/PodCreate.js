@@ -4,24 +4,24 @@ import { useTranslation } from 'react-i18next';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
 
-import { createHPATemplate } from './templates';
+import { createPodTemplate } from './templates';
 
-function HorizontalPodAutoscalersCreate({
+export function PodCreate({
   formElementRef,
   onChange,
   setCustomValid,
   resourceUrl,
 }) {
   const { namespaceId } = useMicrofrontendContext();
-  const [HPA, setHPA] = useState(createHPATemplate(namespaceId));
+  const [pod, setPod] = useState(createPodTemplate(namespaceId));
   const { t } = useTranslation();
 
   return (
     <ResourceForm
-      pluralKind="HorizontalPodAutoscalers"
-      singularName={t('hpas.name_singular')}
-      resource={HPA}
-      setResource={setHPA}
+      pluralKind="pods"
+      singularName={t('pods.name_singular')}
+      resource={pod}
+      setResource={setPod}
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
@@ -30,4 +30,3 @@ function HorizontalPodAutoscalersCreate({
     />
   );
 }
-export { HorizontalPodAutoscalersCreate };

@@ -12,14 +12,15 @@ import { createNamespaceTemplate } from './templates';
 import { createLimitRangeTemplate } from 'components/Predefined/Create/LimitRanges/templates';
 import { createResourceQuotaTemplate } from 'components/Predefined/Create/ResourceQuotas/templates';
 
-import './CreateNamespace.scss';
 import { LimitPresets, MemoryPresets } from './Presets';
 import { CONFIG } from './config';
+
+import './NamespaceCreate.scss';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_VALUE = 'disabled';
 
-const NamespacesCreate = props => {
+export function NamespaceCreate(props) {
   const {
     formElementRef,
     onChange,
@@ -321,7 +322,6 @@ const NamespacesCreate = props => {
       ) : null}
     </ResourceForm>
   );
-};
+}
 
-NamespacesCreate.allowEdit = true;
-export { NamespacesCreate };
+NamespaceCreate.allowEdit = true;

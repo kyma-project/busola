@@ -6,7 +6,7 @@ import { getFeatureToggle } from 'shared/hooks/useFeatureToggle';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'shared/components/Link/Link';
 import { Trans } from 'react-i18next';
-import { NamespacesCreate } from './NamespacesCreate';
+import { NamespaceCreate } from './NamespaceCreate';
 
 const FilterNamespaces = namespace => {
   const showHiddenNamespaces = getFeatureToggle('showHiddenNamespaces');
@@ -17,7 +17,7 @@ const FilterNamespaces = namespace => {
     : !hiddenNamespaces.includes(namespace.metadata.name);
 };
 
-const NamespacesList = props => {
+export function NamespaceList(props) {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -42,10 +42,10 @@ const NamespacesList = props => {
       customColumns={customColumns}
       description={description}
       filter={FilterNamespaces}
-      createResourceForm={NamespacesCreate}
+      createResourceForm={NamespaceCreate}
       {...props}
     />
   );
-};
+}
 
-export default NamespacesList;
+export default NamespaceList;

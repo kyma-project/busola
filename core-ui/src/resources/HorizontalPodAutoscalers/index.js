@@ -3,9 +3,9 @@ import React from 'react';
 export const resourceType = 'HorizontalPodAutoscalers';
 export const namespaced = true;
 
-export const List = React.lazy(() => import('./HorizontalPodAutoscalersList'));
+export const List = React.lazy(() => import('./HorizontalPodAutoscalerList'));
 export const Details = React.lazy(() =>
-  import('./HorizontalPodAutoscalersDetails'),
+  import('./HorizontalPodAutoscalerDetails'),
 );
 
 export const resourceGraphConfig = (t, context) => ({

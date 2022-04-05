@@ -1,16 +1,17 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import { Link } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
-import { useTranslation } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
 import { Link as ReactSharedLink } from 'shared/components/Link/Link';
-import { Trans } from 'react-i18next';
-import { PodsCreate } from './PodsCreate';
+
+import { PodCreate } from './PodCreate';
 import { PodStatus } from './PodStatus';
 import PodRestarts from './PodRestarts';
 
-const PodsList = params => {
+export function PodList(params) {
   const { showNodeName } = params;
   const { t } = useTranslation();
 
@@ -67,10 +68,10 @@ const PodsList = params => {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={PodsCreate}
+      createResourceForm={PodCreate}
       {...params}
     />
   );
-};
+}
 
-export default PodsList;
+export default PodList;

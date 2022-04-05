@@ -12,9 +12,9 @@ import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 
 import { currentMetricsParser, metricsParser } from './helpers';
-import { HorizontalPodAutoscalersCreate } from './HorizontalPodAutoscalersCreate';
+import { HorizontalPodAutoscalerCreate } from './HorizontalPodAutoscalerCreate';
 
-function HorizontalPodAutoscalersDetails(props) {
+export function HorizontalPodAutoscalerDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -120,9 +120,9 @@ function HorizontalPodAutoscalersDetails(props) {
       resourceName={t('hpas.name_singular')}
       customColumns={customColumns}
       customComponents={[HPASpec, HPAMetrics, Events]}
-      createResourceForm={HorizontalPodAutoscalersCreate}
+      createResourceForm={HorizontalPodAutoscalerCreate}
       {...props}
     />
   );
 }
-export default HorizontalPodAutoscalersDetails;
+export default HorizontalPodAutoscalerDetails;

@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
 import { ReplicaSetStatus } from './ReplicaSetStatus';
 import { Selector } from 'shared/components/Selector/Selector';
-import { ReplicaSetsCreate } from './ReplicaSetsCreate';
+import { ReplicaSetCreate } from './ReplicaSetCreate';
 
-export const ReplicasetsDetails = props => {
+export function ReplicasetsDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -73,9 +73,9 @@ export const ReplicasetsDetails = props => {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={[HPASubcomponent, MatchSelector]}
-      createResourceForm={ReplicaSetsCreate}
+      createResourceForm={ReplicaSetCreate}
       {...props}
     />
   );
-};
+}
 export default ReplicasetsDetails;

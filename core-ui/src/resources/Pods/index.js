@@ -20,8 +20,8 @@ function matchByVolumes(pod, resource) {
 export const resourceType = 'Pods';
 export const namespaced = true;
 
-export const List = React.lazy(() => import('./PodsList'));
-export const Details = React.lazy(() => import('./PodsDetails'));
+export const List = React.lazy(() => import('./PodList'));
+export const Details = React.lazy(() => import('./PodDetails'));
 
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
