@@ -12,16 +12,18 @@ import { useTranslation } from 'react-i18next';
 import { useMinWidth, TABLET } from 'hooks/useMinWidth';
 import { LayoutPanel } from 'fundamental-react';
 import { SaveGraphControls } from './SaveGraphControls';
+import { DetailsCard } from './DetailsCard/DetailsCard';
 import './ResourceGraph.scss';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 function ResourceGraph({ resource, i18n, config }) {
   const { features } = useMicrofrontendContext();
   const { t } = useTranslation(['translation'], { i18n });
   const [dotSrc, setDotSrc] = useState('');
   const [isReady, setReady] = useState(false);
-
+  const [isDetailsCardHidden, setIsDetailsCardHidden] = useState(false);
   const [graphEl, setGraphEl] = useState(null);
-
+  const [clickedResource, setClickedResource] = useState('');
   const isTabletOrWider = useMinWidth(TABLET);
   const { hasBeenInView } = useIntersectionObserver(graphEl, {
     skip: !isTabletOrWider,
@@ -45,7 +47,10 @@ function ResourceGraph({ resource, i18n, config }) {
           if (res.metadata.uid === resource.metadata.uid) {
             node.classList.add('root-node');
           } else {
-            node.onclick = () => navigateToResource(res);
+            node.onclick = () => {
+              setIsDetailsCardHidden(true);
+              setClickedResource(res);
+            };
           }
         }
       }
@@ -75,7 +80,7 @@ function ResourceGraph({ resource, i18n, config }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasBeenInView]);
   if (!features.VISUAL_RESOURCES?.isEnabled) {
-    return '';
+    return EMPTY_TEXT_PLACEHOLDER;
   }
 
   const actions = !startedLoading && null;
@@ -114,6 +119,9 @@ function ResourceGraph({ resource, i18n, config }) {
                 name={`${resource.kind} ${resource.metadata.name}.gv`}
                 i18n={i18n}
               />
+              {isDetailsCardHidden ? (
+                <DetailsCard resource={clickedResource} />
+              ) : null}
             </div>
           </ErrorBoundary>
         </LayoutPanel.Body>
