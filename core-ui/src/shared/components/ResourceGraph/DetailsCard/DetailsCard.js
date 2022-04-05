@@ -3,40 +3,10 @@ import './DetailsCard.scss';
 import { Button } from 'fundamental-react';
 import { navigateToResource } from 'shared/hooks/navigate';
 import { useTranslation } from 'react-i18next';
-import { GoToDetailsLink } from 'shared/components/ControlledBy/ControlledBy';
-import { SubscriptionConditionStatus } from 'shared/components/SubscriptionConditionStatus';
 import { Labels } from 'shared/components/Labels/Labels';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 export function DetailsCard({ resource, handleCloseCard }) {
   const { t } = useTranslation();
-
-  const tempCustomColumns = [
-    {
-      header: t('subscriptions.headers.conditions.status'),
-      value: ({ status }) => {
-        const lastCondition = {
-          status: 'True',
-        };
-        return <SubscriptionConditionStatus condition={lastCondition} />;
-      },
-    },
-    {
-      header: t('common.headers.owner'),
-      value: () => {
-        return (
-          <p>
-            {t('services.name_singular')}&nbsp;
-            <GoToDetailsLink resource="services" name={'serviceName'} />
-          </p>
-        );
-      },
-    },
-    {
-      header: t('subscriptions.sink'),
-      value: () => <p>"just a sink"</p>,
-    },
-  ];
 
   return (
     <div className="details-card-wrapper">
@@ -57,17 +27,6 @@ export function DetailsCard({ resource, handleCloseCard }) {
           <p className="title">{t('common.headers.labels')}</p>
           <Labels labels={resource?.metadata?.labels} />
         </div>
-        {tempCustomColumns?.map(({ header, value: Component }) => {
-          return (
-            <div>
-              <LayoutPanelRow
-                name={header}
-                value={<Component />}
-                key={header}
-              />
-            </div>
-          );
-        })}
       </section>
       <div className="buttons-wrapper">
         <Button
