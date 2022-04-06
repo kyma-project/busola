@@ -7,6 +7,7 @@ import { crdHandler } from './crdHandler';
 import { helmReleaseHandler } from './helmReleaseHandler';
 import { findCommonPrefix } from 'shared/utils/helpers';
 import { crHandler } from './crHandler';
+import { crListHandler } from './crListHandler';
 
 const handlers = [
   nonResourceHandler,
@@ -15,6 +16,7 @@ const handlers = [
   nodesHandler,
   logsHandler,
   crdHandler,
+  crListHandler,
   crHandler,
   helmReleaseHandler,
 ];
