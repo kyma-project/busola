@@ -1,10 +1,11 @@
 import React from 'react';
-import './DetailsCard.scss';
 import { Button } from 'fundamental-react';
 import { navigateToResource } from 'shared/hooks/navigate';
 import { useTranslation } from 'react-i18next';
 import { Labels } from 'shared/components/Labels/Labels';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import './DetailsCard.scss';
+
 export function DetailsCard({ resource, handleCloseCard }) {
   const { t } = useTranslation();
 
