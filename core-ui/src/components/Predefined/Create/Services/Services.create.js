@@ -48,6 +48,9 @@ ServicesCreate.resourceGraphConfig = (t, context) => ({
     {
       kind: 'Ingress',
     },
+    {
+      kind: 'VirtualService',
+    },
   ],
   matchers: {
     Function: (service, functión) =>
