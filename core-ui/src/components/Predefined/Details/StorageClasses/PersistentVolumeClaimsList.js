@@ -1,8 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
 
-import PersistentVolumeClaimsListComponent from 'components/Predefined/List/PersistentVolumeClaims.list';
-import { useTranslation } from 'react-i18next';
+import PersistentVolumeClaimsListComponent from 'resources/PersistentVolumeClaims/PersistentVolumeClaimList';
+
 export function PersistentVolumeClaimsList(storageclass) {
   const navigateFn = resource => {
     LuigiClient.linkManager()

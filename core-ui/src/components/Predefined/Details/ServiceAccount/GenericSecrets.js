@@ -1,7 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { SecretList } from 'resources/Secrets/SecretList';
+
 import { useDownloadSecretKubeconfig } from './useDownloadSecretKubeconfig';
-import SecretsList from 'components/Predefined/List/Secrets.list';
+
 export const GenericSecrets = ({
   namespace,
   filter,
@@ -25,7 +28,7 @@ export const GenericSecrets = ({
   ];
 
   return (
-    <SecretsList
+    <SecretList
       {...{
         name: title,
         hasDetailsView: true,

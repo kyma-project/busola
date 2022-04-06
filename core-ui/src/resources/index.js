@@ -9,19 +9,19 @@ import * as VirtualServices from './VirtualServices';
 import * as ServiceEntries from './ServiceEntries';
 import * as StatefulSets from './StatefulSets';
 import * as Services from './Services';
-// import serviceInstances from './namespaceResources/serviceInstances.routes';
-// import serviceBrokers from './namespaceResources/serviceBrokers.routes';
-// import serviceBindings from './namespaceResources/serviceBindings.routes';
-// import secrets from './namespaceResources/secrets.routes';
-// import roles from './namespaceResources/roles.routes';
-// import roleBindings from './namespaceResources/roleBindings.routes';
+import * as ServiceInstances from './ServiceInstances';
+import * as ServiceBrokers from './ServiceBrokers';
+import * as ServiceBindings from './ServiceBindings';
+import * as Secrets from './Secrets';
+import * as Roles from './Roles';
+import * as RoleBindings from './RoleBindings';
 import * as ReplicaSets from './ReplicaSets';
 import * as Pods from './Pods';
-// import persistentVolumeClaims from './namespaceResources/persistentVolumeClaims.routes';
+import * as PersistentVolumeClaims from './PersistentVolumeClaims';
 // import oAuth2Clients from './namespaceResources/oAuth2Clients.routes';
-// import networkPolicies from './namespaceResources/networkPolicies.routes';
+import * as NetworkPolicies from './NetworkPolicies';
 // import issuers from './namespaceResources/issuers.routes';
-// import ingresses from './namespaceResources/ingresses.routes';
+import * as Ingresses from './Ingresses';
 import * as HorizontalPodAutoscalers from './HorizontalPodAutoscalers';
 import * as Gateways from './Gateways';
 // import eventsNamespace from './namespaceResources/eventsNamespace.routes';
@@ -33,8 +33,8 @@ import * as DaemonSets from './DaemonSets';
 // import customResourcesDefinitionsNamespace from './namespaceResources/customResourceDefinitionsNs.routes';
 // import configMaps from './namespaceResources/configMaps.routes';
 // import certificates from './namespaceResources/certificates.routes';
-// import authorizationPolicies from './namespaceResources/authorizationPolicies.routes';
-// import apiRules from './namespaceResources/apiRules.routes';
+import * as AuthorizationPolicies from './AuthorizationPolicies';
+import * as ApiRules from './ApiRules';
 // import addonsConfigurationNamespace from './namespaceResources/addonsConfigurationNamespace.routes';
 // import subscriptions from './namespaceResources/subscriptions.routes';
 // import serviceAccounts from './namespaceResources/serviceAccounts.routes';
@@ -43,14 +43,14 @@ import * as Functions from './Functions';
 
 // //cluster
 // import applications from './clusterResources/applications.routes';
-// import clusterRoles from './clusterResources/clusterRoles.routes';
+import * as ClusterRoles from './ClusterRoles';
 // import storageClasses from './clusterResources/storageClases.routes';
 // import persistentVolumes from './clusterResources/persistentVolumes.routes';
 import * as Namespaces from './Namespaces';
 // import eventsCluster from './clusterResources/eventsCluster.routes';
 // import addonsConfigurationCluster from './clusterResources/addonsConfigurationCluster.routes';
 // import customResourceDefinitionsCl from './clusterResources/customResourceDefinitionsCl.routes';
-// import clusterRoleBindings from './clusterResources/clusterRoleBindings.routes';
+import * as ClusterRoleBindings from './ClusterRoleBindings';
 
 export const resources = {
   // // namespace resources
@@ -65,29 +65,29 @@ export const resources = {
   Pods,
   Deployments,
   DaemonSets,
-  // // istio
+  // istio
   VirtualServices,
   Gateways,
   Sidecars,
   ServiceEntries,
   DestinationRules,
-  // authorizationPolicies,
-  // // discovery and network
+  AuthorizationPolicies,
+  // discovery and network
   Services,
-  // ingresses,
-  // networkPolicies,
+  Ingresses,
+  NetworkPolicies,
   HorizontalPodAutoscalers,
-  // apiRules,
+  ApiRules,
   // // storage
-  // persistentVolumeClaims,
-  // // service management
-  // serviceInstances,
-  // serviceBindings,
-  // serviceBrokers,
-  // // configuration
-  // secrets,
-  // roles,
-  // roleBindings,
+  PersistentVolumeClaims,
+  // service management
+  ServiceInstances,
+  ServiceBindings,
+  ServiceBrokers,
+  // configuration
+  Secrets,
+  Roles,
+  RoleBindings,
   // oAuth2Clients,
   // issuers,
   // dnsProvider,
@@ -104,12 +104,12 @@ export const resources = {
   // applications,
   // eventsCluster,
   Namespaces,
-  // clusterRoles,
+  ClusterRoles,
   // storageClasses,
   // persistentVolumes,
   // addonsConfigurationCluster,
   // customResourceDefinitionsCl,
-  // clusterRoleBindings,
+  ClusterRoleBindings,
 };
 
 export const routes = (
