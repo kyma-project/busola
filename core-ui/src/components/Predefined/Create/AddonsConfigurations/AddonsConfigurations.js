@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button, FormLabel } from 'fundamental-react';
-import { MessageStrip, FormInput } from 'fundamental-react';
+import { FormInput } from 'fundamental-react';
 import { LabelSelectorInput } from 'shared/components/LabelSelectorInput/LabelSelectorInput';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
-import { K8sNameField } from 'shared/ResourceForm/fields';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useTranslation } from 'react-i18next';
 import { randomNamesGenerator } from 'shared/utils/randomNamesGenerator/randomNamesGenerator';
