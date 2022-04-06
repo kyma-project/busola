@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { MessageStrip, Button, FormInput } from 'fundamental-react';
 import * as jp from 'jsonpath';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import _ from 'lodash';
+
 import { createBindingTemplate, newSubject } from './templates';
 import { SingleSubjectForm, SingleSubjectInput } from './SubjectForm';
 import { validateBinding } from './helpers';
-import { MessageStrip } from 'fundamental-react';
 import { RoleForm } from './RoleForm.js';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { ResourceForm } from 'shared/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/inputs';
 import { KeyValueField, ItemArray } from 'shared/ResourceForm/fields';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import _ from 'lodash';
+import { randomNamesGenerator } from 'shared/utils/randomNamesGenerator/randomNamesGenerator';
+
+import './RoleBindings.scss';
 
 export function RoleBindings({
   formElementRef,
@@ -73,6 +78,11 @@ export function RoleBindings({
     jp.value(binding, '$.roleRef', newRole);
     setBinding({ ...binding });
   };
+  const generateName = () => {
+    const name = randomNamesGenerator();
+    jp.value(binding, '$.metadata.name', name);
+    setBinding({ ...binding });
+  };
   return (
     <ResourceForm
       pluralKind={pluralKind}
@@ -93,6 +103,36 @@ export function RoleBindings({
         ariaLabel={t('components.k8s-name-input.aria-label', {
           resourceType: singularName,
         })}
+        input={() => {
+          return (
+            <div className="binding-name-field">
+              <FormInput
+                compact
+                onChange={e => {
+                  jp.value(binding, '$.metadata.name', e.target.value);
+                  setBinding({ ...binding });
+                }}
+                type="text"
+                value={binding.metadata.name || ''}
+                aria-required="true"
+                ariaLabel={t('components.k8s-name-input.aria-label', {
+                  resourceType: singularName,
+                })}
+                required={true}
+                readOnly={!!initialRoleBinding}
+              />
+              <Tooltip content={t('common.tooltips.generate-name')}>
+                <Button
+                  compact
+                  onClick={generateName}
+                  glyph="synchronize"
+                  ariaLabel="Generate name button"
+                  disabled={!!initialRoleBinding}
+                />
+              </Tooltip>
+            </div>
+          );
+        }}
       />
       <KeyValueField
         advanced

@@ -51,18 +51,13 @@ export function K8sNameField({
               readOnly={readOnly}
               {...inputProps}
             />
-            <Tooltip
-              className="actions-tooltip"
-              content={t('common.tooltips.generate-name')}
-            >
+            <Tooltip content={t('common.tooltips.generate-name')}>
               <Button
                 compact
-                className="k8s-name-field-action"
                 onClick={generateName}
                 glyph="synchronize"
                 ariaLabel="Generate name button"
                 disabled={readOnly}
-                {...inputProps}
               />
             </Tooltip>
           </div>
