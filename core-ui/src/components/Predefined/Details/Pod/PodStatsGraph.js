@@ -6,6 +6,7 @@ export function PodStatsGraph(resource) {
   return (
     <StatsPanel
       type="pod"
+      mode="multiple"
       namespace={resource.metadata.namespace}
       pod={resource.metadata.name}
     />
