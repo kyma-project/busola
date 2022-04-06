@@ -13,7 +13,7 @@ import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSe
 
 import { createOAuth2ClientTemplate } from './helpers';
 
-const OAuth2ClientsCreate = ({
+export function OAuth2ClientCreate({
   namespace,
   formElementRef,
   onChange,
@@ -23,7 +23,7 @@ const OAuth2ClientsCreate = ({
   resourceUrl,
   refetchList,
   setCustomValid,
-}) => {
+}) {
   const { t } = useTranslation();
 
   const [oAuth2Client, setOAuth2Client] = useState(
@@ -174,22 +174,5 @@ const OAuth2ClientsCreate = ({
       />
     </ResourceForm>
   );
-};
-OAuth2ClientsCreate.allowEdit = true;
-OAuth2ClientsCreate.secrets = (t, context) => [
-  {
-    title: t('oauth2-clients.secret'),
-    data: ['client_id', 'client_secret'],
-  },
-];
-OAuth2ClientsCreate.resourceGraphConfig = (t, context) => ({
-  relations: [
-    {
-      kind: 'Secret',
-    },
-  ],
-  matchers: {
-    Secret: (client, secret) => client.spec.secretName === secret.metadata.name,
-  },
-});
-export { OAuth2ClientsCreate };
+}
+OAuth2ClientCreate.allowEdit = true;

@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { DNSProvidersCreate } from '../Create/DNSProviders/DNSProviders.create';
+
+import { DnsProviderCreate } from './DnsProviderCreate';
 
 const Domains = resource => {
   const { t, i18n } = useTranslation();
@@ -44,7 +45,7 @@ const Domains = resource => {
   );
 };
 
-export const DNSProvidersDetails = props => {
+export function DnsProviderDetails(props) {
   const { t, i18n } = useTranslation();
 
   const customColumns = [
@@ -70,9 +71,9 @@ export const DNSProvidersDetails = props => {
     <ResourceDetails
       customComponents={[Domains]}
       customColumns={customColumns}
-      createResourceForm={DNSProvidersCreate}
+      createResourceForm={DnsProviderCreate}
       {...props}
     />
   );
-};
-export default DNSProvidersDetails;
+}
+export default DnsProviderDetails;

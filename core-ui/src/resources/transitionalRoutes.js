@@ -1,11 +1,7 @@
 import React from 'react';
 
 //namespaced
-import oAuth2Clients from './namespaceResources/oAuth2Clients.routes';
-import issuers from './namespaceResources/issuers.routes';
 import eventsNamespace from './namespaceResources/eventsNamespace.routes';
-import dnsProvider from './namespaceResources/dnsProviders.routes';
-import dnsEntries from './namespaceResources/dnsEntries.routes';
 import customResourcesDefinitionsNamespace from './namespaceResources/customResourceDefinitionsNs.routes';
 import configMaps from './namespaceResources/configMaps.routes';
 import certificates from './namespaceResources/certificates.routes';
@@ -28,10 +24,6 @@ const resources = (
     {eventsNamespace}
     <>
       {/* configuration */}
-      {oAuth2Clients}
-      {issuers}
-      {dnsProvider}
-      {dnsEntries}
       {customResourcesDefinitionsNamespace}
       {configMaps}
       {certificates}

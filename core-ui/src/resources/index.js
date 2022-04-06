@@ -18,15 +18,15 @@ import * as RoleBindings from './RoleBindings';
 import * as ReplicaSets from './ReplicaSets';
 import * as Pods from './Pods';
 import * as PersistentVolumeClaims from './PersistentVolumeClaims';
-// import oAuth2Clients from './namespaceResources/oAuth2Clients.routes';
+import * as OAuth2Clients from './OAuth2Clients';
 import * as NetworkPolicies from './NetworkPolicies';
-// import issuers from './namespaceResources/issuers.routes';
+import * as Issuers from './Issuers';
 import * as Ingresses from './Ingresses';
 import * as HorizontalPodAutoscalers from './HorizontalPodAutoscalers';
 import * as Gateways from './Gateways';
 // import eventsNamespace from './namespaceResources/eventsNamespace.routes';
-// import dnsProvider from './namespaceResources/dnsProviders.routes';
-// import dnsEntries from './namespaceResources/dnsEntries.routes';
+import * as DnsProviders from './DnsProviders';
+import * as DnsEntries from './DnsEntries';
 import * as DestinationRules from './DestinationRules';
 import * as Deployments from './Deployments';
 import * as DaemonSets from './DaemonSets';
@@ -88,10 +88,10 @@ export const resources = {
   Secrets,
   Roles,
   RoleBindings,
-  // oAuth2Clients,
-  // issuers,
-  // dnsProvider,
-  // dnsEntries,
+  OAuth2Clients,
+  Issuers,
+  DnsProviders,
+  DnsEntries,
   // customResourcesDefinitionsNamespace,
   // configMaps,
   // certificates,

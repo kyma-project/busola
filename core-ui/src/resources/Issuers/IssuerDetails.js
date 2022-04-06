@@ -1,12 +1,13 @@
 import React from 'react';
-import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
-import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { useTranslation } from 'react-i18next';
 
-import { IssuerDomains } from './IssuerDomains';
-import { IssuersCreate } from '../../Create/Issuers/Issuers.create';
+import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 
-function IssuersDetails(props) {
+import { IssuerDomains } from './IssuerDomains';
+import { IssuerCreate } from './IssuerCreate';
+
+export function IssuerDetails(props) {
   const { t, i18n } = useTranslation();
 
   const customColumns = [
@@ -34,10 +35,10 @@ function IssuersDetails(props) {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={[IssuerDomains]}
-      createResourceForm={IssuersCreate}
+      createResourceForm={IssuerCreate}
       {...props}
     />
   );
 }
 
-export default IssuersDetails;
+export default IssuerDetails;

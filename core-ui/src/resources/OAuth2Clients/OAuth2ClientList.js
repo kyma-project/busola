@@ -1,12 +1,13 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
+
 import { OAuth2ClientStatus } from 'shared/components/OAuth2ClientStatus/OAuth2ClientStatus';
-import { useTranslation } from 'react-i18next';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Link } from 'shared/components/Link/Link';
-import { Trans } from 'react-i18next';
-import { OAuth2ClientsCreate } from '../Create/OAuthClients/OAuthClients.create';
 
-const OAuth2ClientsList = props => {
+import { OAuth2ClientCreate } from './OAuth2ClientCreate';
+
+export function OAuth2ClientList(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -36,10 +37,10 @@ const OAuth2ClientsList = props => {
       customColumns={customColumns}
       description={description}
       resourceName={t('oauth2-clients.title')}
-      createResourceForm={OAuth2ClientsCreate}
+      createResourceForm={OAuth2ClientCreate}
       {...props}
     />
   );
-};
+}
 
-export default OAuth2ClientsList;
+export default OAuth2ClientList;

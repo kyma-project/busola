@@ -11,6 +11,7 @@ import {
   KeyValueField,
   TextArrayInput,
 } from 'shared/ResourceForm/fields';
+
 import { DNSNameRef } from './DNSNameRef';
 import { TargetsRef } from './TargetsRef';
 import {
@@ -18,7 +19,7 @@ import {
   createDNSEntryTemplateForGardener,
 } from './helpers';
 
-function DNSEntriesCreate({
+export function DnsEntryCreate({
   onChange,
   formElementRef,
   namespace,
@@ -117,6 +118,4 @@ function DNSEntriesCreate({
     </ResourceForm>
   );
 }
-
-DNSEntriesCreate.allowEdit = true;
-export { DNSEntriesCreate };
+DnsEntryCreate.allowEdit = true;

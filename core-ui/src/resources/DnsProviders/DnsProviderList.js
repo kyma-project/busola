@@ -1,20 +1,27 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
 import { Link } from 'shared/components/Link/Link';
-import { Trans } from 'react-i18next';
-import { DNSEntriesCreate } from '../Create/DNSEntries/DNSEntries.create';
 
-const DNSEntriesList = params => {
+import { DnsProviderCreate } from './DnsProviderCreate';
+
+export function DnsProviderList(props) {
   const { t, i18n } = useTranslation();
   const customColumns = [
     {
-      header: t('dnsentries.headers.status'),
-      value: dnsentry => (
+      header: t('dnsproviders.headers.type'),
+      value: dnsprovider => {
+        return dnsprovider.spec.type;
+      },
+    },
+    {
+      header: t('dnsproviders.headers.status'),
+      value: dnsprovider => (
         <ResourceStatus
-          status={dnsentry.status}
-          resourceKind="dnsentries"
+          status={dnsprovider.status}
+          resourceKind="dnsproviders"
           i18n={i18n}
         />
       ),
@@ -22,7 +29,7 @@ const DNSEntriesList = params => {
   ];
 
   const description = (
-    <Trans i18nKey="dnsentries.description">
+    <Trans i18nKey="dnsproviders.description">
       <Link
         className="fd-link"
         url="https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-01-own-domain"
@@ -34,10 +41,10 @@ const DNSEntriesList = params => {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      resourceName="DNS Entries"
-      createResourceForm={DNSEntriesCreate}
-      {...params}
+      createResourceForm={DnsProviderCreate}
+      {...props}
     />
   );
-};
-export default DNSEntriesList;
+}
+
+export default DnsProviderList;

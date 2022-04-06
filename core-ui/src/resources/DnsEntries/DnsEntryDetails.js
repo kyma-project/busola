@@ -1,10 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LayoutPanel } from 'fundamental-react';
+
 import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { DNSEntriesCreate } from '../Create/DNSEntries/DNSEntries.create';
+
+import { DnsEntryCreate } from './DnsEntryCreate';
 
 const RowComponent = ({ name, value }) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
@@ -69,7 +71,7 @@ const Spec = resource => {
   );
 };
 
-const DNSEntriesDetails = props => {
+export function DnsEntryDetails(props) {
   const { t, i18n } = useTranslation();
 
   const customColumns = [
@@ -89,9 +91,9 @@ const DNSEntriesDetails = props => {
     <ResourceDetails
       customComponents={[Provider, Spec]}
       customColumns={customColumns}
-      createResourceForm={DNSEntriesCreate}
+      createResourceForm={DnsEntryCreate}
       {...props}
     />
   );
-};
-export default DNSEntriesDetails;
+}
+export default DnsEntryDetails;

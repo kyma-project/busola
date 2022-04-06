@@ -1,18 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  createPresets,
-  createIssuerTemplate,
-  createCATypeTemplate,
-  createACMETypeTemplate,
-  createExternalAccountBinding,
-} from './templates';
-import { validateIssuer } from './helpers';
-
-import { IssuerTypeDropdown } from './IssuerTypeDropdown';
-import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
-import { Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
+import { Checkbox } from 'fundamental-react';
+
+import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import {
@@ -21,7 +12,17 @@ import {
   K8sNameField,
 } from 'shared/ResourceForm/fields';
 
-function IssuersCreate({
+import { validateIssuer } from './helpers';
+import {
+  createPresets,
+  createIssuerTemplate,
+  createCATypeTemplate,
+  createACMETypeTemplate,
+  createExternalAccountBinding,
+} from './templates';
+import { IssuerTypeDropdown } from './IssuerTypeDropdown';
+
+export function IssuerCreate({
   onChange,
   formElementRef,
   namespace,
@@ -326,5 +327,4 @@ function IssuersCreate({
     </ResourceForm>
   );
 }
-IssuersCreate.allowEdit = true;
-export { IssuersCreate };
+IssuerCreate.allowEdit = true;
