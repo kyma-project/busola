@@ -55,7 +55,7 @@ export function getStaticChildrenNodesForNamespace(
   features,
   customResources,
 ) {
-  const namespacedCustomResources = customResources?.customResources?.filter(
+  const namespacedCustomResources = customResources?.filter(
     cr => cr?.nav?.scope === 'namespace',
   );
   const customPaths =

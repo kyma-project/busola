@@ -7,7 +7,9 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { useSentry } from 'hooks/useSentry';
+
 import { Details } from 'components/Extensibility/details';
+import { ExtensibilityList } from 'components/Extensibility/extensibilityList';
 
 import resources from 'routing/resources';
 import otherRoutes from 'routing/other';
@@ -48,7 +50,23 @@ export default function App() {
           </WithTitle>
         }
       />
-      <Route path="/custompage" element={<Details />} />
+      <Route
+        path="/namespaces/:namespaceId/wasmplugins"
+        element={<ExtensibilityList />}
+      />
+      <Route
+        path="/namespaces/:namespaceId/wasmplugins/:resourceName"
+        element={<Details />}
+      />
+      <Route
+        path="/namespaces/:namespaceId/customjobs"
+        element={<ExtensibilityList />}
+      />
+      <Route
+        path="/namespaces/:namespaceId/customjobs/:resourceName"
+        element={<Details />}
+      />
+
       {resources}
       {otherRoutes}
       <Route path="" element={<MainFrameRedirection />} />
