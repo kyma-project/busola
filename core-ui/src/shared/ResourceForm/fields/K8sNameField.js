@@ -17,7 +17,7 @@ export function K8sNameField({
   ...props
 }) {
   const { t, i18n } = useTranslation();
-  const { isAdvanced, propertyPath, validate, ...inputProps } = props;
+  const { isAdvanced, propertyPath, validate, readOnly, ...inputProps } = props;
 
   const generateName = () => {
     const name = randomNamesGenerator();
@@ -48,6 +48,7 @@ export function K8sNameField({
               onChange={e => setValue(e.target.value)}
               value={value}
               i18n={i18n}
+              readOnly={readOnly}
               {...inputProps}
             />
             <Tooltip
@@ -60,6 +61,8 @@ export function K8sNameField({
                 onClick={generateName}
                 glyph="synchronize"
                 ariaLabel="Generate name button"
+                disabled={readOnly}
+                {...inputProps}
               />
             </Tooltip>
           </div>
