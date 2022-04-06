@@ -284,12 +284,7 @@ export function ResourceListRenderer({
         className="fd-link"
         onClick={_ => {
           if (navigateFn) return navigateFn(entry);
-          if (fixedPath && namespace)
-            return navigateToFixedPathResourceDetails(
-              resourceType,
-              entry.metadata.name,
-            );
-          if (fixedPath && !namespace) return navigateToResource(entry);
+          if (fixedPath) return navigateToResource(entry);
           navigateToDetails(resourceType, entry.metadata.name);
         }}
       >
