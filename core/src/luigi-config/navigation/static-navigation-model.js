@@ -87,7 +87,7 @@ export function getStaticChildrenNodesForNamespace(
           children: [
             {
               pathSegment: `:${cr.nav?.path}Name`,
-              resourceType: 'cr.nav.path',
+              resourceType: cr.nav?.path,
               viewUrl:
                 config.coreUIModuleUrl +
                 `/namespaces/:namespaceId/${cr.nav?.path}/:${cr.nav?.path}Name?` +
