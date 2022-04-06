@@ -87,7 +87,7 @@ export async function reloadNavigation() {
   }, 100);
 }
 
-async function createClusterManagementNodes(features) {
+async function createClusterManagementNodes(features, customResources) {
   const activeClusterName = getActiveClusterName();
 
   const childrenNodes = [
@@ -119,6 +119,7 @@ async function createClusterManagementNodes(features) {
       language: i18next.language,
       busolaClusterParams: await getBusolaClusterParams(),
       features,
+      customResources,
       ssoData: getSSOAuthData(),
       settings: {
         pagination: {
@@ -417,6 +418,7 @@ export async function createNavigationNodes(
         activeClusterName,
         groups,
         features,
+        customResources,
         clusters: await getClusters(),
         hiddenNamespaces,
         cluster: activeCluster.currentContext.cluster,

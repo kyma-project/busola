@@ -7,6 +7,7 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { useSentry } from 'hooks/useSentry';
+import { Details } from 'components/Extensibility/details';
 
 import resources from 'routing/resources';
 import otherRoutes from 'routing/other';
@@ -35,15 +36,6 @@ export default function App() {
     ].map(route => <Route key="route" path={route} element={null} />);
   }, []);
 
-  // routes must be fetched from a central config map. Register them in busola-config
-  // //
-  // const r = {
-  //   route: {
-  //     kind: 'Details',
-  //     namespaced: true,
-  //   },
-  // };
-
   return (
     // force rerender on cluster change
     <Routes key={cluster?.name}>
@@ -56,7 +48,7 @@ export default function App() {
           </WithTitle>
         }
       />
-
+      <Route path="/custompage" element={<Details />} />
       {resources}
       {otherRoutes}
       <Route path="" element={<MainFrameRedirection />} />

@@ -1,15 +1,15 @@
-// import React, { useEffect, useState } from 'react';
-//
-// export const Details = () => {
-//   const [schema, setSchema] = useState(null);
-//
-//   useEffect(() => {
-//     async function getDetails() {
-//       const jobs = setSchema(data);
-//     }
-//
-//     void getDetails();
-//   }, []);
-//
-//   return <div>heheh</div>;
-// };
+import React, { useEffect } from 'react';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+
+export const Details = () => {
+  const { customResources } = useMicrofrontendContext();
+
+  console.log(customResources);
+  useEffect(() => {
+    async function getDetails() {}
+
+    void getDetails();
+  }, []);
+
+  return <div>heheh</div>;
+};
