@@ -31,8 +31,8 @@ import * as DestinationRules from './DestinationRules';
 import * as Deployments from './Deployments';
 import * as DaemonSets from './DaemonSets';
 // import customResourcesDefinitionsNamespace from './namespaceResources/customResourceDefinitionsNs.routes';
-// import configMaps from './namespaceResources/configMaps.routes';
-// import certificates from './namespaceResources/certificates.routes';
+import * as ConfigMaps from './ConfigMaps';
+import * as Certificates from './Certificates';
 import * as AuthorizationPolicies from './AuthorizationPolicies';
 import * as ApiRules from './ApiRules';
 // import addonsConfigurationNamespace from './namespaceResources/addonsConfigurationNamespace.routes';
@@ -93,8 +93,8 @@ export const resources = {
   DnsProviders,
   DnsEntries,
   // customResourcesDefinitionsNamespace,
-  // configMaps,
-  // certificates,
+  ConfigMaps,
+  Certificates,
   // addonsConfigurationNamespace,
   // subscriptions,
   // serviceAccounts,

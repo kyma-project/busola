@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
+import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import {
@@ -11,9 +12,8 @@ import {
 } from 'shared/ResourceForm/fields';
 
 import { createConfigMapTemplate, createPresets } from './helpers';
-import { cloneDeep } from 'lodash';
 
-export function ConfigMapsCreate({
+export function ConfigMapCreate({
   formElementRef,
   onChange,
   setCustomValid,
@@ -68,14 +68,5 @@ export function ConfigMapsCreate({
     </ResourceForm>
   );
 }
-ConfigMapsCreate.allowEdit = true;
-ConfigMapsCreate.allowClone = true;
-ConfigMapsCreate.resourceGraphConfig = (t, context) => ({
-  relations: [
-    {
-      kind: 'Pod',
-    },
-  ],
-  depth: 1,
-  networkFlowLevel: 1,
-});
+ConfigMapCreate.allowEdit = true;
+ConfigMapCreate.allowClone = true;

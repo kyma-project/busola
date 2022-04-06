@@ -1,14 +1,15 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { CertificateDate } from 'shared/components/CertificateDate/CertificateDate';
-
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { CertificatesCreate } from '../../Create/Certificates/Certificates.create';
+
+import { CertificateCreate } from './CertificateCreate';
 import { CertificateRefs } from './CertificateRefs';
 
-function CertificatesDetails(props) {
+export function CertificateDetails(props) {
   const { t, i18n } = useTranslation();
 
   const customColumns = [
@@ -47,10 +48,10 @@ function CertificatesDetails(props) {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={[CertificateRefs]}
-      createResourceForm={CertificatesCreate}
+      createResourceForm={CertificateCreate}
       {...props}
     />
   );
 }
 
-export default CertificatesDetails;
+export default CertificateDetails;

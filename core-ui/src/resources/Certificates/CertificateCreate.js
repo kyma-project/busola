@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, FormTextarea, Switch } from 'fundamental-react';
 import * as jp from 'jsonpath';
+import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
@@ -14,20 +15,18 @@ import { base64Decode, base64Encode } from 'shared/helpers';
 import { IssuerRef } from 'shared/components/ResourceRef/IssuerRef';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
 
-import { cloneDeep } from 'lodash';
-
 import { createTemplate } from './templates';
 
-import './CreateCertificate.scss';
+import './CertificateCreate.scss';
 
-const CertificatesCreate = ({
+export function CertificateCreate({
   setCustomValid,
   onChange,
   formElementRef,
   namespace,
   resource: initialCertificate,
   resourceUrl,
-}) => {
+}) {
   const { t } = useTranslation();
 
   const [certificate, setCertificate] = useState(
@@ -276,7 +275,5 @@ const CertificatesCreate = ({
       )}
     </ResourceForm>
   );
-};
-
-CertificatesCreate.allowEdit = true;
-export { CertificatesCreate };
+}
+CertificateCreate.allowEdit = true;

@@ -1,15 +1,16 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
 import { Link } from 'shared/components/Link/Link';
-import { Trans } from 'react-i18next';
-import { CertificatesCreate } from '../Create/Certificates/Certificates.create';
-import { IssuerLink } from '../Details/Certificate/IssuerLink';
 import { CertificateDate } from 'shared/components/CertificateDate/CertificateDate';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
-const CertificatesList = props => {
+import { CertificateCreate } from './CertificateCreate';
+import { IssuerLink } from './IssuerLink';
+
+export function CertificateList(props) {
   const { t, i18n } = useTranslation();
 
   const customColumns = [
@@ -61,9 +62,9 @@ const CertificatesList = props => {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={CertificatesCreate}
+      createResourceForm={CertificateCreate}
       {...props}
     />
   );
-};
-export default CertificatesList;
+}
+export default CertificateList;

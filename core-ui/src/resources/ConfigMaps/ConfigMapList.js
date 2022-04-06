@@ -1,12 +1,13 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
-import { useTranslation } from 'react-i18next';
 import { Link } from 'shared/components/Link/Link';
-import { Trans } from 'react-i18next';
-import { ConfigMapsCreate } from '../Create/ConfigMaps/ConfigMaps.create';
 
-const ConfigMapsList = props => {
+import { ConfigMapCreate } from './ConfigMapCreate';
+
+export function ConfigMapList(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -31,9 +32,9 @@ const ConfigMapsList = props => {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={ConfigMapsCreate}
+      createResourceForm={ConfigMapCreate}
       {...props}
     />
   );
-};
-export default ConfigMapsList;
+}
+export default ConfigMapList;

@@ -3,8 +3,6 @@ import React from 'react';
 //namespaced
 import eventsNamespace from './namespaceResources/eventsNamespace.routes';
 import customResourcesDefinitionsNamespace from './namespaceResources/customResourceDefinitionsNs.routes';
-import configMaps from './namespaceResources/configMaps.routes';
-import certificates from './namespaceResources/certificates.routes';
 import addonsConfigurationNamespace from './namespaceResources/addonsConfigurationNamespace.routes';
 import subscriptions from './namespaceResources/subscriptions.routes';
 import serviceAccounts from './namespaceResources/serviceAccounts.routes';
@@ -25,8 +23,6 @@ const resources = (
     <>
       {/* configuration */}
       {customResourcesDefinitionsNamespace}
-      {configMaps}
-      {certificates}
       {addonsConfigurationNamespace}
       {subscriptions}
       {serviceAccounts}
