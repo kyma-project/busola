@@ -53,7 +53,9 @@ export function getStaticChildrenNodesForNamespace(
   groupVersions,
   permissionSet,
   features,
+  customResources,
 ) {
+  console.log(11221, customResources);
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {
@@ -1656,6 +1658,7 @@ export function getStaticRootNodes(
   groupVersions,
   permissionSet,
   features,
+  customResources,
 ) {
   const nodes = [
     {
@@ -1706,6 +1709,7 @@ export function getStaticRootNodes(
               groupVersions,
               permissionSet,
               features,
+              customResources,
             ),
           defaultChildNode: 'details',
         },

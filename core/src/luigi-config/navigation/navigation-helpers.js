@@ -49,12 +49,12 @@ export function hideByNodeCategory(node, showExperimentalCategory) {
 }
 
 export function createNamespacesList(rawNamespaceNames) {
-  var namespaces = [];
+  let namespaces = [];
   rawNamespaceNames
     .sort((namespaceA, namespaceB) => {
       return namespaceA.name.localeCompare(namespaceB.name);
     })
-    .map(namespace => {
+    .forEach(namespace => {
       const namespaceName = namespace.name;
       const alternativeLocation = getCorrespondingNamespaceLocation(
         namespaceName,

@@ -35,6 +35,15 @@ export default function App() {
     ].map(route => <Route key="route" path={route} element={null} />);
   }, []);
 
+  // routes must be fetched from a central config map. Register them in busola-config
+  // //
+  // const r = {
+  //   route: {
+  //     kind: 'Details',
+  //     namespaced: true,
+  //   },
+  // };
+
   return (
     // force rerender on cluster change
     <Routes key={cluster?.name}>
@@ -47,6 +56,7 @@ export default function App() {
           </WithTitle>
         }
       />
+
       {resources}
       {otherRoutes}
       <Route path="" element={<MainFrameRedirection />} />

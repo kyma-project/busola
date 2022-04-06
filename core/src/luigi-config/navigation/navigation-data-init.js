@@ -14,6 +14,7 @@ import {
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
 import { getFeatures, resolveFeatureAvailability } from '../features';
+import { getCustomResources } from '../customResources';
 import { showAlert } from '../utils/showAlert';
 
 import {
@@ -210,6 +211,8 @@ export async function createNavigation() {
       groupVersions,
     });
 
+    const customResources = await getCustomResources();
+
     const optionsForCurrentCluster = {
       contextSwitcher: {
         defaultLabel: 'Select Namespace ...',
@@ -266,6 +269,7 @@ export async function createNavigation() {
         features,
         groupVersions,
         permissionSet,
+        customResources,
       ),
     };
   } catch (err) {
@@ -336,6 +340,7 @@ export async function createNavigationNodes(
   features,
   groupVersions,
   permissionSet,
+  customResources,
 ) {
   const authData = getAuthData();
   const activeCluster = await getActiveCluster();
@@ -356,7 +361,9 @@ export async function createNavigationNodes(
       groupVersions,
       permissionSet,
       features,
+      customResources,
     );
+
     const observabilitySection = await getObservabilityNodes(
       authData,
       features,
@@ -460,12 +467,14 @@ async function getChildrenNodesForNamespace(
   groupVersions,
   permissionSet,
   features,
+  customResources,
 ) {
   const { navigation = {} } = (await getActiveCluster()).config;
   const staticNodes = getStaticChildrenNodesForNamespace(
     groupVersions,
     permissionSet,
     features,
+    customResources,
   );
 
   hideDisabledNodes(navigation.disabledNodes, staticNodes, true);

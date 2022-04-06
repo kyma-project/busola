@@ -1,0 +1,17 @@
+{
+  "nav": {
+    "path": "custom_jobs",
+    "label": "Custom Jobs",
+    "category": "My Resources",
+    "scope": "namespace",
+    "api-address": "/apis/batch/v1",
+    "hasDetailsView": true
+  },
+  "details": {
+    "title": "Jobs",
+    "desc": "Jobs but custom",
+    "url": "jobs-custom",
+    "fields": {
+    }
+  }
+}
