@@ -46,12 +46,12 @@ function ResourceGraph({ resource, i18n, config }) {
 
           if (res.metadata.uid === resource.metadata.uid) {
             node.classList.add('root-node');
-          } else {
-            node.onclick = () => {
-              setIsDetailsCardOpened(true);
-              setClickedResource(res);
-            };
           }
+
+          node.onclick = () => {
+            setIsDetailsCardOpened(true);
+            setClickedResource(res);
+          };
         }
       }
     };

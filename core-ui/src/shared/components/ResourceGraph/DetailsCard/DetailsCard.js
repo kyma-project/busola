@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from 'fundamental-react';
+import { Labels } from 'shared/components/Labels/Labels';
 import { navigateToResource } from 'shared/hooks/navigate';
 import { useTranslation } from 'react-i18next';
-import { Labels } from 'shared/components/Labels/Labels';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import './DetailsCard.scss';
 
