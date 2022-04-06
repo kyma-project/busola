@@ -1,17 +1,21 @@
 {
-  "nav": {
-    "path": "custom_jobs",
-    "label": "Custom Jobs",
-    "category": "My Resources",
-    "scope": "namespace",
-    "api-address": "/apis/batch/v1",
-    "hasDetailsView": true
-  },
-  "details": {
-    "title": "Jobs",
-    "desc": "Jobs but custom",
-    "url": "jobs-custom",
-    "fields": {
+  "customResources": [
+    {
+      "nav": {
+        "path": "wasmplugins",
+        "label": "My wasmplugins",
+        "category": "My Resources",
+        "scope": "namespace",
+        "api": "/apis/extensions.istio.io/v1alpha1",
+        "hasDetailsView": true
+      },
+      "details": {
+        "title": "Jobs",
+        "desc": "Jobs but custom",
+        "url": "jobs-custom",
+        "fields": {
+        }
+      }
     }
-  }
+  ]
 }
