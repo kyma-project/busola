@@ -1,27 +1,21 @@
-[
-  {
-    "id": "custom_jobs",
-    "description": "id must be equal to nav.path",
-    "nav": {
-      "path": "custom_jobs",
-      "label": "Custom Jobs",
-      "category": "My Resources",
-      "scope": "namespace",
-      "api-address": "/apis/batch/v1",
-      "hasDetailsView": true
-    },
-    "list": {
-      "title": "Custom Jobs",
-      "desc": "Jobs but custom are a great resource",
-      "columns": {}
-    },
-    "details": {
-      "title": "Custom Jobs",
-      "fields": {}
-    },
-    "create": {
-      "name_singular": "Custom Jobs",
-      "fields": {}
+{
+  "customResources": [
+    {
+      "nav": {
+        "path": "wasmplugins",
+        "label": "My wasmplugins",
+        "category": "My Resources",
+        "scope": "namespace",
+        "api": "/apis/extensions.istio.io/v1alpha1",
+        "hasDetailsView": true
+      },
+      "details": {
+        "title": "Jobs",
+        "desc": "Jobs but custom",
+        "url": "jobs-custom",
+        "fields": {
+        }
+      }
     }
-  }
-]
+  ]
+}

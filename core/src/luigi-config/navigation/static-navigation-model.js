@@ -55,7 +55,51 @@ export function getStaticChildrenNodesForNamespace(
   features,
   customResources,
 ) {
-  console.log(11221, customResources);
+  const namespacedCustomResources = customResources?.customResources?.filter(
+    cr => cr?.nav?.scope === 'namespace',
+  );
+  const customPaths =
+    namespacedCustomResources?.map(cr => ({
+      category: {
+        label: cr.nav?.category,
+        collapsible: true,
+        icon: 'source-code',
+      },
+      resourceType: cr.nav?.path,
+      pathSegment: cr.nav?.path,
+      label: cr.nav?.label,
+      viewUrl:
+        config.coreUIModuleUrl +
+        `/namespaces/:namespaceId/${cr.nav?.path}?` +
+        toSearchParamsString({
+          resourceApiPath: cr.nav?.api,
+          hasDetailsView: cr.nav?.hasDetailsView,
+        }),
+      viewGroup: coreUIViewGroupName,
+      keepSelectedForChildren: true,
+      navigationContext: cr.nav?.path,
+      context: {
+        customResource: cr,
+      },
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: `:${cr.nav?.path}Name`,
+              resourceType: cr.nav?.path,
+              viewUrl:
+                config.coreUIModuleUrl +
+                `/namespaces/:namespaceId/${cr.nav?.path}/:${cr.nav?.path}Name?` +
+                toSearchParamsString({
+                  resourceApiPath: cr.nav?.api,
+                }),
+            },
+          ],
+        },
+      ],
+    })) || [];
+
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {
@@ -1649,8 +1693,10 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
   ];
-  filterNodesByAvailablePaths(nodes, groupVersions, permissionSet);
-  return nodes;
+
+  const allNodes = [...nodes, ...customPaths];
+  filterNodesByAvailablePaths(allNodes, groupVersions, permissionSet);
+  return allNodes;
 }
 
 export function getStaticRootNodes(
