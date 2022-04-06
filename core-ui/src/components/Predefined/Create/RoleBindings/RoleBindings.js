@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageStrip, Button, FormInput } from 'fundamental-react';
+import { MessageStrip } from 'fundamental-react';
 import * as jp from 'jsonpath';
-import * as Inputs from 'shared/ResourceForm/inputs';
 import _ from 'lodash';
 
 import { createBindingTemplate, newSubject } from './templates';
 import { SingleSubjectForm, SingleSubjectInput } from './SubjectForm';
 import { validateBinding } from './helpers';
 import { RoleForm } from './RoleForm.js';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { ResourceForm } from 'shared/ResourceForm';
-import { KeyValueField, ItemArray } from 'shared/ResourceForm/fields';
+import {
+  K8sNameField,
+  KeyValueField,
+  ItemArray,
+} from 'shared/ResourceForm/fields';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { randomNamesGenerator } from 'shared/utils/randomNamesGenerator/randomNamesGenerator';
 
 import './RoleBindings.scss';
 
@@ -78,11 +79,12 @@ export function RoleBindings({
     jp.value(binding, '$.roleRef', newRole);
     setBinding({ ...binding });
   };
-  const generateName = () => {
-    const name = randomNamesGenerator();
+
+  const handleNameChange = name => {
     jp.value(binding, '$.metadata.name', name);
     setBinding({ ...binding });
   };
+
   return (
     <ResourceForm
       pluralKind={pluralKind}
@@ -94,45 +96,13 @@ export function RoleBindings({
       createUrl={resourceUrl}
       initialResource={initialRoleBinding}
     >
-      <ResourceForm.FormField
-        required
-        label={t('common.labels.name')}
-        input={Inputs.Text}
+      <K8sNameField
         propertyPath="$.metadata.name"
+        kind={t('role-bindings.name_singular')}
+        setValue={handleNameChange}
+        className="fd-margin-bottom--sm"
         readOnly={!!initialRoleBinding}
-        ariaLabel={t('components.k8s-name-input.aria-label', {
-          resourceType: singularName,
-        })}
-        input={() => {
-          return (
-            <div className="binding-name-field">
-              <FormInput
-                compact
-                onChange={e => {
-                  jp.value(binding, '$.metadata.name', e.target.value);
-                  setBinding({ ...binding });
-                }}
-                type="text"
-                value={binding.metadata.name || ''}
-                aria-required="true"
-                ariaLabel={t('components.k8s-name-input.aria-label', {
-                  resourceType: singularName,
-                })}
-                required={true}
-                readOnly={!!initialRoleBinding}
-              />
-              <Tooltip content={t('common.tooltips.generate-name')}>
-                <Button
-                  compact
-                  onClick={generateName}
-                  glyph="synchronize"
-                  ariaLabel="Generate name button"
-                  disabled={!!initialRoleBinding}
-                />
-              </Tooltip>
-            </div>
-          );
-        }}
+        pattern="*"
       />
       <KeyValueField
         advanced

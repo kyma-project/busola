@@ -14,6 +14,7 @@ export function K8sNameField({
   setValue,
   className,
   prefix,
+  pattern,
   ...props
 }) {
   const { t, i18n } = useTranslation();
@@ -49,6 +50,7 @@ export function K8sNameField({
               value={value}
               i18n={i18n}
               readOnly={readOnly}
+              pattern={pattern}
               {...inputProps}
             />
             <Tooltip content={t('common.tooltips.generate-name')}>
