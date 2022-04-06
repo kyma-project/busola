@@ -12,7 +12,7 @@ import { RuntimeResources } from 'shared/ResourceForm/fields';
 import './Containers.scss';
 
 function SingleContainerSection({ container, setContainer }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <ResourceForm.Wrapper resource={container} setResource={setContainer}>
