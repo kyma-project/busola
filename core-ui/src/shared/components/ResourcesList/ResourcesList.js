@@ -10,10 +10,7 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { navigateToDetails } from 'shared/hooks/navigate';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import {
-  navigateToFixedPathResourceDetails,
-  navigateToResource,
-} from 'shared/hooks/navigate';
+import { navigateToResource } from 'shared/hooks/navigate';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
