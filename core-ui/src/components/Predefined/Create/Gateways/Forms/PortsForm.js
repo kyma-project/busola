@@ -1,10 +1,13 @@
 import React from 'react';
-import { Select } from 'shared/components/Select/Select';
+import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
+
+import * as Inputs from 'shared/ResourceForm/inputs';
+import { Select } from 'shared/components/Select/Select';
 import { PROTOCOLS, DEFAULT_PORTS, isTLSProtocol } from './../helpers';
 import { switchTLS } from './TlsForm';
 import { ResourceForm } from 'shared/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/inputs';
+import { K8sNameField } from 'shared/ResourceForm/fields';
 
 export const PortsForm = ({ server = {}, servers, setServers }) => {
   const { t } = useTranslation();
@@ -19,6 +22,11 @@ export const PortsForm = ({ server = {}, servers, setServers }) => {
     setServers([...servers]);
 
     switchTLS(server, isTLSProtocol(selected.key), servers, setServers);
+  };
+
+  const handleNameChange = name => {
+    jp.value(server, '$.port.name', name);
+    setServers([...servers]);
   };
 
   return (
@@ -54,12 +62,12 @@ export const PortsForm = ({ server = {}, servers, setServers }) => {
           />
         )}
       />
-      <ResourceForm.FormField
-        required
-        label={t('gateways.create-modal.advanced.port.name')}
+      <K8sNameField
         propertyPath="$.port.name"
-        input={Inputs.Text}
-        ariaLabel={t('gateways.aria-labels.port-name')}
+        kind={t('gateways.aria-labels.port-name')}
+        setValue={handleNameChange}
+        className="fd-margin-bottom--sm"
+        pattern="*"
       />
 
       <ResourceForm.FormField
