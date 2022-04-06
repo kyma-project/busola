@@ -67,7 +67,7 @@ export const PortsForm = ({ server = {}, servers, setServers }) => {
         kind={t('gateways.aria-labels.port-name')}
         setValue={handleNameChange}
         className="fd-margin-bottom--sm"
-        pattern="*"
+        pattern=".*"
       />
 
       <ResourceForm.FormField

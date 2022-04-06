@@ -102,7 +102,7 @@ export function RoleBindings({
         setValue={handleNameChange}
         className="fd-margin-bottom--sm"
         readOnly={!!initialRoleBinding}
-        pattern="*"
+        pattern=".*"
       />
       <KeyValueField
         advanced
