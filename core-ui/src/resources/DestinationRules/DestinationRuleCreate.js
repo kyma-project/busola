@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useTranslation } from 'react-i18next';
+
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
+
 import { createDestinationRuleTemplate } from './templates';
 
-function DestinationRulesCreate({
+function DestinationRuleCreate({
   formElementRef,
   onChange,
   setCustomValid,
@@ -30,4 +32,4 @@ function DestinationRulesCreate({
     />
   );
 }
-export { DestinationRulesCreate };
+export { DestinationRuleCreate };

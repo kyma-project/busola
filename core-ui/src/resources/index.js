@@ -6,7 +6,7 @@ import * as Jobs from './Jobs';
 import * as Sidecars from './Sidecars';
 import * as CronJobs from './CronJobs';
 import * as VirtualServices from './VirtualServices';
-// import serviceEntries from './namespaceResources/serviceEntries.routes';
+import * as ServiceEntries from './ServiceEntries';
 import * as StatefulSets from './StatefulSets';
 import * as Services from './Services';
 // import serviceInstances from './namespaceResources/serviceInstances.routes';
@@ -27,7 +27,7 @@ import * as Gateways from './Gateways';
 // import eventsNamespace from './namespaceResources/eventsNamespace.routes';
 // import dnsProvider from './namespaceResources/dnsProviders.routes';
 // import dnsEntries from './namespaceResources/dnsEntries.routes';
-// import destinationRules from './namespaceResources/destinationRules.routes';
+import * as DestinationRules from './DestinationRules';
 import * as Deployments from './Deployments';
 import * as DaemonSets from './DaemonSets';
 // import customResourcesDefinitionsNamespace from './namespaceResources/customResourceDefinitionsNs.routes';
@@ -69,8 +69,8 @@ export const resources = {
   VirtualServices,
   Gateways,
   Sidecars,
-  // serviceEntries,
-  // destinationRules,
+  ServiceEntries,
+  DestinationRules,
   // authorizationPolicies,
   // // discovery and network
   Services,

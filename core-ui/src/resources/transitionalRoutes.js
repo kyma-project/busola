@@ -1,7 +1,6 @@
 import React from 'react';
 
 //namespaced
-import serviceEntries from './namespaceResources/serviceEntries.routes';
 import serviceInstances from './namespaceResources/serviceInstances.routes';
 import serviceBrokers from './namespaceResources/serviceBrokers.routes';
 import serviceBindings from './namespaceResources/serviceBindings.routes';
@@ -16,7 +15,6 @@ import ingresses from './namespaceResources/ingresses.routes';
 import eventsNamespace from './namespaceResources/eventsNamespace.routes';
 import dnsProvider from './namespaceResources/dnsProviders.routes';
 import dnsEntries from './namespaceResources/dnsEntries.routes';
-import destinationRules from './namespaceResources/destinationRules.routes';
 import customResourcesDefinitionsNamespace from './namespaceResources/customResourceDefinitionsNs.routes';
 import configMaps from './namespaceResources/configMaps.routes';
 import certificates from './namespaceResources/certificates.routes';
@@ -43,8 +41,6 @@ const resources = (
     {eventsNamespace}
     <>
       {/* istio */}
-      {serviceEntries}
-      {destinationRules}
       {authorizationPolicies}
       {/* discovery and network */}
       {ingresses}

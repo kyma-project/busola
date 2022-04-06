@@ -1,11 +1,13 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Link } from 'shared/components/Link/Link';
-import { ServiceEntriesCreate } from '../Create/ServiceEntries/ServiceEntries.create';
 
-const ServiceEntriesList = props => {
+import { ServiceEntryCreate } from './ServiceEntryCreate';
+
+export function ServiceEntryList(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -32,9 +34,9 @@ const ServiceEntriesList = props => {
     <ResourcesList
       description={description}
       customColumns={customColumns}
-      createResourceForm={ServiceEntriesCreate}
+      createResourceForm={ServiceEntryCreate}
       {...props}
     />
   );
-};
-export default ServiceEntriesList;
+}
+export default ServiceEntryList;

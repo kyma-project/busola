@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { ResourceForm } from 'shared/ResourceForm';
+
 import { createServiceEntryTemplate } from './templates';
 
-function ServiceEntriesCreate({
+export function ServiceEntryCreate({
   formElementRef,
   onChange,
   resourceUrl,
@@ -28,5 +30,3 @@ function ServiceEntriesCreate({
     />
   );
 }
-
-export { ServiceEntriesCreate };

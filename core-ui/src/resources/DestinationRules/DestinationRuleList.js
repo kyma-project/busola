@@ -1,11 +1,12 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Link } from 'shared/components/Link/Link';
 
-import { DestinationRulesCreate } from '../Create/DestinationRules/DestinationRules.create';
+import { DestinationRuleCreate } from './DestinationRuleCreate';
 
-const DestinationRulesList = props => {
+export function DestinationRuleList(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -29,10 +30,10 @@ const DestinationRulesList = props => {
       resourceName={t('destination-rules.title')}
       customColumns={customColumns}
       description={description}
-      createResourceForm={DestinationRulesCreate}
+      createResourceForm={DestinationRuleCreate}
       {...props}
     />
   );
-};
+}
 
-export default DestinationRulesList;
+export default DestinationRuleList;

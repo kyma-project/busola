@@ -1,14 +1,17 @@
-import { LayoutPanel } from 'fundamental-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { LayoutPanel } from 'fundamental-react';
+
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Selector } from 'shared/components/Selector/Selector';
 import { Tokens } from 'shared/components/Tokens';
+
 import { Endpoints } from './Endpoints';
-import { ServiceEntriesCreate } from '../../Create/ServiceEntries/ServiceEntries.create';
+import { ServiceEntryCreate } from './ServiceEntryCreate';
+
 const Ports = serviceentry => {
   const { t, i18n } = useTranslation();
 
@@ -97,7 +100,7 @@ const Workloads = se => {
   );
 };
 
-function ServiceEntriesDetails(props) {
+export function ServiceEntryDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -115,9 +118,9 @@ function ServiceEntriesDetails(props) {
     <ResourceDetails
       customComponents={[Configuration, Ports, Workloads]}
       customColumns={customColumns}
-      createResourceForm={ServiceEntriesCreate}
+      createResourceForm={ServiceEntryCreate}
       {...props}
     />
   );
 }
-export default ServiceEntriesDetails;
+export default ServiceEntryDetails;
