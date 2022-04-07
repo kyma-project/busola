@@ -44,10 +44,6 @@ function ResourceGraph({ resource, i18n, config }) {
 
           if (!node) continue;
 
-          if (res.metadata.uid === resource.metadata.uid) {
-            node.classList.add('root-node');
-          }
-
           node.onclick = () => {
             setIsDetailsCardOpened(true);
             setClickedResource(res);
