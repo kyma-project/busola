@@ -21,7 +21,6 @@ function ResourceGraph({ resource, i18n, config }) {
   const { t } = useTranslation(['translation'], { i18n });
   const [dotSrc, setDotSrc] = useState('');
   const [isReady, setReady] = useState(false);
-  const [isDetailsCardOpened, setIsDetailsCardOpened] = useState(false);
   const [graphEl, setGraphEl] = useState(null);
   const [clickedResource, setClickedResource] = useState(null);
   const isTabletOrWider = useMinWidth(TABLET);
@@ -45,7 +44,6 @@ function ResourceGraph({ resource, i18n, config }) {
           if (!node) continue;
 
           node.onclick = () => {
-            setIsDetailsCardOpened(true);
             setClickedResource(res);
           };
         }
@@ -106,10 +104,10 @@ function ResourceGraph({ resource, i18n, config }) {
                 name={`${resource.kind} ${resource.metadata.name}.gv`}
                 i18n={i18n}
               />
-              {isDetailsCardOpened ? (
+              {clickedResource ? (
                 <DetailsCard
                   resource={clickedResource}
-                  handleCloseCard={() => setIsDetailsCardOpened(false)}
+                  handleCloseCard={() => setClickedResource(null)}
                 />
               ) : null}
             </div>
