@@ -14,34 +14,16 @@ const resourceTypes = [
   ['secrets'],
   ['serviceaccounts', 'sa'],
   ['services', 'svc'],
-  ['addonsconfigurations', 'addons'],
   ['daemonsets', 'ds'],
   ['deployments', 'deploy'],
   ['replicasets', 'rs'],
   ['statefulsets', 'sts'],
   ['cronjobs', 'cj'],
   ['jobs'],
-  ['certificates', 'cert', 'certs'],
-  ['issuers'],
-  ['dnsentries', 'dnse'],
-  ['dnsproviders', 'dnspr'],
-  ['subscriptions'],
-  ['ingresses', 'ing'],
-  ['networkpolicies', 'np'],
-  ['apirules'],
-  ['oauth2clients'],
-  ['destinationrules', 'dr'],
-  ['gateways', 'gw'],
-  ['virtualservices', 'vs'],
-  ['authorizationpolicies', 'ap'],
   ['rolebindings', 'rb', 'rbs'],
   ['roles'],
-  ['functions', 'fn'],
-  ['gitrepositories', 'gitrepos', 'repos'],
   ['horizontalpodautoscalers', 'hpa'],
   ['persistentvolumeclaims', 'pvc'],
-  ['serviceentries', 'se'],
-  ['sidecars'],
 ];
 const extendedResourceTypes = resourceTypes.map(aliases => [
   ...aliases,
@@ -137,6 +119,9 @@ function createResults({
   const [type, name] = tokens;
 
   const resourceType = toFullResourceType(type, extendedResourceTypes);
+  if (!extendedResourceTypes.flat().includes(resourceType)) {
+    return;
+  }
   const matchedNode = namespaceNodes.find(
     n =>
       n.resourceType === resourceType || n.navigationContext === resourceType,

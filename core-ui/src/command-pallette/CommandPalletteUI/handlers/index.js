@@ -7,6 +7,7 @@ import { crdHandler } from './crdHandler';
 import { helmReleaseHandler } from './helmReleaseHandler';
 import { findCommonPrefix } from 'shared/utils/helpers';
 import { crHandler } from './crHandler';
+import { crListHandler } from './crListHandler';
 
 const handlers = [
   nonResourceHandler,
@@ -15,6 +16,7 @@ const handlers = [
   nodesHandler,
   logsHandler,
   crdHandler,
+  crListHandler,
   crHandler,
   helmReleaseHandler,
 ];
@@ -42,6 +44,11 @@ export function getAutocompleteEntries(context) {
   const allEntries = handlers
     .flatMap(handler => handler.getAutocompleteEntries(context))
     .filter(Boolean);
+
+  // don't try to autocomplete if correct word is already here
+  if (allEntries.includes(context.query)) {
+    return null;
+  }
 
   const prefix = findCommonPrefix(context.query, allEntries);
   return prefix === context.query ? null : prefix;
@@ -74,6 +81,10 @@ export function getHelpEntries(context) {
       .flatMap(e => e),
     others: handlers
       .map(handler => handler.getOthersHelp?.(context))
+      .filter(Boolean)
+      .flatMap(e => e),
+    crds: handlers
+      .map(handler => handler.getCRsHelp?.(context))
       .filter(Boolean)
       .flatMap(e => e),
   };
