@@ -1,4 +1,5 @@
 import didYouMean from 'didyoumean';
+import pluralize from 'pluralize';
 
 export function getSuggestion(phrase, itemList) {
   return didYouMean(phrase, itemList);
@@ -44,4 +45,21 @@ export function autocompleteForResources({ tokens, resources, resourceTypes }) {
     default:
       return [];
   }
+}
+
+export function extractShortNames({
+  resourceType: pluralResourceType,
+  aliases,
+}) {
+  const singularResourceType = pluralize(pluralResourceType, 1);
+  return aliases.filter(
+    alias => alias !== singularResourceType && alias !== pluralResourceType,
+  );
+}
+
+export function findNavigationNode(resourceType, nodes) {
+  return nodes.find(
+    n =>
+      n.resourceType === resourceType || n.navigationContext === resourceType,
+  );
 }

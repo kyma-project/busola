@@ -2,7 +2,11 @@ import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import { prettifyKind } from 'shared/utils/helpers';
 import { LOADING_INDICATOR } from '../useSearchResults';
-import { autocompleteForResources, getSuggestion } from './helpers';
+import {
+  autocompleteForResources,
+  findNavigationNode,
+  getSuggestion,
+} from './helpers';
 
 // get all possible aliases for a cr
 function getCRAliases(crds) {
@@ -35,9 +39,7 @@ function findMatchingNode(crd, context) {
   const { namespaceNodes, clusterNodes } = context;
   const resourceType = crd.spec.names.plural;
 
-  return [...namespaceNodes, ...clusterNodes].find(
-    n => n.resourceType === resourceType,
-  );
+  return findNavigationNode(resourceType, [...namespaceNodes, ...clusterNodes]);
 }
 
 function navigateTo({ matchingNode, namespace, crd, crName = '' }) {

@@ -5,6 +5,8 @@ import {
   getSuggestion,
   toFullResourceType,
   autocompleteForResources,
+  extractShortNames,
+  findNavigationNode,
 } from './helpers';
 
 const resourceTypes = [
@@ -45,7 +47,6 @@ const resourceTypes = [
     resourceType: 'statefulsets',
     aliases: ['statefulset', 'statefulsets', 'sts'],
   },
-  // we don't have nodes for those resources, but let's keep them here
   {
     resourceType: 'networkpolicies',
     aliases: ['netpol', 'networkpolicies', 'networkpolicy', 'np'],
@@ -152,10 +153,7 @@ async function fetchNamespacedResource(context) {
     updateResourceCache,
   } = context;
   const resourceType = toFullResourceType(tokens[0], resourceTypes);
-  const matchedNode = namespaceNodes.find(
-    n =>
-      n.resourceType === resourceType || n.navigationContext === resourceType,
-  );
+  const matchedNode = findNavigationNode(resourceType, namespaceNodes);
 
   if (!matchedNode) {
     return;
@@ -180,11 +178,7 @@ function createResults({
 }) {
   const [type, name] = tokens;
   const resourceType = toFullResourceType(type, resourceTypes);
-  const matchedNode = namespaceNodes.find(
-    n =>
-      n.resourceType === resourceType || n.navigationContext === resourceType,
-  );
-
+  const matchedNode = findNavigationNode(resourceType, namespaceNodes);
   if (!matchedNode) {
     return;
   }
@@ -228,12 +222,8 @@ export const namespacedResourceHandler = {
   getSuggestions,
   fetchResources: fetchNamespacedResource,
   createResults,
-  getNavigationHelp: () => [], //todo
-  // resourceTypes.map(types => {
-  //   if (types.length === 1) {
-  //     return [types[0]];
-  //   } else {
-  //     return [types[0], types[types.length - 1]];
-  //   }
-  // }),
+  getNavigationHelp: ({ namespaceNodes }) =>
+    resourceTypes
+      .filter(rT => findNavigationNode(rT.resourceType, namespaceNodes))
+      .map(rT => [rT.resourceType, extractShortNames(rT)]),
 };

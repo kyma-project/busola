@@ -5,6 +5,8 @@ import {
   getSuggestion,
   toFullResourceType,
   autocompleteForResources,
+  extractShortNames,
+  findNavigationNode,
 } from './helpers';
 
 const resourceTypes = [
@@ -32,7 +34,7 @@ const resourceTypes = [
   },
   {
     resourceType: 'validatingwebhookconfigurations',
-    aliases: ['validatingwebhookconfiguration', 'validatingwebhookconfigurati'],
+    aliases: ['validatingwebhookconfiguration'],
   },
   {
     resourceType: 'runtimeclasses',
@@ -134,7 +136,7 @@ async function fetchClusterResources(context) {
   const { fetch, tokens, updateResourceCache, clusterNodes } = context;
 
   const resourceType = toFullResourceType(tokens[0], resourceTypes);
-  const matchedNode = clusterNodes.find(n => n.resourceType === resourceType);
+  const matchedNode = findNavigationNode(resourceType, clusterNodes);
 
   if (!matchedNode) {
     return;
@@ -193,7 +195,7 @@ function createResults({
 }) {
   const [type, name] = tokens;
   const resourceType = toFullResourceType(type, resourceTypes);
-  const matchedNode = clusterNodes.find(n => n.resourceType === resourceType);
+  const matchedNode = findNavigationNode(resourceType, clusterNodes);
   if (!matchedNode) {
     return;
   }
@@ -249,12 +251,8 @@ export const clusterResourceHandler = {
   getSuggestions,
   fetchResources: fetchClusterResources,
   createResults,
-  getNavigationHelp: () => [], //todo
-  // resourceTypes.map(types => {
-  //   if (types.length === 1) {
-  //     return [types[0]];
-  //   } else {
-  //     return [types[0], types[types.length - 1]];
-  //   }
-  // }),
+  getNavigationHelp: ({ clusterNodes }) =>
+    resourceTypes
+      .filter(rT => findNavigationNode(rT.resourceType, clusterNodes))
+      .map(rT => [rT.resourceType, extractShortNames(rT)]),
 };
