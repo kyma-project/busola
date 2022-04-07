@@ -12,21 +12,21 @@ export function DetailsCard({ resource, handleCloseCard }) {
   return (
     <div className="details-card-wrapper">
       <header className="details-card-header">
-        <p className="resource-name">{resource?.metadata?.name}</p>
-        <p className="resource-kind">{resource?.kind}</p>
+        <p className="resource-name">{resource.metadata.name}</p>
+        <p className="resource-kind">{resource.kind}</p>
       </header>
       <section className="details-content">
         <p className="title">
           {t('common.headers.created')}&nbsp;
           <span>
             <ReadableCreationTimestamp
-              timestamp={resource?.metadata?.creationTimestamp}
+              timestamp={resource.metadata.creationTimestamp}
             />
           </span>
         </p>
         <div>
           <p className="title">{t('common.headers.labels')}</p>
-          <Labels labels={resource?.metadata?.labels} />
+          <Labels labels={resource.metadata.labels} />
         </div>
       </section>
       <div className="buttons-wrapper">
