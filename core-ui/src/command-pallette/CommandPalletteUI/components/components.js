@@ -107,10 +107,10 @@ export function CommandPalletteHelp({ helpEntries }) {
           </h1>
           <table className="help-text">
             <tbody>
-              {helpEntries.crds.map(({ name, shortName }) => (
+              {helpEntries.crds.map(({ name, shortNames }) => (
                 <tr key={name}>
                   <td>{name}</td>
-                  <td>{shortName}</td>
+                  <td>{shortNames?.join(', ')}</td>
                 </tr>
               ))}
             </tbody>
