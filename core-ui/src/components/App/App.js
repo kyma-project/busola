@@ -8,7 +8,7 @@ import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { useSentry } from 'hooks/useSentry';
 
-import { Details } from 'components/Extensibility/details';
+import { ExtensibilityDetails } from 'components/Extensibility/extensibilityDetails';
 import { ExtensibilityList } from 'components/Extensibility/extensibilityList';
 
 import resources from 'routing/resources';
@@ -56,7 +56,7 @@ export default function App() {
       />
       <Route
         path="/namespaces/:namespaceId/wasmplugins/:resourceName"
-        element={<Details />}
+        element={<ExtensibilityDetails />}
       />
       <Route
         path="/namespaces/:namespaceId/customjobs"
@@ -64,7 +64,7 @@ export default function App() {
       />
       <Route
         path="/namespaces/:namespaceId/customjobs/:resourceName"
-        element={<Details />}
+        element={<ExtensibilityDetails />}
       />
 
       {resources}

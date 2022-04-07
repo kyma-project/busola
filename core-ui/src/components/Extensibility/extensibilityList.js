@@ -8,7 +8,7 @@ export const ExtensibilityList = () => {
   const listProps = usePrepareListProps(resource.nav.path, resource.nav.label);
   if (resource.nav.resourceType) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
-      /[a-z0-9-]+$/,
+      /[a-z0-9-]+\/?$/,
       resource.nav.resourceType,
     );
   }
