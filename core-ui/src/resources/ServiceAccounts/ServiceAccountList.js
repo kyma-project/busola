@@ -3,9 +3,9 @@ import { useTranslation, Trans } from 'react-i18next';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Link } from 'shared/components/Link/Link';
-import { ServiceAccountsCreate } from '../../Create/ServiceAccounts/ServiceAccounts.create';
+import { ServiceAccountCreate } from './ServiceAccountCreate';
 
-const ServiceAccountsList = props => {
+export function ServiceAccountList(props) {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -32,10 +32,10 @@ const ServiceAccountsList = props => {
       customColumns={customColumns}
       description={description}
       resourceName={t('service-accounts.title')}
-      createResourceForm={ServiceAccountsCreate}
+      createResourceForm={ServiceAccountCreate}
       {...props}
     />
   );
-};
+}
 
-export default ServiceAccountsList;
+export default ServiceAccountList;

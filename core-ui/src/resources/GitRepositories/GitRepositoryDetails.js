@@ -1,13 +1,15 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
+
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { GitRepositoriesCreate } from '../Create/GitRepositories/GitRepositories.create';
-import { useTranslation } from 'react-i18next';
 
-const GitRepositoriesDetails = props => {
+import { GitRepositoryCreate } from './GitRepositoryCreate';
+
+export function GitRepositoryDetails(props) {
   const { t, i18n } = useTranslation();
 
   const customColumns = [
@@ -47,10 +49,10 @@ const GitRepositoriesDetails = props => {
   return (
     <ResourceDetails
       {...props}
-      createResourceForm={GitRepositoriesCreate}
+      createResourceForm={GitRepositoryCreate}
       customColumns={customColumns}
     />
   );
-};
+}
 
-export default GitRepositoriesDetails;
+export default GitRepositoryDetails;

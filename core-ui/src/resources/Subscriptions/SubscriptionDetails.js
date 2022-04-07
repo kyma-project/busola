@@ -1,18 +1,18 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { LayoutPanel } from 'fundamental-react';
+
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { GoToDetailsLink } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-
 import { SubscriptionConditionStatus } from 'shared/components/SubscriptionConditionStatus';
-import { SubscriptionConditions } from './SubscriptionConditions';
-
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
-import { SubscriptionsCreate } from '../../Create/Subscriptions/Subscriptions.create';
+
+import { SubscriptionConditions } from './SubscriptionConditions';
+
+import { SubscriptionCreate } from './SubscriptionCreate';
 
 import './EventFilters.scss';
 
@@ -59,7 +59,7 @@ const EventFilters = ({ filter }) => {
   );
 };
 
-const SubscriptionsFilter = subscription => {
+const SubscriptionFilter = subscription => {
   const { t } = useTranslation();
   const filters = subscription?.spec?.filter?.filters || [];
   return (
@@ -82,7 +82,7 @@ const SubscriptionsFilter = subscription => {
   );
 };
 
-const SubscriptionsDetails = props => {
+export function SubscriptionDetails(props) {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -125,14 +125,14 @@ const SubscriptionsDetails = props => {
 
   return (
     <ResourceDetails
-      customComponents={[SubscriptionConditions, SubscriptionsFilter, Events]}
+      customComponents={[SubscriptionConditions, SubscriptionFilter, Events]}
       customColumns={customColumns}
       resourceTitle={t('subscriptions.title')}
       singularName={t('subscriptions.name_singular')}
-      createResourceForm={SubscriptionsCreate}
+      createResourceForm={SubscriptionCreate}
       {...props}
     />
   );
-};
+}
 
-export default SubscriptionsDetails;
+export default SubscriptionDetails;

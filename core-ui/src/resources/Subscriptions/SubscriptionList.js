@@ -1,10 +1,13 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Link } from 'shared/components/Link/Link';
 import { SubscriptionConditionStatus } from 'shared/components/SubscriptionConditionStatus';
-import { SubscriptionsCreate } from '../../Create/Subscriptions/Subscriptions.create';
+
+import { SubscriptionCreate } from './SubscriptionCreate';
+
 import './Subscriptions.scss';
 
 const EventTypes = ({ filters }) => {
@@ -31,7 +34,7 @@ const EventTypes = ({ filters }) => {
   );
 };
 
-const SubscriptionsList = props => {
+export function SubscriptionList(props) {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -63,10 +66,10 @@ const SubscriptionsList = props => {
       resourceName={t('subscriptions.title')}
       customColumns={customColumns}
       description={description}
-      createResourceForm={SubscriptionsCreate}
+      createResourceForm={SubscriptionCreate}
       {...props}
     />
   );
-};
+}
 
-export default SubscriptionsList;
+export default SubscriptionList;

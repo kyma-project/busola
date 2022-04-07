@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { GenericSecrets } from './GenericSecrets';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { ServiceAccountsCreate } from '../../Create/ServiceAccounts/ServiceAccounts.create';
+import { ServiceAccountCreate } from './ServiceAccountCreate';
 
 const ServiceAccountSecrets = serviceAccount => {
   const namespace = serviceAccount.metadata.namespace;
@@ -46,7 +46,7 @@ const ServiceAccountImagePullSecrets = serviceAccount => {
   ) : null;
 };
 
-export const ServiceAccountsDetails = props => {
+export function ServiceAccountDetails(props) {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -62,10 +62,10 @@ export const ServiceAccountsDetails = props => {
     <ResourceDetails
       customComponents={[ServiceAccountSecrets, ServiceAccountImagePullSecrets]}
       customColumns={customColumns}
-      createResourceForm={ServiceAccountsCreate}
+      createResourceForm={ServiceAccountCreate}
       {...props}
     />
   );
-};
+}
 
-export default ServiceAccountsDetails;
+export default ServiceAccountDetails;

@@ -1,6 +1,7 @@
 import React from 'react';
-import SubscriptionsListComponent from 'components/Predefined/List/Subscription/Subscriptions.list';
 import { useTranslation } from 'react-i18next';
+
+import SubscriptionsListComponent from 'resources/Subscriptions/SubscriptionList';
 
 const getServiceName = sink => {
   if (typeof sink !== 'string') return '';

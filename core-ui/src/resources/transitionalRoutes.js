@@ -3,9 +3,6 @@ import React from 'react';
 //namespaced
 import eventsNamespace from './namespaceResources/eventsNamespace.routes';
 import addonsConfigurationNamespace from './namespaceResources/addonsConfigurationNamespace.routes';
-import subscriptions from './namespaceResources/subscriptions.routes';
-import serviceAccounts from './namespaceResources/serviceAccounts.routes';
-import gitRepositories from './namespaceResources/gitRepositories.routes';
 
 //cluster
 import applications from './clusterResources/applications.routes';
@@ -21,9 +18,6 @@ const resources = (
     <>
       {/* configuration */}
       {addonsConfigurationNamespace}
-      {subscriptions}
-      {serviceAccounts}
-      {gitRepositories}
     </>
 
     {/* cluster resources */}

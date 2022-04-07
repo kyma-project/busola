@@ -35,9 +35,9 @@ import * as Certificates from './Certificates';
 import * as AuthorizationPolicies from './AuthorizationPolicies';
 import * as ApiRules from './ApiRules';
 // import addonsConfigurationNamespace from './namespaceResources/addonsConfigurationNamespace.routes';
-// import subscriptions from './namespaceResources/subscriptions.routes';
-// import serviceAccounts from './namespaceResources/serviceAccounts.routes';
-// import gitRepositoies from './namespaceResources/gitRepositories.routes';
+import * as Subscriptions from './Subscriptions';
+import * as ServiceAccounts from './ServiceAccounts';
+import * as GitRepositories from './GitRepositories';
 import * as Functions from './Functions';
 
 // //cluster
@@ -95,9 +95,9 @@ export const resources = {
   ConfigMaps,
   Certificates,
   // addonsConfigurationNamespace,
-  // subscriptions,
-  // serviceAccounts,
-  // gitRepositories,
+  Subscriptions,
+  ServiceAccounts,
+  GitRepositories,
 
   // // cluster resources
   // applications,

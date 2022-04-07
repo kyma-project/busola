@@ -15,7 +15,7 @@ function isGitUrl(str) {
   return regex.test(str);
 }
 
-function GitRepositoriesCreate({
+export function GitRepositoryCreate({
   namespace,
   formElementRef,
   onChange,
@@ -146,16 +146,4 @@ function GitRepositoriesCreate({
     </ResourceForm>
   );
 }
-GitRepositoriesCreate.allowEdit = true;
-GitRepositoriesCreate.secrets = (t, context) => [
-  {
-    title: t('git-repositories.secret-basic'),
-    data: ['username', 'password'],
-  },
-  {
-    title: t('git-repositories.secret-ssh-key'),
-    data: ['key'],
-  },
-];
-
-export { GitRepositoriesCreate };
+GitRepositoryCreate.allowEdit = true;

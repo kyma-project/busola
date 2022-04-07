@@ -9,6 +9,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 import * as Inputs from 'shared/ResourceForm/inputs';
+
 import { createSubscriptionTemplate } from './templates';
 import {
   getServiceName,
@@ -19,7 +20,7 @@ import { FiltersSection } from './FiltersSection';
 
 const versionOptions = ['v1', 'v2', 'v3', 'v4'];
 
-const SubscriptionsCreate = ({
+export const SubscriptionCreate = ({
   onChange,
   formElementRef,
   namespace,
@@ -287,19 +288,4 @@ const SubscriptionsCreate = ({
     </ResourceForm>
   );
 };
-SubscriptionsCreate.allowEdit = true;
-
-SubscriptionsCreate.resourceGraphConfig = () => ({
-  depth: 1,
-  networkFlowLevel: 0,
-  relations: [
-    {
-      kind: 'Service',
-    },
-  ],
-  matchers: {
-    Service: (subscription, service) =>
-      getServiceName(subscription.spec.sink) === service.metadata.name,
-  },
-});
-export { SubscriptionsCreate };
+SubscriptionCreate.allowEdit = true;

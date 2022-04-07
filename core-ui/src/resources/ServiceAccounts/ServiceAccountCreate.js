@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import * as jp from 'jsonpath';
+import { Switch } from 'fundamental-react';
+import { cloneDeep } from 'lodash';
+
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { ResourceForm } from 'shared/ResourceForm';
 import {
@@ -7,25 +11,22 @@ import {
   KeyValueField,
   ComboboxArrayInput,
 } from 'shared/ResourceForm/fields';
-import * as jp from 'jsonpath';
+
 import { createServiceAccountTemplate } from './templates';
 import { validateServiceAccount } from './helpers';
-import { Switch } from 'fundamental-react';
-import _ from 'lodash';
 
-const ServiceAccountsCreate = ({
+export const ServiceAccountCreate = ({
   formElementRef,
   namespace,
   onChange,
   setCustomValid,
-  resource: initialServiceAccounts,
+  resource: initialServiceAccount,
   resourceUrl,
 }) => {
   const { t } = useTranslation();
 
   const [serviceAccount, setServiceAccount] = useState(
-    _.cloneDeep(initialServiceAccounts) ||
-      createServiceAccountTemplate(namespace),
+    cloneDeep(initialServiceAccount) || createServiceAccountTemplate(namespace),
   );
 
   React.useEffect(() => {
@@ -54,7 +55,7 @@ const ServiceAccountsCreate = ({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      initialResource={initialServiceAccounts}
+      initialResource={initialServiceAccount}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
@@ -139,26 +140,4 @@ const ServiceAccountsCreate = ({
     </ResourceForm>
   );
 };
-ServiceAccountsCreate.allowEdit = true;
-ServiceAccountsCreate.resourceGraphConfig = (t, context) => ({
-  relations: [
-    {
-      kind: 'ClusterRoleBinding',
-    },
-    {
-      kind: 'RoleBinding',
-      clusterwide: true,
-    },
-    {
-      kind: 'Secret',
-    },
-  ],
-  depth: 2,
-  networkFlowLevel: 2,
-  matchers: {
-    Secret: (sa, secret) =>
-      sa.secrets?.find(s => s.name === secret.metadata.name) ||
-      sa.imagePullSecrets?.find(s => s.name === secret.metadata.name),
-  },
-});
-export { ServiceAccountsCreate };
+ServiceAccountCreate.allowEdit = true;

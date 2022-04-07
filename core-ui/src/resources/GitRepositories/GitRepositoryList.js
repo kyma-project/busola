@@ -1,15 +1,16 @@
 import React from 'react';
+import { Link } from 'fundamental-react';
+import { useTranslation, Trans } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Link as ReactSharedLink } from 'shared/components/Link/Link';
-import { Link } from 'fundamental-react';
-import { useTranslation } from 'react-i18next';
-import { Trans } from 'react-i18next';
-import { GitRepositoriesCreate } from '../../Create/GitRepositories/GitRepositories.create';
 
-const GitRepositoriesList = props => {
+import { GitRepositoryCreate } from './GitRepositoryCreate';
+
+export function GitRepositoryList(props) {
   const { t, i18n } = useTranslation();
 
   const customColumns = [
@@ -60,10 +61,10 @@ const GitRepositoriesList = props => {
       customColumns={customColumns}
       createActionLabel={t('git-repositories.labels.create')}
       description={description}
-      createResourceForm={GitRepositoriesCreate}
+      createResourceForm={GitRepositoryCreate}
       {...props}
     />
   );
-};
+}
 
-export default GitRepositoriesList;
+export default GitRepositoryList;
