@@ -2,41 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { usePrepareDetailsProps } from 'routing/createResourceRoutes';
-import { GenericList } from 'shared/components/GenericList/GenericList';
-
-const CreateExtensibilityList = metadata => {
-  const { title, headers, columns, resource: resPath } = metadata;
-
-  const headerRenderer = () => headers;
-
-  const rowRenderer = condition => {
-    return (
-      columns.map(column =>
-        column.split('.').reduce((prevRes, curr) => {
-          return prevRes?.[curr] ? prevRes[curr] : null;
-        }, condition),
-      ) || []
-    );
-  };
-
-  return res => {
-    //get resource specified in json component 'resource'
-    const result = resPath.split('.').reduce((prevRes, curr) => {
-      return prevRes[curr];
-    }, res);
-
-    return (
-      <GenericList
-        key={title}
-        title={title}
-        showSearchField={false}
-        headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
-        entries={result || []}
-      />
-    );
-  };
-};
+import { CreateExtensibilityList } from './components/CreateExtensibilityList';
 
 export const ExtensibilityDetails = () => {
   const resource = useGetCRbyPath();
