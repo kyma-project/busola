@@ -37,9 +37,6 @@ export function useDeleteResource({
     try {
       if (deleteFn) {
         deleteFn(resource, url);
-        notification.notifySuccess({
-          content: t('clusters.disconnect'),
-        });
       } else {
         await deleteResourceMutation(url);
         notification.notifySuccess({

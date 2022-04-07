@@ -123,7 +123,12 @@ function ClusterList() {
       handler: resource => {
         setChosenCluster(resource);
         handleResourceDelete({
-          deleteFn: () => deleteCluster(resource?.name),
+          deleteFn: () => {
+            deleteCluster(resource?.name);
+            notification.notifySuccess({
+              content: t('clusters.disconnect'),
+            });
+          },
         });
       },
     },
