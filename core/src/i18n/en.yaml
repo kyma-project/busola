@@ -1750,6 +1750,8 @@ replica-sets:
     error: At least one of the Pods has failed.
     running: All the Pods are running correctly.
 resource-graph:
+  buttons:
+    go-to-details: Go to details
   error: Something went wrong during rendering the graph.
   save-as-dot: DOT format
   title: Resource Graph

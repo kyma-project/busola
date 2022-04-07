@@ -191,7 +191,7 @@ export const ModalWithForm = ({
         actions={[
           renderConfirmButton(),
           <Button onClick={() => setOpenStatus(false)} option="transparent">
-            Cancel
+            {t('common.buttons.cancel')}
           </Button>,
         ]}
         onClose={() => {
