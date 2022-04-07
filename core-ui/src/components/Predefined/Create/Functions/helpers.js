@@ -1,15 +1,12 @@
-import { randomNameGenerator } from 'shared/utils/helpers';
-
 export function createFunctionTemplate(namespace) {
-  const name = randomNameGenerator();
   return {
     apiVersion: 'serverless.kyma-project.io/v1alpha1',
     kind: 'Function',
     metadata: {
-      name,
+      name: '',
       namespace,
       labels: {
-        'app.kubernetes.io/name': name,
+        'app.kubernetes.io/name': '',
       },
     },
     spec: {

@@ -22,6 +22,7 @@ function SecretsCreate({
   resource: initialSecret,
   resourceUrl,
   setCustomValid,
+  prefix,
 }) {
   const { t } = useTranslation();
   const [secret, setSecret] = useState(
@@ -77,6 +78,7 @@ function SecretsCreate({
           setSecret({ ...secret });
         }}
         validate={value => !!value}
+        prefix={prefix}
       />
       <KeyValueField
         advanced
@@ -94,6 +96,8 @@ function SecretsCreate({
         label={t('secrets.type')}
         input={({ value, setValue }) => (
           <ComboboxInput
+            id="secrets-type-combobox"
+            ariaLabel="Secret's type's Combobox"
             required
             compact
             placeholder={t('secrets.placeholders.type')}

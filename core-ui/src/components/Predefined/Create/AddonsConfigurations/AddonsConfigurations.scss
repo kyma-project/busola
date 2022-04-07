@@ -1,7 +1,22 @@
-.addons-urls-editor, .addons-urls-list {
-  margin: 5px 0;
+.addons-urls-editor,
+.addons-urls-list {
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-gap: 20px;
   align-items: center;
+}
+
+.binding-name-field {
+  display: flex;
+}
+
+.fd-form-group {
+  .fd-input {
+    margin: 0;
+  }
+}
+
+.addons-name {
+  .fd-popover {
+    width: 100%;
+  }
 }
