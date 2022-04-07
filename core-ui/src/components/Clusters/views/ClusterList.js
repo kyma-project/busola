@@ -123,7 +123,12 @@ function ClusterList() {
       handler: resource => {
         setChosenCluster(resource);
         handleResourceDelete({
-          deleteFn: () => deleteCluster(resource?.name),
+          deleteFn: () => {
+            deleteCluster(resource?.name);
+            notification.notifySuccess({
+              content: t('clusters.disconnect'),
+            });
+          },
         });
       },
     },
@@ -201,7 +206,12 @@ function ClusterList() {
       <DeleteMessageBox
         resource={chosenCluster}
         resourceName={chosenCluster?.kubeconfig['current-context']}
-        deleteFn={e => deleteCluster(e.name)}
+        deleteFn={e => {
+          deleteCluster(e.name);
+          notification.notifySuccess({
+            content: t('clusters.disconnect'),
+          });
+        }}
       />
     </>
   );
