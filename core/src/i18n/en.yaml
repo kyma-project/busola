@@ -394,10 +394,11 @@ command-palette:
     namespaced: Namespaced CRs
   help:
     choose-cluster: Choose Cluster
+    crd-aliases: CRD Aliases
     full: Use <0>↑</0> and <0>↓</0> to navigate between results, <0>⏎</0> to choose, <0>Tab</0> to autocomplete.
     navigation: Navigation
     open-preferences: Open Preferences
-    resource-aliases: Resource Aliases
+    resource-aliases: Built-in Resource Aliases
     short-help: Type to search, e.g. "ns default" or "pod nginx"
   item-actions:
     navigate: Navigate
@@ -413,6 +414,7 @@ command-palette:
     clusterroles: Cluster Roles
     configmaps: Config Maps
     cronjobs: Cron Jobs
+    customresourcedefinitions: Custom Resource Definitions
     daemonsets: Daemon Sets
     destinationrules: Destination Rules
     gitrepositories: Git Repositories

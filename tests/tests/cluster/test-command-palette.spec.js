@@ -119,6 +119,17 @@ context('Test Command Palette navigation', () => {
     cy.getIframeBody()
       .contains('API Server Address')
       .should('be.visible');
+
+    // navigate to generic CR
+    openCommandPalette();
+
+    getQueryInput().type('am');
+
+    getQueryInput().trigger('keydown', { key: 'Enter' });
+
+    cy.getIframeBody()
+      .contains('ApplicationMappings')
+      .should('be.visible');
   });
 
   it('History', () => {
