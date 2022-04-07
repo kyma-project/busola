@@ -16,8 +16,6 @@ import {
 } from 'shared/ResourceForm/fields';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
-import './RoleBindings.scss';
-
 export function RoleBindings({
   formElementRef,
   namespace,
@@ -98,11 +96,11 @@ export function RoleBindings({
     >
       <K8sNameField
         propertyPath="$.metadata.name"
-        kind={t('role-bindings.name_singular')}
+        kind={singularName}
         setValue={handleNameChange}
-        className="fd-margin-bottom--sm"
         readOnly={!!initialRoleBinding}
         pattern=".*"
+        showHelp={false}
       />
       <KeyValueField
         advanced

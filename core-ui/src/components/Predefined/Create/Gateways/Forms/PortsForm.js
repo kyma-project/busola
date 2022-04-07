@@ -68,6 +68,7 @@ export const PortsForm = ({ server = {}, servers, setServers }) => {
         setValue={handleNameChange}
         className="fd-margin-bottom--sm"
         pattern=".*"
+        showHelp={false}
       />
 
       <ResourceForm.FormField

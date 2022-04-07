@@ -25,6 +25,7 @@ function SingleContainerSection({ container, setContainer }) {
         required
         kind={t('deployments.create-modal.advanced.image')}
         pattern=".*"
+        showHelp={false}
       />
       <ResourceForm.FormField
         required
