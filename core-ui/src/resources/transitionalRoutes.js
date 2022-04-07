@@ -2,7 +2,6 @@ import React from 'react';
 
 //namespaced
 import eventsNamespace from './namespaceResources/eventsNamespace.routes';
-import customResourcesDefinitionsNamespace from './namespaceResources/customResourceDefinitionsNs.routes';
 import addonsConfigurationNamespace from './namespaceResources/addonsConfigurationNamespace.routes';
 import subscriptions from './namespaceResources/subscriptions.routes';
 import serviceAccounts from './namespaceResources/serviceAccounts.routes';
@@ -14,7 +13,6 @@ import storageClasses from './clusterResources/storageClases.routes';
 import persistentVolumes from './clusterResources/persistentVolumes.routes';
 import eventsCluster from './clusterResources/eventsCluster.routes';
 import addonsConfigurationCluster from './clusterResources/addonsConfigurationCluster.routes';
-import customResourceDefinitionsCl from './clusterResources/customResourceDefinitionsCl.routes';
 
 const resources = (
   <>
@@ -22,7 +20,6 @@ const resources = (
     {eventsNamespace}
     <>
       {/* configuration */}
-      {customResourcesDefinitionsNamespace}
       {addonsConfigurationNamespace}
       {subscriptions}
       {serviceAccounts}
@@ -36,7 +33,6 @@ const resources = (
       {storageClasses}
       {persistentVolumes}
       {addonsConfigurationCluster}
-      {customResourceDefinitionsCl}
     </>
   </>
 );

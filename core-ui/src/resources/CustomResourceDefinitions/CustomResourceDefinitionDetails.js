@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
-import { CurrentCRDVersion } from './CurrentCRDVersion';
+import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { Button } from 'fundamental-react';
-
-import { CRCreate } from './CRCreate';
-import { RelatedCRDsList } from './RelatedCRDsList';
 import { Tokens } from 'shared/components/Tokens';
 import { EventsList } from 'shared/components/EventsList';
-import { CustomResourceDefinitionsCreate } from '../../Create/CustomResourceDefinitions/CustomResourceDefinitons.create';
 
-const CustomResourceDefinitionsDetails = props => {
+import { CurrentCRDVersion } from './CurrentCRDVersion';
+import { CRCreate } from './CRCreate';
+import { RelatedCRDsList } from './RelatedCRDsList';
+import { CustomResourceDefinitionCreate } from './CustomResourceDefinitionCreate';
+
+export function CustomResourceDefinitionDetails(props) {
   const { t, i18n } = useTranslation();
 
   const customColumns = [
@@ -108,10 +109,10 @@ const CustomResourceDefinitionsDetails = props => {
           );
         },
       ]}
-      createResourceForm={CustomResourceDefinitionsCreate}
+      createResourceForm={CustomResourceDefinitionCreate}
       {...props}
     />
   );
-};
+}
 
-export default CustomResourceDefinitionsDetails;
+export default CustomResourceDefinitionDetails;

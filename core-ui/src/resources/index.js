@@ -30,7 +30,6 @@ import * as DnsEntries from './DnsEntries';
 import * as DestinationRules from './DestinationRules';
 import * as Deployments from './Deployments';
 import * as DaemonSets from './DaemonSets';
-// import customResourcesDefinitionsNamespace from './namespaceResources/customResourceDefinitionsNs.routes';
 import * as ConfigMaps from './ConfigMaps';
 import * as Certificates from './Certificates';
 import * as AuthorizationPolicies from './AuthorizationPolicies';
@@ -49,7 +48,7 @@ import * as ClusterRoles from './ClusterRoles';
 import * as Namespaces from './Namespaces';
 // import eventsCluster from './clusterResources/eventsCluster.routes';
 // import addonsConfigurationCluster from './clusterResources/addonsConfigurationCluster.routes';
-// import customResourceDefinitionsCl from './clusterResources/customResourceDefinitionsCl.routes';
+import * as CustomResourceDefinitions from './CustomResourceDefinitions';
 import * as ClusterRoleBindings from './ClusterRoleBindings';
 
 export const resources = {
@@ -108,7 +107,7 @@ export const resources = {
   // storageClasses,
   // persistentVolumes,
   // addonsConfigurationCluster,
-  // customResourceDefinitionsCl,
+  CustomResourceDefinitions,
   ClusterRoleBindings,
 };
 

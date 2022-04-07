@@ -8,7 +8,7 @@ import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useTranslation } from 'react-i18next';
 
 import { SchemaViewer } from 'shared/components/SchemaViewer/SchemaViewer';
-import { CustomResources } from '../../../CustomResources/CustomResources';
+import { CustomResources } from 'components/CustomResources/CustomResources';
 import './CurrentCRDVersion.scss';
 
 const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {

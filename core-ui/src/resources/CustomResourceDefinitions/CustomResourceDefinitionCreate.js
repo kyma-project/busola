@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
+
 import { createCustomResourceDefinitionsTemplate } from './templates';
 
-function CustomResourceDefinitionsCreate({
+export function CustomResourceDefinitionCreate({
   namespace,
   formElementRef,
   onChange,
@@ -29,5 +31,3 @@ function CustomResourceDefinitionsCreate({
     />
   );
 }
-
-export { CustomResourceDefinitionsCreate };

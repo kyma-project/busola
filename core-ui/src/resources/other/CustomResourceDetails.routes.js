@@ -3,9 +3,7 @@ import { Route, useParams } from 'react-router-dom';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 const CustomResource = React.lazy(() =>
-  import(
-    '../../components/Predefined/Details/CustomResourceDefinitions/CustomResources.details'
-  ),
+  import('../CustomResourceDefinitions/CustomResources.details'),
 );
 
 function RoutedCRDDetails() {

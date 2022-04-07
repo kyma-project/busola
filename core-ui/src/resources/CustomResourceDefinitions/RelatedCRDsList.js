@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
-import CustomResourceDefinitionsList from 'components/Predefined/List/CustomResourceDefinitions.list';
+import CustomResourceDefinitionList from './CustomResourceDefinitionList';
 
 export function RelatedCRDsList(resource) {
   const { t, i18n } = useTranslation();
@@ -17,7 +17,7 @@ export function RelatedCRDsList(resource) {
     );
   };
   return (
-    <CustomResourceDefinitionsList
+    <CustomResourceDefinitionList
       {...{
         hasDetailsView: true,
         fixedPath: true,
