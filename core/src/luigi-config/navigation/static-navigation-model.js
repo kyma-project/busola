@@ -7,6 +7,7 @@ import {
   getClusters,
 } from './../cluster-management/cluster-management';
 import { hasPermissionsFor, hasWildcardPermission } from './permissions';
+import { getCustomPaths } from './customResources';
 
 export const coreUIViewGroupName = '_core_ui_';
 
@@ -58,47 +59,7 @@ export function getStaticChildrenNodesForNamespace(
   const namespacedCustomResources = customResources?.filter(
     cr => cr?.nav?.scope === 'namespace',
   );
-  const customPaths =
-    namespacedCustomResources?.map(cr => ({
-      category: {
-        label: cr.nav?.category,
-        collapsible: true,
-        icon: 'source-code',
-      },
-      resourceType: cr.nav?.path,
-      pathSegment: cr.nav?.path,
-      label: cr.nav?.label,
-      viewUrl:
-        config.coreUIModuleUrl +
-        `/namespaces/:namespaceId/${cr.nav?.path}?` +
-        toSearchParamsString({
-          resourceApiPath: cr.nav?.api,
-          hasDetailsView: cr.nav?.hasDetailsView,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      navigationContext: cr.nav?.path,
-      context: {
-        customResource: cr,
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: `:${cr.nav?.path}Name`,
-              resourceType: cr.nav?.path,
-              viewUrl:
-                config.coreUIModuleUrl +
-                `/namespaces/:namespaceId/${cr.nav?.path}/:${cr.nav?.path}Name?` +
-                toSearchParamsString({
-                  resourceApiPath: cr.nav?.api,
-                }),
-            },
-          ],
-        },
-      ],
-    })) || [];
+  const customPaths = getCustomPaths(namespacedCustomResources);
 
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
@@ -1706,6 +1667,11 @@ export function getStaticRootNodes(
   features,
   customResources,
 ) {
+  const clusterCustomResources = customResources?.filter(
+    cr => cr?.nav?.scope === 'cluster',
+  );
+  const customPaths = getCustomPaths(clusterCustomResources);
+
   const nodes = [
     {
       pathSegment: 'overview',
@@ -2155,8 +2121,10 @@ export function getStaticRootNodes(
       onNodeActivation: downloadKubeconfig,
     },
   ];
-  filterNodesByAvailablePaths(nodes, groupVersions, permissionSet);
-  return nodes;
+
+  const allNodes = [...nodes, ...customPaths];
+  filterNodesByAvailablePaths(allNodes, groupVersions, permissionSet);
+  return allNodes;
 }
 
 function extractApiGroup(apiPath) {
