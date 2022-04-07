@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Graphviz } from 'graphviz-react';
 
 function GraphvizComponent({ dotSrc, isReady }) {
@@ -16,4 +16,4 @@ function GraphvizComponent({ dotSrc, isReady }) {
   );
 }
 
-export const MemoizedGraphviz = React.memo(GraphvizComponent);
+export const MemoizedGraphviz = memo(GraphvizComponent);
