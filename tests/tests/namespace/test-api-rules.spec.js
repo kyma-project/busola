@@ -7,6 +7,8 @@ const API_RULE_HOST = API_RULE_NAME + '-host';
 const API_RULE_PATH = '/test-path';
 const API_RULE_DEFAULT_PATH = '/.*';
 
+let initialApiRule;
+
 context('Test API Rules in the Function details view', () => {
   Cypress.skipAfterFail();
 
@@ -42,6 +44,26 @@ context('Test API Rules in the Function details view', () => {
 
     cy.getIframeBody()
       .find('[ariaLabel="API Rule name"]:visible', { log: false })
+      .should(input => {
+        initialApiRule = input.val();
+        expect(initialApiRule).to.include(`${FUNCTION_NAME}-`);
+      });
+
+    cy.getIframeBody()
+      .find('[ariaLabel="Generate name button"]:visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
+      .find('[ariaLabel="API Rule name"]:visible', { log: false })
+      .should(input => {
+        const generatedApiRule = input.val();
+        expect(generatedApiRule).not.to.include(initialApiRule);
+        expect(generatedApiRule).to.include(`${FUNCTION_NAME}-`);
+      });
+
+    cy.getIframeBody()
+      .find('[ariaLabel="API Rule name"]:visible', { log: false })
+      .type(`{selectall}{backspace}`)
       .type(API_RULE_NAME);
 
     cy.getIframeBody()

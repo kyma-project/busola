@@ -22,6 +22,7 @@ const ServiceAccountSecrets = serviceAccount => {
       listKey={listKey}
       title={title}
       allowKubeconfigDownload
+      prefix={serviceAccount.metadata.name}
     />
   ) : null;
 };
@@ -42,6 +43,7 @@ const ServiceAccountImagePullSecrets = serviceAccount => {
       filter={filterBySecret}
       listKey={listKey}
       title={title}
+      prefix={serviceAccount.metadata.name}
     />
   ) : null;
 };
