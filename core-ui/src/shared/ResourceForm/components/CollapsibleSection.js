@@ -55,7 +55,7 @@ export function CollapsibleSection({
             iconGlyph={iconGlyph}
           />
         }
-        <div class="actions" ref={actionsRef}>
+        <div className="actions" ref={actionsRef}>
           {typeof actions === 'function' ? actions(setOpen) : actions}
         </div>
       </header>

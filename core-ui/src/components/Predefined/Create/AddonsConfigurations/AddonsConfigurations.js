@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button, FormLabel } from 'fundamental-react';
+import { FormInput } from 'fundamental-react';
 import { LabelSelectorInput } from 'shared/components/LabelSelectorInput/LabelSelectorInput';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
-import { K8sNameInput } from 'shared/components/K8sNameInput/K8sNameInput';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useTranslation } from 'react-i18next';
+import { randomNamesGenerator } from 'shared/utils/randomNamesGenerator/randomNamesGenerator';
 
 import './AddonsConfigurations.scss';
 
@@ -98,6 +100,11 @@ export const AddonsConfigurations = ({
     return <></>;
   };
 
+  const generateName = () => {
+    const name = randomNamesGenerator();
+    setName(name);
+  };
+
   const { i18n } = useTranslation();
 
   return (
@@ -111,16 +118,28 @@ export const AddonsConfigurations = ({
       noValidate
     >
       <div className="fd-form-group">
-        <div className="fd-form-item">
-          <K8sNameInput
+        <FormLabel required htmlFor={`${resourceType}-urls`}>
+          {t('common.labels.name')}
+        </FormLabel>
+        <div className="binding-name-field">
+          <FormInput
             onChange={handleNameChanged}
-            id={`${resourceType}-name`}
-            kind={kind}
-            i18n={i18n}
+            type="text"
             value={name}
+            aria-required="true"
+            ariaLabel={t('components.k8s-name-input.aria-label', {
+              resourceType: kind,
+            })}
+            required={true}
           />
+          <Tooltip content={t('common.tooltips.generate-name')}>
+            <Button
+              onClick={generateName}
+              glyph="synchronize"
+              ariaLabel="Generate name button"
+            />
+          </Tooltip>
         </div>
-
         <LabelSelectorInput
           labels={labels}
           onChange={handleLabelsChanged}
@@ -128,7 +147,6 @@ export const AddonsConfigurations = ({
         />
         <FormLabel
           style={{ display: 'block' }}
-          className="fd-margin-top--tiny"
           required
           htmlFor={`${resourceType}-urls`}
         >

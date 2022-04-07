@@ -7,6 +7,7 @@ export const GenericSecrets = ({
   filter,
   title,
   allowKubeconfigDownload,
+  prefix,
 }) => {
   const { t, i18n } = useTranslation();
   const downloadKubeconfig = useDownloadSecretKubeconfig();
@@ -40,6 +41,7 @@ export const GenericSecrets = ({
         title,
         readOnly: true,
         i18n,
+        createFormProps: { prefix },
       }}
     />
   );
