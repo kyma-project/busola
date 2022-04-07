@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Graphviz } from 'graphviz-react';
+import { MemoizedGraphviz } from './GraphvizComponent';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
@@ -43,6 +43,10 @@ function ResourceGraph({ resource, i18n, config }) {
           const node = document.getElementById(res.metadata.uid);
 
           if (!node) continue;
+
+          if (res.metadata.uid === resource.metadata.uid) {
+            node.classList.add('root-node');
+          }
 
           node.onclick = () => {
             setIsDetailsCardOpened(true);
@@ -99,16 +103,7 @@ function ResourceGraph({ resource, i18n, config }) {
         <LayoutPanel.Body>
           <ErrorBoundary i18n={i18n} customMessage={t('resource-graph.error')}>
             <div id="graph-area">
-              <Graphviz
-                dot={dotSrc}
-                // https://github.com/magjac/d3-graphviz#selection_graphviz
-                options={{
-                  height: '100%',
-                  width: '100%',
-                  zoom: isReady, // if always true, then the graph will jump on first pan or zoom
-                  useWorker: false,
-                }}
-              />
+              <MemoizedGraphviz dotSrc={dotSrc} isReady={isReady} />
               <SaveGraphControls
                 content={dotSrc}
                 // .gv extension is preferred instead of .dot
