@@ -118,11 +118,7 @@ export const AddonsConfigurations = ({
       noValidate
     >
       <div className="fd-form-group">
-        <FormLabel
-          style={{ display: 'block' }}
-          required
-          htmlFor={`${resourceType}-urls`}
-        >
+        <FormLabel required htmlFor={`${resourceType}-urls`}>
           {t('common.labels.name')}
         </FormLabel>
         <div className="binding-name-field">
