@@ -11,6 +11,7 @@ export function SingleContainerForm({
   setContainers,
   isAdvanced,
   readOnly,
+  prefix,
 }) {
   const { t } = useTranslation();
 
@@ -29,6 +30,7 @@ export function SingleContainerForm({
         propertyPath="$.name"
         kind={t('jobs.create-modal.container')}
         readOnly={readOnly}
+        prefix={prefix}
       />
       <ResourceForm.FormField
         required
@@ -71,6 +73,7 @@ export function SingleContainerInput({
   value: containers,
   setValue: setContainers,
   readOnly,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -84,6 +87,7 @@ export function SingleContainerInput({
         containers={containers}
         setContainers={setContainers}
         readOnly={readOnly}
+        {...props}
       />
     </ResourceForm.CollapsibleSection>
   );

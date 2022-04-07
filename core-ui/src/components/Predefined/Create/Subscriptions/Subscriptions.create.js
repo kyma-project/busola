@@ -27,6 +27,7 @@ const SubscriptionsCreate = ({
   resourceUrl,
   serviceName = '',
   setCustomValid,
+  prefix,
 }) => {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -123,6 +124,7 @@ const SubscriptionsCreate = ({
           setSubscription({ ...subscription });
         }}
         readOnly={!!initialSubscription}
+        prefix={prefix}
       />
       <ResourceForm.FormField
         label={t('subscriptions.create.labels.sink')}
