@@ -403,6 +403,7 @@ command-palette:
     navigate: Navigate
     open: Open
     show-help: Show available commands
+    switch: Switch context
   resource-names:
     addonsconfigurations: Addons
     apirules: API Rules

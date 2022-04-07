@@ -101,6 +101,40 @@ async function fetchClusterResources(context) {
   }
 }
 
+function sendNamespaceSwitchMessage(namespaceName) {
+  LuigiClient.sendCustomMessage({
+    id: 'busola.switchNamespace',
+    namespaceName,
+  });
+}
+
+function makeSingleNamespaceLinks({ namespace, t }) {
+  const category = t('namespaces.title');
+  const label = namespace.metadata.name;
+  const name = namespace.metadata.name;
+  const query = `namespaces ${name}`;
+
+  const switchContextNode = {
+    label,
+    category,
+    query,
+    onActivate: () => sendNamespaceSwitchMessage(name),
+    customActionText: t('command-palette.item-actions.switch'),
+  };
+
+  const navigateToDetailsNode = {
+    label,
+    category,
+    query,
+    onActivate: () =>
+      LuigiClient.linkManager()
+        .fromContext('cluster')
+        .navigate('namespaces/' + name),
+  };
+
+  return [switchContextNode, navigateToDetailsNode];
+}
+
 function createResults({
   tokens,
   resourceCache,
@@ -151,9 +185,14 @@ function createResults({
   }
 
   if (name) {
-    return resources
-      .filter(item => item.metadata.name.includes(name))
-      .map(item => makeListItem(item, matchedNode, t));
+    const matchedResources = resources.filter(item =>
+      item.metadata.name.includes(name),
+    );
+    // special case for a single namespace
+    if (resourceType === 'namespaces' && matchedResources.length === 1) {
+      return makeSingleNamespaceLinks({ namespace: matchedResources[0], t });
+    }
+    return matchedResources.map(item => makeListItem(item, matchedNode, t));
   } else {
     return [
       linkToList,
