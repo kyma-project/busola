@@ -2,6 +2,7 @@ import React from 'react';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'routing/createResourceRoutes';
+import { ExtensibilityCreate } from './extensibilityCreate';
 
 export const ExtensibilityList = () => {
   const resource = useGetCRbyPath();
@@ -12,5 +13,7 @@ export const ExtensibilityList = () => {
       resource.nav.resourceType,
     );
   }
-  return <ResourcesList {...listProps} />;
+  return (
+    <ResourcesList createResourceForm={ExtensibilityCreate} {...listProps} />
+  );
 };
