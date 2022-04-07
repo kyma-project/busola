@@ -7,7 +7,7 @@ import {
   getClusters,
 } from './../cluster-management/cluster-management';
 import { hasPermissionsFor, hasWildcardPermission } from './permissions';
-import { getCustomPaths } from './customResources';
+import { getCustomPaths } from './customPaths';
 
 export const coreUIViewGroupName = '_core_ui_';
 
@@ -56,10 +56,7 @@ export function getStaticChildrenNodesForNamespace(
   features,
   customResources,
 ) {
-  const namespacedCustomResources = customResources?.filter(
-    cr => cr?.nav?.scope === 'namespace',
-  );
-  const customPaths = getCustomPaths(namespacedCustomResources);
+  const customPaths = getCustomPaths(customResources, 'namespace');
 
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
@@ -1667,10 +1664,7 @@ export function getStaticRootNodes(
   features,
   customResources,
 ) {
-  const clusterCustomResources = customResources?.filter(
-    cr => cr?.nav?.scope === 'cluster',
-  );
-  const customPaths = getCustomPaths(clusterCustomResources);
+  const customPaths = getCustomPaths(customResources, 'cluster');
 
   const nodes = [
     {
