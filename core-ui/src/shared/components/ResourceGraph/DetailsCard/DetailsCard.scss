@@ -48,7 +48,7 @@
 
 .buttons-wrapper {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   height: 10%;
   padding-top: 10px;
   border-top: 1px solid var(--sapList_SelectionBackgroundColor);
