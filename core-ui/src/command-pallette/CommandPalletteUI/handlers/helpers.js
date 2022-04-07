@@ -4,9 +4,10 @@ export function getSuggestion(phrase, itemList) {
   return didYouMean(phrase, itemList);
 }
 
-// assume first item is the full name
 export function toFullResourceType(resourceType, resources) {
-  return resources.find(r => r.includes(resourceType))?.[0] || resourceType;
+  const fullResourceType = resources.find(r => r.aliases.includes(resourceType))
+    ?.resourceType;
+  return fullResourceType || resourceType;
 }
 
 export function getSuggestionsForSingleResource({
@@ -32,8 +33,9 @@ export function autocompleteForResources({ tokens, resources, resourceTypes }) {
   const tokenToAutocomplete = tokens[tokens.length - 1];
   switch (tokens.length) {
     case 1: // type
-      // take only first, plural form
-      return resourceTypes.flatMap(t => t[0]).filter(rT => rT.startsWith(type));
+      return resourceTypes
+        .flatMap(rT => rT.aliases)
+        .filter(alias => alias.startsWith(type));
     case 2: // name
       const resourceNames = resources.map(n => n.metadata.name);
       return resourceNames

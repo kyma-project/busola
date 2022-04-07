@@ -1,5 +1,4 @@
 import LuigiClient from '@luigi-project/client';
-import pluralize from 'pluralize';
 import { LOADING_INDICATOR } from '../useSearchResults';
 import { getApiPath } from 'shared/utils/helpers';
 import {
@@ -9,25 +8,70 @@ import {
 } from './helpers';
 
 const resourceTypes = [
-  ['clusterrolebindings', 'crbs', 'crb'],
-  ['clusterroles', 'cr'],
-  ['storageclasses'],
-  ['persistentvolumes', 'pv'],
-  ['namespaces', 'ns'],
+  {
+    resourceType: 'clusterrolebindings',
+    aliases: ['clusterrolebinding', 'clusterrolebindings', 'crb'],
+  },
+  {
+    resourceType: 'clusterroles',
+    aliases: ['clusterrole', 'clusterroles', 'cr'],
+  },
+  {
+    resourceType: 'persistentvolumes',
+    aliases: ['persistentvolume', 'persistentvolumes', 'pv'],
+  },
+  { resourceType: 'namespaces', aliases: ['namespace', 'namespaces', 'ns'] },
+  {
+    resourceType: 'storageclasses',
+    aliases: ['sc', 'storageclass', 'storageclasses'],
+  },
+  // we don't have nodes for those resources, but let's keep them here
+  {
+    resourceType: 'volumeattachments',
+    aliases: ['volumeattachment', 'volumeattachments'],
+  },
+  {
+    resourceType: 'validatingwebhookconfigurations',
+    aliases: ['validatingwebhookconfiguration', 'validatingwebhookconfigurati'],
+  },
+  {
+    resourceType: 'runtimeclasses',
+    aliases: ['runtimeclass', 'runtimeclasses'],
+  },
+  {
+    resourceType: 'prioritylevelconfigurations',
+    aliases: ['prioritylevelconfiguration', 'prioritylevelconfigurations'],
+  },
+  {
+    resourceType: 'priorityclasses',
+    aliases: ['pc', 'priorityclass', 'priorityclasses'],
+  },
+  {
+    resourceType: 'ingressclasses',
+    aliases: ['ingressclass', 'ingressclasses'],
+  },
+  { resourceType: 'flowschemas', aliases: ['flowschema', 'flowschemas'] },
+  { resourceType: 'csidrivers', aliases: ['csidriver', 'csidrivers'] },
+  { resourceType: 'csinodes', aliases: ['csinode', 'csinodes'] },
+  {
+    resourceType: 'certificatesigningrequests',
+    aliases: ['certificatesigningrequest', 'certificatesigningrequests', 'csr'],
+  },
+  { resourceType: 'apiservices', aliases: ['apiservice', 'apiservices'] },
+  {
+    resourceType: 'mutatingwebhookconfigurations',
+    aliases: ['mutatingwebhookconfiguration', 'mutatingwebhookconfigurations'],
+  },
 ];
-const extendedResourceTypes = resourceTypes.map(aliases => [
-  ...aliases,
-  pluralize(aliases[0], 1),
-]);
 
 function getAutocompleteEntries({ tokens, resourceCache }) {
-  const fullResourceType = toFullResourceType(tokens[0], extendedResourceTypes);
+  const fullResourceType = toFullResourceType(tokens[0], resourceTypes);
   const resources = resourceCache[fullResourceType] || [];
 
   return autocompleteForResources({
     tokens,
     resources,
-    resourceTypes: extendedResourceTypes,
+    resourceTypes,
   });
 }
 
@@ -35,12 +79,12 @@ function getSuggestions({ tokens, resourceCache }) {
   const [type, name] = tokens;
   const suggestedType = getSuggestion(
     type,
-    extendedResourceTypes.flatMap(n => n),
+    resourceTypes.flatMap(n => n.aliases),
   );
   if (name) {
     const fullResourceType = toFullResourceType(
       suggestedType || type,
-      extendedResourceTypes,
+      resourceTypes,
     );
     const resourceNames = (resourceCache[fullResourceType] || []).map(
       n => n.metadata.name,
@@ -78,20 +122,24 @@ function makeListItem(item, matchedNode, t) {
 }
 
 function getApiPathForQuery({ tokens, clusterNodes }) {
-  const resourceType = toFullResourceType(tokens[0], extendedResourceTypes);
+  const resourceType = toFullResourceType(tokens[0], resourceTypes);
   return getApiPath(resourceType, clusterNodes);
 }
+
 async function fetchClusterResources(context) {
   const apiPath = getApiPathForQuery(context);
   if (!apiPath) {
     return;
   }
+  const { fetch, tokens, updateResourceCache, clusterNodes } = context;
 
-  const { fetch, tokens, updateResourceCache } = context;
-  const resourceType = toFullResourceType(tokens[0], extendedResourceTypes);
-  if (!extendedResourceTypes.flatMap(t => t).includes(resourceType)) {
+  const resourceType = toFullResourceType(tokens[0], resourceTypes);
+  const matchedNode = clusterNodes.find(n => n.resourceType === resourceType);
+
+  if (!matchedNode) {
     return;
   }
+
   try {
     const response = await fetch(apiPath + '/' + resourceType);
     const { items } = await response.json();
@@ -144,13 +192,8 @@ function createResults({
   t,
 }) {
   const [type, name] = tokens;
-
-  const resourceType = toFullResourceType(type, extendedResourceTypes);
-  if (!extendedResourceTypes.flat().includes(resourceType)) {
-    return;
-  }
+  const resourceType = toFullResourceType(type, resourceTypes);
   const matchedNode = clusterNodes.find(n => n.resourceType === resourceType);
-
   if (!matchedNode) {
     return;
   }
@@ -206,12 +249,12 @@ export const clusterResourceHandler = {
   getSuggestions,
   fetchResources: fetchClusterResources,
   createResults,
-  getNavigationHelp: () =>
-    resourceTypes.map(types => {
-      if (types.length === 1) {
-        return [types[0]];
-      } else {
-        return [types[0], types[types.length - 1]];
-      }
-    }),
+  getNavigationHelp: () => [], //todo
+  // resourceTypes.map(types => {
+  //   if (types.length === 1) {
+  //     return [types[0]];
+  //   } else {
+  //     return [types[0], types[types.length - 1]];
+  //   }
+  // }),
 };

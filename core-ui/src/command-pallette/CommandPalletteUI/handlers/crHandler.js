@@ -72,7 +72,7 @@ function getAutocompleteEntries({ tokens, resourceCache, namespace }) {
   return autocompleteForResources({
     tokens,
     resources,
-    resourceTypes: crdAliases.map(c => c.aliases),
+    resourceTypes: crdAliases,
   });
 }
 
