@@ -1,10 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { usePrepareDetailsProps } from 'routing/createResourceRoutes';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 
-///namespaces/default/jobs/major-leading-build-qvpcc
-///namespaces/default/customjobs/jobs
+const CreateExtensibilityList = metadata => {
+  const { title, headers, columns, resource: resPath } = metadata;
+
+  const headerRenderer = () => headers;
+
+  const rowRenderer = condition => {
+    return (
+      columns.map(column =>
+        column.split('.').reduce((prevRes, curr) => {
+          return prevRes?.[curr] ? prevRes[curr] : null;
+        }, condition),
+      ) || []
+    );
+  };
+
+  return res => {
+    //get resource specified in json component 'resource'
+    const result = resPath.split('.').reduce((prevRes, curr) => {
+      return prevRes[curr];
+    }, res);
+
+    return (
+      <GenericList
+        key={title}
+        title={title}
+        showSearchField={false}
+        headerRenderer={headerRenderer}
+        rowRenderer={rowRenderer}
+        entries={result || []}
+      />
+    );
+  };
+};
 
 export const ExtensibilityDetails = () => {
   const resource = useGetCRbyPath();
@@ -12,20 +44,27 @@ export const ExtensibilityDetails = () => {
     resource.nav.path,
     resource.nav.label,
   );
-  console.log(resource);
-  console.log(detailsProps.resourceUrl);
-
-  console.log(
-    detailsProps.resourceUrl.replace(
-      resource.nav.path,
-      resource.nav.resourceType,
-    ),
-  );
   if (resource.nav.resourceType) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
       resource.nav.path,
       resource.nav.resourceType,
     );
   }
-  return <ResourceDetails {...detailsProps} />;
+
+  const customColumns = [];
+  const [customComponents, setCustomComponents] = useState([]);
+
+  useEffect(() => {
+    console.log('useEffect entered', resource.details.components);
+    const { components } = resource.details;
+    const lists = components.filter(ele => ele.type === 'list');
+    setCustomComponents(lists.map(CreateExtensibilityList));
+  }, [resource]);
+  return (
+    <ResourceDetails
+      customColumns={customColumns}
+      customComponents={customComponents}
+      {...detailsProps}
+    />
+  );
 };
