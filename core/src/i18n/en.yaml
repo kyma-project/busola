@@ -303,6 +303,7 @@ clusters:
     kubeconfig-download-error: Failed to download the kubeconfig
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
   description-visibility: Description is shown on the Clusters Overview list
+  disconnect: Cluster disconnected
   edit-cluster: Edit Cluster
   empty:
     go-to-btp-cockpit: To view your clusters, go to
@@ -556,6 +557,7 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: Error
+    generate-name: Generate name
     hide: Hide Read-Only Fields
     k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
