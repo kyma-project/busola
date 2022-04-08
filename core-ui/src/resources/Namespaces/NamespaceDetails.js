@@ -7,8 +7,8 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
-import LimitRangesList from 'components/Predefined/List/LimitRanges.list';
-import ResourceQuotasListComponent from 'components/Predefined/List/ResourceQuotas.list';
+import { LimitRangeList } from 'resources/LimitRanges/LimitRangeList';
+import { ResourceQuotaList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotaList';
 
 import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';
@@ -32,7 +32,7 @@ export function NamespaceDetails(props) {
     i18n,
   };
 
-  const LimitrangesList = <LimitRangesList {...limitRangesParams} />;
+  const LimitrangesList = <LimitRangeList {...limitRangesParams} />;
 
   const resourceQuotasParams = {
     hasDetailsView: false,
@@ -45,7 +45,7 @@ export function NamespaceDetails(props) {
   };
 
   const ResourceQuotasList = (
-    <ResourceQuotasListComponent {...resourceQuotasParams} />
+    <ResourceQuotaListComponent {...resourceQuotasParams} />
   );
 
   const applicationMappingsParams = {

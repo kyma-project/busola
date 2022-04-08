@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { Checkbox, FormFieldset, Switch } from 'fundamental-react';
+import LuigiClient from '@luigi-project/client';
+
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
-import LuigiClient from '@luigi-project/client';
-import { useTranslation } from 'react-i18next';
-import { MemoryInput } from './MemoryQuotas';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
-import { createNamespaceTemplate } from './templates';
-import { createLimitRangeTemplate } from 'components/Predefined/Create/LimitRanges/templates';
-import { createResourceQuotaTemplate } from 'components/Predefined/Create/ResourceQuotas/templates';
+import { createLimitRangeTemplate } from 'resources/LimitRanges/templates';
+import { createResourceQuotaTemplate } from 'resources/ResourceQuotas/templates';
 
+import { MemoryInput } from './MemoryQuotas';
+import { createNamespaceTemplate } from './templates';
 import { LimitPresets, MemoryPresets } from './Presets';
 import { CONFIG } from './config';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Presets } from 'shared/ResourceForm/components/Presets';
-import { createResourceQuotaTemplate } from 'components/Predefined/Create/ResourceQuotas/templates';
-import { createLimitRangeTemplate } from 'components/Predefined/Create/LimitRanges/templates';
+import { createResourceQuotaTemplate } from 'resources/ResourceQuotas/templates';
+import { createLimitRangeTemplate } from 'resources/LimitRanges/templates';
 
 export const LimitPresets = ({
   presets,

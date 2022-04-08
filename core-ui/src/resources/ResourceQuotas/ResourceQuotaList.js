@@ -2,9 +2,9 @@ import React from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
-import { ResourceQuotasCreate } from '../Create/ResourceQuotas/ResourceQuotas.create';
+import { ResourceQuotaCreate } from './ResourceQuotaCreate';
 
-const ResourceQuotasList = props => {
+export function ResourceQuotaList(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -26,9 +26,9 @@ const ResourceQuotasList = props => {
     <ResourcesList
       resourceName={t('resource-quotas.title')}
       customColumns={customColumns}
-      createResourceForm={ResourceQuotasCreate}
+      createResourceForm={ResourceQuotaCreate}
       {...props}
     />
   );
-};
-export default ResourceQuotasList;
+}
+export default ResourceQuotaList;

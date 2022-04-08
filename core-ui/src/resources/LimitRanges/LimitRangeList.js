@@ -1,10 +1,12 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { useTranslation } from 'react-i18next';
-import { LimitRangesCreate } from '../Create/LimitRanges/LimitRanges.create';
 
-const LimitRangesList = props => {
+import { LimitRangeCreate } from './LimitRangeCreate';
+
+export function LimitRangeList(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -35,9 +37,9 @@ const LimitRangesList = props => {
     <ResourcesList
       resourceName={t('limit-ranges.title')}
       customColumns={customColumns}
-      createResourceForm={LimitRangesCreate}
+      createResourceForm={LimitRangeCreate}
       {...props}
     />
   );
-};
-export default LimitRangesList;
+}
+export default LimitRangeList;
