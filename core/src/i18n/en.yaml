@@ -112,7 +112,7 @@ applications:
     binding-create-failed: Failed to create the Binding
     binding-created: Binding created
     binding-deleted: Binding deleted
-    binding-not-found: No Bindings
+    binding-not-found: No bindings
     cannot-create: Cannot create the Application
     connect-disabled: Connecting Applications is disabled for SAP BTP, Kyma Runtime.
     copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
