@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button, FormLabel } from 'fundamental-react';
+
 import { LabelSelectorInput } from 'shared/components/LabelSelectorInput/LabelSelectorInput';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { K8sNameInput } from 'shared/components/K8sNameInput/K8sNameInput';
-import { useTranslation } from 'react-i18next';
 
-import './AddonsConfigurations.scss';
+import './GenericAddonsConfigurationCreate.scss';
 
-export const AddonsConfigurations = ({
+export function GenericAddonsConfigurationCreate({
   kind,
   formElementRef,
   onChange,
@@ -18,7 +19,7 @@ export const AddonsConfigurations = ({
   namespace,
   refetchList,
   setCustomValid,
-}) => {
+}) {
   const [name, setName] = useState('');
   const [labels, setLabels] = useState({});
   const [newUrl, setNewUrl] = useState('');
@@ -155,4 +156,4 @@ export const AddonsConfigurations = ({
       </div>
     </form>
   );
-};
+}

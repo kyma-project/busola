@@ -1,15 +1,15 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
 import { Link } from 'shared/components/Link/Link';
-import { useTranslation, Trans } from 'react-i18next';
-import { AddonsConfigurationsCreate } from '../../Create/AddonsConfigurations/AddonsConfigurations.create';
 
-export const GenericAddonsConfigurationsList = ({
+export function GenericAddonsConfigurationList({
   descriptionKey,
   documentationLink,
   ...props
-}) => {
+}) {
   const { t, i18n } = useTranslation();
 
   const statusColumn = {
@@ -33,19 +33,4 @@ export const GenericAddonsConfigurationsList = ({
       {...props}
     />
   );
-};
-
-function AddonsConfigurationsList(props) {
-  return (
-    <GenericAddonsConfigurationsList
-      descriptionKey={'addons.description'}
-      documentationLink={
-        'https://kyma-project-old.netlify.app/docs/components/helm-broker#custom-resource-addons-configuration'
-      }
-      createResourceForm={AddonsConfigurationsCreate}
-      {...props}
-    />
-  );
 }
-
-export default AddonsConfigurationsList;

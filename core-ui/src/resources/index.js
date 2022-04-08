@@ -34,7 +34,7 @@ import * as ConfigMaps from './ConfigMaps';
 import * as Certificates from './Certificates';
 import * as AuthorizationPolicies from './AuthorizationPolicies';
 import * as ApiRules from './ApiRules';
-// import addonsConfigurationNamespace from './namespaceResources/addonsConfigurationNamespace.routes';
+import * as AddonsConfigurations from './AddonsConfigurations';
 import * as Subscriptions from './Subscriptions';
 import * as ServiceAccounts from './ServiceAccounts';
 import * as GitRepositories from './GitRepositories';
@@ -47,12 +47,13 @@ import * as StorageClasses from './StorageClasses';
 import * as PersistentVolumes from './PersistentVolumes';
 import * as Namespaces from './Namespaces';
 // import eventsCluster from './clusterResources/eventsCluster.routes';
-// import addonsConfigurationCluster from './clusterResources/addonsConfigurationCluster.routes';
+import * as ClusterAddonsConfigurations from './ClusterAddonsConfigurations';
 import * as CustomResourceDefinitions from './CustomResourceDefinitions';
 import * as ClusterRoleBindings from './ClusterRoleBindings';
 
 export const resources = {
-  // // namespace resources
+  // namespace resources
+  // TODO
   // eventsNamespace,
 
   // workloads
@@ -91,24 +92,25 @@ export const resources = {
   Issuers,
   DnsProviders,
   DnsEntries,
-  // TODO
+  // TODO?
   // customResourcesDefinitionsNamespace,
   ConfigMaps,
   Certificates,
-  // TODO
-  // addonsConfigurationNamespace,
+  AddonsConfigurations,
   Subscriptions,
   ServiceAccounts,
   GitRepositories,
 
-  // // cluster resources
+  // cluster resources
   Applications,
+  // TODO
   // eventsCluster,
   Namespaces,
   ClusterRoles,
   StorageClasses,
   PersistentVolumes,
-  // addonsConfigurationCluster,
+  // TODO
+  ClusterAddonsConfigurations,
   CustomResourceDefinitions,
   ClusterRoleBindings,
 };

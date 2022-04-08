@@ -1,9 +1,11 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { useTranslation } from 'react-i18next';
-import { AddonsConfigurationsCreate } from '../../Create/AddonsConfigurations/AddonsConfigurations.create';
+
+import { AddonsConfigurationCreate } from './AddonsConfigurationCreate';
 
 export const RepositoryUrls = addon => {
   const { t, i18n } = useTranslation();
@@ -30,14 +32,6 @@ export const RepositoryUrls = addon => {
   );
 };
 
-const AddonsConfigurationsDetailsNamespace = props => {
-  return (
-    <ResourceDetails
-      customComponents={[RepositoryUrls]}
-      createResourceForm={AddonsConfigurationsCreate}
-      {...props}
-    />
-  );
-};
-
-export default AddonsConfigurationsDetailsNamespace;
+export function GenericAddonsConfigurationDetails(props) {
+  return <ResourceDetails customComponents={[RepositoryUrls]} {...props} />;
+}
