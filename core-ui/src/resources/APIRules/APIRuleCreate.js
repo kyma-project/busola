@@ -23,7 +23,7 @@ import {
   validateApiRule,
 } from './helpers';
 
-export function ApiRuleCreate({
+export function APIRuleCreate({
   formElementRef,
   namespace,
   onChange,
@@ -171,4 +171,4 @@ export function ApiRuleCreate({
   );
 }
 
-ApiRuleCreate.allowEdit = true;
+APIRuleCreate.allowEdit = true;

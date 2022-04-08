@@ -6,8 +6,8 @@ export const resourceType = 'ApiRules';
 export const namespaced = true;
 export const resourceI18Key = 'api-rules.title';
 
-export const List = React.lazy(() => import('./ApiRuleList'));
-export const Details = React.lazy(() => import('./ApiRuleDetails'));
+export const List = React.lazy(() => import('./APIRuleList'));
+export const Details = React.lazy(() => import('./APIRuleDetails'));
 
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,

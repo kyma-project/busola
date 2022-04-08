@@ -9,9 +9,9 @@ import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Link } from 'shared/components/Link/Link';
 
-import { ApiRuleCreate } from './ApiRuleCreate';
+import { APIRuleCreate } from './APIRuleCreate';
 
-export function ApiRuleList(props) {
+export function APIRuleList(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -43,10 +43,10 @@ export function ApiRuleList(props) {
       customColumns={customColumns}
       resourceName={t('api-rules.title')}
       description={description}
-      createResourceForm={ApiRuleCreate}
+      createResourceForm={APIRuleCreate}
       {...props}
     />
   );
 }
 
-export default ApiRuleList;
+export default APIRuleList;

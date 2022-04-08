@@ -11,9 +11,9 @@ import AccessStrategies from 'components/ApiRules/AccessStrategies/AccessStrateg
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 
 import ApiRuleServices from './Services';
-import { ApiRuleCreate } from './ApiRuleCreate';
+import { APIRuleCreate } from './APIRuleCreate';
 
-export function ApiRuleDetails(props) {
+export function APIRuleDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -44,9 +44,9 @@ export function ApiRuleDetails(props) {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={[ApiRulesAccessStrategies, ApiRuleServices]}
-      createResourceForm={ApiRuleCreate}
+      createResourceForm={APIRuleCreate}
       {...props}
     />
   );
 }
-export default ApiRuleDetails;
+export default APIRuleDetails;

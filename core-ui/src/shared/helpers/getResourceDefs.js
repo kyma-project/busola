@@ -13,7 +13,6 @@ export function getPerResourceDefs(defType, t, context) {
     Object.entries(resources)
       .filter(([, resource]) => resource[defType])
       .map(([resourceName, resource]) => {
-        // ResourcesCreate -> Resource
         const kind = pluralize(resourceName, 1);
         const value = resource[defType](t, context);
         return [kind, value];
