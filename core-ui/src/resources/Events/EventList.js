@@ -1,39 +1,17 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
+import { Icon, Link } from 'fundamental-react';
+
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { prettifyNamePlural } from 'shared/utils/helpers';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { useTranslation, Trans } from 'react-i18next';
 import { Link as DescriptionLink } from 'shared/components/Link/Link';
-import { Icon, Link } from 'fundamental-react';
 import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
-const EventsList = props => {
-  const description = (
-    <Trans i18nKey="events.description">
-      <DescriptionLink
-        className="fd-link"
-        url="https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/#example-debugging-pending-pods"
-      />
-    </Trans>
-  );
-
-  return (
-    <>
-      {!props.isCompact && (
-        <PageHeader
-          title={prettifyNamePlural(props.resourceName, props.resourceType)}
-          description={description}
-        />
-      )}
-      <Events {...props} />
-    </>
-  );
-};
-
-export const Events = ({ ...otherParams }) => {
+export function Events({ ...otherParams }) {
   const { t, i18n } = useTranslation();
   const { defaultType, hideInvolvedObjects, resourceUrl } = otherParams;
   const { loading = true, error, data: items } = useGetList(otherParams.filter)(
@@ -145,6 +123,29 @@ export const Events = ({ ...otherParams }) => {
       i18n={i18n}
     />
   );
-};
+}
 
-export default EventsList;
+export function EventList(props) {
+  const description = (
+    <Trans i18nKey="events.description">
+      <DescriptionLink
+        className="fd-link"
+        url="https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/#example-debugging-pending-pods"
+      />
+    </Trans>
+  );
+
+  return (
+    <>
+      {!props.isCompact && (
+        <PageHeader
+          title={prettifyNamePlural(props.resourceName, props.resourceType)}
+          description={description}
+        />
+      )}
+      <Events {...props} />
+    </>
+  );
+}
+
+export default EventList;

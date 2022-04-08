@@ -1,12 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Icon, LayoutPanel, Link } from 'fundamental-react';
+
 import {
   formatInvolvedObject,
   formatSourceObject,
   navigateToNamespaceOverview,
 } from 'hooks/useMessageList';
-
-import { Icon, LayoutPanel, Link } from 'fundamental-react';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
@@ -41,7 +41,7 @@ const Message = event => {
   );
 };
 
-const EventsDetails = props => {
+export function EventDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -112,6 +112,6 @@ const EventsDetails = props => {
       readOnly={true}
     />
   );
-};
+}
 
-export default EventsDetails;
+export default EventDetails;

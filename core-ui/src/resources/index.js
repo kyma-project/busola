@@ -1,5 +1,4 @@
 import { createResourceRoutes } from './createResourceRoutes';
-import transitionalRoutes from './transitionalRoutes';
 
 //namespaced
 import * as Jobs from './Jobs';
@@ -24,7 +23,7 @@ import * as Issuers from './Issuers';
 import * as Ingresses from './Ingresses';
 import * as HorizontalPodAutoscalers from './HorizontalPodAutoscalers';
 import * as Gateways from './Gateways';
-// import eventsNamespace from './namespaceResources/eventsNamespace.routes';
+import * as Events from './Events';
 import * as DnsProviders from './DnsProviders';
 import * as DnsEntries from './DnsEntries';
 import * as DestinationRules from './DestinationRules';
@@ -46,15 +45,14 @@ import * as ClusterRoles from './ClusterRoles';
 import * as StorageClasses from './StorageClasses';
 import * as PersistentVolumes from './PersistentVolumes';
 import * as Namespaces from './Namespaces';
-// import eventsCluster from './clusterResources/eventsCluster.routes';
+import * as ClusterEvents from './ClusterEvents';
 import * as ClusterAddonsConfigurations from './ClusterAddonsConfigurations';
 import * as CustomResourceDefinitions from './CustomResourceDefinitions';
 import * as ClusterRoleBindings from './ClusterRoleBindings';
 
 export const resources = {
   // namespace resources
-  // TODO
-  // eventsNamespace,
+  Events,
 
   // workloads
   Functions,
@@ -103,21 +101,14 @@ export const resources = {
 
   // cluster resources
   Applications,
-  // TODO
-  // eventsCluster,
+  ClusterEvents,
   Namespaces,
   ClusterRoles,
   StorageClasses,
   PersistentVolumes,
-  // TODO
   ClusterAddonsConfigurations,
   CustomResourceDefinitions,
   ClusterRoleBindings,
 };
 
-export const routes = (
-  <>
-    {Object.values(resources).map(createResourceRoutes)}
-    {transitionalRoutes}
-  </>
-);
+export const routes = <>{Object.values(resources).map(createResourceRoutes)}</>;
