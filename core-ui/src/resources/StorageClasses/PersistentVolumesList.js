@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 
-import PersistentVolumesListComponent from 'components/Predefined/List/PersistentVolumes.list';
+import PersistentVolumesListComponent from 'resources/PersistentVolumes/PersistentVolumeList';
 import { useTranslation } from 'react-i18next';
 
 export function PersistentVolumesList(storageclass) {

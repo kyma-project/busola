@@ -1,14 +1,15 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 
 import ApplicationServices from './ApplicationServices';
 import NamespaceBindings from './NamespaceBindings';
 import ConnectApplicationModal from './ConnectApplicationModal';
 import { ApplicationStatus } from './ApplicationStatus';
-import { useTranslation } from 'react-i18next';
-import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { ApplicationsCreate } from '../../Create/Applications/Applications.create';
+import { ApplicationCreate } from './ApplicationCreate';
 
-const ApplicationsDetails = props => {
+export function ApplicationDetails(props) {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -28,10 +29,10 @@ const ApplicationsDetails = props => {
         <ConnectApplicationModal applicationName={props.resourceName} />
       }
       customComponents={[NamespaceBindings, ApplicationServices]}
-      createResourceForm={ApplicationsCreate}
+      createResourceForm={ApplicationCreate}
       {...props}
     />
   );
-};
+}
 
-export default ApplicationsDetails;
+export default ApplicationDetails;

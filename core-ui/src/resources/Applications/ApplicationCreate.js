@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
+import { useTranslation } from 'react-i18next';
+
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
-import { useTranslation } from 'react-i18next';
+
 import { createApplicationTemplate } from './templates';
 
-function ApplicationsCreate({
+export function ApplicationCreate({
   formElementRef,
   onChange,
   setCustomValid,
@@ -74,5 +76,4 @@ function ApplicationsCreate({
   );
 }
 
-ApplicationsCreate.allowEdit = true;
-export { ApplicationsCreate };
+ApplicationCreate.allowEdit = true;

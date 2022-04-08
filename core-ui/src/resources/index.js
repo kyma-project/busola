@@ -41,10 +41,10 @@ import * as GitRepositories from './GitRepositories';
 import * as Functions from './Functions';
 
 // //cluster
-// import applications from './clusterResources/applications.routes';
+import * as Applications from './Applications';
 import * as ClusterRoles from './ClusterRoles';
-// import storageClasses from './clusterResources/storageClases.routes';
-// import persistentVolumes from './clusterResources/persistentVolumes.routes';
+import * as StorageClasses from './StorageClasses';
+import * as PersistentVolumes from './PersistentVolumes';
 import * as Namespaces from './Namespaces';
 // import eventsCluster from './clusterResources/eventsCluster.routes';
 // import addonsConfigurationCluster from './clusterResources/addonsConfigurationCluster.routes';
@@ -77,7 +77,7 @@ export const resources = {
   NetworkPolicies,
   HorizontalPodAutoscalers,
   ApiRules,
-  // // storage
+  // storage
   PersistentVolumeClaims,
   // service management
   ServiceInstances,
@@ -91,21 +91,23 @@ export const resources = {
   Issuers,
   DnsProviders,
   DnsEntries,
+  // TODO
   // customResourcesDefinitionsNamespace,
   ConfigMaps,
   Certificates,
+  // TODO
   // addonsConfigurationNamespace,
   Subscriptions,
   ServiceAccounts,
   GitRepositories,
 
   // // cluster resources
-  // applications,
+  Applications,
   // eventsCluster,
   Namespaces,
   ClusterRoles,
-  // storageClasses,
-  // persistentVolumes,
+  StorageClasses,
+  PersistentVolumes,
   // addonsConfigurationCluster,
   CustomResourceDefinitions,
   ClusterRoleBindings,

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { ResourceForm } from 'shared/ResourceForm';
+
 import { createPersistentVolumeTemplate } from './templates';
 
-function PersistentVolumesCreate({
+export function PersistentVolumeCreate({
   formElementRef,
   onChange,
   setCustomValid,
@@ -26,21 +28,3 @@ function PersistentVolumesCreate({
     />
   );
 }
-
-PersistentVolumesCreate.resourceGraphConfig = (t, context) => ({
-  relations: [
-    {
-      kind: 'StorageClass',
-    },
-    {
-      kind: 'PersistentVolumeClaim',
-      clusterwide: true,
-    },
-  ],
-  depth: 1,
-  matchers: {
-    StorageClass: (pv, sc) => pv.spec.storageClassName === sc.metadata.name,
-  },
-});
-
-export { PersistentVolumesCreate };

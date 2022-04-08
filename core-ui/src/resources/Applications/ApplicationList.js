@@ -1,12 +1,13 @@
 import React from 'react';
-import { ApplicationStatus } from '../../Details/Application/ApplicationStatus';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Link } from 'shared/components/Link/Link';
-import { Trans } from 'react-i18next';
-import { ApplicationsCreate } from '../../Create/Applications/Applications.create';
 
-const ApplicationsList = props => {
+import { ApplicationStatus } from './ApplicationStatus';
+import { ApplicationCreate } from './ApplicationCreate';
+
+export function ApplicationList(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -28,9 +29,9 @@ const ApplicationsList = props => {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={ApplicationsCreate}
+      createResourceForm={ApplicationCreate}
       {...props}
     />
   );
-};
-export default ApplicationsList;
+}
+export default ApplicationList;

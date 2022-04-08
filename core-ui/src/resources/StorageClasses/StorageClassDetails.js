@@ -1,18 +1,18 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { LayoutPanel } from 'fundamental-react';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { PersistentVolumesList } from './PersistentVolumesList';
-import { PersistentVolumeClaimsList } from './PersistentVolumeClaimsList';
 
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
-import { StorageClassesCreate } from '../../Create/StorageClasses/StorageClasses.create';
 
-const StorageClassesDetails = props => {
+import { PersistentVolumesList } from './PersistentVolumesList';
+import { PersistentVolumeClaimsList } from './PersistentVolumeClaimsList';
+import { StorageClassCreate } from './StorageClassCreate';
+
+export function StorageClassDetails(props) {
   const { t } = useTranslation();
 
   const StorageClassParameters = storageclass => {
@@ -78,9 +78,9 @@ const StorageClassesDetails = props => {
       customColumns={customColumns}
       resourceTitle={t('storage-classes.title')}
       singularName={t('storage-classes.name_singular')}
-      createResourceForm={StorageClassesCreate}
+      createResourceForm={StorageClassCreate}
       {...props}
     />
   );
-};
-export default StorageClassesDetails;
+}
+export default StorageClassDetails;

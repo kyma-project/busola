@@ -1,16 +1,17 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
+import { Link } from 'fundamental-react';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Link as DescLink } from 'shared/components/Link/Link';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { Link } from 'fundamental-react';
-import { Trans } from 'react-i18next';
 import { navigateToResource } from 'shared/helpers/universalLinks';
-import { PersistentVolumeStatus } from '../Details/PersistentVolume/PersistentVolumeStatus';
-import { PersistentVolumesCreate } from '../Create/PersistentVolumes/PersistentVolumes.create';
 
-const PersistentVolumesList = props => {
+import { PersistentVolumeStatus } from './PersistentVolumeStatus';
+import { PersistentVolumeCreate } from './PersistentVolumeCreate';
+
+export function PersistentVolumeList(props) {
   const { t } = useTranslation();
   const { data: storageClasses } = useGetList()(
     '/apis/storage.k8s.io/v1/storageclasses',
@@ -90,9 +91,9 @@ const PersistentVolumesList = props => {
       resourceName={t('pv.title')}
       customColumns={customColumns}
       description={description}
-      createResourceForm={PersistentVolumesCreate}
+      createResourceForm={PersistentVolumeCreate}
       {...props}
     />
   );
-};
-export default PersistentVolumesList;
+}
+export default PersistentVolumeList;

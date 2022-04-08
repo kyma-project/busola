@@ -4,7 +4,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 
 const AppServiceDetails = React.lazy(() =>
   import(
-    '../../components/Predefined/Details/Application/ApplicationServicesDetails/ApplicationServicesDetails'
+    'resources/Applications/ApplicationServicesDetails/ApplicationServicesDetails'
   ),
 );
 

@@ -14,7 +14,7 @@ import { RelatedPods } from 'shared/components/RelatedPods';
 import { Selector } from 'shared/components/Selector/Selector';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import PersistentVolumesList from 'components/Predefined/List/PersistentVolumes.list';
+import PersistentVolumesList from 'resources/PersistentVolumes/PersistentVolumeList';
 
 import { PersistentVolumeClaimCreate } from './PersistentVolumeClaimCreate';
 

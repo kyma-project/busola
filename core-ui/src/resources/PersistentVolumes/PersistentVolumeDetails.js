@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, LayoutPanel } from 'fundamental-react';
+
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
@@ -9,10 +10,11 @@ import { Tokens } from 'shared/components/Tokens';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { navigateToResource } from 'shared/helpers/universalLinks';
-import { PersistentVolumeStatus } from './PersistentVolumeStatus';
-import { PersistentVolumesCreate } from '../../Create/PersistentVolumes/PersistentVolumes.create';
 
-function PersistentVolumesDetails(props) {
+import { PersistentVolumeStatus } from './PersistentVolumeStatus';
+import { PersistentVolumeCreate } from './PersistentVolumeCreate';
+
+export function PersistentVolumeDetails(props) {
   const { t } = useTranslation();
 
   const customColumns = [
@@ -132,10 +134,10 @@ function PersistentVolumesDetails(props) {
     <ResourceDetails
       customColumns={customColumns}
       customComponents={[PvDetails, Events]}
-      createResourceForm={PersistentVolumesCreate}
+      createResourceForm={PersistentVolumeCreate}
       {...props}
     />
   );
 }
 
-export default PersistentVolumesDetails;
+export default PersistentVolumeDetails;
