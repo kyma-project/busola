@@ -90,8 +90,6 @@ export const resources = {
   Issuers,
   DnsProviders,
   DnsEntries,
-  // TODO?
-  // customResourcesDefinitionsNamespace,
   ConfigMaps,
   Certificates,
   AddonsConfigurations,
