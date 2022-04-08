@@ -53,8 +53,7 @@ export function SearchInput({
   };
 
   useEffect(() => {
-    console.log(disabled);
-    if (!isSearchHidden && !disabled) {
+    if (!isSearchHidden) {
       openSearchList();
     }
   }, [isSearchHidden]);
