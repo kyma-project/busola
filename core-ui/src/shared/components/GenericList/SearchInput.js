@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Menu, Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { useEventListener } from 'hooks/useEventListener';
+import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
 
 import 'core-js/es/array/flat-map';
 
@@ -40,6 +42,27 @@ export function SearchInput({
   const { t } = useTranslation(null, { i18n });
   const [isSearchHidden, setSearchHidden] = React.useState(true);
   const searchInputRef = React.useRef();
+
+  //HERE I AM
+
+  const onKeyPress = e => {
+    const { key } = e;
+    if (key === '/' && !disabled) {
+      setSearchHidden(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log(disabled);
+    if (!isSearchHidden && !disabled) {
+      openSearchList();
+    }
+  }, [isSearchHidden]);
+
+  useEventListener('keydown', onKeyPress);
+  useCustomMessageListener('busola.toggle-open-search', () =>
+    setSearchHidden(false),
+  );
 
   const renderSearchList = entries => {
     const suggestions = getSearchSuggestions(entries);

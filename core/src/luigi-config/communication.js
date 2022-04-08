@@ -16,6 +16,7 @@ import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
 
 addCommandPaletteHandler();
+addOpenSearchHandler();
 
 window.addEventListener('click', () => {
   Luigi.customMessages().sendToAll({
@@ -163,6 +164,20 @@ function addCommandPaletteHandler() {
       // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
       e.preventDefault();
       Luigi.customMessages().sendToAll({ id: 'busola.toggle-command-palette' });
+    }
+  });
+}
+
+function addOpenSearchHandler() {
+  window.addEventListener('keydown', e => {
+    const { key } = e;
+
+    const isMFModalPresent = !!document.querySelector('.lui-modal-mf');
+
+    if (isMFModalPresent) return;
+
+    if (key === '/') {
+      Luigi.customMessages().sendToAll({ id: 'busola.toggle-open-search' });
     }
   });
 }
