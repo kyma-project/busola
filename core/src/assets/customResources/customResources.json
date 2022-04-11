@@ -7,7 +7,7 @@
       "scope": "namespace",
       "api": "/apis/extensions.istio.io/v1alpha1",
       "resource": {
-        "kind": "wasmplugins",
+        "kind": "WasmPlugins",
         "group": "extensions.istio.io",
         "version": "v1alpha1"
       },
@@ -25,7 +25,7 @@
     },
     "create": {
       "name_singular": "Custom Jobs",
-      "fields": {}
+      "openAPIV3Schema": {}
     }
   },
   {
@@ -37,7 +37,7 @@
       "resourceType": "jobs",
       "api": "/apis/batch/v1",
       "resource": {
-        "kind": "jobs",
+        "kind": "Jobs",
         "group": "batch",
         "version": "v1"
       },
@@ -106,7 +106,7 @@
     },
     "create": {
       "name_singular": "Custom Jobs",
-      "fields": {}
+      "openAPIV3Schema": {}
     }
   }
 ]

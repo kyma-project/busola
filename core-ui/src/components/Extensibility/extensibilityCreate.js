@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, createRef } from 'react';
+import { isEmpty, isEqual } from 'lodash';
+
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { Spinner } from 'shared/components/Spinner/Spinner';
+import ResourceSchema from './components/ResourceSchema';
 
 export function ExtensibilityCreate({
   formElementRef,
@@ -11,16 +13,34 @@ export function ExtensibilityCreate({
   resourceUrl,
   resource: createResource,
 }) {
-  const api = createResource?.nav?.resource;
-  const [resource, setResource] = useState({});
-  const { data, loading = true } = useGet(
-    `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${api.kind}.${api.group}`,
+  const api = createResource?.nav?.resource || {};
+  const jsonSchemaFormRef = createRef();
+  const [resource, setResource] = useState({
+    apiVersion: `${api.group}/${api.version}`,
+    kind: api.kind,
+    metadata: {
+      name: '',
+      labels: {},
+      annotations: {},
+    },
+    spec: {},
+  });
+
+  const parametersSchema = createResource?.create?.openAPIV3Schema;
+
+  const {
+    data,
+  } = useGet(
+    `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${api.kind.toLowerCase()}.${
+      api.group
+    }`,
+    { skip: !isEmpty(parametersSchema) },
   );
-  if (loading) return <Spinner />;
 
   const versions = data?.spec?.versions || [];
-  const schema = versions.find(v => v.name === api.version)?.schema || {};
-  console.log(schema);
+  const schema = !isEmpty(parametersSchema)
+    ? parametersSchema
+    : versions.find(v => v.name === api.version)?.schema?.openAPIV3Schema || {};
 
   return (
     <ResourceForm
@@ -32,7 +52,24 @@ export function ExtensibilityCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      onlyYaml
-    />
+    >
+      <ResourceSchema
+        key={api.version}
+        schemaFormRef={jsonSchemaFormRef}
+        data={schema || {}}
+        instanceCreateParameterSchema={schema}
+        onSubmitSchemaForm={() => {}}
+        onFormChange={formData => {
+          if (
+            !isEqual(formData?.instanceCreateParameters?.spec, resource?.spec)
+          ) {
+            const newResource = formData.instanceCreateParameters || {};
+            delete newResource?.properties;
+            delete newResource?.type;
+            setResource({ ...newResource });
+          }
+        }}
+      />
+    </ResourceForm>
   );
 }
