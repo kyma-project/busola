@@ -2,30 +2,49 @@ import React, { useEffect, useState } from 'react';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { usePrepareDetailsProps } from 'routing/createResourceRoutes';
-import { CreateExtensibilityList } from './components/CreateExtensibilityList';
+import {
+  CreateExtensibilityList,
+  getResourceChild,
+} from './components/CreateExtensibilityList';
+import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
 export const ExtensibilityDetails = () => {
-  const resource = useGetCRbyPath();
+  const resMetaData = useGetCRbyPath();
   const detailsProps = usePrepareDetailsProps(
-    resource.nav.path,
-    resource.nav.label,
+    resMetaData.nav.path,
+    resMetaData.nav.label,
   );
-  if (resource.nav.resourceType) {
+  if (resMetaData.nav.resourceType) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
-      resource.nav.path,
-      resource.nav.resourceType,
+      resMetaData.nav.path,
+      resMetaData.nav.resourceType,
     );
   }
+
+  const CreateReadOnlyEditor = monacoMetadata => resource => {
+    const value = getResourceChild(monacoMetadata.resource, resource);
+    return (
+      <ReadonlyEditorPanel
+        title={monacoMetadata.title}
+        key={monacoMetadata.title}
+        value={JSON.stringify(value, null, 2)}
+      />
+    );
+  };
 
   const customColumns = [];
   const [customComponents, setCustomComponents] = useState([]);
 
   useEffect(() => {
-    console.log('useEffect entered', resource.details.components);
-    const { components } = resource.details;
-    const lists = components.filter(ele => ele.type === 'list');
-    setCustomComponents(lists.map(CreateExtensibilityList));
-  }, [resource]);
+    const { components } = resMetaData.details;
+    const lists = components?.filter(ele => ele.type === 'list') || [];
+    const editors = components?.filter(ele => ele.type === 'monaco') || [];
+    setCustomComponents([
+      ...editors.map(CreateReadOnlyEditor),
+      ...lists.map(CreateExtensibilityList),
+    ]);
+  }, [resMetaData]);
+
   return (
     <ResourceDetails
       customColumns={customColumns}

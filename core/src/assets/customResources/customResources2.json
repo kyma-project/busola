@@ -1,0 +1,114 @@
+{
+  "globalSettings": {},
+  "subpages": [
+    {
+      "nav": {
+        "path": "wasmplugins",
+        "label": "My wasmplugins",
+        "category": "My Resources",
+        "scope": "namespace",
+        "api": "/apis/extensions.istio.io/v1alpha1",
+        "resourceType": "wasmplugins",
+        "hasDetailsView": true
+      },
+      "list": {
+        "title": "My wasmplugins title override",
+        "desc": "Wasmplugins are a great resource",
+        "columns": {}
+      },
+      "details": {
+        "title": "Custom Jobs",
+        "fields": {}
+      },
+      "create": {
+        "name_singular": "Custom Jobs",
+        "fields": {}
+      }
+    },
+    {
+      "nav": {
+        "path": "customjobs",
+        "label": "CustomJobs",
+        "category": "My Resources",
+        "scope": "namespace",
+        "resourceType": "jobs",
+        "api": "/apis/batch/v1",
+        "hasDetailsView": true
+      },
+      "list": {
+        "title": "My custom jobs title override",
+        "desc": "Custom jobs are a great resource",
+        "columns": {}
+      },
+      "details": {
+        "title": "Custom Jobs",
+        "components": [
+          {
+            "type": "monaco",
+            "resource": "job.status.conditions",
+            "placement": "leftColumn/rightColumn/throughout",
+            "title": {
+              "en": "Job Status Conditions",
+              "pl": "Job Status Conditions",
+              "de": "Job Status Conditions"
+            },
+            "class": "custom-conditions"
+          },
+          {
+            "type": "monaco",
+            "resource": "job",
+            "title": "Job as a Whole"
+          },
+          {
+            "type": "monaco",
+            "resource": "job.metadata.name",
+            "title": "Job Name"
+          },
+          {
+            "type": "list",
+            "title": "Conditions",
+            "headers": ["type", "status", "last transition"],
+            "columns": ["type", "status", "lastTransitionTime"],
+            "resource": "$.status.conditions"
+          },
+          {
+            "type": "list",
+            "title": "Conditions Double",
+            "headers": ["type", "status", "LaSt PrOBe", "last transition"],
+            "columns": [
+              "type",
+              "(condition, index) => condition.status",
+              "lastProbeTime",
+              "condition.lastProbeTime"
+            ],
+            "resource": "$.status.conditions"
+          },
+          {
+            "type": "list",
+            "title": "My own Conditions",
+            "headers": ["type", "status", "LaSt PrOBe", "Reason", "Message"],
+            "columns": ["type", "status", "lastProbeTime", "reason", "message"],
+            "resource": "$.status.conditions"
+          }
+        ]
+      },
+      "create": {
+        "name_singular": "Custom Jobs",
+        "fields": {}
+      },
+      "css": {
+        "fd-list": {
+          "display": "none",
+          "color": "blue",
+          "content": "this additional properties will be added to the class fd-list at the custom page. This way any class can be targeted"
+        },
+        ".custom-conditions": {
+          "background": "green"
+        },
+        ".custom-conditions .fd-list": {
+          "background": "red"
+        }
+      }
+    }
+  ]
+}
