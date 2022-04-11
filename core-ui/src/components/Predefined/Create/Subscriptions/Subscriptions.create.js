@@ -293,7 +293,7 @@ SubscriptionsCreate.allowEdit = true;
 
 SubscriptionsCreate.resourceGraphConfig = () => ({
   depth: 1,
-  networkFlowLevel: 0,
+  networkFlowLevel: -2,
   relations: [
     {
       kind: 'Service',

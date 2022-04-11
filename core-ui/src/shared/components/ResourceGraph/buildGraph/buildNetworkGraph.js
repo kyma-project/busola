@@ -154,9 +154,6 @@ export function buildNetworkGraph({ store }, config) {
           const podId = multiplePods
             ? 'composite-pod'
             : store['Pod'][0].metadata.uid;
-          const subscriptionIds = store['Subscription']?.map(
-            subscription => subscription.metadata.uid,
-          );
           currentLayer.forEach(svc => {
             if (!!deployment && store['Pod']?.length) {
               strEdges.push(
@@ -165,9 +162,6 @@ export function buildNetworkGraph({ store }, config) {
                 }),
               );
             }
-            (subscriptionIds || []).forEach(subscription =>
-              strEdges.push(makeEdge(svc.metadata.uid, subscription)),
-            );
           });
         }
       }
