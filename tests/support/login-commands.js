@@ -99,7 +99,7 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
       .click();
 
     cy.getIframeBody()
-      .contains('Drag file here')
+      .contains('Drag your file here or click to upload')
       .attachFile(fileName, { subjectType: 'drag-n-drop' });
 
     cy.getIframeBody()

@@ -14,6 +14,7 @@ import { setFeatureToggle } from './utils/feature-toggles';
 import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
+import { getCorrespondingNamespaceLocation } from './navigation/navigation-helpers';
 
 addCommandPaletteHandler();
 
@@ -114,6 +115,16 @@ export const communication = {
         title,
         type,
       });
+    },
+    'busola.switchNamespace': ({ namespaceName }) => {
+      const alternativeLocation = getCorrespondingNamespaceLocation(
+        namespaceName,
+      );
+      Luigi.navigation()
+        .fromContext('cluster')
+        .navigate(
+          'namespaces/' + (alternativeLocation || namespaceName + '/details'),
+        );
     },
     'busola.pathExists': async ({ path, pathId }) => {
       const exists = await Luigi.navigation().pathExists(path);

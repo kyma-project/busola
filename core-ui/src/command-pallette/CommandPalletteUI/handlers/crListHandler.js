@@ -73,5 +73,5 @@ export const crListHandler = {
   getSuggestions,
   fetchResources: () => {},
   createResults,
-  getNavigationHelp: () => [['customresources', 'crs']],
+  getNavigationHelp: () => [['customresources', ['crs']]],
 };
