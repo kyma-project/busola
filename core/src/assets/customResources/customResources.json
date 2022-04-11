@@ -52,16 +52,30 @@
       "title": "Custom Jobs",
       "components": [
         {
+          "type": "monaco",
+          "resource": "job.status.conditions",
+          "title": "Job Status Conditions"
+        },
+        {
+          "type": "monaco",
+          "resource": "job",
+          "title": "Job as a Whole"
+        },
+        {
+          "type": "monaco",
+          "resource": "job.metadata.name",
+          "title": "Job Name"
+        },
+        {
           "type": "list",
           "title": "Conditions",
-          "headers": ["type", "status", "last probe", "last transition"],
+          "headers": ["type", "status", "last transition"],
           "columns": [
             "type",
             "status",
-            "lastProbeTime",
             "lastTransitionTime"
           ],
-          "resource": "status.conditions"
+          "resource": "$.status.conditions"
         },
         {
           "type": "list",
@@ -73,7 +87,20 @@
             "lastProbeTime",
             "condition.lastProbeTime"
           ],
-          "resource": "status.conditions"
+          "resource": "$.status.conditions"
+        },
+        {
+          "type": "list",
+          "title": "My own Conditions",
+          "headers": ["type" ,"status", "LaSt PrOBe", "Reason", "Message"],
+          "columns": [
+            "type",
+            "status",
+            "lastProbeTime",
+            "reason",
+            "message"
+          ],
+          "resource": "$.status.conditions"
         }
       ]
     },
