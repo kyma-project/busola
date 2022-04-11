@@ -1,4 +1,4 @@
-import React, { useState, createRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { isEmpty, isEqual } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -14,7 +14,7 @@ export function ExtensibilityCreate({
   resource: createResource,
 }) {
   const api = createResource?.nav?.resource || {};
-  const jsonSchemaFormRef = createRef();
+  const jsonSchemaFormRef = useRef(null);
   const [resource, setResource] = useState({
     apiVersion: `${api.group}/${api.version}`,
     kind: api.kind,

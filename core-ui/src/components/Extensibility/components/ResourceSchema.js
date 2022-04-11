@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect, useRef } from 'react';
 
-import { JsonSchemaForm } from './styled';
+import { JsonSchemaForm } from './JSONSchemaForm';
 const [draft04, draft06] = [
   require('ajv/lib/refs/json-schema-draft-04.json'),
   require('ajv/lib/refs/json-schema-draft-06.json'),
@@ -34,15 +34,6 @@ const ResourceSchema = ({
     });
   };
 
-  const getAdditionalMetaSchemas = currentSchema => {
-    let additionalSchemaArray = [];
-    if (currentSchema) {
-      currentSchema.includes('draft-04') && additionalSchemaArray.push(draft04);
-      currentSchema.includes('draft-06') && additionalSchemaArray.push(draft06);
-    }
-    return additionalSchemaArray;
-  };
-
   const removeErrorMessages = errors =>
     errors.map(e => {
       e.message = '';
@@ -54,7 +45,7 @@ const ResourceSchema = ({
       id="schemaDataForm"
       schemaFormRef={schemaFormRef}
       schema={instanceCreateParameterSchema}
-      additionalMetaSchemas={instanceCreateParameterSchema}
+      additionalMetaSchemas={[draft04, draft06]}
       onChange={handleFormChange}
       liveValidate
       onSubmit={onSubmitSchemaForm}
