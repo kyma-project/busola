@@ -174,7 +174,7 @@ context('Test Command Palette navigation', () => {
     getQueryInput().type('podz');
 
     cy.getIframeBody()
-      .contains('Did you mean: pods')
+      .contains('Did you mean: pod')
       .should('be.visible');
 
     cy.getIframeBody()
