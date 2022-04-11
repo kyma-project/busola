@@ -6,6 +6,11 @@
       "category": "My Resources",
       "scope": "namespace",
       "api": "/apis/extensions.istio.io/v1alpha1",
+      "resource": {
+        "kind": "wasmplugins",
+        "group": "extensions.istio.io",
+        "version": "v1alpha1"
+      },
       "resourceType": "wasmplugins",
       "hasDetailsView": true
     },
@@ -31,6 +36,11 @@
       "scope": "namespace",
       "resourceType": "jobs",
       "api": "/apis/batch/v1",
+      "resource": {
+        "kind": "jobs",
+        "group": "batch",
+        "version": "v1"
+      },
       "hasDetailsView": true
     },
     "list": {
