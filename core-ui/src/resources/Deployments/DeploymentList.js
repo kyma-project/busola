@@ -17,7 +17,7 @@ const getImages = deployment => {
   return images;
 };
 
-export const DeploymentList = props => {
+export function DeploymentList(props) {
   const { t } = useTranslation();
   const restartAction = useRestartAction(props.resourceUrl);
 
@@ -64,5 +64,5 @@ export const DeploymentList = props => {
       {...props}
     />
   );
-};
+}
 export default DeploymentList;

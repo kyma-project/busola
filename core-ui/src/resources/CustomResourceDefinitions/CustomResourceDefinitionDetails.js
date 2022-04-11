@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
@@ -69,8 +69,6 @@ export function CustomResourceDefinitionDetails(props) {
     );
   };
 
-  const [showEditDialog, setShowEditDialog] = useState(false);
-
   return (
     <ResourceDetails
       customColumns={customColumns}
@@ -79,35 +77,6 @@ export function CustomResourceDefinitionDetails(props) {
         CurrentCRDVersion,
         RelatedCRDsList,
         Events,
-      ]}
-      resourceHeaderActions={[
-        crd => {
-          return (
-            <>
-              <ModalWithForm
-                title={t('components.resources-list.create', {
-                  resourceType: crd.spec.names.kind,
-                })}
-                opened={showEditDialog}
-                confirmText={t('common.buttons.create')}
-                id={`add-${crd.spec.names.kind}-modal`}
-                className="modal-size--l create-resource-modal"
-                renderForm={props => <CRCreate crd={crd} {...props} />}
-                i18n={i18n}
-                modalOpeningComponent={<></>}
-                customCloseAction={() => setShowEditDialog(false)}
-              />
-              <Button
-                glyph="add"
-                option="transparent"
-                onClick={() => setShowEditDialog(true)}
-                className="fd-margin-end--tiny"
-              >
-                {t('common.buttons.create')} {crd.spec.names.kind}
-              </Button>
-            </>
-          );
-        },
       ]}
       createResourceForm={CustomResourceDefinitionCreate}
       {...props}

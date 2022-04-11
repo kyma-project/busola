@@ -11,10 +11,8 @@ import {
 const resourceTypes = [
   ['clusterrolebindings', 'crbs', 'crb'],
   ['clusterroles', 'cr'],
-  ['applications', 'app', 'apps'],
   ['storageclasses'],
   ['persistentvolumes', 'pv'],
-  ['clusteraddonsconfigurations', 'clusteraddon', 'clusteraddons'],
   ['namespaces', 'ns'],
 ];
 const extendedResourceTypes = resourceTypes.map(aliases => [
@@ -114,6 +112,9 @@ function createResults({
   const [type, name] = tokens;
 
   const resourceType = toFullResourceType(type, extendedResourceTypes);
+  if (!extendedResourceTypes.flat().includes(resourceType)) {
+    return;
+  }
   const matchedNode = clusterNodes.find(n => n.resourceType === resourceType);
 
   if (!matchedNode) {

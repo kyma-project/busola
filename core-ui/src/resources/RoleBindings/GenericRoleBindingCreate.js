@@ -6,7 +6,11 @@ import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import { KeyValueField, ItemArray } from 'shared/ResourceForm/fields';
+import {
+  K8sNameField,
+  KeyValueField,
+  ItemArray,
+} from 'shared/ResourceForm/fields';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
 import { createBindingTemplate, newSubject } from './templates';
@@ -75,6 +79,12 @@ export function GenericRoleBindingCreate({
     jp.value(binding, '$.roleRef', newRole);
     setBinding({ ...binding });
   };
+
+  const handleNameChange = name => {
+    jp.value(binding, '$.metadata.name', name);
+    setBinding({ ...binding });
+  };
+
   return (
     <ResourceForm
       pluralKind={pluralKind}
@@ -86,15 +96,13 @@ export function GenericRoleBindingCreate({
       createUrl={resourceUrl}
       initialResource={initialRoleBinding}
     >
-      <ResourceForm.FormField
-        required
-        label={t('common.labels.name')}
-        input={Inputs.Text}
+      <K8sNameField
         propertyPath="$.metadata.name"
+        kind={singularName}
+        setValue={handleNameChange}
         readOnly={!!initialRoleBinding}
-        ariaLabel={t('components.k8s-name-input.aria-label', {
-          resourceType: singularName,
-        })}
+        pattern=".*"
+        showHelp={false}
       />
       <KeyValueField
         advanced

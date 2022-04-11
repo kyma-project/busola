@@ -5,15 +5,29 @@ import { useGet } from 'shared/hooks/BackendAPI/useGet';
 const getPrometheusSelector = data => {
   let selector = `cluster="", container!="", namespace="${data.namespace}"`;
   if (data.pod) {
-    selector = `${selector}, pod="${data.pod}"`;
+    let pods = data.pod;
+    if (Array.isArray(data.pod)) {
+      pods = data.pod.join('|');
+    }
+    selector = `${selector}, pod=~"${pods}"`;
   }
   return selector;
 };
 
-const getPrometheusCPUQuery = (type, data, step, cpuQuery = 'sum_irate') => {
+const getPrometheusCPUQuery = (
+  type,
+  mode,
+  data,
+  step,
+  cpuQuery = 'sum_irate',
+) => {
   if (type === 'cluster') {
     return `count(node_cpu_seconds_total{mode="idle"}) - sum(rate(node_cpu_seconds_total{mode="idle"}[${step}s]))`;
-  } else if (type === 'pod') {
+  } else if (type === 'pod' && mode === 'multiple') {
+    return `sum by(container)(node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
+      data,
+    )}, container != "POD"})`;
+  } else if (type === 'pod' && mode === 'single') {
     return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
       data,
     )}})`;
@@ -22,10 +36,14 @@ const getPrometheusCPUQuery = (type, data, step, cpuQuery = 'sum_irate') => {
   }
 };
 
-const getPrometheusMemoryQuery = (type, data) => {
+const getPrometheusMemoryQuery = (type, mode, data) => {
   if (type === 'cluster') {
     return `sum(node_memory_MemTotal_bytes - node_memory_MemFree_bytes)`;
-  } else if (type === 'pod') {
+  } else if (type === 'pod' && mode === 'multiple') {
+    return `sum by(container)(node_namespace_pod_container:container_memory_working_set_bytes{${getPrometheusSelector(
+      data,
+    )}, container != "POD"})`;
+  } else if (type === 'pod' && mode === 'single') {
     return `sum(node_namespace_pod_container:container_memory_working_set_bytes{${getPrometheusSelector(
       data,
     )}})`;
@@ -62,14 +80,14 @@ const getPrometheusNodesQuery = () => {
   return `sum(kubelet_node_name)`;
 };
 
-export function getMetric(type, metric, cpuQuery, { step, ...data }) {
+export function getMetric(type, mode, metric, cpuQuery, { step, ...data }) {
   const metrics = {
     cpu: {
-      prometheusQuery: getPrometheusCPUQuery(type, data, step, cpuQuery),
+      prometheusQuery: getPrometheusCPUQuery(type, mode, data, step, cpuQuery),
       unit: '',
     },
     memory: {
-      prometheusQuery: getPrometheusMemoryQuery(type, data),
+      prometheusQuery: getPrometheusMemoryQuery(type, mode, data),
       binary: true,
       unit: 'B',
     },
@@ -89,7 +107,12 @@ export function getMetric(type, metric, cpuQuery, { step, ...data }) {
   return metrics[metric];
 }
 
-export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
+export function usePrometheus(
+  type,
+  mode,
+  metricId,
+  { items, timeSpan, ...props },
+) {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);
@@ -103,7 +126,7 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
   const [path, setPath] = useState(kyma2_1path);
   const [cpuQuery, setCpuQuery] = useState(cpu2_1_partial_query);
 
-  const metric = getMetric(type, metricId, cpuQuery, { step, ...props });
+  const metric = getMetric(type, mode, metricId, cpuQuery, { step, ...props });
 
   const tick = () => {
     const newEndDate = new Date();
@@ -158,27 +181,60 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     error = null;
   }
 
-  let stepMultiplier = 0;
-  let helpIndex = 0;
-  const dataValues = data?.data.result[0]?.values;
   let prometheusData = [];
+  let prometheusLabels = [];
 
-  if (dataValues?.length > 0) {
-    for (let i = 0; i < items; i++) {
-      const [timestamp, graphValue] = dataValues[helpIndex] || [];
-      const timeDifference = Math.floor(timestamp - startDate.getTime() / 1000);
-      if (stepMultiplier === timeDifference) {
-        helpIndex++;
-        prometheusData.push(graphValue);
-      } else {
-        prometheusData.push(null);
+  if (mode === 'multiple') {
+    (data?.data.result || []).forEach(d => {
+      let tempPrometheusData = [];
+
+      let stepMultiplier = 0;
+      let helpIndex = 0;
+      const dataValues = d?.values;
+      const metric = d?.metric;
+      if (dataValues?.length > 0) {
+        for (let i = 0; i < items; i++) {
+          const [timestamp, graphValue] = dataValues[helpIndex] || [];
+          const timeDifference = Math.floor(
+            timestamp - startDate.getTime() / 1000,
+          );
+          if (stepMultiplier === timeDifference) {
+            helpIndex++;
+            tempPrometheusData.push(graphValue);
+          } else {
+            tempPrometheusData.push(null);
+          }
+          stepMultiplier += step;
+        }
+        prometheusLabels.push(`container="${metric.container}"`);
+        prometheusData.push(tempPrometheusData);
       }
-      stepMultiplier += step;
+    });
+  } else {
+    const dataValues = data?.data.result[0]?.values;
+
+    let stepMultiplier = 0;
+    let helpIndex = 0;
+    if (dataValues?.length > 0) {
+      for (let i = 0; i < items; i++) {
+        const [timestamp, graphValue] = dataValues[helpIndex] || [];
+        const timeDifference = Math.floor(
+          timestamp - startDate.getTime() / 1000,
+        );
+        if (stepMultiplier === timeDifference) {
+          helpIndex++;
+          prometheusData.push(graphValue);
+        } else {
+          prometheusData.push(null);
+        }
+        stepMultiplier += step;
+      }
     }
   }
 
   return {
     data: prometheusData,
+    defaultLabels: prometheusLabels,
     error,
     loading,
     step,

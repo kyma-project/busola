@@ -19,6 +19,7 @@ export function ServiceDetails(props) {
   if (features?.EVENTING?.isEnabled) {
     customComponents.push(service => (
       <SubscriptionsList
+        prefix={service.metadata.name}
         serviceName={service.metadata.name}
         namespace={service.metadata.namespace}
         key="subscriptionList"
@@ -28,6 +29,7 @@ export function ServiceDetails(props) {
   if (features?.API_GATEWAY?.isEnabled) {
     customComponents.push(service => (
       <ApiRulesList
+        prefix={service.metadata.name}
         key={service}
         serviceName={service.metadata.name}
         namespace={service.metadata.namespace}

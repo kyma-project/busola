@@ -77,10 +77,6 @@ export function FunctionCreate({
   }));
 
   useEffect(() => {
-    setCustomValid(true);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
     if (!type) {
       if (previousRuntime?.substring(0, 4) !== runtime?.substring(0, 4)) {
         jp.value(
@@ -135,6 +131,7 @@ export function FunctionCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={`/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespace}/functions`}
+      setCustomValid={setCustomValid}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

@@ -100,6 +100,17 @@ export function CommandPalletteHelp({ helpEntries }) {
           ))}
         </tbody>
       </table>
+      <h1 className="help-header">{t('command-palette.help.crd-aliases')}</h1>
+      <table className="help-text">
+        <tbody>
+          {helpEntries.crds.map(({ name, shortName }) => (
+            <tr key={name}>
+              <td>{name}</td>
+              <td>{shortName}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

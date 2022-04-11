@@ -88,12 +88,12 @@ export function YamlResourcesList({ resourcesData }) {
             <div
               id="upload-progress-bar"
               style={{ width: `${getPercentage()}%` }}
-            ></div>
+            />
             <div id="upload-progress-bar-label">{getLabel()}</div>
           </div>
           <ul className="fd-margin-top--tiny">
             {filteredResources.map(r => (
-              <li key={`${r?.value?.kind}-${r?.value?.name}`}>
+              <li key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}>
                 <Icon
                   className={`status status-${getIcon(r?.status)}`}
                   glyph={getIcon(r?.status)}

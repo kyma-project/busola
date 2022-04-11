@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { Selector } from 'shared/components/Selector/Selector.js';
+import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
 
-import { DeploymentCreate } from './DeploymentCreate';
 import { DeploymentStatus } from './DeploymentStatus';
+import { DeploymentCreate } from './DeploymentCreate';
 
-export const DeploymentDetails = props => {
+export function DeploymentDetails(props) {
   const { t } = useTranslation();
   const customColumns = [
     {
@@ -33,14 +35,30 @@ export const DeploymentDetails = props => {
     />
   );
 
+  const StatsComponent = deployment => {
+    const labelSelector = Object.entries(deployment.spec?.selector?.matchLabels)
+      .map(([key, value]) => `${key}=${value}`)
+      .join(',');
+    const resourceUrl = `/api/v1/namespaces/${deployment.metadata.namespace}/pods?labelSelector=${labelSelector}`;
+    const { data } = useGetList()(resourceUrl);
+    const connectedPods = (data || []).map(pod => pod.metadata.name);
+
+    return (
+      <StatsPanel
+        type="pod"
+        mode="multiple"
+        pod={connectedPods}
+        namespace={deployment.metadata.namespace}
+      />
+    );
+  };
   return (
     <ResourceDetails
-      customComponents={[HPASubcomponent, MatchSelector]}
+      customComponents={[HPASubcomponent, StatsComponent, MatchSelector]}
       customColumns={customColumns}
       createResourceForm={DeploymentCreate}
       {...props}
     />
   );
-};
-
+}
 export default DeploymentDetails;

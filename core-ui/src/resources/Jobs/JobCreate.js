@@ -34,6 +34,7 @@ export function JobCreate({
   setCustomValid,
   resource: initialJob,
   resourceUrl,
+  prefix,
 }) {
   const { t } = useTranslation();
   const { features } = useMicrofrontendContext();
@@ -103,6 +104,7 @@ export function JobCreate({
           setJob({ ...job });
         }}
         readOnly={!!initialJob}
+        prefix={prefix}
       />
       <ResourceForm.FormField
         label={t('jobs.create-modal.disable-sidecar')}
@@ -137,6 +139,7 @@ export function JobCreate({
         simple
         propertyPath="$.spec.template.spec.containers"
         readOnly={!!initialJob}
+        prefix={prefix}
       />
 
       <ContainersSection

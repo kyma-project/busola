@@ -37,7 +37,7 @@ context('Test Custom Resources', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains(/Create Clusteraddonsconfiguration/i)
+      .contains(/Create Cluster Addons Configuration/i)
       .should('be.visible');
 
     cy.getIframeBody()
