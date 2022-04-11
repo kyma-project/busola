@@ -108,4 +108,4 @@ export const resources = [
   ClusterRoleBindings,
 ];
 
-export const routes = <>{resources.map(createResourceRoutes)}</>;
+export const resourceRoutes = <>{resources.map(createResourceRoutes)}</>;

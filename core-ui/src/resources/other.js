@@ -16,7 +16,6 @@ const other = (
   <>
     {customResourceDetails}
     {customResourceListOfType}
-    {/*TODO customResourceDefinitions*/}
     {customResourcesByGroup}
     {noPermissions}
     {nodeOverview}

@@ -8,7 +8,7 @@ import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { useSentry } from 'hooks/useSentry';
 
-import { routes } from 'resources';
+import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
 
 export default function App() {
@@ -47,7 +47,7 @@ export default function App() {
           </WithTitle>
         }
       />
-      {routes}
+      {resourceRoutes}
       {otherRoutes}
       <Route path="" element={<MainFrameRedirection />} />
     </Routes>
