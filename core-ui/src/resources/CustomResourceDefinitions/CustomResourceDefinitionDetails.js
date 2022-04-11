@@ -1,16 +1,13 @@
 import React from 'react';
-import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Tokens } from 'shared/components/Tokens';
 import { EventsList } from 'shared/components/EventsList';
 
 import { CurrentCRDVersion } from './CurrentCRDVersion';
-import { CRCreate } from './CRCreate';
 import { RelatedCRDsList } from './RelatedCRDsList';
 import { CustomResourceDefinitionCreate } from './CustomResourceDefinitionCreate';
 

@@ -5,8 +5,6 @@ import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus'
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import { AddonsConfigurationCreate } from './AddonsConfigurationCreate';
-
 export const RepositoryUrls = addon => {
   const { t, i18n } = useTranslation();
 

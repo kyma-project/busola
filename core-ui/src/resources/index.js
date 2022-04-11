@@ -53,7 +53,6 @@ import * as ClusterRoleBindings from './ClusterRoleBindings';
 export const resources = {
   // namespace resources
   Events,
-
   // workloads
   Functions,
   StatefulSets,

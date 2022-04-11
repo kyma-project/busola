@@ -5,7 +5,7 @@ import { MessageStrip } from 'fundamental-react';
 import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/inputs';
+
 import {
   K8sNameField,
   KeyValueField,

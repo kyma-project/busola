@@ -4,7 +4,6 @@ import { Button, FormLabel, FormInput } from 'fundamental-react';
 
 import { LabelSelectorInput } from 'shared/components/LabelSelectorInput/LabelSelectorInput';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
-import { K8sNameInput } from 'shared/components/K8sNameInput/K8sNameInput';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { randomNamesGenerator } from 'shared/utils/randomNamesGenerator/randomNamesGenerator';
 
