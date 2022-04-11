@@ -88,7 +88,7 @@ export const createResourceRoutes = ({
     : '';
 
   return (
-    <>
+    <React.Fragment key={listPath}>
       <Route
         path={listPath}
         exact
@@ -118,6 +118,6 @@ export const createResourceRoutes = ({
           }
         />
       ) : null}
-    </>
+    </React.Fragment>
   );
 };

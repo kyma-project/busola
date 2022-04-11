@@ -50,7 +50,7 @@ import * as ClusterAddonsConfigurations from './ClusterAddonsConfigurations';
 import * as CustomResourceDefinitions from './CustomResourceDefinitions';
 import * as ClusterRoleBindings from './ClusterRoleBindings';
 
-export const resources = {
+export const resources = [
   // namespace resources
   Events,
   // workloads
@@ -106,6 +106,6 @@ export const resources = {
   ClusterAddonsConfigurations,
   CustomResourceDefinitions,
   ClusterRoleBindings,
-};
+];
 
-export const routes = <>{Object.values(resources).map(createResourceRoutes)}</>;
+export const routes = <>{resources.map(createResourceRoutes)}</>;
