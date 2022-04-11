@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "",
+  "title": "Busola custom pages",
+  "description": "A set of custom pages to be added to the Busola UI",
+  "type": "object",
+  "properties": {
+    "globalSettings": {
+      "type": "object",
+      "description": "the field to "
+    },
+    "subpages": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "nav": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "api": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string"
+              },
+              "hasDetailsView": {
+                "type": "boolean"
+              },
+              "resourceType": {
+                "type": "string"
+              }
+            }
+          },
+          "create": {
+            "type": "object",
+            "properties": {
+              "name_singular": {
+                "type": "string"
+              },
+              "fields": {
+                "type": "object"
+              }
+            }
+          },
+          "details": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "fields": {
+                "type": "object"
+              }
+            }
+          },
+          "list": {
+            "type": "object",
+            "properties": {
+              "columns": {
+                "type": "object"
+              },
+              "title": {
+                "type": "string"
+              },
+              "desc": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
