@@ -50,6 +50,7 @@ export function ExtensibilityCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
+      onlyYaml={!(simpleSchema || advancedSchema)}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
@@ -70,7 +71,7 @@ export function ExtensibilityCreate({
       <ResourceSchema
         simple
         key={api.version}
-        schema={simpleSchema || {}}
+        schema={simpleSchema || advancedSchema || {}}
         data={resource.spec || {}}
         onSubmit={() => {}}
         onChange={handleFieldChange}
@@ -78,7 +79,7 @@ export function ExtensibilityCreate({
       <ResourceSchema
         advanced
         key={api.version}
-        schema={advancedSchema || {}}
+        schema={advancedSchema || simpleSchema || {}}
         data={resource.spec || {}}
         onChange={handleFieldChange}
       />
