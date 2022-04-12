@@ -44,8 +44,6 @@ export function SearchInput({
   const [isSearchHidden, setSearchHidden] = React.useState(true);
   const searchInputRef = React.useRef();
 
-  //HERE I AM
-
   const onKeyPress = e => {
     const { key } = e;
     if (key === '/' && !disabled && alowSlashShortcut) {
