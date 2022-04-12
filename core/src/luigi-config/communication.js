@@ -173,7 +173,6 @@ function addOpenSearchHandler() {
     const { key } = e;
 
     const isMFModalPresent = !!document.querySelector('.lui-modal-mf');
-
     if (isMFModalPresent) return;
 
     if (key === '/') {

@@ -49,6 +49,7 @@ export const GenericList = ({
   className,
   currentlyEditedResourceUID,
   i18n,
+  slashToSearch,
 }) => {
   const { settings } = useMicrofrontendContext();
   if (pagination) {
@@ -83,6 +84,7 @@ export const GenericList = ({
     <>
       {showSearchField && (
         <SearchInput
+          slashToSearch={slashToSearch}
           entriesKind={entriesKind || title || ''}
           searchQuery={searchQuery}
           filteredEntries={filteredEntries}

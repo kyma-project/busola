@@ -359,6 +359,7 @@ export function ResourceListRenderer({
           'metadata.labels',
           ...textSearchProperties,
         ]}
+        slashToSearch={true}
         showSearchField={showSearchField}
         actions={actions}
         entries={resources || []}
