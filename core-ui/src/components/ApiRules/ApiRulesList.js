@@ -1,5 +1,5 @@
 import React from 'react';
-import ApiRulesListComponent from 'components/Predefined/List/ApiRules.list';
+import ApiRulesListComponent from 'resources/APIRules/APIRuleList';
 import { useTranslation } from 'react-i18next';
 
 export function ApiRulesList({ serviceName, namespace, prefix }) {
