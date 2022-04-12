@@ -13,6 +13,8 @@ export const ExtensibilityList = () => {
       resource.nav.resourceType,
     );
   }
+  listProps.createFormProps = { resource };
+
   return (
     <ResourcesList createResourceForm={ExtensibilityCreate} {...listProps} />
   );
