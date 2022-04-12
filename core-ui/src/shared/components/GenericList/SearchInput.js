@@ -38,9 +38,8 @@ export function SearchInput({
   disabled = false,
   onKeyDown,
   i18n,
-  slashToSearch = false,
+  alowSlashShortcut,
 }) {
-  console.log(disabled);
   const { t } = useTranslation(null, { i18n });
   const [isSearchHidden, setSearchHidden] = React.useState(true);
   const searchInputRef = React.useRef();
@@ -49,10 +48,7 @@ export function SearchInput({
 
   const onKeyPress = e => {
     const { key } = e;
-    // console.log(key === '/');
-    // console.log(!disabled);
-    console.log(key === '/', !disabled);
-    if (key === '/' && !disabled) {
+    if (key === '/' && !disabled && alowSlashShortcut) {
       openSearchList();
     }
   };
@@ -63,7 +59,7 @@ export function SearchInput({
     }
   }, [isSearchHidden]);
 
-  useEventListener('keydown', onKeyPress, [disabled]);
+  useEventListener('keydown', onKeyPress, [disabled, alowSlashShortcut]);
   useCustomMessageListener(
     'busola.toggle-open-search',
     () => {
@@ -71,7 +67,7 @@ export function SearchInput({
         setSearchHidden(false);
       }
     },
-    [disabled],
+    [disabled, alowSlashShortcut],
   );
 
   const renderSearchList = entries => {

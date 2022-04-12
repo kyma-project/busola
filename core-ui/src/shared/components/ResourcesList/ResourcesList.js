@@ -149,6 +149,7 @@ export function ResourceListRenderer({
   resources,
   silentRefetch = () => {},
   showSearchField = true,
+  alowSlashShortcut,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
 }) {
   const { t } = useTranslation(['translation'], { i18n });
@@ -359,7 +360,7 @@ export function ResourceListRenderer({
           'metadata.labels',
           ...textSearchProperties,
         ]}
-        slashToSearch={true}
+        alowSlashShortcut={alowSlashShortcut}
         showSearchField={showSearchField}
         actions={actions}
         entries={resources || []}
