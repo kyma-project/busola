@@ -17,7 +17,11 @@ export const createPath = (
   return `${namespacePrefix}/${pathSegment}${details}`;
 };
 
-export const usePrepareListProps = (resourceType, resourceI18Key) => {
+export const usePrepareListProps = (
+  resourceType,
+  resourceI18Key,
+  allowSlashShortcut,
+) => {
   const routerParams = useParams();
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
@@ -30,6 +34,7 @@ export const usePrepareListProps = (resourceType, resourceI18Key) => {
     resourceName: resourceI18Key ? t(resourceI18Key) : '',
     namespace: routerParams.namespaceId,
     i18n,
+    allowSlashShortcut,
   };
 };
 
@@ -61,7 +66,7 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
 };
 
 const ListWrapper = ({ children, resourceType, resourceI18Key }) => {
-  const props = usePrepareListProps(resourceType, resourceI18Key);
+  const props = usePrepareListProps(resourceType, resourceI18Key, true);
   return React.cloneElement(children, props);
 };
 const DetailsWrapper = ({ children, resourceType, resourceI18Key }) => {

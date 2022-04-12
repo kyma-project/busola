@@ -57,6 +57,7 @@ export function CustomResources({
     showNamespace,
     hideCreateOption,
     createResourceForm: props => <CRCreate {...props} crd={crd} />,
+    allowSlashShortcut: true,
   };
 
   return <ResourcesList {...params} />;

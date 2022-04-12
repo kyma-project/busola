@@ -81,6 +81,7 @@ function HelmReleasesList() {
         i18n={i18n}
         serverDataLoading={loading}
         serverDataError={error}
+        allowSlashShortcut={true}
       />
     </>
   );

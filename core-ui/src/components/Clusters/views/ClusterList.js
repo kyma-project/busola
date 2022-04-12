@@ -202,6 +202,7 @@ function ClusterList() {
         extraHeaderContent={extraHeaderContent}
         noSearchResultMessage={t('clusters.list.no-clusters-found')}
         i18n={i18n}
+        allowSlashShortcut={true}
       />
       <DeleteMessageBox
         resource={chosenCluster}
