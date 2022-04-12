@@ -14,8 +14,11 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
 import ServiceCatalogUIWrapper from './service-catalog-ui/Wrapper';
 
-import './index.scss';
-import './fiori-helpers.scss';
+import './styles/reset.css';
+import './styles/sapIllus-Fills.css';
+import './styles/sapIllus-Layout.css';
+import './styles/index.scss';
+import './styles/fiori-helpers.scss';
 
 i18next
   .use(initReactI18next)
