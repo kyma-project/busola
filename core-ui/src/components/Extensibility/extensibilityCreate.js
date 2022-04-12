@@ -15,6 +15,7 @@ export function ExtensibilityCreate({
 }) {
   const api = createResource?.nav?.resource || {};
   const jsonSchemaFormRef = useRef(null);
+
   const [resource, setResource] = useState({
     apiVersion: `${api.group}/${api.version}`,
     kind: api.kind,
@@ -60,14 +61,15 @@ export function ExtensibilityCreate({
         instanceCreateParameterSchema={schema}
         onSubmitSchemaForm={() => {}}
         onFormChange={formData => {
-          if (
-            !isEqual(formData?.instanceCreateParameters?.spec, resource?.spec)
-          ) {
-            const newResource = formData.instanceCreateParameters || {};
-            delete newResource?.properties;
-            delete newResource?.type;
-            setResource({ ...newResource });
-          }
+          onChange(formData);
+          // if (
+          //   !isEqual(formData?.spec, resource?.spec)
+          // ) {
+          // const newResource = formData?.spec || {};
+          // delete newResource?.properties;
+          // delete newResource?.type;
+          // setResource(newResource);
+          // }
         }}
       />
     </ResourceForm>

@@ -29,9 +29,7 @@ const ResourceSchema = ({
     } else if (!validationVisible && initialFormData.current !== formData)
       setValidationVisible(true);
 
-    onFormChange({
-      instanceCreateParameters: formData,
-    });
+    onFormChange(formData);
   };
 
   const removeErrorMessages = errors =>
