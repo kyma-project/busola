@@ -10,7 +10,7 @@ export const Details = React.lazy(() => import('./SubscriptionDetails'));
 
 export const resourceGraphConfig = () => ({
   depth: 1,
-  networkFlowLevel: 0,
+  networkFlowLevel: -2,
   relations: [
     {
       kind: 'Service',
