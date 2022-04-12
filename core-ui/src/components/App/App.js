@@ -8,8 +8,8 @@ import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { useSentry } from 'hooks/useSentry';
 
-import resources from 'routing/resources';
-import otherRoutes from 'routing/other';
+import { resourceRoutes } from 'resources';
+import otherRoutes from 'resources/other';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -47,7 +47,7 @@ export default function App() {
           </WithTitle>
         }
       />
-      {resources}
+      {resourceRoutes}
       {otherRoutes}
       <Route path="" element={<MainFrameRedirection />} />
     </Routes>
