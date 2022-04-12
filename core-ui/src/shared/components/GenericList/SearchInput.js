@@ -50,7 +50,8 @@ export function SearchInput({
   const onKeyPress = e => {
     const { key } = e;
     // console.log(key === '/');
-    console.log(!disabled);
+    // console.log(!disabled);
+    console.log(key === '/', !disabled);
     if (key === '/' && !disabled) {
       openSearchList();
     }
@@ -63,8 +64,14 @@ export function SearchInput({
   }, [isSearchHidden]);
 
   useEventListener('keydown', onKeyPress, [disabled]);
-  useCustomMessageListener('busola.toggle-open-search', () =>
-    setSearchHidden(false),
+  useCustomMessageListener(
+    'busola.toggle-open-search',
+    () => {
+      if (!disabled) {
+        setSearchHidden(false);
+      }
+    },
+    [disabled],
   );
 
   const renderSearchList = entries => {
