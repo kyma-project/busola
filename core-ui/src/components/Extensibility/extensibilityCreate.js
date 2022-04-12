@@ -1,9 +1,13 @@
 import React, { useState, useRef } from 'react';
+import * as jp from 'jsonpath';
 import { isEmpty, isEqual } from 'lodash';
+import { useTranslation } from 'react-i18next';
 
-import { ResourceForm } from 'shared/ResourceForm';
-import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { createTemplate } from './helpers';
 import ResourceSchema from './components/ResourceSchema';
+import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
+import { ResourceForm } from 'shared/ResourceForm';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 export function ExtensibilityCreate({
   formElementRef,
@@ -13,35 +17,24 @@ export function ExtensibilityCreate({
   resourceUrl,
   resource: createResource,
 }) {
-  const api = createResource?.nav?.resource || {};
+  const { t } = useTranslation();
   const jsonSchemaFormRef = useRef(null);
+  const { namespaceId: namespace } = useMicrofrontendContext();
+  const api = createResource?.nav?.resource || {};
 
-  const [resource, setResource] = useState({
-    apiVersion: `${api.group}/${api.version}`,
-    kind: api.kind,
-    metadata: {
-      name: '',
-      labels: {},
-      annotations: {},
-    },
-    spec: {},
-  });
-
-  const parametersSchema = createResource?.create?.openAPIV3Schema;
-
-  const {
-    data,
-  } = useGet(
-    `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/${api.kind.toLowerCase()}.${
-      api.group
-    }`,
-    { skip: !isEmpty(parametersSchema) },
+  const [resource, setResource] = useState(
+    createTemplate(api, namespace, createResource?.nav?.scope),
   );
 
-  const versions = data?.spec?.versions || [];
-  const schema = !isEmpty(parametersSchema)
-    ? parametersSchema
-    : versions.find(v => v.name === api.version)?.schema?.openAPIV3Schema || {};
+  const simpleSchema = createResource?.create?.simple?.schema;
+  const advancedSchema = createResource?.create?.advanced?.schema;
+
+  const handleNameChange = name => {
+    jp.value(resource, '$.metadata.name', name);
+    jp.value(resource, "$.metadata.labels['app.kubernetes.io/name']", name);
+
+    setResource({ ...resource });
+  };
 
   return (
     <ResourceForm
@@ -54,11 +47,48 @@ export function ExtensibilityCreate({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
     >
+      <K8sNameField
+        propertyPath="$.metadata.name"
+        kind={api.kind}
+        setValue={handleNameChange}
+        validate={value => !!value}
+      />
+      <KeyValueField
+        advanced
+        propertyPath="$.metadata.labels"
+        title={t('common.headers.labels')}
+        className="fd-margin-top--sm"
+      />
+      <KeyValueField
+        advanced
+        propertyPath="$.metadata.annotations"
+        title={t('common.headers.annotations')}
+      />
       <ResourceSchema
+        simple
         key={api.version}
         schemaFormRef={jsonSchemaFormRef}
-        data={schema || {}}
-        instanceCreateParameterSchema={schema}
+        data={simpleSchema || {}}
+        instanceCreateParameterSchema={simpleSchema}
+        onSubmitSchemaForm={() => {}}
+        onFormChange={formData => {
+          onChange(formData);
+          // if (
+          //   !isEqual(formData?.spec, resource?.spec)
+          // ) {
+          // const newResource = formData?.spec || {};
+          // delete newResource?.properties;
+          // delete newResource?.type;
+          // setResource(newResource);
+          // }
+        }}
+      />
+      <ResourceSchema
+        advanced
+        key={api.version}
+        schemaFormRef={jsonSchemaFormRef}
+        data={advancedSchema || {}}
+        instanceCreateParameterSchema={advancedSchema}
         onSubmitSchemaForm={() => {}}
         onFormChange={formData => {
           onChange(formData);
