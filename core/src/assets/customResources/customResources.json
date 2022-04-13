@@ -16,8 +16,21 @@
     },
     "list": {
       "title": "My wasmplugins title override",
-      "desc": "Wasmplugins are a great resource",
-      "columns": {}
+      "description": "Wasmplugins are a great resource",
+      "columns": [
+        {
+          "header": "plugin name",
+          "valuePath": "$.spec.pluginName",
+          "display": "status",
+          "successValues": ["add_header"],
+          "warningValues": ["other_header"]
+        },
+        {
+          "header": "Pretend it's an url",
+          "valuePath": "$.spec.url",
+          "display": "external-link"
+        }
+      ]
     },
     "details": {
       "title": "Custom Jobs",
@@ -163,8 +176,24 @@
     },
     "list": {
       "title": "My custom jobs title override",
-      "desc": "Custom jobs are a great resource",
-      "columns": {}
+      "description": "Custom jobs are a great resource",
+      "columns": [
+        {
+          "header": "BackOffLimit",
+          "valuePath": "$.spec.backoffLimit"
+        },
+        {
+          "header": "Selector's matchLabels",
+          "valuePath": "$.spec.selector.matchLabels",
+          "display": "labels"
+        },
+        {
+          "header": "Container image names",
+          "valuePath": "$.spec.template.spec.volumes",
+          "display": "array",
+          "arrayValuePath": "$.name"
+        }
+      ]
     },
     "details": {
       "title": "Custom Jobs",
