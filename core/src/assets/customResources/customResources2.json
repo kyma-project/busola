@@ -13,8 +13,8 @@
       },
       "list": {
         "title": "My wasmplugins title override",
-        "desc": "Wasmplugins are a great resource",
-        "columns": {}
+        "description": "Wasmplugins are a great resource",
+        "columns": []
       },
       "details": {
         "title": "Custom Jobs",
@@ -37,8 +37,8 @@
       },
       "list": {
         "title": "My custom jobs title override",
-        "desc": "Custom jobs are a great resource",
-        "columns": {}
+        "description": "Custom jobs are a great resource",
+        "columns": []
       },
       "details": {
         "title": "Custom Jobs",
