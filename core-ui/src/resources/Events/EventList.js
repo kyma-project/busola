@@ -19,7 +19,6 @@ export function Events({ ...otherParams }) {
     resourceUrl,
     allowSlashShortcut,
   } = otherParams;
-  console.log(allowSlashShortcut);
   const { loading = true, error, data: items } = useGetList(otherParams.filter)(
     resourceUrl,
     {
