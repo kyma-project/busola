@@ -17,11 +17,7 @@ export const createPath = (
   return `${namespacePrefix}/${pathSegment}${details}`;
 };
 
-export const usePrepareListProps = (
-  resourceType,
-  resourceI18Key,
-  listProps,
-) => {
+export const usePrepareListProps = (resourceType, resourceI18Key) => {
   const routerParams = useParams();
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
@@ -34,7 +30,6 @@ export const usePrepareListProps = (
     resourceName: t(resourceI18Key || '') ? t(resourceI18Key) : resourceI18Key,
     namespace: routerParams.namespaceId,
     i18n,
-    description: listProps.description,
   };
 };
 

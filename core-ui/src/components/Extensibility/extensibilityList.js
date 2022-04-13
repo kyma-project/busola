@@ -41,11 +41,7 @@ function listColumnDisplay(value, columnProps) {
 
 export const ExtensibilityList = () => {
   const resource = useGetCRbyPath();
-  const listProps = usePrepareListProps(
-    resource.nav.path,
-    resource.nav.label,
-    resource.list,
-  );
+  const listProps = usePrepareListProps(resource.nav.path, resource.nav.label);
   if (resource.nav.resourceType) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
       /[a-z0-9-]+\/?$/,
