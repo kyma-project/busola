@@ -14,7 +14,7 @@ import {
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
 import { getFeatures, resolveFeatureAvailability } from '../features';
-import { getCustomResources } from '../customResources';
+import { getCustomResources, getCustomTranslations } from '../customResources';
 import { showAlert } from '../utils/showAlert';
 
 import {
@@ -213,6 +213,7 @@ export async function createNavigation() {
     });
 
     const customResources = await getCustomResources();
+    const customTranslations = await getCustomTranslations();
 
     const optionsForCurrentCluster = {
       contextSwitcher: {
@@ -271,6 +272,7 @@ export async function createNavigation() {
         groupVersions,
         permissionSet,
         customResources,
+        customTranslations,
       ),
     };
   } catch (err) {
@@ -342,6 +344,7 @@ export async function createNavigationNodes(
   groupVersions,
   permissionSet,
   customResources,
+  customTranslations,
 ) {
   const authData = getAuthData();
   const activeCluster = await getActiveCluster();
@@ -363,6 +366,7 @@ export async function createNavigationNodes(
       permissionSet,
       features,
       customResources,
+      customTranslations,
     );
 
     const observabilitySection = await getObservabilityNodes(
@@ -419,6 +423,7 @@ export async function createNavigationNodes(
         groups,
         features,
         customResources,
+        customTranslations,
         clusters: await getClusters(),
         hiddenNamespaces,
         cluster: activeCluster.currentContext.cluster,
@@ -470,6 +475,7 @@ async function getChildrenNodesForNamespace(
   permissionSet,
   features,
   customResources,
+  customTranslations,
 ) {
   const { navigation = {} } = (await getActiveCluster()).config;
   const staticNodes = getStaticChildrenNodesForNamespace(
@@ -477,6 +483,7 @@ async function getChildrenNodesForNamespace(
     permissionSet,
     features,
     customResources,
+    customTranslations,
   );
 
   hideDisabledNodes(navigation.disabledNodes, staticNodes, true);
