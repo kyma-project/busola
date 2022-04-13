@@ -61,7 +61,7 @@ export function SearchInput({
   useCustomMessageListener(
     'busola.toggle-open-search',
     () => {
-      if (!disabled) {
+      if (!disabled && allowSlashShortcut) {
         setSearchHidden(false);
       }
     },

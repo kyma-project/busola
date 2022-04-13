@@ -13,7 +13,13 @@ import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 export function Events({ ...otherParams }) {
   const { t, i18n } = useTranslation();
-  const { defaultType, hideInvolvedObjects, resourceUrl } = otherParams;
+  const {
+    defaultType,
+    hideInvolvedObjects,
+    resourceUrl,
+    allowSlashShortcut,
+  } = otherParams;
+  console.log(allowSlashShortcut);
   const { loading = true, error, data: items } = useGetList(otherParams.filter)(
     resourceUrl,
     {
@@ -121,6 +127,7 @@ export function Events({ ...otherParams }) {
         'components.generic-list.messages.no-search-results',
       )}
       i18n={i18n}
+      allowSlashShortcut={allowSlashShortcut}
     />
   );
 }
@@ -143,7 +150,7 @@ export function EventList(props) {
           description={description}
         />
       )}
-      <Events {...props} />
+      <Events {...props} allowSlashShortcut={!props.isCompact} />
     </>
   );
 }
