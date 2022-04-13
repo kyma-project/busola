@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import * as jp from 'jsonpath';
-import { isEmpty, isEqual } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { createTemplate } from './helpers';
@@ -18,7 +17,6 @@ export function ExtensibilityCreate({
   resource: createResource,
 }) {
   const { t } = useTranslation();
-  const jsonSchemaFormRef = useRef(null);
   const { namespaceId: namespace } = useMicrofrontendContext();
   const api = createResource?.nav?.resource || {};
 
@@ -36,6 +34,12 @@ export function ExtensibilityCreate({
     setResource({ ...resource });
   };
 
+  const handleFieldChange = value => {
+    //not only spec :)
+    jp.value(resource, '$.spec', value);
+    setResource({ ...resource });
+  };
+
   return (
     <ResourceForm
       pluralKind={resourceType}
@@ -46,6 +50,7 @@ export function ExtensibilityCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
+      onlyYaml={!(simpleSchema || advancedSchema)}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
@@ -57,7 +62,6 @@ export function ExtensibilityCreate({
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
-        className="fd-margin-top--sm"
       />
       <KeyValueField
         advanced
@@ -67,40 +71,17 @@ export function ExtensibilityCreate({
       <ResourceSchema
         simple
         key={api.version}
-        schemaFormRef={jsonSchemaFormRef}
-        data={simpleSchema || {}}
-        instanceCreateParameterSchema={simpleSchema}
-        onSubmitSchemaForm={() => {}}
-        onFormChange={formData => {
-          onChange(formData);
-          // if (
-          //   !isEqual(formData?.spec, resource?.spec)
-          // ) {
-          // const newResource = formData?.spec || {};
-          // delete newResource?.properties;
-          // delete newResource?.type;
-          // setResource(newResource);
-          // }
-        }}
+        schema={simpleSchema || advancedSchema || {}}
+        data={resource.spec || {}}
+        onSubmit={() => {}}
+        onChange={handleFieldChange}
       />
       <ResourceSchema
         advanced
         key={api.version}
-        schemaFormRef={jsonSchemaFormRef}
-        data={advancedSchema || {}}
-        instanceCreateParameterSchema={advancedSchema}
-        onSubmitSchemaForm={() => {}}
-        onFormChange={formData => {
-          onChange(formData);
-          // if (
-          //   !isEqual(formData?.spec, resource?.spec)
-          // ) {
-          // const newResource = formData?.spec || {};
-          // delete newResource?.properties;
-          // delete newResource?.type;
-          // setResource(newResource);
-          // }
-        }}
+        schema={advancedSchema || simpleSchema || {}}
+        data={resource.spec || {}}
+        onChange={handleFieldChange}
       />
     </ResourceForm>
   );
