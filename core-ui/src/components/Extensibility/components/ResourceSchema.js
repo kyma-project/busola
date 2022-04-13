@@ -70,5 +70,6 @@ const JSONSchemaForm = ({ properties, path, ...props }) => {
 };
 
 export const ResourceSchema = ({ ...props }) => {
+  if (isEmpty(props.schema)) return null;
   return <JSONSchemaForm properties={props.schema.properties} {...props} />;
 };
