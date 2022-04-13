@@ -2,17 +2,13 @@ import React from 'react';
 
 import { JsonSchemaForm } from './JSONSchemaForm';
 
-const ResourceSchema = ({ onChange, schema, data }) => {
-  const handleFormChange = ({ formData }) => {
-    onChange(formData);
-  };
-
+const ResourceSchema = ({ schema, resource, setResource }) => {
   return (
     <JsonSchemaForm
       id="schemaDataForm"
       schema={schema}
-      onChange={handleFormChange}
-      formData={data}
+      resource={resource}
+      setResource={setResource}
     />
   );
 };

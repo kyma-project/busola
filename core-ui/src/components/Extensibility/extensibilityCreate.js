@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
+import * as Inputs from 'shared/ResourceForm/inputs';
 import { createTemplate } from './helpers';
 import ResourceSchema from './components/ResourceSchema';
 import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
@@ -34,9 +35,8 @@ export function ExtensibilityCreate({
     setResource({ ...resource });
   };
 
-  const handleFieldChange = value => {
-    //not only spec :)
-    jp.value(resource, '$.spec', value);
+  const handleFieldChange = (path, value) => {
+    jp.value(resource, path, value);
     setResource({ ...resource });
   };
 
@@ -46,7 +46,6 @@ export function ExtensibilityCreate({
       singularName={resourceType}
       resource={resource}
       setResource={setResource}
-      onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
@@ -72,16 +71,16 @@ export function ExtensibilityCreate({
         simple
         key={api.version}
         schema={simpleSchema || advancedSchema || {}}
-        data={resource.spec || {}}
+        resource={resource}
+        setResource={handleFieldChange}
         onSubmit={() => {}}
-        onChange={handleFieldChange}
       />
       <ResourceSchema
         advanced
         key={api.version}
         schema={advancedSchema || simpleSchema || {}}
-        data={resource.spec || {}}
-        onChange={handleFieldChange}
+        resource={resource}
+        setResource={handleFieldChange}
       />
     </ResourceForm>
   );
