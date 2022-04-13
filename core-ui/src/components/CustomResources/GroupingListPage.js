@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { groupBy } from 'lodash';
-import { FormInput, LayoutPanel } from 'fundamental-react';
 import { Tokens } from 'shared/components/Tokens';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
