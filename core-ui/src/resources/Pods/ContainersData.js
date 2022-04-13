@@ -7,19 +7,7 @@ import { LayoutPanel, Button } from 'fundamental-react';
 import './ContainersData.scss';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { ContainerStatus } from './ContainerStatus';
-
-const getPorts = ports => {
-  if (ports?.length) {
-    return ports.map(port => {
-      const portValue = port.name
-        ? `${port.name}:${port.containerPort}/${port.protocol}`
-        : `${port.containerPort}/${port.protocol}`;
-      return <li key={portValue}>{portValue}</li>;
-    });
-  } else {
-    return '';
-  }
-};
+import { getPorts } from 'shared/components/GetContainersPorts';
 
 ContainersData.propTypes = {
   containers: PropTypes.arrayOf(PropTypes.object).isRequired,
