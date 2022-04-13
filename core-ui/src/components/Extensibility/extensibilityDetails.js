@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import * as jp from 'jsonpath';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { usePrepareDetailsProps } from 'routing/createResourceRoutes';
@@ -7,6 +8,8 @@ import {
   getResourceChild,
 } from './components/CreateExtensibilityList';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
+import { LayoutPanel } from 'fundamental-react';
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 export const ExtensibilityDetails = () => {
   const resMetaData = useGetCRbyPath();
@@ -32,6 +35,25 @@ export const ExtensibilityDetails = () => {
     );
   };
 
+  const CreateDetailPanel = metadata => resource => {
+    return (
+      <LayoutPanel className="fd-margin--lg">
+        <LayoutPanel.Header>
+          <LayoutPanel.Head title={metadata.title} />
+        </LayoutPanel.Header>
+        <LayoutPanel.Body>
+          {metadata.properties.map(prop => (
+            <LayoutPanelRow
+              key={prop.valuePath}
+              name={prop.header}
+              value={jp.value(resource, prop.valuePath)}
+            />
+          ))}
+        </LayoutPanel.Body>
+      </LayoutPanel>
+    );
+  };
+
   const customColumns = [];
   const [customComponents, setCustomComponents] = useState([]);
 
@@ -39,9 +61,12 @@ export const ExtensibilityDetails = () => {
     const { components } = resMetaData.details;
     const lists = components?.filter(ele => ele.type === 'list') || [];
     const editors = components?.filter(ele => ele.type === 'monaco') || [];
+    const detailPanels =
+      components?.filter(ele => ele.type === 'detail-panel') || [];
     setCustomComponents([
       ...editors.map(CreateReadOnlyEditor),
       ...lists.map(CreateExtensibilityList),
+      ...detailPanels.map(CreateDetailPanel),
     ]);
   }, [resMetaData]);
 

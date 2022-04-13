@@ -208,6 +208,20 @@
           "resource": "$.status.conditions"
         },
         {
+          "type": "detail-panel",
+          "properties": [{
+            "header": "Parallelism",
+            "valuePath": "$.spec.parallelism"
+          },{
+            "header": "Completions",
+            "valuePath": "$.spec.completions"
+          },{
+            "header": "Backofflimit",
+            "valuePath": "$.spec.backoffLimit"
+          }],
+          "title": "Some details"
+        },
+        {
           "type": "list",
           "title": "My own Conditions",
           "headers": ["type", "status", "LaSt PrOBe", "Reason", "Message"],
