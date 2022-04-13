@@ -26,7 +26,7 @@ export const CreateExtensibilityList = metadata => {
 
   return res => {
     const result = getResourceChild(resPath, res);
-
+    return 'temp return ';
     return (
       <GenericList
         key={title}
