@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
-import * as Inputs from 'shared/ResourceForm/inputs';
 import { createTemplate } from './helpers';
-import ResourceSchema from './components/ResourceSchema';
+import { ResourceSchema } from './components/ResourceSchema';
 import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 export function ExtensibilityCreate({
   formElementRef,
-  onChange,
   setCustomValid,
   resourceType,
   resourceUrl,
