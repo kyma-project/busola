@@ -197,14 +197,18 @@
         {
           "type": "list",
           "title": {
-            "id": "conditionsTitleI"
+            "id": "conditionsTitleII"
           },
           "headers": [
             { "id": "headers.conditions.type" },
             { "id": "headers.conditions.status" },
-            { "id": "headers.conditions.lastProbeTime" },
+            {
+              "id": "headers.conditions.lastProbeTime",
+              "en": "Local priority Last Probe"
+            },
             "Last Probe Time string no translation"
           ],
+          "columns": ["type", "status", "lastProbeTime", "lastProbeTime"],
           "resource": "$.status.conditions"
         },
         {
