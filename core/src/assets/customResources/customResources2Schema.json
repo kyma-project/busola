@@ -1,77 +1,349 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "",
-  "title": "Busola custom pages",
-  "description": "A set of custom pages to be added to the Busola UI",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "A set of custom pages to be added to the Busola UI.",
+  "required": ["pages"],
+  "title": "Custom pages to be displayed in Busola",
+  "$id": "https://busola.com/extensibility-resources.json",
   "type": "object",
   "properties": {
-    "globalSettings": {
-      "type": "object",
-      "description": "the field to "
+    "settings": {
+      "description": "The field to set custom pages settings. Currently not used.",
+      "title": "Custom pages setting",
+      "type": "object"
     },
-    "subpages": {
+    "pages": {
+      "description": "Each object in this array is transferred into a resource. It's shown in the navigation and appropriate pages are created if defined: listing, detail and create views.",
+      "minItems": 1,
+      "title": "Set of custom pages",
       "type": "array",
       "items": {
+        "description": "The object comprises of four parts and settings. The only mandatory is 'nav'. If you omit any other part, its default view will be displayed. ",
+        "required": ["nav"],
+        "title": "Custom page definition",
+        "type": "object",
         "properties": {
           "nav": {
+            "description": "Defines data needed to add a page to busola and send API requests to kubernetes.",
+            "required": [
+              "path",
+              "label",
+              "category",
+              "scope",
+              "api",
+              "hasDetailsView"
+            ],
+            "title": "Navigation data",
             "type": "object",
             "properties": {
               "path": {
-                "type": "string"
-              },
-              "scope": {
+                "description": "This string is added to busola URL's path. If you don't define 'resourceType', it is also used as a default resource type when querrying Kubernetes API.",
+                "examples": ["custom-jobs", "wasmplugins"],
+                "title": "Path",
                 "type": "string"
               },
               "label": {
-                "type": "string"
-              },
-              "api": {
+                "description": "Human-readable name of the resource, to be displayed in the navigation and on the resource pages.",
+                "title": "Label",
+                "examples": ["Custom Jobs", "WASM Plugins"],
                 "type": "string"
               },
               "category": {
+                "description": "Parent menu category. It can be either exsiting or new category name.",
+                "title": "Category",
+                "examples": ["Workloads", "My Resources"],
+                "type": "string"
+              },
+              "scope": {
+                "description": "Defines if the component should be displayed with namespace or cluster resources.",
+                "title": "Scope",
+                "enum": ["namespace", "cluster"],
+                "type": "string"
+              },
+              "api": {
+                "description": "The part of HTTP Request path up to the resource name (not including the name). For native K8 resources, can be obtained for example from: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23. This is needed to query the Kubernetes REST API.",
+                "examples": [
+                  "/apis/batch/v1",
+                  "/apis/extensions.istio.io/v1alpha1",
+                  "/apis/addons.kyma-project.io/v1alpha1"
+                ],
+                "title": "API Schema",
+                "type": "string"
+              },
+              "resourceType": {
+                "description": "Used to tell Busola expilicitly what it should query K8 API for. Set only if your path is different than the K8 resource name. For example, path is set to 'jobs-with-extra-info', but you want to query for 'jobs'.",
+                "title": "ResourceType",
+                "examples": ["jobs", "wasmplugins"],
                 "type": "string"
               },
               "hasDetailsView": {
+                "default": true,
+                "description": "Determines if the resource's detail view is enabled.",
+                "title": "HasDetailsView",
                 "type": "boolean"
-              },
-              "resourceType": {
-                "type": "string"
-              }
-            }
-          },
-          "create": {
-            "type": "object",
-            "properties": {
-              "name_singular": {
-                "type": "string"
-              },
-              "fields": {
-                "type": "object"
               }
             }
           },
           "details": {
             "type": "object",
+            "title": "Details Page Data",
+            "description": "Defines columns and components displayed at the Details view.",
+            "required": ["components"],
             "properties": {
               "title": {
-                "type": "string"
+                "type": "string",
+                "title": "Title",
+                "description": "Human readable title to be used in title and headings. If not set, value is taken from 'nav'."
               },
-              "fields": {
-                "type": "object"
+              "components": {
+                "type": "array",
+                "title": "components",
+                "description": "Defines components displayed at the Details view",
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "title": "The first anyOf schema",
+                      "description": "An explanation about the purpose of this instance.",
+                      "required": [
+                        "type",
+                        "resource",
+                        "placement",
+                        "title",
+                        "class"
+                      ],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "title": "The type schema",
+                          "description": "An explanation about the purpose of this instance."
+                        },
+                        "resource": {
+                          "type": "string",
+                          "title": "The resource schema",
+                          "description": "An explanation about the purpose of this instance."
+                        },
+                        "placement": {
+                          "type": "string",
+                          "title": "The placement schema",
+                          "description": "An explanation about the purpose of this instance."
+                        },
+                        "title": {
+                          "type": "object",
+                          "title": "The title schema",
+                          "description": "An explanation about the purpose of this instance.",
+                          "required": ["en", "pl", "de"],
+                          "properties": {
+                            "en": {
+                              "type": "string",
+                              "title": "The en schema",
+                              "description": "An explanation about the purpose of this instance."
+                            },
+                            "pl": {
+                              "type": "string",
+                              "title": "The pl schema",
+                              "description": "An explanation about the purpose of this instance."
+                            },
+                            "de": {
+                              "type": "string",
+                              "title": "The de schema",
+                              "description": "An explanation about the purpose of this instance."
+                            }
+                          }
+                        },
+                        "class": {
+                          "type": "string",
+                          "title": "The class schema",
+                          "description": "An explanation about the purpose of this instance."
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "title": "The second anyOf schema",
+                      "description": "An explanation about the purpose of this instance.",
+                      "required": ["type", "resource", "title"],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "title": "The type schema",
+                          "description": "An explanation about the purpose of this instance."
+                        },
+                        "resource": {
+                          "type": "string",
+                          "title": "The resource schema",
+                          "description": "An explanation about the purpose of this instance."
+                        },
+                        "title": {
+                          "type": "string",
+                          "title": "The title schema",
+                          "description": "An explanation about the purpose of this instance."
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "title": "The third anyOf schema",
+                      "description": "An explanation about the purpose of this instance.",
+                      "required": [
+                        "type",
+                        "title",
+                        "headers",
+                        "columns",
+                        "resource"
+                      ],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "title": "The type schema",
+                          "description": "An explanation about the purpose of this instance."
+                        },
+                        "title": {
+                          "type": "string",
+                          "title": "The title schema",
+                          "description": "An explanation about the purpose of this instance."
+                        },
+                        "headers": {
+                          "type": "array",
+                          "title": "The headers schema",
+                          "description": "An explanation about the purpose of this instance.",
+                          "items": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "title": "The first anyOf schema",
+                                "description": "An explanation about the purpose of this instance."
+                              }
+                            ]
+                          }
+                        },
+                        "columns": {
+                          "type": "array",
+                          "title": "The columns schema",
+                          "description": "An explanation about the purpose of this instance.",
+                          "items": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "title": "The first anyOf schema",
+                                "description": "An explanation about the purpose of this instance."
+                              }
+                            ]
+                          }
+                        },
+                        "resource": {
+                          "type": "string",
+                          "title": "The resource schema",
+                          "description": "An explanation about the purpose of this instance."
+                        }
+                      }
+                    }
+                  ]
+                }
               }
             }
           },
           "list": {
             "type": "object",
+            "title": "The list schema",
+            "description": "An explanation about the purpose of this instance.",
+            "required": ["title", "desc", "columns"],
             "properties": {
-              "columns": {
-                "type": "object"
-              },
               "title": {
-                "type": "string"
+                "type": "string",
+                "title": "The title schema",
+                "description": "An explanation about the purpose of this instance."
               },
               "desc": {
-                "type": "string"
+                "type": "string",
+                "title": "The desc schema",
+                "description": "An explanation about the purpose of this instance."
+              },
+              "columns": {
+                "type": "object",
+                "title": "The columns schema",
+                "description": "An explanation about the purpose of this instance.",
+                "required": []
+              }
+            }
+          },
+          "create": {
+            "type": "object",
+            "title": "The create schema",
+            "description": "An explanation about the purpose of this instance.",
+            "required": ["name_singular", "fields"],
+            "properties": {
+              "name_singular": {
+                "type": "string",
+                "title": "The name_singular schema",
+                "description": "An explanation about the purpose of this instance."
+              },
+              "fields": {
+                "type": "object",
+                "title": "The fields schema",
+                "description": "An explanation about the purpose of this instance.",
+                "required": []
+              }
+            }
+          },
+          "settings": {
+            "css": {},
+            "type": "object",
+            "title": "The css schema",
+            "description": "An explanation about the purpose of this instance.",
+            "required": [
+              "custom",
+              ".custom-conditions",
+              ".custom-conditions .fd-list"
+            ],
+            "properties": {
+              "custom": {
+                "type": "object",
+                "title": "The custom schema",
+                "description": "An explanation about the purpose of this instance.",
+                "required": ["display", "color", "content"],
+                "properties": {
+                  "display": {
+                    "type": "string",
+                    "title": "The display schema",
+                    "description": "An explanation about the purpose of this instance."
+                  },
+                  "color": {
+                    "type": "string",
+                    "title": "The color schema",
+                    "description": "An explanation about the purpose of this instance."
+                  },
+                  "content": {
+                    "type": "string",
+                    "title": "The content schema",
+                    "description": "An explanation about the purpose of this instance."
+                  }
+                }
+              },
+              ".custom-conditions": {
+                "type": "object",
+                "title": "The .custom-conditions schema",
+                "description": "An explanation about the purpose of this instance.",
+                "required": ["background"],
+                "properties": {
+                  "background": {
+                    "type": "string",
+                    "title": "The background schema",
+                    "description": "An explanation about the purpose of this instance."
+                  }
+                }
+              },
+              ".custom-conditions .fd-list": {
+                "type": "object",
+                "title": "The .custom-conditions .fd-list schema",
+                "description": "An explanation about the purpose of this instance.",
+                "required": ["background"],
+                "properties": {
+                  "background": {
+                    "type": "string",
+                    "title": "The background schema",
+                    "description": "An explanation about the purpose of this instance."
+                  }
+                }
               }
             }
           }

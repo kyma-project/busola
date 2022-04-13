@@ -24,7 +24,6 @@
       "fields": {}
     },
     "create": {
-      "name_singular": "Custom Jobs",
       "simple": {
         "schema": {
           "type": "object",
