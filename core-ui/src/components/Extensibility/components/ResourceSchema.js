@@ -6,7 +6,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { KeyValueField } from 'shared/ResourceForm/fields';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
-const RJSF = ({ properties, path, ...props }) => {
+const JSONSchemaForm = ({ properties, path, ...props }) => {
   const { resource, setResource } = props;
 
   const getValue = path => {
@@ -20,7 +20,7 @@ const RJSF = ({ properties, path, ...props }) => {
       if (!isEmpty(properties[key].properties)) {
         return (
           <ResourceForm.CollapsibleSection simple title={key}>
-            <RJSF
+            <JSONSchemaForm
               properties={properties[key].properties}
               path={newPath}
               {...props}
@@ -70,5 +70,6 @@ const RJSF = ({ properties, path, ...props }) => {
 };
 
 export const ResourceSchema = ({ ...props }) => {
-  return <RJSF properties={props.schema.properties} {...props} />;
+  if (isEmpty(props.schema)) return null;
+  return <JSONSchemaForm properties={props.schema.properties} {...props} />;
 };
