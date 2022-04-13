@@ -130,7 +130,7 @@ export function SearchInput({
             <input
               aria-label="search-input"
               ref={searchInputRef}
-              type="text"
+              type="search"
               placeholder={t('common.tooltips.search')}
               value={searchQuery}
               onBlur={() => setSearchHidden(true)}

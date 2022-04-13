@@ -10,7 +10,7 @@ import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditor
 import { ResourceListRenderer } from 'shared/components/ResourcesList/ResourcesList';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-import './GroupingListPage.scss';
+import { SearchInput } from 'shared/components/GenericList/SearchInput';
 
 export function GroupingListPage({
   title,
@@ -63,11 +63,10 @@ export function GroupingListPage({
       title={title}
       description={description}
       actions={
-        <FormInput
+        <SearchInput
           value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          className="fd-margin-begin--lg search-with-magnifying-glass group-list-search"
-          type="search"
+          handleQueryChange={setSearchQuery}
+          allowSlashShortcut
         />
       }
     />
