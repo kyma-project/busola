@@ -46,6 +46,12 @@ export function SearchInput({
 
   const onKeyPress = e => {
     const { key } = e;
+
+    const isCommandPalleteOpen = !!document.querySelector(
+      '#command-palette-background',
+    );
+    if (isCommandPalleteOpen) return;
+
     if (key === '/' && !disabled && allowSlashShortcut) {
       openSearchList();
     }
