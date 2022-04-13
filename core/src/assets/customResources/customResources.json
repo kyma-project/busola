@@ -16,133 +16,127 @@
     },
     "list": {
       "title": "My wasmplugins title override",
-      "desc": "Wasmplugins are a great resource",
-      "columns": {}
+      "description": "Wasmplugins are a great resource",
+      "columns": [
+        {
+          "header": "plugin name",
+          "valuePath": "$.spec.pluginName",
+          "display": "status",
+          "successValues": ["add_header"],
+          "warningValues": ["other_header"]
+        },
+        {
+          "header": "Pretend it's an url",
+          "valuePath": "$.spec.url",
+          "display": "external-link"
+        }
+      ]
     },
     "details": {
       "title": "Custom Jobs",
       "fields": {}
     },
     "create": {
-      "name_singular": "Custom Jobs",
       "simple": {
         "schema": {
           "type": "object",
           "properties": {
-              "spec": {
-                  "description": "Extend the functionality provided by the Istio proxy through WebAssembly filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html",
+            "spec": {
+              "description": "Extend the functionality provided by the Istio proxy through WebAssembly filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html",
+              "type": "object",
+              "properties": {
+                "imagePullPolicy": {
+                  "description": "The pull behaviour to be applied when fetching an OCI image.",
+                  "type": "string",
+                  "enum": ["UNSPECIFIED_POLICY", "IfNotPresent", "Always"]
+                },
+                "imagePullSecret": {
+                  "description": "Credentials to use for OCI image pulling.",
+                  "type": "string"
+                },
+                "phase": {
+                  "description": "Determines where in the filter chain this `WasmPlugin` is to be injected.",
+                  "type": "string",
+                  "enum": ["UNSPECIFIED_PHASE", "AUTHN", "AUTHZ", "STATS"]
+                },
+                "pluginConfig": {
+                  "description": "The configuration that will be passed on to the plugin.",
                   "type": "object",
-                  "properties": {
-                      "imagePullPolicy": {
-                          "description": "The pull behaviour to be applied when fetching an OCI image.",
-                          "type": "string",
-                          "enum": [
-                              "UNSPECIFIED_POLICY",
-                              "IfNotPresent",
-                              "Always"
-                          ]
-                      },
-                      "imagePullSecret": {
-                          "description": "Credentials to use for OCI image pulling.",
-                          "type": "string"
-                      },
-                      "phase": {
-                          "description": "Determines where in the filter chain this `WasmPlugin` is to be injected.",
-                          "type": "string",
-                          "enum": [
-                              "UNSPECIFIED_PHASE",
-                              "AUTHN",
-                              "AUTHZ",
-                              "STATS"
-                          ]
-                      },
-                      "pluginConfig": {
-                          "description": "The configuration that will be passed on to the plugin.",
-                          "type": "object",
-                          "x-kubernetes-preserve-unknown-fields": true
-                      },
-                      "pluginName": {
-                          "type": "string"
-                      }
-                  }
+                  "x-kubernetes-preserve-unknown-fields": true
+                },
+                "pluginName": {
+                  "type": "string"
+                }
               }
+            }
           }
-      }
+        }
       },
       "advanced": {
         "schema": {
           "type": "object",
           "properties": {
-              "spec": {
-                  "description": "Extend the functionality provided by the Istio proxy through WebAssembly filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html",
-                  "type": "object",
-                  "properties": {
-                      "imagePullPolicy": {
-                          "description": "The pull behaviour to be applied when fetching an OCI image.",
-                          "type": "string",
-                          "enum": [
-                              "UNSPECIFIED_POLICY",
-                              "IfNotPresent",
-                              "Always"
-                          ]
-                      },
-                      "imagePullSecret": {
-                          "description": "Credentials to use for OCI image pulling.",
-                          "type": "string"
-                      },
-                      "phase": {
-                          "description": "Determines where in the filter chain this `WasmPlugin` is to be injected.",
-                          "type": "string",
-                          "enum": [
-                              "UNSPECIFIED_PHASE",
-                              "AUTHN",
-                              "AUTHZ",
-                              "STATS"
-                          ]
-                      },
-                      "pluginConfig": {
-                          "description": "The configuration that will be passed on to the plugin.",
-                          "type": "object",
-                          "x-kubernetes-preserve-unknown-fields": true
-                      },
-                      "pluginName": {
-                          "type": "string"
-                      },
-                      "priority": {
-                          "description": "Determines ordering of `WasmPlugins` in the same `phase`.",
-                          "type": "integer",
-                          "nullable": true
-                      },
-                      "selector": {
-                          "type": "object",
-                          "properties": {
-                              "matchLabels": {
-                                  "type": "object",
-                                  "additionalProperties": {
-                                      "type": "string"
-                                  }
-                              }
-                          }
-                      },
-                      "sha256": {
-                          "description": "SHA256 checksum that will be used to verify Wasm module or OCI container.",
-                          "type": "string"
-                      },
-                      "url": {
-                          "description": "URL of a Wasm module or OCI container.",
-                          "type": "string"
-                      },
-                      "verificationKey": {
-                          "type": "string"
-                      }
-                  }
-              },
-              "status": {
+            "spec": {
+              "description": "Extend the functionality provided by the Istio proxy through WebAssembly filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html",
+              "type": "object",
+              "properties": {
+                "imagePullPolicy": {
+                  "description": "The pull behaviour to be applied when fetching an OCI image.",
+                  "type": "string",
+                  "enum": ["UNSPECIFIED_POLICY", "IfNotPresent", "Always"]
+                },
+                "imagePullSecret": {
+                  "description": "Credentials to use for OCI image pulling.",
+                  "type": "string"
+                },
+                "phase": {
+                  "description": "Determines where in the filter chain this `WasmPlugin` is to be injected.",
+                  "type": "string",
+                  "enum": ["UNSPECIFIED_PHASE", "AUTHN", "AUTHZ", "STATS"]
+                },
+                "pluginConfig": {
+                  "description": "The configuration that will be passed on to the plugin.",
                   "type": "object",
                   "x-kubernetes-preserve-unknown-fields": true
+                },
+                "pluginName": {
+                  "type": "string"
+                },
+                "priority": {
+                  "description": "Determines ordering of `WasmPlugins` in the same `phase`.",
+                  "type": "integer",
+                  "nullable": true
+                },
+                "selector": {
+                  "type": "object",
+                  "properties": {
+                    "matchLabels": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "sha256": {
+                  "description": "SHA256 checksum that will be used to verify Wasm module or OCI container.",
+                  "type": "string"
+                },
+                "url": {
+                  "description": "URL of a Wasm module or OCI container.",
+                  "type": "string"
+                },
+                "verificationKey": {
+                  "type": "string"
+                }
               }
+            },
+            "status": {
+              "type": "object",
+              "x-kubernetes-preserve-unknown-fields": true
+            }
           }
-      }
+        }
       }
     }
   },
@@ -163,8 +157,24 @@
     },
     "list": {
       "title": "My custom jobs title override",
-      "desc": "Custom jobs are a great resource",
-      "columns": {}
+      "description": "Custom jobs are a great resource",
+      "columns": [
+        {
+          "header": "BackOffLimit",
+          "valuePath": "$.spec.backoffLimit"
+        },
+        {
+          "header": "Selector's matchLabels",
+          "valuePath": "$.spec.selector.matchLabels",
+          "display": "labels"
+        },
+        {
+          "header": "Container image names",
+          "valuePath": "$.spec.template.spec.volumes",
+          "display": "array",
+          "arrayValuePath": "$.name"
+        }
+      ]
     },
     "details": {
       "title": "Custom Jobs",
@@ -186,38 +196,22 @@
         },
         {
           "type": "list",
-          "title": "Conditions",
-          "headers": ["type", "status", "last transition"],
-          "columns": [
-            "type",
-            "status",
-            "lastTransitionTime"
-          ],
-          "resource": "$.status.conditions"
-        },
-        {
-          "type": "list",
-          "title": "Conditions Double",
-          "headers": ["type", "status", "LaSt PrOBe", "last transition"],
-          "columns": [
-            "type",
-            "(condition, index) => condition.status",
-            "lastProbeTime",
-            "condition.lastProbeTime"
+          "title": {
+            "id": "conditionsTitleI"
+          },
+          "headers": [
+            { "id": "headers.conditions.type" },
+            { "id": "headers.conditions.status" },
+            { "id": "headers.conditions.lastProbeTime" },
+            "Last Probe Time string no translation"
           ],
           "resource": "$.status.conditions"
         },
         {
           "type": "list",
           "title": "My own Conditions",
-          "headers": ["type" ,"status", "LaSt PrOBe", "Reason", "Message"],
-          "columns": [
-            "type",
-            "status",
-            "lastProbeTime",
-            "reason",
-            "message"
-          ],
+          "headers": ["type", "status", "LaSt PrOBe", "Reason", "Message"],
+          "columns": ["type", "status", "lastProbeTime", "reason", "message"],
           "resource": "$.status.conditions"
         }
       ]

@@ -55,6 +55,7 @@ export function getStaticChildrenNodesForNamespace(
   permissionSet,
   features,
   customResources,
+  customTranslations, //TODO this is needed to have translated menu positions
 ) {
   const customPaths = getCustomPaths(customResources, 'namespace');
 

@@ -1,6 +1,6 @@
 {
-  "globalSettings": {},
-  "subpages": [
+  "settings": {},
+  "pages": [
     {
       "nav": {
         "path": "wasmplugins",
@@ -13,8 +13,8 @@
       },
       "list": {
         "title": "My wasmplugins title override",
-        "desc": "Wasmplugins are a great resource",
-        "columns": {}
+        "description": "Wasmplugins are a great resource",
+        "columns": []
       },
       "details": {
         "title": "Custom Jobs",
@@ -37,8 +37,8 @@
       },
       "list": {
         "title": "My custom jobs title override",
-        "desc": "Custom jobs are a great resource",
-        "columns": {}
+        "description": "Custom jobs are a great resource",
+        "columns": []
       },
       "details": {
         "title": "Custom Jobs",
@@ -66,9 +66,9 @@
           },
           {
             "type": "list",
-            "title": "Conditions",
             "headers": ["type", "status", "last transition"],
             "columns": ["type", "status", "lastTransitionTime"],
+            "title": "Conditions",
             "resource": "$.status.conditions"
           },
           {
@@ -97,7 +97,7 @@
         "fields": {}
       },
       "css": {
-        "fd-list": {
+        "custom": {
           "display": "none",
           "color": "blue",
           "content": "this additional properties will be added to the class fd-list at the custom page. This way any class can be targeted"
