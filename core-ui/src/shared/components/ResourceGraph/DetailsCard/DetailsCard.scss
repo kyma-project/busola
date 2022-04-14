@@ -1,0 +1,59 @@
+.details-card-wrapper {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 95%;
+  width: 25%;
+  max-width: 500px;
+  background-color: var(--sapBaseColor);
+  box-shadow: 0 0 10px var(--sapList_SelectionBackgroundColor);
+}
+
+.details-card-header {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--sapList_SelectionBackgroundColor);
+
+  .resource-name {
+    max-height: 70%;
+    padding: 10px 0 0 20px;
+    font-size: 18px;
+    color: var(--sapTextColor);
+  }
+
+  .resource-kind {
+    max-height: 30%;
+    padding: 10px 0 10px 20px;
+    color: var(--sapContent_LabelColor);
+  }
+}
+
+.details-content {
+  height: 75%;
+  margin: 5px 0;
+  padding: 0 15px;
+  overflow-y: auto;
+}
+
+.title {
+  color: var(--sapNeutralColor);
+  margin-bottom: 5px;
+
+  span {
+    color: var(--sapTextColor);
+  }
+}
+
+.buttons-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  height: 10%;
+  padding-top: 10px;
+  border-top: 1px solid var(--sapList_SelectionBackgroundColor);
+
+  button {
+    margin: 0 10px;
+  }
+}

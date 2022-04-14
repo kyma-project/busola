@@ -112,7 +112,7 @@ applications:
     binding-create-failed: Failed to create the Binding
     binding-created: Binding created
     binding-deleted: Binding deleted
-    binding-not-found: No Bindings
+    binding-not-found: No bindings
     cannot-create: Cannot create the Application
     connect-disabled: Connecting Applications is disabled for SAP BTP, Kyma Runtime.
     copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
@@ -303,6 +303,7 @@ clusters:
     kubeconfig-download-error: Failed to download the kubeconfig
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
   description-visibility: Description is shown on the Clusters Overview list
+  disconnect: Cluster disconnected
   edit-cluster: Edit Cluster
   empty:
     go-to-btp-cockpit: To view your clusters, go to
@@ -393,15 +394,17 @@ command-palette:
     namespaced: Namespaced CRs
   help:
     choose-cluster: Choose Cluster
+    crd-aliases: CRD Aliases
     full: Use <0>↑</0> and <0>↓</0> to navigate between results, <0>⏎</0> to choose, <0>Tab</0> to autocomplete.
     navigation: Navigation
     open-preferences: Open Preferences
-    resource-aliases: Resource Aliases
+    resource-aliases: Built-in Resource Aliases
     short-help: Type to search, e.g. "ns default" or "pod nginx"
   item-actions:
     navigate: Navigate
     open: Open
     show-help: Show available commands
+    switch: Switch context
   resource-names:
     addonsconfigurations: Addons
     apirules: API Rules
@@ -412,6 +415,7 @@ command-palette:
     clusterroles: Cluster Roles
     configmaps: Config Maps
     cronjobs: Cron Jobs
+    customresourcedefinitions: Custom Resource Definitions
     daemonsets: Daemon Sets
     destinationrules: Destination Rules
     gitrepositories: Git Repositories
@@ -553,6 +557,7 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: Error
+    generate-name: Generate name
     hide: Hide Read-Only Fields
     k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
@@ -576,7 +581,7 @@ components:
   error-panel:
     error: An error occured. The component cannot be rendered.
   file-input:
-    drag-file: Drag file here
+    drag-file: Drag your file here or click to upload
   generic-list:
     acion-header:
       messages:
@@ -1745,6 +1750,8 @@ replica-sets:
     error: At least one of the Pods has failed.
     running: All the Pods are running correctly.
 resource-graph:
+  buttons:
+    go-to-details: Go to details
   error: Something went wrong during rendering the graph.
   save-as-dot: DOT format
   title: Resource Graph

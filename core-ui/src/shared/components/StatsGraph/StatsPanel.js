@@ -18,7 +18,7 @@ import './StatsPanel.scss';
 
 const DATA_POINTS = 60;
 
-export function SingleGraph({ type, timeSpan, metric, ...props }) {
+export function SingleGraph({ type, mode, timeSpan, metric, ...props }) {
   const { t } = useTranslation();
   const {
     data,
@@ -28,7 +28,7 @@ export function SingleGraph({ type, timeSpan, metric, ...props }) {
     loading,
     startDate,
     endDate,
-  } = usePrometheus(type, metric, {
+  } = usePrometheus(type, mode, metric, {
     items: DATA_POINTS,
     timeSpan,
     ...props,
@@ -66,13 +66,14 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
     loading: loading1,
     startDate,
     endDate,
-  } = usePrometheus(type, metric1, {
+  } = usePrometheus(type, 'single', metric1, {
     items: DATA_POINTS,
     timeSpan,
     ...props,
   });
   const { data: data2, error: error2, loading: loading2 } = usePrometheus(
     type,
+    'single',
     metric2,
     {
       items: DATA_POINTS,
@@ -80,7 +81,6 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
       ...props,
     },
   );
-
   return (
     <>
       {!error1 && !error2 ? (
@@ -108,9 +108,54 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
   );
 }
 
-export function StatsPanel({ type, ...props }) {
-  const { features } = useMicrofrontendContext();
+export function SingleMetricMultipeGraph({
+  type,
+  mode,
+  timeSpan,
+  metric,
+  labels,
+  ...props
+}) {
+  const { t } = useTranslation();
+  const {
+    data,
+    defaultLabels,
+    binary,
+    unit,
+    error,
+    loading,
+    startDate,
+    endDate,
+  } = usePrometheus(type, mode, metric, {
+    items: DATA_POINTS,
+    timeSpan,
+    ...props,
+  });
+  return (
+    <>
+      {!error ? (
+        <StatsGraph
+          data={zip(...data)}
+          binary={binary}
+          unit={unit}
+          startDate={startDate}
+          endDate={endDate}
+          dataPoints={DATA_POINTS}
+          labels={labels ? labels : defaultLabels}
+          {...props}
+        />
+      ) : (
+        <div className="error-message">
+          <p>{getErrorMessage(error, t('components.error-panel.error'))}</p>
+        </div>
+      )}
+      <BusyIndicator className="throbber" show={loading} />
+    </>
+  );
+}
 
+export function StatsPanel({ type, mode = 'single', ...props }) {
+  const { features } = useMicrofrontendContext();
   const timeSpans = {
     '1h': 60 * 60,
     '3h': 3 * 60 * 60,
@@ -168,9 +213,20 @@ export function StatsPanel({ type, ...props }) {
         </LayoutPanel.Actions>
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        {metric !== 'network' && (
+        {mode === 'multiple' && metric !== 'network' && (
+          <SingleMetricMultipeGraph
+            type={type}
+            mode={mode}
+            metric={metric}
+            className={metric}
+            timeSpan={timeSpans[timeSpan]}
+            {...props}
+          />
+        )}
+        {mode !== 'multiple' && metric !== 'network' && (
           <SingleGraph
             type={type}
+            mode={mode}
             metric={metric}
             className={metric}
             timeSpan={timeSpans[timeSpan]}

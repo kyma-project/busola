@@ -2,7 +2,7 @@ import React from 'react';
 import * as jp from 'jsonpath';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { usePrepareListProps } from 'routing/createResourceRoutes';
+import { usePrepareListProps } from 'resources/helpers';
 import { ExtensibilityCreate } from './extensibilityCreate';
 import { Labels } from 'shared/components/Labels/Labels';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';

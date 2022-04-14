@@ -11,8 +11,8 @@ import { useSentry } from 'hooks/useSentry';
 import { ExtensibilityDetails } from 'components/Extensibility/extensibilityDetails';
 import { ExtensibilityList } from 'components/Extensibility/extensibilityList';
 
-import resources from 'routing/resources';
-import otherRoutes from 'routing/other';
+import { resourceRoutes } from 'resources';
+import otherRoutes from 'resources/other';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -50,6 +50,7 @@ export default function App() {
           </WithTitle>
         }
       />
+
       <Route
         path="/namespaces/:namespaceId/wasmplugins"
         element={<ExtensibilityList />}
@@ -88,7 +89,7 @@ export default function App() {
         element={<ExtensibilityDetails />}
       />
 
-      {resources}
+      {resourceRoutes}
       {otherRoutes}
       <Route path="" element={<MainFrameRedirection />} />
     </Routes>

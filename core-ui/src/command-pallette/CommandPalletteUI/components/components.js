@@ -92,14 +92,31 @@ export function CommandPalletteHelp({ helpEntries }) {
       </h1>
       <table className="help-text">
         <tbody>
-          {helpEntries.navigation.map(([name, shortName]) => (
+          {helpEntries.navigation.map(([name, shortNames]) => (
             <tr key={name}>
               <td>{name}</td>
-              <td>{shortName || EMPTY_TEXT_PLACEHOLDER}</td>
+              <td>{shortNames?.join(', ') || EMPTY_TEXT_PLACEHOLDER}</td>
             </tr>
           ))}
         </tbody>
       </table>
+      {helpEntries.crds.length && (
+        <>
+          <h1 className="help-header">
+            {t('command-palette.help.crd-aliases')}
+          </h1>
+          <table className="help-text">
+            <tbody>
+              {helpEntries.crds.map(({ name, shortNames }) => (
+                <tr key={name}>
+                  <td>{name}</td>
+                  <td>{shortNames?.join(', ')}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
     </div>
   );
 }

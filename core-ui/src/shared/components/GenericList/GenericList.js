@@ -49,6 +49,7 @@ export const GenericList = ({
   className,
   currentlyEditedResourceUID,
   i18n,
+  allowSlashShortcut,
 }) => {
   const { settings } = useMicrofrontendContext();
   if (pagination) {
@@ -92,6 +93,7 @@ export const GenericList = ({
           showSearchControl={showSearchControl}
           disabled={!entries.length}
           i18n={i18n}
+          allowSlashShortcut={allowSlashShortcut}
         />
       )}
       {extraHeaderContent}

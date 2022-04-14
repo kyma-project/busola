@@ -27,7 +27,7 @@ FROM alpine:3.15.0
 WORKDIR /app
 
 RUN apk --no-cache upgrade &&\
-    apk --no-cache add nginx
+  apk --no-cache add nginx
 
 # apps
 COPY --from=builder /app/core/src /app/core
