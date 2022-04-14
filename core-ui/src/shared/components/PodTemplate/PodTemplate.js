@@ -11,18 +11,22 @@ function getEnvs(envs) {
   if (envs?.length) {
     return (
       <table className="template-table">
-        <tr>
-          <th>Name</th>
-          <th>Value</th>
-        </tr>
-        {envs.map(env => {
-          return (
-            <tr>
-              <td>{env.name}</td>
-              <td>{env.value || env?.valueFrom?.secretKeyRef?.name || ''}</td>
-            </tr>
-          );
-        })}
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {envs.map((env, i) => {
+            return (
+              <tr key={i}>
+                <td>{env.name}</td>
+                <td>{env.value || env?.valueFrom?.secretKeyRef?.name || ''}</td>
+              </tr>
+            );
+          })}
+        </tbody>
       </table>
     );
   } else {
@@ -34,18 +38,22 @@ function getMounts(mounts) {
   if (mounts?.length) {
     return (
       <table className="template-table">
-        <tr>
-          <th>Name</th>
-          <th>Value</th>
-        </tr>
-        {mounts.map(mount => {
-          return (
-            <tr>
-              <td>{mount.name}</td>
-              <td>{mount?.mountPath}</td>
-            </tr>
-          );
-        })}
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {mounts.map((mount, i) => {
+            return (
+              <tr key={i}>
+                <td>{mount.name}</td>
+                <td>{mount?.mountPath}</td>
+              </tr>
+            );
+          })}
+        </tbody>
       </table>
     );
   } else {
