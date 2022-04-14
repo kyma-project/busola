@@ -66,6 +66,14 @@ export default function App() {
         path="/namespaces/:namespaceId/customjobs/:resourceName"
         element={<ExtensibilityDetails />}
       />
+      <Route
+        path="/namespaces/:namespaceId/envoyfilters"
+        element={<ExtensibilityList />}
+      />
+      <Route
+        path="/namespaces/:namespaceId/envoyfilters/:resourceName"
+        element={<ExtensibilityDetails />}
+      />
 
       {resources}
       {otherRoutes}
