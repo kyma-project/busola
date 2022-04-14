@@ -149,7 +149,7 @@ export function EventList(props) {
           description={description}
         />
       )}
-      <Events {...props} allowSlashShortcut={!props.isCompact} />
+      <Events {...props} />
     </>
   );
 }
