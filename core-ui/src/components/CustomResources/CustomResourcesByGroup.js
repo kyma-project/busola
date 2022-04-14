@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Link } from 'shared/components/Link/Link';
 import { Link as FdLink } from 'fundamental-react';
 import pluralize from 'pluralize';
-import { GroupingListPage } from './GroupingListPage/GroupingListPage';
+import { GroupingListPage } from './GroupingListPage';
 
 export default function CustomResourcesByGroup({ namespace }) {
   const { t } = useTranslation();

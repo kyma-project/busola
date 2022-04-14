@@ -1,4 +1,7 @@
 /// <reference types="cypress" />
+function openSearchWithSlashShortcut() {
+  cy.get('body').type('/');
+}
 
 context('Test Custom Resources', () => {
   Cypress.skipAfterFail();
@@ -7,15 +10,17 @@ context('Test Custom Resources', () => {
     cy.loginAndSelectCluster();
   });
 
-  it('Check CR groups list', () => {
+  it('Check CR groups list with slash shortcut', () => {
     cy.navigateTo('Configuration', 'Custom Resources');
 
     cy.getIframeBody()
       .contains('h3', 'Custom Resources')
       .should('be.visible');
 
+    openSearchWithSlashShortcut();
+
     cy.getIframeBody()
-      .find('[type=search]')
+      .find('[type="search"]')
       .type('addons');
 
     cy.getIframeBody()

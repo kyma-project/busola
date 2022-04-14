@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Menu, Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { useEventListener } from 'hooks/useEventListener';
+import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
 
 import 'core-js/es/array/flat-map';
 
@@ -36,10 +38,41 @@ export function SearchInput({
   disabled = false,
   onKeyDown,
   i18n,
+  allowSlashShortcut,
 }) {
   const { t } = useTranslation(null, { i18n });
   const [isSearchHidden, setSearchHidden] = React.useState(true);
   const searchInputRef = React.useRef();
+
+  const onKeyPress = e => {
+    const { key } = e;
+
+    const isCommandPalleteOpen = !!document.querySelector(
+      '#command-palette-background',
+    );
+    if (isCommandPalleteOpen) return;
+
+    if (key === '/' && !disabled && allowSlashShortcut) {
+      openSearchList();
+    }
+  };
+
+  useEffect(() => {
+    if (!isSearchHidden) {
+      openSearchList();
+    }
+  }, [isSearchHidden]);
+
+  useEventListener('keydown', onKeyPress, [disabled, allowSlashShortcut]);
+  useCustomMessageListener(
+    'busola.toggle-open-search',
+    () => {
+      if (!disabled && allowSlashShortcut) {
+        setSearchHidden(false);
+      }
+    },
+    [disabled, allowSlashShortcut],
+  );
 
   const renderSearchList = entries => {
     const suggestions = getSearchSuggestions(entries);
@@ -103,7 +136,7 @@ export function SearchInput({
             <input
               aria-label="search-input"
               ref={searchInputRef}
-              type="text"
+              type="search"
               placeholder={t('common.tooltips.search')}
               value={searchQuery}
               onBlur={() => setSearchHidden(true)}
