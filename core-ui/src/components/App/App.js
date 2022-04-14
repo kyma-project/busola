@@ -15,7 +15,7 @@ import resources from 'routing/resources';
 import otherRoutes from 'routing/other';
 
 export default function App() {
-  const { cluster, language } = useMicrofrontendContext();
+  const { cluster, language, customResources } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
@@ -50,35 +50,23 @@ export default function App() {
           </WithTitle>
         }
       />
-      <Route
-        path="/namespaces/:namespaceId/wasmplugins"
-        element={<ExtensibilityList />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/wasmplugins/:resourceName"
-        element={<ExtensibilityDetails />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/customjobs"
-        element={<ExtensibilityList />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/customjobs/:resourceName"
-        element={<ExtensibilityDetails />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/envoyfilters"
-        element={<ExtensibilityList />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/envoyfilters/:resourceName"
-        element={<ExtensibilityDetails />}
-      />
-      <Route path="/bgpconfigurations" element={<ExtensibilityList />} />
-      <Route
-        path="/bgpconfigurations/:resourceName"
-        element={<ExtensibilityDetails />}
-      />
+
+      {customResources?.map(cr => {
+        return (
+          <>
+            <Route
+              path={`/namespaces/:namespaceId/${cr.navigation.path}`}
+              element={<ExtensibilityList />}
+            />
+            {cr.navigation.hasDetailsView && (
+              <Route
+                path={`/namespaces/:namespaceId/${cr.navigation.path}/:${cr.navigation.path}Name`}
+                element={<ExtensibilityDetails />}
+              />
+            )}
+          </>
+        );
+      })}
 
       {resources}
       {otherRoutes}
