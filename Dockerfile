@@ -16,9 +16,11 @@ ENV CI true
 COPY . /app
 
 RUN make resolve
+RUN make validate
+RUN make pull-licenses
 
-RUN cd /app/core &&  make build
-RUN cd /app/core-ui &&  make build
+RUN cd /app/core && make test && make build
+RUN cd /app/core-ui && make test && make build
 
 # ---- Serve ----
 FROM nginxinc/nginx-unprivileged:1.21
