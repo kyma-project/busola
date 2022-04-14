@@ -5,6 +5,31 @@ import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { getPorts } from '../GetContainersPorts';
 
+import './PodTemplate.scss';
+
+function getEnvs(envs) {
+  if (envs?.length) {
+    return (
+      <table className="env-table">
+        <tr className="table-header">
+          <th>Name</th>
+          <th>Value</th>
+        </tr>
+        {envs.map(env => {
+          return (
+            <tr>
+              <td>{env.name}</td>
+              <td>{env.value}</td>
+            </tr>
+          );
+        })}
+      </table>
+    );
+  } else {
+    return '';
+  }
+}
+
 export function PodTemplate({ template }) {
   const { t } = useTranslation();
 
@@ -32,7 +57,9 @@ export function PodTemplate({ template }) {
             value={getPorts(container.ports)}
           />
         )}
-        {container.env && <LayoutPanelRow name={'Enviroment'} value={'ENV'} />}
+        {container.env && (
+          <LayoutPanelRow name={'Enviroment'} value={getEnvs(container.env)} />
+        )}
         {container.volume && (
           <LayoutPanelRow name={'Volume Mounts'} value={'Mount'} />
         )}
@@ -45,36 +72,44 @@ export function PodTemplate({ template }) {
   }
 
   return (
-    <LayoutPanel className="fd-margin--md container-panel">
+    <LayoutPanel className="fd-margin--md" key="pod-template">
       <LayoutPanel.Header>
         <LayoutPanel.Head title={'Pod template'} />
       </LayoutPanel.Header>
       {template.spec.containers && (
         <>
-          <LayoutPanel.Header>
-            <LayoutPanel.Head title={'Containers'} />
-          </LayoutPanel.Header>
-          {template.spec.containers.map(container => (
-            <ContainerComponent
-              key={container.name}
-              container={container}
-              name="Containers"
-            />
-          ))}
+          <LayoutPanel className="fd-margin--md">
+            <LayoutPanel.Header>
+              <LayoutPanel.Head title={'Containers'} />
+            </LayoutPanel.Header>
+            <LayoutPanel.Body>
+              {template.spec.containers.map(container => (
+                <ContainerComponent
+                  key={container.name}
+                  container={container}
+                  name="Containers"
+                />
+              ))}
+            </LayoutPanel.Body>
+          </LayoutPanel>
         </>
       )}
       {template.spec.initContainers && (
         <>
-          <LayoutPanel.Header>
-            <LayoutPanel.Head title={'Init containers'} />
-          </LayoutPanel.Header>
-          {template.spec.initContainers.map(container => (
-            <ContainerComponent
-              key={container.name}
-              container={container}
-              name="Init Conatiners"
-            />
-          ))}
+          <LayoutPanel className="fd-margin--md">
+            <LayoutPanel.Header>
+              <LayoutPanel.Head title={'Init containers'} />
+            </LayoutPanel.Header>
+            <LayoutPanel.Body>
+              {template.spec.initContainers.map(container => (
+                <ContainerComponent
+                  key={container.name}
+                  container={container}
+                  name="Init Conatiners"
+                />
+              ))}
+            </LayoutPanel.Body>
+          </LayoutPanel>
         </>
       )}
     </LayoutPanel>
