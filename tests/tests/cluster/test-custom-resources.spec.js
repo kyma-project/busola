@@ -15,7 +15,7 @@ context('Test Custom Resources', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .find('[type=search]')
+      .find('[role="search"] [aria-label="open-search"]')
       .type('addons');
 
     cy.getIframeBody()
