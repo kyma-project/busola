@@ -8,7 +8,7 @@ import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { Button } from 'fundamental-react';
 import { ClusterStorageType } from '../ClusterStorageType';
 import { useKymaVersionQuery } from './useKymaVersionQuery';
-import { YamlUploadDialog } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { YamlUploadDialog } from 'components/Predefined/Details/Namespace/YamlUpload/YamlUploadDialog';
 
 export function ClusterOverviewHeader() {
   const { t } = useTranslation();

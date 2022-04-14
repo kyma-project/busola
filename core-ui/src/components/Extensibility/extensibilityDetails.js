@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { usePrepareDetailsProps } from 'resources/helpers';
+import { usePrepareDetailsProps } from 'routing/createResourceRoutes';
 import {
   CreateExtensibilityList,
   getResourceChild,

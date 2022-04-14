@@ -33,7 +33,7 @@ context('Test invalid kubeconfig', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Drag your file here or click to upload')
+      .contains('Drag file here')
       .attachFile('kubeconfig--invalid.txt', { subjectType: 'drag-n-drop' });
 
     cy.getIframeBody()

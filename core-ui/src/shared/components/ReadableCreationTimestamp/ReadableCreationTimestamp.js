@@ -17,8 +17,6 @@ const rtf = new Intl.RelativeTimeFormat('en', {
 });
 
 export const ReadableCreationTimestamp = ({ timestamp }) => {
-  if (!timestamp) return null;
-
   const now = new Date();
   const createdAt = new Date(timestamp);
 

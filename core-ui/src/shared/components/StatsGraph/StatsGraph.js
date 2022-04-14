@@ -323,9 +323,7 @@ export function StatsGraph({
         if (value.length === 1 && !labels?.[0]) {
           labelContent = [getSIPrefix(value[0], binary, { unit }).string];
         } else {
-          // graphs are created from the bottom to the top. reverse the tooltips order to align.
-          const valueReversed = [...value]?.reverse();
-          labelContent = valueReversed?.map((val, idx) => {
+          labelContent = value.map((val, idx) => {
             const labelTitle = labels?.[idx] || idx + 1;
             const labelValue = getSIPrefix(val, binary, { unit }).string;
             return `${labelTitle}: ${labelValue}`;

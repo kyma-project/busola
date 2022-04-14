@@ -1,7 +1,6 @@
 import React from 'react';
-import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
-import { K8sNameField } from 'shared/ResourceForm/fields';
+import { K8sNameInput } from 'shared/components/K8sNameInput/K8sNameInput';
 
 import { Button, MessageStrip } from 'fundamental-react';
 
@@ -12,20 +11,25 @@ import { RuntimeResources } from 'shared/ResourceForm/fields';
 import './Containers.scss';
 
 function SingleContainerSection({ container, setContainer }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <ResourceForm.Wrapper resource={container} setResource={setContainer}>
-      <K8sNameField
-        propertyPath="$.name"
-        setValue={name => {
-          jp.value(container, '$.name', name);
-          setContainer(container);
-        }}
+      <ResourceForm.FormField
         required
-        kind={t('deployments.create-modal.advanced.image')}
-        pattern=".*"
-        showHelp={false}
+        label={t('common.headers.name')}
+        propertyPath="$.name"
+        input={({ value, setValue }) => (
+          <K8sNameInput
+            value={value}
+            onChange={e => setValue(e.target.value)}
+            compact
+            required
+            showLabel={false}
+            i18n={i18n}
+            kind={t('deployments.create-modal.advanced.image')}
+          />
+        )}
       />
       <ResourceForm.FormField
         required

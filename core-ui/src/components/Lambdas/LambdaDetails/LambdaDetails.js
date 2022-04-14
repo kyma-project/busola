@@ -51,12 +51,10 @@ export default function LambdaDetails({ lambda }) {
             title={t('functions.details.title.configuration')}
           >
             <ApiRules
-              prefix={lambda.metadata.name}
               serviceName={lambda.metadata.name}
               namespace={lambda.metadata.namespace}
             />
             <Subscriptions
-              prefix={lambda.metadata.name}
               serviceName={lambda.metadata.name}
               namespace={lambda.metadata.namespace}
             />

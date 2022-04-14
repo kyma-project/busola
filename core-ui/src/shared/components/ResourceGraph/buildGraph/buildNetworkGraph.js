@@ -94,9 +94,7 @@ export function buildNetworkGraph({ store }, config) {
           : store['Pod'][0].metadata.uid;
         const podName = getCombinedResourceName(store['Pod']);
 
-        const label = multiplePods
-          ? `Pods\n${wrap(podName)}`
-          : `Pod\n${wrap(podName)}`;
+        const label = `Pod\n${wrap(podName)}`;
         let pod = `"${podId}" [id="${podId}" class="pod" margin="0.2,0.2" label="${label}"][shape=box]`;
         // assume only one deployment
         const deployment = store['Deployment']?.[0];
@@ -154,6 +152,9 @@ export function buildNetworkGraph({ store }, config) {
           const podId = multiplePods
             ? 'composite-pod'
             : store['Pod'][0].metadata.uid;
+          const subscriptionIds = store['Subscription']?.map(
+            subscription => subscription.metadata.uid,
+          );
           currentLayer.forEach(svc => {
             if (!!deployment && store['Pod']?.length) {
               strEdges.push(
@@ -162,6 +163,9 @@ export function buildNetworkGraph({ store }, config) {
                 }),
               );
             }
+            (subscriptionIds || []).forEach(subscription =>
+              strEdges.push(makeEdge(svc.metadata.uid, subscription)),
+            );
           });
         }
       }

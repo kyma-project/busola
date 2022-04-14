@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { MemoizedGraphviz } from './GraphvizComponent';
+import { Graphviz } from 'graphviz-react';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-
+import { navigateToResource } from 'shared/hooks/navigate';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useRelatedResources } from 'shared/components/ResourceGraph/useRelatedResources';
 import { useIntersectionObserver } from 'shared/hooks/useIntersectionObserver';
@@ -12,17 +12,16 @@ import { useTranslation } from 'react-i18next';
 import { useMinWidth, TABLET } from 'hooks/useMinWidth';
 import { LayoutPanel } from 'fundamental-react';
 import { SaveGraphControls } from './SaveGraphControls';
-import { DetailsCard } from './DetailsCard/DetailsCard';
 import './ResourceGraph.scss';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 function ResourceGraph({ resource, i18n, config }) {
   const { features } = useMicrofrontendContext();
   const { t } = useTranslation(['translation'], { i18n });
   const [dotSrc, setDotSrc] = useState('');
   const [isReady, setReady] = useState(false);
+
   const [graphEl, setGraphEl] = useState(null);
-  const [clickedResource, setClickedResource] = useState(null);
+
   const isTabletOrWider = useMinWidth(TABLET);
   const { hasBeenInView } = useIntersectionObserver(graphEl, {
     skip: !isTabletOrWider,
@@ -43,9 +42,11 @@ function ResourceGraph({ resource, i18n, config }) {
 
           if (!node) continue;
 
-          node.onclick = () => {
-            setClickedResource(res);
-          };
+          if (res.metadata.uid === resource.metadata.uid) {
+            node.classList.add('root-node');
+          } else {
+            node.onclick = () => navigateToResource(res);
+          }
         }
       }
     };
@@ -74,7 +75,7 @@ function ResourceGraph({ resource, i18n, config }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasBeenInView]);
   if (!features.VISUAL_RESOURCES?.isEnabled) {
-    return EMPTY_TEXT_PLACEHOLDER;
+    return '';
   }
 
   const actions = !startedLoading && null;
@@ -97,19 +98,22 @@ function ResourceGraph({ resource, i18n, config }) {
         <LayoutPanel.Body>
           <ErrorBoundary i18n={i18n} customMessage={t('resource-graph.error')}>
             <div id="graph-area">
-              <MemoizedGraphviz dotSrc={dotSrc} isReady={isReady} />
+              <Graphviz
+                dot={dotSrc}
+                // https://github.com/magjac/d3-graphviz#selection_graphviz
+                options={{
+                  height: '100%',
+                  width: '100%',
+                  zoom: isReady, // if always true, then the graph will jump on first pan or zoom
+                  useWorker: false,
+                }}
+              />
               <SaveGraphControls
                 content={dotSrc}
                 // .gv extension is preferred instead of .dot
                 name={`${resource.kind} ${resource.metadata.name}.gv`}
                 i18n={i18n}
               />
-              {clickedResource ? (
-                <DetailsCard
-                  resource={clickedResource}
-                  handleCloseCard={() => setClickedResource(null)}
-                />
-              ) : null}
             </div>
           </ErrorBoundary>
         </LayoutPanel.Body>

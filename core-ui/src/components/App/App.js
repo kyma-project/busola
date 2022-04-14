@@ -11,8 +11,8 @@ import { useSentry } from 'hooks/useSentry';
 import { ExtensibilityDetails } from 'components/Extensibility/extensibilityDetails';
 import { ExtensibilityList } from 'components/Extensibility/extensibilityList';
 
-import { resourceRoutes } from 'resources';
-import otherRoutes from 'resources/other';
+import resources from 'routing/resources';
+import otherRoutes from 'routing/other';
 
 export default function App() {
   const { cluster, language, customResources } = useMicrofrontendContext();
@@ -85,7 +85,7 @@ export default function App() {
         }
       })}
 
-      {resourceRoutes}
+      {resources}
       {otherRoutes}
       <Route path="" element={<MainFrameRedirection />} />
     </Routes>

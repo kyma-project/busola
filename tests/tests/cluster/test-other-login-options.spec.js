@@ -19,7 +19,7 @@ context('Test other login options', () => {
         .click();
 
       cy.getIframeBody()
-        .contains('Drag your file here or click to upload')
+        .contains('Drag file here')
         .attachFile(
           {
             fileContent: jsyaml.dump(kubeconfig),

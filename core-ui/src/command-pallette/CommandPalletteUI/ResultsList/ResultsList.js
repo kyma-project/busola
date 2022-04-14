@@ -57,7 +57,7 @@ export function ResultsList({
       {results?.length ? (
         results.map((result, i) => (
           <Result
-            key={`${result.label}|${result.category}|${result.customActionText}`}
+            key={result.label + result.category}
             {...result}
             index={i}
             activeIndex={activeIndex}

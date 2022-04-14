@@ -44,7 +44,7 @@ context('Test multiple context kubeconfig', () => {
         .click();
 
       cy.getIframeBody()
-        .contains('Drag your file here or click to upload')
+        .contains('Drag file here')
         .attachFile(
           {
             fileContent: jsyaml.dump(kubeconfig),

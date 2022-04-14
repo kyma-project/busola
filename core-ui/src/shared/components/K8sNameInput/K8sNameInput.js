@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { useValidation } from 'shared/hooks/useValidation';
 
-export const k8sNamePattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
+const pattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
 
 export const K8sNameInput = ({
   _ref,
@@ -22,7 +22,6 @@ export const K8sNameInput = ({
   value,
   onChange,
   inputRef,
-  pattern = k8sNamePattern,
   ...props
 }) => {
   const { t } = useTranslation(null, { i18n });
@@ -78,3 +77,5 @@ K8sNameInput.propTypes = {
   showHelp: PropTypes.bool,
   required: PropTypes.bool,
 };
+
+export const k8sNamePattern = pattern;

@@ -1,8 +1,8 @@
 import React from 'react';
-import ApiRulesListComponent from 'resources/APIRules/APIRuleList';
+import ApiRulesListComponent from 'components/Predefined/List/ApiRules.list';
 import { useTranslation } from 'react-i18next';
 
-export function ApiRulesList({ serviceName, namespace, prefix }) {
+export function ApiRulesList({ serviceName, namespace }) {
   const { i18n } = useTranslation();
   const params = {
     hasDetailsView: true,
@@ -12,7 +12,7 @@ export function ApiRulesList({ serviceName, namespace, prefix }) {
     namespace,
     isCompact: true,
     showTitle: true,
-    createFormProps: { serviceName, prefix },
+    createFormProps: { serviceName },
     filter: apiRule => apiRule.spec.service.name === serviceName,
     i18n,
   };

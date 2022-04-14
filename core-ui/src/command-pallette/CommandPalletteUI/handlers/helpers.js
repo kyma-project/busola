@@ -1,14 +1,12 @@
 import didYouMean from 'didyoumean';
-import pluralize from 'pluralize';
 
 export function getSuggestion(phrase, itemList) {
   return didYouMean(phrase, itemList);
 }
 
+// assume first item is the full name
 export function toFullResourceType(resourceType, resources) {
-  const fullResourceType = resources.find(r => r.aliases.includes(resourceType))
-    ?.resourceType;
-  return fullResourceType || resourceType;
+  return resources.find(r => r.includes(resourceType))?.[0] || resourceType;
 }
 
 export function getSuggestionsForSingleResource({
@@ -34,9 +32,8 @@ export function autocompleteForResources({ tokens, resources, resourceTypes }) {
   const tokenToAutocomplete = tokens[tokens.length - 1];
   switch (tokens.length) {
     case 1: // type
-      return resourceTypes
-        .flatMap(rT => rT.aliases)
-        .filter(alias => alias.startsWith(type));
+      // take only first, plural form
+      return resourceTypes.flatMap(t => t[0]).filter(rT => rT.startsWith(type));
     case 2: // name
       const resourceNames = resources.map(n => n.metadata.name);
       return resourceNames
@@ -45,21 +42,4 @@ export function autocompleteForResources({ tokens, resources, resourceTypes }) {
     default:
       return [];
   }
-}
-
-export function extractShortNames({
-  resourceType: pluralResourceType,
-  aliases,
-}) {
-  const singularResourceType = pluralize(pluralResourceType, 1);
-  return aliases.filter(
-    alias => alias !== singularResourceType && alias !== pluralResourceType,
-  );
-}
-
-export function findNavigationNode(resourceType, nodes) {
-  return nodes.find(
-    n =>
-      n.resourceType === resourceType || n.navigationContext === resourceType,
-  );
 }

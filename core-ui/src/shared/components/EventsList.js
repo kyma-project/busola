@@ -1,7 +1,6 @@
 import React from 'react';
-import { EventList as EventListComponent } from 'resources/Events/EventList';
+import EventsListComponent from 'components/Predefined/List/Events.list';
 import { useTranslation } from 'react-i18next';
-
 export function EventsList({
   namespace = null,
   filter,
@@ -24,5 +23,5 @@ export function EventsList({
     i18n,
   };
 
-  return <EventListComponent {...eventsParams} />;
+  return <EventsListComponent {...eventsParams} />;
 }

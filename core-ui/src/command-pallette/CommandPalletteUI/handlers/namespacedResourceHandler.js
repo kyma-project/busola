@@ -1,92 +1,61 @@
 import LuigiClient from '@luigi-project/client';
+import pluralize from 'pluralize';
 import { LOADING_INDICATOR } from '../useSearchResults';
 import { getApiPath } from 'shared/utils/helpers';
 import {
   getSuggestion,
   toFullResourceType,
   autocompleteForResources,
-  extractShortNames,
-  findNavigationNode,
 } from './helpers';
 
 const resourceTypes = [
-  { resourceType: 'cronjobs', aliases: ['cj', 'cronjob', 'cronjobs'] },
-  { resourceType: 'daemonsets', aliases: ['daemonset', 'daemonsets', 'ds'] },
-  {
-    resourceType: 'deployments',
-    aliases: ['deploy', 'deployment', 'deployments', 'dp'],
-  },
-  { resourceType: 'configmaps', aliases: ['cm', 'configmap', 'configmaps'] },
-  {
-    resourceType: 'horizontalpodautoscalers',
-    aliases: ['horizontalpodautoscaler', 'horizontalpodautoscalers', 'hpa'],
-  },
-  { resourceType: 'jobs', aliases: ['jo', 'job', 'jobs'] },
-  { resourceType: 'ingresses', aliases: ['ing', 'ingress', 'ingresses'] },
-  { resourceType: 'pods', aliases: ['po', 'pod', 'pods'] },
-  {
-    resourceType: 'limitranges',
-    aliases: ['limitrange', 'limitranges', 'limits'],
-  },
-  {
-    resourceType: 'resourcequotas',
-    aliases: ['quota', 'resourcequota', 'resourcequotas'],
-  },
-  {
-    resourceType: 'rolebindings',
-    aliases: ['rb', 'rolebinding', 'rolebindings'],
-  },
-  { resourceType: 'roles', aliases: ['ro', 'role', 'roles'] },
-  { resourceType: 'secrets', aliases: ['sec', 'secret', 'secrets'] },
-  {
-    resourceType: 'persistentvolumeclaims',
-    aliases: ['persistentvolumeclaim', 'persistentvolumeclaims', 'pvc'],
-  },
-  { resourceType: 'services', aliases: ['service', 'services', 'svc'] },
-  {
-    resourceType: 'statefulsets',
-    aliases: ['statefulset', 'statefulsets', 'sts'],
-  },
-  {
-    resourceType: 'networkpolicies',
-    aliases: ['netpol', 'networkpolicies', 'networkpolicy', 'np'],
-  },
-  { resourceType: 'serviceaccounts', aliases: ['sa', 'serviceaccount'] },
-  { resourceType: 'replicasets', aliases: ['replicaset', 'replicasets', 'rs'] },
-  // we don't have nodes for those resources, but let's keep them here
-  {
-    resourceType: 'replicationcontrollers',
-    aliases: ['rc', 'replicationcontroller', 'replicationcontrollers'],
-  },
-  { resourceType: 'podtemplates', aliases: ['podtemplate', 'podtemplates'] },
-  {
-    resourceType: 'podsecuritypolicies',
-    aliases: ['podsecuritypolicies', 'podsecuritypolicy', 'psp'],
-  },
-  {
-    resourceType: 'poddisruptionbudgets',
-    aliases: ['pdb', 'poddisruptionbudget', 'poddisruptionbudgets'],
-  },
-  { resourceType: 'leases', aliases: ['lease', 'leases'] },
-  { resourceType: 'endpoints', aliases: ['endpoints', 'ep'] },
-  {
-    resourceType: 'csistoragecapacities',
-    aliases: ['csistoragecapacities', 'csistoragecapacity'],
-  },
-  {
-    resourceType: 'controllerrevisions',
-    aliases: ['controllerrevision', 'controllerrevisions'],
-  },
+  ['configmaps', 'cm'],
+  ['pods', 'po'],
+  ['secrets'],
+  ['serviceaccounts', 'sa'],
+  ['services', 'svc'],
+  ['addonsconfigurations', 'addons'],
+  ['daemonsets', 'ds'],
+  ['deployments', 'deploy'],
+  ['replicasets', 'rs'],
+  ['statefulsets', 'sts'],
+  ['cronjobs', 'cj'],
+  ['jobs'],
+  ['certificates', 'cert', 'certs'],
+  ['issuers'],
+  ['dnsentries', 'dnse'],
+  ['dnsproviders', 'dnspr'],
+  ['subscriptions'],
+  ['ingresses', 'ing'],
+  ['networkpolicies', 'np'],
+  ['apirules'],
+  ['oauth2clients'],
+  ['destinationrules', 'dr'],
+  ['gateways', 'gw'],
+  ['virtualservices', 'vs'],
+  ['authorizationpolicies', 'ap'],
+  ['rolebindings', 'rb', 'rbs'],
+  ['roles'],
+  ['functions', 'fn'],
+  ['gitrepositories', 'gitrepos', 'repos'],
+  ['horizontalpodautoscalers', 'hpa'],
+  ['persistentvolumeclaims', 'pvc'],
+  ['serviceentries', 'se'],
+  ['sidecars'],
 ];
+const extendedResourceTypes = resourceTypes.map(aliases => [
+  ...aliases,
+  pluralize(aliases[0], 1),
+]);
 
 function getAutocompleteEntries({ tokens, namespace, resourceCache }) {
-  const fullResourceType = toFullResourceType(tokens[0], resourceTypes);
+  const fullResourceType = toFullResourceType(tokens[0], extendedResourceTypes);
   const resources = resourceCache[`${namespace}/${fullResourceType}`] || [];
 
   return autocompleteForResources({
     tokens,
     resources,
-    resourceTypes,
+    resourceTypes: extendedResourceTypes,
   });
 }
 
@@ -94,18 +63,18 @@ function getSuggestions({ tokens, namespace, resourceCache }) {
   const [type, name] = tokens;
   const suggestedType = getSuggestion(
     type,
-    resourceTypes.flatMap(n => n.aliases),
+    extendedResourceTypes.flatMap(n => n),
   );
   if (name) {
-    const resourceType = toFullResourceType(
+    const fullResourceType = toFullResourceType(
       suggestedType || type,
-      resourceTypes,
+      extendedResourceTypes,
     );
     const resourceNames = (
-      resourceCache[`${namespace}/${resourceType}`] || []
+      resourceCache[`${namespace}/${fullResourceType}`] || []
     ).map(n => n.metadata.name);
     const suggestedName = getSuggestion(name, resourceNames);
-    return `${suggestedType || type} ${suggestedName || name}`;
+    return `${suggestedType} ${suggestedName}`;
   } else {
     return suggestedType;
   }
@@ -136,7 +105,7 @@ function makeListItem(item, matchedNode, t) {
 }
 
 function getApiPathForQuery({ tokens, namespaceNodes }) {
-  const resourceType = toFullResourceType(tokens[0], resourceTypes);
+  const resourceType = toFullResourceType(tokens[0], extendedResourceTypes);
   return getApiPath(resourceType, namespaceNodes);
 }
 
@@ -145,20 +114,9 @@ async function fetchNamespacedResource(context) {
   if (!apiPath) {
     return;
   }
-  const {
-    fetch,
-    namespace,
-    tokens,
-    namespaceNodes,
-    updateResourceCache,
-  } = context;
-  const resourceType = toFullResourceType(tokens[0], resourceTypes);
-  const matchedNode = findNavigationNode(resourceType, namespaceNodes);
 
-  if (!matchedNode) {
-    return;
-  }
-
+  const { fetch, namespace, tokens, updateResourceCache } = context;
+  const resourceType = toFullResourceType(tokens[0], extendedResourceTypes);
   try {
     const path = `${apiPath}/namespaces/${namespace}/${resourceType}`;
     const response = await fetch(path);
@@ -177,8 +135,13 @@ function createResults({
   t,
 }) {
   const [type, name] = tokens;
-  const resourceType = toFullResourceType(type, resourceTypes);
-  const matchedNode = findNavigationNode(resourceType, namespaceNodes);
+
+  const resourceType = toFullResourceType(type, extendedResourceTypes);
+  const matchedNode = namespaceNodes.find(
+    n =>
+      n.resourceType === resourceType || n.navigationContext === resourceType,
+  );
+
   if (!matchedNode) {
     return;
   }
@@ -222,8 +185,12 @@ export const namespacedResourceHandler = {
   getSuggestions,
   fetchResources: fetchNamespacedResource,
   createResults,
-  getNavigationHelp: ({ namespaceNodes }) =>
-    resourceTypes
-      .filter(rT => findNavigationNode(rT.resourceType, namespaceNodes))
-      .map(rT => [rT.resourceType, extractShortNames(rT)]),
+  getNavigationHelp: () =>
+    resourceTypes.map(types => {
+      if (types.length === 1) {
+        return [types[0]];
+      } else {
+        return [types[0], types[types.length - 1]];
+      }
+    }),
 };

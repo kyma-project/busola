@@ -113,7 +113,7 @@ export const addExternalNodes = externalNodes => {
   return navigationNodes;
 };
 
-export function getCorrespondingNamespaceLocation(namespaceName) {
+function getCorrespondingNamespaceLocation(namespaceName) {
   const addressTokens = window.location.pathname.split('/');
   // check if we are in namespaces context
   if (addressTokens[3] !== 'namespaces') {

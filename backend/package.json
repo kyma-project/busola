@@ -17,7 +17,7 @@
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "express": "^4.17.3",
-    "express-jwt": "^6.1.1",
+    "express-jwt": "^6.1.0",
     "https": "^1.0.0",
     "jwks-rsa": "^2.0.5",
     "lodash.merge": "^4.6.2",
@@ -35,11 +35,6 @@
     "webpack": "^5.10.1",
     "webpack-cli": "^4.2.0",
     "webpack-node-externals": "^2.5.2"
-  },
-  "overrides": {
-    "express-jwt": {
-      "async": "^3.2.2"
-    }
   },
   "node": {
     "child_process": false

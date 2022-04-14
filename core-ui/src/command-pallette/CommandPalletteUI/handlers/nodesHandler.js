@@ -95,5 +95,5 @@ export const nodesHandler = {
   getSuggestions,
   fetchResources: concernsNodes,
   createResults,
-  getNavigationHelp: () => [['nodes', ['no']]],
+  getNavigationHelp: () => [['nodes', 'no']],
 };

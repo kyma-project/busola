@@ -1,5 +1,5 @@
 import React from 'react';
-import { PodList } from 'resources/Pods/PodList';
+import PodsListComponent from 'components/Predefined/List/Pod/Pods.list';
 import { useTranslation } from 'react-i18next';
 
 export const RelatedPods = ({ namespace = '', filter }) => {
@@ -16,5 +16,5 @@ export const RelatedPods = ({ namespace = '', filter }) => {
     i18n,
   };
 
-  return <PodList {...podListParams} />;
+  return <PodsListComponent {...podListParams} />;
 };
