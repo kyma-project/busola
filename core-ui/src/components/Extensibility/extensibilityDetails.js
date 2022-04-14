@@ -70,10 +70,20 @@ export const ExtensibilityDetails = () => {
     ]);
   }, [resMetaData]);
 
+  const breadcrumbs = [
+    {
+      name: resMetaData.navigation.label || resMetaData.navigation.path,
+      path: '/',
+      fromContext: resMetaData.navigation.path,
+    },
+    { name: '' },
+  ];
+
   return (
     <ResourceDetails
       customColumns={customColumns}
       customComponents={customComponents}
+      breadcrumbs={breadcrumbs}
       {...detailsProps}
     />
   );
