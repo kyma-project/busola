@@ -815,7 +815,6 @@ deployments:
   description: <0>Deployment</0> is a Kubernetes object that represents a replicated application running on your cluster.
   headers:
     images: Images
-    pod-template: Pod Template
     pods: $t(pods.title)
   name_singular: Deployment
   title: Deployments
@@ -1624,12 +1623,15 @@ pods:
     type: Type
     volume-name: Volume Name
   labels:
+    args: Args
+    command: Command
     constainers: Containers
     env: Environment
     filter-timeframe: 'Filter timeframe by:'
     image: Image
     image-pull-policy: Image Pull Policy
     init-constainers: Init Containers
+    pod-template: Pod Template
     ports: Ports
     reverse-logs: Reverse logs
     save-to-file: Save to a file

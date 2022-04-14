@@ -95,13 +95,13 @@ export function PodTemplate({ template }) {
         )}
         {container.command && (
           <LayoutPanelRow
-            name={'Command'}
+            name={t('pods.labels.command')}
             value={<p className="code-block">{container.command.join(' ')}</p>}
           />
         )}
         {container.args && (
           <LayoutPanelRow
-            name={'Args'}
+            name={t('pods.labels.args')}
             value={<p className="code-block">{container.args.join(' ')}</p>}
           />
         )}
@@ -116,7 +116,7 @@ export function PodTemplate({ template }) {
   return (
     <LayoutPanel className="fd-margin--md" key="pod-template">
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('deployments.headers.pod-template')} />
+        <LayoutPanel.Head title={t('pods.labels.pod-template')} />
       </LayoutPanel.Header>
       {template.spec.containers && (
         <>
