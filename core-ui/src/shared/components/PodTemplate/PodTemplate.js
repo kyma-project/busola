@@ -19,12 +19,8 @@ function getEnvs(envs) {
         {envs.map(env => {
           return (
             <tr>
-              <td>{env.name || EMPTY_TEXT_PLACEHOLDER}</td>
-              <td>
-                {env.value ||
-                  env?.valueFrom?.secretKeyRef?.name ||
-                  EMPTY_TEXT_PLACEHOLDER}
-              </td>
+              <td>{env.name}</td>
+              <td>{env.value || env?.valueFrom?.secretKeyRef?.name || ''}</td>
             </tr>
           );
         })}
@@ -47,7 +43,7 @@ function getMounts(mounts) {
           return (
             <tr>
               <td>{mount.name}</td>
-              <td>{mount?.mountPath || EMPTY_TEXT_PLACEHOLDER}</td>
+              <td>{mount?.mountPath}</td>
             </tr>
           );
         })}
@@ -95,6 +91,18 @@ export function PodTemplate({ template }) {
           <LayoutPanelRow
             name={t('pods.labels.volume-mounts')}
             value={getMounts(container.volumeMounts)}
+          />
+        )}
+        {container.command && (
+          <LayoutPanelRow
+            name={'Command'}
+            value={<p className="code-block">{container.command.join(' ')}</p>}
+          />
+        )}
+        {container.args && (
+          <LayoutPanelRow
+            name={'Args'}
+            value={<p className="code-block">{container.args.join(' ')}</p>}
           />
         )}
       </LayoutPanel.Body>

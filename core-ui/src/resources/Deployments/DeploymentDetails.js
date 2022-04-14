@@ -36,7 +36,7 @@ export function DeploymentDetails(props) {
     />
   );
 
-  const PodTemplates = deployment => (
+  const DeploymentPodTemplate = deployment => (
     <PodTemplate template={deployment.spec.template} />
   );
 
@@ -63,7 +63,7 @@ export function DeploymentDetails(props) {
         HPASubcomponent,
         StatsComponent,
         MatchSelector,
-        PodTemplates,
+        DeploymentPodTemplate,
       ]}
       customColumns={customColumns}
       createResourceForm={DeploymentCreate}
