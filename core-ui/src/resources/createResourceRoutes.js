@@ -1,9 +1,9 @@
-import { Route } from 'react-router-dom';
 import React, { Suspense } from 'react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { usePrepareDetailsProps, usePrepareListProps } from './helpers';
+import { Route } from 'react-router-dom';
 
-const createPath = (
+export const createPath = (
   config = { namespaced: true, detailsView: false, pathSegment: '' },
 ) => {
   const { namespaced = true, detailsView = false, pathSegment = '' } = config;
@@ -23,16 +23,17 @@ const DetailsWrapper = ({ children, resourceType, resourceI18Key }) => {
   return React.cloneElement(children, props);
 };
 
-export function createResourceRoutes({
+export const createResourceRoutes = ({
   List = null,
   Details = null,
   // Create = null,
   namespaced = true,
   resourceType = '',
   resourceI18Key = '',
-}) {
+}) => {
   // define resourceI18Key when calling the function, to set a custom plural resource name, for example to fix the capitalization
   // const { namespaced = true, resourceType = '', resourceI18Key = '' } = config;
+
   const pathSegment = resourceType.toLowerCase();
 
   const listPath = createPath({ namespaced, pathSegment });
@@ -72,4 +73,4 @@ export function createResourceRoutes({
       ) : null}
     </React.Fragment>
   );
-}
+};

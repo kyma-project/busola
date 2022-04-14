@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { usePrepareDetailsProps } from 'routing/createResourceRoutes';
 import {
   CreateExtensibilityList,
   getResourceChild,
@@ -10,6 +9,7 @@ import {
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { usePrepareDetailsProps } from 'resources/helpers';
 
 export const ExtensibilityDetails = () => {
   const resMetaData = useGetCRbyPath();

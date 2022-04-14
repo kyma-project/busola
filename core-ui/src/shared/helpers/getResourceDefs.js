@@ -1,21 +1,22 @@
 import pluralize from 'pluralize';
-import * as components from 'components/Predefined/Create';
+import { resources } from 'resources';
 
 export function getResourceDefs(defType, t, context) {
-  return Object.values(components)
-    .filter(component => component[defType])
-    .map(component => component[defType](t, context))
+  return resources
+    .filter(resource => resource.resourceType === defType)
+    .map(({ resourceGraphConfig }) => {
+      return resourceGraphConfig(t, context);
+    })
     .flat();
 }
 
 export function getPerResourceDefs(defType, t, context) {
   return Object.fromEntries(
-    Object.entries(components)
-      .filter(([, component]) => component[defType])
-      .map(([componentName, component]) => {
-        // ResourcesCreate -> Resource
-        const kind = pluralize(componentName.replace('Create', ''), 1);
-        const value = component[defType](t, context);
+    resources
+      .filter(resource => !!resource[defType])
+      .map(({ resourceType, resourceGraphConfig }) => {
+        const kind = pluralize(resourceType, 1);
+        const value = resourceGraphConfig(t, context);
         return [kind, value];
       }),
   );

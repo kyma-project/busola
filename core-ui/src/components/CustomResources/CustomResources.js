@@ -1,10 +1,11 @@
 import React from 'react';
 import * as jp from 'jsonpath';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { useNavigateToCustomResource } from '../Predefined/Details/CustomResourceDefinitions/useNavigateToCustomResource';
-import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { CRCreate } from 'components/Predefined/Details/CustomResourceDefinitions/CRCreate';
 import pluralize from 'pluralize';
+
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { useNavigateToCustomResource } from 'resources/CustomResourceDefinitions/useNavigateToCustomResource';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { CRCreate } from 'resources/CustomResourceDefinitions/CRCreate';
 
 export function CustomResources({
   crd,
@@ -46,7 +47,6 @@ export function CustomResources({
     hasDetailsView: true,
     navigateFn: cr => navigateFn(cr, crd),
     resourceUrl,
-    resourceName: crd.spec.names.kind,
     title: pluralize(crd.spec.names.kind),
     resourceType: crd.spec.names.kind,
     namespace,
@@ -57,6 +57,7 @@ export function CustomResources({
     showNamespace,
     hideCreateOption,
     createResourceForm: props => <CRCreate {...props} crd={crd} />,
+    allowSlashShortcut: true,
   };
 
   return <ResourcesList {...params} />;

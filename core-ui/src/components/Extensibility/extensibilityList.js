@@ -2,12 +2,12 @@ import React from 'react';
 import * as jp from 'jsonpath';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { usePrepareListProps } from 'routing/createResourceRoutes';
 import { ExtensibilityCreate } from './extensibilityCreate';
 import { Labels } from 'shared/components/Labels/Labels';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Link } from 'shared/components/Link/Link';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { usePrepareListProps } from 'resources/helpers';
 
 function resolveBadgeType(value, columnProps) {
   const { successValues, warningValues } = columnProps;

@@ -102,10 +102,15 @@ const splitName = name => {
 export const prettifyNamePlural = (resourceName, resourceType) => {
   return capitalize(resourceName) || splitName(capitalize(resourceType));
 };
-
 export const prettifyNameSingular = (resourceName, resourceType) => {
   const resources = prettifyNamePlural(resourceName, resourceType);
   return pluralize(resources, 1);
+};
+
+export const prettifyKind = kind => {
+  const r = /([A-Z]+(?![a-z])|[A-Z][a-z]+)/g;
+  const parts = kind.match(r);
+  return parts.join(' ');
 };
 
 export const getErrorMessage = (error, message = null) => {

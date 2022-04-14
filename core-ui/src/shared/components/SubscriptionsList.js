@@ -1,6 +1,7 @@
 import React from 'react';
-import SubscriptionsListComponent from 'components/Predefined/List/Subscription/Subscriptions.list';
 import { useTranslation } from 'react-i18next';
+
+import SubscriptionsListComponent from 'resources/Subscriptions/SubscriptionList';
 
 const getServiceName = sink => {
   if (typeof sink !== 'string') return '';
@@ -10,7 +11,7 @@ const getServiceName = sink => {
   return sink?.substring(startIndex, nextDot);
 };
 
-export function SubscriptionsList({ serviceName, namespace }) {
+export function SubscriptionsList({ serviceName, namespace, prefix }) {
   const { i18n } = useTranslation();
   const params = {
     hasDetailsView: true,
@@ -20,7 +21,7 @@ export function SubscriptionsList({ serviceName, namespace }) {
     namespace,
     isCompact: true,
     showTitle: true,
-    createFormProps: { serviceName },
+    createFormProps: { serviceName, prefix },
     filter: subscription => {
       return getServiceName(subscription.spec.sink) === serviceName;
     },

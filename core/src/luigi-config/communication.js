@@ -14,8 +14,10 @@ import { setFeatureToggle } from './utils/feature-toggles';
 import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
+import { getCorrespondingNamespaceLocation } from './navigation/navigation-helpers';
 
 addCommandPaletteHandler();
+addOpenSearchHandler();
 
 window.addEventListener('click', () => {
   Luigi.customMessages().sendToAll({
@@ -115,6 +117,16 @@ export const communication = {
         type,
       });
     },
+    'busola.switchNamespace': ({ namespaceName }) => {
+      const alternativeLocation = getCorrespondingNamespaceLocation(
+        namespaceName,
+      );
+      Luigi.navigation()
+        .fromContext('cluster')
+        .navigate(
+          'namespaces/' + (alternativeLocation || namespaceName + '/details'),
+        );
+    },
     'busola.pathExists': async ({ path, pathId }) => {
       const exists = await Luigi.navigation().pathExists(path);
       Luigi.customMessages().sendToAll({
@@ -163,6 +175,19 @@ function addCommandPaletteHandler() {
       // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
       e.preventDefault();
       Luigi.customMessages().sendToAll({ id: 'busola.toggle-command-palette' });
+    }
+  });
+}
+
+function addOpenSearchHandler() {
+  window.addEventListener('keydown', e => {
+    const { key } = e;
+
+    const isMFModalPresent = !!document.querySelector('.lui-modal-mf');
+    if (isMFModalPresent) return;
+
+    if (key === '/') {
+      Luigi.customMessages().sendToAll({ id: 'busola.toggle-open-search' });
     }
   });
 }
