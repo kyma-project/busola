@@ -1,51 +1,12 @@
 import React from 'react';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { useTranslation } from 'react-i18next';
-
-export const getResourceChild = (resPath, resource) =>
-  resPath.split('.').reduce((prevRes, curr, idx) => {
-    if (idx === 0) {
-      return prevRes;
-    }
-    return prevRes?.[curr] ? prevRes[curr] : null;
-  }, resource);
-
-export const useGetTranslation = () => {
-  const { customTranslations } = useMicrofrontendContext();
-
-  const language = useTranslation().i18n.language; //en
-
-  return translationPath => {
-    if (!translationPath) {
-      return '';
-    }
-    if (typeof translationPath === 'string') {
-      return translationPath;
-    }
-
-    if (translationPath[language]) {
-      return translationPath[language];
-    }
-
-    if (translationPath.id) {
-      return (
-        getResourceChild('$.' + translationPath.id, customTranslations)?.[
-          language
-        ] || ''
-      );
-    }
-    return '';
-  };
-};
+import { getValue, useGetTranslation } from './helpers';
 
 export const CreateExtensibilityList = metadata => {
-  // const { customTranslations } = useMicrofrontendContext();
   const { title, headers, columns, resource: resPath } = metadata;
 
-  ///
   const Element = res => {
-    const result = getResourceChild(resPath, res);
+    const result = getValue(res, resPath);
 
     const translate = useGetTranslation();
 

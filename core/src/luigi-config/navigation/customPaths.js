@@ -1,4 +1,20 @@
 import { config } from '../config';
+import i18next from 'i18next';
+
+// this fn is cloned in core-ui 'helpers.js' as 'useGetTranslation'. Modify it also there
+const translate = translationObj => {
+  const language = i18next.language;
+  if (!translationObj) {
+    return '';
+  }
+  if (typeof translationObj === 'string') {
+    return translationObj;
+  }
+  if (translationObj[language]) {
+    return translationObj[language];
+  }
+  return Object.values(translationObj)[0] || '';
+};
 
 const getCustomNodes = (crs, scope) => {
   const toSearchParamsString = object => {
@@ -16,7 +32,7 @@ const getCustomNodes = (crs, scope) => {
         }/${resource.version.toLowerCase()}`;
         return {
           category: {
-            label: cr.navigation?.category || 'Custom Resources',
+            label: translate(cr.navigation?.category) || 'Custom Resources',
             collapsible: true,
             icon: 'customize',
           },
@@ -80,6 +96,8 @@ export const getCustomPaths = (customResources, scope) => {
       }
       return crScope === scope;
     });
+
+    console.log(scopedCrs);
     return scopedCrs || [];
   };
 

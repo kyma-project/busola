@@ -3,7 +3,7 @@
     "navigation": {
       "path": "wasmplugins",
       "label": "My wasmplugins",
-      "category": "My Resources",
+      "category": { "de": "Meine Ressourcen" },
       "scope": "namespace",
       "resource": {
         "kind": "WasmPlugins",
@@ -142,7 +142,7 @@
     "navigation": {
       "path": "customjobs",
       "label": "CustomJobs",
-      "category": "My Resources",
+      "category": { "de": "Meine Ressourcen" },
       "scope": "namespace",
       "resource": {
         "kind": "Jobs",
@@ -152,20 +152,30 @@
       "hasDetailsView": true
     },
     "list": {
-      "title": "My custom jobs title override",
-      "description": "Custom jobs are a great resource",
+      "name-override": "My custom jobs title override",
+      "description": {
+        "en": "Custom jobs are a great resource.",
+        "de": "Benutzerdefinierte Jobs sind eine großartige Ressource."
+      },
       "columns": [
         {
-          "header": "BackOffLimit",
+          "header": {
+            "en": "BackOffLimit"
+          },
           "valuePath": "$.spec.backoffLimit"
         },
         {
-          "header": "Selector's matchLabels",
+          "header": {
+            "de": "MatchLabels des Selektors"
+          },
           "valuePath": "$.spec.selector.matchLabels",
           "display": "labels"
         },
         {
-          "header": "Container image names",
+          "header": {
+            "en": "Container image names",
+            "de": "Container-Image-Namen"
+          },
           "valuePath": "$.spec.template.spec.volumes",
           "display": "array",
           "arrayValuePath": "$.name"
@@ -173,52 +183,52 @@
       ]
     },
     "details": {
-      "title": "Custom Jobs",
       "components": [
         {
           "type": "monaco",
-          "resource": "job.status.conditions",
-          "title": "Job Status Conditions"
+          "resource": "",
+          "title": "Job as a Whole",
+          "language": "json"
         },
         {
           "type": "monaco",
-          "resource": "job",
-          "title": "Job as a Whole"
-        },
-        {
-          "type": "monaco",
-          "resource": "job.metadata.name",
-          "title": "Job Name"
+          "resource": "metadata.name",
+          "title": { "en": "The Job's Name" },
+          "language": "json"
         },
         {
           "type": "list",
           "title": {
-            "id": "conditionsTitleII"
+            "en": "conditionsTitleII"
           },
           "headers": [
-            { "id": "headers.conditions.type" },
-            { "id": "headers.conditions.status" },
+            { "en": "type hej", "de": "Der Typ" },
+            { "en": "statusss", "de": "Das Status" },
             {
-              "id": "headers.conditions.lastProbeTime",
-              "en": "Local priority Last Probe"
+              "de": "Letze Sonde",
+              "pl": "Ostatnia sonda"
             },
             "Last Probe Time string no translation"
           ],
           "columns": ["type", "status", "lastProbeTime", "lastProbeTime"],
-          "resource": "$.status.conditions"
+          "resource": "status.conditions"
         },
         {
           "type": "detail-panel",
-          "properties": [{
-            "header": "Parallelism",
-            "valuePath": "$.spec.parallelism"
-          },{
-            "header": "Completions",
-            "valuePath": "$.spec.completions"
-          },{
-            "header": "Backofflimit",
-            "valuePath": "$.spec.backoffLimit"
-          }],
+          "properties": [
+            {
+              "header": "Parallelism",
+              "valuePath": "$.spec.parallelism"
+            },
+            {
+              "header": "Completions",
+              "valuePath": "$.spec.completions"
+            },
+            {
+              "header": "Backofflimit",
+              "valuePath": "$.spec.backoffLimit"
+            }
+          ],
           "title": "Some details"
         },
         {
@@ -226,12 +236,11 @@
           "title": "My own Conditions",
           "headers": ["type", "status", "LaSt PrOBe", "Reason", "Message"],
           "columns": ["type", "status", "lastProbeTime", "reason", "message"],
-          "resource": "$.status.conditions"
+          "resource": "status.conditions"
         }
       ]
     },
     "create": {
-      "name_singular": "Custom Jobs",
       "schema": {}
     }
   },
@@ -239,7 +248,7 @@
     "navigation": {
       "path": "envoyfilters",
       "label": "envoyfilters",
-      "category": "My Resources",
+      "category": { "de": "Meine Ressourcen" },
       "scope": "namespace",
       "resource": {
         "kind": "EnvoyFilters",
@@ -265,589 +274,555 @@
     },
     "create": {
       "name_singular": "Envoy Filters",
-        "simple": {
-          "schema": {
+      "simple": {
+        "schema": {
           "type": "object",
           "properties": {
-              "spec": {
-                  "description": "Customizing Envoy configuration generated by Istio. See more details at: https://istio.io/docs/reference/config/networking/envoy-filter.html",
-                  "type": "object",
-                  "properties": {
-                      "configPatches": {
-                          "description": "One or more patches with match conditions.",
-                          "type": "array",
-                          "items": {
-                              "type": "object",
-                              "properties": {
-                                  "applyTo": {
-                                      "type": "string",
-                                      "enum": [
-                                          "INVALID",
-                                          "LISTENER",
-                                          "FILTER_CHAIN",
-                                          "NETWORK_FILTER",
-                                          "HTTP_FILTER",
-                                          "ROUTE_CONFIGURATION",
-                                          "VIRTUAL_HOST",
-                                          "HTTP_ROUTE",
-                                          "CLUSTER",
-                                          "EXTENSION_CONFIG",
-                                          "BOOTSTRAP"
-                                      ]
-                                  },
-                                  "match": {
-                                      "description": "Match on listener/route configuration/cluster.",
-                                      "type": "object",
-                                      "oneOf": [
-                                          {
-                                              "not": {
-                                                  "anyOf": [
-                                                      {
-                                                          "required": [
-                                                              "listener"
-                                                          ]
-                                                      },
-                                                      {
-                                                          "required": [
-                                                              "routeConfiguration"
-                                                          ]
-                                                      },
-                                                      {
-                                                          "required": [
-                                                              "cluster"
-                                                          ]
-                                                      }
-                                                  ]
-                                              }
-                                          },
-                                          {
-                                              "required": [
-                                                  "listener"
-                                              ]
-                                          },
-                                          {
-                                              "required": [
-                                                  "routeConfiguration"
-                                              ]
-                                          },
-                                          {
-                                              "required": [
-                                                  "cluster"
-                                              ]
-                                          }
-                                      ],
-                                      "properties": {
-                                          "cluster": {
-                                              "description": "Match on envoy cluster attributes.",
-                                              "type": "object",
-                                              "properties": {
-                                                  "name": {
-                                                      "description": "The exact name of the cluster to match.",
-                                                      "type": "string"
-                                                  },
-                                                  "portNumber": {
-                                                      "description": "The service port for which this cluster was generated.",
-                                                      "type": "integer"
-                                                  },
-                                                  "service": {
-                                                      "description": "The fully qualified service name for this cluster.",
-                                                      "type": "string"
-                                                  },
-                                                  "subset": {
-                                                      "description": "The subset associated with the service.",
-                                                      "type": "string"
-                                                  }
-                                              }
-                                          },
-                                          "context": {
-                                              "description": "The specific config generation context to match on.",
-                                              "type": "string",
-                                              "enum": [
-                                                  "ANY",
-                                                  "SIDECAR_INBOUND",
-                                                  "SIDECAR_OUTBOUND",
-                                                  "GATEWAY"
-                                              ]
-                                          },
-                                          "listener": {
-                                              "description": "Match on envoy listener attributes.",
-                                              "type": "object",
-                                              "properties": {
-                                                  "filterChain": {
-                                                      "description": "Match a specific filter chain in a listener.",
-                                                      "type": "object",
-                                                      "properties": {
-                                                          "applicationProtocols": {
-                                                              "description": "Applies only to sidecars.",
-                                                              "type": "string"
-                                                          },
-                                                          "destinationPort": {
-                                                              "description": "The destination_port value used by a filter chain's match condition.",
-                                                              "type": "integer"
-                                                          },
-                                                          "filter": {
-                                                              "description": "The name of a specific filter to apply the patch to.",
-                                                              "type": "object",
-                                                              "properties": {
-                                                                  "name": {
-                                                                      "description": "The filter name to match on.",
-                                                                      "type": "string"
-                                                                  },
-                                                                  "subFilter": {
-                                                                      "type": "object",
-                                                                      "properties": {
-                                                                          "name": {
-                                                                              "description": "The filter name to match on.",
-                                                                              "type": "string"
-                                                                          }
-                                                                      }
-                                                                  }
-                                                              }
-                                                          },
-                                                          "name": {
-                                                              "description": "The name assigned to the filter chain.",
-                                                              "type": "string"
-                                                          },
-                                                          "sni": {
-                                                              "description": "The SNI value used by a filter chain's match condition.",
-                                                              "type": "string"
-                                                          },
-                                                          "transportProtocol": {
-                                                              "description": "Applies only to `SIDECAR_INBOUND` context.",
-                                                              "type": "string"
-                                                          }
-                                                      }
-                                                  },
-                                                  "name": {
-                                                      "description": "Match a specific listener by its name.",
-                                                      "type": "string"
-                                                  },
-                                                  "portName": {
-                                                      "type": "string"
-                                                  },
-                                                  "portNumber": {
-                                                      "type": "integer"
-                                                  }
-                                              }
-                                          },
-                                          "proxy": {
-                                              "description": "Match on properties associated with a proxy.",
-                                              "type": "object",
-                                              "properties": {
-                                                  "metadata": {
-                                                      "type": "object",
-                                                      "additionalProperties": {
-                                                          "type": "string"
-                                                      }
-                                                  },
-                                                  "proxyVersion": {
-                                                      "type": "string"
-                                                  }
-                                              }
-                                          },
-                                          "routeConfiguration": {
-                                              "description": "Match on envoy HTTP route configuration attributes.",
-                                              "type": "object",
-                                              "properties": {
-                                                  "gateway": {
-                                                      "type": "string"
-                                                  },
-                                                  "name": {
-                                                      "description": "Route configuration name to match on.",
-                                                      "type": "string"
-                                                  },
-                                                  "portName": {
-                                                      "description": "Applicable only for GATEWAY context.",
-                                                      "type": "string"
-                                                  },
-                                                  "portNumber": {
-                                                      "type": "integer"
-                                                  },
-                                                  "vhost": {
-                                                      "type": "object",
-                                                      "properties": {
-                                                          "name": {
-                                                              "type": "string"
-                                                          },
-                                                          "route": {
-                                                              "description": "Match a specific route within the virtual host.",
-                                                              "type": "object",
-                                                              "properties": {
-                                                                  "action": {
-                                                                      "description": "Match a route with specific action type.",
-                                                                      "type": "string",
-                                                                      "enum": [
-                                                                          "ANY",
-                                                                          "ROUTE",
-                                                                          "REDIRECT",
-                                                                          "DIRECT_RESPONSE"
-                                                                      ]
-                                                                  },
-                                                                  "name": {
-                                                                      "type": "string"
-                                                                  }
-                                                              }
-                                                          }
-                                                      }
-                                                  }
-                                              }
-                                          }
-                                      }
-                                  },
-                                  "patch": {
-                                      "description": "The patch to apply along with the operation.",
-                                      "type": "object",
-                                      "properties": {
-                                          "filterClass": {
-                                              "description": "Determines the filter insertion order.",
-                                              "type": "string",
-                                              "enum": [
-                                                  "UNSPECIFIED",
-                                                  "AUTHN",
-                                                  "AUTHZ",
-                                                  "STATS"
-                                              ]
-                                          },
-                                          "operation": {
-                                              "description": "Determines how the patch should be applied.",
-                                              "type": "string",
-                                              "enum": [
-                                                  "INVALID",
-                                                  "MERGE",
-                                                  "ADD",
-                                                  "REMOVE",
-                                                  "INSERT_BEFORE",
-                                                  "INSERT_AFTER",
-                                                  "INSERT_FIRST",
-                                                  "REPLACE"
-                                              ]
-                                          },
-                                          "value": {
-                                              "description": "The JSON config of the object being patched.",
-                                              "type": "object",
-                                              "x-kubernetes-preserve-unknown-fields": true
-                                          }
-                                      }
-                                  }
-                              }
-                          }
-                      },
-                      "priority": {
-                          "description": "Priority defines the order in which patch sets are applied within a context.",
-                          "type": "integer",
-                          "format": "int32"
-                      },
-                      "workloadSelector": {
-                          "type": "object",
-                          "properties": {
-                              "labels": {
-                                  "type": "object",
-                                  "additionalProperties": {
-                                      "type": "string"
-                                  }
-                              }
-                          }
-                      }
-                  }
-              },
-              "status": {
-                  "type": "object",
-                  "x-kubernetes-preserve-unknown-fields": true
-              }
-          }
-      }
-    },
-      "advanced": {
-        "schema": {
-        "type": "object",
-        "properties": {
             "spec": {
-                "description": "Customizing Envoy configuration generated by Istio. See more details at: https://istio.io/docs/reference/config/networking/envoy-filter.html",
-                "type": "object",
-                "properties": {
-                    "configPatches": {
-                        "description": "One or more patches with match conditions.",
-                        "type": "array",
-                        "items": {
+              "description": "Customizing Envoy configuration generated by Istio. See more details at: https://istio.io/docs/reference/config/networking/envoy-filter.html",
+              "type": "object",
+              "properties": {
+                "configPatches": {
+                  "description": "One or more patches with match conditions.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "applyTo": {
+                        "type": "string",
+                        "enum": [
+                          "INVALID",
+                          "LISTENER",
+                          "FILTER_CHAIN",
+                          "NETWORK_FILTER",
+                          "HTTP_FILTER",
+                          "ROUTE_CONFIGURATION",
+                          "VIRTUAL_HOST",
+                          "HTTP_ROUTE",
+                          "CLUSTER",
+                          "EXTENSION_CONFIG",
+                          "BOOTSTRAP"
+                        ]
+                      },
+                      "match": {
+                        "description": "Match on listener/route configuration/cluster.",
+                        "type": "object",
+                        "oneOf": [
+                          {
+                            "not": {
+                              "anyOf": [
+                                {
+                                  "required": ["listener"]
+                                },
+                                {
+                                  "required": ["routeConfiguration"]
+                                },
+                                {
+                                  "required": ["cluster"]
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "required": ["listener"]
+                          },
+                          {
+                            "required": ["routeConfiguration"]
+                          },
+                          {
+                            "required": ["cluster"]
+                          }
+                        ],
+                        "properties": {
+                          "cluster": {
+                            "description": "Match on envoy cluster attributes.",
                             "type": "object",
                             "properties": {
-                                "applyTo": {
-                                    "type": "string",
-                                    "enum": [
-                                        "INVALID",
-                                        "LISTENER",
-                                        "FILTER_CHAIN",
-                                        "NETWORK_FILTER",
-                                        "HTTP_FILTER",
-                                        "ROUTE_CONFIGURATION",
-                                        "VIRTUAL_HOST",
-                                        "HTTP_ROUTE",
-                                        "CLUSTER",
-                                        "EXTENSION_CONFIG",
-                                        "BOOTSTRAP"
-                                    ]
-                                },
-                                "match": {
-                                    "description": "Match on listener/route configuration/cluster.",
-                                    "type": "object",
-                                    "oneOf": [
-                                        {
-                                            "not": {
-                                                "anyOf": [
-                                                    {
-                                                        "required": [
-                                                            "listener"
-                                                        ]
-                                                    },
-                                                    {
-                                                        "required": [
-                                                            "routeConfiguration"
-                                                        ]
-                                                    },
-                                                    {
-                                                        "required": [
-                                                            "cluster"
-                                                        ]
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        {
-                                            "required": [
-                                                "listener"
-                                            ]
-                                        },
-                                        {
-                                            "required": [
-                                                "routeConfiguration"
-                                            ]
-                                        },
-                                        {
-                                            "required": [
-                                                "cluster"
-                                            ]
-                                        }
-                                    ],
-                                    "properties": {
-                                        "cluster": {
-                                            "description": "Match on envoy cluster attributes.",
-                                            "type": "object",
-                                            "properties": {
-                                                "name": {
-                                                    "description": "The exact name of the cluster to match.",
-                                                    "type": "string"
-                                                },
-                                                "portNumber": {
-                                                    "description": "The service port for which this cluster was generated.",
-                                                    "type": "integer"
-                                                },
-                                                "service": {
-                                                    "description": "The fully qualified service name for this cluster.",
-                                                    "type": "string"
-                                                },
-                                                "subset": {
-                                                    "description": "The subset associated with the service.",
-                                                    "type": "string"
-                                                }
-                                            }
-                                        },
-                                        "context": {
-                                            "description": "The specific config generation context to match on.",
-                                            "type": "string",
-                                            "enum": [
-                                                "ANY",
-                                                "SIDECAR_INBOUND",
-                                                "SIDECAR_OUTBOUND",
-                                                "GATEWAY"
-                                            ]
-                                        },
-                                        "listener": {
-                                            "description": "Match on envoy listener attributes.",
-                                            "type": "object",
-                                            "properties": {
-                                                "filterChain": {
-                                                    "description": "Match a specific filter chain in a listener.",
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "applicationProtocols": {
-                                                            "description": "Applies only to sidecars.",
-                                                            "type": "string"
-                                                        },
-                                                        "destinationPort": {
-                                                            "description": "The destination_port value used by a filter chain's match condition.",
-                                                            "type": "integer"
-                                                        },
-                                                        "filter": {
-                                                            "description": "The name of a specific filter to apply the patch to.",
-                                                            "type": "object",
-                                                            "properties": {
-                                                                "name": {
-                                                                    "description": "The filter name to match on.",
-                                                                    "type": "string"
-                                                                },
-                                                                "subFilter": {
-                                                                    "type": "object",
-                                                                    "properties": {
-                                                                        "name": {
-                                                                            "description": "The filter name to match on.",
-                                                                            "type": "string"
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        "name": {
-                                                            "description": "The name assigned to the filter chain.",
-                                                            "type": "string"
-                                                        },
-                                                        "sni": {
-                                                            "description": "The SNI value used by a filter chain's match condition.",
-                                                            "type": "string"
-                                                        },
-                                                        "transportProtocol": {
-                                                            "description": "Applies only to `SIDECAR_INBOUND` context.",
-                                                            "type": "string"
-                                                        }
-                                                    }
-                                                },
-                                                "name": {
-                                                    "description": "Match a specific listener by its name.",
-                                                    "type": "string"
-                                                },
-                                                "portName": {
-                                                    "type": "string"
-                                                },
-                                                "portNumber": {
-                                                    "type": "integer"
-                                                }
-                                            }
-                                        },
-                                        "proxy": {
-                                            "description": "Match on properties associated with a proxy.",
-                                            "type": "object",
-                                            "properties": {
-                                                "metadata": {
-                                                    "type": "object",
-                                                    "additionalProperties": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "proxyVersion": {
-                                                    "type": "string"
-                                                }
-                                            }
-                                        },
-                                        "routeConfiguration": {
-                                            "description": "Match on envoy HTTP route configuration attributes.",
-                                            "type": "object",
-                                            "properties": {
-                                                "gateway": {
-                                                    "type": "string"
-                                                },
-                                                "name": {
-                                                    "description": "Route configuration name to match on.",
-                                                    "type": "string"
-                                                },
-                                                "portName": {
-                                                    "description": "Applicable only for GATEWAY context.",
-                                                    "type": "string"
-                                                },
-                                                "portNumber": {
-                                                    "type": "integer"
-                                                },
-                                                "vhost": {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "name": {
-                                                            "type": "string"
-                                                        },
-                                                        "route": {
-                                                            "description": "Match a specific route within the virtual host.",
-                                                            "type": "object",
-                                                            "properties": {
-                                                                "action": {
-                                                                    "description": "Match a route with specific action type.",
-                                                                    "type": "string",
-                                                                    "enum": [
-                                                                        "ANY",
-                                                                        "ROUTE",
-                                                                        "REDIRECT",
-                                                                        "DIRECT_RESPONSE"
-                                                                    ]
-                                                                },
-                                                                "name": {
-                                                                    "type": "string"
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                "patch": {
-                                    "description": "The patch to apply along with the operation.",
-                                    "type": "object",
-                                    "properties": {
-                                        "filterClass": {
-                                            "description": "Determines the filter insertion order.",
-                                            "type": "string",
-                                            "enum": [
-                                                "UNSPECIFIED",
-                                                "AUTHN",
-                                                "AUTHZ",
-                                                "STATS"
-                                            ]
-                                        },
-                                        "operation": {
-                                            "description": "Determines how the patch should be applied.",
-                                            "type": "string",
-                                            "enum": [
-                                                "INVALID",
-                                                "MERGE",
-                                                "ADD",
-                                                "REMOVE",
-                                                "INSERT_BEFORE",
-                                                "INSERT_AFTER",
-                                                "INSERT_FIRST",
-                                                "REPLACE"
-                                            ]
-                                        },
-                                        "value": {
-                                            "description": "The JSON config of the object being patched.",
-                                            "type": "object",
-                                            "x-kubernetes-preserve-unknown-fields": true
-                                        }
-                                    }
-                                }
+                              "name": {
+                                "description": "The exact name of the cluster to match.",
+                                "type": "string"
+                              },
+                              "portNumber": {
+                                "description": "The service port for which this cluster was generated.",
+                                "type": "integer"
+                              },
+                              "service": {
+                                "description": "The fully qualified service name for this cluster.",
+                                "type": "string"
+                              },
+                              "subset": {
+                                "description": "The subset associated with the service.",
+                                "type": "string"
+                              }
                             }
-                        }
-                    },
-                    "priority": {
-                        "description": "Priority defines the order in which patch sets are applied within a context.",
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "workloadSelector": {
-                        "type": "object",
-                        "properties": {
-                            "labels": {
+                          },
+                          "context": {
+                            "description": "The specific config generation context to match on.",
+                            "type": "string",
+                            "enum": [
+                              "ANY",
+                              "SIDECAR_INBOUND",
+                              "SIDECAR_OUTBOUND",
+                              "GATEWAY"
+                            ]
+                          },
+                          "listener": {
+                            "description": "Match on envoy listener attributes.",
+                            "type": "object",
+                            "properties": {
+                              "filterChain": {
+                                "description": "Match a specific filter chain in a listener.",
+                                "type": "object",
+                                "properties": {
+                                  "applicationProtocols": {
+                                    "description": "Applies only to sidecars.",
+                                    "type": "string"
+                                  },
+                                  "destinationPort": {
+                                    "description": "The destination_port value used by a filter chain's match condition.",
+                                    "type": "integer"
+                                  },
+                                  "filter": {
+                                    "description": "The name of a specific filter to apply the patch to.",
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "description": "The filter name to match on.",
+                                        "type": "string"
+                                      },
+                                      "subFilter": {
+                                        "type": "object",
+                                        "properties": {
+                                          "name": {
+                                            "description": "The filter name to match on.",
+                                            "type": "string"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "name": {
+                                    "description": "The name assigned to the filter chain.",
+                                    "type": "string"
+                                  },
+                                  "sni": {
+                                    "description": "The SNI value used by a filter chain's match condition.",
+                                    "type": "string"
+                                  },
+                                  "transportProtocol": {
+                                    "description": "Applies only to `SIDECAR_INBOUND` context.",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "name": {
+                                "description": "Match a specific listener by its name.",
+                                "type": "string"
+                              },
+                              "portName": {
+                                "type": "string"
+                              },
+                              "portNumber": {
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          "proxy": {
+                            "description": "Match on properties associated with a proxy.",
+                            "type": "object",
+                            "properties": {
+                              "metadata": {
                                 "type": "object",
                                 "additionalProperties": {
-                                    "type": "string"
+                                  "type": "string"
                                 }
+                              },
+                              "proxyVersion": {
+                                "type": "string"
+                              }
                             }
+                          },
+                          "routeConfiguration": {
+                            "description": "Match on envoy HTTP route configuration attributes.",
+                            "type": "object",
+                            "properties": {
+                              "gateway": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "description": "Route configuration name to match on.",
+                                "type": "string"
+                              },
+                              "portName": {
+                                "description": "Applicable only for GATEWAY context.",
+                                "type": "string"
+                              },
+                              "portNumber": {
+                                "type": "integer"
+                              },
+                              "vhost": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "route": {
+                                    "description": "Match a specific route within the virtual host.",
+                                    "type": "object",
+                                    "properties": {
+                                      "action": {
+                                        "description": "Match a route with specific action type.",
+                                        "type": "string",
+                                        "enum": [
+                                          "ANY",
+                                          "ROUTE",
+                                          "REDIRECT",
+                                          "DIRECT_RESPONSE"
+                                        ]
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
                         }
+                      },
+                      "patch": {
+                        "description": "The patch to apply along with the operation.",
+                        "type": "object",
+                        "properties": {
+                          "filterClass": {
+                            "description": "Determines the filter insertion order.",
+                            "type": "string",
+                            "enum": ["UNSPECIFIED", "AUTHN", "AUTHZ", "STATS"]
+                          },
+                          "operation": {
+                            "description": "Determines how the patch should be applied.",
+                            "type": "string",
+                            "enum": [
+                              "INVALID",
+                              "MERGE",
+                              "ADD",
+                              "REMOVE",
+                              "INSERT_BEFORE",
+                              "INSERT_AFTER",
+                              "INSERT_FIRST",
+                              "REPLACE"
+                            ]
+                          },
+                          "value": {
+                            "description": "The JSON config of the object being patched.",
+                            "type": "object",
+                            "x-kubernetes-preserve-unknown-fields": true
+                          }
+                        }
+                      }
                     }
+                  }
+                },
+                "priority": {
+                  "description": "Priority defines the order in which patch sets are applied within a context.",
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "workloadSelector": {
+                  "type": "object",
+                  "properties": {
+                    "labels": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 }
+              }
             },
             "status": {
-                "type": "object",
-                "x-kubernetes-preserve-unknown-fields": true
+              "type": "object",
+              "x-kubernetes-preserve-unknown-fields": true
             }
+          }
         }
-    }
+      },
+      "advanced": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "spec": {
+              "description": "Customizing Envoy configuration generated by Istio. See more details at: https://istio.io/docs/reference/config/networking/envoy-filter.html",
+              "type": "object",
+              "properties": {
+                "configPatches": {
+                  "description": "One or more patches with match conditions.",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "applyTo": {
+                        "type": "string",
+                        "enum": [
+                          "INVALID",
+                          "LISTENER",
+                          "FILTER_CHAIN",
+                          "NETWORK_FILTER",
+                          "HTTP_FILTER",
+                          "ROUTE_CONFIGURATION",
+                          "VIRTUAL_HOST",
+                          "HTTP_ROUTE",
+                          "CLUSTER",
+                          "EXTENSION_CONFIG",
+                          "BOOTSTRAP"
+                        ]
+                      },
+                      "match": {
+                        "description": "Match on listener/route configuration/cluster.",
+                        "type": "object",
+                        "oneOf": [
+                          {
+                            "not": {
+                              "anyOf": [
+                                {
+                                  "required": ["listener"]
+                                },
+                                {
+                                  "required": ["routeConfiguration"]
+                                },
+                                {
+                                  "required": ["cluster"]
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "required": ["listener"]
+                          },
+                          {
+                            "required": ["routeConfiguration"]
+                          },
+                          {
+                            "required": ["cluster"]
+                          }
+                        ],
+                        "properties": {
+                          "cluster": {
+                            "description": "Match on envoy cluster attributes.",
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "description": "The exact name of the cluster to match.",
+                                "type": "string"
+                              },
+                              "portNumber": {
+                                "description": "The service port for which this cluster was generated.",
+                                "type": "integer"
+                              },
+                              "service": {
+                                "description": "The fully qualified service name for this cluster.",
+                                "type": "string"
+                              },
+                              "subset": {
+                                "description": "The subset associated with the service.",
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "context": {
+                            "description": "The specific config generation context to match on.",
+                            "type": "string",
+                            "enum": [
+                              "ANY",
+                              "SIDECAR_INBOUND",
+                              "SIDECAR_OUTBOUND",
+                              "GATEWAY"
+                            ]
+                          },
+                          "listener": {
+                            "description": "Match on envoy listener attributes.",
+                            "type": "object",
+                            "properties": {
+                              "filterChain": {
+                                "description": "Match a specific filter chain in a listener.",
+                                "type": "object",
+                                "properties": {
+                                  "applicationProtocols": {
+                                    "description": "Applies only to sidecars.",
+                                    "type": "string"
+                                  },
+                                  "destinationPort": {
+                                    "description": "The destination_port value used by a filter chain's match condition.",
+                                    "type": "integer"
+                                  },
+                                  "filter": {
+                                    "description": "The name of a specific filter to apply the patch to.",
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "description": "The filter name to match on.",
+                                        "type": "string"
+                                      },
+                                      "subFilter": {
+                                        "type": "object",
+                                        "properties": {
+                                          "name": {
+                                            "description": "The filter name to match on.",
+                                            "type": "string"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "name": {
+                                    "description": "The name assigned to the filter chain.",
+                                    "type": "string"
+                                  },
+                                  "sni": {
+                                    "description": "The SNI value used by a filter chain's match condition.",
+                                    "type": "string"
+                                  },
+                                  "transportProtocol": {
+                                    "description": "Applies only to `SIDECAR_INBOUND` context.",
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "name": {
+                                "description": "Match a specific listener by its name.",
+                                "type": "string"
+                              },
+                              "portName": {
+                                "type": "string"
+                              },
+                              "portNumber": {
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          "proxy": {
+                            "description": "Match on properties associated with a proxy.",
+                            "type": "object",
+                            "properties": {
+                              "metadata": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string"
+                                }
+                              },
+                              "proxyVersion": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "routeConfiguration": {
+                            "description": "Match on envoy HTTP route configuration attributes.",
+                            "type": "object",
+                            "properties": {
+                              "gateway": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "description": "Route configuration name to match on.",
+                                "type": "string"
+                              },
+                              "portName": {
+                                "description": "Applicable only for GATEWAY context.",
+                                "type": "string"
+                              },
+                              "portNumber": {
+                                "type": "integer"
+                              },
+                              "vhost": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "route": {
+                                    "description": "Match a specific route within the virtual host.",
+                                    "type": "object",
+                                    "properties": {
+                                      "action": {
+                                        "description": "Match a route with specific action type.",
+                                        "type": "string",
+                                        "enum": [
+                                          "ANY",
+                                          "ROUTE",
+                                          "REDIRECT",
+                                          "DIRECT_RESPONSE"
+                                        ]
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "patch": {
+                        "description": "The patch to apply along with the operation.",
+                        "type": "object",
+                        "properties": {
+                          "filterClass": {
+                            "description": "Determines the filter insertion order.",
+                            "type": "string",
+                            "enum": ["UNSPECIFIED", "AUTHN", "AUTHZ", "STATS"]
+                          },
+                          "operation": {
+                            "description": "Determines how the patch should be applied.",
+                            "type": "string",
+                            "enum": [
+                              "INVALID",
+                              "MERGE",
+                              "ADD",
+                              "REMOVE",
+                              "INSERT_BEFORE",
+                              "INSERT_AFTER",
+                              "INSERT_FIRST",
+                              "REPLACE"
+                            ]
+                          },
+                          "value": {
+                            "description": "The JSON config of the object being patched.",
+                            "type": "object",
+                            "x-kubernetes-preserve-unknown-fields": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "priority": {
+                  "description": "Priority defines the order in which patch sets are applied within a context.",
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "workloadSelector": {
+                  "type": "object",
+                  "properties": {
+                    "labels": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "status": {
+              "type": "object",
+              "x-kubernetes-preserve-unknown-fields": true
+            }
+          }
+        }
       }
     }
   }

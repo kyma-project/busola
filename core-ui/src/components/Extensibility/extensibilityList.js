@@ -1,5 +1,5 @@
 import React from 'react';
-import * as jp from 'jsonpath';
+import { getValue, useGetTranslation } from './components/helpers';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ExtensibilityCreate } from './extensibilityCreate';
@@ -25,7 +25,7 @@ function listColumnDisplay(value, columnProps) {
     case 'labels':
       return <Labels labels={value} />;
     case 'array':
-      return (value || []).map(v => jp.value(v, arrayValuePath)).join(', ');
+      return (value || []).map(v => getValue(v, arrayValuePath)).join(', ');
     case 'external-link':
       return <Link url={value}>{value}</Link>;
     case 'status':
@@ -41,6 +41,7 @@ function listColumnDisplay(value, columnProps) {
 
 export const ExtensibilityList = () => {
   const resource = useGetCRbyPath();
+  const translate = useGetTranslation();
   const listProps = usePrepareListProps(
     resource.navigation.path,
     resource.navigation.label,
@@ -52,10 +53,13 @@ export const ExtensibilityList = () => {
     );
   }
   listProps.createFormProps = { resource };
+  listProps.resourceName =
+    translate(resource.list?.['name-override']) || listProps.resourceName;
+  listProps.description = translate(resource.list?.description) || '';
   listProps.customColumns = (resource.list.columns || []).map(column => ({
-    header: column.header,
+    header: translate(column.header),
     value: resource => {
-      const v = listColumnDisplay(jp.value(resource, column.valuePath), column);
+      const v = listColumnDisplay(getValue(resource, column.valuePath), column);
       if (typeof v === 'undefined' || v === '') {
         return EMPTY_TEXT_PLACEHOLDER;
       } else {
@@ -63,7 +67,6 @@ export const ExtensibilityList = () => {
       }
     },
   }));
-
   return (
     <ResourcesList createResourceForm={ExtensibilityCreate} {...listProps} />
   );

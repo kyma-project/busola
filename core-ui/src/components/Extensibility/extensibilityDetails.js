@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import * as jp from 'jsonpath';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import {
-  CreateExtensibilityList,
-  getResourceChild,
-} from './components/CreateExtensibilityList';
-import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
-import { LayoutPanel } from 'fundamental-react';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { CreateExtensibilityList } from './components/CreateExtensibilityList';
+import { CreateReadOnlyEditor } from './components/CreateMonacoReadOnlyEditor';
+import { CreateDetailPanel } from './components/CreateDetailPanel';
 import { usePrepareDetailsProps } from 'resources/helpers';
-
 export const ExtensibilityDetails = () => {
   const resMetaData = useGetCRbyPath();
   const detailsProps = usePrepareDetailsProps(
     resMetaData.navigation.path,
     resMetaData.navigation.label,
   );
+
   if (resMetaData.navigation.resource.kind) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
       resMetaData.navigation.path,
@@ -24,35 +19,7 @@ export const ExtensibilityDetails = () => {
     );
   }
 
-  const CreateReadOnlyEditor = monacoMetadata => resource => {
-    const value = getResourceChild(monacoMetadata.resource, resource);
-    return (
-      <ReadonlyEditorPanel
-        title={monacoMetadata.title}
-        key={monacoMetadata.title}
-        value={JSON.stringify(value, null, 2)}
-      />
-    );
-  };
-
-  const CreateDetailPanel = metadata => resource => {
-    return (
-      <LayoutPanel className="fd-margin--lg">
-        <LayoutPanel.Header>
-          <LayoutPanel.Head title={metadata.title} />
-        </LayoutPanel.Header>
-        <LayoutPanel.Body>
-          {metadata.properties.map(prop => (
-            <LayoutPanelRow
-              key={prop.valuePath}
-              name={prop.header}
-              value={jp.value(resource, prop.valuePath)}
-            />
-          ))}
-        </LayoutPanel.Body>
-      </LayoutPanel>
-    );
-  };
+  // const translate = useGetTranslation();
 
   const customColumns = [];
   const [customComponents, setCustomComponents] = useState([]);

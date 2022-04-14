@@ -5,6 +5,7 @@ import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
 import { KeyValueField } from 'shared/ResourceForm/fields';
 import * as Inputs from 'shared/ResourceForm/inputs';
+import {} from './CreateDetailPanel';
 
 const JSONSchemaForm = ({ properties, path, ...props }) => {
   const { resource, setResource } = props;
