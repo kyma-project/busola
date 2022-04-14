@@ -6,6 +6,7 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { getPorts } from '../GetContainersPorts';
 
 import './PodTemplate.scss';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 function getEnvs(envs) {
   if (envs?.length) {
@@ -18,8 +19,12 @@ function getEnvs(envs) {
         {envs.map(env => {
           return (
             <tr>
-              <td>{env.name}</td>
-              <td>{env.value}</td>
+              <td>{env.name || EMPTY_TEXT_PLACEHOLDER}</td>
+              <td>
+                {env.value ||
+                  env?.valueFrom?.secretKeyRef?.name ||
+                  EMPTY_TEXT_PLACEHOLDER}
+              </td>
             </tr>
           );
         })}
@@ -42,7 +47,7 @@ function getMounts(mounts) {
           return (
             <tr>
               <td>{mount.name}</td>
-              <td>{mount.mountPath}</td>
+              <td>{mount?.mountPath || EMPTY_TEXT_PLACEHOLDER}</td>
             </tr>
           );
         })}
@@ -81,11 +86,14 @@ export function PodTemplate({ template }) {
           />
         )}
         {container.env && (
-          <LayoutPanelRow name={'Enviroment'} value={getEnvs(container.env)} />
+          <LayoutPanelRow
+            name={t('pods.labels.env')}
+            value={getEnvs(container.env)}
+          />
         )}
         {container.volumeMounts && (
           <LayoutPanelRow
-            name={'Volume Mounts'}
+            name={t('pods.labels.volume-mounts')}
             value={getMounts(container.volumeMounts)}
           />
         )}
@@ -100,20 +108,19 @@ export function PodTemplate({ template }) {
   return (
     <LayoutPanel className="fd-margin--md" key="pod-template">
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={'Pod template'} />
+        <LayoutPanel.Head title={t('deployments.headers.pod-template')} />
       </LayoutPanel.Header>
       {template.spec.containers && (
         <>
           <LayoutPanel className="fd-margin--md">
             <LayoutPanel.Header>
-              <LayoutPanel.Head title={'Containers'} />
+              <LayoutPanel.Head title={t('pods.labels.constainers')} />
             </LayoutPanel.Header>
             <LayoutPanel.Body>
               {template.spec.containers.map(container => (
                 <ContainerComponent
                   key={container.name}
                   container={container}
-                  name="Containers"
                 />
               ))}
             </LayoutPanel.Body>
@@ -124,14 +131,13 @@ export function PodTemplate({ template }) {
         <>
           <LayoutPanel className="fd-margin--md">
             <LayoutPanel.Header>
-              <LayoutPanel.Head title={'Init containers'} />
+              <LayoutPanel.Head title={t('pods.labels.init-constainers')} />
             </LayoutPanel.Header>
             <LayoutPanel.Body>
               {template.spec.initContainers.map(container => (
                 <ContainerComponent
                   key={container.name}
                   container={container}
-                  name="Init Conatiners"
                 />
               ))}
             </LayoutPanel.Body>
