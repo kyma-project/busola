@@ -1,5 +1,5 @@
-[
-  {
+{
+  "wasmplugins": {
     "navigation": {
       "path": "wasmplugins",
       "label": "My wasmplugins",
@@ -138,7 +138,7 @@
       }
     }
   },
-  {
+  "customjobs": {
     "navigation": {
       "path": "customjobs",
       "label": "CustomJobs",
@@ -235,7 +235,7 @@
       "schema": {}
     }
   },
-  {
+  "envoyfilters": {
     "navigation": {
       "path": "envoyfilters",
       "label": "envoyfilters",
@@ -851,4 +851,4 @@
       }
     }
   }
-]
+}

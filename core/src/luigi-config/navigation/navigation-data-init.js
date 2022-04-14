@@ -212,7 +212,7 @@ export async function createNavigation() {
       groupVersions,
     });
 
-    const customResources = await getCustomResources();
+    const customResources = await getCustomResources(authData);
     const customTranslations = await getCustomTranslations();
 
     const optionsForCurrentCluster = {

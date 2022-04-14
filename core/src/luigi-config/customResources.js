@@ -1,9 +1,11 @@
+import { config } from './config';
+import { failFastFetch } from './navigation/queries';
+
 let customResources = null;
 
 let customTranslations = null;
 
-export async function getCustomResources() {
-  if (customResources) return customResources;
+async function loadBusolaClusterCRs() {
   try {
     const cacheBuster = '?cache-buster=' + Date.now();
 
@@ -11,14 +13,48 @@ export async function getCustomResources() {
       `/assets/customResources/customResources.json${cacheBuster}`,
     );
 
-    const data = await response.json();
-    customResources = data;
-
-    return data;
+    return await response.json();
   } catch (e) {
     console.warn(`Cannot load customResources.json: `, e);
     return null;
   }
+}
+
+async function loadTargetClusterCRs(authData) {
+  try {
+    const response = await failFastFetch(
+      config.backendAddress +
+        '/api/v1/namespaces/kube-public/configmaps/busola-components',
+      authData,
+    );
+    const { data } = await response.json();
+    return Object.fromEntries(
+      Object.entries(data)
+        .map(([k, v]) => {
+          try {
+            return [k, JSON.parse(v)];
+          } catch (e) {
+            console.warn('cannot parse ', k, v);
+            return null;
+          }
+        })
+        .filter(Boolean),
+    );
+  } catch (e) {
+    console.warn('Cannot load target cluster CRs', e);
+    return [];
+  }
+}
+
+export async function getCustomResources(authData) {
+  if (customResources) return customResources;
+
+  customResources = Object.values({
+    ...(await loadBusolaClusterCRs()),
+    ...(await loadTargetClusterCRs(authData)),
+  });
+
+  return customResources;
 }
 
 export async function getCustomTranslations() {
