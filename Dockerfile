@@ -15,6 +15,7 @@ ENV CI true
 
 COPY . /app
 
+
 RUN make resolve
 
 RUN cd /app/core &&  make build
@@ -34,9 +35,8 @@ COPY --from=builder /app/nginx/core.conf /etc/nginx/
 COPY --from=builder /app/nginx/core-ui.conf /etc/nginx/
 COPY --from=builder /app/nginx/mime.types /etc/nginx/
 
-
-RUN touch /app/nginx.pid && \
-  chown -R nginx:nginx /app/nginx.pid
+COPY --from=builder /app/nginx/nginx.pid /app/nginx.pid
+RUN chown -R nginx:nginx /app/nginx.pid
 
 EXPOSE 8080
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
