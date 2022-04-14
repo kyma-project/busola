@@ -97,7 +97,6 @@ export const getCustomPaths = (customResources, scope) => {
       return crScope === scope;
     });
 
-    console.log(scopedCrs);
     return scopedCrs || [];
   };
 
