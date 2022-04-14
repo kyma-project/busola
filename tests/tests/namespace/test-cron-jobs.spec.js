@@ -125,7 +125,7 @@ context('Test Cron Jobs', () => {
       .type('*');
 
     cy.getIframeBody()
-      .contains('Command')
+      .contains('button', 'Command')
       .click();
 
     cy.getIframeBody()
