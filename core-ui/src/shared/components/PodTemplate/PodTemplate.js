@@ -6,7 +6,6 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { getPorts } from '../GetContainersPorts';
 
 import './PodTemplate.scss';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 function getEnvs(envs) {
   if (envs?.length) {
