@@ -30,6 +30,7 @@ export const usePrepareListProps = (resourceType, resourceI18Key) => {
     resourceName: resourceI18Key ? t(resourceI18Key) : '',
     namespace: routerParams.namespaceId,
     i18n,
+    allowSlashShortcut: true,
   };
 };
 
