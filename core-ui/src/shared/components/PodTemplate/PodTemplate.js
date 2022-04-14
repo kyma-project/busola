@@ -10,8 +10,8 @@ import './PodTemplate.scss';
 function getEnvs(envs) {
   if (envs?.length) {
     return (
-      <table className="env-table">
-        <tr className="table-header">
+      <table className="template-table">
+        <tr>
           <th>Name</th>
           <th>Value</th>
         </tr>
@@ -30,10 +30,33 @@ function getEnvs(envs) {
   }
 }
 
+function getMounts(mounts) {
+  if (mounts?.length) {
+    return (
+      <table className="template-table">
+        <tr>
+          <th>Name</th>
+          <th>Value</th>
+        </tr>
+        {mounts.map(mount => {
+          return (
+            <tr>
+              <td>{mount.name}</td>
+              <td>{mount.mountPath}</td>
+            </tr>
+          );
+        })}
+      </table>
+    );
+  } else {
+    return '';
+  }
+}
+
 export function PodTemplate({ template }) {
   const { t } = useTranslation();
 
-  const ContainerComponent = ({ container, name }) => (
+  const ContainerComponent = ({ container }) => (
     <>
       <LayoutPanel.Header>
         <LayoutPanel.Head title={container.name} />
@@ -60,8 +83,11 @@ export function PodTemplate({ template }) {
         {container.env && (
           <LayoutPanelRow name={'Enviroment'} value={getEnvs(container.env)} />
         )}
-        {container.volume && (
-          <LayoutPanelRow name={'Volume Mounts'} value={'Mount'} />
+        {container.volumeMounts && (
+          <LayoutPanelRow
+            name={'Volume Mounts'}
+            value={getMounts(container.volumeMounts)}
+          />
         )}
       </LayoutPanel.Body>
     </>

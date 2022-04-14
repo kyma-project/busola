@@ -1,8 +1,18 @@
-.env-table {
-  text-align: left;
-  border: 1px solid black;
-}
+.template-table {
+  margin-bottom: 10px;
 
-.table-header {
-  border-bottom: 1px solid black;
+  tr {
+    text-align: left;
+    border-bottom: 2px solid var(--sapGroup_ContentBorderColor, #d9d9d9);
+  }
+
+  th {
+    background-color: var(--sapNeutralBackground);
+  }
+
+  th,
+  td {
+    padding: 5px 0px 0px 5px;
+    width: 50%;
+  }
 }
