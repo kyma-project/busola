@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { groupBy } from 'lodash';
-import { FormInput, LayoutPanel } from 'fundamental-react';
 import { Tokens } from 'shared/components/Tokens';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { LayoutPanel } from 'fundamental-react';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { ResourceListRenderer } from 'shared/components/ResourcesList/ResourcesList';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-import './GroupingListPage.scss';
+import { SearchInput } from 'shared/components/GenericList/SearchInput';
 
 export function GroupingListPage({
   title,
@@ -63,11 +63,10 @@ export function GroupingListPage({
       title={title}
       description={description}
       actions={
-        <FormInput
+        <SearchInput
           value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          className="fd-margin-begin--lg search-with-magnifying-glass group-list-search"
-          type="search"
+          handleQueryChange={setSearchQuery}
+          allowSlashShortcut
         />
       }
     />
