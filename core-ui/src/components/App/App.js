@@ -15,7 +15,7 @@ import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
 
 export default function App() {
-  const { cluster, language } = useMicrofrontendContext();
+  const { cluster, language, customResources } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
@@ -51,43 +51,39 @@ export default function App() {
         }
       />
 
-      <Route
-        path="/namespaces/:namespaceId/wasmplugins"
-        element={<ExtensibilityList />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/wasmplugins/:resourceName"
-        element={<ExtensibilityDetails />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/customjobs"
-        element={<ExtensibilityList />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/customjobs/:resourceName"
-        element={<ExtensibilityDetails />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/envoyfilters"
-        element={<ExtensibilityList />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/envoyfilters/:resourceName"
-        element={<ExtensibilityDetails />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/buckets"
-        element={<ExtensibilityList />}
-      />
-      <Route
-        path="/namespaces/:namespaceId/buckets/:resourceName"
-        element={<ExtensibilityDetails />}
-      />
-      <Route path="/bgpconfigurations" element={<ExtensibilityList />} />
-      <Route
-        path="/bgpconfigurations/:resourceName"
-        element={<ExtensibilityDetails />}
-      />
+      {customResources?.map(cr => {
+        if (cr.navigation?.scope === 'namespace') {
+          return (
+            <>
+              <Route
+                path={`/namespaces/:namespaceId/${cr.navigation.path}`}
+                element={<ExtensibilityList />}
+              />
+              {cr.navigation.hasDetailsView && (
+                <Route
+                  path={`/namespaces/:namespaceId/${cr.navigation.path}/:${cr.navigation.path}Name`}
+                  element={<ExtensibilityDetails />}
+                />
+              )}
+            </>
+          );
+        } else {
+          return (
+            <>
+              <Route
+                path={`/${cr.navigation.path}`}
+                element={<ExtensibilityList />}
+              />
+              {cr.navigation.hasDetailsView && (
+                <Route
+                  path={`/${cr.navigation.path}/:${cr.navigation.path}Name`}
+                  element={<ExtensibilityDetails />}
+                />
+              )}
+            </>
+          );
+        }
+      })}
 
       {resourceRoutes}
       {otherRoutes}
