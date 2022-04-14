@@ -14,13 +14,13 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 export const ExtensibilityDetails = () => {
   const resMetaData = useGetCRbyPath();
   const detailsProps = usePrepareDetailsProps(
-    resMetaData.nav.path,
-    resMetaData.nav.label,
+    resMetaData.navigation.path,
+    resMetaData.navigation.label,
   );
-  if (resMetaData.nav.resourceType) {
+  if (resMetaData.navigation.resource.kind) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
-      resMetaData.nav.path,
-      resMetaData.nav.resourceType,
+      resMetaData.navigation.path,
+      resMetaData.navigation.resource.kind.toLowerCase(),
     );
   }
 

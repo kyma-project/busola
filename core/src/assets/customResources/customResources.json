@@ -1,17 +1,15 @@
 [
   {
-    "nav": {
+    "navigation": {
       "path": "wasmplugins",
       "label": "My wasmplugins",
       "category": "My Resources",
       "scope": "namespace",
-      "api": "/apis/extensions.istio.io/v1alpha1",
       "resource": {
         "kind": "WasmPlugins",
         "group": "extensions.istio.io",
         "version": "v1alpha1"
       },
-      "resourceType": "wasmplugins",
       "hasDetailsView": true
     },
     "list": {
@@ -141,13 +139,11 @@
     }
   },
   {
-    "nav": {
+    "navigation": {
       "path": "customjobs",
       "label": "CustomJobs",
       "category": "My Resources",
       "scope": "namespace",
-      "resourceType": "jobs",
-      "api": "/apis/batch/v1",
       "resource": {
         "kind": "Jobs",
         "group": "batch",
@@ -240,13 +236,11 @@
     }
   },
   {
-    "nav": {
+    "navigation": {
       "path": "envoyfilters",
       "label": "envoyfilters",
       "category": "My Resources",
       "scope": "namespace",
-      "resourceType": "envoyfilters",
-      "api": "/apis/networking.istio.io/v1alpha3",
       "resource": {
         "kind": "EnvoyFilters",
         "group": "networking.istio.io",

@@ -17,10 +17,10 @@ export function ExtensibilityCreate({
 }) {
   const { t } = useTranslation();
   const { namespaceId: namespace } = useMicrofrontendContext();
-  const api = createResource?.nav?.resource || {};
+  const api = createResource?.navigation?.resource || {};
 
   const [resource, setResource] = useState(
-    createTemplate(api, namespace, createResource?.nav?.scope),
+    createTemplate(api, namespace, createResource?.navigation?.scope),
   );
 
   const simpleSchema = createResource?.create?.simple?.schema;

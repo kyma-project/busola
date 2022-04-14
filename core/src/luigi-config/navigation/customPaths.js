@@ -9,49 +9,55 @@ const getCustomNodes = (crs, scope) => {
 
   try {
     customPaths =
-      crs?.map(cr => ({
-        category: {
-          label: cr.nav?.category || 'Custom Resources',
-          collapsible: true,
-          icon: 'source-code',
-        },
-        resourceType: cr.nav?.resourceType,
-        pathSegment: cr.nav?.path,
-        label: cr.nav?.label,
-        viewUrl:
-          config.coreUIModuleUrl +
-          `${scope === 'namespace' ? '/namespaces/:namespaceId' : ''}/${
-            cr.nav?.path
-          }?` +
-          toSearchParamsString({
-            resourceApiPath: cr.nav?.api,
-            hasDetailsView: cr.nav?.hasDetailsView,
-          }),
-        keepSelectedForChildren: true,
-        navigationContext: cr.nav?.path,
-        context: {
-          customResource: cr,
-        },
-        children: [
-          {
-            pathSegment: 'details',
-            children: [
-              {
-                pathSegment: `:${cr.nav?.path}Name`,
-                resourceType: cr.nav?.path,
-                viewUrl:
-                  config.coreUIModuleUrl +
-                  `${scope === 'namespace' ? '/namespaces/:namespaceId' : ''}/${
-                    cr.nav?.path
-                  }/:${cr.nav?.path}Name?` +
-                  toSearchParamsString({
-                    resourceApiPath: cr.nav?.api,
-                  }),
-              },
-            ],
+      crs?.map(cr => {
+        const { resource } = cr.navigation || {};
+        const api = `/${resource.group === 'core' ? 'api' : 'apis'}/${
+          resource.group
+        }/${resource.version.toLowerCase()}`;
+        return {
+          category: {
+            label: cr.navigation?.category || 'Custom Resources',
+            collapsible: true,
+            icon: 'customize',
           },
-        ],
-      })) || [];
+          resourceType: resource.kind.toLowerCase(),
+          pathSegment: cr.navigation?.path,
+          label: cr.navigation?.label || resource.kind,
+          viewUrl:
+            config.coreUIModuleUrl +
+            `${scope === 'namespace' ? '/namespaces/:namespaceId' : ''}/${
+              cr.navigation?.path
+            }?` +
+            toSearchParamsString({
+              resourceApiPath: api,
+              hasDetailsView: cr.navigation?.hasDetailsView,
+            }),
+          keepSelectedForChildren: true,
+          navigationContext: cr.navigation?.path,
+          context: {
+            customResource: cr,
+          },
+          children: [
+            {
+              pathSegment: 'details',
+              children: [
+                {
+                  pathSegment: `:${cr.navigation?.path}Name`,
+                  resourceType: resource.kind.toLowerCase(),
+                  viewUrl:
+                    config.coreUIModuleUrl +
+                    `${
+                      scope === 'namespace' ? '/namespaces/:namespaceId' : ''
+                    }/${cr.navigation?.path}/:${cr.navigation?.path}Name?` +
+                    toSearchParamsString({
+                      resourceApiPath: api,
+                    }),
+                },
+              ],
+            },
+          ],
+        };
+      }) || [];
   } catch (e) {
     console.error('An error occured while creating custom paths:', e);
   }
@@ -61,7 +67,7 @@ const getCustomNodes = (crs, scope) => {
 export const getCustomPaths = (customResources, scope) => {
   const getScopedCrs = (crs, scope) => {
     const scopedCrs = crs?.filter(cr => {
-      const crScope = cr.nav?.scope;
+      const crScope = cr.navigation?.scope;
       if (
         !crScope ||
         (crScope.toLowerCase() !== 'namespace' &&
@@ -80,12 +86,14 @@ export const getCustomPaths = (customResources, scope) => {
   const getValidCrs = crs => {
     const validCrs = crs?.filter(cr => {
       const isValidCr =
-        cr.nav &&
-        typeof cr.nav.path === 'string' &&
-        typeof cr.nav.api === 'string' &&
-        typeof cr.nav.resourceType === 'string';
+        cr.navigation &&
+        typeof cr.navigation.path === 'string' &&
+        cr.navigation.resource &&
+        typeof cr.navigation.resource.kind === 'string' &&
+        typeof cr.navigation.resource.group === 'string' &&
+        typeof cr.navigation.resource.version === 'string';
       if (!isValidCr) {
-        console.warn(
+        console.error(
           'Some of the custom resources are not configured properly.',
         );
       }
