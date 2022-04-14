@@ -74,6 +74,14 @@ export default function App() {
         path="/namespaces/:namespaceId/envoyfilters/:resourceName"
         element={<ExtensibilityDetails />}
       />
+      <Route
+        path="/namespaces/:namespaceId/buckets"
+        element={<ExtensibilityList />}
+      />
+      <Route
+        path="/namespaces/:namespaceId/buckets/:resourceName"
+        element={<ExtensibilityDetails />}
+      />
       <Route path="/bgpconfigurations" element={<ExtensibilityList />} />
       <Route
         path="/bgpconfigurations/:resourceName"
