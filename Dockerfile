@@ -16,18 +16,13 @@ ENV CI true
 COPY . /app
 
 RUN make resolve
-RUN make validate
-RUN make pull-licenses
 
-RUN cd /app/core && make test && make build
-RUN cd /app/core-ui && make test && make build
+RUN cd /app/core &&  make build
+RUN cd /app/core-ui &&  make build
 
 # ---- Serve ----
-FROM alpine:3.15.0
+FROM nginxinc/nginx-unprivileged:1.21
 WORKDIR /app
-
-RUN apk --no-cache upgrade &&\
-  apk --no-cache add nginx
 
 # apps
 COPY --from=builder /app/core/src /app/core
@@ -38,10 +33,6 @@ COPY --from=builder /app/nginx/nginx.conf /etc/nginx/
 COPY --from=builder /app/nginx/core.conf /etc/nginx/
 COPY --from=builder /app/nginx/core-ui.conf /etc/nginx/
 COPY --from=builder /app/nginx/mime.types /etc/nginx/
-
-
-RUN touch /var/run/nginx.pid && \
-  chown -R nginx:nginx /var/run/nginx.pid
 
 EXPOSE 8080
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
