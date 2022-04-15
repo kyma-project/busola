@@ -125,7 +125,7 @@ context('Test Cron Jobs', () => {
       .type('*');
 
     cy.getIframeBody()
-      .contains('button', 'Command')
+      .find('[aria-label="expand Command"]')
       .click();
 
     cy.getIframeBody()
@@ -146,7 +146,7 @@ context('Test Cron Jobs', () => {
       .type('busytest');
 
     cy.getIframeBody()
-      .contains('Always')
+      .contains('[data-testid="select-dropdown"]', 'Always')
       .click();
 
     cy.getIframeBody()
