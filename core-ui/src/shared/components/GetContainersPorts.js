@@ -1,3 +1,5 @@
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+
 export function getPorts(ports) {
   if (ports?.length) {
     return (
@@ -11,6 +13,6 @@ export function getPorts(ports) {
       </ul>
     );
   } else {
-    return '';
+    return EMPTY_TEXT_PLACEHOLDER;
   }
 }

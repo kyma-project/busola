@@ -3,162 +3,60 @@ import { useTranslation } from 'react-i18next';
 
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { getPorts } from '../GetContainersPorts';
-
+import { Labels } from '../Labels/Labels';
+import { ContainersPanel, Volume } from './components';
 import './PodTemplate.scss';
-
-function getEnvs(envs) {
-  if (envs?.length) {
-    return (
-      <table className="template-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          {envs.map((env, i) => {
-            return (
-              <tr key={i}>
-                <td>{env.name}</td>
-                <td>{env.value || env?.valueFrom?.secretKeyRef?.name || ''}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    );
-  } else {
-    return '';
-  }
-}
-
-function getMounts(mounts) {
-  if (mounts?.length) {
-    return (
-      <table className="template-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          {mounts.map((mount, i) => {
-            return (
-              <tr key={i}>
-                <td>{mount.name}</td>
-                <td>{mount?.mountPath}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    );
-  } else {
-    return '';
-  }
-}
 
 export function PodTemplate({ template }) {
   const { t } = useTranslation();
 
-  const ContainerComponent = ({ container }) => (
-    <>
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title={container.name} />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        {container.image && (
-          <LayoutPanelRow
-            name={t('pods.labels.image')}
-            value={container.image}
-          />
-        )}
-        {container.imagePullPolicy && (
-          <LayoutPanelRow
-            name={t('pods.labels.image-pull-policy')}
-            value={container.imagePullPolicy}
-          />
-        )}
-        {container.ports && (
-          <LayoutPanelRow
-            name={t('pods.labels.ports')}
-            value={getPorts(container.ports)}
-          />
-        )}
-        {container.env && (
-          <LayoutPanelRow
-            name={t('pods.labels.env')}
-            value={getEnvs(container.env)}
-          />
-        )}
-        {container.volumeMounts && (
-          <LayoutPanelRow
-            name={t('pods.labels.volume-mounts')}
-            value={getMounts(container.volumeMounts)}
-          />
-        )}
-        {container.command && (
-          <LayoutPanelRow
-            name={t('pods.labels.command')}
-            value={<p className="code-block">{container.command.join(' ')}</p>}
-          />
-        )}
-        {container.args && (
-          <LayoutPanelRow
-            name={t('pods.labels.args')}
-            value={<p className="code-block">{container.args.join(' ')}</p>}
-          />
-        )}
-      </LayoutPanel.Body>
-    </>
+  const header = (
+    <LayoutPanel.Header>
+      <LayoutPanel.Head title={t('pods.labels.pod-template')} />
+      <Labels
+        className="fd-margin-begin--tiny"
+        labels={template.metadata.labels}
+      />
+    </LayoutPanel.Header>
   );
 
-  if (!template.spec.containers && !template.spec.initContainers) {
-    return null;
-  }
+  const body = (
+    <LayoutPanel.Body>
+      <LayoutPanelRow
+        name={t('pods.labels.restart-policy')}
+        value={template.spec.restartPolicy}
+      />
+      <ContainersPanel
+        title={t('pods.labels.constainers')}
+        containers={template.spec.containers}
+      />
+      {template.spec.initContainers && (
+        <ContainersPanel
+          title={t('pods.labels.init-constainers')}
+          containers={template.spec.initContainers}
+        />
+      )}
+      {template.spec.volumes && (
+        <>
+          <LayoutPanel className="fd-margin--md">
+            <LayoutPanel.Header>
+              <LayoutPanel.Head title={t('pods.labels.volumes')} />
+            </LayoutPanel.Header>
+            <LayoutPanel.Body>
+              {template.spec.volumes.map(volume => (
+                <Volume key={volume.name} volume={volume} />
+              ))}
+            </LayoutPanel.Body>
+          </LayoutPanel>
+        </>
+      )}
+    </LayoutPanel.Body>
+  );
 
   return (
     <LayoutPanel className="fd-margin--md" key="pod-template">
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('pods.labels.pod-template')} />
-      </LayoutPanel.Header>
-      {template.spec.containers && (
-        <>
-          <LayoutPanel className="fd-margin--md">
-            <LayoutPanel.Header>
-              <LayoutPanel.Head title={t('pods.labels.constainers')} />
-            </LayoutPanel.Header>
-            <LayoutPanel.Body>
-              {template.spec.containers.map(container => (
-                <ContainerComponent
-                  key={container.name}
-                  container={container}
-                />
-              ))}
-            </LayoutPanel.Body>
-          </LayoutPanel>
-        </>
-      )}
-      {template.spec.initContainers && (
-        <>
-          <LayoutPanel className="fd-margin--md">
-            <LayoutPanel.Header>
-              <LayoutPanel.Head title={t('pods.labels.init-constainers')} />
-            </LayoutPanel.Header>
-            <LayoutPanel.Body>
-              {template.spec.initContainers.map(container => (
-                <ContainerComponent
-                  key={container.name}
-                  container={container}
-                />
-              ))}
-            </LayoutPanel.Body>
-          </LayoutPanel>
-        </>
-      )}
+      {header}
+      {body}
     </LayoutPanel>
   );
 }
