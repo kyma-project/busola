@@ -13,7 +13,7 @@
       "hasDetailsView": true
     },
     "list": {
-      "title": "My wasmplugins title override",
+      "nameOverride": "My wasmplugins title override",
       "description": "Wasmplugins are a great resource",
       "columns": [
         {
@@ -30,10 +30,7 @@
         }
       ]
     },
-    "details": {
-      "title": "Custom Jobs",
-      "fields": {}
-    },
+    "details": {},
     "create": {
       "simple": {
         "schema": {
@@ -141,7 +138,7 @@
   "customjobs": {
     "navigation": {
       "path": "customjobs",
-      "label": "CustomJobs",
+      "label": "Custom Jobs",
       "category": { "de": "Meine Ressourcen" },
       "scope": "namespace",
       "resource": {
@@ -152,7 +149,7 @@
       "hasDetailsView": true
     },
     "list": {
-      "name-override": "My custom jobs title override",
+      "nameOverride": "My custom jobs title override",
       "description": {
         "en": "Custom jobs are a great resource.",
         "de": "Benutzerdefinierte Jobs sind eine großartige Ressource."
@@ -185,19 +182,19 @@
     "details": {
       "components": [
         {
-          "type": "monaco",
-          "resource": "",
+          "type": "monacoPanel",
+          "valuePath": "$",
           "title": "Job as a Whole",
           "language": "json"
         },
         {
-          "type": "monaco",
-          "resource": "metadata.name",
+          "type": "monacoPanel",
+          "valuePath": "metadata.name",
           "title": { "en": "The Job's Name" },
           "language": "json"
         },
         {
-          "type": "list",
+          "type": "listPanel",
           "title": {
             "en": "conditionsTitleII"
           },
@@ -211,10 +208,13 @@
             "Last Probe Time string no translation"
           ],
           "columns": ["type", "status", "lastProbeTime", "lastProbeTime"],
-          "resource": "status.conditions"
+          "valuePath": "$.status.conditions"
         },
         {
-          "type": "detail-panel",
+          "type": "detailPanel",
+          "title": {
+            "en": "Some details"
+          },
           "properties": [
             {
               "header": "Parallelism",
@@ -225,18 +225,19 @@
               "valuePath": "$.spec.completions"
             },
             {
-              "header": "Backofflimit",
+              "header": {
+                "en": "Backofflimit"
+              },
               "valuePath": "$.spec.backoffLimit"
             }
-          ],
-          "title": "Some details"
+          ]
         },
         {
-          "type": "list",
+          "type": "listPanel",
           "title": "My own Conditions",
           "headers": ["type", "status", "LaSt PrOBe", "Reason", "Message"],
           "columns": ["type", "status", "lastProbeTime", "reason", "message"],
-          "resource": "status.conditions"
+          "valuePath": "$.status.conditions"
         }
       ]
     },
@@ -259,14 +260,15 @@
     },
     "list": {
       "title": "My list of envoys",
-      "description": "Blabla",
+      "description": {
+        "id": "Blabla"
+      },
       "columns": []
     },
     "details": {
-      "title": "Envoy Filter",
       "components": [
         {
-          "type": "monaco",
+          "type": "monacoPanel",
           "resource": "envoyfilter",
           "title": "Filter as a Whole"
         }

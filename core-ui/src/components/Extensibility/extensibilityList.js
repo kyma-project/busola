@@ -54,7 +54,7 @@ export const ExtensibilityList = () => {
   }
   listProps.createFormProps = { resource };
   listProps.resourceName =
-    translate(resource.list?.['name-override']) || listProps.resourceName;
+    translate(resource.list?.nameOverride) || listProps.resourceName;
   listProps.description = translate(resource.list?.description) || '';
   listProps.customColumns = (resource.list.columns || []).map(column => ({
     header: translate(column.header),

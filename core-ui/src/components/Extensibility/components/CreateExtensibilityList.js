@@ -3,11 +3,11 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { getValue, useGetTranslation } from './helpers';
 
 export const CreateExtensibilityList = metadata => {
-  const { title, headers, columns, resource: resPath } = metadata;
+  const { title, headers, columns, valuePath } = metadata;
 
-  const Element = res => {
-    const result = getValue(res, resPath);
-
+  return res => {
+    const result = getValue(res, valuePath);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const translate = useGetTranslation();
 
     const headerRenderer = () =>
@@ -24,6 +24,7 @@ export const CreateExtensibilityList = metadata => {
         ) || []
       );
     };
+
     return (
       <GenericList
         key={translate(title)}
@@ -35,6 +36,4 @@ export const CreateExtensibilityList = metadata => {
       />
     );
   };
-
-  return Element;
 };

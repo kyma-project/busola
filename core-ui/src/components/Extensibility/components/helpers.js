@@ -2,7 +2,7 @@ import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
 export const getValue = (resource, path) => {
-  if (!path) return resource;
+  if (!path || path === '$') return resource;
 
   if (path.startsWith('$.')) {
     return jp.value(resource, path);

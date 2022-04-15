@@ -19,22 +19,26 @@ export const ExtensibilityDetails = () => {
     );
   }
 
-  // const translate = useGetTranslation();
-
   const customColumns = [];
   const [customComponents, setCustomComponents] = useState([]);
 
   useEffect(() => {
     const { components } = resMetaData.details;
-    const lists = components?.filter(ele => ele.type === 'list') || [];
-    const editors = components?.filter(ele => ele.type === 'monaco') || [];
-    const detailPanels =
-      components?.filter(ele => ele.type === 'detail-panel') || [];
-    setCustomComponents([
-      ...editors.map(CreateReadOnlyEditor),
-      ...lists.map(CreateExtensibilityList),
-      ...detailPanels.map(CreateDetailPanel),
-    ]);
+
+    const parse = components =>
+      components.map(c => {
+        switch (c.type) {
+          case 'listPanel':
+            return CreateExtensibilityList(c);
+          case 'detailPanel':
+            return CreateDetailPanel(c);
+          case 'monacoPanel':
+            return CreateReadOnlyEditor(c);
+          default:
+            return null;
+        }
+      }) || [];
+    setCustomComponents(parse(components));
   }, [resMetaData]);
 
   const breadcrumbs = [
