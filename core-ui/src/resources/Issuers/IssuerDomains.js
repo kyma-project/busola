@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
 export function IssuerDomains(issuer) {
