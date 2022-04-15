@@ -33,6 +33,20 @@ body {
   }
 }
 
+.panel-grid {
+  display: grid;
+  grid-template-columns: 2fr 2fr;
+  margin: 32px;
+  grid-gap: 32px;
+  .fd-panel {
+    margin: 0;
+  }
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
 .fd-panel.fd-panel--no-background {
   background-color: transparent;
 }

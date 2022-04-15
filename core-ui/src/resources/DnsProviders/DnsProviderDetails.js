@@ -6,7 +6,6 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import { DnsProviderCreate } from './DnsProviderCreate';
-import '../Namespaces/NamespaceDetails.scss';
 
 const Domains = resource => {
   const { t, i18n } = useTranslation();
