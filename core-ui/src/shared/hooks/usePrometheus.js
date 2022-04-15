@@ -114,7 +114,9 @@ export function usePrometheus(
   metricId,
   { items, timeSpan, ...props },
 ) {
+  // const { serviceUrl } = useFeature('PROMETHEUS');
   useFeature('PROMETHEUS');
+
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);

@@ -1,11 +1,15 @@
 import { useEffect } from 'react';
 import LuigiClient from '@luigi-project/client';
 
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+
 // export function getFeature(key) {
 // return (LuigiClient.getActiveFeatureToggles() || []).includes(key);
 // }
 
 export function useFeature(featureName) {
+  const { features } = useMicrofrontendContext();
+
   // const [value, setValue] = useState(false);
   // const luigiValue = getFeatureToggle(key);
 
@@ -25,6 +29,7 @@ export function useFeature(featureName) {
     );
     return () => LuigiClient.removeCustomMessageListener(customMsgId);
     */
+    return features[featureName] ?? { isEnabled: false };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // return [value, setValue];

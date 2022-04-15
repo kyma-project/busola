@@ -7,7 +7,6 @@ import {
   BusyIndicator,
 } from 'fundamental-react';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { useTranslation } from 'react-i18next';
 
@@ -155,7 +154,6 @@ export function SingleMetricMultipeGraph({
 }
 
 export function StatsPanel({ type, mode = 'single', ...props }) {
-  const { features } = useMicrofrontendContext();
   const timeSpans = {
     '1h': 60 * 60,
     '3h': 3 * 60 * 60,
@@ -175,9 +173,8 @@ export function StatsPanel({ type, mode = 'single', ...props }) {
     setTimeSpan(visibleTimeSpans[0]);
   }, [metric]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!features.PROMETHEUS?.isEnabled) {
-    return '';
-  }
+  const prometheus = useFeature('PROMETHEUS');
+  if (!prometheus.isEnabled) return '';
 
   const graphOptions =
     type === 'pod'
