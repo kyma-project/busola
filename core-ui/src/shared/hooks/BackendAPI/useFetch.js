@@ -1,10 +1,10 @@
+import { fetchQueue } from 'fetch-queue';
+
 import { checkForTokenExpiration } from 'shared/hooks/BackendAPI/checkForTokenExpiration';
 import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { baseUrl, throwHttpError } from 'shared/hooks/BackendAPI/config';
 import { useConfig } from 'shared/contexts/ConfigContext';
-
-import { fetchQueue } from 'fetch-queue';
 
 export const useFetch = () => {
   const { authData, cluster, config, ssoData } = useMicrofrontendContext();
