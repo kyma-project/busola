@@ -1,6 +1,19 @@
 import { failFastFetch } from './navigation/queries';
 import { config as coreConfig } from './config';
 
+export function convertStaticFeatures(features = {}) {
+  return Object.fromEntries(
+    Object.entries(features).map(([key, feature]) => {
+      if (feature.selectors) {
+        feature.checks = feature.selectors.map(selector =>
+          apiGroup(selector.apiGroup),
+        );
+        feature.initial = true;
+      }
+      return [key, feature];
+    }),
+  );
+}
 const xprod = (a, b) => {
   let idx = 0;
   let ilen = a.length;
@@ -21,7 +34,7 @@ const xprod = (a, b) => {
 const xprod3 = (a, b, c) =>
   xprod(a, xprod(b, c)).map(([a, [b, c]]) => [a, b, c]);
 
-function apiGroup(group) {
+export function apiGroup(group) {
   return (config, feature, { groupVersions }) => {
     const found = groupVersions?.find(g => g.includes(group));
     return {
@@ -63,7 +76,7 @@ function service(
 // Object.entries(DEFAULT_MODULES).map(([key, value]) => [key, apiGroup(value)])
 // );
 
-const discoverableFeatures = {
+export const discoverableFeatures = {
   PROMETHEUS: {
     initial: false,
     checks: [

@@ -1,3 +1,4 @@
+import { apiGroup, discoverableFeatures } from './feature-discovery';
 const DEFAULT_MODULES = {
   SERVICE_CATALOG: 'servicecatalog.k8s.io',
   BTP_CATALOG: 'services.cloud.sap.com',
@@ -9,7 +10,7 @@ const DEFAULT_MODULES = {
   SERVERLESS: 'serverless.kyma-project.io',
   CUSTOM_DOMAINS: 'dns.gardener.cloud',
   ISTIO: 'networking.istio.io',
-  PROMETHEUS: 'monitoring.coreos.com',
+  // PROMETHEUS: 'monitoring.coreos.com',
 };
 
 export const DEFAULT_FEATURES = {
@@ -17,15 +18,11 @@ export const DEFAULT_FEATURES = {
     Object.entries(DEFAULT_MODULES).map(([key, value]) => [
       key,
       {
-        selectors: [
-          {
-            type: 'apiGroup',
-            apiGroup: value,
-          },
-        ],
+        checks: [apiGroup(value)],
       },
     ]),
   ),
+  ...discoverableFeatures,
 };
 
 export const DEFAULT_HIDDEN_NAMESPACES = [

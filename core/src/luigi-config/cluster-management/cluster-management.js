@@ -12,6 +12,7 @@ import {
 import { merge } from 'lodash';
 import { checkIfClusterRequiresCA } from '../navigation/queries';
 import * as clusterStorage from './clusters-storage';
+import { convertStaticFeatures } from '../feature-discovery';
 
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
@@ -121,6 +122,13 @@ export async function getActiveCluster() {
   }
 
   const targetClusterConfig = getTargetClusterConfig() || {};
+
+  if (clusters.config?.features)
+    clusters.config.features = convertStaticFeatures(clusters.config?.features);
+  if (targetClusterConfig.config?.features)
+    targetClusterConfig.config.features = convertStaticFeatures(
+      targetClusterConfig.config?.features,
+    );
 
   // add target cluster config
   clusters[clusterName].config = merge(

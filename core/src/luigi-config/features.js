@@ -1,5 +1,6 @@
 import { getBusolaClusterParams } from './busola-cluster-params';
 import { getActiveCluster } from './cluster-management/cluster-management';
+import { apiGroup } from './feature-discovery';
 import { merge } from 'lodash';
 
 const resolvers = {
@@ -52,6 +53,6 @@ export async function getFeatures(data = null) {
     (await getBusolaClusterParams())?.config?.features, // features from config.json merged with configmap
     (await getActiveCluster())?.config?.features, // features from external configmap
   );
-
+  console.log('rawFeatures', rawFeatures);
   return await resolveFeatures(rawFeatures || {}, data);
 }

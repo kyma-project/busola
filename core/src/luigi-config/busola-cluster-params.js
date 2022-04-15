@@ -1,4 +1,5 @@
 import { merge } from 'lodash';
+import { convertStaticFeatures } from './feature-discovery';
 
 let params = null;
 
@@ -15,6 +16,14 @@ export async function getBusolaClusterParams() {
 
       const defaultParams = await defaultConfigResponse.json();
       const mapParams = await configMapResponse.json();
+      if (defaultParams.config?.features)
+        defaultParams.config.features = convertStaticFeatures(
+          defaultParams.config?.features,
+        );
+      if (mapParams.config?.features)
+        mapParams.config.features = convertStaticFeatures(
+          mapParams.config?.features,
+        );
 
       params = merge(defaultParams, mapParams);
     } catch (e) {

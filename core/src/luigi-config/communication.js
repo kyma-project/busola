@@ -17,7 +17,8 @@ import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
 import { getCorrespondingNamespaceLocation } from './navigation/navigation-helpers';
-
+import { getAuthData } from './auth/auth-storage';
+import { fetchBusolaInitData } from './navigation/queries';
 addCommandPaletteHandler();
 addOpenSearchHandler();
 

@@ -10,6 +10,7 @@ import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { useTranslation } from 'react-i18next';
 
+import { useFeature } from 'shared/hooks/useFeature';
 import { usePrometheus } from 'shared/hooks/usePrometheus';
 import { StatsGraph } from 'shared/components/StatsGraph';
 
@@ -174,7 +175,7 @@ export function StatsPanel({ type, mode = 'single', ...props }) {
   }, [metric]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const prometheus = useFeature('PROMETHEUS');
-  if (!prometheus.isEnabled) return '';
+  if (!prometheus?.isEnabled) return '';
 
   const graphOptions =
     type === 'pod'
