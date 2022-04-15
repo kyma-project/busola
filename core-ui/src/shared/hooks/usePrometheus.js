@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { useFeature } from 'shared/hooks/useFeature';
 
 const getPrometheusSelector = data => {
   let selector = `cluster="", container!="", namespace="${data.namespace}"`;
@@ -113,6 +114,7 @@ export function usePrometheus(
   metricId,
   { items, timeSpan, ...props },
 ) {
+  useFeature('PROMETHEUS');
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);

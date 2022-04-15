@@ -1,4 +1,6 @@
 import i18next from 'i18next';
+
+import { discoverFeature } from './feature-discovery';
 import { NODE_PARAM_PREFIX } from './luigi-config';
 import {
   saveClusterParams,
@@ -134,6 +136,11 @@ export const communication = {
         exists,
         pathId,
       });
+    },
+    'busola.requestFeature': async ({ featureName }) => {
+      const authData = getAuthData();
+      const groupVersions = await fetchBusolaInitData(authData);
+      discoverFeature(featureName, { authData, groupVersions });
     },
     ...pageSizeCommunicationEntry,
   },
