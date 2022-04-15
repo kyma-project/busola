@@ -4,6 +4,8 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { baseUrl, throwHttpError } from 'shared/hooks/BackendAPI/config';
 import { useConfig } from 'shared/contexts/ConfigContext';
 
+import { fetchQueue } from 'fetch-queue';
+
 export const useFetch = () => {
   const { authData, cluster, config, ssoData } = useMicrofrontendContext();
   const { fromConfig } = useConfig();
@@ -24,7 +26,10 @@ export const useFetch = () => {
     };
 
     try {
-      const response = await fetch(baseUrl(fromConfig) + relativeUrl, init);
+      const response = await fetchQueue(
+        baseUrl(fromConfig) + relativeUrl,
+        init,
+      );
       if (response.ok) {
         return response;
       } else {
