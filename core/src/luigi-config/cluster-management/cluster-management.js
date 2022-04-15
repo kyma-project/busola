@@ -115,30 +115,30 @@ export async function saveCARequired() {
 }
 
 export async function getActiveCluster() {
+  console.log('getActiveCluster');
   const clusters = clusterStorage.load();
   const clusterName = getActiveClusterName();
-  if (!clusterName || !clusters[clusterName]) {
+  const activeCluster = clusters[clusterName];
+
+  if (!clusterName || !activeCluster) {
+    console.log('no stuff');
     return null;
   }
 
   const targetClusterConfig = getTargetClusterConfig() || {};
 
-  if (clusters.config?.features)
-    clusters.config.features = convertStaticFeatures(clusters.config?.features);
-  if (targetClusterConfig.config?.features)
-    targetClusterConfig.config.features = convertStaticFeatures(
-      targetClusterConfig.config?.features,
-    );
+  if (activeCluster.config) activeCluster.config.features = {};
+  // if (targetClusterConfig.config) targetClusterConfig.config.features = {};
 
   // add target cluster config
-  clusters[clusterName].config = merge(
+  activeCluster.config = merge(
     {},
-    clusters[clusterName].config,
+    activeCluster.config,
     targetClusterConfig.config,
   );
 
-  clusters[clusterName] = await mergeParams(clusters[clusterName]);
-  return clusters[clusterName];
+  console.log(activeCluster);
+  return await mergeParams(activeCluster);
 }
 
 export function getActiveClusterName() {

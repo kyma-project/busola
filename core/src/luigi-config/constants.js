@@ -1,4 +1,5 @@
-import { apiGroup, discoverableFeatures } from './feature-discovery';
+import { apiGroup, service, xprod3 } from './feature-discovery';
+
 const DEFAULT_MODULES = {
   SERVICE_CATALOG: 'servicecatalog.k8s.io',
   BTP_CATALOG: 'services.cloud.sap.com',
@@ -22,8 +23,31 @@ export const DEFAULT_FEATURES = {
       },
     ]),
   ),
-  ...discoverableFeatures,
+  PROMETHEUS: {
+    initial: false,
+    checks: [
+      apiGroup('monitoring.coreos.com'),
+      service(
+        (config, feature) => {
+          return xprod3(
+            feature.namespaces,
+            feature.serviceNames,
+            feature.portNames,
+          ).map(
+            ([namespace, serviceName, portName]) =>
+              `api/v1/namespaces/${namespace}/services/${serviceName}:${portName}/proxy/api/v1`,
+          );
+        },
+        undefined,
+        url => `${url}/status/runtimeinfo`,
+      ),
+    ],
+    namespaces: ['kyma-system'],
+    serviceNames: ['monitoring-prometheus', 'prometheus'],
+    portNames: ['web', 'http-web'],
+  },
 };
+console.log('DEFAULT_FEATURES', DEFAULT_FEATURES);
 
 export const DEFAULT_HIDDEN_NAMESPACES = [
   'compass-system',

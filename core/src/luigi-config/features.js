@@ -48,11 +48,6 @@ async function resolveFeatures(features, data) {
 }
 
 export async function getFeatures(data = null) {
-  const rawFeatures = merge(
-    {},
-    (await getBusolaClusterParams())?.config?.features, // features from config.json merged with configmap
-    (await getActiveCluster())?.config?.features, // features from external configmap
-  );
-  console.log('rawFeatures', rawFeatures);
+  const rawFeatures = (await getActiveCluster())?.config?.features;
   return await resolveFeatures(rawFeatures || {}, data);
 }

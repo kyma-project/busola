@@ -6,6 +6,7 @@ import {
   saveClusterParams,
   deleteCluster,
   saveActiveClusterName,
+  getActiveCluster,
   getActiveClusterName,
   setCluster,
 } from './cluster-management/cluster-management';
@@ -141,7 +142,8 @@ export const communication = {
     'busola.requestFeature': async ({ featureName }) => {
       const authData = getAuthData();
       const groupVersions = await fetchBusolaInitData(authData);
-      discoverFeature(featureName, { authData, groupVersions });
+      const features = (await getActiveCluster())?.config?.features;
+      discoverFeature(features, featureName, { authData, groupVersions });
     },
     ...pageSizeCommunicationEntry,
   },

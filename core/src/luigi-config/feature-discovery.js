@@ -1,5 +1,4 @@
-import { failFastFetch } from './navigation/queries';
-import { config as coreConfig } from './config';
+import { apiGroup } from './feature-checks';
 
 export function convertStaticFeatures(features = {}) {
   return Object.fromEntries(
@@ -31,92 +30,29 @@ const xprod = (a, b) => {
   }
   return result;
 };
-const xprod3 = (a, b, c) =>
+export const xprod3 = (a, b, c) =>
   xprod(a, xprod(b, c)).map(([a, [b, c]]) => [a, b, c]);
 
-export function apiGroup(group) {
-  return (config, feature, { groupVersions }) => {
-    const found = groupVersions?.find(g => g.includes(group));
-    return {
-      ...config,
-      isEnabled: found,
-    };
-  };
-}
-
-function service(
-  urlsGenerator,
-  validator = async res => res.ok,
-  urlMutator = url => url,
-) {
-  return async (config, feature, { authData }) => {
-    const urls = urlsGenerator(config, feature);
-    for (const url of urls) {
-      try {
-        const res = await failFastFetch(
-          urlMutator(`${coreConfig.backendAddress}/${url}`),
-          authData,
-        );
-        if (await validator(res)) {
-          return {
-            ...config,
-            serviceUrl: url,
-          };
-        }
-      } catch (e) {}
-    }
-    return {
-      ...config,
-      isEnabled: false,
-    };
-  };
-}
-
-// export const DEFAULT_FEATURES = Object.fromEntries(
-// Object.entries(DEFAULT_MODULES).map(([key, value]) => [key, apiGroup(value)])
-// );
-
-export const discoverableFeatures = {
-  PROMETHEUS: {
-    initial: false,
-    checks: [
-      apiGroup('monitoring.coreos.com'),
-      service(
-        (config, feature) => {
-          return xprod3(
-            feature.namespaces,
-            feature.serviceNames,
-            feature.portNames,
-          ).map(
-            ([namespace, serviceName, portName]) =>
-              `api/v1/namespaces/${namespace}/services/${serviceName}:${portName}/proxy/api/v1`,
-          );
-        },
-        undefined,
-        url => `${url}/status/runtimeinfo`,
-      ),
-    ],
-    namespaces: ['kyma-system'],
-    serviceNames: ['monitoring-prometheus', 'prometheus'],
-    portNames: ['web', 'http-web'],
-  },
-};
-
-export const discoverFeature = (featureName, data = {}) => {
-  const feature = discoverableFeatures[featureName];
+export const discoverFeature = (features, featureName, data = {}) => {
+  const feature = features[featureName];
   if (!feature) return;
 
+  // TODO sequential async discovery
   feature.checks.reduce(
-    (config, check) => {
+    async (config, check) => {
       if (!config.isEnabled) return config;
-      return check(config, feature, data);
+      return await check(config, feature, data);
     },
     { isEnabled: true },
+    // TODO update local storage here
   ); // TODO read configuration
 };
 
-export const discoverInitialFeatures = (data = {}) => {
-  Object.entries(discoverableFeatures)
+export const discoverInitialFeatures = (features, data = {}) => {
+  // TODO promise and return
+  Object.entries(features)
     .filter(([key, feature]) => feature.initial)
     .forEach(([key]) => discoverFeature(key, data));
+
+  return features;
 };
