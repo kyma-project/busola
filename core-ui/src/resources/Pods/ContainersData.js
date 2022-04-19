@@ -67,14 +67,15 @@ export default function ContainersData({ type, containers, statuses }) {
       <LayoutPanel.Header>
         <LayoutPanel.Head title={type} />
       </LayoutPanel.Header>
-
-      {containers.map(container => (
-        <ContainerComponent
-          key={container.name}
-          container={container}
-          status={statuses?.find(status => status.name === container.name)}
-        />
-      ))}
+      <LayoutPanel.Body>
+        {containers.map(container => (
+          <ContainerComponent
+            key={container.name}
+            container={container}
+            status={statuses?.find(status => status.name === container.name)}
+          />
+        ))}
+      </LayoutPanel.Body>
     </LayoutPanel>
   );
 }
