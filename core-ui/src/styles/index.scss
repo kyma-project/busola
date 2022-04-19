@@ -1,6 +1,6 @@
 @import '~fundamental-styles/dist/margins.css';
 @import '~@sap-theming/theming-base-content/content/Base/baseLib/sap_fiori_3/css_variables.css';
-@import './shared/components/ResourceGraph/mixins';
+@import '../shared/components/ResourceGraph/mixins';
 
 html {
   font-size: 16px;
@@ -30,6 +30,20 @@ body {
 
   &.no-border {
     border: none;
+  }
+}
+
+.panel-grid {
+  display: grid;
+  grid-template-columns: 2fr 2fr;
+  margin: 32px;
+  grid-gap: 32px;
+  .fd-panel {
+    margin: 0;
+  }
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
   }
 }
 

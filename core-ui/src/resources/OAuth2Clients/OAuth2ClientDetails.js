@@ -10,7 +10,6 @@ import OAuthClientSpecPanel from './OAuthClientSpecPanel';
 import { OAuth2ClientCreate } from './OAuth2ClientCreate';
 
 function SecretComponent({ namespaceName, secretName }) {
-  const { t } = useTranslation();
   const { data: secret, error, loading = true } = useGet(
     `/api/v1/namespaces/${namespaceName}/secrets/${secretName}`,
     {
@@ -18,9 +17,7 @@ function SecretComponent({ namespaceName, secretName }) {
     },
   );
 
-  if (loading) return t('common.headers.loading');
-  if (error) return `${t('common.tooltips.error')} ${error.message}`;
-
+  if (loading || error) return null;
   return <SecretData secret={secret} />;
 }
 
@@ -35,7 +32,11 @@ export function OAuth2ClientDetails(props) {
     />
   );
   const Configuration = resource => (
-    <OAuthClientSpecPanel key="configuration" spec={resource.spec} />
+    <OAuthClientSpecPanel
+      key="configuration"
+      spec={resource.spec}
+      namespace={resource.metadata.namespace}
+    />
   );
 
   const statusColumn = {

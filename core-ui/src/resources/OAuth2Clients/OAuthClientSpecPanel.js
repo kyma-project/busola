@@ -1,17 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { navigateToResource } from 'shared/hooks/navigate';
 
 import { LayoutPanel, FormItem, FormLabel, Link } from 'fundamental-react';
-import LuigiClient from '@luigi-project/client';
 import { Tokens } from 'shared/components/Tokens';
-import { useTranslation } from 'react-i18next';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 import './OAuthClientSpecPanel.scss';
 
-OAuthClientSpecPanel.propTypes = { spec: PropTypes.object.isRequired };
+OAuthClientSpecPanel.propTypes = {
+  spec: PropTypes.object.isRequired,
+  namespace: PropTypes.string.isRequired,
+};
 
-export default function OAuthClientSpecPanel({ spec }) {
+export default function OAuthClientSpecPanel({ spec, namespace }) {
   const { t } = useTranslation();
+
+  const { data: secrets } = useGetList()(
+    `/api/v1/namespaces/${namespace}/secrets`,
+    {
+      pollingInterval: 5000,
+    },
+  );
+
+  const clientSecret = secrets?.find(
+    ({ metadata }) => metadata.name === spec.secretName,
+  );
 
   return (
     <LayoutPanel className="fd-margin--md oauth-client-panel">
@@ -67,15 +83,13 @@ export default function OAuthClientSpecPanel({ spec }) {
       {spec?.secretName ? (
         <FormItem>
           <FormLabel>{t('oauth2-clients.labels.secret')}</FormLabel>
-          <Link
-            onClick={() =>
-              LuigiClient.linkManager()
-                .fromContext('namespace')
-                .navigate(`secrets/details/${spec.secretName}`)
-            }
-          >
-            {spec.secretName}
-          </Link>
+          {clientSecret ? (
+            <Link onClick={() => navigateToResource(clientSecret)}>
+              {spec.secretName}
+            </Link>
+          ) : (
+            spec.secretName || EMPTY_TEXT_PLACEHOLDER
+          )}
         </FormItem>
       ) : null}
       {spec?.tokenEndpointAuthMethod ? (
