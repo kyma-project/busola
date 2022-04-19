@@ -21,11 +21,13 @@ export function PodTemplate({ template }) {
   );
 
   const body = (
-    <LayoutPanel.Body>
-      <LayoutPanelRow
-        name={t('pods.labels.restart-policy')}
-        value={template.spec.restartPolicy}
-      />
+    <>
+      <LayoutPanel.Body className="fd-has-padding-bottom-none">
+        <LayoutPanelRow
+          name={t('pods.labels.restart-policy')}
+          value={template.spec.restartPolicy}
+        />
+      </LayoutPanel.Body>
       <ContainersPanel
         title={t('pods.labels.constainers')}
         containers={template.spec.containers}
@@ -50,7 +52,7 @@ export function PodTemplate({ template }) {
           </LayoutPanel>
         </>
       )}
-    </LayoutPanel.Body>
+    </>
   );
 
   return (
