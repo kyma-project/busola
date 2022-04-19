@@ -29,17 +29,15 @@ export function createPresets(secretDefs, namespaceId, t) {
       name: t('common.labels.default-preset'),
       value: createSecretTemplate(namespaceId),
     },
-    ...secretDefs.map(({ title, name, type, data, ...value }) => {
-      return {
-        name: title || name || type,
-        value: {
-          ...createSecretTemplate(namespaceId),
-          ...value,
-          name,
-          type: type || 'Opaque',
-          data: data?.reduce((acc, key) => ({ ...acc, [key]: '' }), {}),
-        },
-      };
-    }),
+    ...secretDefs.map(({ title, name, type, data, ...value }) => ({
+      name: title || name || type,
+      value: {
+        ...createSecretTemplate(namespaceId),
+        ...value,
+        name,
+        type: type || 'Opaque',
+        data: data?.reduce((acc, key) => ({ ...acc, [key]: '' }), {}),
+      },
+    })),
   ];
 }
