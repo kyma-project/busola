@@ -1,5 +1,5 @@
-import { apiGroup, service, xprod3 } from './feature-discovery';
-
+import { xprod3 } from './feature-discovery';
+import { apiGroup, service } from './feature-checks';
 const DEFAULT_MODULES = {
   SERVICE_CATALOG: 'servicecatalog.k8s.io',
   BTP_CATALOG: 'services.cloud.sap.com',
