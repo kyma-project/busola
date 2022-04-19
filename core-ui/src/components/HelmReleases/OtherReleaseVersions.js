@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
-import { GenericList } from 'react-shared';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Link } from 'fundamental-react';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spinner } from 'react-shared';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import { LayoutPanel } from 'fundamental-react';
 
 const Skeleton = ({ height, width = '100%' }) => {

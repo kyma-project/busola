@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { LayoutPanel, Button } from 'fundamental-react';
-import { Tooltip } from 'react-shared';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useTranslation } from 'react-i18next';
 
 import LambdaReplicas from './LambdaReplicas';
@@ -71,12 +72,10 @@ export default function ResourcesManagement({ lambda }) {
   const {
     register,
     handleSubmit,
-    errors,
-    formState,
+    formState: { errors, isValid },
     setValue,
-    triggerValidation,
   } = useForm({
-    validationSchema: prepareSchema(t),
+    resolver: yupResolver(prepareSchema(t)),
     mode: 'onChange',
     defaultValues,
   });
@@ -98,12 +97,6 @@ export default function ResourcesManagement({ lambda }) {
   function updateFields(data) {
     Object.entries(data).forEach(
       ([name, val]) => setValue && setValue(name, val),
-    );
-  }
-
-  async function retriggerValidation() {
-    await Promise.all(
-      Object.keys(defaultValues).map(elem => triggerValidation(elem)),
     );
   }
 
@@ -162,7 +155,6 @@ export default function ResourcesManagement({ lambda }) {
         onClick={async () => {
           updateFields(defaultValues);
           setIsEditMode(false);
-          retriggerValidation();
         }}
       >
         {t('common.buttons.cancel')}
@@ -175,14 +167,14 @@ export default function ResourcesManagement({ lambda }) {
   const popupMessage = t('functions.create-view.errors.one-field-invalid');
 
   function renderConfirmButton() {
-    const disabled = isEditMode && !formState.isValid;
+    const disabled = isEditMode && !isValid;
     const button = (
       <Button
         glyph={isEditMode ? 'save' : 'edit'}
         option={isEditMode ? 'emphasized' : 'transparent'}
         typeAttr="submit"
         onClick={() => setIsEditMode(prev => !prev)}
-        disabled={isEditMode && !formState.isValid}
+        disabled={isEditMode && !isValid}
       >
         {isEditMode ? saveText : editText}
       </Button>
@@ -228,8 +220,6 @@ export default function ResourcesManagement({ lambda }) {
               register={register}
               disabledForm={!isEditMode}
               errors={errors}
-              triggerValidation={triggerValidation}
-              retriggerValidation={retriggerValidation}
             />
           </LayoutPanel.Body>
         </div>
@@ -245,8 +235,6 @@ export default function ResourcesManagement({ lambda }) {
               register={register}
               disabledForm={!isEditMode}
               errors={errors}
-              triggerValidation={triggerValidation}
-              retriggerValidation={retriggerValidation}
               setValue={setValue}
               type="function"
               defaultPreset={defaultValues[inputNames.function.preset]}
@@ -265,8 +253,6 @@ export default function ResourcesManagement({ lambda }) {
               register={register}
               disabledForm={!isEditMode}
               errors={errors}
-              triggerValidation={triggerValidation}
-              retriggerValidation={retriggerValidation}
               setValue={setValue}
               type="buildJob"
               defaultPreset={defaultValues[inputNames.buildJob.preset]}

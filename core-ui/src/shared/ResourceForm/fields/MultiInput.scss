@@ -1,3 +1,17 @@
-.multi-input > .fd-col {
-  padding-top: 0;
+.multi-input {
+  > .fd-col {
+    padding-top: 0;
+  }
+  .readonly-value {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .new-item-action {
+    min-width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

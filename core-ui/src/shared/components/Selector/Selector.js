@@ -1,12 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Labels } from 'react-shared';
+import { Labels } from 'shared/components/Labels/Labels';
 import { LayoutPanel } from 'fundamental-react';
 import './Selector.scss';
 import { RelatedPods } from '../RelatedPods';
 import { MatchExpressionsList } from '../MatchExpressionsList';
-import { isEmpty } from 'lodash';
+import { isEmpty, isEqual } from 'lodash';
 
 const SelectorDetails = ({
   expressions,
@@ -14,19 +14,25 @@ const SelectorDetails = ({
   namespace,
   RelatedResources,
 }) => {
-  let labelSelector;
-  if (labels) {
-    labelSelector = Object.entries(labels)
-      .map(([key, value]) => `${key}=${value}`)
-      .join(',');
-  }
+  const filterByLabels = pod => {
+    if (!pod.metadata?.labels) return false;
+
+    const podLabels = Object?.entries(pod.metadata?.labels);
+    const resourceLabels = Object?.entries(labels);
+    return resourceLabels.every(resLabel =>
+      podLabels.some(podLabel => isEqual(resLabel, podLabel)),
+    );
+  };
 
   const relatedResources = RelatedResources ? (
-    <RelatedResources labelSelector={labelSelector} />
+    <RelatedResources labels={labels} />
   ) : (
-    <RelatedPods namespace={namespace} labelSelector={labelSelector} />
+    <RelatedPods
+      namespace={namespace}
+      labels={labels}
+      filter={filterByLabels}
+    />
   );
-
   return expressions ? (
     <MatchExpressionsList expressions={expressions} />
   ) : (

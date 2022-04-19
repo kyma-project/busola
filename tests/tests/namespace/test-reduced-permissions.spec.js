@@ -53,6 +53,10 @@ context('Test reduced permissions', () => {
       'apps',
     );
 
+    cy.getIframeBody()
+      .find('[ariaLabel="Load"]:visible', { log: false })
+      .click();
+
     // resources
     chooseComboboxOption(
       '[placeholder^="Start typing to select Resources"]:visible',

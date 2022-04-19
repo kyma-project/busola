@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ServiceClassInfo from '../ServiceClassInfo/ServiceClassInfo';
 
-import { PageHeader } from 'react-shared';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 
 import { serviceClassConstants } from 'helpers/constants';
 import { isService, getResourceDisplayName } from 'helpers';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LayoutPanel } from 'fundamental-react';
-import { Dropdown } from 'react-shared';
+import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { useTranslation } from 'react-i18next';
 
 import { Input } from './TableElements/Input';
@@ -19,8 +19,6 @@ export default function LambdaResources({
   register,
   errors = {},
   type = 'function',
-  triggerValidation = () => void 0,
-  retriggerValidation = () => void 0,
   setValue = () => void 0,
   defaultPreset = customPreset,
 }) {
@@ -56,7 +54,6 @@ export default function LambdaResources({
         setValue(inputNames.requests.cpu, values.requestCpu);
         setValue(inputNames.limits.memory, values.limitMemory);
         setValue(inputNames.limits.cpu, values.limitCpu);
-        await retriggerValidation();
       }
       setCurrentPreset(preset);
     }
@@ -78,7 +75,6 @@ export default function LambdaResources({
                 disabled={disabledForm}
                 options={presetOptions}
                 selectedKey={defaultPreset}
-                _ref={register}
                 id={inputNames.preset}
                 name={inputNames.preset}
                 onSelect={(_, selected) => onChangePreset(selected)}
@@ -112,13 +108,10 @@ export default function LambdaResources({
                   <Input
                     className={inputClassName}
                     disabled={disabledForm}
-                    _ref={register}
+                    {...register(inputNames.requests.memory)}
                     id={inputNames.requests.memory}
                     name={inputNames.requests.memory}
                     placeholder={t('functions.details.title.memory')}
-                    onChange={async () => {
-                      await triggerValidation(inputNames.limits.memory);
-                    }}
                   />
                   <ErrorMessage
                     errors={errors}
@@ -136,11 +129,8 @@ export default function LambdaResources({
                     className={inputClassName}
                     id={inputNames.requests.cpu}
                     name={inputNames.requests.cpu}
-                    _ref={register}
+                    {...register(inputNames.requests.cpu)}
                     placeholder={t('functions.details.title.cpu')}
-                    onChange={async () => {
-                      await triggerValidation(inputNames.limits.cpu);
-                    }}
                   />
                   <ErrorMessage
                     errors={errors}
@@ -168,11 +158,8 @@ export default function LambdaResources({
                     className={inputClassName}
                     id={inputNames.limits.memory}
                     name={inputNames.limits.memory}
-                    _ref={register}
+                    {...register(inputNames.limits.memory)}
                     placeholder={t('functions.details.title.memory')}
-                    onChange={async () => {
-                      await triggerValidation(inputNames.requests.memory);
-                    }}
                   />
                   <ErrorMessage
                     errors={errors}
@@ -190,11 +177,8 @@ export default function LambdaResources({
                     name={inputNames.limits.cpu}
                     disabled={disabledForm}
                     className={inputClassName}
-                    _ref={register}
                     placeholder={t('functions.details.title.cpu')}
-                    onChange={async () => {
-                      await triggerValidation(inputNames.requests.cpu);
-                    }}
+                    {...register(inputNames.requests.cpu)}
                   />
                   <ErrorMessage errors={errors} field={inputNames.limits.cpu} />
                 </>

@@ -1,16 +1,15 @@
 import React, { useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  WithTitle,
-  useMicrofrontendContext,
-  MainFrameRedirection,
-} from 'react-shared';
-import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
-import { useSentry } from '../../hooks/useSentry';
 
-import resources from 'routing/resources';
-import otherRoutes from 'routing/other';
+import { MainFrameRedirection } from 'shared/components/MainFrameRedirection/MainFrameRedirection';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { WithTitle } from 'shared/hooks/useWindowTitle';
+import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
+import { useSentry } from 'hooks/useSentry';
+
+import { resourceRoutes } from 'resources';
+import otherRoutes from 'resources/other';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -48,7 +47,7 @@ export default function App() {
           </WithTitle>
         }
       />
-      {resources}
+      {resourceRoutes}
       {otherRoutes}
       <Route path="" element={<MainFrameRedirection />} />
     </Routes>

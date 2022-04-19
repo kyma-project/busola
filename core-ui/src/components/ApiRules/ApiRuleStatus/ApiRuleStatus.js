@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { StatusBadge } from 'react-shared';
+import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useTranslation } from 'react-i18next';
 
 ApiRuleStatus.propTypes = {

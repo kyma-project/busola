@@ -30,6 +30,8 @@ export function MultiInput({
   fullWidth = false,
   isEntryLocked = () => false,
   readOnly,
+  noEdit,
+  newItemAction,
   ...props
 }) {
   const { t } = useTranslation();
@@ -187,20 +189,29 @@ export function MultiInput({
         <ul className={listClasses}>
           {internalValue.map((entry, index) => (
             <li key={index}>
-              {inputs.map(
-                (input, inputIndex) => inputComponents[index][inputIndex],
+              {noEdit && !isLast(index) && (
+                <span class="readonly-value">{entry}</span>
               )}
-              <Button
-                disabled={readOnly}
-                compact
-                className={classnames({
-                  hidden: isLast(index) || isEntryLocked(entry),
-                })}
-                glyph="delete"
-                type="negative"
-                onClick={() => removeValue(index)}
-                ariaLabel={t('common.buttons.delete')}
-              />
+              {(!noEdit || isLast(index)) &&
+                inputs.map(
+                  (input, inputIndex) => inputComponents[index][inputIndex],
+                )}
+              {!isLast(index) && (
+                <Button
+                  disabled={readOnly}
+                  compact
+                  className={classnames({
+                    hidden: isEntryLocked(entry),
+                  })}
+                  glyph="delete"
+                  type="negative"
+                  onClick={() => removeValue(index)}
+                  ariaLabel={t('common.buttons.delete')}
+                />
+              )}
+              {isLast(index) && (
+                <span className="new-item-action">{newItemAction}</span>
+              )}
             </li>
           ))}
         </ul>

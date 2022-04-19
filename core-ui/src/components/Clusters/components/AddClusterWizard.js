@@ -3,11 +3,9 @@ import { Wizard, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import {
-  useNotification,
-  useMicrofrontendContext,
-  useCustomFormValidator,
-} from 'react-shared';
+import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 import { hasKubeconfigAuth, getUser, getContext, addCluster } from '../shared';
 import { AuthForm } from './AuthForm';

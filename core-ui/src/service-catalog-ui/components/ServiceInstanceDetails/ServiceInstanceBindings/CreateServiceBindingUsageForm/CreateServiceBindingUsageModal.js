@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 
 import { Button } from 'fundamental-react';
-import {
-  Tooltip,
-  useGetList,
-  ModalWithForm,
-  useMicrofrontendContext,
-} from 'react-shared';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import CreateServiceBindingUsageForm from './CreateServiceBindingUsageForm';
 import { SERVICE_BINDINGS_PANEL } from '../constants';

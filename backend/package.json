@@ -4,10 +4,9 @@
   "description": "APIserver proxy for Busola",
   "main": "backend.index.js",
   "scripts": {
-    "start:kyma": "npm run watch",
-    "watch": "SSL_CERT_FILE=certs.pem NODE_ENV=development nodemon --exec babel-node index.js",
+    "start": "SSL_CERT_FILE=certs.pem NODE_ENV=development nodemon --exec babel-node index.js",
     "build": "webpack --mode=production",
-    "start": "SSL_CERT_FILE=certs.pem NODE_ENV=production node backend-production.js",
+    "start:prod": "SSL_CERT_FILE=certs.pem NODE_ENV=production node backend-production.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -17,8 +16,8 @@
     "@babel/runtime": "^7.13.10",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "express-jwt": "^6.1.0",
+    "express": "^4.17.3",
+    "express-jwt": "^6.1.1",
     "https": "^1.0.0",
     "jwks-rsa": "^2.0.5",
     "lodash.merge": "^4.6.2",
@@ -36,6 +35,11 @@
     "webpack": "^5.10.1",
     "webpack-cli": "^4.2.0",
     "webpack-node-externals": "^2.5.2"
+  },
+  "overrides": {
+    "express-jwt": {
+      "async": "^3.2.2"
+    }
   },
   "node": {
     "child_process": false

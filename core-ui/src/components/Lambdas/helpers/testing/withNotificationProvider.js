@@ -1,5 +1,5 @@
 import React from 'react';
-import { NotificationProvider } from 'react-shared';
+import { NotificationProvider } from 'shared/contexts/NotificationContext';
 
 export function withNotificationProvider({ component = null }) {
   return (

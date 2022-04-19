@@ -1,21 +1,34 @@
 import { useEffect, useState } from 'react';
 import LuigiClient from '@luigi-project/client';
-
-import { useGet, useMicrofrontendContext } from 'react-shared';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 const getPrometheusSelector = data => {
-  const selector = `cluster="", container!="", namespace="${data.namespace}"`;
+  let selector = `cluster="", container!="", namespace="${data.namespace}"`;
   if (data.pod) {
-    selector.concat(', ', `pod="${data.pod}"`);
+    let pods = data.pod;
+    if (Array.isArray(data.pod)) {
+      pods = data.pod.join('|');
+    }
+    selector = `${selector}, pod=~"${pods}"`;
   }
   return selector;
 };
 
-const getPrometheusCPUQuery = (type, data, step) => {
+const getPrometheusCPUQuery = (
+  type,
+  mode,
+  data,
+  step,
+  cpuQuery = 'sum_irate',
+) => {
   if (type === 'cluster') {
     return `count(node_cpu_seconds_total{mode="idle"}) - sum(rate(node_cpu_seconds_total{mode="idle"}[${step}s]))`;
-  } else if (type === 'pod') {
-    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{${getPrometheusSelector(
+  } else if (type === 'pod' && mode === 'multiple') {
+    return `sum by(container)(node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
+      data,
+    )}, container != "POD"})`;
+  } else if (type === 'pod' && mode === 'single') {
+    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
       data,
     )}})`;
   } else {
@@ -23,11 +36,15 @@ const getPrometheusCPUQuery = (type, data, step) => {
   }
 };
 
-const getPrometheusMemoryQuery = (type, data) => {
+const getPrometheusMemoryQuery = (type, mode, data) => {
   if (type === 'cluster') {
     return `sum(node_memory_MemTotal_bytes - node_memory_MemFree_bytes)`;
-  } else if (type === 'pod') {
-    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{${getPrometheusSelector(
+  } else if (type === 'pod' && mode === 'multiple') {
+    return `sum by(container)(node_namespace_pod_container:container_memory_working_set_bytes{${getPrometheusSelector(
+      data,
+    )}, container != "POD"})`;
+  } else if (type === 'pod' && mode === 'single') {
+    return `sum(node_namespace_pod_container:container_memory_working_set_bytes{${getPrometheusSelector(
       data,
     )}})`;
   } else {
@@ -51,7 +68,7 @@ const getPrometheusNetworkTransmittedQuery = (type, data, step) => {
   if (type === 'cluster') {
     return `sum(rate(node_network_transmit_bytes_total{device!="lo"}[${step}s]))`;
   } else if (type === 'pod') {
-    return `sum(irate(container_network_receive_bytes_total{${getPrometheusSelector(
+    return `sum(irate(container_network_transmit_bytes_total{${getPrometheusSelector(
       data,
     )}}[${step}s]))`;
   } else {
@@ -63,14 +80,14 @@ const getPrometheusNodesQuery = () => {
   return `sum(kubelet_node_name)`;
 };
 
-export function getMetric(type, metric, { step, ...data }) {
+export function getMetric(type, mode, metric, cpuQuery, { step, ...data }) {
   const metrics = {
     cpu: {
-      prometheusQuery: getPrometheusCPUQuery(type, data, step),
+      prometheusQuery: getPrometheusCPUQuery(type, mode, data, step, cpuQuery),
       unit: '',
     },
     memory: {
-      prometheusQuery: getPrometheusMemoryQuery(type, data),
+      prometheusQuery: getPrometheusMemoryQuery(type, mode, data),
       binary: true,
       unit: 'B',
     },
@@ -90,26 +107,26 @@ export function getMetric(type, metric, { step, ...data }) {
   return metrics[metric];
 }
 
-export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
-  const { features } = useMicrofrontendContext();
+export function usePrometheus(
+  type,
+  mode,
+  metricId,
+  { items, timeSpan, ...props },
+) {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);
 
-  let featurePath = features.PROMETHEUS?.config?.path;
-  featurePath = featurePath?.startsWith('/')
-    ? featurePath.substring(1)
-    : featurePath;
-  featurePath = featurePath?.endsWith('/')
-    ? featurePath.substring(0, featurePath.length - 1)
-    : featurePath;
   const kyma2_0path =
     'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
   const kyma2_1path =
     'api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1';
-  const [path, setPath] = useState(featurePath || kyma2_0path);
+  const cpu2_0_partial_query = 'sum_rate';
+  const cpu2_1_partial_query = 'sum_irate';
+  const [path, setPath] = useState(kyma2_1path);
+  const [cpuQuery, setCpuQuery] = useState(cpu2_1_partial_query);
 
-  const metric = getMetric(type, metricId, { step, ...props });
+  const metric = getMetric(type, mode, metricId, cpuQuery, { step, ...props });
 
   const tick = () => {
     const newEndDate = new Date();
@@ -137,23 +154,24 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     `query=${metric.prometheusQuery}`;
 
   const onDataReceived = data => {
-    if (data?.error) {
+    if (data?.error && data?.error?.statusCode === 'Failure') {
       if (path !== kyma2_0path && path !== kyma2_1path) {
-        LuigiClient.sendCustomMessage({
-          id: 'busola.setPrometheusPath',
-          path: kyma2_0path,
-        });
-        setPath(kyma2_0path);
-      } else if (path === kyma2_0path) {
         LuigiClient.sendCustomMessage({
           id: 'busola.setPrometheusPath',
           path: kyma2_1path,
         });
+        setCpuQuery(cpu2_1_partial_query);
         setPath(kyma2_1path);
+      } else if (path === kyma2_1path) {
+        LuigiClient.sendCustomMessage({
+          id: 'busola.setPrometheusPath',
+          path: kyma2_0path,
+        });
+        setCpuQuery(cpu2_0_partial_query);
+        setPath(kyma2_0path);
       }
     }
   };
-
   let { data, error, loading } = useGet(`/${path}/${query}`, {
     pollingInterval: 0,
     onDataReceived: data => onDataReceived(data),
@@ -163,27 +181,60 @@ export function usePrometheus(type, metricId, { items, timeSpan, ...props }) {
     error = null;
   }
 
-  let stepMultiplier = 0;
-  let helpIndex = 0;
-  const dataValues = data?.data.result[0]?.values;
   let prometheusData = [];
+  let prometheusLabels = [];
 
-  if (dataValues?.length > 0) {
-    for (let i = 0; i < items; i++) {
-      const [timestamp, graphValue] = dataValues[helpIndex] || [];
-      const timeDifference = Math.floor(timestamp - startDate.getTime() / 1000);
-      if (stepMultiplier === timeDifference) {
-        helpIndex++;
-        prometheusData.push(graphValue);
-      } else {
-        prometheusData.push(null);
+  if (mode === 'multiple') {
+    (data?.data.result || []).forEach(d => {
+      let tempPrometheusData = [];
+
+      let stepMultiplier = 0;
+      let helpIndex = 0;
+      const dataValues = d?.values;
+      const metric = d?.metric;
+      if (dataValues?.length > 0) {
+        for (let i = 0; i < items; i++) {
+          const [timestamp, graphValue] = dataValues[helpIndex] || [];
+          const timeDifference = Math.floor(
+            timestamp - startDate.getTime() / 1000,
+          );
+          if (stepMultiplier === timeDifference) {
+            helpIndex++;
+            tempPrometheusData.push(graphValue);
+          } else {
+            tempPrometheusData.push(null);
+          }
+          stepMultiplier += step;
+        }
+        prometheusLabels.push(`container="${metric.container}"`);
+        prometheusData.push(tempPrometheusData);
       }
-      stepMultiplier += step;
+    });
+  } else {
+    const dataValues = data?.data.result[0]?.values;
+
+    let stepMultiplier = 0;
+    let helpIndex = 0;
+    if (dataValues?.length > 0) {
+      for (let i = 0; i < items; i++) {
+        const [timestamp, graphValue] = dataValues[helpIndex] || [];
+        const timeDifference = Math.floor(
+          timestamp - startDate.getTime() / 1000,
+        );
+        if (stepMultiplier === timeDifference) {
+          helpIndex++;
+          prometheusData.push(graphValue);
+        } else {
+          prometheusData.push(null);
+        }
+        stepMultiplier += step;
+      }
     }
   }
 
   return {
     data: prometheusData,
+    defaultLabels: prometheusLabels,
     error,
     loading,
     step,

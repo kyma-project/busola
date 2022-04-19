@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import { GenericList } from 'react-shared';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Icon, InfoLabel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 

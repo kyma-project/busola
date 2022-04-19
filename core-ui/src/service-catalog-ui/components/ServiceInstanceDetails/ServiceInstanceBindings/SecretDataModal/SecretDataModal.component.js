@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import Grid from 'styled-components-grid';
-import { Modal } from 'react-shared';
+import { Modal } from 'shared/components/Modal/Modal';
 import {
   List,
   Item,
@@ -12,7 +12,7 @@ import {
 } from './styled';
 import { useTranslation } from 'react-i18next';
 
-function SecretDataModalWrapper(props) {
+function SecretDataWrapper(props) {
   const { i18n, t } = useTranslation();
   return <SecretDataModal i18n={i18n} {...props} t={t} />;
 }
@@ -95,4 +95,4 @@ class SecretDataModal extends React.Component {
   }
 }
 
-export default SecretDataModalWrapper;
+export default SecretDataWrapper;

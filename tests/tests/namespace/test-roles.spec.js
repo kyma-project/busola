@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import { chooseComboboxOption } from '../../support/helpers';
 
 const ROLE_NAME = `test-role-${Math.floor(Math.random() * 9999) + 1000}`;
 const CLONE_NAME = `${ROLE_NAME}-clone`;
@@ -30,38 +31,29 @@ context('Test Roles', () => {
       .type(ROLE_NAME)
       .click();
 
-    cy.getIframeBody()
-      .find(
-        '[placeholder="Start typing to select API Groups from the list"]:visible',
-        { log: false },
-      )
-      .type(API_GROUP)
-      .click();
+    chooseComboboxOption(
+      '[placeholder^="Start typing to select API"]:visible',
+      API_GROUP,
+    );
 
     cy.getIframeBody()
-      .find(
-        '[placeholder="Start typing to select Resources from the list"]:visible',
-        { log: false },
-      )
-      .type(RESOURCE)
+      .find('[ariaLabel="Load"]:visible', { log: false })
       .click();
 
-    cy.getIframeBody()
-      .find(
-        '[placeholder="Start typing to select Verbs from the list"]:visible',
-        { log: false },
-      )
-      .type('get')
-      .click();
+    chooseComboboxOption(
+      '[placeholder^="Start typing to select Resources"]:visible',
+      RESOURCE,
+    );
 
-    cy.getIframeBody()
-      .find(
-        '[placeholder="Start typing to select Verbs from the list"]:visible',
-        { log: false },
-      )
-      .eq(1)
-      .type('impersonate')
-      .click();
+    chooseComboboxOption(
+      '[placeholder^="Start typing to select Verbs"]:visible',
+      'get',
+    );
+
+    chooseComboboxOption(
+      '[placeholder^="Start typing to select Verbs"]:visible',
+      'create',
+    );
 
     cy.getIframeBody()
       .contains('button', /^Create$/)
@@ -80,7 +72,8 @@ context('Test Roles', () => {
 
     cy.getIframeBody()
       .find('[data-testid=rules-list]')
-      .contains('td', 'impersonate');
+      .find('[data-testid=create]')
+      .should('not.have.text', '-');
 
     cy.getIframeBody()
       .find('[data-testid=rules-list]')
@@ -93,14 +86,10 @@ context('Test Roles', () => {
       .contains('Edit')
       .click();
 
-    cy.getIframeBody()
-      .find(
-        '[placeholder="Start typing to select Verbs from the list"]:visible',
-        { log: false },
-      )
-      .eq(2)
-      .type('watch')
-      .click();
+    chooseComboboxOption(
+      '[placeholder^="Start typing to select Verbs"]:visible',
+      'watch',
+    );
 
     cy.getIframeBody()
       .contains('button', 'Update')
@@ -119,7 +108,8 @@ context('Test Roles', () => {
 
     cy.getIframeBody()
       .find('[data-testid=rules-list]')
-      .contains('td', 'impersonate');
+      .find('[data-testid=create]')
+      .should('not.have.text', '-');
 
     cy.getIframeBody()
       .find('[data-testid=rules-list]')
@@ -158,7 +148,8 @@ context('Test Roles', () => {
 
     cy.getIframeBody()
       .find('[data-testid=rules-list]')
-      .contains('td', 'impersonate');
+      .find('[data-testid=create]')
+      .should('not.have.text', '-');
 
     cy.getIframeBody()
       .find('[data-testid=rules-list]')

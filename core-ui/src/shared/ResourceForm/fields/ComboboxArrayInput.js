@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { MultiInput } from './MultiInput';
 import * as Inputs from '../inputs';
+import './ComboboxArrayInput.scss';
 
 export function ComboboxArrayInput({
   title,
@@ -15,6 +16,8 @@ export function ComboboxArrayInput({
   options,
   emptyStringKey,
   onBlur,
+  filterOptions,
+  noEdit,
   ...props
 }) {
   const { t } = useTranslation();
@@ -41,38 +44,59 @@ export function ComboboxArrayInput({
   return (
     <MultiInput
       title={title}
+      noEdit={noEdit}
       defaultOpen={defaultOpen}
       isAdvanced={isAdvanced}
       toInternal={toInternal}
       toExternal={toExternal}
       tooltipContent={tooltipContent}
       sectionTooltipContent={sectionTooltipContent}
+      className="combobox-array-input"
       inputs={[
-        ({ value, setValue, ref, updateValue, focus, index }) => (
-          <Inputs.ComboboxInput
-            key={index}
-            placeholder={placeholder}
-            compact
-            _ref={ref}
-            selectedKey={value}
-            typedValue={value || ''}
-            selectionType="manual"
-            setValue={setValue}
-            options={options}
-            onKeyDown={focus}
-            onBlur={onBlur}
-            onSelectionChange={(_, selected) => {
-              if (!selected.text) {
-                setValue(null);
-                updateValue(null);
-              }
-              const selection =
-                selected.key !== -1 ? selected.key : selected.text;
-              setValue(selection);
-              updateValue(selection);
-            }}
-          />
-        ),
+        ({
+          value,
+          internalValue,
+          setValue,
+          ref,
+          updateValue,
+          focus,
+          index,
+        }) => {
+          const filteredOptions = () => {
+            if (!filterOptions) return options;
+            return options.filter(
+              option => !internalValue.includes(option.key),
+            );
+          };
+          return (
+            <Inputs.ComboboxInput
+              key={index}
+              placeholder={placeholder}
+              compact
+              _ref={ref}
+              selectedKey={value}
+              typedValue={value || ''}
+              selectionType="manual"
+              setValue={setValue}
+              options={filteredOptions()}
+              onKeyDown={focus}
+              onBlur={onBlur}
+              onSelectionChange={(_, selected) => {
+                if ((noEdit && !selected) || selected.key === -1) {
+                  return;
+                }
+                if (!selected.text) {
+                  setValue(null);
+                  updateValue(null);
+                }
+                const selection =
+                  selected.key !== -1 ? selected.key : selected.text;
+                setValue(selection);
+                updateValue(selection);
+              }}
+            />
+          );
+        },
       ]}
       {...props}
     />

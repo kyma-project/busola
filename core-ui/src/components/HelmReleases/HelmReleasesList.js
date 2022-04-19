@@ -1,14 +1,12 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation, Trans } from 'react-i18next';
-import {
-  useMicrofrontendContext,
-  useGetList,
-  PageHeader,
-  Link as ExternalLink,
-  Labels,
-  GenericList,
-} from 'react-shared';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { Labels } from 'shared/components/Labels/Labels';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { GenericList } from 'shared/components/GenericList/GenericList';
+import { Link as ExternalLink } from 'shared/components/Link/Link';
 import { Link } from 'fundamental-react';
 import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
@@ -83,6 +81,7 @@ function HelmReleasesList() {
         i18n={i18n}
         serverDataLoading={loading}
         serverDataError={error}
+        allowSlashShortcut
       />
     </>
   );

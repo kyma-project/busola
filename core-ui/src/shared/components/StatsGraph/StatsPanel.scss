@@ -18,10 +18,16 @@
   .stats-graph {
     aspect-ratio: 6/1;
     &.cpu {
-      --bar-color: var(--sapIndicationColor_7);
+      --bar-color: var(--sapIndicationColor_7) var(--sapIndicationColor_6)
+        var(--sapIndicationColor_5) var(--sapIndicationColor_4)
+        var(--sapIndicationColor_3) var(--sapIndicationColor_2)
+        var(--sapIndicationColor_1);
     }
     &.memory {
-      --bar-color: var(--sapIndicationColor_6);
+      --bar-color: var(--sapIndicationColor_6) var(--sapIndicationColor_5)
+        var(--sapIndicationColor_4) var(--sapIndicationColor_3)
+        var(--sapIndicationColor_2) var(--sapIndicationColor_1)
+        var(--sapIndicationColor_7);
     }
     &.network {
       --bar-color: var(--sapIndicationColor_5) var(--sapIndicationColor_4);

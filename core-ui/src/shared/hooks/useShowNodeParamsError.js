@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
-import { useNotification } from 'react-shared';
+import { useNotification } from 'shared/contexts/NotificationContext';
 
 export function useShowNodeParamsError() {
   const nodeParams = LuigiClient.getNodeParams();

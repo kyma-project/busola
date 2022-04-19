@@ -112,7 +112,7 @@ applications:
     binding-create-failed: Failed to create the Binding
     binding-created: Binding created
     binding-deleted: Binding deleted
-    binding-not-found: No Bindings
+    binding-not-found: No bindings
     cannot-create: Cannot create the Application
     connect-disabled: Connecting Applications is disabled for SAP BTP, Kyma Runtime.
     copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
@@ -258,15 +258,18 @@ certificates:
   state: Status
   title: Certificates
   tooltips:
+    close-expiration: Certificate will expire in less than one day.
     common-name: Common Name is the primary domain name of the certificate.
     csr: Certificate Signing Request is an alternative way to provide common name, DNS names, and other information.
     dns-names: DNS Names are the optional additional domain names of the certificate.
     existing-secret: Use an existing Secret for storing the certificate if enabled. Otherwise a new Secret will be created.
+    expired: Certificate expired
     issuer: Certificate issuer. If no issuer is given, the default issuer is used.
     ready: Certificate issued
     renew: Trigger a certificate renewal if enabled.
     secret-name: Name of the Secret object to use for storing the certificate.
     secret-ref: Reference of the existing Secret object to use for storing the certificate.
+    will-expire: Certificate will expire in {{daysToExpire}} {{daysForm}}.
     with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
   with-csr: Use a CSR
 cluster-addons:
@@ -300,6 +303,7 @@ clusters:
     kubeconfig-download-error: Failed to download the kubeconfig
     kubeconfig-not-present: Kubeconfig is missing on the Cluster
   description-visibility: Description is shown on the Clusters Overview list
+  disconnect: Cluster disconnected
   edit-cluster: Edit Cluster
   empty:
     go-to-btp-cockpit: To view your clusters, go to
@@ -390,15 +394,17 @@ command-palette:
     namespaced: Namespaced CRs
   help:
     choose-cluster: Choose Cluster
+    crd-aliases: CRD Aliases
     full: Use <0>↑</0> and <0>↓</0> to navigate between results, <0>⏎</0> to choose, <0>Tab</0> to autocomplete.
     navigation: Navigation
     open-preferences: Open Preferences
-    resource-aliases: Resource Aliases
+    resource-aliases: Built-in Resource Aliases
     short-help: Type to search, e.g. "ns default" or "pod nginx"
   item-actions:
     navigate: Navigate
     open: Open
     show-help: Show available commands
+    switch: Switch context
   resource-names:
     addonsconfigurations: Addons
     apirules: API Rules
@@ -409,6 +415,7 @@ command-palette:
     clusterroles: Cluster Roles
     configmaps: Config Maps
     cronjobs: Cron Jobs
+    customresourcedefinitions: Custom Resource Definitions
     daemonsets: Daemon Sets
     destinationrules: Destination Rules
     gitrepositories: Git Repositories
@@ -479,6 +486,8 @@ common:
     annotations: Annotations
     created: Created
     description: Description
+    items: Items
+    key: Key
     kind: Kind
     labels: Labels
     loading: Loading...
@@ -487,8 +496,10 @@ common:
     namespace: Namespace
     owner: Controlled By
     pods: Pods
+    resource: Resource
     resources: Resources
     status: Status
+    value: Value
     version: Version
   labels:
     data: Data
@@ -550,6 +561,7 @@ common:
     download: Download
     duplicate-key: Duplicate key
     error: Error
+    generate-name: Generate name
     hide: Hide Read-Only Fields
     k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
@@ -564,6 +576,7 @@ common:
     secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
     secret-ref-namespace: Namespace defines the space within which the secret name must be unique.
     show: Show read-only fields
+    unknown-date: Unknown date
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
   'yes': 'yes'
 components:
@@ -572,7 +585,7 @@ components:
   error-panel:
     error: An error occured. The component cannot be rendered.
   file-input:
-    drag-file: Drag file here
+    drag-file: Drag your file here or click to upload
   generic-list:
     acion-header:
       messages:
@@ -696,7 +709,6 @@ cron-jobs:
     hour: Hour
     labels:
       concurrency-policy: Concurrency Policy
-      restart-policy: Restart Policy
     minute: Minute
     month: Month
     parse-error: Error parsing CRON expression
@@ -1290,7 +1302,6 @@ hpas:
   'on': 'on'
   on-pods: on Pods
   pods: Pods
-  resource: Resource
   resource-cpu-on-pods: Resource CPU on Pods (current / target)
   scale-target-ref: Scale Target Reference
   spec: Specification
@@ -1614,15 +1625,22 @@ pods:
     type: Type
     volume-name: Volume Name
   labels:
+    args: Args
+    command: Command
     constainers: Containers
+    env: Environment
     filter-timeframe: 'Filter timeframe by:'
     image: Image
     image-pull-policy: Image Pull Policy
     init-constainers: Init Containers
+    mount-path: Mount Path
+    pod-template: Pod Template
     ports: Ports
+    restart-policy: Restart Policy
     reverse-logs: Reverse logs
     save-to-file: Save to a file
     show-timestamps: Show Timestamps
+    volume-mounts: Volume Mounts
     volumes: Volumes
   message:
     failed-to-download: Failed to download the logs
@@ -1741,6 +1759,8 @@ replica-sets:
     error: At least one of the Pods has failed.
     running: All the Pods are running correctly.
 resource-graph:
+  buttons:
+    go-to-details: Go to details
   error: Something went wrong during rendering the graph.
   save-as-dot: DOT format
   title: Resource Graph
@@ -1774,6 +1794,9 @@ role-bindings:
     api-group: API Group
   title: Role Bindings
 roles:
+  buttons:
+    add-all: Add all
+    load: Load
   description: <0>Role</0> is a set of permissions within a Namespace that can be assigned to a user.
   headers:
     api-groups: API Groups

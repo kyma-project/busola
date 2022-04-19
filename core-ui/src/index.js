@@ -7,13 +7,18 @@ import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
 
 import App from './components/App/App';
-// NOTE react-shared has to be imported after App for some unknown reason
-import { Microfrontend, Spinner } from 'react-shared';
+
+import { Microfrontend } from 'shared/contexts/Microfrontend';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+
 import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
 import ServiceCatalogUIWrapper from './service-catalog-ui/Wrapper';
 
-import './index.scss';
-import './fiori-helpers.scss';
+import './styles/reset.css';
+import './styles/sapIllus-Fills.css';
+import './styles/sapIllus-Layout.css';
+import './styles/index.scss';
+import './styles/fiori-helpers.scss';
 
 i18next
   .use(initReactI18next)

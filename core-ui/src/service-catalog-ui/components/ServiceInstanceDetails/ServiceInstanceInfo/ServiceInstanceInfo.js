@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { Link, PageHeader } from 'react-shared';
-
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { Link } from 'shared/components/Link/Link';
 import { getResourceDisplayName } from 'helpers';
 import { serviceInstanceConstants } from 'helpers/constants';
 import { ServiceInstanceStatus } from '../../../shared/ServiceInstanceStatus.js';

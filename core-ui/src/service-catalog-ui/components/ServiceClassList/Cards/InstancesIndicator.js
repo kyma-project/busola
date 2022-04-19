@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import { Tooltip } from 'react-shared';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 import { isStringValueEqualToTrue } from 'helpers';
 import './InstancesIndicator.scss';

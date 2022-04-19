@@ -4,7 +4,9 @@ import { Dialog, Button } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 
-import { useNotification, Tooltip, CustomPropTypes } from 'react-shared';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 /* NOTE
  * this is a copy of old shared/components/ModalWithForm. The primary reason is
@@ -189,7 +191,7 @@ export const ModalWithForm = ({
         actions={[
           renderConfirmButton(),
           <Button onClick={() => setOpenStatus(false)} option="transparent">
-            Cancel
+            {t('common.buttons.cancel')}
           </Button>,
         ]}
         onClose={() => {

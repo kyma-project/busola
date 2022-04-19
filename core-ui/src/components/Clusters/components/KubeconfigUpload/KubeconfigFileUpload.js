@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileInput } from 'react-shared';
+import { FileInput } from 'shared/components/FileInput/FileInput';
 import { useTranslation } from 'react-i18next';
 
 export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
@@ -13,8 +13,8 @@ export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
     });
   };
 
-  const onKubeconfigFileUploaded = async file => {
-    const fileContent = await readFile(file);
+  const onKubeconfigFileUploaded = async files => {
+    const fileContent = await readFile(files[0]);
     onKubeconfigTextAdded(fileContent);
   };
 

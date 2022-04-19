@@ -5,15 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
 import { Link, Button, MessagePage } from 'fundamental-react';
 
-import {
-  useMicrofrontendContext,
-  PageHeader,
-  GenericList,
-  useNotification,
-  ModalWithForm,
-  useDeleteResource,
-  EMPTY_TEXT_PLACEHOLDER,
-} from 'react-shared';
+import { useDeleteResource } from 'shared/hooks/useDeleteResource';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import { setCluster, deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
@@ -125,7 +123,12 @@ function ClusterList() {
       handler: resource => {
         setChosenCluster(resource);
         handleResourceDelete({
-          deleteFn: () => deleteCluster(resource?.name),
+          deleteFn: () => {
+            deleteCluster(resource?.name);
+            notification.notifySuccess({
+              content: t('clusters.disconnect'),
+            });
+          },
         });
       },
     },
@@ -199,11 +202,17 @@ function ClusterList() {
         extraHeaderContent={extraHeaderContent}
         noSearchResultMessage={t('clusters.list.no-clusters-found')}
         i18n={i18n}
+        allowSlashShortcut
       />
       <DeleteMessageBox
         resource={chosenCluster}
         resourceName={chosenCluster?.kubeconfig['current-context']}
-        deleteFn={e => deleteCluster(e.name)}
+        deleteFn={e => {
+          deleteCluster(e.name);
+          notification.notifySuccess({
+            content: t('clusters.disconnect'),
+          });
+        }}
       />
     </>
   );
