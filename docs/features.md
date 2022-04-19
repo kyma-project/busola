@@ -346,7 +346,8 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-- **SSO_LOGIN** – is used to configure data necessary for the SSO login such as an issuer address, client’s ID, and scopes.
+- **SSO_LOGIN** – is used to configure data necessary for the SSO login such as an issuer address, client’s ID, client’s Secret and scopes. If clientSecret is omitted, a public client
+  is assumed.
 
   ```bash
   "SSO_LOGIN": {
@@ -354,7 +355,8 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
     "config": {
       "issuerUrl": "https://kymatest.accounts400.ondemand.com",
       "scope": "openid",
-      "clientId": "9bd05ed7-a930-44e6-8c79-e6defeb7dec9"
+      "clientId": "9bd05ed7-a930-44e6-8c79-e6defeb7dec9",
+      "clientSecret": "supersecret",
     }
   },
   ```
