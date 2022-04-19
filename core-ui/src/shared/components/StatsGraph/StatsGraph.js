@@ -148,8 +148,16 @@ function getTimeScale({ startDate, endDate }) {
     '0.25': getTimeScaleLabel(min + 0.25 * diff),
     '0.5': getTimeScaleLabel(min + 0.5 * diff),
     '0.75': getTimeScaleLabel(min + 0.75 * diff),
-    1: getTimeScaleLabel(max),
+    1: getTimeScaleLabel(max - 1000 * 60),
   };
+}
+
+function getColumnTime({ startDate, endDate, dataPoints, index }) {
+  const min = startDate.getTime();
+  const max = endDate.getTime();
+  const diff = max - min;
+  const columnTime = (diff * index) / dataPoints;
+  return getTimeScaleLabel(min + columnTime);
 }
 
 export function StatsGraph({
@@ -336,6 +344,15 @@ export function StatsGraph({
             labelContent.push(`${t('graphs.total')}: ${sumLabel}`);
           }
         }
+
+        const columnTime = getColumnTime({
+          startDate,
+          endDate,
+          dataPoints,
+          index,
+        });
+
+        labelContent.push(`${t('common.tooltips.at')} ${columnTime}`);
 
         const labelWidth = Math.max(
           ...labelContent.map(labelLine => ctx.measureText(labelLine).width),

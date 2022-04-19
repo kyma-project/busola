@@ -45,6 +45,7 @@ context('Test Daemon Sets', () => {
 
     // created pod
     cy.getIframeBody()
+      .find('table')
       .contains(new RegExp(DAEMONSET_NAME + '-'))
       .click();
 
