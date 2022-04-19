@@ -36,13 +36,23 @@ To run Kyma Dashboard manually on a cluster, you must install it together with I
 3. Wait a minute for the Dashboard to start.
 4. The Dashboard is available under your domain (for example, `https://busola.local.kyma.dev/`).
 
-## Enable SSL on the backend service
+## Enable TLS in the backend service
 
-Generate a CA Certificate and corresponding tls key & tls cert.  
-Then set the following environment variables:
+By default, the communication with the backend pod is plain HTTP. Even when you use istio service mesh, the last bit of communication
+between the istio sidecar and the backend service stays plain HTTP.
 
-```bash
-BUSOLA_SSL_ENABLED=1
-BUSOLA_SSL_KEY_FILE=/path/to/tls.key
-BUSOLA_SSL_CRT_FILE=/path/to/tls.crt
-```
+If your use-case requires TLS all the way into the backend pod, you can enable it by providing a TLS certificate to the backend service,
+setting some environment variables and changing the deployment.
+
+1. Generate TLS certificate
+2. Mount your certificate into the backend pod
+3. Set the following environment variables on the backend pod:
+
+   ```
+   BUSOLA_SSL_ENABLED=1
+   BUSOLA_SSL_KEY_FILE=/path/to/tls.key
+   BUSOLA_SSL_CRT_FILE=/path/to/tls.crt
+   ```
+
+4. If you are using istio service mesh, enable the `destinationrule-busola-backend.yaml` resource in `resources/istio/kustomization.yaml`
+5. Install Busola according to [Install Kyma Dashboard with Istio Ingress](#install-kyma-dashboard-with-istio-ingress)

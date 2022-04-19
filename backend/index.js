@@ -55,7 +55,6 @@ if (
   process.env.BUSOLA_SSL_CRT_FILE != ''
 ) {
   const https = require('https');
-  const fs = require('fs');
   const options = {
     requestCert: true,
     rejectUnauthorized: false,
