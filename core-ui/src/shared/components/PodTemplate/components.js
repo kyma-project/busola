@@ -119,7 +119,7 @@ export function ContainersPanel({ title, containers }) {
 
 export function Volume({ volume }) {
   const { t } = useTranslation();
-  const { name, configMap, emptyDir, secret } = volume;
+  const { name, configMap, secret } = volume;
 
   const getTypeLabel = () => {
     switch (true) {
