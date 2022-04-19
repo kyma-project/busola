@@ -127,8 +127,6 @@ export function Volume({ volume }) {
         return t('config-maps.name_singular');
       case !!secret:
         return t('secrets.name_singular');
-      case !!emptyDir:
-        return t('pods.labels.empty-dir');
       default:
         const volumeType = Object.keys(volume).find(key => key !== 'name');
         return volumeType;

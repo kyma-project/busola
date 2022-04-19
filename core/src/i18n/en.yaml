@@ -1628,7 +1628,6 @@ pods:
     args: Args
     command: Command
     constainers: Containers
-    empty-dir: emptyDir
     env: Environment
     filter-timeframe: 'Filter timeframe by:'
     image: Image
