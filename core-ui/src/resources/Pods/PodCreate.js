@@ -27,6 +27,8 @@ export function PodCreate({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       onlyYaml
+      // apiLink="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#job-v1-batch"
+      schemaId="/v1/Pods"
     />
   );
 }

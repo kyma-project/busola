@@ -59,7 +59,7 @@ export function K8sNameField({
                 compact
                 onClick={generateName}
                 glyph="synchronize"
-                ariaLabel="Generate name button"
+                aria-label="Generate name button"
                 disabled={readOnly}
               />
             </Tooltip>

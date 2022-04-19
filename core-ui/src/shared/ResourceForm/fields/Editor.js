@@ -4,9 +4,10 @@ import { useTheme } from 'shared/contexts/ThemeContext';
 import jsyaml from 'js-yaml';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { Editor as EditorESM } from 'shared/components/MonacoEditorESM/Editor';
 import './Editor.scss';
 
-export function Editor({
+function EditorUMD({
   value,
   setValue,
   readonly,
@@ -90,3 +91,7 @@ export function Editor({
     </div>
   );
 }
+
+//TODO - make it a real feature flag
+const isESM = true;
+export const Editor = isESM ? EditorESM : EditorUMD;
