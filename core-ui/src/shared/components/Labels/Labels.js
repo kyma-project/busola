@@ -1,10 +1,11 @@
 import React from 'react';
+import classNames from 'classnames';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import './Labels.scss';
 
 const SHORTENING_TRESHOLD = 60;
 
-export const Labels = ({ labels, shortenLongLabels = false }) => {
+export const Labels = ({ labels, className, shortenLongLabels = false }) => {
   if (!labels || Object.keys(labels).length === 0) {
     return <span>{EMPTY_TEXT_PLACEHOLDER}</span>;
   }
@@ -18,7 +19,7 @@ export const Labels = ({ labels, shortenLongLabels = false }) => {
 
   /* eslint-enable no-unused-vars */
   return (
-    <div className="labels">
+    <div className={classNames('labels', className)}>
       {separatedLabels.map((label, id) => (
         <span
           aria-label={label}
