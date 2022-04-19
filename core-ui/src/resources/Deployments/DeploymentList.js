@@ -10,11 +10,10 @@ import { DeploymentCreate } from './DeploymentCreate';
 import { DeploymentStatus } from './DeploymentStatus';
 
 const getImages = deployment => {
-  const images =
-    deployment.spec.template.spec.containers?.map(
-      container => container.image,
-    ) || [];
-  return images;
+  const images = deployment.spec.template.spec.containers?.map(
+    container => container.image,
+  );
+  return images || [];
 };
 
 export function DeploymentList(props) {
