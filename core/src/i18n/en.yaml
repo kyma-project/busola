@@ -486,6 +486,8 @@ common:
     annotations: Annotations
     created: Created
     description: Description
+    items: Items
+    key: Key
     kind: Kind
     labels: Labels
     loading: Loading...
@@ -494,8 +496,10 @@ common:
     namespace: Namespace
     owner: Controlled By
     pods: Pods
+    resource: Resource
     resources: Resources
     status: Status
+    value: Value
     version: Version
   labels:
     data: Data
@@ -706,7 +710,6 @@ cron-jobs:
     hour: Hour
     labels:
       concurrency-policy: Concurrency Policy
-      restart-policy: Restart Policy
     minute: Minute
     month: Month
     parse-error: Error parsing CRON expression
@@ -1300,7 +1303,6 @@ hpas:
   'on': 'on'
   on-pods: on Pods
   pods: Pods
-  resource: Resource
   resource-cpu-on-pods: Resource CPU on Pods (current / target)
   scale-target-ref: Scale Target Reference
   spec: Specification
@@ -1624,15 +1626,22 @@ pods:
     type: Type
     volume-name: Volume Name
   labels:
+    args: Args
+    command: Command
     constainers: Containers
+    env: Environment
     filter-timeframe: 'Filter timeframe by:'
     image: Image
     image-pull-policy: Image Pull Policy
     init-constainers: Init Containers
+    mount-path: Mount Path
+    pod-template: Pod Template
     ports: Ports
+    restart-policy: Restart Policy
     reverse-logs: Reverse logs
     save-to-file: Save to a file
     show-timestamps: Show Timestamps
+    volume-mounts: Volume Mounts
     volumes: Volumes
   message:
     failed-to-download: Failed to download the logs

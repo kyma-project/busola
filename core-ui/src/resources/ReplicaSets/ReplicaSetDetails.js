@@ -7,6 +7,7 @@ import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcompon
 import { ReplicaSetStatus } from './ReplicaSetStatus';
 import { Selector } from 'shared/components/Selector/Selector';
 import { ReplicaSetCreate } from './ReplicaSetCreate';
+import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 
 export function ReplicasetsDetails(props) {
   const { t } = useTranslation();
@@ -69,10 +70,14 @@ export function ReplicasetsDetails(props) {
     />
   );
 
+  const ReplicaSetPodTemplate = replicaset => (
+    <PodTemplate template={replicaset.spec.template} />
+  );
+
   return (
     <ResourceDetails
       customColumns={customColumns}
-      customComponents={[HPASubcomponent, MatchSelector]}
+      customComponents={[HPASubcomponent, MatchSelector, ReplicaSetPodTemplate]}
       createResourceForm={ReplicaSetCreate}
       {...props}
     />

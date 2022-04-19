@@ -8,6 +8,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { Selector } from 'shared/components/Selector/Selector';
+import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 
 import { JobCreate } from './JobCreate';
 import { JobCompletions } from './JobCompletions';
@@ -69,7 +70,15 @@ export function JobDetails(props) {
       selector={job.spec?.selector}
     />
   );
-  const customComponents = [JobConditions, MatchSelector, Events];
+
+  const JobPodTemplate = job => <PodTemplate template={job.spec.template} />;
+
+  const customComponents = [
+    JobConditions,
+    MatchSelector,
+    Events,
+    JobPodTemplate,
+  ];
 
   return (
     <ResourceDetails

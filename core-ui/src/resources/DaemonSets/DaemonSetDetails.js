@@ -8,6 +8,7 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Selector } from 'shared/components/Selector/Selector';
 import { DaemonSetStatus } from './DaemonSetStatus';
 import { DaemonSetCreate } from './DaemonSetCreate';
+import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 
 const Tolerations = resource => {
   const { t, i18n } = useTranslation();
@@ -43,34 +44,6 @@ const Tolerations = resource => {
   );
 };
 
-const Images = resource => {
-  const { t, i18n } = useTranslation();
-
-  const getImages = daemonSet => {
-    const images =
-      daemonSet.spec.template.spec.containers?.map(
-        container => container.image,
-      ) || [];
-    return images;
-  };
-
-  const headerRenderer = () => [t('daemon-sets.images')];
-  const rowRenderer = entry => [
-    <span style={{ overflowWrap: 'anywhere' }}>{entry}</span>,
-  ];
-  return (
-    <GenericList
-      title={t('daemon-sets.images')}
-      entries={getImages(resource) || []}
-      headerRenderer={headerRenderer}
-      rowRenderer={rowRenderer}
-      testid="daemon-set-images"
-      showHeader={false}
-      i18n={i18n}
-    />
-  );
-};
-
 export function DaemonSetDetails(props) {
   const { t } = useTranslation();
 
@@ -96,9 +69,13 @@ export function DaemonSetDetails(props) {
     />
   );
 
+  const DaemonSetPodTemplate = daemonSet => (
+    <PodTemplate template={daemonSet.spec.template} />
+  );
+
   return (
     <ResourceDetails
-      customComponents={[Tolerations, Images, MatchSelector]}
+      customComponents={[Tolerations, MatchSelector, DaemonSetPodTemplate]}
       customColumns={customColumns}
       createResourceForm={DaemonSetCreate}
       {...props}
