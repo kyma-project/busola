@@ -130,7 +130,8 @@ export function Volume({ volume }) {
       case !!emptyDir:
         return t('pods.labels.empty-dir');
       default:
-        return t('common.headers.other');
+        const volumeType = Object.keys(volume).find(key => key !== 'name');
+        return volumeType;
     }
   };
 

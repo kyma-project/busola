@@ -494,7 +494,6 @@ common:
     logs: Logs
     name: Name
     namespace: Namespace
-    other: Other
     owner: Controlled By
     pods: Pods
     resource: Resource
