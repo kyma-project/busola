@@ -121,21 +121,22 @@ export function Volume({ volume }) {
   const { t } = useTranslation();
   const { name, configMap, emptyDir, secret } = volume;
 
-  let typeLabel;
-  switch (true) {
-    case !!configMap:
-      typeLabel = t('config-maps.name_singular');
-      break;
-    case !!secret:
-      typeLabel = t('secrets.name_singular');
-      break;
-    case !!emptyDir:
-      typeLabel = t('pods.labels.empty-dir');
-      break;
-    default:
-      typeLabel = t('common.headers.other');
-  }
+  const getTypeLabel = () => {
+    switch (true) {
+      case !!configMap:
+        return t('config-maps.name_singular');
+      case !!secret:
+        return t('secrets.name_singular');
+      case !!emptyDir:
+        return t('pods.labels.empty-dir');
+      default:
+        return t('common.headers.other');
+    }
+  };
+
+  const typeLabel = getTypeLabel();
   const k8sResource = configMap || secret;
+  const k8sResourceName = configMap?.name || secret?.secretName;
 
   return (
     <>
@@ -152,11 +153,11 @@ export function Volume({ volume }) {
                 onClick={() =>
                   navigateToFixedPathResourceDetails(
                     configMap ? 'configmaps' : 'secrets',
-                    k8sResource.name,
+                    k8sResourceName,
                   )
                 }
               >
-                {k8sResource.name}
+                {k8sResourceName}
               </Link>
             }
           />
