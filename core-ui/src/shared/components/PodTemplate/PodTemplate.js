@@ -28,10 +28,12 @@ export function PodTemplate({ template }) {
           value={template.spec.restartPolicy}
         />
       </LayoutPanel.Body>
-      <ContainersPanel
-        title={t('pods.labels.constainers')}
-        containers={template.spec.containers}
-      />
+      {template.spec.containers && (
+        <ContainersPanel
+          title={t('pods.labels.constainers')}
+          containers={template.spec.containers}
+        />
+      )}
       {template.spec.initContainers && (
         <ContainersPanel
           title={t('pods.labels.init-constainers')}
