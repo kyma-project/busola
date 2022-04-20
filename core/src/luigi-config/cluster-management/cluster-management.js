@@ -115,13 +115,11 @@ export async function saveCARequired() {
 }
 
 export async function getActiveCluster() {
-  console.log('getActiveCluster');
   const clusters = clusterStorage.load();
   const clusterName = getActiveClusterName();
   const activeCluster = clusters[clusterName];
 
   if (!clusterName || !activeCluster) {
-    console.log('no stuff');
     return null;
   }
 
@@ -137,7 +135,6 @@ export async function getActiveCluster() {
     targetClusterConfig.config,
   );
 
-  console.log(activeCluster);
   return await mergeParams(activeCluster);
 }
 

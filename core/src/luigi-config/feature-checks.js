@@ -6,7 +6,7 @@ export function apiGroup(group) {
     const found = groupVersions?.find(g => g.includes(group));
     return {
       ...config,
-      isEnabled: found,
+      isEnabled: !!found,
     };
   };
 }

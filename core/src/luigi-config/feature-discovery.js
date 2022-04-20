@@ -35,15 +35,30 @@ export const xprod3 = (a, b, c) =>
 
 export const discoverFeature = (features, featureName, data = {}) => {
   const feature = features[featureName];
+  console.log('discoverFeature features', features, 'feature', feature);
   if (!feature) return;
-
   // TODO sequential async discovery
-  feature.checks.reduce(
+
+  feature.checks?.reduce(
     async (config, check) => {
+      console.log(
+        'reduce! featureName',
+        featureName,
+        'feature',
+        feature,
+        'config',
+        config,
+        config.isEnabled,
+        '!config.isEnabled',
+        !config.isEnabled,
+        'check(config, feature, data)',
+        await check(config, feature, data),
+      );
       if (!config.isEnabled) return config;
       return await check(config, feature, data);
     },
-    { isEnabled: true },
+    { isEnabled: false },
+
     // TODO update local storage here
   ); // TODO read configuration
 };
@@ -52,7 +67,7 @@ export const discoverInitialFeatures = (features, data = {}) => {
   // TODO promise and return
   Object.entries(features)
     .filter(([key, feature]) => feature.initial)
-    .forEach(([key]) => discoverFeature(key, data));
+    .forEach(([key]) => discoverFeature(features, key, data));
 
   return features;
 };
