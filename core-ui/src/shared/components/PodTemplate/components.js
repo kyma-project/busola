@@ -108,7 +108,7 @@ export function ContainersPanel({ title, containers }) {
           <LayoutPanel.Head title={title} />
         </LayoutPanel.Header>
         <LayoutPanel.Body>
-          {containers.map(container => (
+          {containers?.map(container => (
             <ContainerComponent key={container.name} container={container} />
           ))}
         </LayoutPanel.Body>
