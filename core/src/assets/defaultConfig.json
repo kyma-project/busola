@@ -65,6 +65,9 @@
       },
       "VISUAL_RESOURCES": {
         "isEnabled": true
+      },
+      "MONACO_AUTOCOMPLETION": {
+        "isEnabled": true
       }
     }
   }

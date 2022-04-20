@@ -374,3 +374,11 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
     "isEnabled": true,
   },
   ```
+
+- **MONACO_AUTOCOMPLETION** – determines if Busola should obtain json schemas and validate input in Monaco.
+
+  ```bash
+  "VISUAL_RESOURCES": {
+    "isEnabled": false,
+  },
+  ```

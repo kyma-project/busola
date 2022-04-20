@@ -5,6 +5,7 @@ import jsyaml from 'js-yaml';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { Editor as EditorESM } from 'shared/components/MonacoEditorESM/Editor';
+import Luigi from '@luigi-project/client';
 import './Editor.scss';
 
 function EditorUMD({
@@ -92,6 +93,5 @@ function EditorUMD({
   );
 }
 
-//TODO - make it a real feature flag
-const isESM = true;
+const isESM = Luigi.getContext().features?.MONACO_AUTOCOMPLETION?.isEnabled;
 export const Editor = isESM ? EditorESM : EditorUMD;
