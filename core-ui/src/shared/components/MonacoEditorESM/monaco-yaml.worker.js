@@ -52,15 +52,16 @@ self.onmessage = $event => {
       .resolve($event.data[1])
       .then(resolved => {
         const schema = toJsonSchema(resolved);
-
         createAjv(schema);
         self.postMessage({
           isInitialized: !!Object.values(mySchemas).length,
         });
       })
       .catch(err => {
-        // TODO: notify the app of the error
         console.error(err);
+        self.postMessage({
+          error: err,
+        });
       });
   }
   if ($event.data[0] === 'getSchema') {

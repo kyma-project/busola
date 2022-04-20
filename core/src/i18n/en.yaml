@@ -470,6 +470,7 @@ common:
       advanced: Advanced
       simple: Simple
     object-required: An object is required
+    schema-error: 'Failed to setup resource validation and autocompletion, only syntax is checked: {{error}}.'
   delete-dialog:
     delete-confirm: Don't ask again
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.

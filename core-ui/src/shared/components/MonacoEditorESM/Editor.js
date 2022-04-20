@@ -4,10 +4,9 @@ import jsyaml from 'js-yaml';
 import { editor } from 'monaco-editor';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-
 import { useEditorHelper } from './useEditorHelper';
-
 import './Editor.scss';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 export function Editor({
   value,
@@ -25,7 +24,11 @@ export function Editor({
   const divRef = useRef(null);
   const valueRef = useRef(jsyaml.dump(value, { noRefs: true }));
   const editorRef = useRef(null);
-  const { setAutocompleteOptions } = useEditorHelper({
+  const {
+    setAutocompleteOptions,
+    error: schemaError,
+    loading,
+  } = useEditorHelper({
     ...props,
   });
   useEffect(() => {
@@ -81,11 +84,14 @@ export function Editor({
   }, [editorTheme, setAutocompleteOptions, language, setValue, t]);
 
   return (
-    <div>
-      <div
-        ref={divRef}
-        style={{ width: 800, height: 300, border: '1px solid #d9d9d9' }}
-      />
+    <div className="resource-form__wrapper">
+      {loading ? (
+        <div className="resource-form__overlay">
+          <Spinner />
+        </div>
+      ) : null}
+
+      <div ref={divRef} className="resource-form__editor" />
 
       {error && (
         <div className="resource-form__editor__error">
@@ -94,7 +100,13 @@ export function Editor({
           </MessageStrip>
         </div>
       )}
-      <div>{JSON.stringify(markers)}</div>
+
+      <div className="resource-form__legend">
+        {schemaError ? (
+          <p> {t('common.create-form.schema-error', { error: schemaError })}</p>
+        ) : null}
+        {markers.length ? markers.map(m => <p> {JSON.stringify(m)}</p>) : null}
+      </div>
     </div>
   );
 }

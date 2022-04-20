@@ -40,6 +40,8 @@ const schemas = [];
 
 export function useEditorHelper({ schemaId }) {
   const [schema, setSchema] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
   const fetch = useSingleGet();
 
   // this gets calculated only once, to fetch the json validation schema
@@ -58,13 +60,25 @@ export function useEditorHelper({ schemaId }) {
           .then(data => {
             schemasWorker.postMessage(['initialize', data]);
           });
+        return;
       }
       if (e.data.isInitialized === true) {
         schemasWorker.postMessage(['getSchema', schemaId]);
+        return;
       }
       if (e.data[schemaId]) {
         setSchema(e.data[schemaId]);
       }
+      if (e.data.error) {
+        setError(e.data.error);
+      }
+      setLoading(false);
+    };
+
+    schemasWorker.onerror = e => {
+      setError(e);
+      setSchema(null);
+      setLoading(false);
     };
 
     // disabling due to the changing identity of fetch
@@ -85,19 +99,18 @@ export function useEditorHelper({ schemaId }) {
       }
     }
     setDiagnosticsOptions({
-      enableSchemaRequest: true,
+      enableSchemaRequest: false,
       hover: true,
-      completion: true,
+      completion: !!schema,
       validate: true,
       format: true,
       isKubernetes: true,
       schemas: schemas,
     });
-
     return {
       modelUri,
     };
   }, [schema, schemaId]);
 
-  return { setAutocompleteOptions, schema };
+  return { setAutocompleteOptions, schema, error, loading };
 }
