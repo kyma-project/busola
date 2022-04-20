@@ -33,41 +33,48 @@ const xprod = (a, b) => {
 export const xprod3 = (a, b, c) =>
   xprod(a, xprod(b, c)).map(([a, [b, c]]) => [a, b, c]);
 
-export const discoverFeature = (features, featureName, data = {}) => {
+export const discoverFeature = async (features, featureName, data = {}) => {
   const feature = features[featureName];
   console.log('discoverFeature features', features, 'feature', feature);
   if (!feature) return;
   // TODO sequential async discovery
 
-  feature.checks?.reduce(
+  const sth = await feature.checks?.reduce(
     async (config, check) => {
+      console.log('reduce', config);
+      if (!config.isEnabled) return config;
+      const newPartialConfig = await check(config, feature, data);
       console.log(
         'reduce! featureName',
         featureName,
-        'feature',
-        feature,
         'config',
         config,
-        config.isEnabled,
-        '!config.isEnabled',
-        !config.isEnabled,
-        'check(config, feature, data)',
-        await check(config, feature, data),
+        'newPartialConfig',
+        newPartialConfig,
       );
-      if (!config.isEnabled) return config;
-      return await check(config, feature, data);
+      return {
+        ...config,
+        ...newPartialConfig,
+        isEnabled: config.isEnabled && newPartialConfig.isEnabled,
+      };
     },
-    { isEnabled: false },
+    { isEnabled: true },
 
     // TODO update local storage here
-  ); // TODO read configuration
+  );
+  console.log('after reduce', sth);
+  // TODO read configuration
 };
 
-export const discoverInitialFeatures = (features, data = {}) => {
+export const discoverInitialFeatures = async (features, data = {}) => {
   // TODO promise and return
-  Object.entries(features)
-    .filter(([key, feature]) => feature.initial)
-    .forEach(([key]) => discoverFeature(features, key, data));
+  const initialFirstFeatures = Object.entries(features).filter(
+    ([key, feature]) => feature.initial,
+  );
+
+  for (const initialFirst of initialFirstFeatures) {
+    await discoverFeature(features, initialFirst, data);
+  }
 
   return features;
 };

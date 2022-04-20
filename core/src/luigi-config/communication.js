@@ -143,7 +143,7 @@ export const communication = {
       const authData = getAuthData();
       const groupVersions = await fetchBusolaInitData(authData);
       const features = (await getActiveCluster())?.config?.features;
-      discoverFeature(features, featureName, { authData, groupVersions });
+      await discoverFeature(features, featureName, { authData, groupVersions });
     },
     ...pageSizeCommunicationEntry,
   },
