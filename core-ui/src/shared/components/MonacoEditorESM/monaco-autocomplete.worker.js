@@ -2,7 +2,6 @@
 
 import toJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 import { Resolver } from '@stoplight/json-ref-resolver';
-import pluralize from 'pluralize';
 
 //ajv is commented out temporarily, if no problems we can remove it
 // let JSONSchemas = null;
@@ -22,18 +21,19 @@ function createAjv(schema) {
       const { group, kind, version } = value[
         'x-kubernetes-group-version-kind'
       ][0];
-      const key = `${group}/${version}/${pluralize(kind)}`;
+      const prefix = group ? `${group}/` : '';
+      const schemaId = `${prefix}${version}/${kind}`;
+      // console.log(schemaId, value['x-kubernetes-group-version-kind'][0]);
+      // this is to be investigated, there must be a bug in these jsons, ajv cannot parse them
+      // if (schemaId.startsWith('monitoring.coreos.com/v1alpha1/Alertmanager'))
+      //   return null;
 
-      //TODO this is to be investigated, there must be a bug in these jsons, ajv cannot parse them
-      if (key.startsWith('monitoring.coreos.com/v1alpha1/Alertmanager'))
-        return null;
-
-      // if (!ajv.getSchema(key)) {
-      //   ajv.addSchema(value, key);
+      // if (!ajv.getSchema(schemaId)) {
+      //   ajv.addSchema(value, schemaId);
       // }
 
-      if (!mySchemas[key]) {
-        mySchemas[key] = value;
+      if (!mySchemas[schemaId]) {
+        mySchemas[schemaId] = value;
       }
     }
   });
@@ -65,11 +65,13 @@ self.onmessage = $event => {
       });
   }
   if ($event.data[0] === 'getSchema') {
-    // toogle the lines below
+    // toggle the lines below to use AJV
     // const schema = JSONSchemas.getSchema($event.data[1])?.schema;
     const schema = mySchemas[$event.data[1]];
     if (schema) {
       self.postMessage({ [$event.data[1]]: schema });
+    } else {
+      self.postMessage({ error: new Error('No matching schema') });
     }
   }
 };

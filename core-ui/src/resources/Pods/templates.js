@@ -1,6 +1,6 @@
 export function createPodTemplate(namespace) {
   return {
-    apiVersion: '/v1',
+    apiVersion: 'v1',
     kind: 'Pod',
     metadata: {
       name: '',

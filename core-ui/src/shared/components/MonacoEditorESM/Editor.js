@@ -4,7 +4,7 @@ import jsyaml from 'js-yaml';
 import { editor } from 'monaco-editor';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { useEditorHelper } from './useEditorHelper';
+import { useAutocompleteWorker } from './useAutocompleteWorker';
 import './Editor.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
@@ -14,7 +14,6 @@ export function Editor({
   readonly,
   language = 'yaml',
   editorDidMount,
-  ...props
 }) {
   const { t } = useTranslation();
   const [error, setError] = useState('');
@@ -28,8 +27,8 @@ export function Editor({
     setAutocompleteOptions,
     error: schemaError,
     loading,
-  } = useEditorHelper({
-    ...props,
+  } = useAutocompleteWorker({
+    value,
   });
   useEffect(() => {
     editor.onDidChangeMarkers(markers => {
@@ -105,7 +104,13 @@ export function Editor({
         {schemaError ? (
           <p> {t('common.create-form.schema-error', { error: schemaError })}</p>
         ) : null}
-        {markers.length ? markers.map(m => <p> {JSON.stringify(m)}</p>) : null}
+        {markers.length
+          ? markers.map(m => (
+              <p>
+                {m.startLineNumber}:{m.startColumn} ==> {m.message}
+              </p>
+            ))
+          : null}
       </div>
     </div>
   );

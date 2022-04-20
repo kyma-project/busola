@@ -31,25 +31,23 @@ window.MonacoEnvironment = {
 let schemasWorker = null;
 if (typeof Worker !== 'undefined') {
   schemasWorker = new Worker(
-    new URL('./monaco-yaml.worker.js', import.meta.url),
+    new URL('./monaco-autocomplete.worker.js', import.meta.url),
     { type: 'module' },
   );
 }
 // each hook instance has access to this variable (a sort of global state)
 const schemas = [];
 
-export function useEditorHelper({ schemaId }) {
+export function useAutocompleteWorker({ value }) {
   const [schema, setSchema] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const fetch = useSingleGet();
 
+  const { apiVersion, kind } = value;
   // this gets calculated only once, to fetch the json validation schema
-  // it means each supported resource must have apiVersion and kind defined
-  // const [fileId] = useState(
-  //   `${value.apiVersion || ''}/${pluralize(value.kind || '')}`,
-  // );
-  // console.log(fileId);
+  // it means each supported resource must have apiVersion and kind initially defined
+  const [schemaId] = useState(`${apiVersion}/${kind}`);
 
   useEffect(() => {
     schemasWorker.postMessage(['shouldInitialize']);
@@ -62,6 +60,7 @@ export function useEditorHelper({ schemaId }) {
           });
         return;
       }
+
       if (e.data.isInitialized === true) {
         schemasWorker.postMessage(['getSchema', schemaId]);
         return;

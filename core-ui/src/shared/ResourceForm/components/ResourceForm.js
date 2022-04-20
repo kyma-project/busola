@@ -30,7 +30,6 @@ export function ResourceForm({
   afterCreatedFn,
   className,
   onlyYaml = false,
-  ...props
 }) {
   const { i18n } = useTranslation();
   const createResource = useCreateResource({
@@ -73,13 +72,11 @@ export function ResourceForm({
       }}
     />
   );
-
   let editor = (
     <Editor
       value={resource}
       setValue={setResource}
       onMount={editor => setActionsEditor(editor)}
-      {...props}
     />
   );
   editor = renderEditor

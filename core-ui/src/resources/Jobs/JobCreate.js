@@ -94,9 +94,6 @@ export function JobCreate({
       formElementRef={formElementRef}
       presets={!initialJob && createJobPresets(namespace, t)}
       createUrl={resourceUrl}
-      onlyYaml
-      // apiLink="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#job-v1-batch"
-      schemaId="batch/v1/Jobs"
     >
       <K8sNameField
         propertyPath="$.metadata.name"
