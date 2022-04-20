@@ -287,7 +287,7 @@ export default function FunctionVariables({
   ];
 
   return (
-    <div className="func-variables">
+    <div className="function-variables">
       <GenericList
         title={t('functions.variable.title.environment-variables')}
         showSearchField={true}

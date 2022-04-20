@@ -167,7 +167,7 @@ export default function CodeAndDependencies({ func }) {
       title: t('functions.variable.header.source'),
       body: (
         <Editor
-          id="func-code"
+          id="function-code"
           language={monacoEditorLang}
           showDiff={showDiff}
           originalValue={func.spec.source}
@@ -184,7 +184,7 @@ export default function CodeAndDependencies({ func }) {
       title: t('functions.details.title.dependencies'),
       body: (
         <Editor
-          id="func-dependencies"
+          id="function-dependencies"
           language={monacoEditorDeps}
           showDiff={showDiff}
           originalValue={func.spec.deps}
@@ -200,7 +200,7 @@ export default function CodeAndDependencies({ func }) {
 
   return (
     <TabsWithActions
-      className="fd-margin--md func-code-and-deps"
+      className="fd-margin--md function-code-and-deps"
       tabsData={tabsData}
       actions={actions}
     />

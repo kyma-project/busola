@@ -198,7 +198,7 @@ export default function ResourcesManagement({ func }) {
   }
 
   return (
-    <LayoutPanel className="fd-margin--md func-resources-management">
+    <LayoutPanel className="fd-margin--md function-resources-management">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <LayoutPanel.Header>
           <LayoutPanel.Head
@@ -209,7 +209,7 @@ export default function ResourcesManagement({ func }) {
             {renderConfirmButton()}
           </LayoutPanel.Actions>
         </LayoutPanel.Header>
-        <div className="func-resources-management__panel">
+        <div className="function-resources-management__panel">
           <LayoutPanel.Header>
             <LayoutPanel.Head
               title={t('functions.details.title.scaling-options')}
@@ -223,7 +223,7 @@ export default function ResourcesManagement({ func }) {
             />
           </LayoutPanel.Body>
         </div>
-        <div className="func-resources-management__panel">
+        <div className="function-resources-management__panel">
           <LayoutPanel.Header>
             <LayoutPanel.Head
               title={t('functions.details.title.runtime-profile')}
@@ -241,7 +241,7 @@ export default function ResourcesManagement({ func }) {
             />
           </LayoutPanel.Body>
         </div>
-        <div className="func-resources-management__panel">
+        <div className="function-resources-management__panel">
           <LayoutPanel.Header>
             <LayoutPanel.Head
               title={t('functions.details.title.build-job')}

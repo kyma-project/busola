@@ -1,4 +1,4 @@
-.func-details {
+.function-details {
   position: relative;
 
   > .fd-loading-dots {
@@ -9,7 +9,7 @@
     transform: translate(-50%, -50%);
   }
 
-  .func-details-tabs {
+  .function-details-tabs {
     .fd-tabs__item:first-of-type {
       padding-left: 32px;
     }

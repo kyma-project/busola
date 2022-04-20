@@ -1,4 +1,4 @@
-.func-variables {
+.function-variables {
   .list-actions {
     li {
       display: inline-block;
@@ -30,12 +30,12 @@
     transition: color 0.1s;
   }
 
-  .func-variable {
+  .function-variable {
     display: inline-block;
   }
 }
 
-.edit-func-variables-form {
+.edit-function-variables-form {
   .fd-table tbody tr {
     border: 0;
 
@@ -79,6 +79,6 @@
   }
 }
 
-.func-variable-status {
+.function-variable-status {
   float: right;
 }

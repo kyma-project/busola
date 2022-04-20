@@ -17,5 +17,5 @@ export default function FunctionDetailsWrapper({ func }) {
     content = <FunctionDetails func={func} />;
   }
 
-  return <div className="func-details">{content}</div>;
+  return <div className="function-details">{content}</div>;
 }

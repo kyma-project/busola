@@ -159,7 +159,7 @@ export default function InjectedVariables({
   const entries = [...injectedVariables];
 
   return (
-    <div className="func-variables">
+    <div className="function-variables">
       <GenericList
         title={t('functions.variable.title.injected-variables')}
         showSearchField={true}

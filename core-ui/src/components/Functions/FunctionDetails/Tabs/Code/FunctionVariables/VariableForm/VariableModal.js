@@ -29,7 +29,7 @@ export default function VariableModal({
       modalOpeningComponent={modalOpeningComponent}
       confirmText={confirmText}
       invalidPopupMessage={invalidModalPopupMessage}
-      id="add-func-variables-modal"
+      id="add-function-variables-modal"
       onModalOpenStateChange={onModalOpenStateChange}
       alwaysOpen={alwaysOpen}
       renderForm={props => (

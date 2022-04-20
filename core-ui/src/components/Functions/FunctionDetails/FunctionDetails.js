@@ -36,18 +36,18 @@ export default function FunctionDetails({ func }) {
 
   return (
     <>
-      <Tabs className="func-details-tabs" callback={setSelectedTabIndex}>
+      <Tabs className="function-details-tabs" callback={setSelectedTabIndex}>
         <Tab
-          key="func-code"
-          id="func-code"
+          key="function-code"
+          id="function-code"
           title={t('functions.details.title.code')}
         >
           <CodeTab func={func} isActive={selectedTabIndex === 0} />
         </Tab>
         {configTabShouldRender && (
           <Tab
-            key="func-configuration"
-            id="func-configuration"
+            key="function-configuration"
+            id="function-configuration"
             title={t('functions.details.title.configuration')}
           >
             <ApiRules
@@ -64,8 +64,8 @@ export default function FunctionDetails({ func }) {
           </Tab>
         )}
         <Tab
-          key="func-resources"
-          id="func-resources"
+          key="function-resources"
+          id="function-resources"
           title={t('functions.details.title.resources')}
         >
           <ResourceManagement func={func} />

@@ -166,7 +166,7 @@ export default function RepositoryConfig({ func }) {
   }
 
   return (
-    <LayoutPanel className="fd-margin--md func-repository-config">
+    <LayoutPanel className="fd-margin--md function-repository-config">
       <LayoutPanel.Header>
         <LayoutPanel.Head title={t('functions.repository.title')} />
         <LayoutPanel.Actions>
