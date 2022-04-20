@@ -19,6 +19,7 @@ import './StatsPanel.scss';
 const DATA_POINTS = 60;
 
 export function SingleGraph({ type, mode, timeSpan, metric, ...props }) {
+  console.log(type);
   const { t } = useTranslation();
   const {
     data,
@@ -57,6 +58,7 @@ export function SingleGraph({ type, mode, timeSpan, metric, ...props }) {
 }
 
 export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
+  console.log(metric1);
   const { t } = useTranslation();
   const {
     data: data1,
@@ -154,7 +156,23 @@ export function SingleMetricMultipeGraph({
   );
 }
 
-export function StatsPanel({ type, mode = 'single', ...props }) {
+const getGraphOptions = type => {
+  switch (type) {
+    case 'pod':
+      return ['cpu', 'memory', 'network'];
+    case 'cluster':
+      return ['cpu', 'memory', 'network', 'nodes'];
+    default:
+      return null;
+  }
+};
+
+export function StatsPanel({
+  type,
+  mode = 'single',
+  defaultMetric = 'cpu',
+  ...props
+}) {
   const { features } = useMicrofrontendContext();
   const timeSpans = {
     '1h': 60 * 60,
@@ -163,7 +181,7 @@ export function StatsPanel({ type, mode = 'single', ...props }) {
     '24h': 24 * 60 * 60,
     '7d': 7 * 24 * 60 * 60,
   };
-  const [metric, setMetric] = useState('cpu');
+  const [metric, setMetric] = useState(defaultMetric);
 
   const visibleTimeSpans =
     metric === 'nodes' ? ['6h', '24h', '7d'] : ['1h', '3h', '6h'];
@@ -179,23 +197,22 @@ export function StatsPanel({ type, mode = 'single', ...props }) {
     return '';
   }
 
-  const graphOptions =
-    type === 'pod'
-      ? ['cpu', 'memory', 'network']
-      : ['cpu', 'memory', 'network', 'nodes'];
+  const graphOptions = getGraphOptions(type);
 
   return (
     <LayoutPanel className="fd-margin--md stats-panel">
       <LayoutPanel.Header>
         <LayoutPanel.Filters>
-          <Dropdown
-            selectedKey={metric}
-            onSelect={(e, val) => setMetric(val.key)}
-            options={graphOptions.map(option => ({
-              key: option,
-              text: t(`graphs.${option}`),
-            }))}
-          />
+          {graphOptions ? (
+            <Dropdown
+              selectedKey={metric}
+              onSelect={(e, val) => setMetric(val.key)}
+              options={graphOptions.map(option => ({
+                key: option,
+                text: t(`graphs.${option}`),
+              }))}
+            />
+          ) : null}
         </LayoutPanel.Filters>
         <LayoutPanel.Actions>
           <ButtonSegmented>
@@ -220,6 +237,16 @@ export function StatsPanel({ type, mode = 'single', ...props }) {
             metric={metric}
             className={metric}
             timeSpan={timeSpans[timeSpan]}
+            {...props}
+          />
+        )}
+        {mode === 'multiple' && metric === 'pvc-usage' && (
+          <DualGraph
+            type={type}
+            metric1="pvc-used-space"
+            metric2="pvc-free-space"
+            timeSpan={timeSpans[timeSpan]}
+            labels={[t('graphs.network-up'), t('graphs.network-down')]}
             {...props}
           />
         )}

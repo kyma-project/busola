@@ -15,11 +15,11 @@ const getPrometheusSelector = data => {
 };
 
 const getPrometheusQueryPVCUsedSpaceQuery = (data, step) => {
-  return `sum without(instance, node) (topk(1, (kubelet_volume_stats_capacity_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${data.namespace}", persistentvolumeclaim="${data.name}"}[${step}s])))`;
+  return `sum without(instance, node) (topk(1, (kubelet_volume_stats_capacity_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${data.namespace}", persistentvolumeclaim="${data.name}"})))`;
 };
 
 const getPrometheusQueryPVCFreeSpaceQuery = (data, step) => {
-  return `sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${data.namespace}", persistentvolumeclaim=${data.name}}[${step}s])))`;
+  return `sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${data.namespace}", persistentvolumeclaim="${data.name}"})))`;
 };
 
 const getPrometheusCPUQuery = (
@@ -89,7 +89,6 @@ const getPrometheusNodesQuery = () => {
 };
 
 export function getMetric(type, mode, metric, cpuQuery, { step, ...data }) {
-  console.log(step);
   const metrics = {
     cpu: {
       prometheusQuery: getPrometheusCPUQuery(type, mode, data, step, cpuQuery),
