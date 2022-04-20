@@ -13,6 +13,7 @@ export function useCreateResource({
   initialResource,
   createUrl,
   afterCreatedFn,
+  setShowEditDialog,
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -56,7 +57,10 @@ export function useCreateResource({
         const mergedResource = {
           ...initialResource,
           ...resource,
-          metadata: { ...initialResource.metadata, ...resource.metadata },
+          metadata: {
+            ...initialResource.metadata,
+            ...resource.metadata,
+          },
         };
         await patchRequest(
           createUrl,

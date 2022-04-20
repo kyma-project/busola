@@ -317,7 +317,7 @@ export function ResourceListRenderer({
           })}
       </Button>
     ));
-
+  console.log(showEditDialog);
   return (
     <>
       <ModalWithForm
@@ -339,6 +339,7 @@ export function ResourceListRenderer({
               resourceUrl={resourceUrl}
               namespace={namespace}
               refetchList={silentRefetch}
+              setShowEditDialog={setShowEditDialog}
               {...props}
               {...createFormProps}
             />
@@ -346,7 +347,7 @@ export function ResourceListRenderer({
         )}
         i18n={i18n}
         modalOpeningComponent={<></>}
-        customCloseAction={() => setShowEditDialog(false)}
+        // customCloseAction={() => setShowEditDialog(false)}
       />
       <DeleteMessageBox
         resource={activeResource}

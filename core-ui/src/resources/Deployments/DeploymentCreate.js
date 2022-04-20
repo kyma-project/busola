@@ -30,6 +30,7 @@ export function DeploymentCreate({
   setCustomValid,
   resource: initialDeployment,
   resourceUrl,
+  setShowEditDialog,
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -138,6 +139,7 @@ export function DeploymentCreate({
         resourceUrl || `/apis/apps/v1/namespaces/${namespace}/deployments/`
       }
       initialResource={initialDeployment}
+      setShowEditDialog={setShowEditDialog}
     >
       <K8sNameField
         readOnly={!!initialDeployment}

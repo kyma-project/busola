@@ -84,8 +84,9 @@ export const ModalWithForm = ({
       formElementRef.current.dispatchEvent(
         new Event('submit', { bubbles: true, cancelable: true }),
       );
-      setOpenStatus(false);
+      // setOpenStatus(false);
     }
+    return false;
   }
 
   function renderConfirmButton() {

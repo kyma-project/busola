@@ -30,7 +30,9 @@ export function ResourceForm({
   afterCreatedFn,
   className,
   onlyYaml = false,
+  setShowEditDialog,
 }) {
+  // console.log(setShowEditDialog);
   const { i18n } = useTranslation();
   const createResource = useCreateResource({
     singularName,
@@ -39,6 +41,7 @@ export function ResourceForm({
     initialResource,
     createUrl,
     afterCreatedFn,
+    setShowEditDialog,
   });
 
   const [mode, setMode] = React.useState(
