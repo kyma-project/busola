@@ -1,11 +1,11 @@
 import pluralize from 'pluralize';
 import { resources } from 'resources';
 
-export function getResourceDefs(defType, t, context) {
+export function getResourceDefs(defType, t, context, key) {
   return resources
     .filter(resource => resource.resourceType === defType)
-    .map(({ resourceGraphConfig }) => {
-      return resourceGraphConfig(t, context);
+    .map(resource => {
+      return resource[key](t, context);
     })
     .flat();
 }

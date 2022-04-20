@@ -1,7 +1,7 @@
 import { getResourceDefs } from 'shared/helpers/getResourceDefs';
 
 export const getSecretDefs = (t, context) =>
-  getResourceDefs('Secrets', t, context);
+  getResourceDefs('Secrets', t, context, 'secrets');
 
 export const mapObjectValues = (fn, obj) =>
   Object.fromEntries(

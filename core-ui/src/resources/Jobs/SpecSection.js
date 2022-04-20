@@ -62,7 +62,7 @@ export const CronJobSpecSection = ({ value, setValue, ...props }) => {
       <ResourceForm.FormField
         advanced
         propertyPath="$.jobTemplate.spec.template.spec.restartPolicy"
-        label={t('cron-jobs.create-modal.labels.restart-policy')}
+        label={t('pods.labels.restart-policy')}
         input={Inputs.Dropdown}
         options={restartPolicyOptions}
       />
@@ -104,7 +104,7 @@ export const JobSpecSection = ({ value, setValue, readOnly, ...props }) => {
       <ResourceForm.FormField
         advanced
         propertyPath="$.template.spec.restartPolicy"
-        label={t('cron-jobs.create-modal.labels.restart-policy')}
+        label={t('pods.labels.restart-policy')}
         input={Inputs.Dropdown}
         options={restartPolicyOptions}
         readOnly={readOnly}

@@ -9,6 +9,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { CronJobLastScheduleTime } from 'shared/components/CronJob/CronJobLastScheduleTime';
+import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 
 import { CronJobCreate } from './CronJobCreate';
 import { CronJobJobs } from './CronJobJobs';
@@ -64,9 +65,13 @@ export function CronJobDetails(props) {
     />
   );
 
+  const CronJobPodTemplate = cronjob => (
+    <PodTemplate template={cronjob.spec.jobTemplate.spec.template} />
+  );
+
   return (
     <ResourceDetails
-      customComponents={[CronJobJobs, Events]}
+      customComponents={[CronJobJobs, Events, CronJobPodTemplate]}
       customColumns={customColumns}
       createResourceForm={CronJobCreate}
       {...props}
