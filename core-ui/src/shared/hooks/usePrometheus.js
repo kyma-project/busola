@@ -14,6 +14,14 @@ const getPrometheusSelector = data => {
   return selector;
 };
 
+const getPrometheusQueryPVCUsedSpaceQuery = (data, step) => {
+  return `sum without(instance, node) (topk(1, (kubelet_volume_stats_capacity_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${data.namespace}", persistentvolumeclaim="${data.name}"}[${step}s])))`;
+};
+
+const getPrometheusQueryPVCFreeSpaceQuery = (data, step) => {
+  return `sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${data.namespace}", persistentvolumeclaim=${data.name}}[${step}s])))`;
+};
+
 const getPrometheusCPUQuery = (
   type,
   mode,
@@ -81,6 +89,7 @@ const getPrometheusNodesQuery = () => {
 };
 
 export function getMetric(type, mode, metric, cpuQuery, { step, ...data }) {
+  console.log(step);
   const metrics = {
     cpu: {
       prometheusQuery: getPrometheusCPUQuery(type, mode, data, step, cpuQuery),
@@ -102,6 +111,14 @@ export function getMetric(type, mode, metric, cpuQuery, { step, ...data }) {
     nodes: {
       prometheusQuery: getPrometheusNodesQuery(),
       unit: '',
+    },
+    'pvc-used-space': {
+      prometheusQuery: getPrometheusQueryPVCUsedSpaceQuery(data, step),
+      unit: 'MiB',
+    },
+    'pvc-free-space': {
+      prometheusQuery: getPrometheusQueryPVCFreeSpaceQuery(data, step),
+      unit: 'MiB',
     },
   };
   return metrics[metric];

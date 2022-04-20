@@ -7,12 +7,17 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
+import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
 import { PersistentVolumeCreate } from './PersistentVolumeCreate';
+
+const StatsComponent = pv => {
+  return <StatsPanel type="pod" mode="single" />;
+};
 
 export function PersistentVolumeDetails(props) {
   const { t } = useTranslation();
