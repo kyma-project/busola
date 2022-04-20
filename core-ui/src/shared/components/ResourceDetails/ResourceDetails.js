@@ -310,7 +310,9 @@ function Resource({
         ))}
       </PageHeader>
       <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
-      {customComponents.map(component => component(resource, resourceUrl))}
+      {(customComponents || []).map(component =>
+        component(resource, resourceUrl),
+      )}
       {children}
       {resourceGraphConfig?.[resource.kind] && (
         <Suspense fallback={<Spinner />}>
