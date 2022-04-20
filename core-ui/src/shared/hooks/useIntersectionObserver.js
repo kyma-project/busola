@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 const defaultOptions = {
   root: null,
   rootMargin: '0px',
-  threshold: 1.0,
+  threshold: 0.5,
 };
 
 export const useIntersectionObserver = (target, options = {}) => {
