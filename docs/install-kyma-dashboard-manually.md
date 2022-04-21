@@ -40,7 +40,7 @@ To run Kyma Dashboard manually on a cluster, you must install it together with I
 
 By default, the communication with the backend Pod is plain HTTP. Even when you use Istio Service Mesh, the last bit of communication between the Istio sidecar and the backend service stays plain HTTP.
 
-If your use case needs TLS all the way into the backend Pod, enable it by providing a TLS certificate to the backend service, setting some environment variables and changing the deployment. Depending on your setup, you might have to use a valid TLS certificate (e.g. if you are directly exposing the backend Pod without TLS termination in between). In this case you might want to use cert-manager to handle your certificates or provide a valid one here and manage it yourself.
+If your use case needs TLS all the way into the backend Pod, enable it by providing a TLS certificate to the backend service, setting some environment variables and changing the deployment. Depending on your setup, you might have to use a valid TLS certificate (for example, if you are directly exposing the backend Pod without TLS termination in between). In this case, you might want to use cert-manager to handle your certificates, or provide a valid one here and manage it yourself.
 
 1. Generate a TLS certificate and create a tls secret on your cluster.
    ```bash
