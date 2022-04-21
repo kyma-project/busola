@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'fundamental-react';
+import { Icon, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -77,23 +77,16 @@ export function YamlResourcesList({ resourcesData, namespace }) {
                 className="fd-margin-begin--sm"
                 style={{ listStyle: 'disc' }}
               >
+                {r?.value?.kind} {r?.value?.metadata?.name}
                 {!!r?.value?.metadata?.namespace &&
                   namespace &&
                   r?.value?.metadata?.namespace !== namespace && (
-                    <Tooltip
-                      content={t('upload-yaml.different-namespace', {
+                    <MessageStrip type="warning">
+                      {t('upload-yaml.different-namespace', {
                         namespace: r?.value?.metadata?.namespace,
                       })}
-                    >
-                      <Icon
-                        ariaLabel="Warning"
-                        glyph="message-warning"
-                        size="s"
-                        className="fd-has-color-status-2 has-tooltip"
-                      />
-                    </Tooltip>
-                  )}{' '}
-                {r?.value?.kind} {r?.value?.metadata?.name}
+                    </MessageStrip>
+                  )}
               </li>
             ))}
           </ul>
