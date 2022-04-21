@@ -379,6 +379,6 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   ```bash
   "VISUAL_RESOURCES": {
-    "isEnabled": false,
+    "isEnabled": true,
   },
   ```
