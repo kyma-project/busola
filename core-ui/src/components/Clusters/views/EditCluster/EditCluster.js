@@ -75,7 +75,7 @@ function EditClusterComponent({
   );
   const [clientId, setClientId] = useState(findInitialValue('oidc-client-id'));
   const [clientSecret, setClientSecret] = useState(
-    findInitialValue('oidc-client-id'),
+    findInitialValue('oidc-client-secret'),
   );
   const [scopes, setScopes] = useState(findInitialValue('oidc-extra-scope'));
   const createOIDC = (type = '', val = '') => {
