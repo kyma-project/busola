@@ -9,6 +9,7 @@ import { useUploadResources } from './useUploadResources';
 import './YamlUploadDialog.scss';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 export const OPERATION_STATE_INITIAL = 'INITIAL';
 export const OPERATION_STATE_WAITING = 'WAITING';
@@ -17,6 +18,8 @@ export const OPERATION_STATE_SOME_FAILED = 'SOME_FAILED';
 
 export function YamlUploadDialog({ show, onCancel }) {
   const { t } = useTranslation();
+  const { namespaceId } = useMicrofrontendContext();
+  const defaultNamespace = namespaceId || 'default';
 
   const [resourcesData, setResourcesData] = useState();
   const [resourcesWithStatuses, setResourcesWithStatuses] = useState();
@@ -28,6 +31,7 @@ export function YamlUploadDialog({ show, onCancel }) {
     resourcesWithStatuses,
     setResourcesWithStatuses,
     setLastOperationState,
+    defaultNamespace,
   );
 
   useEventListener('keydown', ({ key }) => {
@@ -95,7 +99,7 @@ export function YamlUploadDialog({ show, onCancel }) {
           setLastOperationState={setLastOperationState}
         />
         <div className="fd-margin-begin--tiny fd-margin-end--tiny">
-          {t('upload-yaml.info')}
+          {t('upload-yaml.info', { namespace: defaultNamespace })}
           <YamlResourcesList resourcesData={resourcesWithStatuses} />
         </div>
       </div>
