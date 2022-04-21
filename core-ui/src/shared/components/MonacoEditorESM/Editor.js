@@ -49,6 +49,7 @@ export function Editor({
       language: 'yaml',
       fontSize: 15,
       theme: editorTheme,
+      fixedOverflowWidgets: true,
     });
 
     editorRef.current.onDidChangeModelContent(() => {
