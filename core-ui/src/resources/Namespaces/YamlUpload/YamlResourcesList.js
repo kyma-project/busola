@@ -1,18 +1,21 @@
 import React from 'react';
+import pluralize from 'pluralize';
 import { Icon, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import {
   STATE_ERROR,
   STATE_WAITING,
   STATE_UPDATED,
   STATE_CREATED,
 } from './useUploadResources';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import './YamlResourcesList.scss';
 
 export function YamlResourcesList({ resourcesData, namespace }) {
   const { t } = useTranslation();
+  const { namespaceNodes, clusterNodes } = useMicrofrontendContext();
+
   const filteredResources = resourcesData?.filter(
     resource => resource !== null,
   );
@@ -34,6 +37,41 @@ export function YamlResourcesList({ resourcesData, namespace }) {
         (filteredResources?.length || 0)) *
       100
     );
+  };
+
+  const getWarning = resource => {
+    const resourceType = pluralize(resource?.kind?.toLowerCase());
+    const resourceNamespace = resource?.metadata?.namespace;
+    const hasCurrentNamespace = namespace
+      ? resourceNamespace === namespace
+      : true;
+    const isKnownClusterWide = !!clusterNodes?.find(
+      n => n.resourceType === resourceType,
+    );
+    const isKnownNamespaceWide = !!namespaceNodes?.find(
+      n => n.resourceType === resourceType,
+    );
+
+    if (
+      (isKnownClusterWide && !resourceNamespace) ||
+      (isKnownNamespaceWide && (!resourceNamespace || hasCurrentNamespace))
+    ) {
+      return null;
+    } else if (isKnownNamespaceWide && !hasCurrentNamespace) {
+      return (
+        <MessageStrip type="warning">
+          {t('upload-yaml.different-namespace', {
+            namespace: resource?.metadata?.namespace,
+          })}
+        </MessageStrip>
+      );
+    } else if (isKnownClusterWide && resourceNamespace) {
+      return (
+        <MessageStrip type="warning">
+          {"Cluster wide resources shouldn't have a namespace"}
+        </MessageStrip>
+      );
+    }
   };
 
   const getIcon = status => {
@@ -78,15 +116,7 @@ export function YamlResourcesList({ resourcesData, namespace }) {
                 style={{ listStyle: 'disc' }}
               >
                 {r?.value?.kind} {r?.value?.metadata?.name}
-                {!!r?.value?.metadata?.namespace &&
-                  namespace &&
-                  r?.value?.metadata?.namespace !== namespace && (
-                    <MessageStrip type="warning">
-                      {t('upload-yaml.different-namespace', {
-                        namespace: r?.value?.metadata?.namespace,
-                      })}
-                    </MessageStrip>
-                  )}
+                {getWarning(r.value)}
               </li>
             ))}
           </ul>
