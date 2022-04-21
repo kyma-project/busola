@@ -27,7 +27,7 @@ window.MonacoEnvironment = {
     }
   },
 };
-// initiate own web worker to prepare the templates
+// initiate a web worker that will prepare the templates, to keep the main thread free
 let schemasWorker = null;
 if (typeof Worker !== 'undefined') {
   schemasWorker = new Worker(
@@ -35,7 +35,7 @@ if (typeof Worker !== 'undefined') {
     { type: 'module' },
   );
 }
-// each hook instance has access to this variable (a sort of global state)
+// each hook instance has access to this variable (an ESModule-level global state)
 const schemas = [];
 
 export function useAutocompleteWorker({ value }) {
@@ -47,9 +47,16 @@ export function useAutocompleteWorker({ value }) {
   const { apiVersion, kind } = value;
   // this gets calculated only once, to fetch the json validation schema
   // it means each supported resource must have apiVersion and kind initially defined
+  // if it's not possible, think about passing additional prop with backup value
   const [schemaId] = useState(`${apiVersion}/${kind}`);
 
   useEffect(() => {
+    if (typeof Worker === 'undefined') {
+      setLoading(false);
+      setError(new Error("Browser doesn't support web workers"));
+      return;
+    }
+
     schemasWorker.postMessage(['shouldInitialize']);
     schemasWorker.onmessage = e => {
       if (e.data.isInitialized === false) {
@@ -80,7 +87,7 @@ export function useAutocompleteWorker({ value }) {
       setLoading(false);
     };
 
-    // disabling due to the changing identity of fetch
+    // disabling eslint due to the changing identity of fetch
     // eslint-disable-next-line
   }, [schemaId]);
 
@@ -90,7 +97,7 @@ export function useAutocompleteWorker({ value }) {
     if (schema) {
       if (schemas.every(el => el.fileMatch[0] !== String(modelUri))) {
         schemas.push({
-          // uri: apiLink, // TODO - custom link would make a lot of sense, but it creates problems (a query is sent),
+          // uri: apiLink, // TODO - (task created) custom link would make a lot of sense, but it creates problems (a query is sent),
           uri: 'https://kubernetes.io/docs',
           fileMatch: [String(modelUri)],
           schema: schema,
