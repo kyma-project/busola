@@ -51,7 +51,9 @@ export function useUploadResources(
       n => n.resourceType === resourceType,
     );
 
-    if (hasNamespace || isKnownClusterWide) {
+    if (isKnownClusterWide) {
+      return getResourceUrl(resource, null);
+    } else if (hasNamespace) {
       return getResourceUrl(resource);
     } else if (isKnownNamespaceWide) {
       return getResourceUrl(resource, namespaceId);

@@ -2084,7 +2084,6 @@ top-nav:
   profile:
     preferences: $t(preferences.title)
 upload-yaml:
-  different-namespace: This resource will be uploaded to the {{namespace}} Namespace.
   info: You can upload multiple resources, separated in YAML by '---'. If resource already exists, it will be updated, otherwise a new one will be created. In case the Namespace is not given, the '{{namespace}}' one will be used.
   messages:
     not-a-k8s-resource: Not a Kubernetes resource!
@@ -2095,6 +2094,9 @@ upload-yaml:
     updated: Updated
     waiting: Waiting
   title: Upload YAML
+  warnings:
+    different-namespace: This resource will be uploaded to the {{namespace}} Namespace.
+    incorrect-namespace: The cluster-wide resources shouldn't have a Namespace.
   you-will-create_one: 'You will create 1 resource:'
   you-will-create_other: 'You will create {{count}} resources:'
 virtualservices:

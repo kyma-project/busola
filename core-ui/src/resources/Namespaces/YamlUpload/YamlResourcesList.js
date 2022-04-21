@@ -60,7 +60,7 @@ export function YamlResourcesList({ resourcesData, namespace }) {
     } else if (isKnownNamespaceWide && !hasCurrentNamespace) {
       return (
         <MessageStrip type="warning">
-          {t('upload-yaml.different-namespace', {
+          {t('upload-yaml.warnings.different-namespace', {
             namespace: resource?.metadata?.namespace,
           })}
         </MessageStrip>
@@ -68,7 +68,7 @@ export function YamlResourcesList({ resourcesData, namespace }) {
     } else if (isKnownClusterWide && resourceNamespace) {
       return (
         <MessageStrip type="warning">
-          {"Cluster wide resources shouldn't have a namespace"}
+          {t('upload-yaml.warnings.incorrect-namespace')}
         </MessageStrip>
       );
     }
