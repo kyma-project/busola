@@ -100,7 +100,10 @@ export function YamlUploadDialog({ show, onCancel }) {
         />
         <div className="fd-margin-begin--tiny fd-margin-end--tiny">
           {t('upload-yaml.info', { namespace: defaultNamespace })}
-          <YamlResourcesList resourcesData={resourcesWithStatuses} />
+          <YamlResourcesList
+            resourcesData={resourcesWithStatuses}
+            namespace={namespaceId}
+          />
         </div>
       </div>
     </Dialog>

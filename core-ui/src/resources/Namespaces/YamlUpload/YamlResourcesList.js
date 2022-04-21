@@ -1,15 +1,17 @@
 import React from 'react';
 import { Icon } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
+
 import {
   STATE_ERROR,
   STATE_WAITING,
   STATE_UPDATED,
   STATE_CREATED,
 } from './useUploadResources';
-import { useTranslation } from 'react-i18next';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import './YamlResourcesList.scss';
 
-export function YamlResourcesList({ resourcesData }) {
+export function YamlResourcesList({ resourcesData, namespace }) {
   const { t } = useTranslation();
   const filteredResources = resourcesData?.filter(
     resource => resource !== null,
@@ -75,6 +77,21 @@ export function YamlResourcesList({ resourcesData }) {
                 className="fd-margin-begin--sm"
                 style={{ listStyle: 'disc' }}
               >
+                {r?.value?.metadata?.namespace &&
+                  r?.value?.metadata?.namespace !== namespace && (
+                    <Tooltip
+                      content={t('upload-yaml.different-namespace', {
+                        namespace: r?.value?.metadata?.namespace,
+                      })}
+                    >
+                      <Icon
+                        ariaLabel="Warning"
+                        glyph="message-warning"
+                        size="s"
+                        className="fd-has-color-status-2 has-tooltip"
+                      />
+                    </Tooltip>
+                  )}{' '}
                 {r?.value?.kind} {r?.value?.metadata?.name}
               </li>
             ))}
