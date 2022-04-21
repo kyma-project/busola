@@ -77,7 +77,8 @@ export function YamlResourcesList({ resourcesData, namespace }) {
                 className="fd-margin-begin--sm"
                 style={{ listStyle: 'disc' }}
               >
-                {r?.value?.metadata?.namespace &&
+                {!!r?.value?.metadata?.namespace &&
+                  namespace &&
                   r?.value?.metadata?.namespace !== namespace && (
                     <Tooltip
                       content={t('upload-yaml.different-namespace', {
