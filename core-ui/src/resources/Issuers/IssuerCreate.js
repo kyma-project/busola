@@ -259,7 +259,7 @@ export function IssuerCreate({
       setResource={setIssuer}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={createPresets(namespace, t)}
+      presets={!initialIssuer && createPresets(namespace, t)}
       createUrl={resourceUrl}
     >
       <K8sNameField

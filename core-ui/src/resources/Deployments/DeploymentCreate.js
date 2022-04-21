@@ -125,7 +125,7 @@ export function DeploymentCreate({
       formElementRef={formElementRef}
       afterCreatedFn={afterCreatedFn}
       renderEditor={!initialDeployment ? renderEditor : null}
-      presets={createPresets(namespace, t)}
+      presets={!initialDeployment && createPresets(namespace, t)}
       onPresetSelected={value => {
         setDeployment(value.deployment);
         setCreateService(!!value.service);

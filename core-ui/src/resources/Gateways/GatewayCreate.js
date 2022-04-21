@@ -49,7 +49,7 @@ export function GatewayCreate({
       initialResource={initialGateway}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={createPresets(namespace, t)}
+      presets={!initialGateway && createPresets(namespace, t)}
       createUrl={resourceUrl}
     >
       <K8sNameField
