@@ -1,10 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import LambdaDetailsWrapper from 'components/Lambdas/LambdaDetails/LambdaDetailsWrapper';
-import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
-import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
-import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
+import FunctionDetailsWrapper from 'components/Functions/FunctionDetails/FunctionDetailsWrapper';
+import { prettySourceType } from 'components/Functions/helpers/functions';
+import { prettyRuntime } from 'components/Functions/helpers/runtime';
+import { FunctionStatusBadge } from 'components/Functions/FunctionStatusBadge/FunctionStatusBadge';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { FunctionCreate } from './FunctionCreate';
 
@@ -14,7 +14,7 @@ export function FunctionDetails(props) {
     {
       header: t('common.headers.status'),
       value: resource => (
-        <LambdaStatusBadge
+        <FunctionStatusBadge
           resourceKind={props.resourceType}
           status={resource.status}
         />
@@ -31,7 +31,7 @@ export function FunctionDetails(props) {
   ];
 
   const Functions = resource => {
-    return <LambdaDetailsWrapper key="lambdaDetails" lambda={resource} />;
+    return <FunctionDetailsWrapper key="functionDetails" func={resource} />;
   };
   return (
     <ResourceDetails

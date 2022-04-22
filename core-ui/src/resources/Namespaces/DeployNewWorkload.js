@@ -13,7 +13,7 @@ export default function DeployNewWorkload({ namespaceName }) {
 
   const functionsExist = features?.SERVERLESS?.isEnabled;
 
-  const lambdaModal = functionsExist ? (
+  const functionModal = functionsExist ? (
     <ModalWithForm
       title={t('functions.create-view.title')}
       confirmText={t('common.buttons.create')}
@@ -59,7 +59,7 @@ export default function DeployNewWorkload({ namespaceName }) {
         body={
           <Menu>
             <Menu.List>
-              {lambdaModal}
+              {functionModal}
               {deploymentModal}
             </Menu.List>
           </Menu>

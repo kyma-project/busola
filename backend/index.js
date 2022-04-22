@@ -1,7 +1,6 @@
 const express = require('express');
 const compression = require('compression');
 const cors = require('cors');
-const http = require('http');
 const fs = require('fs');
 const merge = require('lodash.merge');
 
@@ -48,7 +47,26 @@ if (process.env.NODE_ENV === 'development') {
 }
 setupJWTCheck(app);
 
-const server = http.createServer(app);
+let server = null;
+
+if (
+  process.env.BUSOLA_SSL_ENABLED == 1 &&
+  process.env.BUSOLA_SSL_KEY_FILE != '' &&
+  process.env.BUSOLA_SSL_CRT_FILE != ''
+) {
+  const https = require('https');
+  const options = {
+    requestCert: true,
+    rejectUnauthorized: false,
+    key: fs.readFileSync(process.env.BUSOLA_SSL_KEY_FILE),
+    cert: fs.readFileSync(process.env.BUSOLA_SSL_CRT_FILE),
+  };
+  server = https.createServer(options, app);
+} else {
+  const http = require('http');
+  server = http.createServer(app);
+}
+
 // requestLogger(require("http")); //uncomment this to log the outgoing traffic
 // requestLogger(require("https")); //uncomment this to log the outgoing traffic
 
