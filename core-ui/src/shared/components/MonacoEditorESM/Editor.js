@@ -14,6 +14,9 @@ export function Editor({
   readonly,
   language = 'yaml',
   editorDidMount,
+  customSchemaId,
+  autocompletionDisabled,
+  customSchemaUri,
 }) {
   const { t } = useTranslation();
   const [error, setError] = useState('');
@@ -29,6 +32,9 @@ export function Editor({
     loading,
   } = useAutocompleteWorker({
     value,
+    customSchemaId,
+    autocompletionDisabled,
+    customSchemaUri,
   });
   useEffect(() => {
     editor.onDidChangeMarkers(markers => {
@@ -41,7 +47,7 @@ export function Editor({
 
   useEffect(() => {
     const { modelUri } = setAutocompleteOptions();
-
+    console.log(modelUri);
     const model = editor.createModel(valueRef.current, language, modelUri);
     editorRef.current = editor.create(divRef.current, {
       model: model,
@@ -105,13 +111,18 @@ export function Editor({
         {schemaError ? (
           <p> {t('common.create-form.schema-error', { error: schemaError })}</p>
         ) : null}
-        {markers.length
-          ? markers.map(m => (
-              <p>
-                {m.startLineNumber}:{m.startColumn} ==> {m.message}
-              </p>
-            ))
-          : null}
+        {markers.length ? (
+          <div className="resource-form__editor__error">
+            <MessageStrip type="info" className="fd-margin--sm">
+              {markers.map(m => (
+                <p>
+                  {t('common.tooltips.line')} {m.startLineNumber},{' '}
+                  {t('common.tooltips.column')} {m.startColumn}: {m.message}
+                </p>
+              ))}
+            </MessageStrip>
+          </div>
+        ) : null}
       </div>
     </div>
   );

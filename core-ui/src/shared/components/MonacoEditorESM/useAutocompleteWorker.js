@@ -38,7 +38,12 @@ if (typeof Worker !== 'undefined') {
 // each hook instance has access to this variable (an ESModule-level global state)
 const schemas = [];
 
-export function useAutocompleteWorker({ value }) {
+export function useAutocompleteWorker({
+  value,
+  customSchemaId,
+  autocompletionDisabled,
+  customSchemaUri,
+}) {
   const [schema, setSchema] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -48,9 +53,14 @@ export function useAutocompleteWorker({ value }) {
   // this gets calculated only once, to fetch the json validation schema
   // it means each supported resource must have apiVersion and kind initially defined
   // if it's not possible, think about passing additional prop with backup value
-  const [schemaId] = useState(`${apiVersion}/${kind}`);
+  const [schemaId] = useState(customSchemaId || `${apiVersion}/${kind}`);
 
   useEffect(() => {
+    if (autocompletionDisabled) {
+      setLoading(false);
+      return;
+    }
+
     if (typeof Worker === 'undefined') {
       setLoading(false);
       setError(new Error("Browser doesn't support web workers"));
@@ -98,8 +108,9 @@ export function useAutocompleteWorker({ value }) {
       if (schemas.every(el => el.fileMatch[0] !== String(modelUri))) {
         schemas.push({
           // uri: apiLink, // TODO - (task created) custom link would make a lot of sense, but it creates problems (a query is sent),
-          uri: 'https://kubernetes.io/docs',
+          uri: customSchemaUri || 'https://kubernetes.io/docs',
           fileMatch: [String(modelUri)],
+          // fileMatch: [schemaId],
           schema: schema,
         });
       }
@@ -116,7 +127,7 @@ export function useAutocompleteWorker({ value }) {
     return {
       modelUri,
     };
-  }, [schema, schemaId]);
+  }, [schema, schemaId, customSchemaUri]);
 
   return { setAutocompleteOptions, schema, error, loading };
 }

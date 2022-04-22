@@ -28,6 +28,7 @@ export function CustomResourceDefinitionCreate({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       onlyYaml
+      autocompletionDisabled={true}
     />
   );
 }

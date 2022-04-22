@@ -30,6 +30,9 @@ export function ResourceForm({
   afterCreatedFn,
   className,
   onlyYaml = false,
+  customSchemaId,
+  autocompletionDisabled,
+  customSchemaUri,
 }) {
   const { i18n } = useTranslation();
   const createResource = useCreateResource({
@@ -77,6 +80,9 @@ export function ResourceForm({
       value={resource}
       setValue={setResource}
       onMount={editor => setActionsEditor(editor)}
+      customSchemaId={customSchemaId}
+      customSchemaUri={customSchemaUri}
+      autocompletionDisabled={autocompletionDisabled}
     />
   );
   editor = renderEditor
