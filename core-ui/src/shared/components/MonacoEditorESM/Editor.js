@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTheme } from 'shared/contexts/ThemeContext';
 import jsyaml from 'js-yaml';
-import { editor } from 'monaco-editor';
+import { editor, Uri } from 'monaco-editor';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useAutocompleteWorker } from './useAutocompleteWorker';
@@ -18,6 +18,7 @@ export function Editor({
   autocompletionDisabled,
   customSchemaUri,
 }) {
+  const descriptor = useRef(Uri);
   const { t } = useTranslation();
   const [error, setError] = useState('');
   const [markers, setMarkers] = useState([]);
@@ -28,6 +29,7 @@ export function Editor({
   const editorRef = useRef(null);
   const {
     setAutocompleteOptions,
+    activeSchemaPath,
     error: schemaError,
     loading,
   } = useAutocompleteWorker({
@@ -37,18 +39,28 @@ export function Editor({
     customSchemaUri,
   });
   useEffect(() => {
-    editor.onDidChangeMarkers(markers => {
+    const onDidChangeMarkers = editor.onDidChangeMarkers(markers => {
       if (markers.length) {
-        const descriptiveMarkers = editor.getModelMarkers({});
+        const descriptiveMarkers = editor.getModelMarkers({
+          resource: descriptor.current,
+        });
         setMarkers(descriptiveMarkers);
       }
     });
+
+    return () => {
+      onDidChangeMarkers.dispose();
+    };
   }, [setMarkers]);
 
   useEffect(() => {
     const { modelUri } = setAutocompleteOptions();
-    console.log(modelUri);
-    const model = editor.createModel(valueRef.current, language, modelUri);
+
+    descriptor.current = modelUri;
+    const model =
+      editor.getModel(modelUri) ||
+      editor.createModel(valueRef.current, language, modelUri);
+
     editorRef.current = editor.create(divRef.current, {
       model: model,
       automaticLayout: true,
@@ -58,36 +70,51 @@ export function Editor({
       fixedOverflowWidgets: true,
     });
 
-    editorRef.current.onDidChangeModelContent(() => {
-      const editorValue = editorRef.current.getValue();
+    const onDidChangeModelContent = editorRef.current.onDidChangeModelContent(
+      () => {
+        const editorValue = editorRef.current.getValue();
 
-      if (valueRef.current !== editorValue) {
-        try {
-          let parsed = {};
-          if (language === 'yaml') {
-            parsed = jsyaml.load(editorValue);
-          } else if (language === 'json') {
-            parsed = JSON.parse(editorValue);
+        if (valueRef.current !== editorValue) {
+          try {
+            let parsed = {};
+            if (language === 'yaml') {
+              parsed = jsyaml.load(editorValue);
+            } else if (language === 'json') {
+              parsed = JSON.parse(editorValue);
+            }
+            if (typeof parsed !== 'object') {
+              setError(t('common.create-form.object-required'));
+              return;
+            }
+            setValue(parsed);
+            setError(null);
+          } catch ({ message }) {
+            // get the message until the newline
+            setError(message.substr(0, message.indexOf('\n')));
           }
-          if (typeof parsed !== 'object') {
-            setError(t('common.create-form.object-required'));
-            return;
-          }
-          setValue(parsed);
-          setError(null);
-        } catch ({ message }) {
-          // get the message until the newline
-          setError(message.substr(0, message.indexOf('\n')));
         }
-      }
-    });
+      },
+    );
+
     return () => {
-      editor.getModels().forEach(model => {
-        if (model._associatedResource === modelUri) model.dispose();
-      });
+      onDidChangeModelContent.dispose();
+
+      editor.getModel(descriptor.current).dispose();
       editorRef.current.dispose();
     };
   }, [editorTheme, setAutocompleteOptions, language, setValue, t]);
+
+  useEffect(() => {
+    const onDidFocusEditorText = editorRef.current.onDidFocusEditorText(() => {
+      if (activeSchemaPath !== descriptor.current.path) {
+        setAutocompleteOptions();
+      }
+    });
+
+    return () => {
+      onDidFocusEditorText.dispose();
+    };
+  }, [setAutocompleteOptions, activeSchemaPath]);
 
   return (
     <div className="resource-form__wrapper">
@@ -108,17 +135,23 @@ export function Editor({
       )}
 
       <div className="resource-form__legend">
-        {schemaError ? (
-          <p> {t('common.create-form.schema-error', { error: schemaError })}</p>
-        ) : null}
         {markers.length ? (
-          <div className="resource-form__editor__error">
-            <MessageStrip type="info" className="fd-margin--sm">
+          <div>
+            <MessageStrip type="warning" className="fd-margin--sm">
+              {schemaError ? (
+                <span className="line">
+                  {' '}
+                  {t('common.create-form.schema-error', { error: schemaError })}
+                </span>
+              ) : null}
               {markers.map(m => (
-                <p>
+                <span
+                  className="line"
+                  key={`${m.startLineNumber}${m.startColumn}`}
+                >
                   {t('common.tooltips.line')} {m.startLineNumber},{' '}
                   {t('common.tooltips.column')} {m.startColumn}: {m.message}
-                </p>
+                </span>
               ))}
             </MessageStrip>
           </div>

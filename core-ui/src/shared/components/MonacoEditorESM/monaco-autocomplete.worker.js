@@ -14,7 +14,7 @@ async function createJSONSchemas(openAPISchemas) {
       ][0];
       const prefix = group ? `${group}/` : '';
       const schemaId = `${prefix}${version}/${kind}`;
-      console.log(schemaId);
+
       if (!jsonSchemas[schemaId]) {
         jsonSchemas[schemaId] = value;
       }

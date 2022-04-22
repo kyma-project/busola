@@ -25,18 +25,24 @@
   overflow: hidden;
   flex-grow: 1;
   border: 1px solid var(--sapNeutralBackground);
+}
+.resource-form__legend {
+  position: absolute;
+  bottom: 0;
+  width: calc(100% - 10px);
 
-  .resource-form__legend {
+  .line {
     width: 100%;
+    display: block;
   }
+}
 
-  .resource-form__editor__error {
-    inset: 0;
+.resource-form__editor__error {
+  inset: 0;
 
-    & > * {
-      bottom: 0;
-      left: 50px;
-      position: absolute;
-    }
+  & > * {
+    bottom: 0;
+    left: 50px;
+    position: absolute;
   }
 }

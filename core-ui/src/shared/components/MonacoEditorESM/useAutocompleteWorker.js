@@ -35,8 +35,7 @@ if (typeof Worker !== 'undefined') {
     { type: 'module' },
   );
 }
-// each hook instance has access to this variable (an ESModule-level global state)
-const schemas = [];
+let activeSchemaPath = null;
 
 export function useAutocompleteWorker({
   value,
@@ -103,31 +102,32 @@ export function useAutocompleteWorker({
 
   const setAutocompleteOptions = useCallback(() => {
     const modelUri = Uri.parse(schemaId);
-
+    console.log(schema);
     if (schema) {
-      if (schemas.every(el => el.fileMatch[0] !== String(modelUri))) {
-        schemas.push({
-          // uri: apiLink, // TODO - (task created) custom link would make a lot of sense, but it creates problems (a query is sent),
-          uri: customSchemaUri || 'https://kubernetes.io/docs',
-          fileMatch: [String(modelUri)],
-          // fileMatch: [schemaId],
-          schema: schema,
-        });
-      }
+      activeSchemaPath = modelUri.path;
+      setDiagnosticsOptions({
+        enableSchemaRequest: false,
+        hover: true,
+        completion: true,
+        validate: true,
+        format: true,
+        isKubernetes: true,
+        // schemas,
+        schemas: [
+          {
+            // TODO - (task created) custom link would make custom links in the monaco tooltips,
+            //  but it creates problems (a query is sent)
+            uri: customSchemaUri || 'https://kubernetes.io/docs/',
+            fileMatch: [modelUri, String(modelUri)],
+            schema,
+          },
+        ],
+      });
     }
-    setDiagnosticsOptions({
-      enableSchemaRequest: false,
-      hover: true,
-      completion: !!schema,
-      validate: true,
-      format: true,
-      isKubernetes: true,
-      schemas: schemas,
-    });
     return {
       modelUri,
     };
   }, [schema, schemaId, customSchemaUri]);
 
-  return { setAutocompleteOptions, schema, error, loading };
+  return { setAutocompleteOptions, activeSchemaPath, error, loading };
 }

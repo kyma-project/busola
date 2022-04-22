@@ -186,7 +186,6 @@ export function NamespaceCreate(props) {
       afterCreatedFn={afterNamespaceCreated}
       setCustomValid={setCustomValid}
       customSchemaId="v1/Namespace"
-      // autocompletionDisabled={true}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
