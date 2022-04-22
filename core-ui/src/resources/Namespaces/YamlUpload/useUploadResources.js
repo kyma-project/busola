@@ -61,9 +61,7 @@ export function useUploadResources(
       const response = await fetch(getResourceKindUrl(resource));
       const json = await response.json();
       const apiGroupResources = json?.resources;
-      const apiGroup = apiGroupResources.find(
-        r => r?.kind === resource.value?.kind,
-      );
+      const apiGroup = apiGroupResources.find(r => r?.kind === resource?.kind);
       return apiGroup?.namespaced
         ? getResourceUrl(resource, namespaceId)
         : getResourceUrl(resource);

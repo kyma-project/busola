@@ -42,22 +42,13 @@ export function YamlResourcesList({ resourcesData, namespace }) {
   const getWarning = resource => {
     const resourceType = pluralize(resource?.kind?.toLowerCase());
     const resourceNamespace = resource?.metadata?.namespace;
-    const hasCurrentNamespace = namespace
-      ? resourceNamespace === namespace
-      : true;
-    const isKnownClusterWide = !!clusterNodes?.find(
-      n => n.resourceType === resourceType,
-    );
+    const hasCurrentNamespace =
+      namespace && resourceNamespace ? resourceNamespace === namespace : true;
     const isKnownNamespaceWide = !!namespaceNodes?.find(
       n => n.resourceType === resourceType,
     );
 
-    if (
-      (isKnownClusterWide && !resourceNamespace) ||
-      (isKnownNamespaceWide && (!resourceNamespace || hasCurrentNamespace))
-    ) {
-      return null;
-    } else if (isKnownNamespaceWide && !hasCurrentNamespace) {
+    if (isKnownNamespaceWide && !hasCurrentNamespace) {
       return (
         <MessageStrip type="warning">
           {t('upload-yaml.warnings.different-namespace', {
@@ -65,13 +56,8 @@ export function YamlResourcesList({ resourcesData, namespace }) {
           })}
         </MessageStrip>
       );
-    } else if (isKnownClusterWide && resourceNamespace) {
-      return (
-        <MessageStrip type="warning">
-          {t('upload-yaml.warnings.incorrect-namespace')}
-        </MessageStrip>
-      );
     }
+    return null;
   };
 
   const getIcon = status => {
