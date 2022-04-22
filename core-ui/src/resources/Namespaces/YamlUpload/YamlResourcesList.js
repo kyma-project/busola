@@ -14,7 +14,7 @@ import './YamlResourcesList.scss';
 
 export function YamlResourcesList({ resourcesData, namespace }) {
   const { t } = useTranslation();
-  const { namespaceNodes, clusterNodes } = useMicrofrontendContext();
+  const { namespaceNodes } = useMicrofrontendContext();
 
   const filteredResources = resourcesData?.filter(
     resource => resource !== null,
