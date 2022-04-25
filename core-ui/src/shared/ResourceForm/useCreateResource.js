@@ -13,6 +13,7 @@ export function useCreateResource({
   initialResource,
   createUrl,
   afterCreatedFn,
+  setOpen,
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -62,8 +63,11 @@ export function useCreateResource({
           createUrl,
           createPatch(initialResource, mergedResource),
         );
+        setOpen(false);
       } else {
         await postRequest(createUrl, resource);
+
+        setOpen(false);
       }
 
       if (afterCreatedFn) {

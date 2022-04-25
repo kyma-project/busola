@@ -50,10 +50,11 @@ export const ModalWithForm = ({
   onModalOpenStateChange,
   alwaysOpen,
   i18n,
+
   ...props
 }) => {
   const { t } = useTranslation(null, { i18n });
-  const [isOpen, setOpen] = useState(alwaysOpen || false);
+  const [isOpen, setOpen] = useState(alwaysOpen || aaa);
   const [isValid, setValid] = useState(false);
   const [customValid, setCustomValid] = useState(true);
   const formElementRef = useRef(null);
@@ -129,7 +130,7 @@ export const ModalWithForm = ({
       formElementRef.current.dispatchEvent(
         new Event('submit', { bubbles: true, cancelable: true }),
       );
-      setOpenStatus(false);
+      // setOpenStatus(false);
     }
   }
 

@@ -25,10 +25,15 @@ export const ModalWithForm = ({
   onModalOpenStateChange,
   alwaysOpen,
   i18n,
+  isOpen: parentisOpen,
+  setOpen: parentSetOpen,
   ...props
 }) => {
   const { t } = useTranslation(null, { i18n });
-  const [isOpen, setOpen] = useState(alwaysOpen || false);
+  const [isOpen0, setO] = useState(alwaysOpen || parentisOpen);
+  const isOpen = typeof parentisOpen === 'boolean' ? parentisOpen : isOpen0;
+
+  const setOpen = parentSetOpen || setO;
 
   const {
     isValid,
@@ -52,11 +57,11 @@ export const ModalWithForm = ({
     if (status) {
       setTimeout(() => revalidate());
       LuigiClient.uxManager().addBackdrop();
+      setOpen(status);
     } else {
       LuigiClient.uxManager().removeBackdrop();
       if (customCloseAction) customCloseAction();
     }
-    setOpen(status);
   }
 
   function handleFormChanged() {
@@ -151,6 +156,7 @@ export const ModalWithForm = ({
         ]}
         onClose={() => {
           setOpenStatus(false);
+          // setOpen(false);
         }}
         title={title}
       >

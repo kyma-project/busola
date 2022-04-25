@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
@@ -151,6 +151,9 @@ function Resource({
     resourceTitle,
     resource.kind,
   );
+
+  const [isOpen, setOpen] = useState(false);
+
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
@@ -198,6 +201,8 @@ function Resource({
     } else {
       return (
         <ModalWithForm
+          isOpen={isOpen}
+          setOpen={setOpen}
           title={
             editActionLabel ||
             t('components.resource-details.edit', {
@@ -223,6 +228,7 @@ function Resource({
                 resourceUrl={resourceUrl}
                 namespace={namespace}
                 refetchList={silentRefetch}
+                setOpen={setOpen}
                 {...props}
               />
             </ErrorBoundary>

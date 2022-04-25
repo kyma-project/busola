@@ -30,6 +30,7 @@ export function ResourceForm({
   afterCreatedFn,
   className,
   onlyYaml = false,
+  setOpen,
 }) {
   const { i18n } = useTranslation();
   const createResource = useCreateResource({
@@ -39,6 +40,7 @@ export function ResourceForm({
     initialResource,
     createUrl,
     afterCreatedFn,
+    setOpen,
   });
 
   const [mode, setMode] = React.useState(
