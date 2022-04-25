@@ -104,7 +104,7 @@ export function Editor({
       editor.getModel(descriptor.current).dispose();
       editorRef.current.dispose();
     };
-  }, [editorTheme, setAutocompleteOptions, language, setValue, t]);
+  }, [editorTheme, setAutocompleteOptions, language, setValue, t, readOnly]);
 
   useEffect(() => {
     const onDidFocusEditorText = editorRef.current.onDidFocusEditorText(() => {
@@ -128,6 +128,7 @@ export function Editor({
 
       <div ref={divRef} className="resource-form__editor" />
       <p>
+        {/* TODO verify how this should be done */}
         {readOnly ? 'read-only mode' : null}
         {readOnly && (schemaError || autocompletionDisabled) ? ' | ' : null}
         {schemaError || autocompletionDisabled ? 'no autocompletion' : null}
@@ -142,11 +143,6 @@ export function Editor({
         {markers.length ? (
           <div>
             <MessageStrip type="warning" className="fd-margin--sm">
-              {schemaError ? (
-                <span className="line">
-                  {t('common.create-form.schema-error', { error: schemaError })}
-                </span>
-              ) : null}
               {markers.map(m => (
                 <span
                   className="line"

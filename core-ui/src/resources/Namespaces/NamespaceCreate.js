@@ -185,7 +185,7 @@ export function NamespaceCreate(props) {
       initialResource={initialNamespace}
       afterCreatedFn={afterNamespaceCreated}
       setCustomValid={setCustomValid}
-      customSchemaId="dssv1/Namespace"
+      customSchemaId="v1/Namespace"
     >
       <K8sNameField
         propertyPath="$.metadata.name"

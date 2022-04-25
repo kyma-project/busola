@@ -45,6 +45,7 @@ self.onmessage = $event => {
   }
   if ($event.data[0] === 'getSchema') {
     const schema = jsonSchemas[$event.data[1]];
+
     if (schema) {
       self.postMessage({ [$event.data[1]]: schema });
     } else {
