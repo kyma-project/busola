@@ -2130,6 +2130,7 @@ function filterNodesByAvailablePaths(nodes, groupVersions, permissionSet) {
 
 function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
   if (!node.viewUrl || !node.resourceType) {
+    // used for Custom Resources node
     if (node.context?.requiredGroupResource) {
       const { group, resource } = node.context.requiredGroupResource;
       if (!hasPermissionsFor(group, resource, permissionSet)) {
@@ -2138,6 +2139,7 @@ function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
     }
     return;
   }
+
   const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
   if (!apiPath) return;
 
@@ -2147,14 +2149,19 @@ function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
       .replace(/^\/apis\//, '')
       .replace(/^\/api\//, '');
 
+    // todo dedupe with features
     if (!groupVersions.find(g => g.includes(groupVersion))) {
       removeNode();
+      return;
     }
   } else {
     // we need to filter through permissions to check the node availability
     const apiGroup = extractApiGroup(apiPath);
     if (!hasPermissionsFor(apiGroup, node.resourceType, permissionSet)) {
       removeNode();
+      return;
     }
   }
+
+  // todo run checks for a feature and removeNode if needed
 }

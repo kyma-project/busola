@@ -29,8 +29,8 @@ export function useFeature(featureName) {
     );
     return () => LuigiClient.removeCustomMessageListener(customMsgId);
     */
-    return features[featureName] ?? { isEnabled: false };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // return [value, setValue];
+  return features[featureName] ?? { isEnabled: false };
 }

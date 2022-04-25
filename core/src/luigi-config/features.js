@@ -1,3 +1,4 @@
+// todo remove
 import { getBusolaClusterParams } from './busola-cluster-params';
 import { getActiveCluster } from './cluster-management/cluster-management';
 import { apiGroup } from './feature-discovery';

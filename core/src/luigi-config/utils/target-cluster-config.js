@@ -1,4 +1,5 @@
 import { getAuthData } from '../auth/auth-storage';
+import { convertStaticFeatures } from '../feature-discovery';
 import { config } from './../config';
 import { failFastFetch } from './../navigation/queries';
 
@@ -16,6 +17,12 @@ export async function loadTargetClusterConfig() {
       getAuthData(),
     );
     clusterConfig = JSON.parse((await res.json()).data.config);
+
+    if (clusterConfig?.config?.features) {
+      clusterConfig.config.features = convertStaticFeatures(
+        clusterConfig.config.features,
+      );
+    }
   } catch (e) {
     if (e.statusCode !== 404) {
       // don't warn on Not Found, that's fine

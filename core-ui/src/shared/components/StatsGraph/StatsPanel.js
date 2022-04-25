@@ -175,6 +175,9 @@ export function StatsPanel({ type, mode = 'single', ...props }) {
   }, [metric]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const prometheus = useFeature('PROMETHEUS');
+
+  console.log('is prometheus enabled?', prometheus?.isEnabled);
+
   if (!prometheus?.isEnabled) return '';
 
   const graphOptions =

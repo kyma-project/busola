@@ -1,3 +1,6 @@
+import * as jp from 'jsonpath';
+import { getBusolaClusterParams } from './busola-cluster-params';
+import { getActiveCluster } from './cluster-management/cluster-management';
 import { apiGroup } from './feature-checks';
 
 export function convertStaticFeatures(features = {}) {
@@ -7,74 +10,83 @@ export function convertStaticFeatures(features = {}) {
         feature.checks = feature.selectors.map(selector =>
           apiGroup(selector.apiGroup),
         );
+        delete feature.selectors;
         feature.initial = true;
       }
       return [key, feature];
     }),
   );
 }
-const xprod = (a, b) => {
-  let idx = 0;
-  let ilen = a.length;
-  let j;
-  let jlen = b.length;
-  let result = [];
 
-  while (idx < ilen) {
-    j = 0;
-    while (j < jlen) {
-      result[result.length] = [a[idx], b[j]];
-      j += 1;
+export function arrayCombine(arrays) {
+  const _arrayCombine = (arrs, current = []) => {
+    if (arrs.length === 1) {
+      return arrs[0].map(e => [...current, e]);
+    } else {
+      return arrs[0].map(e => _arrayCombine(arrs.slice(1), [...current, e]));
     }
-    idx += 1;
+  };
+
+  return _arrayCombine(arrays).flat(arrays.length - 1);
+}
+
+export const discoverFeature = async (featureConfig, data = {}) => {
+  // feature is enabled by default
+  if (featureConfig.isEnabled === false) {
+    return featureConfig;
   }
-  return result;
-};
-export const xprod3 = (a, b, c) =>
-  xprod(a, xprod(b, c)).map(([a, [b, c]]) => [a, b, c]);
 
-export const discoverFeature = async (features, featureName, data = {}) => {
-  const feature = features[featureName];
-  console.log('discoverFeature features', features, 'feature', feature);
-  if (!feature) return;
-  // TODO sequential async discovery
-
-  const sth = await feature.checks?.reduce(
-    async (config, check) => {
-      console.log('reduce', config);
-      if (!config.isEnabled) return config;
-      const newPartialConfig = await check(config, feature, data);
-      console.log(
-        'reduce! featureName',
-        featureName,
-        'config',
-        config,
-        'newPartialConfig',
-        newPartialConfig,
-      );
-      return {
-        ...config,
-        ...newPartialConfig,
-        isEnabled: config.isEnabled && newPartialConfig.isEnabled,
-      };
-    },
-    { isEnabled: true },
-
-    // TODO update local storage here
-  );
-  console.log('after reduce', sth);
-  // TODO read configuration
+  const initialConfig = { ...featureConfig, isEnabled: true };
+  const result = await featureConfig.checks?.reduce(async (config, check) => {
+    config = await config;
+    if (!config.isEnabled) return config;
+    const newPartialConfig = await check(config, featureConfig, data);
+    return {
+      ...config,
+      ...newPartialConfig,
+      isEnabled: config.isEnabled && newPartialConfig.isEnabled,
+    };
+  }, Promise.resolve(initialConfig));
+  return { ...featureConfig, ...result };
 };
 
 export const discoverInitialFeatures = async (features, data = {}) => {
-  // TODO promise and return
   const initialFirstFeatures = Object.entries(features).filter(
     ([key, feature]) => feature.initial,
   );
 
-  for (const initialFirst of initialFirstFeatures) {
-    await discoverFeature(features, initialFirst, data);
+  for (const [featureName, featureConfig] of initialFirstFeatures) {
+    features[featureName] = await discoverFeature(featureConfig, data);
   }
 
   return features;
 };
+
+let features = null;
+
+// replaces getFeatures from features.js
+export async function getFeatures2(data) {
+  if (!features) {
+    // as a stretch, separate getting active cluster & getting current configuration
+    // getActiveCluster -> name + kubeconfig
+    // getCurrentConfig -> configuration for active cluster OR configuration for Busola cluster
+    const rawFeatures =
+      (await getActiveCluster())?.config?.features ||
+      (await getBusolaClusterParams())?.config?.features || // in case active cluster is null
+      {};
+    features = await discoverInitialFeatures(rawFeatures, data);
+  }
+  return features;
+}
+
+export function updateFeatures(featureName, featureConfig) {
+  features = { ...features, [featureName]: featureConfig };
+  console.log(featureName, featureConfig);
+
+  const config = Luigi.getConfig();
+  // set context of all first-level nodes
+  config.navigation.nodes.forEach(node =>
+    jp.value(node, '$.context.features', features),
+  );
+  Luigi.configChanged('navigation.nodes');
+}

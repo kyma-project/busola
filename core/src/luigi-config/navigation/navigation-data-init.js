@@ -13,7 +13,7 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
-import { getFeatures, resolveFeatureAvailability } from '../features';
+import { resolveFeatureAvailability } from '../features';
 import { showAlert } from '../utils/showAlert';
 
 import {
@@ -41,6 +41,7 @@ import { checkClusterStorageType } from '../cluster-management/clusters-storage'
 import { getSSOAuthData } from '../auth/sso';
 import { setNavFooterText } from '../nav-footer';
 import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/pagination';
+import { getFeatures2 } from '../feature-discovery';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -159,7 +160,7 @@ async function createClusterManagementNodes(features) {
 }
 
 async function createNavigationForNoCluster() {
-  const features = await getFeatures();
+  const features = await getFeatures2();
 
   return {
     profile: {
@@ -205,7 +206,7 @@ export async function createNavigation() {
 
     const activeClusterName = activeCluster.kubeconfig['current-context'];
 
-    const features = await getFeatures({
+    const features = await getFeatures2({
       authData,
       groupVersions,
     });
@@ -242,6 +243,9 @@ export async function createNavigation() {
         ],
       },
     };
+    // todo move to checkSingleNode in 'static-navigation-model.js'
+    // it would work here just fine, but checkSingleNode is a better place
+    // we don't need to resolve features, as they had already been resolved before creating navigation
     const isNodeEnabled = node => {
       if (node.context?.requiredFeatures) {
         for (const feature of node.context.requiredFeatures || []) {
@@ -294,6 +298,7 @@ export async function createNavigation() {
 }
 
 async function getObservabilityNodes(authData, enabledFeatures) {
+  // todo rewrite as check of type service/resource
   let links =
     // take the Config Params at first
     (await resolveFeatureAvailability(enabledFeatures.OBSERVABILITY)) &&

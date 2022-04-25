@@ -115,12 +115,15 @@ export function usePrometheus(
   { items, timeSpan, ...props },
 ) {
   // const { serviceUrl } = useFeature('PROMETHEUS');
-  useFeature('PROMETHEUS');
+  const prometheus = useFeature('PROMETHEUS');
+
+  console.log('todo use resolved prometheus url from config:', prometheus);
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);
 
+  // todo use resolved url from config instead
   const kyma2_0path =
     'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
   const kyma2_1path =

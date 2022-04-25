@@ -11,6 +11,7 @@ export function apiGroup(group) {
   };
 }
 
+// could be "function resource(..." as well?
 export function service(
   urlsGenerator,
   validator = async res => res.ok,
@@ -24,13 +25,16 @@ export function service(
           urlMutator(`${coreConfig.backendAddress}/${url}`),
           authData,
         );
+        // todo subscribe to url updates & re-run resolving function (the one with reduce)
         if (await validator(res)) {
           return {
             ...config,
             serviceUrl: url,
           };
         }
-      } catch (e) {}
+      } catch (e) {
+        console.log('Service feature check: ', url, 'failed, trying next.');
+      }
     }
     return {
       ...config,

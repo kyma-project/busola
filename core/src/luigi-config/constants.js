@@ -1,4 +1,4 @@
-import { xprod3 } from './feature-discovery';
+import { arrayCombine } from './feature-discovery';
 import { apiGroup, service } from './feature-checks';
 const DEFAULT_MODULES = {
   SERVICE_CATALOG: 'servicecatalog.k8s.io',
@@ -20,6 +20,8 @@ export const DEFAULT_FEATURES = {
       key,
       {
         checks: [apiGroup(value)],
+        initial: true,
+        showInNavigation: true, // indicate that when the feature config changes navigation should be reloaded
       },
     ]),
   ),
@@ -29,11 +31,11 @@ export const DEFAULT_FEATURES = {
       apiGroup('monitoring.coreos.com'),
       service(
         (config, feature) => {
-          return xprod3(
+          return arrayCombine([
             feature.namespaces,
             feature.serviceNames,
             feature.portNames,
-          ).map(
+          ]).map(
             ([namespace, serviceName, portName]) =>
               `api/v1/namespaces/${namespace}/services/${serviceName}:${portName}/proxy/api/v1`,
           );
@@ -47,7 +49,6 @@ export const DEFAULT_FEATURES = {
     portNames: ['web', 'http-web'],
   },
 };
-console.log('DEFAULT_FEATURES', DEFAULT_FEATURES);
 
 export const DEFAULT_HIDDEN_NAMESPACES = [
   'compass-system',

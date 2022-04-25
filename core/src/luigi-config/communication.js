@@ -1,6 +1,6 @@
 import i18next from 'i18next';
 
-import { discoverFeature } from './feature-discovery';
+import { discoverFeature, updateFeatures } from './feature-discovery';
 import { NODE_PARAM_PREFIX } from './luigi-config';
 import {
   saveClusterParams,
@@ -143,7 +143,11 @@ export const communication = {
       const authData = getAuthData();
       const groupVersions = await fetchBusolaInitData(authData);
       const features = (await getActiveCluster())?.config?.features;
-      await discoverFeature(features, featureName, { authData, groupVersions });
+      const updatedFeature = await discoverFeature(features[featureName], {
+        authData,
+        groupVersions,
+      });
+      updateFeatures(featureName, updatedFeature);
     },
     ...pageSizeCommunicationEntry,
   },
