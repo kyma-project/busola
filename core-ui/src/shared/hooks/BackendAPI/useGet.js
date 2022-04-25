@@ -325,7 +325,7 @@ export const useSingleGet = () => {
 export const useGetList2 = filter => (resourceUrl, { pollingInterval }) => {
   const { fromConfig } = useConfig();
   const path = baseUrl(fromConfig) + resourceUrl;
-  const [data, setData] = useState(fetchCache.getSync(path));
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     console.log('sub for', resourceUrl);
@@ -340,6 +340,10 @@ export const useGetList2 = filter => (resourceUrl, { pollingInterval }) => {
       fetchCache.unsubscribe(path, id);
     };
   }, [setData, path]);
+
+  useEffect(() => {
+    setData(fetchCache.getSync(path));
+  }, [path]);
 
   return {
     data,
