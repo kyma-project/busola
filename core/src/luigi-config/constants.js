@@ -14,6 +14,11 @@ const DEFAULT_MODULES = {
   // PROMETHEUS: 'monitoring.coreos.com',
 };
 
+// todo: initial should have 3 possible values:
+// PRIMARY - laoded during the app boostrap (e.g. nav nodes for resources)
+// SECONDARY - loaded immediately after app bootstraps (e.g. observability)
+// <other> - lazy loaded (e.g. prometheus)
+
 export const DEFAULT_FEATURES = {
   ...Object.fromEntries(
     Object.entries(DEFAULT_MODULES).map(([key, value]) => [

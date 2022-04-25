@@ -26,6 +26,7 @@ export const useFetch = () => {
     };
 
     try {
+      // todo use in core
       const response = await fetchQueue(
         baseUrl(fromConfig) + relativeUrl,
         init,
