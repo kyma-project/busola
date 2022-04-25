@@ -41,6 +41,7 @@ import { checkClusterStorageType } from '../cluster-management/clusters-storage'
 import { getSSOAuthData } from '../auth/sso';
 import { setNavFooterText } from '../nav-footer';
 import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/pagination';
+import { fetchCache, loadCacheItem, saveCacheItem } from '../fetch-cache';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -189,6 +190,13 @@ export async function createNavigation() {
     }
 
     await saveCARequired();
+
+    const clusterName = getActiveClusterName();
+    fetchCache.init({
+      getCacheItem: path => loadCacheItem(clusterName, path),
+      setCacheItem: (path, item) => saveCacheItem(clusterName, path, item),
+      fetchOptions: { data: authData },
+    });
     await loadTargetClusterConfig();
 
     const activeCluster = await getActiveCluster();
@@ -201,7 +209,7 @@ export async function createNavigation() {
       getCurrentContextNamespace(activeCluster.kubeconfig),
     );
 
-    const groupVersions = await fetchBusolaInitData(authData);
+    const groupVersions = await fetchBusolaInitData();
 
     const activeClusterName = activeCluster.kubeconfig['current-context'];
 

@@ -1,10 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import shortid from 'shortid';
+import { fetchCache } from 'fetch-cache';
+import { useConfig } from 'shared/contexts/ConfigContext';
+import { baseUrl } from './config';
 
 // allow <n> consecutive requests to fail before displaying error
 const ERROR_TOLERANCY = 2;
@@ -317,4 +320,30 @@ function handleSingleDataReceived(newData, oldData, setDataFn) {
 export const useSingleGet = () => {
   const fetch = useFetch();
   return url => fetch({ relativeUrl: url });
+};
+
+export const useGetList2 = filter => (resourceUrl, { pollingInterval }) => {
+  const { fromConfig } = useConfig();
+  const path = baseUrl(fromConfig) + resourceUrl;
+  const [data, setData] = useState(fetchCache.getSync(path));
+
+  useEffect(() => {
+    console.log('sub for', resourceUrl);
+    const id = fetchCache.subscribe({
+      path,
+      callback: (_, d) => setData(d),
+      refreshIntervalMs: pollingInterval,
+      fetchIfNotPresent: true,
+    });
+    return () => {
+      console.log('unsub for', path);
+      fetchCache.unsubscribe(path, id);
+    };
+  }, [setData, path]);
+
+  return {
+    data,
+    loading: data === undefined,
+    error: false,
+  };
 };

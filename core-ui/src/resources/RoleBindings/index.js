@@ -22,7 +22,10 @@ export const resourceGraphConfig = (t, context) => ({
   matchers: {
     ServiceAccount: (rb, sa) =>
       rb.subjects?.find(
-        sub => sub.kind === 'ServiceAccount' && sub.name === sa.metadata.name,
+        sub =>
+          sub.kind === 'ServiceAccount' &&
+          sub.name === sa.metadata.name &&
+          sub.namespace === sa.metadata.namespace,
       ),
   },
   depth: 1,

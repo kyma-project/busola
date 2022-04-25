@@ -9,7 +9,7 @@ import * as jp from 'jsonpath';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { navigateToDetails } from 'shared/hooks/navigate';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
-import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useGetList2 } from 'shared/hooks/BackendAPI/useGet';
 import { navigateToResource } from 'shared/hooks/navigate';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
@@ -102,13 +102,12 @@ function Resources(props) {
   } = props;
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
 
-  const { loading, error, data: resources, silentRefetch } = useGetList(filter)(
-    resourceUrl,
-    {
-      pollingInterval: 3000,
-      skip: skipDataLoading,
-    },
-  );
+  const { loading, error, data: resources, silentRefetch } = useGetList2(
+    filter,
+  )(resourceUrl, {
+    pollingInterval: 3000,
+    skip: skipDataLoading,
+  });
 
   return (
     <ResourceListRenderer

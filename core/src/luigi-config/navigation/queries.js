@@ -2,6 +2,8 @@ import { config } from './../config';
 import { getActiveCluster } from './../cluster-management/cluster-management';
 import { HttpError } from '../../../../core-ui/src/shared/hooks/BackendAPI/config';
 import { getSSOAuthData } from '../auth/sso';
+import { fetchCache } from '../fetch-cache';
+import { reloadNavigation } from './navigation-data-init';
 
 export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {
@@ -105,11 +107,18 @@ export function fetchPermissions(auth, namespace = '*') {
     .then(res => res.status.resourceRules);
 }
 
-export async function fetchBusolaInitData(auth) {
+export async function fetchBusolaInitData() {
   const CORE_GROUP = 'v1';
 
-  return await failFastFetch(config.backendAddress + '/apis', auth)
-    .then(res => res.json())
+  return await fetchCache
+    .getAndSubscribe({
+      path: config.backendAddress + '/apis',
+      callback: (prev, next) => {
+        console.log(prev, next);
+        reloadNavigation();
+      },
+      refreshIntervalMs: 5000,
+    })
     .then(res => [
       CORE_GROUP,
       ...res.groups.flatMap(group =>

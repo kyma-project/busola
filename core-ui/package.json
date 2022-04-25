@@ -16,6 +16,7 @@
     "dompurify": "^2.0.8",
     "graphviz-react": "^1.2.0",
     "lodash-es": "^4.17.21",
+    "lokijs": "^1.5.12",
     "pako": "^2.0.4",
     "react": "../node_modules/react",
     "react-hook-form": "^7.29.0",

@@ -2,13 +2,10 @@ import { setAuthData, clearAuthData, getAuthData } from '../auth/auth-storage';
 import { reloadNavigation } from '../navigation/navigation-data-init';
 import { reloadAuth, hasNonOidcAuth } from '../auth/auth';
 import { saveLocation } from '../navigation/previous-location';
-import { parseOIDCParams } from '../auth/oidc-params';
+import { createLoginCommand, parseOIDCParams } from '../auth/oidc-params';
 import { DEFAULT_HIDDEN_NAMESPACES, DEFAULT_FEATURES } from '../constants';
 import { getBusolaClusterParams } from '../busola-cluster-params';
-import {
-  getTargetClusterConfig,
-  loadTargetClusterConfig,
-} from '../utils/target-cluster-config';
+import { getTargetClusterConfig } from '../utils/target-cluster-config';
 import { merge } from 'lodash';
 import { checkIfClusterRequiresCA } from '../navigation/queries';
 import * as clusterStorage from './clusters-storage';
@@ -63,7 +60,6 @@ export async function setCluster(clusterName) {
       setAuthData(kubeconfigUser);
       Luigi.navigation().navigate(targetLocation);
       await saveCARequired();
-      await loadTargetClusterConfig();
       await clusterStorage.checkClusterStorageType(originalStorage);
       await reloadNavigation();
       setTimeout(() => Luigi.navigation().navigate(targetLocation));
