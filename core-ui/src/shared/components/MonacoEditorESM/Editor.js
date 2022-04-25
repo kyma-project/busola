@@ -5,8 +5,8 @@ import { editor, Uri } from 'monaco-editor';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useAutocompleteWorker } from './useAutocompleteWorker';
-import './Editor.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import './Editor.scss';
 
 export function Editor({
   value,
@@ -126,21 +126,17 @@ export function Editor({
 
       <div ref={divRef} className="resource-form__editor" />
 
-      {error && (
-        <div className="resource-form__editor__error">
+      <div className="resource-form__legend">
+        {error && (
           <MessageStrip type="error" className="fd-margin--sm">
             {t('common.create-form.editor-error', { error })}
           </MessageStrip>
-        </div>
-      )}
-
-      <div className="resource-form__legend">
+        )}
         {markers.length ? (
           <div>
             <MessageStrip type="warning" className="fd-margin--sm">
               {schemaError ? (
                 <span className="line">
-                  {' '}
                   {t('common.create-form.schema-error', { error: schemaError })}
                 </span>
               ) : null}

@@ -102,28 +102,26 @@ export function useAutocompleteWorker({
 
   const setAutocompleteOptions = useCallback(() => {
     const modelUri = Uri.parse(schemaId);
-    console.log(schema);
-    if (schema) {
-      activeSchemaPath = modelUri.path;
-      setDiagnosticsOptions({
-        enableSchemaRequest: false,
-        hover: true,
-        completion: true,
-        validate: true,
-        format: true,
-        isKubernetes: true,
-        // schemas,
-        schemas: [
-          {
-            // TODO - (task created) custom link would make custom links in the monaco tooltips,
-            //  but it creates problems (a query is sent)
-            uri: customSchemaUri || 'https://kubernetes.io/docs/',
-            fileMatch: [modelUri, String(modelUri)],
-            schema,
-          },
-        ],
-      });
-    }
+    activeSchemaPath = modelUri.path;
+    setDiagnosticsOptions({
+      enableSchemaRequest: false,
+      hover: true,
+      completion: !!schema,
+      validate: true,
+      format: true,
+      isKubernetes: true,
+      schemas: [
+        {
+          // TODO - (task created) custom link would make custom links in the monaco tooltips,
+          //  but they cant contain a # sign, that is being taken as a ref
+          uri:
+            customSchemaUri ||
+            'https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19',
+          fileMatch: [String(modelUri)],
+          schema: schema || {},
+        },
+      ],
+    });
     return {
       modelUri,
     };
