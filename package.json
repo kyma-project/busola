@@ -75,6 +75,11 @@
     "webpack-cli": "^4.9.2",
     "yaml-sort": "^1.2.1"
   },
+  "overrides": {
+    "fundamental-react": {
+      "moment": "2.29.2"
+    }
+  },
   "lint-staged": {
     "core/src/i18n/*.yaml": "yaml-sort --lineWidth=-1 -i ",
     "*.{ts,tsx,js,jsx,json,html,css,scss,yaml,md}": "prettier --write"
