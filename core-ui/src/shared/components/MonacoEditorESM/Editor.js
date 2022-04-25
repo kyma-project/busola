@@ -11,7 +11,7 @@ import './Editor.scss';
 export function Editor({
   value,
   setValue,
-  readonly,
+  readOnly,
   language = 'yaml',
   editorDidMount,
   customSchemaId,
@@ -37,6 +37,7 @@ export function Editor({
     customSchemaId,
     autocompletionDisabled,
     customSchemaUri,
+    readOnly,
   });
   useEffect(() => {
     const onDidChangeMarkers = editor.onDidChangeMarkers(markers => {
@@ -68,6 +69,7 @@ export function Editor({
       fontSize: 15,
       theme: editorTheme,
       fixedOverflowWidgets: true,
+      readOnly: readOnly,
     });
 
     const onDidChangeModelContent = editorRef.current.onDidChangeModelContent(
@@ -125,6 +127,11 @@ export function Editor({
       ) : null}
 
       <div ref={divRef} className="resource-form__editor" />
+      <p>
+        {readOnly ? 'read-only mode' : null}
+        {readOnly && (schemaError || autocompletionDisabled) ? ' | ' : null}
+        {schemaError || autocompletionDisabled ? 'no autocompletion' : null}
+      </p>
 
       <div className="resource-form__legend">
         {error && (

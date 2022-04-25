@@ -33,6 +33,7 @@ export function ResourceForm({
   customSchemaId,
   autocompletionDisabled,
   customSchemaUri,
+  readOnly,
 }) {
   const { i18n } = useTranslation();
   const createResource = useCreateResource({
@@ -83,6 +84,7 @@ export function ResourceForm({
       customSchemaId={customSchemaId}
       customSchemaUri={customSchemaUri}
       autocompletionDisabled={autocompletionDisabled}
+      readOnly={readOnly}
     />
   );
   editor = renderEditor

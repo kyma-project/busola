@@ -17,7 +17,9 @@ import { MessageStrip } from 'fundamental-react';
 const SIDECAR_INJECTION_LABEL = 'sidecar.istio.io/inject';
 const SIDECAR_INJECTION_VALUE = 'false';
 
-function isJobValid(job) {
+function isJobValid(jobo) {
+  const job = jobo || {};
+
   const isNameValid = jp.value(job, '$.metadata.name');
 
   const containers = jp.value(job, '$.spec.template.spec.containers') || [];
@@ -40,7 +42,7 @@ export function JobCreate({
   const { features } = useMicrofrontendContext();
   const istioEnabled = features.ISTIO?.isEnabled;
   const defaultSidecarAnnotations = initialJob
-    ? initialJob?.spec.template.metadata.annotations
+    ? initialJob?.spec?.template?.metadata?.annotations
     : istioEnabled
     ? { [SIDECAR_INJECTION_LABEL]: SIDECAR_INJECTION_VALUE }
     : {};

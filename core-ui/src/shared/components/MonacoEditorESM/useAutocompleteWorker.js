@@ -42,6 +42,7 @@ export function useAutocompleteWorker({
   customSchemaId,
   autocompletionDisabled,
   customSchemaUri,
+  readOnly,
 }) {
   const [schema, setSchema] = useState(null);
   const [error, setError] = useState(null);
@@ -51,9 +52,8 @@ export function useAutocompleteWorker({
   const { apiVersion, kind } = value;
   // this gets calculated only once, to fetch the json validation schema
   // it means each supported resource must have apiVersion and kind initially defined
-  // if it's not possible, think about passing additional prop with backup value
+  // if it's not possible, pass the additional prop customSchemaId
   const [schemaId] = useState(customSchemaId || `${apiVersion}/${kind}`);
-
   useEffect(() => {
     if (autocompletionDisabled) {
       setLoading(false);
@@ -106,17 +106,15 @@ export function useAutocompleteWorker({
     setDiagnosticsOptions({
       enableSchemaRequest: false,
       hover: true,
-      completion: !!schema,
+      completion: !!schema && !readOnly,
       validate: true,
       format: true,
       isKubernetes: true,
       schemas: [
         {
-          // TODO - (task created) custom link would make custom links in the monaco tooltips,
-          //  but they cant contain a # sign, that is being taken as a ref
           uri:
             customSchemaUri ||
-            'https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19',
+            'https://kubernetes.io/docs/concepts/overview/kubernetes-api',
           fileMatch: [String(modelUri)],
           schema: schema || {},
         },
@@ -125,7 +123,7 @@ export function useAutocompleteWorker({
     return {
       modelUri,
     };
-  }, [schema, schemaId, customSchemaUri]);
+  }, [schema, schemaId, customSchemaUri, readOnly]);
 
   return { setAutocompleteOptions, activeSchemaPath, error, loading };
 }
