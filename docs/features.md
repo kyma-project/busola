@@ -346,7 +346,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-- **SSO_LOGIN** – is used to configure data necessary for the SSO login such as an issuer address, client’s ID, client’s Secret and scopes. If clientSecret is omitted, a public client is assumed.
+- **SSO_LOGIN** – is used to configure data necessary for the SSO login such as an issuer address, client’s ID, client’s Secret and scopes. If `clientSecret` is omitted, a public client is used.
 
   ```bash
   "SSO_LOGIN": {
