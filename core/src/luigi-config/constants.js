@@ -26,7 +26,7 @@ export const DEFAULT_FEATURES = {
       {
         checks: [apiGroup(value)],
         initial: true,
-        showInNavigation: true, // indicate that when the feature config changes navigation should be reloaded
+        showInNavigation: true, // indicates that when the feature config changes navigation should be reloaded
       },
     ]),
   ),
