@@ -26,7 +26,6 @@ self.onmessage = $event => {
   if ($event.data[0] === 'shouldInitialize') {
     self.postMessage({
       isInitialized: !!Object.values(jsonSchemas).length,
-      mySchemas: jsonSchemas,
     });
   }
   if ($event.data[0] === 'initialize') {
