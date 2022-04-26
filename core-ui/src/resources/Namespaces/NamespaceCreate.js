@@ -30,6 +30,7 @@ export function NamespaceCreate(props) {
     onCompleted,
     onError,
     setCustomValid,
+    setOpen,
   } = props;
   const { t } = useTranslation();
 
@@ -174,6 +175,7 @@ export function NamespaceCreate(props) {
 
   return (
     <ResourceForm
+      setOpen={setOpen}
       pluralKind="namespaces"
       singularName={t('namespaces.name_singular')}
       renderEditor={!initialNamespace ? renderEditor : null}
