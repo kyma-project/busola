@@ -1244,12 +1244,14 @@ grafana:
   unavailable: No Grafana link
 graphs:
   cpu: CPU
+  free-space: Free space
   memory: Memory
   network: Network
   network-down: Download
   network-up: Upload
   nodes: Nodes
   total: Total
+  used-space: Used space
 helm-releases:
   description: <0>Helm Release</0> tracks the installed charts. For each installed chart, a new release is created.
   headers:
