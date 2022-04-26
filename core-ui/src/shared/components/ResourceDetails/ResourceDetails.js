@@ -151,7 +151,6 @@ function Resource({
     resourceTitle,
     resource.kind,
   );
-
   const [isOpen, setOpen] = useState(false);
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);

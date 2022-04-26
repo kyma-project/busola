@@ -13,13 +13,16 @@ import {
 
 import { createConfigMapTemplate, createPresets } from './helpers';
 
-export function ConfigMapCreate({
-  formElementRef,
-  onChange,
-  setCustomValid,
-  resource: initialConfigMap,
-  resourceUrl,
-}) {
+export function ConfigMapCreate(cos, as) {
+  const {
+    formElementRef,
+    onChange,
+    setCustomValid,
+    resource: initialConfigMap,
+    resourceUrl,
+    setOpen,
+  } = cos;
+  console.log('???', setOpen, cos);
   const { namespaceId } = useMicrofrontendContext();
   const [configMap, setConfigMap] = useState(
     initialConfigMap ? cloneDeep(initialConfigMap) : createConfigMapTemplate(),
@@ -38,6 +41,7 @@ export function ConfigMapCreate({
       presets={createPresets([], namespaceId, t)}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
+      setOpen={setOpen}
     >
       <K8sNameField
         readOnly={!!initialConfigMap?.metadata?.name}

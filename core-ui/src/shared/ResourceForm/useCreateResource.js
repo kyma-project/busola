@@ -63,10 +63,13 @@ export function useCreateResource({
           createUrl,
           createPatch(initialResource, mergedResource),
         );
+        /// todo usun takze backdrop luigiego
+        LuigiClient.uxManager().removeBackdrop();
         setOpen(false);
       } else {
         await postRequest(createUrl, resource);
-
+        /// todo usun takze backdrop luigiego
+        LuigiClient.uxManager().removeBackdrop();
         setOpen(false);
       }
 

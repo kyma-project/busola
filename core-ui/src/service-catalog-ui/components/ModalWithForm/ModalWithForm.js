@@ -54,7 +54,7 @@ export const ModalWithForm = ({
   ...props
 }) => {
   const { t } = useTranslation(null, { i18n });
-  const [isOpen, setOpen] = useState(alwaysOpen || aaa);
+  const [isOpen, setOpen] = useState(alwaysOpen);
   const [isValid, setValid] = useState(false);
   const [customValid, setCustomValid] = useState(true);
   const formElementRef = useRef(null);
