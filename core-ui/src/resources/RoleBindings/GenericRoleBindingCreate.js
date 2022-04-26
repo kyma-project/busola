@@ -27,6 +27,7 @@ export function GenericRoleBindingCreate({
   resourceUrl,
   pluralKind,
   singularName,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -95,6 +96,7 @@ export function GenericRoleBindingCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialRoleBinding}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

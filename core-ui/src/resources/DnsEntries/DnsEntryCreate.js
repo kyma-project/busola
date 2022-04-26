@@ -26,6 +26,7 @@ export function DnsEntryCreate({
   setCustomValid,
   resource: initialDNSEntry,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
   const [dnsEntry, setDnsEntry] = useState(
@@ -58,6 +59,7 @@ export function DnsEntryCreate({
       initialResource={initialDNSEntry}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

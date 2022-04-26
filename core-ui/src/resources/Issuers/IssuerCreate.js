@@ -29,6 +29,7 @@ export function IssuerCreate({
   resource: initialIssuer,
   resourceUrl,
   setCustomValid,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -261,6 +262,7 @@ export function IssuerCreate({
       formElementRef={formElementRef}
       presets={!initialIssuer && createPresets(namespace, t)}
       createUrl={resourceUrl}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

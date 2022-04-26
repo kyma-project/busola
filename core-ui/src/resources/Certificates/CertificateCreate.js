@@ -26,6 +26,7 @@ export function CertificateCreate({
   namespace,
   resource: initialCertificate,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -115,6 +116,7 @@ export function CertificateCreate({
       formElementRef={formElementRef}
       initialResource={initialCertificate}
       createUrl={resourceUrl}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

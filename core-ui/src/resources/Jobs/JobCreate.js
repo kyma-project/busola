@@ -35,6 +35,7 @@ export function JobCreate({
   resource: initialJob,
   resourceUrl,
   prefix,
+  ...props
 }) {
   const { t } = useTranslation();
   const { features } = useMicrofrontendContext();
@@ -94,6 +95,7 @@ export function JobCreate({
       formElementRef={formElementRef}
       presets={!initialJob && createJobPresets(namespace, t)}
       createUrl={resourceUrl}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

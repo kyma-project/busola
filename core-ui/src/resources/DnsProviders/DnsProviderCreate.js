@@ -25,6 +25,7 @@ export function DnsProviderCreate({
   setCustomValid,
   resource: initialDnsProvider,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -71,6 +72,7 @@ export function DnsProviderCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

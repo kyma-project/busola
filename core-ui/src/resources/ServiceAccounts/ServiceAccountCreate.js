@@ -22,6 +22,7 @@ export const ServiceAccountCreate = ({
   setCustomValid,
   resource: initialServiceAccount,
   resourceUrl,
+  ...props
 }) => {
   const { t } = useTranslation();
 
@@ -56,6 +57,7 @@ export const ServiceAccountCreate = ({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialServiceAccount}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

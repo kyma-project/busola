@@ -15,6 +15,7 @@ export function ApplicationCreate({
   setCustomValid,
   resource: initialApplication,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -42,6 +43,7 @@ export function ApplicationCreate({
       createUrl={resourceUrl}
       initialResource={initialApplication}
       setCustomValid={setCustomValid}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

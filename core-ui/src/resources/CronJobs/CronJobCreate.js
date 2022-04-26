@@ -40,7 +40,7 @@ export function CronJobCreate({
   onChange,
   setCustomValid,
   resourceUrl,
-  setOpen,
+  ...props
 }) {
   const { t } = useTranslation();
   const { features } = useMicrofrontendContext();
@@ -99,7 +99,7 @@ export function CronJobCreate({
       formElementRef={formElementRef}
       presets={!initialCronJob && createCronJobPresets(namespace, t)}
       createUrl={resourceUrl}
-      setOpen={setOpen}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

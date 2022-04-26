@@ -23,6 +23,7 @@ export function GenericRoleCreate({
   presets,
   createTemplate,
   resource: initialRole,
+  ...props
 }) {
   const { t } = useTranslation();
   const [role, setRole] = useState(cloneDeep(initialRole) || createTemplate());
@@ -43,6 +44,7 @@ export function GenericRoleCreate({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       presets={!initialRole && presets}
+      {...props}
     >
       <K8sNameField
         required

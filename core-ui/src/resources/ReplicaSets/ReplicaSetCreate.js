@@ -22,6 +22,7 @@ export function ReplicaSetCreate({
   namespace,
   onChange,
   setCustomValid,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -56,6 +57,7 @@ export function ReplicaSetCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialReplicaSet}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

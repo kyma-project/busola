@@ -32,6 +32,7 @@ export function APIRuleCreate({
   setCustomValid,
   serviceName,
   prefix,
+  ...props
 }) {
   const { t } = useTranslation();
   // queries are moved up here so that the network calls are not doubled
@@ -115,6 +116,7 @@ export function APIRuleCreate({
       createUrl={resourceUrl}
       afterCreatedFn={afterCreatedFn}
       setCustomValid={setCustomValid}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

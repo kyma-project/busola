@@ -23,6 +23,7 @@ export function OAuth2ClientCreate({
   resourceUrl,
   refetchList,
   setCustomValid,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -42,6 +43,7 @@ export function OAuth2ClientCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

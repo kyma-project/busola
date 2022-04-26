@@ -29,6 +29,7 @@ export const SubscriptionCreate = ({
   serviceName = '',
   setCustomValid,
   prefix,
+  ...props
 }) => {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -116,6 +117,7 @@ export const SubscriptionCreate = ({
       createUrl={resourceUrl}
       afterCreatedFn={afterCreatedFn}
       setCustomValid={setCustomValid}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

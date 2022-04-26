@@ -23,6 +23,7 @@ export function SecretCreate({
   resourceUrl,
   setCustomValid,
   prefix,
+  ...props
 }) {
   const { t } = useTranslation();
   const [secret, setSecret] = useState(
@@ -67,6 +68,7 @@ export function SecretCreate({
       createUrl={resourceUrl}
       presets={!initialSecret && createPresets(secretDefs, namespaceId, t)}
       setCustomValid={setCustomValid}
+      {...props}
     >
       <K8sNameField
         readOnly={!!initialSecret}

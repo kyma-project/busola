@@ -19,7 +19,7 @@ export function ConfigMapCreate({
   setCustomValid,
   resource: initialConfigMap,
   resourceUrl,
-  ...rest
+  ...props
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [configMap, setConfigMap] = useState(
@@ -39,7 +39,7 @@ export function ConfigMapCreate({
       presets={createPresets([], namespaceId, t)}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      {...rest}
+      {...props}
     >
       <K8sNameField
         readOnly={!!initialConfigMap?.metadata?.name}

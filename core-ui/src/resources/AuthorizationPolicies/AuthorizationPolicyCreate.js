@@ -11,6 +11,7 @@ export const AuthorizationPolicyCreate = ({
   formElementRef,
   resourceUrl,
   setCustomValid,
+  ...props
 }) => {
   const { t } = useTranslation();
   const [authorizationPolicy, setAuthorizationPolicy] = useState(
@@ -28,6 +29,7 @@ export const AuthorizationPolicyCreate = ({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       onlyYaml
+      {...props}
     ></ResourceForm>
   );
 };

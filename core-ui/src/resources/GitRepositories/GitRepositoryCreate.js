@@ -22,6 +22,7 @@ export function GitRepositoryCreate({
   resourceUrl,
   setCustomValid,
   resource: initialRepository,
+  ...props
 }) {
   const { t } = useTranslation();
   const [repository, setRepository] = useState(
@@ -82,6 +83,7 @@ export function GitRepositoryCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

@@ -20,6 +20,7 @@ export function GatewayCreate({
   setCustomValid,
   resource: initialGateway,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -51,6 +52,7 @@ export function GatewayCreate({
       formElementRef={formElementRef}
       presets={!initialGateway && createPresets(namespace, t)}
       createUrl={resourceUrl}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

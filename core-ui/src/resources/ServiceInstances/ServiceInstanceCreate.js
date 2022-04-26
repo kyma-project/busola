@@ -17,6 +17,7 @@ export function ServiceInstanceCreate({
   formElementRef,
   onChange,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
   const [serviceInstance, setServiceInstance] = React.useState(
@@ -32,6 +33,7 @@ export function ServiceInstanceCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

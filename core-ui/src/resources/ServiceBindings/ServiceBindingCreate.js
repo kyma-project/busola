@@ -21,6 +21,7 @@ export function ServiceBindingCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
   const [serviceBinding, setServiceBinding] = React.useState(
@@ -53,6 +54,7 @@ export function ServiceBindingCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
+      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
