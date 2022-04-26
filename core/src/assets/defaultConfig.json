@@ -67,7 +67,7 @@
         "isEnabled": true
       },
       "MONACO_AUTOCOMPLETION": {
-        "isEnabled": true
+        "isEnabled": false
       }
     }
   }
