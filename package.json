@@ -26,7 +26,7 @@
     "core-js": "^3.3.6",
     "cross-fetch": "^3.1.5",
     "file-saver": "^2.0.2",
-    "fundamental-react": "^0.14.1",
+    "fundamental-react": "^0.14.2-rc.1",
     "fundamental-styles": "^0.19.0",
     "gulp-rename": "^2.0.0",
     "i18next": "^20.3.4",
@@ -74,11 +74,6 @@
     "sass-loader": "^12.4.0",
     "webpack-cli": "^4.9.2",
     "yaml-sort": "^1.2.1"
-  },
-  "overrides": {
-    "fundamental-react": {
-      "moment": "2.29.2"
-    }
   },
   "lint-staged": {
     "core/src/i18n/*.yaml": "yaml-sort --lineWidth=-1 -i ",
