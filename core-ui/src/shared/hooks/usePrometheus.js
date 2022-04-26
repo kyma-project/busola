@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import LuigiClient from '@luigi-project/client';
+import { useEffect, useState } from 'react';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 const getPrometheusSelector = data => {
@@ -14,12 +14,17 @@ const getPrometheusSelector = data => {
   return selector;
 };
 
-const getPrometheusQueryPVCUsedSpaceQuery = (data, step) => {
-  return `sum without(instance, node) (topk(1, (kubelet_volume_stats_capacity_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${data.namespace}", persistentvolumeclaim="${data.name}"})))`;
+const getPrometheusPVCUsedSpaceQuery = ({ resource }) => {
+  return `(
+    sum without(instance, node) (topk(1, (kubelet_volume_stats_capacity_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${resource.namespace}", persistentvolumeclaim="${resource.name}"})))
+    -
+    sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${resource.namespace}", persistentvolumeclaim="${resource.name}"})))
+  )
+  `;
 };
 
-const getPrometheusQueryPVCFreeSpaceQuery = (data, step) => {
-  return `sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${data.namespace}", persistentvolumeclaim="${data.name}"})))`;
+const getPrometheusPVCFreeSpaceQuery = ({ resource }) => {
+  return `sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${resource?.namespace}", persistentvolumeclaim="${resource?.name}"})))`;
 };
 
 const getPrometheusCPUQuery = (
@@ -112,12 +117,12 @@ export function getMetric(type, mode, metric, cpuQuery, { step, ...data }) {
       unit: '',
     },
     'pvc-used-space': {
-      prometheusQuery: getPrometheusQueryPVCUsedSpaceQuery(data, step),
-      unit: 'MiB',
+      prometheusQuery: getPrometheusPVCUsedSpaceQuery(data),
+      unit: 'GB',
     },
     'pvc-free-space': {
-      prometheusQuery: getPrometheusQueryPVCFreeSpaceQuery(data, step),
-      unit: 'MiB',
+      prometheusQuery: getPrometheusPVCFreeSpaceQuery(data),
+      unit: 'GB',
     },
   };
   return metrics[metric];
@@ -241,7 +246,8 @@ export function usePrometheus(
           helpIndex++;
           prometheusData.push(graphValue);
         } else {
-          prometheusData.push(null);
+          // prometheusData.push(null);
+          prometheusData.push(graphValue); //TODO fix pushing only null values???
         }
         stepMultiplier += step;
       }

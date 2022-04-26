@@ -176,7 +176,7 @@ export function PersistentVolumeClaimDetails(props) {
   const StatsComponent = pvc => {
     return (
       <StatsPanel
-        data={{
+        resource={{
           name: pvc.metadata.name,
           namespace: pvc.metadata.namespace,
         }}

@@ -19,7 +19,6 @@ import './StatsPanel.scss';
 const DATA_POINTS = 60;
 
 export function SingleGraph({ type, mode, timeSpan, metric, ...props }) {
-  console.log(type);
   const { t } = useTranslation();
   const {
     data,
@@ -230,7 +229,18 @@ export function StatsPanel({
         </LayoutPanel.Actions>
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        {mode === 'multiple' && metric !== 'network' && (
+        {mode === 'multiple' && metric === 'pvc-usage' && (
+          <DualGraph
+            type={type}
+            metric1="pvc-used-space"
+            metric2="pvc-free-space"
+            className={metric}
+            timeSpan={timeSpans[timeSpan]}
+            labels={[t('graphs.network-up'), t('graphs.network-down')]}
+            {...props}
+          />
+        )}
+        {/* {mode === 'multiple' && metric !== 'network' && (
           <SingleMetricMultipeGraph
             type={type}
             mode={mode}
@@ -239,17 +249,7 @@ export function StatsPanel({
             timeSpan={timeSpans[timeSpan]}
             {...props}
           />
-        )}
-        {mode === 'multiple' && metric === 'pvc-usage' && (
-          <DualGraph
-            type={type}
-            metric1="pvc-used-space"
-            metric2="pvc-free-space"
-            timeSpan={timeSpans[timeSpan]}
-            labels={[t('graphs.network-up'), t('graphs.network-down')]}
-            {...props}
-          />
-        )}
+        )} */}
         {mode !== 'multiple' && metric !== 'network' && (
           <SingleGraph
             type={type}
@@ -260,7 +260,7 @@ export function StatsPanel({
             {...props}
           />
         )}
-        {metric === 'network' && (
+        {/* {metric === 'network' && (
           <DualGraph
             type={type}
             metric1={'network-up'}
@@ -270,7 +270,7 @@ export function StatsPanel({
             labels={[t('graphs.network-up'), t('graphs.network-down')]}
             {...props}
           />
-        )}
+        )} */}
       </LayoutPanel.Body>
     </LayoutPanel>
   );
