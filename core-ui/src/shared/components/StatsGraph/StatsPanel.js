@@ -92,7 +92,6 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
           startDate={startDate}
           endDate={endDate}
           dataPoints={DATA_POINTS}
-          className="dual-graph"
           {...props}
         />
       ) : (
