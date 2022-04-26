@@ -20,7 +20,8 @@ export function ExtensibilityCreate({
   const api = createResource?.navigation?.resource || {};
 
   const [resource, setResource] = useState(
-    createTemplate(api, namespace, createResource?.navigation?.scope),
+    createResource?.create?.template ||
+      createTemplate(api, namespace, createResource?.navigation?.scope),
   );
 
   const simpleSchema = createResource?.create?.simple?.schema;
