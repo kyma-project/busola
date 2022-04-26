@@ -20,6 +20,7 @@ export const AuthorizationPolicyCreate = ({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="authorizationpolicies"
       singularName={t('authorization-policies.name_singular')}
       resource={authorizationPolicy}
@@ -29,7 +30,6 @@ export const AuthorizationPolicyCreate = ({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       onlyYaml
-      {...props}
     ></ResourceForm>
   );
 };

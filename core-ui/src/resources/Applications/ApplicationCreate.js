@@ -34,6 +34,7 @@ export function ApplicationCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="applications"
       singularName={t('applications.name_singular')}
       resource={application}
@@ -43,7 +44,6 @@ export function ApplicationCreate({
       createUrl={resourceUrl}
       initialResource={initialApplication}
       setCustomValid={setCustomValid}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

@@ -64,6 +64,7 @@ export function DnsProviderCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="dnsProviders"
       singularName={t('dnsproviders.name_singular')}
       resource={dnsProvider}
@@ -72,7 +73,6 @@ export function DnsProviderCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

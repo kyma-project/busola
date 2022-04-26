@@ -43,6 +43,7 @@ export function GatewayCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="gateways"
       singularName={t(`gateways.name_singular`)}
       resource={gateway}
@@ -52,7 +53,6 @@ export function GatewayCreate({
       formElementRef={formElementRef}
       presets={!initialGateway && createPresets(namespace, t)}
       createUrl={resourceUrl}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

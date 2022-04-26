@@ -46,6 +46,7 @@ export function ServiceBindingCreate({
 
   return (
     <ResourceForm
+      {...props}
       className="create-service-binding-form"
       pluralKind="servicebindings"
       singularName={t('btp-service-bindings.name_singular')}
@@ -54,7 +55,6 @@ export function ServiceBindingCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

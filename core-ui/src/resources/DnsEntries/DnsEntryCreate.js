@@ -50,6 +50,7 @@ export function DnsEntryCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="dnsEntries"
       singularName={t('dnsentries.name_singular')}
       resource={dnsEntry}
@@ -59,7 +60,6 @@ export function DnsEntryCreate({
       initialResource={initialDNSEntry}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

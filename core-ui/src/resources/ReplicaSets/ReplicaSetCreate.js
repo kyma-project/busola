@@ -49,6 +49,7 @@ export function ReplicaSetCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="replicasets"
       singularName={t(`replica-sets.name_singular`)}
       resource={replicaset}
@@ -57,7 +58,6 @@ export function ReplicaSetCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialReplicaSet}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

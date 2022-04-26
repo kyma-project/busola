@@ -25,6 +25,7 @@ export function ServiceInstanceCreate({
   );
   return (
     <ResourceForm
+      {...props}
       className="create-service-instance-form"
       pluralKind="serviceinstances"
       singularName={t('btp-instances.name_singular')}
@@ -33,7 +34,6 @@ export function ServiceInstanceCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

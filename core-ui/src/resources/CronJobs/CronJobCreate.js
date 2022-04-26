@@ -90,6 +90,7 @@ export function CronJobCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="cronjobs"
       singularName={t(`cron-jobs.name_singular`)}
       initialResource={initialCronJob}
@@ -99,7 +100,6 @@ export function CronJobCreate({
       formElementRef={formElementRef}
       presets={!initialCronJob && createCronJobPresets(namespace, t)}
       createUrl={resourceUrl}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

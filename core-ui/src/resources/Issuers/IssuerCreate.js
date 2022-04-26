@@ -253,6 +253,7 @@ export function IssuerCreate({
   };
   return (
     <ResourceForm
+      {...props}
       pluralKind="issuers"
       singularName={t('issuers.name_singular')}
       resource={issuer}
@@ -262,7 +263,6 @@ export function IssuerCreate({
       formElementRef={formElementRef}
       presets={!initialIssuer && createPresets(namespace, t)}
       createUrl={resourceUrl}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

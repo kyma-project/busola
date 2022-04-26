@@ -11,6 +11,7 @@ export function CustomResourceDefinitionCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
   const [customResourceDefinitions, setCustomResourceDefinitions] = useState(
@@ -19,6 +20,7 @@ export function CustomResourceDefinitionCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="customresourcedefinitions"
       singularName={t('custom-resource-definitions.name_singular')}
       resource={customResourceDefinitions}

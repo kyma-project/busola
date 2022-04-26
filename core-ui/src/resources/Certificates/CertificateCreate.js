@@ -108,6 +108,7 @@ export function CertificateCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="certificates"
       singularName={t('certificates.name_singular')}
       resource={certificate}
@@ -116,7 +117,6 @@ export function CertificateCreate({
       formElementRef={formElementRef}
       initialResource={initialCertificate}
       createUrl={resourceUrl}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

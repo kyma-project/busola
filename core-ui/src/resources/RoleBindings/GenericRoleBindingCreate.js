@@ -88,6 +88,7 @@ export function GenericRoleBindingCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind={pluralKind}
       singularName={singularName}
       resource={binding}
@@ -96,7 +97,6 @@ export function GenericRoleBindingCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialRoleBinding}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

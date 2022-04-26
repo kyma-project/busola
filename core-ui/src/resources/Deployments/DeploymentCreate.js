@@ -118,6 +118,7 @@ export function DeploymentCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="deployments"
       singularName={t(`deployments.name_singular`)}
       resource={deployment}
@@ -139,7 +140,6 @@ export function DeploymentCreate({
         resourceUrl || `/apis/apps/v1/namespaces/${namespace}/deployments/`
       }
       initialResource={initialDeployment}
-      {...props}
     >
       <K8sNameField
         readOnly={!!initialDeployment}

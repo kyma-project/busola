@@ -29,6 +29,7 @@ export function ConfigMapCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="configmaps"
       singularName={t('config-maps.name_singular')}
       resource={configMap}
@@ -39,7 +40,6 @@ export function ConfigMapCreate({
       presets={createPresets([], namespaceId, t)}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      {...props}
     >
       <K8sNameField
         readOnly={!!initialConfigMap?.metadata?.name}

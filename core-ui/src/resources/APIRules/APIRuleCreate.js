@@ -106,6 +106,7 @@ export function APIRuleCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="apirules"
       singularName={t(`api-rules.name_singular`)}
       resource={apiRule}
@@ -116,7 +117,6 @@ export function APIRuleCreate({
       createUrl={resourceUrl}
       afterCreatedFn={afterCreatedFn}
       setCustomValid={setCustomValid}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

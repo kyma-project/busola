@@ -34,6 +34,7 @@ export function GenericRoleCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind={pluralKind}
       singularName={singularName}
       resource={role}
@@ -44,7 +45,6 @@ export function GenericRoleCreate({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       presets={!initialRole && presets}
-      {...props}
     >
       <K8sNameField
         required

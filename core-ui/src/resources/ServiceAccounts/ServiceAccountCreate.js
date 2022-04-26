@@ -49,6 +49,7 @@ export const ServiceAccountCreate = ({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="serviceaccounts"
       singularName={t(`service-accounts.name_singular`)}
       resource={serviceAccount}
@@ -57,7 +58,6 @@ export const ServiceAccountCreate = ({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialServiceAccount}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

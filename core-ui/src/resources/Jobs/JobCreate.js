@@ -86,6 +86,7 @@ export function JobCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="jobs"
       singularName={t(`jobs.name_singular`)}
       resource={job}
@@ -95,7 +96,6 @@ export function JobCreate({
       formElementRef={formElementRef}
       presets={!initialJob && createJobPresets(namespace, t)}
       createUrl={resourceUrl}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

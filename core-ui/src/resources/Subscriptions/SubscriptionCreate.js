@@ -107,6 +107,7 @@ export const SubscriptionCreate = ({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="subscriptions"
       singularName={t('subscriptions.name_singular')}
       resource={subscription}
@@ -117,7 +118,6 @@ export const SubscriptionCreate = ({
       createUrl={resourceUrl}
       afterCreatedFn={afterCreatedFn}
       setCustomValid={setCustomValid}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"

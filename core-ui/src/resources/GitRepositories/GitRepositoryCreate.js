@@ -74,6 +74,7 @@ export function GitRepositoryCreate({
 
   return (
     <ResourceForm
+      {...props}
       className="create-function-form"
       pluralKind="gitrepositories"
       singularName={t('git-repositories.name_singular')}
@@ -83,7 +84,6 @@ export function GitRepositoryCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      {...props}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
