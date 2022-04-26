@@ -7,7 +7,7 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import ApiRuleForm from '../ApiRuleForm/ApiRuleForm';
 import EntryNotFound from 'components/EntryNotFound/EntryNotFound';
-import { formatMessage as injectVariables } from 'components/Lambdas/helpers/misc';
+import { formatMessage as injectVariables } from 'components/Functions/helpers/misc';
 import { API_RULE_URL } from '../constants';
 
 EditApiRule.propTypes = {

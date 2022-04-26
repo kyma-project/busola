@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
+import { Button } from 'fundamental-react';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -9,6 +11,7 @@ import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { LimitRangeList } from 'resources/LimitRanges/LimitRangeList';
 import { ResourceQuotaList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotaList';
+import { YamlUploadDialog } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
 import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';
@@ -20,6 +23,7 @@ import './NamespaceDetails.scss';
 
 export function NamespaceDetails(props) {
   const { t, i18n } = useTranslation();
+  const [showAdd, setShowAdd] = useState(false);
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
   const limitRangesParams = {
@@ -69,7 +73,18 @@ export function NamespaceDetails(props) {
   );
 
   const headerActions = (
-    <DeployNewWorkload namespaceName={props.resourceName} />
+    <>
+      <DeployNewWorkload namespaceName={props.resourceName} />
+      <Button
+        glyph="add"
+        onClick={() => {
+          setShowAdd(true);
+          LuigiClient.uxManager().addBackdrop();
+        }}
+      >
+        {t('upload-yaml.title')}
+      </Button>
+    </>
   );
 
   const customColumns = [
@@ -98,6 +113,13 @@ export function NamespaceDetails(props) {
       {ResourceQuotasList}
       {ApplicationMappings}
       {Events}
+      <YamlUploadDialog
+        show={showAdd}
+        onCancel={() => {
+          setShowAdd(false);
+          LuigiClient.uxManager().removeBackdrop();
+        }}
+      />
     </ResourceDetails>
   );
 }

@@ -55,7 +55,7 @@ Cypress.Commands.add(
     });
 
     cy.getIframeBody()
-      .find('.lambda-details')
+      .find('.function-details')
       .contains('button', 'Save')
       .should('not.be.disabled')
       .click();

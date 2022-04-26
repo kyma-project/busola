@@ -5,9 +5,9 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { Link } from 'shared/components/Link/Link';
 
-import { prettySourceType } from 'components/Lambdas/helpers/lambdas';
-import { prettyRuntime } from 'components/Lambdas/helpers/runtime';
-import { LambdaStatusBadge } from 'components/Lambdas/LambdaStatusBadge/LambdaStatusBadge';
+import { prettySourceType } from 'components/Functions/helpers/functions';
+import { prettyRuntime } from 'components/Functions/helpers/runtime';
+import { FunctionStatusBadge } from 'components/Functions/FunctionStatusBadge/FunctionStatusBadge';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { FunctionCreate } from './FunctionCreate';
@@ -46,7 +46,7 @@ export function FunctionList(props) {
     {
       header: t('common.headers.status'),
       value: resource => (
-        <LambdaStatusBadge
+        <FunctionStatusBadge
           resourceKind={props.resourceType}
           status={resource.status}
         />
