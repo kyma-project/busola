@@ -39,10 +39,14 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
   const { resourceName, namespaceId } = useParams();
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
-  const resourceUrl = getResourceUrl();
+  // replace resourceName at the end - we have it already in params
+  const resourceUrl = getResourceUrl().replace(
+    new RegExp(resourceName + '$'),
+    '',
+  );
 
-  const decodedResourceUrl = decodeURIComponent(resourceUrl);
   const decodedResourceName = decodeURIComponent(resourceName);
+  const decodedResourceUrl = decodeURIComponent(resourceUrl);
 
   const context = useMicrofrontendContext();
   if (!savedResourceGraph) {

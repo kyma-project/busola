@@ -61,7 +61,13 @@ export function ResourceDetails(props) {
   if (!props.resourceUrl) {
     return <></>; // wait for the context update
   } else {
-    return <ResourceDetailsRenderer {...props} />;
+    return (
+      <ResourceDetailsRenderer
+        {...props}
+        // todo
+        resourceUrl={props.resourceUrl + props.resourceName}
+      />
+    );
   }
 }
 

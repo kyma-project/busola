@@ -3,6 +3,8 @@ obsługa resourceType jako klucz + filtrowanie (lista + detale)
 obsługa ścieżek jako klucz (calle nie-resourcowe)
 obsługa błędów
 
+przyznaj że nie będzie label selectorów
+
 POTEM
 - obsługa w command palette
 - obsluga na grafach
