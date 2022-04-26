@@ -174,12 +174,14 @@ const getDualGraphValues = (metric, t) => {
         metric1: 'pvc-used-space',
         metric2: 'pvc-free-space',
         labels: [t('graphs.free-space'), t('graphs.used-space')],
+        className: 'pvc-usage',
       };
     case 'network':
       return {
         metric1: 'network-up',
         metric2: 'network-down',
         labels: [t('graphs.network-up'), t('graphs.network-down')],
+        className: 'network',
       };
     default:
       console.error(`You need to declare dual graph values for ${metric}!`);
@@ -198,7 +200,8 @@ export function StatsPanel({
     '1h': 60 * 60,
     '3h': 3 * 60 * 60,
     '6h': 6 * 60 * 60,
-    '24h': 24 * 60 * 60,
+    '1d': 24 * 60 * 60,
+    '2d': 2 * 24 * 60 * 60,
     '7d': 7 * 24 * 60 * 60,
   };
   const dualGraphs = ['network', 'pvc-usage'];
@@ -206,7 +209,7 @@ export function StatsPanel({
   const [metric, setMetric] = useState(defaultMetric);
 
   const visibleTimeSpans =
-    metric === 'nodes' ? ['6h', '24h', '7d'] : ['1h', '3h', '6h'];
+    metric === 'nodes' || 'pvc-usage' ? ['1d', '2d', '7d'] : ['1h', '3h', '6h'];
   const [timeSpan, setTimeSpan] = useState(visibleTimeSpans[0]);
 
   const { t } = useTranslation();

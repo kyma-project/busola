@@ -29,8 +29,11 @@
         var(--sapIndicationColor_2) var(--sapIndicationColor_1)
         var(--sapIndicationColor_7);
     }
-    &.dual-graph {
+    &.network {
       --bar-color: var(--sapIndicationColor_5) var(--sapIndicationColor_4);
+    }
+    &.pvc-usage {
+      --bar-color: var(--sapContent_ForegroundColor) var(--sapIndicationColor_3);
     }
   }
 }
