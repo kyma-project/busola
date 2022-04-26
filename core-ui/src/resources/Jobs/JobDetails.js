@@ -64,14 +64,14 @@ export function JobDetails(props) {
 
   const MatchSelector = job => (
     <Selector
-      namespace={job.metadata.namespace}
+      namespace={job?.metadata?.namespace}
       labels={job.spec?.selector?.matchLabels}
       expressions={job.spec?.selector?.matchExpressions}
       selector={job.spec?.selector}
     />
   );
 
-  const JobPodTemplate = job => <PodTemplate template={job.spec.template} />;
+  const JobPodTemplate = job => <PodTemplate template={job.spec?.template} />;
 
   const customComponents = [
     JobConditions,

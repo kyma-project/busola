@@ -11,9 +11,11 @@ function CRCreate({ onChange, formElementRef, crd }) {
     const currentVersion = crd.spec.versions.find(ver => ver.storage).name;
     const namespace =
       crd.spec.scope === 'Namespaced'
-        ? `/namespaces/${cr.metadata.namespace}`
+        ? `/namespaces/${cr.metadata?.namespace || ''}`
         : '';
-    return `/apis/${crd.spec.group}/${currentVersion}${namespace}/${crd.spec.names.plural}`;
+    return `/apis/${crd.spec?.group || ''}/${currentVersion}${namespace}/${
+      crd.spec.names.plural
+    }`;
   };
 
   return (
