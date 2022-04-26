@@ -74,9 +74,12 @@ function EditClusterComponent({
     findInitialValue('oidc-issuer-url'),
   );
   const [clientId, setClientId] = useState(findInitialValue('oidc-client-id'));
+  const [clientSecret, setClientSecret] = useState(
+    findInitialValue('oidc-client-secret'),
+  );
   const [scopes, setScopes] = useState(findInitialValue('oidc-extra-scope'));
   const createOIDC = (type = '', val = '') => {
-    const config = { issuerUrl, clientId, scopes, [type]: val };
+    const config = { issuerUrl, clientId, clientSecret, scopes, [type]: val };
     const exec = {
       apiVersion: 'client.authentication.k8s.io/v1beta1',
       command: 'kubectl',
@@ -85,6 +88,7 @@ function EditClusterComponent({
         'get-token',
         `--oidc-issuer-url=${config.issuerUrl}`,
         `--oidc-client-id=${config.clientId}`,
+        `--oidc-client-secret=${config.clientSecret}`,
         `--oidc-extra-scope=openid ${config.scopes}`,
         '--grant-type=auto',
       ],
@@ -114,6 +118,17 @@ function EditClusterComponent({
         setValue={val => {
           setClientId(val);
           createOIDC('clientId', val);
+        }}
+      />
+      <ResourceForm.FormField
+        label={t('clusters.labels.client-secret')}
+        input={Inputs.Text}
+        advanced
+        required
+        value={clientSecret}
+        setValue={val => {
+          setClientSecret(val);
+          createOIDC('clientSecret', val);
         }}
       />
       <ResourceForm.FormField

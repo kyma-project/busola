@@ -26,7 +26,7 @@ async function createSSOAuth(callback) {
     const ssoFeature = (await getBusolaClusterParams()).config.features
       .SSO_LOGIN;
 
-    const { issuerUrl, clientId, scope } = ssoFeature.config;
+    const { issuerUrl, clientId, clientSecret, scope } = ssoFeature.config;
     const OpenIdConnect = await importOpenIdConnect();
 
     return {
@@ -35,6 +35,7 @@ async function createSSOAuth(callback) {
         idpProvider: OpenIdConnect,
         authority: issuerUrl,
         client_id: clientId,
+        client_secret: clientSecret,
         scope: scope || 'openid',
         response_type: 'code',
         response_mode: 'query',
