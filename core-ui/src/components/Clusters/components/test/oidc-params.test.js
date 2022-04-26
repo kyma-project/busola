@@ -12,12 +12,14 @@ describe('parseOIDCparams', () => {
         args: [
           '--oidc-issuer-url=https://coastguard.gov.us',
           '--oidc-client-id=hasselhoff',
+          '--oidc-client-secret=hasselhoffsecret',
           '--oidc-extra-scope=peach',
         ],
       },
     };
     expect(parseOIDCparams(input)).toMatchObject({
       clientId: 'hasselhoff',
+      clientSecret: 'hasselhoffsecret',
       issuerUrl: 'https://coastguard.gov.us',
       scope: 'peach',
     });

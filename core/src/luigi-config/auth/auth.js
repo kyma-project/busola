@@ -49,7 +49,9 @@ async function importOpenIdConnect() {
 
 async function createAuth(callback, kubeconfigUser) {
   try {
-    const { issuerUrl, clientId, scope } = parseOIDCParams(kubeconfigUser);
+    const { issuerUrl, clientId, clientSecret, scope } = parseOIDCParams(
+      kubeconfigUser,
+    );
 
     const OpenIdConnect = await importOpenIdConnect();
 
@@ -59,6 +61,7 @@ async function createAuth(callback, kubeconfigUser) {
         idpProvider: OpenIdConnect,
         authority: issuerUrl,
         client_id: clientId,
+        client_secret: clientSecret,
         scope: scope || 'openid',
         response_type: 'code',
         response_mode: 'query',
