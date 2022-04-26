@@ -13,13 +13,20 @@ export const CreateDetailPanel = metadata => resource => {
         <LayoutPanel.Head title={translate(metadata.title)} />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        {metadata.properties.map(prop => (
-          <LayoutPanelRow
-            key={prop.valuePath}
-            name={translate(prop.header)}
-            value={getValue(resource, prop.valuePath)}
-          />
-        ))}
+        {metadata.properties.map(prop => {
+          // todo move into a function and reuse elsewhere
+          let value = getValue(resource, prop.valuePath);
+          if (typeof value === 'boolean') {
+            value = value.toString();
+          }
+          return (
+            <LayoutPanelRow
+              key={prop.valuePath}
+              name={translate(prop.header)}
+              value={value}
+            />
+          );
+        })}
       </LayoutPanel.Body>
     </LayoutPanel>
   );
