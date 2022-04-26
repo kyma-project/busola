@@ -14,17 +14,17 @@ const getPrometheusSelector = data => {
   return selector;
 };
 
-const getPrometheusPVCUsedSpaceQuery = ({ resource }) => {
+const getPrometheusPVCUsedSpaceQuery = ({ name, namespace }) => {
   return `(
-    sum without(instance, node) (topk(1, (kubelet_volume_stats_capacity_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${resource.namespace}", persistentvolumeclaim="${resource.name}"})))
+    sum without(instance, node) (topk(1, (kubelet_volume_stats_capacity_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${namespace}", persistentvolumeclaim="${name}"})))
     -
-    sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${resource.namespace}", persistentvolumeclaim="${resource.name}"})))
+    sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${namespace}", persistentvolumeclaim="${name}"})))
   )
   `;
 };
 
-const getPrometheusPVCFreeSpaceQuery = ({ resource }) => {
-  return `sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${resource?.namespace}", persistentvolumeclaim="${resource?.name}"})))`;
+const getPrometheusPVCFreeSpaceQuery = ({ namespace, name }) => {
+  return `sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${namespace}", persistentvolumeclaim="${name}"})))`;
 };
 
 const getPrometheusCPUQuery = (
@@ -118,11 +118,13 @@ export function getMetric(type, mode, metric, cpuQuery, { step, ...data }) {
     },
     'pvc-used-space': {
       prometheusQuery: getPrometheusPVCUsedSpaceQuery(data),
-      unit: 'GB',
+      binary: true,
+      unit: 'B',
     },
     'pvc-free-space': {
       prometheusQuery: getPrometheusPVCFreeSpaceQuery(data),
-      unit: 'GB',
+      binary: true,
+      unit: 'B',
     },
   };
   return metrics[metric];
@@ -246,8 +248,7 @@ export function usePrometheus(
           helpIndex++;
           prometheusData.push(graphValue);
         } else {
-          // prometheusData.push(null);
-          prometheusData.push(graphValue); //TODO fix pushing only null values???
+          prometheusData.push(null);
         }
         stepMultiplier += step;
       }

@@ -176,12 +176,10 @@ export function PersistentVolumeClaimDetails(props) {
   const StatsComponent = pvc => {
     return (
       <StatsPanel
-        resource={{
-          name: pvc.metadata.name,
-          namespace: pvc.metadata.namespace,
-        }}
-        defaultMetric={'pvc-usage'}
-        mode="multiple"
+        namespace={pvc.metadata.namespace}
+        name={pvc.metadata.name}
+        defaultMetric="pvc-usage"
+        title={t('persistent-volume-claims.headers.volume-spce-usage')}
       />
     );
   };

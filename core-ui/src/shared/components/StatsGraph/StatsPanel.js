@@ -57,7 +57,6 @@ export function SingleGraph({ type, mode, timeSpan, metric, ...props }) {
 }
 
 export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
-  console.log(metric1);
   const { t } = useTranslation();
   const {
     data: data1,
@@ -82,6 +81,7 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
       ...props,
     },
   );
+
   return (
     <>
       {!error1 && !error2 ? (
@@ -92,6 +92,7 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
           startDate={startDate}
           endDate={endDate}
           dataPoints={DATA_POINTS}
+          className="dual-graph"
           {...props}
         />
       ) : (
@@ -166,6 +167,26 @@ const getGraphOptions = type => {
   }
 };
 
+const getDualGraphValues = (metric, t) => {
+  switch (metric) {
+    case 'pvc-usage':
+      return {
+        metric1: 'pvc-used-space',
+        metric2: 'pvc-free-space',
+        labels: [t('graphs.free-space'), t('graphs.used-space')],
+      };
+    case 'network':
+      return {
+        metric1: 'network-up',
+        metric2: 'network-down',
+        labels: [t('graphs.network-up'), t('graphs.network-down')],
+      };
+    default:
+      console.error(`You need to declare dual graph values for ${metric}!`);
+      return {};
+  }
+};
+
 export function StatsPanel({
   type,
   mode = 'single',
@@ -180,6 +201,8 @@ export function StatsPanel({
     '24h': 24 * 60 * 60,
     '7d': 7 * 24 * 60 * 60,
   };
+  const dualGraphs = ['network', 'pvc-usage'];
+
   const [metric, setMetric] = useState(defaultMetric);
 
   const visibleTimeSpans =
@@ -197,12 +220,13 @@ export function StatsPanel({
   }
 
   const graphOptions = getGraphOptions(type);
-
   return (
     <LayoutPanel className="fd-margin--md stats-panel">
       <LayoutPanel.Header>
         <LayoutPanel.Filters>
-          {graphOptions ? (
+          {props?.title ? (
+            <LayoutPanel.Head title={props.title} />
+          ) : (
             <Dropdown
               selectedKey={metric}
               onSelect={(e, val) => setMetric(val.key)}
@@ -211,7 +235,7 @@ export function StatsPanel({
                 text: t(`graphs.${option}`),
               }))}
             />
-          ) : null}
+          )}
         </LayoutPanel.Filters>
         <LayoutPanel.Actions>
           <ButtonSegmented>
@@ -229,48 +253,34 @@ export function StatsPanel({
         </LayoutPanel.Actions>
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        {mode === 'multiple' && metric === 'pvc-usage' && (
+        {!dualGraphs.includes(metric) &&
+          (mode === 'multiple' ? (
+            <SingleMetricMultipeGraph
+              type={type}
+              mode={mode}
+              metric={metric}
+              className={metric}
+              timeSpan={timeSpans[timeSpan]}
+              {...props}
+            />
+          ) : (
+            <SingleGraph
+              type={type}
+              mode={mode}
+              metric={metric}
+              className={metric}
+              timeSpan={timeSpans[timeSpan]}
+              {...props}
+            />
+          ))}
+        {dualGraphs.includes(metric) && (
           <DualGraph
             type={type}
-            metric1="pvc-used-space"
-            metric2="pvc-free-space"
-            className={metric}
             timeSpan={timeSpans[timeSpan]}
-            labels={[t('graphs.network-up'), t('graphs.network-down')]}
+            {...getDualGraphValues(metric, t)}
             {...props}
           />
         )}
-        {/* {mode === 'multiple' && metric !== 'network' && (
-          <SingleMetricMultipeGraph
-            type={type}
-            mode={mode}
-            metric={metric}
-            className={metric}
-            timeSpan={timeSpans[timeSpan]}
-            {...props}
-          />
-        )} */}
-        {mode !== 'multiple' && metric !== 'network' && (
-          <SingleGraph
-            type={type}
-            mode={mode}
-            metric={metric}
-            className={metric}
-            timeSpan={timeSpans[timeSpan]}
-            {...props}
-          />
-        )}
-        {/* {metric === 'network' && (
-          <DualGraph
-            type={type}
-            metric1={'network-up'}
-            metric2={'network-down'}
-            className={metric}
-            timeSpan={timeSpans[timeSpan]}
-            labels={[t('graphs.network-up'), t('graphs.network-down')]}
-            {...props}
-          />
-        )} */}
       </LayoutPanel.Body>
     </LayoutPanel>
   );

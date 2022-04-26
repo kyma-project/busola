@@ -1616,6 +1616,7 @@ persistent-volume-claims:
     storage-class-name: Storage Class Name
     volume-mode: Volume Mode
     volume-name: Volume Name
+    volume-spce-usage: Volume Space Usage
   message:
     empty-selector: Matches all Persistent Volumes
   name_singular: Persistent Volume Claim
