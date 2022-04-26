@@ -1,0 +1,17 @@
+.function-details {
+  position: relative;
+
+  > .fd-loading-dots {
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .function-details-tabs {
+    .fd-tabs__item:first-of-type {
+      padding-left: 32px;
+    }
+  }
+}

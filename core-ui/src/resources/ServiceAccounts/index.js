@@ -13,7 +13,6 @@ export const resourceGraphConfig = (t, context) => ({
     },
     {
       kind: 'RoleBinding',
-      clusterwide: true,
     },
     {
       kind: 'Secret',

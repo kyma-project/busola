@@ -1,16 +1,21 @@
 import React from 'react';
-import { Icon } from 'fundamental-react';
+import pluralize from 'pluralize';
+import { Icon, MessageStrip } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
+
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import {
   STATE_ERROR,
   STATE_WAITING,
   STATE_UPDATED,
   STATE_CREATED,
 } from './useUploadResources';
-import { useTranslation } from 'react-i18next';
 import './YamlResourcesList.scss';
 
-export function YamlResourcesList({ resourcesData }) {
+export function YamlResourcesList({ resourcesData, namespace }) {
   const { t } = useTranslation();
+  const { namespaceNodes } = useMicrofrontendContext();
+
   const filteredResources = resourcesData?.filter(
     resource => resource !== null,
   );
@@ -32,6 +37,27 @@ export function YamlResourcesList({ resourcesData }) {
         (filteredResources?.length || 0)) *
       100
     );
+  };
+
+  const getWarning = resource => {
+    const resourceType = pluralize(resource?.kind?.toLowerCase());
+    const resourceNamespace = resource?.metadata?.namespace;
+    const hasCurrentNamespace =
+      namespace && resourceNamespace ? resourceNamespace === namespace : true;
+    const isKnownNamespaceWide = !!namespaceNodes?.find(
+      n => n.resourceType === resourceType,
+    );
+
+    if (isKnownNamespaceWide && !hasCurrentNamespace) {
+      return (
+        <MessageStrip type="warning">
+          {t('upload-yaml.warnings.different-namespace', {
+            namespace: resource?.metadata?.namespace,
+          })}
+        </MessageStrip>
+      );
+    }
+    return null;
   };
 
   const getIcon = status => {
@@ -76,6 +102,7 @@ export function YamlResourcesList({ resourcesData }) {
                 style={{ listStyle: 'disc' }}
               >
                 {r?.value?.kind} {r?.value?.metadata?.name}
+                {getWarning(r.value)}
               </li>
             ))}
           </ul>

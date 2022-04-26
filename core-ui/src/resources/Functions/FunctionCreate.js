@@ -14,9 +14,9 @@ import {
 import {
   functionAvailableLanguages,
   getDefaultDependencies,
-} from 'components/Lambdas/helpers/runtime';
-import { CONFIG } from 'components/Lambdas/config';
-import { useConfigData } from 'components/Lambdas/helpers/misc/useConfigData';
+} from 'components/Functions/helpers/runtime';
+import { CONFIG } from 'components/Functions/config';
+import { useConfigData } from 'components/Functions/helpers/misc/useConfigData';
 
 import { createFunctionTemplate } from './helpers';
 
@@ -37,7 +37,7 @@ export function FunctionCreate({
 }) {
   useConfigData();
   const { t } = useTranslation();
-  const [func, setFunc] = useState(createFunctionTemplate(namespace));
+  const [func, setFunction] = useState(createFunctionTemplate(namespace));
   const {
     data: repositories,
   } = useGetList()(
@@ -82,7 +82,7 @@ export function FunctionCreate({
         jp.value(
           func,
           '$.spec.source',
-          CONFIG.defaultLambdaCodeAndDeps[runtime].code,
+          CONFIG.defaultFunctionCodeAndDeps[runtime].code,
         );
 
         jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
@@ -104,20 +104,20 @@ export function FunctionCreate({
       jp.value(func, '$.spec.reference', 'main');
       jp.value(func, '$.spec.baseDir', '/');
     }
-    setFunc({ ...func });
+    setFunction({ ...func });
   }, [type]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (maxReplicas && maxReplicas < minReplicas) {
       jp.value(func, '$.spec.maxReplicas', minReplicas);
-      setFunc({ ...func });
+      setFunction({ ...func });
     }
   }, [minReplicas]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (maxReplicas && maxReplicas < minReplicas) {
       jp.value(func, '$.spec.minReplicas', maxReplicas);
-      setFunc({ ...func });
+      setFunction({ ...func });
     }
   }, [maxReplicas]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -127,7 +127,7 @@ export function FunctionCreate({
       pluralKind="functions"
       singularName={t('functions.name_singular')}
       resource={func}
-      setResource={setFunc}
+      setResource={setFunction}
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={`/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespace}/functions`}
@@ -140,7 +140,7 @@ export function FunctionCreate({
           jp.value(func, '$.metadata.name', name);
           jp.value(func, "$.metadata.labels['app.kubernetes.io/name']", name);
           jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
-          setFunc({ ...func });
+          setFunction({ ...func });
         }}
       />
       <KeyValueField
