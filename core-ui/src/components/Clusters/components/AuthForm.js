@@ -48,6 +48,12 @@ const OIDCform = ({ resource, setResource, ...props }) => {
         aria-label="client-id"
       />
       <ResourceForm.FormField
+        propertyPath="$.clientSecret"
+        label={t('clusters.wizard.auth.client-secret')}
+        input={Inputs.Text}
+        aria-label="client-secret"
+      />
+      <ResourceForm.FormField
         required
         propertyPath="$.scope"
         label={t('clusters.wizard.auth.scopes')}
