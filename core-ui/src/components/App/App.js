@@ -10,49 +10,15 @@ import { useSentry } from 'hooks/useSentry';
 
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
-import { fetchCache, loadCacheItem, saveCacheItem } from 'fetch-cache';
-import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
-import loki, { LokiIndexedAdapter } from 'lokijs';
-
-window.loki = loki;
-
-// window.db = new loki('busola.db');
-// console.log(window.db.collections);
-// window.db.addCollection('cukierki');
-// console.log(window.db.collections);
-console.log(LokiIndexedAdapter);
+// import loki, { LokiIndexedAdapter } from 'lokijs';
 
 export default function App() {
-  const {
-    authData,
-    cluster,
-    config,
-    ssoData,
-    language,
-  } = useMicrofrontendContext();
+  const { cluster, language } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
     i18n.changeLanguage(language);
   }, [language, i18n]);
-
-  useEffect(() => {
-    if (cluster) {
-      console.log('init core-ui cache for', cluster.name);
-      fetchCache.init({
-        getCacheItem: path => loadCacheItem(cluster.name, path),
-        setCacheItem: (path, item) => saveCacheItem(cluster.name, path, item),
-        fetchOptions: {
-          headers: createHeaders(
-            authData,
-            cluster.cluster,
-            config.requiresCA,
-            ssoData,
-          ),
-        },
-      });
-    }
-  }, [cluster?.name, ssoData, config?.requiresCA]); //todo add authData
 
   useSentry();
 

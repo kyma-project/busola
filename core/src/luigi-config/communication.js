@@ -15,6 +15,7 @@ import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
 import { getCorrespondingNamespaceLocation } from './navigation/navigation-helpers';
+import { fetchCache } from './fetch-cache';
 
 addCommandPaletteHandler();
 addOpenSearchHandler();
@@ -103,6 +104,7 @@ export const communication = {
         await reloadAuth();
         clearAuthData();
         saveActiveClusterName(null);
+        fetchCache.destroy();
       }
       await reloadNavigation();
     },

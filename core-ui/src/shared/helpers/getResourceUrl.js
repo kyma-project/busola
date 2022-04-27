@@ -7,3 +7,8 @@ export function getResourceUrl() {
     ? fullResourceApiPath
     : resourceApiPath + window.location.pathname.replace(/^\/core-ui/, '');
 }
+
+export function getResourceApiPath() {
+  const queryParams = new URLSearchParams(window.location.search);
+  return queryParams.get('resourceApiPath');
+}

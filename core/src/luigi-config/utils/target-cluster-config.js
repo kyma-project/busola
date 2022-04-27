@@ -3,7 +3,11 @@ import { reloadNavigation } from '../navigation/navigation-data-init';
 import { config } from './../config';
 
 function todo_configmapToDataWeNeed(configmap) {
-  return JSON.parse(configmap?.data?.config || '{}') || {};
+  try {
+    return JSON.parse(configmap?.data?.config || '{}') || {};
+  } catch (_) {
+    return {};
+  }
 }
 
 export function getTargetClusterConfig() {

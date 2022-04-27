@@ -5,9 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import shortid from 'shortid';
-import { fetchCache } from 'fetch-cache';
-import { useConfig } from 'shared/contexts/ConfigContext';
-import { baseUrl } from './config';
+import { useFetchCache } from 'fetch-cache';
 
 // allow <n> consecutive requests to fail before displaying error
 const ERROR_TOLERANCY = 2;
@@ -322,32 +320,113 @@ export const useSingleGet = () => {
   return url => fetch({ relativeUrl: url });
 };
 
-export const useGetList2 = filter => (resourceUrl, { pollingInterval }) => {
-  const { fromConfig } = useConfig();
-  const path = baseUrl(fromConfig) + resourceUrl;
+export const useGet3 = ({
+  pollingInterval,
+  resourceType,
+  namespace,
+  apiPath,
+  name,
+}) => {
+  resourceType = resourceType.toLowerCase();
   const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const { subscribe, unsubscribe, getFromCache } = useFetchCache();
 
   useEffect(() => {
-    console.log('sub for', resourceUrl);
-    const id = fetchCache.subscribe({
-      path,
-      callback: (_, d) => setData(d),
+    console.log('subscribeITEM', resourceType);
+    setData(
+      getFromCache({
+        namespace,
+        resourceType,
+        name,
+      }),
+    );
+    const { subscriptionKey, id } = subscribe({
+      apiPath,
+      resourceType,
+      namespace,
+      onData: data => {
+        setData(data);
+      },
+      onError: setError,
       refreshIntervalMs: pollingInterval,
-      fetchIfNotPresent: true,
+      name,
     });
     return () => {
-      console.log('unsub for', path);
-      fetchCache.unsubscribe(path, id);
+      console.log('unsubscribeITEM', resourceType);
+      unsubscribe(subscriptionKey, id);
     };
-  }, [setData, path]);
+  }, [setData, apiPath, resourceType, namespace]);
+
+  return {
+    data: data?.[0],
+    loading: false, //todo
+    error,
+  };
+};
+
+export const useGetList3 = ({
+  pollingInterval,
+  resourceType,
+  namespace,
+  apiPath,
+  labelSelector,
+}) => {
+  resourceType = resourceType.toLowerCase();
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [cachedResultsOnly, setCachedResultsOnly] = useState(true);
+
+  const { subscribe, unsubscribe, getFromCache } = useFetchCache();
 
   useEffect(() => {
-    setData(fetchCache.getSync(path));
-  }, [path]);
+    console.log('subscribeLIST', resourceType);
+    console.log(
+      getFromCache({
+        namespace,
+        resourceType,
+        labelSelector,
+      }),
+    );
+    setData(
+      getFromCache({
+        namespace,
+        resourceType,
+        labelSelector,
+      }),
+    );
+
+    const { subscriptionKey, id } = subscribe({
+      apiPath,
+      resourceType,
+      namespace,
+      onData: data => {
+        setData(data);
+        // setLoading(false);
+        setCachedResultsOnly(false);
+      },
+      onError: setError,
+      refreshIntervalMs: pollingInterval,
+      labelSelector,
+    });
+    return () => {
+      console.log('unsubscribeLIST', resourceType);
+      unsubscribe(subscriptionKey, id);
+    };
+  }, [
+    setData,
+    apiPath,
+    resourceType,
+    namespace,
+    setLoading,
+    setCachedResultsOnly,
+  ]);
 
   return {
     data,
-    loading: data === undefined,
-    error: false,
+    loading: !data,
+    error,
+    cachedResultsOnly,
   };
 };

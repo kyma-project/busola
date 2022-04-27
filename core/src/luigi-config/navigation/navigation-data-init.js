@@ -278,6 +278,7 @@ export async function createNavigation() {
     };
   } catch (err) {
     saveActiveClusterName(null);
+    fetchCache.destroy();
     if (err.statusCode === 403) {
       clearAuthData();
       saveLocation(

@@ -50,6 +50,7 @@ export const GenericList = ({
   currentlyEditedResourceUID,
   i18n,
   allowSlashShortcut,
+  displayingCachedResults = false,
 }) => {
   const { settings } = useMicrofrontendContext();
   if (pagination) {
@@ -173,15 +174,37 @@ export const GenericList = ({
     className,
   );
 
-  return (
-    <LayoutPanel className={panelClassNames} data-testid={testid}>
-      {showRootHeader && (
-        <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
+  const header = () => {
+    const headerWrapper = content => (
+      <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
+        {content}
+      </LayoutPanel.Header>
+    );
+
+    if (showRootHeader) {
+      return headerWrapper(
+        <>
+          {displayingCachedResults && (
+            <>
+              <div className="fd-busy-indicator--circle-0" />
+              <div className="fd-busy-indicator--circle-1" />
+              <div className="fd-busy-indicator--circle-2" />
+            </>
+          )}
           <LayoutPanel.Head title={title} />
           <LayoutPanel.Actions>{headerActions}</LayoutPanel.Actions>
-        </LayoutPanel.Header>
-      )}
+        </>,
+      );
+    } else if (displayingCachedResults) {
+      return headerWrapper(<Spinner compact />);
+    } else {
+      return null;
+    }
+  };
 
+  return (
+    <LayoutPanel className={panelClassNames} data-testid={testid}>
+      {header()}
       <LayoutPanel.Body className="fd-has-padding-none">
         <table className={tableClassNames}>
           {showHeader && (

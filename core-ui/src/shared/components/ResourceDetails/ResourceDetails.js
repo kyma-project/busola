@@ -9,7 +9,7 @@ import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNot
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useDelete, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
-import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { useGet, useGet3 } from 'shared/hooks/BackendAPI/useGet';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
@@ -59,6 +59,7 @@ ResourceDetails.defaultProps = {
 
 export function ResourceDetails(props) {
   if (!props.resourceUrl) {
+    alert('no res url');
     return <></>; // wait for the context update
   } else {
     return (
@@ -72,15 +73,23 @@ export function ResourceDetails(props) {
 }
 
 function ResourceDetailsRenderer(props) {
-  const {
-    loading = true,
-    error,
-    data: resource,
-    silentRefetch,
-  } = useGet(props.resourceUrl, { pollingInterval: 3000 });
+  let { loading = true, error, data: resource } = useGet3({
+    apiPath: props.apiPath,
+    namespace: props.namespace,
+    name: props.resourceName,
+    resourceType: props.resourceType,
+    pollingInterval: 3000,
+  });
+
+  if (!loading && !resource) {
+    error = 'NOT FOUND';
+  }
 
   const updateResourceMutation = useUpdate(props.resourceUrl);
   const deleteResourceMutation = useDelete(props.resourceUrl);
+  const silentRefetch = () => {
+    console.log('todo silentRefetch');
+  };
 
   if (loading) return <Spinner />;
   if (error) {
@@ -152,6 +161,7 @@ function Resource({
   resourceTitle,
   resourceGraphConfig,
 }) {
+  resource.kind = 'Namespace';
   const { t } = useTranslation(['translation'], { i18n });
   const prettifiedResourceKind = prettifyNameSingular(
     resourceTitle,

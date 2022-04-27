@@ -19,6 +19,7 @@ import './styles/sapIllus-Fills.css';
 import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
+import { FetchCacheProvider } from 'fetch-cache';
 
 i18next
   .use(initReactI18next)
@@ -48,10 +49,12 @@ ReactDOM.render(
   <Microfrontend env={process.env}>
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Suspense fallback={<Spinner />}>
-        <CommandPaletteProvider>
-          <App />
-          <ServiceCatalogUIWrapper />
-        </CommandPaletteProvider>
+        <FetchCacheProvider>
+          <CommandPaletteProvider>
+            <App />
+            <ServiceCatalogUIWrapper />
+          </CommandPaletteProvider>
+        </FetchCacheProvider>
       </Suspense>
     </BrowserRouter>
   </Microfrontend>,

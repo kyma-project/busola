@@ -2,20 +2,29 @@ import shortid from 'shortid';
 import { failFastFetch } from './navigation/queries';
 
 export function loadCacheItem(clusterName, path) {
-  // todo try catch
   // todo cache key
-  const cache = JSON.parse(localStorage.getItem('busola.cache')) || {};
-  const clusterCache = cache[clusterName] || {};
-  return clusterCache[path];
+  try {
+    const cache = JSON.parse(localStorage.getItem('busola.cache')) || {};
+    const clusterCache = cache[clusterName] || {};
+    return clusterCache[path];
+  } catch (e) {
+    console.warn('loadCacheItem', e);
+    return null;
+  }
 }
 
 export function saveCacheItem(clusterName, path, item) {
-  const cache = JSON.parse(localStorage.getItem('busola.cache')) || {};
-  if (!cache[clusterName]) {
-    cache[clusterName] = {};
+  try {
+    const cache = JSON.parse(localStorage.getItem('busola.cache')) || {};
+    if (!cache[clusterName]) {
+      cache[clusterName] = {};
+    }
+    cache[clusterName][path] = item;
+    localStorage.setItem('busola.cache', JSON.stringify(cache));
+  } catch (e) {
+    console.warn('saveCacheItem', e);
+    return null;
   }
-  cache[clusterName][path] = item;
-  localStorage.setItem('busola.cache', JSON.stringify(cache));
 }
 
 class FetchCache {
@@ -24,7 +33,6 @@ class FetchCache {
   }
   init({ getCacheItem, setCacheItem, fetchOptions = {} }) {
     console.info('cache init');
-
     this.getCacheItem = getCacheItem;
     this.setCacheItem = setCacheItem;
     this.fetchOptions = fetchOptions;
@@ -61,6 +69,7 @@ class FetchCache {
               for (const sub of subscription.subscribers) {
                 sub.callback(this.getCacheItem(path), updatedData);
               }
+              alert('possible null in interval ' + path);
               this.setCacheItem(path, updatedData);
             }
           } catch (e) {
@@ -80,6 +89,10 @@ class FetchCache {
     subscription.subscribers = subscription.subscribers.filter(
       s => s.id !== id,
     );
+    if (subscription.subscribers.length === 0) {
+      clearInterval(subscription.intervalId);
+      delete subscription.intervalId;
+    }
   }
   minInterval(subscribers) {
     return (
@@ -100,6 +113,9 @@ class FetchCache {
         return item;
       } else {
         const data = await this.fetch(path);
+        if (!data) {
+          alert('possible null in get ' + path);
+        }
         this.setCacheItem(path, data);
         return data;
       }
@@ -123,9 +139,20 @@ class FetchCache {
       const response = await failFastFetch(path, this.fetchOptions.data);
       return await response.json();
     } catch (e) {
-      console.warn('HMMM', e);
-      return null;
+      debugger;
+      // alert('CORE FETCH FAILED');
+      // alert(e.message)
+      console.log('core error', e);
+      // todo
+      return this.getSync(path);
     }
+  }
+  destroy() {
+    console.log('destroy');
+    for (const sub of Object.values(this.subscriptions || {})) {
+      clearInterval(sub.intervalId);
+    }
+    this.subscriptions = {};
   }
 }
 

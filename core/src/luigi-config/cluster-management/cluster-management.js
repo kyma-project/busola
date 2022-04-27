@@ -9,6 +9,7 @@ import { getTargetClusterConfig } from '../utils/target-cluster-config';
 import { merge } from 'lodash';
 import { checkIfClusterRequiresCA } from '../navigation/queries';
 import * as clusterStorage from './clusters-storage';
+import { fetchCache } from '../fetch-cache';
 
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
@@ -68,6 +69,7 @@ export async function setCluster(clusterName) {
       location = location.origin;
     }
   } catch (e) {
+    fetchCache.destroy();
     console.warn(e);
     alert('An error occured while setting up the cluster.');
     saveActiveClusterName(null);
