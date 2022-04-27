@@ -21,17 +21,16 @@ import './NamespaceCreate.scss';
 const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_VALUE = 'disabled';
 
-export function NamespaceCreate(props) {
-  const {
-    formElementRef,
-    onChange,
-    resource: initialNamespace,
-    resourceUrl,
-    onCompleted,
-    onError,
-    setCustomValid,
-    ...rest
-  } = props;
+export function NamespaceCreate({
+  formElementRef,
+  onChange,
+  resource: initialNamespace,
+  resourceUrl,
+  onCompleted,
+  onError,
+  setCustomValid,
+  ...props
+}) {
   const { t } = useTranslation();
 
   const [namespace, setNamespace] = useState(
@@ -175,7 +174,7 @@ export function NamespaceCreate(props) {
 
   return (
     <ResourceForm
-      {...rest}
+      {...props}
       pluralKind="namespaces"
       singularName={t('namespaces.name_singular')}
       renderEditor={!initialNamespace ? renderEditor : null}
