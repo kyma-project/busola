@@ -56,7 +56,6 @@ if (
 ) {
   const https = require('https');
   const options = {
-    requestCert: true,
     key: fs.readFileSync(process.env.BUSOLA_SSL_KEY_FILE),
     cert: fs.readFileSync(process.env.BUSOLA_SSL_CRT_FILE),
   };
