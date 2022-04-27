@@ -13,7 +13,6 @@ export function useCreateResource({
   initialResource,
   createUrl,
   afterCreatedFn,
-
   toggleFormFn,
 }) {
   const { t } = useTranslation();
@@ -64,10 +63,14 @@ export function useCreateResource({
           createUrl,
           createPatch(initialResource, mergedResource),
         );
-        if (toggleFormFn) toggleFormFn(false);
+        if (typeof toggleFormFn === 'function') {
+          toggleFormFn(false);
+        }
       } else {
         await postRequest(createUrl, resource);
-        if (toggleFormFn) toggleFormFn(false);
+        if (typeof toggleFormFn === 'function') {
+          toggleFormFn(false);
+        }
       }
 
       if (afterCreatedFn) {

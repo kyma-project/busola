@@ -45,7 +45,6 @@ export function ResourceForm({
     initialResource,
     createUrl,
     afterCreatedFn,
-
     toggleFormFn,
   });
 

@@ -62,6 +62,8 @@ export const ModalWithForm = ({
 
   useEffect(() => {
     if (getToggleFormFn) {
+      // If getToggleFormFn is defined, the function that toggles form modal on/off is passed to parent. The modal will not be closed automatically
+      // after clicking on the submit button. You must call it to close the modal: toggleFormFn(false).
       getToggleFormFn(() => setOpenStatus);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,6 +94,9 @@ export const ModalWithForm = ({
       formElementRef.current.dispatchEvent(
         new Event('submit', { bubbles: true, cancelable: true }),
       );
+      if (!getToggleFormFn) {
+        setOpenStatus(false);
+      }
     }
   }
 
