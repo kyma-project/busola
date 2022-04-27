@@ -155,7 +155,7 @@ export function ResourceListRenderer({
   const { t } = useTranslation(['translation'], { i18n });
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
-  const [isOpen, setOpen] = useState(false);
+  const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     i18n,
@@ -329,8 +329,7 @@ export function ResourceListRenderer({
             resourceType: prettifiedResourceName,
           })
         }
-        isOpen={isOpen}
-        setOpen={setOpen}
+        getToggleFormFn={getToggleFormFn}
         opened={showEditDialog}
         confirmText={t('common.buttons.create')}
         id={`add-${resourceType}-modal`}
@@ -343,7 +342,7 @@ export function ResourceListRenderer({
               resourceUrl={resourceUrl}
               namespace={namespace}
               refetchList={silentRefetch}
-              setOpen={setOpen}
+              toggleFormFn={toggleFormFn}
               {...props}
               {...createFormProps}
             />

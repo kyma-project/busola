@@ -25,16 +25,11 @@ export const ModalWithForm = ({
   onModalOpenStateChange,
   alwaysOpen,
   i18n,
-  isOpen: parentisOpen,
-  setOpen: parentSetOpen,
+  getToggleFormFn,
   ...props
 }) => {
   const { t } = useTranslation(null, { i18n });
-  const [isOpen0, setO] = useState(alwaysOpen || parentisOpen);
-
-  const isOpen = typeof parentisOpen === 'boolean' ? parentisOpen : isOpen0;
-
-  const setOpen = parentSetOpen || setO;
+  const [isOpen, setOpen] = useState(alwaysOpen || false);
 
   const {
     isValid,
@@ -54,7 +49,7 @@ export const ModalWithForm = ({
     if (isOpen !== undefined) onModalOpenStateChange(isOpen);
   }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function setOpenStatus(status) {
+  const setOpenStatus = status => {
     if (status) {
       setTimeout(() => revalidate());
       LuigiClient.uxManager().addBackdrop();
@@ -63,7 +58,14 @@ export const ModalWithForm = ({
       if (customCloseAction) customCloseAction();
     }
     setOpen(status);
-  }
+  };
+
+  useEffect(() => {
+    if (getToggleFormFn) {
+      getToggleFormFn(() => setOpenStatus);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getToggleFormFn]);
 
   function handleFormChanged() {
     setTimeout(() => revalidate());

@@ -151,7 +151,7 @@ function Resource({
     resourceTitle,
     resource.kind,
   );
-  const [isOpen, setOpen] = useState(false);
+  const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
@@ -200,8 +200,7 @@ function Resource({
     } else {
       return (
         <ModalWithForm
-          isOpen={isOpen}
-          setOpen={setOpen}
+          getToggleFormFn={getToggleFormFn}
           title={
             editActionLabel ||
             t('components.resource-details.edit', {
@@ -227,7 +226,7 @@ function Resource({
                 resourceUrl={resourceUrl}
                 namespace={namespace}
                 refetchList={silentRefetch}
-                setOpen={setOpen}
+                toggleFormFn={toggleFormFn}
                 {...props}
               />
             </ErrorBoundary>

@@ -30,7 +30,8 @@ export function ResourceForm({
   afterCreatedFn,
   className,
   onlyYaml = false,
-  setOpen,
+
+  toggleFormFn,
   customSchemaId,
   autocompletionDisabled,
   customSchemaUri,
@@ -44,7 +45,8 @@ export function ResourceForm({
     initialResource,
     createUrl,
     afterCreatedFn,
-    setOpen,
+
+    toggleFormFn,
   });
 
   const [mode, setMode] = React.useState(

@@ -13,7 +13,8 @@ export function useCreateResource({
   initialResource,
   createUrl,
   afterCreatedFn,
-  setOpen,
+
+  toggleFormFn,
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -63,14 +64,10 @@ export function useCreateResource({
           createUrl,
           createPatch(initialResource, mergedResource),
         );
-        /// todo usun takze backdrop luigiego
-        LuigiClient.uxManager().removeBackdrop();
-        setOpen(false);
+        if (toggleFormFn) toggleFormFn(false);
       } else {
         await postRequest(createUrl, resource);
-        /// todo usun takze backdrop luigiego
-        LuigiClient.uxManager().removeBackdrop();
-        setOpen(false);
+        if (toggleFormFn) toggleFormFn(false);
       }
 
       if (afterCreatedFn) {
