@@ -10,6 +10,7 @@ import { useSentry } from 'hooks/useSentry';
 
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
+import { useTestPrometheusQuery } from './useTestPrometheusQuery';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
@@ -20,6 +21,7 @@ export default function App() {
   }, [language, i18n]);
 
   useSentry();
+  useTestPrometheusQuery();
 
   const serviceCatalogRoutes = useMemo(() => {
     return [

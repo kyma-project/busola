@@ -12,19 +12,19 @@ export function loadCacheItem(clusterName, path) {
   const cache = JSON.parse(localStorage.getItem('busola.cache')) || {};
   const dbCache = getFromDB(clusterName, path);
   const clusterCache = cache[clusterName] || {};
-  console.log('clusterCache[path]', clusterCache[path], 'dbCache', dbCache);
+  // console.log('clusterCache[path]', clusterCache[path], 'dbCache', dbCache);
   return clusterCache[path];
 }
 
 async function getFromDB(clusterName, path) {
-  console.log('getFromDB', clusterName, path);
+  // console.log('getFromDB', clusterName, path);
   const pathItems = await db.paths
     .where({ cluster: clusterName, path })
     .first(); //.equals(clusterName).and('path').equals(path).toArray();
   return pathItems.items || [];
 }
 async function saveToDB(clusterName, path, items) {
-  console.log('saveToDB', clusterName, path, items);
+  // console.log('saveToDB', clusterName, path, items);
   const dbObject = {
     cluster: clusterName,
     path,
@@ -98,6 +98,7 @@ export function FetchCacheProvider({ children }) {
     }
     return items;
   };
+
   const minInterval = subscribers => {
     return (
       subscribers
@@ -106,6 +107,7 @@ export function FetchCacheProvider({ children }) {
         .sort()[0] || 10000
     );
   };
+
   const doFetch = async url => {
     const headers = createHeaders(
       authData,
@@ -152,6 +154,20 @@ export function FetchCacheProvider({ children }) {
     }
   };
 
+  const addSubscription = ({ subscriptionKey, refreshIntervalMs, onData }) => {
+    if (!subscriptions.current[subscriptionKey]) {
+      subscriptions.current[subscriptionKey] = { subscribers: [] };
+    }
+    const subscription = subscriptions.current[subscriptionKey];
+    const subscriptionId = shortid();
+    subscription.subscribers.push({
+      refreshIntervalMs,
+      onData,
+      id: subscriptionId,
+    });
+    return subscription;
+  };
+
   const value = {
     subscribe: ({
       onData,
@@ -165,15 +181,10 @@ export function FetchCacheProvider({ children }) {
     }) => {
       const subscriptionKey = `${namespace}/${resourceType}/${name}/${labelSelector ||
         ''}`;
-      if (!subscriptions.current[subscriptionKey]) {
-        subscriptions.current[subscriptionKey] = { subscribers: [] };
-      }
-      const subscription = subscriptions.current[subscriptionKey];
-      const subscriptionId = shortid();
-      subscription.subscribers.push({
+      const subscription = addSubscription({
+        subscriptionKey,
         refreshIntervalMs,
         onData,
-        id: subscriptionId,
       });
 
       const url = buildRequestUrl({
@@ -209,7 +220,6 @@ export function FetchCacheProvider({ children }) {
           sub.onData(updatedData, {
             prevData,
             hasChanged,
-            fromCache: false,
           });
         }
         const otherResources = (getCacheItem(cacheKey) || []).filter(
@@ -240,7 +250,43 @@ export function FetchCacheProvider({ children }) {
         // todo interval is not precise enough, and it may change with added subscribers - let's use timeout
         subscription.intervalId = setInterval(() => refetch(), timeout);
       }
-      return { subscriptionKey, id: subscriptionId };
+      return { subscriptionKey, id: subscription.id };
+    },
+    subscribeUrl({ onData, onError, url, refreshIntervalMs = 10000 }) {
+      const subscriptionKey = url;
+      const subscription = addSubscription({
+        subscriptionKey,
+        refreshIntervalMs,
+        onData,
+      });
+
+      const refetch = async () => {
+        try {
+          const updatedData = await doFetch(url);
+          const prevData = getCacheItem(url);
+          const hasChanged =
+            JSON.stringify(updatedData) !== JSON.stringify(prevData);
+
+          for (const sub of subscription.subscribers) {
+            sub.onData(updatedData, {
+              prevData,
+              hasChanged,
+            });
+          }
+          setCacheItem(url, updatedData);
+        } catch (e) {
+          onError(e);
+          console.warn('refetch failed', e);
+        }
+      };
+
+      if (typeof subscription.intervalId === 'undefined') {
+        refetch();
+        const timeout = minInterval(subscription.subscribers);
+        // todo interval is not precise enough, and it may change with added subscribers - let's use timeout
+        subscription.intervalId = setInterval(() => refetch(), timeout);
+      }
+      return { subscriptionKey, id: subscription.id };
     },
     unsubscribe: (subscriptionKey, id) => {
       const subscription = subscriptions.current[subscriptionKey];
@@ -265,6 +311,9 @@ export function FetchCacheProvider({ children }) {
         namespace,
         labelSelector,
       });
+    },
+    getFromCacheUrl: url => {
+      return getCacheItem(url);
     },
   };
   return (
