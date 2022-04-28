@@ -472,6 +472,7 @@ common:
       advanced: Advanced
       simple: Simple
     object-required: An object is required
+    schema-error: 'Only syntax is checked: {{error}}.'
   delete-dialog:
     delete-confirm: Don't ask again
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
@@ -560,6 +561,7 @@ common:
     unknown: Unknown
   tooltips:
     at: at
+    column: Col
     copy-to-clipboard: Copy to Clipboard
     download: Download
     duplicate-key: Duplicate key
@@ -569,6 +571,7 @@ common:
     k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
+    line: Ln
     read-file: Read file content as a single value, with file name as a key.
     resource-ref-name: Unique name within a Namespace to refer to a {{resource}} resource.
     resource-ref-namespace: Namespace defines the space within which the {{resource}} name must be unique.
