@@ -7,13 +7,14 @@ import { useTranslation } from 'react-i18next';
 import { useAutocompleteWorker } from './useAutocompleteWorker';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import './Editor.scss';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 export function Editor({
   value,
   setValue,
   readOnly,
   language = 'yaml',
-  editorDidMount,
+  onMount,
   customSchemaId,
   autocompletionDisabled,
   customSchemaUri,
@@ -72,6 +73,10 @@ export function Editor({
       readOnly: readOnly,
     });
 
+    if (typeof onMount === 'function') {
+      onMount(editorRef.current);
+    }
+
     const onDidChangeModelContent = editorRef.current.onDidChangeModelContent(
       () => {
         const editorValue = editorRef.current.getValue();
@@ -104,7 +109,15 @@ export function Editor({
       editor.getModel(descriptor.current).dispose();
       editorRef.current.dispose();
     };
-  }, [editorTheme, setAutocompleteOptions, language, setValue, t, readOnly]);
+  }, [
+    editorTheme,
+    setAutocompleteOptions,
+    language,
+    setValue,
+    t,
+    readOnly,
+    onMount,
+  ]);
 
   useEffect(() => {
     const onDidFocusEditorText = editorRef.current.onDidFocusEditorText(() => {
@@ -125,14 +138,14 @@ export function Editor({
           <Spinner />
         </div>
       ) : null}
-
+      <div className="resource-form__autocomplete">
+        {schemaError || autocompletionDisabled ? (
+          <Tooltip content={`${schemaError}`}>
+            {t('common.create-form.autocomplete-unavailable')}
+          </Tooltip>
+        ) : null}
+      </div>
       <div ref={divRef} className="resource-form__editor" />
-      <p>
-        {/* TODO verify how this should be done */}
-        {readOnly ? 'read-only mode' : null}
-        {readOnly && (schemaError || autocompletionDisabled) ? ' | ' : null}
-        {schemaError || autocompletionDisabled ? 'no autocompletion' : null}
-      </p>
 
       <div className="resource-form__legend">
         {error && (

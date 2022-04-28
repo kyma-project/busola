@@ -5,7 +5,14 @@
   min-height: 350px;
   position: relative;
 }
-
+.resource-form__autocomplete {
+  position: absolute;
+  bottom: 100%;
+  width: 100%;
+  text-align: right;
+  color: var(--sapNeutralColor);
+  font-size: var(--sapFontSmallSize);
+}
 .resource-form__overlay {
   position: absolute;
   //background-color: rgba(4,4,4,0.8);

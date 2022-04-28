@@ -32,7 +32,6 @@ export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
           editor={editor}
           title={title}
           saveDisabled={true}
-          readOnly={true}
           i18n={i18n}
         />
         <MonacoEditor

@@ -461,6 +461,7 @@ common:
     update: Update
     view-yaml: View YAML
   create-form:
+    autocomplete-unavailable: Monaco autocompletion unavailable
     choose-preset: Choose option
     editor-error: 'Parse error: {{error}}, previous valid input will be used'
     messages:
@@ -472,7 +473,6 @@ common:
       advanced: Advanced
       simple: Simple
     object-required: An object is required
-    schema-error: 'Only syntax is checked: {{error}}.'
   delete-dialog:
     delete-confirm: Don't ask again
     information: You've switched off removal confirmations for all resources. You can switch them back on in Preferences.
@@ -567,7 +567,7 @@ common:
     duplicate-key: Duplicate key
     error: Error
     generate-name: Generate name
-    hide: Hide Read-Only Fields
+    hide: Hide read-only fields
     k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.

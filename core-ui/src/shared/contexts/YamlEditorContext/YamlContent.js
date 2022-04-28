@@ -37,7 +37,6 @@ export function YamlContent({
         title={title}
         onSave={onSave}
         saveDisabled={saveDisabled}
-        readOnly={readOnly}
         i18n={i18n}
       />
       <ErrorBoundary i18n={i18n}>
