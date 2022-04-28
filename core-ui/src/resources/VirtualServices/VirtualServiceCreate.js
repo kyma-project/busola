@@ -9,6 +9,7 @@ export function VirtualServiceCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [service, setService] = useState(createTemplate(namespaceId));
@@ -16,6 +17,7 @@ export function VirtualServiceCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="virtualservices"
       singularName={t('virtualservices.name_singular')}
       resource={service}

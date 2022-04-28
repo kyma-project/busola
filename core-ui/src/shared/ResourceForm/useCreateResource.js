@@ -13,6 +13,7 @@ export function useCreateResource({
   initialResource,
   createUrl,
   afterCreatedFn,
+  toggleFormFn,
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -62,8 +63,14 @@ export function useCreateResource({
           createUrl,
           createPatch(initialResource, mergedResource),
         );
+        if (typeof toggleFormFn === 'function') {
+          toggleFormFn(false);
+        }
       } else {
         await postRequest(createUrl, resource);
+        if (typeof toggleFormFn === 'function') {
+          toggleFormFn(false);
+        }
       }
 
       if (afterCreatedFn) {

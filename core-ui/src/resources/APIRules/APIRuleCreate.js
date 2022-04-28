@@ -32,6 +32,7 @@ export function APIRuleCreate({
   setCustomValid,
   serviceName,
   prefix,
+  ...props
 }) {
   const { t } = useTranslation();
   // queries are moved up here so that the network calls are not doubled
@@ -105,6 +106,7 @@ export function APIRuleCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="apirules"
       singularName={t(`api-rules.name_singular`)}
       resource={apiRule}

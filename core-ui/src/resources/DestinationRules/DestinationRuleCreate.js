@@ -11,6 +11,7 @@ function DestinationRuleCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [destinationRule, setDestinationRule] = useState(
@@ -20,6 +21,7 @@ function DestinationRuleCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="destinationrules"
       singularName={t('destination-rules.name_singular')}
       resource={destinationRule}
