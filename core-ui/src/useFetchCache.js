@@ -4,22 +4,48 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { baseUrl, throwHttpError } from 'shared/hooks/BackendAPI/config';
 import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import shortid from 'shortid';
+import { db } from 'components/App/db';
 
 export function loadCacheItem(clusterName, path) {
   // todo try catch
   // todo cache key
   const cache = JSON.parse(localStorage.getItem('busola.cache')) || {};
+  const dbCache = getFromDB(clusterName, path);
   const clusterCache = cache[clusterName] || {};
+  console.log('clusterCache[path]', clusterCache[path], 'dbCache', dbCache);
   return clusterCache[path];
 }
 
-export function saveCacheItem(clusterName, path, item) {
+async function getFromDB(clusterName, path) {
+  console.log('getFromDB', clusterName, path);
+  const pathItems = await db.paths
+    .where({ cluster: clusterName, path })
+    .first(); //.equals(clusterName).and('path').equals(path).toArray();
+  return pathItems.items || [];
+}
+async function saveToDB(clusterName, path, items) {
+  console.log('saveToDB', clusterName, path, items);
+  const dbObject = {
+    cluster: clusterName,
+    path,
+    items,
+  };
+  try {
+    await db.paths.put(dbObject);
+  } catch (error) {
+    console.log(
+      `Failed to add or modify ${path} for cluster ${clusterName}: ${error}`,
+    );
+  }
+}
+export async function saveCacheItem(clusterName, path, item) {
   const cache = JSON.parse(localStorage.getItem('busola.cache')) || {};
   if (!cache[clusterName]) {
     cache[clusterName] = {};
   }
   cache[clusterName][path] = item;
   localStorage.setItem('busola.cache', JSON.stringify(cache));
+  await saveToDB(clusterName, path, item);
 }
 
 export const FetchCacheContext = createContext({});

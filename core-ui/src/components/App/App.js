@@ -10,7 +10,6 @@ import { useSentry } from 'hooks/useSentry';
 
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
-// import loki, { LokiIndexedAdapter } from 'lokijs';
 
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
