@@ -11,6 +11,7 @@ export function PodCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [pod, setPod] = useState(createPodTemplate(namespaceId));
@@ -18,6 +19,7 @@ export function PodCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="pods"
       singularName={t('pods.name_singular')}
       resource={pod}

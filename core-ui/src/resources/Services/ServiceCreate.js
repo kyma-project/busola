@@ -9,6 +9,7 @@ export function ServiceCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [service, setService] = useState(createServiceTemplate(namespaceId));
@@ -16,6 +17,7 @@ export function ServiceCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="services"
       singularName={t('services.name_singular')}
       resource={service}

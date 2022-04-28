@@ -11,6 +11,7 @@ export function HorizontalPodAutoscalerCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [HPA, setHPA] = useState(createHPATemplate(namespaceId));
@@ -18,6 +19,7 @@ export function HorizontalPodAutoscalerCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="HorizontalPodAutoscalers"
       singularName={t('hpas.name_singular')}
       resource={HPA}

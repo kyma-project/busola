@@ -22,6 +22,7 @@ export function ReplicaSetCreate({
   namespace,
   onChange,
   setCustomValid,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -48,6 +49,7 @@ export function ReplicaSetCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="replicasets"
       singularName={t(`replica-sets.name_singular`)}
       resource={replicaset}

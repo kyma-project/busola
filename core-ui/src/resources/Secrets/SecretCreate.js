@@ -23,6 +23,7 @@ export function SecretCreate({
   resourceUrl,
   setCustomValid,
   prefix,
+  ...props
 }) {
   const { t } = useTranslation();
   const [secret, setSecret] = useState(
@@ -56,6 +57,7 @@ export function SecretCreate({
 
   return (
     <ResourceForm
+      {...props}
       className="create-secret-form"
       pluralKind="secrets"
       singularName={t('secrets.name_singular')}

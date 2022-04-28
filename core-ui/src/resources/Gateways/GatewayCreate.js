@@ -20,6 +20,7 @@ export function GatewayCreate({
   setCustomValid,
   resource: initialGateway,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -42,6 +43,7 @@ export function GatewayCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="gateways"
       singularName={t(`gateways.name_singular`)}
       resource={gateway}

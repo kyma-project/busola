@@ -21,6 +21,7 @@ export function ServiceBindingCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
   const [serviceBinding, setServiceBinding] = React.useState(
@@ -45,6 +46,7 @@ export function ServiceBindingCreate({
 
   return (
     <ResourceForm
+      {...props}
       className="create-service-binding-form"
       pluralKind="servicebindings"
       singularName={t('btp-service-bindings.name_singular')}

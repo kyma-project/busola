@@ -25,6 +25,7 @@ export function DnsProviderCreate({
   setCustomValid,
   resource: initialDnsProvider,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -63,6 +64,7 @@ export function DnsProviderCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="dnsProviders"
       singularName={t('dnsproviders.name_singular')}
       resource={dnsProvider}
