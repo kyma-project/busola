@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import LuigiClient from '@luigi-project/client';
+import { useEffect, useState } from 'react';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 const getPrometheusSelector = data => {
@@ -12,6 +12,19 @@ const getPrometheusSelector = data => {
     selector = `${selector}, pod=~"${pods}"`;
   }
   return selector;
+};
+
+const getPrometheusPVCUsedSpaceQuery = ({ name, namespace }) => {
+  return `(
+    sum without(instance, node) (topk(1, (kubelet_volume_stats_capacity_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${namespace}", persistentvolumeclaim="${name}"})))
+    -
+    sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${namespace}", persistentvolumeclaim="${name}"})))
+  )
+  `;
+};
+
+const getPrometheusPVCFreeSpaceQuery = ({ namespace, name }) => {
+  return `sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${namespace}", persistentvolumeclaim="${name}"})))`;
 };
 
 const getPrometheusCPUQuery = (
@@ -102,6 +115,16 @@ export function getMetric(type, mode, metric, cpuQuery, { step, ...data }) {
     nodes: {
       prometheusQuery: getPrometheusNodesQuery(),
       unit: '',
+    },
+    'pvc-used-space': {
+      prometheusQuery: getPrometheusPVCUsedSpaceQuery(data),
+      binary: true,
+      unit: 'B',
+    },
+    'pvc-free-space': {
+      prometheusQuery: getPrometheusPVCFreeSpaceQuery(data),
+      binary: true,
+      unit: 'B',
     },
   };
   return metrics[metric];
