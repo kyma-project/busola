@@ -154,18 +154,18 @@ export function FetchCacheProvider({ children }) {
     }
   };
 
-  const addSubscription = ({ subscriptionKey, refreshIntervalMs, onData }) => {
+  const addSubscriber = ({ subscriptionKey, refreshIntervalMs, onData }) => {
     if (!subscriptions.current[subscriptionKey]) {
       subscriptions.current[subscriptionKey] = { subscribers: [] };
     }
     const subscription = subscriptions.current[subscriptionKey];
-    const subscriptionId = shortid();
-    subscription.subscribers.push({
+    const subscriber = {
       refreshIntervalMs,
       onData,
-      id: subscriptionId,
-    });
-    return subscription;
+      id: shortid(),
+    };
+    subscription.subscribers.push(subscriber);
+    return { subscriber, subscription };
   };
 
   const value = {
@@ -181,7 +181,7 @@ export function FetchCacheProvider({ children }) {
     }) => {
       const subscriptionKey = `${namespace}/${resourceType}/${name}/${labelSelector ||
         ''}`;
-      const subscription = addSubscription({
+      const { subscriber, subscription } = addSubscriber({
         subscriptionKey,
         refreshIntervalMs,
         onData,
@@ -250,11 +250,11 @@ export function FetchCacheProvider({ children }) {
         // todo interval is not precise enough, and it may change with added subscribers - let's use timeout
         subscription.intervalId = setInterval(() => refetch(), timeout);
       }
-      return { subscriptionKey, id: subscription.id };
+      return { subscriptionKey, id: subscriber.id };
     },
     subscribeUrl({ onData, onError, url, refreshIntervalMs = 10000 }) {
       const subscriptionKey = url;
-      const subscription = addSubscription({
+      const subscription = addSubscriber({
         subscriptionKey,
         refreshIntervalMs,
         onData,

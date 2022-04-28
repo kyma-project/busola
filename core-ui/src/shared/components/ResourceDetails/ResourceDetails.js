@@ -73,7 +73,7 @@ export function ResourceDetails(props) {
 }
 
 function ResourceDetailsRenderer(props) {
-  let { loading = true, error, data: resource } = useGet3({
+  let { loading = true, error, data: resource, cachedResultsOnly } = useGet3({
     apiPath: props.apiPath,
     namespace: props.namespace,
     name: props.resourceName,

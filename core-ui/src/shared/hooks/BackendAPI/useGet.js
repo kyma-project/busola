@@ -360,13 +360,13 @@ export const useGet3 = ({
       name,
     });
     return () => unsubscribe(subscriptionKey, id);
-  }, [setData, apiPath, resourceType, namespace]);
+  }, [setData, apiPath, resourceType, namespace, name]);
 
   return {
     data: data?.[0],
     loading,
     error,
-    setCachedResultsOnly,
+    cachedResultsOnly,
   };
 };
 
