@@ -81,10 +81,6 @@ function ResourceDetailsRenderer(props) {
     pollingInterval: 3000,
   });
 
-  if (!loading && !resource) {
-    error = 'NOT FOUND';
-  }
-
   const updateResourceMutation = useUpdate(props.resourceUrl);
   const deleteResourceMutation = useDelete(props.resourceUrl);
   const silentRefetch = () => {

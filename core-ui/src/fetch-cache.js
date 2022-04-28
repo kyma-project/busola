@@ -45,7 +45,6 @@ export function FetchCacheProvider({ children }) {
     cluster && saveCacheItem(cluster.name, key, item);
 
   useEffect(() => {
-    console.log('useeffect cleanup');
     for (const sub of Object.values(subscriptions.current)) {
       clearInterval(sub.intervalId);
     }
@@ -235,19 +234,6 @@ export function FetchCacheProvider({ children }) {
       labelSelector = null,
     }) => {
       const items = getCacheItem(resourceType);
-      // console.log('get', items, {
-      //   name,
-      //   namespace,
-      //   labelSelector,
-      // });
-      // console.log(
-      //   'filter',
-      //   filter(items, {
-      //     name,
-      //     namespace,
-      //     labelSelector,
-      //   }),
-      // );
       return filter(items, {
         name,
         namespace,

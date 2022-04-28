@@ -8,6 +8,7 @@ export function ApiRulesList({ serviceName, namespace, prefix }) {
     hasDetailsView: true,
     fixedPath: true,
     resourceUrl: `/apis/gateway.kyma-project.io/v1alpha1/namespaces/${namespace}/apirules`,
+    apiPath: '/apis/gateway.kyma-project.io/v1alpha1',
     resourceType: 'apirules',
     namespace,
     isCompact: true,

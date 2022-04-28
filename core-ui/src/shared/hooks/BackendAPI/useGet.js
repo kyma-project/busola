@@ -330,38 +330,43 @@ export const useGet3 = ({
   resourceType = resourceType.toLowerCase();
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [cachedResultsOnly, setCachedResultsOnly] = useState(true);
+
   const { subscribe, unsubscribe, getFromCache } = useFetchCache();
 
   useEffect(() => {
-    console.log('subscribeITEM', resourceType);
-    setData(
-      getFromCache({
-        namespace,
-        resourceType,
-        name,
-      }),
-    );
+    const cacheData = getFromCache({
+      namespace,
+      resourceType,
+      name,
+    });
+    if (cacheData) {
+      setData(cacheData);
+      setLoading(false);
+    }
+
     const { subscriptionKey, id } = subscribe({
       apiPath,
       resourceType,
       namespace,
       onData: data => {
         setData(data);
+        setLoading(false);
+        setCachedResultsOnly(false);
       },
       onError: setError,
       refreshIntervalMs: pollingInterval,
       name,
     });
-    return () => {
-      console.log('unsubscribeITEM', resourceType);
-      unsubscribe(subscriptionKey, id);
-    };
+    return () => unsubscribe(subscriptionKey, id);
   }, [setData, apiPath, resourceType, namespace]);
 
   return {
     data: data?.[0],
-    loading: false, //todo
+    loading,
     error,
+    setCachedResultsOnly,
   };
 };
 
@@ -381,21 +386,16 @@ export const useGetList3 = ({
   const { subscribe, unsubscribe, getFromCache } = useFetchCache();
 
   useEffect(() => {
-    console.log('subscribeLIST', resourceType);
-    console.log(
-      getFromCache({
-        namespace,
-        resourceType,
-        labelSelector,
-      }),
-    );
-    setData(
-      getFromCache({
-        namespace,
-        resourceType,
-        labelSelector,
-      }),
-    );
+    const cacheData = getFromCache({
+      namespace,
+      resourceType,
+      labelSelector,
+    });
+
+    if (cacheData) {
+      setData(cacheData);
+      setLoading(false);
+    }
 
     const { subscriptionKey, id } = subscribe({
       apiPath,
@@ -403,7 +403,7 @@ export const useGetList3 = ({
       namespace,
       onData: data => {
         setData(data);
-        // setLoading(false);
+        setLoading(false);
         setCachedResultsOnly(false);
       },
       onError: setError,
@@ -411,7 +411,6 @@ export const useGetList3 = ({
       labelSelector,
     });
     return () => {
-      console.log('unsubscribeLIST', resourceType);
       unsubscribe(subscriptionKey, id);
     };
   }, [
@@ -425,7 +424,7 @@ export const useGetList3 = ({
 
   return {
     data,
-    loading: !data,
+    loading,
     error,
     cachedResultsOnly,
   };
