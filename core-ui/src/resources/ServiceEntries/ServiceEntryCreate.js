@@ -11,6 +11,7 @@ export function ServiceEntryCreate({
   resourceUrl,
   setCustomValid,
   namespace,
+  ...props
 }) {
   const { t } = useTranslation();
   const [serviceEntry, setServiceEntry] = useState(
@@ -18,6 +19,7 @@ export function ServiceEntryCreate({
   );
   return (
     <ResourceForm
+      {...props}
       pluralKind="serviceentries"
       singularName={t('service-entries.name_singular')}
       resource={serviceEntry}

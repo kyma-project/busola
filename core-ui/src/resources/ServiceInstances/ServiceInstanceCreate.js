@@ -17,6 +17,7 @@ export function ServiceInstanceCreate({
   formElementRef,
   onChange,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
   const [serviceInstance, setServiceInstance] = React.useState(
@@ -24,6 +25,7 @@ export function ServiceInstanceCreate({
   );
   return (
     <ResourceForm
+      {...props}
       className="create-service-instance-form"
       pluralKind="serviceinstances"
       singularName={t('btp-instances.name_singular')}

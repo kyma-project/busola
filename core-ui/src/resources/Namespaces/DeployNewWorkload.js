@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Popover, Menu, Button } from 'fundamental-react';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
@@ -10,6 +10,8 @@ export default function DeployNewWorkload({ namespaceName }) {
   const { t, i18n } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
+
+  const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
   const functionsExist = features?.SERVERLESS?.isEnabled;
 
@@ -23,8 +25,13 @@ export default function DeployNewWorkload({ namespaceName }) {
           {t('functions.create-view.title')}
         </Menu.Item>
       }
+      getToggleFormFn={getToggleFormFn}
       renderForm={props => (
-        <FunctionCreate {...props} namespace={namespaceName} />
+        <FunctionCreate
+          {...props}
+          namespace={namespaceName}
+          toggleFormFn={toggleFormFn}
+        />
       )}
       i18n={i18n}
     />
@@ -41,7 +48,11 @@ export default function DeployNewWorkload({ namespaceName }) {
         </Menu.Item>
       }
       renderForm={props => (
-        <DeploymentCreate {...props} namespace={namespaceName} />
+        <DeploymentCreate
+          {...props}
+          namespace={namespaceName}
+          toggleFormFn={toggleFormFn}
+        />
       )}
       i18n={i18n}
     />
