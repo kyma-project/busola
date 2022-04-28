@@ -30,6 +30,7 @@ export function DeploymentCreate({
   setCustomValid,
   resource: initialDeployment,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -117,6 +118,7 @@ export function DeploymentCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="deployments"
       singularName={t(`deployments.name_singular`)}
       resource={deployment}

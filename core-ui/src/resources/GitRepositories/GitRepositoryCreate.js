@@ -22,6 +22,7 @@ export function GitRepositoryCreate({
   resourceUrl,
   setCustomValid,
   resource: initialRepository,
+  ...props
 }) {
   const { t } = useTranslation();
   const [repository, setRepository] = useState(
@@ -73,6 +74,7 @@ export function GitRepositoryCreate({
 
   return (
     <ResourceForm
+      {...props}
       className="create-function-form"
       pluralKind="gitrepositories"
       singularName={t('git-repositories.name_singular')}

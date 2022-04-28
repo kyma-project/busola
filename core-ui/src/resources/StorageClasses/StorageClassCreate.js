@@ -10,6 +10,7 @@ export function StorageClassCreate({
   formElementRef,
   resourceUrl,
   setCustomValid,
+  ...props
 }) {
   const { t } = useTranslation();
   const [storageClass, setStorageClass] = useState(
@@ -18,6 +19,7 @@ export function StorageClassCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="storageclass"
       singularName={t('storage-classes.name_singular')}
       resource={storageClass}

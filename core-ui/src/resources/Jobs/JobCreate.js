@@ -35,6 +35,7 @@ export function JobCreate({
   resource: initialJob,
   resourceUrl,
   prefix,
+  ...props
 }) {
   const { t } = useTranslation();
   const { features } = useMicrofrontendContext();
@@ -85,6 +86,7 @@ export function JobCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="jobs"
       singularName={t(`jobs.name_singular`)}
       resource={job}
