@@ -21,7 +21,7 @@ export default function App() {
   }, [language, i18n]);
 
   useSentry();
-  useTestPrometheusQuery();
+  // useTestPrometheusQuery();
 
   const serviceCatalogRoutes = useMemo(() => {
     return [
