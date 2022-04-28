@@ -157,7 +157,7 @@ function Resource({
   resourceTitle,
   resourceGraphConfig,
 }) {
-  resource.kind = 'Namespace';
+  resource.kind = resourceType; // todo?
   const { t } = useTranslation(['translation'], { i18n });
   const prettifiedResourceKind = prettifyNameSingular(
     resourceTitle,
