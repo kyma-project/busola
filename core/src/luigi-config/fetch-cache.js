@@ -69,7 +69,7 @@ class FetchCache {
               for (const sub of subscription.subscribers) {
                 sub.callback(this.getCacheItem(path), updatedData);
               }
-              alert('possible null in interval ' + path);
+              // alert('possible null in interval ' + path);
               this.setCacheItem(path, updatedData);
             }
           } catch (e) {
@@ -114,7 +114,7 @@ class FetchCache {
       } else {
         const data = await this.fetch(path);
         if (!data) {
-          alert('possible null in get ' + path);
+          // alert('possible null in get ' + path);
         }
         this.setCacheItem(path, data);
         return data;

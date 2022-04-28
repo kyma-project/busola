@@ -336,15 +336,18 @@ export const useGet3 = ({
   const { subscribe, unsubscribe, getFromCache } = useFetchCache();
 
   useEffect(() => {
-    const cacheData = getFromCache({
-      namespace,
-      resourceType,
-      name,
-    });
-    if (cacheData) {
-      setData(cacheData);
-      setLoading(false);
-    }
+    const loadFromCache = async () => {
+      const cacheData = await getFromCache({
+        namespace,
+        resourceType,
+        name,
+      });
+      if (cacheData) {
+        setData(cacheData);
+        setLoading(false);
+      }
+    };
+    loadFromCache();
 
     const { subscriptionKey, id } = subscribe({
       apiPath,
@@ -386,16 +389,21 @@ export const useGetList3 = ({
   const { subscribe, unsubscribe, getFromCache } = useFetchCache();
 
   useEffect(() => {
-    const cacheData = getFromCache({
-      namespace,
-      resourceType,
-      labelSelector,
-    });
+    const loadFromCache = async () => {
+      const cacheData = await getFromCache({
+        namespace,
+        resourceType,
+        labelSelector,
+      });
+      console.log('cache', cacheData);
 
-    if (cacheData) {
-      setData(cacheData);
-      setLoading(false);
-    }
+      if (cacheData) {
+        setData(cacheData);
+        setLoading(false);
+      }
+    };
+
+    loadFromCache();
 
     const { subscriptionKey, id } = subscribe({
       apiPath,

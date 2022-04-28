@@ -31,7 +31,6 @@ export function ResourceForm({
   className,
   onlyYaml = false,
 }) {
-  createUrl = '/apis/ziomale';
   const { i18n } = useTranslation();
   const createResource = useCreateResource({
     singularName,

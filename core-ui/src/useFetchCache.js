@@ -6,46 +6,46 @@ import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import shortid from 'shortid';
 import { db } from 'components/App/db';
 
-export function loadCacheItem(clusterName, path) {
+async function loadCacheItem(clusterName, key) {
   // todo try catch
   // todo cache key
   const cache = JSON.parse(localStorage.getItem('busola.cache')) || {};
-  const dbCache = getFromDB(clusterName, path);
+  const dbCache = await getFromDB(clusterName, key);
   const clusterCache = cache[clusterName] || {};
-  // console.log('clusterCache[path]', clusterCache[path], 'dbCache', dbCache);
-  return clusterCache[path];
+  console.log('clusterCache[path]', clusterCache[key], 'dbCache', dbCache);
+  return clusterCache[key];
 }
 
-async function getFromDB(clusterName, path) {
+async function getFromDB(clusterName, key) {
   // console.log('getFromDB', clusterName, path);
   const pathItems = await db.paths
-    .where({ cluster: clusterName, path })
+    .where({ cluster: clusterName, path: key })
     .first(); //.equals(clusterName).and('path').equals(path).toArray();
-  return pathItems.items || [];
+  return pathItems;
 }
-async function saveToDB(clusterName, path, items) {
+async function saveToDB(clusterName, key, items) {
   // console.log('saveToDB', clusterName, path, items);
   const dbObject = {
     cluster: clusterName,
-    path,
+    path: key,
     items,
   };
   try {
     await db.paths.put(dbObject);
   } catch (error) {
     console.log(
-      `Failed to add or modify ${path} for cluster ${clusterName}: ${error}`,
+      `Failed to add or modify ${key} for cluster ${clusterName}: ${error}`,
     );
   }
 }
-export async function saveCacheItem(clusterName, path, item) {
+export async function saveCacheItem(clusterName, key, item) {
   const cache = JSON.parse(localStorage.getItem('busola.cache')) || {};
   if (!cache[clusterName]) {
     cache[clusterName] = {};
   }
-  cache[clusterName][path] = item;
+  cache[clusterName][key] = item;
   localStorage.setItem('busola.cache', JSON.stringify(cache));
-  await saveToDB(clusterName, path, item);
+  await saveToDB(clusterName, key, item);
 }
 
 export const FetchCacheContext = createContext({});
@@ -66,9 +66,10 @@ export function FetchCacheProvider({ children }) {
 
   const subscriptions = useRef({});
 
-  const getCacheItem = key => cluster && loadCacheItem(cluster.name, key);
-  const setCacheItem = (key, item) =>
-    cluster && saveCacheItem(cluster.name, key, item);
+  const getCacheItem = async key =>
+    cluster && (await loadCacheItem(cluster.name, key));
+  const setCacheItem = async (key, item) =>
+    cluster && (await saveCacheItem(cluster.name, key, item));
 
   useEffect(() => {
     for (const sub of Object.values(subscriptions.current)) {
@@ -199,7 +200,10 @@ export function FetchCacheProvider({ children }) {
 
       const refetchSingle = async () => {
         const updatedData = await doFetch(url);
-        const prevData = filter(getCacheItem(cacheKey), filteringParams)?.[0];
+        const prevData = filter(
+          await getCacheItem(cacheKey),
+          filteringParams,
+        )?.[0];
         const hasChanged =
           JSON.stringify(updatedData) !== JSON.stringify(prevData);
 
@@ -212,7 +216,7 @@ export function FetchCacheProvider({ children }) {
 
       const refetchList = async () => {
         const updatedData = (await doFetch(url)).items;
-        const prevData = filter(getCacheItem(cacheKey), filteringParams);
+        const prevData = filter(await getCacheItem(cacheKey), filteringParams);
         const hasChanged =
           JSON.stringify(updatedData) !== JSON.stringify(prevData);
 
@@ -222,10 +226,10 @@ export function FetchCacheProvider({ children }) {
             hasChanged,
           });
         }
-        const otherResources = (getCacheItem(cacheKey) || []).filter(
+        const otherResources = ((await getCacheItem(cacheKey)) || []).filter(
           i => !updatedData.find(u => u.metadata.uid === i.metadata.uid),
         );
-        setCacheItem(
+        await setCacheItem(
           cacheKey,
           [...otherResources, ...updatedData].sort(sortResources),
         );
@@ -263,7 +267,7 @@ export function FetchCacheProvider({ children }) {
       const refetch = async () => {
         try {
           const updatedData = await doFetch(url);
-          const prevData = getCacheItem(url);
+          const prevData = await getCacheItem(url);
           const hasChanged =
             JSON.stringify(updatedData) !== JSON.stringify(prevData);
 
@@ -273,7 +277,7 @@ export function FetchCacheProvider({ children }) {
               hasChanged,
             });
           }
-          setCacheItem(url, updatedData);
+          await setCacheItem(url, updatedData);
         } catch (e) {
           onError(e);
           console.warn('refetch failed', e);
@@ -299,21 +303,22 @@ export function FetchCacheProvider({ children }) {
         delete subscription.intervalId;
       }
     },
-    getFromCache: ({
+    getFromCache: async ({
       namespace = '',
       name = '',
       resourceType,
       labelSelector = null,
     }) => {
-      const items = getCacheItem(resourceType);
+      const items = await getCacheItem(resourceType);
       return filter(items, {
         name,
         namespace,
         labelSelector,
       });
     },
-    getFromCacheUrl: url => {
-      return getCacheItem(url);
+
+    getFromCacheUrl: async url => {
+      return await getCacheItem(url);
     },
   };
   return (

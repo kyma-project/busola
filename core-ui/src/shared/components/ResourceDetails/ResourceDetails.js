@@ -59,7 +59,6 @@ ResourceDetails.defaultProps = {
 
 export function ResourceDetails(props) {
   if (!props.resourceUrl) {
-    alert('no res url');
     return <></>; // wait for the context update
   } else {
     return (
