@@ -161,6 +161,8 @@ const getGraphOptions = type => {
       return ['cpu', 'memory', 'network'];
     case 'cluster':
       return ['cpu', 'memory', 'network', 'nodes'];
+    case 'pvc':
+      return ['pvc-usage'];
     default:
       return null;
   }
@@ -204,13 +206,14 @@ export function StatsPanel({
     '7d': 7 * 24 * 60 * 60,
   };
   const dualGraphs = ['network', 'pvc-usage'];
-
+  const longerTimeSpansGraphs = ['pvc-usage', 'nodes'];
   const [metric, setMetric] = useState(defaultMetric);
 
-  const visibleTimeSpans =
-    metric === 'nodes' || 'pvc-usage' ? ['1d', '2d', '7d'] : ['1h', '3h', '6h'];
-  const [timeSpan, setTimeSpan] = useState(visibleTimeSpans[0]);
+  const visibleTimeSpans = longerTimeSpansGraphs.includes(metric)
+    ? ['1d', '2d', '7d']
+    : ['1h', '3h', '6h'];
 
+  const [timeSpan, setTimeSpan] = useState(visibleTimeSpans[0]);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -226,13 +229,13 @@ export function StatsPanel({
     <LayoutPanel className="fd-margin--md stats-panel">
       <LayoutPanel.Header>
         <LayoutPanel.Filters>
-          {props?.title ? (
-            <LayoutPanel.Head title={props.title} />
+          {graphOptions?.length === 1 ? (
+            <LayoutPanel.Head title={t(`graphs.${graphOptions[0]}`)} />
           ) : (
             <Dropdown
               selectedKey={metric}
               onSelect={(e, val) => setMetric(val.key)}
-              options={graphOptions.map(option => ({
+              options={graphOptions?.map(option => ({
                 key: option,
                 text: t(`graphs.${option}`),
               }))}

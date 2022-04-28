@@ -179,7 +179,7 @@ export function PersistentVolumeClaimDetails(props) {
         namespace={pvc.metadata.namespace}
         name={pvc.metadata.name}
         defaultMetric="pvc-usage"
-        title={t('persistent-volume-claims.headers.volume-spce-usage')}
+        type="pvc"
       />
     );
   };
