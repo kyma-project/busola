@@ -19,7 +19,7 @@ import './styles/sapIllus-Fills.css';
 import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
-import { FetchCacheProvider } from 'fetch-cache';
+import { FetchCacheProvider } from 'useFetchCache';
 
 i18next
   .use(initReactI18next)

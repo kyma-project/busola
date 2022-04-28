@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import shortid from 'shortid';
-import { useFetchCache } from 'fetch-cache';
+import { useFetchCache } from 'useFetchCache'; // todo move that file somewhere else
 
 // allow <n> consecutive requests to fail before displaying error
 const ERROR_TOLERANCY = 2;
