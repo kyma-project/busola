@@ -80,7 +80,7 @@ function ResourceDetailsRenderer(props) {
   if (error) {
     const breadcrumbItems = props.breadcrumbs || [
       {
-        name: prettifyNamePlural(props.resourceTitle || props.resourceType),
+        name: prettifyNamePlural(props.resourceTitle, props.resourceType),
         path: '/',
         fromContext: props.resourceType.toLowerCase(),
       },
