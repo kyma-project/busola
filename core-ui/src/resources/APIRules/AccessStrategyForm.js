@@ -5,6 +5,7 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { TextArrayInput, ItemArray } from 'shared/ResourceForm/fields';
 import { JwtStrategyConfig } from './JwtStrategyConfig';
 import { createAccessStrategyTemplate } from './templates';
+import * as jp from 'jsonpath';
 
 const accessStrategies = ['allow', 'noop', 'jwt', 'oauth2_introspection'];
 
@@ -30,6 +31,11 @@ function SingleAccessStrategyInput({
         label={t('api-rules.access-strategies.labels.handler')}
         input={Inputs.Dropdown}
         options={accessStrategyOptions}
+        setValue={handler => {
+          jp.value(accessStrategy, '$.config', undefined);
+          jp.value(accessStrategy, '$.handler', handler);
+          setAccessStrategy({ ...accessStrategy });
+        }}
       />
       {accessStrategy?.handler === 'oauth2_introspection' && (
         <TextArrayInput
