@@ -36,7 +36,7 @@ export function compareCpu(limit = '', current = '') {
   return normalizedLimit <= normalizedCurrent;
 }
 
-export function isCPUEqual(first = '', second = '') {
+export function areCPUsEqual(first = '', second = '') {
   const firstCPU = normalizeCPU(first);
   const secondCPU = normalizeCPU(second);
 

@@ -8,8 +8,8 @@ import {
   normalizeMemory,
   compareCpu,
   compareMemory,
-  isCPUEqual,
-  isMemoryEqual,
+  areCPUsEqual,
+  areMemoriesEqual,
 } from 'components/Functions/helpers/resources';
 import { CONFIG } from 'components/Functions/config';
 
@@ -323,16 +323,16 @@ export function checkReplicasPreset(min, max, presets) {
 
 function areResourcesPresetEqual(functionResources, presetValues) {
   return (
-    isMemoryEqual(
+    areMemoriesEqual(
       presetValues?.requestMemory,
       functionResources?.requests?.memory,
     ) &&
-    isMemoryEqual(
+    areMemoriesEqual(
       presetValues?.limitMemory,
       functionResources?.limits?.memory,
     ) &&
-    isCPUEqual(presetValues?.requestCpu, functionResources?.requests?.cpu) &&
-    isCPUEqual(presetValues?.limitCpu, functionResources?.limits?.cpu)
+    areCPUsEqual(presetValues?.requestCpu, functionResources?.requests?.cpu) &&
+    areCPUsEqual(presetValues?.limitCpu, functionResources?.limits?.cpu)
   );
 }
 

@@ -19,7 +19,7 @@ export function compareMemory(limit = '', current = '') {
   return normalizedLimit <= normalizedCurrent;
 }
 
-export function isMemoryEqual(first = '', second = '') {
+export function areMemoriesEqual(first = '', second = '') {
   const firstMemory = normalizeMemory(first);
   const secondMemory = normalizeMemory(second);
 
