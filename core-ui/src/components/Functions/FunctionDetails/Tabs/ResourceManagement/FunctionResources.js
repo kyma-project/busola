@@ -74,7 +74,7 @@ export default function FunctionResources({
               <Dropdown
                 disabled={disabledForm}
                 options={presetOptions}
-                selectedKey={defaultPreset}
+                selectedKey={currentPreset}
                 id={inputNames.preset}
                 name={inputNames.preset}
                 onSelect={(_, selected) => onChangePreset(selected)}
@@ -178,7 +178,7 @@ export default function FunctionResources({
                     disabled={disabledForm}
                     className={inputClassName}
                     placeholder={t('functions.details.title.cpu')}
-                    {...register(inputNames.requests.cpu)}
+                    {...register(inputNames.limits.cpu)}
                   />
                   <ErrorMessage errors={errors} field={inputNames.limits.cpu} />
                 </>
