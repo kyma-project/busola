@@ -4,6 +4,11 @@ import { useTheme } from 'shared/contexts/ThemeContext';
 import { LayoutPanel } from 'fundamental-react';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
 import { useTranslation } from 'react-i18next';
+import Luigi from '@luigi-project/client';
+import { Editor as EditorESM } from 'shared/components/MonacoEditorESM/Editor';
+
+const isESM = Luigi.getContext().features?.MONACO_AUTOCOMPLETION?.isEnabled;
+const Editor = isESM ? EditorESM : MonacoEditor;
 
 export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
   const { editorTheme } = useTheme();
@@ -34,12 +39,13 @@ export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
           saveDisabled={true}
           i18n={i18n}
         />
-        <MonacoEditor
+        <Editor
           theme={editorTheme}
           height="20em"
           value={value}
           options={options}
-          onMount={editor => setEditor(editor)}
+          onMount={setEditor}
+          autocompletionDisabled
           {...editorProps}
         />
       </LayoutPanel.Body>

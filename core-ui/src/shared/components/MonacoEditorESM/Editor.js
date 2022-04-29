@@ -18,6 +18,7 @@ export function Editor({
   customSchemaId,
   autocompletionDisabled,
   customSchemaUri,
+  height,
 }) {
   const descriptor = useRef(Uri);
   const { t } = useTranslation();
@@ -132,7 +133,10 @@ export function Editor({
   }, [setAutocompleteOptions, activeSchemaPath]);
 
   return (
-    <div className="resource-form__wrapper">
+    <div
+      className="resource-form__wrapper"
+      style={{ height, minHeight: height }}
+    >
       {loading ? (
         <div className="resource-form__overlay">
           <Spinner />

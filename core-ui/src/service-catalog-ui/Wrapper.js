@@ -12,7 +12,7 @@ const ServiceCatalogUiWrapper = () => {
     // force rerender on cluster change
     <Routes key={cluster?.name}>
       <Route
-        path="/catalog*"
+        path="/catalog/*"
         element={
           <Suspense fallback={<Spinner />}>
             <ServiceCatalogUI id="catalog" />
@@ -20,7 +20,7 @@ const ServiceCatalogUiWrapper = () => {
         }
       />
       <Route
-        path="/instances*"
+        path="/instances/*"
         element={
           <Suspense fallback={<Spinner />}>
             <ServiceCatalogUI id="instances" />
