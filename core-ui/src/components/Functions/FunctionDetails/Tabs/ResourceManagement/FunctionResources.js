@@ -21,6 +21,8 @@ export default function FunctionResources({
   type = 'function',
   setValue = () => void 0,
   defaultPreset = customPreset,
+  watch,
+  comparePresetWithFormValues,
 }) {
   const { t, i18n } = useTranslation();
   const [currentPreset, setCurrentPreset] = useState(defaultPreset);
@@ -44,9 +46,24 @@ export default function FunctionResources({
     text: t('functions.variable.type.custom'),
     key: customPreset,
   });
+  useEffect(() => {
+    const subscription = watch(formValues => {
+      const presetsEntries = Object.entries(presets);
+      for (const [key, preset] of presetsEntries) {
+        if (comparePresetWithFormValues(preset, formValues)) {
+          setCurrentPreset(key);
+          return;
+        }
+      }
+      setCurrentPreset(customPreset);
+    });
+    return () => subscription.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watch, setCurrentPreset, presets]);
 
   async function onChangePreset(selected) {
     const preset = selected.key;
+
     if (preset) {
       if (presets && preset !== customPreset) {
         const values = presets[preset];
@@ -55,7 +72,6 @@ export default function FunctionResources({
         setValue(inputNames.limits.memory, values.limitMemory);
         setValue(inputNames.limits.cpu, values.limitCpu);
       }
-      setCurrentPreset(preset);
     }
   }
 

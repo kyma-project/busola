@@ -17,6 +17,8 @@ import {
   inputNames,
   checkReplicasPreset,
   checkResourcesPreset,
+  areCPUsEqual,
+  areMemoriesEqual,
 } from './shared';
 
 import './ResourceManagement.scss';
@@ -73,6 +75,7 @@ export default function ResourcesManagement({ func }) {
     register,
     handleSubmit,
     formState: { errors, isValid },
+    watch,
     setValue,
   } = useForm({
     resolver: yupResolver(prepareSchema(t)),
@@ -166,6 +169,26 @@ export default function ResourcesManagement({ func }) {
   const editText = t('functions.details.buttons.edit-configuration');
   const popupMessage = t('functions.create-view.errors.one-field-invalid');
 
+  function compareRuntimeProfileFormValues(preset, formValues) {
+    return (
+      areCPUsEqual(preset.limitCpu, formValues.functionLimitsCpu) &&
+      areMemoriesEqual(preset.limitMemory, formValues.functionLimitsMemory) &&
+      areMemoriesEqual(
+        preset.requestMemory,
+        formValues.functionRequestsMemory,
+      ) &&
+      areCPUsEqual(preset.requestCpu, formValues.functionRequestsCpu)
+    );
+  }
+  function compareBuildJobProfileFormValues(preset, formValues) {
+    return (
+      areCPUsEqual(preset.limitCpu, formValues.buildLimitsCpu) &&
+      areMemoriesEqual(preset.limitMemory, formValues.buildLimitsMemory) &&
+      areMemoriesEqual(preset.requestMemory, formValues.buildRequestsMemory) &&
+      areCPUsEqual(preset.requestCpu, formValues.buildRequestsCpu)
+    );
+  }
+
   function renderConfirmButton() {
     const disabled = isEditMode && !isValid;
     const button = (
@@ -238,6 +261,8 @@ export default function ResourcesManagement({ func }) {
               setValue={setValue}
               type="function"
               defaultPreset={defaultValues[inputNames.function.preset]}
+              watch={watch}
+              comparePresetWithFormValues={compareRuntimeProfileFormValues}
             />
           </LayoutPanel.Body>
         </div>
@@ -256,6 +281,8 @@ export default function ResourcesManagement({ func }) {
               setValue={setValue}
               type="buildJob"
               defaultPreset={defaultValues[inputNames.buildJob.preset]}
+              watch={watch}
+              comparePresetWithFormValues={compareBuildJobProfileFormValues}
             />
           </LayoutPanel.Body>
         </div>

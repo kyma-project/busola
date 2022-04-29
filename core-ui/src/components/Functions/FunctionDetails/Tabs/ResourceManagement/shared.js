@@ -13,6 +13,11 @@ import {
 } from 'components/Functions/helpers/resources';
 import { CONFIG } from 'components/Functions/config';
 
+export {
+  areCPUsEqual,
+  areMemoriesEqual,
+} from 'components/Functions/helpers/resources';
+
 export const inputClassName = 'fd-input resource_input';
 export const errorClassName = 'error_message';
 export const customPreset = 'custom';
