@@ -15,8 +15,9 @@ export function useTestPrometheusQuery() {
 
   useEffect(() => {
     for (const url of Object.keys(state)) {
-      const cachedValue = getFromCacheUrl(url);
-      console.log('CACHE', url, !!cachedValue);
+      getFromCacheUrl(url).then(v => {
+        console.log('CACHE', url, !!v);
+      });
     }
   }, []);
 
@@ -30,7 +31,7 @@ export function useTestPrometheusQuery() {
       const { subscriptionKey, id } = subscribeUrl({
         url,
         onData: a => setState(state => ({ ...state, [url]: !!a })),
-        refreshIntervalMs: 1000,
+        refreshIntervalMs: 5000,
       });
 
       cleanups.push(() => unsubscribe(subscriptionKey, id));

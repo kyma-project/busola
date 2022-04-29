@@ -4,40 +4,41 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { baseUrl, throwHttpError } from 'shared/hooks/BackendAPI/config';
 import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import shortid from 'shortid';
-import { db } from 'components/App/db';
+// import { db } from 'components/App/db';
+import pluralize from 'pluralize';
 
 async function loadCacheItem(clusterName, key) {
   // todo try catch
   // todo cache key
   const cache = JSON.parse(localStorage.getItem('busola.cache')) || {};
-  const dbCache = await getFromDB(clusterName, key);
+  // const dbCache = await getFromDB(clusterName, key);
   const clusterCache = cache[clusterName] || {};
-  console.log('clusterCache[path]', clusterCache[key], 'dbCache', dbCache);
+  // console.log('clusterCache[path]', clusterCache[key], 'dbCache', dbCache);
   return clusterCache[key];
 }
 
-async function getFromDB(clusterName, key) {
-  // console.log('getFromDB', clusterName, path);
-  const pathItems = await db.paths
-    .where({ cluster: clusterName, path: key })
-    .first(); //.equals(clusterName).and('path').equals(path).toArray();
-  return pathItems;
-}
-async function saveToDB(clusterName, key, items) {
-  // console.log('saveToDB', clusterName, path, items);
-  const dbObject = {
-    cluster: clusterName,
-    path: key,
-    items,
-  };
-  try {
-    await db.paths.put(dbObject);
-  } catch (error) {
-    console.log(
-      `Failed to add or modify ${key} for cluster ${clusterName}: ${error}`,
-    );
-  }
-}
+// async function getFromDB(clusterName, key) {
+//   // console.log('getFromDB', clusterName, path);
+//   const pathItems = await db.paths
+//     .where({ cluster: clusterName, path: key })
+//     .first(); //.equals(clusterName).and('path').equals(path).toArray();
+//   return pathItems;
+// }
+// async function saveToDB(clusterName, key, items) {
+//   // console.log('saveToDB', clusterName, path, items);
+//   const dbObject = {
+//     cluster: clusterName,
+//     path: key,
+//     items,
+//   };
+//   try {
+//     await db.paths.put(dbObject);
+//   } catch (error) {
+//     console.log(
+//       `Failed to add or modify ${key} for cluster ${clusterName}: ${error}`,
+//     );
+//   }
+// }
 export async function saveCacheItem(clusterName, key, item) {
   const cache = JSON.parse(localStorage.getItem('busola.cache')) || {};
   if (!cache[clusterName]) {
@@ -45,7 +46,7 @@ export async function saveCacheItem(clusterName, key, item) {
   }
   cache[clusterName][key] = item;
   localStorage.setItem('busola.cache', JSON.stringify(cache));
-  await saveToDB(clusterName, key, item);
+  // await saveToDB(clusterName, key, item);
 }
 
 export const FetchCacheContext = createContext({});
@@ -199,26 +200,75 @@ export function FetchCacheProvider({ children }) {
       const filteringParams = { namespace, name, labelSelector };
 
       const refetchSingle = async () => {
-        const updatedData = await doFetch(url);
-        const prevData = filter(
-          await getCacheItem(cacheKey),
-          filteringParams,
-        )?.[0];
+        const updatedItem = await doFetch(url);
+        const prevList = await getCacheItem(cacheKey);
+        const prevItem = filter(prevList, filteringParams)?.[0];
         const hasChanged =
-          JSON.stringify(updatedData) !== JSON.stringify(prevData);
+          updatedItem?.metadata?.resourceVersion !==
+          prevItem?.metadata.resourceVersion;
 
         if (hasChanged) {
           for (const sub of subscription.subscribers) {
-            sub.onData(updatedData ? [updatedData] : null, prevData);
+            sub.onData(updatedItem ? [updatedItem] : null, {
+              prevData: prevItem,
+              hasChanged,
+            });
+          }
+
+          if (!prevList) {
+            await setCacheItem(cacheKey, [updatedItem]);
+            return;
+          }
+
+          if (updatedItem) {
+            const index = prevList.findIndex(
+              i => i.metadata.uid === updatedItem.metadata.uid,
+            );
+            if (index !== -1) {
+              console.log('update');
+              // update item on list
+              prevList[index] = updatedItem;
+              console.log(prevItem);
+              console.log(updatedItem);
+              await setCacheItem(cacheKey, prevList);
+            } else {
+              console.log('add');
+              // add item to list
+              await setCacheItem(
+                cacheKey,
+                [...prevList, updatedItem].sort(sortResources),
+              );
+            }
+          } else if (prevItem) {
+            console.log('del');
+            console.log(prevItem);
+            await setCacheItem(
+              cacheKey,
+              prevList.filter(i => i.metadata.uid !== prevItem.metadata.id),
+            );
           }
         }
       };
 
       const refetchList = async () => {
-        const updatedData = (await doFetch(url)).items;
+        let { kind, items, apiVersion } = await doFetch(url);
+        // make sure items in list have kind & apiVersion
+        const updatedData = items.map(item => ({
+          ...item,
+          kind: pluralize(kind.replace(/List$/, ''), 1),
+          apiVersion,
+        }));
+
         const prevData = filter(await getCacheItem(cacheKey), filteringParams);
         const hasChanged =
-          JSON.stringify(updatedData) !== JSON.stringify(prevData);
+          updatedData.length !== prevData?.length ||
+          updatedData.some(
+            uD =>
+              !prevData.find(
+                pD =>
+                  pD.metadata.resourceVersion === uD.metadata.resourceVersion,
+              ),
+          );
 
         for (const sub of subscription.subscribers) {
           sub.onData(updatedData, {
@@ -227,7 +277,7 @@ export function FetchCacheProvider({ children }) {
           });
         }
         const otherResources = ((await getCacheItem(cacheKey)) || []).filter(
-          i => !updatedData.find(u => u.metadata.uid === i.metadata.uid),
+          i => !prevData.find(u => u.metadata.uid === i.metadata.uid),
         );
         await setCacheItem(
           cacheKey,
@@ -258,7 +308,7 @@ export function FetchCacheProvider({ children }) {
     },
     subscribeUrl({ onData, onError, url, refreshIntervalMs = 10000 }) {
       const subscriptionKey = url;
-      const subscription = addSubscriber({
+      const { subscriber, subscription } = addSubscriber({
         subscriptionKey,
         refreshIntervalMs,
         onData,
@@ -290,7 +340,7 @@ export function FetchCacheProvider({ children }) {
         // todo interval is not precise enough, and it may change with added subscribers - let's use timeout
         subscription.intervalId = setInterval(() => refetch(), timeout);
       }
-      return { subscriptionKey, id: subscription.id };
+      return { subscriptionKey, id: subscriber.id };
     },
     unsubscribe: (subscriptionKey, id) => {
       const subscription = subscriptions.current[subscriptionKey];

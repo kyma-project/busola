@@ -353,10 +353,17 @@ export const useGet3 = ({
       apiPath,
       resourceType,
       namespace,
-      onData: data => {
-        setData(data);
-        setLoading(false);
-        setCachedResultsOnly(false);
+      onData: (data, { hasChanged }) => {
+        console.log('has chagnged get', hasChanged);
+        if (cachedResultsOnly) {
+          // make sure the item is updated after first network call
+          setData(data);
+          setLoading(false);
+          setCachedResultsOnly(false);
+        } else if (hasChanged) {
+          console.log('ITEM data changed');
+          setData(data);
+        }
       },
       onError: setError,
       refreshIntervalMs: pollingInterval,
@@ -395,7 +402,7 @@ export const useGetList3 = ({
         resourceType,
         labelSelector,
       });
-      console.log('cache', cacheData);
+      // console.log('cache', cacheData);
 
       if (cacheData) {
         setData(cacheData);
@@ -409,10 +416,16 @@ export const useGetList3 = ({
       apiPath,
       resourceType,
       namespace,
-      onData: data => {
-        setData(data);
-        setLoading(false);
-        setCachedResultsOnly(false);
+      onData: (data, { hasChanged }) => {
+        if (cachedResultsOnly) {
+          // make sure list is updated after first network call
+          setData(data);
+          setLoading(false);
+          setCachedResultsOnly(false);
+        } else if (hasChanged) {
+          console.log('LIST data changed');
+          setData(data);
+        }
       },
       onError: setError,
       refreshIntervalMs: pollingInterval,
@@ -427,6 +440,7 @@ export const useGetList3 = ({
     resourceType,
     namespace,
     setLoading,
+    cachedResultsOnly,
     setCachedResultsOnly,
   ]);
 

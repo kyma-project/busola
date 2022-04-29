@@ -12,6 +12,23 @@ import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
 import { useTestPrometheusQuery } from './useTestPrometheusQuery';
 
+// import LokiIndexedAdapter from 'lokijs/src/loki-indexed-adapter.js';
+// import loki from 'lokijs';
+// var adapter = new LokiIndexedAdapter('lokijs');
+
+// var db = new loki('busola-new.db', {
+//   adapter,
+//   autosave: true,
+//   autosaveInterval: 100
+// });
+// window.db = db;
+// console.log(db);
+// console.log(db.collections);
+// db.addCollection('tets', { autoupdate: true });
+// db.getCollection('tets').insert({ a: 'b' });
+// db.save();
+// db.saveDatabase();
+
 export default function App() {
   const { cluster, language } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();

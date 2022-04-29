@@ -156,7 +156,7 @@ function Resource({
   resourceTitle,
   resourceGraphConfig,
 }) {
-  resource.kind = resourceType; // todo?
+  console.log('render, resourceKind:', resource.kind);
   const { t } = useTranslation(['translation'], { i18n });
   const prettifiedResourceKind = prettifyNameSingular(
     resourceTitle,

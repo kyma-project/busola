@@ -9,7 +9,7 @@ import * as jp from 'jsonpath';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { navigateToDetails } from 'shared/hooks/navigate';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
-import { useGetList2, useGetList3 } from 'shared/hooks/BackendAPI/useGet';
+import { useGetList3 } from 'shared/hooks/BackendAPI/useGet';
 import { navigateToResource } from 'shared/hooks/navigate';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
@@ -162,6 +162,7 @@ export function ResourceListRenderer({
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
   cachedResultsOnly = false,
 }) {
+  console.log('redner res list');
   const { t } = useTranslation(['translation'], { i18n });
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
