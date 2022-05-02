@@ -17,7 +17,7 @@ import { MessageStrip } from 'fundamental-react';
 const SIDECAR_INJECTION_LABEL = 'sidecar.istio.io/inject';
 const SIDECAR_INJECTION_VALUE = 'false';
 
-function isJobValid(job) {
+function isJobValid(job = {}) {
   const isNameValid = jp.value(job, '$.metadata.name');
 
   const containers = jp.value(job, '$.spec.template.spec.containers') || [];
@@ -35,12 +35,13 @@ export function JobCreate({
   resource: initialJob,
   resourceUrl,
   prefix,
+  ...props
 }) {
   const { t } = useTranslation();
   const { features } = useMicrofrontendContext();
   const istioEnabled = features.ISTIO?.isEnabled;
   const defaultSidecarAnnotations = initialJob
-    ? initialJob?.spec.template.metadata.annotations
+    ? initialJob?.spec?.template?.metadata?.annotations
     : istioEnabled
     ? { [SIDECAR_INJECTION_LABEL]: SIDECAR_INJECTION_VALUE }
     : {};
@@ -85,6 +86,7 @@ export function JobCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="jobs"
       singularName={t(`jobs.name_singular`)}
       resource={job}
@@ -92,7 +94,9 @@ export function JobCreate({
       initialResource={initialJob}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={!initialJob && createJobPresets(namespace, t)}
+      presets={
+        !initialJob && createJobPresets(namespace, t, defaultSidecarAnnotations)
+      }
       createUrl={resourceUrl}
     >
       <K8sNameField

@@ -30,6 +30,12 @@ export function ResourceForm({
   afterCreatedFn,
   className,
   onlyYaml = false,
+
+  toggleFormFn,
+  customSchemaId,
+  autocompletionDisabled,
+  customSchemaUri,
+  readOnly,
 }) {
   const { i18n } = useTranslation();
   const createResource = useCreateResource({
@@ -39,6 +45,7 @@ export function ResourceForm({
     initialResource,
     createUrl,
     afterCreatedFn,
+    toggleFormFn,
   });
 
   const [mode, setMode] = React.useState(
@@ -72,12 +79,15 @@ export function ResourceForm({
       }}
     />
   );
-
   let editor = (
     <Editor
       value={resource}
       setValue={setResource}
       onMount={editor => setActionsEditor(editor)}
+      customSchemaId={customSchemaId}
+      customSchemaUri={customSchemaUri}
+      autocompletionDisabled={autocompletionDisabled}
+      readOnly={readOnly}
     />
   );
   editor = renderEditor

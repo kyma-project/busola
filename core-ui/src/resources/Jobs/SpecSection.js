@@ -79,7 +79,14 @@ export const CronJobSpecSection = ({ value, setValue, ...props }) => {
   );
 };
 
-export const JobSpecSection = ({ value, setValue, readOnly, ...props }) => {
+export const JobSpecSection = ({
+  value: unsafeValue,
+  setValue,
+  readOnly,
+  ...props
+}) => {
+  const value = { template: {}, ...unsafeValue };
+
   const { t } = useTranslation();
 
   return (

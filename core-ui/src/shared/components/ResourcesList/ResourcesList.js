@@ -27,7 +27,7 @@ import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
 
-/* to allow cloning of a resource set the folowing on the resource create component:
+/* to allow cloning of a resource set the following on the resource create component:
  *
  * ResourceCreate.allowCreate = true;
  *
@@ -165,6 +165,8 @@ export function ResourceListRenderer({
   console.log('redner res list');
   const { t } = useTranslation(['translation'], { i18n });
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
+
+  const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     i18n,
@@ -338,6 +340,7 @@ export function ResourceListRenderer({
             resourceType: prettifiedResourceName,
           })
         }
+        getToggleFormFn={getToggleFormFn}
         opened={showEditDialog}
         confirmText={t('common.buttons.create')}
         id={`add-${resourceType}-modal`}
@@ -350,6 +353,7 @@ export function ResourceListRenderer({
               resourceUrl={resourceUrl}
               namespace={namespace}
               refetchList={silentRefetch}
+              toggleFormFn={toggleFormFn}
               {...props}
               {...createFormProps}
             />

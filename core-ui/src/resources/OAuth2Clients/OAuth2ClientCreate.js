@@ -23,6 +23,7 @@ export function OAuth2ClientCreate({
   resourceUrl,
   refetchList,
   setCustomValid,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -32,6 +33,7 @@ export function OAuth2ClientCreate({
 
   return (
     <ResourceForm
+      {...props}
       className="create-oauth2-client-form"
       pluralKind="oauth2clients"
       singularName={t('oauth2-clients.name_singular')}

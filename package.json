@@ -28,7 +28,7 @@
     "dexie": "^3.2.2",
     "dexie-react-hooks": "^1.1.1",
     "file-saver": "^2.0.2",
-    "fundamental-react": "^0.14.1",
+    "fundamental-react": "^0.14.3",
     "fundamental-styles": "^0.19.0",
     "gulp-rename": "^2.0.0",
     "i18next": "^20.3.4",
