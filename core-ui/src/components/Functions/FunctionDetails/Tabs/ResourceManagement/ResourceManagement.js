@@ -77,6 +77,7 @@ export default function ResourcesManagement({ func }) {
     formState: { errors, isValid },
     watch,
     setValue,
+    getValues,
   } = useForm({
     resolver: yupResolver(prepareSchema(t)),
     mode: 'onChange',
@@ -263,6 +264,7 @@ export default function ResourcesManagement({ func }) {
               defaultPreset={defaultValues[inputNames.function.preset]}
               watch={watch}
               comparePresetWithFormValues={compareRuntimeProfileFormValues}
+              formValues={getValues()}
             />
           </LayoutPanel.Body>
         </div>
@@ -283,6 +285,7 @@ export default function ResourcesManagement({ func }) {
               defaultPreset={defaultValues[inputNames.buildJob.preset]}
               watch={watch}
               comparePresetWithFormValues={compareBuildJobProfileFormValues}
+              formValues={getValues()}
             />
           </LayoutPanel.Body>
         </div>
