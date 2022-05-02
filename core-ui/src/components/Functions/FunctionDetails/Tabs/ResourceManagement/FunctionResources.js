@@ -21,6 +21,9 @@ export default function FunctionResources({
   type = 'function',
   setValue = () => void 0,
   defaultPreset = customPreset,
+  watch,
+  comparePresetWithFormValues,
+  formValues,
 }) {
   const { t, i18n } = useTranslation();
   const [currentPreset, setCurrentPreset] = useState(defaultPreset);
@@ -44,9 +47,26 @@ export default function FunctionResources({
     text: t('functions.variable.type.custom'),
     key: customPreset,
   });
+  useEffect(() => {
+    const updatePreset = formValues => {
+      const presetsEntries = Object.entries(presets);
+      for (const [key, preset] of presetsEntries) {
+        if (comparePresetWithFormValues(preset, formValues)) {
+          setCurrentPreset(key);
+          return;
+        }
+      }
+      setCurrentPreset(customPreset);
+    };
+    const subscription = watch(updatePreset);
+    updatePreset(formValues);
+    return () => subscription.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watch, setCurrentPreset, presets]);
 
   async function onChangePreset(selected) {
     const preset = selected.key;
+
     if (preset) {
       if (presets && preset !== customPreset) {
         const values = presets[preset];
@@ -55,7 +75,6 @@ export default function FunctionResources({
         setValue(inputNames.limits.memory, values.limitMemory);
         setValue(inputNames.limits.cpu, values.limitCpu);
       }
-      setCurrentPreset(preset);
     }
   }
 
@@ -74,7 +93,7 @@ export default function FunctionResources({
               <Dropdown
                 disabled={disabledForm}
                 options={presetOptions}
-                selectedKey={defaultPreset}
+                selectedKey={currentPreset}
                 id={inputNames.preset}
                 name={inputNames.preset}
                 onSelect={(_, selected) => onChangePreset(selected)}
@@ -178,7 +197,7 @@ export default function FunctionResources({
                     disabled={disabledForm}
                     className={inputClassName}
                     placeholder={t('functions.details.title.cpu')}
-                    {...register(inputNames.requests.cpu)}
+                    {...register(inputNames.limits.cpu)}
                   />
                   <ErrorMessage errors={errors} field={inputNames.limits.cpu} />
                 </>
