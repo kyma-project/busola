@@ -5,20 +5,22 @@ const configMock = {
   data: {
     config: JSON.stringify({
       config: {
-        navigation: {
-          disabledNodes: [],
-          externalNodes: [
-            {
-              category: 'Category from target cluster',
-              icon: 'course-book',
-              children: [
-                {
-                  label: 'Example label',
-                  link: 'http://test',
-                },
-              ],
-            },
-          ],
+        navigation: { disabledNodes: [] },
+        features: {
+          EXTERNAL_NODES: {
+            nodes: [
+              {
+                category: 'Category from target cluster',
+                icon: 'course-book',
+                children: [
+                  {
+                    label: 'Example label',
+                    link: 'http://test',
+                  },
+                ],
+              },
+            ],
+          },
         },
         storage: 'inMemory',
       },
