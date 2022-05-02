@@ -461,7 +461,7 @@ common:
     update: Update
     view-yaml: View YAML
   create-form:
-    autocomplete-unavailable: Monaco autocompletion unavailable
+    autocomplete-unavailable-error: Monaco autocompletion unavailable. {{error}}.
     choose-preset: Choose option
     editor-error: 'Parse error: {{error}}, previous valid input will be used'
     messages:

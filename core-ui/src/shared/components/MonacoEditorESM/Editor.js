@@ -142,19 +142,18 @@ export function Editor({
           <Spinner />
         </div>
       ) : null}
-      <div className="resource-form__autocomplete">
-        {schemaError || autocompletionDisabled ? (
-          <Tooltip content={`${schemaError}`}>
-            {t('common.create-form.autocomplete-unavailable')}
-          </Tooltip>
-        ) : null}
-      </div>
       <div ref={divRef} className="resource-form__editor" />
-
       <div className="resource-form__legend">
         {error && (
           <MessageStrip type="error" className="fd-margin--sm">
             {t('common.create-form.editor-error', { error })}
+          </MessageStrip>
+        )}
+        {schemaError && (
+          <MessageStrip type="warning" className="fd-margin--sm" dismissible>
+            {t('common.create-form.autocomplete-unavailable-error', {
+              error: schemaError,
+            })}
           </MessageStrip>
         )}
         {markers.length ? (

@@ -46,6 +46,7 @@ export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
           options={options}
           onMount={setEditor}
           autocompletionDisabled
+          readOnly
           {...editorProps}
         />
       </LayoutPanel.Body>
