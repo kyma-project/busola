@@ -113,10 +113,7 @@ export async function fetchBusolaInitData() {
   return await fetchCache
     .subscribe({
       path: config.backendAddress + '/apis',
-      callback: (prev, next) => {
-        console.log(prev, next);
-        reloadNavigation();
-      },
+      callback: reloadNavigation,
       refreshIntervalMs: 5000,
     })
     .then(({ data: res }) => [

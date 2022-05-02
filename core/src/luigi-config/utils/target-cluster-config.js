@@ -20,7 +20,7 @@ export async function loadTargetClusterConfig() {
     path:
       config.backendAddress +
       '/api/v1/namespaces/kube-public/configmaps/busola-config',
-    callback: () => reloadNavigation(),
+    callback: reloadNavigation,
     refreshIntervalMs: 5000,
   });
 }

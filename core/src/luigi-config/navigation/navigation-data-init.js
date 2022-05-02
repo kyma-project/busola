@@ -192,6 +192,7 @@ export async function createNavigation() {
     await saveCARequired();
 
     const clusterName = getActiveClusterName();
+    fetchCache.destroy();
     fetchCache.init({
       getCacheItem: path => loadCacheItem(clusterName, path),
       setCacheItem: (path, item) => saveCacheItem(clusterName, path, item),
