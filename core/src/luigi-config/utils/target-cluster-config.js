@@ -2,46 +2,25 @@ import { fetchCache } from '../fetch-cache';
 import { reloadNavigation } from '../navigation/navigation-data-init';
 import { config } from './../config';
 
-function todo_configmapToDataWeNeed(configmap) {
+export function getTargetClusterConfig() {
   try {
-    return JSON.parse(configmap?.data?.config || '{}') || {};
-  } catch (_) {
+    const cm = fetchCache.getSync(
+      config.backendAddress +
+        '/api/v1/namespaces/kube-public/configmaps/busola-config',
+    );
+    return JSON.parse(cm?.data?.config || '{}') || {};
+  } catch (e) {
+    console.warn('cannot get cluster config', e);
     return {};
   }
 }
 
-export function getTargetClusterConfig() {
-  const cm = fetchCache.getSync(
-    config.backendAddress +
-      '/api/v1/namespaces/kube-public/configmaps/busola-config',
-  );
-  return todo_configmapToDataWeNeed(cm);
-}
-
 export async function loadTargetClusterConfig() {
-  fetchCache.getAndSubscribe({
+  await fetchCache.subscribe({
     path:
       config.backendAddress +
       '/api/v1/namespaces/kube-public/configmaps/busola-config',
-    callback: (prev, next) => {
-      console.log('config changed', prev, next);
-      reloadNavigation();
-    },
+    callback: () => reloadNavigation(),
     refreshIntervalMs: 5000,
   });
-
-  // try {
-  //   const res = await failFastFetch(
-  //     config.backendAddress +
-  //       '/api/v1/namespaces/kube-public/configmaps/busola-config',
-  //     getAuthData(),
-  //   );
-  //   clusterConfig = JSON.parse((await res.json()).data.config);
-  // } catch (e) {
-  //   if (e.statusCode !== 404) {
-  //     // don't warn on Not Found, that's fine
-  //     console.warn(e);
-  //   }
-  //   clusterConfig = {};
-  // }
 }

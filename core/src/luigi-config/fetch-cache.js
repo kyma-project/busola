@@ -1,28 +1,29 @@
 import shortid from 'shortid';
 import { failFastFetch } from './navigation/queries';
 
+const CACHE_KEY = 'busola.cache';
+
 export function loadCacheItem(clusterName, path) {
-  // todo cache key
   try {
-    const cache = JSON.parse(localStorage.getItem('busola.cache')) || {};
+    const cache = JSON.parse(localStorage.getItem(CACHE_KEY)) || {};
     const clusterCache = cache[clusterName] || {};
     return clusterCache[path];
   } catch (e) {
-    console.warn('loadCacheItem', e);
+    console.warn('loadCacheItem failed', e);
     return null;
   }
 }
 
 export function saveCacheItem(clusterName, path, item) {
   try {
-    const cache = JSON.parse(localStorage.getItem('busola.cache')) || {};
+    const cache = JSON.parse(localStorage.getItem(CACHE_KEY)) || {};
     if (!cache[clusterName]) {
       cache[clusterName] = {};
     }
     cache[clusterName][path] = item;
     localStorage.setItem('busola.cache', JSON.stringify(cache));
   } catch (e) {
-    console.warn('saveCacheItem', e);
+    console.warn('saveCacheItem failed', e);
     return null;
   }
 }
@@ -32,56 +33,54 @@ class FetchCache {
     this.subscriptions = {};
   }
   init({ getCacheItem, setCacheItem, fetchOptions = {} }) {
-    console.info('cache init');
     this.getCacheItem = getCacheItem;
     this.setCacheItem = setCacheItem;
     this.fetchOptions = fetchOptions;
 
     for (const sub of Object.values(this.subscriptions || {})) {
-      clearInterval(sub.intervalId);
+      clearInterval(sub.timeoutId);
     }
     this.subscriptions = {};
   }
-  subscribe({ path, callback, refreshIntervalMs = 10000 }) {
-    try {
-      if (!this.subscriptions[path]) {
-        this.subscriptions[path] = { subscribers: [] };
-      }
-      const subscription = this.subscriptions[path];
-      const id = shortid();
-      subscription.subscribers.push({
-        refreshIntervalMs,
-        callback,
-        id,
-      });
-      if (typeof subscription.intervalId === 'undefined') {
-        const timeout = this.minInterval(subscription.subscribers);
-        // todo interval is not precise enough, and it may change with added subscribers - let's use timeout
-
-        subscription.intervalId = setInterval(async () => {
-          try {
-            const updatedData = await this.fetch(path);
-            const hasChanged =
-              JSON.stringify(updatedData) !==
-              JSON.stringify(this.getCacheItem(path));
-
-            if (hasChanged) {
-              for (const sub of subscription.subscribers) {
-                sub.callback(this.getCacheItem(path), updatedData);
-              }
-              // alert('possible null in interval ' + path);
-              this.setCacheItem(path, updatedData);
-            }
-          } catch (e) {
-            console.warn('interval failed', e);
-          }
-        }, timeout);
-      }
-      return id;
-    } catch (e) {
-      console.log('subscribe failed', e);
-      throw e;
+  async subscribe({ path, callback, refreshIntervalMs = 10000 }) {
+    if (!this.subscriptions[path]) {
+      this.subscriptions[path] = { subscribers: [] };
     }
+    const subscription = this.subscriptions[path];
+    const id = shortid();
+    subscription.subscribers.push({
+      refreshIntervalMs,
+      callback,
+      id,
+    });
+
+    const refetch = async () => {
+      try {
+        const updatedData = await this.fetch(path);
+        const hasChanged =
+          JSON.stringify(updatedData) !==
+          JSON.stringify(this.getCacheItem(path));
+
+        if (hasChanged) {
+          for (const sub of subscription.subscribers) {
+            sub.callback(this.getCacheItem(path), updatedData);
+          }
+          this.setCacheItem(path, updatedData);
+        }
+      } catch (e) {
+        console.warn('interval failed', e);
+      }
+
+      const timeout = this.minInterval(subscription.subscribers);
+      subscription.timeoutId = setTimeout(refetch, timeout);
+    };
+
+    if (typeof subscription.timeoutId === 'undefined') {
+      const timeout = this.minInterval(subscription.subscribers);
+      subscription.timeoutId = setTimeout(refetch, timeout);
+    }
+
+    return { subscriptionId: id, data: await this.get(path) };
   }
   unsubscribe(path, id) {
     const subscription = this.subscriptions[path];
@@ -90,8 +89,8 @@ class FetchCache {
       s => s.id !== id,
     );
     if (subscription.subscribers.length === 0) {
-      clearInterval(subscription.intervalId);
-      delete subscription.intervalId;
+      clearInterval(subscription.timeoutId);
+      delete subscription.timeoutId;
     }
   }
   minInterval(subscribers) {
@@ -102,26 +101,17 @@ class FetchCache {
         .sort()[0] || 10000
     );
   }
-  async getAndSubscribe({ path, callback, refreshIntervalMs = 10000 }) {
-    this.subscribe({ path, callback, refreshIntervalMs });
-    return await this.get(path);
-  }
   async get(path) {
-    try {
-      const item = this.getSync(path);
-      if (item !== undefined) {
-        return item;
-      } else {
-        const data = await this.fetch(path);
-        if (!data) {
-          // alert('possible null in get ' + path);
-        }
-        this.setCacheItem(path, data);
-        return data;
+    const item = this.getSync(path);
+    if (item) {
+      return item;
+    } else {
+      const data = await this.fetch(path);
+      if (!data) {
+        // alert('possible null in get ' + path);
       }
-    } catch (e) {
-      console.log('get failed', e);
-      throw e;
+      this.setCacheItem(path, data);
+      return data;
     }
   }
   getSync(path) {
@@ -131,26 +121,17 @@ class FetchCache {
     return this.getCacheItem(path);
   }
   async fetch(path) {
-    if (!this.fetchOptions?.data) {
-      throw new Error('No data to auth');
-    }
-
     try {
       const response = await failFastFetch(path, this.fetchOptions.data);
       return await response.json();
     } catch (e) {
-      debugger;
-      // alert('CORE FETCH FAILED');
-      // alert(e.message)
-      console.log('core error', e);
-      // todo
-      return this.getSync(path);
+      console.warn(e);
+      return;
     }
   }
   destroy() {
-    console.log('destroy');
     for (const sub of Object.values(this.subscriptions || {})) {
-      clearInterval(sub.intervalId);
+      clearInterval(sub.timeoutId);
     }
     this.subscriptions = {};
   }

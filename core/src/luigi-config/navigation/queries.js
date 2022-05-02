@@ -111,7 +111,7 @@ export async function fetchBusolaInitData() {
   const CORE_GROUP = 'v1';
 
   return await fetchCache
-    .getAndSubscribe({
+    .subscribe({
       path: config.backendAddress + '/apis',
       callback: (prev, next) => {
         console.log(prev, next);
@@ -119,7 +119,7 @@ export async function fetchBusolaInitData() {
       },
       refreshIntervalMs: 5000,
     })
-    .then(res => [
+    .then(({ data: res }) => [
       CORE_GROUP,
       ...res.groups.flatMap(group =>
         group.versions.map(version => version.groupVersion),
