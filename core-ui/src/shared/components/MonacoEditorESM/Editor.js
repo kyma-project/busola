@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { useAutocompleteWorker } from './useAutocompleteWorker';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import './Editor.scss';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 export function Editor({
   value,
