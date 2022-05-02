@@ -17,7 +17,6 @@ export function SubscriptionsList({ serviceName, namespace, prefix }) {
     hasDetailsView: true,
     fixedPath: true,
     resourceUrl: `/apis/eventing.kyma-project.io/v1alpha1/namespaces/${namespace}/subscriptions`,
-    apiPath: '/apis/eventing.kyma-project.io/v1alpha1',
     resourceType: 'subscriptions',
     namespace,
     isCompact: true,

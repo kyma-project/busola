@@ -5,8 +5,8 @@ import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 export function BTPResourceStatus({ status, resourceKind }) {
   const { i18n } = useTranslation();
 
-  const conditions = status?.conditions || [];
-  const lastCondition = conditions[conditions.length - 1] || {};
+  const conditions = status.conditions;
+  const lastCondition = conditions[conditions.length - 1];
 
   if (status.ready === 'True' && lastCondition.type === 'Ready') {
     return (

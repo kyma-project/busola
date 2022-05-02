@@ -17,8 +17,6 @@ import {
   inputNames,
   checkReplicasPreset,
   checkResourcesPreset,
-  areCPUsEqual,
-  areMemoriesEqual,
 } from './shared';
 
 import './ResourceManagement.scss';
@@ -40,30 +38,30 @@ function getDefaultFormValues(func) {
       CONFIG.functionResourcesPresets,
     ),
     [inputNames.function.requests.cpu]: parseCpu(
-      func.spec.resources?.requests?.cpu || '',
+      func.spec.resources.requests.cpu || '',
     ),
     [inputNames.function.limits.cpu]: parseCpu(
-      func.spec.resources?.limits?.cpu || '',
+      func.spec.resources.limits.cpu || '',
     ),
     [inputNames.function.requests.memory]:
-      func.spec.resources?.requests?.memory || '',
+      func.spec.resources.requests.memory || '',
     [inputNames.function.limits.memory]:
-      func.spec.resources?.limits?.memory || '',
+      func.spec.resources.limits.memory || '',
 
     [inputNames.buildJob.preset]: checkResourcesPreset(
       func.spec.buildResources,
       CONFIG.buildJobResourcesPresets,
     ),
     [inputNames.buildJob.requests.cpu]: parseCpu(
-      func.spec.buildResources?.requests?.cpu || '',
+      func.spec.buildResources.requests.cpu || '',
     ),
     [inputNames.buildJob.limits.cpu]: parseCpu(
-      func.spec.buildResources?.limits?.cpu || '',
+      func.spec.buildResources.limits.cpu || '',
     ),
     [inputNames.buildJob.requests.memory]:
-      func.spec.buildResources?.requests?.memory || '',
+      func.spec.buildResources.requests.memory || '',
     [inputNames.buildJob.limits.memory]:
-      func.spec.buildResources?.limits?.memory || '',
+      func.spec.buildResources.limits.memory || '',
   };
 }
 
@@ -75,9 +73,7 @@ export default function ResourcesManagement({ func }) {
     register,
     handleSubmit,
     formState: { errors, isValid },
-    watch,
     setValue,
-    getValues,
   } = useForm({
     resolver: yupResolver(prepareSchema(t)),
     mode: 'onChange',
@@ -170,26 +166,6 @@ export default function ResourcesManagement({ func }) {
   const editText = t('functions.details.buttons.edit-configuration');
   const popupMessage = t('functions.create-view.errors.one-field-invalid');
 
-  function compareRuntimeProfileFormValues(preset, formValues) {
-    return (
-      areCPUsEqual(preset.limitCpu, formValues.functionLimitsCpu) &&
-      areMemoriesEqual(preset.limitMemory, formValues.functionLimitsMemory) &&
-      areMemoriesEqual(
-        preset.requestMemory,
-        formValues.functionRequestsMemory,
-      ) &&
-      areCPUsEqual(preset.requestCpu, formValues.functionRequestsCpu)
-    );
-  }
-  function compareBuildJobProfileFormValues(preset, formValues) {
-    return (
-      areCPUsEqual(preset.limitCpu, formValues.buildLimitsCpu) &&
-      areMemoriesEqual(preset.limitMemory, formValues.buildLimitsMemory) &&
-      areMemoriesEqual(preset.requestMemory, formValues.buildRequestsMemory) &&
-      areCPUsEqual(preset.requestCpu, formValues.buildRequestsCpu)
-    );
-  }
-
   function renderConfirmButton() {
     const disabled = isEditMode && !isValid;
     const button = (
@@ -262,9 +238,6 @@ export default function ResourcesManagement({ func }) {
               setValue={setValue}
               type="function"
               defaultPreset={defaultValues[inputNames.function.preset]}
-              watch={watch}
-              comparePresetWithFormValues={compareRuntimeProfileFormValues}
-              formValues={getValues()}
             />
           </LayoutPanel.Body>
         </div>
@@ -283,9 +256,6 @@ export default function ResourcesManagement({ func }) {
               setValue={setValue}
               type="buildJob"
               defaultPreset={defaultValues[inputNames.buildJob.preset]}
-              watch={watch}
-              comparePresetWithFormValues={compareBuildJobProfileFormValues}
-              formValues={getValues()}
             />
           </LayoutPanel.Body>
         </div>

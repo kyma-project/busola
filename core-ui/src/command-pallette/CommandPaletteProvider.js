@@ -24,8 +24,8 @@ export const CommandPaletteProvider = ({ children }) => {
     const { key, metaKey, ctrlKey } = e;
     // for (Edge, Chrome) || (Firefox, Safari)
     const isMac = (navigator.userAgentData?.platform || navigator.platform)
-      ?.toLowerCase()
-      ?.startsWith('mac');
+      .toLowerCase()
+      .startsWith('mac');
     const modifierKeyPressed = (isMac && metaKey) || (!isMac && ctrlKey);
 
     if (key.toLowerCase() === 'k' && modifierKeyPressed) {

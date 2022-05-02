@@ -8,15 +8,8 @@ import {
   normalizeMemory,
   compareCpu,
   compareMemory,
-  areCPUsEqual,
-  areMemoriesEqual,
 } from 'components/Functions/helpers/resources';
 import { CONFIG } from 'components/Functions/config';
-
-export {
-  areCPUsEqual,
-  areMemoriesEqual,
-} from 'components/Functions/helpers/resources';
 
 export const inputClassName = 'fd-input resource_input';
 export const errorClassName = 'error_message';
@@ -326,24 +319,14 @@ export function checkReplicasPreset(min, max, presets) {
   return customPreset;
 }
 
-function areResourcesPresetEqual(functionResources, presetValues) {
-  return (
-    areMemoriesEqual(
-      presetValues?.requestMemory,
-      functionResources?.requests?.memory,
-    ) &&
-    areMemoriesEqual(
-      presetValues?.limitMemory,
-      functionResources?.limits?.memory,
-    ) &&
-    areCPUsEqual(presetValues?.requestCpu, functionResources?.requests?.cpu) &&
-    areCPUsEqual(presetValues?.limitCpu, functionResources?.limits?.cpu)
-  );
-}
-
 export function checkResourcesPreset(functionResources, presets) {
   const possiblePreset = Object.entries(presets).find(([_, values]) => {
-    return areResourcesPresetEqual(functionResources, values);
+    return (
+      values?.requestMemory === functionResources?.requests?.memory &&
+      values?.requestCpu === functionResources?.requests?.cpu &&
+      values?.limitMemory === functionResources?.limits?.memory &&
+      values?.limitCpu === functionResources?.limits?.cpu
+    );
   });
   if (possiblePreset) {
     return possiblePreset[0];

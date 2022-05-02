@@ -29,7 +29,6 @@ export function NamespaceDetails(props) {
   const limitRangesParams = {
     hasDetailsView: false,
     resourceUrl: `/api/v1/namespaces/${props.resourceName}/limitranges`,
-    apiPath: '/api/v1',
     resourceType: 'LimitRanges',
     namespace: props.resourceName,
     isCompact: true,
@@ -42,7 +41,6 @@ export function NamespaceDetails(props) {
   const resourceQuotasParams = {
     hasDetailsView: false,
     resourceUrl: `/api/v1/namespaces/${props.resourceName}/resourcequotas`,
-    apiPath: '/api/v1',
     resourceType: 'ResourceQuotas',
     namespace: props.resourceName,
     isCompact: true,
@@ -57,7 +55,6 @@ export function NamespaceDetails(props) {
   const applicationMappingsParams = {
     hasDetailsView: false,
     resourceUrl: `/apis/applicationconnector.kyma-project.io/v1alpha1/namespaces/${props.resourceName}/applicationmappings`,
-    apiPath: '/apis/applicationconnector.kyma-project.io/v1alpha1',
     resourceType: 'ApplicationMappings',
     namespace: props.resourceName,
     isCompact: true,

@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import shortid from 'shortid';
-import { useFetchCache } from 'useFetchCache'; // todo move that file somewhere else
 
 // allow <n> consecutive requests to fail before displaying error
 const ERROR_TOLERANCY = 2;
@@ -318,136 +317,4 @@ function handleSingleDataReceived(newData, oldData, setDataFn) {
 export const useSingleGet = () => {
   const fetch = useFetch();
   return url => fetch({ relativeUrl: url });
-};
-
-export const useGet3 = ({
-  pollingInterval,
-  resourceType,
-  namespace,
-  apiPath,
-  name,
-}) => {
-  resourceType = resourceType.toLowerCase();
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [cachedResultsOnly, setCachedResultsOnly] = useState(true);
-
-  const { subscribe, unsubscribe, getFromCache } = useFetchCache();
-
-  useEffect(() => {
-    const loadFromCache = async () => {
-      const cacheData = await getFromCache({
-        namespace,
-        resourceType,
-        name,
-      });
-      if (cacheData) {
-        setData(cacheData);
-        setLoading(false);
-      }
-    };
-    loadFromCache();
-
-    const { subscriptionKey, id } = subscribe({
-      apiPath,
-      resourceType,
-      namespace,
-      onData: (data, { hasChanged }) => {
-        console.log('has chagnged get', hasChanged);
-        if (cachedResultsOnly) {
-          // make sure the item is updated after first network call
-          setData(data);
-          setLoading(false);
-          setCachedResultsOnly(false);
-        } else if (hasChanged) {
-          console.log('ITEM data changed');
-          setData(data);
-        }
-      },
-      onError: setError,
-      refreshIntervalMs: pollingInterval,
-      name,
-    });
-    return () => unsubscribe(subscriptionKey, id);
-  }, [setData, apiPath, resourceType, namespace, name]);
-
-  return {
-    data: data?.[0],
-    loading,
-    error,
-    cachedResultsOnly,
-  };
-};
-
-export const useGetList3 = ({
-  pollingInterval,
-  resourceType,
-  namespace,
-  apiPath,
-  labelSelector,
-}) => {
-  resourceType = resourceType.toLowerCase();
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [cachedResultsOnly, setCachedResultsOnly] = useState(true);
-
-  const { subscribe, unsubscribe, getFromCache } = useFetchCache();
-
-  useEffect(() => {
-    const loadFromCache = async () => {
-      const cacheData = await getFromCache({
-        namespace,
-        resourceType,
-        labelSelector,
-      });
-      // console.log('cache', cacheData);
-
-      if (cacheData) {
-        setData(cacheData);
-        setLoading(false);
-      }
-    };
-
-    loadFromCache();
-
-    const { subscriptionKey, id } = subscribe({
-      apiPath,
-      resourceType,
-      namespace,
-      onData: (data, { hasChanged }) => {
-        if (cachedResultsOnly) {
-          // make sure list is updated after first network call
-          setData(data);
-          setLoading(false);
-          setCachedResultsOnly(false);
-        } else if (hasChanged) {
-          console.log('LIST data changed');
-          setData(data);
-        }
-      },
-      onError: setError,
-      refreshIntervalMs: pollingInterval,
-      labelSelector,
-    });
-    return () => {
-      unsubscribe(subscriptionKey, id);
-    };
-  }, [
-    setData,
-    apiPath,
-    resourceType,
-    namespace,
-    setLoading,
-    cachedResultsOnly,
-    setCachedResultsOnly,
-  ]);
-
-  return {
-    data,
-    loading,
-    error,
-    cachedResultsOnly,
-  };
 };

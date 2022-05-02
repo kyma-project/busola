@@ -31,7 +31,6 @@ const SelectorDetails = ({
       namespace={namespace}
       labels={labels}
       filter={filterByLabels}
-      labelSelector={labels}
     />
   );
   return expressions ? (

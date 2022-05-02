@@ -19,10 +19,6 @@ export function createClusterRolePresets(translate, groupVersions) {
   const apiGroups = getApiGroupInputOptions(groupVersions).map(g => g.key);
   return [
     {
-      name: translate('common.labels.default-preset'),
-      value: createClusterRoleTemplate(),
-    },
-    {
       name: translate('roles.templates.all-permissions'),
       value: createClusterRoleTemplate({
         name: 'all-permissions',

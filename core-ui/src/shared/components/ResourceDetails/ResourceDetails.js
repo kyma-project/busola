@@ -9,7 +9,7 @@ import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNot
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useDelete, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
-import { useGet, useGet3 } from 'shared/hooks/BackendAPI/useGet';
+import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
@@ -61,36 +61,26 @@ export function ResourceDetails(props) {
   if (!props.resourceUrl) {
     return <></>; // wait for the context update
   } else {
-    return (
-      <ResourceDetailsRenderer
-        {...props}
-        // todo
-        resourceUrl={props.resourceUrl + props.resourceName}
-      />
-    );
+    return <ResourceDetailsRenderer {...props} />;
   }
 }
 
 function ResourceDetailsRenderer(props) {
-  let { loading = true, error, data: resource, cachedResultsOnly } = useGet3({
-    apiPath: props.apiPath,
-    namespace: props.namespace,
-    name: props.resourceName,
-    resourceType: props.resourceType,
-    pollingInterval: 3000,
-  });
+  const {
+    loading = true,
+    error,
+    data: resource,
+    silentRefetch,
+  } = useGet(props.resourceUrl, { pollingInterval: 3000 });
 
   const updateResourceMutation = useUpdate(props.resourceUrl);
   const deleteResourceMutation = useDelete(props.resourceUrl);
-  const silentRefetch = () => {
-    console.log('todo silentRefetch');
-  };
 
   if (loading) return <Spinner />;
   if (error) {
     const breadcrumbItems = props.breadcrumbs || [
       {
-        name: prettifyNamePlural(props.resourceTitle, props.resourceType),
+        name: prettifyNamePlural(props.resourceTitle || props.resourceType),
         path: '/',
         fromContext: props.resourceType.toLowerCase(),
       },
@@ -156,7 +146,6 @@ function Resource({
   resourceTitle,
   resourceGraphConfig,
 }) {
-  console.log('render, resourceKind:', resource.kind);
   const { t } = useTranslation(['translation'], { i18n });
   const prettifiedResourceKind = prettifyNameSingular(
     resourceTitle,

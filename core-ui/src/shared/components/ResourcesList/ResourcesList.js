@@ -9,7 +9,7 @@ import * as jp from 'jsonpath';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { navigateToDetails } from 'shared/hooks/navigate';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
-import { useGetList3 } from 'shared/hooks/BackendAPI/useGet';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { navigateToResource } from 'shared/hooks/navigate';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
@@ -25,7 +25,6 @@ import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
-import pluralize from 'pluralize';
 
 /* to allow cloning of a resource set the following on the resource create component:
  *
@@ -98,25 +97,18 @@ function Resources(props) {
     resourceName,
     resourceType,
     filter,
-    namespace,
-    apiPath,
+    resourceUrl,
     skipDataLoading,
-    labelSelector,
   } = props;
   useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
 
-  const { loading, error, data: resources, cachedResultsOnly } = useGetList3({
-    apiPath,
-    namespace,
-    pollingInterval: 3000,
-    skip: skipDataLoading, // todo what does it mean
-    filter,
-    resourceType,
-    labelSelector,
-  });
-  const silentRefetch = () => {
-    console.log('todo silent refetch');
-  };
+  const { loading, error, data: resources, silentRefetch } = useGetList(filter)(
+    resourceUrl,
+    {
+      pollingInterval: 3000,
+      skip: skipDataLoading,
+    },
+  );
 
   return (
     <ResourceListRenderer
@@ -124,7 +116,6 @@ function Resources(props) {
       error={error}
       resources={resources}
       silentRefetch={silentRefetch}
-      cachedResultsOnly={cachedResultsOnly}
       {...props}
     />
   );
@@ -160,9 +151,7 @@ export function ResourceListRenderer({
   showSearchField = true,
   allowSlashShortcut,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
-  cachedResultsOnly = false,
 }) {
-  console.log('redner res list');
   const { t } = useTranslation(['translation'], { i18n });
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 
@@ -368,7 +357,7 @@ export function ResourceListRenderer({
         resourceUrl={`${resourceUrl}/${nameSelector(activeResource)}`}
       />
       <GenericList
-        title={showTitle ? title || pluralize(prettifiedResourceName) : null}
+        title={showTitle ? title || prettifiedResourceName : null}
         textSearchProperties={[
           'metadata.name',
           'metadata.namespace',
@@ -388,7 +377,6 @@ export function ResourceListRenderer({
         testid={testid}
         currentlyEditedResourceUID={currentlyEditedResourceUID}
         i18n={i18n}
-        displayingCachedResults={cachedResultsOnly}
       />
     </>
   );

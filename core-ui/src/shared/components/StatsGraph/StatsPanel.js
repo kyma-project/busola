@@ -81,7 +81,6 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
       ...props,
     },
   );
-
   return (
     <>
       {!error1 && !error2 ? (
@@ -155,65 +154,21 @@ export function SingleMetricMultipeGraph({
   );
 }
 
-const getGraphOptions = type => {
-  switch (type) {
-    case 'pod':
-      return ['cpu', 'memory', 'network'];
-    case 'cluster':
-      return ['cpu', 'memory', 'network', 'nodes'];
-    case 'pvc':
-      return ['pvc-usage'];
-    default:
-      return null;
-  }
-};
-
-const getDualGraphValues = (metric, t) => {
-  switch (metric) {
-    case 'pvc-usage':
-      return {
-        metric1: 'pvc-used-space',
-        metric2: 'pvc-free-space',
-        labels: [t('graphs.free-space'), t('graphs.used-space')],
-        className: 'pvc-usage',
-      };
-    case 'network':
-      return {
-        metric1: 'network-up',
-        metric2: 'network-down',
-        labels: [t('graphs.network-up'), t('graphs.network-down')],
-        className: 'network',
-      };
-    default:
-      console.error(`You need to declare dual graph values for ${metric}!`);
-      return {};
-  }
-};
-
-export function StatsPanel({
-  type,
-  mode = 'single',
-  defaultMetric = 'cpu',
-  ...props
-}) {
+export function StatsPanel({ type, mode = 'single', ...props }) {
   const { features } = useMicrofrontendContext();
   const timeSpans = {
     '1h': 60 * 60,
     '3h': 3 * 60 * 60,
     '6h': 6 * 60 * 60,
-    '1d': 24 * 60 * 60,
-    '2d': 2 * 24 * 60 * 60,
+    '24h': 24 * 60 * 60,
     '7d': 7 * 24 * 60 * 60,
   };
-  const dualGraphs = ['network', 'pvc-usage'];
-  const longerTimeSpansGraphs = ['pvc-usage', 'nodes'];
-  const [metric, setMetric] = useState(defaultMetric);
+  const [metric, setMetric] = useState('cpu');
 
-  const visibleTimeSpans = longerTimeSpansGraphs.includes(metric)
-    ? ['1d', '2d', '7d']
-    : ['1h', '3h', '6h'];
-
+  const visibleTimeSpans =
+    metric === 'nodes' ? ['6h', '24h', '7d'] : ['1h', '3h', '6h'];
   const [timeSpan, setTimeSpan] = useState(visibleTimeSpans[0]);
+
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -224,23 +179,23 @@ export function StatsPanel({
     return '';
   }
 
-  const graphOptions = getGraphOptions(type);
+  const graphOptions =
+    type === 'pod'
+      ? ['cpu', 'memory', 'network']
+      : ['cpu', 'memory', 'network', 'nodes'];
+
   return (
     <LayoutPanel className="fd-margin--md stats-panel">
       <LayoutPanel.Header>
         <LayoutPanel.Filters>
-          {graphOptions?.length === 1 ? (
-            <LayoutPanel.Head title={t(`graphs.${graphOptions[0]}`)} />
-          ) : (
-            <Dropdown
-              selectedKey={metric}
-              onSelect={(e, val) => setMetric(val.key)}
-              options={graphOptions?.map(option => ({
-                key: option,
-                text: t(`graphs.${option}`),
-              }))}
-            />
-          )}
+          <Dropdown
+            selectedKey={metric}
+            onSelect={(e, val) => setMetric(val.key)}
+            options={graphOptions.map(option => ({
+              key: option,
+              text: t(`graphs.${option}`),
+            }))}
+          />
         </LayoutPanel.Filters>
         <LayoutPanel.Actions>
           <ButtonSegmented>
@@ -258,31 +213,34 @@ export function StatsPanel({
         </LayoutPanel.Actions>
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        {!dualGraphs.includes(metric) &&
-          (mode === 'multiple' ? (
-            <SingleMetricMultipeGraph
-              type={type}
-              mode={mode}
-              metric={metric}
-              className={metric}
-              timeSpan={timeSpans[timeSpan]}
-              {...props}
-            />
-          ) : (
-            <SingleGraph
-              type={type}
-              mode={mode}
-              metric={metric}
-              className={metric}
-              timeSpan={timeSpans[timeSpan]}
-              {...props}
-            />
-          ))}
-        {dualGraphs.includes(metric) && (
+        {mode === 'multiple' && metric !== 'network' && (
+          <SingleMetricMultipeGraph
+            type={type}
+            mode={mode}
+            metric={metric}
+            className={metric}
+            timeSpan={timeSpans[timeSpan]}
+            {...props}
+          />
+        )}
+        {mode !== 'multiple' && metric !== 'network' && (
+          <SingleGraph
+            type={type}
+            mode={mode}
+            metric={metric}
+            className={metric}
+            timeSpan={timeSpans[timeSpan]}
+            {...props}
+          />
+        )}
+        {metric === 'network' && (
           <DualGraph
             type={type}
+            metric1={'network-up'}
+            metric2={'network-down'}
+            className={metric}
             timeSpan={timeSpans[timeSpan]}
-            {...getDualGraphValues(metric, t)}
+            labels={[t('graphs.network-up'), t('graphs.network-down')]}
             {...props}
           />
         )}

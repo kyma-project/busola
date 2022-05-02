@@ -4,6 +4,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { createPatch } from 'rfc6902';
 
 import extractErrors from 'shared/errorExtractor';
+import { getResourceUrl } from 'shared/helpers';
 
 export const UPDATE_TYPE = {
   GENERAL_CONFIGURATION: 'GENERAL_CONFIGURATION',
@@ -31,7 +32,7 @@ export const useUpdateFunction = ({
   }
 
   async function handleUpdateFunction(updatedData, userCallback = () => {}) {
-    const url = `/apis/serverless.kyma-project.io/v1alpha1/namespaces/${func.metadata.namespace}/functions/${func.metadata.name}`;
+    const url = getResourceUrl();
 
     try {
       const newFunction = {

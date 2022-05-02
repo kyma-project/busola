@@ -57,15 +57,10 @@ export function createContainerTemplate() {
   };
 }
 
-export function createJobPresets(namespace, translate, templateAnnotations) {
+export function createJobPresets(namespace, translate) {
   return [
     {
       name: translate('common.labels.default-preset'),
-      value: createJobTemplate(namespace, templateAnnotations),
-    },
-
-    {
-      name: 'Hello',
       value: {
         apiVersion: 'batch/v1',
         kind: 'Job',
@@ -100,18 +95,10 @@ export function createJobPresets(namespace, translate, templateAnnotations) {
   ];
 }
 
-export function createCronJobPresets(
-  namespace,
-  translate,
-  templateAnnotations,
-) {
+export function createCronJobPresets(namespace, translate) {
   return [
     {
       name: translate('common.labels.default-preset'),
-      value: createCronJobTemplate(namespace, templateAnnotations),
-    },
-    {
-      name: 'Hello',
       value: {
         apiVersion: 'batch/v1beta1',
         kind: 'CronJob',

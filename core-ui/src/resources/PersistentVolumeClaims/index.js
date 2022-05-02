@@ -25,6 +25,6 @@ export const resourceGraphConfig = (t, context) => ({
   networkFlowLevel: 1,
   matchers: {
     StorageClass: (pvc, sc) => pvc.spec.storageClassName === sc.metadata.name,
-    PersistentVolume: (pvc, pv) => pvc.spec.volumeName === pv.metadata.name,
+    PersistentVolume: (pvc, pv) => (pvc.spec.volumeName = pv.metadata.name),
   },
 });

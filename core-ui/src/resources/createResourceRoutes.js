@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { Route, useParams } from 'react-router-dom';
-import { getResourceApiPath, getResourceUrl } from 'shared/helpers';
+import { getResourceUrl } from 'shared/helpers';
 import { useTranslation } from 'react-i18next';
 import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
 
@@ -31,7 +31,6 @@ export const usePrepareListProps = (resourceType, resourceI18Key) => {
     namespace: routerParams.namespaceId,
     i18n,
     allowSlashShortcut: true,
-    apiPath: getResourceApiPath(),
   };
 };
 
@@ -40,14 +39,10 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
   const { resourceName, namespaceId } = useParams();
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
-  // replace resourceName at the end - we have it already in params
-  const resourceUrl = getResourceUrl().replace(
-    new RegExp(resourceName + '$'),
-    '',
-  );
+  const resourceUrl = getResourceUrl();
 
-  const decodedResourceName = decodeURIComponent(resourceName);
   const decodedResourceUrl = decodeURIComponent(resourceUrl);
+  const decodedResourceName = decodeURIComponent(resourceName);
 
   const context = useMicrofrontendContext();
   if (!savedResourceGraph) {
@@ -63,7 +58,6 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
     readOnly: queryParams.get('readOnly') === 'true',
     resourceGraphConfig: savedResourceGraph,
     i18n,
-    apiPath: getResourceApiPath(),
   };
 };
 
