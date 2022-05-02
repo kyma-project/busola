@@ -94,7 +94,9 @@ export function JobCreate({
       initialResource={initialJob}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={!initialJob && createJobPresets(namespace, t)}
+      presets={
+        !initialJob && createJobPresets(namespace, t, defaultSidecarAnnotations)
+      }
       createUrl={resourceUrl}
     >
       <K8sNameField

@@ -98,7 +98,10 @@ export function CronJobCreate({
       setResource={setCronJob}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={!initialCronJob && createCronJobPresets(namespace, t)}
+      presets={
+        !initialCronJob &&
+        createCronJobPresets(namespace, t, defaultSidecarAnnotations)
+      }
       createUrl={resourceUrl}
     >
       <K8sNameField
