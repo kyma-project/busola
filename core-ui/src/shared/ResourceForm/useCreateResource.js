@@ -16,7 +16,6 @@ export function useCreateResource({
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
-
   const postRequest = usePost();
   const patchRequest = useUpdate();
 

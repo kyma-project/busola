@@ -26,9 +26,17 @@ export function useDeleteResource({
 
   const prettifiedResourceName = prettifyNameSingular(undefined, resourceType);
 
+  const prepareUrl = path => {
+    const fixedPath = path?.split('?')?.[0];
+    const nameIndex = fixedPath.lastIndexOf('/');
+    const urlPrefix = fixedPath.substring(0, nameIndex);
+    const resourceName = fixedPath.substring(nameIndex + 1);
+    const encodedName = encodeURIComponent(resourceName);
+    return `${urlPrefix}/${encodedName}`;
+  };
+
   const performDelete = async (resource, resourceUrl, deleteFn) => {
-    const withoutQueryString = path => path?.split('?')?.[0];
-    const url = withoutQueryString(resourceUrl);
+    const url = prepareUrl(resourceUrl);
 
     LuigiClient.sendCustomMessage({
       id: 'busola.dontConfirmDelete',
