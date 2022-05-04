@@ -74,41 +74,46 @@ export function createNamespacesList(rawNamespaceNames) {
   return namespaces;
 }
 
-export const addExternalNodes = externalNodes => {
-  if (!externalNodes || externalNodes.length === 0) return [];
+export const addExternalNodes = externalNodesFeature => {
+  if (externalNodesFeature?.isEnabled === false) return;
+
   let navigationNodes = [];
-
-  externalNodes.forEach(node => {
-    const { category = 'External Links', icon = 'action', children } = node;
-    if (!children || children.length === 0) return;
-    navigationNodes = [
-      ...navigationNodes,
-      {
-        category: {
-          label: category,
-          icon,
-          collapsible: true,
-        },
-        pathSegment: `${category.replace(' ', '_')}_placeholder`,
-        hideFromNav: false,
-      },
-    ];
-
-    children.forEach(child => {
-      const { label, link } = child;
+  try {
+    (externalNodesFeature?.nodes || []).forEach(node => {
+      const { category = 'External Links', icon = 'action', children } = node;
+      if (!children || children.length === 0) return;
       navigationNodes = [
         ...navigationNodes,
         {
-          label,
-          category,
-          viewUrl: '',
-          externalLink: {
-            url: link,
+          category: {
+            label: category,
+            icon,
+            collapsible: true,
           },
+          pathSegment: `${category.replace(' ', '_')}_placeholder`,
+          hideFromNav: false,
         },
       ];
+
+      children.forEach(child => {
+        const { label, link } = child;
+        navigationNodes = [
+          ...navigationNodes,
+          {
+            label,
+            category,
+            viewUrl: '',
+            externalLink: {
+              url: link,
+            },
+          },
+        ];
+      });
     });
-  });
+  } catch (e) {
+    console.warn('Cannot setup externalNodes', e);
+    return [];
+  }
 
   return navigationNodes;
 };
