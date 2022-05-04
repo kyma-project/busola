@@ -1,9 +1,8 @@
-import LuigiClient from '@luigi-project/client';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useTranslation } from 'react-i18next';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
+import { navigateToDetails } from 'shared/hooks/navigate';
 import { createPatch } from 'rfc6902';
 
 export function useCreateResource({
@@ -17,7 +16,7 @@ export function useCreateResource({
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
-  const { namespaceId } = useMicrofrontendContext();
+
   const postRequest = usePost();
   const patchRequest = useUpdate();
 
@@ -34,17 +33,7 @@ export function useCreateResource({
         },
       ),
     });
-    if (!isEdit) {
-      if (namespaceId) {
-        LuigiClient.linkManager()
-          .fromContext('namespace')
-          .navigate(
-            `/${pluralKind.toLowerCase()}/details/${resource.metadata.name}`,
-          );
-      } else {
-        LuigiClient.linkManager().navigate(`details/${resource.metadata.name}`);
-      }
-    }
+    if (!isEdit) navigateToDetails(pluralKind, resource.metadata.name);
   };
 
   return async e => {
