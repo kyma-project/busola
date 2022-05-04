@@ -13,15 +13,13 @@ export function Editor({
   setValue,
   readOnly,
   language = 'yaml',
-  onChange,
   onMount,
   customSchemaId,
   autocompletionDisabled,
   customSchemaUri,
   height,
-  options,
 }) {
-  const descriptor = useRef(Uri);
+  const descriptor = useRef(new Uri());
   const { t } = useTranslation();
   const [error, setError] = useState('');
   const [markers, setMarkers] = useState([]);
@@ -75,7 +73,9 @@ export function Editor({
       theme: editorTheme,
       fixedOverflowWidgets: true,
       readOnly: readOnly,
-      ...options,
+      scrollbar: {
+        alwaysConsumeMouseWheel: false,
+      },
     });
 
     if (typeof onMount === 'function') {
@@ -86,25 +86,31 @@ export function Editor({
       () => {
         const editorValue = editorRef.current.getValue();
 
-        // if (typeof onChange === 'function') {
-        //   // console.log(editorValue);
-        //   // onChange(editorValue);
-        // }
+        const updateState = (value, setErr, setVal) => {
+          if (typeof value !== 'object') {
+            setErr(t('common.create-form.object-required'));
+            return false;
+          }
+          setVal(value);
+          setErr(null);
+          return true;
+        };
 
         if (valueRef.current !== editorValue) {
           try {
-            let parsed = {};
-            if (language === 'yaml') {
-              parsed = jsyaml.load(editorValue);
-            } else if (language === 'json') {
-              parsed = JSON.parse(editorValue);
+            switch (language) {
+              case 'javascript':
+              case 'typescript':
+              case 'json':
+                setValue(editorValue);
+                setError(null);
+                break;
+              case 'yaml':
+                updateState(jsyaml.load(editorValue), setError, setValue);
+                break;
+              default:
+                break;
             }
-            if (typeof parsed !== 'object') {
-              setError(t('common.create-form.object-required'));
-              return;
-            }
-            setValue(parsed);
-            setError(null);
           } catch ({ message }) {
             // get the message until the newline
             setError(message.substr(0, message.indexOf('\n')));
@@ -118,7 +124,6 @@ export function Editor({
       editor.getModel(descriptor.current)?.dispose();
       editorRef.current.dispose();
     };
-    //options, onChange missing
   }, [
     editorTheme,
     setAutocompleteOptions,

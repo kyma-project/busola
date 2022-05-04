@@ -9,6 +9,7 @@ import { ResourceFormWrapper } from './Wrapper';
 import { Presets } from './Presets';
 import { Editor } from '../fields/Editor';
 import { useCreateResource } from '../useCreateResource';
+import * as jp from 'jsonpath';
 
 import './ResourceForm.scss';
 
@@ -22,7 +23,6 @@ export function ResourceForm({
   onChange,
   formElementRef,
   children,
-  renderEditor,
   createUrl,
   presets,
   onPresetSelected,
@@ -78,20 +78,11 @@ export function ResourceForm({
       }}
     />
   );
-  let editor = (
-    <Editor
-      value={resource}
-      setValue={setResource}
-      onMount={setActionsEditor}
-      customSchemaId={customSchemaId}
-      customSchemaUri={customSchemaUri}
-      autocompletionDisabled={autocompletionDisabled}
-      readOnly={readOnly}
-    />
+
+  // save initial template values in case user deletes apiVersion or kind. This creates a key for corresponding JSON Schema
+  const resourceSchemaId = useRef(
+    `${jp.value(resource, `$.apiVersion`)}/${jp.value(resource, `$.kind`)}`,
   );
-  editor = renderEditor
-    ? renderEditor({ defaultEditor: editor, Editor })
-    : editor;
 
   return (
     <section className={classnames('resource-form', className)}>
@@ -118,7 +109,15 @@ export function ResourceForm({
               saveHidden
               i18n={i18n}
             />
-            {editor}
+            <Editor
+              value={resource}
+              setValue={setResource}
+              onMount={setActionsEditor}
+              customSchemaId={customSchemaId || resourceSchemaId.current}
+              customSchemaUri={customSchemaUri}
+              autocompletionDisabled={autocompletionDisabled}
+              readOnly={readOnly}
+            />
           </>
         )}
         {/* always keep the advanced form to ensure validation */}
