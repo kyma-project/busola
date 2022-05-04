@@ -22,6 +22,14 @@ window.MonacoEnvironment = {
           ),
           { type: 'module' },
         );
+      case 'javascript':
+      case 'typescript':
+        return new Worker(
+          new URL(
+            'monaco-editor/esm/vs/language/typescript/ts.worker',
+            import.meta.url,
+          ),
+        );
       default:
         throw new Error(`Unknown label ${label}`);
     }
@@ -120,6 +128,7 @@ export function useAutocompleteWorker({
         },
       ],
     });
+
     return {
       modelUri,
     };

@@ -94,4 +94,4 @@ function EditorUMD({
 }
 
 const isESM = Luigi.getContext().features?.MONACO_AUTOCOMPLETION?.isEnabled;
-export const Editor = isESM ? EditorESM : EditorUMD;
+export const Editor = isESM || true ? EditorESM : EditorUMD;

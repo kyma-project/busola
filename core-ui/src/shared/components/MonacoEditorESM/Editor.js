@@ -13,11 +13,13 @@ export function Editor({
   setValue,
   readOnly,
   language = 'yaml',
+  onChange,
   onMount,
   customSchemaId,
   autocompletionDisabled,
   customSchemaUri,
   height,
+  options,
 }) {
   const descriptor = useRef(Uri);
   const { t } = useTranslation();
@@ -26,7 +28,9 @@ export function Editor({
   const { editorTheme } = useTheme();
 
   const divRef = useRef(null);
-  const valueRef = useRef(jsyaml.dump(value, { noRefs: true }));
+  const valueRef = useRef(
+    language === 'yaml' ? jsyaml.dump(value, { noRefs: true }) : value,
+  );
   const editorRef = useRef(null);
   const {
     setAutocompleteOptions,
@@ -40,6 +44,7 @@ export function Editor({
     customSchemaUri,
     readOnly,
   });
+
   useEffect(() => {
     const onDidChangeMarkers = editor.onDidChangeMarkers(markers => {
       if (markers.length) {
@@ -57,7 +62,6 @@ export function Editor({
 
   useEffect(() => {
     const { modelUri } = setAutocompleteOptions();
-
     descriptor.current = modelUri;
     const model =
       editor.getModel(modelUri) ||
@@ -66,11 +70,12 @@ export function Editor({
     editorRef.current = editor.create(divRef.current, {
       model: model,
       automaticLayout: true,
-      language: 'yaml',
+      language: language,
       fontSize: 15,
       theme: editorTheme,
       fixedOverflowWidgets: true,
       readOnly: readOnly,
+      ...options,
     });
 
     if (typeof onMount === 'function') {
@@ -80,6 +85,11 @@ export function Editor({
     const onDidChangeModelContent = editorRef.current.onDidChangeModelContent(
       () => {
         const editorValue = editorRef.current.getValue();
+
+        // if (typeof onChange === 'function') {
+        //   // console.log(editorValue);
+        //   // onChange(editorValue);
+        // }
 
         if (valueRef.current !== editorValue) {
           try {
@@ -105,10 +115,10 @@ export function Editor({
 
     return () => {
       onDidChangeModelContent.dispose();
-
-      editor.getModel(descriptor.current).dispose();
+      editor.getModel(descriptor.current)?.dispose();
       editorRef.current.dispose();
     };
+    //options, onChange missing
   }, [
     editorTheme,
     setAutocompleteOptions,
@@ -155,7 +165,7 @@ export function Editor({
             })}
           </MessageStrip>
         )}
-        {markers.length ? (
+        {!autocompletionDisabled && markers.length ? (
           <div>
             <MessageStrip type="warning" className="fd-margin--sm">
               {markers.map(m => (

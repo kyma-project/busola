@@ -1,12 +1,11 @@
 import React, { useRef, useEffect } from 'react';
-import { DiffEditor } from 'shared/components/MonacoEditor/MonacoEditor';
 import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
+import { Editor as MEESM } from 'shared/components/MonacoEditorESM/Editor';
 import { useTheme } from 'shared/contexts/ThemeContext';
 
 export default function Editor({
   id,
-  language = 'javascript',
-  showDiff = false,
+  language = '',
   originalValue = '',
   value = '',
   controlledValue = '',
@@ -52,45 +51,36 @@ export default function Editor({
         'Could not apply IntersectionObserver to code editor. Visibility problems may occur.',
       );
     } // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showDiff]);
+  }, []);
 
-  function handleDiffEditorDidMount(editor) {
-    monacoEditorInstance.current = editor;
-    const { modified } = editor.getModel();
-
-    subscription.current = modified.onDidChangeContent(_ => {
-      setValue(modified.getValue());
-      debouncedCallback();
-    });
-  }
-
-  function handleControlledChange(value) {
-    setValue(value);
-    setControlledValue(value);
-    debouncedCallback();
-  }
-
-  if (showDiff) {
-    return (
-      <div className="diff-editor" ref={editorContainer}>
-        <DiffEditor
-          id={id}
-          height="30em"
-          language={language}
-          theme={editorTheme}
-          original={originalValue}
-          modified={controlledValue}
-          onMount={handleDiffEditorDidMount}
-        />
-      </div>
-    );
-  }
+  const handleControlledChange = React.useCallback(
+    value => {
+      // setValue(value);
+      // setControlledValue(value);
+      // debouncedCallback();
+    },
+    [debouncedCallback, setValue, setControlledValue],
+  );
 
   return (
     <div className="controlled-editor" ref={editorContainer}>
-      <MonacoEditor
+      {/*<MonacoEditor*/}
+      {/*  onMount={editor => (monacoEditorInstance.current = editor)}*/}
+      {/*  id={id}*/}
+      {/*  height="30em"*/}
+      {/*  language={language}*/}
+      {/*  theme={editorTheme}*/}
+      {/*  value={controlledValue}*/}
+      {/*  options={{*/}
+      {/*    scrollbar: {*/}
+      {/*      alwaysConsumeMouseWheel: false,*/}
+      {/*    },*/}
+      {/*  }}*/}
+      {/*  onChange={handleControlledChange}*/}
+      {/*/>*/}
+      <MEESM
+        autocompletionDisabled
         onMount={editor => (monacoEditorInstance.current = editor)}
-        id={id}
         height="30em"
         language={language}
         theme={editorTheme}
@@ -100,6 +90,7 @@ export default function Editor({
             alwaysConsumeMouseWheel: false,
           },
         }}
+        customSchemaId={id}
         onChange={handleControlledChange}
       />
     </div>
