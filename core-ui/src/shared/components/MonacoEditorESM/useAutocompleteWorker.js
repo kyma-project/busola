@@ -58,11 +58,14 @@ export function useAutocompleteWorker({
   const fetch = useSingleGet();
 
   const { apiVersion, kind } = value;
-  // this gets calculated only once, to fetch the json validation schema
+  // schemaId gets calculated only once, to find the json validation schema by a key
   // it means each supported resource must have apiVersion and kind initially defined
   // if it's not possible, pass the additional prop customSchemaId
   const [schemaId] = useState(customSchemaId || `${apiVersion}/${kind}`);
+
   useEffect(() => {
+    // fetch OpenAPI and parse it to JSON Schemas (this is an expensive operation passed to a web worker)
+
     if (autocompletionDisabled) {
       setLoading(false);
       return;
@@ -81,6 +84,11 @@ export function useAutocompleteWorker({
           .then(res => res.json())
           .then(data => {
             schemasWorker.postMessage(['initialize', data]);
+          })
+          .catch(err => {
+            console.error(err);
+            setError(new Error("Server didn't send specification."));
+            setLoading(false);
           });
         return;
       }
@@ -108,6 +116,9 @@ export function useAutocompleteWorker({
     // eslint-disable-next-line
   }, [schemaId]);
 
+  /**
+   * Call this before initializing Monaco. This function alters monaco global config to set up JSON-based autocompletion.
+   */
   const setAutocompleteOptions = useCallback(() => {
     const modelUri = Uri.parse(schemaId);
     activeSchemaPath = modelUri.path;

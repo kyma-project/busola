@@ -14,9 +14,9 @@ export function Editor({
   readOnly,
   language = 'yaml',
   onMount,
-  customSchemaId,
+  customSchemaId, // custom key to match the json schema
   autocompletionDisabled,
-  customSchemaUri,
+  customSchemaUri, // custom link to be displayed in the autocompletion tooltips
   height,
 }) {
   const descriptor = useRef(new Uri());
@@ -30,6 +30,7 @@ export function Editor({
     language === 'yaml' ? jsyaml.dump(value, { noRefs: true }) : value,
   );
   const editorRef = useRef(null);
+
   const {
     setAutocompleteOptions,
     activeSchemaPath,
@@ -44,6 +45,10 @@ export function Editor({
   });
 
   useEffect(() => {
+    // show warnings in a message strip
+    if (autocompletionDisabled) {
+      return;
+    }
     const onDidChangeMarkers = editor.onDidChangeMarkers(markers => {
       if (markers.length) {
         const descriptiveMarkers = editor.getModelMarkers({
@@ -56,15 +61,20 @@ export function Editor({
     return () => {
       onDidChangeMarkers.dispose();
     };
-  }, [setMarkers]);
+  }, [setMarkers, autocompletionDisabled]);
 
   useEffect(() => {
+    // setup Monaco editor and pass value updates
+
+    // calling this function sets up autocompletion
     const { modelUri } = setAutocompleteOptions();
     descriptor.current = modelUri;
+
     const model =
       editor.getModel(modelUri) ||
       editor.createModel(valueRef.current, language, modelUri);
 
+    // create editor and assign model with value and autocompletion
     editorRef.current = editor.create(divRef.current, {
       model: model,
       automaticLayout: true,
@@ -82,6 +92,7 @@ export function Editor({
       onMount(editorRef.current);
     }
 
+    // update parent component state
     const onDidChangeModelContent = editorRef.current.onDidChangeModelContent(
       () => {
         const editorValue = editorRef.current.getValue();
@@ -135,6 +146,8 @@ export function Editor({
   ]);
 
   useEffect(() => {
+    // refresh model on editor focus. Needed for cases when multiple editors are open simultaneously
+
     const onDidFocusEditorText = editorRef.current.onDidFocusEditorText(() => {
       if (activeSchemaPath !== descriptor.current.path) {
         setAutocompleteOptions();
@@ -170,7 +183,7 @@ export function Editor({
             })}
           </MessageStrip>
         )}
-        {!autocompletionDisabled && markers.length ? (
+        {markers.length ? (
           <div>
             <MessageStrip type="warning" className="fd-margin--sm">
               {markers.map(m => (
