@@ -107,16 +107,6 @@ export function Editor({
       () => {
         const editorValue = editorRef.current.getValue();
 
-        const updateState = (value, setErr, setVal) => {
-          if (typeof value !== 'object') {
-            setErr(t('common.create-form.object-required'));
-            return false;
-          }
-          setVal(value);
-          setErr(null);
-          return true;
-        };
-
         if (valueRef.current !== editorValue) {
           try {
             switch (language) {
@@ -127,14 +117,18 @@ export function Editor({
                 setError(null);
                 break;
               case 'yaml':
-                updateState(
-                  multipleYamls
-                    ? jsyaml.loadAll(editorValue)
-                    : jsyaml.load(editorValue),
-                  setError,
-                  setValue,
-                );
+                const parsed = multipleYamls
+                  ? jsyaml.loadAll(editorValue)
+                  : jsyaml.load(editorValue);
+
+                if (typeof parsed !== 'object') {
+                  setError(t('common.create-form.object-required'));
+                  break;
+                }
+                setValue(parsed);
+                setError(null);
                 break;
+
               default:
                 break;
             }
@@ -156,7 +150,7 @@ export function Editor({
     setAutocompleteOptions,
     language,
     multipleYamls,
-    // setValue,
+    setValue,
     t,
     readOnly,
     onMount,
