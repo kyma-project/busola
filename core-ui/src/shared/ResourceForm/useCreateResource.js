@@ -2,9 +2,8 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
-import { navigateToDetails } from 'shared/hooks/navigate';
+import { navigateToResource } from 'shared/hooks/navigate';
 import { createPatch } from 'rfc6902';
-
 export function useCreateResource({
   singularName,
   pluralKind,
@@ -32,7 +31,7 @@ export function useCreateResource({
         },
       ),
     });
-    if (!isEdit) navigateToDetails(pluralKind, resource.metadata.name);
+    if (!isEdit) navigateToResource(resource);
   };
 
   return async e => {

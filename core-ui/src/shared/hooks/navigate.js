@@ -87,7 +87,9 @@ export function navigateToResource(resource) {
     kind,
   } = resource;
 
-  let path = `${pluralize(kind.toLowerCase())}/details/${name}`;
+  let path = `${pluralize(kind.toLowerCase())}/details/${encodeURIComponent(
+    name,
+  )}`;
   if (namespace) {
     path = `namespaces/${namespace}/${path}`;
   }
