@@ -82,7 +82,7 @@ export function ResourceForm({
     <Editor
       value={resource}
       setValue={setResource}
-      onMount={editor => setActionsEditor(editor)}
+      onMount={setActionsEditor}
       customSchemaId={customSchemaId}
       customSchemaUri={customSchemaUri}
       autocompletionDisabled={autocompletionDisabled}

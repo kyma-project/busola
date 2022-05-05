@@ -13,10 +13,11 @@ export function Editor({
   setValue,
   readOnly,
   language = 'yaml',
-  editorDidMount,
+  onMount,
   customSchemaId,
   autocompletionDisabled,
   customSchemaUri,
+  height,
 }) {
   const descriptor = useRef(Uri);
   const { t } = useTranslation();
@@ -72,6 +73,10 @@ export function Editor({
       readOnly: readOnly,
     });
 
+    if (typeof onMount === 'function') {
+      onMount(editorRef.current);
+    }
+
     const onDidChangeModelContent = editorRef.current.onDidChangeModelContent(
       () => {
         const editorValue = editorRef.current.getValue();
@@ -104,7 +109,15 @@ export function Editor({
       editor.getModel(descriptor.current).dispose();
       editorRef.current.dispose();
     };
-  }, [editorTheme, setAutocompleteOptions, language, setValue, t, readOnly]);
+  }, [
+    editorTheme,
+    setAutocompleteOptions,
+    language,
+    setValue,
+    t,
+    readOnly,
+    onMount,
+  ]);
 
   useEffect(() => {
     const onDidFocusEditorText = editorRef.current.onDidFocusEditorText(() => {
@@ -119,25 +132,27 @@ export function Editor({
   }, [setAutocompleteOptions, activeSchemaPath]);
 
   return (
-    <div className="resource-form__wrapper">
+    <div
+      className="resource-form__wrapper"
+      style={{ height, minHeight: height }}
+    >
       {loading ? (
         <div className="resource-form__overlay">
           <Spinner />
         </div>
       ) : null}
-
       <div ref={divRef} className="resource-form__editor" />
-      <p>
-        {/* TODO verify how this should be done */}
-        {readOnly ? 'read-only mode' : null}
-        {readOnly && (schemaError || autocompletionDisabled) ? ' | ' : null}
-        {schemaError || autocompletionDisabled ? 'no autocompletion' : null}
-      </p>
-
       <div className="resource-form__legend">
         {error && (
           <MessageStrip type="error" className="fd-margin--sm">
             {t('common.create-form.editor-error', { error })}
+          </MessageStrip>
+        )}
+        {schemaError && (
+          <MessageStrip type="warning" className="fd-margin--sm" dismissible>
+            {t('common.create-form.autocomplete-unavailable-error', {
+              error: schemaError,
+            })}
           </MessageStrip>
         )}
         {markers.length ? (

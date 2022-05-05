@@ -48,7 +48,7 @@ self.onmessage = $event => {
     if (schema) {
       self.postMessage({ [$event.data[1]]: schema });
     } else {
-      self.postMessage({ error: new Error('No matching schema') });
+      self.postMessage({ error: new Error('Resource schema not found') });
     }
   }
 };
