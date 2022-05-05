@@ -41,7 +41,7 @@ export function YamlUploadDialog({ show, onCancel }) {
   });
 
   useEffect(() => {
-    if (show) {
+    if (!show) {
       setResourcesData(null);
       setResourcesWithStatuses(null);
       setLastOperationState(OPERATION_STATE_INITIAL);

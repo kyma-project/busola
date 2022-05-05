@@ -9,7 +9,6 @@ import { OPERATION_STATE_INITIAL } from './YamlUploadDialog';
 
 const isK8sResource = resource => {
   if (!resource) return true;
-  console.log(resource);
   return resource.apiVersion && resource.kind && resource.metadata;
 };
 
@@ -28,7 +27,6 @@ export function YamlUpload({
   const updateYamlContent = useCallback(
     files => {
       try {
-        // const files = jsyaml.loadAll(text);
         setLastOperationState(OPERATION_STATE_INITIAL);
         if (files.some(file => typeof file !== 'object')) {
           setError(t('clusters.wizard.not-an-object'));
@@ -43,8 +41,10 @@ export function YamlUpload({
         setError(message.substr(0, message.indexOf('\n')));
       }
     },
-    [setLastOperationState, setResourcesData, t],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [setLastOperationState, t],
   );
+
   return (
     <div>
       <YamlFileUploader
