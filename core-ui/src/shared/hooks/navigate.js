@@ -105,8 +105,6 @@ export function nagivateToResourceAfterCreate(namespace, name, pluralKind) {
       .fromContext('namespace')
       .navigate(`/${pluralKind.toLowerCase()}/details/${encodedName}`);
   } else {
-    LuigiClient.linkManager().navigate(
-      `details/${encodeURIComponent(encodedName)}`,
-    );
+    LuigiClient.linkManager().navigate(`details/${encodedName}`);
   }
 }
