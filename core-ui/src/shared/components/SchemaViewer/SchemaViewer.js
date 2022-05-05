@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { LayoutPanel, Button, ButtonSegmented } from 'fundamental-react';
 import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
-import { useTheme } from 'shared/contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 
@@ -11,7 +10,6 @@ import './SchemaViewer.scss';
 
 export function SchemaViewer({ name, schema }) {
   const [schemaMode, setSchemaMode] = useState('viewer');
-  const { editorTheme } = useTheme();
 
   const { t } = useTranslation();
 
@@ -58,36 +56,30 @@ export function SchemaViewer({ name, schema }) {
         )}
         {schemaMode === 'json' && (
           <MonacoEditor
-            key={`crd-schema-editor-${name}`}
-            theme={editorTheme}
+            customSchemaId={`crd-schema-editor-${name}`}
             language="json"
             height="20em"
             value={jsonSchema()}
+            autocompletionDisabled
+            readOnly
             options={{
-              readOnly: true,
               minimap: {
                 enabled: false,
-              },
-              scrollbar: {
-                alwaysConsumeMouseWheel: false,
               },
             }}
           />
         )}
         {schemaMode === 'yaml' && (
           <MonacoEditor
-            key={`crd-schema-editor-${name}`}
-            theme={editorTheme}
+            customSchemaId={`crd-schema-editor-${name}`}
             language="yaml"
+            autocompletionDisabled
             height="20em"
             value={yamlSchema()}
+            readOnly
             options={{
-              readOnly: true,
               minimap: {
                 enabled: false,
-              },
-              scrollbar: {
-                alwaysConsumeMouseWheel: false,
               },
             }}
           />

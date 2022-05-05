@@ -57,7 +57,7 @@ export function useAutocompleteWorker({
   const [loading, setLoading] = useState(true);
   const fetch = useSingleGet();
 
-  const { apiVersion, kind } = value;
+  const { apiVersion, kind } = value || {};
   // schemaId gets calculated only once, to find the json validation schema by a key
   // it means each supported resource must have apiVersion and kind initially defined
   // if it's not possible, pass the additional prop customSchemaId
@@ -117,7 +117,8 @@ export function useAutocompleteWorker({
   }, [schemaId]);
 
   /**
-   * Call this before initializing Monaco. This function alters monaco global config to set up JSON-based autocompletion.
+   * Call this before initializing Monaco. This function alters monaco global config to set up JSON-based
+   * autocompletion.
    */
   const setAutocompleteOptions = useCallback(() => {
     const modelUri = Uri.parse(schemaId);

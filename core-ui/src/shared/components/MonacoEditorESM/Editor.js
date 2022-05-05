@@ -6,29 +6,34 @@ import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useAutocompleteWorker } from './useAutocompleteWorker';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { isEqual } from 'lodash';
+
 import './Editor.scss';
 
 export function Editor({
-  value,
+  value, // object for yaml and string for other formats. Editor call js-yaml functions itself.
   setValue,
   readOnly,
   language = 'yaml',
+  multipleYamls, // set to true, if you want upload multiple yaml files
   onMount,
-  customSchemaId, // custom key to match the json schema
+  customSchemaId, // custom key to find the json schema, don't use if the default key works (apiVersion/kind)
   autocompletionDisabled,
   customSchemaUri, // custom link to be displayed in the autocompletion tooltips
   height,
+  options = {}, // IEditorOptions, check Monaco API for the list of options
+  ...rest
 }) {
   const descriptor = useRef(new Uri());
   const { t } = useTranslation();
   const [error, setError] = useState('');
   const [markers, setMarkers] = useState([]);
   const { editorTheme } = useTheme();
-
   const divRef = useRef(null);
   const valueRef = useRef(
     language === 'yaml' ? jsyaml.dump(value, { noRefs: true }) : value,
   );
+
   const editorRef = useRef(null);
 
   const {
@@ -43,9 +48,13 @@ export function Editor({
     customSchemaUri,
     readOnly,
   });
+  const memoizedOptions = useRef({});
+  if (!isEqual(memoizedOptions.current, options)) {
+    memoizedOptions.current = options;
+  }
 
   useEffect(() => {
-    // show warnings in a message strip
+    // show warnings in a message strip at the bottom of editor
     if (autocompletionDisabled) {
       return;
     }
@@ -62,9 +71,8 @@ export function Editor({
       onDidChangeMarkers.dispose();
     };
   }, [setMarkers, autocompletionDisabled]);
-
   useEffect(() => {
-    // setup Monaco editor and pass value updates
+    // setup Monaco editor and pass value updates to parent
 
     // calling this function sets up autocompletion
     const { modelUri } = setAutocompleteOptions();
@@ -86,13 +94,15 @@ export function Editor({
       scrollbar: {
         alwaysConsumeMouseWheel: false,
       },
+      ...memoizedOptions.current,
     });
 
+    // pass editor instance to parent
     if (typeof onMount === 'function') {
       onMount(editorRef.current);
     }
 
-    // update parent component state
+    // update parent component state on value change
     const onDidChangeModelContent = editorRef.current.onDidChangeModelContent(
       () => {
         const editorValue = editorRef.current.getValue();
@@ -117,7 +127,13 @@ export function Editor({
                 setError(null);
                 break;
               case 'yaml':
-                updateState(jsyaml.load(editorValue), setError, setValue);
+                updateState(
+                  multipleYamls
+                    ? jsyaml.loadAll(editorValue)
+                    : jsyaml.load(editorValue),
+                  setError,
+                  setValue,
+                );
                 break;
               default:
                 break;
@@ -139,7 +155,8 @@ export function Editor({
     editorTheme,
     setAutocompleteOptions,
     language,
-    setValue,
+    multipleYamls,
+    // setValue,
     t,
     readOnly,
     onMount,
@@ -162,6 +179,7 @@ export function Editor({
   return (
     <div
       className="resource-form__wrapper"
+      {...rest}
       style={{ height, minHeight: height }}
     >
       {loading ? (

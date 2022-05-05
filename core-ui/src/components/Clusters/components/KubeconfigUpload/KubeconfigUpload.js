@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import jsyaml from 'js-yaml';
 import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
-import { useTheme } from 'shared/contexts/ThemeContext';
 
 import './KubeconfigUpload.scss';
 
@@ -16,47 +15,51 @@ export function KubeconfigUpload({
   setKubeconfig,
 }) {
   const [error, setError] = React.useState('');
-  const { editorTheme } = useTheme();
+  const [editor, setEditor] = useState(null);
+
   const { t } = useTranslation();
 
-  const configString = jsyaml.dump(kubeconfig, { noRefs: true }) || undefined;
-  const updateKubeconfig = text => {
-    try {
-      const config = jsyaml.load(text);
-      if (typeof config !== 'object') {
-        setError(t('clusters.wizard.not-an-object'));
-      } else {
-        setKubeconfig(config);
-        setError(null);
+  const updateKubeconfig = useCallback(
+    config => {
+      try {
+        if (typeof config !== 'object') {
+          setError(t('clusters.wizard.not-an-object'));
+        } else {
+          setKubeconfig(config);
+
+          setError(null);
+        }
+      } catch ({ message }) {
+        // get the message until the newline
+        setError(message.substr(0, message.indexOf('\n')));
       }
-    } catch ({ message }) {
-      // get the message until the newline
-      setError(message.substr(0, message.indexOf('\n')));
-    }
-  };
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [t],
+  );
 
   return (
     <>
-      <KubeconfigFileUpload onKubeconfigTextAdded={updateKubeconfig} />
+      <KubeconfigFileUpload
+        onKubeconfigTextAdded={text => {
+          const parsed = jsyaml.load(text);
+          if (parsed) {
+            updateKubeconfig(parsed);
+            editor.getModel().setValue(text);
+          }
+        }}
+      />
       <p className="editor-label fd-margin-bottom--sm fd-margin-top--sm">
         {t('clusters.wizard.editor-label')}
       </p>
       <MonacoEditor
         height="320px"
+        autocompletionDisabled
         language="yaml"
-        theme={editorTheme}
-        value={configString}
-        onMount={editor =>
-          editor.onDidBlurEditorWidget(() =>
-            updateKubeconfig(editor.getValue()),
-          )
-        }
-        onChange={value => updateKubeconfig(value)}
-        options={{
-          scrollbar: {
-            alwaysConsumeMouseWheel: false,
-          },
-        }}
+        value={kubeconfig}
+        customSchemaId="cluster"
+        onMount={setEditor}
+        setValue={updateKubeconfig}
       />
       {error && (
         <MessageStrip type="error" className="fd-margin-top--sm">
