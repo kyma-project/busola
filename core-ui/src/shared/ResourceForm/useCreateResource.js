@@ -2,8 +2,10 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
-import { navigateToResource } from 'shared/hooks/navigate';
+import { nagivateToResourceAfterCreate } from 'shared/hooks/navigate';
 import { createPatch } from 'rfc6902';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+
 export function useCreateResource({
   singularName,
   pluralKind,
@@ -17,7 +19,7 @@ export function useCreateResource({
   const notification = useNotification();
   const postRequest = usePost();
   const patchRequest = useUpdate();
-
+  const { namespaceId } = useMicrofrontendContext();
   const isEdit = !!initialResource?.metadata?.name;
 
   const defaultAfterCreatedFn = () => {
@@ -31,7 +33,12 @@ export function useCreateResource({
         },
       ),
     });
-    if (!isEdit) navigateToResource(resource);
+    if (!isEdit)
+      nagivateToResourceAfterCreate(
+        namespaceId,
+        resource.metadata.name,
+        pluralKind,
+      );
   };
 
   return async e => {

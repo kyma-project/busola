@@ -97,3 +97,16 @@ export function navigateToResource(resource) {
     .fromContext('cluster')
     .navigate(path);
 }
+
+export function nagivateToResourceAfterCreate(namespace, name, pluralKind) {
+  const encodedName = encodeURIComponent(name);
+  if (namespace) {
+    LuigiClient.linkManager()
+      .fromContext('namespace')
+      .navigate(`/${pluralKind.toLowerCase()}/details/${encodedName}`);
+  } else {
+    LuigiClient.linkManager().navigate(
+      `details/${encodeURIComponent(encodedName)}`,
+    );
+  }
+}
