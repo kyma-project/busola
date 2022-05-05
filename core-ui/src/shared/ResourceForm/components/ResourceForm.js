@@ -30,7 +30,6 @@ export function ResourceForm({
   afterCreatedFn,
   className,
   onlyYaml = false,
-
   toggleFormFn,
   customSchemaId,
   autocompletionDisabled,
