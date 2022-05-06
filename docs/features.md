@@ -110,7 +110,7 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **EXTERNAL_NODES** - a list of links to external websites. `category`, `icon`: a category name and optional icon, `children`: a list of pairs (label and link).
+- **EXTERNAL_NODES** - a list of links to external websites. `category`: a category name, `icon`: an optional icon, `children`: a list of pairs (label and link).
 
   Default settings:
 
