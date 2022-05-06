@@ -26,6 +26,7 @@ export function ResourceForm({
   createUrl,
   presets,
   onPresetSelected,
+  renderEditor,
   onSubmit,
   afterCreatedFn,
   className,
@@ -84,6 +85,20 @@ export function ResourceForm({
     `${jp.value(resource, `$.apiVersion`)}/${jp.value(resource, `$.kind`)}`,
   );
 
+  let editor = (
+    <Editor
+      value={resource}
+      setValue={setResource}
+      onMount={setActionsEditor}
+      customSchemaId={customSchemaId || resourceSchemaId.current}
+      customSchemaUri={customSchemaUri}
+      autocompletionDisabled={autocompletionDisabled}
+      readOnly={readOnly}
+    />
+  );
+  editor = renderEditor
+    ? renderEditor({ defaultEditor: editor, Editor })
+    : editor;
   return (
     <section className={classnames('resource-form', className)}>
       {presetsSelector}
@@ -109,15 +124,7 @@ export function ResourceForm({
               saveHidden
               i18n={i18n}
             />
-            <Editor
-              value={resource}
-              setValue={setResource}
-              onMount={setActionsEditor}
-              customSchemaId={customSchemaId || resourceSchemaId.current}
-              customSchemaUri={customSchemaUri}
-              autocompletionDisabled={autocompletionDisabled}
-              readOnly={readOnly}
-            />
+            {editor}
           </>
         )}
         {/* always keep the advanced form to ensure validation */}
