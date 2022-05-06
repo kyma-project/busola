@@ -11,6 +11,7 @@ import LuigiClient from '@luigi-project/client';
 import { YamlContent } from 'shared/contexts/YamlEditorContext/YamlContent';
 import { isValidYaml } from 'shared/contexts/YamlEditorContext/isValidYaml';
 import 'shared/contexts/YamlEditorContext/YamlEditorContext.scss';
+import jsYaml from 'js-yaml';
 
 export const YamlEditorContext = createContext({
   setEditedYaml: _ => {},
@@ -62,7 +63,7 @@ export const YamlEditorProvider = ({ children, i18n }) => {
 
   async function handleSaveClick() {
     try {
-      await onSaveFn.current(changedYaml);
+      await onSaveFn.current(jsYaml.dump(changedYaml));
       closeEditor();
     } catch (_) {}
   }

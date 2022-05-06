@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import jsyaml from 'js-yaml';
-import MonacoEditor from '@monaco-editor/react';
+// import MonacoEditor from '@monaco-editor/react';
+import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
 
 import { useTheme } from 'shared/contexts/ThemeContext';
@@ -40,19 +41,16 @@ export function YamlContent({
         i18n={i18n}
       />
       <ErrorBoundary i18n={i18n}>
-        <MonacoEditor
+        <Editor
+          autocompletionDisabled
           height="85vh"
           language="yaml"
-          theme={editorTheme}
-          value={val}
-          onChange={text => setChangedYamlFn(text)}
-          onMount={editor => setEditor(editor)}
+          value={yaml}
+          setValue={setChangedYamlFn}
+          onMount={setEditor}
+          readOnly={readOnly}
           options={{
             minimap: { enabled: false },
-            readOnly,
-            scrollbar: {
-              alwaysConsumeMouseWheel: false,
-            },
           }}
         />
       </ErrorBoundary>
