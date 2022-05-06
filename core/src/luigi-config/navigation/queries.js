@@ -1,3 +1,4 @@
+import { fetchQueue } from 'fetch-queue';
 import { config } from './../config';
 import { getActiveCluster } from './../cluster-management/cluster-management';
 import { HttpError } from '../../../../core-ui/src/shared/hooks/BackendAPI/config';
@@ -51,7 +52,7 @@ export async function failFastFetch(input, auth, init = {}) {
 
   init.headers = await createHeaders(auth, input);
 
-  const response = await fetch(input, init);
+  const response = await fetchQueue(input, init);
   if (response.ok) {
     return response;
   } else {

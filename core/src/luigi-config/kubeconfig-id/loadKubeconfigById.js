@@ -1,3 +1,4 @@
+import { fetchQueue } from 'fetch-queue';
 import i18next from 'i18next';
 import { getBusolaClusterParams } from '../busola-cluster-params';
 import { resolveFeatureAvailability } from '../features';
@@ -33,7 +34,7 @@ export async function loadKubeconfigById(kubeconfigId) {
   const jsyaml = await importJsYaml();
 
   const url = join(kubeconfigIdFeature.config.kubeconfigUrl, kubeconfigId);
-  const responseText = await fetch(url).then(res => res.text());
+  const responseText = await fetchQueue(url).then(res => res.text());
   const payload = jsyaml.load(responseText);
 
   if (typeof payload !== 'object') {
