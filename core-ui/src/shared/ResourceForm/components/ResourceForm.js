@@ -125,7 +125,6 @@ export function ResourceForm({
               i18n={i18n}
             />
             {editor}
-            {/*<Editor value="" language="json" />*/}
           </>
         )}
         {/* always keep the advanced form to ensure validation */}

@@ -276,7 +276,7 @@ export default function CreateInstanceForm({
               autocompletionDisabled
               aria-label="schema-editor"
               height="25em"
-              language="JSON"
+              language="json"
               onChange={handleCustomParametersChange}
               value={JSON.stringify(instanceCreateParameters, null, 2)}
             />

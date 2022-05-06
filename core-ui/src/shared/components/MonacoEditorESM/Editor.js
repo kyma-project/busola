@@ -11,7 +11,8 @@ import { isEqual } from 'lodash';
 import './Editor.scss';
 
 export function Editor({
-  value, // object for yaml and string for other formats. Editor call js-yaml functions itself.
+  value, // Pass value to initialize the Editor. Altering value later will not be reflected in the editor.
+  // Pass object for yaml and string for other formats. Editor call js-yaml functions itself.
   onChange,
   readOnly,
   language = 'yaml',
@@ -30,16 +31,15 @@ export function Editor({
   const [markers, setMarkers] = useState([]);
   const { editorTheme } = useTheme();
   const divRef = useRef(null);
+  const editorRef = useRef(null);
   const valueRef = useRef(
     language === 'yaml'
       ? jsyaml.dump(value, { noRefs: true })
       : language === 'json'
       ? value
-      : // ? JSON.stringify(value)
+      : //   JSON.stringify(value)
         value,
   );
-
-  const editorRef = useRef(null);
 
   const {
     setAutocompleteOptions,
@@ -111,41 +111,39 @@ export function Editor({
     const onDidChangeModelContent = editorRef.current.onDidChangeModelContent(
       () => {
         const editorValue = editorRef.current.getValue();
+        try {
+          switch (language) {
+            case 'javascript':
+            case 'typescript':
+            case 'json':
+              onChange(editorValue);
+              setError(null);
+              break;
+            // case 'json':
+            //   if (rest.setValue) rest.setValue(JSON.parse(editorValue));
+            //   onChange(JSON.parse(editorValue));
+            //   setError(null);
+            //   break;
+            case 'yaml':
+              const parsed = multipleYamls
+                ? jsyaml.loadAll(editorValue)
+                : jsyaml.load(editorValue);
 
-        if (valueRef.current !== editorValue) {
-          try {
-            switch (language) {
-              case 'javascript':
-              case 'json':
-
-              case 'typescript':
-                onChange(editorValue);
-                setError(null);
+              if (rest.setValue) rest.setValue(parsed);
+              if (typeof parsed !== 'object') {
+                setError(t('common.create-form.object-required'));
                 break;
-              // case 'json':
-              //   onChange(JSON.parse(editorValue));
-              //   onChange(null);
-              //   break;
-              case 'yaml':
-                const parsed = multipleYamls
-                  ? jsyaml.loadAll(editorValue)
-                  : jsyaml.load(editorValue);
+              }
+              onChange(parsed);
+              setError(null);
+              break;
 
-                if (typeof parsed !== 'object') {
-                  setError(t('common.create-form.object-required'));
-                  break;
-                }
-                onChange(parsed);
-                setError(null);
-                break;
-
-              default:
-                break;
-            }
-          } catch ({ message }) {
-            // get the message until the newline
-            setError(message.substr(0, message.indexOf('\n')));
+            default:
+              break;
           }
+        } catch ({ message }) {
+          // get the message until the newline
+          setError(message.substr(0, message.indexOf('\n')));
         }
       },
     );
@@ -165,6 +163,18 @@ export function Editor({
     readOnly,
     onMount,
   ]);
+
+  // useEffect(() => {
+  //   // update monaco editor value when parent modifies value
+  //   if (
+  //     JSON.stringify(value) &&
+  //     editorRef.current?.getValue() &&
+  //     JSON.stringify(value) !==
+  //       JSON.stringify(JSON.parse(editorRef.current?.getValue() || '{}'))
+  //   ) {
+  //     editorRef.current?.getModel().setValue(JSON.stringify(value));
+  //   }
+  // }, [value]);
 
   useEffect(() => {
     // refresh model on editor focus. Needed for cases when multiple editors are open simultaneously
