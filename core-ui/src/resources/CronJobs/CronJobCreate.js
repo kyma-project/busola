@@ -40,6 +40,7 @@ export function CronJobCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
   const { features } = useMicrofrontendContext();
@@ -89,6 +90,7 @@ export function CronJobCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="cronjobs"
       singularName={t(`cron-jobs.name_singular`)}
       initialResource={initialCronJob}
@@ -96,7 +98,10 @@ export function CronJobCreate({
       setResource={setCronJob}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={createCronJobPresets(namespace, t)}
+      presets={
+        !initialCronJob &&
+        createCronJobPresets(namespace, t, defaultSidecarAnnotations)
+      }
       createUrl={resourceUrl}
     >
       <K8sNameField

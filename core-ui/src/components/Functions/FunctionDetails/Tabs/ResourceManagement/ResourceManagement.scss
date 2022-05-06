@@ -1,0 +1,84 @@
+.function-resources-management {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+
+  .error_message {
+    padding-top: 5px;
+    color: #ee0000;
+  }
+
+  > form > .fd-panel__header {
+    border-radius: 4px;
+  }
+
+  .has-padding-none {
+    padding: 0;
+  }
+
+  .has-bottom-margin {
+    margin-bottom: 16px !important;
+  }
+
+  .has-box-shadow-none {
+    box-shadow: none;
+  }
+
+  .has-none-border-bottom {
+    border-bottom: none;
+  }
+
+  .presets {
+    margin-bottom: 16px;
+  }
+
+  .has-no-margin-bottom {
+    margin-bottom: 0;
+  }
+
+  .hidden-panel {
+    display: none;
+  }
+
+  .is-block {
+    display: block;
+    padding: 10px 0;
+
+    > .fd-panel__head {
+      padding-bottom: 10px;
+    }
+    > .fd-panel__actions {
+      /* Spin Buttons modified */
+      input[type='number'] {
+        position: relative; // do not delete this
+      }
+      > input[type='number']::-webkit-outer-spin-button,
+      > input[type='number']::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        width: 1em;
+        opacity: 0.5; /* shows Spin Buttons per default (Chrome >= 39) */
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        top: 0;
+      }
+
+      > input[type='number']::-webkit-inner-spin-button:hover,
+      > input[type='number']::-webkit-inner-spin-button:active {
+        box-shadow: 0 0 2px #0cf;
+        opacity: 0.8;
+      }
+
+      > input.resource_input:disabled {
+        color: black;
+        opacity: 0.5;
+      }
+    }
+  }
+
+  &__panel {
+    margin-top: 16px;
+    border-radius: 4px;
+    box-shadow: 0 5px 20px 0
+      var(--fd-panel-box-shadow-color, var(--sapNeutralBackground, #eeeeef));
+  }
+}

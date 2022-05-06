@@ -9,6 +9,7 @@ export function IngressCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [ingress, setIngress] = useState(createIngressTemplate(namespaceId));
@@ -16,6 +17,7 @@ export function IngressCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="ingresses"
       singularName={t('ingresses.name_singular')}
       resource={ingress}

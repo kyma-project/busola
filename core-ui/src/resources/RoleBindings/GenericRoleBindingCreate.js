@@ -27,6 +27,7 @@ export function GenericRoleBindingCreate({
   resourceUrl,
   pluralKind,
   singularName,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -87,6 +88,7 @@ export function GenericRoleBindingCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind={pluralKind}
       singularName={singularName}
       resource={binding}

@@ -29,6 +29,7 @@ export function IssuerCreate({
   resource: initialIssuer,
   resourceUrl,
   setCustomValid,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -252,6 +253,7 @@ export function IssuerCreate({
   };
   return (
     <ResourceForm
+      {...props}
       pluralKind="issuers"
       singularName={t('issuers.name_singular')}
       resource={issuer}
@@ -259,7 +261,7 @@ export function IssuerCreate({
       setResource={setIssuer}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={createPresets(namespace, t)}
+      presets={!initialIssuer && createPresets(namespace, t)}
       createUrl={resourceUrl}
     >
       <K8sNameField

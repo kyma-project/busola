@@ -1,0 +1,37 @@
+.resource-form__wrapper {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 21px - 36px);
+  min-height: 350px;
+  position: relative;
+}
+.resource-form__overlay {
+  position: absolute;
+  //background-color: rgba(4,4,4,0.8);
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+}
+
+.resource-form__editor {
+  position: relative;
+  width: calc(100% - 2px);
+  height: calc(100% - 21px - 36px); // avoid v-scroll
+  overflow: hidden;
+  flex-grow: 1;
+  border: 1px solid var(--sapNeutralBackground);
+}
+.resource-form__legend {
+  position: absolute;
+  bottom: 0;
+  width: calc(100% - 10px);
+
+  .line {
+    width: 100%;
+    display: block;
+  }
+}

@@ -312,6 +312,7 @@ clusters:
   kubeconfig: kubeconfig
   labels:
     client-id: Client ID
+    client-secret: Client Secret
     issuer-url: Issuer URL
     name: Clusters
     scopes: Scopes
@@ -366,6 +367,7 @@ clusters:
     all-contexts: All contexts
     auth:
       client-id: Client ID
+      client-secret: Client Secret
       issuer-url: Issuer URL
       scopes: Scopes
       token: Token
@@ -459,6 +461,7 @@ common:
     update: Update
     view-yaml: View YAML
   create-form:
+    autocomplete-unavailable-error: Monaco autocompletion unavailable. {{error}}.
     choose-preset: Choose option
     editor-error: 'Parse error: {{error}}, previous valid input will be used'
     messages:
@@ -486,6 +489,8 @@ common:
     annotations: Annotations
     created: Created
     description: Description
+    items: Items
+    key: Key
     kind: Kind
     labels: Labels
     loading: Loading...
@@ -494,8 +499,10 @@ common:
     namespace: Namespace
     owner: Controlled By
     pods: Pods
+    resource: Resource
     resources: Resources
     status: Status
+    value: Value
     version: Version
   labels:
     data: Data
@@ -553,15 +560,18 @@ common:
     'true': 'true'
     unknown: Unknown
   tooltips:
+    at: at
+    column: Col
     copy-to-clipboard: Copy to Clipboard
     download: Download
     duplicate-key: Duplicate key
     error: Error
     generate-name: Generate name
-    hide: Hide Read-Only Fields
+    hide: Hide read-only fields
     k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
+    line: Ln
     read-file: Read file content as a single value, with file name as a key.
     resource-ref-name: Unique name within a Namespace to refer to a {{resource}} resource.
     resource-ref-namespace: Namespace defines the space within which the {{resource}} name must be unique.
@@ -705,7 +715,6 @@ cron-jobs:
     hour: Hour
     labels:
       concurrency-policy: Concurrency Policy
-      restart-policy: Restart Policy
     minute: Minute
     month: Month
     parse-error: Error parsing CRON expression
@@ -1235,12 +1244,15 @@ grafana:
   unavailable: No Grafana link
 graphs:
   cpu: CPU
+  free-space: Free space
   memory: Memory
   network: Network
   network-down: Download
   network-up: Upload
   nodes: Nodes
+  pvc-usage: Volume Space Usage
   total: Total
+  used-space: Used space
 helm-releases:
   description: <0>Helm Release</0> tracks the installed charts. For each installed chart, a new release is created.
   headers:
@@ -1299,7 +1311,6 @@ hpas:
   'on': 'on'
   on-pods: on Pods
   pods: Pods
-  resource: Resource
   resource-cpu-on-pods: Resource CPU on Pods (current / target)
   scale-target-ref: Scale Target Reference
   spec: Specification
@@ -1623,15 +1634,22 @@ pods:
     type: Type
     volume-name: Volume Name
   labels:
+    args: Args
+    command: Command
     constainers: Containers
+    env: Environment
     filter-timeframe: 'Filter timeframe by:'
     image: Image
     image-pull-policy: Image Pull Policy
     init-constainers: Init Containers
+    mount-path: Mount Path
+    pod-template: Pod Template
     ports: Ports
+    restart-policy: Restart Policy
     reverse-logs: Reverse logs
     save-to-file: Save to a file
     show-timestamps: Show Timestamps
+    volume-mounts: Volume Mounts
     volumes: Volumes
   message:
     failed-to-download: Failed to download the logs
@@ -2074,7 +2092,7 @@ top-nav:
   profile:
     preferences: $t(preferences.title)
 upload-yaml:
-  info: You can upload multiple resources, separated in YAML by '---'. If resource already exists, it will be updated, otherwise a new one will be created. In case the Namespace is not given, the 'default' one will be used.
+  info: You can upload multiple resources, separated in YAML by '---'. If a resource already exists, it will be updated, otherwise a new one will be created. If the Namespace is not given, the '{{namespace}}' one will be used.
   messages:
     not-a-k8s-resource: Not a Kubernetes resource!
   or-paste-here: 'or paste it here:'
@@ -2084,6 +2102,9 @@ upload-yaml:
     updated: Updated
     waiting: Waiting
   title: Upload YAML
+  warnings:
+    different-namespace: This resource will be uploaded to the '{{namespace}}' Namespace.
+    incorrect-namespace: The cluster-wide resources shouldn't have a Namespace.
   you-will-create_one: 'You will create 1 resource:'
   you-will-create_other: 'You will create {{count}} resources:'
 virtualservices:

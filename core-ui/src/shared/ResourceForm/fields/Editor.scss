@@ -3,6 +3,10 @@
   height: calc(100% - 21px - 36px); // avoid v-scroll
   overflow: hidden;
 
+  .monaco-editor {
+    min-height: 200px;
+  }
+
   .resource-form__editor__error {
     inset: 0;
 

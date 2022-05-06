@@ -34,14 +34,7 @@ context('Test Network Policy', () => {
     cy.wrap(loadNetworkPolicy(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       NP_CONFIG => {
         const NP = JSON.stringify(NP_CONFIG);
-
-        cy.getIframeBody()
-          .find('div.view-lines')
-          .clearInput()
-          .type(NP, {
-            parseSpecialCharSequences: false,
-            waitForAnimations: false,
-          });
+        cy.pasteToMonaco(NP);
       },
     );
 

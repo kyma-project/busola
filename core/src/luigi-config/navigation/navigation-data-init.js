@@ -366,7 +366,7 @@ export async function createNavigationNodes(
       authData,
       features,
     );
-    const externalNodes = addExternalNodes(navigation.externalNodes);
+    const externalNodes = addExternalNodes(features.EXTERNAL_NODES);
     const allNodes = [
       ...staticNodes,
       ...observabilitySection,

@@ -11,6 +11,7 @@ export function StatefulSetCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [statefulSet, setStatefulSet] = useState(
@@ -20,6 +21,7 @@ export function StatefulSetCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="statefulsets"
       singularName={t('stateful-sets.name_singular')}
       resource={statefulSet}

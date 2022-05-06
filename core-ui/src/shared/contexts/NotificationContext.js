@@ -14,6 +14,12 @@ export const NotificationProvider = ({
 }) => {
   const [toastProps, setToastProps] = useState();
 
+  const escFunction = event => {
+    if (event.key === 'Escape') {
+      event.stopPropagation();
+    }
+  };
+
   function showLuigiNotification(notificationProps) {
     const header =
       (notificationProps.content && notificationProps.title) ||
@@ -22,6 +28,10 @@ export const NotificationProvider = ({
         : 'Information';
     const body = notificationProps.content || notificationProps.title;
 
+    document.addEventListener('keydown', escFunction, {
+      capture: true,
+    });
+
     LuigiClient.uxManager()
       .showConfirmationModal({
         type: notificationProps.type,
@@ -29,7 +39,11 @@ export const NotificationProvider = ({
         header,
         ...notificationProps,
       })
-      .catch(e => {});
+      .catch(e => {
+        document.removeEventListener('keydown', escFunction, {
+          capture: true,
+        });
+      });
   }
 
   const methods = {

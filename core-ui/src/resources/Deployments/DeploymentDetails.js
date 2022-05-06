@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { Selector } from 'shared/components/Selector/Selector.js';
+import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { HPASubcomponent } from 'resources/HorizontalPodAutoscalers/HPASubcomponent';
@@ -35,6 +36,10 @@ export function DeploymentDetails(props) {
     />
   );
 
+  const DeploymentPodTemplate = deployment => (
+    <PodTemplate template={deployment.spec.template} />
+  );
+
   const StatsComponent = deployment => {
     const labelSelector = Object.entries(deployment.spec?.selector?.matchLabels)
       .map(([key, value]) => `${key}=${value}`)
@@ -54,7 +59,12 @@ export function DeploymentDetails(props) {
   };
   return (
     <ResourceDetails
-      customComponents={[HPASubcomponent, StatsComponent, MatchSelector]}
+      customComponents={[
+        HPASubcomponent,
+        StatsComponent,
+        MatchSelector,
+        DeploymentPodTemplate,
+      ]}
       customColumns={customColumns}
       createResourceForm={DeploymentCreate}
       {...props}

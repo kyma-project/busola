@@ -20,6 +20,7 @@ export function GatewayCreate({
   setCustomValid,
   resource: initialGateway,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -42,6 +43,7 @@ export function GatewayCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="gateways"
       singularName={t(`gateways.name_singular`)}
       resource={gateway}
@@ -49,7 +51,7 @@ export function GatewayCreate({
       initialResource={initialGateway}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={createPresets(namespace, t)}
+      presets={!initialGateway && createPresets(namespace, t)}
       createUrl={resourceUrl}
     >
       <K8sNameField

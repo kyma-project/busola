@@ -7,6 +7,7 @@ import 'shared/contexts/YamlEditorContext/EditorActions.scss';
 import { useTranslation } from 'react-i18next';
 
 const EDITOR_VISIBILITY = 'editor-visibility';
+const READONLY_FIELDS = ['^ *managedFields:$', '^status:$'];
 
 const ButtonWithTooltip = ({
   tooltipContent,
@@ -36,11 +37,12 @@ export function EditorActions({
   saveDisabled,
   saveHidden,
   i18n,
-  readOnly,
 }) {
   const [visible, setVisible] = useState(
     localStorage.getItem(EDITOR_VISIBILITY) !== 'false',
   );
+
+  const { readOnly } = editor?.getRawOptions() || {};
 
   useEffect(() => {
     localStorage.setItem(EDITOR_VISIBILITY, visible);
@@ -61,7 +63,7 @@ export function EditorActions({
 
   const getReadOnlyFieldsPosition = () => {
     // definition of read only fields
-    const READONLY_FIELDS = ['^ *managedFields:$', '^status:$'];
+
     let arrayOfPositions = [];
     READONLY_FIELDS.forEach(fieldName => {
       if (!!editor.getModel()) {

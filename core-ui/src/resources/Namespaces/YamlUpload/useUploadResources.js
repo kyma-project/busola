@@ -15,8 +15,6 @@ import {
   OPERATION_STATE_WAITING,
 } from './YamlUploadDialog';
 
-const DEFAULT_NAMESPACE = 'default';
-
 export const STATE_ERROR = 'ERROR';
 export const STATE_WAITING = 'WAITING';
 export const STATE_UPDATED = 'UPDATED';
@@ -26,6 +24,7 @@ export function useUploadResources(
   resources = [],
   setResourcesData,
   setLastOperationState,
+  namespaceId,
 ) {
   const fetch = useSingleGet();
   const post = usePost();
@@ -52,19 +51,19 @@ export function useUploadResources(
       n => n.resourceType === resourceType,
     );
 
-    if (hasNamespace || isKnownClusterWide) {
+    if (isKnownClusterWide) {
+      return getResourceUrl(resource, null);
+    } else if (hasNamespace) {
       return getResourceUrl(resource);
     } else if (isKnownNamespaceWide) {
-      return getResourceUrl(resource, DEFAULT_NAMESPACE);
+      return getResourceUrl(resource, namespaceId);
     } else {
       const response = await fetch(getResourceKindUrl(resource));
       const json = await response.json();
       const apiGroupResources = json?.resources;
-      const apiGroup = apiGroupResources.find(
-        r => r?.kind === resource.value?.kind,
-      );
+      const apiGroup = apiGroupResources.find(r => r?.kind === resource?.kind);
       return apiGroup?.namespaced
-        ? getResourceUrl(resource, DEFAULT_NAMESPACE)
+        ? getResourceUrl(resource, namespaceId)
         : getResourceUrl(resource);
     }
   };

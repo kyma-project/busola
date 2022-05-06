@@ -7,7 +7,7 @@ export const getResourceKindUrl = resource => {
 };
 
 export const getResourceUrl = (resource, namespace) => {
-  if (!namespace) {
+  if (namespace === undefined) {
     namespace = resource?.metadata?.namespace;
   }
 

@@ -25,6 +25,7 @@ export const ModalWithForm = ({
   onModalOpenStateChange,
   alwaysOpen,
   i18n,
+  getToggleFormFn,
   ...props
 }) => {
   const { t } = useTranslation(null, { i18n });
@@ -48,7 +49,7 @@ export const ModalWithForm = ({
     if (isOpen !== undefined) onModalOpenStateChange(isOpen);
   }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function setOpenStatus(status) {
+  const setOpenStatus = status => {
     if (status) {
       setTimeout(() => revalidate());
       LuigiClient.uxManager().addBackdrop();
@@ -57,7 +58,16 @@ export const ModalWithForm = ({
       if (customCloseAction) customCloseAction();
     }
     setOpen(status);
-  }
+  };
+
+  useEffect(() => {
+    if (getToggleFormFn) {
+      // If getToggleFormFn is defined, the function that toggles form modal on/off is passed to parent. The modal will not be closed automatically
+      // after clicking on the submit button. You must call toggleFormFn(false) to close the modal at the moment you prefer.
+      getToggleFormFn(() => setOpenStatus);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getToggleFormFn]);
 
   function handleFormChanged() {
     setTimeout(() => revalidate());
@@ -84,7 +94,9 @@ export const ModalWithForm = ({
       formElementRef.current.dispatchEvent(
         new Event('submit', { bubbles: true, cancelable: true }),
       );
-      setOpenStatus(false);
+      if (!getToggleFormFn) {
+        setOpenStatus(false);
+      }
     }
   }
 
@@ -145,10 +157,16 @@ export const ModalWithForm = ({
         show={isOpen}
         actions={[
           renderConfirmButton(),
-          <Button onClick={() => setOpenStatus(false)} option="transparent">
+          <Button
+            onClick={() => {
+              setOpenStatus(false);
+            }}
+            option="transparent"
+          >
             Cancel
           </Button>,
         ]}
+        disableAutoClose={true}
         onClose={() => {
           setOpenStatus(false);
         }}

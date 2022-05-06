@@ -11,6 +11,7 @@ export function ResourceQuotaCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [resourceQuota, setResourceQuota] = useState(
@@ -20,6 +21,7 @@ export function ResourceQuotaCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="resourceQuotas"
       singularName={t('resource-quotas.name_singular')}
       resource={resourceQuota}

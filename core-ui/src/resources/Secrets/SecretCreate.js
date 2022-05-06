@@ -23,6 +23,7 @@ export function SecretCreate({
   resourceUrl,
   setCustomValid,
   prefix,
+  ...props
 }) {
   const { t } = useTranslation();
   const [secret, setSecret] = useState(
@@ -56,6 +57,7 @@ export function SecretCreate({
 
   return (
     <ResourceForm
+      {...props}
       className="create-secret-form"
       pluralKind="secrets"
       singularName={t('secrets.name_singular')}
@@ -65,7 +67,7 @@ export function SecretCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      presets={createPresets(secretDefs, namespaceId, t)}
+      presets={!initialSecret && createPresets(secretDefs, namespaceId, t)}
       setCustomValid={setCustomValid}
     >
       <K8sNameField

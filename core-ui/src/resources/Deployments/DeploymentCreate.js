@@ -30,6 +30,7 @@ export function DeploymentCreate({
   setCustomValid,
   resource: initialDeployment,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -117,6 +118,7 @@ export function DeploymentCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="deployments"
       singularName={t(`deployments.name_singular`)}
       resource={deployment}
@@ -125,7 +127,7 @@ export function DeploymentCreate({
       formElementRef={formElementRef}
       afterCreatedFn={afterCreatedFn}
       renderEditor={!initialDeployment ? renderEditor : null}
-      presets={createPresets(namespace, t)}
+      presets={!initialDeployment && createPresets(namespace, t)}
       onPresetSelected={value => {
         setDeployment(value.deployment);
         setCreateService(!!value.service);

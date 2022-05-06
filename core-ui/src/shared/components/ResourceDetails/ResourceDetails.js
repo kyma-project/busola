@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
@@ -80,7 +80,7 @@ function ResourceDetailsRenderer(props) {
   if (error) {
     const breadcrumbItems = props.breadcrumbs || [
       {
-        name: prettifyNamePlural(props.resourceTitle || props.resourceType),
+        name: prettifyNamePlural(props.resourceTitle, props.resourceType),
         path: '/',
         fromContext: props.resourceType.toLowerCase(),
       },
@@ -151,6 +151,8 @@ function Resource({
     resourceTitle,
     resource.kind,
   );
+  const [toggleFormFn, getToggleFormFn] = useState(() => {});
+
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
@@ -198,6 +200,7 @@ function Resource({
     } else {
       return (
         <ModalWithForm
+          getToggleFormFn={getToggleFormFn}
           title={
             editActionLabel ||
             t('components.resource-details.edit', {
@@ -223,6 +226,7 @@ function Resource({
                 resourceUrl={resourceUrl}
                 namespace={namespace}
                 refetchList={silentRefetch}
+                toggleFormFn={toggleFormFn}
                 {...props}
               />
             </ErrorBoundary>
