@@ -1,5 +1,5 @@
 import LuigiClient from '@luigi-project/client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 const getPrometheusSelector = data => {
@@ -152,7 +152,7 @@ export function usePrometheus(
 
   const metric = getMetric(type, mode, metricId, cpuQuery, { step, ...props });
 
-  const tick = () => {
+  const tick = useCallback(() => {
     const newEndDate = new Date();
     const newStartDate = new Date();
 
@@ -162,10 +162,27 @@ export function usePrometheus(
     setStartDate(newStartDate);
 
     setStep(timeSpan / items);
-  };
+    // console.log(startDate.getTime() / 1000);
+    // console.log(endDate.getTime() / 1000);
+    // console.log(
+    //   'floored',
+    //   Math.floor(endDate.getTime() / 1000 - startDate.getTime() / 1000),
+    // );
+    // if (
+    //   Math.floor(endDate.getTime() / 1000 - startDate.getTime() / 1000) ===
+    //   timeSpan - 1
+    // ) {
+    //   setSkip(false);
+    //   console.log('noskip');
+    // } else {
+    //   console.log('skip');
+    //   setSkip(true);
+    // }
+  }, [timeSpan, items]);
 
   useEffect(() => {
     tick();
+
     const loop = setInterval(tick, step * 1000);
     return () => clearInterval(loop);
   }, [metricId, timeSpan]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -177,18 +194,17 @@ export function usePrometheus(
       'floored',
       Math.floor(endDate.getTime() / 1000 - startDate.getTime() / 1000),
     );
-    console.log('span', timeSpan);
     if (
       Math.floor(endDate.getTime() / 1000 - startDate.getTime() / 1000) !==
       timeSpan - 1
     ) {
-      console.log('noskip');
       setSkip(false);
+      console.log('noskip');
     } else {
       console.log('skip');
       setSkip(true);
     }
-  }, [startDate, timeSpan, metricId]);
+  }, [startDate, endDate, metricId, timeSpan, tick]);
 
   const query =
     `query_range?` +
@@ -216,7 +232,7 @@ export function usePrometheus(
       }
     }
   };
-  console.log('skip', skip);
+
   let { data, error, loading } = useGet(`/${path}/${query}`, {
     pollingInterval: 0,
     onDataReceived: data => onDataReceived(data),
