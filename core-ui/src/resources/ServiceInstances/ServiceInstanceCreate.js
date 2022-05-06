@@ -87,6 +87,7 @@ export function ServiceInstanceCreate({
         setResource={setServiceInstance}
       >
         <Editor
+          autocompletionDisabled
           propertyPath="$.spec.parameters"
           language="json"
           validate={parsed => !!parsed && typeof parsed === 'object'}

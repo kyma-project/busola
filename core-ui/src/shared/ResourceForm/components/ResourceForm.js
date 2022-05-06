@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { ModeSelector } from './ModeSelector';
 import { ResourceFormWrapper } from './Wrapper';
 import { Presets } from './Presets';
-import { Editor } from '../fields/Editor';
+import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { useCreateResource } from '../useCreateResource';
 import * as jp from 'jsonpath';
 
@@ -125,6 +125,7 @@ export function ResourceForm({
               i18n={i18n}
             />
             {editor}
+            {/*<Editor value="" language="json" />*/}
           </>
         )}
         {/* always keep the advanced form to ensure validation */}

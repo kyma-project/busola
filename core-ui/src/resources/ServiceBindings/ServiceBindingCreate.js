@@ -117,6 +117,8 @@ export function ServiceBindingCreate({
         <Editor
           propertyPath="$.spec.parameters"
           language="json"
+          autocompletionDisabled
+          advanced
           validate={parsed => !!parsed && typeof parsed === 'object'}
           invalidValueMessage={t(
             'btp-service-bindings.messages.params-invalid',

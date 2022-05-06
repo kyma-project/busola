@@ -31,7 +31,11 @@ export function Editor({
   const { editorTheme } = useTheme();
   const divRef = useRef(null);
   const valueRef = useRef(
-    language === 'yaml' ? jsyaml.dump(value, { noRefs: true }) : value,
+    language === 'yaml'
+      ? jsyaml.dump(value, { noRefs: true })
+      : language === 'json'
+      ? JSON.stringify(value)
+      : value,
   );
 
   const editorRef = useRef(null);
@@ -112,9 +116,12 @@ export function Editor({
             switch (language) {
               case 'javascript':
               case 'typescript':
-              case 'json':
                 setValue(editorValue);
                 setError(null);
+                break;
+              case 'json':
+                setValue(JSON.parse(editorValue));
+                setValue(null);
                 break;
               case 'yaml':
                 const parsed = multipleYamls
@@ -159,14 +166,14 @@ export function Editor({
   useEffect(() => {
     // refresh model on editor focus. Needed for cases when multiple editors are open simultaneously
 
-    const onDidFocusEditorText = editorRef.current.onDidFocusEditorText(() => {
-      if (activeSchemaPath !== descriptor.current.path) {
+    const onDidFocusEditorText = editorRef.current?.onDidFocusEditorText(() => {
+      if (activeSchemaPath !== descriptor.current?.path) {
         setAutocompleteOptions();
       }
     });
 
     return () => {
-      onDidFocusEditorText.dispose();
+      onDidFocusEditorText?.dispose();
     };
   }, [setAutocompleteOptions, activeSchemaPath]);
 
