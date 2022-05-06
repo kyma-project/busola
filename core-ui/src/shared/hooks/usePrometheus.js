@@ -162,22 +162,6 @@ export function usePrometheus(
     setStartDate(newStartDate);
 
     setStep(timeSpan / items);
-    // console.log(startDate.getTime() / 1000);
-    // console.log(endDate.getTime() / 1000);
-    // console.log(
-    //   'floored',
-    //   Math.floor(endDate.getTime() / 1000 - startDate.getTime() / 1000),
-    // );
-    // if (
-    //   Math.floor(endDate.getTime() / 1000 - startDate.getTime() / 1000) ===
-    //   timeSpan - 1
-    // ) {
-    //   setSkip(false);
-    //   console.log('noskip');
-    // } else {
-    //   console.log('skip');
-    //   setSkip(true);
-    // }
   }, [timeSpan, items]);
 
   useEffect(() => {
@@ -188,20 +172,12 @@ export function usePrometheus(
   }, [metricId, timeSpan]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    console.log(startDate.getTime() / 1000);
-    console.log(endDate.getTime() / 1000);
-    console.log(
-      'floored',
-      Math.floor(endDate.getTime() / 1000 - startDate.getTime() / 1000),
-    );
     if (
       Math.floor(endDate.getTime() / 1000 - startDate.getTime() / 1000) !==
       timeSpan - 1
     ) {
       setSkip(false);
-      console.log('noskip');
     } else {
-      console.log('skip');
       setSkip(true);
     }
   }, [startDate, endDate, metricId, timeSpan, tick]);
