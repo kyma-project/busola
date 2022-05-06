@@ -11,13 +11,7 @@ const DEFAULT_MODULES = {
   SERVERLESS: 'serverless.kyma-project.io',
   CUSTOM_DOMAINS: 'dns.gardener.cloud',
   ISTIO: 'networking.istio.io',
-  // PROMETHEUS: 'monitoring.coreos.com',
 };
-
-// todo: initial should have 3 possible values:
-// PRIMARY - laoded during the app boostrap (e.g. nav nodes for resources)
-// SECONDARY - loaded immediately after app bootstraps (e.g. observability)
-// <other> - lazy loaded (e.g. prometheus)
 
 export const DEFAULT_FEATURES = {
   ...Object.fromEntries(
@@ -25,13 +19,12 @@ export const DEFAULT_FEATURES = {
       key,
       {
         checks: [apiGroup(value)],
-        initial: true,
-        showInNavigation: true, // indicates that when the feature config changes navigation should be reloaded
+        stage: 'PRIMARY',
+        updateNavigation: true, // indicates that when the feature config changes navigation should be reloaded
       },
     ]),
   ),
   PROMETHEUS: {
-    initial: false,
     checks: [
       apiGroup('monitoring.coreos.com'),
       service(

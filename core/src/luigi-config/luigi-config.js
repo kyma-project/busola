@@ -45,11 +45,11 @@ export const NODE_PARAM_PREFIX = `~`;
 async function initializeBusola() {
   initTheme();
 
-  const activeCluster = await getActiveCluster();
-
-  Luigi.setConfig({
+  const activeCluster = getActiveCluster();
+  const navigation = await createNavigation();
+  window.Luigi.setConfig({
     communication,
-    navigation: await createNavigation(),
+    navigation,
     routing: {
       nodeParamPrefix: NODE_PARAM_PREFIX,
       skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],
@@ -63,9 +63,9 @@ async function initializeBusola() {
   await new Promise(resolve => setTimeout(resolve, 100));
 
   await setNavFooterText();
-  if (!(await getActiveCluster())) {
+  if (!getActiveCluster()) {
     if (!window.location.pathname.startsWith('/clusters')) {
-      Luigi.navigation().navigate('/clusters');
+      window.Luigi.navigation().navigate('/clusters');
     }
   } else {
     tryRestorePreviousLocation();
@@ -79,7 +79,7 @@ async function initializeBusola() {
 
   await i18n;
 
-  await setActiveClusterIfPresentInUrl();
+  setActiveClusterIfPresentInUrl();
 
   // save location, as we'll may be logged out in a moment
   saveCurrentLocation();

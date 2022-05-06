@@ -1,6 +1,6 @@
 import { getBusolaClusterParams } from './../busola-cluster-params';
-import { resolveFeatureAvailability } from './../features';
 import parseJWT from 'jwt-decode';
+import { convertToURLsearch } from '../communication';
 
 const SSO_KEY = 'SSO';
 
@@ -14,7 +14,7 @@ export function getSSOAuthData() {
 
 export async function isSSOEnabled() {
   const features = (await getBusolaClusterParams()).config?.features || {};
-  return await resolveFeatureAvailability(features.SSO_LOGIN, null);
+  return features.SSO_LOGIN?.isEnabled === true;
 }
 
 async function importOpenIdConnect() {
@@ -81,7 +81,7 @@ export async function ssoLogin(luigiAfterInit) {
   }
 
   return new Promise(async resolve => {
-    Luigi.setConfig({
+    window.Luigi.setConfig({
       auth: await createSSOAuth(resolve),
       lifecycleHooks: { luigiAfterInit },
     });

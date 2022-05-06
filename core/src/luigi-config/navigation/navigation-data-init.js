@@ -3,7 +3,7 @@ import {
   fetchPermissions,
   fetchBusolaInitData,
   fetchNamespaces,
-  fetchObservabilityHost,
+  // fetchObservabilityHost,
 } from './queries';
 import { getBusolaClusterParams } from '../busola-cluster-params';
 import { config } from '../config';
@@ -13,7 +13,6 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
-import { resolveFeatureAvailability } from '../features';
 import { showAlert } from '../utils/showAlert';
 
 import {
@@ -32,6 +31,7 @@ import {
   saveActiveClusterName,
   getCurrentContextNamespace,
   saveCARequired,
+  getCurrentConfig,
 } from '../cluster-management/cluster-management';
 import { getFeatureToggle } from '../utils/feature-toggles';
 import { saveLocation } from './previous-location';
@@ -41,7 +41,9 @@ import { checkClusterStorageType } from '../cluster-management/clusters-storage'
 import { getSSOAuthData } from '../auth/sso';
 import { setNavFooterText } from '../nav-footer';
 import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/pagination';
-import { getFeatures2 } from '../feature-discovery';
+import { getFeatures } from '../feature-discovery';
+import { fetchCache } from '../cache/fetch-cache';
+import { loadCacheItem, saveCacheItem } from './../cache/storage';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -79,7 +81,7 @@ async function createAppSwitcher() {
 
 export async function reloadNavigation() {
   const navigation = await createNavigation();
-  Luigi.setConfig({ ...Luigi.getConfig(), navigation });
+  window.Luigi.setConfig({ ...window.Luigi.getConfig(), navigation });
 
   // wait for Luigi to update DOM
   setTimeout(async () => {
@@ -131,7 +133,7 @@ async function createClusterManagementNodes(features) {
 
   const notActiveCluster = name => name !== activeClusterName;
 
-  const clusterNodes = Object.keys(await getClusters())
+  const clusterNodes = Object.keys(getClusters())
     .filter(notActiveCluster)
     .map(clusterName => ({
       pathSegment: encodeURIComponent(clusterName),
@@ -153,14 +155,14 @@ async function createClusterManagementNodes(features) {
     hideFromNav: true,
     hideSideNav: true,
     viewUrl: config.coreUIModuleUrl + '/no-permissions',
-    context: { currentCluster: await getActiveCluster() },
+    context: { currentCluster: getActiveCluster() },
   };
 
   return [clusterManagementNode, clusterNode, noPermissionsNode];
 }
 
 async function createNavigationForNoCluster() {
-  const features = await getFeatures2();
+  const features = await getFeatures();
 
   return {
     profile: {
@@ -185,18 +187,26 @@ async function createNavigationForNoCluster() {
 export async function createNavigation() {
   try {
     const authData = getAuthData();
-    if (!(await getActiveCluster()) || !authData) {
+    if (!getActiveCluster() || !authData) {
       return await createNavigationForNoCluster();
     }
 
     await saveCARequired();
+    const clusterName = getActiveClusterName();
+    fetchCache.destroy();
+    fetchCache.init({
+      getCacheItem: path => loadCacheItem(clusterName, path),
+      setCacheItem: (path, item) => saveCacheItem(clusterName, path, item),
+      fetchOptions: { data: authData },
+    });
     await loadTargetClusterConfig();
 
-    const activeCluster = await getActiveCluster();
+    const config = await getCurrentConfig();
 
-    await checkClusterStorageType(activeCluster.config.storage);
+    await checkClusterStorageType(config.storage);
 
     // we assume all users can make SelfSubjectRulesReview request
+    const activeCluster = getActiveCluster();
     const permissionSet = await fetchPermissions(
       authData,
       getCurrentContextNamespace(activeCluster.kubeconfig),
@@ -206,7 +216,7 @@ export async function createNavigation() {
 
     const activeClusterName = activeCluster.kubeconfig['current-context'];
 
-    const features = await getFeatures2({
+    const features = await getFeatures({
       authData,
       groupVersions,
     });
@@ -249,7 +259,9 @@ export async function createNavigation() {
     const isNodeEnabled = node => {
       if (node.context?.requiredFeatures) {
         for (const feature of node.context.requiredFeatures || []) {
-          if (!feature || feature.isEnabled === false) return false;
+          if (!feature || feature.isEnabled === false) {
+            return false;
+          }
         }
       }
       return true;
@@ -274,6 +286,7 @@ export async function createNavigation() {
     };
   } catch (err) {
     saveActiveClusterName(null);
+    fetchCache.destroy();
     if (err.statusCode === 403) {
       clearAuthData();
       saveLocation(
@@ -298,43 +311,44 @@ export async function createNavigation() {
 }
 
 async function getObservabilityNodes(authData, enabledFeatures) {
+  return [];
   // todo rewrite as check of type service/resource
-  let links =
-    // take the Config Params at first
-    (await resolveFeatureAvailability(enabledFeatures.OBSERVABILITY)) &&
-    enabledFeatures.OBSERVABILITY?.config.links;
+  // let links =
+  //   // take the Config Params at first
+  //   (await resolveFeatureAvailability(enabledFeatures.OBSERVABILITY)) &&
+  //   enabledFeatures.OBSERVABILITY?.config.links;
 
-  if (!links) {
-    const defaultObservability = (await getBusolaClusterParams()).config
-      .features.OBSERVABILITY;
-    links =
-      (await resolveFeatureAvailability(defaultObservability)) && //  use the Busola configMap as a fallback
-      defaultObservability.config.links;
-  }
-  if (!links) return []; // could not get the OBSERVABILITY feature config from either source, do not add any nodes
+  // if (!links) {
+  //   const defaultObservability = (await getBusolaClusterParams()).config
+  //     .features.OBSERVABILITY;
+  //   links =
+  //     (await resolveFeatureAvailability(defaultObservability)) && //  use the Busola configMap as a fallback
+  //     defaultObservability.config.links;
+  // }
+  // if (!links) return []; // could not get the OBSERVABILITY feature config from either source, do not add any nodes
 
-  const CATEGORY = {
-    label: 'Observability',
-    icon: 'stethoscope',
-    collapsible: true,
-  };
-  const navNodes = await Promise.all(
-    links.map(async ({ label, path }) => {
-      try {
-        return {
-          category: CATEGORY,
-          externalLink: {
-            url: 'https://' + (await fetchObservabilityHost(authData, path)),
-            sameWindow: false,
-          },
-          label,
-        };
-      } catch (e) {
-        return undefined;
-      }
-    }),
-  );
-  return navNodes.filter(n => n);
+  // const CATEGORY = {
+  //   label: 'Observability',
+  //   icon: 'stethoscope',
+  //   collapsible: true,
+  // };
+  // const navNodes = await Promise.all(
+  //   links.map(async ({ label, path }) => {
+  //     try {
+  //       return {
+  //         category: CATEGORY,
+  //         externalLink: {
+  //           url: 'https://' + (await fetchObservabilityHost(authData, path)),
+  //           sameWindow: false,
+  //         },
+  //         label,
+  //       };
+  //     } catch (e) {
+  //       return undefined;
+  //     }
+  //   }),
+  // );
+  // return navNodes.filter(n => n);
 }
 
 export async function createNavigationNodes(
@@ -343,7 +357,7 @@ export async function createNavigationNodes(
   permissionSet,
 ) {
   const authData = getAuthData();
-  const activeCluster = await getActiveCluster();
+  const activeCluster = getActiveCluster();
 
   if (!activeCluster || !getAuthData()) {
     return await createClusterManagementNodes(features);
@@ -401,7 +415,7 @@ export async function createNavigationNodes(
       pathSegment: 'cluster',
       hideFromNav: true,
       onNodeActivation: () => {
-        Luigi.navigation().navigate(`/cluster/${activeClusterName}`);
+        window.Luigi.navigation().navigate(`/cluster/${activeClusterName}`);
       },
       children: [
         {
@@ -415,7 +429,7 @@ export async function createNavigationNodes(
         activeClusterName,
         groups,
         features,
-        clusters: await getClusters(),
+        clusters: getClusters(),
         hiddenNamespaces,
         cluster: activeCluster.currentContext.cluster,
         config: activeCluster.config,
@@ -438,14 +452,14 @@ export async function createNavigationNodes(
 }
 
 async function getNamespaces() {
-  const activeCluster = await getActiveCluster();
+  const activeCluster = getActiveCluster();
   const namespace = getCurrentContextNamespace(activeCluster.kubeconfig);
 
   if (namespace) {
     return createNamespacesList([{ name: namespace }]);
   }
 
-  const { hiddenNamespaces = [] } = activeCluster?.config || {};
+  const { hiddenNamespaces = [] } = getCurrentConfig();
   try {
     let namespaces = await fetchNamespaces(getAuthData());
     if (!getFeatureToggle('showHiddenNamespaces')) {
@@ -466,7 +480,7 @@ async function getChildrenNodesForNamespace(
   permissionSet,
   features,
 ) {
-  const { navigation = {} } = (await getActiveCluster()).config;
+  const { navigation = {} } = getCurrentConfig();
   const staticNodes = getStaticChildrenNodesForNamespace(
     groupVersions,
     permissionSet,

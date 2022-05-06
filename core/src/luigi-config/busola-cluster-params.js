@@ -1,4 +1,3 @@
-import { fetchQueue } from 'fetch-queue';
 import { merge } from 'lodash';
 import { convertStaticFeatures } from './feature-discovery';
 
@@ -8,15 +7,16 @@ export async function getBusolaClusterParams() {
   if (!params) {
     try {
       const cacheBuster = '?cache-buster=' + Date.now();
-      const defaultConfigResponse = await fetchQueue(
+      const defaultConfigResponse = await fetch(
         '/assets/defaultConfig.json' + cacheBuster,
       );
-      const configMapResponse = await fetchQueue(
+      const configMapResponse = await fetch(
         '/assets/config/config.json' + cacheBuster,
       );
 
       const defaultParams = await defaultConfigResponse.json();
       const mapParams = await configMapResponse.json();
+
       if (defaultParams.config?.features)
         defaultParams.config.features = convertStaticFeatures(
           defaultParams.config?.features,

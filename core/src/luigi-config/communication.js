@@ -6,9 +6,9 @@ import {
   saveClusterParams,
   deleteCluster,
   saveActiveClusterName,
-  getActiveCluster,
   getActiveClusterName,
   setCluster,
+  getCurrentConfig,
 } from './cluster-management/cluster-management';
 import { clearAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
@@ -20,6 +20,8 @@ import { communicationEntry as pageSizeCommunicationEntry } from './settings/pag
 import { getCorrespondingNamespaceLocation } from './navigation/navigation-helpers';
 import { getAuthData } from './auth/auth-storage';
 import { fetchBusolaInitData } from './navigation/queries';
+import { fetchCache } from './cache/fetch-cache';
+
 addCommandPaletteHandler();
 addOpenSearchHandler();
 
@@ -107,6 +109,7 @@ export const communication = {
         await reloadAuth();
         clearAuthData();
         saveActiveClusterName(null);
+        fetchCache.destroy();
       }
       await reloadNavigation();
     },
@@ -142,7 +145,7 @@ export const communication = {
     'busola.requestFeature': async ({ featureName }) => {
       const authData = getAuthData();
       const groupVersions = await fetchBusolaInitData(authData);
-      const features = (await getActiveCluster())?.config?.features;
+      const features = (await getCurrentConfig()).features;
       const updatedFeature = await discoverFeature(features[featureName], {
         authData,
         groupVersions,

@@ -1,8 +1,9 @@
-import { fetchQueue } from 'fetch-queue';
 import { config } from './../config';
 import { getActiveCluster } from './../cluster-management/cluster-management';
 import { HttpError } from '../../../../core-ui/src/shared/hooks/BackendAPI/config';
 import { getSSOAuthData } from '../auth/sso';
+import { fetchCache } from '../cache/fetch-cache';
+import { reloadNavigation } from './navigation-data-init';
 
 export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {
@@ -34,9 +35,9 @@ export async function failFastFetch(input, auth, init = {}) {
   }
 
   async function createHeaders(auth) {
-    const params = await getActiveCluster();
-    const cluster = params.currentContext.cluster.cluster;
-    const requiresCA = params.config?.requiresCA;
+    const activeCluster = getActiveCluster();
+    const cluster = activeCluster.currentContext.cluster.cluster;
+    const requiresCA = activeCluster.config?.requiresCA;
 
     return {
       ...createSSOHeader(),
@@ -52,7 +53,7 @@ export async function failFastFetch(input, auth, init = {}) {
 
   init.headers = await createHeaders(auth, input);
 
-  const response = await fetchQueue(input, init);
+  const response = await fetch(input, init);
   if (response.ok) {
     return response;
   } else {
@@ -106,12 +107,16 @@ export function fetchPermissions(auth, namespace = '*') {
     .then(res => res.status.resourceRules);
 }
 
-export async function fetchBusolaInitData(auth) {
+export async function fetchBusolaInitData() {
   const CORE_GROUP = 'v1';
 
-  return await failFastFetch(config.backendAddress + '/apis', auth)
-    .then(res => res.json())
-    .then(res => [
+  return await fetchCache
+    .subscribe({
+      path: config.backendAddress + '/apis',
+      callback: reloadNavigation,
+      refreshIntervalMs: 5000, // todo make bigger
+    })
+    .then(({ data: res }) => [
       CORE_GROUP,
       ...res.groups.flatMap(group =>
         group.versions.map(version => version.groupVersion),

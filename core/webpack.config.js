@@ -6,6 +6,9 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = env => {
   return {
+    optimization: {
+      minimize: false, // set to false to disable minification
+    },
     mode: 'production',
     entry: {
       luigiConfig: './src/luigi-config/luigi-config.js',

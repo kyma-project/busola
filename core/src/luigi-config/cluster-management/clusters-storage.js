@@ -1,7 +1,11 @@
 import i18next from 'i18next';
 import { getBusolaClusterParams } from '../busola-cluster-params';
 import { showAlert } from '../utils/showAlert';
-import { getActiveCluster, getActiveClusterName } from './cluster-management';
+import {
+  getActiveCluster,
+  getActiveClusterName,
+  getCurrentConfig,
+} from './cluster-management';
 
 const CLUSTERS_KEY = 'busola.clusters';
 
@@ -50,7 +54,7 @@ export async function save(clusters) {
 }
 
 export async function checkClusterStorageType(originalStorage) {
-  const targetStorage = (await getActiveCluster()).config.storage;
+  const targetStorage = getCurrentConfig().storage;
   if (!!targetStorage && targetStorage !== originalStorage) {
     // move the cluster to the valid storage
     const clusters = load();

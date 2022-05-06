@@ -1,4 +1,3 @@
-import { fetchQueue } from 'fetch-queue';
 import i18next from 'i18next';
 import { getBusolaClusterParams } from './busola-cluster-params';
 
@@ -43,7 +42,7 @@ export async function setNavFooterText() {
 }
 
 async function getBusolaVersion() {
-  return await fetchQueue('/assets/version.json')
+  return await fetch('/assets/version.json')
     .then(response => response.json())
     .then(json => json.version)
     .catch(() => 'unknown');
