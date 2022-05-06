@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 const random = Math.floor(Math.random() * 9999) + 1000;
-const CRB_NAME = `test-crb-${random}`;
+const CRB_NAME = `test-###-crb-${random}`;
 const USER_NAME = 'test@kyma.eu';
 
 context('Test Cluster Role Bindings', () => {
