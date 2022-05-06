@@ -88,7 +88,7 @@ export function ResourceForm({
   let editor = (
     <Editor
       value={resource}
-      setValue={setResource}
+      onChange={setResource}
       onMount={setActionsEditor}
       customSchemaId={customSchemaId || resourceSchemaId.current}
       customSchemaUri={customSchemaUri}

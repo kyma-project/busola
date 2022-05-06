@@ -59,7 +59,7 @@ export function KubeconfigUpload({
         value={kubeconfig}
         customSchemaId="cluster"
         onMount={setEditor}
-        setValue={updateKubeconfig}
+        onChange={updateKubeconfig}
       />
       {error && (
         <MessageStrip type="error" className="fd-margin-top--sm">

@@ -12,7 +12,7 @@ import './Editor.scss';
 
 export function Editor({
   value, // object for yaml and string for other formats. Editor call js-yaml functions itself.
-  setValue,
+  onChange,
   readOnly,
   language = 'yaml',
   multipleYamls, // set to true, if you want upload multiple yaml files
@@ -119,12 +119,12 @@ export function Editor({
               case 'json':
 
               case 'typescript':
-                setValue(editorValue);
+                onChange(editorValue);
                 setError(null);
                 break;
               // case 'json':
-              //   setValue(JSON.parse(editorValue));
-              //   setValue(null);
+              //   onChange(JSON.parse(editorValue));
+              //   onChange(null);
               //   break;
               case 'yaml':
                 const parsed = multipleYamls
@@ -135,7 +135,7 @@ export function Editor({
                   setError(t('common.create-form.object-required'));
                   break;
                 }
-                setValue(parsed);
+                onChange(parsed);
                 setError(null);
                 break;
 
@@ -160,7 +160,7 @@ export function Editor({
     setAutocompleteOptions,
     language,
     multipleYamls,
-    setValue,
+    onChange,
     t,
     readOnly,
     onMount,

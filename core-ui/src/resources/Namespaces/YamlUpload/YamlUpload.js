@@ -62,7 +62,7 @@ export function YamlUpload({
         height="400px"
         language="yaml"
         value={yamlContentString}
-        setValue={updateYamlContent}
+        onChange={updateYamlContent}
         onMount={setEditor}
       />
       {error && (

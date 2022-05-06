@@ -127,7 +127,13 @@ export function ServiceBindingCreate({
         {/*  height="10em"*/}
         {/*/>*/}
         <KeyValueField
+          propertyPath="$.spec.parameters"
+          validate={parsed => !!parsed && typeof parsed === 'object'}
           fullWidth
+          advanced
+          invalidValueMessage={t(
+            'btp-service-bindings.messages.params-invalid',
+          )}
           // readableFromFile
           // className="resource-form__data-field"
           // title={title || t('common.labels.data')}

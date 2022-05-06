@@ -3,11 +3,9 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import {
-  Editor,
-  K8sNameField,
-  KeyValueField,
-} from 'shared/ResourceForm/fields';
+import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
+import { Editor } from 'shared/components/MonacoEditorESM/Editor';
+
 import * as Inputs from 'shared/ResourceForm/inputs';
 
 import { createServiceInstanceTemplate } from './helpers.js';

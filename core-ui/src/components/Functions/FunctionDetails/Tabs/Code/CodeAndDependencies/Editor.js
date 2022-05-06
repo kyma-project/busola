@@ -28,7 +28,7 @@ export default function Editor({
       language={language}
       theme={editorTheme}
       value={controlledValue}
-      setValue={handleControlledChange}
+      onChange={handleControlledChange}
       customSchemaId={id}
     />
   );

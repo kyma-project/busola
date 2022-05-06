@@ -46,7 +46,7 @@ export function YamlContent({
           height="85vh"
           language="yaml"
           value={yaml}
-          setValue={setChangedYamlFn}
+          onChange={setChangedYamlFn}
           onMount={setEditor}
           readOnly={readOnly}
           options={{
