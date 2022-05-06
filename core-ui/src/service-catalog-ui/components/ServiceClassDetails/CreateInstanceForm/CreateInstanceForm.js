@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FormItem, FormLabel, Icon, Link } from 'fundamental-react';
 import * as LuigiClient from '@luigi-project/client';
 
-import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
+import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { randomNameGenerator } from 'shared/utils/helpers';
@@ -272,7 +272,7 @@ export default function CreateInstanceForm({
             )}
           </div>
           {customParametersProvided && (
-            <MonacoEditor
+            <Editor
               autocompletionDisabled
               aria-label="schema-editor"
               height="25em"

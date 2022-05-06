@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
+import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import jsyaml from 'js-yaml';
 
 import { YamlFileUploader } from './YamlFileUploader';
@@ -56,7 +56,7 @@ export function YamlUpload({
       <p className="editor-label fd-margin-bottom--sm fd-margin-top--sm">
         {t('upload-yaml.or-paste-here')}
       </p>
-      <MonacoEditor
+      <Editor
         autocompletionDisabled
         multipleYamls
         height="400px"

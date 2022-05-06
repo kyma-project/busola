@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { LayoutPanel, Button, ButtonSegmented } from 'fundamental-react';
-import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
+import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 
@@ -55,7 +55,7 @@ export function SchemaViewer({ name, schema }) {
           </div>
         )}
         {schemaMode === 'json' && (
-          <MonacoEditor
+          <Editor
             customSchemaId={`crd-schema-editor-${name}`}
             language="json"
             height="20em"
@@ -70,7 +70,7 @@ export function SchemaViewer({ name, schema }) {
           />
         )}
         {schemaMode === 'yaml' && (
-          <MonacoEditor
+          <Editor
             customSchemaId={`crd-schema-editor-${name}`}
             language="yaml"
             autocompletionDisabled

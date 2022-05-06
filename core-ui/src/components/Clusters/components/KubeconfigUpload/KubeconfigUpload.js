@@ -3,7 +3,7 @@ import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import jsyaml from 'js-yaml';
-import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
+import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
 import './KubeconfigUpload.scss';
 
@@ -52,7 +52,7 @@ export function KubeconfigUpload({
       <p className="editor-label fd-margin-bottom--sm fd-margin-top--sm">
         {t('clusters.wizard.editor-label')}
       </p>
-      <MonacoEditor
+      <Editor
         height="320px"
         autocompletionDisabled
         language="yaml"

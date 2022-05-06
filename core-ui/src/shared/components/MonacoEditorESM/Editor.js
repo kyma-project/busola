@@ -34,8 +34,9 @@ export function Editor({
     language === 'yaml'
       ? jsyaml.dump(value, { noRefs: true })
       : language === 'json'
-      ? JSON.stringify(value)
-      : value,
+      ? value
+      : // ? JSON.stringify(value)
+        value,
   );
 
   const editorRef = useRef(null);
@@ -115,14 +116,16 @@ export function Editor({
           try {
             switch (language) {
               case 'javascript':
+              case 'json':
+
               case 'typescript':
                 setValue(editorValue);
                 setError(null);
                 break;
-              case 'json':
-                setValue(JSON.parse(editorValue));
-                setValue(null);
-                break;
+              // case 'json':
+              //   setValue(JSON.parse(editorValue));
+              //   setValue(null);
+              //   break;
               case 'yaml':
                 const parsed = multipleYamls
                   ? jsyaml.loadAll(editorValue)
