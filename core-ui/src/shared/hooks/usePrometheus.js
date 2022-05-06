@@ -139,6 +139,7 @@ export function usePrometheus(
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);
+  const [skip, setSkip] = useState(true);
 
   const kyma2_0path =
     'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
@@ -169,6 +170,26 @@ export function usePrometheus(
     return () => clearInterval(loop);
   }, [metricId, timeSpan]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    console.log(startDate.getTime() / 1000);
+    console.log(endDate.getTime() / 1000);
+    console.log(
+      'floored',
+      Math.floor(endDate.getTime() / 1000 - startDate.getTime() / 1000),
+    );
+    console.log('span', timeSpan);
+    if (
+      Math.floor(endDate.getTime() / 1000 - startDate.getTime() / 1000) !==
+      timeSpan - 1
+    ) {
+      console.log('noskip');
+      setSkip(false);
+    } else {
+      console.log('skip');
+      setSkip(true);
+    }
+  }, [startDate, timeSpan, metricId]);
+
   const query =
     `query_range?` +
     `start=${startDate.toISOString()}&` +
@@ -195,9 +216,11 @@ export function usePrometheus(
       }
     }
   };
+  console.log('skip', skip);
   let { data, error, loading } = useGet(`/${path}/${query}`, {
     pollingInterval: 0,
     onDataReceived: data => onDataReceived(data),
+    skip: skip,
   });
 
   if (data) {
