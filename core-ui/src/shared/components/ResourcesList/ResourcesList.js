@@ -217,6 +217,11 @@ export function ResourceListRenderer({
     );
   };
 
+  const prepareResourceUrl = (resourceUrl, resourceName) => {
+    const encodedName = encodeURIComponent(resourceName);
+    return `${resourceUrl}/${encodedName}`;
+  };
+
   const handleResourceClone = resource => {
     let activeResource = cloneDeep(resource);
     jp.value(activeResource, '$.metadata.name', '');
@@ -261,7 +266,10 @@ export function ResourceListRenderer({
           disabledHandler: isProtected,
           handler: resource => {
             handleResourceDelete({
-              resourceUrl: `${resourceUrl}/${resource.metadata.name}`,
+              resourceUrl: prepareResourceUrl(
+                resourceUrl,
+                resource.metadata.name,
+              ),
             });
             setActiveResource(resource);
           },
@@ -354,7 +362,10 @@ export function ResourceListRenderer({
       />
       <DeleteMessageBox
         resource={activeResource}
-        resourceUrl={`${resourceUrl}/${nameSelector(activeResource)}`}
+        resourceUrl={prepareResourceUrl(
+          resourceUrl,
+          nameSelector(activeResource),
+        )}
       />
       <GenericList
         title={showTitle ? title || prettifiedResourceName : null}
