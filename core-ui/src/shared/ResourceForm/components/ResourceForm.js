@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { ModeSelector } from './ModeSelector';
 import { ResourceFormWrapper } from './Wrapper';
 import { Presets } from './Presets';
-import { Editor } from 'shared/components/MonacoEditorESM/Editor';
+import { EditorWrapper } from 'shared/components/MonacoEditorESM/Editor';
 import { useCreateResource } from '../useCreateResource';
 import * as jp from 'jsonpath';
 
@@ -80,24 +80,19 @@ export function ResourceForm({
     />
   );
 
-  // save initial template values in case user deletes apiVersion or kind. This creates a key for corresponding JSON Schema
-  const resourceSchemaId = useRef(
-    `${jp.value(resource, `$.apiVersion`)}/${jp.value(resource, `$.kind`)}`,
-  );
-
   let editor = (
-    <Editor
+    <EditorWrapper
       value={resource}
       onChange={setResource}
       onMount={setActionsEditor}
-      customSchemaId={customSchemaId || resourceSchemaId.current}
+      customSchemaId={customSchemaId}
       customSchemaUri={customSchemaUri}
       autocompletionDisabled={autocompletionDisabled}
       readOnly={readOnly}
     />
   );
   editor = renderEditor
-    ? renderEditor({ defaultEditor: editor, Editor })
+    ? renderEditor({ defaultEditor: editor, Editor: EditorWrapper })
     : editor;
   return (
     <section className={classnames('resource-form', className)}>

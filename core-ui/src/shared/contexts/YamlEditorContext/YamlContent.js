@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import jsyaml from 'js-yaml';
-// import MonacoEditor from '@monaco-editor/react';
-import { Editor } from 'shared/components/MonacoEditorESM/Editor';
+import { EditorWrapper } from 'shared/components/MonacoEditorESM/Editor';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
 
-import { useTheme } from 'shared/contexts/ThemeContext';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
 export function YamlContent({
@@ -18,7 +16,6 @@ export function YamlContent({
 }) {
   const [editor, setEditor] = React.useState(null);
   const [val, setVal] = useState(jsyaml.dump(yaml));
-  const { editorTheme } = useTheme();
 
   useEffect(() => {
     const converted = jsyaml.dump(yaml);
@@ -29,7 +26,6 @@ export function YamlContent({
     editor?.trigger('', 'closeFindWidget');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [yaml]);
-
   return (
     <>
       <EditorActions
@@ -41,8 +37,7 @@ export function YamlContent({
         i18n={i18n}
       />
       <ErrorBoundary i18n={i18n}>
-        <Editor
-          autocompletionDisabled
+        <EditorWrapper
           height="85vh"
           language="yaml"
           value={yaml}

@@ -84,6 +84,7 @@ export function ServiceInstanceCreate({
         resource={serviceInstance}
         setResource={setServiceInstance}
       >
+        {/* TODO does it work */}
         <Editor
           autocompletionDisabled
           propertyPath="$.spec.parameters"

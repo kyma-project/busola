@@ -115,6 +115,7 @@ export function ServiceBindingCreate({
         resource={serviceBinding}
         setResource={setServiceBinding}
       >
+        {/* TO DO test it */}
         {/*<Editor*/}
         {/*  propertyPath="$.spec.parameters"*/}
         {/*  language="json"*/}

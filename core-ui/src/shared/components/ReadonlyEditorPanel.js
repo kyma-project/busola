@@ -11,12 +11,8 @@ export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
   const [editor, setEditor] = React.useState(null);
 
   const options = {
-    readOnly: true,
     minimap: {
       enabled: false,
-    },
-    scrollbar: {
-      alwaysConsumeMouseWheel: false,
     },
   };
 

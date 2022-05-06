@@ -25,8 +25,10 @@ export function YamlUpload({
     ?.join('---\n');
 
   const updateYamlContent = useCallback(
-    files => {
+    text => {
       try {
+        const files = jsyaml.loadAll(text);
+
         setLastOperationState(OPERATION_STATE_INITIAL);
         if (files.some(file => typeof file !== 'object')) {
           setError(t('clusters.wizard.not-an-object'));
@@ -58,7 +60,6 @@ export function YamlUpload({
       </p>
       <Editor
         autocompletionDisabled
-        multipleYamls
         height="400px"
         language="yaml"
         value={yamlContentString}

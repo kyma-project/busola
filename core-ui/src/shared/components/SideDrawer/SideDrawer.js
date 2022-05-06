@@ -33,8 +33,7 @@ export const SideDrawer = ({
         <Editor
           height="90vh"
           autocompletionDisabled
-          language="yaml"
-          value={children}
+          value={textToCopy}
           readOnly
         />
       </>

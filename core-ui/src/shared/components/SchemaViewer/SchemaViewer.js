@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { LayoutPanel, Button, ButtonSegmented } from 'fundamental-react';
-import { Editor } from 'shared/components/MonacoEditorESM/Editor';
+import { EditorWrapper } from 'shared/components/MonacoEditorESM/Editor';
 import { useTranslation } from 'react-i18next';
-import jsyaml from 'js-yaml';
 
 import { JSONSchema } from './JSONSchema';
 
@@ -12,9 +11,6 @@ export function SchemaViewer({ name, schema }) {
   const [schemaMode, setSchemaMode] = useState('viewer');
 
   const { t } = useTranslation();
-
-  const jsonSchema = () => JSON.stringify(schema, null, 2);
-  const yamlSchema = () => jsyaml.dump(schema, { noRefs: true });
 
   return (
     <LayoutPanel key={`crd-schema-${name}`} className="fd-margin--md">
@@ -55,11 +51,11 @@ export function SchemaViewer({ name, schema }) {
           </div>
         )}
         {schemaMode === 'json' && (
-          <Editor
+          <EditorWrapper
             customSchemaId={`crd-schema-editor-${name}`}
             language="json"
             height="20em"
-            value={jsonSchema()}
+            value={schema}
             autocompletionDisabled
             readOnly
             options={{
@@ -70,12 +66,12 @@ export function SchemaViewer({ name, schema }) {
           />
         )}
         {schemaMode === 'yaml' && (
-          <Editor
+          <EditorWrapper
             customSchemaId={`crd-schema-editor-${name}`}
             language="yaml"
             autocompletionDisabled
             height="20em"
-            value={yamlSchema()}
+            value={schema}
             readOnly
             options={{
               minimap: {

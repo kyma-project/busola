@@ -20,8 +20,10 @@ export function KubeconfigUpload({
   const { t } = useTranslation();
 
   const updateKubeconfig = useCallback(
-    config => {
+    text => {
       try {
+        const config = jsyaml.load(text);
+
         if (typeof config !== 'object') {
           setError(t('clusters.wizard.not-an-object'));
         } else {
@@ -37,16 +39,11 @@ export function KubeconfigUpload({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [t],
   );
-
   return (
     <>
       <KubeconfigFileUpload
         onKubeconfigTextAdded={text => {
-          const parsed = jsyaml.load(text);
-          if (parsed) {
-            updateKubeconfig(parsed);
-            editor.getModel().setValue(text);
-          }
+          editor.getModel().setValue(text);
         }}
       />
       <p className="editor-label fd-margin-bottom--sm fd-margin-top--sm">
@@ -56,7 +53,7 @@ export function KubeconfigUpload({
         height="320px"
         autocompletionDisabled
         language="yaml"
-        value={kubeconfig}
+        value={jsyaml.dump(kubeconfig)}
         customSchemaId="cluster"
         onMount={setEditor}
         onChange={updateKubeconfig}

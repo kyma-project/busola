@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { Editor as MonacoEditor } from 'shared/components/MonacoEditorESM/Editor';
-import { useTheme } from 'shared/contexts/ThemeContext';
 
 export default function Editor({
   id,
@@ -10,8 +9,6 @@ export default function Editor({
   setValue,
   debouncedCallback = () => undefined,
 }) {
-  const { editorTheme } = useTheme();
-
   const handleControlledChange = useCallback(
     value => {
       setValue(value);
@@ -20,13 +17,11 @@ export default function Editor({
     },
     [debouncedCallback, setValue, setControlledValue],
   );
-
   return (
     <MonacoEditor
       autocompletionDisabled
       height="30em"
       language={language}
-      theme={editorTheme}
       value={controlledValue}
       onChange={handleControlledChange}
       customSchemaId={id}
