@@ -6,7 +6,7 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { ResourceForm } from 'shared/ResourceForm';
 import {
-  Editor,
+  // Editor,
   K8sNameField,
   KeyValueField,
 } from 'shared/ResourceForm/fields';
@@ -14,6 +14,7 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 
 import { createServiceBindingTemplate } from './helpers';
 import { SecretRefForm } from './SecretRefForm/SecretRefForm';
+import { FormTextarea } from 'fundamental-react';
 
 export function ServiceBindingCreate({
   namespace,
@@ -114,16 +115,31 @@ export function ServiceBindingCreate({
         resource={serviceBinding}
         setResource={setServiceBinding}
       >
-        <Editor
-          propertyPath="$.spec.parameters"
-          language="json"
-          autocompletionDisabled
-          advanced
-          validate={parsed => !!parsed && typeof parsed === 'object'}
-          invalidValueMessage={t(
-            'btp-service-bindings.messages.params-invalid',
+        {/*<Editor*/}
+        {/*  propertyPath="$.spec.parameters"*/}
+        {/*  language="json"*/}
+        {/*  autocompletionDisabled*/}
+        {/*  advanced*/}
+        {/*  validate={parsed => !!parsed && typeof parsed === 'object'}*/}
+        {/*  invalidValueMessage={t(*/}
+        {/*    'btp-service-bindings.messages.params-invalid',*/}
+        {/*  )}*/}
+        {/*  height="10em"*/}
+        {/*/>*/}
+        <KeyValueField
+          fullWidth
+          // readableFromFile
+          // className="resource-form__data-field"
+          // title={title || t('common.labels.data')}
+          input={({ setValue, ...props }) => (
+            <FormTextarea
+              compact
+              onChange={e => setValue(e.target.value)}
+              className="value-textarea"
+              {...props}
+              onKeyDown={() => {}} // overwrites default onKeyDown that switches focus when Enter is pressed
+            />
           )}
-          height="10em"
         />
       </ResourceForm.CollapsibleSection>
       <SecretRefForm
