@@ -9,7 +9,6 @@ import { ResourceFormWrapper } from './Wrapper';
 import { Presets } from './Presets';
 import { EditorWrapper } from 'shared/components/MonacoEditorESM/Editor';
 import { useCreateResource } from '../useCreateResource';
-import * as jp from 'jsonpath';
 
 import './ResourceForm.scss';
 
