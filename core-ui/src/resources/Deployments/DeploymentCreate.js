@@ -76,6 +76,7 @@ export function DeploymentCreate({
       <ResourceForm.CollapsibleSection
         title={t('services.name_singular')}
         actions={serviceActions}
+        defaultOpen={createService}
       >
         <Editor
           readonly={!createService}

@@ -1,6 +1,6 @@
 .resource-form__editor {
   position: relative;
-  height: calc(100% - 21px - 36px); // avoid v-scroll
+  height: calc(100% - 21px); // avoid v-scroll
   overflow: hidden;
 
   .monaco-editor {
@@ -11,9 +11,11 @@
     inset: 0;
 
     & > * {
-      bottom: 0;
-      left: 50px;
+      bottom: 36px;
+      width: 50%;
+      right: 10px;
       position: absolute;
+      opacity: 0.8;
     }
   }
 }
