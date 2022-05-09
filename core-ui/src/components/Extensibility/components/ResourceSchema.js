@@ -38,15 +38,15 @@ const widgets = {
     /*
     Accordions: AccordionsRenderer,
     */
-    Text: ({ onChange, onKeyDown, value, schema, storeKeys, required }) => {
-      console.log('Text', { schema, value, onChange });
+    Text: ({ onChangeeee, onKeyDown, value, schema, storeKeys, required }) => {
+      console.log('Text', { schema, value, onChangeeee });
       return (
         <input
           onKeyDown={onKeyDown}
           onChange={e => {
             const newVal = e.target.value;
 
-            onChange({
+            onChangeeee({
               storeKeys,
               scopes: ['value'],
               type: 'set',
@@ -155,8 +155,10 @@ export const ResourceSchema = ({ ...props }) => {
   // const [store, setStore] = useState(() => createStore(createOrderedMap(value)));
   const onChange = useCallback(
     actions => {
-      console.log('onChange', actions);
-      setStore(storeUpdater(actions));
+      setStore(prevStore => {
+        console.log('onChange', actions);
+        return storeUpdater(actions)(prevStore);
+      });
     },
     [setStore],
   );
@@ -192,7 +194,11 @@ export const ResourceSchema = ({ ...props }) => {
     <>
       <div>{JSON.stringify(store)}</div>
       <UIMetaProvider widgets={widgets}>
-        <UIStoreProvider store={store} onChange={onChange} showValidity={true}>
+        <UIStoreProvider
+          store={store}
+          onChangeeee={onChange}
+          showValidity={true}
+        >
           <FormStack isRoot schema={schema} />
         </UIStoreProvider>
       </UIMetaProvider>
