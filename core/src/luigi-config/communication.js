@@ -46,24 +46,22 @@ export const communication = {
       });
     },
     'busola.showHiddenNamespaces': ({ showHiddenNamespaces }) => {
-      console.log('busola.showHiddenNamespaces', showHiddenNamespaces);
       localStorage.setItem('busola.showHiddenNamespaces', showHiddenNamespaces);
-
-      // setFeatureToggle('showHiddenNamespaces', showHiddenNamespaces);
-      // Luigi.configChanged();
+      setFeatureToggle('showHiddenNamespaces', showHiddenNamespaces);
+      Luigi.configChanged();
     },
-    // 'busola.getFeatureToggle': ({ key }) => {
-    //   localStorage.getItem('busola.showHiddenNamespaces', showHiddenNamespaces);
-    //   Luigi.customMessages().sendToAll({
-    //     id: 'busola.getFeatureToggle',
-    //     theme: name,
-    //   });
-    // },
     'busola.disableResourceProtection': ({ disableResourceProtection }) => {
+      localStorage.setItem(
+        'busola.disableResourceProtection',
+        disableResourceProtection,
+      );
       setFeatureToggle('disableResourceProtection', disableResourceProtection);
+      Luigi.configChanged();
     },
     'busola.dontConfirmDelete': ({ value }) => {
+      localStorage.setItem('busola.dontConfirmDelete', value);
       setFeatureToggle('dontConfirmDelete', value);
+      Luigi.configChanged();
     },
     'busola.refreshNavigation': () => {
       Luigi.configChanged('navigation.nodes');
