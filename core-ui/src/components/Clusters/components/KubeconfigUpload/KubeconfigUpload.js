@@ -42,7 +42,7 @@ export function KubeconfigUpload({
         {t('clusters.wizard.editor-label')}
       </p>
       <MonacoEditor
-        height="400px"
+        height="320px"
         language="yaml"
         theme={editorTheme}
         value={configString}
