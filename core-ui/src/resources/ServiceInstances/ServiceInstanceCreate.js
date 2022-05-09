@@ -4,11 +4,11 @@ import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
-import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
 import * as Inputs from 'shared/ResourceForm/inputs';
 
 import { createServiceInstanceTemplate } from './helpers.js';
+import { FormTextarea } from 'fundamental-react';
 
 export function ServiceInstanceCreate({
   namespace,
@@ -78,22 +78,23 @@ export function ServiceInstanceCreate({
         input={Inputs.Text}
         placeholder={t('btp-instances.placeholders.external-name')}
       />
-      <ResourceForm.CollapsibleSection
-        advanced
+      <KeyValueField
         title={t('btp-instances.parameters')}
-        resource={serviceInstance}
-        setResource={setServiceInstance}
-      >
-        {/* TODO does it work */}
-        <Editor
-          autocompletionDisabled
-          propertyPath="$.spec.parameters"
-          language="json"
-          validate={parsed => !!parsed && typeof parsed === 'object'}
-          invalidValueMessage={t('btp-instances.messages.params-invalid')}
-          height="10em"
-        />
-      </ResourceForm.CollapsibleSection>
+        propertyPath="$.spec.parameters"
+        validate={parsed => !!parsed && typeof parsed === 'object'}
+        fullWidth
+        advanced
+        invalidValueMessage={t('btp-instances.messages.params-invalid')}
+        input={({ setValue, ...props }) => (
+          <FormTextarea
+            compact
+            onChange={e => setValue(e.target.value)}
+            className="value-textarea"
+            {...props}
+            onKeyDown={() => {}} // overwrites default onKeyDown that switches focus when Enter is pressed
+          />
+        )}
+      />
     </ResourceForm>
   );
 }

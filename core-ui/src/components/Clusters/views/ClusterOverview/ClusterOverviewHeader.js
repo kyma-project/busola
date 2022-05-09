@@ -69,7 +69,6 @@ export function ClusterOverviewHeader() {
           <ClusterStorageType clusterConfig={config} />
         </PageHeader.Column>
       </PageHeader>
-      {/*  TODO this component probably increased initial load, lazy load it (it contains monaco editor)*/}
       <YamlUploadDialog
         show={showAdd}
         onCancel={() => {
