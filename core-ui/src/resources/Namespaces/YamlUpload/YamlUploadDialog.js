@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Dialog, Button } from 'fundamental-react';
 import { isEqual } from 'lodash';
+import jsyaml from 'js-yaml';
 
 import { YamlUpload } from './YamlUpload';
 import { YamlResourcesList } from './YamlResourcesList';
@@ -49,17 +50,22 @@ export function YamlUploadDialog({ show, onCancel }) {
     }
   }, [show]);
 
-  const updateYamlContent = yaml => {
-    if (isEqual(yaml?.sort(), oldYaml?.current?.sort())) return;
-    setResourcesData(yaml);
-    const nonEmptyResources = yaml?.filter(resource => resource !== null);
-    const resourcesWithStatus = nonEmptyResources?.map(value => ({
-      value,
-      status: '',
-      message: '',
-    }));
-    setResourcesWithStatuses(resourcesWithStatus);
-    oldYaml.current = yaml;
+  const updateYamlContent = yamlText => {
+    try {
+      const yaml = jsyaml.loadAll(yamlText);
+      if (isEqual(yaml?.sort(), oldYaml?.current?.sort())) return;
+      setResourcesData(yamlText);
+      const nonEmptyResources = yaml?.filter(resource => resource !== null);
+      const resourcesWithStatus = nonEmptyResources?.map(value => ({
+        value,
+        status: '',
+        message: '',
+      }));
+      setResourcesWithStatuses(resourcesWithStatus);
+      oldYaml.current = yaml;
+    } catch ({ message }) {
+      console.log(message);
+    }
   };
 
   const actions = [
