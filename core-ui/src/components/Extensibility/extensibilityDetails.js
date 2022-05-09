@@ -5,6 +5,7 @@ import { CreateExtensibilityList } from './components/CreateExtensibilityList';
 import { CreateReadOnlyEditor } from './components/CreateMonacoReadOnlyEditor';
 import { CreateDetailPanel } from './components/CreateDetailPanel';
 import { usePrepareDetailsProps } from 'resources/helpers';
+
 export const ExtensibilityDetails = () => {
   const resMetaData = useGetCRbyPath();
   const detailsProps = usePrepareDetailsProps(

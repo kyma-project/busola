@@ -1,10 +1,89 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { isEmpty } from 'lodash';
 import * as jp from 'jsonpath';
+
+import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
+import { UIMetaProvider, useUIMeta } from '@ui-schema/ui-schema/UIMeta';
+import {
+  UIStoreProvider,
+  createEmptyStore,
+  createStore,
+  storeUpdater,
+} from '@ui-schema/ui-schema';
+import { WidgetRenderer } from '@ui-schema/ui-schema/WidgetRenderer';
+import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { KeyValueField } from 'shared/ResourceForm/fields';
 import * as Inputs from 'shared/ResourceForm/inputs';
+
+export function StringRenderer({ value }) {
+  return <div>[[{value}]]</div>;
+}
+
+const widgets = {
+  // ErrorFallback: ErrorFallback,
+  RootRenderer: ({ children }) => <div>{children}</div>,
+  GroupRenderer: ({ children }) => <div>{children}</div>,
+  WidgetRenderer,
+  pluginStack: [],
+  pluginSimpleStack: [],
+  types: {
+    string: StringRenderer,
+    boolean: StringRenderer,
+    number: StringRenderer,
+    integer: StringRenderer,
+  },
+  custom: {
+    /*
+    Accordions: AccordionsRenderer,
+    */
+    Text: ({ onChange, onKeyDown, value, schema, storeKeys, required }) => {
+      console.log('Text', { schema, value, onChange });
+      return (
+        <input
+          onKeyDown={onKeyDown}
+          onChange={e => {
+            const newVal = e.target.value;
+
+            onChange({
+              storeKeys,
+              scopes: ['value'],
+              type: 'set',
+              schema,
+              required,
+              data: { value: newVal },
+            });
+          }}
+          value={value}
+        />
+      );
+    },
+    /*
+    Text: TextRenderer,
+    StringIcon: StringIconRenderer,
+    TextIcon: TextIconRenderer,
+    NumberIcon: NumberIconRenderer,
+    NumberSlider,
+    SimpleList,
+    GenericList,
+    OptionsCheck,
+    OptionsRadio,
+    Select,
+    SelectMulti,
+    Card: CardRenderer,
+    LabelBox,
+    FormGroup,
+    */
+  },
+};
+
+export function FormContainer({ children }) {
+  // return <Grid container spacing={spacing}>{children}</Grid>;
+  return <div container>{children}</div>;
+}
+
+const FormStack = injectPluginStack(FormContainer);
 
 const JSONSchemaForm = ({ properties, path, ...props }) => {
   const { resource, setResource } = props;
@@ -70,6 +149,55 @@ const JSONSchemaForm = ({ properties, path, ...props }) => {
 };
 
 export const ResourceSchema = ({ ...props }) => {
+  const [store, setStore] = useState(() =>
+    createStore(createOrderedMap(props.resource)),
+  );
+  // const [store, setStore] = useState(() => createStore(createOrderedMap(value)));
+  const onChange = useCallback(
+    actions => {
+      console.log('onChange', actions);
+      setStore(storeUpdater(actions));
+    },
+    [setStore],
+  );
+
   if (isEmpty(props.schema)) return null;
-  return <JSONSchemaForm properties={props.schema.properties} {...props} />;
+
+  console.log(props.schema);
+  const schema = createOrderedMap(props.schema);
+  // const schema = createOrderedMap({
+  // "type": "object",
+  // "properties": {
+  // "metadata.name": {
+  // "type": "string",
+  // "minLength": 3
+  // },
+  // "comment": {
+  // "type": "string",
+  // "widget": "Text",
+  // "view": {
+  // "rows": 3
+  // }
+  // },
+  // // "accept_privacy": {
+  // // "type": "boolean"
+  // // }
+  // },
+  // // "required": [
+  // // "accept_privacy"
+  // // ]
+  // });
+
+  return (
+    <>
+      <div>{JSON.stringify(store)}</div>
+      <UIMetaProvider widgets={widgets}>
+        <UIStoreProvider store={store} onChange={onChange} showValidity={true}>
+          <FormStack isRoot schema={schema} />
+        </UIStoreProvider>
+      </UIMetaProvider>
+    </>
+  );
+
+  // return <JSONSchemaForm properties={props.schema.properties} {...props} />;
 };
