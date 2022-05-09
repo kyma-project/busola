@@ -14,10 +14,6 @@ export function getFeatureToggle(key) {
 export function setFeatureToggle(key, value) {
   localStorage.setItem(`busola.${key}`, value);
   updateFeatureToggle(key, value);
-  Luigi.customMessages().sendToAll({
-    id: `busola.toggle-changed.${key}`,
-    value,
-  });
 }
 
 export function readFeatureToggle(key) {
