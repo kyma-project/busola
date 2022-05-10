@@ -1,3 +1,4 @@
+import { fetchQueue } from 'fetch-queue';
 import { config } from './../config';
 import { getActiveCluster } from './../cluster-management/cluster-management';
 import { getSSOAuthData } from '../auth/sso';
@@ -52,7 +53,7 @@ export async function failFastFetch(input, auth, init = {}) {
 
   init.headers = await createHeaders(auth, input);
 
-  return await fetch(input, init);
+  return await fetchQueue(input, init);
 }
 
 export async function checkIfClusterRequiresCA(auth) {
