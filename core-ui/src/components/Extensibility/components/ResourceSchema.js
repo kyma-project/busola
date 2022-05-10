@@ -17,8 +17,56 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { KeyValueField } from 'shared/ResourceForm/fields';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
-export function StringRenderer({ value }) {
-  return <div>[[{value}]]</div>;
+import {
+  DefaultHandler,
+  DependentHandler,
+  ConditionalHandler,
+  CombiningHandler,
+  ReferencingHandler,
+  ExtractStorePlugin,
+} from '@ui-schema/ui-schema/Plugins';
+import { PluginSimpleStack } from '@ui-schema/ui-schema/PluginSimpleStack';
+import { ValidityReporter } from '@ui-schema/ui-schema/ValidityReporter';
+import { ComponentPluginType } from '@ui-schema/ui-schema';
+import { validators } from '@ui-schema/ui-schema/Validators/validators';
+
+const pluginStack = [
+  ReferencingHandler,
+  ExtractStorePlugin,
+  CombiningHandler,
+  DefaultHandler,
+  DependentHandler,
+  ConditionalHandler,
+  PluginSimpleStack,
+  ValidityReporter,
+];
+
+function StringRenderer({
+  onChange,
+  onKeyDown,
+  value,
+  schema,
+  storeKeys,
+  required,
+}) {
+  return (
+    <input
+      onKeyDown={onKeyDown}
+      onChange={e => {
+        const newVal = e.target.value;
+
+        onChange({
+          storeKeys,
+          scopes: ['value'],
+          type: 'set',
+          schema,
+          required,
+          data: { value: newVal },
+        });
+      }}
+      value={value}
+    />
+  );
 }
 
 const widgets = {
@@ -26,40 +74,20 @@ const widgets = {
   RootRenderer: ({ children }) => <div>{children}</div>,
   GroupRenderer: ({ children }) => <div>{children}</div>,
   WidgetRenderer,
-  pluginStack: [],
-  pluginSimpleStack: [],
+  pluginStack,
+  pluginSimpleStack: validators,
   types: {
     string: StringRenderer,
-    boolean: StringRenderer,
+    boolean: ({ children }) => <span>TODO: boolean</span>,
     number: StringRenderer,
     integer: StringRenderer,
+    array: ({ children }) => <>TODO: array</>,
   },
   custom: {
     /*
     Accordions: AccordionsRenderer,
     */
-    Text: ({ onChange, onKeyDown, value, schema, storeKeys, required }) => {
-      console.log('Text', { schema, value, onChange });
-      return (
-        <input
-          onKeyDown={onKeyDown}
-          onChange={e => {
-            console.log('test');
-            const newVal = e.target.value;
-
-            onChange({
-              storeKeys,
-              scopes: ['value'],
-              type: 'set',
-              schema,
-              required,
-              data: { value: newVal },
-            });
-          }}
-          value={value}
-        />
-      );
-    },
+    Text: StringRenderer,
     /*
     Text: TextRenderer,
     StringIcon: StringIconRenderer,
@@ -153,7 +181,6 @@ export const ResourceSchema = ({ ...props }) => {
   const [store, setStore] = useState(() =>
     createStore(createOrderedMap(props.resource)),
   );
-  // const [store, setStore] = useState(() => createStore(createOrderedMap(value)));
   const onChange = useCallback(
     actions => {
       setStore(prevStore => {
@@ -168,39 +195,15 @@ export const ResourceSchema = ({ ...props }) => {
 
   console.log(props.schema);
   const schema = createOrderedMap(props.schema);
-  // const schema = createOrderedMap({
-  // "type": "object",
-  // "properties": {
-  // "metadata.name": {
-  // "type": "string",
-  // "minLength": 3
-  // },
-  // "comment": {
-  // "type": "string",
-  // "widget": "Text",
-  // "view": {
-  // "rows": 3
-  // }
-  // },
-  // // "accept_privacy": {
-  // // "type": "boolean"
-  // // }
-  // },
-  // // "required": [
-  // // "accept_privacy"
-  // // ]
-  // });
 
   return (
     <>
       <div>{JSON.stringify(store)}</div>
-      <UIMetaProvider widgets={widgets} onChange={onChange}>
-        <UIStoreProvider store={store} showValidity={true}>
+      <UIMetaProvider widgets={widgets}>
+        <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
           <FormStack isRoot schema={schema} />
         </UIStoreProvider>
       </UIMetaProvider>
     </>
   );
-
-  // return <JSONSchemaForm properties={props.schema.properties} {...props} />;
 };
