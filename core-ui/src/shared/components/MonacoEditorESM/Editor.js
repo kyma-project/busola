@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTheme } from 'shared/contexts/ThemeContext';
-import jsyaml from 'js-yaml';
 import { editor, Uri } from 'monaco-editor';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
