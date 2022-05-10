@@ -1,9 +1,9 @@
 import i18next from 'i18next';
 import {
   fetchPermissions,
-  fetchBusolaInitData,
+  fetchAvailableApis,
   fetchNamespaces,
-  // fetchObservabilityHost,
+  fetchObservabilityHost,
 } from './queries';
 import { getBusolaClusterParams } from '../busola-cluster-params';
 import { config } from '../config';
@@ -41,7 +41,7 @@ import { checkClusterStorageType } from '../cluster-management/clusters-storage'
 import { getSSOAuthData } from '../auth/sso';
 import { setNavFooterText } from '../nav-footer';
 import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/pagination';
-import { getFeatures } from '../feature-discovery';
+import { getFeatures, initFeatures } from '../feature-discovery';
 import { fetchCache } from '../cache/fetch-cache';
 import { loadCacheItem, saveCacheItem } from './../cache/storage';
 
@@ -162,7 +162,7 @@ async function createClusterManagementNodes(features) {
 }
 
 async function createNavigationForNoCluster() {
-  const features = await getFeatures();
+  await initFeatures();
 
   return {
     profile: {
@@ -180,7 +180,7 @@ async function createNavigationForNoCluster() {
     },
     preloadViewGroups: false,
     appSwitcher: await createAppSwitcher(),
-    nodes: await createClusterManagementNodes(features),
+    nodes: await createClusterManagementNodes(getFeatures()),
   };
 }
 
@@ -212,14 +212,11 @@ export async function createNavigation() {
       getCurrentContextNamespace(activeCluster.kubeconfig),
     );
 
-    const groupVersions = await fetchBusolaInitData(authData);
+    const groupVersions = await fetchAvailableApis(authData);
 
     const activeClusterName = activeCluster.kubeconfig['current-context'];
 
-    const features = await getFeatures({
-      authData,
-      groupVersions,
-    });
+    await initFeatures();
 
     const optionsForCurrentCluster = {
       contextSwitcher: {
@@ -253,19 +250,6 @@ export async function createNavigation() {
         ],
       },
     };
-    // todo move to checkSingleNode in 'static-navigation-model.js'
-    // it would work here just fine, but checkSingleNode is a better place
-    // we don't need to resolve features, as they had already been resolved before creating navigation
-    const isNodeEnabled = node => {
-      if (node.context?.requiredFeatures) {
-        for (const feature of node.context.requiredFeatures || []) {
-          if (!feature || feature.isEnabled === false) {
-            return false;
-          }
-        }
-      }
-      return true;
-    };
 
     if (!hasAnyRoleBound(permissionSet)) {
       const error = i18next.t('common.errors.no-permissions-no-role');
@@ -275,11 +259,11 @@ export async function createNavigation() {
     return {
       preloadViewGroups: false,
       nodeAccessibilityResolver: node =>
-        isNodeEnabled(node) && navigationPermissionChecker(node, permissionSet),
+        navigationPermissionChecker(node, permissionSet),
       appSwitcher: await createAppSwitcher(),
       ...optionsForCurrentCluster,
       nodes: await createNavigationNodes(
-        features,
+        await getFeatures(),
         groupVersions,
         permissionSet,
       ),
@@ -310,45 +294,36 @@ export async function createNavigation() {
   }
 }
 
-async function getObservabilityNodes(authData, enabledFeatures) {
-  return [];
-  // todo rewrite as check of type service/resource
-  // let links =
-  //   // take the Config Params at first
-  //   (await resolveFeatureAvailability(enabledFeatures.OBSERVABILITY)) &&
-  //   enabledFeatures.OBSERVABILITY?.config.links;
+async function getObservabilityNodes(authData) {
+  const observabilityFeature = (await getCurrentConfig()).features
+    .OBSERVABILITY;
 
-  // if (!links) {
-  //   const defaultObservability = (await getBusolaClusterParams()).config
-  //     .features.OBSERVABILITY;
-  //   links =
-  //     (await resolveFeatureAvailability(defaultObservability)) && //  use the Busola configMap as a fallback
-  //     defaultObservability.config.links;
-  // }
-  // if (!links) return []; // could not get the OBSERVABILITY feature config from either source, do not add any nodes
+  if (!observabilityFeature || !observabilityFeature.isEnabled) return [];
 
-  // const CATEGORY = {
-  //   label: 'Observability',
-  //   icon: 'stethoscope',
-  //   collapsible: true,
-  // };
-  // const navNodes = await Promise.all(
-  //   links.map(async ({ label, path }) => {
-  //     try {
-  //       return {
-  //         category: CATEGORY,
-  //         externalLink: {
-  //           url: 'https://' + (await fetchObservabilityHost(authData, path)),
-  //           sameWindow: false,
-  //         },
-  //         label,
-  //       };
-  //     } catch (e) {
-  //       return undefined;
-  //     }
-  //   }),
-  // );
-  // return navNodes.filter(n => n);
+  const links = observabilityFeature.config.links;
+
+  const CATEGORY = {
+    label: 'Observability',
+    icon: 'stethoscope',
+    collapsible: true,
+  };
+  const navNodes = await Promise.all(
+    links.map(async ({ label, path }) => {
+      try {
+        return {
+          category: CATEGORY,
+          externalLink: {
+            url: 'https://' + (await fetchObservabilityHost(authData, path)),
+            sameWindow: false,
+          },
+          label,
+        };
+      } catch (e) {
+        return undefined;
+      }
+    }),
+  );
+  return navNodes.filter(n => n);
 }
 
 export async function createNavigationNodes(
@@ -376,10 +351,7 @@ export async function createNavigationNodes(
       permissionSet,
       features,
     );
-    const observabilitySection = await getObservabilityNodes(
-      authData,
-      features,
-    );
+    const observabilitySection = await getObservabilityNodes(authData);
     const externalNodes = addExternalNodes(features.EXTERNAL_NODES);
     const allNodes = [
       ...staticNodes,

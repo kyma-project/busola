@@ -1,9 +1,8 @@
 import { config } from './../config';
 import { getActiveCluster } from './../cluster-management/cluster-management';
-import { HttpError } from '../../../../core-ui/src/shared/hooks/BackendAPI/config';
 import { getSSOAuthData } from '../auth/sso';
 import { fetchCache } from '../cache/fetch-cache';
-import { reloadNavigation } from './navigation-data-init';
+import { extractGroupVersions } from '../utils/extractGroupVersions';
 
 export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {
@@ -53,22 +52,7 @@ export async function failFastFetch(input, auth, init = {}) {
 
   init.headers = await createHeaders(auth, input);
 
-  const response = await fetch(input, init);
-  if (response.ok) {
-    return response;
-  } else {
-    if (response.json) {
-      const errorResponse = await response.json();
-      throw new HttpError(
-        errorResponse.message && typeof errorResponse.message === 'string'
-          ? errorResponse.message
-          : response.statusText,
-        errorResponse.statusCode ? errorResponse.statusCode : response.status,
-      );
-    } else {
-      throw new Error(response);
-    }
-  }
+  return await fetch(input, init);
 }
 
 export async function checkIfClusterRequiresCA(auth) {
@@ -107,21 +91,11 @@ export function fetchPermissions(auth, namespace = '*') {
     .then(res => res.status.resourceRules);
 }
 
-export async function fetchBusolaInitData() {
-  const CORE_GROUP = 'v1';
-
+export async function fetchAvailableApis() {
+  // don't subscribe to '/apis' here - apiGroup features take care of that
   return await fetchCache
-    .subscribe({
-      path: config.backendAddress + '/apis',
-      callback: reloadNavigation,
-      refreshIntervalMs: 5000, // todo make bigger
-    })
-    .then(({ data: res }) => [
-      CORE_GROUP,
-      ...res.groups.flatMap(group =>
-        group.versions.map(version => version.groupVersion),
-      ),
-    ]);
+    .get('/apis')
+    .then(({ data }) => extractGroupVersions(data));
 }
 
 export function fetchNamespaces(auth) {

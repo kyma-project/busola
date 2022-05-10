@@ -221,8 +221,6 @@ export function StatsPanel({
 
   const prometheus = useFeature('PROMETHEUS');
 
-  console.log('is prometheus enabled?', prometheus?.isEnabled);
-
   if (!prometheus?.isEnabled) return '';
 
   const graphOptions = getGraphOptions(type);

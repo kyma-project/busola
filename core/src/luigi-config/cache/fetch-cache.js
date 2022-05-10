@@ -1,5 +1,5 @@
 import shortid from 'shortid';
-// todo use fetchQueue
+import { config } from '../config';
 import { failFastFetch } from './../navigation/queries';
 
 class FetchCache {
@@ -31,41 +31,51 @@ class FetchCache {
     const refetch = async () => {
       try {
         const updatedData = await this.fetch(path);
+        const prevData = this.getCacheItem(path);
         const hasChanged =
-          JSON.stringify(updatedData) !==
-          JSON.stringify(this.getCacheItem(path));
+          JSON.stringify(updatedData) !== JSON.stringify(prevData);
 
+        // console.log(hasChanged, path);
         if (hasChanged) {
-          for (const sub of subscription.subscribers) {
-            sub.callback(this.getCacheItem(path), updatedData);
-          }
           this.setCacheItem(path, updatedData);
+          for (const sub of subscription.subscribers) {
+            sub.callback({
+              prevData,
+              updatedData,
+            });
+          }
         }
       } catch (e) {
         console.warn('interval failed', e);
       }
 
-      const timeout = this.minInterval(subscription.subscribers);
-      subscription.timeoutId = setTimeout(refetch, timeout);
+      // stop polling if there are no subscribers
+      if (this.subscriptions[path]?.subscribers?.length) {
+        const timeout = this.minInterval(subscription.subscribers);
+        subscription.timeoutId = setTimeout(refetch, timeout);
+      }
     };
 
+    // start polling
     if (typeof subscription.timeoutId === 'undefined') {
-      const timeout = this.minInterval(subscription.subscribers);
-      subscription.timeoutId = setTimeout(refetch, timeout);
+      subscription.timeoutId = -1;
+      refetch();
     }
 
-    return { subscriptionId: id, data: await this.get(path) };
-  }
-  unsubscribe(path, id) {
-    const subscription = this.subscriptions[path];
-    if (!subscription) return;
-    subscription.subscribers = subscription.subscribers.filter(
-      s => s.id !== id,
-    );
-    if (subscription.subscribers.length === 0) {
-      clearInterval(subscription.timeoutId);
-      delete subscription.timeoutId;
-    }
+    const unsubscribe = () => {
+      const subscription = this.subscriptions[path];
+      if (!subscription) return;
+      subscription.subscribers = subscription.subscribers.filter(
+        s => s.id !== id,
+      );
+      // no subscribers anymore, stop polling
+      if (subscription.subscribers.length === 0) {
+        clearTimeout(subscription.timeoutId);
+        delete subscription.timeoutId;
+      }
+    };
+
+    return { unsubscribe, ...(await this.get(path)) };
   }
   minInterval(subscribers) {
     return (
@@ -77,7 +87,7 @@ class FetchCache {
   }
   async get(path) {
     const item = this.getSync(path);
-    if (item) {
+    if (item?.status) {
       return item;
     } else {
       const data = await this.fetch(path);
@@ -92,12 +102,18 @@ class FetchCache {
     return this.getCacheItem(path);
   }
   async fetch(path) {
+    if (path.startsWith('/')) {
+      path = config.backendAddress + path;
+    }
     try {
       const response = await failFastFetch(path, this.fetchOptions.data);
-      return await response.json();
+      if (response.status === 301) {
+        return { status: 301, data: null };
+      }
+      return { status: response.status, data: await response.json() };
     } catch (e) {
       console.warn('fetch', path, e);
-      return;
+      return { status: 0, data: null };
     }
   }
   destroy() {

@@ -137,26 +137,25 @@ export function usePrometheus(
   metricId,
   { items, timeSpan, ...props },
 ) {
-  // const { serviceUrl } = useFeature('PROMETHEUS');
-  const prometheus = useFeature('PROMETHEUS');
-
-  console.log('todo use resolved prometheus url from config:', prometheus);
+  const { serviceUrl } = useFeature('PROMETHEUS');
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);
 
-  // todo use resolved url from config instead
-  const kyma2_0path =
-    'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
-  const kyma2_1path =
-    'api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1';
-  const cpu2_0_partial_query = 'sum_rate';
+  // const kyma2_0path =
+  //   'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
+  // const kyma2_1path =
+  //   'api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1';
+  // const cpu2_0_partial_query = 'sum_rate';
   const cpu2_1_partial_query = 'sum_irate';
-  const [path, setPath] = useState(kyma2_1path);
-  const [cpuQuery, setCpuQuery] = useState(cpu2_1_partial_query);
+  // const [path, setPath] = useState(kyma2_1path);
+  // const [cpuQuery, setCpuQuery] = useState(cpu2_1_partial_query);
 
-  const metric = getMetric(type, mode, metricId, cpuQuery, { step, ...props });
+  const metric = getMetric(type, mode, metricId, cpu2_1_partial_query, {
+    step,
+    ...props,
+  });
 
   const tick = () => {
     const newEndDate = new Date();
@@ -183,33 +182,33 @@ export function usePrometheus(
     `step=${step}&` +
     `query=${metric.prometheusQuery}`;
 
-  const onDataReceived = data => {
-    if (data?.error && data?.error?.statusCode === 'Failure') {
-      if (path !== kyma2_0path && path !== kyma2_1path) {
-        LuigiClient.sendCustomMessage({
-          id: 'busola.setPrometheusPath',
-          path: kyma2_1path,
-        });
-        setCpuQuery(cpu2_1_partial_query);
-        setPath(kyma2_1path);
-      } else if (path === kyma2_1path) {
-        LuigiClient.sendCustomMessage({
-          id: 'busola.setPrometheusPath',
-          path: kyma2_0path,
-        });
-        setCpuQuery(cpu2_0_partial_query);
-        setPath(kyma2_0path);
-      }
-    }
-  };
-  let { data, error, loading } = useGet(`/${path}/${query}`, {
+  // const onDataReceived = data => {
+  //   if (data?.error && data?.error?.statusCode === 'Failure') {
+  //     if (path !== kyma2_0path && path !== kyma2_1path) {
+  //       LuigiClient.sendCustomMessage({
+  //         id: 'busola.setPrometheusPath',
+  //         path: kyma2_1path,
+  //       });
+  //       setCpuQuery(cpu2_1_partial_query);
+  //       setPath(kyma2_1path);
+  //     } else if (path === kyma2_1path) {
+  //       LuigiClient.sendCustomMessage({
+  //         id: 'busola.setPrometheusPath',
+  //         path: kyma2_0path,
+  //       });
+  //       setCpuQuery(cpu2_0_partial_query);
+  //       setPath(kyma2_0path);
+  //     }
+  //   }
+  // };
+  let { data, error, loading } = useGet(`${serviceUrl}/${query}`, {
     pollingInterval: 0,
-    onDataReceived: data => onDataReceived(data),
+    // onDataReceived: data => onDataReceived(data),
   });
 
-  if (data) {
-    error = null;
-  }
+  // if (data) {
+  //   error = null;
+  // }
 
   let prometheusData = [];
   let prometheusLabels = [];

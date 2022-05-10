@@ -117,6 +117,7 @@ The document lists and describes all the feature flags that are available in Kym
   ```bash
   "EXTERNAL_NODES": {
     "isEnabled": true,
+    "stage": "SECONDARY",
     "nodes": [
       {
         "category": "My Category",

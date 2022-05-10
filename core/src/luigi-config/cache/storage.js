@@ -24,3 +24,14 @@ export function saveCacheItem(clusterName, path, item) {
     return null;
   }
 }
+
+export function clearClusterCache(clusterName) {
+  try {
+    const cache = JSON.parse(localStorage.getItem(CACHE_KEY)) || {};
+    delete cache[clusterName];
+    localStorage.setItem('busola.cache', JSON.stringify(cache));
+  } catch (e) {
+    console.warn('clearClusterData failed', e);
+    return null;
+  }
+}

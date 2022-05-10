@@ -1,6 +1,15 @@
-import * as jp from 'jsonpath';
-import { getCurrentConfig } from './cluster-management/cluster-management';
+import { getAuthData } from './auth/auth-storage';
+import { fetchCache } from './cache/fetch-cache';
+import {
+  getActiveCluster,
+  getCurrentConfig,
+  getCurrentContextNamespace,
+} from './cluster-management/cluster-management';
 import { apiGroup } from './feature-checks';
+import { createNavigationNodes } from './navigation/navigation-data-init';
+import { fetchPermissions } from './navigation/queries';
+import { configChanged } from './utils/configChanged';
+import { extractGroupVersions } from './utils/extractGroupVersions';
 
 // convert features from old format (selectors) to new format (checks)
 export function convertStaticFeatures(features = {}) {
@@ -18,77 +27,150 @@ export function convertStaticFeatures(features = {}) {
   );
 }
 
-export function arrayCombine(arrays) {
-  const _arrayCombine = (arrs, current = []) => {
-    if (arrs.length === 1) {
-      return arrs[0].map(e => [...current, e]);
-    } else {
-      return arrs[0].map(e => _arrayCombine(arrs.slice(1), [...current, e]));
+export async function reloadNodes() {
+  try {
+    const activeCluster = getActiveCluster();
+    const permissionSet = await fetchPermissions(
+      getAuthData(),
+      getCurrentContextNamespace(activeCluster.kubeconfig),
+    );
+
+    const { data } = await fetchCache.get('/apis');
+    const groupVersions = extractGroupVersions(data);
+    const cfg = window.Luigi.getConfig();
+    cfg.navigation.nodes = await createNavigationNodes(
+      lastResolvedFeatures,
+      groupVersions,
+      permissionSet,
+    );
+    window.Luigi.setConfig(cfg);
+    window.Luigi.configChanged('navigation.nodes');
+  } catch (e) {
+    console.warn('reloadNodes failed', e, window.Luigi.initialized);
+  }
+}
+
+export async function discoverFeature(featureName, rawFeatureConfig) {
+  try {
+    if (!rawFeatureConfig) {
+      console.debug('discoverFeature: not found ', featureName);
+      return { isEnabled: false };
     }
-  };
 
-  return _arrayCombine(arrays).flat(arrays.length - 1);
+    for (const cleanup of rawFeatureConfig.cleanups || []) {
+      cleanup();
+    }
+    rawFeatureConfig.cleanups = [];
+
+    // not active yet or disabled explicitly
+    if (!rawFeatureConfig.active || rawFeatureConfig.isEnabled === false) {
+      return rawFeatureConfig;
+    }
+
+    let currentConfig = { ...rawFeatureConfig, isEnabled: true };
+    for (const check of rawFeatureConfig.checks || []) {
+      if (!currentConfig.isEnabled) {
+        return currentConfig;
+      }
+      const newPartialConfig = await check(featureName, currentConfig);
+      currentConfig = { ...currentConfig, ...newPartialConfig };
+    }
+    return currentConfig;
+  } catch (e) {
+    console.warn('Error setting up feature', featureName, e);
+    return { ...rawFeatureConfig, isEnabled: false };
+  }
 }
 
-export const discoverFeature = async (featureConfig, data = {}) => {
-  if (!featureConfig) {
-    return { isEnabled: false };
+let lastResolvedFeatures = {};
+export async function getFeatures() {
+  const resolvedFeatures = {};
+  for (const featureName in rawFeatures) {
+    const rawFeatureConfig = rawFeatures[featureName];
+    resolvedFeatures[featureName] = await discoverFeature(
+      featureName,
+      rawFeatureConfig,
+    );
   }
+  lastResolvedFeatures = resolvedFeatures;
+  return resolvedFeatures;
+}
 
-  // disabled explicitly
-  if (featureConfig.isEnabled === false) {
-    return featureConfig;
+let rawFeatures = {};
+export async function initFeatures() {
+  rawFeatures = (await getCurrentConfig()).features;
+
+  for (const featureName in rawFeatures) {
+    const featureConfig = rawFeatures[featureName];
+    if (featureConfig?.stage === 'PRIMARY') {
+      rawFeatures[featureName].active = true;
+    }
   }
+}
 
-  const initialConfig = { ...featureConfig, isEnabled: true };
-  const result = await (featureConfig.checks || [])?.reduce(
-    async (config, check) => {
-      config = await config;
-      if (!config.isEnabled) return config;
-      const newPartialConfig = await check(config, featureConfig, data);
-      return {
-        ...config,
-        ...newPartialConfig,
-        isEnabled: config.isEnabled && newPartialConfig.isEnabled,
-      };
-    },
-    Promise.resolve(initialConfig),
+export async function resolveSecondaryFeatures() {
+  for (const featureName in rawFeatures) {
+    const featureConfig = rawFeatures[featureName];
+    if (featureConfig?.stage === 'SECONDARY') {
+      rawFeatures[featureName].active = true;
+      await updateFeature(featureName);
+    }
+  }
+}
+
+async function updateFeaturesContext() {
+  configChanged({
+    valuePath: '$.context.features',
+    value: lastResolvedFeatures,
+    scope: 'navigation.nodes',
+  });
+}
+
+export async function updateFeature(featureName) {
+  const resolvedFeature = await discoverFeature(
+    featureName,
+    rawFeatures[featureName],
   );
-  return { ...featureConfig, ...result };
-};
 
-export const discoverFeatures = async (features, data = {}, stage) => {
-  const filterFeatures = stage
-    ? featureConfig => featureConfig.stage === stage
-    : // stage not specified, just discover rest of the features
-      featureConfig =>
-        featureConfig.stage !== 'PRIMARY' &&
-        featureConfig.stage !== 'SECONDARY';
+  const prevResolved = lastResolvedFeatures[featureName];
+  if (JSON.stringify(prevResolved) !== JSON.stringify(resolvedFeature)) {
+    lastResolvedFeatures[featureName] = resolvedFeature;
 
-  const featuresToDiscover = Object.entries(
-    features,
-  ).filter(([, featureConfig]) => filterFeatures(featureConfig));
-
-  for (const [featureName, featureConfig] of featuresToDiscover) {
-    features[featureName] = await discoverFeature(featureConfig, data);
+    console.log('update ctx cause', featureName);
+    await updateFeaturesContext();
+    if (resolvedFeature.updateNavigation) {
+      console.log('reload nodes cause', featureName);
+      await reloadNodes();
+    }
   }
-  return features;
+}
+
+const featureSubscribers = {};
+
+async function updateFeatureSubscribers(featureName) {
+  if (rawFeatures[featureName]) {
+    const active = !!featureSubscribers[featureName].length;
+    if (rawFeatures[featureName].active !== active) {
+      rawFeatures[featureName].active = active;
+      await updateFeature(featureName);
+    }
+  }
+}
+
+export const featureCommunicationEntries = {
+  'busola.startRequestFeature': async ({ featureName, requestId }) => {
+    if (!featureSubscribers[featureName]) {
+      featureSubscribers[featureName] = [];
+    }
+    featureSubscribers[featureName].push(requestId);
+
+    await updateFeatureSubscribers(featureName);
+  },
+  'busola.stopRequestFeature': async ({ featureName, requestId }) => {
+    featureSubscribers[featureName] = featureSubscribers[featureName].filter(
+      id => id !== requestId,
+    );
+
+    await updateFeatureSubscribers(featureName);
+  },
 };
-
-export async function getFeatures(data) {
-  const rawFeatures = (await getCurrentConfig()).features;
-  var features = await discoverFeatures(rawFeatures, data, 'PRIMARY');
-  return features;
-}
-
-export function updateFeatures(featureName, featureConfig) {
-  console.log('todo');
-  // features = { ...features, [featureName]: featureConfig };
-
-  // const config = window.Luigi.getConfig();
-  // // set context of all first-level nodes
-  // config.navigation.nodes.forEach(node =>
-  //   jp.value(node, '$.context.features', features),
-  // );
-  // window.Luigi.configChanged('navigation.nodes');
-}

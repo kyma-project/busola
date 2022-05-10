@@ -1,3 +1,4 @@
+import shortid from 'shortid';
 import { useEffect } from 'react';
 import LuigiClient from '@luigi-project/client';
 
@@ -7,10 +8,19 @@ export function useFeature(featureName) {
   const { features } = useMicrofrontendContext();
 
   useEffect(() => {
+    const requestId = shortid();
     LuigiClient.sendCustomMessage({
-      id: 'busola.requestFeature',
+      id: 'busola.startRequestFeature',
       featureName,
+      requestId,
     });
+    return () => {
+      LuigiClient.sendCustomMessage({
+        id: 'busola.stopRequestFeature',
+        featureName,
+        requestId,
+      });
+    };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return features[featureName] ?? { isEnabled: false };

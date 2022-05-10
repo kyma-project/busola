@@ -24,8 +24,9 @@ import { initTheme } from './utils/theme';
 import { readFeatureToggles } from './utils/feature-toggles';
 import { ssoLogin } from './auth/sso';
 import { setNavFooterText } from './nav-footer';
+import { resolveSecondaryFeatures } from './feature-discovery';
 
-const luigiAfterInit = () => Luigi.ux().hideAppLoadingIndicator();
+const luigiAfterInit = () => window.Luigi.ux().hideAppLoadingIndicator();
 
 export const i18n = i18next.use(i18nextBackend).init({
   lng: localStorage.getItem('busola.language') || 'en',
@@ -36,7 +37,7 @@ export const i18n = i18next.use(i18nextBackend).init({
   },
   saveMissing: true,
   missingKeyHandler: (_lngs, _ns, key) => {
-    console.warn(key);
+    // console.warn(key);
   },
 });
 
@@ -70,6 +71,7 @@ async function initializeBusola() {
   } else {
     tryRestorePreviousLocation();
   }
+  await resolveSecondaryFeatures();
 }
 
 (async () => {

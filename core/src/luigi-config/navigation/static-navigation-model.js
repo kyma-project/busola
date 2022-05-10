@@ -2163,5 +2163,11 @@ function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
     }
   }
 
-  // todo run checks for a feature and removeNode if needed
+  if (node.context?.requiredFeatures) {
+    for (const feature of node.context.requiredFeatures || []) {
+      if (!feature || feature.isEnabled === false) {
+        removeNode();
+      }
+    }
+  }
 }

@@ -1,6 +1,6 @@
 import i18next from 'i18next';
 
-import { discoverFeature, updateFeatures } from './feature-discovery';
+import { featureCommunicationEntries } from './feature-discovery';
 import { NODE_PARAM_PREFIX } from './luigi-config';
 import {
   saveClusterParams,
@@ -8,7 +8,6 @@ import {
   saveActiveClusterName,
   getActiveClusterName,
   setCluster,
-  getCurrentConfig,
 } from './cluster-management/cluster-management';
 import { clearAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
@@ -18,9 +17,8 @@ import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
 import { getCorrespondingNamespaceLocation } from './navigation/navigation-helpers';
-import { getAuthData } from './auth/auth-storage';
-import { fetchBusolaInitData } from './navigation/queries';
 import { fetchCache } from './cache/fetch-cache';
+import { clearClusterCache } from './cache/storage';
 
 addCommandPaletteHandler();
 addOpenSearchHandler();
@@ -66,29 +64,6 @@ export const communication = {
     'busola.setWindowTitle': ({ title }) => {
       Luigi.ux().setDocumentTitle(title);
     },
-    'busola.silentNavigate': ({ newParams }) => {
-      const { search: paramsString, pathname } = new URL(window.location.href);
-      const currentParams = convertToObject(paramsString);
-
-      // remove params explicitly marked for removal
-      Object.keys(newParams).forEach(key => {
-        if (newParams[key] === undefined) {
-          delete currentParams[key];
-          delete newParams[key];
-        }
-      });
-
-      const newParamsString = convertToURLsearch({
-        ...currentParams,
-        ...newParams,
-      });
-
-      window.history.replaceState(
-        null,
-        window.document.title,
-        pathname + newParamsString,
-      );
-    },
     'busola.reload': ({ reason }) => {
       if (reason === 'sso-expiration') {
         setSSOAuthData(null);
@@ -105,6 +80,8 @@ export const communication = {
       await deleteCluster(clusterName);
 
       const activeClusterName = getActiveClusterName();
+
+      clearClusterCache(activeClusterName);
       if (activeClusterName === clusterName) {
         await reloadAuth();
         clearAuthData();
@@ -142,17 +119,8 @@ export const communication = {
         pathId,
       });
     },
-    'busola.requestFeature': async ({ featureName }) => {
-      const authData = getAuthData();
-      const groupVersions = await fetchBusolaInitData(authData);
-      const features = (await getCurrentConfig()).features;
-      const updatedFeature = await discoverFeature(features[featureName], {
-        authData,
-        groupVersions,
-      });
-      updateFeatures(featureName, updatedFeature);
-    },
     ...pageSizeCommunicationEntry,
+    ...featureCommunicationEntries,
   },
 };
 

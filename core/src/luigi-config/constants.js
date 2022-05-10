@@ -1,5 +1,5 @@
-import { arrayCombine } from './feature-discovery';
 import { apiGroup, service } from './feature-checks';
+
 const DEFAULT_MODULES = {
   SERVICE_CATALOG: 'servicecatalog.k8s.io',
   BTP_CATALOG: 'services.cloud.sap.com',
@@ -12,6 +12,18 @@ const DEFAULT_MODULES = {
   CUSTOM_DOMAINS: 'dns.gardener.cloud',
   ISTIO: 'networking.istio.io',
 };
+
+function arrayCombine(arrays) {
+  const _arrayCombine = (arrs, current = []) => {
+    if (arrs.length === 1) {
+      return arrs[0].map(e => [...current, e]);
+    } else {
+      return arrs[0].map(e => _arrayCombine(arrs.slice(1), [...current, e]));
+    }
+  };
+
+  return _arrayCombine(arrays).flat(arrays.length - 1);
+}
 
 export const DEFAULT_FEATURES = {
   ...Object.fromEntries(
@@ -28,18 +40,19 @@ export const DEFAULT_FEATURES = {
     checks: [
       apiGroup('monitoring.coreos.com'),
       service(
-        (config, feature) => {
+        featureConfig => {
           return arrayCombine([
-            feature.namespaces,
-            feature.serviceNames,
-            feature.portNames,
+            featureConfig.namespaces,
+            featureConfig.serviceNames,
+            featureConfig.portNames,
           ]).map(
             ([namespace, serviceName, portName]) =>
-              `api/v1/namespaces/${namespace}/services/${serviceName}:${portName}/proxy/api/v1`,
+              `/api/v1/namespaces/${namespace}/services/${serviceName}:${portName}/proxy/api/v1`,
           );
         },
         undefined,
         url => `${url}/status/runtimeinfo`,
+        15000,
       ),
     ],
     namespaces: ['kyma-system'],
