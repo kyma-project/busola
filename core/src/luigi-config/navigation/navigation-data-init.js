@@ -347,8 +347,7 @@ export async function createNavigationNodes(
   const activeClusterName = encodeURIComponent(
     activeCluster.kubeconfig['current-context'],
   );
-  const { navigation = {}, hiddenNamespaces = [] } =
-    activeCluster?.config || {};
+  const { navigation = {} } = activeCluster?.config || {};
 
   const createClusterNodes = async () => {
     const staticNodes = getStaticRootNodes(
@@ -411,7 +410,6 @@ export async function createNavigationNodes(
         groups,
         features,
         clusters: await getClusters(),
-        hiddenNamespaces,
         cluster: activeCluster.currentContext.cluster,
         config: activeCluster.config,
         kubeconfig: activeCluster.kubeconfig,
@@ -440,7 +438,8 @@ async function getNamespaces() {
     return createNamespacesList([{ name: namespace }]);
   }
 
-  const { hiddenNamespaces = [] } = activeCluster?.config || {};
+  const hiddenNamespaces =
+    activeCluster?.config.features?.HIDDEN_NAMESPACES?.selector || [];
   try {
     let namespaces = await fetchNamespaces(getAuthData());
     if (!getFeatureToggle('showHiddenNamespaces')) {

@@ -18,7 +18,8 @@ import { useTranslation } from 'react-i18next';
 export default function CreateBinding({ application, alreadyBoundNamespaces }) {
   const { t, i18n } = useTranslation();
 
-  const { hiddenNamespaces } = useMicrofrontendContext();
+  const hiddenNamespaces =
+    useMicrofrontendContext().features?.HIDDEN_NAMESPACES?.selector || [];
   const [servicesToBind, setServicesToBind] = React.useState([]);
   const [namespaceName, setNamespaceName] = React.useState('');
   const notification = useNotification();

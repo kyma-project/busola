@@ -36,7 +36,8 @@ export function ExternalResourceRef({
   );
 
   const showHiddenNamespaces = getFeatureToggle('showHiddenNamespaces');
-  const hiddenNamespaces = LuigiClient.getContext().hiddenNamespaces;
+  const hiddenNamespaces =
+    LuigiClient.getContext().features.HIDDEN_NAMESPACES?.selector || [];
 
   const namespacesOptions = (namespaces || [])
     .filter(ns =>

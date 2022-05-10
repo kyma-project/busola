@@ -19,8 +19,9 @@ export function useSearchResults({
     activeClusterName,
     clusterNodes,
     namespaceNodes,
-    hiddenNamespaces,
+    features,
   } = useMicrofrontendContext();
+  const hiddenNamespaces = features.HIDDEN_NAMESPACES?.selector;
   const [showHiddenNamespaces] = useFeatureToggle('showHiddenNamespaces');
   const fetch = useFetch();
   const { t } = useTranslation();
