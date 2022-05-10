@@ -34,11 +34,6 @@ export function ExtensibilityCreate({
     setResource({ ...resource });
   };
 
-  const handleFieldChange = (path, value) => {
-    jp.value(resource, path, value);
-    setResource({ ...resource });
-  };
-
   return (
     <ResourceForm
       pluralKind={resourceType}
@@ -71,7 +66,7 @@ export function ExtensibilityCreate({
         key={api.version}
         schema={simpleSchema || advancedSchema || {}}
         resource={resource}
-        setResource={handleFieldChange}
+        setResource={setResource}
         onSubmit={() => {}}
       />
       <ResourceSchema
@@ -79,7 +74,7 @@ export function ExtensibilityCreate({
         key={api.version}
         schema={advancedSchema || simpleSchema || {}}
         resource={resource}
-        setResource={handleFieldChange}
+        setResource={setResource}
       />
     </ResourceForm>
   );

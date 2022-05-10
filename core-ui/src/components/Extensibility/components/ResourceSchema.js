@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { isEmpty } from 'lodash';
 import * as jp from 'jsonpath';
 
@@ -177,33 +177,29 @@ const JSONSchemaForm = ({ properties, path, ...props }) => {
   });
 };
 
-export const ResourceSchema = ({ ...props }) => {
+export const ResourceSchema = ({ resource, setResource, schema }) => {
   const [store, setStore] = useState(() =>
-    createStore(createOrderedMap(props.resource)),
+    createStore(createOrderedMap(resource)),
   );
   const onChange = useCallback(
     actions => {
-      setStore(prevStore => {
-        console.log('onChange', actions);
-        return storeUpdater(actions)(prevStore);
-      });
+      setStore(prevStore => storeUpdater(actions)(prevStore));
     },
     [setStore],
   );
+  useEffect(() => {
+    setResource(store.valuesToJS());
+  }, [store.values]);
 
-  if (isEmpty(props.schema)) return null;
+  if (isEmpty(schema)) return null;
 
-  console.log(props.schema);
-  const schema = createOrderedMap(props.schema);
+  const schemaMap = createOrderedMap(schema);
 
   return (
-    <>
-      <div>{JSON.stringify(store)}</div>
-      <UIMetaProvider widgets={widgets}>
-        <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
-          <FormStack isRoot schema={schema} />
-        </UIStoreProvider>
-      </UIMetaProvider>
-    </>
+    <UIMetaProvider widgets={widgets}>
+      <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
+        <FormStack isRoot schema={schemaMap} />
+      </UIStoreProvider>
+    </UIMetaProvider>
   );
 };
