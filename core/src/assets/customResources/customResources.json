@@ -1,4 +1,2079 @@
 {
+  "shoots":{
+     "navigation":{
+        "path":"shoots",
+        "label":"Shoots",
+        "category":"Gardener",
+        "scope":"namespace",
+        "hasDetailsView":true,
+        "resource":{
+           "kind":"Shoots",
+           "group":"core.gardener.cloud",
+           "version":"v1beta1"
+        }
+     },
+     "list":{
+        "description":"An interesting description for a Shoot resource",
+        "columns":[
+           {
+              "header":"Version",
+              "valuePath":"spec.kubernetes.version"
+           },
+           {
+              "valuePath":"metadata.annotations['gardener.cloud/created-by']",
+              "header":"Created By"
+           }
+        ]
+     },
+     "details":{
+        "components":[
+           {
+              "type":"detailPanel",
+              "title":{
+                 "en":"More details here"
+              },
+              "properties":[
+                 {
+                    "header":"K8s dashboard enabled?",
+                    "valuePath":"spec.addons.kubernetesDashboard.enabled"
+                 },
+                 {
+                    "header":"Nginx Ingress enabled?",
+                    "valuePath":"spec.addons.nginxIngress.enabled"
+                 },
+                 {
+                    "header":"Cloud Profile Name",
+                    "valuePath":"spec.cloudProfileName"
+                 },
+                 {
+                    "header":{
+                       "en":"Hibernation enabled?"
+                    },
+                    "valuePath":"spec.hibernation.enabled"
+                 }
+              ]
+           },
+           {
+              "type":"monacoPanel",
+              "valuePath":"$.spec.kubernetes.kubeAPIServer.oidcConfig",
+              "title":"OIDC configuration"
+           },
+           {
+              "type":"listPanel",
+              "title":{
+                 "en":"Conditions"
+              },
+              "headers":[
+                 {
+                    "en":"Type",
+                    "de":"Der Typ"
+                 },
+                 {
+                    "en":"Condition",
+                    "de":"Das Status"
+                 },
+                 {
+                    "de":"Reason",
+                    "pl":"Ostatnia sonda"
+                 },
+                 "Message"
+              ],
+              "columns":[
+                 "type",
+                 "status",
+                 "reason",
+                 "message"
+              ],
+              "valuePath":"$.status.conditions"
+           }
+        ]
+     },
+     "create":{
+       "template": {
+        "apiVersion": "core.gardener.cloud/v1beta1",
+        "kind": "Shoot",
+        "metadata": {
+          "namespace": "garden-hasselhoff",
+          "name": ""
+        },
+        "spec": {
+          "cloudProfileName": "gcp",
+          "extensions": [
+            {
+              "type": "shoot-dns-service",
+              "providerConfig": {
+                "apiVersion": "service.dns.extensions.gardener.cloud/v1alpha1",
+                "dnsProviderReplication": {
+                  "enabled": true
+                },
+                "kind": "DNSConfig"
+              }
+            },
+            {
+              "type": "shoot-cert-service",
+              "providerConfig": {
+                "apiVersion": "service.cert.extensions.gardener.cloud/v1alpha1",
+                "kind": "CertConfig",
+                "shootIssuers": {
+                  "enabled": true
+                }
+              }
+            }
+          ],
+          "kubernetes": {
+            "allowPrivilegedContainers": true,
+            "kubeAPIServer": {
+              "enableBasicAuthentication": false,
+              "oidcConfig": {
+                "groupsClaim": "groups",
+                "clientID": "d0316c58-b0fe-45cd-9960-0fea0708355a",
+                "issuerURL": "https://apskyxzcl.accounts400.ondemand.com",
+                "signingAlgs": [
+                  "RS256"
+                ],
+                "usernameClaim": "sub",
+                "usernamePrefix": "-"
+              }
+            },
+            "version": "1.21.10"
+          },
+          "networking": {
+            "nodes": "10.250.0.0/16",
+            "pods": "100.96.0.0/11",
+            "services": "100.64.0.0/13",
+            "type": "calico"
+          },
+          "provider": {
+            "controlPlaneConfig": {
+              "apiVersion": "gcp.provider.extensions.gardener.cloud/v1alpha1",
+              "kind": "ControlPlaneConfig",
+              "zone": "europe-west4-b"
+            },
+            "infrastructureConfig": {
+              "apiVersion": "gcp.provider.extensions.gardener.cloud/v1alpha1",
+              "kind": "InfrastructureConfig",
+              "networks": {
+                "workers": "10.250.0.0/16"
+              }
+            },
+            "type": "gcp",
+            "workers": [
+              {
+                "machine": {
+                  "image": {
+                    "name": "gardenlinux",
+                    "version": "576.7.0"
+                  },
+                  "type": "n2-standard-8"
+                },
+                "maxSurge": 1,
+                "maxUnavailable": 0,
+                "maximum": 5,
+                "minimum": 3,
+                "name": "worker-dev",
+                "volume": {
+                  "size": "60Gi",
+                  "type": "pd-ssd"
+                },
+                "zones": [
+                  "europe-west4-b"
+                ]
+              }
+            ]
+          },
+          "purpose": "development",
+          "addons": {
+            "kubernetesDashboard": {
+              "enabled": false
+            },
+            "nginxIngress": {
+              "enabled": false
+            }
+          },
+          "hibernation": {
+            "schedules": [
+              {
+                "start": "00 20 * * 1,2,3,4,5",
+                "end": "00 05 * * 1,2,3,4,5",
+                "location": "Europe/Berlin"
+              }
+            ]
+          },
+          "maintenance": {
+            "timeWindow": {
+              "begin": "010000+0000",
+              "end": "020000+0000"
+            },
+            "autoUpdate": {
+              "kubernetesVersion": false,
+              "machineImageVersion": true
+            }
+          },
+          "region": "europe-west4",
+          "secretBindingName": "kyma-gcp-workloads"
+        }
+      },
+      "simple":{
+          "schema":{
+            "description":"Shoot represents a Shoot cluster created and managed by Gardener.",
+            "type":"object",
+            "properties":{
+                "spec":{
+                  "description":"Specification of the Shoot cluster. If the object's deletion timestamp is set, this field is immutable.",
+                  "type":"object",
+                  "required":[
+                      "cloudProfileName",
+                      "kubernetes",
+                      "networking",
+                      "provider",
+                      "region",
+                      "secretBindingName"
+                  ],
+                  "properties":{
+                      "addons":{
+                        "description":"Addons contains information about enabled/disabled addons and their configuration.",
+                        "type":"object",
+                        "properties":{
+                            "kubernetesDashboard":{
+                              "description":"KubernetesDashboard holds configuration settings for the kubernetes dashboard addon.",
+                              "type":"object",
+                              "required":[
+                                  "enabled"
+                              ],
+                              "properties":{
+                                  "authenticationMode":{
+                                    "description":"AuthenticationMode defines the authentication mode for the kubernetes-dashboard.",
+                                    "type":"string"
+                                  },
+                                  "enabled":{
+                                    "description":"Enabled indicates whether the addon is enabled or not.",
+                                    "type":"boolean"
+                                  }
+                              }
+                            },
+                            "nginxIngress":{
+                              "description":"NginxIngress holds configuration settings for the nginx-ingress addon.",
+                              "type":"object",
+                              "required":[
+                                  "enabled"
+                              ],
+                              "properties":{
+                                  "config":{
+                                    "description":"Config contains custom configuration for the nginx-ingress-controller configuration. See https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/configmap.md#configuration-options",
+                                    "type":"object",
+                                    "additionalProperties":{
+                                        "type":"string"
+                                    }
+                                  },
+                                  "enabled":{
+                                    "description":"Enabled indicates whether the addon is enabled or not.",
+                                    "type":"boolean"
+                                  },
+                                  "externalTrafficPolicy":{
+                                    "description":"ExternalTrafficPolicy controls the `.spec.externalTrafficPolicy` value of the load balancer `Service` exposing the nginx-ingress. Defaults to `Cluster`.",
+                                    "type":"string"
+                                  },
+                                  "loadBalancerSourceRanges":{
+                                    "description":"LoadBalancerSourceRanges is list of allowed IP sources for NginxIngress",
+                                    "type":"array",
+                                    "items":{
+                                        "type":"string"
+                                    }
+                                  }
+                              }
+                            }
+                        }
+                      },
+                      "cloudProfileName":{
+                        "description":"CloudProfileName is a name of a CloudProfile object. This field is immutable.",
+                        "type":"string"
+                      },
+                      "dns":{
+                        "description":"DNS contains information about the DNS settings of the Shoot.",
+                        "type":"object",
+                        "properties":{
+                            "domain":{
+                              "description":"Domain is the external available domain of the Shoot cluster. This domain will be written into the kubeconfig that is handed out to end-users. This field is immutable.",
+                              "type":"string"
+                            },
+                            "providers":{
+                              "description":"Providers is a list of DNS providers that shall be enabled for this shoot cluster. Only relevant if not a default domain is used.",
+                              "type":"array",
+                              "items":{
+                                  "description":"DNSProvider contains information about a DNS provider.",
+                                  "type":"object",
+                                  "properties":{
+                                    "domains":{
+                                        "description":"Domains contains information about which domains shall be included/excluded for this provider.",
+                                        "type":"object",
+                                        "properties":{
+                                          "exclude":{
+                                              "description":"Exclude is a list of domains that shall be excluded.",
+                                              "type":"array",
+                                              "items":{
+                                                "type":"string"
+                                              }
+                                          },
+                                          "include":{
+                                              "description":"Include is a list of domains that shall be included.",
+                                              "type":"array",
+                                              "items":{
+                                                "type":"string"
+                                              }
+                                          }
+                                        }
+                                    },
+                                    "primary":{
+                                        "description":"Primary indicates that this DNSProvider is used for shoot related domains.",
+                                        "type":"boolean"
+                                    },
+                                    "secretName":{
+                                        "description":"SecretName is a name of a secret containing credentials for the stated domain and the provider. When not specified, the Gardener will use the cloud provider credentials referenced by the Shoot and try to find respective credentials there (primary provider only). Specifying this field may override this behavior, i.e. forcing the Gardener to only look into the given secret.",
+                                        "type":"string"
+                                    },
+                                    "type":{
+                                        "description":"Type is the DNS provider type.",
+                                        "type":"string"
+                                    },
+                                    "zones":{
+                                        "description":"Zones contains information about which hosted zones shall be included/excluded for this provider.",
+                                        "type":"object",
+                                        "properties":{
+                                          "exclude":{
+                                              "description":"Exclude is a list of domains that shall be excluded.",
+                                              "type":"array",
+                                              "items":{
+                                                "type":"string"
+                                              }
+                                          },
+                                          "include":{
+                                              "description":"Include is a list of domains that shall be included.",
+                                              "type":"array",
+                                              "items":{
+                                                "type":"string"
+                                              }
+                                          }
+                                        }
+                                    }
+                                  }
+                              },
+                              "x-kubernetes-patch-merge-key":"type",
+                              "x-kubernetes-patch-strategy":"merge"
+                            }
+                        }
+                      },
+                      "exposureClassName":{
+                        "description":"ExposureClassName is the optional name of an exposure class to apply a control plane endpoint exposure strategy. This field is immutable.",
+                        "type":"string"
+                      },
+                      "extensions":{
+                        "description":"Extensions contain type and provider information for Shoot extensions.",
+                        "type":"array",
+                        "items":{
+                            "description":"Extension contains type and provider information for Shoot extensions.",
+                            "type":"object",
+                            "required":[
+                              "type"
+                            ],
+                            "properties":{
+                              "disabled":{
+                                  "description":"Disabled allows to disable extensions that were marked as 'globally enabled' by Gardener administrators.",
+                                  "type":"boolean"
+                              },
+                              "providerConfig":{
+                                  "description":"ProviderConfig is the configuration passed to extension resource.",
+                                  "type":"object"
+                              },
+                              "type":{
+                                  "description":"Type is the type of the extension resource.",
+                                  "type":"string"
+                              }
+                            }
+                        }
+                      },
+                      "hibernation":{
+                        "description":"Hibernation contains information whether the Shoot is suspended or not.",
+                        "type":"object",
+                        "properties":{
+                            "enabled":{
+                              "description":"Enabled specifies whether the Shoot needs to be hibernated or not. If it is true, the Shoot's desired state is to be hibernated. If it is false or nil, the Shoot's desired state is to be awakened.",
+                              "type":"boolean"
+                            },
+                            "schedules":{
+                              "description":"Schedules determine the hibernation schedules.",
+                              "type":"array",
+                              "items":{
+                                  "description":"HibernationSchedule determines the hibernation schedule of a Shoot. A Shoot will be regularly hibernated at each start time and will be woken up at each end time. Start or End can be omitted, though at least one of each has to be specified.",
+                                  "type":"object",
+                                  "properties":{
+                                    "end":{
+                                        "description":"End is a Cron spec at which time a Shoot will be woken up.",
+                                        "type":"string"
+                                    },
+                                    "location":{
+                                        "description":"Location is the time location in which both start and and shall be evaluated.",
+                                        "type":"string"
+                                    },
+                                    "start":{
+                                        "description":"Start is a Cron spec at which time a Shoot will be hibernated.",
+                                        "type":"string"
+                                    }
+                                  }
+                              }
+                            }
+                        }
+                      },
+                      "kubernetes":{
+                        "description":"Kubernetes contains the version and configuration settings of the control plane components.",
+                        "type":"object",
+                        "required":[
+                            "version"
+                        ],
+                        "properties":{
+                            "allowPrivilegedContainers":{
+                              "description":"AllowPrivilegedContainers indicates whether privileged containers are allowed in the Shoot (default: true).",
+                              "type":"boolean"
+                            },
+                            "clusterAutoscaler":{
+                              "description":"ClusterAutoscaler contains the configuration flags for the Kubernetes cluster autoscaler.",
+                              "type":"object",
+                              "properties":{
+                                  "expander":{
+                                    "description":"Expander defines the algorithm to use during scale up (default: least-waste). See: https://github.com/gardener/autoscaler/blob/machine-controller-manager-provider/cluster-autoscaler/FAQ.md#what-are-expanders.",
+                                    "type":"string"
+                                  },
+                                  "ignoreTaints":{
+                                    "description":"IgnoreTaints specifies a list of taint keys to ignore in node templates when considering to scale a node group.",
+                                    "type":"array",
+                                    "items":{
+                                        "type":"string"
+                                    }
+                                  },
+                                  "maxGracefulTerminationSeconds":{
+                                    "description":"MaxGracefulTerminationSeconds is the number of seconds CA waits for pod termination when trying to scale down a node (default: 600).",
+                                    "type":"integer",
+                                    "format":"int32"
+                                  },
+                                  "maxNodeProvisionTime":{
+                                    "description":"MaxNodeProvisionTime defines how long CA waits for node to be provisioned (default: 20 mins).",
+                                    "type":"string"
+                                  },
+                                  "scaleDownDelayAfterAdd":{
+                                    "description":"ScaleDownDelayAfterAdd defines how long after scale up that scale down evaluation resumes (default: 1 hour).",
+                                    "type":"string"
+                                  },
+                                  "scaleDownDelayAfterDelete":{
+                                    "description":"ScaleDownDelayAfterDelete how long after node deletion that scale down evaluation resumes, defaults to scanInterval (default: 0 secs).",
+                                    "type":"string"
+                                  },
+                                  "scaleDownDelayAfterFailure":{
+                                    "description":"ScaleDownDelayAfterFailure how long after scale down failure that scale down evaluation resumes (default: 3 mins).",
+                                    "type":"string"
+                                  },
+                                  "scaleDownUnneededTime":{
+                                    "description":"ScaleDownUnneededTime defines how long a node should be unneeded before it is eligible for scale down (default: 30 mins).",
+                                    "type":"string"
+                                  },
+                                  "scaleDownUtilizationThreshold":{
+                                    "description":"ScaleDownUtilizationThreshold defines the threshold in fraction (0.0 - 1.0) under which a node is being removed (default: 0.5).",
+                                    "type":"number",
+                                    "format":"double"
+                                  },
+                                  "scanInterval":{
+                                    "description":"ScanInterval how often cluster is reevaluated for scale up or down (default: 10 secs).",
+                                    "type":"string"
+                                  }
+                              }
+                            },
+                            "enableStaticTokenKubeconfig":{
+                              "description":"EnableStaticTokenKubeconfig indicates whether static token kubeconfig secret should be present in garden cluster (default: true).",
+                              "type":"boolean"
+                            },
+                            "kubeAPIServer":{
+                              "description":"KubeAPIServer contains configuration settings for the kube-apiserver.",
+                              "type":"object",
+                              "properties":{
+                                  "admissionPlugins":{
+                                    "description":"AdmissionPlugins contains the list of user-defined admission plugins (additional to those managed by Gardener), and, if desired, the corresponding configuration.",
+                                    "type":"array",
+                                    "items":{
+                                        "description":"AdmissionPlugin contains information about a specific admission plugin and its corresponding configuration.",
+                                        "type":"object",
+                                        "required":[
+                                          "name"
+                                        ],
+                                        "properties":{
+                                          "config":{
+                                              "description":"Config is the configuration of the plugin.",
+                                              "type":"object"
+                                          },
+                                          "name":{
+                                              "description":"Name is the name of the plugin.",
+                                              "type":"string"
+                                          }
+                                        }
+                                    },
+                                    "x-kubernetes-patch-merge-key":"name",
+                                    "x-kubernetes-patch-strategy":"merge"
+                                  },
+                                  "apiAudiences":{
+                                    "description":"APIAudiences are the identifiers of the API. The service account token authenticator will validate that tokens used against the API are bound to at least one of these audiences. Defaults to [\"kubernetes\"].",
+                                    "type":"array",
+                                    "items":{
+                                        "type":"string"
+                                    }
+                                  },
+                                  "auditConfig":{
+                                    "description":"AuditConfig contains configuration settings for the audit of the kube-apiserver.",
+                                    "type":"object",
+                                    "properties":{
+                                        "auditPolicy":{
+                                          "description":"AuditPolicy contains configuration settings for audit policy of the kube-apiserver.",
+                                          "type":"object",
+                                          "properties":{
+                                              "configMapRef":{
+                                                "description":"ConfigMapRef is a reference to a ConfigMap object in the same namespace, which contains the audit policy for the kube-apiserver.",
+                                                "type":"object",
+                                                "properties":{
+                                                    "apiVersion":{
+                                                      "description":"API version of the referent.",
+                                                      "type":"string"
+                                                    },
+                                                    "fieldPath":{
+                                                      "description":"If referring to a piece of an object instead of an entire object, this string should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2]. For example, if the object reference is to a container within a pod, this would take on a value like: \"spec.containers{name}\" (where \"name\" refers to the name of the container that triggered the event) or if no container name is specified \"spec.containers[2]\" (container with index 2 in this pod). This syntax is chosen only to have some well-defined way of referencing a part of an object.",
+                                                      "type":"string"
+                                                    },
+                                                    "kind":{
+                                                      "description":"Kind of the referent. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+                                                      "type":"string"
+                                                    },
+                                                    "name":{
+                                                      "description":"Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                                                      "type":"string"
+                                                    },
+                                                    "namespace":{
+                                                      "description":"Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+                                                      "type":"string"
+                                                    },
+                                                    "resourceVersion":{
+                                                      "description":"Specific resourceVersion to which this reference is made, if any. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency",
+                                                      "type":"string"
+                                                    },
+                                                    "uid":{
+                                                      "description":"UID of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids",
+                                                      "type":"string"
+                                                    }
+                                                },
+                                                "x-kubernetes-map-type":"atomic"
+                                              }
+                                          }
+                                        }
+                                    }
+                                  },
+                                  "enableAnonymousAuthentication":{
+                                    "description":"EnableAnonymousAuthentication defines whether anonymous requests to the secure port of the API server should be allowed (flag `--anonymous-auth`). See: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/",
+                                    "type":"boolean"
+                                  },
+                                  "enableBasicAuthentication":{
+                                    "description":"EnableBasicAuthentication defines whether basic authentication should be enabled for this cluster or not.",
+                                    "type":"boolean"
+                                  },
+                                  "eventTTL":{
+                                    "description":"EventTTL controls the amount of time to retain events. Defaults to 1h.",
+                                    "type":"string"
+                                  },
+                                  "featureGates":{
+                                    "description":"FeatureGates contains information about enabled feature gates.",
+                                    "type":"object",
+                                    "additionalProperties":{
+                                        "type":"boolean"
+                                    }
+                                  },
+                                  "oidcConfig":{
+                                    "description":"OIDCConfig contains configuration settings for the OIDC provider.",
+                                    "type":"object",
+                                    "properties":{
+                                        "caBundle":{
+                                          "description":"If set, the OpenID server's certificate will be verified by one of the authorities in the oidc-ca-file, otherwise the host's root CA set will be used.",
+                                          "type":"string"
+                                        },
+                                        "clientAuthentication":{
+                                          "description":"ClientAuthentication can optionally contain client configuration used for kubeconfig generation.",
+                                          "type":"object",
+                                          "properties":{
+                                              "extraConfig":{
+                                                "description":"Extra configuration added to kubeconfig's auth-provider. Must not be any of idp-issuer-url, client-id, client-secret, idp-certificate-authority, idp-certificate-authority-data, id-token or refresh-token",
+                                                "type":"object",
+                                                "additionalProperties":{
+                                                    "type":"string"
+                                                }
+                                              },
+                                              "secret":{
+                                                "description":"The client Secret for the OpenID Connect client.",
+                                                "type":"string"
+                                              }
+                                          }
+                                        },
+                                        "clientID":{
+                                          "description":"The client ID for the OpenID Connect client, must be set if oidc-issuer-url is set.",
+                                          "type":"string"
+                                        },
+                                        "groupsClaim":{
+                                          "description":"If provided, the name of a custom OpenID Connect claim for specifying user groups. The claim value is expected to be a string or array of strings. This flag is experimental, please see the authentication documentation for further details.",
+                                          "type":"string"
+                                        },
+                                        "groupsPrefix":{
+                                          "description":"If provided, all groups will be prefixed with this value to prevent conflicts with other authentication strategies.",
+                                          "type":"string"
+                                        },
+                                        "issuerURL":{
+                                          "description":"The URL of the OpenID issuer, only HTTPS scheme will be accepted. If set, it will be used to verify the OIDC JSON Web Token (JWT).",
+                                          "type":"string"
+                                        },
+                                        "requiredClaims":{
+                                          "description":"key=value pairs that describes a required claim in the ID Token. If set, the claim is verified to be present in the ID Token with a matching value.",
+                                          "type":"object",
+                                          "additionalProperties":{
+                                              "type":"string"
+                                          }
+                                        },
+                                        "signingAlgs":{
+                                          "description":"List of allowed JOSE asymmetric signing algorithms. JWTs with a 'alg' header value not in this list will be rejected. Values are defined by RFC 7518 https://tools.ietf.org/html/rfc7518#section-3.1",
+                                          "type":"array",
+                                          "items":{
+                                              "type":"string"
+                                          }
+                                        },
+                                        "usernameClaim":{
+                                          "description":"The OpenID claim to use as the user name. Note that claims other than the default ('sub') is not guaranteed to be unique and immutable. This flag is experimental, please see the authentication documentation for further details. (default \"sub\")",
+                                          "type":"string"
+                                        },
+                                        "usernamePrefix":{
+                                          "description":"If provided, all usernames will be prefixed with this value. If not provided, username claims other than 'email' are prefixed by the issuer URL to avoid clashes. To skip any prefixing, provide the value '-'.",
+                                          "type":"string"
+                                        }
+                                    }
+                                  },
+                                  "requests":{
+                                    "description":"Requests contains configuration for request-specific settings for the kube-apiserver.",
+                                    "type":"object",
+                                    "properties":{
+                                        "maxMutatingInflight":{
+                                          "description":"MaxMutatingInflight is the maximum number of mutating requests in flight at a given time. When the server exceeds this, it rejects requests.",
+                                          "type":"integer",
+                                          "format":"int32"
+                                        },
+                                        "maxNonMutatingInflight":{
+                                          "description":"MaxNonMutatingInflight is the maximum number of non-mutating requests in flight at a given time. When the server exceeds this, it rejects requests.",
+                                          "type":"integer",
+                                          "format":"int32"
+                                        }
+                                    }
+                                  },
+                                  "runtimeConfig":{
+                                    "description":"RuntimeConfig contains information about enabled or disabled APIs.",
+                                    "type":"object",
+                                    "additionalProperties":{
+                                        "type":"boolean"
+                                    }
+                                  },
+                                  "serviceAccountConfig":{
+                                    "description":"ServiceAccountConfig contains configuration settings for the service account handling of the kube-apiserver.",
+                                    "type":"object",
+                                    "properties":{
+                                        "acceptedIssuers":{
+                                          "description":"AcceptedIssuers is an additional set of issuers that are used to determine which service account tokens are accepted. These values are not used to generate new service account tokens. Only useful when service account tokens are also issued by another external system or a change of the current issuer that is used for generating tokens is being performed. This field is only available for Kubernetes v1.22 or later.",
+                                          "type":"array",
+                                          "items":{
+                                              "type":"string"
+                                          }
+                                        },
+                                        "extendTokenExpiration":{
+                                          "description":"ExtendTokenExpiration turns on projected service account expiration extension during token generation, which helps safe transition from legacy token to bound service account token feature. If this flag is enabled, admission injected tokens would be extended up to 1 year to prevent unexpected failure during transition, ignoring value of service-account-max-token-expiration.",
+                                          "type":"boolean"
+                                        },
+                                        "issuer":{
+                                          "description":"Issuer is the identifier of the service account token issuer. The issuer will assert this identifier in \"iss\" claim of issued tokens. This value is used to generate new service account tokens. This value is a string or URI. Defaults to URI of the API server.",
+                                          "type":"string"
+                                        },
+                                        "maxTokenExpiration":{
+                                          "description":"MaxTokenExpiration is the maximum validity duration of a token created by the service account token issuer. If an otherwise valid TokenRequest with a validity duration larger than this value is requested, a token will be issued with a validity duration of this value. This field must be within [30d,90d] when the ShootMaxTokenExpirationValidation feature gate is enabled. This field will be overwritten to be within [30d,90d] when the ShootMaxTokenExpirationOverwrite feature gate is enabled.",
+                                          "type":"string"
+                                        },
+                                        "signingKeySecretName":{
+                                          "description":"SigningKeySecret is a reference to a secret that contains an optional private key of the service account token issuer. The issuer will sign issued ID tokens with this private key. Only useful if service account tokens are also issued by another external system.",
+                                          "type":"object",
+                                          "properties":{
+                                              "name":{
+                                                "description":"Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+                                                "type":"string"
+                                              }
+                                          },
+                                          "x-kubernetes-map-type":"atomic"
+                                        }
+                                    }
+                                  },
+                                  "watchCacheSizes":{
+                                    "description":"WatchCacheSizes contains configuration of the API server's watch cache sizes. Configuring these flags might be useful for large-scale Shoot clusters with a lot of parallel update requests and a lot of watching controllers (e.g. large shooted Seed clusters). When the API server's watch cache's capacity is too small to cope with the amount of update requests and watchers for a particular resource, it might happen that controller watches are permanently stopped with `too old resource version` errors. Starting from kubernetes v1.19, the API server's watch cache size is adapted dynamically and setting the watch cache size flags will have no effect, except when setting it to 0 (which disables the watch cache).",
+                                    "type":"object",
+                                    "properties":{
+                                        "default":{
+                                          "description":"Default configures the default watch cache size of the kube-apiserver (flag `--default-watch-cache-size`, defaults to 100). See: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/",
+                                          "type":"integer",
+                                          "format":"int32"
+                                        },
+                                        "resources":{
+                                          "description":"Resources configures the watch cache size of the kube-apiserver per resource (flag `--watch-cache-sizes`). See: https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/",
+                                          "type":"array",
+                                          "items":{
+                                              "description":"ResourceWatchCacheSize contains configuration of the API server's watch cache size for one specific resource.",
+                                              "type":"object",
+                                              "required":[
+                                                "resource",
+                                                "size"
+                                              ],
+                                              "properties":{
+                                                "apiGroup":{
+                                                    "description":"APIGroup is the API group of the resource for which the watch cache size should be configured. An unset value is used to specify the legacy core API (e.g. for `secrets`).",
+                                                    "type":"string"
+                                                },
+                                                "resource":{
+                                                    "description":"Resource is the name of the resource for which the watch cache size should be configured (in lowercase plural form, e.g. `secrets`).",
+                                                    "type":"string"
+                                                },
+                                                "size":{
+                                                    "description":"CacheSize specifies the watch cache size that should be configured for the specified resource.",
+                                                    "type":"integer",
+                                                    "format":"int32"
+                                                }
+                                              }
+                                          }
+                                        }
+                                    }
+                                  }
+                              }
+                            },
+                            "kubeControllerManager":{
+                              "description":"KubeControllerManager contains configuration settings for the kube-controller-manager.",
+                              "type":"object",
+                              "properties":{
+                                  "featureGates":{
+                                    "description":"FeatureGates contains information about enabled feature gates.",
+                                    "type":"object",
+                                    "additionalProperties":{
+                                        "type":"boolean"
+                                    }
+                                  },
+                                  "horizontalPodAutoscaler":{
+                                    "description":"HorizontalPodAutoscalerConfig contains horizontal pod autoscaler configuration settings for the kube-controller-manager.",
+                                    "type":"object",
+                                    "properties":{
+                                        "cpuInitializationPeriod":{
+                                          "description":"The period after which a ready pod transition is considered to be the first.",
+                                          "type":"string"
+                                        },
+                                        "downscaleStabilization":{
+                                          "description":"The configurable window at which the controller will choose the highest recommendation for autoscaling.",
+                                          "type":"string"
+                                        },
+                                        "initialReadinessDelay":{
+                                          "description":"The configurable period at which the horizontal pod autoscaler considers a Pod “not yet ready” given that it’s unready and it has  transitioned to unready during that time.",
+                                          "type":"string"
+                                        },
+                                        "syncPeriod":{
+                                          "description":"The period for syncing the number of pods in horizontal pod autoscaler.",
+                                          "type":"string"
+                                        },
+                                        "tolerance":{
+                                          "description":"The minimum change (from 1.0) in the desired-to-actual metrics ratio for the horizontal pod autoscaler to consider scaling.",
+                                          "type":"number",
+                                          "format":"double"
+                                        }
+                                    }
+                                  },
+                                  "nodeCIDRMaskSize":{
+                                    "description":"NodeCIDRMaskSize defines the mask size for node cidr in cluster (default is 24). This field is immutable.",
+                                    "type":"integer",
+                                    "format":"int32"
+                                  },
+                                  "nodeMonitorGracePeriod":{
+                                    "description":"NodeMonitorGracePeriod defines the grace period before an unresponsive node is marked unhealthy.",
+                                    "type":"string"
+                                  },
+                                  "podEvictionTimeout":{
+                                    "description":"PodEvictionTimeout defines the grace period for deleting pods on failed nodes. Defaults to 2m.",
+                                    "type":"string"
+                                  }
+                              }
+                            },
+                            "kubeProxy":{
+                              "description":"KubeProxy contains configuration settings for the kube-proxy.",
+                              "type":"object",
+                              "properties":{
+                                  "enabled":{
+                                    "description":"Enabled indicates whether kube-proxy should be deployed or not. Depending on the networking extensions switching kube-proxy off might be rejected. Consulting the respective documentation of the used networking extension is recommended before using this field. defaults to true if not specified.",
+                                    "type":"boolean"
+                                  },
+                                  "featureGates":{
+                                    "description":"FeatureGates contains information about enabled feature gates.",
+                                    "type":"object",
+                                    "additionalProperties":{
+                                        "type":"boolean"
+                                    }
+                                  },
+                                  "mode":{
+                                    "description":"Mode specifies which proxy mode to use. defaults to IPTables.",
+                                    "type":"string"
+                                  }
+                              }
+                            },
+                            "kubeScheduler":{
+                              "description":"KubeScheduler contains configuration settings for the kube-scheduler.",
+                              "type":"object",
+                              "properties":{
+                                  "featureGates":{
+                                    "description":"FeatureGates contains information about enabled feature gates.",
+                                    "type":"object",
+                                    "additionalProperties":{
+                                        "type":"boolean"
+                                    }
+                                  },
+                                  "kubeMaxPDVols":{
+                                    "description":"KubeMaxPDVols allows to configure the `KUBE_MAX_PD_VOLS` environment variable for the kube-scheduler. Please find more information here: https://kubernetes.io/docs/concepts/storage/storage-limits/#custom-limits Note that using this field is considered alpha-/experimental-level and is on your own risk. You should be aware of all the side-effects and consequences when changing it.",
+                                    "type":"string"
+                                  }
+                              }
+                            },
+                            "kubelet":{
+                              "description":"Kubelet contains configuration settings for the kubelet.",
+                              "type":"object",
+                              "properties":{
+                                  "cpuCFSQuota":{
+                                    "description":"CPUCFSQuota allows you to disable/enable CPU throttling for Pods.",
+                                    "type":"boolean"
+                                  },
+                                  "cpuManagerPolicy":{
+                                    "description":"CPUManagerPolicy allows to set alternative CPU management policies (default: none).",
+                                    "type":"string"
+                                  },
+                                  "evictionHard":{
+                                    "description":"EvictionHard describes a set of eviction thresholds (e.g. memory.available<1Gi) that if met would trigger a Pod eviction. Default:\n  memory.available:   \"100Mi/1Gi/5%\"\n  nodefs.available:   \"5%\"\n  nodefs.inodesFree:  \"5%\"\n  imagefs.available:  \"5%\"\n  imagefs.inodesFree: \"5%\"",
+                                    "type":"object",
+                                    "properties":{
+                                        "imageFSAvailable":{
+                                          "description":"ImageFSAvailable is the threshold for the free disk space in the imagefs filesystem (docker images and container writable layers).",
+                                          "type":"string"
+                                        },
+                                        "imageFSInodesFree":{
+                                          "description":"ImageFSInodesFree is the threshold for the available inodes in the imagefs filesystem.",
+                                          "type":"string"
+                                        },
+                                        "memoryAvailable":{
+                                          "description":"MemoryAvailable is the threshold for the free memory on the host server.",
+                                          "type":"string"
+                                        },
+                                        "nodeFSAvailable":{
+                                          "description":"NodeFSAvailable is the threshold for the free disk space in the nodefs filesystem (docker volumes, logs, etc).",
+                                          "type":"string"
+                                        },
+                                        "nodeFSInodesFree":{
+                                          "description":"NodeFSInodesFree is the threshold for the available inodes in the nodefs filesystem.",
+                                          "type":"string"
+                                        }
+                                    }
+                                  },
+                                  "evictionMaxPodGracePeriod":{
+                                    "description":"EvictionMaxPodGracePeriod describes the maximum allowed grace period (in seconds) to use when terminating pods in response to a soft eviction threshold being met. Default: 90",
+                                    "type":"integer",
+                                    "format":"int32"
+                                  },
+                                  "evictionMinimumReclaim":{
+                                    "description":"EvictionMinimumReclaim configures the amount of resources below the configured eviction threshold that the kubelet attempts to reclaim whenever the kubelet observes resource pressure. Default: 0 for each resource",
+                                    "type":"object",
+                                    "properties":{
+                                        "imageFSAvailable":{
+                                          "description":"ImageFSAvailable is the threshold for the disk space reclaim in the imagefs filesystem (docker images and container writable layers).",
+                                          "type":"string"
+                                        },
+                                        "imageFSInodesFree":{
+                                          "description":"ImageFSInodesFree is the threshold for the inodes reclaim in the imagefs filesystem.",
+                                          "type":"string"
+                                        },
+                                        "memoryAvailable":{
+                                          "description":"MemoryAvailable is the threshold for the memory reclaim on the host server.",
+                                          "type":"string"
+                                        },
+                                        "nodeFSAvailable":{
+                                          "description":"NodeFSAvailable is the threshold for the disk space reclaim in the nodefs filesystem (docker volumes, logs, etc).",
+                                          "type":"string"
+                                        },
+                                        "nodeFSInodesFree":{
+                                          "description":"NodeFSInodesFree is the threshold for the inodes reclaim in the nodefs filesystem.",
+                                          "type":"string"
+                                        }
+                                    }
+                                  },
+                                  "evictionPressureTransitionPeriod":{
+                                    "description":"EvictionPressureTransitionPeriod is the duration for which the kubelet has to wait before transitioning out of an eviction pressure condition. Default: 4m0s",
+                                    "type":"string"
+                                  },
+                                  "evictionSoft":{
+                                    "description":"EvictionSoft describes a set of eviction thresholds (e.g. memory.available<1.5Gi) that if met over a corresponding grace period would trigger a Pod eviction. Default:\n  memory.available:   \"200Mi/1.5Gi/10%\"\n  nodefs.available:   \"10%\"\n  nodefs.inodesFree:  \"10%\"\n  imagefs.available:  \"10%\"\n  imagefs.inodesFree: \"10%\"",
+                                    "type":"object",
+                                    "properties":{
+                                        "imageFSAvailable":{
+                                          "description":"ImageFSAvailable is the threshold for the free disk space in the imagefs filesystem (docker images and container writable layers).",
+                                          "type":"string"
+                                        },
+                                        "imageFSInodesFree":{
+                                          "description":"ImageFSInodesFree is the threshold for the available inodes in the imagefs filesystem.",
+                                          "type":"string"
+                                        },
+                                        "memoryAvailable":{
+                                          "description":"MemoryAvailable is the threshold for the free memory on the host server.",
+                                          "type":"string"
+                                        },
+                                        "nodeFSAvailable":{
+                                          "description":"NodeFSAvailable is the threshold for the free disk space in the nodefs filesystem (docker volumes, logs, etc).",
+                                          "type":"string"
+                                        },
+                                        "nodeFSInodesFree":{
+                                          "description":"NodeFSInodesFree is the threshold for the available inodes in the nodefs filesystem.",
+                                          "type":"string"
+                                        }
+                                    }
+                                  },
+                                  "evictionSoftGracePeriod":{
+                                    "description":"EvictionSoftGracePeriod describes a set of eviction grace periods (e.g. memory.available=1m30s) that correspond to how long a soft eviction threshold must hold before triggering a Pod eviction. Default:\n  memory.available:   1m30s\n  nodefs.available:   1m30s\n  nodefs.inodesFree:  1m30s\n  imagefs.available:  1m30s\n  imagefs.inodesFree: 1m30s",
+                                    "type":"object",
+                                    "properties":{
+                                        "imageFSAvailable":{
+                                          "description":"ImageFSAvailable is the grace period for the ImageFSAvailable eviction threshold.",
+                                          "type":"string"
+                                        },
+                                        "imageFSInodesFree":{
+                                          "description":"ImageFSInodesFree is the grace period for the ImageFSInodesFree eviction threshold.",
+                                          "type":"string"
+                                        },
+                                        "memoryAvailable":{
+                                          "description":"MemoryAvailable is the grace period for the MemoryAvailable eviction threshold.",
+                                          "type":"string"
+                                        },
+                                        "nodeFSAvailable":{
+                                          "description":"NodeFSAvailable is the grace period for the NodeFSAvailable eviction threshold.",
+                                          "type":"string"
+                                        },
+                                        "nodeFSInodesFree":{
+                                          "description":"NodeFSInodesFree is the grace period for the NodeFSInodesFree eviction threshold.",
+                                          "type":"string"
+                                        }
+                                    }
+                                  },
+                                  "failSwapOn":{
+                                    "description":"FailSwapOn makes the Kubelet fail to start if swap is enabled on the node. (default true).",
+                                    "type":"boolean"
+                                  },
+                                  "featureGates":{
+                                    "description":"FeatureGates contains information about enabled feature gates.",
+                                    "type":"object",
+                                    "additionalProperties":{
+                                        "type":"boolean"
+                                    }
+                                  },
+                                  "imageGCHighThresholdPercent":{
+                                    "description":"ImageGCHighThresholdPercent describes the percent of the disk usage which triggers image garbage collection. Default: 50",
+                                    "type":"integer",
+                                    "format":"int32"
+                                  },
+                                  "imageGCLowThresholdPercent":{
+                                    "description":"ImageGCLowThresholdPercent describes the percent of the disk to which garbage collection attempts to free. Default: 40",
+                                    "type":"integer",
+                                    "format":"int32"
+                                  },
+                                  "imagePullProgressDeadline":{
+                                    "description":"ImagePullProgressDeadline describes the time limit under which if no pulling progress is made, the image pulling will be cancelled. Default: 1m",
+                                    "type":"string"
+                                  },
+                                  "kubeReserved":{
+                                    "description":"KubeReserved is the configuration for resources reserved for kubernetes node components (mainly kubelet and container runtime). When updating these values, be aware that cgroup resizes may not succeed on active worker nodes. Look for the NodeAllocatableEnforced event to determine if the configuration was applied. Default: cpu=80m,memory=1Gi,pid=20k",
+                                    "type":"object",
+                                    "properties":{
+                                        "cpu":{
+                                          "description":"CPU is the reserved cpu.",
+                                          "type":"string"
+                                        },
+                                        "ephemeralStorage":{
+                                          "description":"EphemeralStorage is the reserved ephemeral-storage.",
+                                          "type":"string"
+                                        },
+                                        "memory":{
+                                          "description":"Memory is the reserved memory.",
+                                          "type":"string"
+                                        },
+                                        "pid":{
+                                          "description":"PID is the reserved process-ids.",
+                                          "type":"string"
+                                        }
+                                    }
+                                  },
+                                  "maxPods":{
+                                    "description":"MaxPods is the maximum number of Pods that are allowed by the Kubelet. Default: 110",
+                                    "type":"integer",
+                                    "format":"int32"
+                                  },
+                                  "podPidsLimit":{
+                                    "description":"PodPIDsLimit is the maximum number of process IDs per pod allowed by the kubelet.",
+                                    "type":"integer",
+                                    "format":"int64"
+                                  },
+                                  "serializeImagePulls":{
+                                    "description":"SerializeImagePulls describes whether the images are pulled one at a time. Default: true",
+                                    "type":"boolean"
+                                  },
+                                  "systemReserved":{
+                                    "description":"SystemReserved is the configuration for resources reserved for system processes not managed by kubernetes (e.g. journald). When updating these values, be aware that cgroup resizes may not succeed on active worker nodes. Look for the NodeAllocatableEnforced event to determine if the configuration was applied.",
+                                    "type":"object",
+                                    "properties":{
+                                        "cpu":{
+                                          "description":"CPU is the reserved cpu.",
+                                          "type":"string"
+                                        },
+                                        "ephemeralStorage":{
+                                          "description":"EphemeralStorage is the reserved ephemeral-storage.",
+                                          "type":"string"
+                                        },
+                                        "memory":{
+                                          "description":"Memory is the reserved memory.",
+                                          "type":"string"
+                                        },
+                                        "pid":{
+                                          "description":"PID is the reserved process-ids.",
+                                          "type":"string"
+                                        }
+                                    }
+                                  }
+                              }
+                            },
+                            "version":{
+                              "description":"Version is the semantic Kubernetes version to use for the Shoot cluster.",
+                              "type":"string"
+                            },
+                            "verticalPodAutoscaler":{
+                              "description":"VerticalPodAutoscaler contains the configuration flags for the Kubernetes vertical pod autoscaler.",
+                              "type":"object",
+                              "required":[
+                                  "enabled"
+                              ],
+                              "properties":{
+                                  "enabled":{
+                                    "description":"Enabled specifies whether the Kubernetes VPA shall be enabled for the shoot cluster.",
+                                    "type":"boolean"
+                                  },
+                                  "evictAfterOOMThreshold":{
+                                    "description":"EvictAfterOOMThreshold defines the threshold that will lead to pod eviction in case it OOMed in less than the given threshold since its start and if it has only one container (default: 10m0s).",
+                                    "type":"string"
+                                  },
+                                  "evictionRateBurst":{
+                                    "description":"EvictionRateBurst defines the burst of pods that can be evicted (default: 1)",
+                                    "type":"integer",
+                                    "format":"int32"
+                                  },
+                                  "evictionRateLimit":{
+                                    "description":"EvictionRateLimit defines the number of pods that can be evicted per second. A rate limit set to 0 or -1 will disable the rate limiter (default: -1).",
+                                    "type":"number",
+                                    "format":"double"
+                                  },
+                                  "evictionTolerance":{
+                                    "description":"EvictionTolerance defines the fraction of replica count that can be evicted for update in case more than one pod can be evicted (default: 0.5).",
+                                    "type":"number",
+                                    "format":"double"
+                                  },
+                                  "recommendationMarginFraction":{
+                                    "description":"RecommendationMarginFraction is the fraction of usage added as the safety margin to the recommended request (default: 0.15).",
+                                    "type":"number",
+                                    "format":"double"
+                                  },
+                                  "recommenderInterval":{
+                                    "description":"RecommenderInterval is the interval how often metrics should be fetched (default: 1m0s).",
+                                    "type":"string"
+                                  },
+                                  "updaterInterval":{
+                                    "description":"UpdaterInterval is the interval how often the updater should run (default: 1m0s).",
+                                    "type":"string"
+                                  }
+                              }
+                            }
+                        }
+                      },
+                      "maintenance":{
+                        "description":"Maintenance contains information about the time window for maintenance operations and which operations should be performed.",
+                        "type":"object",
+                        "properties":{
+                            "autoUpdate":{
+                              "description":"AutoUpdate contains information about which constraints should be automatically updated.",
+                              "type":"object",
+                              "required":[
+                                  "kubernetesVersion",
+                                  "machineImageVersion"
+                              ],
+                              "properties":{
+                                  "kubernetesVersion":{
+                                    "description":"KubernetesVersion indicates whether the patch Kubernetes version may be automatically updated (default: true).",
+                                    "type":"boolean"
+                                  },
+                                  "machineImageVersion":{
+                                    "description":"MachineImageVersion indicates whether the machine image version may be automatically updated (default: true).",
+                                    "type":"boolean"
+                                  }
+                              }
+                            },
+                            "confineSpecUpdateRollout":{
+                              "description":"ConfineSpecUpdateRollout prevents that changes/updates to the shoot specification will be rolled out immediately. Instead, they are rolled out during the shoot's maintenance time window. There is one exception that will trigger an immediate roll out which is changes to the Spec.Hibernation.Enabled field.",
+                              "type":"boolean"
+                            },
+                            "timeWindow":{
+                              "description":"TimeWindow contains information about the time window for maintenance operations.",
+                              "type":"object",
+                              "required":[
+                                  "begin",
+                                  "end"
+                              ],
+                              "properties":{
+                                  "begin":{
+                                    "description":"Begin is the beginning of the time window in the format HHMMSS+ZONE, e.g. \"220000+0100\". If not present, a random value will be computed.",
+                                    "type":"string"
+                                  },
+                                  "end":{
+                                    "description":"End is the end of the time window in the format HHMMSS+ZONE, e.g. \"220000+0100\". If not present, the value will be computed based on the \"Begin\" value.",
+                                    "type":"string"
+                                  }
+                              }
+                            }
+                        }
+                      },
+                      "monitoring":{
+                        "description":"Monitoring contains information about custom monitoring configurations for the shoot.",
+                        "type":"object",
+                        "properties":{
+                            "alerting":{
+                              "description":"Alerting contains information about the alerting configuration for the shoot cluster.",
+                              "type":"object",
+                              "properties":{
+                                  "emailReceivers":{
+                                    "description":"MonitoringEmailReceivers is a list of recipients for alerts",
+                                    "type":"array",
+                                    "items":{
+                                        "type":"string"
+                                    }
+                                  }
+                              }
+                            }
+                        }
+                      },
+                      "networking":{
+                        "description":"Networking contains information about cluster networking such as CNI Plugin type, CIDRs, ...etc.",
+                        "type":"object",
+                        "required":[
+                            "type"
+                        ],
+                        "properties":{
+                            "nodes":{
+                              "description":"Nodes is the CIDR of the entire node network. This field is immutable.",
+                              "type":"string"
+                            },
+                            "pods":{
+                              "description":"Pods is the CIDR of the pod network. This field is immutable.",
+                              "type":"string"
+                            },
+                            "providerConfig":{
+                              "description":"ProviderConfig is the configuration passed to network resource.",
+                              "type":"object"
+                            },
+                            "services":{
+                              "description":"Services is the CIDR of the service network. This field is immutable.",
+                              "type":"string"
+                            },
+                            "type":{
+                              "description":"Type identifies the type of the networking plugin. This field is immutable.",
+                              "type":"string"
+                            }
+                        }
+                      },
+                      "provider":{
+                        "description":"Provider contains all provider-specific and provider-relevant information.",
+                        "type":"object",
+                        "required":[
+                            "type",
+                            "workers"
+                        ],
+                        "properties":{
+                            "controlPlaneConfig":{
+                              "description":"ControlPlaneConfig contains the provider-specific control plane config blob. Please look up the concrete definition in the documentation of your provider extension.",
+                              "type":"object"
+                            },
+                            "infrastructureConfig":{
+                              "description":"InfrastructureConfig contains the provider-specific infrastructure config blob. Please look up the concrete definition in the documentation of your provider extension.",
+                              "type":"object"
+                            },
+                            "type":{
+                              "description":"Type is the type of the provider. This field is immutable.",
+                              "type":"string"
+                            },
+                            "workers":{
+                              "description":"Workers is a list of worker groups.",
+                              "type":"array",
+                              "items":{
+                                  "description":"Worker is the base definition of a worker group.",
+                                  "type":"object",
+                                  "required":[
+                                    "name",
+                                    "machine",
+                                    "maximum",
+                                    "minimum"
+                                  ],
+                                  "properties":{
+                                    "annotations":{
+                                        "description":"Annotations is a map of key/value pairs for annotations for all the `Node` objects in this worker pool.",
+                                        "type":"object",
+                                        "additionalProperties":{
+                                          "type":"string"
+                                        }
+                                    },
+                                    "caBundle":{
+                                        "description":"CABundle is a certificate bundle which will be installed onto every machine of this worker pool.",
+                                        "type":"string"
+                                    },
+                                    "cri":{
+                                        "description":"CRI contains configurations of CRI support of every machine in the worker pool. Defaults to a CRI with name `containerd` when the Kubernetes version of the `Shoot` is >= 1.22.",
+                                        "type":"object",
+                                        "required":[
+                                          "name"
+                                        ],
+                                        "properties":{
+                                          "containerRuntimes":{
+                                              "description":"ContainerRuntimes is the list of the required container runtimes supported for a worker pool.",
+                                              "type":"array",
+                                              "items":{
+                                                "description":"ContainerRuntime contains information about worker's available container runtime",
+                                                "type":"object",
+                                                "required":[
+                                                    "type"
+                                                ],
+                                                "properties":{
+                                                    "providerConfig":{
+                                                      "description":"ProviderConfig is the configuration passed to container runtime resource.",
+                                                      "type":"object"
+                                                    },
+                                                    "type":{
+                                                      "description":"Type is the type of the Container Runtime.",
+                                                      "type":"string"
+                                                    }
+                                                }
+                                              }
+                                          },
+                                          "name":{
+                                              "description":"The name of the CRI library. Supported values are `docker` and `containerd`.",
+                                              "type":"string"
+                                          }
+                                        }
+                                    },
+                                    "dataVolumes":{
+                                        "description":"DataVolumes contains a list of additional worker volumes.",
+                                        "type":"array",
+                                        "items":{
+                                          "description":"DataVolume contains information about a data volume.",
+                                          "type":"object",
+                                          "required":[
+                                              "name",
+                                              "size"
+                                          ],
+                                          "properties":{
+                                              "encrypted":{
+                                                "description":"Encrypted determines if the volume should be encrypted.",
+                                                "type":"boolean"
+                                              },
+                                              "name":{
+                                                "description":"Name of the volume to make it referencable.",
+                                                "type":"string"
+                                              },
+                                              "size":{
+                                                "description":"VolumeSize is the size of the volume.",
+                                                "type":"string"
+                                              },
+                                              "type":{
+                                                "description":"Type is the type of the volume.",
+                                                "type":"string"
+                                              }
+                                          }
+                                        }
+                                    },
+                                    "kubeletDataVolumeName":{
+                                        "description":"KubeletDataVolumeName contains the name of a dataVolume that should be used for storing kubelet state.",
+                                        "type":"string"
+                                    },
+                                    "kubernetes":{
+                                        "description":"Kubernetes contains configuration for Kubernetes components related to this worker pool.",
+                                        "type":"object",
+                                        "properties":{
+                                          "kubelet":{
+                                              "description":"Kubelet contains configuration settings for all kubelets of this worker pool. If set, all `spec.kubernetes.kubelet` settings will be overwritten for this worker pool (no merge of settings).",
+                                              "type":"object",
+                                              "properties":{
+                                                "cpuCFSQuota":{
+                                                    "description":"CPUCFSQuota allows you to disable/enable CPU throttling for Pods.",
+                                                    "type":"boolean"
+                                                },
+                                                "cpuManagerPolicy":{
+                                                    "description":"CPUManagerPolicy allows to set alternative CPU management policies (default: none).",
+                                                    "type":"string"
+                                                },
+                                                "evictionHard":{
+                                                    "description":"EvictionHard describes a set of eviction thresholds (e.g. memory.available<1Gi) that if met would trigger a Pod eviction. Default:\n  memory.available:   \"100Mi/1Gi/5%\"\n  nodefs.available:   \"5%\"\n  nodefs.inodesFree:  \"5%\"\n  imagefs.available:  \"5%\"\n  imagefs.inodesFree: \"5%\"",
+                                                    "type":"object",
+                                                    "properties":{
+                                                      "imageFSAvailable":{
+                                                          "description":"ImageFSAvailable is the threshold for the free disk space in the imagefs filesystem (docker images and container writable layers).",
+                                                          "type":"string"
+                                                      },
+                                                      "imageFSInodesFree":{
+                                                          "description":"ImageFSInodesFree is the threshold for the available inodes in the imagefs filesystem.",
+                                                          "type":"string"
+                                                      },
+                                                      "memoryAvailable":{
+                                                          "description":"MemoryAvailable is the threshold for the free memory on the host server.",
+                                                          "type":"string"
+                                                      },
+                                                      "nodeFSAvailable":{
+                                                          "description":"NodeFSAvailable is the threshold for the free disk space in the nodefs filesystem (docker volumes, logs, etc).",
+                                                          "type":"string"
+                                                      },
+                                                      "nodeFSInodesFree":{
+                                                          "description":"NodeFSInodesFree is the threshold for the available inodes in the nodefs filesystem.",
+                                                          "type":"string"
+                                                      }
+                                                    }
+                                                },
+                                                "evictionMaxPodGracePeriod":{
+                                                    "description":"EvictionMaxPodGracePeriod describes the maximum allowed grace period (in seconds) to use when terminating pods in response to a soft eviction threshold being met. Default: 90",
+                                                    "type":"integer",
+                                                    "format":"int32"
+                                                },
+                                                "evictionMinimumReclaim":{
+                                                    "description":"EvictionMinimumReclaim configures the amount of resources below the configured eviction threshold that the kubelet attempts to reclaim whenever the kubelet observes resource pressure. Default: 0 for each resource",
+                                                    "type":"object",
+                                                    "properties":{
+                                                      "imageFSAvailable":{
+                                                          "description":"ImageFSAvailable is the threshold for the disk space reclaim in the imagefs filesystem (docker images and container writable layers).",
+                                                          "type":"string"
+                                                      },
+                                                      "imageFSInodesFree":{
+                                                          "description":"ImageFSInodesFree is the threshold for the inodes reclaim in the imagefs filesystem.",
+                                                          "type":"string"
+                                                      },
+                                                      "memoryAvailable":{
+                                                          "description":"MemoryAvailable is the threshold for the memory reclaim on the host server.",
+                                                          "type":"string"
+                                                      },
+                                                      "nodeFSAvailable":{
+                                                          "description":"NodeFSAvailable is the threshold for the disk space reclaim in the nodefs filesystem (docker volumes, logs, etc).",
+                                                          "type":"string"
+                                                      },
+                                                      "nodeFSInodesFree":{
+                                                          "description":"NodeFSInodesFree is the threshold for the inodes reclaim in the nodefs filesystem.",
+                                                          "type":"string"
+                                                      }
+                                                    }
+                                                },
+                                                "evictionPressureTransitionPeriod":{
+                                                    "description":"EvictionPressureTransitionPeriod is the duration for which the kubelet has to wait before transitioning out of an eviction pressure condition. Default: 4m0s",
+                                                    "type":"string"
+                                                },
+                                                "evictionSoft":{
+                                                    "description":"EvictionSoft describes a set of eviction thresholds (e.g. memory.available<1.5Gi) that if met over a corresponding grace period would trigger a Pod eviction. Default:\n  memory.available:   \"200Mi/1.5Gi/10%\"\n  nodefs.available:   \"10%\"\n  nodefs.inodesFree:  \"10%\"\n  imagefs.available:  \"10%\"\n  imagefs.inodesFree: \"10%\"",
+                                                    "type":"object",
+                                                    "properties":{
+                                                      "imageFSAvailable":{
+                                                          "description":"ImageFSAvailable is the threshold for the free disk space in the imagefs filesystem (docker images and container writable layers).",
+                                                          "type":"string"
+                                                      },
+                                                      "imageFSInodesFree":{
+                                                          "description":"ImageFSInodesFree is the threshold for the available inodes in the imagefs filesystem.",
+                                                          "type":"string"
+                                                      },
+                                                      "memoryAvailable":{
+                                                          "description":"MemoryAvailable is the threshold for the free memory on the host server.",
+                                                          "type":"string"
+                                                      },
+                                                      "nodeFSAvailable":{
+                                                          "description":"NodeFSAvailable is the threshold for the free disk space in the nodefs filesystem (docker volumes, logs, etc).",
+                                                          "type":"string"
+                                                      },
+                                                      "nodeFSInodesFree":{
+                                                          "description":"NodeFSInodesFree is the threshold for the available inodes in the nodefs filesystem.",
+                                                          "type":"string"
+                                                      }
+                                                    }
+                                                },
+                                                "evictionSoftGracePeriod":{
+                                                    "description":"EvictionSoftGracePeriod describes a set of eviction grace periods (e.g. memory.available=1m30s) that correspond to how long a soft eviction threshold must hold before triggering a Pod eviction. Default:\n  memory.available:   1m30s\n  nodefs.available:   1m30s\n  nodefs.inodesFree:  1m30s\n  imagefs.available:  1m30s\n  imagefs.inodesFree: 1m30s",
+                                                    "type":"object",
+                                                    "properties":{
+                                                      "imageFSAvailable":{
+                                                          "description":"ImageFSAvailable is the grace period for the ImageFSAvailable eviction threshold.",
+                                                          "type":"string"
+                                                      },
+                                                      "imageFSInodesFree":{
+                                                          "description":"ImageFSInodesFree is the grace period for the ImageFSInodesFree eviction threshold.",
+                                                          "type":"string"
+                                                      },
+                                                      "memoryAvailable":{
+                                                          "description":"MemoryAvailable is the grace period for the MemoryAvailable eviction threshold.",
+                                                          "type":"string"
+                                                      },
+                                                      "nodeFSAvailable":{
+                                                          "description":"NodeFSAvailable is the grace period for the NodeFSAvailable eviction threshold.",
+                                                          "type":"string"
+                                                      },
+                                                      "nodeFSInodesFree":{
+                                                          "description":"NodeFSInodesFree is the grace period for the NodeFSInodesFree eviction threshold.",
+                                                          "type":"string"
+                                                      }
+                                                    }
+                                                },
+                                                "failSwapOn":{
+                                                    "description":"FailSwapOn makes the Kubelet fail to start if swap is enabled on the node. (default true).",
+                                                    "type":"boolean"
+                                                },
+                                                "featureGates":{
+                                                    "description":"FeatureGates contains information about enabled feature gates.",
+                                                    "type":"object",
+                                                    "additionalProperties":{
+                                                      "type":"boolean"
+                                                    }
+                                                },
+                                                "imageGCHighThresholdPercent":{
+                                                    "description":"ImageGCHighThresholdPercent describes the percent of the disk usage which triggers image garbage collection. Default: 50",
+                                                    "type":"integer",
+                                                    "format":"int32"
+                                                },
+                                                "imageGCLowThresholdPercent":{
+                                                    "description":"ImageGCLowThresholdPercent describes the percent of the disk to which garbage collection attempts to free. Default: 40",
+                                                    "type":"integer",
+                                                    "format":"int32"
+                                                },
+                                                "imagePullProgressDeadline":{
+                                                    "description":"ImagePullProgressDeadline describes the time limit under which if no pulling progress is made, the image pulling will be cancelled. Default: 1m",
+                                                    "type":"string"
+                                                },
+                                                "kubeReserved":{
+                                                    "description":"KubeReserved is the configuration for resources reserved for kubernetes node components (mainly kubelet and container runtime). When updating these values, be aware that cgroup resizes may not succeed on active worker nodes. Look for the NodeAllocatableEnforced event to determine if the configuration was applied. Default: cpu=80m,memory=1Gi,pid=20k",
+                                                    "type":"object",
+                                                    "properties":{
+                                                      "cpu":{
+                                                          "description":"CPU is the reserved cpu.",
+                                                          "type":"string"
+                                                      },
+                                                      "ephemeralStorage":{
+                                                          "description":"EphemeralStorage is the reserved ephemeral-storage.",
+                                                          "type":"string"
+                                                      },
+                                                      "memory":{
+                                                          "description":"Memory is the reserved memory.",
+                                                          "type":"string"
+                                                      },
+                                                      "pid":{
+                                                          "description":"PID is the reserved process-ids.",
+                                                          "type":"string"
+                                                      }
+                                                    }
+                                                },
+                                                "maxPods":{
+                                                    "description":"MaxPods is the maximum number of Pods that are allowed by the Kubelet. Default: 110",
+                                                    "type":"integer",
+                                                    "format":"int32"
+                                                },
+                                                "podPidsLimit":{
+                                                    "description":"PodPIDsLimit is the maximum number of process IDs per pod allowed by the kubelet.",
+                                                    "type":"integer",
+                                                    "format":"int64"
+                                                },
+                                                "serializeImagePulls":{
+                                                    "description":"SerializeImagePulls describes whether the images are pulled one at a time. Default: true",
+                                                    "type":"boolean"
+                                                },
+                                                "systemReserved":{
+                                                    "description":"SystemReserved is the configuration for resources reserved for system processes not managed by kubernetes (e.g. journald). When updating these values, be aware that cgroup resizes may not succeed on active worker nodes. Look for the NodeAllocatableEnforced event to determine if the configuration was applied.",
+                                                    "type":"object",
+                                                    "properties":{
+                                                      "cpu":{
+                                                          "description":"CPU is the reserved cpu.",
+                                                          "type":"string"
+                                                      },
+                                                      "ephemeralStorage":{
+                                                          "description":"EphemeralStorage is the reserved ephemeral-storage.",
+                                                          "type":"string"
+                                                      },
+                                                      "memory":{
+                                                          "description":"Memory is the reserved memory.",
+                                                          "type":"string"
+                                                      },
+                                                      "pid":{
+                                                          "description":"PID is the reserved process-ids.",
+                                                          "type":"string"
+                                                      }
+                                                    }
+                                                }
+                                              }
+                                          },
+                                          "version":{
+                                              "description":"Version is the semantic Kubernetes version to use for the Kubelet in this Worker Group. If not specified the kubelet version is derived from the global shoot cluster kubernetes version. version must be equal or lower than the version of the shoot kubernetes version. Only one minor version difference to other worker groups and global kubernetes version is allowed.",
+                                              "type":"string"
+                                          }
+                                        }
+                                    },
+                                    "labels":{
+                                        "description":"Labels is a map of key/value pairs for labels for all the `Node` objects in this worker pool.",
+                                        "type":"object",
+                                        "additionalProperties":{
+                                          "type":"string"
+                                        }
+                                    },
+                                    "machine":{
+                                        "description":"Machine contains information about the machine type and image.",
+                                        "type":"object",
+                                        "required":[
+                                          "type"
+                                        ],
+                                        "properties":{
+                                          "image":{
+                                              "description":"Image holds information about the machine image to use for all nodes of this pool. It will default to the latest version of the first image stated in the referenced CloudProfile if no value has been provided.",
+                                              "type":"object",
+                                              "required":[
+                                                "name"
+                                              ],
+                                              "properties":{
+                                                "name":{
+                                                    "description":"Name is the name of the image.",
+                                                    "type":"string"
+                                                },
+                                                "providerConfig":{
+                                                    "description":"ProviderConfig is the shoot's individual configuration passed to an extension resource.",
+                                                    "type":"object"
+                                                },
+                                                "version":{
+                                                    "description":"Version is the version of the shoot's image. If version is not provided, it will be defaulted to the latest version from the CloudProfile.",
+                                                    "type":"string"
+                                                }
+                                              }
+                                          },
+                                          "type":{
+                                              "description":"Type is the machine type of the worker group.",
+                                              "type":"string"
+                                          }
+                                        }
+                                    },
+                                    "machineControllerManager":{
+                                        "description":"MachineControllerManagerSettings contains configurations for different worker-pools. Eg. MachineDrainTimeout, MachineHealthTimeout.",
+                                        "type":"object",
+                                        "properties":{
+                                          "machineCreationTimeout":{
+                                              "description":"MachineCreationTimeout is the period after which creation of the machine is declared failed.",
+                                              "type":"string"
+                                          },
+                                          "machineDrainTimeout":{
+                                              "description":"MachineDrainTimeout is the period after which machine is forcefully deleted.",
+                                              "type":"string"
+                                          },
+                                          "machineHealthTimeout":{
+                                              "description":"MachineHealthTimeout is the period after which machine is declared failed.",
+                                              "type":"string"
+                                          },
+                                          "maxEvictRetries":{
+                                              "description":"MaxEvictRetries are the number of eviction retries on a pod after which drain is declared failed, and forceful deletion is triggered.",
+                                              "type":"integer",
+                                              "format":"int32"
+                                          },
+                                          "nodeConditions":{
+                                              "description":"NodeConditions are the set of conditions if set to true for the period of MachineHealthTimeout, machine will be declared failed.",
+                                              "type":"array",
+                                              "items":{
+                                                "type":"string"
+                                              }
+                                          }
+                                        }
+                                    },
+                                    "maxSurge":{
+                                        "description":"MaxSurge is maximum number of VMs that are created during an update.",
+                                        "type":"string",
+                                        "format":"int-or-string"
+                                    },
+                                    "maxUnavailable":{
+                                        "description":"MaxUnavailable is the maximum number of VMs that can be unavailable during an update.",
+                                        "type":"string",
+                                        "format":"int-or-string"
+                                    },
+                                    "maximum":{
+                                        "description":"Maximum is the maximum number of VMs to create.",
+                                        "type":"integer",
+                                        "format":"int32"
+                                    },
+                                    "minimum":{
+                                        "description":"Minimum is the minimum number of VMs to create.",
+                                        "type":"integer",
+                                        "format":"int32"
+                                    },
+                                    "name":{
+                                        "description":"Name is the name of the worker group.",
+                                        "type":"string"
+                                    },
+                                    "providerConfig":{
+                                        "description":"ProviderConfig is the provider-specific configuration for this worker pool.",
+                                        "type":"object"
+                                    },
+                                    "systemComponents":{
+                                        "description":"SystemComponents contains configuration for system components related to this worker pool",
+                                        "type":"object",
+                                        "required":[
+                                          "allow"
+                                        ],
+                                        "properties":{
+                                          "allow":{
+                                              "description":"Allow determines whether the pool should be allowed to host system components or not (defaults to true)",
+                                              "type":"boolean"
+                                          }
+                                        }
+                                    },
+                                    "taints":{
+                                        "description":"Taints is a list of taints for all the `Node` objects in this worker pool.",
+                                        "type":"array",
+                                        "items":{
+                                          "description":"The node this Taint is attached to has the \"effect\" on any pod that does not tolerate the Taint.",
+                                          "type":"object",
+                                          "required":[
+                                              "key",
+                                              "effect"
+                                          ],
+                                          "properties":{
+                                              "effect":{
+                                                "description":"Required. The effect of the taint on pods that do not tolerate the taint. Valid effects are NoSchedule, PreferNoSchedule and NoExecute.\n\nPossible enum values:\n - `\"NoExecute\"` Evict any already-running pods that do not tolerate the taint. Currently enforced by NodeController.\n - `\"NoSchedule\"` Do not allow new pods to schedule onto the node unless they tolerate the taint, but allow all pods submitted to Kubelet without going through the scheduler to start, and allow all already-running pods to continue running. Enforced by the scheduler.\n - `\"PreferNoSchedule\"` Like TaintEffectNoSchedule, but the scheduler tries not to schedule new pods onto the node, rather than prohibiting new pods from scheduling onto the node entirely. Enforced by the scheduler.",
+                                                "type":"string",
+                                                "enum":[
+                                                    "NoExecute",
+                                                    "NoSchedule",
+                                                    "PreferNoSchedule"
+                                                ]
+                                              },
+                                              "key":{
+                                                "description":"Required. The taint key to be applied to a node.",
+                                                "type":"string"
+                                              },
+                                              "timeAdded":{
+                                                "description":"TimeAdded represents the time at which the taint was added. It is only written for NoExecute taints.",
+                                                "type":"string",
+                                                "format":"date-time"
+                                              },
+                                              "value":{
+                                                "description":"The taint value corresponding to the taint key.",
+                                                "type":"string"
+                                              }
+                                          }
+                                        }
+                                    },
+                                    "volume":{
+                                        "description":"Volume contains information about the volume type and size.",
+                                        "type":"object",
+                                        "required":[
+                                          "size"
+                                        ],
+                                        "properties":{
+                                          "encrypted":{
+                                              "description":"Encrypted determines if the volume should be encrypted.",
+                                              "type":"boolean"
+                                          },
+                                          "name":{
+                                              "description":"Name of the volume to make it referencable.",
+                                              "type":"string"
+                                          },
+                                          "size":{
+                                              "description":"VolumeSize is the size of the volume.",
+                                              "type":"string"
+                                          },
+                                          "type":{
+                                              "description":"Type is the type of the volume.",
+                                              "type":"string"
+                                          }
+                                        }
+                                    },
+                                    "zones":{
+                                        "description":"Zones is a list of availability zones that are used to evenly distribute this worker pool. Optional as not every provider may support availability zones.",
+                                        "type":"array",
+                                        "items":{
+                                          "type":"string"
+                                        }
+                                    }
+                                  }
+                              },
+                              "x-kubernetes-patch-merge-key":"name",
+                              "x-kubernetes-patch-strategy":"merge"
+                            }
+                        }
+                      },
+                      "purpose":{
+                        "description":"Purpose is the purpose class for this cluster.",
+                        "type":"string"
+                      },
+                      "region":{
+                        "description":"Region is a name of a region. This field is immutable.",
+                        "type":"string"
+                      },
+                      "resources":{
+                        "description":"Resources holds a list of named resource references that can be referred to in extension configs by their names.",
+                        "type":"array",
+                        "items":{
+                            "description":"NamedResourceReference is a named reference to a resource.",
+                            "type":"object",
+                            "required":[
+                              "name",
+                              "resourceRef"
+                            ],
+                            "properties":{
+                              "name":{
+                                  "description":"Name of the resource reference.",
+                                  "type":"string"
+                              },
+                              "resourceRef":{
+                                  "description":"ResourceRef is a reference to a resource.",
+                                  "type":"object",
+                                  "required":[
+                                    "kind",
+                                    "name"
+                                  ],
+                                  "properties":{
+                                    "apiVersion":{
+                                        "description":"API version of the referent",
+                                        "type":"string"
+                                    },
+                                    "kind":{
+                                        "description":"Kind of the referent; More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds\"",
+                                        "type":"string"
+                                    },
+                                    "name":{
+                                        "description":"Name of the referent; More info: http://kubernetes.io/docs/user-guide/identifiers#names",
+                                        "type":"string"
+                                    }
+                                  },
+                                  "x-kubernetes-map-type":"atomic"
+                              }
+                            }
+                        }
+                      },
+                      "secretBindingName":{
+                        "description":"SecretBindingName is the name of the a SecretBinding that has a reference to the provider secret. The credentials inside the provider secret will be used to create the shoot in the respective account. This field is immutable.",
+                        "type":"string"
+                      },
+                      "seedName":{
+                        "description":"SeedName is the name of the seed cluster that runs the control plane of the Shoot. This field is immutable when the SeedChange feature gate is disabled.",
+                        "type":"string"
+                      },
+                      "seedSelector":{
+                        "description":"SeedSelector is an optional selector which must match a seed's labels for the shoot to be scheduled on that seed.",
+                        "type":"object",
+                        "properties":{
+                            "matchExpressions":{
+                              "description":"matchExpressions is a list of label selector requirements. The requirements are ANDed.",
+                              "type":"array",
+                              "items":{
+                                  "description":"A label selector requirement is a selector that contains values, a key, and an operator that relates the key and values.",
+                                  "type":"object",
+                                  "required":[
+                                    "key",
+                                    "operator"
+                                  ],
+                                  "properties":{
+                                    "key":{
+                                        "description":"key is the label key that the selector applies to.",
+                                        "type":"string",
+                                        "x-kubernetes-patch-merge-key":"key",
+                                        "x-kubernetes-patch-strategy":"merge"
+                                    },
+                                    "operator":{
+                                        "description":"operator represents a key's relationship to a set of values. Valid operators are In, NotIn, Exists and DoesNotExist.",
+                                        "type":"string"
+                                    },
+                                    "values":{
+                                        "description":"values is an array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. This array is replaced during a strategic merge patch.",
+                                        "type":"array",
+                                        "items":{
+                                          "type":"string"
+                                        }
+                                    }
+                                  }
+                              }
+                            },
+                            "matchLabels":{
+                              "description":"matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels map is equivalent to an element of matchExpressions, whose key field is \"key\", the operator is \"In\", and the values array contains only \"value\". The requirements are ANDed.",
+                              "type":"object",
+                              "additionalProperties":{
+                                  "type":"string"
+                              }
+                            },
+                            "providerTypes":{
+                              "description":"Providers is optional and can be used by restricting seeds by their provider type. '*' can be used to enable seeds regardless of their provider type.",
+                              "type":"array",
+                              "items":{
+                                  "type":"string"
+                              }
+                            }
+                        }
+                      },
+                      "systemComponents":{
+                        "description":"SystemComponents contains the settings of system components in the control or data plane of the Shoot cluster.",
+                        "type":"object",
+                        "properties":{
+                            "coreDNS":{
+                              "description":"CoreDNS contains the settings of the Core DNS components running in the data plane of the Shoot cluster.",
+                              "type":"object",
+                              "required":[
+                                  "autoscaling"
+                              ],
+                              "properties":{
+                                  "autoscaling":{
+                                    "description":"Autoscaling contains the settings related to autoscaling of the Core DNS components running in the data plane of the Shoot cluster.",
+                                    "type":"object",
+                                    "required":[
+                                        "mode"
+                                    ],
+                                    "properties":{
+                                        "mode":{
+                                          "description":"The mode of the autoscaling to be used for the Core DNS components running in the data plane of the Shoot cluster. Supported values are `horizontal` and `cluster-proportional`.",
+                                          "type":"string"
+                                        }
+                                    }
+                                  }
+                              }
+                            }
+                        }
+                      },
+                      "tolerations":{
+                        "description":"Tolerations contains the tolerations for taints on seed clusters.",
+                        "type":"array",
+                        "items":{
+                            "description":"Toleration is a toleration for a seed taint.",
+                            "type":"object",
+                            "required":[
+                              "key"
+                            ],
+                            "properties":{
+                              "key":{
+                                  "description":"Key is the toleration key to be applied to a project or shoot.",
+                                  "type":"string"
+                              },
+                              "value":{
+                                  "description":"Value is the toleration value corresponding to the toleration key.",
+                                  "type":"string"
+                              }
+                            }
+                        },
+                        "x-kubernetes-patch-merge-key":"key",
+                        "x-kubernetes-patch-strategy":"merge"
+                      }
+                  }
+                }
+            },
+            "x-kubernetes-group-version-kind":[
+                {
+                  "group":"core.gardener.cloud",
+                  "kind":"Shoot",
+                  "version":"v1beta1"
+                }
+            ]
+          }
+      }
+     }
+  },
+  "wasmplugins":{
+     "navigation":{
+        "path":"wasmplugins",
+        "label":"My wasmplugins",
+        "category":{
+           "de":"Meine Ressourcen"
+        },
+        "scope":"namespace",
+        "resource":{
+           "kind":"WasmPlugins",
+           "group":"extensions.istio.io",
+           "version":"v1alpha1"
+        },
+        "hasDetailsView":true
+     },
+     "list":{
+        "nameOverride":"My wasmplugins title override",
+        "description":"Wasmplugins are a great resource",
+        "columns":[
+           {
+              "header":"plugin name",
+              "valuePath":"$.spec.pluginName",
+              "display":"status",
+              "successValues":[
+                 "add_header"
+              ],
+              "warningValues":[
+                 "other_header"
+              ]
+           },
+           {
+              "header":"Pretend it's an url",
+              "valuePath":"$.spec.url",
+              "display":"external-link"
+           }
+        ]
+     },
+     "details":{
+
+     },
+     "create":{
+
+     }
+  },
+  "customjobs":{
+     "navigation":{
+        "path":"customjobs",
+        "label":"Custom Jobs",
+        "category":{
+           "de":"Meine Ressourcen"
+        },
+        "scope":"namespace",
+        "resource":{
+           "kind":"Jobs",
+           "group":"batch",
+           "version":"v1"
+        },
+        "hasDetailsView":true
+     },
+     "list":{
+        "nameOverride":"My custom jobs title override",
+        "description":{
+           "en":"Custom jobs are a great resource.",
+           "de":"Benutzerdefinierte Jobs sind eine großartige Ressource."
+        },
+        "columns":[
+           {
+              "header":{
+                 "en":"BackOffLimit"
+              },
+              "valuePath":"$.spec.backoffLimit"
+           },
+           {
+              "header":{
+                 "de":"MatchLabels des Selektors"
+              },
+              "valuePath":"$.spec.selector.matchLabels",
+              "display":"labels"
+           },
+           {
+              "header":{
+                 "en":"Container image names",
+                 "de":"Container-Image-Namen"
+              },
+              "valuePath":"$.spec.template.spec.volumes",
+              "display":"array",
+              "arrayValuePath":"$.name"
+           }
+        ]
+     },
+     "details":{
+        "components":[
+           {
+              "type":"monacoPanel",
+              "valuePath":"$",
+              "title":"Job as a Whole",
+              "language":"json"
+           },
+           {
+              "type":"monacoPanel",
+              "valuePath":"metadata.name",
+              "title":{
+                 "en":"The Job's Name"
+              },
+              "language":"json"
+           },
+           {
+              "type":"listPanel",
+              "title":{
+                 "en":"conditionsTitleII"
+              },
+              "headers":[
+                 {
+                    "en":"type hej",
+                    "de":"Der Typ"
+                 },
+                 {
+                    "en":"statusss",
+                    "de":"Das Status"
+                 },
+                 {
+                    "de":"Letze Sonde",
+                    "pl":"Ostatnia sonda"
+                 },
+                 "Last Probe Time string no translation"
+              ],
+              "columns":[
+                 "type",
+                 "status",
+                 "lastProbeTime",
+                 "lastProbeTime"
+              ],
+              "valuePath":"$.status.conditions"
+           },
+           {
+              "type":"detailPanel",
+              "title":{
+                 "en":"Some details"
+              },
+              "properties":[
+                 {
+                    "header":"Parallelism",
+                    "valuePath":"$.spec.parallelism"
+                 },
+                 {
+                    "header":"Completions",
+                    "valuePath":"$.spec.completions"
+                 },
+                 {
+                    "header":{
+                       "en":"Backofflimit"
+                    },
+                    "valuePath":"$.spec.backoffLimit"
+                 }
+              ]
+           },
+           {
+              "type":"listPanel",
+              "title":"My own Conditions",
+              "headers":[
+                 "type",
+                 "status",
+                 "LaSt PrOBe",
+                 "Reason",
+                 "Message"
+              ],
+              "columns":[
+                 "type",
+                 "status",
+                 "lastProbeTime",
+                 "reason",
+                 "message"
+              ],
+              "valuePath":"$.status.conditions"
+           }
+        ]
+     },
+     "create":{
+        "schema":{
+
+        }
+     }
+  },
   "envoyfilters":{
      "navigation":{
         "path":"envoyfilters",
@@ -304,8 +2379,7 @@
                        "priority":{
                           "description":"Priority defines the order in which patch sets are applied within a context.",
                           "type":"integer",
-                          "format":"int32",
-                          "widget": "Text"
+                          "format":"int32"
                        },
                        "workloadSelector":{
                           "type":"object",
