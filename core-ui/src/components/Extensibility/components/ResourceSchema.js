@@ -38,15 +38,16 @@ const widgets = {
     /*
     Accordions: AccordionsRenderer,
     */
-    Text: ({ onChangeeee, onKeyDown, value, schema, storeKeys, required }) => {
-      console.log('Text', { schema, value, onChangeeee });
+    Text: ({ onChange, onKeyDown, value, schema, storeKeys, required }) => {
+      console.log('Text', { schema, value, onChange });
       return (
         <input
           onKeyDown={onKeyDown}
           onChange={e => {
+            console.log('test');
             const newVal = e.target.value;
 
-            onChangeeee({
+            onChange({
               storeKeys,
               scopes: ['value'],
               type: 'set',
@@ -193,12 +194,8 @@ export const ResourceSchema = ({ ...props }) => {
   return (
     <>
       <div>{JSON.stringify(store)}</div>
-      <UIMetaProvider widgets={widgets}>
-        <UIStoreProvider
-          store={store}
-          onChangeeee={onChange}
-          showValidity={true}
-        >
+      <UIMetaProvider widgets={widgets} onChange={onChange}>
+        <UIStoreProvider store={store} showValidity={true}>
           <FormStack isRoot schema={schema} />
         </UIStoreProvider>
       </UIMetaProvider>
