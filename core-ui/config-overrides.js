@@ -14,6 +14,7 @@ module.exports = {
     return config;
   },
   jest: function(config) {
+    console.log(config);
     config.moduleNameMapper = {
       '^helpers/?(.*)': '<rootDir>/src/service-catalog-ui/helpers/$1',
       '^shared/?(.*)': '<rootDir>/src/shared/$1',
@@ -28,6 +29,8 @@ module.exports = {
       '<rootDir>/src/service-catalog-ui/',
       ...(config.coveragePathIgnorePatterns || []),
     ];
+    // fetch-queue is not transpiled, let Jest/babel take care of that
+    config.transformIgnorePatterns = ['/node_modules/(?!fetch-queue)/'];
     return config;
   },
 };
