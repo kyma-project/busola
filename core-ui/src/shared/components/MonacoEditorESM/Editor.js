@@ -84,7 +84,6 @@ export function Editor({
       model: model,
       automaticLayout: true,
       language: language,
-      fontSize: 15,
       theme: editorTheme,
       fixedOverflowWidgets: true,
       readOnly: readOnly,
@@ -112,15 +111,10 @@ export function Editor({
       editor.getModel(descriptor.current)?.dispose();
       editorRef.current.dispose();
     };
-  }, [
-    editorTheme,
-    setAutocompleteOptions,
-    language,
-    onChange,
-    t,
-    readOnly,
-    onMount,
-  ]);
+    // disabling eslint to exclude onChange listener from the dependencies.
+    // Otherwise, each onChange function must be memoized.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editorTheme, setAutocompleteOptions, language, t, readOnly, onMount]);
 
   useEffect(() => {
     // refresh model on editor focus. Needed for cases when multiple editors are open simultaneously
