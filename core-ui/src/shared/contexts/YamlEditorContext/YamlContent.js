@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import jsyaml from 'js-yaml';
-import { EditorWrapper } from 'shared/components/MonacoEditorESM/Editor';
+import EditorWrapper from 'shared/ResourceForm/fields/Editor';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';

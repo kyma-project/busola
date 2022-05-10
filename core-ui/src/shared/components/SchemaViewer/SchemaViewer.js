@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { LayoutPanel, Button, ButtonSegmented } from 'fundamental-react';
-import { EditorWrapper } from 'shared/components/MonacoEditorESM/Editor';
+import EditorWrapper from 'shared/ResourceForm/fields/Editor';
 import { useTranslation } from 'react-i18next';
 
 import { JSONSchema } from './JSONSchema';

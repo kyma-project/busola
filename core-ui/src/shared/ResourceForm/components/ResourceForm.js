@@ -2,12 +2,12 @@ import React, { useRef, useEffect } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
+import EditorWrapper from 'shared/ResourceForm/fields/Editor';
 import { useTranslation } from 'react-i18next';
 
 import { ModeSelector } from './ModeSelector';
 import { ResourceFormWrapper } from './Wrapper';
 import { Presets } from './Presets';
-import { EditorWrapper } from 'shared/components/MonacoEditorESM/Editor';
 import { useCreateResource } from '../useCreateResource';
 
 import './ResourceForm.scss';
