@@ -1,4 +1,3 @@
-import LuigiClient from '@luigi-project/client';
 import { useEffect, useState } from 'react';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { useFeature } from 'shared/hooks/useFeature';
@@ -143,16 +142,7 @@ export function usePrometheus(
   const [endDate, setEndDate] = useState(new Date());
   const [step, setStep] = useState(timeSpan / items);
 
-  // const kyma2_0path =
-  //   'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
-  // const kyma2_1path =
-  //   'api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1';
-  // const cpu2_0_partial_query = 'sum_rate';
-  const cpu2_1_partial_query = 'sum_irate';
-  // const [path, setPath] = useState(kyma2_1path);
-  // const [cpuQuery, setCpuQuery] = useState(cpu2_1_partial_query);
-
-  const metric = getMetric(type, mode, metricId, cpu2_1_partial_query, {
+  const metric = getMetric(type, mode, metricId, 'sum_irate', {
     step,
     ...props,
   });
@@ -182,33 +172,9 @@ export function usePrometheus(
     `step=${step}&` +
     `query=${metric.prometheusQuery}`;
 
-  // const onDataReceived = data => {
-  //   if (data?.error && data?.error?.statusCode === 'Failure') {
-  //     if (path !== kyma2_0path && path !== kyma2_1path) {
-  //       LuigiClient.sendCustomMessage({
-  //         id: 'busola.setPrometheusPath',
-  //         path: kyma2_1path,
-  //       });
-  //       setCpuQuery(cpu2_1_partial_query);
-  //       setPath(kyma2_1path);
-  //     } else if (path === kyma2_1path) {
-  //       LuigiClient.sendCustomMessage({
-  //         id: 'busola.setPrometheusPath',
-  //         path: kyma2_0path,
-  //       });
-  //       setCpuQuery(cpu2_0_partial_query);
-  //       setPath(kyma2_0path);
-  //     }
-  //   }
-  // };
   let { data, error, loading } = useGet(`${serviceUrl}/${query}`, {
     pollingInterval: 0,
-    // onDataReceived: data => onDataReceived(data),
   });
-
-  // if (data) {
-  //   error = null;
-  // }
 
   let prometheusData = [];
   let prometheusLabels = [];

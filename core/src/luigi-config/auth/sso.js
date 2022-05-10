@@ -1,6 +1,6 @@
 import { getBusolaClusterParams } from './../busola-cluster-params';
-import parseJWT from 'jwt-decode';
 import { convertToURLsearch } from '../communication';
+import parseJWT from 'jwt-decode';
 
 const SSO_KEY = 'SSO';
 
@@ -13,6 +13,7 @@ export function getSSOAuthData() {
 }
 
 export async function isSSOEnabled() {
+  // SSO is outside features flow - it's need to be checked immediately
   const features = (await getBusolaClusterParams()).config?.features || {};
   return features.SSO_LOGIN?.isEnabled === true;
 }

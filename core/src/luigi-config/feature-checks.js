@@ -28,15 +28,16 @@ export function apiGroup(group, refreshIntervalMs = 10000) {
   };
 }
 
-export function service(
+export function service({
   urlsGenerator,
   validator = async res => res.status < 400,
+  urlMutator,
   refreshIntervalMs,
-) {
+}) {
   const subscribeToAllUrls = async (urls, featureName, featureConfig) => {
     for (const url of urls) {
       const { unsubscribe } = await fetchCache.subscribe({
-        path: url,
+        path: urlMutator(url),
         callback: () => updateFeature(featureName, featureConfig),
       });
       featureConfig.cleanups.push(unsubscribe);
@@ -44,12 +45,12 @@ export function service(
   };
 
   const checkSingleUrl = async (url, featureName, featureConfig) => {
-    const res = await fetchCache.get(url);
+    const res = await fetchCache.get(urlMutator(url));
     try {
       const serviceFound = await validator(res);
       if (serviceFound) {
         const { unsubscribe } = await fetchCache.subscribe({
-          path: url,
+          path: urlMutator(url),
           callback: () => updateFeature(featureName, featureConfig),
           refreshIntervalMs,
         });

@@ -37,7 +37,7 @@ export const i18n = i18next.use(i18nextBackend).init({
   },
   saveMissing: true,
   missingKeyHandler: (_lngs, _ns, key) => {
-    // console.warn(key);
+    console.warn(key);
   },
 });
 

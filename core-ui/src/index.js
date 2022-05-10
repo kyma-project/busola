@@ -36,7 +36,7 @@ i18next
     saveMissing: true,
     missingKeyHandler: (_lngs, _ns, key) => {
       if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-        // console.warn(key);
+        console.warn(key);
       }
     },
     interpolation: {

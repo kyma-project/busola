@@ -32,15 +32,15 @@ export const DEFAULT_FEATURES = {
       {
         checks: [apiGroup(value)],
         stage: 'PRIMARY',
-        updateNavigation: true, // indicates that when the feature config changes navigation should be reloaded
+        updateNodes: true, // indicates that when the feature config changes nodes should be reloaded
       },
     ]),
   ),
   PROMETHEUS: {
     checks: [
       apiGroup('monitoring.coreos.com'),
-      service(
-        featureConfig => {
+      service({
+        urlsGenerator: featureConfig => {
           return arrayCombine([
             featureConfig.namespaces,
             featureConfig.serviceNames,
@@ -50,10 +50,9 @@ export const DEFAULT_FEATURES = {
               `/api/v1/namespaces/${namespace}/services/${serviceName}:${portName}/proxy/api/v1`,
           );
         },
-        undefined,
-        url => `${url}/status/runtimeinfo`,
-        15000,
-      ),
+        urlMutator: url => `${url}/status/runtimeinfo`,
+        refreshIntervalMs: 15000,
+      }),
     ],
     namespaces: ['kyma-system'],
     serviceNames: ['monitoring-prometheus', 'prometheus'],

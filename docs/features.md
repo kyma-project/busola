@@ -2,7 +2,13 @@
 title: Feature flags
 ---
 
-The document lists and describes all the feature flags that are available in Kyma Dashboard and provides their configuration examples:
+The document explains the usage of feature flags in Busola, as well as lists and describes all the feature flags that are available in Kyma Dashboard and provides their configuration examples:
+
+#### Features priority
+
+todo
+
+#### The features list
 
 > **TIP:** The list is ordered alphabetically.
 
@@ -11,7 +17,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "ADDONS": {
     "isEnabled": true,
     "selectors": [
@@ -29,7 +35,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "API_GATEWAY": {
     "isEnabled": true,
     "selectors": [
@@ -46,7 +52,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "APPLICATIONS": {
     "isEnabled": true,
     "selectors": [
@@ -63,7 +69,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "BTP_CATALOG": {
     "isEnabled": true,
     "selectors": [
@@ -80,7 +86,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "CUSTOM_DOMAINS": {
     "isEnabled": true,
     "selectors": [
@@ -98,7 +104,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "EVENTING": {
     "isEnabled": true,
     "selectors": [
@@ -114,7 +120,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "EXTERNAL_NODES": {
     "isEnabled": true,
     "stage": "SECONDARY",
@@ -138,7 +144,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "ISTIO": {
     "isEnabled": true,
     "selectors": [
@@ -156,7 +162,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "JWT_CHECK_CONFIG": {
     "isEnabled": false,
     "config": {
@@ -172,7 +178,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "GZIP": {
     "isEnabled": true,
   }
@@ -183,7 +189,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "KUBECONFIG_ID": {
    "isEnabled": true,
    "config": {
@@ -197,7 +203,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Example:
 
-  ```bash
+  ```json
   "LEGAL_LINKS": {
     "config": {
       "legal-disclosure": {
@@ -225,7 +231,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Defualt settings:
 
-  ```bash
+  ```json
   "OBSERVABILITY": {
    "isEnabled": true,
    "config": {
@@ -256,7 +262,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Example:
 
-  ```bash
+  ```json
   "PROTECTED_RESOURCES": {
     "isEnabled": true,
     "config": {
@@ -298,7 +304,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   Default settings:
 
-  ```bash
+  ```json
   "SENTRY": {
     "isEnabled": false,
     "selectors": [],
@@ -313,7 +319,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   Default settings:
 
-  ```bash
+  ```json
   "SERVERLESS": {
     "isEnabled": true,
     "selectors": [
@@ -332,7 +338,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   Default settings:
 
-  ```bash
+  ```json
   "SERVICE_CATALOG": {
     "isEnabled": true,
     "selectors": [
@@ -349,7 +355,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   Default settings:
 
-  ```bash
+  ```json
   "SERVICE_CATALOG_ADDONS": {
     "isEnabled": true,
     "selectors": [
@@ -363,15 +369,15 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
 - **SHOW_KYMA_VERSION** – determines if the Kyma version should be visible on the Cluster Details page. The displayed version is the value of the `reconciler.kyma-project.io/origin-version` label in the `kyma-system` Namespace. If the value of the label is missing or there is no `kyma-system` Namespace, the `Unknown` version will be displayed.
 
-  ```bash
+  ```json
   "SHOW_KYMA_VERSION": {
     "isEnabled": true
   },
   ```
 
-- **SSO_LOGIN** – is used to configure data necessary for the SSO login such as an issuer address, client’s ID, client’s Secret and scopes. If `clientSecret` is omitted, a public client is used.
+- **SSO_LOGIN** – is used to configure data necessary for the SSO login such as an issuer address, client’s ID, client’s Secret and scopes. If `clientSecret` is omitted, a public client is used. This feature is out of standard features flow, so it will run immediately.
 
-  ```bash
+  ```json
   "SSO_LOGIN": {
     "isEnabled": true,
     "config": {
@@ -385,7 +391,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
 - **PROMETHEUS** – is used to show or hide the **Prometheus** metrics graphs.
 
-  ```bash
+  ```json
   "PROMETHEUS": {
     "isEnabled": true,
   },
@@ -393,7 +399,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
 - **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at a resource details view.
 
-  ```bash
+  ```json
   "VISUAL_RESOURCES": {
     "isEnabled": true,
   },
@@ -401,7 +407,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
 - **MONACO_AUTOCOMPLETION** – determines if Busola should obtain json schemas and validate input in Monaco.
 
-  ```bash
+  ```json
   "VISUAL_RESOURCES": {
     "isEnabled": true,
   },

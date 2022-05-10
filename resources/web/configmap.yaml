@@ -29,7 +29,6 @@ data:
             }
           },
           "SSO_LOGIN": {
-            "stage": "PRIMARY",
             "isEnabled": false,
             "config": {
               "issuerUrl": "https://apskyxzcl.accounts400.ondemand.com",
@@ -42,7 +41,6 @@ data:
           },
           "SENTRY": {
             "isEnabled": true
-            "stage": "PRIMARY",
             "selectors": [],
             "config": {
               "dsn": ""

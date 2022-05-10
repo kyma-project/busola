@@ -138,7 +138,7 @@ export async function updateFeature(featureName) {
 
     console.log('update ctx cause', featureName);
     await updateFeaturesContext();
-    if (resolvedFeature.updateNavigation) {
+    if (resolvedFeature.updateNodes) {
       console.log('reload nodes cause', featureName);
       await reloadNodes();
     }

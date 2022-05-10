@@ -107,9 +107,6 @@ class FetchCache {
     }
     try {
       const response = await failFastFetch(path, this.fetchOptions.data);
-      if (response.status === 301) {
-        return { status: 301, data: null };
-      }
       return { status: response.status, data: await response.json() };
     } catch (e) {
       console.warn('fetch', path, e);

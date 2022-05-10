@@ -2149,7 +2149,6 @@ function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
       .replace(/^\/apis\//, '')
       .replace(/^\/api\//, '');
 
-    // todo dedupe with features
     if (!groupVersions.find(g => g.includes(groupVersion))) {
       removeNode();
       return;
