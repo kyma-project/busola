@@ -8,24 +8,19 @@ import { useTheme } from 'shared/contexts/ThemeContext';
 
 import './KubeconfigUpload.scss';
 
-export function KubeconfigUpload({
-  onKubeconfig,
-  handleKubeconfigAdded,
-  kubeconfigFromParams,
-  kubeconfig,
-  setKubeconfig,
-}) {
+export function KubeconfigUpload({ setKubeconfig }) {
   const [error, setError] = React.useState('');
+  const [editorValue, setEditorValue] = React.useState('');
   const { editorTheme } = useTheme();
   const { t } = useTranslation();
 
-  const configString = jsyaml.dump(kubeconfig, { noRefs: true }) || undefined;
   const updateKubeconfig = text => {
     try {
       const config = jsyaml.load(text);
       if (typeof config !== 'object') {
         setError(t('clusters.wizard.not-an-object'));
       } else {
+        setEditorValue(text);
         setKubeconfig(config);
         setError(null);
       }
@@ -45,7 +40,7 @@ export function KubeconfigUpload({
         height="320px"
         language="yaml"
         theme={editorTheme}
-        value={configString}
+        value={editorValue || ''}
         onMount={editor =>
           editor.onDidBlurEditorWidget(() =>
             updateKubeconfig(editor.getValue()),

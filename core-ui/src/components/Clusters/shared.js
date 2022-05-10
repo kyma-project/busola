@@ -47,16 +47,16 @@ export function getUserIndex(kubeconfig) {
   const context =
     contextName === '-all-'
       ? kubeconfig?.contexts[0]?.context
-      : kubeconfig?.contexts?.find(c => c.name === contextName)?.context;
-  const index = kubeconfig?.users?.findIndex(u => u.name === context?.user);
+      : kubeconfig?.contexts?.find(c => c?.name === contextName)?.context;
+  const index = kubeconfig?.users?.findIndex(u => u?.name === context?.user);
   return index > 0 ? index : 0;
 }
 
 export function getUser(kubeconfig) {
   const contextName = kubeconfig?.['current-context'];
-  const context = kubeconfig?.contexts?.find(c => c.name === contextName)
+  const context = kubeconfig?.contexts?.find(c => c?.name === contextName)
     ?.context;
-  return kubeconfig?.users?.find(u => u.name === context?.user)?.user;
+  return kubeconfig?.users?.find(u => u?.name === context?.user)?.user;
 }
 
 export function hasKubeconfigAuth(kubeconfig) {
