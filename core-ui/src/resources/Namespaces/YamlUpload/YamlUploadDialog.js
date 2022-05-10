@@ -64,7 +64,7 @@ export function YamlUploadDialog({ show, onCancel }) {
       setResourcesWithStatuses(resourcesWithStatus);
       oldYaml.current = yaml;
     } catch ({ message }) {
-      console.log(message);
+      console.error(message);
     }
   };
 
