@@ -1,5 +1,5 @@
 import LuigiClient from '@luigi-project/client';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 const getPrometheusSelector = data => {
