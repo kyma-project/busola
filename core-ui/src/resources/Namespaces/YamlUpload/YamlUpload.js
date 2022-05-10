@@ -17,10 +17,6 @@ export function YamlUpload({
   const { editorTheme } = useTheme();
   const { t } = useTranslation();
 
-  const yamlContentString = resourcesData
-    ?.map(y => jsyaml.dump(y, { noRefs: true }) || undefined)
-    ?.join('---\n');
-
   const isK8sResource = resource => {
     if (!resource) return true;
     return resource.apiVersion && resource.kind && resource.metadata;
@@ -35,7 +31,7 @@ export function YamlUpload({
       } else if (files.some(file => !isK8sResource(file))) {
         setError(t('upload-yaml.messages.not-a-k8s-resource'));
       } else {
-        setResourcesData(files);
+        setResourcesData(text);
         setError(null);
       }
     } catch ({ message }) {
@@ -54,7 +50,7 @@ export function YamlUpload({
         height="400px"
         language="yaml"
         theme={editorTheme}
-        value={yamlContentString}
+        value={resourcesData}
         onChange={updateYamlContent}
         options={{ scrollbar: { alwaysConsumeMouseWheel: false } }}
       />
