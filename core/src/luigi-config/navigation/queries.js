@@ -38,9 +38,9 @@ export async function failFastFetch(input, auth, init = {}) {
   }
 
   async function createHeaders(auth) {
-    const activeCluster = getActiveCluster();
-    const cluster = activeCluster.currentContext.cluster.cluster;
-    const requiresCA = activeCluster.config?.requiresCA;
+    const params = getActiveCluster();
+    const cluster = params.currentContext.cluster.cluster;
+    const requiresCA = params.config?.requiresCA;
 
     return {
       ...createSSOHeader(),
