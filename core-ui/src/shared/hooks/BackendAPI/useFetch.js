@@ -1,3 +1,4 @@
+import { fetchQueue } from 'fetch-queue';
 import { checkForTokenExpiration } from 'shared/hooks/BackendAPI/checkForTokenExpiration';
 import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
@@ -24,7 +25,10 @@ export const useFetch = () => {
     };
 
     try {
-      const response = await fetch(baseUrl(fromConfig) + relativeUrl, init);
+      const response = await fetchQueue(
+        baseUrl(fromConfig) + relativeUrl,
+        init,
+      );
       if (response.ok) {
         return response;
       } else {
