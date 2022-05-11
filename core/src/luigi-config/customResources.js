@@ -49,7 +49,7 @@ export async function getCustomResources(authData) {
 
   customResources = Object.values({
     ...(await loadBusolaClusterCRs()),
-    ...(await loadTargetClusterCRs(authData)),
+    // ...(await loadTargetClusterCRs(authData)),
   });
   return customResources;
 }

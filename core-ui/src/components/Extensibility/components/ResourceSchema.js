@@ -3,117 +3,24 @@ import { isEmpty } from 'lodash';
 import * as jp from 'jsonpath';
 
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
-import { UIMetaProvider, useUIMeta } from '@ui-schema/ui-schema/UIMeta';
+import { UIMetaProvider } from '@ui-schema/ui-schema/UIMeta';
 import {
   UIStoreProvider,
-  createEmptyStore,
   createStore,
   storeUpdater,
 } from '@ui-schema/ui-schema';
-import { WidgetRenderer } from '@ui-schema/ui-schema/WidgetRenderer';
 import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { KeyValueField } from 'shared/ResourceForm/fields';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
-import {
-  DefaultHandler,
-  DependentHandler,
-  ConditionalHandler,
-  CombiningHandler,
-  ReferencingHandler,
-  ExtractStorePlugin,
-} from '@ui-schema/ui-schema/Plugins';
-import { PluginSimpleStack } from '@ui-schema/ui-schema/PluginSimpleStack';
-import { ValidityReporter } from '@ui-schema/ui-schema/ValidityReporter';
-import { ComponentPluginType } from '@ui-schema/ui-schema';
-import { validators } from '@ui-schema/ui-schema/Validators/validators';
-
-const pluginStack = [
-  ReferencingHandler,
-  ExtractStorePlugin,
-  CombiningHandler,
-  DefaultHandler,
-  DependentHandler,
-  ConditionalHandler,
-  PluginSimpleStack,
-  ValidityReporter,
-];
-
-function StringRenderer({
-  onChange,
-  onKeyDown,
-  value,
-  schema,
-  storeKeys,
-  required,
-}) {
-  return (
-    <input
-      onKeyDown={onKeyDown}
-      onChange={e => {
-        const newVal = e.target.value;
-
-        onChange({
-          storeKeys,
-          scopes: ['value'],
-          type: 'set',
-          schema,
-          required,
-          data: { value: newVal },
-        });
-      }}
-      value={value}
-    />
-  );
-}
-
-const widgets = {
-  // ErrorFallback: ErrorFallback,
-  RootRenderer: ({ children }) => <div>{children}</div>,
-  GroupRenderer: ({ children }) => <div>{children}</div>,
-  WidgetRenderer,
-  pluginStack,
-  pluginSimpleStack: validators,
-  types: {
-    string: StringRenderer,
-    boolean: ({ children }) => <span>TODO: boolean</span>,
-    number: StringRenderer,
-    integer: StringRenderer,
-    array: ({ children }) => <>TODO: array</>,
-  },
-  custom: {
-    /*
-    Accordions: AccordionsRenderer,
-    */
-    Text: StringRenderer,
-    /*
-    Text: TextRenderer,
-    StringIcon: StringIconRenderer,
-    TextIcon: TextIconRenderer,
-    NumberIcon: NumberIconRenderer,
-    NumberSlider,
-    SimpleList,
-    GenericList,
-    OptionsCheck,
-    OptionsRadio,
-    Select,
-    SelectMulti,
-    Card: CardRenderer,
-    LabelBox,
-    FormGroup,
-    */
-  },
-};
-
-export function FormContainer({ children }) {
-  // return <Grid container spacing={spacing}>{children}</Grid>;
-  return <div container>{children}</div>;
-}
+import { FormContainer } from '../ds/FormContainer';
+import formWidgets from '../ds/widgets-form';
 
 const FormStack = injectPluginStack(FormContainer);
 
+// TODO left only for reference - remove as soon as all corresponding widgets are implemented
 const JSONSchemaForm = ({ properties, path, ...props }) => {
   const { resource, setResource } = props;
 
@@ -196,7 +103,7 @@ export const ResourceSchema = ({ resource, setResource, schema }) => {
   const schemaMap = createOrderedMap(schema);
 
   return (
-    <UIMetaProvider widgets={widgets}>
+    <UIMetaProvider widgets={formWidgets}>
       <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
         <FormStack isRoot schema={schemaMap} />
       </UIStoreProvider>
