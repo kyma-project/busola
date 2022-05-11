@@ -27,29 +27,7 @@ export function convertStaticFeatures(features = {}) {
   );
 }
 
-export async function reloadNodes() {
-  try {
-    const activeCluster = getActiveCluster();
-    const permissionSet = await fetchPermissions(
-      getAuthData(),
-      getCurrentContextNamespace(activeCluster.kubeconfig),
-    );
-
-    const { data } = await fetchCache.get('/apis');
-    const groupVersions = extractGroupVersions(data);
-    const cfg = Luigi.getConfig();
-    cfg.navigation.nodes = await createNavigationNodes(
-      lastResolvedFeatures,
-      groupVersions,
-      permissionSet,
-    );
-    Luigi.setConfig(cfg);
-    Luigi.configChanged('navigation.nodes');
-  } catch (e) {
-    console.warn('reloadNodes failed', e, Luigi.initialized);
-  }
-}
-
+// re-run the checks for the feature
 export async function discoverFeature(featureName, rawFeatureConfig) {
   try {
     if (!rawFeatureConfig) {
@@ -67,6 +45,7 @@ export async function discoverFeature(featureName, rawFeatureConfig) {
       return rawFeatureConfig;
     }
 
+    // assume feature is enabled by default
     let currentConfig = { ...rawFeatureConfig, isEnabled: true };
     for (const check of rawFeatureConfig.checks || []) {
       if (!currentConfig.isEnabled) {
@@ -82,6 +61,22 @@ export async function discoverFeature(featureName, rawFeatureConfig) {
   }
 }
 
+// only the feature configurations
+let rawFeatures = {};
+
+// load feature configuration and run the PRIMARY features
+export async function initFeatures() {
+  rawFeatures = (await getCurrentConfig()).features;
+
+  for (const featureName in rawFeatures) {
+    const featureConfig = rawFeatures[featureName];
+    if (featureConfig?.stage === 'PRIMARY') {
+      rawFeatures[featureName].active = true;
+    }
+  }
+}
+
+// resolved feature configurations
 let lastResolvedFeatures = {};
 export async function getFeatures() {
   const resolvedFeatures = {};
@@ -96,18 +91,6 @@ export async function getFeatures() {
   return resolvedFeatures;
 }
 
-let rawFeatures = {};
-export async function initFeatures() {
-  rawFeatures = (await getCurrentConfig()).features;
-
-  for (const featureName in rawFeatures) {
-    const featureConfig = rawFeatures[featureName];
-    if (featureConfig?.stage === 'PRIMARY') {
-      rawFeatures[featureName].active = true;
-    }
-  }
-}
-
 export async function resolveSecondaryFeatures() {
   for (const featureName in rawFeatures) {
     const featureConfig = rawFeatures[featureName];
@@ -118,15 +101,38 @@ export async function resolveSecondaryFeatures() {
   }
 }
 
-async function updateFeaturesContext() {
-  configChanged({
-    valuePath: '$.context.features',
-    value: lastResolvedFeatures,
-    scope: 'navigation.nodes',
-  });
-}
-
 export async function updateFeature(featureName) {
+  const updateFeaturesContext = async () => {
+    configChanged({
+      valuePath: '$.context.features',
+      value: lastResolvedFeatures,
+      scope: 'navigation.nodes',
+    });
+  };
+
+  const reloadNodes = async () => {
+    try {
+      const activeCluster = getActiveCluster();
+      const permissionSet = await fetchPermissions(
+        getAuthData(),
+        getCurrentContextNamespace(activeCluster.kubeconfig),
+      );
+
+      const { data } = await fetchCache.get('/apis');
+      const groupVersions = extractGroupVersions(data);
+      const cfg = Luigi.getConfig();
+      cfg.navigation.nodes = await createNavigationNodes(
+        lastResolvedFeatures,
+        groupVersions,
+        permissionSet,
+      );
+      Luigi.setConfig(cfg);
+      Luigi.configChanged('navigation.nodes');
+    } catch (e) {
+      console.warn('reloadNodes failed', e);
+    }
+  };
+
   const resolvedFeature = await discoverFeature(
     featureName,
     rawFeatures[featureName],
@@ -146,6 +152,7 @@ export async function updateFeature(featureName) {
 // counter (with feature name as a key) for iframe subscribers
 const featureSubscribers = {};
 
+// turn feature on/off based on iframe subscriber count
 async function updateFeatureSubscribers(featureName) {
   if (rawFeatures[featureName]) {
     const targetActive = !!featureSubscribers[featureName];
@@ -157,7 +164,7 @@ async function updateFeatureSubscribers(featureName) {
 }
 
 export const featureCommunicationEntries = {
-  'busola.startRequestFeature': async ({ featureName, Id }) => {
+  'busola.startRequestFeature': async ({ featureName }) => {
     if (!featureSubscribers[featureName]) {
       featureSubscribers[featureName] = 0;
     }

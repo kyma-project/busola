@@ -179,7 +179,7 @@ async function createNavigationForNoCluster() {
     },
     preloadViewGroups: false,
     appSwitcher: await createAppSwitcher(),
-    nodes: await createClusterManagementNodes(getFeatures()),
+    nodes: await createClusterManagementNodes(await getFeatures()),
   };
 }
 
