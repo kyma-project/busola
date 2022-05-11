@@ -6,7 +6,13 @@ The document explains the usage of feature flags in Busola, as well as lists and
 
 #### Features priority
 
-todo
+Features in Busola initialisation is based on `stage` property, which can take one of the values listed here:
+
+- `PRIMARY` - the feature will be resolved while the app bootstraps. Features that should be immediately visible should be set as `PRIMARY` (e.g. main navigation structure).
+- `SECONDARY` - the feature will be resolved after the app is ready, it should be used for non-critical features (e.g. additional navigation nodes).
+- \<other value> - the feature will be loaded only on-demand, most often by the iframe. Use the `useFeature` hook to request usage of such feature.
+
+Note that some features need to be run before the app starts the bootstrap process (e.g. SSO_LOGIN), so they are out of normal feature flow.
 
 #### The features list
 

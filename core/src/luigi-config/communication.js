@@ -1,5 +1,4 @@
 import i18next from 'i18next';
-
 import { NODE_PARAM_PREFIX } from './luigi-config';
 import {
   saveClusterParams,
