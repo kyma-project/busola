@@ -1,6 +1,6 @@
 export function createLimitRangeTemplate({
   max = '1100Mi',
-  min = '32Mi',
+  min = '16Mi',
   defaultVal = '512Mi',
   defaultRequest = '32Mi',
   name = '',
