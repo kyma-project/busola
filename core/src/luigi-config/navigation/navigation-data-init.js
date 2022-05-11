@@ -440,7 +440,7 @@ async function getNamespaces() {
   }
 
   const hiddenNamespaces =
-    activeCluster?.config.features?.HIDDEN_NAMESPACES?.selector || [];
+    activeCluster?.config.features?.HIDDEN_NAMESPACES?.selectors || [];
   try {
     let namespaces = await fetchNamespaces(getAuthData());
     if (!getFeatureToggle('showHiddenNamespaces')) {

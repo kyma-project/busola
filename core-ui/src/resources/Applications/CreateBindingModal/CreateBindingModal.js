@@ -19,7 +19,7 @@ export default function CreateBinding({ application, alreadyBoundNamespaces }) {
   const { t, i18n } = useTranslation();
 
   const hiddenNamespaces =
-    useMicrofrontendContext().features?.HIDDEN_NAMESPACES?.selector || [];
+    useMicrofrontendContext().features?.HIDDEN_NAMESPACES?.selectors || [];
   const [servicesToBind, setServicesToBind] = React.useState([]);
   const [namespaceName, setNamespaceName] = React.useState('');
   const notification = useNotification();

@@ -11,7 +11,7 @@ import { NamespaceCreate } from './NamespaceCreate';
 const FilterNamespaces = namespace => {
   const showHiddenNamespaces = getFeatureToggle('showHiddenNamespaces');
   const hiddenNamespaces =
-    LuigiClient.getContext().features.HIDDEN_NAMESPACES?.selector || [];
+    LuigiClient.getContext().features.HIDDEN_NAMESPACES?.selectors || [];
 
   return showHiddenNamespaces
     ? true

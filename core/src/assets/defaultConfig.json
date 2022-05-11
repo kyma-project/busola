@@ -64,7 +64,7 @@
         "selectors": []
       },
       "HIDDEN_NAMESPACES": {
-        "selector": [
+        "selectors": [
           "compass-system",
           "istio-system",
           "knative-eventing",

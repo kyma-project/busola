@@ -181,7 +181,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   ```bash
   "HIDDEN_NAMESPACES": {
-        "selector": [
+        "selectors": [
           "compass-system",
           "istio-system",
           "knative-eventing",

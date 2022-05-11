@@ -21,7 +21,7 @@ export function useSearchResults({
     namespaceNodes,
     features,
   } = useMicrofrontendContext();
-  const hiddenNamespaces = features.HIDDEN_NAMESPACES?.selector;
+  const hiddenNamespaces = features.HIDDEN_NAMESPACES?.selectors;
   const [showHiddenNamespaces] = useFeatureToggle('showHiddenNamespaces');
   const fetch = useFetch();
   const { t } = useTranslation();
