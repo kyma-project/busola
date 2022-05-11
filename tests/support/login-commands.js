@@ -117,6 +117,7 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
       .contains('button', 'Connect cluster')
       .click();
 
+    cy.wait(30000);
     cy.url().should('match', expectedLocation);
     cy.getIframeBody()
       .find('thead')
