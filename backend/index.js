@@ -1,8 +1,8 @@
 const express = require('express');
 const compression = require('compression');
 const cors = require('cors');
-const fs = require('fs');
 const merge = require('lodash.merge');
+const fs = require('fs');
 
 import { handleRequest, serveStaticApp, serveMonaco } from './common';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
