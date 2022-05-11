@@ -62,6 +62,29 @@ export const communication = {
     'busola.setWindowTitle': ({ title }) => {
       Luigi.ux().setDocumentTitle(title);
     },
+    'busola.silentNavigate': ({ newParams }) => {
+      const { search: paramsString, pathname } = new URL(window.location.href);
+      const currentParams = convertToObject(paramsString);
+
+      // remove params explicitly marked for removal
+      Object.keys(newParams).forEach(key => {
+        if (newParams[key] === undefined) {
+          delete currentParams[key];
+          delete newParams[key];
+        }
+      });
+
+      const newParamsString = convertToURLsearch({
+        ...currentParams,
+        ...newParams,
+      });
+
+      window.history.replaceState(
+        null,
+        window.document.title,
+        pathname + newParamsString,
+      );
+    },
     'busola.reload': ({ reason }) => {
       if (reason === 'sso-expiration') {
         setSSOAuthData(null);
@@ -78,7 +101,6 @@ export const communication = {
       await deleteCluster(clusterName);
 
       const activeClusterName = getActiveClusterName();
-
       if (activeClusterName === clusterName) {
         await reloadAuth();
         clearAuthData();

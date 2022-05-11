@@ -82,7 +82,7 @@ export async function ssoLogin(luigiAfterInit) {
   }
 
   return new Promise(async resolve => {
-    window.Luigi.setConfig({
+    Luigi.setConfig({
       auth: await createSSOAuth(resolve),
       lifecycleHooks: { luigiAfterInit },
     });

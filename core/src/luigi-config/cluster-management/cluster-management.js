@@ -59,11 +59,11 @@ export async function setCluster(clusterName) {
 
     if (hasNonOidcAuth(kubeconfigUser)) {
       setAuthData(kubeconfigUser);
-      window.Luigi.navigation().navigate(targetLocation);
+      Luigi.navigation().navigate(targetLocation);
       await saveCARequired();
       await clusterStorage.checkClusterStorageType(originalStorage);
       await reloadNavigation();
-      setTimeout(() => window.Luigi.navigation().navigate(targetLocation));
+      setTimeout(() => Luigi.navigation().navigate(targetLocation));
     } else {
       saveLocation(targetLocation);
       window.location = window.location.origin;
@@ -181,7 +181,7 @@ export async function deleteActiveCluster() {
   await reloadAuth();
   clearAuthData();
   saveActiveClusterName(null);
-  window.Luigi.navigation().navigate('/clusters');
+  Luigi.navigation().navigate('/clusters');
   // even though we navigate to /clusters, Luigi complains it can't find
   // current cluster path in navigation - skip a frame to fix it
   await new Promise(resolve => setTimeout(resolve));

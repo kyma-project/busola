@@ -10,38 +10,28 @@ function saveCache(cache) {
 }
 
 export function loadCacheItem(path) {
-  try {
-    const clusterName = getActiveClusterName();
-    if (!clusterName) {
-      throw Error('No active cluster');
-    }
-
-    const cache = loadCache();
-    const clusterCache = cache[clusterName] || {};
-    return clusterCache[path];
-  } catch (e) {
-    console.warn('loadCacheItem failed', e);
-    return null;
+  const clusterName = getActiveClusterName();
+  if (!clusterName) {
+    throw Error('No active cluster');
   }
+
+  const cache = loadCache();
+  const clusterCache = cache[clusterName] || {};
+  return clusterCache[path];
 }
 
 export function saveCacheItem(path, item) {
-  try {
-    const clusterName = getActiveClusterName();
-    if (!clusterName) {
-      throw Error('No active cluster');
-    }
-
-    const cache = loadCache();
-    if (!cache[clusterName]) {
-      cache[clusterName] = {};
-    }
-    cache[clusterName][path] = item;
-    saveCache(cache);
-  } catch (e) {
-    console.warn('saveCacheItem failed', e);
-    return null;
+  const clusterName = getActiveClusterName();
+  if (!clusterName) {
+    throw Error('No active cluster');
   }
+
+  const cache = loadCache();
+  if (!cache[clusterName]) {
+    cache[clusterName] = {};
+  }
+  cache[clusterName][path] = item;
+  saveCache(cache);
 }
 
 export function clearClusterCache(clusterName) {

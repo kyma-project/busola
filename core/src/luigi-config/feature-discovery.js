@@ -37,16 +37,16 @@ export async function reloadNodes() {
 
     const { data } = await fetchCache.get('/apis');
     const groupVersions = extractGroupVersions(data);
-    const cfg = window.Luigi.getConfig();
+    const cfg = Luigi.getConfig();
     cfg.navigation.nodes = await createNavigationNodes(
       lastResolvedFeatures,
       groupVersions,
       permissionSet,
     );
-    window.Luigi.setConfig(cfg);
-    window.Luigi.configChanged('navigation.nodes');
+    Luigi.setConfig(cfg);
+    Luigi.configChanged('navigation.nodes');
   } catch (e) {
-    console.warn('reloadNodes failed', e, window.Luigi.initialized);
+    console.warn('reloadNodes failed', e, Luigi.initialized);
   }
 }
 
@@ -136,10 +136,8 @@ export async function updateFeature(featureName) {
   if (JSON.stringify(prevResolved) !== JSON.stringify(resolvedFeature)) {
     lastResolvedFeatures[featureName] = resolvedFeature;
 
-    console.log('update ctx cause', featureName);
     await updateFeaturesContext();
     if (resolvedFeature.updateNodes) {
-      console.log('reload nodes cause', featureName);
       await reloadNodes();
     }
   }

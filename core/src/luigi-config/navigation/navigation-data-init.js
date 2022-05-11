@@ -80,7 +80,7 @@ async function createAppSwitcher() {
 
 export async function reloadNavigation() {
   const navigation = await createNavigation();
-  window.Luigi.setConfig({ ...window.Luigi.getConfig(), navigation });
+  Luigi.setConfig({ ...Luigi.getConfig(), navigation });
 
   // wait for Luigi to update DOM
   setTimeout(async () => {
@@ -380,7 +380,7 @@ export async function createNavigationNodes(
       pathSegment: 'cluster',
       hideFromNav: true,
       onNodeActivation: () => {
-        window.Luigi.navigation().navigate(`/cluster/${activeClusterName}`);
+        Luigi.navigation().navigate(`/cluster/${activeClusterName}`);
       },
       children: [
         {

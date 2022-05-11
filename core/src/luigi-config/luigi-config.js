@@ -26,7 +26,7 @@ import { ssoLogin } from './auth/sso';
 import { setNavFooterText } from './nav-footer';
 import { resolveSecondaryFeatures } from './feature-discovery';
 
-const luigiAfterInit = () => window.Luigi.ux().hideAppLoadingIndicator();
+const luigiAfterInit = () => Luigi.ux().hideAppLoadingIndicator();
 
 export const i18n = i18next.use(i18nextBackend).init({
   lng: localStorage.getItem('busola.language') || 'en',
@@ -47,7 +47,7 @@ async function initializeBusola() {
   initTheme();
 
   const activeCluster = getActiveCluster();
-  window.Luigi.setConfig({
+  Luigi.setConfig({
     communication,
     navigation: await createNavigation(),
     routing: {
@@ -65,7 +65,7 @@ async function initializeBusola() {
   await setNavFooterText();
   if (!getActiveCluster()) {
     if (!window.location.pathname.startsWith('/clusters')) {
-      window.Luigi.navigation().navigate('/clusters');
+      Luigi.navigation().navigate('/clusters');
     }
   } else {
     tryRestorePreviousLocation();
