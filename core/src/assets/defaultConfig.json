@@ -60,6 +60,9 @@
           ]
         }
       },
+      "DISABLED_NODES": {
+        "selectors": []
+      },
       "HIDDEN_NAMESPACES": {
         "selector": [
           "compass-system",

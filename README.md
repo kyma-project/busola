@@ -41,11 +41,10 @@ Learn about the [default configuration](#default-configuration) in Busola and [h
 
 Busola is delivered with the following default settings:
 
-| Parameter                  | Comment                                                                                                                                          | Default Value           |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
-| `features`                 | Switches a set of Busola features on and off. Use selectors to configure conditions for the features. To switch them off, set `isEnabled=false`. | `isEnabled=true`        |
-| `navigation.disabledNodes` | Array of IDs of navigation nodes that are hidden from navigation. Format: `<category>.<nodeName>` or `<namespace>.<category>.<nodeName>`)        | empty                   |
-| `version`                  | Configuration version. Don’t edit this. Can be empty.                                                                                            | the most recent release |
+| Parameter  | Comment                                                                                                                                          | Default Value           |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `features` | Switches a set of Busola features on and off. Use selectors to configure conditions for the features. To switch them off, set `isEnabled=false`. | `isEnabled=true`        |
+| `version`  | Configuration version. Don’t edit this. Can be empty.                                                                                            | the most recent release |
 
 ### Configuration sources
 

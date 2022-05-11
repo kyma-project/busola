@@ -347,7 +347,8 @@ export async function createNavigationNodes(
   const activeClusterName = encodeURIComponent(
     activeCluster.kubeconfig['current-context'],
   );
-  const { navigation = {} } = activeCluster?.config || {};
+  const disabledNodes =
+    activeCluster.config?.features?.DISABLED_NODES?.selectors || [];
 
   const createClusterNodes = async () => {
     const staticNodes = getStaticRootNodes(
@@ -366,7 +367,7 @@ export async function createNavigationNodes(
       ...observabilitySection,
       ...externalNodes,
     ];
-    hideDisabledNodes(navigation.disabledNodes, allNodes, false);
+    hideDisabledNodes(disabledNodes, allNodes, false);
     return allNodes;
   };
 
@@ -460,13 +461,16 @@ async function getChildrenNodesForNamespace(
   permissionSet,
   features,
 ) {
-  const { navigation = {} } = (await getActiveCluster()).config;
+  const disabledNodes =
+    (await getActiveCluster()).config?.features?.DISABLED_NODES?.selectors ||
+    [];
+
   const staticNodes = getStaticChildrenNodesForNamespace(
     groupVersions,
     permissionSet,
     features,
   );
 
-  hideDisabledNodes(navigation.disabledNodes, staticNodes, true);
+  hideDisabledNodes(disabledNodes, staticNodes, true);
   return staticNodes;
 }

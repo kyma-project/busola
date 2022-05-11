@@ -110,6 +110,16 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
+- **DISABLED_NODES** - an array of IDs of navigation nodes that are hidden from navigation. Format: `<category>.<nodeName>` or `<namespace>.<category>.<nodeName>`).
+
+  Default settings:
+
+  ```bash
+  "DISABLED_NODES": {
+    "selectors": []
+  }
+  ```
+
 - **EXTERNAL_NODES** - a list of links to external websites. `category`: a category name, `icon`: an optional icon, `children`: a list of pairs (label and link).
 
   Default settings:
