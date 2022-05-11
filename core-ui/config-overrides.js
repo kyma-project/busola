@@ -28,6 +28,8 @@ module.exports = {
       '<rootDir>/src/service-catalog-ui/',
       ...(config.coveragePathIgnorePatterns || []),
     ];
+    // fetch-queue is not transpiled, let Jest/babel take care of that
+    config.transformIgnorePatterns = ['/node_modules/(?!fetch-queue)/'];
     return config;
   },
 };
