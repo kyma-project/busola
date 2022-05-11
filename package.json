@@ -16,7 +16,7 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "@luigi-project/client": "^1.20.1",
+    "@luigi-project/client": "1.21.0",
     "@sap-theming/theming-base-content": "^11.1.28",
     "@sentry/react": "^6.17.9",
     "@sentry/tracing": "^6.12.0",
