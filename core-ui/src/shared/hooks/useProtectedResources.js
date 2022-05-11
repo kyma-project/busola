@@ -8,8 +8,8 @@ import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
 
 export function useProtectedResources(i18n) {
-  const { t } = useTranslation(['translation'], { i18n });
   const microfrontendContext = useMicrofrontendContext();
+  const { t } = useTranslation(['translation'], { i18n });
   const [disableResourceProtection] = useFeatureToggle(
     'disableResourceProtection',
   );
