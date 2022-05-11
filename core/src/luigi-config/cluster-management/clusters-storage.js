@@ -54,7 +54,7 @@ export async function save(clusters) {
 }
 
 export async function checkClusterStorageType(originalStorage) {
-  const targetStorage = getCurrentConfig().storage;
+  const targetStorage = (await getCurrentConfig()).storage;
   if (!!targetStorage && targetStorage !== originalStorage) {
     // move the cluster to the valid storage
     const clusters = load();

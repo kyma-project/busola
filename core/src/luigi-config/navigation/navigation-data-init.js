@@ -424,7 +424,7 @@ async function getNamespaces() {
     return createNamespacesList([{ name: namespace }]);
   }
 
-  const { hiddenNamespaces = [] } = getCurrentConfig();
+  const { hiddenNamespaces = [] } = await getCurrentConfig();
   try {
     let namespaces = await fetchNamespaces(getAuthData());
     if (!getFeatureToggle('showHiddenNamespaces')) {
@@ -445,7 +445,7 @@ async function getChildrenNodesForNamespace(
   permissionSet,
   features,
 ) {
-  const { navigation = {} } = getCurrentConfig();
+  const { navigation = {} } = await getCurrentConfig();
   const staticNodes = getStaticChildrenNodesForNamespace(
     groupVersions,
     permissionSet,
