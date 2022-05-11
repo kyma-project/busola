@@ -6,7 +6,7 @@ The document explains the usage of feature flags in Busola, lists and describes 
 
 #### Features priority
 
-Features in Busola initialisation is based on `stage` property, which can take one of the values listed here:
+Initialisation of the Busola features is based on the `stage` property, which can take one of the following values:
 
 - `PRIMARY` - the feature will be resolved while the app bootstraps. Features that should be immediately visible should be set as `PRIMARY` (e.g. main navigation structure).
 - `SECONDARY` - the feature will be resolved after the app is ready, it should be used for non-critical features (e.g. additional navigation nodes).
