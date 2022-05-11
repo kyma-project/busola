@@ -2,7 +2,7 @@
 title: Feature flags
 ---
 
-The document explains the usage of feature flags in Busola, as well as lists and describes all the feature flags that are available in Kyma Dashboard and provides their configuration examples:
+The document explains the usage of feature flags in Busola, lists and describes all the available feature flags, and provides their configuration examples:
 
 #### Features priority
 
