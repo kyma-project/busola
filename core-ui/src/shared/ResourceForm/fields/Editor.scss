@@ -1,12 +1,7 @@
 .resource-form__editor {
-  position: relative;
-  height: calc(100% - 21px); // avoid v-scroll
-  overflow: hidden;
-
   .monaco-editor {
     min-height: 200px;
   }
-
   .resource-form__editor__error {
     inset: 0;
 

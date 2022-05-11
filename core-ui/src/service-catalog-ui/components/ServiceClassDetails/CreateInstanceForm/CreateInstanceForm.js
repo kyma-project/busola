@@ -1,12 +1,11 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { FormItem, FormLabel, Icon, Link } from 'fundamental-react';
 import * as LuigiClient from '@luigi-project/client';
 
-import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
+import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useTheme } from 'shared/contexts/ThemeContext';
 import { randomNameGenerator } from 'shared/utils/helpers';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { CopiableLink } from 'shared/components/Link/CopiableLink';
@@ -66,12 +65,11 @@ export default function CreateInstanceForm({
     false,
   );
   const [instanceCreateParameters, setInstanceCreateParameters] = useState({});
-  const { editorTheme } = useTheme();
 
   useEffect(() => {
     setCustomValid(true);
     // Make the form initially valid because a form without instanceCreateParameters is always valid.
-    // It'll be immiediately overwritten once plan or instanceCreateParameters are changed
+    // It'll be immediately overwritten once plan or instanceCreateParameters are changed
 
     // eslint-disable-next-line
   }, []);
@@ -147,7 +145,7 @@ export default function CreateInstanceForm({
     }
   }
 
-  const handleCustomParametersChange = input => {
+  const handleCustomParametersChange = useCallback(input => {
     try {
       const parsedInput = JSON.parse(input);
       if (isNonNullObject(parsedInput)) {
@@ -157,7 +155,8 @@ export default function CreateInstanceForm({
     } catch (_) {
       setCustomValid(false);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function handleFormSubmit(e) {
     e.preventDefault();
@@ -273,11 +272,11 @@ export default function CreateInstanceForm({
             )}
           </div>
           {customParametersProvided && (
-            <MonacoEditor
+            <Editor
+              autocompletionDisabled
               aria-label="schema-editor"
               height="25em"
-              language="JSON"
-              theme={editorTheme}
+              language="json"
               onChange={handleCustomParametersChange}
               value={JSON.stringify(instanceCreateParameters, null, 2)}
             />
