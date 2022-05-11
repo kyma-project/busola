@@ -183,9 +183,8 @@ function EditClusterComponent({
         onChange={onChange}
         formElementRef={formElementRef}
         createUrl={resourceUrl}
-        onSubmit={() => {
-          onComplete();
-        }}
+        onSubmit={onComplete}
+        autocompletionDisabled
       >
         <K8sNameField
           kind={t('clusters.name_singular')}
