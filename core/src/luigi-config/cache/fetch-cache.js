@@ -7,12 +7,19 @@ import { loadCacheItem, saveCacheItem } from './storage';
 class FetchCache {
   constructor() {
     this.subscriptions = {};
+    this.clusterName = null;
   }
-  init() {
+  init(clusterName) {
     this.clear();
+    this.clusterName = clusterName;
   }
   // subbscribe and return data (from cache or fresh)
   async subscribe({ path, callback, refreshIntervalMs = 10000 }) {
+    if (!this.clusterName) {
+      console.debug('subscribe: no clusterName');
+      return null;
+    }
+
     if (!this.subscriptions[path]) {
       this.subscriptions[path] = { subscribers: [] };
     }
@@ -27,12 +34,12 @@ class FetchCache {
     const refetch = async () => {
       try {
         const updatedData = await this.fetch(path);
-        const prevData = loadCacheItem(path);
+        const prevData = loadCacheItem(this.clusterName, path);
         const hasChanged =
           JSON.stringify(updatedData) !== JSON.stringify(prevData);
 
         if (hasChanged) {
-          saveCacheItem(path, updatedData);
+          saveCacheItem(this.clusterName, path, updatedData);
           for (const sub of subscription.subscribers) {
             sub.callback({
               prevData,
@@ -83,18 +90,22 @@ class FetchCache {
   }
   // get item from cache or fetch in case it doesn't exist
   async get(path) {
+    if (!this.clusterName) {
+      console.debug('get: no clusterName');
+      return null;
+    }
     const item = this.getSync(path);
     if (item?.status) {
       return item;
     } else {
       const data = await this.fetch(path);
-      saveCacheItem(path, data);
+      saveCacheItem(this.clusterName, path, data);
       return data;
     }
   }
   // get item from cache
   getSync(path) {
-    return loadCacheItem(path);
+    return loadCacheItem(this.clusterName, path);
   }
   async fetch(path) {
     if (path.startsWith('/')) {
@@ -113,6 +124,7 @@ class FetchCache {
       clearTimeout(sub.timeoutId);
     }
     this.subscriptions = {};
+    this.clusterName = null;
   }
 }
 

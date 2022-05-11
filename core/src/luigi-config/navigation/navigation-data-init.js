@@ -191,7 +191,7 @@ export async function createNavigation() {
     }
 
     await saveCARequired();
-    fetchCache.init();
+    fetchCache.init(getActiveClusterName());
     await loadTargetClusterConfig();
 
     const config = await getCurrentConfig();

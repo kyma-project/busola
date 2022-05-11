@@ -1,4 +1,3 @@
-import { getActiveClusterName } from '../cluster-management/cluster-management';
 const CACHE_KEY = 'busola.cache';
 
 function loadCache() {
@@ -9,23 +8,13 @@ function saveCache(cache) {
   localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
 }
 
-export function loadCacheItem(path) {
-  const clusterName = getActiveClusterName();
-  if (!clusterName) {
-    throw Error('No active cluster');
-  }
-
+export function loadCacheItem(clusterName, path) {
   const cache = loadCache();
   const clusterCache = cache[clusterName] || {};
   return clusterCache[path];
 }
 
-export function saveCacheItem(path, item) {
-  const clusterName = getActiveClusterName();
-  if (!clusterName) {
-    throw Error('No active cluster');
-  }
-
+export function saveCacheItem(clusterName, path, item) {
   const cache = loadCache();
   if (!cache[clusterName]) {
     cache[clusterName] = {};
