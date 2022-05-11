@@ -38,7 +38,7 @@ context('Test Cluster configuration', () => {
 
   it('Applies config from target cluster', () => {
     cy.intercept(requestData, configMock);
-    cy.loginAndSelectCluster();
+    cy.loginAndSelectCluster({ storage: 'Local storage' });
     cy.url().should('match', /overview$/);
 
     // cluster storage message should be visible
