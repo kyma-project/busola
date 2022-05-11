@@ -141,7 +141,9 @@ export async function getCurrentConfig() {
   };
 
   const busolaClusterParams = await getBusolaClusterParams();
-  const targetCluterConfig = await getTargetClusterConfig();
+  const targetCluterConfig = getActiveClusterName()
+    ? await getTargetClusterConfig()
+    : {};
 
   const features = {
     ...config.features,
