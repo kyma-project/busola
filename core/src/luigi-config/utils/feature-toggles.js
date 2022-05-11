@@ -4,7 +4,6 @@ export function updateFeatureToggle(key, value) {
   } else {
     Luigi.featureToggles().unsetFeatureToggle(key);
   }
-  Luigi.configChanged();
 }
 
 export function getFeatureToggle(key) {
