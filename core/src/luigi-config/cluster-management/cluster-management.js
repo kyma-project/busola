@@ -118,15 +118,18 @@ export function getActiveCluster() {
   return activeCluster;
 }
 
+let currentClusterName = null;
 export function getActiveClusterName() {
-  return localStorage.getItem(CURRENT_CLUSTER_NAME_KEY);
+  return localStorage.getItem(CURRENT_CLUSTER_NAME_KEY) || currentClusterName;
 }
 
 export function saveActiveClusterName(clusterName) {
   if (clusterName) {
     localStorage.setItem(CURRENT_CLUSTER_NAME_KEY, clusterName);
+    currentClusterName = clusterName;
   } else {
     localStorage.removeItem(CURRENT_CLUSTER_NAME_KEY);
+    currentClusterName = null;
   }
 }
 
