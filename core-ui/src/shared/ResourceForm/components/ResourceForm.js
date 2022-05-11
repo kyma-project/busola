@@ -2,12 +2,12 @@ import React, { useRef, useEffect } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
+import EditorWrapper from 'shared/ResourceForm/fields/Editor';
 import { useTranslation } from 'react-i18next';
 
 import { ModeSelector } from './ModeSelector';
 import { ResourceFormWrapper } from './Wrapper';
 import { Presets } from './Presets';
-import { Editor } from '../fields/Editor';
 import { useCreateResource } from '../useCreateResource';
 
 import './ResourceForm.scss';
@@ -22,10 +22,10 @@ export function ResourceForm({
   onChange,
   formElementRef,
   children,
-  renderEditor,
   createUrl,
   presets,
   onPresetSelected,
+  renderEditor,
   onSubmit,
   afterCreatedFn,
   className,
@@ -78,10 +78,11 @@ export function ResourceForm({
       }}
     />
   );
+
   let editor = (
-    <Editor
+    <EditorWrapper
       value={resource}
-      setValue={setResource}
+      onChange={setResource}
       onMount={setActionsEditor}
       customSchemaId={customSchemaId}
       customSchemaUri={customSchemaUri}
@@ -90,9 +91,8 @@ export function ResourceForm({
     />
   );
   editor = renderEditor
-    ? renderEditor({ defaultEditor: editor, Editor })
+    ? renderEditor({ defaultEditor: editor, Editor: EditorWrapper })
     : editor;
-
   return (
     <section className={classnames('resource-form', className)}>
       {presetsSelector}

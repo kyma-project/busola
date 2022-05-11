@@ -1,16 +1,17 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, Suspense } from 'react';
 import { Dialog, Button } from 'fundamental-react';
 import { isEqual } from 'lodash';
-import jsyaml from 'js-yaml';
 
-import { YamlUpload } from './YamlUpload';
 import { YamlResourcesList } from './YamlResourcesList';
 import { useUploadResources } from './useUploadResources';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import './YamlUploadDialog.scss';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+
+export const YamlUpload = React.lazy(() => import('./YamlUpload'));
 
 export const OPERATION_STATE_INITIAL = 'INITIAL';
 export const OPERATION_STATE_WAITING = 'WAITING';
@@ -42,7 +43,7 @@ export function YamlUploadDialog({ show, onCancel }) {
   });
 
   useEffect(() => {
-    if (show) {
+    if (!show) {
       setResourcesData(null);
       setResourcesWithStatuses(null);
       setLastOperationState(OPERATION_STATE_INITIAL);
@@ -50,22 +51,17 @@ export function YamlUploadDialog({ show, onCancel }) {
     }
   }, [show]);
 
-  const updateYamlContent = yamlText => {
-    try {
-      const yaml = jsyaml.loadAll(yamlText);
-      if (isEqual(yaml?.sort(), oldYaml?.current?.sort())) return;
-      setResourcesData(yamlText);
-      const nonEmptyResources = yaml?.filter(resource => resource !== null);
-      const resourcesWithStatus = nonEmptyResources?.map(value => ({
-        value,
-        status: '',
-        message: '',
-      }));
-      setResourcesWithStatuses(resourcesWithStatus);
-      oldYaml.current = yaml;
-    } catch ({ message }) {
-      console.error(message);
-    }
+  const updateYamlContent = yaml => {
+    if (isEqual(yaml?.sort(), oldYaml?.current?.sort())) return;
+    setResourcesData(yaml);
+    const nonEmptyResources = yaml?.filter(resource => resource !== null);
+    const resourcesWithStatus = nonEmptyResources?.map(value => ({
+      value,
+      status: '',
+      message: '',
+    }));
+    setResourcesWithStatuses(resourcesWithStatus);
+    oldYaml.current = yaml;
   };
 
   const actions = [
@@ -98,20 +94,24 @@ export function YamlUploadDialog({ show, onCancel }) {
       actions={actions}
       className="yaml-upload-modal"
     >
-      <div className="yaml-upload-modal__layout">
-        <YamlUpload
-          resourcesData={resourcesData}
-          setResourcesData={updateYamlContent}
-          setLastOperationState={setLastOperationState}
-        />
-        <div className="fd-margin-begin--tiny fd-margin-end--tiny">
-          {t('upload-yaml.info', { namespace: defaultNamespace })}
-          <YamlResourcesList
-            resourcesData={resourcesWithStatuses}
-            namespace={namespaceId}
+      <Suspense fallback={<Spinner />}>
+        <div className="yaml-upload-modal__layout">
+          <YamlUpload
+            resourcesData={resourcesData}
+            setResourcesData={updateYamlContent}
+            setLastOperationState={setLastOperationState}
           />
+          <div className="fd-margin-begin--tiny fd-margin-end--tiny">
+            {t('upload-yaml.info', { namespace: defaultNamespace })}
+            <YamlResourcesList
+              resourcesData={resourcesWithStatuses}
+              namespace={namespaceId}
+            />
+          </div>
         </div>
-      </div>
+      </Suspense>
     </Dialog>
   );
 }
+
+export default YamlUploadDialog;
