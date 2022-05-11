@@ -2139,7 +2139,6 @@ function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
     }
     return;
   }
-
   const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
   if (!apiPath) return;
 

@@ -40,7 +40,7 @@ data:
             "isReadOnly": false
           },
           "SENTRY": {
-            "isEnabled": true
+            "isEnabled": true,
             "selectors": [],
             "config": {
               "dsn": ""
@@ -67,7 +67,6 @@ data:
             }
           },
           "KUBECONFIG_ID": {
-            "stage": "PRIMARY",
             "config": {
               "kubeconfigUrl": "/kubeconfig"
             }

@@ -47,10 +47,9 @@ async function initializeBusola() {
   initTheme();
 
   const activeCluster = getActiveCluster();
-  const navigation = await createNavigation();
   window.Luigi.setConfig({
     communication,
-    navigation,
+    navigation: await createNavigation(),
     routing: {
       nodeParamPrefix: NODE_PARAM_PREFIX,
       skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],

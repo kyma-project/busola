@@ -1,6 +1,5 @@
 import i18next from 'i18next';
 
-import { featureCommunicationEntries } from './feature-discovery';
 import { NODE_PARAM_PREFIX } from './luigi-config';
 import {
   saveClusterParams,
@@ -17,6 +16,7 @@ import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
 import { getCorrespondingNamespaceLocation } from './navigation/navigation-helpers';
+import { featureCommunicationEntries } from './feature-discovery';
 import { fetchCache } from './cache/fetch-cache';
 import { clearClusterCache } from './cache/storage';
 
