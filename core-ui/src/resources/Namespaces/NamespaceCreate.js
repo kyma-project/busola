@@ -159,14 +159,22 @@ export function NamespaceCreate({
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.container-limits')}
         >
-          <Editor value={limits} setValue={setLimits} />
+          <Editor
+            value={limits}
+            setValue={setLimits}
+            customSchemaId="v1/LimitRange"
+          />
         </ResourceForm.CollapsibleSection>
       ) : null}
       {!initialNamespace && withMemory ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.memory-quotas')}
         >
-          <Editor value={memory} setValue={setMemory} />
+          <Editor
+            value={memory}
+            setValue={setMemory}
+            customSchemaId="v1/ResourceQuota"
+          />
         </ResourceForm.CollapsibleSection>
       ) : null}
     </div>

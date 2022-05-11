@@ -14,7 +14,6 @@ module.exports = {
     return config;
   },
   jest: function(config) {
-    console.log(config);
     config.moduleNameMapper = {
       '^helpers/?(.*)': '<rootDir>/src/service-catalog-ui/helpers/$1',
       '^shared/?(.*)': '<rootDir>/src/shared/$1',
