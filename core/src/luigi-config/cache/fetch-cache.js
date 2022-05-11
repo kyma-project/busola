@@ -95,7 +95,7 @@ class FetchCache {
       return null;
     }
     const item = this.getSync(path);
-    if (item?.status) {
+    if (item) {
       return item;
     } else {
       const data = await this.fetch(path);
@@ -116,7 +116,7 @@ class FetchCache {
       return { status: response.status, data: await response.json() };
     } catch (e) {
       console.warn('fetch', path, e);
-      return { status: 0, data: null };
+      return null;
     }
   }
   clear() {

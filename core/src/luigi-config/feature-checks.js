@@ -30,7 +30,7 @@ export function apiGroup(group, refreshIntervalMs = 10000) {
 
 export function service({
   urlsGenerator,
-  validator = async res => res.status < 400,
+  validator = async res => res?.status < 400,
   urlMutator,
   refreshIntervalMs,
 }) {
