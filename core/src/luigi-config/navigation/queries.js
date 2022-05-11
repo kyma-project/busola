@@ -1,4 +1,3 @@
-// import { fetchQueue } from 'fetch-queue'; TODO
 import { config } from './../config';
 import {
   getActiveCluster,
