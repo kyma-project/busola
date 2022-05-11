@@ -9,6 +9,7 @@ import { getTargetClusterConfig } from '../utils/target-cluster-config';
 import { checkIfClusterRequiresCA } from '../navigation/queries';
 import * as clusterStorage from './clusters-storage';
 import { fetchCache } from '../cache/fetch-cache';
+import { clearClusterCache } from '../cache/storage';
 
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
@@ -170,6 +171,7 @@ export async function deleteCluster(clusterName) {
   const clusters = getClusters();
   delete clusters[clusterName];
   await saveClusters(clusters);
+  clearClusterCache(clusterName);
 }
 
 export async function deleteActiveCluster() {

@@ -17,7 +17,6 @@ import { communicationEntry as pageSizeCommunicationEntry } from './settings/pag
 import { getCorrespondingNamespaceLocation } from './navigation/navigation-helpers';
 import { featureCommunicationEntries } from './feature-discovery';
 import { fetchCache } from './cache/fetch-cache';
-import { clearClusterCache } from './cache/storage';
 
 addCommandPaletteHandler();
 addOpenSearchHandler();
@@ -80,7 +79,6 @@ export const communication = {
 
       const activeClusterName = getActiveClusterName();
 
-      clearClusterCache(activeClusterName);
       if (activeClusterName === clusterName) {
         await reloadAuth();
         clearAuthData();
