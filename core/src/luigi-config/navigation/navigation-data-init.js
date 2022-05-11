@@ -347,8 +347,14 @@ export async function createNavigationNodes(
   const activeClusterName = encodeURIComponent(
     activeCluster.kubeconfig['current-context'],
   );
-  const disabledNodes =
-    activeCluster.config?.features?.DISABLED_NODES?.selectors || [];
+
+  let disabledNodes = [];
+  if (
+    activeCluster.config?.features?.DISABLED_NODES?.isEnabled &&
+    Array.isArray(activeCluster.config?.features?.DISABLED_NODES?.selectors)
+  ) {
+    disabledNodes = activeCluster.config?.features?.DISABLED_NODES?.selectors;
+  }
 
   const createClusterNodes = async () => {
     const staticNodes = getStaticRootNodes(
@@ -461,9 +467,12 @@ async function getChildrenNodesForNamespace(
   permissionSet,
   features,
 ) {
-  const disabledNodes =
-    (await getActiveCluster()).config?.features?.DISABLED_NODES?.selectors ||
-    [];
+  const nodesConfig = (await getActiveCluster()).config?.features
+    ?.DISABLED_NODES;
+  let disabledNodes = [];
+  if (nodesConfig?.isEnabled && Array.isArray(nodesConfig.selectors)) {
+    disabledNodes = nodesConfig.selectors;
+  }
 
   const staticNodes = getStaticChildrenNodesForNamespace(
     groupVersions,

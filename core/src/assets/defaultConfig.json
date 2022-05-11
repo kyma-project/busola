@@ -21,6 +21,7 @@
           }
         }
       },
+      "TEST": ["a", "b"],
       "SSO_LOGIN": {
         "isEnabled": false,
         "config": {
@@ -61,9 +62,11 @@
         }
       },
       "DISABLED_NODES": {
+        "isEnabled": true,
         "selectors": []
       },
       "HIDDEN_NAMESPACES": {
+        "isEnabled": true,
         "selectors": [
           "compass-system",
           "istio-system",
