@@ -47,12 +47,15 @@ export const communication = {
     },
     'busola.showHiddenNamespaces': ({ showHiddenNamespaces }) => {
       setFeatureToggle('showHiddenNamespaces', showHiddenNamespaces);
+      Luigi.configChanged();
     },
     'busola.disableResourceProtection': ({ disableResourceProtection }) => {
       setFeatureToggle('disableResourceProtection', disableResourceProtection);
+      Luigi.configChanged();
     },
     'busola.dontConfirmDelete': ({ value }) => {
       setFeatureToggle('dontConfirmDelete', value);
+      Luigi.configChanged();
     },
     'busola.refreshNavigation': () => {
       Luigi.configChanged('navigation.nodes');

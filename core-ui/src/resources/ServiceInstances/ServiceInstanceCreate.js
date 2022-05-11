@@ -3,14 +3,12 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import {
-  Editor,
-  K8sNameField,
-  KeyValueField,
-} from 'shared/ResourceForm/fields';
+import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
+
 import * as Inputs from 'shared/ResourceForm/inputs';
 
 import { createServiceInstanceTemplate } from './helpers.js';
+import { FormTextarea } from 'fundamental-react';
 
 export function ServiceInstanceCreate({
   namespace,
@@ -80,20 +78,23 @@ export function ServiceInstanceCreate({
         input={Inputs.Text}
         placeholder={t('btp-instances.placeholders.external-name')}
       />
-      <ResourceForm.CollapsibleSection
-        advanced
+      <KeyValueField
         title={t('btp-instances.parameters')}
-        resource={serviceInstance}
-        setResource={setServiceInstance}
-      >
-        <Editor
-          propertyPath="$.spec.parameters"
-          language="json"
-          validate={parsed => !!parsed && typeof parsed === 'object'}
-          invalidValueMessage={t('btp-instances.messages.params-invalid')}
-          height="10em"
-        />
-      </ResourceForm.CollapsibleSection>
+        propertyPath="$.spec.parameters"
+        validate={parsed => !!parsed && typeof parsed === 'object'}
+        fullWidth
+        advanced
+        invalidValueMessage={t('btp-instances.messages.params-invalid')}
+        input={({ setValue, ...props }) => (
+          <FormTextarea
+            compact
+            onChange={e => setValue(e.target.value)}
+            className="value-textarea"
+            {...props}
+            onKeyDown={() => {}} // overwrites default onKeyDown that switches focus when Enter is pressed
+          />
+        )}
+      />
     </ResourceForm>
   );
 }

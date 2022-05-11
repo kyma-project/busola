@@ -138,7 +138,10 @@ export function AddClusterWizard({
         >
           {t('clusters.wizard.storage-info')}
         </MessageStrip>
-        <KubeconfigUpload setKubeconfig={updateKubeconfig} />
+        <KubeconfigUpload
+          kubeconfig={kubeconfig}
+          setKubeconfig={updateKubeconfig}
+        />
       </Wizard.Step>
 
       {kubeconfig && (!hasAuth || !hasOneContext) && (
