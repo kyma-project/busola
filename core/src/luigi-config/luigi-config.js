@@ -1,4 +1,5 @@
 import i18next from 'i18next';
+import { createQueue } from 'fetch-queue';
 import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
 import './../assets/libs/luigi-core/luigi.css';
@@ -41,6 +42,11 @@ export const i18n = i18next.use(i18nextBackend).init({
 });
 
 export const NODE_PARAM_PREFIX = `~`;
+
+createQueue('busola-core-queue', {
+  concurrent: 8,
+  retryOn: [],
+});
 
 async function initializeBusola() {
   initTheme();

@@ -52,7 +52,7 @@ export async function failFastFetch(input, auth, init = {}) {
 
   init.headers = await createHeaders(auth, input);
 
-  const response = await fetchQueue(input, init);
+  const response = await fetchQueue(input, init, 'busola-core-queue');
   if (response.ok) {
     return response;
   } else {
