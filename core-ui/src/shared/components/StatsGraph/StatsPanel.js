@@ -7,10 +7,10 @@ import {
   BusyIndicator,
 } from 'fundamental-react';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
+import { useFeature } from 'shared/hooks/useFeature';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { useTranslation } from 'react-i18next';
 
-import { useFeature } from 'shared/hooks/useFeature';
 import { usePrometheus } from 'shared/hooks/usePrometheus';
 import { StatsGraph } from 'shared/components/StatsGraph';
 
@@ -155,47 +155,47 @@ export function SingleMetricMultipeGraph({
   );
 }
 
+const getGraphOptions = type => {
+  switch (type) {
+    case 'pod':
+      return ['cpu', 'memory', 'network'];
+    case 'cluster':
+      return ['cpu', 'memory', 'network', 'nodes'];
+    case 'pvc':
+      return ['pvc-usage'];
+    default:
+      return null;
+  }
+};
+
+const getDualGraphValues = (metric, t) => {
+  switch (metric) {
+    case 'pvc-usage':
+      return {
+        metric1: 'pvc-used-space',
+        metric2: 'pvc-free-space',
+        labels: [t('graphs.free-space'), t('graphs.used-space')],
+        className: 'pvc-usage',
+      };
+    case 'network':
+      return {
+        metric1: 'network-up',
+        metric2: 'network-down',
+        labels: [t('graphs.network-up'), t('graphs.network-down')],
+        className: 'network',
+      };
+    default:
+      console.error(`You need to declare dual graph values for ${metric}!`);
+      return {};
+  }
+};
+
 export function StatsPanel({
   type,
   mode = 'single',
   defaultMetric = 'cpu',
   ...props
 }) {
-  const getGraphOptions = type => {
-    switch (type) {
-      case 'pod':
-        return ['cpu', 'memory', 'network'];
-      case 'cluster':
-        return ['cpu', 'memory', 'network', 'nodes'];
-      case 'pvc':
-        return ['pvc-usage'];
-      default:
-        return null;
-    }
-  };
-
-  const getDualGraphValues = (metric, t) => {
-    switch (metric) {
-      case 'pvc-usage':
-        return {
-          metric1: 'pvc-used-space',
-          metric2: 'pvc-free-space',
-          labels: [t('graphs.free-space'), t('graphs.used-space')],
-          className: 'pvc-usage',
-        };
-      case 'network':
-        return {
-          metric1: 'network-up',
-          metric2: 'network-down',
-          labels: [t('graphs.network-up'), t('graphs.network-down')],
-          className: 'network',
-        };
-      default:
-        console.error(`You need to declare dual graph values for ${metric}!`);
-        return {};
-    }
-  };
-
   const timeSpans = {
     '1h': 60 * 60,
     '3h': 3 * 60 * 60,
@@ -221,7 +221,9 @@ export function StatsPanel({
 
   const prometheus = useFeature('PROMETHEUS');
 
-  if (!prometheus?.isEnabled) return '';
+  if (!prometheus?.isEnabled) {
+    return '';
+  }
 
   const graphOptions = getGraphOptions(type);
   return (
