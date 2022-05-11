@@ -43,7 +43,6 @@ import { setNavFooterText } from '../nav-footer';
 import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/pagination';
 import { getFeatures, initFeatures } from '../feature-discovery';
 import { fetchCache } from '../cache/fetch-cache';
-import { loadCacheItem, saveCacheItem } from './../cache/storage';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -192,13 +191,7 @@ export async function createNavigation() {
     }
 
     await saveCARequired();
-    const clusterName = getActiveClusterName();
-    fetchCache.destroy();
-    fetchCache.init({
-      getCacheItem: path => loadCacheItem(clusterName, path),
-      setCacheItem: (path, item) => saveCacheItem(clusterName, path, item),
-      fetchOptions: { data: authData },
-    });
+    fetchCache.init();
     await loadTargetClusterConfig();
 
     const config = await getCurrentConfig();
@@ -270,7 +263,7 @@ export async function createNavigation() {
     };
   } catch (err) {
     saveActiveClusterName(null);
-    fetchCache.destroy();
+    fetchCache.clear();
     if (err.statusCode === 403) {
       clearAuthData();
       saveLocation(

@@ -86,7 +86,7 @@ export const communication = {
         await reloadAuth();
         clearAuthData();
         saveActiveClusterName(null);
-        fetchCache.destroy();
+        fetchCache.clear();
       }
       await reloadNavigation();
     },

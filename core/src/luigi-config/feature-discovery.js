@@ -145,32 +145,29 @@ export async function updateFeature(featureName) {
   }
 }
 
+// counter (with feature name as a key) for iframe subscribers
 const featureSubscribers = {};
 
 async function updateFeatureSubscribers(featureName) {
   if (rawFeatures[featureName]) {
-    const active = !!featureSubscribers[featureName].length;
-    if (rawFeatures[featureName].active !== active) {
-      rawFeatures[featureName].active = active;
+    const targetActive = !!featureSubscribers[featureName];
+    if (rawFeatures[featureName].active !== targetActive) {
+      rawFeatures[featureName].active = targetActive;
       await updateFeature(featureName);
     }
   }
 }
 
 export const featureCommunicationEntries = {
-  'busola.startRequestFeature': async ({ featureName, requestId }) => {
+  'busola.startRequestFeature': async ({ featureName, Id }) => {
     if (!featureSubscribers[featureName]) {
-      featureSubscribers[featureName] = [];
+      featureSubscribers[featureName] = 0;
     }
-    featureSubscribers[featureName].push(requestId);
-
+    featureSubscribers[featureName]++;
     await updateFeatureSubscribers(featureName);
   },
-  'busola.stopRequestFeature': async ({ featureName, requestId }) => {
-    featureSubscribers[featureName] = featureSubscribers[featureName].filter(
-      id => id !== requestId,
-    );
-
+  'busola.stopRequestFeature': async ({ featureName }) => {
+    featureSubscribers[featureName]--;
     await updateFeatureSubscribers(featureName);
   },
 };

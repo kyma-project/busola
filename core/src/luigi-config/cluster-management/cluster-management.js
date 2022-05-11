@@ -71,7 +71,7 @@ export async function setCluster(clusterName) {
     console.warn(e);
     alert('An error occured while setting up the cluster.');
     saveActiveClusterName(null);
-    fetchCache.destroy();
+    fetchCache.clear();
   }
 }
 

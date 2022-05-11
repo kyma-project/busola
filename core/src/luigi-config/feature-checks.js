@@ -73,7 +73,7 @@ export function service({
         featureConfig,
       );
       if (succeeded) {
-        return { ...featureConfig, serviceUrl };
+        return { ...featureConfig, serviceUrl, isEnabled: true };
       }
     }
     // service is not available, let's ping all the addresses

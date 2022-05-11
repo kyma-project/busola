@@ -1,6 +1,9 @@
-import { fetchQueue } from 'fetch-queue';
+// import { fetchQueue } from 'fetch-queue'; TODO
 import { config } from './../config';
-import { getActiveCluster } from './../cluster-management/cluster-management';
+import {
+  getActiveCluster,
+  getActiveClusterName,
+} from './../cluster-management/cluster-management';
 import { getSSOAuthData } from '../auth/sso';
 import { fetchCache } from '../cache/fetch-cache';
 import { extractGroupVersions } from '../utils/extractGroupVersions';
@@ -51,9 +54,14 @@ export async function failFastFetch(input, auth, init = {}) {
     };
   }
 
+  const activeClusterName = getActiveClusterName();
+  if (!activeClusterName) {
+    throw Error(`failFastFetch: no connected cluster (${input})`);
+  }
+
   init.headers = await createHeaders(auth, input);
 
-  return await fetchQueue(input, init);
+  return await fetch(input, init);
 }
 
 export async function checkIfClusterRequiresCA(auth) {
