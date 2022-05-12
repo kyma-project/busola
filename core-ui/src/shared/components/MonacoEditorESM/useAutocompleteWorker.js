@@ -35,7 +35,7 @@ window.MonacoEnvironment = {
     }
   },
 };
-// initiate a web worker that will prepare the templates, to keep the main thread free
+// initiate a web worker that will prepare the templates, to keep the main thread free.
 let schemasWorker = null;
 if (typeof Worker !== 'undefined') {
   schemasWorker = new Worker(
