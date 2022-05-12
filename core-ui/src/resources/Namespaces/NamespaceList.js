@@ -1,17 +1,16 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { NamespaceStatus } from './NamespaceStatus';
-import LuigiClient from '@luigi-project/client';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { getFeatureToggle } from 'shared/hooks/useFeatureToggle';
-import { useTranslation } from 'react-i18next';
+import { getHiddenNamespaces } from 'shared/helpers/getHiddenNamespaces';
 import { Link } from 'shared/components/Link/Link';
 import { Trans } from 'react-i18next';
 import { NamespaceCreate } from './NamespaceCreate';
 
 const FilterNamespaces = namespace => {
   const showHiddenNamespaces = getFeatureToggle('showHiddenNamespaces');
-  const hiddenNamespaces =
-    LuigiClient.getContext().features.HIDDEN_NAMESPACES?.selectors || [];
+  const hiddenNamespaces = getHiddenNamespaces();
 
   return showHiddenNamespaces
     ? true

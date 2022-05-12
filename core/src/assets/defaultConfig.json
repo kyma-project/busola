@@ -67,7 +67,7 @@
       },
       "HIDDEN_NAMESPACES": {
         "isEnabled": true,
-        "selectors": [
+        "config": [
           "compass-system",
           "istio-system",
           "knative-eventing",

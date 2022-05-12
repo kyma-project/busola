@@ -2,12 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ComboboxInput } from 'fundamental-react';
 import classnames from 'classnames';
-import LuigiClient from '@luigi-project/client';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { getFeatureToggle } from 'shared/hooks/useFeatureToggle';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-
+import { getHiddenNamespaces } from 'shared/helpers/getHiddenNamespaces';
 import { ResourceForm } from 'shared/ResourceForm';
 
 import './ExternalResourceRef.scss';
@@ -36,8 +35,7 @@ export function ExternalResourceRef({
   );
 
   const showHiddenNamespaces = getFeatureToggle('showHiddenNamespaces');
-  const hiddenNamespaces =
-    LuigiClient.getContext().features.HIDDEN_NAMESPACES?.selectors || [];
+  const hiddenNamespaces = getHiddenNamespaces();
 
   const namespacesOptions = (namespaces || [])
     .filter(ns =>

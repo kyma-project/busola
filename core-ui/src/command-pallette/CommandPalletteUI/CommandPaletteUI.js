@@ -32,7 +32,7 @@ function Background({ hide, children }) {
 
 export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
-
+  console.log(useMicrofrontendContext());
   const [query, setQuery] = useState('');
   const [originalQuery, setOriginalQuery] = useState('');
   const [namespaceContext, setNamespaceContext] = useState(namespace);

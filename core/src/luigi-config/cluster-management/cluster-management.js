@@ -131,7 +131,6 @@ export async function getActiveCluster() {
 
   clusters[clusterName] = await mergeParams(clusters[clusterName]);
 
-  console.log(111, clusters[clusterName]);
   return clusters[clusterName];
 }
 

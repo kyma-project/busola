@@ -9,17 +9,17 @@ import { Modal } from 'shared/components/Modal/Modal';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import './CreateBindingModal.scss';
+import { getHiddenNamespaces } from 'shared/helpers/getHiddenNamespaces';
 import { BindableServicesList } from '../BindableServicesList';
 import { createApplicationBinding } from './createApplicationBinding';
 import { useTranslation } from 'react-i18next';
+import './CreateBindingModal.scss';
 
 export default function CreateBinding({ application, alreadyBoundNamespaces }) {
   const { t, i18n } = useTranslation();
 
-  const hiddenNamespaces =
-    useMicrofrontendContext().features?.HIDDEN_NAMESPACES?.selectors || [];
+  const hiddenNamespaces = getHiddenNamespaces();
+
   const [servicesToBind, setServicesToBind] = React.useState([]);
   const [namespaceName, setNamespaceName] = React.useState('');
   const notification = useNotification();

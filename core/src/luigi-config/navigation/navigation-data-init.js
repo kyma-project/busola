@@ -351,9 +351,9 @@ export async function createNavigationNodes(
   let disabledNodes = [];
   if (
     activeCluster.config?.features?.DISABLED_NODES?.isEnabled &&
-    Array.isArray(activeCluster.config?.features?.DISABLED_NODES?.selectors)
+    Array.isArray(activeCluster.config?.features?.DISABLED_NODES?.config)
   ) {
-    disabledNodes = activeCluster.config?.features?.DISABLED_NODES?.selectors;
+    disabledNodes = activeCluster.config?.features?.DISABLED_NODES?.config;
   }
 
   const createClusterNodes = async () => {
@@ -445,8 +445,15 @@ async function getNamespaces() {
     return createNamespacesList([{ name: namespace }]);
   }
 
+  const hiddenNamespacesConfig =
+    activeCluster?.config.features?.HIDDEN_NAMESPACES;
+
   const hiddenNamespaces =
-    activeCluster?.config.features?.HIDDEN_NAMESPACES?.selectors || [];
+    hiddenNamespacesConfig?.isEnabled &&
+    Array.isArray(hiddenNamespacesConfig?.config)
+      ? hiddenNamespacesConfig.config
+      : [];
+
   try {
     let namespaces = await fetchNamespaces(getAuthData());
     if (!getFeatureToggle('showHiddenNamespaces')) {
