@@ -3,7 +3,7 @@ import { updateFeature } from './feature-discovery';
 import { getAuthData } from './auth/auth-storage';
 import { extractGroupVersions } from './utils/extractGroupVersions';
 
-export function apiGroup(group, refreshIntervalMs = 60000) {
+export function apiGroup(group, refreshIntervalMs = 60_000) {
   const containsGroup = groupVersions =>
     groupVersions?.find(g => g.includes(group));
 
@@ -39,6 +39,7 @@ export function service({
       const { unsubscribe } = await fetchCache.subscribe({
         path: urlMutator(url),
         callback: () => updateFeature(featureName, featureConfig),
+        refreshIntervalMs,
       });
       featureConfig.cleanups.push(unsubscribe);
     }

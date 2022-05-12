@@ -20,5 +20,6 @@ export async function loadTargetClusterConfig() {
   await fetchCache.subscribe({
     path: CONFIGMAP_URL,
     callback: reloadNavigation,
+    refreshIntervalMs: 60_000,
   });
 }

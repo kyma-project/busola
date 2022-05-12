@@ -51,7 +51,7 @@ export const DEFAULT_FEATURES = {
           );
         },
         urlMutator: url => `${url}/status/runtimeinfo`,
-        refreshIntervalMs: 60000,
+        refreshIntervalMs: 60_000,
       }),
     ],
     namespaces: ['kyma-system'],
