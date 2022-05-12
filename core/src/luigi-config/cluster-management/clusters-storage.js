@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 import { getBusolaClusterParams } from '../busola-cluster-params';
 import { showAlert } from '../utils/showAlert';
+import { getTargetClusterConfig } from '../utils/target-cluster-config';
 import {
   getActiveCluster,
   getActiveClusterName,
@@ -27,6 +28,7 @@ export async function save(clusters) {
   const localStorageClusters = {};
   const sessionStorageClusters = {};
   for (const [clusterName, cluster] of Object.entries(clusters)) {
+    console.log(clusterName, cluster, cluster?.config?.storage);
     switch (cluster?.config?.storage || defaultStorage) {
       case 'localStorage':
         localStorageClusters[clusterName] = cluster;
@@ -54,7 +56,9 @@ export async function save(clusters) {
 }
 
 export async function checkClusterStorageType(originalStorage) {
-  const targetStorage = (await getCurrentConfig()).storage;
+  console.log('target cluster config', getTargetClusterConfig());
+  const targetStorage = getTargetClusterConfig().config?.storage;
+  console.log('target', targetStorage, 'org', originalStorage);
   if (!!targetStorage && targetStorage !== originalStorage) {
     // move the cluster to the valid storage
     const clusters = load();

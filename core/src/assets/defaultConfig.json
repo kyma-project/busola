@@ -1,6 +1,6 @@
 {
   "config": {
-    "defaultStorage": "sessionStorage",
+    "defaultStorage": "localStorage",
     "features": {
       "LEGAL_LINKS": {
         "config": {
