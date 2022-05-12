@@ -102,6 +102,7 @@ export async function resolveSecondaryFeatures() {
 }
 
 export async function updateFeature(featureName) {
+  console.log('UPDATE FEATURE', featureName);
   const updateFeaturesContext = async () => {
     configChanged({
       valuePath: '$.context.features',
