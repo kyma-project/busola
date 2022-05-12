@@ -140,7 +140,6 @@ export async function getCurrentConfig() {
     navigation: { disabledNodes: [] },
     hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
     features: DEFAULT_FEATURES,
-    storage: await clusterStorage.getDefaultStorage(),
   };
 
   const busolaClusterParams = await getBusolaClusterParams();
