@@ -21,7 +21,6 @@ async function loadBusolaClusterCRs() {
 async function loadTargetClusterCRs(authData) {
   const labelSelectors = `busola.custom=resource`;
 
-  // try {
   const response = await failFastFetch(
     config.backendAddress +
       `/api/v1/namespaces/kube-public/configmaps?labelSelector=${labelSelectors}`,
@@ -34,7 +33,6 @@ async function loadTargetClusterCRs(authData) {
       Object.entries(item.data)
         .map(([k, v]) => {
           try {
-            console.log('[k, JSON.parse(v)]', [k, JSON.parse(v)]);
             return [k, JSON.parse(v)];
           } catch (e) {
             console.warn('cannot parse ', k, v);
@@ -53,6 +51,5 @@ export async function getCustomResources(authData) {
     ...(await loadBusolaClusterCRs()),
     ...(await loadTargetClusterCRs(authData)),
   });
-  console.log('customResources', customResources);
   return customResources;
 }
