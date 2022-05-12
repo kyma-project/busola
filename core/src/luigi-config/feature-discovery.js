@@ -126,7 +126,6 @@ export async function updateFeature(featureName) {
         groupVersions,
         permissionSet,
       );
-      Luigi.setConfig(cfg);
       Luigi.configChanged('navigation.nodes');
     } catch (e) {
       console.warn('reloadNodes failed', e);

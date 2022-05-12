@@ -120,10 +120,15 @@ export function getActiveCluster() {
 
 let currentClusterName = null;
 export function getActiveClusterName() {
+  // console.log(
+  //   'GET',
+  //   localStorage.getItem(CURRENT_CLUSTER_NAME_KEY) || currentClusterName,
+  // );
   return localStorage.getItem(CURRENT_CLUSTER_NAME_KEY) || currentClusterName;
 }
 
 export function saveActiveClusterName(clusterName) {
+  // console.log('SET', clusterName);
   if (clusterName) {
     localStorage.setItem(CURRENT_CLUSTER_NAME_KEY, clusterName);
     currentClusterName = clusterName;
