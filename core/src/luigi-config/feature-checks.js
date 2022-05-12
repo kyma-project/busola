@@ -3,7 +3,7 @@ import { updateFeature } from './feature-discovery';
 import { getAuthData } from './auth/auth-storage';
 import { extractGroupVersions } from './utils/extractGroupVersions';
 
-export function apiGroup(group, refreshIntervalMs = 60_000) {
+export function apiGroup(group, refreshIntervalMs = 5 * 60 * 1000) {
   const containsGroup = groupVersions =>
     groupVersions?.find(g => g.includes(group));
 
@@ -32,7 +32,7 @@ export function service({
   urlsGenerator,
   validator = async res => res?.status < 400,
   urlMutator,
-  refreshIntervalMs,
+  refreshIntervalMs = 5 * 60 * 1000,
 }) {
   const subscribeToAllUrls = async (urls, featureName, featureConfig) => {
     for (const url of urls) {
