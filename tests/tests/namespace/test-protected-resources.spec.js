@@ -146,7 +146,15 @@ context('Test Protected Resources', () => {
       .find('.fd-switch')
       .click();
 
-    cy.get('[aria-label="close"]').click();
+    // for some reason "Namespaces" node gets detached from DOM
+
+    cy.reload();
+
+    cy.getLeftNav()
+      .contains('Namespaces')
+      .click();
+
+    cy.goToNamespaceDetails();
   });
 
   it("Don't protect a resource", () => {
