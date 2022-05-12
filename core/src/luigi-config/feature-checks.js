@@ -3,7 +3,7 @@ import { updateFeature } from './feature-discovery';
 import { getAuthData } from './auth/auth-storage';
 import { extractGroupVersions } from './utils/extractGroupVersions';
 
-export function apiGroup(group, refreshIntervalMs = 10000) {
+export function apiGroup(group, refreshIntervalMs = 60000) {
   const containsGroup = groupVersions =>
     groupVersions?.find(g => g.includes(group));
 
