@@ -2065,7 +2065,47 @@
                  "message"
               ],
               "valuePath":"$.status.conditions"
-           }
+           },
+           {
+            "type": "detailPanel",
+            "title":{
+              "en":  "Containers"
+            },
+            "properties":[
+              {
+                "header": "Name",
+                "valuePath": "$.spec.template.spec.containers[0].name"
+              },              {
+                "header": "Image",
+                "valuePath": "$.spec.template.spec.containers[0].image"
+              },
+              { 
+                "header": "Command",
+                "valuePath": "$.spec.template.spec.containers[0].command"
+              },
+              {
+                "header": "Resources",
+                "valuePath": "$.spec.template.spec.containers[0].resources"
+              }
+            ]
+         },
+         {
+          "type":"listPanel",
+          "title":"My Containers",
+          "headers":[
+            "name",
+            "image",
+            "command",
+            "resources"
+          ],
+          "columns":[
+             "name",
+             "image",
+             "command",
+             "resources"
+          ],
+          "valuePath":"$.spec.template.spec.containers"
+       }
         ]
      },
      "create":{

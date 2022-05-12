@@ -12,20 +12,20 @@ export const ExtensibilityDetails = () => {
     resMetaData.navigation.path,
     resMetaData.navigation.label,
   );
-
+  console.log(detailsProps);
   if (resMetaData.navigation.resource.kind) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
       resMetaData.navigation.path,
       resMetaData.navigation.resource.kind.toLowerCase(),
     );
   }
-
+  console.log(detailsProps);
   const customColumns = [];
   const [customComponents, setCustomComponents] = useState([]);
 
   useEffect(() => {
     const { components } = resMetaData.details;
-
+    console.log(components);
     const parse = components =>
       components.map(c => {
         switch (c.type) {
