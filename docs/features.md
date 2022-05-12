@@ -116,7 +116,8 @@ The document lists and describes all the feature flags that are available in Kym
 
   ```bash
   "DISABLED_NODES": {
-    "selectors": []
+    "isEnabled": true,
+    "config": []
   }
   ```
 
@@ -181,22 +182,23 @@ The document lists and describes all the feature flags that are available in Kym
 
   ```bash
   "HIDDEN_NAMESPACES": {
-        "selectors": [
-          "compass-system",
-          "istio-system",
-          "knative-eventing",
-          "knative-serving",
-          "kube-public",
-          "kube-system",
-          "kyma-backup",
-          "kyma-installer",
-          "kyma-integration",
-          "kyma-system",
-          "natss",
-          "kube-node-lease",
-          "serverless-system"
-        ]
-      }
+    "isEnabled": true,
+    "config": [
+      "compass-system",
+      "istio-system",
+      "knative-eventing",
+      "knative-serving",
+      "kube-public",
+      "kube-system",
+      "kyma-backup",
+      "kyma-installer",
+      "kyma-integration",
+      "kyma-system",
+      "natss",
+      "kube-node-lease",
+      "serverless-system"
+    ]
+  }
   ```
 
 * **GZIP** – is used to indicate whether the response from the backend server should be compressed or not.

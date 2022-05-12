@@ -7,7 +7,7 @@ const configMock = {
       config: {
         features: {
           DISABLED_NODES: {
-            selectors: [],
+            config: [],
             isEnabled: true,
           },
           EXTERNAL_NODES: {

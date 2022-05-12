@@ -477,8 +477,8 @@ async function getChildrenNodesForNamespace(
   const nodesConfig = (await getActiveCluster()).config?.features
     ?.DISABLED_NODES;
   let disabledNodes = [];
-  if (nodesConfig?.isEnabled && Array.isArray(nodesConfig.selectors)) {
-    disabledNodes = nodesConfig.selectors;
+  if (nodesConfig?.isEnabled && Array.isArray(nodesConfig.config)) {
+    disabledNodes = nodesConfig.config;
   }
 
   const staticNodes = getStaticChildrenNodesForNamespace(
