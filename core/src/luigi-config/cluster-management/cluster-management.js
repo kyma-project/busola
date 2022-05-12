@@ -5,7 +5,10 @@ import { saveLocation } from '../navigation/previous-location';
 import { createLoginCommand, parseOIDCParams } from '../auth/oidc-params';
 import { DEFAULT_HIDDEN_NAMESPACES, DEFAULT_FEATURES } from '../constants';
 import { getBusolaClusterParams } from '../busola-cluster-params';
-import { getTargetClusterConfig } from '../utils/target-cluster-config';
+import {
+  getTargetClusterConfig,
+  loadTargetClusterConfig,
+} from '../utils/target-cluster-config';
 import { checkIfClusterRequiresCA } from '../navigation/queries';
 import * as clusterStorage from './clusters-storage';
 import { fetchCache } from '../cache/fetch-cache';
@@ -47,6 +50,7 @@ export async function setCluster(clusterName) {
   const originalStorage = clusters[clusterName].config.storage;
 
   saveActiveClusterName(clusterName);
+  fetchCache.init(clusterName);
   try {
     await reloadAuth();
 
@@ -61,6 +65,7 @@ export async function setCluster(clusterName) {
       setAuthData(kubeconfigUser);
       Luigi.navigation().navigate(targetLocation);
       await saveCARequired();
+      await loadTargetClusterConfig();
       await clusterStorage.checkClusterStorageType(originalStorage);
       await reloadNavigation();
       setTimeout(() => Luigi.navigation().navigate(targetLocation));
@@ -120,15 +125,10 @@ export function getActiveCluster() {
 
 let currentClusterName = null;
 export function getActiveClusterName() {
-  // console.log(
-  //   'GET',
-  //   localStorage.getItem(CURRENT_CLUSTER_NAME_KEY) || currentClusterName,
-  // );
   return localStorage.getItem(CURRENT_CLUSTER_NAME_KEY) || currentClusterName;
 }
 
 export function saveActiveClusterName(clusterName) {
-  // console.log('SET', clusterName);
   if (clusterName) {
     localStorage.setItem(CURRENT_CLUSTER_NAME_KEY, clusterName);
     currentClusterName = clusterName;
