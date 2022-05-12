@@ -13,10 +13,10 @@ export const ExtensibilityDetails = () => {
     resMetaData.navigation.label,
   );
 
-  if (resMetaData.navigation.resource.kind) {
+  if (resMetaData.resource.kind) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
       resMetaData.navigation.path,
-      resMetaData.navigation.resource.kind.toLowerCase(),
+      resMetaData.resource.kind.toLowerCase(),
     );
   }
 

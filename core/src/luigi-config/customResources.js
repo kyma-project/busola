@@ -19,7 +19,7 @@ async function loadBusolaClusterCRs() {
 }
 
 async function loadTargetClusterCRs(authData) {
-  const labelSelectors = `busola.custom=resource`;
+  const labelSelectors = `busola.io/extension=resource`;
 
   const response = await failFastFetch(
     config.backendAddress +
@@ -51,5 +51,7 @@ export async function getCustomResources(authData) {
     ...(await loadBusolaClusterCRs()),
     ...(await loadTargetClusterCRs(authData)),
   });
+  console.log('customResources', customResources);
+
   return customResources;
 }
