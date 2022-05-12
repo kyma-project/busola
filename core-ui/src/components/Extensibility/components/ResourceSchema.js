@@ -10,6 +10,7 @@ import {
   storeUpdater,
 } from '@ui-schema/ui-schema';
 import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
+import { relTranslator } from '@ui-schema/ui-schema/Translate/relT';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { KeyValueField } from 'shared/ResourceForm/fields';
@@ -103,7 +104,7 @@ export const ResourceSchema = ({ resource, setResource, schema }) => {
   const schemaMap = createOrderedMap(schema);
 
   return (
-    <UIMetaProvider widgets={formWidgets}>
+    <UIMetaProvider widgets={formWidgets} t={relTranslator}>
       <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
         <FormStack isRoot schema={schemaMap} />
       </UIStoreProvider>

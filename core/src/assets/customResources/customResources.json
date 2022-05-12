@@ -2074,6 +2074,229 @@
         }
      }
   },
+  "apirules": {
+     "navigation":{
+        "path":"apirules-custom",
+        "label":"apirules-custom",
+        "scope":"namespace",
+        "resource":{
+           "kind":"APIRules",
+           "group":"gateway.kyma-project.io",
+           "version":"v1alpha1"
+        },
+        "hasDetailsView":true
+     },
+     "list":{
+        "title":"api rules",
+        "description":{
+           "id":"Blabla"
+        },
+        "columns":[
+        ]
+     },
+     "details":{
+        "components":[
+        ]
+     },
+     "create": {
+        "name_singular":"API Rules",
+    "simple": {
+      "schema": {
+    "description": "APIRule is the Schema for the apis ApiRule",
+    "type": "object",
+    "properties": {
+      "apiVersion": {
+        "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+        "type": "string"
+      },
+      "kind": {
+        "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+        "type": "string"
+      },
+      "metadata": {
+        "type": "object"
+      },
+      "spec": {
+        "description": "APIRuleSpec defines the desired state of ApiRule",
+        "type": "object",
+        "required": [
+          "gateway",
+          "rules",
+          "service"
+        ],
+        "properties": {
+          "gateway": {
+            "description": "Gateway to be used",
+            "type": "string",
+            "pattern": "^[0-9a-z-_]+(\\/[0-9a-z-_]+|(\\.[0-9a-z-_]+)*)$"
+          },
+          "rules": {
+            "description": "Rules represents collection of Rule to apply",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "description": "Rule .",
+              "type": "object",
+              "required": [
+                "accessStrategies",
+                "methods",
+                "path"
+              ],
+              "properties": {
+                "accessStrategies": {
+                  "description": "Set of access strategies for a single path",
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "description": "Authenticator represents a handler that authenticates provided credentials.",
+                    "type": "object",
+                    "required": [
+                      "handler"
+                    ],
+                    "properties": {
+                      "config": {
+                        "description": "Config configures the handler. Configuration keys vary per handler.",
+                        "type": "object",
+                        "x-kubernetes-preserve-unknown-fields": true
+                      },
+                      "handler": {
+                        "description": "Name is the name of a handler",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "methods": {
+                  "description": "Set of allowed HTTP methods",
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "mutators": {
+                  "description": "Mutators to be used",
+                  "type": "array",
+                  "items": {
+                    "description": "Mutator represents a handler that transforms the HTTP request before forwarding it.",
+                    "type": "object",
+                    "required": [
+                      "handler"
+                    ],
+                    "properties": {
+                      "config": {
+                        "description": "Config configures the handler. Configuration keys vary per handler.",
+                        "type": "object",
+                        "x-kubernetes-preserve-unknown-fields": true
+                      },
+                      "handler": {
+                        "description": "Name is the name of a handler",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "path": {
+                  "description": "Path to be exposed",
+                  "type": "string",
+                  "pattern": "^([0-9a-zA-Z./*()?!\\\\_-]+)"
+                }
+              }
+            }
+          },
+          "service": {
+            "description": "Definition of the service to expose",
+            "type": "object",
+            "required": [
+              "host",
+              "name",
+              "port"
+            ],
+            "properties": {
+              "external": {
+                "description": "Defines if the service is internal (in cluster) or external",
+                "type": "boolean"
+              },
+              "host": {
+                "description": "URL on which the service will be visible",
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 3,
+                "pattern": "^([a-zA-Z0-9][a-zA-Z0-9-_]*\\.)*[a-zA-Z0-9]*[a-zA-Z0-9-_]*[[a-zA-Z0-9]+$"
+              },
+              "name": {
+                "description": "Name of the service",
+                "type": "string"
+              },
+              "port": {
+                "description": "Port of the service to expose",
+                "type": "integer",
+                "format": "int32",
+                "maximum": 65535,
+                "minimum": 1
+              }
+            }
+          }
+        }
+      },
+      "status": {
+        "description": "APIRuleStatus defines the observed state of ApiRule",
+        "type": "object",
+        "properties": {
+          "APIRuleStatus": {
+            "description": "APIRuleResourceStatus .",
+            "type": "object",
+            "properties": {
+              "code": {
+                "description": "StatusCode .",
+                "type": "string"
+              },
+              "desc": {
+                "type": "string"
+              }
+            }
+          },
+          "accessRuleStatus": {
+            "description": "APIRuleResourceStatus .",
+            "type": "object",
+            "properties": {
+              "code": {
+                "description": "StatusCode .",
+                "type": "string"
+              },
+              "desc": {
+                "type": "string"
+              }
+            }
+          },
+          "lastProcessedTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "observedGeneration": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "virtualServiceStatus": {
+            "description": "APIRuleResourceStatus .",
+            "type": "object",
+            "properties": {
+              "code": {
+                "description": "StatusCode .",
+                "type": "string"
+              },
+              "desc": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+    }
+}
+  },
   "envoyfilters":{
      "navigation":{
         "path":"envoyfilters",

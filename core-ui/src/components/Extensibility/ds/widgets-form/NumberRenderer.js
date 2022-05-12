@@ -5,7 +5,7 @@ import { TransTitle } from '@ui-schema/ui-schema/Translate/TransTitle';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
-export function StringRenderer({
+export function NumberRenderer({
   onChange,
   onKeyDown,
   value,
@@ -28,7 +28,7 @@ export function StringRenderer({
         });
       }}
       label={<TransTitle schema={schema} storeKeys={storeKeys} />}
-      input={Inputs.Text}
+      input={Inputs.Number}
     />
   );
 }

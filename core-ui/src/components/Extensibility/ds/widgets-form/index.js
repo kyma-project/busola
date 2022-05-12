@@ -13,6 +13,8 @@ import { ValidityReporter } from '@ui-schema/ui-schema/ValidityReporter';
 import { validators } from '@ui-schema/ui-schema/Validators/validators';
 
 import { StringRenderer } from './StringRenderer';
+import { NumberRenderer } from './NumberRenderer';
+import { SwitchRenderer } from './SwitchRenderer';
 
 const pluginStack = [
   ReferencingHandler,
@@ -34,9 +36,9 @@ export const widgets = {
   pluginSimpleStack: validators,
   types: {
     string: StringRenderer,
-    boolean: ({ children }) => <span>TODO: boolean</span>,
-    number: StringRenderer,
-    integer: StringRenderer,
+    boolean: SwitchRenderer,
+    number: NumberRenderer,
+    integer: NumberRenderer,
     array: ({ children }) => <>TODO: array</>,
   },
   custom: {
