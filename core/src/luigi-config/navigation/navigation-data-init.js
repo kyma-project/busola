@@ -86,6 +86,16 @@ export async function reloadNavigation() {
   }, 100);
 }
 
+const getDisabledNodes = activeCluster => {
+  const isValidConfig =
+    activeCluster.config?.features?.DISABLED_NODES?.isEnabled &&
+    Array.isArray(activeCluster.config?.features?.DISABLED_NODES?.config);
+
+  return isValidConfig
+    ? activeCluster.config?.features?.DISABLED_NODES?.config
+    : [];
+};
+
 async function createClusterManagementNodes(features) {
   const activeClusterName = getActiveClusterName();
 
@@ -348,13 +358,7 @@ export async function createNavigationNodes(
     activeCluster.kubeconfig['current-context'],
   );
 
-  let disabledNodes = [];
-  if (
-    activeCluster.config?.features?.DISABLED_NODES?.isEnabled &&
-    Array.isArray(activeCluster.config?.features?.DISABLED_NODES?.config)
-  ) {
-    disabledNodes = activeCluster.config?.features?.DISABLED_NODES?.config;
-  }
+  const disabledNodes = getDisabledNodes(activeCluster);
 
   const createClusterNodes = async () => {
     const staticNodes = getStaticRootNodes(
@@ -474,12 +478,9 @@ async function getChildrenNodesForNamespace(
   permissionSet,
   features,
 ) {
-  const nodesConfig = (await getActiveCluster()).config?.features
-    ?.DISABLED_NODES;
-  let disabledNodes = [];
-  if (nodesConfig?.isEnabled && Array.isArray(nodesConfig.config)) {
-    disabledNodes = nodesConfig.config;
-  }
+  const activeCluster = await getActiveCluster();
+
+  const disabledNodes = getDisabledNodes(activeCluster);
 
   const staticNodes = getStaticChildrenNodesForNamespace(
     groupVersions,

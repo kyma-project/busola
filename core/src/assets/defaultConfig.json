@@ -21,7 +21,6 @@
           }
         }
       },
-      "TEST": ["a", "b"],
       "SSO_LOGIN": {
         "isEnabled": false,
         "config": {
@@ -63,7 +62,7 @@
       },
       "DISABLED_NODES": {
         "isEnabled": true,
-        "selectors": []
+        "config": []
       },
       "HIDDEN_NAMESPACES": {
         "isEnabled": true,

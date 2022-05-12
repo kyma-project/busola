@@ -130,7 +130,6 @@ export async function getActiveCluster() {
   );
 
   clusters[clusterName] = await mergeParams(clusters[clusterName]);
-
   return clusters[clusterName];
 }
 
