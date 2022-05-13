@@ -27,21 +27,15 @@ const getPrometheusPVCFreeSpaceQuery = ({ namespace, name }) => {
   return `sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${namespace}", persistentvolumeclaim="${name}"})))`;
 };
 
-const getPrometheusCPUQuery = (
-  type,
-  mode,
-  data,
-  step,
-  cpuQuery = 'sum_irate',
-) => {
+const getPrometheusCPUQuery = (type, mode, data, step) => {
   if (type === 'cluster') {
     return `count(node_cpu_seconds_total{mode="idle"}) - sum(rate(node_cpu_seconds_total{mode="idle"}[${step}s]))`;
   } else if (type === 'pod' && mode === 'multiple') {
-    return `sum by(container)(node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
+    return `sum by(container)(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{${getPrometheusSelector(
       data,
     )}, container != "POD"})`;
   } else if (type === 'pod' && mode === 'single') {
-    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
+    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{${getPrometheusSelector(
       data,
     )}})`;
   } else {
@@ -93,10 +87,10 @@ const getPrometheusNodesQuery = () => {
   return `sum(kubelet_node_name)`;
 };
 
-export function getMetric(type, mode, metric, cpuQuery, { step, ...data }) {
+export function getMetric(type, mode, metric, { step, ...data }) {
   const metrics = {
     cpu: {
-      prometheusQuery: getPrometheusCPUQuery(type, mode, data, step, cpuQuery),
+      prometheusQuery: getPrometheusCPUQuery(type, mode, data, step),
       unit: '',
     },
     memory: {
@@ -145,12 +139,9 @@ export function usePrometheus(
     'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
   const kyma2_1path =
     'api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1';
-  const cpu2_0_partial_query = 'sum_rate';
-  const cpu2_1_partial_query = 'sum_irate';
   const [path, setPath] = useState(kyma2_1path);
-  const [cpuQuery, setCpuQuery] = useState(cpu2_1_partial_query);
 
-  const metric = getMetric(type, mode, metricId, cpuQuery, { step, ...props });
+  const metric = getMetric(type, mode, metricId, { step, ...props });
 
   useEffect(() => {
     const tick = () => {
@@ -183,14 +174,12 @@ export function usePrometheus(
           id: 'busola.setPrometheusPath',
           path: kyma2_1path,
         });
-        setCpuQuery(cpu2_1_partial_query);
         setPath(kyma2_1path);
       } else if (path === kyma2_1path) {
         LuigiClient.sendCustomMessage({
           id: 'busola.setPrometheusPath',
           path: kyma2_0path,
         });
-        setCpuQuery(cpu2_0_partial_query);
         setPath(kyma2_0path);
       }
     }
