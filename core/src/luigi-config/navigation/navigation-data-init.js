@@ -456,8 +456,8 @@ async function getNamespaces() {
 
   const hiddenNamespaces =
     hiddenNamespacesConfig?.isEnabled &&
-    Array.isArray(hiddenNamespacesConfig?.config)
-      ? hiddenNamespacesConfig.config
+    Array.isArray(hiddenNamespacesConfig?.config?.namespaces)
+      ? hiddenNamespacesConfig.config.namespaces
       : [];
 
   try {

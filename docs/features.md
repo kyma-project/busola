@@ -185,21 +185,23 @@ The document lists and describes all the feature flags that are available in Kym
   ```bash
   "HIDDEN_NAMESPACES": {
     "isEnabled": true,
-    "config": [
-      "compass-system",
-      "istio-system",
-      "knative-eventing",
-      "knative-serving",
-      "kube-public",
-      "kube-system",
-      "kyma-backup",
-      "kyma-installer",
-      "kyma-integration",
-      "kyma-system",
-      "natss",
-      "kube-node-lease",
-      "serverless-system"
-    ]
+    "config": {
+      "namespaces": [
+        "compass-system",
+        "istio-system",
+        "knative-eventing",
+        "knative-serving",
+        "kube-public",
+        "kube-system",
+        "kyma-backup",
+        "kyma-installer",
+        "kyma-integration",
+        "kyma-system",
+        "natss",
+        "kube-node-lease",
+        "serverless-system"
+      ]
+    }
   }
   ```
 
