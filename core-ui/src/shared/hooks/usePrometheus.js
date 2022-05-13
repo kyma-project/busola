@@ -136,9 +136,10 @@ export function usePrometheus(
   metricId,
   { items, timeSpan, ...props },
 ) {
+  const step = timeSpan / items;
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [step, setStep] = useState(timeSpan / items);
+  const [query, setQuery] = useState(null);
 
   const kyma2_0path =
     'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
@@ -151,30 +152,29 @@ export function usePrometheus(
 
   const metric = getMetric(type, mode, metricId, cpuQuery, { step, ...props });
 
-  const tick = () => {
-    const newEndDate = new Date();
-    const newStartDate = new Date();
-
-    newEndDate.setTime(Date.now());
-    newStartDate.setTime(newEndDate.getTime() - (timeSpan - 1) * 1000);
-    setEndDate(newEndDate);
-    setStartDate(newStartDate);
-
-    setStep(timeSpan / items);
-  };
-
   useEffect(() => {
-    tick();
-    const loop = setInterval(tick, step * 1000);
-    return () => clearInterval(loop);
-  }, [metricId, timeSpan]); // eslint-disable-line react-hooks/exhaustive-deps
+    const tick = () => {
+      const newEndDate = new Date();
+      const newStartDate = new Date();
 
-  const query =
-    `query_range?` +
-    `start=${startDate.toISOString()}&` +
-    `end=${endDate.toISOString()}&` +
-    `step=${step}&` +
-    `query=${metric.prometheusQuery}`;
+      newEndDate.setTime(Date.now());
+      newStartDate.setTime(newEndDate.getTime() - (timeSpan - 1) * 1000);
+      setEndDate(newEndDate);
+      setStartDate(newStartDate);
+
+      setQuery(
+        `query_range?` +
+          `start=${newStartDate.toISOString()}&` +
+          `end=${newEndDate.toISOString()}&` +
+          `step=${timeSpan / items}&` +
+          `query=${metric.prometheusQuery}`,
+      );
+    };
+
+    tick();
+    const loop = setInterval(tick, (timeSpan / items) * 1000);
+    return () => clearInterval(loop);
+  }, [timeSpan, items, metric.prometheusQuery]);
 
   const onDataReceived = data => {
     if (data?.error && data?.error?.statusCode === 'Failure') {
@@ -195,9 +195,11 @@ export function usePrometheus(
       }
     }
   };
+
   let { data, error, loading } = useGet(`/${path}/${query}`, {
     pollingInterval: 0,
     onDataReceived: data => onDataReceived(data),
+    skip: !query,
   });
 
   if (data) {
