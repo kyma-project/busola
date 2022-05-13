@@ -41,10 +41,10 @@ export const widgets = {
 
       return <>TODO: array</>;
     },
-    object: props => {
-      console.log(props);
-      return <>Siemaneczko</>;
-    },
+    // object: props => {
+    //   console.log(props);
+    //   return <>Siemaneczko</>;
+    // },
     // object: ({ children }) => TableDataRenderer({ children }),
     // array: GenericListRenderer,
   },
@@ -52,6 +52,10 @@ export const widgets = {
     /*
     Accordions: AccordionsRenderer,
     */
+    Workload: props => {
+      console.log(props);
+      return <>Siemaneczko</>;
+    },
     // List: GenericListRenderer,
     // Table: TableDataRenderer,
     /*
