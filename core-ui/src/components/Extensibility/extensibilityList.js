@@ -1,5 +1,5 @@
 import React from 'react';
-import { getValue, useGetTranslation } from './components/helpers';
+import { getValue, useGetTranslation2 } from './components/helpers';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ExtensibilityCreate } from './extensibilityCreate';
@@ -41,7 +41,7 @@ function listColumnDisplay(value, columnProps) {
 
 export const ExtensibilityList = () => {
   const resource = useGetCRbyPath();
-  const translate = useGetTranslation();
+  const translate = useGetTranslation2();
   const listProps = usePrepareListProps(
     resource.navigation.path,
     resource.navigation.label,
@@ -54,10 +54,11 @@ export const ExtensibilityList = () => {
   }
   listProps.createFormProps = { resource };
   listProps.resourceName =
-    translate(resource.list?.nameOverride) || listProps.resourceName;
-  listProps.description = translate(resource.list?.description) || '';
+    translate('labels.name', resource.translations) || listProps.resourceName;
+  listProps.description =
+    translate('labels.description', resource.translations) || '';
   listProps.customColumns = (resource.list.columns || []).map(column => ({
-    header: translate(column.header),
+    header: translate(column.valuePath, resource.translations),
     value: resource => {
       const v = listColumnDisplay(getValue(resource, column.valuePath), column);
       if (typeof v === 'undefined' || v === '') {

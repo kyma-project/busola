@@ -1892,6 +1892,18 @@
      }
   },
   "wasmplugins":{
+    "translations": {
+      "en": {
+        "labels": {
+          "name": "My custom name"
+        }
+      },
+      "pl": {
+        "labels": {
+          "name": "Nazwa" 
+        }
+      }
+    },
      "navigation":{
         "path":"wasmplugins",
         "label":"My wasmplugins",
@@ -1936,6 +1948,24 @@
      }
   },
   "customjobs":{
+    "translations": {
+      "en": {
+        "labels": {
+          "name": "My custom name"
+        },
+        "spec":{
+          "selector": {
+            "matchLabels": "Match Labels"
+          },
+          "backoffLimit": "Back Off Limit"
+        }
+      },
+      "pl": {
+        "labels": {
+          "name": "Nazwa" 
+        }
+      }
+    },
      "navigation":{
         "path":"customjobs",
         "label":"Custom Jobs",
@@ -1951,11 +1981,6 @@
         "hasDetailsView":true
      },
      "list":{
-        "nameOverride":"My custom jobs title override",
-        "description":{
-           "en":"Custom jobs are a great resource.",
-           "de":"Benutzerdefinierte Jobs sind eine großartige Ressource."
-        },
         "columns":[
            {
               "header":{
@@ -2106,6 +2131,18 @@
               "title":"Filter as a Whole"
            }
         ]
+     },
+     "translations": {
+       "en": {
+         "spec": {
+           "priority": "Priority"
+         }
+       },
+       "pl": {
+        "spec": {
+          "priority": "Priorytet"
+        }
+      }
      },
      "create":{
         "name_singular":"Envoy Filters",

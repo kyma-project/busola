@@ -17,6 +17,7 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 
 import { FormContainer } from '../ds/FormContainer';
 import formWidgets from '../ds/widgets-form';
+import { useGetTranslation2 } from './helpers';
 
 const FormStack = injectPluginStack(FormContainer);
 
@@ -84,7 +85,13 @@ const JSONSchemaForm = ({ properties, path, ...props }) => {
   });
 };
 
-export const ResourceSchema = ({ resource, setResource, schema }) => {
+export const ResourceSchema = ({
+  resource,
+  setResource,
+  schema,
+  translations,
+}) => {
+  const translate = useGetTranslation2();
   const [store, setStore] = useState(() =>
     createStore(createOrderedMap(resource)),
   );
@@ -99,11 +106,17 @@ export const ResourceSchema = ({ resource, setResource, schema }) => {
   }, [store.values]);
 
   if (isEmpty(schema)) return null;
-
   const schemaMap = createOrderedMap(schema);
 
+  const translateSchema = text => {
+    if (text && translations) {
+      return translate(text, translations);
+    }
+    return text || '';
+  };
+
   return (
-    <UIMetaProvider widgets={formWidgets}>
+    <UIMetaProvider widgets={formWidgets} t={translateSchema}>
       <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
         <FormStack isRoot schema={schemaMap} />
       </UIStoreProvider>

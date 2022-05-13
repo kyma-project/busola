@@ -68,6 +68,7 @@ export function ExtensibilityCreate({
         resource={resource}
         setResource={setResource}
         onSubmit={() => {}}
+        translations={createResource?.translations || {}}
       />
       <ResourceSchema
         advanced
@@ -75,6 +76,7 @@ export function ExtensibilityCreate({
         schema={advancedSchema || simpleSchema || {}}
         resource={resource}
         setResource={setResource}
+        translations={createResource?.translations || {}}
       />
     </ResourceForm>
   );
