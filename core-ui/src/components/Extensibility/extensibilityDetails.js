@@ -5,6 +5,8 @@ import { CreateExtensibilityList } from './components/CreateExtensibilityList';
 import { CreateReadOnlyEditor } from './components/CreateMonacoReadOnlyEditor';
 import { CreateDetailPanel } from './components/CreateDetailPanel';
 import { usePrepareDetailsProps } from 'resources/helpers';
+import { DetailsSchema } from './components/DetailsSchema';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 export const ExtensibilityDetails = () => {
   const resMetaData = useGetCRbyPath();
@@ -12,6 +14,7 @@ export const ExtensibilityDetails = () => {
     resMetaData.navigation.path,
     resMetaData.navigation.label,
   );
+  console.log(resMetaData);
 
   if (resMetaData.navigation.resource.kind) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
@@ -20,27 +23,10 @@ export const ExtensibilityDetails = () => {
     );
   }
 
+  const schema = resMetaData.create?.simple?.schema;
+  console.log(schema);
+
   const customColumns = [];
-  const [customComponents, setCustomComponents] = useState([]);
-
-  useEffect(() => {
-    const { components } = resMetaData.details;
-
-    const parse = components =>
-      components.map(c => {
-        switch (c.type) {
-          case 'listPanel':
-            return CreateExtensibilityList(c);
-          case 'detailPanel':
-            return CreateDetailPanel(c);
-          case 'monacoPanel':
-            return CreateReadOnlyEditor(c);
-          default:
-            return null;
-        }
-      }) || [];
-    setCustomComponents(parse(components));
-  }, [resMetaData]);
 
   const breadcrumbs = [
     {
@@ -52,11 +38,15 @@ export const ExtensibilityDetails = () => {
   ];
 
   return (
-    <ResourceDetails
-      customColumns={customColumns}
-      customComponents={customComponents}
-      breadcrumbs={breadcrumbs}
-      {...detailsProps}
-    />
+    <>
+      <ResourceDetails
+        customColumns={customColumns}
+        customComponents={[
+          resource => <DetailsSchema resource={resource} schema={schema} />,
+        ]}
+        breadcrumbs={breadcrumbs}
+        {...detailsProps}
+      />
+    </>
   );
 };

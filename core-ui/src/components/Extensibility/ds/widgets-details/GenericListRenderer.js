@@ -14,7 +14,7 @@ export function GenericListRenderer({
 
   return (
     <GenericList
-      title={t(ACCESS_STRATEGIES_PANEL.LIST.TITLE)}
+      title={'Title'}
       showSearchField={''}
       textSearchProperties={''}
       showSearchSuggestion={false}

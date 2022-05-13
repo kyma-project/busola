@@ -3,23 +3,17 @@ import React from 'react';
 import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
-export function GenericListRenderer({
-  onChange,
-  onKeyDown,
-  value,
-  schema,
-  storeKeys,
-  required,
-}) {
+export function TableDataRenderer({ value }) {
+  console.log(value);
   return (
     <LayoutPanel className="fd-margin--md secret-panel">
       <LayoutPanel.Header>
         <LayoutPanel.Head title={'Title'} />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        {Object.keys(secret.data).map(key => (
+        {/* {Object.keys(secret.data).map(key => (
           <LayoutPanelRow name={''} value={<pre>{''}</pre>} />
-        ))}
+        ))} */}
       </LayoutPanel.Body>
     </LayoutPanel>
   );
