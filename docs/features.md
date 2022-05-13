@@ -117,9 +117,7 @@ The document lists and describes all the feature flags that are available in Kym
   ```bash
   "DISABLED_NODES": {
     "isEnabled": false,
-    "config": {
-      "nodes": []
-    }
+    "nodes": []
   }
   ```
 

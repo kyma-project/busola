@@ -89,12 +89,10 @@ export async function reloadNavigation() {
 const getDisabledNodes = activeCluster => {
   const isValidConfig =
     activeCluster.config?.features?.DISABLED_NODES?.isEnabled &&
-    Array.isArray(
-      activeCluster.config?.features?.DISABLED_NODES?.config?.nodes,
-    );
+    Array.isArray(activeCluster.config?.features?.DISABLED_NODES?.nodes);
 
   return isValidConfig
-    ? activeCluster.config?.features?.DISABLED_NODES?.config?.nodes
+    ? activeCluster.config?.features?.DISABLED_NODES?.nodes
     : [];
 };
 
