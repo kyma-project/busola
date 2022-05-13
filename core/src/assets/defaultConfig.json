@@ -61,8 +61,10 @@
         }
       },
       "DISABLED_NODES": {
-        "isEnabled": true,
-        "config": []
+        "isEnabled": false,
+        "config": {
+          "nodes": []
+        }
       },
       "HIDDEN_NAMESPACES": {
         "isEnabled": true,
