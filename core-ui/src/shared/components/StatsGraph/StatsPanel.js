@@ -1,5 +1,5 @@
 import { zip } from 'lodash';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   LayoutPanel,
   Button,
@@ -189,6 +189,13 @@ const getDualGraphValues = (metric, t) => {
       return {};
   }
 };
+const getTimeSpansByMetric = metric => {
+  const longerTimeSpansGraphs = ['pvc-usage', 'nodes'];
+
+  return longerTimeSpansGraphs.includes(metric)
+    ? ['1d', '2d', '7d']
+    : ['1h', '3h', '6h'];
+};
 
 export function StatsPanel({
   type,
@@ -206,20 +213,11 @@ export function StatsPanel({
     '7d': 7 * 24 * 60 * 60,
   };
   const dualGraphs = ['network', 'pvc-usage'];
-  const longerTimeSpansGraphs = ['pvc-usage', 'nodes'];
   const [metric, setMetric] = useState(defaultMetric);
-
-  const visibleTimeSpans = longerTimeSpansGraphs.includes(metric)
-    ? ['1d', '2d', '7d']
-    : ['1h', '3h', '6h'];
+  const visibleTimeSpans = getTimeSpansByMetric(metric);
 
   const [timeSpan, setTimeSpan] = useState(visibleTimeSpans[0]);
   const { t } = useTranslation();
-
-  useEffect(() => {
-    setTimeSpan(visibleTimeSpans[0]);
-  }, [metric]); // eslint-disable-line react-hooks/exhaustive-deps
-
   if (!features.PROMETHEUS?.isEnabled) {
     return '';
   }
@@ -234,7 +232,10 @@ export function StatsPanel({
           ) : (
             <Dropdown
               selectedKey={metric}
-              onSelect={(e, val) => setMetric(val.key)}
+              onSelect={(e, val) => {
+                setMetric(val.key);
+                setTimeSpan(getTimeSpansByMetric(val.key)[0]);
+              }}
               options={graphOptions?.map(option => ({
                 key: option,
                 text: t(`graphs.${option}`),
