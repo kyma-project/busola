@@ -55,7 +55,7 @@
            },
            {
               "type":"monacoPanel",
-              "valuePath":"$.spec.kubernetes.kubeAPIServer.oidcConfig",
+              "valuePath":"spec.kubernetes.kubeAPIServer.oidcConfig",
               "title":"OIDC configuration"
            },
            {
@@ -84,7 +84,7 @@
                  "reason",
                  "message"
               ],
-              "valuePath":"$.status.conditions"
+              "valuePath":"status.conditions"
            }
         ]
      },
@@ -1924,7 +1924,7 @@
         "columns":[
            {
               "header":"plugin name",
-              "valuePath":"$.spec.pluginName",
+              "valuePath":"spec.pluginName",
               "display":"status",
               "successValues":[
                  "add_header"
@@ -1935,7 +1935,7 @@
            },
            {
               "header":"Pretend it's an url",
-              "valuePath":"$.spec.url",
+              "valuePath":"spec.url",
               "display":"external-link"
            }
         ]
@@ -1986,13 +1986,13 @@
               "header":{
                  "en":"BackOffLimit"
               },
-              "valuePath":"$.spec.backoffLimit"
+              "valuePath":"spec.backoffLimit"
            },
            {
               "header":{
                  "de":"MatchLabels des Selektors"
               },
-              "valuePath":"$.spec.selector.matchLabels",
+              "valuePath":"spec.selector.matchLabels",
               "display":"labels"
            },
            {
@@ -2000,9 +2000,9 @@
                  "en":"Container image names",
                  "de":"Container-Image-Namen"
               },
-              "valuePath":"$.spec.template.spec.volumes",
+              "valuePath":"spec.template.spec.volumes",
               "display":"array",
-              "arrayValuePath":"$.name"
+              "arrayValuePath":"name"
            }
         ]
      },
@@ -2048,7 +2048,7 @@
                  "lastProbeTime",
                  "lastProbeTime"
               ],
-              "valuePath":"$.status.conditions"
+              "valuePath":"status.conditions"
            },
            {
               "type":"detailPanel",
@@ -2058,17 +2058,17 @@
               "properties":[
                  {
                     "header":"Parallelism",
-                    "valuePath":"$.spec.parallelism"
+                    "valuePath":"spec.parallelism"
                  },
                  {
                     "header":"Completions",
-                    "valuePath":"$.spec.completions"
+                    "valuePath":"spec.completions"
                  },
                  {
                     "header":{
                        "en":"Backofflimit"
                     },
-                    "valuePath":"$.spec.backoffLimit"
+                    "valuePath":"spec.backoffLimit"
                  }
               ]
            },
@@ -2089,7 +2089,7 @@
                  "reason",
                  "message"
               ],
-              "valuePath":"$.status.conditions"
+              "valuePath":"status.conditions"
            }
         ]
      },

@@ -8,6 +8,8 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Link } from 'shared/components/Link/Link';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { usePrepareListProps } from 'resources/helpers';
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 function resolveBadgeType(value, columnProps) {
   const { successValues, warningValues } = columnProps;
@@ -41,7 +43,17 @@ function listColumnDisplay(value, columnProps) {
 
 export const ExtensibilityList = () => {
   const resource = useGetCRbyPath();
-  const translate = useGetTranslation2();
+
+  const language = useTranslation().i18n.language;
+  i18next.removeResourceBundle(language, 'extensibility');
+  i18next.addResourceBundle(
+    language,
+    'extensibility',
+    resource?.translations?.['en'],
+  );
+  const { t } = useTranslation(['extensibility']);
+  // const { t: tDefault } = useTranslation(['translation']);
+
   const listProps = usePrepareListProps(
     resource.navigation.path,
     resource.navigation.label,
@@ -54,11 +66,13 @@ export const ExtensibilityList = () => {
   }
   listProps.createFormProps = { resource };
   listProps.resourceName =
-    translate('labels.name', resource.translations) || listProps.resourceName;
-  listProps.description =
-    translate('labels.description', resource.translations) || '';
+    t('labels.name', { defaultValue: resource.navigation.label }) ||
+    listProps.resourceName;
+  listProps.description = t('labels.description') || '';
   listProps.customColumns = (resource.list.columns || []).map(column => ({
-    header: translate(column.valuePath, resource.translations),
+    header: t(column.valuePath, {
+      defaultValue: column.valuePath?.split('.')?.pop(),
+    }),
     value: resource => {
       const v = listColumnDisplay(getValue(resource, column.valuePath), column);
       if (typeof v === 'undefined' || v === '') {

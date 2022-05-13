@@ -26,6 +26,8 @@ i18next
   .init({
     lng: 'en',
     fallbackLng: false,
+    ns: ['translation', 'extensibility'],
+    defaultNS: 'translation',
     backend: {
       loadPath: '/i18n/{{lng}}.yaml',
       parse: data => ({
@@ -38,6 +40,9 @@ i18next
       if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
         console.warn(key);
       }
+    },
+    parseMissingKeyHandler: (_key, defaultValue) => {
+      return defaultValue;
     },
     interpolation: {
       escapeValue: false, // react already handles the escaping

@@ -1,5 +1,4 @@
 import * as jp from 'jsonpath';
-import jsyaml from 'js-yaml';
 import { useTranslation } from 'react-i18next';
 
 export const getValue = (resource, path) => {
@@ -25,34 +24,5 @@ export const useGetTranslation = () => {
       return translationObj[language];
     }
     return Object.values(translationObj)[0] || '';
-  };
-};
-
-const getParsedTranslations = translations => {
-  try {
-    return typeof translations === 'object'
-      ? translations
-      : jsyaml.load(translations);
-  } catch (e) {
-    console.log('An error occured while reading translation data', e.message);
-    return {};
-  }
-};
-
-export const useGetTranslation2 = () => {
-  const language = useTranslation().i18n.language;
-
-  return (translationText, translationObj) => {
-    const parsedTranslationObj = getParsedTranslations(translationObj);
-    const translations = parsedTranslationObj?.[language];
-    if (!translations || !translationText) {
-      return '';
-    }
-    const translation = jp.value(translations, translationText);
-    if (typeof translation === 'string') {
-      return translation;
-    }
-    const array = translationText?.split('.');
-    return array[array?.length - 1];
   };
 };
