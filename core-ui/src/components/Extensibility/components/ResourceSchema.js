@@ -105,14 +105,8 @@ export const ResourceSchema = ({
     setResource(store.valuesToJS());
   }, [store.values]);
 
-  const language = useTranslation().i18n.language;
-  i18next.removeResourceBundle(language, 'extensibility');
-  i18next.addResourceBundle(
-    language,
-    'extensibility',
-    translations?.[language],
-  );
-  const { t } = useTranslation(['extensibility']);
+  const translationBundle = resource?.navigation?.path || 'extensibility';
+  const { t } = useTranslation([translationBundle]);
 
   if (isEmpty(schema)) return null;
   const schemaMap = createOrderedMap(schema);

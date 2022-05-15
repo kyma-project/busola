@@ -1,5 +1,5 @@
 import React from 'react';
-import { getValue, useGetTranslation2 } from './components/helpers';
+import { getValue } from './components/helpers';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ExtensibilityCreate } from './extensibilityCreate';
@@ -44,15 +44,8 @@ function listColumnDisplay(value, columnProps) {
 export const ExtensibilityList = () => {
   const resource = useGetCRbyPath();
 
-  const language = useTranslation().i18n.language;
-  i18next.removeResourceBundle(language, 'extensibility');
-  i18next.addResourceBundle(
-    language,
-    'extensibility',
-    resource?.translations?.['en'],
-  );
-  const { t } = useTranslation(['extensibility']);
-  // const { t: tDefault } = useTranslation(['translation']);
+  const translationBundle = resource?.navigation?.path || 'extensibility';
+  const { t } = useTranslation([translationBundle]); // translationBundle doesn't work here - why?
 
   const listProps = usePrepareListProps(
     resource.navigation.path,
@@ -66,11 +59,12 @@ export const ExtensibilityList = () => {
   }
   listProps.createFormProps = { resource };
   listProps.resourceName =
-    t('labels.name', { defaultValue: resource.navigation.label }) ||
-    listProps.resourceName;
-  listProps.description = t('labels.description') || '';
+    t(`${translationBundle}:labels.name`, {
+      defaultValue: resource.navigation.label,
+    }) || listProps.resourceName;
+  listProps.description = t(`${translationBundle}:labels.description`) || '';
   listProps.customColumns = (resource.list.columns || []).map(column => ({
-    header: t(column.valuePath, {
+    header: t(`${translationBundle}:${column.valuePath}`, {
       defaultValue: column.valuePath?.split('.')?.pop(),
     }),
     value: resource => {

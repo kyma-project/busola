@@ -1895,12 +1895,12 @@
     "translations": {
       "en": {
         "labels": {
-          "name": "My custom name"
+          "name": "My custom wasmplugins"
         }
       },
       "pl": {
         "labels": {
-          "name": "Nazwa" 
+          "name": "Moje wasmpluginy" 
         }
       }
     },
@@ -1951,7 +1951,7 @@
     "translations": {
       "en": {
         "labels": {
-          "name": "My custom name"
+          "name": "My custom job"
         },
         "spec":{
           "selector": {
@@ -1962,7 +1962,7 @@
       },
       "pl": {
         "labels": {
-          "name": "Nazwa" 
+          "name": "Moje dzoby" 
         }
       }
     },
