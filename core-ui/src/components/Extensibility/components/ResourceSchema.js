@@ -102,6 +102,7 @@ export const ResourceSchema = ({ resource, setResource, schema, path }) => {
   const { t } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
 
   if (isEmpty(schema)) return null;
+
   const schemaMap = createOrderedMap(schema);
   return (
     <UIMetaProvider

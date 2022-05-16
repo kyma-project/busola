@@ -13,6 +13,10 @@ import { ValidityReporter } from '@ui-schema/ui-schema/ValidityReporter';
 import { validators } from '@ui-schema/ui-schema/Validators/validators';
 
 import { StringRenderer } from './StringRenderer';
+import { NumberRenderer } from './NumberRenderer';
+import { SwitchRenderer } from './SwitchRenderer';
+import { CollapsibleRenderer } from './CollapsibleRenderer';
+import { GenericList } from './GenericList';
 
 const pluginStack = [
   ReferencingHandler,
@@ -34,10 +38,10 @@ export const widgets = {
   pluginSimpleStack: validators,
   types: {
     string: StringRenderer,
-    boolean: ({ children }) => <span>TODO: boolean</span>,
-    number: StringRenderer,
-    integer: StringRenderer,
-    array: ({ children }) => <>TODO: array</>,
+    boolean: SwitchRenderer,
+    number: NumberRenderer,
+    integer: NumberRenderer,
+    array: GenericList,
   },
   custom: {
     /*
@@ -58,8 +62,8 @@ export const widgets = {
     SelectMulti,
     Card: CardRenderer,
     LabelBox,
-    FormGroup,
     */
+    FormGroup: CollapsibleRenderer,
   },
 };
 export default widgets;

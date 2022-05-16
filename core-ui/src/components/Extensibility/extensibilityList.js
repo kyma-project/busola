@@ -26,7 +26,9 @@ function listColumnDisplay(value, columnProps) {
     case 'labels':
       return <Labels labels={value} />;
     case 'array':
-      return (value || []).map(v => getValue(v, arrayValuePath)).join(', ');
+      if (Array.isArray(value)) {
+        return (value || []).map(v => getValue(v, arrayValuePath)).join(', ');
+      }
     case 'external-link':
       return <Link url={value}>{value}</Link>;
     case 'status':
@@ -36,7 +38,7 @@ function listColumnDisplay(value, columnProps) {
         </StatusBadge>
       );
     default:
-      return value;
+      return JSON.stringify(value);
   }
 }
 
@@ -60,19 +62,18 @@ export const ExtensibilityList = () => {
     );
   }
   listProps.createFormProps = { resource };
-  listProps.resourceName =
-    t('labels.name', {
-      defaultValue: resource.navigation.label,
-    });
+  listProps.resourceName = t('labels.name', {
+    defaultValue: resource.navigation.label,
+  });
   listProps.description = t('labels.description', {
-      defaultValue: '',
-    });
+    defaultValue: '',
+  });
   listProps.customColumns = (resource.list.columns || []).map(column => ({
     header: t(column.valuePath, {
       defaultValue: column.valuePath?.split('.')?.pop(),
     }),
     value: resource => {
-      const v = listColumnDisplay(getValue(resource, column.path), column);
+      const v = listColumnDisplay(getValue(resource, column.valuePath), column);
       if (typeof v === 'undefined' || v === '') {
         return EMPTY_TEXT_PLACEHOLDER;
       } else {
