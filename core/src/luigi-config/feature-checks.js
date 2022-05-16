@@ -27,7 +27,7 @@ export function apiGroup({ group, refreshIntervalMs = 5 * 60 * 1000 }) {
     };
   };
 }
-// tets
+
 export function service({
   urlsGenerator,
   validator = async res => res?.status < 400,
