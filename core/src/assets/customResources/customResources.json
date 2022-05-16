@@ -2098,10 +2098,7 @@
         "components":[
         ]
      },
-     "create": {
-        "name_singular":"API Rules",
-    "simple": {
-      "schema": {
+    "schema": {
     "description": "APIRule is the Schema for the apis ApiRule",
     "type": "object",
     "properties": {
@@ -2293,8 +2290,6 @@
             }
           }
         }
-      }
-    }
   }
     }
 }
