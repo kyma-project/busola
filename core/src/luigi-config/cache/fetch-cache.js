@@ -15,6 +15,7 @@ class FetchCache {
   }
   // subbscribe and return data (from cache or fresh)
   async subscribe({ path, callback, refreshIntervalMs = 10000 }) {
+    console.log('sub', path, refreshIntervalMs);
     if (!this.clusterName) {
       console.debug('subscribe: no clusterName');
       return null;

@@ -32,7 +32,7 @@ export function service({
   urlsGenerator,
   validator = async res => res?.status < 400,
   urlMutator,
-  refreshIntervalMs = 5 * 60 * 1000,
+  refreshIntervalMs = 1000,
 }) {
   const subscribeToAllUrls = async (urls, featureName, featureConfig) => {
     for (const url of urls) {

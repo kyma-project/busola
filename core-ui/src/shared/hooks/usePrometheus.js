@@ -137,43 +137,43 @@ export function usePrometheus(
   { items, timeSpan, ...props },
 ) {
   const { serviceUrl } = useFeature('PROMETHEUS');
-
+  const step = timeSpan / items;
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [step, setStep] = useState(timeSpan / items);
+  const [query, setQuery] = useState(null);
 
   const metric = getMetric(type, mode, metricId, 'sum_irate', {
     step,
     ...props,
   });
 
-  const tick = () => {
-    const newEndDate = new Date();
-    const newStartDate = new Date();
-
-    newEndDate.setTime(Date.now());
-    newStartDate.setTime(newEndDate.getTime() - (timeSpan - 1) * 1000);
-    setEndDate(newEndDate);
-    setStartDate(newStartDate);
-
-    setStep(timeSpan / items);
-  };
-
   useEffect(() => {
-    tick();
-    const loop = setInterval(tick, step * 1000);
-    return () => clearInterval(loop);
-  }, [metricId, timeSpan]); // eslint-disable-line react-hooks/exhaustive-deps
+    const tick = () => {
+      const newEndDate = new Date();
+      const newStartDate = new Date();
 
-  const query =
-    `query_range?` +
-    `start=${startDate.toISOString()}&` +
-    `end=${endDate.toISOString()}&` +
-    `step=${step}&` +
-    `query=${metric.prometheusQuery}`;
+      newEndDate.setTime(Date.now());
+      newStartDate.setTime(newEndDate.getTime() - (timeSpan - 1) * 1000);
+      setEndDate(newEndDate);
+      setStartDate(newStartDate);
+
+      setQuery(
+        `query_range?` +
+          `start=${newStartDate.toISOString()}&` +
+          `end=${newEndDate.toISOString()}&` +
+          `step=${timeSpan / items}&` +
+          `query=${metric.prometheusQuery}`,
+      );
+    };
+
+    tick();
+    const loop = setInterval(tick, (timeSpan / items) * 1000);
+    return () => clearInterval(loop);
+  }, [timeSpan, items, metric.prometheusQuery]);
 
   let { data, error, loading } = useGet(`${serviceUrl}/${query}`, {
     pollingInterval: 0,
+    skip: !query,
   });
 
   let prometheusData = [];
