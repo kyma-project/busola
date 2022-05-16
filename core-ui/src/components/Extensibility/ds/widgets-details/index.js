@@ -12,6 +12,7 @@ import { PluginSimpleStack } from '@ui-schema/ui-schema/PluginSimpleStack';
 import { ValidityReporter } from '@ui-schema/ui-schema/ValidityReporter';
 
 import { WorkloadRenderer } from './WorkloadRenderer';
+import { GenericListRenderer } from './GenericListRenderer';
 import { TableDataRenderer } from './TableDataRenderer';
 import { SimpleTypeRenderer } from './simpleTypeRenderer';
 
@@ -36,7 +37,7 @@ export const widgets = {
     //    boolean: ({ children }) => <span>TODO: boolean</span>,
     number: SimpleTypeRenderer,
     integer: SimpleTypeRenderer,
-    // array: GenericListRenderer,
+    array: GenericListRenderer,
     // object: props => {
     //   console.log(props);
     //   return <>Siemaneczko</>;
