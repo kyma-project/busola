@@ -17,15 +17,14 @@ export function ExtensibilityCreate({
 }) {
   const { t } = useTranslation();
   const { namespaceId: namespace } = useMicrofrontendContext();
-  const api = createResource?.navigation?.resource || {};
+  const api = createResource?.resource || {};
 
   const [resource, setResource] = useState(
     createResource?.create?.template ||
       createTemplate(api, namespace, createResource?.navigation?.scope),
   );
-
-  const simpleSchema = createResource?.create?.simple?.schema;
-  const advancedSchema = createResource?.create?.advanced?.schema;
+  //TODO filter schema based on form configuration
+  const schema = createResource?.schema;
 
   const handleNameChange = name => {
     jp.value(resource, '$.metadata.name', name);
@@ -43,7 +42,7 @@ export function ExtensibilityCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      onlyYaml={!(simpleSchema || advancedSchema)}
+      onlyYaml={!schema}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
@@ -64,7 +63,7 @@ export function ExtensibilityCreate({
       <ResourceSchema
         simple
         key={api.version}
-        schema={simpleSchema || advancedSchema || {}}
+        schema={schema || {}}
         resource={resource}
         setResource={setResource}
         onSubmit={() => {}}
@@ -72,7 +71,7 @@ export function ExtensibilityCreate({
       <ResourceSchema
         advanced
         key={api.version}
-        schema={advancedSchema || simpleSchema || {}}
+        schema={schema || {}}
         resource={resource}
         setResource={setResource}
       />
