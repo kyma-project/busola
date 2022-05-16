@@ -27,10 +27,10 @@ function arrayCombine(arrays) {
 
 export const DEFAULT_FEATURES = {
   ...Object.fromEntries(
-    Object.entries(DEFAULT_MODULES).map(([key, value]) => [
-      key,
+    Object.entries(DEFAULT_MODULES).map(([featureName, group]) => [
+      featureName,
       {
-        checks: [apiGroup(value)],
+        checks: [apiGroup({ group })],
         stage: 'PRIMARY',
         updateNodes: true, // indicates that when the feature config changes nodes should be reloaded
       },
@@ -38,7 +38,7 @@ export const DEFAULT_FEATURES = {
   ),
   PROMETHEUS: {
     checks: [
-      apiGroup('monitoring.coreos.com'),
+      apiGroup({ group: 'monitoring.coreos.com' }),
       service({
         urlsGenerator: featureConfig => {
           return arrayCombine([

@@ -17,7 +17,7 @@ export function convertStaticFeatures(features = {}) {
     Object.entries(features).map(([key, feature]) => {
       if (feature.selectors) {
         feature.checks = feature.selectors.map(selector =>
-          apiGroup(selector.apiGroup),
+          apiGroup({ group: selector.apiGroup }),
         );
         delete feature.selectors;
         feature.stage = 'PRIMARY';
