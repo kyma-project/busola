@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { LayoutPanel, Button, ButtonSegmented } from 'fundamental-react';
-import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
-import { useTheme } from 'shared/contexts/ThemeContext';
+import EditorWrapper from 'shared/ResourceForm/fields/Editor';
 import { useTranslation } from 'react-i18next';
-import jsyaml from 'js-yaml';
 
 import { JSONSchema } from './JSONSchema';
 
@@ -11,12 +9,8 @@ import './SchemaViewer.scss';
 
 export function SchemaViewer({ name, schema }) {
   const [schemaMode, setSchemaMode] = useState('viewer');
-  const { editorTheme } = useTheme();
 
   const { t } = useTranslation();
-
-  const jsonSchema = () => JSON.stringify(schema, null, 2);
-  const yamlSchema = () => jsyaml.dump(schema, { noRefs: true });
 
   return (
     <LayoutPanel key={`crd-schema-${name}`} className="fd-margin--md">
@@ -57,37 +51,31 @@ export function SchemaViewer({ name, schema }) {
           </div>
         )}
         {schemaMode === 'json' && (
-          <MonacoEditor
-            key={`crd-schema-editor-${name}`}
-            theme={editorTheme}
+          <EditorWrapper
+            customSchemaId={`crd-schema-editor-${name}`}
             language="json"
             height="20em"
-            value={jsonSchema()}
+            value={schema}
+            autocompletionDisabled
+            readOnly
             options={{
-              readOnly: true,
               minimap: {
                 enabled: false,
-              },
-              scrollbar: {
-                alwaysConsumeMouseWheel: false,
               },
             }}
           />
         )}
         {schemaMode === 'yaml' && (
-          <MonacoEditor
-            key={`crd-schema-editor-${name}`}
-            theme={editorTheme}
+          <EditorWrapper
+            customSchemaId={`crd-schema-editor-${name}`}
             language="yaml"
+            autocompletionDisabled
             height="20em"
-            value={yamlSchema()}
+            value={schema}
+            readOnly
             options={{
-              readOnly: true,
               minimap: {
                 enabled: false,
-              },
-              scrollbar: {
-                alwaysConsumeMouseWheel: false,
               },
             }}
           />

@@ -5,15 +5,12 @@ import * as jp from 'jsonpath';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { ResourceForm } from 'shared/ResourceForm';
-import {
-  Editor,
-  K8sNameField,
-  KeyValueField,
-} from 'shared/ResourceForm/fields';
+import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
 import { createServiceBindingTemplate } from './helpers';
 import { SecretRefForm } from './SecretRefForm/SecretRefForm';
+import { FormTextarea } from 'fundamental-react';
 
 export function ServiceBindingCreate({
   namespace,
@@ -21,6 +18,7 @@ export function ServiceBindingCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
   const [serviceBinding, setServiceBinding] = React.useState(
@@ -45,6 +43,7 @@ export function ServiceBindingCreate({
 
   return (
     <ResourceForm
+      {...props}
       className="create-service-binding-form"
       pluralKind="servicebindings"
       singularName={t('btp-service-bindings.name_singular')}
@@ -106,22 +105,24 @@ export function ServiceBindingCreate({
         tooltipContent={t('btp-service-bindings.tooltips.secret')}
         input={Inputs.Text}
       />
-      <ResourceForm.CollapsibleSection
-        advanced
+
+      <KeyValueField
         title={t('btp-service-bindings.parameters')}
-        resource={serviceBinding}
-        setResource={setServiceBinding}
-      >
-        <Editor
-          propertyPath="$.spec.parameters"
-          language="json"
-          validate={parsed => !!parsed && typeof parsed === 'object'}
-          invalidValueMessage={t(
-            'btp-service-bindings.messages.params-invalid',
-          )}
-          height="10em"
-        />
-      </ResourceForm.CollapsibleSection>
+        propertyPath="$.spec.parameters"
+        validate={parsed => !!parsed && typeof parsed === 'object'}
+        fullWidth
+        advanced
+        invalidValueMessage={t('btp-service-bindings.messages.params-invalid')}
+        input={({ setValue, ...props }) => (
+          <FormTextarea
+            compact
+            onChange={e => setValue(e.target.value)}
+            className="value-textarea"
+            {...props}
+            onKeyDown={() => {}} // overwrites default onKeyDown that switches focus when Enter is pressed
+          />
+        )}
+      />
       <SecretRefForm
         advanced
         propertyPath="$.spec.parametersFrom"

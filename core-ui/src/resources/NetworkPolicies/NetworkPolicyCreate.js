@@ -11,6 +11,7 @@ export function NetworkPolicyCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [networkPolicy, setNetworkPolicy] = useState(
@@ -20,6 +21,7 @@ export function NetworkPolicyCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="networkpolicies"
       singularName={t('network-policies.name_singular')}
       resource={networkPolicy}

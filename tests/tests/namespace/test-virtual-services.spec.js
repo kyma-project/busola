@@ -1,18 +1,15 @@
-import jsyaml from 'js-yaml';
+import { loadFile } from '../../support/loadFile';
 
 const SERVICE_NAME = `test-virtual-service-${Math.floor(Math.random() * 9999) +
   1000}`;
 
 async function loadVirtualService() {
-  const content = await new Promise(resolve => {
-    cy.fixture('test-virtual-service.yaml').then(content => resolve(content));
-  });
-  const service = jsyaml.load(content);
-
+  const service = await loadFile('test-virtual-service.yaml');
+  const newService = { ...service };
   service.metadata.name = SERVICE_NAME;
   service.metadata.namespace = Cypress.env('NAMESPACE_NAME');
 
-  return service;
+  return newService;
 }
 
 context('Test Virtual Services', () => {
@@ -30,13 +27,9 @@ context('Test Virtual Services', () => {
       .contains('Create Virtual Service')
       .click();
 
-    cy.wrap(loadVirtualService()).then(config => {
-      const configString = JSON.stringify(config);
-      cy.getIframeBody()
-        .find('textarea[aria-roledescription="editor"]')
-        .first()
-        .type('{selectall}{backspace}{selectall}{backspace}')
-        .paste({ pastePayload: configString });
+    cy.wrap(loadVirtualService()).then(VS_CONFIG => {
+      const VS = JSON.stringify(VS_CONFIG);
+      cy.pasteToMonaco(VS);
     });
 
     cy.getIframeBody()

@@ -47,12 +47,15 @@ export const communication = {
     },
     'busola.showHiddenNamespaces': ({ showHiddenNamespaces }) => {
       setFeatureToggle('showHiddenNamespaces', showHiddenNamespaces);
+      Luigi.configChanged();
     },
     'busola.disableResourceProtection': ({ disableResourceProtection }) => {
       setFeatureToggle('disableResourceProtection', disableResourceProtection);
+      Luigi.configChanged();
     },
     'busola.dontConfirmDelete': ({ value }) => {
       setFeatureToggle('dontConfirmDelete', value);
+      Luigi.configChanged();
     },
     'busola.refreshNavigation': () => {
       Luigi.configChanged('navigation.nodes');
@@ -163,8 +166,8 @@ function addCommandPaletteHandler() {
     const { key, metaKey, ctrlKey } = e;
     // for (Edge, Chrome) || (Firefox, Safari)
     const isMac = (navigator.userAgentData?.platform || navigator.platform)
-      .toLowerCase()
-      .startsWith('mac');
+      ?.toLowerCase()
+      ?.startsWith('mac');
     const modifierKeyPressed = (isMac && metaKey) || (!isMac && ctrlKey);
 
     const isMFModalPresent = !!document.querySelector('.lui-modal-mf');

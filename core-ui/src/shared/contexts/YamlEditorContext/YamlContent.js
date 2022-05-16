@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import jsyaml from 'js-yaml';
-import MonacoEditor from '@monaco-editor/react';
+import EditorWrapper from 'shared/ResourceForm/fields/Editor';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
 
-import { useTheme } from 'shared/contexts/ThemeContext';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
 export function YamlContent({
@@ -17,7 +16,6 @@ export function YamlContent({
 }) {
   const [editor, setEditor] = React.useState(null);
   const [val, setVal] = useState(jsyaml.dump(yaml));
-  const { editorTheme } = useTheme();
 
   useEffect(() => {
     const converted = jsyaml.dump(yaml);
@@ -28,7 +26,6 @@ export function YamlContent({
     editor?.trigger('', 'closeFindWidget');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [yaml]);
-
   return (
     <>
       <EditorActions
@@ -37,23 +34,18 @@ export function YamlContent({
         title={title}
         onSave={onSave}
         saveDisabled={saveDisabled}
-        readOnly={readOnly}
         i18n={i18n}
       />
       <ErrorBoundary i18n={i18n}>
-        <MonacoEditor
+        <EditorWrapper
           height="85vh"
           language="yaml"
-          theme={editorTheme}
-          value={val}
-          onChange={text => setChangedYamlFn(text)}
-          onMount={editor => setEditor(editor)}
+          value={yaml}
+          onChange={setChangedYamlFn}
+          onMount={setEditor}
+          readOnly={readOnly}
           options={{
             minimap: { enabled: false },
-            readOnly,
-            scrollbar: {
-              alwaysConsumeMouseWheel: false,
-            },
           }}
         />
       </ErrorBoundary>

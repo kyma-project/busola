@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import LuigiClient from '@luigi-project/client';
+import { useEffect, useState } from 'react';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 const getPrometheusSelector = data => {
@@ -14,21 +14,28 @@ const getPrometheusSelector = data => {
   return selector;
 };
 
-const getPrometheusCPUQuery = (
-  type,
-  mode,
-  data,
-  step,
-  cpuQuery = 'sum_irate',
-) => {
+const getPrometheusPVCUsedSpaceQuery = ({ name, namespace }) => {
+  return `(
+    sum without(instance, node) (topk(1, (kubelet_volume_stats_capacity_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${namespace}", persistentvolumeclaim="${name}"})))
+    -
+    sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${namespace}", persistentvolumeclaim="${name}"})))
+  )
+  `;
+};
+
+const getPrometheusPVCFreeSpaceQuery = ({ namespace, name }) => {
+  return `sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${namespace}", persistentvolumeclaim="${name}"})))`;
+};
+
+const getPrometheusCPUQuery = (type, mode, data, step) => {
   if (type === 'cluster') {
     return `count(node_cpu_seconds_total{mode="idle"}) - sum(rate(node_cpu_seconds_total{mode="idle"}[${step}s]))`;
   } else if (type === 'pod' && mode === 'multiple') {
-    return `sum by(container)(node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
+    return `sum by(container)(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{${getPrometheusSelector(
       data,
     )}, container != "POD"})`;
   } else if (type === 'pod' && mode === 'single') {
-    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
+    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{${getPrometheusSelector(
       data,
     )}})`;
   } else {
@@ -80,10 +87,10 @@ const getPrometheusNodesQuery = () => {
   return `sum(kubelet_node_name)`;
 };
 
-export function getMetric(type, mode, metric, cpuQuery, { step, ...data }) {
+export function getMetric(type, mode, metric, { step, ...data }) {
   const metrics = {
     cpu: {
-      prometheusQuery: getPrometheusCPUQuery(type, mode, data, step, cpuQuery),
+      prometheusQuery: getPrometheusCPUQuery(type, mode, data, step),
       unit: '',
     },
     memory: {
@@ -103,6 +110,16 @@ export function getMetric(type, mode, metric, cpuQuery, { step, ...data }) {
       prometheusQuery: getPrometheusNodesQuery(),
       unit: '',
     },
+    'pvc-used-space': {
+      prometheusQuery: getPrometheusPVCUsedSpaceQuery(data),
+      binary: true,
+      unit: 'B',
+    },
+    'pvc-free-space': {
+      prometheusQuery: getPrometheusPVCFreeSpaceQuery(data),
+      binary: true,
+      unit: 'B',
+    },
   };
   return metrics[metric];
 }
@@ -113,45 +130,42 @@ export function usePrometheus(
   metricId,
   { items, timeSpan, ...props },
 ) {
+  const step = timeSpan / items;
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [step, setStep] = useState(timeSpan / items);
+  const [query, setQuery] = useState(null);
 
   const kyma2_0path =
     'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
   const kyma2_1path =
     'api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1';
-  const cpu2_0_partial_query = 'sum_rate';
-  const cpu2_1_partial_query = 'sum_irate';
   const [path, setPath] = useState(kyma2_1path);
-  const [cpuQuery, setCpuQuery] = useState(cpu2_1_partial_query);
 
-  const metric = getMetric(type, mode, metricId, cpuQuery, { step, ...props });
-
-  const tick = () => {
-    const newEndDate = new Date();
-    const newStartDate = new Date();
-
-    newEndDate.setTime(Date.now());
-    newStartDate.setTime(newEndDate.getTime() - (timeSpan - 1) * 1000);
-    setEndDate(newEndDate);
-    setStartDate(newStartDate);
-
-    setStep(timeSpan / items);
-  };
+  const metric = getMetric(type, mode, metricId, { step, ...props });
 
   useEffect(() => {
-    tick();
-    const loop = setInterval(tick, step * 1000);
-    return () => clearInterval(loop);
-  }, [metricId, timeSpan]); // eslint-disable-line react-hooks/exhaustive-deps
+    const tick = () => {
+      const newEndDate = new Date();
+      const newStartDate = new Date();
 
-  const query =
-    `query_range?` +
-    `start=${startDate.toISOString()}&` +
-    `end=${endDate.toISOString()}&` +
-    `step=${step}&` +
-    `query=${metric.prometheusQuery}`;
+      newEndDate.setTime(Date.now());
+      newStartDate.setTime(newEndDate.getTime() - (timeSpan - 1) * 1000);
+      setEndDate(newEndDate);
+      setStartDate(newStartDate);
+
+      setQuery(
+        `query_range?` +
+          `start=${newStartDate.toISOString()}&` +
+          `end=${newEndDate.toISOString()}&` +
+          `step=${timeSpan / items}&` +
+          `query=${metric.prometheusQuery}`,
+      );
+    };
+
+    tick();
+    const loop = setInterval(tick, (timeSpan / items) * 1000);
+    return () => clearInterval(loop);
+  }, [timeSpan, items, metric.prometheusQuery]);
 
   const onDataReceived = data => {
     if (data?.error && data?.error?.statusCode === 'Failure') {
@@ -160,21 +174,21 @@ export function usePrometheus(
           id: 'busola.setPrometheusPath',
           path: kyma2_1path,
         });
-        setCpuQuery(cpu2_1_partial_query);
         setPath(kyma2_1path);
       } else if (path === kyma2_1path) {
         LuigiClient.sendCustomMessage({
           id: 'busola.setPrometheusPath',
           path: kyma2_0path,
         });
-        setCpuQuery(cpu2_0_partial_query);
         setPath(kyma2_0path);
       }
     }
   };
+
   let { data, error, loading } = useGet(`/${path}/${query}`, {
     pollingInterval: 0,
     onDataReceived: data => onDataReceived(data),
+    skip: !query,
   });
 
   if (data) {

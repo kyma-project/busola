@@ -21,16 +21,16 @@ import './NamespaceCreate.scss';
 const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_VALUE = 'disabled';
 
-export function NamespaceCreate(props) {
-  const {
-    formElementRef,
-    onChange,
-    resource: initialNamespace,
-    resourceUrl,
-    onCompleted,
-    onError,
-    setCustomValid,
-  } = props;
+export function NamespaceCreate({
+  formElementRef,
+  onChange,
+  resource: initialNamespace,
+  resourceUrl,
+  onCompleted,
+  onError,
+  setCustomValid,
+  ...props
+}) {
   const { t } = useTranslation();
 
   const [namespace, setNamespace] = useState(
@@ -159,14 +159,22 @@ export function NamespaceCreate(props) {
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.container-limits')}
         >
-          <Editor value={limits} setValue={setLimits} />
+          <Editor
+            value={limits}
+            setValue={setLimits}
+            customSchemaId="v1/LimitRange"
+          />
         </ResourceForm.CollapsibleSection>
       ) : null}
       {!initialNamespace && withMemory ? (
         <ResourceForm.CollapsibleSection
           title={t('namespaces.create-modal.memory-quotas')}
         >
-          <Editor value={memory} setValue={setMemory} />
+          <Editor
+            value={memory}
+            setValue={setMemory}
+            customSchemaId="v1/ResourceQuota"
+          />
         </ResourceForm.CollapsibleSection>
       ) : null}
     </div>
@@ -174,6 +182,7 @@ export function NamespaceCreate(props) {
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="namespaces"
       singularName={t('namespaces.name_singular')}
       renderEditor={!initialNamespace ? renderEditor : null}

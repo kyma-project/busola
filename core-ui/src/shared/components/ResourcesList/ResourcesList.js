@@ -26,7 +26,7 @@ import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
 
-/* to allow cloning of a resource set the folowing on the resource create component:
+/* to allow cloning of a resource set the following on the resource create component:
  *
  * ResourceCreate.allowCreate = true;
  *
@@ -151,9 +151,12 @@ export function ResourceListRenderer({
   showSearchField = true,
   allowSlashShortcut,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
+  disableCreate = false,
 }) {
   const { t } = useTranslation(['translation'], { i18n });
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
+
+  const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     i18n,
@@ -215,6 +218,11 @@ export function ResourceListRenderer({
     );
   };
 
+  const prepareResourceUrl = (resourceUrl, resourceName) => {
+    const encodedName = encodeURIComponent(resourceName);
+    return `${resourceUrl}/${encodedName}`;
+  };
+
   const handleResourceClone = resource => {
     let activeResource = cloneDeep(resource);
     jp.value(activeResource, '$.metadata.name', '');
@@ -259,7 +267,10 @@ export function ResourceListRenderer({
           disabledHandler: isProtected,
           handler: resource => {
             handleResourceDelete({
-              resourceUrl: `${resourceUrl}/${resource.metadata.name}`,
+              resourceUrl: prepareResourceUrl(
+                resourceUrl,
+                resource.metadata.name,
+              ),
             });
             setActiveResource(resource);
           },
@@ -302,7 +313,7 @@ export function ResourceListRenderer({
 
   const extraHeaderContent =
     listHeaderActions ||
-    (CreateResourceForm && (
+    (CreateResourceForm && !disableCreate && (
       <Button
         glyph="add"
         option="transparent"
@@ -327,6 +338,7 @@ export function ResourceListRenderer({
             resourceType: prettifiedResourceName,
           })
         }
+        getToggleFormFn={getToggleFormFn}
         opened={showEditDialog}
         confirmText={t('common.buttons.create')}
         id={`add-${resourceType}-modal`}
@@ -339,6 +351,7 @@ export function ResourceListRenderer({
               resourceUrl={resourceUrl}
               namespace={namespace}
               refetchList={silentRefetch}
+              toggleFormFn={toggleFormFn}
               {...props}
               {...createFormProps}
             />
@@ -350,7 +363,10 @@ export function ResourceListRenderer({
       />
       <DeleteMessageBox
         resource={activeResource}
-        resourceUrl={`${resourceUrl}/${nameSelector(activeResource)}`}
+        resourceUrl={prepareResourceUrl(
+          resourceUrl,
+          nameSelector(activeResource),
+        )}
       />
       <GenericList
         title={showTitle ? title || prettifiedResourceName : null}

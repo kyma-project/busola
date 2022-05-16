@@ -24,7 +24,7 @@ export const RepositoryUrls = addon => {
       title={t('addons.repository-urls')}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      entries={addon.status.repositories || []}
+      entries={addon.status?.repositories || []}
       i18n={i18n}
     />
   );

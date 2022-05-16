@@ -35,3 +35,10 @@ export function compareCpu(limit = '', current = '') {
 
   return normalizedLimit <= normalizedCurrent;
 }
+
+export function areCPUsEqual(first = '', second = '') {
+  const firstCPU = normalizeCPU(first);
+  const secondCPU = normalizeCPU(second);
+
+  return firstCPU === secondCPU;
+}
