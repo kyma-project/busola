@@ -9,6 +9,7 @@ import { Labels } from 'shared/components/Labels/Labels';
 export function WorkloadRenderer({ storeKeys, schema, schemaKeys, ...props }) {
   const { store } = useUIStore();
   const { value } = store?.extractValues(storeKeys) || {};
+  if (!value) return null;
 
   return (
     <LayoutPanel className="fd-margin--md">

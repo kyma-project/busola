@@ -12,6 +12,7 @@ export function GenericListRenderer({
 }) {
   const { store } = useUIStore();
   let { value } = store?.extractValues(storeKeys) || {};
+  if (!value) return null;
   value = value.toJS();
 
   return (
