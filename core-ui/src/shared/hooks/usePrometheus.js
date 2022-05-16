@@ -27,21 +27,15 @@ const getPrometheusPVCFreeSpaceQuery = ({ namespace, name }) => {
   return `sum without(instance, node) (topk(1, (kubelet_volume_stats_available_bytes{cluster="", job="kubelet", metrics_path="/metrics", namespace="${namespace}", persistentvolumeclaim="${name}"})))`;
 };
 
-const getPrometheusCPUQuery = (
-  type,
-  mode,
-  data,
-  step,
-  cpuQuery = 'sum_irate',
-) => {
+const getPrometheusCPUQuery = (type, mode, data, step) => {
   if (type === 'cluster') {
     return `count(node_cpu_seconds_total{mode="idle"}) - sum(rate(node_cpu_seconds_total{mode="idle"}[${step}s]))`;
   } else if (type === 'pod' && mode === 'multiple') {
-    return `sum by(container)(node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
+    return `sum by(container)(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{${getPrometheusSelector(
       data,
     )}, container != "POD"})`;
   } else if (type === 'pod' && mode === 'single') {
-    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:${cpuQuery}{${getPrometheusSelector(
+    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{${getPrometheusSelector(
       data,
     )}})`;
   } else {
@@ -93,10 +87,10 @@ const getPrometheusNodesQuery = () => {
   return `sum(kubelet_node_name)`;
 };
 
-export function getMetric(type, mode, metric, cpuQuery, { step, ...data }) {
+export function getMetric(type, mode, metric, { step, ...data }) {
   const metrics = {
     cpu: {
-      prometheusQuery: getPrometheusCPUQuery(type, mode, data, step, cpuQuery),
+      prometheusQuery: getPrometheusCPUQuery(type, mode, data, step),
       unit: '',
     },
     memory: {
@@ -142,10 +136,7 @@ export function usePrometheus(
   const [endDate, setEndDate] = useState(new Date());
   const [query, setQuery] = useState(null);
 
-  const metric = getMetric(type, mode, metricId, 'sum_irate', {
-    step,
-    ...props,
-  });
+  const metric = getMetric(type, mode, metricId, { step, ...props });
 
   useEffect(() => {
     const tick = () => {
