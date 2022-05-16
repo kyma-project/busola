@@ -107,7 +107,7 @@ export async function saveClusterParams(params) {
 export async function saveCARequired() {
   const clusters = clusterStorage.load();
   const cluster = clusters[getActiveClusterName()];
-  if (cluster?.config.requiresCA === undefined) {
+  if (typeof cluster?.config.requiresCA === 'undefined') {
     cluster.config = {
       ...cluster.config,
       requiresCA: await checkIfClusterRequiresCA(getAuthData()),
