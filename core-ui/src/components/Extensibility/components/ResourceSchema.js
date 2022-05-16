@@ -24,7 +24,6 @@ const FormStack = injectPluginStack(FormContainer);
 // TODO left only for reference - remove as soon as all corresponding widgets are implemented
 const JSONSchemaForm = ({ properties, path, ...props }) => {
   const { resource, setResource } = props;
-
   const getValue = path => {
     return jp.value(resource, '$.' + path);
   };
@@ -102,7 +101,6 @@ export const ResourceSchema = ({ resource, setResource, schema }) => {
   if (isEmpty(schema)) return null;
 
   const schemaMap = createOrderedMap(schema);
-
   return (
     <UIMetaProvider widgets={formWidgets} t={relTranslator}>
       <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
