@@ -110,6 +110,28 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
+- **EXTERNAL_NODES** - a list of links to external websites. `category`: a category name, `icon`: an optional icon, `children`: a list of pairs (label and link).
+
+  Default settings:
+
+  ```bash
+  "EXTERNAL_NODES": {
+    "isEnabled": true,
+    "nodes": [
+      {
+        "category": "My Category",
+        "icon": "course-book",
+        "children": [
+          {
+            "label": "Example Node Label",
+            "link": "https://github.com/kyma-project/busola"
+          }
+        ]
+      }
+    ]
+  }
+  ```
+
 - **ISTIO** - is used to show or hide the Istio-related views and to define which APIs are required for the views to be shown properly.
   For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 

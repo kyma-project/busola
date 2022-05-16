@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import MonacoEditor from '@monaco-editor/react';
+import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import jsyaml from 'js-yaml';
 import { Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import './SideDrawer.scss';
 import { CopiableText } from 'shared/components/CopiableText/CopiableText';
-import { useTheme } from 'shared/contexts/ThemeContext';
 
 const MIN_EDITOR_RATIO = 33; // %
 const MAX_EDITOR_RATIO = 100;
@@ -22,7 +21,6 @@ export const SideDrawer = ({
   withYamlEditor,
 }) => {
   const [width, setWidth] = React.useState(MIN_EDITOR_RATIO);
-  const { editorTheme } = useTheme();
   const { i18n } = useTranslation();
 
   let textToCopy;
@@ -32,18 +30,11 @@ export const SideDrawer = ({
     children = (
       <>
         <h1 className="fd-has-type-4">YAML</h1>
-        <MonacoEditor
+        <Editor
           height="90vh"
-          width="100%"
-          language={'yaml'}
-          theme={editorTheme}
+          autocompletionDisabled
           value={textToCopy}
-          options={{
-            readOnly: true,
-            scrollbar: {
-              alwaysConsumeMouseWheel: false,
-            },
-          }}
+          readOnly
         />
       </>
     );

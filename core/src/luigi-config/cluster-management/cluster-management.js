@@ -149,10 +149,7 @@ export function saveActiveClusterName(clusterName) {
 // defaults < config from Busola cluster CM < (config from target cluster CM)
 async function mergeParams(params) {
   const defaultConfig = {
-    navigation: {
-      disabledNodes: [],
-      externalNodes: [],
-    },
+    navigation: { disabledNodes: [] },
     hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
     features: DEFAULT_FEATURES,
     storage: await clusterStorage.getDefaultStorage(),

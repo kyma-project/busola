@@ -15,6 +15,7 @@ export function ApplicationCreate({
   setCustomValid,
   resource: initialApplication,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -33,6 +34,7 @@ export function ApplicationCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="applications"
       singularName={t('applications.name_singular')}
       resource={application}

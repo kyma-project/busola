@@ -10,6 +10,7 @@ import { navigateToClusterResourceDetails } from 'shared/hooks/navigate';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
+import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import { RelatedPods } from 'shared/components/RelatedPods';
 import { Selector } from 'shared/components/Selector/Selector';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -35,6 +36,7 @@ const RelatedVolumes = ({ labels }) => {
     },
     isCompact: true,
     showTitle: true,
+    disableCreate: true,
   };
 
   return <PersistentVolumesList {...PVParams} key="pv-list" />;
@@ -172,12 +174,24 @@ export function PersistentVolumeClaimDetails(props) {
     );
   };
 
+  const StatsComponent = pvc => {
+    return (
+      <StatsPanel
+        namespace={pvc.metadata.namespace}
+        name={pvc.metadata.name}
+        defaultMetric="pvc-usage"
+        type="pvc"
+      />
+    );
+  };
+
   return (
     <ResourceDetails
       customComponents={[
         PVCConfiguration,
         PVCPods,
         PVCSelectorSpecification,
+        StatsComponent,
         Events,
       ]}
       customColumns={customColumns}

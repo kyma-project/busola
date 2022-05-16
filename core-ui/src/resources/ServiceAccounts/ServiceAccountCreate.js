@@ -22,6 +22,7 @@ export const ServiceAccountCreate = ({
   setCustomValid,
   resource: initialServiceAccount,
   resourceUrl,
+  ...props
 }) => {
   const { t } = useTranslation();
 
@@ -48,6 +49,7 @@ export const ServiceAccountCreate = ({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="serviceaccounts"
       singularName={t(`service-accounts.name_singular`)}
       resource={serviceAccount}

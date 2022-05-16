@@ -10,12 +10,14 @@ export function PersistentVolumeCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const [pv, setPv] = useState(createPersistentVolumeTemplate());
   const { t } = useTranslation();
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="persistentvolumes"
       singularName={t('pv.name_singular')}
       resource={pv}

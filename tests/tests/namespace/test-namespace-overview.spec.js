@@ -81,6 +81,15 @@ context(
         .find('[data-testid="delete-confirmation"]')
         .click();
 
+      // for some reason "Namespaces" node gets detached from DOM
+      cy.reload();
+
+      cy.getLeftNav()
+        .contains('Namespaces')
+        .click();
+
+      cy.goToNamespaceDetails();
+
       cy.getIframeBody()
         .contains('.fd-table__row', NEW_LIMIT_NAME)
         .find('button[data-testid="delete"]')

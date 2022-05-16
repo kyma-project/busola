@@ -11,6 +11,7 @@ export const AuthorizationPolicyCreate = ({
   formElementRef,
   resourceUrl,
   setCustomValid,
+  ...props
 }) => {
   const { t } = useTranslation();
   const [authorizationPolicy, setAuthorizationPolicy] = useState(
@@ -19,6 +20,7 @@ export const AuthorizationPolicyCreate = ({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="authorizationpolicies"
       singularName={t('authorization-policies.name_singular')}
       resource={authorizationPolicy}

@@ -11,6 +11,7 @@ export function DaemonSetCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [daemonSet, setDaemonSet] = useState(
@@ -20,6 +21,7 @@ export function DaemonSetCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="daemonsets"
       singularName={t('daemon-sets.name_singular')}
       resource={daemonSet}

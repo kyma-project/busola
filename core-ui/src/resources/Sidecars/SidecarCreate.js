@@ -11,12 +11,14 @@ export function SidecarCreate({
   setCustomValid,
   resourceUrl,
   namespace,
+  ...props
 }) {
   const [sidecar, setSidecar] = useState(createSidecarTemplate(namespace));
   const { t } = useTranslation();
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="sidecars"
       singularName={t('sidecars.name_singular')}
       resource={sidecar}

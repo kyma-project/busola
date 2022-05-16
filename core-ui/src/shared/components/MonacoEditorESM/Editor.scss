@@ -5,7 +5,6 @@
   min-height: 350px;
   position: relative;
 }
-
 .resource-form__overlay {
   position: absolute;
   //background-color: rgba(4,4,4,0.8);
@@ -26,6 +25,7 @@
   flex-grow: 1;
   border: 1px solid var(--sapNeutralBackground);
 }
+
 .resource-form__legend {
   position: absolute;
   bottom: 0;
