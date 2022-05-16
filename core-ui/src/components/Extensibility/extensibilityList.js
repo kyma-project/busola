@@ -52,24 +52,27 @@ export const ExtensibilityList = () => {
     resource.navigation.path,
     resource.navigation.label,
   );
-  if (resource.navigation.resource.kind) {
+
+  if (resource.resource?.kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
       /[a-z0-9-]+\/?$/,
-      resource.navigation.resource.kind.toLowerCase(),
+      (resource.resource?.kind).toLowerCase(),
     );
   }
   listProps.createFormProps = { resource };
   listProps.resourceName =
     t('labels.name', {
       defaultValue: resource.navigation.label,
-    }) || listProps.resourceName;
-  listProps.description = t('labels.description') || '';
+    });
+  listProps.description = t('labels.description', {
+      defaultValue: '',
+    });
   listProps.customColumns = (resource.list.columns || []).map(column => ({
     header: t(column.valuePath, {
       defaultValue: column.valuePath?.split('.')?.pop(),
     }),
     value: resource => {
-      const v = listColumnDisplay(getValue(resource, column.valuePath), column);
+      const v = listColumnDisplay(getValue(resource, column.path), column);
       if (typeof v === 'undefined' || v === '') {
         return EMPTY_TEXT_PLACEHOLDER;
       } else {
