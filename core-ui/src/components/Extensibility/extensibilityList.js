@@ -9,7 +9,6 @@ import { Link } from 'shared/components/Link/Link';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { usePrepareListProps } from 'resources/helpers';
 import { useTranslation } from 'react-i18next';
-import i18next from 'i18next';
 
 function resolveBadgeType(value, columnProps) {
   const { successValues, warningValues } = columnProps;

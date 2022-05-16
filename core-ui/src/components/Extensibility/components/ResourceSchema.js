@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { isEmpty } from 'lodash';
 import * as jp from 'jsonpath';
-import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
