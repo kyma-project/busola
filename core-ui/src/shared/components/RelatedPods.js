@@ -14,6 +14,7 @@ export const RelatedPods = ({ namespace = '', filter }) => {
     filter,
     showTitle: true,
     i18n,
+    disableCreate: true,
   };
 
   return <PodList {...podListParams} />;
