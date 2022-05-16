@@ -20,9 +20,9 @@ export function GenericListRenderer({
         title={prettifyNamePlural(props.ownKey)}
         entries={value}
         headerRenderer={() => Object.keys(value[0] || {})}
-        rowRenderer={pojedynczeValiu =>
+        rowRenderer={singleValue =>
           Object.keys(value[0] || {}).map(key =>
-            JSON.stringify(pojedynczeValiu[key]),
+            JSON.stringify(singleValue[key]),
           )
         }
       />

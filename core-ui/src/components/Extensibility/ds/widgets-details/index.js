@@ -36,12 +36,9 @@ export const widgets = {
     number: SimpleTypeRenderer,
     integer: SimpleTypeRenderer,
     array: GenericListRenderer,
-    // object: props => {
-    //   console.log(props);
-    //   return <>Siemaneczko</>;
-    // },
-    // object: GenericListRenderer,
-    // array: GenericListRenderer,
+    object: props => {
+      return <>TO DO: {props}</>;
+    },
   },
   custom: {
     /*
