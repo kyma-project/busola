@@ -151,6 +151,7 @@ export function ResourceListRenderer({
   showSearchField = true,
   allowSlashShortcut,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
+  disableCreate = false,
 }) {
   const { t } = useTranslation(['translation'], { i18n });
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
@@ -312,7 +313,7 @@ export function ResourceListRenderer({
 
   const extraHeaderContent =
     listHeaderActions ||
-    (CreateResourceForm && (
+    (CreateResourceForm && !disableCreate && (
       <Button
         glyph="add"
         option="transparent"
