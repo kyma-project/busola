@@ -1,5 +1,5 @@
 import React from 'react';
-import { getValue, useGetTranslation } from './components/helpers';
+import { getValue } from './components/helpers';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ExtensibilityCreate } from './extensibilityCreate';
@@ -8,6 +8,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Link } from 'shared/components/Link/Link';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { usePrepareListProps } from 'resources/helpers';
+import { useTranslation } from 'react-i18next';
 
 function resolveBadgeType(value, columnProps) {
   const { successValues, warningValues } = columnProps;
@@ -25,7 +26,9 @@ function listColumnDisplay(value, columnProps) {
     case 'labels':
       return <Labels labels={value} />;
     case 'array':
-      return (value || []).map(v => getValue(v, arrayValuePath)).join(', ');
+      if (Array.isArray(value)) {
+        return (value || []).map(v => getValue(v, arrayValuePath)).join(', ');
+      }
     case 'external-link':
       return <Link url={value}>{value}</Link>;
     case 'status':
@@ -35,29 +38,40 @@ function listColumnDisplay(value, columnProps) {
         </StatusBadge>
       );
     default:
-      return value;
+      return JSON.stringify(value);
   }
 }
 
 export const ExtensibilityList = () => {
   const resource = useGetCRbyPath();
-  const translate = useGetTranslation();
+
+  const translationBundle = resource?.navigation?.path || 'extensibility';
+  const { t: translations } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
+  const t = (path, ...props) =>
+    translations(`${translationBundle}:${path}`, ...props);
+
   const listProps = usePrepareListProps(
     resource.navigation.path,
     resource.navigation.label,
   );
-  if (resource.navigation.resource.kind) {
+
+  if (resource.resource?.kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
       /[a-z0-9-]+\/?$/,
-      resource.navigation.resource.kind.toLowerCase(),
+      (resource.resource?.kind).toLowerCase(),
     );
   }
   listProps.createFormProps = { resource };
-  listProps.resourceName =
-    translate(resource.list?.nameOverride) || listProps.resourceName;
-  listProps.description = translate(resource.list?.description) || '';
+  listProps.resourceName = t('labels.name', {
+    defaultValue: resource.navigation.label,
+  });
+  listProps.description = t('labels.description', {
+    defaultValue: '',
+  });
   listProps.customColumns = (resource.list.columns || []).map(column => ({
-    header: translate(column.header),
+    header: t(column.valuePath, {
+      defaultValue: column.valuePath?.split('.')?.pop(),
+    }),
     value: resource => {
       const v = listColumnDisplay(getValue(resource, column.valuePath), column);
       if (typeof v === 'undefined' || v === '') {
