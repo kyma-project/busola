@@ -2383,6 +2383,7 @@
                        },
                        "workloadSelector":{
                           "type":"object",
+                          "widget": "Workload",
                           "properties":{
                              "labels":{
                                 "type":"object",
