@@ -26,8 +26,8 @@ const getCustomNodes = (crs, scope) => {
   try {
     customPaths =
       crs?.map(cr => {
-        const { resource } = cr.navigation || {};
-        const api = `/${resource.group === 'core' ? 'api' : 'apis'}/${
+        const { resource } = cr || {};
+        const api = `/${resource?.group === 'core' ? 'api' : 'apis'}/${
           resource.group
         }/${resource.version.toLowerCase()}`;
         return {
@@ -105,10 +105,10 @@ export const getCustomPaths = (customResources, scope) => {
       const isValidCr =
         cr.navigation &&
         typeof cr.navigation.path === 'string' &&
-        cr.navigation.resource &&
-        typeof cr.navigation.resource.kind === 'string' &&
-        typeof cr.navigation.resource.group === 'string' &&
-        typeof cr.navigation.resource.version === 'string';
+        cr.resource &&
+        typeof cr.resource.kind === 'string' &&
+        typeof cr.resource.group === 'string' &&
+        typeof cr.resource.version === 'string';
       if (!isValidCr) {
         console.error(
           'Some of the custom resources are not configured properly.',

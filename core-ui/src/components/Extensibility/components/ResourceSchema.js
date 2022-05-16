@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { isEmpty } from 'lodash';
 import * as jp from 'jsonpath';
+import { useTranslation } from 'react-i18next';
 
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import { UIMetaProvider } from '@ui-schema/ui-schema/UIMeta';
@@ -23,7 +24,6 @@ const FormStack = injectPluginStack(FormContainer);
 // TODO left only for reference - remove as soon as all corresponding widgets are implemented
 const JSONSchemaForm = ({ properties, path, ...props }) => {
   const { resource, setResource } = props;
-
   const getValue = path => {
     return jp.value(resource, '$.' + path);
   };
@@ -84,7 +84,7 @@ const JSONSchemaForm = ({ properties, path, ...props }) => {
   });
 };
 
-export const ResourceSchema = ({ resource, setResource, schema }) => {
+export const ResourceSchema = ({ resource, setResource, schema, path }) => {
   const [store, setStore] = useState(() =>
     createStore(createOrderedMap(resource)),
   );
@@ -98,12 +98,17 @@ export const ResourceSchema = ({ resource, setResource, schema }) => {
     setResource(store.valuesToJS());
   }, [store.values]);
 
+  const translationBundle = path || 'extensibility';
+  const { t } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
+
   if (isEmpty(schema)) return null;
 
   const schemaMap = createOrderedMap(schema);
-
   return (
-    <UIMetaProvider widgets={formWidgets}>
+    <UIMetaProvider
+      widgets={formWidgets}
+      t={(path, ...props) => t(`${translationBundle}:${path}`, ...props)}
+    >
       <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
         <FormStack isRoot schema={schemaMap} />
       </UIStoreProvider>
