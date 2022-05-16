@@ -51,7 +51,5 @@ export async function getCustomResources(authData) {
     ...(await loadBusolaClusterCRs()),
     ...(await loadTargetClusterCRs(authData)),
   });
-  console.log('customResources', customResources);
-
   return customResources;
 }
