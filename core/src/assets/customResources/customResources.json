@@ -2207,6 +2207,7 @@
           "service": {
             "description": "Definition of the service to expose",
             "type": "object",
+            "widget": "FormGroup",
             "required": [
               "host",
               "name",
@@ -2242,6 +2243,7 @@
       "status": {
         "description": "APIRuleStatus defines the observed state of ApiRule",
         "type": "object",
+        "hidden": true,
         "properties": {
           "APIRuleStatus": {
             "description": "APIRuleResourceStatus .",
