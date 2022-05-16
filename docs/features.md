@@ -110,7 +110,7 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **DISABLED_NODES** - an array of IDs of navigation nodes that are hidden from navigation. Format: `<category>.<nodeName>` or `<namespace>.<category>.<nodeName>`).
+- **DISABLED_NODES** - an array of IDs of navigation nodes that are hidden from navigation. Format: `<category>.<nodeName>` or `namespace.<category>.<nodeName>`).
 
   Default settings:
 
