@@ -13,6 +13,7 @@ import { checkIfClusterRequiresCA } from '../navigation/queries';
 import * as clusterStorage from './clusters-storage';
 import { fetchCache } from '../cache/fetch-cache';
 import { clearClusterCache } from '../cache/storage';
+import { isNil } from 'lodash';
 
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
@@ -107,7 +108,7 @@ export async function saveClusterParams(params) {
 export async function saveCARequired() {
   const clusters = clusterStorage.load();
   const cluster = clusters[getActiveClusterName()];
-  if (typeof cluster?.config.requiresCA === 'undefined') {
+  if (isNil(cluster?.config.requiresCA)) {
     cluster.config = {
       ...cluster.config,
       requiresCA: await checkIfClusterRequiresCA(getAuthData()),
