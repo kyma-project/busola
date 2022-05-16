@@ -30,7 +30,6 @@ const JSONSchemaForm = ({ properties, path, ...props }) => {
   const keys = Object.keys(properties);
   return keys?.map(key => {
     const newPath = path ? `${path}.${key}` : key;
-    console.log('newPath', newPath);
     if (properties[key].type === 'object') {
       if (!isEmpty(properties[key].properties)) {
         return (
@@ -101,7 +100,6 @@ export const ResourceSchema = ({ resource, setResource, schema }) => {
   if (isEmpty(schema)) return null;
 
   const schemaMap = createOrderedMap(schema);
-  console.log('schemaMap', schemaMap, 'schema', schema);
   return (
     <UIMetaProvider widgets={formWidgets}>
       <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
