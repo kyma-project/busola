@@ -1,4 +1,4 @@
-import { fetchCache } from './cache/fetch-cache';
+import * as fetchCache from './cache/fetch-cache';
 import { updateFeature } from './feature-discovery';
 import { getAuthData } from './auth/auth-storage';
 import { extractGroupVersions } from './utils/extractGroupVersions';
@@ -32,7 +32,7 @@ export function service({
   urlsGenerator,
   validator = async res => res?.status < 400,
   urlMutator,
-  refreshIntervalMs = 1000,
+  refreshIntervalMs = 5 * 60 * 1000,
 }) {
   const subscribeToAllUrls = async (urls, featureName, featureConfig) => {
     for (const url of urls) {

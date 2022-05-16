@@ -42,7 +42,7 @@ import { getSSOAuthData } from '../auth/sso';
 import { setNavFooterText } from '../nav-footer';
 import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/pagination';
 import { getFeatures, initFeatures } from '../feature-discovery';
-import { fetchCache } from '../cache/fetch-cache';
+import * as fetchCache from './../cache/fetch-cache';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();

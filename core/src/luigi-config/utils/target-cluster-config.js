@@ -1,4 +1,4 @@
-import { fetchCache } from '../cache/fetch-cache';
+import * as fetchCache from './../cache/fetch-cache';
 import { reloadNavigation } from '../navigation/navigation-data-init';
 
 const CONFIGMAP_URL = '/api/v1/namespaces/kube-public/configmaps/busola-config';

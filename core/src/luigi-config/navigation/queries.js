@@ -4,7 +4,7 @@ import {
   getActiveClusterName,
 } from './../cluster-management/cluster-management';
 import { getSSOAuthData } from '../auth/sso';
-import { fetchCache } from '../cache/fetch-cache';
+import * as fetchCache from './../cache/fetch-cache';
 import { extractGroupVersions } from '../utils/extractGroupVersions';
 
 export async function failFastFetch(input, auth, init = {}) {

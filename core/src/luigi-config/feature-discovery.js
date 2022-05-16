@@ -1,5 +1,5 @@
 import { getAuthData } from './auth/auth-storage';
-import { fetchCache } from './cache/fetch-cache';
+import * as fetchCache from './cache/fetch-cache';
 import {
   getActiveCluster,
   getCurrentConfig,

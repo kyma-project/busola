@@ -11,7 +11,7 @@ import {
 } from '../utils/target-cluster-config';
 import { checkIfClusterRequiresCA } from '../navigation/queries';
 import * as clusterStorage from './clusters-storage';
-import { fetchCache } from '../cache/fetch-cache';
+import * as fetchCache from './../cache/fetch-cache';
 import { clearClusterCache } from '../cache/storage';
 import { isNil } from 'lodash';
 

@@ -16,7 +16,7 @@ import { setSSOAuthData } from './auth/sso';
 import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
 import { getCorrespondingNamespaceLocation } from './navigation/navigation-helpers';
 import { featureCommunicationEntries } from './feature-discovery';
-import { fetchCache } from './cache/fetch-cache';
+import * as fetchCache from './cache/fetch-cache';
 
 addCommandPaletteHandler();
 addOpenSearchHandler();
