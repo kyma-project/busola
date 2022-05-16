@@ -45,7 +45,9 @@ export const ExtensibilityList = () => {
   const resource = useGetCRbyPath();
 
   const translationBundle = resource?.navigation?.path || 'extensibility';
-  const { t } = useTranslation([translationBundle]); // translationBundle doesn't work here - why?
+  const { t: translations } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
+  const t = (path, ...props) =>
+    translations(`${translationBundle}:${path}`, ...props);
 
   const listProps = usePrepareListProps(
     resource.navigation.path,
@@ -59,12 +61,12 @@ export const ExtensibilityList = () => {
   }
   listProps.createFormProps = { resource };
   listProps.resourceName =
-    t(`${translationBundle}:labels.name`, {
+    t('labels.name', {
       defaultValue: resource.navigation.label,
     }) || listProps.resourceName;
-  listProps.description = t(`${translationBundle}:labels.description`) || '';
+  listProps.description = t('labels.description') || '';
   listProps.customColumns = (resource.list.columns || []).map(column => ({
-    header: t(`${translationBundle}:${column.valuePath}`, {
+    header: t(column.valuePath, {
       defaultValue: column.valuePath?.split('.')?.pop(),
     }),
     value: resource => {

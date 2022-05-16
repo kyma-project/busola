@@ -86,12 +86,7 @@ const JSONSchemaForm = ({ properties, path, ...props }) => {
   });
 };
 
-export const ResourceSchema = ({
-  resource,
-  setResource,
-  schema,
-  translations,
-}) => {
+export const ResourceSchema = ({ resource, setResource, schema, path }) => {
   const [store, setStore] = useState(() =>
     createStore(createOrderedMap(resource)),
   );
@@ -105,14 +100,17 @@ export const ResourceSchema = ({
     setResource(store.valuesToJS());
   }, [store.values]);
 
-  const translationBundle = resource?.navigation?.path || 'extensibility';
-  const { t } = useTranslation([translationBundle]);
+  const translationBundle = path || 'extensibility';
+  const { t } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
 
   if (isEmpty(schema)) return null;
   const schemaMap = createOrderedMap(schema);
 
   return (
-    <UIMetaProvider widgets={formWidgets} t={t}>
+    <UIMetaProvider
+      widgets={formWidgets}
+      t={(path, ...props) => t(`${translationBundle}:${path}`, ...props)}
+    >
       <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
         <FormStack isRoot schema={schemaMap} />
       </UIStoreProvider>
