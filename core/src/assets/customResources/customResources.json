@@ -5,13 +5,13 @@
         "label":"Shoots",
         "category":"Gardener",
         "scope":"namespace",
-        "hasDetailsView":true,
-        "resource":{
-           "kind":"Shoots",
-           "group":"core.gardener.cloud",
-           "version":"v1beta1"
-        }
+        "hasDetailsView":true
      },
+     "resource":{
+      "kind":"Shoots",
+      "group":"core.gardener.cloud",
+      "version":"v1beta1"
+   },
      "list":{
         "description":"An interesting description for a Shoot resource",
         "columns":[
@@ -1899,13 +1899,13 @@
            "de":"Meine Ressourcen"
         },
         "scope":"namespace",
-        "resource":{
-           "kind":"WasmPlugins",
-           "group":"extensions.istio.io",
-           "version":"v1alpha1"
-        },
         "hasDetailsView":true
      },
+     "resource":{
+      "kind":"WasmPlugins",
+      "group":"extensions.istio.io",
+      "version":"v1alpha1"
+   },
      "list":{
         "nameOverride":"My wasmplugins title override",
         "description":"Wasmplugins are a great resource",
@@ -1943,13 +1943,13 @@
            "de":"Meine Ressourcen"
         },
         "scope":"namespace",
-        "resource":{
-           "kind":"Jobs",
-           "group":"batch",
-           "version":"v1"
-        },
         "hasDetailsView":true
      },
+     "resource":{
+      "kind":"Jobs",
+      "group":"batch",
+      "version":"v1"
+   },
      "list":{
         "nameOverride":"My custom jobs title override",
         "description":{
@@ -2079,12 +2079,12 @@
         "path":"apirules-custom",
         "label":"apirules-custom",
         "scope":"namespace",
-        "resource":{
-           "kind":"APIRules",
-           "group":"gateway.kyma-project.io",
-           "version":"v1alpha1"
-        },
         "hasDetailsView":true
+     },
+     "resource":{
+        "kind":"APIRules",
+        "group":"gateway.kyma-project.io",
+        "version":"v1alpha1"
      },
      "list":{
         "title":"api rules",
@@ -2307,12 +2307,12 @@
            "de":"Meine Ressourcen"
         },
         "scope":"namespace",
-        "resource":{
-           "kind":"EnvoyFilters",
-           "group":"networking.istio.io",
-           "version":"v1alpha3"
-        },
         "hasDetailsView":true
+     },
+     "resource":{
+        "kind":"EnvoyFilters",
+        "group":"networking.istio.io",
+        "version":"v1alpha3"
      },
      "list":{
         "title":"My list of envoys",
