@@ -2,13 +2,21 @@ import React from 'react';
 
 import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
 
-function matchByEnv(valueFromKey) {
-  return (pod, resource) =>
-    pod.spec.containers.some(container =>
+function matchByMount(volumeResourceType) {
+  const valueFromKey = volumeResourceType + 'KeyRef';
+
+  return (pod, resource) => {
+    const connectedResourceName = resource.metadata.name;
+    const connectedByEnv = pod.spec.containers.some(container =>
       container.env.find(
-        e => e.valueFrom?.[valueFromKey]?.name === resource.metadata.name,
+        e => e.valueFrom?.[valueFromKey]?.name === connectedResourceName,
       ),
     );
+    const connectedByVolume = pod.spec.volumes.some(
+      volume => volume[volumeResourceType]?.name === connectedResourceName,
+    );
+    return connectedByEnv || connectedByVolume;
+  };
 }
 
 function matchByVolumes(pod, resource) {
@@ -53,7 +61,7 @@ export const resourceGraphConfig = (t, context) => ({
     },
   ],
   matchers: {
-    ConfigMap: (pod, cm) => matchByEnv('configMapKeyRef')(pod, cm),
+    ConfigMap: (pod, cm) => matchByMount('configMap')(pod, cm),
     DaemonSet: (pod, ds) =>
       matchByOwnerReference({
         resource: pod,
@@ -70,7 +78,7 @@ export const resourceGraphConfig = (t, context) => ({
         pod.metadata.labels,
       ),
     Secret: (pod, secret) =>
-      matchByEnv('secretKeyRef')(pod, secret) || matchByVolumes(pod, secret),
+      matchByMount('secret')(pod, secret) || matchByVolumes(pod, secret),
     StatefulSet: (pod, ss) =>
       matchByOwnerReference({
         resource: pod,
