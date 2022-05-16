@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { isEmpty } from 'lodash';
 import * as jp from 'jsonpath';
+import { useTranslation } from 'react-i18next';
 
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import { UIMetaProvider } from '@ui-schema/ui-schema/UIMeta';
@@ -10,7 +11,6 @@ import {
   storeUpdater,
 } from '@ui-schema/ui-schema';
 import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
-import { relTranslator } from '@ui-schema/ui-schema/Translate/relT';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { KeyValueField } from 'shared/ResourceForm/fields';
@@ -84,7 +84,7 @@ const JSONSchemaForm = ({ properties, path, ...props }) => {
   });
 };
 
-export const ResourceSchema = ({ resource, setResource, schema }) => {
+export const ResourceSchema = ({ resource, setResource, schema, path }) => {
   const [store, setStore] = useState(() =>
     createStore(createOrderedMap(resource)),
   );
@@ -98,11 +98,17 @@ export const ResourceSchema = ({ resource, setResource, schema }) => {
     setResource(store.valuesToJS());
   }, [store.values]);
 
+  const translationBundle = path || 'extensibility';
+  const { t } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
+
   if (isEmpty(schema)) return null;
 
   const schemaMap = createOrderedMap(schema);
   return (
-    <UIMetaProvider widgets={formWidgets} t={relTranslator}>
+    <UIMetaProvider
+      widgets={formWidgets}
+      t={(path, ...props) => t(`${translationBundle}:${path}`, ...props)}
+    >
       <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
         <FormStack isRoot schema={schemaMap} />
       </UIStoreProvider>

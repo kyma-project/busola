@@ -12,7 +12,6 @@ export function StringRenderer({
   schema,
   storeKeys,
   required,
-  ...props
 }) {
   return (
     <ResourceForm.FormField

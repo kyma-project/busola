@@ -1,5 +1,5 @@
 import React from 'react';
-import { getValue, useGetTranslation } from './components/helpers';
+import { getValue } from './components/helpers';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ExtensibilityCreate } from './extensibilityCreate';
@@ -8,6 +8,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Link } from 'shared/components/Link/Link';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { usePrepareListProps } from 'resources/helpers';
+import { useTranslation } from 'react-i18next';
 
 function resolveBadgeType(value, columnProps) {
   const { successValues, warningValues } = columnProps;
@@ -43,7 +44,12 @@ function listColumnDisplay(value, columnProps) {
 
 export const ExtensibilityList = () => {
   const resource = useGetCRbyPath();
-  const translate = useGetTranslation();
+
+  const translationBundle = resource?.navigation?.path || 'extensibility';
+  const { t: translations } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
+  const t = (path, ...props) =>
+    translations(`${translationBundle}:${path}`, ...props);
+
   const listProps = usePrepareListProps(
     resource.navigation.path,
     resource.navigation.label,
@@ -56,11 +62,16 @@ export const ExtensibilityList = () => {
     );
   }
   listProps.createFormProps = { resource };
-  listProps.resourceName =
-    translate(resource.list?.title) || listProps.resourceName;
-  listProps.description = translate(resource.list?.description) || '';
+  listProps.resourceName = t('labels.name', {
+    defaultValue: resource.navigation.label,
+  });
+  listProps.description = t('labels.description', {
+    defaultValue: '',
+  });
   listProps.customColumns = (resource.list.columns || []).map(column => ({
-    header: translate(column.header),
+    header: t(column.valuePath, {
+      defaultValue: column.valuePath?.split('.')?.pop(),
+    }),
     value: resource => {
       const v = listColumnDisplay(getValue(resource, column.valuePath), column);
       if (typeof v === 'undefined' || v === '') {

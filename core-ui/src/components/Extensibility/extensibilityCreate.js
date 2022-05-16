@@ -67,6 +67,7 @@ export function ExtensibilityCreate({
         resource={resource}
         setResource={setResource}
         onSubmit={() => {}}
+        path={createResource?.navigation?.path || ''}
       />
       <ResourceSchema
         advanced
@@ -74,6 +75,7 @@ export function ExtensibilityCreate({
         schema={schema || {}}
         resource={resource}
         setResource={setResource}
+        path={createResource?.navigation?.path || ''}
       />
     </ResourceForm>
   );

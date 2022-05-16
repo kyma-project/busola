@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 import { MainFrameRedirection } from 'shared/components/MainFrameRedirection/MainFrameRedirection';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
@@ -15,7 +16,7 @@ import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
 
 export default function App() {
-  const { cluster, language, customResources } = useMicrofrontendContext();
+  const { cluster, language, customResources = [] } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
@@ -52,6 +53,12 @@ export default function App() {
       />
 
       {customResources?.map(cr => {
+        const translationBundle = cr?.navigation?.path || 'extensibility';
+        i18next.addResourceBundle(
+          language,
+          translationBundle,
+          cr?.translations?.[language] || {},
+        );
         if (cr.navigation?.scope === 'namespace') {
           return (
             <>
