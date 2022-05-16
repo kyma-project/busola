@@ -55,7 +55,7 @@
            },
            {
               "type":"monacoPanel",
-              "valuePath":"$.spec.kubernetes.kubeAPIServer.oidcConfig",
+              "valuePath":"spec.kubernetes.kubeAPIServer.oidcConfig",
               "title":"OIDC configuration"
            },
            {
@@ -84,7 +84,7 @@
                  "reason",
                  "message"
               ],
-              "valuePath":"$.status.conditions"
+              "valuePath":"status.conditions"
            }
         ]
      },
@@ -1892,6 +1892,19 @@
      }
   },
   "wasmplugins":{
+    "translations": {
+      "en": {
+        "labels": {
+          "description": "Wasmplugins are great resources",
+          "name": "My custom wasmplugins"
+        }
+      },
+      "pl": {
+        "labels": {
+          "name": "Moje wasmpluginy" 
+        }
+      }
+    },
      "navigation":{
         "path":"wasmplugins",
         "label":"My wasmplugins",
@@ -1912,7 +1925,7 @@
         "columns":[
            {
               "header":"plugin name",
-              "valuePath":"$.spec.pluginName",
+              "valuePath":"spec.pluginName",
               "display":"status",
               "successValues":[
                  "add_header"
@@ -1923,7 +1936,7 @@
            },
            {
               "header":"Pretend it's an url",
-              "valuePath":"$.spec.url",
+              "valuePath":"spec.url",
               "display":"external-link"
            }
         ]
@@ -1936,6 +1949,24 @@
      }
   },
   "customjobs":{
+    "translations": {
+      "en": {
+        "labels": {
+          "name": "My custom job"
+        },
+        "spec":{
+          "selector": {
+            "matchLabels": "Match Labels"
+          },
+          "backoffLimit": "Back Off Limit"
+        }
+      },
+      "pl": {
+        "labels": {
+          "name": "Moje dzoby" 
+        }
+      }
+    },
      "navigation":{
         "path":"customjobs",
         "label":"Custom Jobs",
@@ -1951,23 +1982,18 @@
         "hasDetailsView":true
      },
      "list":{
-        "nameOverride":"My custom jobs title override",
-        "description":{
-           "en":"Custom jobs are a great resource.",
-           "de":"Benutzerdefinierte Jobs sind eine großartige Ressource."
-        },
         "columns":[
            {
               "header":{
                  "en":"BackOffLimit"
               },
-              "valuePath":"$.spec.backoffLimit"
+              "valuePath":"spec.backoffLimit"
            },
            {
               "header":{
                  "de":"MatchLabels des Selektors"
               },
-              "valuePath":"$.spec.selector.matchLabels",
+              "valuePath":"spec.selector.matchLabels",
               "display":"labels"
            },
            {
@@ -1975,9 +2001,9 @@
                  "en":"Container image names",
                  "de":"Container-Image-Namen"
               },
-              "valuePath":"$.spec.template.spec.volumes",
+              "valuePath":"spec.template.spec.volumes",
               "display":"array",
-              "arrayValuePath":"$.name"
+              "arrayValuePath":"name"
            }
         ]
      },
@@ -2023,7 +2049,7 @@
                  "lastProbeTime",
                  "lastProbeTime"
               ],
-              "valuePath":"$.status.conditions"
+              "valuePath":"status.conditions"
            },
            {
               "type":"detailPanel",
@@ -2033,17 +2059,17 @@
               "properties":[
                  {
                     "header":"Parallelism",
-                    "valuePath":"$.spec.parallelism"
+                    "valuePath":"spec.parallelism"
                  },
                  {
                     "header":"Completions",
-                    "valuePath":"$.spec.completions"
+                    "valuePath":"spec.completions"
                  },
                  {
                     "header":{
                        "en":"Backofflimit"
                     },
-                    "valuePath":"$.spec.backoffLimit"
+                    "valuePath":"spec.backoffLimit"
                  }
               ]
            },
@@ -2064,7 +2090,7 @@
                  "reason",
                  "message"
               ],
-              "valuePath":"$.status.conditions"
+              "valuePath":"status.conditions"
            }
         ]
      },
@@ -2106,6 +2132,18 @@
               "title":"Filter as a Whole"
            }
         ]
+     },
+     "translations": {
+       "en": {
+         "spec": {
+           "priority": "Priority"
+         }
+       },
+       "pl": {
+        "spec": {
+          "priority": "Priorytet"
+        }
+      }
      },
      "create":{
         "name_singular":"Envoy Filters",
