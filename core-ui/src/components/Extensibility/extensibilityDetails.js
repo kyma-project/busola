@@ -14,7 +14,6 @@ export const ExtensibilityDetails = () => {
     resMetaData.navigation.path,
     resMetaData.navigation.label,
   );
-  console.log(resMetaData);
 
   if (resMetaData.navigation.resource.kind) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
@@ -24,7 +23,6 @@ export const ExtensibilityDetails = () => {
   }
 
   const schema = resMetaData.create?.simple?.schema;
-  console.log(schema);
 
   const customColumns = [];
 

@@ -13,7 +13,6 @@ const DetailsStack = injectPluginStack(DetailsContainer);
 
 export const DetailsSchema = ({ resource, schema }) => {
   const store = createStore(createOrderedMap(resource));
-  console.log('store', store);
 
   if (isEmpty(schema)) return null;
 

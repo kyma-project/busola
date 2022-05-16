@@ -36,11 +36,7 @@ export const widgets = {
     //    boolean: ({ children }) => <span>TODO: boolean</span>,
     number: SimpleTypeRenderer,
     integer: SimpleTypeRenderer,
-    array: props => {
-      console.log(props);
-
-      return <>TODO: array</>;
-    },
+    array: GenericListRenderer,
     // object: props => {
     //   console.log(props);
     //   return <>Siemaneczko</>;
@@ -52,10 +48,10 @@ export const widgets = {
     /*
     Accordions: AccordionsRenderer,
     */
-    Workload: props => {
-      console.log(props);
-      return <>Siemaneczko</>;
-    },
+    // Workload: props => {
+    //   console.log(props);
+    //   return <>Siemaneczko</>;
+    // },
     // List: GenericListRenderer,
     // Table: TableDataRenderer,
     /*

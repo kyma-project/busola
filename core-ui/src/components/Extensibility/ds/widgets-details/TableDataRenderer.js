@@ -4,7 +4,6 @@ import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
 export function TableDataRenderer({ value }) {
-  console.log(value);
   return (
     <LayoutPanel className="fd-margin--md secret-panel">
       <LayoutPanel.Header>
