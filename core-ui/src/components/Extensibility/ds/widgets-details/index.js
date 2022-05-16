@@ -9,12 +9,10 @@ import {
   ExtractStorePlugin,
 } from '@ui-schema/ui-schema/Plugins';
 import { PluginSimpleStack } from '@ui-schema/ui-schema/PluginSimpleStack';
-import { ValidityReporter } from '@ui-schema/ui-schema/ValidityReporter';
 
 import { WorkloadRenderer } from './WorkloadRenderer';
 import { GenericListRenderer } from './GenericListRenderer';
-import { TableDataRenderer } from './TableDataRenderer';
-import { SimpleTypeRenderer } from './simpleTypeRenderer';
+import { SimpleTypeRenderer } from './SimpleTypeRenderer';
 
 const pluginStack = [
   ReferencingHandler,
@@ -34,7 +32,7 @@ export const widgets = {
   pluginStack,
   types: {
     string: SimpleTypeRenderer,
-    //    boolean: ({ children }) => <span>TODO: boolean</span>,
+    boolean: SimpleTypeRenderer,
     number: SimpleTypeRenderer,
     integer: SimpleTypeRenderer,
     array: GenericListRenderer,

@@ -10,7 +10,7 @@ export function SimpleTypeRenderer({ value, ...props }) {
       <LayoutPanel.Body>
         <LayoutPanelRow
           name={props.ownKey || EMPTY_TEXT_PLACEHOLDER}
-          value={value}
+          value={typeof value === 'boolean' ? value.toString() : value}
         />
       </LayoutPanel.Body>
     </LayoutPanel>
