@@ -7,7 +7,7 @@ import {
 } from 'components/ApiRules/components';
 import ApiRuleStatus from 'components/ApiRules/ApiRuleStatus/ApiRuleStatus';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 
 import { APIRuleCreate } from './APIRuleCreate';
 
@@ -31,7 +31,7 @@ export function APIRuleList(props) {
 
   const description = (
     <Trans i18nKey="api-rules.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/apix-01-apirule/#documentation-content"
       />

@@ -3,7 +3,7 @@ import { useTranslation, Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ResourceStatus } from 'shared/components/ResourceStatus/ResourceStatus';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 import { CertificateDate } from 'shared/components/CertificateDate/CertificateDate';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
@@ -51,7 +51,7 @@ export function CertificateList(props) {
 
   const description = (
     <Trans i18nKey="certificates.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://cert-manager.io/docs/concepts/certificate/"
       />

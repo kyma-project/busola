@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 import { GatewayCreate } from './GatewayCreate';
 import { GatewaySelector } from './GatewaySelector';
 import { Trans } from 'react-i18next';
@@ -18,7 +18,7 @@ export function GatewayList(props) {
 
   const description = (
     <Trans i18nKey="gateways.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://istio.io/latest/docs/reference/config/networking/gateway/"
       />

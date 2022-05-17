@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 import { getResourceDisplayName } from 'helpers';
 import { serviceInstanceConstants } from 'helpers/constants';
 import { ServiceInstanceStatus } from '../../../shared/ServiceInstanceStatus.js';
@@ -39,7 +39,7 @@ const ServiceInstanceInfo = ({
 
   const documentationLink = serviceClass.spec.externalMetadata
     ?.documentationUrl && (
-    <Link
+    <ExternalLink
       className="fd-link"
       url={serviceClass.spec.externalMetadata.documentationUrl}
       text={serviceInstanceConstants.link}
@@ -48,7 +48,7 @@ const ServiceInstanceInfo = ({
   );
 
   const supportLink = serviceClass.spec.externalMetadata?.supportUrl && (
-    <Link
+    <ExternalLink
       className="fd-link"
       url={serviceClass.spec.externalMetadata.supportUrl}
       text={serviceInstanceConstants.link}

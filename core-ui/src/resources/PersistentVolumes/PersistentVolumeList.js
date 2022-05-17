@@ -4,7 +4,7 @@ import { Link } from 'fundamental-react';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Link as DescLink } from 'shared/components/Link/Link';
+import { ExternalLink as DescLink } from 'shared/components/Link/ExternalLink';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 

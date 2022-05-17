@@ -2,7 +2,7 @@ import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeClaimStatus';
 import { Tokens } from 'shared/components/Tokens';
 
@@ -32,7 +32,7 @@ export function PersistentVolumeClaimList(props) {
 
   const description = (
     <Trans i18nKey="persistent-volume-claims.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kubernetes.io/docs/concepts/storage/persistent-volumes/"
       />

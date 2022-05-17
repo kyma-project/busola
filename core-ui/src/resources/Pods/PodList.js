@@ -5,7 +5,7 @@ import LuigiClient from '@luigi-project/client';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
-import { Link as ReactSharedLink } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 
 import { PodCreate } from './PodCreate';
 import { PodStatus } from './PodStatus';
@@ -57,7 +57,7 @@ export function PodList(params) {
 
   const description = (
     <Trans i18nKey="pods.description">
-      <ReactSharedLink
+      <ExternalLink
         className="fd-link"
         url="https://kubernetes.io/docs/concepts/workloads/pods/"
       />

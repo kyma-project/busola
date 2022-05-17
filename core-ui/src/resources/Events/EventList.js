@@ -8,7 +8,7 @@ import { prettifyNamePlural } from 'shared/utils/helpers';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { Link as DescriptionLink } from 'shared/components/Link/Link';
+import { ExternalLink as DescriptionLink } from 'shared/components/Link/ExternalLink';
 import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 export function Events({ ...otherParams }) {

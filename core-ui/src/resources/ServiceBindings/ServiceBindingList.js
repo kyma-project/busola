@@ -6,7 +6,7 @@ import { Link } from 'fundamental-react';
 import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
-import { Link as ReactSharedLink } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 
 import { ServiceBindingCreate } from './ServiceBindingCreate';
 
@@ -54,7 +54,7 @@ export function ServiceBindingList(props) {
 
   const description = (
     <Trans i18nKey="btp-service-bindings.description">
-      <ReactSharedLink
+      <ExternalLink
         className="fd-link"
         url="https://github.com/SAP/sap-btp-service-operator#step-2-create-a-service-binding"
       />

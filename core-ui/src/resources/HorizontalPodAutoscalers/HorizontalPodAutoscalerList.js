@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 import { Tokens } from 'shared/components/Tokens';
 
 import { MetricsBrief } from './helpers';
@@ -46,7 +46,7 @@ export function HorizontalPodAutoscalerList(props) {
 
   const description = (
     <Trans i18nKey="hpas.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/horizontal-pod-autoscaler-v2/"
       />

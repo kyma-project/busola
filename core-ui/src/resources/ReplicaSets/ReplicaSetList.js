@@ -3,7 +3,7 @@ import { useTranslation, Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 
 import { ReplicaSetCreate } from './ReplicaSetCreate';
 import { ReplicaSetStatus } from './ReplicaSetStatus';
@@ -44,7 +44,7 @@ export function ReplicaSetList(params) {
 
   const description = (
     <Trans i18nKey="replica-sets.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/"
       />

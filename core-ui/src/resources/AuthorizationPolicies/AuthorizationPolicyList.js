@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 
 import { AuthorizationPolicyCreate } from './AuthorizationPolicyCreate';
 
@@ -18,7 +18,7 @@ export function AuthorizationPolicyList(props) {
 
   const description = (
     <Trans i18nKey="authorization-policies.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://istio.io/latest/docs/reference/config/security/authorization-policy/"
       />

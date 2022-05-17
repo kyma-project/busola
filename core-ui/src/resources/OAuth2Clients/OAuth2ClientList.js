@@ -3,7 +3,7 @@ import { useTranslation, Trans } from 'react-i18next';
 
 import { OAuth2ClientStatus } from 'shared/components/OAuth2ClientStatus/OAuth2ClientStatus';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 
 import { OAuth2ClientCreate } from './OAuth2ClientCreate';
 
@@ -25,7 +25,7 @@ export function OAuth2ClientList(props) {
 
   const description = (
     <Trans i18nKey="oauth2-clients.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-03-expose-and-secure-service#register-an-o-auth2-client-and-get-tokens"
       />

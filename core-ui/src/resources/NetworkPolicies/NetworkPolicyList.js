@@ -2,14 +2,14 @@ import React from 'react';
 import { Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 
 import { NetworkPolicyCreate } from './NetworkPolicyCreate';
 
 export function NetworkPolicyList(props) {
   const description = (
     <Trans i18nKey="network-policies.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kubernetes.io/docs/concepts/services-networking/network-policies/"
       />

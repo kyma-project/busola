@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'fundamental-react';
 
-export const Link = ({ url, text, className, children }) => {
+export const ExternalLink = ({ url, text, className, children }) => {
   return (
     <a
       className={className}
@@ -21,7 +21,7 @@ export const Link = ({ url, text, className, children }) => {
   );
 };
 
-Link.propTypes = {
+ExternalLink.propTypes = {
   url: PropTypes.string.isRequired,
   text: PropTypes.string,
 };

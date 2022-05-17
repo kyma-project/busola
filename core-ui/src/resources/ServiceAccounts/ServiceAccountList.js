@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { ServiceAccountTokenStatus } from 'shared/components/ServiceAccountTokenStatus';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 import { ServiceAccountCreate } from './ServiceAccountCreate';
 
 export function ServiceAccountList(props) {
@@ -20,7 +20,7 @@ export function ServiceAccountList(props) {
 
   const description = (
     <Trans i18nKey="service-accounts.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/"
       />

@@ -4,7 +4,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { CronJobLastScheduleTime } from 'shared/components/CronJob/CronJobLastScheduleTime';
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 import { CronJobCreate } from './CronJobCreate';
 
 export function CronJobList(props) {
@@ -27,7 +27,7 @@ export function CronJobList(props) {
 
   const description = (
     <Trans i18nKey="cron-jobs.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/"
       />

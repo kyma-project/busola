@@ -5,7 +5,7 @@ import { Link } from 'fundamental-react';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { Link as ReactSharedLink } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 
 export function GenericRoleBindingList({ descriptionKey, ...params }) {
   const { t } = useTranslation();
@@ -90,7 +90,7 @@ export function GenericRoleBindingList({ descriptionKey, ...params }) {
 
   const description = (
     <Trans i18nKey={descriptionKey}>
-      <ReactSharedLink
+      <ExternalLink
         className="fd-link"
         url="https://kyma-project.io/docs/kyma/latest/04-operation-guides/security/sec-02-authorization-in-kyma/#role-binding"
       />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 import { Trans } from 'react-i18next';
 import { instancesTabUtils } from 'helpers/instances-tab-utils';
 import { Tab } from 'shared/components/Tabs/Tab';
@@ -120,7 +120,7 @@ export default function ServiceClassList() {
 
   const description = (
     <Trans i18nKey="catalog.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kyma-project-docs-preview.netlify.app/components/service-catalog"
       />

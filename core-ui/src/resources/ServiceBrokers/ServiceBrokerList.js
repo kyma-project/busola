@@ -3,7 +3,7 @@ import { useTranslation, Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 
 export function ServiceBrokerList(props) {
   const { t, i18n } = useTranslation();
@@ -37,7 +37,7 @@ export function ServiceBrokerList(props) {
 
   const description = (
     <Trans i18nKey="brokers.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kyma-project-old.netlify.app/docs/components/service-catalog#overview-service-brokers"
       />

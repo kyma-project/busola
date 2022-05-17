@@ -4,7 +4,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
 import { Labels } from 'shared/components/Labels/Labels';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 
 import { DaemonSetCreate } from './DaemonSetCreate';
@@ -38,7 +38,7 @@ export function DaemonSetList(props) {
 
   const description = (
     <Trans i18nKey="daemon-sets.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/"
       />

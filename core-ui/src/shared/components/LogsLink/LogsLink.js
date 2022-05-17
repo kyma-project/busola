@@ -7,8 +7,8 @@ import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { Link } from 'shared/components/Link/Link';
 import './LogsLink.scss';
+import { ExternalLink } from '../Link/ExternalLink';
 
 export const LogsLink = ({
   className,
@@ -71,7 +71,7 @@ export const LogsLink = ({
   )}`;
 
   return (
-    <Link
+    <ExternalLink
       className={classNames('logs-link', 'fd-button', className)}
       url={grafanaLink}
       text={children || t('grafana.logs')}

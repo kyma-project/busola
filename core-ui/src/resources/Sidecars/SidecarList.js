@@ -4,7 +4,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Labels } from 'shared/components/Labels/Labels';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 
 import { SidecarCreate } from './SidecarCreate';
 
@@ -26,7 +26,7 @@ export function SidecarList(props) {
 
   const description = (
     <Trans i18nKey="sidecars.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://istio.io/latest/docs/reference/config/networking/sidecar/"
       />

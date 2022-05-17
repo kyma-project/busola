@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 
 import { ServiceEntryCreate } from './ServiceEntryCreate';
 
@@ -23,7 +23,7 @@ export function ServiceEntryList(props) {
 
   const description = (
     <Trans i18nKey="service-entries.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://istio.io/latest/docs/reference/config/networking/service-entry/"
       />

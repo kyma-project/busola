@@ -1,7 +1,7 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 import { GroupingListPage } from './GroupingListPage';
 
 export default function CRDList() {
@@ -14,7 +14,7 @@ export default function CRDList() {
 
   const description = (
     <Trans i18nKey="custom-resource-definitions.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/"
       />

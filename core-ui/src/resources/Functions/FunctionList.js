@@ -3,7 +3,7 @@ import { Button } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 
 import { prettySourceType } from 'components/Functions/helpers/functions';
 import { prettyRuntime } from 'components/Functions/helpers/runtime';
@@ -56,7 +56,7 @@ export function FunctionList(props) {
 
   const description = (
     <Trans i18nKey="functions.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/svls-01-function/#documentation-content/"
       />

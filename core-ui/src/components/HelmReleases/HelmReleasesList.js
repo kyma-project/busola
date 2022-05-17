@@ -6,7 +6,7 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { Labels } from 'shared/components/Labels/Labels';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { Link as ExternalLink } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 import { Link } from 'fundamental-react';
 import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';

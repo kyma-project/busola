@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 
 import { ApplicationStatus } from './ApplicationStatus';
 import { ApplicationCreate } from './ApplicationCreate';
@@ -18,7 +18,7 @@ export function ApplicationList(props) {
   ];
   const description = (
     <Trans i18nKey="applications.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/ac-01-application"
       />

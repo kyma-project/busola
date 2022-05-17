@@ -3,7 +3,7 @@ import { useTranslation, Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
 
 import { DeploymentCreate } from './DeploymentCreate';
@@ -47,7 +47,7 @@ export function DeploymentList(props) {
 
   const description = (
     <Trans i18nKey="deployments.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/"
       />

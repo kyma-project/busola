@@ -4,7 +4,7 @@ import { NamespaceStatus } from './NamespaceStatus';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { getFeatureToggle } from 'shared/hooks/useFeatureToggle';
 import { getHiddenNamespaces } from 'shared/helpers/getHiddenNamespaces';
-import { Link } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 import { Trans } from 'react-i18next';
 import { NamespaceCreate } from './NamespaceCreate';
 
@@ -30,7 +30,7 @@ export function NamespaceList(props) {
 
   const description = (
     <Trans i18nKey="namespaces.description">
-      <Link
+      <ExternalLink
         className="fd-link"
         url="https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces"
       />

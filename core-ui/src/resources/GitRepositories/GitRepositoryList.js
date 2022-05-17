@@ -6,7 +6,7 @@ import LuigiClient from '@luigi-project/client';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { Link as ReactSharedLink } from 'shared/components/Link/Link';
+import { ExternalLink } from 'shared/components/Link/ExternalLink';
 
 import { GitRepositoryCreate } from './GitRepositoryCreate';
 
@@ -49,7 +49,7 @@ export function GitRepositoryList(props) {
 
   const description = (
     <Trans i18nKey="git-repositories.description">
-      <ReactSharedLink
+      <ExternalLink
         className="fd-link"
         url="https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/svls-02-gitrepository#documentation-content"
       />
