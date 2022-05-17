@@ -16,28 +16,26 @@ const rowRenderer = strategy => {
   return [
     <span>{strategy.path}</span>,
     <ul className="tokens">
-      {strategy.accessStrategies.map(ac => {
-        return (
-          <li key={ac.handler}>
-            <InfoLabel modifier="filled">
-              <Icon
-                ariaLabel={
-                  accessStrategyTypes[ac.handler]?.displayName || ac.handler
-                }
-                className="fd-margin-end--tiny"
-                glyph={
-                  ac.handler === accessStrategyTypes.noop.value ||
-                  ac.handler === accessStrategyTypes.allow.value
-                    ? 'unlocked'
-                    : 'locked'
-                }
-                size="s"
-              />
-              {accessStrategyTypes[ac.handler]?.displayName || ac.handler}
-            </InfoLabel>
-          </li>
-        );
-      })}
+      {strategy.accessStrategies.map(ac => (
+        <li key={ac.handler}>
+          <InfoLabel modifier="filled">
+            <Icon
+              ariaLabel={
+                accessStrategyTypes[ac.handler]?.displayName || ac.handler
+              }
+              className="fd-margin-end--tiny"
+              glyph={
+                ac.handler === accessStrategyTypes.noop.value ||
+                ac.handler === accessStrategyTypes.allow.value
+                  ? 'unlocked'
+                  : 'locked'
+              }
+              size="s"
+            />
+            {accessStrategyTypes[ac.handler]?.displayName || ac.handler}
+          </InfoLabel>
+        </li>
+      ))}
     </ul>,
     <ul className="tokens">
       {strategy.methods
