@@ -36,7 +36,6 @@ export async function handleKubeconfigIdIfPresent() {
 
     const params = {
       config: {
-        hiddenNamespaces: constants.DEFAULT_HIDDEN_NAMESPACES,
         features: {
           ...constants.DEFAULT_FEATURES,
         },
