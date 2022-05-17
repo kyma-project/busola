@@ -83,7 +83,26 @@ const JSONSchemaForm = ({ properties, path, ...props }) => {
     }
   });
 };
-
+const metadata = {
+  properties: {
+    name: {
+      type: 'string',
+    },
+    labels: {
+      type: 'object',
+      additionalProperties: {
+        type: 'string',
+      },
+    },
+    annotations: {
+      type: 'object',
+      additionalProperties: {
+        type: 'string',
+      },
+    },
+  },
+  type: 'object',
+};
 export const ResourceSchema = ({ resource, setResource, schema, path }) => {
   const [store, setStore] = useState(() =>
     createStore(createOrderedMap(resource)),
@@ -103,7 +122,12 @@ export const ResourceSchema = ({ resource, setResource, schema, path }) => {
 
   if (isEmpty(schema)) return null;
 
-  const schemaMap = createOrderedMap(schema);
+  const newschema = {
+    ...schema,
+    properties: { ...schema.properties, metadata },
+  };
+
+  const schemaMap = createOrderedMap(newschema);
   return (
     <UIMetaProvider
       widgets={formWidgets}
