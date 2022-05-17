@@ -3,7 +3,7 @@ import { reloadNavigation } from '../navigation/navigation-data-init';
 import { reloadAuth, hasNonOidcAuth } from '../auth/auth';
 import { saveLocation } from '../navigation/previous-location';
 import { parseOIDCParams } from '../auth/oidc-params';
-import { DEFAULT_HIDDEN_NAMESPACES, DEFAULT_FEATURES } from '../constants';
+import { DEFAULT_FEATURES } from '../constants';
 import { getBusolaClusterParams } from '../busola-cluster-params';
 import {
   getTargetClusterConfig,
@@ -149,8 +149,6 @@ export function saveActiveClusterName(clusterName) {
 // defaults < config from Busola cluster CM < (config from target cluster CM)
 async function mergeParams(params) {
   const defaultConfig = {
-    navigation: { disabledNodes: [] },
-    hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
     features: DEFAULT_FEATURES,
     storage: await clusterStorage.getDefaultStorage(),
   };
@@ -166,10 +164,6 @@ async function mergeParams(params) {
     ...(await getBusolaClusterParams()).config?.features,
     ...params.config.features,
   };
-
-  // Don't merge hiddenNamespaces, use the defaults only when params are empty
-  params.config.hiddenNamespaces =
-    params.config?.hiddenNamespaces || DEFAULT_HIDDEN_NAMESPACES;
 
   return params;
 }

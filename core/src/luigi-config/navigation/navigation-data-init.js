@@ -86,6 +86,16 @@ export async function reloadNavigation() {
   }, 100);
 }
 
+const getDisabledNodes = activeCluster => {
+  const isValidConfig =
+    activeCluster.config?.features?.DISABLED_NODES?.isEnabled &&
+    Array.isArray(activeCluster.config?.features?.DISABLED_NODES?.nodes);
+
+  return isValidConfig
+    ? activeCluster.config?.features?.DISABLED_NODES?.nodes
+    : [];
+};
+
 async function createClusterManagementNodes(features) {
   const activeClusterName = getActiveClusterName();
 
@@ -347,8 +357,8 @@ export async function createNavigationNodes(
   const activeClusterName = encodeURIComponent(
     activeCluster.kubeconfig['current-context'],
   );
-  const { navigation = {}, hiddenNamespaces = [] } =
-    activeCluster?.config || {};
+
+  const disabledNodes = getDisabledNodes(activeCluster);
 
   const createClusterNodes = async () => {
     const staticNodes = getStaticRootNodes(
@@ -367,7 +377,7 @@ export async function createNavigationNodes(
       ...observabilitySection,
       ...externalNodes,
     ];
-    hideDisabledNodes(navigation.disabledNodes, allNodes, false);
+    hideDisabledNodes(disabledNodes, allNodes, false);
     return allNodes;
   };
 
@@ -411,7 +421,6 @@ export async function createNavigationNodes(
         groups,
         features,
         clusters: await getClusters(),
-        hiddenNamespaces,
         cluster: activeCluster.currentContext.cluster,
         config: activeCluster.config,
         kubeconfig: activeCluster.kubeconfig,
@@ -440,7 +449,15 @@ async function getNamespaces() {
     return createNamespacesList([{ name: namespace }]);
   }
 
-  const { hiddenNamespaces = [] } = activeCluster?.config || {};
+  const hiddenNamespacesConfig =
+    activeCluster?.config.features?.HIDDEN_NAMESPACES;
+
+  const hiddenNamespaces =
+    hiddenNamespacesConfig?.isEnabled &&
+    Array.isArray(hiddenNamespacesConfig?.config?.namespaces)
+      ? hiddenNamespacesConfig.config.namespaces
+      : [];
+
   try {
     let namespaces = await fetchNamespaces(getAuthData());
     if (!getFeatureToggle('showHiddenNamespaces')) {
@@ -461,13 +478,16 @@ async function getChildrenNodesForNamespace(
   permissionSet,
   features,
 ) {
-  const { navigation = {} } = (await getActiveCluster()).config;
+  const activeCluster = await getActiveCluster();
+
+  const disabledNodes = getDisabledNodes(activeCluster);
+
   const staticNodes = getStaticChildrenNodesForNamespace(
     groupVersions,
     permissionSet,
     features,
   );
 
-  hideDisabledNodes(navigation.disabledNodes, staticNodes, true);
+  hideDisabledNodes(disabledNodes, staticNodes, true);
   return staticNodes;
 }

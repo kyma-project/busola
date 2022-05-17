@@ -5,8 +5,11 @@ const configMock = {
   data: {
     config: JSON.stringify({
       config: {
-        navigation: { disabledNodes: [] },
         features: {
+          DISABLED_NODES: {
+            nodes: [],
+            isEnabled: false,
+          },
           EXTERNAL_NODES: {
             nodes: [
               {
