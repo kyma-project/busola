@@ -3,7 +3,6 @@ import { reloadNavigation } from '../navigation/navigation-data-init';
 import { reloadAuth, hasNonOidcAuth } from '../auth/auth';
 import { saveLocation } from '../navigation/previous-location';
 import { createLoginCommand, parseOIDCParams } from '../auth/oidc-params';
-import { DEFAULT_HIDDEN_NAMESPACES, DEFAULT_FEATURES } from '../constants';
 import { getBusolaClusterParams } from '../busola-cluster-params';
 import {
   getTargetClusterConfig,
@@ -14,6 +13,7 @@ import * as clusterStorage from './clusters-storage';
 import * as fetchCache from './../cache/fetch-cache';
 import { clearClusterCache } from '../cache/storage';
 import { isNil } from 'lodash';
+import { DEFAULT_FEATURES } from '../constants';
 
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
@@ -142,33 +142,22 @@ export function saveActiveClusterName(clusterName) {
 // setup params:
 // defaults < config from Busola cluster CM < (config from target cluster CM)
 export async function getCurrentConfig() {
-  let config = {
-    navigation: { disabledNodes: [] },
-    hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
-    features: DEFAULT_FEATURES,
-  };
-
   const busolaClusterParams = await getBusolaClusterParams();
   const targetCluterConfig = getActiveClusterName()
     ? await getTargetClusterConfig()
     : {};
 
   const features = {
-    ...config.features,
+    ...DEFAULT_FEATURES,
     ...busolaClusterParams?.config?.features,
     ...targetCluterConfig?.config?.features,
   };
 
-  config = {
-    ...config,
+  let config = {
     ...busolaClusterParams?.config,
     ...targetCluterConfig?.config,
   };
   config.features = features;
-
-  // Don't merge hiddenNamespaces, use the defaults only when params are empty
-  config.hiddenNamespaces =
-    config?.hiddenNamespaces || DEFAULT_HIDDEN_NAMESPACES;
 
   return config;
 }

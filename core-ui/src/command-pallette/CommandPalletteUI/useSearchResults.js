@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { getHiddenNamespaces } from 'shared/helpers/getHiddenNamespaces';
 import * as handlers from './handlers';
 
 export const LOADING_INDICATOR = 'LOADING_INDICATOR';
@@ -19,8 +20,8 @@ export function useSearchResults({
     activeClusterName,
     clusterNodes,
     namespaceNodes,
-    hiddenNamespaces,
   } = useMicrofrontendContext();
+  const hiddenNamespaces = getHiddenNamespaces();
   const [showHiddenNamespaces] = useFeatureToggle('showHiddenNamespaces');
   const fetch = useFetch();
   const { t } = useTranslation();

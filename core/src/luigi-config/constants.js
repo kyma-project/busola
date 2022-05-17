@@ -58,19 +58,3 @@ export const DEFAULT_FEATURES = {
     portNames: ['web', 'http-web'],
   },
 };
-
-export const DEFAULT_HIDDEN_NAMESPACES = [
-  'compass-system',
-  'istio-system',
-  'knative-eventing',
-  'knative-serving',
-  'kube-public',
-  'kube-system',
-  'kyma-backup',
-  'kyma-installer',
-  'kyma-integration',
-  'kyma-system',
-  'natss',
-  'kube-node-lease',
-  'serverless-system',
-];

@@ -60,6 +60,29 @@
           ]
         }
       },
+      "HIDDEN_NAMESPACES": {
+        "isEnabled": true,
+        "config": {
+          "namespaces": [
+            "compass-system",
+            "istio-system",
+            "knative-eventing",
+            "knative-serving",
+            "kube-public",
+            "kube-system",
+            "kyma-backup",
+            "kyma-installer",
+            "kyma-integration",
+            "kyma-system",
+            "natss",
+            "kube-node-lease",
+            "serverless-system"
+          ]
+        }
+      },
+      "PROMETHEUS": {
+        "isEnabled": true
+      },
       "VISUAL_RESOURCES": {
         "isEnabled": true
       },

@@ -122,6 +122,17 @@ Note that some features must be run before the application starts the bootstrap 
   },
   ```
 
+- **DISABLED_NODES** - an array of IDs of navigation nodes that are hidden from navigation. Format: `<category>.<nodeName>` or `namespace.<category>.<nodeName>`).
+
+  Default settings:
+
+  ```bash
+  "DISABLED_NODES": {
+    "isEnabled": false,
+    "nodes": []
+  }
+  ```
+
 - **EXTERNAL_NODES** - a list of links to external websites. `category`: a category name, `icon`: an optional icon, `children`: a list of pairs (label and link).
 
   Default settings:
@@ -178,7 +189,34 @@ Note that some features must be run before the application starts the bootstrap 
   }
   ```
 
-- **GZIP** – is used to indicate whether the response from the backend server should be compressed or not.
+- **HIDDEN_NAMESPACES** – is used to define a list of Namespace names that are considered system, and are hidden by default.
+
+  Default settings:
+
+  ```bash
+  "HIDDEN_NAMESPACES": {
+    "isEnabled": true,
+    "config": {
+      "namespaces": [
+        "compass-system",
+        "istio-system",
+        "knative-eventing",
+        "knative-serving",
+        "kube-public",
+        "kube-system",
+        "kyma-backup",
+        "kyma-installer",
+        "kyma-integration",
+        "kyma-system",
+        "natss",
+        "kube-node-lease",
+        "serverless-system"
+      ]
+    }
+  }
+  ```
+
+* **GZIP** – is used to indicate whether the response from the backend server should be compressed or not.
 
   Backend feature. Cannot be modified at the cluster's Config Map level.
 
@@ -190,7 +228,7 @@ Note that some features must be run before the application starts the bootstrap 
   }
   ```
 
-- **KUBECONFIG_ID** – is used to configure the URL to which Busola sends a request to download a kubeconfig file. If you add `?kubeconfigID={your ID}` to the Busola URL, Busola tries to download the kubeconfig from `{kubeconfigUrl}/{yourID}`. If the operation succeeds, Busola adds the kubeconfing file to the cluster.
+* **KUBECONFIG_ID** – is used to configure the URL to which Busola sends a request to download a kubeconfig file. If you add `?kubeconfigID={your ID}` to the Busola URL, Busola tries to download the kubeconfig from `{kubeconfigUrl}/{yourID}`. If the operation succeeds, Busola adds the kubeconfing file to the cluster.
   If you use a full address in the **kubeconfigUrl** field, Busola also reads it.
 
   Default settings:
@@ -204,7 +242,7 @@ Note that some features must be run before the application starts the bootstrap 
   },
   ```
 
-- **LEGAL_LINKS** – is used to show or hide legal links. You can find the all available links in the following example.
+* **LEGAL_LINKS** – is used to show or hide legal links. You can find the all available links in the following example.
   In **config** you can find the unchangeable keys (you cannot use **legalDisclosure** instead of **legal-disclosure**). The keys include both the default link, which takes you to the default address, and a link that depends on your chosen language.
 
   Example:
@@ -233,7 +271,7 @@ Note that some features must be run before the application starts the bootstrap 
 
   The link under the given key is selected based on your language code (de, en, pl, etc.). If the code is not available, the default link is used.
 
-- **OBSERVABILITY** – is used to render nodes in the navigation. The **label** parameter shows the name of the given service. The **path** parameter is used by Busola during the bootstrapping. Busola sends a request to the cluster address. The **path** value and the cluster must return the VirtualService object. If the object is found, you receive an address to which the node in the navigation leads.
+* **OBSERVABILITY** – is used to render nodes in the navigation. The **label** parameter shows the name of the given service. The **path** parameter is used by Busola during the bootstrapping. Busola sends a request to the cluster address. The **path** value and the cluster must return the VirtualService object. If the object is found, you receive an address to which the node in the navigation leads.
 
   Defualt settings:
 
@@ -259,7 +297,7 @@ Note that some features must be run before the application starts the bootstrap 
   }
   ```
 
-- **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.
+* **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.
   Each resource requires the **match** field, which includes a list of key-value pairs. The proper rule description is when the definition given in the key matches the value.
 
   To switch comparison mode from **standard** to **regex**, set the **regex** parameter to `true`.
