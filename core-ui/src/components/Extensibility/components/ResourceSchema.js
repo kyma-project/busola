@@ -122,9 +122,12 @@ export const ResourceSchema = ({ resource, setResource, schema, path }) => {
 
   if (isEmpty(schema)) return null;
 
-  const newschema = {
-    ...schema,
-    properties: { ...schema.properties, metadata },
+  let newschema = schema;
+  delete schema.metadata;
+
+  newschema = {
+    ...newschema,
+    properties: { metadata, ...newschema.properties },
   };
 
   const schemaMap = createOrderedMap(newschema);
