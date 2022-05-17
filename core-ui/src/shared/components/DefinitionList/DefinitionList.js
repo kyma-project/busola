@@ -1,5 +1,7 @@
 import React from 'react';
 import { LayoutPanel } from 'fundamental-react';
+
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import './DefinitionList.scss';
 
 export function DefinitionList({ title, list }) {
@@ -9,14 +11,9 @@ export function DefinitionList({ title, list }) {
         <LayoutPanel.Head title={title} />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        <dl>
-          {list.map(({ name, value }) => (
-            <React.Fragment key={name}>
-              <dt>{name}</dt>
-              <dt>{value}</dt>
-            </React.Fragment>
-          ))}
-        </dl>
+        {list.map(({ name, value }) => (
+          <LayoutPanelRow name={name} value={value} key={name} />
+        ))}
       </LayoutPanel.Body>
     </LayoutPanel>
   );
