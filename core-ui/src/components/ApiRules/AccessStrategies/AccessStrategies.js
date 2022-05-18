@@ -43,7 +43,9 @@ const rowRenderer = (strategy, t) => {
     <ul className="tokens">
       {strategy.accessStrategies.map(ac => (
         <li key={ac.handler}>
-          {!accessStrategyTypes[ac.handler]?.displayName ? (
+          {accessStrategyTypes[ac.handler]?.displayName ? (
+            infoLabel(ac.handler)
+          ) : (
             <Tooltip
               content={t(
                 'api-rules.access-strategies.messages.unaccepted-type',
@@ -51,8 +53,6 @@ const rowRenderer = (strategy, t) => {
             >
               {infoLabel(ac.handler)}
             </Tooltip>
-          ) : (
-            infoLabel(ac.handler)
           )}
         </li>
       ))}
