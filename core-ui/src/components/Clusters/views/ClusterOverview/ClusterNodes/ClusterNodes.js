@@ -74,10 +74,11 @@ export function ClusterNodes() {
           percentage={cpu.percentage}
           tooltip={{
             content: `
-        Used: ${cpu.usage}m 
-        Available: ${cpu.capacity}m
-        `,
+              Used: ${cpu.usage}m 
+              Available: ${cpu.capacity}m
+              `,
             position: 'bottom',
+            color: 'var(--sapIndicationColor_5)',
           }}
         />
       ) : (
@@ -90,11 +91,12 @@ export function ClusterNodes() {
           percentage={memory.percentage}
           tooltip={{
             content: `
-        Used: ${memory.usage}GiB 
-        Available: ${memory.capacity}GiB
-        `,
+              Used: ${memory.usage}GiB 
+              Available: ${memory.capacity}GiB
+              `,
             position: 'bottom',
           }}
+          color="var(--sapIndicationColor_6)"
         />
       ) : (
         EMPTY_TEXT_PLACEHOLDER

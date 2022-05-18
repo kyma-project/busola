@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import './ProgressBar.scss';
 
@@ -17,18 +19,16 @@ export function ProgressBar({
   current,
   max,
   color = 'var(--sapBrandColor)',
-  percentage,
   tooltip,
 }) {
-  const calculatePercentage = (current, max) => {
-    const percent = ((current || 0) / (max || current || 1)) * 100;
-    if (percent > 100) return 100;
-    return percent;
+  const getPercentage = (current, max) => {
+    const percentage = ((current || 0) / (max || current || 1)) * 100;
+    if (percentage > 100) return 100;
+    return `${percentage}%`;
   };
-  const getPercentage = (current, max, percentage) =>
-    percentage ? percentage : `${calculatePercentage(current, max)}%`;
+
   const progressBarStyle = {
-    width: getPercentage(current, max, percentage),
+    width: getPercentage(current, max),
     backgroundColor: color,
   };
 
@@ -40,3 +40,10 @@ export function ProgressBar({
     </TooltipWrapper>
   );
 }
+
+ProgressBar.propTypes = {
+  current: PropTypes.number.isRequired,
+  max: PropTypes.number.isRequired,
+  color: PropTypes.string,
+  tooltip: PropTypes.object,
+};

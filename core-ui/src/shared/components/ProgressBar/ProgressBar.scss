@@ -1,21 +1,26 @@
-.progress-bar {
-  height: 100%;
-  border-radius: inherit;
-  text-align: right;
-  position: absolute;
+.progress-bar-tooltip {
+  width: 100%;
+  bottom: 0;
+  cursor: help;
 }
 
 .progress-bar-container {
   height: 10px;
   width: 100%;
-  background-color: var(--sapBaseColor);
   border: solid 1px var(--sapTextColor);
   border-radius: 50px;
   position: relative;
 }
 
-.progress-bar-tooltip {
-  width: 100%;
-  bottom: 0;
-  cursor: help;
+.progress-bar {
+  height: 100%;
+  border-radius: inherit;
+  position: absolute;
+  animation: expandWidth 1s linear;
+}
+
+@keyframes expandWidth {
+  0% {
+    width: 0;
+  }
 }
