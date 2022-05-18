@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { CreateExtensibilityList } from './components/CreateExtensibilityList';
-import { CreateReadOnlyEditor } from './components/CreateMonacoReadOnlyEditor';
-import { CreateDetailPanel } from './components/CreateDetailPanel';
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { DetailsSchema } from './components/DetailsSchema';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 export const ExtensibilityDetails = () => {
   const resMetaData = useGetCRbyPath();
