@@ -57,4 +57,13 @@ export const DEFAULT_FEATURES = {
     serviceNames: ['monitoring-prometheus', 'prometheus'],
     portNames: ['web', 'http-web'],
   },
+  APPLICATION_CONNECTOR_FLOW: {
+    checks: [
+      service({
+        urlsGenerator: () => [
+          `/api/v1/namespaces/kyma-integration/services/connector-service-internal-api`,
+        ],
+      }),
+    ],
+  },
 };
