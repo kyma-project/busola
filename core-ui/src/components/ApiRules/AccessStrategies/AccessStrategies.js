@@ -15,16 +15,16 @@ import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 const textSearchProperties = ['path', 'accessStrategies', 'methods'];
 const rowRenderer = (strategy, t) => {
   const infoLabel = handler => {
-    const hasValidStrategy = accessStrategyTypes[handler]?.displayName;
+    const strategyType = accessStrategyTypes[handler]?.displayName;
 
     return (
       <InfoLabel
         modifier="filled"
-        color={!hasValidStrategy ? 4 : ''}
-        className={!hasValidStrategy ? 'has-tooltip' : ''}
+        color={strategyType ? '' : 4}
+        className={!strategyType ? '' : 'has-tooltip'}
       >
         <Icon
-          ariaLabel={accessStrategyTypes[handler]?.displayName || handler}
+          ariaLabel={strategyType || handler}
           className="fd-margin-end--tiny"
           glyph={
             handler === accessStrategyTypes.noop.value ||
@@ -34,7 +34,7 @@ const rowRenderer = (strategy, t) => {
           }
           size="s"
         />
-        {accessStrategyTypes[handler]?.displayName || handler}
+        {strategyType || handler}
       </InfoLabel>
     );
   };
