@@ -410,6 +410,10 @@ input[type='checkbox'] {
   background-size: 16px;
 }
 
+.has-tooltip {
+  cursor: help;
+}
+
 @include graph-node-border(pod, 4);
 @include graph-node-border(virtualservice, 1);
 @include graph-node-border(rolebinding, 2);
