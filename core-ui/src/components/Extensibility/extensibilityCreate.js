@@ -50,7 +50,7 @@ export function ExtensibilityCreate({
         setValue={handleNameChange}
         validate={value => !!value}
       />
-      <KeyValueField
+      {/* <KeyValueField
         advanced
         propertyPath="$.metadata.labels"
         title={t('common.headers.labels')}
@@ -59,7 +59,7 @@ export function ExtensibilityCreate({
         advanced
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
-      />
+      /> */}
       <ResourceSchema
         simple
         key={api.version}
