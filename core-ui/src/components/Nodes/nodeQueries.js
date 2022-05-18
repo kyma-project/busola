@@ -61,10 +61,11 @@ export function useNodesQuery() {
       };
 
       setData(
-        nodes.items.map(n => ({
+        nodes.items?.map(n => ({
           name: n.metadata.name,
           creationTimestamp: n.metadata.creationTimestamp,
           metrics: nodeMetrics ? getNodeMetrics(n) : {},
+          node: n,
         })),
       );
     }

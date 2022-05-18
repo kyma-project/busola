@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { CircleProgress } from 'shared/components/CircleProgress/CircleProgress';
 import { LayoutPanel } from 'fundamental-react';
+
+import { ProgressBar } from 'shared/components/ProgressBar/ProgressBar';
 
 import './NodeResources.scss';
 
@@ -14,23 +15,21 @@ export function NodeResources({ metrics, headerContent }) {
       <LayoutPanel.Body>
         {cpu && memory ? (
           <>
-            <CircleProgress
-              color="var(--sapIndicationColor_7)"
-              value={cpu.usage}
+            CPU:
+            <ProgressBar
+              current={cpu.usage}
               max={cpu.capacity}
-              title={t('machine-info.cpu-m')}
-              reversed={true}
+              percentage={cpu.percentage}
               tooltip={{
                 content: `${t('machine-info.cpu-usage')} ${cpu.percentage}`,
                 position: 'right',
               }}
             />
-            <CircleProgress
-              color="var(--sapIndicationColor_6)"
-              value={memory.usage}
+            Memory:
+            <ProgressBar
+              current={memory.usage}
               max={memory.capacity}
-              title={t('machine-info.memory-gib')}
-              reversed={true}
+              percentage={memory.percentage}
               tooltip={{
                 content: `${t('machine-info.memory-usage')} ${
                   memory.percentage
