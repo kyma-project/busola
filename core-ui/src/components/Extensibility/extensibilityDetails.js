@@ -3,6 +3,7 @@ import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { DetailsSchema } from './components/DetailsSchema';
+import { prettifyNamePlural } from 'shared/utils/helpers';
 
 export const ExtensibilityDetails = () => {
   const resMetaData = useGetCRbyPath();
@@ -34,6 +35,9 @@ export const ExtensibilityDetails = () => {
   return (
     <>
       <ResourceDetails
+        windowTitle={prettifyNamePlural(
+          resMetaData.navigation.label || resMetaData.navigation.path,
+        )}
         customColumns={customColumns}
         customComponents={[
           resource => <DetailsSchema resource={resource} schema={schema} />,
