@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGetCRbyPath } from './useGetCRbyPath';
-import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { usePrepareDetailsProps } from 'resources/helpers';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { DetailsSchema } from './components/DetailsSchema';
 import { prettifyNamePlural } from 'shared/utils/helpers';
 
@@ -19,7 +19,7 @@ export const ExtensibilityDetails = () => {
     );
   }
 
-  const schema = resMetaData.create?.simple?.schema;
+  const schema = resMetaData.create?.simple?.schema || resMetaData?.schema;
 
   const customColumns = [];
 
@@ -31,7 +31,6 @@ export const ExtensibilityDetails = () => {
     },
     { name: '' },
   ];
-
   return (
     <>
       <ResourceDetails
