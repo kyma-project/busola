@@ -21,7 +21,7 @@ const rowRenderer = (strategy, t) => {
       <InfoLabel
         modifier="filled"
         color={strategyType ? '' : 4}
-        className={!strategyType ? '' : 'has-tooltip'}
+        className={strategyType ? '' : 'has-tooltip'}
       >
         <Icon
           ariaLabel={strategyType || handler}
