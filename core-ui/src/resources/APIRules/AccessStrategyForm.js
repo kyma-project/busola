@@ -6,6 +6,7 @@ import { TextArrayInput, ItemArray } from 'shared/ResourceForm/fields';
 import { JwtStrategyConfig } from './JwtStrategyConfig';
 import { createAccessStrategyTemplate } from './templates';
 import * as jp from 'jsonpath';
+import accessStrategyTypes from 'components/ApiRules/accessStrategyTypes';
 
 const accessStrategies = ['allow', 'noop', 'jwt', 'oauth2_introspection'];
 
