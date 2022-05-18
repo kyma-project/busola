@@ -36,14 +36,12 @@ export const widgets = {
     number: SimpleTypeRenderer,
     integer: SimpleTypeRenderer,
     array: GenericListRenderer,
-    object: props => {
-      return <>TO DO: {props}</>;
-    },
   },
   custom: {
     /*
     Accordions: AccordionsRenderer,
     */
+    Card: () => {},
     Workload: WorkloadRenderer,
     // List: GenericListRenderer,
     // Table: TableDataRenderer,
