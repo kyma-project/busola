@@ -44,7 +44,7 @@ export function ClusterNodes() {
       <StatusBadge
         i18n={i18n}
         additionalContent={status.message}
-        resourceKind="pods"
+        resourceKind="nodes"
         type={getStatusType(status.type)}
       >
         {status.type}
