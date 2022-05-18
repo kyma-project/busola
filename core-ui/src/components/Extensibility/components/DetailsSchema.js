@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { isEmpty } from 'lodash';
 
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
