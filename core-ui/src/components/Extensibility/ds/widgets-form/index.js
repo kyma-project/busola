@@ -46,6 +46,7 @@ export const widgets = {
     array: GenericList,
   },
   custom: {
+    Null: () => '',
     /*
     Accordions: AccordionsRenderer,
     */
