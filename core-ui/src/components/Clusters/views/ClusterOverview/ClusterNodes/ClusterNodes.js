@@ -4,13 +4,17 @@ import { ErrorPanel } from 'shared/components/ErrorPanel/ErrorPanel';
 import { Link } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
-import { useNodesQuery } from 'components/Nodes/nodeQueries';
+import {
+  useNodesQuery,
+  usePrometheusNodeQuery,
+} from 'components/Nodes/nodeQueries';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ProgressBar } from 'shared/components/ProgressBar/ProgressBar';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import Skeleton from 'shared/components/Skeleton/Skeleton';
 
 import './ClusterNodes.scss';
@@ -29,7 +33,17 @@ const NodeHeader = ({ nodeName }) => {
 };
 
 export function ClusterNodes() {
-  const { nodes, error, loading } = useNodesQuery();
+  const { features } = useMicrofrontendContext();
+  const usePrometheusQueries = features.PROMETHEUS?.isEnabled;
+
+  const {
+    data: prometheusData,
+    error: prometheusDataError,
+    loading: prometheusDataLoading,
+  } = usePrometheusNodeQuery(!usePrometheusQueries);
+  const { nodes, error, loading } = useNodesQuery(usePrometheusQueries);
+
+  const data = usePrometheusQueries ? prometheusData : nodes;
   const { i18n } = useTranslation();
 
   const getStatusType = status => {
@@ -37,17 +51,17 @@ export function ClusterNodes() {
     return undefined;
   };
 
-  const getStatus = node => {
-    const conditions = node?.status?.conditions || [];
-    const status = conditions.find(c => c?.status === 'True');
-    return status ? (
+  const getStatus = status => {
+    const conditions = status?.conditions || [];
+    const currentStatus = conditions.find(c => c?.status === 'True');
+    return currentStatus ? (
       <StatusBadge
         i18n={i18n}
-        additionalContent={status.message}
+        additionalContent={currentStatus.message}
         resourceKind="nodes"
-        type={getStatusType(status.type)}
+        type={getStatusType(currentStatus.type)}
       >
-        {status.type}
+        {currentStatus.type}
       </StatusBadge>
     ) : (
       EMPTY_TEXT_PLACEHOLDER
@@ -66,12 +80,11 @@ export function ClusterNodes() {
   const rowRenderer = entry => {
     const { cpu, memory } = entry?.metrics || {};
     return [
-      <NodeHeader nodeName={entry.name} />,
+      <NodeHeader nodeName={entry.metadata?.name} />,
       cpu ? (
         <ProgressBar
           current={cpu.usage}
           max={cpu.capacity}
-          percentage={cpu.percentage}
           tooltip={{
             content: `
               Used: ${cpu.usage}m 
@@ -88,7 +101,6 @@ export function ClusterNodes() {
         <ProgressBar
           current={memory.usage}
           max={memory.capacity}
-          percentage={memory.percentage}
           tooltip={{
             content: `
               Used: ${memory.usage}GiB 
@@ -101,14 +113,17 @@ export function ClusterNodes() {
       ) : (
         EMPTY_TEXT_PLACEHOLDER
       ),
-      <ReadableCreationTimestamp timestamp={entry.creationTimestamp} />,
-      entry.node?.status?.nodeInfo?.kubeProxyVersion || EMPTY_TEXT_PLACEHOLDER,
-      getStatus(entry.node),
+      <ReadableCreationTimestamp
+        timestamp={entry.metadata?.creationTimestamp}
+      />,
+      entry.status?.nodeInfo?.kubeProxyVersion || EMPTY_TEXT_PLACEHOLDER,
+      getStatus(entry),
     ];
   };
 
   const Events = <EventsList defaultType={EVENT_MESSAGE_TYPE.WARNING} />;
 
+  //TODO WHAT IS THIS LOADING THING
   return (
     <>
       <GenericList
@@ -116,11 +131,13 @@ export function ClusterNodes() {
         allowSlashShortcut={false}
         showSearchField={false}
         actions={[]}
-        entries={nodes || []}
+        entries={data || []}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
-        serverDataError={error}
-        serverDataLoading={loading}
+        serverDataError={usePrometheusQueries ? prometheusDataError : error}
+        serverDataLoading={
+          usePrometheusQueries ? prometheusDataLoading : loading
+        }
         pagination={{ autoHide: true }}
         i18n={i18n}
       />
@@ -129,7 +146,7 @@ export function ClusterNodes() {
           <Skeleton height="220px" />
         </div>
       )}
-      {error && !nodes && (
+      {error && !data && (
         <ErrorPanel error={error} title="Metrics" i18n={i18n} />
       )}
       <StatsPanel type="cluster" />
