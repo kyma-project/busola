@@ -68,7 +68,7 @@ export default function App() {
               />
               {cr.navigation.hasDetailsView && (
                 <Route
-                  path={`/namespaces/:namespaceId/${cr.navigation.path}/:${cr.navigation.path}Name`}
+                  path={`/namespaces/:namespaceId/${cr.navigation.path}/:resourceName`}
                   element={<ExtensibilityDetails />}
                 />
               )}
@@ -83,7 +83,7 @@ export default function App() {
               />
               {cr.navigation.hasDetailsView && (
                 <Route
-                  path={`/${cr.navigation.path}/:${cr.navigation.path}Name`}
+                  path={`/${cr.navigation.path}/:resourceName`}
                   element={<ExtensibilityDetails />}
                 />
               )}

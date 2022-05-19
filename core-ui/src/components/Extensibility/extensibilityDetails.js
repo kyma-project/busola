@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useGetCRbyPath } from './useGetCRbyPath';
-import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { CreateExtensibilityList } from './components/CreateExtensibilityList';
-import { CreateReadOnlyEditor } from './components/CreateMonacoReadOnlyEditor';
-import { CreateDetailPanel } from './components/CreateDetailPanel';
 import { usePrepareDetailsProps } from 'resources/helpers';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { DetailsSchema } from './components/DetailsSchema';
+import { prettifyNamePlural } from 'shared/utils/helpers';
 
 export const ExtensibilityDetails = () => {
   const resMetaData = useGetCRbyPath();
@@ -20,27 +19,9 @@ export const ExtensibilityDetails = () => {
     );
   }
 
+  const schema = resMetaData?.schema;
+
   const customColumns = [];
-  const [customComponents, setCustomComponents] = useState([]);
-
-  useEffect(() => {
-    const { components } = resMetaData.details;
-
-    const parse = components =>
-      components.map(c => {
-        switch (c.type) {
-          case 'listPanel':
-            return CreateExtensibilityList(c);
-          case 'detailPanel':
-            return CreateDetailPanel(c);
-          case 'monacoPanel':
-            return CreateReadOnlyEditor(c);
-          default:
-            return null;
-        }
-      }) || [];
-    setCustomComponents(parse(components));
-  }, [resMetaData]);
 
   const breadcrumbs = [
     {
@@ -50,13 +31,19 @@ export const ExtensibilityDetails = () => {
     },
     { name: '' },
   ];
-
   return (
-    <ResourceDetails
-      customColumns={customColumns}
-      customComponents={customComponents}
-      breadcrumbs={breadcrumbs}
-      {...detailsProps}
-    />
+    <>
+      <ResourceDetails
+        windowTitle={prettifyNamePlural(
+          resMetaData.navigation.label || resMetaData.navigation.path,
+        )}
+        customColumns={customColumns}
+        customComponents={[
+          resource => <DetailsSchema resource={resource} schema={schema} />,
+        ]}
+        breadcrumbs={breadcrumbs}
+        {...detailsProps}
+      />
+    </>
   );
 };

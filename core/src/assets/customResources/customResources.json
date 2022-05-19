@@ -2230,7 +2230,7 @@
           "service": {
             "description": "Definition of the service to expose",
             "type": "object",
-            "widget": "FormGroup",
+            "widget": "Panel",
             "required": [
               "host",
               "name",
@@ -2641,6 +2641,7 @@
                        },
                        "workloadSelector":{
                           "type":"object",
+                          "widget": "Workload",
                           "properties":{
                              "labels":{
                                 "type":"object",
@@ -2953,4 +2954,5 @@
         }
      }
   }
+  
 }
