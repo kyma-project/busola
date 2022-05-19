@@ -24,6 +24,7 @@ import { initTheme } from './utils/theme';
 import { readFeatureToggles } from './utils/feature-toggles';
 import { ssoLogin } from './auth/sso';
 import { setNavFooterText } from './nav-footer';
+import { resolveSecondaryFeatures } from './feature-discovery';
 
 const luigiAfterInit = () => Luigi.ux().hideAppLoadingIndicator();
 
@@ -45,8 +46,7 @@ export const NODE_PARAM_PREFIX = `~`;
 async function initializeBusola() {
   initTheme();
 
-  const activeCluster = await getActiveCluster();
-
+  const activeCluster = getActiveCluster();
   Luigi.setConfig({
     communication,
     navigation: await createNavigation(),
@@ -63,13 +63,14 @@ async function initializeBusola() {
   await new Promise(resolve => setTimeout(resolve, 100));
 
   await setNavFooterText();
-  if (!(await getActiveCluster())) {
+  if (!getActiveCluster()) {
     if (!window.location.pathname.startsWith('/clusters')) {
       Luigi.navigation().navigate('/clusters');
     }
   } else {
     tryRestorePreviousLocation();
   }
+  await resolveSecondaryFeatures();
 }
 
 (async () => {
@@ -79,7 +80,7 @@ async function initializeBusola() {
 
   await i18n;
 
-  await setActiveClusterIfPresentInUrl();
+  setActiveClusterIfPresentInUrl();
 
   // save location, as we'll may be logged out in a moment
   saveCurrentLocation();

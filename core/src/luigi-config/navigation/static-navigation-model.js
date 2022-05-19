@@ -2130,6 +2130,7 @@ function filterNodesByAvailablePaths(nodes, groupVersions, permissionSet) {
 
 function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
   if (!node.viewUrl || !node.resourceType) {
+    // used for Custom Resources node
     if (node.context?.requiredGroupResource) {
       const { group, resource } = node.context.requiredGroupResource;
       if (!hasPermissionsFor(group, resource, permissionSet)) {
@@ -2149,12 +2150,22 @@ function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
 
     if (!groupVersions.find(g => g.includes(groupVersion))) {
       removeNode();
+      return;
     }
   } else {
     // we need to filter through permissions to check the node availability
     const apiGroup = extractApiGroup(apiPath);
     if (!hasPermissionsFor(apiGroup, node.resourceType, permissionSet)) {
       removeNode();
+      return;
+    }
+  }
+
+  if (node.context?.requiredFeatures) {
+    for (const feature of node.context.requiredFeatures || []) {
+      if (!feature || feature.isEnabled === false) {
+        removeNode();
+      }
     }
   }
 }

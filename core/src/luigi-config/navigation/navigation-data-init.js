@@ -1,7 +1,7 @@
 import i18next from 'i18next';
 import {
   fetchPermissions,
-  fetchBusolaInitData,
+  fetchAvailableApis,
   fetchNamespaces,
   fetchObservabilityHost,
 } from './queries';
@@ -13,7 +13,6 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
-import { getFeatures, resolveFeatureAvailability } from '../features';
 import { showAlert } from '../utils/showAlert';
 
 import {
@@ -32,6 +31,7 @@ import {
   saveActiveClusterName,
   getCurrentContextNamespace,
   saveCARequired,
+  getCurrentConfig,
 } from '../cluster-management/cluster-management';
 import { getFeatureToggle } from '../utils/feature-toggles';
 import { saveLocation } from './previous-location';
@@ -41,6 +41,8 @@ import { checkClusterStorageType } from '../cluster-management/clusters-storage'
 import { getSSOAuthData } from '../auth/sso';
 import { setNavFooterText } from '../nav-footer';
 import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/pagination';
+import { getFeatures, initFeatures } from '../feature-discovery';
+import * as fetchCache from './../cache/fetch-cache';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -86,14 +88,12 @@ export async function reloadNavigation() {
   }, 100);
 }
 
-const getDisabledNodes = activeCluster => {
+const getDisabledNodes = features => {
   const isValidConfig =
-    activeCluster.config?.features?.DISABLED_NODES?.isEnabled &&
-    Array.isArray(activeCluster.config?.features?.DISABLED_NODES?.nodes);
+    features?.DISABLED_NODES?.isEnabled &&
+    Array.isArray(features?.DISABLED_NODES?.nodes);
 
-  return isValidConfig
-    ? activeCluster.config?.features?.DISABLED_NODES?.nodes
-    : [];
+  return isValidConfig ? features?.DISABLED_NODES?.nodes : [];
 };
 
 async function createClusterManagementNodes(features) {
@@ -140,7 +140,7 @@ async function createClusterManagementNodes(features) {
 
   const notActiveCluster = name => name !== activeClusterName;
 
-  const clusterNodes = Object.keys(await getClusters())
+  const clusterNodes = Object.keys(getClusters())
     .filter(notActiveCluster)
     .map(clusterName => ({
       pathSegment: encodeURIComponent(clusterName),
@@ -162,14 +162,14 @@ async function createClusterManagementNodes(features) {
     hideFromNav: true,
     hideSideNav: true,
     viewUrl: config.coreUIModuleUrl + '/no-permissions',
-    context: { currentCluster: await getActiveCluster() },
+    context: { currentCluster: getActiveCluster() },
   };
 
   return [clusterManagementNode, clusterNode, noPermissionsNode];
 }
 
 async function createNavigationForNoCluster() {
-  const features = await getFeatures();
+  await initFeatures();
 
   return {
     profile: {
@@ -187,38 +187,37 @@ async function createNavigationForNoCluster() {
     },
     preloadViewGroups: false,
     appSwitcher: await createAppSwitcher(),
-    nodes: await createClusterManagementNodes(features),
+    nodes: await createClusterManagementNodes(await getFeatures()),
   };
 }
 
 export async function createNavigation() {
   try {
     const authData = getAuthData();
-    if (!(await getActiveCluster()) || !authData) {
+    if (!getActiveCluster() || !authData) {
       return await createNavigationForNoCluster();
     }
 
     await saveCARequired();
+    fetchCache.init(getActiveClusterName());
     await loadTargetClusterConfig();
 
-    const activeCluster = await getActiveCluster();
+    const config = await getCurrentConfig();
 
-    await checkClusterStorageType(activeCluster.config.storage);
+    await checkClusterStorageType(config.storage);
 
     // we assume all users can make SelfSubjectRulesReview request
+    const activeCluster = getActiveCluster();
     const permissionSet = await fetchPermissions(
       authData,
       getCurrentContextNamespace(activeCluster.kubeconfig),
     );
 
-    const groupVersions = await fetchBusolaInitData(authData);
+    const groupVersions = await fetchAvailableApis(authData);
 
     const activeClusterName = activeCluster.kubeconfig['current-context'];
 
-    const features = await getFeatures({
-      authData,
-      groupVersions,
-    });
+    await initFeatures();
 
     const optionsForCurrentCluster = {
       contextSwitcher: {
@@ -252,14 +251,6 @@ export async function createNavigation() {
         ],
       },
     };
-    const isNodeEnabled = node => {
-      if (node.context?.requiredFeatures) {
-        for (const feature of node.context.requiredFeatures || []) {
-          if (!feature || feature.isEnabled === false) return false;
-        }
-      }
-      return true;
-    };
 
     if (!hasAnyRoleBound(permissionSet)) {
       const error = i18next.t('common.errors.no-permissions-no-role');
@@ -269,17 +260,18 @@ export async function createNavigation() {
     return {
       preloadViewGroups: false,
       nodeAccessibilityResolver: node =>
-        isNodeEnabled(node) && navigationPermissionChecker(node, permissionSet),
+        navigationPermissionChecker(node, permissionSet),
       appSwitcher: await createAppSwitcher(),
       ...optionsForCurrentCluster,
       nodes: await createNavigationNodes(
-        features,
+        await getFeatures(),
         groupVersions,
         permissionSet,
       ),
     };
   } catch (err) {
     saveActiveClusterName(null);
+    fetchCache.clear();
     if (err.statusCode === 403) {
       clearAuthData();
       saveLocation(
@@ -303,20 +295,13 @@ export async function createNavigation() {
   }
 }
 
-async function getObservabilityNodes(authData, enabledFeatures) {
-  let links =
-    // take the Config Params at first
-    (await resolveFeatureAvailability(enabledFeatures.OBSERVABILITY)) &&
-    enabledFeatures.OBSERVABILITY?.config.links;
+async function getObservabilityNodes(authData) {
+  const observabilityFeature = (await getCurrentConfig()).features
+    .OBSERVABILITY;
 
-  if (!links) {
-    const defaultObservability = (await getBusolaClusterParams()).config
-      .features.OBSERVABILITY;
-    links =
-      (await resolveFeatureAvailability(defaultObservability)) && //  use the Busola configMap as a fallback
-      defaultObservability.config.links;
-  }
-  if (!links) return []; // could not get the OBSERVABILITY feature config from either source, do not add any nodes
+  if (!observabilityFeature || !observabilityFeature.isEnabled) return [];
+
+  const links = observabilityFeature.config.links;
 
   const CATEGORY = {
     label: 'Observability',
@@ -348,7 +333,7 @@ export async function createNavigationNodes(
   permissionSet,
 ) {
   const authData = getAuthData();
-  const activeCluster = await getActiveCluster();
+  const activeCluster = getActiveCluster();
 
   if (!activeCluster || !getAuthData()) {
     return await createClusterManagementNodes(features);
@@ -367,10 +352,7 @@ export async function createNavigationNodes(
       permissionSet,
       features,
     );
-    const observabilitySection = await getObservabilityNodes(
-      authData,
-      features,
-    );
+    const observabilitySection = await getObservabilityNodes(authData);
     const externalNodes = addExternalNodes(features.EXTERNAL_NODES);
     const allNodes = [
       ...staticNodes,
@@ -420,7 +402,7 @@ export async function createNavigationNodes(
         activeClusterName,
         groups,
         features,
-        clusters: await getClusters(),
+        clusters: getClusters(),
         cluster: activeCluster.currentContext.cluster,
         config: activeCluster.config,
         kubeconfig: activeCluster.kubeconfig,
@@ -442,15 +424,15 @@ export async function createNavigationNodes(
 }
 
 async function getNamespaces() {
-  const activeCluster = await getActiveCluster();
+  const activeCluster = getActiveCluster();
   const namespace = getCurrentContextNamespace(activeCluster.kubeconfig);
 
   if (namespace) {
     return createNamespacesList([{ name: namespace }]);
   }
 
-  const hiddenNamespacesConfig =
-    activeCluster?.config.features?.HIDDEN_NAMESPACES;
+  const { features } = await getCurrentConfig();
+  const hiddenNamespacesConfig = features?.HIDDEN_NAMESPACES;
 
   const hiddenNamespaces =
     hiddenNamespacesConfig?.isEnabled &&
@@ -478,9 +460,7 @@ async function getChildrenNodesForNamespace(
   permissionSet,
   features,
 ) {
-  const activeCluster = await getActiveCluster();
-
-  const disabledNodes = getDisabledNodes(activeCluster);
+  const disabledNodes = getDisabledNodes(features);
 
   const staticNodes = getStaticChildrenNodesForNamespace(
     groupVersions,

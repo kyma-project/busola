@@ -1,6 +1,6 @@
-import LuigiClient from '@luigi-project/client';
 import { useEffect, useState } from 'react';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
+import { useFeature } from 'shared/hooks/useFeature';
 
 const getPrometheusSelector = data => {
   let selector = `cluster="", container!="", namespace="${data.namespace}"`;
@@ -130,16 +130,11 @@ export function usePrometheus(
   metricId,
   { items, timeSpan, ...props },
 ) {
+  const { serviceUrl } = useFeature('PROMETHEUS');
   const step = timeSpan / items;
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [query, setQuery] = useState(null);
-
-  const kyma2_0path =
-    'api/v1/namespaces/kyma-system/services/monitoring-prometheus:web/proxy/api/v1';
-  const kyma2_1path =
-    'api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1';
-  const [path, setPath] = useState(kyma2_1path);
 
   const metric = getMetric(type, mode, metricId, { step, ...props });
 
@@ -167,33 +162,10 @@ export function usePrometheus(
     return () => clearInterval(loop);
   }, [timeSpan, items, metric.prometheusQuery]);
 
-  const onDataReceived = data => {
-    if (data?.error && data?.error?.statusCode === 'Failure') {
-      if (path !== kyma2_0path && path !== kyma2_1path) {
-        LuigiClient.sendCustomMessage({
-          id: 'busola.setPrometheusPath',
-          path: kyma2_1path,
-        });
-        setPath(kyma2_1path);
-      } else if (path === kyma2_1path) {
-        LuigiClient.sendCustomMessage({
-          id: 'busola.setPrometheusPath',
-          path: kyma2_0path,
-        });
-        setPath(kyma2_0path);
-      }
-    }
-  };
-
-  let { data, error, loading } = useGet(`/${path}/${query}`, {
+  let { data, error, loading } = useGet(`${serviceUrl}/${query}`, {
     pollingInterval: 0,
-    onDataReceived: data => onDataReceived(data),
     skip: !query,
   });
-
-  if (data) {
-    error = null;
-  }
 
   let prometheusData = [];
   let prometheusLabels = [];
