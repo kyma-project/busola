@@ -10,7 +10,8 @@ Initialisation of the Busola features is based on the `stage` property, which ca
 
 - `PRIMARY` - the feature is resolved while the application bootstraps. Features that should be immediately visible must be set as `PRIMARY` (for example, main navigation structure).
 - `SECONDARY` - the feature is resolved after the application is ready, it must be used for non-critical features (for example, additional navigation nodes).
-- \<other value> - the feature is loaded only on-demand, most often by the iframe. Use the `useFeature` hook to request usage of such feature.
+
+If the stage is not set, the feature is loaded only on-demand, most often by the iframe. Use the `useFeature` hook to request usage of such feature.
 
 Note that some features must be run before the application starts the bootstrap process (for example, SSO_LOGIN), so they are out of the normal feature flow.
 
