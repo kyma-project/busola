@@ -1,11 +1,10 @@
 import React from 'react';
-import { useUIStore } from '@ui-schema/ui-schema';
 import { TransTitle } from '@ui-schema/ui-schema/Translate/TransTitle';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { KeyValueField } from 'shared/ResourceForm/fields';
 
-export function AdditionalPropertiesRenderer({
+export function KeyValuePairRenderer({
   storeKeys,
   schema,
   resource,
@@ -16,7 +15,6 @@ export function AdditionalPropertiesRenderer({
   return (
     <ResourceForm.Wrapper resource={resource} setResource={setResource}>
       <KeyValueField
-        // advanced
         propertyPath={propertyPath}
         title={<TransTitle schema={schema} storeKeys={storeKeys} />}
       />
