@@ -28,6 +28,8 @@ function listColumnDisplay(value, columnProps) {
     case 'array':
       if (Array.isArray(value)) {
         return (value || []).map(v => getValue(v, arrayValuePath)).join(', ');
+      } else {
+        return '';
       }
     case 'external-link':
       return <Link url={value}>{value}</Link>;

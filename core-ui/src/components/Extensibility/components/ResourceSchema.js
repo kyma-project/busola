@@ -113,7 +113,7 @@ export const ResourceSchema = ({
   );
   useEffect(() => {
     setResource(store.valuesToJS());
-  }, [store.values]);
+  }, [store.values]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const translationBundle = path || 'extensibility';
   const { t } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
