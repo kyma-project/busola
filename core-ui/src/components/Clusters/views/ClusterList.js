@@ -43,13 +43,13 @@ function ClusterList() {
   }
 
   const styleActiveCluster = entry => {
-    return entry.kubeconfig['current-context'] === activeClusterName
+    return entry?.kubeconfig['current-context'] === activeClusterName
       ? { fontWeight: 'bolder' }
       : {};
   };
 
   const downloadKubeconfig = entry => {
-    if (entry.kubeconfig) {
+    if (entry?.kubeconfig) {
       try {
         const kubeconfigYaml = jsyaml.dump(entry.kubeconfig);
         const blob = new Blob([kubeconfigYaml], {

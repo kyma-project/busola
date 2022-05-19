@@ -20,17 +20,17 @@ function EditClusterComponent({
   const [resource, setResource] = useState(cloneDeep(editedCluster));
 
   const [authenticationType, setAuthenticationType] = useState(
-    resource.kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
+    resource?.kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
   );
   const notification = useNotification();
 
   const { kubeconfig, config } = resource;
 
-  const originalName = useRef(resource.kubeconfig['current-context'] || '');
+  const originalName = useRef(resource?.kubeconfig['current-context'] || '');
 
   const onComplete = () => {
     try {
-      if (originalName.current !== resource.kubeconfig['current-context']) {
+      if (originalName.current !== resource?.kubeconfig['current-context']) {
         deleteCluster(originalName.current);
       }
       const contextName = kubeconfig['current-context'];
@@ -61,7 +61,7 @@ function EditClusterComponent({
   );
 
   const findInitialValue = id => {
-    if (resource.kubeconfig?.users?.[0]?.user?.exec?.args) {
+    if (resource?.kubeconfig?.users?.[0]?.user?.exec?.args) {
       const elementWithId = resource.kubeconfig?.users?.[0]?.user?.exec?.args.find(
         el => el.includes(id),
       );
@@ -205,10 +205,10 @@ function EditClusterComponent({
           value={authenticationType}
           setValue={type => {
             if (type === 'token') {
-              delete resource.kubeconfig?.users?.[0]?.user?.exec;
+              delete resource?.kubeconfig?.users?.[0]?.user?.exec;
               jp.value(resource, '$.kubeconfig.users[0].user.token', '');
             } else {
-              delete resource.kubeconfig.users?.[0]?.user?.token;
+              delete resource?.kubeconfig.users?.[0]?.user?.token;
               createOIDC();
             }
             setResource({ ...resource });
