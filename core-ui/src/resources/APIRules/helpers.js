@@ -1,4 +1,5 @@
 import * as jp from 'jsonpath';
+import accessStrategyTypes from 'components/ApiRules/accessStrategyTypes';
 
 // hostname may contain optional namespace prefix ({namespace}/{hostname})
 function removeNamespacePrefix(host) {
@@ -31,8 +32,9 @@ export function getGatewayHosts(gateway) {
     .filter(filterUnique);
 }
 
-function validateAccessStrategy(accessStrategy) {
-  if (!accessStrategy) return false;
+export function validateAccessStrategy(accessStrategy) {
+  if (!accessStrategy || !accessStrategyTypes[accessStrategy.handler])
+    return false;
 
   const { config, handler } = accessStrategy;
 

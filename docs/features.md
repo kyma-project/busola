@@ -2,7 +2,20 @@
 title: Feature flags
 ---
 
-The document lists and describes all the feature flags that are available in Kyma Dashboard and provides their configuration examples:
+The document explains the usage of feature flags in Busola, lists and describes all the available feature flags, and provides their configuration examples:
+
+#### Features priority
+
+Initialisation of the Busola features is based on the `stage` property, which can take one of the following values:
+
+- `PRIMARY` - the feature is resolved while the application bootstraps. Features that should be immediately visible must be set as `PRIMARY` (for example, main navigation structure).
+- `SECONDARY` - the feature is resolved after the application is ready, it must be used for non-critical features (for example, additional navigation nodes).
+
+If the stage is not set, the feature is loaded only on-demand, most often by the iframe. Use the `useFeature` hook to request usage of such feature.
+
+Note that some features must be run before the application starts the bootstrap process (for example, SSO_LOGIN), so they are out of the normal feature flow.
+
+#### The features list
 
 > **TIP:** The list is ordered alphabetically.
 
@@ -11,7 +24,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "ADDONS": {
     "isEnabled": true,
     "selectors": [
@@ -29,7 +42,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "API_GATEWAY": {
     "isEnabled": true,
     "selectors": [
@@ -46,7 +59,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "APPLICATIONS": {
     "isEnabled": true,
     "selectors": [
@@ -63,7 +76,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "BTP_CATALOG": {
     "isEnabled": true,
     "selectors": [
@@ -80,7 +93,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "CUSTOM_DOMAINS": {
     "isEnabled": true,
     "selectors": [
@@ -98,7 +111,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "EVENTING": {
     "isEnabled": true,
     "selectors": [
@@ -110,13 +123,25 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **EXTERNAL_NODES** - a list of links to external websites. `category`: a category name, `icon`: an optional icon, `children`: a list of pairs (label and link).
+- **DISABLED_NODES** - an array of IDs of navigation nodes that are hidden from navigation. Format: `<category>.<nodeName>` or `namespace.<category>.<nodeName>`).
 
   Default settings:
 
   ```bash
+  "DISABLED_NODES": {
+    "isEnabled": false,
+    "nodes": []
+  }
+  ```
+
+- **EXTERNAL_NODES** - a list of links to external websites. `category`: a category name, `icon`: an optional icon, `children`: a list of pairs (label and link).
+
+  Default settings:
+
+  ```json
   "EXTERNAL_NODES": {
     "isEnabled": true,
+    "stage": "SECONDARY",
     "nodes": [
       {
         "category": "My Category",
@@ -137,7 +162,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "ISTIO": {
     "isEnabled": true,
     "selectors": [
@@ -155,7 +180,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Default settings:
 
-  ```bash
+  ```json
   "JWT_CHECK_CONFIG": {
     "isEnabled": false,
     "config": {
@@ -165,24 +190,51 @@ The document lists and describes all the feature flags that are available in Kym
   }
   ```
 
-- **GZIP** – is used to indicate whether the response from the backend server should be compressed or not.
+- **HIDDEN_NAMESPACES** – is used to define a list of Namespace names that are considered system, and are hidden by default.
+
+  Default settings:
+
+  ```bash
+  "HIDDEN_NAMESPACES": {
+    "isEnabled": true,
+    "config": {
+      "namespaces": [
+        "compass-system",
+        "istio-system",
+        "knative-eventing",
+        "knative-serving",
+        "kube-public",
+        "kube-system",
+        "kyma-backup",
+        "kyma-installer",
+        "kyma-integration",
+        "kyma-system",
+        "natss",
+        "kube-node-lease",
+        "serverless-system"
+      ]
+    }
+  }
+  ```
+
+* **GZIP** – is used to indicate whether the response from the backend server should be compressed or not.
 
   Backend feature. Cannot be modified at the cluster's Config Map level.
 
   Default settings:
 
-  ```bash
+  ```json
   "GZIP": {
     "isEnabled": true,
   }
   ```
 
-- **KUBECONFIG_ID** – is used to configure the URL to which Busola sends a request to download a kubeconfig file. If you add `?kubeconfigID={your ID}` to the Busola URL, Busola tries to download the kubeconfig from `{kubeconfigUrl}/{yourID}`. If the operation succeeds, Busola adds the kubeconfing file to the cluster.
+* **KUBECONFIG_ID** – is used to configure the URL to which Busola sends a request to download a kubeconfig file. If you add `?kubeconfigID={your ID}` to the Busola URL, Busola tries to download the kubeconfig from `{kubeconfigUrl}/{yourID}`. If the operation succeeds, Busola adds the kubeconfing file to the cluster.
   If you use a full address in the **kubeconfigUrl** field, Busola also reads it.
 
   Default settings:
 
-  ```bash
+  ```json
   "KUBECONFIG_ID": {
    "isEnabled": true,
    "config": {
@@ -191,12 +243,12 @@ The document lists and describes all the feature flags that are available in Kym
   },
   ```
 
-- **LEGAL_LINKS** – is used to show or hide legal links. You can find the all available links in the following example.
+* **LEGAL_LINKS** – is used to show or hide legal links. You can find the all available links in the following example.
   In **config** you can find the unchangeable keys (you cannot use **legalDisclosure** instead of **legal-disclosure**). The keys include both the default link, which takes you to the default address, and a link that depends on your chosen language.
 
   Example:
 
-  ```bash
+  ```json
   "LEGAL_LINKS": {
     "config": {
       "legal-disclosure": {
@@ -220,11 +272,11 @@ The document lists and describes all the feature flags that are available in Kym
 
   The link under the given key is selected based on your language code (de, en, pl, etc.). If the code is not available, the default link is used.
 
-- **OBSERVABILITY** – is used to render nodes in the navigation. The **label** parameter shows the name of the given service. The **path** parameter is used by Busola during the bootstrapping. Busola sends a request to the cluster address. The **path** value and the cluster must return the VirtualService object. If the object is found, you receive an address to which the node in the navigation leads.
+* **OBSERVABILITY** – is used to render nodes in the navigation. The **label** parameter shows the name of the given service. The **path** parameter is used by Busola during the bootstrapping. Busola sends a request to the cluster address. The **path** value and the cluster must return the VirtualService object. If the object is found, you receive an address to which the node in the navigation leads.
 
   Defualt settings:
 
-  ```bash
+  ```json
   "OBSERVABILITY": {
    "isEnabled": true,
    "config": {
@@ -246,7 +298,7 @@ The document lists and describes all the feature flags that are available in Kym
   }
   ```
 
-- **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.
+* **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.
   Each resource requires the **match** field, which includes a list of key-value pairs. The proper rule description is when the definition given in the key matches the value.
 
   To switch comparison mode from **standard** to **regex**, set the **regex** parameter to `true`.
@@ -255,7 +307,7 @@ The document lists and describes all the feature flags that are available in Kym
 
   Example:
 
-  ```bash
+  ```json
   "PROTECTED_RESOURCES": {
     "isEnabled": true,
     "config": {
@@ -297,7 +349,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   Default settings:
 
-  ```bash
+  ```json
   "SENTRY": {
     "isEnabled": false,
     "selectors": [],
@@ -312,7 +364,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   Default settings:
 
-  ```bash
+  ```json
   "SERVERLESS": {
     "isEnabled": true,
     "selectors": [
@@ -331,7 +383,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   Default settings:
 
-  ```bash
+  ```json
   "SERVICE_CATALOG": {
     "isEnabled": true,
     "selectors": [
@@ -348,7 +400,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   Default settings:
 
-  ```bash
+  ```json
   "SERVICE_CATALOG_ADDONS": {
     "isEnabled": true,
     "selectors": [
@@ -362,15 +414,15 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
 - **SHOW_KYMA_VERSION** – determines if the Kyma version should be visible on the Cluster Details page. The displayed version is the value of the `reconciler.kyma-project.io/origin-version` label in the `kyma-system` Namespace. If the value of the label is missing or there is no `kyma-system` Namespace, the `Unknown` version will be displayed.
 
-  ```bash
+  ```json
   "SHOW_KYMA_VERSION": {
     "isEnabled": true
   },
   ```
 
-- **SSO_LOGIN** – is used to configure data necessary for the SSO login such as an issuer address, client’s ID, client’s Secret and scopes. If `clientSecret` is omitted, a public client is used.
+- **SSO_LOGIN** – is used to configure data necessary for the SSO login such as an issuer address, client’s ID, client’s Secret and scopes. If `clientSecret` is omitted, a public client is used. This feature is out of standard features flow, so it will run immediately.
 
-  ```bash
+  ```json
   "SSO_LOGIN": {
     "isEnabled": true,
     "config": {
@@ -384,7 +436,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
 - **PROMETHEUS** – is used to show or hide the **Prometheus** metrics graphs.
 
-  ```bash
+  ```json
   "PROMETHEUS": {
     "isEnabled": true,
   },
@@ -392,7 +444,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
 - **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at a resource details view.
 
-  ```bash
+  ```json
   "VISUAL_RESOURCES": {
     "isEnabled": true,
   },
@@ -400,7 +452,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
 - **MONACO_AUTOCOMPLETION** – determines if Busola should obtain json schemas and validate input in Monaco.
 
-  ```bash
+  ```json
   "VISUAL_RESOURCES": {
     "isEnabled": true,
   },

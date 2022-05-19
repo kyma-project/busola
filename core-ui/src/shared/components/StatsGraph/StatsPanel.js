@@ -7,7 +7,7 @@ import {
   BusyIndicator,
 } from 'fundamental-react';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useFeature } from 'shared/hooks/useFeature';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { useTranslation } from 'react-i18next';
 
@@ -203,7 +203,6 @@ export function StatsPanel({
   defaultMetric = 'cpu',
   ...props
 }) {
-  const { features } = useMicrofrontendContext();
   const timeSpans = {
     '1h': 60 * 60,
     '3h': 3 * 60 * 60,
@@ -218,7 +217,10 @@ export function StatsPanel({
 
   const [timeSpan, setTimeSpan] = useState(visibleTimeSpans[0]);
   const { t } = useTranslation();
-  if (!features.PROMETHEUS?.isEnabled) {
+
+  const prometheus = useFeature('PROMETHEUS');
+
+  if (!prometheus?.isEnabled) {
     return '';
   }
 

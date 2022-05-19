@@ -2,24 +2,26 @@ import { setAuthData, clearAuthData, getAuthData } from '../auth/auth-storage';
 import { reloadNavigation } from '../navigation/navigation-data-init';
 import { reloadAuth, hasNonOidcAuth } from '../auth/auth';
 import { saveLocation } from '../navigation/previous-location';
-import { parseOIDCParams } from '../auth/oidc-params';
-import { DEFAULT_HIDDEN_NAMESPACES, DEFAULT_FEATURES } from '../constants';
+import { createLoginCommand, parseOIDCParams } from '../auth/oidc-params';
 import { getBusolaClusterParams } from '../busola-cluster-params';
 import {
   getTargetClusterConfig,
   loadTargetClusterConfig,
 } from '../utils/target-cluster-config';
-import { merge } from 'lodash';
 import { checkIfClusterRequiresCA } from '../navigation/queries';
 import * as clusterStorage from './clusters-storage';
+import * as fetchCache from './../cache/fetch-cache';
+import { clearClusterCache } from '../cache/storage';
+import { isNil } from 'lodash';
+import { DEFAULT_FEATURES } from '../constants';
 
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
-export async function setActiveClusterIfPresentInUrl() {
-  const match = location.pathname.match(/^\/cluster\/(.*?)\//);
+export function setActiveClusterIfPresentInUrl() {
+  const match = window.location.pathname.match(/^\/cluster\/(.*?)\//);
   if (match) {
     const clusterName = decodeURIComponent(match[1]);
-    const clusters = await getClusters();
+    const clusters = getClusters();
     if (clusterName in clusters) {
       saveActiveClusterName(clusterName);
     }
@@ -43,12 +45,13 @@ export function getAfterLoginLocation(clusterName, kubeconfig) {
 }
 
 export async function setCluster(clusterName) {
-  const clusters = await getClusters();
+  const clusters = getClusters();
   const params = clusters[clusterName];
 
   const originalStorage = clusters[clusterName].config.storage;
 
   saveActiveClusterName(clusterName);
+  fetchCache.init(clusterName);
   try {
     await reloadAuth();
 
@@ -69,12 +72,13 @@ export async function setCluster(clusterName) {
       setTimeout(() => Luigi.navigation().navigate(targetLocation));
     } else {
       saveLocation(targetLocation);
-      location = location.origin;
+      window.location = window.location.origin;
     }
   } catch (e) {
     console.warn(e);
     alert('An error occured while setting up the cluster.');
     saveActiveClusterName(null);
+    fetchCache.clear();
   }
 }
 
@@ -92,7 +96,7 @@ export async function saveClusterParams(params) {
   }
 
   const clusterName = params.kubeconfig['current-context'];
-  const clusters = await getClusters();
+  const clusters = getClusters();
   const prevConfig = clusters[clusterName]?.config || {};
   clusters[clusterName] = {
     ...params,
@@ -104,7 +108,7 @@ export async function saveClusterParams(params) {
 export async function saveCARequired() {
   const clusters = clusterStorage.load();
   const cluster = clusters[getActiveClusterName()];
-  if (cluster.config.requiresCA === undefined) {
+  if (isNil(cluster?.config.requiresCA)) {
     cluster.config = {
       ...cluster.config,
       requiresCA: await checkIfClusterRequiresCA(getAuthData()),
@@ -113,79 +117,60 @@ export async function saveCARequired() {
   }
 }
 
-export async function getActiveCluster() {
+export function getActiveCluster() {
   const clusters = clusterStorage.load();
   const clusterName = getActiveClusterName();
-  if (!clusterName || !clusters[clusterName]) {
-    return null;
-  }
-
-  const targetClusterConfig = getTargetClusterConfig() || {};
-
-  // add target cluster config
-  clusters[clusterName].config = merge(
-    {},
-    clusters[clusterName].config,
-    targetClusterConfig.config,
-  );
-
-  clusters[clusterName] = await mergeParams(clusters[clusterName]);
-  return clusters[clusterName];
+  const activeCluster = clusters[clusterName];
+  return activeCluster;
 }
 
+let currentClusterName = null;
 export function getActiveClusterName() {
-  return localStorage.getItem(CURRENT_CLUSTER_NAME_KEY);
+  return localStorage.getItem(CURRENT_CLUSTER_NAME_KEY) || currentClusterName;
 }
 
 export function saveActiveClusterName(clusterName) {
   if (clusterName) {
     localStorage.setItem(CURRENT_CLUSTER_NAME_KEY, clusterName);
+    currentClusterName = clusterName;
   } else {
     localStorage.removeItem(CURRENT_CLUSTER_NAME_KEY);
+    currentClusterName = null;
   }
 }
 
 // setup params:
 // defaults < config from Busola cluster CM < (config from target cluster CM)
-async function mergeParams(params) {
-  const defaultConfig = {
-    navigation: { disabledNodes: [] },
-    hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
-    features: DEFAULT_FEATURES,
-    storage: await clusterStorage.getDefaultStorage(),
+export async function getCurrentConfig() {
+  const busolaClusterParams = await getBusolaClusterParams();
+  const targetCluterConfig = getActiveClusterName()
+    ? await getTargetClusterConfig()
+    : {};
+
+  const features = {
+    ...DEFAULT_FEATURES,
+    ...busolaClusterParams?.config?.features,
+    ...targetCluterConfig?.config?.features,
   };
 
-  params.config = {
-    ...defaultConfig,
-    ...(await getBusolaClusterParams()).config,
-    ...params.config,
+  let config = {
+    ...busolaClusterParams?.config,
+    ...targetCluterConfig?.config,
   };
+  config.features = features;
 
-  params.config.features = {
-    ...defaultConfig.features,
-    ...(await getBusolaClusterParams()).config?.features,
-    ...params.config.features,
-  };
-
-  // Don't merge hiddenNamespaces, use the defaults only when params are empty
-  params.config.hiddenNamespaces =
-    params.config?.hiddenNamespaces || DEFAULT_HIDDEN_NAMESPACES;
-
-  return params;
+  return config;
 }
 
-export async function getClusters() {
-  const clusters = clusterStorage.load();
-  for (const clusterName in clusters) {
-    clusters[clusterName] = await mergeParams(clusters[clusterName]);
-  }
-  return clusters;
+export function getClusters() {
+  return clusterStorage.load();
 }
 
 export async function deleteCluster(clusterName) {
-  const clusters = await getClusters();
+  const clusters = getClusters();
   delete clusters[clusterName];
   await saveClusters(clusters);
+  clearClusterCache(clusterName);
 }
 
 export async function deleteActiveCluster() {
@@ -205,7 +190,7 @@ export async function saveClusters(clusters) {
 }
 
 export function handleResetEndpoint() {
-  if (location.pathname === '/reset') {
+  if (window.location.pathname === '/reset') {
     saveActiveClusterName(null);
     // we could use location = '/clusters', but it would trigger unnecessary reload
     window.history.replaceState(null, window.document.title, '/clusters');

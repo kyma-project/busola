@@ -86,13 +86,6 @@ context('Test reduced permissions', () => {
   });
 
   it('Create Service Account', () => {
-    // for some reason "Namespaces" node gets detached from DOM
-    cy.reload();
-
-    cy.getLeftNav()
-      .contains('Namespaces')
-      .click();
-
     cy.goToNamespaceDetails();
 
     cy.navigateTo('Configuration', 'Service Accounts');
@@ -161,9 +154,6 @@ context('Test reduced permissions', () => {
   });
 
   it('Download kubeconfig for Service Account', () => {
-    // once again the navigation is broken, so clicking on anything with bring us to Cluster Overview
-    cy.reload();
-
     cy.getLeftNav()
       .contains('Namespaces')
       .click();
@@ -218,10 +208,6 @@ context('Test reduced permissions', () => {
   });
 
   it('Inspect reduced permissions view', () => {
-    // navigation is broken again
-    cy.reload();
-
-    // try to delete resource
     cy.getIframeBody()
       .contains('button', 'Delete')
       .click();
@@ -265,9 +251,6 @@ context('Test reduced permissions', () => {
     cy.getLeftNav()
       .contains('Configuration')
       .should('exist');
-
-    // yes, navigation is broken yet again
-    cy.reload();
 
     // delete binding
     cy.getLeftNav()

@@ -75,7 +75,7 @@ export function createNamespacesList(rawNamespaceNames) {
 }
 
 export const addExternalNodes = externalNodesFeature => {
-  if (externalNodesFeature?.isEnabled === false) return;
+  if (externalNodesFeature?.isEnabled === false) return [];
 
   let navigationNodes = [];
   try {

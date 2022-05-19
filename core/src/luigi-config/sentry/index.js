@@ -2,14 +2,13 @@ import * as Sentry from '@sentry/browser';
 import { Integrations } from '@sentry/tracing';
 
 import { getBusolaClusterParams } from '../busola-cluster-params';
-import { resolveFeatureAvailability } from '../features';
 
 export async function initSentry() {
   const features = (await getBusolaClusterParams()).config?.features || {};
   const sentryFeature = features.SENTRY;
-  const isSentryEnabled = await resolveFeatureAvailability(sentryFeature, null);
 
-  if (isSentryEnabled && sentryFeature.config?.dsn) {
+  // sentry is out of features flow, just check if it's enabled
+  if (sentryFeature.isEnabled && sentryFeature.config?.dsn) {
     Sentry.init({
       dsn: sentryFeature.config.dsn,
 

@@ -146,15 +146,7 @@ context('Test Protected Resources', () => {
       .find('.fd-switch')
       .click();
 
-    // for some reason "Namespaces" node gets detached from DOM
-
-    cy.reload();
-
-    cy.getLeftNav()
-      .contains('Namespaces')
-      .click();
-
-    cy.goToNamespaceDetails();
+    cy.get('[data-testid="modal-mf"] [aria-label="close"]').click();
   });
 
   it("Don't protect a resource", () => {

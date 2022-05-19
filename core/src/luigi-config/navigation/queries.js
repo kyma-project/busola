@@ -1,7 +1,11 @@
 import { config } from './../config';
-import { getActiveCluster } from './../cluster-management/cluster-management';
-import { HttpError } from '../../../../core-ui/src/shared/hooks/BackendAPI/config';
+import {
+  getActiveCluster,
+  getActiveClusterName,
+} from './../cluster-management/cluster-management';
 import { getSSOAuthData } from '../auth/sso';
+import * as fetchCache from './../cache/fetch-cache';
+import { extractGroupVersions } from '../utils/extractGroupVersions';
 
 export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {
@@ -33,7 +37,7 @@ export async function failFastFetch(input, auth, init = {}) {
   }
 
   async function createHeaders(auth) {
-    const params = await getActiveCluster();
+    const params = getActiveCluster();
     const cluster = params.currentContext.cluster.cluster;
     const requiresCA = params.config?.requiresCA;
 
@@ -49,24 +53,14 @@ export async function failFastFetch(input, auth, init = {}) {
     };
   }
 
+  const activeClusterName = getActiveClusterName();
+  if (!activeClusterName) {
+    throw Error(`failFastFetch: no connected cluster (${input})`);
+  }
+
   init.headers = await createHeaders(auth, input);
 
-  const response = await fetch(input, init);
-  if (response.ok) {
-    return response;
-  } else {
-    if (response.json) {
-      const errorResponse = await response.json();
-      throw new HttpError(
-        errorResponse.message && typeof errorResponse.message === 'string'
-          ? errorResponse.message
-          : response.statusText,
-        errorResponse.statusCode ? errorResponse.statusCode : response.status,
-      );
-    } else {
-      throw new Error(response);
-    }
-  }
+  return await fetch(input, init);
 }
 
 export async function checkIfClusterRequiresCA(auth) {
@@ -105,17 +99,11 @@ export function fetchPermissions(auth, namespace = '*') {
     .then(res => res.status.resourceRules);
 }
 
-export async function fetchBusolaInitData(auth) {
-  const CORE_GROUP = 'v1';
-
-  return await failFastFetch(config.backendAddress + '/apis', auth)
-    .then(res => res.json())
-    .then(res => [
-      CORE_GROUP,
-      ...res.groups.flatMap(group =>
-        group.versions.map(version => version.groupVersion),
-      ),
-    ]);
+export async function fetchAvailableApis() {
+  // don't subscribe to '/apis' here - apiGroup features take care of that
+  return await fetchCache
+    .get('/apis')
+    .then(({ data }) => extractGroupVersions(data));
 }
 
 export function fetchNamespaces(auth) {
