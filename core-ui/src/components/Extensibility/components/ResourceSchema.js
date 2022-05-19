@@ -103,15 +103,15 @@ export const ResourceSchema = ({ resource, setResource, schema, path }) => {
 
   if (isEmpty(schema)) return null;
 
-  let newschema = schema;
-  delete newschema.properties.metadata;
+  let newSchema = schema;
+  delete newSchema.properties.metadata;
 
-  newschema = {
-    ...newschema,
-    properties: { metadata: METADATA_SCHEMA, ...newschema.properties },
+  newSchema = {
+    ...newSchema,
+    properties: { metadata: METADATA_SCHEMA, ...newSchema.properties },
   };
 
-  const schemaMap = createOrderedMap(newschema);
+  const schemaMap = createOrderedMap(newSchema);
   return (
     <UIMetaProvider
       widgets={formWidgets}
