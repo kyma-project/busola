@@ -20,7 +20,7 @@ export function ExtensibilityCreate({
   const api = createResource?.resource || {};
 
   const [resource, setResource] = useState(
-    createResource?.create?.template ||
+    createResource?.template ||
       createTemplate(api, namespace, createResource?.navigation?.scope),
   );
   //TODO filter schema based on form configuration
@@ -64,6 +64,7 @@ export function ExtensibilityCreate({
         simple
         key={api.version}
         schema={schema || {}}
+        schemaRules={createResource?.form}
         resource={resource}
         setResource={setResource}
         onSubmit={() => {}}
@@ -73,6 +74,7 @@ export function ExtensibilityCreate({
         advanced
         key={api.version}
         schema={schema || {}}
+        schemaRules={createResource?.form}
         resource={resource}
         setResource={setResource}
         path={createResource?.navigation?.path || ''}

@@ -13,21 +13,25 @@ export function StringRenderer({
   storeKeys,
   required,
 }) {
-  return (
-    <ResourceForm.FormField
-      value={value}
-      setValue={value => {
-        onChange({
-          storeKeys,
-          scopes: ['value'],
-          type: 'set',
-          schema,
-          required,
-          data: { value },
-        });
-      }}
-      label={<TransTitle schema={schema} storeKeys={storeKeys} />}
-      input={Inputs.Text}
-    />
-  );
+  if (schema.enum) {
+    return 'ENUM';
+  } else {
+    return (
+      <ResourceForm.FormField
+        value={value}
+        setValue={value => {
+          onChange({
+            storeKeys,
+            scopes: ['value'],
+            type: 'set',
+            schema,
+            required,
+            data: { value },
+          });
+        }}
+        label={<TransTitle schema={schema} storeKeys={storeKeys} />}
+        input={Inputs.Text}
+      />
+    );
+  }
 }

@@ -18,6 +18,13 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 
 import { FormContainer } from '../ds/FormContainer';
 import formWidgets from '../ds/widgets-form';
+import { SchemaRulesInjector } from '../SchemaRulesInjector';
+
+const [firstPlugin, ...otherPlugins] = formWidgets.pluginStack;
+const widgets = {
+  ...formWidgets,
+  pluginStack: [firstPlugin, SchemaRulesInjector, ...otherPlugins],
+};
 
 const FormStack = injectPluginStack(FormContainer);
 
@@ -84,7 +91,15 @@ const JSONSchemaForm = ({ properties, path, ...props }) => {
   });
 };
 
-export const ResourceSchema = ({ resource, setResource, schema, path }) => {
+export const ResourceSchema = ({
+  advanced,
+  resource,
+  setResource,
+  schema,
+  schemaRules = [],
+  path,
+  ...extraParams
+}) => {
   const [store, setStore] = useState(() =>
     createStore(createOrderedMap(resource)),
   );
@@ -101,15 +116,32 @@ export const ResourceSchema = ({ resource, setResource, schema, path }) => {
   const translationBundle = path || 'extensibility';
   const { t } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
 
+  const fullSchemaRules = [
+    { path: 'metadata.name', simple: true },
+    { path: 'metadata.labels' },
+    { path: 'metadata.annotations' },
+    ...schemaRules,
+  ];
+  const simpleRules = fullSchemaRules.filter(item => item.simple ?? false);
+  const advancedRules = fullSchemaRules.filter(item => item.advanced ?? true);
+
+  const myRules = advanced ? advancedRules : simpleRules;
+
   if (isEmpty(schema)) return null;
 
   const schemaMap = createOrderedMap(schema);
+
   return (
     <UIMetaProvider
-      widgets={formWidgets}
+      widgets={widgets}
       t={(path, ...props) => t(`${translationBundle}:${path}`, ...props)}
     >
-      <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
+      <UIStoreProvider
+        store={store}
+        showValidity={true}
+        onChange={onChange}
+        schemaRules={myRules}
+      >
         <FormStack isRoot schema={schemaMap} />
       </UIStoreProvider>
     </UIMetaProvider>
