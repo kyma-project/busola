@@ -20,6 +20,8 @@ import { FormContainer } from '../ds/FormContainer';
 import formWidgets from '../ds/widgets-form';
 import { SchemaRulesInjector } from '../SchemaRulesInjector';
 
+import { METADATA_SCHEMA } from './metadataSchema';
+
 const [firstPlugin, ...otherPlugins] = formWidgets.pluginStack;
 const widgets = {
   ...formWidgets,
@@ -129,8 +131,15 @@ export const ResourceSchema = ({
 
   if (isEmpty(schema)) return null;
 
-  const schemaMap = createOrderedMap(schema);
+  let newSchema = schema;
+  delete newSchema.properties.metadata;
 
+  newSchema = {
+    ...newSchema,
+    properties: { metadata: METADATA_SCHEMA, ...newSchema.properties },
+  };
+
+  const schemaMap = createOrderedMap(newSchema);
   return (
     <UIMetaProvider
       widgets={widgets}
@@ -142,7 +151,12 @@ export const ResourceSchema = ({
         onChange={onChange}
         schemaRules={myRules}
       >
-        <FormStack isRoot schema={schemaMap} />
+        <FormStack
+          isRoot
+          schema={schemaMap}
+          resource={resource}
+          setResource={setResource}
+        />
       </UIStoreProvider>
     </UIMetaProvider>
   );

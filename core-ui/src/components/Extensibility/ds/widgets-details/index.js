@@ -9,16 +9,11 @@ import {
   ExtractStorePlugin,
 } from '@ui-schema/ui-schema/Plugins';
 import { PluginSimpleStack } from '@ui-schema/ui-schema/PluginSimpleStack';
-import { ValidityReporter } from '@ui-schema/ui-schema/ValidityReporter';
-import { validators } from '@ui-schema/ui-schema/Validators/validators';
 
-import { StringRenderer } from './StringRenderer';
-import { NumberRenderer } from './NumberRenderer';
-import { SwitchRenderer } from './SwitchRenderer';
-import { NameRenderer } from './NameRenderer';
-import { KeyValuePairRenderer } from './KeyValuePairRenderer';
-import { CollapsibleRenderer } from './CollapsibleRenderer';
-import { GenericList } from './GenericList';
+import { WorkloadRenderer } from './WorkloadRenderer';
+import { GenericListRenderer } from './GenericListRenderer';
+import { SimpleTypeRenderer } from './SimpleTypeRenderer';
+// import { PanelRenderer } from './PanelRenderer';
 
 const pluginStack = [
   ReferencingHandler,
@@ -28,7 +23,6 @@ const pluginStack = [
   DependentHandler,
   ConditionalHandler,
   PluginSimpleStack,
-  ValidityReporter,
 ];
 
 export const widgets = {
@@ -37,20 +31,21 @@ export const widgets = {
   GroupRenderer: ({ children }) => <div>{children}</div>,
   WidgetRenderer,
   pluginStack,
-  pluginSimpleStack: validators,
   types: {
-    string: StringRenderer,
-    boolean: SwitchRenderer,
-    number: NumberRenderer,
-    integer: NumberRenderer,
-    array: GenericList,
+    string: SimpleTypeRenderer,
+    boolean: SimpleTypeRenderer,
+    number: SimpleTypeRenderer,
+    integer: SimpleTypeRenderer,
+    array: GenericListRenderer,
   },
   custom: {
-    Null: () => '',
     /*
     Accordions: AccordionsRenderer,
     */
-    Text: StringRenderer,
+    // Panel: PanelRenderer,
+    Workload: WorkloadRenderer,
+    // List: GenericListRenderer,
+    // Table: TableDataRenderer,
     /*
     Text: TextRenderer,
     StringIcon: StringIconRenderer,
@@ -65,10 +60,8 @@ export const widgets = {
     SelectMulti,
     Card: CardRenderer,
     LabelBox,
+    FormGroup,
     */
-    Name: NameRenderer,
-    KeyValuePair: KeyValuePairRenderer,
-    FormGroup: CollapsibleRenderer,
   },
 };
 export default widgets;
