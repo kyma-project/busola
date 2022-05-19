@@ -26,6 +26,7 @@ export function CertificateCreate({
   namespace,
   resource: initialCertificate,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -107,6 +108,7 @@ export function CertificateCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="certificates"
       singularName={t('certificates.name_singular')}
       resource={certificate}

@@ -11,6 +11,7 @@ export function PersistentVolumeClaimCreate({
   onChange,
   resourceUrl,
   setCustomValid,
+  ...props
 }) {
   const { t } = useTranslation();
   const [persistentVolumeClaim, setPersistentVolumeClaim] = useState(
@@ -19,6 +20,7 @@ export function PersistentVolumeClaimCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="persistentvolumeclaims"
       singularName={t('persistent-volume-claims.name_singular')}
       resource={persistentVolumeClaim}

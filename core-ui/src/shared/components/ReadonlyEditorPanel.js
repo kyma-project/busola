@@ -1,9 +1,9 @@
 import React from 'react';
-import { MonacoEditor } from 'shared/components/MonacoEditor/MonacoEditor';
 import { useTheme } from 'shared/contexts/ThemeContext';
 import { LayoutPanel } from 'fundamental-react';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
 import { useTranslation } from 'react-i18next';
+import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
 export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
   const { editorTheme } = useTheme();
@@ -11,12 +11,8 @@ export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
   const [editor, setEditor] = React.useState(null);
 
   const options = {
-    readOnly: true,
     minimap: {
       enabled: false,
-    },
-    scrollbar: {
-      alwaysConsumeMouseWheel: false,
     },
   };
 
@@ -32,15 +28,16 @@ export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
           editor={editor}
           title={title}
           saveDisabled={true}
-          readOnly={true}
           i18n={i18n}
         />
-        <MonacoEditor
+        <Editor
           theme={editorTheme}
           height="20em"
           value={value}
           options={options}
-          onMount={editor => setEditor(editor)}
+          onMount={setEditor}
+          autocompletionDisabled
+          readOnly
           {...editorProps}
         />
       </LayoutPanel.Body>

@@ -11,6 +11,7 @@ export function LimitRangeCreate({
   onChange,
   setCustomValid,
   resourceUrl,
+  ...props
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [limitRange, setLimitRange] = useState(
@@ -20,6 +21,7 @@ export function LimitRangeCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="limitRanges"
       singularName={t('limit-ranges.name_singular')}
       resource={limitRange}

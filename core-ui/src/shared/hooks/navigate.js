@@ -87,11 +87,24 @@ export function navigateToResource(resource) {
     kind,
   } = resource;
 
-  let path = `${pluralize(kind.toLowerCase())}/details/${name}`;
+  let path = `${pluralize(kind.toLowerCase())}/details/${encodeURIComponent(
+    name,
+  )}`;
   if (namespace) {
     path = `namespaces/${namespace}/${path}`;
   }
   return LuigiClient.linkManager()
     .fromContext('cluster')
     .navigate(path);
+}
+
+export function nagivateToResourceAfterCreate(namespace, name, pluralKind) {
+  const encodedName = encodeURIComponent(name);
+  if (namespace) {
+    LuigiClient.linkManager()
+      .fromContext('namespace')
+      .navigate(`/${pluralKind.toLowerCase()}/details/${encodedName}`);
+  } else {
+    LuigiClient.linkManager().navigate(`details/${encodedName}`);
+  }
 }

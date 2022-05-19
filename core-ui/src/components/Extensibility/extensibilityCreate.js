@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import * as jp from 'jsonpath';
-import { useTranslation } from 'react-i18next';
 
 import { createTemplate } from './helpers';
 import { ResourceSchema } from './components/ResourceSchema';
-import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
@@ -15,7 +12,6 @@ export function ExtensibilityCreate({
   resourceUrl,
   resource: createResource,
 }) {
-  const { t } = useTranslation();
   const { namespaceId: namespace } = useMicrofrontendContext();
   const api = createResource?.resource || {};
 
@@ -25,13 +21,6 @@ export function ExtensibilityCreate({
   );
   //TODO filter schema based on form configuration
   const schema = createResource?.schema;
-
-  const handleNameChange = name => {
-    jp.value(resource, '$.metadata.name', name);
-    jp.value(resource, "$.metadata.labels['app.kubernetes.io/name']", name);
-
-    setResource({ ...resource });
-  };
 
   return (
     <ResourceForm
@@ -44,22 +33,6 @@ export function ExtensibilityCreate({
       setCustomValid={setCustomValid}
       onlyYaml={!schema}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={api.kind}
-        setValue={handleNameChange}
-        validate={value => !!value}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
       <ResourceSchema
         simple
         key={api.version}

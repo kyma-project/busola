@@ -30,6 +30,7 @@ export function DeploymentCreate({
   setCustomValid,
   resource: initialDeployment,
   resourceUrl,
+  ...props
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -75,6 +76,7 @@ export function DeploymentCreate({
       <ResourceForm.CollapsibleSection
         title={t('services.name_singular')}
         actions={serviceActions}
+        defaultOpen={createService}
       >
         <Editor
           readonly={!createService}
@@ -117,6 +119,7 @@ export function DeploymentCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="deployments"
       singularName={t(`deployments.name_singular`)}
       resource={deployment}

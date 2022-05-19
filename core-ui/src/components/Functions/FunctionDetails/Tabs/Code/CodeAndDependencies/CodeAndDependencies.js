@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Switch } from 'fundamental-react';
+import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -30,7 +30,6 @@ export default function CodeAndDependencies({ func }) {
     type: UPDATE_TYPE.CODE_AND_DEPENDENCIES,
   });
 
-  const [showDiff, setShowDiff] = useState(false);
   const [disabledCause, setDisabledCause] = useState(
     DISABLED_CAUSES.NO_CHANGES,
   );
@@ -73,12 +72,6 @@ export default function CodeAndDependencies({ func }) {
     }
 
     setDisabledCause(DISABLED_CAUSES.VALID);
-  }
-
-  function onChangeToggle() {
-    setControlledCode(code);
-    setControlledDependencies(dependencies);
-    setShowDiff(prev => !prev);
   }
 
   function handleSave() {
@@ -144,17 +137,7 @@ export default function CodeAndDependencies({ func }) {
     button
   );
 
-  const toggle = (
-    <Switch compact onChange={onChangeToggle}>
-      {t('functions.details.buttons.diff_toggle')}
-    </Switch>
-  );
-  const actions = (
-    <>
-      {toggle}
-      {saveButton}
-    </>
-  );
+  const actions = <>{saveButton}</>;
 
   const {
     language: monacoEditorLang,
@@ -169,7 +152,6 @@ export default function CodeAndDependencies({ func }) {
         <Editor
           id="function-code"
           language={monacoEditorLang}
-          showDiff={showDiff}
           originalValue={func.spec.source}
           value={code}
           controlledValue={controlledCode}
@@ -186,7 +168,6 @@ export default function CodeAndDependencies({ func }) {
         <Editor
           id="function-dependencies"
           language={monacoEditorDeps}
-          showDiff={showDiff}
           originalValue={func.spec.deps}
           value={dependencies}
           controlledValue={controllerDependencies}

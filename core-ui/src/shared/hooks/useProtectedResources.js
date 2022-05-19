@@ -16,7 +16,8 @@ export function useProtectedResources(i18n) {
 
   const protectedResourceRules = microfrontendContext.features
     ?.PROTECTED_RESOURCES?.isEnabled
-    ? microfrontendContext.features?.PROTECTED_RESOURCES?.config.resources
+    ? microfrontendContext.features?.PROTECTED_RESOURCES?.config?.resources ||
+      []
     : [];
 
   const getEntryProtection = entry => {

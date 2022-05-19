@@ -34,6 +34,7 @@ export function FunctionCreate({
   formElementRef,
   onChange,
   setCustomValid,
+  ...props
 }) {
   useConfigData();
   const { t } = useTranslation();
@@ -123,6 +124,7 @@ export function FunctionCreate({
 
   return (
     <ResourceForm
+      {...props}
       className="create-function-form"
       pluralKind="functions"
       singularName={t('functions.name_singular')}

@@ -19,6 +19,7 @@ export function ConfigMapCreate({
   setCustomValid,
   resource: initialConfigMap,
   resourceUrl,
+  ...props
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [configMap, setConfigMap] = useState(
@@ -28,6 +29,7 @@ export function ConfigMapCreate({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind="configmaps"
       singularName={t('config-maps.name_singular')}
       resource={configMap}
