@@ -18,7 +18,7 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 
 import { FormContainer } from '../ds/FormContainer';
 import formWidgets from '../ds/widgets-form';
-
+import { METADATA_SCHEMA } from './metadataSchema';
 const FormStack = injectPluginStack(FormContainer);
 
 // TODO left only for reference - remove as soon as all corresponding widgets are implemented
@@ -103,14 +103,27 @@ export const ResourceSchema = ({ resource, setResource, schema, path }) => {
 
   if (isEmpty(schema)) return null;
 
-  const schemaMap = createOrderedMap(schema);
+  let newSchema = schema;
+  delete newSchema.properties.metadata;
+
+  newSchema = {
+    ...newSchema,
+    properties: { metadata: METADATA_SCHEMA, ...newSchema.properties },
+  };
+
+  const schemaMap = createOrderedMap(newSchema);
   return (
     <UIMetaProvider
       widgets={formWidgets}
       t={(path, ...props) => t(`${translationBundle}:${path}`, ...props)}
     >
       <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
-        <FormStack isRoot schema={schemaMap} />
+        <FormStack
+          isRoot
+          schema={schemaMap}
+          resource={resource}
+          setResource={setResource}
+        />
       </UIStoreProvider>
     </UIMetaProvider>
   );

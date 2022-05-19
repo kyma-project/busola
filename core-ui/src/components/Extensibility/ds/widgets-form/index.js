@@ -15,6 +15,8 @@ import { validators } from '@ui-schema/ui-schema/Validators/validators';
 import { StringRenderer } from './StringRenderer';
 import { NumberRenderer } from './NumberRenderer';
 import { SwitchRenderer } from './SwitchRenderer';
+import { NameRenderer } from './NameRenderer';
+import { KeyValuePairRenderer } from './KeyValuePairRenderer';
 import { CollapsibleRenderer } from './CollapsibleRenderer';
 import { GenericList } from './GenericList';
 
@@ -63,6 +65,8 @@ export const widgets = {
     Card: CardRenderer,
     LabelBox,
     */
+    Name: NameRenderer,
+    KeyValuePair: KeyValuePairRenderer,
     FormGroup: CollapsibleRenderer,
   },
 };
