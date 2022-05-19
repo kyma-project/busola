@@ -19,7 +19,7 @@ export const ExtensibilityDetails = () => {
     );
   }
 
-  const schema = resMetaData.create?.simple?.schema || resMetaData?.schema;
+  const schema = resMetaData?.schema;
 
   const customColumns = [];
 
