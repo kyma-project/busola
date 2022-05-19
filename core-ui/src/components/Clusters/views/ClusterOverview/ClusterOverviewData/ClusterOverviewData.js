@@ -12,7 +12,7 @@ import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import Skeleton from 'shared/components/Skeleton/Skeleton';
 
-import './ClusterNodes.scss';
+import './ClusterOverviewData.scss';
 
 const NodeHeader = ({ nodeName }) => {
   const navigateToNodeDetails = nodeName =>
@@ -28,7 +28,7 @@ const NodeHeader = ({ nodeName }) => {
   );
 };
 
-export function ClusterNodes() {
+export function ClusterOverviewData() {
   const { nodes, error, loading } = useNodesQuery();
   const { i18n } = useTranslation();
   const itemsPerPage = 8;
