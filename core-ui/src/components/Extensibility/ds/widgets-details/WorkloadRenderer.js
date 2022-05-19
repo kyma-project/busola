@@ -1,10 +1,10 @@
 import React from 'react';
 import { useUIStore } from '@ui-schema/ui-schema';
-import { LayoutPanel } from 'fundamental-react';
 
+import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { prettifyNamePlural } from 'shared/utils/helpers';
 import { Labels } from 'shared/components/Labels/Labels';
+import { TransTitle } from '@ui-schema/ui-schema/Translate/TransTitle';
 
 export function WorkloadRenderer({ storeKeys, schema, schemaKeys, ...props }) {
   const { store } = useUIStore();
@@ -14,7 +14,9 @@ export function WorkloadRenderer({ storeKeys, schema, schemaKeys, ...props }) {
   return (
     <LayoutPanel className="fd-margin--md">
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={prettifyNamePlural(props.ownKey)} />
+        <LayoutPanel.Head
+          title={<TransTitle schema={schema} storeKeys={storeKeys} />}
+        />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
         <LayoutPanelRow

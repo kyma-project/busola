@@ -1,8 +1,8 @@
 import React from 'react';
 import { useUIStore } from '@ui-schema/ui-schema';
 
-import { prettifyNamePlural } from 'shared/utils/helpers';
 import { GenericList } from 'shared/components/GenericList/GenericList';
+import { TransTitle } from '@ui-schema/ui-schema/Translate/TransTitle';
 
 export function GenericListRenderer({
   storeKeys,
@@ -18,7 +18,7 @@ export function GenericListRenderer({
   return (
     <>
       <GenericList
-        title={prettifyNamePlural(props.ownKey)}
+        title={<TransTitle schema={schema} storeKeys={storeKeys} />}
         entries={value}
         headerRenderer={() => Object.keys(value[0] || {})}
         rowRenderer={singleValue =>
