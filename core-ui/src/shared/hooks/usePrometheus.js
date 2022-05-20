@@ -38,6 +38,8 @@ const getPrometheusCPUQuery = (type, mode, data, step) => {
     return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{${getPrometheusSelector(
       data,
     )}})`;
+  } else if (type === 'node') {
+    return `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{cluster="", node=~"${data.nodeName}"}) by (pod)`;
   } else {
     return '';
   }
@@ -54,6 +56,8 @@ const getPrometheusMemoryQuery = (type, mode, data) => {
     return `sum(node_namespace_pod_container:container_memory_working_set_bytes{${getPrometheusSelector(
       data,
     )}})`;
+  } else if (type === 'node') {
+    return `sum(node_namespace_pod_container:container_memory_working_set_bytes{cluster="", node=~"${data.nodeName}"})`;
   } else {
     return '';
   }
@@ -66,6 +70,8 @@ const getPrometheusNetworkReceivedQuery = (type, data, step) => {
     return `sum(irate(container_network_receive_bytes_total{${getPrometheusSelector(
       data,
     )}}[${step}s]))`;
+  } else if (type === 'node') {
+    return `sum(irate(container_network_receive_bytes_total{cluster="", node=~"${data.nodeName}"}[${step}s]))`;
   } else {
     return '';
   }
@@ -78,6 +84,8 @@ const getPrometheusNetworkTransmittedQuery = (type, data, step) => {
     return `sum(irate(container_network_transmit_bytes_total{${getPrometheusSelector(
       data,
     )}}[${step}s]))`;
+  } else if (type === 'node') {
+    return `sum(irate(container_network_transmit_bytes_total{cluster="", node=~"${data.nodeName}"}[${step}s]))`;
   } else {
     return '';
   }

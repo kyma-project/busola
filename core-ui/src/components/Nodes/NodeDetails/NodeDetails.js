@@ -10,9 +10,9 @@ import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 import './NodeDetails.scss';
+import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 
-//TODO usun ten export
-export function NodeDetails({ nodeName }) {
+function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
   const { t } = useTranslation();
   useWindowTitle(t('nodes.title_details', { nodeName }));
@@ -24,7 +24,6 @@ export function NodeDetails({ nodeName }) {
       defaultType={EVENT_MESSAGE_TYPE.WARNING}
     />
   );
-
   return (
     <div className="node-details">
       <NodeDetailsHeader
@@ -35,6 +34,7 @@ export function NodeDetails({ nodeName }) {
       />
       {data && (
         <>
+          <StatsPanel type="node" nodeName={data.node.metadata.name} />
           <div className="panels">
             <NodeResources
               {...data}
