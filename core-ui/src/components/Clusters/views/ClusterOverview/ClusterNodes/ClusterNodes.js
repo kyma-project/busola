@@ -13,7 +13,7 @@ import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import Skeleton from 'shared/components/Skeleton/Skeleton';
 import { ResourceCommitment } from './ResourceCommitment/ResourceCommitment';
 
-import './ClusterOverviewData.scss';
+import './ClusterNodes.scss';
 
 const NodeHeader = ({ nodeName }) => {
   const navigateToNodeDetails = nodeName =>
@@ -29,7 +29,7 @@ const NodeHeader = ({ nodeName }) => {
   );
 };
 
-export function ClusterOverviewData() {
+export function ClusterNodes() {
   const { nodes, error, loading } = useNodesQuery();
   const { i18n } = useTranslation();
   const itemsPerPage = 8;
