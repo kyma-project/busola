@@ -68,7 +68,6 @@
             "istio-system",
             "knative-eventing",
             "knative-serving",
-            "kube-public",
             "kube-system",
             "kyma-backup",
             "kyma-installer",
