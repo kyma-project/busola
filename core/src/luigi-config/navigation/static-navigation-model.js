@@ -2131,9 +2131,6 @@ function filterNodesByAvailablePaths(nodes, groupVersions, permissionSet) {
 function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
   if (node.context?.requiredFeatures) {
     for (const feature of node.context.requiredFeatures || []) {
-      // if (node.category === 'Service Management') {
-      //   console.log(node);
-      // }
       if (!feature || feature.isEnabled === false) {
         removeNode();
       }
