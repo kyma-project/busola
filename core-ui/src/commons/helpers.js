@@ -36,7 +36,7 @@ export const getResourceDisplayName = resource => {
     return null;
   }
 
-  return resource.displayName || resource.externalName || resource.name;
+  return resource?.displayName || resource.externalName || resource.name;
 };
 
 export function clearEmptyPropertiesInObject(object) {
