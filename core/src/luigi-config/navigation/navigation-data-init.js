@@ -210,12 +210,12 @@ export async function createNavigation() {
     const activeCluster = getActiveCluster();
     const permissionSet = await fetchPermissions(
       authData,
-      getCurrentContextNamespace(activeCluster.kubeconfig),
+      getCurrentContextNamespace(activeCluster?.kubeconfig),
     );
 
     const groupVersions = await fetchAvailableApis(authData);
 
-    const activeClusterName = activeCluster.kubeconfig['current-context'];
+    const activeClusterName = activeCluster?.kubeconfig['current-context'];
 
     await initFeatures();
 
@@ -425,7 +425,7 @@ export async function createNavigationNodes(
 
 async function getNamespaces() {
   const activeCluster = getActiveCluster();
-  const namespace = getCurrentContextNamespace(activeCluster.kubeconfig);
+  const namespace = getCurrentContextNamespace(activeCluster?.kubeconfig);
 
   if (namespace) {
     return createNamespacesList([{ name: namespace }]);
