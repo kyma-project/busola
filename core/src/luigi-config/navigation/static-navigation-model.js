@@ -1647,8 +1647,7 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
   ];
-  filterNodesByAvailablePaths(nodes, groupVersions, permissionSet);
-  return nodes;
+  return filterNodesByAvailablePaths(nodes, groupVersions, permissionSet);
 }
 
 export function getStaticRootNodes(
@@ -2105,8 +2104,7 @@ export function getStaticRootNodes(
       onNodeActivation: downloadKubeconfig,
     },
   ];
-  filterNodesByAvailablePaths(nodes, groupVersions, permissionSet);
-  return nodes;
+  return filterNodesByAvailablePaths(nodes, groupVersions, permissionSet);
 }
 
 function extractApiGroup(apiPath) {
@@ -2117,18 +2115,32 @@ function extractApiGroup(apiPath) {
 }
 
 function filterNodesByAvailablePaths(nodes, groupVersions, permissionSet) {
-  for (let i = nodes.length - 1; i >= 0; i--) {
-    const node = nodes[i];
+  for (const node of nodes) {
     if (typeof node.children === 'object') {
-      filterNodesByAvailablePaths(node.children, groupVersions, permissionSet);
+      node.children = filterNodesByAvailablePaths(
+        node.children,
+        groupVersions,
+        permissionSet,
+      );
     }
 
-    const removeNode = () => nodes.splice(i, 1);
+    const removeNode = () => (node.toDelete = true);
+
     checkSingleNode(node, groupVersions, permissionSet, removeNode);
   }
+
+  return nodes.filter(n => !n.toDelete);
 }
 
 function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
+  if (node.context?.requiredFeatures) {
+    for (const feature of node.context.requiredFeatures || []) {
+      if (!feature || feature.isEnabled === false) {
+        removeNode();
+      }
+    }
+  }
+
   if (!node.viewUrl || !node.resourceType) {
     // used for Custom Resources node
     if (node.context?.requiredGroupResource) {
@@ -2158,14 +2170,6 @@ function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
     if (!hasPermissionsFor(apiGroup, node.resourceType, permissionSet)) {
       removeNode();
       return;
-    }
-  }
-
-  if (node.context?.requiredFeatures) {
-    for (const feature of node.context.requiredFeatures || []) {
-      if (!feature || feature.isEnabled === false) {
-        removeNode();
-      }
     }
   }
 }
