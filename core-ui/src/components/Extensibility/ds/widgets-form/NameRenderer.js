@@ -15,6 +15,7 @@ export function NameRenderer({
       value={value}
       kind={resource.kind}
       setValue={value => {
+        // TODO change not only metadata.name but metadata.labels['app.kubernetes.io/name'] as well
         onChange({
           storeKeys,
           scopes: ['value'],
