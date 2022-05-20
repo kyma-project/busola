@@ -124,7 +124,7 @@ export function KeyValueField({
                 compact
                 className="read-from-file"
                 onClick={() =>
-                  readFromFile().then(result => {
+                  readFromFile()?.then(result => {
                     setValue({
                       key: value?.key || result.name,
                       val: !encodable

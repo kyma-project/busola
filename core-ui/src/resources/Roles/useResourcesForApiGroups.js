@@ -39,11 +39,11 @@ export function useResourcesForApiGroups(apiGroups = []) {
         const loader = fetchApiGroup(
           groupVersion,
           apiGroup,
-        ).then(resources => ({ apiGroup, resources }));
+        )?.then(resources => ({ apiGroup, resources }));
         loaders.push(loader);
       }
     }
-    return Promise.all(loaders).then(jsons => {
+    return Promise.all(loaders)?.then(jsons => {
       const newCache = jsons.reduce(
         (cache, { apiGroup, resources }) => ({
           ...cache,

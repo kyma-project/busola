@@ -76,7 +76,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
   };
 
   const addAllResources = () => {
-    fetchResources().then(resourcesCache => {
+    fetchResources()?.then(resourcesCache => {
       const availableResources = getAvailableResources(resourcesCache);
       jp.value(
         rule,
