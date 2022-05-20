@@ -11,7 +11,7 @@ const match = (entry, query) => {
     entry
       .toString()
       .toLowerCase()
-      .includes(query.toLowerCase())
+      .includes(query?.toLowerCase())
   );
 };
 
