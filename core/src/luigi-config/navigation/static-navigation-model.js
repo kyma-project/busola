@@ -2129,6 +2129,17 @@ function filterNodesByAvailablePaths(nodes, groupVersions, permissionSet) {
 }
 
 function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
+  if (node.context?.requiredFeatures) {
+    for (const feature of node.context.requiredFeatures || []) {
+      // if (node.category === 'Service Management') {
+      //   console.log(node);
+      // }
+      if (!feature || feature.isEnabled === false) {
+        removeNode();
+      }
+    }
+  }
+
   if (!node.viewUrl || !node.resourceType) {
     // used for Custom Resources node
     if (node.context?.requiredGroupResource) {
@@ -2158,14 +2169,6 @@ function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
     if (!hasPermissionsFor(apiGroup, node.resourceType, permissionSet)) {
       removeNode();
       return;
-    }
-  }
-
-  if (node.context?.requiredFeatures) {
-    for (const feature of node.context.requiredFeatures || []) {
-      if (!feature || feature.isEnabled === false) {
-        removeNode();
-      }
     }
   }
 }
