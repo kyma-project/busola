@@ -15,7 +15,7 @@ export function ServiceBrokerList(props) {
     {
       header: t('common.headers.status'),
       value: ({ status }) => {
-        const lastCondition = status.conditions[status.conditions.length - 1];
+        const lastCondition = status?.conditions[status?.conditions.length - 1];
 
         let type = 'info';
         if (lastCondition.type === 'Ready') type = 'ready';

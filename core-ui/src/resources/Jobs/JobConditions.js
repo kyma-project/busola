@@ -45,7 +45,7 @@ export function JobConditions(job) {
       showSearchField={false}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      entries={job.status.conditions || []}
+      entries={job.status?.conditions || []}
       i18n={i18n}
     />
   );

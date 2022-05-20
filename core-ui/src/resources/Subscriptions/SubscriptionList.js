@@ -41,7 +41,7 @@ export function SubscriptionList(props) {
       header: t('common.headers.status'),
       value: ({ status }) => {
         const lastCondition =
-          status?.conditions?.[status.conditions.length - 1] || 'unknown';
+          status?.conditions?.[status?.conditions.length - 1] || 'unknown';
 
         return <SubscriptionConditionStatus condition={lastCondition} />;
       },
