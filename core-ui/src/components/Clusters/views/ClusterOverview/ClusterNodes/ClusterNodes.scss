@@ -10,18 +10,15 @@
   }
 }
 
-.cluster-overview__graphs-wrapper {
-  display: grid;
-  grid-template-columns: 1fr;
-
-  & > :first-child {
-    margin-bottom: 32px;
-  }
+.cluster-overview__graphs-wrapper > :first-child {
+  margin-bottom: 32px;
 }
 
-@media (min-width: 800px) {
+@media (min-width: 900px) {
   .cluster-overview__graphs-wrapper {
+    display: grid;
     grid-template-columns: 2fr 1fr;
+    // grid-gap: 32px;
 
     & > :first-child {
       margin-right: 12px;

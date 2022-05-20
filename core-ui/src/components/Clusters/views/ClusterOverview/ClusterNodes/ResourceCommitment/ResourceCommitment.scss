@@ -1,30 +1,42 @@
-.main {
-  width: 100%;
-  height: 40px;
-}
+.commitment-graph {
+  .fd-layout-panel__filters {
+    border: 0;
+    padding: 0;
+  }
 
-.main div {
-  height: 100%;
-  display: inline-block;
-}
+  .query-dropdown {
+    width: 220px;
+  }
 
-.box--requests {
-  background: pink;
-}
+  .graph-wrapper {
+    min-height: 130px;
+    place-items: center;
+    display: grid;
+  }
 
-.box--limits {
-  background: magenta;
-}
+  .graph {
+    width: 100%;
+    height: 40px;
 
-.box--allocatable {
-  background: red;
-}
+    div {
+      height: 100%;
+      display: inline-block;
+    }
 
-.box--allocated {
-  background: sienna;
-}
+    .box--requests {
+      background: pink;
+    }
 
-.in {
-  width: 100%;
-  height: 100%;
+    .box--limits {
+      background: magenta;
+    }
+
+    .box--allocatable {
+      background: red;
+    }
+
+    .box--allocated {
+      background: sienna;
+    }
+  }
 }

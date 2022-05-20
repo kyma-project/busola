@@ -1252,6 +1252,9 @@ graphs:
   network-up: Upload
   nodes: Nodes
   pvc-usage: Volume Space Usage
+  resource-commitment:
+    cpu: CPU Commitment
+    memory: Memory Commmitment
   total: Total
   used-space: Used space
 helm-releases:
