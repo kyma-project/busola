@@ -12,37 +12,23 @@
 
 .cluster-overview__graphs-wrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-  grid-gap: 32px;
+  grid-template-columns: 1fr;
+
+  & > :first-child {
+    margin-bottom: 32px;
+  }
 }
 
-.main {
-  width: 100%;
-  height: 40px;
-}
+@media (min-width: 800px) {
+  .cluster-overview__graphs-wrapper {
+    grid-template-columns: 2fr 1fr;
 
-.main div {
-  height: 100%;
-  display: inline-block;
-}
-
-.box--requests {
-  background: pink;
-}
-
-.box--limits {
-  background: magenta;
-}
-
-.box--allocatable {
-  background: red;
-}
-
-.box--allocated {
-  background: sienna;
-}
-
-.in {
-  width: 100%;
-  height: 100%;
+    & > :first-child {
+      margin-right: 12px;
+      margin-bottom: unset;
+    }
+    & > :last-child {
+      margin-left: 20px;
+    }
+  }
 }
