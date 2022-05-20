@@ -71,7 +71,6 @@ export function ClusterNodes() {
           />
         </LayoutPanel.Footer>
       )}
-      1
       <StatsPanel type="cluster" />
       {Events}
     </>

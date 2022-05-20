@@ -1,20 +1,32 @@
 .node-details {
-  .panels > * {
-    margin: 32px;
+  .panels {
+    & > .stats-panel {
+      margin-right: 0 !important;
+      margin-left: 0 !important;
+    }
   }
 
   @media (min-width: 700px) {
     .panels {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 16px;
       justify-content: space-between;
 
+      & > .stats-panel {
+        margin: 0 !important;
+      }
       & > * {
         width: 100%;
-        margin-bottom: 0;
+        margin: 0;
       }
 
-      & > :first-child {
-        margin-right: 0;
+      //& > :first-child {
+      //  margin-right: 0;
+      //}
+
+      &.withPrometheus {
+        grid-template-columns: 2fr 1fr;
       }
     }
   }
