@@ -14,7 +14,7 @@ export function YamlFileUploader({ onYamlContentAdded }) {
   };
 
   const onYamlContentUploaded = files => {
-    void Promise.all([...files].map(readFile))
+    void Promise.all([...files]?.map(readFile))
       .then(contents => {
         onYamlContentAdded(contents.join('\n---\n'));
       })

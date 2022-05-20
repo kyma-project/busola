@@ -20,7 +20,7 @@ function getAutocompleteEntries({ tokens, resourceCache }) {
       );
       return crdNames
         .filter(name => name.startsWith(tokenToAutocomplete))
-        .map(name => `${tokens[0]} ${name} `);
+        ?.map(name => `${tokens[0]} ${name} `);
     default:
       return [];
   }

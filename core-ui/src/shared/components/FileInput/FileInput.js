@@ -32,7 +32,7 @@ export function FileInput({
   }
 
   function fileChanged(files) {
-    setFileNames([...files].map(file => file.name || ''));
+    setFileNames([...files]?.map(file => file.name || ''));
     if (files.length) {
       fileInputChanged(files);
     }

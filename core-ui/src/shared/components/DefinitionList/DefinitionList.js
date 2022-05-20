@@ -11,7 +11,7 @@ export function DefinitionList({ title, list }) {
         <LayoutPanel.Head title={title} />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        {list.map(({ name, value }) => (
+        {list?.map(({ name, value }) => (
           <LayoutPanelRow name={name} value={value} key={name} />
         ))}
       </LayoutPanel.Body>

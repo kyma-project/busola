@@ -42,7 +42,7 @@ export function DeploymentDetails(props) {
 
   const StatsComponent = deployment => {
     const labelSelector = Object.entries(deployment.spec?.selector?.matchLabels)
-      .map(([key, value]) => `${key}=${value}`)
+      ?.map(([key, value]) => `${key}=${value}`)
       .join(',');
     const resourceUrl = `/api/v1/namespaces/${deployment.metadata.namespace}/pods?labelSelector=${labelSelector}`;
     const { data } = useGetList()(resourceUrl);

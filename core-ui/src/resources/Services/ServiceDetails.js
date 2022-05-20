@@ -39,7 +39,7 @@ export function ServiceDetails(props) {
 
   const getExternalIPs = service => {
     if (service.status.loadBalancer?.ingress) {
-      return service.status.loadBalancer?.ingress.map(
+      return service.status.loadBalancer?.ingress?.map(
         endpoint => endpoint.ip || endpoint.hostname,
       );
     } else if (service.spec.externalIPs?.length) {
