@@ -201,6 +201,7 @@ export function StatsPanel({
   type,
   mode = 'single',
   defaultMetric = 'cpu',
+  className = 'fd-margin--md',
   ...props
 }) {
   const timeSpans = {
@@ -226,7 +227,7 @@ export function StatsPanel({
 
   const graphOptions = getGraphOptions(type);
   return (
-    <LayoutPanel className="fd-margin--md stats-panel">
+    <LayoutPanel className={`${className} stats-panel`}>
       <LayoutPanel.Header>
         <LayoutPanel.Filters>
           {graphOptions?.length === 1 ? (
