@@ -203,7 +203,6 @@ Note that some features must be run before the application starts the bootstrap 
         "istio-system",
         "knative-eventing",
         "knative-serving",
-        "kube-public",
         "kube-system",
         "kyma-backup",
         "kyma-installer",
