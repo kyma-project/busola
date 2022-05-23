@@ -28,6 +28,7 @@
     "monaco-yaml": "^4.0.0-alpha.2",
     "pako": "^2.0.4",
     "pluralize": "^8.0.0",
+    "prop-types": "^15.7.2",
     "react": "../node_modules/react",
     "react-hook-form": "^7.29.0",
     "react-tippy": "^1.4.0",
