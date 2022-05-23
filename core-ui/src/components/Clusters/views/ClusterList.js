@@ -43,7 +43,7 @@ function ClusterList() {
   }
 
   const styleActiveCluster = entry => {
-    return entry?.kubeconfig['current-context'] === activeClusterName
+    return entry?.kubeconfig?.['current-context'] === activeClusterName
       ? { fontWeight: 'bolder' }
       : {};
   };

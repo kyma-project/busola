@@ -26,11 +26,11 @@ function EditClusterComponent({
 
   const { kubeconfig, config } = resource;
 
-  const originalName = useRef(resource?.kubeconfig['current-context'] || '');
+  const originalName = useRef(resource?.kubeconfig?.['current-context'] || '');
 
   const onComplete = () => {
     try {
-      if (originalName.current !== resource?.kubeconfig['current-context']) {
+      if (originalName.current !== resource?.kubeconfig?.['current-context']) {
         deleteCluster(originalName.current);
       }
       const contextName = kubeconfig['current-context'];
