@@ -14,6 +14,7 @@
     "buffer": "^6.0.3",
     "bytes-iec": "^3.1.0",
     "classnames": "^2.2.6",
+    "copy-to-clipboard": "^3.2.0",
     "core-js": "^3.21.1",
     "cronstrue": "^1.114.0",
     "didyoumean": "^1.2.2",
