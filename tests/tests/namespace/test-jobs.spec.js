@@ -12,7 +12,7 @@ const SECOND_CONTAINER_NAME = JOB_NAME + '-node';
 function checkJobLogs({ showLogsSelector, expectedLogs }) {
   cy.getIframeBody()
     .find(showLogsSelector)
-    .click();
+    .click({ force: true });
 
   cy.getIframeBody().contains(expectedLogs);
 
