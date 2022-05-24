@@ -1497,7 +1497,7 @@ namespaces:
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   name_singular: Namespace
   namespaces-overview: Namespaces Overview
-  no-namespaces-found: No namespaces fetched
+  no-namespaces-found: No Namespaces fetched
   overview:
     resources:
       error: Error while loading memory consumption data
