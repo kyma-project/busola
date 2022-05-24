@@ -814,8 +814,6 @@ deployments:
       service: Service
       target-port: Target Port
       target-port-placeholder: Enter the target port of the container
-    messages:
-      deployment-ok-service-bad: 'Deployment created, failed to create the Service: {{error}}'
     simple:
       docker-image: Docker Image
       docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx

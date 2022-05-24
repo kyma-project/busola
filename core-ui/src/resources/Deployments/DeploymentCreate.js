@@ -18,7 +18,6 @@ import {
   createContainerTemplate,
   createDeploymentTemplate,
   createPresets,
-  createServiceTemplate,
 } from './templates';
 
 import './DeploymentCreate.scss';
@@ -41,8 +40,6 @@ export function DeploymentCreate({
       ? _.cloneDeep(initialDeployment)
       : createDeploymentTemplate(namespace),
   );
-  const [service, setService] = useState(createServiceTemplate(namespace));
-  const [createService, setCreateService] = useState(false);
 
   useEffect(() => {
     const hasAnyContainers = !!(
@@ -52,41 +49,6 @@ export function DeploymentCreate({
     setCustomValid(hasAnyContainers);
   }, [deployment, setCustomValid]);
 
-  const serviceActions = (
-    <Checkbox
-      compact
-      checked={createService}
-      onChange={(_, checked) => setCreateService(checked)}
-      dir="rtl"
-    >
-      {t('deployments.create-modal.advanced.expose-service')}
-    </Checkbox>
-  );
-
-  const renderEditor = ({ defaultEditor, Editor }) => (
-    <div className="double-editor">
-      <ResourceForm.CollapsibleSection
-        title={t('deployments.name_singular')}
-        defaultOpen
-        resource={deployment}
-        setResource={setDeployment}
-      >
-        {defaultEditor}
-      </ResourceForm.CollapsibleSection>
-      <ResourceForm.CollapsibleSection
-        title={t('services.name_singular')}
-        actions={serviceActions}
-        defaultOpen={createService}
-      >
-        <Editor
-          readonly={!createService}
-          value={service}
-          setValue={setService}
-        />
-      </ResourceForm.CollapsibleSection>
-    </div>
-  );
-
   const handleNameChange = name => {
     jp.value(deployment, '$.metadata.name', name);
     jp.value(deployment, "$.metadata.labels['app.kubernetes.io/name']", name);
@@ -94,27 +56,6 @@ export function DeploymentCreate({
     jp.value(deployment, '$.spec.selector.matchLabels.app', name); // match labels
     jp.value(deployment, '$.spec.template.metadata.labels.app', name); // pod labels
     setDeployment({ ...deployment });
-
-    jp.value(service, '$.metadata.name', name);
-    jp.value(service, '$.spec.selector.app', name);
-    setService({ ...service });
-  };
-
-  const afterCreatedFn = async defaultAfterCreatedFn => {
-    try {
-      if (createService) {
-        await postRequest(`/api/v1/namespaces/${namespace}/services`, service);
-      }
-      defaultAfterCreatedFn();
-    } catch (e) {
-      console.error(e);
-      notification.notifyError({
-        content: t(
-          'deployments.create-modal.messages.deployment-ok-service-bad',
-          { error: e.message },
-        ),
-      });
-    }
   };
 
   return (
@@ -126,15 +67,9 @@ export function DeploymentCreate({
       setResource={setDeployment}
       onChange={onChange}
       formElementRef={formElementRef}
-      afterCreatedFn={afterCreatedFn}
-      renderEditor={!initialDeployment ? renderEditor : null}
       presets={!initialDeployment && createPresets(namespace, t)}
       onPresetSelected={value => {
         setDeployment(value.deployment);
-        setCreateService(!!value.service);
-        if (value.service) {
-          setService(value.service);
-        }
       }}
       // create modal on a namespace details doesn't have the resourceUrl
       createUrl={
@@ -175,39 +110,6 @@ export function DeploymentCreate({
         namespace={namespace}
         createContainerTemplate={createContainerTemplate}
       />
-
-      {!initialDeployment && (
-        <ResourceForm.CollapsibleSection
-          advanced
-          title={t('deployments.create-modal.advanced.service')}
-          resource={service}
-          setResource={setService}
-          actions={serviceActions}
-        >
-          <ResourceForm.FormField
-            advanced
-            required
-            disabled={!createService}
-            propertyPath="$.spec.ports[0].port"
-            label={t('deployments.create-modal.advanced.port')}
-            input={Inputs.Port}
-            placeholder={t(
-              'deployments.create-modal.advanced.port-placeholder',
-            )}
-          />
-          <ResourceForm.FormField
-            advanced
-            required
-            disabled={!createService}
-            propertyPath="$.spec.ports[0].targetPort"
-            label={t('deployments.create-modal.advanced.target-port')}
-            input={Inputs.Port}
-            placeholder={t(
-              'deployments.create-modal.advanced.target-port-placeholder',
-            )}
-          />
-        </ResourceForm.CollapsibleSection>
-      )}
     </ResourceForm>
   );
 }
