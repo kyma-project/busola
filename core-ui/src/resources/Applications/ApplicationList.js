@@ -6,16 +6,24 @@ import { Link } from 'shared/components/Link/Link';
 
 import { ApplicationStatus } from './ApplicationStatus';
 import { ApplicationCreate } from './ApplicationCreate';
+import { useFeature } from 'shared/hooks/useFeature';
 
 export function ApplicationList(props) {
   const { t } = useTranslation();
 
-  const customColumns = [
-    {
-      header: t('common.headers.status'),
-      value: application => <ApplicationStatus application={application} />,
-    },
-  ];
+  const { isEnabled: isAppConnectorFlowEnabled } = useFeature(
+    'APPLICATION_CONNECTOR_FLOW',
+  );
+
+  const customColumns = isAppConnectorFlowEnabled
+    ? [
+        {
+          header: t('common.headers.status'),
+          value: application => <ApplicationStatus application={application} />,
+        },
+      ]
+    : [];
+
   const description = (
     <Trans i18nKey="applications.description">
       <Link
