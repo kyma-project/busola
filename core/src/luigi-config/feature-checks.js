@@ -31,7 +31,7 @@ export function apiGroup({ group, refreshIntervalMs = 5 * 60 * 1000 }) {
 export function service({
   urlsGenerator,
   validator = async res => res?.status < 400,
-  urlMutator,
+  urlMutator = url => url,
   refreshIntervalMs = 5 * 60 * 1000,
 }) {
   const subscribeToAllUrls = async (urls, featureName, featureConfig) => {
