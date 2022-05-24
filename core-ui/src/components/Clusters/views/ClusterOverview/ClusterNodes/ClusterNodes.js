@@ -14,8 +14,8 @@ import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ProgressBar } from 'shared/components/ProgressBar/ProgressBar';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import Skeleton from 'shared/components/Skeleton/Skeleton';
+import { useFeature } from 'shared/hooks/useFeature';
 
 import './ClusterNodes.scss';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
@@ -33,8 +33,8 @@ const NodeHeader = ({ nodeName }) => {
 };
 
 export function ClusterNodes() {
-  const { features } = useMicrofrontendContext();
-  const usePrometheusQueries = features.PROMETHEUS?.isEnabled;
+  const prometheus = useFeature('PROMETHEUS');
+  const usePrometheusQueries = prometheus?.isEnabled;
 
   const {
     data: prometheusData,

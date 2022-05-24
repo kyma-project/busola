@@ -137,7 +137,9 @@ export function usePrometheus({
     ...props
   },
 }) {
-  const { serviceUrl } = useFeature('PROMETHEUS');
+  const {
+    serviceUrl = '/api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1',
+  } = useFeature('PROMETHEUS');
   const step = timeSpan / items;
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
