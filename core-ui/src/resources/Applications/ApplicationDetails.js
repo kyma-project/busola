@@ -8,25 +8,36 @@ import NamespaceBindings from './NamespaceBindings';
 import ConnectApplicationModal from './ConnectApplicationModal';
 import { ApplicationStatus } from './ApplicationStatus';
 import { ApplicationCreate } from './ApplicationCreate';
+import { useFeature } from 'shared/hooks/useFeature';
 
 export function ApplicationDetails(props) {
   const { t } = useTranslation();
+
+  const { isEnabled: isAppConnectorFlowEnabled } = useFeature(
+    'APPLICATION_CONNECTOR_FLOW',
+  );
+
   const customColumns = [
     {
       header: t('applications.headers.description'),
       value: app => app.spec.description || '-',
     },
-    {
+  ];
+
+  if (isAppConnectorFlowEnabled) {
+    customColumns.push({
       header: t('common.headers.status'),
       value: app => <ApplicationStatus application={app} />,
-    },
-  ];
+    });
+  }
 
   return (
     <ResourceDetails
       customColumns={customColumns}
       headerActions={
-        <ConnectApplicationModal applicationName={props.resourceName} />
+        isAppConnectorFlowEnabled && (
+          <ConnectApplicationModal applicationName={props.resourceName} />
+        )
       }
       customComponents={[NamespaceBindings, ApplicationServices]}
       createResourceForm={ApplicationCreate}
