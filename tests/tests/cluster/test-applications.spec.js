@@ -2,12 +2,9 @@
 const APPLICATION_NAME = Cypress.env('APP_NAME');
 const APPLICATION_DESCRIPTION = `test description`;
 
-// {} mocks service exists, a string mocks en error
 const serviceRequestData = {
   method: 'GET',
-  url: new RegExp(
-    '/backend/api/v1/namespaces/kyma-integration/services/connector-service-internal-api:http-int/proxy/health',
-  ),
+  url: /connector-service-internal-api/,
 };
 
 context('Test Applications', () => {
@@ -18,7 +15,7 @@ context('Test Applications', () => {
   });
 
   it('Inspect list', () => {
-    cy.intercept(serviceRequestData, {});
+    cy.intercept(serviceRequestData, { statusCode: 200, body: '{}' });
     cy.navigateTo('Integration', 'Applications');
 
     cy.getIframeBody()
@@ -27,7 +24,7 @@ context('Test Applications', () => {
   });
 
   it('Inspect details', () => {
-    cy.intercept(serviceRequestData, {});
+    cy.intercept(serviceRequestData, { statusCode: 200, body: '{}' });
 
     cy.getIframeBody()
       .contains('a', APPLICATION_NAME)
@@ -82,10 +79,15 @@ context('Test Applications', () => {
   });
 
   it('When APPLICATION_CONNECTOR_FLOW is disabled', () => {
-    cy.intercept(serviceRequestData, 'DISABLED');
+    cy.intercept(serviceRequestData, { statusCode: 404 });
     cy.getLeftNav()
       .contains('Applications')
       .click();
+
+    // make sure the table row is rendered before performing 'not.exist' checks
+    cy.getIframeBody()
+      .contains(APPLICATION_NAME)
+      .should('exist');
 
     cy.getIframeBody()
       .contains('Status')
