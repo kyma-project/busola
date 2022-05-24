@@ -86,7 +86,7 @@ function CorsPolicy({ cors }) {
       <LayoutPanel.Body>
         <dl>
           <dd>{t('virtualservices.http-routes.cors.allow-origins')}</dd>
-          {cors.allowOrigins.map(origin => (
+          {cors.allowOrigins?.map(origin => (
             <dt>
               <StringMatch def={origin} />
             </dt>
@@ -408,7 +408,7 @@ export function StringMatch({ def, ignoreCase }) {
 
 function StringMatchMap({ labelId, map }) {
   const { t } = useTranslation();
-  return Object.entries(map).map(([field, matchValue]) => (
+  return Object.entries(map)?.map(([field, matchValue]) => (
     <>
       <dd>{t(labelId, { field })}</dd>
       <dt>

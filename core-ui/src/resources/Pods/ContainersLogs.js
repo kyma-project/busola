@@ -70,7 +70,7 @@ const ContainersLogs = ({ params }) => {
       return (
         <span>
           {logArray.map((part, idx) =>
-            part.toLowerCase() === searchText.toLowerCase() ? (
+            part?.toLowerCase() === searchText?.toLowerCase() ? (
               <b key={idx} className="logs-highlighted">
                 {part}
               </b>
