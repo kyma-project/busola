@@ -10,7 +10,10 @@
   "properties": {
     "body": {
       "description": "Configuration of fields/data that should be desplayed body section of resource details page.",
-      "type": "array",
+      "type": [
+        "array",
+        "object"
+      ],
       "items": {
         "type": "object",
         "oneOf": [
@@ -48,10 +51,7 @@
           {
             "properties": {
               "children ": {
-                "type": [
-                  "object",
-                  "array"
-                ],
+                "type": "object",
                 "allOf": [
                   {
                     "$ref": "#/definitions/component_config"
@@ -65,28 +65,56 @@
     },
     "header": {
       "description": "Configuration of fields/data that should be desplayed header section of resource details page.",
-      "type": "array",
+      "type": [
+        "array",
+        "object"
+      ],
       "items": {
         "type": "object",
-        "properties": {
-          "path": {
-            "description": "The path to the resource variable",
-            "examples": [
-              "status.phase",
-              "metadata.labels"
+        "oneOf": [
+          {
+            "required": [
+              "path"
             ],
-            "type": "string"
+            "not": {
+              "required": [
+                "name"
+              ]
+            }
           },
-          "widget": {
-            "description": "Name of a widget that should be used for displaying data defined by path",
-            "examples": [
-              "Badge"
+          {
+            "required": [
+              "name"
             ],
-            "type": "string"
+            "not": {
+              "required": [
+                "path"
+              ]
+            }
+          },
+          {
+            "required": [
+              "name",
+              "path"
+            ]
           }
-        },
-        "required": [
-          "path"
+        ],
+        "anyOf": [
+          {
+            "$ref": "#/definitions/component_config"
+          },
+          {
+            "properties": {
+              "children ": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#/definitions/component_config"
+                  }
+                ]
+              }
+            }
+          }
         ]
       }
     }
