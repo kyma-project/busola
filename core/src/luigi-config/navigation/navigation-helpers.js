@@ -54,7 +54,7 @@ export function createNamespacesList(rawNamespaceNames) {
     .sort((namespaceA, namespaceB) => {
       return namespaceA.name.localeCompare(namespaceB.name);
     })
-    .map(namespace => {
+    .forEach(namespace => {
       const namespaceName = namespace.name;
       const alternativeLocation = getCorrespondingNamespaceLocation(
         namespaceName,
@@ -75,7 +75,7 @@ export function createNamespacesList(rawNamespaceNames) {
 }
 
 export const addExternalNodes = externalNodesFeature => {
-  if (externalNodesFeature?.isEnabled === false) return;
+  if (externalNodesFeature?.isEnabled === false) return [];
 
   let navigationNodes = [];
   try {

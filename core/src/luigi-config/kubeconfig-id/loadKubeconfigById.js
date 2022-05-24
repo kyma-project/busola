@@ -1,6 +1,5 @@
 import i18next from 'i18next';
 import { getBusolaClusterParams } from '../busola-cluster-params';
-import { resolveFeatureAvailability } from '../features';
 import { DEFAULT_FEATURES } from './../constants';
 
 function join(path, fileName) {
@@ -26,7 +25,7 @@ export async function loadKubeconfigById(kubeconfigId) {
     ...clusterParams.config?.features,
   }['KUBECONFIG_ID'];
 
-  if (!(await resolveFeatureAvailability(kubeconfigIdFeature))) {
+  if (kubeconfigIdFeature.isEnabled === false) {
     return null;
   }
 

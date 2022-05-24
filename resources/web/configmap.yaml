@@ -48,6 +48,7 @@ data:
           },
           "OBSERVABILITY": {
             "isEnabled": true,
+            "stage": "SECONDARY",
             "config": {
               "links": [
                 {

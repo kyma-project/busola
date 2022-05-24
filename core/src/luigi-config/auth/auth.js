@@ -24,7 +24,7 @@ function updateLuigiAuth(auth) {
 }
 
 export async function reloadAuth() {
-  const params = await getActiveCluster();
+  const params = getActiveCluster();
 
   if (!params) {
     updateLuigiAuth(null);
@@ -99,7 +99,7 @@ async function createAuth(callback, kubeconfigUser) {
 
 export async function clusterLogin(luigiAfterInit) {
   return new Promise(async resolve => {
-    const params = await getActiveCluster();
+    const params = getActiveCluster();
 
     const kubeconfigUser = params?.currentContext.user.user;
 

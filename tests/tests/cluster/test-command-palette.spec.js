@@ -50,8 +50,6 @@ context('Test Command Palette navigation', () => {
   });
 
   it('Basic navigation', () => {
-    // reloading seems to fix the strange issue where Luigi navigates us back to previous page
-    cy.reload();
     cy.getIframeBody().contains('Cluster Details');
 
     // navigate to namespace
@@ -123,7 +121,7 @@ context('Test Command Palette navigation', () => {
     // navigate to generic CR
     openCommandPalette();
 
-    getQueryInput().type('am');
+    getQueryInput().type('applicationmappings');
 
     getQueryInput().trigger('keydown', { key: 'Enter' });
 
@@ -209,8 +207,8 @@ context('Test Command Palette navigation', () => {
       .find('[aria-label=command-palette-search]')
       .should('not.exist');
 
-    // nav is broken again
-    cy.reload();
+    cy.get('[data-testid="modal-mf"] [aria-label="close"]').click();
+
     cy.getIframeBody().contains('Cluster Details');
 
     openCommandPalette();

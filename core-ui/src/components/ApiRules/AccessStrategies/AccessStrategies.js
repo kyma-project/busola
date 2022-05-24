@@ -10,28 +10,50 @@ import accessStrategyTypes from '../accessStrategyTypes';
 import { ACCESS_STRATEGIES_PANEL } from 'components/ApiRules/constants';
 
 import './AccessStrategies.scss';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 const textSearchProperties = ['path', 'accessStrategies', 'methods'];
-const rowRenderer = strategy => {
+const rowRenderer = (strategy, t) => {
+  const infoLabel = handler => {
+    const strategyType = accessStrategyTypes[handler]?.displayName;
+
+    return (
+      <InfoLabel
+        modifier="filled"
+        color={strategyType ? '' : 4}
+        className={strategyType ? '' : 'has-tooltip'}
+      >
+        <Icon
+          ariaLabel={strategyType || handler}
+          className="fd-margin-end--tiny"
+          glyph={
+            handler === accessStrategyTypes.noop.value ||
+            handler === accessStrategyTypes.allow.value
+              ? 'unlocked'
+              : 'locked'
+          }
+          size="s"
+        />
+        {strategyType || handler}
+      </InfoLabel>
+    );
+  };
   return [
     <span>{strategy.path}</span>,
     <ul className="tokens">
       {strategy.accessStrategies.map(ac => (
         <li key={ac.handler}>
-          <InfoLabel modifier="filled">
-            <Icon
-              ariaLabel={accessStrategyTypes[ac.handler].displayName}
-              className="fd-margin-end--tiny"
-              glyph={
-                ac.handler === accessStrategyTypes.noop.value ||
-                ac.handler === accessStrategyTypes.allow.value
-                  ? 'unlocked'
-                  : 'locked'
-              }
-              size="s"
-            />
-            {accessStrategyTypes[ac.handler].displayName}
-          </InfoLabel>
+          {accessStrategyTypes[ac.handler]?.displayName ? (
+            infoLabel(ac.handler)
+          ) : (
+            <Tooltip
+              content={t(
+                'api-rules.access-strategies.messages.unaccepted-type',
+              )}
+            >
+              {infoLabel(ac.handler)}
+            </Tooltip>
+          )}
         </li>
       ))}
     </ul>,
@@ -75,7 +97,7 @@ export default function AccessStrategies({
         showSearchSuggestion={false}
         entries={strategies}
         headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
+        rowRenderer={e => rowRenderer(e, t)}
         noSearchResultMessage={
           ACCESS_STRATEGIES_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY
         }

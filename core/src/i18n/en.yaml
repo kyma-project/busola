@@ -34,6 +34,7 @@ api-rules:
     messages:
       one-method: This access strategy requires at least one method.
       one-strategy-required: Provide at least one strategy.
+      unaccepted-type: Make sure that Access Strategies have the accepted values (noop, allow, oauth2_introspection, jwt) in YAML.
     title: Access Strategies
     tooltips:
       path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.

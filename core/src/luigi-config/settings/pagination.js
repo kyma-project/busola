@@ -1,4 +1,4 @@
-import * as jp from 'jsonpath';
+import { configChanged } from './../utils/configChanged';
 
 const PAGE_SIZE_STORAGE_KEY = 'busola.page-size';
 const DEFAULT_PAGE_SIZE = 20;
@@ -18,11 +18,10 @@ export const communicationEntry = {
   'busola.set-page-size': ({ pageSize }) => {
     setPageSize(pageSize);
 
-    const config = Luigi.getConfig();
-    // set context of all first-level nodes
-    config.navigation.nodes.forEach(node =>
-      jp.value(node, '$.context.settings.pagination.pageSize', pageSize),
-    );
-    Luigi.configChanged('navigation');
+    configChanged({
+      value: pageSize,
+      valuePath: '$.context.settings.pagination.pageSize',
+      scope: 'navigation',
+    });
   },
 };
