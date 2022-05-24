@@ -26,30 +26,49 @@ context('Test navigation features', () => {
       VISUAL_RESOURCES: { isEnabled: false },
     });
     cy.loginAndSelectCluster();
+    cy.goToNamespaceDetails();
   });
 
   it('Disable features visible by default', () => {
-    // applications
+    // no application mappings since APPLICATIONS is disabled
+    cy.getIframeBody()
+      .contains(/Application Mapping/)
+      .should('not.exist');
+
+    // no graphs since PROMETHEUS is disabled
+    cy.getIframeBody()
+      .contains('CPU')
+      .should('not.exist');
+
+    // istio
     cy.getLeftNav()
-      .contains('Integration')
+      .contains('Istio')
+      .should('not.exist');
+
+    // functions
+    cy.getLeftNav()
+      .contains('Workloads')
       .click();
 
     cy.getLeftNav()
-      .contains('Applications')
+      .contains('Functions')
       .should('not.exist');
 
-    // visual resources
-    cy.navigateTo('Configuration', 'Cluster Role Bindings');
-
-    cy.getIframeBody()
-      .contains('cluster-admin')
+    // api rules
+    cy.getLeftNav()
+      .contains('Discovery and Network')
       .click();
 
-    // wait for view to stabilize
-    cy.wait(5000);
-
-    cy.getIframeBody()
-      .contains('Resource Graph')
+    cy.getLeftNav()
+      .contains('API Rules')
       .should('not.exist');
+
+    // make sure other nav nodes are still here
+    cy.getLeftNav()
+      .contains('Deployments')
+      .should('exist');
+    cy.getLeftNav()
+      .contains('Ingresses')
+      .should('exist');
   });
 });
