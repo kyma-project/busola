@@ -10,19 +10,11 @@ export const getValue = (resource, path) => {
   return jp.value(resource, '$.' + path);
 };
 
-export const useGetTranslation = () => {
-  const language = useTranslation().i18n.language; //en
-  // this fn is cloned in core 'customPaths.js' as 'translate'. Modify it also there
-  return translationObj => {
-    if (!translationObj) {
-      return '';
-    }
-    if (typeof translationObj === 'string') {
-      return translationObj;
-    }
-    if (translationObj[language]) {
-      return translationObj[language];
-    }
-    return Object.values(translationObj)[0] || '';
+export const useGetTranslation = path => {
+  const translationBundle = path || 'extensibility';
+  const { t } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
+
+  return {
+    t: (path, ...props) => t(`${translationBundle}:${path}`, ...props) || path,
   };
 };

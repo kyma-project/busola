@@ -2,10 +2,13 @@ import React from 'react';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { DetailsSchema } from './components/DetailsSchema';
 import { prettifyNamePlural } from 'shared/utils/helpers';
 
+import { Widget } from './components/Widget';
+import { useGetTranslation } from './components/helpers';
+
 export const ExtensibilityDetails = () => {
+  const { t } = useGetTranslation();
   const resMetaData = useGetCRbyPath();
   const detailsProps = usePrepareDetailsProps(
     resMetaData.navigation.path,
@@ -19,9 +22,9 @@ export const ExtensibilityDetails = () => {
     );
   }
 
+  const header = resMetaData?.details?.header || [];
+  const body = resMetaData?.details?.body || [];
   const schema = resMetaData?.schema;
-
-  const customColumns = [];
 
   const breadcrumbs = [
     {
@@ -37,9 +40,16 @@ export const ExtensibilityDetails = () => {
         windowTitle={prettifyNamePlural(
           resMetaData.navigation.label || resMetaData.navigation.path,
         )}
-        customColumns={customColumns}
+        customColumns={header.map(def => ({
+          header: t(def.path || def.id),
+          value: resource => (
+            <Widget value={resource} structure={def} schema={schema} />
+          ),
+        }))}
         customComponents={[
-          resource => <DetailsSchema resource={resource} schema={schema} />,
+          resource => (
+            <Widget value={resource} structure={body} schema={schema} />
+          ),
         ]}
         breadcrumbs={breadcrumbs}
         {...detailsProps}
