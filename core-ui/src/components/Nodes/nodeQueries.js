@@ -151,7 +151,7 @@ function usePrometheusMemoryQuery(skip = false) {
     error: memoryAvailableError,
     loading: memoryAvailableLoading,
   } = usePrometheus({
-    defaultQuery: `sum(kube_node_status_capacity{cluster="", resource="cpu"})`,
+    defaultQuery: `sum(kube_node_status_capacity{cluster="", resource="memory"}) by (node)`,
     additionalProps: { timeSpan: 60, skip, parseData: false },
   });
 
