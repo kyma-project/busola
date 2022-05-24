@@ -10,9 +10,7 @@ context('Test invalid kubeconfig', () => {
       .contains('Connect cluster')
       .click();
 
-    cy.getIframeBody()
-      .find('.monaco-editor')
-      .type('wrong_kubeconfig');
+    cy.pasteToMonaco('wrong_kubeconfig');
 
     // trigger blur on editor
     cy.getIframeBody()
