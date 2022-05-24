@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Schema defining structure of details configuration",
+  "required": [
+    "header",
+    "body"
+  ],
+  "title": "Custom pages to be displayed in Busola",
+  "type": "object",
+  "properties": {
+    "body": {
+      "description": "Configuration of fields/data that should be desplayed body section of resource details page.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "oneOf": [
+          {
+            "required": [
+              "path"
+            ],
+            "not": {
+              "required": [
+                "name"
+              ]
+            }
+          },
+          {
+            "required": [
+              "name"
+            ],
+            "not": {
+              "required": [
+                "path"
+              ]
+            }
+          },
+          {
+            "required": [
+              "name",
+              "path"
+            ]
+          }
+        ],
+        "anyOf": [
+          {
+            "$ref": "#/definitions/component_config"
+          },
+          {
+            "properties": {
+              "children ": {
+                "type": [
+                  "object",
+                  "array"
+                ],
+                "allOf": [
+                  {
+                    "$ref": "#/definitions/component_config"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "header": {
+      "description": "Configuration of fields/data that should be desplayed header section of resource details page.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "description": "The path to the resource variable",
+            "examples": [
+              "status.phase",
+              "metadata.labels"
+            ],
+            "type": "string"
+          },
+          "widget": {
+            "description": "Name of a widget that should be used for displaying data defined by path",
+            "examples": [
+              "Badge"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "path"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "component_config": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name of component used for dispaying translations",
+          "type": "string"
+        },
+        "language": {
+          "description": "parameter passed to a widget CodeViewer defining language in which editor should parse the code",
+          "enum": [
+            "json",
+            "yaml"
+          ],
+          "type": "string"
+        },
+        "path": {
+          "description": "The path to the resource variable",
+          "examples": [
+            "status.phase",
+            "metadata.labels"
+          ],
+          "type": "string"
+        },
+        "widget": {
+          "description": "Name of a widget that should be used for displaying data defined by path",
+          "examples": [
+            "Badge",
+            "CodeViewer"
+          ],
+          "type": "string"
+        }
+      }
+    }
+  }
+}
