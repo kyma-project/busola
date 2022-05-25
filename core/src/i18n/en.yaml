@@ -569,7 +569,7 @@ common:
     error: Error
     generate-name: Generate name
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
@@ -803,17 +803,11 @@ deployments:
       containers: Containers
       cpu-limits: CPU Limits
       cpu-requests: CPU Requests
-      expose-service: Expose separate Service
       image: Image
       memory-limits: Memory Limits
       memory-requests: Memory Requests
       one-container-required: Provide at least one container.
-      port: Port
-      port-placeholder: Enter the port exposed by the Service
       runtime-profile: Runtime Profile
-      service: Service
-      target-port: Target Port
-      target-port-placeholder: Enter the target port of the container
     simple:
       docker-image: Docker Image
       docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx
@@ -1447,7 +1441,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
