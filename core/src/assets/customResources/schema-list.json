@@ -1,19 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "description": "Schema defining structure of details configuration",
+  "description": "Schema defining structure of list configuration",
   "required": [
-    "header",
-    "body"
+    "columns"
   ],
   "title": "Custom pages to be displayed in Busola",
   "type": "object",
   "properties": {
-    "body": {
-      "description": "Configuration of fields/data that should be displayed in body section of resource details page.",
-      "$ref": "#/definitions/component_array_or_object"
-    },
-    "header": {
-      "description": "Configuration of fields/data that should be displayed in header section of resource details page.",
+    "columns": {
+      "description": "Configuration of fields/data that should be displayed on the table of resource list page.",
       "$ref": "#/definitions/component_array_or_object"
     }
   },
@@ -86,18 +81,6 @@
           "anyOf": [
             {
               "$ref": "#/definitions/component_config"
-            },
-            {
-              "properties": {
-                "children ": {
-                  "type": "object",
-                  "allOf": [
-                    {
-                      "$ref": "#/definitions/component_config"
-                    }
-                  ]
-                }
-              }
             }
           ]
         },
@@ -136,18 +119,6 @@
             "anyOf": [
               {
                 "$ref": "#/definitions/component_config"
-              },
-              {
-                "properties": {
-                  "children ": {
-                    "type": "object",
-                    "allOf": [
-                      {
-                        "$ref": "#/definitions/component_config"
-                      }
-                    ]
-                  }
-                }
               }
             ]
           }

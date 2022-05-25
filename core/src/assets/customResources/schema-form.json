@@ -1,36 +1,18 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "description": "Schema defining structure of details configuration",
-  "required": [
-    "header",
-    "body"
-  ],
+  "description": "Schema defining structure of form configuration",
   "title": "Custom pages to be displayed in Busola",
-  "type": "object",
-  "properties": {
-    "body": {
-      "description": "Configuration of fields/data that should be displayed in body section of resource details page.",
-      "$ref": "#/definitions/component_array_or_object"
-    },
-    "header": {
-      "description": "Configuration of fields/data that should be displayed in header section of resource details page.",
-      "$ref": "#/definitions/component_array_or_object"
-    }
-  },
+  "$ref": "#/definitions/component_array_or_object",
   "definitions": {
     "component_config": {
       "type": "object",
       "properties": {
+        "advanced": {
+          "description": "Define if field should be displayed on advanced form view",
+          "type": "boolean"
+        },
         "name": {
           "description": "Name of component used for dispaying translations",
-          "type": "string"
-        },
-        "language": {
-          "description": "parameter passed to a widget CodeViewer defining language in which editor should parse the code",
-          "enum": [
-            "json",
-            "yaml"
-          ],
           "type": "string"
         },
         "path": {
@@ -40,6 +22,10 @@
             "metadata.labels"
           ],
           "type": "string"
+        },
+        "simple": {
+          "description": "Define if field should be displayed on simple form view",
+          "type": "boolean"
         },
         "widget": {
           "description": "Name of a widget that should be used for displaying data defined by path",
@@ -86,18 +72,6 @@
           "anyOf": [
             {
               "$ref": "#/definitions/component_config"
-            },
-            {
-              "properties": {
-                "children ": {
-                  "type": "object",
-                  "allOf": [
-                    {
-                      "$ref": "#/definitions/component_config"
-                    }
-                  ]
-                }
-              }
             }
           ]
         },
@@ -136,18 +110,6 @@
             "anyOf": [
               {
                 "$ref": "#/definitions/component_config"
-              },
-              {
-                "properties": {
-                  "children ": {
-                    "type": "object",
-                    "allOf": [
-                      {
-                        "$ref": "#/definitions/component_config"
-                      }
-                    ]
-                  }
-                }
               }
             ]
           }
