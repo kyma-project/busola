@@ -10,12 +10,14 @@ import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 import './NodeDetails.scss';
+import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
+import { useFeature } from 'shared/hooks/useFeature';
 
-//TODO usun ten export
-export function NodeDetails({ nodeName }) {
+function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);
   const { t } = useTranslation();
   useWindowTitle(t('nodes.title_details', { nodeName }));
+  const isPrometheusEnabled = useFeature('PROMETHEUS')?.isEnabled;
 
   const filterByHost = e => e.source.host === nodeName;
   const Events = (
@@ -35,13 +37,21 @@ export function NodeDetails({ nodeName }) {
       />
       {data && (
         <>
-          <div className="panels">
-            <NodeResources
-              {...data}
-              headerContent={
-                <Title level={5}>{t('common.headers.resources')}</Title>
-              }
-            />
+          <div
+            className={`panels fd-margin--md  ${
+              isPrometheusEnabled ? 'withPrometheus' : ''
+            }`}
+          >
+            {isPrometheusEnabled ? (
+              <StatsPanel type="node" nodeName={data.node.metadata.name} />
+            ) : (
+              <NodeResources
+                {...data}
+                headerContent={
+                  <Title level={5}>{t('common.headers.resources')}</Title>
+                }
+              />
+            )}
             <MachineInfo
               nodeInfo={data.node.status.nodeInfo}
               capacity={data.node.status.capacity}
