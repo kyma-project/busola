@@ -39,6 +39,7 @@
     "namespace/test-namespace-overview.spec.js",
     "namespace/run-prepare-functions.spec.js",
     "namespace/test-deployments.spec.js",
+    "namespace/test-services.spec.js",
     "namespace/test-events.spec.js",
     "namespace/test-roles.spec.js",
     "namespace/test-resource-upload.spec.js",
