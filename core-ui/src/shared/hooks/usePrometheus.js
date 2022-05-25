@@ -171,7 +171,7 @@ export function usePrometheus({
     tick();
     const loop = setInterval(tick, step * 1000);
     return () => clearInterval(loop);
-  }, [timeSpan, items, metric]);
+  }, [timeSpan, step, metric]);
 
   const { data, error, loading } = useGet(`${serviceUrl}/${query}`, {
     pollingInterval: 0,

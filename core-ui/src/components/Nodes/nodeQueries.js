@@ -108,7 +108,7 @@ function usePrometheusCPUQuery(skip = false) {
         });
       }
     }
-  }, [cpu]);
+  }, [cpu, data]);
 
   return {
     data: data?.data,
@@ -133,7 +133,7 @@ function usePrometheusMemoryQuery(skip = false) {
         });
       }
     }
-  }, [memory]);
+  }, [memory, data]);
   return {
     data: data?.data,
     error,
@@ -147,7 +147,7 @@ export function usePrometheusNodesQuery(skip = false) {
   const { data: nodeData, error: nodeError, loading: nodeLoading } = useGet(
     '/api/v1/nodes',
     {
-      pollingInterval: 4000,
+      pollingInterval: 0,
       skip,
     },
   );
@@ -207,7 +207,7 @@ export function usePrometheusNodesQuery(skip = false) {
         nodeData: nodeData,
       });
     }
-  }, [cpuData, memoryData, nodeData]);
+  }, [cpuData, memoryData, nodeData, data]);
 
   return {
     data: data?.data,
