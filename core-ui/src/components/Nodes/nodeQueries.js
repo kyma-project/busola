@@ -26,9 +26,13 @@ const createUsageMetrics = (node, metricsForNode) => {
 
   return {
     cpu: {
+      usage: cpuUsage,
+      capacity: cpuCapacity,
       percentage: getPercentageFromUsage(cpuUsage, cpuCapacity),
     },
     memory: {
+      usage: memoryUsage,
+      capacity: memoryCapacity,
       percentage: getPercentageFromUsage(memoryUsage, memoryCapacity),
     },
   };
