@@ -1,7 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: orders-service
+  name: ''
+  namespace: ''
 spec:
   selector:
     app: orders-service

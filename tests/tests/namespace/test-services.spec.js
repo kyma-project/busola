@@ -1,11 +1,15 @@
 import 'cypress-file-upload';
 
-const SERVICE_NAME = 'orders-service';
 import { loadFile } from '../../support/loadFile';
+
+const SERVICE_NAME = `orders-service-${Math.floor(Math.random() * 9999) +
+  1000}`;
 
 async function loadService() {
   const service = await loadFile('test-services.yaml');
   const newService = { ...service };
+  service.metadata.name = SERVICE_NAME;
+  service.metadata.namespace = Cypress.env('NAMESPACE_NAME');
 
   return newService;
 }
