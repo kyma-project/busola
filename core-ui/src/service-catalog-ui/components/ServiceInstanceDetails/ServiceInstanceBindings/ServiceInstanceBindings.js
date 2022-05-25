@@ -82,7 +82,7 @@ const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
     .filter(d => d);
 
   const capitalize = str => {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    return str.charAt(0).toUpperCase() + str.slice(1)?.toLowerCase();
   };
 
   async function handleResourceDelete({ serviceBindingUsage }) {
