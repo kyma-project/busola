@@ -22,21 +22,45 @@
       height: 100%;
       display: inline-block;
     }
-
-    .box--requests {
-      background: pink;
+  }
+  .graph-legend {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 4px 12px;
+    @media (max-width: 900px) {
+      display: flex;
     }
 
-    .box--limits {
-      background: magenta;
+    & > div {
+      cursor: help;
     }
 
-    .box--allocatable {
-      background: red;
-    }
-
-    .box--allocated {
-      background: sienna;
+    .legend-box {
+      height: 1em;
+      width: 1em;
+      display: inline-block;
+      margin-right: 0.5em;
     }
   }
+}
+
+.graph-box--requests {
+  background: var(--sapIndicationColor_4);
+  fill: var(--sapIndicationColor_4);
+}
+
+.graph-box--limits {
+  background: var(--sapIndicationColor_3);
+  fill: var(--sapIndicationColor_3);
+}
+
+.graph-box--allocatable {
+  background: var(--sapContent_Illustrative_Color6);
+  fill: var(--sapContent_Illustrative_Color6);
+}
+
+.graph-box--allocated {
+  background: var(--sapIndicationColor_5);
+  fill: var(--sapIndicationColor_5);
 }

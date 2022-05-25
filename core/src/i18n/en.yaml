@@ -1254,7 +1254,17 @@ graphs:
   pvc-usage: Volume Space Usage
   resource-commitment:
     cpu: CPU Commitment
+    legend:
+      allocatable: Allocatable
+      allocated: Allocated
+      limits: Limits
+      requests: Requests
     memory: Memory Commmitment
+    tooltips:
+      allocatable: Entire cluster capacity
+      allocated: Currently used resources
+      limits: Total of limits
+      requests: Total of requests
   total: Total
   used-space: Used space
 helm-releases:
