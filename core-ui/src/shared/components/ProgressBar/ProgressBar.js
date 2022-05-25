@@ -16,19 +16,12 @@ const TooltipWrapper = ({ tooltipProps, children }) => {
 };
 
 export function ProgressBar({
-  current,
-  max,
+  percentage,
   color = 'var(--sapBrandColor)',
   tooltip,
 }) {
-  const getPercentage = (current, max) => {
-    const percentage = ((current || 0) / (max || current || 1)) * 100;
-    if (percentage > 100) return 100;
-    return `${percentage}%`;
-  };
-
   const progressBarStyle = {
-    width: getPercentage(current, max),
+    width: percentage,
     backgroundColor: color,
   };
 
@@ -42,8 +35,8 @@ export function ProgressBar({
 }
 
 ProgressBar.propTypes = {
-  current: PropTypes.number.isRequired,
-  max: PropTypes.number.isRequired,
+  current: PropTypes.number,
+  max: PropTypes.number,
   color: PropTypes.string,
   tooltip: PropTypes.object,
 };

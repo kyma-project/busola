@@ -7,7 +7,7 @@ import { isEqual } from 'lodash';
 const round = (num, places) =>
   Math.round(num * Math.pow(10, places)) / Math.pow(10, places);
 
-const percentage = (value, total) => {
+const getPercentageFromUsage = (value, total) => {
   if (total === 0) {
     return 'Unknown';
   }
@@ -26,14 +26,10 @@ const createUsageMetrics = (node, metricsForNode) => {
 
   return {
     cpu: {
-      usage: cpuUsage,
-      capacity: cpuCapacity,
-      percentage: percentage(cpuUsage, cpuCapacity),
+      percentage: getPercentageFromUsage(cpuUsage, cpuCapacity),
     },
     memory: {
-      usage: memoryUsage,
-      capacity: memoryCapacity,
-      percentage: percentage(memoryUsage, memoryCapacity),
+      percentage: getPercentageFromUsage(memoryUsage, memoryCapacity),
     },
   };
 };
@@ -80,112 +76,64 @@ export function useNodesQuery(skip = false) {
   };
 }
 
+const getPercentage = value => {
+  return `${Math.round(100 * value)}%`;
+};
+
+const formatData = data =>
+  data?.map(n => ({
+    name: n.node,
+    percentage: getPercentage(n.value),
+  }));
+
 function usePrometheusCPUQuery(skip = false) {
   const [data, setData] = React.useState(null);
 
   //TODO USE DIFFERENT QUERIES
-  const {
-    data: cpuUsed,
-    error: cpuUsedError,
-    loading: cpuUsedLoading,
-  } = usePrometheus({
-    defaultQuery: `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{cluster=""}) by (node)`,
-    additionalProps: { timeSpan: 60, skip, parseData: false },
-  });
-  const {
-    data: cpuAvailable,
-    error: cpuAvailableError,
-    loading: cpuAvailableLoading,
-  } = usePrometheus({
-    defaultQuery: `sum(kube_node_status_capacity{cluster="", resource="cpu"}) by (node)`,
+  const { data: cpu, error, loading } = usePrometheus({
+    defaultQuery: `sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{cluster=""}) by (node) / sum(kube_node_status_capacity{cluster="", resource="cpu"}) by (node)`,
     additionalProps: { timeSpan: 60, skip, parseData: false },
   });
 
   React.useEffect(() => {
-    if (cpuUsed && cpuAvailable) {
-      if (
-        !isEqual(cpuUsed, data?.cpuUsed) ||
-        !isEqual(cpuAvailable, data?.cpuAvailable)
-      ) {
-        const getAvailableCapacity = node => {
-          const matchingNode = cpuAvailable?.find(
-            available => node.name === available.name,
-          );
-          return matchingNode?.value;
-        };
-
-        const formattedData = cpuUsed?.map(n => ({
-          name: n.node,
-          usage: n.value,
-          capacity: getAvailableCapacity(n),
-        }));
-
+    if (cpu) {
+      if (!isEqual(cpu, data?.cpuData)) {
         setData({
-          data: formattedData,
-          cpuUsed: cpuUsed,
-          cpuAvailable: cpuAvailable,
+          data: formatData(cpu),
+          cpuData: cpu,
         });
       }
     }
-  }, [cpuUsed, cpuAvailable]);
+  }, [cpu]);
+
   return {
     data: data?.data,
-    error: cpuUsedError || cpuAvailableError,
-    loading: cpuUsedLoading || cpuAvailableLoading,
+    error,
+    loading,
   };
 }
 
 function usePrometheusMemoryQuery(skip = false) {
   const [data, setData] = React.useState(null);
 
-  const {
-    data: memoryUsed,
-    error: memoryUsedError,
-    loading: memoryUsedLoading,
-  } = usePrometheus({
-    defaultQuery: `sum(node_namespace_pod_container:container_memory_working_set_bytes{cluster="", container!=""}) by (node)`,
+  const { data: memory, error, loading } = usePrometheus({
+    defaultQuery: `sum(node_namespace_pod_container:container_memory_working_set_bytes{cluster="", container!=""}) by (node) / sum(kube_node_status_capacity{cluster="", resource="memory"}) by (node)`,
     additionalProps: { timeSpan: 60, skip, parseData: false },
   });
-  const {
-    data: memoryAvailable,
-    error: memoryAvailableError,
-    loading: memoryAvailableLoading,
-  } = usePrometheus({
-    defaultQuery: `sum(kube_node_status_capacity{cluster="", resource="memory"}) by (node)`,
-    additionalProps: { timeSpan: 60, skip, parseData: false },
-  });
-
   React.useEffect(() => {
-    if (memoryUsed && memoryAvailable) {
-      if (
-        !isEqual(memoryUsed, data?.memoryUsed) ||
-        !isEqual(memoryAvailable, data?.memoryAvailable)
-      ) {
-        const getAvailableCapacity = node => {
-          const matchingNode = memoryAvailable?.find(
-            available => node.name === available.name,
-          );
-          return matchingNode?.value;
-        };
-
-        const formattedData = memoryUsed?.map(n => ({
-          name: n.node,
-          usage: n.value,
-          capacity: getAvailableCapacity(n),
-        }));
-
+    if (memory) {
+      if (!isEqual(memory, data?.memoryData)) {
         setData({
-          data: formattedData,
-          memoryUsed: memoryUsed,
-          memoryAvailable: memoryAvailable,
+          data: formatData(memory),
+          memoryData: memory,
         });
       }
     }
-  }, [memoryUsed, memoryAvailable]);
+  }, [memory]);
   return {
     data: data?.data,
-    error: memoryUsedError || memoryAvailableError,
-    loading: memoryUsedLoading || memoryAvailableLoading,
+    error,
+    loading,
   };
 }
 
@@ -222,16 +170,14 @@ export function usePrometheusNodeQuery(skip = false) {
           available => node.name === available.name,
         );
         return {
-          usage: matchingNode?.usage,
-          capacity: matchingNode?.capacity,
+          percentage: matchingNode?.percentage,
         };
       };
 
       const formattedMetrics = cpuData?.map(n => ({
         name: n?.name,
         cpu: {
-          usage: n?.usage,
-          capacity: n?.capacity,
+          percentage: n?.percentage,
         },
         memory: getAvailableMemory(n),
       }));
@@ -257,11 +203,12 @@ export function usePrometheusNodeQuery(skip = false) {
         nodeData: nodeData,
       });
     }
-  }, [cpuData, memoryData]);
+  }, [cpuData, memoryData, nodeData]);
+
   return {
     data: data?.data,
     error: nodeError || cpuError || memoryError,
-    loading: nodeLoading || cpuLoading || memoryLoading,
+    loading: nodeLoading || cpuLoading || memoryLoading || !data?.data,
   };
 }
 

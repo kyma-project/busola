@@ -83,13 +83,9 @@ export function ClusterNodes() {
       <NodeHeader nodeName={entry.metadata?.name} />,
       cpu ? (
         <ProgressBar
-          current={cpu.usage}
-          max={cpu.capacity}
+          percentage={cpu.percentage}
           tooltip={{
-            content: `
-              Used: ${cpu.usage}m 
-              Available: ${cpu.capacity}m
-              `,
+            content: `CPU Used: ${cpu.percentage}`,
             position: 'bottom',
             color: 'var(--sapIndicationColor_5)',
           }}
@@ -99,13 +95,9 @@ export function ClusterNodes() {
       ),
       memory ? (
         <ProgressBar
-          current={memory.usage}
-          max={memory.capacity}
+          percentage={memory.percentage}
           tooltip={{
-            content: `
-              Used: ${memory.usage}GiB 
-              Available: ${memory.capacity}GiB
-              `,
+            content: `Memory Used: ${memory.percentage}`,
             position: 'bottom',
           }}
           color="var(--sapIndicationColor_6)"
@@ -117,7 +109,7 @@ export function ClusterNodes() {
         timestamp={entry.metadata?.creationTimestamp}
       />,
       entry.status?.nodeInfo?.kubeProxyVersion || EMPTY_TEXT_PLACEHOLDER,
-      getStatus(entry),
+      getStatus(entry.status),
     ];
   };
 
