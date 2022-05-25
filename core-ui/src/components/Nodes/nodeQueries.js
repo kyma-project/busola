@@ -137,7 +137,7 @@ function usePrometheusMemoryQuery(skip = false) {
   };
 }
 
-export function usePrometheusNodeQuery(skip = false) {
+export function usePrometheusNodesQuery(skip = false) {
   const [data, setData] = React.useState(null);
 
   const { data: nodeData, error: nodeError, loading: nodeLoading } = useGet(

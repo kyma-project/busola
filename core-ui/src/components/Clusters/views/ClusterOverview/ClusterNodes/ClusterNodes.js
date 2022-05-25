@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import {
   useNodesQuery,
-  usePrometheusNodeQuery,
+  usePrometheusNodesQuery,
 } from 'components/Nodes/nodeQueries';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
@@ -33,6 +33,7 @@ const NodeHeader = ({ nodeName }) => {
 };
 
 export function ClusterNodes() {
+  const { i18n } = useTranslation();
   const prometheus = useFeature('PROMETHEUS');
   const usePrometheusQueries = prometheus?.isEnabled;
 
@@ -40,11 +41,18 @@ export function ClusterNodes() {
     data: prometheusData,
     error: prometheusDataError,
     loading: prometheusDataLoading,
-  } = usePrometheusNodeQuery(!usePrometheusQueries);
-  const { nodes, error, loading } = useNodesQuery(usePrometheusQueries);
+  } = usePrometheusNodesQuery(!usePrometheusQueries);
+  const {
+    nodes,
+    error: nodesDataError,
+    loading: nodesDataLoading,
+  } = useNodesQuery(usePrometheusQueries === undefined || usePrometheusQueries);
 
   const data = usePrometheusQueries ? prometheusData : nodes;
-  const { i18n } = useTranslation();
+  const error = usePrometheusQueries ? prometheusDataError : nodesDataError;
+  const loading = usePrometheusQueries
+    ? prometheusDataLoading
+    : nodesDataLoading;
 
   const getStatusType = status => {
     if (status === 'Ready') return 'success';
@@ -115,7 +123,6 @@ export function ClusterNodes() {
 
   const Events = <EventsList defaultType={EVENT_MESSAGE_TYPE.WARNING} />;
 
-  //TODO WHAT IS THIS LOADING THING
   return (
     <>
       <GenericList
