@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePost } from 'shared/hooks/BackendAPI/usePost';
-import { useNotification } from 'shared/contexts/NotificationContext';
-import { Checkbox } from 'fundamental-react';
 import * as jp from 'jsonpath';
 import * as _ from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/inputs';
 import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 import {
   SimpleContainersView,
@@ -32,8 +28,6 @@ export function DeploymentCreate({
   ...props
 }) {
   const { t } = useTranslation();
-  const notification = useNotification();
-  const postRequest = usePost();
 
   const [deployment, setDeployment] = useState(
     initialDeployment
