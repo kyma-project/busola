@@ -62,7 +62,7 @@ context('Test Cluster Overview', () => {
       .should('not.be.empty');
 
     cy.getIframeBody()
-      .contains('Resources')
+      .contains('CPU')
       .should('be.visible');
 
     cy.getIframeBody()
