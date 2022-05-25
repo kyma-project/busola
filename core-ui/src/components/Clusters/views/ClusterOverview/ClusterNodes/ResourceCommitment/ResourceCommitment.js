@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { useCurrentQuery } from './queries';
 import './ResourceCommitment.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 function useMetricQuery({ serviceUrl, time }) {
   const { t } = useTranslation();
@@ -52,62 +51,87 @@ function CommitmentGraph({ data }) {
   const { t } = useTranslation();
   data = [
     {
-      name: 'allocatable',
+      name: 'capacity',
       value: 1,
     },
     ...data,
   ];
-  // make sure legend data is not sorted
-  const legendData = [...data];
+
+  const utilized = data.find(d => d.name === 'utilized').value;
+  const capacity = data.find(d => d.name === 'capacity').value;
+  const limits = data.find(d => d.name === 'limits').value;
+
+  const shouldShowAllocatable = limits < capacity;
+
+  data = data.filter(d => d.name !== 'utilized');
+  if (!shouldShowAllocatable) {
+    data = data.filter(d => d.name !== 'capacity');
+  }
   data.sort((a, b) => a.value - b.value);
 
-  const max = data.at(-1).value;
+  const sum = data.reduce((prev, curr) => prev + curr.value, 0);
 
   let accumulatedX = 0;
   data.forEach((v, i) => {
-    v.width = data[i - 1] ? data[i].value - data[i - 1].value : data[i].value;
-    v.xPos = accumulatedX / max;
-    accumulatedX += v.width * 100;
+    v.width = (data[i].value / sum) * 100;
+    v.xPos = accumulatedX;
+    accumulatedX += v.width;
   });
 
-  const allocated = data.find(d => d.name === 'allocated').value;
-  const requests = data.find(d => d.name === 'requests').value;
-  const limits = data.find(d => d.name === 'limits').value;
-
-  // console.log({ allocated, requests, limits });
-  // console.log(
-  //   'allocated should be between ',
-  //   allocated * 0.75,
-  //   '(requests) and ',
-  //   allocated * 1.5 + '(limits)',
-  // );
-  // console.log('req:', (requests / allocated) * 100);
-  // console.log('lim:', (limits / allocated) * 100);
+  const dataToShow = shouldShowAllocatable
+    ? ['requests', 'limits', 'capacity']
+    : ['requests', 'limits'];
 
   return (
     <>
-      <svg viewBox="0 0 100 8" xmlns="http://www.w3.org/2000/svg">
-        {data.map(v => {
+      <svg viewBox="0 0 100 12" xmlns="http://www.w3.org/2000/svg">
+        {dataToShow.map(ds => {
+          const v = data.find(d => d.name === ds);
           return (
             <rect
               key={v.name}
-              width={(v.width / max) * 100}
-              height="100"
+              width={v.width}
               x={v.xPos}
+              height="4"
+              y="4"
               className={`graph-box--${v.name}`}
             />
           );
         })}
+        <svg x={(utilized / sum) * 100}>
+          <text y="3" className="a">
+            {t('graphs.resource-commitment.utilized')}
+          </text>
+          <rect height="4" y="4" width="0.2" x="-0.1" />
+          <polygon points="-0.5,3.3, 0.5,3.3, 0,4" />
+        </svg>
+        {!shouldShowAllocatable && (
+          <>
+            <svg x={(capacity / sum) * 100}>
+              <text y="9" className="b">
+                {t('graphs.resource-commitment.capacity')}
+              </text>
+              <rect
+                className="graph-box--utilized"
+                height="4"
+                y="4"
+                width="0.2"
+                x="-0.1"
+              />
+              <polygon
+                className="graph-box--utilized"
+                points="-0.5,8.7, 0.5,8.7, 0,8"
+              />
+              ;
+            </svg>
+          </>
+        )}
       </svg>
       <legend className="graph-legend">
-        {legendData.map(v => (
-          <div key={v.name}>
-            <Tooltip
-              content={t(`graphs.resource-commitment.tooltips.${v.name}`)}
-            >
-              <div className={`legend-box graph-box--${v.name}`}></div>
-              <span>{t(`graphs.resource-commitment.legend.${v.name}`)}</span>
-            </Tooltip>
+        {dataToShow.map(e => (
+          <div key={e}>
+            <div className={`legend-box graph-box--${e}`}></div>
+            <span>{t(`graphs.resource-commitment.${e}`)}</span>
           </div>
         ))}
       </legend>
