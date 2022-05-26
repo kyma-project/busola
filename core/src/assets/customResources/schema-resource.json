@@ -2,7 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema",
   "description": "Schema with basich information about resource",
   "required": [
-    "columns"
+    "group",
+    "kind",
+    "version"
   ],
   "title": "Custom pages to be displayed in Busola",
   "type": "object",
