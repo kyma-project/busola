@@ -19,10 +19,7 @@ context('Test navigation features', () => {
   before(() => {
     mockFeatures({
       APPLICATIONS: { isEnabled: false },
-      ISTIO: { isEnabled: false },
-      SERVERLESS: { isEnabled: false },
-      API_GATEWAY: { isEnabled: false },
-      PROMETHEUS: { isEnabled: false },
+      PROMETHEUS: null,
       VISUAL_RESOURCES: { isEnabled: false },
     });
     cy.loginAndSelectCluster();
@@ -42,11 +39,13 @@ context('Test navigation features', () => {
     cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
     cy.getIframeBody()
-      .contains('cluster-admin')
+      .contains('application-broker (SA)') // link wrapper
+      .contains('application-broker') // link itself
       .click();
 
-    // wait for view to stabilize
-    cy.wait(5000);
+    cy.getIframeBody()
+      .contains('kubernetes.io/service-account-token')
+      .should('exist');
 
     cy.getIframeBody()
       .contains('Resource Graph')
