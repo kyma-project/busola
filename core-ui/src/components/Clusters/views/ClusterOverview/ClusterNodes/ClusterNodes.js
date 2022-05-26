@@ -142,6 +142,7 @@ export function ClusterNodes() {
         }
         pagination={{ autoHide: true }}
         i18n={i18n}
+        testid="cluster-nodes"
       />
       {error && !data && (
         <ErrorPanel
