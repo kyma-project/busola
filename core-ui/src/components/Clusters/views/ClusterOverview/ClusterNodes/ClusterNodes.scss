@@ -17,7 +17,7 @@
 @media (min-width: 900px) {
   .cluster-overview__graphs-wrapper {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1fr;
 
     & > :first-child {
       margin-right: 12px;
