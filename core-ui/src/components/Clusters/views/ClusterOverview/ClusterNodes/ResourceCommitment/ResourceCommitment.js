@@ -10,6 +10,14 @@ import { useCssVariables } from 'hooks/useCssVariables';
 import { GraphLegend } from './GraphLegend';
 import './ResourceCommitment.scss';
 
+function getTextBoundingBox(ctx, text, padding) {
+  const labelWidth = ctx.measureText(text).width;
+  const labelHeight = parseInt(ctx.font) * 1.2;
+  const boxWidth = Math.round(labelWidth + padding * 2);
+  const boxHeight = Math.round(labelHeight + padding * 2);
+  return { boxWidth, boxHeight };
+}
+
 function CommitmentGraph({ data }) {
   const CANVAS_SCALE = 2;
   const RATIO = 1 / 6;
@@ -27,7 +35,6 @@ function CommitmentGraph({ data }) {
     limitsFill: '--sapContent_Illustrative_Color2',
     requestsFill: '--sapContent_Illustrative_Color3',
   });
-  const { limits, utilized, requests } = data;
   const [showWarningLabel, setShowWarningLabel] = useState(false);
   const [mouseOverMainGraph, setMouseOverMainGraph] = useState(false);
 
@@ -39,6 +46,9 @@ function CommitmentGraph({ data }) {
   const ratio = 1 / 1.5; // 100% / 150%
   const barHeight = innerhHeight / 2;
   const barHStart = verticalPadding + innerhHeight / 8;
+  const warningBarWidth = 20;
+
+  const { limits, utilized, requests } = data;
 
   const redraw = () => {
     const drawCapacity = ctx => {
@@ -71,13 +81,13 @@ function CommitmentGraph({ data }) {
       );
     };
 
-    const drawWarningRect = ctx => {
+    const drawWarningBar = ctx => {
       if (limits > 1.5) {
         ctx.fillStyle = cssVariables.warningColor;
         ctx.fillRect(
           horizontalPadding + 1.5 * ratio * innerWidth,
           barHStart,
-          20,
+          warningBarWidth,
           barHeight,
         );
       }
@@ -90,8 +100,8 @@ function CommitmentGraph({ data }) {
         horizontalPadding + Math.min(utilized, 1.5) * ratio * innerWidth;
       const y = barHStart;
       ctx.moveTo(x, y);
-      ctx.lineTo(x - 6, y - 7);
-      ctx.lineTo(x + 6, y - 7);
+      ctx.lineTo(x - 10, y - 11);
+      ctx.lineTo(x + 10, y - 11);
       ctx.fill();
       ctx.fillRect(x - 1, y, 2, barHeight);
       ctx.fillRect(x, y, 2, barHeight);
@@ -100,7 +110,7 @@ function CommitmentGraph({ data }) {
           value: (utilized * 100).toFixed(2),
         }),
         x,
-        y - 25,
+        (verticalPadding * 4) / 5,
       );
     };
 
@@ -145,11 +155,11 @@ function CommitmentGraph({ data }) {
       ctx.textBaseline = 'bottom';
 
       const labelPadding = 5;
-      const labelWidth = ctx.measureText(warning).width;
-      const labelHeight = parseInt(ctx.font) * 1.2;
-      const boxWidth = Math.round(labelWidth + labelPadding * 2);
-      const boxHeight = Math.round(labelHeight + labelPadding * 2);
-
+      const { boxHeight, boxWidth } = getTextBoundingBox(
+        ctx,
+        warning,
+        labelPadding,
+      );
       ctx.fillRect(x - boxWidth, y - boxHeight, boxWidth, boxHeight);
       ctx.strokeRect(x - boxWidth, y - boxHeight, boxWidth, boxHeight);
 
@@ -160,7 +170,7 @@ function CommitmentGraph({ data }) {
     const drawMainGraphLabel = ctx => {
       if (!mouseOverMainGraph) return;
 
-      const warning = `Requests: ${(requests * 100).toFixed(2)}%, limits: ${(
+      const label = `Requests: ${(requests * 100).toFixed(2)}%, limits: ${(
         limits * 100
       ).toFixed(2)}%`;
       const x = width / 2;
@@ -171,16 +181,16 @@ function CommitmentGraph({ data }) {
       ctx.textBaseline = 'bottom';
 
       const labelPadding = 5;
-      const labelWidth = ctx.measureText(warning).width;
-      const labelHeight = parseInt(ctx.font) * 1.2;
-      const boxWidth = Math.round(labelWidth + labelPadding * 2);
-      const boxHeight = Math.round(labelHeight + labelPadding * 2);
-
+      const { boxHeight, boxWidth } = getTextBoundingBox(
+        ctx,
+        label,
+        labelPadding,
+      );
       ctx.fillRect(x - boxWidth / 2, y - boxHeight, boxWidth, boxHeight);
       ctx.strokeRect(x - boxWidth / 2, y - boxHeight, boxWidth, boxHeight);
 
       ctx.fillStyle = cssVariables.textColor;
-      ctx.fillText(warning, x, y - labelPadding);
+      ctx.fillText(label, x, y - labelPadding);
     };
 
     const ctx = canvasRef.current.getContext('2d');
@@ -192,7 +202,7 @@ function CommitmentGraph({ data }) {
       drawCapacity,
       drawLimits,
       drawRequests,
-      drawWarningRect,
+      drawWarningBar,
       drawUtilized,
       drawFrames,
       drawLabelWarning,
@@ -230,21 +240,37 @@ function CommitmentGraph({ data }) {
   }, [canvasRef]);
 
   const mousemove = e => {
+    const isInsideRect = ({ x, y }, { rX, rY, rWidth, rHeight }) => {
+      return x >= rX && x <= rX + rWidth && y >= rY && y < +rY + rHeight;
+    };
+
     const rect = e.target.getBoundingClientRect();
     const x = Math.round(e.clientX - rect.left) * CANVAS_SCALE;
     const y = Math.round(e.clientY - rect.top) * CANVAS_SCALE;
 
-    const yInsideBar = y >= barHStart && y <= barHStart + barHeight;
-    const xInsideWarning =
-      x >= horizontalPadding + 1.5 * ratio * innerWidth &&
-      x <= horizontalPadding + 1.5 * ratio * innerWidth + 20;
-    setShowWarningLabel(yInsideBar && xInsideWarning);
-    const xInsideMainBar =
-      x >= horizontalPadding &&
-      x <=
-        horizontalPadding +
-          innerWidth * Math.min(Math.max(limits, requests), 1.5) * ratio;
-    setMouseOverMainGraph(yInsideBar && xInsideMainBar);
+    setShowWarningLabel(
+      isInsideRect(
+        { x, y },
+        {
+          rX: horizontalPadding + 1.5 * ratio * innerWidth,
+          rY: barHStart,
+          rWidth: warningBarWidth,
+          rHeight: barHeight,
+        },
+      ),
+    );
+    setMouseOverMainGraph(
+      isInsideRect(
+        { x, y },
+        {
+          rX: horizontalPadding,
+          rY: barHStart,
+          rWidth:
+            innerWidth * Math.min(Math.max(limits, requests), 1.5) * ratio,
+          rHeight: barHeight,
+        },
+      ),
+    );
   };
 
   return (
