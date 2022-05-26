@@ -16,10 +16,9 @@ function useMiniQuery(serviceUrl, query, time, skip) {
 export function useCurrentQuery({ serviceUrl, time, queryType }) {
   const flattenRequests = requests => {
     return {
-      data: requests.map(request => ({
-        name: request.name,
-        value: request.query.value,
-      })),
+      data: Object.fromEntries(
+        requests.map(request => [request.name, request.query.value]),
+      ),
       loading: requests.some(request => request.query.loading), // any loading=true
       error: requests.find(request => request.query.error)?.query?.error, // find first error
     };

@@ -3,7 +3,7 @@ import { Dropdown } from 'shared/ResourceForm/inputs';
 import { useTranslation } from 'react-i18next';
 import { useCurrentQuery } from './queries';
 
-export function useMetricQuery({ serviceUrl, time }) {
+export function useMetricsQuery({ serviceUrl, time }) {
   const { t } = useTranslation();
 
   const CPU_QUERY = {
