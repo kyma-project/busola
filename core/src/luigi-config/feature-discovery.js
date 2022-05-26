@@ -115,7 +115,7 @@ export async function updateFeature(featureName) {
       const activeCluster = getActiveCluster();
       const permissionSet = await fetchPermissions(
         getAuthData(),
-        getCurrentContextNamespace(activeCluster.kubeconfig),
+        getCurrentContextNamespace(activeCluster?.kubeconfig),
       );
 
       const { data } = await fetchCache.get('/apis');

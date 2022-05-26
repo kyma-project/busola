@@ -178,6 +178,8 @@ const getGraphOptions = type => {
       return ['cpu', 'memory', 'network', 'nodes'];
     case 'pvc':
       return ['pvc-usage'];
+    case 'node':
+      return ['cpu', 'memory', 'network'];
     default:
       return null;
   }
