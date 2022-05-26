@@ -146,7 +146,7 @@ export function usePrometheusNodesQuery(skip = false) {
   const { data: nodeData, error: nodeError, loading: nodeLoading } = useGet(
     '/api/v1/nodes',
     {
-      pollingInterval: 0,
+      pollingInterval: 5000,
       skip,
     },
   );
