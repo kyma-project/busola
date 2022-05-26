@@ -6,7 +6,7 @@ import { Widget, InlineWidget } from './Widget';
 
 export function Panel({ value, structure, schema }) {
   const { t } = useGetTranslation();
-  const key = structure.path || structure.id;
+  const key = structure.name || structure.path;
 
   return (
     <LayoutPanel className="fd-margin--md" key={key}>

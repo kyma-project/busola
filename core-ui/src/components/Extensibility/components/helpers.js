@@ -1,5 +1,8 @@
-import * as jp from 'jsonpath';
+import { createContext, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
+import * as jp from 'jsonpath';
+
+export const TranslationBundleContext = createContext('extensibility');
 
 export const getValue = (resource, path) => {
   if (!path || path === '$') return resource;
@@ -11,7 +14,7 @@ export const getValue = (resource, path) => {
 };
 
 export const useGetTranslation = path => {
-  const translationBundle = path || 'extensibility';
+  const translationBundle = useContext(TranslationBundleContext);
   const { t } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
 
   return {

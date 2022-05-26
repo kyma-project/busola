@@ -5,11 +5,17 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { prettifyNamePlural } from 'shared/utils/helpers';
 
 import { Widget } from './components/Widget';
-import { useGetTranslation } from './components/helpers';
+import {
+  useGetTranslation,
+  TranslationBundleContext,
+} from './components/helpers';
 
 export const ExtensibilityDetails = () => {
   const { t } = useGetTranslation();
   const resMetaData = useGetCRbyPath();
+
+  console.log('resMetaData', resMetaData);
+
   const detailsProps = usePrepareDetailsProps(
     resMetaData.navigation.path,
     resMetaData.navigation.label,
@@ -35,7 +41,7 @@ export const ExtensibilityDetails = () => {
     { name: '' },
   ];
   return (
-    <>
+    <TranslationBundleContext.Provider value={resMetaData.navigation.path}>
       <ResourceDetails
         windowTitle={prettifyNamePlural(
           resMetaData.navigation.label || resMetaData.navigation.path,
@@ -54,6 +60,6 @@ export const ExtensibilityDetails = () => {
         breadcrumbs={breadcrumbs}
         {...detailsProps}
       />
-    </>
+    </TranslationBundleContext.Provider>
   );
 };

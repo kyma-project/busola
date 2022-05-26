@@ -4,19 +4,12 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { widgets } from './index';
 import { getValue, useGetTranslation } from './helpers';
 
-export function SimpleRenderer({ renderer, ...props }) {
-  const Renderer = renderer;
-  return <Renderer {...props} />;
-}
+export const SimpleRenderer = ({ children }) => children;
 
-export function InlineWidget({ renderer, structure, ...props }) {
+export function InlineWidget({ children, structure, ...props }) {
   const { t } = useGetTranslation();
-  const Renderer = renderer;
   return (
-    <LayoutPanelRow
-      name={t(structure.path || structure.id)}
-      value={<Renderer structure={structure} {...props} />}
-    />
+    <LayoutPanelRow name={t(structure.path || structure.id)} value={children} />
   );
 }
 
@@ -33,34 +26,28 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
 
   const childValue = structure.path ? getValue(value, structure.path) : value;
 
+  let Renderer = structure.children ? Plain : Text;
   if (structure.widget) {
-    const Renderer = widgets[structure.widget];
+    Renderer = widgets[structure.widget];
     if (!Renderer) {
       return `no widget ${structure.widget}`;
-    } else if (Renderer.inline) {
-      return (
-        <InlineRenderer
-          renderer={Renderer}
-          value={childValue}
-          structure={structure}
-          {...props}
-        />
-      );
-    } else {
-      return <Renderer value={childValue} structure={structure} {...props} />;
     }
   }
 
-  if (structure.children) {
-    return <Plain value={childValue} structure={structure} {...props} />;
-  }
+  const SingleWidget = props =>
+    Renderer.inline && InlineRenderer ? (
+      <InlineRenderer {...props}>
+        <Renderer {...props} />
+      </InlineRenderer>
+    ) : (
+      <Renderer {...props} />
+    );
 
-  return (
-    <InlineRenderer
-      renderer={Text}
-      value={childValue}
-      structure={structure}
-      {...props}
-    />
+  return Array.isArray(childValue) && !Renderer.array ? (
+    childValue.map(item => (
+      <SingleWidget value={item} structure={structure} {...props} />
+    ))
+  ) : (
+    <SingleWidget value={childValue} structure={structure} {...props} />
   );
 }

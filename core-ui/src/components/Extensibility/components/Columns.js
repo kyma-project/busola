@@ -5,20 +5,9 @@ import { Widget } from './Widget';
 export function Columns({ value, structure, schema }) {
   return (
     <div class="panel-grid">
-      {
-        <Widget
-          value={value}
-          structure={structure.columns[0] || []}
-          schema={schema}
-        />
-      }
-      {
-        <Widget
-          value={value}
-          structure={structure.columns[1] || []}
-          schema={schema}
-        />
-      }
+      {structure.children.map(child => (
+        <Widget value={value} structure={child} schema={schema} />
+      ))}
     </div>
   );
 }

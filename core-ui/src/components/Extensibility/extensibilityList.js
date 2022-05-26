@@ -4,11 +4,12 @@ import { useGetCRbyPath } from './useGetCRbyPath';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ExtensibilityCreate } from './extensibilityCreate';
 import { Labels } from 'shared/components/Labels/Labels';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Link } from 'shared/components/Link/Link';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { usePrepareListProps } from 'resources/helpers';
 import { useTranslation } from 'react-i18next';
+import { TranslationBundleContext } from './components/helpers';
+import { Widget } from './components/Widget';
 
 function resolveBadgeType(value, columnProps) {
   const { successValues, warningValues } = columnProps;
@@ -45,45 +46,52 @@ function listColumnDisplay(value, columnProps) {
 }
 
 export const ExtensibilityList = () => {
-  const resource = useGetCRbyPath();
+  const resMetaData = useGetCRbyPath();
 
-  const translationBundle = resource?.navigation?.path || 'extensibility';
-  const { t: translations } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
+  const translationBundle = resMetaData?.navigation?.path || 'extensibility';
+  const { t: translate } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
   const t = (path, ...props) =>
-    translations(`${translationBundle}:${path}`, ...props);
+    translate(`${translationBundle}:${path}`, ...props);
+
+  const schema = resMetaData?.schema;
 
   const listProps = usePrepareListProps(
-    resource.navigation.path,
-    resource.navigation.label,
+    resMetaData.navigation.path,
+    resMetaData.navigation.label,
   );
 
-  if (resource.resource?.kind) {
+  if (resMetaData.resource?.kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
       /[a-z0-9-]+\/?$/,
-      (resource.resource?.kind).toLowerCase(),
+      (resMetaData.resource?.kind).toLowerCase(),
     );
   }
-  listProps.createFormProps = { resource };
+  listProps.createFormProps = { resource: resMetaData };
   listProps.resourceName = t('labels.name', {
-    defaultValue: resource.navigation.label,
+    defaultValue: resMetaData.navigation.label,
   });
   listProps.description = t('labels.description', {
     defaultValue: '',
   });
-  listProps.customColumns = (resource.list.columns || []).map(column => ({
+  listProps.customColumns = (resMetaData.list || []).map(column => ({
     header: t(column.valuePath, {
-      defaultValue: column.valuePath?.split('.')?.pop(),
+      defaultValue: column.path?.split('.')?.pop(),
     }),
-    value: resource => {
+    value: resource => (
+      <Widget value={resource} structure={column} schema={schema} />
+    ),
+    /*
       const v = listColumnDisplay(getValue(resource, column.valuePath), column);
       if (typeof v === 'undefined' || v === '') {
         return EMPTY_TEXT_PLACEHOLDER;
       } else {
         return v;
       }
-    },
+      */
   }));
   return (
-    <ResourcesList createResourceForm={ExtensibilityCreate} {...listProps} />
+    <TranslationBundleContext.Provider value={resMetaData.navigation.path}>
+      <ResourcesList createResourceForm={ExtensibilityCreate} {...listProps} />
+    </TranslationBundleContext.Provider>
   );
 };
