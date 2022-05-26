@@ -40,14 +40,13 @@ const createUsageMetrics = (node, metricsForNode) => {
 
 export function useNodesQuery(skip = false) {
   const [data, setData] = React.useState(null);
-  const {
-    data: nodeMetrics,
-    error: metricsError,
-    loading: metricsLoading,
-  } = useGet('/apis/metrics.k8s.io/v1beta1/nodes', {
-    pollingInterval: 4000,
-    skip,
-  });
+  const { data: nodeMetrics, loading: metricsLoading } = useGet(
+    '/apis/metrics.k8s.io/v1beta1/nodes',
+    {
+      pollingInterval: 4000,
+      skip,
+    },
+  );
 
   const {
     data: nodes,
@@ -75,7 +74,7 @@ export function useNodesQuery(skip = false) {
 
   return {
     nodes: data,
-    error: metricsError || nodesError,
+    error: nodesError,
     loading: metricsLoading || nodesLoading,
   };
 }
