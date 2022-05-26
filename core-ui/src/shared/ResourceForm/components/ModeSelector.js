@@ -26,7 +26,7 @@ export function ModeSelector({ mode, isEditing, setMode }) {
     { mode: ModeSelector.MODE_YAML, label: 'YAML' },
   ];
 
-  const buttonsToDisplay = isEditing ? createModeButtons : editeModeButtons;
+  const buttonsToDisplay = isEditing ? editeModeButtons : createModeButtons;
 
   return (
     <div className="mode-selector">
