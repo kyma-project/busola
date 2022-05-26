@@ -2,6 +2,7 @@ import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 function usePrometheusQuery(serviceUrl, query, time) {
   query = encodeURIComponent(query);
+  time = Math.floor(time / 1000);
   const url = `${serviceUrl}/query?query=${query}&time=${time}`;
   const { data, loading, error } = useGet(url, {
     pollingInterval: 0,

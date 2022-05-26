@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dropdown } from 'shared/ResourceForm/inputs';
 import { useTranslation } from 'react-i18next';
 import { useCurrentQuery } from './queries';
+import { useFeature } from 'shared/hooks/useFeature';
 
-export function useMetricsQuery({ serviceUrl, time }) {
+export function useMetricsQuery() {
+  const { serviceUrl } = useFeature('PROMETHEUS');
+  const [time, setTime] = useState(Date.now());
   const { t } = useTranslation();
 
   const CPU_QUERY = {
@@ -22,6 +25,12 @@ export function useMetricsQuery({ serviceUrl, time }) {
     time,
     queryType,
   });
+
+  useEffect(() => {
+    const REFETCH_RATE_MS = 60 * 1000;
+    const id = setInterval(() => setTime(Date.now()), REFETCH_RATE_MS);
+    return () => clearInterval(id);
+  }, [queryType]);
 
   const QueryDropdown = (
     <Dropdown

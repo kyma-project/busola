@@ -13,14 +13,13 @@ import './ResourceCommitment.scss';
 function getTextBoundingBox(ctx, text, padding) {
   const labelWidth = ctx.measureText(text).width;
   const labelHeight = parseInt(ctx.font) * 1.2;
-  const boxWidth = Math.round(labelWidth + padding * 2);
-  const boxHeight = Math.round(labelHeight + padding * 2);
+  const boxWidth = labelWidth + padding * 2;
+  const boxHeight = labelHeight + padding * 2;
   return { boxWidth, boxHeight };
 }
 
 function CommitmentGraph({ data }) {
-  const CANVAS_SCALE = 2;
-  const RATIO = 1 / 6;
+  const CANVAS_SCALE = 2; // used to make Canvas text crisp
 
   const { t } = useTranslation();
 
@@ -38,7 +37,7 @@ function CommitmentGraph({ data }) {
   const [showWarningLabel, setShowWarningLabel] = useState(false);
   const [mouseOverMainGraph, setMouseOverMainGraph] = useState(false);
 
-  const height = width * RATIO;
+  const height = width / 6;
   const horizontalPadding = width / 25;
   const verticalPadding = width / 30;
   const innerWidth = width - horizontalPadding * 2;
@@ -104,7 +103,6 @@ function CommitmentGraph({ data }) {
       ctx.lineTo(x + 10, y - 11);
       ctx.fill();
       ctx.fillRect(x - 1, y, 2, barHeight);
-      ctx.fillRect(x, y, 2, barHeight);
       ctx.fillText(
         t('graphs.resource-commitment.utilized-value', {
           value: (utilized * 100).toFixed(2),
@@ -144,7 +142,7 @@ function CommitmentGraph({ data }) {
     };
 
     const drawLabelWarning = ctx => {
-      if (!showWarningLabel) return;
+      if (!showWarningLabel || limits <= 1.5) return;
 
       const x = horizontalPadding + 1.5 * ratio * innerWidth;
       const y = barHStart;
@@ -194,8 +192,8 @@ function CommitmentGraph({ data }) {
     };
 
     const ctx = canvasRef.current.getContext('2d');
-    ctx.font = `${12 * CANVAS_SCALE}px sans-serif`;
-    ctx.textBaseline = 'alphabetic';
+    ctx.font = '24px sans-serif';
+    ctx.textBaseline = 'alphabetic'; // default
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
     for (const fn of [
@@ -241,12 +239,12 @@ function CommitmentGraph({ data }) {
 
   const mousemove = e => {
     const isInsideRect = ({ x, y }, { rX, rY, rWidth, rHeight }) => {
-      return x >= rX && x <= rX + rWidth && y >= rY && y < +rY + rHeight;
+      return x >= rX && x <= rX + rWidth && y >= rY && y <= rY + rHeight;
     };
 
     const rect = e.target.getBoundingClientRect();
-    const x = Math.round(e.clientX - rect.left) * CANVAS_SCALE;
-    const y = Math.round(e.clientY - rect.top) * CANVAS_SCALE;
+    const x = (e.clientX - rect.left) * CANVAS_SCALE;
+    const y = (e.clientY - rect.top) * CANVAS_SCALE;
 
     setShowWarningLabel(
       isInsideRect(
@@ -286,26 +284,15 @@ function CommitmentGraph({ data }) {
   );
 }
 
-function ResourceCommitmentComponent({ serviceUrl }) {
+export function ResourceCommitment() {
+  const { isEnabled } = useFeature('PROMETHEUS');
   const { t } = useTranslation();
-  const [time, setTime] = useState(Math.floor(Date.now() / 1000));
   const {
     QueryDropdown,
     queryResults: { data, loading, error },
-    queryType,
-  } = useMetricsQuery({
-    serviceUrl,
-    time,
-  });
+  } = useMetricsQuery();
 
-  useEffect(() => {
-    const REFETCH_RATE_MS = 60 * 1000;
-    const id = setInterval(
-      () => setTime(Math.floor(Date.now() / 1000)),
-      REFETCH_RATE_MS,
-    );
-    return () => clearInterval(id);
-  }, [queryType]);
+  if (!isEnabled) return null;
 
   const content = () => {
     if (loading) {
@@ -325,10 +312,4 @@ function ResourceCommitmentComponent({ serviceUrl }) {
       <LayoutPanel.Body>{content()}</LayoutPanel.Body>
     </LayoutPanel>
   );
-}
-
-export function ResourceCommitment() {
-  const { isEnabled, serviceUrl } = useFeature('PROMETHEUS');
-  if (!isEnabled) return null;
-  return <ResourceCommitmentComponent serviceUrl={serviceUrl} />;
 }
