@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Schema with basich information about resource",
+  "required": [
+    "columns"
+  ],
+  "title": "Custom pages to be displayed in Busola",
+  "type": "object",
+  "properties": {
+    "group": {
+      "description": "Kind is the Kubernetes resource api group",
+      "type": "string"
+    },
+    "kind": {
+      "description": "Kind is the Kubernetes resource name",
+      "type": "string"
+    },
+    "version": {
+      "description": "Version is the Kubernetes resource version",
+      "type": "string"
+    }
+  }
+}
