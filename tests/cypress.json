@@ -34,6 +34,7 @@
     "cluster/test-settings.spec.js",
     "cluster/test-command-palette.spec.js",
     "cluster/test-custom-resources.spec.js",
+    "cluster/test-navigation-features.spec.js",
     "cluster/run-after.spec.js",
     "namespace/run-before.spec.js",
     "namespace/test-namespace-overview.spec.js",
