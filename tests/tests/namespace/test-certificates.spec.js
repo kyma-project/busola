@@ -60,10 +60,6 @@ context('Test Certificates', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Advanced')
-      .click();
-
-    cy.getIframeBody()
       .contains('Annotations')
       .click();
 

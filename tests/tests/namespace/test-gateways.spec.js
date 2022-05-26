@@ -86,10 +86,6 @@ context('Test Gateways', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Advanced')
-      .click();
-
-    cy.getIframeBody()
       .find('[role=dialog]')
       .contains('Servers')
       .click();

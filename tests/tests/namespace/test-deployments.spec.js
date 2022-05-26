@@ -147,10 +147,6 @@ context('Test Deployments', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Advanced')
-      .click();
-
-    cy.getIframeBody()
       .find('[aria-label="expand Labels"]')
       .click();
 

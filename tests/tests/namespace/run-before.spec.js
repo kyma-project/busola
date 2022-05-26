@@ -60,11 +60,6 @@ context('Create Namespace', () => {
 
     cy.getIframeBody()
       .find('[role=dialog]')
-      .contains('Advanced')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role=dialog]')
       .contains('button', 'Update')
       .click();
   });
