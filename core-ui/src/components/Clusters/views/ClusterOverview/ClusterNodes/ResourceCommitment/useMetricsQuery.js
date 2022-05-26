@@ -25,13 +25,10 @@ export function useMetricsQuery({ serviceUrl, time }) {
 
   const QueryDropdown = (
     <Dropdown
-      compact={false}
       fullWidth={false}
       className="query-dropdown"
       selectedKey={queryType}
-      onSelect={(_, { key }) => {
-        setQueryType(key);
-      }}
+      onSelect={(_, { key }) => setQueryType(key)}
       options={[CPU_QUERY, MEMORY_QUERY]}
     />
   );

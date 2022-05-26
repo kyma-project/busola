@@ -236,6 +236,7 @@ export function StatsPanel({
             <LayoutPanel.Head title={t(`graphs.${graphOptions[0]}`)} />
           ) : (
             <Dropdown
+              compact
               selectedKey={metric}
               onSelect={(e, val) => {
                 setMetric(val.key);
