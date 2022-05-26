@@ -78,7 +78,7 @@ export const DefaultBackendPanel = ({ backend, namespace }) => {
                 ) ? (
                   <GoToDetailsLink
                     resource={pluralize(
-                      backend.resource.kind.toString().toLowerCase(),
+                      backend.resource.kind.toString()?.toLowerCase(),
                     )}
                     name={backend.resource.name}
                     noBrackets

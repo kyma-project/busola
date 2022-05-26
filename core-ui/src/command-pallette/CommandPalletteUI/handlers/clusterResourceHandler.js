@@ -88,7 +88,7 @@ function getSuggestions({ tokens, resourceCache }) {
       suggestedType || type,
       resourceTypes,
     );
-    const resourceNames = (resourceCache[fullResourceType] || []).map(
+    const resourceNames = (resourceCache[fullResourceType] || [])?.map(
       n => n.metadata.name,
     );
     const suggestedName = getSuggestion(name, resourceNames);
@@ -237,11 +237,11 @@ function createResults({
     if (resourceType === 'namespaces' && matchedResources.length === 1) {
       return makeSingleNamespaceLinks({ namespace: matchedResources[0], t });
     }
-    return matchedResources.map(item => makeListItem(item, matchedNode, t));
+    return matchedResources?.map(item => makeListItem(item, matchedNode, t));
   } else {
     return [
       linkToList,
-      ...resources.map(item => makeListItem(item, matchedNode, t)),
+      ...resources?.map(item => makeListItem(item, matchedNode, t)),
     ];
   }
 }
