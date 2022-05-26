@@ -212,6 +212,8 @@ context('Test reduced permissions', () => {
       .contains('button', 'Delete')
       .click();
 
+    cy.getIframeBody().contains('Are you sure you want to');
+
     cy.getIframeBody()
       .find('[data-testid="delete-confirmation"]')
       .click();
