@@ -152,16 +152,10 @@ export function usePrometheusNodesQuery(skip = false) {
     },
   );
 
-  const {
-    data: cpuData,
-    error: cpuError,
-    loading: cpuLoading,
-  } = usePrometheusCPUQuery(skip);
-  const {
-    data: memoryData,
-    error: memoryError,
-    loading: memoryLoading,
-  } = usePrometheusMemoryQuery(skip);
+  const { data: cpuData, loading: cpuLoading } = usePrometheusCPUQuery(skip);
+  const { data: memoryData, loading: memoryLoading } = usePrometheusMemoryQuery(
+    skip,
+  );
 
   React.useEffect(() => {
     if (
@@ -211,7 +205,7 @@ export function usePrometheusNodesQuery(skip = false) {
 
   return {
     data: data?.data,
-    error: nodeError || cpuError || memoryError,
+    error: nodeError,
     loading: nodeLoading || cpuLoading || memoryLoading || !data?.data,
   };
 }

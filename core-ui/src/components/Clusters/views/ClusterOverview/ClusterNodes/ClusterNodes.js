@@ -14,7 +14,6 @@ import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ProgressBar } from 'shared/components/ProgressBar/ProgressBar';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import Skeleton from 'shared/components/Skeleton/Skeleton';
 import { useFeature } from 'shared/hooks/useFeature';
 
 import './ClusterNodes.scss';
@@ -108,7 +107,7 @@ export function ClusterNodes() {
           percentage={memory.percentage}
           tooltip={{
             content: t('cluster-overview.tooltips.memory-used', {
-              percentage: cpu.percentage,
+              percentage: memory.percentage,
             }),
             position: 'bottom',
           }}
@@ -144,11 +143,6 @@ export function ClusterNodes() {
         pagination={{ autoHide: true }}
         i18n={i18n}
       />
-      {loading && (
-        <div className="cluster-overview__nodes">
-          <Skeleton height="220px" />
-        </div>
-      )}
       {error && !data && (
         <ErrorPanel
           error={error}
