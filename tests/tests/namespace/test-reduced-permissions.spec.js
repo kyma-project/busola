@@ -218,9 +218,9 @@ context('Test reduced permissions', () => {
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    cy.contains('Failed to delete the Namespace').should('be.visible');
-
-    cy.contains('Close').click();
+    cy.contains('Close')
+      .trigger('mouseover')
+      .click();
 
     cy.getLeftNav()
       .contains('Workloads')
