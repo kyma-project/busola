@@ -278,6 +278,15 @@ cluster-addons:
   navigation-title: Cluster Addons
   singular_name: Cluster Addons Configuration
   title: Cluster Addons Configurations
+cluster-overview:
+  headers:
+    cpu: CPU
+    memory: Memory
+    metrics: Metrics
+    nodes: Nodes
+  tooltips:
+    cpu-used: 'CPU Used: {{percentage}}'
+    memory-used: 'Memory Used: {{percentage}}'
 cluster-role-bindings:
   description: <0>Cluster Role Binding</0> assigns the permissions defined in a Cluster Role to a user.
   name_singular: Cluster Role Binding
@@ -569,7 +578,7 @@ common:
     error: Error
     generate-name: Generate name
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' (e.g.: ''my-name1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
@@ -1449,7 +1458,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright

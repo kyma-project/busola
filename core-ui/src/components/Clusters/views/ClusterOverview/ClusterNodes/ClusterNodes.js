@@ -33,7 +33,7 @@ const NodeHeader = ({ nodeName }) => {
 };
 
 export function ClusterNodes() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const prometheus = useFeature('PROMETHEUS');
   const usePrometheusQueries = prometheus?.isEnabled;
 
@@ -77,12 +77,12 @@ export function ClusterNodes() {
   };
 
   const headerRenderer = () => [
-    'Name',
-    'CPU',
-    'Memory',
-    'Created',
-    'Version',
-    'Status',
+    t('common.headers.name'),
+    t('cluster-overview.headers.cpu'),
+    t('cluster-overview.headers.memory'),
+    t('common.headers.created'),
+    t('common.headers.version'),
+    t('common.headers.status'),
   ];
 
   const rowRenderer = entry => {
@@ -93,7 +93,9 @@ export function ClusterNodes() {
         <ProgressBar
           percentage={cpu.percentage}
           tooltip={{
-            content: `CPU Used: ${cpu.percentage}`,
+            content: t('cluster-overview.tooltips.cpu-used', {
+              percentage: cpu.percentage,
+            }),
             position: 'bottom',
             color: 'var(--sapIndicationColor_5)',
           }}
@@ -105,7 +107,9 @@ export function ClusterNodes() {
         <ProgressBar
           percentage={memory.percentage}
           tooltip={{
-            content: `Memory Used: ${memory.percentage}`,
+            content: t('cluster-overview.tooltips.memory-used', {
+              percentage: cpu.percentage,
+            }),
             position: 'bottom',
           }}
           color="var(--sapIndicationColor_6)"
@@ -126,7 +130,7 @@ export function ClusterNodes() {
   return (
     <>
       <GenericList
-        title={'Nodes'}
+        title={t('cluster-overview.headers.nodes')}
         allowSlashShortcut={false}
         showSearchField={false}
         actions={[]}
@@ -146,7 +150,11 @@ export function ClusterNodes() {
         </div>
       )}
       {error && !data && (
-        <ErrorPanel error={error} title="Metrics" i18n={i18n} />
+        <ErrorPanel
+          error={error}
+          title={t('cluster-overview.headers.metrics')}
+          i18n={i18n}
+        />
       )}
       <StatsPanel type="cluster" />
       {Events}
