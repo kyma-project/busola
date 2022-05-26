@@ -21,7 +21,7 @@ export function ModeSelector({ mode, isEditing, setMode }) {
   const editeModeButtons = [
     {
       mode: ModeSelector.MODE_ADVANCED,
-      label: t('new-advanced'), // TODO: discuss with TW
+      label: t('common.create-form.modes.ui-form'),
     },
     { mode: ModeSelector.MODE_YAML, label: 'YAML' },
   ];

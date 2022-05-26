@@ -473,6 +473,7 @@ common:
     modes:
       advanced: Advanced
       simple: Simple
+      ui-form: UI Form
     object-required: An object is required
   delete-dialog:
     delete-confirm: Don't ask again
