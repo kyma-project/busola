@@ -21,16 +21,11 @@
     "component_config": {
       "type": "object",
       "properties": {
-        "name": {
-          "description": "Name of component used for dispaying translations",
+        "additionalProperties": {
           "type": "string"
         },
-        "language": {
-          "description": "parameter passed to a widget CodeViewer defining language in which editor should parse the code",
-          "enum": [
-            "json",
-            "yaml"
-          ],
+        "name": {
+          "description": "Name of component used for dispaying translations",
           "type": "string"
         },
         "path": {
