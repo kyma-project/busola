@@ -215,12 +215,11 @@ context('Test reduced permissions', () => {
     cy.getIframeBody().contains('Are you sure you want to');
 
     cy.getIframeBody()
+      .wait(1000)
       .find('[data-testid="delete-confirmation"]')
       .click();
 
-    cy.contains('Close')
-      .trigger('mouseover')
-      .click();
+    cy.contains('Close').click();
 
     cy.getLeftNav()
       .contains('Workloads')
