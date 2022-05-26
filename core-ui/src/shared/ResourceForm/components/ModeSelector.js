@@ -18,7 +18,7 @@ export function ModeSelector({ mode, isEditing, setMode }) {
     { mode: ModeSelector.MODE_YAML, label: 'YAML' },
   ];
 
-  const editeModeButtons = [
+  const editModeButtons = [
     {
       mode: ModeSelector.MODE_ADVANCED,
       label: t('common.create-form.modes.ui-form'),
@@ -26,7 +26,7 @@ export function ModeSelector({ mode, isEditing, setMode }) {
     { mode: ModeSelector.MODE_YAML, label: 'YAML' },
   ];
 
-  const buttonsToDisplay = isEditing ? editeModeButtons : createModeButtons;
+  const buttonsToDisplay = isEditing ? editModeButtons : createModeButtons;
 
   return (
     <div className="mode-selector">
