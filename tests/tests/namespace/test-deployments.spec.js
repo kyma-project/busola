@@ -92,15 +92,11 @@ context('Test Deployments', () => {
       .type('20');
 
     cy.getIframeBody()
-      .contains('Expose separate Service')
-      .click();
-
-    cy.getIframeBody()
       .contains('button', /^Create$/)
       .click();
   });
 
-  it('Check if deployment, pod and service exist', () => {
+  it('Check if deployment and pod exist', () => {
     cy.url().should(
       'match',
       new RegExp(`\/deployments\/details\/${DEPLOYMENT_NAME}$`),
@@ -113,18 +109,6 @@ context('Test Deployments', () => {
 
     cy.getIframeBody()
       .contains('h3', DEPLOYMENT_NAME)
-      .should('be.visible');
-
-    cy.getLeftNav()
-      .contains('Discovery and Network')
-      .click();
-
-    cy.getLeftNav()
-      .find('[data-testid=services_services]')
-      .click();
-
-    cy.getIframeBody()
-      .contains('a', DEPLOYMENT_NAME)
       .should('be.visible');
   });
 
@@ -162,22 +146,9 @@ context('Test Deployments', () => {
       .type('label-value');
 
     cy.getIframeBody()
-      .contains('Expose a separate Service')
-      .should('not.exist');
-
-    cy.getIframeBody()
       .contains('button', 'Update')
       .click();
 
     cy.getIframeBody().contains('label-key=label-value');
-
-    // Close the left side nav tabs to not interfere with other tests
-    cy.getLeftNav()
-      .contains('Discovery and Network')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
   });
 });
