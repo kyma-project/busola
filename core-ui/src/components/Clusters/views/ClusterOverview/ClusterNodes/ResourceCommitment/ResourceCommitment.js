@@ -7,7 +7,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { useMetricsQuery } from './useMetricsQuery';
 import { useCssVariables } from 'hooks/useCssVariables';
-import { GraphLegend } from './GraphLegend';
+import { GraphLegend } from './GraphLegend/GraphLegend';
 import './ResourceCommitment.scss';
 
 function getTextBoundingBox(ctx, text, padding) {
@@ -24,11 +24,11 @@ function CommitmentGraph({ data }) {
 
   const { t } = useTranslation();
 
-  const [width, setWidth] = useState(1);
+  const [width, setWidth] = useState(0); // will be calculated
   const canvasRef = useRef();
   const cssVariables = useCssVariables({
     textColor: '--sapTextColor',
-    warningColor: '--sapCriticalColor',
+    warningColor: '--sapWarningColor',
     outlineColor: '--sapNeutralBackground',
     tooltipBackgroundColor: '--sapNeutralBackground',
     capacityFill: '--sapContent_Illustrative_Color6',
@@ -148,7 +148,7 @@ function CommitmentGraph({ data }) {
 
       const x = horizontalPadding + 1.5 * ratio * innerWidth;
       const y = barHStart;
-      const warning = t('graphs.resource-commitment.exceeds');
+      const warning = t('graphs.resource-commitment.limits-exceed');
       ctx.fillStyle = cssVariables.tooltipBackgroundColor;
       ctx.strokeStyle = cssVariables.textColor;
       ctx.textAlign = 'right';
@@ -274,16 +274,15 @@ function CommitmentGraph({ data }) {
   };
 
   return (
-    <div>
+    <>
       <canvas
-        className="resource-commitment-graph-todo"
         ref={canvasRef}
         width={width}
         height={height}
         onMouseMove={mousemove}
       ></canvas>
       <GraphLegend />
-    </div>
+    </>
   );
 }
 
@@ -323,7 +322,7 @@ function ResourceCommitmentComponent({ serviceUrl }) {
       <LayoutPanel.Header>
         <LayoutPanel.Filters>{QueryDropdown}</LayoutPanel.Filters>
       </LayoutPanel.Header>
-      <LayoutPanel.Body className="graph-wrapper">{content()}</LayoutPanel.Body>
+      <LayoutPanel.Body>{content()}</LayoutPanel.Body>
     </LayoutPanel>
   );
 }

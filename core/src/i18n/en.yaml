@@ -1247,11 +1247,10 @@ graphs:
   resource-commitment:
     capacity: Capacity
     cpu: CPU Commitment
-    exceeds: Resource limits exceed the 150% of cluster capacity.
     limits: Limits
+    limits-exceed: Resource limits exceed the 150% of cluster capacity.
     memory: Memory Commmitment
     requests: Requests
-    utilized: Utilized
     utilized-value: Utilized ({{value}}%)
   total: Total
   used-space: Used space

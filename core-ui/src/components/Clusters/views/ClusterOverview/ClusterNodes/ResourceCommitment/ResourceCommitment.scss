@@ -1,8 +1,8 @@
-.resource-commitment-graph-todo {
-  width: 100%;
-}
-
 .commitment-graph {
+  canvas {
+    width: 100%;
+  }
+
   .fd-layout-panel__filters {
     border: 0;
     padding: 0;
@@ -11,73 +11,4 @@
   .query-dropdown {
     width: 220px;
   }
-
-  .graph-wrapper {
-    min-height: 130px;
-    place-items: center;
-    display: grid;
-  }
-
-  .graph {
-    width: 100%;
-    height: 40px;
-
-    div {
-      height: 100%;
-      display: inline-block;
-    }
-  }
-  .graph-legend {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 4px 12px;
-    @media (max-width: 900px) {
-      display: flex;
-    }
-
-    display: flex;
-    justify-content: center;
-
-    .legend-box {
-      height: 1em;
-      width: 1em;
-      display: inline-block;
-      margin-right: 0.5em;
-    }
-  }
-}
-
-.graph-box--requests {
-  background: var(--sapContent_Illustrative_Color3);
-  fill: var(--sapContent_Illustrative_Color3);
-}
-
-.graph-box--limits {
-  background: var(--sapContent_Illustrative_Color2);
-  fill: var(--sapContent_Illustrative_Color2);
-}
-
-.graph-box--capacity {
-  background: var(--sapContent_Illustrative_Color6);
-  fill: var(--sapContent_Illustrative_Color6);
-}
-
-.graph-box--utilized {
-  background: #cc4300;
-  fill: #cc4300;
-  filter: saturate(0.5);
-}
-
-.a {
-  font-size: 2.5px;
-  alignment-baseline: baseline;
-}
-
-.b {
-  font-size: 2.5px;
-  alignment-baseline: hanging;
-}
-
-svg {
-  overflow: visible;
 }
