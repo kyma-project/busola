@@ -32,6 +32,9 @@
       display: flex;
     }
 
+    display: flex;
+    justify-content: center;
+
     .legend-box {
       height: 1em;
       width: 1em;
@@ -42,17 +45,13 @@
 }
 
 .graph-box--requests {
-  background: var(--sapIndicationColor_4);
-  fill: var(--sapIndicationColor_4);
-  background: #a1dbb1;
-  fill: #a1dbb1;
+  background: var(--sapContent_Illustrative_Color3);
+  fill: var(--sapContent_Illustrative_Color3);
 }
 
 .graph-box--limits {
-  background: var(--sapIndicationColor_3);
-  fill: var(--sapIndicationColor_3);
-  background: #93bfeb;
-  fill: #93bfeb;
+  background: var(--sapContent_Illustrative_Color2);
+  fill: var(--sapContent_Illustrative_Color2);
 }
 
 .graph-box--capacity {

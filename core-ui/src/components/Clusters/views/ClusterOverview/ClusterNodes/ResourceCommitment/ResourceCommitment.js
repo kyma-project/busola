@@ -1,141 +1,123 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useFeature } from 'shared/hooks/useFeature';
 import { LayoutPanel } from 'fundamental-react';
-import { Dropdown } from 'shared/ResourceForm/inputs';
 import { useTranslation } from 'react-i18next';
-import { useCurrentQuery } from './queries';
 import './ResourceCommitment.scss';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-
-function useMetricQuery({ serviceUrl, time }) {
-  const { t } = useTranslation();
-
-  const CPU_QUERY = {
-    text: t('graphs.resource-commitment.cpu'),
-    key: 'cpu',
-  };
-
-  const MEMORY_QUERY = {
-    text: t('graphs.resource-commitment.memory'),
-    key: 'memory',
-  };
-
-  const [queryType, setQueryType] = useState(CPU_QUERY.key);
-  const queryResults = useCurrentQuery({
-    serviceUrl,
-    time,
-    queryType,
-  });
-
-  const QueryDropdown = (
-    <Dropdown
-      compact={false}
-      fullWidth={false}
-      className="query-dropdown"
-      selectedKey={queryType}
-      onSelect={(_, { key }) => {
-        setQueryType(key);
-      }}
-      options={[CPU_QUERY, MEMORY_QUERY]}
-    />
-  );
-
-  return {
-    QueryDropdown,
-    queryResults,
-    queryType,
-  };
-}
+import { useMetricQuery } from './useMetricQuery';
+import { useGetCssVariables } from './useGetCssVariables';
 
 function CommitmentGraph({ data }) {
+  const canvasRef = useRef();
   const { t } = useTranslation();
-  data = [
-    {
-      name: 'capacity',
-      value: 1,
-    },
-    ...data,
-  ];
-
-  const utilized = data.find(d => d.name === 'utilized').value;
-  const capacity = data.find(d => d.name === 'capacity').value;
-  const limits = data.find(d => d.name === 'limits').value;
-
-  const shouldShowAllocatable = limits < capacity;
-
-  data = data.filter(d => d.name !== 'utilized');
-  if (!shouldShowAllocatable) {
-    data = data.filter(d => d.name !== 'capacity');
-  }
-  data.sort((a, b) => a.value - b.value);
-
-  const sum = data.reduce((prev, curr) => prev + curr.value, 0);
-
-  let accumulatedX = 0;
-  data.forEach((v, i) => {
-    v.width = (data[i].value / sum) * 100;
-    v.xPos = accumulatedX;
-    accumulatedX += v.width;
+  const cssVariables = useGetCssVariables({
+    textColor: '--sapTextColor',
+    warningColor: '--sapCriticalColor',
+    outlineColor: '--sapNeutralBackground',
+    capacityFill: '--sapContent_Illustrative_Color6',
+    limitsFill: '--sapContent_Illustrative_Color2',
+    requestsFill: '--sapContent_Illustrative_Color3',
   });
+  const capacity = {
+    name: 'capacity',
+    value: 1,
+  };
+  const limits = data.find(d => d.name === 'limits');
+  const utilized = data.find(d => d.name === 'utilized');
+  const requests = data.find(d => d.name === 'requests');
 
-  const dataToShow = shouldShowAllocatable
-    ? ['requests', 'limits', 'capacity']
-    : ['requests', 'limits'];
+  const redraw = () => {
+    const paddingW = 20;
+    const paddingH = 5;
+    const w = 600;
+    const h = 150;
+    const paddedW = w - paddingW * 2;
+    const paddedH = h - paddingH * 2;
+    const m100 = 1 / 1.5; // 100% / 150%
+
+    if (canvasRef.current) {
+      const ctx = canvasRef.current.getContext('2d');
+      ctx.textAlign = 'center';
+      ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+
+      const barHeight = paddedH / 2;
+      const barHStart = paddingH + paddedH / 8;
+
+      ctx.fillStyle = cssVariables.capacityFill;
+      ctx.fillRect(paddingW, barHStart - 15, paddedW * m100, barHeight + 30);
+
+      ctx.fillStyle = cssVariables.limitsFill;
+      ctx.fillRect(
+        paddingW,
+        barHStart,
+        paddedW * Math.min(limits.value, 1.5) * m100,
+        barHeight,
+      );
+
+      ctx.fillStyle = cssVariables.requestsFill;
+      ctx.fillRect(
+        paddingW,
+        barHStart,
+        paddedW * Math.min(requests.value, 1.5) * m100,
+        barHeight,
+      );
+
+      if (limits.value > 1.5) {
+        ctx.fillStyle = cssVariables.warningColor;
+        ctx.fillRect(paddingW + 1.5 * m100 * paddedW, barHStart, 20, barHeight);
+      }
+
+      ctx.fillStyle = 'black';
+      const x = paddingW + Math.min(utilized.value, 1.5) * m100 * paddedW;
+      const y = barHStart;
+      ctx.moveTo(x, y);
+      ctx.lineTo(x - 4, y - 5);
+      ctx.lineTo(x + 4, y - 5);
+      ctx.fill();
+      ctx.fillRect(x - 1, y, 2, barHeight);
+      ctx.fillRect(x, y, 2, barHeight);
+      ctx.fillText('Utilized', x, y - 10);
+
+      ctx.strokeStyle = cssVariables.outlineColor + '88';
+      ctx.strokeRect(paddingW, barHStart, paddedW, 1);
+      ctx.strokeRect(paddingW, barHStart + barHeight - 1, paddedW, 1);
+
+      for (let i = 0; i <= 150; i += 25) {
+        ctx.strokeStyle = cssVariables.outlineColor + '88';
+        ctx.strokeRect(
+          paddingW + (i / 150) * paddedW - 1,
+          barHStart,
+          1,
+          barHeight,
+        );
+
+        ctx.fillStyle = cssVariables.textColor;
+        ctx.fillText(
+          i + '%',
+          paddingW + (i / 150) * paddedW,
+          paddingH + (paddedH * 9) / 10,
+        );
+      }
+    }
+  };
+
+  useEffect(() => {
+    redraw();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canvasRef, cssVariables]);
 
   return (
-    <>
-      <svg viewBox="0 0 100 12" xmlns="http://www.w3.org/2000/svg">
-        {dataToShow.map(ds => {
-          const v = data.find(d => d.name === ds);
-          return (
-            <rect
-              key={v.name}
-              width={v.width}
-              x={v.xPos}
-              height="4"
-              y="4"
-              className={`graph-box--${v.name}`}
-            />
-          );
-        })}
-        <svg x={(utilized / sum) * 100}>
-          <text y="3" className="a">
-            {t('graphs.resource-commitment.utilized')}
-          </text>
-          <rect height="4" y="4" width="0.2" x="-0.1" />
-          <polygon points="-0.5,3.3, 0.5,3.3, 0,4" />
-        </svg>
-        {!shouldShowAllocatable && (
-          <>
-            <svg x={(capacity / sum) * 100}>
-              <text y="9" className="b">
-                {t('graphs.resource-commitment.capacity')}
-              </text>
-              <rect
-                className="graph-box--utilized"
-                height="4"
-                y="4"
-                width="0.2"
-                x="-0.1"
-              />
-              <polygon
-                className="graph-box--utilized"
-                points="-0.5,8.7, 0.5,8.7, 0,8"
-              />
-              ;
-            </svg>
-          </>
-        )}
-      </svg>
+    <div>
+      <canvas ref={canvasRef} width="600" height="150"></canvas>
       <legend className="graph-legend">
-        {dataToShow.map(e => (
+        {['limits', 'requests', 'capacity'].map(e => (
           <div key={e}>
             <div className={`legend-box graph-box--${e}`}></div>
             <span>{t(`graphs.resource-commitment.${e}`)}</span>
           </div>
         ))}
       </legend>
-    </>
+    </div>
   );
 }
 
