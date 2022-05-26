@@ -803,19 +803,11 @@ deployments:
       containers: Containers
       cpu-limits: CPU Limits
       cpu-requests: CPU Requests
-      expose-service: Expose separate Service
       image: Image
       memory-limits: Memory Limits
       memory-requests: Memory Requests
       one-container-required: Provide at least one container.
-      port: Port
-      port-placeholder: Enter the port exposed by the Service
       runtime-profile: Runtime Profile
-      service: Service
-      target-port: Target Port
-      target-port-placeholder: Enter the target port of the container
-    messages:
-      deployment-ok-service-bad: 'Deployment created, failed to create the Service: {{error}}'
     simple:
       docker-image: Docker Image
       docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx
