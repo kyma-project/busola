@@ -11,7 +11,7 @@ function computeVariables(variableMapping) {
   return obj;
 }
 
-export function useGetCssVariables(variableMapping) {
+export function useCssVariables(variableMapping) {
   const { theme } = useTheme();
   const [variables, setVariables] = useState(() =>
     computeVariables(variableMapping),
@@ -20,7 +20,7 @@ export function useGetCssVariables(variableMapping) {
   useEffect(() => {
     setTimeout(() => {
       setVariables(computeVariables(variableMapping));
-      // timeout is needed
+      // wait for stylesheet to reload
     }, 100);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme, JSON.stringify(variableMapping)]);

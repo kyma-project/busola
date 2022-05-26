@@ -6,9 +6,9 @@ import { LayoutPanel } from 'fundamental-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { useMetricsQuery } from './useMetricsQuery';
-import { useGetCssVariables } from './useGetCssVariables';
-import './ResourceCommitment.scss';
+import { useCssVariables } from 'hooks/useCssVariables';
 import { GraphLegend } from './GraphLegend';
+import './ResourceCommitment.scss';
 
 function CommitmentGraph({ data }) {
   const CANVAS_SCALE = 2;
@@ -16,28 +16,31 @@ function CommitmentGraph({ data }) {
 
   const { t } = useTranslation();
 
-  const [width, setWidth] = useState(300);
-  const height = width * RATIO;
+  const [width, setWidth] = useState(1);
   const canvasRef = useRef();
-  const cssVariables = useGetCssVariables({
+  const cssVariables = useCssVariables({
     textColor: '--sapTextColor',
     warningColor: '--sapCriticalColor',
     outlineColor: '--sapNeutralBackground',
+    tooltipBackgroundColor: '--sapNeutralBackground',
     capacityFill: '--sapContent_Illustrative_Color6',
     limitsFill: '--sapContent_Illustrative_Color2',
     requestsFill: '--sapContent_Illustrative_Color3',
   });
   const { limits, utilized, requests } = data;
+  const [showWarningLabel, setShowWarningLabel] = useState(false);
+  const [mouseOverMainGraph, setMouseOverMainGraph] = useState(false);
+
+  const height = width * RATIO;
+  const horizontalPadding = width / 25;
+  const verticalPadding = width / 30;
+  const innerWidth = width - horizontalPadding * 2;
+  const innerhHeight = height - verticalPadding * 2;
+  const ratio = 1 / 1.5; // 100% / 150%
+  const barHeight = innerhHeight / 2;
+  const barHStart = verticalPadding + innerhHeight / 8;
 
   const redraw = () => {
-    const horizontalPadding = width / 25;
-    const verticalPadding = width / 60;
-    const innerWidth = width - horizontalPadding * 2;
-    const innerhHeight = height - verticalPadding * 2;
-    const ratio = 1 / 1.5; // 100% / 150%
-    const barHeight = innerhHeight / 2;
-    const barHStart = verticalPadding + innerhHeight / 8;
-
     const drawCapacity = ctx => {
       ctx.fillStyle = cssVariables.capacityFill;
       ctx.fillRect(
@@ -68,7 +71,7 @@ function CommitmentGraph({ data }) {
       );
     };
 
-    const drawWarning = ctx => {
+    const drawWarningRect = ctx => {
       if (limits > 1.5) {
         ctx.fillStyle = cssVariables.warningColor;
         ctx.fillRect(
@@ -92,7 +95,13 @@ function CommitmentGraph({ data }) {
       ctx.fill();
       ctx.fillRect(x - 1, y, 2, barHeight);
       ctx.fillRect(x, y, 2, barHeight);
-      ctx.fillText(t('graphs.resource-commitment.utilized'), x, y - 20);
+      ctx.fillText(
+        t('graphs.resource-commitment.utilized-value', {
+          value: (utilized * 100).toFixed(2),
+        }),
+        x,
+        y - 25,
+      );
     };
 
     const drawFrames = ctx => {
@@ -119,21 +128,78 @@ function CommitmentGraph({ data }) {
         ctx.fillText(
           i + '%',
           horizontalPadding + (i / 150) * innerWidth,
-          verticalPadding + (innerhHeight * 9) / 10,
+          verticalPadding + innerhHeight,
         );
       }
     };
 
+    const drawLabelWarning = ctx => {
+      if (!showWarningLabel) return;
+
+      const x = horizontalPadding + 1.5 * ratio * innerWidth;
+      const y = barHStart;
+      const warning = t('graphs.resource-commitment.exceeds');
+      ctx.fillStyle = cssVariables.tooltipBackgroundColor;
+      ctx.strokeStyle = cssVariables.textColor;
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'bottom';
+
+      const labelPadding = 5;
+      const labelWidth = ctx.measureText(warning).width;
+      const labelHeight = parseInt(ctx.font) * 1.2;
+      const boxWidth = Math.round(labelWidth + labelPadding * 2);
+      const boxHeight = Math.round(labelHeight + labelPadding * 2);
+
+      ctx.fillRect(x - boxWidth, y - boxHeight, boxWidth, boxHeight);
+      ctx.strokeRect(x - boxWidth, y - boxHeight, boxWidth, boxHeight);
+
+      ctx.fillStyle = cssVariables.textColor;
+      ctx.fillText(warning, x - labelPadding, y - labelPadding);
+    };
+
+    const drawMainGraphLabel = ctx => {
+      if (!mouseOverMainGraph) return;
+
+      const warning = `Requests: ${(requests * 100).toFixed(2)}%, limits: ${(
+        limits * 100
+      ).toFixed(2)}%`;
+      const x = width / 2;
+      const y = height / 2;
+      ctx.fillStyle = cssVariables.tooltipBackgroundColor;
+      ctx.strokeStyle = cssVariables.textColor;
+      ctx.textAlign = 'middle';
+      ctx.textBaseline = 'bottom';
+
+      const labelPadding = 5;
+      const labelWidth = ctx.measureText(warning).width;
+      const labelHeight = parseInt(ctx.font) * 1.2;
+      const boxWidth = Math.round(labelWidth + labelPadding * 2);
+      const boxHeight = Math.round(labelHeight + labelPadding * 2);
+
+      ctx.fillRect(x - boxWidth / 2, y - boxHeight, boxWidth, boxHeight);
+      ctx.strokeRect(x - boxWidth / 2, y - boxHeight, boxWidth, boxHeight);
+
+      ctx.fillStyle = cssVariables.textColor;
+      ctx.fillText(warning, x, y - labelPadding);
+    };
+
     const ctx = canvasRef.current.getContext('2d');
     ctx.font = `${12 * CANVAS_SCALE}px sans-serif`;
+    ctx.textBaseline = 'alphabetic';
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
-    drawCapacity(ctx);
-    drawLimits(ctx);
-    drawRequests(ctx);
-    drawWarning(ctx);
-    drawUtilized(ctx);
-    drawFrames(ctx);
+    for (const fn of [
+      drawCapacity,
+      drawLimits,
+      drawRequests,
+      drawWarningRect,
+      drawUtilized,
+      drawFrames,
+      drawLabelWarning,
+      drawMainGraphLabel,
+    ]) {
+      fn(ctx);
+    }
   };
 
   useEffect(() => {
@@ -141,7 +207,16 @@ function CommitmentGraph({ data }) {
 
     redraw();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canvasRef, cssVariables, limits, utilized, requests, width]);
+  }, [
+    canvasRef,
+    cssVariables,
+    limits,
+    utilized,
+    requests,
+    width,
+    showWarningLabel,
+    mouseOverMainGraph,
+  ]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -154,19 +229,23 @@ function CommitmentGraph({ data }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canvasRef]);
 
-  // const mousemove = e => {
-  // const rect = e.target.getBoundingClientRect();
-  // const x = Math.round(e.clientX - rect.left) * CANVAS_SCALE;
-  // const y = Math.round(e.clientY - rect.top) * CANVAS_SCALE;
-  // const bar = Math.floor((x - geometry.graph.left) / geometry.sectionWidth);
-  // if (y > geometry.graph.height + geometry.graph.top) {
-  //   setActiveBar(null);
-  // } else if (bar >= 0 && bar <= dataPoints) {
-  //   setActiveBar(bar);
-  // } else {
-  //   setActiveBar(null);
-  // }
-  // };
+  const mousemove = e => {
+    const rect = e.target.getBoundingClientRect();
+    const x = Math.round(e.clientX - rect.left) * CANVAS_SCALE;
+    const y = Math.round(e.clientY - rect.top) * CANVAS_SCALE;
+
+    const yInsideBar = y >= barHStart && y <= barHStart + barHeight;
+    const xInsideWarning =
+      x >= horizontalPadding + 1.5 * ratio * innerWidth &&
+      x <= horizontalPadding + 1.5 * ratio * innerWidth + 20;
+    setShowWarningLabel(yInsideBar && xInsideWarning);
+    const xInsideMainBar =
+      x >= horizontalPadding &&
+      x <=
+        horizontalPadding +
+          innerWidth * Math.min(Math.max(limits, requests), 1.5) * ratio;
+    setMouseOverMainGraph(yInsideBar && xInsideMainBar);
+  };
 
   return (
     <div>
@@ -175,8 +254,7 @@ function CommitmentGraph({ data }) {
         ref={canvasRef}
         width={width}
         height={height}
-        // onMouseMove={mousemove}
-        // onMouseOut={() => setActiveBar(null)}
+        onMouseMove={mousemove}
       ></canvas>
       <GraphLegend />
     </div>
