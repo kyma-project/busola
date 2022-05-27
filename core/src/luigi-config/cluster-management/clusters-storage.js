@@ -2,11 +2,7 @@ import i18next from 'i18next';
 import { getBusolaClusterParams } from '../busola-cluster-params';
 import { showAlert } from '../utils/showAlert';
 import { getTargetClusterConfig } from '../utils/target-cluster-config';
-import {
-  getActiveCluster,
-  getActiveClusterName,
-  getCurrentConfig,
-} from './cluster-management';
+import { getActiveClusterName } from './cluster-management';
 
 const CLUSTERS_KEY = 'busola.clusters';
 
