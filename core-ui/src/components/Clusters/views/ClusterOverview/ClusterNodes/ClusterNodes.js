@@ -96,7 +96,7 @@ export function ClusterNodes() {
               percentage: cpu.percentage,
             }),
             position: 'bottom',
-            color: 'var(--sapIndicationColor_5)',
+            color: 'var(--sapIndicationColor_7)',
           }}
         />
       ) : (
