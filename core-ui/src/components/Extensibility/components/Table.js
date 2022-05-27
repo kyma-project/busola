@@ -6,13 +6,10 @@ import { useGetTranslation } from '../helpers';
 import { Widget } from './Widget';
 
 export function Table({ value, structure, schema }) {
-  const { t } = useGetTranslation();
+  const { widgetT } = useGetTranslation();
 
-  const key = structure.name || structure.path;
   const headerRenderer = () =>
-    (structure.columns || structure.children || []).map(column =>
-      t(`${key}.${column.name || column.path}`),
-    );
+    (structure.columns || []).map(column => widgetT([structure, column]));
 
   const rowRenderer = entry =>
     structure.columns.map(column => (

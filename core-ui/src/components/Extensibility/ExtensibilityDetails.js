@@ -9,7 +9,7 @@ import { Widget } from './components/Widget';
 import { useGetTranslation, TranslationBundleContext } from './helpers';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
-  const { t } = useGetTranslation();
+  const { widgetT } = useGetTranslation();
 
   const detailsProps = usePrepareDetailsProps(
     resMetaData.navigation.path,
@@ -42,7 +42,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
           resMetaData.navigation.label || resMetaData.navigation.path,
         )}
         customColumns={header.map(def => ({
-          header: t(def.path || def.id),
+          header: widgetT(def),
           value: resource => (
             <Widget value={resource} structure={def} schema={schema} />
           ),

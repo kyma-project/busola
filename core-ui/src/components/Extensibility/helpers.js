@@ -22,10 +22,12 @@ export const useGetTranslation = path => {
   return {
     t: (path, ...props) => t(`${translationBundle}:${path}`, ...props) || path,
     widgetT: (def, options = {}) => {
-      const path = def.name || def.path;
+      const items = Array.isArray(def) ? def : [def];
+      const path = items.map(item => item.name || item.path).join('.');
       return t(`${translationBundle}:${path}`, {
         ...options,
-        defaultValue: path?.split('.')?.pop(),
+        defaultValue: path,
+        // defaultValue: path?.split('.')?.pop(),
       });
     },
   };

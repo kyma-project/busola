@@ -7,15 +7,12 @@ import { widgets } from './index';
 export const SimpleRenderer = ({ children }) => children;
 
 export function InlineWidget({ children, structure, ...props }) {
-  const { t } = useGetTranslation();
-  return (
-    <LayoutPanelRow name={t(structure.path || structure.id)} value={children} />
-  );
+  const { widgetT } = useGetTranslation();
+  return <LayoutPanelRow name={widgetT(structure)} value={children} />;
 }
 
 export function Widget({ structure, value, inlineRenderer, ...props }) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
-  console.log('Widget', { structure, value, props });
   const { Plain, Text } = widgets;
 
   if (Array.isArray(structure)) {

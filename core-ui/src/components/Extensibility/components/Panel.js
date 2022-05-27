@@ -5,13 +5,12 @@ import { useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 
 export function Panel({ value, structure, schema }) {
-  const { t } = useGetTranslation();
-  const key = structure.name || structure.path;
+  const { widgetT } = useGetTranslation();
 
   return (
-    <LayoutPanel className="fd-margin--md" key={key}>
+    <LayoutPanel className="fd-margin--md">
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={t(key)} />
+        <LayoutPanel.Head title={widgetT(structure)} />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
         {structure.children?.map((def, idx) => (
