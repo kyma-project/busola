@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 
-import { createTemplate } from './helpers';
-import { ResourceSchema } from './components/ResourceSchema';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+
+import { createTemplate } from './helpers';
+import { ResourceSchema } from './ResourceSchema';
 
 export function ExtensibilityCreate({
   formElementRef,

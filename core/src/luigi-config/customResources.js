@@ -1,5 +1,7 @@
 import { config } from './config';
 import { failFastFetch } from './navigation/queries';
+import jsyaml from 'js-yaml';
+import { merge } from 'lodash';
 
 let customResources = null;
 
@@ -29,18 +31,29 @@ async function loadTargetClusterCRs(authData) {
   const { items } = await response.json();
 
   return items.map(item =>
-    Object.fromEntries(
-      Object.entries(item.data)
-        .map(([k, v]) => {
-          try {
-            return [k, JSON.parse(v)];
-          } catch (e) {
-            console.warn('cannot parse ', k, v);
-            return null;
+    Object.entries(item.data).reduce((acc, [key, value]) => {
+      try {
+        const match = key.match(/^translations(-([a-z]{2}))?$/);
+        if (match) {
+          let translations = acc.translations || {};
+          const lang = match[2];
+          const langTranslations = jsyaml.load(value);
+          if (lang) {
+            translations = merge(translations, { [lang]: langTranslations });
+          } else {
+            translations = merge(translations, langTranslations);
           }
-        })
-        .filter(Boolean),
-    ),
+          return { ...acc, translations };
+        }
+
+        return {
+          ...acc,
+          [key]: jsyaml.load(value, { json: true }),
+        };
+      } catch (error) {
+        console.warn('cannot parse ', key, value, error);
+      }
+    }, {}),
   );
 }
 
