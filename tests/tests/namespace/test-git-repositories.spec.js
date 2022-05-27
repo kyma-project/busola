@@ -83,11 +83,6 @@ context('Test Git Repositories', () => {
       .contains(/default-token/)
       .click();
 
-    // move to Advanced
-    cy.getIframeBody()
-      .contains('Advanced')
-      .click();
-
     // edit labels
     cy.getIframeBody()
       .find('[role=dialog]')

@@ -106,10 +106,6 @@ context('Test Cron Jobs', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Advanced')
-      .click();
-
-    cy.getIframeBody()
       .find('[placeholder="Hour"]')
       .clear()
       .type('*');

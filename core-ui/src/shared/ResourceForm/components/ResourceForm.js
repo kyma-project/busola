@@ -47,9 +47,15 @@ export function ResourceForm({
     toggleFormFn,
   });
 
-  const [mode, setMode] = React.useState(
-    onlyYaml ? ModeSelector.MODE_YAML : ModeSelector.MODE_SIMPLE,
-  );
+  const handleInitialMode = () => {
+    if (onlyYaml) return ModeSelector.MODE_YAML;
+
+    if (!!initialResource) return ModeSelector.MODE_ADVANCED;
+
+    return ModeSelector.MODE_SIMPLE;
+  };
+
+  const [mode, setMode] = React.useState(handleInitialMode);
   const [actionsEditor, setActionsEditor] = React.useState(null);
   const validationRef = useRef(true);
 
@@ -96,7 +102,13 @@ export function ResourceForm({
   return (
     <section className={classnames('resource-form', className)}>
       {presetsSelector}
-      {onlyYaml ? null : <ModeSelector mode={mode} setMode={setMode} />}
+      {onlyYaml ? null : (
+        <ModeSelector
+          mode={mode}
+          setMode={setMode}
+          isEditing={!!initialResource}
+        />
+      )}
       <form ref={formElementRef} onSubmit={onSubmit || createResource}>
         {mode === ModeSelector.MODE_SIMPLE && (
           <div onChange={onChange} className="simple-form">

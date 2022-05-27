@@ -69,10 +69,6 @@ context('Test Cluster Role Bindings', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Advanced')
-      .click();
-
-    cy.getIframeBody()
       .find('[role="document"]')
       .contains('User')
       .click();
