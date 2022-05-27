@@ -132,19 +132,30 @@ export function getMetric(type, mode, metric, { step, ...data }) {
   return metrics[metric];
 }
 
-export function usePrometheus(
+export function usePrometheus({
   type,
   mode,
   metricId,
-  { items, timeSpan, ...props },
-) {
-  const { serviceUrl } = useFeature('PROMETHEUS');
+  defaultQuery,
+  additionalProps: {
+    items = 1,
+    timeSpan = 60,
+    skip = false,
+    parseData = true,
+    ...props
+  },
+}) {
+  const {
+    serviceUrl = '/api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1',
+  } = useFeature('PROMETHEUS');
   const step = timeSpan / items;
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [query, setQuery] = useState(null);
 
-  const metric = getMetric(type, mode, metricId, { step, ...props });
+  const metric =
+    defaultQuery ||
+    getMetric(type, mode, metricId, { step, ...props })?.prometheusQuery;
 
   useEffect(() => {
     const tick = () => {
@@ -160,32 +171,63 @@ export function usePrometheus(
         `query_range?` +
           `start=${newStartDate.toISOString()}&` +
           `end=${newEndDate.toISOString()}&` +
-          `step=${timeSpan / items}&` +
-          `query=${metric.prometheusQuery}`,
+          `step=${step}&` +
+          `query=${metric}`,
       );
     };
 
     tick();
-    const loop = setInterval(tick, (timeSpan / items) * 1000);
+    const loop = setInterval(tick, step * 1000);
     return () => clearInterval(loop);
-  }, [timeSpan, items, metric.prometheusQuery]);
+  }, [timeSpan, step, metric]);
 
-  let { data, error, loading } = useGet(`${serviceUrl}/${query}`, {
+  const { data, error, loading } = useGet(`${serviceUrl}/${query}`, {
     pollingInterval: 0,
     skip: !query,
   });
 
   let prometheusData = [];
   let prometheusLabels = [];
-
-  if (mode === 'multiple') {
+  if (parseData === false) {
     (data?.data.result || []).forEach(d => {
-      let tempPrometheusData = [];
+      const result = {
+        node: d?.metric?.node,
+        value: d?.values?.[0]?.[1],
+      };
+      prometheusData.push(result);
+    });
+  } else {
+    if (mode === 'multiple') {
+      (data?.data.result || []).forEach(d => {
+        let tempPrometheusData = [];
+
+        let stepMultiplier = 0;
+        let helpIndex = 0;
+        const dataValues = d?.values;
+        const metric = d?.metric;
+        if (dataValues?.length > 0) {
+          for (let i = 0; i < items; i++) {
+            const [timestamp, graphValue] = dataValues[helpIndex] || [];
+            const timeDifference = Math.floor(
+              timestamp - startDate.getTime() / 1000,
+            );
+            if (stepMultiplier === timeDifference) {
+              helpIndex++;
+              tempPrometheusData.push(graphValue);
+            } else {
+              tempPrometheusData.push(null);
+            }
+            stepMultiplier += step;
+          }
+          prometheusLabels.push(`container="${metric.container}"`);
+          prometheusData.push(tempPrometheusData);
+        }
+      });
+    } else {
+      const dataValues = data?.data.result[0]?.values;
 
       let stepMultiplier = 0;
       let helpIndex = 0;
-      const dataValues = d?.values;
-      const metric = d?.metric;
       if (dataValues?.length > 0) {
         for (let i = 0; i < items; i++) {
           const [timestamp, graphValue] = dataValues[helpIndex] || [];
@@ -194,34 +236,12 @@ export function usePrometheus(
           );
           if (stepMultiplier === timeDifference) {
             helpIndex++;
-            tempPrometheusData.push(graphValue);
+            prometheusData.push(graphValue);
           } else {
-            tempPrometheusData.push(null);
+            prometheusData.push(null);
           }
           stepMultiplier += step;
         }
-        prometheusLabels.push(`container="${metric.container}"`);
-        prometheusData.push(tempPrometheusData);
-      }
-    });
-  } else {
-    const dataValues = data?.data.result[0]?.values;
-
-    let stepMultiplier = 0;
-    let helpIndex = 0;
-    if (dataValues?.length > 0) {
-      for (let i = 0; i < items; i++) {
-        const [timestamp, graphValue] = dataValues[helpIndex] || [];
-        const timeDifference = Math.floor(
-          timestamp - startDate.getTime() / 1000,
-        );
-        if (stepMultiplier === timeDifference) {
-          helpIndex++;
-          prometheusData.push(graphValue);
-        } else {
-          prometheusData.push(null);
-        }
-        stepMultiplier += step;
       }
     }
   }
@@ -232,8 +252,8 @@ export function usePrometheus(
     error,
     loading,
     step,
-    binary: metric.binary,
-    unit: metric.unit,
+    binary: metric?.binary,
+    unit: metric?.unit,
     startDate,
     endDate,
   };
