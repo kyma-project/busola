@@ -81,10 +81,6 @@ context('Test Replica Sets', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Advanced')
-      .click();
-
-    cy.getIframeBody()
       .find(
         '[placeholder="Enter the Docker image tag, for example, bitnami/nginx"]',
       )

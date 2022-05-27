@@ -168,8 +168,7 @@ li {
 .fd-dropdown[fullwidth='true'] {
   width: 100%;
 
-  .fd-popper__body,
-  .fd-popover {
+  .fd-popper__body {
     width: 100%;
   }
 
@@ -384,6 +383,10 @@ input[type='checkbox'] {
 
 .fd-popover__popper b {
   font-weight: bold;
+}
+
+.fd-popover {
+  width: 100%;
 }
 
 .fd-color--warning {

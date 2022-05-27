@@ -69,10 +69,6 @@ context('Test DNS Entries', () => {
       .contains('Edit')
       .click();
 
-    cy.getIframeBody()
-      .contains('Advanced')
-      .click();
-
     // name should be disabled for edit
     cy.getIframeBody()
       .find('[ariaLabel="DNS Entry name"]:visible')

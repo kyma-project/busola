@@ -5,7 +5,6 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { k8sNamePattern } from 'shared/components/K8sNameInput/K8sNameInput';
 import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
-import './K8sResourceSelect.scss';
 
 const commonPropTypes = {
   onSelect: PropTypes.func.isRequired,

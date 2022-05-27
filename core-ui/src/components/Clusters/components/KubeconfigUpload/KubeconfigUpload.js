@@ -39,6 +39,7 @@ export function KubeconfigUpload({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [t],
   );
+
   return (
     <>
       <KubeconfigFileUpload
@@ -53,7 +54,7 @@ export function KubeconfigUpload({
         height="320px"
         autocompletionDisabled
         language="yaml"
-        value={jsyaml.dump(kubeconfig)}
+        value={kubeconfig ? jsyaml.dump(kubeconfig) : ''}
         customSchemaId="cluster"
         onMount={setEditor}
         onChange={updateKubeconfig}
