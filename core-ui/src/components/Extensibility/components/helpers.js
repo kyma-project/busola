@@ -5,6 +5,7 @@ import * as jp from 'jsonpath';
 export const TranslationBundleContext = createContext('extensibility');
 
 export const getValue = (resource, path) => {
+  if (!resource) return undefined;
   if (!path || path === '$') return resource;
 
   if (path.startsWith('$.')) {

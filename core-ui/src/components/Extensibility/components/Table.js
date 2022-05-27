@@ -20,7 +20,7 @@ export function Table({ value, structure, schema }) {
   return (
     <GenericList
       showSearchSuggestion={false}
-      entries={value}
+      entries={value || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
     />
