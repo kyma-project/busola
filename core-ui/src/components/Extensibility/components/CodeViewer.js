@@ -1,6 +1,8 @@
 import React from 'react';
-import { useGetTranslation } from './helpers';
+
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
+
+import { useGetTranslation } from '../helpers';
 
 export function CodeViewer({ value, structure, schema }) {
   const { t } = useGetTranslation();

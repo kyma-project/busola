@@ -1,7 +1,7 @@
 import React from 'react';
 import { LayoutPanel } from 'fundamental-react';
 
-import { useGetTranslation } from './helpers';
+import { useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 
 export function Panel({ value, structure, schema }) {

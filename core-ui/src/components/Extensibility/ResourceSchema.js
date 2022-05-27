@@ -11,8 +11,8 @@ import {
 } from '@ui-schema/ui-schema';
 import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
 
-import formWidgets from '../componenta-form';
-import { SchemaRulesInjector } from '../SchemaRulesInjector';
+import formWidgets from './components-form';
+import { SchemaRulesInjector } from './SchemaRulesInjector';
 
 import { METADATA_SCHEMA } from './metadataSchema';
 

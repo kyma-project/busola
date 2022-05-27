@@ -1,8 +1,8 @@
 import React from 'react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
+import { getValue, useGetTranslation } from '../helpers';
 import { widgets } from './index';
-import { getValue, useGetTranslation } from './helpers';
 
 export const SimpleRenderer = ({ children }) => children;
 

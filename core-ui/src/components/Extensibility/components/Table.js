@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { useGetTranslation } from './helpers';
+
+import { useGetTranslation } from '../helpers';
 import { Widget } from './Widget';
 
 export function Table({ value, structure, schema }) {

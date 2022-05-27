@@ -1,20 +1,15 @@
 import React from 'react';
-import { useGetCRbyPath } from './useGetCRbyPath';
+
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { prettifyNamePlural } from 'shared/utils/helpers';
 
+import { useGetCRbyPath } from './useGetCRbyPath';
 import { Widget } from './components/Widget';
-import {
-  useGetTranslation,
-  TranslationBundleContext,
-} from './components/helpers';
+import { useGetTranslation, TranslationBundleContext } from './helpers';
 
-export const ExtensibilityDetails = () => {
+export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const { t } = useGetTranslation();
-  const resMetaData = useGetCRbyPath();
-
-  console.log('resMetaData', resMetaData);
 
   const detailsProps = usePrepareDetailsProps(
     resMetaData.navigation.path,
@@ -60,6 +55,16 @@ export const ExtensibilityDetails = () => {
         breadcrumbs={breadcrumbs}
         {...detailsProps}
       />
+    </TranslationBundleContext.Provider>
+  );
+};
+
+export const ExtensibilityDetails = () => {
+  const resMetaData = useGetCRbyPath();
+
+  return (
+    <TranslationBundleContext.Provider value={resMetaData.navigation.path}>
+      <ExtensibilityDetailsCore resMetaData={resMetaData} />
     </TranslationBundleContext.Provider>
   );
 };

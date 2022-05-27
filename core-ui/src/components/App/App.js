@@ -9,8 +9,8 @@ import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { useSentry } from 'hooks/useSentry';
 
-import { ExtensibilityDetails } from 'components/Extensibility/extensibilityDetails';
-import { ExtensibilityList } from 'components/Extensibility/extensibilityList';
+import { ExtensibilityDetails } from 'components/Extensibility/ExtensibilityDetails';
+import { ExtensibilityList } from 'components/Extensibility/ExtensibilityList';
 
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
