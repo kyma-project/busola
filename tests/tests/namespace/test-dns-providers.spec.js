@@ -79,10 +79,6 @@ context('Test DNS Providers', () => {
       .find('[ariaLabel="DNS Provider name"]:visible', { log: false })
       .should('have.attr', 'readonly', 'readonly');
 
-    cy.getIframeBody()
-      .contains('Advanced')
-      .click();
-
     // edit labels
     cy.getIframeBody()
       .find('[role=dialog]')

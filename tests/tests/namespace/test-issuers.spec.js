@@ -104,6 +104,10 @@ context('Test Issuers', () => {
       .type('mail@server.com');
 
     cy.getIframeBody()
+      .contains('Include Domains')
+      .click();
+
+    cy.getIframeBody()
       .find('[placeholder^="Domain"]:visible')
       .type('other.server.com{enter}another.server.com');
 
