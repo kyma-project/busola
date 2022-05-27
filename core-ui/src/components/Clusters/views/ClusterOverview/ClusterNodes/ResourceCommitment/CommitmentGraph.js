@@ -11,6 +11,8 @@ function getTextBoundingBox(ctx, text, padding) {
   return { boxWidth, boxHeight };
 }
 
+const LIMITS_WARNING_VALUE = 1.5; // 150%
+
 export function CommitmentGraph({ data }) {
   const CANVAS_SCALE = 2; // used to make Canvas text crisp
 
@@ -30,17 +32,18 @@ export function CommitmentGraph({ data }) {
   const [showWarningLabel, setShowWarningLabel] = useState(false);
   const [mouseOverMainGraph, setMouseOverMainGraph] = useState(false);
 
+  const { limits, utilized, requests } = data;
+
   const height = width / 6;
   const horizontalPadding = width / 25;
   const verticalPadding = width / 30;
   const innerWidth = width - horizontalPadding * 2;
   const innerhHeight = height - verticalPadding * 2;
-  const ratio = 1 / 1.5; // 100% / 150%
+  const maxValue = Math.min(limits, LIMITS_WARNING_VALUE);
+  const ratio = 1 / maxValue;
   const barHeight = innerhHeight / 2;
   const barHStart = verticalPadding + innerhHeight / 8;
   const warningBarWidth = 20;
-
-  const { limits, utilized, requests } = data;
 
   const redraw = () => {
     const drawCapacity = ctx => {
@@ -58,7 +61,7 @@ export function CommitmentGraph({ data }) {
       ctx.fillRect(
         horizontalPadding,
         barHStart,
-        innerWidth * Math.min(limits, 1.5) * ratio,
+        innerWidth * Math.min(limits, LIMITS_WARNING_VALUE) * ratio,
         barHeight,
       );
     };
@@ -68,16 +71,16 @@ export function CommitmentGraph({ data }) {
       ctx.fillRect(
         horizontalPadding,
         barHStart,
-        innerWidth * Math.min(requests, 1.5) * ratio,
+        innerWidth * Math.min(requests, LIMITS_WARNING_VALUE) * ratio,
         barHeight,
       );
     };
 
     const drawWarningBar = ctx => {
-      if (limits > 1.5) {
+      if (limits > LIMITS_WARNING_VALUE) {
         ctx.fillStyle = cssVariables.warningColor;
         ctx.fillRect(
-          horizontalPadding + 1.5 * ratio * innerWidth,
+          horizontalPadding + LIMITS_WARNING_VALUE * ratio * innerWidth,
           barHStart,
           warningBarWidth,
           barHeight,
@@ -89,7 +92,8 @@ export function CommitmentGraph({ data }) {
       ctx.textAlign = 'left';
       ctx.fillStyle = cssVariables.textColor;
       const x =
-        horizontalPadding + Math.min(utilized, 1.5) * ratio * innerWidth;
+        horizontalPadding +
+        Math.min(utilized, LIMITS_WARNING_VALUE) * ratio * innerWidth;
       const y = barHStart;
       ctx.moveTo(x, y);
       ctx.lineTo(x - 10, y - 11);
@@ -116,28 +120,20 @@ export function CommitmentGraph({ data }) {
         1,
       );
 
-      for (let i = 0; i <= 150; i += 25) {
+      for (let i = 0; i <= 100 * maxValue; i += 25) {
         ctx.strokeStyle = cssVariables.outlineColor + '88';
-        ctx.strokeRect(
-          horizontalPadding + (i / 150) * innerWidth - 1,
-          barHStart,
-          1,
-          barHeight,
-        );
+        const x = horizontalPadding + (i / (100 * maxValue)) * innerWidth;
+        ctx.strokeRect(x - 1, barHStart, 1, barHeight);
 
         ctx.fillStyle = cssVariables.textColor;
-        ctx.fillText(
-          i + '%',
-          horizontalPadding + (i / 150) * innerWidth,
-          verticalPadding + innerhHeight,
-        );
+        ctx.fillText(i + '%', x, verticalPadding + innerhHeight);
       }
     };
 
     const drawLabelWarning = ctx => {
-      if (!showWarningLabel || limits <= 1.5) return;
+      if (!showWarningLabel || limits <= LIMITS_WARNING_VALUE) return;
 
-      const x = horizontalPadding + 1.5 * ratio * innerWidth;
+      const x = horizontalPadding + LIMITS_WARNING_VALUE * ratio * innerWidth;
       const y = barHStart;
       const warning = t('graphs.resource-commitment.limits-exceed');
       ctx.fillStyle = cssVariables.tooltipBackgroundColor;
@@ -243,7 +239,7 @@ export function CommitmentGraph({ data }) {
       isInsideRect(
         { x, y },
         {
-          rX: horizontalPadding + 1.5 * ratio * innerWidth,
+          rX: horizontalPadding + LIMITS_WARNING_VALUE * ratio * innerWidth,
           rY: barHStart,
           rWidth: warningBarWidth,
           rHeight: barHeight,
@@ -257,7 +253,9 @@ export function CommitmentGraph({ data }) {
           rX: horizontalPadding,
           rY: barHStart,
           rWidth:
-            innerWidth * Math.min(Math.max(limits, requests), 1.5) * ratio,
+            innerWidth *
+            Math.min(Math.max(limits, requests), LIMITS_WARNING_VALUE) *
+            ratio,
           rHeight: barHeight,
         },
       ),
