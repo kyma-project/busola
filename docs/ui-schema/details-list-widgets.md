@@ -1,5 +1,5 @@
 ---
-title: UI Schema
+title: Details list widgets
 ---
 
 {INTRODUCTION}
