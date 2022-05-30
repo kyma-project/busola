@@ -92,10 +92,6 @@ context('Test OAuth2 Clients', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Advanced')
-      .click();
-
-    cy.getIframeBody()
       .contains('label', 'ID Token')
       .click();
 

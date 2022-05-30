@@ -145,10 +145,6 @@ context('Test Jobs', () => {
       .contains('Edit')
       .click();
 
-    cy.getIframeBody()
-      .contains('Advanced')
-      .click();
-
     // containers section should be readonly
     cy.getIframeBody().contains(
       'After a Job is created, the containers are read-only.',

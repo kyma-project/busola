@@ -212,11 +212,12 @@ context('Test reduced permissions', () => {
       .contains('button', 'Delete')
       .click();
 
+    cy.getIframeBody().contains('Are you sure you want to');
+
     cy.getIframeBody()
+      .wait(1000)
       .find('[data-testid="delete-confirmation"]')
       .click();
-
-    cy.contains('Failed to delete the Namespace').should('be.visible');
 
     cy.contains('Close').click();
 

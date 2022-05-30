@@ -125,10 +125,6 @@ context('Test API Rules in the Function details view', () => {
     cy.getIframeBody().contains(API_RULE_NAME);
 
     cy.getIframeBody()
-      .contains('Advanced')
-      .click();
-
-    cy.getIframeBody()
       .contains('Add Rule')
       .click();
 

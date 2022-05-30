@@ -28,10 +28,15 @@ export function SingleGraph({ type, mode, timeSpan, metric, ...props }) {
     loading,
     startDate,
     endDate,
-  } = usePrometheus(type, mode, metric, {
-    items: DATA_POINTS,
-    timeSpan,
-    ...props,
+  } = usePrometheus({
+    type,
+    mode,
+    metricId: metric,
+    additionalProps: {
+      items: DATA_POINTS,
+      timeSpan,
+      ...props,
+    },
   });
 
   return (
@@ -66,21 +71,26 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
     loading: loading1,
     startDate,
     endDate,
-  } = usePrometheus(type, 'single', metric1, {
-    items: DATA_POINTS,
-    timeSpan,
-    ...props,
-  });
-  const { data: data2, error: error2, loading: loading2 } = usePrometheus(
+  } = usePrometheus({
     type,
-    'single',
-    metric2,
-    {
+    mode: 'single',
+    metricId: metric1,
+    additionalProps: {
       items: DATA_POINTS,
       timeSpan,
       ...props,
     },
-  );
+  });
+  const { data: data2, error: error2, loading: loading2 } = usePrometheus({
+    type,
+    mode: 'single',
+    metricId: metric2,
+    additionalProps: {
+      items: DATA_POINTS,
+      timeSpan,
+      ...props,
+    },
+  });
 
   return (
     <>
@@ -127,10 +137,15 @@ export function SingleMetricMultipeGraph({
     loading,
     startDate,
     endDate,
-  } = usePrometheus(type, mode, metric, {
-    items: DATA_POINTS,
-    timeSpan,
-    ...props,
+  } = usePrometheus({
+    type,
+    mode,
+    metricId: metric,
+    additionalProps: {
+      items: DATA_POINTS,
+      timeSpan,
+      ...props,
+    },
   });
   return (
     <>
