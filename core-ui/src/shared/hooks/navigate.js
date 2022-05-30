@@ -1,13 +1,29 @@
 import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 
+export function getResourceDetailsLink(resourceType, resourceName) {
+  const context = LuigiClient.getContext();
+  const namespace = context.namespaceId
+    ? `/namespaces/${context.namespaceId}`
+    : '';
+
+  return `${window.location.ancestorOrigins[0]}/cluster/${context.activeClusterName}${namespace}/${resourceType}/details/${resourceName}`;
+}
+
 function navigateToResourceDetails(resourceName) {
   LuigiClient.linkManager()
     .fromClosestContext()
     .navigate('/details/' + resourceName);
 }
 
-export function navigateToFixedPathResourceDetails(resourceType, resourceName) {
+export function navigateToFixedPathResourceDetails(
+  resourceType,
+  resourceName,
+  e,
+) {
+  if (e.metaKey) return;
+  e.preventDefault();
+
   LuigiClient.linkManager()
     .fromContext('namespace')
     .navigate(`${resourceType}/details/${resourceName}`);

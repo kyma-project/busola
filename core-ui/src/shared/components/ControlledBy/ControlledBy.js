@@ -9,6 +9,7 @@ import {
 } from 'shared/hooks/navigate';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import shortid from 'shortid';
+import { getResourceDetailsLink } from 'shared/hooks/navigate';
 
 function pathExists(path) {
   const pathId = shortid.generate();
@@ -66,9 +67,10 @@ export const GoToDetailsLink = ({
     return (
       <Link
         className="fd-link"
-        onClick={_ => {
-          navigateToFixedPathResourceDetails(resource, name);
+        onClick={e => {
+          navigateToFixedPathResourceDetails(resource, name, e);
         }}
+        href={getResourceDetailsLink(resource, name)}
       >
         {noBrackets ? name : `(${name})`}
       </Link>
@@ -80,6 +82,7 @@ export const GoToDetailsLink = ({
         onClick={_ => {
           navigateToClusterResourceDetails(resource, name);
         }}
+        href={getResourceDetailsLink(resource, name)}
       >
         {noBrackets ? name : `(${name})`}
       </Link>

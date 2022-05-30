@@ -13,7 +13,10 @@ export function RoleRef({ roleRef }) {
     return EMPTY_TEXT_PLACEHOLDER;
   }
 
-  const navigateToRoleDetails = () => {
+  const navigateToRoleDetails = e => {
+    if (e.metaKey) return;
+    e.preventDefault();
+
     if (roleRef.kind === 'ClusterRole') {
       LuigiClient.linkManager()
         .fromContext('cluster')
@@ -25,9 +28,26 @@ export function RoleRef({ roleRef }) {
     }
   };
 
+  const roleDetails = () => {
+    const context = LuigiClient.getContext();
+    const namespace = context.namespaceId
+      ? `/namespaces/${context.namespaceId}`
+      : '';
+
+    if (roleRef.kind === 'ClusterRole') {
+      return `${window.location.ancestorOrigins[0]}/cluster/${context.activeClusterName}${namespace}/clusterroles/details/${roleRef.name}`;
+    } else {
+      return `${window.location.ancestorOrigins[0]}/cluster/${context.activeClusterName}${namespace}/roles/details/${roleRef.name}`;
+    }
+  };
+
   return (
     <div>
-      <Link className="fd-link" onClick={() => navigateToRoleDetails()}>
+      <Link
+        className="fd-link"
+        onClick={e => navigateToRoleDetails(e)}
+        href={roleDetails()}
+      >
         {roleRef.name}
       </Link>
       <Tooltip delay={0} content={roleRef.kind}>
