@@ -1,30 +1,12 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { Labels } from 'shared/components/Labels/Labels';
-import { Link } from 'shared/components/Link/Link';
-import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { usePrepareListProps } from 'resources/helpers';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
-import {
-  getValue,
-  TranslationBundleContext,
-  useGetTranslation,
-} from './helpers';
+import { TranslationBundleContext, useGetTranslation } from './helpers';
 import { Widget } from './components/Widget';
-
-function resolveBadgeType(value, columnProps) {
-  const { successValues, warningValues } = columnProps;
-  if ((successValues || []).includes(value)) {
-    return 'success';
-  } else if ((warningValues || []).includes(value)) {
-    return 'warning';
-  }
-  return undefined;
-}
 
 export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
