@@ -3,6 +3,7 @@ import LuigiClient from '@luigi-project/client';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Link } from 'fundamental-react';
+import { getResourceDetailsLink } from 'shared/hooks/navigate';
 
 const shortRoleKind = roleRefKind => {
   return roleRefKind === 'ClusterRole' ? '(CR)' : '(R)';
@@ -29,15 +30,10 @@ export function RoleRef({ roleRef }) {
   };
 
   const roleDetails = () => {
-    const context = LuigiClient.getContext();
-    const namespace = context.namespaceId
-      ? `/namespaces/${context.namespaceId}`
-      : '';
-
     if (roleRef.kind === 'ClusterRole') {
-      return `${window.location.ancestorOrigins[0]}/cluster/${context.activeClusterName}${namespace}/clusterroles/details/${roleRef.name}`;
+      return getResourceDetailsLink('clusterroles', roleRef.name);
     } else {
-      return `${window.location.ancestorOrigins[0]}/cluster/${context.activeClusterName}${namespace}/roles/details/${roleRef.name}`;
+      return getResourceDetailsLink('roles', roleRef.name);
     }
   };
 
