@@ -22,7 +22,7 @@ export function CommitmentGraph({ data }) {
   const canvasRef = useRef();
   const cssVariables = useCssVariables({
     textColor: '--sapTextColor',
-    warningColor: '--sapWarningColor',
+    warningColor: '--sapShell_NegativeColor',
     outlineColor: '--sapNeutralBackground',
     tooltipBackgroundColor: '--sapNeutralBackground',
     limitsFill: '--sapContent_Illustrative_Color2',
