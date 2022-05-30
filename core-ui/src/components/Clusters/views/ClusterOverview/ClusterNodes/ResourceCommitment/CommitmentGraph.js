@@ -39,7 +39,7 @@ export function CommitmentGraph({ data }) {
   const verticalPadding = width / 30;
   const innerWidth = width - horizontalPadding * 2;
   const innerhHeight = height - verticalPadding * 2;
-  const maxValue = Math.min(limits, LIMITS_WARNING_VALUE);
+  const maxValue = Math.min(Math.max(limits, 1.0), LIMITS_WARNING_VALUE);
   const ratio = 1 / maxValue;
   const barHeight = innerhHeight / 2;
   const barHStart = verticalPadding + innerhHeight / 8;
