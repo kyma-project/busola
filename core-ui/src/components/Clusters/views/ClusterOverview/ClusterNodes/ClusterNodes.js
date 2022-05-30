@@ -11,6 +11,7 @@ import {
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
+import { ResourceCommitment } from './ResourceCommitment/ResourceCommitment';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ProgressBar } from 'shared/components/ProgressBar/ProgressBar';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
@@ -151,7 +152,10 @@ export function ClusterNodes() {
           i18n={i18n}
         />
       )}
-      <StatsPanel type="cluster" />
+      <div className="fd-margin--md cluster-overview__graphs-wrapper">
+        <StatsPanel type="cluster" className="" />
+        <ResourceCommitment />
+      </div>
       {Events}
     </>
   );

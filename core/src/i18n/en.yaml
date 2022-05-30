@@ -1254,6 +1254,14 @@ graphs:
   network-up: Upload
   nodes: Nodes
   pvc-usage: Volume Space Usage
+  resource-commitment:
+    capacity: Capacity
+    cpu: CPU Commitment
+    limits: Limits
+    limits-exceed: Resource limits exceed 150% of the cluster capacity.
+    memory: Memory Commitment
+    requests: Requests
+    utilized-value: Utilized ({{value}}%)
   total: Total
   used-space: Used space
 helm-releases:
