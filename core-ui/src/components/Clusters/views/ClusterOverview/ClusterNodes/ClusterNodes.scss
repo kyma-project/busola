@@ -9,3 +9,22 @@
     margin-right: 8px;
   }
 }
+
+.cluster-overview__graphs-wrapper > :first-child {
+  margin-bottom: 32px;
+}
+
+@media (min-width: 1100px) {
+  .cluster-overview__graphs-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    & > :first-child {
+      margin-right: 12px;
+      margin-bottom: unset;
+    }
+    & > :last-child {
+      margin-left: 20px;
+    }
+  }
+}

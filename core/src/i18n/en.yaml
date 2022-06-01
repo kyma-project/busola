@@ -278,6 +278,15 @@ cluster-addons:
   navigation-title: Cluster Addons
   singular_name: Cluster Addons Configuration
   title: Cluster Addons Configurations
+cluster-overview:
+  headers:
+    cpu: CPU
+    memory: Memory
+    metrics: Metrics
+    nodes: Nodes
+  tooltips:
+    cpu-used: 'CPU Used: {{percentage}}'
+    memory-used: 'Memory Used: {{percentage}}'
 cluster-role-bindings:
   description: <0>Cluster Role Binding</0> assigns the permissions defined in a Cluster Role to a user.
   name_singular: Cluster Role Binding
@@ -1245,6 +1254,14 @@ graphs:
   network-up: Upload
   nodes: Nodes
   pvc-usage: Volume Space Usage
+  resource-commitment:
+    capacity: Capacity
+    cpu: CPU Commitment
+    limits: Limits
+    limits-exceed: Resource limits exceed 150% of the cluster capacity.
+    memory: Memory Commitment
+    requests: Requests
+    utilized-value: Utilized ({{value}}%)
   total: Total
   used-space: Used space
 helm-releases:

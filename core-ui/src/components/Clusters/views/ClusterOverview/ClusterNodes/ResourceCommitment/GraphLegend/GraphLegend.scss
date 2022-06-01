@@ -1,0 +1,24 @@
+.commitment-graph__legend {
+  display: flex;
+  justify-content: center;
+  gap: 0 12px;
+
+  .legend-box {
+    height: 1em;
+    width: 1em;
+    display: inline-block;
+    margin-right: 0.5em;
+
+    &--requests {
+      background: var(--sapContent_Illustrative_Color3);
+    }
+
+    &--limits {
+      background: var(--sapContent_Illustrative_Color2);
+    }
+
+    &--capacity {
+      background: var(--sapContent_Illustrative_Color6);
+    }
+  }
+}
