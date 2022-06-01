@@ -2,119 +2,34 @@
   "$schema": "http://json-schema.org/draft-07/schema",
   "description": "Schema defining structure of form configuration",
   "title": "Custom pages to be displayed in Busola",
-  "$ref": "#/definitions/component_array_or_object",
-  "definitions": {
-    "component_config": {
-      "type": "object",
-      "properties": {
-        "advanced": {
-          "description": "Define if field should be displayed on advanced form view",
-          "type": "boolean"
-        },
-        "name": {
-          "description": "Name of component used for dispaying translations",
-          "type": "string"
-        },
-        "path": {
-          "description": "The path to the resource variable",
-          "examples": [
-            "status.phase",
-            "metadata.labels"
-          ],
-          "type": "string"
-        },
-        "simple": {
-          "description": "Define if field should be displayed on simple form view",
-          "type": "boolean"
-        },
-        "widget": {
-          "description": "Name of a widget that should be used for displaying data defined by path",
-          "examples": [
-            "Badge",
-            "CodeViewer"
-          ],
-          "type": "string"
-        }
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "description": "The path to the resource variable",
+        "examples": [
+          "status.phase",
+          "metadata.labels"
+        ],
+        "type": "string"
+      },
+      "widget": {
+        "description": "Name of a widget that should be used for displaying data defined by path",
+        "examples": [
+          "Badge",
+          "CodeViewer"
+        ],
+        "type": "string"
+      },
+      "simple": {
+        "description": "Define if field should be displayed on simple form view",
+        "type": "boolean"
+      },
+      "advanced": {
+        "description": "Define if field should be displayed on advanced form view",
+        "type": "boolean"
       }
-    },
-    "component_array_or_object": {
-      "anyOf": [
-        {
-          "type": "object",
-          "oneOf": [
-            {
-              "required": [
-                "path"
-              ],
-              "not": {
-                "required": [
-                  "name"
-                ]
-              }
-            },
-            {
-              "required": [
-                "name"
-              ],
-              "not": {
-                "required": [
-                  "path"
-                ]
-              }
-            },
-            {
-              "required": [
-                "name",
-                "path"
-              ]
-            }
-          ],
-          "anyOf": [
-            {
-              "$ref": "#/definitions/component_config"
-            }
-          ]
-        },
-        {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "oneOf": [
-              {
-                "required": [
-                  "path"
-                ],
-                "not": {
-                  "required": [
-                    "name"
-                  ]
-                }
-              },
-              {
-                "required": [
-                  "name"
-                ],
-                "not": {
-                  "required": [
-                    "path"
-                  ]
-                }
-              },
-              {
-                "required": [
-                  "name",
-                  "path"
-                ]
-              }
-            ],
-            "anyOf": [
-              {
-                "$ref": "#/definitions/component_config"
-              }
-            ]
-          }
-        }
-      ]
     }
   }
 }

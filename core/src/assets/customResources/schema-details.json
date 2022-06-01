@@ -10,20 +10,31 @@
   "properties": {
     "body": {
       "description": "Configuration of fields/data that should be displayed in body section of resource details page.",
-      "$ref": "#/definitions/component_array_or_object"
+      {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/component"
+        }
+      }
     },
     "header": {
       "description": "Configuration of fields/data that should be displayed in header section of resource details page.",
-      "$ref": "#/definitions/component_array_or_object"
+      {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/component"
+        }
+      }
     }
   },
   "definitions": {
-    "component_config": {
+    "component": {
       "type": "object",
+      "oneOf": [
+        {"required": ["name"]},
+        {"required": ["path"]}
+      ],
       "properties": {
-        "additionalProperties": {
-          "type": "string"
-        },
         "name": {
           "description": "Name of component used for dispaying translations",
           "type": "string"
@@ -43,109 +54,22 @@
             "CodeViewer"
           ],
           "type": "string"
+        },
+        "children": {
+          "$ref": "#/definitions/list"
         }
       }
     },
-    "component_array_or_object": {
+    "list": {
       "anyOf": [
-        {
-          "type": "object",
-          "oneOf": [
-            {
-              "required": [
-                "path"
-              ],
-              "not": {
-                "required": [
-                  "name"
-                ]
-              }
-            },
-            {
-              "required": [
-                "name"
-              ],
-              "not": {
-                "required": [
-                  "path"
-                ]
-              }
-            },
-            {
-              "required": [
-                "name",
-                "path"
-              ]
-            }
-          ],
-          "anyOf": [
-            {
-              "$ref": "#/definitions/component_config"
-            },
-            {
-              "properties": {
-                "children ": {
-                  "type": "object",
-                  "allOf": [
-                    {
-                      "$ref": "#/definitions/component_config"
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        },
         {
           "type": "array",
           "items": {
-            "type": "object",
-            "oneOf": [
-              {
-                "required": [
-                  "path"
-                ],
-                "not": {
-                  "required": [
-                    "name"
-                  ]
-                }
-              },
-              {
-                "required": [
-                  "name"
-                ],
-                "not": {
-                  "required": [
-                    "path"
-                  ]
-                }
-              },
-              {
-                "required": [
-                  "name",
-                  "path"
-                ]
-              }
-            ],
-            "anyOf": [
-              {
-                "$ref": "#/definitions/component_config"
-              },
-              {
-                "properties": {
-                  "children ": {
-                    "type": "object",
-                    "allOf": [
-                      {
-                        "$ref": "#/definitions/component_config"
-                      }
-                    ]
-                  }
-                }
-              }
-            ]
+            "$ref": "#/definitions/component"
           }
+        },
+        {
+          "$ref": "#/definitions/component"
         }
       ]
     }
