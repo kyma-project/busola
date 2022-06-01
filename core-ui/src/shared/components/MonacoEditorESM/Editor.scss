@@ -29,7 +29,9 @@
 .resource-form__legend {
   position: absolute;
   bottom: 0;
-  width: calc(100% - 10px);
+  width: 50%;
+  right: 10px;
+  opacity: 0.8;
 
   .line {
     width: 100%;

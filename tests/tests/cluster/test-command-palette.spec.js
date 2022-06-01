@@ -121,7 +121,7 @@ context('Test Command Palette navigation', () => {
     // navigate to generic CR
     openCommandPalette();
 
-    getQueryInput().type('am');
+    getQueryInput().type('applicationmappings');
 
     getQueryInput().trigger('keydown', { key: 'Enter' });
 

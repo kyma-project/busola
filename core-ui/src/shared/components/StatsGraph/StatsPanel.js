@@ -28,10 +28,15 @@ export function SingleGraph({ type, mode, timeSpan, metric, ...props }) {
     loading,
     startDate,
     endDate,
-  } = usePrometheus(type, mode, metric, {
-    items: DATA_POINTS,
-    timeSpan,
-    ...props,
+  } = usePrometheus({
+    type,
+    mode,
+    metricId: metric,
+    additionalProps: {
+      items: DATA_POINTS,
+      timeSpan,
+      ...props,
+    },
   });
 
   return (
@@ -66,21 +71,26 @@ export function DualGraph({ type, timeSpan, metric1, metric2, ...props }) {
     loading: loading1,
     startDate,
     endDate,
-  } = usePrometheus(type, 'single', metric1, {
-    items: DATA_POINTS,
-    timeSpan,
-    ...props,
-  });
-  const { data: data2, error: error2, loading: loading2 } = usePrometheus(
+  } = usePrometheus({
     type,
-    'single',
-    metric2,
-    {
+    mode: 'single',
+    metricId: metric1,
+    additionalProps: {
       items: DATA_POINTS,
       timeSpan,
       ...props,
     },
-  );
+  });
+  const { data: data2, error: error2, loading: loading2 } = usePrometheus({
+    type,
+    mode: 'single',
+    metricId: metric2,
+    additionalProps: {
+      items: DATA_POINTS,
+      timeSpan,
+      ...props,
+    },
+  });
 
   return (
     <>
@@ -127,10 +137,15 @@ export function SingleMetricMultipeGraph({
     loading,
     startDate,
     endDate,
-  } = usePrometheus(type, mode, metric, {
-    items: DATA_POINTS,
-    timeSpan,
-    ...props,
+  } = usePrometheus({
+    type,
+    mode,
+    metricId: metric,
+    additionalProps: {
+      items: DATA_POINTS,
+      timeSpan,
+      ...props,
+    },
   });
   return (
     <>
@@ -163,6 +178,8 @@ const getGraphOptions = type => {
       return ['cpu', 'memory', 'network', 'nodes'];
     case 'pvc':
       return ['pvc-usage'];
+    case 'node':
+      return ['cpu', 'memory', 'network'];
     default:
       return null;
   }
@@ -201,6 +218,7 @@ export function StatsPanel({
   type,
   mode = 'single',
   defaultMetric = 'cpu',
+  className = 'fd-margin--md',
   ...props
 }) {
   const timeSpans = {
@@ -226,13 +244,14 @@ export function StatsPanel({
 
   const graphOptions = getGraphOptions(type);
   return (
-    <LayoutPanel className="fd-margin--md stats-panel">
+    <LayoutPanel className={`${className} stats-panel`}>
       <LayoutPanel.Header>
         <LayoutPanel.Filters>
           {graphOptions?.length === 1 ? (
             <LayoutPanel.Head title={t(`graphs.${graphOptions[0]}`)} />
           ) : (
             <Dropdown
+              compact
               selectedKey={metric}
               onSelect={(e, val) => {
                 setMetric(val.key);

@@ -278,6 +278,15 @@ cluster-addons:
   navigation-title: Cluster Addons
   singular_name: Cluster Addons Configuration
   title: Cluster Addons Configurations
+cluster-overview:
+  headers:
+    cpu: CPU
+    memory: Memory
+    metrics: Metrics
+    nodes: Nodes
+  tooltips:
+    cpu-used: 'CPU Used: {{percentage}}'
+    memory-used: 'Memory Used: {{percentage}}'
 cluster-role-bindings:
   description: <0>Cluster Role Binding</0> assigns the permissions defined in a Cluster Role to a user.
   name_singular: Cluster Role Binding
@@ -473,6 +482,7 @@ common:
     modes:
       advanced: Advanced
       simple: Simple
+      ui-form: UI Form
     object-required: An object is required
   delete-dialog:
     delete-confirm: Don't ask again
@@ -803,19 +813,11 @@ deployments:
       containers: Containers
       cpu-limits: CPU Limits
       cpu-requests: CPU Requests
-      expose-service: Expose separate Service
       image: Image
       memory-limits: Memory Limits
       memory-requests: Memory Requests
       one-container-required: Provide at least one container.
-      port: Port
-      port-placeholder: Enter the port exposed by the Service
       runtime-profile: Runtime Profile
-      service: Service
-      target-port: Target Port
-      target-port-placeholder: Enter the target port of the container
-    messages:
-      deployment-ok-service-bad: 'Deployment created, failed to create the Service: {{error}}'
     simple:
       docker-image: Docker Image
       docker-image-placeholder: Enter the Docker image tag, for example, bitnami/nginx
@@ -1252,6 +1254,14 @@ graphs:
   network-up: Upload
   nodes: Nodes
   pvc-usage: Volume Space Usage
+  resource-commitment:
+    capacity: Capacity
+    cpu: CPU Commitment
+    limits: Limits
+    limits-exceed: Resource limits exceed 150% of the cluster capacity.
+    memory: Memory Commitment
+    requests: Requests
+    utilized-value: Utilized ({{value}}%)
   total: Total
   used-space: Used space
 helm-releases:
@@ -1497,6 +1507,7 @@ namespaces:
   description: <0>Namespace</0> helps to maintain and divide resources in a cluster.
   name_singular: Namespace
   namespaces-overview: Namespaces Overview
+  no-namespaces-found: No Namespaces fetched
   overview:
     resources:
       error: Error while loading memory consumption data

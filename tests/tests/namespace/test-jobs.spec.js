@@ -12,7 +12,7 @@ const SECOND_CONTAINER_NAME = JOB_NAME + '-node';
 function checkJobLogs({ showLogsSelector, expectedLogs }) {
   cy.getIframeBody()
     .find(showLogsSelector)
-    .click();
+    .click({ force: true });
 
   cy.getIframeBody().contains(expectedLogs);
 
@@ -143,10 +143,6 @@ context('Test Jobs', () => {
   it('Edit Job', () => {
     cy.getIframeBody()
       .contains('Edit')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Advanced')
       .click();
 
     // containers section should be readonly

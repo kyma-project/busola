@@ -146,7 +146,7 @@ export function NamespaceCreate({
   }
 
   const renderEditor = ({ defaultEditor, Editor }) => (
-    <div className="double-editor">
+    <div>
       <ResourceForm.CollapsibleSection
         title={t('namespaces.name_singular')}
         defaultOpen

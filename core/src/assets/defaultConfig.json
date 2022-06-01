@@ -68,7 +68,6 @@
             "istio-system",
             "knative-eventing",
             "knative-serving",
-            "kube-public",
             "kube-system",
             "kyma-backup",
             "kyma-installer",
@@ -82,9 +81,6 @@
       },
       "VISUAL_RESOURCES": {
         "isEnabled": true
-      },
-      "MONACO_AUTOCOMPLETION": {
-        "isEnabled": false
       }
     }
   }

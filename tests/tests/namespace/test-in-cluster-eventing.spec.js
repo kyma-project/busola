@@ -243,10 +243,6 @@ context('Test in-cluster eventing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Advanced')
-      .click();
-
-    cy.getIframeBody()
       .find(
         '[placeholder="Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1"]',
       )

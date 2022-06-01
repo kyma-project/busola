@@ -11,8 +11,6 @@ context('Test Custom Resources', () => {
   it('Check CR groups list', () => {
     cy.navigateTo('Configuration', 'Custom Resources');
 
-    const iframeBody = cy.getIframeBody();
-
     cy.getIframeBody()
       .contains('h3', 'Custom Resources')
       .should('be.visible');

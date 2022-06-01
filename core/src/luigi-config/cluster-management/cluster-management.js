@@ -14,6 +14,7 @@ import * as fetchCache from './../cache/fetch-cache';
 import { clearClusterCache } from '../cache/storage';
 import { isNil } from 'lodash';
 import { DEFAULT_FEATURES } from '../constants';
+import i18next from 'i18next';
 
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
@@ -29,7 +30,10 @@ export function setActiveClusterIfPresentInUrl() {
 }
 
 export function getCurrentContextNamespace(kubeconfig) {
-  const currentContextName = kubeconfig['current-context'];
+  const currentContextName = kubeconfig?.['current-context'];
+
+  if (!currentContextName) return i18next.t('namespaces.no-namespaces-found');
+
   const context = kubeconfig.contexts.find(c => c.name === currentContextName);
   return context?.context.namespace;
 }
@@ -45,14 +49,15 @@ export function getAfterLoginLocation(clusterName, kubeconfig) {
 }
 
 export async function setCluster(clusterName) {
-  const clusters = getClusters();
-  const params = clusters[clusterName];
-
-  const originalStorage = clusters[clusterName].config.storage;
-
-  saveActiveClusterName(clusterName);
-  fetchCache.init(clusterName);
   try {
+    const clusters = getClusters();
+    const params = clusters[clusterName];
+
+    const originalStorage = clusters[clusterName].config.storage;
+
+    saveActiveClusterName(clusterName);
+    fetchCache.init(clusterName);
+
     await reloadAuth();
 
     const kubeconfigUser = params.currentContext.user.user;
@@ -95,7 +100,7 @@ export async function saveClusterParams(params) {
     });
   }
 
-  const clusterName = params.kubeconfig['current-context'];
+  const clusterName = params?.kubeconfig?.['current-context'];
   const clusters = getClusters();
   const prevConfig = clusters[clusterName]?.config || {};
   clusters[clusterName] = {

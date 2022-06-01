@@ -28,7 +28,7 @@ export function clearEmptyPropertiesInObject(object) {
 }
 
 export function isStringValueEqualToTrue(value) {
-  return value ? 'true' === value.toLowerCase() : false;
+  return value ? 'true' === value?.toLowerCase() : false;
 }
 
 export function isAddon(labels) {

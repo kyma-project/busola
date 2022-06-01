@@ -28,9 +28,8 @@ context('Test Cluster Overview', () => {
       .should('not.be.empty');
 
     cy.getIframeBody()
-      .contains('Node:')
-      .its('length')
-      .should('be.gte', 1);
+      .contains('Nodes')
+      .should('be.visible');
 
     cy.getIframeBody()
       .contains('Events')
@@ -39,10 +38,12 @@ context('Test Cluster Overview', () => {
 
   it('Go to Node details', () => {
     cy.getIframeBody()
-      .contains('Node:')
-      .first()
-      .next('a')
-      .click();
+      .find('[data-testid=cluster-nodes]')
+      .within(_ => {
+        cy.get('a')
+          .first()
+          .click();
+      });
   });
 
   it('Test Node details', () => {
@@ -62,7 +63,7 @@ context('Test Cluster Overview', () => {
       .should('not.be.empty');
 
     cy.getIframeBody()
-      .contains('Resources')
+      .contains('CPU')
       .should('be.visible');
 
     cy.getIframeBody()
