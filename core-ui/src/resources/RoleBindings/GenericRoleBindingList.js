@@ -82,7 +82,7 @@ export function GenericRoleBindingList({ descriptionKey, ...params }) {
     'roleRef.name',
     (entry, query) => {
       const matchingSubject = entry.subjects?.find(subject =>
-        subject.name.toLowerCase().includes(query.toLowerCase()),
+        subject.name.toLowerCase().includes(query?.toLowerCase()),
       );
       return matchingSubject?.name || null;
     },

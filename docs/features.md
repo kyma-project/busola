@@ -203,7 +203,6 @@ Note that some features must be run before the application starts the bootstrap 
         "istio-system",
         "knative-eventing",
         "knative-serving",
-        "kube-public",
         "kube-system",
         "kyma-backup",
         "kyma-installer",
@@ -434,23 +433,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-- **PROMETHEUS** – is used to show or hide the **Prometheus** metrics graphs.
-
-  ```json
-  "PROMETHEUS": {
-    "isEnabled": true,
-  },
-  ```
-
 - **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at a resource details view.
-
-  ```json
-  "VISUAL_RESOURCES": {
-    "isEnabled": true,
-  },
-  ```
-
-- **MONACO_AUTOCOMPLETION** – determines if Busola should obtain json schemas and validate input in Monaco.
 
   ```json
   "VISUAL_RESOURCES": {

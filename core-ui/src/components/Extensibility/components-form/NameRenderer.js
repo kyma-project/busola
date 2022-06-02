@@ -1,4 +1,5 @@
 import React from 'react';
+import { List } from 'immutable';
 
 import { K8sNameField } from 'shared/ResourceForm/fields';
 
@@ -15,9 +16,17 @@ export function NameRenderer({
       value={value}
       kind={resource.kind}
       setValue={value => {
-        // TODO change not only metadata.name but metadata.labels['app.kubernetes.io/name'] as well
+        console.log('storeKeys', storeKeys);
         onChange({
           storeKeys,
+          scopes: ['value'],
+          type: 'set',
+          schema,
+          required,
+          data: { value },
+        });
+        onChange({
+          storeKeys: List(['metadata', 'labels', 'app.kubernetes.io/name']),
           scopes: ['value'],
           type: 'set',
           schema,

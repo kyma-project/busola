@@ -10,7 +10,7 @@ context('Test Service Accounts', () => {
     cy.goToNamespaceDetails();
   });
 
-  it('Create a Client', () => {
+  it('Create a Service Account', () => {
     cy.navigateTo('Configuration', 'Service Accounts');
 
     cy.getIframeBody()
@@ -72,10 +72,6 @@ context('Test Service Accounts', () => {
   it('Edit', () => {
     cy.getIframeBody()
       .contains('Edit')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Advanced')
       .click();
 
     cy.getIframeBody()

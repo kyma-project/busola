@@ -10,9 +10,7 @@ context('Test invalid kubeconfig', () => {
       .contains('Connect cluster')
       .click();
 
-    cy.getIframeBody()
-      .find('.monaco-editor')
-      .type('wrong_kubeconfig');
+    cy.pasteToMonaco('wrong_kubeconfig');
 
     // trigger blur on editor
     cy.getIframeBody()
@@ -38,8 +36,9 @@ context('Test invalid kubeconfig', () => {
 
     cy.getIframeBody()
       .find('.fd-message-strip--error')
-      .shouldHaveTrimmedText(
-        'Parse error: bad indentation of a mapping entry (2:2), previous valid input will be used',
+      .should(
+        'contain.text',
+        'Parse error: bad indentation of a mapping entry',
       );
   });
 });
