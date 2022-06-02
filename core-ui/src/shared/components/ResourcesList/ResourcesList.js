@@ -280,9 +280,25 @@ export function ResourceListRenderer({
       ].filter(e => e);
 
   const headerRenderer = () => [
-    t('common.headers.name'),
+    <Link
+      key={'name'}
+      onClick={() => {
+        sort === 'nameup' ? setSort('namedown') : setSort('nameup');
+      }}
+    >
+      {t('common.headers.name') +
+        (sort === 'nameup' ? '\u2191' : sort === 'namedown' ? '\u2193' : '')}
+    </Link>,
     ...(showNamespace ? [t('common.headers.namespace')] : []),
-    t('common.headers.created'),
+    <Link
+      key={'created'}
+      onClick={() => {
+        sort === 'timeup' ? setSort('timedown') : setSort('timeup');
+      }}
+    >
+      {t('common.headers.created') +
+        (sort === 'timeup' ? '\u2191' : sort === 'timedown' ? '\u2193' : '')}
+    </Link>,
     t('common.headers.labels'),
     ...customColumns.map(col => col.header),
     '',
@@ -323,25 +339,33 @@ export function ResourceListRenderer({
 
   const sorting = (key, resources) => {
     if (key === 'nameup') {
-      return resources.sort((a, b) =>
-        a.metadata.name.localeCompare(b.metadata.name),
-      );
+      return [
+        ...resources.sort((a, b) =>
+          a.metadata.name.localeCompare(b.metadata.name),
+        ),
+      ];
     } else if (key === 'namedown') {
-      return resources.sort((a, b) =>
-        b.metadata.name.localeCompare(a.metadata.name),
-      );
+      return [
+        ...resources.sort((a, b) =>
+          b.metadata.name.localeCompare(a.metadata.name),
+        ),
+      ];
     } else if (key === 'timeup') {
-      return resources.sort(
-        (a, b) =>
-          new Date(b.metadata.creationTimestamp).getTime() -
-          new Date(a.metadata.creationTimestamp).getTime(),
-      );
+      return [
+        ...resources.sort(
+          (a, b) =>
+            new Date(b.metadata.creationTimestamp).getTime() -
+            new Date(a.metadata.creationTimestamp).getTime(),
+        ),
+      ];
     } else {
-      return resources.sort(
-        (a, b) =>
-          new Date(a.metadata.creationTimestamp).getTime() -
-          new Date(b.metadata.creationTimestamp).getTime(),
-      );
+      return [
+        ...resources.sort(
+          (a, b) =>
+            new Date(a.metadata.creationTimestamp).getTime() -
+            new Date(b.metadata.creationTimestamp).getTime(),
+        ),
+      ];
     }
   };
 
