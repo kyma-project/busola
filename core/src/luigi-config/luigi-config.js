@@ -27,10 +27,11 @@ import { resolveSecondaryFeatures } from './feature-discovery';
 import { worker } from './mocks/browser';
 const luigiAfterInit = () => Luigi.ux().hideAppLoadingIndicator();
 
-if (process.env.NODE_ENV === 'development') {
-  console.log('starting luigi MSW');
-  worker.start();
-}
+// disabling to run in it the spike's pipeline
+// if (process.env.NODE_ENV === 'development') {
+console.log('starting luigi MSW');
+worker.start();
+// }
 
 export const i18n = i18next.use(i18nextBackend).init({
   lng: localStorage.getItem('busola.language') || 'en',
