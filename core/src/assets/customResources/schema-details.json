@@ -10,20 +10,16 @@
   "properties": {
     "body": {
       "description": "Configuration of fields/data that should be displayed in body section of resource details page.",
-      {
-        "type": "array",
-        "items": {
-          "$ref": "#/definitions/component"
-        }
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/component"
       }
     },
     "header": {
       "description": "Configuration of fields/data that should be displayed in header section of resource details page.",
-      {
-        "type": "array",
-        "items": {
-          "$ref": "#/definitions/component"
-        }
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/component"
       }
     }
   },
