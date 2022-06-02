@@ -25,6 +25,7 @@ import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
+import { Dropdown } from '../Dropdown/Dropdown';
 
 /* to allow cloning of a resource set the following on the resource create component:
  *
@@ -311,9 +312,41 @@ export function ResourceListRenderer({
     protectedResourceWarning(entry),
   ];
 
-  const extraHeaderContent =
-    listHeaderActions ||
-    (CreateResourceForm && !disableCreate && (
+  const [sort, setSort] = useState('nameup');
+
+  const options = [
+    { key: 'nameup', text: 'name \u2191' },
+    { key: 'namedown', text: 'name \u2193' },
+    { key: 'timeup', text: 'time \u2191' },
+    { key: 'timedown', text: 'time \u2193' },
+  ];
+
+  const sorting = (key, resources) => {
+    if (key === 'nameup') {
+      return resources.sort((a, b) =>
+        a.metadata.name.localeCompare(b.metadata.name),
+      );
+    } else if (key === 'namedown') {
+      return resources.sort((a, b) =>
+        b.metadata.name.localeCompare(a.metadata.name),
+      );
+    } else if (key === 'timeup') {
+      return resources.sort(
+        (a, b) =>
+          new Date(b.metadata.creationTimestamp).getTime() -
+          new Date(a.metadata.creationTimestamp).getTime(),
+      );
+    } else {
+      return resources.sort(
+        (a, b) =>
+          new Date(a.metadata.creationTimestamp).getTime() -
+          new Date(b.metadata.creationTimestamp).getTime(),
+      );
+    }
+  };
+
+  const extraHeaderContent = listHeaderActions || [
+    CreateResourceForm && !disableCreate && (
       <Button
         glyph="add"
         option="transparent"
@@ -327,7 +360,14 @@ export function ResourceListRenderer({
             resourceType: prettifiedResourceName,
           })}
       </Button>
-    ));
+    ),
+    <Dropdown
+      label={'Sort by'}
+      selectedKey={sort}
+      onSelect={(_, { key }) => setSort(key)}
+      options={options}
+    />,
+  ];
 
   return (
     <>
@@ -379,7 +419,7 @@ export function ResourceListRenderer({
         allowSlashShortcut={allowSlashShortcut}
         showSearchField={showSearchField}
         actions={actions}
-        entries={resources || []}
+        entries={sorting(sort, resources || [])}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         serverDataError={error}
