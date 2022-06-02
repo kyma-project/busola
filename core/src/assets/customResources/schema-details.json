@@ -30,7 +30,7 @@
   "definitions": {
     "component": {
       "type": "object",
-      "oneOf": [
+      "anyOf": [
         {"required": ["name"]},
         {"required": ["path"]}
       ],
