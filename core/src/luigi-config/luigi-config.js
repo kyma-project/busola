@@ -3,7 +3,6 @@ import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
 import './../assets/libs/luigi-core/luigi.css';
 import '../index.css';
-
 import {
   saveCurrentLocation,
   tryRestorePreviousLocation,
@@ -25,8 +24,13 @@ import { readFeatureToggles } from './utils/feature-toggles';
 import { ssoLogin } from './auth/sso';
 import { setNavFooterText } from './nav-footer';
 import { resolveSecondaryFeatures } from './feature-discovery';
-
+import { worker } from './mocks/browser';
 const luigiAfterInit = () => Luigi.ux().hideAppLoadingIndicator();
+
+if (process.env.NODE_ENV === 'development') {
+  console.log('starting luigi MSW');
+  worker.start();
+}
 
 export const i18n = i18next.use(i18nextBackend).init({
   lng: localStorage.getItem('busola.language') || 'en',

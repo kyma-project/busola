@@ -76,5 +76,8 @@
     "react-app-rewired": "^2.2.1",
     "react-jsonschema-form": "1.7.0",
     "react-scripts": "^5.0.0"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

@@ -39,5 +39,8 @@
   },
   "jest": {
     "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.js$"
+  },
+  "msw": {
+    "workerDirectory": "src"
   }
 }

@@ -24,7 +24,7 @@ module.exports = env => {
       rules: [
         {
           loader: 'babel-loader',
-          exclude: /html|css|woff|woff2/,
+          exclude: /html|css|woff|woff2|json/,
           options: {
             rootMode: 'root',
           },

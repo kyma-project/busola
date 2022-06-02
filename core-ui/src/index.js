@@ -44,6 +44,12 @@ i18next
     },
   });
 
+if (process.env.NODE_ENV === 'development') {
+  const { worker } = require('./mocks/browser');
+  console.log('starting react MSW');
+  worker.start();
+}
+
 ReactDOM.render(
   <Microfrontend env={process.env}>
     <BrowserRouter basename={process.env.PUBLIC_URL}>
