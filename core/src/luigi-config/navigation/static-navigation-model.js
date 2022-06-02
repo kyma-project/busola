@@ -1714,6 +1714,7 @@ export function getStaticRootNodes(
               groupVersions,
               permissionSet,
               features,
+              customResources,
             ),
           defaultChildNode: 'details',
         },
