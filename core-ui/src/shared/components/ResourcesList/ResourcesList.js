@@ -287,7 +287,7 @@ export function ResourceListRenderer({
       }}
     >
       {t('common.headers.name') +
-        (sort === 'nameup' ? '\u2191' : sort === 'namedown' ? '\u2193' : '')}
+        (sort === 'nameup' ? ' \u2191' : sort === 'namedown' ? ' \u2193' : '')}
     </Link>,
     ...(showNamespace ? [t('common.headers.namespace')] : []),
     <Link
@@ -297,7 +297,7 @@ export function ResourceListRenderer({
       }}
     >
       {t('common.headers.created') +
-        (sort === 'timeup' ? '\u2191' : sort === 'timedown' ? '\u2193' : '')}
+        (sort === 'timeup' ? ' \u2191' : sort === 'timedown' ? ' \u2193' : '')}
     </Link>,
     t('common.headers.labels'),
     ...customColumns.map(col => col.header),
@@ -331,10 +331,10 @@ export function ResourceListRenderer({
   const [sort, setSort] = useState('nameup');
 
   const options = [
-    { key: 'nameup', text: 'name \u2191' },
-    { key: 'namedown', text: 'name \u2193' },
-    { key: 'timeup', text: 'time \u2191' },
-    { key: 'timedown', text: 'time \u2193' },
+    { key: 'nameup', text: 'Sorting by: name \u2191' },
+    { key: 'namedown', text: 'Sorting by: name \u2193' },
+    { key: 'timeup', text: 'Sorting by: time \u2191' },
+    { key: 'timedown', text: 'Sorting by: time \u2193' },
   ];
 
   const sorting = (key, resources) => {
@@ -370,6 +370,12 @@ export function ResourceListRenderer({
   };
 
   const extraHeaderContent = listHeaderActions || [
+    <Dropdown
+      selectedKey={sort}
+      onSelect={(_, { key }) => setSort(key)}
+      options={options}
+      compact
+    />,
     CreateResourceForm && !disableCreate && (
       <Button
         glyph="add"
@@ -385,12 +391,6 @@ export function ResourceListRenderer({
           })}
       </Button>
     ),
-    <Dropdown
-      label={'Sort by'}
-      selectedKey={sort}
-      onSelect={(_, { key }) => setSort(key)}
-      options={options}
-    />,
   ];
 
   return (
