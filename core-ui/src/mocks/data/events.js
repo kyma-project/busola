@@ -614,7 +614,7 @@ export const clusterDetailsEvents = mockGetRequest('/backend/api/v1/events', {
       },
       reason: 'Unhealthy',
       message:
-        'Readiness probe failed: Get "http://100.96.0.30:15020/app-health/kubevious/readyz": context deadline exceeded (Client.Timeout exceeded while awaiting headers)',
+        '4444CUSTOMMOCKReadiness probe failed: Get "http://100.96.0.30:15020/app-health/kubevious/readyz": context deadline exceeded (Client.Timeout exceeded while awaiting headers)',
       source: {
         component: 'kubelet',
         host: 'shoot--hasselhoff--kmain-worker-dev-z1-66c66-bn2hk',

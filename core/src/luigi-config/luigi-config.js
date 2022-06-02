@@ -29,8 +29,8 @@ const luigiAfterInit = () => Luigi.ux().hideAppLoadingIndicator();
 
 // disabling to run in it the spike's pipeline
 // if (process.env.NODE_ENV === 'development') {
-console.log('starting luigi MSW');
-worker.start();
+// console.log('starting luigi MSW');
+// worker.start();
 // }
 
 export const i18n = i18next.use(i18nextBackend).init({

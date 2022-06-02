@@ -20,11 +20,11 @@ export const handlers = [
   ...clusterDetailsVersions,
   ...clusterDetailsEvents,
   ...clusterDetailsApis,
+  ...clusterDetailsNodes,
   ...clusterDetailsQueryRange1,
   ...clusterDetailsQueryRange2,
   ...clusterDetailsQueryRange3,
   ...clusterDetailsQueryRange4,
   ...clusterDetailsQueryRange5,
   ...clusterDetailsQueryRange6,
-  ...clusterDetailsNodes,
 ];
