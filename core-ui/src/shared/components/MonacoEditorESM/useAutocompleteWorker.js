@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { Uri } from 'monaco-editor';
 import { setDiagnosticsOptions } from 'monaco-yaml';
+import { getSchemaLink } from './getSchemaLink';
 
 window.MonacoEnvironment = {
   getWorker(moduleId, label) {
@@ -73,6 +74,7 @@ export function useAutocompleteWorker({
   // if none of the values is provided, the schemaId will be randomized (Monaco uses this
   // value as a model id and model stores information on editor's value, language etc.)
   const [schemaId] = useState(customSchemaId || getDefaultSchemaId(value));
+  const [schemaLink] = useState(getSchemaLink(value));
 
   useEffect(() => {
     // fetch OpenAPI and parse it to JSON Schemas (this is an expensive operation passed to a web worker)
@@ -145,6 +147,7 @@ export function useAutocompleteWorker({
         {
           uri:
             customSchemaUri ||
+            schemaLink ||
             'https://kubernetes.io/docs/concepts/overview/kubernetes-api',
           fileMatch: [String(modelUri)],
           schema: schema || {},
@@ -155,7 +158,7 @@ export function useAutocompleteWorker({
     return {
       modelUri,
     };
-  }, [schema, schemaId, customSchemaUri, readOnly]);
+  }, [schema, schemaId, schemaLink, customSchemaUri, readOnly]);
 
   return { setAutocompleteOptions, activeSchemaPath, error, loading };
 }
