@@ -15,7 +15,7 @@ function RoutedCustomResourcesList() {
 export default (
   <>
     <Route
-      path="/customresources"
+      path="customresources"
       element={
         <Suspense fallback={<Spinner />}>
           <CustomResourcesByGroup />
@@ -23,7 +23,7 @@ export default (
       }
     />
     <Route
-      path="/namespaces/:namespaceId/customresources/"
+      path="namespaces/:namespaceId/customresources/"
       element={
         <Suspense fallback={<Spinner />}>
           <RoutedCustomResourcesList />

@@ -8,7 +8,7 @@ const NoPermissions = React.lazy(() =>
 
 export default (
   <Route
-    path={'/no-permissions'}
+    path="no-permissions"
     element={
       <Suspense fallback={<Spinner />}>
         <NoPermissions />

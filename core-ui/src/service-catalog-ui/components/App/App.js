@@ -6,7 +6,6 @@ import {
   ServiceClassDetailsContainer,
   ClusterServiceClassDetailsContainer,
 } from '../ServiceClassDetails/ServiceClassDetails.container';
-import { MainFrameRedirection } from 'shared/components/MainFrameRedirection/MainFrameRedirection';
 import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { NotificationProvider } from 'shared/contexts/NotificationContext';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
@@ -78,7 +77,6 @@ const App = ({ id }) => {
             </WithTitle>
           }
         />
-        <Route exact path="" element={<MainFrameRedirection />} />
       </Routes>
     </NotificationProvider>
   );

@@ -8,7 +8,7 @@ const Preferences = React.lazy(() =>
 
 export default (
   <Route
-    path={'/preferences'}
+    path={'preferences'}
     element={
       <Suspense fallback={<Spinner />}>
         <Preferences />
