@@ -16,10 +16,17 @@ const host =
     ? 'http://localhost:8080'
     : window.location.origin;
 
-export const getSchemaLink = value => {
+export const getSchemaLink = (value, language) => {
+  if (language !== 'yaml') return GENERIC_URL;
   if (!value) return GENERIC_URL;
 
-  const resource = jsyaml.load(value);
+  let resource = null;
+  try {
+    resource = jsyaml.load(value);
+  } catch (e) {
+    console.error(e);
+    return GENERIC_URL;
+  }
 
   const resourceType = resource.kind;
   const resourceApi = resource.apiVersion;
@@ -39,7 +46,6 @@ export const getSchemaLink = value => {
 
   const v = window.localStorage.getItem('cluster.version');
 
-  console.log(isNative, v);
   if (isNative && v) {
     return `https://kubernetes.io/docs/reference/generated/kubernetes-api/${v.substring(
       0,
@@ -54,7 +60,7 @@ export const getSchemaLink = value => {
   if (clusterName) {
     const resourceTypeLink = pluralize(resourceType).toLowerCase();
     const trimmedResourceApi = resourceApi.split('/')[0];
-    // if kubeconfig is not stored in localStorage, it will open a new busola login page
+    // if kubeconfig is not stored in the localStorage, it will open a new busola login page
     return `${host}/cluster/${clusterName}/customresourcedefinitions/details/${resourceTypeLink}.${trimmedResourceApi}`;
   }
 

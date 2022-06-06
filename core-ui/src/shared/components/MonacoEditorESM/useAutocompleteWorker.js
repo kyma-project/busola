@@ -62,6 +62,7 @@ export function useAutocompleteWorker({
   autocompletionDisabled,
   customSchemaUri,
   readOnly,
+  language,
 }) {
   const [schema, setSchema] = useState(null);
   const [error, setError] = useState(null);
@@ -74,7 +75,7 @@ export function useAutocompleteWorker({
   // if none of the values is provided, the schemaId will be randomized (Monaco uses this
   // value as a model id and model stores information on editor's value, language etc.)
   const [schemaId] = useState(customSchemaId || getDefaultSchemaId(value));
-  const [schemaLink] = useState(getSchemaLink(value));
+  const [schemaLink] = useState(getSchemaLink(value, language));
 
   useEffect(() => {
     // fetch OpenAPI and parse it to JSON Schemas (this is an expensive operation passed to a web worker)
