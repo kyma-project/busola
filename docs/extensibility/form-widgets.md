@@ -1,8 +1,8 @@
----
-title: Form widgets
----
+# Form widgets
 
-**Text**
+Widgets available for resource forms.
+
+### Text
 
 Text widget renders the field as a text field. Used by default for all string values.
 

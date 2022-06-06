@@ -1,12 +1,14 @@
----
-title: Resource-based extensions
----
+# Resource-based extensions
+
+## Introduction
 
 It it possible to introduce new resources into busola by adding a Config Map to the `kube-public` namepace with a label `busola.io/extension=resource`.
 
 The config map is build of several sections that define various
 
-#### `resource` section
+## Config Map sections
+
+### `resource` section
 
 The resource section contains basic information about the resource - namely kind and api details.
 
@@ -18,7 +20,7 @@ The resource section contains basic information about the resource - namely kind
 }
 ```
 
-#### `navigation` section
+### `navigation` section
 
 The navigation section defines this resource's availability in the menu and generated url.
 
@@ -34,9 +36,9 @@ Available fields are:
 }
 ```
 
-#### `form` section
+### `form` section
 
-Form section modifies the original schema (provided in the schema section) for use with [https://ui-schema.bemit.codes/](ui-schema) to generate the create/edit form for the resource. It contains a list of objects that define what fields should be included in the final form. All given fields are placed in the advanced form by default, however it's possible to add a field to simple form by providing the `simple: true` flag, or removing it from advanced form by providing the `advanced: false` flag.
+Form section modifies the original schema (provided in the schema section) for use with [ui-schema](https://ui-schema.bemit.codes/) to generate the create/edit form for the resource. It contains a list of objects that define what fields should be included in the final form. All given fields are placed in the advanced form by default, however it's possible to add a field to simple form by providing the `simple: true` flag, or removing it from advanced form by providing the `advanced: false` flag.
 
 Available fields are:
 
@@ -54,7 +56,7 @@ Available fields are:
 ]
 ```
 
-#### `list` section
+### `list` section
 
 List section defines extra columns available in the list. The format is similar to the form section, however each entry consists only of two values:
 
@@ -65,7 +67,7 @@ List section defines extra columns available in the list. The format is similar 
 [{ "path": "spec.url" }, { "path": "spec.priority", "widget": "Badge" }]
 ```
 
-#### `details` section
+### `details` section
 
 Details section defines the display structure for the details page. It contains two sections, `header` and `body`, both of which are a list of item to display in the header section and the body of the page respectively. The format of the entries is at the core similar to the form section, however it has extra options available.
 
@@ -118,12 +120,12 @@ Extra properties might be available for specific widgets.
 }
 ```
 
-#### `schema` section
+### `schema` section
 
 Schema contains the JSON-schema definition of the resource. In most cases this
 should simply be the CRD copied verbatim.
 
-#### `translations` sections
+### `translations` sections
 
 Translations can be provided as a single `translations` section that contains all available languages, formatted for i18next either as yaml or json, based on their paths.
 
@@ -148,4 +150,28 @@ de:
     name: Name
   spec:
     items: Artikel
+```
+
+Alternatively a `transations-{lang}` sections can be provided for a single language only. For example:
+
+`translations-en`:
+
+```yaml
+category: My category
+name: My Resource
+metadata:
+  name: Name
+spec:
+  items: Items
+```
+
+`translaions-pl`:
+
+```
+category: meine Kategorie
+name: Meine Ressource
+metadata:
+  name: Name
+spec:
+  items: Artikel
 ```
