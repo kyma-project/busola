@@ -8,7 +8,7 @@ Inline widgets are for simple values and are usable in lists, details headers an
 
 Text widgets render the value as simple text. This is the default behaviour for all scalar values.
 
-Example:
+#### Example
 
 ```json
 {
@@ -28,7 +28,7 @@ Values that are automatically handled are:
 - rendered as a warning: unknown, warning
 - rendered as an error: error, failure, invalid
 
-Example:
+#### Example
 
 ```json
 {
@@ -49,7 +49,7 @@ Plain widget renders all contents of an object or list sequentially without any 
 
 Panel widget renders an object as a separate panel with it's own title (base on it's `path` or `name`).
 
-Example:
+#### Example
 
 ```json
 {
@@ -65,7 +65,7 @@ Example:
 
 Columns widget renders the child widgets in two columns.
 
-Example:
+#### Example
 
 ```json
 {
@@ -88,11 +88,11 @@ Example:
 
 CodeViewer displays the the value using code hightlight.
 
-The widget acceps an extra parameter:
+#### Widget-specific parameters
 
 - **language** - language to use for code highlighting
 
-Example:
+#### Example
 
 ```json
 {
@@ -106,7 +106,7 @@ Example:
 
 Table displays array data as rows of a table instead of free-standing components. The `children` parameter defines the column renderers to use. Similar to the `list` section of the config map, only inline widgets should be used as children.
 
-Example:
+#### Example
 
 ```json
 {

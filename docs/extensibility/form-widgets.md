@@ -8,6 +8,8 @@ Widgets available for resource forms.
 
 Text widget renders the field as a text field. Used by default for all string values.
 
+#### Example
+
 ```json
 {
   "path": "spec.my-data",
@@ -18,6 +20,8 @@ Text widget renders the field as a text field. Used by default for all string va
 ### Name
 
 Name widgets renders a name input field. Contains an automatic name generator and additionally sets the label field when changed. Added automatically to all forms and set to the `metadata.name` value.
+
+#### Example
 
 ```json
 {
@@ -32,6 +36,8 @@ Name widgets renders a name input field. Contains an automatic name generator an
 
 Renders an `object` value as list of dual text fields one used for key the other for value, allowing for adding and removing entries.
 
+#### Example
+
 ```json
 {
   "path": "spec.my-data",
@@ -44,6 +50,8 @@ Renders an `object` value as list of dual text fields one used for key the other
 ### FormGroup
 
 Renders an `object` as a collapsible section. Requires the children property to render the content of the section.
+
+#### Example
 
 ```json
 {
