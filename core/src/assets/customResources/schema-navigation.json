@@ -10,29 +10,6 @@
   "title": "Custom pages to be displayed in Busola",
   "type": "object",
   "properties": {
-    "category": {
-      "description": "Category define where in navigation the entry should be displayed",
-      "examples": [
-        {
-          "de": "German translation"
-        },
-        {
-          "en": "English translation"
-        }
-      ],
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
-      }
-    },
-    "hasDetailsView": {
-      "description": "HasDetailsView defines if detalis page exist",
-      "type": "boolean"
-    },
-    "label": {
-      "description": "Label define under what name entry should be displayed in navigation",
-      "type": "string"
-    },
     "path": {
       "description": "Path is a string used to prepare resource page URL",
       "type": "string"

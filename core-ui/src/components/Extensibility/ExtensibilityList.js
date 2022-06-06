@@ -25,11 +25,11 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     );
   }
   listProps.createFormProps = { resource: resMetaData };
-  listProps.resourceName = t('labels.name', {
-    defaultValue: resMetaData.navigation.label,
+  listProps.resourceName = t('name', {
+    defaultValue: resMetaData.resource?.kind,
   });
-  listProps.description = t('labels.description', {
-    defaultValue: '',
+  listProps.description = t('description', {
+    defaultValue: ' ',
   });
   listProps.customColumns = (resMetaData.list || []).map(column => ({
     header: widgetT(column),

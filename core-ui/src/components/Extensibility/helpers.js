@@ -27,7 +27,6 @@ export const useGetTranslation = path => {
       return t(`${translationBundle}:${path}`, {
         ...options,
         defaultValue: path,
-        // defaultValue: path?.split('.')?.pop(),
       });
     },
   };

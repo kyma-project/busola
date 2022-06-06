@@ -26,19 +26,30 @@ const getCustomNodes = (crs, scope) => {
   try {
     customPaths =
       crs?.map(cr => {
+        const translationBundle = cr.navigation?.path || 'extensibility';
+        i18next.addResourceBundle(
+          i18next.language,
+          translationBundle,
+          cr.translations?.[i18next.language] || {},
+        );
         const { resource } = cr || {};
         const api = `/${resource?.group === 'core' ? 'api' : 'apis'}/${
           resource.group
         }/${resource.version.toLowerCase()}`;
         return {
           category: {
-            label: translate(cr.navigation?.category) || 'Custom Resources',
+            label: i18next.t([
+              `${translationBundle}:category`,
+              'custom-resources.title',
+            ]),
             collapsible: true,
-            icon: 'customize',
+            icon: cr.navigation?.icon || 'customize',
           },
           resourceType: resource.kind.toLowerCase(),
           pathSegment: cr.navigation?.path,
-          label: cr.navigation?.label || resource.kind,
+          label: i18next.t(`${translationBundle}:name`, {
+            defaultValue: resource.kind,
+          }),
           viewUrl:
             config.coreUIModuleUrl +
             `${scope === 'namespace' ? '/namespaces/:namespaceId' : ''}/${
@@ -46,7 +57,7 @@ const getCustomNodes = (crs, scope) => {
             }?` +
             toSearchParamsString({
               resourceApiPath: api,
-              hasDetailsView: cr.navigation?.hasDetailsView,
+              hasDetailsView: !!cr.details,
             }),
           keepSelectedForChildren: true,
           navigationContext: cr.navigation?.path,

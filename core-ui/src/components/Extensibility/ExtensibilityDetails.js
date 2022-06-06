@@ -36,26 +36,24 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
     { name: '' },
   ];
   return (
-    <TranslationBundleContext.Provider value={resMetaData.navigation.path}>
-      <ResourceDetails
-        windowTitle={prettifyNamePlural(
-          resMetaData.navigation.label || resMetaData.navigation.path,
-        )}
-        customColumns={header.map(def => ({
-          header: widgetT(def),
-          value: resource => (
-            <Widget value={resource} structure={def} schema={schema} />
-          ),
-        }))}
-        customComponents={[
-          resource => (
-            <Widget value={resource} structure={body} schema={schema} />
-          ),
-        ]}
-        breadcrumbs={breadcrumbs}
-        {...detailsProps}
-      />
-    </TranslationBundleContext.Provider>
+    <ResourceDetails
+      windowTitle={prettifyNamePlural(
+        resMetaData.navigation.label || resMetaData.navigation.path,
+      )}
+      customColumns={header.map(def => ({
+        header: widgetT(def),
+        value: resource => (
+          <Widget value={resource} structure={def} schema={schema} />
+        ),
+      }))}
+      customComponents={[
+        resource => (
+          <Widget value={resource} structure={body} schema={schema} />
+        ),
+      ]}
+      breadcrumbs={breadcrumbs}
+      {...detailsProps}
+    />
   );
 };
 
