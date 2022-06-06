@@ -25,7 +25,7 @@ import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
-import { Dropdown } from '../Dropdown/Dropdown';
+import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 
 /* to allow cloning of a resource set the following on the resource create component:
  *
@@ -153,6 +153,10 @@ export function ResourceListRenderer({
   allowSlashShortcut,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate = false,
+  sortBy = {
+    name: nameLocaleSort,
+    time: timeSort,
+  },
 }) {
   const { t } = useTranslation(['translation'], { i18n });
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
@@ -280,25 +284,9 @@ export function ResourceListRenderer({
       ].filter(e => e);
 
   const headerRenderer = () => [
-    <Link
-      key={'name'}
-      onClick={() => {
-        sort === 'nameup' ? setSort('namedown') : setSort('nameup');
-      }}
-    >
-      {t('common.headers.name') +
-        (sort === 'nameup' ? ' \u2191' : sort === 'namedown' ? ' \u2193' : '')}
-    </Link>,
+    t('common.headers.name'),
     ...(showNamespace ? [t('common.headers.namespace')] : []),
-    <Link
-      key={'created'}
-      onClick={() => {
-        sort === 'timeup' ? setSort('timedown') : setSort('timeup');
-      }}
-    >
-      {t('common.headers.created') +
-        (sort === 'timeup' ? ' \u2191' : sort === 'timedown' ? ' \u2193' : '')}
-    </Link>,
+    t('common.headers.created'),
     t('common.headers.labels'),
     ...customColumns.map(col => col.header),
     '',
@@ -328,54 +316,7 @@ export function ResourceListRenderer({
     protectedResourceWarning(entry),
   ];
 
-  const [sort, setSort] = useState('nameup');
-
-  const options = [
-    { key: 'nameup', text: 'Sorting by: name \u2191' },
-    { key: 'namedown', text: 'Sorting by: name \u2193' },
-    { key: 'timeup', text: 'Sorting by: time \u2191' },
-    { key: 'timedown', text: 'Sorting by: time \u2193' },
-  ];
-
-  const sorting = (key, resources) => {
-    if (key === 'nameup') {
-      return [
-        ...resources.sort((a, b) =>
-          a.metadata.name.localeCompare(b.metadata.name),
-        ),
-      ];
-    } else if (key === 'namedown') {
-      return [
-        ...resources.sort((a, b) =>
-          b.metadata.name.localeCompare(a.metadata.name),
-        ),
-      ];
-    } else if (key === 'timeup') {
-      return [
-        ...resources.sort(
-          (a, b) =>
-            new Date(b.metadata.creationTimestamp).getTime() -
-            new Date(a.metadata.creationTimestamp).getTime(),
-        ),
-      ];
-    } else {
-      return [
-        ...resources.sort(
-          (a, b) =>
-            new Date(a.metadata.creationTimestamp).getTime() -
-            new Date(b.metadata.creationTimestamp).getTime(),
-        ),
-      ];
-    }
-  };
-
   const extraHeaderContent = listHeaderActions || [
-    <Dropdown
-      selectedKey={sort}
-      onSelect={(_, { key }) => setSort(key)}
-      options={options}
-      compact
-    />,
     CreateResourceForm && !disableCreate && (
       <Button
         glyph="add"
@@ -443,7 +384,7 @@ export function ResourceListRenderer({
         allowSlashShortcut={allowSlashShortcut}
         showSearchField={showSearchField}
         actions={actions}
-        entries={sorting(sort, resources || [])}
+        entries={resources || []}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         serverDataError={error}
@@ -453,6 +394,7 @@ export function ResourceListRenderer({
         testid={testid}
         currentlyEditedResourceUID={currentlyEditedResourceUID}
         i18n={i18n}
+        sortBy={sortBy}
       />
     </>
   );

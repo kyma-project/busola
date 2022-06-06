@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LayoutPanel } from 'fundamental-react';
+import { Dropdown } from '../Dropdown/Dropdown';
 import { useTranslation } from 'react-i18next';
 
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
@@ -20,7 +21,13 @@ import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { getErrorMessage } from 'shared/utils/helpers';
+import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import './GenericList.scss';
+
+const defaultSort = {
+  name: nameLocaleSort,
+  time: timeSort,
+};
 
 export const GenericList = ({
   entries = [],
@@ -50,7 +57,27 @@ export const GenericList = ({
   currentlyEditedResourceUID,
   i18n,
   allowSlashShortcut,
+  sortBy,
 }) => {
+  if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
+
+  const [sort, setSort] = useState({
+    name: sortBy && Object.keys(sortBy)[0],
+    order: 'ASC',
+  });
+
+  const sorting = (sort, resources) => {
+    if (!sortBy) return resources;
+    const sortFunction = Object.entries(sortBy).filter(([name]) => {
+      return name === sort.name;
+    })[0][1];
+    if (sort.order === 'ASC') {
+      return [...resources.sort(sortFunction)];
+    } else {
+      return [...resources.sort((a, b) => sortFunction(b, a))];
+    }
+  };
+
   const { settings } = useMicrofrontendContext();
   if (pagination) {
     pagination.itemsPerPage =
@@ -61,8 +88,31 @@ export const GenericList = ({
   const [currentPage, setCurrentPage] = React.useState(
     pagination?.initialPage || 1,
   );
-  const [filteredEntries, setFilteredEntries] = useState(entries);
+  const [filteredEntries, setFilteredEntries] = useState(() =>
+    sorting(sort, entries),
+  );
   const [searchQuery, setSearchQuery] = useState('');
+
+  const sortOptions =
+    sortBy &&
+    Object.entries(sortBy).flatMap(([name]) => {
+      return [
+        {
+          key: `${name}ASC`,
+          text: t('common.sorting.sort-by-asc', {
+            name: t(`common.sorting.${name}`),
+          }),
+          data: { name, order: 'ASC' },
+        },
+        {
+          key: `${name}DESC`,
+          text: t('common.sorting.sort-by-desc', {
+            name: t(`common.sorting.${name}`),
+          }),
+          data: { name, order: 'DESC' },
+        },
+      ];
+    });
 
   useEffect(() => {
     if (pagination) {
@@ -73,10 +123,16 @@ export const GenericList = ({
       }
     }
     setFilteredEntries(
-      filterEntries([...entries], searchQuery, textSearchProperties),
+      filterEntries(sorting(sort, entries), searchQuery, textSearchProperties),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery, setFilteredEntries, entries, pagination?.itemsPerPage]);
+  }, [
+    searchQuery,
+    setFilteredEntries,
+    entries,
+    pagination?.itemsPerPage,
+    sort,
+  ]);
 
   React.useEffect(() => setCurrentPage(1), [searchQuery]);
 
@@ -94,6 +150,14 @@ export const GenericList = ({
           disabled={!entries.length}
           i18n={i18n}
           allowSlashShortcut={allowSlashShortcut}
+        />
+      )}
+      {sortBy && (
+        <Dropdown
+          selectedKey={sort.name + sort.order}
+          onSelect={(_, { data }) => setSort(data)}
+          options={sortOptions}
+          compact
         />
       )}
       {extraHeaderContent}
