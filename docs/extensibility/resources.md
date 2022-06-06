@@ -212,7 +212,7 @@ spec:
   items: Items
 ```
 
-`translaions-pl`:
+`translations-pl`:
 
 ```yaml
 category: meine Kategorie
