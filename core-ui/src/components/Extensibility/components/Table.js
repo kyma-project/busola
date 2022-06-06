@@ -9,10 +9,10 @@ export function Table({ value, structure, schema }) {
   const { widgetT } = useGetTranslation();
 
   const headerRenderer = () =>
-    (structure.columns || []).map(column => widgetT([structure, column]));
+    (structure.children || []).map(column => widgetT([structure, column]));
 
   const rowRenderer = entry =>
-    structure.columns.map(column => (
+    structure.children.map(column => (
       <Widget value={entry} structure={column} schema={schema} />
     ));
 
