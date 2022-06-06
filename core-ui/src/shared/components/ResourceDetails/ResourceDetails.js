@@ -51,7 +51,7 @@ ResourceDetails.propTypes = {
 
 ResourceDetails.defaultProps = {
   customColumns: [],
-  customComponentscustomComponents: [],
+  customComponents: [],
   headerActions: null,
   resourceHeaderActions: [],
   readOnly: false,
