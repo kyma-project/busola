@@ -9,8 +9,8 @@ import './Navigation.scss';
 const createNavigationStructure = (routes, namespaced) => {
   let categories = [];
   routes?.map(route => {
-    if (!route?.navData?.category) return;
-    if (route?.namespaced !== namespaced) return;
+    if (!route?.navData?.category) return null;
+    if (route?.namespaced !== namespaced) return null;
     const matchingIndex = categories?.findIndex(
       category => category?.name === route?.navData?.category,
     );
@@ -33,8 +33,9 @@ const createNavigationStructure = (routes, namespaced) => {
         },
       ];
     }
+    return null;
   });
-  return categories;
+  return categories.filter(c => c);
 };
 
 export function Navigation() {
