@@ -9,7 +9,7 @@ export function Badge({ value, structure, schema }) {
     EMPTY_TEXT_PLACEHOLDER
   ) : (
     <span className="status-badge-wrapper">
-      <StatusBadge>{value}</StatusBadge>
+      <StatusBadge autoResolveType>{value}</StatusBadge>
     </span>
   );
 }
