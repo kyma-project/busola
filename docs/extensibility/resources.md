@@ -14,6 +14,8 @@ All sections can be provided as either json or yaml.
 
 The resource section is required and contains basic information about the resource - namely kind and api details.
 
+Example:
+
 ```json
 {
   "kind": "MyResources",
@@ -24,12 +26,14 @@ The resource section is required and contains basic information about the resour
 
 ### `navigation` section
 
-The navigation section is required and defines this resource's availability in the menu and generated url.
+The navigation section is required and defines this resource's availability in the menu and generated url. The name of the menu entry as well as category it's going to be placed in are read from the translation section's `name` and `category` entries respectively.
 
 Available fields are:
 
 - **path** - path for this resource to use in the url,
 - **scope** - either `namespace` or `cluster`.
+
+Example:
 
 ```json
 {
@@ -49,6 +53,8 @@ Available fields are:
 - **simple** - whether to display in the simple form. By default it is false,
 - **advanced** - whether to diplay in the advanced form. By default it is true.
 
+Example:
+
 ```json
 [
   { "path": "spec.priority", "simple": true },
@@ -65,6 +71,8 @@ List section defines extra columns available in the list. The format is similar 
 - **path** - [required] contains the path to the data to use for the column,
 - **widget** - optional widget used to render the field. By default the value will be displayed verbatim. For more information about the available widgets see [Display widgets](display-widgets.md).
 
+Example:
+
 ```json
 [{ "path": "spec.url" }, { "path": "spec.priority", "widget": "Badge" }]
 ```
@@ -73,12 +81,22 @@ List section defines extra columns available in the list. The format is similar 
 
 Details section defines the display structure for the details page. It contains two sections, `header` and `body`, both of which are a list of item to display in the header section and the body of the page respectively. The format of the entries is at the core similar to the form section, however it has extra options available.
 
+The resource section is required and contains basic information about the resource - namely kind and api details.
+
+{
+"kind": "MyResources",
+"group": "networking.istio.io",
+"version": "v1alpha3"
+}
+
 - **path** - contains the path to the data to use for the widget. Not required for purely presentational widgets,
 - **name** - used for entries without `path` to define the translation source used for labels. Required if no path is present,
 - **widget** - optional widget to render the field. By default the value will be displayed verbatim. For more information about the available widgets see [Display widgets](display-widgets.md),
 - **children** - a list of child widgets to use for all `object` and `array` type fields. Not available for header widgets.
 
 Extra properties might be available for specific widgets.
+
+Example:
 
 ```json
 {
@@ -160,6 +178,8 @@ Extra translations available include:
 - **name** - title to be used in the navigation and on the list screen. Defaults to it's resource kind,
 - **description** - a more in-depth description of the resorce displaye on the list screen. It's only displayed if present.
 
+Example:
+
 ```yaml
 en:
   category: My category
@@ -192,7 +212,7 @@ spec:
 
 `translaions-pl`:
 
-```
+```yaml
 category: meine Kategorie
 name: Meine Ressource
 metadata:
