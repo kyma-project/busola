@@ -220,3 +220,5 @@ metadata:
 spec:
   items: Artikel
 ```
+
+If both `translations` and `translations-{lang}` sections are provided, they are merged together.
