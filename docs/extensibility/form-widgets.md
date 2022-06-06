@@ -4,6 +4,8 @@ Widgets available for resource forms.
 
 ## Simple Widgets
 
+Simple widgets represent a single scalar value.
+
 ### Text
 
 Text widget renders the field as a text field. Used by default for all string values.
@@ -32,6 +34,8 @@ Name widgets renders a name input field. Contains an automatic name generator an
 
 ## Complex Widgets
 
+Complex widgets handle more complex values than a simple scalar. Either arrays or objects.
+
 ### KeyValuePair
 
 Renders an `object` value as list of dual text fields one used for key the other for value, allowing for adding and removing entries.
@@ -45,7 +49,9 @@ Renders an `object` value as list of dual text fields one used for key the other
 }
 ```
 
-## Presentational Widgets
+## Presentation Widgets
+
+Presentation widgets do not handle data directly and only serve to group contents into a more readable form.
 
 ### FormGroup
 
