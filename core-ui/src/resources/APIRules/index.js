@@ -5,6 +5,10 @@ import { matchByOwnerReference } from 'shared/utils/helpers';
 export const resourceType = 'ApiRules';
 export const namespaced = true;
 export const resourceI18Key = 'api-rules.title';
+export const navData = {
+  category: 'Xxx',
+  label: resourceType,
+};
 
 export const List = React.lazy(() => import('./APIRuleList'));
 export const Details = React.lazy(() => import('./APIRuleDetails'));

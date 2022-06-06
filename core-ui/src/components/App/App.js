@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { Navigation } from '../Navigation/Navigation';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
@@ -16,6 +17,8 @@ import { useSentry } from 'hooks/useSentry';
 
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
+
+import './App.scss';
 
 function Clusters() {
   return 'tu bd lista klastrów';
@@ -47,28 +50,31 @@ export default function App() {
   }, []);
 
   return (
-    <Routes>
-      <Route path="clusters" element={<Clusters />} />
-      <Route path="cluster/:currentClusterName/*">
+    <>
+      <Navigation />
+      <Routes>
+        <Route path="clusters" element={<Clusters />} />
+        <Route path="cluster/:currentClusterName/*">
+          <Route
+            path="overview" // overview route should stay static
+            element={
+              <WithTitle title={t('clusters.overview.title-current-cluster')}>
+                <ClusterOverview />
+              </WithTitle>
+            }
+          />
+          {serviceCatalogRoutes}
+          {resourceRoutes}
+          {otherRoutes}
+          {/* todo redirect to ns details on invalid path */}
+          {/* <Route path="*" element={<Navigate to="overview" replace />} /> */}
+        </Route>
         <Route
-          path="overview" // overview route should stay static
-          element={
-            <WithTitle title={t('clusters.overview.title-current-cluster')}>
-              <ClusterOverview />
-            </WithTitle>
-          }
+          path="*"
+          element={<EmptyPathRedirect currentCluster={currentCluster} />}
         />
-        {serviceCatalogRoutes}
-        {resourceRoutes}
-        {otherRoutes}
-        {/* todo redirect to ns details on invalid path */}
-        {/* <Route path="*" element={<Navigate to="overview" replace />} /> */}
-      </Route>
-      <Route
-        path="*"
-        element={<EmptyPathRedirect currentCluster={currentCluster} />}
-      />
-    </Routes>
+      </Routes>
+    </>
   );
 }
 

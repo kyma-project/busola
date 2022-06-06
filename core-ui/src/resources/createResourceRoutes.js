@@ -122,3 +122,14 @@ export const createResourceRoutes = ({
     </React.Fragment>
   );
 };
+
+export const createResourceNavRoutes = ({
+  namespaced = true,
+  resourceType = '',
+  resourceI18Key = '',
+  navData,
+}) => {
+  const pathSegment = resourceType.toLowerCase();
+  const listPath = createPath({ namespaced, pathSegment });
+  return { path: listPath, namespaced, resourceType, resourceI18Key, navData };
+};
