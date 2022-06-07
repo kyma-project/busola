@@ -1,0 +1,256 @@
+{
+  "kind": "SecretList",
+  "apiVersion": "v1",
+  "metadata": {
+    "resourceVersion": "15584752"
+  },
+  "items": [
+    {
+      "metadata": {
+        "name": "default-token-lkwqk",
+        "namespace": "wch",
+        "uid": "82648566-a65e-4d83-a79b-b568a76430ed",
+        "resourceVersion": "6039956",
+        "creationTimestamp": "2022-05-12T08:24:24Z",
+        "labels": {
+          "resources.gardener.cloud/purpose": "token-invalidator"
+        },
+        "annotations": {
+          "kubernetes.io/service-account.name": "default",
+          "kubernetes.io/service-account.uid": "73127de3-582d-46b3-aaf2-a176b071d77c"
+        },
+        "managedFields": [
+          {
+            "manager": "gardener-resource-manager",
+            "operation": "Update",
+            "apiVersion": "v1",
+            "time": "2022-05-12T08:24:24Z",
+            "fieldsType": "FieldsV1",
+            "fieldsV1": {
+              "f:metadata": {
+                "f:labels": {
+                  ".": {},
+                  "f:resources.gardener.cloud/purpose": {}
+                }
+              }
+            }
+          },
+          {
+            "manager": "kube-controller-manager",
+            "operation": "Update",
+            "apiVersion": "v1",
+            "time": "2022-05-12T08:24:24Z",
+            "fieldsType": "FieldsV1",
+            "fieldsV1": {
+              "f:data": {
+                ".": {},
+                "f:ca.crt": {},
+                "f:namespace": {},
+                "f:token": {}
+              },
+              "f:metadata": {
+                "f:annotations": {
+                  ".": {},
+                  "f:kubernetes.io/service-account.name": {},
+                  "f:kubernetes.io/service-account.uid": {}
+                }
+              },
+              "f:type": {}
+            }
+          }
+        ]
+      },
+      "data": {
+        "ca.crt": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5akNDQWQ2Z0F3SUJBZ0lRUHlXZmVWcE5xUFRidXRId0o5a2hmekFOQmdrcWhraUc5dzBCQVFzRkFEQVYKTVJNd0VRWURWUVFERXdwcmRXSmxjbTVsZEdWek1CNFhEVEl5TURReU1qQTJOVEl4T0ZvWERUTXlNRFF5TWpBMgpOVEl4T0Zvd0ZURVRNQkVHQTFVRUF4TUthM1ZpWlhKdVpYUmxjekNDQVNJd0RRWUpLb1pJaHZjTkFRRUJCUUFECmdnRVBBRENDQVFvQ2dnRUJBS1ZHR3E0WXQ3bnE4TGpnOEZsK01nTDlwYktHSG04SDIyYmlobG9RVUp0SDBsbmQKU2pjLzljM2gyQUU2cmVtUzBWUXA5SlhvOFRHTFpLa0JEZ0UwaHFMVVFDYzZYc0paTjIyQktqQlEwR0dxb0duNgptTkFaMEVDZUZiSTgyM2lDdXVsNEIyVXlBYjMxcGJtSmdVWHl2RUp4SEFrMEF6TUVnWVhjZ3Zid0pPRmVIV2xuCmRQS0U4Q3Q1cnNJRkJuUDE2ZnRpWDZ5UFhLN04xUkhOUWVSa0RZYzZiVjdXeGdvUGlBVFBsRFI0b002bTZENDgKZXpGSWFvQjZmLzhvUHNyV1dHWFZwU0ZjaXFKUUZWNGI1RUZ5RmNuOGpjaXRJNjZkVy9qdkNsVjllaUR1eVArSApXRTdUemNwdkM4WFZ2RUIwOFFTeGlkMk91UVJtV0RQQnYxcHZDV2tDQXdFQUFhTkNNRUF3RGdZRFZSMFBBUUgvCkJBUURBZ0dtTUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3SFFZRFZSME9CQllFRlBZNUk3U0ZmR3dHSUs2MC9NQnkKSUJJUTJnU09NQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUUNJTE5TNkZKOHhEMnE4UGZYWHVPMzN4R1hGQ21XLwpnOWhka0xKSGwvSzdidC90NzRxRUpicUE1NzNFS0xmc01XQW5TN1VsUTNYbWtZeitIQkY0WFBiQ0UweGdkbXUyCmh1WDZPdTdBSHBoMkxqRFQ2OFVIZFI2YnA3ZVB1NTMvMXpwczA1cHB1ZVhLUlMxWW5iQ0hJUWsxN085c1ZEbk0KcHhLQjZaNTlWYnFhejZRTHZLQStOTnNMYU81NFZRd0RhRk1heEtSL05ybnJjOS94dFZNcS9ucWlvUzNHSjBDYgp1T3g4OCtVWFY0b1ExeDh4S0hGd1ZYWHJxU2VEMkVLZVU1RTRrdFpJaTFRc2k2UmpFeU5MTnR5akU3SnpIWHdICm9JbVd1dlpTUFJDRll4RS8rUUNHc3Q1TlpHNHc1R0FnMi95OXRaaHFnckRqaStrdzhHMHdsaUR0Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K",
+        "namespace": "d2No",
+        "token": "ZXlKaGJHY2lPaUpTVXpJMU5pSXNJbXRwWkNJNkltWkpkMFYxZGpSbFJFTlNSMnhWT1RZM1lqZEZRa0Z1ZEZjM1RtZE1NVEZETTBSVWEzSXlYM0ZETjJzaWZRLmV5SnBjM01pT2lKcmRXSmxjbTVsZEdWekwzTmxjblpwWTJWaFkyTnZkVzUwSWl3aWEzVmlaWEp1WlhSbGN5NXBieTl6WlhKMmFXTmxZV05qYjNWdWRDOXVZVzFsYzNCaFkyVWlPaUozWTJnaUxDSnJkV0psY201bGRHVnpMbWx2TDNObGNuWnBZMlZoWTJOdmRXNTBMM05sWTNKbGRDNXVZVzFsSWpvaVpHVm1ZWFZzZEMxMGIydGxiaTFzYTNkeGF5SXNJbXQxWW1WeWJtVjBaWE11YVc4dmMyVnlkbWxqWldGalkyOTFiblF2YzJWeWRtbGpaUzFoWTJOdmRXNTBMbTVoYldVaU9pSmtaV1poZFd4MElpd2lhM1ZpWlhKdVpYUmxjeTVwYnk5elpYSjJhV05sWVdOamIzVnVkQzl6WlhKMmFXTmxMV0ZqWTI5MWJuUXVkV2xrSWpvaU56TXhNamRrWlRNdE5UZ3laQzAwTm1JekxXRmhaakl0WVRFM05tSXdOekZrTnpkaklpd2ljM1ZpSWpvaWMzbHpkR1Z0T25ObGNuWnBZMlZoWTJOdmRXNTBPbmRqYURwa1pXWmhkV3gwSW4wLk8xUF9DdzRtN0hrSEgtR0ZINDE4ZlRtaUVDMTZWS21UNVduSXk3bUVSenpRdktIa1lpR1ZLcG85V3pqYzFXcDNqTXVGb0VHcm9ZeHNLQmVCektUenQ0Y283aExVNl9TY3FHU01aMUd0WlE4WHplZ0Zsb3RRQ0p0eXJSNlI2R3FoYkFuQU5CUzZGTTFGTnJEcWExS19BY0VkMW93MHlUUWlvM2pBTk9OU04yTERjN2pod2JNdkxUaldwNlFpcE8yUEprTlVWNnZIS0lVQk12Ml9jOElLRDRXN1hCbmp6eTEwMGtLWE5aUEY4Zmx2QVU2N0dCM0xJUmhKeHIzWGtqb1ZHLVpxeTRxSklpV3dPYkRHVWM2Ti1pc0d5bE52LV8tRGM4aFR2N3JXc0JRUzdDS24xS2dJZjBsVlZ6dWVaaTVyUzN4NjRrekpCYVEyenpHTVI0Z25NbzZ3aS1sbEROTFIteWZVQ1J3WW1NWjR3SVc5U3pSdm5EeFMwN0ZfbkFKeVZ5Q0p0UWV3a0l1RmRmM3RjWER4OTJBUUJsS19ydDVlal9VQzJoMTEwTDFzZjMyeUY4c3k0bVlBOTN4MzhPMHNFUVJ0Q1o5d0VzUFJpWU5NRFlFREd5YkdmUUFobjVFWDFvXy1LNU8zajJOTlg2Ykc5cmxid0hmbko5dEhtMzBoOFhER2IxUnZfN0E1NFdXLUpadFd6ZldlOVc5bUltb2ZWS0JBRXZNOFpxYXE4b1dWUE13Uk44Y1JRVUU0eEM4STJ1OVpzSGp4QVU5ekhOSlNSUkdXc2NRaE5KT2UtNTlOb2JIc25UUGQ5V2o3QWxKV3d2dU55Y2RWeDVIblhnX2R6LUlBNWpLeGtpVDA3b3VDSWtJQUhhQmctemVDWl9mdzd5ajQ4LXhyTWVB"
+      },
+      "type": "kubernetes.io/service-account-token"
+    },
+    {
+      "metadata": {
+        "name": "serverless-build-token-zwb45",
+        "namespace": "wch",
+        "uid": "42e1ea01-d912-4ef1-818a-a4f06bf986c5",
+        "resourceVersion": "6039966",
+        "creationTimestamp": "2022-05-12T08:24:24Z",
+        "labels": {
+          "resources.gardener.cloud/purpose": "token-invalidator"
+        },
+        "annotations": {
+          "kubernetes.io/service-account.name": "serverless-build",
+          "kubernetes.io/service-account.uid": "c53dc2bc-a33e-4494-ad15-756c7a5bbfc2"
+        },
+        "managedFields": [
+          {
+            "manager": "gardener-resource-manager",
+            "operation": "Update",
+            "apiVersion": "v1",
+            "time": "2022-05-12T08:24:24Z",
+            "fieldsType": "FieldsV1",
+            "fieldsV1": {
+              "f:metadata": {
+                "f:labels": {
+                  ".": {},
+                  "f:resources.gardener.cloud/purpose": {}
+                }
+              }
+            }
+          },
+          {
+            "manager": "kube-controller-manager",
+            "operation": "Update",
+            "apiVersion": "v1",
+            "time": "2022-05-12T08:24:24Z",
+            "fieldsType": "FieldsV1",
+            "fieldsV1": {
+              "f:data": {
+                ".": {},
+                "f:ca.crt": {},
+                "f:namespace": {},
+                "f:token": {}
+              },
+              "f:metadata": {
+                "f:annotations": {
+                  ".": {},
+                  "f:kubernetes.io/service-account.name": {},
+                  "f:kubernetes.io/service-account.uid": {}
+                }
+              },
+              "f:type": {}
+            }
+          }
+        ]
+      },
+      "data": {
+        "ca.crt": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5akNDQWQ2Z0F3SUJBZ0lRUHlXZmVWcE5xUFRidXRId0o5a2hmekFOQmdrcWhraUc5dzBCQVFzRkFEQVYKTVJNd0VRWURWUVFERXdwcmRXSmxjbTVsZEdWek1CNFhEVEl5TURReU1qQTJOVEl4T0ZvWERUTXlNRFF5TWpBMgpOVEl4T0Zvd0ZURVRNQkVHQTFVRUF4TUthM1ZpWlhKdVpYUmxjekNDQVNJd0RRWUpLb1pJaHZjTkFRRUJCUUFECmdnRVBBRENDQVFvQ2dnRUJBS1ZHR3E0WXQ3bnE4TGpnOEZsK01nTDlwYktHSG04SDIyYmlobG9RVUp0SDBsbmQKU2pjLzljM2gyQUU2cmVtUzBWUXA5SlhvOFRHTFpLa0JEZ0UwaHFMVVFDYzZYc0paTjIyQktqQlEwR0dxb0duNgptTkFaMEVDZUZiSTgyM2lDdXVsNEIyVXlBYjMxcGJtSmdVWHl2RUp4SEFrMEF6TUVnWVhjZ3Zid0pPRmVIV2xuCmRQS0U4Q3Q1cnNJRkJuUDE2ZnRpWDZ5UFhLN04xUkhOUWVSa0RZYzZiVjdXeGdvUGlBVFBsRFI0b002bTZENDgKZXpGSWFvQjZmLzhvUHNyV1dHWFZwU0ZjaXFKUUZWNGI1RUZ5RmNuOGpjaXRJNjZkVy9qdkNsVjllaUR1eVArSApXRTdUemNwdkM4WFZ2RUIwOFFTeGlkMk91UVJtV0RQQnYxcHZDV2tDQXdFQUFhTkNNRUF3RGdZRFZSMFBBUUgvCkJBUURBZ0dtTUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3SFFZRFZSME9CQllFRlBZNUk3U0ZmR3dHSUs2MC9NQnkKSUJJUTJnU09NQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUUNJTE5TNkZKOHhEMnE4UGZYWHVPMzN4R1hGQ21XLwpnOWhka0xKSGwvSzdidC90NzRxRUpicUE1NzNFS0xmc01XQW5TN1VsUTNYbWtZeitIQkY0WFBiQ0UweGdkbXUyCmh1WDZPdTdBSHBoMkxqRFQ2OFVIZFI2YnA3ZVB1NTMvMXpwczA1cHB1ZVhLUlMxWW5iQ0hJUWsxN085c1ZEbk0KcHhLQjZaNTlWYnFhejZRTHZLQStOTnNMYU81NFZRd0RhRk1heEtSL05ybnJjOS94dFZNcS9ucWlvUzNHSjBDYgp1T3g4OCtVWFY0b1ExeDh4S0hGd1ZYWHJxU2VEMkVLZVU1RTRrdFpJaTFRc2k2UmpFeU5MTnR5akU3SnpIWHdICm9JbVd1dlpTUFJDRll4RS8rUUNHc3Q1TlpHNHc1R0FnMi95OXRaaHFnckRqaStrdzhHMHdsaUR0Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K",
+        "namespace": "d2No",
+        "token": "ZXlKaGJHY2lPaUpTVXpJMU5pSXNJbXRwWkNJNkltWkpkMFYxZGpSbFJFTlNSMnhWT1RZM1lqZEZRa0Z1ZEZjM1RtZE1NVEZETTBSVWEzSXlYM0ZETjJzaWZRLmV5SnBjM01pT2lKcmRXSmxjbTVsZEdWekwzTmxjblpwWTJWaFkyTnZkVzUwSWl3aWEzVmlaWEp1WlhSbGN5NXBieTl6WlhKMmFXTmxZV05qYjNWdWRDOXVZVzFsYzNCaFkyVWlPaUozWTJnaUxDSnJkV0psY201bGRHVnpMbWx2TDNObGNuWnBZMlZoWTJOdmRXNTBMM05sWTNKbGRDNXVZVzFsSWpvaWMyVnlkbVZ5YkdWemN5MWlkV2xzWkMxMGIydGxiaTE2ZDJJME5TSXNJbXQxWW1WeWJtVjBaWE11YVc4dmMyVnlkbWxqWldGalkyOTFiblF2YzJWeWRtbGpaUzFoWTJOdmRXNTBMbTVoYldVaU9pSnpaWEoyWlhKc1pYTnpMV0oxYVd4a0lpd2lhM1ZpWlhKdVpYUmxjeTVwYnk5elpYSjJhV05sWVdOamIzVnVkQzl6WlhKMmFXTmxMV0ZqWTI5MWJuUXVkV2xrSWpvaVl6VXpaR015WW1NdFlUTXpaUzAwTkRrMExXRmtNVFV0TnpVMll6ZGhOV0ppWm1NeUlpd2ljM1ZpSWpvaWMzbHpkR1Z0T25ObGNuWnBZMlZoWTJOdmRXNTBPbmRqYURwelpYSjJaWEpzWlhOekxXSjFhV3hrSW4wLjBoVGFVS1VhQ2JHd3NXa1h6WFlaaVE3YTJzT08yYjhSQTBqT2E5R2hhVV91WFJRTE80LVU3em9Ka2hHUF91RkRLcjdOZ3lzWnJSRWRSZGN2TnA5bnk5OTRQblRyZHYtUVZ2aDRGRktTZjNLUXpUbjlSb0JQR3o0d3ZCdnI1TF9vdmFnNHFnY2diZ0g2ZnhaTFlUa3Jab2dOeWN5V2NqOFpnOXdJdmNKbkE2Zy1LT25YOWgzWkNtZmVzVUFhUkppNjhTbHRIQkxER29BS05KNG15TEFYQkdBRV9DVTloeGJfOUVZQUFPeXdqUm1FR2liRkRobGxUSXhhTy1EcDFES3gzbmNkb1ZCY09ESUFCSlF5N0Y0N1FxTm5aS3NRRUU1d2tPRGxraXZ4Q01rVGFFVGNxWlEwbS1qQ3V1YTJ1WFJESVp4YnBVNjNyS29sMk1SWVZVWS05OTJsSHRpNnZkbDludWVXdFd4WDN2emhBc2gzeVdRM0FRTldwdTZKaV9MX1MwT0J3SWEzWkpwZGZHNzhNcmRvZnNiY2VzeC01aGJyZTdpMVBrcGJ6MnNNUDAtZXBjdEFyNWpfOHg5Wjc1eldDU0J6WnJuamxoZGF5bEN5RFBLa3ZWRnJaWklzQXdTaVJPZDhFVGJpSkF2MFZrX0VnSm5DbnpObFl1bmtLcHVsdUNBdzdpYzNMTnN4VE1kSExMT2RINF9LSzAySFlLdjZuVzRHYUJlaEhmX3BobC1LNXNyTGpQMkstUVFmcjlnQmFpTWc0dGpqeW1vOGJVRWhldWVac3hzd2N1UURqVTBFa1FKUW5PRlkxSVpHSzJzMmM4N1duNmlrRlN3ZFB6Y3B0WVFuV0xWMjlJT2FvWDlaR3N5bV9IR25hRzFBU0NrWGJ0OUYzbkhQT1Zv"
+      },
+      "type": "kubernetes.io/service-account-token"
+    },
+    {
+      "metadata": {
+        "name": "serverless-function-token-65bsq",
+        "namespace": "wch",
+        "uid": "b0c95cbb-c30a-4702-93e2-62e9c49bcde7",
+        "resourceVersion": "6039969",
+        "creationTimestamp": "2022-05-12T08:24:24Z",
+        "labels": {
+          "resources.gardener.cloud/purpose": "token-invalidator",
+          "token-invalidator.resources.gardener.cloud/consider": "true"
+        },
+        "annotations": {
+          "kubernetes.io/service-account.name": "serverless-function",
+          "kubernetes.io/service-account.uid": "5f872362-8923-4cd7-9acb-61fccd6cb12f"
+        },
+        "managedFields": [
+          {
+            "manager": "gardener-resource-manager",
+            "operation": "Update",
+            "apiVersion": "v1",
+            "time": "2022-05-12T08:24:24Z",
+            "fieldsType": "FieldsV1",
+            "fieldsV1": {
+              "f:metadata": {
+                "f:labels": {
+                  ".": {},
+                  "f:resources.gardener.cloud/purpose": {},
+                  "f:token-invalidator.resources.gardener.cloud/consider": {}
+                }
+              }
+            }
+          },
+          {
+            "manager": "kube-controller-manager",
+            "operation": "Update",
+            "apiVersion": "v1",
+            "time": "2022-05-12T08:24:24Z",
+            "fieldsType": "FieldsV1",
+            "fieldsV1": {
+              "f:data": {
+                ".": {},
+                "f:ca.crt": {},
+                "f:namespace": {},
+                "f:token": {}
+              },
+              "f:metadata": {
+                "f:annotations": {
+                  ".": {},
+                  "f:kubernetes.io/service-account.name": {},
+                  "f:kubernetes.io/service-account.uid": {}
+                }
+              },
+              "f:type": {}
+            }
+          }
+        ]
+      },
+      "data": {
+        "ca.crt": "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5akNDQWQ2Z0F3SUJBZ0lRUHlXZmVWcE5xUFRidXRId0o5a2hmekFOQmdrcWhraUc5dzBCQVFzRkFEQVYKTVJNd0VRWURWUVFERXdwcmRXSmxjbTVsZEdWek1CNFhEVEl5TURReU1qQTJOVEl4T0ZvWERUTXlNRFF5TWpBMgpOVEl4T0Zvd0ZURVRNQkVHQTFVRUF4TUthM1ZpWlhKdVpYUmxjekNDQVNJd0RRWUpLb1pJaHZjTkFRRUJCUUFECmdnRVBBRENDQVFvQ2dnRUJBS1ZHR3E0WXQ3bnE4TGpnOEZsK01nTDlwYktHSG04SDIyYmlobG9RVUp0SDBsbmQKU2pjLzljM2gyQUU2cmVtUzBWUXA5SlhvOFRHTFpLa0JEZ0UwaHFMVVFDYzZYc0paTjIyQktqQlEwR0dxb0duNgptTkFaMEVDZUZiSTgyM2lDdXVsNEIyVXlBYjMxcGJtSmdVWHl2RUp4SEFrMEF6TUVnWVhjZ3Zid0pPRmVIV2xuCmRQS0U4Q3Q1cnNJRkJuUDE2ZnRpWDZ5UFhLN04xUkhOUWVSa0RZYzZiVjdXeGdvUGlBVFBsRFI0b002bTZENDgKZXpGSWFvQjZmLzhvUHNyV1dHWFZwU0ZjaXFKUUZWNGI1RUZ5RmNuOGpjaXRJNjZkVy9qdkNsVjllaUR1eVArSApXRTdUemNwdkM4WFZ2RUIwOFFTeGlkMk91UVJtV0RQQnYxcHZDV2tDQXdFQUFhTkNNRUF3RGdZRFZSMFBBUUgvCkJBUURBZ0dtTUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3SFFZRFZSME9CQllFRlBZNUk3U0ZmR3dHSUs2MC9NQnkKSUJJUTJnU09NQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUUNJTE5TNkZKOHhEMnE4UGZYWHVPMzN4R1hGQ21XLwpnOWhka0xKSGwvSzdidC90NzRxRUpicUE1NzNFS0xmc01XQW5TN1VsUTNYbWtZeitIQkY0WFBiQ0UweGdkbXUyCmh1WDZPdTdBSHBoMkxqRFQ2OFVIZFI2YnA3ZVB1NTMvMXpwczA1cHB1ZVhLUlMxWW5iQ0hJUWsxN085c1ZEbk0KcHhLQjZaNTlWYnFhejZRTHZLQStOTnNMYU81NFZRd0RhRk1heEtSL05ybnJjOS94dFZNcS9ucWlvUzNHSjBDYgp1T3g4OCtVWFY0b1ExeDh4S0hGd1ZYWHJxU2VEMkVLZVU1RTRrdFpJaTFRc2k2UmpFeU5MTnR5akU3SnpIWHdICm9JbVd1dlpTUFJDRll4RS8rUUNHc3Q1TlpHNHc1R0FnMi95OXRaaHFnckRqaStrdzhHMHdsaUR0Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K",
+        "namespace": "d2No",
+        "token": "ZXlKaGJHY2lPaUpTVXpJMU5pSXNJbXRwWkNJNkltWkpkMFYxZGpSbFJFTlNSMnhWT1RZM1lqZEZRa0Z1ZEZjM1RtZE1NVEZETTBSVWEzSXlYM0ZETjJzaWZRLmV5SnBjM01pT2lKcmRXSmxjbTVsZEdWekwzTmxjblpwWTJWaFkyTnZkVzUwSWl3aWEzVmlaWEp1WlhSbGN5NXBieTl6WlhKMmFXTmxZV05qYjNWdWRDOXVZVzFsYzNCaFkyVWlPaUozWTJnaUxDSnJkV0psY201bGRHVnpMbWx2TDNObGNuWnBZMlZoWTJOdmRXNTBMM05sWTNKbGRDNXVZVzFsSWpvaWMyVnlkbVZ5YkdWemN5MW1kVzVqZEdsdmJpMTBiMnRsYmkwMk5XSnpjU0lzSW10MVltVnlibVYwWlhNdWFXOHZjMlZ5ZG1salpXRmpZMjkxYm5RdmMyVnlkbWxqWlMxaFkyTnZkVzUwTG01aGJXVWlPaUp6WlhKMlpYSnNaWE56TFdaMWJtTjBhVzl1SWl3aWEzVmlaWEp1WlhSbGN5NXBieTl6WlhKMmFXTmxZV05qYjNWdWRDOXpaWEoyYVdObExXRmpZMjkxYm5RdWRXbGtJam9pTldZNE56SXpOakl0T0RreU15MDBZMlEzTFRsaFkySXROakZtWTJOa05tTmlNVEptSWl3aWMzVmlJam9pYzNsemRHVnRPbk5sY25acFkyVmhZMk52ZFc1ME9uZGphRHB6WlhKMlpYSnNaWE56TFdaMWJtTjBhVzl1SW4wLkVucHo4V29uQWg2eENVdWVLYkdBaV8xZHRuNzNOeVFlc2VWVWQ2VzlJcUZaaW83ak5sSVktVFRlWHUzSFJSTHhoSFNpNi1KRVFnNEVYRXhOQ01LVHZmaThQNmtibWVJbElEdmhfenhJNmc5N2o2SHZOSkJTT21EUEx3Q1ZwTU9SbllEWFFKZG9lNXVBY2tOTGZ3S0NlZVM5TzY3MnViZk04Q050Sm1IaVJ1Y21ZZUE4bnRiQWdiQzVHX2hRQjg4VFZobk82TEhRRk9mbGJ1VWRMUVZydWJ4Rl9QVGxNQ3g4RjM5MlVPNkpnM2dIdzJ4V21KcWVYUVMydkN4RTZvVnZDZjRJd2xYeUd4QTVEMjBoTzNGc09EQzVIR1I5cDQ4TW9HcllKWGtlV2R5WGlqa3NVTV8zN09lbXkxeGQtQlRwNXN1ekxFcmRqVzZ5RjIwSGdGbFRUV3BRXzF6YWVHcUF6UXk2TnVXUjYyaWt0U3h2bGt4UW1ZOXdCOXU1QTZabWR6MEVTSDhEQ2dqX3Y4MkhTMnE0MzltYVN6bDk3TjV0YlZmd25VZ3ZDUzVDMnpMWVZkcXZpNVJ3dkVpd0hWUmo3NHc4ZVlpM2RMRVloblBEQTlKSllqTGp6Q0hXbmF1R0NDNVpRNEJUUmRpY2VhM29vSzFoT1hPSlp1WGJONTNIZm9sSWVtY0V0bVU4QTgzaURXS04tNjhLX3gtZ2hIWWhCNFo4dVJ0YThRYjh1azNXVnQwWGtjSmJlcmkya3V5SmlhbENqdkdsWUY2Z0R3bFN2RkdRbWQ5enlOeWlhbm9RaUpnb2ZpSnR4VHdhWU1aX2I2YXNuODVwQWxBZWRMYnpoOGZsU0lVQWxDVU1xMlZyTXNqZGJxbDNHWGhHcUVhbkE2RWZOVWpBeXVR"
+      },
+      "type": "kubernetes.io/service-account-token"
+    },
+    {
+      "metadata": {
+        "name": "serverless-registry-config-default",
+        "namespace": "wch",
+        "uid": "5bbb2b12-71b3-4ca3-a22e-81e1aa782872",
+        "resourceVersion": "6039953",
+        "creationTimestamp": "2022-05-12T08:24:24Z",
+        "labels": {
+          "reconciler.kyma-project.io/managed-by": "reconciler",
+          "reconciler.kyma-project.io/origin-version": "2.2.0",
+          "serverless.kyma-project.io/config": "credentials"
+        },
+        "annotations": {
+          "reconciler.kyma-project.io/managed-by-reconciler-disclaimer": "DO NOT EDIT - This resource is managed by Kyma.\nAny modifications are discarded and the resource is reverted to the original state."
+        },
+        "managedFields": [
+          {
+            "manager": "manager",
+            "operation": "Update",
+            "apiVersion": "v1",
+            "time": "2022-05-12T08:24:24Z",
+            "fieldsType": "FieldsV1",
+            "fieldsV1": {
+              "f:data": {
+                ".": {},
+                "f:.dockerconfigjson": {},
+                "f:isInternal": {},
+                "f:password": {},
+                "f:registryAddress": {},
+                "f:serverAddress": {},
+                "f:username": {}
+              },
+              "f:metadata": {
+                "f:annotations": {
+                  ".": {},
+                  "f:reconciler.kyma-project.io/managed-by-reconciler-disclaimer": {}
+                },
+                "f:labels": {
+                  ".": {},
+                  "f:reconciler.kyma-project.io/managed-by": {},
+                  "f:reconciler.kyma-project.io/origin-version": {},
+                  "f:serverless.kyma-project.io/config": {}
+                }
+              },
+              "f:type": {}
+            }
+          }
+        ]
+      },
+      "data": {
+        ".dockerconfigjson": "eyJhdXRocyI6IHsic2VydmVybGVzcy1kb2NrZXItcmVnaXN0cnkua3ltYS1zeXN0ZW0uc3ZjLmNsdXN0ZXIubG9jYWw6NTAwMCI6IHsiYXV0aCI6ICJWMWhhVDFSSWNHbFZiRUpEWkc1V2RFMUhNVTVWTWxKRVdtdEpQVHBaTW1nelVXNUNkbHBXUlhkaWJHeHhUVVJHTVU5SGNIQmhiWGd3VXpKd1ExSlhXbFZVTW5oWVZHdEtUR05yVWxSbGJsRTFUVUU5UFE9PSJ9LCAicmVnaXN0cnkua21haW4uaGFzc2VsaG9mZi5zaG9vdC5jYW5hcnkuazhzLWhhbmEub25kZW1hbmQuY29tIjogeyJhdXRoIjogIlYxaGFUMVJJY0dsVmJFSkRaRzVXZEUxSE1VNVZNbEpFV210SlBUcFpNbWd6VVc1Q2RscFdSWGRpYkd4eFRVUkdNVTlIY0hCaGJYZ3dVekp3UTFKWFdsVlVNbmhZVkd0S1RHTnJVbFJsYmxFMVRVRTlQUT09In19fQ==",
+        "isInternal": "dHJ1ZQ==",
+        "password": "WTJoM1FuQnZaVkV3YmxscU1ERjFPR3BwYW14MFMycENSV1pVVDJ4WFRrSkxja1JUZW5RNU1BPT0=",
+        "registryAddress": "c2VydmVybGVzcy1kb2NrZXItcmVnaXN0cnkua3ltYS1zeXN0ZW0uc3ZjLmNsdXN0ZXIubG9jYWw6NTAwMA==",
+        "serverAddress": "cmVnaXN0cnkua21haW4uaGFzc2VsaG9mZi5zaG9vdC5jYW5hcnkuazhzLWhhbmEub25kZW1hbmQuY29t",
+        "username": "V1haT1RIcGlVbEJDZG5WdE1HMU5VMlJEWmtJPQ=="
+      },
+      "type": "kubernetes.io/dockerconfigjson"
+    }
+  ]
+}
