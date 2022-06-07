@@ -3,10 +3,15 @@ import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { baseUrl, throwHttpError } from 'shared/hooks/BackendAPI/config';
 import { useConfig } from 'shared/contexts/ConfigContext';
+import { useAuth } from 'store/clusters/useAuth';
+import { useClusters } from 'store/clusters/useClusters';
 
 export const useFetch = () => {
-  const { authData, cluster, config, ssoData } = useMicrofrontendContext();
+  const { ssoData } = useMicrofrontendContext();
+  const authData = useAuth();
+  const { currentCluster } = useClusters();
   const { fromConfig } = useConfig();
+  var config = { requiresCA: true };
 
   if (!authData) return () => {};
 
@@ -18,7 +23,7 @@ export const useFetch = () => {
       ...init,
       headers: {
         ...(init?.headers || {}),
-        ...createHeaders(authData, cluster.cluster, config.requiresCA, ssoData),
+        ...createHeaders(authData, currentCluster, config.requiresCA, ssoData),
       },
       signal: abortController?.signal,
     };

@@ -7,11 +7,12 @@ import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
-import { hasKubeconfigAuth, getUser, getContext, addCluster } from '../shared';
+import { hasKubeconfigAuth, getUser, getContext } from '../shared';
 import { AuthForm } from './AuthForm';
 import { KubeconfigUpload } from './KubeconfigUpload/KubeconfigUpload';
 import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
+import { useClusters } from 'store/clusters/useClusters';
 
 import './AddClusterWizard.scss';
 
@@ -24,6 +25,7 @@ export function AddClusterWizard({
   const { busolaClusterParams } = useMicrofrontendContext();
   const { t } = useTranslation();
   const notification = useNotification();
+  const { addCluster } = useClusters();
 
   const [hasAuth, setHasAuth] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);

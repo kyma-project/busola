@@ -53,8 +53,7 @@ export const GenericList = ({
 }) => {
   const { settings } = useMicrofrontendContext();
   if (pagination) {
-    pagination.itemsPerPage =
-      pagination.itemsPerPage || settings?.pagination?.pageSize;
+    pagination.itemsPerPage = pagination.itemsPerPage || 20; // todo
   }
 
   const { t } = useTranslation(null, { i18n });

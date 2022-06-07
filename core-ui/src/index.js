@@ -19,6 +19,8 @@ import './styles/sapIllus-Fills.css';
 import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
+import { Provider } from 'react-redux';
+import { store } from 'store/store';
 
 i18next
   .use(initReactI18next)
@@ -49,8 +51,10 @@ ReactDOM.render(
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Suspense fallback={<Spinner />}>
         <CommandPaletteProvider>
-          <App />
-          <ServiceCatalogUIWrapper />
+          <Provider store={store}>
+            <App />
+            <ServiceCatalogUIWrapper />
+          </Provider>
         </CommandPaletteProvider>
       </Suspense>
     </BrowserRouter>

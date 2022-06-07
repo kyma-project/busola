@@ -53,7 +53,7 @@ export function MicrofrontendContextProvider({ children }) {
   }
 
   return (
-    <MicrofrontendContext.Provider value={context}>
+    <MicrofrontendContext.Provider value={{ features: {} }}>
       {children}
     </MicrofrontendContext.Provider>
   );

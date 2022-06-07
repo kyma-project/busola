@@ -5,6 +5,7 @@ import React from 'react';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import shortid from 'shortid';
+import { useAuth } from 'store/clusters/useAuth';
 
 // allow <n> consecutive requests to fail before displaying error
 const ERROR_TOLERANCY = 2;
@@ -16,7 +17,7 @@ const useGetHook = processDataFn =>
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
-    const { authData } = useMicrofrontendContext();
+    const authData = useAuth();
     const fetch = useFetch();
     const abortController = React.useRef(new AbortController());
     const errorTolerancyCounter = React.useRef(0);

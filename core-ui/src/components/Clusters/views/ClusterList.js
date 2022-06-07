@@ -7,24 +7,27 @@ import { Link, Button, MessagePage } from 'fundamental-react';
 
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import { setCluster, deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
 import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
 
 import './ClusterList.scss';
+import { useClusters } from 'store/clusters/useClusters';
 
 function ClusterList() {
-  const { clusters, activeClusterName } = useMicrofrontendContext();
+  const {
+    clusters,
+    currentClusterName,
+    setCluster,
+    removeCluster,
+  } = useClusters();
   const notification = useNotification();
   const { t, i18n } = useTranslation();
-
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     i18n,
     resourceType: t('clusters.labels.name'),
@@ -43,7 +46,7 @@ function ClusterList() {
   }
 
   const styleActiveCluster = entry => {
-    return entry?.kubeconfig?.['current-context'] === activeClusterName
+    return entry?.kubeconfig?.['current-context'] === currentClusterName
       ? { fontWeight: 'bolder' }
       : {};
   };
@@ -124,7 +127,7 @@ function ClusterList() {
         setChosenCluster(resource);
         handleResourceDelete({
           deleteFn: () => {
-            deleteCluster(resource?.name);
+            removeCluster(resource?.name);
             notification.notifySuccess({
               content: t('clusters.disconnect'),
             });
@@ -208,7 +211,7 @@ function ClusterList() {
         resource={chosenCluster}
         resourceName={chosenCluster?.kubeconfig['current-context']}
         deleteFn={e => {
-          deleteCluster(e.name);
+          removeCluster(e.name);
           notification.notifySuccess({
             content: t('clusters.disconnect'),
           });

@@ -1,33 +1,33 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import {
-  Navigate,
-  Outlet,
-  Route,
-  Routes,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import React, { useMemo } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
-import { useSentry } from 'hooks/useSentry';
 
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
+import ClusterList from 'components/Clusters/views/ClusterList';
+import { useAuth } from 'store/clusters/useAuth';
+import { useSelector } from 'react-redux';
+import { selectCurrentCluster } from 'store/clusters/clusters.slice';
+import jwtDecode from 'jwt-decode';
 
-function Clusters() {
-  return 'tu bd lista klastrów';
-}
+// function EmptyPathRedirect() {
+//   const currentCluster = useSelector(selectCurrentCluster);
+//   const hash = window.location.hash;
+//   const path = currentCluster
+//     ? `/cluster/${currentCluster.contextName}`
+//     : '/clusters';
 
-function EmptyPathRedirect({ currentCluster }) {
-  const path = currentCluster ? `/cluster/${currentCluster}` : '/clusters';
-  return <Navigate to={path} replace />;
-}
+//   return <Navigate to={path + hash} replace />;
+// }
 
 export default function App() {
-  const [currentCluster] = useState('a');
+  const auth = useAuth();
+  if (auth?.token) {
+    console.log('expires', auth && jwtDecode(auth.token).exp);
+  }
   const { t } = useTranslation();
 
   const Null = () => 'null';
@@ -48,7 +48,7 @@ export default function App() {
 
   return (
     <Routes>
-      <Route path="clusters" element={<Clusters />} />
+      <Route path="clusters" element={<ClusterList />} />
       <Route path="cluster/:currentClusterName/*">
         <Route
           path="overview" // overview route should stay static
@@ -61,60 +61,9 @@ export default function App() {
         {serviceCatalogRoutes}
         {resourceRoutes}
         {otherRoutes}
-        {/* todo redirect to ns details on invalid path */}
-        {/* <Route path="*" element={<Navigate to="overview" replace />} /> */}
+        <Route path="*" element={<Navigate to="overview" replace />} />
       </Route>
-      <Route
-        path="*"
-        element={<EmptyPathRedirect currentCluster={currentCluster} />}
-      />
+      {/* <Route path="*" element={<EmptyPathRedirect />} /> */}
     </Routes>
   );
 }
-
-// export function App2() {
-//   const { cluster, language } = useMicrofrontendContext();
-//   const { t, i18n } = useTranslation();
-
-//   useEffect(() => {
-//     i18n.changeLanguage(language);
-//   }, [language, i18n]);
-
-//   useSentry();
-
-//   const serviceCatalogRoutes = useMemo(() => {
-//     return [
-//       '/catalog',
-//       '/catalog/ServiceClass/:serviceId',
-//       '/catalog/ServiceClass/:serviceId/plans',
-//       '/catalog/ServiceClass/:serviceId/plan/:planId',
-//       '/catalog/ClusterServiceClass/:serviceId',
-//       '/catalog/ClusterServiceClass/:serviceId/plans',
-//       '/catalog/ClusterServiceClass/:serviceId/plan/:planId',
-//       '/instances',
-//       '/instances/details/:instanceName',
-//     ].map(route => <Route key="route" path={route} element={null} />);
-//   }, []);
-
-//   function Clusters() {
-//     return 'clusters';
-//   }
-
-//   return (
-//     // force rerender on cluster change
-//     <Routes key={cluster?.name}>
-//       {/* <Route path="clusters" element={<Clusters />} /> */}
-//       {serviceCatalogRoutes}
-//       <Route
-//         path="/overview" // overview route should stay static
-//         element={
-//           <WithTitle title={t('clusters.overview.title-current-cluster')}>
-//             <ClusterOverview />
-//           </WithTitle>
-//         }
-//       />
-//       {namespacedResourceRoutes}
-//       {otherRoutes}
-//     </Routes>
-//   );
-// }

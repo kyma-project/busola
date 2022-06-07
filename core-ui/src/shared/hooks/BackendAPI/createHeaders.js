@@ -20,12 +20,12 @@ function createSSOHeader(ssoData) {
 }
 
 export function createHeaders(authData, cluster, requiresCA, ssoData) {
+  const { 'certificate-authority-data': ca, server } =
+    cluster?.currentContext.cluster.cluster || {};
   return {
     ...createAuthHeaders(authData),
     ...createSSOHeader(ssoData),
-    'X-Cluster-Url': cluster?.server,
-    'X-Cluster-Certificate-Authority-Data': requiresCA
-      ? cluster['certificate-authority-data']
-      : undefined,
+    'X-Cluster-Url': server,
+    'X-Cluster-Certificate-Authority-Data': requiresCA ? ca : undefined,
   };
 }

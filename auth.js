@@ -38,7 +38,7 @@ export default function App() {
       }, 1000);
 
       expTimeout.current = setTimeout(() => {
-        console.log('auth expired');
+        console.log('AUTH EXPIRED');
         clearInterval(pinging);
 
         setAuth(null);
