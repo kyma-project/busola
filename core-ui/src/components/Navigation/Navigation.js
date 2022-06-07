@@ -1,5 +1,6 @@
 import React from 'react';
 import { List } from 'fundamental-react';
+import { useLocation, NavLink } from 'react-router-dom';
 
 import { resourcesData } from 'resources';
 import { otherResourcesData } from 'resources/other';
@@ -39,8 +40,7 @@ const createNavigationStructure = (routes, namespaced) => {
 };
 
 export function Navigation() {
-  const pathName = window.location.pathname;
-  console.log(window.location);
+  const pathName = useLocation().pathname;
 
   if (pathName === '/clusters' || pathName === '/clusters/') {
     return null;
@@ -55,11 +55,19 @@ export function Navigation() {
     <div>
       {navStructure?.map(nav => (
         <List header={nav.name} key={nav.name} navigation>
-          {nav.children?.map(child => (
-            <List.Item url={child.path} key={`${nav.name}-${child.label}`}>
-              <List.Text>{child.label}</List.Text>
-            </List.Item>
-          ))}
+          {nav.children?.map(child => {
+            const cluster = pathName
+              .split('/')
+              ?.slice(0, 3)
+              ?.join('/');
+            //change namespace as well
+            const path = `${cluster}/${child.path}`;
+            return (
+              <List.Item key={`${nav.name}-${child.label}`}>
+                <NavLink to={path}>{child.label}</NavLink>
+              </List.Item>
+            );
+          })}
         </List>
       ))}
     </div>
