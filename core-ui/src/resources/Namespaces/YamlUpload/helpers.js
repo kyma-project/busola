@@ -1,6 +1,5 @@
 import pluralize from 'pluralize';
 import schema from './schema.json';
-import { Draft07 as Core } from 'json-schema-library';
 const { validator } = require('@exodus/schemasafe');
 export const getResourceKindUrl = resource => {
   return `/${resource?.apiVersion === 'v1' ? 'api' : 'apis'}/${
@@ -21,28 +20,23 @@ export const getResourceUrl = (resource, namespace) => {
 };
 
 export const validateResourceBySchema = (res, rule) => {
-  console.log('sch', schema);
-
+  let erroIds = [];
   const errors = schema.rules.reduce(
     (accumulator, currentRule, index, array) => {
       try {
-        // why for these two libraries the 'kind' isnt checked properly id 22, 53, 54 <-
-        //there is name
-        // Core works slower
-        const core = new Core(currentRule.schema);
-        const result = core.isValid(res);
-        // const schemaValidator = validator(currentRule.schema);
-        // const result = schemaValidator(res);
+        const schemaValidator = validator(currentRule.schema);
+        const result = schemaValidator(res.value);
         if (!currentRule.enabledByDefault) return [...accumulator];
         if (!result) return [currentRule.messageOnFailure, ...accumulator];
         return [...accumulator];
       } catch (e) {
-        // console.log('catchxd', e);
+        erroIds = [...erroIds, currentRule.id];
+        console.error(e);
         return [...accumulator];
       }
     },
     [],
   );
-
+  console.log(erroIds);
   console.log(errors);
 };
