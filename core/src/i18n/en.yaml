@@ -565,6 +565,7 @@ common:
     replicas: Replicas
     sort-by-asc: Sorting by {{name}} ↑
     sort-by-desc: Sorting by {{name}} ↓
+    status: Status
     time: Time
   statuses:
     error: Error
