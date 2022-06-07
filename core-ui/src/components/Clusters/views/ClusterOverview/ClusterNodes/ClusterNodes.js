@@ -127,6 +127,13 @@ export function ClusterNodes() {
 
   const Events = <EventsList defaultType={EVENT_MESSAGE_TYPE.WARNING} />;
 
+  // This sets and unsets cluster version.
+  // Should be stored and cleared if cluster is changed in a central state once Redux is installed
+  window.localStorage.setItem(
+    'cluster.version',
+    data?.[0]?.status?.nodeInfo?.kubeletVersion,
+  );
+
   return (
     <>
       <GenericList
