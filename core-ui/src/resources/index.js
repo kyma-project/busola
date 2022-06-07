@@ -1,4 +1,7 @@
-import { createResourceRoutes } from './createResourceRoutes';
+import {
+  createResourceRoutes,
+  createResourceNavRoutes,
+} from './createResourceRoutes';
 
 //namespaced
 import * as Jobs from './Jobs';
@@ -97,9 +100,9 @@ export const resources = [
   GitRepositories,
 
   // cluster resources
+  Namespaces,
   Applications,
   ClusterEvents,
-  Namespaces,
   ClusterRoles,
   StorageClasses,
   PersistentVolumes,
@@ -109,3 +112,5 @@ export const resources = [
 ];
 
 export const resourceRoutes = <>{resources.map(createResourceRoutes)}</>;
+
+export const resourcesData = resources.map(createResourceNavRoutes);
