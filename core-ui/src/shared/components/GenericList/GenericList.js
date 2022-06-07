@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { LayoutPanel } from 'fundamental-react';
-import { Dropdown } from '../Dropdown/Dropdown';
 import { useTranslation } from 'react-i18next';
 
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
@@ -22,6 +21,7 @@ import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
+import { SortModalPanel } from './SortModalPanel';
 import './GenericList.scss';
 
 const defaultSort = {
@@ -93,27 +93,6 @@ export const GenericList = ({
   );
   const [searchQuery, setSearchQuery] = useState('');
 
-  const sortOptions =
-    sortBy &&
-    Object.entries(sortBy).flatMap(([name]) => {
-      return [
-        {
-          key: `${name}ASC`,
-          text: t('common.sorting.sort-by-asc', {
-            name: t(`common.sorting.${name}`),
-          }),
-          data: { name, order: 'ASC' },
-        },
-        {
-          key: `${name}DESC`,
-          text: t('common.sorting.sort-by-desc', {
-            name: t(`common.sorting.${name}`),
-          }),
-          data: { name, order: 'DESC' },
-        },
-      ];
-    });
-
   useEffect(() => {
     if (pagination) {
       // move back when the last item from the last page is deleted
@@ -153,12 +132,7 @@ export const GenericList = ({
         />
       )}
       {sortBy && (
-        <Dropdown
-          selectedKey={sort.name + sort.order}
-          onSelect={(_, { data }) => setSort(data)}
-          options={sortOptions}
-          compact
-        />
+        <SortModalPanel sortBy={sortBy} sort={sort} setSort={setSort} t={t} />
       )}
       {extraHeaderContent}
     </>

@@ -561,10 +561,13 @@ common:
     secret-ref-namespace: Select Namespace
   protected-resource: Resource protected. Go to Preferences to turn on the modification of protected resources.
   sorting:
+    asc: Ascending
+    desc: Descenting
     name: Name
     replicas: Replicas
-    sort-by-asc: Sorting by {{name}} ↑
-    sort-by-desc: Sorting by {{name}} ↓
+    sort: Sort
+    sort-by: Sort By
+    sort-order: Sort Order
     status: Status
     time: Time
   statuses:
