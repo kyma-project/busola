@@ -8,63 +8,7 @@ import {
   extractShortNames,
   findNavigationNode,
 } from './helpers';
-
-const resourceTypes = [
-  {
-    resourceType: 'clusterrolebindings',
-    aliases: ['clusterrolebinding', 'clusterrolebindings', 'crb'],
-  },
-  {
-    resourceType: 'clusterroles',
-    aliases: ['clusterrole', 'clusterroles', 'cr'],
-  },
-  {
-    resourceType: 'persistentvolumes',
-    aliases: ['persistentvolume', 'persistentvolumes', 'pv'],
-  },
-  { resourceType: 'namespaces', aliases: ['namespace', 'namespaces', 'ns'] },
-  {
-    resourceType: 'storageclasses',
-    aliases: ['sc', 'storageclass', 'storageclasses'],
-  },
-  // we don't have nodes for those resources, but let's keep them here
-  {
-    resourceType: 'volumeattachments',
-    aliases: ['volumeattachment', 'volumeattachments'],
-  },
-  {
-    resourceType: 'validatingwebhookconfigurations',
-    aliases: ['validatingwebhookconfiguration'],
-  },
-  {
-    resourceType: 'runtimeclasses',
-    aliases: ['runtimeclass', 'runtimeclasses'],
-  },
-  {
-    resourceType: 'prioritylevelconfigurations',
-    aliases: ['prioritylevelconfiguration', 'prioritylevelconfigurations'],
-  },
-  {
-    resourceType: 'priorityclasses',
-    aliases: ['pc', 'priorityclass', 'priorityclasses'],
-  },
-  {
-    resourceType: 'ingressclasses',
-    aliases: ['ingressclass', 'ingressclasses'],
-  },
-  { resourceType: 'flowschemas', aliases: ['flowschema', 'flowschemas'] },
-  { resourceType: 'csidrivers', aliases: ['csidriver', 'csidrivers'] },
-  { resourceType: 'csinodes', aliases: ['csinode', 'csinodes'] },
-  {
-    resourceType: 'certificatesigningrequests',
-    aliases: ['certificatesigningrequest', 'certificatesigningrequests', 'csr'],
-  },
-  { resourceType: 'apiservices', aliases: ['apiservice', 'apiservices'] },
-  {
-    resourceType: 'mutatingwebhookconfigurations',
-    aliases: ['mutatingwebhookconfiguration', 'mutatingwebhookconfigurations'],
-  },
-];
+import { clusterNativeResourceTypes as resourceTypes } from 'shared/constants';
 
 function getAutocompleteEntries({ tokens, resourceCache }) {
   const fullResourceType = toFullResourceType(tokens[0], resourceTypes);
