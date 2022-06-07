@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { createResourceNavRoutes } from './createResourceRoutes';
+
 import customResourceDetails from './other/CustomResourceDetails.routes';
 import customResourceListOfType from './other/CustomResourceListOfType.routes.js';
 import customResourcesByGroup from './other/CustomResourcesByGroup.routes.js';
@@ -27,3 +29,6 @@ const other = (
 );
 
 export default other;
+
+export const otherResourcesData = [];
+// todo other.map(createResourceNavRoutes);

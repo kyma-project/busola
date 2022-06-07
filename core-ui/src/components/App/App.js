@@ -2,6 +2,8 @@ import React, { useMemo } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { Navigation } from '../Navigation/Navigation';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 
@@ -12,16 +14,6 @@ import { useAuth } from 'store/clusters/useAuth';
 import { useSelector } from 'react-redux';
 import { selectCurrentCluster } from 'store/clusters/clusters.slice';
 import jwtDecode from 'jwt-decode';
-
-// function EmptyPathRedirect() {
-//   const currentCluster = useSelector(selectCurrentCluster);
-//   const hash = window.location.hash;
-//   const path = currentCluster
-//     ? `/cluster/${currentCluster.contextName}`
-//     : '/clusters';
-
-//   return <Navigate to={path + hash} replace />;
-// }
 
 export default function App() {
   const auth = useAuth();
@@ -47,23 +39,30 @@ export default function App() {
   }, []);
 
   return (
-    <Routes>
-      <Route path="clusters" element={<ClusterList />} />
-      <Route path="cluster/:currentClusterName/*">
-        <Route
-          path="overview" // overview route should stay static
-          element={
-            <WithTitle title={t('clusters.overview.title-current-cluster')}>
-              <ClusterOverview />
-            </WithTitle>
-          }
-        />
-        {serviceCatalogRoutes}
-        {resourceRoutes}
-        {otherRoutes}
-        <Route path="*" element={<Navigate to="overview" replace />} />
-      </Route>
-      {/* <Route path="*" element={<EmptyPathRedirect />} /> */}
-    </Routes>
+    <>
+      <Navigation />
+      <Routes>
+        <Route path="clusters" element={<ClusterList />} />
+        <Route path="cluster/:currentClusterName/*">
+          <Route
+            path="overview" // overview route should stay static
+            element={
+              <WithTitle title={t('clusters.overview.title-current-cluster')}>
+                <ClusterOverview />
+              </WithTitle>
+            }
+          />
+          {serviceCatalogRoutes}
+          {resourceRoutes}
+          {otherRoutes}
+          {/* todo redirect to ns details on invalid path */}
+          {/* <Route path="*" element={<Navigate to="overview" replace />} /> */}
+        </Route>
+        {/* <Route
+          path="*"
+          element={<EmptyPathRedirect />}
+        /> */}
+      </Routes>
+    </>
   );
 }
