@@ -11,6 +11,11 @@
   border-radius: 50px;
   position: relative;
 }
+@media all and (max-width: 992px) {
+  .progress-bar-container {
+    width: 7vw;
+  }
+}
 
 .progress-bar {
   height: 100%;
