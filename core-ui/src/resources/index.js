@@ -100,9 +100,9 @@ export const resources = [
   GitRepositories,
 
   // cluster resources
+  Namespaces,
   Applications,
   ClusterEvents,
-  Namespaces,
   ClusterRoles,
   StorageClasses,
   PersistentVolumes,

@@ -10,10 +10,10 @@ import './Navigation.scss';
 const createNavigationStructure = (routes, namespaced) => {
   let categories = [];
   routes?.map(route => {
-    if (!route?.navData?.category) return null;
+    if (!route?.navData) return null;
     if (route?.namespaced !== namespaced) return null;
     const matchingIndex = categories?.findIndex(
-      category => category?.name === route?.navData?.category,
+      category => category?.name === route?.navData?.category || '',
     );
     if (matchingIndex >= 0) {
       const matchingCategory = categories?.[matchingIndex];
@@ -29,7 +29,7 @@ const createNavigationStructure = (routes, namespaced) => {
       categories = [
         ...categories,
         {
-          name: route?.navData?.category,
+          name: route?.navData?.category || '',
           children: [{ label: route?.navData?.label, ...route }],
         },
       ];

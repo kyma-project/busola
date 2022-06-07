@@ -2,6 +2,10 @@ import React from 'react';
 
 export const resourceType = 'ClusterRoles';
 export const namespaced = false;
+export const navData = {
+  category: 'Xxx',
+  label: resourceType,
+};
 
 export const List = React.lazy(() => import('./ClusterRoleList'));
 export const Details = React.lazy(() => import('./ClusterRoleDetails'));
