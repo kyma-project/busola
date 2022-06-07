@@ -1,7 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
@@ -43,11 +45,14 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
 };
 
 export const ExtensibilityList = () => {
+  const { t } = useTranslation();
   const resMetaData = useGetCRbyPath();
 
   return (
     <TranslationBundleContext.Provider value={resMetaData.navigation.path}>
-      <ExtensibilityListCore resMetaData={resMetaData} />
+      <ErrorBoundary customMessage={t('extensibility.error')}>
+        <ExtensibilityListCore resMetaData={resMetaData} />
+      </ErrorBoundary>
     </TranslationBundleContext.Provider>
   );
 };

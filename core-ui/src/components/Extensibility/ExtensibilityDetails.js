@@ -1,8 +1,10 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { prettifyNamePlural } from 'shared/utils/helpers';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { Widget } from './components/Widget';
@@ -58,11 +60,14 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
 };
 
 export const ExtensibilityDetails = () => {
+  const { t } = useTranslation();
   const resMetaData = useGetCRbyPath();
 
   return (
     <TranslationBundleContext.Provider value={resMetaData.navigation.path}>
-      <ExtensibilityDetailsCore resMetaData={resMetaData} />
+      <ErrorBoundary customMessage={t('extensibility.error')}>
+        <ExtensibilityDetailsCore resMetaData={resMetaData} />
+      </ErrorBoundary>
     </TranslationBundleContext.Provider>
   );
 };
