@@ -4,31 +4,48 @@ import toJsonSchema from '@openapi-contrib/openapi-schema-to-json-schema';
 import { Resolver } from '@stoplight/json-ref-resolver';
 import * as jp from 'jsonpath';
 
-function findObjectsPaths(obj, key, val, path = '') {
-  var objects = [];
-  for (var i in obj) {
+const CUSTOM_KEY = 'format';
+const CUSTOM_FORMATS = {
+  'int-or-string': { oneOf: [{ type: 'string' }, { type: 'number' }] },
+  'date-time': { type: 'string' },
+  int32: { type: 'number' },
+  int64: { type: 'number' },
+};
+
+function getExistingCustomFormats(obj, path = '') {
+  let existingData = [];
+
+  for (let i in obj) {
     if (!obj.hasOwnProperty(i)) continue;
     if (typeof obj[i] === 'object') {
-      objects = objects.concat(
-        findObjectsPaths(obj[i], key, val, path ? `${path}.${i}` : i),
+      existingData = existingData.concat(
+        getExistingCustomFormats(obj[i], path ? `${path}.${i}` : i),
       );
-    } else if ((i === key && obj[i] === val) || (i === key && val === '')) {
-      objects.push(path);
+    } else if (i === CUSTOM_KEY) {
+      for (let formatKey of Object.keys(CUSTOM_FORMATS)) {
+        if (formatKey === obj[i]) {
+          existingData.push({ path, formatKey });
+          break;
+        }
+      }
     }
   }
-  return objects;
+  return existingData;
 }
 
-function replaceObjects(paths, schema) {
-  for (var i in paths) {
-    const object = {
-      ...jp.value(schema, `$.${paths[i]}`),
-      oneOf: [{ type: 'string' }, { type: 'number' }],
+function replaceObjects(existingCustomFormats, schema) {
+  for (let i in existingCustomFormats) {
+    let object = {
+      ...jp.value(schema, `$.${existingCustomFormats[i].path}`),
     };
     delete object.type;
-    jp.value(schema, `$.${paths[i]}`, object);
-    return schema;
+    object = {
+      ...object,
+      ...CUSTOM_FORMATS[existingCustomFormats[i].formatKey],
+    };
+    jp.value(schema, `$.${existingCustomFormats[i].path}`, object);
   }
+  return schema;
 }
 
 const jsonSchemas = {};
@@ -43,12 +60,11 @@ async function createJSONSchemas(openAPISchemas) {
       const prefix = group ? `${group}/` : '';
       const schemaId = `${prefix}${version}/${kind}`;
       const partialSchema = JSON.parse(JSON.stringify(value));
-      const intOrStringPaths = findObjectsPaths(
+      const existingCustomFormats = getExistingCustomFormats(partialSchema);
+      const modifiedSchema = replaceObjects(
+        existingCustomFormats,
         partialSchema,
-        'format',
-        'int-or-string',
       );
-      const modifiedSchema = replaceObjects(intOrStringPaths, partialSchema);
 
       if (!jsonSchemas[schemaId]) {
         jsonSchemas[schemaId] = modifiedSchema;
