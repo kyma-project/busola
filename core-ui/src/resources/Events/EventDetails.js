@@ -96,13 +96,13 @@ export function EventDetails(props) {
     },
     {
       header: t('events.headers.count'),
-      value: event => <p>{event.count || 0}</p>,
+      value: event => <p>{event.count || EMPTY_TEXT_PLACEHOLDER}</p>,
     },
     {
       header: t('events.headers.last-seen'),
       value: event => (
         <ReadableCreationTimestamp
-          timestamp={event.lastTimestamp || event.eventTime}
+          timestamp={event.lastTimestamp || EMPTY_TEXT_PLACEHOLDER}
         />
       ),
     },
