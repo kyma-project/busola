@@ -95,9 +95,11 @@ export function CommitmentGraph({ data }) {
         horizontalPadding +
         Math.min(utilized, LIMITS_WARNING_VALUE) * ratio * innerWidth;
       const y = barHStart;
+      ctx.beginPath();
       ctx.moveTo(x, y);
       ctx.lineTo(x - 10, y - 11);
       ctx.lineTo(x + 10, y - 11);
+      ctx.closePath();
       ctx.fill();
       ctx.fillRect(x - 1, y, 2, barHeight);
       ctx.fillText(
