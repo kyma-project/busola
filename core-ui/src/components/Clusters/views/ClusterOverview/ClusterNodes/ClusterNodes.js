@@ -146,7 +146,7 @@ export function ClusterNodes() {
         rowRenderer={rowRenderer}
         serverDataError={usePrometheusQueries ? prometheusDataError : error}
         serverDataLoading={
-          usePrometheusQueries ? prometheusDataLoading : loading
+          !data && (usePrometheusQueries ? prometheusDataLoading : loading)
         }
         pagination={{ autoHide: true }}
         i18n={i18n}
