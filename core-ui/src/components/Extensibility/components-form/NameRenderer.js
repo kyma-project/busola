@@ -16,7 +16,6 @@ export function NameRenderer({
       value={value}
       kind={resource.kind}
       setValue={value => {
-        console.log('storeKeys', storeKeys);
         onChange({
           storeKeys,
           scopes: ['value'],
