@@ -18,6 +18,11 @@ import i18next from 'i18next';
 
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
+const clearK8Version = () => {
+  // resets the variable on stage and production
+  localStorage.setItem('cluster.version', null);
+};
+
 export function setActiveClusterIfPresentInUrl() {
   const match = window.location.pathname.match(/^\/cluster\/(.*?)\//);
   if (match) {
@@ -79,6 +84,7 @@ export async function setCluster(clusterName) {
       saveLocation(targetLocation);
       window.location = window.location.origin;
     }
+    clearK8Version();
   } catch (e) {
     console.warn(e);
     alert('An error occured while setting up the cluster.');
@@ -182,6 +188,7 @@ export async function deleteActiveCluster() {
   await deleteCluster(getActiveClusterName());
   await reloadAuth();
   clearAuthData();
+  clearK8Version();
   saveActiveClusterName(null);
   Luigi.navigation().navigate('/clusters');
   // even though we navigate to /clusters, Luigi complains it can't find
