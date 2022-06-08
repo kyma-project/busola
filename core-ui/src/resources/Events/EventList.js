@@ -10,6 +10,7 @@ import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Link as DescriptionLink } from 'shared/components/Link/Link';
 import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 export function Events({ ...otherParams }) {
   const { t, i18n } = useTranslation();
@@ -94,7 +95,7 @@ export function Events({ ...otherParams }) {
     </div>,
     <p>{entry.message}</p>,
     ...involvedObject(entry),
-    formatSourceObject(entry.source),
+    formatSourceObject(entry.source || EMPTY_TEXT_PLACEHOLDER),
     <p>{entry.count || 0}</p>,
     <ReadableCreationTimestamp
       timestamp={entry.lastTimestamp || entry.eventTime}
