@@ -7,7 +7,9 @@ export const SortModalPanel = ({ sortBy, sort, setSort, t }) => {
   const [order, setOrder] = useState(sort.order);
   const [name, setName] = useState(sort.name);
 
-  const sortOpeningComponent = <Button glyph="sort" option="transparent" />;
+  const sortOpeningComponent = (
+    <Button glyph="sort" option="transparent" aria-label="open-sort" />
+  );
 
   return (
     <Modal
@@ -28,10 +30,19 @@ export const SortModalPanel = ({ sortBy, sort, setSort, t }) => {
     >
       <p>{t('common.sorting.sort-order')}</p>
       <FormRadioGroup onChange={(_, order) => setOrder(order)}>
-        <FormRadioItem data="ASC" checked={order === 'ASC'}>
+        <FormRadioItem
+          data="ASC"
+          checked={order === 'ASC'}
+          // prevent error for checked without onChange
+          inputProps={{ onChange: () => {} }}
+        >
           {t('common.sorting.asc')}
         </FormRadioItem>
-        <FormRadioItem data="DESC" checked={order === 'DESC'}>
+        <FormRadioItem
+          data="DESC"
+          checked={order === 'DESC'}
+          inputProps={{ onChange: () => {} }}
+        >
           {t('common.sorting.desc')}
         </FormRadioItem>
       </FormRadioGroup>
@@ -41,7 +52,12 @@ export const SortModalPanel = ({ sortBy, sort, setSort, t }) => {
         {sortBy &&
           Object.entries(sortBy).flatMap(([value]) => {
             return (
-              <FormRadioItem data={value} checked={name === value}>
+              <FormRadioItem
+                data={value}
+                key={value}
+                checked={name === value}
+                inputProps={{ onChange: () => {} }}
+              >
                 {t(`common.sorting.${value}`)}
               </FormRadioItem>
             );

@@ -407,5 +407,44 @@ describe('GenericList', () => {
 
       expect(await getByLabelText('Loading')).toBeInTheDocument();
     });
+
+    it('Test sorting funcionality', () => {
+      const { getByLabelText, queryByText, getByText, getAllByRole } = render(
+        <GenericList
+          title=""
+          entries={mockEntries}
+          headerRenderer={() => ['name', 'description']}
+          rowRenderer={entry => [entry.name, entry.description]}
+          sortBy={{
+            name: (a, b) => a.name.localeCompare(b.name),
+            description: (a, b) => a.description.localeCompare(b.description),
+          }}
+        />,
+      );
+      // opening sort modal
+      fireEvent.click(getByLabelText('open-sort'));
+
+      // checking is sort modal open
+      expect(queryByText('common.sorting.sort')).toBeInTheDocument();
+
+      // checking generating of sort by form
+      expect(queryByText('common.sorting.description')).toBeInTheDocument();
+
+      // choosing option to sort
+      fireEvent.click(getByText('common.sorting.desc'));
+      fireEvent.click(getByText('common.sorting.description'));
+      fireEvent.click(getByText('common.buttons.ok'));
+
+      // checking sorted items
+      expect(getAllByRole('row')[1].textContent).toBe(
+        'THIRD_ENTRYtestdescription3',
+      );
+      expect(getAllByRole('row')[2].textContent).toBe(
+        'second_entrytestdescription2',
+      );
+      expect(getAllByRole('row')[3].textContent).toBe(
+        'first_entrytestdescription1',
+      );
+    });
   });
 });
