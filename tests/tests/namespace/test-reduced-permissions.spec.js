@@ -253,6 +253,8 @@ context('Test reduced permissions', () => {
       .contains('Configuration')
       .should('exist');
 
+    cy.wait(5000);
+
     // delete binding
     cy.getLeftNav()
       .contains('Configuration')
