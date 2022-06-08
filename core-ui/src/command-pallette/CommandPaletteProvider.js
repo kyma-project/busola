@@ -14,7 +14,7 @@ export const CommandPaletteProvider = ({ children }) => {
     const modalPresent = document.querySelector(
       '[data-focus-lock-disabled=false]',
     );
-    // disable opening pallette if other modal is present
+    // disable opening palette if other modal is present
     if (!modalPresent || !value) {
       _setShowDialog(value);
     }

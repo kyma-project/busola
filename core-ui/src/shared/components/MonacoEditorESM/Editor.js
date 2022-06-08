@@ -43,6 +43,7 @@ export function Editor({
     autocompletionDisabled,
     customSchemaUri,
     readOnly,
+    language,
   });
   const memoizedOptions = useRef({});
   if (!isEqual(memoizedOptions.current, options)) {
