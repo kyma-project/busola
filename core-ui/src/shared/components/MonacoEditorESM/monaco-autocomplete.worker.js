@@ -8,8 +8,8 @@ const CUSTOM_KEY = 'format';
 const CUSTOM_FORMATS = {
   'int-or-string': { oneOf: [{ type: 'string' }, { type: 'number' }] },
   'date-time': { type: 'string' },
-  int32: { type: 'number' },
-  int64: { type: 'number' },
+  int32: { type: 'integer' },
+  int64: { type: 'integer' },
 };
 
 function getExistingCustomFormats(obj, path = '') {
@@ -49,6 +49,7 @@ function replaceObjects(existingCustomFormats, schema) {
 }
 
 const jsonSchemas = {};
+
 async function createJSONSchemas(openAPISchemas) {
   const resolved = await new Resolver().resolve(openAPISchemas);
   const schema = toJsonSchema(resolved);
@@ -59,15 +60,9 @@ async function createJSONSchemas(openAPISchemas) {
       ][0];
       const prefix = group ? `${group}/` : '';
       const schemaId = `${prefix}${version}/${kind}`;
-      const partialSchema = JSON.parse(JSON.stringify(value));
-      const existingCustomFormats = getExistingCustomFormats(partialSchema);
-      const modifiedSchema = replaceObjects(
-        existingCustomFormats,
-        partialSchema,
-      );
 
       if (!jsonSchemas[schemaId]) {
-        jsonSchemas[schemaId] = modifiedSchema;
+        jsonSchemas[schemaId] = value;
       }
     }
   });
@@ -94,10 +89,11 @@ self.onmessage = $event => {
       });
   }
   if ($event.data[0] === 'getSchema') {
-    const schema = jsonSchemas[$event.data[1]];
-
-    if (schema) {
-      self.postMessage({ [$event.data[1]]: schema });
+    const schema = JSON.parse(JSON.stringify(jsonSchemas[$event.data[1]]));
+    const existingCustomFormats = getExistingCustomFormats(schema);
+    const modifiedSchema = replaceObjects(existingCustomFormats, schema);
+    if (modifiedSchema) {
+      self.postMessage({ [$event.data[1]]: modifiedSchema });
     } else {
       self.postMessage({ error: new Error('Resource schema not found') });
     }
