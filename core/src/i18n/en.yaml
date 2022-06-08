@@ -562,7 +562,9 @@ common:
   protected-resource: Resource protected. Go to Preferences to turn on the modification of protected resources.
   sorting:
     asc: Ascending
+    count: Count
     desc: Descenting
+    lastseen: Last Seen
     name: Name
     replicas: Replicas
     sort: Sort
@@ -570,6 +572,7 @@ common:
     sort-order: Sort Order
     status: Status
     time: Time
+    type: Type
   statuses:
     error: Error
     failed: Failed
@@ -603,6 +606,7 @@ common:
     secret-ref-name: Unique name within a Namespace to refer to a Secret resource.
     secret-ref-namespace: Namespace defines the space within which the secret name must be unique.
     show: Show read-only fields
+    sort: Sort
     unknown-date: Unknown date
     value: Value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
   'yes': 'yes'

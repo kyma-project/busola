@@ -95,8 +95,10 @@ export function Events({ ...otherParams }) {
     <p>{entry.message}</p>,
     ...involvedObject(entry),
     formatSourceObject(entry.source),
-    <p>{entry.count}</p>,
-    <ReadableCreationTimestamp timestamp={entry.lastTimestamp} />,
+    <p>{entry.count || 0}</p>,
+    <ReadableCreationTimestamp
+      timestamp={entry.lastTimestamp || entry.eventTime}
+    />,
   ];
 
   const textSearchProperties = [
@@ -127,6 +129,18 @@ export function Events({ ...otherParams }) {
       )}
       i18n={i18n}
       allowSlashShortcut={allowSlashShortcut}
+      sortBy={defaultSort => {
+        const { name } = defaultSort;
+
+        return {
+          name,
+          type: (a, b) => a.type.localeCompare(b.type),
+          lastseen: (a, b) =>
+            new Date(b.lastTimestamp || b.eventTime).getTime() -
+            new Date(a.lastTimestamp || a.eventTime).getTime(),
+          count: (a, b) => (a.count || 0) - (b.count || 0),
+        };
+      }}
     />
   );
 }

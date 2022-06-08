@@ -94,12 +94,14 @@ export function EventDetails(props) {
     },
     {
       header: t('events.headers.count'),
-      value: event => <p>{event.count}</p>,
+      value: event => <p>{event.count || 0}</p>,
     },
     {
       header: t('events.headers.last-seen'),
       value: event => (
-        <ReadableCreationTimestamp timestamp={event.lastTimestamp} />
+        <ReadableCreationTimestamp
+          timestamp={event.lastTimestamp || event.eventTime}
+        />
       ),
     },
   ];

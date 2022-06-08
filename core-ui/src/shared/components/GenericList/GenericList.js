@@ -132,7 +132,13 @@ export const GenericList = ({
         />
       )}
       {sortBy && (
-        <SortModalPanel sortBy={sortBy} sort={sort} setSort={setSort} t={t} />
+        <SortModalPanel
+          sortBy={sortBy}
+          sort={sort}
+          setSort={setSort}
+          t={t}
+          disabled={!entries.length}
+        />
       )}
       {extraHeaderContent}
     </>

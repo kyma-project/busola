@@ -2,13 +2,27 @@ import React, { useState } from 'react';
 import { Button } from 'fundamental-react';
 import { Modal } from '../Modal/Modal';
 import { FormRadioGroup, FormRadioItem } from 'fundamental-react';
+import { Tooltip } from '../Tooltip/Tooltip';
 
-export const SortModalPanel = ({ sortBy, sort, setSort, t }) => {
+export const SortModalPanel = ({
+  sortBy,
+  sort,
+  setSort,
+  t,
+  disabled = false,
+}) => {
   const [order, setOrder] = useState(sort.order);
   const [name, setName] = useState(sort.name);
 
   const sortOpeningComponent = (
-    <Button glyph="sort" option="transparent" aria-label="open-sort" />
+    <Tooltip content={t('common.tooltips.sort')}>
+      <Button
+        disabled={disabled}
+        option="transparent"
+        glyph="sort"
+        aria-label="open-sort"
+      />
+    </Tooltip>
   );
 
   return (
