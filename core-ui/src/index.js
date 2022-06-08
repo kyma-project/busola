@@ -21,6 +21,7 @@ import './styles/index.scss';
 import './styles/fiori-helpers.scss';
 import { Provider } from 'react-redux';
 import { store } from 'store/store';
+import { AuthContextProvider } from 'store/clusters/AuthContext';
 
 i18next
   .use(initReactI18next)
@@ -46,16 +47,26 @@ i18next
     },
   });
 
+const withProvider = Provider => Component => props => (
+  <Provider {...props}>
+    <Component {...props} />
+  </Provider>
+);
+const Providers = [CommandPaletteProvider, AuthContextProvider].reduce(
+  (component, provider) => withProvider(provider)(component),
+  ({ children }) => <>{children}</>,
+);
+
 ReactDOM.render(
   <Microfrontend env={process.env}>
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Suspense fallback={<Spinner />}>
-        <CommandPaletteProvider>
-          <Provider store={store}>
+        <Provider store={store}>
+          <Providers>
             <App />
             <ServiceCatalogUIWrapper />
-          </Provider>
-        </CommandPaletteProvider>
+          </Providers>
+        </Provider>
       </Suspense>
     </BrowserRouter>
   </Microfrontend>,

@@ -39,6 +39,7 @@ export function useClusters() {
       delete nextClusters[clusterName];
       dispatch(setClusters(nextClusters));
       storage.saveClusters(nextClusters);
+      setCluster(null);
     },
   };
 }

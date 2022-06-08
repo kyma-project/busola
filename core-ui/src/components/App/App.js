@@ -3,23 +3,23 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Navigation } from '../Navigation/Navigation';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
 import ClusterList from 'components/Clusters/views/ClusterList';
-import { useAuth } from 'store/clusters/useAuth';
-import { useSelector } from 'react-redux';
-import { selectCurrentCluster } from 'store/clusters/clusters.slice';
-import jwtDecode from 'jwt-decode';
+import { useClusters } from 'store/clusters/useClusters';
+
+function EmptyPathRedirect() {
+  const { currentCluster } = useClusters();
+  const path = currentCluster
+    ? `/cluster/${currentCluster.contextName}/overview`
+    : '/clusters';
+  return <Navigate to={path} replace />;
+}
 
 export default function App() {
-  const auth = useAuth();
-  if (auth?.token) {
-    console.log('expires', auth && jwtDecode(auth.token).exp);
-  }
   const { t } = useTranslation();
 
   const Null = () => 'null';
@@ -43,6 +43,10 @@ export default function App() {
       <Navigation />
       <Routes>
         <Route path="clusters" element={<ClusterList />} />
+        <Route
+          path="cluster/:currentClusterName"
+          element={<Navigate to="overview" />}
+        />
         <Route path="cluster/:currentClusterName/*">
           <Route
             path="overview" // overview route should stay static
@@ -58,10 +62,7 @@ export default function App() {
           {/* todo redirect to ns details on invalid path */}
           {/* <Route path="*" element={<Navigate to="overview" replace />} /> */}
         </Route>
-        {/* <Route
-          path="*"
-          element={<EmptyPathRedirect />}
-        /> */}
+        <Route path="*" element={<EmptyPathRedirect />} />
       </Routes>
     </>
   );

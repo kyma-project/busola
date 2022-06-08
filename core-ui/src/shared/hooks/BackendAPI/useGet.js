@@ -5,7 +5,7 @@ import React from 'react';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import shortid from 'shortid';
-import { useAuth } from 'store/clusters/useAuth';
+import { useAuth } from 'store/clusters/AuthContext';
 
 // allow <n> consecutive requests to fail before displaying error
 const ERROR_TOLERANCY = 2;

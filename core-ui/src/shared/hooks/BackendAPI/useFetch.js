@@ -3,7 +3,7 @@ import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { baseUrl, throwHttpError } from 'shared/hooks/BackendAPI/config';
 import { useConfig } from 'shared/contexts/ConfigContext';
-import { useAuth } from 'store/clusters/useAuth';
+import { useAuth } from 'store/clusters/AuthContext';
 import { useClusters } from 'store/clusters/useClusters';
 
 export const useFetch = () => {
