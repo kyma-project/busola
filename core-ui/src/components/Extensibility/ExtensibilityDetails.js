@@ -11,7 +11,7 @@ import { Widget } from './components/Widget';
 import { useGetTranslation, TranslationBundleContext } from './helpers';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
-  const { widgetT } = useGetTranslation();
+  const { t, widgetT } = useGetTranslation();
 
   const detailsProps = usePrepareDetailsProps(
     resMetaData.navigation.path,
@@ -31,7 +31,9 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
 
   const breadcrumbs = [
     {
-      name: resMetaData.navigation.label || resMetaData.navigation.path,
+      name: t('name', {
+        defaultValue: resMetaData.resource?.kind,
+      }),
       path: '/',
       fromContext: resMetaData.navigation.path,
     },
