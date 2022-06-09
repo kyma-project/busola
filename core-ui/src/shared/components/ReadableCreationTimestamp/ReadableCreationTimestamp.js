@@ -1,3 +1,5 @@
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+
 function getDayDifference(time1, time2) {
   return (time1 - time2) / (24 * 60 * 60 * 1000);
 }
@@ -17,7 +19,7 @@ const rtf = new Intl.RelativeTimeFormat('en', {
 });
 
 export const ReadableCreationTimestamp = ({ timestamp }) => {
-  if (!timestamp) return null;
+  if (!timestamp) return EMPTY_TEXT_PLACEHOLDER;
 
   const now = new Date();
   const createdAt = new Date(timestamp);
