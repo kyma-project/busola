@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Resource-based extensions are a means of introducing custom resource pages to busola. To achieve that a Config Map needs to be created in the `kube-public` namespace with a label `busola.io/extension=resource`.
+Resource-based extensions are a means for users to introduce custom resource pages to busola. To achieve that a Config Map needs to be created in the `kube-public` namespace with a label `busola.io/extension=resource`.
 
 The Config Map needs to have several fields created that define how the resources is handled.
 
