@@ -132,7 +132,7 @@ Extra parameters might be available for specific widgets.
     {
       "path": "spec.configPatches",
       "widget": "Table",
-      "columns": [{ "path": "applyTo" }, { "path": "match.context" }]
+      "children": [{ "path": "applyTo" }, { "path": "match.context" }]
     }
   ]
 }
