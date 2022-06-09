@@ -25,7 +25,6 @@ import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
-import pluralize from 'pluralize';
 import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 
 /* to allow cloning of a resource set the following on the resource create component:
@@ -96,14 +95,13 @@ export function ResourcesList(props) {
 function Resources(props) {
   const {
     windowTitle,
+    resourceName,
     resourceType,
     filter,
     resourceUrl,
     skipDataLoading,
   } = props;
-
-  const prettifiedResourceKind = prettifyNamePlural(null, resourceType);
-  useWindowTitle(windowTitle || pluralize(prettifiedResourceKind));
+  useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
 
   const { loading, error, data: resources, silentRefetch } = useGetList(filter)(
     resourceUrl,
