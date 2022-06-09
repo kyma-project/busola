@@ -25,6 +25,7 @@ import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
+import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 
 /* to allow cloning of a resource set the following on the resource create component:
  *
@@ -152,6 +153,10 @@ export function ResourceListRenderer({
   allowSlashShortcut,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate = false,
+  sortBy = {
+    name: nameLocaleSort,
+    time: timeSort,
+  },
 }) {
   const { t } = useTranslation(['translation'], { i18n });
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
@@ -311,9 +316,8 @@ export function ResourceListRenderer({
     protectedResourceWarning(entry),
   ];
 
-  const extraHeaderContent =
-    listHeaderActions ||
-    (CreateResourceForm && !disableCreate && (
+  const extraHeaderContent = listHeaderActions || [
+    CreateResourceForm && !disableCreate && (
       <Button
         glyph="add"
         option="transparent"
@@ -327,7 +331,8 @@ export function ResourceListRenderer({
             resourceType: prettifiedResourceName,
           })}
       </Button>
-    ));
+    ),
+  ];
 
   return (
     <>
@@ -389,6 +394,7 @@ export function ResourceListRenderer({
         testid={testid}
         currentlyEditedResourceUID={currentlyEditedResourceUID}
         i18n={i18n}
+        sortBy={sortBy}
       />
     </>
   );
