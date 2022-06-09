@@ -991,6 +991,8 @@ events:
     source: Source
     type: Type
   title: Events
+extensibility:
+  error: Your extension configuration is incorrect.
 functions:
   buttons:
     connected-repositories: Connected Repositories
