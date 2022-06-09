@@ -6,7 +6,7 @@ import * as jp from 'jsonpath';
 
 const CUSTOM_KEY = 'format';
 const CUSTOM_FORMATS = {
-  'int-or-string': { oneOf: [{ type: 'string' }, { type: 'number' }] },
+  'int-or-string': { oneOf: [{ type: 'string' }, { type: 'integer' }] },
   'date-time': { type: 'string' },
   int32: { type: 'integer' },
   int64: { type: 'integer' },
