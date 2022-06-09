@@ -1,5 +1,6 @@
 import { config } from '../config';
 import i18next from 'i18next';
+import { coreUIViewGroupName } from './static-navigation-model';
 
 // this fn is cloned in core-ui 'helpers.js' as 'useGetTranslation'. Modify it also there
 const translate = translationObj => {
@@ -37,6 +38,7 @@ const getCustomNodes = (crs, scope) => {
           resource.group
         }/${resource.version.toLowerCase()}`;
         return {
+          viewGroup: coreUIViewGroupName,
           category: {
             label: i18next.t([
               `${translationBundle}:category`,
@@ -115,7 +117,7 @@ export const getCustomPaths = (customResources, scope) => {
     const validCrs = crs?.filter(cr => {
       const isValidCr =
         cr.navigation &&
-        typeof cr.navigation.path === 'string' &&
+        typeof cr.navigation?.path === 'string' &&
         cr.resource &&
         typeof cr.resource.kind === 'string' &&
         typeof cr.resource.group === 'string' &&
