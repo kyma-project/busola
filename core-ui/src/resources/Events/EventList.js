@@ -10,15 +10,21 @@ import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Link as DescriptionLink } from 'shared/components/Link/Link';
 import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
+import { setWindowTitle } from 'shared/hooks/useWindowTitle';
 
-export function Events({ ...otherParams }) {
+function Events({ ...otherParams }) {
   const { t, i18n } = useTranslation();
   const {
     defaultType,
     hideInvolvedObjects,
     resourceUrl,
     allowSlashShortcut,
+    updateTitle = true,
   } = otherParams;
+
+  if (updateTitle) {
+    setWindowTitle(t('events.title'));
+  }
   const { loading = true, error, data: items } = useGetList(otherParams.filter)(
     resourceUrl,
     {
