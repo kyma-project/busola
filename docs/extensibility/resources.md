@@ -18,7 +18,7 @@ The resource section is required and contains basic information about the resour
 
 ```json
 {
-  "kind": "MyResources",
+  "kind": "MyResource",
   "group": "networking.istio.io",
   "version": "v1alpha3"
 }
