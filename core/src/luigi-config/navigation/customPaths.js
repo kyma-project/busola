@@ -23,7 +23,6 @@ const getCustomNodes = (crs, scope) => {
   };
 
   let customPaths;
-
   try {
     customPaths =
       crs?.map(cr => {
@@ -38,7 +37,6 @@ const getCustomNodes = (crs, scope) => {
           resource.group
         }/${resource.version.toLowerCase()}`;
         return {
-          viewGroup: coreUIViewGroupName,
           category: {
             label: i18next.t([
               `${translationBundle}:category`,
