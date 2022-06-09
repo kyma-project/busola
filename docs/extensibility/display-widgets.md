@@ -55,10 +55,8 @@ Panel widget renders an object as a separate panel with it's own title (base on 
 {
   "name": "details",
   "widget": "Panel",
-  "children": [
-    { "path": "spec.value" },
-    { "path": "spec.other-value" }
-  ]
+  "children": [{ "path": "spec.value" }, { "path": "spec.other-value" }]
+}
 ```
 
 ### Columns
