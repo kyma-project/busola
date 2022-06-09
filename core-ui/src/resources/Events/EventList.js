@@ -137,7 +137,7 @@ export function Events({ ...otherParams }) {
           lastseen: (a, b) =>
             new Date(b.lastTimestamp).getTime() -
             new Date(a.lastTimestamp).getTime(),
-          count: (a, b) => b.count - a.count,
+          count: (a, b) => a.count - b.count,
         };
       }}
     />
