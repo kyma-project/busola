@@ -101,9 +101,7 @@ export function EventDetails(props) {
     {
       header: t('events.headers.last-seen'),
       value: event => (
-        <ReadableCreationTimestamp
-          timestamp={event.lastTimestamp || EMPTY_TEXT_PLACEHOLDER}
-        />
+        <ReadableCreationTimestamp timestamp={event.lastTimestamp} />
       ),
     },
   ];
