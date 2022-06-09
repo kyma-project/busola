@@ -190,7 +190,7 @@ export function MultiInput({
           {internalValue.map((entry, index) => (
             <li key={index}>
               {noEdit && !isLast(index) && (
-                <span class="readonly-value">{entry}</span>
+                <span className="readonly-value">{entry}</span>
               )}
               {(!noEdit || isLast(index)) &&
                 inputs.map(

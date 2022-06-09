@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Schema defining structure of details configuration",
+  "required": [
+    "header",
+    "body"
+  ],
+  "title": "Custom pages to be displayed in Busola",
+  "type": "object",
+  "properties": {
+    "body": {
+      "description": "Configuration of fields/data that should be displayed in body section of resource details page.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/component"
+      }
+    },
+    "header": {
+      "description": "Configuration of fields/data that should be displayed in header section of resource details page.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/component"
+      }
+    }
+  },
+  "definitions": {
+    "component": {
+      "type": "object",
+      "anyOf": [
+        {"required": ["name"]},
+        {"required": ["path"]}
+      ],
+      "properties": {
+        "name": {
+          "description": "Name of component used for dispaying translations",
+          "type": "string"
+        },
+        "path": {
+          "description": "The path to the resource variable",
+          "examples": [
+            "status.phase",
+            "metadata.labels"
+          ],
+          "type": "string"
+        },
+        "widget": {
+          "description": "Name of a widget that should be used for displaying data defined by path",
+          "examples": [
+            "Badge",
+            "CodeViewer"
+          ],
+          "type": "string"
+        },
+        "children": {
+          "$ref": "#/definitions/list"
+        }
+      }
+    },
+    "list": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/component"
+          }
+        },
+        {
+          "$ref": "#/definitions/component"
+        }
+      ]
+    }
+  }
+}
