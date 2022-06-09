@@ -30,7 +30,9 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
 
   const breadcrumbs = [
     {
-      name: resMetaData.navigation.label || resMetaData.navigation.path,
+      name: t('name', {
+        defaultValue: resMetaData.resource?.kind,
+      }),
       path: '/',
       fromContext: resMetaData.navigation.path,
     },
