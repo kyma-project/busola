@@ -24,7 +24,11 @@ export const HeaderRenderer = ({ actions, headerRenderer }) => {
   }
   return [
     headerRenderer().map((h, index) => (
-      <th className="fd-table__cell" scope="col" key={h || index}>
+      <th
+        className="fd-table__cell"
+        scope="col"
+        key={typeof h === 'object' ? index : h}
+      >
         {h}
       </th>
     )),

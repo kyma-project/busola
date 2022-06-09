@@ -82,6 +82,9 @@ function HelmReleasesList() {
         serverDataLoading={loading}
         serverDataError={error}
         allowSlashShortcut
+        sortBy={{
+          name: (a, b) => a.releaseName.localeCompare(b.releaseName),
+        }}
       />
     </>
   );
