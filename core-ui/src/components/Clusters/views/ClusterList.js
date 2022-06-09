@@ -200,7 +200,7 @@ function ClusterList() {
         rowRenderer={rowRenderer}
         actions={actions}
         extraHeaderContent={extraHeaderContent}
-        noSearchResultMessage={t('clusters.list.no-clusters-found')}
+        noSearchResultMessage={'clusters.list.no-clusters-found'}
         i18n={i18n}
         allowSlashShortcut
       />

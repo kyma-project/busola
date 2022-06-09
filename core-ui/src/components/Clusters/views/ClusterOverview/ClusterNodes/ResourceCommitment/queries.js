@@ -1,3 +1,4 @@
+import { isNil } from 'lodash';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 
 function usePrometheusQuery(serviceUrl, query, time) {
@@ -20,7 +21,7 @@ export function useCurrentQuery({ serviceUrl, time, queryType }) {
       data: Object.fromEntries(
         requests.map(request => [request.name, request.query.value]),
       ),
-      loading: requests.some(request => request.query.loading), // any loading=true
+      loading: requests.some(request => isNil(request.query.value)), // any value is not present
       error: requests.find(request => request.query.error)?.query?.error, // find first error
     };
   };

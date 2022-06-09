@@ -150,7 +150,7 @@ function HeaderOperations({ title, operations }) {
   const { t } = useTranslation();
   return (
     <>
-      {title && <div class="header-operation-title">{title}</div>}
+      {title && <div className="header-operation-title">{title}</div>}
       <ul>
         {operations.add &&
           Object.entries(operations.set).map(([header, val]) => (
@@ -396,7 +396,7 @@ export function StringMatch({ def, ignoreCase }) {
 
   return (
     <>
-      <span class="match-type">{label}</span> {value}{' '}
+      <span className="match-type">{label}</span> {value}{' '}
       {ignoreCase && !def.regex && (
         <span className="ignore-case">
           {t('virtualservices.matches.ignore-case')}
