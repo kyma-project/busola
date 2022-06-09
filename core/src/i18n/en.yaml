@@ -563,7 +563,7 @@ common:
   sorting:
     asc: Ascending
     count: Count
-    desc: Descenting
+    desc: Descending
     lastseen: Last Seen
     name: Name
     replicas: Replicas

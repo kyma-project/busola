@@ -27,6 +27,7 @@ export const SortModalPanel = ({
 
   return (
     <Modal
+      title={t('common.sorting.sort')}
       actions={onClose => [
         <Button
           option="emphasized"
@@ -39,7 +40,6 @@ export const SortModalPanel = ({
           {t('common.buttons.cancel')}
         </Button>,
       ]}
-      title={t('common.sorting.sort')}
       modalOpeningComponent={sortOpeningComponent}
     >
       <p>{t('common.sorting.sort-order')}</p>
