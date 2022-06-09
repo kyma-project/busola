@@ -7,6 +7,7 @@ import {
   getClusters,
 } from './../cluster-management/cluster-management';
 import { hasPermissionsFor, hasWildcardPermission } from './permissions';
+import { getCustomPaths } from './customPaths';
 
 export const coreUIViewGroupName = '_core_ui_';
 
@@ -53,7 +54,10 @@ export function getStaticChildrenNodesForNamespace(
   groupVersions,
   permissionSet,
   features,
+  customResources,
 ) {
+  const customPaths = getCustomPaths(customResources, 'namespace');
+
   const encodedClusterName = encodeURIComponent(getActiveClusterName());
   const nodes = [
     {
@@ -1647,7 +1651,9 @@ export function getStaticChildrenNodesForNamespace(
       ],
     },
   ];
-  return filterNodesByAvailablePaths(nodes, groupVersions, permissionSet);
+
+  const allNodes = [...nodes, ...customPaths];
+  return filterNodesByAvailablePaths(allNodes, groupVersions, permissionSet);
 }
 
 export function getStaticRootNodes(
@@ -1655,7 +1661,10 @@ export function getStaticRootNodes(
   groupVersions,
   permissionSet,
   features,
+  customResources,
 ) {
+  const customPaths = getCustomPaths(customResources, 'cluster');
+
   const nodes = [
     {
       pathSegment: 'overview',
@@ -1705,6 +1714,7 @@ export function getStaticRootNodes(
               groupVersions,
               permissionSet,
               features,
+              customResources,
             ),
           defaultChildNode: 'details',
         },
@@ -2104,7 +2114,9 @@ export function getStaticRootNodes(
       onNodeActivation: downloadKubeconfig,
     },
   ];
-  return filterNodesByAvailablePaths(nodes, groupVersions, permissionSet);
+
+  const allNodes = [...nodes, ...customPaths];
+  return filterNodesByAvailablePaths(allNodes, groupVersions, permissionSet);
 }
 
 function extractApiGroup(apiPath) {
