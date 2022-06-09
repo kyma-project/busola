@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "description": "Schema defining structure of list configuration",
+  "title": "Custom pages to be displayed in Busola",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "oneOf": [
+      {"required": ["name"]},
+      {"required": ["path"]}
+    ],
+    "properties": {
+      "name": {
+        "description": "Name of component used for dispaying translations",
+        "type": "string"
+      },
+      "path": {
+        "description": "The path to the resource variable",
+        "examples": [
+          "status.phase",
+          "metadata.labels"
+        ],
+        "type": "string"
+      },
+      "widget": {
+        "description": "Name of a widget that should be used for displaying data defined by path",
+        "examples": [
+          "Badge",
+          "CodeViewer"
+        ],
+        "type": "string"
+      }
+    }
+  }
+}
