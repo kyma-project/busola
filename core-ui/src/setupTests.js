@@ -5,6 +5,8 @@ import { act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import 'babel-polyfill';
 
+Element.prototype.scroll = () => {};
+
 const originalConsoleError = console.error;
 export const ignoreConsoleErrors = patterns => {
   console.error = (...data) => {
