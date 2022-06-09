@@ -63,12 +63,12 @@ export default function App() {
           return (
             <>
               <Route
-                path={`/namespaces/:namespaceId/${cr.navigation.path}`}
+                path={`/namespaces/:namespaceId/${cr.navigation?.path}`}
                 element={<ExtensibilityList />}
               />
               {cr.details && (
                 <Route
-                  path={`/namespaces/:namespaceId/${cr.navigation.path}/:resourceName`}
+                  path={`/namespaces/:namespaceId/${cr.navigation?.path}/:resourceName`}
                   element={<ExtensibilityDetails />}
                 />
               )}
@@ -78,12 +78,12 @@ export default function App() {
           return (
             <>
               <Route
-                path={`/${cr.navigation.path}`}
+                path={`/${cr.navigation?.path}`}
                 element={<ExtensibilityList />}
               />
               {cr.details && (
                 <Route
-                  path={`/${cr.navigation.path}/:resourceName`}
+                  path={`/${cr.navigation?.path}/:resourceName`}
                   element={<ExtensibilityDetails />}
                 />
               )}

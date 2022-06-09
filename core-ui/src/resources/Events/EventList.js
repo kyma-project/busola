@@ -11,6 +11,7 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Link as DescriptionLink } from 'shared/components/Link/Link';
 import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { setWindowTitle } from 'shared/hooks/useWindowTitle';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 function Events({ ...otherParams }) {
   const { t, i18n } = useTranslation();
@@ -101,7 +102,7 @@ function Events({ ...otherParams }) {
     <p>{entry.message}</p>,
     ...involvedObject(entry),
     formatSourceObject(entry.source),
-    <p>{entry.count}</p>,
+    <p>{entry.count || EMPTY_TEXT_PLACEHOLDER}</p>,
     <ReadableCreationTimestamp timestamp={entry.lastTimestamp} />,
   ];
 
@@ -133,6 +134,18 @@ function Events({ ...otherParams }) {
       )}
       i18n={i18n}
       allowSlashShortcut={allowSlashShortcut}
+      sortBy={defaultSort => {
+        const { name } = defaultSort;
+
+        return {
+          name,
+          type: (a, b) => a.type.localeCompare(b.type),
+          lastseen: (a, b) =>
+            new Date(b.lastTimestamp).getTime() -
+            new Date(a.lastTimestamp).getTime(),
+          count: (a, b) => a.count - b.count,
+        };
+      }}
     />
   );
 }
