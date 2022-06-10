@@ -9,6 +9,7 @@ import 'core-js/es/array/flat-map';
 
 import { MESSAGES } from 'shared/components/GenericList/constants';
 import { getEntryMatches } from 'shared/components/GenericList/helpers';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 SearchInput.propTypes = {
   searchQuery: PropTypes.string,
@@ -157,13 +158,15 @@ export function SearchInput({
         </div>
       </div>
       {showControl && (
-        <Button
-          disabled={disabled}
-          option="transparent"
-          glyph="search"
-          onClick={openSearchList}
-          aria-label="open-search"
-        />
+        <Tooltip content={t('common.tooltips.search')}>
+          <Button
+            disabled={disabled}
+            option="transparent"
+            glyph="search"
+            onClick={openSearchList}
+            aria-label="open-search"
+          />
+        </Tooltip>
       )}
     </section>
   );

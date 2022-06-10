@@ -137,7 +137,7 @@ export function Modal({
       <FdModal
         className={classNames('custom-modal', className)}
         type={type}
-        title={t(title)}
+        title={title}
         show={show}
         onClose={onClose}
         actions={modalActions()}

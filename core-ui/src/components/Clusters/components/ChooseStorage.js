@@ -15,7 +15,12 @@ export function ChooseStorage({ storage, setStorage }) {
         className="choose-storage"
         onChange={(_, type) => setStorage(type)}
       >
-        <FormRadioItem data="localStorage" checked={storage === 'localStorage'}>
+        <FormRadioItem
+          data="localStorage"
+          checked={storage === 'localStorage'}
+          // prevent error for checked without onChange
+          inputProps={{ onChange: () => {} }}
+        >
           {t('clusters.storage.labels.localStorage')}:{' '}
           {t('clusters.storage.descriptions.localStorage')}
         </FormRadioItem>
@@ -23,12 +28,17 @@ export function ChooseStorage({ storage, setStorage }) {
         <FormRadioItem
           data="sessionStorage"
           checked={storage === 'sessionStorage'}
+          inputProps={{ onChange: () => {} }}
         >
           {t('clusters.storage.labels.sessionStorage')}:{' '}
           {t('clusters.storage.descriptions.sessionStorage')}
         </FormRadioItem>
 
-        <FormRadioItem data="inMemory" checked={storage === 'inMemory'}>
+        <FormRadioItem
+          data="inMemory"
+          checked={storage === 'inMemory'}
+          inputProps={{ onChange: () => {} }}
+        >
           {t('clusters.storage.labels.inMemory')}:{' '}
           {t('clusters.storage.descriptions.inMemory')}
         </FormRadioItem>

@@ -397,6 +397,7 @@ export async function createNavigationNodes(
       onNodeActivation: () => {
         Luigi.navigation().navigate(`/cluster/${activeClusterName}`);
       },
+      viewGroup: coreUIViewGroupName,
       children: [
         {
           navigationContext: 'cluster',

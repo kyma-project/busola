@@ -20,7 +20,14 @@ import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { getErrorMessage } from 'shared/utils/helpers';
+import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
+import { SortModalPanel } from './SortModalPanel';
 import './GenericList.scss';
+
+const defaultSort = {
+  name: nameLocaleSort,
+  time: timeSort,
+};
 
 export const GenericList = ({
   entries = [],
@@ -50,7 +57,27 @@ export const GenericList = ({
   currentlyEditedResourceUID,
   i18n,
   allowSlashShortcut,
+  sortBy,
 }) => {
+  if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
+
+  const [sort, setSort] = useState({
+    name: sortBy && Object.keys(sortBy)[0],
+    order: 'ASC',
+  });
+
+  const sorting = (sort, resources) => {
+    if (!sortBy) return resources;
+    const sortFunction = Object.entries(sortBy).filter(([name]) => {
+      return name === sort.name;
+    })[0][1];
+    if (sort.order === 'ASC') {
+      return [...resources.sort(sortFunction)];
+    } else {
+      return [...resources.sort((a, b) => sortFunction(b, a))];
+    }
+  };
+
   const { settings } = useMicrofrontendContext();
   if (pagination) {
     pagination.itemsPerPage =
@@ -61,7 +88,9 @@ export const GenericList = ({
   const [currentPage, setCurrentPage] = React.useState(
     pagination?.initialPage || 1,
   );
-  const [filteredEntries, setFilteredEntries] = useState(entries);
+  const [filteredEntries, setFilteredEntries] = useState(() =>
+    sorting(sort, entries),
+  );
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -73,10 +102,16 @@ export const GenericList = ({
       }
     }
     setFilteredEntries(
-      filterEntries([...entries], searchQuery, textSearchProperties),
+      filterEntries(sorting(sort, entries), searchQuery, textSearchProperties),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery, setFilteredEntries, entries, pagination?.itemsPerPage]);
+  }, [
+    searchQuery,
+    setFilteredEntries,
+    entries,
+    pagination?.itemsPerPage,
+    sort,
+  ]);
 
   React.useEffect(() => setCurrentPage(1), [searchQuery]);
 
@@ -94,6 +129,15 @@ export const GenericList = ({
           disabled={!entries.length}
           i18n={i18n}
           allowSlashShortcut={allowSlashShortcut}
+        />
+      )}
+      {sortBy && (
+        <SortModalPanel
+          sortBy={sortBy}
+          sort={sort}
+          setSort={setSort}
+          t={t}
+          disabled={!entries.length}
         />
       )}
       {extraHeaderContent}
@@ -146,7 +190,7 @@ export const GenericList = ({
 
     return pagedItems.map((e, index) => (
       <RowRenderer
-        key={e.id || e.name || index}
+        key={e.metadata?.uid || e.name || e.metadata?.name || index}
         entry={e}
         actions={actions}
         actionsStandaloneItems={actionsStandaloneItems}
