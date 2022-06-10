@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { prettifyNamePlural } from 'shared/utils/helpers';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
@@ -41,9 +40,9 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   ];
   return (
     <ResourceDetails
-      windowTitle={prettifyNamePlural(
-        resMetaData.navigation.label || resMetaData.navigation.path,
-      )}
+      windowTitle={t('name', {
+        defaultValue: resMetaData.resource?.kind,
+      })}
       customColumns={header.map(def => ({
         header: widgetT(def),
         value: resource => (
