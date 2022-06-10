@@ -30,24 +30,19 @@ const FormStack = injectPluginStack(FormContainer);
 export function ResourceSchema({
   advanced,
   resource,
-  setResource,
   schema,
   schemaRules = [],
   path,
+  store,
+  setStore,
   ...extraParams
 }) {
-  const [store, setStore] = useState(() =>
-    createStore(createOrderedMap(resource)),
-  );
   const onChange = useCallback(
     actions => {
       setStore(prevStore => storeUpdater(actions)(prevStore));
     },
     [setStore],
   );
-  useEffect(() => {
-    setResource(store.valuesToJS());
-  }, [store.values]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const translationBundle = path || 'extensibility';
   const { t } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
@@ -85,12 +80,7 @@ export function ResourceSchema({
         onChange={onChange}
         schemaRules={myRules}
       >
-        <FormStack
-          isRoot
-          schema={schemaMap}
-          resource={resource}
-          setResource={setResource}
-        />
+        <FormStack isRoot schema={schemaMap} resource={resource} />
       </UIStoreProvider>
     </UIMetaProvider>
   );
