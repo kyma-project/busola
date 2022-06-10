@@ -12,7 +12,11 @@ export function ConfigMapDetails(props) {
   const ConfigMapEditor = resource => {
     const { data } = resource;
     return Object.keys(data || {}).map(key => (
-      <ReadonlyEditorPanel title={key} value={data[key]} key={key} />
+      <ReadonlyEditorPanel
+        title={key}
+        value={data[key]}
+        key={key + JSON.stringify(data[key])}
+      />
     ));
   };
 

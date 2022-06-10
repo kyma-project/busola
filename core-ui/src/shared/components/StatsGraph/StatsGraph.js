@@ -333,8 +333,9 @@ export function StatsGraph({
         } else {
           // graphs are created from the bottom to the top. reverse the tooltips order to align.
           const valueReversed = [...value]?.reverse();
+          const labelsReversed = [...labels]?.reverse();
           labelContent = valueReversed?.map((val, idx) => {
-            const labelTitle = labels?.[idx] || idx + 1;
+            const labelTitle = labelsReversed?.[idx] || idx + 1;
             const labelValue = getSIPrefix(val, binary, { unit }).string;
             return `${labelTitle}: ${labelValue}`;
           });

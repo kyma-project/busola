@@ -59,6 +59,10 @@ export function HorizontalPodAutoscalerList(props) {
       resourceName={t('hpas.title')}
       description={description}
       createResourceForm={HorizontalPodAutoscalerCreate}
+      sortBy={defaultSort => ({
+        ...defaultSort,
+        replicas: (a, b) => a.status.currentReplicas - b.status.currentReplicas,
+      })}
       {...props}
     />
   );

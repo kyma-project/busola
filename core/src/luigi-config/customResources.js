@@ -2,6 +2,7 @@ import { config } from './config';
 import { failFastFetch } from './navigation/queries';
 import jsyaml from 'js-yaml';
 import { merge } from 'lodash';
+import { getCurrentConfig } from './cluster-management/cluster-management';
 
 let customResources = null;
 
@@ -62,13 +63,15 @@ async function loadTargetClusterCRs(authData) {
 }
 
 export async function getCustomResources(authData) {
-  if (customResources) return customResources;
+  const { features } = await getCurrentConfig();
+  if (features.EXTENSIBILITY?.isEnabled) {
+    if (customResources) return customResources;
 
-  const crs = await loadBusolaClusterCRs();
-  console.log(crs);
-  customResources = Object.values({
-    ...crs,
-    ...(await loadTargetClusterCRs(authData)),
-  });
-  return customResources;
+    customResources = Object.values({
+      ...(await loadBusolaClusterCRs()),
+      ...(await loadTargetClusterCRs(authData)),
+    });
+    return customResources;
+  }
+  return [];
 }
