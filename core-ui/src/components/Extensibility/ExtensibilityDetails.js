@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { isArray } from 'lodash';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -45,7 +44,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
         defaultValue: resMetaData.resource?.kind,
       })}
       customColumns={
-        isArray(header)
+        Array.isArray(header)
           ? header.map(def => ({
               header: widgetT(def),
               value: resource => (
@@ -54,11 +53,15 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
             }))
           : []
       }
-      customComponents={[
-        resource => (
-          <Widget value={resource} structure={body} schema={schema} />
-        ),
-      ]}
+      customComponents={
+        Array.isArray(body)
+          ? [
+              resource => (
+                <Widget value={resource} structure={body} schema={schema} />
+              ),
+            ]
+          : []
+      }
       breadcrumbs={breadcrumbs}
       {...detailsProps}
     />

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { isArray } from 'lodash';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
@@ -34,7 +33,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   listProps.description = t('description', {
     defaultValue: ' ',
   });
-  listProps.customColumns = isArray(resMetaData.list)
+  listProps.customColumns = Array.isArray(resMetaData.list)
     ? resMetaData.list.map(column => ({
         header: widgetT(column),
         value: resource => (

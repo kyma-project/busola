@@ -1,6 +1,5 @@
 import React from 'react';
 import { LayoutPanel } from 'fundamental-react';
-import { isArray } from 'lodash';
 
 import { useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
@@ -14,7 +13,7 @@ export function Panel({ value, structure, schema }) {
         <LayoutPanel.Head title={widgetT(structure)} />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        {isArray(structure?.children)
+        {Array.isArray(structure?.children)
           ? structure.children?.map((def, idx) => (
               <Widget
                 key={idx}
