@@ -53,6 +53,7 @@ export const ExtensibilityList = () => {
       <ErrorBoundary
         customMessage={t('extensibility.error')}
         displayButton={false}
+        key={resMetaData.navigation.path}
       >
         <ExtensibilityListCore resMetaData={resMetaData} />
       </ErrorBoundary>
