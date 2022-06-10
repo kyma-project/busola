@@ -19,6 +19,7 @@ import { NameRenderer } from './NameRenderer';
 import { KeyValuePairRenderer } from './KeyValuePairRenderer';
 import { CollapsibleRenderer } from './CollapsibleRenderer';
 import { GenericList } from './GenericList';
+import { MonacoRenderer } from './MonacoRenderer';
 
 const pluginStack = [
   ReferencingHandler,
@@ -68,6 +69,7 @@ export const widgets = {
     */
     Name: NameRenderer,
     KeyValuePair: KeyValuePairRenderer,
+    CodeEditor: MonacoRenderer,
     FormGroup: CollapsibleRenderer,
   },
 };
