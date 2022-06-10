@@ -50,7 +50,11 @@ export const ExtensibilityList = () => {
 
   return (
     <TranslationBundleContext.Provider value={resMetaData.navigation.path}>
-      <ErrorBoundary customMessage={t('extensibility.error')}>
+      <ErrorBoundary
+        customMessage={t('extensibility.error')}
+        displayButton={false}
+        key={resMetaData.navigation.path}
+      >
         <ExtensibilityListCore resMetaData={resMetaData} />
       </ErrorBoundary>
     </TranslationBundleContext.Provider>
