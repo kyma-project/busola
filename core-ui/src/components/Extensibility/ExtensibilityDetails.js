@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { isArray } from 'lodash';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -43,12 +44,16 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
       windowTitle={t('name', {
         defaultValue: resMetaData.resource?.kind,
       })}
-      customColumns={header.map(def => ({
-        header: widgetT(def),
-        value: resource => (
-          <Widget value={resource} structure={def} schema={schema} />
-        ),
-      }))}
+      customColumns={
+        isArray(header)
+          ? header.map(def => ({
+              header: widgetT(def),
+              value: resource => (
+                <Widget value={resource} structure={def} schema={schema} />
+              ),
+            }))
+          : []
+      }
       customComponents={[
         resource => (
           <Widget value={resource} structure={body} schema={schema} />

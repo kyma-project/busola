@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { isEmpty } from 'lodash';
+import { isEmpty, isArray } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
@@ -56,7 +56,7 @@ export function ResourceSchema({
     { path: 'metadata.name', simple: true },
     { path: 'metadata.labels' },
     { path: 'metadata.annotations' },
-    ...schemaRules,
+    ...(isArray(schemaRules) ? schemaRules : []),
   ];
   const simpleRules = fullSchemaRules.filter(item => item.simple ?? false);
   const advancedRules = fullSchemaRules.filter(item => item.advanced ?? true);
