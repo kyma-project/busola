@@ -47,3 +47,4 @@ export function SecretRefs({ value, structure, schema }) {
     />
   );
 }
+SecretRefs.array = true;
