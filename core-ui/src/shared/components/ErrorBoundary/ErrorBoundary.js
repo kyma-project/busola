@@ -5,7 +5,6 @@ import * as Sentry from '@sentry/react';
 
 class ErrorBoundaryComponent extends React.Component {
   constructor(props) {
-    console.log(props);
     super(props);
     this.state = {
       hasError: false,
@@ -30,7 +29,7 @@ class ErrorBoundaryComponent extends React.Component {
               this.props.t('err-boundary.restored-initial-form')}
           </p>
 
-          {this.props?.displayButton ? (
+          {this.props.displayButton ? (
             <Button
               onClick={() => this.setState({ hasError: false, error: null })}
             >
