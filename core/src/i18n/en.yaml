@@ -504,6 +504,7 @@ common:
     key: Key
     kind: Kind
     labels: Labels
+    link: Link
     loading: Loading...
     logs: Logs
     name: Name
