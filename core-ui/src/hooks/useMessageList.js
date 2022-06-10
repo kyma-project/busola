@@ -87,7 +87,7 @@ export const formatInvolvedObject = obj => {
 };
 
 export const formatSourceObject = obj => {
-  if (!obj) return EMPTY_TEXT_PLACEHOLDER;
+  if (!obj || Object.keys(obj).length === 0) return EMPTY_TEXT_PLACEHOLDER;
   return obj.host ? (
     <Link className="fd-link" onClick={() => navigateToNodeDetails(obj.host)}>
       {obj.host}

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 import { MainFrameRedirection } from 'shared/components/MainFrameRedirection/MainFrameRedirection';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
@@ -8,11 +9,14 @@ import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { useSentry } from 'hooks/useSentry';
 
+import { ExtensibilityDetails } from 'components/Extensibility/ExtensibilityDetails';
+import { ExtensibilityList } from 'components/Extensibility/ExtensibilityList';
+
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
 
 export default function App() {
-  const { cluster, language } = useMicrofrontendContext();
+  const { cluster, language, customResources = [] } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
@@ -47,6 +51,47 @@ export default function App() {
           </WithTitle>
         }
       />
+
+      {customResources?.map(cr => {
+        const translationBundle = cr?.navigation?.path || 'extensibility';
+        i18next.addResourceBundle(
+          language,
+          translationBundle,
+          cr?.translations?.[language] || {},
+        );
+        if (cr.navigation?.scope === 'namespace') {
+          return (
+            <>
+              <Route
+                path={`/namespaces/:namespaceId/${cr.navigation?.path}`}
+                element={<ExtensibilityList />}
+              />
+              {cr.details && (
+                <Route
+                  path={`/namespaces/:namespaceId/${cr.navigation?.path}/:resourceName`}
+                  element={<ExtensibilityDetails />}
+                />
+              )}
+            </>
+          );
+        } else {
+          return (
+            <>
+              <Route
+                path={`/${cr.navigation?.path}`}
+                element={<ExtensibilityList />}
+              />
+              {cr.details && (
+                <Route
+                  path={`/${cr.navigation?.path}/:resourceName`}
+                  element={<ExtensibilityDetails />}
+                />
+              )}
+            </>
+          );
+        }
+      })}
+
       {resourceRoutes}
       {otherRoutes}
       <Route path="" element={<MainFrameRedirection />} />

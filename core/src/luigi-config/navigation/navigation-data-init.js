@@ -13,6 +13,7 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
+import { getCustomResources, getCustomTranslations } from '../customResources';
 import { showAlert } from '../utils/showAlert';
 
 import {
@@ -96,7 +97,7 @@ const getDisabledNodes = features => {
   return isValidConfig ? features?.DISABLED_NODES?.nodes : [];
 };
 
-async function createClusterManagementNodes(features) {
+async function createClusterManagementNodes(features, customResources) {
   const activeClusterName = getActiveClusterName();
 
   const childrenNodes = [
@@ -128,6 +129,7 @@ async function createClusterManagementNodes(features) {
       language: i18next.language,
       busolaClusterParams: await getBusolaClusterParams(),
       features,
+      customResources,
       ssoData: getSSOAuthData(),
       settings: {
         pagination: {
@@ -219,6 +221,8 @@ export async function createNavigation() {
 
     await initFeatures();
 
+    const customResources = await getCustomResources(authData);
+
     const optionsForCurrentCluster = {
       contextSwitcher: {
         defaultLabel: 'Select Namespace ...',
@@ -267,6 +271,7 @@ export async function createNavigation() {
         await getFeatures(),
         groupVersions,
         permissionSet,
+        customResources,
       ),
     };
   } catch (err) {
@@ -331,6 +336,7 @@ export async function createNavigationNodes(
   features,
   groupVersions,
   permissionSet,
+  customResources,
 ) {
   const authData = getAuthData();
   const activeCluster = getActiveCluster();
@@ -351,6 +357,7 @@ export async function createNavigationNodes(
       groupVersions,
       permissionSet,
       features,
+      customResources,
     );
     const observabilitySection = await getObservabilityNodes(authData);
     const externalNodes = addExternalNodes(features.EXTERNAL_NODES);
@@ -390,6 +397,7 @@ export async function createNavigationNodes(
       onNodeActivation: () => {
         Luigi.navigation().navigate(`/cluster/${activeClusterName}`);
       },
+      viewGroup: coreUIViewGroupName,
       children: [
         {
           navigationContext: 'cluster',
@@ -402,6 +410,7 @@ export async function createNavigationNodes(
         activeClusterName,
         groups,
         features,
+        customResources,
         clusters: getClusters(),
         cluster: activeCluster.currentContext.cluster,
         config: activeCluster.config,
@@ -459,6 +468,7 @@ async function getChildrenNodesForNamespace(
   groupVersions,
   permissionSet,
   features,
+  customResources,
 ) {
   const disabledNodes = getDisabledNodes(features);
 
@@ -466,6 +476,7 @@ async function getChildrenNodesForNamespace(
     groupVersions,
     permissionSet,
     features,
+    customResources,
   );
 
   hideDisabledNodes(disabledNodes, staticNodes, true);
