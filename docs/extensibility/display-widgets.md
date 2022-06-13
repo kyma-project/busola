@@ -4,7 +4,7 @@ Widgets available for lists and details pages.
 
 ## Inline widgets
 
-Inline widgets are for simple values and are usable in lists, details headers and details body.
+Inline widgets are used for simple values and are usable in lists, details headers, and details bodies.
 
 ### Text
 
