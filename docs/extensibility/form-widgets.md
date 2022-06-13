@@ -55,7 +55,7 @@ Presentation widgets do not handle data directly and only serve to group content
 
 ### FormGroup
 
-Renders an `object` as a collapsible section. Requires the children property to render the content of the section.
+FormGroup renders an `object` as a collapsible section. Requires the children property to render the content of the section.
 
 #### Example
 

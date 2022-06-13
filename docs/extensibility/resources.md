@@ -2,17 +2,17 @@
 
 ## Introduction
 
-Resource-based extensions are a means for users to introduce custom resource pages to busola. To achieve that a Config Map needs to be created in the `kube-public` namespace with a label `busola.io/extension=resource`.
+Resource-based extensions are means for users to introduce custom resource pages to Busola. To achieve that, you need to create a Config Map in the `kube-public` Namespace with a label `busola.io/extension=resource`.
 
-The Config Map needs to have several fields created that define how the resources is handled.
+The Config Map needs to have several fields created that define how the resources are handled.
 
-All sections can be provided as either json or yaml.
+All sections can be provided as either JSON or YAML.
 
 ## Config Map sections
 
-### `resource` section
+### resource section
 
-The resource section is required and contains basic information about the resource - namely kind and api details.
+The `resource` section is required and contains basic information about the resource. For example, `kind` and api details.
 
 #### Example
 
@@ -24,9 +24,9 @@ The resource section is required and contains basic information about the resour
 }
 ```
 
-### `navigation` section
+### navigation section
 
-The navigation section is required and defines this resource's availability in the menu and generated url. The name of the menu entry as well as category it's going to be placed in are read from the translation section's `name` and `category` entries respectively.
+The `navigation` section is required and defines this resource availability in the menu and the generated url. The name of the menu entry as well as category that it's going to be placed in are read from the translation section entries `name` and `category` respectively.
 
 #### Item paremeters
 
@@ -42,16 +42,16 @@ The navigation section is required and defines this resource's availability in t
 }
 ```
 
-### `form` section
+### form section
 
-Form section modifies the original schema (provided in the schema section) for use with [ui-schema](https://ui-schema.bemit.codes/) to generate the create/edit form for the resource. It contains a list of objects that define what fields should be included in the final form. All given fields are placed in the advanced form by default, however it's possible to add a field to simple form by providing the `simple: true` flag, or removing it from advanced form by providing the `advanced: false` flag.
+The `form` section modifies the original schema (provided in the schema section) for use with [ui-schema](https://ui-schema.bemit.codes/) to generate the create/edit form for the resource. It contains a list of objects that define which fields must be included in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to simple form by providing the `simple: true` flag, or removing it from advanced form by providing the `advanced: false` flag.
 
 #### Item parameters
 
-- **path** - _[required]_ path to the property that should be displayed in the form. In case of an array the array index is ommited (so for instance if `spec.items` is an array and we want to display `name` for each items, the path would simply be `spec.items.name`).
+- **path** - _[required]_ path to the property that must be displayed in the form. In case of an array the array index is omitted. For example, if `spec.items` is an array and you want to display `name` for each items, the path is `spec.items.name`).
 - **widget** - optional widget to render the field. If no widget is provided a default handler will be used depending on the data type provided in the schema. For more information about the available widgets see [Form widgets](form-widgets.md).
-- **simple** - whether to display in the simple form. By default it is false.
-- **advanced** - whether to diplay in the advanced form. By default it is true.
+- **simple** - to display in the simple form. By default it is false.
+- **advanced** - to display in the advanced form. By default it is true.
 
 ### Example
 
@@ -64,14 +64,14 @@ Form section modifies the original schema (provided in the schema section) for u
 ]
 ```
 
-### `list` section
+### list section
 
-List section defines extra columns available in the list. The format is similar to the form section, however each entry consists only of two values:
+The `list` section defines extra columns available in the list. The format is similar to the form section, however each entry consists only of two values:
 
 #### Item parameters
 
 - **path** - _[required]_ contains the path to the data to use for the column.
-- **widget** - optional widget used to render the field. By default the value will be displayed verbatim. For more information about the available widgets see [Display widgets](display-widgets.md).
+- **widget** - optional widget used to render the field. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 
 #### Example
 
@@ -79,9 +79,9 @@ List section defines extra columns available in the list. The format is similar 
 [{ "path": "spec.url" }, { "path": "spec.priority", "widget": "Badge" }]
 ```
 
-### `details` section
+### details section
 
-Details section defines the display structure for the details page. It contains two sections, `header` and `body`, both of which are a list of item to display in the header section and the body of the page respectively. The format of the entries is at the core similar to the form section, however it has extra options available.
+The `details` section defines the display structure for the details page. It contains two sections, `header` and `body`, both of which are a list of item to display in the header section and the body of the page respectively. The format of the entries is similar to the form section, however it has extra options available.
 
 The resource section is required and contains basic information about the resource - namely kind and api details.
 
@@ -89,8 +89,8 @@ The resource section is required and contains basic information about the resour
 
 - **path** - contains the path to the data to use for the widget. Not required for purely presentational widgets.
 - **name** - used for entries without `path` to define the translation source used for labels. Required if no path is present.
-- **widget** - optional widget to render the field. By default the value will be displayed verbatim. For more information about the available widgets see [Display widgets](display-widgets.md).
-- **children** - a list of child widgets to use for all `object` and `array` type fields. Not available for header widgets.
+- **widget** - optional widget to render the field. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
+- **children** - a list of child widgets to be used for all `object` and `array` type of fields. Not available for header widgets.
 
 Extra parameters might be available for specific widgets.
 
@@ -140,7 +140,7 @@ Extra parameters might be available for specific widgets.
 
 #### Note
 
-Whenever an entry has both `path` and `children` properties, the paths of children are going to be relative to the parent. So for example:
+Whenever an entry has both `path` and `children` properties, the paths of children are relative to the parent. For example:
 
 ```json
 [
@@ -152,7 +152,7 @@ Whenever an entry has both `path` and `children` properties, the paths of childr
 ]
 ```
 
-will render the same set of data as:
+renders the same set of data as:
 
 ```json
 [
@@ -164,13 +164,13 @@ will render the same set of data as:
 ]
 ```
 
-### `schema` section
+### schema section
 
 Schema contains the JSON-schema definition of the resource. In most cases this should simply be the CRD copied verbatim.
 
-### `translations` sections
+### translations sections
 
-Translations can be provided as a single `translations` section that contains all available languages, formatted for i18next either as yaml or json, based on their paths.
+This section can be provided as a single `translations` section that contains all available languages, formatted for i18next either as YAML or JSON, based on their paths.
 
 #### Predefined translation keys
 
@@ -199,7 +199,7 @@ de:
 
 #### Note
 
-Alternatively a `transations-{lang}` sections can be provided for a single language only. For example:
+Alternatively, `translations-{lang}` sections can be provided for a single language only. For example:
 
 `translations-en`:
 
