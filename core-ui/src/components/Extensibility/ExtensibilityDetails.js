@@ -68,7 +68,10 @@ export const ExtensibilityDetails = () => {
 
   return (
     <TranslationBundleContext.Provider value={resMetaData.navigation.path}>
-      <ErrorBoundary customMessage={t('extensibility.error')}>
+      <ErrorBoundary
+        customMessage={t('extensibility.error')}
+        displayButton={false}
+      >
         <ExtensibilityDetailsCore resMetaData={resMetaData} />
       </ErrorBoundary>
     </TranslationBundleContext.Provider>
