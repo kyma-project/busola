@@ -15,6 +15,7 @@ export function ExtensibilityCreate({
   resourceUrl,
   resource: createResource,
   toggleFormFn,
+  resourceName,
   ...props
 }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
@@ -40,7 +41,7 @@ export function ExtensibilityCreate({
             ? 'common.create-form.messages.patch-success'
             : 'common.create-form.messages.create-success',
           {
-            resourceType: api?.kind,
+            resourceType: resourceName,
           },
         ),
       });
@@ -51,7 +52,7 @@ export function ExtensibilityCreate({
   return (
     <ResourceForm
       pluralKind={resourceType}
-      singularName={api?.kind}
+      singularName={resourceName}
       resource={resource}
       setResource={setResource}
       formElementRef={formElementRef}

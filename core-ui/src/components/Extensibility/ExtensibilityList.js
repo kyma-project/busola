@@ -28,9 +28,11 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     );
   }
   listProps.createFormProps = { resource: resMetaData };
-  listProps.resourceName = t('name', {
-    defaultValue: resMetaData.resource?.kind,
-  });
+  listProps.resourceName =
+    t('name', {
+      defaultValue: resMetaData.resource?.kind,
+    }) ?? resMetaData.resource?.kind;
+
   listProps.description = t('description', {
     defaultValue: ' ',
   });
