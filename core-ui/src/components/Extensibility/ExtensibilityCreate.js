@@ -83,5 +83,3 @@ export function ExtensibilityCreate({
     </ResourceForm>
   );
 }
-
-ExtensibilityCreate.allowEdit = true;
