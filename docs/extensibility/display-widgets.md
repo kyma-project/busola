@@ -74,11 +74,13 @@ Columns widgets render the child widgets in two columns.
   "children": [
     {
       "name": "columns.left",
-      "widget": "Panel"
+      "widget": "Panel",
+      "children": [{ "path": "spec.value" }]
     },
     {
       "name": "columns.right",
-      "widget": "Panel"
+      "widget": "Panel",
+      "children": [{ "path": "spec.value" }]
     }
   ]
 }
