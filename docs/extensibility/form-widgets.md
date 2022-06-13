@@ -8,7 +8,7 @@ Simple widgets represent a single scalar value.
 
 ### Text
 
-Text widget renders the field as a text field. Used by default for all string values.
+Text widgets render a field as a text field. They are used by default for all string values.
 
 #### Example
 
