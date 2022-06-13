@@ -8,7 +8,7 @@ Inline widgets are used for simple values and are usable in lists, details heade
 
 ### Text
 
-Text widgets render the value as simple text. This is the default behaviour for all scalar values.
+Text widgets render values as a simple text. This is the default behavior for all scalar values.
 
 #### Example
 
