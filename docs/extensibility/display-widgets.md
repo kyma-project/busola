@@ -45,7 +45,7 @@ Block widgets are more complex layouts and should be used only in details body.
 
 ### Plain
 
-Plain widget renders all contents of an object or list sequentially without any decorations. This is the default behaviour for all objects and arrays.
+Plain widgets render all contents of an object or list sequentially without any decorations. This is the default behavior for all objects and arrays.
 
 ### Panel
 
