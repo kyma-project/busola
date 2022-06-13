@@ -86,7 +86,7 @@ Columns widgets render the child widgets in two columns.
 
 ### CodeViewer
 
-CodeViewer displays the the value using code hightlight.
+CodeViewer displays values using the code highlight.
 
 #### Widget-specific parameters
 
