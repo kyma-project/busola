@@ -21,7 +21,7 @@ Text widgets render a field as a text field. They are used by default for all st
 
 ### Name
 
-Name widgets renders a name input field. Contains an automatic name generator and additionally sets the label field when changed. Added automatically to all forms and set to the `metadata.name` value.
+Name widgets render a name input field. They contain an automatic name generator, and additionally set the label field when changed. They are added automatically to all forms, and set to the `metadata.name` value.
 
 #### Example
 
