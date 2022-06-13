@@ -31,13 +31,12 @@ export function ExtensibilityCreate({
   const schema = createResource?.schema;
 
   const afterCreatedFn = async defaultAfterCreatedFn => {
-    console.log('api', api);
     if (createResource?.details) {
       defaultAfterCreatedFn();
     } else {
       notification.notifySuccess({
         content: t(
-          props?.item //when we introduce edit mode, we should check if it's edit/create mode
+          props?.item //when we introduce edit mode, we should check if it's edit/create
             ? 'common.create-form.messages.patch-success'
             : 'common.create-form.messages.create-success',
           {
