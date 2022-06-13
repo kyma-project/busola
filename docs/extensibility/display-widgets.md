@@ -28,7 +28,7 @@ The following values are automatically handled:
 - rendered as an information: initial, pending, available, released.
 - rendered as a success: ready, bound, running, success, succeeded, ok
 - rendered as a warning: unknown, warning
-- rendered as an error: error, failure, invalid
+- rendered as an error: error, failure, invalid.
 
 #### Example
 
