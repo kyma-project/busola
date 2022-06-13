@@ -34,7 +34,7 @@ Name widgets render a name input field. They contain an automatic name generator
 
 ## Complex widgets
 
-Complex widgets handle more complex values than a simple scalar. Either arrays or objects.
+Complex widgets handle more advanced data structures such as arrays or objects.
 
 ### KeyValuePair
 

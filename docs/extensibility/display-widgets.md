@@ -86,7 +86,7 @@ Columns widgets render the child widgets in two columns.
 
 ### CodeViewer
 
-CodeViewer displays values using the code highlight.
+CodeViewer widgets display values using the code highlight.
 
 #### Widget-specific parameters
 
@@ -104,7 +104,7 @@ CodeViewer displays values using the code highlight.
 
 ### Table
 
-Table displays array data as rows of a table instead of free-standing components. The `children` parameter defines the column renderers to use. Similar to the `list` section of the config map, only inline widgets should be used as children.
+Table widgets display array data as rows of a table instead of free-standing components. The `children` parameter defines the column renderers to use. Similar to the `list` section of the config map, only inline widgets should be used as children.
 
 #### Example
 
