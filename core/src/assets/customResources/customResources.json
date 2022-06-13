@@ -1,2 +1,101 @@
 {
+  "lp":{
+    "navigation": {
+      "path": "custom-log-pipelines",
+      "scope": "cluster"
+    },
+    "resource": {
+      "kind": "LogPipelines",
+      "group": "telemetry.kyma-project.io",
+      "version": "v1alpha1"
+    },
+    "translations": {
+      "en": {
+        "name": "Log Pipelines",
+        "category": "DD",
+        "status.conditions.type": "Status"
+      }
+    },
+    "details": {
+      "body": [
+        {
+          "path": "status.conditions",
+          "widget": "Table",
+          "children": [{ "path": "type" }, { "path": "type" }]
+        }]
+    }
+  },
+  "ca": {
+    "resource": {
+      "kind": "ClusterAssets",
+      "group": "rafter.kyma-project.io",
+      "version": "v1beta1"
+    },
+    "navigation": {
+      "path": "dupa",
+      "scope": "cluster"
+    },
+    "details": {
+      "header": [
+        {
+          "path": "status.phase",
+          "widget": "Badge"
+        }
+      ],
+      "body": [
+        {
+          "path": "status.phase",
+          "widget": "CodeViewer"
+        },
+        {
+          "name": "details",
+          "widget": "Panel",
+          "children": [
+            {
+              "path": "spec.source.filter"
+            },
+            {
+              "path": "spec.source.metadataWebhookService[0].filter"
+            }
+          ]
+        },
+        {
+          "name": "columns.container",
+          "widget": "Columns",
+          "children": [
+            {
+              "name": "columns.left",
+              "widget": "Panel",
+              "children": [{"path": "spec.source.filter"}]
+            },
+            {
+              "name": "columns.right",
+              "widget": "Panel",
+              "children": [{"path": "spec.source.metadataWebhookService[0].filter"}]
+            }
+          ]
+        },
+        {
+          "path": "status.assetRef",
+          "widget": "CodeViewer",
+          "language": "json"
+        }
+      ]
+    },
+    "form": [],
+    "list": [],
+    "translations": {
+      "en": {
+        "category": "DD",
+        "status.phase": "Phase",
+        "metadata.labels": "Labels",
+        "spec.source.filter": "Value",
+        "spec.source.metadataWebhookService[0].filter": "Other Value",
+        "columns.container": "Columns Container",
+        "columns.left": "Columns Left",
+        "columns.right": "Columns Right",
+        "status.assetRef": "JSON Data"
+      }
+    }
+  }
 }

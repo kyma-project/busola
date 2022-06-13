@@ -19,6 +19,10 @@ Text widgets render values as a simple text. This is the default behavior for al
 }
 ```
 
+<p>
+<img src="./assets/Text.png" style="max-width:20%;">
+</p>
+
 ### Badge
 
 Badge widgets render texts as a status badge, using a set of predefined rules to assign colors.
@@ -38,6 +42,10 @@ The following values are automatically handled:
   "widget": "Badge"
 }
 ```
+
+<p>
+<img src="./assets/Badge.png" style="max-width:20%;">
+</p>
 
 ## Block widgets
 
@@ -60,6 +68,10 @@ Panel widgets render an object as a separate panel with it's own title (based on
   "children": [{ "path": "spec.value" }, { "path": "spec.other-value" }]
 }
 ```
+
+<p>
+<img src="./assets/Panel.png" style="max-width:100%;">
+</p>
 
 ### Columns
 
@@ -86,6 +98,10 @@ Columns widgets render the child widgets in two columns.
 }
 ```
 
+<p>
+<img src="./assets/Columns.png" style="max-width:100%;">
+</p>
+
 ### CodeViewer
 
 CodeViewer displays values using the code highlight.
@@ -104,6 +120,10 @@ CodeViewer displays values using the code highlight.
 }
 ```
 
+<p>
+<img src="./assets/CodeViewer.png" style="max-width:100%;">
+</p>
+
 ### Table
 
 Table displays array data as rows of a table instead of free-standing components. The `children` parameter defines the column renderers to use. Similar to the `list` section of the config map, only inline widgets should be used as children.
@@ -117,3 +137,7 @@ Table displays array data as rows of a table instead of free-standing components
   "children": [{ "path": "name" }, { "path": "status" }]
 }
 ```
+
+<p>
+<img src="./assets/Table.png" style="max-width:100%;">
+</p>
