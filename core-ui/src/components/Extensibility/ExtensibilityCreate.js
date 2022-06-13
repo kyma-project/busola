@@ -30,17 +30,14 @@ export function ExtensibilityCreate({
   //TODO filter schema based on form configuration
   const schema = createResource?.schema;
 
-  console.log('props', props);
   const afterCreatedFn = async defaultAfterCreatedFn => {
     console.log('api', api);
-    console.log('createres', createResource);
     if (createResource?.details) {
       defaultAfterCreatedFn();
     } else {
-      toggleFormFn(false);
       notification.notifySuccess({
         content: t(
-          !props?.item //how to check if it is edit/create mode
+          props?.item //when we introduce edit mode, we should check if it's edit/create mode
             ? 'common.create-form.messages.patch-success'
             : 'common.create-form.messages.create-success',
           {
@@ -49,6 +46,7 @@ export function ExtensibilityCreate({
         ),
       });
     }
+    toggleFormFn(false);
   };
 
   return (
