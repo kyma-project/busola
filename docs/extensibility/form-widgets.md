@@ -49,7 +49,7 @@ Renders an `object` value as list of dual text fields one used for key the other
 }
 ```
 
-## Presentation Widgets
+## Presentation widgets
 
 Presentation widgets do not handle data directly and only serve to group contents into a more readable form.
 
