@@ -10,11 +10,10 @@ export function NameRenderer({
   onChange,
   schema,
   required,
-  extraPaths = [],
   ...props
 }) {
-  console.log('extraPaths', extraPaths);
-  console.log('more props', props);
+  const extraPaths = schema.get('extraPaths')?.toJS() || [];
+
   return (
     <K8sNameField
       value={value}
