@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import pluralize from 'pluralize';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -20,7 +21,8 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   if (resMetaData.resource.kind) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
       resMetaData.navigation.path,
-      resMetaData.resource.kind.toLowerCase(),
+      // resMetaData.resource.kind.toLowerCase(),
+      pluralize(resMetaData.resource?.kind).toLowerCase(),
     );
   }
 
@@ -43,17 +45,25 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
       windowTitle={t('name', {
         defaultValue: resMetaData.resource?.kind,
       })}
-      customColumns={header.map(def => ({
-        header: widgetT(def),
-        value: resource => (
-          <Widget value={resource} structure={def} schema={schema} />
-        ),
-      }))}
-      customComponents={[
-        resource => (
-          <Widget value={resource} structure={body} schema={schema} />
-        ),
-      ]}
+      customColumns={
+        Array.isArray(header)
+          ? header.map(def => ({
+              header: widgetT(def),
+              value: resource => (
+                <Widget value={resource} structure={def} schema={schema} />
+              ),
+            }))
+          : []
+      }
+      customComponents={
+        Array.isArray(body)
+          ? [
+              resource => (
+                <Widget value={resource} structure={body} schema={schema} />
+              ),
+            ]
+          : []
+      }
       breadcrumbs={breadcrumbs}
       {...detailsProps}
     />
