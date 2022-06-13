@@ -90,7 +90,7 @@ CodeViewer displays values using the code highlight.
 
 #### Widget-specific parameters
 
-- **language** - language to use for code highlighting
+- **language** - language used for the code highlighting.
 
 #### Example
 
