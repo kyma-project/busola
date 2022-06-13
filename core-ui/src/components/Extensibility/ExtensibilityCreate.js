@@ -11,15 +11,18 @@ export function ExtensibilityCreate({
   setCustomValid,
   resourceType,
   resourceUrl,
-  resource: createResource,
+  resource: initialResource,
+  resourceSchema: createResource,
 }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
   const api = createResource?.resource || {};
 
   const [resource, setResource] = useState(
-    createResource?.template ||
+    initialResource ||
+      createResource?.template ||
       createTemplate(api, namespace, createResource?.navigation?.scope),
   );
+
   //TODO filter schema based on form configuration
   const schema = createResource?.schema;
 
@@ -33,6 +36,7 @@ export function ExtensibilityCreate({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       onlyYaml={!schema}
+      initialResource={initialResource}
     >
       <ResourceSchema
         simple
@@ -56,3 +60,5 @@ export function ExtensibilityCreate({
     </ResourceForm>
   );
 }
+
+ExtensibilityCreate.allowEdit = true;

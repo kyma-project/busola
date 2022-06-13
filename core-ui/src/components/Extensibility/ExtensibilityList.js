@@ -27,7 +27,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
       pluralize(resMetaData.resource?.kind).toLowerCase(),
     );
   }
-  listProps.createFormProps = { resource: resMetaData };
+  listProps.createFormProps = { resourceSchema: resMetaData };
   listProps.resourceName = t('name', {
     defaultValue: resMetaData.resource?.kind,
   });

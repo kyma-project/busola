@@ -9,6 +9,7 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { Widget } from './components/Widget';
 import { useGetTranslation, TranslationBundleContext } from './helpers';
+import { ExtensibilityCreate } from './ExtensibilityCreate';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
@@ -57,6 +58,8 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
         ),
       ]}
       breadcrumbs={breadcrumbs}
+      createResourceForm={ExtensibilityCreate}
+      editFormProps={{ resourceSchema: resMetaData }}
       {...detailsProps}
     />
   );
