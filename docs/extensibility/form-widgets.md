@@ -38,7 +38,7 @@ Complex widgets handle more complex values than a simple scalar. Either arrays o
 
 ### KeyValuePair
 
-Renders an `object` value as list of dual text fields one used for key the other for value, allowing for adding and removing entries.
+KeyValuePair widgets render an `object` value as list of dual text fields. One is used for a key and the other for a value, allowing for adding and removing entries.
 
 #### Example
 

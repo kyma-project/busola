@@ -30,7 +30,7 @@ The `navigation` section is required and defines this resource availability in t
 
 #### Item paremeters
 
-- **path** - path for this resource to use in the url.
+- **path** - path for this resource used in the url.
 - **scope** - either `namespace` or `cluster`.
 
 #### Example
@@ -70,7 +70,7 @@ The `list` section defines extra columns available in the list. The format is si
 
 #### Item parameters
 
-- **path** - _[required]_ contains the path to the data to use for the column.
+- **path** - _[required]_ contains the path to the data used for the column.
 - **widget** - optional widget used to render the field. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 
 #### Example
@@ -83,11 +83,9 @@ The `list` section defines extra columns available in the list. The format is si
 
 The `details` section defines the display structure for the details page. It contains two sections, `header` and `body`, both of which are a list of item to display in the header section and the body of the page respectively. The format of the entries is similar to the form section, however it has extra options available.
 
-The resource section is required and contains basic information about the resource - namely kind and api details.
-
 #### Items parameteres
 
-- **path** - contains the path to the data to use for the widget. Not required for purely presentational widgets.
+- **path** - contains the path to the data used for the widget. Not required for purely presentational widgets.
 - **name** - used for entries without `path` to define the translation source used for labels. Required if no path is present.
 - **widget** - optional widget to render the field. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **children** - a list of child widgets to be used for all `object` and `array` type of fields. Not available for header widgets.
@@ -138,7 +136,7 @@ Extra parameters might be available for specific widgets.
 }
 ```
 
-#### Note
+#### Data scoping
 
 Whenever an entry has both `path` and `children` properties, the paths of children are relative to the parent. For example:
 
@@ -166,7 +164,7 @@ renders the same set of data as:
 
 ### schema section
 
-Schema contains the JSON-schema definition of the resource. In most cases this should simply be the CRD copied verbatim.
+The `schema` section contains the JSON-schema definition of the resource. In most cases this is copied verbatim from the CRD.
 
 ### translations sections
 
@@ -174,9 +172,9 @@ This section can be provided as a single `translations` section that contains al
 
 #### Predefined translation keys
 
-- **category** - the name of a category to use for the left-hand menu. By default it will be placed into a "Custom Resources" category.
-- **name** - title to be used in the navigation and on the list screen. Defaults to it's resource kind.
-- **description** - a more in-depth description of the resorce displaye on the list screen. It's only displayed if present.
+- **category** - the name of a category to use for the left-hand menu. By default it is placed into a **Custom Resources** category.
+- **name** - title used in the navigation and on the list screen. It defaults to its resource kind.
+- **description** - a more in-depth description of the resorce displaye on the list screen. It is only displayed if present.
 
 #### Example
 
@@ -197,7 +195,7 @@ de:
     items: Artikel
 ```
 
-#### Note
+#### Language-specific sections
 
 Alternatively, `translations-{lang}` sections can be provided for a single language only. For example:
 
@@ -212,7 +210,7 @@ spec:
   items: Items
 ```
 
-`translations-pl`:
+`translations-de`:
 
 ```yaml
 category: meine Kategorie
