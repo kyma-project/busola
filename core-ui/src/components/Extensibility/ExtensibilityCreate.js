@@ -13,10 +13,10 @@ export function ExtensibilityCreate({
   setCustomValid,
   resourceType,
   resourceUrl,
-  resource: createResource,
+  resource: initialResource,
+  resourceSchema: createResource,
   toggleFormFn,
   resourceName,
-  ...props
 }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
   const notification = useNotification();
@@ -37,7 +37,7 @@ export function ExtensibilityCreate({
     } else {
       notification.notifySuccess({
         content: t(
-          props?.item //when we introduce edit mode, we should check if it's edit/create
+          initialResource //when we introduce edit mode, we should check if it's edit/create
             ? 'common.create-form.messages.patch-success'
             : 'common.create-form.messages.create-success',
           {
@@ -83,3 +83,5 @@ export function ExtensibilityCreate({
     </ResourceForm>
   );
 }
+
+ExtensibilityCreate.allowEdit = true;
