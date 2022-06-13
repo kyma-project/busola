@@ -32,7 +32,7 @@ Name widgets render a name input field. They contain an automatic name generator
 }
 ```
 
-## Complex Widgets
+## Complex widgets
 
 Complex widgets handle more complex values than a simple scalar. Either arrays or objects.
 
