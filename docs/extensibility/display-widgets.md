@@ -21,7 +21,7 @@ Text widgets render values as a simple text. This is the default behavior for al
 
 ### Badge
 
-Badge widget renders the text as a status badge, using a set of predefined rules to assign colours.
+Badge widgets render texts as a status badge, using a set of predefined rules to assign colors.
 
 Values that are automatically handled are:
 
