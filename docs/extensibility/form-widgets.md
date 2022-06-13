@@ -2,7 +2,7 @@
 
 Widgets available for resource forms.
 
-## Simple Widgets
+## Simple widgets
 
 Simple widgets represent a single scalar value.
 
