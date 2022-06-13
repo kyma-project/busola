@@ -10,8 +10,6 @@ export function MonacoRenderer({
   schema,
   required,
 }) {
-  console.log(1111, storeKeys, value);
-
   return (
     <ResourceForm.CollapsibleSection
       title={<TransTitle schema={schema} storeKeys={storeKeys} />}

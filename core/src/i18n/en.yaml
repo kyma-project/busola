@@ -994,6 +994,10 @@ events:
   title: Events
 extensibility:
   error: Your extension configuration is incorrect.
+  secret-ref:
+    namespace-no-secrets: Namespace has no Secrets.
+    select-namespace: Select Namespace
+    select-secret: Select Secret
 functions:
   buttons:
     connected-repositories: Connected Repositories
