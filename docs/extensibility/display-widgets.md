@@ -23,7 +23,7 @@ Text widgets render values as a simple text. This is the default behavior for al
 
 Badge widgets render texts as a status badge, using a set of predefined rules to assign colors.
 
-Values that are automatically handled are:
+The following values are automatically handled:
 
 - rendered as an information: initial, pending, available, released
 - rendered as a success: ready, bound, running, success, succeeded, ok
