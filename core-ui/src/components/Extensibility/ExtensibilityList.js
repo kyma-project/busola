@@ -37,12 +37,14 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   listProps.description = t('description', {
     defaultValue: ' ',
   });
-  listProps.customColumns = (resMetaData.list || []).map(column => ({
-    header: widgetT(column),
-    value: resource => (
-      <Widget value={resource} structure={column} schema={schema} />
-    ),
-  }));
+  listProps.customColumns = Array.isArray(resMetaData.list)
+    ? resMetaData.list.map(column => ({
+        header: widgetT(column),
+        value: resource => (
+          <Widget value={resource} structure={column} schema={schema} />
+        ),
+      }))
+    : [];
   return (
     <ResourcesList createResourceForm={ExtensibilityCreate} {...listProps} />
   );
