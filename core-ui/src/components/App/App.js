@@ -61,33 +61,33 @@ export default function App() {
         );
         if (cr.navigation?.scope === 'namespace') {
           return (
-            <>
+            <React.Fragment key={`namespace-${cr.navigation?.path}`}>
               <Route
-                path={`/namespaces/:namespaceId/${cr.navigation.path}`}
+                path={`/namespaces/:namespaceId/${cr.navigation?.path}`}
                 element={<ExtensibilityList />}
               />
               {cr.details && (
                 <Route
-                  path={`/namespaces/:namespaceId/${cr.navigation.path}/:resourceName`}
+                  path={`/namespaces/:namespaceId/${cr.navigation?.path}/:resourceName`}
                   element={<ExtensibilityDetails />}
                 />
               )}
-            </>
+            </React.Fragment>
           );
         } else {
           return (
-            <>
+            <React.Fragment key={`cluster-${cr.navigation?.path}`}>
               <Route
-                path={`/${cr.navigation.path}`}
+                path={`/${cr.navigation?.path}`}
                 element={<ExtensibilityList />}
               />
               {cr.details && (
                 <Route
-                  path={`/${cr.navigation.path}/:resourceName`}
+                  path={`/${cr.navigation?.path}/:resourceName`}
                   element={<ExtensibilityDetails />}
                 />
               )}
-            </>
+            </React.Fragment>
           );
         }
       })}

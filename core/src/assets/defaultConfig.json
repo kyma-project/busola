@@ -81,6 +81,9 @@
       },
       "VISUAL_RESOURCES": {
         "isEnabled": true
+      },
+      "EXTENSIBILITY": {
+        "isEnabled": false 
       }
     }
   }

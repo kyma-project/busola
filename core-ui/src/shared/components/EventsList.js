@@ -22,6 +22,7 @@ export function EventsList({
     hideInvolvedObjects,
     filter,
     i18n,
+    updateTitle: false,
   };
 
   return <EventListComponent {...eventsParams} />;
