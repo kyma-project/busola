@@ -49,7 +49,7 @@ Plain widgets render all contents of an object or list sequentially without any 
 
 ### Panel
 
-Panel widget renders an object as a separate panel with it's own title (base on it's `path` or `name`).
+Panel widgets render an object as a separate panel with it's own title (based on it's `path` or `name`).
 
 #### Example
 
