@@ -1,6 +1,8 @@
-# Display widgets Widgets available for lists and details pages.
+# Display widgets
 
-## Inline Widgets
+Widgets available for lists and details pages.
+
+## Inline widgets
 
 Inline widgets are for simple values and are usable in lists, details headers and details body.
 
@@ -37,7 +39,7 @@ Values that are automatically handled are:
 }
 ```
 
-## Block Widgets
+## Block widgets
 
 Block widgets are more complex layouts and should be used only in details body.
 
