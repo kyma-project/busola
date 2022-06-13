@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import pluralize from 'pluralize';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -20,7 +21,8 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   if (resMetaData.resource.kind) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
       resMetaData.navigation.path,
-      resMetaData.resource.kind.toLowerCase(),
+      // resMetaData.resource.kind.toLowerCase(),
+      pluralize(resMetaData.resource?.kind).toLowerCase(),
     );
   }
 
@@ -66,7 +68,10 @@ export const ExtensibilityDetails = () => {
 
   return (
     <TranslationBundleContext.Provider value={resMetaData.navigation.path}>
-      <ErrorBoundary customMessage={t('extensibility.error')}>
+      <ErrorBoundary
+        customMessage={t('extensibility.error')}
+        displayButton={false}
+      >
         <ExtensibilityDetailsCore resMetaData={resMetaData} />
       </ErrorBoundary>
     </TranslationBundleContext.Provider>
