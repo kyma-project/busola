@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import pluralize from 'pluralize';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
@@ -23,7 +24,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   if (resMetaData.resource?.kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
       /[a-z0-9-]+\/?$/,
-      (resMetaData.resource?.kind).toLowerCase(),
+      pluralize(resMetaData.resource?.kind).toLowerCase(),
     );
   }
   listProps.createFormProps = { resource: resMetaData };
