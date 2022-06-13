@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useGetTranslation } from './helpers';
 
 import { createTemplate } from './helpers';
 import { ResourceSchema } from './ResourceSchema';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
+import { prettifyKind } from 'shared/utils/helpers';
 
 export function ExtensibilityCreate({
   formElementRef,
@@ -21,6 +23,7 @@ export function ExtensibilityCreate({
   const { namespaceId: namespace } = useMicrofrontendContext();
   const notification = useNotification();
   const { t } = useTranslation();
+  const { t: tExt } = useGetTranslation();
   const api = createResource?.resource || {};
 
   const [resource, setResource] = useState(
@@ -53,7 +56,9 @@ export function ExtensibilityCreate({
   return (
     <ResourceForm
       pluralKind={resourceType}
-      singularName={resourceType}
+      singularName={
+        tExt('name') || prettifyKind(createResource.resource?.kind || '')
+      }
       resource={resource}
       setResource={setResource}
       formElementRef={formElementRef}
