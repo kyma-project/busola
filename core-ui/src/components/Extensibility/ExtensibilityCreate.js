@@ -5,6 +5,8 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 import { createTemplate } from './helpers';
 import { ResourceSchema } from './ResourceSchema';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useTranslation } from 'react-i18next';
 
 export function ExtensibilityCreate({
   formElementRef,
@@ -13,8 +15,12 @@ export function ExtensibilityCreate({
   resourceUrl,
   resource: initialResource,
   resourceSchema: createResource,
+  toggleFormFn,
+  resourceName,
 }) {
   const { namespaceId: namespace } = useMicrofrontendContext();
+  const notification = useNotification();
+  const { t } = useTranslation();
   const api = createResource?.resource || {};
 
   const [resource, setResource] = useState(
@@ -25,6 +31,24 @@ export function ExtensibilityCreate({
 
   //TODO filter schema based on form configuration
   const schema = createResource?.schema;
+
+  const afterCreatedFn = async defaultAfterCreatedFn => {
+    if (createResource?.details) {
+      defaultAfterCreatedFn();
+    } else {
+      notification.notifySuccess({
+        content: t(
+          initialResource
+            ? 'common.create-form.messages.patch-success'
+            : 'common.create-form.messages.create-success',
+          {
+            resourceType: resourceName,
+          },
+        ),
+      });
+    }
+    toggleFormFn(false);
+  };
 
   return (
     <ResourceForm
@@ -37,6 +61,7 @@ export function ExtensibilityCreate({
       setCustomValid={setCustomValid}
       onlyYaml={!schema}
       initialResource={initialResource}
+      afterCreatedFn={afterCreatedFn}
     >
       <ResourceSchema
         simple

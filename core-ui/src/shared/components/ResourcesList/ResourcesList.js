@@ -353,6 +353,7 @@ export function ResourceListRenderer({
             <CreateResourceForm
               resource={activeResource}
               resourceType={resourceType}
+              resourceName={resourceName}
               resourceUrl={resourceUrl}
               namespace={namespace}
               refetchList={silentRefetch}
