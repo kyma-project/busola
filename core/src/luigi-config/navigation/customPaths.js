@@ -39,7 +39,7 @@ const getCustomNodes = (crs, scope) => {
         return {
           category: {
             label: i18next.t([
-              `${translationBundle}:category`,
+              `${translationBundle}::category`,
               'custom-resources.title',
             ]),
             collapsible: true,
@@ -47,7 +47,7 @@ const getCustomNodes = (crs, scope) => {
           },
           resourceType: resource.kind.toLowerCase(),
           pathSegment: cr.navigation?.path,
-          label: i18next.t(`${translationBundle}:name`, {
+          label: i18next.t(`${translationBundle}::name`, {
             defaultValue: resource.kind,
           }),
           viewUrl:
