@@ -6,10 +6,11 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 
-export function SecretRefs({ value, structure, schema }) {
+export function ResourceRefs({ value, structure, schema, configMapStructure }) {
   const { t, i18n } = useTranslation();
   const { widgetT } = useGetTranslation();
 
+  const resourceType = configMapStructure.kind;
   //kyma logpipeline api can return object in place of array wrongly, if only one record is defined
   const sanitizedValue =
     !Array.isArray(value) && value?.name && value?.namespace ? [value] : value;
@@ -24,7 +25,7 @@ export function SecretRefs({ value, structure, schema }) {
     <Link
       onClick={() =>
         navigateToResource({
-          kind: 'Secret',
+          kind: resourceType,
           name,
           namespace,
         })
@@ -47,4 +48,4 @@ export function SecretRefs({ value, structure, schema }) {
     />
   );
 }
-SecretRefs.array = true;
+ResourceRefs.array = true;

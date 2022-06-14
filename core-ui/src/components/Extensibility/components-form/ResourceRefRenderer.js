@@ -1,6 +1,7 @@
 import React from 'react';
 import { ExternalResourceRef } from 'shared/components/ResourceRef/ExternalResourceRef';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import pluralize from 'pluralize';
 
 export function ResourceRefRender({
   onChange,
@@ -11,7 +12,7 @@ export function ResourceRefRender({
   required,
   ...props
 }) {
-  const resourceType = schema.get('components') || 'secrets';
+  const resourceType = pluralize(schema.get('kind') || '').toLowerCase();
 
   const url = `/api/v1/${resourceType}`;
 
