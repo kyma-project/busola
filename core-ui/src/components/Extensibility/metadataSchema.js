@@ -3,6 +3,7 @@ export const METADATA_SCHEMA = {
     name: {
       type: 'string',
       widget: 'Name',
+      extraPaths: [['metadata', 'labels', 'app.kubernetes.io/name']],
     },
     labels: {
       type: 'object',
