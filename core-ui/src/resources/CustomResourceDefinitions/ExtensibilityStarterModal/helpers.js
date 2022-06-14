@@ -30,13 +30,17 @@ function extractAdditionalPrinterColumns(crd) {
   }));
 }
 
+function isStatusMaybe({ name }) {
+  return name.toLowerCase() === 'status' || name.toLowerCase() === 'phase';
+}
+
 export function extractValueColumns(crd) {
   const firstLevelPropertiesColumns = extractFirstLevelProperties(crd);
   const additionalPrinterColumns = extractAdditionalPrinterColumns(crd);
 
   const inferWidgets = c => ({
     ...c,
-    ...(c.name.toLowerCase() === 'status' ? { widget: 'Badge' } : {}),
+    ...(isStatusMaybe(c) ? { widget: 'Badge' } : {}),
   });
 
   return [...firstLevelPropertiesColumns, ...additionalPrinterColumns].map(
@@ -48,6 +52,7 @@ export function createExtensibilityTemplate(crd, t) {
   const version = crd.spec.versions.find(v => v.storage);
   const additionalValueColumns = extractValueColumns(crd);
 
+  const possibleStatusColumn = additionalValueColumns.find(isStatusMaybe);
   return {
     resource: {
       kind: crd.spec.names.kind,
@@ -61,7 +66,7 @@ export function createExtensibilityTemplate(crd, t) {
     form: extractFirstLevelProperties(crd),
     list: additionalValueColumns,
     details: {
-      header: [],
+      header: possibleStatusColumn ? [possibleStatusColumn] : [],
       body: [
         {
           name: 'Summary',
