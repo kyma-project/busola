@@ -20,7 +20,6 @@ import { KeyValuePairRenderer } from './KeyValuePairRenderer';
 import { CollapsibleRenderer } from './CollapsibleRenderer';
 import { GenericList } from './GenericList';
 import { MonacoRenderer } from './MonacoRenderer';
-import { SecretRefRender } from './SecretRefRenderer';
 import { ResourceRefRender } from './ResourceRefRenderer';
 
 const pluginStack = [
@@ -73,7 +72,6 @@ export const widgets = {
     KeyValuePair: KeyValuePairRenderer,
     CodeEditor: MonacoRenderer,
     FormGroup: CollapsibleRenderer,
-    SecretRefs: SecretRefRender,
     ResourceRefs: ResourceRefRender,
   },
 };
