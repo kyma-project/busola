@@ -13,15 +13,17 @@ export function Panel({ value, structure, schema }) {
         <LayoutPanel.Head title={widgetT(structure)} />
       </LayoutPanel.Header>
       <LayoutPanel.Body>
-        {structure.children?.map((def, idx) => (
-          <Widget
-            key={idx}
-            value={value}
-            structure={def}
-            schema={schema}
-            inlineRenderer={InlineWidget}
-          />
-        ))}
+        {Array.isArray(structure?.children)
+          ? structure.children?.map((def, idx) => (
+              <Widget
+                key={idx}
+                value={value}
+                structure={def}
+                schema={schema}
+                inlineRenderer={InlineWidget}
+              />
+            ))
+          : null}
       </LayoutPanel.Body>
     </LayoutPanel>
   );
