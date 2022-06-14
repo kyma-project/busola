@@ -5,17 +5,20 @@ function extractFirstLevelProperties(crd) {
   const filterSimpleProps = ([, property]) =>
     property.type !== 'object' && property.type !== 'array';
 
-  const firstLevelProperties =
-    crd.spec.versions.find(v => v.storage).schema?.openAPIV3Schema?.properties
-      ?.spec?.properties || {};
+  const spec = crd.spec.versions.find(v => v.storage).schema?.openAPIV3Schema
+    ?.properties?.spec;
+
+  const firstLevelProperties = spec?.properties || {};
+  const requiredProperties = spec?.required || [];
 
   return Object.entries(firstLevelProperties)
     .filter(filterSimpleProps)
     .map(([name, property]) => ({
       path: `spec.${name}`,
       type: property.type,
-      name: name,
+      name,
       isSelected: true,
+      required: requiredProperties.includes(name),
     }));
 }
 
@@ -51,8 +54,8 @@ export function extractValueColumns(crd) {
 export function createExtensibilityTemplate(crd, t) {
   const version = crd.spec.versions.find(v => v.storage);
   const additionalValueColumns = extractValueColumns(crd);
-
   const possibleStatusColumn = additionalValueColumns.find(isStatusMaybe);
+
   return {
     resource: {
       kind: crd.spec.names.kind,
@@ -73,7 +76,14 @@ export function createExtensibilityTemplate(crd, t) {
           widget: 'Panel',
           children: additionalValueColumns.length
             ? extractValueColumns(crd) // create a copy
-            : [{ path: 'metadata.creationTimestamp' }],
+            : [
+                {
+                  name: 'Created at',
+                  isSelected: true,
+                  path: 'metadata.creationTimestamp',
+                  type: 'date',
+                },
+              ],
         },
         { path: 'spec', widget: 'CodeViewer' },
       ],
@@ -98,6 +108,7 @@ export function createConfigmap(crd, data) {
       .filter(e => e.isSelected)
       .map(e => {
         delete e.isSelected;
+        delete e.required;
         return e;
       });
 
@@ -108,7 +119,7 @@ export function createConfigmap(crd, data) {
 
   data.form = data.form
     .filter(e => e.isSelected)
-    .map(e => ({ simple: true, path: e.path }));
+    .map(e => ({ simple: true, path: e.path, required: e.required }));
 
   return {
     kind: 'ConfigMap',

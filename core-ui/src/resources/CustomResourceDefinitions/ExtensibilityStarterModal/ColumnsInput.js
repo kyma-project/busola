@@ -1,9 +1,17 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormInput, Checkbox } from 'fundamental-react';
+import { FormInput, Checkbox, MessageStrip } from 'fundamental-react';
 
 export function ColumnsInput({ value: columns, setValue: setColumns }) {
   const { t } = useTranslation();
+
+  if (!columns.length) {
+    return (
+      <MessageStrip type="warning">
+        {t('extensibility.starter-modal.messages.no-columns')}
+      </MessageStrip>
+    );
+  }
 
   return columns.map(value => {
     return (

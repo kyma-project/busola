@@ -1006,6 +1006,7 @@ extensibility:
       configmap-info: <0>{{name}}</0> Config Map will be created or updated in <1>kube-public</1> Namespace.
       docs-info: For more documentation consult <0>Extensibility documentation</0>.
       error: Failed to upsert UI configuration.
+      no-columns: No example values could be inferred from CR definition.
       scaffold-only: Configuration above can be changed later in the Config Map level.
       success: UI configuration upserted.
     title: Create UI for {{kind}} CRD
