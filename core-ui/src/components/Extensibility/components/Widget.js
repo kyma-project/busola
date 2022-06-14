@@ -33,11 +33,11 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
 
   const SingleWidget = props =>
     Renderer.inline && InlineRenderer ? (
-      <InlineRenderer {...props} configMapStructure={structure}>
-        <Renderer {...props} configMapStructure={structure} />
+      <InlineRenderer {...props}>
+        <Renderer {...props} />
       </InlineRenderer>
     ) : (
-      <Renderer {...props} configMapStructure={structure} />
+      <Renderer {...props} />
     );
 
   return Array.isArray(childValue) && !Renderer.array ? (
