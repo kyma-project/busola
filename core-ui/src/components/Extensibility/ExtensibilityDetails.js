@@ -45,17 +45,25 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
       windowTitle={t('name', {
         defaultValue: resMetaData.resource?.kind,
       })}
-      customColumns={header.map(def => ({
-        header: widgetT(def),
-        value: resource => (
-          <Widget value={resource} structure={def} schema={schema} />
-        ),
-      }))}
-      customComponents={[
-        resource => (
-          <Widget value={resource} structure={body} schema={schema} />
-        ),
-      ]}
+      customColumns={
+        Array.isArray(header)
+          ? header.map(def => ({
+              header: widgetT(def),
+              value: resource => (
+                <Widget value={resource} structure={def} schema={schema} />
+              ),
+            }))
+          : []
+      }
+      customComponents={
+        Array.isArray(body)
+          ? [
+              resource => (
+                <Widget value={resource} structure={body} schema={schema} />
+              ),
+            ]
+          : []
+      }
       breadcrumbs={breadcrumbs}
       {...detailsProps}
     />
