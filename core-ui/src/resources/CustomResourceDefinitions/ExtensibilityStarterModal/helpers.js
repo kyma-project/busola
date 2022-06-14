@@ -83,7 +83,7 @@ export function createExtensibilityTemplate(crd, t) {
     translations: {
       en: {
         name: pluralize(prettifyKind(crd.spec.names.kind)),
-        category: t('custom-resources.title'),
+        category: 'Custom Resources',
         ...(additionalValueColumns.length
           ? { 'metadata.creationTimestamp': 'Created at' }
           : {}),
@@ -93,7 +93,7 @@ export function createExtensibilityTemplate(crd, t) {
 }
 
 export function createConfigmap(crd, data) {
-  const filterSelected = arr =>
+  const filterViewProps = arr =>
     arr
       .filter(e => e.isSelected)
       .map(e => {
@@ -101,9 +101,14 @@ export function createConfigmap(crd, data) {
         return e;
       });
 
-  data.list = filterSelected(data.list);
-  data.details.body[0].children = filterSelected(data.details.body[0].children);
-  data.form = filterSelected(data.form);
+  data.list = filterViewProps(data.list);
+  data.details.body[0].children = filterViewProps(
+    data.details.body[0].children,
+  );
+
+  data.form = data.form
+    .filter(e => e.isSelected)
+    .map(e => ({ simple: true, path: e.path }));
 
   return {
     kind: 'ConfigMap',
