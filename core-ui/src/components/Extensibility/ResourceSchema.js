@@ -77,7 +77,7 @@ export function ResourceSchema({
   return (
     <UIMetaProvider
       widgets={widgets}
-      t={(path, ...props) => t(`${translationBundle}:${path}`, ...props)}
+      t={(path, ...props) => t(`${translationBundle}::${path}`, ...props)}
     >
       <UIStoreProvider
         store={store}
