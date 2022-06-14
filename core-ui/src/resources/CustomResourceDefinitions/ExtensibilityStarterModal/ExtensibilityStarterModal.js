@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, MessageStrip } from 'fundamental-react';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
-import { prettifyNamePlural } from 'shared/utils/helpers';
+import { prettifyKind } from 'shared/utils/helpers';
 import { Link } from 'shared/components/Link/Link';
 import { Trans, useTranslation } from 'react-i18next';
 import { ExtensibilityStarterForm } from './ExtensibilityStarterForm';
@@ -39,10 +39,18 @@ export function ExtensibilityStarterModal({ crd }) {
     );
   };
 
+  const ScaffoldOnlyInfo = () => {
+    return (
+      <MessageStrip type="information" className="fd-margin-top--sm">
+        {t('extensibility.starter-modal.messages.scaffold-only')}
+      </MessageStrip>
+    );
+  };
+
   return (
     <ModalWithForm
       title={t('extensibility.starter-modal.title', {
-        kind: pluralize(prettifyNamePlural(null, crd.spec.names.kind)),
+        kind: pluralize(prettifyKind(crd.spec.names.kind)),
       })}
       modalOpeningComponent={
         <Button glyph="add" className="fd-margin-end--tiny">
@@ -54,6 +62,7 @@ export function ExtensibilityStarterModal({ crd }) {
           <DocsLink />
           <ConfigMapInfo />
           <ExtensibilityStarterForm crd={crd} {...props} />
+          <ScaffoldOnlyInfo />
         </>
       )}
       className="modal-size--l"

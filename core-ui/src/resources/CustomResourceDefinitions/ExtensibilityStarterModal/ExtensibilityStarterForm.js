@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
-import { ResourceForm } from 'shared/ResourceForm';
-import { Select } from 'shared/components/Select/Select';
 import { useTranslation } from 'react-i18next';
+
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { useUpsert } from 'shared/hooks/BackendAPI/useUpsert';
 import { useNotification } from 'shared/contexts/NotificationContext';
+import { ResourceForm } from 'shared/ResourceForm';
+
 import { createExtensibilityTemplate, createConfigmap } from './helpers';
+import { ColumnsInput } from './ColumnsInput';
+import './ExtensibilityStarterForm.scss';
 
 export function ExtensibilityStarterForm({ crd, formElementRef, onChange }) {
   const { t } = useTranslation();
@@ -14,9 +17,6 @@ export function ExtensibilityStarterForm({ crd, formElementRef, onChange }) {
   const upsert = useUpsert();
 
   const [state, setState] = useState(() => createExtensibilityTemplate(crd, t));
-  console.log(state);
-
-  const { name, ...cmData } = state; //todo
 
   return (
     <ResourceForm.Single
@@ -24,7 +24,8 @@ export function ExtensibilityStarterForm({ crd, formElementRef, onChange }) {
       onChange={onChange}
       resource={state}
       setResource={setState}
-      createResource={async e => {
+      className="resource-form--unset-height"
+      createResource={async () => {
         const onError = e =>
           notificationManager.notifyError({
             content: t('common.messages.error', { error: e.message }),
@@ -43,54 +44,43 @@ export function ExtensibilityStarterForm({ crd, formElementRef, onChange }) {
             );
         };
 
-        try {
-          await upsert({
-            url: '/api/v1/namespaces/kube-public/configmaps',
-            resource: createConfigmap(crd, cmData),
-            onSuccess,
-            onError,
-          });
-        } catch (e) {
-          console.log(e);
-        }
+        const configmap = createConfigmap(crd, state);
+        await upsert({
+          url: '/api/v1/namespaces/kube-public/configmaps',
+          resource: configmap,
+          onSuccess,
+          onError,
+        });
       }}
     >
       <ResourceForm.Wrapper>
         <ResourceForm.FormField
           required
-          propertyPath="name"
+          propertyPath="translations.en.name"
           label={t('common.labels.name')}
           input={Inputs.Text}
         />
         <ResourceForm.FormField
           required
-          propertyPath="navigation.category"
+          propertyPath="translations.en.category"
           label={t('common.labels.category')}
           input={Inputs.Text}
         />
         <ResourceForm.CollapsibleSection
           title={t('extensibility.starter-modal.headers.form')}
         >
-          <ResourceForm.FormField
-            required
-            propertyPath='$["current-context"]'
-            label={'dupa'}
-            validate={value => !!value}
-            input={({ value, setValue }) => (
-              <Select
-                selectedKey={value}
-                options={[{ key: 'a', text: 'b' }]}
-                onSelect={(_, { key }) => setValue(key)}
-              />
-            )}
-          />
+          <ColumnsInput propertyPath="$.form" />
         </ResourceForm.CollapsibleSection>
         <ResourceForm.CollapsibleSection
-          title={t('extensibility.starter-modal.headers.list')}
-        ></ResourceForm.CollapsibleSection>
+          title={t('extensibility.starter-modal.headers.list-columns')}
+        >
+          <ColumnsInput propertyPath="$.list" />
+        </ResourceForm.CollapsibleSection>
         <ResourceForm.CollapsibleSection
-          title={t('extensibility.starter-modal.headers.details')}
-        ></ResourceForm.CollapsibleSection>
+          title={t('extensibility.starter-modal.headers.details-summary')}
+        >
+          <ColumnsInput propertyPath="$.details.body[0].children" />
+        </ResourceForm.CollapsibleSection>
       </ResourceForm.Wrapper>
     </ResourceForm.Single>
   );
