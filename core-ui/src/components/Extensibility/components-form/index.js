@@ -21,6 +21,7 @@ import { CollapsibleRenderer } from './CollapsibleRenderer';
 import { GenericList } from './GenericList';
 import { MonacoRenderer } from './MonacoRenderer';
 import { SecretRefRender } from './SecretRefRenderer';
+import { ResourceRefRender } from './ResourceRefRenderer';
 
 const pluginStack = [
   ReferencingHandler,
@@ -73,6 +74,7 @@ export const widgets = {
     CodeEditor: MonacoRenderer,
     FormGroup: CollapsibleRenderer,
     SecretRefs: SecretRefRender,
+    ResourceRefs: ResourceRefRender,
   },
 };
 export default widgets;
