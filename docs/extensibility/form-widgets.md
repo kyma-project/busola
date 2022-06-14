@@ -25,7 +25,7 @@ Name widgets render a name input field. They contain an automatic name generator
 
 #### Widget-specific parameters
 
-- **extraPaths** - an array of extra paths to fill in with the contents of the field/. Each path can either be a period-separated string or an array of strings.
+- **extraPaths** - an array of extra paths to fill in with the contents of the field. Each path can either be a period-separated string or an array of strings.
 
 #### Example
 
@@ -59,7 +59,7 @@ Presentation widgets do not handle data directly and only serve to group content
 
 ### FormGroup
 
-FormGroup renders an `object` as a collapsible section. Requires the children property to render the content of the section.
+FormGroup widgets render an `object` as a collapsible section. Requires the children property to render the content of the section.
 
 #### Example
 

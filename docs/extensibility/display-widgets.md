@@ -1,6 +1,6 @@
 # Display widgets
 
-Widgets available for lists and details pages.
+Widgets available for the lists and details pages.
 
 ## Inline widgets
 
@@ -25,10 +25,10 @@ Badge widgets render texts as a status badge, using a set of predefined rules to
 
 The following values are automatically handled:
 
-- rendered as an information: initial, pending, available, released.
-- rendered as a success: ready, bound, running, success, succeeded, ok.
-- rendered as a warning: unknown, warning.
-- rendered as an error: error, failure, invalid.
+- rendered as an information: `initial`, `pending`, `available`, `released`.
+- rendered as a success: `ready`, `bound`, `running`, `success`, `succeeded`, `ok`.
+- rendered as a warning: `unknown`, `warning`.
+- rendered as an error: `error`, `failure`, `invalid`.
 
 #### Example
 
