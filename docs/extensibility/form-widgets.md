@@ -26,7 +26,6 @@ Name widgets render a name input field. They contain an automatic name generator
 #### Widget-specific parameters
 
 - **extraPaths** - an array of extra paths to fill in with the contents of the field/. Each path can either be a period-separated string or an array of strings.
--
 
 #### Example
 
