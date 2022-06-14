@@ -23,7 +23,7 @@ export function ExtensibilityCreate({
   const { namespaceId: namespace } = useMicrofrontendContext();
   const notification = useNotification();
   const { t } = useTranslation();
-  const { t: tExt } = useGetTranslation();
+  const { t: tExt, exists } = useGetTranslation();
   const api = createResource?.resource || {};
 
   const [resource, setResource] = useState(
@@ -57,7 +57,9 @@ export function ExtensibilityCreate({
     <ResourceForm
       pluralKind={resourceType}
       singularName={
-        tExt('name') || prettifyKind(createResource.resource?.kind || '')
+        exists('name')
+          ? tExt('name')
+          : prettifyKind(createResource.resource?.kind || '')
       }
       resource={resource}
       setResource={setResource}

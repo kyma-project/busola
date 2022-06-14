@@ -17,7 +17,8 @@ export const getValue = (resource, path) => {
 
 export const useGetTranslation = path => {
   const translationBundle = useContext(TranslationBundleContext);
-  const { t } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
+  const { t, i18n } = useTranslation([translationBundle]);
+  //doesn't always work, add `translationBundle.` at the beggining of a path
 
   return {
     t: (path, ...props) => t(`${translationBundle}:${path}`, ...props) || path,
@@ -29,6 +30,7 @@ export const useGetTranslation = path => {
         defaultValue: path,
       });
     },
+    exists: path => i18n.exists(`${translationBundle}:${path}`),
   };
 };
 
