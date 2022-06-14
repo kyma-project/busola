@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import pluralize from 'pluralize';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
@@ -12,23 +13,21 @@ import { Widget } from './components/Widget';
 
 export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
+  const { path, kind } = resMetaData?.resource ?? {};
 
   const schema = resMetaData?.schema;
 
-  const listProps = usePrepareListProps(
-    resMetaData.navigation.path,
-    resMetaData.navigation.label,
-  );
+  const listProps = usePrepareListProps(path, 'name');
 
-  if (resMetaData.resource?.kind) {
+  if (kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
       /[a-z0-9-]+\/?$/,
-      (resMetaData.resource?.kind).toLowerCase(),
+      pluralize(kind).toLowerCase(),
     );
   }
   listProps.createFormProps = { resource: resMetaData };
   listProps.resourceName = t('name', {
-    defaultValue: resMetaData.resource?.kind,
+    defaultValue: kind,
   });
   listProps.description = t('description', {
     defaultValue: ' ',
@@ -47,9 +46,10 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
 export const ExtensibilityList = () => {
   const { t } = useTranslation();
   const resMetaData = useGetCRbyPath();
+  const { path } = resMetaData.resource ?? {};
 
   return (
-    <TranslationBundleContext.Provider value={resMetaData.navigation.path}>
+    <TranslationBundleContext.Provider value={path}>
       <ErrorBoundary customMessage={t('extensibility.error')}>
         <ExtensibilityListCore resMetaData={resMetaData} />
       </ErrorBoundary>

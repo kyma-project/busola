@@ -46,7 +46,7 @@ const getCustomNodes = (crs, scope) => {
             icon: cr.resource?.icon || 'customize',
           },
           resourceType: resource.kind.toLowerCase(),
-          pathSegment: cr.resource?.path,
+          pathSegment: resource?.path,
           label: i18next.t(`${translationBundle}:name`, {
             defaultValue: resource.kind,
           }),

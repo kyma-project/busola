@@ -59,7 +59,7 @@ export default function App() {
           translationBundle,
           cr?.translations?.[language] || {},
         );
-        if (cr.resorce?.scope === 'namespace') {
+        if (cr.resource?.scope === 'namespace') {
           return (
             <>
               <Route
