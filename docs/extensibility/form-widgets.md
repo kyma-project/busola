@@ -23,6 +23,11 @@ Text widgets render a field as a text field. They are used by default for all st
 
 Name widgets render a name input field. They contain an automatic name generator, and additionally set the label field when changed. They are added automatically to all forms, and set to the `metadata.name` value.
 
+#### Widget-specific parameters
+
+- **extraPaths** - an array of extra paths to fill in with the contents of the field/. Each path can either be a period-separated string or an array of strings.
+-
+
 #### Example
 
 ```json
