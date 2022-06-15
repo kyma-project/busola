@@ -3,7 +3,7 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 export const useGetCRbyPath = () => {
   const { customResources = [] } = useMicrofrontendContext();
   const resource = customResources.find(el => {
-    const { scope, path } = el.navigation || {};
+    const { scope, path } = el.resource || {};
     const hasCorrectPath = window.location.pathname.includes(`/${path}`);
     const hasCorrectScope =
       scope?.toLowerCase().includes('namespace') ===
