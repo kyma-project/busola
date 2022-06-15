@@ -61,7 +61,7 @@ export default function App() {
         );
         if (cr.resource?.scope === 'namespace') {
           return (
-            <React.Fragment key={`namespace-${cr.navigation?.path}`}>
+            <React.Fragment key={`namespace-${cr.resource?.path}`}>
               <Route
                 path={`/namespaces/:namespaceId/${cr.resource.path}`}
                 element={<ExtensibilityList />}
