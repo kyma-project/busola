@@ -53,22 +53,22 @@ export default function App() {
       />
 
       {customResources?.map(cr => {
-        const translationBundle = cr?.navigation?.path || 'extensibility';
+        const translationBundle = cr?.resource?.path || 'extensibility';
         i18next.addResourceBundle(
           language,
           translationBundle,
           cr?.translations?.[language] || {},
         );
-        if (cr.navigation?.scope === 'namespace') {
+        if (cr.resource?.scope === 'namespace') {
           return (
-            <React.Fragment key={`namespace-${cr.navigation?.path}`}>
+            <React.Fragment key={`namespace-${cr.resource?.path}`}>
               <Route
-                path={`/namespaces/:namespaceId/${cr.navigation?.path}`}
+                path={`/namespaces/:namespaceId/${cr.resource.path}`}
                 element={<ExtensibilityList />}
               />
               {cr.details && (
                 <Route
-                  path={`/namespaces/:namespaceId/${cr.navigation?.path}/:resourceName`}
+                  path={`/namespaces/:namespaceId/${cr.resource.path}/:resourceName`}
                   element={<ExtensibilityDetails />}
                 />
               )}
@@ -76,14 +76,14 @@ export default function App() {
           );
         } else {
           return (
-            <React.Fragment key={`cluster-${cr.navigation?.path}`}>
+            <React.Fragment key={`cluster-${cr.resource?.path}`}>
               <Route
-                path={`/${cr.navigation?.path}`}
+                path={`/${cr.resource.path}`}
                 element={<ExtensibilityList />}
               />
               {cr.details && (
                 <Route
-                  path={`/${cr.navigation?.path}/:resourceName`}
+                  path={`/${cr.resource.path}/:resourceName`}
                   element={<ExtensibilityDetails />}
                 />
               )}
