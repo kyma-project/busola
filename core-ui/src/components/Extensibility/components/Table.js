@@ -6,8 +6,7 @@ import { useGetTranslation } from '../helpers';
 import { Widget } from './Widget';
 
 export function Table({ value, structure, schema }) {
-  const { widgetT } = useGetTranslation();
-
+  const { t, widgetT } = useGetTranslation();
   const headerRenderer = () =>
     (structure.children || []).map(column => widgetT([structure, column]));
 
@@ -20,6 +19,11 @@ export function Table({ value, structure, schema }) {
     <GenericList
       showSearchSuggestion={false}
       entries={value || []}
+      title={t(structure.name, {
+        defaultValue: t(structure.path, {
+          defaultValue: ' ',
+        }),
+      })}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
     />
