@@ -76,7 +76,7 @@ export default function App() {
           );
         } else {
           return (
-            <React.Fragment key={`cluster-${cr.navigation?.path}`}>
+            <React.Fragment key={`cluster-${cr.resource?.path}`}>
               <Route
                 path={`/${cr.resource.path}`}
                 element={<ExtensibilityList />}
