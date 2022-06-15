@@ -1003,7 +1003,7 @@ extensibility:
       form-fields: Form Fields
       list-columns: List Columns
     messages:
-      configmap-info: <0>{{name}}</0> Config Map will be created or updated in <1>kube-public</1> Namespace.
+      configmap-info: <0>{{name}}</0> Config Map is created or updated in <1>kube-public</1> Namespace.
       docs-info: For more information, see <0>Extensibility documentation</0>.
       error: Failed to upsert UI configuration.
       no-columns: No example values could be inferred from the CRD.
