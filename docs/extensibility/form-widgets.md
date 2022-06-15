@@ -1,6 +1,6 @@
 # Form widgets
 
-Widgets available for resource forms.
+Form widgets are used in the resource forms.
 
 ## Simple widgets
 
@@ -42,7 +42,7 @@ Complex widgets handle more advanced data structures such as arrays or objects.
 
 ### KeyValuePair
 
-KeyValuePair widgets render an `object` value as list of dual text fields. One is used for a key and the other for a value, allowing for adding and removing entries.
+KeyValuePair widgets render an `object` value as a list of dual text fields. One is used for a key and the other for a value, allowing for adding and removing entries.
 
 #### Example
 

@@ -1,6 +1,6 @@
 # Display widgets
 
-Widgets available for the lists and details pages.
+Display widgets are used in the lists and details pages.
 
 ## Inline widgets
 
