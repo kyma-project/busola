@@ -56,7 +56,7 @@ export function ResourceSchema({
     { path: 'metadata.name', simple: true },
     { path: 'metadata.labels' },
     { path: 'metadata.annotations' },
-    ...schemaRules,
+    ...(Array.isArray(schemaRules) ? schemaRules : []),
   ];
   const simpleRules = fullSchemaRules.filter(item => item.simple ?? false);
   const advancedRules = fullSchemaRules.filter(item => item.advanced ?? true);
@@ -77,7 +77,7 @@ export function ResourceSchema({
   return (
     <UIMetaProvider
       widgets={widgets}
-      t={(path, ...props) => t(`${translationBundle}:${path}`, ...props)}
+      t={(path, ...props) => t(`${translationBundle}::${path}`, ...props)}
     >
       <UIStoreProvider
         store={store}

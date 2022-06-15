@@ -32,12 +32,14 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   listProps.description = t('description', {
     defaultValue: ' ',
   });
-  listProps.customColumns = (resMetaData.list || []).map(column => ({
-    header: widgetT(column),
-    value: resource => (
-      <Widget value={resource} structure={column} schema={schema} />
-    ),
-  }));
+  listProps.customColumns = Array.isArray(resMetaData.list)
+    ? resMetaData.list.map(column => ({
+        header: widgetT(column),
+        value: resource => (
+          <Widget value={resource} structure={column} schema={schema} />
+        ),
+      }))
+    : [];
   return (
     <ResourcesList createResourceForm={ExtensibilityCreate} {...listProps} />
   );
@@ -50,7 +52,11 @@ export const ExtensibilityList = () => {
 
   return (
     <TranslationBundleContext.Provider value={path}>
-      <ErrorBoundary customMessage={t('extensibility.error')}>
+      <ErrorBoundary
+        customMessage={t('extensibility.error')}
+        displayButton={false}
+        key={resMetaData.navigation.path}
+      >
         <ExtensibilityListCore resMetaData={resMetaData} />
       </ErrorBoundary>
     </TranslationBundleContext.Provider>

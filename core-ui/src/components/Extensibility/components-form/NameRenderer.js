@@ -10,28 +10,33 @@ export function NameRenderer({
   onChange,
   schema,
   required,
+  ...props
 }) {
+  const extraPaths = schema.get('extraPaths')?.toJS() || [];
+
   return (
     <K8sNameField
       value={value}
       kind={resource.kind}
       setValue={value => {
-        onChange({
-          storeKeys,
-          scopes: ['value'],
-          type: 'set',
-          schema,
-          required,
-          data: { value },
-        });
-        onChange({
-          storeKeys: List(['metadata', 'labels', 'app.kubernetes.io/name']),
-          scopes: ['value'],
-          type: 'set',
-          schema,
-          required,
-          data: { value },
-        });
+        onChange([
+          {
+            storeKeys,
+            scopes: ['value'],
+            type: 'set',
+            schema,
+            required,
+            data: { value },
+          },
+          ...extraPaths.map(path => ({
+            storeKeys: List(Array.isArray(path) ? path : path.split('.')),
+            scopes: ['value'],
+            type: 'set',
+            schema,
+            required,
+            data: { value },
+          })),
+        ]);
       }}
       validate={value => !!value}
     />

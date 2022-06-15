@@ -43,17 +43,25 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
       windowTitle={t('name', {
         defaultValue: prettifyNamePlural(resMetaData.resource.kind),
       })}
-      customColumns={header.map(def => ({
-        header: widgetT(def),
-        value: resource => (
-          <Widget value={resource} structure={def} schema={schema} />
-        ),
-      }))}
-      customComponents={[
-        resource => (
-          <Widget value={resource} structure={body} schema={schema} />
-        ),
-      ]}
+      customColumns={
+        Array.isArray(header)
+          ? header.map(def => ({
+              header: widgetT(def),
+              value: resource => (
+                <Widget value={resource} structure={def} schema={schema} />
+              ),
+            }))
+          : []
+      }
+      customComponents={
+        Array.isArray(body)
+          ? [
+              resource => (
+                <Widget value={resource} structure={body} schema={schema} />
+              ),
+            ]
+          : []
+      }
       breadcrumbs={breadcrumbs}
       {...detailsProps}
     />
@@ -66,7 +74,10 @@ export const ExtensibilityDetails = () => {
 
   return (
     <TranslationBundleContext.Provider value={resMetaData.resource.path}>
-      <ErrorBoundary customMessage={t('extensibility.error')}>
+      <ErrorBoundary
+        customMessage={t('extensibility.error')}
+        displayButton={false}
+      >
         <ExtensibilityDetailsCore resMetaData={resMetaData} />
       </ErrorBoundary>
     </TranslationBundleContext.Provider>

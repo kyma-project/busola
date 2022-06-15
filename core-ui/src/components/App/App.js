@@ -61,7 +61,7 @@ export default function App() {
         );
         if (cr.resource?.scope === 'namespace') {
           return (
-            <>
+            <React.Fragment key={`namespace-${cr.navigation?.path}`}>
               <Route
                 path={`/namespaces/:namespaceId/${cr.resource.path}`}
                 element={<ExtensibilityList />}
@@ -72,11 +72,11 @@ export default function App() {
                   element={<ExtensibilityDetails />}
                 />
               )}
-            </>
+            </React.Fragment>
           );
         } else {
           return (
-            <>
+            <React.Fragment key={`cluster-${cr.navigation?.path}`}>
               <Route
                 path={`/${cr.resource.path}`}
                 element={<ExtensibilityList />}
@@ -87,7 +87,7 @@ export default function App() {
                   element={<ExtensibilityDetails />}
                 />
               )}
-            </>
+            </React.Fragment>
           );
         }
       })}
