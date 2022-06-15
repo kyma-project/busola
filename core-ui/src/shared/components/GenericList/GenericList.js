@@ -58,7 +58,7 @@ export const GenericList = ({
   i18n,
   allowSlashShortcut,
   sortBy,
-  invalidConfigurationMessage,
+  genericErrorMessage,
 }) => {
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
@@ -176,7 +176,7 @@ export const GenericList = ({
       }
       return (
         <BodyFallback>
-          <p>{invalidConfigurationMessage || t(notFoundMessage)}</p>
+          <p>{genericErrorMessage || t(notFoundMessage)}</p>
         </BodyFallback>
       );
     }
@@ -300,7 +300,7 @@ GenericList.propTypes = {
   compact: PropTypes.bool,
   className: PropTypes.string,
   currentlyEditedResourceUID: PropTypes.string,
-  invalidConfigurationMessage: PropTypes.string,
+  genericErrorMessage: PropTypes.string,
 };
 
 GenericList.defaultProps = {
@@ -317,5 +317,5 @@ GenericList.defaultProps = {
   serverDataLoading: false,
   hasExternalMargin: true,
   compact: true,
-  invalidConfigurationMessage: null,
+  genericErrorMessage: null,
 };
