@@ -61,8 +61,6 @@ export function createExtensibilityTemplate(crd, t) {
       kind: crd.spec.names.kind,
       group: crd.spec.group,
       version: version.name,
-    },
-    navigation: {
       path: crd.spec.names.plural,
       scope: crd.spec.scope === 'Namespaced' ? 'namespace' : 'cluster',
     },
