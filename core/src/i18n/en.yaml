@@ -1010,6 +1010,9 @@ extensibility:
       scaffold-only: Configuration above can be changed later in the Config Map level.
       success: UI configuration upserted.
     title: Create UI for {{kind}} CRD
+  widgets:
+    table:
+      error: The table widget configuration is incorrect. Path value must be an array type.
 functions:
   buttons:
     connected-repositories: Connected Repositories
