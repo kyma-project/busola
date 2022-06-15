@@ -81,7 +81,7 @@ The `details` section defines the display structure for the details page. It con
 - **path** - contains the path to the data used for the widget. Not required for presentational widgets.
 - **name** - used for entries without `path` to define the translation source used for labels. Required if no `path` is present.
 - **widget** - optional widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
-- **children** - a list of child widgets to be used for all `object` and `array` type of fields. Not available for header widgets.
+- **children** - a list of child widgets used for all `object` and `array` type of fields. Not available for header widgets.
 
 Extra parameters might be available for specific widgets.
 
