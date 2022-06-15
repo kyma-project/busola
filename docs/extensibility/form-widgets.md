@@ -59,14 +59,13 @@ Presentation widgets do not handle data directly and only serve to group content
 
 ### FormGroup
 
-FormGroup widgets render an `object` as a collapsible section. Requires the children property to render the content of the section.
+FormGroup widgets render an `object` as a collapsible section.
 
 #### Example
 
 ```json
 {
-  "name": "spec.service",
-  "widget": "FormGroup",
-  "children": [{ "path": "spec.service.host" }, { "path": "spec.service.port" }]
+  "path": "spec.service",
+  "widget": "FormGroup"
 }
 ```

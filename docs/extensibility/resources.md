@@ -14,37 +14,30 @@ All sections can be provided as either JSON or YAML.
 
 The `resource` section is required and contains basic information about the resource. For example, `kind` and api details.
 
+- **kind** - _[required]_ kubernetes kind of the resource.
+- **group** - _[required]_ api group used for all requests.
+- **version** - _[required]_ api version used for all requests.
+- **path** - path fragment for this resource used in the url. Defaults to pluralized lowercase `kind`. Used mostly to provide an alternative url to avoid conflicts with other resources.
+- **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
+
 #### Example
 
 ```json
 {
   "kind": "MyResource",
   "group": "networking.istio.io",
-  "version": "v1alpha3"
-}
-```
-
-### navigation section
-
-The `navigation` section is required and defines this resource availability in the menu and the generated url. The name of the menu entry as well as category that it's going to be placed in are read from the translation section entries `name` and `category` respectively.
-
-#### Item paremeters
-
-- **path** - path for this resource used in the url.
-- **scope** - either `namespace` or `cluster`.
-
-#### Example
-
-```json
-{
-  "path": "my-resources",
+  "version": "v1alpha3",
   "scope": "namespace"
 }
 ```
 
+### schema section
+
+The `schema` section contains the JSON-schema definition of the resource. In most cases this is copied verbatim from the CRD. The schema is the basis for generating the create/edit forms and the resultant resource yaml using [ui-schema](https://ui-schema.bemit.codes/).
+
 ### form section
 
-The `form` section modifies the original schema (provided in the schema section) for use with [ui-schema](https://ui-schema.bemit.codes/) to generate the create/edit form for the resource. It contains a list of objects that define which fields must be included in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to simple form by providing the `simple: true` flag, or removing it from advanced form by providing the `advanced: false` flag.
+The `form` section contains a list of objects that define which fields must be included in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to simple form by providing the `simple: true` flag, or removing it from advanced form by providing the `advanced: false` flag.
 
 #### Item parameters
 
@@ -161,10 +154,6 @@ renders the same set of data as:
   }
 ]
 ```
-
-### schema section
-
-The `schema` section contains the JSON-schema definition of the resource. In most cases this is copied verbatim from the CRD.
 
 ### translations sections
 
