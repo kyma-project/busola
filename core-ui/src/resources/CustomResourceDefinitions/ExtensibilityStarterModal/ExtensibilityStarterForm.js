@@ -67,7 +67,7 @@ export function ExtensibilityStarterForm({ crd, formElementRef, onChange }) {
           input={Inputs.Text}
         />
         <ResourceForm.CollapsibleSection
-          title={t('extensibility.starter-modal.headers.form')}
+          title={t('extensibility.starter-modal.headers.form-fields')}
         >
           <ColumnsInput propertyPath="$.form" />
         </ResourceForm.CollapsibleSection>

@@ -1000,7 +1000,7 @@ extensibility:
     headers:
       details-summary: Details Summary
       field-name: Field Name
-      form: Form
+      form-fields: Form fields
       list-columns: List Columns
     messages:
       configmap-info: <0>{{name}}</0> Config Map will be created or updated in <1>kube-public</1> Namespace.
