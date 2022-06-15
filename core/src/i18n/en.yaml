@@ -993,6 +993,9 @@ events:
   title: Events
 extensibility:
   error: Your extension configuration is incorrect.
+  widgets:
+    table:
+      error: The table widget configuration is incorrect. Path value should be an array type.
 functions:
   buttons:
     connected-repositories: Connected Repositories
