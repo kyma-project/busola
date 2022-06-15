@@ -11,6 +11,7 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 const RowComponent = ({ name, value }) =>
   value ? <LayoutPanelRow name={name} value={value} /> : null;
@@ -51,7 +52,8 @@ export function EventDetails(props) {
     },
     {
       header: t('events.headers.source'),
-      value: event => formatSourceObject(event.source),
+      value: event =>
+        formatSourceObject(event.source || EMPTY_TEXT_PLACEHOLDER),
     },
     {
       header: t('common.labels.namespace'),
@@ -94,7 +96,7 @@ export function EventDetails(props) {
     },
     {
       header: t('events.headers.count'),
-      value: event => <p>{event.count}</p>,
+      value: event => <p>{event.count || EMPTY_TEXT_PLACEHOLDER}</p>,
     },
     {
       header: t('events.headers.last-seen'),

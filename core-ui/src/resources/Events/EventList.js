@@ -10,15 +10,22 @@ import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Link as DescriptionLink } from 'shared/components/Link/Link';
 import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
+import { setWindowTitle } from 'shared/hooks/useWindowTitle';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
-export function Events({ ...otherParams }) {
+function Events({ ...otherParams }) {
   const { t, i18n } = useTranslation();
   const {
     defaultType,
     hideInvolvedObjects,
     resourceUrl,
     allowSlashShortcut,
+    updateTitle = true,
   } = otherParams;
+
+  if (updateTitle) {
+    setWindowTitle(t('events.title'));
+  }
   const { loading = true, error, data: items } = useGetList(otherParams.filter)(
     resourceUrl,
     {
@@ -95,7 +102,7 @@ export function Events({ ...otherParams }) {
     <p>{entry.message}</p>,
     ...involvedObject(entry),
     formatSourceObject(entry.source),
-    <p>{entry.count}</p>,
+    <p>{entry.count || EMPTY_TEXT_PLACEHOLDER}</p>,
     <ReadableCreationTimestamp timestamp={entry.lastTimestamp} />,
   ];
 
@@ -127,6 +134,18 @@ export function Events({ ...otherParams }) {
       )}
       i18n={i18n}
       allowSlashShortcut={allowSlashShortcut}
+      sortBy={defaultSort => {
+        const { name } = defaultSort;
+
+        return {
+          name,
+          type: (a, b) => a.type.localeCompare(b.type),
+          lastseen: (a, b) =>
+            new Date(b.lastTimestamp).getTime() -
+            new Date(a.lastTimestamp).getTime(),
+          count: (a, b) => a.count - b.count,
+        };
+      }}
     />
   );
 }
@@ -136,7 +155,7 @@ export function EventList(props) {
     <Trans i18nKey="events.description">
       <DescriptionLink
         className="fd-link"
-        url="https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/#example-debugging-pending-pods"
+        url="https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/event-v1/"
       />
     </Trans>
   );

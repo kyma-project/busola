@@ -31,6 +31,7 @@ const luigiAfterInit = () => Luigi.ux().hideAppLoadingIndicator();
 export const i18n = i18next.use(i18nextBackend).init({
   lng: localStorage.getItem('busola.language') || 'en',
   fallbackLng: 'en',
+  nsSeparator: '::',
   backend: {
     loadPath: '/i18n/{{lng}}.yaml',
     parse: data => yaml.load(data),

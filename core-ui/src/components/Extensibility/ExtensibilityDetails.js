@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import pluralize from 'pluralize';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { prettifyNamePlural } from 'shared/utils/helpers';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
@@ -11,7 +11,7 @@ import { Widget } from './components/Widget';
 import { useGetTranslation, TranslationBundleContext } from './helpers';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
-  const { widgetT } = useGetTranslation();
+  const { t, widgetT } = useGetTranslation();
 
   const detailsProps = usePrepareDetailsProps(
     resMetaData.navigation.path,
@@ -21,7 +21,8 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   if (resMetaData.resource.kind) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
       resMetaData.navigation.path,
-      resMetaData.resource.kind.toLowerCase(),
+      // resMetaData.resource.kind.toLowerCase(),
+      pluralize(resMetaData.resource?.kind).toLowerCase(),
     );
   }
 
@@ -31,7 +32,9 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
 
   const breadcrumbs = [
     {
-      name: resMetaData.navigation.label || resMetaData.navigation.path,
+      name: t('name', {
+        defaultValue: resMetaData.resource?.kind,
+      }),
       path: '/',
       fromContext: resMetaData.navigation.path,
     },
@@ -39,20 +42,28 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   ];
   return (
     <ResourceDetails
-      windowTitle={prettifyNamePlural(
-        resMetaData.navigation.label || resMetaData.navigation.path,
-      )}
-      customColumns={header.map(def => ({
-        header: widgetT(def),
-        value: resource => (
-          <Widget value={resource} structure={def} schema={schema} />
-        ),
-      }))}
-      customComponents={[
-        resource => (
-          <Widget value={resource} structure={body} schema={schema} />
-        ),
-      ]}
+      windowTitle={t('name', {
+        defaultValue: resMetaData.resource?.kind,
+      })}
+      customColumns={
+        Array.isArray(header)
+          ? header.map(def => ({
+              header: widgetT(def),
+              value: resource => (
+                <Widget value={resource} structure={def} schema={schema} />
+              ),
+            }))
+          : []
+      }
+      customComponents={
+        Array.isArray(body)
+          ? [
+              resource => (
+                <Widget value={resource} structure={body} schema={schema} />
+              ),
+            ]
+          : []
+      }
       breadcrumbs={breadcrumbs}
       {...detailsProps}
     />
@@ -65,7 +76,10 @@ export const ExtensibilityDetails = () => {
 
   return (
     <TranslationBundleContext.Provider value={resMetaData.navigation.path}>
-      <ErrorBoundary customMessage={t('extensibility.error')}>
+      <ErrorBoundary
+        customMessage={t('extensibility.error')}
+        displayButton={false}
+      >
         <ExtensibilityDetailsCore resMetaData={resMetaData} />
       </ErrorBoundary>
     </TranslationBundleContext.Provider>

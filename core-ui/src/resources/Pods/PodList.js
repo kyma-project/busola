@@ -8,7 +8,7 @@ import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
 import { Link as ReactSharedLink } from 'shared/components/Link/Link';
 
 import { PodCreate } from './PodCreate';
-import { PodStatus } from './PodStatus';
+import { PodStatus, calculatePodState } from './PodStatus';
 import PodRestarts from './PodRestarts';
 
 export function PodList(params) {
@@ -69,6 +69,13 @@ export function PodList(params) {
       customColumns={customColumns}
       description={description}
       createResourceForm={PodCreate}
+      sortBy={defaultSort => ({
+        ...defaultSort,
+        status: (a, b) =>
+          calculatePodState(a).status.localeCompare(
+            calculatePodState(b).status,
+          ),
+      })}
       {...params}
     />
   );
