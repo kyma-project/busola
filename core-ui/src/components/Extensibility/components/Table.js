@@ -26,8 +26,8 @@ const handleTableValue = (value, t) => {
 };
 
 export function Table({ value, structure, schema }) {
-  const { widgetT } = useGetTranslation();
   const { t } = useTranslation();
+  const { t: tExt, widgetT } = useGetTranslation();
   const headerRenderer = () =>
     (structure.children || []).map(column => widgetT([structure, column]));
 
@@ -39,6 +39,11 @@ export function Table({ value, structure, schema }) {
   return (
     <GenericList
       showSearchSuggestion={false}
+      title={tExt(structure.name, {
+        defaultValue: t(structure.path, {
+          defaultValue: ' ',
+        }),
+      })}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       {...handleTableValue(value, t)}
