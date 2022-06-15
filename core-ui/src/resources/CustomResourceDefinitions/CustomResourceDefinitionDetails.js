@@ -10,6 +10,7 @@ import { EventsList } from 'shared/components/EventsList';
 import { CurrentCRDVersion } from './CurrentCRDVersion';
 import { RelatedCRDsList } from './RelatedCRDsList';
 import { CustomResourceDefinitionCreate } from './CustomResourceDefinitionCreate';
+import { ExtensibilityStarterModal } from './ExtensibilityStarterModal/ExtensibilityStarterModal';
 
 export function CustomResourceDefinitionDetails(props) {
   const { t, i18n } = useTranslation();
@@ -76,6 +77,11 @@ export function CustomResourceDefinitionDetails(props) {
         Events,
       ]}
       createResourceForm={CustomResourceDefinitionCreate}
+      resourceHeaderActions={[
+        crd => (
+          <ExtensibilityStarterModal key="extensibility-modal" crd={crd} />
+        ),
+      ]}
       {...props}
     />
   );
