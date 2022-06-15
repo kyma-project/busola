@@ -72,9 +72,18 @@ FormGroup renders an `object` as a collapsible section. Requires the children pr
 #### Example
 
 ```json
-{
+({
   "name": "spec.service",
-  "widget": "FormGroup",
-  "children": [{ "path": "spec.service.host" }, { "path": "spec.service.port" }]
-}
+  "widget": "FormGroup"
+},
+{
+  "path": "spec.service.host"
+},
+{
+  "path": "spec.service.port"
+})
 ```
+
+<p>
+<img src="./assets/form-widgets/FormGroup.png" style="max-width:100%;">
+</p>
