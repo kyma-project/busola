@@ -104,7 +104,7 @@ CodeViewer widgets display values using the code highlight.
 
 ### Table
 
-Table widgets display array data as rows of a table instead of free-standing components. The `children` parameter defines the column renderers to use. Similar to the `list` section of the config map, only inline widgets should be used as children.
+Table widgets display array data as rows of a table instead of free-standing components. The `children` parameter defines the values to used to render the columns. Similar to the `list` section of the Config Map, only inline widgets should be used as children.
 
 #### Example
 

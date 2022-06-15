@@ -42,7 +42,7 @@ The `form` section contains a list of objects that define which fields must be i
 #### Item parameters
 
 - **path** - _[required]_ path to the property that must be displayed in the form. In case of an array the array index is omitted. For example, if `spec.items` is an array and you want to display `name` for each items, the path is `spec.items.name`).
-- **widget** - optional widget to render the field. If no widget is provided a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form widgets](form-widgets.md).
+- **widget** - optional widget to render the field referred to by the `path` property. If no widget is provided a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form widgets](form-widgets.md).
 - **simple** - to display in the simple form. By default it is false.
 - **advanced** - to display in the advanced form. By default it is true.
 
@@ -64,7 +64,7 @@ The `list` section defines extra columns available in the list. The format is si
 #### Item parameters
 
 - **path** - _[required]_ contains the path to the data used for the column.
-- **widget** - optional widget used to render the field. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
+- **widget** - optional widget used to render the field referred to by the `path` property. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 
 #### Example
 
@@ -80,7 +80,7 @@ The `details` section defines the display structure for the details page. It con
 
 - **path** - contains the path to the data used for the widget. Not required for purely presentational widgets.
 - **name** - used for entries without `path` to define the translation source used for labels. Required if no path is present.
-- **widget** - optional widget to render the field. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
+- **widget** - optional widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **children** - a list of child widgets to be used for all `object` and `array` type of fields. Not available for header widgets.
 
 Extra parameters might be available for specific widgets.
