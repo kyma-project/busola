@@ -4,7 +4,7 @@ import pluralize from 'pluralize';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { prettifyNamePlural } from 'shared/utils/helpers';
+import { prettifyKind } from 'shared/utils/helpers';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
@@ -31,7 +31,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const breadcrumbs = [
     {
       name: t('name', {
-        defaultValue: prettifyNamePlural(resMetaData.resource.path),
+        defaultValue: pluralize(prettifyKind(kind)),
       }),
       path: '/',
       fromContext: resMetaData.resource.path,
@@ -41,7 +41,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   return (
     <ResourceDetails
       windowTitle={t('name', {
-        defaultValue: prettifyNamePlural(resMetaData.resource.kind),
+        defaultValue: pluralize(prettifyKind(kind)),
       })}
       customColumns={
         Array.isArray(header)

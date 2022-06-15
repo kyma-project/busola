@@ -1,6 +1,8 @@
-import { config } from '../config';
 import i18next from 'i18next';
+import pluralize from 'pluralize';
+
 import { coreUIViewGroupName } from './static-navigation-model';
+import { config } from '../config';
 
 // this fn is cloned in core-ui 'helpers.js' as 'useGetTranslation'. Modify it also there
 const translate = translationObj => {
@@ -48,7 +50,7 @@ const getCustomNodes = (crs, scope) => {
           resourceType: resource.kind.toLowerCase(),
           pathSegment: resource?.path,
           label: i18next.t(`${translationBundle}::name`, {
-            defaultValue: resource.kind,
+            defaultValue: pluralize(resource.kind),
           }),
           viewUrl:
             config.coreUIModuleUrl +

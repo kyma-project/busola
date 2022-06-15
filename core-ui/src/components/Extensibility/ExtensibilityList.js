@@ -5,6 +5,7 @@ import pluralize from 'pluralize';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { prettifyKind } from 'shared/utils/helpers';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
@@ -27,7 +28,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   }
   listProps.createFormProps = { resource: resMetaData };
   listProps.resourceName = t('name', {
-    defaultValue: kind,
+    defaultValue: pluralize(prettifyKind(kind)),
   });
   listProps.description = t('description', {
     defaultValue: ' ',
