@@ -41,7 +41,7 @@ The `form` section contains a list of objects that define which fields must be i
 
 #### Item parameters
 
-- **path** - _[required]_ path to the property that must be displayed in the form. In case of an array the array index is omitted. For example, if `spec.items` is an array and you want to display `name` for each items, the path is `spec.items.name`).
+- **path** - _[required]_ path to the property that must be displayed in the form. In case of an array the array index is omitted. For example, if `spec.items` is an array and you want to display `name` for each items, the path is `spec.items.name`.
 - **widget** - optional widget to render the field. If no widget is provided a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form widgets](form-widgets.md).
 - **simple** - to display in the simple form. By default it is false.
 - **advanced** - to display in the advanced form. By default it is true.
@@ -59,7 +59,7 @@ The `form` section contains a list of objects that define which fields must be i
 
 ### list section
 
-The `list` section defines extra columns available in the list. The format is similar to the form section, however each entry consists only of two values:
+The `list` section defines extra columns available in the list. The format is similar to the `form` section, however each entry consists only of two values:
 
 #### Item parameters
 
@@ -74,12 +74,12 @@ The `list` section defines extra columns available in the list. The format is si
 
 ### details section
 
-The `details` section defines the display structure for the details page. It contains two sections, `header` and `body`, both of which are a list of item to display in the header section and the body of the page respectively. The format of the entries is similar to the form section, however it has extra options available.
+The `details` section defines the display structure for the details page. It contains two sections, `header` and `body`, both of which are a list of items to display in the `header` section and the body of the page respectively. The format of the entries is similar to the `form` section, however it has extra options available.
 
 #### Items parameteres
 
-- **path** - contains the path to the data used for the widget. Not required for purely presentational widgets.
-- **name** - used for entries without `path` to define the translation source used for labels. Required if no path is present.
+- **path** - contains the path to the data used for the widget. Not required for presentational widgets.
+- **name** - used for entries without `path` to define the translation source used for labels. Required if no `path` is present.
 - **widget** - optional widget to render the field. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **children** - a list of child widgets to be used for all `object` and `array` type of fields. Not available for header widgets.
 
@@ -131,7 +131,7 @@ Extra parameters might be available for specific widgets.
 
 #### Data scoping
 
-Whenever an entry has both `path` and `children` properties, the paths of children are relative to the parent. For example:
+Whenever an entry has both `path` and `children` properties, the paths of `children` are relative to the parent. For example:
 
 ```json
 [
@@ -161,9 +161,9 @@ This section can be provided as a single `translations` section that contains al
 
 #### Predefined translation keys
 
-- **category** - the name of a category to use for the left-hand menu. By default it is placed into a **Custom Resources** category.
+- **category** - the name of a category used for the left-hand menu. By default it is placed into a **Custom Resources** category.
 - **name** - title used in the navigation and on the list screen. It defaults to its resource kind.
-- **description** - a more in-depth description of the resorce displaye on the list screen. It is only displayed if present.
+- **description** - a more in-depth description of the resource displayed on the list screen. It is only displayed if present.
 
 #### Example
 
