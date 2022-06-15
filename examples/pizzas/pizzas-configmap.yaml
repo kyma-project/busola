@@ -65,12 +65,6 @@ data:
       { "name": "Payment method","path": "spec.paymentMethod", "widget": "Badge" }, 
       { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" }
     ]
-  navigation: |-
-    {
-      "path": "pizzas",
-      "category": "lunch",
-      "scope": "namespace"
-    }
   resource: |-
     {
       "kind": "Pizza",
@@ -137,7 +131,7 @@ data:
     }
   translations: |
     en:
-      name: PIZZA
+      name: Pizza
       category: Lunch
       spec.description: Description
       spec.state: State
