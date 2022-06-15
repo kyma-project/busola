@@ -20,7 +20,7 @@ Text widgets render values as a simple text. This is the default behavior for al
 ```
 
 <p>
-<img src="./assets/Text.png" style="max-width:20%;">
+<img src="./assets/display-widgets/Text.png" style="max-width:20%;">
 </p>
 
 ### Badge
@@ -44,7 +44,7 @@ The following values are automatically handled:
 ```
 
 <p>
-<img src="./assets/Badge.png" style="max-width:20%;">
+<img src="./assets/display-widgets/Badge.png" style="max-width:20%;">
 </p>
 
 ## Block widgets
@@ -70,7 +70,7 @@ Panel widgets render an object as a separate panel with it's own title (based on
 ```
 
 <p>
-<img src="./assets/Panel.png" style="max-width:100%;">
+<img src="./assets/display-widgets/Panel.png" style="max-width:100%;">
 </p>
 
 ### Columns
@@ -92,14 +92,14 @@ Columns widgets render the child widgets in two columns.
     {
       "name": "columns.right",
       "widget": "Panel",
-      "children": [{ "path": "spec.value" }]
+      "children": [{ "path": "spec.other-value" }]
     }
   ]
 }
 ```
 
 <p>
-<img src="./assets/Columns.png" style="max-width:100%;">
+<img src="./assets/display-widgets/Columns.png" style="max-width:100%;">
 </p>
 
 ### CodeViewer
@@ -121,7 +121,7 @@ CodeViewer displays values using the code highlight.
 ```
 
 <p>
-<img src="./assets/CodeViewer.png" style="max-width:100%;">
+<img src="./assets/display-widgets/CodeViewer.png" style="max-width:100%;">
 </p>
 
 ### Table
@@ -139,5 +139,5 @@ Table displays array data as rows of a table instead of free-standing components
 ```
 
 <p>
-<img src="./assets/Table.png" style="max-width:100%;">
+<img src="./assets/display-widgets/Table.png" style="max-width:100%;">
 </p>

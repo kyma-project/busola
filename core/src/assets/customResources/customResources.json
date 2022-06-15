@@ -1,2 +1,310 @@
 {
+  "lp":{
+    "navigation": {
+      "path": "custom-log-pipelines",
+      "scope": "cluster"
+    },
+    "resource": {
+      "kind": "LogPipelines",
+      "group": "telemetry.kyma-project.io",
+      "version": "v1alpha1"
+    },
+    "translations": {
+      "en": {
+        "name": "Log Pipelines",
+        "category": "DD",
+        "status.conditions.type": "Status"
+      }
+    },
+    "details": {
+      "body": [
+        {
+          "path": "status.conditions",
+          "widget": "Table",
+          "children": [{ "path": "type" }, { "path": "type" }]
+        }]
+    }
+  },
+  "ca": {
+    "resource": {
+      "kind": "ClusterAssets",
+      "group": "rafter.kyma-project.io",
+      "version": "v1beta1"
+    },
+    "navigation": {
+      "path": "dupa",
+      "scope": "cluster"
+    },
+    "details": {
+      "header": [
+        {
+          "path": "status.phase",
+          "widget": "Badge"
+        }
+      ],
+      "body": [
+        {
+          "path": "status.phase",
+          "widget": "CodeViewer"
+        },
+        {
+          "name": "details",
+          "widget": "Panel",
+          "children": [
+            {
+              "path": "spec.source.filter"
+            },
+            {
+              "path": "spec.source.metadataWebhookService[-1:].filter"
+            }
+          ]
+        },
+        {
+          "name": "columns.container",
+          "widget": "Columns",
+          "children": [
+            {
+              "name": "columns.left",
+              "widget": "Panel",
+              "children": [{"path": "spec.source.filter"}]
+            },
+            {
+              "name": "columns.right",
+              "widget": "Panel",
+              "children": [{"path": "spec.source.metadataWebhookService[-1:].filter"}]
+            }
+          ]
+        },
+        {
+          "path": "status.assetRef",
+          "widget": "CodeViewer",
+          "language": "json"
+        }
+      ]
+    },
+    "form": [{
+      "name": "dupa",
+      "path": "spec",
+      "widget": "FormGroup",
+      "children": [{"path": "spec.bucketRef.name", "widget": "Text"}],
+      "simple": true
+    }],
+    "schema": {
+      "description": "ClusterAsset is the Schema for the clusterassets API",
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources",
+          "type": "string"
+        },
+        "kind": {
+          "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds",
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object"
+        },
+        "spec": {
+          "description": "ClusterAssetSpec defines the desired state of ClusterAsset",
+          "type": "object",
+          "required": [
+            "source"
+          ],
+          "properties": {
+            "bucketRef": {
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "data": {
+                  "type":"string"
+                }
+              }
+            },
+            "displayName": {
+              "type": "string"
+            },
+            "parameters": {
+              "type": "object"
+            },
+            "source": {
+              "type": "object",
+              "required": [
+                "mode",
+                "url"
+              ],
+              "properties": {
+                "filter": {
+                  "type": "string"
+                },
+                "metadataWebhookService": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "name",
+                      "namespace"
+                    ],
+                    "properties": {
+                      "endpoint": {
+                        "type": "string"
+                      },
+                      "filter": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "namespace": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "single",
+                    "package",
+                    "index"
+                  ]
+                },
+                "mutationWebhookService": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "name",
+                      "namespace"
+                    ],
+                    "properties": {
+                      "endpoint": {
+                        "type": "string"
+                      },
+                      "filter": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "namespace": {
+                        "type": "string"
+                      },
+                      "parameters": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                },
+                "url": {
+                  "type": "string"
+                },
+                "validationWebhookService": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "name",
+                      "namespace"
+                    ],
+                    "properties": {
+                      "endpoint": {
+                        "type": "string"
+                      },
+                      "filter": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "namespace": {
+                        "type": "string"
+                      },
+                      "parameters": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "status": {
+          "description": "ClusterAssetStatus defines the observed state of ClusterAsset",
+          "type": "object",
+          "required": [
+            "lastHeartbeatTime",
+            "observedGeneration",
+            "phase"
+          ],
+          "properties": {
+            "assetRef": {
+              "type": "object",
+              "required": [
+                "baseUrl"
+              ],
+              "properties": {
+                "baseUrl": {
+                  "type": "string"
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "name"
+                    ],
+                    "properties": {
+                      "metadata": {
+                        "type": "object"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "lastHeartbeatTime": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "message": {
+              "type": "string"
+            },
+            "observedGeneration": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "phase": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "list": [],
+    "translations": {
+      "en": {
+        "category": "DD",
+        "status.phase": "Phase",
+        "spec": "My data",
+        "spec.source.filter": "My data",
+        "spec.source.metadataWebhookService[-1:].filter": "Dupa",
+        "columns.container": "Columns Container",
+        "columns.left": "Columns Left",
+        "columns.right": "Columns Right",
+        "status.assetRef": "JSON Data"
+      }
+    }
+  }
 }

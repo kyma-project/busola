@@ -19,6 +19,10 @@ Text widgets render a field as a text field. They are used by default for all st
 }
 ```
 
+<p>
+<img src="./assets/form-widgets/Text.png" style="max-width:100%;">
+</p>
+
 ### Name
 
 Name widgets render a name input field. They contain an automatic name generator, and additionally set the label field when changed. They are added automatically to all forms, and set to the `metadata.name` value.
@@ -31,6 +35,10 @@ Name widgets render a name input field. They contain an automatic name generator
   "widget": "Name"
 }
 ```
+
+<p>
+<img src="./assets/form-widgets/Name.png" style="max-width:100%;">
+</p>
 
 ## Complex widgets
 
@@ -48,6 +56,10 @@ Renders an `object` value as list of dual text fields one used for key the other
   "widget": "KeyValuePair"
 }
 ```
+
+<p>
+<img src="./assets/form-widgets/KeyValue.png" style="max-width:100%;">
+</p>
 
 ## Presentation widgets
 
