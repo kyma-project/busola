@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { createStore } from '@ui-schema/ui-schema';
+import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
+import Immutable from 'immutable';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
@@ -20,15 +23,27 @@ export function ExtensibilityCreate({
     createResource?.template ||
       createTemplate(api, namespace, createResource?.navigation?.scope),
   );
+
+  const [store, setStore] = useState(() =>
+    createStore(createOrderedMap(resource)),
+  );
+
+  const updateResource = res =>
+    setStore(prevStore => prevStore.set('values', Immutable.fromJS(res)));
+
   //TODO filter schema based on form configuration
   const schema = createResource?.schema;
+
+  useEffect(() => {
+    setResource(store.valuesToJS());
+  }, [store.values]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <ResourceForm
       pluralKind={resourceType}
       singularName={resourceType}
       resource={resource}
-      setResource={setResource}
+      setResource={updateResource}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
@@ -40,7 +55,8 @@ export function ExtensibilityCreate({
         schema={schema || {}}
         schemaRules={createResource?.form}
         resource={resource}
-        setResource={setResource}
+        store={store}
+        setStore={setStore}
         onSubmit={() => {}}
         path={createResource?.navigation?.path || ''}
       />
@@ -50,7 +66,8 @@ export function ExtensibilityCreate({
         schema={schema || {}}
         schemaRules={createResource?.form}
         resource={resource}
-        setResource={setResource}
+        store={store}
+        setStore={setStore}
         path={createResource?.navigation?.path || ''}
       />
     </ResourceForm>
