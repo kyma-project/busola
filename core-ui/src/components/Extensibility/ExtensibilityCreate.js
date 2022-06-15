@@ -33,7 +33,7 @@ export function ExtensibilityCreate({
   const [resource, setResource] = useState(
     initialResource ||
       createResource?.template ||
-      createTemplate(api, namespace, createResource?.navigation?.scope),
+      createTemplate(api, namespace, createResource?.resource?.scope),
   );
 
   const [store, setStore] = useState(() =>
@@ -93,7 +93,7 @@ export function ExtensibilityCreate({
         store={store}
         setStore={setStore}
         onSubmit={() => {}}
-        path={createResource?.navigation?.path || ''}
+        path={createResource?.resource?.path || ''}
       />
       <ResourceSchema
         advanced
@@ -103,7 +103,7 @@ export function ExtensibilityCreate({
         resource={resource}
         store={store}
         setStore={setStore}
-        path={createResource?.navigation?.path || ''}
+        path={createResource?.resource?.path || ''}
       />
     </ResourceForm>
   );
