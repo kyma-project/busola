@@ -14,9 +14,9 @@ All sections can be provided as either JSON or YAML.
 
 The `resource` section is required and contains basic information about the resource. For example, `kind` and api details.
 
-- **kind** - _[required]_ kubernetes kind of the resource.
-- **group** - _[required]_ api group used for all requests.
-- **version** - _[required]_ api version used for all requests.
+- **kind** - _[required]_ Kubernetes kind of the resource.
+- **group** - _[required]_ API group used for all requests.
+- **version** - _[required]_ API version used for all requests.
 - **path** - path fragment for this resource used in the url. Defaults to pluralized lowercase `kind`. Used mostly to provide an alternative url to avoid conflicts with other resources.
 - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
 
