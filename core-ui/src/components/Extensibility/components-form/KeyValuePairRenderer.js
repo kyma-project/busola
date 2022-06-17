@@ -2,6 +2,7 @@ import React from 'react';
 import { TransTitle } from '@ui-schema/ui-schema/Translate/TransTitle';
 
 import { KeyValueField } from 'shared/ResourceForm/fields';
+import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 
 export function KeyValuePairRenderer({
   storeKeys,
@@ -12,7 +13,7 @@ export function KeyValuePairRenderer({
 }) {
   return (
     <KeyValueField
-      value={value}
+      value={value ? Object.fromEntries(value) : {}}
       setValue={value => {
         onChange({
           storeKeys,
@@ -20,7 +21,7 @@ export function KeyValuePairRenderer({
           type: 'set',
           schema,
           required,
-          data: { value },
+          data: { value: createOrderedMap(value) },
         });
       }}
       title={<TransTitle schema={schema} storeKeys={storeKeys} />}
