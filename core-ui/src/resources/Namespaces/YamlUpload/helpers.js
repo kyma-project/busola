@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import schema from './schema.json';
+import { schema } from './schema.js';
 const { validator } = require('@exodus/schemasafe');
 export const getResourceKindUrl = resource => {
   return `/${resource?.apiVersion === 'v1' ? 'api' : 'apis'}/${

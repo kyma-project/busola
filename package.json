@@ -13,7 +13,6 @@
     "lint-staged": "lint-staged --concurrent=false"
   },
   "dependencies": {
-    "@exodus/schemasafe": "^1.0.0-rc.6",
     "@sap-theming/theming-base-content": "^11.1.28",
     "@sentry/tracing": "^6.12.0",
     "file-saver": "^2.0.2",
