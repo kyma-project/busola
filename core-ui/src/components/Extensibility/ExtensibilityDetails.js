@@ -65,7 +65,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
       }
       breadcrumbs={breadcrumbs}
       createResourceForm={ExtensibilityCreate}
-      editFormProps={{ resourceSchema: resMetaData }}
+      resourceSchema={resMetaData}
       {...detailsProps}
     />
   );

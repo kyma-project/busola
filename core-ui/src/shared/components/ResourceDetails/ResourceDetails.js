@@ -145,7 +145,7 @@ function Resource({
   windowTitle,
   resourceTitle,
   resourceGraphConfig,
-  editFormProps,
+  resourceSchema,
 }) {
   const { t } = useTranslation(['translation'], { i18n });
   const prettifiedResourceKind = prettifyNameSingular(
@@ -228,7 +228,7 @@ function Resource({
                 namespace={namespace}
                 refetchList={silentRefetch}
                 toggleFormFn={toggleFormFn}
-                {...editFormProps}
+                resourceSchema={resourceSchema}
                 {...props}
               />
             </ErrorBoundary>
