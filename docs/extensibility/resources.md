@@ -12,7 +12,7 @@ All sections can be provided as either JSON or YAML.
 
 ### resource section
 
-The `resource` section is required and contains basic information about the resource. For example, `kind` and api details.
+The `resource` section is required and contains basic information about the resource. For example, `kind` and API details.
 
 - **kind** - _[required]_ Kubernetes kind of the resource.
 - **group** - _[required]_ API group used for all requests.
