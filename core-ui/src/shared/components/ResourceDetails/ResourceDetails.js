@@ -228,7 +228,7 @@ function Resource({
                 namespace={namespace}
                 refetchList={silentRefetch}
                 toggleFormFn={toggleFormFn}
-                resourceSchema={editFormProps?.resourceSchema}
+                {...editFormProps}
                 {...props}
               />
             </ErrorBoundary>
