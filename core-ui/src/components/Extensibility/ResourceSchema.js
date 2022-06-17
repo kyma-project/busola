@@ -1,14 +1,10 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import { UIMetaProvider } from '@ui-schema/ui-schema/UIMeta';
-import {
-  UIStoreProvider,
-  createStore,
-  storeUpdater,
-} from '@ui-schema/ui-schema';
+import { UIStoreProvider, storeUpdater } from '@ui-schema/ui-schema';
 import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
 
 import formWidgets from './components-form';
@@ -30,24 +26,19 @@ const FormStack = injectPluginStack(FormContainer);
 export function ResourceSchema({
   advanced,
   resource,
-  setResource,
   schema,
   schemaRules = [],
   path,
+  store,
+  setStore,
   ...extraParams
 }) {
-  const [store, setStore] = useState(() =>
-    createStore(createOrderedMap(resource)),
-  );
   const onChange = useCallback(
     actions => {
       setStore(prevStore => storeUpdater(actions)(prevStore));
     },
     [setStore],
   );
-  useEffect(() => {
-    setResource(store.valuesToJS());
-  }, [store.values]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const translationBundle = path || 'extensibility';
   const { t } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
@@ -56,7 +47,7 @@ export function ResourceSchema({
     { path: 'metadata.name', simple: true },
     { path: 'metadata.labels' },
     { path: 'metadata.annotations' },
-    ...schemaRules,
+    ...(Array.isArray(schemaRules) ? schemaRules : []),
   ];
   const simpleRules = fullSchemaRules.filter(item => item.simple ?? false);
   const advancedRules = fullSchemaRules.filter(item => item.advanced ?? true);
@@ -77,7 +68,7 @@ export function ResourceSchema({
   return (
     <UIMetaProvider
       widgets={widgets}
-      t={(path, ...props) => t(`${translationBundle}:${path}`, ...props)}
+      t={(path, ...props) => t(`${translationBundle}::${path}`, ...props)}
     >
       <UIStoreProvider
         store={store}
@@ -85,12 +76,7 @@ export function ResourceSchema({
         onChange={onChange}
         schemaRules={myRules}
       >
-        <FormStack
-          isRoot
-          schema={schemaMap}
-          resource={resource}
-          setResource={setResource}
-        />
+        <FormStack isRoot schema={schemaMap} resource={resource} />
       </UIStoreProvider>
     </UIMetaProvider>
   );

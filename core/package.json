@@ -21,6 +21,7 @@
     "@luigi-project/plugin-auth-oidc": "1.8.1",
     "@sentry/browser": "^6.17.4",
     "file-saver": "2.0.2",
+    "pluralize": "^8.0.0",
     "shortid": "^2.2.16"
   },
   "devDependencies": {

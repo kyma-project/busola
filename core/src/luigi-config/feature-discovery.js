@@ -5,6 +5,7 @@ import {
   getCurrentConfig,
   getCurrentContextNamespace,
 } from './cluster-management/cluster-management';
+import { getCustomResources } from './customResources';
 import { apiGroup } from './feature-checks';
 import { createNavigationNodes } from './navigation/navigation-data-init';
 import { fetchPermissions } from './navigation/queries';
@@ -112,11 +113,11 @@ export async function updateFeature(featureName) {
 
   const reloadNodes = async () => {
     try {
+      const authData = getAuthData();
       const activeCluster = getActiveCluster();
-      const permissionSet = await fetchPermissions(
-        getAuthData(),
-        getCurrentContextNamespace(activeCluster?.kubeconfig),
-      );
+      const namespace = getCurrentContextNamespace(activeCluster?.kubeconfig);
+      const permissionSet = await fetchPermissions(authData, namespace);
+      const customResources = await getCustomResources(authData);
 
       const { data } = await fetchCache.get('/apis');
       const groupVersions = extractGroupVersions(data);
@@ -125,6 +126,7 @@ export async function updateFeature(featureName) {
         lastResolvedFeatures,
         groupVersions,
         permissionSet,
+        customResources,
       );
       Luigi.configChanged('navigation.nodes');
     } catch (e) {

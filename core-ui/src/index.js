@@ -26,6 +26,7 @@ i18next
   .init({
     lng: 'en',
     fallbackLng: false,
+    nsSeparator: '::',
     defaultNS: 'translation',
     backend: {
       loadPath: '/i18n/{{lng}}.yaml',

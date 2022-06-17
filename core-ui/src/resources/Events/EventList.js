@@ -155,7 +155,7 @@ export function EventList(props) {
     <Trans i18nKey="events.description">
       <DescriptionLink
         className="fd-link"
-        url="https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/#example-debugging-pending-pods"
+        url="https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/event-v1/"
       />
     </Trans>
   );
