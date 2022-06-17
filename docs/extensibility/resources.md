@@ -42,7 +42,7 @@ The `form` section contains a list of objects that define which fields must be i
 #### Item parameters
 
 - **path** - _[required]_ path to the property that must be displayed in the form. In case of an array the array index is omitted. For example, if `spec.items` is an array and you want to display `name` for each items, the path is `spec.items.name`.
-- **widget** - optional widget to render the field. If no widget is provided a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form widgets](form-widgets.md).
+- **widget** - optional widget used to render the field referred to by the `path` property. If no widget is provided a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form widgets](form-widgets.md).
 - **simple** - to display in the simple form. By default it is false.
 - **advanced** - to display in the advanced form. By default it is true.
 
