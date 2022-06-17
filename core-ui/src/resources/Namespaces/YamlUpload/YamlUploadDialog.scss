@@ -9,7 +9,7 @@
   ul {
     // match Monaco height
     max-height: 800px;
-    overflow: auto;
+    overflow-y: auto;
   }
 
   &__layout {

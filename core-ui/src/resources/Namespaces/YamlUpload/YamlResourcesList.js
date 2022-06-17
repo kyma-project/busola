@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import pluralize from 'pluralize';
-import { Icon, MessageStrip } from 'fundamental-react';
+import { Button, Icon, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
@@ -11,11 +11,11 @@ import {
   STATE_CREATED,
 } from './useUploadResources';
 import './YamlResourcesList.scss';
+import { validateResourceBySchema } from './helpers';
 
 export function YamlResourcesList({ resourcesData, namespace }) {
   const { t } = useTranslation();
   const { namespaceNodes } = useMicrofrontendContext();
-
   const filteredResources = resourcesData?.filter(
     resource => resource !== null,
   );
@@ -39,7 +39,7 @@ export function YamlResourcesList({ resourcesData, namespace }) {
     );
   };
 
-  const getWarning = resource => {
+  const isInCurrentNamespace = resource => {
     const resourceType = pluralize(resource?.kind?.toLowerCase());
     const resourceNamespace = resource?.metadata?.namespace;
     const hasCurrentNamespace =
@@ -48,9 +48,13 @@ export function YamlResourcesList({ resourcesData, namespace }) {
       n => n.resourceType === resourceType,
     );
 
-    if (isKnownNamespaceWide && !hasCurrentNamespace) {
+    return !(isKnownNamespaceWide && !hasCurrentNamespace);
+  };
+
+  const NamespaceWarning = ({ resource }) => {
+    if (!isInCurrentNamespace(resource)) {
       return (
-        <MessageStrip type="warning">
+        <MessageStrip type="warning" className="fd-margin-top--sm">
           {t('upload-yaml.warnings.different-namespace', {
             namespace: resource?.metadata?.namespace,
           })}
@@ -72,6 +76,61 @@ export function YamlResourcesList({ resourcesData, namespace }) {
       default:
         return 'question-mark';
     }
+  };
+
+  const FilteredResourceDetails = ({ resource }) => {
+    const { t } = useTranslation();
+    const errors = useMemo(() => validateResourceBySchema(resource), [
+      resource,
+    ]);
+    const [areWarningsVisible, setVisibleWarnings] = useState(false);
+    const isButtonShown = errors.length > 0 || !isInCurrentNamespace(resource);
+    return (
+      <li
+        className="fd-margin-begin--sm fd-margin-end--sm fd-margin-bottom--sm"
+        style={{ listStyle: 'disc' }}
+      >
+        <p style={{ fontSize: '16px' }}>
+          {resource?.kind} {resource?.metadata?.name}
+        </p>
+        {isButtonShown && (
+          <Button
+            glyph={
+              areWarningsVisible
+                ? 'navigation-up-arrow'
+                : 'navigation-down-arrow'
+            }
+            onClick={() => {
+              setVisibleWarnings(prevState => !prevState);
+            }}
+            type="attention"
+            style={{
+              width: '100%',
+            }}
+          >
+            {!areWarningsVisible
+              ? t('common.buttons.see-warnings')
+              : t('common.buttons.hide-warnings')}
+          </Button>
+        )}
+        {areWarningsVisible ? (
+          <ul>
+            <NamespaceWarning resource={resource} />
+            {errors.map(err => (
+              <li>
+                <MessageStrip
+                  type="warning"
+                  key={err}
+                  className="fd-margin-top--sm"
+                >
+                  {err}
+                </MessageStrip>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </li>
+    );
   };
 
   const getStatus = status => {
@@ -96,14 +155,10 @@ export function YamlResourcesList({ resourcesData, namespace }) {
           </p>
           <ul>
             {filteredResources?.map(r => (
-              <li
-                key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}
-                className="fd-margin-begin--sm"
-                style={{ listStyle: 'disc' }}
-              >
-                {r?.value?.kind} {r?.value?.metadata?.name}
-                {getWarning(r.value)}
-              </li>
+              <FilteredResourceDetails
+                resource={r?.value}
+                key={`${r?.value?.kind}-${r.value?.metadata?.name}`}
+              />
             ))}
           </ul>
         </div>
