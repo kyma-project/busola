@@ -10,7 +10,6 @@ import './YamlUploadDialog.scss';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { validateResourceBySchema } from './helpers';
 
 export const YamlUpload = React.lazy(() => import('./YamlUpload'));
 
@@ -37,10 +36,6 @@ export function YamlUploadDialog({ show, onCancel }) {
     setLastOperationState,
     defaultNamespace,
   );
-
-  const validateResources = () => {
-    validateResourceBySchema(resourcesWithStatuses[0]);
-  };
 
   useEventListener('keydown', ({ key }) => {
     if (key === 'Escape') {
@@ -78,7 +73,7 @@ export function YamlUploadDialog({ show, onCancel }) {
     ) : (
       <>
         <Button
-          onClick={validateResources}
+          onClick={fetchResources}
           disabled={!resourcesWithStatuses?.length}
           option="emphasized"
         >

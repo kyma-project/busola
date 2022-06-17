@@ -463,10 +463,12 @@ common:
     delete: Delete
     edit: Edit
     edit-yaml: Edit YAML
+    hide-warnings: Hide Warnings
     load: Load
     ok: OK
     restart: Restart
     save: Save
+    see-warnings: See Warnings
     submit: Submit
     update: Update
     view-yaml: View YAML

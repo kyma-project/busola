@@ -60,7 +60,7 @@ function YamlUpload({
       </p>
       <Editor
         autocompletionDisabled
-        height="400px"
+        height="60vh"
         language="yaml"
         value={yamlContentString}
         onChange={updateYamlContent}

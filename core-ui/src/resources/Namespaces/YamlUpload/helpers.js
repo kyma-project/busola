@@ -19,24 +19,18 @@ export const getResourceUrl = (resource, namespace) => {
   return `${apiPath}${namespacePart}/${resourceType}`;
 };
 
-export const validateResourceBySchema = (res, rule) => {
-  let erroIds = [];
-  const errors = schema.rules.reduce(
-    (accumulator, currentRule, index, array) => {
-      try {
-        const schemaValidator = validator(currentRule.schema);
-        const result = schemaValidator(res.value);
-        if (!currentRule.enabledByDefault) return [...accumulator];
-        if (!result) return [currentRule.messageOnFailure, ...accumulator];
-        return [...accumulator];
-      } catch (e) {
-        erroIds = [...erroIds, currentRule.id];
-        console.error(e);
-        return [...accumulator];
-      }
-    },
-    [],
-  );
-  console.log(erroIds);
-  console.log(errors);
+export const validateResourceBySchema = res => {
+  if (!res) return;
+  const errors = schema.rules.reduce((accumulator, currentRule) => {
+    try {
+      const schemaValidator = validator(currentRule.schema);
+      const result = schemaValidator(res);
+      if (!currentRule.enabledByDefault) return [...accumulator];
+      if (!result) return [currentRule.messageOnFailure, ...accumulator];
+      return [...accumulator];
+    } catch (e) {
+      return [...accumulator];
+    }
+  }, []);
+  return errors;
 };
