@@ -17,9 +17,9 @@ const widgets = {
   ...formWidgets,
   pluginStack: [firstPlugin, SchemaRulesInjector, ...otherPlugins],
 };
-console.log(widgets);
+
 function FormContainer({ children }) {
-  return <div container>{children}</div>;
+  return <div container="true">{children}</div>;
 }
 const FormStack = injectPluginStack(FormContainer);
 
