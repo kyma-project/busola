@@ -16,7 +16,7 @@ export function ResourceRefRender({
 
   const url = `/api/v1/${resourceType}`;
 
-  const { data, loading } = useGetList()(url);
+  const { data, loading, error } = useGetList()(url);
   return (
     <ExternalResourceRef
       value={value}
@@ -33,6 +33,7 @@ export function ResourceRefRender({
       }}
       required={required}
       loading={loading}
+      error={error}
     />
   );
 }
