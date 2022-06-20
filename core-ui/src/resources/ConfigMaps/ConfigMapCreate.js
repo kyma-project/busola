@@ -14,6 +14,7 @@ import {
 import { createConfigMapTemplate, createPresets } from './helpers';
 
 export function ConfigMapCreate({
+  namespace,
   formElementRef,
   onChange,
   setCustomValid,
@@ -21,9 +22,11 @@ export function ConfigMapCreate({
   resourceUrl,
   ...props
 }) {
-  const { namespaceId } = useMicrofrontendContext();
+  console.log(namespace);
   const [configMap, setConfigMap] = useState(
-    initialConfigMap ? cloneDeep(initialConfigMap) : createConfigMapTemplate(),
+    initialConfigMap
+      ? cloneDeep(initialConfigMap)
+      : createConfigMapTemplate(namespace || ''),
   );
   const { t } = useTranslation();
 
@@ -37,7 +40,7 @@ export function ConfigMapCreate({
       setResource={setConfigMap}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={createPresets([], namespaceId, t)}
+      presets={createPresets([], namespace || '', t)}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
     >
