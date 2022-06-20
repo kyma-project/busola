@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
@@ -14,6 +13,7 @@ import {
 import { createConfigMapTemplate, createPresets } from './helpers';
 
 export function ConfigMapCreate({
+  namespace,
   formElementRef,
   onChange,
   setCustomValid,
@@ -21,9 +21,10 @@ export function ConfigMapCreate({
   resourceUrl,
   ...props
 }) {
-  const { namespaceId } = useMicrofrontendContext();
   const [configMap, setConfigMap] = useState(
-    initialConfigMap ? cloneDeep(initialConfigMap) : createConfigMapTemplate(),
+    initialConfigMap
+      ? cloneDeep(initialConfigMap)
+      : createConfigMapTemplate(namespace || ''),
   );
   const { t } = useTranslation();
 
@@ -37,7 +38,7 @@ export function ConfigMapCreate({
       setResource={setConfigMap}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={createPresets([], namespaceId, t)}
+      presets={createPresets([], namespace || '', t)}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
     >
