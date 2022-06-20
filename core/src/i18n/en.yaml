@@ -2022,6 +2022,7 @@ settings:
     dontConfirmDelete: Delete without confirmation
     showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
+    validateYAMLFiles: Validate YAMl files
   interface:
     description: Appearance, language
     themes:

@@ -21,6 +21,7 @@ export const OPERATION_STATE_SOME_FAILED = 'SOME_FAILED';
 export function YamlUploadDialog({ show, onCancel }) {
   const { t } = useTranslation();
   const { namespaceId } = useMicrofrontendContext();
+  const [isValidationOn, setValidationOn] = useState(true);
   const defaultNamespace = namespaceId || 'default';
 
   const [resourcesData, setResourcesData] = useState();
@@ -101,10 +102,13 @@ export function YamlUploadDialog({ show, onCancel }) {
             resourcesData={resourcesData}
             setResourcesData={updateYamlContent}
             setLastOperationState={setLastOperationState}
+            handleYAMLValidation={() => setValidationOn(prev => !prev)}
+            isValidationOn={isValidationOn}
           />
           <div className="fd-margin-begin--tiny fd-margin-end--tiny">
             {t('upload-yaml.info', { namespace: defaultNamespace })}
             <YamlResourcesList
+              isValidationOn={isValidationOn}
               resourcesData={resourcesWithStatuses}
               namespace={namespaceId}
             />
