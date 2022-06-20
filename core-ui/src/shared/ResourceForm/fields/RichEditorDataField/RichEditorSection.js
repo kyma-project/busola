@@ -3,15 +3,15 @@ import { CollapsibleSection } from '../../components/CollapsibleSection';
 import { FormField } from '../../components/FormField';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
+import { Button } from 'fundamental-react';
 
-export function RichEditorSection({ dataKey: key, value, onChange }) {
+export function RichEditorSection({ dataKey: key, value, onChange, onDelete }) {
   const [internalKey, setInternalKey] = useState();
   const [internalValue, setInternalValue] = useState();
-  // const deleteAction = onDelete && (
-  //   <Button glyph="delete" compact type="negative" onClick={onDelete}></Button>
-  // );
 
-  // console.log('int val', internalState);
+  const deleteAction = onDelete && (
+    <Button glyph="delete" compact type="negative" onClick={onDelete}></Button>
+  );
 
   useEffect(() => {
     setInternalKey(key);
@@ -26,7 +26,7 @@ export function RichEditorSection({ dataKey: key, value, onChange }) {
       title={key}
       defaultOpen
       canChangeState={false}
-      // actions={deleteAction}
+      actions={deleteAction}
     >
       <FormField
         value={internalKey}
