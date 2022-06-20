@@ -5,6 +5,7 @@ import pluralize from 'pluralize';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { prettifyKind } from 'shared/utils/helpers';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
@@ -13,24 +14,24 @@ import { Widget } from './components/Widget';
 
 export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
+  const { path, kind } = resMetaData?.resource ?? {};
 
   const schema = resMetaData?.schema;
 
-  const listProps = usePrepareListProps(
-    resMetaData.navigation.path,
-    resMetaData.navigation.label,
-  );
+  const listProps = usePrepareListProps(path, 'name');
 
-  if (resMetaData.resource?.kind) {
+  if (kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
       /[a-z0-9-]+\/?$/,
-      pluralize(resMetaData.resource?.kind).toLowerCase(),
+      pluralize(kind).toLowerCase(),
     );
   }
-  listProps.createFormProps = { resource: resMetaData };
+  listProps.createFormProps = { resourceSchema: resMetaData };
+
   listProps.resourceName = t('name', {
-    defaultValue: resMetaData.resource?.kind,
+    defaultValue: pluralize(prettifyKind(kind)),
   });
+
   listProps.description = t('description', {
     defaultValue: ' ',
   });
@@ -50,13 +51,14 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
 export const ExtensibilityList = () => {
   const { t } = useTranslation();
   const resMetaData = useGetCRbyPath();
+  const { path } = resMetaData.resource ?? {};
 
   return (
-    <TranslationBundleContext.Provider value={resMetaData.navigation.path}>
+    <TranslationBundleContext.Provider value={path}>
       <ErrorBoundary
         customMessage={t('extensibility.error')}
         displayButton={false}
-        key={resMetaData.navigation.path}
+        key={path}
       >
         <ExtensibilityListCore resMetaData={resMetaData} />
       </ErrorBoundary>

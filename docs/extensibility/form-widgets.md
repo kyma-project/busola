@@ -1,6 +1,6 @@
 # Form widgets
 
-Widgets available for resource forms.
+Form widgets are used in the resource forms.
 
 ## Simple widgets
 
@@ -27,6 +27,10 @@ Text widgets render a field as a text field. They are used by default for all st
 
 Name widgets render a name input field. They contain an automatic name generator, and additionally set the label field when changed. They are added automatically to all forms, and set to the `metadata.name` value.
 
+#### Widget-specific parameters
+
+- **extraPaths** - an array of extra paths to fill in with the contents of the field. Each path can either be a period-separated string or an array of strings.
+
 #### Example
 
 ```json
@@ -42,11 +46,11 @@ Name widgets render a name input field. They contain an automatic name generator
 
 ## Complex widgets
 
-Complex widgets handle more complex values than a simple scalar. Either arrays or objects.
+Complex widgets handle more advanced data structures such as arrays or objects.
 
 ### KeyValuePair
 
-Renders an `object` value as list of dual text fields one used for key the other for value, allowing for adding and removing entries.
+KeyValuePair widgets render an `object` value as a list of dual text fields. One is used for a key and the other for a value, allowing for adding and removing entries.
 
 #### Example
 
@@ -67,7 +71,7 @@ Presentation widgets do not handle data directly and only serve to group content
 
 ### FormGroup
 
-FormGroup renders an `object` as a collapsible section. Requires the children property to render the content of the section.
+FormGroup widgets render an `object` as a collapsible section.
 
 #### Example
 

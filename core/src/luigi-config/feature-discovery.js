@@ -5,6 +5,7 @@ import {
   getCurrentConfig,
   getCurrentContextNamespace,
 } from './cluster-management/cluster-management';
+import { getCustomResources } from './customResources';
 import { apiGroup } from './feature-checks';
 import { createNavigationNodes } from './navigation/navigation-data-init';
 import { fetchPermissions } from './navigation/queries';

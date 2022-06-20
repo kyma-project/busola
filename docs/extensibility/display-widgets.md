@@ -1,6 +1,6 @@
 # Display widgets
 
-Widgets available for lists and details pages.
+Display widgets are used in the lists and details pages.
 
 ## Inline widgets
 
@@ -29,10 +29,10 @@ Badge widgets render texts as a status badge, using a set of predefined rules to
 
 The following values are automatically handled:
 
-- rendered as an information: initial, pending, available, released.
-- rendered as a success: ready, bound, running, success, succeeded, ok.
-- rendered as a warning: unknown, warning.
-- rendered as an error: error, failure, invalid.
+- rendered as an information: `initial`, `pending`, `available`, `released`.
+- rendered as a success: `ready`, `bound`, `running`, `success`, `succeeded`, `ok`.
+- rendered as a warning: `unknown`, `warning`.
+- rendered as an error: `error`, `failure`, `invalid`.
 
 #### Example
 
@@ -104,7 +104,7 @@ Columns widgets render the child widgets in two columns.
 
 ### CodeViewer
 
-CodeViewer displays values using the code highlight.
+CodeViewer widgets display values using the code highlight.
 
 #### Widget-specific parameters
 
@@ -126,7 +126,7 @@ CodeViewer displays values using the code highlight.
 
 ### Table
 
-Table displays array data as rows of a table instead of free-standing components. The `children` parameter defines the column renderers to use. Similar to the `list` section of the config map, only inline widgets should be used as children.
+Table widgets display array data as rows of a table instead of free-standing components. The `children` parameter defines the values used to render the columns. Similar to the `list` section of the Config Map, only inline widgets should be used as children.
 
 #### Example
 
