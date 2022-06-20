@@ -20,7 +20,7 @@ Text widgets render a field as a text field. They are used by default for all st
 ```
 
 <p>
-<img src="./assets/form-widgets/Text.png" style="max-width:100%;">
+<img src="./assets/form-widgets/Text.png" alt="Example of a text widget" style="max-width:100%;">
 </p>
 
 ### Name
