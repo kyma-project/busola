@@ -1,2 +1,38 @@
 {
+  "services": {
+    "resource": {
+      "kind": "Service",
+      "group": "core",
+      "version": "v1",
+      "scope": "namespace",
+      "path": "services-new"
+    },
+    "details": {},
+    "list": [{
+      "path": "metadata.ownerReferences",
+      "widget": "ControlledByKind"
+    }, {
+      "path": "spec.type"
+    }, {
+      "path": "spec.clusterIP"
+    }, {
+      "path": "spec.externalIPs"
+    },  {
+      "path": "spec.ports"
+    }
+  ],
+    "form": {},
+    "schema": {},
+    "translations": {
+      "en": {
+        "name": "SERVICE NEW",
+        "category": "DD",
+        "spec.type": "Service type",
+        "spec.ports": "Ports //TODO",
+        "spec.clusterIP": "Cluster IP",
+        "spec.externalIPs": "External IPs //TODO",
+        "metadata.ownerReferences": "Controlled by"
+      }
+    }
+  }
 }

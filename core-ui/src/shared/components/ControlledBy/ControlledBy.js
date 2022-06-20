@@ -99,43 +99,69 @@ export const GoToDetailsLink = ({
     );
   }
 };
+
 export const ControlledBy = ({ ownerReferences }) => {
-  if (!ownerReferences?.length) return EMPTY_TEXT_PLACEHOLDER;
+  if (
+    !ownerReferences ||
+    (Array.isArray(ownerReferences) && !ownerReferences?.length)
+  )
+    return EMPTY_TEXT_PLACEHOLDER;
+
+  const OwnerRef = ({ owner, className }) => {
+    const resource = owner.kind.endsWith('s')
+      ? `${owner.kind.toLowerCase()}es`
+      : `${owner.kind.toLowerCase()}s`;
+
+    return (
+      <div key={owner.name} className={className}>
+        {owner.kind}
+        &nbsp;
+        <GoToDetailsLink
+          resource={resource}
+          apiVersion={owner.apiVersion}
+          name={owner.name}
+        />
+      </div>
+    );
+  };
+
   return (
     <>
-      {ownerReferences.map((owner, index) => {
-        const className = index > 0 ? 'fd-margin-top--sm' : '';
-        const resource = owner.kind.endsWith('s')
-          ? `${owner.kind.toLowerCase()}es`
-          : `${owner.kind.toLowerCase()}s`;
-        return (
-          <div key={owner.name} className={className}>
-            {owner.kind}
-            &nbsp;
-            <GoToDetailsLink
-              resource={resource}
-              apiVersion={owner.apiVersion}
-              name={owner.name}
-            />
-          </div>
-        );
-      })}
+      {Array.isArray(ownerReferences) ? (
+        ownerReferences.map((owner, index) => {
+          const className = index > 0 ? 'fd-margin-top--sm' : '';
+          return <OwnerRef owner={owner} className={className} />;
+        })
+      ) : (
+        <OwnerRef owner={ownerReferences} className={''} />
+      )}
     </>
   );
 };
 
 export const ControlledByKind = ({ ownerReferences }) => {
-  if (!ownerReferences?.length) return EMPTY_TEXT_PLACEHOLDER;
+  if (
+    !ownerReferences ||
+    (Array.isArray(ownerReferences) && !ownerReferences?.length)
+  )
+    return EMPTY_TEXT_PLACEHOLDER;
+
+  const OwnerRef = ({ owner, className }) => (
+    <div key={owner.name} className={className}>
+      {owner.kind}
+    </div>
+  );
+
   return (
     <>
-      {ownerReferences.map((owner, index) => {
-        const className = index > 0 ? 'fd-margin-top--sm' : '';
-        return (
-          <div key={owner.name} className={className}>
-            {owner.kind}
-          </div>
-        );
-      })}
+      {Array.isArray(ownerReferences) ? (
+        ownerReferences.map((owner, index) => {
+          const className = index > 0 ? 'fd-margin-top--sm' : '';
+          return <OwnerRef owner={owner} className={className} />;
+        })
+      ) : (
+        <OwnerRef owner={ownerReferences} className={''} />
+      )}
     </>
   );
 };
