@@ -1,0 +1,13 @@
+.columns-input {
+  display: grid;
+  grid-template-columns: 1fr 8fr 8fr 3fr;
+  column-gap: 20px;
+
+  .fd-checkbox__label {
+    padding: 6px;
+  }
+}
+
+.resource-form--unset-height {
+  height: unset;
+}

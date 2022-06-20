@@ -1,6 +1,8 @@
-import { config } from '../config';
 import i18next from 'i18next';
+import pluralize from 'pluralize';
+
 import { coreUIViewGroupName } from './static-navigation-model';
+import { config } from '../config';
 
 // this fn is cloned in core-ui 'helpers.js' as 'useGetTranslation'. Modify it also there
 const translate = translationObj => {
@@ -26,7 +28,7 @@ const getCustomNodes = (crs, scope) => {
   try {
     customPaths =
       crs?.map(cr => {
-        const translationBundle = cr.navigation?.path || 'extensibility';
+        const translationBundle = cr.resource?.path || 'extensibility';
         i18next.addResourceBundle(
           i18next.language,
           translationBundle,
@@ -43,24 +45,24 @@ const getCustomNodes = (crs, scope) => {
               'custom-resources.title',
             ]),
             collapsible: true,
-            icon: cr.navigation?.icon || 'customize',
+            icon: cr.resource?.icon || 'customize',
           },
           resourceType: resource.kind.toLowerCase(),
-          pathSegment: cr.navigation?.path,
+          pathSegment: resource?.path,
           label: i18next.t(`${translationBundle}::name`, {
-            defaultValue: resource.kind,
+            defaultValue: pluralize(resource.kind),
           }),
           viewUrl:
             config.coreUIModuleUrl +
             `${scope === 'namespace' ? '/namespaces/:namespaceId' : ''}/${
-              cr.navigation?.path
+              cr.resource?.path
             }?` +
             toSearchParamsString({
               resourceApiPath: api,
               hasDetailsView: !!cr.details,
             }),
           keepSelectedForChildren: true,
-          navigationContext: cr.navigation?.path,
+          navigationContext: cr.resource?.path,
           context: {
             customResource: cr,
           },
@@ -69,13 +71,13 @@ const getCustomNodes = (crs, scope) => {
               pathSegment: 'details',
               children: [
                 {
-                  pathSegment: `:${cr.navigation?.path}Name`,
+                  pathSegment: `:${cr.resource?.path}Name`,
                   resourceType: resource.kind.toLowerCase(),
                   viewUrl:
                     config.coreUIModuleUrl +
                     `${
                       scope === 'namespace' ? '/namespaces/:namespaceId' : ''
-                    }/${cr.navigation?.path}/:${cr.navigation?.path}Name?` +
+                    }/${cr.resource?.path}/:${cr.resource?.path}Name?` +
                     toSearchParamsString({
                       resourceApiPath: api,
                     }),
@@ -94,7 +96,7 @@ const getCustomNodes = (crs, scope) => {
 export const getCustomPaths = (customResources, scope) => {
   const getScopedCrs = (crs, scope) => {
     const scopedCrs = crs?.filter(cr => {
-      const crScope = cr.navigation?.scope;
+      const crScope = cr.resource?.scope;
       if (
         !crScope ||
         (crScope.toLowerCase() !== 'namespace' &&
@@ -114,9 +116,8 @@ export const getCustomPaths = (customResources, scope) => {
   const getValidCrs = crs => {
     const validCrs = crs?.filter(cr => {
       const isValidCr =
-        cr.navigation &&
-        typeof cr.navigation?.path === 'string' &&
         cr.resource &&
+        typeof cr.resource.path === 'string' &&
         typeof cr.resource.kind === 'string' &&
         typeof cr.resource.group === 'string' &&
         typeof cr.resource.version === 'string';

@@ -518,6 +518,7 @@ common:
     value: Value
     version: Version
   labels:
+    category: Category
     data: Data
     default-preset: Default
     hostname: Hostname
@@ -995,6 +996,25 @@ events:
   title: Events
 extensibility:
   error: Your extension configuration is incorrect.
+  starter-modal:
+    buttons:
+      open-modal: Create UI
+    headers:
+      details-summary: Details Summary
+      field-name: Field Name
+      form-fields: Form Fields
+      list-columns: List Columns
+    messages:
+      configmap-info: <0>{{name}}</0> Config Map is created or updated in <1>kube-public</1> Namespace.
+      docs-info: For more information, see <0>Extensibility documentation</0>.
+      error: Failed to upsert UI configuration.
+      no-columns: No example values could be inferred from the CRD.
+      scaffold-only: Configuration above can be changed later at the Config Map level.
+      success: UI configuration upserted.
+    title: Create UI for {{kind}} CRD
+  widgets:
+    table:
+      error: The table widget configuration is incorrect. Path value must be an array type.
 functions:
   buttons:
     connected-repositories: Connected Repositories
