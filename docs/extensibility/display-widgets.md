@@ -121,7 +121,7 @@ CodeViewer widgets display values using the code highlight.
 ```
 
 <p>
-<img src="./assets/display-widgets/CodeViewer.png" style="max-width:100%;">
+<img src="./assets/display-widgets/CodeViewer.png" alt="Example of a CodeViewer widget" style="max-width:100%;">
 </p>
 
 ### Table
