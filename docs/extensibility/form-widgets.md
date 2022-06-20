@@ -62,7 +62,7 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 ```
 
 <p>
-<img src="./assets/form-widgets/KeyValue.png" style="max-width:100%;">
+<img src="./assets/form-widgets/KeyValue.png" alt="Example of a KeyValuePair widget" style="max-width:100%;">
 </p>
 
 ## Presentation widgets
