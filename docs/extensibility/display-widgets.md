@@ -20,7 +20,7 @@ Text widgets render values as a simple text. This is the default behavior for al
 ```
 
 <p>
-<img src="./assets/display-widgets/Text.png" style="max-width:20%;">
+<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" style="max-width:20%;">
 </p>
 
 ### Badge
