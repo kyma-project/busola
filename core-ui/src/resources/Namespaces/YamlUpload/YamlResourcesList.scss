@@ -36,3 +36,20 @@
     color: var(--sapNegativeColor);
   }
 }
+
+.warning-button {
+  display: flex;
+  flex-direction: row-reverse;
+  width: 100%;
+
+  span {
+    width: 100%;
+    margin-left: 10px;
+  }
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+  }
+}

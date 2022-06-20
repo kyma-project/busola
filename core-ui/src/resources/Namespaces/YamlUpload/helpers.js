@@ -20,6 +20,7 @@ export const getResourceUrl = (resource, namespace) => {
 };
 
 export const validateResourceBySchema = res => {
+  console.log('res');
   if (!res) return;
   const errors = schema.rules.reduce((accumulator, currentRule) => {
     try {

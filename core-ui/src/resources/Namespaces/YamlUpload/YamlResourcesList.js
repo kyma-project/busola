@@ -13,7 +13,11 @@ import {
 import './YamlResourcesList.scss';
 import { validateResourceBySchema } from './helpers';
 
-export function YamlResourcesList({ resourcesData, namespace }) {
+export function YamlResourcesList({
+  resourcesData,
+  namespace,
+  isValidationOn,
+}) {
   const { t } = useTranslation();
   const { namespaceNodes } = useMicrofrontendContext();
   const filteredResources = resourcesData?.filter(
@@ -78,58 +82,83 @@ export function YamlResourcesList({ resourcesData, namespace }) {
     }
   };
 
-  const FilteredResourceDetails = ({ resource }) => {
-    const { t } = useTranslation();
-    const errors = useMemo(() => validateResourceBySchema(resource), [
-      resource,
-    ]);
-    const [areWarningsVisible, setVisibleWarnings] = useState(false);
-    const isButtonShown = errors.length > 0 || !isInCurrentNamespace(resource);
+  const WarningButton = ({
+    handleShowWarnings,
+    areWarningsVisible,
+    warningsAmount,
+  }) => {
     return (
-      <li
-        className="fd-margin-begin--sm fd-margin-end--sm fd-margin-bottom--sm"
-        style={{ listStyle: 'disc' }}
+      <Button
+        onClick={handleShowWarnings}
+        className="warning-button"
+        type="attention"
+        glyph={
+          areWarningsVisible ? 'navigation-up-arrow' : 'navigation-down-arrow'
+        }
       >
-        <p style={{ fontSize: '16px' }}>
-          {resource?.kind} {resource?.metadata?.name}
-        </p>
-        {isButtonShown && (
-          <Button
-            glyph={
-              areWarningsVisible
-                ? 'navigation-up-arrow'
-                : 'navigation-down-arrow'
-            }
-            onClick={() => {
-              setVisibleWarnings(prevState => !prevState);
-            }}
-            type="attention"
-            style={{
-              width: '100%',
-            }}
-          >
+        <div>
+          <p>
             {!areWarningsVisible
               ? t('common.buttons.see-warnings')
               : t('common.buttons.hide-warnings')}
-          </Button>
+          </p>
+          <p>{warningsAmount}</p>
+        </div>
+      </Button>
+    );
+  };
+
+  const ValidationWarnings = ({ resource }) => {
+    const warnings = useMemo(() => validateResourceBySchema(resource), [
+      resource,
+    ]);
+    const [areWarningsVisible, setVisibleWarnings] = useState(false);
+    const isButtonShown =
+      warnings.length > 0 || !isInCurrentNamespace(resource);
+    return (
+      <>
+        {isButtonShown && (
+          <WarningButton
+            handleShowWarnings={() => {
+              setVisibleWarnings(prevState => !prevState);
+            }}
+            areWarningsVisible={areWarningsVisible}
+            warningsAmount={warnings.length}
+          />
         )}
         {areWarningsVisible ? (
           <ul>
             <NamespaceWarning resource={resource} />
-            {errors.map(err => (
-              <li>
-                <MessageStrip
-                  type="warning"
-                  key={err}
-                  className="fd-margin-top--sm"
-                >
+            {warnings.map(err => (
+              <li key={`${resource?.kind}-${resource?.metadata?.name}-${err}`}>
+                <MessageStrip type="warning" className="fd-margin-top--sm">
                   {err}
                 </MessageStrip>
               </li>
             ))}
           </ul>
         ) : null}
-      </li>
+      </>
+    );
+  };
+
+  const FilteredResourcesDetails = () => {
+    console.log(isValidationOn);
+    return (
+      <ul>
+        {filteredResources.map(r => (
+          <li
+            className="fd-margin-begin--sm fd-margin-end--sm fd-margin-bottom--sm"
+            style={{ listStyle: 'disc' }}
+            key={`${r?.value?.kind}-${r.value?.metadata?.name}`}
+          >
+            <p style={{ fontSize: '16px' }}>
+              {r?.value?.kind} {r?.value?.metadata?.name}
+            </p>
+            {isValidationOn ? <ValidationWarnings resource={r?.value} /> : null}
+          </li>
+        ))}
+      </ul>
     );
   };
 
@@ -153,14 +182,7 @@ export function YamlResourcesList({ resourcesData, namespace }) {
               },
             )}
           </p>
-          <ul>
-            {filteredResources?.map(r => (
-              <FilteredResourceDetails
-                resource={r?.value}
-                key={`${r?.value?.kind}-${r.value?.metadata?.name}`}
-              />
-            ))}
-          </ul>
+          <FilteredResourcesDetails />
         </div>
       );
     } else {
