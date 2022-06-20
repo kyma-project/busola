@@ -22,7 +22,6 @@ export function ConfigMapCreate({
   resourceUrl,
   ...props
 }) {
-  console.log(namespace);
   const [configMap, setConfigMap] = useState(
     initialConfigMap
       ? cloneDeep(initialConfigMap)
