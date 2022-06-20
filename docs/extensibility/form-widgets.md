@@ -41,7 +41,7 @@ Name widgets render a name input field. They contain an automatic name generator
 ```
 
 <p>
-<img src="./assets/form-widgets/Name.png" style="max-width:100%;">
+<img src="./assets/form-widgets/Name.png" alt="Example of a name widget" style="max-width:100%;">
 </p>
 
 ## Complex widgets
