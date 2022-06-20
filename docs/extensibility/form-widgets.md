@@ -89,5 +89,5 @@ FormGroup widgets render an `object` as a collapsible section.
 ```
 
 <p>
-<img src="./assets/form-widgets/FormGroup.png" style="max-width:100%;">
+<img src="./assets/form-widgets/FormGroup.png" alt="Example of a FormGroup widget" style="max-width:100%;">
 </p>
