@@ -12,4 +12,4 @@ The `examples` folder showcases some of the Busola features and concepts.
 
 ## Installation
 
-For instructions on installing and running an example, refer to the `README.md` document of the specific example.
+To install and run an example, refer to the `README.md` document of the specific example.
