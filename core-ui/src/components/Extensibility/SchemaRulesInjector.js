@@ -32,7 +32,7 @@ export function SchemaRulesInjector({
     .map(item => (typeof item === 'number' ? '[]' : item))
     .join('.')
     .replace('.[]', '[]');
-  const flatPath = path.replace(/\[\]/g, '');
+  const flatPath = path.replace(/\[]/g, '');
 
   let newSchema;
   if (!visiblePaths.includes(flatPath)) {

@@ -12,18 +12,26 @@ export function ResourceRefRender({
   required,
   ...props
 }) {
+  // TODO the value obtained by ui-schema is undefined for this component
+  const backupValueFromResource = storeKeys
+    .toArray()
+    .reduce((valueSoFar, currKey) => {
+      return valueSoFar[currKey];
+    }, props.resource);
+
   const resourceType = pluralize(schema.get('kind') || '').toLowerCase();
 
   const url = `/api/v1/${resourceType}`;
 
   const { data, loading, error } = useGetList()(url);
+
   return (
     <ExternalResourceRef
-      value={value}
+      value={value || backupValueFromResource}
       resources={data}
       setValue={value => {
         onChange({
-          storeKeys,
+          storeKeys: storeKeys,
           scopes: ['value'],
           type: 'set',
           schema,
