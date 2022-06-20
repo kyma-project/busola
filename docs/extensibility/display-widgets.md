@@ -139,5 +139,5 @@ Table widgets display array data as rows of a table instead of free-standing com
 ```
 
 <p>
-<img src="./assets/display-widgets/Table.png" style="max-width:100%;">
+<img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="max-width:100%;">
 </p>
