@@ -121,12 +121,12 @@ context('Test Command Palette navigation', () => {
     // navigate to generic CR
     openCommandPalette();
 
-    getQueryInput().type('applicationmappings');
+    getQueryInput().type('verticalpodautoscalercheckpoints');
 
     getQueryInput().trigger('keydown', { key: 'Enter' });
 
     cy.getIframeBody()
-      .contains('ApplicationMappings')
+      .contains('VerticalPodAutoscalerCheckpoints')
       .should('be.visible');
   });
 
