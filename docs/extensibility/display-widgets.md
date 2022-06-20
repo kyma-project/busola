@@ -99,7 +99,7 @@ Columns widgets render the child widgets in two columns.
 ```
 
 <p>
-<img src="./assets/display-widgets/Columns.png" style="max-width:100%;">
+<img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="max-width:100%;">
 </p>
 
 ### CodeViewer
