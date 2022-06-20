@@ -45,7 +45,11 @@ export function CollapsibleSection({
 
   return (
     <div className={classNames}>
-      <header onClick={toggle} aria-label={`expand ${title}`}>
+      <header
+        onClick={toggle}
+        aria-label={`expand ${title}`}
+        className={canChangeState ? 'has-cursor-pointer' : ''}
+      >
         {
           <Title
             tooltipContent={tooltipContent}

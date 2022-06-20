@@ -10,7 +10,7 @@ import { isEqual } from 'lodash';
 import './Editor.scss';
 
 export function Editor({
-  value, // Pass value to initialize the Editor. Altering value later will not be reflected (as in an uncontrolled component).
+  value,
   error, // used by the resourceFormWrapper to display error that previous input is used
   onChange,
   readOnly,
@@ -20,6 +20,8 @@ export function Editor({
   autocompletionDisabled,
   customSchemaUri, // custom link to be displayed in the autocompletion tooltips
   height,
+  onBlur,
+  onFocus,
   options = {}, // IEditorOptions, check Monaco API for the list of options
   ...rest
 }) {
@@ -31,6 +33,7 @@ export function Editor({
   const divRef = useRef(null);
   const editorRef = useRef(null);
   const valueRef = useRef(value);
+  const [hasFocus, setHasFocus] = useState(false);
 
   const {
     setAutocompleteOptions,
@@ -51,6 +54,37 @@ export function Editor({
   }
 
   useEffect(() => {
+    if (editorRef.current) {
+      // update parent component state on value change
+      const onDidChangeModelContent = editorRef.current.onDidChangeModelContent(
+        () => {
+          const editorValue = editorRef.current.getValue();
+          console.log(editorValue);
+          onChange(editorValue);
+        },
+      );
+      return () => onDidChangeModelContent.dispose();
+    }
+  }, [onChange]);
+
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.onDidBlurEditorText(() => {
+        setHasFocus(false);
+        if (typeof onBlur === 'function') {
+          onBlur();
+        }
+      });
+      editorRef.current.onDidFocusEditorText(() => {
+        setHasFocus(true);
+        if (typeof onFocus === 'function') {
+          onFocus();
+        }
+      });
+    }
+  }, [onBlur, onFocus, editorRef]);
+
+  useEffect(() => {
     // show warnings in a message strip at the bottom of editor
     if (autocompletionDisabled) {
       return;
@@ -68,6 +102,17 @@ export function Editor({
       onDidChangeMarkers.dispose();
     };
   }, [setMarkers, autocompletionDisabled]);
+
+  useEffect(() => {
+    if (
+      !hasFocus &&
+      editorRef.current &&
+      editorRef.current.getValue() !== value
+    ) {
+      editorRef.current.setValue(value);
+    }
+  }, [value, hasFocus]);
+
   useEffect(() => {
     // setup Monaco editor and pass value updates to parent
 
@@ -105,6 +150,19 @@ export function Editor({
         onChange(editorValue);
       },
     );
+
+    editorRef.current.onDidBlurEditorText(() => {
+      setHasFocus(false);
+      if (typeof onBlur === 'function') {
+        onBlur();
+      }
+    });
+    editorRef.current.onDidFocusEditorText(() => {
+      setHasFocus(true);
+      if (typeof onFocus === 'function') {
+        onFocus();
+      }
+    });
 
     return () => {
       onDidChangeModelContent.dispose();

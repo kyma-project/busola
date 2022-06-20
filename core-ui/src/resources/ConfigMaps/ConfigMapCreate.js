@@ -8,7 +8,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import {
   K8sNameField,
   KeyValueField,
-  DataField,
+  RichEditorDataField,
 } from 'shared/ResourceForm/fields';
 
 import { createConfigMapTemplate, createPresets } from './helpers';
@@ -23,7 +23,9 @@ export function ConfigMapCreate({
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const [configMap, setConfigMap] = useState(
-    initialConfigMap ? cloneDeep(initialConfigMap) : createConfigMapTemplate(),
+    initialConfigMap
+      ? cloneDeep(initialConfigMap)
+      : createConfigMapTemplate(namespaceId),
   );
   const { t } = useTranslation();
 
@@ -66,7 +68,7 @@ export function ConfigMapCreate({
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <DataField defaultOpen propertyPath="$.data" />
+      <RichEditorDataField defaultOpen propertyPath="$.data" />
     </ResourceForm>
   );
 }
