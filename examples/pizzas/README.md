@@ -2,7 +2,7 @@
 
 ## Overview
 
-The pizzas example showcases the Busola's extensibility feature.
+The `pizzas` example showcases the Busola's extensibility feature.
 
 ## Instalation
 
