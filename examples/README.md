@@ -2,7 +2,7 @@
 
 ## Overview
 
-The examples folder showcases some of the Busola features and concepts.
+The `examples` folder showcases some of the Busola features and concepts.
 
 ## List of examples
 
