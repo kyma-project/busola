@@ -14,14 +14,11 @@ export function SchemaRulesInjector({
     ...uniq(
       schemaRules.flatMap(entry =>
         entry.path.split(/\./).reduce((acc, step) => {
+          const flatStep = step.replace('[]', '');
           if (!acc.length) {
-            return [step, step.replace('[]', '')];
+            return [flatStep];
           } else {
-            return [
-              ...acc,
-              `${acc[acc.length - 1]}.${step}`,
-              `${acc[acc.length - 1]}.${step.replace('[]', '')}`,
-            ];
+            return [...acc, `${acc[acc.length - 1]}.${flatStep}`];
           }
         }, []),
       ),
@@ -35,9 +32,10 @@ export function SchemaRulesInjector({
     .map(item => (typeof item === 'number' ? '[]' : item))
     .join('.')
     .replace('.[]', '[]');
+  const flatPath = path.replace(/\[\]/g, '');
 
   let newSchema;
-  if (!visiblePaths.includes(path)) {
+  if (!visiblePaths.includes(flatPath)) {
     newSchema = schema.mergeDeep({ widget: 'Null' });
   } else {
     const itemMap = schemaRules.find(item => item.path === path) ?? {};
