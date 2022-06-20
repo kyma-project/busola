@@ -15,9 +15,13 @@ export function SchemaRulesInjector({
       schemaRules.flatMap(entry =>
         entry.path.split(/\./).reduce((acc, step) => {
           if (!acc.length) {
-            return [step];
+            return [step, step.replace('[]', '')];
           } else {
-            return [...acc, `${acc[acc.length - 1]}.${step}`];
+            return [
+              ...acc,
+              `${acc[acc.length - 1]}.${step}`,
+              `${acc[acc.length - 1]}.${step.replace('[]', '')}`,
+            ];
           }
         }, []),
       ),
@@ -27,7 +31,10 @@ export function SchemaRulesInjector({
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
 
-  const path = storeKeys.filter(i => typeof i === 'string').join('.');
+  const path = storeKeys
+    .map(item => (typeof item === 'number' ? '[]' : item))
+    .join('.')
+    .replace('.[]', '[]');
 
   let newSchema;
   if (!visiblePaths.includes(path)) {
