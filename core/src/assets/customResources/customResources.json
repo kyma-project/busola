@@ -7,7 +7,21 @@
       "scope": "namespace",
       "path": "services-new"
     },
-    "details": {},
+    "details": {
+      "header": [{
+        "path": "metadata.ownerReferences",
+        "widget": "ControlledBy"
+      }, {
+        "path": "spec.type"
+      }, {
+        "path": "spec.clusterIP"
+      }, {
+        "path": "spec.externalIPs"
+      },  {
+        "path": "spec.ports"
+      }],
+      "body": {}
+    },
     "list": [{
       "path": "metadata.ownerReferences",
       "widget": "ControlledByKind"
@@ -21,8 +35,6 @@
       "path": "spec.ports"
     }
   ],
-    "form": {},
-    "schema": {},
     "translations": {
       "en": {
         "name": "SERVICE NEW",
