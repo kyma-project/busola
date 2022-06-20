@@ -1,5 +1,6 @@
 import { Button } from 'fundamental-react';
-import React, { useRef, useState } from 'react';
+import { isNil } from 'lodash';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
@@ -9,7 +10,6 @@ export function RichEditorDataField({ value, setValue }) {
   const { t } = useTranslation();
   const [internalValue, setInternalValue] = useState([]);
   const valueRef = useRef(null);
-  const [nV, setNV] = useState({ key: '', value: '' });
 
   if (JSON.stringify(value) !== valueRef.current) {
     setInternalValue(
@@ -20,13 +20,22 @@ export function RichEditorDataField({ value, setValue }) {
 
   const pushValue = internalValue => {
     setValue(
-      Object.fromEntries(internalValue.map(({ key, value }) => [key, value])),
+      Object.fromEntries(
+        internalValue.filter(Boolean).map(({ key, value }) => [key, value]),
+      ),
     );
   };
 
+  useEffect(() => {
+    if (!internalValue.length || internalValue[internalValue.length - 1]) {
+      setInternalValue([...internalValue, null]);
+    }
+  }, [internalValue]);
+
   return (
     <ResourceForm.CollapsibleSection title={t('common.labels.data')}>
-      {internalValue.map(({ key, value }, index) => {
+      {internalValue.map((item, index) => {
+        const { key, value } = item || {};
         return (
           <ResourceForm.CollapsibleSection
             title={key}
@@ -42,12 +51,16 @@ export function RichEditorDataField({ value, setValue }) {
                 }}
               />
             }
+            key={index}
             defaultOpen
           >
             <input
-              value={key}
+              value={key || ''}
               onChange={e => {
-                internalValue[index] = { key: e.target.value, value };
+                internalValue[index] = {
+                  key: e.target.value,
+                  value: value || '',
+                };
                 setInternalValue([...internalValue]);
               }}
               onBlur={() => pushValue(internalValue)}
@@ -55,40 +68,21 @@ export function RichEditorDataField({ value, setValue }) {
             <Editor
               height="120px"
               autocompletionDisabled
-              value={value}
+              value={isNil(value) ? '' : value.toString()}
               onChange={value => {
-                internalValue[index] = { key, value };
-                setInternalValue([...internalValue]);
+                setInternalValue(internalValue => {
+                  internalValue[index] = {
+                    key: internalValue[index]?.key || '',
+                    value,
+                  };
+                  return [...internalValue];
+                });
               }}
               onBlur={() => pushValue(internalValue)}
             />
           </ResourceForm.CollapsibleSection>
         );
       })}
-      <ResourceForm.CollapsibleSection title={'NEW VALUE'} defaultOpen>
-        <input
-          value={nV.key}
-          onChange={e => setNV({ key: e.target.value, value: nV.value })}
-          onBlur={() => {
-            if (nV.key || nV.value) {
-              pushValue([...internalValue, nV]);
-              setNV({ key: '', value: '' });
-            }
-          }}
-        />
-        <Editor
-          height="120px"
-          autocompletionDisabled
-          value={nV.value}
-          onChange={value => setNV({ key: nV.key, value })}
-          onBlur={() => {
-            if (nV.key || nV.value) {
-              pushValue([...internalValue, nV]);
-              setNV({ key: '', value: '' });
-            }
-          }}
-        />
-      </ResourceForm.CollapsibleSection>
     </ResourceForm.CollapsibleSection>
   );
 }

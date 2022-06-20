@@ -34,6 +34,8 @@ export function Editor({
   const editorRef = useRef(null);
   const valueRef = useRef(value);
   const [hasFocus, setHasFocus] = useState(false);
+  const focusRef = useRef(null);
+  const blurRef = useRef(null);
 
   const {
     setAutocompleteOptions,
@@ -55,32 +57,24 @@ export function Editor({
 
   useEffect(() => {
     if (editorRef.current) {
-      // update parent component state on value change
-      const onDidChangeModelContent = editorRef.current.onDidChangeModelContent(
-        () => {
-          const editorValue = editorRef.current.getValue();
-          console.log(editorValue);
-          onChange(editorValue);
-        },
-      );
-      return () => onDidChangeModelContent.dispose();
-    }
-  }, [onChange]);
-
-  useEffect(() => {
-    if (editorRef.current) {
-      editorRef.current.onDidBlurEditorText(() => {
+      focusRef.current?.dispose();
+      focusRef.current = editorRef.current.onDidBlurEditorText(() => {
         setHasFocus(false);
         if (typeof onBlur === 'function') {
           onBlur();
         }
       });
-      editorRef.current.onDidFocusEditorText(() => {
+      blurRef.current?.dispose();
+      blurRef.current = editorRef.current.onDidFocusEditorText(() => {
         setHasFocus(true);
         if (typeof onFocus === 'function') {
           onFocus();
         }
       });
+      return () => {
+        focusRef.current.dispose();
+        blurRef.current.dispose();
+      };
     }
   }, [onBlur, onFocus, editorRef]);
 
@@ -151,13 +145,13 @@ export function Editor({
       },
     );
 
-    editorRef.current.onDidBlurEditorText(() => {
+    blurRef.current = editorRef.current.onDidBlurEditorText(() => {
       setHasFocus(false);
       if (typeof onBlur === 'function') {
         onBlur();
       }
     });
-    editorRef.current.onDidFocusEditorText(() => {
+    focusRef.current = editorRef.current.onDidFocusEditorText(() => {
       setHasFocus(true);
       if (typeof onFocus === 'function') {
         onFocus();
