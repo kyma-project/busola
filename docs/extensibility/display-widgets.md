@@ -70,7 +70,7 @@ Panel widgets render an object as a separate panel with it's own title (based on
 ```
 
 <p>
-<img src="./assets/display-widgets/Panel.png" style="max-width:100%;">
+<img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="max-width:100%;">
 </p>
 
 ### Columns
