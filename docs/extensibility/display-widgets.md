@@ -44,7 +44,7 @@ The following values are automatically handled:
 ```
 
 <p>
-<img src="./assets/display-widgets/Badge.png" style="max-width:20%;">
+<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" style="max-width:20%;">
 </p>
 
 ## Block widgets
