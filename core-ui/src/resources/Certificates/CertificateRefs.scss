@@ -15,4 +15,9 @@
   .fd-panel__footer {
     word-break: break-word;
   }
+
+  .csr {
+    max-height: 200px;
+    overflow-y: auto;
+  }
 }
