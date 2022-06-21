@@ -38,7 +38,7 @@ Name widgets render a name input field. They contain an automatic name generator
 
 ### CodeEditor
 
-CodeEditor widgets render a Monaco editor, that is the most versatile widget, can be used to edit any variable. Editor's default language is JSON.
+CodeEditor widgets render a versatile code editor, that can be used to edit any variable. Editor's default language is JSON.
 
 #### Example
 
