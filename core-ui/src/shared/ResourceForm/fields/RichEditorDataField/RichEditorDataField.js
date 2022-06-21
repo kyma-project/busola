@@ -67,7 +67,6 @@ export function RichEditorDataField({ value: data, setValue: setData }) {
                         ...internalData[index],
                         language,
                       };
-                      console.log('lang dropdown SET', internalData[index]);
                       return [...internalData];
                     });
                   }}
@@ -96,7 +95,6 @@ export function RichEditorDataField({ value: data, setValue: setData }) {
                   value: value || '',
                   language: item?.language || '',
                 };
-                console.log('key SET', internalData[index]);
                 setInternalData([...internalData]);
               }}
               input={Inputs.Text}
@@ -116,7 +114,6 @@ export function RichEditorDataField({ value: data, setValue: setData }) {
                     value,
                     language: internalData[index]?.language || '',
                   };
-                  console.log('value SET', internalData[index]);
                   return [...internalData];
                 });
               }}

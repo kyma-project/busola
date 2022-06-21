@@ -32,7 +32,6 @@ export function Editor({
   const { editorTheme } = useTheme();
   const divRef = useRef(null);
   const editorRef = useRef(null);
-  const valueRef = useRef(value);
   const [hasFocus, setHasFocus] = useState(false);
   const focusRef = useRef(null);
   const blurRef = useRef(null);
@@ -104,7 +103,6 @@ export function Editor({
       editorRef.current &&
       editorRef.current.getValue() !== value
     ) {
-      console.log('set editor value', value);
       editorRef.current.setValue(value);
     }
   }, [value, hasFocus]);
@@ -118,7 +116,7 @@ export function Editor({
 
     const model =
       editor.getModel(modelUri) ||
-      editor.createModel(valueRef.current, language, modelUri);
+      editor.createModel(value, language, modelUri);
 
     // create editor and assign model with value and autocompletion
     editorRef.current = editor.create(divRef.current, {
