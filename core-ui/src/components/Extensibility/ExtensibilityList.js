@@ -44,7 +44,11 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
       }))
     : [];
   return (
-    <ResourcesList createResourceForm={ExtensibilityCreate} {...listProps} />
+    <ResourcesList
+      createResourceForm={ExtensibilityCreate}
+      allowSlashShortcut
+      {...listProps}
+    />
   );
 };
 
