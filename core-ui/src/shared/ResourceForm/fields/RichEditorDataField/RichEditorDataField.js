@@ -7,7 +7,7 @@ import { FormField } from '../../components/FormField';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-import { detectLanguage, getAvailableLanguages } from './languages';
+import { getAvailableLanguages } from './languages';
 
 export function RichEditorDataField({ value: data, setValue: setData }) {
   const { t } = useTranslation();
