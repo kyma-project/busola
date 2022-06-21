@@ -20,7 +20,7 @@ Text widgets render a field as a text field. They are used by default for all st
 ```
 
 <p>
-<img src="./assets/form-widgets/Text.png" alt="Example of a text widget" style="max-width:100%;">
+<img src="./assets/form-widgets/Text.png" alt="Example of a text widget" style="max-width:100%;border: 1px solid #D2D5D9">
 </p>
 
 ### Name
@@ -41,7 +41,7 @@ Name widgets render a name input field. They contain an automatic name generator
 ```
 
 <p>
-<img src="./assets/form-widgets/Name.png" alt="Example of a name widget" style="max-width:100%;">
+<img src="./assets/form-widgets/Name.png" alt="Example of a name widget" style="max-width:100%;border: 1px solid #D2D5D9">
 </p>
 
 ## Complex widgets
@@ -62,7 +62,7 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 ```
 
 <p>
-<img src="./assets/form-widgets/KeyValue.png" alt="Example of a KeyValuePair widget" style="max-width:100%;">
+<img src="./assets/form-widgets/KeyValue.png" alt="Example of a KeyValuePair widget" style="max-width:100%; border: 1px solid #D2D5D9">
 </p>
 
 ## Presentation widgets
@@ -89,5 +89,5 @@ FormGroup widgets render an `object` as a collapsible section.
 ```
 
 <p>
-<img src="./assets/form-widgets/FormGroup.png" alt="Example of a FormGroup widget" style="max-width:100%;">
+<img src="./assets/form-widgets/FormGroup.png" alt="Example of a FormGroup widget" style="max-width:100%;border: 1px solid #D2D5D9">
 </p>
