@@ -169,9 +169,7 @@ context('Test API Rules in the Function details view', () => {
   });
 
   it('Inspect list using slash shortcut', () => {
-    cy.getLeftNav()
-      .contains('API Rules')
-      .click();
+    cy.navigateTo('Discovery and Network', 'API Rules');
 
     openSearchWithSlashShortcut();
 
