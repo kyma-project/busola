@@ -35,6 +35,7 @@ export function Editor({
   const [hasFocus, setHasFocus] = useState(false);
   const focusRef = useRef(null);
   const blurRef = useRef(null);
+  const changeRef = useRef(null);
 
   const {
     setAutocompleteOptions,
@@ -76,6 +77,14 @@ export function Editor({
       };
     }
   }, [onBlur, onFocus, editorRef]);
+
+  if (editorRef.current) {
+    changeRef.current?.dispose();
+    changeRef.current = editorRef.current.onDidChangeModelContent(() => {
+      const editorValue = editorRef.current.getValue();
+      onChange(editorValue);
+    });
+  }
 
   useEffect(() => {
     // show warnings in a message strip at the bottom of editor
@@ -138,12 +147,10 @@ export function Editor({
     }
 
     // update parent component state on value change
-    const onDidChangeModelContent = editorRef.current.onDidChangeModelContent(
-      () => {
-        const editorValue = editorRef.current.getValue();
-        onChange(editorValue);
-      },
-    );
+    changeRef.current = editorRef.current.onDidChangeModelContent(() => {
+      const editorValue = editorRef.current.getValue();
+      onChange(editorValue);
+    });
 
     blurRef.current = editorRef.current.onDidBlurEditorText(() => {
       setHasFocus(false);
@@ -159,7 +166,7 @@ export function Editor({
     });
 
     return () => {
-      onDidChangeModelContent.dispose();
+      changeRef.current.dispose();
       editor.getModel(descriptor.current)?.dispose();
       editorRef.current.dispose();
     };
