@@ -17,11 +17,10 @@ export function Dropdown({
   placeholder,
   _ref,
   emptyListMessage,
-  i18n,
   className,
   ...fdSelectProps
 }) {
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation(null);
   if (!options || !options.length) {
     options = [
       {
