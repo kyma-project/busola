@@ -18,7 +18,7 @@ function EditorAsFieldWrapper({
 
   const parsedValue = React.useMemo(() => {
     if (language === 'yaml') {
-      return jsyaml.dump(value, { noRefs: true });
+      return jsyaml.dump(JSON.parse(JSON.stringify(value), { noRefs: true }));
     } else if (language === 'json') {
       return JSON.stringify(value, null, 2);
     } else {
