@@ -62,9 +62,13 @@ export function RichEditorDataField({ value: data, setValue: setData }) {
                   selectedKey={language || ''}
                   onSelect={(e, { key: language }) => {
                     e.stopPropagation(); // don't collapse the section
-                    setInternalData(internalValue => {
-                      internalValue[index] = { key, value, language };
-                      return [...internalValue];
+                    setInternalData(internalData => {
+                      internalData[index] = {
+                        ...internalData[index],
+                        language,
+                      };
+                      console.log('lang dropdown SET', internalData[index]);
+                      return [...internalData];
                     });
                   }}
                 />
@@ -92,6 +96,7 @@ export function RichEditorDataField({ value: data, setValue: setData }) {
                   value: value || '',
                   language: item?.language || '',
                 };
+                console.log('key SET', internalData[index]);
                 setInternalData([...internalData]);
               }}
               input={Inputs.Text}
@@ -105,13 +110,14 @@ export function RichEditorDataField({ value: data, setValue: setData }) {
               autocompletionDisabled
               value={isNil(value) ? '' : value.toString()}
               onChange={value => {
-                setInternalData(internalValue => {
-                  internalValue[index] = {
-                    key: internalValue[index]?.key || '',
+                setInternalData(internalData => {
+                  internalData[index] = {
+                    key: internalData[index]?.key || '',
                     value,
-                    language: internalValue[index]?.language || '',
+                    language: internalData[index]?.language || '',
                   };
-                  return [...internalValue];
+                  console.log('value SET', internalData[index]);
+                  return [...internalData];
                 });
               }}
               onBlur={() => pushValue(internalData)}

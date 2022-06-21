@@ -98,11 +98,13 @@ export function Editor({
   }, [setMarkers, autocompletionDisabled]);
 
   useEffect(() => {
+    // update editor value when it comes as a prop
     if (
       !hasFocus &&
       editorRef.current &&
       editorRef.current.getValue() !== value
     ) {
+      console.log('set editor value', value);
       editorRef.current.setValue(value);
     }
   }, [value, hasFocus]);
