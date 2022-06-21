@@ -1,6 +1,10 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 
+function openSearchWithSlashShortcut() {
+  cy.get('body').type('/');
+}
+
 const FUNCTION_NAME = 'test-function';
 const API_RULE_NAME = 'test-api-rule';
 const API_RULE_HOST = API_RULE_NAME + '-host';
@@ -164,7 +168,19 @@ context('Test API Rules in the Function details view', () => {
       .should('exist');
   });
 
-  it('Inspect list', () => {
-    cy.inspectList('API Rules', API_RULE_NAME);
+  it('Inspect list using slash shortcut', () => {
+    cy.getLeftNav()
+      .contains('API Rules')
+      .click();
+
+    openSearchWithSlashShortcut();
+
+    cy.getIframeBody()
+      .find('[role="search"] [aria-label="open-search"]')
+      .type(API_RULE_NAME);
+
+    cy.getIframeBody()
+      .contains(API_RULE_NAME)
+      .should('be.visible');
   });
 });
