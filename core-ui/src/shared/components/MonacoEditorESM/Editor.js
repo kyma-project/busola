@@ -201,12 +201,16 @@ export function Editor({
       <div ref={divRef} className="resource-form__editor" />
       <div className="resource-form__legend">
         {error && (
-          <MessageStrip type="error" className="fd-margin--sm">
+          <MessageStrip type="error" className="fd-margin--sm break-word">
             {t('common.create-form.editor-error', { error })}
           </MessageStrip>
         )}
         {schemaError && (
-          <MessageStrip type="warning" className="fd-margin--sm" dismissible>
+          <MessageStrip
+            type="warning"
+            className="fd-margin--sm break-word"
+            dismissible
+          >
             {t('common.create-form.autocomplete-unavailable-error', {
               error: schemaError,
             })}
@@ -214,7 +218,7 @@ export function Editor({
         )}
         {markers.length ? (
           <div>
-            <MessageStrip type="warning" className="fd-margin--sm">
+            <MessageStrip type="warning" className="fd-margin--sm break-word">
               {markers.map(m => (
                 <span
                   className="line"

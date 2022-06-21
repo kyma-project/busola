@@ -490,6 +490,7 @@ common:
     message: Are you sure you want to delete {{type}} {{name}}?
     title: Delete {{name}}
   errors:
+    couldnt-fetch-resources: Couldn't fetch resources.
     error: Error
     generic: Invalid field data
     no-permissions: You don't have enough permissions to view this content.
@@ -504,6 +505,7 @@ common:
     key: Key
     kind: Kind
     labels: Labels
+    link: Link
     loading: Loading...
     logs: Logs
     name: Name
