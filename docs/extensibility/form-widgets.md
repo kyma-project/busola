@@ -36,6 +36,19 @@ Name widgets render a name input field. They contain an automatic name generator
 }
 ```
 
+### CodeEditor
+
+CodeEditor widgets render a Monaco editor, that is the most versatile widget, can be used to edit any variable. Editor's default language is JSON.
+
+#### Example
+
+```json
+{
+  "path": "spec.my-data",
+  "widget": "CodeEditor"
+}
+```
+
 ## Complex widgets
 
 Complex widgets handle more advanced data structures such as arrays or objects.
@@ -48,8 +61,21 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 
 ```json
 {
-  "path": "spec.my-data",
+  "path": "spec.my-data[]",
   "widget": "KeyValuePair"
+}
+```
+
+### ResourceRefs
+
+ResourceRefs widgets render the lists of dropdowns to select the associated resources' names and namespaces. The corresponding specification object must be an array of objects `{name: 'foo', namespace: 'bar'}`.
+
+#### Example
+
+```json
+{
+  "path": "spec.my-data[]",
+  "widget": "ResourceRefs"
 }
 ```
 
