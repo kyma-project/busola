@@ -19,14 +19,13 @@ export const getResourceUrl = (resource, namespace) => {
   return `${apiPath}${namespacePart}/${resourceType}`;
 };
 
-export const validateResourceBySchema = res => {
+export const validateResourceBySchema = resource => {
   console.log('res');
-  if (!res) return;
+  if (!resource) return;
   const errors = schema.rules.reduce((accumulator, currentRule) => {
     try {
       const schemaValidator = validator(currentRule.schema);
-      const result = schemaValidator(res);
-      if (!currentRule.enabledByDefault) return [...accumulator];
+      const result = schemaValidator(resource);
       if (!result) return [currentRule.messageOnFailure, ...accumulator];
       return [...accumulator];
     } catch (e) {

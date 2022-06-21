@@ -1,9 +1,7 @@
-import React, { useState, useMemo } from 'react';
-import pluralize from 'pluralize';
-import { Button, Icon, MessageStrip } from 'fundamental-react';
+import React from 'react';
+import { Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import {
   STATE_ERROR,
   STATE_WAITING,
@@ -11,15 +9,20 @@ import {
   STATE_CREATED,
 } from './useUploadResources';
 import './YamlResourcesList.scss';
-import { validateResourceBySchema } from './helpers';
+import { FilteredResourcesDetails } from './FilteredResourcesDetails';
+/*
+TODO:
+- Improve performance
+  For now, everytime we type smth in monaco(we change resources values) we use validation function
+  which breaks the performance. We can have a button that validates that but that's not perfect.
+  What are other solutions
+- Think about splitting schema to separate folders. We can group them by kind and kind enums
+e.g. Deployment.schema.js -> only Deployment rules
+     Workloads.schema.js -> resources that are workloads so Deployments, pods, etc
+*/
 
-export function YamlResourcesList({
-  resourcesData,
-  namespace,
-  isValidationOn,
-}) {
+export function YamlResourcesList({ resourcesData, isValidationOn }) {
   const { t } = useTranslation();
-  const { namespaceNodes } = useMicrofrontendContext();
   const filteredResources = resourcesData?.filter(
     resource => resource !== null,
   );
@@ -43,31 +46,6 @@ export function YamlResourcesList({
     );
   };
 
-  const isInCurrentNamespace = resource => {
-    const resourceType = pluralize(resource?.kind?.toLowerCase());
-    const resourceNamespace = resource?.metadata?.namespace;
-    const hasCurrentNamespace =
-      namespace && resourceNamespace ? resourceNamespace === namespace : true;
-    const isKnownNamespaceWide = !!namespaceNodes?.find(
-      n => n.resourceType === resourceType,
-    );
-
-    return !(isKnownNamespaceWide && !hasCurrentNamespace);
-  };
-
-  const NamespaceWarning = ({ resource }) => {
-    if (!isInCurrentNamespace(resource)) {
-      return (
-        <MessageStrip type="warning" className="fd-margin-top--sm">
-          {t('upload-yaml.warnings.different-namespace', {
-            namespace: resource?.metadata?.namespace,
-          })}
-        </MessageStrip>
-      );
-    }
-    return null;
-  };
-
   const getIcon = status => {
     switch (status) {
       case STATE_WAITING:
@@ -80,86 +58,6 @@ export function YamlResourcesList({
       default:
         return 'question-mark';
     }
-  };
-
-  const WarningButton = ({
-    handleShowWarnings,
-    areWarningsVisible,
-    warningsAmount,
-  }) => {
-    return (
-      <Button
-        onClick={handleShowWarnings}
-        className="warning-button"
-        type="attention"
-        glyph={
-          areWarningsVisible ? 'navigation-up-arrow' : 'navigation-down-arrow'
-        }
-      >
-        <div>
-          <p>
-            {!areWarningsVisible
-              ? t('common.buttons.see-warnings')
-              : t('common.buttons.hide-warnings')}
-          </p>
-          <p>{warningsAmount}</p>
-        </div>
-      </Button>
-    );
-  };
-
-  const ValidationWarnings = ({ resource }) => {
-    const warnings = useMemo(() => validateResourceBySchema(resource), [
-      resource,
-    ]);
-    const [areWarningsVisible, setVisibleWarnings] = useState(false);
-    const isButtonShown =
-      warnings.length > 0 || !isInCurrentNamespace(resource);
-    return (
-      <>
-        {isButtonShown && (
-          <WarningButton
-            handleShowWarnings={() => {
-              setVisibleWarnings(prevState => !prevState);
-            }}
-            areWarningsVisible={areWarningsVisible}
-            warningsAmount={warnings.length}
-          />
-        )}
-        {areWarningsVisible ? (
-          <ul>
-            <NamespaceWarning resource={resource} />
-            {warnings.map(err => (
-              <li key={`${resource?.kind}-${resource?.metadata?.name}-${err}`}>
-                <MessageStrip type="warning" className="fd-margin-top--sm">
-                  {err}
-                </MessageStrip>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-      </>
-    );
-  };
-
-  const FilteredResourcesDetails = () => {
-    console.log(isValidationOn);
-    return (
-      <ul>
-        {filteredResources.map(r => (
-          <li
-            className="fd-margin-begin--sm fd-margin-end--sm fd-margin-bottom--sm"
-            style={{ listStyle: 'disc' }}
-            key={`${r?.value?.kind}-${r.value?.metadata?.name}`}
-          >
-            <p style={{ fontSize: '16px' }}>
-              {r?.value?.kind} {r?.value?.metadata?.name}
-            </p>
-            {isValidationOn ? <ValidationWarnings resource={r?.value} /> : null}
-          </li>
-        ))}
-      </ul>
-    );
   };
 
   const getStatus = status => {
@@ -182,7 +80,10 @@ export function YamlResourcesList({
               },
             )}
           </p>
-          <FilteredResourcesDetails />
+          <FilteredResourcesDetails
+            filteredResources={filteredResources}
+            isValidationOn={isValidationOn}
+          />
         </div>
       );
     } else {
