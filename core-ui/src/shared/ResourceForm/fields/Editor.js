@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import * as jp from 'jsonpath';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
-import './Editor.scss';
 
 function EditorAsFieldWrapper({
   value,
