@@ -30,7 +30,7 @@ async function loadTargetClusterCRs(authData) {
   try {
     const response = await failFastFetch(
       config.backendAddress +
-        `/api/v1/namespaces/kube-public/configmaps?labelSelector=${labelSelectors}`,
+        `/api/v1/configmaps?labelSelector=${labelSelectors}`,
       authData,
     );
     items = (await response.json()).items;
