@@ -32,6 +32,8 @@
   width: 50%;
   right: 10px;
   opacity: 0.8;
+  max-height: 50%;
+  overflow-y: auto;
 
   .line {
     width: 100%;
