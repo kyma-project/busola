@@ -4,29 +4,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { FormField } from '../../components/FormField';
-
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
-
-import flourite from 'flourite';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-import { languages } from 'monaco-editor';
-
-function detectLanguage(text) {
-  const { statistics } = flourite(text || '');
-  delete statistics['Julia']; // Julia language messes up with JS
-  return Object.entries(statistics || {})
-    .reduce(
-      (max, [key, value]) => {
-        if (value > max.value) {
-          return { key, value };
-        }
-        return max;
-      },
-      { key: '', value: 0 },
-    )
-    .key.toLowerCase();
-}
+import { detectLanguage, getAvailableLanguages } from './languages';
 
 export function RichEditorDataField({ value: data, setValue: setData }) {
   const { t } = useTranslation();
@@ -74,9 +55,10 @@ export function RichEditorDataField({ value: data, setValue: setData }) {
                 <Dropdown
                   disabled={!item}
                   compact
-                  options={languages
-                    .getLanguages()
-                    .map(l => ({ key: l.id, text: l.aliases?.[0] || l.id }))}
+                  options={getAvailableLanguages().map(l => ({
+                    key: l.id,
+                    text: l.aliases?.[0] || l.id,
+                  }))}
                   selectedKey={language || ''}
                   onSelect={(e, { key: language }) => {
                     e.stopPropagation(); // don't collapse the section
