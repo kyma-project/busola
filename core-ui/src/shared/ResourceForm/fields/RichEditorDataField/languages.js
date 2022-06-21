@@ -18,5 +18,5 @@ export function detectLanguage(text) {
 }
 
 export function getAvailableLanguages() {
-  return languages.getLanguages();
+  return languages.getLanguages().sort((a, b) => a.id.localeCompare(b.id));
 }

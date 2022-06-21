@@ -525,6 +525,7 @@ common:
     kyma: Kyma
     name: Name
     namespace: Namespace
+    new-entry: New Entry
     'no': 'No'
     path: Path
     protocol: Protocol
