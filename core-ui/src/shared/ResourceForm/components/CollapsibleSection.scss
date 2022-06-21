@@ -6,16 +6,13 @@
   header {
     display: flex;
     justify-content: space-between;
+    cursor: pointer;
     padding: 8px 16px;
     border-top: 1px solid var(--sapList_GroupHeaderBorderColor);
 
     .control-icon {
       margin-right: 8px;
     }
-  }
-
-  .has-cursor-pointer {
-    cursor: pointer;
   }
 
   &.disabled {
