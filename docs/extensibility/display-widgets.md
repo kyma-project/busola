@@ -43,9 +43,7 @@ The following values are automatically handled:
 }
 ```
 
-<p>
 <img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" style="max-width:20%;border: 1px solid #D2D5D9">
-</p>
 
 ## Block widgets
 
@@ -69,9 +67,7 @@ Panel widgets render an object as a separate panel with it's own title (based on
 }
 ```
 
-<p>
 <img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="max-width:100%;border: 1px solid #D2D5D9">
-</p>
 
 ### Columns
 
@@ -98,9 +94,7 @@ Columns widgets render the child widgets in two columns.
 }
 ```
 
-<p>
 <img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="max-width:100%;border: 1px solid #D2D5D9">
-</p>
 
 ### CodeViewer
 
@@ -120,9 +114,7 @@ CodeViewer widgets display values using the code highlight.
 }
 ```
 
-<p>
 <img src="./assets/display-widgets/CodeViewer.png" alt="Example of a CodeViewer widget" style="max-width:100%;border: 1px solid #D2D5D9">
-</p>
 
 ### Table
 
@@ -138,6 +130,4 @@ Table widgets display array data as rows of a table instead of free-standing com
 }
 ```
 
-<p>
 <img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="max-width:100%;border: 1px solid #D2D5D9">
-</p>
