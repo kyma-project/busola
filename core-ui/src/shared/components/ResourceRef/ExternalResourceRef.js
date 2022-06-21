@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ComboboxInput } from 'fundamental-react';
+import { ComboboxInput, MessageStrip } from 'fundamental-react';
 import classnames from 'classnames';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
@@ -26,6 +26,7 @@ export function ExternalResourceRef({
   defaultOpen = undefined,
   currentNamespace,
   noSection,
+  error,
   index,
 }) {
   const { t } = useTranslation();
@@ -49,6 +50,12 @@ export function ExternalResourceRef({
     }));
 
   if (loading || namespacesLoading) return <Spinner compact={true} />;
+  if (error)
+    return (
+      <MessageStrip dismissible={false} type="information">
+        {t('common.errors.couldnt-fetch-resources')}
+      </MessageStrip>
+    );
 
   const allResourcesOptions = resources.map(resource => ({
     key: resource.metadata.name,

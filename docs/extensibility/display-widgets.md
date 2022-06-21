@@ -86,19 +86,14 @@ Columns widgets render the child widgets in two columns.
 
 ### CodeViewer
 
-CodeViewer widgets display values using the code highlight.
-
-#### Widget-specific parameters
-
-- **language** - language used for the code highlighting.
+CodeViewer widgets display values using a read-only code editor. The editor autodetects the language.
 
 #### Example
 
 ```json
 {
   "path": "spec.json-data",
-  "widget": "CodeViewer",
-  "language": "json"
+  "widget": "CodeViewer"
 }
 ```
 
@@ -113,5 +108,20 @@ Table widgets display array data as rows of a table instead of free-standing com
   "path": "spec.item-list",
   "widget": "Table",
   "children": [{ "path": "name" }, { "path": "status" }]
+}
+```
+
+### ResourceRefs
+
+ResourceRefs widgets render the lists of links to the associated resources. The corresponding specification object must be an array of objects `{name: 'foo', namespace: 'bar'}`.
+Additionally, you must define the kind of the linked resources by passing the Kubernetes resource `kind` (for example, `Secret`, `ConfigMap`).
+
+#### Example
+
+```json
+{
+  "path": "spec.item-list",
+  "widget": "ResourceRefs",
+  "kind": "Secret"
 }
 ```
