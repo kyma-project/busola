@@ -86,7 +86,7 @@ Columns widgets render the child widgets in two columns.
 
 ### CodeViewer
 
-CodeViewer widgets display values using a read-only code editor. The editor will autodetect the language.
+CodeViewer widgets display values using a read-only code editor. The editor autodetects the language.
 
 #### Example
 
@@ -111,10 +111,10 @@ Table widgets display array data as rows of a table instead of free-standing com
 }
 ```
 
-### ResourceRef
+### ResourceRefs
 
 ResourceRefs widgets render the lists of links to the associated resources. The corresponding specification object must be an array of objects `{name: 'foo', namespace: 'bar'}`.
-Additionally define the kind of the linked resources by passing resource Kubernetes `kind`.
+Additionally, you must define the kind of the linked resources by passing the Kubernetes resource `kind` (for example, `Secret`, `ConfigMap`).
 
 #### Example
 

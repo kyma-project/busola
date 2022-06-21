@@ -38,7 +38,7 @@ Name widgets render a name input field. They contain an automatic name generator
 
 ### CodeEditor
 
-CodeEditor widgets render a versatile code editor, that can be used to edit any variable. Editor's default language is JSON.
+CodeEditor widgets render a versatile code editor that can be used to edit any variable. The editor's default language is JSON.
 
 #### Example
 
@@ -68,7 +68,7 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 
 ### ResourceRefs
 
-ResourceRefs widgets render the lists of dropdowns to select the associated resources' names and namespaces. The corresponding specification object must be an array of objects `{name: 'foo', namespace: 'bar'}`.
+ResourceRefs widgets render the lists of dropdowns to select the associated resources' names and Namespaces. The corresponding specification object must be an array of objects `{name: 'foo', namespace: 'bar'}`.
 
 #### Example
 
