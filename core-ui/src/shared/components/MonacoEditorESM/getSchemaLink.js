@@ -19,15 +19,14 @@ const host =
 export const getSchemaLink = (value, language) => {
   if (language !== 'yaml') return GENERIC_URL;
   if (!value) return GENERIC_URL;
-
-  let resource = null;
+  let resources = null;
   try {
-    resource = jsyaml.load(value);
+    resources = jsyaml.loadAll(value);
   } catch (e) {
     console.error(e);
     return GENERIC_URL;
   }
-
+  const resource = resources[0];
   const resourceType = resource.kind;
   const resourceApi = resource.apiVersion;
 

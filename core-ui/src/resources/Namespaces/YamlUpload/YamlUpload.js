@@ -52,7 +52,8 @@ function YamlUpload({
   );
 
   return (
-    <div>
+    //when using 99%, the Monaco is more responsive.
+    <div style={{ width: '99%' }}>
       <YamlFileUploader
         onYamlContentAdded={val => {
           updateYamlContent(val);
