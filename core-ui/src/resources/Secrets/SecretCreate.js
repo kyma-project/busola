@@ -16,7 +16,7 @@ import { createSecretTemplate, createPresets, getSecretDefs } from './helpers';
 import './SecretCreate.scss';
 
 export function SecretCreate({
-  namespaceId,
+  namespace,
   formElementRef,
   onChange,
   resource: initialSecret,
@@ -27,7 +27,9 @@ export function SecretCreate({
 }) {
   const { t } = useTranslation();
   const [secret, setSecret] = useState(
-    initialSecret ? { ...initialSecret } : createSecretTemplate(namespaceId),
+    initialSecret
+      ? { ...initialSecret }
+      : createSecretTemplate(namespace || ''),
   );
   const [lockedKeys, setLockedKeys] = useState([]);
 
@@ -67,7 +69,7 @@ export function SecretCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      presets={!initialSecret && createPresets(secretDefs, namespaceId, t)}
+      presets={!initialSecret && createPresets(secretDefs, namespace || '', t)}
       setCustomValid={setCustomValid}
     >
       <K8sNameField
