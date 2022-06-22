@@ -9,17 +9,7 @@ import {
   STATE_CREATED,
 } from './useUploadResources';
 import './YamlResourcesList.scss';
-import { FilteredResourcesDetails } from './FilteredResourcesDetails';
-/*
-TODO:
-- Improve performance
-  For now, everytime we type smth in monaco(we change resources values) we use validation function
-  which breaks the performance. We can have a button that validates that but that's not perfect.
-  What are other solutions
-- Think about splitting schema to separate folders. We can group them by kind and kind enums
-e.g. Deployment.schema.js -> only Deployment rules
-     Workloads.schema.js -> resources that are workloads so Deployments, pods, etc
-*/
+import { FilteredResourcesDetails } from './FilteredResourcesDetails/FilteredResourcesDetails';
 
 export function YamlResourcesList({ resourcesData, isValidationOn }) {
   const { t } = useTranslation();

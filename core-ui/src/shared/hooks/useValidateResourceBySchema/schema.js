@@ -79,6 +79,7 @@ export const schema = {
               properties: {
                 kind: {
                   enum: [
+                    'Deployment',
                     'Pod',
                     'DaemonSet',
                     'StatefulSet',
@@ -468,6 +469,7 @@ export const schema = {
       },
     },
     {
+      //TODO: what to do with this one?
       id: 10,
       name: 'Ensure deployment-like resource is using a valid restart policy',
       uniqueName: 'WORKLOAD_INCORRECT_RESTARTPOLICY_VALUE_ALWAYS',

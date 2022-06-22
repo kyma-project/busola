@@ -1,10 +1,12 @@
-import React, { useState, useMemo } from 'react';
-import { Button, MessageStrip } from 'fundamental-react';
+import React, { useState } from 'react';
+import { useIsInCurrentNamespace } from 'shared/hooks/useIsInCurrentNamespace';
+import { useValidateResourceBySchema } from 'shared/hooks/useValidateResourceBySchema/useValidateResourceBySchema';
 import { useTranslation } from 'react-i18next';
 
-import './YamlResourcesList.scss';
-import { validateResourceBySchema } from './helpers';
-import { useIsInCurrentNamespace } from 'shared/hooks/useIsInCurrentNamespace';
+import { Button, MessageStrip } from 'fundamental-react';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+
+import './FilteredResourcesDetails.scss';
 
 const NamespaceWarning = ({ resource }) => {
   const { t } = useTranslation();
@@ -23,10 +25,10 @@ const NamespaceWarning = ({ resource }) => {
 const WarningButton = ({
   handleShowWarnings,
   areWarningsVisible,
-  warningsAmount,
+  warningsNumber,
 }) => {
   const { t } = useTranslation();
-
+  console.log('wn', warningsNumber);
   return (
     <Button
       onClick={handleShowWarnings}
@@ -42,7 +44,11 @@ const WarningButton = ({
             ? t('common.buttons.see-warnings')
             : t('common.buttons.hide-warnings')}
         </p>
-        <p>{warningsAmount}</p>
+        {!warningsNumber ? (
+          <Spinner className="fd-busy-indicator--s warning-spinner" />
+        ) : (
+          <p>{warningsNumber}</p>
+        )}
       </div>
     </Button>
   );
@@ -51,13 +57,9 @@ const WarningButton = ({
 const ValidationWarnings = ({ resource }) => {
   const [areWarningsVisible, setVisibleWarnings] = useState(false);
   const isInCurrentNamespace = useIsInCurrentNamespace(resource);
-
-  const stringifiedResource = JSON.stringify(resource);
-  const warnings = useMemo(() => validateResourceBySchema(resource), [
-    stringifiedResource,
-  ]);
-
-  const isButtonShown = warnings.length > 0 || isInCurrentNamespace;
+  const warnings = useValidateResourceBySchema(resource);
+  console.log(warnings);
+  const isButtonShown = warnings?.length > 0 || isInCurrentNamespace;
 
   return (
     <>
@@ -67,7 +69,7 @@ const ValidationWarnings = ({ resource }) => {
             setVisibleWarnings(prevState => !prevState);
           }}
           areWarningsVisible={areWarningsVisible}
-          warningsAmount={warnings.length}
+          warningsNumber={warnings?.length + Number(!isInCurrentNamespace)}
         />
       )}
       {areWarningsVisible ? (
