@@ -28,7 +28,7 @@ const WarningButton = ({
   warningsNumber,
 }) => {
   const { t } = useTranslation();
-  console.log('wn', warningsNumber);
+
   return (
     <Button
       onClick={handleShowWarnings}
@@ -58,7 +58,6 @@ const ValidationWarnings = ({ resource }) => {
   const [areWarningsVisible, setVisibleWarnings] = useState(false);
   const isInCurrentNamespace = useIsInCurrentNamespace(resource);
   const warnings = useValidateResourceBySchema(resource);
-  console.log(warnings);
   const isButtonShown = warnings?.length > 0 || isInCurrentNamespace;
 
   return (
