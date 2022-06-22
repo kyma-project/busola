@@ -1,12 +1,11 @@
 import React from 'react';
-import { Button } from 'fundamental-react';
+import { Button, ComboboxInput } from 'fundamental-react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { FormField } from '../../components/FormField';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
-import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { getAvailableLanguages } from './languages';
 
 export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
@@ -14,16 +13,25 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
   const { key, value, language } = item || {};
 
   const languageDropdown = (
-    <Dropdown
+    <ComboboxInput
       disabled={!item}
       compact
+      showAllEntries
+      searchFullString
+      selectionType="manual"
+      popoverProps={{
+        onClick: e => {
+          console.log(e);
+        },
+      }}
       options={getAvailableLanguages().map(l => ({
         key: l.id,
         text: l.aliases?.[0] || l.id,
       }))}
       selectedKey={language || ''}
-      onSelect={(e, { key: language }) => {
-        e.stopPropagation(); // don't collapse the section
+      onSelectionChange={(e, { key: language }) => {
+        console.log(e);
+        e?.stopPropagation(); // don't collapse the section
         onChange({ language });
       }}
       placeholder={t('common.statuses.unknown')}
