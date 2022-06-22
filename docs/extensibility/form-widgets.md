@@ -97,7 +97,7 @@ FormGroup widgets render an `object` as a collapsible section.
 
 ```json
 {
-  "name": "spec.service",
+  "path": "spec.service",
   "widget": "FormGroup"
 },
 {
