@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import * as jp from 'jsonpath';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
-import './Editor.scss';
 
 function EditorAsFieldWrapper({
   value,
@@ -18,7 +17,7 @@ function EditorAsFieldWrapper({
 
   const parsedValue = React.useMemo(() => {
     if (language === 'yaml') {
-      return jsyaml.dump(value, { noRefs: true });
+      return jsyaml.dump(JSON.parse(JSON.stringify(value), { noRefs: true }));
     } else if (language === 'json') {
       return JSON.stringify(value, null, 2);
     } else {
