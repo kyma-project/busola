@@ -1,12 +1,16 @@
 import React, { useCallback } from 'react';
 import { Button, ComboboxInput } from 'fundamental-react';
 import { isNil } from 'lodash';
+import { languages } from 'monaco-editor';
 import { useTranslation } from 'react-i18next';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { FormField } from '../../components/FormField';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
-import { getAvailableLanguages } from './languages';
+
+function getAvailableLanguages() {
+  return languages.getLanguages().sort((a, b) => a.id.localeCompare(b.id));
+}
 
 export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
   const { t } = useTranslation();

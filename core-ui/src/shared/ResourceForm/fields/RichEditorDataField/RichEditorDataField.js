@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
-import { detectLanguage } from './languages';
+import { detectLanguage } from '../../../utils/detectLanguage';
 import { RichEditorSection } from './RichEditorSection';
 
 export function RichEditorDataField({ value: data, setValue: setData }) {

@@ -1,5 +1,4 @@
 import flourite from 'flourite';
-import { languages } from 'monaco-editor';
 
 export function detectLanguage(text) {
   const { statistics } = flourite(text || '');
@@ -15,8 +14,4 @@ export function detectLanguage(text) {
       { key: '', value: 0 },
     )
     .key.toLowerCase();
-}
-
-export function getAvailableLanguages() {
-  return languages.getLanguages().sort((a, b) => a.id.localeCompare(b.id));
 }
