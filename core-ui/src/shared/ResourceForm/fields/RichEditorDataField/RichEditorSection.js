@@ -19,18 +19,12 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
       showAllEntries
       searchFullString
       selectionType="manual"
-      popoverProps={{
-        onClick: e => {
-          console.log(e);
-        },
-      }}
       options={getAvailableLanguages().map(l => ({
         key: l.id,
         text: l.aliases?.[0] || l.id,
       }))}
       selectedKey={language || ''}
       onSelectionChange={(e, { key: language }) => {
-        console.log(e);
         e?.stopPropagation(); // don't collapse the section
         onChange({ language });
       }}
