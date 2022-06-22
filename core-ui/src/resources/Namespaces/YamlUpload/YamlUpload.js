@@ -19,7 +19,7 @@ function YamlUpload({
   setResourcesData,
   setLastOperationState,
   isValidationOn,
-  handleYAMLValidation,
+  handleResourceValidation,
 }) {
   const [error, setError] = useState('');
   const [editor, setEditor] = useState(null);
@@ -64,7 +64,10 @@ function YamlUpload({
         <p className="editor-label">{t('upload-yaml.or-paste-here')}</p>
         <div className="switch-wrapper">
           <p>{t('settings.clusters.validateResources')}</p>
-          <Switch onChange={handleYAMLValidation} checked={isValidationOn} />
+          <Switch
+            onChange={handleResourceValidation}
+            checked={isValidationOn}
+          />
         </div>
       </div>
       <Editor

@@ -102,7 +102,7 @@ export function YamlUploadDialog({ show, onCancel }) {
             resourcesData={resourcesData}
             setResourcesData={updateYamlContent}
             setLastOperationState={setLastOperationState}
-            handleYAMLValidation={() => setValidationOn(prev => !prev)}
+            handleResourceValidation={() => setValidationOn(prev => !prev)}
             isValidationOn={isValidationOn}
           />
           <div className="fd-margin-begin--tiny fd-margin-end--tiny">

@@ -21,3 +21,8 @@
     background-color: var(--sapButton_Attention_TextColor, #32363a);
   }
 }
+
+.resources-list {
+  max-height: 60vh;
+  overflow-y: auto;
+}

@@ -61,7 +61,7 @@ const ValidationWarnings = ({ resource }) => {
   const isButtonShown = warnings?.length > 0 || isInCurrentNamespace;
 
   return (
-    <>
+    <div>
       {isButtonShown && (
         <WarningButton
           handleShowWarnings={() => {
@@ -72,7 +72,7 @@ const ValidationWarnings = ({ resource }) => {
         />
       )}
       {areWarningsVisible ? (
-        <ul>
+        <ul className="warnings-list">
           <NamespaceWarning resource={resource} />
           {warnings.map(err => (
             <li key={`${resource?.kind}-${resource?.metadata?.name}-${err}`}>
@@ -83,7 +83,7 @@ const ValidationWarnings = ({ resource }) => {
           ))}
         </ul>
       ) : null}
-    </>
+    </div>
   );
 };
 
@@ -92,7 +92,7 @@ export const FilteredResourcesDetails = ({
   isValidationOn,
 }) => {
   return (
-    <ul>
+    <ul className="resources-list">
       {filteredResources.map(r => (
         <li
           className="fd-margin-begin--sm fd-margin-end--sm fd-margin-bottom--sm"
