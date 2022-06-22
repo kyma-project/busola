@@ -28,7 +28,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
         e?.stopPropagation(); // don't collapse the section
         onChange({ language });
       }}
-      placeholder={t('common.statuses.unknown')}
+      placeholder={t('components.rich-editor-data-field.language-placeholder')}
     />
   );
 
@@ -57,7 +57,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
   const handleChange = useCallback(
     value => onChange({ key: key || '', value }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [key],
+    [key, language],
   );
 
   const valueInput = (

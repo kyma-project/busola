@@ -17,11 +17,12 @@ export function RichEditorDataField({ value: data, setValue: setData }) {
         key,
         value,
         language:
-          (firstRender
+          (firstRender.current
             ? detectLanguage(value)
             : internalData.find(d => d?.key === key)?.language) || '',
       })),
     );
+    firstRender.current = false;
     valueRef.current = JSON.stringify(data);
   }
 
