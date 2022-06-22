@@ -7,6 +7,7 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { FormField } from '../../components/FormField';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
+import './RichEditorSection.scss';
 
 function getAvailableLanguages() {
   return languages.getLanguages().sort((a, b) => a.id.localeCompare(b.id));
@@ -85,14 +86,11 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
     <ResourceForm.CollapsibleSection
       title={title}
       language={language || ''}
-      actions={
-        <>
-          {languageDropdown} {deleteButton}
-        </>
-      }
+      actions={deleteButton}
       defaultOpen
     >
       {keyInput}
+      <div className="rich-editor__dropdown-wrapper">{languageDropdown}</div>
       {valueInput}
     </ResourceForm.CollapsibleSection>
   );
