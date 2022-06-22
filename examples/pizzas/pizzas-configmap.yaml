@@ -1,0 +1,144 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: pizzas
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: pizzas
+    busola.io/extension: resource
+data:
+  details: |
+    {
+      "header": [
+        {
+          "path": "spec.sauce"
+        },
+        {
+          "path": "spec.description"
+        },
+        {
+          "path": "spec.myfield1",
+          "name": "My custom field"
+        }
+      ],
+     "body": [
+        {
+          "name": "Summary",
+          "widget": "Panel",
+          "children": [
+            { "path": "spec.realization" },
+            { "path": "spec.paymentMethod", "widget": "Badge" },
+            {
+              "name": "State",
+              "path": "status.messages[-1:].state",
+              "widget": "Badge"
+            },
+            {
+              "name": "Message",
+              "path": "status.messages[-1:].message"
+            }
+          ]
+        },
+        {
+          "name": "topping",
+          "path": "spec.toppings",
+          "widget": "Table",
+          "children": [{ "path": "name" }, { "path": "price" }, { "path": "quantity" }]
+        }
+      ]
+    }
+  form: |-
+    [
+      { "path": "spec.description", "widget": "Text" , "simple": true},
+      { "path": "spec.paymentMethod", "widget": "Text" , "simple": true},
+      { "path": "spec.sauce", "widget": "Text" , "simple": true},
+      { "path": "spec.realization", "widget": "Text" , "simple": true},
+      { "path": "spec.toppings", "simple": true},
+      { "path": "spec.toppings.name", "simple": true},
+      { "path": "spec.toppings.price", "simple": true},
+      { "path": "spec.toppings.quantity", "simple": true}
+    ]
+  list: |-
+    [
+      { "path": "spec.description" },
+      { "path": "spec.realization" }, 
+      { "name": "Payment method","path": "spec.paymentMethod", "widget": "Badge" }, 
+      { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" }
+    ]
+  resource: |-
+    {
+      "kind": "Pizza",
+      "group": "mykubernetes.acme.org",
+      "version": "v1",
+      "scope": "namespace"
+    }
+  schema: |-
+    {
+      "type": "object",
+      "properties": {
+        "spec": {
+          "description": "Information about our pizza",
+          "type": "object",
+          "properties": {
+            "description": {
+              "description": "Pizza desc",
+              "type": "string"
+            },
+            "paymentMethod": {
+              "description": "The payment method for our pizza",
+              "type": "string",
+              "enum": [
+                "CARD",
+                "CASH"
+              ]
+            },
+            "realization": {
+              "description": "The order fulfillment of our pizza",
+              "type": "string",
+              "enum": [
+                "DELIVERY",
+                "SELF-PICKUP"
+              ]
+            },
+            "sauce": {
+              "description": "The name of the sauce to use on our pizza",
+              "type": "string"
+            },
+            "toppings": {
+              "description": "List of toppings for our pizza",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The name of the topping",
+                    "type": "string"
+                  },
+                  "price": {
+                    "description": "The price of the topping",
+                    "type": "number"
+                  },
+                  "quantity": {
+                    "description": "The quantity of the selected topping",
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  translations: |
+    en:
+      name: Pizza
+      category: Lunch
+      spec.description: Description
+      spec.state: State
+      spec.realization: Realization
+      spec.paymentMethod: Payment Method
+      spec.sauce: Sauce
+      spec.toppings: Toppings
+      topping.name: Name
+      topping.price: Price
+      topping.quantity: Quantity
