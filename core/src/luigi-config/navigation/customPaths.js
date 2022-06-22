@@ -36,7 +36,9 @@ const getCustomNodes = (crs, scope) => {
         );
         const { resource } = cr || {};
         const api = `/${
-          resource?.group === 'core' ? 'api' : `apis/${resource.group}`
+          resource?.group === 'core' || resource?.group === ''
+            ? 'api'
+            : `apis/${resource.group}`
         }/${resource.version.toLowerCase()}`;
         return {
           category: {
