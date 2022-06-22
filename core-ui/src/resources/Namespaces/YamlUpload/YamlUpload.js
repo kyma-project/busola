@@ -63,7 +63,7 @@ function YamlUpload({
       <div className="info-wrapper fd-margin-bottom--sm fd-margin-top--sm">
         <p className="editor-label">{t('upload-yaml.or-paste-here')}</p>
         <div className="switch-wrapper">
-          <p>{t('settings.clusters.validateYAMLFiles')}</p>
+          <p>{t('settings.clusters.validateResources')}</p>
           <Switch onChange={handleYAMLValidation} checked={isValidationOn} />
         </div>
       </div>
