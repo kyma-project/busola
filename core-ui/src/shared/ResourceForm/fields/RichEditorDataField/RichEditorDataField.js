@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
 import { detectLanguage } from './languages';
@@ -33,13 +33,13 @@ export function RichEditorDataField({ value: data, setValue: setData }) {
   }, [internalData]);
 
   // update original data source
-  const pushValue = () => {
+  const pushValue = useCallback(() => {
     setData(
       Object.fromEntries(
         internalData.filter(Boolean).map(({ key, value }) => [key, value]),
       ),
     );
-  };
+  }, [setData, internalData]);
 
   return (
     <ResourceForm.CollapsibleSection

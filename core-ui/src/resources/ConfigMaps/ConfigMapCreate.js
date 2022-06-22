@@ -67,7 +67,7 @@ export function ConfigMapCreate({
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <RichEditorDataField defaultOpen propertyPath="$.data" />
+      <RichEditorDataField defaultOpen propertyPath="$.data" advanced />
     </ResourceForm>
   );
 }
