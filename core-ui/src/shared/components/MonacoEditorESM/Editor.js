@@ -33,9 +33,6 @@ export function Editor({
   const divRef = useRef(null);
   const editorRef = useRef(null);
   const [hasFocus, setHasFocus] = useState(false);
-  const focusRef = useRef(null);
-  const blurRef = useRef(null);
-  const changeRef = useRef(null);
 
   const {
     setAutocompleteOptions,
@@ -56,35 +53,32 @@ export function Editor({
   }
 
   useEffect(() => {
-    if (editorRef.current) {
-      focusRef.current?.dispose();
-      focusRef.current = editorRef.current.onDidBlurEditorText(() => {
-        setHasFocus(false);
-        if (typeof onBlur === 'function') {
-          onBlur();
-        }
-      });
-      blurRef.current?.dispose();
-      blurRef.current = editorRef.current.onDidFocusEditorText(() => {
-        setHasFocus(true);
-        if (typeof onFocus === 'function') {
-          onFocus();
-        }
-      });
-      return () => {
-        focusRef.current.dispose();
-        blurRef.current.dispose();
-      };
-    }
-  }, [onBlur, onFocus, editorRef]);
-
-  if (editorRef.current) {
-    changeRef.current?.dispose();
-    changeRef.current = editorRef.current.onDidChangeModelContent(() => {
-      const editorValue = editorRef.current.getValue();
-      onChange(editorValue);
+    //focus listener
+    if (!editorRef.current) return;
+    const focusListener = editorRef.current.onDidFocusEditorText(() => {
+      setHasFocus(true);
+      if (typeof onFocus === 'function') {
+        onFocus();
+      }
     });
-  }
+    return () => {
+      focusListener.dispose();
+    };
+  }, [onFocus]);
+
+  useEffect(() => {
+    //blur listener
+    if (!editorRef.current) return;
+    const blurListener = editorRef.current.onDidBlurEditorText(() => {
+      setHasFocus(false);
+      if (typeof onBlur === 'function') {
+        onBlur();
+      }
+    });
+    return () => {
+      blurListener.dispose();
+    };
+  }, [onBlur]);
 
   useEffect(() => {
     // show warnings in a message strip at the bottom of editor
@@ -147,33 +141,27 @@ export function Editor({
     }
 
     // update parent component state on value change
-    changeRef.current = editorRef.current.onDidChangeModelContent(() => {
+    const changeListener = editorRef.current.onDidChangeModelContent(() => {
       const editorValue = editorRef.current.getValue();
       onChange(editorValue);
     });
 
-    blurRef.current = editorRef.current.onDidBlurEditorText(() => {
-      setHasFocus(false);
-      if (typeof onBlur === 'function') {
-        onBlur();
-      }
-    });
-    focusRef.current = editorRef.current.onDidFocusEditorText(() => {
-      setHasFocus(true);
-      if (typeof onFocus === 'function') {
-        onFocus();
-      }
-    });
-
     return () => {
-      changeRef.current.dispose();
+      changeListener.dispose();
       editor.getModel(descriptor.current)?.dispose();
       editorRef.current.dispose();
     };
-    // disabling eslint to exclude onChange listener from the dependencies.
-    // Otherwise, each onChange function must be memoized.
+    // missing dependencies:  'value'
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editorTheme, setAutocompleteOptions, language, t, readOnly, onMount]);
+  }, [
+    editorTheme,
+    setAutocompleteOptions,
+    language,
+    t,
+    readOnly,
+    onMount,
+    onChange,
+  ]);
 
   useEffect(() => {
     // refresh model on editor focus. Needed for cases when multiple editors are open simultaneously

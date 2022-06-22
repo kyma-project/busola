@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Button, ComboboxInput } from 'fundamental-react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -60,6 +60,11 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
       pattern={'[-._a-zA-Z0-9]+'}
     />
   );
+  const handleChange = useCallback(
+    value => onChange({ key: key || '', value }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [key],
+  );
 
   const valueInput = (
     <Editor
@@ -67,7 +72,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
       height="120px"
       autocompletionDisabled
       value={isNil(value) ? '' : value.toString()}
-      onChange={value => onChange({ key: key || '', value })}
+      onChange={handleChange}
       onBlur={pushValue}
     />
   );
