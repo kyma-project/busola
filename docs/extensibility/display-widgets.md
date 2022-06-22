@@ -51,6 +51,14 @@ Block widgets are more complex layouts and should be used only in details body.
 
 Plain widgets render all contents of an object or list sequentially without any decorations. This is the default behavior for all objects and arrays.
 
+#### Example
+
+```json
+{ "children": [{ "path": "spec.options" }] }
+```
+
+<img src="./assets/display-widgets/Plain.png" alt="Example of a plain widget" width="20%" style="border: 1px solid #D2D5D9">
+
 ### Panel
 
 Panel widgets render an object as a separate panel with it's own title (based on it's `path` or `name`).
@@ -134,8 +142,10 @@ Additionally, you must define the kind of the linked resources by passing the Ku
 
 ```json
 {
-  "path": "spec.item-list",
+  "path": "spec.secretRef",
   "widget": "ResourceRefs",
   "kind": "Secret"
 }
 ```
+
+<img src="./assets/display-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">

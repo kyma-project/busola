@@ -53,6 +53,8 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
 }
 ```
 
+<img src="./assets/form-widgets/CodeEditor.png" alt="Example of a CodeEditor widget" style="border: 1px solid #D2D5D9">
+
 ## Complex widgets
 
 Complex widgets handle more advanced data structures such as arrays or objects.
@@ -75,15 +77,19 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 ### ResourceRefs
 
 ResourceRefs widgets render the lists of dropdowns to select the associated resources' names and Namespaces. The corresponding specification object must be an array of objects `{name: 'foo', namespace: 'bar'}`.
+Additionally, you must define the kind of the linked resources by passing the Kubernetes resource `kind` (for example, `Secret`, `ConfigMap`).
 
 #### Example
 
 ```json
 {
-  "path": "spec.my-data[]",
+  "path": "spec.secretRefs[]",
+  "kind": "Secret",
   "widget": "ResourceRefs"
 }
 ```
+
+<img src="./assets/form-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">
 
 ## Presentation widgets
 
@@ -96,7 +102,7 @@ FormGroup widgets render an `object` as a collapsible section.
 #### Example
 
 ```json
-{
+({
   "path": "spec.service",
   "widget": "FormGroup"
 },
@@ -105,7 +111,7 @@ FormGroup widgets render an `object` as a collapsible section.
 },
 {
   "path": "spec.service.port"
-}
+})
 ```
 
 <img src="./assets/form-widgets/FormGroup.png" alt="Example of a FormGroup widget" style="border: 1px solid #D2D5D9">
