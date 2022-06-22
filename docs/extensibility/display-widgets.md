@@ -19,7 +19,7 @@ Text widgets render values as a simple text. This is the default behavior for al
 }
 ```
 
-<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" style="max-width:20%;border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="20%" style="border: 1px solid #D2D5D9">
 
 ### Badge
 
@@ -41,7 +41,7 @@ The following values are automatically handled:
 }
 ```
 
-<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" style="max-width:20%;border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="20%" style="border: 1px solid #D2D5D9">
 
 ## Block widgets
 
@@ -139,3 +139,33 @@ Additionally, you must define the kind of the linked resources by passing the Ku
   "kind": "Secret"
 }
 ```
+
+### ControlledBy
+
+ControlledBy widgets render the kind and the name with a link to the resources that the current resource is dependent of.
+
+### Example
+
+```json
+{
+  "path": "metadata.ownerReferences",
+  "widget": "ControlledBy"
+}
+```
+
+<img src="./assets/display-widgets/ControlledBy.png" alt="Example of a table widget" width="20%" style="border: 1px solid #D2D5D9">
+
+### ControlledByKind
+
+ControlledByKind widgets render the kind of the resources that the current resource is dependent of.
+
+### Example
+
+```json
+{
+  "path": "metadata.ownerReferences",
+  "widget": "ControlledByKind"
+}
+```
+
+<img src="./assets/display-widgets/ControlledByKind.png" alt="Example of a table widget" width="20%" style="border:1px solid #D2D5D9">
