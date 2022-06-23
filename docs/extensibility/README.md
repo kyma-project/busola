@@ -12,7 +12,7 @@ To automatically add the UI page for your CRD, follow these steps:
 2.  Click **Create UI +**, and provide **Name** and **Category**.
 3.  Optionally, you can uncheck the UI elements that are not necessary.
 
-    > **NOTE** The UI elements visible in this form are only suggestions. You can change the configuration later in your Config Map.
+> **NOTE** The UI elements visible in this form are only suggestions. You can change the configuration later in your Config Map.
 
 4.  Click **Create**.
 
@@ -24,7 +24,7 @@ To create your CRD Config Map, follow these steps:
 2. Click **Create Config Map +** and enter the name of your Config Map.
 3. Go to the **Advanced** tab and in the **Labels** form enter `busola.io/extension` as a key, and `resource` as a value.
 
-   > **NOTE** Do not overwrite the existing name label.
+> **NOTE** Do not overwrite the existing name label.
 
 4. Click **Create**.
 5. Click **Edit**.
