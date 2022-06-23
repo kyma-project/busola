@@ -48,31 +48,45 @@ async function loadTargetClusterCRs(authData) {
   }
   return (items || [])
     .map(item => {
-      const cr = Object.entries(item.data).reduce((acc, [key, value]) => {
-        try {
-          const match = key.match(/^translations(-([a-z]{2}))?$/);
-          if (match) {
-            let translations = acc.translations || {};
-            const lang = match[2];
-            const langTranslations = jsyaml.load(value);
-            if (lang) {
-              translations = merge(translations, { [lang]: langTranslations });
-            } else {
-              translations = merge(translations, langTranslations);
+      const cr = Object.entries(item?.data || []).reduce(
+        (acc, [key, value]) => {
+          try {
+            const match = key.match(/^translations(-([a-z]{2}))?$/);
+            if (match) {
+              let translations = acc.translations || {};
+              const lang = match[2];
+              const langTranslations = jsyaml.load(value);
+              if (lang) {
+                translations = merge(translations, {
+                  [lang]: langTranslations,
+                });
+              } else {
+                translations = merge(translations, langTranslations);
+              }
+              return { ...acc, translations };
             }
-            return { ...acc, translations };
+
+            return {
+              ...acc,
+              [key]: jsyaml.load(value, { json: true }),
+            };
+          } catch (error) {
+            console.warn('cannot parse ', key, value, error);
+            return null;
           }
+        },
+        {},
+      );
 
-          return {
-            ...acc,
-            [key]: jsyaml.load(value, { json: true }),
-          };
-        } catch (error) {
-          console.warn('cannot parse ', key, value, error);
-        }
-      }, {});
-
-      if (!cr.resource) {
+      if (!cr?.resource || Object.keys(cr.resource).length === 0) {
+        console.warn(
+          'Some of the custom resources are not configured properly.',
+        );
+        return null;
+      } else if (!cr.resource.path && !cr.resource.kind) {
+        console.warn(
+          'Some of the custom resources are not configured properly. Should have kind defined.',
+        );
         return null;
       } else if (!cr.resource.path) {
         cr.resource.path = pluralize(cr.resource.kind).toLowerCase();

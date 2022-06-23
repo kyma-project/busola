@@ -19,6 +19,8 @@ Text widgets render values as a simple text. This is the default behavior for al
 }
 ```
 
+<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" style="max-width:20%;border: 1px solid #D2D5D9">
+
 ### Badge
 
 Badge widgets render texts as a status badge, using a set of predefined rules to assign colors.
@@ -38,6 +40,8 @@ The following values are automatically handled:
   "widget": "Badge"
 }
 ```
+
+<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" style="max-width:20%;border: 1px solid #D2D5D9">
 
 ## Block widgets
 
@@ -61,6 +65,8 @@ Panel widgets render an object as a separate panel with it's own title (based on
 }
 ```
 
+<img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
+
 ### Columns
 
 Columns widgets render the child widgets in two columns.
@@ -74,33 +80,34 @@ Columns widgets render the child widgets in two columns.
   "children": [
     {
       "name": "columns.left",
-      "widget": "Panel"
+      "widget": "Panel",
+      "children": [{ "path": "spec.value" }]
     },
     {
       "name": "columns.right",
-      "widget": "Panel"
+      "widget": "Panel",
+      "children": [{ "path": "spec.other-value" }]
     }
   ]
 }
 ```
 
+<img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
+
 ### CodeViewer
 
-CodeViewer widgets display values using the code highlight.
-
-#### Widget-specific parameters
-
-- **language** - language used for the code highlighting.
+CodeViewer widgets display values using a read-only code editor. The editor autodetects the language.
 
 #### Example
 
 ```json
 {
   "path": "spec.json-data",
-  "widget": "CodeViewer",
-  "language": "json"
+  "widget": "CodeViewer"
 }
 ```
+
+<img src="./assets/display-widgets/CodeViewer.png" alt="Example of a CodeViewer widget" style="border: 1px solid #D2D5D9">
 
 ### Table
 
@@ -113,5 +120,22 @@ Table widgets display array data as rows of a table instead of free-standing com
   "path": "spec.item-list",
   "widget": "Table",
   "children": [{ "path": "name" }, { "path": "status" }]
+}
+```
+
+<img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
+
+### ResourceRefs
+
+ResourceRefs widgets render the lists of links to the associated resources. The corresponding specification object must be an array of objects `{name: 'foo', namespace: 'bar'}`.
+Additionally, you must define the kind of the linked resources by passing the Kubernetes resource `kind` (for example, `Secret`, `ConfigMap`).
+
+#### Example
+
+```json
+{
+  "path": "spec.item-list",
+  "widget": "ResourceRefs",
+  "kind": "Secret"
 }
 ```

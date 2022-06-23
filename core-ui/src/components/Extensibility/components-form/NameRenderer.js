@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { List } from 'immutable';
 
 import { K8sNameField } from 'shared/ResourceForm/fields';
@@ -13,9 +13,11 @@ export function NameRenderer({
   ...props
 }) {
   const extraPaths = schema.get('extraPaths')?.toJS() || [];
+  const nameRef = useRef(resource?.metadata?.name);
 
   return (
     <K8sNameField
+      readOnly={!!nameRef.current}
       value={value}
       kind={resource.kind}
       setValue={value => {

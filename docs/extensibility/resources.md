@@ -39,6 +39,8 @@ The `schema` section contains the JSON-schema definition of the resource. In mos
 
 The `form` section contains a list of objects that define which fields must be included in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to simple form by providing the `simple: true` flag, or removing it from advanced form by providing the `advanced: false` flag.
 
+If you target elements of an array rather that the array itself, you can use `items[]` notation.
+
 #### Item parameters
 
 - **path** - _[required]_ path to the property that must be displayed in the form. In case of an array the array index is omitted. For example, if `spec.items` is an array and you want to display `name` for each items, the path is `spec.items.name`.
@@ -51,9 +53,9 @@ The `form` section contains a list of objects that define which fields must be i
 ```json
 [
   { "path": "spec.priority", "simple": true },
-  { "path": "spec.items.name" },
-  { "path": "spec.items.service.url" },
-  { "path": "spec.items.service.port" }
+  { "path": "spec.items[].name" },
+  { "path": "spec.items[].service.url" },
+  { "path": "spec.items[].service.port" }
 ]
 ```
 

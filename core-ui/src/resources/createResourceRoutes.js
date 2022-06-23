@@ -51,7 +51,7 @@ export const createResourceRoutes = ({
               resourceType={resourceType}
               resourceI18Key={resourceI18Key}
             >
-              <List />
+              <List allowSlashShortcut />
             </ListWrapper>
           </Suspense>
         }

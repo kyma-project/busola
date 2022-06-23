@@ -39,8 +39,8 @@ context('Test navigation features', () => {
     cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
     cy.getIframeBody()
-      .contains('application-broker (SA)') // link wrapper
-      .contains('application-broker') // link itself
+      .contains('eventing-controller (SA)') // link wrapper
+      .contains('eventing-controller') // link itself
       .click();
 
     cy.getIframeBody()

@@ -30,7 +30,11 @@ export function CertificateRefs(certificate) {
       </FormItem>
       <FormItem>
         <FormLabel>{t('certificates.csr')}</FormLabel>
-        {certificate.spec?.csr ? certificate.spec.csr : EMPTY_TEXT_PLACEHOLDER}
+        <div className="break-word csr-display">
+          {certificate.spec?.csr
+            ? certificate.spec.csr
+            : EMPTY_TEXT_PLACEHOLDER}
+        </div>
       </FormItem>
       {certificate.metadata?.annotations ? (
         <FormItem>
