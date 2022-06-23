@@ -38,7 +38,6 @@ export function FunctionCreate({
   resource: initialFunction,
   ...props
 }) {
-  console.log(initialFunction);
   useConfigData();
   const { t } = useTranslation();
   const [func, setFunction] = useState(
