@@ -1,4 +1,4 @@
-# Config Map sections
+# Config Map for resource-based extensions
 
 ## Overview
 
