@@ -248,3 +248,5 @@ export function FunctionCreate({
     </ResourceForm>
   );
 }
+
+FunctionCreate.allowEdit = true;
