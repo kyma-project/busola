@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
+import * as _ from 'lodash';
 import { MessageStrip } from 'fundamental-react';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
@@ -19,7 +20,6 @@ import { CONFIG } from 'components/Functions/config';
 import { useConfigData } from 'components/Functions/helpers/misc/useConfigData';
 
 import { createFunctionTemplate } from './helpers';
-import { cloneDeep } from 'lodash';
 
 function usePrevious(value) {
   const ref = useRef('');
@@ -36,13 +36,14 @@ export function FunctionCreate({
   onChange,
   setCustomValid,
   resource: initialFunction,
+  resourceUrl,
   ...props
 }) {
   useConfigData();
   const { t } = useTranslation();
   const [func, setFunction] = useState(
     initialFunction
-      ? cloneDeep(initialFunction)
+      ? _.cloneDeep(initialFunction)
       : createFunctionTemplate(namespace),
   );
   const {
@@ -138,7 +139,10 @@ export function FunctionCreate({
       setResource={setFunction}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={`/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespace}/functions`}
+      createUrl={
+        resourceUrl ||
+        `/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespace}/functions`
+      }
       setCustomValid={setCustomValid}
       initialResource={initialFunction}
     >
