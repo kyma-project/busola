@@ -31,7 +31,7 @@
       },
       "KUBECONFIG_ID": {
         "config": {
-          "kubeconfigUrl": "assets/kubeconfig"
+          "kubeconfigUrl": "/kubeconfig"
         }
       },
       "SENTRY": {

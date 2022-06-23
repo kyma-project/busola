@@ -82,7 +82,7 @@ export async function handleKubeconfigIdIfPresent() {
             ...constants.DEFAULT_FEATURES,
           },
         },
-        // contextName: el.name,
+        contextName: el.name,
         currentContext: {
           cluster: cluster,
           user: user,
