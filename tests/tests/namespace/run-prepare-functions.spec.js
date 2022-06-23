@@ -19,6 +19,30 @@ context('Prepare funtions for testing', () => {
     cy.createSimpleFunction(FUNCTION_NAME);
   });
 
+  it('Edit a receiver Function and check updated Resources', () => {
+    cy.getIframeBody()
+      .contains('button', 'Edit')
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-haspopup="listbox"]:visible')
+      .first()
+      .click();
+
+    cy.getIframeBody()
+      .contains('Node.js 12')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role=dialog]')
+      .contains('button', 'Update')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Node.js 12')
+      .should('be.visible');
+  });
+
   it('Create a receiver Function', () => {
     cy.createFunction(
       FUNCTION_RECEIVER_NAME,
