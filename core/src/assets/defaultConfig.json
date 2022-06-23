@@ -31,7 +31,7 @@
       },
       "KUBECONFIG_ID": {
         "config": {
-          "kubeconfigUrl": "/kubeconfig"
+          "kubeconfigUrl": "assets/kubeconfig"
         }
       },
       "SENTRY": {
@@ -83,7 +83,7 @@
         "isEnabled": true
       },
       "EXTENSIBILITY": {
-        "isEnabled": false 
+        "isEnabled": false
       }
     }
   }

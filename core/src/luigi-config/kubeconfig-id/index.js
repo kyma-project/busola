@@ -41,6 +41,7 @@ export async function handleKubeconfigIdIfPresent() {
         },
       },
       kubeconfig,
+      contextName: kubeconfig?.cluster?.name || '',
       currentContext: getContext(kubeconfig),
     };
 
@@ -53,6 +54,46 @@ export async function handleKubeconfigIdIfPresent() {
     }
 
     await saveClusterParams(params);
+
+    const nonActiveContexts = kubeconfig.contexts.filter(el => {
+      const contextName = el.name;
+      return contextName !== kubeconfig['current-context'];
+    });
+
+    const saveNonActiveCluster = async el => {
+      const cluster = kubeconfig.clusters.find(
+        c => c.name === el.context.cluster,
+      );
+      const user = kubeconfig.users.find(u => u.name === el.context.user);
+
+      const extractedKubeconfig = {
+        ...kubeconfig,
+        'current-context': el.name,
+        contexts: [el],
+        clusters: [cluster],
+        users: [user],
+      };
+
+      const params = {
+        kubeconfig: extractedKubeconfig,
+        config: {
+          storage: 'sessionStorage',
+          features: {
+            ...constants.DEFAULT_FEATURES,
+          },
+        },
+        // contextName: el.name,
+        currentContext: {
+          cluster: cluster,
+          user: user,
+        },
+      };
+      await saveClusterParams(params);
+    };
+
+    for (const context of nonActiveContexts) {
+      await saveNonActiveCluster(context);
+    }
 
     saveActiveClusterName(clusterName);
   } catch (e) {
