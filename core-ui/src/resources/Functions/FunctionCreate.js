@@ -19,6 +19,7 @@ import { CONFIG } from 'components/Functions/config';
 import { useConfigData } from 'components/Functions/helpers/misc/useConfigData';
 
 import { createFunctionTemplate } from './helpers';
+import { cloneDeep } from 'lodash';
 
 function usePrevious(value) {
   const ref = useRef('');
@@ -34,11 +35,17 @@ export function FunctionCreate({
   formElementRef,
   onChange,
   setCustomValid,
+  resource: initialFunction,
   ...props
 }) {
+  console.log(initialFunction);
   useConfigData();
   const { t } = useTranslation();
-  const [func, setFunction] = useState(createFunctionTemplate(namespace));
+  const [func, setFunction] = useState(
+    initialFunction
+      ? cloneDeep(initialFunction)
+      : createFunctionTemplate(namespace),
+  );
   const {
     data: repositories,
   } = useGetList()(
@@ -134,6 +141,7 @@ export function FunctionCreate({
       formElementRef={formElementRef}
       createUrl={`/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespace}/functions`}
       setCustomValid={setCustomValid}
+      initialResource={initialFunction}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
@@ -144,6 +152,7 @@ export function FunctionCreate({
           jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
           setFunction({ ...func });
         }}
+        readOnly={!!initialFunction}
       />
       <KeyValueField
         advanced
