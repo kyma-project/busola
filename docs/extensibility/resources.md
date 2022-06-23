@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the required Config Map sections, that need to be configured in order to handle your CRD UI page.
+This document describes the required Config Map sections, you need to configure in order to handle your CRD UI page.
 All sections can be provided as either JSON or YAML.
 
 ## resource section
@@ -13,7 +13,7 @@ The `resource` section is required and contains basic information about the reso
 - **group** - _[required]_ API group used for all requests.
 - **version** - _[required]_ API version used for all requests.
 - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
-- **path** - path fragment for this resource used in the url. Defaults to pluralized lowercase `kind`. Used mostly to provide an alternative url to avoid conflicts with other resources.
+- **path** - path fragment for this resource used in the url. Defaults to pluralized lowercase `kind`. Used to provide an alternative url to avoid conflicts with other resources.
 
 ### Example
 
@@ -32,16 +32,16 @@ The `schema` section contains the JSON-schema definition of the resource. In mos
 
 ## form section
 
-The `form` section contains a list of objects that define which fields must be included in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to the simple form by providing the `simple: true` flag, or removing it from the advanced form by providing the `advanced: false` flag.
+The `form` section contains a list of objects that define which fields you must include in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to the simple form by providing the `simple: true` flag, or removing it from the advanced form by providing the `advanced: false` flag.
 
 If you target elements of an array rather that the array itself, you can use `items[]` notation.
 
 ### Item parameters
 
-- **path** - _[required]_ path to the property that must be displayed in the form. In case of an array, the array index is omitted. For example, if `spec.items` is an array and you want to display `name` for each items, the path is `spec.items.name`.
-- **widget** - optional widget used to render the field referred to by the `path` property. If no widget is provided a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form widgets](form-widgets.md).
-- **simple** - to display in the simple form. By default it is false.
-- **advanced** - to display in the advanced form. By default it is true.
+- **path** - _[required]_ path to the property that you want to display in the form. In case of an array, the array index is omitted. For example, if `spec.items` is an array and you want to display `name` for each items, the path is `spec.items.name`.
+- **widget** - optional widget used to render the field referred to by the `path` property. If you don't provide the widget, a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form widgets](form-widgets.md).
+- **simple** - to display in the simple form. It is `false` by default.
+- **advanced** - to display in the advanced form. It is `true` by default.
 
 ### Example
 
@@ -78,7 +78,7 @@ The `details` section defines the display structure for the details page. It con
 - **path** - contains the path to the data used for the widget. Not required for presentational widgets.
 - **name** - used for entries without `path` to define the translation source used for labels. Required if no `path` is present.
 - **widget** - optional widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
-- **children** - a list of child widgets used for all `object` and `array` type of fields. Not available for header widgets.
+- **children** - a list of child widgets used for all `object` and `array` fields. Not available for header widgets.
 
 Extra parameters might be available for specific widgets.
 
@@ -154,13 +154,13 @@ renders the same set of data as:
 
 ## translations sections
 
-This section can be provided as a single `translations` section that contains all available languages, formatted for i18next either as YAML or JSON, based on their paths.
+You can provide this section as a single `translations` section, that contains all available languages, formatted for i18next either as YAML or JSON, based on their paths.
 
 ### Predefined translation keys
 
-- **category** - the name of a category used for the left-hand menu. By default it is placed into a **Custom Resources** category.
+- **category** - the name of a category used for the left-hand menu. It is placed in a **Custom Resources** category by default.
 - **name** - title used in the navigation and on the list screen. It defaults to its resource kind.
-- **description** - a more in-depth description of the resource displayed on the list screen. It is only displayed if present.
+- **description** - a more in-depth description of the resource displayed on the list screen. Only displayed if present.
 
 ### Example
 
@@ -183,7 +183,7 @@ de:
 
 ### Language-specific sections
 
-Alternatively, `translations-{lang}` sections can be provided for a single language only. For example:
+Alternatively, you can provide `translations-{lang}` sections for a single language. For example:
 
 `translations-en`:
 
@@ -207,4 +207,4 @@ spec:
   items: Artikel
 ```
 
-If both `translations` and `translations-{lang}` sections are provided, they are merged together.
+If you provde both `translations` and `translations-{lang}` sections, they are merged together.

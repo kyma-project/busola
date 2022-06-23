@@ -1,10 +1,10 @@
 # Display widgets
 
-Display widgets are used in the lists and details pages.
+You can use display widgets in the lists and details pages.
 
 ## Inline widgets
 
-Inline widgets are used for simple values and are usable in lists, details headers, and details bodies.
+Use inline widgets for simple values in lists, details headers, and details bodies.
 
 ### Text
 
@@ -45,7 +45,7 @@ The following values are automatically handled:
 
 ## Block widgets
 
-Block widgets are more complex layouts and should be used only in details body.
+Block widgets are more complex layouts and you should use them only in details body.
 
 ### Plain
 
@@ -111,7 +111,7 @@ CodeViewer widgets display values using a read-only code editor. The editor auto
 
 ### Table
 
-Table widgets display array data as rows of a table instead of free-standing components. The `children` parameter defines the values used to render the columns. Similar to the `list` section of the Config Map, only inline widgets should be used as children.
+Table widgets display array data as rows of a table instead of free-standing components. The `children` parameter defines the values used to render the columns. Similar to the `list` section of the Config Map, you should use inline widgets only as children.
 
 #### Example
 
