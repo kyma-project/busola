@@ -1,7 +1,7 @@
 import React from 'react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
-import { getValue, useGetTranslation } from '../helpers';
+import { getValue, getAdvancedValue, useGetTranslation } from '../helpers';
 import { widgets } from './index';
 
 export const SimpleRenderer = ({ children }) => children;
@@ -21,7 +21,11 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     );
   }
 
-  const childValue = structure.path ? getValue(value, structure.path) : value;
+  const childValue = structure.formula
+    ? getAdvancedValue(value, structure.path, structure.formula)
+    : structure.path
+    ? getValue(value, structure.path)
+    : value;
 
   let Renderer = structure.children ? Plain : Text;
   if (structure.widget) {
