@@ -19,16 +19,23 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
 
   const languageDropdown = (
     <ComboboxInput
+      id="choose-language-input"
+      ariaLabel="choose-language"
       disabled={!item}
       compact
       showAllEntries
       searchFullString
       selectionType="manual"
-      options={getAvailableLanguages().map(l => ({
-        key: l.id,
-        text: l.aliases?.[0] || l.id,
-      }))}
-      selectedKey={language || ''}
+      options={getAvailableLanguages()
+        .map(l => ({
+          key: l.id,
+          text: l.aliases?.[0] || l.id,
+        }))
+        // remove duplicates
+        .filter(
+          (l, index, arr) => arr.findIndex(e => e.key === l.key) === index,
+        )}
+      selectedKey={typeof language === 'string' ? language : ''}
       onSelectionChange={(e, { key: language }) => {
         e?.stopPropagation(); // don't collapse the section
         onChange({ language });
