@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import LuigiClient from '@luigi-project/client';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import shortid from 'shortid';
+import pluralize from 'pluralize';
 import { Link } from 'fundamental-react';
+
 import {
   navigateToCustomResourceDefinitionDetails,
   navigateToClusterResourceDetails,
   navigateToFixedPathResourceDetails,
 } from 'shared/hooks/navigate';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import shortid from 'shortid';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 function pathExists(path) {
   const pathId = shortid.generate();
@@ -108,9 +110,7 @@ export const ControlledBy = ({ ownerReferences }) => {
     return EMPTY_TEXT_PLACEHOLDER;
 
   const OwnerRef = ({ owner, className }) => {
-    const resource = owner.kind.endsWith('s')
-      ? `${owner.kind.toLowerCase()}es`
-      : `${owner.kind.toLowerCase()}s`;
+    const resource = pluralize(owner.kind).toLowerCase();
 
     return (
       <div key={owner.name} className={className}>
