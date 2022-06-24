@@ -6,6 +6,7 @@ import { CodeViewer } from './CodeViewer';
 import { Badge } from './Badge';
 import { Table } from './Table';
 import { ResourceRefs } from './ResourceRefs';
+import { ControlledBy, ControlledByKind } from './ControlledBy';
 
 export const widgets = {
   Null: () => '',
@@ -17,4 +18,6 @@ export const widgets = {
   CodeViewer,
   Table,
   ResourceRefs,
+  ControlledBy,
+  ControlledByKind,
 };
