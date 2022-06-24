@@ -2,7 +2,7 @@
 
 ## Overview
 
-Extensibility in Busola allows you to create a UI page for your Custom Resource Defintion (CRD). You can create it at a cluster or Namespace level. To configure the UI page of your CRD, you can add navigation nodes, lists, and details pages, as well as create and edit forms. You can also add [display](display-widgets.md) and [form](form-widgets.md) widgets to have a graphical representation of the elements.
+Extensibility in Busola is a feature that allows you to create a separate dedicated user interface (UI) page for your Custom Resource Defintion (CRD). It allows you to add navigation nodes, at Cluster or Namespace level, and to configure your resource list page, details pages, as well as create and edit forms. You can also add [display](display-widgets.md) and [form](form-widgets.md) widgets to have a graphical representation of the elements.
 
 ## Quick start
 
