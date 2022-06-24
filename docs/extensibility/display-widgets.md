@@ -142,7 +142,7 @@ Additionally, you must define the kind of the linked resources by passing the Ku
 
 ### ControlledBy
 
-ControlledBy widgets render the kind and the name with a link to the resources that the current resource is dependent of.
+ControlledBy widgets render the kind and the name with a link to the resources that the current resource is dependent on.
 
 ### Example
 
