@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the required Config Map sections, you need to configure in order to handle your CRD UI page.
+This document describes the required Config Map sections that you need to configure in order to handle your CRD UI page.
 All sections can be provided as either JSON or YAML.
 
 ## resource section
@@ -13,7 +13,7 @@ The `resource` section is required and contains basic information about the reso
 - **group** - _[required]_ API group used for all requests.
 - **version** - _[required]_ API version used for all requests.
 - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
-- **path** - path fragment for this resource used in the url. Defaults to pluralized lowercase `kind`. Used to provide an alternative url to avoid conflicts with other resources.
+- **path** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
 
 ### Example
 
@@ -32,14 +32,14 @@ The `schema` section contains the JSON-schema definition of the resource. In mos
 
 ## form section
 
-The `form` section contains a list of objects that define which fields you must include in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to the simple form by providing the `simple: true` flag, or removing it from the advanced form by providing the `advanced: false` flag.
+The `form` section contains a list of objects that define which fields you must include in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to the simple form by providing the `simple: true` flag. You can also remove it from the advanced form by providing the `advanced: false` flag.
 
 If you target elements of an array rather that the array itself, you can use `items[]` notation.
 
 ### Item parameters
 
-- **path** - _[required]_ path to the property that you want to display in the form. In case of an array, the array index is omitted. For example, if `spec.items` is an array and you want to display `name` for each items, the path is `spec.items.name`.
-- **widget** - optional widget used to render the field referred to by the `path` property. If you don't provide the widget, a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form widgets](form-widgets.md).
+- **path** - _[required]_ path to the property that you want to display in the form. In the case of an array, the array index is omitted. For example, if `spec.items` is an array and you want to display `name` for each item, the path is `spec.items.name`.
+- **widget** - optional widget used to render the field referred to by the **path** property. If you don't provide the widget, a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form widgets](form-widgets.md).
 - **simple** - to display in the simple form. It is `false` by default.
 - **advanced** - to display in the advanced form. It is `true` by default.
 
@@ -73,7 +73,7 @@ The `list` section defines extra columns available in the list. The format is si
 
 The `details` section defines the display structure for the details page. It contains two sections, `header` and `body`, both of which are a list of items to display in the `header` section and the body of the page respectively. The format of the entries is similar to the `form` section, however it has extra options available.
 
-### Items parameteres
+### Items parameters
 
 - **path** - contains the path to the data used for the widget. Not required for presentational widgets.
 - **name** - used for entries without `path` to define the translation source used for labels. Required if no `path` is present.
@@ -154,7 +154,7 @@ renders the same set of data as:
 
 ## translations sections
 
-You can provide this section as a single `translations` section, that contains all available languages, formatted for i18next either as YAML or JSON, based on their paths.
+You can provide this section as a single `translations` section that contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
 
 ### Predefined translation keys
 
@@ -207,4 +207,4 @@ spec:
   items: Artikel
 ```
 
-If you provde both `translations` and `translations-{lang}` sections, they are merged together.
+If you provide both `translations` and `translations-{lang}` sections, they are merged together.
