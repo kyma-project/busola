@@ -157,7 +157,7 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 
 ### ControlledByKind
 
-ControlledByKind widgets render the kind of the resources that the current resource is dependent of.
+ControlledByKind widgets render the kind of the resources that the current resource is dependent on.
 
 ### Example
 
