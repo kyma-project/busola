@@ -35,7 +35,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
         .filter(
           (l, index, arr) => arr.findIndex(e => e.key === l.key) === index,
         )}
-      selectedKey={typeof language === 'string' ? language : ''}
+      selectedKey={typeof language === 'string' ? language : undefined}
       onSelectionChange={(e, { key: language }) => {
         e?.stopPropagation(); // don't collapse the section
         onChange({ language });

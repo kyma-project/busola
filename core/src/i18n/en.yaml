@@ -665,7 +665,7 @@ components:
         failure: 'Failed to update the {{resourceType}}: {{error}}'
         success: '{{resourceType}} updated'
   rich-editor-data-field:
-    language-placeholder: Choose a language
+    language-placeholder: Choose language
   string-input:
     placeholder: Enter multiple values separated by comma
     remove: Click to remove
