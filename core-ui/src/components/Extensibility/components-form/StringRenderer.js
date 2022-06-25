@@ -12,8 +12,11 @@ export function StringRenderer({
   schema,
   storeKeys,
   required,
+  compact,
   ...props
 }) {
+  // const compact = !!schema.get('compact');
+
   if (schema.get('enum')) {
     const options = schema
       .get('enum')
@@ -35,6 +38,7 @@ export function StringRenderer({
         label={<TransTitle schema={schema} storeKeys={storeKeys} />}
         input={Inputs.ComboboxInput}
         options={options}
+        compact={compact}
       />
     );
   } else {
@@ -53,6 +57,7 @@ export function StringRenderer({
         }}
         label={<TransTitle schema={schema} storeKeys={storeKeys} />}
         input={Inputs.Text}
+        compact={compact}
       />
     );
   }

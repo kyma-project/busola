@@ -21,6 +21,7 @@ import { CollapsibleRenderer } from './CollapsibleRenderer';
 import { GenericList } from './GenericList';
 import { MonacoRenderer } from './MonacoRenderer';
 import { ResourceRefRender } from './ResourceRefRenderer';
+import { SimpleList } from './SimpleList';
 
 const pluginStack = [
   ReferencingHandler,
@@ -41,6 +42,9 @@ export const widgets = {
   pluginStack,
   pluginSimpleStack: validators,
   types: {
+    object: ({ schema, ...props }) => (
+      <WidgetRenderer {...props} schema={schema.delete('widget')} />
+    ),
     string: StringRenderer,
     boolean: SwitchRenderer,
     number: NumberRenderer,
@@ -59,7 +63,9 @@ export const widgets = {
     TextIcon: TextIconRenderer,
     NumberIcon: NumberIconRenderer,
     NumberSlider,
+    */
     SimpleList,
+    /*
     GenericList,
     OptionsCheck,
     OptionsRadio,
