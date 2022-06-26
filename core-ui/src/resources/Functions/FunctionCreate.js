@@ -139,10 +139,7 @@ export function FunctionCreate({
       setResource={setFunction}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={
-        resourceUrl ||
-        `/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespace}/functions`
-      }
+      createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       initialResource={initialFunction}
     >
