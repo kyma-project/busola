@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import * as _ from 'lodash';
+import { cloneDeep } from 'lodash';
 import { MessageStrip } from 'fundamental-react';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
@@ -43,7 +43,7 @@ export function FunctionCreate({
   const { t } = useTranslation();
   const [func, setFunction] = useState(
     initialFunction
-      ? _.cloneDeep(initialFunction)
+      ? cloneDeep(initialFunction)
       : createFunctionTemplate(namespace),
   );
   const {
