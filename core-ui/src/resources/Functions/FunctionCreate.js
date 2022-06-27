@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
+import { cloneDeep } from 'lodash';
 import { MessageStrip } from 'fundamental-react';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
@@ -34,11 +35,17 @@ export function FunctionCreate({
   formElementRef,
   onChange,
   setCustomValid,
+  resource: initialFunction,
+  resourceUrl,
   ...props
 }) {
   useConfigData();
   const { t } = useTranslation();
-  const [func, setFunction] = useState(createFunctionTemplate(namespace));
+  const [func, setFunction] = useState(
+    initialFunction
+      ? cloneDeep(initialFunction)
+      : createFunctionTemplate(namespace),
+  );
   const {
     data: repositories,
   } = useGetList()(
@@ -132,8 +139,9 @@ export function FunctionCreate({
       setResource={setFunction}
       onChange={onChange}
       formElementRef={formElementRef}
-      createUrl={`/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespace}/functions`}
+      createUrl={resourceUrl}
       setCustomValid={setCustomValid}
+      initialResource={initialFunction}
     >
       <K8sNameField
         propertyPath="$.metadata.name"
@@ -144,6 +152,7 @@ export function FunctionCreate({
           jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
           setFunction({ ...func });
         }}
+        readOnly={!!initialFunction}
       />
       <KeyValueField
         advanced
@@ -248,3 +257,5 @@ export function FunctionCreate({
     </ResourceForm>
   );
 }
+
+FunctionCreate.allowEdit = true;
