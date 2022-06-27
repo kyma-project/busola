@@ -37,7 +37,7 @@ const pluginStack = [
 export const widgets = {
   // ErrorFallback: ErrorFallback,
   RootRenderer: ({ children }) => <div>{children}</div>,
-  GroupRenderer: ({ children }) => <div>{children}</div>,
+  GroupRenderer: ({ children }) => children,
   WidgetRenderer,
   pluginStack,
   pluginSimpleStack: validators,

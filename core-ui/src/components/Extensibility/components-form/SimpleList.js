@@ -24,18 +24,6 @@ export function SimpleList({
   const listSize = value?.size || 0;
   const fullWidth = false; // TODO
 
-  console.log('widgets', widgets);
-
-  const addItem = () => {
-    onChange({
-      storeKeys,
-      scopes: ['value', 'internal'],
-      type: 'list-item-add',
-      schema,
-      required,
-    });
-  };
-
   const removeItem = index => {
     onChange({
       storeKeys,
@@ -54,89 +42,44 @@ export function SimpleList({
     'fd-col-md--12': fullWidth,
   });
 
+  const isLast = index => index === listSize;
+
   return (
     <ResourceForm.CollapsibleSection
       container
       title={<TransTitle schema={schema} storeKeys={storeKeys} />}
-      actions={setOpen => (
-        <Button
-          glyph="add"
-          compact
-          onClick={() => {
-            addItem();
-            setOpen(true);
-          }}
-          disabled={readOnly}
-        >
-          {t('common.buttons.add')}
-        </Button>
-      )}
       {...props}
     >
       <div className="fd-row form-field multi-input">
         <ul className={listClasses}>
-          {Array(listSize)
+          {Array(listSize + 1)
             .fill(null)
             .map((_val, index) => {
               const ownKeys = storeKeys.push(index);
               const itemsSchema = schema.get('items');
 
-              /*
-        return (
-          <ResourceForm.CollapsibleSection
-            title={<TransTitle schema={schema} storeKeys={ownKeys} />}
-            actions={
-              <Button
-                compact
-                glyph="delete"
-                type="negative"
-                onClick={() => removeItem(index)}
-                disabled={readOnly}
-              />
-            }
-          >
-            <PluginStack
-              showValidity={showValidity}
-              schema={itemsSchema}
-              parentSchema={schema}
-              storeKeys={ownKeys}
-              level={level + 1}
-              schemaKeys={schemaKeys?.push('items')}
-            />
-          </ResourceForm.CollapsibleSection>
-        );
-        */
               return (
                 <li>
                   <PluginStack
                     showValidity={showValidity}
                     schema={itemsSchema}
-                    /*
-            widgets={{
-              ...widgets,
-              types: {
-                string: () => 'string',
-                integer: () => 'integer',
-                number: () => 'number',
-                boolean: () => 'boolean',
-              }
-            }}
-            */
                     parentSchema={schema}
                     storeKeys={ownKeys}
                     level={level + 1}
                     schemaKeys={schemaKeys?.push('items')}
-                    // WidgetOverride={({children}) => <React.Fragment container="true">{children}</React.Fragment>}
                     compact
                   />
-                  <Button
-                    disabled={readOnly}
-                    compact
-                    glyph="delete"
-                    type="negative"
-                    onClick={() => removeItem(index)}
-                    ariaLabel={t('common.buttons.delete')}
-                  />
+                  {!isLast(index) && (
+                    <Button
+                      disabled={readOnly}
+                      compact
+                      glyph="delete"
+                      type="negative"
+                      onClick={() => removeItem(index)}
+                      ariaLabel={t('common.buttons.delete')}
+                    />
+                  )}
+                  {isLast(index) && <span className="new-item-action"></span>}
                 </li>
               );
             })}

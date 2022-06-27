@@ -19,7 +19,11 @@ const widgets = {
 };
 
 function FormContainer({ children }) {
-  return <div container="true">{children}</div>;
+  return (
+    <div className="form-container" container="true">
+      {children}
+    </div>
+  );
 }
 const FormStack = injectPluginStack(FormContainer);
 
