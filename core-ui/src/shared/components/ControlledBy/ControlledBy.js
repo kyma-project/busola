@@ -11,6 +11,7 @@ import {
 } from 'shared/hooks/navigate';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { useMounted } from '../../hooks/useMounted';
 
 function pathExists(path) {
   const pathId = shortid.generate();
@@ -47,14 +48,17 @@ export const GoToDetailsLink = ({
 
   const [viewPath, setViewPath] = useState(null);
 
+  // prevents `setState` on onmounted component
+  const mounted = useMounted();
+
   useEffect(() => {
     const checkIfPathExists = async () => {
       if (await pathExists(namespacedViewPath)) {
-        setViewPath('namespace');
+        if (mounted.current) setViewPath('namespace');
       } else if (await pathExists(clusterWideViewPath)) {
-        setViewPath('cluster');
+        if (mounted.current) setViewPath('cluster');
       } else {
-        setViewPath('');
+        if (mounted.current) setViewPath('');
       }
     };
     if (resource && !viewPath) {
