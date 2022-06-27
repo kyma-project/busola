@@ -1,7 +1,7 @@
 import React from 'react';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
-import { TransTitle } from '@ui-schema/ui-schema/Translate/TransTitle';
 import { ResourceForm } from 'shared/ResourceForm';
+import { useGetTranslation } from 'components/Extensibility/helpers';
 
 export function MonacoRenderer({
   storeKeys,
@@ -10,10 +10,9 @@ export function MonacoRenderer({
   schema,
   required,
 }) {
+  const { tFromStoreKeys } = useGetTranslation();
   return (
-    <ResourceForm.CollapsibleSection
-      title={<TransTitle schema={schema} storeKeys={storeKeys} />}
-    >
+    <ResourceForm.CollapsibleSection title={tFromStoreKeys(storeKeys)}>
       <Editor
         autocompletionDisabled
         value={value}
