@@ -35,16 +35,12 @@ const pluginStack = [
 ];
 
 export const widgets = {
-  // ErrorFallback: ErrorFallback,
   RootRenderer: ({ children }) => <div>{children}</div>,
   GroupRenderer: ({ children }) => children,
   WidgetRenderer,
   pluginStack,
   pluginSimpleStack: validators,
   types: {
-    object: ({ schema, ...props }) => (
-      <WidgetRenderer {...props} schema={schema.delete('widget')} />
-    ),
     string: StringRenderer,
     boolean: SwitchRenderer,
     number: NumberRenderer,

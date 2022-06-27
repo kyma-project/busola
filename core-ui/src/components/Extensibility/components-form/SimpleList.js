@@ -1,4 +1,5 @@
 import React from 'react';
+import { mapValues } from 'lodash';
 import { TransTitle, PluginStack, useUIStore } from '@ui-schema/ui-schema';
 import { Button } from 'fundamental-react';
 import classnames from 'classnames';
@@ -22,7 +23,6 @@ export function SimpleList({
   const { store } = useUIStore();
   const { value } = store?.extractValues(storeKeys) || {};
   const listSize = value?.size || 0;
-  const fullWidth = false; // TODO
 
   const removeItem = index => {
     onChange({
@@ -35,14 +35,21 @@ export function SimpleList({
     });
   };
 
-  const listClasses = classnames({
-    'text-array-input__list': true,
-    'fd-col': true,
-    'fd-col-md--7': !fullWidth,
-    'fd-col-md--12': fullWidth,
-  });
+  const listClasses = classnames([
+    'text-array-input__list',
+    'fd-col',
+    'fd-col-md--12',
+  ]);
 
   const isLast = index => index === listSize;
+  const itemsSchema = schema.get('items');
+  const titleRenderer = ({ schema, storeKeys }) => (
+    <label>
+      <TransTitle schema={schema} storeKeys={storeKeys} />
+    </label>
+  );
+
+  const isObject = itemsSchema.get('type') === 'object';
 
   return (
     <ResourceForm.CollapsibleSection
@@ -50,13 +57,32 @@ export function SimpleList({
       title={<TransTitle schema={schema} storeKeys={storeKeys} />}
       {...props}
     >
-      <div className="fd-row form-field multi-input">
+      <div className="fd-row form-field multi-input extensibility">
         <ul className={listClasses}>
+          {isObject && (
+            <li>
+              <PluginStack
+                schema={itemsSchema}
+                widgets={{
+                  ...widgets,
+                  types: mapValues(widgets.types, () => titleRenderer),
+                  custom: {
+                    ...mapValues(widgets.custom, () => titleRenderer),
+                    Null: () => '',
+                  },
+                }}
+                parentSchema={schema}
+                storeKeys={storeKeys.push(0)}
+                level={level + 1}
+                schemaKeys={schemaKeys?.push('items')}
+              />
+              <span className="item-action"></span>
+            </li>
+          )}
           {Array(listSize + 1)
             .fill(null)
             .map((_val, index) => {
               const ownKeys = storeKeys.push(index);
-              const itemsSchema = schema.get('items');
 
               return (
                 <li>
@@ -69,17 +95,18 @@ export function SimpleList({
                     schemaKeys={schemaKeys?.push('items')}
                     compact
                   />
-                  {!isLast(index) && (
-                    <Button
-                      disabled={readOnly}
-                      compact
-                      glyph="delete"
-                      type="negative"
-                      onClick={() => removeItem(index)}
-                      ariaLabel={t('common.buttons.delete')}
-                    />
-                  )}
-                  {isLast(index) && <span className="new-item-action"></span>}
+                  <span className="item-action">
+                    {!isLast(index) && (
+                      <Button
+                        disabled={readOnly}
+                        compact
+                        glyph="delete"
+                        type="negative"
+                        onClick={() => removeItem(index)}
+                        ariaLabel={t('common.buttons.delete')}
+                      />
+                    )}
+                  </span>
                 </li>
               );
             })}

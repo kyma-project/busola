@@ -15,8 +15,6 @@ export function StringRenderer({
   compact,
   ...props
 }) {
-  // const compact = !!schema.get('compact');
-
   if (schema.get('enum')) {
     const options = schema
       .get('enum')
