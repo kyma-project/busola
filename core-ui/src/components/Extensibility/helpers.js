@@ -10,9 +10,11 @@ export const getValue = (resource, path) => {
   if (!path || path === '$') return resource;
 
   if (path.startsWith('$.')) {
-    return jp.value(resource, path);
+    return jp.query(resource, path);
+  } else if (path.startsWith('[')) {
+    return jp.query(resource, '$' + path);
   }
-  return jp.value(resource, '$.' + path);
+  return jp.query(resource, '$.' + path);
 };
 
 export const useGetTranslation = path => {

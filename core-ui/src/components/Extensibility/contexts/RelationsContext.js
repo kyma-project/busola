@@ -1,0 +1,110 @@
+import pluralize from 'pluralize';
+import { createContext, useContext, useEffect, useRef } from 'react';
+import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
+import { useObjectState } from 'shared/useObjectState';
+import jsonata from 'jsonata';
+import * as jsPathUtil from 'shared/helpers/jsPathUtil';
+
+const RelationsContext = createContext();
+
+function formatJsonataResult(result, { isListCall }) {
+  // if no entries matched, JSONata returns undefined, make it empty list
+  if (isListCall && !result) {
+    result = [];
+  }
+  // JSONata adds "sequence=true" field
+  delete result.sequence;
+  // if 1 entry matched, JSONata returns it, wrap it in list
+  if (isListCall && !Array.isArray(result)) {
+    result = [result];
+  }
+  return result;
+}
+
+export function RelationsContextProvider({ children, relations }) {
+  const fetch = useFetch();
+  // store
+  const [store, setStore] = useObjectState();
+  // safer than useState for concurrency - we don't want to duplicate the requests
+  const relationsDict = useRef({});
+  // refetch intervals
+  const intervals = useRef([]);
+
+  // clear timeouts on component unmount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => () => intervals.current.forEach(clearInterval), []);
+
+  const fetchResource = async (relation, relationName, resource) => {
+    const {
+      group,
+      kind,
+      selector,
+      version,
+      resourceName,
+      namespaced,
+    } = relation;
+    const namespace = namespaced ?? resource.metadata.namespace;
+
+    const namespacePart = namespace ? `/namespaces/${namespace}` : '';
+    const resourceType = pluralize(kind).toLowerCase();
+    const relativeUrl = `/${group}/${version}${namespacePart}/${resourceType}`;
+    const isListCall = !resourceName;
+    try {
+      const response = await fetch({ relativeUrl });
+      const data = await response.json();
+      const expression = jsonata(selector);
+      let result = expression.evaluate({
+        data: isListCall ? data.items : data,
+        resource,
+      });
+      setStore(relationName, {
+        loading: false,
+        error: null,
+        data: formatJsonataResult(result, { isListCall }),
+      });
+    } catch (e) {
+      setStore(relationName, { loading: false, error: e, data: null });
+    }
+  };
+
+  const getRelatedResourceInPath = path => {
+    const relationName = jsPathUtil.getFirstSegment(path);
+    return relations[relationName] ? relationName : null;
+  };
+
+  const contextValue = {
+    store,
+    relations,
+    getRelatedResourceInPath,
+    requestRelatedResource: (resource, path) => {
+      const relationName = getRelatedResourceInPath(path);
+      const relation = relations[relationName];
+
+      if (!relationsDict.current[relationName]) {
+        // mark relations as fetched
+        relationsDict.current[relationName] = true;
+
+        setStore(relationName, { loading: true });
+
+        fetchResource(relation, relationName, resource);
+        const REFETCH_INTERVAL = 6000;
+        intervals.current.push(
+          setInterval(
+            () => fetchResource(relation, relationName, resource),
+            REFETCH_INTERVAL,
+          ),
+        );
+      }
+    },
+  };
+
+  return (
+    <RelationsContext.Provider value={contextValue}>
+      {children}
+    </RelationsContext.Provider>
+  );
+}
+
+export function useRelationsContext() {
+  return useContext(RelationsContext);
+}
