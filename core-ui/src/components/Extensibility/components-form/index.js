@@ -61,8 +61,8 @@ export const widgets = {
     NumberSlider,
     */
     SimpleList,
-    /*
     GenericList,
+    /*
     OptionsCheck,
     OptionsRadio,
     Select,

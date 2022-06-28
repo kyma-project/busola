@@ -12,6 +12,7 @@ export function NumberRenderer({
   schema,
   storeKeys,
   required,
+  compact,
   ...props
 }) {
   return (
@@ -29,6 +30,7 @@ export function NumberRenderer({
       }}
       label={<TransTitle schema={schema} storeKeys={storeKeys} />}
       input={Inputs.Number}
+      compact={compact}
     />
   );
 }

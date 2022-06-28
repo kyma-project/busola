@@ -12,6 +12,7 @@ export function SwitchRenderer({
   schema,
   storeKeys,
   required,
+  compact,
   ...props
 }) {
   return (
@@ -29,6 +30,7 @@ export function SwitchRenderer({
       }}
       label={<TransTitle schema={schema} storeKeys={storeKeys} />}
       input={Inputs.Switch}
+      compact={compact}
     />
   );
 }

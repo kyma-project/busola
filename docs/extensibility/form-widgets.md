@@ -109,3 +109,47 @@ FormGroup widgets render an `object` as a collapsible section.
 ```
 
 <img src="./assets/form-widgets/FormGroup.png" alt="Example of a FormGroup widget" style="border: 1px solid #D2D5D9">
+
+### GenericList
+
+GenericList widgets render an `array` as a list of collapsible sections with their own sub-forms. An **add** button is present to add new entries.
+
+#### Example
+
+```json
+({
+  "path": "spec.services",
+  "widget": "GenericList"
+},
+{
+  "path": "spec.services[].host"
+},
+{
+  "path": "spec.services[].port"
+})
+```
+
+### SimpleList
+
+SimpleList widgets render an `array` as a table with rows representing data items and columns representing different fields. New items are added automatically when new entries are typed it.
+
+This type of field is only suitable for simple data types and can contain more complex structures in it's items.
+
+#### Example
+
+```json
+({
+  "path": "spec.services",
+  "widget": "SimpleList"
+},
+{
+  "path": "spec.services[].host"
+},
+{
+  "path": "spec.services[].port"
+})
+```
+
+#### Scalar values
+
+When array items are scalar instead of an object, no header with a field title will be rendered in the resulting table.
