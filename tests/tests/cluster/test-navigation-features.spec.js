@@ -29,10 +29,6 @@ context('Test navigation features', () => {
     // applications
     cy.getLeftNav()
       .contains('Integration')
-      .click();
-
-    cy.getLeftNav()
-      .contains('Applications')
       .should('not.exist');
 
     // visual resources

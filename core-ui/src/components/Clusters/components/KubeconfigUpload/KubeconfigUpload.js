@@ -36,8 +36,7 @@ export function KubeconfigUpload({
         setError(message.substr(0, message.indexOf('\n')));
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [t],
+    [t, setError, setKubeconfig],
   );
 
   return (
