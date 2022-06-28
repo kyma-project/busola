@@ -28,10 +28,10 @@ context('Test Cluster Role Bindings', () => {
 
     cy.getIframeBody()
       .find('[placeholder="Start typing to select Role Binding from the list"]')
-      .type('broker');
+      .type('admin');
 
     cy.getIframeBody()
-      .contains('helm-broker-h3')
+      .contains('cluster-admin')
       .click();
 
     cy.getIframeBody()
@@ -59,7 +59,7 @@ context('Test Cluster Role Bindings', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('helm-broker-h3')
+      .contains('cluster-admin')
       .should('be.visible');
   });
 
