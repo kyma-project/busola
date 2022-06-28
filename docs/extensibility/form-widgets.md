@@ -96,16 +96,18 @@ FormGroup widgets render an `object` as a collapsible section.
 #### Example
 
 ```json
-({
-  "path": "spec.service",
-  "widget": "FormGroup"
-},
-{
-  "path": "spec.service.host"
-},
-{
-  "path": "spec.service.port"
-})
+[
+  {
+    "path": "spec.service",
+    "widget": "FormGroup"
+  },
+  {
+    "path": "spec.service.host"
+  },
+  {
+    "path": "spec.service.port"
+  }
+]
 ```
 
 <img src="./assets/form-widgets/FormGroup.png" alt="Example of a FormGroup widget" style="border: 1px solid #D2D5D9">
@@ -117,16 +119,18 @@ GenericList widgets render an `array` as a list of collapsible sections with the
 #### Example
 
 ```json
-({
-  "path": "spec.services",
-  "widget": "GenericList"
-},
-{
-  "path": "spec.services[].host"
-},
-{
-  "path": "spec.services[].port"
-})
+[
+  {
+    "path": "spec.services",
+    "widget": "GenericList"
+  },
+  {
+    "path": "spec.services[].host"
+  },
+  {
+    "path": "spec.services[].port"
+  }
+]
 ```
 
 ### SimpleList
@@ -138,16 +142,18 @@ This type of field is only suitable for simple data types and can contain more c
 #### Example
 
 ```json
-({
-  "path": "spec.services",
-  "widget": "SimpleList"
-},
-{
-  "path": "spec.services[].host"
-},
-{
-  "path": "spec.services[].port"
-})
+[
+  {
+    "path": "spec.services",
+    "widget": "SimpleList"
+  },
+  {
+    "path": "spec.services[].host"
+  },
+  {
+    "path": "spec.services[].port"
+  }
+]
 ```
 
 #### Scalar values
