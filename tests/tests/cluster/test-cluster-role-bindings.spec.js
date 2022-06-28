@@ -32,7 +32,7 @@ context('Test Cluster Role Bindings', () => {
 
     cy.getIframeBody()
       .contains('cluster-admin')
-      .click();
+      .click({ force: true });
 
     cy.getIframeBody()
       .find('[ariaLabel="User name"]')
