@@ -46,7 +46,6 @@ export function ResourceForm({
     afterCreatedFn,
     toggleFormFn,
   });
-
   const handleInitialMode = () => {
     if (onlyYaml) return ModeSelector.MODE_YAML;
 

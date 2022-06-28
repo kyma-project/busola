@@ -21,32 +21,32 @@ context('Test Custom Resources', () => {
 
     cy.getIframeBody()
       .find('[type="search"]')
-      .type('addons');
+      .type('app');
 
     cy.getIframeBody()
       .find('table')
       .should('have.length', 1);
 
     cy.getIframeBody()
-      .contains('ClusterAddonsConfigurations')
+      .contains('Applications')
       .should('be.visible');
   });
 
   it('Check single CR list', () => {
     cy.getIframeBody()
-      .contains('ClusterAddonsConfigurations')
+      .contains('Applications')
       .click();
 
     cy.getIframeBody()
-      .contains('ClusterAddonsConfigurations')
+      .contains('Applications')
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains(/Create Cluster Addons Configuration/i)
+      .contains(/Create Application/i)
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('clusteraddonsconfigurations.addons.kyma-project.io')
+      .contains('applicationconnector.kyma-project.io')
       .click();
 
     cy.url().should('match', /customresourcedefinitions/);
