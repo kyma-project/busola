@@ -11,7 +11,7 @@
         "header": [
           {
             "path": "apiRules",
-            "name": "API Rule names",
+            "name": "API Rule names & statuses, this is so  f a n c y",
             "valuePreprocessor": "PendingWrapper",
             "formula": "$join([*].(metadata.name & ' (' & status.APIRuleStatus.code & ')'), ', ')"
           }
@@ -27,11 +27,9 @@
             "path": "subscriptions",
             "columns": [{
               "path": "status.cleanEventTypes[0]",
-              "name": "My fancy event types",
+              "name": "My very own event types",
               "widget": "Badge"
             }],
-            "hasDetailsView": true,
-            "fixedPath": true,
             "showSearchField": false
           }
         ]

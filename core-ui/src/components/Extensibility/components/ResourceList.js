@@ -16,10 +16,12 @@ export function ResourceList({
   const namespace = relation.namespaced ?? originalResource.metadata.namespace;
   const { group, kind, version } = relation;
 
-  const PredefinedList = resources.find(
+  const PredefinedRenderer = resources.find(
     r => r.resourceType.toLowerCase() === pluralize(kind).toLowerCase(),
-  )?.List;
-  const Renderer = PredefinedList ? PredefinedList : ResourcesList;
+  );
+  const ListRenderer = PredefinedRenderer
+    ? PredefinedRenderer.List
+    : ResourcesList;
 
   const namespacePart = namespace ? `/namespaces/${namespace}` : '';
   const resourceUrl = `/${group}/${version}${namespacePart}/${pluralize(
@@ -35,7 +37,7 @@ export function ResourceList({
   }
 
   return (
-    <Renderer
+    <ListRenderer
       skipDataLoading={true}
       loading={value.loading}
       error={value.error}
@@ -47,6 +49,8 @@ export function ResourceList({
       isCompact
       title={structure.name}
       showTitle={true}
+      hasDetailsView={structure.hasDetailsView ?? !!PredefinedRenderer.Details}
+      fixedPath={true}
       {...structure}
       {...props}
       columns={columns}
