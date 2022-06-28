@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useRelationsContext } from '../contexts/RelationsContext';
 import { Widget } from './Widget';
 
+// receives { data, loading, error }, displays loading or error state and passes the value down
 export function PendingWrapper({ value, ...props }) {
   const { t } = useTranslation();
 
@@ -24,7 +25,6 @@ export function PendingWrapper({ value, ...props }) {
       relatedResourcePath,
       '',
     );
-    console.log('data', data);
     return <Widget value={data} {...copiedProps} />;
   }
 }

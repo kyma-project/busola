@@ -5,6 +5,7 @@ import { useRelationsContext } from '../contexts/RelationsContext';
 import { getValue, useGetTranslation } from '../helpers';
 import { widgets } from './index';
 import { PendingWrapper } from './PendingWrapper';
+import jsonata from 'jsonata';
 
 export const SimpleRenderer = ({ children }) => children;
 
@@ -62,6 +63,11 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
         {...props}
       />
     );
+  }
+
+  if (structure.formula) {
+    const expression = jsonata(structure.formula);
+    childValue = expression.evaluate(childValue);
   }
 
   if (Array.isArray(structure)) {

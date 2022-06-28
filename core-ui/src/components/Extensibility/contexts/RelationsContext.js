@@ -51,16 +51,19 @@ export function RelationsContextProvider({ children, relations }) {
     const isListCall = !resourceName;
     try {
       const response = await fetch({ relativeUrl });
-      const data = await response.json();
-      const expression = jsonata(selector);
-      let result = expression.evaluate({
-        data: isListCall ? data.items : data,
-        resource,
-      });
+      let data = await response.json();
+      data = isListCall ? data.items : data;
+      if (selector) {
+        data = jsonata(selector).evaluate({
+          data,
+          resource,
+        });
+        data = formatJsonataResult(data, { isListCall });
+      }
       setStore(relationName, {
         loading: false,
         error: null,
-        data: formatJsonataResult(result, { isListCall }),
+        data,
       });
     } catch (e) {
       setStore(relationName, { loading: false, error: e, data: null });

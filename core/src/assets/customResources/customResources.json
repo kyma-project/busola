@@ -12,7 +12,8 @@
           {
             "path": "apiRules",
             "name": "API Rule names",
-            "valuePreprocessor": "PendingWrapper"
+            "valuePreprocessor": "PendingWrapper",
+            "formula": "$join([*].(metadata.name & ' (' & status.APIRuleStatus.code & ')'), ', ')"
           }
         ],
         "body": [
@@ -29,6 +30,8 @@
               "name": "My fancy event types",
               "widget": "Badge"
             }],
+            "hasDetailsView": true,
+            "fixedPath": true,
             "showSearchField": false
           }
         ]
@@ -545,6 +548,29 @@
           "spec.clusterIP": "Cluster IP",
           "spec.externalIPs": "External IPs //TODO",
           "metadata.ownerReferences": "Controlled by"
+        }
+      }
+    },
+    "deployments": {
+      "resource": {
+        "kind": "Deployment",
+        "group": "apps",
+        "version": "v1",
+        "scope": "namespace",
+        "path": "deployments-new"
+      },
+      "details": {
+        "header": [],
+        "body": [{
+            "widget": "ResourceList",
+            "path": "pods"
+        }]
+      },
+      "relations": {
+        "pods": {
+          "kind": "Pod",
+          "group": "api",
+          "version": "v1"
         }
       }
     }
