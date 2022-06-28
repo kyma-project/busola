@@ -21,32 +21,32 @@ context('Test Custom Resources', () => {
 
     cy.getIframeBody()
       .find('[type="search"]')
-      .type('compass');
+      .type('app');
 
     cy.getIframeBody()
       .find('table')
       .should('have.length', 1);
 
     cy.getIframeBody()
-      .contains('CompassConnections')
+      .contains('Applications')
       .should('be.visible');
   });
 
   it('Check single CR list', () => {
     cy.getIframeBody()
-      .contains('CompassConnections')
+      .contains('Applications')
       .click();
 
     cy.getIframeBody()
-      .contains('CompassConnections')
+      .contains('Applications')
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains(/Create Compass Connection/i)
+      .contains(/Create Application/i)
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('compass.kyma-project.io')
+      .contains('applicationconnector.kyma-project.io')
       .click();
 
     cy.url().should('match', /customresourcedefinitions/);
