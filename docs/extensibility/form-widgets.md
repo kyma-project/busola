@@ -133,6 +133,8 @@ GenericList widgets render an `array` as a list of collapsible sections with the
 ]
 ```
 
+<img src="./assets/form-widgets/GenericList.png" alt="Example of a GenericList widget" style="border: 1px solid #D2D5D9">
+
 ### SimpleList
 
 SimpleList widgets render an `array` as a table with rows representing data items and columns representing different fields. New items are added automatically when new entries are typed it.
@@ -155,6 +157,8 @@ This type of field is only suitable for simple data types and can contain more c
   }
 ]
 ```
+
+<img src="./assets/form-widgets/SimpleList.png" alt="Example of a SimpleList widget" style="border: 1px solid #D2D5D9">
 
 #### Scalar values
 
