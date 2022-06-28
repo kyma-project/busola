@@ -4,6 +4,7 @@ import { useRelationsContext } from '../contexts/RelationsContext';
 
 import { getValue, useGetTranslation } from '../helpers';
 import { widgets } from './index';
+import { PendingWrapper } from './PendingWrapper';
 
 export const SimpleRenderer = ({ children }) => children;
 
@@ -46,6 +47,22 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (structure.valuePreprocessor) {
+    const valuePreprocessors = { PendingWrapper };
+
+    const Preprocessor = valuePreprocessors[structure.valuePreprocessor];
+    const copiedStructure = JSON.parse(JSON.stringify(structure));
+    copiedStructure.valuePreprocessor = null;
+    return (
+      <Preprocessor
+        value={childValue}
+        structure={copiedStructure}
+        inlineRenderer={inlineRenderer}
+        {...props}
+      />
+    );
+  }
 
   if (Array.isArray(structure)) {
     return (

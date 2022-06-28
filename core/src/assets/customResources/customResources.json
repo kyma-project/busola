@@ -12,7 +12,7 @@
           {
             "path": "apiRules",
             "name": "API Rule names",
-            "valuePreProcessors": ["PendingWrapper"]
+            "valuePreprocessor": "PendingWrapper"
           }
         ],
         "body": [

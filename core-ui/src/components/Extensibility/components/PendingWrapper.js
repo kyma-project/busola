@@ -10,7 +10,7 @@ export function PendingWrapper({ value, ...props }) {
   if (typeof value !== 'object') {
     return value ?? null;
   }
-  let { data, loading, error } = value;
+  const { data, loading, error } = value;
 
   if (loading) {
     return t('common.headers.loading');
@@ -18,11 +18,13 @@ export function PendingWrapper({ value, ...props }) {
     return t('common.messages.error', { error });
   } else {
     const relatedResourcePath = getRelatedResourceInPath(props.structure.path);
+    // copy props to make sure original "structure" is not lost
     const copiedProps = JSON.parse(JSON.stringify(props));
     copiedProps.structure.path = props.structure.path.replace(
       relatedResourcePath,
       '',
     );
+    console.log('data', data);
     return <Widget value={data} {...copiedProps} />;
   }
 }
