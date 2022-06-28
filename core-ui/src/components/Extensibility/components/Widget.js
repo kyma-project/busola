@@ -16,8 +16,18 @@ export function InlineWidget({ children, structure, ...props }) {
   );
 }
 
-export function Widget({ structure, value, inlineRenderer, ...props }) {
+function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
+  return Renderer.inline && InlineRenderer ? (
+    <InlineRenderer {...props}>
+      <Renderer {...props} />
+    </InlineRenderer>
+  ) : (
+    <Renderer {...props} />
+  );
+}
+
+export function Widget({ structure, value, inlineRenderer, ...props }) {
   const { Plain, Text } = widgets;
 
   const {
@@ -83,20 +93,23 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     }
   }
 
-  const SingleWidget = props =>
-    Renderer.inline && InlineRenderer ? (
-      <InlineRenderer {...props}>
-        <Renderer {...props} />
-      </InlineRenderer>
-    ) : (
-      <Renderer {...props} />
-    );
-
   return Array.isArray(childValue) && !Renderer.array ? (
     childValue.map(item => (
-      <SingleWidget value={item} structure={structure} {...props} />
+      <SingleWidget
+        inlineRenderer={inlineRenderer}
+        Renderer={Renderer}
+        value={item}
+        structure={structure}
+        {...props}
+      />
     ))
   ) : (
-    <SingleWidget value={childValue} structure={structure} {...props} />
+    <SingleWidget
+      inlineRenderer={inlineRenderer}
+      Renderer={Renderer}
+      value={childValue}
+      structure={structure}
+      {...props}
+    />
   );
 }

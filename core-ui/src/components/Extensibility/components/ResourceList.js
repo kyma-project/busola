@@ -15,6 +15,10 @@ export function ResourceList({
 }) {
   const namespace = relation.namespaced ?? originalResource.metadata.namespace;
   const { group, kind, version } = relation;
+  const namespacePart = namespace ? `/namespaces/${namespace}` : '';
+  const resourceUrl = `/${group}/${version}${namespacePart}/${pluralize(
+    kind,
+  ).toLowerCase()}`;
 
   const PredefinedRenderer = resources.find(
     r => r.resourceType.toLowerCase() === pluralize(kind).toLowerCase(),
@@ -22,11 +26,6 @@ export function ResourceList({
   const ListRenderer = PredefinedRenderer
     ? PredefinedRenderer.List
     : ResourcesList;
-
-  const namespacePart = namespace ? `/namespaces/${namespace}` : '';
-  const resourceUrl = `/${group}/${version}${namespacePart}/${pluralize(
-    kind,
-  ).toLowerCase()}`;
 
   let columns;
   if (Array.isArray(structure.columns)) {
