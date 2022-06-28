@@ -66,9 +66,7 @@ export function DeploymentCreate({
         setDeployment(value.deployment);
       }}
       // create modal on a namespace details doesn't have the resourceUrl
-      createUrl={
-        resourceUrl || `/apis/apps/v1/namespaces/${namespace}/deployments/`
-      }
+      createUrl={resourceUrl}
       initialResource={initialDeployment}
     >
       <K8sNameField
