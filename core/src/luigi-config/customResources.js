@@ -35,13 +35,18 @@ async function loadTargetClusterCRs(authData) {
 
   let items;
   try {
-    const response = await failFastFetch(
+    let response = await failFastFetch(
       config.backendAddress +
-        (namespace
-          ? `/api/v1/namespaces/${namespace}/configmaps?labelSelector=${labelSelectors}`
-          : `/api/v1/configmaps?labelSelector=${labelSelectors}`),
+        `/api/v1/configmaps?labelSelector=${labelSelectors}`,
       authData,
     );
+    if (response.status >= 400) {
+      response = await failFastFetch(
+        config.backendAddress +
+          `/api/v1/namespaces/${namespace}/configmaps?labelSelector=${labelSelectors}`,
+        authData,
+      );
+    }
     items = (await response.json()).items;
   } catch (e) {
     console.warn('Cannot load target cluster CRs', e);
