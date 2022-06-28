@@ -31,6 +31,7 @@ export default function DeployNewWorkload({ namespaceName }) {
           {...props}
           namespace={namespaceName}
           toggleFormFn={toggleFormFn}
+          resourceUrl={`/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespaceName}/functions`}
         />
       )}
       i18n={i18n}
@@ -52,6 +53,7 @@ export default function DeployNewWorkload({ namespaceName }) {
           {...props}
           namespace={namespaceName}
           toggleFormFn={toggleFormFn}
+          resourceUrl={`/apis/apps/v1/namespaces/${namespaceName}/deployments/`}
         />
       )}
       i18n={i18n}

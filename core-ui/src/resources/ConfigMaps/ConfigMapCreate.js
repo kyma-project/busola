@@ -7,7 +7,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import {
   K8sNameField,
   KeyValueField,
-  DataField,
+  RichEditorDataField,
 } from 'shared/ResourceForm/fields';
 
 import { createConfigMapTemplate, createPresets } from './helpers';
@@ -67,7 +67,7 @@ export function ConfigMapCreate({
         propertyPath="$.metadata.annotations"
         title={t('common.headers.annotations')}
       />
-      <DataField defaultOpen propertyPath="$.data" />
+      <RichEditorDataField defaultOpen propertyPath="$.data" />
     </ResourceForm>
   );
 }
