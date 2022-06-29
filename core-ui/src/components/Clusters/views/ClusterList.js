@@ -204,7 +204,7 @@ function ClusterList() {
         i18n={i18n}
         allowSlashShortcut
         sortBy={{
-          name: (a, b) => a.contextName.localeCompare(b.contextName),
+          name: (a, b) => a.contextName?.localeCompare(b.contextName),
         }}
       />
       <DeleteMessageBox
