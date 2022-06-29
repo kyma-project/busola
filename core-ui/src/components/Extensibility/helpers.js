@@ -15,13 +15,14 @@ export const getValue = (resource, path) => {
   }
   return jp.value(resource, '$.' + path);
 };
-export const getAdvancedValue = (resource, path, formula) => {
-  const value = getValue(resource, path);
-  console.log('value', value);
-
-  var expression = jsonata(formula);
-  var result = expression.evaluate({ value });
-  console.log('result', result);
+export const applyFormula = (value, formula) => {
+  let result;
+  try {
+    let expression = jsonata(formula);
+    result = expression.evaluate({ value });
+  } catch (e) {
+    return `Error: e.message`;
+  }
 
   return result;
 };
