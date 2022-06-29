@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useRef } from 'react';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { useObjectState } from 'shared/useObjectState';
 import jsonata from 'jsonata';
+import * as jp from 'jsonpath';
 import * as jsPathUtil from 'shared/helpers/jsPathUtil';
 
 const RelationsContext = createContext();
@@ -34,20 +35,43 @@ export function RelationsContextProvider({ children, relations }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => intervals.current.forEach(clearInterval), []);
 
-  const fetchResource = async (relation, relationName, resource) => {
+  const buildUrl = (relation, resource) => {
     const {
       group,
       kind,
-      selector,
       version,
       resourceName,
       namespaced,
+      ownerLabelSelectorPath,
     } = relation;
     const namespace = namespaced ?? resource.metadata.namespace;
 
     const namespacePart = namespace ? `/namespaces/${namespace}` : '';
     const resourceType = pluralize(kind).toLowerCase();
-    const relativeUrl = `/${group}/${version}${namespacePart}/${resourceType}`;
+
+    let labelSelector = '';
+    if (ownerLabelSelectorPath) {
+      const ownerLabels = jp.value(resource, ownerLabelSelectorPath);
+      labelSelector =
+        '?labelSelector=' +
+        Object.entries(ownerLabels)
+          ?.map(([key, value]) => `${key}=${value}`)
+          .join(',');
+    }
+
+    let url = `/${group}/${version}${namespacePart}/${resourceType}`;
+    if (labelSelector) {
+      url += labelSelector;
+    } else if (resourceName) {
+      url += '/' + resourceName;
+    }
+    return url;
+  };
+
+  const fetchResource = async (relation, relationName, resource) => {
+    const { selector, resourceName } = relation;
+
+    const relativeUrl = buildUrl(relation, resource);
     const isListCall = !resourceName;
     try {
       const response = await fetch({ relativeUrl });
