@@ -4,7 +4,11 @@ import pluralize from 'pluralize';
 
 import { config } from './config';
 import { failFastFetch } from './navigation/queries';
-import { getCurrentConfig } from './cluster-management/cluster-management';
+import {
+  getActiveCluster,
+  getCurrentConfig,
+  getCurrentContextNamespace,
+} from './cluster-management/cluster-management';
 
 let customResources = null;
 
@@ -24,15 +28,26 @@ async function loadBusolaClusterCRs() {
 }
 
 async function loadTargetClusterCRs(authData) {
+  const activeCluster = getActiveCluster();
+  const namespace =
+    getCurrentContextNamespace(activeCluster?.kubeconfig) || 'kube-public';
+
   const labelSelectors = `busola.io/extension=resource`;
 
   let items;
   try {
-    const response = await failFastFetch(
+    let response = await failFastFetch(
       config.backendAddress +
-        `/api/v1/namespaces/kube-public/configmaps?labelSelector=${labelSelectors}`,
+        `/api/v1/configmaps?labelSelector=${labelSelectors}`,
       authData,
     );
+    if (response.status >= 400) {
+      response = await failFastFetch(
+        config.backendAddress +
+          `/api/v1/namespaces/${namespace}/configmaps?labelSelector=${labelSelectors}`,
+        authData,
+      );
+    }
     items = (await response.json()).items;
   } catch (e) {
     console.warn('Cannot load target cluster CRs', e);
