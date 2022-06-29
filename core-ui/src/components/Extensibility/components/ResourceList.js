@@ -13,7 +13,10 @@ export function ResourceList({
   schema,
   ...props
 }) {
-  const namespace = relation.namespaced ?? originalResource.metadata.namespace;
+  const namespace =
+    typeof relation.namespace === 'undefined'
+      ? originalResource.metadata.namespace
+      : relation.namespace;
   const { group, kind, version } = relation;
   const namespacePart = namespace ? `/namespaces/${namespace}` : '';
   const resourceUrl = `/${group}/${version}${namespacePart}/${pluralize(
