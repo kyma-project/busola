@@ -26,6 +26,7 @@ export function NamespaceDetails(props) {
   const [showAdd, setShowAdd] = useState(false);
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
+
   const limitRangesParams = {
     hasDetailsView: false,
     resourceUrl: `/api/v1/namespaces/${props.resourceName}/limitranges`,
@@ -61,9 +62,11 @@ export function NamespaceDetails(props) {
     showTitle: true,
   };
 
-  const ApplicationMappings = features?.APPLICATIONS?.isEnabled ? (
-    <ResourcesList {...applicationMappingsParams} />
-  ) : null;
+  const ApplicationMappings =
+    features?.APPLICATIONS?.isEnabled &&
+    features?.SERVICE_CATALOG?.isEnabled ? (
+      <ResourcesList {...applicationMappingsParams} />
+    ) : null;
 
   const Events = (
     <EventsList
