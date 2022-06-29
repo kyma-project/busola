@@ -1,3 +1,4 @@
+import { getReasonPhrase } from 'http-status-codes';
 export const baseUrl = getConfigFn => getConfigFn('backendAddress');
 
 export class HttpError extends Error {
@@ -28,10 +29,13 @@ export async function throwHttpError(response) {
     } catch (e) {}
   } // proceed to show more generic error
 
-  const errorMessage = response.message || response.statusText || response;
-  return new Error(
-    errorMessage && typeof errorMessage === 'string'
-      ? errorMessage
-      : 'An error occured. The component cannot be rendered.',
-  );
+  const createErrorMessage = (statusCode, statusText) => {
+    return `${statusCode} ${statusText || getReasonPhrase(statusCode)}`;
+  };
+
+  const errorMessage =
+    response.message ||
+    createErrorMessage(response.status, response.statusText);
+
+  return new Error(errorMessage);
 }
