@@ -2,6 +2,7 @@ import { createContext, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
+var jsonata = require('jsonata');
 
 export const TranslationBundleContext = createContext('extensibility');
 
@@ -10,11 +11,23 @@ export const getValue = (resource, path) => {
   if (!path || path === '$') return resource;
 
   if (path.startsWith('$.')) {
-    return jp.query(resource, path);
+    return jp.value(resource, path);
   } else if (path.startsWith('[')) {
-    return jp.query(resource, '$' + path);
+    return jp.value(resource, '$' + path);
   }
-  return jp.query(resource, '$.' + path);
+  return jp.value(resource, '$.' + path);
+};
+export const ApplyFormula = (value, formula, i18n) => {
+  const { t } = useTranslation(null, { i18n });
+  let result;
+  try {
+    let expression = jsonata(formula);
+    result = expression.evaluate({ data: value });
+  } catch (e) {
+    result = t('extensibility.configuration-error', { error: e.message });
+  }
+
+  return result;
 };
 
 export const useGetTranslation = path => {

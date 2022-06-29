@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useRelationsContext } from '../contexts/RelationsContext';
 
-import { getValue, useGetTranslation } from '../helpers';
 import { widgets, valuePreprocessors } from './index';
-import jsonata from 'jsonata';
+import { useTranslation } from 'react-i18next';
+
+import { getValue, ApplyFormula, useGetTranslation } from '../helpers';
 
 export const SimpleRenderer = ({ children }) => children;
 
@@ -28,6 +29,7 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
 
 export function Widget({ structure, value, inlineRenderer, ...props }) {
   const { Plain, Text } = widgets;
+  const { i18n } = useTranslation();
 
   const {
     store,
@@ -73,8 +75,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
   }
 
   if (structure.formula) {
-    const expression = jsonata(structure.formula);
-    childValue = expression.evaluate(childValue);
+    childValue = ApplyFormula(childValue, structure.formula, i18n);
   }
 
   if (Array.isArray(structure)) {

@@ -63,7 +63,8 @@ data:
       { "path": "spec.description" },
       { "path": "spec.realization" }, 
       { "name": "Payment method","path": "spec.paymentMethod", "widget": "Badge" }, 
-      { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" }
+      { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
+      { "path": "spec.toppings", formula: "$join(value.name, ', ')" }
     ]
   resource: |-
     {
