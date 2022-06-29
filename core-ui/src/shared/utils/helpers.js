@@ -114,6 +114,7 @@ export const prettifyKind = kind => {
 };
 
 export const getErrorMessage = (error, message = null) => {
+  console.log('getErrorMessage', error, error?.originalMessage);
   let errorNotification = message
     ? message
     : 'An error occured. The component cannot be rendered.';

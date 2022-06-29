@@ -27,7 +27,7 @@ export const HeaderRenderer = ({ actions, headerRenderer }) => {
       <th
         className="fd-table__cell"
         scope="col"
-        key={typeof h === 'object' ? index : h}
+        key={!h || typeof h === 'object' ? index : h}
       >
         {h}
       </th>
