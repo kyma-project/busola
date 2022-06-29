@@ -4,7 +4,6 @@ import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { useObjectState } from 'shared/useObjectState';
 import jsonata from 'jsonata';
 import * as jp from 'jsonpath';
-import * as jsPathUtil from 'shared/helpers/jsPathUtil';
 
 const RelationsContext = createContext();
 
@@ -95,8 +94,9 @@ export function RelationsContextProvider({ children, relations }) {
   };
 
   const getRelatedResourceInPath = path => {
-    const relationName = jsPathUtil.getFirstSegment(path);
-    return relations[relationName] ? relationName : null;
+    return Object.keys(relations).find(relationName =>
+      path.startsWith('$' + relationName),
+    );
   };
 
   const contextValue = {

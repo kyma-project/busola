@@ -167,7 +167,13 @@ export const ControlledByKind = ({ ownerReferences }) => {
       {Array.isArray(ownerReferences) ? (
         ownerReferences.map((owner, index) => {
           const className = index > 0 ? 'fd-margin-top--sm' : '';
-          return <OwnerRef owner={owner} className={className} />;
+          return (
+            <OwnerRef
+              key={owner.kind + owner.name}
+              owner={owner}
+              className={className}
+            />
+          );
         })
       ) : (
         <OwnerRef owner={ownerReferences} className={''} />

@@ -20,12 +20,16 @@ export function PendingWrapper({ value, ...props }) {
     return t('common.messages.error', { error });
   } else {
     const relatedResourcePath = getRelatedResourceInPath(props.structure.path);
-    // copy props to make sure original "structure" is not lost
-    const copiedProps = JSON.parse(JSON.stringify(props));
-    copiedProps.structure.path = props.structure.path.replace(
-      relatedResourcePath,
-      '',
+
+    return (
+      <Widget
+        value={data}
+        {...props}
+        structure={{
+          ...props.structure,
+          path: props.structure.path.replace(relatedResourcePath, ''),
+        }}
+      />
     );
-    return <Widget value={data} {...copiedProps} />;
   }
 }
