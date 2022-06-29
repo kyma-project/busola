@@ -15,13 +15,14 @@ export const getValue = (resource, path) => {
   }
   return jp.value(resource, '$.' + path);
 };
-export const applyFormula = (value, formula) => {
+export const ApplyFormula = (value, formula, i18n) => {
+  const { t } = useTranslation(null, { i18n });
   let result;
   try {
     let expression = jsonata(formula);
-    result = expression.evaluate({ value });
+    result = expression.evaluate({ data: value });
   } catch (e) {
-    return `Error: ${e.message}`;
+    result = t('extensibility.configuration-error', { error: e.message });
   }
 
   return result;

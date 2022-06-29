@@ -1,7 +1,8 @@
 import React from 'react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { useTranslation } from 'react-i18next';
 
-import { getValue, applyFormula, useGetTranslation } from '../helpers';
+import { getValue, ApplyFormula, useGetTranslation } from '../helpers';
 import { widgets } from './index';
 
 export const SimpleRenderer = ({ children }) => children;
@@ -14,6 +15,7 @@ export function InlineWidget({ children, structure, ...props }) {
 export function Widget({ structure, value, inlineRenderer, ...props }) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
   const { Plain, Text } = widgets;
+  const { i18n } = useTranslation();
 
   if (Array.isArray(structure)) {
     return (
@@ -24,7 +26,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
   let childValue = structure.path ? getValue(value, structure.path) : value;
 
   if (structure.formula) {
-    childValue = applyFormula(childValue, structure.formula);
+    childValue = ApplyFormula(childValue, structure.formula, i18n);
   }
 
   let Renderer = structure.children ? Plain : Text;
