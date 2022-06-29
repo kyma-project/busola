@@ -78,6 +78,7 @@ function ResourceGraph({ resource, i18n, config }) {
   }
 
   const actions = !startedLoading && null;
+
   if (!isTabletOrWider) {
     return null;
   }
