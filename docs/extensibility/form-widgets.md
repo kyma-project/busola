@@ -53,6 +53,41 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
 }
 ```
 
+### Resource
+
+Resource widgets render a dropdown list of specified resources and stores the selected one as a string containing it's name.
+
+#### Widget-specific parameters
+
+- **kind** - _[required]_ Kubernetes kind of the resource.
+- **group** - API group used for all requests. Not provided for native kubernetes resources.
+- **version** - _[required]_ API version used for all requests.
+- **scope** - either `namespace` or `cluster`. When set to cluster namespaced resources will be fetched from all namespaces. Defaults to `cluster`.
+- **namespace** - namespace to fetch resources from. Used only when scope is `namespace` and resources need to be fetched from a specific namespace. Defaults to active namespace when omitted.
+
+#### Example
+
+```json
+[
+  {
+    "path": "spec.namespace",
+    "widget": "Resource",
+    "scope": "cluster",
+    "kind": "Namespace",
+    "version": "v1"
+  },
+  {
+    "path": "spec.gateway",
+    "widget": "Resource",
+    "kind": "Gateway",
+    "scope": "namespace",
+    "namespace": "kyma-system",
+    "group": "networking.istio.io",
+    "version": "v1alpha3"
+  }
+]
+```
+
 ## Complex widgets
 
 Complex widgets handle more advanced data structures such as arrays or objects.
