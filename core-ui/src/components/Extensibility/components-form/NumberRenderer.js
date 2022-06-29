@@ -11,6 +11,7 @@ export function NumberRenderer({
   schema,
   storeKeys,
   required,
+  compact,
   ...props
 }) {
   const { tFromStoreKeys } = useGetTranslation();
@@ -29,6 +30,7 @@ export function NumberRenderer({
       }}
       label={tFromStoreKeys(storeKeys)}
       input={Inputs.Number}
+      compact={compact}
     />
   );
 }
