@@ -139,7 +139,7 @@ GenericList widgets render an `array` as a list of collapsible sections with the
 
 SimpleList widgets render an `array` as a table with rows representing data items and columns representing different fields. New items are added automatically when new entries are typed in.
 
-This type of field is only suitable for simple data types and can contain more complex structures in it's items.
+This type of field is only suitable for simple data types and can contain more complex structures in its items.
 
 #### Example
 
