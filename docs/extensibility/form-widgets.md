@@ -162,4 +162,4 @@ This type of field is only suitable for simple data types and can contain more c
 
 #### Scalar values
 
-When array items are scalar instead of an object, no header with a field title will be rendered in the resulting table.
+When array items are scalars instead of objects, no header with the field title will be rendered in the resulting table.
