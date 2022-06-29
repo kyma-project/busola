@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { TransTitle } from '@ui-schema/ui-schema/Translate/TransTitle';
-
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
+import { useGetTranslation } from 'components/Extensibility/helpers';
 
 export function StringRenderer({
   onChange,
@@ -15,6 +14,8 @@ export function StringRenderer({
   compact,
   ...props
 }) {
+  const { tFromStoreKeys } = useGetTranslation();
+
   if (schema.get('enum')) {
     const options = schema
       .get('enum')
@@ -33,7 +34,7 @@ export function StringRenderer({
             data: { value },
           });
         }}
-        label={<TransTitle schema={schema} storeKeys={storeKeys} />}
+        label={tFromStoreKeys(storeKeys)}
         input={Inputs.ComboboxInput}
         options={options}
         compact={compact}
@@ -53,7 +54,7 @@ export function StringRenderer({
             data: { value },
           });
         }}
-        label={<TransTitle schema={schema} storeKeys={storeKeys} />}
+        label={tFromStoreKeys(storeKeys)}
         input={Inputs.Text}
         compact={compact}
       />

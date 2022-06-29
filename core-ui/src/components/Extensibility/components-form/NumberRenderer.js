@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { TransTitle } from '@ui-schema/ui-schema/Translate/TransTitle';
-
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
+import { useGetTranslation } from 'components/Extensibility/helpers';
 
 export function NumberRenderer({
   onChange,
@@ -15,6 +14,7 @@ export function NumberRenderer({
   compact,
   ...props
 }) {
+  const { tFromStoreKeys } = useGetTranslation();
   return (
     <ResourceForm.FormField
       value={value}
@@ -28,7 +28,7 @@ export function NumberRenderer({
           data: { value },
         });
       }}
-      label={<TransTitle schema={schema} storeKeys={storeKeys} />}
+      label={tFromStoreKeys(storeKeys)}
       input={Inputs.Number}
       compact={compact}
     />
