@@ -48,7 +48,7 @@ export function ResourceList({
       isCompact
       title={structure.name}
       showTitle={true}
-      hasDetailsView={structure.hasDetailsView ?? !!PredefinedRenderer.Details}
+      hasDetailsView={structure.hasDetailsView ?? !!PredefinedRenderer?.Details}
       fixedPath={true}
       {...structure}
       {...props}

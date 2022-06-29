@@ -55,7 +55,7 @@ export function RelationsContextProvider({ children, relations }) {
       const ownerLabels = jp.value(resource, ownerLabelSelectorPath);
       labelSelector =
         '?labelSelector=' +
-        Object.entries(ownerLabels)
+        Object.entries(ownerLabels || {})
           ?.map(([key, value]) => `${key}=${value}`)
           .join(',');
     }
@@ -70,11 +70,11 @@ export function RelationsContextProvider({ children, relations }) {
   };
 
   const fetchResource = async (relation, relationName, resource) => {
-    const { selector, resourceName } = relation;
-
-    const relativeUrl = buildUrl(relation, resource);
-    const isListCall = !resourceName;
     try {
+      const { selector, resourceName } = relation;
+
+      const relativeUrl = buildUrl(relation, resource);
+      const isListCall = !resourceName;
       const response = await fetch({ relativeUrl });
       let data = await response.json();
       data = isListCall ? data.items : data;
