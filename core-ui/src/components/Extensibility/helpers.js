@@ -21,7 +21,7 @@ export const applyFormula = (value, formula) => {
     let expression = jsonata(formula);
     result = expression.evaluate({ value });
   } catch (e) {
-    return `Error: e.message`;
+    return `Error: ${e.message}`;
   }
 
   return result;
