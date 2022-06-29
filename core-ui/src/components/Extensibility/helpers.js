@@ -37,6 +37,14 @@ export const useGetTranslation = path => {
 
   return {
     t: (path, ...props) => t(`${translationBundle}::${path}`, ...props) || path,
+    tFromStoreKeys: (storeKeys, ...props) => {
+      const path = storeKeys
+        .toArray()
+        .filter(el => typeof el === 'string') // get rid of numbers i.e. spec.ports[2].protocol
+        .join('.');
+
+      return t(`${translationBundle}::${path}`, ...props) || path;
+    },
     widgetT: (def, options = {}) => {
       const items = Array.isArray(def) ? def : [def];
       const path = items.map(item => item.name || item.path).join('.');
