@@ -1,17 +1,15 @@
 import React from 'react';
 
-import { TransTitle } from '@ui-schema/ui-schema/Translate/TransTitle';
-
 import { ResourceForm } from 'shared/ResourceForm';
+import { useGetTranslation } from 'components/Extensibility/helpers';
 
 export function CollapsibleRenderer({ schema, storeKeys, widgets, ...props }) {
   const { WidgetRenderer } = widgets;
   const ownSchema = schema.delete('widget');
+  const { tFromStoreKeys } = useGetTranslation();
 
   return (
-    <ResourceForm.CollapsibleSection
-      title={<TransTitle schema={schema} storeKeys={storeKeys} />}
-    >
+    <ResourceForm.CollapsibleSection title={tFromStoreKeys(storeKeys)}>
       <WidgetRenderer
         {...props}
         storeKeys={storeKeys}
