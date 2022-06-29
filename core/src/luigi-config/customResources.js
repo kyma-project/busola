@@ -29,7 +29,8 @@ async function loadBusolaClusterCRs() {
 
 async function loadTargetClusterCRs(authData) {
   const activeCluster = getActiveCluster();
-  const namespace = getCurrentContextNamespace(activeCluster?.kubeconfig) || 'kube-public';
+  const namespace =
+    getCurrentContextNamespace(activeCluster?.kubeconfig) || 'kube-public';
 
   const labelSelectors = `busola.io/extension=resource`;
 
