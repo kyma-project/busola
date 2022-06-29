@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useRelationsContext } from '../contexts/RelationsContext';
 import { Widget } from './Widget';
 
@@ -14,7 +15,7 @@ export function PendingWrapper({ value, ...props }) {
   const { data, loading, error } = value;
 
   if (loading) {
-    return t('common.headers.loading');
+    return <Spinner size="s" className="" center={false} />;
   } else if (error) {
     return t('common.messages.error', { error });
   } else {

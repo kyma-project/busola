@@ -3,8 +3,7 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { useRelationsContext } from '../contexts/RelationsContext';
 
 import { getValue, useGetTranslation } from '../helpers';
-import { widgets } from './index';
-import { PendingWrapper } from './PendingWrapper';
+import { widgets, valuePreprocessors } from './index';
 import jsonata from 'jsonata';
 
 export const SimpleRenderer = ({ children }) => children;
@@ -60,8 +59,6 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
   }, []);
 
   if (structure.valuePreprocessor) {
-    const valuePreprocessors = { PendingWrapper };
-
     const Preprocessor = valuePreprocessors[structure.valuePreprocessor];
     const copiedStructure = JSON.parse(JSON.stringify(structure));
     copiedStructure.valuePreprocessor = null;
