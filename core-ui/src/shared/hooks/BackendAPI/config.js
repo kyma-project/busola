@@ -29,13 +29,9 @@ export async function throwHttpError(response) {
     } catch (e) {}
   } // proceed to show more generic error
 
-  const createErrorMessage = (statusCode, statusText) => {
-    return `${statusCode} ${statusText || getReasonPhrase(statusCode)}`;
-  };
-
+  const { message, status, statusText } = response;
   const errorMessage =
-    response.message ||
-    createErrorMessage(response.status, response.statusText);
+    message || `${status} ${statusText || getReasonPhrase(status)}`;
 
   return new Error(errorMessage);
 }
