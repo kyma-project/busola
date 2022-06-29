@@ -63,6 +63,7 @@ The `list` section defines extra columns available in the list. The format is si
 - **path** - _[required]_ contains the path to the data used for the column.
 - **widget** - optional widget used to render the field referred to by the `path` property. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **formula** - optional formula used to modify data referred to by the `path` property. In formula we use naming convention: `data.name` instead of just `name`. To see more details about using formulas see [JSONata](https://docs.jsonata.org/overview.html).
+- **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
 
 ### Example
 
@@ -89,6 +90,7 @@ The `details` section defines the display structure for the details page. It con
 - **name** - used for entries without `path` to define the translation source used for labels. Required if no `path` is present.
 - **widget** - optional widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **formula** - optional formula used to modify data referred to by the `path` property. To see more details about using formulas see [JSONata](https://docs.jsonata.org/overview.html).
+- **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
 - **children** - a list of child widgets used for all `object` and `array` fields. Not available for header widgets.
 
 Extra parameters might be available for specific widgets.
@@ -169,6 +171,59 @@ renders the same set of data as:
 ]
 ```
 
+## relations section
+
+This section contains an object that maps a relation name to relation configuration object. Relation name preceded by dollar sign '\$' can be then used in `path` expression.
+
+It's possible to use both relation name and a path, e.g. `{"path": $myRelatedResource.metadata.labels}` will return the `metadata.labels` of related resource.
+
+### Relation configuration object fields
+
+Those fields are used to build the related resource URL and filter the received data.
+
+- **kind** - _[required]_ Kubernetes resource kind.
+- **group** - _[required]_ Kubernetes resource group.
+- **version** - _[required]_ Kubernetes resource version.
+- **namespace** - resource's Namespace name, defaults to original resource's Namespace. If set to `null` the relation with match clusterwide resources / resources in all namespaces.
+- **resourceName** - specific resource name, leave empty to match all resources of given type.
+- **ownerLabelSelectorPath** - path to original object's `selector` type property (e.g. `spec.selector.matchLabels` for Deployment, used to select matching Pods).
+- **selector** - [JSONata](https://docs.jsonata.org/overview.html) function enabling user to write a custom matching logic. It receives a data context of:
+
+  ```js
+  {
+    data, // related resource
+    resource, // original resource
+  }
+  ```
+
+  This function should return a boolean value.
+
+### Example
+
+```json
+{
+  "deployments": {
+    "resource": ...
+    "details": {
+       "body": [
+         {
+            "widget": "ResourceList",
+            "path": "$myPods"
+        }
+      ]
+    }
+  },
+  "relations": {
+    "myPods": {
+      "kind": "Pod",
+      "group": "api",
+      "version": "v1",
+      "ownerLabelSelectorPath": "spec.selector.matchLabels"
+    }
+  }
+}
+```
+
 ## translations sections
 
 You can provide this section as a single `translations` section that contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
@@ -225,3 +280,17 @@ spec:
 ```
 
 If you provide both `translations` and `translations-{lang}` sections, they are merged together.
+
+### Value preprocessors
+
+Value preprocessors are used as a middleware between a value and the actual renderer. They can transform a given value and pass it further or stop processing, rendering to view early.
+
+#### List of value preprocessors
+
+- **PendingWrapper** - useful when value resolves to a triple of `{loading, error, data}`:
+
+  - For `loading` equal to `true`, it will display a loading indicator.
+  - For truthy `error`, it will display an error message.
+  - Otherwise, it will pass `data` to display component.
+
+  Unless custom handling of error or loading state is required, using the `PendingWrapper` is recommended, e.g. for fields that use [related resources](#relations-section).

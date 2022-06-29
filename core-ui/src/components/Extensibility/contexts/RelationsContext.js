@@ -35,15 +35,17 @@ export function RelationsContextProvider({ children, relations }) {
   useEffect(() => () => intervals.current.forEach(clearInterval), []);
 
   const buildUrl = (relation, resource) => {
-    const {
+    let {
       group,
       kind,
       version,
       resourceName,
-      namespaced,
+      namespace,
       ownerLabelSelectorPath,
     } = relation;
-    const namespace = namespaced ?? resource.metadata.namespace;
+    if (typeof namespace === 'undefined') {
+      namespace = resource.metadata.namespace;
+    }
 
     const namespacePart = namespace ? `/namespaces/${namespace}` : '';
     const resourceType = pluralize(kind).toLowerCase();

@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
-var jsonata = require('jsonata');
+import jsonata from 'jsonata';
 
 export const TranslationBundleContext = createContext('extensibility');
 
