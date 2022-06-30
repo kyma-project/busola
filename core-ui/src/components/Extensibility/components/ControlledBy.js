@@ -8,12 +8,12 @@ import {
 } from 'shared/components/ControlledBy/ControlledBy';
 
 export function ControlledBy({ value, structure, schema }) {
-  return isNil(value) ? EMPTY_TEXT_PLACEHOLDER : <CB ownerReferences={value} />;
+  const emptyTextPlaceholder = structure.placeholder || EMPTY_TEXT_PLACEHOLDER;
+
+  return isNil(value) ? emptyTextPlaceholder : <CB ownerReferences={value} />;
 }
 export function ControlledByKind({ value, structure, schema }) {
-  return isNil(value) ? (
-    EMPTY_TEXT_PLACEHOLDER
-  ) : (
-    <CBK ownerReferences={value} />
-  );
+  const emptyTextPlaceholder = structure.placeholder || EMPTY_TEXT_PLACEHOLDER;
+
+  return isNil(value) ? emptyTextPlaceholder : <CBK ownerReferences={value} />;
 }

@@ -19,6 +19,16 @@ Text widgets render values as a simple text. This is the default behavior for al
 }
 ```
 
+###### Optional properties
+
+Define the optional `placeholder` property to change the default empty text placeholder (`-`).
+
+```json
+{
+  "placeholder": "-"
+}
+```
+
 <img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="20%" style="border: 1px solid #D2D5D9">
 
 ### Badge
@@ -153,6 +163,16 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 }
 ```
 
+###### Optional properties
+
+Define the optional `placeholder` property to change the default empty text placeholder (`-`).
+
+```json
+{
+  "placeholder": "-"
+}
+```
+
 <img src="./assets/display-widgets/ControlledBy.png" alt="Example of a table widget" width="20%" style="border: 1px solid #D2D5D9">
 
 ### ControlledByKind
@@ -165,6 +185,16 @@ ControlledByKind widgets render the kind of the resources that the current resou
 {
   "path": "metadata.ownerReferences",
   "widget": "ControlledByKind"
+}
+```
+
+###### Optional properties
+
+Define the optional `placeholder` property to change the default empty text placeholder (`-`).
+
+```json
+{
+  "placeholder": "-"
 }
 ```
 
