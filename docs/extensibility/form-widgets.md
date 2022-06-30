@@ -96,16 +96,70 @@ FormGroup widgets render an `object` as a collapsible section.
 #### Example
 
 ```json
-({
-  "path": "spec.service",
-  "widget": "FormGroup"
-},
-{
-  "path": "spec.service.host"
-},
-{
-  "path": "spec.service.port"
-})
+[
+  {
+    "path": "spec.service",
+    "widget": "FormGroup"
+  },
+  {
+    "path": "spec.service.host"
+  },
+  {
+    "path": "spec.service.port"
+  }
+]
 ```
 
 <img src="./assets/form-widgets/FormGroup.png" alt="Example of a FormGroup widget" style="border: 1px solid #D2D5D9">
+
+### GenericList
+
+GenericList widgets render an `array` as a list of collapsible sections with their own sub-forms. An **add** button is present to add new entries.
+
+#### Example
+
+```json
+[
+  {
+    "path": "spec.services",
+    "widget": "GenericList"
+  },
+  {
+    "path": "spec.services[].host"
+  },
+  {
+    "path": "spec.services[].port"
+  }
+]
+```
+
+<img src="./assets/form-widgets/GenericList.png" alt="Example of a GenericList widget" style="border: 1px solid #D2D5D9">
+
+### SimpleList
+
+SimpleList widgets render an `array` as a table with rows representing data items and columns representing different fields. New items are added automatically when new entries are typed in.
+
+This type of field is only suitable for simple data types and can contain more complex structures in its items.
+
+#### Example
+
+```json
+[
+  {
+    "path": "spec.services",
+    "widget": "SimpleList"
+  },
+  {
+    "path": "spec.services[].host"
+  },
+  {
+    "path": "spec.services[].port"
+  }
+]
+```
+
+<img src="./assets/form-widgets/SimpleList.png" alt="Example of a SimpleList widget" style="border: 1px solid #D2D5D9">
+
+#### Scalar values
+
+When array items are scalars instead of objects, no header with the field title will be rendered in the resulting table.
