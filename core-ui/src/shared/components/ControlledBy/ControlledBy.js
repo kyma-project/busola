@@ -11,7 +11,7 @@ import {
 } from 'shared/hooks/navigate';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { useMounted } from '../../hooks/useMounted';
+import { useComponentDidMount } from 'shared/useComponentDidMount';
 
 function pathExists(path) {
   const pathId = shortid.generate();
@@ -49,7 +49,7 @@ export const GoToDetailsLink = ({
   const [viewPath, setViewPath] = useState(null);
 
   // prevents `setState` on onmounted component
-  const mounted = useMounted();
+  const mounted = useComponentDidMount();
 
   useEffect(() => {
     const checkIfPathExists = async () => {
