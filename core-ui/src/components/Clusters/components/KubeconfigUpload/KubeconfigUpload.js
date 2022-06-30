@@ -50,7 +50,6 @@ export function KubeconfigUpload({
         {t('clusters.wizard.editor-label')}
       </p>
       <Editor
-        height="320px"
         autocompletionDisabled
         language="yaml"
         value={kubeconfig ? jsyaml.dump(kubeconfig) : ''}
