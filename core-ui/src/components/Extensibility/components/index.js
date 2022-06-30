@@ -7,6 +7,7 @@ import { Badge } from './Badge';
 import { Table } from './Table';
 import { ResourceRefs } from './ResourceRefs';
 import { ControlledBy, ControlledByKind } from './ControlledBy';
+import { JoinedArray } from './JoinedArray';
 
 export const widgets = {
   Null: () => '',
@@ -20,4 +21,5 @@ export const widgets = {
   ResourceRefs,
   ControlledBy,
   ControlledByKind,
+  JoinedArray,
 };
