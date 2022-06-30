@@ -11,6 +11,7 @@ export function SwitchRenderer({
   schema,
   storeKeys,
   required,
+  compact,
   ...props
 }) {
   const { tFromStoreKeys } = useGetTranslation();
@@ -29,6 +30,7 @@ export function SwitchRenderer({
       }}
       label={tFromStoreKeys(storeKeys)}
       input={Inputs.Switch}
+      compact={compact}
     />
   );
 }
