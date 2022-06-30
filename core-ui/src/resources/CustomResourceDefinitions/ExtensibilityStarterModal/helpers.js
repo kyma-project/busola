@@ -91,6 +91,8 @@ export function createExtensibilityTemplate(crd, t) {
     translations: {
       en: {
         name: pluralize(prettifyKind(crd.spec.names.kind)),
+        'metadata.annotations': 'Annotations',
+        'metadata.labels': 'Labels',
         category: 'Custom Resources',
         ...(additionalValueColumns.length
           ? { 'metadata.creationTimestamp': 'Created at' }
