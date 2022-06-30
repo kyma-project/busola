@@ -11,6 +11,7 @@ export function StringRenderer({
   schema,
   storeKeys,
   required,
+  compact,
   ...props
 }) {
   const { tFromStoreKeys } = useGetTranslation();
@@ -36,6 +37,7 @@ export function StringRenderer({
         label={tFromStoreKeys(storeKeys)}
         input={Inputs.ComboboxInput}
         options={options}
+        compact={compact}
       />
     );
   } else {
@@ -54,6 +56,7 @@ export function StringRenderer({
         }}
         label={tFromStoreKeys(storeKeys)}
         input={Inputs.Text}
+        compact={compact}
       />
     );
   }
