@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
-import { detectLanguage } from '../../../utils/detectLanguage';
 import { RichEditorSection } from './RichEditorSection';
 
 export function RichEditorDataField({ value: data, setValue: setData }) {
@@ -16,10 +15,7 @@ export function RichEditorDataField({ value: data, setValue: setData }) {
       Object.entries(data || {}).map(([key, value]) => ({
         key,
         value,
-        language:
-          (firstRender.current
-            ? detectLanguage(value)
-            : internalData.find(d => d?.key === key)?.language) || '',
+        language: internalData.find(d => d?.key === key)?.language || '',
       })),
     );
     firstRender.current = false;
