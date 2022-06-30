@@ -32,7 +32,6 @@ export function Editor({
   const { editorTheme } = useTheme();
   const divRef = useRef(null);
   const editorRef = useRef(null);
-  const [hasFocus, setHasFocus] = useState(false);
 
   const {
     setAutocompleteOptions,
@@ -56,7 +55,6 @@ export function Editor({
     //focus listener
     if (!editorRef.current) return;
     const focusListener = editorRef.current.onDidFocusEditorText(() => {
-      setHasFocus(true);
       if (typeof onFocus === 'function') {
         onFocus();
       }
@@ -70,7 +68,6 @@ export function Editor({
     //blur listener
     if (!editorRef.current) return;
     const blurListener = editorRef.current.onDidBlurEditorText(() => {
-      setHasFocus(false);
       if (typeof onBlur === 'function') {
         onBlur();
       }
@@ -101,14 +98,10 @@ export function Editor({
 
   useEffect(() => {
     // update editor value when it comes as a prop
-    if (
-      !hasFocus &&
-      editorRef.current &&
-      editorRef.current.getValue() !== value
-    ) {
+    if (editorRef.current && editorRef.current.getValue() !== value) {
       editorRef.current.setValue(value);
     }
-  }, [value, hasFocus]);
+  }, [value]);
 
   useEffect(() => {
     // setup Monaco editor and pass value updates to parent
