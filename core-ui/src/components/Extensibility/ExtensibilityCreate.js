@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { createStore } from '@ui-schema/ui-schema';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import Immutable from 'immutable';
@@ -40,8 +40,11 @@ export function ExtensibilityCreate({
     createStore(createOrderedMap(resource)),
   );
 
-  const updateResource = res =>
-    setStore(prevStore => prevStore.set('values', Immutable.fromJS(res)));
+  const updateResource = useCallback(
+    res =>
+      setStore(prevStore => prevStore.set('values', Immutable.fromJS(res))),
+    [setStore],
+  );
 
   //TODO filter schema based on form configuration
 
