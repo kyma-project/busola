@@ -11,7 +11,7 @@ import {
   getCurrentContextNamespace,
 } from './cluster-management/cluster-management';
 
-let customResources = null;
+let customResources = {};
 
 async function loadBusolaClusterCRs() {
   try {
