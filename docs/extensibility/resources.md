@@ -70,11 +70,16 @@ The `list` section defines extra columns available in the list. The format is si
 [
   { "path": "spec.url" },
   { "path": "spec.priority", "widget": "Badge" },
-  { "path": "spec.toppings", "formula": "$join(data.name, ', ')" },
+  { "path": "spec.volumes", "formula": "$join(data.name, ', ')" },
   {
-    "name": "quantityIsMore",
-    "path": "spec.toppings",
-    "formula": "$filter(data, function ($v, $i, $a) { $v.quantity > $average($a.quantity) })"
+    "path": "spec.volumes",
+    "formula": "$filter(data, function ($v, $i, $a) {'configMap' in $keys($v)})", //List array of Volume objects that have config map"
+    //or
+    "formula": "data['configMap' in $keys($)]"
+  },
+  {
+    "path": "spec.volumes",
+    "formula": "$join(data['configMap' in $keys($)].name, ', ')" // List volume names of volumes that have config map
   }
 ]
 ```
@@ -100,7 +105,7 @@ Extra parameters might be available for specific widgets.
   "header": [
     { "path": "metadata.name" },
     { "path": "spec.priority", "widget": "Badge" },
-    { "path": "spec.toppings", "formula": "$join(data.name, ', ')" }
+    { "path": "spec.volumes", "formula": "$join(data.name, ', ')" }
   ],
   "body": [
     {
@@ -118,9 +123,9 @@ Extra parameters might be available for specific widgets.
         { "path": "metadata.name" },
         { "path": "spec.priority", "widget": "Badge" },
         {
-          "name": "quantityIsMore",
-          "path": "spec.toppings",
-          "formula": "$filter(data, function ($v, $i, $a) { $v.quantity > $average($a.quantity) })"
+          "name": "Volumes names of volumes with config map",
+          "path": "spec.volumes",
+          "formula": "$join(data['configMap' in $keys($)].name, ', ')"
         }
       ]
     },
