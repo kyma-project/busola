@@ -43,6 +43,23 @@ The following values are automatically handled:
 
 <img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="20%" style="border: 1px solid #D2D5D9">
 
+### JoinedArray
+
+JoinedArray widgets render all the values of an array of strings as a comma-separated list. You can change comma to something else by defininf `separator`.
+
+#### Example
+
+```json
+{
+  "name": "Joined array",
+  "path": "spec.dnsNames",
+  "widget": "JoinedArray",
+  "separator": ": "
+}
+```
+
+<img src="./assets/display-widgets/JoinedArray.png" alt="Example of a joined array widget" width="20%" style="border: 1px solid #D2D5D9">
+
 ## Block widgets
 
 Block widgets are more complex layouts and you should use them only in the details body.
