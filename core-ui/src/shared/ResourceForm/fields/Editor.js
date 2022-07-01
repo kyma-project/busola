@@ -52,8 +52,7 @@ function EditorAsFieldWrapper({
         setError(message.substr(0, message.indexOf('\n')));
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setError, t, language],
+    [onChange, setError, t, language, setValue],
   );
   return (
     <Editor

@@ -6,11 +6,12 @@ import { config } from './config';
 import { failFastFetch } from './navigation/queries';
 import {
   getActiveCluster,
+  getActiveClusterName,
   getCurrentConfig,
   getCurrentContextNamespace,
 } from './cluster-management/cluster-management';
 
-let customResources = null;
+let customResources = {};
 
 async function loadBusolaClusterCRs() {
   try {
@@ -105,14 +106,18 @@ async function loadTargetClusterCRs(authData) {
 
 export async function getCustomResources(authData) {
   const { features } = await getCurrentConfig();
-  if (features.EXTENSIBILITY?.isEnabled) {
-    if (customResources) return customResources;
+  const clusterName = getActiveClusterName();
 
-    customResources = Object.values({
+  if (features.EXTENSIBILITY?.isEnabled) {
+    if (customResources[clusterName]) {
+      return customResources[clusterName];
+    }
+
+    customResources[clusterName] = Object.values({
       ...(await loadBusolaClusterCRs()),
       ...(await loadTargetClusterCRs(authData)),
     });
-    return customResources;
+    return customResources[clusterName];
   }
   return [];
 }

@@ -62,7 +62,7 @@ The `list` section defines extra columns available in the list. The format is si
 
 - **path** - _[required]_ contains the path to the data used for the column.
 - **widget** - optional widget used to render the field referred to by the `path` property. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
-- **formula** - optional formula used to modify data referred to by the `path` property. In formula we use naming convention: `data.name` instead of just `name`. To see more details about using formulas see [JSONata](https://docs.jsonata.org/overview.html).
+- **formula** - optional formula used to modify data referred to by the `path` property. In `formula` we use the following naming convention: `data.name` instead of just `name`. To learn more about using formulas, see [JSONata](https://docs.jsonata.org/overview.html).
 
 ### Example
 
@@ -81,7 +81,7 @@ The `list` section defines extra columns available in the list. The format is si
   },
   {
     "path": "spec.volumes",
-    "formula": "$join(data['configMap' in $keys($)].name, ', ')" // List volume names of volumes that have config map
+    "formula": "$join(data['configMap' in $keys($)].name, ', ')" // List volume names of volumes that have a config map
   }
 ]
 ```
@@ -95,7 +95,7 @@ The `details` section defines the display structure for the details page. It con
 - **path** - contains the path to the data used for the widget. Not required for presentational widgets.
 - **name** - used for entries without `path` to define the translation source used for labels. Required if no `path` is present.
 - **widget** - optional widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
-- **formula** - optional formula used to modify data referred to by the `path` property. To see more details about using formulas see [JSONata](https://docs.jsonata.org/overview.html).
+- **formula** - optional formula used to modify data referred to by the `path` property. To learn more about using formulas, see [JSONata](https://docs.jsonata.org/overview.html).
 - **children** - a list of child widgets used for all `object` and `array` fields. Not available for header widgets.
 
 Extra parameters might be available for specific widgets.

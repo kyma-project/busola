@@ -30,8 +30,8 @@ export async function loadKubeconfigById(kubeconfigId) {
   }
 
   const jsyaml = await importJsYaml();
-
   const url = join(kubeconfigIdFeature.config.kubeconfigUrl, kubeconfigId);
+
   const responseText = await fetch(url).then(res => res.text());
   const payload = jsyaml.load(responseText);
 
