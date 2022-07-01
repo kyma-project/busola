@@ -9,7 +9,7 @@ import jsyaml from 'js-yaml';
 export function CodeViewer({ value, structure, schema }) {
   const { widgetT } = useGetTranslation();
 
-  const { parsedValue, language } = getEditorValue(value, structure);
+  const { parsedValue, language } = getValueAndLang(value, structure);
   return (
     <ReadonlyEditorPanel
       title={widgetT(structure)}
@@ -19,26 +19,38 @@ export function CodeViewer({ value, structure, schema }) {
   );
 }
 
-const getEditorValue = value => {
-  let parsedValue = '';
-  let language = '';
-
+function detectLanguage(value) {
   if (isValidYaml(value)) {
-    try {
-      parsedValue = jsyaml.dump(value);
-      language = 'yaml';
-    } catch (e) {
-      console.error(e);
-    }
+    return 'yaml';
   } else if (typeof value === 'object') {
-    try {
-      parsedValue = JSON.stringify(value, null, 2);
-      language = 'json';
-    } catch (e) {
-      console.error(e);
-    }
+    return 'json';
   } else if (typeof value === 'string') {
-    parsedValue = value;
+    return '';
+  }
+}
+function stringifyIfObject(value) {
+  return typeof value !== 'string' ? JSON.stringify(value, null, 2) : value;
+}
+
+const getValueAndLang = (value, structure) => {
+  let language = structure.language || detectLanguage(value);
+  let parsedValue = '';
+
+  try {
+    switch (language) {
+      case 'yaml':
+        parsedValue = jsyaml.dump(value);
+        break;
+      default:
+        //this includes JSON and other languages
+        parsedValue = stringifyIfObject(value);
+    }
+  } catch (e) {
+    window.alert(
+      `CodeViewer: received resource is in a language other than defined: ${e}`,
+    );
+    language = '';
+    parsedValue = stringifyIfObject(value);
   }
 
   return {
