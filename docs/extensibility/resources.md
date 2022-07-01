@@ -73,11 +73,11 @@ The `list` section defines extra columns available in the list. The format is si
   { "path": "spec.volumes", "formula": "$join(data.name, ', ')" },
   {
     "path": "spec.volumes",
-    "formula": "$filter(data, function ($v, $i, $a) {'configMap' in $keys($v)})" // List array of Volume objects that have config map
+    "formula": "$filter(data, function ($v, $i, $a) {'configMap' in $keys($v)})" // List the array of Volume objects that have a config map
   },
   {
     "path": "spec.volumes",
-    "formula": "data['configMap' in $keys($)]" // List array of Volume objects that have config map
+    "formula": "data['configMap' in $keys($)]" // This is the alternative way of listing the array of Volume objects that have a config map
   },
   {
     "path": "spec.volumes",
