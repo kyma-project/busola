@@ -45,7 +45,11 @@ The following values are automatically handled:
 
 ### JoinedArray
 
-JoinedArray widgets render all the values of an array of strings as a comma-separated list. You can change comma to something else by defining the `separator` parameter.
+JoinedArray widgets render all the values of an array of strings as a comma-separated list.
+
+#### Widget-specific parameters
+
+- **separator** - a string by which the elements of the array will be separated by. The default value is a comma `,`
 
 #### Example
 
