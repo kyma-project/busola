@@ -49,7 +49,7 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
 
 #### Widget-specific parameters
 
-- **separator** - a string by which the elements of the array will be separated by. The default value is a comma `,`
+- **separator** - a string by which the elements of the array will be separated by. The default value is a comma `,`.
 
 #### Example
 
