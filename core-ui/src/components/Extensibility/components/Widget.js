@@ -14,6 +14,7 @@ export function InlineWidget({ children, structure, ...props }) {
 export function Widget({ structure, value, inlineRenderer, ...props }) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
   const { Plain, Text } = widgets;
+
   if (Array.isArray(structure)) {
     return (
       <Plain value={value} structure={{ children: structure }} {...props} />
@@ -40,9 +41,9 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     );
 
   return Array.isArray(childValue) && !Renderer.array ? (
-    childValue.map(item => {
-      return <SingleWidget value={item} structure={structure} {...props} />;
-    })
+    childValue.map(item => (
+      <SingleWidget value={item} structure={structure} {...props} />
+    ))
   ) : (
     <SingleWidget value={childValue} structure={structure} {...props} />
   );
