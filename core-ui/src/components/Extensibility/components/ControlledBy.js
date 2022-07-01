@@ -7,13 +7,19 @@ import {
   ControlledByKind as CBK,
 } from 'shared/components/ControlledBy/ControlledBy';
 
-export function ControlledBy({ value, structure, schema }) {
-  const emptyTextPlaceholder = structure.placeholder || EMPTY_TEXT_PLACEHOLDER;
+export function ControlledBy({ value, structure, schema, resource }) {
+  const emptyTextPlaceholder =
+    structure.placeholder ||
+    resource?.defaultPlaceholder ||
+    EMPTY_TEXT_PLACEHOLDER;
 
   return isNil(value) ? emptyTextPlaceholder : <CB ownerReferences={value} />;
 }
-export function ControlledByKind({ value, structure, schema }) {
-  const emptyTextPlaceholder = structure.placeholder || EMPTY_TEXT_PLACEHOLDER;
+export function ControlledByKind({ value, structure, schema, resource }) {
+  const emptyTextPlaceholder =
+    structure.placeholder ||
+    resource?.defaultPlaceholder ||
+    EMPTY_TEXT_PLACEHOLDER;
 
   return isNil(value) ? emptyTextPlaceholder : <CBK ownerReferences={value} />;
 }

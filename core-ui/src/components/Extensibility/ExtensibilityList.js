@@ -39,7 +39,12 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     ? resMetaData.list.map(column => ({
         header: widgetT(column),
         value: resource => (
-          <Widget value={resource} structure={column} schema={schema} />
+          <Widget
+            value={resource}
+            structure={column}
+            schema={schema}
+            resource={resMetaData.resource}
+          />
         ),
       }))
     : [];

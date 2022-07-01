@@ -49,7 +49,12 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
           ? header.map(def => ({
               header: widgetT(def),
               value: resource => (
-                <Widget value={resource} structure={def} schema={schema} />
+                <Widget
+                  value={resource}
+                  structure={def}
+                  schema={schema}
+                  resource={resMetaData?.resource}
+                />
               ),
             }))
           : []
@@ -58,7 +63,12 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
         Array.isArray(body)
           ? [
               resource => (
-                <Widget value={resource} structure={body} schema={schema} />
+                <Widget
+                  value={resource}
+                  structure={body}
+                  schema={schema}
+                  resource={resMetaData}
+                />
               ),
             ]
           : []
