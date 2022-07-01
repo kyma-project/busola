@@ -1,9 +1,11 @@
 .resource-form__wrapper {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  min-height: 100px;
+  height: calc(100% - 21px - 36px);
+  min-height: 350px;
+  position: relative;
 }
+
 .resource-form__overlay {
   position: absolute;
   //background-color: rgba(4,4,4,0.8);

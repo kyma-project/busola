@@ -40,7 +40,7 @@ export function KubeconfigUpload({
   );
 
   return (
-    <>
+    <div className="kubeconfig-upload">
       <KubeconfigFileUpload
         onKubeconfigTextAdded={text => {
           editor.getModel().setValue(text);
@@ -62,6 +62,6 @@ export function KubeconfigUpload({
           {t('common.create-form.editor-error', { error })}
         </MessageStrip>
       )}
-    </>
+    </div>
   );
 }
