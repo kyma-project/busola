@@ -269,6 +269,7 @@ export const SubscriptionCreate = ({
         )}
       />
       <ResourceForm.FormField
+        className="break-word"
         simple
         label={t('subscriptions.create.labels.event-type')}
         messageStrip={eventTypeMessageStrip}
