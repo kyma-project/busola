@@ -30,11 +30,7 @@ context('Test Config Maps', () => {
 
     cy.getIframeBody()
       .find('[placeholder="Enter key"]:visible')
-      .type(ENTRY_KEY);
-
-    cy.findMonaco()
-      .first()
-      .type(ENTRY_VALUE);
+      .type(`${ENTRY_KEY}{enter}{backspace}${ENTRY_VALUE}`);
 
     cy.getIframeBody()
       .find('[role="dialog"]')
@@ -60,18 +56,10 @@ context('Test Config Maps', () => {
       .contains('Edit')
       .click();
 
-    // hide first entry so Cypress doesn't get confuused
-    cy.getIframeBody()
-      .find('[aria-label="expand config-map-key"]')
-      .click();
-
     cy.getIframeBody()
       .find('[placeholder="Enter key"]:visible')
-      .type(ENTRY_KEY2);
-
-    cy.findMonaco()
       .eq(1)
-      .type(ENTRY_VALUE2);
+      .type(`${ENTRY_KEY2}{enter}{backspace}${ENTRY_VALUE2}`);
 
     cy.getIframeBody()
       .find('[role=dialog]')
