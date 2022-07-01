@@ -45,7 +45,7 @@ The following values are automatically handled:
 
 ### JoinedArray
 
-JoinedArray widgets render all the values of an array of strings as a comma-separated list. You can change comma to something else by defininf `separator`.
+JoinedArray widgets render all the values of an array of strings as a comma-separated list. You can change comma to something else by defining the `separator` parameter.
 
 #### Example
 
