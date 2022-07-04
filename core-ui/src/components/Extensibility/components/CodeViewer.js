@@ -5,6 +5,7 @@ import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { useGetTranslation } from '../helpers';
 import { isValidYaml } from 'shared/contexts/YamlEditorContext/isValidYaml';
 import jsyaml from 'js-yaml';
+import LuigiClient from '@luigi-project/client';
 
 export function CodeViewer({ value, structure, schema }) {
   const { widgetT } = useGetTranslation();
@@ -46,9 +47,10 @@ const getValueAndLang = (value, structure) => {
         parsedValue = stringifyIfObject(value);
     }
   } catch (e) {
-    window.alert(
-      `CodeViewer: received resource is in a language other than defined: ${e}`,
-    );
+    LuigiClient.uxManager().showAlert({
+      text: `CodeViewer - the received resource is in a language other than defined: ${e}`,
+      type: 'error',
+    });
     language = '';
     parsedValue = stringifyIfObject(value);
   }
