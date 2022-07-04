@@ -1,11 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useTheme } from 'shared/contexts/ThemeContext';
-import { editor, Uri } from 'monaco-editor';
+import React, { useState } from 'react';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { useAutocompleteWorker } from './useAutocompleteWorker';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { isEqual } from 'lodash';
+
+import { useAutocompleteWorker } from './autocompletion/useAutocompleteWorker';
+import { useOnFocus } from './hooks/useOnFocus';
+import { useOnBlur } from './hooks/useOnBlur';
+import { useDisplayWarnings } from './hooks/useDisplayWarnings';
+import { useUpdateValueOnParentChange } from './hooks/useUpdateValueOnParentChange';
+import { useOnMount } from './hooks/useOnMount';
+import { useOnChange } from './hooks/useOnChange';
+import { useCreateEditor } from './hooks/useCreateEditor';
 
 import './Editor.scss';
 
@@ -25,17 +30,10 @@ export function Editor({
   options = {}, // IEditorOptions, check Monaco API for the list of options
   ...rest
 }) {
-  const descriptor = useRef(new Uri());
   const { t } = useTranslation();
-
-  const [markers, setMarkers] = useState([]);
-  const { editorTheme } = useTheme();
-  const divRef = useRef(null);
-  // const editorRef = useRef(null);
-  const [editorInstance, setEditorInstance] = useState(null);
-
   const [hasFocus, setHasFocus] = useState(false);
 
+  // prepare autocompletion
   const {
     setAutocompleteOptions,
     activeSchemaPath,
@@ -49,136 +47,32 @@ export function Editor({
     readOnly,
     language,
   });
-  const memoizedOptions = useRef({});
-  if (!isEqual(memoizedOptions.current, options)) {
-    memoizedOptions.current = options;
-  }
 
-  useEffect(() => {
-    // focus listener
-    if (!editorInstance) return;
-    const focusListener = editorInstance.onDidFocusEditorText(() => {
-      setHasFocus(true);
-      if (typeof onFocus === 'function') {
-        onFocus();
-      }
-    });
-    // refresh model on editor focus. Needed for cases when multiple editors are open simultaneously
-    if (activeSchemaPath !== descriptor.current?.path) {
-      setAutocompleteOptions();
-    }
-    return () => {
-      focusListener.dispose();
-    };
-  }, [editorInstance, onFocus, setAutocompleteOptions, activeSchemaPath]);
-
-  useEffect(() => {
-    //blur listener
-    if (!editorInstance) return;
-    const blurListener = editorInstance.onDidBlurEditorText(() => {
-      setHasFocus(false);
-      if (typeof onBlur === 'function') {
-        onBlur();
-      }
-    });
-    return () => {
-      blurListener.dispose();
-    };
-  }, [editorInstance, onBlur]);
-
-  useEffect(() => {
-    // show warnings in a message strip at the bottom of editor
-    if (autocompletionDisabled) {
-      return;
-    }
-    const onDidChangeMarkers = editor.onDidChangeMarkers(markers => {
-      if (markers.length) {
-        const descriptiveMarkers = editor.getModelMarkers({
-          resource: descriptor.current,
-        });
-        setMarkers(descriptiveMarkers);
-      }
-    });
-
-    return () => {
-      onDidChangeMarkers.dispose();
-    };
-  }, [setMarkers, autocompletionDisabled]);
-
-  useEffect(() => {
-    // update editor value when it comes as a prop
-    if (!hasFocus && editorInstance && editorInstance.getValue() !== value) {
-      editorInstance.setValue(value);
-    }
-  }, [editorInstance, value, hasFocus]);
-
-  useEffect(() => {
-    // setup Monaco editor and pass value updates to parent
-
-    // calling this function sets up autocompletion
-    const { modelUri } = setAutocompleteOptions();
-    descriptor.current = modelUri;
-
-    const model =
-      editor.getModel(modelUri) ||
-      editor.createModel(value, language, modelUri);
-
-    // create editor and assign model with value and autocompletion
-    const instance = editor.create(divRef.current, {
-      model: model,
-      automaticLayout: true,
-      language: language,
-      theme: editorTheme,
-      fixedOverflowWidgets: true,
-      readOnly: readOnly,
-      scrollbar: {
-        alwaysConsumeMouseWheel: false,
-      },
-      ...memoizedOptions.current,
-    });
-
-    setEditorInstance(instance);
-
-    // pass editor instance to parent
-    if (typeof onMount === 'function') {
-      onMount(instance);
-    }
-
-    // update parent component state on value change
-    const changeListener = instance.onDidChangeModelContent(() => {
-      const editorValue = instance.getValue();
-      onChange(editorValue);
-    });
-
-    return () => {
-      changeListener.dispose();
-      editor.getModel(descriptor.current)?.dispose();
-      instance.dispose();
-    };
-    // missing dependencies: 'value'
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    editorTheme,
+  // set autocompletion global context to the current editor and initialize an editor instance
+  const { editorInstance, divRef, descriptor } = useCreateEditor({
+    value,
+    options,
     setAutocompleteOptions,
-    setEditorInstance,
     language,
-    t,
     readOnly,
-    onMount,
-    onChange,
-  ]);
+  });
 
-  useEffect(() => {
-    // refresh model on editor focus. Needed for cases when multiple editors are open simultaneously
-    const onDidFocusEditorText = editorInstance?.onDidFocusEditorText(() => {
-      if (activeSchemaPath !== descriptor.current?.path) {
-        setAutocompleteOptions();
-      }
-    });
-    return () => {
-      onDidFocusEditorText?.dispose();
-    };
-  }, [editorInstance, setAutocompleteOptions, activeSchemaPath]);
+  // manage listeners
+  useOnFocus({
+    editorInstance,
+    onFocus,
+    setAutocompleteOptions,
+    activeSchemaPath,
+    setHasFocus,
+    descriptor,
+  });
+  useOnBlur({ editorInstance, onBlur, setHasFocus });
+  useOnMount({ editorInstance, onMount });
+  useOnChange({ editorInstance, onChange });
+
+  // others
+  useUpdateValueOnParentChange({ editorInstance, value, hasFocus });
+  const warnings = useDisplayWarnings({ autocompletionDisabled, descriptor });
 
   return (
     <div
@@ -209,10 +103,10 @@ export function Editor({
             })}
           </MessageStrip>
         )}
-        {markers.length ? (
+        {warnings.length ? (
           <div>
             <MessageStrip type="warning" className="fd-margin--sm break-word">
-              {markers.map(m => (
+              {warnings.map(m => (
                 <span
                   className="line"
                   key={`${m.startLineNumber}${m.startColumn}`}
