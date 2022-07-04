@@ -200,7 +200,7 @@ Those fields are used to build the related resource URL and filter the received 
 - **namespace** - resource's Namespace name, defaults to original resource's Namespace. If set to `null` the relation with match clusterwide resources / resources in all namespaces.
 - **resourceName** - specific resource name, leave empty to match all resources of given type.
 - **ownerLabelSelectorPath** - path to original object's `selector` type property (e.g. `spec.selector.matchLabels` for Deployment, used to select matching Pods).
-- **selector** - [JSONata](https://docs.jsonata.org/overview.html) function enabling user to write a custom matching logic. It receives a data context of:
+- **selector** - [JSONata](https://docs.jsonata.org/overview.html) function enabling the user to write a custom matching logic. It receives a data context of:
 
   ```js
   {
