@@ -135,7 +135,6 @@ export function Editor({
     // focus listener
     if (!editorRef.current) return;
     const focusListener = editorRef.current.onDidFocusEditorText(() => {
-      console.log('set to true');
       setHasFocus(true);
       if (typeof onFocus === 'function') {
         onFocus();
