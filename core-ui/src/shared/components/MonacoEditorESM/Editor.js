@@ -31,7 +31,9 @@ export function Editor({
   const [markers, setMarkers] = useState([]);
   const { editorTheme } = useTheme();
   const divRef = useRef(null);
-  const editorRef = useRef(null);
+  // const editorRef = useRef(null);
+  const [editorInstance, setEditorInstance] = useState(null);
+
   const [hasFocus, setHasFocus] = useState(false);
 
   const {
@@ -53,9 +55,27 @@ export function Editor({
   }
 
   useEffect(() => {
+    // focus listener
+    if (!editorInstance) return;
+    const focusListener = editorInstance.onDidFocusEditorText(() => {
+      setHasFocus(true);
+      if (typeof onFocus === 'function') {
+        onFocus();
+      }
+    });
+    // refresh model on editor focus. Needed for cases when multiple editors are open simultaneously
+    if (activeSchemaPath !== descriptor.current?.path) {
+      setAutocompleteOptions();
+    }
+    return () => {
+      focusListener.dispose();
+    };
+  }, [editorInstance, onFocus, setAutocompleteOptions, activeSchemaPath]);
+
+  useEffect(() => {
     //blur listener
-    if (!editorRef.current) return;
-    const blurListener = editorRef.current.onDidBlurEditorText(() => {
+    if (!editorInstance) return;
+    const blurListener = editorInstance.onDidBlurEditorText(() => {
       setHasFocus(false);
       if (typeof onBlur === 'function') {
         onBlur();
@@ -64,7 +84,7 @@ export function Editor({
     return () => {
       blurListener.dispose();
     };
-  }, [onBlur]);
+  }, [editorInstance, onBlur]);
 
   useEffect(() => {
     // show warnings in a message strip at the bottom of editor
@@ -87,14 +107,10 @@ export function Editor({
 
   useEffect(() => {
     // update editor value when it comes as a prop
-    if (
-      !hasFocus &&
-      editorRef.current &&
-      editorRef.current.getValue() !== value
-    ) {
-      editorRef.current.setValue(value);
+    if (!hasFocus && editorInstance && editorInstance.getValue() !== value) {
+      editorInstance.setValue(value);
     }
-  }, [value, hasFocus]);
+  }, [editorInstance, value, hasFocus]);
 
   useEffect(() => {
     // setup Monaco editor and pass value updates to parent
@@ -108,7 +124,7 @@ export function Editor({
       editor.createModel(value, language, modelUri);
 
     // create editor and assign model with value and autocompletion
-    editorRef.current = editor.create(divRef.current, {
+    const instance = editor.create(divRef.current, {
       model: model,
       automaticLayout: true,
       language: language,
@@ -121,37 +137,30 @@ export function Editor({
       ...memoizedOptions.current,
     });
 
+    setEditorInstance(instance);
+
     // pass editor instance to parent
     if (typeof onMount === 'function') {
-      onMount(editorRef.current);
+      onMount(instance);
     }
 
     // update parent component state on value change
-    const changeListener = editorRef.current.onDidChangeModelContent(() => {
-      const editorValue = editorRef.current.getValue();
+    const changeListener = instance.onDidChangeModelContent(() => {
+      const editorValue = instance.getValue();
       onChange(editorValue);
-    });
-
-    // focus listener
-    if (!editorRef.current) return;
-    const focusListener = editorRef.current.onDidFocusEditorText(() => {
-      setHasFocus(true);
-      if (typeof onFocus === 'function') {
-        onFocus();
-      }
     });
 
     return () => {
       changeListener.dispose();
       editor.getModel(descriptor.current)?.dispose();
-      editorRef.current.dispose();
-      focusListener.dispose();
+      instance.dispose();
     };
     // missing dependencies: 'value'
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     editorTheme,
     setAutocompleteOptions,
+    setEditorInstance,
     language,
     t,
     readOnly,
@@ -161,7 +170,7 @@ export function Editor({
 
   useEffect(() => {
     // refresh model on editor focus. Needed for cases when multiple editors are open simultaneously
-    const onDidFocusEditorText = editorRef.current?.onDidFocusEditorText(() => {
+    const onDidFocusEditorText = editorInstance?.onDidFocusEditorText(() => {
       if (activeSchemaPath !== descriptor.current?.path) {
         setAutocompleteOptions();
       }
@@ -169,7 +178,7 @@ export function Editor({
     return () => {
       onDidFocusEditorText?.dispose();
     };
-  }, [setAutocompleteOptions, activeSchemaPath]);
+  }, [editorInstance, setAutocompleteOptions, activeSchemaPath]);
 
   return (
     <div
