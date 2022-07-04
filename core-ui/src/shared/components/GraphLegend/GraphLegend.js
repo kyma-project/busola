@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import './GraphLegend.scss';
 
-export function GraphLegend({ values = ['requests', 'limits', 'capacity'] }) {
+export function GraphLegend({ values }) {
   const { t } = useTranslation();
   return (
     <legend className="commitment-graph__legend">

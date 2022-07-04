@@ -272,7 +272,7 @@ export function CommitmentGraph({ data }) {
         height={height}
         onMouseMove={mousemove}
       ></canvas>
-      <GraphLegend />
+      <GraphLegend values={['requests', 'limits', 'capacity']} />
     </>
   );
 }
