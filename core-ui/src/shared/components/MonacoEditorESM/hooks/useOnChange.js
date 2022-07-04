@@ -7,10 +7,9 @@ export const useOnChange = ({ editorInstance, onChange }) => {
     const changeListener = editorInstance.onDidChangeModelContent(() => {
       const editorValue = editorInstance.getValue();
       onChange(editorValue);
-
-      return () => {
-        changeListener.dispose();
-      };
     });
+    return () => {
+      changeListener.dispose();
+    };
   }, [editorInstance, onChange]);
 };
