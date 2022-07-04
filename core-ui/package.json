@@ -3,20 +3,55 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@datasert/cronjs-parser": "^1.1.0",
+    "@hookform/resolvers": "^2.8.8",
+    "@luigi-project/client": "^1.21.0",
+    "@openapi-contrib/openapi-schema-to-json-schema": "^3.1.1",
+    "@peculiar/x509": "^1.6.0",
+    "@sentry/react": "^6.17.4",
+    "@stoplight/json-ref-resolver": "^3.1.3",
+    "@ui-schema/ui-schema": "^0.4.0-beta.1",
+    "ajv": "^6.12.3",
+    "buffer": "^6.0.3",
     "bytes-iec": "^3.1.0",
+    "classnames": "^2.2.6",
+    "copy-to-clipboard": "^3.2.0",
+    "core-js": "^3.3.6",
+    "cronstrue": "^1.114.0",
+    "cross-fetch": "^3.1.5",
+    "didyoumean": "^1.2.2",
     "dompurify": "^2.0.8",
-    "jsonpath": "^1.1.1",
-    "markdown-it": "^10.0.0",
-    "react-hook-form": "^5.5.0",
-    "use-debounce": "^3.4.1",
-    "yup": "^0.28.3"
+    "fundamental-react": "^0.14.4",
+    "fundamental-styles": "^0.19.0",
+    "graphviz-react": "^1.2.0",
+    "http-status-codes": "^2.2.0",
+    "lodash-es": "^4.17.21",
+    "monaco-editor": "^0.33.0",
+    "monaco-yaml": "^4.0.0-alpha.2",
+    "pako": "^2.0.4",
+    "pluralize": "^8.0.0",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-hook-form": "^7.29.0",
+    "react-i18next": "^11.15.3",
+    "react-router-dom": "^6.3.0",
+    "react-tippy": "^1.4.0",
+    "rfc6902": "^4.0.1",
+    "semver": "^7.3.5",
+    "styled-components": "^5.3.3",
+    "styled-components-grid": "^2.2.2",
+    "use-debounce": "^7.0.1",
+    "yup": "^0.28.5"
   },
   "scripts": {
-    "start": "PORT=8889 ../node_modules/.bin/react-scripts start",
-    "start:kyma": "BROWSER=none  PORT=8889 ../node_modules/.bin/react-scripts start",
-    "build": "PUBLIC_URL=/core-ui INLINE_RUNTIME_CHUNK=false ../node_modules/.bin/react-scripts build",
-    "test": "../node_modules/.bin/react-scripts test",
-    "eject": "../node_modules/.bin/react-scripts eject"
+    "start": "(cd ..; gulp copy-themes) && PORT=8889 BROWSER=none GENERATE_SOURCEMAP=false react-app-rewired start",
+    "build": "(cd ..; gulp copy-themes) && PUBLIC_URL=/core-ui INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
   },
   "browserslist": {
     "production": [
@@ -33,12 +68,15 @@
   "config": {
     "unsafe-perm": true
   },
-  "jest": {
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ]
-  },
   "devDependencies": {
-    "babel-polyfill": "^6.26.0"
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.3",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
+    "babel-polyfill": "^6.26.0",
+    "enzyme": "^3.10.0",
+    "enzyme-to-json": "^3.4.0",
+    "react-app-rewired": "^2.2.1",
+    "react-jsonschema-form": "1.7.0",
+    "react-scripts": "^5.0.0"
   }
 }

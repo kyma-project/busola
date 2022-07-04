@@ -1,25 +1,54 @@
 import React from 'react';
-import { FormLabel, Select } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
+import { MessageStrip, Select } from 'fundamental-react';
+
+import { ResourceForm } from 'shared/ResourceForm';
+
 import './ContextChooser.scss';
 
-export function ContextChooser({ kubeconfig, setContextName }) {
-  const contexts = Array.isArray(kubeconfig.contexts)
-    ? kubeconfig.contexts.map(({ name }) => ({
-        key: name,
-        text: name,
-      }))
-    : [];
-  const selectedKey = kubeconfig['current-context'];
+export function ContextChooser(params) {
+  const kubeconfig = params.resource;
+  const { t } = useTranslation();
+
+  if (!Array.isArray(kubeconfig.contexts)) {
+    return '';
+  }
+
+  const contexts = kubeconfig.contexts.map(({ name }) => ({
+    key: name,
+    text: name,
+  }));
+  contexts.push({
+    key: '-all-',
+    text: t('clusters.wizard.all-contexts'),
+  });
 
   return (
-    <div className="context-chooser">
-      <FormLabel htmlFor="context-chooser">Context:</FormLabel>
-      <Select
-        id="context-chooser"
-        selectedKey={selectedKey}
-        options={contexts}
-        onSelect={(_, { text }) => setContextName(text)}
+    <ResourceForm.Wrapper {...params}>
+      <ResourceForm.FormField
+        required
+        propertyPath='$["current-context"]'
+        label={t('clusters.wizard.context')}
+        validate={value => !!value}
+        input={({ value, setValue }) => (
+          <Select
+            id="context-chooser"
+            selectedKey={value}
+            options={contexts}
+            onSelect={(_, { key }) => setValue(key)}
+          />
+        )}
       />
-    </div>
+      {kubeconfig['current-context'] === '-all-' && (
+        <MessageStrip
+          type="information"
+          className="fd-margin-top--sm fd-margin-bottom--sm"
+        >
+          {t('clusters.wizard.multi-context-info', {
+            context: kubeconfig.contexts[0]?.name,
+          })}
+        </MessageStrip>
+      )}
+    </ResourceForm.Wrapper>
   );
 }

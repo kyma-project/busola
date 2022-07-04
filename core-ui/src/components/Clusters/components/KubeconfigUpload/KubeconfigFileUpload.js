@@ -1,7 +1,10 @@
 import React from 'react';
-import { FileInput } from 'react-shared';
+import { FileInput } from 'shared/components/FileInput/FileInput';
+import { useTranslation } from 'react-i18next';
 
 export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
+  const { i18n } = useTranslation();
+
   const readFile = file => {
     return new Promise(resolve => {
       const reader = new FileReader();
@@ -10,15 +13,16 @@ export function KubeconfigFileUpload({ onKubeconfigTextAdded }) {
     });
   };
 
-  const onKubeconfigFileUploaded = async file => {
-    const fileContent = await readFile(file);
+  const onKubeconfigFileUploaded = async files => {
+    const fileContent = await readFile(files[0]);
     onKubeconfigTextAdded(fileContent);
   };
 
   return (
     <FileInput
       fileInputChanged={onKubeconfigFileUploaded}
-      acceptedFileFormats=".yaml"
+      acceptedFileFormats=".yaml,.yml"
+      i18n={i18n}
     />
   );
 }

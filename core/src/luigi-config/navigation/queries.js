@@ -1,11 +1,18 @@
 import { config } from './../config';
-import { getActiveCluster } from './../cluster-management';
-import { HttpError } from '../../../../shared/hooks/BackendAPI/config';
+import {
+  getActiveCluster,
+  getActiveClusterName,
+} from './../cluster-management/cluster-management';
+import { getSSOAuthData } from '../auth/sso';
+import * as fetchCache from './../cache/fetch-cache';
+import { extractGroupVersions } from '../utils/extractGroupVersions';
 
 export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {
     if (auth.token) {
-      return { Authorization: `Bearer ${auth.token}` };
+      return {
+        'X-K8s-Authorization': `Bearer ${auth.token}`,
+      };
     } else if (
       auth &&
       auth['client-certificate-data'] &&
@@ -20,35 +27,58 @@ export async function failFastFetch(input, auth, init = {}) {
     }
   }
 
-  function createHeaders(auth) {
-    const cluster = getActiveCluster().currentContext.cluster.cluster;
+  function createSSOHeader() {
+    const ssoData = getSSOAuthData();
+    if (ssoData) {
+      return { Authorization: 'Bearer ' + ssoData.idToken };
+    } else {
+      return null;
+    }
+  }
+
+  async function createHeaders(auth) {
+    const params = getActiveCluster();
+    const cluster = params.currentContext.cluster.cluster;
+    const requiresCA = params.config?.requiresCA;
+
     return {
+      ...createSSOHeader(),
       ...createAuthHeaders(auth),
       'Content-Type': 'application/json',
       'X-Cluster-Url': cluster?.server,
       'X-Cluster-Certificate-Authority-Data':
-        cluster && cluster['certificate-authority-data'],
+        requiresCA === true || requiresCA === undefined
+          ? cluster['certificate-authority-data']
+          : undefined,
     };
   }
 
-  init.headers = createHeaders(auth);
-
-  const response = await fetch(input, init);
-  if (response.ok) {
-    return response;
-  } else {
-    if (response.json) {
-      const errorResponse = await response.json();
-      throw new HttpError(
-        errorResponse.message && typeof errorResponse.message === 'string'
-          ? errorResponse.message
-          : response.statusText,
-        errorResponse.statusCode ? errorResponse.statusCode : response.status,
-      );
-    } else {
-      throw new Error(response);
-    }
+  const activeClusterName = getActiveClusterName();
+  if (!activeClusterName) {
+    throw Error(`failFastFetch: no connected cluster (${input})`);
   }
+
+  init.headers = await createHeaders(auth, input);
+
+  return await fetch(input, init);
+}
+
+export async function checkIfClusterRequiresCA(auth) {
+  try {
+    // try to fetch with CA (if 'requiresCA' is undefined => send CA)
+    await failFastFetch(config.backendAddress + '/api', auth);
+    return true;
+  } catch (_) {
+    // if it fails, don't send CA anymore
+    return false;
+  }
+}
+
+export async function fetchObservabilityHost(auth, vsPath) {
+  const res = await failFastFetch(config.backendAddress + '/' + vsPath, auth, {
+    method: 'GET',
+  });
+  return (await res.json()).spec.hosts[0];
 }
 
 export function fetchPermissions(auth, namespace = '*') {
@@ -69,19 +99,11 @@ export function fetchPermissions(auth, namespace = '*') {
     .then(res => res.status.resourceRules);
 }
 
-export function fetchBusolaInitData(auth) {
-  const crdsUrl = `${config.backendAddress}/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
-  const crdsQuery = failFastFetch(crdsUrl, auth)
-    .then(res => res.json())
-    .then(data => ({ crds: data.items.map(crd => crd.metadata) }));
-
-  const apiPathsQuery = failFastFetch(config.backendAddress, auth)
-    .then(res => res.json())
-    .then(data => ({ apiPaths: data.paths }));
-
-  const promises = [crdsQuery, apiPathsQuery];
-
-  return Promise.all(promises).then(res => Object.assign(...res));
+export async function fetchAvailableApis() {
+  // don't subscribe to '/apis' here - apiGroup features take care of that
+  return await fetchCache
+    .get('/apis')
+    .then(({ data }) => extractGroupVersions(data));
 }
 
 export function fetchNamespaces(auth) {

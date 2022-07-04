@@ -6,7 +6,7 @@ This project contains smoke and integration UI tests for Busola.
 
 ## Prerequisites
 
-Before testing, you need to copy your cluster's kubeconfig file to [`fixtures/kubeconfig.yaml`](fixtures/kubeconfig.yaml).
+Before testing, you need to copy your cluster's kubeconfig file to `fixtures/kubeconfig.yaml`.
 
 ## Installation
 
@@ -54,4 +54,12 @@ To open the `tests runner`, pointing to a `local Busola` instance, use this comm
 
 ```bash
 npm run start:local
+```
+
+### Login via OIDC to a cluster (optional)
+
+If a cluster requires an OIDC authentication, include these additional arguments while lunching tests, for example:
+
+```bash
+CYPRESS_OIDC_PASS={YOUR_PASSWORD} CYPRESS_OIDC_USER={YOUR_USERNAME} npm start
 ```

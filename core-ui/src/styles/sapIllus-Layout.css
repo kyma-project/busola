@@ -1,0 +1,81 @@
+:root {
+  --sapIllus_CaptionColor: #32363a;
+  --sapIllus_CaptionMessageColor: #6a6d70;
+}
+.sapIllus {
+  display: block;
+  margin: 0;
+  text-align: center;
+}
+.sapIllus_Image,
+.sapIllus_Caption {
+  display: block;
+  margin: 0 auto;
+}
+.sapIllus_Caption {
+  max-width: 288px;
+}
+@media screen and (min-width: 600px) {
+  .sapIllus_Caption {
+    max-width: 400px;
+  }
+}
+.sapIllus_CaptionHeader {
+  color: var(--sapIllus_CaptionColor);
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1rem;
+  font-weight: normal;
+  line-height: 1.25;
+}
+.sapIllus_CaptionMessage {
+  color: var(--sapIllus_CaptionMessageColor);
+  font-size: 0.875rem;
+  font-weight: normal;
+  line-height: 1.428571428571429;
+}
+.sapIllus_Spot {
+  padding: 24px 16px 32px;
+}
+.sapIllus_Spot .sapIllus_Image {
+  width: 128px;
+  height: 128px;
+  margin-bottom: 8px;
+}
+.sapIllus_Dialog {
+  padding: 32px 16px 48px;
+}
+.sapIllus_Dialog .sapIllus_Image {
+  width: 160px;
+  height: 160px;
+  margin-bottom: 32px;
+}
+@media screen and (min-width: 600px) {
+  .sapIllus_Dialog .sapIllus_CaptionHeader {
+    font-size: 1.125rem;
+    line-height: 1.333333333333333;
+  }
+}
+.sapIllus_Scene {
+  padding: 96px 16px;
+}
+.sapIllus_Scene .sapIllus_Image {
+  width: 240px;
+  height: 180px;
+  margin-bottom: 32px;
+}
+.sapIllus_Scene .sapIllus_CaptionHeader {
+  margin-bottom: 8px;
+  font-size: 1.5rem;
+  line-height: 1.333333333333333;
+}
+.sapIllus_Scene .sapIllus_CaptionMessage {
+  font-size: 1.125rem;
+  line-height: 1.333333333333333;
+}
+@media screen and (min-width: 600px) {
+  .sapIllus_Scene .sapIllus_Image {
+    width: 320px;
+    height: 240px;
+  }
+}

@@ -5,7 +5,10 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/server-snippet: 'server_tokens off;' # hide nginx version
+    nginx.ingress.kubernetes.io/enable-cors: 'false'
 spec:
+  ingressClassName: nginx
   rules:
     - host: %DOMAIN%
       http:

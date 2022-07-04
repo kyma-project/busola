@@ -3,10 +3,3 @@ reviewers:
 
 approvers:
     - default-approvers
-
-filters:
-  '\.md$|/docs/|^milv\.config\.yaml$':
-    approvers:
-      - documentation-approvers
-    reviewers:
-      - documentation-reviewers

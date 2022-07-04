@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Sidecar
+metadata:
+  name: ''
+  namespace: ''
+spec:
+  egress:
+    - hosts:
+        - testhost/*
+  ingress:
+    - port:
+        number: 81
+        protocol: HTTP
+        name: portname
+      defaultEndpoint: 127.0.0.1:8080
+  outboundTrafficPolicy:
+    mode: ALLOW_ANY
+  workloadSelector:
+    labels:
+      app: ratings

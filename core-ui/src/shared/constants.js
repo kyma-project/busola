@@ -1,65 +1,127 @@
-export const PREFERENCES_TITLE = 'Preferences';
-export const CLUSTERS_OVERVIEW_TITLE = 'Clusters Overview';
-export const ADD_CLUSTER_TITLE = 'Add Cluster';
-export const API_RULES_TITLE = 'API Rules';
-export const NO_PERMISSIONS_TITLE = 'No Permissions';
-export const CLUSTER_OVERVIEW_TITLE = 'Cluster Overview';
+export const EMPTY_TEXT_PLACEHOLDER = '-';
 
-export const ERRORS = {
-  SERVER: 'Server error. Contact your cluster admin.',
-  RESOURCES_NOT_FOUND: 'There are no related resources yet.',
-  NOT_MATCHING_SEARCH_QUERY: "Couldn't find resources matching this query.",
-  NOT_MATCHING_FILTERS: "Couldn't find resources matching these filters.",
-};
-
-export const EVENT_TRIGGERS_PANEL = {
-  LIST: {
-    TITLE: 'Event Subscriptions',
-    ERRORS: {
-      RESOURCES_NOT_FOUND: 'There are no Event Subscriptions yet.',
-      NOT_MATCHING_SEARCH_QUERY:
-        "Couldn't find Event Subscriptions matching this query.",
-    },
+export const namespaceNativeResourceTypes = [
+  { resourceType: 'cronjobs', aliases: ['cj', 'cronjob', 'cronjobs'] },
+  { resourceType: 'daemonsets', aliases: ['daemonset', 'daemonsets', 'ds'] },
+  {
+    resourceType: 'deployments',
+    aliases: ['deploy', 'deployment', 'deployments', 'dp'],
   },
-  ADD_MODAL: {
-    TITLE: 'Add Event Subscription',
-    OPEN_BUTTON: {
-      TEXT: 'Add Event Subscription',
-      NOT_ENTRIES_POPUP_MESSAGE:
-        'No Events available to connect in this Namespace.',
-      NO_EXPOSED_PORTS_MESSAGE: 'This service has no exposed ports.',
-    },
-    CONFIRM_BUTTON: {
-      TEXT: 'Add',
-      INVALID_POPUP_MESSAGE: 'The eventType field must have a proper value.',
-    },
+  { resourceType: 'configmaps', aliases: ['cm', 'configmap', 'configmaps'] },
+  {
+    resourceType: 'horizontalpodautoscalers',
+    aliases: ['horizontalpodautoscaler', 'horizontalpodautoscalers', 'hpa'],
   },
-};
-
-export const TRIGGER_SCHEMA = {
-  CSS_PREFIX: 'schema-event-trigger',
-  PAYLOAD_TEXT: 'Payload',
-  EXAMPLE_TEXT: 'Example',
-  COLUMN_NAMES: ['Name', 'Title', 'Type', 'Format', 'Default', 'Description'],
-};
-
-export const OAUTH_DOC_URL = '/docs/components/security';
-
-export const EVENT_SUBSCRIPTION_PANEL = {
-  ADD_MODAL: {
-    TITLE: 'Create Event Subscription',
-    OPEN_BUTTON: {
-      TEXT: 'Create Event Subscription',
-    },
-    CONFIRM_BUTTON: {
-      TEXT: 'Save',
-    },
-    CANCEL_BUTTON: {
-      TEXT: 'Close',
-    },
-    NOTIFICATION: {
-      SUCCESS: 'Event subscription created',
-      ERROR: 'Cannot create event subscription',
-    },
+  { resourceType: 'jobs', aliases: ['jo', 'job', 'jobs'] },
+  { resourceType: 'ingresses', aliases: ['ing', 'ingress', 'ingresses'] },
+  { resourceType: 'pods', aliases: ['po', 'pod', 'pods'] },
+  {
+    resourceType: 'limitranges',
+    aliases: ['limitrange', 'limitranges', 'limits'],
   },
-};
+  {
+    resourceType: 'resourcequotas',
+    aliases: ['quota', 'resourcequota', 'resourcequotas'],
+  },
+  {
+    resourceType: 'rolebindings',
+    aliases: ['rb', 'rolebinding', 'rolebindings'],
+  },
+  { resourceType: 'roles', aliases: ['ro', 'role', 'roles'] },
+  { resourceType: 'secrets', aliases: ['sec', 'secret', 'secrets'] },
+  {
+    resourceType: 'persistentvolumeclaims',
+    aliases: ['persistentvolumeclaim', 'persistentvolumeclaims', 'pvc'],
+  },
+  { resourceType: 'services', aliases: ['service', 'services', 'svc'] },
+  {
+    resourceType: 'statefulsets',
+    aliases: ['statefulset', 'statefulsets', 'sts'],
+  },
+  {
+    resourceType: 'networkpolicies',
+    aliases: ['netpol', 'networkpolicies', 'networkpolicy', 'np'],
+  },
+  { resourceType: 'serviceaccounts', aliases: ['sa', 'serviceaccount'] },
+  { resourceType: 'replicasets', aliases: ['replicaset', 'replicasets', 'rs'] },
+  // we don't have nodes for those resources, but let's keep them here
+  {
+    resourceType: 'replicationcontrollers',
+    aliases: ['rc', 'replicationcontroller', 'replicationcontrollers'],
+  },
+  { resourceType: 'podtemplates', aliases: ['podtemplate', 'podtemplates'] },
+  {
+    resourceType: 'podsecuritypolicies',
+    aliases: ['podsecuritypolicies', 'podsecuritypolicy', 'psp'],
+  },
+  {
+    resourceType: 'poddisruptionbudgets',
+    aliases: ['pdb', 'poddisruptionbudget', 'poddisruptionbudgets'],
+  },
+  { resourceType: 'leases', aliases: ['lease', 'leases'] },
+  { resourceType: 'endpoints', aliases: ['endpoints', 'ep'] },
+  {
+    resourceType: 'csistoragecapacities',
+    aliases: ['csistoragecapacities', 'csistoragecapacity'],
+  },
+  {
+    resourceType: 'controllerrevisions',
+    aliases: ['controllerrevision', 'controllerrevisions'],
+  },
+];
+export const clusterNativeResourceTypes = [
+  {
+    resourceType: 'clusterrolebindings',
+    aliases: ['clusterrolebinding', 'clusterrolebindings', 'crb'],
+  },
+  {
+    resourceType: 'clusterroles',
+    aliases: ['clusterrole', 'clusterroles', 'cr'],
+  },
+  {
+    resourceType: 'persistentvolumes',
+    aliases: ['persistentvolume', 'persistentvolumes', 'pv'],
+  },
+  { resourceType: 'namespaces', aliases: ['namespace', 'namespaces', 'ns'] },
+  {
+    resourceType: 'storageclasses',
+    aliases: ['sc', 'storageclass', 'storageclasses'],
+  },
+  // we don't have nodes for those resources, but let's keep them here
+  {
+    resourceType: 'volumeattachments',
+    aliases: ['volumeattachment', 'volumeattachments'],
+  },
+  {
+    resourceType: 'validatingwebhookconfigurations',
+    aliases: ['validatingwebhookconfiguration'],
+  },
+  {
+    resourceType: 'runtimeclasses',
+    aliases: ['runtimeclass', 'runtimeclasses'],
+  },
+  {
+    resourceType: 'prioritylevelconfigurations',
+    aliases: ['prioritylevelconfiguration', 'prioritylevelconfigurations'],
+  },
+  {
+    resourceType: 'priorityclasses',
+    aliases: ['pc', 'priorityclass', 'priorityclasses'],
+  },
+  {
+    resourceType: 'ingressclasses',
+    aliases: ['ingressclass', 'ingressclasses'],
+  },
+  { resourceType: 'flowschemas', aliases: ['flowschema', 'flowschemas'] },
+  { resourceType: 'csidrivers', aliases: ['csidriver', 'csidrivers'] },
+  { resourceType: 'csinodes', aliases: ['csinode', 'csinodes'] },
+  {
+    resourceType: 'certificatesigningrequests',
+    aliases: ['certificatesigningrequest', 'certificatesigningrequests', 'csr'],
+  },
+  { resourceType: 'apiservices', aliases: ['apiservice', 'apiservices'] },
+  {
+    resourceType: 'mutatingwebhookconfigurations',
+    aliases: ['mutatingwebhookconfiguration', 'mutatingwebhookconfigurations'],
+  },
+];

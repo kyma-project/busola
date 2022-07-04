@@ -1,39 +1,63 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import { GenericList } from 'react-shared';
-import { InfoLabel, Icon } from 'fundamental-react';
+import { GenericList } from 'shared/components/GenericList/GenericList';
+import { Icon, InfoLabel } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
-import accessStrategyTypes, { usesMethods } from '../accessStrategyTypes';
+import accessStrategyTypes from '../accessStrategyTypes';
 
 import { ACCESS_STRATEGIES_PANEL } from 'components/ApiRules/constants';
 
 import './AccessStrategies.scss';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
-const headerRenderer = () => ['Path', 'Type', 'Methods'];
 const textSearchProperties = ['path', 'accessStrategies', 'methods'];
-const rowRenderer = strategy => {
-  const selectedType = strategy.accessStrategies[0].handler;
+const rowRenderer = (strategy, t) => {
+  const infoLabel = handler => {
+    const strategyType = accessStrategyTypes[handler]?.displayName;
+
+    return (
+      <InfoLabel
+        modifier="filled"
+        color={strategyType ? '' : 4}
+        className={strategyType ? '' : 'has-tooltip'}
+      >
+        <Icon
+          ariaLabel={strategyType || handler}
+          className="fd-margin-end--tiny"
+          glyph={
+            handler === accessStrategyTypes.noop.value ||
+            handler === accessStrategyTypes.allow.value
+              ? 'unlocked'
+              : 'locked'
+          }
+          size="s"
+        />
+        {strategyType || handler}
+      </InfoLabel>
+    );
+  };
   return [
     <span>{strategy.path}</span>,
-    <InfoLabel modifier="filled">
-      <Icon
-        ariaLabel={accessStrategyTypes[selectedType].displayName}
-        glyph={
-          selectedType === accessStrategyTypes.noop.value ||
-          selectedType === accessStrategyTypes.allow.value
-            ? 'unlocked'
-            : 'locked'
-        }
-        size="s"
-      />
-      {accessStrategyTypes[selectedType].displayName}
-    </InfoLabel>,
-    <ul
-      className={classNames('methods', {
-        'fd-hidden': !usesMethods(selectedType),
-      })}
-    >
+    <ul className="tokens">
+      {strategy.accessStrategies.map(ac => (
+        <li key={ac.handler}>
+          {accessStrategyTypes[ac.handler]?.displayName ? (
+            infoLabel(ac.handler)
+          ) : (
+            <Tooltip
+              content={t(
+                'api-rules.access-strategies.messages.unaccepted-type',
+              )}
+            >
+              {infoLabel(ac.handler)}
+            </Tooltip>
+          )}
+        </li>
+      ))}
+    </ul>,
+    <ul className="tokens">
       {strategy.methods
         .sort()
         .reverse()
@@ -51,24 +75,33 @@ export default function AccessStrategies({
   showSearchField = true,
   compact = false,
 }) {
+  const { t, i18n } = useTranslation();
+
+  const headerRenderer = () => [
+    t('api-rules.access-strategies.labels.path'),
+    t('api-rules.access-strategies.labels.types'),
+    t('api-rules.access-strategies.labels.methods'),
+  ];
+
   return (
     <div
       className={classNames('api-rules__access-strategies', {
         'api-rules__access-strategies--compact': compact,
       })}
-      aria-label="Access strategies"
+      aria-label={t('api-rules.access-strategies.title')}
     >
       <GenericList
-        title={ACCESS_STRATEGIES_PANEL.LIST.TITLE}
+        title={t(ACCESS_STRATEGIES_PANEL.LIST.TITLE)}
         showSearchField={showSearchField}
         textSearchProperties={textSearchProperties}
         showSearchSuggestion={false}
         entries={strategies}
         headerRenderer={headerRenderer}
-        rowRenderer={rowRenderer}
+        rowRenderer={e => rowRenderer(e, t)}
         noSearchResultMessage={
           ACCESS_STRATEGIES_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY
         }
+        i18n={i18n}
       />
     </div>
   );

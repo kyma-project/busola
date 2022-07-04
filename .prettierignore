@@ -78,14 +78,15 @@ stats.html
 
 # symlinked shared components for react
 shared/build
-**/react-shared
 
 backend/backend-production.*
 
 **/temp/**
 
 # monaco editor
-**/vs/loader.js 
+**/vs/loader.js
 
 **/assets/**
 **/*.chunk.*
+
+**/public/**

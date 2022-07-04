@@ -1,21 +1,6 @@
 import LuigiClient from '@luigi-project/client';
 
-import createEncoder from 'json-url';
-import { DEFAULT_MODULES, DEFAULT_HIDDEN_NAMESPACES } from 'react-shared';
-import { merge } from 'lodash';
-
-const encoder = createEncoder('lzma');
-
-function getResponseParams(usePKCE = true) {
-  if (usePKCE) {
-    return {
-      responseType: 'code',
-      responseMode: 'query',
-    };
-  } else {
-    return { responseType: 'id_token' };
-  }
-}
+import { tryParseOIDCparams } from './components/oidc-params';
 
 export function setCluster(clusterName) {
   LuigiClient.sendCustomMessage({
@@ -24,33 +9,11 @@ export function setCluster(clusterName) {
   });
 }
 
-export function addCluster(initParams) {
-  const defaultParams = {
-    config: {
-      navigation: {
-        disabledNodes: [],
-        externalNodes: [],
-      },
-      hiddenNamespaces: DEFAULT_HIDDEN_NAMESPACES,
-      modules: DEFAULT_MODULES,
-    },
-  };
-
-  if (initParams.config.auth) {
-    initParams.config.auth = {
-      ...initParams.config.auth,
-      ...getResponseParams(initParams.config.auth.usePKCE),
-    };
-  }
-
-  const params = merge(defaultParams, initParams);
-  // Don't merge hiddenNamespaces, use the defaults only when initParams are empty
-  params.config.hiddenNamespaces =
-    initParams.config?.hiddenNamespaces || DEFAULT_HIDDEN_NAMESPACES;
-
+export function addCluster(params, switchCluster = true) {
   LuigiClient.sendCustomMessage({
     id: 'busola.addCluster',
     params,
+    switchCluster,
   });
 }
 
@@ -61,15 +24,11 @@ export function deleteCluster(clusterName) {
   });
 }
 
-export const decompressParams = async initParams => {
-  return await encoder.decompress(initParams);
-};
-
 export function getContext(kubeconfig, contextName) {
   const contexts = kubeconfig.contexts;
   const currentContextName = contextName || kubeconfig['current-context'];
   if (contexts.length === 0 || !currentContextName) {
-    // no contexts or no context choosen, just take first cluster and user
+    // no contexts or no context chosen, just take first cluster and user
     return {
       cluster: kubeconfig.clusters[0],
       user: kubeconfig.users[0],
@@ -83,17 +42,34 @@ export function getContext(kubeconfig, contextName) {
   }
 }
 
-export function hasKubeconfigAuth(kubeconfig, contextName) {
+export function getUserIndex(kubeconfig) {
+  const contextName = kubeconfig?.['current-context'];
+  const context =
+    contextName === '-all-'
+      ? kubeconfig?.contexts[0]?.context
+      : kubeconfig?.contexts?.find(c => c?.name === contextName)?.context;
+  const index = kubeconfig?.users?.findIndex(u => u?.name === context?.user);
+  return index > 0 ? index : 0;
+}
+
+export function getUser(kubeconfig) {
+  const contextName = kubeconfig?.['current-context'];
+  const context = kubeconfig?.contexts?.find(c => c?.name === contextName)
+    ?.context;
+  return kubeconfig?.users?.find(u => u?.name === context?.user)?.user;
+}
+
+export function hasKubeconfigAuth(kubeconfig) {
   try {
-    const context = kubeconfig.contexts.find(c => c.name === contextName)
-      .context;
-    const user = kubeconfig.users.find(u => u.name === context.user).user;
+    const contextName = kubeconfig?.['current-context'];
+    const user = getUser(kubeconfig, contextName);
 
     const token = user.token;
     const clientCA = user['client-certificate-data'];
     const clientKeyData = user['client-key-data'];
+    const oidcParams = tryParseOIDCparams(user);
 
-    return !!token || (!!clientCA && !!clientKeyData);
+    return !!token || (!!clientCA && !!clientKeyData) || !!oidcParams;
   } catch (e) {
     // we could arduously check for falsy values, but...
     console.warn(e);

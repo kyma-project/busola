@@ -1,0 +1,116 @@
+.double-theme {
+  position: relative;
+
+  * {
+    position: absolute;
+    left: 0;
+  }
+
+  & :last-child {
+    svg {
+      clip-path: polygon(0 0, 100% 0, 0 100%);
+    }
+  }
+}
+
+.theme-wrapper {
+  position: relative;
+}
+
+.theme-preview {
+  border: 1px solid var(--sapContent_Illustrative_Color5);
+  border-radius: 50%;
+
+  &.theme--light {
+    .cls-1 {
+      fill: #f7f7f7;
+    }
+    .cls-2 {
+      fill: #ccc;
+    }
+    .cls-3 {
+      fill: #fff;
+    }
+    .cls-4 {
+      fill: #d9d9d9;
+    }
+    .cls-5 {
+      fill: #0854a0;
+    }
+    .cls-6 {
+      fill: #6a6d70;
+    }
+    .cls-7 {
+      fill: #354a5f;
+    }
+    .cls-8 {
+      fill: #7996b4;
+    }
+    .cls-9 {
+      fill: #fff;
+    }
+  }
+  &.theme--dark {
+    .cls-1 {
+      fill: #1c2228;
+    }
+    .cls-2 {
+      fill: #424f5e;
+    }
+    .cls-3 {
+      fill: #29313a;
+    }
+    .cls-4 {
+      fill: #3a4552;
+    }
+    .cls-5 {
+      fill: #91c8f6;
+    }
+    .cls-6 {
+      fill: #d3d7d9;
+    }
+    .cls-7 {
+      fill: #354a5f;
+    }
+    .cls-8 {
+      fill: #7996b4;
+    }
+    .cls-9 {
+      fill: #fafafa;
+    }
+  }
+  &.theme--hcb {
+    .cls-1,
+    .cls-3,
+    .cls-7 {
+      fill: #000;
+    }
+    .cls-2,
+    .cls-4,
+    .cls-6,
+    .cls-8,
+    .cls-9 {
+      fill: #fff;
+    }
+    .cls-5 {
+      fill: #0f5d94;
+    }
+  }
+  &.theme--hcw {
+    .cls-1,
+    .cls-3,
+    .cls-7 {
+      fill: #fff;
+    }
+    .cls-2,
+    .cls-4,
+    .cls-6,
+    .cls-8,
+    .cls-9 {
+      fill: #000;
+    }
+    .cls-5 {
+      fill: #8fb5ff;
+    }
+  }
+}

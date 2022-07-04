@@ -1,10 +1,12 @@
+import { getTheme } from './utils/theme';
+
 export function createSettings(params) {
   return {
-    responsiveNavigation: 'simpleMobileOnly',
-    sideNavFooterText: '',
+    responsiveNavigation: 'Fiori3',
+    sideNavFooterText: ' ', // init empty footer
     header: {
-      logo: 'assets/logo.svg',
-      title: params?.currentContext.cluster.name || 'Busola',
+      logo: getTheme() === 'hcw' ? 'assets/logo-black.svg' : 'assets/logo.svg',
+      title: params?.currentContext.cluster.name || '',
       favicon: 'favicon.ico',
     },
     appLoadingIndicator: {

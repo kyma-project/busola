@@ -1,17 +1,21 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
-import { Button, LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
+import { Button, LayoutPanel } from 'fundamental-react';
+import { LayoutPanelRow } from '../LayoutPanelRow/LayoutPanelRow';
 import './SecretData.scss';
 import { base64Decode } from 'shared/helpers';
 
 const SecretComponent = ({ name, value, showEncoded, isCollapsed }) => (
-  <FormItem className="item-wrapper">
-    <FormLabel>{name}</FormLabel>
-    <pre className={isCollapsed ? 'show-more-expand' : 'show-more-collapse'}>
-      {showEncoded ? value : base64Decode(value)}
-    </pre>
-  </FormItem>
+  <LayoutPanelRow
+    name={name}
+    value={
+      <pre className={isCollapsed ? 'show-more-expand' : 'show-more-collapse'}>
+        {showEncoded ? value : base64Decode(value)}
+      </pre>
+    }
+  />
 );
 
 SecretData.propTypes = {
@@ -19,6 +23,7 @@ SecretData.propTypes = {
 };
 
 export default function SecretData({ secret }) {
+  const { t } = useTranslation();
   const [isEncoded, setEncoded] = React.useState(true);
   const [isCollapsed, setCollapsed] = React.useState(true);
   const [showExpandButton, setShowExpandButton] = React.useState(false);
@@ -49,14 +54,14 @@ export default function SecretData({ secret }) {
     );
 
     if (!secret) {
-      return <SecretWrapper>Secret not found.</SecretWrapper>;
+      return <SecretWrapper>Secret not found</SecretWrapper>;
     }
     if (!secret.data) {
-      return <SecretWrapper>Empty secret.</SecretWrapper>;
+      return <SecretWrapper>Empty Secret</SecretWrapper>;
     }
 
     return (
-      <>
+      <LayoutPanel.Body>
         {Object.keys(secret.data).map(key => (
           <SecretComponent
             name={key}
@@ -66,14 +71,14 @@ export default function SecretData({ secret }) {
             isCollapsed={isCollapsed}
           />
         ))}
-      </>
+      </LayoutPanel.Body>
     );
   };
 
   return (
     <LayoutPanel className="fd-margin--md secret-panel">
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={'Data'} />
+        <LayoutPanel.Head title={t('secrets.data')} />
         <LayoutPanel.Actions>
           {showExpandButton && (
             <Button
@@ -82,7 +87,9 @@ export default function SecretData({ secret }) {
               disabled={!secret?.data}
               onClick={() => setCollapsed(!isCollapsed)}
             >
-              {isCollapsed ? 'Expand all' : 'Collapse all'}
+              {isCollapsed
+                ? t('secrets.buttons.expand')
+                : t('secrets.buttons.collapse')}
             </Button>
           )}
           <Button
@@ -93,7 +100,9 @@ export default function SecretData({ secret }) {
               return isEncoded ? encode() : decode();
             }}
           >
-            {isEncoded ? 'Decode' : 'Encode'}
+            {isEncoded
+              ? t('secrets.buttons.decode')
+              : t('secrets.buttons.encode')}
           </Button>
         </LayoutPanel.Actions>
       </LayoutPanel.Header>

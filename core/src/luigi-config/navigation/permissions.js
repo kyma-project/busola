@@ -1,39 +1,20 @@
 import rbacRulesMatched from './rbac-rules-matcher';
-
-function checkRequiredModules(nodeToCheckPermissionsFor, crds) {
-  const requiredModules = nodeToCheckPermissionsFor.context?.requiredModules;
-  let hasPermissions = true;
-  if (requiredModules?.length > 0) {
-    if (crds?.length > 0) {
-      requiredModules.forEach(module => {
-        const moduleExists = crds.some(crd => crd.includes(module));
-        if (hasPermissions && !moduleExists) {
-          hasPermissions = false;
-        }
-      });
-    } else {
-      hasPermissions = false;
-    }
-  }
-  return hasPermissions;
-}
+import _ from 'lodash';
 
 export function navigationPermissionChecker(
   nodeToCheckPermissionsFor,
   selfSubjectRulesReview,
-  crds,
 ) {
   const noRulesApplied =
     !Array.isArray(nodeToCheckPermissionsFor.requiredPermissions) ||
     !nodeToCheckPermissionsFor.requiredPermissions.length;
 
   return (
-    (noRulesApplied ||
-      rbacRulesMatched(
-        nodeToCheckPermissionsFor.requiredPermissions,
-        selfSubjectRulesReview,
-      )) &&
-    checkRequiredModules(nodeToCheckPermissionsFor, crds)
+    noRulesApplied ||
+    rbacRulesMatched(
+      nodeToCheckPermissionsFor.requiredPermissions,
+      selfSubjectRulesReview,
+    )
   );
 }
 
@@ -49,10 +30,10 @@ export function hasWildcardPermission(permissionSet) {
 export function hasPermissionsFor(
   apiGroup,
   resourceType,
-  permissionSet,
+  groupVersions,
   verbs = [],
 ) {
-  const permissionsForApiGroup = permissionSet.filter(
+  const permissionsForApiGroup = groupVersions.filter(
     p => p.apiGroups.includes(apiGroup) || p.apiGroups[0] === '*',
   );
   const matchingPermission = permissionsForApiGroup.find(p =>
@@ -74,4 +55,33 @@ export function hasPermissionsFor(
   }
 
   return !!matchingPermission || !!wildcardPermission;
+}
+
+export function hasAnyRoleBound(permissionSet) {
+  const ssrr = {
+    apiGroups: ['authorization.k8s.io'],
+    resources: ['selfsubjectaccessreviews', 'selfsubjectrulesreviews'],
+    verbs: ['create'],
+  };
+
+  const filterSelfSubjectRulesReview = permission =>
+    !_.isEqual(permission, ssrr);
+
+  // leave out ssrr permission, as it's always there
+  permissionSet = permissionSet.filter(filterSelfSubjectRulesReview);
+
+  const verbs = permissionSet.flatMap(p => p.verbs);
+
+  const usefulVerbs = [
+    'get',
+    'list',
+    'watch',
+    'create',
+    'update',
+    'patch',
+    'delete',
+    '*',
+  ];
+
+  return verbs.some(v => usefulVerbs.includes(v));
 }

@@ -1,0 +1,18 @@
+.params-warning-icon {
+  color: var(--sapCriticalColor);
+  font-weight: bolder;
+  margin-left: 10px;
+}
+
+.fd-message-page.empty-cluster-list {
+  height: 100vh;
+
+  .fd-message-page__icon {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+.cluster-disabled-subtitle a {
+  font-size: inherit;
+}

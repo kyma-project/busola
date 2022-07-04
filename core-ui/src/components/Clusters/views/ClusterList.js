@@ -1,21 +1,40 @@
-import React from 'react';
-import LuigiClient from '@luigi-project/client';
+import React, { useState } from 'react';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
-import { Link, Button } from 'fundamental-react';
-import { useShowNodeParamsError } from 'shared/useShowNodeParamsError';
-import {
-  useMicrofrontendContext,
-  PageHeader,
-  GenericList,
-  useNotification,
-} from 'react-shared';
+import { useTranslation } from 'react-i18next';
+import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
+import { Link, Button, MessagePage } from 'fundamental-react';
+
+import { useDeleteResource } from 'shared/hooks/useDeleteResource';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import { setCluster, deleteCluster } from './../shared';
+import { AddClusterDialog } from '../components/AddClusterDialog';
+import { EditCluster } from './EditCluster/EditCluster';
+import { ClusterStorageType } from './ClusterStorageType';
 
-export function ClusterList() {
+import './ClusterList.scss';
+
+function ClusterList() {
   const { clusters, activeClusterName } = useMicrofrontendContext();
   const notification = useNotification();
+  const { t, i18n } = useTranslation();
+
+  const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
+    i18n,
+    resourceType: t('clusters.labels.name'),
+  });
+
+  const [chosenCluster, setChosenCluster] = useState(null);
+  const [showAdd, setShowAdd] = useState(false);
+
+  const [showEdit, setShowEdit] = useState(false);
+  const [editedCluster, setEditedCluster] = useState(null);
 
   useShowNodeParamsError();
 
@@ -24,62 +43,94 @@ export function ClusterList() {
   }
 
   const styleActiveCluster = entry => {
-    return entry.currentContext.cluster.name === activeClusterName
+    return entry?.kubeconfig?.['current-context'] === activeClusterName
       ? { fontWeight: 'bolder' }
       : {};
   };
 
   const downloadKubeconfig = entry => {
-    if (entry.kubeconfig) {
+    if (entry?.kubeconfig) {
       try {
         const kubeconfigYaml = jsyaml.dump(entry.kubeconfig);
         const blob = new Blob([kubeconfigYaml], {
           type: 'application/yaml;charset=utf-8',
         });
-        saveAs(blob, 'kubeconfig.yaml');
+        saveAs(blob, `kubeconfig--${entry.kubeconfig['current-context']}.yaml`);
       } catch (e) {
         console.error(e);
         notification.notifyError({
-          title: 'Failed to download the Kubeconfig',
+          title: t('clusters.common.kubeconfig-download-error'),
           content: e.message,
         });
       }
     } else {
       notification.notifyError({
-        title: 'Failed to download the Kubeconfig',
-        content: 'Kubeconfig is missing on the Cluster',
+        title: t('clusters.common.kubeconfig-download-error'),
+        content: t('clusters.common.kubeconfig-not-present'),
       });
     }
   };
 
-  const entries = Object.values(clusters);
-  const headerRenderer = () => ['Name', 'API Server address'];
+  const entries = Object.entries(clusters).map(([name, cluster]) => ({
+    name,
+    ...cluster,
+  }));
+  const headerRenderer = () => [
+    t('common.headers.name'),
+    t('clusters.common.api-server-address'),
+    t('clusters.storage.title'),
+    t('common.headers.description'),
+  ];
   const textSearchProperties = [
-    'currentContext.cluster.name',
+    'kubeconfig.current-context',
     'currentContext.cluster.cluster.server',
   ];
 
   const rowRenderer = entry => [
-    <Link
-      className="link"
-      style={styleActiveCluster(entry)}
-      onClick={() => setCluster(entry.currentContext.cluster.name)}
-    >
-      {entry.currentContext.cluster.name}
-    </Link>,
+    <>
+      <Link
+        className="fd-link"
+        style={styleActiveCluster(entry)}
+        onClick={() => setCluster(entry.name)}
+      >
+        {entry.name}
+      </Link>
+    </>,
     entry.currentContext.cluster.cluster.server,
+    <ClusterStorageType clusterConfig={entry.config} />,
+    entry.config.description || EMPTY_TEXT_PLACEHOLDER,
   ];
 
   const actions = [
     {
-      name: 'Download Kubeconfig',
+      name: t('common.buttons.edit'),
+      icon: 'edit',
+      tooltip: t('clusters.edit-cluster'),
+      handler: cluster => {
+        setEditedCluster(cluster);
+        setShowEdit(true);
+      },
+    },
+    {
+      name: t('clusters.common.download-kubeconfig'),
       icon: 'download',
-      tooltip: 'Download Kubeconfig',
+      tooltip: t('clusters.common.download-kubeconfig'),
       handler: e => downloadKubeconfig(e),
     },
     {
-      name: 'Delete',
-      handler: e => deleteCluster(e.currentContext.cluster.name),
+      name: t('common.buttons.delete'),
+      icon: 'delete',
+      handler: resource => {
+        setChosenCluster(resource);
+        handleResourceDelete({
+          deleteFn: () => {
+            deleteCluster(resource?.name);
+            notification.notifySuccess({
+              content: t('clusters.disconnect'),
+            });
+          },
+        });
+      },
     },
   ];
 
@@ -88,15 +139,59 @@ export function ClusterList() {
       option="transparent"
       glyph="add"
       className="fd-margin-begin--sm"
-      onClick={() => LuigiClient.linkManager().navigate('add')}
+      onClick={() => setShowAdd(true)}
     >
-      Add Cluster
+      {t('clusters.add.title')}
     </Button>
   );
 
+  const addDialog = (
+    <AddClusterDialog show={showAdd} onCancel={() => setShowAdd(false)} />
+  );
+  const editDialog = (
+    <ModalWithForm
+      opened={showEdit}
+      className="modal-size--l create-resource-modal"
+      title={t('clusters.edit-cluster')}
+      id="edit-cluster"
+      renderForm={props => (
+        <EditCluster {...props} editedCluster={editedCluster} />
+      )}
+      modalOpeningComponent={<></>}
+      customCloseAction={() => setShowEdit(false)}
+      confirmText={t('common.buttons.update')}
+    />
+  );
+
+  if (!entries.length) {
+    const subtitle = t('clusters.empty.subtitle');
+    return (
+      <>
+        {addDialog}
+        <MessagePage
+          className="empty-cluster-list"
+          image={
+            <svg role="presentation" className="fd-message-page__icon">
+              <use xlinkHref="#sapIllus-Dialog-NoData"></use>
+            </svg>
+          }
+          title={t('clusters.empty.title')}
+          subtitle={subtitle}
+          actions={
+            <Button onClick={() => setShowAdd(true)}>
+              {t('clusters.add.title')}
+            </Button>
+          }
+        />
+      </>
+    );
+  }
+
   return (
     <>
-      <PageHeader title="Clusters Overview" />
+      {addDialog}
+      {editDialog}
+      <PageHeader title={t('clusters.overview.title-all-clusters')} />
       <GenericList
         textSearchProperties={textSearchProperties}
         showSearchSuggestion={false}
@@ -105,8 +200,25 @@ export function ClusterList() {
         rowRenderer={rowRenderer}
         actions={actions}
         extraHeaderContent={extraHeaderContent}
-        noSearchResultMessage="No clusters found"
+        noSearchResultMessage={'clusters.list.no-clusters-found'}
+        i18n={i18n}
+        allowSlashShortcut
+        sortBy={{
+          name: (a, b) => a.contextName?.localeCompare(b.contextName),
+        }}
+      />
+      <DeleteMessageBox
+        resource={chosenCluster}
+        resourceName={chosenCluster?.kubeconfig['current-context']}
+        deleteFn={e => {
+          deleteCluster(e.name);
+          notification.notifySuccess({
+            content: t('clusters.disconnect'),
+          });
+        }}
       />
     </>
   );
 }
+
+export default ClusterList;

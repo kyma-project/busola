@@ -5,13 +5,12 @@ export const saveLocation = location => {
 };
 
 export const saveCurrentLocation = () => {
-  const hasInitParams = [...window.location.searchParams.keys()].includes(
-    'init',
-  );
-  if (!window.location.hash && !hasInitParams) {
-    const location = window.location.pathname;
-    const params = window.location.search;
-    saveLocation(location + params);
+  if (
+    !window.location.hash &&
+    window.location.pathname !== '/' &&
+    window.location.pathname !== '/clusters'
+  ) {
+    saveLocation(window.location.pathname);
   }
 };
 

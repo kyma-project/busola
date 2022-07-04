@@ -1,10 +1,13 @@
 import React from 'react';
-import { PageHeader, ReadableCreationTimestamp } from 'react-shared';
+import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { useTranslation } from 'react-i18next';
 
 export function NodeDetailsHeader({ nodeName, node, loading, error }) {
+  const { t } = useTranslation();
   const breadcrumbs = [
     {
-      name: 'Cluster Overview - Nodes',
+      name: t('node-details.name'),
       path: '/overview',
       fromContext: 'cluster',
     },
@@ -16,22 +19,22 @@ export function NodeDetailsHeader({ nodeName, node, loading, error }) {
 
   return (
     <PageHeader title={nodeName} breadcrumbItems={breadcrumbs}>
-      {loading && 'Loading...'}
+      {loading && t('common.headers.loading')}
       {error && error.message}
       {node && (
         <>
-          <PageHeader.Column title="Created">
+          <PageHeader.Column title={t('common.headers.created')}>
             <ReadableCreationTimestamp
               timestamp={node.metadata.creationTimestamp}
             />
           </PageHeader.Column>
-          <PageHeader.Column title="Pod CIDR">
+          <PageHeader.Column title={t('node-details.pod-cidr')}>
             {node.spec.podCIDR}
           </PageHeader.Column>
-          <PageHeader.Column title="Internal IP">
+          <PageHeader.Column title={t('node-details.internal-ip')}>
             {internalIP.address}
           </PageHeader.Column>
-          <PageHeader.Column title="Hostname">
+          <PageHeader.Column title={t('common.labels.hostname')}>
             {hostname.address}
           </PageHeader.Column>
         </>

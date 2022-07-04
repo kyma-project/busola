@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: ''
+  namespace: ''
+spec:
+  hosts:
+    - test.com
+  resolution: STATIC
+  location: MESH_EXTERNAL
+  addresses:
+    - 192.192.192.192/24
+  workloadSelector:
+    labels:
+      test: test

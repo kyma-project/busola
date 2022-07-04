@@ -1,0 +1,15 @@
+.memory-input {
+  display: flex;
+
+  & > :first-child {
+    margin-top: 4px;
+  }
+
+  .dropdown {
+    width: 100px;
+
+    .fd-select__text-content {
+      min-width: unset;
+    }
+  }
+}

@@ -8,32 +8,43 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
     .click();
 
   cy.getIframeBody()
-    .contains('Create apirules')
+    .contains('Create API Rule')
     .should('be.visible')
     .click();
 
-  cy.getModalBody().within($modal => {
-    cy.get('[placeholder="API Rule name"]').type(ApiRuleName);
-    cy.get('[placeholder="Enter the hostname"]').type(ApiRuleHost); //the host is ocupied by another virtualservice
-    cy.get('[role="select"]#service').select(ApiRuleName + ':80');
+  cy.getIframeBody()
+    .find('[ariaLabel="API Rule name"]:visible', { log: false })
+    .type(ApiRuleName);
 
-    cy.get('[aria-label="Access strategy type"]').select('noop');
+  cy.getIframeBody()
+    .find('[placeholder="Subdomain part of API Rule address"]:visible', {
+      log: false,
+    })
+    .type(ApiRuleHost);
 
-    // inputs are invisible because the Fundamental uses label::before to display the check area
-    cy.get('input[type="checkbox"]').check(['GET', 'POST'], { force: true });
-    cy.get('input[type="checkbox"]').uncheck(
-      ['PUT', 'PATCH', 'DELETE', 'HEAD'],
-      { force: true },
-    );
-    cy.get('[aria-label="submit-form"]')
-      .should('not.be.disabled')
-      .click();
-  });
+  cy.getIframeBody()
+    .contains('Choose the service to expose')
+    .filter(':visible', { log: false })
+    .click();
+  cy.getIframeBody()
+    .contains(ApiRuleName + ' (port: 80)')
+    .click();
 
-  cy.get('.iframeModalCtn iframe').should('not.exist');
+  cy.getIframeBody()
+    .contains('Allow')
+    .filter(':visible', { log: false })
+    .click();
+  cy.getIframeBody()
+    .contains('noop')
+    .click();
 
-  cy.getLeftNav()
-    .contains('Discovery and Network')
+  cy.getIframeBody()
+    .contains('POST')
+    .click();
+
+  cy.getIframeBody()
+    .find('[role=dialog]')
+    .contains('button', 'Create')
     .click();
 });
 
@@ -44,7 +55,7 @@ Cypress.Commands.add('checkApiRuleStatus', ApiRuleName => {
 
   cy.getLeftNav()
     .contains('API Rules')
-    .click();
+    .click({ force: true });
 
   cy.getIframeBody()
     .find('[aria-label="open-search"]')

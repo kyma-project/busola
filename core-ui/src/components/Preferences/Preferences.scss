@@ -1,14 +1,16 @@
-main.preferences {
-    .fd-panel__actions {
-        font-size: 14px !important;
-    }
+.preferences-row {
+  display: grid;
+  grid-template-columns: 3fr 3fr;
+  align-items: center;
+  padding: 16px;
 
-    strong {
-        font-weight: 800;
-    }
+  & > :first-child {
+    text-align: right;
+    font-size: smaller;
+    margin-right: 16px;
+  }
 
-    .fd-switch__label {
-        display: inline-grid; // use inline-grid for nice children centering
-        vertical-align: middle;
-    }
+  .fd-form-label {
+    display: none;
+  }
 }

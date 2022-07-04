@@ -1,4 +1,5 @@
-external-links-to-ignore: ['localhost', 'kyma.local']
+external-links-to-ignore:
+  ['localhost', 'kyma.local', 'https://busola.local.kyma.dev']
 files-to-ignore: ['node_modules']
 timeout: 60
 request-repeats: 5

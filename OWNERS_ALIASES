@@ -1,29 +1,35 @@
 aliases:
     default-reviewers:
-    - parostatkiem
+    - qbalukom
     - Wawrzyn321
     - dariadomagala
     - akucharska
+    - valentinvieriu
+    - wchrapka
+    - Lyczeq
+    - mrCherry97
     default-approvers:
-    - parostatkiem
-    - kwiatekus
+    - qbalukom
+    - Wawrzyn321
     - dariadomagala
     - akucharska
-    content-ui-reviewers:
-    - aerfio
-    content-ui-approvers:
-    - aerfio
+    - valentinvieriu
+    - wchrapka
     documentation-reviewers:
-    - kazydek
     - klaudiagrz
-    - bszwarc
     - mmitoraj
     - majakurcius
-    - alexandra-simeonova
+    - grego952
+    - NHingerl
     documentation-approvers:
-    - kazydek
     - klaudiagrz
-    - bszwarc
     - mmitoraj
     - majakurcius
-    - alexandra-simeonova
+    - grego952
+    - NHingerl
+    technical-writers:
+    - klaudiagrz
+    - mmitoraj
+    - majakurcius
+    - grego952
+    - NHingerl

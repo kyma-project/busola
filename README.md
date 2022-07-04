@@ -9,15 +9,13 @@ Busola is a web-based UI for managing resources within Kyma or any Kubernetes cl
 Busola project consists of the following UI projects:
 
 - [`Core`](./core) - The main frame
-- [`Service-Catalog-UI`](./service-catalog-ui) - The UI layer for Service Catalog, Instances and Brokers
-- [`Log UI`](./logging) - The logs view
 - [`Backend`](./backend) - A kind of a proxy between Busola and the Kubernetes cluster
 - [`Tests`](./tests) - Acceptance and end-to-end tests
 
 ## Prerequisites
 
-- [`npm`](https://www.npmjs.com/): >= 6.14.12
-- [`node`](https://nodejs.org/en/): >= 14.16.1
+- [`npm`](https://www.npmjs.com/): >= 8.1.2
+- [`node`](https://nodejs.org/en/): >= 16.13.2
 
 ## Installation
 
@@ -33,9 +31,54 @@ npm run bootstrap:ci
 > - Installs dependencies for the [libraries](#components).
 > - Builds all the [libraries](#components).
 
-## Usage
+Read [Install Kyma Dashboard manually](docs/install-kyma-dashboard-manually.md) to learn how to install the Dashboard with Istio Ingress and how to install it on a Kyma cluster.
 
-See the [Development](#development) section.
+## Configuration
+
+Learn about the [default configuration](#default-configuration) in Busola and [how to change it](#change-the-configuration).
+
+### Default Configuration
+
+Busola is delivered with the following default settings:
+
+| Parameter  | Comment                                                                                                                                          | Default Value           |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `features` | Switches a set of Busola features on and off. Use selectors to configure conditions for the features. To switch them off, set `isEnabled=false`. | `isEnabled=true`        |
+| `version`  | Configuration version. Don’t edit this. Can be empty.                                                                                            | the most recent release |
+
+### Configuration sources
+
+Busola configuration is the product of gathering and merging the configurations from several individual sources. The following list presents the sources in the order of precedence:
+
+**Backend:**
+
+- Busola backend default cluster configuration, acquired from the [defaultConfig.json](backend/settings/defaultConfig.json) file.
+- Busola cluster configuration, available on the Busola cluster in the Config Map "busola/busola-config" under the key "config".
+  This data is mounted to the Busola `web` and `backend` Pods, and during the local development,
+  the [defaultConfig.json](backend/settings/defaultConfig.json) file is used.
+
+**Frontend:**
+
+- Built-in, hardcoded defaults.
+- Busola frontend default cluster configuration, acquired from the [defaultConfig.json](core/src/assets/defaultConfig.json) file.
+- Busola cluster configuration, available on the Busola cluster in the Config Map "busola/busola-config" under the key "config".
+  This data is mounted to the Busola `web` and `backend` Pods, and during the local development,
+  the [defaultConfig.json](core/src/assets/defaultConfig.json) file is used.
+- Target cluster configuration, available on the target cluster in ConfigMap "kube-public/busola-config" under the key "config". Busola performs a request for that resource during the bootstrap process.
+
+### Change the Configuration
+
+If you have the required authorizations and access to the kubeconfig, you can change the settings for the Busola cluster configuration and the target cluster configuration.
+
+With the `feature` toggles, you can switch each Busola feature on or off and configure them to fit your needs.
+Features comprise the following elements:
+
+- `FEATURE_ID`: Unique identifier, as defined in the Busola source code
+- `selector`: The k8s resources that can activate the feature
+- `isEnabled`: Activates or deactivates the feature, overwriting the status set by `selector`
+- `config`: Provides additional configuration options as needed for each feature. For details, see the README in the specific component or feature.
+
+See the available Busola [feature flags](docs/features.md) for more information.
 
 ## Development
 
@@ -47,16 +90,14 @@ Use the following command to run Busola with the [`core`](./core) and all other 
 npm run start
 ```
 
-After a while, open the [http://localhost:4200](http://localhost:4200) address in your browser, and add your **init params** to the address to make it look like `http://localhost:4200?init=yourInitParams`. You can generate the params with [this generator](http://enkode.surge.sh/).
+After a while, open the [http://localhost:8080](http://localhost:8080) address in your browser, and provide your kubeconfig in the **Connect cluster** wizard.
 
 Once you started Busola locally, you can begin the development. All modules have the hot-reload feature enabled, therefore, you can edit the code in real-time and see the changes in your browser.
 
 The apps you started run at the following addresses:
 
-- `Core` - [http://localhost:4200](http://localhost:4200)
+- `Core` - [http://localhost:8080](http://localhost:8080)
 - `Core-UI` - [http://localhost:8889](http://localhost:8889)
-- `Log UI` - [http://localhost:4400](http://localhost:4400)
-- `Service-Catalog-UI` - [http://localhost:8000](http://localhost:8000)
 - `Backend` - [http://localhost:3001](http://localhost:3001)
 
 ### Security countermeasures
@@ -80,6 +121,38 @@ When developing new features in Busola UI, adhere to the following rules. This w
 
 For the information on how to run tests and configure them, go to the [`tests`](tests) directory.
 
+## Busola in Docker: adding a cluster via kubeconfig ID
+
+1. If you run Busola in Docker, you can mount your kubeconfig as a bind mount for Busola container. Execute the following command:
+
+   ```bash
+   docker run --rm -it -p 3001:3001 -v <path to your kubeconfig>:/app/core/kubeconfig/<your kubeconfig file name> --pid=host --name busola eu.gcr.io/kyma-project/busola:latest
+   ```
+
+2. When you open Busola in your browser, go to `http://localhost:3001?kubeconfigID={YOUR_KUBECONFIG_FILE_NAME}`. Busola will try to download that file and add it for your Busola instance.
+
 ## Troubleshooting
 
 > **TIP:** To solve most of the problems with Busola development, clear the browser cache or do a hard refresh of the website.
+
+### Symptom
+
+You are experiencing connectivity problems with Busola in Docker against a k3d cluster.
+
+### Cause
+
+When the k3d cluster's API server is exposed on the `0.0.0.0` address on you machine, Busola in Docker interprets `0.0.0.0` as its internal Docker address, routing the requests to the wrong endpoint.
+
+### Remedy
+
+- For Docker Desktop for Mac and Windows, pass `DOCKER_DESKTOP_CLUSTER=true` on dockerized Busola startup. This way, `0.0.0.0` is automatically replaced with `host.docker.internal`.
+
+  ```bash
+  docker run --rm -it -p 3001:3001 -e DOCKER_DESKTOP_CLUSTER=true --pid=host --name busola eu.gcr.io/kyma-project/busola:latest
+  ```
+
+- For Linux, run Busola with `--net=host` (omitting the `-p` parameter).
+
+  ```bash
+  docker run --rm -it --net=host --pid=host --name busola eu.gcr.io/kyma-project/busola:latest
+  ```

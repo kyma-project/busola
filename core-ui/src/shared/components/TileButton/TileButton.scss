@@ -1,0 +1,43 @@
+.tile-button {
+  width: 100%;
+  height: 70px;
+  background-color: var(--sapList_Background);
+
+  :hover {
+    background: var(--sapList_Hover_Background);
+    & * {
+      background: initial;
+    }
+  }
+
+  :active {
+    background: var(--sapList_Active_Background);
+    & * {
+      color: var(--sapList_Active_TextColor) !important;
+    }
+  }
+
+  &.tile--active {
+    background: var(--sapList_SelectionBackgroundColor);
+  }
+
+  button {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+
+    padding: 16px;
+    width: 100%;
+    height: inherit;
+
+    border: none;
+    background: none;
+    color: var(--sapTextColor);
+    cursor: pointer;
+
+    .tile-button__text {
+      text-align: left;
+      padding-left: 16px;
+      align-self: center;
+    }
+  }
+}
