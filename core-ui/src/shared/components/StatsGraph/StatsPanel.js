@@ -15,7 +15,7 @@ import { usePrometheus } from 'shared/hooks/usePrometheus';
 import { StatsGraph } from 'shared/components/StatsGraph';
 
 import './StatsPanel.scss';
-import { GraphLegend } from 'components/Clusters/views/ClusterOverview/ClusterNodes/ResourceCommitment/GraphLegend/GraphLegend';
+import { GraphLegend } from 'shared/components/GraphLegend/GraphLegend';
 
 const DATA_POINTS = 60;
 

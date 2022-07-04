@@ -9,7 +9,7 @@ export function GraphLegend({ values = ['requests', 'limits', 'capacity'] }) {
       {values.map(e => (
         <div key={e}>
           <div className={`legend-box legend-box--${e}`}></div>
-          <span>{t(`graphs.resource-commitment.${e}`)}</span>
+          <span>{t(`graphs.${e}`)}</span>
         </div>
       ))}
     </legend>
