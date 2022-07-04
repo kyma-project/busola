@@ -186,7 +186,7 @@ renders the same set of data as:
 
 ## relations section
 
-This section contains an object that maps a relation name to relation configuration object. Relation name preceded by dollar sign '\$' can be then used in `path` expression.
+The `relations` section contains an object that maps a relation name to a relation configuration object. The relation name preceded by a dollar sign '\$' is used in the `path` expression.
 
 It's possible to use both relation name and a path; for example, `{"path": $myRelatedResource.metadata.labels}` returns the `metadata.labels` of the related resource.
 
