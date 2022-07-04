@@ -3,12 +3,12 @@ import LuigiClient from '@luigi-project/client';
 import { CommandPaletteUI } from './CommandPalletteUI/CommandPaletteUI';
 import { useEventListener } from 'hooks/useEventListener';
 import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
-import { useResourceCache } from './CommandPalletteUI/useResourceCache';
+import { useObjectState } from '../shared/useObjectState';
 
 export const CommandPaletteProvider = ({ children }) => {
   const [showDialog, _setShowDialog] = useState(false);
   const hide = () => setShowDialog(false);
-  const [resourceCache, updateResourceCache] = useResourceCache();
+  const [resourceCache, updateResourceCache] = useObjectState();
 
   const setShowDialog = value => {
     const modalPresent = document.querySelector(
