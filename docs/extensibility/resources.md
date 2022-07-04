@@ -296,7 +296,7 @@ If you provide both `translations` and `translations-{lang}` sections, they are 
 
 ### Value preprocessors
 
-Value preprocessors are used as a middleware between a value and the actual renderer. They can transform a given value and pass it further or stop processing, rendering to view early.
+Value preprocessors are used as a middleware between a value and the actual renderer. They can transform a given value and pass it to the widget; or stop processing and render it so you can view it immediately, without passing it to the widget.
 
 #### List of value preprocessors
 
