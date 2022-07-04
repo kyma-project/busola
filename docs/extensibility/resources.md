@@ -304,6 +304,6 @@ Value preprocessors are used as a middleware between a value and the actual rend
 
   - For `loading` equal to `true`, it displays a loading indicator.
   - For truthy `error`, it will display an error message.
-  - Otherwise, it will pass `data` to display component.
+  - Otherwise, it passes `data` to the display component.
 
   Unless you need custom handling of error or loading state, we recommend using the `PendingWrapper`, for example, for fields that use [related resources](#relations-section).
