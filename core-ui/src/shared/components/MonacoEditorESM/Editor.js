@@ -53,20 +53,6 @@ export function Editor({
   }
 
   useEffect(() => {
-    //focus listener
-    if (!editorRef.current) return;
-    const focusListener = editorRef.current.onDidFocusEditorText(() => {
-      setHasFocus(true);
-      if (typeof onFocus === 'function') {
-        onFocus();
-      }
-    });
-    return () => {
-      focusListener.dispose();
-    };
-  }, [onFocus]);
-
-  useEffect(() => {
     //blur listener
     if (!editorRef.current) return;
     const blurListener = editorRef.current.onDidBlurEditorText(() => {
@@ -146,12 +132,23 @@ export function Editor({
       onChange(editorValue);
     });
 
+    // focus listener
+    if (!editorRef.current) return;
+    const focusListener = editorRef.current.onDidFocusEditorText(() => {
+      console.log('set to true');
+      setHasFocus(true);
+      if (typeof onFocus === 'function') {
+        onFocus();
+      }
+    });
+
     return () => {
       changeListener.dispose();
       editor.getModel(descriptor.current)?.dispose();
       editorRef.current.dispose();
+      focusListener.dispose();
     };
-    // missing dependencies:  'value'
+    // missing dependencies: 'value'
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     editorTheme,
