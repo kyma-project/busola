@@ -129,7 +129,7 @@ Table widgets display array data as rows of a table instead of free-standing com
 
 ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with [related resources](resources.md#relations-section).
 
-If such resource list was already defined in Busola, the configuration will be reused. To obtain custom columns, specify `columns` field.
+If such resource list was already defined in Busola, the configuration will be reused. To obtain custom columns, specify the `columns` field.
 
 #### Example
 
