@@ -10,7 +10,7 @@ import { isEqual } from 'lodash';
 import './Editor.scss';
 
 export function Editor({
-  value,
+  value, // Pass value to initialize the Editor. Altering value later will not be reflected (as in an uncontrolled component).
   error, // used by the resourceFormWrapper to display error that previous input is used
   onChange,
   readOnly,
@@ -20,8 +20,6 @@ export function Editor({
   autocompletionDisabled,
   customSchemaUri, // custom link to be displayed in the autocompletion tooltips
   height,
-  onBlur,
-  onFocus,
   options = {}, // IEditorOptions, check Monaco API for the list of options
   ...rest
 }) {
@@ -32,7 +30,7 @@ export function Editor({
   const { editorTheme } = useTheme();
   const divRef = useRef(null);
   const editorRef = useRef(null);
-  const [hasFocus, setHasFocus] = useState(false);
+  const valueRef = useRef(value);
 
   const {
     setAutocompleteOptions,
@@ -53,34 +51,6 @@ export function Editor({
   }
 
   useEffect(() => {
-    //focus listener
-    if (!editorRef.current) return;
-    const focusListener = editorRef.current.onDidFocusEditorText(() => {
-      setHasFocus(true);
-      if (typeof onFocus === 'function') {
-        onFocus();
-      }
-    });
-    return () => {
-      focusListener.dispose();
-    };
-  }, [onFocus]);
-
-  useEffect(() => {
-    //blur listener
-    if (!editorRef.current) return;
-    const blurListener = editorRef.current.onDidBlurEditorText(() => {
-      setHasFocus(false);
-      if (typeof onBlur === 'function') {
-        onBlur();
-      }
-    });
-    return () => {
-      blurListener.dispose();
-    };
-  }, [onBlur]);
-
-  useEffect(() => {
     // show warnings in a message strip at the bottom of editor
     if (autocompletionDisabled) {
       return;
@@ -98,18 +68,6 @@ export function Editor({
       onDidChangeMarkers.dispose();
     };
   }, [setMarkers, autocompletionDisabled]);
-
-  useEffect(() => {
-    // update editor value when it comes as a prop
-    if (
-      !hasFocus &&
-      editorRef.current &&
-      editorRef.current.getValue() !== value
-    ) {
-      editorRef.current.setValue(value);
-    }
-  }, [value, hasFocus]);
-
   useEffect(() => {
     // setup Monaco editor and pass value updates to parent
 
@@ -119,7 +77,7 @@ export function Editor({
 
     const model =
       editor.getModel(modelUri) ||
-      editor.createModel(value, language, modelUri);
+      editor.createModel(valueRef.current, language, modelUri);
 
     // create editor and assign model with value and autocompletion
     editorRef.current = editor.create(divRef.current, {
@@ -141,27 +99,22 @@ export function Editor({
     }
 
     // update parent component state on value change
-    const changeListener = editorRef.current.onDidChangeModelContent(() => {
-      const editorValue = editorRef.current.getValue();
-      onChange(editorValue);
-    });
+    const onDidChangeModelContent = editorRef.current.onDidChangeModelContent(
+      () => {
+        const editorValue = editorRef.current.getValue();
+        onChange(editorValue);
+      },
+    );
 
     return () => {
-      changeListener.dispose();
+      onDidChangeModelContent.dispose();
       editor.getModel(descriptor.current)?.dispose();
       editorRef.current.dispose();
     };
-    // missing dependencies:  'value'
+    // disabling eslint to exclude onChange listener from the dependencies.
+    // Otherwise, each onChange function must be memoized.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    editorTheme,
-    setAutocompleteOptions,
-    language,
-    t,
-    readOnly,
-    onMount,
-    onChange,
-  ]);
+  }, [editorTheme, setAutocompleteOptions, language, t, readOnly, onMount]);
 
   useEffect(() => {
     // refresh model on editor focus. Needed for cases when multiple editors are open simultaneously
