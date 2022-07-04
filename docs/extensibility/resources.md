@@ -188,7 +188,7 @@ renders the same set of data as:
 
 This section contains an object that maps a relation name to relation configuration object. Relation name preceded by dollar sign '\$' can be then used in `path` expression.
 
-It's possible to use both relation name and a path, e.g. `{"path": $myRelatedResource.metadata.labels}` will return the `metadata.labels` of related resource.
+It's possible to use both relation name and a path; for example, `{"path": $myRelatedResource.metadata.labels}` returns the `metadata.labels` of the related resource.
 
 ### Relation configuration object fields
 
