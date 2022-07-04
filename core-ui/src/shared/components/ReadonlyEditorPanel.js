@@ -4,7 +4,6 @@ import { LayoutPanel } from 'fundamental-react';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
 import { useTranslation } from 'react-i18next';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
-import { detectLanguage } from 'shared/utils/detectLanguage';
 
 export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
   const { editorTheme } = useTheme();
@@ -39,7 +38,6 @@ export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
           onMount={setEditor}
           autocompletionDisabled
           readOnly
-          language={detectLanguage(value)}
           {...editorProps}
         />
       </LayoutPanel.Body>
