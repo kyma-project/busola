@@ -306,4 +306,4 @@ Value preprocessors are used as a middleware between a value and the actual rend
   - For truthy `error`, it will display an error message.
   - Otherwise, it will pass `data` to display component.
 
-  Unless custom handling of error or loading state is required, using the `PendingWrapper` is recommended, e.g. for fields that use [related resources](#relations-section).
+  Unless you need custom handling of error or loading state, we recommend using the `PendingWrapper`, for example, for fields that use [related resources](#relations-section).
