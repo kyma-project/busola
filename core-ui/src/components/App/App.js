@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 
@@ -11,13 +11,44 @@ import { useSentry } from 'hooks/useSentry';
 
 import { ExtensibilityDetails } from 'components/Extensibility/ExtensibilityDetails';
 import { ExtensibilityList } from 'components/Extensibility/ExtensibilityList';
+import { baseUrl } from 'shared/hooks/BackendAPI/config';
 
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
+import { useConfig } from 'shared/contexts/ConfigContext';
 
 export default function App() {
   const { cluster, language, customResources = [] } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
+
+  const location = useLocation();
+  const { fromConfig } = useConfig();
+  useEffect(() => {
+    let log;
+    if (location.pathname.includes('/namespaces/')) {
+      if (
+        new RegExp('/namespaces/[a-z0-9-]+/?(details)?$').test(
+          location.pathname,
+        )
+      ) {
+        log = 'namespaces';
+      } else {
+        log = location.pathname.replace(new RegExp('/namespaces/.*?/'), '');
+      }
+    } else {
+      log = location.pathname.substring(1);
+    }
+    let tab = log.split('/');
+    if (tab.length > 1) {
+      log = 'PATH:DETAILS ' + tab[0];
+    } else {
+      log = 'PATH:LIST ' + tab[0];
+    }
+    fetch(baseUrl(fromConfig) + '/tracking', {
+      method: 'POST',
+      body: log,
+    }).catch(console.log);
+  }, [fromConfig, location]);
 
   useEffect(() => {
     i18n.changeLanguage(language);

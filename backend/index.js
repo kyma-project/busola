@@ -79,6 +79,10 @@ if (isDocker) {
   app.use('/backend', handleRequest);
   serveStaticApp(app, '/', '/core');
 } else {
+  app.post('/backend/tracking', (req, res) => {
+    console.log('X-Log:', req.body.toString());
+    res.sendStatus(200);
+  });
   app.use(handleRequest);
 }
 
