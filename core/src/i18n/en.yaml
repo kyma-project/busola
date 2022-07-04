@@ -527,6 +527,7 @@ common:
     kyma: Kyma
     name: Name
     namespace: Namespace
+    new-entry: New Entry
     'no': 'No'
     path: Path
     protocol: Protocol
@@ -663,6 +664,8 @@ components:
       update:
         failure: 'Failed to update the {{resourceType}}: {{error}}'
         success: '{{resourceType}} updated'
+  rich-editor-data-field:
+    language-placeholder: Choose language
   string-input:
     placeholder: Enter multiple values separated by comma
     remove: Click to remove
