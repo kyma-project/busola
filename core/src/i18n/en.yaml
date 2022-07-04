@@ -1302,7 +1302,7 @@ graphs:
     memory: Memory Commitment
     network-down: Network Download
     network-up: Network Upload
-    nodes: Nodes
+    nodes: Nodes Commitment
     requests: Requests
     used-space: Used Space
     utilized-value: Utilized ({{value}}%)
