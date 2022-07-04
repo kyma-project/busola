@@ -20,5 +20,33 @@
     &--capacity {
       background: var(--sapContent_Illustrative_Color6);
     }
+
+    &--cpu {
+      background: var(--sapIndicationColor_7);
+    }
+
+    &--memory {
+      background: var(--sapIndicationColor_6);
+    }
+
+    &--nodes {
+      background: var(--sapNeutralColor);
+    }
+
+    &--network-up {
+      background: var(--sapIndicationColor_4);
+    }
+
+    &--network-down {
+      background: var(--sapIndicationColor_5);
+    }
+
+    &--used-space {
+      background: var(--sapIndicationColor_3);
+    }
+
+    &--free-space {
+      background: var(--sapContent_ForegroundColor);
+    }
   }
 }

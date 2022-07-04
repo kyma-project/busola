@@ -15,6 +15,7 @@ import { usePrometheus } from 'shared/hooks/usePrometheus';
 import { StatsGraph } from 'shared/components/StatsGraph';
 
 import './StatsPanel.scss';
+import { GraphLegend } from 'components/Clusters/views/ClusterOverview/ClusterNodes/ResourceCommitment/GraphLegend/GraphLegend';
 
 const DATA_POINTS = 60;
 
@@ -191,7 +192,7 @@ const getDualGraphValues = (metric, t) => {
       return {
         metric1: 'pvc-used-space',
         metric2: 'pvc-free-space',
-        labels: [t('graphs.free-space'), t('graphs.used-space')],
+        labels: [t('graphs.used-space'), t('graphs.free-space')],
         className: 'pvc-usage',
       };
     case 'network':
@@ -206,6 +207,18 @@ const getDualGraphValues = (metric, t) => {
       return {};
   }
 };
+
+const getLegendValues = metric => {
+  switch (metric) {
+    case 'network':
+      return ['network-up', 'network-down'];
+    case 'pvc-usage':
+      return ['used-space', 'free-space'];
+    default:
+      return [metric];
+  }
+};
+
 const getTimeSpansByMetric = metric => {
   const longerTimeSpansGraphs = ['pvc-usage', 'nodes'];
 
@@ -308,6 +321,7 @@ export function StatsPanel({
             {...props}
           />
         )}
+        <GraphLegend values={getLegendValues(metric)} />
       </LayoutPanel.Body>
     </LayoutPanel>
   );
