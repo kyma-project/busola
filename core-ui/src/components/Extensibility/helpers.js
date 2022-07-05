@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
-var jsonata = require('jsonata');
+import jsonata from 'jsonata';
 
 export const TranslationBundleContext = createContext('extensibility');
 
@@ -12,6 +12,8 @@ export const getValue = (resource, path) => {
 
   if (path.startsWith('$.')) {
     return jp.value(resource, path);
+  } else if (path.startsWith('[')) {
+    return jp.value(resource, '$' + path);
   }
   return jp.value(resource, '$.' + path);
 };

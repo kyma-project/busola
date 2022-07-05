@@ -1,12 +1,13 @@
 import React from 'react';
 
 import { Widget } from './Widget';
+import './Columns.scss';
 
-export function Columns({ value, structure, schema }) {
+export function Columns({ structure, ...props }) {
   return (
-    <div className="panel-grid">
+    <div className="extensibility-columns">
       {structure.children.map(child => (
-        <Widget value={value} structure={child} schema={schema} />
+        <Widget structure={child} {...props} />
       ))}
     </div>
   );
