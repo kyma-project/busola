@@ -43,6 +43,27 @@ The following values are automatically handled:
 
 <img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="20%" style="border: 1px solid #D2D5D9">
 
+### JoinedArray
+
+JoinedArray widgets render all the values of an array of strings as a comma-separated list.
+
+#### Widget-specific parameters
+
+- **separator** - a string by which the elements of the array will be separated by. The default value is a comma `,`.
+
+#### Example
+
+```json
+{
+  "name": "Joined array",
+  "path": "spec.dnsNames",
+  "widget": "JoinedArray",
+  "separator": ": "
+}
+```
+
+<img src="./assets/display-widgets/JoinedArray.png" alt="Example of a joined array widget" width="20%" style="border: 1px solid #D2D5D9">
+
 ## Block widgets
 
 Block widgets are more complex layouts and you should use them only in the details body.
@@ -69,7 +90,7 @@ Panel widgets render an object as a separate panel with it's own title (based on
 
 ### Columns
 
-Columns widgets render the child widgets in two columns.
+Columns widgets render the child widgets in multiple columns.
 
 #### Example
 
@@ -96,14 +117,20 @@ Columns widgets render the child widgets in two columns.
 
 ### CodeViewer
 
-CodeViewer widgets display values using a read-only code editor. The editor autodetects the language.
+CodeViewer widgets display values using a read-only code editor.
+
+#### Widget-specific parameters
+
+- **language** - used for code highlighting. Editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
+  If the language is not specified, editor tries to display the content as `yaml` with a fallback to `json`.
 
 #### Example
 
 ```json
 {
   "path": "spec.json-data",
-  "widget": "CodeViewer"
+  "widget": "CodeViewer",
+  "language": "yaml"
 }
 ```
 
@@ -113,13 +140,18 @@ CodeViewer widgets display values using a read-only code editor. The editor auto
 
 Table widgets display array data as rows of a table instead of free-standing components. The **children** parameter defines the values used to render the columns. Similar to the `list` section of the Config Map, you should use inline widgets only as children.
 
+#### Widget-specific parameters
+
+- **collapsible** - an optional array of extra widgets to display as an extra collapsible section. Uses the same format as the **children** parameter.
+
 #### Example
 
 ```json
 {
   "path": "spec.item-list",
   "widget": "Table",
-  "children": [{ "path": "name" }, { "path": "status" }]
+  "children": [{ "path": "name" }, { "path": "status" }],
+  "collapsible": [{ "path": "description" }]
 }
 ```
 
