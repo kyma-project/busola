@@ -4,11 +4,17 @@ export const useUpdateValueOnParentChange = ({
   editorInstance,
   value,
   hasFocus,
+  error,
 }) => {
   useEffect(() => {
     // update editor value when it comes as a prop
-    if (!hasFocus && editorInstance && editorInstance.getValue() !== value) {
+    if (
+      !error &&
+      !hasFocus &&
+      editorInstance &&
+      editorInstance.getValue() !== value
+    ) {
       editorInstance.setValue(value);
     }
-  }, [editorInstance, value, hasFocus]);
+  }, [editorInstance, value, hasFocus, error]);
 };

@@ -33,6 +33,8 @@ export function Editor({
   const { t } = useTranslation();
   const [hasFocus, setHasFocus] = useState(false);
 
+  console.log(error);
+
   // prepare autocompletion
   const {
     setAutocompleteOptions,
@@ -71,7 +73,7 @@ export function Editor({
   useOnChange({ editorInstance, onChange });
 
   // others
-  useUpdateValueOnParentChange({ editorInstance, value, hasFocus });
+  useUpdateValueOnParentChange({ editorInstance, value, hasFocus, error });
   const warnings = useDisplayWarnings({ autocompletionDisabled, descriptor });
 
   return (
