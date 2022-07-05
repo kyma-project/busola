@@ -7,6 +7,9 @@ import { Badge } from './Badge';
 import { Table } from './Table';
 import { ResourceRefs } from './ResourceRefs';
 import { ControlledBy, ControlledByKind } from './ControlledBy';
+import { ResourceList } from './ResourceList';
+
+import { PendingWrapper } from './PendingWrapper';
 
 export const widgets = {
   Null: () => '',
@@ -20,4 +23,9 @@ export const widgets = {
   ResourceRefs,
   ControlledBy,
   ControlledByKind,
+  ResourceList,
+};
+
+export const valuePreprocessors = {
+  PendingWrapper,
 };

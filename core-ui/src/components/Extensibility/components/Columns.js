@@ -2,11 +2,11 @@ import React from 'react';
 
 import { Widget } from './Widget';
 
-export function Columns({ value, structure, schema }) {
+export function Columns({ structure, ...props }) {
   return (
     <div className="panel-grid">
       {structure.children.map(child => (
-        <Widget value={value} structure={child} schema={schema} />
+        <Widget structure={child} {...props} />
       ))}
     </div>
   );

@@ -125,6 +125,27 @@ Table widgets display array data as rows of a table instead of free-standing com
 
 <img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
 
+### ResourceList
+
+ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with [related resources](resources.md#relations-section).
+
+If such resource list was already defined in Busola, the configuration will be reused. To obtain custom columns, specify the `columns` field.
+
+#### Example
+
+```json
+{
+  "widget": "ResourceList",
+  "path": "$myRelatedResource",
+  "columns": [
+    {
+      "path": "status.code",
+      "widget": "Badge"
+    }
+  ]
+}
+```
+
 ### ResourceRefs
 
 ResourceRefs widgets render the lists of links to the associated resources. The corresponding specification object must be an array of objects `{name: 'foo', namespace: 'bar'}`.
