@@ -148,6 +148,16 @@ export function SingleMetricMultipeGraph({
       ...props,
     },
   });
+
+  const legendValues = (labels || defaultLabels)
+    .map(l => {
+      return {
+        metric,
+        label: l,
+      };
+    })
+    .reverse();
+
   return (
     <>
       {!error ? (
@@ -167,6 +177,7 @@ export function SingleMetricMultipeGraph({
         </div>
       )}
       <BusyIndicator className="throbber" show={loading} />
+      <GraphLegend values={legendValues} />
     </>
   );
 }
@@ -211,11 +222,11 @@ const getDualGraphValues = (metric, t) => {
 const getLegendValues = metric => {
   switch (metric) {
     case 'network':
-      return ['network-up', 'network-down'];
+      return [{ metric: 'network-down' }, { metric: 'network-up' }];
     case 'pvc-usage':
-      return ['used-space', 'free-space'];
+      return [{ metric: 'free-space' }, { metric: 'used-space' }];
     default:
-      return [metric];
+      return [{ metric }];
   }
 };
 
@@ -314,14 +325,20 @@ export function StatsPanel({
             />
           ))}
         {dualGraphs.includes(metric) && (
-          <DualGraph
-            type={type}
-            timeSpan={timeSpans[timeSpan]}
-            {...getDualGraphValues(metric, t)}
-            {...props}
-          />
+          <>
+            <DualGraph
+              type={type}
+              mode={mode}
+              timeSpan={timeSpans[timeSpan]}
+              {...getDualGraphValues(metric, t)}
+              {...props}
+            />
+            <GraphLegend values={getLegendValues(metric)} />
+          </>
         )}
-        <GraphLegend values={getLegendValues(metric)} />
+        {mode !== 'multiple' && !dualGraphs.includes(metric) ? (
+          <GraphLegend values={getLegendValues(metric)} />
+        ) : null}
       </LayoutPanel.Body>
     </LayoutPanel>
   );

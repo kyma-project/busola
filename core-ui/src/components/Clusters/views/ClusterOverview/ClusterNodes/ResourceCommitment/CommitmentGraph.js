@@ -264,6 +264,18 @@ export function CommitmentGraph({ data }) {
     );
   };
 
+  const values = [
+    {
+      metric: 'requests',
+    },
+    {
+      metric: 'limits',
+    },
+    {
+      metric: 'capacity',
+    },
+  ];
+
   return (
     <>
       <canvas
@@ -272,7 +284,7 @@ export function CommitmentGraph({ data }) {
         height={height}
         onMouseMove={mousemove}
       ></canvas>
-      <GraphLegend values={['requests', 'limits', 'capacity']} />
+      <GraphLegend values={values} isStatsPanel={false} />
     </>
   );
 }
