@@ -3,6 +3,18 @@ import { useLocation } from 'react-router-dom';
 import { baseUrl } from 'shared/hooks/BackendAPI/config';
 import { useConfig } from 'shared/contexts/ConfigContext';
 import { useFeature } from 'shared/hooks/useFeature';
+import { v4 as uuid } from 'uuid';
+
+function getLoggingId() {
+  const STORAGE_KEY = 'busola.logging-id';
+
+  let loggingId = localStorage.getItem(STORAGE_KEY);
+  if (!loggingId) {
+    loggingId = uuid();
+    localStorage.setItem(STORAGE_KEY, loggingId);
+  }
+  return loggingId;
+}
 
 export function useTracking() {
   const { isEnabled } = useFeature('TRACKING');
@@ -13,28 +25,29 @@ export function useTracking() {
   useEffect(() => {
     if (!isEnabled) return;
 
-    let log;
+    let path;
     if (pathname.includes('/namespaces/')) {
       if (new RegExp('/namespaces/[a-z0-9-]+/?(details)?$').test(pathname)) {
         // namespace details
-        log = 'namespaces';
+        path = 'namespaces';
       } else {
         // other resource details
-        log = pathname.replace(new RegExp('/namespaces/.*?/'), '');
+        path = pathname.replace(new RegExp('/namespaces/.*?/'), '');
       }
     } else {
       // no namespace
-      log = pathname.substring(1);
+      path = pathname.substring(1);
     }
-    let tab = log.split('/'); // split by '/', take only first part
-    if (tab.length > 1) {
-      log = 'PATH:DETAILS ' + tab[0];
+    const pathSegments = path.split('/'); // split by '/', take only first part
+    let log;
+    if (pathSegments.length > 1) {
+      log = 'PATH:DETAILS ' + pathSegments[0];
     } else {
-      log = 'PATH:LIST ' + tab[0];
+      log = 'PATH:LIST ' + pathSegments[0];
     }
     fetch(baseUrl(fromConfig) + '/tracking', {
       method: 'POST',
-      body: log,
+      body: JSON.stringify({ payload: log, id: getLoggingId() }),
     }).catch(e => console.debug('Tracking call failed', e));
   }, [fromConfig, pathname, isEnabled]);
 }

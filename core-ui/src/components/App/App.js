@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router-dom';
-
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 

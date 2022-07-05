@@ -3,7 +3,11 @@ export function handleTracking(app) {
 
   if (isEnabled) {
     app.post('/backend/tracking', (req, res) => {
-      console.log('X-Log:', req.body.toString());
+      const payload = JSON.parse(req.body.toString());
+      console.log(
+        'X-Log:',
+        JSON.stringify({ ...payload, timestamp: Date.now() }),
+      );
       res.sendStatus(200);
     });
   }
