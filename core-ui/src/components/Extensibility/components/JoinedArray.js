@@ -8,7 +8,7 @@ export function JoinedArray({ value, structure, schema }) {
     return EMPTY_TEXT_PLACEHOLDER;
   } else if (
     !Array.isArray(value) ||
-    value.some(item => Object.keys(item).length > 1)
+    value.some(item => typeof item === 'object' || typeof item === 'array')
   ) {
     return t('extensibility.widgets.joined-array.error');
   }
@@ -17,3 +17,4 @@ export function JoinedArray({ value, structure, schema }) {
 }
 
 JoinedArray.array = true;
+JoinedArray.inline = true;
