@@ -62,7 +62,7 @@ function YamlUpload({
         autocompletionDisabled
         height="400px"
         language="yaml"
-        value={yamlContentString}
+        value={yamlContentString || ''}
         onChange={updateYamlContent}
         onMount={setEditor}
       />
