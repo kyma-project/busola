@@ -113,13 +113,18 @@ CodeViewer widgets display values using a read-only code editor. The editor auto
 
 Table widgets display array data as rows of a table instead of free-standing components. The **children** parameter defines the values used to render the columns. Similar to the `list` section of the Config Map, you should use inline widgets only as children.
 
+#### Widget-specific parameters
+
+- **extraChildren** - an optional array of extra widgets to display as an extra collapsible row. Uses the same format as the **children** parameter.
+
 #### Example
 
 ```json
 {
   "path": "spec.item-list",
   "widget": "Table",
-  "children": [{ "path": "name" }, { "path": "status" }]
+  "children": [{ "path": "name" }, { "path": "status" }],
+  "extraChildren": [{ "path": "description" }]
 }
 ```
 
