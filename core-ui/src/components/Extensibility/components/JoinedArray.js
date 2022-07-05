@@ -8,7 +8,7 @@ export function JoinedArray({ value, structure, schema }) {
     return EMPTY_TEXT_PLACEHOLDER;
   } else if (
     !Array.isArray(value) ||
-    value.some(item => typeof item === 'object' || typeof item === 'array')
+    value.some(item => typeof item === Object || typeof item === Array)
   ) {
     return t('extensibility.widgets.joined-array.error');
   }
