@@ -64,6 +64,7 @@ The `list` section defines extra columns available in the list. The format is si
 
 - **path** - _[required]_ contains the path to the data used for the column.
 - **widget** - optional widget used to render the field referred to by the `path` property. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
+- **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
 - **formula** - optional formula used to modify data referred to by the `path` property. In `formula` we use the following naming convention: `data.name` instead of just `name`. To learn more about using formulas, see [JSONata](https://docs.jsonata.org/overview.html).
 
 ### Example
@@ -72,6 +73,12 @@ The `list` section defines extra columns available in the list. The format is si
 [
   { "path": "spec.url" },
   { "path": "spec.priority", "widget": "Badge" },
+  { "path": "spec.toppings", "formula": "$join(data.name, ', ')" },
+  {
+    "name": "quantityIsMore",
+    "path": "spec.toppings",
+    "formula": "$filter(data, function ($v, $i, $a) { $v.quantity > $average($a.quantity) })"
+  },
   { "path": "spec.volumes", "formula": "$join(data.name, ', ')" },
   {
     "path": "spec.volumes",
@@ -97,6 +104,7 @@ The `details` section defines the display structure for the details page. It con
 - **path** - contains the path to the data used for the widget. Not required for presentational widgets.
 - **name** - used for entries without `path` to define the translation source used for labels. Required if no `path` is present.
 - **widget** - optional widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
+- **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
 - **formula** - optional formula used to modify data referred to by the `path` property. To learn more about using formulas, see [JSONata](https://docs.jsonata.org/overview.html).
 - **children** - a list of child widgets used for all `object` and `array` fields. Not available for header widgets.
 
@@ -178,6 +186,59 @@ renders the same set of data as:
 ]
 ```
 
+## relations section
+
+The `relations` section contains an object that maps a relation name to a relation configuration object. The relation name preceded by a dollar sign '\$' is used in the `path` expression.
+
+It's possible to use both relation name and a path; for example, `{"path": $myRelatedResource.metadata.labels}` returns the `metadata.labels` of the related resource.
+
+### Relation configuration object fields
+
+Those fields are used to build the related resource URL and filter the received data.
+
+- **kind** - _[required]_ Kubernetes resource kind.
+- **group** - _[required]_ Kubernetes resource group.
+- **version** - _[required]_ Kubernetes resource version.
+- **namespace** - the resource's Namespace name; it defaults to the original resource's Namespace. If set to `null`, the relation matches cluster-wide resources or resources in all Namespaces.
+- **resourceName** - a specific resource name; leave empty to match all resources of a given type.
+- **ownerLabelSelectorPath** - the path to original object's `selector` type property; for example, `spec.selector.matchLabels` for Deployment, used to select matching Pods.
+- **selector** - [JSONata](https://docs.jsonata.org/overview.html) function enabling the user to write a custom matching logic. It receives a data context of:
+
+  ```js
+  {
+    data, // related resource
+    resource, // original resource
+  }
+  ```
+
+  This function should return a boolean value.
+
+### Example
+
+```json
+{
+  "deployments": {
+    "resource": ...
+    "details": {
+       "body": [
+         {
+            "widget": "ResourceList",
+            "path": "$myPods"
+        }
+      ]
+    }
+  },
+  "relations": {
+    "myPods": {
+      "kind": "Pod",
+      "group": "api",
+      "version": "v1",
+      "ownerLabelSelectorPath": "spec.selector.matchLabels"
+    }
+  }
+}
+```
+
 ## translations sections
 
 You can provide this section as a single `translations` section that contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
@@ -234,3 +295,17 @@ spec:
 ```
 
 If you provide both `translations` and `translations-{lang}` sections, they are merged together.
+
+### Value preprocessors
+
+Value preprocessors are used as a middleware between a value and the actual renderer. They can transform a given value and pass it to the widget; or stop processing and render it so you can view it immediately, without passing it to the widget.
+
+#### List of value preprocessors
+
+- **PendingWrapper** - useful when value resolves to a triple of `{loading, error, data}`:
+
+  - For `loading` equal to `true`, it displays a loading indicator.
+  - For truthy `error`, it displays an error message.
+  - Otherwise, it passes `data` to the display component.
+
+  Unless you need custom handling of error or loading state, we recommend using the `PendingWrapper`, for example, for fields that use [related resources](#relations-section).

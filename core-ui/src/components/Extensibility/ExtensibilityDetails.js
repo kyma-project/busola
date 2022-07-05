@@ -11,6 +11,7 @@ import { useGetCRbyPath } from './useGetCRbyPath';
 import { Widget } from './components/Widget';
 import { useGetTranslation, TranslationBundleContext } from './helpers';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
+import { RelationsContextProvider } from './contexts/RelationsContext';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
@@ -25,9 +26,10 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
     );
   }
 
-  const header = resMetaData?.details?.header || [];
-  const body = resMetaData?.details?.body || [];
-  const schema = resMetaData?.schema;
+  const header = resMetaData.details?.header || [];
+  const body = resMetaData.details?.body || [];
+  const schema = resMetaData.schema;
+  const relations = resMetaData.relations || {};
 
   const breadcrumbs = [
     {
@@ -46,13 +48,15 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
       })}
       customColumns={
         Array.isArray(header)
-          ? header.map(def => ({
+          ? header.map((def, i) => ({
               header: widgetT(def),
               value: resource => (
                 <Widget
+                  key={i}
                   value={resource}
                   structure={def}
                   schema={schema}
+                  relations={relations}
                   resource={resMetaData?.resource}
                 />
               ),
@@ -62,11 +66,13 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
       customComponents={
         Array.isArray(body)
           ? [
-              resource => (
+              (resource, i) => (
                 <Widget
+                  key={i}
                   value={resource}
                   structure={body}
                   schema={schema}
+                  relations={relations}
                   resource={resMetaData}
                 />
               ),
@@ -87,12 +93,14 @@ export const ExtensibilityDetails = () => {
 
   return (
     <TranslationBundleContext.Provider value={resMetaData.resource.path}>
-      <ErrorBoundary
-        customMessage={t('extensibility.error')}
-        displayButton={false}
-      >
-        <ExtensibilityDetailsCore resMetaData={resMetaData} />
-      </ErrorBoundary>
+      <RelationsContextProvider relations={resMetaData?.relations || {}}>
+        <ErrorBoundary
+          customMessage={t('extensibility.error')}
+          displayButton={false}
+        >
+          <ExtensibilityDetailsCore resMetaData={resMetaData} />
+        </ErrorBoundary>
+      </RelationsContextProvider>
     </TranslationBundleContext.Provider>
   );
 };
