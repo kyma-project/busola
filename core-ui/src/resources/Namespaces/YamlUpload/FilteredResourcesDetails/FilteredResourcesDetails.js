@@ -45,7 +45,7 @@ const WarningButton = ({
             : t('common.buttons.hide-warnings')}
         </p>
         {!warningsNumber ? (
-          <Spinner className="fd-busy-indicator--s warning-spinner" />
+          <Spinner className="warning-spinner" size="s" center={false} />
         ) : (
           <p>{warningsNumber}</p>
         )}
