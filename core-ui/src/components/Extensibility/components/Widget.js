@@ -18,19 +18,19 @@ export function InlineWidget({ children, structure, ...props }) {
 
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
+
+  const value = props.value ? <Renderer {...props} /> : 'placeholder';
+
   return Renderer.inline && InlineRenderer ? (
-    <InlineRenderer {...props}>
-      <Renderer {...props} />
-    </InlineRenderer>
+    <InlineRenderer {...props}>{value}</InlineRenderer>
   ) : (
-    <Renderer {...props} />
+    value
   );
 }
 
 export function Widget({ structure, value, inlineRenderer, ...props }) {
   const { Plain, Text } = widgets;
   const { i18n } = useTranslation();
-
   const {
     store,
     relations,
