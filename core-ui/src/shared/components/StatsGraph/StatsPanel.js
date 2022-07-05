@@ -13,9 +13,9 @@ import { useTranslation } from 'react-i18next';
 
 import { usePrometheus } from 'shared/hooks/usePrometheus';
 import { StatsGraph } from 'shared/components/StatsGraph';
+import { GraphLegend } from 'shared/components/GraphLegend/GraphLegend';
 
 import './StatsPanel.scss';
-import { GraphLegend } from 'shared/components/GraphLegend/GraphLegend';
 
 const DATA_POINTS = 60;
 
@@ -315,14 +315,17 @@ export function StatsPanel({
               {...props}
             />
           ) : (
-            <SingleGraph
-              type={type}
-              mode={mode}
-              metric={metric}
-              className={metric}
-              timeSpan={timeSpans[timeSpan]}
-              {...props}
-            />
+            <>
+              <SingleGraph
+                type={type}
+                mode={mode}
+                metric={metric}
+                className={metric}
+                timeSpan={timeSpans[timeSpan]}
+                {...props}
+              />
+              <GraphLegend values={getLegendValues(metric)} />
+            </>
           ))}
         {dualGraphs.includes(metric) && (
           <>
@@ -336,9 +339,6 @@ export function StatsPanel({
             <GraphLegend values={getLegendValues(metric)} />
           </>
         )}
-        {mode !== 'multiple' && !dualGraphs.includes(metric) ? (
-          <GraphLegend values={getLegendValues(metric)} />
-        ) : null}
       </LayoutPanel.Body>
     </LayoutPanel>
   );
