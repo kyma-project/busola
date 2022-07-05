@@ -63,7 +63,7 @@ Resource widgets render a dropdown list of specified resources and store the sel
 - **group** - API group used for all requests. Not provided for native Kubernetes resources.
 - **version** - _[required]_ API version used for all requests.
 - **scope** - either `namespace` or `cluster`. When set to `cluster`, namespaced resources are fetched from all Namespaces. Defaults to `cluster`.
-- **namespace** - namespace to fetch resources from. Used only when scope is `namespace` and resources need to be fetched from a specific namespace. Defaults to active namespace when omitted.
+- **namespace** - Namespace to fetch resources from. Used only when scope is `namespace` and resources need to be fetched from a specific Namespace. Defaults to the active Namespace when omitted.
 
 #### Example
 
