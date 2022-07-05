@@ -1,17 +1,23 @@
 import React from 'react';
+import classNames from 'classnames';
+
 export const Spinner = ({
   ariaLabel = 'Loading',
   compact = false,
-  className,
+  size,
+  className = 'fd-margin-top-bottom--md',
+  center = true,
 }) => {
+  size = size || (compact ? 'm' : 'l');
+  const sizeClassName = 'fd-busy-indicator--' + size;
+  const style = center
+    ? { width: '100%', display: 'flex', justifyContent: 'center' }
+    : {};
+
   return (
     <div
-      style={{
-        width: '100%%',
-        display: 'flex',
-        justifyContent: 'center',
-      }}
-      className={className || `fd-busy-indicator--${compact ? 'm' : 'l'}`}
+      className={classNames(sizeClassName, className)}
+      style={style}
       aria-hidden="false"
       aria-label={ariaLabel}
     >

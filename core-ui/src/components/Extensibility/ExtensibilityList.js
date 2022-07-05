@@ -11,12 +11,14 @@ import { useGetCRbyPath } from './useGetCRbyPath';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
 import { TranslationBundleContext, useGetTranslation } from './helpers';
 import { Widget } from './components/Widget';
+import { RelationsContextProvider } from './contexts/RelationsContext';
 
 export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
   const { path, kind } = resMetaData?.resource ?? {};
 
   const schema = resMetaData?.schema;
+  const relations = resMetaData?.relations || {};
 
   const listProps = usePrepareListProps(path, 'name');
 
@@ -36,15 +38,25 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     defaultValue: ' ',
   });
   listProps.customColumns = Array.isArray(resMetaData.list)
-    ? resMetaData.list.map(column => ({
+    ? resMetaData.list.map((column, i) => ({
         header: widgetT(column),
         value: resource => (
-          <Widget value={resource} structure={column} schema={schema} />
+          <Widget
+            key={i}
+            value={resource}
+            structure={column}
+            schema={schema}
+            relations={relations}
+          />
         ),
       }))
     : [];
   return (
-    <ResourcesList createResourceForm={ExtensibilityCreate} {...listProps} />
+    <ResourcesList
+      createResourceForm={ExtensibilityCreate}
+      allowSlashShortcut
+      {...listProps}
+    />
   );
 };
 
@@ -55,13 +67,15 @@ export const ExtensibilityList = () => {
 
   return (
     <TranslationBundleContext.Provider value={path}>
-      <ErrorBoundary
-        customMessage={t('extensibility.error')}
-        displayButton={false}
-        key={path}
-      >
-        <ExtensibilityListCore resMetaData={resMetaData} />
-      </ErrorBoundary>
+      <RelationsContextProvider relations={resMetaData?.relations || {}}>
+        <ErrorBoundary
+          customMessage={t('extensibility.error')}
+          displayButton={false}
+          key={path}
+        >
+          <ExtensibilityListCore resMetaData={resMetaData} />
+        </ErrorBoundary>
+      </RelationsContextProvider>
     </TranslationBundleContext.Provider>
   );
 };

@@ -4,9 +4,14 @@ import pluralize from 'pluralize';
 
 import { config } from './config';
 import { failFastFetch } from './navigation/queries';
-import { getCurrentConfig } from './cluster-management/cluster-management';
+import {
+  getActiveCluster,
+  getActiveClusterName,
+  getCurrentConfig,
+  getCurrentContextNamespace,
+} from './cluster-management/cluster-management';
 
-let customResources = null;
+let customResources = {};
 
 async function loadBusolaClusterCRs() {
   try {
@@ -24,15 +29,26 @@ async function loadBusolaClusterCRs() {
 }
 
 async function loadTargetClusterCRs(authData) {
+  const activeCluster = getActiveCluster();
+  const namespace =
+    getCurrentContextNamespace(activeCluster?.kubeconfig) || 'kube-public';
+
   const labelSelectors = `busola.io/extension=resource`;
 
   let items;
   try {
-    const response = await failFastFetch(
+    let response = await failFastFetch(
       config.backendAddress +
-        `/api/v1/namespaces/kube-public/configmaps?labelSelector=${labelSelectors}`,
+        `/api/v1/configmaps?labelSelector=${labelSelectors}`,
       authData,
     );
+    if (response.status >= 400) {
+      response = await failFastFetch(
+        config.backendAddress +
+          `/api/v1/namespaces/${namespace}/configmaps?labelSelector=${labelSelectors}`,
+        authData,
+      );
+    }
     items = (await response.json()).items;
   } catch (e) {
     console.warn('Cannot load target cluster CRs', e);
@@ -90,14 +106,18 @@ async function loadTargetClusterCRs(authData) {
 
 export async function getCustomResources(authData) {
   const { features } = await getCurrentConfig();
-  if (features.EXTENSIBILITY?.isEnabled) {
-    if (customResources) return customResources;
+  const clusterName = getActiveClusterName();
 
-    customResources = Object.values({
+  if (features.EXTENSIBILITY?.isEnabled) {
+    if (customResources[clusterName]) {
+      return customResources[clusterName];
+    }
+
+    customResources[clusterName] = Object.values({
       ...(await loadBusolaClusterCRs()),
       ...(await loadTargetClusterCRs(authData)),
     });
-    return customResources;
+    return customResources[clusterName];
   }
   return [];
 }

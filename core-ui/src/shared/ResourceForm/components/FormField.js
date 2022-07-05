@@ -16,9 +16,12 @@ export function FormField({
   isAdvanced,
   defaultValue,
   messageStrip,
+  compact = false,
   ...props
 }) {
   const { validate, ...inputProps } = props;
+  if (compact) return input({ required, disabled, ...inputProps });
+
   return (
     <div className={classnames('fd-row form-field', className)}>
       <div className="fd-col fd-col-md--4 form-field__label">

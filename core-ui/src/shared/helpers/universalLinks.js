@@ -7,6 +7,7 @@ export const navigateToResource = ({ namespace, name, kind }) => {
   const path = `${namespacePrefix}${pluralize(
     kind,
   ).toLowerCase()}/details/${name}`;
+
   LuigiClient.linkManager()
     .fromContext('cluster')
     .navigate(path);

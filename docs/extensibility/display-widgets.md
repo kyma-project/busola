@@ -1,10 +1,10 @@
 # Display widgets
 
-Display widgets are used in the lists and details pages.
+You can use display widgets in the lists and details pages.
 
 ## Inline widgets
 
-Inline widgets are used for simple values and are usable in lists, details headers, and details bodies.
+Use inline widgets for simple values in lists, details headers, and details bodies.
 
 ### Text
 
@@ -18,6 +18,8 @@ Text widgets render values as a simple text. This is the default behavior for al
   "widget": "Text"
 }
 ```
+
+<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="20%" style="border: 1px solid #D2D5D9">
 
 ### Badge
 
@@ -39,9 +41,11 @@ The following values are automatically handled:
 }
 ```
 
+<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="20%" style="border: 1px solid #D2D5D9">
+
 ## Block widgets
 
-Block widgets are more complex layouts and should be used only in details body.
+Block widgets are more complex layouts and you should use them only in the details body.
 
 ### Plain
 
@@ -61,6 +65,8 @@ Panel widgets render an object as a separate panel with it's own title (based on
 }
 ```
 
+<img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
+
 ### Columns
 
 Columns widgets render the child widgets in two columns.
@@ -74,37 +80,38 @@ Columns widgets render the child widgets in two columns.
   "children": [
     {
       "name": "columns.left",
-      "widget": "Panel"
+      "widget": "Panel",
+      "children": [{ "path": "spec.value" }]
     },
     {
       "name": "columns.right",
-      "widget": "Panel"
+      "widget": "Panel",
+      "children": [{ "path": "spec.other-value" }]
     }
   ]
 }
 ```
 
+<img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
+
 ### CodeViewer
 
-CodeViewer widgets display values using the code highlight.
-
-#### Widget-specific parameters
-
-- **language** - language used for the code highlighting.
+CodeViewer widgets display values using a read-only code editor. The editor autodetects the language.
 
 #### Example
 
 ```json
 {
   "path": "spec.json-data",
-  "widget": "CodeViewer",
-  "language": "json"
+  "widget": "CodeViewer"
 }
 ```
 
+<img src="./assets/display-widgets/CodeViewer.png" alt="Example of a CodeViewer widget" style="border: 1px solid #D2D5D9">
+
 ### Table
 
-Table widgets display array data as rows of a table instead of free-standing components. The `children` parameter defines the values used to render the columns. Similar to the `list` section of the Config Map, only inline widgets should be used as children.
+Table widgets display array data as rows of a table instead of free-standing components. The **children** parameter defines the values used to render the columns. Similar to the `list` section of the Config Map, you should use inline widgets only as children.
 
 #### Example
 
@@ -115,3 +122,71 @@ Table widgets display array data as rows of a table instead of free-standing com
   "children": [{ "path": "name" }, { "path": "status" }]
 }
 ```
+
+<img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
+
+### ResourceList
+
+ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with [related resources](resources.md#relations-section).
+
+If such resource list was already defined in Busola, the configuration will be reused. To obtain custom columns, specify the `columns` field.
+
+#### Example
+
+```json
+{
+  "widget": "ResourceList",
+  "path": "$myRelatedResource",
+  "columns": [
+    {
+      "path": "status.code",
+      "widget": "Badge"
+    }
+  ]
+}
+```
+
+### ResourceRefs
+
+ResourceRefs widgets render the lists of links to the associated resources. The corresponding specification object must be an array of objects `{name: 'foo', namespace: 'bar'}`.
+Additionally, you must define the kind of the linked resources by passing the Kubernetes resource `kind` (for example, `Secret`, `ConfigMap`).
+
+#### Example
+
+```json
+{
+  "path": "spec.item-list",
+  "widget": "ResourceRefs",
+  "kind": "Secret"
+}
+```
+
+### ControlledBy
+
+ControlledBy widgets render the kind and the name with a link to the resources that the current resource is dependent on.
+
+### Example
+
+```json
+{
+  "path": "metadata.ownerReferences",
+  "widget": "ControlledBy"
+}
+```
+
+<img src="./assets/display-widgets/ControlledBy.png" alt="Example of a table widget" width="20%" style="border: 1px solid #D2D5D9">
+
+### ControlledByKind
+
+ControlledByKind widgets render the kind of the resources that the current resource is dependent on.
+
+### Example
+
+```json
+{
+  "path": "metadata.ownerReferences",
+  "widget": "ControlledByKind"
+}
+```
+
+<img src="./assets/display-widgets/ControlledByKind.png" alt="Example of a table widget" width="20%" style="border:1px solid #D2D5D9">

@@ -1,9 +1,10 @@
 import React from 'react';
-import { TransTitle, PluginStack, useUIStore } from '@ui-schema/ui-schema';
+import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
 import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
+import { useGetTranslation } from 'components/Extensibility/helpers';
 
 export function GenericList({
   storeKeys,
@@ -42,10 +43,12 @@ export function GenericList({
     });
   };
 
+  const { tFromStoreKeys } = useGetTranslation();
+
   return (
     <ResourceForm.CollapsibleSection
       container
-      title={<TransTitle schema={schema} storeKeys={storeKeys} />}
+      title={tFromStoreKeys(storeKeys)}
       actions={setOpen => (
         <Button
           glyph="add"
@@ -68,7 +71,7 @@ export function GenericList({
           const itemsSchema = schema.get('items');
           return (
             <ResourceForm.CollapsibleSection
-              title={<TransTitle schema={schema} storeKeys={ownKeys} />}
+              title={tFromStoreKeys(ownKeys)}
               actions={
                 <Button
                   compact

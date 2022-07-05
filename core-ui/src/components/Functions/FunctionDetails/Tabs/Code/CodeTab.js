@@ -1,6 +1,7 @@
 import React from 'react';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useFeature } from 'shared/hooks/useFeature';
 
 import CodeAndDependencies from './CodeAndDependencies/CodeAndDependencies';
 import RepositoryConfig from './RepositoryConfig/RepositoryConfig';
@@ -13,7 +14,12 @@ import { serializeVariables } from 'components/Functions/helpers/functionVariabl
 import PodList from './PodList/PodList';
 
 export default function CodeTab({ func, isActive }) {
-  const { serviceBindingsCombined } = useGetBindingsCombined(func, isActive);
+  const { isEnabled: isServiceCatalogEnabled } = useFeature('SERVICE_CATALOG');
+
+  const { serviceBindingsCombined } = useGetBindingsCombined(
+    func,
+    isActive && isServiceCatalogEnabled,
+  );
   const serviceBindingsWithUsages = (serviceBindingsCombined || []).filter(
     ({ serviceBindingUsage }) => serviceBindingUsage,
   );

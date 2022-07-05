@@ -128,6 +128,7 @@ export function ResourceListRenderer({
   resourceName,
   namespace,
   customColumns = [],
+  columns,
   createResourceForm: CreateResourceForm,
   createActionLabel,
   hasDetailsView,
@@ -185,6 +186,10 @@ export function ResourceListRenderer({
     resourceName,
     resourceType,
   );
+
+  if (columns) {
+    customColumns = columns;
+  }
 
   customColumns = customColumns.filter(col => !omitColumnsIds.includes(col.id));
 

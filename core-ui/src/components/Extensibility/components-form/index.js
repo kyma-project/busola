@@ -19,6 +19,9 @@ import { NameRenderer } from './NameRenderer';
 import { KeyValuePairRenderer } from './KeyValuePairRenderer';
 import { CollapsibleRenderer } from './CollapsibleRenderer';
 import { GenericList } from './GenericList';
+import { MonacoRenderer } from './MonacoRenderer';
+import { ResourceRefRender } from './ResourceRefRenderer';
+import { SimpleList } from './SimpleList';
 
 const pluginStack = [
   ReferencingHandler,
@@ -32,9 +35,8 @@ const pluginStack = [
 ];
 
 export const widgets = {
-  // ErrorFallback: ErrorFallback,
   RootRenderer: ({ children }) => <div>{children}</div>,
-  GroupRenderer: ({ children }) => <div>{children}</div>,
+  GroupRenderer: ({ children }) => children,
   WidgetRenderer,
   pluginStack,
   pluginSimpleStack: validators,
@@ -57,8 +59,10 @@ export const widgets = {
     TextIcon: TextIconRenderer,
     NumberIcon: NumberIconRenderer,
     NumberSlider,
+    */
     SimpleList,
     GenericList,
+    /*
     OptionsCheck,
     OptionsRadio,
     Select,
@@ -68,7 +72,9 @@ export const widgets = {
     */
     Name: NameRenderer,
     KeyValuePair: KeyValuePairRenderer,
+    CodeEditor: MonacoRenderer,
     FormGroup: CollapsibleRenderer,
+    ResourceRefs: ResourceRefRender,
   },
 };
 export default widgets;
