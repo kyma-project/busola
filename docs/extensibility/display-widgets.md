@@ -43,6 +43,27 @@ The following values are automatically handled:
 
 <img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="20%" style="border: 1px solid #D2D5D9">
 
+### JoinedArray
+
+JoinedArray widgets render all the values of an array of strings as a comma-separated list.
+
+#### Widget-specific parameters
+
+- **separator** - a string by which the elements of the array will be separated by. The default value is a comma `,`.
+
+#### Example
+
+```json
+{
+  "name": "Joined array",
+  "path": "spec.dnsNames",
+  "widget": "JoinedArray",
+  "separator": ": "
+}
+```
+
+<img src="./assets/display-widgets/JoinedArray.png" alt="Example of a joined array widget" width="20%" style="border: 1px solid #D2D5D9">
+
 ## Block widgets
 
 Block widgets are more complex layouts and you should use them only in the details body.
@@ -96,14 +117,20 @@ Columns widgets render the child widgets in multiple columns.
 
 ### CodeViewer
 
-CodeViewer widgets display values using a read-only code editor. The editor autodetects the language.
+CodeViewer widgets display values using a read-only code editor.
+
+#### Widget-specific parameters
+
+- **language** - used for code highlighting. Editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
+  If the language is not specified, editor tries to display the content as `yaml` with a fallback to `json`.
 
 #### Example
 
 ```json
 {
   "path": "spec.json-data",
-  "widget": "CodeViewer"
+  "widget": "CodeViewer",
+  "language": "yaml"
 }
 ```
 
