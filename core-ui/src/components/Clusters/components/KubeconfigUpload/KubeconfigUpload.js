@@ -40,7 +40,7 @@ export function KubeconfigUpload({
   );
 
   return (
-    <>
+    <div className="kubeconfig-upload">
       <KubeconfigFileUpload
         onKubeconfigTextAdded={text => {
           editor.getModel().setValue(text);
@@ -50,7 +50,6 @@ export function KubeconfigUpload({
         {t('clusters.wizard.editor-label')}
       </p>
       <Editor
-        height="320px"
         autocompletionDisabled
         language="yaml"
         value={kubeconfig ? jsyaml.dump(kubeconfig) : ''}
@@ -63,6 +62,6 @@ export function KubeconfigUpload({
           {t('common.create-form.editor-error', { error })}
         </MessageStrip>
       )}
-    </>
+    </div>
   );
 }
