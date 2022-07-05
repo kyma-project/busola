@@ -1,15 +1,47 @@
 import React from 'react';
-
-import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
-
-import { useGetTranslation } from '../helpers';
-import { isValidYaml } from 'shared/contexts/YamlEditorContext/isValidYaml';
 import jsyaml from 'js-yaml';
-import LuigiClient from '@luigi-project/client';
+import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
+import { isValidYaml } from 'shared/contexts/YamlEditorContext/isValidYaml';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useGetTranslation } from '../helpers';
+import { useTranslation } from 'react-i18next';
 
 export function CodeViewer({ value, structure, schema }) {
   const { widgetT } = useGetTranslation();
+  const { t } = useTranslation();
 
+  const notification = useNotification();
+
+  const getValueAndLang = (value, structure) => {
+    let language = structure.language || detectLanguage(value);
+    let parsedValue = '';
+
+    try {
+      switch (language) {
+        case 'yaml':
+          parsedValue = jsyaml.dump(value);
+          break;
+        default:
+          //this includes JSON and other languages
+          parsedValue = stringifyIfObject(value);
+      }
+    } catch (e) {
+      const errMessage = t('extensibility.widgets.code-viewer-error', {
+        error: e.message,
+      });
+      console.warn(errMessage);
+      notification.notifyError({
+        content: errMessage,
+      });
+      language = '';
+      parsedValue = stringifyIfObject(value);
+    }
+
+    return {
+      parsedValue,
+      language,
+    };
+  };
   const { parsedValue, language } = getValueAndLang(value, structure);
   return (
     <ReadonlyEditorPanel
@@ -32,31 +64,3 @@ function detectLanguage(value) {
 function stringifyIfObject(value) {
   return typeof value !== 'string' ? JSON.stringify(value, null, 2) : value;
 }
-
-const getValueAndLang = (value, structure) => {
-  let language = structure.language || detectLanguage(value);
-  let parsedValue = '';
-
-  try {
-    switch (language) {
-      case 'yaml':
-        parsedValue = jsyaml.dump(value);
-        break;
-      default:
-        //this includes JSON and other languages
-        parsedValue = stringifyIfObject(value);
-    }
-  } catch (e) {
-    LuigiClient.uxManager().showAlert({
-      text: `CodeViewer - the received resource is in a language other than defined: ${e}`,
-      type: 'error',
-    });
-    language = '';
-    parsedValue = stringifyIfObject(value);
-  }
-
-  return {
-    parsedValue,
-    language,
-  };
-};
