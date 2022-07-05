@@ -33,8 +33,6 @@ export function Editor({
   const { t } = useTranslation();
   const [hasFocus, setHasFocus] = useState(false);
 
-  console.log(error);
-
   // prepare autocompletion
   const {
     setAutocompleteOptions,
