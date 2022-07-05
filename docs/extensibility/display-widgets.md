@@ -115,7 +115,7 @@ Table widgets display array data as rows of a table instead of free-standing com
 
 #### Widget-specific parameters
 
-- **extraChildren** - an optional array of extra widgets to display as an extra collapsible row. Uses the same format as the **children** parameter.
+- **collapsible** - an optional array of extra widgets to display as an extra collapsible section. Uses the same format as the **children** parameter.
 
 #### Example
 
@@ -124,7 +124,7 @@ Table widgets display array data as rows of a table instead of free-standing com
   "path": "spec.item-list",
   "widget": "Table",
   "children": [{ "path": "name" }, { "path": "status" }],
-  "extraChildren": [{ "path": "description" }]
+  "collapsible": [{ "path": "description" }]
 }
 ```
 

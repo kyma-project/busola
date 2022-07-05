@@ -35,14 +35,14 @@ export function Table({ value, structure, schema }) {
     widgetT([structure, column]),
   );
   const headerRenderer = () =>
-    structure.extraChildren ? ['', ...coreHeaders] : coreHeaders;
+    structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
 
   const rowRenderer = entry => {
     const cells = structure.children.map(column => (
       <Widget value={entry} structure={column} schema={schema} />
     ));
 
-    if (!structure.extraChildren) {
+    if (!structure.collapsible) {
       return cells;
     }
 
@@ -50,7 +50,7 @@ export function Table({ value, structure, schema }) {
       cells,
       collapseContent: (
         <td colspan="100%" className="collapsible-panel">
-          {structure.extraChildren.map(child => (
+          {structure.collapsible.map(child => (
             <Widget
               value={entry}
               structure={child}
