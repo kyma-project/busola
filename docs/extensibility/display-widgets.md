@@ -90,7 +90,7 @@ Panel widgets render an object as a separate panel with it's own title (based on
 
 ### Columns
 
-Columns widgets render the child widgets in two columns.
+Columns widgets render the child widgets in multiple columns.
 
 #### Example
 
@@ -140,13 +140,18 @@ CodeViewer widgets display values using a read-only code editor.
 
 Table widgets display array data as rows of a table instead of free-standing components. The **children** parameter defines the values used to render the columns. Similar to the `list` section of the Config Map, you should use inline widgets only as children.
 
+#### Widget-specific parameters
+
+- **collapsible** - an optional array of extra widgets to display as an extra collapsible section. Uses the same format as the **children** parameter.
+
 #### Example
 
 ```json
 {
   "path": "spec.item-list",
   "widget": "Table",
-  "children": [{ "path": "name" }, { "path": "status" }]
+  "children": [{ "path": "name" }, { "path": "status" }],
+  "collapsible": [{ "path": "description" }]
 }
 ```
 
