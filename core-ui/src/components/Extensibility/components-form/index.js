@@ -20,6 +20,7 @@ import { KeyValuePairRenderer } from './KeyValuePairRenderer';
 import { CollapsibleRenderer } from './CollapsibleRenderer';
 import { GenericList } from './GenericList';
 import { MonacoRenderer } from './MonacoRenderer';
+import { ResourceRenderer } from './ResourceRenderer';
 import { ResourceRefRender } from './ResourceRefRenderer';
 import { SimpleList } from './SimpleList';
 
@@ -75,6 +76,7 @@ export const widgets = {
     CodeEditor: MonacoRenderer,
     FormGroup: CollapsibleRenderer,
     ResourceRefs: ResourceRefRender,
+    Resource: ResourceRenderer,
   },
 };
 export default widgets;
