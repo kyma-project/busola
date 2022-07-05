@@ -5,7 +5,9 @@ import { isNil } from 'lodash';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import { useGetTranslation } from '../helpers';
-import { Widget } from './Widget';
+import { Widget, InlineWidget } from './Widget';
+
+import './Table.scss';
 
 const handleTableValue = (value, t) => {
   switch (true) {
@@ -29,16 +31,41 @@ const handleTableValue = (value, t) => {
 export function Table({ value, structure, schema }) {
   const { t } = useTranslation();
   const { t: tExt, widgetT } = useGetTranslation();
+  const coreHeaders = (structure.children || []).map(column =>
+    widgetT([structure, column]),
+  );
   const headerRenderer = () =>
-    (structure.children || []).map(column => widgetT([structure, column]));
+    structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
 
-  const rowRenderer = entry =>
-    structure.children.map(column => (
+  const rowRenderer = entry => {
+    const cells = structure.children.map(column => (
       <Widget value={entry} structure={column} schema={schema} />
     ));
 
+    if (!structure.collapsible) {
+      return cells;
+    }
+
+    return {
+      cells,
+      collapseContent: (
+        <td colspan="100%" className="collapsible-panel">
+          {structure.collapsible.map(child => (
+            <Widget
+              value={entry}
+              structure={child}
+              schema={schema}
+              inlineRenderer={InlineWidget}
+            />
+          ))}
+        </td>
+      ),
+    };
+  };
+
   return (
     <GenericList
+      className="extensibility-table"
       showSearchSuggestion={false}
       title={tExt(structure.name, {
         defaultValue: tExt(structure.path, {
