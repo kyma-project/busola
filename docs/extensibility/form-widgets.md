@@ -55,7 +55,7 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
 
 ### Resource
 
-Resource widgets render a dropdown list of specified resources and stores the selected one as a string containing it's name.
+Resource widgets render a dropdown list of specified resources and store the selected one as a string containing its name.
 
 #### Widget-specific parameters
 
