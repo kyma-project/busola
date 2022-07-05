@@ -69,7 +69,7 @@ Panel widgets render an object as a separate panel with it's own title (based on
 
 ### Columns
 
-Columns widgets render the child widgets in two columns.
+Columns widgets render the child widgets in multiple columns.
 
 #### Example
 
