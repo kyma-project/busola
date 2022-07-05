@@ -1018,6 +1018,7 @@ extensibility:
       success: UI configuration upserted.
     title: Create UI for {{kind}} CRD
   widgets:
+    code-viewer-error: 'CodeViewer: The received resource is in a language other than defined: {{error}}.'
     joined-array:
       error: 'Configuration error: The joined array widget configuration is incorrect. Path value must be an array type.'
     table:

@@ -117,14 +117,20 @@ Columns widgets render the child widgets in two columns.
 
 ### CodeViewer
 
-CodeViewer widgets display values using a read-only code editor. The editor autodetects the language.
+CodeViewer widgets display values using a read-only code editor.
+
+#### Widget-specific parameters
+
+- **language** - used for code highlighting. Editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
+  If the language is not specified, editor tries to display the content as `yaml` with a fallback to `json`.
 
 #### Example
 
 ```json
 {
   "path": "spec.json-data",
-  "widget": "CodeViewer"
+  "widget": "CodeViewer",
+  "language": "yaml"
 }
 ```
 
