@@ -5,6 +5,7 @@ const fs = require('fs');
 const merge = require('lodash.merge');
 
 import { handleRequest, serveStaticApp, serveMonaco } from './common';
+import { handleTracking } from './tracking.js';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 const { setupJWTCheck } = require('./jwtCheck');
 
@@ -79,10 +80,7 @@ if (isDocker) {
   app.use('/backend', handleRequest);
   serveStaticApp(app, '/', '/core');
 } else {
-  app.post('/backend/tracking', (req, res) => {
-    console.log('X-Log:', req.body.toString());
-    res.sendStatus(200);
-  });
+  handleTracking(app);
   app.use(handleRequest);
 }
 
