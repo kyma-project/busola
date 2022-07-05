@@ -30,6 +30,8 @@
   }
   .fd-wizard__content {
     padding-bottom: 16px;
+    display: flex;
+    flex-flow: column;
     flex-grow: 1;
     overflow: auto;
   }
