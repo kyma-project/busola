@@ -10,7 +10,19 @@ import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
 import './RichEditorSection.scss';
 
 function getAvailableLanguages() {
-  return languages.getLanguages().sort((a, b) => a.id.localeCompare(b.id));
+  return (
+    languages
+      .getLanguages()
+      .sort((a, b) => a.id.localeCompare(b.id))
+      // move yaml and json to the top
+      .sort((a, _) => (a.id === 'json' || a.id === 'yaml' ? -1 : 1))
+      .map(l => ({
+        key: l.id,
+        text: l.aliases?.[0] || l.id,
+      }))
+      // remove duplicates
+      .filter((l, index, arr) => arr.findIndex(e => e.key === l.key) === index)
+  );
 }
 
 export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
@@ -26,15 +38,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
       showAllEntries
       searchFullString
       selectionType="manual"
-      options={getAvailableLanguages()
-        .map(l => ({
-          key: l.id,
-          text: l.aliases?.[0] || l.id,
-        }))
-        // remove duplicates
-        .filter(
-          (l, index, arr) => arr.findIndex(e => e.key === l.key) === index,
-        )}
+      options={getAvailableLanguages()}
       selectedKey={typeof language === 'string' ? language : undefined}
       onSelectionChange={(e, { key: language }) => {
         e?.stopPropagation(); // don't collapse the section
