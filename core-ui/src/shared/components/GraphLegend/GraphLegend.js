@@ -11,24 +11,20 @@ export function GraphLegend({ values, isStatsPanel = true }) {
   const barColors = color?.trim().split(/ +/);
   const { theme } = useTheme();
 
-  const handleCss = canvas => {
+  const handleCss = () => {
+    const canvas = document.querySelector('canvas.stats-graph');
+    if (!canvas) return;
     const css = getComputedStyle(canvas);
     const barColor = css.getPropertyValue('--bar-color');
     setColor(barColor);
   };
 
   useEffect(() => {
-    const canvas = document.querySelector('canvas.stats-graph');
-    if (!canvas) return;
-
-    handleCss(canvas);
+    handleCss();
   }, [values]);
 
   useEffect(() => {
-    const canvas = document.querySelector('canvas.stats-graph');
-    if (!canvas) return;
-
-    const cssDelay = setTimeout(() => handleCss(canvas), 750);
+    const cssDelay = setTimeout(handleCss, 1000);
 
     return () => clearTimeout(cssDelay);
   }, [theme]);
