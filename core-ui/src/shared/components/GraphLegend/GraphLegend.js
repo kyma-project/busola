@@ -7,16 +7,15 @@ import './GraphLegend.scss';
 
 export function GraphLegend({ values, isStatsPanel = true }) {
   const { t } = useTranslation();
-  const [color, setColor] = useState('');
-  const barColors = color?.trim().split(/ +/);
+  const [colors, setColors] = useState([]);
   const { theme } = useTheme();
 
   const handleCss = () => {
     const canvas = document.querySelector('canvas.stats-graph');
     if (!canvas) return;
     const css = getComputedStyle(canvas);
-    const barColor = css.getPropertyValue('--bar-color');
-    setColor(barColor);
+    const color = css.getPropertyValue('--bar-color');
+    setColors(color?.trim().split(/ +/));
   };
 
   useEffect(() => {
@@ -41,7 +40,7 @@ export function GraphLegend({ values, isStatsPanel = true }) {
             style={
               isStatsPanel
                 ? {
-                    background: barColors?.[idx],
+                    background: colors?.[idx],
                   }
                 : null
             }
