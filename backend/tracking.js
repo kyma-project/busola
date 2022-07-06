@@ -5,8 +5,11 @@ export function handleTracking(app) {
     app.post('/backend/tracking', (req, res) => {
       const payload = JSON.parse(req.body.toString());
       console.log(
-        'X-Log:',
-        JSON.stringify({ ...payload, timestamp: Date.now() }),
+        JSON.stringify({
+          ...payload,
+          timestamp: Date.now(),
+          type: 'X-Log ' + payload.type,
+        }),
       );
       res.sendStatus(200);
     });
