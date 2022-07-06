@@ -1,30 +1,43 @@
 import React, { useEffect } from 'react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useRelationsContext } from '../contexts/RelationsContext';
-
+import { isNil } from 'lodash';
 import { widgets, valuePreprocessors } from './index';
 import { useTranslation } from 'react-i18next';
 
-import { getValue, ApplyFormula, useGetTranslation } from '../helpers';
+import {
+  getValue,
+  ApplyFormula,
+  useGetTranslation,
+  useGetPlaceholder,
+} from '../helpers';
+import { stringifyIfBoolean } from 'shared/utils/helpers';
 
-export const SimpleRenderer = ({ children }) => children;
+export const SimpleRenderer = ({ children }) => {
+  return children;
+};
 
-export function InlineWidget({ children, structure, ...props }) {
+export function InlineWidget({ value, structure }) {
   const { widgetT } = useGetTranslation();
+  const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
+
   return (
-    <LayoutPanelRow name={widgetT(structure)} value={children} {...props} />
+    <LayoutPanelRow
+      name={widgetT(structure)}
+      value={isNil(value) ? emptyLeafPlaceholder : value}
+    />
   );
 }
 
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
 
-  const value = props.value ? <Renderer {...props} /> : 'placeholder';
-
   return Renderer.inline && InlineRenderer ? (
-    <InlineRenderer {...props}>{value}</InlineRenderer>
+    <InlineRenderer {...props}>
+      <Renderer {...props} />
+    </InlineRenderer>
   ) : (
-    value
+    <Renderer {...props} />
   );
 }
 
@@ -91,6 +104,8 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     }
   }
 
+  const sanitizedValue = stringifyIfBoolean(childValue);
+
   return Array.isArray(childValue) && !Renderer.array ? (
     childValue.map(item => (
       <SingleWidget
@@ -105,7 +120,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     <SingleWidget
       inlineRenderer={inlineRenderer}
       Renderer={Renderer}
-      value={childValue}
+      value={sanitizedValue}
       structure={structure}
       {...props}
     />

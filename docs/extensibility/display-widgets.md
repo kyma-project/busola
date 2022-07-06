@@ -10,21 +10,17 @@ Use inline widgets for simple values in lists, details headers, and details bodi
 
 Text widgets render values as a simple text. This is the default behavior for all scalar values.
 
+###### Widget-specific parameters
+
+- **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
+  If the translation section has a translation with the id the same as the string, the translation is used.
+
 #### Example
 
 ```json
 {
   "path": "spec.label",
-  "widget": "Text"
-}
-```
-
-###### Optional properties
-
-Define the optional `placeholder` property to change the default empty text placeholder (`-`).
-
-```json
-{
+  "widget": "Text",
   "placeholder": "-"
 }
 ```
@@ -42,12 +38,18 @@ The following values are automatically handled:
 - rendered as a warning: `unknown`, `warning`.
 - rendered as an error: `error`, `failure`, `invalid`.
 
+###### Widget-specific parameters
+
+- **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
+  If the translation section has a translation with the id the same as the string, the translation is used.
+
 #### Example
 
 ```json
 {
   "path": "status.value",
-  "widget": "Badge"
+  "widget": "Badge",
+  "placeholder": "-"
 }
 ```
 
@@ -84,7 +86,7 @@ Plain widgets render all contents of an object or list sequentially without any 
 
 ### Panel
 
-Panel widgets render an object as a separate panel with it's own title (based on it's `path` or `name`).
+Panel widgets render an object as a separate panel with its own title (based on its `path` or `name`).
 
 #### Example
 
@@ -92,7 +94,10 @@ Panel widgets render an object as a separate panel with it's own title (based on
 {
   "name": "details",
   "widget": "Panel",
-  "children": [{ "path": "spec.value" }, { "path": "spec.other-value" }]
+  "children": [
+    { "path": "spec.value" },
+    { "path": "spec.other-value", "placeholder": "-" }
+  ]
 }
 ```
 
@@ -112,7 +117,7 @@ Columns widgets render the child widgets in multiple columns.
     {
       "name": "columns.left",
       "widget": "Panel",
-      "children": [{ "path": "spec.value" }]
+      "children": [{ "path": "spec.value", "placeholder": "-" }]
     },
     {
       "name": "columns.right",
@@ -207,21 +212,17 @@ Additionally, you must define the kind of the linked resources by passing the Ku
 
 ControlledBy widgets render the kind and the name with a link to the resources that the current resource is dependent on.
 
+###### Widget-specific parameters
+
+- **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
+  If the translation section has a translation with the id the same as the string, the translation is used.
+
 ### Example
 
 ```json
 {
   "path": "metadata.ownerReferences",
-  "widget": "ControlledBy"
-}
-```
-
-###### Optional properties
-
-Define the optional `placeholder` property to change the default empty text placeholder (`-`).
-
-```json
-{
+  "widget": "ControlledBy",
   "placeholder": "-"
 }
 ```
@@ -232,22 +233,18 @@ Define the optional `placeholder` property to change the default empty text plac
 
 ControlledByKind widgets render the kind of the resources that the current resource is dependent on.
 
+###### Widget-specific parameters
+
+- **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
+  If the translation section has a translation with the id the same as the string, the translation is used.
+
 ### Example
 
 ```json
 {
   "path": "metadata.ownerReferences",
-  "widget": "ControlledByKind"
-}
-```
-
-###### Optional properties
-
-Define the optional `placeholder` property to change the default empty text placeholder (`-`).
-
-```json
-{
-  "placeholder": "-"
+  "widget": "ControlledByKind",
+  "placeholder": "- no refs -"
 }
 ```
 

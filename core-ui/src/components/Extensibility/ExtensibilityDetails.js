@@ -73,7 +73,6 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
                   structure={body}
                   schema={schema}
                   relations={relations}
-                  resource={resMetaData}
                 />
               ),
             ]
@@ -92,7 +91,12 @@ export const ExtensibilityDetails = () => {
   const resMetaData = useGetCRbyPath();
 
   return (
-    <TranslationBundleContext.Provider value={resMetaData.resource.path}>
+    <TranslationBundleContext.Provider
+      value={{
+        translationBundle: resMetaData.resource.path,
+        defaultResourcePlaceholder: resMetaData?.resource?.defaultPlaceholder,
+      }}
+    >
       <RelationsContextProvider relations={resMetaData?.relations || {}}>
         <ErrorBoundary
           customMessage={t('extensibility.error')}

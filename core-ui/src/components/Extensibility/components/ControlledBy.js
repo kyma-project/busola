@@ -1,25 +1,17 @@
 import React from 'react';
 import { isNil } from 'lodash';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 import {
   ControlledBy as CB,
   ControlledByKind as CBK,
 } from 'shared/components/ControlledBy/ControlledBy';
+import { useGetPlaceholder } from 'components/Extensibility/helpers';
 
-export function ControlledBy({ value, structure, schema, resource }) {
-  const emptyTextPlaceholder =
-    structure.placeholder ||
-    resource?.defaultPlaceholder ||
-    EMPTY_TEXT_PLACEHOLDER;
-
-  return isNil(value) ? emptyTextPlaceholder : <CB ownerReferences={value} />;
+export function ControlledBy({ value, structure, schema }) {
+  const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
+  return isNil(value) ? emptyLeafPlaceholder : <CB ownerReferences={value} />;
 }
-export function ControlledByKind({ value, structure, schema, resource }) {
-  const emptyTextPlaceholder =
-    structure.placeholder ||
-    resource?.defaultPlaceholder ||
-    EMPTY_TEXT_PLACEHOLDER;
-
-  return isNil(value) ? emptyTextPlaceholder : <CBK ownerReferences={value} />;
+export function ControlledByKind({ value, structure, schema }) {
+  const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
+  return isNil(value) ? emptyLeafPlaceholder : <CBK ownerReferences={value} />;
 }
