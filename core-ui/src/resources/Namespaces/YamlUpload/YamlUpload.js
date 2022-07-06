@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import jsyaml from 'js-yaml';
@@ -62,15 +61,11 @@ function YamlUpload({
         autocompletionDisabled
         height="400px"
         language="yaml"
-        value={yamlContentString}
+        value={yamlContentString || ''}
         onChange={updateYamlContent}
         onMount={setEditor}
+        error={error}
       />
-      {error && (
-        <MessageStrip type="error" className="fd-margin-top--sm">
-          {t('common.create-form.editor-error', { error })}
-        </MessageStrip>
-      )}
     </div>
   );
 }

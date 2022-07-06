@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCssVariables } from 'hooks/useCssVariables';
-import { GraphLegend } from './GraphLegend/GraphLegend';
+import { GraphLegend } from 'shared/components/GraphLegend/GraphLegend';
 
 function getTextBoundingBox(ctx, text, padding) {
   const labelWidth = ctx.measureText(text).width;
@@ -264,6 +264,18 @@ export function CommitmentGraph({ data }) {
     );
   };
 
+  const values = [
+    {
+      metric: 'requests',
+    },
+    {
+      metric: 'limits',
+    },
+    {
+      metric: 'capacity',
+    },
+  ];
+
   return (
     <>
       <canvas
@@ -272,7 +284,7 @@ export function CommitmentGraph({ data }) {
         height={height}
         onMouseMove={mousemove}
       ></canvas>
-      <GraphLegend />
+      <GraphLegend values={values} isStatsPanel={false} />
     </>
   );
 }
