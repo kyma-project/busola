@@ -1,16 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useTheme } from 'shared/contexts/ThemeContext';
-import { editor, Uri } from 'monaco-editor';
+import React, { useState } from 'react';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { useAutocompleteWorker } from './useAutocompleteWorker';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { isEqual } from 'lodash';
+
+import { useAutocompleteWorker } from './autocompletion/useAutocompleteWorker';
+import { useOnFocus } from './hooks/useOnFocus';
+import { useOnBlur } from './hooks/useOnBlur';
+import { useDisplayWarnings } from './hooks/useDisplayWarnings';
+import { useUpdateValueOnParentChange } from './hooks/useUpdateValueOnParentChange';
+import { useOnMount } from './hooks/useOnMount';
+import { useOnChange } from './hooks/useOnChange';
+import { useCreateEditor } from './hooks/useCreateEditor';
 
 import './Editor.scss';
 
 export function Editor({
-  value, // Pass value to initialize the Editor. Altering value later will not be reflected (as in an uncontrolled component).
+  value,
   error, // used by the resourceFormWrapper to display error that previous input is used
   onChange,
   readOnly,
@@ -20,18 +25,15 @@ export function Editor({
   autocompletionDisabled,
   customSchemaUri, // custom link to be displayed in the autocompletion tooltips
   height,
+  onBlur,
+  onFocus,
   options = {}, // IEditorOptions, check Monaco API for the list of options
   ...rest
 }) {
-  const descriptor = useRef(new Uri());
   const { t } = useTranslation();
+  const [hasFocus, setHasFocus] = useState(false);
 
-  const [markers, setMarkers] = useState([]);
-  const { editorTheme } = useTheme();
-  const divRef = useRef(null);
-  const editorRef = useRef(null);
-  const valueRef = useRef(value);
-
+  // prepare autocompletion
   const {
     setAutocompleteOptions,
     activeSchemaPath,
@@ -45,88 +47,32 @@ export function Editor({
     readOnly,
     language,
   });
-  const memoizedOptions = useRef({});
-  if (!isEqual(memoizedOptions.current, options)) {
-    memoizedOptions.current = options;
-  }
 
-  useEffect(() => {
-    // show warnings in a message strip at the bottom of editor
-    if (autocompletionDisabled) {
-      return;
-    }
-    const onDidChangeMarkers = editor.onDidChangeMarkers(markers => {
-      if (markers.length) {
-        const descriptiveMarkers = editor.getModelMarkers({
-          resource: descriptor.current,
-        });
-        setMarkers(descriptiveMarkers);
-      }
-    });
+  // set autocompletion global context to the current editor and initialize an editor instance
+  const { editorInstance, divRef, descriptor } = useCreateEditor({
+    value,
+    options,
+    setAutocompleteOptions,
+    language,
+    readOnly,
+  });
 
-    return () => {
-      onDidChangeMarkers.dispose();
-    };
-  }, [setMarkers, autocompletionDisabled]);
-  useEffect(() => {
-    // setup Monaco editor and pass value updates to parent
+  // manage listeners
+  useOnFocus({
+    editorInstance,
+    onFocus,
+    setAutocompleteOptions,
+    activeSchemaPath,
+    setHasFocus,
+    descriptor,
+  });
+  useOnBlur({ editorInstance, onBlur, setHasFocus });
+  useOnMount({ editorInstance, onMount });
+  useOnChange({ editorInstance, onChange });
 
-    // calling this function sets up autocompletion
-    const { modelUri } = setAutocompleteOptions();
-    descriptor.current = modelUri;
-
-    const model =
-      editor.getModel(modelUri) ||
-      editor.createModel(valueRef.current, language, modelUri);
-
-    // create editor and assign model with value and autocompletion
-    editorRef.current = editor.create(divRef.current, {
-      model: model,
-      automaticLayout: true,
-      language: language,
-      theme: editorTheme,
-      fixedOverflowWidgets: true,
-      readOnly: readOnly,
-      scrollbar: {
-        alwaysConsumeMouseWheel: false,
-      },
-      ...memoizedOptions.current,
-    });
-
-    // pass editor instance to parent
-    if (typeof onMount === 'function') {
-      onMount(editorRef.current);
-    }
-
-    // update parent component state on value change
-    const onDidChangeModelContent = editorRef.current.onDidChangeModelContent(
-      () => {
-        const editorValue = editorRef.current.getValue();
-        onChange(editorValue);
-      },
-    );
-
-    return () => {
-      onDidChangeModelContent.dispose();
-      editor.getModel(descriptor.current)?.dispose();
-      editorRef.current.dispose();
-    };
-    // disabling eslint to exclude onChange listener from the dependencies.
-    // Otherwise, each onChange function must be memoized.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editorTheme, setAutocompleteOptions, language, t, readOnly, onMount]);
-
-  useEffect(() => {
-    // refresh model on editor focus. Needed for cases when multiple editors are open simultaneously
-    const onDidFocusEditorText = editorRef.current?.onDidFocusEditorText(() => {
-      if (activeSchemaPath !== descriptor.current?.path) {
-        setAutocompleteOptions();
-      }
-    });
-    return () => {
-      onDidFocusEditorText?.dispose();
-    };
-  }, [setAutocompleteOptions, activeSchemaPath]);
+  // others
+  useUpdateValueOnParentChange({ editorInstance, value, hasFocus, error });
+  const warnings = useDisplayWarnings({ autocompletionDisabled, descriptor });
 
   return (
     <div
@@ -157,10 +103,10 @@ export function Editor({
             })}
           </MessageStrip>
         )}
-        {markers.length ? (
+        {warnings.length ? (
           <div>
             <MessageStrip type="warning" className="fd-margin--sm break-word">
-              {markers.map(m => (
+              {warnings.map(m => (
                 <span
                   className="line"
                   key={`${m.startLineNumber}${m.startColumn}`}
