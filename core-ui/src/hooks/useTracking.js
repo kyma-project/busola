@@ -41,13 +41,13 @@ export function useTracking() {
     const pathSegments = path.split('/'); // split by '/', take only first part
     let log;
     if (pathSegments.length > 1) {
-      log = 'PATH:DETAILS ' + pathSegments[0];
+      log = 'DETAILS ' + pathSegments[0];
     } else {
-      log = 'PATH:LIST ' + pathSegments[0];
+      log = 'LIST ' + pathSegments[0];
     }
     fetch(baseUrl(fromConfig) + '/tracking', {
       method: 'POST',
-      body: JSON.stringify({ payload: log, id: getLoggingId() }),
+      body: JSON.stringify({ type: 'PATH', payload: log, id: getLoggingId() }),
     }).catch(e => console.debug('Tracking call failed', e));
   }, [fromConfig, pathname, isEnabled]);
 }
