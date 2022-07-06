@@ -1292,21 +1292,21 @@ grafana:
   open-in-grafana: Open in Grafana
   unavailable: No Grafana link
 graphs:
+  capacity: Capacity
   cpu: CPU
   free-space: Free space
+  limits: Limits
   memory: Memory
   network: Network
   network-down: Download
   network-up: Upload
   nodes: Nodes
   pvc-usage: Volume Space Usage
+  requests: Requests
   resource-commitment:
-    capacity: Capacity
     cpu: CPU Commitment
-    limits: Limits
     limits-exceed: Resource limits exceed 150% of the cluster capacity.
     memory: Memory Commitment
-    requests: Requests
     utilized-value: Utilized ({{value}}%)
   total: Total
   used-space: Used space
