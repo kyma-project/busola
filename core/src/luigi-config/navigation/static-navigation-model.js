@@ -371,7 +371,6 @@ export function getStaticChildrenNodesForNamespace(
       pathSegment: 'pods',
       resourceType: 'pods',
       label: i18next.t('pods.title'),
-      group: '',
       viewUrl:
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/pods?' +
