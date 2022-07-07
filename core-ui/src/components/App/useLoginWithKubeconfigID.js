@@ -14,13 +14,13 @@ export const useLoginWithKubeconfigID = () => {
       return;
     }
 
-    // remove old clusters
-    Object.keys(clusters).forEach(clusterName =>
-      LuigiClient.sendCustomMessage({
-        id: 'busola.deleteCluster',
-        clusterName,
-      }),
-    );
+    // // remove old clusters
+    // Object.keys(clusters).forEach(clusterName =>
+    //   LuigiClient.sendCustomMessage({
+    //     id: 'busola.deleteCluster',
+    //     clusterName,
+    //   }),
+    // );
 
     // add new clusters
     const onlyOneCluster = getKubeconfigId.contexts.length === 1;
