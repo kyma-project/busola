@@ -8,17 +8,39 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
+jest.mock('./ExtensibilityCreate', () => ({
+  ExtensibilityCreate: data => {
+    return JSON.stringify(data);
+  },
+}));
+
 jest.mock('./useGetCRbyPath', () => ({
   useGetCRbyPath: () => ({
     resource: {
       path: 'myCustomPath',
+      kind: 'myCustomKind',
+      name: 'My custom name',
     },
+    schema: {},
+    relations: {},
   }),
 }));
 
-jest.mock('./ExtensibilityListCore', () => ({
-  ExtensibilityListCore: data => {
+jest.mock('./components/Widget', () => ({
+  Widget: data => {
     return JSON.stringify(data);
+  },
+}));
+
+jest.mock('shared/components/ResourcesList/ResourcesList', () => ({
+  ResourcesList: data => {
+    const CreateForm = data.createResourceForm;
+    return (
+      <>
+        <CreateForm {...data} />
+        {JSON.stringify(data)}
+      </>
+    );
   },
 }));
 
