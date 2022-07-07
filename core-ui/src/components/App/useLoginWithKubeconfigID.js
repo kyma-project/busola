@@ -5,7 +5,7 @@ import LuigiClient from '@luigi-project/client';
 
 export const useLoginWithKubeconfigID = () => {
   const { getKubeconfigId, clusters } = useMicrofrontendContext();
-  console.log(useMicrofrontendContext());
+
   useEffect(() => {
     const noContexts =
       !Array.isArray(getKubeconfigId?.contexts) ||
@@ -29,14 +29,9 @@ export const useLoginWithKubeconfigID = () => {
     });
     if (!onlyOneCluster) {
       // Luigi doesn't reload when we don't choose an active cluster
-      // LuigiClient.linkManager().navigate('/');
-      // LuigiClient.navigation()
       LuigiClient.sendCustomMessage({
-        id: 'busola.reload',
+        id: 'busola.refreshClusters',
       });
-      // LuigiClient.sendCustomMessage({
-      //   id: 'busola.refreshNavigation',
-      // });
     }
   }, [getKubeconfigId, clusters]);
 };
