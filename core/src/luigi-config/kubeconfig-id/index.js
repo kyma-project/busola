@@ -34,68 +34,7 @@ export async function handleKubeconfigIdIfPresent() {
       return null;
     }
 
-    const params = {
-      config: {
-        features: {
-          ...constants.DEFAULT_FEATURES,
-        },
-      },
-      kubeconfig,
-      contextName: kubeconfig?.cluster?.name || '',
-      currentContext: getContext(kubeconfig),
-    };
-
-    const clusterName = params.kubeconfig['current-context'];
-
-    const existingClusterNames = Object.keys(clusterStorage.load());
-    if (!existingClusterNames.includes(clusterName)) {
-      // use sessionStorage for *NEW* kubeconfigID clusters
-      params.config.storage = 'sessionStorage';
-    }
-
-    await saveClusterParams(params);
-
-    const nonActiveContexts = kubeconfig.contexts.filter(el => {
-      const contextName = el.name;
-      return contextName !== kubeconfig['current-context'];
-    });
-
-    const saveNonActiveCluster = async el => {
-      const cluster = kubeconfig.clusters.find(
-        c => c.name === el.context.cluster,
-      );
-      const user = kubeconfig.users.find(u => u.name === el.context.user);
-
-      const extractedKubeconfig = {
-        ...kubeconfig,
-        'current-context': el.name,
-        contexts: [el],
-        clusters: [cluster],
-        users: [user],
-      };
-
-      const params = {
-        kubeconfig: extractedKubeconfig,
-        config: {
-          storage: 'sessionStorage',
-          features: {
-            ...constants.DEFAULT_FEATURES,
-          },
-        },
-        contextName: el.name,
-        currentContext: {
-          cluster: cluster,
-          user: user,
-        },
-      };
-      await saveClusterParams(params);
-    };
-
-    for (const context of nonActiveContexts) {
-      await saveNonActiveCluster(context);
-    }
-
-    saveActiveClusterName(clusterName);
+    return kubeconfig;
   } catch (e) {
     alert(i18next.t('kubeconfig-id.error', { error: e.message }));
     console.warn(e);

@@ -44,6 +44,7 @@ import { setNavFooterText } from '../nav-footer';
 import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/pagination';
 import { getFeatures, initFeatures } from '../feature-discovery';
 import * as fetchCache from './../cache/fetch-cache';
+import { handleKubeconfigIdIfPresent } from './../kubeconfig-id';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -128,6 +129,7 @@ async function createClusterManagementNodes(features, customResources) {
       activeClusterName,
       language: i18next.language,
       busolaClusterParams: await getBusolaClusterParams(),
+      getKubeconfigId: await handleKubeconfigIdIfPresent(),
       features,
       customResources,
       ssoData: getSSOAuthData(),
@@ -415,6 +417,7 @@ export async function createNavigationNodes(
         cluster: activeCluster.currentContext.cluster,
         config: activeCluster.config,
         kubeconfig: activeCluster.kubeconfig,
+        getKubeconfigId: await handleKubeconfigIdIfPresent(),
         language: i18next.language,
         ssoData: getSSOAuthData(),
         groupVersions,

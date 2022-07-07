@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Wizard, MessageStrip } from 'fundamental-react';
+import { MessageStrip, Wizard } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -7,11 +7,12 @@ import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
-import { hasKubeconfigAuth, getUser, getContext, addCluster } from '../shared';
+import { getUser, hasKubeconfigAuth } from '../shared';
 import { AuthForm } from './AuthForm';
 import { KubeconfigUpload } from './KubeconfigUpload/KubeconfigUpload';
 import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
+import { addByContext } from './addByContext';
 
 import './AddClusterWizard.scss';
 
@@ -59,29 +60,6 @@ export function AddClusterWizard({
     setHasAuth(hasAuth);
 
     setKubeconfig(kubeconfig);
-  };
-
-  const addByContext = (kubeconfig, context, switchCluster = true) => {
-    const cluster = kubeconfig.clusters.find(
-      c => c.name === context.context.cluster,
-    );
-    const user = kubeconfig.users.find(u => u.name === context.context.user);
-    const newKubeconfig = {
-      ...kubeconfig,
-      'current-context': context.name,
-      contexts: [context],
-      clusters: [cluster],
-      users: [user],
-    };
-    addCluster(
-      {
-        kubeconfig: newKubeconfig,
-        contextName: context.name,
-        config: { ...(config || {}), storage },
-        currentContext: getContext(newKubeconfig, context.name),
-      },
-      switchCluster,
-    );
   };
 
   const onComplete = () => {
