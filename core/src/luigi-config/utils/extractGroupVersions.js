@@ -1,15 +1,9 @@
 export function extractGroupVersions(apis) {
-  const CORE_GROUP = '';
-  const CORE_GROUP_VERSION = {
-    groupVersion: 'v1',
-    version: 'v1',
-  };
+  const CORE_GROUP = 'v1';
   return [
-    {
-      name: CORE_GROUP,
-      preferredVersion: CORE_GROUP_VERSION,
-      versions: [CORE_GROUP_VERSION],
-    },
-    ...apis.groups,
+    CORE_GROUP,
+    ...apis.groups.flatMap(group =>
+      group.versions.map(version => version.groupVersion),
+    ),
   ];
 }

@@ -4,7 +4,7 @@ import { useFeature } from 'shared/hooks/useFeature';
 import * as Sentry from '@sentry/react';
 
 export function useVersionWarning({ resourceUrl, resourceType }) {
-  const { groupVersions } = useMicrofrontendContext();
+  const { apiGroups } = useMicrofrontendContext();
   const { isEnabled: isTrackingEnabled } = useFeature('SENTRY');
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export function useVersionWarning({ resourceUrl, resourceType }) {
     const group = urlSegments[2];
     const version = urlSegments[3];
 
-    const preferredVersion = groupVersions.find(gV => gV.name === group)
+    const preferredVersion = apiGroups.find(gV => gV.name === group)
       ?.preferredVersion.version;
 
     if (preferredVersion && version !== preferredVersion) {
@@ -31,5 +31,5 @@ export function useVersionWarning({ resourceUrl, resourceType }) {
         Sentry.Severity.Info,
       );
     }
-  }, [groupVersions, isTrackingEnabled, resourceType, resourceUrl]);
+  }, [apiGroups, isTrackingEnabled, resourceType, resourceUrl]);
 }

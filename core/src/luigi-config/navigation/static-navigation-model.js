@@ -2151,11 +2151,7 @@ function checkSingleNode(node, groupVersions, permissionSet) {
       .replace(/^\/apis\//, '')
       .replace(/^\/api\//, '');
 
-    if (
-      !groupVersions
-        .flatMap(group => group.versions.map(version => version.groupVersion))
-        .find(g => g.includes(groupVersion))
-    ) {
+    if (!groupVersions.find(g => g.includes(groupVersion))) {
       node.toDelete = true;
       return;
     }
