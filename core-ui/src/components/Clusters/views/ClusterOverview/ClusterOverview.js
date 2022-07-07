@@ -6,13 +6,6 @@ import './ClusterOverview.scss';
 export function ClusterOverview() {
   return (
     <>
-      <button
-        onClick={() => {
-          throw Error('TEST');
-        }}
-      >
-        Crash
-      </button>
       <ClusterOverviewHeader />
       <ClusterNodes />
     </>

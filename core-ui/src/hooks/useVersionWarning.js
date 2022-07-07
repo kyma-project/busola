@@ -8,7 +8,6 @@ export function useVersionWarning({ resourceUrl, resourceType }) {
   const { isEnabled: isTrackingEnabled } = useFeature('SENTRY');
 
   useEffect(() => {
-    console.log(resourceType);
     if (!isTrackingEnabled) return;
 
     if (resourceType.toLowerCase() === 'horizontalpodautoscalers') {
@@ -26,7 +25,6 @@ export function useVersionWarning({ resourceUrl, resourceType }) {
     const preferredVersion = groupVersions.find(gV => gV.name === group)
       ?.preferredVersion.version;
 
-    console.log(version, preferredVersion);
     if (preferredVersion && version !== preferredVersion) {
       Sentry.captureMessage(
         `Unexpected version of ${resourceType}: expected ${preferredVersion}, got ${version}.`,
