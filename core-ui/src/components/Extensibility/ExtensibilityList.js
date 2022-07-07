@@ -6,15 +6,14 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { prettifyKind } from 'shared/utils/helpers';
-import { useGetTranslation } from './helpers';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
-import { TranslationBundleContext } from './helpers';
+import { TranslationBundleContext, useGetTranslation } from './helpers';
 import { Widget } from './components/Widget';
 import { RelationsContextProvider } from './contexts/RelationsContext';
 
-const ExtensibilityListCore = ({ resMetaData }) => {
+export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
   const { path, kind } = resMetaData?.resource ?? {};
 
