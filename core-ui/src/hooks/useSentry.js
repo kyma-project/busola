@@ -20,6 +20,7 @@ export function useSentry() {
     const feature = features?.SENTRY || {};
     if (feature.isEnabled && feature.config?.dsn) {
       const nextDsn = feature.config.dsn;
+      console.log('sentry is on');
 
       if (nextDsn !== dsn) {
         setDsn(nextDsn);

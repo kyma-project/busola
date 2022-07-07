@@ -409,6 +409,7 @@ export async function createNavigationNodes(
         authData,
         activeClusterName,
         groups,
+        groupVersions,
         features,
         customResources,
         clusters: getClusters(),
