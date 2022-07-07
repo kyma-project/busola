@@ -9,7 +9,7 @@ export const useOnFocus = ({
   descriptor,
 }) => {
   useEffect(() => {
-    if (!editorInstance || !onFocus) return;
+    if (!editorInstance) return;
     const focusListener = editorInstance.onDidFocusEditorText(() => {
       setHasFocus(true);
       if (typeof onFocus === 'function') {
