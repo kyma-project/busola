@@ -42,9 +42,9 @@ data:
           "children": [{ "path": "name" }, { "path": "price" }, { "path": "quantity" }]
         },
         {
-                "widget": "ResourceList",
-                "path": "$pizzaDeployments",
-        "name": "Deployed pizzas"
+          "widget": "ResourceList",
+          "path": "$pizzaDeployments",
+          "name": "Deployed pizzas"
         },
     {
       "name": "columns",
