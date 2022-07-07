@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pizza-deployment
+  namespace: default
+  labels:
+    app.kubernetes.io/name: pizza-deployment
+    label-example: pizza
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pizza-deployment
+  template:
+    metadata:
+      labels:
+        app: pizza-deployment
+    spec:
+      imagePullSecrets: []
+      containers:
+        - name: pizza-deployment
+          image: bitnami/nginx
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 50m
+            limits:
+              memory: 128Mi
+              cpu: 100m
