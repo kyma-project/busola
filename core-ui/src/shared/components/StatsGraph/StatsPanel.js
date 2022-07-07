@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 import { usePrometheus } from 'shared/hooks/usePrometheus';
 import { StatsGraph } from 'shared/components/StatsGraph';
+import { GraphLegend } from 'shared/components/GraphLegend/GraphLegend';
 
 import './StatsPanel.scss';
 
@@ -147,6 +148,16 @@ export function SingleMetricMultipeGraph({
       ...props,
     },
   });
+
+  const legendValues = (labels || defaultLabels)
+    .map(l => {
+      return {
+        metric,
+        label: l,
+      };
+    })
+    .reverse();
+
   return (
     <>
       {!error ? (
@@ -166,6 +177,7 @@ export function SingleMetricMultipeGraph({
         </div>
       )}
       <BusyIndicator className="throbber" show={loading} />
+      <GraphLegend values={legendValues} />
     </>
   );
 }
@@ -191,7 +203,7 @@ const getDualGraphValues = (metric, t) => {
       return {
         metric1: 'pvc-used-space',
         metric2: 'pvc-free-space',
-        labels: [t('graphs.free-space'), t('graphs.used-space')],
+        labels: [t('graphs.used-space'), t('graphs.free-space')],
         className: 'pvc-usage',
       };
     case 'network':
@@ -206,6 +218,18 @@ const getDualGraphValues = (metric, t) => {
       return {};
   }
 };
+
+const getLegendValues = metric => {
+  switch (metric) {
+    case 'network':
+      return [{ metric: 'network-down' }, { metric: 'network-up' }];
+    case 'pvc-usage':
+      return [{ metric: 'free-space' }, { metric: 'used-space' }];
+    default:
+      return [{ metric }];
+  }
+};
+
 const getTimeSpansByMetric = metric => {
   const longerTimeSpansGraphs = ['pvc-usage', 'nodes'];
 
@@ -291,22 +315,29 @@ export function StatsPanel({
               {...props}
             />
           ) : (
-            <SingleGraph
-              type={type}
-              mode={mode}
-              metric={metric}
-              className={metric}
-              timeSpan={timeSpans[timeSpan]}
-              {...props}
-            />
+            <>
+              <SingleGraph
+                type={type}
+                mode={mode}
+                metric={metric}
+                className={metric}
+                timeSpan={timeSpans[timeSpan]}
+                {...props}
+              />
+              <GraphLegend values={getLegendValues(metric)} />
+            </>
           ))}
         {dualGraphs.includes(metric) && (
-          <DualGraph
-            type={type}
-            timeSpan={timeSpans[timeSpan]}
-            {...getDualGraphValues(metric, t)}
-            {...props}
-          />
+          <>
+            <DualGraph
+              type={type}
+              mode={mode}
+              timeSpan={timeSpans[timeSpan]}
+              {...getDualGraphValues(metric, t)}
+              {...props}
+            />
+            <GraphLegend values={getLegendValues(metric)} />
+          </>
         )}
       </LayoutPanel.Body>
     </LayoutPanel>

@@ -8,7 +8,7 @@ export function BTPResourceStatus({ status, resourceKind }) {
   const conditions = status?.conditions || [];
   const lastCondition = conditions[conditions.length - 1] || {};
 
-  if (status.ready === 'True' && lastCondition.type === 'Ready') {
+  if (status?.ready === 'True' && lastCondition.type === 'Ready') {
     return (
       <StatusBadge type="positive" i18n={i18n} resourceKind={resourceKind}>
         {lastCondition.reason}

@@ -51,6 +51,6 @@ context('Test Daemon Sets', () => {
 
     // images
     cy.getIframeBody().contains(/gardener\/apiserver-proxy/);
-    cy.getIframeBody().contains(/envoyproxy\/envoy/);
+    cy.getIframeBody().contains(/envoyproxy/);
   });
 });

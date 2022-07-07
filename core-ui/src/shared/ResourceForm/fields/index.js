@@ -7,3 +7,4 @@ export * from './ItemArray';
 export * from './ComboboxArrayInput';
 export * from './SelectArrayInput';
 export * from './RuntimeResources';
+export * from './RichEditorDataField/RichEditorDataField';
