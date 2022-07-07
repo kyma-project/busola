@@ -5,7 +5,9 @@ import { extractGroupVersions } from './utils/extractGroupVersions';
 
 export function apiGroup({ group, refreshIntervalMs = 5 * 60 * 1000 }) {
   const containsGroup = groupVersions =>
-    groupVersions?.find(g => g.includes(group));
+    groupVersions
+      .flatMap(group => group.versions.map(version => version.groupVersion))
+      ?.find(g => g.includes(group));
 
   return async (featureName, featureConfig) => {
     if (!getAuthData()) {
