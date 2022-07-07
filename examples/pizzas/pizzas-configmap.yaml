@@ -51,9 +51,9 @@ data:
       "widget": "Columns",
       "children": [
         {
-          "name": "spec.state",
+          "name": "Comments",
           "widget": "Panel",
-          "children": [{ "path": "spec.state" }]
+          "children": [ {"path": "spec.comments", "widget": "JoinedArray", "separator": "XDD"}]
         },
         {
           "name": "spec.description",
@@ -73,7 +73,12 @@ data:
       { "path": "spec.toppings", "simple": true},
       { "path": "spec.toppings.name", "simple": true},
       { "path": "spec.toppings.price", "simple": true},
-      { "path": "spec.toppings.quantity", "simple": true}
+      { "path": "spec.toppings.quantity", "simple": true},
+      { "path": "spec.comments"},
+      {
+        "path": "spec.recipeSecrets[]",
+        "widget": "ResourceRefs"
+        }
     ]
   list: |-
     [
@@ -81,7 +86,7 @@ data:
       { "path": "spec.realization" }, 
       { "name": "Payment method","path": "spec.paymentMethod", "widget": "Badge" }, 
       { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
-      { "path": "spec.toppings", formula: "$join(value.name, ', ')", "name": "Toppings price" }
+      { "path": "spec.toppings", formula: "$sum(value.name, ', ')", "name": "Toppings price" }
     ]
   relations: |-
     {
@@ -132,6 +137,30 @@ data:
               "description": "The name of the sauce to use on our pizza",
               "type": "string"
             },
+            "recipeSecrets":{
+              "description": "List of secrets with the recipe",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The name of the secret"
+                  },
+                "namespace": {
+                  "description": "The namespace of the secret",
+                  "type": "string"
+                  }  
+                }
+              }
+            },
+            "comments":{
+              "description": Additional commentsm,
+              "type": "array",
+              "items":{
+                "type":"string"
+              }
+            },
             "toppings": {
               "description": "List of toppings for our pizza",
               "type": "array",
@@ -162,6 +191,7 @@ data:
       name: Pizza
       category: Lunch
       spec.description: Description
+      spec.comments: Comments
       spec.state: State
       spec.realization: Realization
       spec.paymentMethod: Payment Method
