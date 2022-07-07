@@ -7,12 +7,11 @@ export function useVersionWarning({ resourceUrl, resourceType }) {
   const { groupVersions } = useMicrofrontendContext();
   const { isEnabled: isTrackingEnabled } = useFeature('SENTRY');
 
-  console.log(resourceType);
-
   useEffect(() => {
+    console.log(resourceType);
     if (!isTrackingEnabled) return;
 
-    if (resourceType === 'HorizontalPodAutoscalers') {
+    if (resourceType.toLowerCase() === 'horizontalpodautoscalers') {
       // we don't talk about HPAs
       // unless it's https://github.com/kyma-project/busola/issues/1566
       return;
@@ -28,11 +27,11 @@ export function useVersionWarning({ resourceUrl, resourceType }) {
       ?.preferredVersion.version;
 
     console.log(version, preferredVersion);
-    if (version !== preferredVersion) {
+    if (preferredVersion && version !== preferredVersion) {
       Sentry.captureMessage(
         `Unexpected version of ${resourceType}: expected ${preferredVersion}, got ${version}.`,
         Sentry.Severity.Info,
       );
     }
-  }, [groupVersions, resourceUrl, resourceType, isTrackingEnabled]);
+  }, [groupVersions, isTrackingEnabled, resourceType, resourceUrl]);
 }
