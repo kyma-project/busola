@@ -8,6 +8,8 @@ const resourceUrl = 'mycustomresources';
 const translations = {
   name: 'MyResource',
   description: 'This is my resource',
+  'spec.customValue1': 'value1',
+  'spec.customValue2': 'value2',
 };
 
 // those mocks have to start with `mock`
@@ -56,7 +58,9 @@ jest.mock('shared/components/ResourcesList/ResourcesList', () => ({
         Type: {data.resourceType}
         Custom columns:{' '}
         {data.customColumns?.length
-          ? 'has custom columns'
+          ? data.customColumns.map(c => {
+              return c.header;
+            })
           : "doesn't have custom columns"}
       </>
     );
@@ -84,16 +88,21 @@ describe('ExtensibilityList', () => {
   it('Renders a complex list for more complex data', () => {
     mockUseGetCRbyPath.mockImplementationOnce(() => ({
       resource: {
-        path: `${resourcePath}?hasDetailsView=true`,
+        path: resourcePath,
         kind: resourceKind,
       },
-      list: [{ path: 'spec.description' }],
+      list: [{ path: 'spec.customValue1' }, { path: 'spec.customValue2' }],
     }));
     const { getByText } = render(<ExtensibilityList />);
     expect(getByText(new RegExp(resourcePath, 'i'))).toBeVisible();
     expect(getByText(new RegExp(translations.name, 'i'))).toBeVisible();
     expect(getByText(new RegExp(translations.description, 'i'))).toBeVisible();
     expect(getByText(new RegExp(resourceUrl, 'i'))).toBeVisible();
-    expect(getByText(new RegExp('has custom columns', 'i'))).toBeVisible();
+    expect(
+      getByText(new RegExp(translations['spec.customValue1'], 'i')),
+    ).toBeVisible();
+    expect(
+      getByText(new RegExp(translations['spec.customValue2'], 'i')),
+    ).toBeVisible();
   });
 });
