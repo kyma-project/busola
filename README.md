@@ -17,6 +17,11 @@ Busola project consists of the following UI projects:
 - [`npm`](https://www.npmjs.com/): >= 8.1.2
 - [`node`](https://nodejs.org/en/): >= 16.13.2
 
+Busola supports:
+
+- [Kyma](https://kyma-project.io/): >= 2.4.2
+- [Istio](https://istio.io/): resource in version `v1beta1`.
+
 ## Installation
 
 To install dependencies for the root and all UI projects, and to prepare symlinks for local libraries within this repository, run the following command:
