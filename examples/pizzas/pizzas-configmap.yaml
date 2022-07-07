@@ -13,15 +13,9 @@ data:
         {
           "path": "spec.sauce"
         },
-        {
-          "path": "spec.description"
-        },
-        {
-          "path": "spec.realization",
-          "name": "My Custom Realization"
-        }
+        { "path": "spec.toppings", formula: "$join(data.name, ', ')" }, 
       ],
-     "body": [
+    "body": [
         {
           "name": "Summary",
           "widget": "Panel",
@@ -36,40 +30,38 @@ data:
             {
               "name": "Message",
               "path": "status.messages[-1:].message"
-            }
+            },
+            { "path": "spec.toppings", formula: "$join(data.name, ', ')" }, 
+
           ]
         },
         {
-          "name": "Toppings",
+          "name": "topping",
           "path": "spec.toppings",
           "widget": "Table",
           "children": [{ "path": "name" }, { "path": "price" }, { "path": "quantity" }]
         },
         {
-          "widget": "ResourceList"
-          "path": "$pizzaDeployments",
-          "name": "Pizza Deployments",
+                "widget": "ResourceList",
+                "path": "$pizzaDeployments",
+        "name": "Deployed pizzas"
         },
+    {
+      "name": "columns",
+      "widget": "Columns",
+      "children": [
         {
-        "widget": "Columns",
-        "children": [
-        {
-          "name": "spec.state"
+          "name": "spec.state",
           "widget": "Panel",
-          "children": [
-          { "path": "spec.state"}
-          ]
+          "children": [{ "path": "spec.state" }]
         },
         {
-        "name": "spec.description",
-        "widget": "Panel",
-        "children": [
-          {
-          "path": "spec.description"}
-        ]
+          "name": "spec.description",
+          "widget": "Panel",
+          "children": [{ "path": "spec.description" }]
         }
-        ]
-        }
+      ]
+    }
       ]
     }
   form: |-
@@ -89,7 +81,7 @@ data:
       { "path": "spec.realization" }, 
       { "name": "Payment method","path": "spec.paymentMethod", "widget": "Badge" }, 
       { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
-      { "path": "spec.toppings", formula: "$join(value.name, ', ')" }
+      { "path": "spec.toppings", formula: "$join(value.name, ', ')", "name": "Toppings price" }
     ]
   relations: |-
     {
@@ -167,7 +159,7 @@ data:
     }
   translations: |
     en:
-      name: Pizzunia
+      name: Pizza
       category: Lunch
       spec.description: Description
       spec.state: State
