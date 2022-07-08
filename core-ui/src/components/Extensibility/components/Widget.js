@@ -1,23 +1,37 @@
 import React, { useEffect } from 'react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useRelationsContext } from '../contexts/RelationsContext';
-
+import { isNil } from 'lodash';
 import { widgets, valuePreprocessors } from './index';
 import { useTranslation } from 'react-i18next';
 
-import { getValue, ApplyFormula, useGetTranslation } from '../helpers';
+import {
+  getValue,
+  ApplyFormula,
+  useGetTranslation,
+  useGetPlaceholder,
+} from '../helpers';
+import { stringifyIfBoolean } from 'shared/utils/helpers';
 
-export const SimpleRenderer = ({ children }) => children;
+export const SimpleRenderer = ({ children }) => {
+  return children;
+};
 
-export function InlineWidget({ children, structure, ...props }) {
+export function InlineWidget({ value, structure }) {
   const { widgetT } = useGetTranslation();
+  const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
+
   return (
-    <LayoutPanelRow name={widgetT(structure)} value={children} {...props} />
+    <LayoutPanelRow
+      name={widgetT(structure)}
+      value={isNil(value) ? emptyLeafPlaceholder : value}
+    />
   );
 }
 
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
+
   return Renderer.inline && InlineRenderer ? (
     <InlineRenderer {...props}>
       <Renderer {...props} />
@@ -30,7 +44,6 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
 export function Widget({ structure, value, inlineRenderer, ...props }) {
   const { Plain, Text } = widgets;
   const { i18n } = useTranslation();
-
   const {
     store,
     relations,
@@ -91,6 +104,8 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     }
   }
 
+  const sanitizedValue = stringifyIfBoolean(childValue);
+
   return Array.isArray(childValue) && !Renderer.array ? (
     childValue.map(item => (
       <SingleWidget
@@ -105,7 +120,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     <SingleWidget
       inlineRenderer={inlineRenderer}
       Renderer={Renderer}
-      value={childValue}
+      value={sanitizedValue}
       structure={structure}
       {...props}
     />
