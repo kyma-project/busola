@@ -433,6 +433,14 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
+- **TRACKING** - determines if simple application usage tracking is enabled.
+
+  ```json
+  "TRACKING": {
+    "isEnabled": false,
+  },
+  ```
+
 - **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at a resource details view.
 
   ```json
