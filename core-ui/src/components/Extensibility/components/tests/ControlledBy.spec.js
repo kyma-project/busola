@@ -2,10 +2,6 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { ControlledBy, ControlledByKind } from '../ControlledBy';
 
-jest.mock('../Widget', () => ({
-  Widget: () => 'xxx',
-}));
-
 describe('ControlledBy', () => {
   it('Renders owners', () => {
     const owners = [
