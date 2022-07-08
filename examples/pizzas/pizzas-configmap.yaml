@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: pizzas
-  namespace: kube-public
+  namespace: lyczeq
   labels:
     app.kubernetes.io/name: pizzas
     busola.io/extension: resource
@@ -45,6 +45,10 @@ data:
           "widget": "ResourceList",
           "path": "$pizzaDeployments",
           "name": "Deployed pizzas"
+        },{
+          "widget": "ResourceList",
+          "path": "$secretRecipe",
+          "name": "Pizza's recipe secret"
         },
     {
       "name": "columns",
@@ -90,7 +94,7 @@ data:
       { "path": "spec.realization" }, 
       { "name": "Payment method","path": "spec.paymentMethod", "widget": "Badge" }, 
       { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
-      { "path": "spec.toppings", formula: "$sum(data.name, ', ')", "name": "Toppings price" }
+      { "path": "spec.toppings", formula: "$reduce(data, function($acc, $item) {$acc + $item.price},0)", "name": "Toppings price" }
     ]
   relations: |-
     {
@@ -100,6 +104,13 @@ data:
         "version": "v1",
         "namespace": "default",
         "selector": "$filter(data, function($item) {$item.metadata.labels.`label-example` = 'pizza'})"
+      },
+      "secretRecipe":{
+        "kind": "Secret",
+        "group": "api",
+        "version": "v1",
+        "namespace": "default",
+        "selector": "$filter(data, function($item) {$item.metadata.name = data.spec.recipeSecret})"
       }
     }
   resource: |-
