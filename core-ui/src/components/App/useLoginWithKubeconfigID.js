@@ -27,22 +27,33 @@ export const useLoginWithKubeconfigID = () => {
         });
       }
 
-      // LUIGI workaround: luigi performs async operations, this task must wait for the microtasks to finish
-      setTimeout(() => {
+      if (isOnlyOneCluster) {
         addByContext(
           getKubeconfigId,
           context,
           isOnlyOneCluster, // sets whether the cluster is active
           previousStorageMethod,
         );
-      }, 50);
+      } else {
+        // LUIGI workaround: luigi performs async operations, this task must wait for the microtasks to finish
+        setTimeout(() => {
+          addByContext(
+            getKubeconfigId,
+            context,
+            isOnlyOneCluster, // sets whether the cluster is active
+            previousStorageMethod,
+          );
+        }, 5);
+      }
     });
 
     // LUIGI workaround: luigi performs async operations, this task must wait for the microtasks to finish
-    setTimeout(() => {
-      LuigiClient.sendCustomMessage({
-        id: 'busola.refreshClusters',
-      });
-    }, 100);
+    if (!isOnlyOneCluster) {
+      setTimeout(() => {
+        LuigiClient.sendCustomMessage({
+          id: 'busola.refreshClusters',
+        });
+      }, 10);
+    }
   }, [getKubeconfigId, clusters]);
 };
