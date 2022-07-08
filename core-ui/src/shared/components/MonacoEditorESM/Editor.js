@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -31,7 +31,6 @@ export function Editor({
   ...rest
 }) {
   const { t } = useTranslation();
-  const [hasFocus, setHasFocus] = useState(false);
 
   // prepare autocompletion
   const {
@@ -50,6 +49,7 @@ export function Editor({
 
   // set autocompletion global context to the current editor and initialize an editor instance
   const { editorInstance, divRef, descriptor } = useCreateEditor({
+    activeSchemaPath,
     value,
     options,
     setAutocompleteOptions,
@@ -61,17 +61,13 @@ export function Editor({
   useOnFocus({
     editorInstance,
     onFocus,
-    setAutocompleteOptions,
-    activeSchemaPath,
-    setHasFocus,
-    descriptor,
   });
-  useOnBlur({ editorInstance, onBlur, setHasFocus });
+  useOnBlur({ editorInstance, onBlur });
   useOnMount({ editorInstance, onMount });
   useOnChange({ editorInstance, onChange });
 
   // others
-  useUpdateValueOnParentChange({ editorInstance, value, hasFocus, error });
+  useUpdateValueOnParentChange({ editorInstance, value, error });
   const warnings = useDisplayWarnings({ autocompletionDisabled, descriptor });
 
   return (
