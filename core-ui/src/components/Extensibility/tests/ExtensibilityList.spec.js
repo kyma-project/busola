@@ -1,10 +1,11 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import { ExtensibilityList } from '../ExtensibilityList';
+import { shallow } from 'enzyme';
+import { ExtensibilityList, ExtensibilityListCore } from '../ExtensibilityList';
+import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
-const resourcePath = 'myCustomPath';
-const resourceKind = 'MyCustomResource';
-const resourceUrl = 'mycustomresources';
+const path = 'myCustomPath';
+const kind = 'MyCustomResource';
+const url = 'mycustomresources';
 const translations = {
   name: 'MyResource',
   description: 'This is my resource',
@@ -34,74 +35,74 @@ jest.mock('../components/Widget', () => ({
   },
 }));
 
-jest.mock('../ExtensibilityCreate', () => ({
-  ExtensibilityCreate: data => {
-    return (
-      <>
-        <p>Create form for with properties: </p>
-        Url: {data.resourceUrl}
-      </>
-    );
-  },
-}));
-
-jest.mock('shared/components/ResourcesList/ResourcesList', () => ({
-  ResourcesList: data => {
-    const CreateForm = data.createResourceForm;
-    return (
-      <>
-        <CreateForm {...data} />
-        <p>List of resources with properties: </p>
-        Name: {data.resourceName}
-        Description: {data.description}
-        Type: {data.resourceType}
-        Custom columns:{' '}
-        {data.customColumns?.length
-          ? data.customColumns.map(c => {
-              return c.header;
-            })
-          : "doesn't have custom columns"}
-      </>
-    );
-  },
+jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
+  'monaco-editor': () => {},
 }));
 
 describe('ExtensibilityList', () => {
-  it('Renders a simple list for only required data', () => {
+  it('Renders columns', () => {
     mockUseGetCRbyPath.mockImplementationOnce(() => ({
       resource: {
-        path: resourcePath,
-        kind: resourceKind,
+        path: path,
+        kind: kind,
       },
     }));
-    const { getByText } = render(<ExtensibilityList />);
-    expect(getByText(new RegExp(resourcePath, 'i'))).toBeVisible();
-    expect(getByText(new RegExp(translations.name, 'i'))).toBeVisible();
-    expect(getByText(new RegExp(translations.description, 'i'))).toBeVisible();
-    expect(getByText(new RegExp(resourceUrl, 'i'))).toBeVisible();
-    expect(
-      getByText(new RegExp("doesn't have custom columns", 'i')),
-    ).toBeVisible();
+
+    const wrapper = shallow(<ExtensibilityList />);
+    const elc = wrapper.find(ExtensibilityListCore);
+    const { resMetaData } = elc.props();
+    expect(elc).toHaveLength(1);
+
+    const elcWrapper = shallow(
+      <ExtensibilityListCore resMetaData={resMetaData} />,
+    );
+    const rl = elcWrapper.find(ResourcesList);
+    const {
+      resourceUrl,
+      resourceType,
+      resourceName,
+      customColumns,
+    } = rl.props();
+    expect(rl).toHaveLength(1);
+    expect(resourceUrl).toEqual(url);
+    expect(resourceType).toEqual(path);
+    expect(resourceName).toEqual(translations.name);
+    expect(customColumns).toEqual([]);
   });
 
   it('Renders a complex list for more complex data', () => {
     mockUseGetCRbyPath.mockImplementationOnce(() => ({
       resource: {
-        path: resourcePath,
-        kind: resourceKind,
+        path: path,
+        kind: kind,
       },
       list: [{ path: 'spec.customValue1' }, { path: 'spec.customValue2' }],
     }));
-    const { getByText } = render(<ExtensibilityList />);
-    expect(getByText(new RegExp(resourcePath, 'i'))).toBeVisible();
-    expect(getByText(new RegExp(translations.name, 'i'))).toBeVisible();
-    expect(getByText(new RegExp(translations.description, 'i'))).toBeVisible();
-    expect(getByText(new RegExp(resourceUrl, 'i'))).toBeVisible();
-    expect(
-      getByText(new RegExp(translations['spec.customValue1'], 'i')),
-    ).toBeVisible();
-    expect(
-      getByText(new RegExp(translations['spec.customValue2'], 'i')),
-    ).toBeVisible();
+
+    const wrapper = shallow(<ExtensibilityList />);
+    const elc = wrapper.find(ExtensibilityListCore);
+    const { resMetaData } = elc.props();
+    expect(elc).toHaveLength(1);
+
+    const elcWrapper = shallow(
+      <ExtensibilityListCore resMetaData={resMetaData} />,
+    );
+    const rl = elcWrapper.find(ResourcesList);
+    const {
+      resourceUrl,
+      resourceType,
+      resourceName,
+      customColumns,
+    } = rl.props();
+    expect(rl).toHaveLength(1);
+    expect(resourceUrl).toEqual(url);
+    expect(resourceType).toEqual(path);
+    expect(resourceName).toEqual(translations.name);
+    expect(customColumns?.[0]?.header).toEqual(
+      translations['spec.customValue1'],
+    );
+    expect(customColumns?.[1]?.header).toEqual(
+      translations['spec.customValue2'],
+    );
   });
 });
