@@ -16,15 +16,27 @@ function getLoggingId() {
   return loggingId;
 }
 
-export function useTracking() {
+function useTracking() {
   const { isEnabled } = useFeature('TRACKING');
-
-  const { pathname } = useLocation();
   const { fromConfig } = useConfig();
 
-  useEffect(() => {
-    if (!isEnabled) return;
+  return {
+    track(body) {
+      if (!isEnabled) return;
 
+      fetch(baseUrl(fromConfig) + '/tracking', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }).catch(e => console.debug('Tracking call failed', e));
+    },
+  };
+}
+
+export function usePageViewTracking() {
+  const { pathname } = useLocation();
+  const { track } = useTracking();
+
+  useEffect(() => {
     let path;
     if (pathname.includes('/namespaces/')) {
       if (new RegExp('/namespaces/[a-z0-9-]+/?(details)?$').test(pathname)) {
@@ -39,15 +51,27 @@ export function useTracking() {
       path = pathname.substring(1);
     }
     const pathSegments = path.split('/'); // split by '/', take only first part
-    let log;
-    if (pathSegments.length > 1) {
-      log = 'DETAILS ' + pathSegments[0];
-    } else {
-      log = 'LIST ' + pathSegments[0];
-    }
-    fetch(baseUrl(fromConfig) + '/tracking', {
-      method: 'POST',
-      body: JSON.stringify({ type: 'PATH', payload: log, id: getLoggingId() }),
-    }).catch(e => console.debug('Tracking call failed', e));
-  }, [fromConfig, pathname, isEnabled]);
+    const viewType = pathSegments.length > 1 ? 'DETAILS' : 'LIST';
+
+    const body = {
+      event: 'page_view',
+      data: { path: pathSegments[0], viewType },
+      metadata: { id: getLoggingId() },
+    };
+    track(body);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+}
+
+export function useSessionStartTracking() {
+  const { track } = useTracking();
+
+  useEffect(() => {
+    track({
+      event: 'session_start',
+      data: { hostname: window.location.hostname },
+      metadata: { id: getLoggingId() },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 }
