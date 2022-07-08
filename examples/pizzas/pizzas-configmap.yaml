@@ -56,8 +56,9 @@ data:
       "children": [
         {
           "name": "Comments",
-          "widget": "Panel",
-          "children": [ {"path": "spec.comments", "widget": "JoinedArray", "separator": "\n"}]
+          "widget": "CodeViewer",
+          "path": "spec.comments",
+          "language": "yaml"
         },
         {
           "name": "spec.description",
@@ -85,7 +86,8 @@ data:
         "kind": "Secret",
         "scope": "namespace",
         "namespace": "default",
-        "version": "v1"
+        "version": "v1",
+        "simple": "true"
       }
     ]
   list: |-
@@ -110,7 +112,7 @@ data:
         "group": "api",
         "version": "v1",
         "namespace": "default",
-        "selector": "$filter(data, function($item) {$item.metadata.name = 'pizza-recipe'})"
+        "selector": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"
       }
     }
   resource: |-
