@@ -69,7 +69,7 @@ export function Table({ value, structure, schema }) {
       showSearchSuggestion={false}
       title={tExt(structure.name, {
         defaultValue: tExt(structure.path, {
-          defaultValue: ' ',
+          defaultValue: structure.name,
         }),
       })}
       headerRenderer={headerRenderer}
