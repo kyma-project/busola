@@ -33,7 +33,7 @@ export function usePageViewTracking() {
     }
 
     sendTrackingRequest({
-      event: 'page_view',
+      event: 'PAGE_VIEW',
       data: { path, viewType },
     });
   }, [pathname]);
@@ -42,7 +42,7 @@ export function usePageViewTracking() {
 export function useSessionStartTracking() {
   useEffect(() => {
     sendTrackingRequest({
-      event: 'session_start',
+      event: 'SESSION_START',
       data: { hostname: window.location.hostname },
     });
   }, []);

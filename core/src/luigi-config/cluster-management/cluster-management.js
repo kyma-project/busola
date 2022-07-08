@@ -56,8 +56,8 @@ export function getAfterLoginLocation(clusterName, kubeconfig) {
 
 async function trackClusterChange(params) {
   await sendTrackingRequest({
-    event: 'cluster_change',
-    data: { clusterServer: params.currentContext.cluster.cluster.server },
+    event: 'CLUSTER_CHANGE',
+    data: { apiServerAddress: params.currentContext.cluster.cluster.server },
   });
 }
 
