@@ -1,76 +1,50 @@
 import { useEffect } from 'react';
+import LuigiClient from '@luigi-project/client';
 import { useLocation } from 'react-router-dom';
-import { baseUrl } from 'shared/hooks/BackendAPI/config';
-import { useConfig } from 'shared/contexts/ConfigContext';
-import { useFeature } from 'shared/hooks/useFeature';
-import { v4 as uuid } from 'uuid';
 
-function getLoggingId() {
-  const STORAGE_KEY = 'busola.logging-id';
-
-  let loggingId = localStorage.getItem(STORAGE_KEY);
-  if (!loggingId) {
-    loggingId = uuid();
-    localStorage.setItem(STORAGE_KEY, loggingId);
-  }
-  return loggingId;
-}
-
-function useTracking() {
-  const { isEnabled } = useFeature('TRACKING');
-  const { fromConfig } = useConfig();
-
-  return {
-    track(body) {
-      if (!isEnabled) return;
-
-      fetch(baseUrl(fromConfig) + '/tracking', {
-        method: 'POST',
-        body: JSON.stringify(body),
-      }).catch(e => console.debug('Tracking call failed', e));
-    },
-  };
+function sendTrackingRequest(body) {
+  LuigiClient.sendCustomMessage({ id: 'busola.tracking', body });
 }
 
 export function usePageViewTracking() {
   const { pathname } = useLocation();
-  const { track } = useTracking();
 
   useEffect(() => {
-    let path;
+    let navigationPath;
     if (pathname.includes('/namespaces/')) {
       if (new RegExp('/namespaces/[a-z0-9-]+/?(details)?$').test(pathname)) {
         // namespace details
-        path = 'namespaces';
+        navigationPath = 'namespaces';
       } else {
         // other resource details
-        path = pathname.replace(new RegExp('/namespaces/.*?/'), '');
+        navigationPath = pathname.replace(new RegExp('/namespaces/.*?/'), '');
       }
     } else {
       // no namespace
-      path = pathname.substring(1);
+      navigationPath = pathname.substring(1);
     }
-    const pathSegments = path.split('/'); // split by '/', take only first part
-    const viewType = pathSegments.length > 1 ? 'DETAILS' : 'LIST';
+    const pathSegments = navigationPath.split('/'); // split by '/', take only first part
+    let viewType = pathSegments.length > 1 ? 'DETAILS' : 'LIST';
+    let path = pathSegments[0];
 
-    const body = {
+    if (pathname === '/overview') {
+      path = 'clusters';
+      viewType = 'DETAILS';
+    }
+
+    sendTrackingRequest({
       event: 'page_view',
-      data: { path: pathSegments[0], viewType },
-      metadata: { id: getLoggingId() },
-    };
-    track(body);
+      data: { path, viewType },
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 }
 
 export function useSessionStartTracking() {
-  const { track } = useTracking();
-
   useEffect(() => {
-    track({
+    sendTrackingRequest({
       event: 'session_start',
       data: { hostname: window.location.hostname },
-      metadata: { id: getLoggingId() },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

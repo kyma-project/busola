@@ -15,6 +15,7 @@ import { clearClusterCache } from '../cache/storage';
 import { isNil } from 'lodash';
 import { DEFAULT_FEATURES } from '../constants';
 import i18next from 'i18next';
+import { sendTrackingRequest } from '../tracking';
 
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
@@ -53,6 +54,13 @@ export function getAfterLoginLocation(clusterName, kubeconfig) {
   }`;
 }
 
+async function trackClusterChange(params) {
+  await sendTrackingRequest({
+    event: 'cluster_change',
+    data: { clusterServer: params.currentContext.cluster.cluster.server },
+  });
+}
+
 export async function setCluster(clusterName) {
   try {
     const clusters = getClusters();
@@ -85,6 +93,8 @@ export async function setCluster(clusterName) {
       window.location = window.location.origin;
     }
     clearK8Version();
+
+    await trackClusterChange(params);
   } catch (e) {
     console.warn(e);
     alert('An error occured while setting up the cluster.');
