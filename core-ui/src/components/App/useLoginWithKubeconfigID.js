@@ -13,32 +13,33 @@ export const useLoginWithKubeconfigID = () => {
     if (noContexts) {
       return;
     }
+    const isOnlyOneCluster = getKubeconfigId.contexts.length === 1;
 
-    // add new clusters
-    const onlyOneCluster = getKubeconfigId.contexts.length === 1;
-
+    // add the new clusters
     getKubeconfigId.contexts.forEach(context => {
+      const clusterIsPresent = clusters[context?.name];
       const previousStorageMethod = clusters[context?.name]?.config?.storage;
 
-      if (previousStorageMethod) {
+      if (clusterIsPresent) {
         LuigiClient.sendCustomMessage({
           id: 'busola.deleteCluster',
           clusterName: context.name,
         });
       }
-      // LUIGI workaround: 'busola.deleteCluster' cannot be waited for, but has plenty of asyncs inside, invoke after the cluster is removed
+
+      // LUIGI workaround: luigi performs async operations, this task must wait for the microtasks to finish
       setTimeout(() => {
         addByContext(
           getKubeconfigId,
           context,
-          onlyOneCluster,
+          isOnlyOneCluster, // sets whether the cluster is active
           previousStorageMethod,
         );
       });
     });
 
-    if (!onlyOneCluster) {
-      // LUIGI workaround: 'Luigi doesn't reload when we don't choose an active cluster. 'addByContext' cannot be waited for as it calls a luigi function with asyncs inside
+    if (!isOnlyOneCluster) {
+      // LUIGI workaround: luigi performs async operations, this task must wait for the microtasks to finish
       setTimeout(() => {
         LuigiClient.sendCustomMessage({
           id: 'busola.refreshClusters',
