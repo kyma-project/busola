@@ -35,16 +35,14 @@ export const useLoginWithKubeconfigID = () => {
           isOnlyOneCluster, // sets whether the cluster is active
           previousStorageMethod,
         );
-      });
+      }, 50);
     });
 
-    if (!isOnlyOneCluster) {
-      // LUIGI workaround: luigi performs async operations, this task must wait for the microtasks to finish
-      setTimeout(() => {
-        LuigiClient.sendCustomMessage({
-          id: 'busola.refreshClusters',
-        });
+    // LUIGI workaround: luigi performs async operations, this task must wait for the microtasks to finish
+    setTimeout(() => {
+      LuigiClient.sendCustomMessage({
+        id: 'busola.refreshClusters',
       });
-    }
+    }, 100);
   }, [getKubeconfigId, clusters]);
 };
