@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { render } from '@testing-library/react';
 import { ControlledBy, ControlledByKind } from '../ControlledBy';
 import {
   ControlledBy as CB,
@@ -24,14 +23,17 @@ describe('ControlledBy', () => {
 
     const component = shallow(<ControlledBy value={owners} />);
     const cb = component.find(CB);
+    const { ownerReferences } = component.props();
     expect(cb).toHaveLength(1);
+    expect(ownerReferences).toHaveLength(2);
   });
 
-  it('Renders empty owners for incorrect data', () => {
-    const owners = '';
+  it('Renders empty owners for empty data', () => {
+    const owners = null;
 
-    const { getByText } = render(<ControlledBy value={owners} />);
-    expect(getByText(new RegExp('-', 'i'))).toBeVisible();
+    const component = shallow(<ControlledBy value={owners} />);
+    const cb = component.find(CB);
+    expect(cb).toHaveLength(0);
   });
 });
 
@@ -52,13 +54,16 @@ describe('ControlledByKind', () => {
 
     const component = shallow(<ControlledByKind value={owners} />);
     const cbk = component.find(CBK);
+    const { ownerReferences } = component.props();
     expect(cbk).toHaveLength(1);
+    expect(ownerReferences).toHaveLength(2);
   });
 
-  it('Renders empty owners for incorrect data', () => {
-    const owners = '';
+  it('Renders empty owners for empty data', () => {
+    const owners = null;
 
-    const { getByText } = render(<ControlledByKind value={owners} />);
-    expect(getByText(new RegExp('-', 'i'))).toBeVisible();
+    const component = shallow(<ControlledByKind value={owners} />);
+    const cbk = component.find(CBK);
+    expect(cbk).toHaveLength(0);
   });
 });
