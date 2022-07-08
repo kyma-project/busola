@@ -21,6 +21,7 @@ export function Editor({
   readOnly,
   language,
   onMount,
+  updateValueOnParentChange,
   customSchemaId, // custom key to find the json schema, don't use if the default key works (apiVersion/kind)
   autocompletionDisabled,
   customSchemaUri, // custom link to be displayed in the autocompletion tooltips
@@ -67,7 +68,12 @@ export function Editor({
   useOnChange({ editorInstance, onChange });
 
   // others
-  useUpdateValueOnParentChange({ editorInstance, value, error });
+  useUpdateValueOnParentChange({
+    updateValueOnParentChange,
+    editorInstance,
+    value,
+    error,
+  });
   const warnings = useDisplayWarnings({ autocompletionDisabled, descriptor });
 
   return (

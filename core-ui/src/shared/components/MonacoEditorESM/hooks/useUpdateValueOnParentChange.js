@@ -4,12 +4,14 @@ export const useUpdateValueOnParentChange = ({
   editorInstance,
   value,
   error,
+  updateValueOnParentChange,
 }) => {
   const [hasFocus, setHasFocus] = useState(false);
 
   useEffect(() => {
     // update editor value when it comes as a prop
     if (
+      updateValueOnParentChange &&
       !error &&
       !hasFocus &&
       editorInstance &&
@@ -34,5 +36,5 @@ export const useUpdateValueOnParentChange = ({
       setEditorHasFocus.dispose();
       setEditorLostFocus.dispose();
     };
-  }, [editorInstance, setHasFocus]);
+  }, [updateValueOnParentChange, editorInstance, setHasFocus]);
 };
