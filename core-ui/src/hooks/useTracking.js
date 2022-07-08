@@ -36,7 +36,6 @@ export function usePageViewTracking() {
       event: 'page_view',
       data: { path, viewType },
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 }
 
@@ -46,6 +45,5 @@ export function useSessionStartTracking() {
       event: 'session_start',
       data: { hostname: window.location.hostname },
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }
