@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+
 import { ExtensibilityList, ExtensibilityListCore } from '../ExtensibilityList';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
@@ -43,8 +44,8 @@ describe('ExtensibilityList', () => {
   it('Renders columns', () => {
     mockUseGetCRbyPath.mockImplementationOnce(() => ({
       resource: {
-        path: path,
-        kind: kind,
+        path,
+        kind,
       },
     }));
 
@@ -73,8 +74,8 @@ describe('ExtensibilityList', () => {
   it('Renders a complex list for more complex data', () => {
     mockUseGetCRbyPath.mockImplementationOnce(() => ({
       resource: {
-        path: path,
-        kind: kind,
+        path,
+        kind,
       },
       list: [{ path: 'spec.customValue1' }, { path: 'spec.customValue2' }],
     }));
@@ -104,5 +105,53 @@ describe('ExtensibilityList', () => {
     expect(customColumns?.[1]?.header).toEqual(
       translations['spec.customValue2'],
     );
+  });
+
+  it("Doesn't crash for incorrect data", () => {
+    mockUseGetCRbyPath.mockImplementationOnce(() => ({
+      resource: {
+        path,
+        kind,
+      },
+      list: 'list',
+    }));
+
+    const wrapper = shallow(<ExtensibilityList />);
+    const elc = wrapper.find(ExtensibilityListCore);
+    const { resMetaData } = elc.props();
+    expect(elc).toHaveLength(1);
+
+    const elcWrapper = shallow(
+      <ExtensibilityListCore resMetaData={resMetaData} />,
+    );
+    const rl = elcWrapper.find(ResourcesList);
+    const {
+      resourceUrl,
+      resourceType,
+      resourceName,
+      customColumns,
+    } = rl.props();
+    expect(rl).toHaveLength(1);
+    expect(resourceUrl).toEqual(url);
+    expect(resourceType).toEqual(path);
+    expect(resourceName).toEqual(translations.name);
+    expect(customColumns).toEqual([]);
+  });
+
+  it("Doesn't crash for incomplete data", () => {
+    mockUseGetCRbyPath.mockImplementationOnce(() => ({
+      resource: {},
+    }));
+
+    const wrapper = shallow(<ExtensibilityList />);
+    const elc = wrapper.find(ExtensibilityListCore);
+    const { resMetaData } = elc.props();
+    expect(elc).toHaveLength(1);
+
+    const elcWrapper = shallow(
+      <ExtensibilityListCore resMetaData={resMetaData} />,
+    );
+    const rl = elcWrapper.find(ResourcesList);
+    expect(rl).toHaveLength(1);
   });
 });
