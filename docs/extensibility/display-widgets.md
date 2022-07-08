@@ -13,7 +13,7 @@ Text widgets render values as a simple text. This is the default behavior for al
 ###### Widget-specific parameters
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
-  If the translation section has a translation with the id the same as the string, the translation is used.
+  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 
 #### Example
 
@@ -41,7 +41,7 @@ The following values are automatically handled:
 ###### Widget-specific parameters
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
-  If the translation section has a translation with the id the same as the string, the translation is used.
+  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 
 #### Example
 
@@ -215,7 +215,7 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 ###### Widget-specific parameters
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
-  If the translation section has a translation with the id the same as the string, the translation is used.
+  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 
 ### Example
 
@@ -236,7 +236,7 @@ ControlledByKind widgets render the kind of the resources that the current resou
 ###### Widget-specific parameters
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
-  If the translation section has a translation with the id the same as the string, the translation is used.
+  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 
 ### Example
 

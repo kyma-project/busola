@@ -14,7 +14,7 @@ The `resource` section is required and contains basic information about the reso
 - **version** - _[required]_ API version used for all requests.
 - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
 - **path** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
-- **defaultPlaceholder** - to be shown in place of empty resource leaves. Overridden by widget level `placeholder`. Defaults to `-`.
+- **defaultPlaceholder** - to be shown in place of empty resource leaves. Overridden by the widget-level **placeholder**. Defaults to `-`.
 
 ### Example
 
