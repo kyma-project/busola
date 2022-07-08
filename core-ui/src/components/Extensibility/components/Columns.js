@@ -7,7 +7,7 @@ export function Columns({ structure, ...props }) {
   return (
     <div className="extensibility-columns">
       {structure.children.map(child => (
-        <Widget structure={child} {...props} />
+        <Widget structure={child} key={`column-${child.path}`} {...props} />
       ))}
     </div>
   );
