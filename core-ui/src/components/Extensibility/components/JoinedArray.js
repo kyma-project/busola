@@ -13,7 +13,10 @@ export function JoinedArray({ value, structure, schema }) {
     return t('extensibility.widgets.joined-array.error');
   }
 
-  return value.join(structure.separator ? structure.separator : ', ');
+  return (
+    value.join(structure?.separator ? structure.separator : ', ') ||
+    EMPTY_TEXT_PLACEHOLDER
+  );
 }
 
 JoinedArray.array = true;
