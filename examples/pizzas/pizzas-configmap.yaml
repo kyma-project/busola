@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: pizzas
-  namespace: lyczeq
+  namespace: kube-public
   labels:
     app.kubernetes.io/name: pizzas
     busola.io/extension: resource
@@ -53,7 +53,7 @@ data:
         {
           "name": "Comments",
           "widget": "Panel",
-          "children": [ {"path": "spec.comments", "widget": "JoinedArray", "separator": "XDD"}]
+          "children": [ {"path": "spec.comments", "widget": "JoinedArray", "separator": "\n"}]
         },
         {
           "name": "spec.description",
@@ -76,9 +76,13 @@ data:
       { "path": "spec.toppings.quantity", "simple": true},
       { "path": "spec.comments"},
       {
-        "path": "spec.recipeSecrets[]",
-        "widget": "ResourceRefs"
-        }
+        "path": "spec.recipeSecret",
+        "widget": "Resource",
+        "kind": "Secret",
+        "scope": "namespace",
+        "namespace": "default",
+        "version": "v1"
+      }
     ]
   list: |-
     [
@@ -86,7 +90,7 @@ data:
       { "path": "spec.realization" }, 
       { "name": "Payment method","path": "spec.paymentMethod", "widget": "Badge" }, 
       { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
-      { "path": "spec.toppings", formula: "$sum(value.name, ', ')", "name": "Toppings price" }
+      { "path": "spec.toppings", formula: "$sum(data.name, ', ')", "name": "Toppings price" }
     ]
   relations: |-
     {
@@ -137,25 +141,12 @@ data:
               "description": "The name of the sauce to use on our pizza",
               "type": "string"
             },
-            "recipeSecrets":{
-              "description": "List of secrets with the recipe",
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                "name": {
-                  "type": "string",
-                  "description": "The name of the secret"
-                  },
-                "namespace": {
-                  "description": "The namespace of the secret",
-                  "type": "string"
-                  }  
-                }
-              }
+            "recipeSecret":{
+              "description": "The secret with a  pizza's recipe",
+              "type": "string"
             },
             "comments":{
-              "description": Additional commentsm,
+              "description": Additional comments,
               "type": "array",
               "items":{
                 "type":"string"
@@ -197,6 +188,7 @@ data:
       spec.paymentMethod: Payment Method
       spec.sauce: Sauce
       spec.toppings: Toppings
+      spec.recipeSecret: Recipe's secret
       topping.name: Name
       topping.price: Price
       topping.quantity: Quantity

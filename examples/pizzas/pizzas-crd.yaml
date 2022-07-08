@@ -63,18 +63,9 @@ spec:
                   type: array
                   items:
                     type: string
-                recipeSecrets:
-                  description: List of secrets with the recipe
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      name:
-                        description: The name of the secret
-                        type: string
-                      namespace:
-                        description: The namespace of the secret
-                        type: string
+                recipeSecret:
+                  description: The secret containing pizza's recipe
+                  type: string
             status:
               type: object
               properties:
