@@ -2,11 +2,10 @@ import { useEffect } from 'react';
 
 export const useOnBlur = ({ editorInstance, onBlur }) => {
   useEffect(() => {
-    if (!editorInstance) return;
+    if (!editorInstance || typeof onBlur !== 'function') return;
+
     const blurListener = editorInstance.onDidBlurEditorText(() => {
-      if (typeof onBlur === 'function') {
-        onBlur();
-      }
+      onBlur();
     });
     return () => {
       blurListener.dispose();

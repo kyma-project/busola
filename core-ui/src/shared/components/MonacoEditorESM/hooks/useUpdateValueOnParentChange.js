@@ -19,11 +19,11 @@ export const useUpdateValueOnParentChange = ({
     ) {
       editorInstance.setValue(value);
     }
-  }, [editorInstance, value, hasFocus, error]);
+  }, [updateValueOnParentChange, editorInstance, value, hasFocus, error]);
 
   useEffect(() => {
     //disable the updates when editor has focus
-    if (!editorInstance) return;
+    if (!editorInstance || !updateValueOnParentChange) return;
 
     const setEditorHasFocus = editorInstance.onDidFocusEditorText(() => {
       setHasFocus(true);

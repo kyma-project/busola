@@ -2,11 +2,10 @@ import { useEffect } from 'react';
 
 export const useOnFocus = ({ editorInstance, onFocus }) => {
   useEffect(() => {
-    if (!editorInstance) return;
+    if (!editorInstance || typeof onFocus !== 'function') return;
+
     const focusListener = editorInstance.onDidFocusEditorText(() => {
-      if (typeof onFocus === 'function') {
-        onFocus();
-      }
+      onFocus();
     });
 
     return () => {
