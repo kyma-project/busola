@@ -1,11 +1,10 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { shallow } from 'enzyme';
 import { Columns } from '../Columns';
+import { Widget } from '../Widget';
 
-jest.mock('../Widget', () => ({
-  Widget: data => {
-    return data.structure.path;
-  },
+jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
+  'monaco-editor': () => {},
 }));
 
 describe('Columns', () => {
@@ -14,17 +13,27 @@ describe('Columns', () => {
       children: [
         {
           name: 'columns.left',
-          path: 'spec.value1',
+          widget: 'Panel',
+          children: [{ path: 'spec.value1' }],
         },
         {
           name: 'columns.right',
-          path: 'spec.value2',
+          widget: 'Panel',
+          children: [{ path: 'spec.value2' }],
         },
       ],
     };
 
-    const { getByText } = render(<Columns structure={structure} />);
-    expect(getByText(new RegExp('spec.value1', 'i'))).toBeVisible();
-    expect(getByText(new RegExp('spec.value2', 'i'))).toBeVisible();
+    const component = shallow(<Columns structure={structure} />);
+    const widget = component.find(Widget);
+    expect(widget).toHaveLength(2);
+  });
+
+  it('Renders columns', () => {
+    const structure = {};
+
+    const component = shallow(<Columns structure={structure} />);
+    const widget = component.find(Widget);
+    expect(widget).toHaveLength(0);
   });
 });

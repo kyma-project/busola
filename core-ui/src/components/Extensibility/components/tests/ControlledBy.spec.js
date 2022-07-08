@@ -23,8 +23,8 @@ describe('ControlledBy', () => {
     ];
 
     const component = shallow(<ControlledBy value={owners} />);
-    const cards = component.find(CB);
-    expect(cards).toHaveLength(1);
+    const cb = component.find(CB);
+    expect(cb).toHaveLength(1);
   });
 
   it('Renders empty owners for incorrect data', () => {
@@ -51,8 +51,8 @@ describe('ControlledByKind', () => {
     ];
 
     const component = shallow(<ControlledByKind value={owners} />);
-    const cards = component.find(CBK);
-    expect(cards).toHaveLength(1);
+    const cbk = component.find(CBK);
+    expect(cbk).toHaveLength(1);
   });
 
   it('Renders empty owners for incorrect data', () => {
