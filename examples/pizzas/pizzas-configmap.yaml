@@ -110,7 +110,7 @@ data:
         "group": "api",
         "version": "v1",
         "namespace": "default",
-        "selector": "$filter(data, function($item) {$item.metadata.name = data.spec.recipeSecret})"
+        "selector": "$filter(data, function($item) {$item.metadata.name = 'pizza-recipe'})"
       }
     }
   resource: |-
