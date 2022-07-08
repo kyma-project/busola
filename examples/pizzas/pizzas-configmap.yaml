@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: pizzas
-  namespace: lyczeq
+  namespace: pizzas
   labels:
     app.kubernetes.io/name: pizzas
     busola.io/extension: resource
@@ -17,35 +17,36 @@ data:
       ],
     "body": [
         {
-          "name": "Summary",
-          "widget": "Panel",
+          "widget": "Columns",
           "children": [
-            { "path": "spec.realization" },
-            { "path": "spec.paymentMethod", "widget": "Badge" },
             {
-              "name": "State",
-              "path": "status.messages[-1:].state",
-              "widget": "Badge"
-            },
-            {
-              "name": "Message",
-              "path": "status.messages[-1:].message"
-            },
-            { "path": "spec.toppings", formula: "$join(data.name, ', ')" }, 
-             { "path": "spec.toppings", formula: "$reduce(data, function($acc, $item) {$acc + $item.price},0)", "name": "Toppings price" }
+            "name": "Summary",
+            "widget": "Panel",
+            "children": [
+              { "path": "spec.realization" },
+              { "path": "spec.paymentMethod", "widget": "Badge" },
+              {
+                "name": "State",
+                "path": "status.messages[-1:].state",
+                "widget": "Badge"
+              },
+              {
+                "name": "Message",
+                "path": "status.messages[-1:].message"
+              },
+              { "path": "spec.toppings", formula: "$join(data.name, ', ')" }, 
+              { "path": "spec.toppings", formula: "$reduce(data, function($acc, $item) {$acc + $item.price},0)", "name": "Toppings price" }
+            ]
+          },
+          {
+            "name": "topping",
+            "path": "spec.toppings",
+            "widget": "Table",
+            "children": [{ "path": "name" }, { "path": "price" }, { "path": "quantity" }]
+          },
           ]
         },
         {
-          "name": "topping",
-          "path": "spec.toppings",
-          "widget": "Table",
-          "children": [{ "path": "name" }, { "path": "price" }, { "path": "quantity" }]
-        },
-        {
-          "widget": "ResourceList",
-          "path": "$pizzaDeployments",
-          "name": "Deployed pizzas"
-        },{
           "widget": "ResourceList",
           "path": "$secretRecipe",
           "name": "Pizza's recipe secret"
@@ -85,7 +86,7 @@ data:
         "widget": "Resource",
         "kind": "Secret",
         "scope": "namespace",
-        "namespace": "default",
+        "namespace": "pizzas",
         "version": "v1",
         "simple": "true"
       }
@@ -100,18 +101,11 @@ data:
     ]
   relations: |-
     {
-      "pizzaDeployments": {
-        "kind": "Deployment",
-        "group": "apis/apps",
-        "version": "v1",
-        "namespace": "default",
-        "selector": "$filter(data, function($item) {$item.metadata.labels.`label-example` = 'pizza'})"
-      },
       "secretRecipe":{
         "kind": "Secret",
         "group": "api",
         "version": "v1",
-        "namespace": "default",
+        "namespace": "pizzas",
         "selector": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"
       }
     }
