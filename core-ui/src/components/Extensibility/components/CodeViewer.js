@@ -1,10 +1,12 @@
 import React from 'react';
 import jsyaml from 'js-yaml';
+import { isNil } from 'lodash';
+import { useTranslation } from 'react-i18next';
+
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { isValidYaml } from 'shared/contexts/YamlEditorContext/isValidYaml';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useGetTranslation } from '../helpers';
-import { useTranslation } from 'react-i18next';
 
 export function CodeViewer({ value, structure, schema }) {
   const { widgetT } = useGetTranslation();
@@ -13,7 +15,7 @@ export function CodeViewer({ value, structure, schema }) {
   const notification = useNotification();
 
   const getValueAndLang = (value, structure) => {
-    let language = structure.language || detectLanguage(value);
+    let language = structure?.language || detectLanguage(value);
     let parsedValue = '';
 
     try {
@@ -62,5 +64,9 @@ function detectLanguage(value) {
   }
 }
 function stringifyIfObject(value) {
-  return typeof value !== 'string' ? JSON.stringify(value, null, 2) : value;
+  return isNil(value)
+    ? ''
+    : typeof value !== 'string'
+    ? JSON.stringify(value, null, 2)
+    : value;
 }
