@@ -7,7 +7,7 @@ export function Number({ value, setValue, ...props }) {
       compact
       type="number"
       value={value}
-      onChange={e => setValue(e.target.valueAsNumber || null)}
+      onChange={e => setValue(e.target.valueAsNumber ?? null)}
       {...props}
     />
   );
