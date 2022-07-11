@@ -1621,8 +1621,6 @@ node-details:
   warnings: Warnings
 nodes:
   name_singular: Node
-  statuses:
-    ready: Ready
   title: Nodes
   title_details: Node {{nodeName}}
 oauth2-clients:
