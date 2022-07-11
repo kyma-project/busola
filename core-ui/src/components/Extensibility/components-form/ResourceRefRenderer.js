@@ -19,9 +19,11 @@ export function ResourceRefRender({
       return valueSoFar[currKey];
     }, props.resource);
 
+  const group = (schema.get('group') || '').toLowerCase();
+  const version = schema.get('version');
   const resourceType = pluralize(schema.get('kind') || '').toLowerCase();
-
-  const url = `/api/v1/${resourceType}`;
+  const groupPrefix = group ? `apis/${group}` : 'api';
+  const url = `/${groupPrefix}/${version}/${resourceType}`;
 
   const { data, loading, error } = useGetList()(url);
 

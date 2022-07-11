@@ -111,12 +111,29 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 
 ResourceRefs widgets render the lists of dropdowns to select the associated resources' names and Namespaces. The corresponding specification object must be an array of objects `{name: 'foo', namespace: 'bar'}`.
 
+#### Widget-specific parameters
+
+- **kind** - _[required]_ Kubernetes kind of the resource.
+- **group** - API group used for all requests. Not provided for native Kubernetes resources.
+- **version** - _[required]_ API version used for all requests.
+
 #### Example
 
 ```json
 {
-  "path": "spec.my-data[]",
-  "widget": "ResourceRefs"
+  {
+    "path": "spec.my-data[]",
+    "widget": "ResourceRefs",
+    "kind": "Secret",
+    "version": "v1"
+  },
+  {
+    "path": "spec.my-gateways[]",
+    "widget": "ResourceRefs",
+    "kind": "Gateway",
+    "group": "networking.istio.io",
+    "version": "v1alpha3"
+  },
 }
 ```
 

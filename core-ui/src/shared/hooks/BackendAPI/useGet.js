@@ -272,7 +272,7 @@ function handleListDataReceived(filter) {
       newData.items = newData.items.filter(filter);
     }
 
-    newData.items = newData.items.map(item => {
+    newData.items = newData.items?.map(item => {
       if (!item.kind && newData.kind?.endsWith('List')) {
         item = {
           kind: newData.kind.substring(0, newData.kind.length - 4),
@@ -298,7 +298,7 @@ function handleListDataReceived(filter) {
             oldData[idx]?.metadata.resourceVersion,
         ))
     ) {
-      lastResourceVersionRef.current = newData.metadata.resourceVersion;
+      lastResourceVersionRef.current = newData.metadata?.resourceVersion;
       setDataFn(newData.items);
     }
   };
@@ -307,7 +307,7 @@ function handleListDataReceived(filter) {
 function handleSingleDataReceived(newData, oldData, setDataFn) {
   if (
     !oldData || // current data is empty and we received some. There's no doubdt we should update.
-    newData.metadata.resourceVersion !== oldData.metadata.resourceVersion
+    newData.metadata.resourceVersion !== oldData.metadata?.resourceVersion
   ) {
     // Compare resourceVersion.
     setDataFn(newData);
