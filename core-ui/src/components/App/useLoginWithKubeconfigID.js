@@ -1,12 +1,12 @@
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { useEffect } from 'react';
 import { addByContext } from 'components/Clusters/components/addByContext';
 import LuigiClient from '@luigi-project/client';
+import { useComponentDidMount } from 'shared/useComponentDidMount';
 
 export const useLoginWithKubeconfigID = () => {
   const { getKubeconfigId, clusters } = useMicrofrontendContext();
 
-  useEffect(() => {
+  useComponentDidMount(() => {
     const noContexts =
       !Array.isArray(getKubeconfigId?.contexts) ||
       !getKubeconfigId.contexts.length;
@@ -27,24 +27,12 @@ export const useLoginWithKubeconfigID = () => {
         });
       }
 
-      if (isOnlyOneCluster) {
-        addByContext(
-          getKubeconfigId,
-          context,
-          isOnlyOneCluster, // sets whether the cluster is active
-          previousStorageMethod,
-        );
-      } else {
-        // LUIGI workaround: luigi performs async operations, this task must wait for the microtasks to finish
-        setTimeout(() => {
-          addByContext(
-            getKubeconfigId,
-            context,
-            isOnlyOneCluster, // sets whether the cluster is active
-            previousStorageMethod,
-          );
-        }, 5);
-      }
+      addByContext(
+        getKubeconfigId,
+        context,
+        isOnlyOneCluster, // sets whether the cluster is active
+        previousStorageMethod,
+      );
     });
 
     // LUIGI workaround: luigi performs async operations, this task must wait for the microtasks to finish
@@ -53,7 +41,7 @@ export const useLoginWithKubeconfigID = () => {
         LuigiClient.sendCustomMessage({
           id: 'busola.refreshClusters',
         });
-      }, 10);
+      }, 50);
     }
-  }, [getKubeconfigId, clusters]);
+  });
 };

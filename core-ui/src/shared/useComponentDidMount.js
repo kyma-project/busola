@@ -1,11 +1,14 @@
 import { useRef, useEffect } from 'react';
 
-export const useComponentDidMount = fn => {
-  const isMounted = useRef(true);
+export const useComponentDidMount = onMountHandler => {
+  const componentDidMount = useRef(false);
+
   useEffect(() => {
-    if (isMounted.current) {
-      fn();
+    if (!componentDidMount.current) {
+      onMountHandler();
+      componentDidMount.current = true;
     }
-    isMounted.current = false;
-  }, [fn]);
+  }, [onMountHandler]);
+
+  return { componentDidMount };
 };
