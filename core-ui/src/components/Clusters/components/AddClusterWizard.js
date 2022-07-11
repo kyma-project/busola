@@ -75,7 +75,7 @@ export function AddClusterWizard({
         });
       } else if (contextName === '-all-') {
         kubeconfig.contexts.forEach((context, index) => {
-          addByContext(kubeconfig, context, !index);
+          addByContext(kubeconfig, context, !index, storage, config);
         });
       } else {
         const context = kubeconfig.contexts.find(
