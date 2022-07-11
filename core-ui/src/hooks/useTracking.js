@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useLocation } from 'react-router-dom';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 function sendTrackingRequest(body) {
   LuigiClient.sendCustomMessage({ id: 'busola.tracking', body });
@@ -14,7 +15,7 @@ export function usePageViewTracking() {
     if (pathname.includes('/namespaces/')) {
       if (new RegExp('/namespaces/[a-z0-9-]+/?(details)?$').test(pathname)) {
         // namespace details
-        navigationPath = 'namespaces';
+        navigationPath = 'namespaces/';
       } else {
         // other resource details
         navigationPath = pathname.replace(new RegExp('/namespaces/.*?/'), '');
@@ -40,10 +41,15 @@ export function usePageViewTracking() {
 }
 
 export function useSessionStartTracking() {
+  const { cluster } = useMicrofrontendContext();
+
   useEffect(() => {
     sendTrackingRequest({
       event: 'SESSION_START',
-      data: { hostname: window.location.hostname },
+      data: {
+        hostname: window.location.hostname,
+        apiServerAddress: cluster?.cluster.server || null,
+      },
     });
   }, []);
 }
