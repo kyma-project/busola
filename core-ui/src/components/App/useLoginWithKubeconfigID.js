@@ -29,12 +29,12 @@ export const useLoginWithKubeconfigID = () => {
         });
       }
 
-      addByContext(
+      addByContext({
         kubeconfig,
         context,
-        isOnlyOneCluster, // sets whether the cluster is active
-        previousStorageMethod,
-      );
+        switchCluster: isOnlyOneCluster,
+        storage: previousStorageMethod,
+      });
     });
 
     if (!isOnlyOneCluster) {

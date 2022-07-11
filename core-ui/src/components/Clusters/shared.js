@@ -77,13 +77,13 @@ export function hasKubeconfigAuth(kubeconfig) {
   }
 }
 
-export const addByContext = (
+export const addByContext = ({
   kubeconfig,
   context,
   switchCluster = true,
   storage = 'sessionStorage',
-  config,
-) => {
+  config = {},
+}) => {
   const cluster = kubeconfig.clusters.find(
     c => c.name === context.context.cluster,
   );
@@ -99,7 +99,7 @@ export const addByContext = (
     {
       kubeconfig: newKubeconfig,
       contextName: context.name,
-      config: { ...(config || {}), storage },
+      config: { ...config, storage },
       currentContext: getContext(newKubeconfig, context.name),
     },
     switchCluster,

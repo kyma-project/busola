@@ -65,22 +65,34 @@ export function AddClusterWizard({
     try {
       const contextName = kubeconfig['current-context'];
       if (!kubeconfig.contexts?.length) {
-        addByContext(kubeconfig, {
-          name: kubeconfig.clusters[0].name,
+        addByContext({
+          kubeconfig,
           context: {
-            cluster: kubeconfig.clusters[0].name,
-            user: kubeconfig.users[0].name,
+            name: kubeconfig.clusters[0].name,
+            context: {
+              cluster: kubeconfig.clusters[0].name,
+              user: kubeconfig.users[0].name,
+            },
           },
+
+          storage,
+          config,
         });
       } else if (contextName === '-all-') {
         kubeconfig.contexts.forEach((context, index) => {
-          addByContext(kubeconfig, context, !index, storage, config);
+          addByContext({
+            kubeconfig,
+            context,
+            switchCluster: !index,
+            storage,
+            config,
+          });
         });
       } else {
         const context = kubeconfig.contexts.find(
           context => context.name === contextName,
         );
-        addByContext(kubeconfig, context);
+        addByContext({ kubeconfig, context, storage, config });
       }
     } catch (e) {
       notification.notifyError({
