@@ -24,7 +24,9 @@ describe('Table', () => {
   describe('title', () => {
     it('From name, translated', () => {
       const component = mount(
-        <TranslationBundleContext.Provider value="myResource.path">
+        <TranslationBundleContext.Provider
+          value={{ translationBundle: 'myResource.path' }}
+        >
           <Table
             value={[]}
             structure={{ path: 'resource.array-data', name: 'my-title' }}
@@ -40,7 +42,9 @@ describe('Table', () => {
 
     it('No name, fall back to path, translated', () => {
       const component = mount(
-        <TranslationBundleContext.Provider value="myResource.path">
+        <TranslationBundleContext.Provider
+          value={{ translationBundle: 'myResource.path' }}
+        >
           <Table value={[]} structure={{ path: 'resource.array-data' }} />
         </TranslationBundleContext.Provider>,
       );
@@ -53,7 +57,9 @@ describe('Table', () => {
 
     it('No translated name or path, fall back to non-translated name', () => {
       const component = mount(
-        <TranslationBundleContext.Provider value="myResource.path">
+        <TranslationBundleContext.Provider
+          value={{ translationBundle: 'myResource.path' }}
+        >
           <Table value={[]} structure={{ path: 'nope', name: 'blah' }} />
         </TranslationBundleContext.Provider>,
       );

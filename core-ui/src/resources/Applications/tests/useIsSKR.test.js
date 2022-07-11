@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { render } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import { useIsSKR } from '../useIsSKR';
 
 let mockUseSingleGet;
@@ -21,11 +21,11 @@ function Testbed() {
 }
 
 describe('useIsSKR', () => {
-  it('Configmap not found', () => {
+  it('Configmap not found', async () => {
     mockUseSingleGet = { error: 'not found', data: null };
     const { getByText } = render(<Testbed />);
 
-    expect(getByText('FETCHING')).toBeInTheDocument();
+    await waitFor(() => expect(getByText('FETCHING')).toBeInTheDocument());
   });
 
   it('Configmap found, value not set to true', async () => {
