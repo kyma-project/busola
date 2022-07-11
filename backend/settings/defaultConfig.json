@@ -12,7 +12,7 @@
         "isEnabled": true
       },
       "TRACKING": {
-        "isEnabled": true
+        "isEnabled": false
       }
     }
   }
