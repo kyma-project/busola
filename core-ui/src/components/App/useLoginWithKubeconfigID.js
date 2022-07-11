@@ -4,19 +4,21 @@ import LuigiClient from '@luigi-project/client';
 import { useComponentDidMount } from 'shared/useComponentDidMount';
 
 export const useLoginWithKubeconfigID = () => {
-  const { getKubeconfigId, clusters } = useMicrofrontendContext();
+  const {
+    kubeconfigIdContents: kubeconfig,
+    clusters,
+  } = useMicrofrontendContext();
 
   useComponentDidMount(() => {
     const noContexts =
-      !Array.isArray(getKubeconfigId?.contexts) ||
-      !getKubeconfigId.contexts.length;
+      !Array.isArray(kubeconfig?.contexts) || !kubeconfig.contexts.length;
     if (noContexts) {
       return;
     }
-    const isOnlyOneCluster = getKubeconfigId.contexts.length === 1;
+    const isOnlyOneCluster = kubeconfig.contexts.length === 1;
 
     // add the new clusters
-    getKubeconfigId.contexts.forEach(context => {
+    kubeconfig.contexts.forEach(context => {
       const clusterIsPresent = clusters[context?.name];
       const previousStorageMethod = clusters[context?.name]?.config?.storage;
 
@@ -28,7 +30,7 @@ export const useLoginWithKubeconfigID = () => {
       }
 
       addByContext(
-        getKubeconfigId,
+        kubeconfig,
         context,
         isOnlyOneCluster, // sets whether the cluster is active
         previousStorageMethod,
