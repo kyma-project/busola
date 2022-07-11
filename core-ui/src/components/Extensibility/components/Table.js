@@ -38,7 +38,7 @@ export function Table({ value, structure, schema }) {
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
 
   const rowRenderer = entry => {
-    const cells = structure.children.map(column => (
+    const cells = (structure.children || []).map(column => (
       <Widget value={entry} structure={column} schema={schema} />
     ));
 
