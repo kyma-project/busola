@@ -51,5 +51,6 @@ export function useSessionStartTracking() {
         apiServerAddress: cluster?.cluster.server || null,
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }
