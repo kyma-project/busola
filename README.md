@@ -19,7 +19,7 @@ Busola project consists of the following UI projects:
 
 Busola supports:
 
-- [Kyma](https://kyma-project.io/): >= 2.4.2
+- [Kyma](https://kyma-project.io/) in version 2.4.2 or higher
 - [Istio](https://istio.io/): resource in version `v1beta1`.
 
 ## Installation
