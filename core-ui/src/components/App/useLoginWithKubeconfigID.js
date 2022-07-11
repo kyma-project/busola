@@ -1,7 +1,7 @@
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { addByContext } from 'components/Clusters/components/addByContext';
 import LuigiClient from '@luigi-project/client';
 import { useComponentDidMount } from 'shared/useComponentDidMount';
+import { addByContext } from 'components/Clusters/shared';
 
 export const useLoginWithKubeconfigID = () => {
   const {
@@ -37,13 +37,10 @@ export const useLoginWithKubeconfigID = () => {
       );
     });
 
-    // LUIGI workaround: luigi performs async operations, this task must wait for the microtasks to finish
     if (!isOnlyOneCluster) {
-      setTimeout(() => {
-        LuigiClient.sendCustomMessage({
-          id: 'busola.refreshClusters',
-        });
-      }, 50);
+      LuigiClient.sendCustomMessage({
+        id: 'busola.refreshClusters',
+      });
     }
   });
 };

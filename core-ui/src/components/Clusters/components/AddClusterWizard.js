@@ -7,12 +7,11 @@ import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
-import { getUser, hasKubeconfigAuth } from '../shared';
+import { addByContext, getUser, hasKubeconfigAuth } from '../shared';
 import { AuthForm } from './AuthForm';
 import { KubeconfigUpload } from './KubeconfigUpload/KubeconfigUpload';
 import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
-import { addByContext } from './addByContext';
 
 import './AddClusterWizard.scss';
 

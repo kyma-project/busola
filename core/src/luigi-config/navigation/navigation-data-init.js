@@ -13,7 +13,7 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
-import { getCustomResources, getCustomTranslations } from '../customResources';
+import { getCustomResources } from '../customResources';
 import { showAlert } from '../utils/showAlert';
 
 import {
