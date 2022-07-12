@@ -26,6 +26,7 @@ import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
 import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
+import { useVersionWarning } from 'hooks/useVersionWarning';
 
 /* to allow cloning of a resource set the following on the resource create component:
  *
@@ -159,6 +160,10 @@ export function ResourceListRenderer({
     time: timeSort,
   },
 }) {
+  useVersionWarning({
+    resourceUrl,
+    resourceType,
+  });
   const { t } = useTranslation(['translation'], { i18n });
   const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
 

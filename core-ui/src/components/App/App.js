@@ -8,7 +8,7 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
 import { useSentry } from 'hooks/useSentry';
-import { useTracking } from '../../hooks/useTracking';
+import { useAppTracking } from 'hooks/tracking';
 
 import { ExtensibilityDetails } from 'components/Extensibility/ExtensibilityDetails';
 import { ExtensibilityList } from 'components/Extensibility/ExtensibilityList';
@@ -28,7 +28,7 @@ export default function App() {
   }, [language, i18n]);
 
   useSentry();
-  useTracking();
+  useAppTracking();
 
   const serviceCatalogRoutes = useMemo(() => {
     return [

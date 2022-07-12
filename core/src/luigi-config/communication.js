@@ -17,6 +17,7 @@ import { communicationEntry as pageSizeCommunicationEntry } from './settings/pag
 import { getCorrespondingNamespaceLocation } from './navigation/navigation-helpers';
 import { featureCommunicationEntries } from './feature-discovery';
 import * as fetchCache from './cache/fetch-cache';
+import { sendTrackingRequest } from './tracking';
 
 addCommandPaletteHandler();
 addOpenSearchHandler();
@@ -132,6 +133,7 @@ export const communication = {
         type,
       });
     },
+    'busola.tracking': async ({ body }) => await sendTrackingRequest(body),
     'busola.switchNamespace': ({ namespaceName }) => {
       const alternativeLocation = getCorrespondingNamespaceLocation(
         namespaceName,
