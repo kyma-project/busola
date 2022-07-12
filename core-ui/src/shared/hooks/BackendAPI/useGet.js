@@ -272,7 +272,7 @@ function handleListDataReceived(filter) {
       newData.items = newData.items.filter(filter);
     }
 
-    newData.items = newData.items?.map(item => {
+    newData.items = (newData.items || []).map(item => {
       if (!item.kind && newData.kind?.endsWith('List')) {
         item = {
           kind: newData.kind.substring(0, newData.kind.length - 4),
