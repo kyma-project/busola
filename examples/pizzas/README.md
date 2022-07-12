@@ -10,7 +10,7 @@ The `samples.yaml` file includes the examples of the above CRDs.
 
 ## Installation
 
-To test the extensibility feature using the Pizza example, simply upload all the YAML files from the `configuration` directory and `samples.yaml` file to your cluster or use the following commands:
+To test the extensibility feature using the Pizza example, simply upload all the YAML files from the `configuration` directory and the `samples.yaml` file to your cluster or use the following commands:
 
 1. Create a `pizzas` namespace and apply the configmaps and CRDs:
 
