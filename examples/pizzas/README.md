@@ -4,7 +4,7 @@
 
 The `pizzas` example showcases the Busola's extensibility feature.
 
-The `configuration` directory consists of two Custom Resource Definitions and two Config Maps that store the information about the extensibility configuration.
+The `configuration` directory consists of two Custom Resource Definitions (CRD) and two Config Maps that store the information about the extensibility configuration.
 
 The `samples.yaml` file includes the examples of the above CRDs.
 
