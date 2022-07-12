@@ -1,9 +1,9 @@
 kind: CustomResourceDefinition
 apiVersion: apiextensions.k8s.io/v1
 metadata:
-  name: pizzas.mykubernetes.acme.org
+  name: pizzas.busola.example.com
 spec:
-  group: mykubernetes.acme.org
+  group: busola.example.com
   names:
     plural: pizzas
     singular: pizza
@@ -28,21 +28,12 @@ spec:
                 description:
                   description: Pizza description
                   type: string
-                paymentMethod:
-                  description: The payment method for our pizza
-                  type: string
-                  enum:
-                    - CARD
-                    - CASH
-                realization:
-                  description: The order fulfillment of our pizza
-                  type: string
-                  enum:
-                    - DELIVERY
-                    - SELF-PICKUP
                 sauce:
                   description: The name of the sauce to use on our pizza
                   type: string
+                  enum:
+                    - GARLIC
+                    - TOMATO
                 toppings:
                   description: List of toppings for our pizza
                   type: array
@@ -66,6 +57,17 @@ spec:
                 recipeSecret:
                   description: The secret containing pizza's recipe
                   type: string
+                ownerReferences:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      apiVersion:
+                        type: string
+                      kind:
+                        type: string
+                      name:
+                        type: string
             status:
               type: object
               properties:

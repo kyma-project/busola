@@ -1,9 +1,4 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: pizzas
----
-apiVersion: mykubernetes.acme.org/v1
+apiVersion: busola.example.com/v1
 kind: Pizza
 metadata:
   name: margherita
@@ -12,14 +7,16 @@ metadata:
   annotations: {}
   namespace: pizzas
 spec:
+  ownerReferences:
+    - apiVersion: busola.example.com/v1
+      kind: PizzaOrder
+      name: margherita-order
   recipeSecret: margherita-recipe
   comments:
     - 'Please, make my pizza quickly.'
     - Margherita is a delicious pizza!
   description: 'Margherita is a simple, vegetarian pizza.'
-  paymentMethod: CARD
-  realization: DELIVERY
-  sauce: Garlic
+  sauce: GARLIC
   toppings:
     - name: Tomato sauce
       price: 3
@@ -30,6 +27,24 @@ spec:
     - name: Basil
       price: 7
       quantity: 6
+---
+apiVersion: busola.example.com/v1
+kind: PizzaOrder
+metadata:
+  name: margherita-order
+  labels:
+    app.kubernetes.io/name: margherita-order
+  annotations: {}
+  namespace: pizzas
+spec:
+  status: Error
+  description: Something went wrong...
+  orderDetails:
+    paymentMethod: CASH
+    realization: DELIVERY
+  pizzas:
+    - name: margherita
+      namespace: pizzas
 ---
 apiVersion: v1
 kind: Secret
@@ -44,7 +59,7 @@ data:
   recipe: >-
     SW5ncmVkaWVudHMKSG9tZW1hZGUgUGl6emEgRG91Z2g6CjLCvSBjdXBzICgzMDAgZykgdW5ibGVhY2hlZCBhbGwtcHVycG9zZSBmbG91cgoxIHRlYXNwb29uIGdyYW51bGF0ZWQgc3VnYXIKwr0gdGVhc3Bvb24gYWN0aXZlIGRyeSB5ZWFzdCBvciBTQUYgaW5zdGFudCB5ZWFzdArCviB0ZWFzcG9vbiBEaWFtb25kIENyeXN0YWwga29zaGVyIHNhbHQKNyBvdW5jZXMgKDEwNcKwRiB0byAxMTXCsEYpIHdhcm0gd2F0ZXIKMSB0YWJsZXNwb29uIGV4dHJhIHZpcmdpbiBvbGl2ZSBvaWwKc2Vtb2xpbmEgYW5kIGFsbC1wdXJwb3NlIGZsb3VyIGZvciBkdXN0aW5nIHRoZSBwaXp6YSBwZWVsClBpenphIFNhdWNlOgoxIGN1cCBwdXJlZWQgb3IgY3J1c2hlZCBjYW5uZWQgU2FuIE1hcnphbm8gdG9tYXRvZXMgKG9yIGNhbm5lZCBJdGFsaWFuIHBsdW0gdG9tYXRvZXMpCjItMyBmcmVzaCBnYXJsaWMgY2xvdmVzIGdyYXRlZCB3aXRoIGEgbWljcm9wbGFuZSBvciBwcmVzc2VkCjEgdGVhc3Bvb24gZXh0cmEgdmlyZ2luIG9saXZlIG9pbCBwbHVzIG1vcmUgZm9yIGRyaXp6bGluZwoyLTMgbGFyZ2UgcGluY2hlcyBvZiBrb3NoZXIgc2FsdCB0byB0YXN0ZQrCvCB0ZWFzcG9vbiBmcmVzaGx5IGdyb3VuZCBibGFjayBwZXBwZXIKVG9wcGluZ3M6CjItMyB0YWJsZXNwb29ucyBmaW5lbHkgZ3JhdGVkIHBhcm1pZ2lhbm8tcmVnZ2lhbm8gY2hlZXNlIHBsdXMgbW9yZSBmb3Igc2VydmluZwo3IG91bmNlcyBmcmVzaCBtb3p6YXJlbGxhIGNoZWVzZSAobm90IHBhY2tlZCBpbiB3YXRlcikgY3V0IGludG8gwr0taW5jaCBjdWJlcwo1LTYgbGFyZ2UgZnJlc2ggYmFzaWwgbGVhdmVzIHBsdXMgbW9yZSBmb3IgZ2FybmlzaGluZwpkcmllZCByZWQgcGVwcGVyIGZsYWtlcyBvcHRpb25hbA==
 ---
-apiVersion: mykubernetes.acme.org/v1
+apiVersion: busola.example.com/v1
 kind: Pizza
 metadata:
   name: diavola
@@ -53,14 +68,16 @@ metadata:
   annotations: {}
   namespace: pizzas
 spec:
+  ownerReferences:
+    - apiVersion: busola.example.com/v1
+      kind: PizzaOrder
+      name: diavola-order
   recipeSecret: diavola-recipe
-  sauce: Spicy ketchup
+  sauce: TOMATO
   comments:
     - I would like the spiciest pizza.
     - I would like to ask for a discount for students.
   description: 'Diavola is such a spicy pizza,it includes hot salami and pickled jalapeños!'
-  paymentMethod: CASH
-  realization: SELF-PICKUP
   toppings:
     - name: Hot salami
       price: 10
@@ -71,6 +88,24 @@ spec:
     - name: Cheese
       price: 4
       quantity: 5
+---
+apiVersion: busola.example.com/v1
+kind: PizzaOrder
+metadata:
+  name: diavola-order
+  labels:
+    app.kubernetes.io/name: diavola-order
+  annotations: {}
+  namespace: pizzas
+spec:
+  orderDetails:
+    paymentMethod: CARD
+    realization: SELF-PICKUP
+  description: The clients asks to prepare the pizza as soon as possible.
+  pizzas:
+    - name: diavola
+      namespace: pizzas
+  status: Ready
 ---
 apiVersion: v1
 kind: Secret

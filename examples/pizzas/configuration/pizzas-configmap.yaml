@@ -13,6 +13,15 @@ data:
         {
           "path": "spec.sauce"
         },
+        {
+          "path": "spec.ownerReferences",
+          "widget": "ControlledBy"
+        },
+        {
+          "path": "spec.ownerReferences",
+          "widget": "ControlledByKind",
+          "placeholder": "---"
+        },
         { "path": "spec.toppings", formula: "$join(data.name, ', ')" }, 
       ],
     "body": [
@@ -23,8 +32,6 @@ data:
             "name": "Summary",
             "widget": "Panel",
             "children": [
-              { "path": "spec.realization" },
-              { "path": "spec.paymentMethod", "widget": "Badge" },
               {
                 "name": "State",
                 "path": "status.messages[-1:].state",
@@ -57,9 +64,15 @@ data:
       "children": [
         {
           "name": "Comments",
-          "widget": "CodeViewer",
-          "path": "spec.comments",
-          "language": "yaml"
+          "widget": "Panel",
+          "children": [
+            {
+            "name": "Comments",
+            "widget": "JoinedArray",
+            "path": "spec.comments",
+            "separator": " || "
+            }
+          ]
         },
         {
           "name": "spec.description",
@@ -73,14 +86,12 @@ data:
   form: |-
     [
       { "path": "spec.description", "widget": "Text" , "simple": true},
-      { "path": "spec.paymentMethod", "widget": "Text" , "simple": true},
       { "path": "spec.sauce", "widget": "Text" , "simple": true},
-      { "path": "spec.realization", "widget": "Text" , "simple": true},
-      { "path": "spec.toppings", "simple": true},
+      { "path": "spec.toppings", "widget": "GenericList", "simple": true},
       { "path": "spec.toppings.name", "simple": true},
       { "path": "spec.toppings.price", "simple": true},
       { "path": "spec.toppings.quantity", "simple": true},
-      { "path": "spec.comments"},
+      { "path": "spec.comments", "widget": "SimpleList", "simple": true},
       {
         "path": "spec.recipeSecret",
         "widget": "Resource",
@@ -88,14 +99,20 @@ data:
         "scope": "namespace",
         "namespace": "pizzas",
         "version": "v1",
-        "simple": "true"
-      }
+        "simple": true
+      },
+      {
+      "path": "spec.ownerReferences",
+      "widget": "GenericList",
+      "simple": true
+      },
+      { "path": "spec.ownerReferences.apiVersion", "simple": true},
+      { "path": "spec.ownerReferences.kind", "simple": true},
+      { "path": "spec.ownerReferences.name", "simple": true}
     ]
   list: |-
     [
       { "path": "spec.description" },
-      { "path": "spec.realization" }, 
-      { "name": "Payment method","path": "spec.paymentMethod", "widget": "Badge" }, 
       { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
       { "path": "spec.toppings", formula: "$reduce(data, function($acc, $item) {$acc + $item.price},0)", "name": "Toppings price" }
     ]
@@ -112,7 +129,7 @@ data:
   resource: |-
     {
       "kind": "Pizza",
-      "group": "mykubernetes.acme.org",
+      "group": "busola.example.com",
       "version": "v1",
       "scope": "namespace"
     }
@@ -127,23 +144,7 @@ data:
             "description": {
               "description": "Pizza desc",
               "type": "string"
-            },
-            "paymentMethod": {
-              "description": "The payment method for our pizza",
-              "type": "string",
-              "enum": [
-                "CARD",
-                "CASH"
-              ]
-            },
-            "realization": {
-              "description": "The order fulfillment of our pizza",
-              "type": "string",
-              "enum": [
-                "DELIVERY",
-                "SELF-PICKUP"
-              ]
-            },
+            },            
             "sauce": {
               "description": "The name of the sauce to use on our pizza",
               "type": "string"
@@ -157,6 +158,23 @@ data:
               "type": "array",
               "items":{
                 "type":"string"
+              }
+            },
+            "ownerReferences":{
+              "type": "array",
+              "items":{
+                "type": "object",
+                "properties":{
+                  "apiVersion":{
+                    "type": "string"                 
+                  },
+                  "kind": {
+                    "type": "string"                 
+                  },
+                  "name": {
+                    "type": "string"                 
+                  }
+                }
               }
             },
             "toppings": {
@@ -191,11 +209,10 @@ data:
       spec.description: Description
       spec.comments: Comments
       spec.state: State
-      spec.realization: Realization
-      spec.paymentMethod: Payment Method
       spec.sauce: Sauce
       spec.toppings: Toppings
       spec.recipeSecret: Recipe's secret
       topping.name: Name
       topping.price: Price
       topping.quantity: Quantity
+      spec.ownerReferences: Owner References
