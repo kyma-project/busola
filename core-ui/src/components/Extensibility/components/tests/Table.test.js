@@ -4,7 +4,7 @@ import { TranslationBundleContext } from 'components/Extensibility/helpers';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
 jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
-  'monaco-editor': () => 'blah',
+  'monaco-editor': () => 'monaco-editor',
 }));
 
 const translations = {
