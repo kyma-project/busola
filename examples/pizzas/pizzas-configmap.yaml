@@ -143,3 +143,4 @@ data:
       topping.name: Name
       topping.price: Price
       topping.quantity: Quantity
+  version: '0.5'

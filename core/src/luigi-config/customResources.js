@@ -1,6 +1,12 @@
 import jsyaml from 'js-yaml';
 import { merge } from 'lodash';
 import pluralize from 'pluralize';
+import { showAlert } from '../luigi-config/utils/showAlert';
+import {
+  getSupportedVersions,
+  getLatestVersion,
+} from '../../../core-ui/src/components/Extensibility/migration';
+import i18next from 'i18next';
 
 import { config } from './config';
 import { failFastFetch } from './navigation/queries';
@@ -117,6 +123,25 @@ export async function getCustomResources(authData) {
       ...(await loadBusolaClusterCRs()),
       ...(await loadTargetClusterCRs(authData)),
     });
+    let hasUnsupportedResourses = false;
+    customResources[clusterName] = customResources[clusterName].filter(
+      resource => {
+        const isSupported = getSupportedVersions().some(
+          version => resource.version == version,
+        );
+        if (isSupported === false) {
+          hasUnsupportedResourses = true;
+        }
+        return isSupported;
+      },
+    );
+    if (hasUnsupportedResourses) {
+      showAlert({
+        text: i18next.t('extensibility.message.unsupported-extensions'),
+        type: 'info',
+        closeAfter: 7500,
+      });
+    }
     return customResources[clusterName];
   }
   return [];

@@ -671,6 +671,7 @@ components:
     remove: Click to remove
 config-maps:
   buttons:
+    migrate: Migrate
     update: Update
   description: <0>Config Map</0> is an object that allows for storing non-sensitive data in key-value pairs.
   errors:
@@ -1000,6 +1001,8 @@ events:
 extensibility:
   configuration-error: 'Configuration error: {{error}}'
   error: Your extension configuration is incorrect.
+  message:
+    unsupported-extensions: Some extensions have unsupported version. Go to Config Map to migrate them to the newest version.
   starter-modal:
     buttons:
       open-modal: Create UI
