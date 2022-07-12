@@ -41,10 +41,10 @@ Badge widgets render texts as a status badge, using a set of predefined rules to
 
 When no highlights are provided, the following values are automatically handled:
 
-- rendered as an information: `initial`, `pending`, `available`, `released`.
-- rendered as a success: `ready`, `bound`, `running`, `success`, `succeeded`, `ok`.
-- rendered as a warning: `unknown`, `warning`.
-- rendered as an error: `error`, `failure`, `invalid`.
+- rendered as informative: `initial`, `pending`, `available`, `released`.
+- rendered as positive: `ready`, `bound`, `running`, `success`, `succeeded`, `ok`.
+- rendered as negative: `unknown`, `warning`.
+- rendered as critical: `error`, `failure`, `invalid`.
 
 #### Example
 
