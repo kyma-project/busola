@@ -33,7 +33,6 @@ data:
       {
         "simple": true,
         "path": "spec.description",
-        "required": true
       },
       {
         "simple": true,
