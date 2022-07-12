@@ -44,7 +44,7 @@ export function CopiableApiRuleHost({ apiRule }) {
   const regex = /^(?=.{1,254}$)((?=[a-z0-9-]{1,63}\.)(xn--+)?[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63}$/i;
   const isFQDN = hostname.match(regex);
   const [gatewayName, gatewayNamespace] = apiRule.spec.gateway.split('.', 2);
-  const gatewayUrl = `/apis/networking.istio.io/v1alpha3/namespaces/${gatewayNamespace}/gateways/${gatewayName}`;
+  const gatewayUrl = `/apis/networking.istio.io/v1beta1/namespaces/${gatewayNamespace}/gateways/${gatewayName}`;
 
   const { data: gateway, error, loading } = useGet(gatewayUrl, {});
 
