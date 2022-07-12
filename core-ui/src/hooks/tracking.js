@@ -2,12 +2,29 @@ import { useEffect } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useLocation } from 'react-router-dom';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useComponentDidMount } from 'shared/useComponentDidMount';
 
 function sendTrackingRequest(body) {
   LuigiClient.sendCustomMessage({ id: 'busola.tracking', body });
 }
 
-export function usePageViewTracking() {
+export function useAppTracking() {
+  useSessionStartTracking();
+  useClusterChangeTracking();
+  usePageViewTracking();
+}
+
+function useSessionStartTracking() {
+  const { cluster } = useMicrofrontendContext();
+  useComponentDidMount(() => {
+    sendTrackingRequest({
+      event: 'SESSION_START',
+      data: { apiServerAddress: cluster?.cluster.server || null },
+    });
+  });
+}
+
+function usePageViewTracking() {
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -40,17 +57,18 @@ export function usePageViewTracking() {
   }, [pathname]);
 }
 
-export function useSessionStartTracking() {
+function useClusterChangeTracking() {
   const { cluster } = useMicrofrontendContext();
 
   useEffect(() => {
-    sendTrackingRequest({
-      event: 'SESSION_START',
-      data: {
-        hostname: window.location.hostname,
-        apiServerAddress: cluster?.cluster.server || null,
-      },
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (cluster?.cluster.server) {
+      sendTrackingRequest({
+        event: 'CLUSTER_CHANGE',
+        data: {
+          hostname: window.location.hostname,
+          apiServerAddress: cluster.cluster.server,
+        },
+      });
+    }
+  }, [cluster?.cluster.server]);
 }
