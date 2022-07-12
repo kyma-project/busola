@@ -101,9 +101,10 @@ export function fetchPermissions(auth, namespace = '*') {
 
 export async function fetchAvailableApis() {
   // don't subscribe to '/apis' here - apiGroup features take care of that
-  return await fetchCache
-    .get('/apis')
-    .then(({ data }) => extractGroupVersions(data));
+  return await fetchCache.get('/apis').then(({ data }) => ({
+    apiGroups: data.groups,
+    groupVersions: extractGroupVersions(data),
+  }));
 }
 
 export function fetchNamespaces(auth) {
