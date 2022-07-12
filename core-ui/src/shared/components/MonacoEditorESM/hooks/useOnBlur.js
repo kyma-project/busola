@@ -1,17 +1,14 @@
 import { useEffect } from 'react';
 
-export const useOnBlur = ({ editorInstance, onBlur, setHasFocus }) => {
+export const useOnBlur = ({ editorInstance, onBlur }) => {
   useEffect(() => {
-    //blur listener
-    if (!editorInstance || !onBlur) return;
+    if (!editorInstance || typeof onBlur !== 'function') return;
+
     const blurListener = editorInstance.onDidBlurEditorText(() => {
-      setHasFocus(false);
-      if (typeof onBlur === 'function') {
-        onBlur();
-      }
+      onBlur();
     });
     return () => {
       blurListener.dispose();
     };
-  }, [editorInstance, onBlur, setHasFocus]);
+  }, [editorInstance, onBlur]);
 };
