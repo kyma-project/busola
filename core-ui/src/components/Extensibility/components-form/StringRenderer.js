@@ -10,54 +10,35 @@ export function StringRenderer({
   value,
   schema,
   storeKeys,
-  required,
   compact,
   ...props
 }) {
   const { tFromStoreKeys } = useGetTranslation();
 
-  if (schema.get('enum')) {
-    const options = schema
-      .get('enum')
-      .toArray()
-      .map(key => ({ key, text: key }));
-    return (
-      <ResourceForm.FormField
-        value={value}
-        setValue={value => {
-          onChange({
-            storeKeys,
-            scopes: ['value'],
-            type: 'set',
-            schema,
-            required,
-            data: { value },
-          });
-        }}
-        label={tFromStoreKeys(storeKeys)}
-        input={Inputs.ComboboxInput}
-        options={options}
-        compact={compact}
-      />
-    );
-  } else {
-    return (
-      <ResourceForm.FormField
-        value={value}
-        setValue={value => {
-          onChange({
-            storeKeys,
-            scopes: ['value'],
-            type: 'set',
-            schema,
-            required,
-            data: { value },
-          });
-        }}
-        label={tFromStoreKeys(storeKeys)}
-        input={Inputs.Text}
-        compact={compact}
-      />
-    );
-  }
+  const enumValue = schema.get('enum');
+  const options = enumValue
+    ? enumValue.toArray().map(key => ({ key, text: key }))
+    : null;
+
+  const isRequired = schema.get('required');
+
+  return (
+    <ResourceForm.FormField
+      value={value}
+      setValue={value => {
+        onChange({
+          storeKeys,
+          scopes: ['value'],
+          type: 'set',
+          schema,
+          data: { value },
+        });
+      }}
+      label={tFromStoreKeys(storeKeys)}
+      input={enumValue ? Inputs.ComboboxInput : Inputs.Text}
+      options={options}
+      compact={compact}
+      required={isRequired}
+    />
+  );
 }
