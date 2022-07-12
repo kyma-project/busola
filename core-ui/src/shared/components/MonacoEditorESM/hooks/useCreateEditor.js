@@ -10,6 +10,7 @@ export const useCreateEditor = ({
   setAutocompleteOptions,
   language,
   readOnly,
+  activeSchemaPath,
 }) => {
   const { editorTheme } = useTheme();
   const descriptor = useRef(new Uri());
@@ -65,6 +66,24 @@ export const useCreateEditor = ({
     t,
     readOnly,
   ]);
+
+  useEffect(() => {
+    //disable the updates when editor has focus
+    if (!editorInstance) return;
+
+    const refreshAutocompletionOnFocus = editorInstance.onDidFocusEditorText(
+      () => {
+        // refresh model on editor focus. Needed for cases when multiple editors are open simultaneously
+        if (activeSchemaPath !== descriptor.current?.path) {
+          setAutocompleteOptions();
+        }
+      },
+    );
+
+    return () => {
+      refreshAutocompletionOnFocus.dispose();
+    };
+  }, [editorInstance, activeSchemaPath, setAutocompleteOptions]);
 
   return { editorInstance, divRef, descriptor };
 };
