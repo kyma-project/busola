@@ -471,26 +471,6 @@ export function getStaticChildrenNodesForNamespace(
             },
           ],
         },
-        {
-          pathSegment: 'create',
-          viewUrl:
-            config.coreUIModuleUrl +
-            '/apirules/create?' +
-            toSearchParamsString({
-              resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
-              hasDetailsView: true,
-            }),
-        },
-        {
-          pathSegment: 'edit/:apiName',
-          viewUrl:
-            config.coreUIModuleUrl +
-            '/apirules/edit/:apiName?' +
-            toSearchParamsString({
-              resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
-              hasDetailsView: true,
-            }),
-        },
       ],
     },
     {
@@ -648,7 +628,7 @@ export function getStaticChildrenNodesForNamespace(
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/gateways?' +
         toSearchParamsString({
-          resourceApiPath: '/apis/networking.istio.io/v1alpha3',
+          resourceApiPath: '/apis/networking.istio.io/v1beta1',
           hasDetailsView: true,
         }),
       viewGroup: coreUIViewGroupName,
@@ -685,7 +665,7 @@ export function getStaticChildrenNodesForNamespace(
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/destinationrules?' +
         toSearchParamsString({
-          resourceApiPath: '/apis/networking.istio.io/v1alpha3',
+          resourceApiPath: '/apis/networking.istio.io/v1beta1',
           hasDetailsView: true,
         }),
       viewGroup: coreUIViewGroupName,
@@ -998,7 +978,7 @@ export function getStaticChildrenNodesForNamespace(
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/serviceinstances?' +
         toSearchParamsString({
-          resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
+          resourceApiPath: '/apis/services.cloud.sap.com/v1',
           readOnly: false,
           hasDetailsView: true,
         }),
@@ -1017,7 +997,7 @@ export function getStaticChildrenNodesForNamespace(
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/serviceinstances/:instanceName?' +
                 toSearchParamsString({
-                  resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
+                  resourceApiPath: '/apis/services.cloud.sap.com/v1',
                 }),
             },
           ],
@@ -1034,7 +1014,7 @@ export function getStaticChildrenNodesForNamespace(
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/servicebindings?' +
         toSearchParamsString({
-          resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
+          resourceApiPath: '/apis/services.cloud.sap.com/v1',
           readOnly: false,
           hasDetailsView: true,
         }),
@@ -1053,7 +1033,7 @@ export function getStaticChildrenNodesForNamespace(
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/servicebindings/:bindingName?' +
                 toSearchParamsString({
-                  resourceApiPath: '/apis/services.cloud.sap.com/v1alpha1',
+                  resourceApiPath: '/apis/services.cloud.sap.com/v1',
                 }),
             },
           ],
@@ -2136,19 +2116,18 @@ function filterNodesByAvailablePaths(nodes, groupVersions, permissionSet) {
       );
     }
 
-    const removeNode = () => (node.toDelete = true);
-
-    checkSingleNode(node, groupVersions, permissionSet, removeNode);
+    checkSingleNode(node, groupVersions, permissionSet);
   }
 
   return nodes.filter(n => !n.toDelete);
 }
 
-function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
+function checkSingleNode(node, groupVersions, permissionSet) {
   if (node.context?.requiredFeatures) {
     for (const feature of node.context.requiredFeatures || []) {
       if (!feature || feature.isEnabled === false) {
-        removeNode();
+        node.toDelete = true;
+        return;
       }
     }
   }
@@ -2158,7 +2137,7 @@ function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
     if (node.context?.requiredGroupResource) {
       const { group, resource } = node.context.requiredGroupResource;
       if (!hasPermissionsFor(group, resource, permissionSet)) {
-        removeNode();
+        node.toDelete = true;
       }
     }
     return;
@@ -2173,14 +2152,14 @@ function checkSingleNode(node, groupVersions, permissionSet, removeNode) {
       .replace(/^\/api\//, '');
 
     if (!groupVersions.find(g => g.includes(groupVersion))) {
-      removeNode();
+      node.toDelete = true;
       return;
     }
   } else {
     // we need to filter through permissions to check the node availability
     const apiGroup = extractApiGroup(apiPath);
     if (!hasPermissionsFor(apiGroup, node.resourceType, permissionSet)) {
-      removeNode();
+      node.toDelete = true;
       return;
     }
   }

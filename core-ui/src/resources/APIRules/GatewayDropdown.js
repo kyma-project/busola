@@ -11,7 +11,7 @@ export function useGatewaysQuery(namespace) {
 
   return useGetList(
     filterGateways,
-  )(`/apis/networking.istio.io/v1alpha3/gateways`, { pollingInterval: 7000 });
+  )(`/apis/networking.istio.io/v1beta1/gateways`, { pollingInterval: 7000 });
 }
 
 export function GatewayDropdown({

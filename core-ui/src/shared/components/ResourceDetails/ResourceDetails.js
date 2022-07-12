@@ -27,6 +27,7 @@ import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
+import { useVersionWarning } from 'hooks/useVersionWarning';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -147,6 +148,7 @@ function Resource({
   resourceGraphConfig,
   resourceSchema,
 }) {
+  useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation(['translation'], { i18n });
   const prettifiedResourceKind = prettifyNameSingular(
     resourceTitle,
