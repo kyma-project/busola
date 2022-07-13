@@ -229,7 +229,7 @@ Note that some features must be run before the application starts the bootstrap 
   ```
 
 * **KUBECONFIG_ID** – is used to configure the URL to which Busola sends a request to download a kubeconfig file. If you add `?kubeconfigID={your ID}` to the Busola URL, Busola tries to download the kubeconfig from `{kubeconfigUrl}/{yourID}`. If the operation succeeds, Busola adds the kubeconfing file to the cluster.
-  If you use a full address in the **kubeconfigUrl** field, Busola also reads it. Optionally, instruct Busola to show the clusters overview rather than the current context cluster with the **showClustersOverview** property.
+  If you use a full address in the **kubeconfigUrl** field, Busola also reads it. Optionally, you can instruct Busola to show the clusters overview rather than the current context cluster, using the **showClustersOverview** property.
 
   Default settings:
 
