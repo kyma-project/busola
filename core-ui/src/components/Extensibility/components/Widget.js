@@ -24,7 +24,17 @@ export function InlineWidget({ value, structure }) {
   return (
     <LayoutPanelRow
       name={widgetT(structure)}
-      value={isNil(value) ? emptyLeafPlaceholder : value}
+      value={
+        isNil(value) ? (
+          emptyLeafPlaceholder
+        ) : (
+          // set path to null to disable JSONpath
+          <Widget
+            value={value}
+            structure={{ ...structure, path: null, formula: null }}
+          />
+        )
+      }
     />
   );
 }
