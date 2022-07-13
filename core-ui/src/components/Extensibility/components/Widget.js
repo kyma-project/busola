@@ -29,8 +29,10 @@ export function InlineWidget({ value, structure }) {
         isNil(value) ? (
           emptyLeafPlaceholder
         ) : (
-          // set path to null to disable JSONpath
-          <Widget value={value} structure={{ ...structure, path: null }} />
+          <Widget
+            value={value}
+            structure={{ ...structure, path: null, formula: null }}
+          />
         )
       }
     />
@@ -49,12 +51,12 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   );
 }
 
-function shouldBeVisible(value, visibleFormula) {
+export function shouldBeVisible(value, visibilityFormula) {
   // allow hidden to be set only explicitly
-  if (!visibleFormula) return { visible: visibleFormula !== false };
+  if (!visibilityFormula) return { visible: visibilityFormula !== false };
 
   try {
-    const expression = jsonata(visibleFormula);
+    const expression = jsonata(visibilityFormula);
     return { visible: !!expression.evaluate({ data: value }) };
   } catch (e) {
     console.warn('Widget::shouldBeVisible error:', e);
@@ -88,7 +90,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
 
   const { visible, error: visibleCheckError } = shouldBeVisible(
     value,
-    structure.visible,
+    structure.visibility,
   );
 
   useEffect(() => {

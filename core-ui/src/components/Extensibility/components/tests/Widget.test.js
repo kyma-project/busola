@@ -23,7 +23,7 @@ describe('Widget', () => {
         <RelationsContextProvider value={{}} relations={{}}>
           <Widget
             value="test-value"
-            structure={{ path: null, visible: null }}
+            structure={{ path: null, visibility: null }}
           />
         </RelationsContextProvider>,
       );
@@ -36,7 +36,7 @@ describe('Widget', () => {
         <RelationsContextProvider value={{}} relations={{}}>
           <Widget
             value="test-value"
-            structure={{ path: null, visible: false }}
+            structure={{ path: null, visibility: false }}
           />
         </RelationsContextProvider>,
       );
@@ -52,7 +52,7 @@ describe('Widget', () => {
         <RelationsContextProvider value={{}} relations={{}}>
           <Widget
             value="test-value"
-            structure={{ path: null, visible: '+=' }}
+            structure={{ path: null, visibility: '+=' }}
           />
         </RelationsContextProvider>,
       );
@@ -69,7 +69,7 @@ describe('Widget', () => {
         <RelationsContextProvider value={{}} relations={{}}>
           <Widget
             value="test-value"
-            structure={{ path: null, visible: '$contains(data, "test")' }}
+            structure={{ path: null, visibility: '$contains(data, "test")' }}
           />
         </RelationsContextProvider>,
       );
@@ -79,7 +79,7 @@ describe('Widget', () => {
         <RelationsContextProvider value={{}} relations={{}}>
           <Widget
             value="test-value"
-            structure={{ path: null, visible: '$contains(data, "tets")' }}
+            structure={{ path: null, visibility: '$contains(data, "tets")' }}
           />
         </RelationsContextProvider>,
       );
