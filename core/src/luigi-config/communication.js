@@ -116,6 +116,15 @@ export const communication = {
     'busola.setCluster': ({ clusterName }) => {
       setCluster(clusterName);
     },
+
+    'busola.refreshClusters': async () => {
+      await reloadAuth();
+      clearAuthData();
+      saveActiveClusterName(null);
+      fetchCache.clear();
+      await reloadNavigation();
+    },
+
     'busola.showMessage': ({ message, title, type }) => {
       Luigi.customMessages().sendToAll({
         id: 'busola.showMessage',
