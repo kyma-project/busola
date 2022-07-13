@@ -14,7 +14,12 @@ export function Badge({ value, structure, schema, ...props }) {
       if (Array.isArray(rule)) {
         return rule.includes(value);
       } else {
-        return jsonata(rule).evaluate({ value });
+        try {
+          return jsonata(rule).evaluate({ value });
+        } catch (e) {
+          console.warn(`invalid rule: ${rule}`);
+          return null;
+        }
       }
     });
     if (match) {
