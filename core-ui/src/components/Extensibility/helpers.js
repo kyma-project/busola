@@ -114,3 +114,7 @@ export const getObjectValueWorkaround = (
 
   return value;
 };
+
+const value = test;
+fduhvbdfs;
+dsfhbvhjdfsbv;
