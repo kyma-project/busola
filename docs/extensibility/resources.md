@@ -107,7 +107,7 @@ The `details` section defines the display structure for the details page. It con
 - **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
 - **formula** - optional formula used to modify data referred to by the `path` property. To learn more about using formulas, see [JSONata](https://docs.jsonata.org/overview.html).
 - **visibility** - by default all fields are visible; however **visibility** property can be used to control a single item display.
-  - If set to `false` explicitly, the field won't render.
+  - If set to `false` explicitly, the field doesn't render.
   - If set to any string, this property is treated as jsonata formula, determining (based on current value given as `data`) if the field should be visible.
   - If not set the field will always be rendered.
 - **children** - a list of child widgets used for all `object` and `array` fields. Not available for header widgets.
