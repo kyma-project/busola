@@ -184,6 +184,7 @@ If such resource list was already defined in Busola, the configuration will be r
 {
   "widget": "ResourceList",
   "path": "$myRelatedResource",
+  "name": "Example ResourceList Secret",
   "columns": [
     {
       "path": "status.code",
@@ -193,10 +194,15 @@ If such resource list was already defined in Busola, the configuration will be r
 }
 ```
 
+<img src="./assets/display-widgets/ResourceList.png" alt="Example of a ResourceList widget" style="border: 1px solid #D2D5D9">
+
 ### ResourceRefs
 
 ResourceRefs widgets render the lists of links to the associated resources. The corresponding specification object must be an array of objects `{name: 'foo', namespace: 'bar'}`.
-Additionally, you must define the kind of the linked resources by passing the Kubernetes resource `kind` (for example, `Secret`, `ConfigMap`).
+
+#### Widget-specific parameters
+
+- **kind** - _[required]_ Kubernetes kind of the resource.
 
 #### Example
 
@@ -207,6 +213,8 @@ Additionally, you must define the kind of the linked resources by passing the Ku
   "kind": "Secret"
 }
 ```
+
+<img src="./assets/display-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">
 
 ### ControlledBy
 
