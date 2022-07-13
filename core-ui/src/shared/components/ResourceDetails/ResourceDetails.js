@@ -311,11 +311,23 @@ function Resource({
           />
         </PageHeader.Column>
 
-        {customColumns.map(col => (
-          <PageHeader.Column key={col.header} title={col.header}>
-            {col.value(resource)}
-          </PageHeader.Column>
-        ))}
+        {customColumns
+          .filter(col => {
+            const { visible, error } = col.visibility?.(resource) || {
+              visible: true,
+            };
+            if (error) {
+              col.value = () =>
+                t('common.messages.error', { error: error.message });
+              return true;
+            }
+            return visible;
+          })
+          .map(col => (
+            <PageHeader.Column key={col.header} title={col.header}>
+              {col.value(resource)}
+            </PageHeader.Column>
+          ))}
       </PageHeader>
       <DeleteMessageBox resource={resource} resourceUrl={resourceUrl} />
       {(customComponents || []).map(component =>
