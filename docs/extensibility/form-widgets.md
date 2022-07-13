@@ -88,6 +88,8 @@ Resource widgets render a dropdown list of specified resources and store the sel
 ]
 ```
 
+<img src="./assets/form-widgets/Resource.png" alt="Example of a Resource widget" style="border: 1px solid #D2D5D9">
+
 ## Complex widgets
 
 Complex widgets handle more advanced data structures such as arrays or objects.
@@ -120,7 +122,7 @@ ResourceRefs widgets render the lists of dropdowns to select the associated reso
 #### Example
 
 ```json
-{
+[
   {
     "path": "spec.my-data[]",
     "widget": "ResourceRefs",
@@ -133,9 +135,11 @@ ResourceRefs widgets render the lists of dropdowns to select the associated reso
     "kind": "Gateway",
     "group": "networking.istio.io",
     "version": "v1alpha3"
-  },
-}
+  }
+]
 ```
+
+<img src="./assets/form-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">
 
 ## Presentation widgets
 
