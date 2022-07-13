@@ -84,6 +84,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
       value={isNil(value) ? '' : value.toString()}
       onChange={handleChange}
       onBlur={pushValue}
+      updateValueOnParentChange
     />
   );
 

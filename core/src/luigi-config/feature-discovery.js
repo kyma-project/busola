@@ -120,14 +120,16 @@ export async function updateFeature(featureName) {
       const customResources = await getCustomResources(authData);
 
       const { data } = await fetchCache.get('/apis');
+      const apiGroups = data.groups;
       const groupVersions = extractGroupVersions(data);
       const cfg = Luigi.getConfig();
-      cfg.navigation.nodes = await createNavigationNodes(
-        lastResolvedFeatures,
+      cfg.navigation.nodes = await createNavigationNodes({
+        features: lastResolvedFeatures,
         groupVersions,
+        apiGroups,
         permissionSet,
         customResources,
-      );
+      });
       Luigi.configChanged('navigation.nodes');
     } catch (e) {
       console.warn('reloadNodes failed', e);

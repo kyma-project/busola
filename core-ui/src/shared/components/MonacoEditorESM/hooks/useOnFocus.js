@@ -1,36 +1,15 @@
 import { useEffect } from 'react';
 
-export const useOnFocus = ({
-  editorInstance,
-  onFocus,
-  setAutocompleteOptions,
-  activeSchemaPath,
-  setHasFocus,
-  descriptor,
-}) => {
+export const useOnFocus = ({ editorInstance, onFocus }) => {
   useEffect(() => {
-    if (!editorInstance || !onFocus) return;
-    const focusListener = editorInstance.onDidFocusEditorText(() => {
-      setHasFocus(true);
-      if (typeof onFocus === 'function') {
-        onFocus();
-      }
+    if (!editorInstance || typeof onFocus !== 'function') return;
 
-      // refresh model on editor focus. Needed for cases when multiple editors are open simultaneously
-      if (activeSchemaPath !== descriptor.current?.path) {
-        setAutocompleteOptions();
-      }
+    const focusListener = editorInstance.onDidFocusEditorText(() => {
+      onFocus();
     });
 
     return () => {
       focusListener.dispose();
     };
-  }, [
-    descriptor,
-    editorInstance,
-    onFocus,
-    setAutocompleteOptions,
-    activeSchemaPath,
-    setHasFocus,
-  ]);
+  }, [editorInstance, onFocus]);
 };

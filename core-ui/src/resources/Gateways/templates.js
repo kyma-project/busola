@@ -11,7 +11,7 @@ export function newServer() {
 
 export function createGatewayTemplate(namespace) {
   return {
-    apiVersion: 'networking.istio.io/v1alpha3',
+    apiVersion: 'networking.istio.io/v1beta1',
     kind: 'Gateway',
     metadata: {
       name: '',
@@ -38,7 +38,7 @@ export function createPresets(namespace, translate) {
     {
       name: 'ingressgateway',
       value: {
-        apiVersion: 'networking.istio.io/v1alpha3',
+        apiVersion: 'networking.istio.io/v1beta1',
         kind: 'Gateway',
         metadata: {
           name: 'httpbin-gateway',
