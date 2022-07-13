@@ -1,6 +1,7 @@
 import React from 'react';
 import { uniq } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
+import { OrderedMap } from 'immutable';
 
 export function SchemaRulesInjector({
   schema,
@@ -36,11 +37,22 @@ export function SchemaRulesInjector({
 
   let newSchema;
   if (!visiblePaths.includes(flatPath)) {
-    newSchema = schema.mergeDeep({ widget: 'Null' });
+    return null;
   } else {
     const itemMap = schemaRules.find(item => item.path === path) ?? {};
     newSchema = schema.mergeDeep(itemMap);
   }
+  // if (flatPath === 'spec') {
+  // newSchema = newSchema.set('properties', OrderedMap({}));
+  // }
+
+  console.log('SchemaRulesInjector', {
+    props,
+    currentPluginIndex: nextPluginIndex,
+    schema: newSchema.toJS(),
+    storeKeys: storeKeys.toJS(),
+    parentSchema: props.parentSchema?.toJS(),
+  });
 
   return (
     <Plugin

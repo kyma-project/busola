@@ -7,16 +7,16 @@ import { UIMetaProvider } from '@ui-schema/ui-schema/UIMeta';
 import { UIStoreProvider, storeUpdater } from '@ui-schema/ui-schema';
 import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
 
-import formWidgets from './components-form';
-import { SchemaRulesInjector } from './SchemaRulesInjector';
+import widgets from './components-form';
+// import { SchemaRulesInjector } from './SchemaRulesInjector';
 
 import { METADATA_SCHEMA } from './metadataSchema';
 
-const [firstPlugin, ...otherPlugins] = formWidgets.pluginStack;
-const widgets = {
-  ...formWidgets,
-  pluginStack: [firstPlugin, SchemaRulesInjector, ...otherPlugins],
-};
+// const [firstPlugin, ...otherPlugins] = formWidgets.pluginStack;
+// const widgets = {
+// ...formWidgets,
+// pluginStack: [firstPlugin, SchemaRulesInjector, ...otherPlugins],
+// };
 
 function FormContainer({ children }) {
   return (
