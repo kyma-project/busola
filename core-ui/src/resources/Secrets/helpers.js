@@ -1,7 +1,18 @@
-import { getResourceDefs } from 'shared/helpers/getResourceDefs';
+import pluralize from 'pluralize';
+import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
 
-export const getSecretDefs = (t, context) =>
-  getResourceDefs('Secrets', t, context, 'secrets');
+export const getSecretDefs = (t, context) => {
+  const defs = getPerResourceDefs('secrets', t, context);
+  return Object.entries(defs)
+    .map(([kind, secretsPresets]) =>
+      secretsPresets.map(secretsPreset => ({
+        ...secretsPreset,
+        title:
+          pluralize(kind) + ': ' + (secretsPreset.title || secretsPreset.type),
+      })),
+    )
+    .flat();
+};
 
 export const mapObjectValues = (fn, obj) =>
   Object.fromEntries(
