@@ -21,7 +21,7 @@ export function prepareSchemaRules(ruleDefs) {
     console.log('parentPath', parentPath);
     const fullPath = [
       ...parentPath,
-      ...(Array.isArray(path) ? path : path.replace(/[]/g, '.').split('.')),
+      ...(Array.isArray(path) ? path : path.replace(/\[]/g, '.').split('.')),
     ];
 
     initial(fullPath).reduce((acc, step) => {
@@ -89,11 +89,14 @@ export function SchemaRulesInjector({
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
 
-  const path = storeKeys
-    .map(item => (typeof item === 'number' ? '[]' : item))
+  const path = storeKeys.map(item => (typeof item === 'number' ? '[]' : item));
+  // .join('.')
+  // .replace('.[]', '[]');
+  // const flatPath = path.replace(/\[]/g, '');
+  const flatPath = path
     .join('.')
-    .replace('.[]', '[]');
-  const flatPath = path.replace(/\[]/g, '');
+    .replace('.[]', '[]')
+    .replace(/\[]/g, '');
 
   let newSchema;
   if (!visiblePaths.includes(flatPath)) {
