@@ -152,6 +152,7 @@ function Resource({
     resourceTitle,
     resource.kind,
   );
+  console.log(resourceTitle, resource.kind);
   const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
