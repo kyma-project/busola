@@ -24,7 +24,7 @@ var instance = {
   kind: 'ConfigMap',
   apiVersion: 'v1',
   metadata: {
-    name: 1,
+    name: 'asdnigjus9fh',
     namespace: 'default',
     uid: 'a525c333-6f54-4d3c-b388-0d516b0171b6',
     resourceVersion: '3322',
@@ -69,7 +69,10 @@ var instance = {
     version: 'main',
   },
 };
-console.log(v.validate(instance, schema));
+
+const result = v.validate(instance, schema, { nestedErrors: true });
+console.log(result);
+console.log(result.toString());
 
 export default function App() {
   return null;

@@ -149,7 +149,10 @@ export const schema = {
         name: {
           description:
             'Name must be unique within a namespace. Is required when creating resources, although some resources may allow a client to request the generation of an appropriate name automatically. Name is primarily intended for creation idempotence and configuration definition. Cannot be updated. More info: http://kubernetes.io/docs/user-guide/identifiers#names',
-          type: 'string',
+          anyOf: [
+            { type: 'string', maxLength: 5 },
+            { type: 'number', minimum: 0 },
+          ],
         },
         namespace: {
           description:
