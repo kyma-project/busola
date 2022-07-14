@@ -4,11 +4,16 @@ import { LayoutPanel } from 'fundamental-react';
 import { useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 
-export function Panel({ value, structure, schema }) {
+export function Panel({ value, structure, schema, hasExternalMargin }) {
   const { widgetT } = useGetTranslation();
+  let panelClassName = '';
+
+  if (hasExternalMargin || hasExternalMargin === undefined) {
+    panelClassName = 'fd-margin--md';
+  }
 
   return (
-    <LayoutPanel>
+    <LayoutPanel className={panelClassName}>
       <LayoutPanel.Header>
         <LayoutPanel.Head title={widgetT(structure)} />
       </LayoutPanel.Header>
