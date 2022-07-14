@@ -21,7 +21,7 @@ export function prepareSchemaRules(ruleDefs) {
     console.log('parentPath', parentPath);
     const fullPath = [
       ...parentPath,
-      ...(Array.isArray(path) ? path : path.replace(/\[]/g, '.').split('.')),
+      ...(Array.isArray(path) ? path : path.replace(/\[]/g, '.[]').split('.')),
     ];
 
     initial(fullPath).reduce((acc, step) => {
@@ -101,28 +101,20 @@ export function SchemaRulesInjector({
   let newSchema;
   if (!visiblePaths.includes(flatPath)) {
     return null;
-  } else {
-    const itemMap = schemaRules.find(byPath(path)) ?? {};
-    newSchema = schema.mergeDeep(itemMap);
   }
-  // if (flatPath === 'spec') {
-  // newSchema = newSchema.set('properties', OrderedMap({}));
-  // }
 
-  /*
-  console.log('SchemaRulesInjector', {
-    props,
-    currentPluginIndex: nextPluginIndex,
-    schema: newSchema.toJS(),
-    storeKeys: storeKeys.toJS(),
-    parentSchema: props.parentSchema?.toJS(),
-  });
-  */
+  console.log('itemRule?', path.toJS());
+  const { simple, advanced, path: myPath, children: childRules, ...itemRule } =
+    schemaRules.find(byPath(path)) ?? {};
+
+  console.log('itemRule', { rule: schemaRules.find(byPath(path)), childRules });
+
+  newSchema = schema.mergeDeep(itemRule);
 
   return (
     <Plugin
       {...props}
-      // schemaRules={[ { path: 'foo' }]}
+      schemaRules={childRules || []}
       currentPluginIndex={nextPluginIndex}
       schema={newSchema}
       storeKeys={storeKeys}
