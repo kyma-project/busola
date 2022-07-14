@@ -17,7 +17,7 @@ export function Badge({ value, structure, schema, ...props }) {
         try {
           return jsonata(rule).evaluate({ value });
         } catch (e) {
-          console.warn(`invalid rule: ${rule}`);
+          console.warn(`invalid rule: ${rule}`, e);
           return null;
         }
       }
