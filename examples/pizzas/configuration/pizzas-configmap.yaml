@@ -42,7 +42,7 @@ data:
                 "path": "status.messages[-1:].message"
               },
               { "path": "spec.toppings", formula: "$join(data.name, ', ')" }, 
-              { "path": "spec.toppings", formula: "$reduce(data, function($acc, $item) {$acc + $item.price},0)", "name": "Toppings price" }
+              { "path": "spec.toppings", formula: "$reduce(data.price)", "name": "Toppings price" }
             ]
           },
           {
@@ -114,7 +114,7 @@ data:
     [
       { "path": "spec.description" },
       { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
-      { "path": "spec.toppings", formula: "$reduce(data, function($acc, $item) {$acc + $item.price},0)", "name": "Toppings price" }
+      { "path": "spec.toppings", formula: "$sum(data.price)", "name": "Toppings price" }
     ]
   relations: |-
     {

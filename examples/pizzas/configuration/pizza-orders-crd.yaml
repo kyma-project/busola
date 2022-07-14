@@ -8,7 +8,7 @@ spec:
     plural: pizzaorders
     singular: pizzaorder
     shortNames:
-      - po
+      - pzo
     kind: PizzaOrder
     listKind: PizzaOrderList
   scope: Namespaced
