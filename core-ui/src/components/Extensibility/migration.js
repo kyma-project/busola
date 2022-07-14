@@ -37,7 +37,8 @@ export function migrateToLatest(resource) {
 }
 const migrateFunctions = {};
 
-// Definitions of functions used for migration
+// Definitions of functions used for migration.
+// The naming convention: use number version string but without a dot
 migrateFunctions['03'] = resource => {
   const newResource = cloneDeep(resource);
   if (formatCurrentVersion(newResource?.data?.version) === '0.3') {
