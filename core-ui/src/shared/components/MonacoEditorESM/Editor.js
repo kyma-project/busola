@@ -3,7 +3,7 @@ import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-import { useAutocompleteWorker } from './autocompletion/useAutocompleteWorker';
+import { useAutocompleteWorker } from './schema-worker/useAutocompleteWorker';
 import { useOnFocus } from './hooks/useOnFocus';
 import { useOnBlur } from './hooks/useOnBlur';
 import { useDisplayWarnings } from './hooks/useDisplayWarnings';

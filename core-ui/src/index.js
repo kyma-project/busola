@@ -12,6 +12,7 @@ import { Microfrontend } from 'shared/contexts/Microfrontend';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
+import { K8sSchemaContextProvider } from 'shared/contexts/K8sSchemaContext';
 import ServiceCatalogUIWrapper from './service-catalog-ui/Wrapper';
 
 import './styles/reset.css';
@@ -54,7 +55,9 @@ ReactDOM.render(
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Suspense fallback={<Spinner />}>
         <CommandPaletteProvider>
-          <App />
+          <K8sSchemaContextProvider>
+            <App />
+          </K8sSchemaContextProvider>
           <ServiceCatalogUIWrapper />
         </CommandPaletteProvider>
       </Suspense>
