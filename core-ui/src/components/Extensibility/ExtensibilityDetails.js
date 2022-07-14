@@ -8,7 +8,7 @@ import { prettifyKind } from 'shared/utils/helpers';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
-import { Widget } from './components/Widget';
+import { shouldBeVisible, Widget } from './components/Widget';
 import { useGetTranslation, TranslationBundleContext } from './helpers';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
 import { RelationsContextProvider } from './contexts/RelationsContext';
@@ -50,6 +50,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
         Array.isArray(header)
           ? header.map((def, i) => ({
               header: widgetT(def),
+              visibility: resource => shouldBeVisible(resource, def.visibility),
               value: resource => (
                 <Widget
                   key={i}
