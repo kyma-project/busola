@@ -2,22 +2,19 @@ import React from 'react';
 import { ExternalResourceRef } from 'shared/components/ResourceRef/ExternalResourceRef';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import pluralize from 'pluralize';
+import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
+import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
 
 export function ResourceRefRender({
   onChange,
-  onKeyDown,
   value,
   schema,
   storeKeys,
   required,
-  ...props
+  resource,
 }) {
   // TODO the value obtained by ui-schema is undefined for this component
-  const backupValueFromResource = storeKeys
-    .toArray()
-    .reduce((valueSoFar, currKey) => {
-      return valueSoFar[currKey];
-    }, props.resource);
+  value = getObjectValueWorkaround(schema, resource, storeKeys, value);
 
   const resourceType = pluralize(schema.get('kind') || '').toLowerCase();
 
@@ -27,7 +24,7 @@ export function ResourceRefRender({
 
   return (
     <ExternalResourceRef
-      value={value || backupValueFromResource}
+      value={value.toJS()}
       resources={data}
       setValue={value => {
         onChange({
@@ -36,7 +33,7 @@ export function ResourceRefRender({
           type: 'set',
           schema,
           required,
-          data: { value },
+          data: { value: createOrderedMap(value) },
         });
       }}
       required={required}
