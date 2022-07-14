@@ -55,7 +55,7 @@ When no highlights are provided, the following values are automatically handled:
   "placeholder": "-",
   "highlights": {
     "positive": ["yes", "ok"],
-    "negative": "value < 0"
+    "negative": "data < 0"
   }
 }
 ```
