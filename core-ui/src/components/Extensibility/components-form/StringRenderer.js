@@ -11,6 +11,7 @@ export function StringRenderer({
   schema,
   storeKeys,
   compact,
+  required,
   ...props
 }) {
   const { tFromStoreKeys } = useGetTranslation();
@@ -19,8 +20,6 @@ export function StringRenderer({
   const options = enumValue
     ? enumValue.toArray().map(key => ({ key, text: key }))
     : null;
-
-  const isRequired = schema.get('required');
 
   return (
     <ResourceForm.FormField
@@ -31,6 +30,7 @@ export function StringRenderer({
           scopes: ['value'],
           type: 'set',
           schema,
+          required,
           data: { value },
         });
       }}
@@ -38,7 +38,7 @@ export function StringRenderer({
       input={enumValue ? Inputs.ComboboxInput : Inputs.Text}
       options={options}
       compact={compact}
-      required={isRequired}
+      required={required}
     />
   );
 }

@@ -31,6 +31,7 @@ export function SwitchRenderer({
       label={tFromStoreKeys(storeKeys)}
       input={Inputs.Switch}
       compact={compact}
+      required={required}
     />
   );
 }
