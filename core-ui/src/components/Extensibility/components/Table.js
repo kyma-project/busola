@@ -28,7 +28,7 @@ const handleTableValue = (value, t) => {
   }
 };
 
-export function Table({ value, structure, schema }) {
+export function Table({ value, structure, schema, hasExternalMargin }) {
   const { t } = useTranslation();
   const { t: tExt, widgetT } = useGetTranslation();
   const coreHeaders = (structure.children || []).map(column =>
@@ -74,6 +74,7 @@ export function Table({ value, structure, schema }) {
       })}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
+      hasExternalMargin={hasExternalMargin}
       {...handleTableValue(value, t)}
     />
   );

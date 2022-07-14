@@ -8,7 +8,7 @@ export function Panel({ value, structure, schema }) {
   const { widgetT } = useGetTranslation();
 
   return (
-    <LayoutPanel className="fd-margin--md">
+    <LayoutPanel>
       <LayoutPanel.Header>
         <LayoutPanel.Head title={widgetT(structure)} />
       </LayoutPanel.Header>
