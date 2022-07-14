@@ -9,6 +9,7 @@ import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
 
 import widgets from './components-form';
 // import { SchemaRulesInjector } from './SchemaRulesInjector';
+import { prepareSchemaRules } from './SchemaRulesInjector';
 
 import { METADATA_SCHEMA } from './metadataSchema';
 
@@ -57,6 +58,8 @@ export function ResourceSchema({
   const advancedRules = fullSchemaRules.filter(item => item.advanced ?? true);
 
   const myRules = advanced ? advancedRules : simpleRules;
+  const preparedRules = prepareSchemaRules(myRules);
+  console.log('preparedRules', myRules, preparedRules);
 
   if (isEmpty(schema)) return null;
 
@@ -78,7 +81,7 @@ export function ResourceSchema({
         store={store}
         showValidity={true}
         onChange={onChange}
-        schemaRules={myRules}
+        schemaRules={preparedRules}
       >
         <FormStack isRoot schema={schemaMap} resource={resource} />
       </UIStoreProvider>

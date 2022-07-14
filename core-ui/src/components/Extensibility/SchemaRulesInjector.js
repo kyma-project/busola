@@ -1,7 +1,62 @@
 import React from 'react';
-import { uniq } from 'lodash';
+import { uniq, merge, initial } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 import { OrderedMap } from 'immutable';
+
+export function prepareSchemaRules(ruleDefs) {
+  const rules = [{ path: [], children: [] }];
+
+  const byPath = a => b => JSON.stringify(b.path) === JSON.stringify(a);
+
+  const addRule = rule => {
+    rules.push(rule);
+    const parentPath = initial(rule.path);
+    const lastParent = rules.findLast(byPath(parentPath));
+    if (lastParent) {
+      lastParent.children.push(rule);
+    }
+  };
+
+  const extractRules = ({ path, ...ruleDef }, parentPath = []) => {
+    console.log('parentPath', parentPath);
+    const fullPath = [
+      ...parentPath,
+      ...(Array.isArray(path) ? path : path.replace(/[]/g, '.').split('.')),
+    ];
+
+    initial(fullPath).reduce((acc, step) => {
+      const myPath = [...acc, step];
+      // const lastRule = rules.findLast(rule => JSON.stringify(rule.path) === JSON.stringify(myPath));
+      const lastRule = rules.findLast(byPath(myPath));
+      if (!lastRule) {
+        addRule({
+          path: myPath,
+          auto: true,
+          children: [],
+        });
+      }
+      return myPath;
+    }, []);
+
+    const lastRule = rules.findLast(byPath(fullPath));
+    if (!lastRule || !lastRule.auto) {
+      addRule({
+        ...ruleDef,
+        path: fullPath,
+        children: [],
+      });
+    } else {
+      merge(lastRule, ruleDef);
+      lastRule.auto = false;
+      lastRule.children = [];
+    }
+    ruleDef.children?.forEach(subDef => extractRules(subDef, fullPath));
+  };
+
+  ruleDefs.forEach(subDef => extractRules(subDef));
+
+  return rules;
+}
 
 export function SchemaRulesInjector({
   schema,
@@ -10,21 +65,26 @@ export function SchemaRulesInjector({
   schemaRules,
   ...props
 }) {
-  const visiblePaths = [
-    '',
-    ...uniq(
-      schemaRules.flatMap(entry =>
-        entry.path.split(/\./).reduce((acc, step) => {
-          const flatStep = step.replace('[]', '');
-          if (!acc.length) {
-            return [flatStep];
-          } else {
-            return [...acc, `${acc[acc.length - 1]}.${flatStep}`];
-          }
-        }, []),
-      ),
-    ),
-  ];
+  console.log('SchemaRulesInjector', schemaRules);
+  const visiblePaths = schemaRules.map(rule =>
+    rule.path.join('.').replace('.[]', ''),
+  );
+  // const visiblePaths = [
+  // '',
+  // ...uniq(
+  // schemaRules.flatMap(entry =>
+  // entry.path.split(/\./).reduce((acc, step) => {
+  // const flatStep = step.replace('[]', '');
+  // if (!acc.length) {
+  // return [flatStep];
+  // } else {
+  // return [...acc, `${acc[acc.length - 1]}.${flatStep}`];
+  // }
+  // }, []),
+  // ),
+  // ),
+  // ];
+  // console.log('visiblePaths', visiblePaths);
 
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
@@ -39,13 +99,14 @@ export function SchemaRulesInjector({
   if (!visiblePaths.includes(flatPath)) {
     return null;
   } else {
-    const itemMap = schemaRules.find(item => item.path === path) ?? {};
+    const itemMap = schemaRules.find(byPath(path)) ?? {};
     newSchema = schema.mergeDeep(itemMap);
   }
   // if (flatPath === 'spec') {
   // newSchema = newSchema.set('properties', OrderedMap({}));
   // }
 
+  /*
   console.log('SchemaRulesInjector', {
     props,
     currentPluginIndex: nextPluginIndex,
@@ -53,10 +114,12 @@ export function SchemaRulesInjector({
     storeKeys: storeKeys.toJS(),
     parentSchema: props.parentSchema?.toJS(),
   });
+  */
 
   return (
     <Plugin
       {...props}
+      // schemaRules={[ { path: 'foo' }]}
       currentPluginIndex={nextPluginIndex}
       schema={newSchema}
       storeKeys={storeKeys}
