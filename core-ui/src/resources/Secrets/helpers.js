@@ -1,5 +1,6 @@
 import pluralize from 'pluralize';
 import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
+import { prettifyKind } from 'shared/utils/helpers';
 
 export const getSecretDefs = (t, context) => {
   const defs = getPerResourceDefs('secrets', t, context);
@@ -8,7 +9,9 @@ export const getSecretDefs = (t, context) => {
       secretsPresets.map(secretsPreset => ({
         ...secretsPreset,
         title:
-          pluralize(kind) + ': ' + (secretsPreset.title || secretsPreset.type),
+          pluralize(prettifyKind(kind)) +
+          ': ' +
+          (secretsPreset.title || secretsPreset.type),
       })),
     )
     .flat();
