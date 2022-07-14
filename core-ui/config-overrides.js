@@ -11,6 +11,11 @@ module.exports = {
       ...config.resolve.alias,
     };
 
+    config.resolve.fallback = {
+      url: require.resolve('url/'),
+      ...config.resolve.fallback,
+    };
+
     return config;
   },
   jest: function(config) {

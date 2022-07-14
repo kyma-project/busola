@@ -16,8 +16,66 @@ import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigI
 
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
+import { Validator } from 'jsonschema';
+import { schema } from './cm';
+
+var v = new Validator();
+var instance = {
+  kind: 'ConfigMap',
+  apiVersion: 'v1',
+  metadata: {
+    name: 1,
+    namespace: 'default',
+    uid: 'a525c333-6f54-4d3c-b388-0d516b0171b6',
+    resourceVersion: '3322',
+    creationTimestamp: '2022-06-23T12:14:25Z',
+    labels: {
+      'reconciler.kyma-project.io/managed-by': 'reconciler',
+      'reconciler.kyma-project.io/origin-version': 'main',
+      'reconciler.kyma-project.io/reconciliation-summary': 'true',
+    },
+    managedFields: [
+      {
+        manager: 'kyma',
+        operation: 'Update',
+        apiVersion: 'v1',
+        time: '2022-06-23T12:14:25Z',
+        fieldsType: 'FieldsV1',
+        fieldsV1: {
+          'f:data': {
+            '.': {},
+            'f:last-reconciliation': {},
+            'f:name': {},
+            'f:status': {},
+            'f:version': {},
+          },
+          'f:metadata': {
+            'f:labels': {
+              '.': {},
+              'f:reconciler.kyma-project.io/managed-by': {},
+              'f:reconciler.kyma-project.io/origin-version': {},
+              'f:reconciler.kyma-project.io/reconciliation-summary': {},
+            },
+          },
+        },
+      },
+    ],
+  },
+  data: {
+    'last-reconciliation':
+      '2022-06-23 14:14:30.390574 +0200 CEST m=+29.922578476',
+    name: 'CRDs',
+    status: 'success',
+    version: 'main',
+  },
+};
+console.log(v.validate(instance, schema));
 
 export default function App() {
+  return null;
+}
+
+export function App2() {
   const { cluster, language, customResources = [] } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
 
