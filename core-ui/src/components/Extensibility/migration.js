@@ -11,16 +11,21 @@ export const getSupportedVersions = () =>
 
 export const getLatestVersion = () =>
   SUPPORTED_VERSIONS.find(version => version.latest)?.version;
-export const getCurrentVersion = resource => {
-  console.log('getCurrentVersion', resource?.data?.version);
-  return resource?.data?.version.replaceAll("'", '').replaceAll('"', '') || '';
+export const formatCurrentVersion = version => {
+  if (!version) return null;
+  return (
+    version
+      .toString()
+      .replaceAll("'", '')
+      .replaceAll('"', '') || ''
+  );
 };
 
 export function migrateToLatest(resource) {
   if (!resource) return undefined;
 
   const newestVersion = getLatestVersion();
-  const currentVersion = getCurrentVersion(resource);
+  const currentVersion = formatCurrentVersion(resource?.data?.version);
 
   const functionName = currentVersion.replace('.', '');
   const newResource =
@@ -35,7 +40,7 @@ const migrateFunctions = {};
 // Definitions of functions used for migration
 migrateFunctions['03'] = resource => {
   const newResource = cloneDeep(resource);
-  if (getCurrentVersion(newResource) === '0.3') {
+  if (formatCurrentVersion(newResource?.data?.version) === '0.3') {
     jp.value(newResource, `$.data.version`, '0.4');
   }
 
@@ -44,7 +49,7 @@ migrateFunctions['03'] = resource => {
 
 migrateFunctions['04'] = resource => {
   const newResource = cloneDeep(resource);
-  if (getCurrentVersion(newResource) === '0.4') {
+  if (formatCurrentVersion(newResource?.data?.version) === '0.4') {
     jp.value(newResource, `$.data.version`, '0.5');
   }
 

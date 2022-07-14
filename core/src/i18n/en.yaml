@@ -1023,6 +1023,9 @@ extensibility:
       success: UI configuration upserted.
     title: Create UI for {{kind}} CRD
   title: Extensibility
+  version:
+    current: Current vesion
+    latest: Latest vesion
   widgets:
     code-viewer-error: 'CodeViewer: The received resource is in a language other than defined: {{error}}.'
     joined-array:

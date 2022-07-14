@@ -16,7 +16,7 @@ import { LayoutPanel, MessageStrip } from 'fundamental-react';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 
 import {
-  getCurrentVersion,
+  formatCurrentVersion,
   getLatestVersion,
   getSupportedVersions,
   migrateToLatest,
@@ -50,14 +50,6 @@ export function ConfigMapDetails(props) {
   const updateConfigMap = async (newConfigMap, configmap) => {
     try {
       const diff = createPatch(configmap, newConfigMap);
-      console.log(
-        'diff',
-        diff,
-        'prettifiedResourceKind',
-        prettifiedResourceKind,
-        props.resourceKind,
-        props,
-      );
       await updateResourceMutation(props.resourceUrl, diff);
       notification.notifySuccess({
         content: t('components.resource-details.messages.success', {
@@ -84,7 +76,7 @@ export function ConfigMapDetails(props) {
 
     if (!(isExtensibilityEnabled && hasExtensibilityLabel)) return null;
 
-    const currentVersion = getCurrentVersion(configmap);
+    const currentVersion = formatCurrentVersion(configmap?.data?.version);
     const hasMigrationFunction = getMigrationFunctions().some(
       version => version === currentVersion.replace('.', ''),
     );
@@ -92,14 +84,7 @@ export function ConfigMapDetails(props) {
     const isSupportedVersion = getSupportedVersions().some(
       version => version === currentVersion,
     );
-    console.log(
-      'isCurrentVersion',
-      isCurrentVersion,
-      currentVersion,
-      typeof currentVersion,
-      getLatestVersion(),
-      typeof getLatestVersion(),
-    );
+
     const showMessage = () => {
       if (isCurrentVersion) {
         return null;
@@ -158,8 +143,12 @@ export function ConfigMapDetails(props) {
         <LayoutPanel.Body>
           {showMessage()}
           <LayoutPanelRow
-            name={t('common.headers.version')}
+            name={t('extensibility.version.current')}
             value={currentVersion || EMPTY_TEXT_PLACEHOLDER}
+          />
+          <LayoutPanelRow
+            name={t('extensibility.version.latest')}
+            value={getLatestVersion()}
           />
         </LayoutPanel.Body>
       </LayoutPanel>
