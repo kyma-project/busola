@@ -4,7 +4,8 @@ const cors = require('cors');
 const fs = require('fs');
 const merge = require('lodash.merge');
 
-import { handleRequest, serveStaticApp, serveMonaco } from './common';
+import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
+import { handleTracking } from './tracking.js';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 const { setupJWTCheck } = require('./jwtCheck');
 
@@ -72,6 +73,8 @@ const port = process.env.PORT || 3001;
 const address = process.env.ADDRESS || 'localhost';
 const isDocker = process.env.IS_DOCKER === 'true';
 
+const handleRequest = makeHandleRequest();
+
 if (isDocker) {
   // yup, order matters here
   serveStaticApp(app, '/core-ui/', '/core-ui');
@@ -79,6 +82,7 @@ if (isDocker) {
   app.use('/backend', handleRequest);
   serveStaticApp(app, '/', '/core');
 } else {
+  handleTracking(app);
   app.use(handleRequest);
 }
 

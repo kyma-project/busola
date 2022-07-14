@@ -79,11 +79,12 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
   const valueInput = (
     <Editor
       language={language || ''}
-      height="120px"
+      height="240px"
       autocompletionDisabled
       value={isNil(value) ? '' : value.toString()}
       onChange={handleChange}
       onBlur={pushValue}
+      updateValueOnParentChange
     />
   );
 
