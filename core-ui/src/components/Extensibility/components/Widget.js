@@ -18,26 +18,20 @@ export const SimpleRenderer = ({ children }) => {
   return children;
 };
 
-export function InlineWidget({ value, structure }) {
+export function InlineWidget({ children, value, structure }) {
   const { widgetT } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
-  return (
-    <LayoutPanelRow
-      name={widgetT(structure)}
-      value={
-        isNil(value) ? (
-          emptyLeafPlaceholder
-        ) : (
-          // set path to null to disable JSONpath
-          <Widget
-            value={value}
-            structure={{ ...structure, path: null, formula: null }}
-          />
-        )
-      }
-    />
-  );
+  let displayValue;
+  if (!isNil(children)) {
+    displayValue = children;
+  } else if (!isNil(value)) {
+    displayValue = value;
+  } else {
+    displayValue = emptyLeafPlaceholder;
+  }
+
+  return <LayoutPanelRow name={widgetT(structure)} value={displayValue} />;
 }
 
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
