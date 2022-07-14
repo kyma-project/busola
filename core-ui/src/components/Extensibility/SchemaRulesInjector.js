@@ -3,10 +3,10 @@ import { uniq, merge, initial } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 import { OrderedMap } from 'immutable';
 
+const byPath = a => b => JSON.stringify(b.path) === JSON.stringify(a);
+
 export function prepareSchemaRules(ruleDefs) {
   const rules = [{ path: [], children: [] }];
-
-  const byPath = a => b => JSON.stringify(b.path) === JSON.stringify(a);
 
   const addRule = rule => {
     rules.push(rule);
