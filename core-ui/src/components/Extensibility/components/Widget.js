@@ -29,7 +29,10 @@ export function InlineWidget({ value, structure }) {
           emptyLeafPlaceholder
         ) : (
           // set path to null to disable JSONpath
-          <Widget value={value} structure={{ ...structure, path: null }} />
+          <Widget
+            value={value}
+            structure={{ ...structure, path: null, formula: null }}
+          />
         )
       }
     />
