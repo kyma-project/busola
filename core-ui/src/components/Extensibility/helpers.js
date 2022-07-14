@@ -4,6 +4,7 @@ import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
 import jsonata from 'jsonata';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { OrderedMap } from 'immutable';
 
 export const TranslationBundleContext = createContext({
   translationBundle: 'extensibility',
@@ -94,4 +95,22 @@ export const useGetPlaceholder = structure => {
   }
 
   return { emptyLeafPlaceholder };
+};
+
+export const getObjectValueWorkaround = (
+  schema,
+  resource,
+  storeKeys,
+  value,
+) => {
+  // TODO the value obtained by ui-schema is undefined for this component
+  if (schema.toJS().type === 'object') {
+    value = OrderedMap(
+      storeKeys.toArray().reduce((valueSoFar, currKey) => {
+        return valueSoFar?.[currKey];
+      }, resource),
+    );
+  }
+
+  return value;
 };

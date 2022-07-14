@@ -100,7 +100,7 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 
 ```json
 {
-  "path": "spec.my-data[]",
+  "path": "spec.my-data",
   "widget": "KeyValuePair"
 }
 ```
