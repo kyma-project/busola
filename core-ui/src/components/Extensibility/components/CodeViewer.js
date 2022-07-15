@@ -5,6 +5,7 @@ import { isValidYaml } from 'shared/contexts/YamlEditorContext/isValidYaml';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useGetTranslation } from '../helpers';
 import { useTranslation } from 'react-i18next';
+import { isNil } from 'lodash';
 
 export function CodeViewer({ value, structure, schema }) {
   const { widgetT } = useGetTranslation();
@@ -16,7 +17,7 @@ export function CodeViewer({ value, structure, schema }) {
     let language = structure.language || detectLanguage(value);
     let parsedValue = '';
 
-    if (value) {
+    if (isNil(value)) {
       try {
         switch (language) {
           case 'yaml':
