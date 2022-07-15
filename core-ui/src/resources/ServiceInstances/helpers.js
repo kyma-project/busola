@@ -1,6 +1,6 @@
 export function createServiceInstanceTemplate(namespaceId) {
   return {
-    apiVersion: 'services.cloud.sap.com/v1alpha1',
+    apiVersion: 'services.cloud.sap.com/v1',
     kind: 'ServiceInstance',
     metadata: {
       name: '',

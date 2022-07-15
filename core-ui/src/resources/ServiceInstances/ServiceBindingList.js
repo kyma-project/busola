@@ -8,7 +8,7 @@ export function ServiceBindingList(instance) {
   const listParams = {
     hasDetailsView: true,
     fixedPath: true,
-    resourceUrl: `/apis/services.cloud.sap.com/v1alpha1/namespaces/${namespace}/servicebindings`,
+    resourceUrl: `/apis/services.cloud.sap.com/v1/namespaces/${namespace}/servicebindings`,
     resourceType: 'servicebindings',
     namespace,
     isCompact: true,
