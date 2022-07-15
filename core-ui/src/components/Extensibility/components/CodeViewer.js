@@ -5,6 +5,7 @@ import { isValidYaml } from 'shared/contexts/YamlEditorContext/isValidYaml';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useGetTranslation } from '../helpers';
 import { useTranslation } from 'react-i18next';
+import { isNil } from 'lodash';
 
 export function CodeViewer({ value, structure, schema }) {
   const { widgetT } = useGetTranslation();
@@ -16,33 +17,36 @@ export function CodeViewer({ value, structure, schema }) {
     let language = structure.language || detectLanguage(value);
     let parsedValue = '';
 
-    try {
-      switch (language) {
-        case 'yaml':
-          parsedValue = jsyaml.dump(value);
-          break;
-        default:
-          //this includes JSON and other languages
-          parsedValue = stringifyIfObject(value);
+    if (isNil(value)) {
+      try {
+        switch (language) {
+          case 'yaml':
+            parsedValue = jsyaml.dump(value);
+            break;
+          default:
+            //this includes JSON and other languages
+            parsedValue = stringifyIfObject(value);
+        }
+      } catch (e) {
+        const errMessage = t('extensibility.widgets.code-viewer-error', {
+          error: e.message,
+        });
+        console.warn(errMessage);
+        notification.notifyError({
+          content: errMessage,
+        });
+        language = '';
+        parsedValue = stringifyIfObject(value);
       }
-    } catch (e) {
-      const errMessage = t('extensibility.widgets.code-viewer-error', {
-        error: e.message,
-      });
-      console.warn(errMessage);
-      notification.notifyError({
-        content: errMessage,
-      });
-      language = '';
-      parsedValue = stringifyIfObject(value);
     }
-
     return {
       parsedValue,
       language,
     };
   };
+
   const { parsedValue, language } = getValueAndLang(value, structure);
+
   return (
     <ReadonlyEditorPanel
       title={widgetT(structure)}
