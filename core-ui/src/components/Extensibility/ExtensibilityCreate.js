@@ -12,7 +12,7 @@ import { ResourceSchema } from './ResourceSchema';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { prettifyKind } from 'shared/utils/helpers';
-
+import { isInvalid } from '@ui-schema/ui-schema';
 export function ExtensibilityCreate({
   formElementRef,
   setCustomValid,
@@ -66,6 +66,13 @@ export function ExtensibilityCreate({
     }
     toggleFormFn(false);
   };
+  const validity = store.getValidity();
+  const isInv = isInvalid(validity);
+
+  console.log('isInv', isInv);
+
+  console.log('v', store.validity.toArray());
+  console.log('gv', store.getValidity().toArray());
 
   return (
     <ResourceForm
@@ -79,7 +86,7 @@ export function ExtensibilityCreate({
       setResource={updateResource}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      setCustomValid={setCustomValid}
+      setCustomValid={() => isInv === 0}
       onlyYaml={!schema}
       initialResource={initialResource}
       afterCreatedFn={afterCreatedFn}
