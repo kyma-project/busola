@@ -1003,7 +1003,7 @@ extensibility:
   error: Your extension configuration is incorrect.
   message:
     old-version: There is a newer version of the extensibility configuration. Please migrate to the newest version.
-    unnown-version: Your extensibility configuration version is no longer supported, but cannot be migrated. Please contact administrator.
+    unnown-version: Your extensibility configuration version is no longer supported, but cannot be migrated. For more information, see <0>Extensibility documentation</0>.
     unsupported-version: Your extensibility configuration version is no longer supported. Please migrate to the newest version.
   starter-modal:
     buttons:

@@ -1,16 +1,11 @@
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 
-const SUPPORTED_VERSIONS = [
-  { version: '0.4', latest: false },
-  { version: '0.5', latest: true },
-];
+const SUPPORTED_VERSIONS = ['0.4', '0.5'];
+const LATEST_VERSION = '0.5';
 
-export const getSupportedVersions = () =>
-  SUPPORTED_VERSIONS.map(version => version.version).sort();
-
-export const getLatestVersion = () =>
-  SUPPORTED_VERSIONS.find(version => version.latest)?.version;
+export const getSupportedVersions = () => SUPPORTED_VERSIONS;
+export const getLatestVersion = () => LATEST_VERSION;
 export const formatCurrentVersion = version => {
   if (!version) return null;
   return (

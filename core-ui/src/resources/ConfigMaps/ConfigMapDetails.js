@@ -1,5 +1,6 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { Link } from 'shared/components/Link/Link';
+import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
@@ -90,29 +91,25 @@ export function ConfigMapDetails(props) {
         return null;
       } else if (isSupportedVersion) {
         return (
-          <MessageStrip
-            type="information"
-            className="add-cluster__kubeconfig-info fd-margin-top--sm fd-margin-bottom--sm"
-          >
+          <MessageStrip type="information" className="fd-margin-bottom--sm">
             {t('extensibility.message.old-version')}
           </MessageStrip>
         );
       } else if (hasMigrationFunction) {
         return (
-          <MessageStrip
-            type="error"
-            className="add-cluster__kubeconfig-info fd-margin-top--sm fd-margin-bottom--sm"
-          >
+          <MessageStrip type="error" className="fd-margin-bottom--sm">
             {t('extensibility.message.unsupported-version')}
           </MessageStrip>
         );
       } else {
         return (
-          <MessageStrip
-            type="error"
-            className="add-cluster__kubeconfig-info fd-margin-top--sm fd-margin-bottom--sm"
-          >
-            {t('extensibility.message.unnown-version')}
+          <MessageStrip type="error" className="fd-margin-bottom--sm">
+            <Trans i18nKey="extensibility.message.unnown-version">
+              <Link
+                className="fd-link"
+                url="https://github.com/kyma-project/busola/tree/main/docs/extensibility"
+              />
+            </Trans>
           </MessageStrip>
         );
       }
