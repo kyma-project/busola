@@ -125,3 +125,6 @@ export const getErrorMessage = (error, message = null) => {
 };
 
 export const intersperse = (arr, sep) => arr.flatMap(el => [sep, el]).slice(1);
+
+export const stringifyIfBoolean = val =>
+  typeof val === 'boolean' ? JSON.stringify(val) : val;

@@ -17,6 +17,7 @@ import { communicationEntry as pageSizeCommunicationEntry } from './settings/pag
 import { getCorrespondingNamespaceLocation } from './navigation/navigation-helpers';
 import { featureCommunicationEntries } from './feature-discovery';
 import * as fetchCache from './cache/fetch-cache';
+import { sendTrackingRequest } from './tracking';
 
 addCommandPaletteHandler();
 addOpenSearchHandler();
@@ -115,6 +116,15 @@ export const communication = {
     'busola.setCluster': ({ clusterName }) => {
       setCluster(clusterName);
     },
+
+    'busola.refreshClusters': async () => {
+      await reloadAuth();
+      clearAuthData();
+      saveActiveClusterName(null);
+      fetchCache.clear();
+      await reloadNavigation();
+    },
+
     'busola.showMessage': ({ message, title, type }) => {
       Luigi.customMessages().sendToAll({
         id: 'busola.showMessage',
@@ -123,6 +133,7 @@ export const communication = {
         type,
       });
     },
+    'busola.tracking': async ({ body }) => await sendTrackingRequest(body),
     'busola.switchNamespace': ({ namespaceName }) => {
       const alternativeLocation = getCorrespondingNamespaceLocation(
         namespaceName,

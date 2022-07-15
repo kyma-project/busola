@@ -66,7 +66,12 @@ export const ExtensibilityList = () => {
   const { path } = resMetaData?.resource ?? {};
 
   return (
-    <TranslationBundleContext.Provider value={path}>
+    <TranslationBundleContext.Provider
+      value={{
+        translationBundle: path,
+        defaultResourcePlaceholder: resMetaData?.resource?.defaultPlaceholder,
+      }}
+    >
       <RelationsContextProvider relations={resMetaData?.relations || {}}>
         <ErrorBoundary
           customMessage={t('extensibility.error')}

@@ -229,7 +229,7 @@ Note that some features must be run before the application starts the bootstrap 
   ```
 
 * **KUBECONFIG_ID** – is used to configure the URL to which Busola sends a request to download a kubeconfig file. If you add `?kubeconfigID={your ID}` to the Busola URL, Busola tries to download the kubeconfig from `{kubeconfigUrl}/{yourID}`. If the operation succeeds, Busola adds the kubeconfing file to the cluster.
-  If you use a full address in the **kubeconfigUrl** field, Busola also reads it.
+  If you use a full address in the **kubeconfigUrl** field, Busola also reads it. Optionally, you can instruct Busola to show the clusters overview rather than the current context cluster, using the **showClustersOverview** property.
 
   Default settings:
 
@@ -237,7 +237,8 @@ Note that some features must be run before the application starts the bootstrap 
   "KUBECONFIG_ID": {
    "isEnabled": true,
    "config": {
-     "kubeconfigUrl": "https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig"
+     "kubeconfigUrl": "https://kyma-env-broker.cp.dev.kyma.cloud.sap/kubeconfig",
+     "showClustersOverview": false,
    }
   },
   ```
@@ -430,6 +431,14 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
       "clientId": "9bd05ed7-a930-44e6-8c79-e6defeb7dec9",
       "clientSecret": "supersecret",
     }
+  },
+  ```
+
+- **TRACKING** - determines if simple application usage tracking is enabled.
+
+  ```json
+  "TRACKING": {
+    "isEnabled": false,
   },
   ```
 
