@@ -1,32 +1,76 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { useTheme } from 'shared/contexts/ThemeContext';
 import './GraphLegend.scss';
+import { useCssVariables } from 'hooks/useCssVariables';
 
 export function GraphLegend({ values, isStatsPanel = true }) {
   const { t } = useTranslation();
+  const canvas = document.querySelector('canvas.stats-graph');
+
+  const barVariable = useCssVariables(
+    { barColor: '--bar-color' },
+    canvas,
+    // values,
+  );
   const [colors, setColors] = useState([]);
-  const { theme } = useTheme();
+  // let colors = []
+  // console.log('values', values);
+  // useEffect(() => {
+  //   handleCss();
+  // }, [values]);
 
-  const handleCss = () => {
-    const canvas = document.querySelector('canvas.stats-graph');
-    if (!canvas) return;
-    const css = getComputedStyle(canvas);
-    const color = css.getPropertyValue('--bar-color');
-    setColors(color?.trim().split(/ +/));
-  };
+  // useEffect(() => {
+  //   const canvas = document.querySelector('canvas.stats-graph');
+  //   if (!canvas) return;
+  //   const css = getComputedStyle(canvas);
+  //   const color = css.getPropertyValue('--bar-color');
+  //   setColors(color?.trim().split(/ +/));
+  //   // setColors(color);
+  // }, [values]);
 
   useEffect(() => {
-    handleCss();
-  }, [values]);
+    if (!barVariable?.barColor) return;
+    const color = barVariable?.barColor?.trim().split(/ +/);
 
-  useEffect(() => {
-    const cssDelay = setTimeout(handleCss, 1000);
+    console.log(color);
+    setColors(color);
+  }, [barVariable]);
 
-    return () => clearTimeout(cssDelay);
-  }, [theme]);
+  // const { theme } = useTheme();
+  // const canvas = document.querySelector('canvas.stats-graph');
+  // let colors = [];
+  // const barVariable = useCssVariables({ barColor: '--bar-color' }, canvas);
+  // console.log('barVariable', barVariable);
+  // colors = barVariable?.barColor
+  //   ? barVariable?.barColor?.trim().split(/ +/)
+  //   : null;
+  // console.log('colors', colors);
+
+  // const colors = [];
+  // const css = getComputedStyle(canvas);
+  // const color = css.getPropertyValue('--bar-color');
+  // console.log(color);
+  // const colors = barVariable?.trim().split(/ +/);
+  // const handleCss = () => {
+  //   const canvas = document.querySelector('canvas.stats-graph');
+  //   if (!canvas) return;
+  //   const css = getComputedStyle(canvas);
+  //   const color = css.getPropertyValue('--bar-color');
+  //   setColors(color?.trim().split(/ +/));
+  // };
+
+  // useEffect(() => {
+  //   // if (!isStatsPanel) return;
+  // }, [values, barVariable]);
+
+  // useEffect(() => {
+  //   const cssDelay = setTimeout(handleCss, 1000);
+
+  //   return () => clearTimeout(cssDelay);
+  // }, [theme]);
 
   return (
     <legend className="commitment-graph__legend">
