@@ -1,0 +1,78 @@
+kind: CustomResourceDefinition
+apiVersion: apiextensions.k8s.io/v1
+metadata:
+  name: pizzaorders.busola.example.com
+spec:
+  group: busola.example.com
+  names:
+    plural: pizzaorders
+    singular: pizzaorder
+    shortNames:
+      - pzo
+    kind: PizzaOrder
+    listKind: PizzaOrderList
+  scope: Namespaced
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          description: A custom resource for creating orders for pizzas
+          type: object
+          properties:
+            spec:
+              description: Information about the order
+              type: object
+              properties:
+                description:
+                  description: Order description
+                  type: string
+                status:
+                  type: string
+                  enum:
+                    - Ready
+                    - Error
+                orderDetails:
+                  description: The details of the order
+                  type: object
+                  properties:
+                    paymentMethod:
+                      type: string
+                      description: The payment method for the order
+                      enum:
+                        - CARD
+                        - CASH
+                    realization:
+                      description: The order's realization way
+                      type: string
+                      enum:
+                        - DELIVERY
+                        - SELF-PICKUP
+                pizzas:
+                  type: array
+                  description: Ordered pizzas
+                  items:
+                    type: object
+                    properties:
+                      kind:
+                        type: string
+                        value: Pizza
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+            status:
+              type: object
+              properties:
+                messages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                      state:
+                        type: string
+  conversion:
+    strategy: None

@@ -68,3 +68,4 @@ function detectLanguage(value) {
 function stringifyIfObject(value) {
   return typeof value !== 'string' ? JSON.stringify(value, null, 2) : value;
 }
+CodeViewer.array = true;
