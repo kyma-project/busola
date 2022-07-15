@@ -58,6 +58,7 @@ const customColumn = PropTypes.exact({
   header: PropTypes.string,
   value: PropTypes.func.isRequired, // gets the resource item as param; should return PropTypes.node
   id: PropTypes.string,
+  visibility: PropTypes.func,
 });
 
 const customColumnsType = PropTypes.arrayOf(customColumn);

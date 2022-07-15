@@ -10,7 +10,7 @@ Use inline widgets for simple values in lists, details headers, and details bodi
 
 Text widgets render values as a simple text. This is the default behavior for all scalar values.
 
-###### Widget-specific parameters
+#### Widget-specific parameters
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
   If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
@@ -31,17 +31,20 @@ Text widgets render values as a simple text. This is the default behavior for al
 
 Badge widgets render texts as a status badge, using a set of predefined rules to assign colors.
 
-The following values are automatically handled:
-
-- rendered as an information: `initial`, `pending`, `available`, `released`.
-- rendered as a success: `ready`, `bound`, `running`, `success`, `succeeded`, `ok`.
-- rendered as a warning: `unknown`, `warning`.
-- rendered as an error: `error`, `failure`, `invalid`.
-
-###### Widget-specific parameters
+#### Widget-specific parameters
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
   If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+- **highlights** - an optional map of highlight rules. Key refers to the type of highlight, while the rule can just be a plain array of values or a string containing a jsonata rule. Allowed keys are `informative` `positive`, `negative` and `critical`.
+
+#### Default highlight rules
+
+When no highlights are provided, the following values are automatically handled:
+
+- rendered as informative: `initial`, `pending`, `available`, `released`.
+- rendered as positive: `ready`, `bound`, `running`, `success`, `succeeded`, `ok`.
+- rendered as negative: `unknown`, `warning`.
+- rendered as critical: `error`, `failure`, `invalid`.
 
 #### Example
 
@@ -49,7 +52,11 @@ The following values are automatically handled:
 {
   "path": "status.value",
   "widget": "Badge",
-  "placeholder": "-"
+  "placeholder": "-",
+  "highlights": {
+    "positive": ["yes", "ok"],
+    "negative": "data < 0"
+  }
 }
 ```
 
@@ -184,6 +191,7 @@ If such resource list was already defined in Busola, the configuration will be r
 {
   "widget": "ResourceList",
   "path": "$myRelatedResource",
+  "name": "Example ResourceList Secret",
   "columns": [
     {
       "path": "status.code",
@@ -193,10 +201,15 @@ If such resource list was already defined in Busola, the configuration will be r
 }
 ```
 
+<img src="./assets/display-widgets/ResourceList.png" alt="Example of a ResourceList widget" style="border: 1px solid #D2D5D9">
+
 ### ResourceRefs
 
 ResourceRefs widgets render the lists of links to the associated resources. The corresponding specification object must be an array of objects `{name: 'foo', namespace: 'bar'}`.
-Additionally, you must define the kind of the linked resources by passing the Kubernetes resource `kind` (for example, `Secret`, `ConfigMap`).
+
+#### Widget-specific parameters
+
+- **kind** - _[required]_ Kubernetes kind of the resource.
 
 #### Example
 
@@ -208,11 +221,13 @@ Additionally, you must define the kind of the linked resources by passing the Ku
 }
 ```
 
+<img src="./assets/display-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">
+
 ### ControlledBy
 
 ControlledBy widgets render the kind and the name with a link to the resources that the current resource is dependent on.
 
-###### Widget-specific parameters
+#### Widget-specific parameters
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
   If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
@@ -233,7 +248,7 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 
 ControlledByKind widgets render the kind of the resources that the current resource is dependent on.
 
-###### Widget-specific parameters
+#### Widget-specific parameters
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
   If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.

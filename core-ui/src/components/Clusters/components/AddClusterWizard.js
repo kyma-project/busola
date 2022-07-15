@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Wizard, MessageStrip } from 'fundamental-react';
+import { MessageStrip, Wizard } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -7,7 +7,7 @@ import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
-import { hasKubeconfigAuth, getUser, getContext, addCluster } from '../shared';
+import { addByContext, getUser, hasKubeconfigAuth } from '../shared';
 import { AuthForm } from './AuthForm';
 import { KubeconfigUpload } from './KubeconfigUpload/KubeconfigUpload';
 import { ContextChooser } from './ContextChooser/ContextChooser';
@@ -61,49 +61,38 @@ export function AddClusterWizard({
     setKubeconfig(kubeconfig);
   };
 
-  const addByContext = (kubeconfig, context, switchCluster = true) => {
-    const cluster = kubeconfig.clusters.find(
-      c => c.name === context.context.cluster,
-    );
-    const user = kubeconfig.users.find(u => u.name === context.context.user);
-    const newKubeconfig = {
-      ...kubeconfig,
-      'current-context': context.name,
-      contexts: [context],
-      clusters: [cluster],
-      users: [user],
-    };
-    addCluster(
-      {
-        kubeconfig: newKubeconfig,
-        contextName: context.name,
-        config: { ...(config || {}), storage },
-        currentContext: getContext(newKubeconfig, context.name),
-      },
-      switchCluster,
-    );
-  };
-
   const onComplete = () => {
     try {
       const contextName = kubeconfig['current-context'];
       if (!kubeconfig.contexts?.length) {
-        addByContext(kubeconfig, {
-          name: kubeconfig.clusters[0].name,
+        addByContext({
+          kubeconfig,
           context: {
-            cluster: kubeconfig.clusters[0].name,
-            user: kubeconfig.users[0].name,
+            name: kubeconfig.clusters[0].name,
+            context: {
+              cluster: kubeconfig.clusters[0].name,
+              user: kubeconfig.users[0].name,
+            },
           },
+
+          storage,
+          config,
         });
       } else if (contextName === '-all-') {
         kubeconfig.contexts.forEach((context, index) => {
-          addByContext(kubeconfig, context, !index);
+          addByContext({
+            kubeconfig,
+            context,
+            switchCluster: !index,
+            storage,
+            config,
+          });
         });
       } else {
         const context = kubeconfig.contexts.find(
           context => context.name === contextName,
         );
-        addByContext(kubeconfig, context);
+        addByContext({ kubeconfig, context, storage, config });
       }
     } catch (e) {
       notification.notifyError({

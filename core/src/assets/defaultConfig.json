@@ -30,6 +30,7 @@
         }
       },
       "KUBECONFIG_ID": {
+        "isEnabled": true,
         "config": {
           "kubeconfigUrl": "/kubeconfig"
         }
