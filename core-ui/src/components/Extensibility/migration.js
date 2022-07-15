@@ -27,7 +27,7 @@ export function migrateToLatest(resource) {
   const newestVersion = getLatestVersion();
   const currentVersion = formatCurrentVersion(resource?.data?.version);
 
-  const functionName = currentVersion.replace('.', '');
+  const functionName = currentVersion?.replace('.', '');
   const newResource =
     currentVersion !== newestVersion
       ? migrateFunctions[functionName](resource)

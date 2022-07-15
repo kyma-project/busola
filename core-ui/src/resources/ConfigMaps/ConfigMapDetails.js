@@ -78,7 +78,7 @@ export function ConfigMapDetails(props) {
 
     const currentVersion = formatCurrentVersion(configmap?.data?.version);
     const hasMigrationFunction = getMigrationFunctions().some(
-      version => version === currentVersion.replace('.', ''),
+      version => version === currentVersion?.replace('.', ''),
     );
     const isCurrentVersion = getLatestVersion() === currentVersion;
     const isSupportedVersion = getSupportedVersions().some(
