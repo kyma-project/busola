@@ -29,7 +29,6 @@ export function prepareSchemaRules(ruleDefs) {
 
     initial(fullPath).reduce((acc, step) => {
       const myPath = [...acc, step];
-      // const lastRule = rules.findLast(rule => JSON.stringify(rule.path) === JSON.stringify(myPath));
       const lastRule = rules.findLast(byPath(myPath));
       if (!lastRule) {
         addRule({
@@ -68,22 +67,10 @@ export function SchemaRulesInjector({
   schemaRules,
   ...props
 }) {
-  const visiblePaths = schemaRules.map(rule =>
-    rule.path.join('.').replace('.[]', ''),
-  );
-
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
 
   const path = storeKeys.map(item => (typeof item === 'number' ? '[]' : item));
-  const flatPath = path
-    .join('.')
-    .replace('.[]', '[]')
-    .replace(/\[]/g, '');
-
-  if (!visiblePaths.includes(flatPath)) {
-    return null;
-  }
 
   const { simple, advanced, path: myPath, children: childRules, ...itemRule } =
     schemaRules.find(byPath(path)) ?? {};
