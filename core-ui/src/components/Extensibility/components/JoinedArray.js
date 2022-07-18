@@ -16,7 +16,7 @@ export function JoinedArray({ value, structure, schema }) {
 
   return (
     value.join(structure?.separator ? structure.separator : ', ') ||
-    EMPTY_TEXT_PLACEHOLDER
+    emptyLeafPlaceholder
   );
 }
 
