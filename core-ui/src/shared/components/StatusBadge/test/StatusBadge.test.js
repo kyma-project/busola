@@ -2,12 +2,6 @@ import React from 'react';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { render } from '@testing-library/react';
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: key => key,
-  }),
-}));
-
 describe('StatusBadge', () => {
   it('renders status text with proper role', () => {
     const { queryByRole } = render(<StatusBadge>INITIAL</StatusBadge>);

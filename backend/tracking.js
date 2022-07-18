@@ -7,8 +7,7 @@ export function handleTracking(app) {
       console.log(
         JSON.stringify({
           ...payload,
-          timestamp: Date.now(),
-          type: 'X-Log ' + payload.type,
+          source: 'busola-frontend',
         }),
       );
       res.sendStatus(200);
