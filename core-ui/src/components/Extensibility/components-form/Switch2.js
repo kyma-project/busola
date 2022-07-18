@@ -1,6 +1,7 @@
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { ResourceForm } from 'shared/ResourceForm';
 import React from 'react';
+import { useGetTranslation } from 'components/Extensibility/helpers';
 
 export const Switch2 = ({
   onChange,
@@ -11,16 +12,21 @@ export const Switch2 = ({
   required,
   compact,
   setValue,
+  propertyPath,
+  label,
   ...props
 }) => {
+  const { t } = useGetTranslation();
+
   return (
     <ResourceForm.FormField
       advanced
       propertyPath="$.spec.enableUnsupportedPlugins"
-      label={'dsd'}
+      label={t(label || propertyPath)}
       input={Inputs.Switch}
       setValue={setValue}
       value={value}
+
       // onChange={setValue}
     />
     // <ResourceForm.FormField

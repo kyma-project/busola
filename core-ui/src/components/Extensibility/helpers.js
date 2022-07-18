@@ -39,10 +39,17 @@ export const useGetTranslation = path => {
   const { translationBundle } = useContext(TranslationBundleContext);
   const { t, i18n } = useTranslation([translationBundle]);
   //doesn't always work, add `translationBundle.` at the beginning of a path
-
   return {
-    t: (path, ...props) => t(`${translationBundle}::${path}`, ...props) || path,
+    t: (path, ...props) => {
+      console.log(path);
+      if (path.startsWith('$.')) {
+        path = path.slice(2);
+      }
+
+      return t(`${translationBundle}::${path}`, ...props) || path;
+    },
     tFromStoreKeys: (storeKeys, ...props) => {
+      console.log(storeKeys);
       const path = storeKeys
         .toArray()
         .filter(el => typeof el === 'string') // get rid of numbers i.e. spec.ports[2].protocol

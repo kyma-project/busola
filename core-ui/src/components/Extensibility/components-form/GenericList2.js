@@ -19,7 +19,8 @@ export function GenericList2({
   ...props
 }) {
   const { t } = useTranslation();
-  const { children: childrenComponents } = componentSpec;
+  console.log(componentSpec);
+  const { children: childrenComponents, path } = componentSpec;
   const listSize = value?.length || 0;
 
   const addItem = () => {
@@ -88,6 +89,7 @@ export function GenericList2({
                       jp.value(newVal, `$[${index}].${child.path}`, v);
                       onChange(newVal);
                     }}
+                    label={`${path}.${child.path}`}
                   />
                 );
               })}

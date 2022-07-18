@@ -14,20 +14,11 @@ export function String2({
   compact,
   setValue,
   propertyPath,
+  label,
   ...props
 }) {
-  console.log(
-    onChange,
-    onKeyDown,
-    value,
-    schema,
-    storeKeys,
-    required,
-    compact,
-    setValue,
-    propertyPath,
-    props,
-  );
+  const { t } = useGetTranslation();
+
   return (
     <ResourceForm.FormField
       value={value}
@@ -42,7 +33,7 @@ export function String2({
       //     data: { value },
       //   });
       // }}
-      label={propertyPath}
+      label={t(label || propertyPath)}
       input={Inputs.Text}
       compact={compact}
     />

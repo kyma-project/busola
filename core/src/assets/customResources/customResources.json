@@ -250,7 +250,12 @@
         "afsd.afds": "fs",
         "status.conditions[-1].type-placeholhder": "sd",
         "this one is overwriten-conditions": "the final string",
-        "no value": "no such value"
+        "no value": "no such value",
+        "spec.files": "Fine Files",
+        "spec.files.content": "Fine File Content",
+        "spec.files.name": "Fine File Name",
+        "kind": "My kind translation",
+        "spec.enableUnsupportedPlugins": "Are UnsupportedPlugins enabled?"
       }
     }
   }
