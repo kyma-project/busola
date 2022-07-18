@@ -31,10 +31,17 @@ const workaroundForNodeMetrics = req => {
 
 export const makeHandleRequest = () => {
   const isDev = process.env.NODE_ENV !== 'production';
-  const isTrackingEnabled = global.config?.features?.TRACKING?.isEnabled;
-  console.log(isDev, isTrackingEnabled);
+  const isTrackingEnabled =
+    global.config?.features?.TRACKING?.isEnabled &&
+    process.env.IS_DOCKER !== 'true';
+
+  console.log('tracking feat', global.config?.features?.TRACKING?.isEnabled);
+  console.log('process.env.IS_DOCKER', process.env.IS_DOCKER);
+  console.log('isTrackingEnabled', isTrackingEnabled);
+  console.log('dev', isDev);
+  console.log('isDev || isTrackingEnabled', isDev || isTrackingEnabled);
   const logger = PinoHttp({
-    autoLogging: !(isDev || isTrackingEnabled), //to disable the automatic "request completed" and "request errored" logging.
+    autoLogging: isDev || isTrackingEnabled, //to disable the automatic "request completed" and "request errored" logging.
     genReqId: req => {
       req.id = uuid();
       return req.id;
