@@ -6,7 +6,12 @@ export function Columns({ structure, ...props }) {
   return (
     <div className="panel-grid">
       {structure.children.map(child => (
-        <Widget structure={child} disableMargin={true} {...props} />
+        <Widget
+          structure={child}
+          key={`column-${child.path}`}
+          disableMargin={true}
+          {...props}
+        />
       ))}
     </div>
   );
