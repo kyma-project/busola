@@ -3,12 +3,17 @@ import { LayoutPanel } from 'fundamental-react';
 
 import { useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
+import classNames from 'classnames';
 
-export function Panel({ value, structure, schema }) {
+export function Panel({ value, structure, schema, disableMargin = false }) {
   const { widgetT } = useGetTranslation();
 
+  const panelClassNames = classNames({
+    'fd-margin--md': !disableMargin,
+  });
+
   return (
-    <LayoutPanel className="fd-margin--md">
+    <LayoutPanel className={panelClassNames}>
       <LayoutPanel.Header>
         <LayoutPanel.Head title={widgetT(structure)} />
       </LayoutPanel.Header>
