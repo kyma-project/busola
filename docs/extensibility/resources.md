@@ -319,11 +319,11 @@ Value preprocessors are used as a middleware between a value and the actual rend
 
 ## version section
 
-The `version` is a string value that defines in which version the extension is configured. If configuration is created with `Create UI` button this value will be provided automatically. When created manually please use the latest vesion number: `'0.5'`
+The `version` is a string value that defines in which version the extension is configured. If the configuration is created with the `Create UI` button, this value is provided automatically. When created manually, use the latest version number: `'0.5'`
 
-Busola only support current version of the configuration and the one behind.
+Busola supports only the current version of the configuration and the prior one.
 
-Therefore whenever a new version of configuration is proposed, there will be possibility to migrate your configuration to the latest vesion. To do so go to your config map and click button `migrate`.
+Therefore, whenever a new version of the configuration is proposed, there is a possibility to migrate your configuration to the latest version. To do so, go to your Config Map and click the `migrate` button.
 
 ### Example (latest vesion)
 
