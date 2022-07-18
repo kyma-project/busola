@@ -35,11 +35,6 @@ export const makeHandleRequest = () => {
     global.config?.features?.TRACKING?.isEnabled &&
     process.env.IS_DOCKER !== 'true';
 
-  console.log('tracking feat', global.config?.features?.TRACKING?.isEnabled);
-  console.log('process.env.IS_DOCKER', process.env.IS_DOCKER);
-  console.log('isTrackingEnabled', isTrackingEnabled);
-  console.log('dev', isDev);
-  console.log('isDev || isTrackingEnabled', isDev || isTrackingEnabled);
   const logger = PinoHttp({
     autoLogging: !!(isDev || isTrackingEnabled), //to disable the automatic "request completed" and "request errored" logging.
     genReqId: req => {
