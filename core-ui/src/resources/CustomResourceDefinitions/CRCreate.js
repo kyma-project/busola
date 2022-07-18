@@ -3,7 +3,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { createTemplate } from './templates';
 import { useNavigateToCustomResource } from './useNavigateToCustomResource';
 
-function CRCreate({ onChange, formElementRef, crd }) {
+function CRCreate({ onChange, formElementRef, crd, toggleFormFn }) {
   const [CR, setCR] = useState(createTemplate(crd));
   const navigateToCustomResource = useNavigateToCustomResource();
 
@@ -28,7 +28,10 @@ function CRCreate({ onChange, formElementRef, crd }) {
       formElementRef={formElementRef}
       createUrl={createResourceUrl(CR, crd)}
       onlyYaml
-      afterCreatedFn={() => navigateToCustomResource(CR, crd)}
+      afterCreatedFn={() => {
+        navigateToCustomResource(CR, crd);
+        toggleFormFn();
+      }}
     />
   );
 }
