@@ -84,7 +84,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
   }
 
   const { visible, error: visibleCheckError } = shouldBeVisible(
-    value,
+    childValue,
     structure.visibility,
   );
 
