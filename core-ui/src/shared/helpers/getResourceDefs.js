@@ -14,9 +14,9 @@ export function getPerResourceDefs(defType, t, context) {
   return Object.fromEntries(
     resources
       .filter(resource => !!resource[defType])
-      .map(({ resourceType, resourceGraphConfig }) => {
-        const kind = pluralize(resourceType, 1);
-        const value = resourceGraphConfig(t, context);
+      .map(resource => {
+        const kind = pluralize(resource.resourceType, 1);
+        const value = resource[defType](t, context);
         return [kind, value];
       }),
   );
