@@ -27,9 +27,9 @@ describe('CodeViewer', () => {
 
     const wrapper = shallow(<CodeViewer value={value} />);
     const editor = wrapper.find(ReadonlyEditorPanel);
-    const { value: valueProp, editorProps } = wrapper.props();
+    const { value: valueProps, editorProps } = editor.props();
     const { language } = editorProps;
-    expect(valueProp).toEqual(`key: value\n`);
+    expect(valueProps).toEqual(`key: value\n`);
     expect(language).toEqual('yaml');
     expect(editor).toHaveLength(1);
   });
@@ -42,9 +42,9 @@ describe('CodeViewer', () => {
 
     const wrapper = shallow(<CodeViewer value={value} structure={structure} />);
     const editor = wrapper.find(ReadonlyEditorPanel);
-    const { value: valueProp, editorProps } = wrapper.props();
+    const { value: valueProps, editorProps } = editor.props();
     const { language } = editorProps;
-    expect(valueProp).toEqual(JSON.stringify(value, null, 2));
+    expect(valueProps).toEqual(JSON.stringify(value, null, 2));
     expect(language).toEqual('json');
     expect(editor).toHaveLength(1);
   });
@@ -54,9 +54,8 @@ describe('CodeViewer', () => {
 
     const wrapper = shallow(<CodeViewer value={value} />);
     const editor = wrapper.find(ReadonlyEditorPanel);
-    const { value: valueProp, editorProps } = wrapper.props();
-    const { language } = editorProps;
-    expect(valueProp).toEqual('');
+    const { value: valueProps } = editor.props();
+    expect(valueProps).toEqual('');
     expect(editor).toHaveLength(1);
   });
 });
