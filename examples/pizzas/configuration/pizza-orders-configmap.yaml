@@ -171,3 +171,4 @@ data:
         "spec.status": "Status"
       }
     }
+  version: '0.5'

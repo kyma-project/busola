@@ -316,3 +316,17 @@ Value preprocessors are used as a middleware between a value and the actual rend
   - Otherwise, it passes `data` to the display component.
 
   Unless you need custom handling of error or loading state, we recommend using the `PendingWrapper`, for example, for fields that use [related resources](#relations-section).
+
+## version section
+
+The `version` is a string value that defines in which version the extension is configured. If the configuration is created with the `Create UI` button, this value is provided automatically. When created manually, use the latest version number: `'0.5'`
+
+Busola supports only the current version of the configuration and the prior one.
+
+Therefore, whenever a new version of the configuration is proposed, there is a possibility to migrate your configuration to the latest version. To do so, go to your Config Map and click the `migrate` button.
+
+### Example (latest vesion)
+
+```yaml
+'0.5'
+```

@@ -1,6 +1,10 @@
 import jsyaml from 'js-yaml';
 import { merge } from 'lodash';
 import pluralize from 'pluralize';
+import {
+  getSupportedVersions,
+  formatCurrentVersion,
+} from '../../../core-ui/src/components/Extensibility/migration';
 
 import { config } from './config';
 import { failFastFetch } from './navigation/queries';
@@ -117,6 +121,14 @@ export async function getCustomResources(authData) {
       ...(await loadBusolaClusterCRs()),
       ...(await loadTargetClusterCRs(authData)),
     });
+
+    customResources[clusterName] = customResources[
+      clusterName
+    ].filter(resource =>
+      getSupportedVersions().some(
+        version => formatCurrentVersion(resource.version) === version,
+      ),
+    );
     return customResources[clusterName];
   }
   return [];

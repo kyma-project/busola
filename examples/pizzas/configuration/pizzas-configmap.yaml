@@ -216,3 +216,4 @@ data:
       topping.price: Price
       topping.quantity: Quantity
       spec.ownerReferences: Owner References
+  version: '0.5'
