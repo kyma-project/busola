@@ -12,6 +12,7 @@ import { useAppTracking } from 'hooks/tracking';
 
 import { ExtensibilityDetails } from 'components/Extensibility/ExtensibilityDetails';
 import { ExtensibilityList } from 'components/Extensibility/ExtensibilityList';
+import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
 
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
@@ -19,6 +20,8 @@ import otherRoutes from 'resources/other';
 export default function App() {
   const { cluster, language, customResources = [] } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
+
+  useLoginWithKubeconfigID();
 
   useEffect(() => {
     i18n.changeLanguage(language);
