@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
 import { widgetList } from 'components/Extensibility/components-form/index';
+import { getSubSchema } from 'components/Extensibility/ExtensibilityCreate';
 
 export function GenericList2({
   storeKeys,
@@ -16,6 +17,7 @@ export function GenericList2({
   readOnly,
   level,
   componentSpec,
+  currentSchema,
   ...props
 }) {
   const { t } = useTranslation();
@@ -76,9 +78,10 @@ export function GenericList2({
               }
             >
               {childrenComponents?.map(child => {
-                //TODO do it based on the childrenComponents
-                const fieldSpec = schema.properties.spec.properties.files;
-                const childSpec = fieldSpec.items.properties[child.path];
+                const childSpec = getSubSchema({
+                  schema: currentSchema?.items?.properties,
+                  path: child.path,
+                });
                 const Component = widgetList[childSpec.type];
 
                 return (
