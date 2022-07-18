@@ -40,8 +40,9 @@ If you target elements of an array rather that the array itself, you can use `it
 
 ### Item parameters
 
-- **path** - _[required]_ path to the property that you want to display in the form. In the case of an array, the array index is omitted. For example, if `spec.items` is an array and you want to display `name` for each item, the path is `spec.items.name`.
+- **path** - _[required]_ path to the property that you want to display in the form.
 - **widget** - optional widget used to render the field referred to by the **path** property. If you don't provide the widget, a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form widgets](form-widgets.md).
+- **children** - child widgets used for grouping. Child paths are relative to it's parent.
 - **simple** - parameter used to display the simple form. It is `false` by default.
 - **advanced** - parameter used to display the advanced form. It is `true` by default.
 
@@ -50,9 +51,14 @@ If you target elements of an array rather that the array itself, you can use `it
 ```json
 [
   { "path": "spec.priority", "simple": true },
-  { "path": "spec.items[].name" },
-  { "path": "spec.items[].service.url" },
-  { "path": "spec.items[].service.port" }
+  {
+    "path": "spec.items[]",
+    "children": [
+      { "path": "name" },
+      { "path": "service.url" },
+      { "path": "service.port" }
+    ]
+  }
 ]
 ```
 
