@@ -32,6 +32,7 @@ const workaroundForNodeMetrics = req => {
 export const makeHandleRequest = () => {
   const isDev = process.env.NODE_ENV !== 'production';
   const isTrackingEnabled = global.config?.features?.TRACKING?.isEnabled;
+  console.log(isDev, isTrackingEnabled);
   const logger = PinoHttp({
     autoLogging: isDev || isTrackingEnabled, //to disable the automatic "request completed" and "request errored" logging.
     genReqId: req => {
