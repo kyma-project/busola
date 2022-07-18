@@ -63,6 +63,20 @@ export function ExtensibilityCreate({
     toggleFormFn(false);
   };
 
+  const getProperties = ({ schema, path }) => {
+    const currentPath = path?.split('.')?.[0];
+    if (!schema?.[currentPath] || !path) return schema;
+    if (
+      schema[currentPath].type === 'object' &&
+      schema[currentPath].properties
+    ) {
+      const newSchema = schema[currentPath].properties;
+      const newPath = path.replace(`${currentPath}.`, '');
+      return getProperties({ schema: newSchema, path: newPath });
+    }
+    return schema[currentPath];
+  };
+
   return (
     <ResourceForm
       pluralKind={resourceType}
@@ -82,20 +96,15 @@ export function ExtensibilityCreate({
       afterCreatedFn={afterCreatedFn}
     >
       {createResource?.form?.map(el => {
-        // const fieldSpec =
-        //   createResource.schema.properties.spec.properties
-        //     .enableUnsupportedPlugins;
-        // const fieldSpec = createResource.schema.properties.kind;
-        const fieldSpec =
-          createResource.schema.properties.spec.properties.files;
-
+        const fieldSpec = getProperties({
+          schema: createResource.schema.properties,
+          path: el.path,
+        });
         const Component = widgetList[fieldSpec.type];
 
         return (
           <Component
-            // propertyPath="$.spec.enableUnsupportedPlugins"
-            // propertyPath="$.kind"
-            propertyPath="$.spec.files"
+            propertyPath={el.path}
             componentSpec={el}
             schema={createResource.schema}
           />
