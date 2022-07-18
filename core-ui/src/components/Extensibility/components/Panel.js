@@ -5,11 +5,16 @@ import { useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 import classNames from 'classnames';
 
-export function Panel({ value, structure, schema, hasExternalMargin = true }) {
+export function Panel({
+  value,
+  structure,
+  schema,
+  disableDefaultMargin = false,
+}) {
   const { widgetT } = useGetTranslation();
 
   const panelClassNames = classNames({
-    'fd-margin--md': hasExternalMargin,
+    'fd-margin--md': !disableDefaultMargin,
   });
 
   return (

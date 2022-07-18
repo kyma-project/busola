@@ -14,7 +14,7 @@ export function IssuerDomains(issuer) {
         headerRenderer={() => []}
         rowRenderer={domain => [domain]}
         showHeader={false}
-        hasExternalMargin={false}
+        disableDefaultMargin={true}
         entries={issuer.spec.acme?.domains?.include || []}
         i18n={i18n}
       />
@@ -25,7 +25,7 @@ export function IssuerDomains(issuer) {
         headerRenderer={() => []}
         rowRenderer={domain => [domain]}
         showHeader={false}
-        hasExternalMargin={false}
+        disableDefaultMargin={true}
         entries={issuer.spec.acme?.domains?.exclude || []}
         i18n={i18n}
       />

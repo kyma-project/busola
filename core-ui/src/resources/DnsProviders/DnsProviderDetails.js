@@ -27,7 +27,7 @@ const Domains = resource => {
         rowRenderer={rowRenderer}
         testid="daemon-set-images"
         showHeader={false}
-        hasExternalMargin={false}
+        disableDefaultMargin={true}
         i18n={i18n}
       />
 
@@ -38,7 +38,7 @@ const Domains = resource => {
         rowRenderer={rowRenderer}
         testid="domains-exclude"
         showHeader={false}
-        hasExternalMargin={false}
+        disableDefaultMargin={true}
         i18n={i18n}
       />
     </div>
