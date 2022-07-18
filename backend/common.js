@@ -41,7 +41,7 @@ export const makeHandleRequest = () => {
   console.log('dev', isDev);
   console.log('isDev || isTrackingEnabled', isDev || isTrackingEnabled);
   const logger = PinoHttp({
-    autoLogging: isDev || isTrackingEnabled, //to disable the automatic "request completed" and "request errored" logging.
+    autoLogging: !!(isDev || isTrackingEnabled), //to disable the automatic "request completed" and "request errored" logging.
     genReqId: req => {
       req.id = uuid();
       return req.id;
