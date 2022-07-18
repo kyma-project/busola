@@ -38,7 +38,7 @@ export function Table({ value, structure, schema, disableMargin }) {
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
 
   const rowRenderer = entry => {
-    const cells = structure.children.map(column => (
+    const cells = (structure.children || []).map(column => (
       <Widget value={entry} structure={column} schema={schema} />
     ));
 
@@ -69,7 +69,7 @@ export function Table({ value, structure, schema, disableMargin }) {
       showSearchSuggestion={false}
       title={tExt(structure.name, {
         defaultValue: tExt(structure.path, {
-          defaultValue: ' ',
+          defaultValue: structure.name,
         }),
       })}
       headerRenderer={headerRenderer}
