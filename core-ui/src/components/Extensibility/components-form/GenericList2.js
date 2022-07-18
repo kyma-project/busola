@@ -5,6 +5,7 @@ import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
 import { widgetList } from 'components/Extensibility/components-form/index';
 import { getSubSchema } from 'components/Extensibility/ExtensibilityCreate';
+import { useGetTranslation } from 'components/Extensibility/helpers';
 
 export function GenericList2({
   storeKeys,
@@ -18,10 +19,11 @@ export function GenericList2({
   level,
   componentSpec,
   currentSchema,
+  propertyPath,
   ...props
 }) {
   const { t } = useTranslation();
-  console.log(componentSpec);
+  const { t: tExtensibility } = useGetTranslation();
   const { children: childrenComponents, path } = componentSpec;
   const listSize = value?.length || 0;
 
@@ -45,7 +47,7 @@ export function GenericList2({
   return (
     <ResourceForm.CollapsibleSection
       container
-      title={'tFromStoreKeys(storeKeys)'}
+      title={tExtensibility(propertyPath)}
       actions={setOpen => (
         <Button
           glyph="add"
@@ -66,7 +68,7 @@ export function GenericList2({
         .map((_val, index) => {
           return (
             <ResourceForm.CollapsibleSection
-              title={'tFromStoreKeys(ownKeys)'}
+              title={`${tExtensibility(propertyPath)} (${index})`}
               actions={
                 <Button
                   compact
