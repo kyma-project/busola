@@ -39,7 +39,6 @@ export const useGetTranslation = path => {
   const { translationBundle } = useContext(TranslationBundleContext);
   const { t, i18n } = useTranslation([translationBundle]);
   //doesn't always work, add `translationBundle.` at the beginning of a path
-
   return {
     t: (path, ...props) => t(`${translationBundle}::${path}`, ...props) || path,
     tFromStoreKeys: (storeKeys, ...props) => {
@@ -59,6 +58,7 @@ export const useGetTranslation = path => {
       });
     },
     exists: path => i18n.exists(`${translationBundle}:${path}`),
+    i18n,
   };
 };
 

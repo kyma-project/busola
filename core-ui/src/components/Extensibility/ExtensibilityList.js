@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -12,9 +12,11 @@ import { ExtensibilityCreate } from './ExtensibilityCreate';
 import { TranslationBundleContext, useGetTranslation } from './helpers';
 import { Widget } from './components/Widget';
 import { RelationsContextProvider } from './contexts/RelationsContext';
+import { Link } from 'shared/components/Link/Link';
 
 export const ExtensibilityListCore = ({ resMetaData }) => {
-  const { t, widgetT } = useGetTranslation();
+  const { t, widgetT, i18n } = useGetTranslation();
+
   const { path, kind } = resMetaData?.resource ?? {};
 
   const schema = resMetaData?.schema;
@@ -34,10 +36,13 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     defaultValue: pluralize(prettifyKind(kind)),
   });
 
-  listProps.description = t('description', {
-    defaultValue: ' ',
+  listProps.description = createResourceDescription({
+    description: resMetaData?.resource?.description,
+    translations: resMetaData?.translations,
+    i18n,
   });
-  listProps.customColumns = Array.isArray(resMetaData.list)
+
+  listProps.customColumns = Array.isArray(resMetaData?.list)
     ? resMetaData.list.map((column, i) => ({
         header: widgetT(column),
         value: resource => (
@@ -51,6 +56,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
         ),
       }))
     : [];
+
   return (
     <ResourcesList
       createResourceForm={ExtensibilityCreate}
@@ -83,4 +89,27 @@ export const ExtensibilityList = () => {
       </RelationsContextProvider>
     </TranslationBundleContext.Provider>
   );
+};
+
+const createResourceDescription = ({ description, translations, i18n }) => {
+  if (typeof description === 'object') {
+    const { desc = '', links = [] } = description;
+    return (
+      <Trans
+        i18nKey={desc}
+        i18n={i18n}
+        components={links.map((link, idx) => (
+          <Link className="fd-link" url={link} key={idx} />
+        ))}
+      />
+    );
+  }
+  if (typeof description === 'string') {
+    const translation = translations?.[i18n.language]?.[description];
+
+    if (!translation) return description;
+    if (translation && typeof translation === 'string') return translation;
+    if (translation && typeof translation === 'object')
+      return createResourceDescription({ description: translation, i18n });
+  }
 };
