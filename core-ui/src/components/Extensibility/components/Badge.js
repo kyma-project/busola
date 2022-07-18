@@ -9,7 +9,7 @@ export function Badge({ value, structure, schema, ...props }) {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
   let type = null;
-  if (structure.highlights) {
+  if (structure?.highlights) {
     const match = Object.entries(structure.highlights).find(([key, rule]) => {
       if (Array.isArray(rule)) {
         return rule.includes(value);
