@@ -7,8 +7,12 @@ export function setWindowTitle(title) {
   );
 }
 
-export function useWindowTitle(title) {
-  useEffect(() => setWindowTitle(title), [title]);
+export function useWindowTitle(title, { skip } = {}) {
+  useEffect(() => {
+    if (!skip) {
+      setWindowTitle(title);
+    }
+  }, [title, skip]);
 }
 
 export function WithTitle({ title, children }) {

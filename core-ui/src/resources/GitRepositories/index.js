@@ -8,11 +8,11 @@ export const Details = React.lazy(() => import('./GitRepositoryDetails'));
 
 export const secrets = (t, context) => [
   {
-    title: t('git-repositories.secret-basic'),
+    title: t('git-repositories.auth.basic'),
     data: ['username', 'password'],
   },
   {
-    title: t('git-repositories.secret-ssh-key'),
+    title: t('git-repositories.auth.ssh-key'),
     data: ['key'],
   },
 ];
