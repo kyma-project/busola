@@ -12,6 +12,7 @@ import { ResourceSchema } from './ResourceSchema';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { prettifyKind } from 'shared/utils/helpers';
+import { widgetList, widgets } from 'components/Extensibility/components-form';
 
 export function ExtensibilityCreate({
   formElementRef,
@@ -35,19 +36,18 @@ export function ExtensibilityCreate({
       createResource?.template ||
       createTemplate(api, namespace, createResource?.resource?.scope),
   );
-
-  const [store, setStore] = useState(() =>
-    createStore(createOrderedMap(resource)),
-  );
-
-  const updateResource = res =>
-    setStore(prevStore => prevStore.set('values', Immutable.fromJS(res)));
+  // const [store, setStore] = useState(() =>
+  //   createStore(createOrderedMap(resource)),
+  // );
+  //
+  // const updateResource = res =>
+  //   setStore(prevStore => prevStore.set('values', Immutable.fromJS(res)));
 
   //TODO filter schema based on form configuration
 
-  useEffect(() => {
-    setResource(store.valuesToJS());
-  }, [store.values]); // eslint-disable-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   setResource(store.valuesToJS());
+  // }, [store.values]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const afterCreatedFn = async defaultAfterCreatedFn => {
     if (createResource?.details) {
@@ -76,37 +76,38 @@ export function ExtensibilityCreate({
           : prettifyKind(createResource.resource?.kind || '')
       }
       resource={resource}
-      setResource={updateResource}
+      setResource={setResource}
+      onChange={() => {}}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
-      setCustomValid={setCustomValid}
+      // setCustomValid={setCustomValid}
       onlyYaml={!schema}
       initialResource={initialResource}
       afterCreatedFn={afterCreatedFn}
     >
-      <ResourceSchema
-        simple
-        key={api.version}
-        schema={schema || {}}
-        schemaRules={createResource?.form}
-        resource={resource}
-        store={store}
-        setStore={setStore}
-        onSubmit={() => {}}
-        path={createResource?.resource?.path || ''}
-      />
-      <ResourceSchema
-        advanced
-        key={api.version}
-        schema={schema || {}}
-        schemaRules={createResource?.form}
-        resource={resource}
-        store={store}
-        setStore={setStore}
-        path={createResource?.resource?.path || ''}
-      />
+      {createResource?.form?.map(el => {
+        console.log(el);
+
+        // const fieldSpec =
+        //   createResource.schema.properties.spec.properties
+        //     .enableUnsupportedPlugins;
+        // const fieldSpec = createResource.schema.properties.kind;
+        const fieldSpec =
+          createResource.schema.properties.spec.properties.files;
+
+        const Component = widgetList[fieldSpec.type];
+
+        return (
+          <Component
+            // propertyPath="$.spec.enableUnsupportedPlugins"
+            // propertyPath="$.kind"
+            propertyPath="$.spec.files"
+            childrenComponents={el.children}
+          />
+        );
+      })}
     </ResourceForm>
   );
 }
 
-ExtensibilityCreate.allowEdit = true;
+ExtensibilityCreate.allowEdit = false;

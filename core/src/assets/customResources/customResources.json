@@ -1,2 +1,257 @@
 {
+  "logPipelines": {
+    "details": {
+      "header": [
+        {
+          "path": "status.conditions[-1].type",
+          "type": "string",
+          "name": "Status123",
+          "widget": "Badge",
+          "placeholder": "no value"
+        },
+        {
+          "path": "spec.enableUnsupportedPlugins",
+          "type": "boolean",
+          "name": "enableUnsupportedPlugins",
+          "widget": "Text",
+          "placeholder": "no value"
+        },
+        {
+          "path": "spec.enableUnsupportedPluginsFAKE",
+          "type": "boolean",
+          "name": "FAKE Badge PROPERRTY",
+          "widget": "Badge",
+          "placeholder": "no value"
+        }
+      ],
+      "body": [
+        {
+          "name": "Summary",
+          "widget": "Panel",
+          "children": [
+            {
+              "path": "spec.enableUnsupportedPlugins",
+              "type": "boolean",
+              "name": "enableUnsupportedPlugins"
+            },
+            {
+              "path": "status.conditions[-1].type",
+              "type": "string",
+              "name": "Status",
+              "widget": "Badge",
+              "placeholder": "no value hehehe"
+            },
+            {
+              "path": "spec.enableUnsupportedPlugins",
+              "type": "boolean",
+              "name": "Unsupported-Plugins"
+            },
+            {
+              "path": "metadata.creationTimestamp",
+              "type": "date",
+              "name": "Age"
+            }
+          ]
+        },
+        {
+          "path": "spec",
+          "widget": "CodeViewer"
+        },
+        {
+          "path": "kind",
+          "widget": "Text",
+          "placeholder": "this one is overwriten-conditions"
+        }
+      ]
+    },
+    "form": [
+      {
+        "simple": true,
+        "path": "spec.enableUnsupportedPlugins"
+      },
+      {
+        "simple": true,
+        "path": "kind"
+      },
+      {
+        "path": "spec.files",
+        "children": [{"path": "name"}, {"path": "content"}]
+      }
+    ],
+    "list": [
+      {
+        "path": "spec.enableUnsupportedPlugins",
+        "type": "boolean",
+        "name": "enableUnsupportedPlugins"
+      },
+      {
+        "path": "status.conditions[-1].type",
+        "type": "string",
+        "name": "Status",
+        "widget": "Badge",
+        "placeholder": "no value"
+      },
+      {
+        "path": "spec.enableUnsupportedPlugins",
+        "type": "boolean",
+        "name": "Unsupported-Plugins",
+        "placeholder": "no value"
+      },
+      {
+        "path": "metadata.creationTimestamp",
+        "type": "date",
+        "name": "Age"
+      }
+    ],
+    "resource": {
+      "kind": "LogPipeline",
+      "group": "telemetry.kyma-project.io",
+      "version": "v1alpha1",
+      "path": "logpipelines",
+      "scope": "cluster",
+      "defaultPlaceholder": "empty"
+    },
+    "schema": {
+      "description": "LogPipeline is the Schema for the logpipelines API",
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+          "type": "string"
+        },
+        "kind": {
+          "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object"
+        },
+        "spec": {
+          "description": "LogPipelineSpec defines the desired state of LogPipeline",
+          "type": "object",
+          "properties": {
+            "enableUnsupportedPlugins": {
+              "type": "boolean"
+            },
+            "files": {
+              "type": "array",
+              "items": {
+                "description": "FileMount provides file content to be consumed by a LogPipeline configuration",
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "filters": {
+              "type": "array",
+              "items": {
+                "description": "Filter describes a Fluent Bit filter configuration section",
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "multilineParsers": {
+              "type": "array",
+              "items": {
+                "description": "MultiLineParser describes a Fluent Bit multiline parser configuration section",
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "outputs": {
+              "type": "array",
+              "items": {
+                "description": "Output describes a Fluent Bit output configuration section",
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "parsers": {
+              "type": "array",
+              "items": {
+                "description": "Parser describes a Fluent Bit parser configuration section",
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "secretRefs": {
+              "type": "array",
+              "items": {
+                "description": "SecretReference is a pointer to a Kubernetes secret that should be provided as environment variable to Fluent Bit",
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "namespace": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "status": {
+          "description": "LogPipelineStatus defines the observed state of LogPipeline",
+          "type": "object",
+          "properties": {
+            "conditions": {
+              "type": "array",
+              "items": {
+                "description": "LogPipelineCondition contains details for the current condition of this LogPipeline",
+                "type": "object",
+                "properties": {
+                  "lastTransitionTime": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "translations": {
+      "en": {
+        "name": "Log Pipelines",
+        "metadata.annotations": "Annotations",
+        "metadata.labels": "Labels",
+        "category": "Custom Resources",
+        "metadata.creationTimestamp": "Created at",
+        "afsd.afds": "fs",
+        "status.conditions[-1].type-placeholhder": "sd",
+        "this one is overwriten-conditions": "the final string",
+        "no value": "no such value"
+      }
+    }
+  }
 }

@@ -23,6 +23,9 @@ import { MonacoRenderer } from './MonacoRenderer';
 import { ResourceRenderer } from './ResourceRenderer';
 import { ResourceRefRender } from './ResourceRefRenderer';
 import { SimpleList } from './SimpleList';
+import { Switch2 } from 'components/Extensibility/components-form/Switch2';
+import { String2 } from 'components/Extensibility/components-form/String2';
+import { GenericList2 } from 'components/Extensibility/components-form/GenericList2';
 
 const pluginStack = [
   ReferencingHandler,
@@ -34,6 +37,14 @@ const pluginStack = [
   PluginSimpleStack,
   ValidityReporter,
 ];
+
+export const widgetList = {
+  string: String2,
+  boolean: Switch2,
+  number: NumberRenderer,
+  integer: NumberRenderer,
+  array: GenericList2,
+};
 
 export const widgets = {
   RootRenderer: ({ children }) => <div>{children}</div>,
