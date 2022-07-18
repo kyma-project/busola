@@ -8,7 +8,7 @@ export function Columns({ structure, ...props }) {
       {structure.children?.map(child => (
         <Widget
           structure={child}
-          key={`column-${child.path}`}
+          key={`column-${child.path || child.name}`}
           disableMargin={true}
           {...props}
         />
