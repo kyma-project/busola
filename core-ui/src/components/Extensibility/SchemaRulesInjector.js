@@ -1,10 +1,11 @@
 import React from 'react';
-import { uniq, merge, initial, last } from 'lodash';
+import { merge, initial, last } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
-import { OrderedMap, List } from 'immutable';
+import { List } from 'immutable';
 
 const byPath = a => b => JSON.stringify(b.path) === JSON.stringify(a);
 
+// fake an OrderedMap-like structure using List to allow for duplicate keys
 const propertiesWrapper = src => ({
   map: cb => List(src.map(([key, val]) => cb(val, key))),
 });
@@ -73,7 +74,7 @@ export function SchemaRulesInjector({
   const path = storeKeys.map(item => (typeof item === 'number' ? '[]' : item));
 
   const { simple, advanced, path: myPath, children: childRules, ...itemRule } =
-    schemaRules.find(byPath(path)) ?? {};
+    schema.get('schemaRule') ?? schemaRules.find(byPath(path)) ?? {};
 
   let newSchema = schema.mergeDeep(itemRule);
   if (schema.get('properties')) {
@@ -88,14 +89,12 @@ export function SchemaRulesInjector({
       })
       .filter(rule => !!rule);
 
-    const oldProperties = newSchema.get('properties');
     newSchema = newSchema.set('properties', propertiesWrapper(newProperties));
   }
 
   return (
     <Plugin
       {...props}
-      schemaRules={childRules || []}
       currentPluginIndex={nextPluginIndex}
       schema={newSchema}
       storeKeys={storeKeys}
