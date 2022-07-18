@@ -12,31 +12,26 @@ import {
   useGetPlaceholder,
 } from '../helpers';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
+import jsonata from 'jsonata';
 
 export const SimpleRenderer = ({ children }) => {
   return children;
 };
 
-export function InlineWidget({ value, structure }) {
+export function InlineWidget({ children, value, structure }) {
   const { widgetT } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
-  return (
-    <LayoutPanelRow
-      name={widgetT(structure)}
-      value={
-        isNil(value) ? (
-          emptyLeafPlaceholder
-        ) : (
-          // set path to null to disable JSONpath
-          <Widget
-            value={value}
-            structure={{ ...structure, path: null, formula: null }}
-          />
-        )
-      }
-    />
-  );
+  let displayValue;
+  if (!isNil(children)) {
+    displayValue = children;
+  } else if (!isNil(value)) {
+    displayValue = value;
+  } else {
+    displayValue = emptyLeafPlaceholder;
+  }
+
+  return <LayoutPanelRow name={widgetT(structure)} value={displayValue} />;
 }
 
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
@@ -51,9 +46,22 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   );
 }
 
+export function shouldBeVisible(value, visibilityFormula) {
+  // allow hidden to be set only explicitly
+  if (!visibilityFormula) return { visible: visibilityFormula !== false };
+
+  try {
+    const expression = jsonata(visibilityFormula);
+    return { visible: !!expression.evaluate({ data: value }) };
+  } catch (e) {
+    console.warn('Widget::shouldBeVisible error:', e);
+    return { visible: false, error: e };
+  }
+}
+
 export function Widget({ structure, value, inlineRenderer, ...props }) {
   const { Plain, Text } = widgets;
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const {
     store,
     relations,
@@ -75,13 +83,26 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     }
   }
 
+  const { visible, error: visibleCheckError } = shouldBeVisible(
+    childValue,
+    structure.visibility,
+  );
+
   useEffect(() => {
+    if (!visible) return;
     // run `requestRelatedResource` in useEffect, as it might update Context's state
     if (structure.path && !!getRelatedResourceInPath(structure.path)) {
       requestRelatedResource(value, structure.path);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (visibleCheckError) {
+    return t('extensibility.configuration-error', {
+      error: visibleCheckError.message,
+    });
+  }
+  if (!visible) return null;
 
   if (structure.valuePreprocessor) {
     const Preprocessor = valuePreprocessors[structure.valuePreprocessor];
