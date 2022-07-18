@@ -8,16 +8,9 @@ import { UIStoreProvider, storeUpdater } from '@ui-schema/ui-schema';
 import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
 
 import widgets from './components-form';
-// import { SchemaRulesInjector } from './SchemaRulesInjector';
 import { prepareSchemaRules } from './SchemaRulesInjector';
 
 import { METADATA_SCHEMA } from './metadataSchema';
-
-// const [firstPlugin, ...otherPlugins] = formWidgets.pluginStack;
-// const widgets = {
-// ...formWidgets,
-// pluginStack: [firstPlugin, SchemaRulesInjector, ...otherPlugins],
-// };
 
 function FormContainer({ children }) {
   return (
