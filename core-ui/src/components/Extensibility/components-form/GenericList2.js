@@ -1,10 +1,8 @@
 import React from 'react';
-import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
 import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
-import { useGetTranslation } from 'components/Extensibility/helpers';
 import { widgetList } from 'components/Extensibility/components-form/index';
 
 export function GenericList2({
@@ -63,8 +61,6 @@ export function GenericList2({
       {Array(listSize)
         .fill(null)
         .map((_val, index) => {
-          // const ownKeys = storeKeys.push(index);
-          // const itemsSchema = schema.get('items');
           return (
             <ResourceForm.CollapsibleSection
               title={'tFromStoreKeys(ownKeys)'}

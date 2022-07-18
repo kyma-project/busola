@@ -8,7 +8,7 @@ import { createTemplate } from './helpers';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { prettifyKind } from 'shared/utils/helpers';
-import { widgetList, widgets } from 'components/Extensibility/components-form';
+import { widgetList } from 'components/Extensibility/components-form';
 
 export function ExtensibilityCreate({
   formElementRef,

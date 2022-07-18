@@ -16,6 +16,18 @@ export function String2({
   propertyPath,
   ...props
 }) {
+  console.log(
+    onChange,
+    onKeyDown,
+    value,
+    schema,
+    storeKeys,
+    required,
+    compact,
+    setValue,
+    propertyPath,
+    props,
+  );
   return (
     <ResourceForm.FormField
       value={value}
