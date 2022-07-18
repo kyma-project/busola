@@ -2,9 +2,10 @@ import React from 'react';
 import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
 import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-
+import * as jp from 'jsonpath';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
+import { widgetList } from 'components/Extensibility/components-form/index';
 
 export function GenericList2({
   storeKeys,
@@ -16,21 +17,19 @@ export function GenericList2({
   required,
   readOnly,
   level,
-  childrenComponents,
+  componentSpec,
   ...props
 }) {
   const { t } = useTranslation();
-
-  const listSize = value?.size || 0;
+  const { children: childrenComponents } = componentSpec;
+  const listSize = value?.length || 0;
 
   const addItem = () => {
     //TODO do it based on the childrenComponents
-
-    const newVal = value ? [...value] : [];
-    newVal.push({ name: '', content: false });
+    const newVal = Array.isArray(value) ? [...value] : [];
+    newVal.push({ name: '', content: 'false' });
     onChange(newVal);
   };
-  console.log(childrenComponents);
   const removeItem = index => {
     onChange({
       storeKeys,
@@ -41,8 +40,6 @@ export function GenericList2({
       required,
     });
   };
-
-  // const { tFromStoreKeys } = useGetTranslation();
 
   return (
     <ResourceForm.CollapsibleSection
@@ -66,8 +63,8 @@ export function GenericList2({
       {Array(listSize)
         .fill(null)
         .map((_val, index) => {
-          const ownKeys = storeKeys.push(index);
-          const itemsSchema = schema.get('items');
+          // const ownKeys = storeKeys.push(index);
+          // const itemsSchema = schema.get('items');
           return (
             <ResourceForm.CollapsibleSection
               title={'tFromStoreKeys(ownKeys)'}
@@ -81,14 +78,23 @@ export function GenericList2({
                 />
               }
             >
-              {/*<PluginStack*/}
-              {/*  showValidity={showValidity}*/}
-              {/*  schema={itemsSchema}*/}
-              {/*  parentSchema={schema}*/}
-              {/*  storeKeys={ownKeys}*/}
-              {/*  level={level + 1}*/}
-              {/*  schemaKeys={schemaKeys?.push('items')}*/}
-              {/*/>*/}
+              {childrenComponents?.map(child => {
+                //TODO do it based on the childrenComponents
+                const fieldSpec = schema.properties.spec.properties.files;
+                const childSpec = fieldSpec.items.properties[child.path];
+                const Component = widgetList[childSpec.type];
+
+                return (
+                  <Component
+                    value={value[index][child.path]}
+                    setValue={v => {
+                      const newVal = [...value];
+                      jp.value(newVal, `$[${index}].${child.path}`, v);
+                      onChange(newVal);
+                    }}
+                  />
+                );
+              })}
             </ResourceForm.CollapsibleSection>
           );
         })}

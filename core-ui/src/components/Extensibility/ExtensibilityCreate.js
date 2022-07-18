@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { createStore } from '@ui-schema/ui-schema';
-import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
-import Immutable from 'immutable';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useGetTranslation } from './helpers';
 
 import { createTemplate } from './helpers';
-import { ResourceSchema } from './ResourceSchema';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { prettifyKind } from 'shared/utils/helpers';
@@ -86,8 +82,6 @@ export function ExtensibilityCreate({
       afterCreatedFn={afterCreatedFn}
     >
       {createResource?.form?.map(el => {
-        console.log(el);
-
         // const fieldSpec =
         //   createResource.schema.properties.spec.properties
         //     .enableUnsupportedPlugins;
@@ -102,7 +96,8 @@ export function ExtensibilityCreate({
             // propertyPath="$.spec.enableUnsupportedPlugins"
             // propertyPath="$.kind"
             propertyPath="$.spec.files"
-            childrenComponents={el.children}
+            componentSpec={el}
+            schema={createResource.schema}
           />
         );
       })}
