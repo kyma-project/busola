@@ -7,12 +7,6 @@ jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
   'monaco-editor': () => {},
 }));
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: key => key,
-  }),
-}));
-
 jest.mock('../../helpers', () => ({
   useGetTranslation: () => ({
     widgetT: key => key,

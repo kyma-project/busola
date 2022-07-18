@@ -5,12 +5,6 @@ import { Badge } from '../Badge';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 describe('Badge', () => {
-  jest.mock('react-i18next', () => ({
-    useTranslation: () => ({
-      t: key => key,
-    }),
-  }));
-
   it('Renders a badge with a default type', () => {
     const value = 'Unknown';
     const structure = {};
