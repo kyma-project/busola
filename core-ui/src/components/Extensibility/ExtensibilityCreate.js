@@ -10,6 +10,16 @@ import { useTranslation } from 'react-i18next';
 import { prettifyKind } from 'shared/utils/helpers';
 import { widgetList } from 'components/Extensibility/components-form';
 
+export const getSubSchema = ({ schema, path }) => {
+  const currentPath = path?.split('.')?.[0];
+  if (!schema?.[currentPath] || !path) return schema;
+  if (schema[currentPath].type === 'object' && schema[currentPath].properties) {
+    const newSchema = schema[currentPath].properties;
+    const newPath = path.replace(`${currentPath}.`, '');
+    return getSubSchema({ schema: newSchema, path: newPath });
+  }
+  return schema[currentPath];
+};
 export function ExtensibilityCreate({
   formElementRef,
   setCustomValid,
@@ -63,20 +73,6 @@ export function ExtensibilityCreate({
     toggleFormFn(false);
   };
 
-  const getProperties = ({ schema, path }) => {
-    const currentPath = path?.split('.')?.[0];
-    if (!schema?.[currentPath] || !path) return schema;
-    if (
-      schema[currentPath].type === 'object' &&
-      schema[currentPath].properties
-    ) {
-      const newSchema = schema[currentPath].properties;
-      const newPath = path.replace(`${currentPath}.`, '');
-      return getProperties({ schema: newSchema, path: newPath });
-    }
-    return schema[currentPath];
-  };
-
   return (
     <ResourceForm
       pluralKind={resourceType}
@@ -96,7 +92,7 @@ export function ExtensibilityCreate({
       afterCreatedFn={afterCreatedFn}
     >
       {createResource?.form?.map(el => {
-        const fieldSpec = getProperties({
+        const fieldSpec = getSubSchema({
           schema: createResource.schema.properties,
           path: el.path,
         });
@@ -107,6 +103,7 @@ export function ExtensibilityCreate({
             propertyPath={el.path}
             componentSpec={el}
             schema={createResource.schema}
+            currentSchema={fieldSpec}
           />
         );
       })}
