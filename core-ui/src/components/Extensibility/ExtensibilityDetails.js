@@ -93,7 +93,7 @@ export const ExtensibilityDetails = () => {
   return (
     <TranslationBundleContext.Provider
       value={{
-        translationBundle: resMetaData?.resource?.path,
+        translationBundle: resMetaData?.resource?.path || 'extensibility',
         defaultResourcePlaceholder: resMetaData?.resource?.defaultPlaceholder,
       }}
     >
