@@ -101,8 +101,12 @@ function Resources(props) {
     filter,
     resourceUrl,
     skipDataLoading,
+    isCompact,
   } = props;
-  useWindowTitle(windowTitle || prettifyNamePlural(resourceName, resourceType));
+  useWindowTitle(
+    windowTitle || prettifyNamePlural(resourceName, resourceType),
+    { skip: isCompact },
+  );
 
   const { loading, error, data: resources, silentRefetch } = useGetList(filter)(
     resourceUrl,
