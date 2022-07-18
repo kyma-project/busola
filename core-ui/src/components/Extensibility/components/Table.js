@@ -28,7 +28,7 @@ const handleTableValue = (value, t) => {
   }
 };
 
-export function Table({ value, structure, schema, disableDefaultMargin }) {
+export function Table({ value, structure, schema, disableMargin }) {
   const { t } = useTranslation();
   const { t: tExt, widgetT } = useGetTranslation();
   const coreHeaders = (structure.children || []).map(column =>
@@ -74,7 +74,7 @@ export function Table({ value, structure, schema, disableDefaultMargin }) {
       })}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      disableDefaultMargin={disableDefaultMargin}
+      disableMargin={disableMargin}
       {...handleTableValue(value, t)}
     />
   );

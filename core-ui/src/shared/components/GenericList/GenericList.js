@@ -50,7 +50,7 @@ export const GenericList = ({
   showHeader,
   serverDataError,
   serverDataLoading,
-  disableDefaultMargin,
+  disableMargin,
   pagination,
   compact,
   className,
@@ -213,7 +213,7 @@ export const GenericList = ({
   const panelClassNames = classnames(
     'generic-list',
     {
-      'fd-margin--md': !disableDefaultMargin,
+      'fd-margin--md': !disableMargin,
     },
     className,
   );
@@ -295,7 +295,7 @@ GenericList.propTypes = {
   showHeader: PropTypes.bool,
   serverDataError: PropTypes.any,
   serverDataLoading: PropTypes.bool,
-  disableDefaultMargin: PropTypes.bool,
+  disableMargin: PropTypes.bool,
   pagination: PaginationProps,
   compact: PropTypes.bool,
   className: PropTypes.string,
@@ -315,7 +315,7 @@ GenericList.defaultProps = {
   showSearchSuggestion: true,
   serverDataError: null,
   serverDataLoading: false,
-  disableDefaultMargin: false,
+  disableMargin: false,
   compact: true,
   genericErrorMessage: null,
 };

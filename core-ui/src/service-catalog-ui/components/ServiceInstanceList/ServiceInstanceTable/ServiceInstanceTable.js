@@ -85,7 +85,7 @@ const ServiceInstanceTable = ({
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       notFoundMessage="No Service Instances found"
-      disableDefaultMargin={true}
+      disableMargin={true}
       textSearchProperties={['metadata.name']}
       i18n={i18n}
     />
