@@ -22,7 +22,13 @@ export function ItemArray({
 }) {
   const { t } = useTranslation();
 
-  values = values || [];
+  if (!Array.isArray(values)) {
+    console.warn(
+      'ItemArray: expected "values" to be array, instead got',
+      values,
+    );
+    values = [];
+  }
 
   const remove = index => setValues(values.filter((_, i) => index !== i));
 

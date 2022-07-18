@@ -106,6 +106,10 @@ The `details` section defines the display structure for the details page. It con
 - **widget** - optional widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
 - **formula** - optional formula used to modify data referred to by the `path` property. To learn more about using formulas, see [JSONata](https://docs.jsonata.org/overview.html).
+- **visibility** - by default all fields are visible; however **visibility** property can be used to control a single item display.
+  - If set to `false` explicitly, the field doesn't render.
+  - If set to any string, this property is treated as jsonata formula, determining (based on current value given as `data`) if the field should be visible.
+  - If not set, the field always renders.
 - **children** - a list of child widgets used for all `object` and `array` fields. Not available for header widgets.
 
 Extra parameters might be available for specific widgets.
@@ -149,7 +153,10 @@ Extra parameters might be available for specific widgets.
     {
       "path": "spec.configPatches",
       "widget": "Panel",
-      "children": [{ "path": "applyTo" }, { "path": "match.context" }]
+      "children": [
+        { "path": "applyTo" },
+        { "path": "match.context", "visibility": "$exists(data.spec.config)" }
+      ]
     },
     {
       "path": "spec.configPatches",
@@ -309,3 +316,17 @@ Value preprocessors are used as a middleware between a value and the actual rend
   - Otherwise, it passes `data` to the display component.
 
   Unless you need custom handling of error or loading state, we recommend using the `PendingWrapper`, for example, for fields that use [related resources](#relations-section).
+
+## version section
+
+The `version` is a string value that defines in which version the extension is configured. If the configuration is created with the `Create UI` button, this value is provided automatically. When created manually, use the latest version number: `'0.5'`
+
+Busola supports only the current version of the configuration and the prior one.
+
+Therefore, whenever a new version of the configuration is proposed, there is a possibility to migrate your configuration to the latest version. To do so, go to your Config Map and click the `migrate` button.
+
+### Example (latest vesion)
+
+```yaml
+'0.5'
+```

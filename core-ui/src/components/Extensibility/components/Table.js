@@ -28,7 +28,7 @@ const handleTableValue = (value, t) => {
   }
 };
 
-export function Table({ value, structure, schema }) {
+export function Table({ value, structure, schema, disableMargin }) {
   const { t } = useTranslation();
   const { t: tExt, widgetT } = useGetTranslation();
   const coreHeaders = (structure.children || []).map(column =>
@@ -38,7 +38,7 @@ export function Table({ value, structure, schema }) {
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
 
   const rowRenderer = entry => {
-    const cells = structure.children.map(column => (
+    const cells = (structure.children || []).map(column => (
       <Widget value={entry} structure={column} schema={schema} />
     ));
 
@@ -69,11 +69,12 @@ export function Table({ value, structure, schema }) {
       showSearchSuggestion={false}
       title={tExt(structure.name, {
         defaultValue: tExt(structure.path, {
-          defaultValue: ' ',
+          defaultValue: structure.name,
         }),
       })}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
+      disableMargin={disableMargin}
       {...handleTableValue(value, t)}
     />
   );
