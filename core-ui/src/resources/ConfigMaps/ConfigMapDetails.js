@@ -73,6 +73,7 @@ export function ConfigMapDetails(props) {
     const { t } = useTranslation();
     const { isEnabled: isExtensibilityEnabled } = useFeature('EXTENSIBILITY');
     const hasExtensibilityLabel =
+      configmap?.metadata?.labels &&
       configmap?.metadata?.labels['busola.io/extension'] === 'resource';
 
     if (!(isExtensibilityEnabled && hasExtensibilityLabel)) return null;
