@@ -16,8 +16,16 @@ import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigI
 
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
+import { useK8sSchema } from 'shared/contexts/K8sSchemaContext';
 
-export default function App() {
+export default function Appxfaf() {
+  const { schema, loading, error } = useK8sSchema('v1/Namespaces');
+  console.log({ schema, loading, error });
+
+  return null;
+}
+
+export function App() {
   const { cluster, language, customResources = [] } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
 

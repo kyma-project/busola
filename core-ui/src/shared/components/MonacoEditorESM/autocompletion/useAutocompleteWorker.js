@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { Uri } from 'monaco-editor';
 import { setDiagnosticsOptions } from 'monaco-yaml';
 import { getSchemaLink } from './getSchemaLink';
-import { useK8sSchema } from 'shared/contexts/K8sSchemaContext';
 
-// todo mapa klaster - openapi
 window.MonacoEnvironment = {
   getWorker(moduleId, label) {
     switch (label) {
@@ -65,8 +64,10 @@ export function useAutocompleteWorker({
   readOnly,
   language,
 }) {
+  const [schema, setSchema] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const fetch = useSingleGet();
 
   // schemaId gets calculated only once, to find the json validation schema by a key
   // it means each supported resource must have apiVersion and kind initially defined
@@ -76,16 +77,9 @@ export function useAutocompleteWorker({
   const [schemaId] = useState(customSchemaId || getDefaultSchemaId(value));
   const [schemaLink] = useState(getSchemaLink(value, language));
 
-  const { schema, error: schemaLoadingError } = useK8sSchema();
-
+  console.log(schemaId, schemaLink);
   useEffect(() => {
-    if (schemaLoadingError && !error) {
-      setError(schemaLoadingError);
-    }
-  }, [schemaLoadingError, error]);
-
-  useEffect(() => {
-    // parse OpenAPI schema to JSON Schemas (this is an expensive operation passed to a web worker)
+    // fetch OpenAPI and parse it to JSON Schemas (this is an expensive operation passed to a web worker)
 
     if (autocompletionDisabled) {
       setLoading(false);
@@ -97,14 +91,20 @@ export function useAutocompleteWorker({
       setError(new Error("Browser doesn't support web workers"));
       return;
     }
-    if (!schema) return;
 
     schemasWorker.postMessage(['shouldInitialize']);
     schemasWorker.onmessage = e => {
       if (e.data.isInitialized === false) {
-        console.log('sending schema', schema);
-        schemasWorker.postMessage(['initialize', schema]);
-        setLoading(false);
+        fetch('/openapi/v2')
+          .then(res => res.json())
+          .then(data => {
+            schemasWorker.postMessage(['initialize', data]);
+          })
+          .catch(err => {
+            console.error(err);
+            setError(new Error("Server didn't send specification."));
+            setLoading(false);
+          });
         return;
       }
 
@@ -113,7 +113,6 @@ export function useAutocompleteWorker({
         return;
       }
       if (e.data[schemaId]) {
-        console.log('tu bd schema', e.data[schemaId]);
         setSchema(e.data[schemaId]);
       }
       if (e.data.error) {
@@ -124,12 +123,13 @@ export function useAutocompleteWorker({
 
     schemasWorker.onerror = e => {
       setError(e);
+      setSchema(null);
       setLoading(false);
     };
 
     // disabling eslint due to the changing identity of fetch
     // eslint-disable-next-line
-  }, [schemaId, schema]);
+  }, [schemaId]);
 
   /**
    * Call this before initializing Monaco. This function alters Monaco global config to set up JSON-based

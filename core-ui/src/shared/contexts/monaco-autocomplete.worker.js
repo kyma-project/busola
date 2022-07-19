@@ -69,13 +69,12 @@ async function createJSONSchemas(openAPISchemas) {
 }
 
 self.onmessage = $event => {
-  const [command, parameter] = $event.data;
-
-  if (command === 'shouldInitialize') {
+  if ($event.data[0] === 'shouldInitialize') {
     self.postMessage({
       isInitialized: !!Object.values(jsonSchemas).length,
     });
-  } else if (command === 'initialize') {
+  }
+  if ($event.data[0] === 'initialize') {
     createJSONSchemas($event.data[1])
       .then(() => {
         self.postMessage({
@@ -88,13 +87,13 @@ self.onmessage = $event => {
           error: err,
         });
       });
-  } else if (command === 'getSchemas') {
-    const schemaIds = parameter;
-    const schema = JSON.parse(JSON.stringify(jsonSchemas[schemaId]));
+  }
+  if ($event.data[0] === 'getSchema') {
+    const schema = JSON.parse(JSON.stringify(jsonSchemas[$event.data[1]]));
     const existingCustomFormats = getExistingCustomFormats(schema);
     const modifiedSchema = replaceObjects(existingCustomFormats, schema);
     if (modifiedSchema) {
-      self.postMessage({ schema: { schemaId, schema: modifiedSchema } });
+      self.postMessage({ [$event.data[1]]: modifiedSchema });
     } else {
       self.postMessage({ error: new Error('Resource schema not found') });
     }
