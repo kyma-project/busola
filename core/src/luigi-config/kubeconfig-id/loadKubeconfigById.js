@@ -26,7 +26,7 @@ export async function loadKubeconfigById(kubeconfigId) {
     return null;
   }
 
-  const isHome = /^\/?$/.test(window.location.pathname);
+  const isHome = /^\/clusters?$/.test(window.location.pathname);
   const areClusters = Object.getOwnPropertyNames(getClusters()).length;
   const defaultKubeconfig = kubeconfigIdFeature.config.defaultKubeconfig;
 
