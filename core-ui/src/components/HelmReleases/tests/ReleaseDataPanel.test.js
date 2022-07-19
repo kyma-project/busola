@@ -2,12 +2,6 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { ReleaseDataPanel } from '../ReleaseDataPanel';
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: key => key,
-  }),
-}));
-
 describe('ReleaseDataPanel', () => {
   it('Renders release data', () => {
     const release = {

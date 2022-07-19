@@ -34,6 +34,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     );
   }
   listProps.createFormProps = { resourceSchema: resMetaData };
+
   listProps.resourceName = t('name', {
     defaultValue: pluralize(prettifyKind(kind)),
   });
@@ -43,7 +44,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   );
 
   listProps.customColumns = Array.isArray(resMetaData?.list)
-    ? resMetaData.list.map((column, i) => ({
+    ? resMetaData?.list.map((column, i) => ({
         header: widgetT(column),
         value: resource => (
           <Widget
@@ -69,7 +70,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
 export const ExtensibilityList = () => {
   const { t } = useTranslation();
   const resMetaData = useGetCRbyPath();
-  const { path } = resMetaData.resource ?? {};
+  const { path } = resMetaData?.resource ?? {};
 
   return (
     <TranslationBundleContext.Provider

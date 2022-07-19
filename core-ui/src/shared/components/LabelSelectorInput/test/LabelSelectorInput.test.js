@@ -3,12 +3,6 @@ import { render, fireEvent } from '@testing-library/react';
 
 import { LabelSelectorInput } from 'shared/components/LabelSelectorInput/LabelSelectorInput';
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: key => key,
-  }),
-}));
-
 describe('LabelSelectorInput', () => {
   const mockChange = jest.fn();
   afterEach(() => {
