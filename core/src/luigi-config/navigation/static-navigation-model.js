@@ -273,7 +273,7 @@ export function getStaticChildrenNodesForNamespace(
         config.coreUIModuleUrl +
         '/namespaces/:namespaceId/cronjobs?' +
         toSearchParamsString({
-          resourceApiPath: '/apis/batch/v1beta1',
+          resourceApiPath: '/apis/batch/v1',
           hasDetailsView: true,
         }),
       viewGroup: coreUIViewGroupName,
@@ -291,7 +291,7 @@ export function getStaticChildrenNodesForNamespace(
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/cronjobs/:cronJobName?' +
                 toSearchParamsString({
-                  resourceApiPath: '/apis/batch/v1beta1',
+                  resourceApiPath: '/apis/batch/v1',
                 }),
             },
           ],
