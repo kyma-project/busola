@@ -15,6 +15,10 @@ function getLoggingId() {
 }
 
 export async function sendTrackingRequest(body) {
+  if (process.env.IS_DOCKER) {
+    return;
+  }
+
   if ((await getCurrentConfig()).features.TRACKING.isEnabled) {
     body.metadata = { ...body.metadata, id: getLoggingId() };
 
