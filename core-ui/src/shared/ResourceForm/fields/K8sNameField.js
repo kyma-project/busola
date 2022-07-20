@@ -64,7 +64,11 @@ export function K8sNameField({
                 />
               </Tooltip>
             </div>
-            {showHelp ? <p>{t('common.tooltips.k8s-name-input')}</p> : null}
+            {showHelp ? (
+              <p style={{ color: 'var(--sapNeutralTextColor)' }}>
+                {t('common.tooltips.k8s-name-input')}
+              </p>
+            ) : null}
           </>
         );
       }}

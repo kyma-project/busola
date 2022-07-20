@@ -215,7 +215,9 @@ export function MultiInput({
               )}
             </li>
           ))}
-          {showInfo && <p>{showInfo}</p>}
+          {showInfo && (
+            <p style={{ color: 'var(--sapNeutralTextColor)' }}>{showInfo}</p>
+          )}
         </ul>
       </div>
     </ResourceForm.CollapsibleSection>
