@@ -6,11 +6,7 @@ import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
-import {
-  K8sNameField,
-  KeyValueField,
-  ItemArray,
-} from 'shared/ResourceForm/fields';
+import { ItemArray } from 'shared/ResourceForm/fields';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
 import { createBindingTemplate, newSubject } from './templates';
