@@ -205,13 +205,11 @@ export function ResourceListRenderer({
 
   customColumns = customColumns.filter(col => !omitColumnsIds.includes(col.id));
 
-  const withoutQueryString = path => path.split('?')[0];
-
   const handleSaveClick = resourceData => async newYAML => {
     try {
       const diff = createPatch(resourceData, jsyaml.load(newYAML));
-      const url =
-        withoutQueryString(resourceUrl) + '/' + resourceData.metadata.name;
+      const url = prepareResourceUrl(resourceUrl, resourceData);
+
       await updateResourceMutation(url, diff);
       silentRefetch();
       notification.notifySuccess({
