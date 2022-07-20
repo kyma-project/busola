@@ -76,6 +76,7 @@ export function GenericRoleBindingCreate({
     const newRole = {
       kind: role.data?.roleKind,
       name: role.data?.roleName,
+      apiGroup: 'rbac.authorization.k8s.io',
     };
     jp.value(binding, '$.roleRef', newRole);
     setBinding({ ...binding });
