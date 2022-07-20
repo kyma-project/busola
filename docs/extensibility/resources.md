@@ -63,9 +63,9 @@ The `list` section defines extra columns available in the list. The format is si
 ### Item parameters
 
 - **path** - _[required]_ contains the path to the data used for the column.
-- **widget** - optional widget used to render the field referred to by the **path** property. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
+- **widget** - optional widget used to render the field referred to by the **path** property. By default, the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
-- **formula** - optional formula used to modify data referred to by the **path** property. In **formula** we use the following naming convention: `data.name` instead of `name`. To learn more about using formulas, see [JSONata](https://docs.jsonata.org/overview.html).
+- **formula** - optional formula used to modify data referred to by the **path** property. **formula** uses the following naming convention: `data.name` instead of `name`. To learn more about using formulas, see [JSONata](https://docs.jsonata.org/overview.html).
 
 ### Example
 
@@ -323,7 +323,7 @@ The `version` is a string value that defines in which version the extension is c
 
 Busola supports only the current version of the configuration and the prior one.
 
-Therefore, whenever a new version of the configuration is proposed, there is a possibility to migrate your configuration to the latest version. To do so, go to your Config Map and click the **Migrate** button.
+Therefore, whenever a new version of the configuration is proposed, you can migrate your configuration to the latest version. To do so, go to your Config Map and click the **Migrate** button.
 
 ### Example (latest vesion)
 
