@@ -76,6 +76,10 @@
       {
         "path": "spec.files",
         "children": [{"path": "name"}, {"path": "content"}]
+      },
+      {
+        "path": "spec.secretRefs.name",
+        "simple": true
       }
     ],
     "list": [
@@ -197,19 +201,22 @@
               }
             },
             "secretRefs": {
-              "type": "array",
-              "items": {
-                "description": "SecretReference is a pointer to a Kubernetes secret that should be provided as environment variable to Fluent Bit",
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "namespace": {
-                    "type": "string"
+              "allOf": [
+              {
+                  "type": "object",
+                  "properties": {
+                      "name": {"type": "string"},
+                      "city": {"type": "string"},
+                      "state": {"type": "string"}
                   }
-                }
+              }, {
+                  "type": "object",
+                  "properties": {
+                      "phone": {"type": "string"},
+                      "email": {"type": "string"}
+                  }
               }
+          ]
             }
           }
         },

@@ -41,7 +41,6 @@ export const useGetTranslation = path => {
   //doesn't always work, add `translationBundle.` at the beginning of a path
   return {
     t: (path, ...props) => {
-      console.log(path);
       if (path.startsWith('$.')) {
         path = path.slice(2);
       }

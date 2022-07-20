@@ -10,13 +10,51 @@ import { useTranslation } from 'react-i18next';
 import { prettifyKind } from 'shared/utils/helpers';
 import { widgetList } from 'components/Extensibility/components-form';
 
+const handleAllAnyOneOf = ({ schema, path, kind = 'allOf' }) => {
+  const currentPath = path?.split('.')?.[0];
+  let sub;
+  schema?.[kind]?.forEach(subSchema => {
+    if (subSchema.type === 'object' && subSchema.properties) {
+      const keys = Object.keys(subSchema.properties) || [];
+      const wantedKey = keys.find(key => key === currentPath);
+      if (wantedKey) sub = subSchema.properties[wantedKey];
+      return;
+    }
+    return;
+  });
+  return sub || { type: 'string' };
+};
+
 export const getSubSchema = ({ schema, path }) => {
   const currentPath = path?.split('.')?.[0];
+  const newPath = path.replace(`${currentPath}.`, '');
   if (!schema?.[currentPath] || !path) return schema;
   if (schema[currentPath].type === 'object' && schema[currentPath].properties) {
     const newSchema = schema[currentPath].properties;
-    const newPath = path.replace(`${currentPath}.`, '');
     return getSubSchema({ schema: newSchema, path: newPath });
+  }
+  if (schema[currentPath].allOf) {
+    return handleAllAnyOneOf({
+      schema: schema[currentPath],
+      path: newPath,
+      kind: 'allOf',
+    });
+  }
+
+  if (schema[currentPath].anyOf) {
+    return handleAllAnyOneOf({
+      schema: schema[currentPath],
+      path: newPath,
+      kind: 'anyOf',
+    });
+  }
+
+  if (schema[currentPath].oneOf) {
+    return handleAllAnyOneOf({
+      schema: schema[currentPath],
+      path: newPath,
+      kind: 'oneOf',
+    });
   }
   return schema[currentPath];
 };
