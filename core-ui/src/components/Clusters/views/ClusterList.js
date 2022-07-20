@@ -19,9 +19,10 @@ import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
 
 import './ClusterList.scss';
+import { loadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID';
 
 function ClusterList() {
-  const { clusters, activeClusterName } = useMicrofrontendContext();
+  const { clusters, activeClusterName, features } = useMicrofrontendContext();
   const notification = useNotification();
   const { t, i18n } = useTranslation();
 
@@ -163,6 +164,19 @@ function ClusterList() {
     />
   );
 
+  const loadDefaultClusterButton = (
+    <>
+      {features?.KUBECONFIG_ID?.config?.defaultKubeconfig && (
+        <Button
+          onClick={() => loadDefaultKubeconfigId()}
+          className="fd-margin-end--tiny fd-margin-begin--tiny"
+        >
+          {t('clusters.add.load-default')}
+        </Button>
+      )}
+    </>
+  );
+
   if (!entries.length) {
     const subtitle = t('clusters.empty.subtitle');
     return (
@@ -178,9 +192,15 @@ function ClusterList() {
           title={t('clusters.empty.title')}
           subtitle={subtitle}
           actions={
-            <Button onClick={() => setShowAdd(true)}>
-              {t('clusters.add.title')}
-            </Button>
+            <>
+              <Button
+                onClick={() => setShowAdd(true)}
+                className="fd-margin-end--tiny fd-margin-begin--tiny"
+              >
+                {t('clusters.add.title')}
+              </Button>
+              {loadDefaultClusterButton}
+            </>
           }
         />
       </>

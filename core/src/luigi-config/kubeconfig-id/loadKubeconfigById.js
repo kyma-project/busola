@@ -54,3 +54,22 @@ export async function loadKubeconfigById(kubeconfigId) {
 
   return payload;
 }
+
+export async function loadDefaultKubeconfigId() {
+  const clusterParams = await getBusolaClusterParams();
+  const kubeconfigIdFeature = {
+    ...DEFAULT_FEATURES,
+    ...clusterParams.config?.features,
+  }['KUBECONFIG_ID'];
+
+  if (!kubeconfigIdFeature.isEnabled) {
+    return null;
+  }
+
+  const defaultKubeconfig = kubeconfigIdFeature.config.defaultKubeconfig;
+
+  if (!defaultKubeconfig) {
+    return null;
+  }
+  return loadKubeconfigById(defaultKubeconfig);
+}
