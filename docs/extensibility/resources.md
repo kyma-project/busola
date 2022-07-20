@@ -7,7 +7,7 @@ All sections can be provided as either JSON or YAML.
 
 ## resource section
 
-The `resource` section is required and contains basic information about the resource. For example, `kind` and API details.
+The `resource` section is required and contains basic information about the resource. For example, **kind** and API details.
 
 - **kind** - _[required]_ Kubernetes kind of the resource.
 - **group** - _[required]_ API group used for all requests.
@@ -252,7 +252,7 @@ You can provide this section as a single `translations` section that contains al
 
 ### Predefined translation keys
 
-- **category** - the name of a category used for the left-hand menu. It is placed in a **Custom Resources** category by default.
+- **category** - the name of a category used for the left-hand menu. It is placed in the `Custom Resources` category by default.
 - **name** - title used in the navigation and on the list screen. It defaults to its resource kind.
 - **description** - a more in-depth description of the resource displayed on the list screen. Only displayed if present.
 
