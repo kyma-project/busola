@@ -55,5 +55,10 @@ function createClusterBindingTemplate() {
       name: '',
     },
     subjects: [newSubject()],
+    roleRef: {
+      kind: '',
+      name: '',
+      apiGroup: DEFAULT_APIGROUP,
+    },
   };
 }
