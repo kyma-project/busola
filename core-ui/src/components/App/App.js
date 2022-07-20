@@ -13,6 +13,7 @@ import { useAppTracking } from 'hooks/tracking';
 import { ExtensibilityDetails } from 'components/Extensibility/ExtensibilityDetails';
 import { ExtensibilityList } from 'components/Extensibility/ExtensibilityList';
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
+import { useOpenapiToJson } from 'components/App/useOpenapiToJson';
 
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
@@ -22,6 +23,7 @@ export default function App() {
   const { t, i18n } = useTranslation();
 
   useLoginWithKubeconfigID();
+  useOpenapiToJson();
 
   useEffect(() => {
     i18n.changeLanguage(language);

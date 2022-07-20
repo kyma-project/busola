@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createStore } from '@ui-schema/ui-schema';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import Immutable from 'immutable';
@@ -12,8 +12,39 @@ import { ResourceSchema } from './ResourceSchema';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { prettifyKind } from 'shared/utils/helpers';
+import { schemasWorker } from 'components/App/useOpenapiToJson';
 
-export function ExtensibilityCreate({
+export const ExtensibilityCreate = ({ resourceSchema, ...props }) => {
+  console.log('OLD:', resourceSchema.schema);
+
+  const [createResource, setschemaFromOpenapi] = useState({
+    ...resourceSchema,
+    schema: null,
+  });
+
+  const apiVersion = createResource.resource.version;
+  const kind = createResource.resource.kind;
+  const group = createResource.resource.group;
+  const key = `${group}/${apiVersion}/${kind}`;
+  schemasWorker.postMessage(['getSchema', key]);
+
+  const ready = useRef(false);
+
+  schemasWorker.onmessage = e => {
+    if (e.data[key] && !ready.current) {
+      ready.current = true;
+      console.log('NEW:, ', e.data[key]);
+      setschemaFromOpenapi({ ...createResource, schema: e.data[key] });
+    }
+  };
+  if (!createResource.schema) return 'waiting';
+
+  return (
+    <ExtensibilityCreateComponent {...props} resourceSchema={createResource} />
+  );
+};
+
+export function ExtensibilityCreateComponent({
   formElementRef,
   setCustomValid,
   resourceType,
