@@ -1,9 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
+import { KeyValueField } from 'shared/ResourceForm/fields';
 
 import * as Inputs from 'shared/ResourceForm/inputs';
 
@@ -33,29 +32,6 @@ export function ServiceInstanceCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={t('btp-instances.name_singular')}
-        setValue={name => {
-          jp.value(serviceInstance, '$.metadata.name', name);
-          jp.value(
-            serviceInstance,
-            "$.metadata.labels['app.kubernetes.io/name']",
-            name,
-          );
-          setServiceInstance({ ...serviceInstance });
-        }}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
       <ResourceForm.FormField
         required
         label={t('btp-instances.offering-name')}

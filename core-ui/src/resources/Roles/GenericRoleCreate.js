@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
-import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import {
-  K8sNameField,
-  KeyValueField,
-  ItemArray,
-} from 'shared/ResourceForm/fields';
+import { ItemArray } from 'shared/ResourceForm/fields';
 import { createRuleTemplate, validateRole } from './helpers';
 import { RuleInput } from './RuleInput';
 import { RuleTitle } from './RuleTitle';
@@ -46,29 +41,6 @@ export function GenericRoleCreate({
       setCustomValid={setCustomValid}
       presets={!initialRole && presets}
     >
-      <K8sNameField
-        required
-        readOnly={!!initialRole?.metadata?.name}
-        propertyPath="$.metadata.name"
-        kind={t('roles.name_singular')}
-        setValue={name => {
-          jp.value(role, '$.metadata.name', name);
-          jp.value(role, "$.metadata.labels['app.kubernetes.io/name']", name);
-          setRole({ ...role });
-        }}
-        validate={value => !!value}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-        className="fd-margin-top--sm"
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
       <ItemArray
         propertyPath="$.rules"
         listTitle={t('roles.headers.rules')}

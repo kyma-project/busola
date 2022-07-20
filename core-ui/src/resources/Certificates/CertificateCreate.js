@@ -6,11 +6,7 @@ import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import {
-  K8sNameField,
-  KeyValueField,
-  TextArrayInput,
-} from 'shared/ResourceForm/fields';
+import { TextArrayInput } from 'shared/ResourceForm/fields';
 import { base64Decode, base64Encode } from 'shared/helpers';
 import { IssuerRef } from 'shared/components/ResourceRef/IssuerRef';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
@@ -117,33 +113,17 @@ export function CertificateCreate({
       formElementRef={formElementRef}
       initialResource={initialCertificate}
       createUrl={resourceUrl}
+      handleNameChange={name => {
+        jp.value(certificate, '$.metadata.name', name);
+        jp.value(
+          certificate,
+          "$.metadata.labels['app.kubernetes.io/name']",
+          name,
+        );
+        setCertificate({ ...certificate });
+      }}
+      nameProps={{ 'data-cy': 'cert-name' }}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={t('certificates.name_singular')}
-        data-cy="cert-name"
-        setValue={name => {
-          jp.value(certificate, '$.metadata.name', name);
-          jp.value(
-            certificate,
-            "$.metadata.labels['app.kubernetes.io/name']",
-            name,
-          );
-          setCertificate({ ...certificate });
-        }}
-        readOnly={!!initialCertificate}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-        className="fd-margin-top--sm"
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
       <ResourceForm.FormField
         label={t('certificates.with-csr')}
         tooltipContent={t('certificates.tooltips.with-csr')}

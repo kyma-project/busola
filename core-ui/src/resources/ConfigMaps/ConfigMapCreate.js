@@ -4,11 +4,7 @@ import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import {
-  K8sNameField,
-  KeyValueField,
-  RichEditorDataField,
-} from 'shared/ResourceForm/fields';
+import { RichEditorDataField } from 'shared/ResourceForm/fields';
 
 import { createConfigMapTemplate, createPresets } from './helpers';
 
@@ -41,32 +37,16 @@ export function ConfigMapCreate({
       presets={createPresets([], namespace || '', t)}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
+      handleNameChange={name => {
+        jp.value(configMap, '$.metadata.name', name);
+        jp.value(
+          configMap,
+          "$.metadata.labels['app.kubernetes.io/name']",
+          name,
+        );
+        setConfigMap({ ...configMap });
+      }}
     >
-      <K8sNameField
-        readOnly={!!initialConfigMap?.metadata?.name}
-        propertyPath="$.metadata.name"
-        kind={t('config-maps.name_singular')}
-        setValue={name => {
-          jp.value(configMap, '$.metadata.name', name);
-          jp.value(
-            configMap,
-            "$.metadata.labels['app.kubernetes.io/name']",
-            name,
-          );
-          setConfigMap({ ...configMap });
-        }}
-        validate={value => !!value}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
       <RichEditorDataField defaultOpen propertyPath="$.data" />
     </ResourceForm>
   );

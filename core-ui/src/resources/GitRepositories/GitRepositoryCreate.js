@@ -6,7 +6,6 @@ import { cloneDeep } from 'lodash';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
-import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 
 import { createRepositoryTemplate } from './helpers';
 
@@ -85,30 +84,6 @@ export function GitRepositoryCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        readOnly={!!initialRepository}
-        kind={t('git-repositories.name_singular')}
-        setValue={name => {
-          jp.value(repository, '$.metadata.name', name);
-          jp.value(
-            repository,
-            "$.metadata.labels['app.kubernetes.io/name']",
-            name,
-          );
-          setRepository({ ...repository });
-        }}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
       <ResourceForm.FormField
         required
         propertyPath="$.spec.url"

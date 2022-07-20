@@ -6,7 +6,6 @@ import { cloneDeep } from 'lodash';
 
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
-import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 import { CronJobSpecSection } from 'resources/Jobs/SpecSection';
 import {
   isCronExpressionValid,
@@ -104,20 +103,6 @@ export function CronJobCreate({
       }
       createUrl={resourceUrl}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={t('cron-jobs.name_singular')}
-        setValue={name => {
-          jp.value(cronJob, '$.metadata.name', name);
-          jp.value(
-            cronJob,
-            "$.metadata.labels['app.kubernetes.io/name']",
-            name,
-          );
-          setCronJob({ ...cronJob });
-        }}
-        readOnly={!!initialCronJob}
-      />
       <ResourceForm.FormField
         label={t('jobs.create-modal.disable-sidecar')}
         input={() => (
@@ -130,17 +115,6 @@ export function CronJobCreate({
             )}
           />
         )}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
       />
 
       <CronJobSpecSection advanced propertyPath="$.spec" />

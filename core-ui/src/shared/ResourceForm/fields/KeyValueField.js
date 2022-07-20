@@ -141,12 +141,6 @@ export function KeyValueField({
           ) : null,
       ]}
       actions={actions}
-      showInfo={
-        props?.propertyPath === '$.metadata.labels' ||
-        props?.propertyPath === '$.metadata.annotations'
-          ? t('common.tooltips.key-value')
-          : false
-      }
       {...props}
     />
   );

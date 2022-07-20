@@ -5,11 +5,7 @@ import { cloneDeep } from 'lodash';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { ResourceForm } from 'shared/ResourceForm';
-import {
-  K8sNameField,
-  KeyValueField,
-  ItemArray,
-} from 'shared/ResourceForm/fields';
+import { ItemArray } from 'shared/ResourceForm/fields';
 
 import { createApiRuleTemplate, createRuleTemplate } from './templates';
 import { useServicesQuery, ServiceDropdown } from './ServiceDropdown';
@@ -117,15 +113,9 @@ export function APIRuleCreate({
       createUrl={resourceUrl}
       afterCreatedFn={afterCreatedFn}
       setCustomValid={setCustomValid}
+      handleNameChange={handleNameChange}
+      nameProps={{ prefix: prefix }}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={t('api-rules.name_singular')}
-        setValue={handleNameChange}
-        readOnly={!!initialApiRule}
-        validate={value => !!value}
-        prefix={prefix}
-      />
       <ServiceDropdown
         propertyPath="$.spec.service"
         servicesQuery={servicesQuery}
@@ -141,17 +131,6 @@ export function APIRuleCreate({
         propertyPath="$.spec.service.host"
         gatewayStr={jp.value(apiRule, '$.spec.gateway')}
         gatewaysQuery={gatewaysQuery}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-        className="fd-margin-top--sm"
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
       />
 
       <SingleRuleInput simple defaultOpen propertyPath="$.spec.rules" />

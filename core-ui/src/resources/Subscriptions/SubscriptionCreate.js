@@ -7,7 +7,6 @@ import { ComboboxInput, MessageStrip } from 'fundamental-react';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { ResourceForm } from 'shared/ResourceForm';
-import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
 import { createSubscriptionTemplate } from './templates';
@@ -118,17 +117,8 @@ export const SubscriptionCreate = ({
       createUrl={resourceUrl}
       afterCreatedFn={afterCreatedFn}
       setCustomValid={setCustomValid}
+      nameProps={{ prefix: prefix }}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={t('subscriptions.name_singular')}
-        setValue={name => {
-          jp.value(subscription, '$.metadata.name', name);
-          setSubscription({ ...subscription });
-        }}
-        readOnly={!!initialSubscription}
-        prefix={prefix}
-      />
       <ResourceForm.FormField
         label={t('subscriptions.create.labels.sink')}
         messageStrip={sinkMessageStrip}
@@ -162,18 +152,6 @@ export const SubscriptionCreate = ({
         loading={servicesLoading}
         tooltipContent={t('subscriptions.tooltips.service-name')}
         disabled={!!serviceName}
-      />
-
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
       />
 
       <ResourceForm.FormField
