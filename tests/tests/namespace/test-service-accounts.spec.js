@@ -81,6 +81,7 @@ context('Test Service Accounts', () => {
 
     cy.getIframeBody()
       .find('[placeholder="Enter key"]')
+      .filterWithNoValue()
       .type('test.key');
 
     cy.getIframeBody()
