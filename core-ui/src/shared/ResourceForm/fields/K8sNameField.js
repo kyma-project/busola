@@ -37,33 +37,35 @@ export function K8sNameField({
       className={className}
       propertyPath="$.metadata.name"
       label={t('common.labels.name')}
-      tooltipContent={showHelp ? t('common.tooltips.k8s-name-input') : null}
       input={() => {
         return (
-          <div className="k8s-name-field">
-            <K8sNameInput
-              kind={kind}
-              compact
-              required
-              showHelp={false}
-              showLabel={false}
-              onChange={e => setValue(e.target.value)}
-              value={value}
-              i18n={i18n}
-              readOnly={readOnly}
-              pattern={pattern}
-              {...inputProps}
-            />
-            <Tooltip content={t('common.tooltips.generate-name')}>
-              <Button
+          <>
+            <div className="k8s-name-field">
+              <K8sNameInput
+                kind={kind}
                 compact
-                onClick={generateName}
-                glyph="synchronize"
-                ariaLabel="Generate name button"
-                disabled={readOnly}
+                required
+                showHelp={false}
+                showLabel={false}
+                onChange={e => setValue(e.target.value)}
+                value={value}
+                i18n={i18n}
+                readOnly={readOnly}
+                pattern={pattern}
+                {...inputProps}
               />
-            </Tooltip>
-          </div>
+              <Tooltip content={t('common.tooltips.generate-name')}>
+                <Button
+                  compact
+                  onClick={generateName}
+                  glyph="synchronize"
+                  ariaLabel="Generate name button"
+                  disabled={readOnly}
+                />
+              </Tooltip>
+            </div>
+            {showHelp ? <p>{t('common.tooltips.k8s-name-input')}</p> : null}
+          </>
         );
       }}
     />

@@ -32,6 +32,7 @@ export function MultiInput({
   readOnly,
   noEdit,
   newItemAction,
+  showInfo,
   ...props
 }) {
   const { t } = useTranslation();
@@ -214,6 +215,7 @@ export function MultiInput({
               )}
             </li>
           ))}
+          {showInfo && <p>{showInfo}</p>}
         </ul>
       </div>
     </ResourceForm.CollapsibleSection>
