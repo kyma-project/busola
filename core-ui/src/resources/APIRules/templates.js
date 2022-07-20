@@ -12,7 +12,7 @@ export function createApiRuleTemplate(namespace) {
       service: {
         host: '',
         name: '',
-        port: '',
+        port: 8080,
       },
     },
   };
