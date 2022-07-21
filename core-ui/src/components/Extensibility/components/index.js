@@ -9,6 +9,7 @@ import { ResourceRefs } from './ResourceRefs';
 import { ControlledBy, ControlledByKind } from './ControlledBy';
 import { JoinedArray } from './JoinedArray';
 import { ResourceList } from './ResourceList';
+import { ResourceLink } from './ResourceLink.js';
 
 import { PendingWrapper } from './PendingWrapper';
 
@@ -26,6 +27,7 @@ export const widgets = {
   ControlledByKind,
   JoinedArray,
   ResourceList,
+  ResourceLink,
 };
 
 export const valuePreprocessors = {

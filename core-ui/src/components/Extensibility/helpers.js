@@ -22,17 +22,14 @@ export const getValue = (resource, path) => {
   }
   return jp.value(resource, '$.' + path);
 };
-export const ApplyFormula = (value, formula, i18n) => {
-  const { t } = useTranslation(null, { i18n });
-  let result;
-  try {
-    let expression = jsonata(formula);
-    result = expression.evaluate({ data: value });
-  } catch (e) {
-    result = t('extensibility.configuration-error', { error: e.message });
-  }
 
-  return result;
+export const applyFormula = (value, formula, t, additionalSources) => {
+  try {
+    const expression = jsonata(formula);
+    return expression.evaluate({ data: value, ...additionalSources });
+  } catch (e) {
+    return t('extensibility.configuration-error', { error: e.message });
+  }
 };
 
 export const useGetTranslation = path => {

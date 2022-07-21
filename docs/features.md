@@ -439,7 +439,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-- **TRACKING** - determines if simple application usage tracking is enabled.
+- **TRACKING** - determines if simple application usage tracking is enabled. This feature needs to be enabled on both frontend and backend.
 
   ```json
   "TRACKING": {

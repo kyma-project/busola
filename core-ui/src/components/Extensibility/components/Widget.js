@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import {
   getValue,
-  ApplyFormula,
+  applyFormula,
   useGetTranslation,
   useGetPlaceholder,
 } from '../helpers';
@@ -61,7 +61,7 @@ export function shouldBeVisible(value, visibilityFormula) {
 
 export function Widget({ structure, value, inlineRenderer, ...props }) {
   const { Plain, Text } = widgets;
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const {
     store,
     relations,
@@ -77,10 +77,13 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     if (relatedResourcePath) {
       childValue = store[relatedResourcePath] || { loading: true };
       props.relation = relations[relatedResourcePath];
-      props.originalResource = value;
     } else {
       childValue = getValue(value, structure.path);
     }
+  }
+
+  if (!props.originalResource) {
+    props.originalResource = value;
   }
 
   const { visible, error: visibleCheckError } = shouldBeVisible(
@@ -119,7 +122,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
   }
 
   if (structure.formula) {
-    childValue = ApplyFormula(childValue, structure.formula, i18n);
+    childValue = applyFormula(childValue, structure.formula, t);
   }
 
   if (Array.isArray(structure)) {
