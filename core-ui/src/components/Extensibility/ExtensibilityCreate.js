@@ -83,7 +83,6 @@ export function ExtensibilityCreate({
       onlyYaml={!schema}
       initialResource={initialResource}
       afterCreatedFn={afterCreatedFn}
-      disableDefaultFields={true}
     >
       <ResourceSchema
         simple

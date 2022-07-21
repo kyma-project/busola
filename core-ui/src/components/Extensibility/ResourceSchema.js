@@ -10,8 +10,6 @@ import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
 import formWidgets from './components-form';
 import { SchemaRulesInjector } from './SchemaRulesInjector';
 
-import { METADATA_SCHEMA } from './metadataSchema';
-
 const [firstPlugin, ...otherPlugins] = formWidgets.pluginStack;
 const widgets = {
   ...formWidgets,
@@ -65,7 +63,7 @@ export function ResourceSchema({
 
   newSchema = {
     ...newSchema,
-    properties: { metadata: METADATA_SCHEMA, ...newSchema.properties },
+    properties: { ...newSchema.properties },
   };
 
   const schemaMap = createOrderedMap(newSchema);
