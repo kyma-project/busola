@@ -16,6 +16,7 @@ export const sendWorkerMessage = (message, ...payload) => {
 };
 
 const listeners = {};
+// a listener for the same message will overwrite a previous one
 export const addWorkerListener = (message, messageHandlerFn) => {
   if (
     !schemasWorker ||
@@ -32,6 +33,7 @@ export const addWorkerListener = (message, messageHandlerFn) => {
   };
 };
 
+// a listener for the same message will overwrite a previous one
 export const addWorkerErrorListener = errorHandlerFn => {
   if (!schemasWorker || typeof errorHandlerFn !== 'function') {
     console.error('addWorkerErrorListener error');

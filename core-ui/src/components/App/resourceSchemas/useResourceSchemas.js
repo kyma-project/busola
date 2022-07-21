@@ -1,11 +1,12 @@
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import {
   sendWorkerMessage,
   addWorkerListener,
   addWorkerErrorListener,
-} from './resourceSchemaWorkerInit';
+  schemasWorker,
+} from './resourceSchemaWorkerApi';
 
 export const AppContext = createContext({ areSchemasComputed: false });
 
@@ -14,11 +15,17 @@ export const useResourceSchemas = () => {
   const { activeClusterName, authData } = useMicrofrontendContext();
   const [areSchemasComputed, setAreSchemasComputed] = useState(false);
   const [schemasError, setSchemasError] = useState(null);
+  const lastFetched = useRef();
 
   useEffect(() => {
-    if (!activeClusterName || !authData?.token) return;
+    if (!activeClusterName || !authData) return;
+
+    // Luigi updates authData few times during a cluster load. The below line cancels repeated requests after first fetch
+    if (lastFetched.current === activeClusterName) return;
+    lastFetched.current = activeClusterName;
+
     fetch('/openapi/v2')
-      ?.then(res => res.json())
+      .then(res => res.json())
       .then(data => {
         sendWorkerMessage('sendingOpenapi', data, activeClusterName);
       })
@@ -43,7 +50,13 @@ export const useResourceSchemas = () => {
 
     // fetch not included
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeClusterName, setAreSchemasComputed, authData?.token]);
+  }, [activeClusterName, setAreSchemasComputed, authData]);
+
+  useEffect(() => {
+    return () => {
+      schemasWorker?.terminate();
+    };
+  }, []);
 
   return { areSchemasComputed, schemasError };
 };

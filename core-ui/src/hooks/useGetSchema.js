@@ -5,7 +5,7 @@ import {
   sendWorkerMessage,
   schemasWorker,
   addWorkerErrorListener,
-} from 'components/App/resourceSchemas/resourceSchemaWorkerInit';
+} from 'components/App/resourceSchemas/resourceSchemaWorkerApi';
 
 export const useGetSchema = ({ schemaId, skip }) => {
   const { areSchemasComputed, schemasError } = useContext(

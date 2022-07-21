@@ -27,7 +27,7 @@ export const ExtensibilityCreate = ({ resourceSchema, ...props }) => {
     skip: !!resourceSchema.schema,
   });
 
-  // resource has schema hardcoded in the ConfigMap or no schema at all
+  // the cases when the resource has the schema in the ConfigMap or no schema either in ConfigMap and OpenAPI
   if (resourceSchema.schema || errorOpenApi) {
     return (
       <ExtensibilityCreateComponent
@@ -39,7 +39,7 @@ export const ExtensibilityCreate = ({ resourceSchema, ...props }) => {
   // waiting for schema from OpenAPI to be computed
   if (loading) return <Spinner />;
 
-  // resource with the schema added from schemaFromOpenApi
+  // resource with a schema from OpenAPI
   return (
     <ExtensibilityCreateComponent
       {...props}
