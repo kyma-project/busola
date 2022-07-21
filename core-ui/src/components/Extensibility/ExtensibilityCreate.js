@@ -18,13 +18,13 @@ export const ExtensibilityCreate = ({ resourceSchema, ...props }) => {
   const { version, kind, group } = resourceSchema.resource;
   const openapiSchemaId = `${group}/${version}/${kind}`;
 
-  const { schema: schemaFromOpenApi } = useGetSchema({
+  const { schema: schemaFromOpenApi, error: errorOpenApi } = useGetSchema({
     schemaId: openapiSchemaId,
     skip: !!resourceSchema.schema,
   });
 
-  // resource has schema hardcoded in the ConfigMap
-  if (resourceSchema.schema) {
+  // resource has schema hardcoded in the ConfigMap or no schema at all
+  if (resourceSchema.schema || errorOpenApi) {
     return (
       <ExtensibilityCreateComponent
         {...props}

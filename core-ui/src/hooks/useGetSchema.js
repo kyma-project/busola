@@ -8,19 +8,28 @@ import {
 export const useGetSchema = ({ schemaId, skip }) => {
   const areSchemasComputed = useContext(AppContext).areSchemasComputed;
   const [schema, setSchema] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(!skip);
 
   useEffect(() => {
-    if (!areSchemasComputed || schema || skip) return;
-    console.log(1111, schemaId);
+    if (!areSchemasComputed || schema || skip) {
+      return;
+    }
+
     sendMessage('getSchema', schemaId);
     messageListener('schemaDelivery', ({ schema, error }) => {
       if (error) {
+        setLoading(false);
+        setError(error);
+        setSchema(null);
         console.error(error);
       } else {
+        setLoading(false);
+        setError(null);
         setSchema(schema);
       }
     });
   }, [areSchemasComputed, schemaId, setSchema, schema, skip]);
 
-  return { schema };
+  return { schema, error, loading };
 };
