@@ -1,50 +1,51 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createStore } from '@ui-schema/ui-schema';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import Immutable from 'immutable';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { useGetTranslation } from './helpers';
+import { useGetTranslation, createTemplate } from './helpers';
 
-import { createTemplate } from './helpers';
 import { ResourceSchema } from './ResourceSchema';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { prettifyKind } from 'shared/utils/helpers';
-import { schemasWorker } from 'components/App/useOpenapiToJson';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+import { useGetSchema } from 'hooks/useGetSchema';
 
 export const ExtensibilityCreate = ({ resourceSchema, ...props }) => {
-  console.log('OLD:', resourceSchema.schema);
+  const { version, kind, group } = resourceSchema.resource;
+  const openapiSchemaId = `${group}/${version}/${kind}`;
 
-  const [createResource, setschemaFromOpenapi] = useState({
-    ...resourceSchema,
-    schema: null,
+  const { schema: schemaFromOpenApi } = useGetSchema({
+    schemaId: openapiSchemaId,
+    skip: !!resourceSchema.schema,
   });
 
-  const apiVersion = createResource.resource.version;
-  const kind = createResource.resource.kind;
-  const group = createResource.resource.group;
-  const key = `${group}/${apiVersion}/${kind}`;
-  schemasWorker.postMessage(['getSchema', key]);
+  // resource has schema hardcoded in the ConfigMap
+  if (resourceSchema.schema) {
+    return (
+      <ExtensibilityCreateComponent
+        {...props}
+        resourceSchema={resourceSchema}
+      />
+    );
+  }
 
-  const ready = useRef(false);
+  // waiting for schema from OpenAPI to be computed
+  if (!schemaFromOpenApi) return <Spinner />;
 
-  schemasWorker.onmessage = e => {
-    if (e.data[key] && !ready.current) {
-      ready.current = true;
-      console.log('NEW:, ', e.data[key]);
-      setschemaFromOpenapi({ ...createResource, schema: e.data[key] });
-    }
-  };
-  if (!createResource.schema) return 'waiting';
-
+  // resource with the schema added from schemaFromOpenApi
   return (
-    <ExtensibilityCreateComponent {...props} resourceSchema={createResource} />
+    <ExtensibilityCreateComponent
+      {...props}
+      resourceSchema={{ ...resourceSchema, schema: schemaFromOpenApi }}
+    />
   );
 };
 
-export function ExtensibilityCreateComponent({
+function ExtensibilityCreateComponent({
   formElementRef,
   setCustomValid,
   resourceType,
