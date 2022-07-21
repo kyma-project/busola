@@ -1,0 +1,9 @@
+apiVersion: serverless.kyma-project.io/v1alpha1
+kind: GitRepository
+metadata:
+  labels:
+    app.kubernetes.io/name: grumpy-chain
+  name: grumpy-chain
+  namespace: ak
+spec:
+  url: 'http://sth2.com'

@@ -1,0 +1,29 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: test-service
+  namespace: default
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+      nodePort: 32732
+  selector:
+    app: frontend
+  clusterIP: 127.0.0.1
+  clusterIPs:
+    - 127.0.0.1
+  type: LoadBalancer
+  sessionAffinity: None
+  externalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  allocateLoadBalancerNodePorts: true
+  internalTrafficPolicy: Cluster
+status:
+  loadBalancer:
+    ingress:
+      - ip: 127.0.0.1
