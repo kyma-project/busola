@@ -23,7 +23,17 @@ data:
           "placeholder": "---"
         },
         { "path": "spec.toppings", formula: "$join(data.name, ', ')" }, 
-      ],
+        {
+          "path": "spec.ownerReferences[0]",
+          "widget": "ResourceLink",
+          "linkText": "spec.linkText",
+          "resource": {
+            "name": "data.name",
+            "namespace": "root.metadata.namespace",
+            "kind": "data.kind",
+        },
+      },
+    ],
     "body": [
         {
           "widget": "Columns",
