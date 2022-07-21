@@ -18,7 +18,11 @@ export const ExtensibilityCreate = ({ resourceSchema, ...props }) => {
   const { version, kind, group } = resourceSchema.resource;
   const openapiSchemaId = `${group}/${version}/${kind}`;
 
-  const { schema: schemaFromOpenApi, error: errorOpenApi } = useGetSchema({
+  const {
+    schema: schemaFromOpenApi,
+    error: errorOpenApi,
+    loading,
+  } = useGetSchema({
     schemaId: openapiSchemaId,
     skip: !!resourceSchema.schema,
   });
@@ -32,9 +36,8 @@ export const ExtensibilityCreate = ({ resourceSchema, ...props }) => {
       />
     );
   }
-
   // waiting for schema from OpenAPI to be computed
-  if (!schemaFromOpenApi) return <Spinner />;
+  if (loading) return <Spinner />;
 
   // resource with the schema added from schemaFromOpenApi
   return (

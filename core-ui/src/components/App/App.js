@@ -14,9 +14,9 @@ import { ExtensibilityDetails } from 'components/Extensibility/ExtensibilityDeta
 import { ExtensibilityList } from 'components/Extensibility/ExtensibilityList';
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
 import {
-  useOpenapiToJson,
+  useResourceSchemas,
   AppContext,
-} from './resourceSchemas/useOpenapiToJson';
+} from './resourceSchemas/useResourceSchemas';
 
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
@@ -26,7 +26,7 @@ export default function App() {
   const { t, i18n } = useTranslation();
 
   useLoginWithKubeconfigID();
-  const { areSchemasComputed } = useOpenapiToJson();
+  const schemaInfo = useResourceSchemas();
 
   useEffect(() => {
     i18n.changeLanguage(language);
@@ -50,7 +50,7 @@ export default function App() {
   }, []);
 
   return (
-    <AppContext.Provider value={{ areSchemasComputed }}>
+    <AppContext.Provider value={{ schemaInfo }}>
       {/* force rerender on cluster change*/}
       <Routes key={cluster?.name}>
         {serviceCatalogRoutes}

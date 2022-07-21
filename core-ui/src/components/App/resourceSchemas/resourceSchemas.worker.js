@@ -50,7 +50,6 @@ function replaceObjects(existingCustomFormats, schema) {
 
 const jsonSchemas = {};
 let activeClusterName = '';
-
 async function createJSONSchemas(openAPISchemas, clusterName) {
   activeClusterName = clusterName;
 
@@ -83,17 +82,18 @@ self.onmessage = $event => {
     const openApiData = $event.data[1];
     const activeClusterName = $event.data[2];
 
+    if (!openApiData || !activeClusterName) throw new Error();
+
     createJSONSchemas(openApiData, activeClusterName)
       .then(() => {
         self.postMessage({
-          type: 'initialized',
-          message: 'Openapi converted to JSONs',
+          type: 'computedToJSON',
         });
       })
       .catch(err => {
         console.error(err);
         self.postMessage({
-          type: 'error',
+          type: 'customError',
           error: err,
         });
       });
@@ -110,12 +110,12 @@ self.onmessage = $event => {
     );
     if (schemaCustomFormatsResolved) {
       self.postMessage({
-        type: 'schemaDelivery',
+        type: 'schemaComputed',
         schema: schemaCustomFormatsResolved,
       });
     } else {
       self.postMessage({
-        type: 'error',
+        type: 'customError',
         error: new Error('Resource schema not found'),
       });
     }

@@ -1,35 +1,40 @@
 import { useContext, useEffect, useState } from 'react';
-import { AppContext } from 'components/App/resourceSchemas/useOpenapiToJson';
+import { AppContext } from 'components/App/resourceSchemas/useResourceSchemas';
 import {
-  messageListener,
-  sendMessage,
-} from 'components/App/resourceSchemas/openapiToJsonWorkerCommunicator';
+  addWorkerListener,
+  sendWorkerMessage,
+  schemasWorker,
+  addWorkerErrorListener,
+} from 'components/App/resourceSchemas/resourceSchemaWorkerInit';
 
 export const useGetSchema = ({ schemaId, skip }) => {
-  const areSchemasComputed = useContext(AppContext).areSchemasComputed;
+  const { areSchemasComputed, schemasError } = useContext(
+    AppContext,
+  ).schemaInfo;
+  const isWorkerOkay = !!schemasWorker && !schemasError;
   const [schema, setSchema] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(!skip);
+  const [loading, setLoading] = useState(!isWorkerOkay ? false : !skip);
 
   useEffect(() => {
-    if (!areSchemasComputed || schema || skip) {
+    if (!areSchemasComputed || schema || skip || !isWorkerOkay) {
       return;
     }
-
-    sendMessage('getSchema', schemaId);
-    messageListener('schemaDelivery', ({ schema, error }) => {
-      if (error) {
-        setLoading(false);
-        setError(error);
-        setSchema(null);
-        console.error(error);
-      } else {
-        setLoading(false);
-        setError(null);
-        setSchema(schema);
-      }
+    sendWorkerMessage('getSchema', schemaId);
+    addWorkerListener('schemaComputed', ({ schema }) => {
+      setSchema(schema);
+      setError(null);
+      setLoading(false);
     });
-  }, [areSchemasComputed, schemaId, setSchema, schema, skip]);
+    addWorkerListener('customError', err => {
+      setError(err);
+      setLoading(false);
+    });
+    addWorkerErrorListener(err => {
+      setError(err);
+      setLoading(false);
+    });
+  }, [areSchemasComputed, schemaId, setSchema, schema, skip, isWorkerOkay]);
 
   return { schema, error, loading };
 };
