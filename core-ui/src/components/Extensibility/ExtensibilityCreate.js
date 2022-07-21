@@ -10,19 +10,57 @@ import { useTranslation } from 'react-i18next';
 import { prettifyKind } from 'shared/utils/helpers';
 import { widgetList } from 'components/Extensibility/components-form';
 
+const checkAllAnyOneOf = ({ schema, path }) => {
+  const currentPath = path?.split('.')?.[0];
+  const newPath = path.replace(`${currentPath}.`, '');
+  if (schema?.allOf) {
+    const newSchema = handleAllAnyOneOf({
+      schema,
+      path: newPath,
+      kind: 'allOf',
+    });
+    return getSubSchema({ schema: newSchema, path: newPath });
+  }
+
+  if (schema?.anyOf) {
+    const newSchema = handleAllAnyOneOf({
+      schema,
+      path: newPath,
+      kind: 'anyOf',
+    });
+    return getSubSchema({ schema: newSchema, path: newPath });
+  }
+
+  if (schema?.oneOf) {
+    const newSchema = handleAllAnyOneOf({
+      schema,
+      path: newPath,
+      kind: 'oneOf',
+    });
+    return getSubSchema({ schema: newSchema, path: newPath });
+  }
+
+  return schema[currentPath] || schema;
+};
 const handleAllAnyOneOf = ({ schema, path, kind = 'allOf' }) => {
   const currentPath = path?.split('.')?.[0];
   let sub;
   schema?.[kind]?.forEach(subSchema => {
-    if (subSchema.type === 'object' && subSchema.properties) {
+    if (subSchema?.type === 'object' && subSchema?.properties) {
       const keys = Object.keys(subSchema.properties) || [];
       const wantedKey = keys.find(key => key === currentPath);
       if (wantedKey) sub = subSchema.properties[wantedKey];
       return;
+    } else if (subSchema && !subSchema.type) {
+      const allanyoneof = checkAllAnyOneOf({
+        schema: subSchema,
+        path: currentPath,
+      });
+      if (!sub) sub = allanyoneof;
     }
     return;
   });
-  return sub || { type: 'string' };
+  return sub || schema?.[kind] || { type: 'string' };
 };
 
 export const getSubSchema = ({ schema, path }) => {
@@ -33,30 +71,11 @@ export const getSubSchema = ({ schema, path }) => {
     const newSchema = schema[currentPath].properties;
     return getSubSchema({ schema: newSchema, path: newPath });
   }
-  if (schema[currentPath].allOf) {
-    return handleAllAnyOneOf({
-      schema: schema[currentPath],
-      path: newPath,
-      kind: 'allOf',
-    });
-  }
-
-  if (schema[currentPath].anyOf) {
-    return handleAllAnyOneOf({
-      schema: schema[currentPath],
-      path: newPath,
-      kind: 'anyOf',
-    });
-  }
-
-  if (schema[currentPath].oneOf) {
-    return handleAllAnyOneOf({
-      schema: schema[currentPath],
-      path: newPath,
-      kind: 'oneOf',
-    });
-  }
-  return schema[currentPath];
+  const allanyoneof = checkAllAnyOneOf({
+    schema: schema[currentPath],
+    path: path,
+  });
+  return allanyoneof;
 };
 export function ExtensibilityCreate({
   formElementRef,

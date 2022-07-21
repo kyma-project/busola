@@ -75,10 +75,21 @@
       },
       {
         "path": "spec.files",
-        "children": [{"path": "name"}, {"path": "content"}]
+        "children": [
+          {
+            "path": "name"
+          },
+          {
+            "path": "content"
+          }
+        ]
       },
       {
         "path": "spec.secretRefs.name",
+        "simple": true
+      },
+      {
+        "path": "spec.secretRefs.exists",
         "simple": true
       }
     ],
@@ -202,21 +213,36 @@
             },
             "secretRefs": {
               "allOf": [
-              {
+                {
+                  "allOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "exists": {
+                          "type": "boolean"
+                        },
+                        "state": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
                   "type": "object",
                   "properties": {
-                      "name": {"type": "string"},
-                      "city": {"type": "string"},
-                      "state": {"type": "string"}
+                    "namespace": {
+                      "type": "string"
+                    },
+                    "test": {
+                      "type": "string"
+                    }
                   }
-              }, {
-                  "type": "object",
-                  "properties": {
-                      "phone": {"type": "string"},
-                      "email": {"type": "string"}
-                  }
-              }
-          ]
+                }
+              ]
             }
           }
         },
