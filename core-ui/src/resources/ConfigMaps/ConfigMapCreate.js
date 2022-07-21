@@ -37,15 +37,6 @@ export function ConfigMapCreate({
       presets={createPresets([], namespace || '', t)}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      handleNameChange={name => {
-        jp.value(configMap, '$.metadata.name', name);
-        jp.value(
-          configMap,
-          "$.metadata.labels['app.kubernetes.io/name']",
-          name,
-        );
-        setConfigMap({ ...configMap });
-      }}
     >
       <RichEditorDataField defaultOpen propertyPath="$.data" />
     </ResourceForm>
