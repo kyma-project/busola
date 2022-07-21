@@ -104,11 +104,6 @@ export const communication = {
     },
     'busola.loadDefaultKubeconfigId': async () => {
       await loadDefaultKubeconfigId();
-      await reloadAuth();
-      clearAuthData();
-      saveActiveClusterName(null);
-      fetchCache.clear();
-      await reloadNavigation();
     },
     'busola.deleteCluster': async ({ clusterName }) => {
       await deleteCluster(clusterName);
