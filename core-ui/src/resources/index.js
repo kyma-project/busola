@@ -50,6 +50,8 @@ import * as ClusterAddonsConfigurations from './ClusterAddonsConfigurations';
 import * as CustomResourceDefinitions from './CustomResourceDefinitions';
 import * as ClusterRoleBindings from './ClusterRoleBindings';
 
+import * as BusolaPlugins from './BusolaPlugins';
+
 export const resources = [
   // namespace resources
   Events,
@@ -106,6 +108,8 @@ export const resources = [
   ClusterAddonsConfigurations,
   CustomResourceDefinitions,
   ClusterRoleBindings,
+
+  BusolaPlugins,
 ];
 
 export const resourceRoutes = <>{resources.map(createResourceRoutes)}</>;
