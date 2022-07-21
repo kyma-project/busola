@@ -27,6 +27,7 @@ import { useWindowTitle } from 'shared/hooks/useWindowTitle';
 import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
+import { useVersionWarning } from 'hooks/useVersionWarning';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -147,6 +148,7 @@ function Resource({
   resourceGraphConfig,
   resourceSchema,
 }) {
+  useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation(['translation'], { i18n });
   const prettifiedResourceKind = prettifyNameSingular(
     resourceTitle,
@@ -288,6 +290,17 @@ function Resource({
     }
   };
 
+  const filterColumns = col => {
+    const { visible, error } = col.visibility?.(resource) || {
+      visible: true,
+    };
+    if (error) {
+      col.value = () => t('common.messages.error', { error: error.message });
+      return true;
+    }
+    return visible;
+  };
+
   return (
     <>
       <PageHeader
@@ -309,7 +322,7 @@ function Resource({
           />
         </PageHeader.Column>
 
-        {customColumns.map(col => (
+        {customColumns.filter(filterColumns).map(col => (
           <PageHeader.Column key={col.header} title={col.header}>
             {col.value(resource)}
           </PageHeader.Column>

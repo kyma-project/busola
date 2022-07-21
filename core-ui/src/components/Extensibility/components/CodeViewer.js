@@ -1,15 +1,53 @@
 import React from 'react';
+import jsyaml from 'js-yaml';
+import { isNil } from 'lodash';
+import { useTranslation } from 'react-i18next';
 
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
-
-import { useGetTranslation } from '../helpers';
 import { isValidYaml } from 'shared/contexts/YamlEditorContext/isValidYaml';
-import jsyaml from 'js-yaml';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useGetTranslation } from '../helpers';
 
 export function CodeViewer({ value, structure, schema }) {
   const { widgetT } = useGetTranslation();
+  const { t } = useTranslation();
 
-  const { parsedValue, language } = getEditorValue(value, structure);
+  const notification = useNotification();
+
+  const getValueAndLang = (value, structure) => {
+    let language = structure?.language || detectLanguage(value);
+    let parsedValue = '';
+
+    if (!isNil(value)) {
+      try {
+        switch (language) {
+          case 'yaml':
+            parsedValue = jsyaml.dump(value);
+            break;
+          default:
+            //this includes JSON and other languages
+            parsedValue = stringifyIfObject(value);
+        }
+      } catch (e) {
+        const errMessage = t('extensibility.widgets.code-viewer-error', {
+          error: e.message,
+        });
+        console.warn(errMessage);
+        notification.notifyError({
+          content: errMessage,
+        });
+        language = '';
+        parsedValue = stringifyIfObject(value);
+      }
+    }
+    return {
+      parsedValue,
+      language,
+    };
+  };
+
+  const { parsedValue, language } = getValueAndLang(value, structure);
+
   return (
     <ReadonlyEditorPanel
       title={widgetT(structure)}
@@ -19,30 +57,20 @@ export function CodeViewer({ value, structure, schema }) {
   );
 }
 
-const getEditorValue = value => {
-  let parsedValue = '';
-  let language = '';
-
+function detectLanguage(value) {
   if (isValidYaml(value)) {
-    try {
-      parsedValue = jsyaml.dump(value);
-      language = 'yaml';
-    } catch (e) {
-      console.error(e);
-    }
+    return 'yaml';
   } else if (typeof value === 'object') {
-    try {
-      parsedValue = JSON.stringify(value, null, 2);
-      language = 'json';
-    } catch (e) {
-      console.error(e);
-    }
+    return 'json';
   } else if (typeof value === 'string') {
-    parsedValue = value;
+    return '';
   }
-
-  return {
-    parsedValue,
-    language,
-  };
-};
+}
+function stringifyIfObject(value) {
+  return isNil(value)
+    ? ''
+    : typeof value !== 'string'
+    ? JSON.stringify(value, null, 2)
+    : value;
+}
+CodeViewer.array = true;

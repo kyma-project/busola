@@ -4,6 +4,7 @@ import { KeyValueField } from 'shared/ResourceForm/fields';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
+import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
 
 export function KeyValuePairRenderer({
   storeKeys,
@@ -11,7 +12,11 @@ export function KeyValuePairRenderer({
   value,
   onChange,
   required,
+  resource,
 }) {
+  // TODO the value obtained by ui-schema is undefined for this component
+  value = getObjectValueWorkaround(schema, resource, storeKeys, value);
+
   const { tFromStoreKeys } = useGetTranslation();
   const { t } = useTranslation();
 
@@ -27,7 +32,7 @@ export function KeyValuePairRenderer({
 
   return (
     <KeyValueField
-      value={value ? Object.fromEntries(value) : {}}
+      value={value ? value.toJS() : {}}
       setValue={value => {
         onChange({
           storeKeys,

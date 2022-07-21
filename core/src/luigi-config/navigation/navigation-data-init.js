@@ -13,7 +13,7 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
-import { getCustomResources, getCustomTranslations } from '../customResources';
+import { getCustomResources } from '../customResources';
 import { showAlert } from '../utils/showAlert';
 
 import {
@@ -44,6 +44,7 @@ import { setNavFooterText } from '../nav-footer';
 import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/pagination';
 import { getFeatures, initFeatures } from '../feature-discovery';
 import * as fetchCache from './../cache/fetch-cache';
+import { handleKubeconfigIdIfPresent } from './../kubeconfig-id';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -128,6 +129,7 @@ async function createClusterManagementNodes(features, customResources) {
       activeClusterName,
       language: i18next.language,
       busolaClusterParams: await getBusolaClusterParams(),
+      kubeconfigIdContents: await handleKubeconfigIdIfPresent(),
       features,
       customResources,
       ssoData: getSSOAuthData(),
@@ -215,7 +217,7 @@ export async function createNavigation() {
       getCurrentContextNamespace(activeCluster?.kubeconfig),
     );
 
-    const groupVersions = await fetchAvailableApis(authData);
+    const { apiGroups, groupVersions } = await fetchAvailableApis(authData);
 
     const activeClusterName = activeCluster?.kubeconfig['current-context'];
 
@@ -267,12 +269,13 @@ export async function createNavigation() {
         navigationPermissionChecker(node, permissionSet),
       appSwitcher: await createAppSwitcher(),
       ...optionsForCurrentCluster,
-      nodes: await createNavigationNodes(
-        await getFeatures(),
+      nodes: await createNavigationNodes({
+        features: await getFeatures(),
         groupVersions,
+        apiGroups,
         permissionSet,
         customResources,
-      ),
+      }),
     };
   } catch (err) {
     saveActiveClusterName(null);
@@ -332,12 +335,13 @@ async function getObservabilityNodes(authData) {
   return navNodes.filter(n => n);
 }
 
-export async function createNavigationNodes(
+export async function createNavigationNodes({
   features,
   groupVersions,
+  apiGroups,
   permissionSet,
   customResources,
-) {
+}) {
   const authData = getAuthData();
   const activeCluster = getActiveCluster();
 
@@ -415,8 +419,11 @@ export async function createNavigationNodes(
         cluster: activeCluster.currentContext.cluster,
         config: activeCluster.config,
         kubeconfig: activeCluster.kubeconfig,
+        kubeconfigIdContents: await handleKubeconfigIdIfPresent(),
         language: i18next.language,
         ssoData: getSSOAuthData(),
+        groupVersions,
+        apiGroups,
         groupVersions,
         settings: {
           pagination: {

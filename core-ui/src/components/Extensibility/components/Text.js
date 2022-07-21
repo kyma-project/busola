@@ -1,12 +1,15 @@
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { useGetPlaceholder } from 'components/Extensibility/helpers';
+import { isNil } from 'lodash';
+import { stringifyIfBoolean } from 'shared/utils/helpers';
 
-export const Text = ({ value, schema }) => {
+export const Text = ({ value, schema, structure }) => {
+  const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
+
   if (typeof value === 'object') {
     return JSON.stringify(value);
-  } else if (!value) {
-    return EMPTY_TEXT_PLACEHOLDER;
-  } else {
-    return value;
   }
+
+  const sanitizedValue = stringifyIfBoolean(value);
+  return isNil(value) ? emptyLeafPlaceholder : sanitizedValue;
 };
 Text.inline = true;

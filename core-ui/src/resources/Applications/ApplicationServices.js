@@ -17,7 +17,7 @@ export default function ApplicationServices({ spec: applicationSpec }) {
     t('applications.headers.events'),
   ];
 
-  const entries = applicationSpec.services.map(e => ({
+  const entries = (applicationSpec.services || []).map(e => ({
     displayName: (
       <Link className="fd-link" onClick={_ => navigateToDetails(e.name)}>
         {e.displayName}

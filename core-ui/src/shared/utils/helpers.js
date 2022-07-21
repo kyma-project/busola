@@ -109,8 +109,8 @@ export const prettifyNameSingular = (resourceName, resourceType) => {
 
 export const prettifyKind = kind => {
   const r = /([A-Z]+(?![a-z])|[A-Z][a-z]+)/g;
-  const parts = kind.match(r);
-  return parts.join(' ');
+  const parts = kind?.match(r);
+  return parts?.join(' ') || '';
 };
 
 export const getErrorMessage = (error, message = null) => {
@@ -125,3 +125,6 @@ export const getErrorMessage = (error, message = null) => {
 };
 
 export const intersperse = (arr, sep) => arr.flatMap(el => [sep, el]).slice(1);
+
+export const stringifyIfBoolean = val =>
+  typeof val === 'boolean' ? JSON.stringify(val) : val;

@@ -10,12 +10,18 @@ Use inline widgets for simple values in lists, details headers, and details bodi
 
 Text widgets render values as a simple text. This is the default behavior for all scalar values.
 
+#### Widget-specific parameters
+
+- **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
+  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+
 #### Example
 
 ```json
 {
   "path": "spec.label",
-  "widget": "Text"
+  "widget": "Text",
+  "placeholder": "-"
 }
 ```
 
@@ -25,23 +31,57 @@ Text widgets render values as a simple text. This is the default behavior for al
 
 Badge widgets render texts as a status badge, using a set of predefined rules to assign colors.
 
-The following values are automatically handled:
+#### Widget-specific parameters
 
-- rendered as an information: `initial`, `pending`, `available`, `released`.
-- rendered as a success: `ready`, `bound`, `running`, `success`, `succeeded`, `ok`.
-- rendered as a warning: `unknown`, `warning`.
-- rendered as an error: `error`, `failure`, `invalid`.
+- **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
+  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+- **highlights** - an optional map of highlight rules. Key refers to the type of highlight, while the rule can just be a plain array of values or a string containing a jsonata rule. Allowed keys are `informative` `positive`, `negative` and `critical`.
+
+#### Default highlight rules
+
+When no highlights are provided, the following values are automatically handled:
+
+- rendered as informative: `initial`, `pending`, `available`, `released`.
+- rendered as positive: `ready`, `bound`, `running`, `success`, `succeeded`, `ok`.
+- rendered as negative: `unknown`, `warning`.
+- rendered as critical: `error`, `failure`, `invalid`.
 
 #### Example
 
 ```json
 {
   "path": "status.value",
-  "widget": "Badge"
+  "widget": "Badge",
+  "placeholder": "-",
+  "highlights": {
+    "positive": ["yes", "ok"],
+    "negative": "data < 0"
+  }
 }
 ```
 
 <img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="20%" style="border: 1px solid #D2D5D9">
+
+### JoinedArray
+
+JoinedArray widgets render all the values of an array of strings as a comma-separated list.
+
+#### Widget-specific parameters
+
+- **separator** - a string by which the elements of the array will be separated by. The default value is a comma `,`.
+
+#### Example
+
+```json
+{
+  "name": "Joined array",
+  "path": "spec.dnsNames",
+  "widget": "JoinedArray",
+  "separator": ": "
+}
+```
+
+<img src="./assets/display-widgets/JoinedArray.png" alt="Example of a joined array widget" width="20%" style="border: 1px solid #D2D5D9">
 
 ## Block widgets
 
@@ -53,7 +93,7 @@ Plain widgets render all contents of an object or list sequentially without any 
 
 ### Panel
 
-Panel widgets render an object as a separate panel with it's own title (based on it's `path` or `name`).
+Panel widgets render an object as a separate panel with its own title (based on its `path` or `name`).
 
 #### Example
 
@@ -61,7 +101,10 @@ Panel widgets render an object as a separate panel with it's own title (based on
 {
   "name": "details",
   "widget": "Panel",
-  "children": [{ "path": "spec.value" }, { "path": "spec.other-value" }]
+  "children": [
+    { "path": "spec.value" },
+    { "path": "spec.other-value", "placeholder": "-" }
+  ]
 }
 ```
 
@@ -69,7 +112,7 @@ Panel widgets render an object as a separate panel with it's own title (based on
 
 ### Columns
 
-Columns widgets render the child widgets in two columns.
+Columns widgets render the child widgets in multiple columns.
 
 #### Example
 
@@ -81,7 +124,7 @@ Columns widgets render the child widgets in two columns.
     {
       "name": "columns.left",
       "widget": "Panel",
-      "children": [{ "path": "spec.value" }]
+      "children": [{ "path": "spec.value", "placeholder": "-" }]
     },
     {
       "name": "columns.right",
@@ -96,14 +139,20 @@ Columns widgets render the child widgets in two columns.
 
 ### CodeViewer
 
-CodeViewer widgets display values using a read-only code editor. The editor autodetects the language.
+CodeViewer widgets display values using a read-only code editor.
+
+#### Widget-specific parameters
+
+- **language** - used for code highlighting. Editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
+  If the language is not specified, editor tries to display the content as `yaml` with a fallback to `json`.
 
 #### Example
 
 ```json
 {
   "path": "spec.json-data",
-  "widget": "CodeViewer"
+  "widget": "CodeViewer",
+  "language": "yaml"
 }
 ```
 
@@ -113,13 +162,18 @@ CodeViewer widgets display values using a read-only code editor. The editor auto
 
 Table widgets display array data as rows of a table instead of free-standing components. The **children** parameter defines the values used to render the columns. Similar to the `list` section of the Config Map, you should use inline widgets only as children.
 
+#### Widget-specific parameters
+
+- **collapsible** - an optional array of extra widgets to display as an extra collapsible section. Uses the same format as the **children** parameter.
+
 #### Example
 
 ```json
 {
   "path": "spec.item-list",
   "widget": "Table",
-  "children": [{ "path": "name" }, { "path": "status" }]
+  "children": [{ "path": "name" }, { "path": "status" }],
+  "collapsible": [{ "path": "description" }]
 }
 ```
 
@@ -137,6 +191,7 @@ If such resource list was already defined in Busola, the configuration will be r
 {
   "widget": "ResourceList",
   "path": "$myRelatedResource",
+  "name": "Example ResourceList Secret",
   "columns": [
     {
       "path": "status.code",
@@ -146,10 +201,15 @@ If such resource list was already defined in Busola, the configuration will be r
 }
 ```
 
+<img src="./assets/display-widgets/ResourceList.png" alt="Example of a ResourceList widget" style="border: 1px solid #D2D5D9">
+
 ### ResourceRefs
 
 ResourceRefs widgets render the lists of links to the associated resources. The corresponding specification object must be an array of objects `{name: 'foo', namespace: 'bar'}`.
-Additionally, you must define the kind of the linked resources by passing the Kubernetes resource `kind` (for example, `Secret`, `ConfigMap`).
+
+#### Widget-specific parameters
+
+- **kind** - _[required]_ Kubernetes kind of the resource.
 
 #### Example
 
@@ -161,16 +221,24 @@ Additionally, you must define the kind of the linked resources by passing the Ku
 }
 ```
 
+<img src="./assets/display-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">
+
 ### ControlledBy
 
 ControlledBy widgets render the kind and the name with a link to the resources that the current resource is dependent on.
+
+#### Widget-specific parameters
+
+- **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
+  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 
 ### Example
 
 ```json
 {
   "path": "metadata.ownerReferences",
-  "widget": "ControlledBy"
+  "widget": "ControlledBy",
+  "placeholder": "-"
 }
 ```
 
@@ -180,12 +248,18 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 
 ControlledByKind widgets render the kind of the resources that the current resource is dependent on.
 
+#### Widget-specific parameters
+
+- **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
+  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+
 ### Example
 
 ```json
 {
   "path": "metadata.ownerReferences",
-  "widget": "ControlledByKind"
+  "widget": "ControlledByKind",
+  "placeholder": "- no refs -"
 }
 ```
 

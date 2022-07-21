@@ -3,8 +3,13 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
 import jsonata from 'jsonata';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { OrderedMap } from 'immutable';
 
-export const TranslationBundleContext = createContext('extensibility');
+export const TranslationBundleContext = createContext({
+  translationBundle: 'extensibility',
+  defaultResourcePlaceholder: '',
+});
 
 export const getValue = (resource, path) => {
   if (!resource) return undefined;
@@ -31,9 +36,9 @@ export const ApplyFormula = (value, formula, i18n) => {
 };
 
 export const useGetTranslation = path => {
-  const translationBundle = useContext(TranslationBundleContext);
+  const { translationBundle } = useContext(TranslationBundleContext);
   const { t, i18n } = useTranslation([translationBundle]);
-  //doesn't always work, add `translationBundle.` at the beggining of a path
+  //doesn't always work, add `translationBundle.` at the beginning of a path
 
   return {
     t: (path, ...props) => t(`${translationBundle}::${path}`, ...props) || path,
@@ -75,3 +80,37 @@ export function createTemplate(api, namespace, scope) {
     template.metadata.namespace = namespace;
   return template;
 }
+
+export const useGetPlaceholder = structure => {
+  const { t } = useGetTranslation();
+  const { defaultResourcePlaceholder } = useContext(TranslationBundleContext);
+
+  let emptyLeafPlaceholder = '';
+  if (structure?.placeholder) {
+    emptyLeafPlaceholder = t(structure.placeholder);
+  } else if (defaultResourcePlaceholder) {
+    emptyLeafPlaceholder = t(defaultResourcePlaceholder);
+  } else {
+    emptyLeafPlaceholder = EMPTY_TEXT_PLACEHOLDER;
+  }
+
+  return { emptyLeafPlaceholder };
+};
+
+export const getObjectValueWorkaround = (
+  schema,
+  resource,
+  storeKeys,
+  value,
+) => {
+  // TODO the value obtained by ui-schema is undefined for this component
+  if (schema.toJS().type === 'object') {
+    value = OrderedMap(
+      storeKeys.toArray().reduce((valueSoFar, currKey) => {
+        return valueSoFar?.[currKey];
+      }, resource),
+    );
+  }
+
+  return value;
+};

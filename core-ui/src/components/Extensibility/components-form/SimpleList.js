@@ -49,7 +49,7 @@ export function SimpleList({
     </label>
   );
 
-  const isObject = itemsSchema.get('type') === 'object';
+  const isObject = itemsSchema?.get('type') === 'object';
 
   return (
     <ResourceForm.CollapsibleSection

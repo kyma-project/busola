@@ -529,6 +529,7 @@ common:
     kyma: Kyma
     name: Name
     namespace: Namespace
+    new-entry: New Entry
     'no': 'No'
     path: Path
     protocol: Protocol
@@ -665,11 +666,14 @@ components:
       update:
         failure: 'Failed to update the {{resourceType}}: {{error}}'
         success: '{{resourceType}} updated'
+  rich-editor-data-field:
+    language-placeholder: Choose language
   string-input:
     placeholder: Enter multiple values separated by comma
     remove: Click to remove
 config-maps:
   buttons:
+    migrate: Migrate
     update: Update
   description: <0>Config Map</0> is an object that allows for storing non-sensitive data in key-value pairs.
   errors:
@@ -999,6 +1003,10 @@ events:
 extensibility:
   configuration-error: 'Configuration error: {{error}}'
   error: Your extension configuration is incorrect.
+  message:
+    old-version: There is a newer version of the extensibility configuration. Please migrate to the newest version.
+    unnown-version: Your extensibility configuration version is no longer supported, but cannot be migrated. For more information, see <0>Extensibility documentation</0>.
+    unsupported-version: Your extensibility configuration version is no longer supported. Please migrate to the newest version.
   starter-modal:
     buttons:
       open-modal: Create UI
@@ -1012,10 +1020,18 @@ extensibility:
       docs-info: For more information, see <0>Extensibility documentation</0>.
       error: Failed to upsert UI configuration.
       no-columns: No example values could be inferred from the CRD.
+      not-an-array: Wrong data format. Values should be an array.
       scaffold-only: Configuration above can be changed later at the Config Map level.
       success: UI configuration upserted.
     title: Create UI for {{kind}} CRD
+  title: Extensibility
+  version:
+    current: Current vesion
+    latest: Latest vesion
   widgets:
+    code-viewer-error: 'CodeViewer: The received resource is in a language other than defined: {{error}}.'
+    joined-array:
+      error: 'Configuration error: The joined array widget configuration is incorrect. Path value must be an array type.'
     table:
       error: The table widget configuration is incorrect. Path value must be an array type.
 functions:
@@ -1287,21 +1303,21 @@ grafana:
   open-in-grafana: Open in Grafana
   unavailable: No Grafana link
 graphs:
+  capacity: Capacity
   cpu: CPU
   free-space: Free space
+  limits: Limits
   memory: Memory
   network: Network
   network-down: Download
   network-up: Upload
   nodes: Nodes
   pvc-usage: Volume Space Usage
+  requests: Requests
   resource-commitment:
-    capacity: Capacity
     cpu: CPU Commitment
-    limits: Limits
     limits-exceed: Resource limits exceed 150% of the cluster capacity.
     memory: Memory Commitment
-    requests: Requests
     utilized-value: Utilized ({{value}}%)
   total: Total
   used-space: Used space

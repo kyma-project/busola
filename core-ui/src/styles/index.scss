@@ -38,6 +38,7 @@ body {
   grid-template-columns: 2fr 2fr;
   margin: 32px;
   grid-gap: 32px;
+
   .fd-panel {
     margin: 0;
   }
@@ -363,6 +364,10 @@ input[type='checkbox'] {
 
 .fd-textarea.resize-vertical {
   resize: vertical;
+}
+
+.is-emphasized {
+  font-style: italic;
 }
 
 .fd-display-flex {

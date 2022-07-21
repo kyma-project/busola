@@ -27,8 +27,8 @@ export const getSchemaLink = (value, language) => {
     return GENERIC_URL;
   }
   const resource = resources[0];
-  const resourceType = resource.kind;
-  const resourceApi = resource.apiVersion;
+  const resourceType = resource?.kind;
+  const resourceApi = resource?.apiVersion;
 
   if (
     !resourceType ||
