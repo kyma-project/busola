@@ -39,9 +39,9 @@ const checkAllAnyOneOf = ({ schema, path }) => {
     });
     return getSubSchema({ schema: newSchema, path: newPath });
   }
-
   return schema[currentPath] || schema;
 };
+
 const handleAllAnyOneOf = ({ schema, path, kind = 'allOf' }) => {
   const currentPath = path?.split('.')?.[0];
   let sub;
@@ -56,11 +56,12 @@ const handleAllAnyOneOf = ({ schema, path, kind = 'allOf' }) => {
         schema: subSchema,
         path: currentPath,
       });
-      if (!sub) sub = allanyoneof;
+      if (allanyoneof) sub = allanyoneof;
+      return;
     }
     return;
   });
-  return sub || schema?.[kind] || { type: 'string' };
+  return sub || { type: 'string' };
 };
 
 export const getSubSchema = ({ schema, path }) => {
