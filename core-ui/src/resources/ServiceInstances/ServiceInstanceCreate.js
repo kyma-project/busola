@@ -9,17 +9,19 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 
 import { createServiceInstanceTemplate } from './helpers.js';
 import { FormTextarea } from 'fundamental-react';
+import { cloneDeep } from 'lodash';
 
 export function ServiceInstanceCreate({
   namespace,
   formElementRef,
   onChange,
+  resource: initialInstance,
   resourceUrl,
   ...props
 }) {
   const { t } = useTranslation();
   const [serviceInstance, setServiceInstance] = React.useState(
-    createServiceInstanceTemplate(namespace),
+    cloneDeep(initialInstance) || createServiceInstanceTemplate(namespace),
   );
   return (
     <ResourceForm
@@ -98,3 +100,5 @@ export function ServiceInstanceCreate({
     </ResourceForm>
   );
 }
+
+ServiceInstanceCreate.allowEdit = true;
