@@ -7,7 +7,7 @@ export function createOAuth2ClientTemplate(namespace) {
       namespace,
     },
     spec: {
-      grantTypes: [''],
+      grantTypes: [],
       scope: '',
       secretName: '',
       tokenEndpointAuthMethod: 'client_secret_basic',
