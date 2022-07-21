@@ -179,6 +179,42 @@ Table widgets display array data as rows of a table instead of free-standing com
 
 <img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
 
+### ResourceLink
+
+ResourceLink widgets renders an internal link to a Kubernetes resource.
+
+#### resource property
+
+To create a navigable link, Busola needs the name and the kind of a target resource. They must be passed in **resource** object, as a property paths in either **data** (value exctracted via **path**) or **root** (the original resource). If the target resource is namespaced, provide also **namespace**, in a similar manner as **name** and **kind** properties.
+
+#### linkText property
+
+The **linkText** has access **data** and **root** (as mentioned in [linkText property section](#linktext-property)). This way it's possible to interpolate resource properties into a translation.
+
+#### Example
+
+##### details section
+
+```json
+{
+  "widget": "ResourceLink",
+  "path": "metadata.ownerReferences[0]",
+  "linkText": "otherTranslations.linkText",
+  "resource": {
+    "name": "data.name",
+    "namespace": "root.metadata.namespace",
+    "kind": "data.kind"
+  }
+}
+```
+
+##### translations section
+
+```yaml
+en:
+  spec.linkText: Go to {{data.kind}} {{data.name}}.
+```
+
 ### ResourceList
 
 ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with [related resources](resources.md#relations-section).
