@@ -9,6 +9,8 @@ export function createRepositoryTemplate(namespace) {
         'app.kubernetes.io/name': '',
       },
     },
-    spec: {},
+    spec: {
+      url: '',
+    },
   };
 }
