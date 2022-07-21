@@ -2,18 +2,19 @@ import React from 'react';
 import { Link } from 'fundamental-react';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 import { useTranslation } from 'react-i18next';
-import { applyFormula, useGetPlaceholder, useGetTranslation } from '../helpers';
+import { useGetPlaceholder, useGetTranslation } from '../helpers';
+import jsonata from 'jsonata';
 
 function getLinkData({ value, formulas, originalResource, t }) {
-  const getValue = formula =>
-    applyFormula(value, formula, t, { root: originalResource });
+  const applyFormula = formula =>
+    jsonata(formula).evaluate({ data: value, root: originalResource });
 
   try {
     return {
       linkData: {
-        name: getValue(formulas.name),
-        namespace: getValue(formulas.namespace),
-        kind: getValue(formulas.kind),
+        name: applyFormula(formulas.name),
+        namespace: formulas.namespace && applyFormula(formulas.namespace),
+        kind: applyFormula(formulas.kind),
       },
     };
   } catch (e) {
