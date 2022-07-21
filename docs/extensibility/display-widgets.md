@@ -118,7 +118,7 @@ The **linkText** has access **data** and **root** (as mentioned in [linkText pro
 
 ```yaml
 en:
-  spec.linkText: Go to {{data.kind}} {{data.name}}.
+  otherTranslations.linkText: Go to {{data.kind}} {{data.name}}.
 ```
 
 ## Block widgets

@@ -26,7 +26,7 @@ data:
         {
           "path": "spec.ownerReferences[0]",
           "widget": "ResourceLink",
-          "linkText": "spec.linkText",
+          "linkText": "otherTranslations.linkText",
           "resource": {
             "name": "data.name",
             "namespace": "root.metadata.namespace",
@@ -226,4 +226,5 @@ data:
       topping.price: Price
       topping.quantity: Quantity
       spec.ownerReferences: Owner References
+      otherTranslations.linkText: Go to {{data.kind}} {{data.name}}.
   version: '0.5'
