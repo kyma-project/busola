@@ -1,6 +1,6 @@
 import { prettifyKind } from 'shared/utils/helpers';
 import pluralize from 'pluralize';
-import { getLatestVersion } from '../../../components/Extensibility/migration';
+import { getLatestVersion } from 'components/Extensibility/migration';
 
 function extractFirstLevelProperties(crd) {
   const filterSimpleProps = ([, property]) =>

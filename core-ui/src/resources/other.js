@@ -11,6 +11,7 @@ import appServiceDetails from './other/appServiceDetails.routes';
 import containerDetails from './other/containerDetails.routes';
 import helmReleasesList from './other/helmReleasesList.routes';
 import helmReleaseDetails from './other/helmReleaseDetails.routes';
+import busolaExtensions from './other/BusolaExtensions.routes';
 
 const other = (
   <>
@@ -25,6 +26,7 @@ const other = (
     {containerDetails}
     {helmReleasesList}
     {helmReleaseDetails}
+    {busolaExtensions}
   </>
 );
 

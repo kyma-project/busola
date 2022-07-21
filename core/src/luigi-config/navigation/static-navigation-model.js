@@ -2080,6 +2080,37 @@ export function getStaticRootNodes(
         },
       ],
     },
+    {
+      category: i18next.t('configuration.title'),
+      pathSegment: 'busolaextensions',
+      navigationContext: 'busolaextensions',
+      label: i18next.t('extensibility.extensions.title'),
+      viewUrl: config.coreUIModuleUrl + '/busolaextensions',
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':namespace',
+              children: [
+                {
+                  pathSegment: ':name',
+                  resourceType: 'configmaps',
+                  viewUrl:
+                    config.coreUIModuleUrl +
+                    '/busolaextensions/details/:namespace/:name?' +
+                    toSearchParamsString({
+                      resourceApiPath: '/api/v1',
+                    }),
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
     // OTHER
     {
       pathSegment: 'preferences',
