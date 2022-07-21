@@ -40,6 +40,7 @@ export function GenericRoleCreate({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       presets={!initialRole && presets}
+      nameProps={{ readOnly: !!initialConfigMap?.metadata?.name }}
     >
       <ItemArray
         propertyPath="$.rules"

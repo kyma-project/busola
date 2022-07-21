@@ -114,6 +114,7 @@ export function ResourceForm({
   editor = renderEditor
     ? renderEditor({ defaultEditor: editor, Editor: EditorWrapper })
     : editor;
+
   return (
     <section className={classnames('resource-form', className)}>
       {presetsSelector}
@@ -136,7 +137,7 @@ export function ResourceForm({
                 <K8sNameField
                   propertyPath="$.metadata.name"
                   kind={singularName}
-                  readOnly={!!initialResource}
+                  readOnly={readOnly || !!initialResource}
                   setValue={handleNameChange}
                   {...nameProps}
                 />
@@ -174,7 +175,7 @@ export function ResourceForm({
                 <K8sNameField
                   propertyPath="$.metadata.name"
                   kind={singularName}
-                  readOnly={!!initialResource}
+                  readOnly={readOnly || !!initialResource}
                   setValue={handleNameChange}
                   {...nameProps}
                 />
