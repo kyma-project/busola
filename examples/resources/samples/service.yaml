@@ -9,12 +9,12 @@ spec:
       protocol: TCP
       port: 80
       targetPort: 8080
-      nodePort: 32732
+      nodePort: 32733
   selector:
     app: frontend
-  clusterIP: 127.0.0.1
+  clusterIP: 100.67.29.73
   clusterIPs:
-    - 127.0.0.1
+    - 100.67.29.73
   type: LoadBalancer
   sessionAffinity: None
   externalTrafficPolicy: Cluster
