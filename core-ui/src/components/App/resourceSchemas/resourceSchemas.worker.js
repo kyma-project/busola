@@ -49,8 +49,14 @@ function replaceObjects(existingCustomFormats, schema) {
 }
 
 const jsonSchemas = {};
+
 let activeClusterName = '';
 async function createJSONSchemas(openAPISchemas, clusterName) {
+  if (clusterName === '__proto__') {
+    //disallow prototype pollution
+    throw new Error();
+  }
+
   activeClusterName = clusterName;
 
   if (jsonSchemas[clusterName]) {
