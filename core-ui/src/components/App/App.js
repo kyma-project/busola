@@ -13,10 +13,8 @@ import { useAppTracking } from 'hooks/tracking';
 import { ExtensibilityDetails } from 'components/Extensibility/ExtensibilityDetails';
 import { ExtensibilityList } from 'components/Extensibility/ExtensibilityList';
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
-import {
-  useResourceSchemas,
-  AppContext,
-} from './resourceSchemas/useResourceSchemas';
+import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
+import { AppContext } from './AppContext';
 
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';

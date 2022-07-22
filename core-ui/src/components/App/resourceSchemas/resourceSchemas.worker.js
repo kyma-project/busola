@@ -56,12 +56,7 @@ async function createJSONSchemas(openAPISchemas, clusterName) {
     //disallow prototype pollution
     throw new Error();
   }
-
   activeClusterName = clusterName;
-
-  if (jsonSchemas[clusterName]) {
-    return;
-  }
 
   const resolved = await new Resolver().resolve(openAPISchemas);
   const schema = toJsonSchema(resolved);

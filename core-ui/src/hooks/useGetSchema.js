@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
-import { AppContext } from 'components/App/resourceSchemas/useResourceSchemas';
 import {
   addWorkerListener,
   sendWorkerMessage,
   schemasWorker,
   addWorkerErrorListener,
 } from 'components/App/resourceSchemas/resourceSchemaWorkerApi';
+import { AppContext } from 'components/App/AppContext';
 
 export const useGetSchema = ({ schemaId, skip }) => {
   const { areSchemasComputed, schemasError } = useContext(

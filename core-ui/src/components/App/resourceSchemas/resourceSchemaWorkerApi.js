@@ -33,7 +33,7 @@ export const addWorkerListener = (message, messageHandlerFn) => {
   };
 };
 
-// a listener for the same message will overwrite a previous one
+// a new listener will overwrite a previous one
 export const addWorkerErrorListener = errorHandlerFn => {
   if (!schemasWorker || typeof errorHandlerFn !== 'function') {
     console.error('addWorkerErrorListener error');

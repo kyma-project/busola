@@ -1,5 +1,5 @@
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { createContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import {
   sendWorkerMessage,
@@ -7,8 +7,6 @@ import {
   addWorkerErrorListener,
   schemasWorker,
 } from './resourceSchemaWorkerApi';
-
-export const AppContext = createContext({ areSchemasComputed: false });
 
 export const useResourceSchemas = () => {
   const fetch = useSingleGet();
@@ -18,7 +16,12 @@ export const useResourceSchemas = () => {
   const lastFetched = useRef();
 
   useEffect(() => {
-    if (!activeClusterName || !authData) return;
+    if (!activeClusterName || !authData) {
+      setSchemasError(null);
+      setAreSchemasComputed(false);
+      lastFetched.current = null;
+      return;
+    }
 
     // Luigi updates authData a few times during a cluster load. The below line cancels repeated requests after the first fetch
     if (lastFetched.current === activeClusterName) return;
