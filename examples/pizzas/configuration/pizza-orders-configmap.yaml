@@ -71,7 +71,7 @@ data:
       "version": "v1",
       "path": "pizzaorders",
       "scope": "namespace",
-       "description: "this string is the description translation id"
+       "description: "check the translations"
     }
   schema: |-
     {
@@ -170,7 +170,7 @@ data:
         "spec.orderDetails.realization": "Realization",
         "spec.pizzas": "Pizzas",
         "spec.status": "Status",
-        "this string is the description translation id": "Customize the pizza view further with the Busola extensibility {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
+        "check the translations": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
       }
     }
   version: '0.5'
