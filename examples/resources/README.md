@@ -21,7 +21,7 @@ kubectl create namespace resources && kubectl apply -f configuration/ --recursiv
 2. Apply the `samples.yaml` file:
 
 ```bash
-ubectl apply -f samples/ --recursive
+kubectl apply -f samples/ --recursive
 ```
 
 After uploading the files, refresh the browser. You should see new items in the left-side navigation.
