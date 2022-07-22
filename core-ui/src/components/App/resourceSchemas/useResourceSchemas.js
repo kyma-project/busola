@@ -20,7 +20,7 @@ export const useResourceSchemas = () => {
   useEffect(() => {
     if (!activeClusterName || !authData) return;
 
-    // Luigi updates authData few times during a cluster load. The below line cancels repeated requests after first fetch
+    // Luigi updates authData a few times during a cluster load. The below line cancels repeated requests after the first fetch
     if (lastFetched.current === activeClusterName) return;
     lastFetched.current = activeClusterName;
 
