@@ -11,18 +11,20 @@ import * as Inputs from 'shared/ResourceForm/inputs';
 import { createServiceBindingTemplate } from './helpers';
 import { SecretRefForm } from './SecretRefForm/SecretRefForm';
 import { FormTextarea } from 'fundamental-react';
+import { cloneDeep } from 'lodash';
 
 export function ServiceBindingCreate({
   namespace,
   formElementRef,
   onChange,
+  resource: initialServiceBinding,
   setCustomValid,
   resourceUrl,
   ...props
 }) {
   const { t } = useTranslation();
   const [serviceBinding, setServiceBinding] = React.useState(
-    createServiceBindingTemplate(namespace),
+    cloneDeep(initialServiceBinding) || createServiceBindingTemplate(namespace),
   );
 
   const { data: secrets, loading, error } = useGetList()(
@@ -52,6 +54,7 @@ export function ServiceBindingCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
+      initialResource={initialServiceBinding}
     >
       <ResourceForm.FormField
         required
@@ -110,3 +113,5 @@ export function ServiceBindingCreate({
     </ResourceForm>
   );
 }
+
+ServiceBindingCreate.allowEdit = true;
