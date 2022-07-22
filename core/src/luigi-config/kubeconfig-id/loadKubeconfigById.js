@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 import { getBusolaClusterParams } from '../busola-cluster-params';
 import { DEFAULT_FEATURES } from './../constants';
+import { getClusters } from '../cluster-management/cluster-management';
 
 function join(path, fileName) {
   if (!path.endsWith('/')) {
@@ -14,10 +15,6 @@ async function importJsYaml() {
 }
 
 export async function loadKubeconfigById(kubeconfigId) {
-  if (!kubeconfigId) {
-    return null;
-  }
-
   const clusterParams = await getBusolaClusterParams();
 
   const kubeconfigIdFeature = {
@@ -25,12 +22,24 @@ export async function loadKubeconfigById(kubeconfigId) {
     ...clusterParams.config?.features,
   }['KUBECONFIG_ID'];
 
-  if (kubeconfigIdFeature.isEnabled === false) {
+  if (!kubeconfigIdFeature.isEnabled) {
+    return null;
+  }
+
+  const isHome = /^\/?$/.test(window.location.pathname);
+  const areClusters = Object.getOwnPropertyNames(getClusters()).length;
+  const defaultKubeconfig = kubeconfigIdFeature.config.defaultKubeconfig;
+
+  const anyKubeconfigId =
+    kubeconfigId || (isHome && !areClusters && defaultKubeconfig);
+
+  if (!anyKubeconfigId) {
     return null;
   }
 
   const jsyaml = await importJsYaml();
-  const url = join(kubeconfigIdFeature.config.kubeconfigUrl, kubeconfigId);
+
+  const url = join(kubeconfigIdFeature.config.kubeconfigUrl, anyKubeconfigId);
 
   const responseText = await fetch(url).then(res => res.text());
   const payload = jsyaml.load(responseText);

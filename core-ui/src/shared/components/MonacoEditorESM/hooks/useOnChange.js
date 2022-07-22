@@ -6,7 +6,7 @@ export const useOnChange = ({ editorInstance, onChange }) => {
     // update parent component state on value change
     const changeListener = editorInstance.onDidChangeModelContent(() => {
       const editorValue = editorInstance.getValue();
-      onChange(editorValue);
+      onChange?.(editorValue);
     });
     return () => {
       changeListener.dispose();

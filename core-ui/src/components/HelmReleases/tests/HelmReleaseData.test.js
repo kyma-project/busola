@@ -13,11 +13,6 @@ const originalDecodeHelmRelease = jest.requireActual(
 
 jest.mock('shared/components/ReadonlyEditorPanel', () => 'mock');
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: key => key,
-  }),
-}));
 describe.skip('HelmReleaseData', () => {
   const PANEL_TITLE = 'helm-releases.headers.release';
 

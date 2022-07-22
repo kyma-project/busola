@@ -3,12 +3,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Selector } from '../Selector';
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: key => key,
-  }),
-}));
-
 jest.mock('../../RelatedPods.js', () => ({
   RelatedPods: ({ namespace }) => <div>Related Pods for {namespace}</div>,
 }));

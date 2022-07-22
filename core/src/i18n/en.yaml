@@ -671,6 +671,7 @@ components:
     remove: Click to remove
 config-maps:
   buttons:
+    migrate: Migrate
     update: Update
   description: <0>Config Map</0> is an object that allows for storing non-sensitive data in key-value pairs.
   errors:
@@ -1000,6 +1001,10 @@ events:
 extensibility:
   configuration-error: 'Configuration error: {{error}}'
   error: Your extension configuration is incorrect.
+  message:
+    old-version: There is a newer version of the extensibility configuration. Please migrate to the newest version.
+    unnown-version: Your extensibility configuration version is no longer supported, but cannot be migrated. For more information, see <0>Extensibility documentation</0>.
+    unsupported-version: Your extensibility configuration version is no longer supported. Please migrate to the newest version.
   starter-modal:
     buttons:
       open-modal: Create UI
@@ -1017,6 +1022,10 @@ extensibility:
       scaffold-only: Configuration above can be changed later at the Config Map level.
       success: UI configuration upserted.
     title: Create UI for {{kind}} CRD
+  title: Extensibility
+  version:
+    current: Current vesion
+    latest: Latest vesion
   widgets:
     code-viewer-error: 'CodeViewer: The received resource is in a language other than defined: {{error}}.'
     joined-array:
