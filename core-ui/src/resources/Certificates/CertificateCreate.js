@@ -113,15 +113,6 @@ export function CertificateCreate({
       formElementRef={formElementRef}
       initialResource={initialCertificate}
       createUrl={resourceUrl}
-      handleNameChange={name => {
-        jp.value(certificate, '$.metadata.name', name);
-        jp.value(
-          certificate,
-          "$.metadata.labels['app.kubernetes.io/name']",
-          name,
-        );
-        setCertificate({ ...certificate });
-      }}
       nameProps={{ 'data-cy': 'cert-name' }}
     >
       <ResourceForm.FormField

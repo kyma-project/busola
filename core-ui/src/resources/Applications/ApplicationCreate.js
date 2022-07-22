@@ -26,6 +26,7 @@ export function ApplicationCreate({
 
   const handleNameChange = name => {
     jp.value(application, '$.metadata.name', name);
+    jp.value(application, "$.metadata.labels['app.kubernetes.io/name']", name);
     jp.value(application, '$.spec.accessLabel', name);
 
     setApplication({ ...application });

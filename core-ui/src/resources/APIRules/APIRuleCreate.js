@@ -76,13 +76,6 @@ export function APIRuleCreate({
     }
   }, [apiRule?.spec?.gateway]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleNameChange = name => {
-    jp.value(apiRule, '$.metadata.name', name);
-    jp.value(apiRule, "$.metadata.labels['app.kubernetes.io/name']", name);
-
-    setApiRule({ ...apiRule });
-  };
-
   const afterCreatedFn = async defaultAfterCreatedFn => {
     if (!serviceName) {
       defaultAfterCreatedFn();
@@ -113,7 +106,6 @@ export function APIRuleCreate({
       createUrl={resourceUrl}
       afterCreatedFn={afterCreatedFn}
       setCustomValid={setCustomValid}
-      handleNameChange={handleNameChange}
       nameProps={{ prefix: prefix }}
     >
       <ServiceDropdown
