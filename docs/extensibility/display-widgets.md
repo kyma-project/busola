@@ -83,7 +83,26 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
 
 <img src="./assets/display-widgets/JoinedArray.png" alt="Example of a joined array widget" width="20%" style="border: 1px solid #D2D5D9">
 
-### ResourceLink
+### Labels
+
+Labels widgets render all the object entries in the `key-value` format.
+
+#### Widget-specific parameters
+
+- **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
+  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+
+```json
+{
+  "path": "spec.orderDetails",
+  "widget": "Labels",
+  "placeholder": "-"
+}
+```
+
+<img src="./assets/display-widgets/Labels.png" alt="Example of a Labels widget" width="20%" style="border: 1px solid #D2D5D9">
+
+# ResourceLink
 
 ResourceLink widgets renders an internal link to a Kubernetes resource.
 
