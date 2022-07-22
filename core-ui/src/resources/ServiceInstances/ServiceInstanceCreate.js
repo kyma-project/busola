@@ -1,4 +1,3 @@
-import * as jp from 'jsonpath';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
