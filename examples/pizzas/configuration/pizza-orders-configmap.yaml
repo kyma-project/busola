@@ -13,6 +13,10 @@ data:
         {
           "path": "spec.status",
           "widget": "Badge"
+        },
+        {
+          "path": "spec.orderDetails",
+          "widget": "Labels"
         }
       ],
       "body": [

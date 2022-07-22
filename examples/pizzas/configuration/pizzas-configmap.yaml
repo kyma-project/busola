@@ -42,7 +42,7 @@ data:
                 "path": "status.messages[-1:].message"
               },
               { "path": "spec.toppings", formula: "$join(data.name, ', ')" }, 
-              { "path": "spec.toppings", formula: "$reduce(data.price)", "name": "Toppings price" }
+              { "path": "spec.toppings", formula: "$sum(data.price)", "name": "Toppings price" }
             ]
           },
           {
