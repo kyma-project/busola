@@ -1,0 +1,86 @@
+apiVersion: serverless.kyma-project.io/v1alpha1
+kind: Function
+metadata:
+  name: commerce-mock-test
+  namespace: commerce-mock
+  labels:
+    app.kubernetes.io/name: commerce-mock-test
+spec:
+  runtime: nodejs14
+  type: ''
+  minReplicas: 1
+  maxReplicas: 1
+  resources:
+    limits:
+      cpu: 25m
+      memory: 32Mi
+    requests:
+      cpu: 10m
+      memory: 16Mi
+  buildResources:
+    limits:
+      cpu: 400m
+      memory: 400Mi
+    requests:
+      cpu: 200m
+      memory: 200Mi
+  source: |-
+    const http = require('http');
+    async function httpGet(url) {
+      return new Promise(async (resolve, reject) => {
+        let body = [];
+
+        const req = http.get(url, res => {
+          res.on('data', chunk => body.push(chunk));
+          res.on('end', () => {
+            const data = Buffer.concat(body).toString();
+            resolve(data);
+          });
+        });
+        req.on('error', e => {
+          // console.log(`ERROR httpGet: ${e}`);
+          reject(e);
+        });
+        req.end();
+
+      });
+
+    }
+    module.exports = { 
+      main: async function (event, context) {
+        const RESULT_CENTRAL_GW_COMMERCE= JSON.parse(await httpGet(`${process.env.CENTRAL_GW_COMMERCE}/test/orders/00000009`));    
+        return RESULT_CENTRAL_GW_COMMERCE;
+      }
+    }
+  deps: |-
+    { 
+      "name": "commerce-mock-test",
+      "version": "1.0.0",
+      "dependencies": {}
+    }
+  env:
+    - name: CENTRAL_GW_COMMERCE
+      value: >-
+        http://central-application-gateway.kyma-system.svc.cluster.local:8082/mp-hasselhoff02/sap-commerce-cloud-commerce-webservices/sap-commerce-cloud-commerce-webservices
+
+---
+apiVersion: gateway.kyma-project.io/v1alpha1
+kind: APIRule
+metadata:
+  name: commerce-mock-test
+  namespace: commerce-mock
+  labels:
+    app.kubernetes.io/name: commerce-mock-test
+spec:
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
+  rules:
+    - accessStrategies:
+        - handler: allow
+          config: {}
+      methods:
+        - GET
+      path: /.*
+  service:
+    host: commerce-mock-test
+    name: commerce-mock-test
+    port: 80
