@@ -11,6 +11,7 @@ import { JoinedArray } from './JoinedArray';
 import { ResourceList } from './ResourceList';
 
 import { PendingWrapper } from './PendingWrapper';
+import { Labels } from './Labels';
 
 export const widgets = {
   Null: () => '',
@@ -26,6 +27,7 @@ export const widgets = {
   ControlledByKind,
   JoinedArray,
   ResourceList,
+  Labels,
 };
 
 export const valuePreprocessors = {
