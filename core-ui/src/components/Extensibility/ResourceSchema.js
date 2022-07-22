@@ -52,7 +52,6 @@ export function ResourceSchema({
 
   const myRules = advanced ? advancedRules : simpleRules;
   const preparedRules = prepareSchemaRules(myRules);
-  console.log('preparedRules', myRules, preparedRules);
 
   if (isEmpty(schema)) return null;
 
