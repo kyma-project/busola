@@ -7,7 +7,7 @@ const byPath = a => b => JSON.stringify(b.path) === JSON.stringify(a);
 
 // fake an OrderedMap-like structure using List to allow for duplicate keys
 const propertiesWrapper = src => ({
-  map: cb => List(src.map(([key, val]) => cb(val, key))),
+  map: cb => List(src?.map(([key, val]) => cb(val, key))),
 });
 
 export function prepareSchemaRules(ruleDefs) {
