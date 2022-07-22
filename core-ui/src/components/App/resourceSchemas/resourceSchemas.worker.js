@@ -78,6 +78,7 @@ async function createJSONSchemas(openAPISchemas, clusterName) {
 
 self.onmessage = $event => {
   const message = $event.data[0];
+
   if (message === 'sendingOpenapi') {
     const openApiData = $event.data[1];
     const activeClusterName = $event.data[2];
