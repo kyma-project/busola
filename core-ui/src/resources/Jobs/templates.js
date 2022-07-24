@@ -22,7 +22,7 @@ export function createJobTemplate(namespace, templateAnnotations) {
 
 export function createCronJobTemplate(namespace, templateAnnotations) {
   return {
-    apiVersion: 'batch/v1beta1',
+    apiVersion: 'batch/v1',
     kind: 'CronJob',
     metadata: {
       name: '',
@@ -113,7 +113,7 @@ export function createCronJobPresets(
     {
       name: 'Hello',
       value: {
-        apiVersion: 'batch/v1beta1',
+        apiVersion: 'batch/v1',
         kind: 'CronJob',
         metadata: {
           name: 'hello',
