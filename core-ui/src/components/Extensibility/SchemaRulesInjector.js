@@ -78,8 +78,8 @@ export function SchemaRulesInjector({
 
   let newSchema = schema.mergeDeep(itemRule);
   if (schema.get('properties')) {
-    const newProperties = childRules?
-      .map(rule => {
+    const newProperties = childRules
+      ?.map(rule => {
         const propertyKey = last(rule.path);
         const property = newSchema
           .get('properties')
