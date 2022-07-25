@@ -2,6 +2,15 @@ import { prettifyKind } from 'shared/utils/helpers';
 import pluralize from 'pluralize';
 import { getLatestVersion } from 'components/Extensibility/migration';
 
+export const SECTIONS = [
+  'resource',
+  'form',
+  'list',
+  'details',
+  'relations',
+  'translations',
+];
+
 function extractFirstLevelProperties(crd) {
   const filterSimpleProps = ([, property]) =>
     property.type !== 'object' && property.type !== 'array';

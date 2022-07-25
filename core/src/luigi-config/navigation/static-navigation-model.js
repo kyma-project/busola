@@ -2084,7 +2084,7 @@ export function getStaticRootNodes(
       category: i18next.t('configuration.title'),
       pathSegment: 'busolaextensions',
       navigationContext: 'busolaextensions',
-      label: i18next.t('extensibility.extensions.title'),
+      label: i18next.t('extensibility.title'),
       viewUrl: config.coreUIModuleUrl + '/busolaextensions',
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,

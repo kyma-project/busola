@@ -24,9 +24,9 @@ import {
 } from '../../components/Extensibility/migration';
 
 import { BusolaExtensionEdit } from './BusolaExtensionEdit';
+import { SECTIONS } from './helpers';
 
 export function BusolaExtensionDetails(props) {
-  console.log('BusolaExtensionDetails', props);
   const { t } = useTranslation();
   const { namespace, name } = useParams();
 
@@ -35,13 +35,28 @@ export function BusolaExtensionDetails(props) {
 
   const BusolaExtensionEditor = resource => {
     const { data } = resource;
-    return Object.keys(data || {}).map(key => (
-      <ReadonlyEditorPanel
-        title={key}
-        value={data[key]}
-        key={key + JSON.stringify(data[key])}
-      />
-    ));
+    return (
+      <>
+        {SECTIONS.map(key => (
+          <ReadonlyEditorPanel
+            title={t(`extensibility.sections.${key}`)}
+            value={data[key]}
+            key={key + JSON.stringify(data[key])}
+          />
+        ))}
+        {Object.keys(resource.data ?? {})
+          .filter(key => key.match(/^translations-..$/))
+          .map(key => (
+            <ReadonlyEditorPanel
+              title={t('extensibility.sections.lang-translations', {
+                lang: key.substring(key.length - 2),
+              })}
+              value={data[key]}
+              key={key + JSON.stringify(data[key])}
+            />
+          ))}
+      </>
+    );
   };
 
   const updateBusolaExtension = async (newBusolaExtension, configmap) => {
@@ -114,7 +129,7 @@ export function BusolaExtensionDetails(props) {
     return (
       <LayoutPanel className="fd-margin--md">
         <LayoutPanel.Header>
-          <LayoutPanel.Head title={t('extensibility.title')} />
+          <LayoutPanel.Head title={t('extensibility.section.version')} />
           <LayoutPanel.Actions>
             {hasMigrationFunction && (
               <>
@@ -158,22 +173,14 @@ export function BusolaExtensionDetails(props) {
     },
   ];
 
-  /*
-i18n: I18n {observers: {…}, options: {…}, services: {…}, logger: Logger, modules: {…}, …}
-namespace: "default"
-readOnly: false
-resourceGraphConfig: {Function: {…}, StatefulSet: {…}, Job: {…}, ReplicaSet: {…}, CronJob: {…}, …}
-resourceName: "crds-status"
-resourceTitle: ""
-*/
   return (
     <ResourceDetails
       customComponents={[ExtensibilityVersion, BusolaExtensionEditor]}
       customColumns={customColumns}
       createResourceForm={BusolaExtensionEdit}
+      resourceTitle={t('extensibility.title')}
       resourceType="ConfigMaps"
       resourceUrl={`/api/v1/namespaces/${namespace}/configmaps/${name}`}
-      // {...props}
     />
   );
 }

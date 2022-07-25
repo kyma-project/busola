@@ -4,26 +4,23 @@ import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import {
-  K8sNameField,
-  KeyValueField,
-  RichEditorDataField,
-} from 'shared/ResourceForm/fields';
+import { K8sNameField } from 'shared/ResourceForm/fields';
+import { Editor } from 'shared/ResourceForm/fields/Editor';
 
-import { createConfigMapTemplate } from './helpers';
+import { createConfigMapTemplate, SECTIONS } from './helpers';
 
 export function BusolaExtensionEdit({
   namespace,
   formElementRef,
   onChange,
   setCustomValid,
-  resource: initialConfigMap,
+  resource: initialExtension,
   resourceUrl,
   ...props
 }) {
-  const [configMap, setConfigMap] = useState(
-    initialConfigMap
-      ? cloneDeep(initialConfigMap)
+  const [extension, setExtension] = useState(
+    initialExtension
+      ? cloneDeep(initialExtension)
       : createConfigMapTemplate(namespace || ''),
   );
   const { t } = useTranslation();
@@ -33,36 +30,62 @@ export function BusolaExtensionEdit({
       {...props}
       pluralKind="configmaps"
       singularName={t('config-maps.name_singular')}
-      resource={configMap}
-      initialResource={initialConfigMap}
-      setResource={setConfigMap}
+      resource={extension}
+      initialResource={initialExtension}
+      setResource={setExtension}
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
     >
       <K8sNameField
-        readOnly={!!initialConfigMap?.metadata?.name}
+        readOnly={true}
         propertyPath="$.metadata.name"
-        kind={t('config-maps.name_singular')}
-        setValue={name => {
-          jp.value(configMap, '$.metadata.name', name);
-          jp.value(
-            configMap,
-            "$.metadata.labels['app.kubernetes.io/name']",
-            name,
-          );
-          setConfigMap({ ...configMap });
-        }}
+        kind="ConfigMap"
         validate={value => !!value}
       />
+      {SECTIONS.map(key => (
+        <ResourceForm.CollapsibleSection
+          title={t(`extensibility.sections.${key}`)}
+          defaultOpen
+        >
+          <Editor
+            language="yaml"
+            height="240px"
+            propertyPath={`$.data.${key}`}
+            autocompletionDisabled
+            updateValueOnParentChange
+            convert={false}
+          />
+        </ResourceForm.CollapsibleSection>
+      ))}
+      {Object.keys(extension.data ?? {})
+        .filter(key => key.match(/^translations-..$/))
+        .map(key => (
+          <ResourceForm.CollapsibleSection
+            title={t('extensibility.sections.lang-translations', {
+              lang: key.substring(key.length - 2),
+            })}
+            defaultOpen
+          >
+            <Editor
+              language="yaml"
+              height="240px"
+              propertyPath={`$.data['${key}']`}
+              autocompletionDisabled
+              updateValueOnParentChange
+              convert={false}
+            />
+          </ResourceForm.CollapsibleSection>
+        ))}
+      {/*
       <RichEditorDataField
         defaultOpen
         propertyPath="$.data"
         collapsible={false}
       />
+      */}
     </ResourceForm>
   );
 }
 BusolaExtensionEdit.allowEdit = true;
-// BusolaExtensionEdit.allowClone = true;

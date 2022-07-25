@@ -12,7 +12,6 @@ import { createExtensibilityTemplate, createConfigmap } from './helpers';
 import { ColumnsInput } from './ColumnsInput';
 import './ExtensibilityStarterForm.scss';
 
-// export function BusolaExtensionCreate({ crd, formElementRef, onChange }) {
 export function BusolaExtensionCreate({ formElementRef, onChange }) {
   const { t } = useTranslation();
   const notificationManager = useNotification();
@@ -21,7 +20,6 @@ export function BusolaExtensionCreate({ formElementRef, onChange }) {
   const { data: crds } = useGetList()(
     '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
   );
-  // const [state, setState] = useState(() => createExtensibilityTemplate(crd, t));
   const [crd, setCrd] = useState(null);
   const [state, setState] = useState({});
 
