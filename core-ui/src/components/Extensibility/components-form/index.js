@@ -28,12 +28,12 @@ import { SimpleList } from './SimpleList';
 
 const pluginStack = [
   ReferencingHandler,
-  SchemaRulesInjector,
   ExtractStorePlugin,
   CombiningHandler,
   DefaultHandler,
   DependentHandler,
   ConditionalHandler,
+  SchemaRulesInjector,
   PluginSimpleStack,
   ValidityReporter,
 ];
