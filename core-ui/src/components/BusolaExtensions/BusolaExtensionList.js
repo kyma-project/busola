@@ -3,13 +3,11 @@ import { useTranslation, Trans } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
 import { Link } from 'shared/components/Link/Link';
 
 import { BusolaExtensionCreate } from './BusolaExtensionCreate';
 
 export function BusolaPluginList(props) {
-  console.log('BusolaPluginList');
   const { t } = useTranslation();
 
   const customColumns = [
@@ -28,12 +26,6 @@ export function BusolaPluginList(props) {
     </Trans>
   );
 
-  // allowSlashShortcut: true
-  // hasDetailsView: true
-  // i18n: I18n {observers: {…}, options: {…}, services: {…}, logger: Logger, modules: {…}, …}
-  // namespace: "dd"
-  // readOnly: false
-
   return (
     <ResourcesList
       customColumns={customColumns}
@@ -44,18 +36,12 @@ export function BusolaPluginList(props) {
       resourceUrl="/api/v1/configmaps?labelSelector=busola.io/extension=resource"
       hasDetailsView={true}
       navigateFn={extension => {
-        console.log(
-          'navigate to',
-          `details/${extension.metadata.namespace}/${extension.metadata.name}`,
-        );
         LuigiClient.linkManager()
           .fromContext('busolaextensions')
           .navigate(
             `/details/${extension.metadata.namespace}/${extension.metadata.name}`,
           );
-        // LuigiClient.sendCustomMessage({ id: 'busola.refreshNavigation' });
       }}
-      // busola.io/extension=resource
     />
   );
 }
