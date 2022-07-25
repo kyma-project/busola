@@ -213,8 +213,8 @@ data:
       spec.sauce: Sauce
       spec.toppings: Toppings
       spec.recipeSecret: Recipe's secret
-      topping.name: Name
-      topping.price: Price
-      topping.quantity: Quantity
+      spec.toppings.name: Name
+      spec.toppings.price: Price ($)
+      spec.toppings.quantity: Quantity
       spec.ownerReferences: Owner References
   version: '0.5'
