@@ -14,41 +14,7 @@ import { prettifyKind } from 'shared/utils/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useGetSchema } from 'hooks/useGetSchema';
 
-export const ExtensibilityCreate = ({ resourceSchema, ...props }) => {
-  const { version, kind, group } = resourceSchema.resource;
-  const openapiSchemaId = `${group}/${version}/${kind}`;
-
-  const {
-    schema: schemaFromOpenApi,
-    error: errorOpenApi,
-    loading,
-  } = useGetSchema({
-    schemaId: openapiSchemaId,
-    skip: !!resourceSchema.schema,
-  });
-
-  // the cases when the resource has the schema in the ConfigMap or no schema either in ConfigMap and OpenAPI
-  if (resourceSchema.schema || errorOpenApi) {
-    return (
-      <ExtensibilityCreateComponent
-        {...props}
-        resourceSchema={resourceSchema}
-      />
-    );
-  }
-  // waiting for schema from OpenAPI to be computed
-  if (loading) return <Spinner />;
-
-  // resource with a schema from OpenAPI
-  return (
-    <ExtensibilityCreateComponent
-      {...props}
-      resourceSchema={{ ...resourceSchema, schema: schemaFromOpenApi }}
-    />
-  );
-};
-
-function ExtensibilityCreateComponent({
+export function ExtensibilityCreate({
   formElementRef,
   setCustomValid,
   resourceType,
@@ -63,7 +29,6 @@ function ExtensibilityCreateComponent({
   const { t } = useTranslation();
   const { t: tExt, exists } = useGetTranslation();
   const api = createResource?.resource || {};
-  const schema = createResource?.schema;
 
   const [resource, setResource] = useState(
     initialResource ||
@@ -102,6 +67,15 @@ function ExtensibilityCreateComponent({
     toggleFormFn(false);
   };
 
+  const { version, kind, group } = createResource.resource;
+  const openapiSchemaId = `${group}/${version}/${kind}`;
+  const { schema, error: errorOpenApi, loading } = useGetSchema({
+    schemaId: openapiSchemaId,
+  });
+
+  // waiting for schema from OpenAPI to be computed
+  if (loading) return <Spinner />;
+
   return (
     <ResourceForm
       pluralKind={resourceType}
@@ -122,7 +96,7 @@ function ExtensibilityCreateComponent({
       <ResourceSchema
         simple
         key={api.version}
-        schema={schema || {}}
+        schema={errorOpenApi ? {} : schema}
         schemaRules={createResource?.form}
         resource={resource}
         store={store}
@@ -133,7 +107,7 @@ function ExtensibilityCreateComponent({
       <ResourceSchema
         advanced
         key={api.version}
-        schema={schema || {}}
+        schema={errorOpenApi ? {} : schema}
         schemaRules={createResource?.form}
         resource={resource}
         store={store}
