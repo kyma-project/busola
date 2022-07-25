@@ -1,7 +1,5 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
 import { useTranslation, Trans } from 'react-i18next';
-import { Link } from 'fundamental-react';
 
 import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -9,14 +7,10 @@ import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
 import { Link as ReactSharedLink } from 'shared/components/Link/Link';
 
 import { ServiceBindingCreate } from './ServiceBindingCreate';
+import { ServiceInstanceLink } from './ServiceInstanceLink';
 
 export function ServiceBindingList(props) {
   const { t } = useTranslation();
-
-  const navigateToInstance = instanceName =>
-    LuigiClient.linkManager()
-      .fromContext('namespace')
-      .navigate(`/serviceinstances/details/${instanceName}`);
 
   const customColumns = [
     {
@@ -27,13 +21,11 @@ export function ServiceBindingList(props) {
     },
     {
       header: t('btp-service-bindings.instance-name'),
-      value: resource => (
-        <Link
-          className="fd-link"
-          onClick={() => navigateToInstance(resource.spec.serviceInstanceName)}
-        >
-          {resource.spec.serviceInstanceName}
-        </Link>
+      value: res => (
+        <ServiceInstanceLink
+          namespace={res.metadata.namespace}
+          serviceInstanceName={res.spec?.serviceInstanceName}
+        />
       ),
       id: 'service-instance-name',
     },
