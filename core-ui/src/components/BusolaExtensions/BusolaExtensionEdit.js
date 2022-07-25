@@ -77,13 +77,6 @@ export function BusolaExtensionEdit({
             />
           </ResourceForm.CollapsibleSection>
         ))}
-      {/*
-      <RichEditorDataField
-        defaultOpen
-        propertyPath="$.data"
-        collapsible={false}
-      />
-      */}
     </ResourceForm>
   );
 }
