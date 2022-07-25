@@ -7,16 +7,10 @@ import { UIMetaProvider } from '@ui-schema/ui-schema/UIMeta';
 import { UIStoreProvider, storeUpdater } from '@ui-schema/ui-schema';
 import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
 
-import formWidgets from './components-form';
-import { SchemaRulesInjector } from './SchemaRulesInjector';
+import widgets from './components-form';
+import { prepareSchemaRules } from './SchemaRulesInjector';
 
 import { METADATA_SCHEMA } from './metadataSchema';
-
-const [firstPlugin, ...otherPlugins] = formWidgets.pluginStack;
-const widgets = {
-  ...formWidgets,
-  pluginStack: [firstPlugin, SchemaRulesInjector, ...otherPlugins],
-};
 
 function FormContainer({ children }) {
   return (
@@ -57,6 +51,7 @@ export function ResourceSchema({
   const advancedRules = fullSchemaRules.filter(item => item.advanced ?? true);
 
   const myRules = advanced ? advancedRules : simpleRules;
+  const preparedRules = prepareSchemaRules(myRules);
 
   if (isEmpty(schema)) return null;
 
@@ -78,7 +73,7 @@ export function ResourceSchema({
         store={store}
         showValidity={true}
         onChange={onChange}
-        schemaRules={myRules}
+        schemaRules={preparedRules}
       >
         <FormStack isRoot schema={schemaMap} resource={resource} />
       </UIStoreProvider>
