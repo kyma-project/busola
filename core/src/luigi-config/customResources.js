@@ -122,13 +122,13 @@ export async function getCustomResources(authData) {
       ...(await loadTargetClusterCRs(authData)),
     });
 
-    customResources[clusterName] = customResources[
-      clusterName
-    ].filter(resource =>
-      getSupportedVersions().some(
-        version => formatCurrentVersion(resource.version) === version,
-      ),
-    );
+    // customResources[clusterName] = customResources[
+    //   clusterName
+    // ].filter(resource =>
+    //   getSupportedVersions().some(
+    //     version => formatCurrentVersion(resource.version) === version,
+    //   ),
+    // );
     return customResources[clusterName];
   }
   return [];
