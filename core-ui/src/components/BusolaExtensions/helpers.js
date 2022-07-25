@@ -145,3 +145,14 @@ export function createConfigmap(crd, data) {
     ),
   };
 }
+
+export function createConfigMapTemplate(namespace) {
+  return {
+    apiVersion: 'v1',
+    kind: 'ConfigMap',
+    metadata: {
+      namespace,
+    },
+    data: {},
+  };
+}

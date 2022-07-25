@@ -2100,10 +2100,11 @@ export function getStaticRootNodes(
                   resourceType: 'configmaps',
                   viewUrl:
                     config.coreUIModuleUrl +
-                    '/busolaextensions/details/:namespace/:name?' +
-                    toSearchParamsString({
-                      resourceApiPath: '/api/v1',
-                    }),
+                    '/busolaextensions/details/:namespace/:name',
+                  // '/busolaextensions/details/:namespace/:name?' +
+                  // toSearchParamsString({
+                  // resourceApiPath: '/api/v1',
+                  // }),
                 },
               ],
             },

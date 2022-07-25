@@ -15,8 +15,6 @@ import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 
-import { prettifyNameSingular } from 'shared/utils/helpers';
-
 import {
   formatCurrentVersion,
   getLatestVersion,
@@ -34,11 +32,6 @@ export function BusolaExtensionDetails(props) {
 
   const updateResourceMutation = useUpdate(props.resourceUrl);
   const notification = useNotification();
-
-  // const prettifiedResourceKind = prettifyNameSingular(
-  // props.resourceTitle,
-  // props.resourceType,
-  // );
 
   const BusolaExtensionEditor = resource => {
     const { data } = resource;
@@ -165,11 +158,21 @@ export function BusolaExtensionDetails(props) {
     },
   ];
 
+  /*
+i18n: I18n {observers: {…}, options: {…}, services: {…}, logger: Logger, modules: {…}, …}
+namespace: "default"
+readOnly: false
+resourceGraphConfig: {Function: {…}, StatefulSet: {…}, Job: {…}, ReplicaSet: {…}, CronJob: {…}, …}
+resourceName: "crds-status"
+resourceTitle: ""
+*/
   return (
     <ResourceDetails
       customComponents={[ExtensibilityVersion, BusolaExtensionEditor]}
       customColumns={customColumns}
       createResourceForm={BusolaExtensionEdit}
+      resourceType="ConfigMaps"
+      resourceUrl={`/api/v1/namespaces/${namespace}/configmaps/${name}`}
       // {...props}
     />
   );

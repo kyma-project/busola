@@ -21,16 +21,18 @@ const BusolaExtensionDetails = React.lazy(() =>
 
 export default (
   <>
-    <Route path="/busolaextensions" element={<BusolaExtensionList />} />
-    {/*
     <Route
-      path="/busolaextensions/:name"
-      element={<RoutedCustomResourcesOfType />}
-    />
-    */}
-    <Route
+      //details/kube-public/alertmanagerconfigs.monitoring.coreos.com
       path="/busolaextensions/details/:namespace/:name"
       element={<BusolaExtensionDetails />}
     />
+    <Route path="/busolaextensions" element={<BusolaExtensionList />} />
+    {/*
+    <Route
+      path="/busolaextensions/:namespace"
+      // element={<RoutedCustomResourcesOfT\ype />}
+      element={<BusolaExtensionDetails />}
+    />
+    */}
   </>
 );
