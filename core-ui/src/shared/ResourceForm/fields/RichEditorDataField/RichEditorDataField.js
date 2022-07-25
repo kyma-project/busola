@@ -3,11 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm/components/ResourceForm';
 import { RichEditorSection } from './RichEditorSection';
 
-export function RichEditorDataField({
-  value: data,
-  setValue: setData,
-  collapsible = true,
-}) {
+export function RichEditorDataField({ value: data, setValue: setData }) {
   const { t } = useTranslation();
   const [internalData, setInternalData] = useState([]);
   const valueRef = useRef(null);
@@ -42,38 +38,32 @@ export function RichEditorDataField({
     );
   }, [setData, internalData]);
 
-  const internals = internalData.map((item, index) => (
-    <RichEditorSection
-      item={item}
-      setInternalData={setInternalData}
-      onChange={data =>
-        setInternalData(internalData => {
-          internalData[index] = {
-            ...item,
-            ...data,
-          };
-          return [...internalData];
-        })
-      }
-      onDelete={() => {
-        internalData.splice(index, 1);
-        setInternalData([...internalData]);
-        pushValue();
-      }}
-      pushValue={pushValue}
-    />
-  ));
-
-  if (collapsible) {
-    return (
-      <ResourceForm.CollapsibleSection
-        defaultOpen
-        title={t('common.labels.data')}
-      >
-        {internals}
-      </ResourceForm.CollapsibleSection>
-    );
-  } else {
-    return internals;
-  }
+  return (
+    <ResourceForm.CollapsibleSection
+      defaultOpen
+      title={t('common.labels.data')}
+    >
+      {internalData.map((item, index) => (
+        <RichEditorSection
+          item={item}
+          setInternalData={setInternalData}
+          onChange={data =>
+            setInternalData(internalData => {
+              internalData[index] = {
+                ...item,
+                ...data,
+              };
+              return [...internalData];
+            })
+          }
+          onDelete={() => {
+            internalData.splice(index, 1);
+            setInternalData([...internalData]);
+            pushValue();
+          }}
+          pushValue={pushValue}
+        />
+      ))}
+    </ResourceForm.CollapsibleSection>
+  );
 }
