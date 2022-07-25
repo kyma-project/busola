@@ -141,7 +141,6 @@ export function KeyValueField({
           ) : null,
       ]}
       actions={actions}
-      tooltipContent={t('common.tooltips.key-value')}
       {...props}
     />
   );

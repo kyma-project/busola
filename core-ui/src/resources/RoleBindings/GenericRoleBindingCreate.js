@@ -6,11 +6,7 @@ import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
-import {
-  K8sNameField,
-  KeyValueField,
-  ItemArray,
-} from 'shared/ResourceForm/fields';
+import { ItemArray } from 'shared/ResourceForm/fields';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
 import {
@@ -86,11 +82,6 @@ export function GenericRoleBindingCreate({
     setBinding({ ...binding });
   };
 
-  const handleNameChange = name => {
-    jp.value(binding, '$.metadata.name', name);
-    setBinding({ ...binding });
-  };
-
   return (
     <ResourceForm
       {...props}
@@ -102,25 +93,13 @@ export function GenericRoleBindingCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialRoleBinding}
+      nameProps={{ pattern: '.*', showHelp: false }}
+      handleNameChange={name => {
+        jp.value(binding, '$.metadata.name', name);
+
+        setBinding({ ...binding });
+      }}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={singularName}
-        setValue={handleNameChange}
-        readOnly={!!initialRoleBinding}
-        pattern=".*"
-        showHelp={false}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
       <RoleForm
         loading={rolesLoading}
         error={rolesError}
