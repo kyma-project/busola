@@ -6,11 +6,7 @@ import { Checkbox } from 'fundamental-react';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import {
-  TextArrayInput,
-  KeyValueField,
-  K8sNameField,
-} from 'shared/ResourceForm/fields';
+import { TextArrayInput } from 'shared/ResourceForm/fields';
 
 import { validateIssuer } from './helpers';
 import {
@@ -264,26 +260,6 @@ export function IssuerCreate({
       presets={!initialIssuer && createPresets(namespace, t)}
       createUrl={resourceUrl}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        readOnly={!!initialIssuer}
-        kind={t('issuers.name_singular')}
-        setValue={name => {
-          jp.value(issuer, '$.metadata.name', name);
-          jp.value(issuer, "$.metadata.labels['app.kubernetes.io/name']", name);
-          setIssuer({ ...issuer });
-        }}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
       <ResourceForm.FormField
         label={t('issuers.type')}
         key={t('issuers.type')}
