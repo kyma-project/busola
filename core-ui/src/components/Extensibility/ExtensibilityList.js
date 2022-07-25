@@ -20,7 +20,7 @@ import { RelationsContextProvider } from './contexts/RelationsContext';
 export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
 
-  const { path, kind } = resMetaData?.resource ?? {};
+  const { path, kind, disableCreate } = resMetaData?.resource ?? {};
 
   const schema = resMetaData?.schema;
   const relations = resMetaData?.relations || {};
@@ -62,6 +62,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     <ResourcesList
       createResourceForm={ExtensibilityCreate}
       allowSlashShortcut
+      readOnly={disableCreate}
       {...listProps}
     />
   );
