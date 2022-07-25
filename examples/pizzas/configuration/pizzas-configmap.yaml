@@ -22,7 +22,7 @@ data:
           "widget": "ControlledByKind",
           "placeholder": "---"
         },
-        { "path": "spec.toppings", formula: "$join(data.name, ', ')" }, 
+        { "path": "spec.toppings", "formula": "$join(data.name, ', ')" }, 
       ],
     "body": [
         {
@@ -41,8 +41,8 @@ data:
                 "name": "Message",
                 "path": "status.messages[-1:].message"
               },
-              { "path": "spec.toppings", formula: "$join(data.name, ', ')" }, 
-              { "path": "spec.toppings", formula: "$sum(data.price)", "name": "Toppings price" }
+              { "path": "spec.toppings", "formula": "$join(data.name, ', ')" }, 
+              { "path": "spec.toppings", "formula": "$sum(data.price)", "name": "Toppings price" }
             ]
           },
           {
@@ -114,7 +114,7 @@ data:
     [
       { "path": "spec.description" },
       { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
-      { "path": "spec.toppings", formula: "$sum(data.price)", "name": "Toppings price" }
+      { "path": "spec.toppings", "formula": "$sum(data.price)", "name": "Toppings price" }
     ]
   relations: |-
     {
@@ -132,7 +132,7 @@ data:
       "group": "busola.example.com",
       "version": "v1",
       "scope": "namespace",
-      "description: "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
+      "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
     }
   schema: |-
     {
