@@ -7,13 +7,10 @@ import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { DefinitionList } from 'shared/components/DefinitionList/DefinitionList';
+import { ServiceInstanceLink } from './ServiceInstanceLink';
 
 export function ServiceBindingData({ metadata, spec, status }) {
   const { t } = useTranslation();
-  const navigateToInstance = instanceName =>
-    LuigiClient.linkManager()
-      .fromContext('namespace')
-      .navigate(`/serviceinstances/details/${instanceName}`);
 
   const { data, loading } = useGet(
     `/api/v1/namespaces/${metadata.namespace}/secrets/${spec.secretName}`,
@@ -32,12 +29,10 @@ export function ServiceBindingData({ metadata, spec, status }) {
     {
       name: t('btp-service-bindings.instance-name'),
       value: (
-        <Link
-          className="fd-link"
-          onClick={() => navigateToInstance(spec.serviceInstanceName)}
-        >
-          {spec.serviceInstanceName}
-        </Link>
+        <ServiceInstanceLink
+          namespace={metadata.namespace}
+          serviceInstanceName={spec.serviceInstanceName}
+        />
       ),
     },
     {

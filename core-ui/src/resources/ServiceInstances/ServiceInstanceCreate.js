@@ -1,25 +1,28 @@
+import * as jp from 'jsonpath';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 
 import * as Inputs from 'shared/ResourceForm/inputs';
 
-import { createServiceInstanceTemplate } from './helpers.js';
 import { FormTextarea } from 'fundamental-react';
+import { cloneDeep } from 'lodash';
+import { createServiceInstanceTemplate } from './helpers.js';
 
 export function ServiceInstanceCreate({
   namespace,
   formElementRef,
   onChange,
+  resource: initialServiceInstance,
   resourceUrl,
   ...props
 }) {
   const { t } = useTranslation();
   const [serviceInstance, setServiceInstance] = React.useState(
-    createServiceInstanceTemplate(namespace),
+    cloneDeep(initialServiceInstance) ||
+      createServiceInstanceTemplate(namespace),
   );
   return (
     <ResourceForm
@@ -31,6 +34,7 @@ export function ServiceInstanceCreate({
       setResource={setServiceInstance}
       onChange={onChange}
       formElementRef={formElementRef}
+      initialResource={initialServiceInstance}
       createUrl={resourceUrl}
     >
       <K8sNameField
@@ -45,6 +49,7 @@ export function ServiceInstanceCreate({
           );
           setServiceInstance({ ...serviceInstance });
         }}
+        readOnly={!!initialServiceInstance}
       />
       <KeyValueField
         advanced
@@ -98,3 +103,5 @@ export function ServiceInstanceCreate({
     </ResourceForm>
   );
 }
+
+ServiceInstanceCreate.allowEdit = true;
