@@ -49,14 +49,18 @@ function TimeInput({ entries, index, name, setSchedule }) {
       required
       label={t('cron-jobs.create-modal.' + name)}
       input={() => (
-        <Inputs.Text
-          value={entries[index] || ''}
-          setValue={setValue}
-          placeholder={t('cron-jobs.create-modal.' + name)}
-          required
-        />
+        <>
+          <Inputs.Text
+            value={entries[index] || ''}
+            setValue={setValue}
+            placeholder={t('cron-jobs.create-modal.' + name)}
+            required
+          />
+          <p style={{ color: 'var(--sapNeutralTextColor)' }}>
+            {t('cron-jobs.create-modal.tooltips.' + name)}
+          </p>
+        </>
       )}
-      tooltipContent={t('cron-jobs.create-modal.tooltips.' + name)}
     />
   );
 }
