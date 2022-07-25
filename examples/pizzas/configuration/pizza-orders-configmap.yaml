@@ -75,7 +75,7 @@ data:
       "version": "v1",
       "path": "pizzaorders",
       "scope": "namespace",
-       "description: "check the translations"
+       "description": "check the translations"
     }
   schema: |-
     {
