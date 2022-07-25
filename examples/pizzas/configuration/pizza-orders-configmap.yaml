@@ -74,7 +74,8 @@ data:
       "group": "busola.example.com",
       "version": "v1",
       "path": "pizzaorders",
-      "scope": "namespace"
+      "scope": "namespace",
+       "description: "check the translations"
     }
   schema: |-
     {
@@ -172,7 +173,8 @@ data:
         "spec.orderDetails.paymentMethod": "Payment method",
         "spec.orderDetails.realization": "Realization",
         "spec.pizzas": "Pizzas",
-        "spec.status": "Status"
+        "spec.status": "Status",
+        "check the translations": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
       }
     }
   version: '0.5'
