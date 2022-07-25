@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
-import {
-  K8sNameField,
-  KeyValueField,
-  ItemArray,
-} from 'shared/ResourceForm/fields';
+import { KeyValueField, ItemArray } from 'shared/ResourceForm/fields';
 import * as jp from 'jsonpath';
 import { createGatewayTemplate, createPresets, newServer } from './templates';
 import { SingleServerForm, SingleServerInput } from './Forms/ServersForm';
@@ -34,13 +30,6 @@ export function GatewayCreate({
     setCustomValid(validateGateway(gateway));
   }, [gateway, setCustomValid]);
 
-  const handleNameChange = name => {
-    jp.value(gateway, '$.metadata.name', name);
-    jp.value(gateway, "$.metadata.labels['app.kubernetes.io/name']", name);
-
-    setGateway({ ...gateway });
-  };
-
   return (
     <ResourceForm
       {...props}
@@ -54,23 +43,6 @@ export function GatewayCreate({
       presets={!initialGateway && createPresets(namespace, t)}
       createUrl={resourceUrl}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={t('gateways.name_singular')}
-        setValue={handleNameChange}
-        className="fd-margin-bottom--sm"
-        readOnly={!!initialGateway}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
       <KeyValueField
         defaultOpen
         required={true}

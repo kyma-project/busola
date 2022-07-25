@@ -6,7 +6,6 @@ import { Checkbox, FormFieldset, Switch } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { createLimitRangeTemplate } from 'resources/LimitRanges/templates';
 import { createResourceQuotaTemplate } from 'resources/ResourceQuotas/templates';
@@ -195,12 +194,11 @@ export function NamespaceCreate({
       afterCreatedFn={afterNamespaceCreated}
       setCustomValid={setCustomValid}
       customSchemaId="v1/Namespace"
+      labelsProps={{
+        lockedKeys: [ISTIO_INJECTION_LABEL],
+        lockedValues: [ISTIO_INJECTION_LABEL],
+      }}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={t('common.labels.namespace')}
-        readOnly={!!initialNamespace}
-      />
       <ResourceForm.FormField
         advanced
         label={t('namespaces.create-modal.disable-sidecar')}
@@ -213,20 +211,6 @@ export function NamespaceCreate({
             checked={isSidecar}
           />
         )}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-        className="fd-margin-top--sm"
-        lockedKeys={[ISTIO_INJECTION_LABEL]}
-        lockedValues={[ISTIO_INJECTION_LABEL]}
-      />
-
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
       />
 
       {!initialNamespace ? (

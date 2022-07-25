@@ -10,8 +10,6 @@ import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
 import widgets from './components-form';
 import { prepareSchemaRules } from './SchemaRulesInjector';
 
-import { METADATA_SCHEMA } from './metadataSchema';
-
 function FormContainer({ children }) {
   return (
     <div className="form-container" container="true">
@@ -60,7 +58,7 @@ export function ResourceSchema({
 
   newSchema = {
     ...newSchema,
-    properties: { metadata: METADATA_SCHEMA, ...newSchema.properties },
+    properties: { ...newSchema.properties },
   };
 
   const schemaMap = createOrderedMap(newSchema);

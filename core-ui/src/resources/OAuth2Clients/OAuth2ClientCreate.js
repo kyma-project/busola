@@ -4,11 +4,7 @@ import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import {
-  TextArrayInput,
-  K8sNameField,
-  KeyValueField,
-} from 'shared/ResourceForm/fields';
+import { TextArrayInput } from 'shared/ResourceForm/fields';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 
 import { createOAuth2ClientTemplate } from './helpers';
@@ -44,32 +40,17 @@ export function OAuth2ClientCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
+      handleNameChange={name => {
+        jp.value(oAuth2Client, '$.metadata.name', name);
+        jp.value(
+          oAuth2Client,
+          "$.metadata.labels['app.kubernetes.io/name']",
+          name,
+        );
+        jp.value(oAuth2Client, '$.spec.secretName', name);
+        setOAuth2Client({ ...oAuth2Client });
+      }}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={t('oauth2-clients.name_singular')}
-        setValue={name => {
-          jp.value(oAuth2Client, '$.metadata.name', name);
-          jp.value(
-            oAuth2Client,
-            "$.metadata.labels['app.kubernetes.io/name']",
-            name,
-          );
-          jp.value(oAuth2Client, '$.spec.secretName', name);
-          setOAuth2Client({ ...oAuth2Client });
-        }}
-        readOnly={!!initialOAuth2Client}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
       <ResourceForm.FormField
         required
         propertyPath="$.spec.responseTypes"

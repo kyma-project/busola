@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as jp from 'jsonpath';
 import { ComboboxInput } from 'fundamental-react';
 
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
-import {
-  K8sNameField,
-  KeyValueField,
-  DataField,
-} from 'shared/ResourceForm/fields';
+import { DataField } from 'shared/ResourceForm/fields';
 
 import { createSecretTemplate, createPresets, getSecretDefs } from './helpers';
 
@@ -72,28 +67,6 @@ export function SecretCreate({
       presets={!initialSecret && createPresets(secretDefs, namespace || '', t)}
       setCustomValid={setCustomValid}
     >
-      <K8sNameField
-        readOnly={!!initialSecret}
-        propertyPath="$.metadata.name"
-        kind={t('secrets.name_singular')}
-        setValue={name => {
-          jp.value(secret, '$.metadata.name', name);
-          jp.value(secret, "$.metadata.labels['app.kubernetes.io/name']", name);
-          setSecret({ ...secret });
-        }}
-        validate={value => !!value}
-        prefix={prefix}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
       <ResourceForm.FormField
         required
         propertyPath="$.type"
