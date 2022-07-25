@@ -9,12 +9,17 @@ import { prettifyKind } from 'shared/utils/helpers';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
-import { TranslationBundleContext, useGetTranslation } from './helpers';
+import {
+  useCreateResourceDescription,
+  TranslationBundleContext,
+  useGetTranslation,
+} from './helpers';
 import { Widget } from './components/Widget';
 import { RelationsContextProvider } from './contexts/RelationsContext';
 
 export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
+
   const { path, kind } = resMetaData?.resource ?? {};
 
   const schema = resMetaData?.schema;
@@ -34,9 +39,10 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     defaultValue: pluralize(prettifyKind(kind)),
   });
 
-  listProps.description = t('description', {
-    defaultValue: ' ',
-  });
+  listProps.description = useCreateResourceDescription(
+    resMetaData?.resource?.description,
+  );
+
   listProps.customColumns = Array.isArray(resMetaData?.list)
     ? resMetaData?.list.map((column, i) => ({
         header: widgetT(column),
@@ -51,6 +57,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
         ),
       }))
     : [];
+
   return (
     <ResourcesList
       createResourceForm={ExtensibilityCreate}
