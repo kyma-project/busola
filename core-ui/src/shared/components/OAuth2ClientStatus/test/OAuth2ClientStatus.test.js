@@ -6,13 +6,13 @@ describe('PodRestarts', () => {
   it('Shows OK for no error', () => {
     const client = { status: { reconciliationError: {} } };
     const { queryByRole } = render(<OAuth2ClientStatus client={client} />);
-    expect(queryByRole('status')).toHaveTextContent('OK');
+    expect(queryByRole('status')).toHaveTextContent('ok');
   });
 
   it('Shows OK for no status', () => {
     const client = {};
     const { queryByRole } = render(<OAuth2ClientStatus client={client} />);
-    expect(queryByRole('status')).toHaveTextContent('OK');
+    expect(queryByRole('status')).toHaveTextContent('ok');
   });
 
   it('Shows error code for error', () => {

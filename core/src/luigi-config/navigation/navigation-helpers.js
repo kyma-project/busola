@@ -1,3 +1,4 @@
+import i18next from 'i18next';
 export const hideDisabledNodes = (disabledNavNodes, nodes, inNamespace) => {
   if (disabledNavNodes?.length > 0) {
     nodes.forEach(node => {
@@ -48,65 +49,76 @@ export function hideByNodeCategory(node, showExperimentalCategory) {
 }
 
 export function createNamespacesList(rawNamespaceNames) {
-  var namespaces = [];
+  let namespaces = [];
   rawNamespaceNames
     .sort((namespaceA, namespaceB) => {
       return namespaceA.name.localeCompare(namespaceB.name);
     })
-    .map(namespace => {
+    .forEach(namespace => {
       const namespaceName = namespace.name;
       const alternativeLocation = getCorrespondingNamespaceLocation(
         namespaceName,
       );
       namespaces.push({
         category: 'Namespaces',
+        customRendererCategory: 'namespace',
         label: namespaceName,
         pathValue: alternativeLocation || namespaceName + '/details',
       });
     });
+  namespaces.unshift({
+    customRendererCategory: 'overview',
+    label: i18next.t('namespaces.namespaces-overview'),
+    pathValue: '/',
+  });
   return namespaces;
 }
 
-export const addExternalNodes = externalNodes => {
-  if (!externalNodes || externalNodes.length === 0) return [];
+export const addExternalNodes = externalNodesFeature => {
+  if (externalNodesFeature?.isEnabled === false) return [];
+
   let navigationNodes = [];
-
-  externalNodes.forEach(node => {
-    const { category = 'External Links', icon = 'action', children } = node;
-    if (!children || children.length === 0) return;
-    navigationNodes = [
-      ...navigationNodes,
-      {
-        category: {
-          label: category,
-          icon,
-          collapsible: true,
-        },
-        pathSegment: `${category.replace(' ', '_')}_placeholder`,
-        hideFromNav: false,
-      },
-    ];
-
-    children.forEach(child => {
-      const { label, link } = child;
+  try {
+    (externalNodesFeature?.nodes || []).forEach(node => {
+      const { category = 'External Links', icon = 'action', children } = node;
+      if (!children || children.length === 0) return;
       navigationNodes = [
         ...navigationNodes,
         {
-          label,
-          category,
-          viewUrl: '',
-          externalLink: {
-            url: link,
+          category: {
+            label: category,
+            icon,
+            collapsible: true,
           },
+          pathSegment: `${category.replace(' ', '_')}_placeholder`,
+          hideFromNav: false,
         },
       ];
+
+      children.forEach(child => {
+        const { label, link } = child;
+        navigationNodes = [
+          ...navigationNodes,
+          {
+            label,
+            category,
+            viewUrl: '',
+            externalLink: {
+              url: link,
+            },
+          },
+        ];
+      });
     });
-  });
+  } catch (e) {
+    console.warn('Cannot setup externalNodes', e);
+    return [];
+  }
 
   return navigationNodes;
 };
 
-function getCorrespondingNamespaceLocation(namespaceName) {
+export function getCorrespondingNamespaceLocation(namespaceName) {
   const addressTokens = window.location.pathname.split('/');
   // check if we are in namespaces context
   if (addressTokens[3] !== 'namespaces') {

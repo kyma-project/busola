@@ -1,0 +1,10 @@
+.stats-graph {
+  font-size: 0.8rem;
+  position: relative;
+  width: 100%;
+  --bar-color: var(--sapNeutralColor);
+  --tooltip-color: var(--sapNeutralBackground);
+  // --bar-color: #0F828F;
+  // --highlight-color: #0F828F;
+  // --highlight-color: #000;
+}

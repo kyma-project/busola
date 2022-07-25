@@ -4,18 +4,24 @@ import { render } from '@testing-library/react';
 import ApiRuleStatus from '../ApiRuleStatus';
 
 describe('ApiRuleStatus', () => {
-  it('Renders nothing if status is none', () => {
+  it('Renders Unknown status if status is null', () => {
     const apiRule = { status: null };
     const { queryByRole } = render(<ApiRuleStatus apiRule={apiRule} />);
-    expect(queryByRole('status')).not.toBeInTheDocument();
+
+    const statusText = queryByRole('status');
+    expect(statusText).toBeInTheDocument();
+    expect(statusText).toHaveTextContent('common.statuses.unknown');
   });
 
-  it('Renders nothing if status.APIRuleStatus is none', () => {
+  it('Renders Unknown status if status.APIRuleStatus is null', () => {
     const apiRule = {
       status: { APIRuleStatus: null },
     };
     const { queryByRole } = render(<ApiRuleStatus apiRule={apiRule} />);
-    expect(queryByRole('status')).not.toBeInTheDocument();
+
+    const statusText = queryByRole('status');
+    expect(statusText).toBeInTheDocument();
+    expect(statusText).toHaveTextContent('common.statuses.unknown');
   });
 
   it('Renders with minimal props', () => {
@@ -31,6 +37,6 @@ describe('ApiRuleStatus', () => {
 
     const statusText = queryByRole('status');
     expect(statusText).toBeInTheDocument();
-    expect(statusText).toHaveTextContent('OK');
+    expect(statusText).toHaveTextContent('api-rules.statuses.ok');
   });
 });

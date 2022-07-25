@@ -1,0 +1,14 @@
+.list-actions {
+  float: right;
+  display: flex;
+
+  &__standalone:not(:last-child),
+  & .actions-tooltip:not(:last-child) {
+    margin-right: 4px;
+  }
+
+  button[class^='fd-button']:hover {
+    background: var(--sapNeutralBackground);
+    border: 1px solid var(--sapLegendBackgroundColor20);
+  }
+}

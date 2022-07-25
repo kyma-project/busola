@@ -65,6 +65,7 @@ clusters:
     kubeconfig-not-present: Brak kubeconfigu w konfiguracji klastra
   labels:
     client-id: Identyfikator klienta
+    client-secret: Sekret klienta
     issuer-url: Adres URL wystawcy
     scopes: Zakresy
   list:

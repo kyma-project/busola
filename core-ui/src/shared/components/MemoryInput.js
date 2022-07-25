@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormInput } from 'fundamental-react';
 
-import { Dropdown } from 'react-shared';
+import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 
 export function MemoryInput({ label, propertyPath, value = '', setValue }) {
   const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];

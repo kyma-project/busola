@@ -1,0 +1,220 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pizzas
+  namespace: pizzas
+  labels:
+    app.kubernetes.io/name: pizzas
+    busola.io/extension: resource
+data:
+  details: |
+    {
+      "header": [
+        {
+          "path": "spec.sauce"
+        },
+        {
+          "path": "spec.ownerReferences",
+          "widget": "ControlledBy"
+        },
+        {
+          "path": "spec.ownerReferences",
+          "widget": "ControlledByKind",
+          "placeholder": "---"
+        },
+        { "path": "spec.toppings", formula: "$join(data.name, ', ')" }, 
+      ],
+    "body": [
+        {
+          "widget": "Columns",
+          "children": [
+            {
+            "name": "Summary",
+            "widget": "Panel",
+            "children": [
+              {
+                "name": "State",
+                "path": "status.messages[-1:].state",
+                "widget": "Badge"
+              },
+              {
+                "name": "Message",
+                "path": "status.messages[-1:].message"
+              },
+              { "path": "spec.toppings", formula: "$join(data.name, ', ')" }, 
+              { "path": "spec.toppings", formula: "$sum(data.price)", "name": "Toppings price" }
+            ]
+          },
+          {
+            "name": "topping",
+            "path": "spec.toppings",
+            "widget": "Table",
+            "children": [{ "path": "name" }, { "path": "price" }, { "path": "quantity" }]
+          },
+          ]
+        },
+        {
+          "widget": "ResourceList",
+          "path": "$secretRecipe",
+          "name": "Pizza's recipe secret"
+        },
+    {
+      "name": "columns",
+      "widget": "Columns",
+      "children": [
+        {
+          "name": "Comments",
+          "widget": "Panel",
+          "children": [
+            {
+            "name": "Comments",
+            "widget": "JoinedArray",
+            "path": "spec.comments",
+            "separator": " || "
+            }
+          ]
+        },
+        {
+          "name": "spec.description",
+          "widget": "Panel",
+          "children": [{ "path": "spec.description" }]
+        }
+      ]
+    }
+      ]
+    }
+  form: |-
+    [
+      { "path": "spec.description", "widget": "Text" , "simple": true},
+      { "path": "spec.sauce", "widget": "Text" , "simple": true},
+      { "path": "spec.toppings", "widget": "GenericList", "simple": true},
+      { "path": "spec.toppings.name", "simple": true},
+      { "path": "spec.toppings.price", "simple": true},
+      { "path": "spec.toppings.quantity", "simple": true},
+      { "path": "spec.comments", "widget": "SimpleList", "simple": true},
+      {
+        "path": "spec.recipeSecret",
+        "widget": "Resource",
+        "kind": "Secret",
+        "scope": "namespace",
+        "namespace": "pizzas",
+        "version": "v1",
+        "simple": true
+      },
+      {
+      "path": "spec.ownerReferences",
+      "widget": "GenericList",
+      "simple": true
+      },
+      { "path": "spec.ownerReferences.apiVersion", "simple": true},
+      { "path": "spec.ownerReferences.kind", "simple": true},
+      { "path": "spec.ownerReferences.name", "simple": true}
+    ]
+  list: |-
+    [
+      { "path": "spec.description" },
+      { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
+      { "path": "spec.toppings", formula: "$sum(data.price)", "name": "Toppings price" }
+    ]
+  relations: |-
+    {
+      "secretRecipe":{
+        "kind": "Secret",
+        "group": "api",
+        "version": "v1",
+        "namespace": "pizzas",
+        "selector": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"
+      }
+    }
+  resource: |-
+    {
+      "kind": "Pizza",
+      "group": "busola.example.com",
+      "version": "v1",
+      "scope": "namespace",
+      "description: "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
+    }
+  schema: |-
+    {
+      "type": "object",
+      "properties": {
+        "spec": {
+          "description": "Information about our pizza",
+          "type": "object",
+          "properties": {
+            "description": {
+              "description": "Pizza desc",
+              "type": "string"
+            },            
+            "sauce": {
+              "description": "The name of the sauce to use on our pizza",
+              "type": "string"
+            },
+            "recipeSecret":{
+              "description": "The secret with a  pizza's recipe",
+              "type": "string"
+            },
+            "comments":{
+              "description": Additional comments,
+              "type": "array",
+              "items":{
+                "type":"string"
+              }
+            },
+            "ownerReferences":{
+              "type": "array",
+              "items":{
+                "type": "object",
+                "properties":{
+                  "apiVersion":{
+                    "type": "string"                 
+                  },
+                  "kind": {
+                    "type": "string"                 
+                  },
+                  "name": {
+                    "type": "string"                 
+                  }
+                }
+              }
+            },
+            "toppings": {
+              "description": "List of toppings for our pizza",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The name of the topping",
+                    "type": "string"
+                  },
+                  "price": {
+                    "description": "The price of the topping",
+                    "type": "number"
+                  },
+                  "quantity": {
+                    "description": "The quantity of the selected topping",
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  translations: |
+    en:
+      name: Pizza
+      category: Lunch
+      spec.description: Description
+      spec.comments: Comments
+      spec.state: State
+      spec.sauce: Sauce
+      spec.toppings: Toppings
+      spec.recipeSecret: Recipe's secret
+      spec.toppings.name: Name
+      spec.toppings.price: Price ($)
+      spec.toppings.quantity: Quantity
+      spec.ownerReferences: Owner References
+  version: '0.5'

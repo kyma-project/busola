@@ -1,12 +1,12 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button, ButtonSegmented } from 'fundamental-react';
 import './ModeSelector.scss';
-import { useTranslation } from 'react-i18next';
 
-export function ModeSelector({ mode, setMode }) {
+export function ModeSelector({ mode, isEditing, setMode }) {
   const { t } = useTranslation();
 
-  const modeButtons = [
+  const createModeButtons = [
     {
       mode: ModeSelector.MODE_SIMPLE,
       label: t('common.create-form.modes.simple'),
@@ -18,10 +18,20 @@ export function ModeSelector({ mode, setMode }) {
     { mode: ModeSelector.MODE_YAML, label: 'YAML' },
   ];
 
+  const editModeButtons = [
+    {
+      mode: ModeSelector.MODE_ADVANCED,
+      label: t('common.create-form.modes.ui-form'),
+    },
+    { mode: ModeSelector.MODE_YAML, label: 'YAML' },
+  ];
+
+  const buttonsToDisplay = isEditing ? editModeButtons : createModeButtons;
+
   return (
     <div className="mode-selector">
       <ButtonSegmented>
-        {modeButtons.map(button => (
+        {buttonsToDisplay.map(button => (
           <Button
             compact
             key={button.mode}

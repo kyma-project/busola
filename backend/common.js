@@ -3,28 +3,9 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const uuid = require('uuid').v4;
+import PinoHttp from 'pino-http';
 import { handleDockerDesktopSubsitution } from './docker-desktop-substitution';
 import { filters } from './request-filters';
-
-const logger = require('pino-http')({
-  autoLogging: process.env.NODE_ENV !== 'production', //to disable the automatic "request completed" and "request errored" logging.
-  genReqId: req => {
-    req.id = uuid();
-    return req.id;
-  },
-  serializers: {
-    req: req => ({
-      id: req.id,
-      method: req.method,
-      url: req.url,
-      cluster_url: req.headers['x-cluster-url'],
-      code: req.code,
-      stack: req.stack,
-      type: req.type,
-      msg: req.msg,
-    }),
-  },
-});
 
 // https://github.tools.sap/sgs/SAP-Global-Trust-List/blob/master/approved.pem
 const certs = fs.readFileSync('certs.pem', 'utf8');
@@ -48,68 +29,95 @@ const workaroundForNodeMetrics = req => {
   }
 };
 
-export const handleRequest = async (req, res) => {
-  logger(req, res);
-  let headersData;
-  try {
-    headersData = extractHeadersData(req);
-  } catch (e) {
-    req.log.error('Headers error:' + e.message);
-    res.status(400).send('Headers are missing or in a wrong format.');
-    return;
-  }
+export const makeHandleRequest = () => {
+  const isDev = process.env.NODE_ENV !== 'production';
+  const isTrackingEnabled =
+    global.config?.features?.TRACKING?.isEnabled &&
+    process.env.IS_DOCKER !== 'true';
 
-  try {
-    filters.forEach(filter => filter(req, headersData));
-  } catch (e) {
-    req.log.error('Filters rejected the request: ' + e.message);
-    res.status(400).send('Request ID: ' + req.id);
-    return;
-  }
-
-  const { targetApiServer, ca, cert, key, authorization } = headersData;
-
-  const headers = authorization
-    ? { ...req.headers, authorization }
-    : req.headers;
-
-  const options = {
-    hostname: targetApiServer.hostname,
-    path: req.originalUrl.replace(/^\/backend/, ''),
-    headers,
-    body: req.body,
-    method: req.method,
-    port: targetApiServer.port || 443,
-    ca,
-    cert,
-    key,
-  };
-  workaroundForNodeMetrics(req);
-
-  const k8sRequest = https.request(options, function(k8sResponse) {
-    if (
-      k8sResponse.headers &&
-      (k8sResponse.headers['Content-Type']?.includes('\\') ||
-        k8sResponse.headers['content-encoding']?.includes('\\'))
-    )
-      return throwInternalServerError(
-        'Response headers are potentially dangerous',
-      );
-
-    res.writeHead(k8sResponse.statusCode, {
-      'Content-Type': k8sResponse.headers['Content-Type'] || 'text/json',
-      'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
-    });
-    k8sResponse.pipe(res);
+  const logger = PinoHttp({
+    autoLogging: !!(isDev || isTrackingEnabled), //to disable the automatic "request completed" and "request errored" logging.
+    genReqId: req => {
+      req.id = uuid();
+      return req.id;
+    },
+    serializers: {
+      req: req => ({
+        id: req.id,
+        method: req.method,
+        url: req.url,
+        apiServerAddress: req.headers['x-cluster-url'],
+        code: req.code,
+        stack: req.stack,
+        type: req.type,
+        msg: req.msg,
+      }),
+    },
   });
-  k8sRequest.on('error', throwInternalServerError); // no need to sanitize the error here as the http.request() will never throw a vulnerable error
-  k8sRequest.end(Buffer.isBuffer(req.body) ? req.body : undefined);
-  req.pipe(k8sRequest);
 
-  function throwInternalServerError(originalError) {
-    req.log.warn(originalError);
-    res.status(502).send('Request ID: ' + req.id);
-  }
+  return async (req, res) => {
+    logger(req, res);
+    let headersData;
+    try {
+      headersData = extractHeadersData(req);
+    } catch (e) {
+      req.log.error('Headers error:' + e.message);
+      res.status(400).send('Headers are missing or in a wrong format.');
+      return;
+    }
+
+    try {
+      filters.forEach(filter => filter(req, headersData));
+    } catch (e) {
+      req.log.error('Filters rejected the request: ' + e.message);
+      res.status(400).send('Request ID: ' + req.id);
+      return;
+    }
+
+    const { targetApiServer, ca, cert, key, authorization } = headersData;
+
+    const headers = authorization
+      ? { ...req.headers, authorization }
+      : req.headers;
+
+    const options = {
+      hostname: targetApiServer.hostname,
+      path: req.originalUrl.replace(/^\/backend/, ''),
+      headers,
+      body: req.body,
+      method: req.method,
+      port: targetApiServer.port || 443,
+      ca,
+      cert,
+      key,
+    };
+    workaroundForNodeMetrics(req);
+
+    const k8sRequest = https.request(options, function(k8sResponse) {
+      if (
+        k8sResponse.headers &&
+        (k8sResponse.headers['Content-Type']?.includes('\\') ||
+          k8sResponse.headers['content-encoding']?.includes('\\'))
+      )
+        return throwInternalServerError(
+          'Response headers are potentially dangerous',
+        );
+
+      res.writeHead(k8sResponse.statusCode, {
+        'Content-Type': k8sResponse.headers['Content-Type'] || 'text/json',
+        'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
+      });
+      k8sResponse.pipe(res);
+    });
+    k8sRequest.on('error', throwInternalServerError); // no need to sanitize the error here as the http.request() will never throw a vulnerable error
+    k8sRequest.end(Buffer.isBuffer(req.body) ? req.body : undefined);
+    req.pipe(k8sRequest);
+
+    function throwInternalServerError(originalError) {
+      req.log.warn(originalError);
+      res.status(502).send('Request ID: ' + req.id);
+    }
+  };
 };
 
 export const serveStaticApp = (app, requestPath, directoryPath) => {

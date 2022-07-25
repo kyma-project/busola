@@ -4,25 +4,32 @@ aliases:
     - Wawrzyn321
     - dariadomagala
     - akucharska
-    - Sawthis
+    - valentinvieriu
+    - wchrapka
+    - Lyczeq
+    - mrCherry97
     default-approvers:
     - qbalukom
-    - kwiatekus
+    - Wawrzyn321
     - dariadomagala
     - akucharska
-    content-ui-reviewers:
-    - aerfio
-    content-ui-approvers:
-    - aerfio
+    - valentinvieriu
+    - wchrapka
     documentation-reviewers:
     - klaudiagrz
     - mmitoraj
     - majakurcius
-    - alexandra-simeonova
+    - grego952
     - NHingerl
     documentation-approvers:
     - klaudiagrz
     - mmitoraj
     - majakurcius
-    - alexandra-simeonova
+    - grego952
+    - NHingerl
+    technical-writers:
+    - klaudiagrz
+    - mmitoraj
+    - majakurcius
+    - grego952
     - NHingerl

@@ -1,7 +1,7 @@
 import i18next from 'i18next';
 import {
   fetchPermissions,
-  fetchBusolaInitData,
+  fetchAvailableApis,
   fetchNamespaces,
   fetchObservabilityHost,
 } from './queries';
@@ -13,7 +13,7 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
-import { getFeatures, resolveFeatureAvailability } from '../features';
+import { getCustomResources } from '../customResources';
 import { showAlert } from '../utils/showAlert';
 
 import {
@@ -32,6 +32,7 @@ import {
   saveActiveClusterName,
   getCurrentContextNamespace,
   saveCARequired,
+  getCurrentConfig,
 } from '../cluster-management/cluster-management';
 import { getFeatureToggle } from '../utils/feature-toggles';
 import { saveLocation } from './previous-location';
@@ -40,6 +41,10 @@ import { loadTargetClusterConfig } from '../utils/target-cluster-config';
 import { checkClusterStorageType } from '../cluster-management/clusters-storage';
 import { getSSOAuthData } from '../auth/sso';
 import { setNavFooterText } from '../nav-footer';
+import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/pagination';
+import { getFeatures, initFeatures } from '../feature-discovery';
+import * as fetchCache from './../cache/fetch-cache';
+import { handleKubeconfigIdIfPresent } from './../kubeconfig-id';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -61,7 +66,18 @@ async function createAppSwitcher() {
     testId: 'clusters-overview',
   };
 
-  return { items: [...clusterNodes, clusterOverviewNode] };
+  const noClustersNode = {
+    title: i18next.t('clusters.overview.title-no-clusters-available'),
+    subTitle: i18next.t('clusters.overview.title-no-clusters-available'),
+    link: '#',
+  };
+
+  return {
+    items:
+      [clusterOverviewNode, ...clusterNodes].length > 1
+        ? [clusterOverviewNode, ...clusterNodes]
+        : [clusterOverviewNode, noClustersNode],
+  };
 }
 
 export async function reloadNavigation() {
@@ -74,7 +90,15 @@ export async function reloadNavigation() {
   }, 100);
 }
 
-async function createClusterManagementNodes(features) {
+const getDisabledNodes = features => {
+  const isValidConfig =
+    features?.DISABLED_NODES?.isEnabled &&
+    Array.isArray(features?.DISABLED_NODES?.nodes);
+
+  return isValidConfig ? features?.DISABLED_NODES?.nodes : [];
+};
+
+async function createClusterManagementNodes(features, customResources) {
   const activeClusterName = getActiveClusterName();
 
   const childrenNodes = [
@@ -93,18 +117,6 @@ async function createClusterManagementNodes(features) {
     },
   ];
 
-  if (!features.ADD_CLUSTER_DISABLED?.isEnabled) {
-    const addClusterNode = [
-      {
-        hideSideNav: true,
-        pathSegment: 'add',
-        navigationContext: 'clusters',
-        viewUrl: config.coreUIModuleUrl + '/clusters/add',
-      },
-    ];
-    childrenNodes.push(addClusterNode);
-  }
-
   const clusterManagementNode = {
     pathSegment: 'clusters',
     hideFromNav: true,
@@ -117,14 +129,22 @@ async function createClusterManagementNodes(features) {
       activeClusterName,
       language: i18next.language,
       busolaClusterParams: await getBusolaClusterParams(),
+      kubeconfigIdContents: await handleKubeconfigIdIfPresent(),
       features,
+      customResources,
       ssoData: getSSOAuthData(),
+      settings: {
+        pagination: {
+          pageSize: getPageSize(),
+          AVAILABLE_PAGE_SIZES,
+        },
+      },
     },
   };
 
   const notActiveCluster = name => name !== activeClusterName;
 
-  const clusterNodes = Object.keys(await getClusters())
+  const clusterNodes = Object.keys(getClusters())
     .filter(notActiveCluster)
     .map(clusterName => ({
       pathSegment: encodeURIComponent(clusterName),
@@ -146,13 +166,14 @@ async function createClusterManagementNodes(features) {
     hideFromNav: true,
     hideSideNav: true,
     viewUrl: config.coreUIModuleUrl + '/no-permissions',
+    context: { currentCluster: getActiveCluster() },
   };
 
   return [clusterManagementNode, clusterNode, noPermissionsNode];
 }
 
 async function createNavigationForNoCluster() {
-  const features = await getFeatures();
+  await initFeatures();
 
   return {
     profile: {
@@ -170,46 +191,54 @@ async function createNavigationForNoCluster() {
     },
     preloadViewGroups: false,
     appSwitcher: await createAppSwitcher(),
-    nodes: await createClusterManagementNodes(features),
+    nodes: await createClusterManagementNodes(await getFeatures()),
   };
 }
 
 export async function createNavigation() {
   try {
     const authData = getAuthData();
-    if (!(await getActiveCluster()) || !authData) {
+    if (!getActiveCluster() || !authData) {
       return await createNavigationForNoCluster();
     }
 
     await saveCARequired();
+    fetchCache.init(getActiveClusterName());
     await loadTargetClusterConfig();
 
-    const activeCluster = await getActiveCluster();
+    const config = await getCurrentConfig();
 
-    await checkClusterStorageType(activeCluster.config.storage);
+    await checkClusterStorageType(config.storage);
 
     // we assume all users can make SelfSubjectRulesReview request
+    const activeCluster = getActiveCluster();
     const permissionSet = await fetchPermissions(
       authData,
-      getCurrentContextNamespace(activeCluster.kubeconfig),
+      getCurrentContextNamespace(activeCluster?.kubeconfig),
     );
 
-    const groupVersions = await fetchBusolaInitData(authData);
+    const { apiGroups, groupVersions } = await fetchAvailableApis(authData);
 
-    const activeClusterName = activeCluster.currentContext.cluster.name;
+    const activeClusterName = activeCluster?.kubeconfig['current-context'];
 
-    const features = await getFeatures({
-      authData,
-      groupVersions,
-    });
+    await initFeatures();
+
+    const customResources = await getCustomResources(authData);
 
     const optionsForCurrentCluster = {
       contextSwitcher: {
         defaultLabel: 'Select Namespace ...',
         parentNodePath: `/cluster/${encodeURIComponent(
           activeClusterName,
-        )}/namespaces`, // absolute path
+        )}/namespaces`, // absolute path,
         lazyloadOptions: true, // load options on click instead on page load
+        customOptionsRenderer: (option, isSelected) => {
+          if (option.customRendererCategory === 'overview') {
+            return `<a class="fd-menu__link" style="border-bottom: 1px solid #eeeeef"><span class="fd-menu__addon-before"><i class="sap-icon--dimension" role="presentation"></i></span><span class="fd-menu__title">${option.label}</span></a>`;
+          }
+          let className = 'fd-menu__link' + (isSelected ? ' is-selected' : '');
+          return `<a class="${className} ">${option.label}</a>`;
+        },
         options: getNamespaces,
       },
       profile: {
@@ -228,14 +257,6 @@ export async function createNavigation() {
         ],
       },
     };
-    const isNodeEnabled = node => {
-      if (node.context?.requiredFeatures) {
-        for (const feature of node.context.requiredFeatures || []) {
-          if (!feature || feature.isEnabled === false) return false;
-        }
-      }
-      return true;
-    };
 
     if (!hasAnyRoleBound(permissionSet)) {
       const error = i18next.t('common.errors.no-permissions-no-role');
@@ -245,17 +266,20 @@ export async function createNavigation() {
     return {
       preloadViewGroups: false,
       nodeAccessibilityResolver: node =>
-        isNodeEnabled(node) && navigationPermissionChecker(node, permissionSet),
+        navigationPermissionChecker(node, permissionSet),
       appSwitcher: await createAppSwitcher(),
       ...optionsForCurrentCluster,
-      nodes: await createNavigationNodes(
-        features,
+      nodes: await createNavigationNodes({
+        features: await getFeatures(),
         groupVersions,
+        apiGroups,
         permissionSet,
-      ),
+        customResources,
+      }),
     };
   } catch (err) {
     saveActiveClusterName(null);
+    fetchCache.clear();
     if (err.statusCode === 403) {
       clearAuthData();
       saveLocation(
@@ -279,20 +303,13 @@ export async function createNavigation() {
   }
 }
 
-async function getObservabilityNodes(authData, enabledFeatures) {
-  let links =
-    // take the Config Params at first
-    (await resolveFeatureAvailability(enabledFeatures.OBSERVABILITY)) &&
-    enabledFeatures.OBSERVABILITY?.config.links;
+async function getObservabilityNodes(authData) {
+  const observabilityFeature = (await getCurrentConfig()).features
+    .OBSERVABILITY;
 
-  if (!links) {
-    const defaultObservability = (await getBusolaClusterParams()).config
-      .features.OBSERVABILITY;
-    links =
-      (await resolveFeatureAvailability(defaultObservability)) && //  use the Busola configMap as a fallback
-      defaultObservability.config.links;
-  }
-  if (!links) return []; // could not get the OBSERVABILITY feature config from either source, do not add any nodes
+  if (!observabilityFeature || !observabilityFeature.isEnabled) return [];
+
+  const links = observabilityFeature.config.links;
 
   const CATEGORY = {
     label: 'Observability',
@@ -318,44 +335,64 @@ async function getObservabilityNodes(authData, enabledFeatures) {
   return navNodes.filter(n => n);
 }
 
-export async function createNavigationNodes(
+export async function createNavigationNodes({
   features,
   groupVersions,
+  apiGroups,
   permissionSet,
-) {
+  customResources,
+}) {
   const authData = getAuthData();
-  const activeCluster = await getActiveCluster();
+  const activeCluster = getActiveCluster();
 
   if (!activeCluster || !getAuthData()) {
     return await createClusterManagementNodes(features);
   }
 
   const activeClusterName = encodeURIComponent(
-    activeCluster.currentContext.cluster.name,
+    activeCluster.kubeconfig['current-context'],
   );
-  const { navigation = {}, hiddenNamespaces = [] } =
-    activeCluster?.config || {};
 
-  const clusterChildren = async () => {
+  const disabledNodes = getDisabledNodes(activeCluster);
+
+  const createClusterNodes = async () => {
     const staticNodes = getStaticRootNodes(
       getChildrenNodesForNamespace,
       groupVersions,
       permissionSet,
       features,
+      customResources,
     );
-    const observabilitySection = await getObservabilityNodes(
-      authData,
-      features,
-    );
-    const externalNodes = addExternalNodes(navigation.externalNodes);
+    const observabilitySection = await getObservabilityNodes(authData);
+    const externalNodes = addExternalNodes(features.EXTERNAL_NODES);
     const allNodes = [
       ...staticNodes,
       ...observabilitySection,
       ...externalNodes,
     ];
-    hideDisabledNodes(navigation.disabledNodes, allNodes, false);
+    hideDisabledNodes(disabledNodes, allNodes, false);
     return allNodes;
   };
+
+  const clusterNodes = await createClusterNodes();
+
+  const namespaceNodes =
+    (await clusterNodes
+      .find(n => n.resourceType === 'namespaces')
+      ?.children[0]?.children?.()) || [];
+
+  const simplifyNodes = nodes =>
+    nodes
+      .filter(n => n.resourceType)
+      .map(n => ({
+        resourceType: n.resourceType.toLowerCase(),
+        label: n.label,
+        viewUrl: n.viewUrl,
+        category:
+          typeof n.category === 'object' ? n.category.label : n.category,
+        pathSegment: n.pathSegment,
+        navigationContext: n.navigationContext,
+      }));
 
   const nodes = [
     {
@@ -364,24 +401,38 @@ export async function createNavigationNodes(
       onNodeActivation: () => {
         Luigi.navigation().navigate(`/cluster/${activeClusterName}`);
       },
+      viewGroup: coreUIViewGroupName,
       children: [
         {
           navigationContext: 'cluster',
           pathSegment: activeClusterName,
-          children: clusterChildren,
+          children: clusterNodes,
         },
       ],
       context: {
         authData,
+        activeClusterName,
         groups,
         features,
-        hiddenNamespaces,
+        customResources,
+        clusters: getClusters(),
         cluster: activeCluster.currentContext.cluster,
         config: activeCluster.config,
         kubeconfig: activeCluster.kubeconfig,
+        kubeconfigIdContents: await handleKubeconfigIdIfPresent(),
         language: i18next.language,
         ssoData: getSSOAuthData(),
         groupVersions,
+        apiGroups,
+        groupVersions,
+        settings: {
+          pagination: {
+            pageSize: getPageSize(),
+            AVAILABLE_PAGE_SIZES,
+          },
+        },
+        clusterNodes: simplifyNodes(clusterNodes),
+        namespaceNodes: simplifyNodes(namespaceNodes),
       },
     },
   ];
@@ -389,7 +440,22 @@ export async function createNavigationNodes(
 }
 
 async function getNamespaces() {
-  const { hiddenNamespaces = [] } = (await getActiveCluster()).config;
+  const activeCluster = getActiveCluster();
+  const namespace = getCurrentContextNamespace(activeCluster?.kubeconfig);
+
+  if (namespace) {
+    return createNamespacesList([{ name: namespace }]);
+  }
+
+  const { features } = await getCurrentConfig();
+  const hiddenNamespacesConfig = features?.HIDDEN_NAMESPACES;
+
+  const hiddenNamespaces =
+    hiddenNamespacesConfig?.isEnabled &&
+    Array.isArray(hiddenNamespacesConfig?.config?.namespaces)
+      ? hiddenNamespacesConfig.config.namespaces
+      : [];
+
   try {
     let namespaces = await fetchNamespaces(getAuthData());
     if (!getFeatureToggle('showHiddenNamespaces')) {
@@ -409,14 +475,17 @@ async function getChildrenNodesForNamespace(
   groupVersions,
   permissionSet,
   features,
+  customResources,
 ) {
-  const { navigation = {} } = (await getActiveCluster()).config;
+  const disabledNodes = getDisabledNodes(features);
+
   const staticNodes = getStaticChildrenNodesForNamespace(
     groupVersions,
     permissionSet,
     features,
+    customResources,
   );
 
-  hideDisabledNodes(navigation.disabledNodes, staticNodes, true);
+  hideDisabledNodes(disabledNodes, staticNodes, true);
   return staticNodes;
 }

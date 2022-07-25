@@ -55,3 +55,11 @@ To open the `tests runner`, pointing to a `local Busola` instance, use this comm
 ```bash
 npm run start:local
 ```
+
+### Login via OIDC to a cluster (optional)
+
+If a cluster requires an OIDC authentication, include these additional arguments while lunching tests, for example:
+
+```bash
+CYPRESS_OIDC_PASS={YOUR_PASSWORD} CYPRESS_OIDC_USER={YOUR_USERNAME} npm start
+```

@@ -1,0 +1,23 @@
+.text-array-input__list li {
+  display: flex;
+
+  input {
+    margin-right: 16px;
+  }
+
+  button {
+    margin-top: 4px;
+
+    &.hidden {
+      visibility: hidden;
+    }
+  }
+
+  .new-value {
+    margin-right: 52px;
+  }
+
+  .fd-button--negative {
+    top: -1px;
+  }
+}

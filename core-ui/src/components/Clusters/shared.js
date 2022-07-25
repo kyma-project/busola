@@ -9,10 +9,11 @@ export function setCluster(clusterName) {
   });
 }
 
-export function addCluster(params) {
+export function addCluster(params, switchCluster = true) {
   LuigiClient.sendCustomMessage({
     id: 'busola.addCluster',
     params,
+    switchCluster,
   });
 }
 
@@ -43,16 +44,19 @@ export function getContext(kubeconfig, contextName) {
 
 export function getUserIndex(kubeconfig) {
   const contextName = kubeconfig?.['current-context'];
-  const context = kubeconfig?.contexts?.find(c => c.name === contextName)
-    .context;
-  return kubeconfig?.users?.findIndex(u => u.name === context?.user);
+  const context =
+    contextName === '-all-'
+      ? kubeconfig?.contexts[0]?.context
+      : kubeconfig?.contexts?.find(c => c?.name === contextName)?.context;
+  const index = kubeconfig?.users?.findIndex(u => u?.name === context?.user);
+  return index > 0 ? index : 0;
 }
 
 export function getUser(kubeconfig) {
   const contextName = kubeconfig?.['current-context'];
-  const context = kubeconfig?.contexts?.find(c => c.name === contextName)
-    .context;
-  return kubeconfig?.users?.find(u => u.name === context?.user)?.user;
+  const context = kubeconfig?.contexts?.find(c => c?.name === contextName)
+    ?.context;
+  return kubeconfig?.users?.find(u => u?.name === context?.user)?.user;
 }
 
 export function hasKubeconfigAuth(kubeconfig) {
@@ -72,3 +76,32 @@ export function hasKubeconfigAuth(kubeconfig) {
     return false;
   }
 }
+
+export const addByContext = ({
+  kubeconfig,
+  context,
+  switchCluster = true,
+  storage = 'sessionStorage',
+  config = {},
+}) => {
+  const cluster = kubeconfig.clusters.find(
+    c => c.name === context.context.cluster,
+  );
+  const user = kubeconfig.users.find(u => u.name === context.context.user);
+  const newKubeconfig = {
+    ...kubeconfig,
+    'current-context': context.name,
+    contexts: [context],
+    clusters: [cluster],
+    users: [user],
+  };
+  addCluster(
+    {
+      kubeconfig: newKubeconfig,
+      contextName: context.name,
+      config: { ...config, storage },
+      currentContext: getContext(newKubeconfig, context.name),
+    },
+    switchCluster,
+  );
+};

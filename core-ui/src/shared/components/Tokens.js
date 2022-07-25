@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { Token } from 'fundamental-react';
-import { EMPTY_TEXT_PLACEHOLDER } from 'react-shared';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 const Tokens = ({ tokens }) => (
   <div>
-    {tokens.length
+    {tokens?.length
       ? tokens.map(scope => (
           <Token
             key={scope}

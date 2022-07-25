@@ -13,6 +13,27 @@ import { reloadAuth } from './auth/auth';
 import { setFeatureToggle } from './utils/feature-toggles';
 import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
+import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
+import { getCorrespondingNamespaceLocation } from './navigation/navigation-helpers';
+import { featureCommunicationEntries } from './feature-discovery';
+import * as fetchCache from './cache/fetch-cache';
+import { sendTrackingRequest } from './tracking';
+
+addCommandPaletteHandler();
+addOpenSearchHandler();
+
+window.addEventListener('click', () => {
+  Luigi.customMessages().sendToAll({
+    id: 'busola.main-frame-click',
+  });
+});
+
+window.addEventListener('keydown', e => {
+  Luigi.customMessages().sendToAll({
+    id: 'busola.main-frame-keydown',
+    key: e.key,
+  });
+});
 
 export const communication = {
   customMessagesListeners: {
@@ -29,9 +50,15 @@ export const communication = {
     },
     'busola.showHiddenNamespaces': ({ showHiddenNamespaces }) => {
       setFeatureToggle('showHiddenNamespaces', showHiddenNamespaces);
+      Luigi.configChanged();
+    },
+    'busola.disableResourceProtection': ({ disableResourceProtection }) => {
+      setFeatureToggle('disableResourceProtection', disableResourceProtection);
+      Luigi.configChanged();
     },
     'busola.dontConfirmDelete': ({ value }) => {
       setFeatureToggle('dontConfirmDelete', value);
+      Luigi.configChanged();
     },
     'busola.refreshNavigation': () => {
       Luigi.configChanged('navigation.nodes');
@@ -68,9 +95,11 @@ export const communication = {
       }
       location.reload();
     },
-    'busola.addCluster': async ({ params }) => {
+    'busola.addCluster': async ({ params, switchCluster = true }) => {
       await saveClusterParams(params);
-      setCluster(params.currentContext.cluster.name);
+      if (switchCluster) {
+        await setCluster(params?.kubeconfig?.['current-context']);
+      }
     },
     'busola.deleteCluster': async ({ clusterName }) => {
       await deleteCluster(clusterName);
@@ -80,12 +109,22 @@ export const communication = {
         await reloadAuth();
         clearAuthData();
         saveActiveClusterName(null);
+        fetchCache.clear();
       }
       await reloadNavigation();
     },
     'busola.setCluster': ({ clusterName }) => {
       setCluster(clusterName);
     },
+
+    'busola.refreshClusters': async () => {
+      await reloadAuth();
+      clearAuthData();
+      saveActiveClusterName(null);
+      fetchCache.clear();
+      await reloadNavigation();
+    },
+
     'busola.showMessage': ({ message, title, type }) => {
       Luigi.customMessages().sendToAll({
         id: 'busola.showMessage',
@@ -93,6 +132,17 @@ export const communication = {
         title,
         type,
       });
+    },
+    'busola.tracking': async ({ body }) => await sendTrackingRequest(body),
+    'busola.switchNamespace': ({ namespaceName }) => {
+      const alternativeLocation = getCorrespondingNamespaceLocation(
+        namespaceName,
+      );
+      Luigi.navigation()
+        .fromContext('cluster')
+        .navigate(
+          'namespaces/' + (alternativeLocation || namespaceName + '/details'),
+        );
     },
     'busola.pathExists': async ({ path, pathId }) => {
       const exists = await Luigi.navigation().pathExists(path);
@@ -102,6 +152,8 @@ export const communication = {
         pathId,
       });
     },
+    ...pageSizeCommunicationEntry,
+    ...featureCommunicationEntries,
   },
 };
 
@@ -123,3 +175,37 @@ const convertToObject = paramsString => {
     });
   return result;
 };
+
+function addCommandPaletteHandler() {
+  window.addEventListener('keydown', e => {
+    const { key, metaKey, ctrlKey } = e;
+    // for (Edge, Chrome) || (Firefox, Safari)
+    const isMac = (navigator.userAgentData?.platform || navigator.platform)
+      ?.toLowerCase()
+      ?.startsWith('mac');
+    const modifierKeyPressed = (isMac && metaKey) || (!isMac && ctrlKey);
+
+    const isMFModalPresent = !!document.querySelector('.lui-modal-mf');
+
+    if (isMFModalPresent) return;
+
+    if (key.toLowerCase() === 'k' && modifierKeyPressed) {
+      // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
+      e.preventDefault();
+      Luigi.customMessages().sendToAll({ id: 'busola.toggle-command-palette' });
+    }
+  });
+}
+
+function addOpenSearchHandler() {
+  window.addEventListener('keydown', e => {
+    const { key } = e;
+
+    const isMFModalPresent = !!document.querySelector('.lui-modal-mf');
+    if (isMFModalPresent) return;
+
+    if (key === '/') {
+      Luigi.customMessages().sendToAll({ id: 'busola.toggle-open-search' });
+    }
+  });
+}

@@ -1,5 +1,5 @@
 import { getBusolaClusterParams } from './../busola-cluster-params';
-import { resolveFeatureAvailability } from './../features';
+import { convertToURLsearch } from '../communication';
 import parseJWT from 'jwt-decode';
 
 const SSO_KEY = 'SSO';
@@ -13,8 +13,9 @@ export function getSSOAuthData() {
 }
 
 export async function isSSOEnabled() {
+  // SSO is outside features flow - it's need to be checked immediately
   const features = (await getBusolaClusterParams()).config?.features || {};
-  return await resolveFeatureAvailability(features.SSO_LOGIN, null);
+  return features.SSO_LOGIN?.isEnabled === true;
 }
 
 async function importOpenIdConnect() {
@@ -26,7 +27,7 @@ async function createSSOAuth(callback) {
     const ssoFeature = (await getBusolaClusterParams()).config.features
       .SSO_LOGIN;
 
-    const { issuerUrl, clientId, scope } = ssoFeature.config;
+    const { issuerUrl, clientId, clientSecret, scope } = ssoFeature.config;
     const OpenIdConnect = await importOpenIdConnect();
 
     return {
@@ -35,6 +36,7 @@ async function createSSOAuth(callback) {
         idpProvider: OpenIdConnect,
         authority: issuerUrl,
         client_id: clientId,
+        client_secret: clientSecret,
         scope: scope || 'openid',
         response_type: 'code',
         response_mode: 'query',

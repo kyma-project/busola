@@ -1,9 +1,11 @@
 import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import 'jsdom-worker-fix';
 import { act } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import 'babel-polyfill';
+
+Element.prototype.scroll = () => {};
 
 const originalConsoleError = console.error;
 export const ignoreConsoleErrors = patterns => {
@@ -14,6 +16,10 @@ export const ignoreConsoleErrors = patterns => {
     originalConsoleError(...data);
   };
 };
+// shutup popper error
+ignoreConsoleErrors([
+  'Element passed as the argument does not exist in the instance',
+]);
 
 var nodeCrypto = require('crypto');
 global.crypto = {
@@ -42,38 +48,30 @@ global.document.createRange = () => ({
 
 window.postMessage = jest.fn();
 
+// graphviz-react uses es modules which jest doesn't understand
+jest.mock('graphviz-react', () => ({
+  Graphviz: () => 'Graphviz mock',
+}));
+
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => {
+    return {
+      t: key => {
+        if (Array.isArray(key)) {
+          return key[0];
+        }
+        return key;
+      },
+      i18n: {
+        changeLanguage: () => new Promise(() => {}),
+        options: {},
+      },
+    };
+  },
+}));
+
 Enzyme.configure({ adapter: new Adapter() });
 
-export async function expectToSolveWithin(
-  fnToCheck,
-  maxTimeout,
-  checkInterval = 100,
-) {
-  // tries to execute `fnToCheck` function without errors every `checkInteval` milliseconds.
-  // If it doesn't succeeed untill `maxTimeout` milliseconds, it fails.
-
-  // This function must be wrapped inside act() like following:
-  // await act(async ()=>{ await expectToSolveWithin(...); });
-
-  let getError = () => '';
-
-  const timeoutPromise = new Promise((resolve, reject) =>
-    setTimeout(function() {
-      console.error('Assertion timeout exceeded');
-      reject(getError());
-    }, maxTimeout),
-  );
-  const expectAssertionsPromise = new Promise(async (resolve, reject) =>
-    setInterval(() => {
-      try {
-        fnToCheck();
-        resolve();
-      } catch (e) {
-        //
-        //  error = e;
-        getError = () => e;
-      }
-    }, checkInterval),
-  );
-  return Promise.race([timeoutPromise, expectAssertionsPromise]);
-}
+// don't use "import" as Luigi needs to be imported after mocking getRandomValues
+require('@luigi-project/client').setTargetOrigin('target-origin-for-tests');

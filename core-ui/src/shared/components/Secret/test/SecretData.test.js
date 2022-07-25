@@ -11,19 +11,6 @@ export const secret = {
 
 export const empty_secret = {};
 
-jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
-      t: str => str,
-      i18n: {
-        changeLanguage: () => new Promise(() => {}),
-        options: {},
-      },
-    };
-  },
-}));
-
 describe('SecretData', () => {
   const expectDecodedState = async ({ findByText, queryByText }) => {
     expect(await findByText(atob(secret.data.client_id))).toBeInTheDocument();
@@ -63,11 +50,11 @@ describe('SecretData', () => {
 
   it('Renders secret not found', async () => {
     const { findByText } = render(<SecretData secret={null} />);
-    expect(await findByText('Secret not found.')).toBeInTheDocument();
+    expect(await findByText('Secret not found')).toBeInTheDocument();
   });
 
   it('Renders empty secret', async () => {
     const { findByText } = render(<SecretData secret={empty_secret} />);
-    expect(await findByText('Empty secret.')).toBeInTheDocument();
+    expect(await findByText('Empty Secret')).toBeInTheDocument();
   });
 });

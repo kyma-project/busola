@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { KubeconfigFileUpload } from './KubeconfigFileUpload';
 import jsyaml from 'js-yaml';
-import { ControlledEditor, useTheme } from 'react-shared';
+import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
 import './KubeconfigUpload.scss';
 
@@ -15,46 +15,53 @@ export function KubeconfigUpload({
   setKubeconfig,
 }) {
   const [error, setError] = React.useState('');
-  const { editorTheme } = useTheme();
+  const [editor, setEditor] = useState(null);
+
   const { t } = useTranslation();
 
-  const configString = jsyaml.dump(kubeconfig, { noRefs: true }) || undefined;
-  const updateKubeconfig = text => {
-    try {
-      const config = jsyaml.load(text);
-      if (typeof config !== 'object') {
-        setError(t('clusters.wizard.not-an-object'));
-      } else {
-        setKubeconfig(config);
-        setError(null);
+  const updateKubeconfig = useCallback(
+    text => {
+      try {
+        const config = jsyaml.load(text);
+
+        if (typeof config !== 'object') {
+          setError(t('clusters.wizard.not-an-object'));
+        } else {
+          setKubeconfig(config);
+
+          setError(null);
+        }
+      } catch ({ message }) {
+        // get the message until the newline
+        setError(message.substr(0, message.indexOf('\n')));
       }
-    } catch ({ message }) {
-      // get the message until the newline
-      setError(message.substr(0, message.indexOf('\n')));
-    }
-  };
+    },
+    [t, setError, setKubeconfig],
+  );
 
   return (
-    <>
-      <KubeconfigFileUpload onKubeconfigTextAdded={updateKubeconfig} />
+    <div className="kubeconfig-upload">
+      <KubeconfigFileUpload
+        onKubeconfigTextAdded={text => {
+          editor.getModel().setValue(text);
+        }}
+      />
       <p className="editor-label fd-margin-bottom--sm fd-margin-top--sm">
         {t('clusters.wizard.editor-label')}
       </p>
-      <ControlledEditor
-        height="400px"
+      <Editor
+        autocompletionDisabled
         language="yaml"
-        theme={editorTheme}
-        value={configString}
-        editorDidMount={(getValue, editor) =>
-          editor.onDidBlurEditorWidget(() => updateKubeconfig(getValue()))
-        }
-        onChange={(_, value) => updateKubeconfig(value)}
+        value={kubeconfig ? jsyaml.dump(kubeconfig) : ''}
+        customSchemaId="cluster"
+        onMount={setEditor}
+        onChange={updateKubeconfig}
       />
       {error && (
         <MessageStrip type="error" className="fd-margin-top--sm">
           {t('common.create-form.editor-error', { error })}
         </MessageStrip>
       )}
-    </>
+    </div>
   );
 }

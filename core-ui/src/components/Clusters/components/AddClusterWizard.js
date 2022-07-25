@@ -1,11 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Wizard, MessageStrip } from 'fundamental-react';
+import React, { useEffect, useState } from 'react';
+import { MessageStrip, Wizard } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { useNotification, useMicrofrontendContext } from 'react-shared';
+import { ResourceForm } from 'shared/ResourceForm';
+import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
-import { hasKubeconfigAuth, getUser, getContext, addCluster } from '../shared';
+import { addByContext, getUser, hasKubeconfigAuth } from '../shared';
 import { AuthForm } from './AuthForm';
 import { KubeconfigUpload } from './KubeconfigUpload/KubeconfigUpload';
 import { ContextChooser } from './ContextChooser/ContextChooser';
@@ -24,16 +26,19 @@ export function AddClusterWizard({
   const notification = useNotification();
 
   const [hasAuth, setHasAuth] = useState(false);
-  const [authValid, setAuthValid] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);
   const [storage, setStorage] = useState(
     busolaClusterParams?.config?.storage || 'localStorage',
   );
-
-  const authFormRef = useRef();
+  const {
+    isValid: authValid,
+    formElementRef: authFormRef,
+    setCustomValid,
+    revalidate,
+  } = useCustomFormValidator();
 
   useEffect(() => {
-    if (kubeconfig) {
+    if (Array.isArray(kubeconfig?.contexts)) {
       if (getUser(kubeconfig)?.token) {
         setStorage('sessionStorage');
       } else {
@@ -42,7 +47,7 @@ export function AddClusterWizard({
     }
   }, [kubeconfig]);
 
-  function updateKubeconfig(kubeconfig) {
+  const updateKubeconfig = kubeconfig => {
     if (!kubeconfig) {
       setKubeconfig(null);
       return;
@@ -50,21 +55,45 @@ export function AddClusterWizard({
 
     const hasOneContext = kubeconfig?.contexts?.length === 1;
     const hasAuth = hasKubeconfigAuth(kubeconfig);
-
     setHasOneContext(hasOneContext);
     setHasAuth(hasAuth);
 
     setKubeconfig(kubeconfig);
-  }
+  };
 
   const onComplete = () => {
     try {
       const contextName = kubeconfig['current-context'];
-      addCluster({
-        kubeconfig,
-        config: { ...(config || {}), storage },
-        currentContext: getContext(kubeconfig, contextName),
-      });
+      if (!kubeconfig.contexts?.length) {
+        addByContext({
+          kubeconfig,
+          context: {
+            name: kubeconfig.clusters[0].name,
+            context: {
+              cluster: kubeconfig.clusters[0].name,
+              user: kubeconfig.users[0].name,
+            },
+          },
+
+          storage,
+          config,
+        });
+      } else if (contextName === '-all-') {
+        kubeconfig.contexts.forEach((context, index) => {
+          addByContext({
+            kubeconfig,
+            context,
+            switchCluster: !index,
+            storage,
+            config,
+          });
+        });
+      } else {
+        const context = kubeconfig.contexts.find(
+          context => context.name === contextName,
+        );
+        addByContext({ kubeconfig, context, storage, config });
+      }
     } catch (e) {
       notification.notifyError({
         title: t('clusters.messages.wrong-configuration'),
@@ -73,6 +102,7 @@ export function AddClusterWizard({
       console.warn(e);
     }
   };
+
   return (
     <Wizard
       onCancel={onCancel}
@@ -115,10 +145,13 @@ export function AddClusterWizard({
             formElementRef={authFormRef}
             resource={kubeconfig}
             setResource={setKubeconfig}
-            onValid={setAuthValid}
+            setCustomValid={setCustomValid}
+            createResource={e => {
+              e.preventDefault();
+            }}
           >
             {!hasOneContext && <ContextChooser />}
-            {!hasAuth && <AuthForm onValid={setAuthValid} />}
+            {!hasAuth && <AuthForm revalidate={revalidate} />}
           </ResourceForm.Single>
         </Wizard.Step>
       )}

@@ -1,0 +1,42 @@
+.fd-inline-help {
+  margin-left: 0.4em;
+}
+
+.input-fields {
+  display: grid;
+  grid-template-columns: auto max-content;
+  grid-gap: 0.8em;
+  margin-left: 3em;
+  margin-top: 1em;
+
+  .input-fields-tooltip {
+    grid-column: 1;
+    width: 100%;
+    text-align: right;
+
+    .fd-input {
+      width: auto;
+    }
+  }
+}
+
+.fd-form-item--check {
+  .fd-inline-help {
+    top: 0;
+  }
+}
+
+.memory-limits,
+.container-limits {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 16px;
+  margin-top: 10px;
+}
+
+@media (min-width: 700px) {
+  .additional-resource {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}

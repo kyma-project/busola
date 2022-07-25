@@ -1,0 +1,30 @@
+.command-palette-ui__results {
+  max-height: 320px; // show ~5 items
+  overflow: auto;
+
+  .result {
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+
+    &--disabled {
+      cursor: default;
+    }
+
+    .label {
+      color: var(--sapList_TextColor);
+    }
+
+    .description {
+      margin-top: 2px;
+      font-size: 90%;
+      color: var(--sapContent_LabelColor);
+      opacity: 0.7;
+    }
+  }
+
+  .active {
+    background: var(--sapList_SelectionBackgroundColor);
+  }
+}

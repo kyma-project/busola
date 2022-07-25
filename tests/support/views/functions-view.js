@@ -1,9 +1,5 @@
 Cypress.Commands.add('createSimpleFunction', functionName => {
   cy.getLeftNav()
-    .contains('Workloads')
-    .click();
-
-  cy.getLeftNav()
     .contains('Functions')
     .click();
 
@@ -17,8 +13,8 @@ Cypress.Commands.add('createSimpleFunction', functionName => {
 
   cy.getIframeBody()
     .find('.advanced-form')
-    .find('[placeholder="Function Name"]')
-    .clear()
+    .find('[ariaLabel="Function name"]')
+    .should('have.text', '')
     .type(functionName);
 
   cy.getIframeBody()
@@ -27,7 +23,7 @@ Cypress.Commands.add('createSimpleFunction', functionName => {
     .click();
 
   cy.getIframeBody()
-    .find('[placeholder="Enter Key"]')
+    .find('[placeholder="Enter key"]')
     .last()
     .type(`example{enter}${functionName}`);
 
@@ -39,14 +35,6 @@ Cypress.Commands.add('createSimpleFunction', functionName => {
     .find('[role="dialog"]')
     .contains('button', 'Create')
     .click();
-
-  cy.getIframeBody()
-    .find('[role="status"]', { timeout: 60 * 1000 })
-    .should('have.text', 'BUILDING');
-
-  cy.getIframeBody()
-    .find('[role="status"]', { timeout: 60 * 1000 })
-    .should('not.have.text', 'BUILDING');
 });
 
 Cypress.Commands.add(
@@ -55,13 +43,7 @@ Cypress.Commands.add(
     cy.createSimpleFunction(functionName);
 
     cy.readFile(functionPath).then(body => {
-      cy.getIframeBody()
-        .find('textarea[aria-roledescription="editor"]')
-        .filter(':visible')
-        .type('{selectall}{backspace}{selectall}{backspace}')
-        .paste({
-          pastePayload: body,
-        });
+      cy.pasteToMonaco(body);
     });
 
     cy.getIframeBody()
@@ -69,32 +51,13 @@ Cypress.Commands.add(
       .click();
 
     cy.readFile(dependenciesPath).then(body => {
-      cy.getIframeBody()
-        .find('textarea[aria-roledescription="editor"]')
-        .filter(':visible')
-        // cy.clear sometimes fails, removing only the first character - use this as a workaround
-        .type('{selectall}{backspace}{selectall}{backspace}')
-        .paste({
-          pastePayload: JSON.stringify(body),
-        });
+      cy.pasteToMonaco(JSON.stringify(body));
     });
 
     cy.getIframeBody()
-      .find('.lambda-details')
+      .find('.function-details')
       .contains('button', 'Save')
       .should('not.be.disabled')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role="status"]', { timeout: 60 * 1000 })
-      .should('not.have.text', 'BUILDING');
-
-    cy.getIframeBody()
-      .find('[role="status"]', { timeout: 120 * 1000 })
-      .should('have.text', 'RUNNING');
-
-    cy.getLeftNav()
-      .contains('Workloads')
       .click();
   },
 );

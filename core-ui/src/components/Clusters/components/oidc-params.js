@@ -1,6 +1,7 @@
 const OIDC_PARAM_NAMES = new Map([
   ['--oidc-issuer-url', 'issuerUrl'],
   ['--oidc-client-id', 'clientId'],
+  ['--oidc-client-secret', 'clientSecret'],
   ['--oidc-extra-scope', 'scope'],
 ]);
 
@@ -35,9 +36,10 @@ export function createLoginCommand(oidcConfig) {
     args: [
       'oidc-login',
       'get-token',
-      `--oidc-issuer-url=${oidcConfig.issuerUrl}`,
-      `--oidc-client-id=${oidcConfig.clientId}`,
-      `--oidc-extra-scope=openid ${oidcConfig.scope}`,
+      `--oidc-issuer-url=${oidcConfig.issuerUrl || ''}`,
+      `--oidc-client-id=${oidcConfig.clientId || ''}`,
+      `--oidc-client-secret=${oidcConfig.clientSecret || ''}`,
+      `--oidc-extra-scope=openid ${oidcConfig.scope || ''}`,
       '--grant-type=auto',
     ],
   };

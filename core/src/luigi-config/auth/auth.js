@@ -24,7 +24,7 @@ function updateLuigiAuth(auth) {
 }
 
 export async function reloadAuth() {
-  const params = await getActiveCluster();
+  const params = getActiveCluster();
 
   if (!params) {
     updateLuigiAuth(null);
@@ -49,7 +49,9 @@ async function importOpenIdConnect() {
 
 async function createAuth(callback, kubeconfigUser) {
   try {
-    const { issuerUrl, clientId, scope } = parseOIDCParams(kubeconfigUser);
+    const { issuerUrl, clientId, clientSecret, scope } = parseOIDCParams(
+      kubeconfigUser,
+    );
 
     const OpenIdConnect = await importOpenIdConnect();
 
@@ -59,6 +61,7 @@ async function createAuth(callback, kubeconfigUser) {
         idpProvider: OpenIdConnect,
         authority: issuerUrl,
         client_id: clientId,
+        client_secret: clientSecret,
         scope: scope || 'openid',
         response_type: 'code',
         response_mode: 'query',
@@ -96,7 +99,7 @@ async function createAuth(callback, kubeconfigUser) {
 
 export async function clusterLogin(luigiAfterInit) {
   return new Promise(async resolve => {
-    const params = await getActiveCluster();
+    const params = getActiveCluster();
 
     const kubeconfigUser = params?.currentContext.user.user;
 

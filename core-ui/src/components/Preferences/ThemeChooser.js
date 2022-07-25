@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTheme, TileButton } from 'react-shared';
+import { TileButton } from 'shared/components/TileButton/TileButton';
+import { useTheme } from 'shared/contexts/ThemeContext';
 import { ThemePreview } from './ThemePreview/ThemePreview';
 
 const themes = ['light_dark', 'light', 'dark', 'hcw', 'hcb'];

@@ -1,0 +1,43 @@
+.schema-viewer {
+  dl {
+    display: grid;
+    grid-template-columns: auto Min(calc(100vw - 30rem), calc(100% - 8rem));
+    grid-row-gap: 4px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-left: 0.5rem;
+
+    dd {
+      grid-column: 1;
+
+      &.expandable {
+        cursor: pointer;
+      }
+    }
+
+    dt {
+      &:not(.full-width) {
+        grid-column: 2;
+        color: var(--sapContent_LabelColor);
+      }
+
+      &.full-width {
+        grid-column: 1 / 3;
+        border-left: 1px solid var(--sapList_BorderColor);
+        padding-left: 0.5rem;
+      }
+    }
+  }
+
+  .description {
+    color: var(--sapContent_LabelColor);
+  }
+
+  .property-name {
+    font-weight: bold;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+}

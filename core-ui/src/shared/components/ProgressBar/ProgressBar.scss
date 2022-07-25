@@ -1,0 +1,32 @@
+.progress-bar-tooltip {
+  width: 100%;
+  bottom: 0;
+  cursor: help;
+}
+
+.progress-bar-container {
+  height: 0.7rem;
+  width: 10rem;
+  border: solid 1px var(--sapTextColor);
+  border-radius: 50px;
+  position: relative;
+}
+@media all and (max-width: 992px) {
+  .progress-bar-container {
+    width: 7vw;
+  }
+}
+
+.progress-bar {
+  height: 100%;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  position: absolute;
+  animation: expandWidth 1s linear;
+}
+
+@keyframes expandWidth {
+  0% {
+    width: 0;
+  }
+}

@@ -1,35 +1,31 @@
 import React from 'react';
+import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
-import { K8sNameInput } from 'react-shared';
+import { K8sNameField } from 'shared/ResourceForm/fields';
 
 import { Button, MessageStrip } from 'fundamental-react';
 
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import * as Inputs from 'shared/ResourceForm/components/Inputs';
-import { RuntimeResources } from 'shared/ResourceForm/components/RuntimeResources';
+import { ResourceForm } from 'shared/ResourceForm';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import { RuntimeResources } from 'shared/ResourceForm/fields';
 
 import './Containers.scss';
 
 function SingleContainerSection({ container, setContainer }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <ResourceForm.Wrapper resource={container} setResource={setContainer}>
-      <ResourceForm.FormField
-        required
-        label={t('common.headers.name')}
+      <K8sNameField
         propertyPath="$.name"
-        input={({ value, setValue }) => (
-          <K8sNameInput
-            value={value}
-            onChange={e => setValue(e.target.value)}
-            compact
-            required
-            showLabel={false}
-            i18n={i18n}
-            kind={t('deployments.create-modal.advanced.image')}
-          />
-        )}
+        setValue={name => {
+          jp.value(container, '$.name', name);
+          setContainer(container);
+        }}
+        required
+        kind={t('deployments.create-modal.advanced.image')}
+        pattern=".*"
+        showHelp={false}
       />
       <ResourceForm.FormField
         required

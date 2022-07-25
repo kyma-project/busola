@@ -1,19 +1,19 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ComboboxInput } from 'fundamental-react';
+import { ComboboxInput, MessageStrip } from 'fundamental-react';
 import classnames from 'classnames';
-import LuigiClient from '@luigi-project/client';
 
-import { useGetList, getFeatureToggle, Spinner } from 'react-shared';
-
-import { ResourceForm } from 'shared/ResourceForm/ResourceForm';
-import { CollapsibleSection } from 'shared/ResourceForm/components/FormComponents';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { getFeatureToggle } from 'shared/hooks/useFeatureToggle';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+import { getHiddenNamespaces } from 'shared/helpers/getHiddenNamespaces';
+import { ResourceForm } from 'shared/ResourceForm';
 
 import './ExternalResourceRef.scss';
 
 export function ExternalResourceRef({
   value,
-  resources,
+  resources = [],
   loading,
   title,
   labelPrefix,
@@ -26,6 +26,7 @@ export function ExternalResourceRef({
   defaultOpen = undefined,
   currentNamespace,
   noSection,
+  error,
   index,
 }) {
   const { t } = useTranslation();
@@ -35,7 +36,7 @@ export function ExternalResourceRef({
   );
 
   const showHiddenNamespaces = getFeatureToggle('showHiddenNamespaces');
-  const hiddenNamespaces = LuigiClient.getContext().hiddenNamespaces;
+  const hiddenNamespaces = getHiddenNamespaces();
 
   const namespacesOptions = (namespaces || [])
     .filter(ns =>
@@ -43,14 +44,20 @@ export function ExternalResourceRef({
         ? true
         : !hiddenNamespaces.includes(ns.metadata.name),
     )
-    .map(ns => ({
+    ?.map(ns => ({
       key: ns.metadata.name,
       text: ns.metadata.name,
     }));
 
   if (loading || namespacesLoading) return <Spinner compact={true} />;
+  if (error)
+    return (
+      <MessageStrip dismissible={false} type="information">
+        {t('common.errors.couldnt-fetch-resources')}
+      </MessageStrip>
+    );
 
-  const allResourcesOptions = resources.map(resource => ({
+  const allResourcesOptions = resources?.map(resource => ({
     key: resource.metadata.name,
     text: resource.metadata.name,
     namespace: resource.metadata.namespace,
@@ -58,21 +65,21 @@ export function ExternalResourceRef({
 
   let filteredResourcesOptions = [];
   if (value?.namespace?.length) {
-    filteredResourcesOptions = allResourcesOptions.filter(
+    filteredResourcesOptions = allResourcesOptions?.filter(
       resource => value?.namespace === resource.namespace,
     );
   } else if (currentNamespace) {
-    filteredResourcesOptions = allResourcesOptions.filter(
+    filteredResourcesOptions = allResourcesOptions?.filter(
       resource => currentNamespace === resource.namespace,
     );
   }
 
   const namespaceValid =
     !value?.namespace ||
-    namespacesOptions.find(ns => ns.key === value.namespace);
+    namespacesOptions?.find(ns => ns.key === value.namespace);
   const nameValid =
     !value?.name ||
-    filteredResourcesOptions.find(res => res.key === value.name);
+    filteredResourcesOptions?.find(res => res.key === value.name);
 
   const content = () => {
     return [
@@ -155,7 +162,7 @@ export function ExternalResourceRef({
 
   if (noSection) return <>{content()}</>;
   return (
-    <CollapsibleSection
+    <ResourceForm.CollapsibleSection
       title={title}
       tooltipContent={tooltipContent}
       actions={actions}
@@ -165,6 +172,6 @@ export function ExternalResourceRef({
       required={required}
     >
       {content()}
-    </CollapsibleSection>
+    </ResourceForm.CollapsibleSection>
   );
 }

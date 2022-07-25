@@ -6,11 +6,19 @@ import { BrowserRouter } from 'react-router-dom';
 import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
 
-import './index.scss';
-import './fiori-helpers.scss';
 import App from './components/App/App';
-// NOTE react-shared has to be imported after App for some unknown reason
-import { Microfrontend, Spinner } from 'react-shared';
+
+import { Microfrontend } from 'shared/contexts/Microfrontend';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+
+import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
+import ServiceCatalogUIWrapper from './service-catalog-ui/Wrapper';
+
+import './styles/reset.css';
+import './styles/sapIllus-Fills.css';
+import './styles/sapIllus-Layout.css';
+import './styles/index.scss';
+import './styles/fiori-helpers.scss';
 
 i18next
   .use(initReactI18next)
@@ -18,15 +26,23 @@ i18next
   .init({
     lng: 'en',
     fallbackLng: false,
+    nsSeparator: '::',
+    defaultNS: 'translation',
     backend: {
       loadPath: '/i18n/{{lng}}.yaml',
-      parse: data => yaml.load(data),
+      parse: data => ({
+        ...yaml.load(data),
+        fallback: '{{fallback}}',
+      }),
     },
     saveMissing: true,
     missingKeyHandler: (_lngs, _ns, key) => {
       if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
         console.warn(key);
       }
+    },
+    parseMissingKeyHandler: (_key, defaultValue) => {
+      return defaultValue;
     },
     interpolation: {
       escapeValue: false, // react already handles the escaping
@@ -37,7 +53,10 @@ ReactDOM.render(
   <Microfrontend env={process.env}>
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Suspense fallback={<Spinner />}>
-        <App />
+        <CommandPaletteProvider>
+          <App />
+          <ServiceCatalogUIWrapper />
+        </CommandPaletteProvider>
       </Suspense>
     </BrowserRouter>
   </Microfrontend>,

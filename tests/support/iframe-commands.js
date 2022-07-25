@@ -6,7 +6,7 @@ Cypress.Commands.add('getIframeBody', () => {
   return (
     cy
       .get('.iframeContainer iframe', { log: false })
-      .filter(':visible', { log: false })
+      .should('be.visible', { log: false })
       .its('0.contentDocument.body', { log: false })
       .should('not.be.empty', { log: false })
       // wraps "body" DOM element to allow

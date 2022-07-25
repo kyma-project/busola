@@ -1,6 +1,8 @@
 import React from 'react';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import './Breakout.scss';
-import { useGetList, useDelete } from 'react-shared';
 import { shuffle } from './shuffle';
 
 const colors = {
@@ -224,6 +226,10 @@ function init(_canvas, _resources) {
 
 function refreshCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.strokeStyle = 'black';
+  ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
   paddle.draw(ctx);
   ball.draw(ctx);
 
@@ -261,19 +267,20 @@ function onMouseMove(x) {
 export function Breakout() {
   const canvasRef = React.useRef(null);
   const [log, setLog] = React.useState([]);
+  const { namespaceId } = useMicrofrontendContext();
 
-  const { data: pods } = useGetList()('/api/v1/namespaces/kyma-system/pods');
+  const { data: pods } = useGetList()(`/api/v1/namespaces/${namespaceId}/pods`);
   const { data: cms } = useGetList()(
-    '/api/v1/namespaces/kyma-system/configmaps',
+    `/api/v1/namespaces/${namespaceId}/configmaps`,
   );
   const { data: secrets } = useGetList()(
-    '/api/v1/namespaces/kyma-system/secrets',
+    `/api/v1/namespaces/${namespaceId}/secrets`,
   );
   const { data: statefulSets } = useGetList()(
-    '/apis/apps/v1/namespaces/kyma-system/statefulsets',
+    `/apis/apps/v1/namespaces/${namespaceId}/statefulsets`,
   );
   const { data: replicasets } = useGetList()(
-    '/apis/apps/v1/namespaces/kyma-system/replicasets/',
+    `/apis/apps/v1/namespaces/${namespaceId}/replicasets/`,
   );
 
   const deleteRequest = useDelete();
@@ -293,7 +300,7 @@ export function Breakout() {
           type: 'Pod',
           delete: () =>
             deleteRequest(
-              '/api/v1/namespaces/kyma-system/pods/' + p.metadata.name,
+              `/api/v1/namespaces/${namespaceId}/pods/` + p.metadata.name,
             )
               .then(() => setLog(log => [...log, 'del Po ' + p.metadata.name]))
               .catch(console.log),
@@ -303,7 +310,8 @@ export function Breakout() {
           type: 'ConfigMap',
           delete: () =>
             deleteRequest(
-              '/api/v1/namespaces/kyma-system/configmaps/' + cm.metadata.name,
+              `/api/v1/namespaces/${namespaceId}/configmaps/` +
+                cm.metadata.name,
             )
               .then(() => setLog(log => [...log, 'del CM ' + cm.metadata.name]))
               .catch(console.log),
@@ -313,7 +321,7 @@ export function Breakout() {
           type: 'Secret',
           delete: () =>
             deleteRequest(
-              '/api/v1/namespaces/kyma-system/secrets/' + s.metadata.name,
+              `/api/v1/namespaces/${namespaceId}/secrets/` + s.metadata.name,
             )
               .then(() =>
                 setLog(log => [...log, 'del Secret ' + s.metadata.name]),
@@ -325,7 +333,7 @@ export function Breakout() {
           type: 'StatefulSet',
           delete: () =>
             deleteRequest(
-              '/apis/apps/v1/namespaces/kyma-system/statefulsets/' +
+              `/apis/apps/v1/namespaces/kyma-system/statefulsets/` +
                 sS.metadata.name,
             )
               .then(() =>
@@ -338,7 +346,7 @@ export function Breakout() {
           type: 'ReplicaSet',
           delete: () =>
             deleteRequest(
-              '/apis/apps/v1/namespaces/kyma-system/replicasets/' +
+              `/apis/apps/v1/namespaces/${namespaceId}/replicasets/` +
                 rS.metadata.name,
             )
               .then(() =>
@@ -350,12 +358,14 @@ export function Breakout() {
       shuffle(resources);
       init(canvasRef.current, resources);
       run(new Date());
+
+      return () => (isRunning = false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canvasRef.current, pods, cms, secrets, statefulSets, replicasets]);
 
   return (
-    <>
+    <React.Fragment key={namespaceId}>
       <canvas
         width={800}
         height={600}
@@ -369,6 +379,6 @@ export function Breakout() {
       {log.map(l => (
         <p key={l}>{l}</p>
       ))}
-    </>
+    </React.Fragment>
   );
 }

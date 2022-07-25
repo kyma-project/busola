@@ -1,0 +1,9 @@
+apiVersion: 'cypress.example.com/v1'
+kind: CronTab
+metadata:
+  name: my-cron-tab
+  namespace: namespacename
+spec:
+  cronSpec: successful-cypress-test
+  image: my-awesome-cron-image
+  replicas: 1

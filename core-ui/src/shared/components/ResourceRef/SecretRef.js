@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGetList } from 'react-shared';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { useTranslation } from 'react-i18next';
 
 import { ExternalResourceRef } from './ExternalResourceRef';

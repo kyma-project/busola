@@ -1,0 +1,27 @@
+.key-value-form {
+  header {
+    button {
+      margin-right: 8px !important;
+    }
+  }
+
+  .grid-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr 148px 30px;
+    grid-gap: 24px;
+  }
+
+  // align buttons with text fields
+  .grid-wrapper .fd-button {
+    margin-top: 4px;
+  }
+
+  i {
+    color: var(--sapButton_Critical_Background, #e9730c);
+  }
+
+  .value-textarea {
+    resize: vertical;
+    height: 37px;
+  }
+}

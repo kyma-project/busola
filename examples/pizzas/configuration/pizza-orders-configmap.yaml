@@ -1,0 +1,180 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pizzaorders
+  namespace: pizzas
+  labels:
+    app.kubernetes.io/name: pizzaorders
+    busola.io/extension: resource
+data:
+  details: |-
+    {
+      "header": [
+        {
+          "path": "spec.status",
+          "widget": "Badge"
+        },
+        {
+          "path": "spec.orderDetails",
+          "widget": "Labels"
+        }
+      ],
+      "body": [
+        {
+          "widget": "CodeViewer",
+          "path": "spec.orderDetails",
+          "language": "yaml"
+        },
+        {
+          "path": "spec.pizzas",
+          "widget": "ResourceRefs",
+          "kind": "Pizza",
+        }
+      ]
+    }
+  form: |-
+    [
+      {
+        "simple": true,
+        "path": "spec.description",
+      },
+      {
+        "simple": true,
+        "path": "spec.status",
+      },
+      {
+        "simple": "true",
+        "widget": "FormGroup",
+        "path": "spec.orderDetails"
+      },
+      {"path": "spec.orderDetails.paymentMethod", "simple": "true"},
+      {"path": "spec.orderDetails.realization", "simple": "true"},
+      {
+        "simple": "true",
+        "path": "spec.pizzas[]",
+        "widget": "ResourceRefs",
+        "kind": "Pizza",
+        "group": "busola.example.com",
+        "version": "v1",
+      }
+    ]
+  list: |-
+    [
+      {
+        "path": "spec.orderDetails.paymentMethod",
+        "widget": "Badge"
+      },
+      {
+        "path": "spec.orderDetails.realization",
+      }
+    ]
+  resource: |-
+    {
+      "kind": "PizzaOrder",
+      "group": "busola.example.com",
+      "version": "v1",
+      "path": "pizzaorders",
+      "scope": "namespace",
+       "description: "check the translations"
+    }
+  schema: |-
+    {
+      "description": "A custom resource for creating orders for pizzas",
+      "type": "object",
+      "properties": {
+        "spec": {
+          "description": "Information about the order",
+          "type": "object",
+          "properties": {
+            "description": {
+              "description": "Order description",
+              "type": "string"
+            },
+            "status":{
+              "type": "string",
+              "enum": [
+                "Ready",
+                "Error"
+              ]
+            },
+            "pizzas": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string",
+                    "value": "Pizza"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "namespace":{
+                    "type": "string"
+                  }
+                }
+              } 
+            },
+            "orderDetails": {
+              "description": "The details of the order",
+              "type": "object",
+              "properties": {
+                "paymentMethod": {
+                  "description": "The payment method for the order",
+                  "type": "string",
+                  "enum": [
+                    "CARD",
+                    "CASH"
+                  ]
+                },
+                "realization": {
+                  "description": "The order's realization way",
+                  "type": "string",
+                  "enum": [
+                    "DELIVERY",
+                    "SELF-PICKUP"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "status": {
+          "type": "object",
+          "properties": {
+            "messages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  translations: |-
+    {
+      "en": {
+        "name": "Pizza Orders",
+        "category": "Lunch",
+        "metadata.annotations": "Annotations",
+        "metadata.labels": "Labels",
+        "metadata.creationTimestamp": "Created at",
+        "spec.description": "Description",
+        "spec.orderDetails": "Order details",
+        "spec.orderDetails.paymentMethod": "Payment method",
+        "spec.orderDetails.realization": "Realization",
+        "spec.pizzas": "Pizzas",
+        "spec.status": "Status",
+        "check the translations": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
+      }
+    }
+  version: '0.5'
