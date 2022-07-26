@@ -1,4 +1,4 @@
-export let schemasWorker = null;
+let schemasWorker = null;
 if (typeof Worker !== 'undefined') {
   schemasWorker = new Worker(
     new URL('./resourceSchemas.worker.js', import.meta.url),
