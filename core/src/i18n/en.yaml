@@ -1013,7 +1013,7 @@ extensibility:
     relations: Resource Relations
     resource: Resource Basics
     translations: Translations
-    version: Versioning
+    version: Version
   starter-modal:
     buttons:
       open-modal: Create UI
