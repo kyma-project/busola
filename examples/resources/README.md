@@ -1,4 +1,4 @@
-# Pizza
+# Resources
 
 ## Overview
 
@@ -24,4 +24,4 @@ kubectl create namespace resources && kubectl apply -f configuration/ --recursiv
 kubectl apply -f samples/ --recursive
 ```
 
-After uploading the files, refresh the browser. You should see new items in the left-side navigation.
+After uploading the files, refresh the browser. You should see new items in the left-side navigation. Remember that EXTENSIBILITY feature [needs to be enabled](./../../docs//features.md).
