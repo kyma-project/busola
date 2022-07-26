@@ -180,7 +180,7 @@ export function BusolaExtensionDetails(props) {
       customComponents={[ExtensibilityVersion, BusolaExtensionEditor]}
       customColumns={customColumns}
       createResourceForm={BusolaExtensionEdit}
-      resourceTitle={t('extensibility.title')}
+      resourceName={t('extensibility.title')}
       resourceType="ConfigMaps"
       resourceUrl={resourceUrl}
     />

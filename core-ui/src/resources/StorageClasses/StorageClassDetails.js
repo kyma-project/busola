@@ -76,7 +76,7 @@ export function StorageClassDetails(props) {
         Events,
       ]}
       customColumns={customColumns}
-      resourceTitle={t('storage-classes.title')}
+      resourceName={t('storage-classes.title')}
       singularName={t('storage-classes.name_singular')}
       createResourceForm={StorageClassCreate}
       {...props}
