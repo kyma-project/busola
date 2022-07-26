@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
+import { Wizard } from 'fundamental-react';
 
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { useUpsert } from 'shared/hooks/BackendAPI/useUpsert';
@@ -23,6 +24,32 @@ export function BusolaExtensionCreate({ formElementRef, onChange }) {
   const [crd, setCrd] = useState(null);
   const [state, setState] = useState({});
 
+  return (
+    <Wizard>
+      <Wizard.Step
+        title={t('extensibility.starter-modal.crd')}
+        indicator="1"
+      ></Wizard.Step>
+      <Wizard.Step
+        title={t('extensibility.sections.resource')}
+        indicator="1"
+      ></Wizard.Step>
+      <Wizard.Step
+        title={t('extensibility.sections.list')}
+        indicator="1"
+      ></Wizard.Step>
+      <Wizard.Step
+        title={t('extensibility.sections.form')}
+        indicator="1"
+      ></Wizard.Step>
+      <Wizard.Step
+        title={t('extensibility.sections.details')}
+        indicator="1"
+      ></Wizard.Step>
+    </Wizard>
+  );
+
+  /*
   return (
     <ResourceForm.Single
       formElementRef={formElementRef}
@@ -108,4 +135,5 @@ export function BusolaExtensionCreate({ formElementRef, onChange }) {
       </ResourceForm.Wrapper>
     </ResourceForm.Single>
   );
+  */
 }
