@@ -22,7 +22,7 @@ data:
           "widget": "ControlledByKind",
           "placeholder": "---"
         },
-        { "path": "spec.toppings", formula: "$join(data.name, ', ')" }, 
+        { "path": "spec.toppings", "formula": "$join(data.name, ', ')" }, 
         {
           "path": "spec.ownerReferences[0]",
           "widget": "ResourceLink",
@@ -30,10 +30,10 @@ data:
           "resource": {
             "name": "data.name",
             "namespace": "root.metadata.namespace",
-            "kind": "data.kind",
-        },
-      },
-    ],
+            "kind": "data.kind"
+          }
+         }
+      ],
     "body": [
         {
           "widget": "Columns",
@@ -51,8 +51,8 @@ data:
                 "name": "Message",
                 "path": "status.messages[-1:].message"
               },
-              { "path": "spec.toppings", formula: "$join(data.name, ', ')" }, 
-              { "path": "spec.toppings", formula: "$sum(data.price)", "name": "Toppings price" }
+              { "path": "spec.toppings", "formula": "$join(data.name, ', ')" }, 
+              { "path": "spec.toppings", "formula": "$sum(data.price)", "name": "Toppings price" }
             ]
           },
           {
@@ -124,7 +124,7 @@ data:
     [
       { "path": "spec.description" },
       { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
-      { "path": "spec.toppings", formula: "$sum(data.price)", "name": "Toppings price" }
+      { "path": "spec.toppings", "formula": "$sum(data.price)", "name": "Toppings price" }
     ]
   relations: |-
     {
@@ -141,7 +141,8 @@ data:
       "kind": "Pizza",
       "group": "busola.example.com",
       "version": "v1",
-      "scope": "namespace"
+      "scope": "namespace",
+      "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
     }
   schema: |-
     {
@@ -222,9 +223,9 @@ data:
       spec.sauce: Sauce
       spec.toppings: Toppings
       spec.recipeSecret: Recipe's secret
-      topping.name: Name
-      topping.price: Price
-      topping.quantity: Quantity
+      spec.toppings.name: Name
+      spec.toppings.price: Price ($)
+      spec.toppings.quantity: Quantity
       spec.ownerReferences: Owner References
       otherTranslations.linkText: Go to {{data.kind}} {{data.name}}.
   version: '0.5'

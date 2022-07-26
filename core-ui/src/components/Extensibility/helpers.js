@@ -1,10 +1,11 @@
-import { createContext, useContext } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { createContext, useContext } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
 import jsonata from 'jsonata';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { OrderedMap } from 'immutable';
+import { Link } from 'shared/components/Link/Link';
 
 export const TranslationBundleContext = createContext({
   translationBundle: 'extensibility',
@@ -36,7 +37,6 @@ export const useGetTranslation = path => {
   const { translationBundle } = useContext(TranslationBundleContext);
   const { t, i18n } = useTranslation([translationBundle]);
   //doesn't always work, add `translationBundle.` at the beginning of a path
-
   return {
     t: (path, ...props) => t(`${translationBundle}::${path}`, ...props) || path,
     tFromStoreKeys: (storeKeys, ...props) => {
@@ -56,6 +56,7 @@ export const useGetTranslation = path => {
       });
     },
     exists: path => i18n.exists(`${translationBundle}:${path}`),
+    i18n,
   };
 };
 
@@ -110,4 +111,36 @@ export const getObjectValueWorkaround = (
   }
 
   return value;
+};
+
+export const useCreateResourceDescription = descID => {
+  const { t, i18n } = useGetTranslation();
+
+  let trans = t(descID);
+
+  if (typeof trans === 'string') {
+    const i18VarRegex = /{{.*?}}/g;
+    const matchesIterator = trans?.matchAll(i18VarRegex);
+    const matches = matchesIterator ? [...matchesIterator].flat() : null;
+
+    if (matches.length) {
+      matches.forEach((link, inx) => {
+        const linkText = link.match(/\[(.*?)]/)[1];
+        trans = trans.replace(link, `<${inx}>${linkText}</${inx}>`);
+      });
+      return (
+        <Trans
+          i18nKey={trans}
+          i18n={i18n}
+          components={matches.map((result, idx) => {
+            const url = result.match(/\((.*?)\)/)[1];
+
+            return <Link className="fd-link" url={url} key={idx} />;
+          })}
+        />
+      );
+    } else {
+      return trans;
+    }
+  }
 };

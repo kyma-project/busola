@@ -1,6 +1,65 @@
 import React from 'react';
-import { uniq } from 'lodash';
+import { merge, initial, last } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
+import { List } from 'immutable';
+
+const byPath = a => b => JSON.stringify(b.path) === JSON.stringify(a);
+
+// fake an OrderedMap-like structure using List to allow for duplicate keys
+const propertiesWrapper = src => ({
+  map: cb => List(src?.map(([key, val]) => cb(val, key))),
+});
+
+export function prepareSchemaRules(ruleDefs) {
+  const rules = [{ path: [], children: [] }];
+
+  const addRule = rule => {
+    rules.push(rule);
+    const parentPath = initial(rule.path);
+    const lastParent = rules.findLast(byPath(parentPath));
+    if (lastParent) {
+      lastParent.children.push(rule);
+    }
+  };
+
+  const extractRules = ({ path, ...ruleDef }, parentPath = []) => {
+    const fullPath = [
+      ...parentPath,
+      ...(Array.isArray(path) ? path : path.replace(/\[]/g, '.[]').split('.')),
+    ];
+
+    initial(fullPath).reduce((acc, step) => {
+      const myPath = [...acc, step];
+      const lastRule = rules.findLast(byPath(myPath));
+      if (!lastRule) {
+        addRule({
+          path: myPath,
+          auto: true,
+          children: [],
+        });
+      }
+      return myPath;
+    }, []);
+
+    const lastRule = rules.findLast(byPath(fullPath));
+    if (!lastRule || !lastRule.auto) {
+      addRule({
+        ...ruleDef,
+        path: fullPath,
+        children: [],
+      });
+    } else {
+      merge(lastRule, ruleDef);
+      lastRule.auto = false;
+      lastRule.children = [];
+    }
+    ruleDef.children?.forEach(subDef => extractRules(subDef, fullPath));
+  };
+
+  ruleDefs.forEach(subDef => extractRules(subDef));
+
+  return rules;
+}
 
 export function SchemaRulesInjector({
   schema,
@@ -9,37 +68,28 @@ export function SchemaRulesInjector({
   schemaRules,
   ...props
 }) {
-  const visiblePaths = [
-    '',
-    ...uniq(
-      schemaRules.flatMap(entry =>
-        entry.path.split(/\./).reduce((acc, step) => {
-          const flatStep = step.replace('[]', '');
-          if (!acc.length) {
-            return [flatStep];
-          } else {
-            return [...acc, `${acc[acc.length - 1]}.${flatStep}`];
-          }
-        }, []),
-      ),
-    ),
-  ];
-
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
 
-  const path = storeKeys
-    .map(item => (typeof item === 'number' ? '[]' : item))
-    .join('.')
-    .replace('.[]', '[]');
-  const flatPath = path.replace(/\[]/g, '');
+  const path = storeKeys.map(item => (typeof item === 'number' ? '[]' : item));
 
-  let newSchema;
-  if (!visiblePaths.includes(flatPath)) {
-    newSchema = schema.mergeDeep({ widget: 'Null' });
-  } else {
-    const itemMap = schemaRules.find(item => item.path === path) ?? {};
-    newSchema = schema.mergeDeep(itemMap);
+  const { simple, advanced, path: myPath, children: childRules, ...itemRule } =
+    schema.get('schemaRule') ?? schemaRules.find(byPath(path)) ?? {};
+
+  let newSchema = schema.mergeDeep(itemRule);
+  if (schema.get('properties')) {
+    const newProperties = childRules
+      ?.map(rule => {
+        const propertyKey = last(rule.path);
+        const property = newSchema
+          .get('properties')
+          .get(propertyKey)
+          ?.set('schemaRule', rule);
+        return property ? [propertyKey, property] : null;
+      })
+      .filter(rule => !!rule);
+
+    newSchema = newSchema.set('properties', propertiesWrapper(newProperties));
   }
 
   return (
