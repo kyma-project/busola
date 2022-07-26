@@ -183,6 +183,14 @@ export function BusolaExtensionDetails(props) {
       resourceName={t('extensibility.title')}
       resourceType="ConfigMaps"
       resourceUrl={resourceUrl}
+      breadcrumbs={[
+        {
+          name: t('extensibility.title'),
+          path: '/',
+          fromContext: 'busolaextensions',
+        },
+        { name: '' },
+      ]}
     />
   );
 }
