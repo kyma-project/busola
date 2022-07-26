@@ -83,6 +83,10 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     }
   }
 
+  if (!props.originalResource) {
+    props.originalResource = value;
+  }
+
   const { visible, error: visibleCheckError } = shouldBeVisible(
     childValue,
     structure.visibility,
