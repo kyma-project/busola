@@ -108,7 +108,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 
 #### resource property
 
-To create a navigable link, Busola needs the name and the kind of a target resource. They must be passed in **resource** object, as a property paths in either **data** (value exctracted via **path**) or **root** (the original resource). If the target resource is namespaced, provide also **namespace**, in a similar manner as **name** and **kind** properties.
+To create a hyperlink, Busola needs the **name** and the **kind** of the target resource; they must be passed into the **resource** object as property paths in either **data** - value extracted using **path**, or **root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
 
 #### linkText property
 
