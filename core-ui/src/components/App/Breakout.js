@@ -372,6 +372,7 @@ export function Breakout() {
   return (
     <React.Fragment key={namespaceId}>
       <canvas
+        className="breakout-canvas"
         width={800}
         height={600}
         ref={canvasRef}
