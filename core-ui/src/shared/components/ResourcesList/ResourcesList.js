@@ -65,6 +65,7 @@ ResourcesList.propTypes = {
   testid: PropTypes.string,
   omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
   resourceUrlPrefix: PropTypes.string,
+  disableCreate: PropTypes.bool,
 };
 
 ResourcesList.defaultProps = {
@@ -74,6 +75,7 @@ ResourcesList.defaultProps = {
   showTitle: false,
   listHeaderActions: null,
   readOnly: false,
+  disableCreate: false,
 };
 
 export function ResourcesList(props) {
@@ -161,7 +163,7 @@ export function ResourceListRenderer({
   allowSlashShortcut,
   resourceUrlPrefix,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
-  disableCreate = false,
+  disableCreate,
   sortBy = {
     name: nameLocaleSort,
     time: timeSort,
