@@ -16,7 +16,7 @@ The `resource` section is required and contains basic information about the reso
 - **path** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
 - **defaultPlaceholder** - to be shown in place of empty resource leaves. Overridden by the widget-level **placeholder**. Defaults to `-`.
 - **description** - displays a custom description on the resource list page. It can contain links. If the translation section has a translation entry with the ID that is the same as the **description** string, the translation is used.
-- **allowCreate** - either `true` or `false`. Defaults to `true`
+- **allowCreate** - either `true` or `false`. Defaults to `true`.
 
 ### Example
 
