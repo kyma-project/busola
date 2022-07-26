@@ -270,29 +270,30 @@ export function Breakout() {
   const { namespaceId } = useMicrofrontendContext();
 
   const { data: pods } = useGetList()(`/api/v1/namespaces/${namespaceId}/pods`);
-  const { data: cms } = useGetList()(
-    `/api/v1/namespaces/${namespaceId}/configmaps`,
-  );
-  const { data: secrets } = useGetList()(
-    `/api/v1/namespaces/${namespaceId}/secrets`,
-  );
-  const { data: statefulSets } = useGetList()(
-    `/apis/apps/v1/namespaces/${namespaceId}/statefulsets`,
-  );
-  const { data: replicasets } = useGetList()(
-    `/apis/apps/v1/namespaces/${namespaceId}/replicasets/`,
-  );
+  // const { data: cms } = useGetList()(
+  //   `/api/v1/namespaces/${namespaceId}/configmaps`,
+  // );
+  // const { data: secrets } = useGetList()(
+  //   `/api/v1/namespaces/${namespaceId}/secrets`,
+  // );
+  // const { data: statefulSets } = useGetList()(
+  //   `/apis/apps/v1/namespaces/${namespaceId}/statefulsets`,
+  // );
+  // const { data: replicasets } = useGetList()(
+  //   `/apis/apps/v1/namespaces/${namespaceId}/replicasets/`,
+  // );
 
   const deleteRequest = useDelete();
 
   React.useEffect(() => {
     if (
       canvasRef.current &&
-      pods &&
-      cms &&
-      secrets &&
-      statefulSets &&
-      replicasets
+      pods
+      // &&
+      // cms &&
+      // secrets &&
+      // statefulSets &&
+      // replicasets
     ) {
       const resources = [
         ...pods.map(p => ({
@@ -305,55 +306,55 @@ export function Breakout() {
               .then(() => setLog(log => [...log, 'del Po ' + p.metadata.name]))
               .catch(console.log),
         })),
-        ...cms.map(cm => ({
-          ...cm,
-          type: 'ConfigMap',
-          delete: () =>
-            deleteRequest(
-              `/api/v1/namespaces/${namespaceId}/configmaps/` +
-                cm.metadata.name,
-            )
-              .then(() => setLog(log => [...log, 'del CM ' + cm.metadata.name]))
-              .catch(console.log),
-        })),
-        ...secrets.map(s => ({
-          ...s,
-          type: 'Secret',
-          delete: () =>
-            deleteRequest(
-              `/api/v1/namespaces/${namespaceId}/secrets/` + s.metadata.name,
-            )
-              .then(() =>
-                setLog(log => [...log, 'del Secret ' + s.metadata.name]),
-              )
-              .catch(console.log),
-        })),
-        ...statefulSets.map(sS => ({
-          ...sS,
-          type: 'StatefulSet',
-          delete: () =>
-            deleteRequest(
-              `/apis/apps/v1/namespaces/kyma-system/statefulsets/` +
-                sS.metadata.name,
-            )
-              .then(() =>
-                setLog(log => [...log, 'del StatefulSet ' + sS.metadata.name]),
-              )
-              .catch(console.log),
-        })),
-        ...replicasets.map(rS => ({
-          ...rS,
-          type: 'ReplicaSet',
-          delete: () =>
-            deleteRequest(
-              `/apis/apps/v1/namespaces/${namespaceId}/replicasets/` +
-                rS.metadata.name,
-            )
-              .then(() =>
-                setLog(log => [...log, 'del ReplicaSet ' + rS.metadata.name]),
-              )
-              .catch(console.log),
-        })),
+        // ...cms.map(cm => ({
+        //   ...cm,
+        //   type: 'ConfigMap',
+        //   delete: () =>
+        //     deleteRequest(
+        //       `/api/v1/namespaces/${namespaceId}/configmaps/` +
+        //         cm.metadata.name,
+        //     )
+        //       .then(() => setLog(log => [...log, 'del CM ' + cm.metadata.name]))
+        //       .catch(console.log),
+        // })),
+        // ...secrets.map(s => ({
+        //   ...s,
+        //   type: 'Secret',
+        //   delete: () =>
+        //     deleteRequest(
+        //       `/api/v1/namespaces/${namespaceId}/secrets/` + s.metadata.name,
+        //     )
+        //       .then(() =>
+        //         setLog(log => [...log, 'del Secret ' + s.metadata.name]),
+        //       )
+        //       .catch(console.log),
+        // })),
+        // ...statefulSets.map(sS => ({
+        //   ...sS,
+        //   type: 'StatefulSet',
+        //   delete: () =>
+        //     deleteRequest(
+        //       `/apis/apps/v1/namespaces/kyma-system/statefulsets/` +
+        //         sS.metadata.name,
+        //     )
+        //       .then(() =>
+        //         setLog(log => [...log, 'del StatefulSet ' + sS.metadata.name]),
+        //       )
+        //       .catch(console.log),
+        // })),
+        // ...replicasets.map(rS => ({
+        //   ...rS,
+        //   type: 'ReplicaSet',
+        //   delete: () =>
+        //     deleteRequest(
+        //       `/apis/apps/v1/namespaces/${namespaceId}/replicasets/` +
+        //         rS.metadata.name,
+        //     )
+        //       .then(() =>
+        //         setLog(log => [...log, 'del ReplicaSet ' + rS.metadata.name]),
+        //       )
+        //       .catch(console.log),
+        // })),
       ];
       shuffle(resources);
       init(canvasRef.current, resources);
@@ -362,7 +363,11 @@ export function Breakout() {
       return () => (isRunning = false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canvasRef.current, pods, cms, secrets, statefulSets, replicasets]);
+  }, [
+    canvasRef.current,
+    pods,
+    //, cms, secrets, statefulSets, replicasets
+  ]);
 
   return (
     <React.Fragment key={namespaceId}>
