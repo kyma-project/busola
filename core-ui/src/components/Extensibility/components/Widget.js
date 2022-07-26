@@ -18,7 +18,7 @@ export const SimpleRenderer = ({ children }) => {
   return children;
 };
 
-export function InlineWidget({ children, value, structure }) {
+export function InlineWidget({ children, value, structure, ...props }) {
   const { widgetT } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
@@ -31,7 +31,9 @@ export function InlineWidget({ children, value, structure }) {
     displayValue = emptyLeafPlaceholder;
   }
 
-  return <LayoutPanelRow name={widgetT(structure)} value={displayValue} />;
+  return (
+    <LayoutPanelRow name={widgetT(structure)} value={displayValue} {...props} />
+  );
 }
 
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
@@ -80,10 +82,6 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     } else {
       childValue = getValue(value, structure.path);
     }
-  }
-
-  if (!props.originalResource) {
-    props.originalResource = value;
   }
 
   const { visible, error: visibleCheckError } = shouldBeVisible(

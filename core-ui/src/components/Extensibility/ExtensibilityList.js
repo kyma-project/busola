@@ -53,6 +53,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
             structure={column}
             schema={schema}
             relations={relations}
+            originalResource={resource}
           />
         ),
       }))
