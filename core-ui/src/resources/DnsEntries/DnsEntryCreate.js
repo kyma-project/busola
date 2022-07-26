@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import {
-  K8sNameField,
-  KeyValueField,
-  TextArrayInput,
-} from 'shared/ResourceForm/fields';
+import { TextArrayInput } from 'shared/ResourceForm/fields';
 
 import { DNSNameRef } from './DNSNameRef';
 import { TargetsRef } from './TargetsRef';
@@ -61,22 +56,6 @@ export function DnsEntryCreate({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={t('dnsentries.name_singular')}
-        setValue={name => {
-          jp.value(dnsEntry, '$.metadata.name', name);
-          jp.value(
-            dnsEntry,
-            "$.metadata.labels['app.kubernetes.io/name']",
-            name,
-          );
-          setDnsEntry({ ...dnsEntry });
-        }}
-        readOnly={initialDNSEntry}
-        validate={name => !!name}
-      />
-
       <DNSNameRef required validate={entry => !!entry?.spec?.dnsName} />
 
       <ResourceForm.FormField
@@ -87,19 +66,6 @@ export function DnsEntryCreate({
         placeholder={t('dnsentries.placeholders.ttl')}
         validate={ttl => typeof ttl === 'number' && ttl >= 0}
         min={0}
-      />
-
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-        className="fd-margin-top--sm"
-      />
-
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
       />
 
       <TargetsRef

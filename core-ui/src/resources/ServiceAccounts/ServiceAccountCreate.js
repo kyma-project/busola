@@ -6,11 +6,7 @@ import { cloneDeep } from 'lodash';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { ResourceForm } from 'shared/ResourceForm';
-import {
-  K8sNameField,
-  KeyValueField,
-  ComboboxArrayInput,
-} from 'shared/ResourceForm/fields';
+import { ComboboxArrayInput } from 'shared/ResourceForm/fields';
 
 import { createServiceAccountTemplate } from './templates';
 import { validateServiceAccount } from './helpers';
@@ -59,25 +55,6 @@ export const ServiceAccountCreate = ({
       createUrl={resourceUrl}
       initialResource={initialServiceAccount}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={t('service-accounts.name_singular')}
-        setValue={name => {
-          jp.value(serviceAccount, '$.metadata.name', name);
-          setServiceAccount({ ...serviceAccount });
-        }}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
-
       <ComboboxArrayInput
         advanced
         propertyPath="$.secrets"
