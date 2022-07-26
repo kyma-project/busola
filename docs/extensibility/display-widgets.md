@@ -104,7 +104,7 @@ Labels widgets render all the object entries in the `key-value` format.
 
 # ResourceLink
 
-ResourceLink widgets renders an internal link to a Kubernetes resource.
+ResourceLink widgets render internal links to Kubernetes resources.
 
 #### resource property
 
