@@ -30,7 +30,9 @@ export function BusolaExtensionDetails(props) {
   const { t } = useTranslation();
   const { namespace, name } = useParams();
 
-  const updateResourceMutation = useUpdate(props.resourceUrl);
+  const resourceUrl = `/api/v1/namespaces/${namespace}/configmaps/${name}`;
+
+  const updateResourceMutation = useUpdate(resourceUrl);
   const notification = useNotification();
 
   const BusolaExtensionEditor = resource => {
@@ -62,7 +64,7 @@ export function BusolaExtensionDetails(props) {
   const updateBusolaExtension = async (newBusolaExtension, configmap) => {
     try {
       const diff = createPatch(configmap, newBusolaExtension);
-      await updateResourceMutation(props.resourceUrl, diff);
+      await updateResourceMutation(resourceUrl, diff);
       notification.notifySuccess({
         content: t('components.resource-details.messages.success', {
           resourceType: 'BusolaExtension',
@@ -91,7 +93,7 @@ export function BusolaExtensionDetails(props) {
 
     const currentVersion = formatCurrentVersion(configmap?.data?.version);
     const hasMigrationFunction = getMigrationFunctions().some(
-      version => version === currentVersion?.replace('.', ''),
+      version => version === currentVersion,
     );
     const isCurrentVersion = getLatestVersion() === currentVersion;
     const isSupportedVersion = getSupportedVersions().some(
@@ -129,7 +131,7 @@ export function BusolaExtensionDetails(props) {
     return (
       <LayoutPanel className="fd-margin--md">
         <LayoutPanel.Header>
-          <LayoutPanel.Head title={t('extensibility.section.version')} />
+          <LayoutPanel.Head title={t('extensibility.sections.version')} />
           <LayoutPanel.Actions>
             {hasMigrationFunction && (
               <>
@@ -180,7 +182,7 @@ export function BusolaExtensionDetails(props) {
       createResourceForm={BusolaExtensionEdit}
       resourceTitle={t('extensibility.title')}
       resourceType="ConfigMaps"
-      resourceUrl={`/api/v1/namespaces/${namespace}/configmaps/${name}`}
+      resourceUrl={resourceUrl}
     />
   );
 }
