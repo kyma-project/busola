@@ -127,7 +127,7 @@ export function SubscriptionDetails(props) {
     <ResourceDetails
       customComponents={[SubscriptionConditions, SubscriptionFilter, Events]}
       customColumns={customColumns}
-      resourceTitle={t('subscriptions.title')}
+      resourceName={t('subscriptions.title')}
       singularName={t('subscriptions.name_singular')}
       createResourceForm={SubscriptionCreate}
       {...props}

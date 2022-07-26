@@ -27,6 +27,7 @@ import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
 import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
+import pluralize from 'pluralize';
 
 /* to allow cloning of a resource set the following on the resource create component:
  *
@@ -63,6 +64,7 @@ ResourcesList.propTypes = {
   navigateFn: PropTypes.func,
   testid: PropTypes.string,
   omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
+  resourceUrlPrefix: PropTypes.string,
 };
 
 ResourcesList.defaultProps = {
@@ -158,6 +160,7 @@ export function ResourceListRenderer({
   silentRefetch = () => {},
   showSearchField = true,
   allowSlashShortcut,
+  resourceUrlPrefix,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate = false,
   sortBy = {
@@ -203,13 +206,11 @@ export function ResourceListRenderer({
 
   customColumns = customColumns.filter(col => !omitColumnsIds.includes(col.id));
 
-  const withoutQueryString = path => path.split('?')[0];
-
   const handleSaveClick = resourceData => async newYAML => {
     try {
       const diff = createPatch(resourceData, jsyaml.load(newYAML));
-      const url =
-        withoutQueryString(resourceUrl) + '/' + resourceData.metadata.name;
+      const url = prepareResourceUrl(resourceUrl, resourceData);
+
       await updateResourceMutation(url, diff);
       silentRefetch();
       notification.notifySuccess({
@@ -238,9 +239,16 @@ export function ResourceListRenderer({
     );
   };
 
-  const prepareResourceUrl = (resourceUrl, resourceName) => {
-    const encodedName = encodeURIComponent(resourceName);
-    return `${resourceUrl}/${encodedName}`;
+  const prepareResourceUrl = (resourceUrl, resource) => {
+    const encodedName = encodeURIComponent(resource?.metadata.name);
+    if (!resourceUrlPrefix) return `${resourceUrl}/${encodedName}`;
+
+    const namespace = resource?.metadata?.namespace;
+    const pluralKind = pluralize((resource?.kind || '').toLowerCase());
+
+    return namespace
+      ? `${resourceUrlPrefix}/namespaces/${namespace}/${pluralKind}/${encodedName}`
+      : `${resourceUrlPrefix}/${pluralKind}/${encodedName}`;
   };
 
   const handleResourceClone = resource => {
@@ -287,10 +295,7 @@ export function ResourceListRenderer({
           disabledHandler: isProtected,
           handler: resource => {
             handleResourceDelete({
-              resourceUrl: prepareResourceUrl(
-                resourceUrl,
-                resource.metadata.name,
-              ),
+              resourceUrl: prepareResourceUrl(resourceUrl, resource),
             });
             setActiveResource(resource);
           },
@@ -399,10 +404,7 @@ export function ResourceListRenderer({
       )}
       <DeleteMessageBox
         resource={activeResource}
-        resourceUrl={prepareResourceUrl(
-          resourceUrl,
-          nameSelector(activeResource),
-        )}
+        resourceUrl={prepareResourceUrl(resourceUrl, activeResource)}
       />
       <GenericList
         title={showTitle ? title || prettifiedResourceName : null}

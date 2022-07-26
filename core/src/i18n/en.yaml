@@ -1000,6 +1000,7 @@ events:
   title: Events
 extensibility:
   configuration-error: 'Configuration error: {{error}}'
+  description: <0>Extensions</0> allow you to create a separate dedicated user interface (UI) page for your Custom Resource Definition (CRD).
   error: Your extension configuration is incorrect.
   message:
     old-version: There is a newer version of the extensibility configuration. Please migrate to the newest version.
@@ -1013,7 +1014,7 @@ extensibility:
     relations: Resource Relations
     resource: Resource Basics
     translations: Translations
-    version: Versioning
+    version: Version
   starter-modal:
     buttons:
       open-modal: Create UI
@@ -2157,9 +2158,10 @@ subscriptions:
   title: Subscriptions
   tooltips:
     application-name: Choose your Application from the cluster.
-    event-name: Provide a name for your event. The name must consist of at least two parts divided by a dot.
+    event-name: The name must consist of at least two parts divided by a dot.
     event-source: Event source is the origin from which the event is published.
-    event-type-advanced: Event type must consist of minimum seven elements separated by dots. Prefix should be sap.kyma.custom. You can add more event types.
+    event-type-advanced: You can add more event types.
+    event-type-advanced-info: Event type must consist of minimum seven elements separated by dots. Prefix should be sap.kyma.custom. You can add more event types.
     event-type-simple: Event type is defined based on the Application name, event name, and event version.
     event-version: Choose the event version from the drop-down list or provide your own version.
     ready: Subscription is active.

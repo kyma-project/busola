@@ -18,7 +18,7 @@ export function BusolaPluginList(props) {
   ];
 
   const description = (
-    <Trans i18nKey="extensibility.extensions.description">
+    <Trans i18nKey="extensibility.description">
       <Link
         className="fd-link"
         url="https://github.com/kyma-project/busola/tree/main/docs/extensibility"
@@ -32,7 +32,7 @@ export function BusolaPluginList(props) {
       description={description}
       createResourceForm={BusolaExtensionCreate}
       customCreateResourceForm
-      resourceTitle={t('extensibility.title')}
+      resourceName={t('extensibility.title')}
       resourceType="ConfigMaps"
       resourceUrl="/api/v1/configmaps?labelSelector=busola.io/extension=resource"
       hasDetailsView={true}

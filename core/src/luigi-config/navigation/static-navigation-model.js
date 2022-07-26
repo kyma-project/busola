@@ -2088,6 +2088,9 @@ export function getStaticRootNodes(
       viewUrl: config.coreUIModuleUrl + '/busolaextensions',
       keepSelectedForChildren: true,
       viewGroup: coreUIViewGroupName,
+      context: {
+        requiredFeatures: [features.EXTENSIBILITY],
+      },
       children: [
         {
           pathSegment: 'details',

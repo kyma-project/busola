@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { K8sNameField } from 'shared/ResourceForm/fields';
-import { Editor } from 'shared/ResourceForm/fields/Editor';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import { K8sNameField, Editor } from 'shared/ResourceForm/fields';
 
 import { createConfigMapTemplate, SECTIONS } from './helpers';
 
@@ -42,6 +42,14 @@ export function BusolaExtensionEdit({
         propertyPath="$.metadata.name"
         kind="ConfigMap"
         validate={value => !!value}
+      />
+      <ResourceForm.FormField
+        required
+        propertyPath="$.data.version"
+        label={t('extensibility.sections.version')}
+        input={Inputs.Text}
+        placeholder={t('api-rules.placeholders.path')}
+        pattern="^[0-9]+\.[0-9]+$"
       />
       {SECTIONS.map(key => (
         <ResourceForm.CollapsibleSection
