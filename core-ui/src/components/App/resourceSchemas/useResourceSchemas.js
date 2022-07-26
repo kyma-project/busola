@@ -5,7 +5,7 @@ import {
   sendWorkerMessage,
   addWorkerListener,
   addWorkerErrorListener,
-  schemasWorker,
+  terminateWorker,
 } from './resourceSchemaWorkerApi';
 
 export const useResourceSchemas = () => {
@@ -57,7 +57,7 @@ export const useResourceSchemas = () => {
 
   useEffect(() => {
     return () => {
-      schemasWorker?.terminate();
+      terminateWorker();
     };
   }, []);
 

@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from 'react';
 import {
   addWorkerListener,
   sendWorkerMessage,
-  schemasWorker,
   addWorkerErrorListener,
+  isWorkerAvailable,
 } from 'components/App/resourceSchemas/resourceSchemaWorkerApi';
 import { AppContext } from 'components/App/AppContext';
 
@@ -11,7 +11,7 @@ export const useGetSchema = ({ schemaId, skip }) => {
   const { areSchemasComputed, schemasError } = useContext(
     AppContext,
   ).schemaInfo;
-  const isWorkerOkay = !!schemasWorker && !schemasError;
+  const isWorkerOkay = isWorkerAvailable && !schemasError;
   const [schema, setSchema] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(!isWorkerOkay ? false : !skip);

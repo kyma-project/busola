@@ -10,6 +10,11 @@ if (typeof Worker !== 'undefined') {
   );
 }
 
+export let isWorkerAvailable = !!schemasWorker;
+export const terminateWorker = () => {
+  schemasWorker?.terminate();
+};
+
 export const sendWorkerMessage = (message, ...payload) => {
   if (typeof message !== 'string') throw new Error('message must be defined');
   schemasWorker?.postMessage([message, ...payload]);
