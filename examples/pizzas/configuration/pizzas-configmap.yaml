@@ -98,9 +98,9 @@ data:
       { "path": "spec.description", "widget": "Text" , "simple": true},
       { "path": "spec.sauce", "widget": "Text" , "simple": true},
       { "path": "spec.toppings", "widget": "GenericList", "simple": true},
-      { "path": "spec.toppings.name", "simple": true},
-      { "path": "spec.toppings.price", "simple": true},
-      { "path": "spec.toppings.quantity", "simple": true},
+      { "path": "spec.toppings[].name", "simple": true},
+      { "path": "spec.toppings[].price", "simple": true},
+      { "path": "spec.toppings[].quantity", "simple": true},
       { "path": "spec.comments", "widget": "SimpleList", "simple": true},
       {
         "path": "spec.recipeSecret",
@@ -116,9 +116,9 @@ data:
       "widget": "GenericList",
       "simple": true
       },
-      { "path": "spec.ownerReferences.apiVersion", "simple": true},
-      { "path": "spec.ownerReferences.kind", "simple": true},
-      { "path": "spec.ownerReferences.name", "simple": true}
+      { "path": "spec.ownerReferences[].apiVersion", "simple": true},
+      { "path": "spec.ownerReferences[].kind", "simple": true},
+      { "path": "spec.ownerReferences[].name", "simple": true}
     ]
   list: |-
     [
@@ -228,4 +228,7 @@ data:
       spec.toppings.quantity: Quantity
       spec.ownerReferences: Owner References
       otherTranslations.linkText: Go to {{data.kind}} {{data.name}}.
+      spec.ownerReferences.apiVersion: API Version
+      spec.ownerReferences.kind: Kind
+      spec.ownerReferences.name: Name
   version: '0.5'
