@@ -142,7 +142,7 @@ en:
 
 ## Block widgets
 
-Block widgets are more complex layouts and you should use them only in the details body.
+Block widgets are more complex layouts and you must use them only in the details body.
 
 ### Plain
 
