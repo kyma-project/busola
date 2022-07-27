@@ -1,6 +1,6 @@
 # Microservices demo
 
-This is [Google's microservices demo applicaiton](https://github.com/GoogleCloudPlatform/microservices-demo/), used to demonstrate the deployment and interaction in a complex cloud-native application.
+This is [Google's microservices demo application](https://github.com/GoogleCloudPlatform/microservices-demo/), used to demonstrate the deployment and interaction in a complex cloud-native application.
 
 ## Deployment
 
