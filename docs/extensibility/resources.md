@@ -15,6 +15,7 @@ The `resource` section is required and contains basic information about the reso
 - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
 - **path** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
 - **defaultPlaceholder** - to be shown in place of empty resource leaves. Overridden by the widget-level **placeholder**. Defaults to `-`.
+- **description** - displays a custom description on the resource list page. It can contain links. If the translation section has a translation entry with the ID that is the same as the **description** string, the translation is used.
 
 ### Example
 
@@ -24,13 +25,10 @@ The `resource` section is required and contains basic information about the reso
   "group": "networking.istio.io",
   "version": "v1alpha3",
   "scope": "namespace",
-  "defaultPlaceholder": "- not set -"
+  "defaultPlaceholder": "- not set -",
+  "description": "See the {{[docs](https://github.com/kyma-project/busola)}} for more information."
 }
 ```
-
-## schema section
-
-The `schema` section contains the JSON-schema definition of the resource. In most cases this is copied verbatim from the CRD. The schema is the basis for generating the create/edit forms and the resultant resource yaml using [ui-schema](https://ui-schema.bemit.codes/).
 
 ## form section
 
@@ -40,8 +38,9 @@ If you target elements of an array rather that the array itself, you can use `it
 
 ### Item parameters
 
-- **path** - _[required]_ path to the property that you want to display in the form. In the case of an array, the array index is omitted. For example, if `spec.items` is an array and you want to display `name` for each item, the path is `spec.items.name`.
+- **path** - _[required]_ path to the property that you want to display in the form.
 - **widget** - optional widget used to render the field referred to by the **path** property. If you don't provide the widget, a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form widgets](form-widgets.md).
+- **children** - child widgets used for grouping. Child paths are relative to its parent.
 - **simple** - parameter used to display the simple form. It is `false` by default.
 - **advanced** - parameter used to display the advanced form. It is `true` by default.
 
@@ -50,9 +49,14 @@ If you target elements of an array rather that the array itself, you can use `it
 ```json
 [
   { "path": "spec.priority", "simple": true },
-  { "path": "spec.items[].name" },
-  { "path": "spec.items[].service.url" },
-  { "path": "spec.items[].service.port" }
+  {
+    "path": "spec.items[]",
+    "children": [
+      { "path": "name" },
+      { "path": "service.url" },
+      { "path": "service.port" }
+    ]
+  }
 ]
 ```
 

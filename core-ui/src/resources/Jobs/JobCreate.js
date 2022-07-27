@@ -7,7 +7,6 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 
 import { createJobTemplate, createJobPresets } from './templates';
 import { JobSpecSection } from './SpecSection';
@@ -99,17 +98,6 @@ export function JobCreate({
       }
       createUrl={resourceUrl}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={t('jobs.name_singular')}
-        setValue={name => {
-          jp.value(job, '$.metadata.name', name);
-          jp.value(job, "$.metadata.labels['app.kubernetes.io/name']", name);
-          setJob({ ...job });
-        }}
-        readOnly={!!initialJob}
-        prefix={prefix}
-      />
       <ResourceForm.FormField
         label={t('jobs.create-modal.disable-sidecar')}
         input={() => (
@@ -124,17 +112,6 @@ export function JobCreate({
             }
           />
         )}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
       />
 
       <JobSpecSection advanced propertyPath="$.spec" readOnly={!!initialJob} />

@@ -13,6 +13,8 @@ import { useAppTracking } from 'hooks/tracking';
 import { ExtensibilityDetails } from 'components/Extensibility/ExtensibilityDetails';
 import { ExtensibilityList } from 'components/Extensibility/ExtensibilityList';
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
+import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
+import { AppContext } from './AppContext';
 
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
@@ -22,6 +24,7 @@ export default function App() {
   const { t, i18n } = useTranslation();
 
   useLoginWithKubeconfigID();
+  const schemaInfo = useResourceSchemas();
 
   useEffect(() => {
     i18n.changeLanguage(language);
@@ -45,61 +48,63 @@ export default function App() {
   }, []);
 
   return (
-    // force rerender on cluster change
-    <Routes key={cluster?.name}>
-      {serviceCatalogRoutes}
-      <Route
-        path="/overview" // overview route should stay static
-        element={
-          <WithTitle title={t('clusters.overview.title-current-cluster')}>
-            <ClusterOverview />
-          </WithTitle>
-        }
-      />
+    <AppContext.Provider value={{ schemaInfo }}>
+      {/* force rerender on cluster change*/}
+      <Routes key={cluster?.name}>
+        {serviceCatalogRoutes}
+        <Route
+          path="/overview" // overview route should stay static
+          element={
+            <WithTitle title={t('clusters.overview.title-current-cluster')}>
+              <ClusterOverview />
+            </WithTitle>
+          }
+        />
 
-      {customResources?.map(cr => {
-        const translationBundle = cr?.resource?.path || 'extensibility';
-        i18next.addResourceBundle(
-          language,
-          translationBundle,
-          cr?.translations?.[language] || {},
-        );
-        if (cr.resource?.scope === 'namespace') {
-          return (
-            <React.Fragment key={`namespace-${cr.resource?.path}`}>
-              <Route
-                path={`/namespaces/:namespaceId/${cr.resource.path}`}
-                element={<ExtensibilityList />}
-              />
-              {cr.details && (
-                <Route
-                  path={`/namespaces/:namespaceId/${cr.resource.path}/:resourceName`}
-                  element={<ExtensibilityDetails />}
-                />
-              )}
-            </React.Fragment>
+        {customResources?.map(cr => {
+          const translationBundle = cr?.resource?.path || 'extensibility';
+          i18next.addResourceBundle(
+            language,
+            translationBundle,
+            cr?.translations?.[language] || {},
           );
-        } else {
-          return (
-            <React.Fragment key={`cluster-${cr.resource?.path}`}>
-              <Route
-                path={`/${cr.resource.path}`}
-                element={<ExtensibilityList />}
-              />
-              {cr.details && (
+          if (cr.resource?.scope === 'namespace') {
+            return (
+              <React.Fragment key={`namespace-${cr.resource?.path}`}>
                 <Route
-                  path={`/${cr.resource.path}/:resourceName`}
-                  element={<ExtensibilityDetails />}
+                  path={`/namespaces/:namespaceId/${cr.resource.path}`}
+                  element={<ExtensibilityList />}
                 />
-              )}
-            </React.Fragment>
-          );
-        }
-      })}
+                {cr.details && (
+                  <Route
+                    path={`/namespaces/:namespaceId/${cr.resource.path}/:resourceName`}
+                    element={<ExtensibilityDetails />}
+                  />
+                )}
+              </React.Fragment>
+            );
+          } else {
+            return (
+              <React.Fragment key={`cluster-${cr.resource?.path}`}>
+                <Route
+                  path={`/${cr.resource.path}`}
+                  element={<ExtensibilityList />}
+                />
+                {cr.details && (
+                  <Route
+                    path={`/${cr.resource.path}/:resourceName`}
+                    element={<ExtensibilityDetails />}
+                  />
+                )}
+              </React.Fragment>
+            );
+          }
+        })}
 
-      {resourceRoutes}
-      {otherRoutes}
-      <Route path="" element={<MainFrameRedirection />} />
-    </Routes>
+        {resourceRoutes}
+        {otherRoutes}
+        <Route path="" element={<MainFrameRedirection />} />
+      </Routes>
+    </AppContext.Provider>
   );
 }

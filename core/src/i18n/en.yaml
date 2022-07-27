@@ -1014,12 +1014,12 @@ extensibility:
       form-fields: Form Fields
       list-columns: List Columns
     messages:
-      configmap-info: <0>{{name}}</0> Config Map is created or updated in <1>kube-public</1> Namespace.
-      docs-info: For more information, see <0>Extensibility documentation</0>.
+      configmap-info: The <0>{{name}}</0> Config Map is created or updated in the <1>kube-public</1> Namespace.
+      docs-info: For more information, see the <0>Extensibility documentation</0>.
       error: Failed to upsert UI configuration.
       no-columns: No example values could be inferred from the CRD.
       not-an-array: Wrong data format. Values should be an array.
-      scaffold-only: Configuration above can be changed later at the Config Map level.
+      scaffold-only: The above configuration can be changed later at the Config Map level.
       success: UI configuration upserted.
     title: Create UI for {{kind}} CRD
   title: Extensibility
@@ -2147,9 +2147,10 @@ subscriptions:
   title: Subscriptions
   tooltips:
     application-name: Choose your Application from the cluster.
-    event-name: Provide a name for your event. The name must consist of at least two parts divided by a dot.
+    event-name: The name must consist of at least two parts divided by a dot.
     event-source: Event source is the origin from which the event is published.
-    event-type-advanced: Event type must consist of minimum seven elements separated by dots. Prefix should be sap.kyma.custom. You can add more event types.
+    event-type-advanced: You can add more event types.
+    event-type-advanced-info: Event type must consist of minimum seven elements separated by dots. Prefix should be sap.kyma.custom. You can add more event types.
     event-type-simple: Event type is defined based on the Application name, event name, and event version.
     event-version: Choose the event version from the drop-down list or provide your own version.
     ready: Subscription is active.
