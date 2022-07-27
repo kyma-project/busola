@@ -137,7 +137,6 @@ export function ResourceListRenderer({
   customColumns = [],
   columns,
   createResourceForm: CreateResourceForm,
-  customCreateResourceForm,
   createActionLabel,
   hasDetailsView,
   fixedPath,
@@ -356,52 +355,37 @@ export function ResourceListRenderer({
 
   return (
     <>
-      {customCreateResourceForm && (
-        <CreateResourceForm
-          resource={activeResource}
-          resourceType={resourceType}
-          resourceName={resourceName}
-          resourceUrl={resourceUrl}
-          namespace={namespace}
-          refetchList={silentRefetch}
-          toggleFormFn={toggleFormFn}
-          {...props}
-          {...createFormProps}
-        />
-      )}
-      {!customCreateResourceForm && (
-        <ModalWithForm
-          title={
-            createActionLabel ||
-            t('components.resources-list.create', {
-              resourceType: prettifiedResourceName,
-            })
-          }
-          getToggleFormFn={getToggleFormFn}
-          opened={showEditDialog}
-          confirmText={t('common.buttons.create')}
-          id={`add-${resourceType}-modal`}
-          className="modal-size--l create-resource-modal"
-          renderForm={props => (
-            <ErrorBoundary i18n={i18n}>
-              <CreateResourceForm
-                resource={activeResource}
-                resourceType={resourceType}
-                resourceName={resourceName}
-                resourceUrl={resourceUrl}
-                namespace={namespace}
-                refetchList={silentRefetch}
-                toggleFormFn={toggleFormFn}
-                {...props}
-                {...createFormProps}
-              />
-            </ErrorBoundary>
-          )}
-          i18n={i18n}
-          modalOpeningComponent={<></>}
-          customCloseAction={() => setShowEditDialog(false)}
-        />
-      )}
+      <ModalWithForm
+        title={
+          createActionLabel ||
+          t('components.resources-list.create', {
+            resourceType: prettifiedResourceName,
+          })
+        }
+        getToggleFormFn={getToggleFormFn}
+        opened={showEditDialog}
+        confirmText={t('common.buttons.create')}
+        id={`add-${resourceType}-modal`}
+        className="modal-size--l create-resource-modal"
+        renderForm={props => (
+          <ErrorBoundary i18n={i18n}>
+            <CreateResourceForm
+              resource={activeResource}
+              resourceType={resourceType}
+              resourceName={resourceName}
+              resourceUrl={resourceUrl}
+              namespace={namespace}
+              refetchList={silentRefetch}
+              toggleFormFn={toggleFormFn}
+              {...props}
+              {...createFormProps}
+            />
+          </ErrorBoundary>
+        )}
+        i18n={i18n}
+        modalOpeningComponent={<></>}
+        customCloseAction={() => setShowEditDialog(false)}
+      />
       <DeleteMessageBox
         resource={activeResource}
         resourceUrl={prepareResourceUrl(resourceUrl, activeResource)}

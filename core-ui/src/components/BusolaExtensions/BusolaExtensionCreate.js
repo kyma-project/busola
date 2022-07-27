@@ -13,7 +13,7 @@ import { createExtensibilityTemplate, createConfigmap } from './helpers';
 import { ColumnsInput } from './ColumnsInput';
 import './ExtensibilityStarterForm.scss';
 
-export function BusolaExtensionCreate({ formElementRef, onChange }) {
+export function BusolaExtensionCreate({ formElementRef, onChange, onCancel }) {
   const { t } = useTranslation();
   const notificationManager = useNotification();
   const upsert = useUpsert();
@@ -25,27 +25,83 @@ export function BusolaExtensionCreate({ formElementRef, onChange }) {
   const [state, setState] = useState({});
 
   return (
-    <Wizard>
+    <Wizard
+      navigationType="tabs"
+      headerSize="md"
+      contentSize="md"
+      onCancel={onCancel}
+    >
       <Wizard.Step
         title={t('extensibility.starter-modal.crd')}
-        indicator="1"
-      ></Wizard.Step>
+        valid={!!crd}
+        glyph="customize"
+      >
+        <ResourceForm.Single resource={state} setResource={setState}>
+          <ResourceForm.FormField
+            required
+            label={t('extensibility.starter-modal.crd')}
+            value={crd?.metadata.name}
+            setValue={value => {
+              const crd = crds.find(crd => crd.metadata.name === value);
+              setCrd(crd);
+              setState(createExtensibilityTemplate(crd, t));
+            }}
+            input={Inputs.ComboboxInput}
+            options={(crds ?? []).map(crd => ({
+              key: crd.metadata.name,
+              text: crd.metadata.name,
+            }))}
+          />
+          {crd && (
+            <>
+              <ResourceForm.FormField
+                required
+                propertyPath="$.translations.en.name"
+                label={t('common.labels.name')}
+                input={Inputs.Text}
+              />
+              <ResourceForm.FormField
+                required
+                propertyPath="$.translations.en.category"
+                label={t('common.labels.category')}
+                input={Inputs.Text}
+              />
+            </>
+          )}
+        </ResourceForm.Single>
+      </Wizard.Step>
+      {/*
       <Wizard.Step
         title={t('extensibility.sections.resource')}
         indicator="1"
       ></Wizard.Step>
-      <Wizard.Step
-        title={t('extensibility.sections.list')}
-        indicator="1"
-      ></Wizard.Step>
-      <Wizard.Step
-        title={t('extensibility.sections.form')}
-        indicator="1"
-      ></Wizard.Step>
-      <Wizard.Step
-        title={t('extensibility.sections.details')}
-        indicator="1"
-      ></Wizard.Step>
+      */}
+      <Wizard.Step title={t('extensibility.sections.relations')} glyph="puzzle">
+        HERE BE RELATION DRAGONS
+        {/* 
+        <ResourceForm.Single
+          resource={state}
+          setResource={setState}
+        >
+          <ColumnsInput propertyPath="$.relations" />
+        </ResourceForm.Single>
+        */}
+      </Wizard.Step>
+      <Wizard.Step title={t('extensibility.sections.form')} glyph="form">
+        <ResourceForm.Single resource={state} setResource={setState}>
+          <ColumnsInput propertyPath="$.form" />
+        </ResourceForm.Single>
+      </Wizard.Step>
+      <Wizard.Step title={t('extensibility.sections.list')} glyph="list">
+        <ResourceForm.Single resource={state} setResource={setState}>
+          <ColumnsInput propertyPath="$.list" />
+        </ResourceForm.Single>
+      </Wizard.Step>
+      <Wizard.Step title={t('extensibility.sections.details')} glyph="document">
+        <ResourceForm.Single resource={state} setResource={setState}>
+          <ColumnsInput propertyPath="$.details.body[0].children" />
+        </ResourceForm.Single>
+      </Wizard.Step>
     </Wizard>
   );
 
