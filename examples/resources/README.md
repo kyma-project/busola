@@ -25,4 +25,5 @@ kubectl apply -f samples/ --recursive
 ```
 
 After uploading the files, refresh the browser. You should see new items in the left-side navigation.
->**NOTE:** Remember [to enable the extensibility feature](./../../docs//features.md).
+
+> **NOTE:** Remember [to enable the extensibility feature](./../../docs//features.md).
