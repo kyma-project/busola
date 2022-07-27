@@ -4,7 +4,7 @@ This example can be used to deploy the [whoami](https://hub.docker.com/r/contain
 
 ## Deployment
 
-- To deploy the basic version of application, use the following command:
+- To deploy the basic version of the application, use the following command:
 
   ```bash
   kubectl create namespace whoami && kubectl apply -f all.yaml
