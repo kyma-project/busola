@@ -56,5 +56,5 @@ export async function loadKubeconfigById(kubeconfigId) {
 }
 
 export async function loadDefaultKubeconfigId() {
-  window.location.href = '/';
+  window.location.replace('/');
 }
