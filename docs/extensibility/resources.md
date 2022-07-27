@@ -212,7 +212,7 @@ It's possible to use both relation name and a path; for example, `{"path": $myRe
 Those fields are used to build the related resource URL and filter the received data.
 
 - **kind** - _[required]_ Kubernetes resource kind.
-- **group** - _[required]_ Kubernetes resource group.
+- **group** - Kubernetes resource group. Not provided for Kubernetes resources in the core (also called legacy) group.
 - **version** - _[required]_ Kubernetes resource version.
 - **namespace** - the resource's Namespace name; it defaults to the original resource's Namespace. If set to `null`, the relation matches cluster-wide resources or resources in all Namespaces.
 - **resourceName** - a specific resource name; leave empty to match all resources of a given type.

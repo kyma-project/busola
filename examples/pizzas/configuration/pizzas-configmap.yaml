@@ -127,7 +127,6 @@ data:
     {
       "secretRecipe":{
         "kind": "Secret",
-        "group": "api",
         "version": "v1",
         "namespace": "pizzas",
         "selector": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"
