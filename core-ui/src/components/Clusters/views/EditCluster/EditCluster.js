@@ -185,6 +185,7 @@ function EditClusterComponent({
         createUrl={resourceUrl}
         onSubmit={onComplete}
         autocompletionDisabled
+        disableDefaultFields={true}
       >
         <K8sNameField
           kind={t('clusters.name_singular')}

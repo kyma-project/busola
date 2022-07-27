@@ -58,6 +58,7 @@ export function CustomResources({
     hideCreateOption,
     createResourceForm: props => <CRCreate {...props} crd={crd} />,
     allowSlashShortcut: true,
+    resourceUrlPrefix: `/apis/${group}/${version.name}`,
   };
 
   return <ResourcesList {...params} />;

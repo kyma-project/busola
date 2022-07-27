@@ -7,7 +7,7 @@ All sections can be provided as either JSON or YAML.
 
 ## resource section
 
-The `resource` section is required and contains basic information about the resource. For example, `kind` and API details.
+The `resource` section is required and contains basic information about the resource. For example, **kind** and API details.
 
 - **kind** - _[required]_ Kubernetes kind of the resource.
 - **group** - _[required]_ API group used for all requests.
@@ -15,6 +15,7 @@ The `resource` section is required and contains basic information about the reso
 - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
 - **path** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
 - **defaultPlaceholder** - to be shown in place of empty resource leaves. Overridden by the widget-level **placeholder**. Defaults to `-`.
+- **description** - displays a custom description on the resource list page. It can contain links. If the translation section has a translation entry with the ID that is the same as the **description** string, the translation is used.
 
 ### Example
 
@@ -24,7 +25,8 @@ The `resource` section is required and contains basic information about the reso
   "group": "networking.istio.io",
   "version": "v1alpha3",
   "scope": "namespace",
-  "defaultPlaceholder": "- not set -"
+  "defaultPlaceholder": "- not set -",
+  "description": "See the {{[docs](https://github.com/kyma-project/busola)}} for more information."
 }
 ```
 
@@ -40,8 +42,9 @@ If you target elements of an array rather that the array itself, you can use `it
 
 ### Item parameters
 
-- **path** - _[required]_ path to the property that you want to display in the form. In the case of an array, the array index is omitted. For example, if `spec.items` is an array and you want to display `name` for each item, the path is `spec.items.name`.
+- **path** - _[required]_ path to the property that you want to display in the form.
 - **widget** - optional widget used to render the field referred to by the **path** property. If you don't provide the widget, a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form widgets](form-widgets.md).
+- **children** - child widgets used for grouping. Child paths are relative to its parent.
 - **simple** - parameter used to display the simple form. It is `false` by default.
 - **advanced** - parameter used to display the advanced form. It is `true` by default.
 
@@ -50,9 +53,14 @@ If you target elements of an array rather that the array itself, you can use `it
 ```json
 [
   { "path": "spec.priority", "simple": true },
-  { "path": "spec.items[].name" },
-  { "path": "spec.items[].service.url" },
-  { "path": "spec.items[].service.port" }
+  {
+    "path": "spec.items[]",
+    "children": [
+      { "path": "name" },
+      { "path": "service.url" },
+      { "path": "service.port" }
+    ]
+  }
 ]
 ```
 
@@ -63,9 +71,9 @@ The `list` section defines extra columns available in the list. The format is si
 ### Item parameters
 
 - **path** - _[required]_ contains the path to the data used for the column.
-- **widget** - optional widget used to render the field referred to by the `path` property. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
+- **widget** - optional widget used to render the field referred to by the **path** property. By default, the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
-- **formula** - optional formula used to modify data referred to by the `path` property. In `formula` we use the following naming convention: `data.name` instead of just `name`. To learn more about using formulas, see [JSONata](https://docs.jsonata.org/overview.html).
+- **formula** - optional formula used to modify data referred to by the **path** property. **formula** uses the following naming convention: `data.name` instead of `name`. To learn more about using formulas, see [JSONata](https://docs.jsonata.org/overview.html).
 
 ### Example
 
@@ -102,10 +110,10 @@ The `details` section defines the display structure for the details page. It con
 ### Items parameters
 
 - **path** - contains the path to the data used for the widget. Not required for presentational widgets.
-- **name** - used for entries without `path` to define the translation source used for labels. Required if no `path` is present.
+- **name** - used for entries without **path** to define the translation source used for labels. Required if no **path** is present.
 - **widget** - optional widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
-- **formula** - optional formula used to modify data referred to by the `path` property. To learn more about using formulas, see [JSONata](https://docs.jsonata.org/overview.html).
+- **formula** - optional formula used to modify data referred to by the **path** property. To learn more about using formulas, see [JSONata](https://docs.jsonata.org/overview.html).
 - **visibility** - by default all fields are visible; however **visibility** property can be used to control a single item display.
   - If set to `false` explicitly, the field doesn't render.
   - If set to any string, this property is treated as jsonata formula, determining (based on current value given as `data`) if the field should be visible.
@@ -169,7 +177,7 @@ Extra parameters might be available for specific widgets.
 
 ### Data scoping
 
-Whenever an entry has both `path` and `children` properties, the paths of `children` are relative to the parent. For example:
+Whenever an entry has both **path** and **children** properties, the paths of **children** are relative to the parent. For example:
 
 ```json
 [
@@ -195,7 +203,7 @@ renders the same set of data as:
 
 ## relations section
 
-The `relations` section contains an object that maps a relation name to a relation configuration object. The relation name preceded by a dollar sign '\$' is used in the `path` expression.
+The `relations` section contains an object that maps a relation name to a relation configuration object. The relation name preceded by a dollar sign '\$' is used in the **path** expression.
 
 It's possible to use both relation name and a path; for example, `{"path": $myRelatedResource.metadata.labels}` returns the `metadata.labels` of the related resource.
 
@@ -208,7 +216,7 @@ Those fields are used to build the related resource URL and filter the received 
 - **version** - _[required]_ Kubernetes resource version.
 - **namespace** - the resource's Namespace name; it defaults to the original resource's Namespace. If set to `null`, the relation matches cluster-wide resources or resources in all Namespaces.
 - **resourceName** - a specific resource name; leave empty to match all resources of a given type.
-- **ownerLabelSelectorPath** - the path to original object's `selector` type property; for example, `spec.selector.matchLabels` for Deployment, used to select matching Pods.
+- **ownerLabelSelectorPath** - the path to original object's **selector** type property; for example, `spec.selector.matchLabels` for Deployment, used to select matching Pods.
 - **selector** - [JSONata](https://docs.jsonata.org/overview.html) function enabling the user to write a custom matching logic. It receives a data context of:
 
   ```js
@@ -252,7 +260,7 @@ You can provide this section as a single `translations` section that contains al
 
 ### Predefined translation keys
 
-- **category** - the name of a category used for the left-hand menu. It is placed in a **Custom Resources** category by default.
+- **category** - the name of a category used for the left-hand menu. It is placed in the `Custom Resources` category by default.
 - **name** - title used in the navigation and on the list screen. It defaults to its resource kind.
 - **description** - a more in-depth description of the resource displayed on the list screen. Only displayed if present.
 
@@ -315,15 +323,15 @@ Value preprocessors are used as a middleware between a value and the actual rend
   - For truthy `error`, it displays an error message.
   - Otherwise, it passes `data` to the display component.
 
-  Unless you need custom handling of error or loading state, we recommend using the `PendingWrapper`, for example, for fields that use [related resources](#relations-section).
+  Unless you need custom handling of error or loading state, we recommend using **PendingWrapper**, for example, for fields that use [related resources](#relations-section).
 
 ## version section
 
-The `version` is a string value that defines in which version the extension is configured. If the configuration is created with the `Create UI` button, this value is provided automatically. When created manually, use the latest version number: `'0.5'`
+The `version` is a string value that defines in which version the extension is configured. If the configuration is created with the **Create UI** button, this value is provided automatically. When created manually, use the latest version number: `'0.5'`
 
 Busola supports only the current version of the configuration and the prior one.
 
-Therefore, whenever a new version of the configuration is proposed, there is a possibility to migrate your configuration to the latest version. To do so, go to your Config Map and click the `migrate` button.
+Therefore, whenever a new version of the configuration is proposed, you can migrate your configuration to the latest version. To do so, go to your Config Map and click the **Migrate** button.
 
 ### Example (latest vesion)
 
