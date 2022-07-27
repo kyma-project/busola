@@ -16,4 +16,4 @@
   kubectl apply -f apirule.yaml
   ```
 
-  The APIRule-exposed httpbin will be available at `httpbin.<YOUR_CLUSTER_DOMAIN>`.
+  The APIRule-exposed httpbin is available at `httpbin.<YOUR_CLUSTER_DOMAIN>`.
