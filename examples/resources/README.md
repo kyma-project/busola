@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `resources` example showcases the Busola's extensibility feature with k8s resources.
+The `resources` example showcases the Busola's extensibility feature with the Kubernetes resources.
 
 The `configuration` directory consists of Config Maps that store the information about the extensibility configuration for specific resources.
 
