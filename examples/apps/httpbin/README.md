@@ -4,7 +4,7 @@
 
 ## Contents
 
-- `all.yaml` - a Namespace, LimitRange, ResourceQuota, Deployment and Service. Deploy with:
+- `all.yaml` - Namespace, LimitRange, ResourceQuota, Deployment and Service. Deploy with:
 
   ```bash
   kubectl create namespace httpbin && kubectl apply -f all.yaml
