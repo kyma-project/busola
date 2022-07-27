@@ -1,0 +1,168 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: certificates.cert-manager.io
+  namespace: resources
+  labels:
+    app.kubernetes.io/name: certificates.cert-manager.io
+    busola.io/extension: resource
+data:
+  details: |-
+    {
+      "header": [
+        {
+          "path": "status.conditions[?(@.type==\"Ready\")].message",
+          "type": "string",
+          "name": "Status",
+          "isSelected": false,
+          "widget": "Badge"
+        }
+      ],
+      "body": [
+        {
+          "name": "Summary",
+          "widget": "Panel",
+          "children": [
+            {
+              "path": "spec.commonName",
+              "type": "string",
+              "name": "commonName"
+            },
+            {
+              "path": "spec.duration",
+              "type": "string",
+              "name": "duration"
+            },
+            {
+              "path": "spec.encodeUsagesInRequest",
+              "type": "boolean",
+              "name": "encodeUsagesInRequest"
+            },
+            {
+              "path": "spec.isCA",
+              "type": "boolean",
+              "name": "isCA"
+            },
+            {
+              "path": "spec.renewBefore",
+              "type": "string",
+              "name": "renewBefore"
+            },
+            {
+              "path": "spec.revisionHistoryLimit",
+              "type": "integer",
+              "name": "revisionHistoryLimit"
+            },
+            {
+              "path": "spec.secretName",
+              "type": "string",
+              "name": "secretName"
+            },
+            {
+              "path": "status.conditions[?(@.type==\"Ready\")].status",
+              "type": "string",
+              "name": "Ready"
+            },
+            {
+              "path": "spec.secretName",
+              "type": "string",
+              "name": "Secret"
+            },
+            {
+              "path": "spec.issuerRef.name",
+              "type": "string",
+              "name": "Issuer"
+            },
+            {
+              "path": "status.conditions[?(@.type==\"Ready\")].message",
+              "type": "string",
+              "name": "Status",
+              "widget": "Badge"
+            },
+            {
+              "path": "metadata.creationTimestamp",
+              "type": "date",
+              "name": "Age"
+            }
+          ]
+        },
+        {
+          "path": "spec",
+          "widget": "CodeViewer"
+        }
+      ]
+    }
+  form: |
+    - path: spec.commonName
+    - path: spec.issuerRef
+      widget: FormGroup
+    - path: spec.issuerRef.group
+    - path: spec.issuerRef.kind
+    - path: spec.issuerRef.name
+    - path: spec.duration
+    - path: spec.encodeUsagesInRequest
+    - path: spec.isCA
+    - path: spec.renewBefore
+    - path: spec.revisionHistoryLimit
+    - path: spec.secretName
+    - path: spec.issuerRef
+      widget: FormGroup
+    - path: spec.issuerRef.kind
+    - path: spec.issuerRef.name
+  list: |-
+    [
+      {
+        "path": "spec.commonName",
+        "type": "string"
+      },
+      {
+        "path": "spec.issuerRef",
+        "widget": "ControlledBy",
+        "kind": "Issuer",
+      },
+      {
+        "path": "status.expirationDate",
+        "type": "string"
+      },
+      {
+        "highlights": {
+          "positive": ["Ready"],
+        },
+        "name": "status",
+        "path": "status.conditions[?(@.type==\"Ready\")].message",
+        "type": "string",
+        "widget": "Badge"
+      },
+    ]
+  resource: |-
+    {
+      "kind": "Certificate",
+      "group": "cert-manager.io",
+      "version": "v1",
+      "path": "example-certificates",
+      "scope": "namespace"
+    }
+  translations: |-
+    {
+      "en": {
+        "name": "Certificates",
+        "metadata.annotations": "Annotations",
+        "metadata.labels": "Labels",
+        "category": "Custom Resources",
+        "metadata.creationTimestamp": "Created at",
+        "spec.commonName": "Common name",
+        "spec.issuerRef": "Issuer",
+        "spec.issuerRef.group": "Group",
+        "spec.issuerRef.kind": "Kind",
+        "spec.issuerRef.name": "Name",
+        "status": "Status",
+        "status.expirationDate": "Expiration date",
+        "spec.duration": "Duration",
+        "spec.encodeUsagesInRequest": "Encode usages in request",
+        "spec.isCA": "Is CA",
+        "spec.renewBefore": "Renew before",
+        "spec.revisionHistoryLimit": "Revision history limit",
+        "spec.secretName": "Secret name",
+      }
+    }
+  version: '0.5'
