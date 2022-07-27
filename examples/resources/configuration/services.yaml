@@ -1,0 +1,107 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: services
+  namespace: resources
+  labels:
+    app.kubernetes.io/name: services
+    busola.io/extension: resource
+data:
+  details: |-
+    {
+      "header": [
+        {
+          "path": "metadata.ownerReferences",
+          "widget": "ControlledBy"
+        },
+        {
+          "path": "spec.type",
+        },
+        {
+          "path": "spec.clusterIP",
+        },
+        {
+          "path": "spec",
+          "name": "ports",
+          "formula": "$count(data.ports) ? $map(data.ports, function($value) {$value.port = $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~> $join('') : [$string($value.port), ':', $string($value.targetPort), '/', $string($value.protocol)] ~> $join('') }) ~> $join(', ')  : '-'"
+        },
+        {
+          "path": "",
+          "name": "External IPs",
+          "formula": "$count(data.status.loadBalancer.ingress) ? $map(data.status.loadBalancer.ingress, function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '): ($count(data.spec.externalIPs) ? data.spec.externalIPs ~> $join(', '): '-')"
+        }
+      ],
+      "body": [
+        {
+          "widget": "ResourceList",
+          "path": "$subscriptions",
+          "name": "Subscription"
+        },
+        {
+          "widget": "ResourceList",
+          "path": "$apirules",
+          "name": "API Rule"
+        }
+      ]
+    }
+  form: '[]'
+  list: |-
+    [
+      {
+        "path": "metadata.ownerReferences",
+        "widget": "ControlledByKind"
+      },
+      {
+        "path": "spec.type",
+      },
+      {
+        "path": "spec.clusterIP",
+      },
+      {
+        "path": "spec",
+        "name": "ports",
+        "formula": "$count(data.ports) ? $map(data.ports, function($value) {$value.port = $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~> $join('') : [$string($value.port), ':', $string($value.targetPort), '/', $string($value.protocol)] ~> $join('') }) ~> $join(', ')  : '-'"
+      },
+      {
+        "path": "",
+        "name": "External IPs",
+        "formula": "$count(data.status.loadBalancer.ingress) ? $map(data.status.loadBalancer.ingress, function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '): ($count(data.spec.externalIPs) ? data.spec.externalIPs ~> $join(', '): '-')"
+      }
+    ]
+  relations: |-
+    {
+      "apirules":{
+        "kind": "APIRule",
+        "group": "apis/gateway.kyma-project.io",
+        "version": "v1alpha1",
+        "selector": "$filter(data, function($item) {$item.spec.service.name = resource.metadata.name})"
+      },
+      "subscriptions":{
+        "kind": "Subscription",
+        "group": "apis/eventing.kyma-project.io",
+        "version": "v1alpha1",
+        "selector": "$filter(data, function($item) {$substringAfter($substringBefore($item.spec.sink, '.'), '://') = resource.metadata.name})"
+      }
+    }
+  resource: |-
+    {
+      "kind": "Service",
+      "group": "",
+      "version": "v1",
+      "path": "example-services",
+      "scope": "namespace",
+    }
+  translations: |-
+    {
+      "en": {
+        "name": "Services",
+        "category": "Custom Resources",
+        "metadata.annotations": "Annotations",
+        "metadata.labels": "Labels",
+        "metadata.ownerReferences": "Controlled  By",
+        "ports": "Ports",
+        "spec.clusterIP": "Cluster IP",
+        "spec.type": "Service Type"
+      }
+    }
+  version: '0.5'

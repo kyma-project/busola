@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: whoami
+  namespace: whoami
+spec:
+  hosts:
+    - '<DOMAIN>'
+  gateways:
+    - kyma-gateway.kyma-system.svc.cluster.local
+  http:
+    - route:
+        - destination:
+            host: whoami.whoami.svc.cluster.local
+            port:
+              number: 80
