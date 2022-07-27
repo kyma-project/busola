@@ -447,7 +447,9 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-- **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at a resource details view.
+  > NOTE: Enable this feature on the frontend and backend.
+
+* **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at a resource details view.
 
   ```json
   "VISUAL_RESOURCES": {
