@@ -4,6 +4,6 @@ metadata:
   labels:
     app.kubernetes.io/name: grumpy-chain
   name: grumpy-chain
-  namespace: ak
+  namespace: resources
 spec:
   url: 'https://github.com/kyma-project/busola'

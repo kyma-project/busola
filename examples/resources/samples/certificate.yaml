@@ -4,7 +4,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: Helm
   name: sap-btp-operator-serving-cert
-  namespace: sap-btp-operator
+  namespace: resources
 spec:
   dnsNames:
     - sap-btp-operator-webhook-service.sap-btp-operator.svc

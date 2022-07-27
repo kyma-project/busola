@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: certificates.cert-manager.io
-  namespace: kube-public
+  namespace: resources
   labels:
     app.kubernetes.io/name: certificates.cert-manager.io
     busola.io/extension: resource

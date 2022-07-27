@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: test-service
-  namespace: default
+  namespace: resources
 spec:
   ports:
     - name: http

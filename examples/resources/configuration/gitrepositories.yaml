@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: gitrepositories.serverless.kyma-project.io
-  namespace: kube-public
+  namespace: resources
   labels:
     app.kubernetes.io/name: gitrepositories.serverless.kyma-project.io
     busola.io/extension: resource
