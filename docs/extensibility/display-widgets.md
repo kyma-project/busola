@@ -106,7 +106,7 @@ Labels widgets render all the object entries in the `key-value` format.
 
 ResourceLink widgets render internal links to Kubernetes resources.
 
-#### resource property
+### resource property
 
 To create a hyperlink, Busola needs the **name** and the **kind** of the target resource; they must be passed into the **resource** object as property paths in either **data** - value extracted using **path**, or **root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
 
