@@ -1,10 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { ControlledBy, ControlledByKind } from '../ControlledBy';
-import {
-  ControlledBy as CB,
-  ControlledByKind as CBK,
-} from 'shared/components/ControlledBy/ControlledBy';
+import { ControlledBy } from '../ControlledBy';
+import { ControlledBy as CB } from 'shared/components/ControlledBy/ControlledBy';
 
 describe('ControlledBy', () => {
   it('Renders ControlledBy component', () => {
@@ -23,9 +20,10 @@ describe('ControlledBy', () => {
 
     const component = shallow(<ControlledBy value={owners} />);
     const cb = component.find(CB);
-    const { ownerReferences } = component.props();
+    const { ownerReferences, kindOnly } = component.props();
     expect(cb).toHaveLength(1);
     expect(ownerReferences).toHaveLength(2);
+    expect(kindOnly).toBeFalsy();
   });
 
   it('Renders empty owners for empty data', () => {
@@ -37,8 +35,8 @@ describe('ControlledBy', () => {
   });
 });
 
-describe('ControlledByKind', () => {
-  it('Renders ControlledByKind component', () => {
+describe('ControlledBy with kindOnly', () => {
+  it('Renders ControlledBy component', () => {
     const owners = [
       {
         apiVersion: 'v1',
@@ -52,18 +50,23 @@ describe('ControlledByKind', () => {
       },
     ];
 
-    const component = shallow(<ControlledByKind value={owners} />);
-    const cbk = component.find(CBK);
-    const { ownerReferences } = component.props();
+    const component = shallow(
+      <ControlledBy structure={{ kindOnly: true }} value={owners} />,
+    );
+    const cbk = component.find(CB);
+    const { ownerReferences, kindOnly } = component.props();
     expect(cbk).toHaveLength(1);
     expect(ownerReferences).toHaveLength(2);
+    expect(kindOnly).toBe(true);
   });
 
   it('Renders empty owners for empty data', () => {
     const owners = null;
 
-    const component = shallow(<ControlledByKind value={owners} />);
-    const cbk = component.find(CBK);
+    const component = shallow(
+      <ControlledBy structure={{ kindOnly: true }} kindOnly value={owners} />,
+    );
+    const cbk = component.find(CB);
     expect(cbk).toHaveLength(0);
   });
 });

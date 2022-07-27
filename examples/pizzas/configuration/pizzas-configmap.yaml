@@ -15,11 +15,8 @@ data:
         },
         {
           "path": "spec.ownerReferences",
-          "widget": "ControlledBy"
-        },
-        {
-          "path": "spec.ownerReferences",
-          "widget": "ControlledByKind",
+          "widget": "ControlledBy",
+          "kindOnly": true,
           "placeholder": "---"
         },
         { "path": "spec.toppings", "formula": "$join(data.name, ', ')" }, 
