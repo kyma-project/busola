@@ -5,7 +5,13 @@ import { useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 import classNames from 'classnames';
 
-export function Panel({ value, structure, schema, disableMargin = false }) {
+export function Panel({
+  value,
+  structure,
+  schema,
+  disableMargin = false,
+  ...props
+}) {
   const { widgetT } = useGetTranslation();
 
   const panelClassNames = classNames({
@@ -26,6 +32,7 @@ export function Panel({ value, structure, schema, disableMargin = false }) {
                 structure={def}
                 schema={schema}
                 inlineRenderer={InlineWidget}
+                {...props}
               />
             ))
           : null}
