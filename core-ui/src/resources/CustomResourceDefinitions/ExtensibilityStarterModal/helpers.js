@@ -87,8 +87,6 @@ export function createExtensibilityTemplate(crd, t) {
         { path: 'spec', widget: 'CodeViewer' },
       ],
     },
-    // turns out the openAPIV3Schema is not required
-    schema: version.schema?.openAPIV3Schema || {},
     translations: {
       en: {
         name: pluralize(prettifyKind(crd.spec.names.kind)),

@@ -32,10 +32,6 @@ The `resource` section is required and contains basic information about the reso
 }
 ```
 
-## schema section
-
-The `schema` section contains the JSON-schema definition of the resource. In most cases this is copied verbatim from the CRD. The schema is the basis for generating the create/edit forms and the resultant resource yaml using [ui-schema](https://ui-schema.bemit.codes/).
-
 ## form section
 
 The `form` section contains a list of objects that define which fields you must include in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to the simple form by providing the `simple: true` flag. You can also remove it from the advanced form by providing the `advanced: false` flag.

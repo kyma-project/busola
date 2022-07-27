@@ -5,13 +5,14 @@ import Immutable from 'immutable';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { useGetTranslation } from './helpers';
+import { useGetTranslation, createTemplate } from './helpers';
 
-import { createTemplate } from './helpers';
 import { ResourceSchema } from './ResourceSchema';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { prettifyKind } from 'shared/utils/helpers';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+import { useGetSchema } from 'hooks/useGetSchema';
 
 export function ExtensibilityCreate({
   formElementRef,
@@ -28,7 +29,6 @@ export function ExtensibilityCreate({
   const { t } = useTranslation();
   const { t: tExt, exists } = useGetTranslation();
   const api = createResource?.resource || {};
-  const schema = createResource?.schema;
 
   const [resource, setResource] = useState(
     initialResource ||
@@ -67,6 +67,15 @@ export function ExtensibilityCreate({
     toggleFormFn(false);
   };
 
+  const { version, kind, group } = createResource.resource;
+  const openapiSchemaId = `${group}/${version}/${kind}`;
+  const { schema, error: errorOpenApi, loading } = useGetSchema({
+    schemaId: openapiSchemaId,
+  });
+
+  // waiting for schema from OpenAPI to be computed
+  if (loading) return <Spinner />;
+
   return (
     <ResourceForm
       pluralKind={resourceType}
@@ -87,7 +96,7 @@ export function ExtensibilityCreate({
       <ResourceSchema
         simple
         key={api.version}
-        schema={schema || {}}
+        schema={errorOpenApi ? {} : schema}
         schemaRules={createResource?.form}
         resource={resource}
         store={store}
@@ -98,7 +107,7 @@ export function ExtensibilityCreate({
       <ResourceSchema
         advanced
         key={api.version}
-        schema={schema || {}}
+        schema={errorOpenApi ? {} : schema}
         schemaRules={createResource?.form}
         resource={resource}
         store={store}
