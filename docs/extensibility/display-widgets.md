@@ -102,7 +102,7 @@ Labels widgets render all the object entries in the `key-value` format.
 
 <img src="./assets/display-widgets/Labels.png" alt="Example of a Labels widget" width="20%" style="border: 1px solid #D2D5D9">
 
-# ResourceLink
+## ResourceLink
 
 ResourceLink widgets render internal links to Kubernetes resources.
 
