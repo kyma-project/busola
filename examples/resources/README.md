@@ -24,4 +24,5 @@ kubectl create namespace resources && kubectl apply -f configuration/ --recursiv
 kubectl apply -f samples/ --recursive
 ```
 
-After uploading the files, refresh the browser. You should see new items in the left-side navigation. Remember that EXTENSIBILITY feature [needs to be enabled](./../../docs//features.md).
+After uploading the files, refresh the browser. You should see new items in the left-side navigation.
+>**NOTE:** Remember [to enable the extensibility feature](./../../docs//features.md).
