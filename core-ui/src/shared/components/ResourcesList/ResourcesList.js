@@ -368,7 +368,7 @@ export function ResourceListRenderer({
         id={`add-${resourceType}-modal`}
         className="modal-size--l create-resource-modal"
         renderForm={props => (
-          <ErrorBoundary i18n={i18n}>
+          <ErrorBoundary>
             <CreateResourceForm
               resource={activeResource}
               resourceType={resourceType}

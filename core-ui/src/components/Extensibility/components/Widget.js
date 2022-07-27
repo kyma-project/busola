@@ -10,6 +10,7 @@ import {
   ApplyFormula,
   useGetTranslation,
   useGetPlaceholder,
+  throwConfigError,
 } from '../helpers';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
 import jsonata from 'jsonata';
@@ -70,6 +71,14 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
   } = useRelationsContext();
 
   let childValue;
+
+  if (!structure || typeof structure !== 'object') {
+    throwConfigError(t('extensibility.not-an-object'), structure);
+  }
+  if (!structure.path && !structure.children && !Array.isArray(structure)) {
+    throwConfigError(t('extensibility.no-path-children'), structure);
+  }
+
   if (!structure.path) {
     childValue = value;
   } else {
