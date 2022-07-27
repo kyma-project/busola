@@ -1,0 +1,25 @@
+apiVersion: gateway.kyma-project.io/v1alpha1
+kind: APIRule
+metadata:
+  name: httpbin
+  namespace: httpbin
+  labels:
+    app.kubernetes.io/name: httpbin
+spec:
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
+  rules:
+    - accessStrategies:
+        - handler: allow
+          config: {}
+      methods:
+        - GET
+        - POST
+        - DELETE
+        - PUT
+        - HEAD
+        - PATCH
+      path: /.*
+  service:
+    host: httpbin
+    name: httpbin
+    port: 80

@@ -1,0 +1,9 @@
+apiVersion: serverless.kyma-project.io/v1alpha1
+kind: GitRepository
+metadata:
+  labels:
+    app.kubernetes.io/name: busola
+  name: busola
+  namespace: resources
+spec:
+  url: 'https://github.com/kyma-project/busola'
