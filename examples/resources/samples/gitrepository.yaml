@@ -6,4 +6,4 @@ metadata:
   name: grumpy-chain
   namespace: ak
 spec:
-  url: 'http://sth2.com'
+  url: 'https://github.com/kyma-project/busola'
