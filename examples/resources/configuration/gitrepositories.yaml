@@ -71,59 +71,6 @@ data:
       "scope": "namespace",
       "version": "v1alpha1"
     }
-  schema: |-
-    {
-      "description": "GitRepository is the Schema for the gitrepositories API",
-      "type": "object",
-      "properties": {
-        "apiVersion": {
-          "description": "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-          "type": "string"
-        },
-        "kind": {
-          "description": "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-          "type": "string"
-        },
-        "metadata": {
-          "type": "object"
-        },
-        "spec": {
-          "description": "GitRepositorySpec defines the desired state of GitRepository",
-          "type": "object",
-          "required": [
-            "url"
-          ],
-          "properties": {
-            "auth": {
-              "description": "Auth is the optional definition of authentication that should be used for repository operations",
-              "type": "object",
-              "required": [
-                "secretName",
-                "type"
-              ],
-              "properties": {
-                "secretName": {
-                  "description": "SecretName is the name of Kubernetes Secret containing credentials used for authentication",
-                  "type": "string"
-                },
-                "type": {
-                  "description": "Type is the type of authentication",
-                  "type": "string",
-                  "enum": [
-                    "basic",
-                    "key"
-                  ]
-                }
-              }
-            },
-            "url": {
-              "description": "URL is the address of GIT repository",
-              "type": "string"
-            }
-          }
-        }
-      }
-    }
   translations: |-
     {
       "en": {
