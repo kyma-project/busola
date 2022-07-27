@@ -23,6 +23,16 @@ data:
           "placeholder": "---"
         },
         { "path": "spec.toppings", "formula": "$join(data.name, ', ')" }, 
+        {
+          "path": "spec.ownerReferences[0]",
+          "widget": "ResourceLink",
+          "linkText": "otherTranslations.linkText",
+          "resource": {
+            "name": "data.name",
+            "namespace": "root.metadata.namespace",
+            "kind": "data.kind"
+          }
+         }
       ],
     "body": [
         {
@@ -217,6 +227,7 @@ data:
       spec.toppings.price: Price ($)
       spec.toppings.quantity: Quantity
       spec.ownerReferences: Owner References
+      otherTranslations.linkText: Go to {{data.kind}} {{data.name}}.
       spec.ownerReferences.apiVersion: API Version
       spec.ownerReferences.kind: Kind
       spec.ownerReferences.name: Name
