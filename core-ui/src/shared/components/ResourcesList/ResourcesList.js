@@ -249,8 +249,7 @@ export function ResourceListRenderer({
 
     const namespace = resource?.metadata?.namespace;
     const pluralKind = pluralize((resource?.kind || '').toLowerCase());
-    console.log('resourceUrl', resourceUrl);
-    console.log('resource', resource);
+
     return namespace
       ? `${resourceUrlPrefix}/namespaces/${namespace}/${pluralKind}/${encodedName}`
       : `${resourceUrlPrefix}/${pluralKind}/${encodedName}`;
