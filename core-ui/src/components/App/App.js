@@ -59,9 +59,10 @@ export default function App() {
           }
         />
 
+        {/* extensibility routes should go first, so if someone overwites the default view, the new one should have a higher priority */}
+        {customResources?.map(cr => createExtensibilityRoutes(cr, language))}
         {resourceRoutes}
         {otherRoutes}
-        {customResources?.map(cr => createExtensibilityRoutes(cr, language))}
         <Route path="" element={<MainFrameRedirection />} />
       </Routes>
     </AppContext.Provider>
