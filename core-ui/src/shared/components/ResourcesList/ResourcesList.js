@@ -105,6 +105,7 @@ function Resources(props) {
     resourceName,
     resourceType,
     filter,
+    filterFn = () => true,
     resourceUrl,
     skipDataLoading,
     isCompact,
@@ -126,7 +127,7 @@ function Resources(props) {
     <ResourceListRenderer
       loading={loading}
       error={error}
-      resources={resources}
+      resources={(resources || []).filter(filterFn)}
       silentRefetch={silentRefetch}
       {...props}
     />

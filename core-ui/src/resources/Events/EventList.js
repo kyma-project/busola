@@ -11,15 +11,16 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
 export function EventList(props) {
   const { t } = useTranslation();
-  const { defaultType, hideInvolvedObjects, filter } = props;
-  console.log('op', props);
+  const { defaultType, hideInvolvedObjects } = props;
+
   const {
+    EVENT_MESSAGE_TYPE,
     displayType,
     MessageSelector,
     formatInvolvedObject,
     formatSourceObject,
   } = useMessageList(defaultType);
-  console.log('ll', displayType);
+
   const involvedObject = hideInvolvedObjects
     ? {}
     : {
@@ -28,8 +29,6 @@ export function EventList(props) {
       };
 
   const textSearchProperties = [
-    'metadata.name',
-    'metadata.namespace',
     'message',
     'source.component',
     'source.host',
@@ -120,12 +119,9 @@ export function EventList(props) {
       {...props}
       hasDetailsView={true}
       readOnly={true}
-      filter={res => {
-        // console.log('res', res);
-        console.log('displayType', displayType);
-        if (displayType.key === 'All')
-          return true && (filter ? filter(res) : true);
-        return res.type === displayType.key && (filter ? filter(res) : true);
+      filterFn={res => {
+        if (displayType.key === EVENT_MESSAGE_TYPE.ALL.key) return true;
+        return res.type === displayType.key && true;
       }}
     />
   );
