@@ -9,6 +9,8 @@ import { ModeSelector } from './ModeSelector';
 import { ResourceFormWrapper } from './Wrapper';
 import { Presets } from './Presets';
 import { useCreateResource } from '../useCreateResource';
+import { KeyValueField, K8sNameField } from '../fields';
+import * as jp from 'jsonpath';
 
 import './ResourceForm.scss';
 
@@ -35,8 +37,21 @@ export function ResourceForm({
   autocompletionDisabled,
   customSchemaUri,
   readOnly,
+  handleNameChange,
+  nameProps,
+  labelsProps,
+  disableDefaultFields,
 }) {
-  const { i18n } = useTranslation();
+  if (!handleNameChange) {
+    handleNameChange = name => {
+      jp.value(resource, '$.metadata.name', name);
+      jp.value(resource, "$.metadata.labels['app.kubernetes.io/name']", name);
+
+      setResource({ ...resource });
+    };
+  }
+
+  const { t, i18n } = useTranslation();
   const createResource = useCreateResource({
     singularName,
     pluralKind,
@@ -46,6 +61,7 @@ export function ResourceForm({
     afterCreatedFn,
     toggleFormFn,
   });
+
   const handleInitialMode = () => {
     if (onlyYaml) return ModeSelector.MODE_YAML;
 
@@ -98,6 +114,7 @@ export function ResourceForm({
   editor = renderEditor
     ? renderEditor({ defaultEditor: editor, Editor: EditorWrapper })
     : editor;
+
   return (
     <section className={classnames('resource-form', className)}>
       {presetsSelector}
@@ -116,6 +133,15 @@ export function ResourceForm({
               setResource={setResource}
               isAdvanced={false}
             >
+              {!disableDefaultFields && (
+                <K8sNameField
+                  propertyPath="$.metadata.name"
+                  kind={singularName}
+                  readOnly={readOnly || !!initialResource}
+                  setValue={handleNameChange}
+                  {...nameProps}
+                />
+              )}
               {children}
             </ResourceFormWrapper>
           </div>
@@ -144,6 +170,31 @@ export function ResourceForm({
             isAdvanced={true}
             validationRef={validationRef}
           >
+            {!disableDefaultFields && (
+              <>
+                <K8sNameField
+                  propertyPath="$.metadata.name"
+                  kind={singularName}
+                  readOnly={readOnly || !!initialResource}
+                  setValue={handleNameChange}
+                  {...nameProps}
+                />
+                <KeyValueField
+                  advanced
+                  propertyPath="$.metadata.labels"
+                  title={t('common.headers.labels')}
+                  className="fd-margin-top--sm"
+                  showInfo={t('common.tooltips.key-value')}
+                  {...labelsProps}
+                />
+                <KeyValueField
+                  advanced
+                  propertyPath="$.metadata.annotations"
+                  title={t('common.headers.annotations')}
+                  showInfo={t('common.tooltips.key-value')}
+                />
+              </>
+            )}
             {children}
           </ResourceFormWrapper>
         </div>

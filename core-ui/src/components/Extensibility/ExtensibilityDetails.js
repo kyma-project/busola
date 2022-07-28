@@ -57,6 +57,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
                   structure={def}
                   schema={schema}
                   relations={relations}
+                  originalResource={resource}
                 />
               ),
             }))
@@ -72,6 +73,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
                   structure={body}
                   schema={schema}
                   relations={relations}
+                  originalResource={resource}
                 />
               ),
             ]

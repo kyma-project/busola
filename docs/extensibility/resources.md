@@ -16,6 +16,7 @@ The `resource` section is required and contains basic information about the reso
 - **path** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
 - **defaultPlaceholder** - to be shown in place of empty resource leaves. Overridden by the widget-level **placeholder**. Defaults to `-`.
 - **description** - displays a custom description on the resource list page. It can contain links. If the translation section has a translation entry with the ID that is the same as the **description** string, the translation is used.
+- **disableCreate** - either `true` or `false`. Defaults to `false`.
 
 ### Example
 
@@ -26,13 +27,10 @@ The `resource` section is required and contains basic information about the reso
   "version": "v1alpha3",
   "scope": "namespace",
   "defaultPlaceholder": "- not set -",
-  "description": "See the {{[docs](https://github.com/kyma-project/busola)}} for more information."
+  "description": "See the {{[docs](https://github.com/kyma-project/busola)}} for more information.",
+  "disableCreate": false
 }
 ```
-
-## schema section
-
-The `schema` section contains the JSON-schema definition of the resource. In most cases this is copied verbatim from the CRD. The schema is the basis for generating the create/edit forms and the resultant resource yaml using [ui-schema](https://ui-schema.bemit.codes/).
 
 ## form section
 
