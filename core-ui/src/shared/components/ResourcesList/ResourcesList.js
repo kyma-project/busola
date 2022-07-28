@@ -286,7 +286,7 @@ export function ResourceListRenderer({
           name: t('common.buttons.edit'),
           tooltip: entry =>
             isProtected(entry)
-              ? t('common.tooltips.protected-resources-info')
+              ? t('common.tooltips.protected-resources-view-yaml')
               : t('common.buttons.edit'),
           icon: entry => (isProtected(entry) ? 'show-edit' : 'edit'),
           handler: handleResourceEdit,

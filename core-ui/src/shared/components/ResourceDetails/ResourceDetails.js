@@ -184,12 +184,17 @@ function Resource({
   const editAction = () => {
     if (protectedResource) {
       return (
-        <Button
-          className="fd-margin-end--tiny"
-          onClick={() => openYaml(resource)}
+        <Tooltip
+          className="actions-tooltip"
+          content={t('common.tooltips.protected-resources-info')}
         >
-          {t('common.buttons.view-yaml')}
-        </Button>
+          <Button
+            className="fd-margin-end--tiny"
+            onClick={() => openYaml(resource)}
+          >
+            {t('common.buttons.view-yaml')}
+          </Button>
+        </Tooltip>
       );
     } else if (!CreateResourceForm || !CreateResourceForm?.allowEdit) {
       return (
