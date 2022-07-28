@@ -66,6 +66,7 @@ ResourcesList.propTypes = {
   omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
   resourceUrlPrefix: PropTypes.string,
   disableCreate: PropTypes.bool,
+  hideLabelsAndCreate: PropTypes.bool,
 };
 
 ResourcesList.defaultProps = {
@@ -76,6 +77,7 @@ ResourcesList.defaultProps = {
   listHeaderActions: null,
   readOnly: false,
   disableCreate: false,
+  hideLabelsAndCreate: false,
 };
 
 export function ResourcesList(props) {
@@ -164,6 +166,7 @@ export function ResourceListRenderer({
   resourceUrlPrefix,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate,
+  hideLabelsAndCreate,
   sortBy = {
     name: nameLocaleSort,
     time: timeSort,
@@ -246,7 +249,8 @@ export function ResourceListRenderer({
 
     const namespace = resource?.metadata?.namespace;
     const pluralKind = pluralize((resource?.kind || '').toLowerCase());
-
+    console.log('resourceUrl', resourceUrl);
+    console.log('resource', resource);
     return namespace
       ? `${resourceUrlPrefix}/namespaces/${namespace}/${pluralKind}/${encodedName}`
       : `${resourceUrlPrefix}/${pluralKind}/${encodedName}`;
@@ -307,9 +311,10 @@ export function ResourceListRenderer({
   const headerRenderer = () => [
     t('common.headers.name'),
     ...(showNamespace ? [t('common.headers.namespace')] : []),
-    t('common.headers.created'),
-    t('common.headers.labels'),
-    ...customColumns.map(col => col.header),
+    ...(!hideLabelsAndCreate
+      ? [t('common.headers.created'), t('common.headers.labels')]
+      : []),
+    ...customColumns.map(col => col.header || null),
     '',
   ];
 
@@ -329,11 +334,17 @@ export function ResourceListRenderer({
       <b>{nameSelector(entry)}</b>
     ),
     ...(showNamespace ? [entry.metadata.namespace] : []),
-    <ReadableCreationTimestamp timestamp={entry.metadata.creationTimestamp} />,
-    <div style={{ maxWidth: '36rem' /*TODO*/ }}>
-      <Labels labels={entry.metadata.labels} shortenLongLabels />
-    </div>,
-    ...customColumns.map(col => col.value(entry)),
+    ...(!hideLabelsAndCreate
+      ? [
+          <ReadableCreationTimestamp
+            timestamp={entry.metadata.creationTimestamp}
+          />,
+          <div style={{ maxWidth: '36rem' /*TODO*/ }}>
+            <Labels labels={entry.metadata.labels} shortenLongLabels />
+          </div>,
+        ]
+      : []),
+    ...customColumns.map(col => (col.value ? col.value(entry) : null)),
     protectedResourceWarning(entry),
   ];
 
