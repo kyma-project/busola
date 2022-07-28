@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cpu-load-generator
+  namespace: default
+  labels:
+    app.kubernetes.io/name: cpu-load-generator
+    istio-injection: disabled
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: 'false'
+    spec:
+      containers:
+        - name: cpu-load-generator
+          image: truek8s/cpu-load-generator:1.0
+          imagePullPolicy: IfNotPresent
+      restartPolicy: OnFailure
