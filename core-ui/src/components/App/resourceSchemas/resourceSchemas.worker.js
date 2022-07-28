@@ -50,52 +50,76 @@ function replaceObjects(existingCustomFormats, schema) {
 
 const jsonSchemas = {};
 
-async function createJSONSchemas(openAPISchemas) {
+let activeClusterName = '';
+async function createJSONSchemas(openAPISchemas, clusterName) {
+  if (clusterName === '__proto__') {
+    //disallow prototype pollution
+    throw new Error();
+  }
+  activeClusterName = clusterName;
+
   const resolved = await new Resolver().resolve(openAPISchemas);
   const schema = toJsonSchema(resolved);
-  Object.values(schema.result.definitions).forEach(value => {
-    if (value['x-kubernetes-group-version-kind']) {
-      const { group, kind, version } = value[
+  jsonSchemas[clusterName] = {};
+
+  Object.values(schema.result.definitions).forEach(definition => {
+    if (definition['x-kubernetes-group-version-kind']) {
+      const { group, kind, version } = definition[
         'x-kubernetes-group-version-kind'
       ][0];
       const prefix = group ? `${group}/` : '';
       const schemaId = `${prefix}${version}/${kind}`;
 
-      if (!jsonSchemas[schemaId]) {
-        jsonSchemas[schemaId] = value;
+      if (!jsonSchemas[clusterName][schemaId]) {
+        jsonSchemas[clusterName][schemaId] = definition;
       }
     }
   });
 }
 
 self.onmessage = $event => {
-  if ($event.data[0] === 'shouldInitialize') {
-    self.postMessage({
-      isInitialized: !!Object.values(jsonSchemas).length,
-    });
-  }
-  if ($event.data[0] === 'initialize') {
-    createJSONSchemas($event.data[1])
+  const message = $event.data[0];
+
+  if (message === 'sendingOpenapi') {
+    const openApiData = $event.data[1];
+    const activeClusterName = $event.data[2];
+
+    if (!openApiData || !activeClusterName) throw new Error();
+
+    createJSONSchemas(openApiData, activeClusterName)
       .then(() => {
         self.postMessage({
-          isInitialized: !!Object.values(jsonSchemas).length,
+          type: 'computedToJSON',
         });
       })
       .catch(err => {
         console.error(err);
         self.postMessage({
+          type: 'customError',
           error: err,
         });
       });
   }
+
   if ($event.data[0] === 'getSchema') {
-    const schema = JSON.parse(JSON.stringify(jsonSchemas[$event.data[1]]));
-    const existingCustomFormats = getExistingCustomFormats(schema);
-    const modifiedSchema = replaceObjects(existingCustomFormats, schema);
-    if (modifiedSchema) {
-      self.postMessage({ [$event.data[1]]: modifiedSchema });
+    const schemaId = JSON.parse(
+      JSON.stringify(jsonSchemas[activeClusterName][$event.data[1]]),
+    );
+    const existingCustomFormats = getExistingCustomFormats(schemaId);
+    const schemaCustomFormatsResolved = replaceObjects(
+      existingCustomFormats,
+      schemaId,
+    );
+    if (schemaCustomFormatsResolved) {
+      self.postMessage({
+        type: 'schemaComputed',
+        schema: schemaCustomFormatsResolved,
+      });
     } else {
-      self.postMessage({ error: new Error('Resource schema not found') });
+      self.postMessage({
+        type: 'customError',
+        error: new Error('Resource schema not found'),
+      });
     }
   }
 };
