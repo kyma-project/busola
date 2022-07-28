@@ -116,7 +116,6 @@ export const ControlledBy = ({
 
   const OwnerRef = ({ owner, className }) => {
     const resource = pluralize(owner.kind).toLowerCase();
-
     return (
       <div key={owner.name} className={className}>
         {owner.kind}
