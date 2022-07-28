@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
@@ -125,5 +125,6 @@ export const useMessageList = (defaultType = EVENT_MESSAGE_TYPE.ALL) => {
     navigateToObjectDetails,
     navigateToNodeDetails,
     MessageSelector,
+    EVENT_MESSAGE_TYPE,
   };
 };
