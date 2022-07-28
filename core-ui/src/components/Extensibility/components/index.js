@@ -14,7 +14,6 @@ import { PendingWrapper } from './PendingWrapper';
 import { Labels } from './Labels';
 
 export const widgets = {
-  Null: () => '',
   Badge,
   Text,
   Plain,

@@ -32,6 +32,7 @@ export function BusolaPluginList(props) {
 
   return (
     <>
+      {/*
       <Dialog
         show={showWizard}
         className="extensibility-wizard"
@@ -42,6 +43,7 @@ export function BusolaPluginList(props) {
           <BusolaExtensionCreate onCancel={() => setShowWizard(false)} />
         </ErrorBoundary>
       </Dialog>
+      */}
       <ResourcesList
         customColumns={customColumns}
         description={description}
@@ -56,7 +58,11 @@ export function BusolaPluginList(props) {
           <Button
             glyph="add"
             option="transparent"
-            onClick={() => setShowWizard(true)}
+            onClick={() =>
+              LuigiClient.linkManager()
+                .fromContext('busolaextensions')
+                .navigate('/create')
+            }
           >
             {t('extensibility.create')}
           </Button>,

@@ -1,6 +1,7 @@
 import { prettifyKind } from 'shared/utils/helpers';
 import pluralize from 'pluralize';
 import { getLatestVersion } from 'components/Extensibility/migration';
+import * as jp from 'jsonpath';
 
 export const SECTIONS = [
   'resource',
@@ -66,6 +67,24 @@ export function createExtensibilityTemplate(crd, t) {
   const additionalValueColumns = extractValueColumns(crd);
   const possibleStatusColumn = additionalValueColumns.find(isStatusMaybe);
 
+  const translations = {
+    en: {
+      name: pluralize(prettifyKind(crd.spec.names.kind)),
+      category: 'Custom Resources',
+      summary: 'Summary',
+      metadata: {
+        annotations: 'Annotations',
+        labels: 'Labels',
+        ...(additionalValueColumns.length
+          ? { 'metadata.creationTimestamp': 'Created at' }
+          : {}),
+      },
+    },
+  };
+  additionalValueColumns.forEach(column =>
+    jp.value(translations.en, `$.${column.path}`, column.name),
+  );
+
   return {
     resource: {
       kind: crd.spec.names.kind,
@@ -80,7 +99,7 @@ export function createExtensibilityTemplate(crd, t) {
       header: possibleStatusColumn ? [possibleStatusColumn] : [],
       body: [
         {
-          name: 'Summary',
+          name: 'summary',
           widget: 'Panel',
           children: additionalValueColumns.length
             ? extractValueColumns(crd) // create a copy
@@ -98,17 +117,7 @@ export function createExtensibilityTemplate(crd, t) {
     },
     // turns out the openAPIV3Schema is not required
     schema: version.schema?.openAPIV3Schema || {},
-    translations: {
-      en: {
-        name: pluralize(prettifyKind(crd.spec.names.kind)),
-        'metadata.annotations': 'Annotations',
-        'metadata.labels': 'Labels',
-        category: 'Custom Resources',
-        ...(additionalValueColumns.length
-          ? { 'metadata.creationTimestamp': 'Created at' }
-          : {}),
-      },
-    },
+    translations,
     version: getLatestVersion(),
   };
 }

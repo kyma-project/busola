@@ -1,3 +1,14 @@
+.extensions-create-wizard {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .fd-wizard__content {
+    flex-grow: 1;
+    height: auto;
+  }
+}
+
 .columns-input {
   display: grid;
   grid-template-columns: 1fr 8fr 8fr 3fr;

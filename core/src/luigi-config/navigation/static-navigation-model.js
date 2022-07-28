@@ -2093,6 +2093,10 @@ export function getStaticRootNodes(
       },
       children: [
         {
+          pathSegment: 'create',
+          viewUrl: config.coreUIModuleUrl + '/busolaextensions/create',
+        },
+        {
           pathSegment: 'details',
           children: [
             {
