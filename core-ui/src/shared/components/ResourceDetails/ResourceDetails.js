@@ -287,6 +287,7 @@ function Resource({
       resource.metadata.name + '.yaml',
       handleSaveClick(resource),
       protectedResource,
+      protectedResource,
     );
   };
 

@@ -237,6 +237,7 @@ export function ResourceListRenderer({
       nameSelector(resource) + '.yaml',
       handleSaveClick(resource),
       isProtected(resource),
+      isProtected(resource),
     );
   };
 
