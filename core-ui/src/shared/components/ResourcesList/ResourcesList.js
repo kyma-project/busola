@@ -58,6 +58,7 @@ ResourcesList.propTypes = {
   isCompact: PropTypes.bool,
   showTitle: PropTypes.bool,
   filter: PropTypes.func,
+  filterFn: PropTypes.func,
   listHeaderActions: PropTypes.node,
   description: PropTypes.node,
   readOnly: PropTypes.bool,
@@ -78,6 +79,7 @@ ResourcesList.defaultProps = {
   readOnly: false,
   disableCreate: false,
   hideLabelsAndCreate: false,
+  filterFn: () => true,
 };
 
 export function ResourcesList(props) {
@@ -105,7 +107,7 @@ function Resources(props) {
     resourceName,
     resourceType,
     filter,
-    filterFn = () => true,
+    filterFn,
     resourceUrl,
     skipDataLoading,
     isCompact,
@@ -339,7 +341,7 @@ export function ResourceListRenderer({
           <ReadableCreationTimestamp
             timestamp={entry.metadata.creationTimestamp}
           />,
-          <div style={{ maxWidth: '36rem' /*TODO*/ }}>
+          <div style={{ maxWidth: '36rem' }}>
             <Labels labels={entry.metadata.labels} shortenLongLabels />
           </div>,
         ]
