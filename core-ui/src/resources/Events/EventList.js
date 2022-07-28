@@ -121,7 +121,7 @@ export function EventList(props) {
       readOnly={true}
       filterFn={res => {
         if (displayType.key === EVENT_MESSAGE_TYPE.ALL.key) return true;
-        return res.type === displayType.key && true;
+        return res.type === displayType.key;
       }}
     />
   );
