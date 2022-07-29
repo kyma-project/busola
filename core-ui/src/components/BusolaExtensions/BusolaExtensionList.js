@@ -31,8 +31,7 @@ export function BusolaPluginList(props) {
       customColumns={customColumns}
       description={description}
       createResourceForm={BusolaExtensionCreate}
-      resourceName={t('extensibility.title')}
-      resourceType="ConfigMaps"
+      resourceType={t('extensibility.title')}
       resourceUrl="/api/v1/configmaps?labelSelector=busola.io/extension=resource"
       resourceUrlPrefix="/api/v1"
       hasDetailsView={true}
