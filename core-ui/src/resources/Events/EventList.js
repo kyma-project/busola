@@ -29,6 +29,7 @@ export function EventList(props) {
       };
 
   const textSearchProperties = [
+    'metadata.namespace',
     'message',
     'source.component',
     'source.host',
