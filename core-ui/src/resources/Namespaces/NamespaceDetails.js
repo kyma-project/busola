@@ -79,6 +79,7 @@ export function NamespaceDetails(props) {
     <>
       <DeployNewWorkload namespaceName={props.resourceName} />
       <Button
+        className="fd-margin-end--tiny"
         glyph="add"
         onClick={() => {
           setShowAdd(true);
