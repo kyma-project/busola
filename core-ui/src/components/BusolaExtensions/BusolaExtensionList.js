@@ -34,6 +34,7 @@ export function BusolaPluginList(props) {
       resourceName={t('extensibility.title')}
       resourceType="ConfigMaps"
       resourceUrl="/api/v1/configmaps?labelSelector=busola.io/extension=resource"
+      resourceUrlPrefix="/api/v1"
       hasDetailsView={true}
       navigateFn={extension => {
         LuigiClient.linkManager()
