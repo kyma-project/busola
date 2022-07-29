@@ -77,7 +77,11 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
   if (!structure || typeof structure !== 'object') {
     throwConfigError(t('extensibility.not-an-object'), structure);
   }
-  if (!structure.path && !structure.children && !Array.isArray(structure)) {
+  if (
+    typeof structure.path !== 'string' &&
+    !Array.isArray(structure.children) &&
+    !Array.isArray(structure)
+  ) {
     throwConfigError(t('extensibility.no-path-children'), structure);
   }
 
