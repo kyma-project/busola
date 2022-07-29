@@ -48,7 +48,6 @@ export function BusolaExtensionEdit({
         propertyPath="$.data.version"
         label={t('extensibility.sections.version')}
         input={Inputs.Text}
-        placeholder={t('api-rules.placeholders.path')}
         pattern="^[0-9]+\.[0-9]+$"
       />
       {SECTIONS.map(key => (
