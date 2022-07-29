@@ -27,7 +27,7 @@ export function OAuth2ClientList(props) {
     <Trans i18nKey="oauth2-clients.description">
       <Link
         className="fd-link"
-        url="https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-03-expose-and-secure-service#register-an-o-auth2-client-and-get-tokens"
+        url="https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-03-expose-and-secure-workload-oauth2#register-an-o-auth2-client-and-get-tokens"
       />
     </Trans>
   );
