@@ -5,6 +5,7 @@ import { cloneDeep } from 'lodash';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { K8sNameField, Editor } from 'shared/ResourceForm/fields';
+import * as jp from 'jsonpath';
 
 import { createConfigMapTemplate, SECTIONS } from './helpers';
 
@@ -45,7 +46,11 @@ export function BusolaExtensionEdit({
       />
       <ResourceForm.FormField
         required
-        propertyPath="$.data.version"
+        value={JSON.parse(jp.value(extension, '$.data.version'))}
+        setValue={(val, setter) => {
+          jp.value(extension, '$.data.version', JSON.stringify(val));
+          setExtension({ ...extension });
+        }}
         label={t('extensibility.sections.version')}
         input={Inputs.Text}
         pattern="^[0-9]+\.[0-9]+$"
