@@ -575,7 +575,7 @@ common:
     sort-by: Sort By
     sort-order: Sort Order
     status: Status
-    time: Time
+    time: Age
     type: Type
   statuses:
     error: Error
