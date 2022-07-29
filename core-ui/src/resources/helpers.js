@@ -22,13 +22,12 @@ export const usePrepareListProps = (resourceType, resourceI18Key) => {
 
 let savedResourceGraph = null;
 export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
-  const { resourceName, namespaceId } = useParams();
+  const { namespaceId } = useParams();
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
   const resourceUrl = getResourceUrl();
 
   const decodedResourceUrl = decodeURIComponent(resourceUrl);
-  const decodedResourceName = decodeURIComponent(resourceName);
 
   const context = useMicrofrontendContext();
   if (!savedResourceGraph) {
