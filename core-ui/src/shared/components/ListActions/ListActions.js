@@ -35,7 +35,14 @@ const StandaloneAction = ({ action, entry, compact }) => {
   );
 
   return action.tooltip ? (
-    <Tooltip className="actions-tooltip" content={action.tooltip}>
+    <Tooltip
+      className="actions-tooltip"
+      content={
+        typeof action.tooltip === 'function'
+          ? action.tooltip(entry)
+          : action.tooltip
+      }
+    >
       {' '}
       {actionButton}{' '}
     </Tooltip>
