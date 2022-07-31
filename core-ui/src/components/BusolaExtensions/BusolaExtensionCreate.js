@@ -109,6 +109,7 @@ export function BusolaExtensionCreate({ formElementRef, onChange, onCancel }) {
               widgets={formWidgets.custom}
               translations={jp.value(state, '$.translations.en')}
               setTranslations={setTranslations}
+              schema={crd}
             />
           </ResourceForm.Single>
         </Wizard.Step>
@@ -119,6 +120,7 @@ export function BusolaExtensionCreate({ formElementRef, onChange, onCancel }) {
               widgets={inlineWidgets}
               translations={jp.value(state, '$.translations.en')}
               setTranslations={setTranslations}
+              schema={crd}
             />
           </ResourceForm.Single>
         </Wizard.Step>
@@ -132,6 +134,7 @@ export function BusolaExtensionCreate({ formElementRef, onChange, onCancel }) {
               widgets={displayWidgets}
               translations={jp.value(state, '$.translations.en')}
               setTranslations={setTranslations}
+              schema={crd}
             />
           </ResourceForm.Single>
         </Wizard.Step>
