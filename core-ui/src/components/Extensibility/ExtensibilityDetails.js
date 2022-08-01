@@ -12,10 +12,16 @@ import { shouldBeVisible, Widget } from './components/Widget';
 import { useGetTranslation, TranslationBundleContext } from './helpers';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
 import { RelationsContextProvider } from './contexts/RelationsContext';
+import { useGetSchema } from 'hooks/useGetSchema';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
-  const { path, kind } = resMetaData?.resource ?? {};
+  const { path, kind, group, version } = resMetaData?.resource ?? {};
+
+  const openapiSchemaId = `${group}/${version}/${kind}`;
+  const { schema } = useGetSchema({
+    schemaId: openapiSchemaId,
+  });
 
   const detailsProps = usePrepareDetailsProps(path, 'name');
 
@@ -28,7 +34,6 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
 
   const header = resMetaData?.details?.header || [];
   const body = resMetaData?.details?.body || [];
-  const schema = resMetaData?.schema;
   const relations = resMetaData?.relations || {};
 
   const breadcrumbs = [
