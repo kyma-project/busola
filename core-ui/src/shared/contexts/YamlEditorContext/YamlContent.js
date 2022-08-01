@@ -12,6 +12,7 @@ export function YamlContent({
   onSave,
   saveDisabled,
   readOnly,
+  isProtected,
   i18n,
 }) {
   const [editor, setEditor] = React.useState(null);
@@ -35,6 +36,7 @@ export function YamlContent({
         onSave={onSave}
         saveDisabled={saveDisabled}
         i18n={i18n}
+        isProtected={isProtected}
       />
       <ErrorBoundary i18n={i18n}>
         <EditorWrapper

@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: thousand-primes
+  namespace: default
+  labels:
+    app.kubernetes.io/name: thousand-primes
+    istio-injection: disabled
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: 'false'
+    spec:
+      containers:
+        - name: thousand-primes
+          image: truek8s/thousand-primes:1.0
+          imagePullPolicy: IfNotPresent
+      restartPolicy: OnFailure

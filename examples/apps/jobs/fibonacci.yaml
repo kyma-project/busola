@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hundred-fibonaccis
+  namespace: default
+  labels:
+    app.kubernetes.io/name: hundred-fibonaccis
+    istio-injection: disabled
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: 'false'
+    spec:
+      containers:
+        - name: hundred-fibonaccis
+          image: truek8s/hundred-fibonaccis:1.0
+          imagePullPolicy: IfNotPresent
+      restartPolicy: OnFailure

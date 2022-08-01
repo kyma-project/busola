@@ -65,6 +65,7 @@ ResourcesList.propTypes = {
   testid: PropTypes.string,
   omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
   resourceUrlPrefix: PropTypes.string,
+  disableCreate: PropTypes.bool,
 };
 
 ResourcesList.defaultProps = {
@@ -74,6 +75,7 @@ ResourcesList.defaultProps = {
   showTitle: false,
   listHeaderActions: null,
   readOnly: false,
+  disableCreate: false,
 };
 
 export function ResourcesList(props) {
@@ -161,7 +163,7 @@ export function ResourceListRenderer({
   allowSlashShortcut,
   resourceUrlPrefix,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
-  disableCreate = false,
+  disableCreate,
   sortBy = {
     name: nameLocaleSort,
     time: timeSort,
@@ -235,6 +237,7 @@ export function ResourceListRenderer({
       nameSelector(resource) + '.yaml',
       handleSaveClick(resource),
       isProtected(resource),
+      isProtected(resource),
     );
   };
 
@@ -270,6 +273,7 @@ export function ResourceListRenderer({
     setActiveResource(activeResource);
     setShowEditDialog(true);
   };
+
   const actions = readOnly
     ? customListActions
     : [
@@ -283,13 +287,19 @@ export function ResourceListRenderer({
           : null,
         {
           name: t('common.buttons.edit'),
-          tooltip: t('common.buttons.edit'),
+          tooltip: entry =>
+            isProtected(entry)
+              ? t('common.tooltips.protected-resources-view-yaml')
+              : t('common.buttons.edit'),
           icon: entry => (isProtected(entry) ? 'show-edit' : 'edit'),
           handler: handleResourceEdit,
         },
         {
           name: t('common.buttons.delete'),
-          tooltip: t('common.buttons.delete'),
+          tooltip: entry =>
+            isProtected(entry)
+              ? t('common.tooltips.protected-resources-info')
+              : t('common.buttons.delete'),
           icon: 'delete',
           disabledHandler: isProtected,
           handler: resource => {

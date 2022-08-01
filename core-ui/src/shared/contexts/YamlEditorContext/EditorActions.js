@@ -37,6 +37,7 @@ export function EditorActions({
   saveDisabled,
   saveHidden,
   i18n,
+  isProtected,
 }) {
   const [visible, setVisible] = useState(
     localStorage.getItem(EDITOR_VISIBILITY) !== 'false',
@@ -132,7 +133,11 @@ export function EditorActions({
       />
       {!saveHidden && (
         <ButtonWithTooltip
-          tooltipContent={t('common.tooltips.save')}
+          tooltipContent={
+            isProtected
+              ? t('common.tooltips.protected-resources-info')
+              : t('common.tooltips.save')
+          }
           glyph="save"
           onClick={onSave}
           disabled={saveDisabled || !editor}
@@ -151,7 +156,10 @@ export function EditorActions({
         disabled={!editor}
       />
       {readOnly && (
-        <span className={t('fd-object-status--critical')}>
+        <span
+          style={{ color: 'var(--sapNeutralTextColor,#6a6d70)' }}
+          className={t('fd-object-status--critical')}
+        >
           {t('common.labels.read-only')}
         </span>
       )}
