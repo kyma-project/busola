@@ -600,6 +600,8 @@ common:
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
+    protected-resources-info: To allow for modifying protected resources go to Preferences > Clusters.
+    protected-resources-view-yaml: View YAML. To allow for modifying protected resources go to Preferences > Clusters.
     read-file: Read file content as a single value, with file name as a key.
     resource-ref-name: Unique name within a Namespace to refer to a {{resource}} resource.
     resource-ref-namespace: Namespace defines the space within which the {{resource}} name must be unique.
