@@ -38,7 +38,8 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
   return {
     resourceUrl: decodedResourceUrl,
     resourceType: resourceType,
-    resourceName: resourceI18Key ? t(resourceI18Key) : resourceI18Key,
+    resourceTitle: resourceI18Key ? t(resourceI18Key) : resourceI18Key,
+    resourceName: decodedResourceName,
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
     resourceGraphConfig: savedResourceGraph,

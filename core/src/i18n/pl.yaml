@@ -54,6 +54,7 @@ cluster-roles:
   title: Role klastra
 clusters:
   add:
+    load-default: Załaduj domyślny klaster
     title: Dodaj klaster
   buttons:
     apply-configuration: Zastosuj konfigurację

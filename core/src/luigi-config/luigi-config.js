@@ -75,6 +75,11 @@ async function initializeBusola() {
 }
 
 (async () => {
+  while (!window.Luigi) {
+    console.debug("Luigi not yet loaded, let's wait a bit...");
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+
   handleResetEndpoint();
 
   await initSentry();

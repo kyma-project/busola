@@ -9,9 +9,10 @@ import { ResourceRefs } from './ResourceRefs';
 import { ControlledBy, ControlledByKind } from './ControlledBy';
 import { JoinedArray } from './JoinedArray';
 import { ResourceList } from './ResourceList';
+import { ResourceLink } from './ResourceLink.js';
+import { Labels } from './Labels';
 
 import { PendingWrapper } from './PendingWrapper';
-import { Labels } from './Labels';
 
 export const widgets = {
   Badge,
@@ -26,6 +27,7 @@ export const widgets = {
   ControlledByKind,
   JoinedArray,
   ResourceList,
+  ResourceLink,
   Labels,
 };
 

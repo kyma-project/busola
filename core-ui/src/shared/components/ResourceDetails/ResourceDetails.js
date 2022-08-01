@@ -28,6 +28,7 @@ import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { useVersionWarning } from 'hooks/useVersionWarning';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 // This component is loaded after the page mounts.
 // Don't try to load it on scroll. It was tested.
@@ -81,7 +82,7 @@ function ResourceDetailsRenderer(props) {
   if (error) {
     const breadcrumbItems = props.breadcrumbs || [
       {
-        name: prettifyNamePlural(props.resourceName, props.resourceType),
+        name: prettifyNamePlural(props.resourceTitle, props.resourceType),
         path: '/',
         fromContext: props.resourceType.toLowerCase(),
       },
@@ -91,7 +92,7 @@ function ResourceDetailsRenderer(props) {
       return (
         <ResourceNotFound
           resource={prettifyNameSingular(
-            props.resourceName,
+            props.resourceTitle,
             props.resourceType,
           )}
           breadcrumbs={breadcrumbItems}
@@ -101,7 +102,7 @@ function ResourceDetailsRenderer(props) {
     }
     return (
       <ResourceNotFound
-        resource={prettifyNameSingular(props.resourceName, props.resourceType)}
+        resource={prettifyNameSingular(props.resourceTitle, props.resourceType)}
         breadcrumbs={breadcrumbItems}
         customMessage={getErrorMessage(error)}
         i18n={props.i18n}
@@ -144,14 +145,14 @@ function Resource({
   silentRefetch,
   updateResourceMutation,
   windowTitle,
-  resourceName,
+  resourceTitle,
   resourceGraphConfig,
   resourceSchema,
 }) {
   useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation(['translation'], { i18n });
   const prettifiedResourceKind = prettifyNameSingular(
-    resourceName,
+    resourceTitle,
     resource.kind,
   );
   const [toggleFormFn, getToggleFormFn] = useState(() => {});
@@ -183,12 +184,17 @@ function Resource({
   const editAction = () => {
     if (protectedResource) {
       return (
-        <Button
-          className="fd-margin-end--tiny"
-          onClick={() => openYaml(resource)}
+        <Tooltip
+          className="actions-tooltip"
+          content={t('common.tooltips.protected-resources-info')}
         >
-          {t('common.buttons.view-yaml')}
-        </Button>
+          <Button
+            className="fd-margin-end--tiny"
+            onClick={() => openYaml(resource)}
+          >
+            {t('common.buttons.view-yaml')}
+          </Button>
+        </Tooltip>
       );
     } else if (!CreateResourceForm || !CreateResourceForm?.allowEdit) {
       return (
@@ -241,20 +247,37 @@ function Resource({
     }
   };
 
+  const deleteButtonWrapper = children => {
+    if (protectedResource) {
+      return (
+        <Tooltip
+          className="actions-tooltip"
+          content={t('common.tooltips.protected-resources-info')}
+        >
+          {children}
+        </Tooltip>
+      );
+    } else {
+      return children;
+    }
+  };
+
   const actions = readOnly ? null : (
     <>
       {protectedResourceWarning(resource)}
       {editAction()}
       {headerActions}
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
-      <Button
-        disabled={protectedResource}
-        onClick={() => handleResourceDelete({ resourceUrl })}
-        option="transparent"
-        type="negative"
-      >
-        {t('common.buttons.delete')}
-      </Button>
+      {deleteButtonWrapper(
+        <Button
+          disabled={protectedResource}
+          onClick={() => handleResourceDelete({ resourceUrl })}
+          option="transparent"
+          type="negative"
+        >
+          {t('common.buttons.delete')}
+        </Button>,
+      )}
     </>
   );
 
@@ -263,6 +286,7 @@ function Resource({
       resource,
       resource.metadata.name + '.yaml',
       handleSaveClick(resource),
+      protectedResource,
       protectedResource,
     );
   };

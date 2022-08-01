@@ -58,6 +58,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
                   structure={def}
                   schema={schema}
                   relations={relations}
+                  originalResource={resource}
                 />
               ),
             }))
@@ -73,6 +74,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
                   structure={body}
                   schema={schema}
                   relations={relations}
+                  originalResource={resource}
                 />
               ),
             ]
@@ -86,7 +88,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   );
 };
 
-export const ExtensibilityDetails = () => {
+const ExtensibilityDetails = () => {
   const { t } = useTranslation();
   const resMetaData = useGetCRbyPath();
 
@@ -108,3 +110,5 @@ export const ExtensibilityDetails = () => {
     </TranslationBundleContext.Provider>
   );
 };
+
+export default ExtensibilityDetails;

@@ -20,7 +20,7 @@ import { RelationsContextProvider } from './contexts/RelationsContext';
 export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
 
-  const { path, kind } = resMetaData?.resource ?? {};
+  const { path, kind, disableCreate } = resMetaData?.resource ?? {};
 
   const schema = resMetaData?.schema;
   const relations = resMetaData?.relations || {};
@@ -53,6 +53,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
             structure={column}
             schema={schema}
             relations={relations}
+            originalResource={resource}
           />
         ),
       }))
@@ -62,12 +63,13 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     <ResourcesList
       createResourceForm={ExtensibilityCreate}
       allowSlashShortcut
+      disableCreate={disableCreate}
       {...listProps}
     />
   );
 };
 
-export const ExtensibilityList = () => {
+const ExtensibilityList = () => {
   const { t } = useTranslation();
   const resMetaData = useGetCRbyPath();
   const { path } = resMetaData?.resource ?? {};
@@ -91,3 +93,5 @@ export const ExtensibilityList = () => {
     </TranslationBundleContext.Provider>
   );
 };
+
+export default ExtensibilityList;

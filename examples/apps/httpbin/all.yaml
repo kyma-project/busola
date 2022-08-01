@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: httpbin
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: 'httpbin'
+  namespace: httpbin
+spec:
+  limits:
+    - type: Container
+      max:
+        memory: 256Mi
+      default:
+        memory: 128Mi
+      defaultRequest:
+        memory: 64Mi
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: 'httpbin'
+  namespace: httpbin
+spec:
+  hard:
+    limits.memory: 256Mi
+    requests.memory: 128Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin
+  namespace: httpbin
+  labels:
+    app.kubernetes.io/name: httpbin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpbin
+  template:
+    metadata:
+      labels:
+        app: httpbin
+        sidecar.istio.io/inject: 'false'
+    spec:
+      containers:
+        - name: httpbin
+          image: kennethreitz/httpbin
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 50m
+            limits:
+              memory: 128Mi
+              cpu: 100m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpbin
+  namespace: httpbin
+spec:
+  selector:
+    app: httpbin
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: gateway.kyma-project.io/v1alpha1
+kind: APIRule
+metadata:
+  name: httpbin
+  namespace: httpbin
+  labels:
+    app.kubernetes.io/name: httpbin
+spec:
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
+  rules:
+    - accessStrategies:
+        - handler: allow
+          config: {}
+      methods:
+        - GET
+        - POST
+        - DELETE
+        - PUT
+        - HEAD
+        - PATCH
+      path: /.*
+  service:
+    host: httpbin
+    name: httpbin
+    port: 80

@@ -13,7 +13,6 @@ export const useFetch = () => {
   return async ({ relativeUrl, abortController, init }) => {
     checkForTokenExpiration(authData?.token);
     checkForTokenExpiration(ssoData?.idToken, { reason: 'sso-expiration' });
-
     init = {
       ...init,
       headers: {
@@ -31,7 +30,7 @@ export const useFetch = () => {
         throw await throwHttpError(response);
       }
     } catch (e) {
-      console.error('Fetch failed: ', e);
+      console.error(`Fetch failed (${relativeUrl}): ${e}`);
       throw e;
     }
   };

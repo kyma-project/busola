@@ -10,11 +10,9 @@ import { EventsList } from 'shared/components/EventsList';
 import { CurrentCRDVersion } from './CurrentCRDVersion';
 import { RelatedCRDsList } from './RelatedCRDsList';
 import { CustomResourceDefinitionCreate } from './CustomResourceDefinitionCreate';
-import { useFeature } from 'shared/hooks/useFeature';
 
 export function CustomResourceDefinitionDetails(props) {
   const { t, i18n } = useTranslation();
-  const { isEnabled: isExtensibilityEnabled } = useFeature('EXTENSIBILITY');
 
   const customColumns = [
     {

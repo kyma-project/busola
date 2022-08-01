@@ -21,7 +21,7 @@ export function ServiceInstanceData({ spec, status }) {
     },
     {
       name: t('btp-instances.instance-id'),
-      value: status.instanceID || EMPTY_TEXT_PLACEHOLDER,
+      value: status?.instanceID || EMPTY_TEXT_PLACEHOLDER,
     },
   ];
 
