@@ -299,6 +299,7 @@ clusters:
   add:
     errors:
       failed-to-add-cluster: Failed to connect a cluster
+    load-default: Load default cluster
     title: Connect cluster
   auth-type: Authentication type
   buttons:
