@@ -68,7 +68,8 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   );
 };
 
-export const ExtensibilityList = () => {
+const ExtensibilityList = () => {
+  const { t } = useTranslation();
   const resMetaData = useGetCRbyPath();
   const { path } = resMetaData?.resource ?? {};
 
@@ -87,3 +88,5 @@ export const ExtensibilityList = () => {
     </TranslationBundleContext.Provider>
   );
 };
+
+export default ExtensibilityList;
