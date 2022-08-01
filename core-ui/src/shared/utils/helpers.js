@@ -95,7 +95,7 @@ const capitalize = str => {
 };
 
 const splitName = name => {
-  const nameArray = name.match(/[A-Z][a-z]+/g);
+  const nameArray = name?.match(/[A-Z][a-z]+/g);
   return nameArray.join(' ');
 };
 
