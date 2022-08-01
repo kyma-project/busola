@@ -82,7 +82,7 @@ function ResourceDetailsRenderer(props) {
   if (error) {
     const breadcrumbItems = props.breadcrumbs || [
       {
-        name: prettifyNamePlural(props.resourceName, props.resourceType),
+        name: prettifyNamePlural(props.resourceTitle, props.resourceType),
         path: '/',
         fromContext: props.resourceType.toLowerCase(),
       },
@@ -92,7 +92,7 @@ function ResourceDetailsRenderer(props) {
       return (
         <ResourceNotFound
           resource={prettifyNameSingular(
-            props.resourceName,
+            props.resourceTitle,
             props.resourceType,
           )}
           breadcrumbs={breadcrumbItems}
@@ -102,7 +102,7 @@ function ResourceDetailsRenderer(props) {
     }
     return (
       <ResourceNotFound
-        resource={prettifyNameSingular(props.resourceName, props.resourceType)}
+        resource={prettifyNameSingular(props.resourceTitle, props.resourceType)}
         breadcrumbs={breadcrumbItems}
         customMessage={getErrorMessage(error)}
         i18n={props.i18n}
@@ -145,14 +145,14 @@ function Resource({
   silentRefetch,
   updateResourceMutation,
   windowTitle,
-  resourceName,
+  resourceTitle,
   resourceGraphConfig,
   resourceSchema,
 }) {
   useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation(['translation'], { i18n });
   const prettifiedResourceKind = prettifyNameSingular(
-    resourceName,
+    resourceTitle,
     resource.kind,
   );
   const [toggleFormFn, getToggleFormFn] = useState(() => {});
