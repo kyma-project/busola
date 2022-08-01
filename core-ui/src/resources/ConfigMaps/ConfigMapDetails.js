@@ -1,27 +1,25 @@
-import React from 'react';
-import { Link } from 'shared/components/Link/Link';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
+import { Link } from 'shared/components/Link/Link';
 
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Button, LayoutPanel, MessageStrip } from 'fundamental-react';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
-import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
-import { Button } from 'fundamental-react';
-import { useFeature } from 'shared/hooks/useFeature';
-import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
-import { useNotification } from 'shared/contexts/NotificationContext';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { LayoutPanel, MessageStrip } from 'fundamental-react';
+import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
+import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { useNotification } from 'shared/contexts/NotificationContext';
+import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
+import { useFeature } from 'shared/hooks/useFeature';
 
 import { prettifyNameSingular } from 'shared/utils/helpers';
 
 import {
   formatCurrentVersion,
   getLatestVersion,
+  getMigrationFunctions,
   getSupportedVersions,
   migrateToLatest,
-  getMigrationFunctions,
 } from '../../components/Extensibility/migration';
 
 import { ConfigMapCreate } from './ConfigMapCreate';
@@ -74,7 +72,7 @@ export function ConfigMapDetails(props) {
     const { isEnabled: isExtensibilityEnabled } = useFeature('EXTENSIBILITY');
     const hasExtensibilityLabel =
       configmap?.metadata?.labels &&
-      configmap?.metadata?.labels['busola.io/extension'] === 'resource';
+      configmap?.metadata?.labels?.['busola.io/extension'] === 'resource';
 
     if (!(isExtensibilityEnabled && hasExtensibilityLabel)) return null;
 
