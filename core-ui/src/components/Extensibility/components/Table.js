@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { isNil } from 'lodash';
+import { useGetSchema } from 'hooks/useGetSchema';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
@@ -28,7 +29,7 @@ const handleTableValue = (value, t) => {
   }
 };
 
-export function Table({ value, structure, schema, disableMargin, ...props }) {
+export function Table({ value, structure, disableMargin, schema, ...props }) {
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
   const coreHeaders = (structure.children || []).map(column => {
@@ -65,6 +66,24 @@ export function Table({ value, structure, schema, disableMargin, ...props }) {
     };
   };
 
+  const sortByArray = structure?.sortBy;
+
+  const sortingOptions = defaultSort => {
+    const obj = {};
+
+    for (const sort of sortByArray || []) {
+      obj[tExt(`${structure.path}.${sort}`)] = (a, b) => {
+        console.log('a', a);
+        console.log('b', b);
+        return a[sort] - b[sort];
+      };
+    }
+    return { ...obj };
+  };
+
+  console.log('schema', schema);
+  console.log('props', props);
+
   return (
     <GenericList
       className="extensibility-table"
@@ -78,6 +97,8 @@ export function Table({ value, structure, schema, disableMargin, ...props }) {
       rowRenderer={rowRenderer}
       disableMargin={disableMargin}
       {...handleTableValue(value, t)}
+      sortBy={sortingOptions}
+      customSortNames
     />
   );
 }

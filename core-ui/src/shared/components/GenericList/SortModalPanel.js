@@ -9,6 +9,7 @@ export const SortModalPanel = ({
   sort,
   setSort,
   t,
+  customSortNames,
   disabled = false,
 }) => {
   const [order, setOrder] = useState(sort.order);
@@ -72,7 +73,7 @@ export const SortModalPanel = ({
                 checked={name === value}
                 inputProps={{ onChange: () => {} }}
               >
-                {t(`common.sorting.${value}`)}
+                {customSortNames ? value : t(`common.sorting.${value}`)}
               </FormRadioItem>
             );
           })}
