@@ -47,7 +47,7 @@ function getFailedCondition(conditions) {
 }
 
 export function getFunctionStatus(status) {
-  if (!status || !status?.conditions.length) {
+  if (!status || !status?.conditions?.length) {
     return { phase: 'INITIALIZING', reason: null, message: null };
   }
   const functionIsRunning = hasTrueType('Running', status.conditions);
