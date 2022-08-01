@@ -58,7 +58,7 @@ export const useLoginWithKubeconfigID = () => {
   });
 };
 
-export async function loadDefaultKubeconfigId() {
+export function loadDefaultKubeconfigId() {
   LuigiClient.sendCustomMessage({
     id: 'busola.loadDefaultKubeconfigId',
   });
