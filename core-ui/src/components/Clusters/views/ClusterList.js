@@ -166,14 +166,15 @@ function ClusterList() {
 
   const loadDefaultClusterButton = (
     <>
-      {features?.KUBECONFIG_ID?.config?.defaultKubeconfig && (
-        <Button
-          onClick={() => loadDefaultKubeconfigId()}
-          className="fd-margin-end--tiny fd-margin-begin--tiny"
-        >
-          {t('clusters.add.load-default')}
-        </Button>
-      )}
+      {features?.KUBECONFIG_ID?.isEnabled &&
+        features?.KUBECONFIG_ID?.config?.defaultKubeconfig && (
+          <Button
+            onClick={() => loadDefaultKubeconfigId()}
+            className="fd-margin-end--tiny fd-margin-begin--tiny"
+          >
+            {t('clusters.add.load-default')}
+          </Button>
+        )}
     </>
   );
 

@@ -103,7 +103,7 @@ export const communication = {
       }
     },
     'busola.loadDefaultKubeconfigId': async () => {
-      await loadDefaultKubeconfigId();
+      loadDefaultKubeconfigId();
     },
     'busola.deleteCluster': async ({ clusterName }) => {
       await deleteCluster(clusterName);
