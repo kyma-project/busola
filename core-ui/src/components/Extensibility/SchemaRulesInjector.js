@@ -8,8 +8,8 @@ const byPath = a => b => JSON.stringify(b.path) === JSON.stringify(a);
 // JS findLast doesn't work in firefox yet
 const findLast = (rules = [], condition) => {
   const reversedRules = rules.reverse();
-  return  reversedRules.find(condition);
-}
+  return reversedRules.find(condition);
+};
 
 // fake an OrderedMap-like structure using List to allow for duplicate keys
 const propertiesWrapper = src => ({
