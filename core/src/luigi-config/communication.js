@@ -102,7 +102,7 @@ export const communication = {
         await setCluster(params?.kubeconfig?.['current-context']);
       }
     },
-    'busola.loadDefaultKubeconfigId': async () => {
+    'busola.loadDefaultKubeconfigId': () => {
       loadDefaultKubeconfigId();
     },
     'busola.deleteCluster': async ({ clusterName }) => {

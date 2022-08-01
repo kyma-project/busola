@@ -6,14 +6,14 @@ import { cloneDeep } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
-import {
-  K8sNameField,
-  KeyValueField,
-  ItemArray,
-} from 'shared/ResourceForm/fields';
+import { ItemArray } from 'shared/ResourceForm/fields';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
-import { createBindingTemplate, newSubject } from './templates';
+import {
+  createBindingTemplate,
+  newSubject,
+  DEFAULT_APIGROUP,
+} from './templates';
 import { SingleSubjectForm, SingleSubjectInput } from './SubjectForm';
 import { validateBinding } from './helpers';
 import { RoleForm } from './RoleForm';
@@ -39,14 +39,14 @@ export function GenericRoleBindingCreate({
     setCustomValid(validateBinding(binding));
   }, [binding, setCustomValid]);
 
-  const rolesUrl = `/apis/rbac.authorization.k8s.io/v1/namespaces/${namespace}/roles`;
+  const rolesUrl = `/apis/${DEFAULT_APIGROUP}/v1/namespaces/${namespace}/roles`;
   const {
     data: roles,
     loading: namespaceRolesLoading = true,
     error: namespaceRolesError,
   } = useGetList()(rolesUrl, { skip: !namespace });
 
-  const clusterRolesUrl = '/apis/rbac.authorization.k8s.io/v1/clusterroles';
+  const clusterRolesUrl = `/apis/${DEFAULT_APIGROUP}/v1/clusterroles`;
   const {
     data: clusterRoles,
     loading: clusterRolesLoading = true,
@@ -76,13 +76,9 @@ export function GenericRoleBindingCreate({
     const newRole = {
       kind: role.data?.roleKind,
       name: role.data?.roleName,
+      apiGroup: DEFAULT_APIGROUP,
     };
     jp.value(binding, '$.roleRef', newRole);
-    setBinding({ ...binding });
-  };
-
-  const handleNameChange = name => {
-    jp.value(binding, '$.metadata.name', name);
     setBinding({ ...binding });
   };
 
@@ -97,25 +93,13 @@ export function GenericRoleBindingCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialRoleBinding}
+      nameProps={{ pattern: '.*', showHelp: false }}
+      handleNameChange={name => {
+        jp.value(binding, '$.metadata.name', name);
+
+        setBinding({ ...binding });
+      }}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={singularName}
-        setValue={handleNameChange}
-        readOnly={!!initialRoleBinding}
-        pattern=".*"
-        showHelp={false}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
       <RoleForm
         loading={rolesLoading}
         error={rolesError}

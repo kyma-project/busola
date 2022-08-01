@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import {
   getValue,
-  ApplyFormula,
+  applyFormula,
   useGetTranslation,
   useGetPlaceholder,
 } from '../helpers';
@@ -18,7 +18,7 @@ export const SimpleRenderer = ({ children }) => {
   return children;
 };
 
-export function InlineWidget({ children, value, structure }) {
+export function InlineWidget({ children, value, structure, ...props }) {
   const { widgetT } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
@@ -31,7 +31,9 @@ export function InlineWidget({ children, value, structure }) {
     displayValue = emptyLeafPlaceholder;
   }
 
-  return <LayoutPanelRow name={widgetT(structure)} value={displayValue} />;
+  return (
+    <LayoutPanelRow name={widgetT(structure)} value={displayValue} {...props} />
+  );
 }
 
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
@@ -61,7 +63,7 @@ export function shouldBeVisible(value, visibilityFormula) {
 
 export function Widget({ structure, value, inlineRenderer, ...props }) {
   const { Plain, Text } = widgets;
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const {
     store,
     relations,
@@ -77,7 +79,6 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     if (relatedResourcePath) {
       childValue = store[relatedResourcePath] || { loading: true };
       props.relation = relations[relatedResourcePath];
-      props.originalResource = value;
     } else {
       childValue = getValue(value, structure.path);
     }
@@ -119,7 +120,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
   }
 
   if (structure.formula) {
-    childValue = ApplyFormula(childValue, structure.formula, i18n);
+    childValue = applyFormula(childValue, structure.formula, t);
   }
 
   if (Array.isArray(structure)) {

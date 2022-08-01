@@ -5,24 +5,26 @@ import * as jp from 'jsonpath';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { ResourceForm } from 'shared/ResourceForm';
-import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
+import { KeyValueField } from 'shared/ResourceForm/fields';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
 import { createServiceBindingTemplate } from './helpers';
 import { SecretRefForm } from './SecretRefForm/SecretRefForm';
 import { FormTextarea } from 'fundamental-react';
+import { cloneDeep } from 'lodash';
 
 export function ServiceBindingCreate({
   namespace,
   formElementRef,
   onChange,
+  resource: initialServiceBinding,
   setCustomValid,
   resourceUrl,
   ...props
 }) {
   const { t } = useTranslation();
   const [serviceBinding, setServiceBinding] = React.useState(
-    createServiceBindingTemplate(namespace),
+    cloneDeep(initialServiceBinding) || createServiceBindingTemplate(namespace),
   );
 
   const { data: secrets, loading, error } = useGetList()(
@@ -52,30 +54,8 @@ export function ServiceBindingCreate({
       onChange={onChange}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
+      initialResource={initialServiceBinding}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={t('btp-service-bindings.name_singular')}
-        setValue={name => {
-          jp.value(serviceBinding, '$.metadata.name', name);
-          jp.value(
-            serviceBinding,
-            "$.metadata.labels['app.kubernetes.io/name']",
-            name,
-          );
-          setServiceBinding({ ...serviceBinding });
-        }}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
       <ResourceForm.FormField
         required
         propertyPath="$.spec.serviceInstanceName"
@@ -133,3 +113,5 @@ export function ServiceBindingCreate({
     </ResourceForm>
   );
 }
+
+ServiceBindingCreate.allowEdit = true;

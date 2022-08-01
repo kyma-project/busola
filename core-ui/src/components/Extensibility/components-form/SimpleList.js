@@ -1,9 +1,10 @@
 import React from 'react';
 import { mapValues } from 'lodash';
 import { TransTitle, PluginStack, useUIStore } from '@ui-schema/ui-schema';
-import { Button } from 'fundamental-react';
+import { Button, FormLabel } from 'fundamental-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { useGetTranslation } from 'components/Extensibility/helpers';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
@@ -19,6 +20,7 @@ export function SimpleList({
   widgets,
   ...props
 }) {
+  const { tFromStoreKeys } = useGetTranslation();
   const { t } = useTranslation();
   const { store } = useUIStore();
   const { value } = store?.extractValues(storeKeys) || {};
@@ -43,11 +45,10 @@ export function SimpleList({
 
   const isLast = index => index === listSize;
   const itemsSchema = schema.get('items');
-  const titleRenderer = ({ schema, storeKeys }) => (
-    <label>
-      <TransTitle schema={schema} storeKeys={storeKeys} />
-    </label>
-  );
+  const titleRenderer = ({ schema, storeKeys }) => {
+    const label = tFromStoreKeys(storeKeys);
+    return <FormLabel>{label}</FormLabel>;
+  };
 
   const isObject = itemsSchema?.get('type') === 'object';
 

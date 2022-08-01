@@ -6,11 +6,7 @@ import { cloneDeep } from 'lodash';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { ResourceForm } from 'shared/ResourceForm';
 import { SecretRef } from 'shared/components/ResourceRef/SecretRef';
-import {
-  K8sNameField,
-  KeyValueField,
-  TextArrayInput,
-} from 'shared/ResourceForm/fields';
+import { TextArrayInput } from 'shared/ResourceForm/fields';
 
 import {
   createDNSProviderTemplate,
@@ -74,20 +70,6 @@ export function DnsProviderCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={t('dnsproviders.name_singular')}
-        setValue={name => {
-          jp.value(dnsProvider, '$.metadata.name', name);
-          jp.value(
-            dnsProvider,
-            "$.metadata.labels['app.kubernetes.io/name']",
-            name,
-          );
-          setDNSProvider({ ...dnsProvider });
-        }}
-        readOnly={!!initialDnsProvider}
-      />
       <ResourceForm.FormField
         propertyPath="$.spec.type"
         label={t('dnsproviders.labels.type')}
@@ -107,16 +89,6 @@ export function DnsProviderCreate({
         id="secretRef"
         propertyPath="$.spec.secretRef"
         title={t('dnsproviders.labels.secret-reference')}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
       />
       <TextArrayInput
         required

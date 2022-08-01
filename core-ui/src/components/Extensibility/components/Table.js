@@ -28,18 +28,19 @@ const handleTableValue = (value, t) => {
   }
 };
 
-export function Table({ value, structure, schema, disableMargin }) {
+export function Table({ value, structure, schema, disableMargin, ...props }) {
   const { t } = useTranslation();
-  const { t: tExt, widgetT } = useGetTranslation();
-  const coreHeaders = (structure.children || []).map(column =>
-    widgetT([structure, column]),
-  );
+  const { t: tExt } = useGetTranslation();
+  const coreHeaders = (structure.children || []).map(column => {
+    const path = `${structure.path}.${column.path}`;
+    return tExt(path);
+  });
   const headerRenderer = () =>
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
 
   const rowRenderer = entry => {
     const cells = (structure.children || []).map(column => (
-      <Widget value={entry} structure={column} schema={schema} />
+      <Widget value={entry} structure={column} schema={schema} {...props} />
     ));
 
     if (!structure.collapsible) {
@@ -56,6 +57,7 @@ export function Table({ value, structure, schema, disableMargin }) {
               structure={child}
               schema={schema}
               inlineRenderer={InlineWidget}
+              {...props}
             />
           ))}
         </td>
