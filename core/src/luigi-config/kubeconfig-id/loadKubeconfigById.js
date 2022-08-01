@@ -54,3 +54,7 @@ export async function loadKubeconfigById(kubeconfigId) {
 
   return payload;
 }
+
+export function loadDefaultKubeconfigId() {
+  window.location.replace('/');
+}
