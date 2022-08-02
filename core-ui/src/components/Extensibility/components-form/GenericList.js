@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
+import pluralize from 'pluralize';
 
 export function GenericList({
   storeKeys,
@@ -71,7 +72,7 @@ export function GenericList({
           const itemsSchema = schema.get('items');
           return (
             <ResourceForm.CollapsibleSection
-              title={tFromStoreKeys(ownKeys)}
+              title={pluralize(tFromStoreKeys(ownKeys), 1)}
               actions={
                 <Button
                   compact
