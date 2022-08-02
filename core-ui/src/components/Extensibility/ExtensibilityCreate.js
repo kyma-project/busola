@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { createStore } from '@ui-schema/ui-schema';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import Immutable from 'immutable';
+import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { useGetTranslation, createTemplate } from './helpers';
-
-import { ResourceSchema } from './ResourceSchema';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useTranslation } from 'react-i18next';
 import { prettifyKind } from 'shared/utils/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useGetSchema } from 'hooks/useGetSchema';
+
+import { useGetTranslation, createTemplate } from './helpers';
+import { ResourceSchema } from './ResourceSchema';
 
 export function ExtensibilityCreate({
   formElementRef,

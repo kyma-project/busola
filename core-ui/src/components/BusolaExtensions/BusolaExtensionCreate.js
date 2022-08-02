@@ -11,7 +11,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
 import { widgets as displayWidgets } from 'components/Extensibility/components';
-import { widgets as formWidgets } from 'components/Extensibility/components-form';
+import { customWidgets as formWidgets } from 'components/Extensibility/components-form/custom';
 
 import { createExtensibilityTemplate, createConfigmap } from './helpers';
 import { ColumnsInput } from './ColumnsInput';
@@ -28,6 +28,9 @@ export function BusolaExtensionCreate({ formElementRef, onChange, onCancel }) {
   );
   const [crd, setCrd] = useState(null);
   const [state, setState] = useState({});
+
+  const schema = crd?.spec.versions.find(v => v.storage).schema
+    ?.openAPIV3Schema;
 
   const inlineWidgets = Object.fromEntries(
     Object.entries(displayWidgets).filter(([key, widget]) => widget.inline),
@@ -90,12 +93,6 @@ export function BusolaExtensionCreate({ formElementRef, onChange, onCancel }) {
             )}
           </ResourceForm.Single>
         </Wizard.Step>
-        {/*
-      <Wizard.Step
-        title={t('extensibility.sections.resource')}
-        indicator="1"
-      ></Wizard.Step>
-      */}
         <Wizard.Step
           title={t('extensibility.sections.relations')}
           glyph="puzzle"
@@ -106,10 +103,10 @@ export function BusolaExtensionCreate({ formElementRef, onChange, onCancel }) {
           <ResourceForm.Single resource={state} setResource={setState}>
             <ColumnsInput
               propertyPath="$.form"
-              widgets={formWidgets.custom}
+              widgets={formWidgets}
               translations={jp.value(state, '$.translations.en')}
               setTranslations={setTranslations}
-              schema={crd}
+              schema={schema}
             />
           </ResourceForm.Single>
         </Wizard.Step>
@@ -120,7 +117,7 @@ export function BusolaExtensionCreate({ formElementRef, onChange, onCancel }) {
               widgets={inlineWidgets}
               translations={jp.value(state, '$.translations.en')}
               setTranslations={setTranslations}
-              schema={crd}
+              schema={schema}
             />
           </ResourceForm.Single>
         </Wizard.Step>
@@ -134,7 +131,7 @@ export function BusolaExtensionCreate({ formElementRef, onChange, onCancel }) {
               widgets={displayWidgets}
               translations={jp.value(state, '$.translations.en')}
               setTranslations={setTranslations}
-              schema={crd}
+              schema={schema}
             />
           </ResourceForm.Single>
         </Wizard.Step>

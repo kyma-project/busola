@@ -1,0 +1,12 @@
+.path-selection-dialog {
+  .control-icon {
+    width: 1rem;
+    display: inline-flex;
+    justify-content: center;
+  }
+  .schema-selector {
+    .children .children {
+      margin-left: 1rem;
+    }
+  }
+}

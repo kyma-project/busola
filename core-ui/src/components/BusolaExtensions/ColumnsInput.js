@@ -5,37 +5,16 @@ import {
   Checkbox,
   Select,
   MessageStrip,
-  Dialog,
   Button,
 } from 'fundamental-react';
+import * as jp from 'jsonpath';
+
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
-export function PathSelectorDialog({
-  schema,
-  show,
-  onCancel,
-  onAdd,
-  allowCustom = false,
-}) {
-  const [path, setPath] = useState('');
-  return (
-    <Dialog
-      show={show}
-      title={'«Select path»'}
-      actions={[
-        <Button option="emphasized" onClick={() => onAdd(path)}>
-          «add»
-        </Button>,
-        <Button option="transparent" onClick={onCancel}>
-          «cancel»
-        </Button>,
-      ]}
-    >
-      <FormInput value={path} onChange={e => setPath(e.target.value)} />
-    </Dialog>
-  );
-}
+import { PathSelectorDialog } from './PathSelectorDialog';
+
+const flatPath = path => path.replace(/\[]/g, '');
 
 export function ColumnsInput({
   value: columns,
@@ -43,12 +22,16 @@ export function ColumnsInput({
   translations,
   setTranslations,
   widgets = {},
-  spec,
+  schema,
 }) {
   const { t } = useTranslation();
   const [showPathSelector, setShowPathSelector] = useState(false);
 
-  const addPath = path => {};
+  const addPath = (path, name) => {
+    setColumns([...columns, { path }]);
+    jp.value(translations, `$.${flatPath(path)}`, name);
+    setTranslations({ ...translations });
+  };
 
   if (!columns?.length) {
     return (
@@ -62,14 +45,18 @@ export function ColumnsInput({
     <>
       <PathSelectorDialog
         show={showPathSelector}
+        schema={schema}
         onCancel={() => setShowPathSelector(false)}
-        onAdd={path => {
-          console.log('would add', path);
-          setShowPathSelector(false);
-        }}
+        onAdd={addPath}
       />
       {columns.map(value => (
         <div key={value.path} className="columns-input">
+          <Button
+            glyph="delete"
+            option="transparent"
+            onClick={() => setColumns(columns.filter(col => col !== value))}
+          />
+          {/*
           <Checkbox
             checked={value.isSelected}
             onChange={e => {
@@ -77,16 +64,17 @@ export function ColumnsInput({
               setColumns([...columns]);
             }}
           />
+          */}
           <ResourceForm.Wrapper
             resource={translations}
             setResource={setTranslations}
           >
             <Inputs.Text
               compact
-              propertyPath={value.path}
+              propertyPath={flatPath(value.path)}
               required
               placeholder={t('extensibility.starter-modal.headers.field-name')}
-              readOnly={!value.isSelected}
+              // readOnly={!value.isSelected}
             />
           </ResourceForm.Wrapper>
           <FormInput readOnly compact defaultValue={value?.path} />

@@ -17,14 +17,8 @@ import { SchemaRulesInjector } from '../SchemaRulesInjector';
 import { StringRenderer } from './StringRenderer';
 import { NumberRenderer } from './NumberRenderer';
 import { SwitchRenderer } from './SwitchRenderer';
-import { NameRenderer } from './NameRenderer';
-import { KeyValuePairRenderer } from './KeyValuePairRenderer';
-import { CollapsibleRenderer } from './CollapsibleRenderer';
 import { GenericList } from './GenericList';
-import { MonacoRenderer } from './MonacoRenderer';
-import { ResourceRenderer } from './ResourceRenderer';
-import { ResourceRefRender } from './ResourceRefRenderer';
-import { SimpleList } from './SimpleList';
+import { customWidgets } from './custom';
 
 const pluginStack = [
   ReferencingHandler,
@@ -51,34 +45,6 @@ export const widgets = {
     integer: NumberRenderer,
     array: GenericList,
   },
-  custom: {
-    /*
-    Accordions: AccordionsRenderer,
-    */
-    Text: StringRenderer,
-    /*
-    Text: TextRenderer,
-    StringIcon: StringIconRenderer,
-    TextIcon: TextIconRenderer,
-    NumberIcon: NumberIconRenderer,
-    NumberSlider,
-    */
-    SimpleList,
-    GenericList,
-    /*
-    OptionsCheck,
-    OptionsRadio,
-    Select,
-    SelectMulti,
-    Card: CardRenderer,
-    LabelBox,
-    */
-    Name: NameRenderer,
-    KeyValuePair: KeyValuePairRenderer,
-    CodeEditor: MonacoRenderer,
-    FormGroup: CollapsibleRenderer,
-    ResourceRefs: ResourceRefRender,
-    Resource: ResourceRenderer,
-  },
+  custom: customWidgets,
 };
 export default widgets;
