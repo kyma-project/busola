@@ -2,7 +2,7 @@
 
 There's a special error handler, that can be used when validating input from the EXT Config Maps.
 
-Users make errors in configuration, we can display the error's message and even the responsible part of a Config Map with the `throwConfigError` handler:
+When users make errors in configuration, you can display the error's message and even the responsible part of a Config Map with the `throwConfigError` handler:
 
 ```js
 if (!structure || typeof structure !== 'object') {
