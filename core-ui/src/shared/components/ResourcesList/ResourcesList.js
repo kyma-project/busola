@@ -67,7 +67,6 @@ ResourcesList.propTypes = {
   omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
   resourceUrlPrefix: PropTypes.string,
   disableCreate: PropTypes.bool,
-  hideLabelsAndCreate: PropTypes.bool,
 };
 
 ResourcesList.defaultProps = {
@@ -78,7 +77,6 @@ ResourcesList.defaultProps = {
   listHeaderActions: null,
   readOnly: false,
   disableCreate: false,
-  hideLabelsAndCreate: false,
   filterFn: () => true,
 };
 
