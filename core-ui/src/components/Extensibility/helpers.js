@@ -144,3 +144,9 @@ export const useCreateResourceDescription = descID => {
     }
   }
 };
+
+export const throwConfigError = (message, code) => {
+  const e = new Error(message, { cause: code });
+  e.name = 'Extensibility Config Error';
+  throw e;
+};
