@@ -184,8 +184,8 @@ CodeViewer widgets display values using a read-only code editor.
 
 #### Widget-specific parameters
 
-- **language** - used for code highlighting. Editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
-  If the language is not specified, editor tries to display the content as `yaml` with a fallback to `json`.
+- **language** - used for code highlighting. The editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
+  If the language is not specified, the editor tries to display the content as `yaml` with a fallback to `json`.
 
 #### Example
 
