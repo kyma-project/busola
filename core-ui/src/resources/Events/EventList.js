@@ -111,7 +111,7 @@ export function EventList(props) {
       textSearchProperties={textSearchProperties}
       listHeaderActions={[MessageSelector]}
       customColumns={customColumns}
-      hideLabelsAndCreate={true}
+      omitColumnsIds={['namespace', 'labels', 'created']}
       sortBy={sortByFn}
       description={description}
       fixedPath={true}
