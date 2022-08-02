@@ -5,7 +5,7 @@ import { FormInput, Checkbox, MessageStrip } from 'fundamental-react';
 export function ColumnsInput({ value: columns, setValue: setColumns }) {
   const { t } = useTranslation();
 
-  if (!columns.length) {
+  if (!columns?.length) {
     return (
       <MessageStrip type="warning">
         {t('extensibility.starter-modal.messages.no-columns')}

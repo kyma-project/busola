@@ -10,12 +10,9 @@ import { EventsList } from 'shared/components/EventsList';
 import { CurrentCRDVersion } from './CurrentCRDVersion';
 import { RelatedCRDsList } from './RelatedCRDsList';
 import { CustomResourceDefinitionCreate } from './CustomResourceDefinitionCreate';
-import { ExtensibilityStarterModal } from './ExtensibilityStarterModal/ExtensibilityStarterModal';
-import { useFeature } from 'shared/hooks/useFeature';
 
 export function CustomResourceDefinitionDetails(props) {
   const { t, i18n } = useTranslation();
-  const { isEnabled: isExtensibilityEnabled } = useFeature('EXTENSIBILITY');
 
   const customColumns = [
     {
@@ -69,10 +66,6 @@ export function CustomResourceDefinitionDetails(props) {
     );
   };
 
-  const resourceHeaderActions = isExtensibilityEnabled
-    ? [crd => <ExtensibilityStarterModal key="extensibility-modal" crd={crd} />]
-    : [];
-
   return (
     <ResourceDetails
       customColumns={customColumns}
@@ -83,7 +76,6 @@ export function CustomResourceDefinitionDetails(props) {
         Events,
       ]}
       createResourceForm={CustomResourceDefinitionCreate}
-      resourceHeaderActions={resourceHeaderActions}
       {...props}
     />
   );
