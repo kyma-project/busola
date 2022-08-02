@@ -2,13 +2,14 @@ import React, { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
 import * as jp from 'jsonpath';
-import { Editor } from 'shared/components/MonacoEditorESM/Editor';
+import { Editor as MonacoEditor } from 'shared/components/MonacoEditorESM/Editor';
 
-function EditorAsFieldWrapper({
+export function Editor({
   value,
   onChange,
   setValue,
   language = 'yaml',
+  convert = true,
   customSchemaId,
   ...props
 }) {
@@ -16,22 +17,30 @@ function EditorAsFieldWrapper({
   const [error, setError] = useState('');
 
   const parsedValue = React.useMemo(() => {
-    if (language === 'yaml') {
+    if (!convert) {
+      return value;
+    } else if (language === 'yaml') {
       return jsyaml.dump(JSON.parse(JSON.stringify(value), { noRefs: true }));
     } else if (language === 'json') {
       return JSON.stringify(value, null, 2);
     } else {
       return value;
     }
-  }, [value, language]);
+  }, [value, language, convert]);
 
   // TODO (task created) schema is lost if user deletes all the resource with the exception of one line, goes to simple and returns to editor
   const resourceSchemaId = useRef(
-    `${jp.value(value, `$.apiVersion`)}/${jp.value(value, `$.kind`)}`,
+    convert
+      ? `${jp.value(value, `$.apiVersion`)}/${jp.value(value, `$.kind`)}`
+      : '',
   );
 
   const handleChange = useCallback(
     text => {
+      if (!convert) {
+        setValue(text);
+        return;
+      }
       try {
         let parsed = {};
         if (language === 'yaml') {
@@ -56,7 +65,7 @@ function EditorAsFieldWrapper({
     [setError, t, language],
   );
   return (
-    <Editor
+    <MonacoEditor
       {...props}
       language={language}
       value={parsedValue}
@@ -67,4 +76,4 @@ function EditorAsFieldWrapper({
   );
 }
 
-export default EditorAsFieldWrapper;
+export default Editor;

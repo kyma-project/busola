@@ -87,7 +87,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   );
 };
 
-export const ExtensibilityDetails = () => {
+const ExtensibilityDetails = () => {
   const resMetaData = useGetCRbyPath();
 
   return (
@@ -105,3 +105,5 @@ export const ExtensibilityDetails = () => {
     </TranslationBundleContext.Provider>
   );
 };
+
+export default ExtensibilityDetails;

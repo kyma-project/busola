@@ -299,6 +299,7 @@ clusters:
   add:
     errors:
       failed-to-add-cluster: Failed to connect a cluster
+    load-default: Load default cluster
     title: Connect cluster
   auth-type: Authentication type
   buttons:
@@ -1002,6 +1003,7 @@ events:
   title: Events
 extensibility:
   configuration-error: 'Configuration error: {{error}}'
+  description: <0>Extensions</0> allow you to create a separate dedicated user interface (UI) page for your Custom Resource Definition (CRD).
   error: Your extension configuration is incorrect.
   message:
     old-version: There is a newer version of the extensibility configuration. Please migrate to the newest version.
@@ -1009,9 +1011,19 @@ extensibility:
     unsupported-version: Your extensibility configuration version is no longer supported. Please migrate to the newest version.
   no-path-children: A widget lacks one of the required properties, add either "path" or "children".
   not-an-object: Not an object.
+  sections:
+    details: Details View
+    form: Form Fields
+    lang-translations: Translations ({{lang}})
+    list: List Columns
+    relations: Resource Relations
+    resource: Resource Basics
+    translations: Translations
+    version: Version
   starter-modal:
     buttons:
       open-modal: Create UI
+    crd: Resource
     headers:
       details-summary: Details Summary
       field-name: Field Name
@@ -1026,7 +1038,7 @@ extensibility:
       scaffold-only: The above configuration can be changed later at the Config Map level.
       success: UI configuration upserted.
     title: Create UI for {{kind}} CRD
-  title: Extensibility
+  title: Extensions
   version:
     current: Current vesion
     latest: Latest vesion

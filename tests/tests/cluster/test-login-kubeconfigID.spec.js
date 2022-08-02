@@ -80,11 +80,52 @@ context('Test login - kubeconfigID', () => {
         url: `${kubeconfigIdAddress}/*`,
       },
       `a:
-c:d`,
+  c:d`,
     );
     cy.visit(`${config.clusterAddress}/clusters?kubeconfigID=tests`);
     Cypress.on('window:alert', alertContent =>
       expect(alertContent).to.include('Error loading kubeconfig ID'),
     );
+  });
+
+  it('Handles default kubeconfig', () => {
+    // mock defaultKubeconfig on
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '*assets/config/config.json*',
+      },
+      JSON.stringify({
+        config: {
+          features: {
+            KUBECONFIG_ID: {
+              isEnabled: true,
+              config: {
+                kubeconfigUrl: '/kubeconfig',
+                defaultKubeconfig: 'mock-kubeconfig.yaml',
+              },
+            },
+          },
+        },
+      }),
+    );
+
+    cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
+      cy.intercept(
+        {
+          method: 'GET',
+          url: `${kubeconfigIdAddress}/*`,
+        },
+        kubeconfig,
+      );
+      cy.visit(`${config.clusterAddress}/clusters`);
+
+      cy.getIframeBody()
+        .contains('Load default cluster')
+        .should('be.visible')
+        .click();
+
+      cy.url().should('match', /overview$/);
+    });
   });
 });
