@@ -1,10 +1,8 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
-import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { prettifyKind } from 'shared/utils/helpers';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
@@ -16,6 +14,7 @@ import {
 } from './helpers';
 import { Widget } from './components/Widget';
 import { RelationsContextProvider } from './contexts/RelationsContext';
+import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 
 export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
@@ -70,7 +69,6 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
 };
 
 const ExtensibilityList = () => {
-  const { t } = useTranslation();
   const resMetaData = useGetCRbyPath();
   const { path } = resMetaData?.resource ?? {};
 
@@ -82,13 +80,9 @@ const ExtensibilityList = () => {
       }}
     >
       <RelationsContextProvider relations={resMetaData?.relations || {}}>
-        <ErrorBoundary
-          customMessage={t('extensibility.error')}
-          displayButton={false}
-          key={path}
-        >
+        <ExtensibilityErrBoundary key={path}>
           <ExtensibilityListCore resMetaData={resMetaData} />
-        </ErrorBoundary>
+        </ExtensibilityErrBoundary>
       </RelationsContextProvider>
     </TranslationBundleContext.Provider>
   );
