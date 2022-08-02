@@ -49,6 +49,7 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
   If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+- **kindOnly** - used to determine if resource name is displayed. Defaults to _false_.
 
 #### Examples
 
