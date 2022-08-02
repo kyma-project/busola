@@ -1003,14 +1003,25 @@ events:
   title: Events
 extensibility:
   configuration-error: 'Configuration error: {{error}}'
+  description: <0>Extensions</0> allow you to create a separate dedicated user interface (UI) page for your Custom Resource Definition (CRD).
   error: Your extension configuration is incorrect.
   message:
     old-version: There is a newer version of the extensibility configuration. Please migrate to the newest version.
     unnown-version: Your extensibility configuration version is no longer supported, but cannot be migrated. For more information, see <0>Extensibility documentation</0>.
     unsupported-version: Your extensibility configuration version is no longer supported. Please migrate to the newest version.
+  sections:
+    details: Details View
+    form: Form Fields
+    lang-translations: Translations ({{lang}})
+    list: List Columns
+    relations: Resource Relations
+    resource: Resource Basics
+    translations: Translations
+    version: Version
   starter-modal:
     buttons:
       open-modal: Create UI
+    crd: Resource
     headers:
       details-summary: Details Summary
       field-name: Field Name
@@ -1025,7 +1036,7 @@ extensibility:
       scaffold-only: The above configuration can be changed later at the Config Map level.
       success: UI configuration upserted.
     title: Create UI for {{kind}} CRD
-  title: Extensibility
+  title: Extensions
   version:
     current: Current vesion
     latest: Latest vesion
