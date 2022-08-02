@@ -203,11 +203,7 @@ export function ResourceListRenderer({
     resourceType,
   );
 
-  if (columns) {
-    customColumns = columns;
-  }
-
-  const defaultCustomColumns = [
+  const defaultColumns = [
     {
       header: t('common.headers.name'),
       value: entry =>
@@ -233,15 +229,6 @@ export function ResourceListRenderer({
       id: 'namespace',
     },
     {
-      header: t('common.headers.labels'),
-      value: entry => (
-        <div style={{ maxWidth: '36rem' }}>
-          <Labels labels={entry.metadata.labels} shortenLongLabels />
-        </div>
-      ),
-      id: 'labels',
-    },
-    {
       header: t('common.headers.created'),
       value: entry => (
         <ReadableCreationTimestamp
@@ -250,11 +237,22 @@ export function ResourceListRenderer({
       ),
       id: 'created',
     },
+    {
+      header: t('common.headers.labels'),
+      value: entry => (
+        <div style={{ maxWidth: '36rem' }}>
+          <Labels labels={entry.metadata.labels} shortenLongLabels />
+        </div>
+      ),
+      id: 'labels',
+    },
   ];
 
-  customColumns = [...defaultCustomColumns, ...customColumns].filter(
-    col => !omitColumnsIds.includes(col.id),
-  );
+  customColumns =
+    columns ||
+    [...defaultColumns, ...customColumns].filter(
+      col => !omitColumnsIds.includes(col.id),
+    );
 
   const handleSaveClick = resourceData => async newYAML => {
     try {
