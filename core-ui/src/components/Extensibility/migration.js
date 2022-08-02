@@ -22,10 +22,9 @@ export function migrateToLatest(resource) {
   const newestVersion = getLatestVersion();
   const currentVersion = formatCurrentVersion(resource?.data?.version);
 
-  const functionName = currentVersion?.replace('.', '');
   const newResource =
     currentVersion !== newestVersion
-      ? migrateFunctions[functionName](resource)
+      ? migrateFunctions[currentVersion](resource)
       : resource;
 
   return newResource;
@@ -33,8 +32,7 @@ export function migrateToLatest(resource) {
 const migrateFunctions = {};
 
 // Definitions of functions used for migration.
-// The naming convention: use number version string but without a dot
-migrateFunctions['03'] = resource => {
+migrateFunctions['0.3'] = resource => {
   const newResource = cloneDeep(resource);
   if (formatCurrentVersion(newResource?.data?.version) === '0.3') {
     jp.value(newResource, `$.data.version`, '0.4');
@@ -43,7 +41,7 @@ migrateFunctions['03'] = resource => {
   return migrateToLatest(newResource);
 };
 
-migrateFunctions['04'] = resource => {
+migrateFunctions['0.4'] = resource => {
   const newResource = cloneDeep(resource);
   if (formatCurrentVersion(newResource?.data?.version) === '0.4') {
     jp.value(newResource, `$.data.version`, '0.5');

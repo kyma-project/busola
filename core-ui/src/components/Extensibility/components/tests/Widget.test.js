@@ -11,7 +11,7 @@ describe('Widget', () => {
     it('not set -> render component as usual', () => {
       const container = mount(
         <RelationsContextProvider value={{}} relations={{}}>
-          <Widget value="test-value" structure={{ path: null }} />
+          <Widget value="test-value" structure={{ path: '' }} />
         </RelationsContextProvider>,
       );
 
@@ -23,7 +23,7 @@ describe('Widget', () => {
         <RelationsContextProvider value={{}} relations={{}}>
           <Widget
             value="test-value"
-            structure={{ path: null, visibility: null }}
+            structure={{ path: '', visibility: null }}
           />
         </RelationsContextProvider>,
       );
@@ -36,7 +36,7 @@ describe('Widget', () => {
         <RelationsContextProvider value={{}} relations={{}}>
           <Widget
             value="test-value"
-            structure={{ path: null, visibility: false }}
+            structure={{ path: '', visibility: false }}
           />
         </RelationsContextProvider>,
       );
@@ -52,7 +52,7 @@ describe('Widget', () => {
         <RelationsContextProvider value={{}} relations={{}}>
           <Widget
             value="test-value"
-            structure={{ path: null, visibility: '+=' }}
+            structure={{ path: '', visibility: '+=' }}
           />
         </RelationsContextProvider>,
       );
@@ -69,7 +69,7 @@ describe('Widget', () => {
         <RelationsContextProvider value={{}} relations={{}}>
           <Widget
             value="test-value"
-            structure={{ path: null, visibility: '$contains(data, "test")' }}
+            structure={{ path: '', visibility: '$contains(data, "test")' }}
           />
         </RelationsContextProvider>,
       );
@@ -79,7 +79,7 @@ describe('Widget', () => {
         <RelationsContextProvider value={{}} relations={{}}>
           <Widget
             value="test-value"
-            structure={{ path: null, visibility: '$contains(data, "tets")' }}
+            structure={{ path: '', visibility: '$contains(data, "tets")' }}
           />
         </RelationsContextProvider>,
       );

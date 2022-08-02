@@ -18,6 +18,7 @@ import { getCorrespondingNamespaceLocation } from './navigation/navigation-helpe
 import { featureCommunicationEntries } from './feature-discovery';
 import * as fetchCache from './cache/fetch-cache';
 import { sendTrackingRequest } from './tracking';
+import { loadDefaultKubeconfigId } from './kubeconfig-id/loadKubeconfigById';
 
 addCommandPaletteHandler();
 addOpenSearchHandler();
@@ -100,6 +101,9 @@ export const communication = {
       if (switchCluster) {
         await setCluster(params?.kubeconfig?.['current-context']);
       }
+    },
+    'busola.loadDefaultKubeconfigId': () => {
+      loadDefaultKubeconfigId();
     },
     'busola.deleteCluster': async ({ clusterName }) => {
       await deleteCluster(clusterName);

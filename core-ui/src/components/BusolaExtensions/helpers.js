@@ -1,6 +1,15 @@
 import { prettifyKind } from 'shared/utils/helpers';
 import pluralize from 'pluralize';
-import { getLatestVersion } from '../../../components/Extensibility/migration';
+import { getLatestVersion } from 'components/Extensibility/migration';
+
+export const SECTIONS = [
+  'resource',
+  'form',
+  'list',
+  'details',
+  'relations',
+  'translations',
+];
 
 function extractFirstLevelProperties(crd) {
   const filterSimpleProps = ([, property]) =>
@@ -141,5 +150,16 @@ export function createConfigmap(crd, data) {
         JSON.stringify(value, null, 2),
       ]),
     ),
+  };
+}
+
+export function createConfigMapTemplate(namespace) {
+  return {
+    apiVersion: 'v1',
+    kind: 'ConfigMap',
+    metadata: {
+      namespace,
+    },
+    data: {},
   };
 }
