@@ -5,6 +5,12 @@ import { List } from 'immutable';
 
 const byPath = a => b => JSON.stringify(b.path) === JSON.stringify(a);
 
+// JS findLast doesn't work in firefox yet
+const findLast = (rules = [], condition) => {
+  const reversedRules = rules.reverse();
+  return reversedRules.find(condition);
+};
+
 // fake an OrderedMap-like structure using List to allow for duplicate keys
 const propertiesWrapper = src => ({
   map: cb => List(src?.map(([key, val]) => cb(val, key))),
@@ -16,7 +22,7 @@ export function prepareSchemaRules(ruleDefs) {
   const addRule = rule => {
     rules.push(rule);
     const parentPath = initial(rule.path);
-    const lastParent = rules.findLast(byPath(parentPath));
+    const lastParent = findLast(rules, byPath(parentPath));
     if (lastParent) {
       lastParent.children.push(rule);
     }
@@ -30,7 +36,7 @@ export function prepareSchemaRules(ruleDefs) {
 
     initial(fullPath).reduce((acc, step) => {
       const myPath = [...acc, step];
-      const lastRule = rules.findLast(byPath(myPath));
+      const lastRule = findLast(rules, byPath(myPath));
       if (!lastRule) {
         addRule({
           path: myPath,
@@ -41,7 +47,7 @@ export function prepareSchemaRules(ruleDefs) {
       return myPath;
     }, []);
 
-    const lastRule = rules.findLast(byPath(fullPath));
+    const lastRule = findLast(rules, byPath(fullPath));
     if (!lastRule || !lastRule.auto) {
       addRule({
         ...ruleDef,
