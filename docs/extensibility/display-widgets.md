@@ -13,7 +13,7 @@ Badge widgets render texts as a status badge, using a set of predefined rules to
 #### Widget-specific parameters
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
-  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+  If the `translations` section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 - **highlights** - an optional map of highlight rules. Key refers to the type of highlight, while the rule can just be a plain array of values or a string containing a jsonata rule. Allowed keys are `informative` `positive`, `negative` and `critical`.
 
 #### Default highlight rules
@@ -48,7 +48,7 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 #### Widget-specific parameters
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
-  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+  If the `translations` section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 - **kindOnly** - used to determine if resource name is displayed. Defaults to _false_.
 
 #### Examples
@@ -106,7 +106,7 @@ Labels widgets render all the object entries in the `key-value` format.
 #### Widget-specific parameters
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
-  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+  If the `translations` section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 
 ```json
 {
@@ -124,7 +124,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 
 #### Widget-specific parameters
 
-- **resource** - To create a hyperlink, Busola needs the **name** and the **kind** of the target resource; they must be passed into the **resource** object as property paths in either **data** - value extracted using **path**, or **root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
+- **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **data** - value extracted using **path**, or **root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
 - **linkText** - this property has access to **data** and **root**. This makes it possible to insert resource properties into a translation.
 
 #### Example
@@ -160,7 +160,7 @@ Text widgets render values as a simple text. This is the default behavior for al
 #### Widget-specific parameters
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
-  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+  If the `translations` section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 
 #### Example
 
