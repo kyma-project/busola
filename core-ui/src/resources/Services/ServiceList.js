@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
+import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { Link } from 'shared/components/Link/Link';
 
 import { ServiceCreate } from './ServiceCreate';
@@ -42,7 +42,10 @@ export function ServiceList(props) {
     {
       header: t('common.headers.owner'),
       value: service => (
-        <ControlledByKind ownerReferences={service.metadata.ownerReferences} />
+        <ControlledBy
+          ownerReferences={service.metadata.ownerReferences}
+          kindOnly
+        />
       ),
     },
     {
