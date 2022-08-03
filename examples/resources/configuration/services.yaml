@@ -50,7 +50,8 @@ data:
     [
       {
         "path": "metadata.ownerReferences",
-        "widget": "ControlledByKind"
+        "widget": "ControlledBy",
+        "kindOnly": true,
       },
       {
         "path": "spec.type",
@@ -84,12 +85,14 @@ data:
         "selector": "$filter(data, function($item) {$substringAfter($substringBefore($item.spec.sink, '.'), '://') = resource.metadata.name})"
       }
     }
-  resource: |-
+  general: |-
     {
-      "kind": "Service",
-      "group": "",
-      "version": "v1",
-      "path": "example-services",
+      "resource": {
+        "kind": "Service",
+        "group": "",
+        "version": "v1",
+      },
+      "urlPath": "example-services",
       "scope": "namespace",
     }
   translations: |-

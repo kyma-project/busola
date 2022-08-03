@@ -135,12 +135,14 @@ data:
         "widget": "Badge"
       },
     ]
-  resource: |-
+  general: |-
     {
-      "kind": "Certificate",
-      "group": "cert-manager.io",
-      "version": "v1",
-      "path": "example-certificates",
+      "resource": {
+        "kind": "Certificate",
+        "group": "cert-manager.io",
+        "version": "v1"
+      },
+      "urlPath": "example-certificates",
       "scope": "namespace"
     }
   translations: |-
