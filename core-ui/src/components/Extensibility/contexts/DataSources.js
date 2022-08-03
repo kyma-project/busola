@@ -72,15 +72,15 @@ export function DataSourcesContextProvider({ children, dataSources }) {
 
   const fetchResource = async (dataSource, dataSourceName, resource) => {
     try {
-      const { selector, resourceName } = dataSource;
+      const { filter, resourceName } = dataSource;
 
       const relativeUrl = buildUrl(dataSource, resource);
       const isListCall = !resourceName;
       const response = await fetch({ relativeUrl });
       let data = await response.json();
       data = isListCall ? data.items : data;
-      if (selector) {
-        data = jsonata(selector).evaluate({
+      if (filter) {
+        data = jsonata(filter).evaluate({
           data,
           resource,
         });

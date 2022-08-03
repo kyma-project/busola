@@ -75,13 +75,13 @@ data:
         "kind": "APIRule",
         "group": "apis/gateway.kyma-project.io",
         "version": "v1alpha1",
-        "selector": "$filter(data, function($item) {$item.spec.service.name = resource.metadata.name})"
+        "filter": "$filter(data, function($item) {$item.spec.service.name = resource.metadata.name})"
       },
       "subscriptions":{
         "kind": "Subscription",
         "group": "apis/eventing.kyma-project.io",
         "version": "v1alpha1",
-        "selector": "$filter(data, function($item) {$substringAfter($substringBefore($item.spec.sink, '.'), '://') = resource.metadata.name})"
+        "filter": "$filter(data, function($item) {$substringAfter($substringBefore($item.spec.sink, '.'), '://') = resource.metadata.name})"
       }
     }
   resource: |-

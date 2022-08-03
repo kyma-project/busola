@@ -130,7 +130,7 @@ data:
         "kind": "Secret",
         "version": "v1",
         "namespace": "pizzas",
-        "selector": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"
+        "filter": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"
       }
     }
   resource: |-
