@@ -71,9 +71,9 @@ data:
   general: |-
     {
       "resource": {
-          "kind": "PizzaOrder",
-          "group": "busola.example.com",
-          "version": "v1"
+        "kind": "PizzaOrder",
+        "group": "busola.example.com",
+        "version": "v1"
       },
       "urlPath": "pizzaorders",
       "scope": "namespace",

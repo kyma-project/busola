@@ -135,11 +135,11 @@ data:
   general: |-
     {
       "resource": {
-      "kind": "Pizza",
-      "group": "busola.example.com",
-      "version": "v1",
+        "kind": "Pizza",
+        "group": "busola.example.com",
+        "version": "v1",
       },
-      "urlPath": "namespace",
+      "scope": "namespace",
       "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
     }
   translations: |
