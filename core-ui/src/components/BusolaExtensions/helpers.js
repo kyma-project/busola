@@ -1,8 +1,7 @@
 import { prettifyKind } from 'shared/utils/helpers';
 import pluralize from 'pluralize';
 import { getLatestVersion } from 'components/Extensibility/migration';
-
-export const EXTENSION_VERSION_LABEL = 'busola.io/extension-version';
+import { EXTENSION_VERSION_LABEL } from './constants';
 
 export const SECTIONS = [
   'resource',

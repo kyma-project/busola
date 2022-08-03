@@ -8,7 +8,7 @@ import { K8sNameField, Editor } from 'shared/ResourceForm/fields';
 import * as jp from 'jsonpath';
 
 import { createConfigMapTemplate, SECTIONS } from './helpers';
-import { EXTENSION_VERSION_LABEL } from 'components/Extensibility/helpers';
+import { EXTENSION_VERSION_LABEL } from './constants';
 
 export function BusolaExtensionEdit({
   namespace,
