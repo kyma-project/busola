@@ -11,23 +11,29 @@ import { useGetTranslation, TranslationBundleContext } from './helpers';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
 import { RelationsContextProvider } from './contexts/RelationsContext';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
+import { useGetSchema } from 'hooks/useGetSchema';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
-  const { path, kind } = resMetaData?.resource ?? {};
+  const { urlPath, resource } = resMetaData?.general ?? {};
+  const { kind, version, group } = resource;
 
-  const detailsProps = usePrepareDetailsProps(path, 'name');
+  const openapiSchemaId = `${group}/${version}/${kind}`;
+  const { schema } = useGetSchema({
+    schemaId: openapiSchemaId,
+  });
 
-  if (resMetaData?.resource?.kind) {
+  const detailsProps = usePrepareDetailsProps(urlPath, 'name');
+
+  if (kind) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
-      path,
+      urlPath,
       pluralize(kind).toLowerCase(),
     );
   }
 
   const header = resMetaData?.details?.header || [];
   const body = resMetaData?.details?.body || [];
-  const schema = resMetaData?.schema;
   const relations = resMetaData?.relations || {};
 
   const breadcrumbs = [
@@ -36,7 +42,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
         defaultValue: pluralize(prettifyKind(kind)),
       }),
       path: '/',
-      fromContext: resMetaData?.resource?.path,
+      fromContext: urlPath,
     },
     { name: '' },
   ];
@@ -89,12 +95,12 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
 
 const ExtensibilityDetails = () => {
   const resMetaData = useGetCRbyPath();
-
+  const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
   return (
     <TranslationBundleContext.Provider
       value={{
-        translationBundle: resMetaData?.resource?.path || 'extensibility',
-        defaultResourcePlaceholder: resMetaData?.resource?.defaultPlaceholder,
+        translationBundle: urlPath || 'extensibility',
+        defaultResourcePlaceholder: defaultPlaceholder,
       }}
     >
       <RelationsContextProvider relations={resMetaData?.relations || {}}>

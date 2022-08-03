@@ -28,12 +28,13 @@ export function ExtensibilityCreate({
   const notification = useNotification();
   const { t } = useTranslation();
   const { t: tExt, exists } = useGetTranslation();
-  const api = createResource?.resource || {};
+  const general = createResource?.general;
+  const api = general?.resource || {};
 
   const [resource, setResource] = useState(
     initialResource ||
       createResource?.template ||
-      createTemplate(api, namespace, createResource?.resource?.scope),
+      createTemplate(api, namespace, general?.scope),
   );
 
   const [store, setStore] = useState(() =>
@@ -67,7 +68,7 @@ export function ExtensibilityCreate({
     toggleFormFn(false);
   };
 
-  const { version, kind, group } = createResource.resource;
+  const { version, kind, group } = api;
   const openapiSchemaId = `${group}/${version}/${kind}`;
   const { schema, error: errorOpenApi, loading } = useGetSchema({
     schemaId: openapiSchemaId,
@@ -79,11 +80,7 @@ export function ExtensibilityCreate({
   return (
     <ResourceForm
       pluralKind={resourceType}
-      singularName={
-        exists('name')
-          ? tExt('name')
-          : prettifyKind(createResource.resource?.kind || '')
-      }
+      singularName={exists('name') ? tExt('name') : prettifyKind(kind || '')}
       resource={resource}
       setResource={updateResource}
       formElementRef={formElementRef}
@@ -95,24 +92,24 @@ export function ExtensibilityCreate({
     >
       <ResourceSchema
         simple
-        key={api.version}
+        key={version}
         schema={errorOpenApi ? {} : schema}
         schemaRules={createResource?.form}
         resource={resource}
         store={store}
         setStore={setStore}
         onSubmit={() => {}}
-        path={createResource?.resource?.path || ''}
+        path={general?.urlPath || ''}
       />
       <ResourceSchema
         advanced
-        key={api.version}
+        key={version}
         schema={errorOpenApi ? {} : schema}
         schemaRules={createResource?.form}
         resource={resource}
         store={store}
         setStore={setStore}
-        path={createResource?.resource?.path || ''}
+        path={general?.urlPath || ''}
       />
     </ResourceForm>
   );
