@@ -13,7 +13,7 @@ import {
   useGetTranslation,
 } from './helpers';
 import { Widget } from './components/Widget';
-import { RelationsContextProvider } from './contexts/RelationsContext';
+import { DataSourcesContextProvider } from './contexts/DataSources';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 
 export const ExtensibilityListCore = ({ resMetaData }) => {
@@ -22,7 +22,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   const { path, kind, disableCreate } = resMetaData?.resource ?? {};
 
   const schema = resMetaData?.schema;
-  const relations = resMetaData?.relations || {};
+  const dataSources = resMetaData?.dataSources || {};
 
   const listProps = usePrepareListProps(path, 'name');
 
@@ -51,7 +51,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
             value={resource}
             structure={column}
             schema={schema}
-            relations={relations}
+            dataSources={dataSources}
             originalResource={resource}
           />
         ),
@@ -79,11 +79,11 @@ const ExtensibilityList = () => {
         defaultResourcePlaceholder: resMetaData?.resource?.defaultPlaceholder,
       }}
     >
-      <RelationsContextProvider relations={resMetaData?.relations || {}}>
+      <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary key={path}>
           <ExtensibilityListCore resMetaData={resMetaData} />
         </ExtensibilityErrBoundary>
-      </RelationsContextProvider>
+      </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>
   );
 };

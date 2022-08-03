@@ -124,7 +124,7 @@ data:
       { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
       { "path": "spec.toppings", "formula": "$sum(data.price)", "name": "Toppings price" }
     ]
-  relations: |-
+  dataSources: |-
     {
       "secretRecipe":{
         "kind": "Secret",

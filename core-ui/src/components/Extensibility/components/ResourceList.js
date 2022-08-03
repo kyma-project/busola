@@ -6,18 +6,18 @@ import { Widget } from './Widget';
 
 export function ResourceList({
   value,
-  relations,
+  dataSources,
   structure,
-  relation,
+  dataSource,
   originalResource,
   schema,
   ...props
 }) {
   const namespace =
-    typeof relation.namespace === 'undefined'
+    typeof dataSource.namespace === 'undefined'
       ? originalResource.metadata.namespace
-      : relation.namespace;
-  const { group, kind, version } = relation;
+      : dataSource.namespace;
+  const { group, kind, version } = dataSource;
   const namespacePart = namespace ? `/namespaces/${namespace}` : '';
   const apiGroup = group ? `apis/${group}` : 'api';
   const resourceUrl = `/${apiGroup}/${version}${namespacePart}/${pluralize(

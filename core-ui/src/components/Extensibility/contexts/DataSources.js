@@ -5,7 +5,7 @@ import { useObjectState } from 'shared/useObjectState';
 import jsonata from 'jsonata';
 import * as jp from 'jsonpath';
 
-const RelationsContext = createContext();
+const DataSourcesContext = createContext();
 
 function formatJsonataResult(result, { isListCall }) {
   // if no entries matched, JSONata returns undefined, make it empty list
@@ -21,12 +21,12 @@ function formatJsonataResult(result, { isListCall }) {
   return result;
 }
 
-export function RelationsContextProvider({ children, relations }) {
+export function DataSourcesContextProvider({ children, dataSources }) {
   const fetch = useFetch();
   // store
   const [store, setStore] = useObjectState();
   // safer than useState for concurrency - we don't want to duplicate the requests
-  const relationsDict = useRef({});
+  const dataSourcesDict = useRef({});
   // refetch intervals
   const intervals = useRef([]);
 
@@ -34,7 +34,7 @@ export function RelationsContextProvider({ children, relations }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => intervals.current.forEach(clearInterval), []);
 
-  const buildUrl = (relation, resource) => {
+  const buildUrl = (dataSource, resource) => {
     let {
       group,
       kind,
@@ -42,7 +42,7 @@ export function RelationsContextProvider({ children, relations }) {
       resourceName,
       namespace,
       ownerLabelSelectorPath,
-    } = relation;
+    } = dataSource;
     if (typeof namespace === 'undefined') {
       namespace = resource.metadata.namespace;
     }
@@ -70,11 +70,11 @@ export function RelationsContextProvider({ children, relations }) {
     return url;
   };
 
-  const fetchResource = async (relation, relationName, resource) => {
+  const fetchResource = async (dataSource, dataSourceName, resource) => {
     try {
-      const { selector, resourceName } = relation;
+      const { selector, resourceName } = dataSource;
 
-      const relativeUrl = buildUrl(relation, resource);
+      const relativeUrl = buildUrl(dataSource, resource);
       const isListCall = !resourceName;
       const response = await fetch({ relativeUrl });
       let data = await response.json();
@@ -86,41 +86,41 @@ export function RelationsContextProvider({ children, relations }) {
         });
         data = formatJsonataResult(data, { isListCall });
       }
-      setStore(relationName, {
+      setStore(dataSourceName, {
         loading: false,
         error: null,
         data,
       });
     } catch (e) {
-      setStore(relationName, { loading: false, error: e, data: null });
+      setStore(dataSourceName, { loading: false, error: e, data: null });
     }
   };
 
   const getRelatedResourceInPath = path => {
-    return Object.keys(relations).find(relationName =>
-      path.startsWith('$' + relationName),
+    return Object.keys(dataSources).find(dataSourceName =>
+      path.startsWith('$' + dataSourceName),
     );
   };
 
   const contextValue = {
     store,
-    relations,
+    dataSources,
     getRelatedResourceInPath,
     requestRelatedResource: (resource, path) => {
-      const relationName = getRelatedResourceInPath(path);
-      const relation = relations[relationName];
+      const dataSourceName = getRelatedResourceInPath(path);
+      const dataSource = dataSources[dataSourceName];
 
-      if (!relationsDict.current[relationName]) {
-        // mark relations as fetched
-        relationsDict.current[relationName] = true;
+      if (!dataSourcesDict.current[dataSourceName]) {
+        // mark dataSource as fetched
+        dataSourcesDict.current[dataSourceName] = true;
 
-        setStore(relationName, { loading: true });
+        setStore(dataSourceName, { loading: true });
 
-        fetchResource(relation, relationName, resource);
+        fetchResource(dataSource, dataSourceName, resource);
         const REFETCH_INTERVAL = 6000;
         intervals.current.push(
           setInterval(
-            () => fetchResource(relation, relationName, resource),
+            () => fetchResource(dataSource, dataSourceName, resource),
             REFETCH_INTERVAL,
           ),
         );
@@ -129,12 +129,12 @@ export function RelationsContextProvider({ children, relations }) {
   };
 
   return (
-    <RelationsContext.Provider value={contextValue}>
+    <DataSourcesContext.Provider value={contextValue}>
       {children}
-    </RelationsContext.Provider>
+    </DataSourcesContext.Provider>
   );
 }
 
-export function useRelationsContext() {
-  return useContext(RelationsContext);
+export function useDataSourcesContext() {
+  return useContext(DataSourcesContext);
 }

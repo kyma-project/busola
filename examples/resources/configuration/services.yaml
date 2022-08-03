@@ -69,7 +69,7 @@ data:
         "formula": "$count(data.status.loadBalancer.ingress) ? $map(data.status.loadBalancer.ingress, function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '): ($count(data.spec.externalIPs) ? data.spec.externalIPs ~> $join(', '): '-')"
       }
     ]
-  relations: |-
+  dataSources: |-
     {
       "apirules":{
         "kind": "APIRule",

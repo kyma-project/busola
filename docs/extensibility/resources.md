@@ -207,20 +207,20 @@ renders the same set of data as:
 ]
 ```
 
-## relations section
+## dataSources section
 
-The `relations` section contains an object that maps a relation name to a relation configuration object. The relation name preceded by a dollar sign '\$' is used in the **path** expression.
+The `dataSources` section contains an object that maps a data source name to a data source configuration object. The data source name preceded by a dollar sign '\$' is used in the **path** expression.
 
-It's possible to use both relation name and a path; for example, `{"path": $myRelatedResource.metadata.labels}` returns the `metadata.labels` of the related resource.
+It's possible to use both data source name and a path; for example, `{"path": $myRelatedResource.metadata.labels}` returns the `metadata.labels` of the related resource.
 
-### Relation configuration object fields
+### Data source configuration object fields
 
 Those fields are used to build the related resource URL and filter the received data.
 
 - **kind** - _[required]_ Kubernetes resource kind.
 - **group** - Kubernetes resource group. Not provided for Kubernetes resources in the core (also called legacy) group.
 - **version** - _[required]_ Kubernetes resource version.
-- **namespace** - the resource's Namespace name; it defaults to the original resource's Namespace. If set to `null`, the relation matches cluster-wide resources or resources in all Namespaces.
+- **namespace** - the resource's Namespace name; it defaults to the original resource's Namespace. If set to `null`, cluster-wide resources or resources in all Namespaces are matched.
 - **resourceName** - a specific resource name; leave empty to match all resources of a given type.
 - **ownerLabelSelectorPath** - the path to original object's **selector** type property; for example, `spec.selector.matchLabels` for Deployment, used to select matching Pods.
 - **selector** - [JSONata](https://docs.jsonata.org/overview.html) function enabling the user to write a custom matching logic. It receives a data context of:
@@ -249,7 +249,7 @@ Those fields are used to build the related resource URL and filter the received 
       ]
     }
   },
-  "relations": {
+  "dataSources": {
     "myPods": {
       "kind": "Pod",
       "group": "api",
@@ -329,4 +329,4 @@ Value preprocessors are used as a middleware between a value and the actual rend
   - For truthy `error`, it displays an error message.
   - Otherwise, it passes `data` to the display component.
 
-  Unless you need custom handling of error or loading state, we recommend using **PendingWrapper**, for example, for fields that use [related resources](#relations-section).
+  Unless you need custom handling of error or loading state, we recommend using **PendingWrapper**, for example, for fields that use [data sources](#datasources-section).
