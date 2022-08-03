@@ -42,6 +42,7 @@ export function BusolaExtensionDetails(props) {
       <>
         {SECTIONS.map(key => (
           <ReadonlyEditorPanel
+            editorProps={{ language: 'yaml' }}
             title={t(`extensibility.sections.${key}`)}
             value={data[key]}
             key={key + JSON.stringify(data[key])}
@@ -51,6 +52,7 @@ export function BusolaExtensionDetails(props) {
           .filter(key => key.match(/^translations-..$/))
           .map(key => (
             <ReadonlyEditorPanel
+              editorProps={{ language: 'yaml' }}
               title={t('extensibility.sections.lang-translations', {
                 lang: key.substring(key.length - 2),
               })}
