@@ -4,6 +4,7 @@ import { formatMessage } from 'components/Functions/helpers/misc';
 import {
   PRETTY_RUNTIME_NODEJS12_NAME,
   PRETTY_RUNTIME_NODEJS14_NAME,
+  PRETTY_RUNTIME_NODEJS16_NAME,
   PRETTY_RUNTIME_PYTHON39_NAME,
 } from '../../constants';
 
