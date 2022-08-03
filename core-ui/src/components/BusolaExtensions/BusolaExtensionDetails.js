@@ -41,6 +41,7 @@ export function BusolaExtensionDetails(props) {
       <>
         {SECTIONS.map(key => (
           <ReadonlyEditorPanel
+            editorProps={{ language: 'yaml' }}
             title={t(`extensibility.sections.${key}`)}
             value={data[key]}
             key={key + JSON.stringify(data[key])}
