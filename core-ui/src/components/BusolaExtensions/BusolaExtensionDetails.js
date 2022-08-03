@@ -46,17 +46,6 @@ export function BusolaExtensionDetails(props) {
             key={key + JSON.stringify(data[key])}
           />
         ))}
-        {Object.keys(resource.data ?? {})
-          .filter(key => key.match(/^translations-..$/))
-          .map(key => (
-            <ReadonlyEditorPanel
-              title={t('extensibility.sections.lang-translations', {
-                lang: key.substring(key.length - 2),
-              })}
-              value={data[key]}
-              key={key + JSON.stringify(data[key])}
-            />
-          ))}
       </>
     );
   };

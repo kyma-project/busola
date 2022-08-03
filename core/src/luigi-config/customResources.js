@@ -58,35 +58,22 @@ async function loadTargetClusterCRs(authData) {
     console.warn('Cannot load target cluster CRs', e);
   }
   return (items || [])
-    .map(item => {
-      const cr = Object.entries(item?.data || []).reduce(
-        (acc, [key, value]) => {
-          try {
-            const match = key.match(/^translations(-([a-z]{2}))?$/);
-            if (match) {
-              let translations = acc.translations || {};
-              const lang = match[2];
-              const langTranslations = jsyaml.load(value);
-              if (lang) {
-                translations = merge(translations, {
-                  [lang]: langTranslations,
-                });
-              } else {
-                translations = merge(translations, langTranslations);
-              }
-              return { ...acc, translations };
+    .map(configMap => {
+      const cr = Object.fromEntries(
+        Object.entries(configMap?.data || []).map(
+          ([sectionKey, yamlString]) => {
+            let decodedSection = [sectionKey, null];
+            try {
+              decodedSection = [
+                sectionKey,
+                jsyaml.load(yamlString, { json: true }),
+              ];
+            } catch (error) {
+              console.warn('cannot parse ', sectionKey, yamlString, error);
             }
-
-            return {
-              ...acc,
-              [key]: jsyaml.load(value, { json: true }),
-            };
-          } catch (error) {
-            console.warn('cannot parse ', key, value, error);
-            return null;
-          }
-        },
-        {},
+            return decodedSection;
+          },
+        ),
       );
 
       if (!cr?.resource || Object.keys(cr.resource).length === 0) {

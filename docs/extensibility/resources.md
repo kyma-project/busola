@@ -254,7 +254,7 @@ Those fields are used to build the related resource URL and filter the received 
 
 ## translations sections
 
-You can provide this section as a single `translations` section that contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
+This section contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
 
 ### Predefined translation keys
 
@@ -281,34 +281,6 @@ de:
     items: Artikel
 ```
 
-### Language-specific sections
-
-Alternatively, you can provide `translations-{lang}` sections for a single language. For example:
-
-`translations-en`:
-
-```yaml
-category: My category
-name: My Resource
-metadata:
-  name: Name
-spec:
-  items: Items
-```
-
-`translations-de`:
-
-```yaml
-category: meine Kategorie
-name: Meine Ressource
-metadata:
-  name: Name
-spec:
-  items: Artikel
-```
-
-If you provide both `translations` and `translations-{lang}` sections, they are merged together.
-
 ### Value preprocessors
 
 Value preprocessors are used as a middleware between a value and the actual renderer. They can transform a given value and pass it to the widget; or stop processing and render it so you can view it immediately, without passing it to the widget.
@@ -331,7 +303,7 @@ Busola supports only the current version of the configuration and the prior one.
 
 Therefore, whenever a new version of the configuration is proposed, you can migrate your configuration to the latest version. To do so, go to your Config Map and click the **Migrate** button.
 
-### Example (latest vesion)
+### Example (latest version)
 
 ```yaml
 '0.5'

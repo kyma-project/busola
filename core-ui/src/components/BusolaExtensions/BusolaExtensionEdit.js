@@ -70,25 +70,6 @@ export function BusolaExtensionEdit({
           />
         </ResourceForm.CollapsibleSection>
       ))}
-      {Object.keys(extension.data ?? {})
-        .filter(key => key.match(/^translations-..$/))
-        .map(key => (
-          <ResourceForm.CollapsibleSection
-            title={t('extensibility.sections.lang-translations', {
-              lang: key.substring(key.length - 2),
-            })}
-            defaultOpen
-          >
-            <Editor
-              language="yaml"
-              height="240px"
-              propertyPath={`$.data['${key}']`}
-              autocompletionDisabled
-              updateValueOnParentChange
-              convert={false}
-            />
-          </ResourceForm.CollapsibleSection>
-        ))}
     </ResourceForm>
   );
 }
