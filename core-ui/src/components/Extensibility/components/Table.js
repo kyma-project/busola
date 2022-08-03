@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { isNil } from 'lodash';
-import { useGetSchema } from 'hooks/useGetSchema';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
@@ -66,23 +65,39 @@ export function Table({ value, structure, disableMargin, schema, ...props }) {
     };
   };
 
-  const sortByArray = structure?.sortBy;
+  const findTypeInSchema = (schema, path) => {
+    const propertiesArray = path.split('.');
+    const firstProperty = propertiesArray[0];
 
-  const sortingOptions = defaultSort => {
-    const obj = {};
-
-    for (const sort of sortByArray || []) {
-      obj[tExt(`${structure.path}.${sort}`)] = (a, b) => {
-        console.log('a', a);
-        console.log('b', b);
-        return a[sort] - b[sort];
-      };
+    if (propertiesArray.length === 1) {
+      const lastSchema = schema?.properties ?? schema?.items?.properties;
+      return lastSchema?.[firstProperty].type;
     }
-    return { ...obj };
+
+    propertiesArray.shift();
+
+    const nextPath = [...propertiesArray].join('.');
+    const nextProperties = schema?.properties ?? schema?.items?.properties;
+    const nextSchema = nextProperties?.[firstProperty];
+    return findTypeInSchema(nextSchema, nextPath);
   };
 
-  console.log('schema', schema);
-  console.log('props', props);
+  const sortingOptions = structure?.sortBy;
+
+  const sortBy = defaultSort => {
+    const obj = {};
+
+    for (const sort of sortingOptions || []) {
+      const path = `${structure.path}.${sort}`;
+      const type = findTypeInSchema(schema, path);
+      console.log('path:', path, 'type:', type);
+      obj[tExt(`${structure.path}.${sort}`)] = (a, b) => {
+        return a[sort].localeCompare(b[sort]);
+      };
+    }
+
+    return { ...obj };
+  };
 
   return (
     <GenericList
@@ -97,7 +112,7 @@ export function Table({ value, structure, disableMargin, schema, ...props }) {
       rowRenderer={rowRenderer}
       disableMargin={disableMargin}
       {...handleTableValue(value, t)}
-      sortBy={sortingOptions}
+      sortBy={sortingOptions ? sortBy : null}
       customSortNames
     />
   );
