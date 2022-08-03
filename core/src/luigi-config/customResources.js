@@ -65,6 +65,14 @@ async function loadTargetClusterCRs(authData) {
     console.warn('Cannot load target cluster CRs', e);
   }
   return (items || [])
+    .filter(item =>
+      SUPPORTED_VERSIONS.some(
+        version =>
+          formatCurrentVersion(
+            item.metadata.labels?.['busola.io/extension-version'],
+          ) === version,
+      ),
+    )
     .map(item => {
       const cr = Object.entries(item?.data || []).reduce(
         (acc, [key, value]) => {
@@ -129,13 +137,6 @@ export async function getCustomResources(authData) {
       ...(await loadTargetClusterCRs(authData)),
     });
 
-    customResources[clusterName] = customResources[
-      clusterName
-    ].filter(resource =>
-      SUPPORTED_VERSIONS.some(
-        version => formatCurrentVersion(resource.version) === version,
-      ),
-    );
     return customResources[clusterName];
   }
   return [];
