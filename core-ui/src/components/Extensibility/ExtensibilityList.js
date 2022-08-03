@@ -15,16 +15,23 @@ import {
 import { Widget } from './components/Widget';
 import { RelationsContextProvider } from './contexts/RelationsContext';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
+import { useGetSchema } from 'hooks/useGetSchema';
 
 export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
 
-  const { path, kind, disableCreate } = resMetaData?.resource ?? {};
+  const { urlPath, disableCreate, resource, description } =
+    resMetaData?.general ?? {};
+  const { kind, group, version } = resource;
 
-  const schema = resMetaData?.schema;
+  const openapiSchemaId = `${group}/${version}/${kind}`;
+  const { schema } = useGetSchema({
+    schemaId: openapiSchemaId,
+  });
+
   const relations = resMetaData?.relations || {};
 
-  const listProps = usePrepareListProps(path, 'name');
+  const listProps = usePrepareListProps(urlPath, 'name');
 
   if (kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
@@ -38,9 +45,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     defaultValue: pluralize(prettifyKind(kind)),
   });
 
-  listProps.description = useCreateResourceDescription(
-    resMetaData?.resource?.description,
-  );
+  listProps.description = useCreateResourceDescription(description);
 
   listProps.customColumns = Array.isArray(resMetaData?.list)
     ? resMetaData?.list.map((column, i) => ({
@@ -70,17 +75,17 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
 
 const ExtensibilityList = () => {
   const resMetaData = useGetCRbyPath();
-  const { path } = resMetaData?.resource ?? {};
+  const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};
 
   return (
     <TranslationBundleContext.Provider
       value={{
-        translationBundle: path,
-        defaultResourcePlaceholder: resMetaData?.resource?.defaultPlaceholder,
+        translationBundle: urlPath,
+        defaultResourcePlaceholder: defaultPlaceholder,
       }}
     >
       <RelationsContextProvider relations={resMetaData?.relations || {}}>
-        <ExtensibilityErrBoundary key={path}>
+        <ExtensibilityErrBoundary key={urlPath}>
           <ExtensibilityListCore resMetaData={resMetaData} />
         </ExtensibilityErrBoundary>
       </RelationsContextProvider>
