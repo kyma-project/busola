@@ -12,7 +12,7 @@ export function CustomResources({
   namespace,
   version,
   showTitle = true,
-  showNamespace,
+  omitColumnsIds,
   hideCreateOption,
 }) {
   const { group, names } = crd.spec;
@@ -54,7 +54,7 @@ export function CustomResources({
     showTitle,
     customColumns,
     testid: 'crd-custom-resources',
-    showNamespace,
+    omitColumnsIds,
     hideCreateOption,
     createResourceForm: props => <CRCreate {...props} crd={crd} />,
     allowSlashShortcut: true,

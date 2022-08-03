@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { Link } from 'fundamental-react';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
@@ -97,23 +97,11 @@ export const formatSourceObject = obj => {
   );
 };
 
-export const useMessageList = (items, defaultType = EVENT_MESSAGE_TYPE.ALL) => {
+export const useMessageList = (defaultType = EVENT_MESSAGE_TYPE.ALL) => {
   const [displayType, setDisplayType] = useState(defaultType);
-  const [sortedItems, setSortedItems] = useState([]);
   const { t } = useTranslation();
-  useEffect(() => {
-    //sorts the messages from the newest once data fetched
-    if (items) {
-      const sorted = items.sort((first, second) => {
-        const firstLastTime = new Date(first.lastTimestamp).getTime();
-        const secondLastTime = new Date(second.lastTimestamp).getTime();
-        return secondLastTime - firstLastTime;
-      });
-      setSortedItems([...sorted]);
-    }
-  }, [items, setSortedItems]);
 
-  const messageSelector = (
+  const MessageSelector = (
     <Dropdown
       compact
       options={Object.values(EVENT_MESSAGE_TYPE).map(el => ({
@@ -132,11 +120,11 @@ export const useMessageList = (items, defaultType = EVENT_MESSAGE_TYPE.ALL) => {
   return {
     displayType,
     setDisplayType,
-    sortedItems,
     formatInvolvedObject,
     formatSourceObject,
     navigateToObjectDetails,
     navigateToNodeDetails,
-    messageSelector,
+    MessageSelector,
+    EVENT_MESSAGE_TYPE,
   };
 };

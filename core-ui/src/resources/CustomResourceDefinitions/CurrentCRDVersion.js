@@ -84,7 +84,9 @@ export const CurrentCRDVersion = resource => {
         version={storageVersion}
         namespace={namespace}
         i18n={i18n}
-        showNamespace={resource.spec.scope === 'Namespaced'}
+        omitColumnsIds={
+          resource.spec.scope !== 'Namespaced' ? ['namespace'] : []
+        }
         hideCreateOption={true}
       />
       <AdditionalPrinterColumns
