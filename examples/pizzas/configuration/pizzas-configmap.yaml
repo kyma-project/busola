@@ -132,12 +132,14 @@ data:
         "selector": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"
       }
     }
-  resource: |-
+  general: |-
     {
+      "resource": {
       "kind": "Pizza",
       "group": "busola.example.com",
       "version": "v1",
-      "scope": "namespace",
+      },
+      "urlPath": "namespace",
       "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
     }
   translations: |
