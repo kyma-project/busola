@@ -24,8 +24,7 @@ import {
 } from '../../components/Extensibility/migration';
 
 import { BusolaExtensionEdit } from './BusolaExtensionEdit';
-import { SECTIONS } from './helpers';
-import { EXTENSION_VERSION_LABEL } from 'components/Extensibility/helpers';
+import { EXTENSION_VERSION_LABEL, SECTIONS } from './helpers';
 
 export function BusolaExtensionDetails(props) {
   const { t } = useTranslation();
