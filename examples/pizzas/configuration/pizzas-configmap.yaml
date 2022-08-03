@@ -6,6 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: pizzas
     busola.io/extension: resource
+    busola.io/extension-version: '0.5'
 data:
   details: |
     {
@@ -158,4 +159,3 @@ data:
       spec.ownerReferences.apiVersion: API Version
       spec.ownerReferences.kind: Kind
       spec.ownerReferences.name: Name
-  version: '0.5'

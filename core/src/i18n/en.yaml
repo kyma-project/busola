@@ -1040,8 +1040,8 @@ extensibility:
     title: Create UI for {{kind}} CRD
   title: Extensions
   version:
-    current: Current vesion
-    latest: Latest vesion
+    current: Current version
+    latest: Latest version
   widgets:
     code-viewer-error: 'CodeViewer: The received resource is in a language other than defined: {{error}}.'
     joined-array:
