@@ -252,7 +252,7 @@ Those fields are used to build the related resource URL and filter the received 
 }
 ```
 
-## translations sections
+## translations section
 
 This section contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
 
