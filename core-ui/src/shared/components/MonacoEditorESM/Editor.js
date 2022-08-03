@@ -15,7 +15,7 @@ import { useCreateEditor } from './hooks/useCreateEditor';
 import './Editor.scss';
 
 export function Editor({
-  value,
+  value = '',
   error, // used by the resourceFormWrapper to display error that previous input is used
   onChange,
   readOnly,

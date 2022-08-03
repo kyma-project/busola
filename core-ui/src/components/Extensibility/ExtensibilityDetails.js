@@ -1,11 +1,9 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { prettifyKind } from 'shared/utils/helpers';
-import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { shouldBeVisible, Widget } from './components/Widget';
@@ -13,6 +11,7 @@ import { useGetTranslation, TranslationBundleContext } from './helpers';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
 import { RelationsContextProvider } from './contexts/RelationsContext';
 import { useGetSchema } from 'hooks/useGetSchema';
+import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
@@ -93,8 +92,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   );
 };
 
-export const ExtensibilityDetails = () => {
-  const { t } = useTranslation();
+const ExtensibilityDetails = () => {
   const resMetaData = useGetCRbyPath();
 
   return (
@@ -105,13 +103,12 @@ export const ExtensibilityDetails = () => {
       }}
     >
       <RelationsContextProvider relations={resMetaData?.relations || {}}>
-        <ErrorBoundary
-          customMessage={t('extensibility.error')}
-          displayButton={false}
-        >
+        <ExtensibilityErrBoundary>
           <ExtensibilityDetailsCore resMetaData={resMetaData} />
-        </ErrorBoundary>
+        </ExtensibilityErrBoundary>
       </RelationsContextProvider>
     </TranslationBundleContext.Provider>
   );
 };
+
+export default ExtensibilityDetails;
