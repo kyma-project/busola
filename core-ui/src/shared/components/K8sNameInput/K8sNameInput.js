@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { useValidation } from 'shared/hooks/useValidation';
 
-export const k8sNamePattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
+export const k8sNamePattern = '^[a-z0-9]([-.a-z0-9]*[a-z0-9])?$';
 
 export const K8sNameInput = ({
   _ref,
