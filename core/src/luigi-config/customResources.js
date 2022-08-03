@@ -1,5 +1,5 @@
 import jsyaml from 'js-yaml';
-import { merge } from 'lodash';
+import { mapValues } from 'lodash';
 import pluralize from 'pluralize';
 
 const SUPPORTED_VERSIONS = ['0.4', '0.5'];
@@ -74,22 +74,15 @@ async function loadTargetClusterCRs(authData) {
       ),
     )
     .map(configMap => {
-      const cr = Object.fromEntries(
-        Object.entries(configMap?.data || {}).map(
-          ([sectionKey, yamlString]) => {
-            let decodedSection = [sectionKey, null];
-            try {
-              decodedSection = [
-                sectionKey,
-                jsyaml.load(yamlString, { json: true }),
-              ];
-            } catch (error) {
-              console.warn('cannot parse ', sectionKey, yamlString, error);
-            }
-            return decodedSection;
-          },
-        ),
-      );
+      const convertYamlToObject = yamlString => {
+        try {
+          return jsyaml.load(yamlString, { json: true });
+        } catch (error) {
+          console.warn('cannot parse ', yamlString, error);
+          return null;
+        }
+      };
+      const cr = mapValues(configMap?.data || {}, convertYamlToObject);
 
       if (!cr?.resource || Object.keys(cr.resource).length === 0) {
         console.warn(
