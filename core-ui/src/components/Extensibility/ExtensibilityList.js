@@ -19,6 +19,8 @@ import { ExtensibilityErrBoundary } from 'components/Extensibility/Extensibility
 export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
 
+  console.log(resMetaData);
+
   const { path, kind, disableCreate } = resMetaData?.resource ?? {};
 
   const schema = resMetaData?.schema;
