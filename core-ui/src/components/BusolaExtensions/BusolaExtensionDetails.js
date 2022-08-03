@@ -25,6 +25,7 @@ import {
 
 import { BusolaExtensionEdit } from './BusolaExtensionEdit';
 import { SECTIONS } from './helpers';
+import { EXTENSION_VERSION_LABEL } from './constants';
 
 export function BusolaExtensionDetails(props) {
   const { t } = useTranslation();
@@ -81,7 +82,10 @@ export function BusolaExtensionDetails(props) {
 
     if (!(isExtensibilityEnabled && hasExtensibilityLabel)) return null;
 
-    const currentVersion = formatCurrentVersion(configmap?.data?.version);
+    const currentVersion = formatCurrentVersion(
+      configmap?.metadata.labels?.[EXTENSION_VERSION_LABEL],
+    );
+
     const hasMigrationFunction = getMigrationFunctions().some(
       version => version === currentVersion,
     );

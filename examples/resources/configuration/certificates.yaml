@@ -6,6 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: certificates.cert-manager.io
     busola.io/extension: resource
+    busola.io/extension-version: '0.5'
 data:
   details: |-
     {
@@ -165,4 +166,3 @@ data:
         "spec.secretName": "Secret name",
       }
     }
-  version: '0.5'
