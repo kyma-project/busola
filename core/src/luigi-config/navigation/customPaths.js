@@ -34,11 +34,10 @@ const getCustomNodes = (crs, scope) => {
           cr.translations?.[i18next.language] || {},
         );
         const { resource, urlPath, icon } = cr.general || {};
-        const api = `/${
-          resource?.group === 'core' || resource?.group === ''
-            ? 'api'
-            : `apis/${resource.group}`
-        }/${resource.version.toLowerCase()}`;
+        const version = resource.version.toLowerCase();
+        const group = resource?.group ? `apis/${resource.group}` : 'api';
+        const api = `/${group}/${version}`;
+
         return {
           category: {
             label: i18next.t([
@@ -121,7 +120,6 @@ export const getCustomPaths = (customResources, scope) => {
         resource &&
         typeof urlPath === 'string' &&
         typeof resource.kind === 'string' &&
-        typeof resource.group === 'string' &&
         typeof resource.version === 'string';
       if (!isValidCr) {
         console.error(

@@ -89,7 +89,6 @@ data:
     {
       "resource": {
         "kind": "Service",
-        "group": "",
         "version": "v1",
       },
       "urlPath": "example-services",
