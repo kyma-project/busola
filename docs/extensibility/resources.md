@@ -2,8 +2,16 @@
 
 ## Overview
 
-This document describes the required Config Map sections that you need to configure in order to handle your CRD UI page.
-All sections can be provided as either JSON or YAML.
+This document describes the required Config Map setup that you need to configure in order to handle your CRD UI page.
+All Config Map `data` sections can be provided as either JSON or YAML.
+
+## Extension version
+
+The version is a string value that defines in which version the extension is configured. It is stored as a value of `busola.io/extension-version` label. If the configuration is created with the **Create Extension** button, this value is provided automatically. When created manually, use the latest version number: `'0.5'`
+
+Busola supports only the current version of the configuration and the prior one.
+
+Therefore, whenever a new version of the configuration is proposed, you can migrate your configuration to the latest version. To do so, go to your Extension and click the **Migrate** button.
 
 ## resource section
 
@@ -322,17 +330,3 @@ Value preprocessors are used as a middleware between a value and the actual rend
   - Otherwise, it passes `data` to the display component.
 
   Unless you need custom handling of error or loading state, we recommend using **PendingWrapper**, for example, for fields that use [related resources](#relations-section).
-
-## version section
-
-The `version` is a string value that defines in which version the extension is configured. If the configuration is created with the **Create UI** button, this value is provided automatically. When created manually, use the latest version number: `'0.5'`
-
-Busola supports only the current version of the configuration and the prior one.
-
-Therefore, whenever a new version of the configuration is proposed, you can migrate your configuration to the latest version. To do so, go to your Config Map and click the **Migrate** button.
-
-### Example (latest vesion)
-
-```yaml
-'0.5'
-```

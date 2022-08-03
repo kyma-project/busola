@@ -8,6 +8,7 @@ import { K8sNameField, Editor } from 'shared/ResourceForm/fields';
 import * as jp from 'jsonpath';
 
 import { createConfigMapTemplate, SECTIONS } from './helpers';
+import { EXTENSION_VERSION_LABEL } from 'components/Extensibility/helpers';
 
 export function BusolaExtensionEdit({
   namespace,
@@ -46,9 +47,16 @@ export function BusolaExtensionEdit({
       />
       <ResourceForm.FormField
         required
-        value={JSON.parse(jp.value(extension, '$.data.version'))}
+        value={jp.value(
+          extension,
+          `$.metadata.labels["${EXTENSION_VERSION_LABEL}"]`,
+        )}
         setValue={(val, setter) => {
-          jp.value(extension, '$.data.version', JSON.stringify(val));
+          jp.value(
+            extension,
+            `$.metadata.labels["${EXTENSION_VERSION_LABEL}"]`,
+            val,
+          );
           setExtension({ ...extension });
         }}
         label={t('extensibility.sections.version')}
