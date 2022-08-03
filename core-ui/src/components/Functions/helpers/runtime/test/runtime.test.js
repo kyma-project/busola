@@ -54,7 +54,7 @@ describe('getDefaultDependencies', () => {
   "name": "other-test-name",
   "version": "1.0.0",
   "dependencies": {}
-  }`,
+}`,
     ],
     [
       'yet-another-test-name',
@@ -66,9 +66,9 @@ describe('getDefaultDependencies', () => {
 }`,
     ],
     [null, 'python39', ''],
-    [undefined, 'nodejs16', ''],
     [undefined, 'nodejs14', ''],
     [undefined, 'nodejs12', ''],
+    [undefined, 'nodejs16', ''],
     ['', 'nodejs12', ``],
   ])('.getDefaultDependencies(%s, %s)', (name, runtime, expected) => {
     const result = getDefaultDependencies(name, runtime);
