@@ -60,7 +60,7 @@ async function loadTargetClusterCRs(authData) {
   return (items || [])
     .map(configMap => {
       const cr = Object.fromEntries(
-        Object.entries(configMap?.data || []).map(
+        Object.entries(configMap?.data || {}).map(
           ([sectionKey, yamlString]) => {
             let decodedSection = [sectionKey, null];
             try {
