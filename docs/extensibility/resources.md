@@ -7,7 +7,7 @@ All Config Map `data` sections can be provided as either JSON or YAML.
 
 ## Extension version
 
-The version is a string value that defines in which version the extension is configured. It is stored as a value of `busola.io/extension-version` label. If the configuration is created with the **Create Extension** button, this value is provided automatically. When created manually, use the latest version number: `'0.5'`
+The version is a string value that defines in which version the extension is configured. It is stored as a value of the `busola.io/extension-version` label. If the configuration is created with the **Create Extension** button, this value is provided automatically. When created manually, use the latest version number, for example, `'0.5'`
 
 Busola supports only the current version of the configuration and the prior one.
 
