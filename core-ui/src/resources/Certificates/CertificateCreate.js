@@ -113,7 +113,7 @@ export function CertificateCreate({
       formElementRef={formElementRef}
       initialResource={initialCertificate}
       createUrl={resourceUrl}
-      nameProps={{ 'data-cy': 'cert-name' }}
+      defaultFieldsProps={{ name: { 'data-cy': 'cert-name' } }}
     >
       <ResourceForm.FormField
         label={t('certificates.with-csr')}

@@ -93,7 +93,12 @@ export function GenericRoleBindingCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialRoleBinding}
-      nameProps={{ pattern: '.*', showHelp: false }}
+      defaultFieldsProps={{
+        name: {
+          pattern: '.*',
+          showHelp: false,
+        },
+      }}
       handleNameChange={name => {
         jp.value(binding, '$.metadata.name', name);
 

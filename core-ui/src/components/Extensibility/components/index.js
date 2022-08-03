@@ -6,7 +6,7 @@ import { CodeViewer } from './CodeViewer';
 import { Badge } from './Badge';
 import { Table } from './Table';
 import { ResourceRefs } from './ResourceRefs';
-import { ControlledBy } from './ControlledBy';
+import { ControlledBy, ControlledByKind } from './ControlledBy';
 import { JoinedArray } from './JoinedArray';
 import { ResourceList } from './ResourceList';
 import { ResourceLink } from './ResourceLink.js';
@@ -25,6 +25,7 @@ export const widgets = {
   Table,
   ResourceRefs,
   ControlledBy,
+  ControlledByKind,
   JoinedArray,
   ResourceList,
   ResourceLink,

@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
 import { Link } from 'shared/components/Link/Link';
 
 import { ReplicaSetCreate } from './ReplicaSetCreate';
@@ -23,9 +23,8 @@ export function ReplicaSetList(params) {
     {
       header: t('common.headers.owner'),
       value: replicaSet => (
-        <ControlledBy
+        <ControlledByKind
           ownerReferences={replicaSet.metadata.ownerReferences}
-          kindOnly
         />
       ),
     },

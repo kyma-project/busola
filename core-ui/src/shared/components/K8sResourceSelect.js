@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ComboboxInput } from 'fundamental-react';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { k8sNamePattern } from 'shared/components/K8sNameInput/K8sNameInput';
+import { getK8sNamePattern } from 'shared/components/K8sNameInput/K8sNameInput';
 import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
 
@@ -47,6 +47,7 @@ export function K8sResourceSelect({
   resourceType,
   value,
   required,
+  noFullStops = false,
   isNamespaced = true,
 }) {
   const { t } = useTranslation();
@@ -103,7 +104,7 @@ export function K8sResourceSelect({
         onChange={onChange}
         onSelectionChange={(_, selected) => onSelect(selected.text)}
         validationState={getValidationState()}
-        inputProps={{ pattern: k8sNamePattern, value }}
+        inputProps={{ pattern: getK8sNamePattern(noFullStops), value }}
       />
     </div>
   );

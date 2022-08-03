@@ -15,8 +15,11 @@ data:
         },
         {
           "path": "spec.ownerReferences",
-          "widget": "ControlledBy",
-          "kindOnly": true,
+          "widget": "ControlledBy"
+        },
+        {
+          "path": "spec.ownerReferences",
+          "widget": "ControlledByKind",
           "placeholder": "---"
         },
         { "path": "spec.toppings", "formula": "$join(data.name, ', ')" }, 
@@ -127,6 +130,7 @@ data:
     {
       "secretRecipe":{
         "kind": "Secret",
+        "group": "api",
         "version": "v1",
         "namespace": "pizzas",
         "selector": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"

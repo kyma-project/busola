@@ -3,7 +3,6 @@ import LuigiClient from '@luigi-project/client';
 import shortid from 'shortid';
 import pluralize from 'pluralize';
 import { Link } from 'fundamental-react';
-import './ControlledBy.scss';
 
 import {
   navigateToCustomResourceDefinitionDetails,
@@ -103,47 +102,78 @@ export const GoToDetailsLink = ({
   }
 };
 
-export const ControlledBy = ({
-  ownerReferences,
-  kindOnly,
-  placeholder = EMPTY_TEXT_PLACEHOLDER,
-}) => {
+export const ControlledBy = ({ ownerReferences }) => {
   if (
     !ownerReferences ||
     (Array.isArray(ownerReferences) && !ownerReferences?.length)
   )
-    return placeholder;
+    return EMPTY_TEXT_PLACEHOLDER;
 
   const OwnerRef = ({ owner, className }) => {
     const resource = pluralize(owner.kind).toLowerCase();
+
     return (
       <div key={owner.name} className={className}>
         {owner.kind}
-        {!kindOnly && (
-          <>
-            &nbsp;
-            <GoToDetailsLink
-              resource={resource}
-              apiVersion={owner.apiVersion}
-              name={owner.name}
-            />
-          </>
-        )}
+        &nbsp;
+        <GoToDetailsLink
+          resource={resource}
+          apiVersion={owner.apiVersion}
+          name={owner.name}
+        />
       </div>
     );
   };
 
-  if (!Array.isArray(ownerReferences)) {
-    ownerReferences = [ownerReferences];
-  }
+  return (
+    <>
+      {Array.isArray(ownerReferences) ? (
+        ownerReferences.map((owner, index) => {
+          const className = index > 0 ? 'fd-margin-top--sm' : '';
+          return (
+            <OwnerRef
+              key={owner.kind + owner.name}
+              owner={owner}
+              className={className}
+            />
+          );
+        })
+      ) : (
+        <OwnerRef owner={ownerReferences} className={''} />
+      )}
+    </>
+  );
+};
+
+export const ControlledByKind = ({ ownerReferences }) => {
+  if (
+    !ownerReferences ||
+    (Array.isArray(ownerReferences) && !ownerReferences?.length)
+  )
+    return EMPTY_TEXT_PLACEHOLDER;
+
+  const OwnerRef = ({ owner, className }) => (
+    <div key={owner.name} className={className}>
+      {owner.kind}
+    </div>
+  );
 
   return (
-    <ul className="controlled-by-list">
-      {ownerReferences.map(owner => (
-        <li key={owner.kind + owner.name}>
-          <OwnerRef owner={owner} />
-        </li>
-      ))}
-    </ul>
+    <>
+      {Array.isArray(ownerReferences) ? (
+        ownerReferences.map((owner, index) => {
+          const className = index > 0 ? 'fd-margin-top--sm' : '';
+          return (
+            <OwnerRef
+              key={owner.kind + owner.name}
+              owner={owner}
+              className={className}
+            />
+          );
+        })
+      ) : (
+        <OwnerRef owner={ownerReferences} className={''} />
+      )}
+    </>
   );
 };

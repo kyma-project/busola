@@ -60,8 +60,7 @@ export function RelationsContextProvider({ children, relations }) {
           .join(',');
     }
 
-    const apiGroup = group ? `apis/${group}` : 'api';
-    let url = `/${apiGroup}/${version}${namespacePart}/${resourceType}`;
+    let url = `/${group}/${version}${namespacePart}/${resourceType}`;
     if (labelSelector) {
       url += labelSelector;
     } else if (resourceName) {

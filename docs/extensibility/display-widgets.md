@@ -6,6 +6,27 @@ You can use display widgets in the lists and details pages.
 
 Use inline widgets for simple values in lists, details headers, and details bodies.
 
+### Text
+
+Text widgets render values as a simple text. This is the default behavior for all scalar values.
+
+#### Widget-specific parameters
+
+- **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
+  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+
+#### Example
+
+```json
+{
+  "path": "spec.label",
+  "widget": "Text",
+  "placeholder": "-"
+}
+```
+
+<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="20%" style="border: 1px solid #D2D5D9">
+
 ### Badge
 
 Badge widgets render texts as a status badge, using a set of predefined rules to assign colors.
@@ -13,7 +34,7 @@ Badge widgets render texts as a status badge, using a set of predefined rules to
 #### Widget-specific parameters
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
-  If the `translations` section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 - **highlights** - an optional map of highlight rules. Key refers to the type of highlight, while the rule can just be a plain array of values or a string containing a jsonata rule. Allowed keys are `informative` `positive`, `negative` and `critical`.
 
 #### Default highlight rules
@@ -40,43 +61,6 @@ When no highlights are provided, the following values are automatically handled:
 ```
 
 <img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="20%" style="border: 1px solid #D2D5D9">
-
-### ControlledBy
-
-ControlledBy widgets render the kind and the name with a link to the resources that the current resource is dependent on.
-
-#### Widget-specific parameters
-
-- **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
-  If the `translations` section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
-- **kindOnly** - used to determine if the resource name is displayed. Defaults to _false_.
-
-#### Examples
-
-##### Kind and name link
-
-```json
-{
-  "path": "metadata.ownerReferences",
-  "widget": "ControlledBy",
-  "placeholder": "-"
-}
-```
-
-<img src="./assets/display-widgets/ControlledBy.png" alt="Example of a ControlledBy widget" width="50%" style="border: 1px solid #D2D5D9">
-
-##### Kind only
-
-```json
-{
-  "path": "metadata.ownerReferences",
-  "widget": "ControlledBy",
-  "placeholder": "-",
-  "kindOnly": true
-}
-```
-
-<img src="./assets/display-widgets/ControlledBy--kindOnly.png" alt="Example of a ControlledBy widget without name link" width="50%" style="border: 1px solid #D2D5D9">
 
 ### JoinedArray
 
@@ -106,7 +90,7 @@ Labels widgets render all the object entries in the `key-value` format.
 #### Widget-specific parameters
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
-  If the `translations` section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 
 ```json
 {
@@ -122,10 +106,13 @@ Labels widgets render all the object entries in the `key-value` format.
 
 ResourceLink widgets render internal links to Kubernetes resources.
 
-#### Widget-specific parameters
+#### resource property
 
-- **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **data** - value extracted using **path**, or **root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
-- **linkText** - this property has access to **data** and **root**. This makes it possible to insert resource properties into a translation.
+To create a hyperlink, Busola needs the **name** and the **kind** of the target resource; they must be passed into the **resource** object as property paths in either **data** - value extracted using **path**, or **root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
+
+#### linkText property
+
+**linkText** has access to **data** and **root**, as mentioned in [linkText property section](#linktext-property)). This makes it possible to insert resource properties into a translation.
 
 #### Example
 
@@ -153,51 +140,32 @@ en:
   otherTranslations.linkText: Go to {{data.kind}} {{data.name}}.
 ```
 
-### Text
-
-Text widgets render values as a simple text. This is the default behavior for all scalar values.
-
-#### Widget-specific parameters
-
-- **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
-  If the `translations` section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
-
-#### Example
-
-```json
-{
-  "path": "spec.label",
-  "widget": "Text",
-  "placeholder": "-"
-}
-```
-
-<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="20%" style="border: 1px solid #D2D5D9">
-
 ## Block widgets
 
 Block widgets are more complex layouts and you must use them only in the details body.
 
-### CodeViewer
+### Plain
 
-CodeViewer widgets display values using a read-only code editor.
+Plain widgets render all contents of an object or list sequentially without any decorations. This is the default behavior for all objects and arrays.
 
-#### Widget-specific parameters
+### Panel
 
-- **language** - used for code highlighting. The editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
-  If the language is not specified, the editor tries to display the content as `yaml` with a fallback to `json`.
+Panel widgets render an object as a separate panel with its own title (based on its `path` or `name`).
 
 #### Example
 
 ```json
 {
-  "path": "spec.json-data",
-  "widget": "CodeViewer",
-  "language": "yaml"
+  "name": "details",
+  "widget": "Panel",
+  "children": [
+    { "path": "spec.value" },
+    { "path": "spec.other-value", "placeholder": "-" }
+  ]
 }
 ```
 
-<img src="./assets/display-widgets/CodeViewer.png" alt="Example of a CodeViewer widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
 
 ### Columns
 
@@ -226,28 +194,47 @@ Columns widgets render the child widgets in multiple columns.
 
 <img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
 
-### Panel
+### CodeViewer
 
-Panel widgets render an object as a separate panel with its own title (based on its `path` or `name`).
+CodeViewer widgets display values using a read-only code editor.
+
+#### Widget-specific parameters
+
+- **language** - used for code highlighting. Editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
+  If the language is not specified, editor tries to display the content as `yaml` with a fallback to `json`.
 
 #### Example
 
 ```json
 {
-  "name": "details",
-  "widget": "Panel",
-  "children": [
-    { "path": "spec.value" },
-    { "path": "spec.other-value", "placeholder": "-" }
-  ]
+  "path": "spec.json-data",
+  "widget": "CodeViewer",
+  "language": "yaml"
 }
 ```
 
-<img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/CodeViewer.png" alt="Example of a CodeViewer widget" style="border: 1px solid #D2D5D9">
 
-### Plain
+### Table
 
-Plain widgets render all contents of an object or list sequentially without any decorations. This is the default behavior for all objects and arrays.
+Table widgets display array data as rows of a table instead of free-standing components. The **children** parameter defines the values used to render the columns. Similar to the `list` section of the Config Map, you should use inline widgets only as children.
+
+#### Widget-specific parameters
+
+- **collapsible** - an optional array of extra widgets to display as an extra collapsible section. Uses the same format as the **children** parameter.
+
+#### Example
+
+```json
+{
+  "path": "spec.item-list",
+  "widget": "Table",
+  "children": [{ "path": "name" }, { "path": "status" }],
+  "collapsible": [{ "path": "description" }]
+}
+```
+
+<img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
 
 ### ResourceList
 
@@ -293,23 +280,44 @@ ResourceRefs widgets render the lists of links to the associated resources. The 
 
 <img src="./assets/display-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">
 
-### Table
+### ControlledBy
 
-Table widgets display array data as rows of a table instead of free-standing components. The **children** parameter defines the values used to render the columns. Similar to the `list` section of the Config Map, you should use inline widgets only as children.
+ControlledBy widgets render the kind and the name with a link to the resources that the current resource is dependent on.
 
 #### Widget-specific parameters
 
-- **collapsible** - an optional array of extra widgets to display as an extra collapsible section. Uses the same format as the **children** parameter.
+- **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
+  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 
-#### Example
+### Example
 
 ```json
 {
-  "path": "spec.item-list",
-  "widget": "Table",
-  "children": [{ "path": "name" }, { "path": "status" }],
-  "collapsible": [{ "path": "description" }]
+  "path": "metadata.ownerReferences",
+  "widget": "ControlledBy",
+  "placeholder": "-"
 }
 ```
 
-<img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ControlledBy.png" alt="Example of a table widget" width="20%" style="border: 1px solid #D2D5D9">
+
+### ControlledByKind
+
+ControlledByKind widgets render the kind of the resources that the current resource is dependent on.
+
+#### Widget-specific parameters
+
+- **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
+  If the translation section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+
+### Example
+
+```json
+{
+  "path": "metadata.ownerReferences",
+  "widget": "ControlledByKind",
+  "placeholder": "- no refs -"
+}
+```
+
+<img src="./assets/display-widgets/ControlledByKind.png" alt="Example of a table widget" width="20%" style="border:1px solid #D2D5D9">

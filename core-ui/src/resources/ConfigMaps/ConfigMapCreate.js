@@ -36,7 +36,9 @@ export function ConfigMapCreate({
       presets={createPresets([], namespace || '', t)}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
-      nameProps={{ readOnly: !!initialConfigMap?.metadata?.name }}
+      defaultFieldsProps={{
+        name: { readOnly: !!initialConfigMap?.metadata?.name },
+      }}
     >
       <RichEditorDataField defaultOpen propertyPath="$.data" />
     </ResourceForm>

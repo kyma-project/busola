@@ -194,9 +194,11 @@ export function NamespaceCreate({
       afterCreatedFn={afterNamespaceCreated}
       setCustomValid={setCustomValid}
       customSchemaId="v1/Namespace"
-      labelsProps={{
-        lockedKeys: [ISTIO_INJECTION_LABEL],
-        lockedValues: [ISTIO_INJECTION_LABEL],
+      defaultFieldsProps={{
+        labels: {
+          lockedKeys: [ISTIO_INJECTION_LABEL],
+          lockedValues: [ISTIO_INJECTION_LABEL],
+        },
       }}
     >
       <ResourceForm.FormField

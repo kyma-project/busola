@@ -117,7 +117,7 @@ export const SubscriptionCreate = ({
       createUrl={resourceUrl}
       afterCreatedFn={afterCreatedFn}
       setCustomValid={setCustomValid}
-      nameProps={{ prefix: prefix }}
+      defaultFieldsProps={{ name: { prefix } }}
     >
       <ResourceForm.FormField
         label={t('subscriptions.create.labels.sink')}

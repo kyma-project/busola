@@ -38,9 +38,8 @@ export function ResourceForm({
   customSchemaUri,
   readOnly,
   handleNameChange,
-  nameProps,
-  labelsProps,
   disableDefaultFields,
+  defaultFieldsProps = {},
 }) {
   if (!handleNameChange) {
     handleNameChange = name => {
@@ -139,7 +138,7 @@ export function ResourceForm({
                   kind={singularName}
                   readOnly={readOnly || !!initialResource}
                   setValue={handleNameChange}
-                  {...nameProps}
+                  {...defaultFieldsProps.labels}
                 />
               )}
               {children}
@@ -177,7 +176,7 @@ export function ResourceForm({
                   kind={singularName}
                   readOnly={readOnly || !!initialResource}
                   setValue={handleNameChange}
-                  {...nameProps}
+                  {...defaultFieldsProps.labels}
                 />
                 <KeyValueField
                   advanced
@@ -185,13 +184,14 @@ export function ResourceForm({
                   title={t('common.headers.labels')}
                   className="fd-margin-top--sm"
                   showInfo={t('common.tooltips.key-value')}
-                  {...labelsProps}
+                  {...defaultFieldsProps.labels}
                 />
                 <KeyValueField
                   advanced
                   propertyPath="$.metadata.annotations"
                   title={t('common.headers.annotations')}
                   showInfo={t('common.tooltips.key-value')}
+                  {...defaultFieldsProps.annotations}
                 />
               </>
             )}

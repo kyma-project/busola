@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
 import { Link } from 'shared/components/Link/Link';
 
 import { SecretCreate } from './SecretCreate';
@@ -14,10 +14,7 @@ export function SecretList(props) {
     {
       header: t('common.headers.owner'),
       value: secret => (
-        <ControlledBy
-          ownerReferences={secret.metadata.ownerReferences}
-          kindOnly
-        />
+        <ControlledByKind ownerReferences={secret.metadata.ownerReferences} />
       ),
     },
     {

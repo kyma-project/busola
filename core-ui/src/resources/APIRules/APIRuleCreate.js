@@ -106,7 +106,7 @@ export function APIRuleCreate({
       createUrl={resourceUrl}
       afterCreatedFn={afterCreatedFn}
       setCustomValid={setCustomValid}
-      nameProps={{ prefix: prefix }}
+      defaultFieldsProps={{ name: { prefix } }}
     >
       <ServiceDropdown
         propertyPath="$.spec.service"

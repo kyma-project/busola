@@ -19,8 +19,7 @@ export function ResourceList({
       : relation.namespace;
   const { group, kind, version } = relation;
   const namespacePart = namespace ? `/namespaces/${namespace}` : '';
-  const apiGroup = group ? `apis/${group}` : 'api';
-  const resourceUrl = `/${apiGroup}/${version}${namespacePart}/${pluralize(
+  const resourceUrl = `/${group}/${version}${namespacePart}/${pluralize(
     kind,
   ).toLowerCase()}`;
 

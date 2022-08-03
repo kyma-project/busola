@@ -7,7 +7,11 @@ import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { useValidation } from 'shared/hooks/useValidation';
 
-export const k8sNamePattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
+const k8sNamePattern = '^[a-z0-9]([-.a-z0-9]*[a-z0-9])?$';
+const k8sNamePatternNoFullStops = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
+
+export const getK8sNamePattern = (noFullStops = false) =>
+  noFullStops ? k8sNamePattern : k8sNamePatternNoFullStops;
 
 export const K8sNameInput = ({
   _ref,
@@ -22,9 +26,14 @@ export const K8sNameInput = ({
   value,
   onChange,
   inputRef,
-  pattern = k8sNamePattern,
+  pattern,
+  noFullStops = true,
   ...props
 }) => {
+  if (!pattern) {
+    pattern = getK8sNamePattern(noFullStops);
+  }
+
   const { t } = useTranslation(null, { i18n });
   const validationProps = useValidation({
     inputRef,

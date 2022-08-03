@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
 import { Link } from 'shared/components/Link/Link';
 
 import { useRestartAction } from 'shared/hooks/useRestartResource';
@@ -17,7 +17,7 @@ export function StatefulSetList(props) {
     {
       header: t('common.headers.owner'),
       value: set => (
-        <ControlledBy ownerReferences={set.metadata.ownerReferences} kindOnly />
+        <ControlledByKind ownerReferences={set.metadata.ownerReferences} />
       ),
     },
     {

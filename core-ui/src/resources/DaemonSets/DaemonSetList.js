@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
+import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
 import { Labels } from 'shared/components/Labels/Labels';
 import { Link } from 'shared/components/Link/Link';
 import { useRestartAction } from 'shared/hooks/useRestartResource';
@@ -18,10 +18,7 @@ export function DaemonSetList(props) {
     {
       header: t('common.headers.owner'),
       value: resource => (
-        <ControlledBy
-          ownerReferences={resource.metadata.ownerReferences}
-          kindOnly
-        />
+        <ControlledByKind ownerReferences={resource.metadata.ownerReferences} />
       ),
     },
     {
