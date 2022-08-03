@@ -8,6 +8,7 @@ import {
 describe('prettyRuntime', () => {
   test.each([
     ['python39', 'Python 3.9'],
+    ['nodejs16', 'Node.js 16'],
     ['nodejs14', 'Node.js 14'],
     ['nodejs12', 'Node.js 12 - Deprecated'],
     [undefined, 'Unknown: undefined'],
@@ -22,6 +23,7 @@ describe('prettyRuntime', () => {
 describe('runtimeToMonacoEditorLang', () => {
   test.each([
     ['python39', { language: 'python', dependencies: 'plaintext' }],
+    ['nodejs16', { language: 'javascript', dependencies: 'json' }],
     ['nodejs14', { language: 'javascript', dependencies: 'json' }],
     ['nodejs12', { language: 'javascript', dependencies: 'json' }],
     ['', { language: 'plaintext', dependencies: 'plaintext' }],
@@ -52,9 +54,19 @@ describe('getDefaultDependencies', () => {
   "name": "other-test-name",
   "version": "1.0.0",
   "dependencies": {}
+  }`,
+    ],
+    [
+      'yet-another-test-name',
+      'nodejs16',
+      `{ 
+  "name": "yet-another-test-name",
+  "version": "1.0.0",
+  "dependencies": {}
 }`,
     ],
     [null, 'python39', ''],
+    [undefined, 'nodejs16', ''],
     [undefined, 'nodejs14', ''],
     [undefined, 'nodejs12', ''],
     ['', 'nodejs12', ``],
