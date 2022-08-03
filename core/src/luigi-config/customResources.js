@@ -1,10 +1,17 @@
 import jsyaml from 'js-yaml';
 import { merge } from 'lodash';
 import pluralize from 'pluralize';
-import {
-  getSupportedVersions,
-  formatCurrentVersion,
-} from '../../../core-ui/src/components/Extensibility/migration';
+
+const SUPPORTED_VERSIONS = ['0.4', '0.5'];
+const formatCurrentVersion = version => {
+  if (!version) return null;
+  return (
+    version
+      .toString()
+      .replaceAll("'", '')
+      .replaceAll('"', '') || ''
+  );
+};
 
 import { config } from './config';
 import { failFastFetch } from './navigation/queries';
@@ -125,7 +132,7 @@ export async function getCustomResources(authData) {
     customResources[clusterName] = customResources[
       clusterName
     ].filter(resource =>
-      getSupportedVersions().some(
+      SUPPORTED_VERSIONS.some(
         version => formatCurrentVersion(resource.version) === version,
       ),
     );
