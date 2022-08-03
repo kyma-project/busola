@@ -15,6 +15,32 @@ import {
 import { stringifyIfBoolean } from 'shared/utils/helpers';
 import jsonata from 'jsonata';
 
+export function useJsonata(query, root, item, dataSources = {}) {
+  const [value, setValue] = useState('');
+
+  useEffect(() => {
+    try {
+      const expression = jsonata(
+        query,
+        root,
+        {
+          ...Object.fromEntries(
+            Object.entries(dataSources).map(([key, source]) => [key, 'TODO']),
+          ),
+          item,
+        },
+        (error, result) => {
+          setValue(result);
+        },
+      );
+      // return expression.evaluate({ data: value, ...additionalSources });
+    } catch (e) {
+      setValue(t('extensibility.configuration-error', { error: e.message }));
+    }
+  }, [query, root, item, dataSources]);
+  return value;
+}
+
 export const SimpleRenderer = ({ children }) => {
   return children;
 };
@@ -72,7 +98,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     requestRelatedResource,
   } = useRelationsContext();
 
-  let childValue;
+  // let childValue;
 
   if (!structure || typeof structure !== 'object') {
     throwConfigError(t('extensibility.not-an-object'), structure);
@@ -85,6 +111,8 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     throwConfigError(t('extensibility.no-path-children'), structure);
   }
 
+  const childValue = useJsonata(structure.source, value);
+  /*
   if (!structure.path) {
     childValue = value;
   } else {
@@ -96,6 +124,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
       childValue = getValue(value, structure.path);
     }
   }
+  */
 
   const { visible, error: visibleCheckError } = shouldBeVisible(
     childValue,
@@ -132,9 +161,9 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     );
   }
 
-  if (structure.formula) {
-    childValue = applyFormula(childValue, structure.formula, t);
-  }
+  // if (structure.formula) {
+  // childValue = applyFormula(childValue, structure.formula, t);
+  // }
 
   if (Array.isArray(structure)) {
     return (
