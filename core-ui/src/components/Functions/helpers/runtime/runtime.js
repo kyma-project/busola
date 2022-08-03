@@ -16,7 +16,7 @@ export const python39 = 'python39';
 
 export const functionAvailableLanguages = {
   // order of those keys is the same as order of available runtimes shown in Create Function Modal
-  [nodejs14]: PRETTY_RUNTIME_NODEJS16_NAME,
+  [nodejs16]: PRETTY_RUNTIME_NODEJS16_NAME,
   [nodejs14]: PRETTY_RUNTIME_NODEJS14_NAME,
   [nodejs12]: PRETTY_RUNTIME_NODEJS12_NAME,
   [python39]: PRETTY_RUNTIME_PYTHON39_NAME,
