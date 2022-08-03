@@ -1,10 +1,9 @@
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
-import { EXTENSION_VERSION_LABEL } from 'components/BusolaExtensions/helpers';
+import { EXTENSION_VERSION_LABEL } from './helpers';
 
 const SUPPORTED_VERSIONS = ['0.4', '0.5'];
 const LATEST_VERSION = '0.5';
-const versionPath = `$.metadata.labels["${EXTENSION_VERSION_LABEL}"]`;
 
 export const getSupportedVersions = () => SUPPORTED_VERSIONS;
 export const getLatestVersion = () => LATEST_VERSION;
@@ -22,7 +21,9 @@ export function migrateToLatest(resource) {
   if (!resource) return undefined;
 
   const newestVersion = getLatestVersion();
-  const currentVersion = formatCurrentVersion(jp.value(resource, versionPath));
+  const currentVersion = formatCurrentVersion(
+    resource?.metadata.labels?.[EXTENSION_VERSION_LABEL],
+  );
 
   const newResource =
     currentVersion !== newestVersion
@@ -31,6 +32,7 @@ export function migrateToLatest(resource) {
 
   return newResource;
 }
+const versionPath = `$.metadata.labels["${EXTENSION_VERSION_LABEL}"]`;
 const migrateFunctions = {};
 
 // Definitions of functions used for migration.
