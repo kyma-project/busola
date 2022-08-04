@@ -7,7 +7,7 @@ const PASSWORD = Cypress.env('OIDC_PASS');
 
 Cypress.Commands.add('loginAndSelectCluster', function(params) {
   const defaults = {
-    fileName: 'kubeconfig.yaml',
+    fileName: 'kubeconfig-k3s.yaml',
     expectedLocation: /overview$/,
     storage: null,
   };
