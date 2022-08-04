@@ -61,18 +61,10 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
       }))
     : [];
 
-  const createFilterFn = JSONataString => {
-    if (typeof JSONataString === 'string') {
-      return value => applyFormula(value, JSONataString, tBusola);
-    }
-    return undefined;
-  };
-  listProps.filterFn = createFilterFn(resMetaData.resource.filter);
-  //
-  // listProps.filterFn =
-  //   typeof resMetaData.resource.filter === 'string'
-  //     ? value => applyFormula(value, resMetaData.resource.filter, tBusola)
-  //     : null;
+  const isFilterAString = typeof resMetaData.resource.filter === 'string';
+  const filterFn = value =>
+    applyFormula(value, resMetaData.resource.filter, tBusola);
+  listProps.filterFn = isFilterAString ? filterFn : undefined;
 
   return (
     <ResourcesList
