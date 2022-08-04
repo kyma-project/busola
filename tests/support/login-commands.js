@@ -7,13 +7,13 @@ const PASSWORD = Cypress.env('OIDC_PASS');
 
 Cypress.Commands.add('loginAndSelectCluster', function(params) {
   const defaults = {
-    fileName: 'kubeconfig-k3s.yaml',
+    fileName: 'kubeconfig.yaml',
     expectedLocation: /overview$/,
     storage: null,
   };
   const { fileName, expectedLocation, storage } = { ...defaults, ...params };
 
-  cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
+  cy.wrap(loadFile('kubeconfig-k3s.yaml')).then(kubeconfig => {
     if (kubeconfig.users?.[0]?.user?.exec?.args) {
       // conditionally logs in to OIDC
       const URLelement = kubeconfig.users[0].user.exec.args.find(el =>
