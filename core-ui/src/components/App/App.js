@@ -20,7 +20,7 @@ import otherRoutes from 'resources/other';
 export default function App() {
   const { cluster, language, customResources = [] } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
-
+  //dum
   useLoginWithKubeconfigID();
   const schemaInfo = useResourceSchemas();
 
