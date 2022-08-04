@@ -17,12 +17,12 @@ Therefore, whenever a new version of the configuration is proposed, you can migr
 
 The `general` section is required and contains basic information about the resource and additional options.
 
-- **resource** - _[required]_ - information about the re
+- **resource** - _[required]_ - information about the resoure.
   - **kind** - _[required]_ Kubernetes kind of the resource.
   - **version** - _[required]_ API version used for all requests.
   - **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
-- **name** - . name of the tab in the navigation panel. Defaults to pluralized **kind**.
-- **category** - name of the category in the navigation panel. Defaults to `Custom Resources`.
+  - **name** - title used in the navigation and on the list screen. It defaults to its resource kind.
+- **category** the name of a category used for the left-hand menu. It is placed in the `Custom Resources` category by default.
 - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
 - **urlPath** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
 - **defaultPlaceholder** - to be shown in place of empty resource leaves. Overridden by the widget-level **placeholder**. Defaults to `-`.
@@ -38,6 +38,8 @@ The `general` section is required and contains basic information about the resou
     "version": "v1alpha3",
     "group": "networking.istio.io"
   },
+  "name": "MyResourceName",
+  "category": "My Category",
   "scope": "namespace",
   "defaultPlaceholder": "- not set -",
   "description": "See the {{[docs](https://github.com/kyma-project/busola)}} for more information.",
@@ -244,7 +246,7 @@ Those fields are used to build the related resource URL and filter the received 
 ```json
 {
   "deployments": {
-    "resource": ...
+    "general": ...
     "details": {
        "body": [
          {
@@ -268,12 +270,6 @@ Those fields are used to build the related resource URL and filter the received 
 ## translations section
 
 This section contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
-
-### Predefined translation keys
-
-- **category** - the name of a category used for the left-hand menu. It is placed in the `Custom Resources` category by default.
-- **name** - title used in the navigation and on the list screen. It defaults to its resource kind.
-- **description** - a more in-depth description of the resource displayed on the list screen. Only displayed if present.
 
 ### Example
 
