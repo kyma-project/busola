@@ -263,9 +263,9 @@ Those fields are used to build the related resource URL and filter the received 
 }
 ```
 
-## translations sections
+## translations section
 
-You can provide this section as a single `translations` section that contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
+This section contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
 
 ### Predefined translation keys
 
@@ -291,34 +291,6 @@ de:
   spec:
     items: Artikel
 ```
-
-### Language-specific sections
-
-Alternatively, you can provide `translations-{lang}` sections for a single language. For example:
-
-`translations-en`:
-
-```yaml
-category: My category
-name: My Resource
-metadata:
-  name: Name
-spec:
-  items: Items
-```
-
-`translations-de`:
-
-```yaml
-category: meine Kategorie
-name: Meine Ressource
-metadata:
-  name: Name
-spec:
-  items: Artikel
-```
-
-If you provide both `translations` and `translations-{lang}` sections, they are merged together.
 
 ### Value preprocessors
 
