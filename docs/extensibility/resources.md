@@ -21,6 +21,8 @@ The `general` section is required and contains basic information about the resou
   - **kind** - _[required]_ Kubernetes kind of the resource.
   - **version** - _[required]_ API version used for all requests.
   - **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
+- **name** - . name of the tab in the navigation panel. Defaults to pluralized **kind**.
+- **category** - name of the category in the navigation panel. Defaults to `Custom Resources`.
 - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
 - **urlPath** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
 - **defaultPlaceholder** - to be shown in place of empty resource leaves. Overridden by the widget-level **placeholder**. Defaults to `-`.
