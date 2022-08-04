@@ -1,7 +1,5 @@
 import i18next from 'i18next';
 import pluralize from 'pluralize';
-
-import { coreUIViewGroupName } from './static-navigation-model';
 import { config } from '../config';
 
 // this fn is cloned in core-ui 'helpers.js' as 'useGetTranslation'. Modify it also there
@@ -33,24 +31,23 @@ const getCustomNodes = (crs, scope) => {
           translationBundle,
           cr.translations?.[i18next.language] || {},
         );
-        const { resource, urlPath, icon } = cr.general || {};
+        const { resource, urlPath, icon, category, name } = cr.general || {};
         const version = resource.version.toLowerCase();
         const group = resource?.group ? `apis/${resource.group}` : 'api';
         const api = `/${group}/${version}`;
 
         return {
           category: {
-            label: i18next.t([
-              `${translationBundle}::category`,
-              'custom-resources.title',
-            ]),
+            label: i18next.t(`${translationBundle}::category`, {
+              defaultValue: category || i18next.t('custom-resources.title'),
+            }),
             collapsible: true,
             icon: icon || 'customize',
           },
           resourceType: resource.kind.toLowerCase(),
           pathSegment: urlPath,
           label: i18next.t(`${translationBundle}::name`, {
-            defaultValue: pluralize(resource.kind),
+            defaultValue: name || pluralize(resource.kind),
           }),
           viewUrl:
             config.coreUIModuleUrl +
