@@ -7,7 +7,7 @@ context('Create Namespace', () => {
 
   it('Create Namespace', () => {
     cy.getLeftNav()
-      .contains('Namespaces')
+      .contains('Namespacwes')
       .click();
 
     cy.getIframeBody()
