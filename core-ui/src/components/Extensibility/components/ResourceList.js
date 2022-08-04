@@ -4,6 +4,24 @@ import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
 import { Widget } from './Widget';
 
+function extractResourceData({ dataSource, originalResource }) {
+  try {
+    let { group, kind, version, namespace } = dataSource.resource;
+    namespace =
+      typeof namespace === 'undefined'
+        ? originalResource.metadata.namespace
+        : namespace;
+    const namespacePart = namespace ? `/namespaces/${namespace}` : '';
+    const apiGroup = group ? `apis/${group}` : 'api';
+    const resourceType = pluralize(kind).toLowerCase();
+    const resourceUrl = `/${apiGroup}/${version}${namespacePart}/${resourceType}`;
+
+    return { kind, resourceType, resourceUrl, namespace };
+  } catch (error) {
+    return { error };
+  }
+}
+
 export function ResourceList({
   value,
   structure,
@@ -12,19 +30,20 @@ export function ResourceList({
   schema,
   ...props
 }) {
-  let { group, kind, version, namespace } = dataSource.resource || {};
-  namespace =
-    typeof namespace === 'undefined'
-      ? originalResource.metadata.namespace
-      : namespace;
-  const namespacePart = namespace ? `/namespaces/${namespace}` : '';
-  const apiGroup = group ? `apis/${group}` : 'api';
-  const resourceUrl = `/${apiGroup}/${version}${namespacePart}/${pluralize(
+  const {
     kind,
-  ).toLowerCase()}`;
+    resourceType,
+    resourceUrl,
+    namespace,
+    error,
+  } = extractResourceData({ dataSource, originalResource });
+
+  if (error) {
+    throw Error('Error in ResourceList: ' + error.message);
+  }
 
   const PredefinedRenderer = resources.find(
-    r => r.resourceType.toLowerCase() === pluralize(kind).toLowerCase(),
+    r => r.resourceType.toLowerCase() === resourceType,
   );
   const ListRenderer = PredefinedRenderer
     ? PredefinedRenderer.List
