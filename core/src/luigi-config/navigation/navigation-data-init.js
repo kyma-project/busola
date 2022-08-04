@@ -286,15 +286,8 @@ export async function createNavigation() {
         `/no-permissions?${NODE_PARAM_PREFIX}error=${err.originalMessage}`,
       );
     } else {
-      let errorNotification = 'Could not load initial configuration';
-      if (err.statusCode && err.message)
-        errorNotification += `: ${err.message} (${err.statusCode}${
-          err.originalMessage && err.message !== err.originalMessage
-            ? ':' + err.originalMessage
-            : ''
-        })`;
       showAlert({
-        text: errorNotification,
+        text: err.message,
         type: 'error',
       });
       console.warn(err);
