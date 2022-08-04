@@ -61,11 +61,11 @@ export const useGetTranslation = path => {
 };
 
 export function createTemplate(api, namespace, scope) {
+  const { version, group } = api;
+  const apiVersion = group ? `${group}/${version}` : version;
+
   const template = {
-    apiVersion:
-      api.group === 'core' || api.group === ''
-        ? api.version
-        : `${api.group}/${api.version}`,
+    apiVersion,
     kind: pluralize(api.kind, 1),
     metadata: {
       name: '',
