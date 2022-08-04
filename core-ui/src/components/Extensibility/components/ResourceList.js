@@ -6,7 +6,6 @@ import { Widget } from './Widget';
 
 export function ResourceList({
   value,
-  dataSources,
   structure,
   dataSource,
   originalResource,
