@@ -17,6 +17,7 @@ export const FUNCTION_PHASES = {
 
 export const PRETTY_RUNTIME_NODEJS12_NAME = 'Node.js 12 - Deprecated';
 export const PRETTY_RUNTIME_NODEJS14_NAME = 'Node.js 14';
+export const PRETTY_RUNTIME_NODEJS16_NAME = 'Node.js 16';
 export const PRETTY_RUNTIME_PYTHON39_NAME = 'Python 3.9';
 
 export const FUNCTION_ERROR_PHASES = ['FAILED', 'NEW REVISION ERROR'];
