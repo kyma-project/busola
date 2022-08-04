@@ -127,9 +127,11 @@ data:
   dataSources: |-
     {
       "secretRecipe":{
-        "kind": "Secret",
-        "version": "v1",
-        "namespace": "pizzas",
+        "resource": {
+          "kind": "Secret",
+          "version": "v1",
+          "namespace": "pizzas",
+        },
         "filter": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"
       }
     }

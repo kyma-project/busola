@@ -13,11 +13,11 @@ export function ResourceList({
   schema,
   ...props
 }) {
-  const namespace =
-    typeof dataSource.namespace === 'undefined'
+  let { group, kind, version, namespace } = dataSource.resource || {};
+  namespace =
+    typeof namespace === 'undefined'
       ? originalResource.metadata.namespace
-      : dataSource.namespace;
-  const { group, kind, version } = dataSource;
+      : namespace;
   const namespacePart = namespace ? `/namespaces/${namespace}` : '';
   const apiGroup = group ? `apis/${group}` : 'api';
   const resourceUrl = `/${apiGroup}/${version}${namespacePart}/${pluralize(

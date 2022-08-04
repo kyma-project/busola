@@ -34,13 +34,9 @@ export function DataSourcesContextProvider({ children, dataSources }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => intervals.current.forEach(clearInterval), []);
 
-  const buildUrl = (dataSource, resource) => {
+  const buildUrl = (dataSource, resource = { resource: {} }) => {
     let {
-      group,
-      kind,
-      version,
-      resourceName,
-      namespace,
+      resource: { group, kind, version, name, namespace },
       ownerLabelSelectorPath,
     } = dataSource;
     if (typeof namespace === 'undefined') {
@@ -64,18 +60,21 @@ export function DataSourcesContextProvider({ children, dataSources }) {
     let url = `/${apiGroup}/${version}${namespacePart}/${resourceType}`;
     if (labelSelector) {
       url += labelSelector;
-    } else if (resourceName) {
-      url += '/' + resourceName;
+    } else if (name) {
+      url += '/' + name;
     }
     return url;
   };
 
   const fetchResource = async (dataSource, dataSourceName, resource) => {
     try {
-      const { filter, resourceName } = dataSource;
+      const {
+        filter,
+        resource: { name },
+      } = dataSource;
 
       const relativeUrl = buildUrl(dataSource, resource);
-      const isListCall = !resourceName;
+      const isListCall = !name;
       const response = await fetch({ relativeUrl });
       let data = await response.json();
       data = isListCall ? data.items : data;
