@@ -11,14 +11,17 @@ import {
   useCreateResourceDescription,
   TranslationBundleContext,
   useGetTranslation,
+  applyFormula,
 } from './helpers';
 import { Widget } from './components/Widget';
 import { RelationsContextProvider } from './contexts/RelationsContext';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 import { useGetSchema } from 'hooks/useGetSchema';
+import { useTranslation } from 'react-i18next';
 
 export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
+  const { t: tBusola } = useTranslation();
 
   const { urlPath, disableCreate, resource, description } =
     resMetaData?.general ?? {};
@@ -62,6 +65,11 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
         ),
       }))
     : [];
+
+  const isFilterAString = typeof resMetaData.resource.filter === 'string';
+  const filterFn = value =>
+    applyFormula(value, resMetaData.resource.filter, tBusola);
+  listProps.filterFn = isFilterAString ? filterFn : undefined;
 
   return (
     <ResourcesList
