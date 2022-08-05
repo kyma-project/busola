@@ -6,7 +6,7 @@ context('Create Application', () => {
   before(cy.loginAndSelectCluster);
 
   it('Create Application', () => {
-    cy.navigateTo('Integration', 'Applicatioens');
+    cy.navigateTo('Integration', 'Applications');
 
     cy.getIframeBody()
       .contains('Create Application')
