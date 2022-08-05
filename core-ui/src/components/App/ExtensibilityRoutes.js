@@ -10,18 +10,20 @@ export const createExtensibilityRoutes = (cr, language) => {
     import('../Extensibility/ExtensibilityDetails'),
   );
 
-  const translationBundle = cr?.resource?.path || 'extensibility';
+  const urlPath = cr?.general?.urlPath;
+
+  const translationBundle = urlPath || 'extensibility';
   i18next.addResourceBundle(
     language,
     translationBundle,
     cr?.translations?.[language] || {},
   );
 
-  if (cr.resource?.scope === 'namespace') {
+  if (cr.general?.scope === 'namespace') {
     return (
-      <React.Fragment key={`namespace-${cr.resource?.path}`}>
+      <React.Fragment key={`namespace-${urlPath}`}>
         <Route
-          path={`/namespaces/:namespaceId/${cr.resource.path}`}
+          path={`/namespaces/:namespaceId/${urlPath}`}
           exact
           element={
             <Suspense fallback={<Spinner />}>
@@ -31,7 +33,7 @@ export const createExtensibilityRoutes = (cr, language) => {
         />
         {cr.details && (
           <Route
-            path={`/namespaces/:namespaceId/${cr.resource.path}/:resourceName`}
+            path={`/namespaces/:namespaceId/${urlPath}/:resourceName`}
             exact
             element={
               <Suspense fallback={<Spinner />}>
@@ -44,9 +46,9 @@ export const createExtensibilityRoutes = (cr, language) => {
     );
   } else {
     return (
-      <React.Fragment key={`cluster-${cr.resource?.path}`}>
+      <React.Fragment key={`cluster-${urlPath}`}>
         <Route
-          path={`/${cr.resource.path}`}
+          path={`/${urlPath}`}
           exact
           element={
             <Suspense fallback={<Spinner />}>
@@ -56,7 +58,7 @@ export const createExtensibilityRoutes = (cr, language) => {
         />
         {cr.details && (
           <Route
-            path={`/${cr.resource.path}/:resourceName`}
+            path={`/${urlPath}/:resourceName`}
             exact
             element={
               <Suspense fallback={<Spinner />}>

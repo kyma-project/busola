@@ -11,39 +11,43 @@ import { useGetTranslation, TranslationBundleContext } from './helpers';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
+import { useGetSchema } from 'hooks/useGetSchema';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
-  const { path, kind } = resMetaData?.resource ?? {};
+  const { urlPath, resource } = resMetaData?.general ?? {};
 
-  const detailsProps = usePrepareDetailsProps(path, 'name');
+  const { schema } = useGetSchema({
+    resource,
+  });
 
-  if (resMetaData?.resource?.kind) {
+  const detailsProps = usePrepareDetailsProps(urlPath, 'name');
+
+  if (resource.kind) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
-      path,
-      pluralize(kind).toLowerCase(),
+      urlPath,
+      pluralize(resource.kind).toLowerCase(),
     );
   }
 
   const header = resMetaData?.details?.header || [];
   const body = resMetaData?.details?.body || [];
-  const schema = resMetaData?.schema;
   const dataSources = resMetaData?.dataSources || {};
 
   const breadcrumbs = [
     {
       name: t('name', {
-        defaultValue: pluralize(prettifyKind(kind)),
+        defaultValue: pluralize(prettifyKind(resource.kind)),
       }),
       path: '/',
-      fromContext: resMetaData?.resource?.path,
+      fromContext: urlPath,
     },
     { name: '' },
   ];
   return (
     <ResourceDetails
       windowTitle={t('name', {
-        defaultValue: pluralize(prettifyKind(kind)),
+        defaultValue: pluralize(prettifyKind(resource.kind)),
       })}
       customColumns={
         Array.isArray(header)
@@ -90,12 +94,12 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
 
 const ExtensibilityDetails = () => {
   const resMetaData = useGetCRbyPath();
-
+  const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
   return (
     <TranslationBundleContext.Provider
       value={{
-        translationBundle: resMetaData?.resource?.path || 'extensibility',
-        defaultResourcePlaceholder: resMetaData?.resource?.defaultPlaceholder,
+        translationBundle: urlPath || 'extensibility',
+        defaultResourcePlaceholder: defaultPlaceholder,
       }}
     >
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
