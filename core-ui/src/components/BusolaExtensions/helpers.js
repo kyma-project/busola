@@ -1,6 +1,7 @@
 import { prettifyKind } from 'shared/utils/helpers';
 import pluralize from 'pluralize';
 import { getLatestVersion } from 'components/Extensibility/migration';
+import { EXTENSION_VERSION_LABEL } from './constants';
 
 export const SECTIONS = [
   'resource',
@@ -107,7 +108,6 @@ export function createExtensibilityTemplate(crd, t) {
           : {}),
       },
     },
-    version: getLatestVersion(),
   };
 }
 
@@ -142,6 +142,7 @@ export function createConfigmap(crd, data) {
       labels: {
         'app.kubernetes.io/name': crd.metadata.name,
         'busola.io/extension': 'resource',
+        [EXTENSION_VERSION_LABEL]: getLatestVersion(),
       },
     },
     data: Object.fromEntries(

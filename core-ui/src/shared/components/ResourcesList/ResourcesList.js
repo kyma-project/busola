@@ -58,6 +58,7 @@ ResourcesList.propTypes = {
   isCompact: PropTypes.bool,
   showTitle: PropTypes.bool,
   filter: PropTypes.func,
+  filterFn: PropTypes.func,
   listHeaderActions: PropTypes.node,
   description: PropTypes.node,
   readOnly: PropTypes.bool,
@@ -76,6 +77,7 @@ ResourcesList.defaultProps = {
   listHeaderActions: null,
   readOnly: false,
   disableCreate: false,
+  filterFn: () => true,
 };
 
 export function ResourcesList(props) {
@@ -103,6 +105,7 @@ function Resources(props) {
     resourceName,
     resourceType,
     filter,
+    filterFn,
     resourceUrl,
     skipDataLoading,
     isCompact,
@@ -124,7 +127,7 @@ function Resources(props) {
     <ResourceListRenderer
       loading={loading}
       error={error}
-      resources={resources}
+      resources={(resources || []).filter(filterFn)}
       silentRefetch={silentRefetch}
       {...props}
     />
@@ -150,11 +153,10 @@ export function ResourceListRenderer({
   testid,
   i18n,
   textSearchProperties = [],
-  omitColumnsIds = [],
+  omitColumnsIds = ['namespace'],
   customListActions = [],
   createFormProps,
   pagination,
-  showNamespace = false,
   loading,
   error,
   resources,
@@ -201,11 +203,56 @@ export function ResourceListRenderer({
     resourceType,
   );
 
-  if (columns) {
-    customColumns = columns;
-  }
+  const defaultColumns = [
+    {
+      header: t('common.headers.name'),
+      value: entry =>
+        hasDetailsView ? (
+          <Link
+            className="fd-link"
+            onClick={_ => {
+              if (navigateFn) return navigateFn(entry);
+              if (fixedPath) return navigateToResource(entry);
+              navigateToDetails(resourceType, entry.metadata.name);
+            }}
+          >
+            {nameSelector(entry)}
+          </Link>
+        ) : (
+          <b>{nameSelector(entry)}</b>
+        ),
+      id: 'name',
+    },
+    {
+      header: t('common.headers.namespace'),
+      value: entry => entry.metadata.namespace,
+      id: 'namespace',
+    },
+    {
+      header: t('common.headers.created'),
+      value: entry => (
+        <ReadableCreationTimestamp
+          timestamp={entry.metadata.creationTimestamp}
+        />
+      ),
+      id: 'created',
+    },
+    {
+      header: t('common.headers.labels'),
+      value: entry => (
+        <div style={{ maxWidth: '36rem' }}>
+          <Labels labels={entry.metadata.labels} shortenLongLabels />
+        </div>
+      ),
+      id: 'labels',
+    },
+  ];
 
-  customColumns = customColumns.filter(col => !omitColumnsIds.includes(col.id));
+  customColumns =
+    columns ||
+    [...defaultColumns, ...customColumns].filter(
+      col => !omitColumnsIds.includes(col.id),
+    );
 
   const handleSaveClick = resourceData => async newYAML => {
     try {
@@ -313,35 +360,12 @@ export function ResourceListRenderer({
       ].filter(e => e);
 
   const headerRenderer = () => [
-    t('common.headers.name'),
-    ...(showNamespace ? [t('common.headers.namespace')] : []),
-    t('common.headers.created'),
-    t('common.headers.labels'),
-    ...customColumns.map(col => col.header),
+    ...customColumns.map(col => col.header || null),
     '',
   ];
 
   const rowRenderer = entry => [
-    hasDetailsView ? (
-      <Link
-        className="fd-link"
-        onClick={_ => {
-          if (navigateFn) return navigateFn(entry);
-          if (fixedPath) return navigateToResource(entry);
-          navigateToDetails(resourceType, entry.metadata.name);
-        }}
-      >
-        {nameSelector(entry)}
-      </Link>
-    ) : (
-      <b>{nameSelector(entry)}</b>
-    ),
-    ...(showNamespace ? [entry.metadata.namespace] : []),
-    <ReadableCreationTimestamp timestamp={entry.metadata.creationTimestamp} />,
-    <div style={{ maxWidth: '36rem' /*TODO*/ }}>
-      <Labels labels={entry.metadata.labels} shortenLongLabels />
-    </div>,
-    ...customColumns.map(col => col.value(entry)),
+    ...customColumns.map(col => (col.value ? col.value(entry) : null)),
     protectedResourceWarning(entry),
   ];
 

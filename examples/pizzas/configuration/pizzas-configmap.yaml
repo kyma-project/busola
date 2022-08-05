@@ -6,6 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: pizzas
     busola.io/extension: resource
+    busola.io/extension-version: '0.5'
 data:
   details: |
     {
@@ -15,11 +16,8 @@ data:
         },
         {
           "path": "spec.ownerReferences",
-          "widget": "ControlledBy"
-        },
-        {
-          "path": "spec.ownerReferences",
-          "widget": "ControlledByKind",
+          "widget": "ControlledBy",
+          "kindOnly": true,
           "placeholder": "---"
         },
         { "path": "spec.toppings", "formula": "$join(data.name, ', ')" }, 
@@ -130,7 +128,6 @@ data:
     {
       "secretRecipe":{
         "kind": "Secret",
-        "group": "api",
         "version": "v1",
         "namespace": "pizzas",
         "selector": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"
@@ -162,4 +159,3 @@ data:
       spec.ownerReferences.apiVersion: API Version
       spec.ownerReferences.kind: Kind
       spec.ownerReferences.name: Name
-  version: '0.5'

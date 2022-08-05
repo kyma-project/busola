@@ -3,7 +3,7 @@ import { useTranslation, Trans } from 'react-i18next';
 
 import { BTPResourceStatus } from 'shared/components/BTPResourceStatus';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
+import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { Link as ReactSharedLink } from 'shared/components/Link/Link';
 
 import { ServiceBindingCreate } from './ServiceBindingCreate';
@@ -16,7 +16,10 @@ export function ServiceBindingList(props) {
     {
       header: t('common.headers.owner'),
       value: resource => (
-        <ControlledByKind ownerReferences={resource.metadata.ownerReferences} />
+        <ControlledBy
+          ownerReferences={resource.metadata.ownerReferences}
+          kindOnly
+        />
       ),
     },
     {
