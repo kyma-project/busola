@@ -113,7 +113,6 @@ export function Table({ value, structure, disableMargin, schema, ...props }) {
       disableMargin={disableMargin}
       {...handleTableValue(value, t)}
       sortBy={sortingOptions ? sortBy : null}
-      customSortNames
     />
   );
 }

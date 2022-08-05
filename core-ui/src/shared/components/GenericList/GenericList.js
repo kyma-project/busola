@@ -58,7 +58,6 @@ export const GenericList = ({
   i18n,
   allowSlashShortcut,
   sortBy,
-  customSortNames = false,
   genericErrorMessage,
 }) => {
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
@@ -138,9 +137,7 @@ export const GenericList = ({
           sortBy={sortBy}
           sort={sort}
           setSort={setSort}
-          t={t}
           disabled={!entries.length}
-          customSortNames={customSortNames}
         />
       )}
       {extraHeaderContent}
