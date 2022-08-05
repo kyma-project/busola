@@ -31,14 +31,14 @@ describe('useGetCRbyPath', () => {
 
     mockCrds = [
       {
-        resource: {
-          path: 'path1',
+        general: {
+          urlPath: 'path1',
           scope: 'namespace',
         },
       },
       {
-        resource: {
-          path: 'path2',
+        general: {
+          urlPath: 'path2',
           scope: 'namespace',
         },
       },
@@ -59,14 +59,14 @@ describe('useGetCRbyPath', () => {
 
     mockCrds = [
       {
-        resource: {
-          path: 'path1',
+        general: {
+          urlPath: 'path1',
           scope: 'namespace',
         },
       },
       {
-        resource: {
-          path: 'path2',
+        general: {
+          urlPath: 'path2',
           scope: 'namespace',
         },
       },
@@ -87,14 +87,14 @@ describe('useGetCRbyPath', () => {
 
     mockCrds = [
       {
-        resource: {
-          path: 'path1',
+        general: {
+          urlPath: 'path1',
           scope: 'namespace',
         },
       },
       {
-        resource: {
-          path: 'path2',
+        general: {
+          urlPath: 'path2',
         },
       },
     ];

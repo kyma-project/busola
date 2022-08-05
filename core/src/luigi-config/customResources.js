@@ -83,19 +83,21 @@ async function loadTargetClusterCRs(authData) {
         }
       };
       const cr = mapValues(configMap?.data || {}, convertYamlToObject);
+      const urlPath = cr?.general?.urlPath;
+      const resource = cr?.general?.resource;
 
-      if (!cr?.resource || Object.keys(cr.resource).length === 0) {
+      if (!resource || Object.keys(resource).length === 0) {
         console.warn(
           'Some of the custom resources are not configured properly.',
         );
         return null;
-      } else if (!cr.resource.path && !cr.resource.kind) {
+      } else if (!urlPath && !resource.kind) {
         console.warn(
           'Some of the custom resources are not configured properly. Should have kind defined.',
         );
         return null;
-      } else if (!cr.resource.path) {
-        cr.resource.path = pluralize(cr.resource.kind).toLowerCase();
+      } else if (!urlPath) {
+        cr.general.urlPath = pluralize(resource.kind).toLowerCase();
       }
 
       return cr;

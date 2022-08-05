@@ -13,15 +13,18 @@ Busola supports only the current version of the configuration and the prior one.
 
 Therefore, whenever a new version of the configuration is proposed, you can migrate your configuration to the latest version. To do so, go to your Extension and click the **Migrate** button.
 
-## resource section
+## general section
 
-The `resource` section is required and contains basic information about the resource. For example, **kind** and API details.
+The `general` section is required and contains basic information about the resource and additional options.
 
-- **kind** - _[required]_ Kubernetes kind of the resource.
-- **group** - _[required]_ API group used for all requests.
-- **version** - _[required]_ API version used for all requests.
+- **resource** - _[required]_ - information about the resoure.
+  - **kind** - _[required]_ Kubernetes kind of the resource.
+  - **version** - _[required]_ API version used for all requests.
+  - **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
+  - **name** - title used in the navigation and on the list screen. It defaults to its resource kind.
+- **category** the name of a category used for the left-hand menu. It is placed in the `Custom Resources` category by default.
 - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
-- **path** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
+- **urlPath** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
 - **defaultPlaceholder** - to be shown in place of empty resource leaves. Overridden by the widget-level **placeholder**. Defaults to `-`.
 - **description** - displays a custom description on the resource list page. It can contain links. If the translation section has a translation entry with the ID that is the same as the **description** string, the translation is used.
 - **filter** - optional [JSONata](https://docs.jsonata.org/overview.html) [filter](https://docs.jsonata.org/higher-order-functions#filter) used to filter the resources shown at the list section property.
@@ -31,9 +34,13 @@ The `resource` section is required and contains basic information about the reso
 
 ```json
 {
-  "kind": "MyResource",
-  "group": "networking.istio.io",
-  "version": "v1alpha3",
+  "resource": {
+    "kind": "MyResource",
+    "version": "v1alpha3",
+    "group": "networking.istio.io"
+  },
+  "name": "MyResourceName",
+  "category": "My Category",
   "scope": "namespace",
   "defaultPlaceholder": "- not set -",
   "description": "See the {{[docs](https://github.com/kyma-project/busola)}} for more information.",
@@ -242,7 +249,7 @@ Those fields are used to build the related resource URL and filter the received 
 ```json
 {
   "deployments": {
-    "resource": ...
+    "general": ...
     "details": {
        "body": [
          {
@@ -268,12 +275,6 @@ Those fields are used to build the related resource URL and filter the received 
 ## translations section
 
 This section contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
-
-### Predefined translation keys
-
-- **category** - the name of a category used for the left-hand menu. It is placed in the `Custom Resources` category by default.
-- **name** - title used in the navigation and on the list screen. It defaults to its resource kind.
-- **description** - a more in-depth description of the resource displayed on the list screen. Only displayed if present.
 
 ### Example
 

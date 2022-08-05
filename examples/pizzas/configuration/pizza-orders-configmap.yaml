@@ -69,12 +69,14 @@ data:
         "path": "spec.orderDetails.realization",
       }
     ]
-  resource: |-
+  general: |-
     {
-      "kind": "PizzaOrder",
-      "group": "busola.example.com",
-      "version": "v1",
-      "path": "pizzaorders",
+      "resource": {
+        "kind": "PizzaOrder",
+        "group": "busola.example.com",
+        "version": "v1"
+      },
+      "urlPath": "pizzaorders",
       "scope": "namespace",
       "description": "check the translations"
     }

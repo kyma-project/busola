@@ -78,13 +78,13 @@ export function BusolaExtensionCreate({ formElementRef, onChange }) {
           <>
             <ResourceForm.FormField
               required
-              propertyPath="$.translations.en.name"
+              propertyPath="$.general.name"
               label={t('common.labels.name')}
               input={Inputs.Text}
             />
             <ResourceForm.FormField
               required
-              propertyPath="$.translations.en.category"
+              propertyPath="$.general.category"
               label={t('common.labels.category')}
               input={Inputs.Text}
             />
