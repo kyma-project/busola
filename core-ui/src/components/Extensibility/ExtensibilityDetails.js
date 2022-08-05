@@ -7,11 +7,7 @@ import { prettifyKind } from 'shared/utils/helpers';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { shouldBeVisible, Widget } from './components/Widget';
-import {
-  useGetTranslation,
-  TranslationBundleContext,
-  createOpenApiSchemaId,
-} from './helpers';
+import { useGetTranslation, TranslationBundleContext } from './helpers';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
@@ -21,9 +17,8 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
   const { urlPath, resource } = resMetaData?.general ?? {};
 
-  const openapiSchemaId = createOpenApiSchemaId(resource);
   const { schema } = useGetSchema({
-    schemaId: openapiSchemaId,
+    resource,
   });
 
   const detailsProps = usePrepareDetailsProps(urlPath, 'name');

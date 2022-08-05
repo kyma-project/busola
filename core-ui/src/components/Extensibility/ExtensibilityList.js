@@ -12,7 +12,6 @@ import {
   TranslationBundleContext,
   useGetTranslation,
   applyFormula,
-  createOpenApiSchemaId,
 } from './helpers';
 import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
@@ -28,9 +27,8 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     resMetaData?.general ?? {};
 
   const dataSources = resMetaData?.dataSources || {};
-  const openapiSchemaId = createOpenApiSchemaId(resource);
   const { schema } = useGetSchema({
-    schemaId: openapiSchemaId,
+    resource,
   });
 
   const listProps = usePrepareListProps(urlPath, 'name');

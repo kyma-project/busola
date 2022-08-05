@@ -5,11 +5,7 @@ import Immutable from 'immutable';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import {
-  useGetTranslation,
-  createTemplate,
-  createOpenApiSchemaId,
-} from './helpers';
+import { useGetTranslation, createTemplate } from './helpers';
 
 import { ResourceSchema } from './ResourceSchema';
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -72,9 +68,8 @@ export function ExtensibilityCreate({
     toggleFormFn(false);
   };
 
-  const openapiSchemaId = createOpenApiSchemaId(api);
   const { schema, error: errorOpenApi, loading } = useGetSchema({
-    schemaId: openapiSchemaId,
+    resource: api,
   });
 
   // waiting for schema from OpenAPI to be computed
