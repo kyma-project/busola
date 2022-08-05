@@ -1,7 +1,6 @@
 import React, { createContext, useContext } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import pluralize from 'pluralize';
 import jsonata from 'jsonata';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { OrderedMap } from 'immutable';
@@ -61,12 +60,12 @@ export const useGetTranslation = path => {
 };
 
 export function createTemplate(api, namespace, scope) {
-  const { version, group } = api;
+  const { version, group, kind } = api;
   const apiVersion = group ? `${group}/${version}` : version;
 
   const template = {
     apiVersion,
-    kind: pluralize(api.kind, 1),
+    kind,
     metadata: {
       name: '',
       labels: {},
