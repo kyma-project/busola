@@ -7,7 +7,11 @@ import { prettifyKind } from 'shared/utils/helpers';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { shouldBeVisible, Widget } from './components/Widget';
-import { useGetTranslation, TranslationBundleContext } from './helpers';
+import {
+  useGetTranslation,
+  TranslationBundleContext,
+  createOpenApiSchemaId,
+} from './helpers';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
 import { RelationsContextProvider } from './contexts/RelationsContext';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
@@ -16,19 +20,18 @@ import { useGetSchema } from 'hooks/useGetSchema';
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
   const { urlPath, resource } = resMetaData?.general ?? {};
-  const { kind, version, group } = resource;
 
-  const openapiSchemaId = `${group}/${version}/${kind}`;
+  const openapiSchemaId = createOpenApiSchemaId(resource);
   const { schema } = useGetSchema({
     schemaId: openapiSchemaId,
   });
 
   const detailsProps = usePrepareDetailsProps(urlPath, 'name');
 
-  if (kind) {
+  if (resource.kind) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
       urlPath,
-      pluralize(kind).toLowerCase(),
+      pluralize(resource.kind).toLowerCase(),
     );
   }
 
@@ -39,7 +42,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const breadcrumbs = [
     {
       name: t('name', {
-        defaultValue: pluralize(prettifyKind(kind)),
+        defaultValue: pluralize(prettifyKind(resource.kind)),
       }),
       path: '/',
       fromContext: urlPath,
@@ -49,7 +52,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   return (
     <ResourceDetails
       windowTitle={t('name', {
-        defaultValue: pluralize(prettifyKind(kind)),
+        defaultValue: pluralize(prettifyKind(resource.kind)),
       })}
       customColumns={
         Array.isArray(header)

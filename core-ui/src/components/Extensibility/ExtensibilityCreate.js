@@ -5,7 +5,11 @@ import Immutable from 'immutable';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { useGetTranslation, createTemplate } from './helpers';
+import {
+  useGetTranslation,
+  createTemplate,
+  createOpenApiSchemaId,
+} from './helpers';
 
 import { ResourceSchema } from './ResourceSchema';
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -68,8 +72,7 @@ export function ExtensibilityCreate({
     toggleFormFn(false);
   };
 
-  const { version, kind, group } = api;
-  const openapiSchemaId = `${group}/${version}/${kind}`;
+  const openapiSchemaId = createOpenApiSchemaId(api);
   const { schema, error: errorOpenApi, loading } = useGetSchema({
     schemaId: openapiSchemaId,
   });
@@ -80,7 +83,9 @@ export function ExtensibilityCreate({
   return (
     <ResourceForm
       pluralKind={resourceType}
-      singularName={exists('name') ? tExt('name') : prettifyKind(kind || '')}
+      singularName={
+        exists('name') ? tExt('name') : prettifyKind(api.kind || '')
+      }
       resource={resource}
       setResource={updateResource}
       formElementRef={formElementRef}
@@ -92,7 +97,7 @@ export function ExtensibilityCreate({
     >
       <ResourceSchema
         simple
-        key={version}
+        key={api.version}
         schema={errorOpenApi ? {} : schema}
         schemaRules={createResource?.form}
         resource={resource}
@@ -103,7 +108,7 @@ export function ExtensibilityCreate({
       />
       <ResourceSchema
         advanced
-        key={version}
+        key={api.version}
         schema={errorOpenApi ? {} : schema}
         schemaRules={createResource?.form}
         resource={resource}

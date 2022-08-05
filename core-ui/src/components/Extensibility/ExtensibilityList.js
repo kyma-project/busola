@@ -12,6 +12,7 @@ import {
   TranslationBundleContext,
   useGetTranslation,
   applyFormula,
+  createOpenApiSchemaId,
 } from './helpers';
 import { Widget } from './components/Widget';
 import { RelationsContextProvider } from './contexts/RelationsContext';
@@ -25,9 +26,8 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
 
   const { urlPath, disableCreate, resource, description } =
     resMetaData?.general ?? {};
-  const { kind, group, version } = resource;
 
-  const openapiSchemaId = `${group}/${version}/${kind}`;
+  const openapiSchemaId = createOpenApiSchemaId(resource);
   const { schema } = useGetSchema({
     schemaId: openapiSchemaId,
   });
@@ -36,16 +36,16 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
 
   const listProps = usePrepareListProps(urlPath, 'name');
 
-  if (kind) {
+  if (resource.kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
       /[a-z0-9-]+\/?$/,
-      pluralize(kind).toLowerCase(),
+      pluralize(resource.kind).toLowerCase(),
     );
   }
   listProps.createFormProps = { resourceSchema: resMetaData };
 
   listProps.resourceName = t('name', {
-    defaultValue: pluralize(prettifyKind(kind)),
+    defaultValue: pluralize(prettifyKind(resource.kind)),
   });
 
   listProps.description = useCreateResourceDescription(description);

@@ -149,3 +149,8 @@ export const throwConfigError = (message, code) => {
   e.name = 'Extensibility Config Error';
   throw e;
 };
+
+export const createOpenApiSchemaId = resource => {
+  const { kind, group, version } = resource;
+  return `${group}/${version}/${kind}`;
+};
