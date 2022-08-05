@@ -1012,11 +1012,11 @@ extensibility:
   no-path-children: A widget lacks one of the required properties, add either "path" or "children".
   not-an-object: Not an object.
   sections:
+    dataSources: Data Sources
     details: Details View
     form: Form Fields
     lang-translations: Translations ({{lang}})
     list: List Columns
-    relations: Resource Relations
     resource: Resource Basics
     translations: Translations
     version: Version

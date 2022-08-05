@@ -124,13 +124,15 @@ data:
       { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
       { "path": "spec.toppings", "formula": "$sum(data.price)", "name": "Toppings price" }
     ]
-  relations: |-
+  dataSources: |-
     {
       "secretRecipe":{
-        "kind": "Secret",
-        "version": "v1",
-        "namespace": "pizzas",
-        "selector": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"
+        "resource": {
+          "kind": "Secret",
+          "version": "v1",
+          "namespace": "pizzas",
+        },
+        "filter": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"
       }
     }
   resource: |-
