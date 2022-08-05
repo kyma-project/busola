@@ -1,14 +1,12 @@
 import React from 'react';
 
 import { Widget } from './Widget';
-
-import './InlineDisplay.scss';
 import { isNil } from 'lodash';
 
-export function Columns({ structure, ...props }) {
-  const inline = isNil(structure.inline)
-    ? props.inlineContext
-    : structure.inline;
+import './InlineDisplay.scss';
+
+export function Columns({ structure, inlineContext, ...props }) {
+  const inline = isNil(structure.inline) ? inlineContext : structure.inline;
 
   const classNames = inline ? 'inline-display' : 'panel-grid';
 
