@@ -2,8 +2,16 @@
 
 ## Overview
 
-This document describes the required Config Map sections that you need to configure in order to handle your CRD UI page.
-All sections can be provided as either JSON or YAML.
+This document describes the required Config Map setup that you need to configure in order to handle your CRD UI page.
+All Config Map `data` sections can be provided as either JSON or YAML.
+
+## Extension version
+
+The version is a string value that defines in which version the extension is configured. It is stored as a value of the `busola.io/extension-version` label. If the configuration is created with the **Create Extension** button, this value is provided automatically. When created manually, use the latest version number, for example, `'0.5'`
+
+Busola supports only the current version of the configuration and the prior one.
+
+Therefore, whenever a new version of the configuration is proposed, you can migrate your configuration to the latest version. To do so, go to your Extension and click the **Migrate** button.
 
 ## resource section
 
@@ -16,6 +24,7 @@ The `resource` section is required and contains basic information about the reso
 - **path** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
 - **defaultPlaceholder** - to be shown in place of empty resource leaves. Overridden by the widget-level **placeholder**. Defaults to `-`.
 - **description** - displays a custom description on the resource list page. It can contain links. If the translation section has a translation entry with the ID that is the same as the **description** string, the translation is used.
+- **filter** - optional [JSONata](https://docs.jsonata.org/overview.html) [filter](https://docs.jsonata.org/higher-order-functions#filter) used to filter the resources shown at the list section property.
 - **disableCreate** - either `true` or `false`. Defaults to `false`.
 
 ### Example
@@ -28,6 +37,7 @@ The `resource` section is required and contains basic information about the reso
   "scope": "namespace",
   "defaultPlaceholder": "- not set -",
   "description": "See the {{[docs](https://github.com/kyma-project/busola)}} for more information.",
+  "filter": "$filter(data, function($item) {$item.type = 'Opaque'})",
   "disableCreate": false
 }
 ```
@@ -252,9 +262,9 @@ Those fields are used to build the related resource URL and filter the received 
 }
 ```
 
-## translations sections
+## translations section
 
-You can provide this section as a single `translations` section that contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
+This section contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
 
 ### Predefined translation keys
 
@@ -281,34 +291,6 @@ de:
     items: Artikel
 ```
 
-### Language-specific sections
-
-Alternatively, you can provide `translations-{lang}` sections for a single language. For example:
-
-`translations-en`:
-
-```yaml
-category: My category
-name: My Resource
-metadata:
-  name: Name
-spec:
-  items: Items
-```
-
-`translations-de`:
-
-```yaml
-category: meine Kategorie
-name: Meine Ressource
-metadata:
-  name: Name
-spec:
-  items: Artikel
-```
-
-If you provide both `translations` and `translations-{lang}` sections, they are merged together.
-
 ### Value preprocessors
 
 Value preprocessors are used as a middleware between a value and the actual renderer. They can transform a given value and pass it to the widget; or stop processing and render it so you can view it immediately, without passing it to the widget.
@@ -322,17 +304,3 @@ Value preprocessors are used as a middleware between a value and the actual rend
   - Otherwise, it passes `data` to the display component.
 
   Unless you need custom handling of error or loading state, we recommend using **PendingWrapper**, for example, for fields that use [related resources](#relations-section).
-
-## version section
-
-The `version` is a string value that defines in which version the extension is configured. If the configuration is created with the **Create UI** button, this value is provided automatically. When created manually, use the latest version number: `'0.5'`
-
-Busola supports only the current version of the configuration and the prior one.
-
-Therefore, whenever a new version of the configuration is proposed, you can migrate your configuration to the latest version. To do so, go to your Config Map and click the **Migrate** button.
-
-### Example (latest vesion)
-
-```yaml
-'0.5'
-```
