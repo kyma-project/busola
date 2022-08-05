@@ -42,7 +42,7 @@ api-rules:
     create: Create API Rule
     edit: Edit API Rule "{{apiRuleName}}"
     expose: Expose {{type}}
-  description: <0>API Rule</0> allows for exposing a service externally.
+  description: <0>APIRule</0> allows for exposing a service externally.
   form:
     gateway: Gateway
     host: Host
@@ -61,19 +61,19 @@ api-rules:
       service-name: Service Name
       status: Status
   messages:
-    create-failed: Failed to create the API Rule
-    created: API Rule created
-    description: Expose Services outside the cluster with API Rules.
-    not-matching-results: Couldn't find API Rules matching this query.
-    one-rule-required: Provide at least one API Rule.
-    updated: API Rule updated
-    will-be-available-at: API Rule will be available at {{address}}.
+    create-failed: Failed to create the APIRule
+    created: APIRule created
+    description: Expose Services outside the cluster with APIRules.
+    not-matching-results: Couldn't find APIRules matching this query.
+    one-rule-required: Provide at least one APIRule.
+    updated: APIRule updated
+    will-be-available-at: APIRule will be available at {{address}}.
   name_singular: API Rule
   oauth:
     required-scope: Required scope
   placeholders:
     path: Enter the path
-    subdomain: Subdomain part of API Rule address
+    subdomain: Subdomain part of the APIRule address
   rule: Rule
   rules: Rules
   services:
@@ -288,11 +288,11 @@ cluster-overview:
     cpu-used: 'CPU Used: {{percentage}}'
     memory-used: 'Memory Used: {{percentage}}'
 cluster-role-bindings:
-  description: <0>Cluster Role Binding</0> assigns the permissions defined in a Cluster Role to a user.
+  description: <0>ClusterRoleBinding</0> assigns the permissions defined in a ClusterRole to a user.
   name_singular: Cluster Role Binding
   title: Cluster Role Bindings
 cluster-roles:
-  description: <0>Cluster Role</0> is a set of cluster-level resources and permissions that can be assigned to a user.
+  description: <0>ClusterRole</0> is a set of cluster-level resources and permissions that can be assigned to a user.
   name_singular: Cluster Role
   title: Cluster Roles
 clusters:
@@ -597,7 +597,7 @@ common:
     error: Error
     generate-name: Generate name
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' and ''.'' (e.g.: ''my.name-1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
@@ -676,13 +676,13 @@ config-maps:
   buttons:
     migrate: Migrate
     update: Update
-  description: <0>Config Map</0> is an object that allows for storing non-sensitive data in key-value pairs.
+  description: <0>ConfigMap</0> is an object that allows for storing non-sensitive data in key-value pairs.
   errors:
-    cannot-create: Cannot create the Config Map
-    cannot-update: Cannot update the Config Map
+    cannot-create: Cannot create the ConfigMap
+    cannot-update: Cannot update the ConfigMap
   messages:
-    created: Config Map created
-    updated: Config Map updated
+    created: ConfigMap created
+    updated: ConfigMap updated
   name_singular: Config Map
   subtitle:
     edit-config-map: Edit Config Map
@@ -768,7 +768,7 @@ cron-jobs:
       month: 1 to 12
       starting-deadline: Optional deadline in seconds for starting the job if it misses the scheduled time.
       suspend: 'If true, the controller suspends subsequent executions (default: false). It does not apply to started executions.'
-  description: <0>Cron Job</0> is a job that is run according to a specified schedule.
+  description: <0>CronJob</0> is a job that is run according to a specified schedule.
   docker-image: Docker Image
   failed-jobs-history-limit: Failed Jobs History Limit
   image-pull-policy: Image Pull Policy
@@ -783,7 +783,7 @@ cron-jobs:
     forbid: No concurrent executions. Skip the new run if the previous one hasn't finished yet.
     replace: No concurrent executions. Replace the previous run with the new one.
 custom-resource-definitions:
-  description: <0>Custom Resource Definition</0> is an object used to define a custom resource that allows you to extend the Kubernetes API for use cases that are not directly covered by core Kubernetes.
+  description: <0>CustomResourceDefinition</0> is an object used to define a custom resource that allows you to extend the Kubernetes API for use cases that are not directly covered by core Kubernetes.
   headers:
     categories: Categories
     description: Description
@@ -813,11 +813,11 @@ custom-resource-definitions:
     served: This version is served using REST APIs.
     storage: Use this version when persisting custom resources to storage.
 custom-resources:
-  description: <0>Custom resource</0> extends the Kubernetes API. You can define your own custom resource by creating a <1>Custom Resource Definition</1> first.
+  description: <0>Custom resource</0> extends the Kubernetes API. You can define your own custom resource by creating a <1>CustomResource Definition</1> first.
   schema-preview: Schema Preview
   title: Custom Resources
 daemon-sets:
-  description: <0>Daemon Set</0> ensures that replicated Pods are running across a set of available nodes.
+  description: <0>DaemonSet</0> ensures that replicated Pods are running across a set of available nodes.
   images: Images
   name_singular: Daemon Set
   node-selector: Node Selector
@@ -856,7 +856,7 @@ deployments:
   title: Deployments
 destination-rules:
   age: Age
-  description: <0>Destination Rule</0> specifies rules that apply to traffic intended for a service after routing.
+  description: <0>DestinationRule</0> specifies rules that apply to traffic intended for a service after routing.
   details:
     alt-names: Subject Alt Names
     base-ejection: Base Ejection Time
@@ -916,7 +916,7 @@ destination-rules:
 discovery-and-network:
   title: Discovery and Network
 dnsentries:
-  description: <0>DNS Entry</0> is an object that represents the request to create an external DNS record.
+  description: <0>DNSEntry</0> is an object that represents the request to create an external DNS record.
   headers:
     dns-name: DNS Name
     provider: Provider
@@ -933,8 +933,8 @@ dnsentries:
     ttl: TTL
     use-cname: Use CNAME
   messages:
-    cannot-create: 'Failed to create the DNS Entry:'
-    created: DNS Entry created
+    cannot-create: Failed to create the DNSEntry
+    created: DNSEntry created
   name_singular: DNS Entry
   placeholders:
     dns-name: Select the DNS name
@@ -956,7 +956,7 @@ dnsentries:
     use-a: Switch to A record.
     use-cname: Switch to CNAME record
 dnsproviders:
-  description: <0>DNS Provider</0> is used to specify and manage the configuration for the external DNS services.
+  description: <0>DNSProvider</0> is used to specify and manage the configuration for the external DNS services.
   domains: Domains
   headers:
     exclude: Excluded Domains
@@ -968,9 +968,9 @@ dnsproviders:
     secret-reference: Secret Reference
     type: Type
   messages:
-    cannot-create: 'Failed to create the DNS Provider:'
-    created: DNS Provider created
-  name_singular: DNS Provider
+    cannot-create: 'Failed to create the DNSProvider:'
+    created: DNSProvider created
+  name_singular: DNSProvider
   placeholders:
     default-ttl: Enter the default time to live
     provider-type: Choose Provider type
@@ -1003,7 +1003,7 @@ events:
   title: Events
 extensibility:
   configuration-error: 'Configuration error: {{error}}'
-  description: <0>Extensions</0> allow you to create a separate dedicated user interface (UI) page for your Custom Resource Definition (CRD).
+  description: <0>Extension</0> allows you to create a separate dedicated user interface (UI) page for your CustomResourceDefinition (CRD).
   error: Your extension configuration is incorrect.
   message:
     old-version: There is a newer version of the extensibility configuration. Please migrate to the newest version.
@@ -1030,12 +1030,12 @@ extensibility:
       form-fields: Form Fields
       list-columns: List Columns
     messages:
-      configmap-info: The <0>{{name}}</0> Config Map is created or updated in the <1>kube-public</1> Namespace.
+      configmap-info: The <0>{{name}}</0> ConfigMap is created or updated in the <1>kube-public</1> Namespace.
       docs-info: For more information, see the <0>Extensibility documentation</0>.
       error: Failed to upsert UI configuration.
       no-columns: No example values could be inferred from the CRD.
       not-an-array: Wrong data format. Values should be an array.
-      scaffold-only: The above configuration can be changed later at the Config Map level.
+      scaffold-only: The above configuration can be changed later at the ConfigMap level.
       success: UI configuration upserted.
     title: Create UI for {{kind}} CRD
   title: Extensions
@@ -1172,7 +1172,7 @@ functions:
       duplicated: Duplicated variable name
       empty: Variable is empty
       invalid: Variable name must consist of alphanumeric characters, can contain '_', no blank spaces.
-      invalid-config: Select the Config Map name and key
+      invalid-config: Select the ConfigMap name and key
       invalid-secret: Select the Secret name and key
       restricted: This variable name is restricted and cannot be used. Try a different name.
     form:
@@ -1266,10 +1266,10 @@ gateways:
     tooltips:
       ca-certificates: The path to a file containing certificate authority (CA) certificates, which verify a presented client-side certificate.
       credential-name: The name of the Secret. Required properties are key and cert; for mutual TLS (mTLS), caceert is also required. Alternatively, you can use a Secret of type tls for server certificates along with a ca.crt key for CA certificates.
-      hosts: At least one host exposed by the gateway, in FQDN format with optional wildcard character in the left-most component.
+      hosts: At least one host exposed by the Gateway, in FQDN format with optional wildcard character in the left-most component.
       private-key: The path to the file holding the server’s private key.
       protocol: The protocol exposed on the port. TLS implies that the connection is routed based on the SNI header to the destination, without terminating the TLS connection.
-      selector: One or more labels that indicate a set of pods on which the gateway configuration is applied. By default, workloads are searched across all namespaces based on label selectors.
+      selector: One or more labels that indicate a set of Pods on which the Gateway configuration is applied. By default, workloads are searched across all Namespaces based on label selectors.
       server-certificate: The path to the file holding the server-side TLS certificate you want to use.
       target-port: The port number on the endpoint where the traffic is received.
   description: ' <0>Gateway</0> describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections.'
@@ -1290,7 +1290,7 @@ git-repositories:
     basic: Basic
     public: Public
     ssh-key: SSH Key
-  description: <0>Git Repository</0> is used to define and manage Git repositories that store the Function's source code and dependencies.
+  description: <0>GitRepository</0> is used to define and manage Git repositories that store the Function's source code and dependencies.
   errors:
     invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
   labels:
@@ -1379,7 +1379,7 @@ hpas:
   container-resource: Container resource
   cpu-utilization: Target average CPU utilization
   current-replicas: Current Replicas
-  description: <0>Horizontal Pod Autoscaler</0> automatically manages the number of Pod replicas to match the demand.
+  description: <0>HorizontalPodAutoscaler</0> automatically manages the number of Pod replicas to match the demand.
   external: External
   headers:
     created: Created
@@ -1530,7 +1530,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
@@ -1608,7 +1608,7 @@ namespaces:
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
 network-policies:
-  description: <0>Network Policy</0> allows you to control how a Pod communicates with different network entities.
+  description: <0>NetworkPolicy</0> allows you to control how a Pod communicates with different network entities.
   headers:
     cidr: CIDR
     egress: Egress
@@ -1691,7 +1691,7 @@ oauth2-clients:
 observability:
   title: Observability
 persistent-volume-claims:
-  description: <0>Persistent Volume Claim (PVC)</0> is a request for the Persistent Volume resources.
+  description: <0>PersistentVolumeClaim (PVC)</0> is a request for the PersistentVolume resources.
   headers:
     access-modes: Access Mode
     configuration: Configuration
@@ -1701,13 +1701,13 @@ persistent-volume-claims:
     volume-mode: Volume Mode
     volume-name: Volume Name
   message:
-    empty-selector: Matches all Persistent Volumes
+    empty-selector: Matches all PersistentVolumes
   name_singular: Persistent Volume Claim
   title: Persistent Volume Claims
   tooltips:
-    bound: Binding between Persistent Volume and Persistent Volume Claim established
-    lost: Lost binding between Persistent Volume and Persistent Volume Claim
-    pending: Checking if binding between Persistent Volume and Persistent Volume Claim is established.
+    bound: Binding between PersistentVolume and PersistentVolumeClaim established
+    lost: Lost binding between PersistentVolume and PersistentVolumeClaim
+    pending: Checking if binding between PersistentVolume and PersistentVolumeClaim is established.
 pods:
   buttons:
     view-logs: View Logs
@@ -1797,7 +1797,7 @@ pods:
 preferences:
   title: Preferences
 pv:
-  description: <0>Persistent Volume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
+  description: <0>PersistentVolume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
   details: Details
   headers:
     access-modes: Access Mode
@@ -1821,11 +1821,11 @@ pv:
     released: Released
   title: Persistent Volumes
   tooltips:
-    available: Persistent Volume not yet bound
-    bound: Persistent Volume bound
+    available: PersistentVolume not yet bound
+    bound: PersistentVolume bound
     failed: Recycle or deletion failed
-    pending: Persistent Volume not available
-    released: Bound Persistent Volume Claim deleted
+    pending: PersistentVolume not available
+    released: Bound PersistentVolume Claim deleted
 replica-sets:
   cpu: CPU
   create-modal:
@@ -1838,7 +1838,7 @@ replica-sets:
     tooltips:
       min-ready-seconds: Minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing in order to be considered available.
       replicas: Number of desired replicas
-  description: <0>Replica Set</0> maintains a number of replica Pods running at any given time.
+  description: <0>ReplicaSet</0> maintains a number of replica Pods running at any given time.
   headers:
     images: Images
     limits: Limits
@@ -1873,7 +1873,7 @@ role-bindings:
     tooltips:
       kind: Being part of the JWT token, you must set User and Groups at the OIDC level if you use an OIDC provider.
     user-name: User name
-  description: <0>Role Binding</0> assigns the permissions defined in a Role to a user.
+  description: <0>RoleBinding</0> assigns the permissions defined in a Role to a user.
   headers:
     kind: Kind
     role-ref: Role Reference
@@ -1998,10 +1998,10 @@ service-accounts:
   create-modal:
     at-least-one-secret-required: '{{resource}} must have at least one secret.'
     tooltips:
-      auto-mount-token: When set to true, it automatically mounts the service account token within each container of a given Pod. For security reasons, don't enable automount if you don't need it.
-      image-pull-secrets: Image Pull Secrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this Service Account. Image Pull Secrets are distinct from Secrets because Secrets can be mounted in a Pod, but Image Pull Secrets are only accessed by the kubelet.
-      secrets: Secrets is the list of Secrets allowed to be used by running Pods using this Service Account.
-  description: <0>Service Account</0> enables processes to run on a Pod to communicate and authenticate to the API server.
+      auto-mount-token: When set to true, it automatically mounts the ServiceAccount token within each container of a given Pod. For security reasons, don't enable automount if you don't need it.
+      image-pull-secrets: Image Pull Secrets is a list of references to Secrets in the same Namespace to use for pulling any images in Pods that reference this ServiceAccount. Image Pull Secrets are distinct from Secrets because Secrets can be mounted in a Pod, but Image Pull Secrets are only accessed by the kubelet.
+      secrets: Secrets is the list of Secrets allowed to be used by running Pods using this ServiceAccount.
+  description: <0>ServiceAccount</0> enables processes to run on a Pod to communicate and authenticate to the API server.
   headers:
     auto-mount-token: Automount Token
     download-kubeconfig: Download Kubeconfig
@@ -2012,7 +2012,7 @@ service-accounts:
   service-account: Service Account
   title: Service Accounts
 service-entries:
-  description: <0>Service Entry</0> allows for adding more entries to the internal service registry of Istio.
+  description: <0>ServiceEntry</0> allows for adding more entries to the internal service registry of Istio.
   headers:
     addresses: Adresses
     configuration: Configuration
@@ -2098,14 +2098,14 @@ sidecars:
   name_singular: Sidecar
   title: Sidecars
 stateful-sets:
-  description: <0>Stateful Set</0> is used for the management of Pods' deployment and scaling.
+  description: <0>StatefulSet</0> is used for the management of Pods' deployment and scaling.
   name_singular: Stateful Set
   replicas: Replicas
   title: Stateful Sets
 storage:
   title: Storage
 storage-classes:
-  description: <0>Storage classes</0> provides a way for administrators to describe the "classes" of storage they offer.
+  description: <0>StorageClass</0> provides a way for administrators to describe the "classes" of storage they offer.
   headers:
     parameters: Parameters
     provisioner: Provisioner
@@ -2192,7 +2192,7 @@ upload-yaml:
   you-will-create_one: 'You will create 1 resource:'
   you-will-create_other: 'You will create {{count}} resources:'
 virtualservices:
-  description: <0>Virtual Service</0> describes a configuration that affects traffic routing.
+  description: <0>VirtualService</0> describes a configuration that affects traffic routing.
   gateways: Gateways
   headers:
     add: add

@@ -2,8 +2,8 @@
 
 ## Overview
 
-This document describes the required Config Map setup that you need to configure in order to handle your CRD UI page.
-All Config Map `data` sections can be provided as either JSON or YAML.
+This document describes the required ConfigMap setup that you need to configure in order to handle your CRD UI page.
+You can provide all the ConfigMap `data` sections as either JSON or YAML.
 
 ## Extension version
 
@@ -23,7 +23,7 @@ The `resource` section is required and contains basic information about the reso
 - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
 - **path** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
 - **defaultPlaceholder** - to be shown in place of empty resource leaves. Overridden by the widget-level **placeholder**. Defaults to `-`.
-- **description** - displays a custom description on the resource list page. It can contain links. If the translation section has a translation entry with the ID that is the same as the **description** string, the translation is used.
+- **description** - displays a custom description on the resource list page. It can contain links. If the `translations` section has a translation entry with the ID that is the same as the **description** string, the translation is used.
 - **disableCreate** - either `true` or `false`. Defaults to `false`.
 
 ### Example
@@ -72,7 +72,7 @@ If you target elements of an array rather that the array itself, you can use `it
 
 ## list section
 
-The `list` section defines extra columns available in the list. The format is similar to the `form` section, however each entry consists only of two values:
+The `list` section defines extra columns available in the list.
 
 ### Item parameters
 
