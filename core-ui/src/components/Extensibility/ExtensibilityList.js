@@ -16,34 +16,36 @@ import {
 import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
+import { useGetSchema } from 'hooks/useGetSchema';
 import { useTranslation } from 'react-i18next';
 
 export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
   const { t: tBusola } = useTranslation();
 
-  const { path, kind, disableCreate } = resMetaData?.resource ?? {};
+  const { urlPath, disableCreate, resource, description } =
+    resMetaData?.general ?? {};
 
-  const schema = resMetaData?.schema;
   const dataSources = resMetaData?.dataSources || {};
+  const { schema } = useGetSchema({
+    resource,
+  });
 
-  const listProps = usePrepareListProps(path, 'name');
-  console.log(listProps);
-  if (kind) {
+  const listProps = usePrepareListProps(urlPath, 'name');
+
+  if (resource.kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
       /[a-z0-9-]+\/?$/,
-      pluralize(kind).toLowerCase(),
+      pluralize(resource.kind).toLowerCase(),
     );
   }
   listProps.createFormProps = { resourceSchema: resMetaData };
 
   listProps.resourceName = t('name', {
-    defaultValue: pluralize(prettifyKind(kind)),
+    defaultValue: pluralize(prettifyKind(resource.kind)),
   });
 
-  listProps.description = useCreateResourceDescription(
-    resMetaData?.resource?.description,
-  );
+  listProps.description = useCreateResourceDescription(description);
 
   listProps.customColumns = Array.isArray(resMetaData?.list)
     ? resMetaData?.list.map((column, i) => ({
@@ -61,6 +63,11 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
       }))
     : [];
 
+  const isFilterAString = typeof resMetaData.resource.filter === 'string';
+  const filterFn = value =>
+    applyFormula(value, resMetaData.resource.filter, tBusola);
+  listProps.filterFn = isFilterAString ? filterFn : undefined;
+
   const sortPaths = (resMetaData?.list || []).reduce((acc, current) => {
     if (current.sortBy) return [...acc, current.path];
     return [...acc];
@@ -71,11 +78,6 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     const { name, time } = defaultSort;
     return { name, time };
   };
-
-  const isFilterAString = typeof resMetaData.resource.filter === 'string';
-  const filterFn = value =>
-    applyFormula(value, resMetaData.resource.filter, tBusola);
-  listProps.filterFn = isFilterAString ? filterFn : undefined;
 
   return (
     <ResourcesList
@@ -90,18 +92,17 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
 
 const ExtensibilityList = () => {
   const resMetaData = useGetCRbyPath();
-  const { path } = resMetaData?.resource ?? {};
-  console.log(resMetaData);
+  const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};
 
   return (
     <TranslationBundleContext.Provider
       value={{
-        translationBundle: path,
-        defaultResourcePlaceholder: resMetaData?.resource?.defaultPlaceholder,
+        translationBundle: urlPath,
+        defaultResourcePlaceholder: defaultPlaceholder,
       }}
     >
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
-        <ExtensibilityErrBoundary key={path}>
+        <ExtensibilityErrBoundary key={urlPath}>
           <ExtensibilityListCore resMetaData={resMetaData} />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>

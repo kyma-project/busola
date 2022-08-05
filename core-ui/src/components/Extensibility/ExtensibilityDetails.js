@@ -15,19 +15,17 @@ import { useGetSchema } from 'hooks/useGetSchema';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
-  const { path, kind, group, version } = resMetaData?.resource ?? {};
-
-  const openapiSchemaId = `${group}/${version}/${kind}`;
+  const { urlPath, resource } = resMetaData?.general ?? {};
   const { schema } = useGetSchema({
-    schemaId: openapiSchemaId,
+    resource,
   });
 
-  const detailsProps = usePrepareDetailsProps(path, 'name');
+  const detailsProps = usePrepareDetailsProps(urlPath, 'name');
 
-  if (resMetaData?.resource?.kind) {
+  if (resource.kind) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
-      path,
-      pluralize(kind).toLowerCase(),
+      urlPath,
+      pluralize(resource.kind).toLowerCase(),
     );
   }
 
@@ -38,17 +36,17 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const breadcrumbs = [
     {
       name: t('name', {
-        defaultValue: pluralize(prettifyKind(kind)),
+        defaultValue: pluralize(prettifyKind(resource.kind)),
       }),
       path: '/',
-      fromContext: resMetaData?.resource?.path,
+      fromContext: urlPath,
     },
     { name: '' },
   ];
   return (
     <ResourceDetails
       windowTitle={t('name', {
-        defaultValue: pluralize(prettifyKind(kind)),
+        defaultValue: pluralize(prettifyKind(resource.kind)),
       })}
       customColumns={
         Array.isArray(header)
@@ -94,12 +92,12 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
 
 const ExtensibilityDetails = () => {
   const resMetaData = useGetCRbyPath();
-
+  const { urlPath, defaultPlaceholder } = resMetaData?.general || {};
   return (
     <TranslationBundleContext.Provider
       value={{
-        translationBundle: resMetaData?.resource?.path || 'extensibility',
-        defaultResourcePlaceholder: resMetaData?.resource?.defaultPlaceholder,
+        translationBundle: urlPath || 'extensibility',
+        defaultResourcePlaceholder: defaultPlaceholder,
       }}
     >
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>

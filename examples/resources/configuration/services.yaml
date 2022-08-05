@@ -50,7 +50,8 @@ data:
     [
       {
         "path": "metadata.ownerReferences",
-        "widget": "ControlledByKind"
+        "widget": "ControlledBy",
+        "kindOnly": true,
       },
       {
         "path": "spec.type",
@@ -75,7 +76,7 @@ data:
         "resource": {
           "kind": "APIRule",
           "group": "gateway.kyma-project.io",
-          "version": "v1alpha1",
+          "version": "v1alpha1"
         },
         "filter": "$filter(data, function($item) {$item.spec.service.name = resource.metadata.name})"
       },
@@ -83,17 +84,18 @@ data:
         "resource": {
           "kind": "Subscription",
           "group": "eventing.kyma-project.io",
-          "version": "v1alpha1",
+          "version": "v1alpha1"
         },
         "filter": "$filter(data, function($item) {$substringAfter($substringBefore($item.spec.sink, '.'), '://') = resource.metadata.name})"
       }
     }
-  resource: |-
+  general: |-
     {
-      "kind": "Service",
-      "group": "",
-      "version": "v1",
-      "path": "example-services",
+      "resource": {
+        "kind": "Service",
+        "version": "v1",
+      },
+      "urlPath": "example-services",
       "scope": "namespace",
     }
   translations: |-

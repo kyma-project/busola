@@ -1015,9 +1015,9 @@ extensibility:
     dataSources: Data Sources
     details: Details View
     form: Form Fields
+    general: General
     lang-translations: Translations ({{lang}})
     list: List Columns
-    resource: Resource Basics
     translations: Translations
     version: Version
   starter-modal:
