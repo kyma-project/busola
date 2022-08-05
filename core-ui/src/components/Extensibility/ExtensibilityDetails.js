@@ -9,7 +9,7 @@ import { useGetCRbyPath } from './useGetCRbyPath';
 import { shouldBeVisible, Widget } from './components/Widget';
 import { useGetTranslation, TranslationBundleContext } from './helpers';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
-import { RelationsContextProvider } from './contexts/RelationsContext';
+import { DataSourcesContextProvider } from './contexts/DataSources';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
@@ -28,7 +28,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const header = resMetaData?.details?.header || [];
   const body = resMetaData?.details?.body || [];
   const schema = resMetaData?.schema;
-  const relations = resMetaData?.relations || {};
+  const dataSources = resMetaData?.dataSources || {};
 
   const breadcrumbs = [
     {
@@ -56,7 +56,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
                   value={resource}
                   structure={def}
                   schema={schema}
-                  relations={relations}
+                  dataSources={dataSources}
                   originalResource={resource}
                   inlineContext={true}
                 />
@@ -73,7 +73,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
                   value={resource}
                   structure={body}
                   schema={schema}
-                  relations={relations}
+                  dataSources={dataSources}
                   originalResource={resource}
                 />
               ),
@@ -98,11 +98,11 @@ const ExtensibilityDetails = () => {
         defaultResourcePlaceholder: resMetaData?.resource?.defaultPlaceholder,
       }}
     >
-      <RelationsContextProvider relations={resMetaData?.relations || {}}>
+      <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary>
           <ExtensibilityDetailsCore resMetaData={resMetaData} />
         </ExtensibilityErrBoundary>
-      </RelationsContextProvider>
+      </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>
   );
 };

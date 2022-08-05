@@ -255,7 +255,7 @@ Plain widgets render all contents of an object or list sequentially without any 
 
 ### ResourceList
 
-ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with [related resources](resources.md#relations-section).
+ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with [related resources](resources.md#datasources-section).
 
 If such resource list was already defined in Busola, the configuration will be reused. To obtain custom columns, specify the `columns` field.
 
