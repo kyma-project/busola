@@ -8,7 +8,7 @@ export const SECTIONS = [
   'form',
   'list',
   'details',
-  'relations',
+  'dataSources',
   'translations',
 ];
 

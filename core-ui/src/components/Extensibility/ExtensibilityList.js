@@ -15,7 +15,7 @@ import {
   createOpenApiSchemaId,
 } from './helpers';
 import { Widget } from './components/Widget';
-import { RelationsContextProvider } from './contexts/RelationsContext';
+import { DataSourcesContextProvider } from './contexts/DataSources';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 import { useGetSchema } from 'hooks/useGetSchema';
 import { useTranslation } from 'react-i18next';
@@ -27,12 +27,11 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   const { urlPath, disableCreate, resource, description } =
     resMetaData?.general ?? {};
 
+  const dataSources = resMetaData?.dataSources || {};
   const openapiSchemaId = createOpenApiSchemaId(resource);
   const { schema } = useGetSchema({
     schemaId: openapiSchemaId,
   });
-
-  const relations = resMetaData?.relations || {};
 
   const listProps = usePrepareListProps(urlPath, 'name');
 
@@ -59,7 +58,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
             value={resource}
             structure={column}
             schema={schema}
-            relations={relations}
+            dataSources={dataSources}
             originalResource={resource}
           />
         ),
@@ -92,11 +91,11 @@ const ExtensibilityList = () => {
         defaultResourcePlaceholder: defaultPlaceholder,
       }}
     >
-      <RelationsContextProvider relations={resMetaData?.relations || {}}>
+      <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary key={urlPath}>
           <ExtensibilityListCore resMetaData={resMetaData} />
         </ExtensibilityErrBoundary>
-      </RelationsContextProvider>
+      </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>
   );
 };

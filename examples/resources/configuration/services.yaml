@@ -70,19 +70,23 @@ data:
         "formula": "$count(data.status.loadBalancer.ingress) ? $map(data.status.loadBalancer.ingress, function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '): ($count(data.spec.externalIPs) ? data.spec.externalIPs ~> $join(', '): '-')"
       }
     ]
-  relations: |-
+  dataSources: |-
     {
       "apirules":{
-        "kind": "APIRule",
-        "group": "gateway.kyma-project.io",
-        "version": "v1alpha1",
-        "selector": "$filter(data, function($item) {$item.spec.service.name = resource.metadata.name})"
+        "resource": {
+          "kind": "APIRule",
+          "group": "gateway.kyma-project.io",
+          "version": "v1alpha1"
+        },
+        "filter": "$filter(data, function($item) {$item.spec.service.name = resource.metadata.name})"
       },
       "subscriptions":{
-        "kind": "Subscription",
-        "group": "eventing.kyma-project.io",
-        "version": "v1alpha1",
-        "selector": "$filter(data, function($item) {$substringAfter($substringBefore($item.spec.sink, '.'), '://') = resource.metadata.name})"
+        "resource": {
+          "kind": "Subscription",
+          "group": "eventing.kyma-project.io",
+          "version": "v1alpha1"
+        },
+        "filter": "$filter(data, function($item) {$substringAfter($substringBefore($item.spec.sink, '.'), '://') = resource.metadata.name})"
       }
     }
   general: |-
