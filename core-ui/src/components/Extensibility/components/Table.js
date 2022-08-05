@@ -4,7 +4,7 @@ import { isNil } from 'lodash';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import { useGetTranslation } from '../helpers';
+import { findTypeInSchema, useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 
 import './Table.scss';
@@ -65,33 +65,23 @@ export function Table({ value, structure, disableMargin, schema, ...props }) {
     };
   };
 
-  const findTypeInSchema = (schema, path) => {
-    const propertiesArray = path.split('.');
-    const firstProperty = propertiesArray[0];
-
-    if (propertiesArray.length === 1) {
-      const lastSchema = schema?.properties ?? schema?.items?.properties;
-      return lastSchema?.[firstProperty].type;
-    }
-
-    propertiesArray.shift();
-
-    const nextPath = [...propertiesArray].join('.');
-    const nextProperties = schema?.properties ?? schema?.items?.properties;
-    const nextSchema = nextProperties?.[firstProperty];
-    return findTypeInSchema(nextSchema, nextPath);
-  };
-
-  const sortingOptions = structure?.sortBy;
-
+  // const sortingOptions = structure?.sortBy || [];
+  const sortPaths = (structure?.children || []).reduce(
+    (accumulator, current) => {
+      if (accumulator.sortBy) return [...accumulator, current.path];
+      return [...accumulator];
+    },
+    [],
+  );
+  console.log(sortPaths);
   const sortBy = defaultSort => {
     const obj = {};
 
-    for (const sort of sortingOptions || []) {
+    for (const sort of sortPaths) {
       const path = `${structure.path}.${sort}`;
       const type = findTypeInSchema(schema, path);
       console.log('path:', path, 'type:', type);
-      obj[tExt(`${structure.path}.${sort}`)] = (a, b) => {
+      obj[tExt(path)] = (a, b) => {
         return a[sort].localeCompare(b[sort]);
       };
     }
@@ -112,7 +102,7 @@ export function Table({ value, structure, disableMargin, schema, ...props }) {
       rowRenderer={rowRenderer}
       disableMargin={disableMargin}
       {...handleTableValue(value, t)}
-      sortBy={sortingOptions ? sortBy : null}
+      sortBy={sortPaths ? sortBy : null}
     />
   );
 }

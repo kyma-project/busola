@@ -150,3 +150,20 @@ export const throwConfigError = (message, code) => {
   e.name = 'Extensibility Config Error';
   throw e;
 };
+
+export const findTypeInSchema = (schema, path) => {
+  const propertiesArray = path.split('.');
+  const firstProperty = propertiesArray[0];
+
+  if (propertiesArray.length === 1) {
+    const lastSchema = schema?.properties ?? schema?.items?.properties;
+    return lastSchema?.[firstProperty].type;
+  }
+
+  propertiesArray.shift();
+
+  const nextPath = [...propertiesArray].join('.');
+  const nextProperties = schema?.properties ?? schema?.items?.properties;
+  const nextSchema = nextProperties?.[firstProperty];
+  return findTypeInSchema(nextSchema, nextPath);
+};

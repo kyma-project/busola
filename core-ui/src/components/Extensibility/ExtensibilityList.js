@@ -28,7 +28,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   const dataSources = resMetaData?.dataSources || {};
 
   const listProps = usePrepareListProps(path, 'name');
-
+  console.log(listProps);
   if (kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
       /[a-z0-9-]+\/?$/,
@@ -61,6 +61,17 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
       }))
     : [];
 
+  const sortPaths = (resMetaData?.list || []).reduce((acc, current) => {
+    if (current.sortBy) return [...acc, current.path];
+    return [...acc];
+  }, []);
+
+  console.log('sortPaths', sortPaths);
+  const sortBy = defaultSort => {
+    const { name, time } = defaultSort;
+    return { name, time };
+  };
+
   const isFilterAString = typeof resMetaData.resource.filter === 'string';
   const filterFn = value =>
     applyFormula(value, resMetaData.resource.filter, tBusola);
@@ -71,6 +82,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
       createResourceForm={ExtensibilityCreate}
       allowSlashShortcut
       disableCreate={disableCreate}
+      sortBy={sortBy}
       {...listProps}
     />
   );
@@ -79,6 +91,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
 const ExtensibilityList = () => {
   const resMetaData = useGetCRbyPath();
   const { path } = resMetaData?.resource ?? {};
+  console.log(resMetaData);
 
   return (
     <TranslationBundleContext.Provider

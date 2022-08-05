@@ -57,7 +57,7 @@ data:
             "name": "topping",
             "path": "spec.toppings",
             "widget": "Table",
-            "children": [{ "path": "name" }, { "path": "price" }, { "path": "quantity" }]
+            "children": [{ "path": "name", "sortBy": true }, { "path": "price", "sortBy": true }, { "path": "quantity", "sortBy": true }]
           },
           ]
         },
@@ -120,9 +120,9 @@ data:
     ]
   list: |-
     [
-      { "path": "spec.description" },
+      { "path": "spec.description", "sortBy": true },
       { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
-      { "path": "spec.toppings", "formula": "$sum(data.price)", "name": "Toppings price" }
+      { "path": "spec.toppings", "formula": "$sum(data.price)", "name": "Toppings price", "sortBy": true }
     ]
   dataSources: |-
     {
