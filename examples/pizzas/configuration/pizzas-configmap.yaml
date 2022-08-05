@@ -124,27 +124,31 @@ data:
       { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
       { "path": "spec.toppings", "formula": "$sum(data.price)", "name": "Toppings price" }
     ]
-  relations: |-
+  dataSources: |-
     {
       "secretRecipe":{
-        "kind": "Secret",
-        "version": "v1",
-        "namespace": "pizzas",
-        "selector": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"
+        "resource": {
+          "kind": "Secret",
+          "version": "v1",
+          "namespace": "pizzas",
+        },
+        "filter": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"
       }
     }
-  resource: |-
+  general: |-
     {
-      "kind": "Pizza",
-      "group": "busola.example.com",
-      "version": "v1",
+      "resource": {
+        "kind": "Pizza",
+        "group": "busola.example.com",
+        "version": "v1"
+      },
+      "name": "Pizza",
+      "category": "Lunch",
       "scope": "namespace",
       "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
     }
   translations: |
     en:
-      name: Pizza
-      category: Lunch
       spec.description: Description
       spec.comments: Comments
       spec.state: State

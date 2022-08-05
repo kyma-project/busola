@@ -64,13 +64,15 @@ data:
         "type": "string"
       }
     ]
-  resource: |-
+  general: |-
     {
-      "group": "serverless.kyma-project.io",
-      "kind": "GitRepository",
-      "path": "example-gitrepositories",
+      "resource": {
+        "group": "serverless.kyma-project.io",
+        "kind": "GitRepository",
+        "version": "v1alpha1"
+      },
+      "urlPath": "example-gitrepositories",
       "scope": "namespace",
-      "version": "v1alpha1"
     }
   translations: |-
     {

@@ -7,7 +7,12 @@ import {
 } from 'components/App/resourceSchemas/resourceSchemaWorkerApi';
 import { AppContext } from 'components/App/AppContext';
 
-export const useGetSchema = ({ schemaId, skip }) => {
+export const useGetSchema = ({ schemaId, skip, resource }) => {
+  if (!schemaId) {
+    const { group, version, kind } = resource;
+    schemaId = `${group}/${version}/${kind}`;
+  }
+
   const { areSchemasComputed, schemasError } = useContext(
     AppContext,
   ).schemaInfo;
