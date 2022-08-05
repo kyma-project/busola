@@ -205,7 +205,7 @@ Columns widgets render the child widgets in multiple columns.
 
 #### Widget-specific parameters
 
-- **inline** - an optional property to change rendering mode.
+- **inline** - an optional property to change the rendering mode.
 
 #### Example
 
