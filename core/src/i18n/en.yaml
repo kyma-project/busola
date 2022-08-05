@@ -1017,7 +1017,7 @@ extensibility:
     lang-translations: Translations ({{lang}})
     list: List Columns
     relations: Resource Relations
-    resource: Resource Basics
+    general: General
     translations: Translations
     version: Version
   starter-modal:
