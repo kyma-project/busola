@@ -1,17 +1,16 @@
 import React from 'react';
 
 import { Widget } from './Widget';
-import { widgets } from '.';
 
 import './InlineDisplay.scss';
+import { isNil } from 'lodash';
 
 export function Columns({ structure, ...props }) {
-  let classNames = 'panel-grid';
-  if (Array.isArray(structure.children)) {
-    if (structure.children.every(child => widgets[child?.widget]?.inline)) {
-      classNames = 'inline-display';
-    }
-  }
+  const inline = isNil(structure.inline)
+    ? props.inlineContext
+    : structure.inline;
+
+  const classNames = inline ? 'inline-display' : 'panel-grid';
 
   return (
     <div className={classNames}>

@@ -62,7 +62,13 @@ export function shouldBeVisible(value, visibilityFormula) {
   }
 }
 
-export function Widget({ structure, value, inlineRenderer, ...props }) {
+export function Widget({
+  structure,
+  value,
+  inlineRenderer,
+  inlineContext,
+  ...props
+}) {
   const { Plain, Text } = widgets;
   const { t } = useTranslation();
   const {
@@ -158,6 +164,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
         Renderer={Renderer}
         value={item}
         structure={structure}
+        inlineContext={inlineContext}
         {...props}
       />
     ))
@@ -167,6 +174,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
       Renderer={Renderer}
       value={sanitizedValue}
       structure={structure}
+      inlineContext={inlineContext}
       {...props}
     />
   );

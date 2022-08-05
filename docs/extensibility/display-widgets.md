@@ -169,7 +169,11 @@ Panel widgets render an object as a separate panel with its own title (based on 
 
 ### Columns
 
-Columns widgets render the child widgets in two columns. Columns must not be used in **header**.
+Columns widgets render the child widgets in multiple columns.
+
+#### Widget-specific parameters
+
+- **inline** - an optional property to change rendering mode.
 
 #### Example
 
