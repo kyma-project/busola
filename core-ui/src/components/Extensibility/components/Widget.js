@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { useRelationsContext } from '../contexts/RelationsContext';
+import { useDataSourcesContext } from '../contexts/DataSources';
 import { isNil } from 'lodash';
 import { widgets, valuePreprocessors } from './index';
 import { useTranslation } from 'react-i18next';
@@ -93,10 +93,10 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
   const { t } = useTranslation();
   const {
     store,
-    relations,
+    dataSources,
     getRelatedResourceInPath,
     requestRelatedResource,
-  } = useRelationsContext();
+  } = useDataSourcesContext();
 
   // let childValue;
 
@@ -119,7 +119,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     const relatedResourcePath = getRelatedResourceInPath(structure.path);
     if (relatedResourcePath) {
       childValue = store[relatedResourcePath] || { loading: true };
-      props.relation = relations[relatedResourcePath];
+      props.dataSource = dataSources[relatedResourcePath];
     } else {
       childValue = getValue(value, structure.path);
     }
