@@ -49,7 +49,7 @@ context('Test DNS Providers', () => {
 
     // name
     cy.getIframeBody()
-      .find('[ariaLabel="DNS Provider name"]:visible', { log: false })
+      .find('[ariaLabel="DNSProvider name"]:visible', { log: false })
       .clear()
       .type(PROVIDER_NAME);
 
@@ -76,7 +76,7 @@ context('Test DNS Providers', () => {
 
     // name should be readonly
     cy.getIframeBody()
-      .find('[ariaLabel="DNS Provider name"]:visible', { log: false })
+      .find('[ariaLabel="DNSProvider name"]:visible', { log: false })
       .should('have.attr', 'readonly', 'readonly');
 
     // edit labels

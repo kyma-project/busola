@@ -17,7 +17,7 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
     .type(ApiRuleName);
 
   cy.getIframeBody()
-    .find('[placeholder="Subdomain part of API Rule address"]:visible', {
+    .find('[placeholder="Subdomain part of APIRule address"]:visible', {
       log: false,
     })
     .type(ApiRuleHost);
