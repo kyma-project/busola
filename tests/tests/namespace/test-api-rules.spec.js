@@ -71,7 +71,7 @@ context('Test API Rules in the Function details view', () => {
       .type(API_RULE_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Subdomain part of APIRule address"]:visible', {
+      .find('[placeholder="Subdomain part of the APIRule address"]:visible', {
         log: false,
       })
       .type(API_RULE_HOST);
