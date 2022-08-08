@@ -24,6 +24,7 @@ spec:
             spec:
               description: Information about the order
               type: object
+              required: ['description', 'status']
               properties:
                 description:
                   description: Order description
