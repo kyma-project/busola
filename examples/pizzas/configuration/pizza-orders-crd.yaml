@@ -56,9 +56,6 @@ spec:
                   items:
                     type: object
                     properties:
-                      kind:
-                        type: string
-                        value: Pizza
                       name:
                         type: string
                       namespace:
