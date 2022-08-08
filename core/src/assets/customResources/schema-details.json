@@ -26,17 +26,13 @@
   "definitions": {
     "component": {
       "type": "object",
-      "anyOf": [
-        {"required": ["name"]},
-        {"required": ["path"]}
-      ],
       "properties": {
         "name": {
           "description": "Name of component used for dispaying translations",
           "type": "string"
         },
-        "path": {
-          "description": "The path to the resource variable",
+        "source": {
+          "description": "Jsonata script used to fetch the data",
           "examples": [
             "status.phase",
             "metadata.labels"

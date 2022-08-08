@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useDataSourcesContext } from '../contexts/DataSources';
 import { isNil } from 'lodash';
@@ -6,8 +6,6 @@ import { widgets, valuePreprocessors } from './index';
 import { useTranslation } from 'react-i18next';
 
 import {
-  getValue,
-  applyFormula,
   useGetTranslation,
   useGetPlaceholder,
   throwConfigError,
@@ -15,19 +13,30 @@ import {
 import { stringifyIfBoolean } from 'shared/utils/helpers';
 import jsonata from 'jsonata';
 
-export function useJsonata(query, root, item, dataSources = {}) {
+export function useJsonata(query, root, extras = {}) {
   const [value, setValue] = useState('');
+  const { t } = useTranslation();
+  const {
+    store: dataSourceStore,
+    requestRelatedResource,
+  } = useDataSourcesContext();
 
   useEffect(() => {
+    const dataSourceFetchers = {
+      secretRecipe: () => {
+        requestRelatedResource(root, 'secretRecipe');
+        return dataSourceStore['secretRecipe'].data;
+      },
+    };
+
+    // console.log('jsonata', query, root);
+    if (!query) return '';
     try {
-      const expression = jsonata(
-        query,
+      jsonata(query).evaluate(
         root,
         {
-          ...Object.fromEntries(
-            Object.entries(dataSources).map(([key, source]) => [key, 'TODO']),
-          ),
-          item,
+          ...dataSourceFetchers,
+          ...extras,
         },
         (error, result) => {
           setValue(result);
@@ -37,7 +46,8 @@ export function useJsonata(query, root, item, dataSources = {}) {
     } catch (e) {
       setValue(t('extensibility.configuration-error', { error: e.message }));
     }
-  }, [query, root, item, dataSources]);
+    // }, [query, root, extras, dataSources]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [dataSourceStore]); // eslint-disable-line react-hooks/exhaustive-deps
   return value;
 }
 
@@ -88,18 +98,25 @@ export function shouldBeVisible(value, visibilityFormula) {
   }
 }
 
-export function Widget({ structure, value, inlineRenderer, ...props }) {
+export function Widget({
+  structure,
+  value,
+  inlineRenderer,
+  originalResource,
+  ...props
+}) {
   const { Plain, Text } = widgets;
   const { t } = useTranslation();
-  const {
-    store,
-    dataSources,
-    getRelatedResourceInPath,
-    requestRelatedResource,
-  } = useDataSourcesContext();
+  // const {
+  // store,
+  // dataSources,
+  // getRelatedResourceInPath,
+  // requestRelatedResource,
+  // } = useDataSourcesContext();
 
   // let childValue;
 
+  /*
   if (!structure || typeof structure !== 'object') {
     throwConfigError(t('extensibility.not-an-object'), structure);
   }
@@ -110,8 +127,13 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
   ) {
     throwConfigError(t('extensibility.no-path-children'), structure);
   }
+  */
 
-  const childValue = useJsonata(structure.source, value);
+  // console.log('Widget', { structure, value, props });
+  const childValue = useJsonata(structure.source, originalResource, {
+    parent: value,
+    item: value,
+  });
   /*
   if (!structure.path) {
     childValue = value;
@@ -131,14 +153,14 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
     structure.visibility,
   );
 
-  useEffect(() => {
-    if (!visible) return;
-    // run `requestRelatedResource` in useEffect, as it might update Context's state
-    if (structure.path && !!getRelatedResourceInPath(structure.path)) {
-      requestRelatedResource(value, structure.path);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  // if (!visible) return;
+  // // run `requestRelatedResource` in useEffect, as it might update Context's state
+  // if (structure.path && !!getRelatedResourceInPath(structure.path)) {
+  // requestRelatedResource(originalResource, );
+  // }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   if (visibleCheckError) {
     return t('extensibility.configuration-error', {
@@ -156,6 +178,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
         value={childValue}
         structure={copiedStructure}
         inlineRenderer={inlineRenderer}
+        originalResource={originalResource}
         {...props}
       />
     );
@@ -167,7 +190,12 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
 
   if (Array.isArray(structure)) {
     return (
-      <Plain value={value} structure={{ children: structure }} {...props} />
+      <Plain
+        value={value}
+        structure={{ children: structure }}
+        originalResource={originalResource}
+        {...props}
+      />
     );
   }
   let Renderer = structure.children ? Plain : Text;
@@ -187,6 +215,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
         Renderer={Renderer}
         value={item}
         structure={structure}
+        originalResource={originalResource}
         {...props}
       />
     ))
@@ -196,6 +225,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
       Renderer={Renderer}
       value={sanitizedValue}
       structure={structure}
+      originalResource={originalResource}
       {...props}
     />
   );

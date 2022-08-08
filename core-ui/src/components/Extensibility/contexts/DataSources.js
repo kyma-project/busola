@@ -105,8 +105,8 @@ export function DataSourcesContextProvider({ children, dataSources }) {
     store,
     dataSources,
     getRelatedResourceInPath,
-    requestRelatedResource: (resource, path) => {
-      const dataSourceName = getRelatedResourceInPath(path);
+    requestRelatedResource: (resource, dataSourceName) => {
+      console.log('requestRelatedResource', resource, dataSourceName);
       const dataSource = dataSources[dataSourceName];
 
       if (!dataSourcesDict.current[dataSourceName]) {
