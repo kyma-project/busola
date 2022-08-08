@@ -68,12 +68,11 @@ export function Table({ value, structure, disableMargin, schema, ...props }) {
   // const sortingOptions = structure?.sortBy || [];
   const sortPaths = (structure?.children || []).reduce(
     (accumulator, current) => {
-      if (accumulator.sortBy) return [...accumulator, current.path];
+      if (current.sortBy) return [...accumulator, current.path];
       return [...accumulator];
     },
     [],
   );
-  console.log(sortPaths);
   const sortBy = defaultSort => {
     const obj = {};
 
@@ -81,8 +80,9 @@ export function Table({ value, structure, disableMargin, schema, ...props }) {
       const path = `${structure.path}.${sort}`;
       const type = findTypeInSchema(schema, path);
       console.log('path:', path, 'type:', type);
+
       obj[tExt(path)] = (a, b) => {
-        return a[sort].localeCompare(b[sort]);
+        return a[sort] - b[sort];
       };
     }
 
@@ -102,7 +102,7 @@ export function Table({ value, structure, disableMargin, schema, ...props }) {
       rowRenderer={rowRenderer}
       disableMargin={disableMargin}
       {...handleTableValue(value, t)}
-      sortBy={sortPaths ? sortBy : null}
+      sortBy={sortPaths.length > 0 ? sortBy : null}
     />
   );
 }

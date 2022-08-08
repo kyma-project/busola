@@ -150,19 +150,19 @@ export const throwConfigError = (message, code) => {
   throw e;
 };
 
-export const findTypeInSchema = (schema, path) => {
-  const propertiesArray = path.split('.');
-  const firstProperty = propertiesArray[0];
+export const applySortFormula = (formula, t) => {
+  try {
+    const sortFunction = jsonata(formula);
+    sortFunction.registerFunction('compareStrings', (a, b) => {
+      return a?.localeCompare(b) ?? 1;
+    });
 
-  if (propertiesArray.length === 1) {
-    const lastSchema = schema?.properties ?? schema?.items?.properties;
-    return lastSchema?.[firstProperty].type;
+    return (a, b) => {
+      sortFunction.assign('first', a);
+      sortFunction.assign('second', b);
+      return sortFunction.evaluate();
+    };
+  } catch (e) {
+    return t('extensibility.configuration-error', { error: e.message });
   }
-
-  propertiesArray.shift();
-
-  const nextPath = [...propertiesArray].join('.');
-  const nextProperties = schema?.properties ?? schema?.items?.properties;
-  const nextSchema = nextProperties?.[firstProperty];
-  return findTypeInSchema(nextSchema, nextPath);
 };

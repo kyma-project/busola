@@ -57,7 +57,11 @@ data:
             "name": "topping",
             "path": "spec.toppings",
             "widget": "Table",
-            "children": [{ "path": "name", "sortBy": true }, { "path": "price", "sortBy": true }, { "path": "quantity", "sortBy": true }]
+            "children": [
+              { "path": "name", "sort": true }, 
+              { "path": "price", "sort": { "default": "true", "fn": $first < $second} },
+              { "path": "quantity", "sort": true}
+            ]
           },
           ]
         },
@@ -120,9 +124,9 @@ data:
     ]
   list: |-
     [
-      { "path": "spec.description", "sortBy": true },
+      { "path": "spec.description","sort": { "fn": "$compareStrings($first, $second)" }  },
       { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
-      { "path": "spec.toppings", "formula": "$sum(data.price)", "name": "Toppings price", "sortBy": true }
+      { "path": "spec.toppings", "formula": "$sum(data.price)", "name": "Toppings price", "sort":{"default":true} }
     ]
   dataSources: |-
     {
