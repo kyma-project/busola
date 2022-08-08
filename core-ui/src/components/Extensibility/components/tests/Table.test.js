@@ -122,9 +122,9 @@ describe('Table', () => {
     // });
     // it('2', () => {
     // const component = mount(
-    //   <RelationsContextProvider value={{}} relations={{}}>
+    //   <DataSourcesContextProvider value={{}} dataSources={{}}>
     //     <Table value={value} structure={{ children: [{ path: '$.a' }] }} />
-    //   </RelationsContextProvider>,
+    //   </DataSourcesContextProvider>,
     // );
     // const list = component.find(GenericList);
     // expect(list).toHaveLength(1);

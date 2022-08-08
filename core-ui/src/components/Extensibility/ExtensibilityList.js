@@ -11,36 +11,41 @@ import {
   useCreateResourceDescription,
   TranslationBundleContext,
   useGetTranslation,
+  applyFormula,
 } from './helpers';
 import { Widget } from './components/Widget';
-import { RelationsContextProvider } from './contexts/RelationsContext';
+import { DataSourcesContextProvider } from './contexts/DataSources';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
+import { useGetSchema } from 'hooks/useGetSchema';
+import { useTranslation } from 'react-i18next';
 
 export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT } = useGetTranslation();
+  const { t: tBusola } = useTranslation();
 
-  const { path, kind, disableCreate } = resMetaData?.resource ?? {};
+  const { urlPath, disableCreate, resource, description } =
+    resMetaData?.general ?? {};
 
-  const schema = resMetaData?.schema;
-  const relations = resMetaData?.relations || {};
+  const dataSources = resMetaData?.dataSources || {};
+  const { schema } = useGetSchema({
+    resource,
+  });
 
-  const listProps = usePrepareListProps(path, 'name');
+  const listProps = usePrepareListProps(urlPath, 'name');
 
-  if (kind) {
+  if (resource.kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
       /[a-z0-9-]+\/?$/,
-      pluralize(kind).toLowerCase(),
+      pluralize(resource.kind).toLowerCase(),
     );
   }
   listProps.createFormProps = { resourceSchema: resMetaData };
 
   listProps.resourceName = t('name', {
-    defaultValue: pluralize(prettifyKind(kind)),
+    defaultValue: pluralize(prettifyKind(resource.kind)),
   });
 
-  listProps.description = useCreateResourceDescription(
-    resMetaData?.resource?.description,
-  );
+  listProps.description = useCreateResourceDescription(description);
 
   listProps.customColumns = Array.isArray(resMetaData?.list)
     ? resMetaData?.list.map((column, i) => ({
@@ -51,12 +56,17 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
             value={resource}
             structure={column}
             schema={schema}
-            relations={relations}
+            dataSources={dataSources}
             originalResource={resource}
           />
         ),
       }))
     : [];
+
+  const isFilterAString = typeof resMetaData.resource?.filter === 'string';
+  const filterFn = value =>
+    applyFormula(value, resMetaData.resource.filter, tBusola);
+  listProps.filterFn = isFilterAString ? filterFn : undefined;
 
   return (
     <ResourcesList
@@ -70,20 +80,20 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
 
 const ExtensibilityList = () => {
   const resMetaData = useGetCRbyPath();
-  const { path } = resMetaData?.resource ?? {};
+  const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};
 
   return (
     <TranslationBundleContext.Provider
       value={{
-        translationBundle: path,
-        defaultResourcePlaceholder: resMetaData?.resource?.defaultPlaceholder,
+        translationBundle: urlPath,
+        defaultResourcePlaceholder: defaultPlaceholder,
       }}
     >
-      <RelationsContextProvider relations={resMetaData?.relations || {}}>
-        <ExtensibilityErrBoundary key={path}>
+      <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
+        <ExtensibilityErrBoundary key={urlPath}>
           <ExtensibilityListCore resMetaData={resMetaData} />
         </ExtensibilityErrBoundary>
-      </RelationsContextProvider>
+      </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>
   );
 };
