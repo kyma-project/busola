@@ -6,6 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: services
     busola.io/extension: resource
+    busola.io/extension-version: '0.5'
 data:
   details: |-
     {
@@ -49,7 +50,8 @@ data:
     [
       {
         "path": "metadata.ownerReferences",
-        "widget": "ControlledByKind"
+        "widget": "ControlledBy",
+        "kindOnly": true,
       },
       {
         "path": "spec.type",
@@ -68,27 +70,32 @@ data:
         "formula": "$count(data.status.loadBalancer.ingress) ? $map(data.status.loadBalancer.ingress, function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '): ($count(data.spec.externalIPs) ? data.spec.externalIPs ~> $join(', '): '-')"
       }
     ]
-  relations: |-
+  dataSources: |-
     {
       "apirules":{
-        "kind": "APIRule",
-        "group": "apis/gateway.kyma-project.io",
-        "version": "v1alpha1",
-        "selector": "$filter(data, function($item) {$item.spec.service.name = resource.metadata.name})"
+        "resource": {
+          "kind": "APIRule",
+          "group": "gateway.kyma-project.io",
+          "version": "v1alpha1"
+        },
+        "filter": "$filter(data, function($item) {$item.spec.service.name = resource.metadata.name})"
       },
       "subscriptions":{
-        "kind": "Subscription",
-        "group": "apis/eventing.kyma-project.io",
-        "version": "v1alpha1",
-        "selector": "$filter(data, function($item) {$substringAfter($substringBefore($item.spec.sink, '.'), '://') = resource.metadata.name})"
+        "resource": {
+          "kind": "Subscription",
+          "group": "eventing.kyma-project.io",
+          "version": "v1alpha1"
+        },
+        "filter": "$filter(data, function($item) {$substringAfter($substringBefore($item.spec.sink, '.'), '://') = resource.metadata.name})"
       }
     }
-  resource: |-
+  general: |-
     {
-      "kind": "Service",
-      "group": "",
-      "version": "v1",
-      "path": "example-services",
+      "resource": {
+        "kind": "Service",
+        "version": "v1",
+      },
+      "urlPath": "example-services",
       "scope": "namespace",
     }
   translations: |-
@@ -104,4 +111,3 @@ data:
         "spec.type": "Service Type"
       }
     }
-  version: '0.5'

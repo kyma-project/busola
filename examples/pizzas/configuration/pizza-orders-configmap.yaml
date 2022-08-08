@@ -6,6 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: pizzaorders
     busola.io/extension: resource
+    busola.io/extension-version: '0.5'
 data:
   details: |-
     {
@@ -70,12 +71,14 @@ data:
         "path": "spec.orderDetails.realization",
       }
     ]
-  resource: |-
+  general: |-
     {
-      "kind": "PizzaOrder",
-      "group": "busola.example.com",
-      "version": "v1",
-      "path": "pizzaorders",
+      "resource": {
+        "kind": "PizzaOrder",
+        "group": "busola.example.com",
+        "version": "v1"
+      },
+      "urlPath": "pizzaorders",
       "scope": "namespace",
       "description": "check the translations"
     }
@@ -96,4 +99,3 @@ data:
         "check the translations": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
       }
     }
-  version: '0.5'

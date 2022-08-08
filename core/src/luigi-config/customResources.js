@@ -1,10 +1,17 @@
 import jsyaml from 'js-yaml';
-import { merge } from 'lodash';
+import { mapValues } from 'lodash';
 import pluralize from 'pluralize';
-import {
-  getSupportedVersions,
-  formatCurrentVersion,
-} from '../../../core-ui/src/components/Extensibility/migration';
+
+const SUPPORTED_VERSIONS = ['0.4', '0.5'];
+const formatCurrentVersion = version => {
+  if (!version) return null;
+  return (
+    version
+      .toString()
+      .replaceAll("'", '')
+      .replaceAll('"', '') || ''
+  );
+};
 
 import { config } from './config';
 import { failFastFetch } from './navigation/queries';
@@ -58,49 +65,39 @@ async function loadTargetClusterCRs(authData) {
     console.warn('Cannot load target cluster CRs', e);
   }
   return (items || [])
-    .map(item => {
-      const cr = Object.entries(item?.data || []).reduce(
-        (acc, [key, value]) => {
-          try {
-            const match = key.match(/^translations(-([a-z]{2}))?$/);
-            if (match) {
-              let translations = acc.translations || {};
-              const lang = match[2];
-              const langTranslations = jsyaml.load(value);
-              if (lang) {
-                translations = merge(translations, {
-                  [lang]: langTranslations,
-                });
-              } else {
-                translations = merge(translations, langTranslations);
-              }
-              return { ...acc, translations };
-            }
+    .filter(item =>
+      SUPPORTED_VERSIONS.some(
+        version =>
+          formatCurrentVersion(
+            item.metadata.labels?.['busola.io/extension-version'],
+          ) === version,
+      ),
+    )
+    .map(configMap => {
+      const convertYamlToObject = yamlString => {
+        try {
+          return jsyaml.load(yamlString, { json: true });
+        } catch (error) {
+          console.warn('cannot parse ', yamlString, error);
+          return null;
+        }
+      };
+      const cr = mapValues(configMap?.data || {}, convertYamlToObject);
+      const urlPath = cr?.general?.urlPath;
+      const resource = cr?.general?.resource;
 
-            return {
-              ...acc,
-              [key]: jsyaml.load(value, { json: true }),
-            };
-          } catch (error) {
-            console.warn('cannot parse ', key, value, error);
-            return null;
-          }
-        },
-        {},
-      );
-
-      if (!cr?.resource || Object.keys(cr.resource).length === 0) {
+      if (!resource || Object.keys(resource).length === 0) {
         console.warn(
           'Some of the custom resources are not configured properly.',
         );
         return null;
-      } else if (!cr.resource.path && !cr.resource.kind) {
+      } else if (!urlPath && !resource.kind) {
         console.warn(
           'Some of the custom resources are not configured properly. Should have kind defined.',
         );
         return null;
-      } else if (!cr.resource.path) {
-        cr.resource.path = pluralize(cr.resource.kind).toLowerCase();
+      } else if (!urlPath) {
+        cr.general.urlPath = pluralize(resource.kind).toLowerCase();
       }
 
       return cr;
@@ -122,13 +119,6 @@ export async function getCustomResources(authData) {
       ...(await loadTargetClusterCRs(authData)),
     });
 
-    customResources[clusterName] = customResources[
-      clusterName
-    ].filter(resource =>
-      getSupportedVersions().some(
-        version => formatCurrentVersion(resource.version) === version,
-      ),
-    );
     return customResources[clusterName];
   }
   return [];

@@ -597,7 +597,7 @@ common:
     error: Error
     generate-name: Generate name
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' (e.g.: 'my-name1')."
+    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
@@ -1012,12 +1012,12 @@ extensibility:
   no-path-children: A widget lacks one of the required properties, add either "path" or "children".
   not-an-object: Not an object.
   sections:
+    dataSources: Data Sources
     details: Details View
     form: Form Fields
+    general: General
     lang-translations: Translations ({{lang}})
     list: List Columns
-    relations: Resource Relations
-    resource: Resource Basics
     translations: Translations
     version: Version
   starter-modal:
@@ -1040,8 +1040,8 @@ extensibility:
     title: Create UI for {{kind}} CRD
   title: Extensions
   version:
-    current: Current vesion
-    latest: Latest vesion
+    current: Current version
+    latest: Latest version
   widgets:
     code-viewer-error: 'CodeViewer: The received resource is in a language other than defined: {{error}}.'
     joined-array:

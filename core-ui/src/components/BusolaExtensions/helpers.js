@@ -1,13 +1,14 @@
 import { prettifyKind } from 'shared/utils/helpers';
 import pluralize from 'pluralize';
 import { getLatestVersion } from 'components/Extensibility/migration';
+import { EXTENSION_VERSION_LABEL } from './constants';
 
 export const SECTIONS = [
-  'resource',
+  'general',
   'form',
   'list',
   'details',
-  'relations',
+  'dataSources',
   'translations',
 ];
 
@@ -67,11 +68,15 @@ export function createExtensibilityTemplate(crd, t) {
   const possibleStatusColumn = additionalValueColumns.find(isStatusMaybe);
 
   return {
-    resource: {
-      kind: crd.spec.names.kind,
-      group: crd.spec.group,
-      version: version.name,
-      path: crd.spec.names.plural,
+    general: {
+      resource: {
+        kind: crd.spec.names.kind,
+        group: crd.spec.group,
+        version: version.name,
+      },
+      name: pluralize(prettifyKind(crd.spec.names.kind)),
+      category: t('custom-resources.title'),
+      urlPath: crd.spec.names.plural,
       scope: crd.spec.scope === 'Namespaced' ? 'namespace' : 'cluster',
     },
     form: extractFirstLevelProperties(crd),
@@ -98,16 +103,13 @@ export function createExtensibilityTemplate(crd, t) {
     },
     translations: {
       en: {
-        name: pluralize(prettifyKind(crd.spec.names.kind)),
         'metadata.annotations': 'Annotations',
         'metadata.labels': 'Labels',
-        category: 'Custom Resources',
         ...(additionalValueColumns.length
           ? { 'metadata.creationTimestamp': 'Created at' }
           : {}),
       },
     },
-    version: getLatestVersion(),
   };
 }
 
@@ -142,6 +144,7 @@ export function createConfigmap(crd, data) {
       labels: {
         'app.kubernetes.io/name': crd.metadata.name,
         'busola.io/extension': 'resource',
+        [EXTENSION_VERSION_LABEL]: getLatestVersion(),
       },
     },
     data: Object.fromEntries(

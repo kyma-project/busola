@@ -6,6 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: gitrepositories.serverless.kyma-project.io
     busola.io/extension: resource
+    busola.io/extension-version: '0.5'
 data:
   details: |-
     {
@@ -63,13 +64,15 @@ data:
         "type": "string"
       }
     ]
-  resource: |-
+  general: |-
     {
-      "group": "serverless.kyma-project.io",
-      "kind": "GitRepository",
-      "path": "example-gitrepositories",
+      "resource": {
+        "group": "serverless.kyma-project.io",
+        "kind": "GitRepository",
+        "version": "v1alpha1"
+      },
+      "urlPath": "example-gitrepositories",
       "scope": "namespace",
-      "version": "v1alpha1"
     }
   translations: |-
     {
@@ -85,4 +88,3 @@ data:
         "spec.auth.type": "Authentication Type"
       }
     }
-  version: '0.5'
