@@ -53,9 +53,11 @@ data:
         "simple": "true",
         "path": "spec.pizzas[]",
         "widget": "ResourceRefs",
-        "kind": "Pizza",
-        "group": "busola.example.com",
-        "version": "v1",
+        "resource": {
+          "kind": "Pizza",
+          "group": "busola.example.com",
+          "version": "v1",
+        }
       }
     ]
   list: |-

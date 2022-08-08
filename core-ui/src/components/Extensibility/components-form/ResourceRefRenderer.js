@@ -16,9 +16,10 @@ export function ResourceRefRender({
   // TODO the value obtained by ui-schema is undefined for this component
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
 
-  const group = (schema.get('group') || '').toLowerCase();
-  const version = schema.get('version');
-  const resourceType = pluralize(schema.get('kind') || '').toLowerCase();
+  const schemaResource = schema.get('resource') || {};
+  const group = (schemaResource?.group || '').toLowerCase();
+  const version = schemaResource?.version;
+  const resourceType = pluralize(schemaResource?.kind || '').toLowerCase();
   const groupPrefix = group ? `apis/${group}` : 'api';
   const url = `/${groupPrefix}/${version}/${resourceType}`;
 
