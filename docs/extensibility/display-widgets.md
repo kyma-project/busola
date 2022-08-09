@@ -207,10 +207,8 @@ Columns widgets render the child widgets in multiple columns.
 
 - **inline** - an optional flag to change the layout mode.
 
-  - **true** - list is displayed inline, wrapping if needed.
+  - **true** - list is displayed inline, wrapping if needed. Defaults for lists, panels and headers.
   - **false** - list is displayed as a grid.
-
-  Defaults to _false_.
 
 #### Example
 
