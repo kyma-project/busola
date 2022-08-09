@@ -158,13 +158,10 @@ export const applySortFormula = (formula, t) => {
     });
 
     return (a, b) => {
-      // sortFunction.assign('first', a);
-      // sortFunction.assign('second', b);
-      // if (a === undefined && b === undefined) return 0;
+      sortFunction.assign('first', a);
+      sortFunction.assign('second', b);
       if (a === undefined) return -1;
       if (b === undefined) return 1;
-      // console.log('second', b);
-      // console.log(sortFunction.evaluate());
       return sortFunction.evaluate();
     };
   } catch (e) {
