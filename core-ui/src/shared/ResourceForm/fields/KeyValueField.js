@@ -20,6 +20,7 @@ export function KeyValueField({
   readableFromFile = false,
   lockedKeys = [],
   lockedValues = [],
+  required,
   ...props
 }) {
   const { t } = useTranslation();
@@ -141,6 +142,7 @@ export function KeyValueField({
           ) : null,
       ]}
       actions={actions}
+      required={required}
       {...props}
     />
   );
