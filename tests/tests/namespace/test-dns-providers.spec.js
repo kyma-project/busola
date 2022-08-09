@@ -87,13 +87,13 @@ context('Test DNS Providers', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter key"]')
+      .find('[placeholder="Enter key"]:visible')
       .filterWithNoValue()
       .type('is-edited');
 
     cy.getIframeBody()
       .find('[role=dialog]')
-      .find('[placeholder="Enter value"]')
+      .find('[placeholder="Enter value"]:visible')
       .filterWithNoValue()
       .first()
       .type('yes');

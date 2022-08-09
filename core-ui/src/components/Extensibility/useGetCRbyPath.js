@@ -4,7 +4,7 @@ export const useGetCRbyPath = () => {
   const { customResources = [], namespaceId } = useMicrofrontendContext();
 
   const resource = customResources.find(el => {
-    const { scope, path } = el.resource || {};
+    const { scope, urlPath } = el.general || {};
     const hasCorrectScope =
       (scope?.toLowerCase() === 'namespace') === !!namespaceId;
     if (!hasCorrectScope) return false;
@@ -13,7 +13,7 @@ export const useGetCRbyPath = () => {
       `/namespaces/${namespaceId}`,
       '',
     );
-    return crPath.includes(`/${path}`);
+    return crPath.includes(`/${urlPath}`);
   });
 
   return resource;

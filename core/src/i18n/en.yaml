@@ -1012,12 +1012,12 @@ extensibility:
   no-path-children: A widget lacks one of the required properties, add either "path" or "children".
   not-an-object: Not an object.
   sections:
+    dataSources: Data Sources
     details: Details View
     form: Form Fields
+    general: General
     lang-translations: Translations ({{lang}})
     list: List Columns
-    relations: Resource Relations
-    resource: Resource Basics
     translations: Translations
     version: Version
   starter-modal:
@@ -1046,6 +1046,8 @@ extensibility:
     code-viewer-error: 'CodeViewer: The received resource is in a language other than defined: {{error}}.'
     joined-array:
       error: 'Configuration error: The joined array widget configuration is incorrect. Path value must be an array type.'
+    resource-ref:
+      header: Resource Reference
     table:
       error: The table widget configuration is incorrect. Path value must be an array type.
 functions:

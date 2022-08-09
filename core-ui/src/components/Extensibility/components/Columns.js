@@ -1,10 +1,17 @@
 import React from 'react';
 
 import { Widget } from './Widget';
+import { isNil } from 'lodash';
 
-export function Columns({ structure, ...props }) {
+import './InlineDisplay.scss';
+
+export function Columns({ structure, inlineContext, ...props }) {
+  const inline = isNil(structure.inline) ? inlineContext : structure.inline;
+
+  const classNames = inline ? 'inline-display' : 'panel-grid';
+
   return (
-    <div className="panel-grid">
+    <div className={classNames}>
       {structure.children?.map(child => (
         <Widget
           structure={child}

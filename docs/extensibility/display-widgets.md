@@ -203,6 +203,13 @@ CodeViewer widgets display values using a read-only code editor.
 
 Columns widgets render the child widgets in multiple columns.
 
+#### Widget-specific parameters
+
+- **inline** - an optional flag to change the layout mode.
+
+  - **true** - list is displayed inline, wrapped if needed. It is a default option for lists, panels, and headers.
+  - **false** - list is displayed as a grid.
+
 #### Example
 
 ```json
@@ -251,7 +258,7 @@ Plain widgets render all contents of an object or list sequentially without any 
 
 ### ResourceList
 
-ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with [related resources](resources.md#relations-section).
+ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with [related resources](resources.md#datasources-section).
 
 If such resource list was already defined in Busola, the configuration will be reused. To obtain custom columns, specify the `columns` field.
 

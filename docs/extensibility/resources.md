@@ -13,29 +13,38 @@ Busola supports only the current version of the configuration and the prior one.
 
 Therefore, whenever a new version of the configuration is proposed, you can migrate your configuration to the latest version. To do so, go to your Extension and click the **Migrate** button.
 
-## resource section
+## general section
 
-The `resource` section is required and contains basic information about the resource. For example, **kind** and API details.
+The `general` section is required and contains basic information about the resource and additional options.
 
-- **kind** - _[required]_ Kubernetes kind of the resource.
-- **group** - _[required]_ API group used for all requests.
-- **version** - _[required]_ API version used for all requests.
+- **resource** - _[required]_ - information about the resoure.
+  - **kind** - _[required]_ Kubernetes kind of the resource.
+  - **version** - _[required]_ API version used for all requests.
+  - **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
+  - **name** - title used in the navigation and on the list screen. It defaults to its resource kind.
+- **category** the name of a category used for the left-hand menu. It is placed in the `Custom Resources` category by default.
 - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
-- **path** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
+- **urlPath** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
 - **defaultPlaceholder** - to be shown in place of empty resource leaves. Overridden by the widget-level **placeholder**. Defaults to `-`.
 - **description** - displays a custom description on the resource list page. It can contain links. If the translation section has a translation entry with the ID that is the same as the **description** string, the translation is used.
+- **filter** - optional [JSONata](https://docs.jsonata.org/overview.html) [filter](https://docs.jsonata.org/higher-order-functions#filter) used to filter the resources shown at the list section property.
 - **disableCreate** - either `true` or `false`. Defaults to `false`.
 
 ### Example
 
 ```json
 {
-  "kind": "MyResource",
-  "group": "networking.istio.io",
-  "version": "v1alpha3",
+  "resource": {
+    "kind": "MyResource",
+    "version": "v1alpha3",
+    "group": "networking.istio.io"
+  },
+  "name": "MyResourceName",
+  "category": "My Category",
   "scope": "namespace",
   "defaultPlaceholder": "- not set -",
   "description": "See the {{[docs](https://github.com/kyma-project/busola)}} for more information.",
+  "filter": "$filter(data, function($item) {$item.type = 'Opaque'})",
   "disableCreate": false
 }
 ```
@@ -207,23 +216,24 @@ renders the same set of data as:
 ]
 ```
 
-## relations section
+## dataSources section
 
-The `relations` section contains an object that maps a relation name to a relation configuration object. The relation name preceded by a dollar sign '\$' is used in the **path** expression.
+The `dataSources` section contains an object that maps a data source name to a data source configuration object. The data source name preceded by a dollar sign '\$' is used in the **path** expression.
 
-It's possible to use both relation name and a path; for example, `{"path": $myRelatedResource.metadata.labels}` returns the `metadata.labels` of the related resource.
+It's possible to use both data source name and a path; for example, `{"path": $myRelatedResource.metadata.labels}` returns the `metadata.labels` of the related resource.
 
-### Relation configuration object fields
+### Data source configuration object fields
 
 Those fields are used to build the related resource URL and filter the received data.
 
-- **kind** - _[required]_ Kubernetes resource kind.
-- **group** - Kubernetes resource group. Not provided for Kubernetes resources in the core (also called legacy) group.
-- **version** - _[required]_ Kubernetes resource version.
-- **namespace** - the resource's Namespace name; it defaults to the original resource's Namespace. If set to `null`, the relation matches cluster-wide resources or resources in all Namespaces.
-- **resourceName** - a specific resource name; leave empty to match all resources of a given type.
+- **resource**:
+  - **kind** - _[required]_ Kubernetes resource kind.
+  - **group** - Kubernetes resource group. Not provided for Kubernetes resources in the core (also called legacy) group.
+  - **version** - _[required]_ Kubernetes resource version.
+  - **namespace** - the resource's Namespace name; it defaults to the original resource's Namespace. If set to `null`, cluster-wide resources or resources in all Namespaces are matched.
+  - **name** - a specific resource name; leave empty to match all resources of a given type.
 - **ownerLabelSelectorPath** - the path to original object's **selector** type property; for example, `spec.selector.matchLabels` for Deployment, used to select matching Pods.
-- **selector** - [JSONata](https://docs.jsonata.org/overview.html) function enabling the user to write a custom matching logic. It receives a data context of:
+- **filter** - [JSONata](https://docs.jsonata.org/overview.html) function enabling the user to write a custom matching logic. It receives a data context of:
 
   ```js
   {
@@ -239,7 +249,7 @@ Those fields are used to build the related resource URL and filter the received 
 ```json
 {
   "deployments": {
-    "resource": ...
+    "general": ...
     "details": {
        "body": [
          {
@@ -249,11 +259,13 @@ Those fields are used to build the related resource URL and filter the received 
       ]
     }
   },
-  "relations": {
+  "dataSources": {
     "myPods": {
-      "kind": "Pod",
-      "group": "api",
-      "version": "v1",
+      "resource": {
+        "kind": "Pod",
+        "group": "api",
+        "version": "v1",
+      },
       "ownerLabelSelectorPath": "spec.selector.matchLabels"
     }
   }
@@ -263,12 +275,6 @@ Those fields are used to build the related resource URL and filter the received 
 ## translations section
 
 This section contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
-
-### Predefined translation keys
-
-- **category** - the name of a category used for the left-hand menu. It is placed in the `Custom Resources` category by default.
-- **name** - title used in the navigation and on the list screen. It defaults to its resource kind.
-- **description** - a more in-depth description of the resource displayed on the list screen. Only displayed if present.
 
 ### Example
 
@@ -301,4 +307,4 @@ Value preprocessors are used as a middleware between a value and the actual rend
   - For truthy `error`, it displays an error message.
   - Otherwise, it passes `data` to the display component.
 
-  Unless you need custom handling of error or loading state, we recommend using **PendingWrapper**, for example, for fields that use [related resources](#relations-section).
+  Unless you need custom handling of error or loading state, we recommend using **PendingWrapper**, for example, for fields that use [data sources](#datasources-section).

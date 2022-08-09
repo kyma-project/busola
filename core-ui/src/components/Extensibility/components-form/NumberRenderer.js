@@ -31,6 +31,7 @@ export function NumberRenderer({
       label={tFromStoreKeys(storeKeys)}
       input={Inputs.Number}
       compact={compact}
+      required={required}
     />
   );
 }

@@ -1,7 +1,5 @@
 import i18next from 'i18next';
 import pluralize from 'pluralize';
-
-import { coreUIViewGroupName } from './static-navigation-model';
 import { config } from '../config';
 
 // this fn is cloned in core-ui 'helpers.js' as 'useGetTranslation'. Modify it also there
@@ -23,48 +21,45 @@ const getCustomNodes = (crs, scope) => {
   const toSearchParamsString = object => {
     return new URLSearchParams(object).toString();
   };
-
   let customPaths;
   try {
     customPaths =
       crs?.map(cr => {
-        const translationBundle = cr.resource?.path || 'extensibility';
+        const translationBundle = cr.general?.urlPath || 'extensibility';
         i18next.addResourceBundle(
           i18next.language,
           translationBundle,
           cr.translations?.[i18next.language] || {},
         );
-        const { resource } = cr || {};
-        const api = `/${
-          resource?.group === 'core' || resource?.group === ''
-            ? 'api'
-            : `apis/${resource.group}`
-        }/${resource.version.toLowerCase()}`;
+        const { resource, urlPath, icon, category, name } = cr.general || {};
+        const version = resource.version.toLowerCase();
+        const group = resource?.group ? `apis/${resource.group}` : 'api';
+        const api = `/${group}/${version}`;
+
         return {
           category: {
-            label: i18next.t([
-              `${translationBundle}::category`,
-              'custom-resources.title',
-            ]),
+            label: i18next.t(`${translationBundle}::category`, {
+              defaultValue: category || i18next.t('custom-resources.title'),
+            }),
             collapsible: true,
-            icon: cr.resource?.icon || 'customize',
+            icon: icon || 'customize',
           },
           resourceType: resource.kind.toLowerCase(),
-          pathSegment: resource?.path,
+          pathSegment: urlPath,
           label: i18next.t(`${translationBundle}::name`, {
-            defaultValue: pluralize(resource.kind),
+            defaultValue: name || pluralize(resource.kind),
           }),
           viewUrl:
             config.coreUIModuleUrl +
-            `${scope === 'namespace' ? '/namespaces/:namespaceId' : ''}/${
-              cr.resource?.path
-            }?` +
+            `${
+              scope === 'namespace' ? '/namespaces/:namespaceId' : ''
+            }/${urlPath}?` +
             toSearchParamsString({
               resourceApiPath: api,
               hasDetailsView: !!cr.details,
             }),
           keepSelectedForChildren: true,
-          navigationContext: cr.resource?.path,
+          navigationContext: urlPath,
           context: {
             customResource: cr,
           },
@@ -73,13 +68,13 @@ const getCustomNodes = (crs, scope) => {
               pathSegment: 'details',
               children: [
                 {
-                  pathSegment: `:${cr.resource?.path}Name`,
+                  pathSegment: `:${urlPath}Name`,
                   resourceType: resource.kind.toLowerCase(),
                   viewUrl:
                     config.coreUIModuleUrl +
                     `${
                       scope === 'namespace' ? '/namespaces/:namespaceId' : ''
-                    }/${cr.resource?.path}/:${cr.resource?.path}Name?` +
+                    }/${urlPath}/:${urlPath}Name?` +
                     toSearchParamsString({
                       resourceApiPath: api,
                     }),
@@ -98,7 +93,7 @@ const getCustomNodes = (crs, scope) => {
 export const getCustomPaths = (customResources, scope) => {
   const getScopedCrs = (crs, scope) => {
     const scopedCrs = crs?.filter(cr => {
-      const crScope = cr.resource?.scope;
+      const crScope = cr.general?.scope;
       if (
         !crScope ||
         (crScope.toLowerCase() !== 'namespace' &&
@@ -117,12 +112,12 @@ export const getCustomPaths = (customResources, scope) => {
 
   const getValidCrs = crs => {
     const validCrs = crs?.filter(cr => {
+      const { resource, urlPath } = cr.general || {};
       const isValidCr =
-        cr.resource &&
-        typeof cr.resource.path === 'string' &&
-        typeof cr.resource.kind === 'string' &&
-        typeof cr.resource.group === 'string' &&
-        typeof cr.resource.version === 'string';
+        resource &&
+        typeof urlPath === 'string' &&
+        typeof resource.kind === 'string' &&
+        typeof resource.version === 'string';
       if (!isValidCr) {
         console.error(
           'Some of the custom resources are not configured properly.',

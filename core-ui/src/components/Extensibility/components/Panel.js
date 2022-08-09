@@ -32,6 +32,7 @@ export function Panel({
                 structure={def}
                 schema={schema}
                 inlineRenderer={InlineWidget}
+                inlineContext={true}
                 {...props}
               />
             ))

@@ -28,12 +28,13 @@ export function ExtensibilityCreate({
   const notification = useNotification();
   const { t } = useTranslation();
   const { t: tExt, exists } = useGetTranslation();
-  const api = createResource?.resource || {};
+  const general = createResource?.general;
+  const api = general?.resource || {};
 
   const [resource, setResource] = useState(
     initialResource ||
       createResource?.template ||
-      createTemplate(api, namespace, createResource?.resource?.scope),
+      createTemplate(api, namespace, general?.scope),
   );
 
   const [store, setStore] = useState(() =>
@@ -67,10 +68,8 @@ export function ExtensibilityCreate({
     toggleFormFn(false);
   };
 
-  const { version, kind, group } = createResource.resource;
-  const openapiSchemaId = `${group}/${version}/${kind}`;
   const { schema, error: errorOpenApi, loading } = useGetSchema({
-    schemaId: openapiSchemaId,
+    resource: api,
   });
 
   // waiting for schema from OpenAPI to be computed
@@ -80,9 +79,7 @@ export function ExtensibilityCreate({
     <ResourceForm
       pluralKind={resourceType}
       singularName={
-        exists('name')
-          ? tExt('name')
-          : prettifyKind(createResource.resource?.kind || '')
+        exists('name') ? tExt('name') : prettifyKind(api.kind || '')
       }
       resource={resource}
       setResource={updateResource}
@@ -102,7 +99,7 @@ export function ExtensibilityCreate({
         store={store}
         setStore={setStore}
         onSubmit={() => {}}
-        path={createResource?.resource?.path || ''}
+        path={general?.urlPath || ''}
       />
       <ResourceSchema
         advanced
@@ -112,7 +109,7 @@ export function ExtensibilityCreate({
         resource={resource}
         store={store}
         setStore={setStore}
-        path={createResource?.resource?.path || ''}
+        path={general?.urlPath || ''}
       />
     </ResourceForm>
   );
