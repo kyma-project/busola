@@ -91,12 +91,12 @@ context('Test Git Repositories', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter key"]')
+      .find('[placeholder="Enter key"]:visible')
       .filterWithNoValue()
       .type('is-edited');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter value"]')
+      .find('[placeholder="Enter value"]:visible')
       .filterWithNoValue()
       .first()
       .type('yes');

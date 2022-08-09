@@ -203,6 +203,13 @@ CodeViewer widgets display values using a read-only code editor.
 
 Columns widgets render the child widgets in multiple columns.
 
+#### Widget-specific parameters
+
+- **inline** - an optional flag to change the layout mode.
+
+  - **true** - list is displayed inline, wrapped if needed. It is a default option for lists, panels, and headers.
+  - **false** - list is displayed as a grid.
+
 #### Example
 
 ```json

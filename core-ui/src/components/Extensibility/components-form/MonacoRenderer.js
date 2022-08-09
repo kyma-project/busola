@@ -32,7 +32,10 @@ export function MonacoRenderer({
   );
 
   return (
-    <ResourceForm.CollapsibleSection title={tFromStoreKeys(storeKeys)}>
+    <ResourceForm.CollapsibleSection
+      title={tFromStoreKeys(storeKeys)}
+      required={required}
+    >
       <Editor
         autocompletionDisabled
         value={value}
