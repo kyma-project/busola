@@ -1,2 +1,87 @@
 {
+  "gitRepos": {
+    "details": {
+      "header": [
+        {
+          "formula": "$exists(data) ? data : 'none'",
+          "highlights": {
+            "informative": [
+              "basic",
+              "key",
+              "none"
+            ]
+          },
+          "path": "spec.auth.type",
+          "widget": "Badge"
+        }
+      ],
+      "body": []
+    },
+    "form": [
+      {
+        "path": "spec.url",
+        "required": true,
+        "simple": true
+      },
+      {
+        "path": "spec.auth",
+        "widget": "FormGroup"
+      },
+      {
+        "path": "spec.auth.type",
+        "simple": "true"
+      },
+      {
+        "kind": "Secret",
+        "namespace": "pizzas",
+        "path": "spec.auth.secretName",
+        "scope": "namespace",
+        "version": "v1",
+        "widget": "Resource"
+      }
+    ],
+    "list": [
+      {
+        "path": "spec.url",
+        "type": "string"
+      },
+      {
+        "formula": "$exists(data) ? data : 'none'",
+        "highlights": {
+          "informative": [
+            "basic",
+            "key",
+            "none"
+          ]
+        },
+        "path": "spec.auth.type",
+        "widget": "Badge"
+      },
+      {
+        "path": "spec.auth.secretName",
+        "type": "string"
+      }
+    ],
+    "resource": {
+      "group": "serverless.kyma-project.io",
+      "kind": "GitRepository",
+      "path": "example-gitrepositories",
+      "scope": "namespace",
+      "version": "v1alpha1"
+    },
+    "translations": {
+      "en": {
+        "name": "Git Repositories",
+        "metadata.annotations": "Annotations",
+        "metadata.labels": "Labels",
+        "category": "Custom Resources",
+        "metadata.creationTimestamp": "Created at",
+        "spec.url": "Repository URL",
+        "spec.auth": "Authentication",
+        "spec.auth.secretName": "Secret",
+        "spec.auth.type": "Authentication Type"
+      }
+    },
+    "version": 0.5
+  }
 }

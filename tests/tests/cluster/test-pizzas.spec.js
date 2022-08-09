@@ -1,0 +1,146 @@
+/// <reference types="cypress" />
+import 'cypress-file-upload';
+import jsyaml from 'js-yaml';
+
+const PIZZA_NAME = 'hawaiian';
+
+context('Test Pizzas', () => {
+  Cypress.skipAfterFail();
+
+  before(() => {
+    cy.loginAndSelectCluster({
+      fileName: 'kubeconfig-k3s.yaml',
+      storage: 'Session storage',
+    });
+    cy.createNamespace('pizzas');
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+  });
+
+  it('Creates the EXT pizza config', () => {
+    cy.getLeftNav()
+      .contains('Cluster Details')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Upload YAML')
+      .click();
+
+    cy.loadFiles(
+      'examples/pizzas/configuration/pizzas-configmap.yaml',
+      'examples/pizzas/configuration/pizza-orders-configmap.yaml',
+      'examples/pizzas/configuration/pizzas-crd.yaml',
+      'examples/pizzas/configuration/pizza-orders-crd.yaml',
+    ).then(resources => {
+      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+      cy.pasteToMonaco(input);
+    });
+
+    cy.getIframeBody()
+      .contains('Submit')
+      .click();
+
+    cy.getIframeBody()
+      .find('.fd-dialog__body')
+      .find('.sap-icon--message-success')
+      .should('have.length', 4);
+
+    //
+    cy.loadFiles('examples/pizzas/samples.yaml').then(resources => {
+      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+      cy.pasteToMonaco(input);
+    });
+
+    cy.getIframeBody()
+      .contains('Submit')
+      .click();
+
+    cy.getIframeBody()
+      .find('.fd-dialog__body')
+      .find('.sap-icon--message-success')
+      .should('have.length', 6);
+
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+
+    cy.reload();
+  });
+
+  it('Displays the Pizza Orders list/details from the samples', () => {
+    cy.getLeftNav()
+      .contains('Namespaces')
+      .click();
+
+    cy.getIframeBody()
+      .contains('a', 'pizzas')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Lunch')
+      .click();
+
+    cy.getLeftNav()
+      .contains('Pizza Orders')
+      .click();
+
+    cy.getIframeBody()
+      .contains('a', 'margherita-order')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('a', 'diavola-order')
+      .click({ force: true });
+  });
+
+  it('Displays the Pizzas list/details view for the samples', () => {
+    cy.getIframeBody()
+      .contains('a', 'pizzas/diavola')
+      .click({ force: true });
+
+    cy.getIframeBody()
+      .contains('Hot salami, Pickled jalapeños, Cheese')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Diavola is such a spicy pizza')
+      .should('be.visible');
+
+    cy.getLeftNav()
+      .contains(/^Pizza$/)
+      .click();
+
+    cy.getIframeBody()
+      .find('.fd-table__body')
+      .find('tr')
+      .should('have.length', 2);
+  });
+
+  it('Tests the Create Form', () => {
+    cy.getIframeBody()
+      .contains('Create Pizza')
+      .click();
+
+    cy.getIframeBody()
+      .find('.fd-dialog__content')
+      .as('form');
+
+    cy.get('@form').contains('Description');
+    cy.get('@form').contains('Sauce');
+    cy.get('@form').contains("Recipe's secret");
+    cy.get('@form').contains('Owner References');
+    cy.get('@form')
+      .find('[arialabel="Pizza name"]:visible')
+      .type(PIZZA_NAME);
+
+    cy.get('@form')
+      .contains('button', 'Create')
+      .click();
+
+    cy.getIframeBody()
+      .contains('h3', PIZZA_NAME)
+      .should('be.visible');
+  });
+
+  it('Removes the pizza namespace', () => {
+    cy.navigateTo('Back to Cluster Details', 'Namespaces');
+    cy.deleteFromGenericList('pizzas');
+  });
+});
