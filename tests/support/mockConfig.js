@@ -11,7 +11,7 @@ Cypress.Commands.add('setBusolaFeature', (featureName, isEnabled) => {
       config: JSON.stringify({
         config: {
           features: {
-            [featureName]: isEnabled,
+            [featureName]: { isEnabled },
           },
         },
       }),

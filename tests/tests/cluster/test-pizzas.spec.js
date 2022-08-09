@@ -3,6 +3,9 @@ import 'cypress-file-upload';
 import jsyaml from 'js-yaml';
 
 const PIZZA_NAME = 'hawaiian';
+const SAUCE = 'TOMATO';
+const PIZZA_DESC = 'Hawaiian pizza is a pizza originating in Canada.';
+const RECIPE = 'margherita-recipe';
 
 context('Test Pizzas', () => {
   Cypress.skipAfterFail();
@@ -13,6 +16,9 @@ context('Test Pizzas', () => {
       storage: 'Session storage',
     });
     cy.createNamespace('pizzas');
+  });
+
+  beforeEach(() => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
   });
 
@@ -64,7 +70,7 @@ context('Test Pizzas', () => {
     cy.reload();
   });
 
-  it('Displays the Pizza Orders list/details from the samples', () => {
+  it('Displays the Pizza Orders list/details view from the samples', () => {
     cy.getLeftNav()
       .contains('Namespaces')
       .click();
@@ -122,10 +128,22 @@ context('Test Pizzas', () => {
       .find('.fd-dialog__content')
       .as('form');
 
-    cy.get('@form').contains('Description');
-    cy.get('@form').contains('Sauce');
-    cy.get('@form').contains("Recipe's secret");
+    cy.get('@form')
+      .find('[data-testid="Description"]:visible')
+      .type(PIZZA_DESC);
+
+    cy.get('@form')
+      .find('[data-testid="Sauce"]:visible')
+      .find('input')
+      .type(SAUCE);
+
+    cy.get('@form')
+      .find('[data-testid="Recipe\'s secret"]:visible')
+      .find('input')
+      .type(RECIPE);
+
     cy.get('@form').contains('Owner References');
+
     cy.get('@form')
       .find('[arialabel="Pizza name"]:visible')
       .type(PIZZA_NAME);
