@@ -44,6 +44,7 @@ export function KeyValuePairRenderer({
         });
       }}
       title={titleTranslation}
+      required={required}
     />
   );
 }

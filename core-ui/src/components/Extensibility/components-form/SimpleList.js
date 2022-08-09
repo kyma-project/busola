@@ -86,7 +86,7 @@ export function SimpleList({
               const ownKeys = storeKeys.push(index);
 
               return (
-                <li>
+                <li key={index}>
                   <PluginStack
                     showValidity={showValidity}
                     schema={itemsSchema}

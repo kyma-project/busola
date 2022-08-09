@@ -41,6 +41,7 @@ export function NameRenderer({
         ]);
       }}
       validate={value => !!value}
+      required={required}
     />
   );
 }
