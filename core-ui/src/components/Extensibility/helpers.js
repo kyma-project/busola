@@ -158,8 +158,13 @@ export const applySortFormula = (formula, t) => {
     });
 
     return (a, b) => {
-      sortFunction.assign('first', a);
-      sortFunction.assign('second', b);
+      // sortFunction.assign('first', a);
+      // sortFunction.assign('second', b);
+      // if (a === undefined && b === undefined) return 0;
+      if (a === undefined) return -1;
+      if (b === undefined) return 1;
+      // console.log('second', b);
+      // console.log(sortFunction.evaluate());
       return sortFunction.evaluate();
     };
   } catch (e) {
@@ -174,8 +179,13 @@ export const getSortingFunction = child => {
     const bValue = getValue(b, path);
 
     switch (typeof aValue) {
-      case 'number' || 'boolean':
+      case 'number':
+      case 'boolean':
+      case 'undefined': {
+        if (aValue === undefined) return -1;
+        if (bValue === undefined) return 1;
         return aValue - bValue;
+      }
       case 'string': {
         if (Date.parse(aValue)) {
           return new Date(aValue).getTime() - new Date(bValue).getTime();
@@ -196,10 +206,15 @@ export const getSortingFunction = child => {
   };
 };
 
-export const sortBy = (sortChildren, t, defaultSortOptions = {}) => {
+export const sortBy = (
+  sortChildren,
+  t,
+  defaultSortOptions = {},
+  pathPrefix = '',
+) => {
   let defaultSort = {};
   const sortingOptions = sortChildren.reduce((acc, child) => {
-    const sortName = child.name || t(child.path);
+    const sortName = child.name || t(`${pathPrefix}${child.path}`);
     let sortFn = getSortingFunction(child);
 
     if (child.sort.fn) {

@@ -58,8 +58,8 @@ data:
             "path": "spec.toppings",
             "widget": "Table",
             "children": [
-              { "path": "name", "sort": true }, 
-              { "path": "price", "sort": { "default": "true", "fn": $first < $second} },
+              { "path": "name" }, 
+              { "path": "price", "sort": { "default": true, "fn": "$second - $first"} },
               { "path": "quantity", "sort": true}
             ]
           },
