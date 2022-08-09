@@ -13,7 +13,7 @@ Busola supports only the current version of the configuration and the prior one.
 
 Therefore, whenever a new version of the configuration is proposed, you can migrate your configuration to the latest version. To do so, go to your Extension and click the **Migrate** button.
 
-## `general` section
+## _general_ section
 
 The **general** section is required and contains basic information about the resource and additional options.
 
