@@ -59,7 +59,7 @@ data:
             "widget": "Table",
             "children": [
               { "path": "name" }, 
-              { "path": "price", "sort": { "default": true, "fn": "$second - $first"} },
+              { "path": "price", "sort": { "default": true, "fn": "$first - $second"} },
               { "path": "quantity", "sort": true}
             ]
           },
