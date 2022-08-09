@@ -253,7 +253,7 @@ Plain widgets render all contents of an object or list sequentially without any 
 
 ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with [related resources](resources.md#datasources-section).
 
-If such resource list was already defined in Busola, the configuration will be reused. To obtain custom columns, specify the `columns` field.
+If such resource list was already defined in Busola, the configuration will be reused. To obtain custom columns, specify the `children` field.
 
 #### Example
 
@@ -262,7 +262,7 @@ If such resource list was already defined in Busola, the configuration will be r
   "widget": "ResourceList",
   "path": "$myRelatedResource",
   "name": "Example ResourceList Secret",
-  "columns": [
+  "children": [
     {
       "path": "status.code",
       "widget": "Badge"

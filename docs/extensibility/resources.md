@@ -89,6 +89,9 @@ The `list` section defines extra columns available in the list. The format is si
 - **widget** - optional widget used to render the field referred to by the **path** property. By default, the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
 - **formula** - optional formula used to modify data referred to by the **path** property. **formula** uses the following naming convention: `data.name` instead of `name`. To learn more about using formulas, see [JSONata](https://docs.jsonata.org/overview.html).
+  <!-- - **sort** - optional sort option. If set to true, it allows to sort via this value. It can also be set to an object with the following properties:
+    - **default** - optional flag. If set to true, the list view is sorted by default by this value.
+    - **fn** -   -->
 
 ### Example
 

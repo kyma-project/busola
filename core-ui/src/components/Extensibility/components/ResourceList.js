@@ -49,9 +49,9 @@ export function ResourceList({
     ? PredefinedRenderer.List
     : ResourcesList;
 
-  let columns;
-  if (Array.isArray(structure.columns)) {
-    columns = structure.columns.map(({ name, ...props }) => ({
+  let children;
+  if (Array.isArray(structure.children)) {
+    children = structure.children.map(({ name, ...props }) => ({
       header: name,
       value: value => <Widget value={value} structure={props} />,
     }));
@@ -61,6 +61,8 @@ export function ResourceList({
   if (Array.isArray(value.data)) {
     value.data = value.data.map(d => ({ ...d, kind }));
   }
+
+  //const sortOptions =
 
   return (
     <ListRenderer
@@ -79,7 +81,7 @@ export function ResourceList({
       fixedPath={true}
       {...structure}
       {...props}
-      columns={columns}
+      columns={children}
     />
   );
 }
