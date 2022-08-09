@@ -1,5 +1,21 @@
 # Display widgets
 
+- [Inline widgets](#inline-widgets)
+  - [Badge](#badge)
+  - [ControlledBy](#controlledby)
+  - [JoinedArray](#joinedarray)
+  - [Labels](#labels)
+  - [ResourceLink](#resourcelink)
+  - [Text](#text)
+- [Block widgets](#block-widgets)
+  - [CodeViewer](#codeviewer)
+  - [Columns](#columns)
+  - [Panel](#panel)
+  - [Plain](#plain)
+  - [ResourceList](#resourcelist)
+  - [ResourceRefs](#resourcerefs)
+  - [Table](#table)
+
 You can use display widgets in the lists and details pages.
 
 ## Inline widgets
