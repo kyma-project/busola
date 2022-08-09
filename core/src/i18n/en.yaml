@@ -597,7 +597,7 @@ common:
     error: Error
     generate-name: Generate name
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' and ''.'' (e.g.: ''my.name-1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
@@ -685,7 +685,7 @@ config-maps:
     updated: ConfigMap updated
   name_singular: Config Map
   subtitle:
-    edit-config-map: Edit Config Map
+    edit-config-map: Edit ConfigMap
   title: Config Maps
 configuration:
   title: Configuration
@@ -918,7 +918,7 @@ discovery-and-network:
 dnsentries:
   description: <0>DNSEntry</0> is an object that represents the request to create an external DNS record.
   headers:
-    dns-name: DNS Name
+    dns-name: DNSName
     provider: Provider
     provider-type: Provider Type
     spec: Specification
@@ -926,7 +926,7 @@ dnsentries:
     targets: Targets
     ttl: TTL
   labels:
-    dns-name: DNS Name
+    dns-name: DNSName
     target: Target
     targets: Targets
     text: Text
@@ -947,7 +947,7 @@ dnsentries:
   title: DNS Entries
   tooltips:
     deleting: Deleting the DNS records
-    invalid: A conflict exists with another DNS entry or owner.
+    invalid: A conflict exists with another DNSentry or owner.
     pending: The DNS entry update is batched or in progress.
     ready: The entry has been accepted and the DNS record created.
     stale: The DNS entry exists, but there is an issue with the provider.
@@ -1530,7 +1530,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
