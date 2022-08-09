@@ -3,7 +3,6 @@
   "version": "0.6.1",
   "license": "MIT",
   "scripts": {
-    "gulp": "gulp",
     "start": "../node_modules/concurrently/bin/concurrently.js \"npm run buildConfig:watch\" \"npm run serve\"",
     "serve": "sirv src -s -D -q -p 8080",
     "build": "npm run buildConfig",
