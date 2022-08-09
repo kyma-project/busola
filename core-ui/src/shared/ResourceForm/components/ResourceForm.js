@@ -72,6 +72,10 @@ export function ResourceForm({
 
   const [mode, setMode] = React.useState(handleInitialMode);
   const [actionsEditor, setActionsEditor] = React.useState(null);
+
+  // workaround for no refreshing Monaco after choosing preset
+  const [yamlKey, setYamlKey] = React.useState(Math.random(999));
+
   const validationRef = useRef(true);
 
   useEffect(() => {
@@ -96,6 +100,7 @@ export function ResourceForm({
         if (onChange) {
           onChange(new Event('input', { bubbles: true }));
         }
+        setYamlKey(Math.random(999));
       }}
     />
   );
@@ -147,7 +152,7 @@ export function ResourceForm({
           </div>
         )}
         {mode === ModeSelector.MODE_YAML && (
-          <>
+          <React.Fragment key={yamlKey}>
             <EditorActions
               val={convertedResource}
               editor={actionsEditor}
@@ -156,7 +161,7 @@ export function ResourceForm({
               i18n={i18n}
             />
             {editor}
-          </>
+          </React.Fragment>
         )}
         {/* always keep the advanced form to ensure validation */}
         <div
