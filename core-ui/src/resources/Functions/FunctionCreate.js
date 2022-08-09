@@ -165,7 +165,7 @@ export function FunctionCreate({
         input={Inputs.Dropdown}
         options={sourceTypeOptions}
       />
-      {func?.spec?.type === 'git' && !repositories.length && (
+      {func?.spec?.type === 'git' && !(repositories || []).length && (
         <MessageStrip
           advanced
           className="fd-margin-top--sm"
@@ -203,7 +203,7 @@ export function FunctionCreate({
         propertyPath="$.spec.buildResources"
         presets={CONFIG['buildJobResourcesPresets']}
       />
-      {func?.spec?.type === 'git' && repositories.length && (
+      {func?.spec?.type === 'git' && (repositories || []).length && (
         <>
           <ResourceForm.FormField
             advanced

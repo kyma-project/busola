@@ -78,7 +78,7 @@ context('Test Jobs', () => {
 
     // job args
     cy.getIframeBody()
-      .contains('Args')
+      .find('[aria-label="expand Args"]:visible')
       .click();
 
     cy.getIframeBody()
@@ -163,12 +163,12 @@ context('Test Jobs', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter key"]')
+      .find('[placeholder="Enter key"]:visible')
       .filterWithNoValue()
       .type('a');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter value"]')
+      .find('[placeholder="Enter value"]:visible')
       .filterWithNoValue()
       .first()
       .type('b');

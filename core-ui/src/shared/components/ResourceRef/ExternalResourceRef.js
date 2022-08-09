@@ -117,6 +117,7 @@ export function ExternalResourceRef({
                     text: t('common.messages.resource-namespace-error'),
                   }
             }
+            required={required}
           />
         )}
       />,
@@ -154,6 +155,7 @@ export function ExternalResourceRef({
                     text: t('common.messages.resource-name-error'),
                   }
             }
+            required={required}
           />
         )}
       />,
