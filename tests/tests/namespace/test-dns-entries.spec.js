@@ -37,7 +37,7 @@ context('Test DNS Entries', () => {
 
     // dns name
     cy.getIframeBody()
-      .find('[placeholder^="Select the DNS name"]:visible')
+      .find('[placeholder^="Select the DNSname"]:visible')
       .type(DNS_NAME)
       .click();
 
@@ -59,7 +59,7 @@ context('Test DNS Entries', () => {
   it('Inspect details', () => {
     cy.getIframeBody().contains(DNS_ENTRY_NAME);
 
-    cy.getIframeBody().contains(`DNS Name${DNS_NAME}`);
+    cy.getIframeBody().contains(`DNSName${DNS_NAME}`);
 
     cy.getIframeBody().contains(`TTL${TTL}`);
   });

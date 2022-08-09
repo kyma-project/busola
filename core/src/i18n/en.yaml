@@ -261,7 +261,7 @@ certificates:
   tooltips:
     close-expiration: Certificate will expire in less than one day.
     common-name: Common Name is the primary domain name of the certificate.
-    csr: Certificate Signing Request is an alternative way to provide common name, DNS names, and other information.
+    csr: Certificate Signing Request is an alternative way to provide common name, DNSnames, and other information.
     dns-names: DNS Names are the optional additional domain names of the certificate.
     existing-secret: Use an existing Secret for storing the certificate if enabled. Otherwise a new Secret will be created.
     expired: Certificate expired
@@ -597,7 +597,7 @@ common:
     error: Error
     generate-name: Generate name
     hide: Hide read-only fields
-    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' and ''.'' (e.g.: ''my.name-1'').'
+    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
@@ -937,7 +937,7 @@ dnsentries:
     created: DNSEntry created
   name_singular: DNS Entry
   placeholders:
-    dns-name: Select the DNS name
+    dns-name: Select the DNSname
     target-a: Enter the A record target
     target-cname: Enter the CNAME record target
     ttl: Enter the time to live
@@ -1530,7 +1530,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
+  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
