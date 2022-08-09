@@ -20,7 +20,7 @@ import { useGetSchema } from 'hooks/useGetSchema';
 import { useTranslation } from 'react-i18next';
 
 export const ExtensibilityListCore = ({ resMetaData }) => {
-  const { t, widgetT } = useGetTranslation();
+  const { t, widgetT, exists } = useGetTranslation();
   const { t: tBusola } = useTranslation();
 
   const { urlPath, disableCreate, resource, description } =
@@ -33,6 +33,11 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
 
   const listProps = usePrepareListProps(urlPath, 'name');
 
+  const resourceName = resMetaData?.general?.name;
+  listProps.resourceName = exists('name')
+    ? t('name')
+    : resourceName || pluralize(prettifyKind(resource.kind));
+
   if (resource.kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
       /[a-z0-9-]+\/?$/,
@@ -40,10 +45,6 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     );
   }
   listProps.createFormProps = { resourceSchema: resMetaData };
-
-  listProps.resourceName = t('name', {
-    defaultValue: pluralize(prettifyKind(resource.kind)),
-  });
 
   listProps.description = useCreateResourceDescription(description);
 
