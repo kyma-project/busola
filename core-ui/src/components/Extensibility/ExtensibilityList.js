@@ -12,8 +12,7 @@ import {
   TranslationBundleContext,
   useGetTranslation,
   applyFormula,
-  getValue,
-  applySortFormula,
+  sortBy,
 } from './helpers';
 import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
@@ -72,72 +71,14 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
 
   const sortChildren = (resMetaData?.list || []).filter(
     element => element.sort,
-    [],
   );
-
-  const getSortingFunction = child => {
-    const { path, formula } = child;
-    return (a, b) => {
-      const aValue = getValue(a, path);
-      const bValue = getValue(b, path);
-      console.log(aValue);
-      console.log(bValue);
-      switch (typeof aValue) {
-        case 'number' || 'boolean':
-          return aValue - bValue;
-        case 'string': {
-          if (Date.parse(aValue)) {
-            return new Date(aValue).getTime() - new Date(bValue).getTime();
-          }
-          return aValue.localeCompare(bValue);
-        }
-        default:
-          if (!formula) {
-            const parsedValueA = JSON.parse(aValue);
-            const parsedValueB = JSON.parse(bValue);
-            return parsedValueA.localeCompare(parsedValueB);
-          }
-          const aFormula = applyFormula(aValue, formula);
-          const bFormula = applyFormula(bValue, formula);
-
-          return aFormula - bFormula;
-      }
-    };
-  };
-
-  const sortBy = defaultSortOptions => {
-    let defaultSort = {};
-    const sortingOptions = sortChildren.reduce((acc, child) => {
-      const sortName = child.name || t(child.path);
-      let sortFn = getSortingFunction(child);
-
-      if (child.sort.fn) {
-        sortFn = (a, b) => {
-          const aValue = getValue(a, child.path);
-          const bValue = getValue(b, child.path);
-          const sortFormula = applySortFormula(child.sort.fn, t);
-          return sortFormula(aValue, bValue);
-        };
-      }
-
-      if (child.sort.default) {
-        defaultSort[sortName] = sortFn;
-        return { ...acc };
-      } else {
-        acc[sortName] = sortFn;
-        return { ...acc };
-      }
-    }, {});
-
-    return { ...defaultSort, ...defaultSortOptions, ...sortingOptions };
-  };
 
   return (
     <ResourcesList
       createResourceForm={ExtensibilityCreate}
       allowSlashShortcut
       disableCreate={disableCreate}
-      sortBy={sortBy}
+      sortBy={defaultSortOptions => sortBy(sortChildren, t, defaultSortOptions)}
       {...listProps}
     />
   );

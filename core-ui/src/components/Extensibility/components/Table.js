@@ -4,7 +4,7 @@ import { isNil } from 'lodash';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import { findTypeInSchema, useGetTranslation } from '../helpers';
+import { sortBy, useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 
 import './Table.scss';
@@ -35,6 +35,7 @@ export function Table({ value, structure, disableMargin, schema, ...props }) {
     const path = `${structure.path}.${column.path}`;
     return tExt(path);
   });
+
   const headerRenderer = () =>
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
 
@@ -65,29 +66,7 @@ export function Table({ value, structure, disableMargin, schema, ...props }) {
     };
   };
 
-  // const sortingOptions = structure?.sortBy || [];
-  const sortPaths = (structure?.children || []).reduce(
-    (accumulator, current) => {
-      if (current.sortBy) return [...accumulator, current.path];
-      return [...accumulator];
-    },
-    [],
-  );
-  const sortBy = defaultSort => {
-    const obj = {};
-
-    for (const sort of sortPaths) {
-      const path = `${structure.path}.${sort}`;
-      const type = findTypeInSchema(schema, path);
-      console.log('path:', path, 'type:', type);
-
-      obj[tExt(path)] = (a, b) => {
-        return a[sort] - b[sort];
-      };
-    }
-
-    return { ...obj };
-  };
+  const sortChildren = (structure?.children || []).filter(child => child.sort);
 
   return (
     <GenericList
@@ -102,7 +81,7 @@ export function Table({ value, structure, disableMargin, schema, ...props }) {
       rowRenderer={rowRenderer}
       disableMargin={disableMargin}
       {...handleTableValue(value, t)}
-      sortBy={sortPaths.length > 0 ? sortBy : null}
+      sortBy={() => sortBy(sortChildren, tExt)}
     />
   );
 }
