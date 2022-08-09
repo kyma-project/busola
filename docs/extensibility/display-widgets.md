@@ -129,7 +129,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 
 #### Example
 
-##### `details` section
+##### _details_ section
 
 ```json
 {
@@ -146,7 +146,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 
 <img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" style="border: 1px solid #D2D5D9">
 
-##### `translations` section
+##### _translations_ section
 
 ```yaml
 en:

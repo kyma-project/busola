@@ -1,5 +1,30 @@
 # Config Map for resource-based extensions
 
+**Table of Contents**
+
+- [Overview](#overview)
+- [Extension version](#extension-version)
+- [_general_ section](#general-section)
+  - [Item parameters](#item-parameters)
+  - [Example](#example)
+- [_form_ section](#form-section)
+  - [Item parameters](#item-parameters)
+  - [Example](#example-1)
+- [_list_ section](#list-section)
+  - [Item parameters](#item-parameters-1)
+  - [Example](#example-2)
+- [_details_ section](#details-section)
+  - [Items parameters](#items-parameters)
+  - [Example](#example-3)
+  - [Data scoping](#data-scoping)
+- [_dataSources_ section](#datasources-section)
+  - [Data source configuration object fields](#data-source-configuration-object-fields)
+  - [Example](#example-4)
+- [_translations_ section](#translations-section)
+  - [Example](#example-5)
+  - [Value preprocessors](#value-preprocessors)
+    - [List of value preprocessors](#list-of-value-preprocessors)
+
 ## Overview
 
 This document describes the required ConfigMap setup that you need to configure in order to handle your CRD UI page.
@@ -16,6 +41,8 @@ Therefore, whenever a new version of the configuration is proposed, you can migr
 ## _general_ section
 
 The **general** section is required and contains basic information about the resource and additional options.
+
+### Item parameters
 
 - **resource** - _[required]_ - information about the resoure.
   - **kind** - _[required]_ Kubernetes kind of the resource.
@@ -49,7 +76,7 @@ The **general** section is required and contains basic information about the res
 }
 ```
 
-## `form` section
+## _form_ section
 
 The **form** section contains a list of objects that define which fields you must include in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to the simple form by providing the `simple: true` flag. You can also remove it from the advanced form by providing the `advanced: false` flag.
 
@@ -79,7 +106,7 @@ If you target elements of an array rather that the array itself, you can use `it
 ]
 ```
 
-## `list` section
+## _list_ section
 
 The **list** section defines extra columns available in the list.
 
@@ -118,7 +145,7 @@ The **list** section defines extra columns available in the list.
 ]
 ```
 
-## `details` section
+## _details_ section
 
 The **details** section defines the display structure for the details page. It contains two sections, `header` and `body`, both of which are a list of items to display in the **header** section and the body of the page respectively. The format of the entries is similar to the **form** section, however it has extra options available.
 
@@ -216,7 +243,7 @@ renders the same set of data as:
 ]
 ```
 
-## `dataSources` section
+## _dataSources_ section
 
 The **dataSources** section contains an object that maps a data source name to a data source configuration object. The data source name preceded by a dollar sign '\$' is used in the **path** expression.
 
@@ -272,7 +299,7 @@ Those fields are used to build the related resource URL and filter the received 
 }
 ```
 
-## `translations` section
+## _translations_ section
 
 This section contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
 
