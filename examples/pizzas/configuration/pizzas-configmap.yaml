@@ -68,6 +68,12 @@ data:
         {
           "widget": "ResourceList",
           "path": "$secretRecipe",
+          "sort": [
+            {
+              "path": "type",
+              "default": true,
+            },
+          ],
           "name": "Pizza's recipe secret"
         },
     {

@@ -2,7 +2,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: services
-  namespace: resources
+  namespace: lyczeq
   labels:
     app.kubernetes.io/name: services
     busola.io/extension: resource
@@ -36,12 +36,32 @@ data:
         {
           "widget": "ResourceList",
           "path": "$subscriptions",
-          "name": "Subscription"
+          "name": "Subscription",
+          "sort": [
+            {
+              "path": "status.ready",
+              "default": true
+            },
+            {
+              "path": "status.config.maxInFlightMessages",
+              "fn": $first - $second
+            }
+          ]
         },
         {
           "widget": "ResourceList",
           "path": "$apirules",
-          "name": "API Rule"
+          "name": "API Rule",
+          "sort": [
+            {
+              "path": "spec.service.host",
+              "default": true
+            },
+            {
+              "path": "spec.service.port",
+              "fn": $first - $second
+            }
+          ]
         }
       ]
     }
@@ -95,7 +115,7 @@ data:
         "kind": "Service",
         "version": "v1",
       },
-      "urlPath": "example-services",
+      "urlPath": "lyczeq-services",
       "scope": "namespace",
     }
   translations: |-

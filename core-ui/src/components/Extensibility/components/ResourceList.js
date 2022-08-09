@@ -3,6 +3,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
 import { Widget } from './Widget';
+import { sortBy, useGetTranslation } from '../helpers';
 
 function extractResourceData({ dataSource, originalResource }) {
   try {
@@ -38,6 +39,8 @@ export function ResourceList({
     error,
   } = extractResourceData({ dataSource, originalResource });
 
+  const { t: tExt } = useGetTranslation();
+
   if (error) {
     throw Error('Error in ResourceList: ' + error.message);
   }
@@ -62,7 +65,17 @@ export function ResourceList({
     value.data = value.data.map(d => ({ ...d, kind }));
   }
 
-  //const sortOptions =
+  const sortOptions = (structure.sort || []).reduce((acc, current) => {
+    if (!current.path) {
+      return [...acc];
+    }
+
+    const obj = {
+      path: current.path,
+      sort: { default: current.default, fn: current.fn },
+    };
+    return [...acc, obj];
+  }, []);
 
   return (
     <ListRenderer
@@ -82,6 +95,9 @@ export function ResourceList({
       {...structure}
       {...props}
       columns={children}
+      sortBy={defaultSortOptions =>
+        sortBy(sortOptions, tExt, defaultSortOptions)
+      }
     />
   );
 }
