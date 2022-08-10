@@ -262,7 +262,7 @@ ResourceList widgets render a list of Kubernetes resources. The ResourceList wid
 
 #### Widget-specific parameters
 
-- **children** optional field used to obtain custom columns. If not set, the configuration will be reused based on the existing resource list defined in Busola.
+- **children** optional field used to obtain custom columns. If not set, the configuration is reused based on the existing resource list defined in Busola.
 - **sort** - optional sort option. Array of objects with the following properties that allow to sort by it's value:
   - **path** - _[required]_ contains the path to the data used for the column.
   - **default** - optional flag. If set to true, the list view is sorted by this value by default.
