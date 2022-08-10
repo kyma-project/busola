@@ -116,7 +116,7 @@ context('Test Pizzas', () => {
       .should('be.visible');
 
     cy.getLeftNav()
-      .contains(/^Pizza$/)
+      .contains(/^Pizzas$/)
       .click();
 
     cy.get('@iframe')
