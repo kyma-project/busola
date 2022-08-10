@@ -113,10 +113,12 @@ data:
       {
         "path": "spec.recipeSecret",
         "widget": "Resource",
-        "kind": "Secret",
-        "scope": "namespace",
-        "namespace": "pizzas",
-        "version": "v1",
+        "resource": {
+          "kind": "Secret",
+          "scope": "namespace",
+          "namespace": "pizzas",
+          "version": "v1",
+        }
         "simple": true
       },
       {
