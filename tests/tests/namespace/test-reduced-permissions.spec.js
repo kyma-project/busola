@@ -125,7 +125,7 @@ context('Test reduced permissions', () => {
 
     // name
     cy.getIframeBody()
-      .find('[ariaLabel="Cluster Role Binding name"]:visible')
+      .find('[ariaLabel="ClusterRoleBinding name"]:visible')
       .type(CRB_NAME);
 
     // role

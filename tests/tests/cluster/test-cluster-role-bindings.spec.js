@@ -23,7 +23,7 @@ context('Test Cluster Role Bindings', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[ariaLabel="Cluster Role Binding name"]')
+      .find('[ariaLabel="ClusterRoleBinding name"]')
       .type(CRB_NAME);
 
     cy.getIframeBody()
