@@ -260,19 +260,56 @@ Plain widgets render all contents of an object or list sequentially without any 
 
 ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with [related resources](resources.md#datasources-section).
 
-If such resource list was already defined in Busola, the configuration will be reused. To obtain custom columns, specify the `children` field.
+#### Widget-specific parameters
 
-#### Example
+- **children** optional field used to obtain custom columns. If not set, the configuration will be reused based on the existing resource list defined in Busola.
+- **sort** - optional sort option. Array of objects with the following properties that allow to sort by it's value:
+  - **path** - _[required]_ contains the path to the data used for the column.
+  - **default** - optional flag. If set to true, the list view is sorted by this value by default.
+  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function `$compareStrings` used to compare two strings e.g. `$compareStrings($first, $second)`
+
+#### Examples
 
 ```json
 {
   "widget": "ResourceList",
   "path": "$myRelatedResource",
+  "name": "Example ResourceList Deployments",
+  "sort": [
+    {
+      "path": "spec.replicas",
+      "default": true
+    },
+    {
+      "path": "spec.strategy.type"
+    }
+  ]
+}
+```
+
+```json
+{
+  "widget": "ResourceList",
+  "path": "$mySecrets",
   "name": "Example ResourceList Secret",
   "children": [
     {
-      "path": "status.code",
-      "widget": "Badge"
+      "path": "metadata.name",
+      "name": "Name",
+      "sort": "true",
+      "widget": "ResourceLink",
+      "resource": {
+        "name": "data.name",
+        "namespace": "root.metadata.namespace",
+        "kind": "data.kind"
+      }
+    },
+    {
+      "path": "type",
+      "name": "Type",
+      "sort": {
+        "default": true
+      }
     }
   ]
 }
@@ -307,6 +344,9 @@ Table widgets display array data as rows of a table instead of free-standing com
 #### Widget-specific parameters
 
 - **collapsible** - an optional array of extra widgets to display as an extra collapsible section. Uses the same format as the **children** parameter.
+- **sort** - optional sort option. If set to true, it allows to sort via this value. Defaults to false. It can also be set to an object with the following properties:
+  - **default** - optional flag. If set to true, the list view is sorted by this value by default.
+  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function `$compareStrings` used to compare two strings e.g. `$compareStrings($first, $second)`
 
 #### Example
 
@@ -314,7 +354,16 @@ Table widgets display array data as rows of a table instead of free-standing com
 {
   "path": "spec.item-list",
   "widget": "Table",
-  "children": [{ "path": "name" }, { "path": "status" }],
+  "children": [
+    { "path": "name", "sort": true },
+    {
+      "path": "status",
+      "sort": {
+        "default": "true",
+        "compareFunction": "$compareStrings($first, $second)"
+      }
+    }
+  ],
   "collapsible": [{ "path": "description" }]
 }
 ```
