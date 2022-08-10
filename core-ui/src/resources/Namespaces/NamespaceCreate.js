@@ -161,7 +161,7 @@ export function NamespaceCreate({
           <Editor
             value={limits}
             setValue={setLimits}
-            customSchemaId="v1/LimitRange"
+            resourceSchemaId="v1/LimitRange"
           />
         </ResourceForm.CollapsibleSection>
       ) : null}
@@ -172,7 +172,7 @@ export function NamespaceCreate({
           <Editor
             value={memory}
             setValue={setMemory}
-            customSchemaId="v1/ResourceQuota"
+            resourceSchemaId="v1/ResourceQuota"
           />
         </ResourceForm.CollapsibleSection>
       ) : null}
@@ -193,7 +193,6 @@ export function NamespaceCreate({
       initialResource={initialNamespace}
       afterCreatedFn={afterNamespaceCreated}
       setCustomValid={setCustomValid}
-      customSchemaId="v1/Namespace"
       labelsProps={{
         lockedKeys: [ISTIO_INJECTION_LABEL],
         lockedValues: [ISTIO_INJECTION_LABEL],

@@ -22,7 +22,7 @@ export function Editor({
   language,
   onMount,
   updateValueOnParentChange,
-  customSchemaId, // custom key to find the json schema, don't use if the default key works (apiVersion/kind)
+  schemaId, // key to find the json schema,
   autocompletionDisabled,
   customSchemaUri, // custom link to be displayed in the autocompletion tooltips
   height,
@@ -41,7 +41,7 @@ export function Editor({
     loading,
   } = useAutocompleteWorker({
     value,
-    customSchemaId,
+    schemaId,
     autocompletionDisabled,
     customSchemaUri,
     readOnly,

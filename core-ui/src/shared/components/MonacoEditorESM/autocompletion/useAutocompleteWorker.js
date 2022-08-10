@@ -39,25 +39,14 @@ window.MonacoEnvironment = {
 
 let activeSchemaPath = null;
 
-const getDefaultSchemaId = resource => {
-  const { apiVersion, kind } = resource || {};
-
-  if (apiVersion && kind) {
-    return `${apiVersion}/${kind}`;
-  } else {
-    return `${Math.random()}`;
-  }
-};
-
 export function useAutocompleteWorker({
   value,
-  customSchemaId,
+  schemaId,
   autocompletionDisabled,
   customSchemaUri,
   readOnly,
   language,
 }) {
-  const [schemaId] = useState(customSchemaId || getDefaultSchemaId(value));
   const [schemaLink] = useState(getSchemaLink(value, language));
 
   const { schema, loading, error } = useGetSchema({
