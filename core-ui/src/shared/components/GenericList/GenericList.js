@@ -23,6 +23,7 @@ import { getErrorMessage } from 'shared/utils/helpers';
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import { SortModalPanel } from './SortModalPanel';
 import './GenericList.scss';
+import { isEmpty } from 'lodash';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -63,12 +64,13 @@ export const GenericList = ({
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
   const [sort, setSort] = useState({
-    name: sortBy && Object.keys(sortBy)[0],
+    name: sortBy && sortBy !== {} && Object?.keys(sortBy)[0],
     order: 'ASC',
   });
 
   const sorting = (sort, resources) => {
-    if (!sortBy) return resources;
+    if (!sortBy || isEmpty(sortBy)) return resources;
+
     const sortFunction = Object.entries(sortBy).filter(([name]) => {
       return name === sort.name;
     })[0][1];
@@ -132,7 +134,7 @@ export const GenericList = ({
           allowSlashShortcut={allowSlashShortcut}
         />
       )}
-      {sortBy && (
+      {sortBy && !isEmpty(sortBy) && (
         <SortModalPanel
           sortBy={sortBy}
           sort={sort}

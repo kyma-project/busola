@@ -3,7 +3,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
 import { sortBy, useGetTranslation } from '../helpers';
-import { prepareChildren } from './helpers';
+import { getChildrenInfo } from './helpers';
 
 function extractResourceData({ dataSource, originalResource }) {
   try {
@@ -53,7 +53,7 @@ export function ResourceList({
     ? PredefinedRenderer.List
     : ResourcesList;
 
-  const [children, sortOptions] = prepareChildren(structure);
+  const { children, sortOptions, defaultSort } = getChildrenInfo(structure);
 
   return (
     <ListRenderer
@@ -74,7 +74,7 @@ export function ResourceList({
       {...props}
       columns={children}
       sortBy={defaultSortOptions =>
-        sortBy(sortOptions, tExt, defaultSortOptions)
+        sortBy(sortOptions, tExt, defaultSort ? defaultSortOptions : {})
       }
     />
   );

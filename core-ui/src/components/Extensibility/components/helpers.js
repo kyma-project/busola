@@ -1,6 +1,6 @@
 import { Widget } from './Widget';
 
-export const prepareChildren = structure => {
+export const getChildrenInfo = structure => {
   if (!Array.isArray(structure.children)) {
     const sortOptions = (structure.sort || []).reduce((acc, current) => {
       if (!current.path) {
@@ -14,7 +14,7 @@ export const prepareChildren = structure => {
       return [...acc, obj];
     }, []);
 
-    return [null, sortOptions];
+    return { children: null, sortOptions, defaultSort: true };
   }
 
   const children = structure.children.map(({ name, ...props }) => ({
@@ -23,5 +23,5 @@ export const prepareChildren = structure => {
   }));
 
   const sortOptions = (structure?.children || []).filter(child => child.sort);
-  return [children, sortOptions];
+  return { children, sortOptions, defaultSort: false };
 };
