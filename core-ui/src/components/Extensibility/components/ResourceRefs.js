@@ -36,6 +36,15 @@ export function ResourceRefs({ value, structure, schema }) {
     name,
   ];
 
+  const sortBy = defaultSort => {
+    const { name } = defaultSort;
+    return {
+      name,
+      namespace: (a, b) =>
+        a.metadata?.namespace.localeCompare(b.metadata?.namespace),
+    };
+  };
+
   return (
     <GenericList
       title={widgetT(structure)}
@@ -44,6 +53,7 @@ export function ResourceRefs({ value, structure, schema }) {
       rowRenderer={rowRenderer}
       i18n={i18n}
       showSearchField={false}
+      sortBy={sortBy}
     />
   );
 }

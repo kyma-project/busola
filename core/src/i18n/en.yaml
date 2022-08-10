@@ -571,6 +571,7 @@ common:
     desc: Descending
     lastseen: Last Seen
     name: Name
+    namespace: Namespace
     replicas: Replicas
     sort: Sort
     sort-by: Sort By
