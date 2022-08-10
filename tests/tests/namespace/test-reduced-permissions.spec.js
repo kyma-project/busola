@@ -117,9 +117,11 @@ context('Test reduced permissions', () => {
 
     // subject type - select it first so the list starts loading
     cy.getIframeBody()
+      .find('[role=dialog]')
       .contains('User')
       .click();
     cy.getIframeBody()
+      .find('[role=dialog]')
       .contains('Service Account')
       .click();
 
