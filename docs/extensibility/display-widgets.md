@@ -265,7 +265,7 @@ ResourceList widgets render a list of Kubernetes resources. The ResourceList wid
 - **children** optional field used to obtain custom columns. If not set, the configuration is reused based on the existing resource list defined in Busola.
 - **sort** - optional sort option. Array of objects with the following properties that allow to sort by it's value:
   - **path** - _[required]_ contains the path to the data used for the column.
-  - **default** - optional flag. If set to true, the list view is sorted by this value by default.
+  - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
   - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function `$compareStrings` used to compare two strings e.g. `$compareStrings($first, $second)`
 
 #### Examples
