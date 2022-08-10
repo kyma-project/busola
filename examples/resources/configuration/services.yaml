@@ -38,7 +38,18 @@ data:
           "path": "$subscriptions",
           "name": "Subscription",
           "children": [
-            {"path": "status.ready", "name": "MyStatus"}
+            {
+              "path": "metadata.name", "name": "Name", "sort": "true", "widget": "ResourceLink", 
+              "resource": {
+                "name": "data.name",
+                "namespace": "root.metadata.namespace",
+                "kind": "data.kind"
+              }
+            },
+            {
+              "path": "spec.filter.filters[0].eventType.value", "name": "First event Type", "sort": {
+              "default": true, "compareFunction": "$compareStrings($first, $second)"}
+            },
           ]    
         },
         {
@@ -52,7 +63,7 @@ data:
             },
             {
               "path": "spec.service.port",
-              "fn": $first - $second
+              "compareFunction": $first - $second
             }
           ]
         }

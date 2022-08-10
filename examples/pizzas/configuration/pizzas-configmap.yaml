@@ -59,7 +59,7 @@ data:
             "widget": "Table",
             "children": [
               { "path": "name" }, 
-              { "path": "price", "sort": { "default": true, "fn": "$first - $second"} },
+              { "path": "price", "sort": { "default": true, "compareFunction": "$first - $second"} },
               { "path": "quantity", "sort": true}
             ]
           },
@@ -130,7 +130,7 @@ data:
     ]
   list: |-
     [
-      { "path": "spec.description","sort": { "fn": "$compareStrings($first, $second)" }  },
+      { "path": "spec.description","sort": { "compareFunction": "$compareStrings($first, $second)" }  },
       { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
       { "path": "spec.toppings", "formula": "$sum(data.price)", "name": "Toppings price", "sort":{"default":true} }
     ]

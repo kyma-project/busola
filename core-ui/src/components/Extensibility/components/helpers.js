@@ -9,7 +9,10 @@ export const getChildrenInfo = (structure, originalResource) => {
 
       const obj = {
         path: current.path,
-        sort: { default: current.default, fn: current.fn },
+        sort: {
+          default: current.default,
+          compareFunction: current.compareFunction,
+        },
       };
       return [...acc, obj];
     }, []);

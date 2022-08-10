@@ -67,6 +67,7 @@ data:
       },
       {
         "path": "spec.orderDetails.realization",
+        "sort": true
       }
     ]
   general: |-

@@ -214,11 +214,11 @@ export const sortBy = (
     const sortName = child.name || t(`${pathPrefix}${child.path}`);
     let sortFn = getSortingFunction(child);
 
-    if (child.sort.fn) {
+    if (child.sort.compareFunction) {
       sortFn = (a, b) => {
         const aValue = getValue(a, child.path);
         const bValue = getValue(b, child.path);
-        const sortFormula = applySortFormula(child.sort.fn, t);
+        const sortFormula = applySortFormula(child.sort.compareFunction, t);
         return sortFormula(aValue, bValue);
       };
     }
