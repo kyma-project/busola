@@ -29,7 +29,6 @@ export function useJsonata(query, root, extras = {}) {
       },
     };
 
-    // console.log('jsonata', query, root);
     if (!query) return '';
     try {
       jsonata(query).evaluate(
@@ -129,7 +128,6 @@ export function Widget({
   }
   */
 
-  // console.log('Widget', { structure, value, props });
   const childValue = useJsonata(structure.source, originalResource, {
     parent: value,
     item: value,
