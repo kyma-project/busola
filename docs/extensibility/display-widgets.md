@@ -357,19 +357,16 @@ Table widgets display array data as rows of a table instead of free-standing com
 
 ```json
 {
-  "path": "spec.item-list",
+  "path": "spec.toppings",
   "widget": "Table",
+  "collapsible": [{ "path": "quantity" }],
   "children": [
     { "path": "name", "sort": true },
     {
-      "path": "status",
-      "sort": {
-        "default": "true",
-        "compareFunction": "$compareStrings($first, $second)"
-      }
+      "path": "price",
+      "sort": { "default": true, "compareFunction": "$second -$first" }
     }
-  ],
-  "collapsible": [{ "path": "description" }]
+  ]
 }
 ```
 

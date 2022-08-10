@@ -54,15 +54,15 @@ data:
             ]
           },
           {
-            "name": "topping",
-            "path": "spec.toppings",
-            "widget": "Table",
-            "children": [
-              { "path": "name" }, 
-              { "path": "price", "sort": { "default": true, "compareFunction": "$first - $second"} },
-              { "path": "quantity", "sort": true}
-            ]
-          },
+          "path": "spec.toppings",
+          "widget": "Table",
+          "collapsible": [{ "path": "quantity" }],
+          "children": [
+            { "path": "name", "sort": true },
+            {
+              "path": "price",
+              "sort": { "default": true, "compareFunction": "$second -$first" }
+            }
           ]
         },
         {
