@@ -80,12 +80,12 @@ context('Test Service Accounts', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter key"]')
+      .find('[placeholder="Enter key"]:visible')
       .filterWithNoValue()
       .type('test.key');
 
     cy.getIframeBody()
-      .find('[placeholder="Enter value"]')
+      .find('[placeholder="Enter value"]:visible')
       .filterWithNoValue()
       .first()
       .type('test-value');

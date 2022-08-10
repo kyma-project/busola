@@ -41,7 +41,6 @@ function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
           compact
           type="number"
           min="0"
-          required
           value={numericValue}
           onChange={e => setValue(e.target.value + selectedUnit)}
         />
@@ -75,7 +74,6 @@ function CpuInput({ label, propertyPath, container = {}, setContainer }) {
       <FormLabel required>{label} (m)</FormLabel>
       <Inputs.Number
         min="0"
-        required
         value={value}
         setValue={value => setValue(value + 'm')}
       />

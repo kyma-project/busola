@@ -55,6 +55,7 @@ export function ResourceRenderer({
       input={Inputs.ComboboxInput}
       options={options}
       compact={compact}
+      required={required}
     />
   );
 }

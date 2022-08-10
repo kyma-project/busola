@@ -4,15 +4,16 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import pluralize from 'pluralize';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
+import { useTranslation } from 'react-i18next';
 
 export function ResourceRefRender({
   onChange,
   value,
   schema,
   storeKeys,
-  required,
   resource,
 }) {
+  const { t } = useTranslation();
   // TODO the value obtained by ui-schema is undefined for this component
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
 
@@ -27,6 +28,7 @@ export function ResourceRefRender({
 
   return (
     <ExternalResourceRef
+      title={t('extensibility.widgets.resource-ref.header')}
       value={value.toJS()}
       resources={data}
       setValue={value => {
@@ -35,11 +37,11 @@ export function ResourceRefRender({
           scopes: ['value'],
           type: 'set',
           schema,
-          required,
+          required: true,
           data: { value: createOrderedMap(value) },
         });
       }}
-      required={required}
+      required
       loading={loading}
       error={error}
     />
