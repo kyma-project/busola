@@ -8,7 +8,7 @@ describe('StatusBadge', () => {
 
     const status = queryByRole('status');
     expect(status).toBeInTheDocument();
-    expect(status).toHaveTextContent('INITIAL');
+    expect(status).toHaveTextContent('common.statuses.initial');
   });
 
   it('displays warning when autoResolveType is set and "children" is a node', () => {
