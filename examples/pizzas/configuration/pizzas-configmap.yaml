@@ -108,7 +108,7 @@ data:
           "scope": "namespace",
           "namespace": "pizzas",
           "version": "v1",
-        }
+        },
         "simple": true
       },
       {
