@@ -120,7 +120,7 @@ context('Test reduced permissions', () => {
       .contains('User')
       .click();
     cy.getIframeBody()
-      .contains('ServiceAccount')
+      .contains('Service Account')
       .click();
 
     // name
