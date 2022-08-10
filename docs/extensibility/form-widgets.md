@@ -72,11 +72,12 @@ Resource widgets render a dropdown list of specified resources and store the sel
 
 #### Widget-specific parameters
 
-- **kind** - _[required]_ Kubernetes kind of the resource.
-- **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
-- **version** - _[required]_ API version used for all requests.
-- **scope** - either `namespace` or `cluster`. When set to `cluster`, namespaced resources are fetched from all Namespaces. Defaults to `cluster`.
-- **namespace** - Namespace to fetch resources from. Used only when scope is `namespace` and resources need to be fetched from a specific Namespace. Defaults to the active Namespace when omitted.
+- **resource**:
+  - **kind** - _[required]_ Kubernetes kind of the resource.
+  - **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
+  - **version** - _[required]_ API version used for all requests.
+  - **scope** - either `namespace` or `cluster`. When set to `cluster`, namespaced resources are fetched from all Namespaces. Defaults to `cluster`.
+  - **namespace** - Namespace to fetch resources from. Used only when scope is `namespace` and resources need to be fetched from a specific Namespace. Defaults to the active Namespace when omitted.
 
 #### Example
 
@@ -85,18 +86,22 @@ Resource widgets render a dropdown list of specified resources and store the sel
   {
     "path": "spec.namespace",
     "widget": "Resource",
-    "scope": "cluster",
-    "kind": "Namespace",
-    "version": "v1"
+    "resource": {
+      "scope": "cluster",
+      "kind": "Namespace",
+      "version": "v1"
+    }
   },
   {
     "path": "spec.gateway",
     "widget": "Resource",
-    "kind": "Gateway",
-    "scope": "namespace",
-    "namespace": "kyma-system",
-    "group": "networking.istio.io",
-    "version": "v1alpha3"
+    "resource": {
+      "kind": "Gateway",
+      "scope": "namespace",
+      "namespace": "kyma-system",
+      "group": "networking.istio.io",
+      "version": "v1alpha3"
+    }
   }
 ]
 ```
@@ -128,9 +133,10 @@ ResourceRefs widgets render the lists of dropdowns to select the associated reso
 
 #### Widget-specific parameters
 
-- **kind** - _[required]_ Kubernetes kind of the resource.
-- **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
-- **version** - _[required]_ API version used for all requests.
+- **resource**:
+  - **kind** - _[required]_ Kubernetes kind of the resource.
+  - **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
+  - **version** - _[required]_ API version used for all requests.
 
 #### Example
 
@@ -139,15 +145,19 @@ ResourceRefs widgets render the lists of dropdowns to select the associated reso
   {
     "path": "spec.my-data[]",
     "widget": "ResourceRefs",
-    "kind": "Secret",
-    "version": "v1"
+    "resource": {
+      "kind": "Secret",
+      "version": "v1"
+    }
   },
   {
     "path": "spec.my-gateways[]",
     "widget": "ResourceRefs",
-    "kind": "Gateway",
-    "group": "networking.istio.io",
-    "version": "v1alpha3"
+    "resource": {
+      "kind": "Gateway",
+      "group": "networking.istio.io",
+      "version": "v1alpha3"
+    }
   }
 ]
 ```
