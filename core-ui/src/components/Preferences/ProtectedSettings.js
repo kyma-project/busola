@@ -1,16 +1,22 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
 import { useTranslation } from 'react-i18next';
 import { Switch } from 'fundamental-react';
 
+import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+
 export default function ProtectedSettings() {
   const { t } = useTranslation();
-
   const [
     disableResourceProtection,
     setDisableResourceProtection,
   ] = useFeatureToggle('disableResourceProtection');
+  const microfrontendContext = useMicrofrontendContext();
+  const protectedResourcesEnabled =
+    microfrontendContext?.features?.PROTECTED_RESOURCES?.isEnabled;
+
+  if (!protectedResourcesEnabled) return null;
 
   const toggleDisableResourceProtection = () => {
     LuigiClient.sendCustomMessage({
