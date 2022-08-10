@@ -68,9 +68,7 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
                 checked={name === value}
                 inputProps={{ onChange: () => {} }}
               >
-                {i18n.exists(`common.sorting.${value}`)
-                  ? t(`common.sorting.${value}`)
-                  : value}
+                {(t(`common.sorting.${value}`), { defaultValue: value })}
               </FormRadioItem>
             );
           })}
