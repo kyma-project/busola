@@ -72,6 +72,7 @@ export function ResourceForm({
 
   const [mode, setMode] = React.useState(handleInitialMode);
   const [actionsEditor, setActionsEditor] = React.useState(null);
+  const [monacoRefreshing, setMonacoRefreshing] = React.useState(false);
   const validationRef = useRef(true);
 
   useEffect(() => {
@@ -96,6 +97,7 @@ export function ResourceForm({
         if (onChange) {
           onChange(new Event('input', { bubbles: true }));
         }
+        setMonacoRefreshing(true);
       }}
     />
   );
@@ -109,6 +111,7 @@ export function ResourceForm({
       customSchemaUri={customSchemaUri}
       autocompletionDisabled={autocompletionDisabled}
       readOnly={readOnly}
+      updateValueOnParentChange={monacoRefreshing}
     />
   );
   editor = renderEditor
