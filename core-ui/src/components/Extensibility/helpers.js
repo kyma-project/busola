@@ -54,7 +54,7 @@ export const useGetTranslation = path => {
         defaultValue: path,
       });
     },
-    exists: path => i18n.exists(`${translationBundle}:${path}`),
+    exists: path => i18n.exists(`${translationBundle}::${path}`),
     i18n,
   };
 };

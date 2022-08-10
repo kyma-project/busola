@@ -163,6 +163,7 @@ function Resource({
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     i18n,
+    resourceName: resourceTitle,
     resourceType,
     navigateToListAfterDelete: true,
   });
