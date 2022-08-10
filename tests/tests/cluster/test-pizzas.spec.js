@@ -70,6 +70,10 @@ context('Test Pizzas', () => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
 
     cy.reload();
+
+    cy.wait(1000)
+      .getLeftNav()
+      .contains('Namespaces');
   });
 
   it('Displays the Pizza Orders list/details view from the samples', () => {

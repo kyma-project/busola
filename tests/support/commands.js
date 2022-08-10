@@ -107,7 +107,6 @@ function paste(subject, { pastePayload }) {
 }
 
 Cypress.Commands.add('getLeftNav', () => {
-  cy.get('[luigi-app-loading-indicator=""]').should('not.exist');
   cy.get('nav[data-testid=semiCollapsibleLeftNav]');
 });
 
