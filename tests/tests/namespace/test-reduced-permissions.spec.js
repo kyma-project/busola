@@ -131,7 +131,7 @@ context('Test reduced permissions', () => {
     // role
     cy.getIframeBody()
       .find(
-        '[placeholder="Start typing to select Role Binding from the list"]:visible',
+        '[placeholder="Start typing to select RoleBinding from the list"]:visible',
       )
       .type(CR_NAME);
     cy.getIframeBody()
