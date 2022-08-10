@@ -278,7 +278,8 @@ ResourceList widgets render a list of Kubernetes resources. The ResourceList wid
   "sort": [
     {
       "path": "spec.replicas",
-      "default": true
+      "default": true,
+      "compareFunction": "$second - $first"
     },
     {
       "path": "spec.strategy.type"
@@ -287,11 +288,15 @@ ResourceList widgets render a list of Kubernetes resources. The ResourceList wid
 }
 ```
 
+<img src="./assets/display-widgets/ResourceList.png" alt="Example of a ResourceList widget" style="border: 1px solid #D2D5D9">
+
+---
+
 ```json
 {
   "widget": "ResourceList",
   "path": "$mySecrets",
-  "name": "Example ResourceList Secret",
+  "name": "Example ResourceList Secret with children",
   "children": [
     {
       "path": "metadata.name",
@@ -315,7 +320,7 @@ ResourceList widgets render a list of Kubernetes resources. The ResourceList wid
 }
 ```
 
-<img src="./assets/display-widgets/ResourceList.png" alt="Example of a ResourceList widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceListChildren.png" alt="Example of a ResourceList widget with children" style="border: 1px solid #D2D5D9">
 
 ### ResourceRefs
 
