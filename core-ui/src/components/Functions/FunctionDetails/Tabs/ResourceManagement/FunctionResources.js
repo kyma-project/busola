@@ -25,7 +25,7 @@ export default function FunctionResources({
   comparePresetWithFormValues,
   formValues,
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [currentPreset, setCurrentPreset] = useState(defaultPreset);
 
   useEffect(() => {
@@ -97,7 +97,6 @@ export default function FunctionResources({
                 id={inputNames.preset}
                 name={inputNames.preset}
                 onSelect={(_, selected) => onChangePreset(selected)}
-                i18n={i18n}
               />
             }
           />

@@ -36,7 +36,6 @@ export function EditorActions({
   onSave,
   saveDisabled,
   saveHidden,
-  i18n,
   isProtected,
 }) {
   const [visible, setVisible] = useState(
@@ -113,7 +112,7 @@ export function EditorActions({
     saveAs(blob, title || 'spec.yaml');
   };
 
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation();
 
   return (
     <section className="editor-actions fd-margin-bottom--sm">

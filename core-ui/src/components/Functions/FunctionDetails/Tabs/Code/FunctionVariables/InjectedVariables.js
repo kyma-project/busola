@@ -136,7 +136,7 @@ export default function InjectedVariables({
   customValueFromVariables,
   injectedVariables,
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const headerRenderer = () => [
     t('functions.variable.header.name'),
@@ -170,7 +170,6 @@ export default function InjectedVariables({
         rowRenderer={rowRenderer}
         notFoundMessage={t('functions.variable.not-found')}
         noSearchResultMessage={t('functions.variable.not-match')}
-        i18n={i18n}
       />
     </div>
   );

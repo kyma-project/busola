@@ -10,12 +10,12 @@ export function GenericAddonsConfigurationList({
   documentationLink,
   ...props
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const statusColumn = {
     header: t('common.headers.status'),
     value: addon => (
-      <ResourceStatus status={addon.status} resourceKind="addons" i18n={i18n} />
+      <ResourceStatus status={addon.status} resourceKind="addons" />
     ),
   };
 

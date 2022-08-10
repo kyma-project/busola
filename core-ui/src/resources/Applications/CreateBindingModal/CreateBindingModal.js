@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import './CreateBindingModal.scss';
 
 export default function CreateBinding({ application, alreadyBoundNamespaces }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const hiddenNamespaces = getHiddenNamespaces();
 
@@ -74,7 +74,6 @@ export default function CreateBinding({ application, alreadyBoundNamespaces }) {
       onConfirm={createBinding}
       disabledConfirm={!namespaceName}
       onHide={() => setNamespaceName('')}
-      i18n={i18n}
     >
       {error && error.message}
       {loading && t('common.headers.loading')}

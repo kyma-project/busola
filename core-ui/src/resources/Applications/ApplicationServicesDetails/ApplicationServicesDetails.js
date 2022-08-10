@@ -15,7 +15,7 @@ import './ApplicationServicesDetails.scss';
 
 function ApplicationServiceDetails({ applicationName, serviceName }) {
   useWindowTitle('Application Service');
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const resourceUrl = `/apis/applicationconnector.kyma-project.io/v1alpha1/applications/${applicationName}`;
 
   const { loading = true, error, data: application } = useGet(resourceUrl, {
@@ -48,7 +48,6 @@ function ApplicationServiceDetails({ applicationName, serviceName }) {
         <ResourceNotFound
           resource={t('applications.title')}
           breadcrumbs={breadcrumbItems}
-          i18n={i18n}
         />
       );
     }
@@ -57,7 +56,6 @@ function ApplicationServiceDetails({ applicationName, serviceName }) {
         resource={t('applications.title')}
         breadcrumbs={breadcrumbItems}
         customMessage={getErrorMessage(error)}
-        i18n={i18n}
       />
     );
   }
@@ -67,7 +65,6 @@ function ApplicationServiceDetails({ applicationName, serviceName }) {
       <ResourceNotFound
         resource={t('applications.headers.service')}
         breadcrumbs={breadcrumbItems}
-        i18n={i18n}
       />
     );
   }
@@ -84,7 +81,7 @@ function ApplicationServiceDetails({ applicationName, serviceName }) {
     e.name || EMPTY_TEXT_PLACEHOLDER,
     e.accessLabel || EMPTY_TEXT_PLACEHOLDER,
     (e.centralGatewayUrl && (
-      <CopiableText compact i18n={i18n} textToCopy={e.centralGatewayUrl}>
+      <CopiableText compact textToCopy={e.centralGatewayUrl}>
         <Tooltip content={e.centralGatewayUrl}>
           <p className="central-gateway-url">{e.centralGatewayUrl}</p>
         </Tooltip>
@@ -110,7 +107,6 @@ function ApplicationServiceDetails({ applicationName, serviceName }) {
             headerRenderer={headerRenderer}
             rowRenderer={rowRenderer}
             notFoundMessage={t('applications.messages.no-apis')}
-            i18n={i18n}
           />
 
           <GenericList
@@ -121,7 +117,6 @@ function ApplicationServiceDetails({ applicationName, serviceName }) {
             headerRenderer={headerRenderer}
             rowRenderer={rowRenderer}
             notFoundMessage={t('applications.messages.no-events')}
-            i18n={i18n}
           />
         </>
       )}

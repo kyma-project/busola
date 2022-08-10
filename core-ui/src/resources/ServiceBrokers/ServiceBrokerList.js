@@ -6,7 +6,7 @@ import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { Link } from 'shared/components/Link/Link';
 
 export function ServiceBrokerList(props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const customColumns = [
     {
       header: t('brokers.headers.url'),
@@ -27,7 +27,6 @@ export function ServiceBrokerList(props) {
           <StatusBadge
             autoResolveType
             additionalContent={lastCondition?.message}
-            i18n={i18n}
           >
             {type || status.lastConditionState}
           </StatusBadge>

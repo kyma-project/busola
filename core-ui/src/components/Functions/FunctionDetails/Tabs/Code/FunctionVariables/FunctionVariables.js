@@ -177,10 +177,9 @@ export default function FunctionVariables({
   customValueFromVariables,
   injectedVariables,
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
-    i18n,
     resourceType: t('functions.variable.title.environment-variables'),
   });
 
@@ -300,7 +299,6 @@ export default function FunctionVariables({
         rowRenderer={rowRenderer}
         notFoundMessage={t('functions.variable.not-found')}
         noSearchResultMessage={t('functions.variable.not-match')}
-        i18n={i18n}
       />
       <DeleteMessageBox
         resource={chosenVariable}

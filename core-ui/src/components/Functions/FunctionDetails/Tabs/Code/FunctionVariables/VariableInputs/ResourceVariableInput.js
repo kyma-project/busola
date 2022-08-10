@@ -30,7 +30,7 @@ export default function ResourceVariableInput({
   setInvalidModalPopupMessage,
   isEdit,
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [variable, setVariable] = useState(currentVariable);
   const debouncedCallback = useDebouncedCallback(newVariable => {
     onUpdateVariable(newVariable);
@@ -263,7 +263,6 @@ export default function ResourceVariableInput({
               selectedKey={
                 currentVariable?.valueFrom?.secretKeyRef?.key || null
               }
-              i18n={i18n}
             />
           </FormItem>
           {takeAll && (
@@ -297,7 +296,6 @@ export default function ResourceVariableInput({
               selectedKey={
                 currentVariable?.valueFrom?.configMapKeyRef?.name || null
               }
-              i18n={i18n}
             />
           </FormItem>
           <FormItem className="grid-input-fields">
@@ -318,7 +316,6 @@ export default function ResourceVariableInput({
               selectedKey={
                 currentVariable?.valueFrom?.configMapKeyRef?.key || null
               }
-              i18n={i18n}
             />
           </FormItem>
         </>

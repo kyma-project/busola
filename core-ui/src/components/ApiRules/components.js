@@ -54,7 +54,7 @@ export function CopiableApiRuleHost({ apiRule }) {
     hostname = `${hostname}.${getGatewayHost(gateway)}`;
   }
 
-  return <CopiableLink url={`https://${hostname}`} i18n={i18n} />;
+  return <CopiableLink url={`https://${hostname}`} />;
 }
 
 export function ApiRuleServiceInfo({ apiRule, withName = true }) {

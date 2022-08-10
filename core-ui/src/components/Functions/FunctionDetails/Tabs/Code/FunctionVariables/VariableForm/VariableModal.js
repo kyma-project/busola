@@ -18,7 +18,6 @@ export default function VariableModal({
   confirmText,
   alwaysOpen,
   onModalOpenStateChange,
-  i18n,
   isEdit,
 }) {
   const [invalidModalPopupMessage, setInvalidModalPopupMessage] = useState('');
@@ -47,7 +46,6 @@ export default function VariableModal({
           isEdit={isEdit}
         />
       )}
-      i18n={i18n}
     />
   );
 }

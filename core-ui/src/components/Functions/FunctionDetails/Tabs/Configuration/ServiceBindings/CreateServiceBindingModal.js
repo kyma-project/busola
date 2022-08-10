@@ -13,7 +13,6 @@ import { SERVICE_BINDINGS_PANEL } from 'components/Functions/constants';
 export default function CreateServiceBindingModal({
   func,
   serviceBindingsCombined,
-  i18n,
 }) {
   const [popupModalMessage, setPopupModalMessage] = useState('');
   const [disablePolling, setDisablePolling] = useState(true);
@@ -200,7 +199,6 @@ export default function CreateServiceBindingModal({
       invalidPopupMessage={popupModalMessage}
       id="create-service-binding-modal"
       renderForm={renderForm}
-      i18n={i18n}
     />
   );
 }

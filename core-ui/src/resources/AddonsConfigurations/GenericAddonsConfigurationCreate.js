@@ -105,8 +105,6 @@ export function GenericAddonsConfigurationCreate({
     setName(name);
   };
 
-  const { i18n } = useTranslation();
-
   return (
     // although HTML spec assigns the role by default to a <form> element, @testing-library ignores it
     // eslint-disable-next-line jsx-a11y/no-redundant-roles
@@ -140,11 +138,7 @@ export function GenericAddonsConfigurationCreate({
             />
           </Tooltip>
         </div>
-        <LabelSelectorInput
-          labels={labels}
-          onChange={handleLabelsChanged}
-          i18n={i18n}
-        />
+        <LabelSelectorInput labels={labels} onChange={handleLabelsChanged} />
         <FormLabel
           style={{ display: 'block' }}
           required

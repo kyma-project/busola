@@ -6,17 +6,14 @@ import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetai
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
 export const RepositoryUrls = addon => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const headerRenderer = _ => [
     t('addons.headers.url'),
     t('common.headers.status'),
   ];
 
-  const rowRenderer = repo => [
-    repo.url,
-    <ResourceStatus status={repo} i18n={i18n} />,
-  ];
+  const rowRenderer = repo => [repo.url, <ResourceStatus status={repo} />];
 
   return (
     <GenericList
@@ -25,7 +22,6 @@ export const RepositoryUrls = addon => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={addon.status?.repositories || []}
-      i18n={i18n}
     />
   );
 };

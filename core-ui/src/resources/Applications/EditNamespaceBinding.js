@@ -8,7 +8,7 @@ import { createPatch } from 'rfc6902';
 import { useTranslation } from 'react-i18next';
 
 export default function EditNamespaceBinding({ application, binding }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const namespace = binding.metadata.namespace;
   const [servicesToBind, setServicesToBind] = React.useState([]);
   const patchRequest = useUpdate();
@@ -43,7 +43,6 @@ export default function EditNamespaceBinding({ application, binding }) {
       modalOpeningComponent={modalOpeningComponent}
       onConfirm={updateBinding}
       onShow={() => setServicesToBind(binding.spec?.services)}
-      i18n={i18n}
     >
       <FormFieldset>
         <BindableServicesList

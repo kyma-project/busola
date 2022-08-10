@@ -6,7 +6,7 @@ import ServiceListItem from './ServiceListItem';
 import { useTranslation } from 'react-i18next';
 
 export default function ServicesBound({ binding, appSpec }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const namespace = binding.metadata.namespace;
 
   const modalOpeningComponent = <Link className="fd-link">{namespace}</Link>;
@@ -18,7 +18,6 @@ export default function ServicesBound({ binding, appSpec }) {
         namespace: namespace,
       })}
       modalOpeningComponent={modalOpeningComponent}
-      i18n={i18n}
     >
       <ul>
         {/* ApplicationMapping spec is not empty */}
