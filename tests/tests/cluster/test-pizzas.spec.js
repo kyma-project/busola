@@ -68,7 +68,7 @@ context('Test Pizzas', () => {
       .should('have.length', 6);
   });
 
-  it('Displays the Pizza Orders list/details view from the samples', () => {
+  it('Displays the Pizza Orders list/detail views from the samples', () => {
     cy.loginAndSelectCluster({
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
@@ -91,6 +91,9 @@ context('Test Pizzas', () => {
       .contains('Pizza Orders')
       .click();
 
+    cy.get('@iframe').contains('DELIVERY');
+    cy.get('@iframe').contains('CASH');
+    cy.get('@iframe').contains('a', 'extensibility docs');
     cy.get('@iframe')
       .contains('a', 'margherita-order')
       .should('be.visible');
@@ -98,9 +101,62 @@ context('Test Pizzas', () => {
     cy.get('@iframe')
       .contains('a', 'diavola-order')
       .click({ force: true });
+
+    cy.get('@iframe').contains('paymentMethod: CARD');
+    cy.get('@iframe').contains('realization=SELF-PICKUP');
+    cy.get('@iframe').contains('h3', 'Pizzas');
   });
 
-  it('Displays the Pizzas list/details view for the samples', () => {
+  it('Edits a Pizza Order', () => {
+    cy.getIframeBody().as('iframe');
+
+    cy.get('@iframe')
+      .contains('Status')
+      .should('be.visible');
+
+    cy.get('@iframe')
+      .contains(/^ready$/i)
+      .should('be.visible');
+
+    cy.get('@iframe')
+      .contains('button:visible', 'Edit')
+      .click();
+
+    cy.getIframeBody()
+      .find('.fd-dialog__content')
+      .as('form');
+
+    cy.get('@form').contains('Name');
+    cy.get('@form').contains('Labels');
+    cy.get('@form').contains('Annotations');
+    cy.get('@form').contains('Description');
+    cy.get('@form')
+      .find('[data-testid="Status"]:visible')
+      .find('input')
+      .type(`{backspace}{backspace}{backspace}{backspace}{backspace}`)
+      .type('Error');
+
+    cy.get('@form').contains('Status');
+    cy.get('@form').contains('Order details');
+    cy.get('@form').contains('Pizzas');
+    cy.get('@form')
+      .find('.fd-form-label--required:visible')
+      .should('have.length', 3);
+
+    cy.get('@form')
+      .contains('button:visible', 'Update')
+      .click();
+
+    cy.get('@iframe')
+      .contains('span', /^READY$/i)
+      .should('not.exist');
+
+    cy.get('@iframe')
+      .contains('span', /^ERROR$/i)
+      .should('be.visible');
+  });
+
+  it('Displays the Pizzas list/detail views from the samples', () => {
     cy.getIframeBody().as('iframe');
 
     cy.get('@iframe')
@@ -123,6 +179,9 @@ context('Test Pizzas', () => {
       .find('.fd-table__body')
       .find('tr')
       .should('have.length', 2);
+
+    cy.get('@iframe').contains('Margherita is a simple, vegetarian pizza.');
+    cy.get('@iframe').contains('Toppings price');
   });
 
   it('Tests the Create Form', () => {
