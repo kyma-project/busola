@@ -58,6 +58,11 @@ export function ResourceList({
     originalResource,
   );
 
+  // make sure "kind" is present on resources
+  if (Array.isArray(value.data)) {
+    value.data = value.data.map(d => ({ ...d, kind }));
+  }
+
   return (
     <ListRenderer
       skipDataLoading={true}
