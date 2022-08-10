@@ -262,11 +262,11 @@ ResourceList widgets render a list of Kubernetes resources. The ResourceList wid
 
 #### Widget-specific parameters
 
-- **children** optional field used to obtain custom columns. If not set, the configuration will be reused based on the existing resource list defined in Busola.
+- **children** optional field used to obtain custom columns. If not set, the configuration is reused based on the existing resource list defined in Busola.
 - **sort** - optional sort option. It's an array of objects that allow you to sort by the value from the given **path**.
   - **path** - _[required]_ contains the path to the data used for the column.
-  - **default** - optional flag. If set to true, the list view is sorted by this value by default.
-  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function `$compareStrings` used to compare two strings e.g. `$compareStrings($first, $second)`
+  - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
+  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function `$compareStrings` used to compare two strings, for example, `$compareStrings($first, $second)`
 
 #### Examples
 
@@ -349,9 +349,9 @@ Table widgets display array data as rows of a table instead of free-standing com
 #### Widget-specific parameters
 
 - **collapsible** - an optional array of extra widgets to display as an extra collapsible section. Uses the same format as the **children** parameter.
-- **sort** - optional sort option. If set to true, it allows to sort via this value. Defaults to false. It can also be set to an object with the following properties:
-  - **default** - optional flag. If set to true, the list view is sorted by this value by default.
-  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function `$compareStrings` used to compare two strings e.g. `$compareStrings($first, $second)`
+- **sort** - optional sort option. If set to `true`, it allows you to sort using this value. Defaults to false. It can also be set to an object with the following properties:
+  - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
+  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function `$compareStrings` used to compare two strings, for example, `$compareStrings($first, $second)`
 
 #### Example
 
