@@ -66,7 +66,7 @@ export function Table({ value, structure, disableMargin, schema, ...props }) {
     };
   };
 
-  const sortChildren = (structure?.children || []).filter(child => child.sort);
+  const sortOptions = (structure?.children || []).filter(child => child.sort);
 
   return (
     <GenericList
@@ -81,7 +81,7 @@ export function Table({ value, structure, disableMargin, schema, ...props }) {
       rowRenderer={rowRenderer}
       disableMargin={disableMargin}
       {...handleTableValue(value, t)}
-      sortBy={() => sortBy(sortChildren, tExt, {}, `${structure.path}.`)}
+      sortBy={() => sortBy(sortOptions, tExt, {}, `${structure.path}.`)}
     />
   );
 }

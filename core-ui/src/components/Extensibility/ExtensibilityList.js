@@ -70,16 +70,14 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     applyFormula(value, resMetaData.resource.filter, tBusola);
   listProps.filterFn = isFilterAString ? filterFn : undefined;
 
-  const sortChildren = (resMetaData?.list || []).filter(
-    element => element.sort,
-  );
+  const sortOptions = (resMetaData?.list || []).filter(element => element.sort);
 
   return (
     <ResourcesList
       createResourceForm={ExtensibilityCreate}
       allowSlashShortcut
       disableCreate={disableCreate}
-      sortBy={defaultSortOptions => sortBy(sortChildren, t, defaultSortOptions)}
+      sortBy={defaultSortOptions => sortBy(sortOptions, t, defaultSortOptions)}
       {...listProps}
     />
   );

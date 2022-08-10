@@ -2,8 +2,8 @@ import pluralize from 'pluralize';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
-import { Widget } from './Widget';
 import { sortBy, useGetTranslation } from '../helpers';
+import { prepareChildren } from './helpers';
 
 function extractResourceData({ dataSource, originalResource }) {
   try {
@@ -48,34 +48,12 @@ export function ResourceList({
   const PredefinedRenderer = resources.find(
     r => r.resourceType.toLowerCase() === resourceType,
   );
+
   const ListRenderer = PredefinedRenderer
     ? PredefinedRenderer.List
     : ResourcesList;
 
-  let children;
-  if (Array.isArray(structure.children)) {
-    children = structure.children.map(({ name, ...props }) => ({
-      header: name,
-      value: value => <Widget value={value} structure={props} />,
-    }));
-  }
-
-  // make sure "kind" is present on resources
-  if (Array.isArray(value.data)) {
-    value.data = value.data.map(d => ({ ...d, kind }));
-  }
-
-  const sortOptions = (structure.sort || []).reduce((acc, current) => {
-    if (!current.path) {
-      return [...acc];
-    }
-
-    const obj = {
-      path: current.path,
-      sort: { default: current.default, fn: current.fn },
-    };
-    return [...acc, obj];
-  }, []);
+  const [children, sortOptions] = prepareChildren(structure);
 
   return (
     <ListRenderer

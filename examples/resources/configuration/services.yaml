@@ -37,16 +37,9 @@ data:
           "widget": "ResourceList",
           "path": "$subscriptions",
           "name": "Subscription",
-          "sort": [
-            {
-              "path": "status.ready",
-              "default": true
-            },
-            {
-              "path": "status.config.maxInFlightMessages",
-              "fn": $first - $second
-            }
-          ]
+          "children": [
+            {"path": "status.ready", "name": "MyStatus"}
+          ]    
         },
         {
           "widget": "ResourceList",
