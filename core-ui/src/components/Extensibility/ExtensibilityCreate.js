@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { createStore } from '@ui-schema/ui-schema';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import Immutable from 'immutable';
+import pluralize from 'pluralize';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { useGetTranslation, createTemplate } from './helpers';
+import { createTemplate } from './helpers';
 
 import { ResourceSchema } from './ResourceSchema';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
-import { prettifyKind } from 'shared/utils/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useGetSchema } from 'hooks/useGetSchema';
 
@@ -27,7 +27,6 @@ export function ExtensibilityCreate({
   const { namespaceId: namespace } = useMicrofrontendContext();
   const notification = useNotification();
   const { t } = useTranslation();
-  const { t: tExt, exists } = useGetTranslation();
   const general = createResource?.general;
   const api = general?.resource || {};
 
@@ -78,9 +77,7 @@ export function ExtensibilityCreate({
   return (
     <ResourceForm
       pluralKind={resourceType}
-      singularName={
-        exists('name') ? tExt('name') : prettifyKind(api.kind || '')
-      }
+      singularName={pluralize(resourceName, 1)}
       resource={resource}
       setResource={updateResource}
       formElementRef={formElementRef}
