@@ -50,6 +50,16 @@ data:
               "path": "spec.filter.filters[0].eventType.value", "name": "First event Type", "sort": {
               "default": true, "compareFunction": "$compareStrings($first, $second)"}
             },
+            {
+              "path": "status.ready", 
+              "name": "Ready",
+              "sort": true,
+              "widget": "Badge",
+              "highlights": {
+                "positive": ["true"],
+                "negative": ["false"]
+              }
+            },
           ]    
         },
         {
