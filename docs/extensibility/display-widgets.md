@@ -351,7 +351,7 @@ Table widgets display array data as rows of a table instead of free-standing com
 - **collapsible** - an optional array of extra widgets to display as an extra collapsible section. Uses the same format as the **children** parameter.
 - **sort** - optional sort option. If set to true, it allows to sort via this value. Defaults to false. It can also be set to an object with the following properties:
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
-  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function `$compareStrings` used to compare two strings e.g. `$compareStrings($first, $second)`
+  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function `$compareStrings` used to compare two strings, for example, `$compareStrings($first, $second)`
 
 #### Example
 
