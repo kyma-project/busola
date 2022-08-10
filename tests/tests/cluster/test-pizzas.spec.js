@@ -73,14 +73,13 @@ context('Test Pizzas', () => {
   });
 
   it('Displays the Pizza Orders list/details view from the samples', () => {
-    cy.getIframeBody().as('iframe');
-    cy.getLeftNav().as('nav');
-
-    cy.get('@nav')
+    cy.getLeftNav()
+      .as('nav')
       .contains('Namespaces')
       .click();
 
-    cy.get('@iframe')
+    cy.getIframeBody()
+      .as('iframe')
       .contains('a', 'pizzas')
       .click();
 
