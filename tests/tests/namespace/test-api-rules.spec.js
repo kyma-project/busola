@@ -47,7 +47,7 @@ context('Test API Rules in the Function details view', () => {
     cy.getIframeBody().contains(`${FUNCTION_NAME} (port: 80)`);
 
     cy.getIframeBody()
-      .find('[ariaLabel="API Rule name"]:visible', { log: false })
+      .find('[ariaLabel="APIRule name"]:visible', { log: false })
       .should(input => {
         initialApiRule = input.val();
         expect(initialApiRule).to.include(`${FUNCTION_NAME}-`);
@@ -58,7 +58,7 @@ context('Test API Rules in the Function details view', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[ariaLabel="API Rule name"]:visible', { log: false })
+      .find('[ariaLabel="APIRule name"]:visible', { log: false })
       .should(input => {
         const generatedApiRule = input.val();
         expect(generatedApiRule).not.to.include(initialApiRule);
@@ -66,7 +66,7 @@ context('Test API Rules in the Function details view', () => {
       });
 
     cy.getIframeBody()
-      .find('[ariaLabel="API Rule name"]:visible', { log: false })
+      .find('[ariaLabel="APIRule name"]:visible', { log: false })
       .type(`{selectall}{backspace}`)
       .type(API_RULE_NAME);
 
