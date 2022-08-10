@@ -101,7 +101,7 @@ export function Editor({
             dismissible
           >
             {t('common.create-form.autocomplete-unavailable-error', {
-              error: schemaError,
+              error: schemaError.error || schemaError.message || schemaError,
             })}
           </MessageStrip>
         )}
