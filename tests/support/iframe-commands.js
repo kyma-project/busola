@@ -2,7 +2,7 @@ Cypress.Commands.add('getIframeBody', () => {
   // get the iframe > document > body
   // and retry until the body element is not empty
   cy.log('getIframeBody');
-  cy.get('.luigi-app-loading-indicator').should('not.exist');
+  cy.get('[luigi-app-loading-indicator=""]').should('not.exist');
   return (
     cy
       .get('.iframeContainer iframe', { log: false })
