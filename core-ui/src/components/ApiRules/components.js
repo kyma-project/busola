@@ -38,7 +38,7 @@ export function GoToApiRuleDetails({ apiRule }) {
 }
 
 export function CopiableApiRuleHost({ apiRule }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   let hostname = apiRule.spec.service.host;
   // regex is explained here: https://stackoverflow.com/questions/17986371/regular-expression-to-validate-fqdn-in-c-sharp-and-javascript
   const regex = /^(?=.{1,254}$)((?=[a-z0-9-]{1,63}\.)(xn--+)?[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63}$/i;
