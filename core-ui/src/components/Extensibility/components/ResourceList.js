@@ -53,7 +53,10 @@ export function ResourceList({
     ? PredefinedRenderer.List
     : ResourcesList;
 
-  const { children, sortOptions, defaultSort } = getChildrenInfo(structure);
+  const { children, sortOptions, defaultSort } = getChildrenInfo(
+    structure,
+    originalResource,
+  );
 
   return (
     <ListRenderer

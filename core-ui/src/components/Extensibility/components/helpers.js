@@ -1,6 +1,6 @@
 import { Widget } from './Widget';
 
-export const getChildrenInfo = structure => {
+export const getChildrenInfo = (structure, originalResource) => {
   if (!Array.isArray(structure.children)) {
     const sortOptions = (structure.sort || []).reduce((acc, current) => {
       if (!current.path) {
@@ -16,7 +16,6 @@ export const getChildrenInfo = structure => {
 
     return { children: null, sortOptions, defaultSort: true };
   }
-
   const children = structure.children.map(({ name, ...props }) => ({
     header: name,
     value: value => <Widget value={value} structure={props} />,
