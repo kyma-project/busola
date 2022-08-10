@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
   const [order, setOrder] = useState(sort.order);
   const [name, setName] = useState(sort.name);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const sortOpeningComponent = (
     <Tooltip content={t('common.tooltips.sort')}>
