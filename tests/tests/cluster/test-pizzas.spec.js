@@ -66,17 +66,13 @@ context('Test Pizzas', () => {
       .find('.fd-dialog__body')
       .find('.sap-icon--message-success')
       .should('have.length', 6);
-
-    cy.setBusolaFeature('EXTENSIBILITY', true);
-
-    cy.reload();
-
-    cy.wait(1000)
-      .getLeftNav()
-      .contains('Namespaces');
   });
 
   it('Displays the Pizza Orders list/details view from the samples', () => {
+    cy.loginAndSelectCluster({
+      fileName: 'kubeconfig-k3s.yaml',
+      storage: 'Session storage',
+    });
     cy.getLeftNav()
       .as('nav')
       .contains('Namespaces')
