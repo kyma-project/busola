@@ -22,8 +22,8 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import { SortModalPanel } from './SortModalPanel';
-import './GenericList.scss';
 import { isEmpty } from 'lodash';
+import './GenericList.scss';
 
 const defaultSort = {
   name: nameLocaleSort,
