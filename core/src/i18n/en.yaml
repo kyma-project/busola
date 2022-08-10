@@ -68,7 +68,7 @@ api-rules:
     one-rule-required: Provide at least one APIRule.
     updated: APIRule updated
     will-be-available-at: APIRule will be available at {{address}}.
-  name_singular: API Rule
+  name_singular: APIRule
   oauth:
     required-scope: Required scope
   placeholders:
@@ -289,11 +289,11 @@ cluster-overview:
     memory-used: 'Memory Used: {{percentage}}'
 cluster-role-bindings:
   description: <0>ClusterRoleBinding</0> assigns the permissions defined in a ClusterRole to a user.
-  name_singular: Cluster Role Binding
+  name_singular: ClusterRoleBinding
   title: Cluster Role Bindings
 cluster-roles:
   description: <0>ClusterRole</0> is a set of cluster-level resources and permissions that can be assigned to a user.
-  name_singular: Cluster Role
+  name_singular: ClusterRole
   title: Cluster Roles
 clusters:
   add:
@@ -597,7 +597,7 @@ common:
     error: Error
     generate-name: Generate name
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' and ''.'' (e.g.: ''my.name-1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
@@ -683,7 +683,7 @@ config-maps:
   messages:
     created: ConfigMap created
     updated: ConfigMap updated
-  name_singular: Config Map
+  name_singular: ConfigMap
   subtitle:
     edit-config-map: Edit ConfigMap
   title: Config Maps
@@ -774,7 +774,7 @@ cron-jobs:
   image-pull-policy: Image Pull Policy
   last-job-execution: Last Job execution
   last-schedule-time: Last Schedule Time
-  name_singular: Cron Job
+  name_singular: CronJob
   not-scheduled-yet: None scheduled yet
   schedule: Schedule
   title: Cron Jobs
@@ -796,7 +796,7 @@ custom-resource-definitions:
     singular: Singular
     type: Type
     value: Value
-  name_singular: Custom Resource Definition
+  name_singular: CustomResourceDefinition
   status:
     not-served: Not Served
     served: Served
@@ -819,7 +819,7 @@ custom-resources:
 daemon-sets:
   description: <0>DaemonSet</0> ensures that replicated Pods are running across a set of available nodes.
   images: Images
-  name_singular: Daemon Set
+  name_singular: DaemonSet
   node-selector: Node Selector
   pods: $t(pods.title)
   title: Daemon Sets
@@ -910,7 +910,7 @@ destination-rules:
     ttl: TTL
   exported-to-namespaces: Exported to Namespaces
   host: Host
-  name_singular: Destination Rule
+  name_singular: DestinationRule
   state: State
   title: Destination Rules
 discovery-and-network:
@@ -935,7 +935,7 @@ dnsentries:
   messages:
     cannot-create: Failed to create the DNSEntry
     created: DNSEntry created
-  name_singular: DNS Entry
+  name_singular: DNSEntry
   placeholders:
     dns-name: Select the DNSname
     target-a: Enter the A record target
@@ -1300,7 +1300,7 @@ git-repositories:
     create: Connect Repository
     secret: Secret
     url: Repository URL
-  name_singular: Git Repository
+  name_singular: GitRepository
   placeholders:
     secret: Enter a Secret name with credentials
     url: Enter the URL address of your Git repository
@@ -1390,7 +1390,7 @@ hpas:
     min-pods: Min Pods
     replicas: Replicas
   metrics: Metrics
-  name_singular: Horizontal Pod Autoscaler
+  name_singular: HorizontalPodAutoscaler
   object: Object
   'on': 'on'
   on-pods: on Pods
@@ -1532,7 +1532,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
@@ -1545,7 +1545,7 @@ limit-ranges:
     default-request: Default Request
     max: Max
     min: Min
-  name_singular: Limit Range
+  name_singular: LimitRange
   title: Limit Ranges
 machine-info:
   architecture-cpus: Architecture and CPUs
@@ -1629,7 +1629,7 @@ network-policies:
     port: Port
     protocol: Protocol
     values: Values
-  name_singular: Network Policy
+  name_singular: NetworkPolicy
   present-but-empty: Present but empty selector selects all pods / namespaces.
   title: Network Policies
 no-permissions:
@@ -1704,7 +1704,7 @@ persistent-volume-claims:
     volume-name: Volume Name
   message:
     empty-selector: Matches all PersistentVolumes
-  name_singular: Persistent Volume Claim
+  name_singular: PersistentVolumeClaim
   title: Persistent Volume Claims
   tooltips:
     bound: Binding between PersistentVolume and PersistentVolumeClaim established
@@ -1813,7 +1813,7 @@ pv:
     server: Server
     storage-class: Storage Class
     storage-class-name: Storage Class Name
-  name_singular: Persistent Volume
+  name_singular: PersistentVolume
   nfs: Network File System
   statuses:
     available: Available
@@ -1847,7 +1847,7 @@ replica-sets:
     replicas: Ready Replicas
     requests: Requests
   memory: Memory
-  name_singular: Replica Set
+  name_singular: ReplicaSet
   title: Replica Sets
   tooltips:
     error: At least one of the Pods has failed.
@@ -1883,7 +1883,7 @@ role-bindings:
   labels:
     annotations: Annotations
     service-account: Service Account
-  name_singular: Role Binding
+  name_singular: RoleBinding
   placeholders:
     api-group: API Group
   title: Role Bindings
@@ -2010,7 +2010,7 @@ service-accounts:
     image-pull-secrets: Image Pull Secrets
     secret: Secret
     secrets: Secrets
-  name_singular: Service Account
+  name_singular: ServiceAccount
   service-account: Service Account
   title: Service Accounts
 service-entries:
@@ -2035,7 +2035,7 @@ service-entries:
       title: Ports
     resolution: Resolution
     subject-alt-names: Subject Alt Names
-  name_singular: Service Entry
+  name_singular: ServiceEntry
   title: Service Entries
 service-management:
   title: Service Management
@@ -2101,7 +2101,7 @@ sidecars:
   title: Sidecars
 stateful-sets:
   description: <0>StatefulSet</0> is used for the management of Pods' deployment and scaling.
-  name_singular: Stateful Set
+  name_singular: StatefulSet
   replicas: Replicas
   title: Stateful Sets
 storage:
@@ -2112,7 +2112,7 @@ storage-classes:
     parameters: Parameters
     provisioner: Provisioner
     reclaim-policy: Reclaim Policy
-  name_singular: Storage Class
+  name_singular: StorageClass
   title: Storage Classes
 subscriptions:
   create:
@@ -2252,7 +2252,7 @@ virtualservices:
     title: Matches
     uri: URI
     without-header: Without header {{field}}
-  name_singular: Virtual Service
+  name_singular: VirtualService
   route:
     destination: Destination
     weight: Weight
