@@ -73,7 +73,6 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   return (
     <ResourcesList
       createResourceForm={ExtensibilityCreate}
-      allowSlashShortcut
       disableCreate={disableCreate}
       {...listProps}
     />

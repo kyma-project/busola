@@ -101,7 +101,6 @@ export function ResourcesList(props) {
 
 function Resources(props) {
   const {
-    windowTitle,
     resourceTitle,
     resourceType,
     filter,
@@ -110,10 +109,9 @@ function Resources(props) {
     skipDataLoading,
     isCompact,
   } = props;
-  useWindowTitle(
-    windowTitle || prettifyNamePlural(resourceTitle, resourceType),
-    { skip: isCompact },
-  );
+  useWindowTitle(prettifyNamePlural(resourceTitle, resourceType), {
+    skip: isCompact,
+  });
 
   const { loading, error, data: resources, silentRefetch } = useGetList(filter)(
     resourceUrl,
@@ -152,7 +150,6 @@ export function ResourceListRenderer({
   navigateFn,
   testid,
   i18n,
-  textSearchProperties = [],
   omitColumnsIds = ['namespace'],
   customListActions = [],
   createFormProps,
@@ -161,8 +158,6 @@ export function ResourceListRenderer({
   error,
   resources,
   silentRefetch = () => {},
-  showSearchField = true,
-  allowSlashShortcut,
   resourceUrlPrefix,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate,
@@ -170,6 +165,7 @@ export function ResourceListRenderer({
     name: nameLocaleSort,
     time: timeSort,
   },
+  searchSettings,
 }) {
   useVersionWarning({
     resourceUrl,
@@ -440,14 +436,13 @@ export function ResourceListRenderer({
         i18n={i18n}
         sortBy={sortBy}
         searchSettings={{
-          showSearchField,
           textSearchProperties: [
             'metadata.name',
             'metadata.namespace',
             'metadata.labels',
-            ...textSearchProperties,
+            ...(searchSettings?.textSearchProperties || []),
           ],
-          allowSlashShortcut,
+          ...searchSettings,
         }}
       />
     </>
