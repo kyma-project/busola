@@ -16,6 +16,7 @@
   "experimentalInteractiveRunEvents": true,
   "testFiles": [
     "cluster/run-before.spec.js",
+    "cluster/test-pizzas.spec.js",
     "cluster/test-edit-cluster.spec.js",
     "cluster/test-applications.spec.js",
     "cluster/test-download-a-kubeconfig.spec.js",
