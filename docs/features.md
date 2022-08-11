@@ -15,7 +15,7 @@ If the stage is not set, the feature is loaded only on-demand, most often by the
 
 Note that some features must be run before the application starts the bootstrap process (for example, SSO_LOGIN), so they are out of the normal feature flow.
 
-#### The features list
+#### Features list
 
 > **TIP:** The list is ordered alphabetically.
 
@@ -88,7 +88,7 @@ Note that some features must be run before the application starts the bootstrap 
   },
   ```
 
-- **CUSTOM_DOMAINS** – is used to show or hide the **DNS Entry**, **DNS Provider**, **Gateway**, **Issuer**, and **Certificate** views.
+- **CUSTOM_DOMAINS** – is used to show or hide the **DNSEntry**, **DNSProvider**, **Gateway**, **Issuer**, and **Certificate** views.
   For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
   Default settings:
@@ -106,7 +106,7 @@ Note that some features must be run before the application starts the bootstrap 
   ```
 
 - **EVENTING** – is used to show or hide the **Eventing** view and to define which APIs are required for the view to be shown properly.
-  It is also used to determine if the **Event Subscriptions** should be displayed in **Function** and **Service** details.
+  It is also used to determine if the **EventSubscriptions** should be displayed in **Function** and **Service** details.
   For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
   Default settings:
@@ -176,7 +176,7 @@ Note that some features must be run before the application starts the bootstrap 
 
 - **JWT_CHECK_CONFIG** – is used to configure data necessary for the backend authentication, such as an issuer and JWKS (JSON Web Key Set) address. When the feature is disabled no authentication occurs on backend side.
 
-  Backend feature. Cannot be modified at the cluster's Config Map level.
+  Backend feature. Cannot be modified at the cluster's ConfigMap level.
 
   Default settings:
 
@@ -190,7 +190,7 @@ Note that some features must be run before the application starts the bootstrap 
   }
   ```
 
-- **HIDDEN_NAMESPACES** – is used to define a list of Namespace names that are considered system, and are hidden by default.
+- **HIDDEN_NAMESPACES** – is used to define a list of Namespaces that are considered system, and are hidden by default.
 
   Default settings:
 
@@ -218,7 +218,7 @@ Note that some features must be run before the application starts the bootstrap 
 
 * **GZIP** – is used to indicate whether the response from the backend server should be compressed or not.
 
-  Backend feature. Cannot be modified at the cluster's Config Map level.
+  Backend feature. Cannot be modified at the cluster's ConfigMap level.
 
   Default settings:
 
@@ -304,11 +304,12 @@ Note that some features must be run before the application starts the bootstrap 
   ```
 
 * **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.
+
   Each resource requires the **match** field, which includes a list of key-value pairs. The proper rule description is when the definition given in the key matches the value.
 
   To switch comparison mode from **standard** to **regex**, set the **regex** parameter to `true`.
 
-  Optionally, you can provide the **message** parameter, which displays a simple message, or **messageSrc**, which is a yaml path where the message to be displayed is included. If neither **message** nor **messageSrc** is provided, a generic message is used.
+  Optionally, you can provide the **message** parameter, which displays a simple message, or **messageSrc**, which is a YAML path where the message to be displayed is included. If neither **message** nor **messageSrc** is provided, a generic message is used.
 
   Example:
 
@@ -389,7 +390,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-- **SSO_LOGIN** – is used to configure data necessary for the SSO login such as an issuer address, client’s ID, client’s Secret and scopes. If `clientSecret` is omitted, a public client is used. This feature is out of standard features flow, so it will run immediately.
+- **SSO_LOGIN** – is used to configure data necessary for the SSO login such as an issuer address, client’s ID, client’s Secret and scopes. If `clientSecret` is omitted, a public client is used. This feature is out of standard features flow, so it runs immediately.
 
   ```json
   "SSO_LOGIN": {
@@ -413,7 +414,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
 
   > NOTE: Enable this feature on the frontend and backend.
 
-* **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at a resource details view.
+* **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at the resource details view.
 
   ```json
   "VISUAL_RESOURCES": {

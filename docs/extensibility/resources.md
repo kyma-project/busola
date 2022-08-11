@@ -1,9 +1,24 @@
 # Config Map for resource-based extensions
 
+**Table of Contents**
+
+- [Overview](#overview)
+- [Extension version](#extension-version)
+- [_general_ section](#general-section)
+- [_form_ section](#form-section)
+- [_list_ section](#list-section)
+- [_details_ section](#details-section)
+  - [Data scoping](#data-scoping)
+- [_dataSources_ section](#datasources-section)
+  - [Data source configuration object fields](#data-source-configuration-object-fields)
+- [_translations_ section](#translations-section)
+  - [Value preprocessors](#value-preprocessors)
+    - [List of value preprocessors](#list-of-value-preprocessors)
+
 ## Overview
 
-This document describes the required Config Map setup that you need to configure in order to handle your CRD UI page.
-All Config Map `data` sections can be provided as either JSON or YAML.
+This document describes the required ConfigMap setup that you need to configure in order to handle your CRD UI page.
+You can provide all the ConfigMap data sections as either JSON or YAML.
 
 ## Extension version
 
@@ -13,9 +28,11 @@ Busola supports only the current version of the configuration and the prior one.
 
 Therefore, whenever a new version of the configuration is proposed, you can migrate your configuration to the latest version. To do so, go to your Extension and click the **Migrate** button.
 
-## general section
+## _general_ section
 
-The `general` section is required and contains basic information about the resource and additional options.
+The **general** section is required and contains basic information about the resource and additional options.
+
+### Item parameters
 
 - **resource** - _[required]_ - information about the resoure.
   - **kind** - _[required]_ Kubernetes kind of the resource.
@@ -26,7 +43,7 @@ The `general` section is required and contains basic information about the resou
 - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
 - **urlPath** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
 - **defaultPlaceholder** - to be shown in place of empty resource leaves. Overridden by the widget-level **placeholder**. Defaults to `-`.
-- **description** - displays a custom description on the resource list page. It can contain links. If the translation section has a translation entry with the ID that is the same as the **description** string, the translation is used.
+- **description** - displays a custom description on the resource list page. It can contain links. If the **translations** section has a translation entry with the ID that is the same as the **description** string, the translation is used.
 - **filter** - optional [JSONata](https://docs.jsonata.org/overview.html) [filter](https://docs.jsonata.org/higher-order-functions#filter) used to filter the resources shown at the list section property.
 - **disableCreate** - either `true` or `false`. Defaults to `false`.
 
@@ -49,9 +66,9 @@ The `general` section is required and contains basic information about the resou
 }
 ```
 
-## form section
+## _form_ section
 
-The `form` section contains a list of objects that define which fields you must include in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to the simple form by providing the `simple: true` flag. You can also remove it from the advanced form by providing the `advanced: false` flag.
+The **form** section contains a list of objects that define which fields you must include in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to the simple form by providing the `simple: true` flag. You can also remove it from the advanced form by providing the `advanced: false` flag.
 
 If you target elements of an array rather that the array itself, you can use `items[]` notation.
 
@@ -79,9 +96,9 @@ If you target elements of an array rather that the array itself, you can use `it
 ]
 ```
 
-## list section
+## _list_ section
 
-The `list` section defines extra columns available in the list. The format is similar to the `form` section, however each entry consists only of two values:
+The **list** section defines extra columns available in the list.
 
 ### Item parameters
 
@@ -118,9 +135,9 @@ The `list` section defines extra columns available in the list. The format is si
 ]
 ```
 
-## details section
+## _details_ section
 
-The `details` section defines the display structure for the details page. It contains two sections, `header` and `body`, both of which are a list of items to display in the `header` section and the body of the page respectively. The format of the entries is similar to the `form` section, however it has extra options available.
+The **details** section defines the display structure for the details page. It contains two sections, `header` and `body`, both of which are a list of items to display in the **header** section and the body of the page respectively. The format of the entries is similar to the **form** section, however it has extra options available.
 
 ### Items parameters
 
@@ -216,9 +233,9 @@ renders the same set of data as:
 ]
 ```
 
-## dataSources section
+## _dataSources_ section
 
-The `dataSources` section contains an object that maps a data source name to a data source configuration object. The data source name preceded by a dollar sign '\$' is used in the **path** expression.
+The **dataSources** section contains an object that maps a data source name to a data source configuration object. The data source name preceded by a dollar sign '\$' is used in the **path** expression.
 
 It's possible to use both data source name and a path; for example, `{"path": $myRelatedResource.metadata.labels}` returns the `metadata.labels` of the related resource.
 
@@ -272,7 +289,7 @@ Those fields are used to build the related resource URL and filter the received 
 }
 ```
 
-## translations section
+## _translations_ section
 
 This section contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
 
