@@ -40,8 +40,6 @@ api-rules:
   title: Reguły API
 applications:
   title: Aplikacje
-brokers:
-  title: Brokerzy
 catalog:
   menu-title: Katalog
   subtitle: Rozszerz możliwości za pomocą dodatkowych usług instalowanych poza klastrem.
@@ -349,10 +347,6 @@ generic-list:
   no-entries-found: Nie znaleziono wpisów
 git-repositories:
   title: Repozytoria Git
-instances:
-  no-specific-plan-parameters:
-    tooltip: Usługodawca nie określił konkretnych parametrów dla wybranego planu. Zapoznaj się z dokumentacją, aby poznać wymagane parametry i zdefiniuj je jako JSON w edytorze.
-  title: Instancje
 integration:
   title: Integracja
 jobs:

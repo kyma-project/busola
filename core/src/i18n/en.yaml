@@ -139,7 +139,6 @@ applications:
     connect-app: Connect Application
     create-app: Create Application
     create-binding: Create Namespace Binding
-    edit-binding: Edit ServiceClass Binding in '{{namespace}}'
     namespace-bindings: Namespace Bindings
     provided-services: Provided Services and Events
   title: Applications
@@ -1199,13 +1198,11 @@ functions:
       config-map: This variable comes from the "{resourceName}" Config Map.
       custom: This variable was provided by the user.
       secret: This variable comes from the "{resourceName}" Secret.
-      service-binding: This variable was injected by the Service Binding referencing Service Instance "{serviceInstanceName}".
       text: This variable comes from a resource. To get the value, follow the link.
     type:
       config-map: Config Map
       custom: Custom
       secret: Secret
-      service-binding: Service Binding
     warnings:
       override: This variable name is identical to the variable injected by the Service Binding. Continue if you intend that they can override each other. Otherwise, choose another name.
       sbu-can-be-overridden:
@@ -1416,21 +1413,6 @@ ingresses:
     rules-not-found: Rules not found
   name_singular: Ingress
   title: Ingresses
-instances:
-  description: <0>Service Instance</0> is a provisioned instance of a service that can be consumed by an application.
-  no-specific-plan-parameters:
-    tooltip: The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as a JSON in the editor.
-  statuses:
-    deprovisionedsuccessfully: Deprovisioned
-    deprovisionrequestinflight: Deprovision Request In Flight
-    instanceupdatedsuccessfully: Instance Updated
-    orphanmitigationsuccessful: Orphan Mitigation Successful
-    provisioncallfailed: Provision Call Failed
-    provisionedsuccessfully: Provisioned
-    provisioning: Provisioning
-    provisionrequestinflight: Provision Request In Flight
-    updateinstancerequestinflight: Update Instance Request In Flight
-  title: Instances
 integration:
   title: Integration
 issuers:
