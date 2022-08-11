@@ -33,7 +33,7 @@ export function ResourceList({
   console.log('ResourcesList', value);
   const kind = (value?.kind ?? '').replace(/List$/, '');
   // const resourceUrl = `/${apiVersion}/${namespacePart}/${resourceType}`;
-  const resourceUrl = `/${value.apiVersion}/${kind}`;
+  const resourceUrl = `/${value?.apiVersion}/${kind}`;
   /*
   const {
     kind,
@@ -48,8 +48,12 @@ export function ResourceList({
   }
   */
 
+  console.log(
+    'predefined',
+    resources.map(r => r.resourceType),
+  );
   const PredefinedRenderer = resources.find(
-    r => r.resourceType.toLowerCase() === kind,
+    r => r.resourceType.toLowerCase() === pluralize(kind).toLowerCase(),
   );
   const ListRenderer = PredefinedRenderer
     ? PredefinedRenderer.List
@@ -63,19 +67,19 @@ export function ResourceList({
       value: value => <Widget value={value} structure={props} />,
     }));
   }
+  */
 
   // make sure "kind" is present on resources
-  if (Array.isArray(value.data)) {
-    value.data = value.data.map(d => ({ ...d, kind }));
+  if (Array.isArray(value?.items)) {
+    value.items = value.items.map(d => ({ ...d, kind }));
   }
-  */
 
   return (
     <ListRenderer
       skipDataLoading={true}
       // loading={value.loading}
       // error={value.error}
-      resources={value.items}
+      resources={value?.items}
       resourceUrl={resourceUrl}
       resourceType={prettifyKind(kind)}
       resourceName={prettifyKind(kind)}
