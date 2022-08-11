@@ -224,7 +224,7 @@ const ContainersLogs = ({ params }) => {
             </Button>
             <SearchInput
               disabled={!logsToSave?.length}
-              entriesKind={'Logs'}
+              title={'Logs'}
               searchQuery={searchQuery}
               handleQueryChange={setSearchQuery}
               showSuggestion={false}

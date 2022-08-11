@@ -31,7 +31,6 @@ const defaultSort = {
 
 export const GenericList = ({
   entries = [],
-  entriesKind,
   actions,
   title,
   headerRenderer,
@@ -120,7 +119,7 @@ export const GenericList = ({
     <>
       {showSearchField && (
         <SearchInput
-          entriesKind={entriesKind || title || ''}
+          entriesKind={title || ''}
           searchQuery={searchQuery}
           filteredEntries={filteredEntries}
           handleQueryChange={setSearchQuery}
@@ -269,7 +268,6 @@ const PaginationProps = PropTypes.shape({
 
 GenericList.propTypes = {
   title: PropTypes.string,
-  entriesKind: PropTypes.string,
   entries: PropTypes.arrayOf(
     PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   ).isRequired,
