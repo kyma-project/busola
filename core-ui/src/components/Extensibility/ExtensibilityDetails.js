@@ -14,7 +14,7 @@ import { ExtensibilityErrBoundary } from 'components/Extensibility/Extensibility
 import { useGetSchema } from 'hooks/useGetSchema';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
-  const { t, widgetT } = useGetTranslation();
+  const { t, widgetT, exists } = useGetTranslation();
   const { urlPath, resource } = resMetaData?.general ?? {};
 
   const { schema } = useGetSchema({
@@ -22,6 +22,13 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   });
 
   const detailsProps = usePrepareDetailsProps(urlPath, 'name');
+
+  const resourceName = resMetaData?.general?.name;
+  const resourceTitle = exists('name')
+    ? t('name')
+    : resourceName || prettifyKind(resource.kind);
+
+  detailsProps.resourceTitle = resourceTitle;
 
   if (resource.kind) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
@@ -36,9 +43,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
 
   const breadcrumbs = [
     {
-      name: t('name', {
-        defaultValue: pluralize(prettifyKind(resource.kind)),
-      }),
+      name: resourceTitle,
       path: '/',
       fromContext: urlPath,
     },
@@ -46,9 +51,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   ];
   return (
     <ResourceDetails
-      windowTitle={t('name', {
-        defaultValue: pluralize(prettifyKind(resource.kind)),
-      })}
+      windowTitle={resourceTitle}
       customColumns={
         Array.isArray(header)
           ? header.map((def, i) => ({
@@ -62,6 +65,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
                   schema={schema}
                   dataSources={dataSources}
                   originalResource={resource}
+                  inlineContext={true}
                 />
               ),
             }))

@@ -11,6 +11,7 @@ import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
 
 export function useDeleteResource({
   i18n,
+  resourceName,
   resourceType,
   navigateToListAfterDelete = false,
 }) {
@@ -24,7 +25,10 @@ export function useDeleteResource({
 
   const notification = useNotification();
 
-  const prettifiedResourceName = prettifyNameSingular(undefined, resourceType);
+  const prettifiedResourceName = prettifyNameSingular(
+    resourceName,
+    resourceType,
+  );
 
   const performDelete = async (resource, resourceUrl, deleteFn) => {
     const withoutQueryString = path => path?.split('?')?.[0];

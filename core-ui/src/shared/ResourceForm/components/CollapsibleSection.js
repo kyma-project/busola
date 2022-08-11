@@ -59,17 +59,18 @@ export function CollapsibleSection({
           {typeof actions === 'function' ? actions(setOpen) : actions}
         </div>
       </header>
-      {open && (
-        <div className="content">
-          <ResourceFormWrapper
-            resource={resource}
-            setResource={setResource}
-            isAdvanced={isAdvanced}
-          >
-            {children}
-          </ResourceFormWrapper>
-        </div>
-      )}
+
+      <div
+        className={open ? 'content content--open' : 'content content--closed'}
+      >
+        <ResourceFormWrapper
+          resource={resource}
+          setResource={setResource}
+          isAdvanced={isAdvanced}
+        >
+          {children}
+        </ResourceFormWrapper>
+      </div>
     </div>
   );
 }

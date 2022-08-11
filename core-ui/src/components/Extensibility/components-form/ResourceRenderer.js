@@ -20,11 +20,8 @@ export function ResourceRenderer({
   const { namespaceId } = useMicrofrontendContext();
 
   const { tFromStoreKeys } = useGetTranslation();
-  const group = schema.get('group');
-  const version = schema.get('version');
-  const kind = schema.get('kind');
-  const scope = schema.get('scope') || 'cluster';
-  const namespace = schema.get('namespace') || namespaceId;
+  const { group, version, kind, scope = 'cluster', namespace = namespaceId } =
+    schema.get('resource') || {};
 
   const url = getResourceUrl(
     {
@@ -58,6 +55,7 @@ export function ResourceRenderer({
       input={Inputs.ComboboxInput}
       options={options}
       compact={compact}
+      required={required}
     />
   );
 }

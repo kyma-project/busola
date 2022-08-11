@@ -193,6 +193,7 @@ export function ResourceListRenderer({
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     i18n,
+    resourceName,
     resourceType,
   });
 
