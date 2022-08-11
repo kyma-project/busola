@@ -7,11 +7,6 @@ export const List = React.lazy(() => import('./IngressList'));
 export const Details = React.lazy(() => import('./IngressDetails'));
 
 export const resourceGraphConfig = (t, context) => ({
-  relations: [
-    {
-      kind: 'Service',
-    },
-  ],
   networkFlowLevel: 0,
   networkFlowKind: true,
 

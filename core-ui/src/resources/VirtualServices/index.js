@@ -11,14 +11,8 @@ export const resourceGraphConfig = (t, context) => ({
   networkFlowLevel: -2,
   relations: [
     {
-      kind: 'APIRule',
-    },
-    {
       kind: 'Gateway',
       clusterwide: true,
-    },
-    {
-      kind: 'Service',
     },
   ],
   matchers: {

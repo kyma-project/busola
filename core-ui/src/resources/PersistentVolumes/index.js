@@ -9,9 +9,6 @@ export const Details = React.lazy(() => import('./PersistentVolumeDetails'));
 export const resourceGraphConfig = (t, context) => ({
   relations: [
     {
-      kind: 'StorageClass',
-    },
-    {
       kind: 'PersistentVolumeClaim',
       clusterwide: true,
     },

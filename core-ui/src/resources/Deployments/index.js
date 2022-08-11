@@ -11,17 +11,6 @@ export const Details = React.lazy(() => import('./DeploymentDetails'));
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
   networkFlowLevel: -2,
-  relations: [
-    {
-      kind: 'Service',
-    },
-    {
-      kind: 'HorizontalPodAutoscaler',
-    },
-    {
-      kind: 'ReplicaSet',
-    },
-  ],
   matchers: {
     HorizontalPodAutoscaler: (deployment, hpa) =>
       hpa.spec.scaleTargetRef?.kind === 'Deployment' &&

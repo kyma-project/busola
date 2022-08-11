@@ -80,6 +80,6 @@ export function getResourceGraphConfig(t, context) {
       }),
   );
 
-  console.log({ ...builtinResourceGraphConfig, ...customResourcesGraphConfig });
+  // console.log({ ...builtinResourceGraphConfig, ...customResourcesGraphConfig });
   return { ...builtinResourceGraphConfig, ...customResourcesGraphConfig };
 }

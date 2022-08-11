@@ -34,32 +34,6 @@ export const Details = React.lazy(() => import('./PodDetails'));
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
   networkFlowLevel: 0,
-  relations: [
-    {
-      kind: 'ConfigMap',
-    },
-    {
-      kind: 'DaemonSet',
-    },
-    {
-      kind: 'Job',
-    },
-    {
-      kind: 'ReplicaSet',
-    },
-    {
-      kind: 'Secret',
-    },
-    {
-      kind: 'StatefulSet',
-    },
-    {
-      kind: 'PersistentVolumeClaim',
-    },
-    {
-      kind: 'NetworkPolicy',
-    },
-  ],
   matchers: {
     ConfigMap: (pod, cm) => matchByMount('configMap')(pod, cm),
     DaemonSet: (pod, ds) =>
@@ -72,11 +46,20 @@ export const resourceGraphConfig = (t, context) => ({
         resource: pod,
         owner: job,
       }),
-    ReplicaSet: (pod, replicaSet) =>
-      matchBySelector(
+    ReplicaSet: (pod, replicaSet) => {
+      const a = matchBySelector(
         replicaSet.spec.selector.matchLabels,
         pod.metadata.labels,
-      ),
+      );
+      const b = matchByOwnerReference({
+        resource: pod,
+        owner: replicaSet,
+      });
+
+      console.log(pod, replicaSet, a, b);
+
+      return a || b;
+    },
     Secret: (pod, secret) =>
       matchByMount('secret')(pod, secret) || matchByVolumes(pod, secret),
     StatefulSet: (pod, ss) =>

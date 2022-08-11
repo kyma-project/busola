@@ -7,14 +7,6 @@ export const List = React.lazy(() => import('./ClusterRoleBindingList'));
 export const Details = React.lazy(() => import('./ClusterRoleBindingDetails'));
 
 export const resourceGraphConfig = (t, context) => ({
-  relations: [
-    {
-      kind: 'ClusterRole',
-    },
-    {
-      kind: 'ServiceAccount',
-    },
-  ],
   matchers: {
     ServiceAccount: (crb, sa) =>
       crb.subjects?.find(

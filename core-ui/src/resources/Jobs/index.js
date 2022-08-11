@@ -11,17 +11,6 @@ export const Details = React.lazy(() => import('./JobDetails'));
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
   networkFlowLevel: -1,
-  relations: [
-    {
-      kind: 'Pod',
-    },
-    {
-      kind: 'CronJob',
-    },
-    {
-      kind: 'Function',
-    },
-  ],
   depth: 1,
   matchers: {
     CronJob: (job, cronJob) =>

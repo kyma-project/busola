@@ -9,12 +9,4 @@ export const Details = React.lazy(() => import('./ReplicaSetDetails'));
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
   networkFlowLevel: -1,
-  relations: [
-    {
-      kind: 'Deployment',
-    },
-    {
-      kind: 'Pod',
-    },
-  ],
 });

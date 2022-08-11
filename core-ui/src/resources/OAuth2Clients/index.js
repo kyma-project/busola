@@ -15,11 +15,6 @@ export const secrets = (t, context) => [
 ];
 
 export const resourceGraphConfig = (t, context) => ({
-  relations: [
-    {
-      kind: 'Secret',
-    },
-  ],
   matchers: {
     Secret: (client, secret) => client.spec.secretName === secret.metadata.name,
   },

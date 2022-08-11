@@ -2,7 +2,7 @@ import React from 'react';
 
 import { matchByOwnerReference } from 'shared/utils/helpers';
 
-export const resourceType = 'ApiRules';
+export const resourceType = 'APIRules';
 export const namespaced = true;
 export const resourceI18Key = 'api-rules.title';
 
@@ -13,12 +13,6 @@ export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
   networkFlowLevel: -3,
   relations: [
-    {
-      kind: 'Service',
-    },
-    {
-      kind: 'VirtualService',
-    },
     {
       kind: 'Gateway',
       clusterwide: true,

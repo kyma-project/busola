@@ -12,12 +12,6 @@ export const resourceGraphConfig = (t, context) => ({
       kind: 'ClusterRole',
       clusterwide: true,
     },
-    {
-      kind: 'Role',
-    },
-    {
-      kind: 'ServiceAccount',
-    },
   ],
   matchers: {
     ServiceAccount: (rb, sa) =>
