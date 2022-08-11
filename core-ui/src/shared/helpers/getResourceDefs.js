@@ -52,12 +52,6 @@ export function getResourceGraphConfig(t, context) {
                     const expression = jsonata(relationFormula);
                     expression.assign('current', cR);
                     expression.assign('item', relatedResource);
-                    // console.log({
-                    //   relationFormula,
-                    //   cR,
-                    //   relatedResource,
-                    //   wynik: expression.evaluate(),
-                    // });
                     return !!expression.evaluate();
                   } catch (e) {
                     console.warn(e);
@@ -69,17 +63,9 @@ export function getResourceGraphConfig(t, context) {
             ),
           ),
         };
-
-        // for (const kind in cR.resourceGraph.matchers) {
-        //   if (builtinResourceGraphConfig[kind]) {
-        //     builtinResourceGraphConfig[kind].relations.push({ kind: cR.kind });
-        //   }
-        // }
-
         return [kind, relation];
       }),
   );
 
-  // console.log({ ...builtinResourceGraphConfig, ...customResourcesGraphConfig });
   return { ...builtinResourceGraphConfig, ...customResourcesGraphConfig };
 }

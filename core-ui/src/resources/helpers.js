@@ -32,7 +32,6 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
 
   const context = useMicrofrontendContext();
   if (!savedResourceGraph) {
-    // savedResourceGraph = getPerResourceDefs('resourceGraphConfig', t, context);
     savedResourceGraph = getResourceGraphConfig(t, context);
   }
 

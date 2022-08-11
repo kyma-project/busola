@@ -59,13 +59,6 @@ export function buildStructuralGraph({ initialResource, store }, config) {
     }
   }
 
-  console.log(`graph "Graph" {
-    fontname="sans-serif";
-
-    ${nodes.map(node => makeNode(node.resource)).join('\n\t')}
-    ${edges.map(e => makeEdge(e.fromId, e.toId)).join('\n\t')}
-}`);
-
   return `graph "Graph" {
     fontname="sans-serif";
 

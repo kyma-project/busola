@@ -46,20 +46,15 @@ export const resourceGraphConfig = (t, context) => ({
         resource: pod,
         owner: job,
       }),
-    ReplicaSet: (pod, replicaSet) => {
-      const a = matchBySelector(
+    ReplicaSet: (pod, replicaSet) =>
+      matchBySelector(
         replicaSet.spec.selector.matchLabels,
         pod.metadata.labels,
-      );
-      const b = matchByOwnerReference({
+      ) ||
+      matchByOwnerReference({
         resource: pod,
         owner: replicaSet,
-      });
-
-      console.log(pod, replicaSet, a, b);
-
-      return a || b;
-    },
+      }),
     Secret: (pod, secret) =>
       matchByMount('secret')(pod, secret) || matchByVolumes(pod, secret),
     StatefulSet: (pod, ss) =>
