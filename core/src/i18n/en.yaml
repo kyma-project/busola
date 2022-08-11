@@ -163,11 +163,6 @@ authorization-policies:
     when: When
   name_singular: Authorization Policy
   title: Authorization Policies
-brokers:
-  description: <0>Service Broker</0> provides a set of managed services that a third party offers and maintains.
-  headers:
-    url: URL
-  title: Brokers
 btp-instances:
   description: ' <0>BTP Service Instance</0> makes the functionality of a service available for consumption.'
   external-name: External Name
@@ -591,7 +586,7 @@ common:
     error: Error
     generate-name: Generate name
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' and ''.'' (e.g.: ''my.name-1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
@@ -1509,7 +1504,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
