@@ -41,8 +41,6 @@
     "react-tippy": "^1.4.0",
     "rfc6902": "^4.0.1",
     "semver": "^7.3.5",
-    "styled-components": "^5.3.3",
-    "styled-components-grid": "^2.2.2",
     "use-debounce": "^7.0.1",
     "yup": "^0.28.5"
   },
@@ -78,7 +76,6 @@
     "enzyme": "^3.10.0",
     "enzyme-to-json": "^3.4.0",
     "react-app-rewired": "^2.2.1",
-    "react-jsonschema-form": "1.7.0",
     "react-scripts": "^5.0.0"
   }
 }
