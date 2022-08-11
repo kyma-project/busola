@@ -103,10 +103,12 @@ data:
       {
         "path": "spec.recipeSecret",
         "widget": "Resource",
-        "kind": "Secret",
-        "scope": "namespace",
-        "namespace": "pizzas",
-        "version": "v1",
+        "resource": {
+          "kind": "Secret",
+          "scope": "namespace",
+          "namespace": "pizzas",
+          "version": "v1",
+        },
         "simple": true
       },
       {
@@ -142,7 +144,7 @@ data:
         "group": "busola.example.com",
         "version": "v1"
       },
-      "name": "Pizza",
+      "name": "Pizzas",
       "category": "Lunch",
       "scope": "namespace",
       "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
