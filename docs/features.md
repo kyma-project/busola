@@ -381,42 +381,6 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-  > NOTE: Both **SERVICE_CATALOG** and **SERVICE_CATALOG_ADDONS** features are used to determine if **Service Bindings** (in the **Configuration** tab) and environment variables injected by **Service Bindings** (in the **Code** Tab) are displayed in the **Functions** view.
-
-- **SERVICE_CATALOG** – is used to show or hide the **Service Catalog** views (**Catalog**, **Instances**, and **Brokers**) and to define which APIs are required for the view to be shown properly.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```json
-  "SERVICE_CATALOG": {
-    "isEnabled": true,
-    "selectors": [
-      {
-        "type": "apiGroup",
-        "apiGroup": "servicecatalog.k8s.io"
-      }
-    ]
-  },
-  ```
-
-- **SERVICE_CATALOG_ADDONS** – is used to show or hide the **Service Catalog Addons** view and to define which APIs are required for the view to be shown properly.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```json
-  "SERVICE_CATALOG_ADDONS": {
-    "isEnabled": true,
-    "selectors": [
-      {
-        "type": "apiGroup",
-        "apiGroup": "servicecatalog.kyma-project.io"
-      }
-    ]
-  },
-  ```
-
 - **SHOW_KYMA_VERSION** – determines if the Kyma version should be visible on the Cluster Details page. The displayed version is the value of the `reconciler.kyma-project.io/origin-version` label in the `kyma-system` Namespace. If the value of the label is missing or there is no `kyma-system` Namespace, the `Unknown` version will be displayed.
 
   ```json
