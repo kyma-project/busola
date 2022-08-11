@@ -85,7 +85,7 @@ data:
   resourceGraph: |-
     {
       matchers: {
-        Pizza: "$current.spec.pizzas[name = $item.metadata.name and namespace = $item.metadata.namespace]",
+        Pizza: "$root.spec.pizzas[name = $item.metadata.name and namespace = $item.metadata.namespace]",
       },
       depth: 1
     }

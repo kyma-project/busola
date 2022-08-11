@@ -152,8 +152,8 @@ data:
   resourceGraph: |-
     {
       matchers: {
-        Secret: "$current.spec.recipeSecret = $item.metadata.name",
-        PizzaOrder: "$item.spec.pizzas[name = $current.metadata.name and namespace = $current.metadata.namespace]",
+        Secret: "$root.spec.recipeSecret = $item.metadata.name",
+        PizzaOrder: "$item.spec.pizzas[name = $root.metadata.name and namespace = $root.metadata.namespace]",
       }
     }
   translations: |

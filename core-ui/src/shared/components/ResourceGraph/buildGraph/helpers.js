@@ -59,20 +59,23 @@ export function match(resourceA, resourceB, config) {
 }
 
 export function findRelations(originalResourceKind, config) {
-  let relations = [...(config[originalResourceKind].relations || [])];
+  // explicitly defined relations
+  const relations = [...(config[originalResourceKind].relations || [])];
 
-  for (const matchKind of Object.keys(
-    config[originalResourceKind].matchers || {},
-  )) {
+  // implicitly defined relations - infer them from `matchers`
+  const matchers = config[originalResourceKind].matchers || {};
+  for (const matchKind of Object.keys(matchers)) {
     if (!relations.find(({ kind }) => kind === matchKind)) {
       relations.push({ kind: matchKind });
     }
   }
 
+  // find `matchers` defined elsewhere
   for (const otherKind in config) {
     if (otherKind === originalResourceKind) continue;
-    for (const matchKind in config[otherKind].matchers || {}) {
-      if (matchKind === originalResourceKind) {
+
+    for (const otherMatchKind in config[otherKind].matchers || {}) {
+      if (otherMatchKind === originalResourceKind) {
         if (!relations.find(({ kind }) => kind === otherKind)) {
           relations.push({ kind: otherKind });
         }

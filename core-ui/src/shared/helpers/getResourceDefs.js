@@ -47,10 +47,11 @@ export function getResourceGraphConfig(t, context) {
           matchers: Object.fromEntries(
             Object.entries(cR.resourceGraph.matchers || {}).map(
               ([relatedKind, relationFormula]) => {
+                const expression = jsonata(relationFormula);
+
                 const matchFn = (cR, relatedResource) => {
                   try {
-                    const expression = jsonata(relationFormula);
-                    expression.assign('current', cR);
+                    expression.assign('root', cR);
                     expression.assign('item', relatedResource);
                     return !!expression.evaluate();
                   } catch (e) {
