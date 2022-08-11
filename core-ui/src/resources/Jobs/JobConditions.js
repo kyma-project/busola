@@ -42,11 +42,13 @@ export function JobConditions(job) {
     <GenericList
       key="conditions"
       title={t('jobs.conditions.title')}
-      showSearchField={false}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={job.status?.conditions || []}
       i18n={i18n}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 }

@@ -57,7 +57,9 @@ export const LabelSelector = ({ selector, title }) => {
         rowRenderer={rowRenderer}
         key="policy-types"
         i18n={i18n}
-        showSearchField={false}
+        searchSettings={{
+          showSearchField: false,
+        }}
       />
     );
   }

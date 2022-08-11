@@ -52,7 +52,9 @@ export const Endpoints = ({ serviceentry }) => {
       rowRenderer={rowRenderer}
       entries={endpoints || []}
       i18n={i18n}
-      showSearchField={false}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 };

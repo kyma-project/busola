@@ -258,10 +258,12 @@ const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
         }
         serverDataError={bindingsRequest.error}
         serverDataLoading={bindingsRequest.loading}
-        textSearchProperties={['spec.secretName']}
         i18n={i18n}
         messages={{
           notFoundMessage: 'No Bindings found',
+        }}
+        searchSettings={{
+          textSearchProperties: ['spec.secretName'],
         }}
       />
       <GenericList
@@ -274,14 +276,16 @@ const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
         actions={actions}
         serverDataError={error}
         serverDataLoading={loading}
-        textSearchProperties={[
-          'serviceBindingUsage.metadata.name',
-          'serviceBinding.metadata.name',
-          'serviceBindingUsage.spec.usedBy.name',
-        ]}
         i18n={i18n}
         messages={{
           notFoundMessage: 'No applications found',
+        }}
+        searchSettings={{
+          textSearchProperties: [
+            'serviceBindingUsage.metadata.name',
+            'serviceBinding.metadata.name',
+            'serviceBindingUsage.spec.usedBy.name',
+          ],
         }}
       />
     </>

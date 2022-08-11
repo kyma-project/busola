@@ -38,7 +38,6 @@ const ServiceClassInstancesTable = ({ instanceList, i18n }) => {
 
   return (
     <GenericList
-      textSearchProperties={['metadata.name']}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={instanceList}
@@ -46,6 +45,9 @@ const ServiceClassInstancesTable = ({ instanceList, i18n }) => {
       i18n={i18n}
       messages={{
         notFoundMessage: serviceClassConstants.emptyInstancesListMessage,
+      }}
+      searchSettings={{
+        textSearchProperties: ['metadata.name'],
       }}
     />
   );

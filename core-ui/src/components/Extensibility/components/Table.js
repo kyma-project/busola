@@ -70,7 +70,6 @@ export function Table({ value, structure, schema, disableMargin, ...props }) {
   return (
     <GenericList
       className="extensibility-table"
-      showSearchSuggestion={false}
       title={tExt(structure.name, {
         defaultValue: tExt(structure.path, {
           defaultValue: structure.name,
@@ -80,6 +79,7 @@ export function Table({ value, structure, schema, disableMargin, ...props }) {
       rowRenderer={rowRenderer}
       disableMargin={disableMargin}
       {...handleTableValue(value, t)}
+      searchSettings={{ showSearchSuggestion: false }}
     />
   );
 }

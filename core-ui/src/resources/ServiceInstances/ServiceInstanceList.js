@@ -46,14 +46,16 @@ export function ServiceInstanceList(props) {
     <ResourcesList
       customColumns={customColumns}
       resourceTitle={t('btp-instances.title')}
-      textSearchProperties={[
-        'spec.serviceOfferingName',
-        'spec.servicePlanName',
-        'spec.externalName',
-      ]}
       description={description}
       createResourceForm={ServiceInstanceCreate}
       {...props}
+      searchSettings={{
+        textSearchProperties: [
+          'spec.serviceOfferingName',
+          'spec.servicePlanName',
+          'spec.externalName',
+        ],
+      }}
     />
   );
 }

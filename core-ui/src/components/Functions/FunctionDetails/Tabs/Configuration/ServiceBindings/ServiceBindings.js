@@ -99,9 +99,6 @@ export default function ServiceBindings({
   return (
     <GenericList
       title={SERVICE_BINDINGS_PANEL.LIST.TITLE}
-      textSearchProperties={textSearchProperties}
-      showSearchField={true}
-      showSearchSuggestion={false}
       extraHeaderContent={createServiceBindingModal}
       actions={actions}
       entries={serviceBindingsWithUsages}
@@ -115,6 +112,11 @@ export default function ServiceBindings({
         noSearchResultMessage:
           SERVICE_BINDINGS_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY,
         serverErrorMessage: t(ERRORS.SERVER),
+      }}
+      searchSettings={{
+        textSearchProperties,
+        showSearchField: true,
+        showSearchSuggestion: false,
       }}
     />
   );

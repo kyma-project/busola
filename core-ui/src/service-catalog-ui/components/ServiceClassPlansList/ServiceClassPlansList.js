@@ -71,8 +71,10 @@ export default function ServiceClassPlansList({ serviceClass, plans }) {
         entries={plans}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
-        showSearchField={false}
         showHeader={false}
+        searchSettings={{
+          showSearchField: false,
+        }}
       />
     </article>
   );

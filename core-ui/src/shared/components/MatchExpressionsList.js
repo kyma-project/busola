@@ -25,7 +25,9 @@ export const MatchExpressionsList = ({ expressions }) => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       i18n={i18n}
-      showSearchField={false}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 };

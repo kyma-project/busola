@@ -32,14 +32,10 @@ const defaultSort = {
 export const GenericList = ({
   entries = [],
   actions,
+  extraHeaderContent,
   title,
   headerRenderer,
   rowRenderer,
-  extraHeaderContent,
-  showSearchField,
-  textSearchProperties,
-  showSearchSuggestion,
-  showSearchControl,
   actionsStandaloneItems,
   testid,
   showRootHeader,
@@ -52,9 +48,9 @@ export const GenericList = ({
   className,
   currentlyEditedResourceUID,
   i18n,
-  allowSlashShortcut,
   sortBy,
   messages,
+  searchSettings,
 }) => {
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
@@ -99,7 +95,11 @@ export const GenericList = ({
       }
     }
     setFilteredEntries(
-      filterEntries(sorting(sort, entries), searchQuery, textSearchProperties),
+      filterEntries(
+        sorting(sort, entries),
+        searchQuery,
+        searchSettings?.textSearchProperties,
+      ),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -114,18 +114,18 @@ export const GenericList = ({
 
   const headerActions = (
     <>
-      {showSearchField && (
+      {searchSettings?.showSearchField && (
         <SearchInput
           entriesKind={title || ''}
           searchQuery={searchQuery}
           filteredEntries={filteredEntries}
           handleQueryChange={setSearchQuery}
-          suggestionProperties={textSearchProperties}
-          showSuggestion={showSearchSuggestion}
-          showSearchControl={showSearchControl}
+          suggestionProperties={searchSettings?.textSearchProperties}
+          showSuggestion={searchSettings?.showSearchSuggestion}
+          showSearchControl={searchSettings?.showSearchControl}
+          allowSlashShortcut={searchSettings?.allowSlashShortcut}
           disabled={!entries.length}
           i18n={i18n}
-          allowSlashShortcut={allowSlashShortcut}
         />
       )}
       {sortBy && (
@@ -274,15 +274,6 @@ GenericList.propTypes = {
   rowRenderer: PropTypes.func.isRequired,
   actions: CustomPropTypes.listActions,
   extraHeaderContent: PropTypes.node,
-  showSearchField: PropTypes.bool,
-  textSearchProperties: PropTypes.arrayOf(
-    PropTypes.oneOfType([
-      PropTypes.string.isRequired,
-      PropTypes.func.isRequired,
-    ]),
-  ),
-  showSearchSuggestion: PropTypes.bool,
-  showSearchControl: PropTypes.bool,
   actionsStandaloneItems: PropTypes.number,
   testid: PropTypes.string,
   showRootHeader: PropTypes.bool,
@@ -299,16 +290,24 @@ GenericList.propTypes = {
     noSearchResultMessage: PropTypes.string,
     serverErrorMessage: PropTypes.string,
   },
+  searchSettings: {
+    showSearchField: PropTypes.bool,
+    textSearchProperties: PropTypes.arrayOf(
+      PropTypes.oneOfType([
+        PropTypes.string.isRequired,
+        PropTypes.func.isRequired,
+      ]),
+    ),
+    showSearchSuggestion: PropTypes.bool,
+    showSearchControl: PropTypes.bool,
+    allowSlashShortcut: PropTypes.bool,
+  },
 };
 
 GenericList.defaultProps = {
   actions: [],
-  textSearchProperties: ['name', 'description'],
-  showSearchField: true,
-  showSearchControl: true,
   showRootHeader: true,
   showHeader: true,
-  showSearchSuggestion: true,
   serverDataError: null,
   serverDataLoading: false,
   disableMargin: false,
@@ -316,5 +315,12 @@ GenericList.defaultProps = {
   messages: {
     notFoundMessage: 'components.generic-list.messages.not-found',
     noSearchResultMessage: 'components.generic-list.messages.no-search-results',
+  },
+  searchSettings: {
+    showSearchField: true,
+    textSearchProperties: ['name', 'description'],
+    showSearchControl: true,
+    showSearchSuggestion: true,
+    allowSlashShortcut: true,
   },
 };

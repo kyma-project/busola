@@ -45,10 +45,12 @@ export function CustomResourceDefinitionDetails(props) {
         title={t('custom-resource-definitions.subtitle.names')}
         entries={resource.spec.names ? [resource.spec.names] : []}
         headerRenderer={headerRenderer}
-        showSearchField={false}
         rowRenderer={rowRenderer}
         testid="crd-names"
         i18n={i18n}
+        searchSettings={{
+          showSearchField: false,
+        }}
       />
     );
   };

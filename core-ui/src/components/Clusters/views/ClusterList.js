@@ -214,21 +214,19 @@ function ClusterList() {
       {editDialog}
       <PageHeader title={t('clusters.overview.title-all-clusters')} />
       <GenericList
-        textSearchProperties={textSearchProperties}
-        showSearchSuggestion={false}
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         actions={actions}
         extraHeaderContent={extraHeaderContent}
         i18n={i18n}
-        allowSlashShortcut
         sortBy={{
           name: (a, b) => a.contextName?.localeCompare(b.contextName),
         }}
         messages={{
           noSearchResultMessage: t('clusters.list.no-clusters-found'),
         }}
+        searchSettings={{ textSearchProperties, showSearchSuggestion: false }}
       />
       <DeleteMessageBox
         resource={chosenCluster}

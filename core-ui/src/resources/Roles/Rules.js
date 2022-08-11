@@ -90,12 +90,14 @@ export const Rules = resource => {
       key="rules"
       className="rules-list"
       title={t('roles.headers.rules')}
-      textSearchProperties={textSearchProperties}
       entries={resource.rules || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       i18n={i18n}
       testid="rules-list"
+      searchSettings={{
+        textSearchProperties,
+      }}
     />
   );
 };

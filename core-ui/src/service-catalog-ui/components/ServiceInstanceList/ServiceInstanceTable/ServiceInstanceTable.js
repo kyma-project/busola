@@ -85,10 +85,12 @@ const ServiceInstanceTable = ({
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       disableMargin={true}
-      textSearchProperties={['metadata.name']}
       i18n={i18n}
       messages={{
         notFoundMessage: 'No Service Instances found',
+      }}
+      searchSettings={{
+        textSearchProperties: ['metadata.name'],
       }}
     />
   );

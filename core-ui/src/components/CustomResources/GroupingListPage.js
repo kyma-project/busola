@@ -83,7 +83,6 @@ export function GroupingListPage({
               resourceType="CustomResourceDefinition"
               resourceTitle="customresourcedefinition"
               hasDetailsView={true}
-              showSearchField={false}
               showTitle={true}
               title={group}
               i18n={i18n}
@@ -104,6 +103,9 @@ export function GroupingListPage({
                     ]
                   : []),
               ]}
+              searchSettings={{
+                showSearchField: false,
+              }}
               {...resourceListProps}
             />
           </li>

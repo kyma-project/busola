@@ -162,9 +162,6 @@ export default function InjectedVariables({
     <div className="function-variables">
       <GenericList
         title={t('functions.variable.title.injected-variables')}
-        showSearchField={true}
-        showSearchSuggestion={false}
-        textSearchProperties={textSearchProperties}
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
@@ -172,6 +169,11 @@ export default function InjectedVariables({
         messages={{
           notFoundMessage: t('functions.variable.not-found'),
           noSearchResultMessage: t('functions.variable.not-match'),
+        }}
+        searchSettings={{
+          showSearchField: true,
+          showSearchSuggestion: false,
+          textSearchProperties,
         }}
       />
     </div>

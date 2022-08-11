@@ -43,7 +43,9 @@ export function ResourceRefs({ value, structure, schema }) {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       i18n={i18n}
-      showSearchField={false}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 }

@@ -40,7 +40,6 @@ export const HPASubcomponent = props => {
       entries={associatedHPA}
       key="associated-hpa-list"
       title={t('hpas.title')}
-      textSearchProperties={['metadata.name']}
       serverDataError={error}
       headerRenderer={() => [
         t('common.headers.name'),
@@ -80,6 +79,9 @@ export const HPASubcomponent = props => {
       ]}
       messages={{
         notFoundMessage: EMPTY_TEXT_PLACEHOLDER,
+      }}
+      searchSettings={{
+        textSearchProperties: ['metadata.name'],
       }}
     />
   );

@@ -33,13 +33,15 @@ export default function ApplicationServices({ spec: applicationSpec }) {
     <GenericList
       key="application-services"
       title={t('applications.subtitle.provided-services')}
-      textSearchProperties={['displayName']}
       entries={entries}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       i18n={i18n}
       messages={{
         notFoundMessage: t('applications.messages.service-not-found'),
+      }}
+      searchSettings={{
+        textSearchProperties: ['displayName'],
       }}
     />
   );

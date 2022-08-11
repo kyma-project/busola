@@ -427,14 +427,6 @@ export function ResourceListRenderer({
       />
       <GenericList
         title={showTitle ? title || prettifiedResourceName : null}
-        textSearchProperties={[
-          'metadata.name',
-          'metadata.namespace',
-          'metadata.labels',
-          ...textSearchProperties,
-        ]}
-        allowSlashShortcut={allowSlashShortcut}
-        showSearchField={showSearchField}
         actions={actions}
         entries={resources || []}
         headerRenderer={headerRenderer}
@@ -447,6 +439,16 @@ export function ResourceListRenderer({
         currentlyEditedResourceUID={currentlyEditedResourceUID}
         i18n={i18n}
         sortBy={sortBy}
+        searchSettings={{
+          showSearchField,
+          textSearchProperties: [
+            'metadata.name',
+            'metadata.namespace',
+            'metadata.labels',
+            ...textSearchProperties,
+          ],
+          allowSlashShortcut,
+        }}
       />
     </>
   );

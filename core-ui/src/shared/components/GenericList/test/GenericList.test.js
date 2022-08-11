@@ -318,7 +318,9 @@ describe('GenericList', () => {
           entries={mockEntries}
           headerRenderer={mockHeaderRenderer}
           rowRenderer={mockEntryRenderer}
-          showSearchField={false}
+          searchSettings={{
+            showSearchField: false,
+          }}
         />,
       );
 
@@ -353,7 +355,9 @@ describe('GenericList', () => {
           entries={mockEntries}
           headerRenderer={mockHeaderRenderer}
           rowRenderer={mockEntryRenderer}
-          textSearchProperties={['metadata.labels']}
+          searchSettings={{
+            textSearchProperties: ['metadata.labels'],
+          }}
         />,
       );
       expect(await queryAllByRole(/^(row|datarow)$/)).toHaveLength(

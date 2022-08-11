@@ -26,7 +26,9 @@ export const NetworkPolicyPorts = ({ ports, title }) => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       i18n={i18n}
-      showSearchField={false}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 };

@@ -83,7 +83,6 @@ export default function NamespaceBindings(application) {
       }
       actions={actions}
       title={t('applications.subtitle.namespace-bindings')}
-      showSearchField={false}
       entries={data || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
@@ -92,6 +91,9 @@ export default function NamespaceBindings(application) {
       i18n={i18n}
       messages={{
         notFoundMessage: t('applications.messages.binding-not-found'),
+      }}
+      searchSettings={{
+        showSearchField: false,
       }}
     />
   );
