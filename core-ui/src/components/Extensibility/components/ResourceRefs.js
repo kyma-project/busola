@@ -6,10 +6,11 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 
-export function ResourceRefs({ value, structure, schema }) {
+export function ResourceRefs({ value, structure, schema, disableMargin }) {
   const { t, i18n } = useTranslation();
   const { widgetT } = useGetTranslation();
   const resourceType = structure.kind;
+  const resourceScope = structure.scope || 'namespace';
   //kyma logpipeline api can return object in place of array wrongly, if only one record is defined
   const sanitizedValue =
     !Array.isArray(value) && value?.name && value?.namespace ? [value] : value;
@@ -42,6 +43,7 @@ export function ResourceRefs({ value, structure, schema }) {
       entries={sanitizedValue || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
+      disableMargin={disableMargin}
       i18n={i18n}
       showSearchField={false}
     />
