@@ -45,18 +45,6 @@ export const secrets = (t, context) => [
 export const resourceGraphConfig = (t, context) => ({
   relations: [
     {
-      kind: 'Pod',
-    },
-    {
-      kind: 'ServiceAccount',
-    },
-    {
-      kind: 'Ingress',
-    },
-    {
-      kind: 'OAuth2Client',
-    },
-    {
       kind: 'Gateway',
       clusterwide: true,
     },

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { getResourceUrl } from 'shared/helpers';
-import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
+import { getResourceGraphConfig } from 'shared/helpers/getResourceDefs';
 
 export const usePrepareListProps = (resourceType, resourceI18Key) => {
   const routerParams = useParams();
@@ -32,7 +32,8 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
 
   const context = useMicrofrontendContext();
   if (!savedResourceGraph) {
-    savedResourceGraph = getPerResourceDefs('resourceGraphConfig', t, context);
+    // savedResourceGraph = getPerResourceDefs('resourceGraphConfig', t, context);
+    savedResourceGraph = getResourceGraphConfig(t, context);
   }
 
   return {

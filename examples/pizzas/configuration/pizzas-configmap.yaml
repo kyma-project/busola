@@ -149,6 +149,13 @@ data:
       "scope": "namespace",
       "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
     }
+  resourceGraph: |-
+    {
+      matchers: {
+        Secret: "$current.spec.recipeSecret = $item.metadata.name",
+        PizzaOrder: "$item.spec.pizzas[name = $current.metadata.name and namespace = $current.metadata.namespace]",
+      }
+    }
   translations: |
     en:
       spec.description: Description

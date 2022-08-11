@@ -82,6 +82,13 @@ data:
       "scope": "namespace",
       "description": "check the translations"
     }
+  resourceGraph: |-
+    {
+      matchers: {
+        Pizza: "$current.spec.pizzas[name = $item.metadata.name and namespace = $item.metadata.namespace]",
+      },
+      depth: 1
+    }
   translations: |-
     {
       "en": {

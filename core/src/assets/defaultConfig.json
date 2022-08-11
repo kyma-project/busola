@@ -84,7 +84,7 @@
         "isEnabled": true
       },
       "EXTENSIBILITY": {
-        "isEnabled": false
+        "isEnabled": true
       },
       "TRACKING": {
         "isEnabled": false

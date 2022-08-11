@@ -57,3 +57,28 @@ export function match(resourceA, resourceB, config) {
   }
   return false;
 }
+
+export function findRelations(originalResourceKind, config) {
+  let relations = [...(config[originalResourceKind].relations || [])];
+
+  for (const matchKind of Object.keys(
+    config[originalResourceKind].matchers || {},
+  )) {
+    if (!relations.find(({ kind }) => kind === matchKind)) {
+      relations.push({ kind: matchKind });
+    }
+  }
+
+  for (const otherKind in config) {
+    if (otherKind === originalResourceKind) continue;
+    for (const matchKind in config[otherKind].matchers || {}) {
+      if (matchKind === originalResourceKind) {
+        if (!relations.find(({ kind }) => kind === otherKind)) {
+          relations.push({ kind: otherKind });
+        }
+      }
+    }
+  }
+
+  return relations;
+}

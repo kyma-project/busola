@@ -3,7 +3,10 @@ import pluralize from 'pluralize';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { getApiPath } from 'shared/utils/helpers';
-import { match } from 'shared/components/ResourceGraph/buildGraph/helpers';
+import {
+  findRelations,
+  match,
+} from 'shared/components/ResourceGraph/buildGraph/helpers';
 
 function getNamespacePart({
   resourceToFetch,
@@ -46,7 +49,7 @@ async function cycle(store, depth, config, context) {
       continue;
     }
 
-    for (const relation of config[kind]?.relations || []) {
+    for (const relation of findRelations(kind, config)) {
       const alreadyInStore = !!store.current[relation.kind];
       const alreadyToFetch = !!resourcesToFetch.find(
         r => r.kind === relation.kind,
