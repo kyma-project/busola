@@ -226,11 +226,6 @@ btp-service-bindings:
     provisioned: Provisioned
     secret: The name of the secret where the credentials are stored, defaults to the Service Binding name if not specified.
     secret-not-found: This Secret doesn't exist.
-catalog:
-  description: <0>Service Catalog</0> provides an easy way to access services that the Service Brokers manage, and to use them in an application.
-  menu-title: Catalog
-  subtitle: Enrich your experience with additional services that are installed outside the cluster.
-  title: Service Catalog
 certificates:
   common-name: Common Name
   create:
@@ -597,7 +592,7 @@ common:
     error: Error
     generate-name: Generate name
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' and ''.'' (e.g.: ''my.name-1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
@@ -1532,7 +1527,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
