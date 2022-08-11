@@ -30,7 +30,6 @@ export function ResourceList({
   schema,
   ...props
 }) {
-  console.log('ResourcesList', value);
   const kind = (value?.kind ?? '').replace(/List$/, '');
   // const resourceUrl = `/${apiVersion}/${namespacePart}/${resourceType}`;
   const resourceUrl = `/${value?.apiVersion}/${kind}`;
@@ -48,10 +47,6 @@ export function ResourceList({
   }
   */
 
-  console.log(
-    'predefined',
-    resources.map(r => r.resourceType),
-  );
   const PredefinedRenderer = resources.find(
     r => r.resourceType.toLowerCase() === pluralize(kind).toLowerCase(),
   );

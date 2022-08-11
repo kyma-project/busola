@@ -74,25 +74,23 @@ export function DataSourcesContextProvider({ children, dataSources }) {
       } = dataSource;
 
       const relativeUrl = buildUrl(dataSource, resource);
-      const isListCall = !name;
       const response = await fetch({ relativeUrl });
       const data = await response.json();
-      // data = isListCall ? data.items : data;
       if (filter && data.items) {
         data.items = jsonata(filter).evaluate({
           data: data.items,
           resource,
         });
-        data.items = formatJsonataResult(data.items, { isListCall });
+        data.items = formatJsonataResult(data.items, {
+          isListCall: data.kind.match(/List$/),
+        });
       }
-      console.log('set store', dataSourceName, data);
       setStore(dataSourceName, {
         loading: false,
         error: null,
         data,
       });
     } catch (e) {
-      console.log('set error store', dataSourceName);
       setStore(dataSourceName, { loading: false, error: e, data: null });
     }
   };
@@ -108,14 +106,12 @@ export function DataSourcesContextProvider({ children, dataSources }) {
     dataSources,
     getRelatedResourceInPath,
     requestRelatedResource: (resource, dataSourceName) => {
-      console.log('requestRelatedResource', resource, dataSourceName);
       const dataSource = dataSources[dataSourceName];
 
       if (!dataSourcesDict.current[dataSourceName]) {
         // mark dataSource as fetched
         dataSourcesDict.current[dataSourceName] = true;
 
-        console.log('set loading store', dataSourceName);
         setStore(dataSourceName, { loading: true });
 
         fetchResource(dataSource, dataSourceName, resource);
