@@ -52,6 +52,7 @@ export function ResourceRenderer({
         });
       }}
       label={tFromStoreKeys(storeKeys)}
+      data-testid={tFromStoreKeys(storeKeys)}
       input={Inputs.ComboboxInput}
       options={options}
       compact={compact}
