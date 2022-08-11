@@ -29,8 +29,17 @@ const defaultSort = {
   time: timeSort,
 };
 
+const defaultSearch = {
+  showSearchField: true,
+  textSearchProperties: ['name', 'description'],
+  showSearchControl: true,
+  showSearchSuggestion: true,
+  allowSlashShortcut: true,
+  noSearchResultMessage: 'components.generic-list.messages.no-search-results',
+};
+
 export const GenericList = ({
-  entries = [],
+  entries,
   actions,
   extraHeaderContent,
   title,
@@ -51,6 +60,8 @@ export const GenericList = ({
   messages,
   searchSettings,
 }) => {
+  searchSettings = { ...defaultSearch, ...searchSettings };
+
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
   const [sort, setSort] = useState({
@@ -165,8 +176,8 @@ export const GenericList = ({
         return (
           <BodyFallback>
             <p>
-              {t(messages.noSearchResultMessage) ||
-                messages.noSearchResultMessage}
+              {t(searchSettings.noSearchResultMessage) ||
+                searchSettings.noSearchResultMessage}
             </p>
           </BodyFallback>
         );
@@ -262,6 +273,25 @@ const PaginationProps = PropTypes.shape({
   autoHide: PropTypes.bool,
 });
 
+const MessagesProps = PropTypes.shape({
+  notFoundMessage: PropTypes.string,
+  serverErrorMessage: PropTypes.string,
+});
+
+const SearchProps = PropTypes.shape({
+  showSearchField: PropTypes.bool,
+  textSearchProperties: PropTypes.arrayOf(
+    PropTypes.oneOfType([
+      PropTypes.string.isRequired,
+      PropTypes.func.isRequired,
+    ]),
+  ),
+  showSearchSuggestion: PropTypes.bool,
+  showSearchControl: PropTypes.bool,
+  allowSlashShortcut: PropTypes.bool,
+  noSearchResultMessage: PropTypes.string,
+});
+
 GenericList.propTypes = {
   title: PropTypes.string,
   entries: PropTypes.arrayOf(
@@ -281,26 +311,12 @@ GenericList.propTypes = {
   compact: PropTypes.bool,
   className: PropTypes.string,
   currentlyEditedResourceUID: PropTypes.string,
-  messages: {
-    notFoundMessage: PropTypes.string,
-    noSearchResultMessage: PropTypes.string,
-    serverErrorMessage: PropTypes.string,
-  },
-  searchSettings: {
-    showSearchField: PropTypes.bool,
-    textSearchProperties: PropTypes.arrayOf(
-      PropTypes.oneOfType([
-        PropTypes.string.isRequired,
-        PropTypes.func.isRequired,
-      ]),
-    ),
-    showSearchSuggestion: PropTypes.bool,
-    showSearchControl: PropTypes.bool,
-    allowSlashShortcut: PropTypes.bool,
-  },
+  messages: MessagesProps,
+  searchSettings: SearchProps,
 };
 
 GenericList.defaultProps = {
+  entries: [],
   actions: [],
   showHeader: true,
   serverDataError: null,
@@ -309,13 +325,6 @@ GenericList.defaultProps = {
   compact: true,
   messages: {
     notFoundMessage: 'components.generic-list.messages.not-found',
-    noSearchResultMessage: 'components.generic-list.messages.no-search-results',
   },
-  searchSettings: {
-    showSearchField: true,
-    textSearchProperties: ['name', 'description'],
-    showSearchControl: true,
-    showSearchSuggestion: true,
-    allowSlashShortcut: true,
-  },
+  searchSettings: defaultSearch,
 };

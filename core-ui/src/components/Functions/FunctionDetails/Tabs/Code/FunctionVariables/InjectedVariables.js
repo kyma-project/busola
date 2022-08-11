@@ -168,12 +168,12 @@ export default function InjectedVariables({
         i18n={i18n}
         messages={{
           notFoundMessage: t('functions.variable.not-found'),
-          noSearchResultMessage: t('functions.variable.not-match'),
         }}
         searchSettings={{
           showSearchField: true,
           showSearchSuggestion: false,
           textSearchProperties,
+          noSearchResultMessage: t('functions.variable.not-match'),
         }}
       />
     </div>

@@ -223,10 +223,11 @@ function ClusterList() {
         sortBy={{
           name: (a, b) => a.contextName?.localeCompare(b.contextName),
         }}
-        messages={{
+        searchSettings={{
+          textSearchProperties,
+          showSearchSuggestion: false,
           noSearchResultMessage: t('clusters.list.no-clusters-found'),
         }}
-        searchSettings={{ textSearchProperties, showSearchSuggestion: false }}
       />
       <DeleteMessageBox
         resource={chosenCluster}

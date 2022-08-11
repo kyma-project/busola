@@ -109,14 +109,14 @@ export default function ServiceBindings({
       i18n={i18n}
       messages={{
         notFoundMessage: SERVICE_BINDINGS_PANEL.LIST.ERRORS.RESOURCES_NOT_FOUND,
-        noSearchResultMessage:
-          SERVICE_BINDINGS_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY,
         serverErrorMessage: t(ERRORS.SERVER),
       }}
       searchSettings={{
         textSearchProperties,
         showSearchField: true,
         showSearchSuggestion: false,
+        noSearchResultMessage:
+          SERVICE_BINDINGS_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY,
       }}
     />
   );
