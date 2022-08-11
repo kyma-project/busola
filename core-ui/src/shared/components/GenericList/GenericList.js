@@ -64,7 +64,7 @@ export const GenericList = ({
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
   const [sort, setSort] = useState({
-    name: sortBy && sortBy !== {} && Object?.keys(sortBy)[0],
+    name: sortBy && Object.keys(sortBy)[0],
     order: 'ASC',
   });
 
