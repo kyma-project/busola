@@ -52,7 +52,6 @@ context('Test Pizzas', () => {
       .find('.sap-icon--message-success')
       .should('have.length', 4);
 
-    //
     cy.loadFiles('examples/pizzas/samples.yaml').then(resources => {
       const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
       cy.pasteToMonaco(input);
@@ -109,14 +108,6 @@ context('Test Pizzas', () => {
 
   it('Edits a Pizza Order', () => {
     cy.getIframeBody().as('iframe');
-
-    cy.get('@iframe')
-      .contains('Status')
-      .should('be.visible');
-
-    cy.get('@iframe')
-      .contains(/^ready$/i)
-      .should('be.visible');
 
     cy.get('@iframe')
       .contains('button:visible', 'Edit')
@@ -220,10 +211,5 @@ context('Test Pizzas', () => {
     cy.getIframeBody()
       .contains('h3', PIZZA_NAME)
       .should('be.visible');
-  });
-
-  it('Removes the pizza namespace', () => {
-    cy.navigateTo('Back to Cluster Details', 'Namespaces');
-    cy.deleteFromGenericList('pizzas');
   });
 });
