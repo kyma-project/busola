@@ -109,6 +109,7 @@ export function ResourceForm({
       customSchemaUri={customSchemaUri}
       autocompletionDisabled={autocompletionDisabled}
       readOnly={readOnly}
+      updateValueOnParentChange={presets?.length}
     />
   );
   editor = renderEditor
