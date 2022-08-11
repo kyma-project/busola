@@ -40,10 +40,6 @@ api-rules:
   title: Reguły API
 applications:
   title: Aplikacje
-catalog:
-  menu-title: Katalog
-  subtitle: Rozszerz możliwości za pomocą dodatkowych usług instalowanych poza klastrem.
-  title: Katalog serwisów
 cluster-addons:
   title: Dodatki do klastra
 cluster-role-bindings:
