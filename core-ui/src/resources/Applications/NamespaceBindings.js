@@ -89,8 +89,10 @@ export default function NamespaceBindings(application) {
       rowRenderer={rowRenderer}
       serverDataError={error}
       serverDataLoading={loading}
-      notFoundMessage={t('applications.messages.binding-not-found')}
       i18n={i18n}
+      messages={{
+        notFoundMessage: t('applications.messages.binding-not-found'),
+      }}
     />
   );
 }

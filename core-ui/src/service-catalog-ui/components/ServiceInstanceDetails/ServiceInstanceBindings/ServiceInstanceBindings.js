@@ -226,7 +226,6 @@ const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
           </Link>,
           <ServiceBindingStatus status={e.status} />,
         ]}
-        notFoundMessage="No Bindings found"
         actions={
           btpCatalogEnabled
             ? []
@@ -261,6 +260,9 @@ const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
         serverDataLoading={bindingsRequest.loading}
         textSearchProperties={['spec.secretName']}
         i18n={i18n}
+        messages={{
+          notFoundMessage: 'No Bindings found',
+        }}
       />
       <GenericList
         key="binding-usages-list"
@@ -269,7 +271,6 @@ const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
         extraHeaderContent={createServiceBindingUsageModal}
         entries={serviceBindingsCombined}
         rowRenderer={bindingUsagesRowRenderer}
-        notFoundMessage="No applications found"
         actions={actions}
         serverDataError={error}
         serverDataLoading={loading}
@@ -279,6 +280,9 @@ const ServiceInstanceBindings = ({ serviceInstance, i18n }) => {
           'serviceBindingUsage.spec.usedBy.name',
         ]}
         i18n={i18n}
+        messages={{
+          notFoundMessage: 'No applications found',
+        }}
       />
     </>
   );

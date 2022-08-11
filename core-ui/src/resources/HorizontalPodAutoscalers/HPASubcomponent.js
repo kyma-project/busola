@@ -41,7 +41,6 @@ export const HPASubcomponent = props => {
       key="associated-hpa-list"
       title={t('hpas.title')}
       textSearchProperties={['metadata.name']}
-      notFoundMessage={EMPTY_TEXT_PLACEHOLDER}
       serverDataError={error}
       headerRenderer={() => [
         t('common.headers.name'),
@@ -79,6 +78,9 @@ export const HPASubcomponent = props => {
           }
         />,
       ]}
+      messages={{
+        notFoundMessage: EMPTY_TEXT_PLACEHOLDER,
+      }}
     />
   );
 };

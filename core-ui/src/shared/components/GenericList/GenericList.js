@@ -35,9 +35,6 @@ export const GenericList = ({
   title,
   headerRenderer,
   rowRenderer,
-  notFoundMessage,
-  noSearchResultMessage,
-  serverErrorMessage,
   extraHeaderContent,
   showSearchField,
   textSearchProperties,
@@ -57,7 +54,7 @@ export const GenericList = ({
   i18n,
   allowSlashShortcut,
   sortBy,
-  genericErrorMessage,
+  messages,
 }) => {
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
@@ -149,8 +146,8 @@ export const GenericList = ({
       return (
         <BodyFallback>
           <p>
-            {serverErrorMessage
-              ? serverErrorMessage
+            {messages.serverErrorMessage
+              ? messages.serverErrorMessage
               : getErrorMessage(serverDataError)}
           </p>
         </BodyFallback>
@@ -164,18 +161,20 @@ export const GenericList = ({
         </BodyFallback>
       );
     }
-
     if (!filteredEntries.length) {
       if (searchQuery) {
         return (
           <BodyFallback>
-            <p>{t(noSearchResultMessage)}</p>
+            <p>
+              {t(messages.noSearchResultMessage) ||
+                messages.noSearchResultMessage}
+            </p>
           </BodyFallback>
         );
       }
       return (
         <BodyFallback>
-          <p>{genericErrorMessage || t(notFoundMessage)}</p>
+          <p>{t(messages.notFoundMessage) || messages.notFoundMessage}</p>
         </BodyFallback>
       );
     }
@@ -276,9 +275,6 @@ GenericList.propTypes = {
   actions: CustomPropTypes.listActions,
   extraHeaderContent: PropTypes.node,
   showSearchField: PropTypes.bool,
-  notFoundMessage: PropTypes.string,
-  noSearchResultMessage: PropTypes.string,
-  serverErrorMessage: PropTypes.string,
   textSearchProperties: PropTypes.arrayOf(
     PropTypes.oneOfType([
       PropTypes.string.isRequired,
@@ -298,12 +294,14 @@ GenericList.propTypes = {
   compact: PropTypes.bool,
   className: PropTypes.string,
   currentlyEditedResourceUID: PropTypes.string,
-  genericErrorMessage: PropTypes.string,
+  messages: {
+    notFoundMessage: PropTypes.string,
+    noSearchResultMessage: PropTypes.string,
+    serverErrorMessage: PropTypes.string,
+  },
 };
 
 GenericList.defaultProps = {
-  notFoundMessage: 'components.generic-list.messages.not-found',
-  noSearchResultMessage: 'components.generic-list.messages.no-search-results',
   actions: [],
   textSearchProperties: ['name', 'description'],
   showSearchField: true,
@@ -315,5 +313,8 @@ GenericList.defaultProps = {
   serverDataLoading: false,
   disableMargin: false,
   compact: true,
-  genericErrorMessage: null,
+  messages: {
+    notFoundMessage: 'components.generic-list.messages.not-found',
+    noSearchResultMessage: 'components.generic-list.messages.no-search-results',
+  },
 };

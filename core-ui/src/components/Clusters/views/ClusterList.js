@@ -221,11 +221,13 @@ function ClusterList() {
         rowRenderer={rowRenderer}
         actions={actions}
         extraHeaderContent={extraHeaderContent}
-        noSearchResultMessage={'clusters.list.no-clusters-found'}
         i18n={i18n}
         allowSlashShortcut
         sortBy={{
           name: (a, b) => a.contextName?.localeCompare(b.contextName),
+        }}
+        messages={{
+          noSearchResultMessage: t('clusters.list.no-clusters-found'),
         }}
       />
       <DeleteMessageBox

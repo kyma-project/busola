@@ -109,12 +109,13 @@ export default function ServiceBindings({
       rowRenderer={rowRenderer}
       serverDataError={serverDataError}
       serverDataLoading={serverDataLoading}
-      notFoundMessage={SERVICE_BINDINGS_PANEL.LIST.ERRORS.RESOURCES_NOT_FOUND}
-      noSearchResultMessage={
-        SERVICE_BINDINGS_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY
-      }
-      serverErrorMessage={t(ERRORS.SERVER)}
       i18n={i18n}
+      messages={{
+        notFoundMessage: SERVICE_BINDINGS_PANEL.LIST.ERRORS.RESOURCES_NOT_FOUND,
+        noSearchResultMessage:
+          SERVICE_BINDINGS_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY,
+        serverErrorMessage: t(ERRORS.SERVER),
+      }}
     />
   );
 }

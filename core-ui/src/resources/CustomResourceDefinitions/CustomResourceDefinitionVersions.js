@@ -29,11 +29,13 @@ const CustomResources = ({ resource, namespace, version, i18n }) => {
     return (
       <GenericList
         title={prettifyNamePlural(undefined, name)}
-        notFoundMessage={t('custom-resource-definitions.messages.no-entries')}
         entries={[]}
         headerRenderer={() => []}
         rowRenderer={() => []}
         i18n={i18n}
+        messages={{
+          notFoundMessage: t('custom-resource-definitions.messages.no-entries'),
+        }}
       />
     );
   }

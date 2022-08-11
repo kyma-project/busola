@@ -42,9 +42,11 @@ const ServiceClassInstancesTable = ({ instanceList, i18n }) => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={instanceList}
-      notFoundMessage={serviceClassConstants.emptyInstancesListMessage}
       title="Service Instances"
       i18n={i18n}
+      messages={{
+        notFoundMessage: serviceClassConstants.emptyInstancesListMessage,
+      }}
     />
   );
 };

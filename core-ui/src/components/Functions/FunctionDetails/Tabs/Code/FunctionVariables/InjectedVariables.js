@@ -168,9 +168,11 @@ export default function InjectedVariables({
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
-        notFoundMessage={t('functions.variable.not-found')}
-        noSearchResultMessage={t('functions.variable.not-match')}
         i18n={i18n}
+        messages={{
+          notFoundMessage: t('functions.variable.not-found'),
+          noSearchResultMessage: t('functions.variable.not-match'),
+        }}
       />
     </div>
   );

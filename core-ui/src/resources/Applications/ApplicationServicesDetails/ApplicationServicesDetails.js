@@ -109,8 +109,10 @@ function ApplicationServiceDetails({ applicationName, serviceName }) {
             entries={APIs}
             headerRenderer={headerRenderer}
             rowRenderer={rowRenderer}
-            notFoundMessage={t('applications.messages.no-apis')}
             i18n={i18n}
+            messages={{
+              notFoundMessage: t('applications.messages.no-apis'),
+            }}
           />
 
           <GenericList
@@ -120,8 +122,10 @@ function ApplicationServiceDetails({ applicationName, serviceName }) {
             entries={events}
             headerRenderer={headerRenderer}
             rowRenderer={rowRenderer}
-            notFoundMessage={t('applications.messages.no-events')}
             i18n={i18n}
+            messages={{
+              notFoundMessage: t('applications.messages.no-events'),
+            }}
           />
         </>
       )}

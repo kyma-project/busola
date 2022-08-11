@@ -22,7 +22,9 @@ const handleTableValue = (value, t) => {
     default: {
       return {
         entries: [],
-        genericErrorMessage: t('extensibility.widgets.table.error'),
+        messages: {
+          notFoundMessage: t('extensibility.widgets.table.error'),
+        },
       };
     }
   }

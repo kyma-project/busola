@@ -98,10 +98,11 @@ export default function AccessStrategies({
         entries={strategies}
         headerRenderer={headerRenderer}
         rowRenderer={e => rowRenderer(e, t)}
-        noSearchResultMessage={
-          ACCESS_STRATEGIES_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY
-        }
         i18n={i18n}
+        messages={{
+          noSearchResultMessage:
+            ACCESS_STRATEGIES_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY,
+        }}
       />
     </div>
   );
