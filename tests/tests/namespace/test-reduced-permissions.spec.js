@@ -122,7 +122,7 @@ context('Test reduced permissions', () => {
       .click();
     cy.getIframeBody()
       .find('[role=dialog]')
-      .contains('Service Account')
+      .contains('ServiceAccount')
       .click();
 
     // name
