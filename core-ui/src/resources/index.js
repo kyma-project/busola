@@ -9,7 +9,6 @@ import * as ServiceEntries from './ServiceEntries';
 import * as StatefulSets from './StatefulSets';
 import * as Services from './Services';
 import * as ServiceInstances from './ServiceInstances';
-import * as ServiceBrokers from './ServiceBrokers';
 import * as ServiceBindings from './ServiceBindings';
 import * as Secrets from './Secrets';
 import * as Roles from './Roles';
@@ -80,7 +79,6 @@ export const resources = [
   // service management
   ServiceInstances,
   ServiceBindings,
-  ServiceBrokers,
   // configuration
   Secrets,
   Roles,
