@@ -261,7 +261,7 @@ certificates:
   tooltips:
     close-expiration: Certificate will expire in less than one day.
     common-name: Common Name is the primary domain name of the certificate.
-    csr: Certificate Signing Request is an alternative way to provide common name, DNSnames, and other information.
+    csr: Certificate Signing Request is an alternative way to provide common name, DNSNames, and other information.
     dns-names: DNS Names are the optional additional domain names of the certificate.
     existing-secret: Use an existing Secret for storing the certificate if enabled. Otherwise a new Secret will be created.
     expired: Certificate expired
@@ -813,7 +813,7 @@ custom-resource-definitions:
     served: This version is served using REST APIs.
     storage: Use this version when persisting custom resources to storage.
 custom-resources:
-  description: <0>Custom resource</0> extends the Kubernetes API. You can define your own custom resource by creating a <1>CustomResource Definition</1> first.
+  description: <0>Custom resource</0> extends the Kubernetes API. You can define your own custom resource by creating a <1>CustomResourceDefinition</1> first.
   schema-preview: Schema Preview
   title: Custom Resources
 daemon-sets:
@@ -937,7 +937,7 @@ dnsentries:
     created: DNSEntry created
   name_singular: DNSEntry
   placeholders:
-    dns-name: Select the DNSname
+    dns-name: Select the DNSName
     target-a: Enter the A record target
     target-cname: Enter the CNAME record target
     ttl: Enter the time to live
@@ -1496,7 +1496,7 @@ jobs:
     title: Conditions
     type: Type
   create-modal:
-    at-least-one-container-required: Cron Job must have at least one container.
+    at-least-one-container-required: CronJob must have at least one container.
     container: Container
     containers: Containers
     containers-readonly-in-edit: After a Job is created, the containers are read-only.
@@ -1827,7 +1827,7 @@ pv:
     bound: PersistentVolume bound
     failed: Recycle or deletion failed
     pending: PersistentVolume not available
-    released: Bound PersistentVolume Claim deleted
+    released: Bound PersistentVolumeClaim deleted
 replica-sets:
   cpu: CPU
   create-modal:
