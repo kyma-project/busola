@@ -1,5 +1,18 @@
 # Form widgets
 
+- [Simple widgets](#simple-widgets)
+  - [Text](#text)
+  - [Name](#name)
+  - [CodeEditor](#codeeditor)
+  - [Resource](#resource)
+- [Complex widgets](#complex-widgets)
+  - [KeyValuePair](#keyvaluepair)
+  - [ResourceRefs](#resourcerefs)
+- [Presentation widgets](#presentation-widgets)
+  - [FormGroup](#formgroup)
+  - [GenericList](#genericlist)
+  - [SimpleList](#simplelist)
+
 Form widgets are used in the resource forms.
 
 ## Simple widgets

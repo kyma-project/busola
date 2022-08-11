@@ -22,7 +22,7 @@ context('Test Service Accounts', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[ariaLabel="Service Account name"]')
+      .find('[ariaLabel="ServiceAccount name"]')
       .clear()
       .type(SERVICE_NAME);
 

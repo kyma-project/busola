@@ -54,7 +54,7 @@ context('Test Protected Resources', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[ariaLabel="Config Map name"]:visible')
+      .find('[ariaLabel="ConfigMap name"]:visible')
       .type(NAME);
 
     cy.getIframeBody()
