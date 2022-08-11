@@ -8,8 +8,8 @@ export function Presets({ presets, onSelect, ...otherProps }) {
     key: name,
     text: name,
   }));
-  
-return (
+
+  return (
     <Dropdown
       placeholder={t('common.create-form.choose-preset')}
       compact
