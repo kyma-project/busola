@@ -27,7 +27,7 @@ context('Test Replica Sets', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[ariaLabel="Replica Set name"]')
+      .find('[ariaLabel="ReplicaSet name"]')
       .clear()
       .type(REPLICA_SET_NAME);
 
