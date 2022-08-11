@@ -1,29 +1,15 @@
 import React from 'react';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { useFeature } from 'shared/hooks/useFeature';
 
 import CodeAndDependencies from './CodeAndDependencies/CodeAndDependencies';
 import RepositoryConfig from './RepositoryConfig/RepositoryConfig';
 import FunctionVariables from './FunctionVariables/FunctionVariables';
-import InjectedVariables from './FunctionVariables/InjectedVariables';
-import { useGetBindingsCombined } from 'components/Functions/hooks/useGetBindingsCombined';
 
 import { isGitSourceType } from 'components/Functions/helpers/functions';
 import { serializeVariables } from 'components/Functions/helpers/functionVariables';
 import PodList from './PodList/PodList';
 
 export default function CodeTab({ func, isActive }) {
-  const { isEnabled: isServiceCatalogEnabled } = useFeature('SERVICE_CATALOG');
-
-  const { serviceBindingsCombined } = useGetBindingsCombined(
-    func,
-    isActive && isServiceCatalogEnabled,
-  );
-  const serviceBindingsWithUsages = (serviceBindingsCombined || []).filter(
-    ({ serviceBindingUsage }) => serviceBindingUsage,
-  );
-
   const { data: configmaps } = useGetList()(
     `/api/v1/namespaces/${func.metadata.namespace}/configmaps`,
   );
@@ -36,19 +22,10 @@ export default function CodeTab({ func, isActive }) {
     injectedVariables,
   } = serializeVariables({
     functionVariables: func?.spec?.env,
-    bindingUsages: serviceBindingsWithUsages || [],
+    bindingUsages: [],
     secrets: secrets,
     configmaps: configmaps,
   });
-  const microfrontendContext = useMicrofrontendContext();
-  const { features } = microfrontendContext;
-  const catalogEnabled =
-    features?.SERVICE_CATALOG?.isEnabled &&
-    features?.SERVICE_CATALOG_ADDONS?.isEnabled;
-
-  const InjectedBindingVariables = catalogEnabled
-    ? InjectedVariables
-    : () => null;
 
   return (
     <>
@@ -61,12 +38,6 @@ export default function CodeTab({ func, isActive }) {
         func={func}
         secrets={secrets}
         configmaps={configmaps}
-        customVariables={customVariables}
-        customValueFromVariables={customValueFromVariables}
-        injectedVariables={injectedVariables}
-      />
-      <InjectedBindingVariables
-        func={func}
         customVariables={customVariables}
         customValueFromVariables={customValueFromVariables}
         injectedVariables={injectedVariables}
