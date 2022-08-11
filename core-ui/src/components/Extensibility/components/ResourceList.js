@@ -30,6 +30,11 @@ export function ResourceList({
   schema,
   ...props
 }) {
+  console.log('ResourcesList', value);
+  const kind = (value?.kind ?? '').replace(/List$/, '');
+  // const resourceUrl = `/${apiVersion}/${namespacePart}/${resourceType}`;
+  const resourceUrl = `/${value.apiVersion}/${kind}`;
+  /*
   const {
     kind,
     resourceType,
@@ -41,14 +46,16 @@ export function ResourceList({
   if (error) {
     throw Error('Error in ResourceList: ' + error.message);
   }
+  */
 
   const PredefinedRenderer = resources.find(
-    r => r.resourceType.toLowerCase() === resourceType,
+    r => r.resourceType.toLowerCase() === kind,
   );
   const ListRenderer = PredefinedRenderer
     ? PredefinedRenderer.List
     : ResourcesList;
 
+  /*
   let columns;
   if (Array.isArray(structure.columns)) {
     columns = structure.columns.map(({ name, ...props }) => ({
@@ -61,17 +68,18 @@ export function ResourceList({
   if (Array.isArray(value.data)) {
     value.data = value.data.map(d => ({ ...d, kind }));
   }
+  */
 
   return (
     <ListRenderer
       skipDataLoading={true}
-      loading={value.loading}
-      error={value.error}
-      resources={value.data}
+      // loading={value.loading}
+      // error={value.error}
+      resources={value.items}
       resourceUrl={resourceUrl}
       resourceType={prettifyKind(kind)}
       resourceName={prettifyKind(kind)}
-      namespace={namespace}
+      // namespace={namespace}
       isCompact
       title={structure.name}
       showTitle={true}
@@ -79,7 +87,12 @@ export function ResourceList({
       fixedPath={true}
       {...structure}
       {...props}
-      columns={columns}
+      // columns={columns}
     />
+  );
+  return (
+    <ul>
+      <li>kind: {kind}</li>
+    </ul>
   );
 }
