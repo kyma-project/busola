@@ -59,7 +59,7 @@ export function ServiceBindingList(props) {
   return (
     <ResourcesList
       customColumns={customColumns}
-      resourceName={t('btp-service-bindings.title')}
+      resourceTitle={t('btp-service-bindings.title')}
       textSearchProperties={['spec.serviceInstanceName', 'spec.externalName']}
       description={description}
       createResourceForm={ServiceBindingCreate}

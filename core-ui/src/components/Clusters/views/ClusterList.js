@@ -230,7 +230,7 @@ function ClusterList() {
       />
       <DeleteMessageBox
         resource={chosenCluster}
-        resourceName={chosenCluster?.kubeconfig['current-context']}
+        resourceTitle={chosenCluster?.kubeconfig['current-context']}
         deleteFn={e => {
           deleteCluster(e.name);
           notification.notifySuccess({

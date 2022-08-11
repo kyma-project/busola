@@ -51,7 +51,7 @@ ResourcesList.propTypes = {
   createActionLabel: PropTypes.string,
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
-  resourceName: PropTypes.string,
+  resourceTitle: PropTypes.string,
   namespace: PropTypes.string,
   hasDetailsView: PropTypes.bool,
   fixedPath: PropTypes.bool,
@@ -89,7 +89,7 @@ export function ResourcesList(props) {
     <YamlEditorProvider i18n={props.i18n}>
       {!props.isCompact && (
         <PageHeader
-          title={prettifyNamePlural(props.resourceName, props.resourceType)}
+          title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
           actions={props.customHeaderActions}
           description={props.description}
         />
@@ -102,7 +102,7 @@ export function ResourcesList(props) {
 function Resources(props) {
   const {
     windowTitle,
-    resourceName,
+    resourceTitle,
     resourceType,
     filter,
     filterFn,
@@ -111,7 +111,7 @@ function Resources(props) {
     isCompact,
   } = props;
   useWindowTitle(
-    windowTitle || prettifyNamePlural(resourceName, resourceType),
+    windowTitle || prettifyNamePlural(resourceTitle, resourceType),
     { skip: isCompact },
   );
 
@@ -137,7 +137,7 @@ function Resources(props) {
 export function ResourceListRenderer({
   resourceUrl,
   resourceType,
-  resourceName,
+  resourceTitle,
   namespace,
   customColumns = [],
   columns,
@@ -182,7 +182,7 @@ export function ResourceListRenderer({
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
     i18n,
-    resourceName,
+    resourceTitle,
     resourceType,
   });
 
@@ -200,7 +200,7 @@ export function ResourceListRenderer({
   useEffect(() => closeEditor(), [namespace]);
 
   const prettifiedResourceName = prettifyNameSingular(
-    resourceName,
+    resourceTitle,
     resourceType,
   );
 
@@ -407,7 +407,7 @@ export function ResourceListRenderer({
             <CreateResourceForm
               resource={activeResource}
               resourceType={resourceType}
-              resourceName={resourceName}
+              resourceTitle={resourceTitle}
               resourceUrl={resourceUrl}
               namespace={namespace}
               refetchList={silentRefetch}

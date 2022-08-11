@@ -55,7 +55,7 @@ export function ReplicaSetList(params) {
   return (
     <ResourcesList
       customColumns={customColumns}
-      resourceName={t('replica-sets.title')}
+      resourceTitle={t('replica-sets.title')}
       description={description}
       createResourceForm={ReplicaSetCreate}
       {...params}

@@ -81,7 +81,7 @@ export function GroupingListPage({
             <ResourceListRenderer
               resourceUrl={resourceUrl}
               resourceType="CustomResourceDefinition"
-              resourceName="customresourcedefinition"
+              resourceTitle="customresourcedefinition"
               hasDetailsView={true}
               showSearchField={false}
               showTitle={true}

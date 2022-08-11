@@ -45,7 +45,7 @@ export function ServiceInstanceList(props) {
   return (
     <ResourcesList
       customColumns={customColumns}
-      resourceName={t('btp-instances.title')}
+      resourceTitle={t('btp-instances.title')}
       textSearchProperties={[
         'spec.serviceOfferingName',
         'spec.servicePlanName',

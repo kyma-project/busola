@@ -10,7 +10,7 @@ export default function Replicas({ name, namespace, isActive = false }) {
     fixedPath: true,
     resourceUrl: `/api/v1/namespaces/${namespace}/pods?labelSelector=${labelSelectors}`,
     resourceType: 'pods',
-    resourceName: 'Replicas of the Function',
+    resourceTitle: 'Replicas of the Function',
     namespace: namespace,
     isCompact: true,
     showTitle: true,
