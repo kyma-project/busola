@@ -13,6 +13,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useGetSchema } from 'hooks/useGetSchema';
+import { prettifyKind } from 'shared/utils/helpers';
 
 export function ExtensibilityCreate({
   formElementRef,
@@ -77,7 +78,7 @@ export function ExtensibilityCreate({
   return (
     <ResourceForm
       pluralKind={resourceType}
-      singularName={pluralize(resourceName, 1)}
+      singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
       resource={resource}
       setResource={updateResource}
       formElementRef={formElementRef}
