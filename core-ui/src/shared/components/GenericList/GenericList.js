@@ -38,7 +38,6 @@ export const GenericList = ({
   rowRenderer,
   actionsStandaloneItems,
   testid,
-  showRootHeader,
   showHeader,
   serverDataError,
   serverDataLoading,
@@ -218,12 +217,10 @@ export const GenericList = ({
 
   return (
     <LayoutPanel className={panelClassNames} data-testid={testid}>
-      {showRootHeader && (
-        <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
-          <LayoutPanel.Head title={title} />
-          <LayoutPanel.Actions>{headerActions}</LayoutPanel.Actions>
-        </LayoutPanel.Header>
-      )}
+      <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
+        <LayoutPanel.Head title={title} />
+        <LayoutPanel.Actions>{headerActions}</LayoutPanel.Actions>
+      </LayoutPanel.Header>
 
       <LayoutPanel.Body className="fd-has-padding-none">
         <table className={tableClassNames}>
@@ -276,7 +273,6 @@ GenericList.propTypes = {
   extraHeaderContent: PropTypes.node,
   actionsStandaloneItems: PropTypes.number,
   testid: PropTypes.string,
-  showRootHeader: PropTypes.bool,
   showHeader: PropTypes.bool,
   serverDataError: PropTypes.any,
   serverDataLoading: PropTypes.bool,
@@ -306,7 +302,6 @@ GenericList.propTypes = {
 
 GenericList.defaultProps = {
   actions: [],
-  showRootHeader: true,
   showHeader: true,
   serverDataError: null,
   serverDataLoading: false,
