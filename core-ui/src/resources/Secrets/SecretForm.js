@@ -45,7 +45,7 @@ export function SecretForm({
     onSubmit(secretInput);
   };
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const metadataContent = (
     <>
       <div className="secrets-form-metadata">

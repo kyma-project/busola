@@ -10,16 +10,18 @@ export function Presets({ presets, onSelect, ...otherProps }) {
   }));
 
   return (
-    <Dropdown
-      placeholder={t('common.create-form.choose-preset')}
-      compact
-      options={options}
-      selectedKey={''}
-      onSelect={(e, preset) => {
-        e.stopPropagation();
-        onSelect(presets.find(p => p.name === preset.key));
-      }}
-      {...otherProps}
-    />
+    <div className="fd-margin-bottom--sm">
+      <Dropdown
+        placeholder={t('common.create-form.choose-preset')}
+        compact
+        options={options}
+        selectedKey={''}
+        onSelect={(e, preset) => {
+          e.stopPropagation();
+          onSelect(presets.find(p => p.name === preset.key));
+        }}
+        {...otherProps}
+      />
+    </div>
   );
 }
