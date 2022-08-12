@@ -24,7 +24,7 @@ export function Editor({
   updateValueOnParentChange,
   customSchemaId, // custom key to find the json schema, don't use if the default key works (apiVersion/kind)
   autocompletionDisabled,
-  customSchemaUri, // custom link to be displayed in the autocompletion tooltips
+  customSchemaUri, // custom tooltip link used also as ID. ID CAN'T BE THE SAME if you have 2+ editor opened at the same time
   height,
   onBlur,
   onFocus,
@@ -67,7 +67,6 @@ export function Editor({
   useOnMount({ editorInstance, onMount });
   useOnChange({ editorInstance, onChange });
 
-  // others
   useUpdateValueOnParentChange({
     updateValueOnParentChange,
     editorInstance,

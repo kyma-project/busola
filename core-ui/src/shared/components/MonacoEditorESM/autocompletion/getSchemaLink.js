@@ -5,18 +5,21 @@ import {
 import jsyaml from 'js-yaml';
 import pluralize from 'pluralize';
 import LuigiClient from '@luigi-project/client';
+import { v4 as uuid } from 'uuid';
 
 const nativeResources = [
   ...namespaceNativeResourceTypes,
   ...clusterNativeResourceTypes,
 ];
-const GENERIC_URL = 'https://kubernetes.io/releases';
+const GENERIC_URL = `https://kubernetes.io/releases`;
 const host =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:8080'
     : window.location.origin;
 
 export const getSchemaLink = (value, language) => {
+  return `https://kubernetes.io/releases/uuid${uuid()}`;
+
   if (language !== 'yaml') return GENERIC_URL;
   if (!value) return GENERIC_URL;
 
@@ -46,11 +49,13 @@ export const getSchemaLink = (value, language) => {
 
   const v = window.localStorage.getItem('cluster.version');
 
+  const uniqueResourceId = `/${resourceApi}/${resourceType}`;
+
   if (isNative && v) {
     return `https://kubernetes.io/docs/reference/generated/kubernetes-api/${v.substring(
       0,
       v.lastIndexOf('.'),
-    )}`;
+    )}${uniqueResourceId}`;
   } else if (isNative && !v) {
     return GENERIC_URL;
   }

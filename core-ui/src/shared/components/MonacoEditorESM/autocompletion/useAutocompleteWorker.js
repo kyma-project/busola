@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Uri } from 'monaco-editor';
 import { setDiagnosticsOptions } from 'monaco-yaml';
 import { getSchemaLink } from './getSchemaLink';
@@ -37,8 +37,7 @@ window.MonacoEnvironment = {
   },
 };
 
-let activeSchemaPath = null;
-
+const schemas = [];
 const getDefaultSchemaId = resource => {
   const { apiVersion, kind } = resource || {};
 
@@ -64,6 +63,7 @@ export function useAutocompleteWorker({
   // value as a model id and model stores information on editor's value, language etc.)
   const [schemaId] = useState(customSchemaId || getDefaultSchemaId(value));
   const [schemaLink] = useState(getSchemaLink(value, language));
+  const activeSchemaPath = useRef('');
 
   const { schema, loading, error } = useGetSchema({
     schemaId,
@@ -76,7 +76,19 @@ export function useAutocompleteWorker({
    */
   const setAutocompleteOptions = useCallback(() => {
     const modelUri = Uri.parse(schemaId);
-    activeSchemaPath = modelUri.path;
+    activeSchemaPath.current = modelUri.path;
+
+    if (schema) {
+      schemas.push({
+        uri:
+          customSchemaUri ||
+          schemaLink ||
+          `https://kubernetes.io/docs/concepts/overview/kubernetes-api/${schemaId}`,
+        fileMatch: [String(modelUri)],
+        schema: schema || {},
+      });
+    }
+
     setDiagnosticsOptions({
       enableSchemaRequest: false,
       hover: true,
@@ -84,16 +96,7 @@ export function useAutocompleteWorker({
       validate: true,
       format: true,
       isKubernetes: true,
-      schemas: [
-        {
-          uri:
-            customSchemaUri ||
-            schemaLink ||
-            'https://kubernetes.io/docs/concepts/overview/kubernetes-api',
-          fileMatch: [String(modelUri)],
-          schema: schema || {},
-        },
-      ],
+      schemas: schemas,
     });
 
     return {
@@ -101,5 +104,10 @@ export function useAutocompleteWorker({
     };
   }, [schema, schemaId, schemaLink, customSchemaUri, readOnly]);
 
-  return { setAutocompleteOptions, activeSchemaPath, error, loading };
+  return {
+    setAutocompleteOptions,
+    activeSchemaPath: activeSchemaPath.current,
+    error,
+    loading,
+  };
 }

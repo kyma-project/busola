@@ -26,7 +26,8 @@ export const useGetSchema = ({ schemaId, skip, resource }) => {
       return;
     }
     sendWorkerMessage('getSchema', schemaId);
-    addWorkerListener('schemaComputed', ({ schema }) => {
+
+    addWorkerListener(`schemaComputed:${schemaId}`, ({ schema }) => {
       setSchema(schema);
       setError(null);
       setLoading(false);
