@@ -13,7 +13,7 @@ export function IssuerDomains(issuer) {
         headerRenderer={() => []}
         rowRenderer={domain => [domain]}
         showHeader={false}
-        disableMargin={true}
+        className="fd-margin--xs"
         entries={issuer.spec.acme?.domains?.include || []}
         i18n={i18n}
         searchSettings={{
@@ -26,7 +26,7 @@ export function IssuerDomains(issuer) {
         headerRenderer={() => []}
         rowRenderer={domain => [domain]}
         showHeader={false}
-        disableMargin={true}
+        className="fd-margin--xs"
         entries={issuer.spec.acme?.domains?.exclude || []}
         i18n={i18n}
         searchSettings={{

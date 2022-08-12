@@ -84,7 +84,7 @@ const ServiceInstanceTable = ({
       entries={data}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      disableMargin={true}
+      className="fd-margin--xs"
       i18n={i18n}
       messages={{
         notFoundMessage: 'No Service Instances found',
