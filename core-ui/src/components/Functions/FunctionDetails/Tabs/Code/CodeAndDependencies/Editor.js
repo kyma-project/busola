@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { Editor as MonacoEditor } from 'shared/components/MonacoEditorESM/Editor';
 
 export default function Editor({
-  id,
   language = '',
   controlledValue = '',
   setControlledValue = '',
@@ -24,7 +23,6 @@ export default function Editor({
       language={language}
       value={controlledValue}
       onChange={handleControlledChange}
-      customSchemaId={id}
     />
   );
 }
