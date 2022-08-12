@@ -102,24 +102,28 @@ self.onmessage = $event => {
   }
 
   if ($event.data[0] === 'getSchema') {
-    const schemaId = JSON.parse(
-      JSON.stringify(jsonSchemas[activeClusterName][$event.data[1]]),
-    );
-    const existingCustomFormats = getExistingCustomFormats(schemaId);
-    const schemaCustomFormatsResolved = replaceObjects(
-      existingCustomFormats,
-      schemaId,
-    );
-    if (schemaCustomFormatsResolved) {
-      self.postMessage({
-        type: 'schemaComputed',
-        schema: schemaCustomFormatsResolved,
-      });
-    } else {
-      self.postMessage({
-        type: 'customError',
-        error: new Error('Resource schema not found'),
-      });
+    if (jsonSchemas[activeClusterName][$event.data[1]]) {
+      const schemaId = JSON.parse(
+        JSON.stringify(jsonSchemas[activeClusterName][$event.data[1]]),
+      );
+      const existingCustomFormats = getExistingCustomFormats(schemaId);
+      const schemaCustomFormatsResolved = replaceObjects(
+        existingCustomFormats,
+        schemaId,
+      );
+      if (schemaCustomFormatsResolved) {
+        self.postMessage({
+          type: 'schemaComputed',
+          schema: schemaCustomFormatsResolved,
+        });
+        return;
+      }
     }
+
+    // post message if schema was not found
+    self.postMessage({
+      type: 'customError',
+      error: new Error('Resource schema not found'),
+    });
   }
 };

@@ -39,31 +39,23 @@ window.MonacoEnvironment = {
 
 let activeSchemaPath = null;
 
-const getDefaultSchemaId = resource => {
-  const { apiVersion, kind } = resource || {};
-
-  if (apiVersion && kind) {
-    return `${apiVersion}/${kind}`;
-  } else {
-    return `${Math.random()}`;
-  }
-};
-
 export function useAutocompleteWorker({
   value,
-  customSchemaId,
+  schemaId: predefinedSchemaId,
   autocompletionDisabled,
   customSchemaUri,
   readOnly,
   language,
 }) {
-  // schemaId gets calculated only once, to find the json validation schema by a key
-  // it means each supported resource must have apiVersion and kind initially defined
-  // if it's not possible, pass the additional prop customSchemaId.
-  // if none of the values is provided, the schemaId will be randomized (Monaco uses this
-  // value as a model id and model stores information on editor's value, language etc.)
-  const [schemaId] = useState(customSchemaId || getDefaultSchemaId(value));
+  const [schemaId] = useState(predefinedSchemaId || Math.random().toString());
   const [schemaLink] = useState(getSchemaLink(value, language));
+
+  if (!autocompletionDisabled && !predefinedSchemaId) {
+    console.warn(
+      'useAutocompleteWorker: autocompletion is on, but no `predefinedSchemaId` provided. Disabling autocompletion.',
+    );
+    autocompletionDisabled = true;
+  }
 
   const { schema, loading, error } = useGetSchema({
     schemaId,
