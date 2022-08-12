@@ -45,7 +45,6 @@ export const GenericList = ({
   title,
   headerRenderer,
   rowRenderer,
-  actionsStandaloneItems,
   testid,
   showHeader,
   serverDataError,
@@ -202,7 +201,6 @@ export const GenericList = ({
         key={e.metadata?.uid || e.name || e.metadata?.name || index}
         entry={e}
         actions={actions}
-        actionsStandaloneItems={actionsStandaloneItems}
         rowRenderer={rowRenderer}
         compact={compact}
         isBeingEdited={
@@ -301,7 +299,6 @@ GenericList.propTypes = {
   rowRenderer: PropTypes.func.isRequired,
   actions: CustomPropTypes.listActions,
   extraHeaderContent: PropTypes.node,
-  actionsStandaloneItems: PropTypes.number,
   testid: PropTypes.string,
   showHeader: PropTypes.bool,
   serverDataError: PropTypes.any,
