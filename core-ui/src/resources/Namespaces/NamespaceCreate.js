@@ -162,7 +162,6 @@ export function NamespaceCreate({
             value={limits}
             setValue={setLimits}
             customSchemaId="v1/LimitRange"
-            customSchemaUri="https://kubernetes.io/docs/concepts/policy/limit-range/"
           />
         </ResourceForm.CollapsibleSection>
       ) : null}
@@ -174,7 +173,6 @@ export function NamespaceCreate({
             value={memory}
             setValue={setMemory}
             customSchemaId="v1/ResourceQuota"
-            customSchemaUri="https://kubernetes.io/docs/concepts/policy/resource-quotas/"
           />
         </ResourceForm.CollapsibleSection>
       ) : null}

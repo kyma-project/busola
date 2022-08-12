@@ -35,7 +35,6 @@ export function ResourceForm({
   toggleFormFn,
   customSchemaId,
   autocompletionDisabled,
-  customSchemaUri,
   readOnly,
   handleNameChange,
   nameProps,
@@ -106,7 +105,6 @@ export function ResourceForm({
       onChange={setResource}
       onMount={setActionsEditor}
       customSchemaId={customSchemaId}
-      customSchemaUri={customSchemaUri}
       autocompletionDisabled={autocompletionDisabled}
       readOnly={readOnly}
       updateValueOnParentChange={presets?.length}

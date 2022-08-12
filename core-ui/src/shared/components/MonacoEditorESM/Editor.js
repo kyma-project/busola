@@ -24,7 +24,6 @@ export function Editor({
   updateValueOnParentChange,
   customSchemaId, // custom key to find the json schema, don't use if the default key works (apiVersion/kind)
   autocompletionDisabled,
-  customSchemaUri, // custom tooltip link used also as ID. ID CAN'T BE THE SAME if you have 2+ editor opened at the same time
   height,
   onBlur,
   onFocus,
@@ -36,21 +35,18 @@ export function Editor({
   // prepare autocompletion
   const {
     setAutocompleteOptions,
-    activeSchemaPath,
     error: schemaError,
     loading,
   } = useAutocompleteWorker({
     value,
     customSchemaId,
     autocompletionDisabled,
-    customSchemaUri,
     readOnly,
     language,
   });
 
   // set autocompletion global context to the current editor and initialize an editor instance
   const { editorInstance, divRef, descriptor } = useCreateEditor({
-    activeSchemaPath,
     value,
     options,
     setAutocompleteOptions,

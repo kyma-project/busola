@@ -111,7 +111,6 @@ self.onmessage = $event => {
       schemaId,
     );
     if (schemaCustomFormatsResolved) {
-      // console.log('schemaSent', schemaId, $event.data[1]);
       self.postMessage({
         type: `schemaComputed:${$event.data[1]}`,
         schema: schemaCustomFormatsResolved,

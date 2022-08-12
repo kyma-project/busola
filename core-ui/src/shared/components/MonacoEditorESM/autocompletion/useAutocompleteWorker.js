@@ -1,8 +1,8 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Uri } from 'monaco-editor';
 import { setDiagnosticsOptions } from 'monaco-yaml';
-import { getSchemaLink } from './getSchemaLink';
 import { useGetSchema } from 'hooks/useGetSchema';
+import { v4 as uuid } from 'uuid';
 
 window.MonacoEnvironment = {
   getWorker(moduleId, label) {
@@ -52,7 +52,6 @@ export function useAutocompleteWorker({
   value,
   customSchemaId,
   autocompletionDisabled,
-  customSchemaUri,
   readOnly,
   language,
 }) {
@@ -62,8 +61,6 @@ export function useAutocompleteWorker({
   // if none of the values is provided, the schemaId will be randomized (Monaco uses this
   // value as a model id and model stores information on editor's value, language etc.)
   const [schemaId] = useState(customSchemaId || getDefaultSchemaId(value));
-  const [schemaLink] = useState(getSchemaLink(value, language));
-  const activeSchemaPath = useRef('');
 
   const { schema, loading, error } = useGetSchema({
     schemaId,
@@ -76,14 +73,11 @@ export function useAutocompleteWorker({
    */
   const setAutocompleteOptions = useCallback(() => {
     const modelUri = Uri.parse(schemaId);
-    activeSchemaPath.current = modelUri.path;
 
     if (schema) {
       schemas.push({
-        uri:
-          customSchemaUri ||
-          schemaLink ||
-          `https://kubernetes.io/docs/concepts/overview/kubernetes-api/${schemaId}`,
+        //this is a fake address that must be unique for different resources, otherwise the schemas will get mixed up
+        uri: `file://kubernetes.io/${uuid()}`,
         fileMatch: [String(modelUri)],
         schema: schema || {},
       });
@@ -102,11 +96,10 @@ export function useAutocompleteWorker({
     return {
       modelUri,
     };
-  }, [schema, schemaId, schemaLink, customSchemaUri, readOnly]);
+  }, [schema, schemaId, readOnly]);
 
   return {
     setAutocompleteOptions,
-    activeSchemaPath: activeSchemaPath.current,
     error,
     loading,
   };
