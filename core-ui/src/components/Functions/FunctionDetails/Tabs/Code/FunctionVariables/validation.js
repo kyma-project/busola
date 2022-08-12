@@ -7,29 +7,22 @@ import {
 import { CONFIG } from 'components/Functions/config';
 import i18next from 'i18next';
 
-export function validateVariables(
-  customVariables = [],
-  customValueFromVariables = [],
-  resources,
-) {
-  return [...customVariables, ...customValueFromVariables].map(
-    (variable, _, array) => {
-      const validation = getValidationStatus({
-        userVariables: array,
-        restrictedVariables: CONFIG.restrictedVariables,
-        varName: variable.name,
-        varID: variable.id,
-        varValue: variable.value || variable.valueFrom,
-        varType: variable.type,
-        varDirty: variable.dirty,
-        resources,
-      });
-      return {
-        ...variable,
-        validation,
-      };
-    },
-  );
+export function validateVariables(customVariables = []) {
+  return [...customVariables].map((variable, _, array) => {
+    const validation = getValidationStatus({
+      userVariables: array,
+      restrictedVariables: CONFIG.restrictedVariables,
+      varName: variable.name,
+      varID: variable.id,
+      varValue: variable.value || variable.valueFrom,
+      varType: variable.type,
+      varDirty: variable.dirty,
+    });
+    return {
+      ...variable,
+      validation,
+    };
+  });
 }
 
 export function validateVariable(variables = [], currentVariable = {}) {

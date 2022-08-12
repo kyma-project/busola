@@ -46,7 +46,7 @@ describe('validateVariables', () => {
       },
     ];
 
-    expect(validateVariables(customVariables, [])).toEqual(expectedVariables);
+    expect(validateVariables(customVariables)).toEqual(expectedVariables);
   });
 });
 

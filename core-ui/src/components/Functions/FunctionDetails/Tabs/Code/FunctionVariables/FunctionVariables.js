@@ -156,8 +156,8 @@ export default function FunctionVariables({
   );
 
   const entries = [
-    ...validateVariables(customVariables, [], []),
-    ...validateVariables(customValueFromVariables, [], []),
+    ...validateVariables(customVariables),
+    ...validateVariables(customValueFromVariables),
   ];
 
   function prepareVariablesInput(newVariables) {
@@ -180,7 +180,7 @@ export default function FunctionVariables({
       oldVariable => oldVariable.id !== variable.id,
     );
 
-    newVariables = validateVariables(newVariables, [], []);
+    newVariables = validateVariables(newVariables);
     const preparedVariable = prepareVariablesInput(newVariables);
 
     updateFunctiontionVariables({
