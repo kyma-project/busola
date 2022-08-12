@@ -59,9 +59,4 @@ export function ResourceList({
       columns={columns}
     />
   );
-  return (
-    <ul>
-      <li>kind: {kind}</li>
-    </ul>
-  );
 }

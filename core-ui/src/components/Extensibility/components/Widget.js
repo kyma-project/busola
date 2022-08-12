@@ -5,11 +5,7 @@ import { isNil } from 'lodash';
 import { widgets, valuePreprocessors } from './index';
 import { useTranslation } from 'react-i18next';
 
-import {
-  useGetTranslation,
-  useGetPlaceholder,
-  throwConfigError,
-} from '../helpers';
+import { useGetTranslation, useGetPlaceholder } from '../helpers';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
 import jsonata from 'jsonata';
 

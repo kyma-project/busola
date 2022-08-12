@@ -68,10 +68,7 @@ export function DataSourcesContextProvider({ children, dataSources }) {
 
   const fetchResource = async (dataSource, dataSourceName, resource) => {
     try {
-      const {
-        filter,
-        resource: { name },
-      } = dataSource;
+      const { filter } = dataSource;
 
       const relativeUrl = buildUrl(dataSource, resource);
       const response = await fetch({ relativeUrl });
