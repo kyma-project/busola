@@ -44,6 +44,7 @@ export function StringRenderer({
       label={tFromStoreKeys(storeKeys)}
       compact={compact}
       required={required}
+      data-testid={tFromStoreKeys(storeKeys)}
       {...getTypeSpecificProps()}
     />
   );
