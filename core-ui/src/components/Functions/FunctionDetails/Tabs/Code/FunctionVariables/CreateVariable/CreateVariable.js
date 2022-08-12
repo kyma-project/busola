@@ -12,7 +12,6 @@ export default function CreateVariable({
   configmaps,
   customVariables,
   customValueFromVariables,
-  injectedVariables,
 }) {
   const { t, i18n } = useTranslation();
 
@@ -24,11 +23,10 @@ export default function CreateVariable({
   const [currentModal, setCurrentModal] = useState();
 
   const commonProps = {
-    func: func,
+    func,
     confirmText: t('common.buttons.create'),
-    customVariables: customVariables,
-    customValueFromVariables: customValueFromVariables,
-    injectedVariables: injectedVariables,
+    customVariables,
+    customValueFromVariables,
     onModalOpenStateChange: state => {
       if (!state) setCurrentModal();
     },

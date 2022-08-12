@@ -16,13 +16,8 @@ export default function CodeTab({ func, isActive }) {
   const { data: secrets } = useGetList()(
     `/api/v1/namespaces/${func.metadata.namespace}/secrets`,
   );
-  const {
-    customVariables,
-    customValueFromVariables,
-    injectedVariables,
-  } = serializeVariables({
+  const { customVariables, customValueFromVariables } = serializeVariables({
     functionVariables: func?.spec?.env,
-    bindingUsages: [],
     secrets: secrets,
     configmaps: configmaps,
   });
@@ -40,7 +35,6 @@ export default function CodeTab({ func, isActive }) {
         configmaps={configmaps}
         customVariables={customVariables}
         customValueFromVariables={customValueFromVariables}
-        injectedVariables={injectedVariables}
       />
       <PodList
         isActive={isActive}

@@ -319,26 +319,15 @@ functions:
     popup-error: Przynajmniej jedna ze zmiennych ma niepoprawny format, jest zastrzerzona, zduplikowana lub pusta.
     title:
       environment-variables: Zmienne środowiskowe
-      injected-variables: Zmienne środowiskowe wstrzyknięte poprzez Service Binding
     tooltip:
       config-map: 'Ta zmienna pochodzi z Mapy Konfiguracji: "{resourceName}".'
       custom: Ta zmienna została wprowadzona przez użytkownika.
       secret: 'Ta zmienna pochodzi z Sekretu: "{resourceName}".'
-      service-binding: 'Ta zmienna została wstrzyknięta przez Service Binding odwołujący się do instancji serwisu: "{serviceInstanceName}".'
       text: Ta zmienna pochodzi z zasobu. Aby uzyskać wartość, kliknij link.
     type:
       config-map: Mapa Konfiguracji
       custom: Niestandardowe
       secret: Sekret
-      service-binding: Service Binding
-    warnings:
-      override: Ta nazwa zmiennej jest identyczna ze zmienną wstrzykniętą przez Service Binding. Kontynuuj, jeśli chcesz, aby mogły się wzajemnie nadpisywać. W przeciwnym razie wybierz inną nazwę.
-      sbu-can-be-overridden:
-        by-both: Ta zmienna może być nadpisana przez jedną z niestandardowych zmiennych lub przez zmienną wstrzykniętą przez jeden z Service Bindingów.
-        by-custom-env: Ta zmienną może nadpisać lub być nadpisana przez jedną z niestandardowych zmiennych.
-        by-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden z Service Bindingów.
-      text: Ostrzeżenie
-      variable-can-override-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden ze stworzonych Service Bindingów.
 generic-list:
   no-entries-found: Nie znaleziono wpisów
 git-repositories:

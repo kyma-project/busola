@@ -1188,7 +1188,6 @@ functions:
     popup-error: At least one variable has an incorrect name format, is restricted, duplicated, or empty.
     title:
       environment-variables: Environment Variables
-      injected-variables: Environment Variables Injected by the Service Bindings
     tooltip:
       config-map: This variable comes from the "{resourceName}" Config Map.
       custom: This variable was provided by the user.
@@ -1198,14 +1197,6 @@ functions:
       config-map: Config Map
       custom: Custom
       secret: Secret
-    warnings:
-      override: This variable name is identical to the variable injected by the Service Binding. Continue if you intend that they can override each other. Otherwise, choose another name.
-      sbu-can-be-overridden:
-        by-both: This variable can be overridden by one of the custom variables or a variable injected by one of the Service Bindings.
-        by-custom-env: This variable can override or be overridden by one of the custom variables.
-        by-sbu: This variable can override or be overridden by a variable injected by one of the Service Bindings.
-      text: Warning
-      variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
 gateways:
   aria-labels:
     host: Host
