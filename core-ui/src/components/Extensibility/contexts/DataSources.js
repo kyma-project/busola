@@ -85,13 +85,20 @@ export function DataSourcesContextProvider({ children, dataSources }) {
           isListCall: data.kind.match(/List$/),
         });
       }
+      if (!data.namespace) {
+        data.namespace = dataSource.resource.namespace;
+      }
       setStore(dataSourceName, {
         loading: false,
         error: null,
         data,
       });
     } catch (e) {
-      setStore(dataSourceName, { loading: false, error: e, data: null });
+      setStore(dataSourceName, {
+        loading: false,
+        error: e,
+        data: { error: e },
+      });
     }
   };
 
@@ -112,7 +119,7 @@ export function DataSourcesContextProvider({ children, dataSources }) {
         // mark dataSource as fetched
         dataSourcesDict.current[dataSourceName] = true;
 
-        setStore(dataSourceName, { loading: true });
+        setStore(dataSourceName, { loading: true, data: { loading: true } });
 
         fetchResource(dataSource, dataSourceName, resource);
         const REFETCH_INTERVAL = 6000;

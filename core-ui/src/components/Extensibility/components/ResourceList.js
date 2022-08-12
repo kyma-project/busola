@@ -15,8 +15,9 @@ export function ResourceList({
   ...props
 }) {
   const kind = (value?.kind ?? '').replace(/List$/, '');
-  // const resourceUrl = `/${apiVersion}/${namespacePart}/${resourceType}`;
-  const resourceUrl = `/${value?.apiVersion}/${kind}`;
+  const namespace = value?.namespace;
+  const namespacePart = namespace ? `/namespaces/${namespace}` : '';
+  const resourceUrl = `/${value?.apiVersion}${namespacePart}/${kind}`;
 
   const PredefinedRenderer = resources.find(
     r => r.resourceType.toLowerCase() === pluralize(kind).toLowerCase(),
@@ -41,13 +42,13 @@ export function ResourceList({
   return (
     <ListRenderer
       skipDataLoading={true}
-      // loading={value.loading}
-      // error={value.error}
+      loading={value?.loading}
+      error={value?.error}
       resources={value?.items}
       resourceUrl={resourceUrl}
       resourceType={prettifyKind(kind)}
       resourceName={prettifyKind(kind)}
-      // namespace={namespace}
+      namespace={namespace}
       isCompact
       title={structure.name}
       showTitle={true}
