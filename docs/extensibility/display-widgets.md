@@ -269,7 +269,7 @@ If such resource list was already defined in Busola, the configuration will be r
   "widget": "ResourceList",
   "path": "$myRelatedResource",
   "name": "Example ResourceList Secret",
-  "columns": [
+  "children": [
     {
       "path": "status.code",
       "widget": "Badge"
