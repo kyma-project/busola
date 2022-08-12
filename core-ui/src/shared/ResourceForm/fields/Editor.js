@@ -1,7 +1,6 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import jsyaml from 'js-yaml';
-import * as jp from 'jsonpath';
 import { Editor as MonacoEditor } from 'shared/components/MonacoEditorESM/Editor';
 
 export function Editor({
@@ -10,7 +9,7 @@ export function Editor({
   setValue,
   language = 'yaml',
   convert = true,
-  customSchemaId,
+  schemaId,
   ...props
 }) {
   const { t } = useTranslation();
@@ -27,13 +26,6 @@ export function Editor({
       return value;
     }
   }, [value, language, convert]);
-
-  // TODO (task created) schema is lost if user deletes all the resource with the exception of one line, goes to simple and returns to editor
-  const resourceSchemaId = useRef(
-    convert
-      ? `${jp.value(value, `$.apiVersion`)}/${jp.value(value, `$.kind`)}`
-      : '',
-  );
 
   const handleChange = useCallback(
     text => {
@@ -71,7 +63,7 @@ export function Editor({
       value={parsedValue}
       onChange={handleChange}
       error={error}
-      customSchemaId={customSchemaId || resourceSchemaId.current}
+      schemaId={schemaId}
     />
   );
 }
