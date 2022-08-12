@@ -42,9 +42,8 @@ export const currentMetricsParser = metrics => {
 };
 
 export const metricsParser = metrics => {
-  const { t } = useTranslation();
-
   return metrics.map(m => {
+    const { t } = useTranslation();
     const type = m.type.charAt(0).toLowerCase() + m.type.slice(1);
     let i18label = null;
     let name = null;
