@@ -76,21 +76,29 @@ export function DataSourcesContextProvider({ children, dataSources }) {
       const relativeUrl = buildUrl(dataSource, resource);
       const isListCall = !name;
       const response = await fetch({ relativeUrl });
+
       let data = await response.json();
-      data = isListCall ? data.items : data;
-      if (filter) {
-        data = jsonata(filter).evaluate({
-          data,
-          resource,
+      const expression = jsonata(filter);
+      expression.assign('root', resource);
+      if (isListCall) {
+        data = data.items.filter(item => {
+          expression.assign('item', item);
+          return expression.evaluate();
         });
-        data = formatJsonataResult(data, { isListCall });
+      } else {
+        expression.assign('item', data);
+        if (!expression.evaluate()) {
+          data = null;
+        }
       }
+
       setStore(dataSourceName, {
         loading: false,
         error: null,
         data,
       });
     } catch (e) {
+      alert(e.message);
       setStore(dataSourceName, { loading: false, error: e, data: null });
     }
   };
