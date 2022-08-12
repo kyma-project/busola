@@ -75,10 +75,11 @@ export function FunctionCreate({
     },
   ];
 
-  const repositoryOptions = repositories?.map(repository => ({
-    key: repository.metadata.name,
-    text: `${repository.metadata.name} (${repository.spec.url})`,
-  }));
+  const repositoryOptions =
+    repositories?.map(repository => ({
+      key: repository.metadata.name,
+      text: `${repository.metadata.name} (${repository.spec.url})`,
+    })) || [];
 
   useEffect(() => {
     if (!type) {
