@@ -23,11 +23,11 @@ context('Test Cluster Role Bindings', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[ariaLabel="Cluster Role Binding name"]')
+      .find('[ariaLabel="ClusterRoleBinding name"]')
       .type(CRB_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Start typing to select Role Binding from the list"]')
+      .find('[placeholder="Start typing to select RoleBinding from the list"]')
       .type('admin');
 
     cy.getIframeBody()

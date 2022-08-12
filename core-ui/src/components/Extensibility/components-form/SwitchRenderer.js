@@ -29,6 +29,7 @@ export function SwitchRenderer({
         });
       }}
       label={tFromStoreKeys(storeKeys)}
+      data-testid={tFromStoreKeys(storeKeys)}
       input={Inputs.Switch}
       compact={compact}
     />
