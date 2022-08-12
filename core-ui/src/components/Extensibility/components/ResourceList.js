@@ -20,7 +20,7 @@ export function ResourceList({
   const resourceUrl = `/${value?.apiVersion}${namespacePart}/${kind}`;
 
   const PredefinedRenderer = resources.find(
-    r => r.resourceType.toLowerCase() === pluralize(kind).toLowerCase(),
+    r => r.resourceType.toLowerCase() === pluralize(kind || '')?.toLowerCase(),
   );
   const ListRenderer = PredefinedRenderer
     ? PredefinedRenderer.List
