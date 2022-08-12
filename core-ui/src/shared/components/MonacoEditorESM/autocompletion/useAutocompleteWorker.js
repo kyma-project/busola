@@ -41,12 +41,13 @@ let activeSchemaPath = null;
 
 export function useAutocompleteWorker({
   value,
-  schemaId,
+  schemaId: predefinedSchemaId,
   autocompletionDisabled,
   customSchemaUri,
   readOnly,
   language,
 }) {
+  const [schemaId] = useState(predefinedSchemaId || Math.random().toString());
   const [schemaLink] = useState(getSchemaLink(value, language));
 
   const { schema, loading, error } = useGetSchema({
