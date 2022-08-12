@@ -1,7 +1,9 @@
 import pluralize from 'pluralize';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
+
 import { Widget } from './Widget';
 
 function extractResourceData({ dataSource, originalResource }) {

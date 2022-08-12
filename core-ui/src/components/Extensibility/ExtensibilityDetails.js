@@ -1,5 +1,6 @@
 import React from 'react';
 import pluralize from 'pluralize';
+import * as Ajv from 'ajv';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -7,13 +8,19 @@ import { prettifyKind } from 'shared/utils/helpers';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { shouldBeVisible, Widget } from './components/Widget';
-import { useGetTranslation, TranslationBundleContext } from './helpers';
+import {
+  useGetTranslation,
+  TranslationBundleContext,
+  throwConfigError,
+} from './helpers';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 import { useGetSchema } from 'hooks/useGetSchema';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
+  const { schemas: extSchemas } = useMicrofrontendContext();
   const { t, widgetT, exists } = useGetTranslation();
   const { urlPath, resource } = resMetaData?.general ?? {};
 
@@ -22,6 +29,11 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   });
 
   const detailsProps = usePrepareDetailsProps(urlPath, 'name');
+
+  const ajv = new Ajv();
+  if (!ajv.validate(extSchemas.details, resMetaData?.details)) {
+    throwConfigError(t('extensibility.errors'), { error: ajv.errors });
+  }
 
   const resourceName = resMetaData?.general?.name;
   const resourceTitle = exists('name')

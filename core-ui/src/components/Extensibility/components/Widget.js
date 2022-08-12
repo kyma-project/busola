@@ -41,11 +41,9 @@ export function useJsonata(query, root, extras = {}) {
           setValue(result);
         },
       );
-      // return expression.evaluate({ data: value, ...additionalSources });
     } catch (e) {
       setValue(t('extensibility.configuration-error', { error: e.message }));
     }
-    // }, [query, root, extras, dataSources]); // eslint-disable-line react-hooks/exhaustive-deps
   }, [dataSourceStore]); // eslint-disable-line react-hooks/exhaustive-deps
   return value;
 }
@@ -106,59 +104,16 @@ export function Widget({
 }) {
   const { Plain, Text } = widgets;
   const { t } = useTranslation();
-  // const {
-  // store,
-  // dataSources,
-  // getRelatedResourceInPath,
-  // requestRelatedResource,
-  // } = useDataSourcesContext();
-
-  // let childValue;
-
-  /*
-  if (!structure || typeof structure !== 'object') {
-    throwConfigError(t('extensibility.not-an-object'), structure);
-  }
-  if (
-    typeof structure.path !== 'string' &&
-    !Array.isArray(structure.children) &&
-    !Array.isArray(structure)
-  ) {
-    throwConfigError(t('extensibility.no-path-children'), structure);
-  }
-  */
 
   const childValue = useJsonata(structure.source, originalResource, {
     parent: value,
     item: value,
   });
-  /*
-  if (!structure.path) {
-    childValue = value;
-  } else {
-    const relatedResourcePath = getRelatedResourceInPath(structure.path);
-    if (relatedResourcePath) {
-      childValue = store[relatedResourcePath] || { loading: true };
-      props.dataSource = dataSources[relatedResourcePath];
-    } else {
-      childValue = getValue(value, structure.path);
-    }
-  }
-  */
 
   const { visible, error: visibleCheckError } = shouldBeVisible(
     childValue,
     structure.visibility,
   );
-
-  // useEffect(() => {
-  // if (!visible) return;
-  // // run `requestRelatedResource` in useEffect, as it might update Context's state
-  // if (structure.path && !!getRelatedResourceInPath(structure.path)) {
-  // requestRelatedResource(originalResource, );
-  // }
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   if (visibleCheckError) {
     return t('extensibility.configuration-error', {
@@ -181,10 +136,6 @@ export function Widget({
       />
     );
   }
-
-  // if (structure.formula) {
-  // childValue = applyFormula(childValue, structure.formula, t);
-  // }
 
   if (Array.isArray(structure)) {
     return (
