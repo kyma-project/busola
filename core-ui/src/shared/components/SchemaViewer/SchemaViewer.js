@@ -52,7 +52,6 @@ export function SchemaViewer({ name, schema }) {
         )}
         {schemaMode === 'json' && (
           <EditorWrapper
-            customSchemaId={`crd-schema-editor-${name}`}
             language="json"
             height="20em"
             value={schema}
@@ -67,7 +66,6 @@ export function SchemaViewer({ name, schema }) {
         )}
         {schemaMode === 'yaml' && (
           <EditorWrapper
-            customSchemaId={`crd-schema-editor-${name}`}
             language="yaml"
             autocompletionDisabled
             height="20em"

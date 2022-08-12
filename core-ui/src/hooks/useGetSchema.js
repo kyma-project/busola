@@ -8,7 +8,7 @@ import {
 import { AppContext } from 'components/App/AppContext';
 
 export const useGetSchema = ({ schemaId, skip, resource }) => {
-  if (!schemaId) {
+  if (!schemaId && resource) {
     const { group, version, kind } = resource;
     schemaId = `${group}/${version}/${kind}`;
   }
