@@ -161,7 +161,7 @@ export function NamespaceCreate({
           <Editor
             value={limits}
             setValue={setLimits}
-            resourceSchemaId="v1/LimitRange"
+            schemaId="v1/LimitRange"
           />
         </ResourceForm.CollapsibleSection>
       ) : null}
@@ -172,7 +172,7 @@ export function NamespaceCreate({
           <Editor
             value={memory}
             setValue={setMemory}
-            resourceSchemaId="v1/ResourceQuota"
+            schemaId="v1/ResourceQuota"
           />
         </ResourceForm.CollapsibleSection>
       ) : null}

@@ -50,6 +50,13 @@ export function useAutocompleteWorker({
   const [schemaId] = useState(predefinedSchemaId || Math.random().toString());
   const [schemaLink] = useState(getSchemaLink(value, language));
 
+  if (!autocompletionDisabled && !predefinedSchemaId) {
+    console.warn(
+      'useAutocompleteWorker: autocompletion is on, but no `predefinedSchemaId` provided. Disabling autocompletion.',
+    );
+    autocompletionDisabled = true;
+  }
+
   const { schema, loading, error } = useGetSchema({
     schemaId,
     skip: autocompletionDisabled,
