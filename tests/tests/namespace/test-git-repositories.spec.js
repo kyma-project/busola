@@ -24,7 +24,7 @@ context('Test Git Repositories', () => {
 
     // name
     cy.getIframeBody()
-      .find('[ariaLabel="Git Repository name"]:visible', { log: false })
+      .find('[ariaLabel="GitRepository name"]:visible', { log: false })
       .clear()
       .type(REPOSITORY_NAME);
 
@@ -55,7 +55,7 @@ context('Test Git Repositories', () => {
 
     // name should be disabled for edit
     cy.getIframeBody()
-      .find('[ariaLabel="Git Repository name"]:visible', { log: false })
+      .find('[ariaLabel="GitRepository name"]:visible', { log: false })
       .should('have.attr', 'readonly');
 
     // edit url

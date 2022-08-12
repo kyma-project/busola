@@ -22,7 +22,7 @@ export function Editor({
   language,
   onMount,
   updateValueOnParentChange,
-  customSchemaId, // custom key to find the json schema, don't use if the default key works (apiVersion/kind)
+  schemaId, // key to find the json schema,
   autocompletionDisabled,
   height,
   onBlur,
@@ -39,7 +39,7 @@ export function Editor({
     loading,
   } = useAutocompleteWorker({
     value,
-    customSchemaId,
+    schemaId,
     autocompletionDisabled,
     readOnly,
     language,
@@ -96,7 +96,7 @@ export function Editor({
             dismissible
           >
             {t('common.create-form.autocomplete-unavailable-error', {
-              error: schemaError,
+              error: schemaError.error || schemaError.message || schemaError,
             })}
           </MessageStrip>
         )}
