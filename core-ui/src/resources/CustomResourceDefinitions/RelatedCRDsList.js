@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import CustomResourceDefinitionList from './CustomResourceDefinitionList';
 
 export function RelatedCRDsList(resource) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const resourceUrl = '/apis/apiextensions.k8s.io/v1/customresourcedefinitions';
 
   const filterByCategories = crd => {
@@ -29,7 +29,6 @@ export function RelatedCRDsList(resource) {
         title: t('custom-resource-definitions.subtitle.related-crds'),
         pagination: { itemsPerPage: 5 },
         hideCreateOption: true,
-        i18n,
         navigateFn: crd => {
           LuigiClient.linkManager()
             .fromContext('cluster')

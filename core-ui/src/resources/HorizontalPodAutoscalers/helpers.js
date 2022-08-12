@@ -1,5 +1,4 @@
 import React from 'react';
-import i18n from 'i18next';
 import { Link } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
@@ -43,6 +42,8 @@ export const currentMetricsParser = metrics => {
 };
 
 export const metricsParser = metrics => {
+  const { t } = useTranslation();
+
   return metrics.map(m => {
     const type = m.type.charAt(0).toLowerCase() + m.type.slice(1);
     let i18label = null;
@@ -62,7 +63,7 @@ export const metricsParser = metrics => {
         i18label = 'hpas.object';
         name = (
           <>
-            {m[type].metric.name} {i18n.t('hpas.on')}{' '}
+            {m[type].metric.name} {t('hpas.on')}{' '}
             <Link
               className="fd-link"
               data-test-id="service-instance-name"
@@ -89,7 +90,7 @@ export const metricsParser = metrics => {
         break;
       case 'Resource':
         i18label = 'common.headers.resource';
-        name = `${m[type].name === 'cpu' ? 'CPU' : m[type].name} ${i18n.t(
+        name = `${m[type].name === 'cpu' ? 'CPU' : m[type].name} ${t(
           'hpas.on-pods',
         )}`;
         break;

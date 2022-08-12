@@ -22,7 +22,7 @@ import { NamespaceCreate } from './NamespaceCreate';
 import './NamespaceDetails.scss';
 
 export function NamespaceDetails(props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [showAdd, setShowAdd] = useState(false);
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
@@ -34,7 +34,6 @@ export function NamespaceDetails(props) {
     namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
-    i18n,
   };
 
   const LimitrangesList = <LimitRangeList {...limitRangesParams} />;
@@ -46,7 +45,6 @@ export function NamespaceDetails(props) {
     namespace: props.resourceName,
     isCompact: true,
     showTitle: true,
-    i18n,
   };
 
   const ResourceQuotasList = (
