@@ -23,6 +23,7 @@ context('Clean up Namespace', () => {
 
     cy.getIframeBody()
       .contains('button', 'Delete')
+      .filter(':visible', { log: false })
       .click({ force: true });
   });
 
