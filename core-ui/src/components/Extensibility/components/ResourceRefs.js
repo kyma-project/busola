@@ -6,7 +6,7 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 
-export function ResourceRefs({ value, structure, schema }) {
+export function ResourceRefs({ value, structure, schema, disableMargin }) {
   const { t, i18n } = useTranslation();
   const { widgetT } = useGetTranslation();
   const resourceType = structure.kind;
@@ -42,6 +42,7 @@ export function ResourceRefs({ value, structure, schema }) {
       entries={sanitizedValue || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
+      disableMargin={disableMargin}
       i18n={i18n}
       searchSettings={{
         showSearchField: false,
