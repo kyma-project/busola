@@ -3,9 +3,7 @@ import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'fundamental-react';
 
-import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
 import { EventsList } from 'shared/components/EventsList';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
@@ -24,8 +22,6 @@ import './NamespaceDetails.scss';
 export function NamespaceDetails(props) {
   const { t, i18n } = useTranslation();
   const [showAdd, setShowAdd] = useState(false);
-  const microfrontendContext = useMicrofrontendContext();
-  const { features } = microfrontendContext;
 
   const limitRangesParams = {
     hasDetailsView: false,
@@ -52,21 +48,6 @@ export function NamespaceDetails(props) {
   const ResourceQuotasList = (
     <ResourceQuotaListComponent {...resourceQuotasParams} />
   );
-
-  const applicationMappingsParams = {
-    hasDetailsView: false,
-    resourceUrl: `/apis/applicationconnector.kyma-project.io/v1alpha1/namespaces/${props.resourceName}/applicationmappings`,
-    resourceType: 'ApplicationMappings',
-    namespace: props.resourceName,
-    isCompact: true,
-    showTitle: true,
-  };
-
-  const ApplicationMappings =
-    features?.APPLICATIONS?.isEnabled &&
-    features?.SERVICE_CATALOG?.isEnabled ? (
-      <ResourcesList {...applicationMappingsParams} />
-    ) : null;
 
   const Events = (
     <EventsList
@@ -115,7 +96,6 @@ export function NamespaceDetails(props) {
       <StatsPanel type="pod" namespace={props.resourceName} />
       {LimitrangesList}
       {ResourceQuotasList}
-      {ApplicationMappings}
       {Events}
       <YamlUploadDialog
         show={showAdd}
