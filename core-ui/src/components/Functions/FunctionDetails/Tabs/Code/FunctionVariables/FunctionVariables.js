@@ -228,9 +228,7 @@ export default function FunctionVariables({
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         i18n={i18n}
-        messages={{
-          notFoundMessage: t('functions.variable.not-found'),
-        }}
+        notFoundMessage={t('functions.variable.not-found')}
         searchSettings={{
           showSearchField: true,
           showSearchSuggestion: false,

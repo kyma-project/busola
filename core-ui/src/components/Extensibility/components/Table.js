@@ -22,9 +22,7 @@ const handleTableValue = (value, t) => {
     default: {
       return {
         entries: [],
-        messages: {
-          notFoundMessage: t('extensibility.widgets.table.error'),
-        },
+        notFoundMessage: t('extensibility.widgets.table.error'),
       };
     }
   }

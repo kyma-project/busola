@@ -109,9 +109,7 @@ function ApplicationServiceDetails({ applicationName, serviceName }) {
             headerRenderer={headerRenderer}
             rowRenderer={rowRenderer}
             i18n={i18n}
-            messages={{
-              notFoundMessage: t('applications.messages.no-apis'),
-            }}
+            notFoundMessage={t('applications.messages.no-apis')}
             searchSettings={{
               textSearchProperties: [
                 'name',
@@ -128,9 +126,7 @@ function ApplicationServiceDetails({ applicationName, serviceName }) {
             headerRenderer={headerRenderer}
             rowRenderer={rowRenderer}
             i18n={i18n}
-            messages={{
-              notFoundMessage: t('applications.messages.no-events'),
-            }}
+            notFoundMessage={t('applications.messages.no-events')}
             searchSettings={{
               textSearchProperties: [
                 'name',

@@ -430,7 +430,6 @@ describe('GenericList', () => {
           headerRenderer={mockHeaderRenderer}
           rowRenderer={mockEntryRenderer}
           serverDataError={true}
-          serverErrorMessage={serverErrorMessage}
         />,
       );
 

@@ -77,9 +77,7 @@ export const HPASubcomponent = props => {
           }
         />,
       ]}
-      messages={{
-        notFoundMessage: EMPTY_TEXT_PLACEHOLDER,
-      }}
+      notFoundMessage={EMPTY_TEXT_PLACEHOLDER}
       searchSettings={{
         textSearchProperties: ['metadata.name'],
       }}

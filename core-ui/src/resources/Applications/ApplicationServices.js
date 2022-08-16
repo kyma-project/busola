@@ -37,9 +37,7 @@ export default function ApplicationServices({ spec: applicationSpec }) {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       i18n={i18n}
-      messages={{
-        notFoundMessage: t('applications.messages.service-not-found'),
-      }}
+      notFoundMessage={t('applications.messages.service-not-found')}
       searchSettings={{
         textSearchProperties: ['displayName'],
       }}

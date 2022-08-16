@@ -33,9 +33,7 @@ const CustomResources = ({ resource, namespace, version, i18n }) => {
         headerRenderer={() => []}
         rowRenderer={() => []}
         i18n={i18n}
-        messages={{
-          notFoundMessage: t('custom-resource-definitions.messages.no-entries'),
-        }}
+        notFoundMessage={t('custom-resource-definitions.messages.no-entries')}
       />
     );
   }

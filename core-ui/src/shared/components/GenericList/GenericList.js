@@ -55,7 +55,7 @@ export const GenericList = ({
   currentlyEditedResourceUID,
   i18n,
   sortBy,
-  messages,
+  notFoundMessage,
   searchSettings,
 }) => {
   searchSettings = { ...defaultSearch, ...searchSettings };
@@ -153,11 +153,7 @@ export const GenericList = ({
     if (serverDataError) {
       return (
         <BodyFallback>
-          <p>
-            {messages.serverErrorMessage
-              ? messages.serverErrorMessage
-              : getErrorMessage(serverDataError)}
-          </p>
+          <p>{getErrorMessage(serverDataError)}</p>
         </BodyFallback>
       );
     }
@@ -182,7 +178,7 @@ export const GenericList = ({
       }
       return (
         <BodyFallback>
-          <p>{t(messages.notFoundMessage) || messages.notFoundMessage}</p>
+          <p>{t(notFoundMessage) || notFoundMessage}</p>
         </BodyFallback>
       );
     }
@@ -270,11 +266,6 @@ const PaginationProps = PropTypes.shape({
   autoHide: PropTypes.bool,
 });
 
-const MessagesProps = PropTypes.shape({
-  notFoundMessage: PropTypes.string,
-  serverErrorMessage: PropTypes.string,
-});
-
 const SearchProps = PropTypes.shape({
   showSearchField: PropTypes.bool,
   textSearchProperties: PropTypes.arrayOf(
@@ -307,7 +298,7 @@ GenericList.propTypes = {
   className: PropTypes.string,
   currentlyEditedResourceUID: PropTypes.string,
   sortBy: PropTypes.func,
-  messages: MessagesProps,
+  notFoundMessage: PropTypes.string,
   searchSettings: SearchProps,
 };
 
@@ -318,8 +309,6 @@ GenericList.defaultProps = {
   serverDataError: null,
   serverDataLoading: false,
   compact: true,
-  messages: {
-    notFoundMessage: 'components.generic-list.messages.not-found',
-  },
+  notFoundMessage: 'components.generic-list.messages.not-found',
   searchSettings: defaultSearch,
 };
