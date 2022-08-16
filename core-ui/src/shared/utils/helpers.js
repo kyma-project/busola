@@ -31,6 +31,19 @@ export function getApiPath(resourceType, nodes) {
   }
 }
 
+export function getApiPath2TodoRenameOrDedupe(relatedResource, nodes) {
+  // check if (version, group) were defined
+  const { version, group } = relatedResource;
+  if (version && group) {
+    const apiGroup = group ? `apis/${group}` : 'api';
+    return `/${apiGroup}/${version}`;
+  }
+
+  // fallback to navigation nodes
+  const resourceType = pluralize(relatedResource.kind.toLowerCase());
+  return getApiPath(resourceType, nodes);
+}
+
 export function findCommonPrefix(initialPrefix, words) {
   if (!words?.length) {
     return initialPrefix;

@@ -11,11 +11,14 @@ export const Details = React.lazy(() => import('./ServiceDetails'));
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
   networkFlowLevel: -1,
-  matchers: {
-    Function: (service, functión) =>
-      matchByOwnerReference({
-        resource: service,
-        owner: functión,
-      }),
-  },
+  relations: [
+    {
+      resource: { kind: 'Function' },
+      filter: (service, functión) =>
+        matchByOwnerReference({
+          resource: service,
+          owner: functión,
+        }),
+    },
+  ],
 });

@@ -34,37 +34,59 @@ export const Details = React.lazy(() => import('./PodDetails'));
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
   networkFlowLevel: 0,
-  matchers: {
-    ConfigMap: (pod, cm) => matchByMount('configMap')(pod, cm),
-    DaemonSet: (pod, ds) =>
-      matchByOwnerReference({
-        resource: pod,
-        owner: ds,
-      }),
-    Job: (pod, job) =>
-      matchByOwnerReference({
-        resource: pod,
-        owner: job,
-      }),
-    ReplicaSet: (pod, replicaSet) =>
-      matchBySelector(
-        replicaSet.spec.selector.matchLabels,
-        pod.metadata.labels,
-      ) ||
-      matchByOwnerReference({
-        resource: pod,
-        owner: replicaSet,
-      }),
-    Secret: (pod, secret) =>
-      matchByMount('secret')(pod, secret) || matchByVolumes(pod, secret),
-    StatefulSet: (pod, ss) =>
-      matchByOwnerReference({
-        resource: pod,
-        owner: ss,
-      }),
-    PersistentVolumeClaim: (pod, pvc) =>
-      pod.spec.volumes.some(
-        volume => volume.persistentVolumeClaim?.claimName === pvc.metadata.name,
-      ),
-  },
+  relations: [
+    {
+      resource: { kind: 'ConfigMap' },
+      filter: (pod, cm) => matchByMount('configMap')(pod, cm),
+    },
+    {
+      resource: { kind: 'DaemonSet' },
+      filter: (pod, ds) =>
+        matchByOwnerReference({
+          resource: pod,
+          owner: ds,
+        }),
+    },
+    {
+      resource: { kind: 'Job' },
+      filter: (pod, job) =>
+        matchByOwnerReference({
+          resource: pod,
+          owner: job,
+        }),
+    },
+    {
+      resource: { kind: 'ReplicaSet' },
+      filter: (pod, replicaSet) =>
+        matchBySelector(
+          replicaSet.spec.selector.matchLabels,
+          pod.metadata.labels,
+        ) ||
+        matchByOwnerReference({
+          resource: pod,
+          owner: replicaSet,
+        }),
+    },
+    {
+      resource: { kind: 'Secret' },
+      filter: (pod, secret) =>
+        matchByMount('secret')(pod, secret) || matchByVolumes(pod, secret),
+    },
+    {
+      resource: { kind: 'StatefulSet' },
+      filter: (pod, ss) =>
+        matchByOwnerReference({
+          resource: pod,
+          owner: ss,
+        }),
+    },
+    {
+      resource: { kind: 'PersistentVolumeClaim' },
+      filter: (pod, pvc) =>
+        pod.spec.volumes.some(
+          volume =>
+            volume.persistentVolumeClaim?.claimName === pvc.metadata.name,
+        ),
+    },
+  ],
 });

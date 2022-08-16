@@ -43,16 +43,6 @@ export const secrets = (t, context) => [
 ];
 
 export const resourceGraphConfig = (t, context) => ({
-  relations: [
-    {
-      kind: 'Gateway',
-      clusterwide: true,
-    },
-    {
-      kind: 'StorageClass',
-      clusterwide: true,
-    },
-  ],
   depth: 1,
   networkFlowLevel: 1,
 });

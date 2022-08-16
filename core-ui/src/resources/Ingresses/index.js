@@ -9,14 +9,16 @@ export const Details = React.lazy(() => import('./IngressDetails'));
 export const resourceGraphConfig = (t, context) => ({
   networkFlowLevel: 0,
   networkFlowKind: true,
-
-  matchers: {
-    Service: (ingress, service) =>
-      (ingress.spec.rules || []).some(rule =>
-        (rule.http?.paths || []).some(
-          path => path.backend?.service?.name === service.metadata.name,
-        ),
-      ) ||
-      ingress.spec?.defaultBackend?.resource?.name === service.metadata.name,
-  },
+  relations: [
+    {
+      resource: { kind: 'Service' },
+      filter: (ingress, service) =>
+        (ingress.spec.rules || []).some(rule =>
+          (rule.http?.paths || []).some(
+            path => path.backend?.service?.name === service.metadata.name,
+          ),
+        ) ||
+        ingress.spec?.defaultBackend?.resource?.name === service.metadata.name,
+    },
+  ],
 });

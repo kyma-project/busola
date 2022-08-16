@@ -1,5 +1,5 @@
 import {
-  findRelations,
+  findRelatedResources,
   makeNode,
   match,
 } from 'shared/components/ResourceGraph/buildGraph/helpers';
@@ -25,7 +25,7 @@ export function buildStructuralGraph({ initialResource, store }, config) {
 
     const kind = node.resource.kind;
 
-    for (const relation of findRelations(kind, config)) {
+    for (const relation of findRelatedResources(kind, config)) {
       for (const relatedResource of store[relation.kind] || []) {
         // don't backtrack
         if (relatedResource.kind === node.fromKind) {

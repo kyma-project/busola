@@ -11,11 +11,14 @@ export const Details = React.lazy(() => import('./DaemonSetDetails'));
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
   networkFlowLevel: -1,
-  matchers: {
-    Pod: (ds, pod) =>
-      matchByOwnerReference({
-        resource: pod,
-        owner: ds,
-      }),
-  },
+  relations: [
+    {
+      resource: { kind: 'Pod' },
+      filter: (ds, pod) =>
+        matchByOwnerReference({
+          resource: pod,
+          owner: ds,
+        }),
+    },
+  ],
 });

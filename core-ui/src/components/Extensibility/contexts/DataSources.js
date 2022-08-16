@@ -98,7 +98,6 @@ export function DataSourcesContextProvider({ children, dataSources }) {
         data,
       });
     } catch (e) {
-      alert(e.message);
       setStore(dataSourceName, { loading: false, error: e, data: null });
     }
   };

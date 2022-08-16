@@ -40,10 +40,17 @@ export function match(resourceA, resourceB, config) {
   const kindB = resourceB.kind;
 
   let matcher = null;
-  if (config[kindA]?.matchers?.[kindB]) {
-    matcher = config[kindA].matchers[kindB];
-  } else if (config[kindB]?.matchers?.[kindA]) {
-    matcher = config[kindB].matchers[kindA];
+  const relationA = config[kindA]?.relations?.find(
+    r => r.resource.kind === kindB,
+  );
+  const relationB = config[kindB]?.relations?.find(
+    r => r.resource.kind === kindA,
+  );
+
+  if (relationA) {
+    matcher = relationA.filter;
+  } else if (relationB) {
+    matcher = relationB.filter;
     // order matters!
     [resourceA, resourceB] = [resourceB, resourceA];
   }
@@ -52,36 +59,27 @@ export function match(resourceA, resourceB, config) {
     try {
       return matcher(resourceA, resourceB);
     } catch (e) {
-      console.warn(e);
+      console.debug(e);
     }
   }
   return false;
 }
 
-export function findRelations(originalResourceKind, config) {
-  // explicitly defined relations
-  const relations = [...(config[originalResourceKind].relations || [])];
+export function findRelatedResources(originalResourceKind, config) {
+  const relations = (config[originalResourceKind].relations || []).map(
+    ({ resource }) => resource,
+  );
 
-  // implicitly defined relations - infer them from `matchers`
-  const matchers = config[originalResourceKind].matchers || {};
-  for (const matchKind of Object.keys(matchers)) {
-    if (!relations.find(({ kind }) => kind === matchKind)) {
-      relations.push({ kind: matchKind });
-    }
-  }
-
-  // find `matchers` defined elsewhere
-  for (const otherKind in config) {
+  for (const [otherKind, otherConfig] of Object.entries(config)) {
     if (otherKind === originalResourceKind) continue;
 
-    for (const otherMatchKind in config[otherKind].matchers || {}) {
-      if (otherMatchKind === originalResourceKind) {
-        if (!relations.find(({ kind }) => kind === otherKind)) {
-          relations.push({ kind: otherKind });
-        }
+    for (const otherRelation of otherConfig.relations || []) {
+      if (otherRelation.resource.kind === originalResourceKind) {
+        relations.push({ kind: otherKind });
       }
     }
   }
+  // todo filter unique (Pizza->PizzaOrder <=> PizzaOrder->Pizza)
 
   return relations;
 }

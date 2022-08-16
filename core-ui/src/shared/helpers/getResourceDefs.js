@@ -24,49 +24,21 @@ export function getPerResourceDefs(defType, t, context) {
 }
 
 export function getResourceGraphConfig(t, context) {
-  const builtinResourceGraphConfig = getPerResourceDefs(
+  const builtinResourceDefs = getPerResourceDefs(
     'resourceGraphConfig',
     t,
     context,
   );
 
-  const customResourcesGraphConfig = Object.fromEntries(
-    context.customResources
-      .map(cR => ({
-        kind: cR.general?.resource?.kind,
-        resourceGraph: cR.resourceGraph,
-      }))
-      .filter(data => data.kind && data.resourceGraph)
-      .map(cR => {
-        const kind = cR.kind;
-        const relation = {
-          depth: cR.resourceGraph.depth,
-          relations: Object.keys(cR.resourceGraph.matchers || {}).map(kind => ({
-            kind,
-          })),
-          matchers: Object.fromEntries(
-            Object.entries(cR.resourceGraph.matchers || {}).map(
-              ([relatedKind, relationFormula]) => {
-                const expression = jsonata(relationFormula);
-
-                const matchFn = (cR, relatedResource) => {
-                  try {
-                    expression.assign('root', cR);
-                    expression.assign('item', relatedResource);
-                    return !!expression.evaluate();
-                  } catch (e) {
-                    console.warn(e);
-                    return false;
-                  }
-                };
-                return [relatedKind, matchFn];
-              },
-            ),
-          ),
-        };
-        return [kind, relation];
-      }),
+  const builtinResourceGraphConfig = Object.fromEntries(
+    Object.entries(builtinResourceDefs).map(([kind, graphConfig]) => [
+      kind,
+      {
+        resource: { kind },
+        ...graphConfig,
+      },
+    ]),
   );
 
-  return { ...builtinResourceGraphConfig, ...customResourcesGraphConfig };
+  return { ...builtinResourceGraphConfig };
 }

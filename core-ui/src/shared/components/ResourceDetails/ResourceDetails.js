@@ -358,7 +358,7 @@ function Resource({
         component(resource, resourceUrl),
       )}
       {children}
-      {resourceGraphConfig?.[resource.kind] && (
+      {resourceGraphConfig[resource.kind] && (
         <Suspense fallback={<Spinner />}>
           <ResourceGraph
             resource={resource}

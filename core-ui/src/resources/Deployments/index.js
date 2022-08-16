@@ -11,19 +11,28 @@ export const Details = React.lazy(() => import('./DeploymentDetails'));
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
   networkFlowLevel: -2,
-  matchers: {
-    HorizontalPodAutoscaler: (deployment, hpa) =>
-      hpa.spec.scaleTargetRef?.kind === 'Deployment' &&
-      hpa.spec.scaleTargetRef?.name === deployment.metadata.name,
-    Service: (deployment, service) =>
-      matchBySelector(
-        deployment.spec.selector.matchLabels,
-        service.spec.selector,
-      ),
-    ReplicaSet: (deployment, replicaSet) =>
-      matchByOwnerReference({
-        resource: replicaSet,
-        owner: deployment,
-      }),
-  },
+  relations: [
+    {
+      resource: { kind: 'HorizontalPodAutoscaler' },
+      filter: (deployment, hpa) =>
+        hpa.spec.scaleTargetRef?.kind === 'Deployment' &&
+        hpa.spec.scaleTargetRef?.name === deployment.metadata.name,
+    },
+    {
+      resource: { kind: 'Service' },
+      filter: (deployment, service) =>
+        matchBySelector(
+          deployment.spec.selector.matchLabels,
+          service.spec.selector,
+        ),
+    },
+    {
+      resource: { kind: 'ReplicaSet' },
+      filter: (deployment, replicaSet) =>
+        matchByOwnerReference({
+          resource: replicaSet,
+          owner: deployment,
+        }),
+    },
+  ],
 });

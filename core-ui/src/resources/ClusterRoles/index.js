@@ -8,11 +8,18 @@ export const Details = React.lazy(() => import('./ClusterRoleDetails'));
 
 export const resourceGraphConfig = (t, context) => ({
   depth: 2,
-  matchers: {
-    ClusterRoleBinding: (cr, crb) =>
-      crb.roleRef.kind === 'ClusterRole' &&
-      crb.roleRef.name === cr.metadata.name,
-    RoleBinding: (cr, rb) =>
-      rb.roleRef.kind === 'ClusterRole' && rb.roleRef.name === cr.metadata.name,
-  },
+  relations: [
+    {
+      resource: { kind: 'ClusterRoleBinding' },
+      filter: (cr, crb) =>
+        crb.roleRef.kind === 'ClusterRole' &&
+        crb.roleRef.name === cr.metadata.name,
+    },
+    {
+      resource: { kind: 'RoleBinding', namespace: null },
+      filter: (cr, rb) =>
+        rb.roleRef.kind === 'ClusterRole' &&
+        rb.roleRef.name === cr.metadata.name,
+    },
+  ],
 });

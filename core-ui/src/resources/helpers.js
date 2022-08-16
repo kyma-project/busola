@@ -20,7 +20,6 @@ export const usePrepareListProps = (resourceType, resourceI18Key) => {
   };
 };
 
-let savedResourceGraph = null;
 export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
   const { resourceName, namespaceId } = useParams();
   const queryParams = new URLSearchParams(window.location.search);
@@ -31,9 +30,6 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
   const decodedResourceName = decodeURIComponent(resourceName);
 
   const context = useMicrofrontendContext();
-  if (!savedResourceGraph) {
-    savedResourceGraph = getResourceGraphConfig(t, context);
-  }
 
   return {
     resourceUrl: decodedResourceUrl,
@@ -42,7 +38,7 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
     resourceName: decodedResourceName,
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
-    resourceGraphConfig: savedResourceGraph,
+    resourceGraphConfig: getResourceGraphConfig(t, context),
     i18n,
   };
 };

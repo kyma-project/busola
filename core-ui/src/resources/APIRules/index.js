@@ -14,25 +14,28 @@ export const resourceGraphConfig = (t, context) => ({
   networkFlowLevel: -3,
   relations: [
     {
-      kind: 'Gateway',
-      clusterwide: true,
+      resource: { kind: 'Service' },
+      filter: (apiRule, service) =>
+        apiRule.spec.service?.name === service.metadata.name,
+    },
+    {
+      resource: { kind: 'VirtualService' },
+      filter: (apiRule, virtualService) =>
+        virtualService.spec.hosts.includes(apiRule.spec.service.host) ||
+        matchByOwnerReference({
+          resource: virtualService,
+          owner: apiRule,
+        }),
+    },
+    {
+      resource: { kind: 'Gateway', namespace: null },
+      filter: (apiRule, gateway) => {
+        const [name, namespace] = apiRule.spec.gateway.split('.');
+        return (
+          name === gateway.metadata.name &&
+          namespace === gateway.metadata.namespace
+        );
+      },
     },
   ],
-  matchers: {
-    Service: (apiRule, service) =>
-      apiRule.spec.service?.name === service.metadata.name,
-    VirtualService: (apiRule, virtualService) =>
-      virtualService.spec.hosts.includes(apiRule.spec.service.host) ||
-      matchByOwnerReference({
-        resource: virtualService,
-        owner: apiRule,
-      }),
-    Gateway: (apiRule, gateway) => {
-      const [name, namespace] = apiRule.spec.gateway.split('.');
-      return (
-        name === gateway.metadata.name &&
-        namespace === gateway.metadata.namespace
-      );
-    },
-  },
 });
