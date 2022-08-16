@@ -68,7 +68,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   const isFilterAString = typeof resMetaData.resource?.filter === 'string';
   const filterFn = value =>
     applyFormula(value, resMetaData.resource.filter, tBusola);
-  listProps.filterFn = isFilterAString ? filterFn : undefined;
+  listProps.filter = isFilterAString ? filterFn : undefined;
 
   return (
     <ResourcesList

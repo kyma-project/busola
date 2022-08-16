@@ -58,7 +58,6 @@ ResourcesList.propTypes = {
   isCompact: PropTypes.bool,
   showTitle: PropTypes.bool,
   filter: PropTypes.func,
-  filterFn: PropTypes.func,
   listHeaderActions: PropTypes.node,
   description: PropTypes.node,
   readOnly: PropTypes.bool,
@@ -77,7 +76,6 @@ ResourcesList.defaultProps = {
   listHeaderActions: null,
   readOnly: false,
   disableCreate: false,
-  filterFn: () => true,
 };
 
 export function ResourcesList(props) {
@@ -104,7 +102,6 @@ function Resources(props) {
     resourceTitle,
     resourceType,
     filter,
-    filterFn,
     resourceUrl,
     skipDataLoading,
     isCompact,
@@ -113,7 +110,7 @@ function Resources(props) {
     skip: isCompact,
   });
 
-  const { loading, error, data: resources, silentRefetch } = useGetList(filter)(
+  const { loading, error, data: resources, silentRefetch } = useGetList()(
     resourceUrl,
     {
       pollingInterval: 3000,
@@ -125,7 +122,7 @@ function Resources(props) {
     <ResourceListRenderer
       loading={loading}
       error={error}
-      resources={(resources || []).filter(filterFn)}
+      resources={filter ? (resources || []).filter(filter) : resources || []}
       silentRefetch={silentRefetch}
       {...props}
     />

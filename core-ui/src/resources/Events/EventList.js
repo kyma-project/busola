@@ -119,7 +119,7 @@ export function EventList(props) {
       {...props}
       hasDetailsView={true}
       readOnly={true}
-      filterFn={res => {
+      filter={res => {
         if (displayType.key === EVENT_MESSAGE_TYPE.ALL.key) return true;
         return res.type === displayType.key;
       }}
