@@ -69,7 +69,7 @@ export function useAutocompleteWorker({
 
     if (schema) {
       schemas.push({
-        //this is a fake address that must be unique for different resources, otherwise the schemas will get mixed up
+        //by monaco-yaml docs, this is not only uri but also a name that must be unique. Resources with the same uri will share one schema.
         uri: `file://kubernetes.io/${uuid()}`,
         fileMatch: [String(modelUri)],
         schema: schema || {},
