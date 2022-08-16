@@ -113,7 +113,7 @@ self.onmessage = $event => {
       );
       if (schemaCustomFormatsResolved) {
         self.postMessage({
-          type: 'schemaComputed',
+          type: `schemaComputed:${$event.data[1]}`,
           schema: schemaCustomFormatsResolved,
         });
         return;
