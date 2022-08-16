@@ -7,31 +7,22 @@ import {
 import { CONFIG } from 'components/Functions/config';
 import i18next from 'i18next';
 
-export function validateVariables(
-  customVariables = [],
-  customValueFromVariables = [],
-  injectedVariables = [],
-  resources,
-) {
-  return [...customVariables, ...customValueFromVariables].map(
-    (variable, _, array) => {
-      const validation = getValidationStatus({
-        userVariables: array,
-        injectedVariables,
-        restrictedVariables: CONFIG.restrictedVariables,
-        varName: variable.name,
-        varID: variable.id,
-        varValue: variable.value || variable.valueFrom,
-        varType: variable.type,
-        varDirty: variable.dirty,
-        resources,
-      });
-      return {
-        ...variable,
-        validation,
-      };
-    },
-  );
+export function validateVariables(customVariables = []) {
+  return [...customVariables].map((variable, _, array) => {
+    const validation = getValidationStatus({
+      userVariables: array,
+      restrictedVariables: CONFIG.restrictedVariables,
+      varName: variable.name,
+      varID: variable.id,
+      varValue: variable.value || variable.valueFrom,
+      varType: variable.type,
+      varDirty: variable.dirty,
+    });
+    return {
+      ...variable,
+      validation,
+    };
+  });
 }
 
 export function validateVariable(variables = [], currentVariable = {}) {
@@ -88,15 +79,14 @@ function isVariableTakeAll(varValue) {
   );
 }
 
-function getTakeAllDuplicates(
+function getTakeAllDuplicates({
   varName,
   varType,
   varValue,
   resources,
   userVariables,
-  injectedVariables,
   restrictedVariables,
-) {
+}) {
   // name of secret or configMap
   const prop =
     varType === VARIABLE_TYPE.SECRET ? 'secretKeyRef' : 'configMapKeyRef';
@@ -112,9 +102,6 @@ function getTakeAllDuplicates(
       userVariables.map(n => n.name).includes(name),
     ),
     ...resourceDataNames.filter(name =>
-      injectedVariables.map(n => n.name).includes(name),
-    ),
-    ...resourceDataNames.filter(name =>
       restrictedVariables.map(n => n.name).includes(name),
     ),
   ];
@@ -122,7 +109,6 @@ function getTakeAllDuplicates(
 
 export function getValidationStatus({
   userVariables = [],
-  injectedVariables = [],
   restrictedVariables = [],
   varName,
   varID,
@@ -133,15 +119,14 @@ export function getValidationStatus({
 }) {
   const isTakeAll = isVariableTakeAll(varValue);
   if (isTakeAll) {
-    const duplicates = getTakeAllDuplicates(
+    const duplicates = getTakeAllDuplicates({
       varName,
       varType,
       varValue,
       resources,
       userVariables,
-      injectedVariables,
       restrictedVariables,
-    );
+    });
 
     if (duplicates.length) {
       return i18next.t('functions.variable.errors.duplicate-multiple-names', {
@@ -200,16 +185,6 @@ export function getValidationStatus({
     )
   ) {
     return VARIABLE_VALIDATION.DUPLICATED;
-  }
-  // override SBU
-  if (
-    injectedVariables.some(
-      variable =>
-        variable.type === VARIABLE_TYPE.BINDING_USAGE &&
-        variable.name === varName,
-    )
-  ) {
-    return VARIABLE_VALIDATION.CAN_OVERRIDE_SBU;
   }
 
   return VARIABLE_VALIDATION.NONE;
