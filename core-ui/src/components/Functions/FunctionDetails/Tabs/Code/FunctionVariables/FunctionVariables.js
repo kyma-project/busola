@@ -229,8 +229,8 @@ export default function FunctionVariables({
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
-        notFoundMessage={t('functions.variable.not-found')}
-        noSearchResultMessage={t('functions.variable.not-match')}
+        notFoundMessage="functions.variable.not-found"
+        noSearchResultMessage="functions.variable.not-match"
       />
       <DeleteMessageBox
         resource={chosenVariable}
