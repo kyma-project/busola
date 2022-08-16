@@ -1,9 +1,3 @@
-addons:
-  errors:
-    cannot-create: Nie można utworzyć konfiguracji dodatków
-  messages:
-    created: Utworzono konfigurację dodatków {{name}}
-  title: Dodatki
 api-rules:
   access-strategies:
     buttons:
@@ -40,8 +34,6 @@ api-rules:
   title: Reguły API
 applications:
   title: Aplikacje
-cluster-addons:
-  title: Dodatki do klastra
 cluster-role-bindings:
   title: Powiązania ról klastra
 cluster-roles:

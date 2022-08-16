@@ -383,11 +383,9 @@ command-palette:
     show-help: Show available commands
     switch: Switch context
   resource-names:
-    addonsconfigurations: Addons
     apirules: API Rules
     authorizationpolicies: Authorization Policies
     cluster: Cluster {{name}}
-    clusteraddonsconfigurations: Cluster Addons
     clusterrolebindings: Cluster Role Bindings
     clusterroles: Cluster Roles
     configmaps: Config Maps
