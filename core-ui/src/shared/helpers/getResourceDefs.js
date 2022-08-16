@@ -1,4 +1,3 @@
-import jsonata from 'jsonata';
 import pluralize from 'pluralize';
 import { resources } from 'resources';
 
@@ -21,24 +20,4 @@ export function getPerResourceDefs(defType, t, context) {
         return [kind, value];
       }),
   );
-}
-
-export function getResourceGraphConfig(t, context) {
-  const builtinResourceDefs = getPerResourceDefs(
-    'resourceGraphConfig',
-    t,
-    context,
-  );
-
-  const builtinResourceGraphConfig = Object.fromEntries(
-    Object.entries(builtinResourceDefs).map(([kind, graphConfig]) => [
-      kind,
-      {
-        resource: { kind },
-        ...graphConfig,
-      },
-    ]),
-  );
-
-  return { ...builtinResourceGraphConfig };
 }

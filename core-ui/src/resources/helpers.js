@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { getResourceUrl } from 'shared/helpers';
-import { getResourceGraphConfig } from 'shared/helpers/getResourceDefs';
+import { getResourceGraphConfig } from 'shared/components/ResourceGraph/getResourceGraphConfig';
 
 export const usePrepareListProps = (resourceType, resourceI18Key) => {
   const routerParams = useParams();
