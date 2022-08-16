@@ -4,7 +4,7 @@
 
 The `resources` example showcases the Busola's extensibility feature with the Kubernetes resources.
 
-The `configuration` directory consists of Config Maps that store the information about the extensibility configuration for specific resources.
+The `configuration` directory consists of ConfigMaps that store the information about the extensibility configuration for specific resources.
 
 The `samples.yaml` file includes the examples of the above resources.
 
@@ -12,7 +12,7 @@ The `samples.yaml` file includes the examples of the above resources.
 
 To test the extensibility feature using the resources examples, upload any of the YAML files from the `configuration` and `samples` directory to your cluster. To upload all the resources use the following commands:
 
-1. Create a `resources` Namespace and apply the Config Maps and CRDs:
+1. Create a `resources` Namespace and apply the ConfigMaps and CRDs:
 
 ```bash
 kubectl create namespace resources && kubectl apply -f configuration/ --recursive
