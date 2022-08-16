@@ -69,14 +69,9 @@ api-rules:
     skipped: Skipped creating the resource
     unknown: Unknown resource state
 applications:
-  aria:
-    namespace: Choose Namespace
-  bindings: Bindings
   buttons:
     connect: Connect Application
-    create: $t(applications.subtitle.create-binding)
     create-app: $t(applications.subtitle.create-app)
-    select-all: Select all
   description: <0>Application</0> represents an external solution connected to Kyma.
   headers:
     access-label: Access Label
@@ -85,31 +80,18 @@ applications:
     description: Description
     events: Events
     service: Service
-    service-and-event: Service and Event Bindings
   labels:
-    applications-and-events: Applications and Events
     description: Description
     namespace: Namespace
   messages:
-    app-created: Application {{applicationName}} created
-    binding-create-failed: Failed to create the Binding
-    binding-created: Binding created
-    binding-deleted: Binding deleted
-    binding-not-found: No bindings
     cannot-create: Cannot create the Application
     connect-disabled: Connecting Applications is disabled for SAP BTP, Kyma Runtime.
     copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
     create-failed: Failed to create the Application
     created: Application created
-    dont-expose: This Application doesn't expose any Services or events.
     no-apis: There are no APIs.
-    no-bound-service: No bound services
     no-events: There are no events.
-    no-matches-text: No Namespaces to bind
     service-not-found: No services
-    show-namespaces: Show Namespaces
-    some-apis: There are some APIs
-    some-events: There are some events
   name_singular: Application
   placeholders:
     description: Provide a description for your Application
@@ -117,7 +99,6 @@ applications:
     deployed: Deployed
     provisioning: Provisioning
   subtitle:
-    bound-to: Services and events bound to '{{namespace}}'
     connect-app: Connect Application
     create-app: Create Application
     provided-services: Provided Services and Events
