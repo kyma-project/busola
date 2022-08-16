@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 
 import ApplicationServices from './ApplicationServices';
-import NamespaceBindings from './NamespaceBindings';
 import ConnectApplicationModal from './ConnectApplicationModal';
 import { ApplicationStatus } from './ApplicationStatus';
 import { ApplicationCreate } from './ApplicationCreate';
@@ -16,7 +15,6 @@ export function ApplicationDetails(props) {
   const { isEnabled: isAppConnectorFlowEnabled } = useFeature(
     'APPLICATION_CONNECTOR_FLOW',
   );
-  const { isEnabled: isServiceCatalogEnabled } = useFeature('SERVICE_CATALOG');
 
   const customColumns = [
     {
@@ -32,10 +30,6 @@ export function ApplicationDetails(props) {
     });
   }
 
-  const customComponents = isServiceCatalogEnabled
-    ? [NamespaceBindings, ApplicationServices]
-    : [ApplicationServices];
-
   return (
     <ResourceDetails
       customColumns={customColumns}
@@ -44,7 +38,7 @@ export function ApplicationDetails(props) {
           <ConnectApplicationModal applicationName={props.resourceName} />
         )
       }
-      customComponents={customComponents}
+      customComponents={[ApplicationServices]}
       createResourceForm={ApplicationCreate}
       {...props}
     />

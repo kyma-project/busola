@@ -12,7 +12,6 @@ export default function EditVariable({
   configmaps,
   customVariables,
   customValueFromVariables,
-  injectedVariables,
   variable,
 }) {
   const { t } = useTranslation();
@@ -43,7 +42,6 @@ export default function EditVariable({
       resources={resources}
       customVariables={customVariables}
       customValueFromVariables={customValueFromVariables}
-      injectedVariables={injectedVariables}
       isEdit
     />
   );

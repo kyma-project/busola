@@ -1,5 +1,3 @@
-import { base64Encode } from 'shared/helpers';
-
 export const functionMock = {
   metadata: {
     name: 'function-pico-bello',
@@ -91,69 +89,10 @@ export const eventTriggerMock = {
   },
 };
 
-export const serviceBindingUsageMock = {
-  serviceBinding: {
-    metadata: {
-      name: 'serviceBinding',
-    },
-    spec: {
-      instanceRef: {
-        name: 'serviceInstanceName',
-      },
-    },
-  },
-  serviceBindingUsage: {
-    metadata: {
-      name: 'serviceBindingUsage',
-    },
-    spec: {
-      parameters: {
-        envPrefix: {
-          name: 'PREFIX_',
-        },
-      },
-    },
-  },
-  secret: {
-    metadata: {
-      name: 'secret',
-      namespace: 'namespace',
-    },
-    data: {
-      FOO: base64Encode('foo'),
-      BAR: base64Encode('bar'),
-    },
-  },
-};
-
-export const serviceInstanceMock = {
-  name: 'serviceInstance',
-  bindable: true,
-  servicePlan: {
-    bindingCreateParameterSchema: {},
-  },
-  serviceBindings: {
-    items: [
-      {
-        name: 'serviceBinding',
-        parameters: '',
-        secret: {
-          name: 'secret',
-          data: {},
-        },
-      },
-    ],
-  },
-};
-
 export const configMapMock = {
   json: {
     data: {
       key: 'value',
     },
   },
-};
-
-export const serviceMock = {
-  name: 'name',
 };
