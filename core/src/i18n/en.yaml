@@ -1,21 +1,3 @@
-addons:
-  addons-status: Addons Status
-  description: <0>Addons Configuration</0> defines Namespace-scoped addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
-  errors:
-    cannot-create: Cannot create the Addons Configuration.
-  headers:
-    url: URL
-  messages:
-    created: Addons Configuration {{name}} created
-  navigation-title: Addons
-  repository-urls: Repository URLs
-  singular_name: Addons Configuration
-  title: Addons Configurations
-  tooltips:
-    failed: One of the repositories failed.
-    pending: Processing the addon
-    ready: Addon configured
-  urls: URLs
 api-rules:
   access-strategies:
     buttons:
@@ -87,14 +69,9 @@ api-rules:
     skipped: Skipped creating the resource
     unknown: Unknown resource state
 applications:
-  aria:
-    namespace: Choose Namespace
-  bindings: Bindings
   buttons:
     connect: Connect Application
-    create: $t(applications.subtitle.create-binding)
     create-app: $t(applications.subtitle.create-app)
-    select-all: Select all
   description: <0>Application</0> represents an external solution connected to Kyma.
   headers:
     access-label: Access Label
@@ -103,31 +80,18 @@ applications:
     description: Description
     events: Events
     service: Service
-    service-and-event: Service and Event Bindings
   labels:
-    applications-and-events: Applications and Events
     description: Description
     namespace: Namespace
   messages:
-    app-created: Application {{applicationName}} created
-    binding-create-failed: Failed to create the Binding
-    binding-created: Binding created
-    binding-deleted: Binding deleted
-    binding-not-found: No bindings
     cannot-create: Cannot create the Application
     connect-disabled: Connecting Applications is disabled for SAP BTP, Kyma Runtime.
     copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
     create-failed: Failed to create the Application
     created: Application created
-    dont-expose: This Application doesn't expose any Services or events.
     no-apis: There are no APIs.
-    no-bound-service: No bound services
     no-events: There are no events.
-    no-matches-text: No Namespaces to bind
     service-not-found: No services
-    show-namespaces: Show Namespaces
-    some-apis: There are some APIs
-    some-events: There are some events
   name_singular: Application
   placeholders:
     description: Provide a description for your Application
@@ -135,12 +99,8 @@ applications:
     deployed: Deployed
     provisioning: Provisioning
   subtitle:
-    bound-to: Services and events bound to '{{namespace}}'
     connect-app: Connect Application
     create-app: Create Application
-    create-binding: Create Namespace Binding
-    edit-binding: Edit ServiceClass Binding in '{{namespace}}'
-    namespace-bindings: Namespace Bindings
     provided-services: Provided Services and Events
   title: Applications
   tooltips:
@@ -164,11 +124,6 @@ authorization-policies:
     when: When
   name_singular: Authorization Policy
   title: Authorization Policies
-brokers:
-  description: <0>Service Broker</0> provides a set of managed services that a third party offers and maintains.
-  headers:
-    url: URL
-  title: Brokers
 btp-instances:
   description: ' <0>BTP Service Instance</0> makes the functionality of a service available for consumption.'
   external-name: External Name
@@ -226,11 +181,6 @@ btp-service-bindings:
     provisioned: Provisioned
     secret: The name of the secret where the credentials are stored, defaults to the Service Binding name if not specified.
     secret-not-found: This Secret doesn't exist.
-catalog:
-  description: <0>Service Catalog</0> provides an easy way to access services that the Service Brokers manage, and to use them in an application.
-  menu-title: Catalog
-  subtitle: Enrich your experience with additional services that are installed outside the cluster.
-  title: Service Catalog
 certificates:
   common-name: Common Name
   create:
@@ -273,11 +223,6 @@ certificates:
     will-expire: Certificate will expire in {{daysToExpire}} {{daysForm}}.
     with-csr: Enable to use a Certificate Signing Request instead of providing domain names manually.
   with-csr: Use a CSR
-cluster-addons:
-  description: <0>Cluster Addons Configuration</0> defines cluster-wide addons that provide all information required to convert Helm charts into Service Classes in Service Catalog.
-  navigation-title: Cluster Addons
-  singular_name: Cluster Addons Configuration
-  title: Cluster Addons Configurations
 cluster-overview:
   headers:
     cpu: CPU
@@ -419,11 +364,9 @@ command-palette:
     show-help: Show available commands
     switch: Switch context
   resource-names:
-    addonsconfigurations: Addons
     apirules: API Rules
     authorizationpolicies: Authorization Policies
     cluster: Cluster {{name}}
-    clusteraddonsconfigurations: Cluster Addons
     clusterrolebindings: Cluster Role Bindings
     clusterroles: Cluster Roles
     configmaps: Config Maps
@@ -1199,26 +1142,15 @@ functions:
     popup-error: At least one variable has an incorrect name format, is restricted, duplicated, or empty.
     title:
       environment-variables: Environment Variables
-      injected-variables: Environment Variables Injected by the Service Bindings
     tooltip:
       config-map: This variable comes from the "{resourceName}" Config Map.
       custom: This variable was provided by the user.
       secret: This variable comes from the "{resourceName}" Secret.
-      service-binding: This variable was injected by the Service Binding referencing Service Instance "{serviceInstanceName}".
       text: This variable comes from a resource. To get the value, follow the link.
     type:
       config-map: Config Map
       custom: Custom
       secret: Secret
-      service-binding: Service Binding
-    warnings:
-      override: This variable name is identical to the variable injected by the Service Binding. Continue if you intend that they can override each other. Otherwise, choose another name.
-      sbu-can-be-overridden:
-        by-both: This variable can be overridden by one of the custom variables or a variable injected by one of the Service Bindings.
-        by-custom-env: This variable can override or be overridden by one of the custom variables.
-        by-sbu: This variable can override or be overridden by a variable injected by one of the Service Bindings.
-      text: Warning
-      variable-can-override-sbu: This variable can override or be overridden by a variable injected by one of the created Service Bindings.
 gateways:
   aria-labels:
     host: Host
@@ -1421,21 +1353,6 @@ ingresses:
     rules-not-found: Rules not found
   name_singular: Ingress
   title: Ingresses
-instances:
-  description: <0>Service Instance</0> is a provisioned instance of a service that can be consumed by an application.
-  no-specific-plan-parameters:
-    tooltip: The service provider did not define specific parameters for the selected plan. Refer to the documentation to learn about the required parameters, and define them as a JSON in the editor.
-  statuses:
-    deprovisionedsuccessfully: Deprovisioned
-    deprovisionrequestinflight: Deprovision Request In Flight
-    instanceupdatedsuccessfully: Instance Updated
-    orphanmitigationsuccessful: Orphan Mitigation Successful
-    provisioncallfailed: Provision Call Failed
-    provisionedsuccessfully: Provisioned
-    provisioning: Provisioning
-    provisionrequestinflight: Provision Request In Flight
-    updateinstancerequestinflight: Update Instance Request In Flight
-  title: Instances
 integration:
   title: Integration
 issuers:

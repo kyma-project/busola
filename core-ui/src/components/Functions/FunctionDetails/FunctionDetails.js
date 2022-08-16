@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 
 import CodeTab from './Tabs/Code/CodeTab';
 import ResourceManagement from './Tabs/ResourceManagement/ResourceManagement';
-import ServiceBindingsWrapper from './Tabs/Configuration/ServiceBindings/ServiceBindingsWrapper';
 import { ApiRulesList } from 'components/ApiRules/ApiRulesList';
 import { SubscriptionsList } from 'shared/components/SubscriptionsList';
 
@@ -21,16 +20,8 @@ export default function FunctionDetails({ func }) {
     ? SubscriptionsList
     : () => null;
 
-  const catalogEnabled =
-    features?.SERVICE_CATALOG?.isEnabled &&
-    features?.SERVICE_CATALOG_ADDONS?.isEnabled;
-
-  const ServiceBindings = catalogEnabled ? ServiceBindingsWrapper : () => null;
-
   const configTabShouldRender =
-    features?.API_GATEWAY?.isEnabled ||
-    features?.EVENTING?.isEnabled ||
-    catalogEnabled;
+    features?.API_GATEWAY?.isEnabled || features?.EVENTING?.isEnabled;
 
   const { t } = useTranslation();
 
@@ -60,7 +51,6 @@ export default function FunctionDetails({ func }) {
               serviceName={func.metadata.name}
               namespace={func.metadata.namespace}
             />
-            <ServiceBindings func={func} isActive={selectedTabIndex === 1} />
           </Tab>
         )}
         <Tab

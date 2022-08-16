@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -31,25 +31,10 @@ export default function App() {
   useSentry();
   useAppTracking();
 
-  const serviceCatalogRoutes = useMemo(() => {
-    return [
-      '/catalog',
-      '/catalog/ServiceClass/:serviceId',
-      '/catalog/ServiceClass/:serviceId/plans',
-      '/catalog/ServiceClass/:serviceId/plan/:planId',
-      '/catalog/ClusterServiceClass/:serviceId',
-      '/catalog/ClusterServiceClass/:serviceId/plans',
-      '/catalog/ClusterServiceClass/:serviceId/plan/:planId',
-      '/instances',
-      '/instances/details/:instanceName',
-    ].map(route => <Route key="route" path={route} element={null} />);
-  }, []);
-
   return (
     <AppContext.Provider value={{ schemaInfo }}>
       {/* force rerender on cluster change*/}
       <Routes key={cluster?.name}>
-        {serviceCatalogRoutes}
         <Route
           path="/overview" // overview route should stay static
           element={
