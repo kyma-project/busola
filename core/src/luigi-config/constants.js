@@ -5,7 +5,6 @@ const DEFAULT_MODULES = {
   EVENTING: 'eventing.kyma-project.io',
   API_GATEWAY: 'gateway.kyma-project.io',
   APPLICATIONS: 'applicationconnector.kyma-project.io',
-  ADDONS: 'addons.kyma-project.io',
   SERVERLESS: 'serverless.kyma-project.io',
   CUSTOM_DOMAINS: 'dns.gardener.cloud',
   ISTIO: 'networking.istio.io',

@@ -1015,43 +1015,6 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
-      pathSegment: 'addons',
-      resourceType: 'addonsconfigurations',
-      navigationContext: 'addonsconfigurations',
-      label: i18next.t('addons.navigation-title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/addonsconfigurations?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.ADDONS],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':addonName',
-              resourceType: 'addonsconfigurations',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/addonsconfigurations/:addonName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('configuration.title'),
       pathSegment: 'configmaps',
       resourceType: 'configmaps',
       navigationContext: 'configmaps',
@@ -1679,47 +1642,6 @@ export function getStaticRootNodes(
                   viewGroup: coreUIViewGroupName,
                 },
               ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      pathSegment: 'addons-configs',
-      navigationContext: 'clusteraddonsconfigurations',
-      resourceType: 'clusteraddonsconfigurations',
-      label: i18next.t('cluster-addons.navigation-title'),
-      category: {
-        label: i18next.t('integration.title'),
-        icon: 'settings',
-        collapsible: true,
-      },
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/clusteraddonsconfigurations?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      context: {
-        requiredFeatures: [features.ADDONS],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':addonName',
-              resourceType: 'clusteraddonsconfigurations',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/clusteraddonsconfigurations/:addonName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
             },
           ],
         },
