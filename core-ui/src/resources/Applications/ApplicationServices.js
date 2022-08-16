@@ -37,7 +37,7 @@ export default function ApplicationServices({ spec: applicationSpec }) {
       entries={entries}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      notFoundMessage={t('applications.messages.service-not-found')}
+      notFoundMessage="applications.messages.service-not-found"
       i18n={i18n}
     />
   );

@@ -12,7 +12,6 @@ import './VariableInputs.scss';
 export default function CustomVariableInput({
   currentVariable = {},
   variables = [],
-  injectedVariables = [],
   onUpdateVariable,
   setValidity,
   setInvalidModalPopupMessage,
@@ -52,7 +51,6 @@ export default function CustomVariableInput({
     const name = event.target.value;
     const validation = getValidationStatus({
       userVariables: variables,
-      injectedVariables,
       restrictedVariables: CONFIG.restrictedVariables,
       varName: name,
       varID: variable.id,
@@ -105,10 +103,6 @@ export default function CustomVariableInput({
       case VARIABLE_VALIDATION.RESTRICTED:
         className = 'fd-has-color-status-3';
         message = t('functions.variable.errors.restricted');
-        break;
-      case VARIABLE_VALIDATION.CAN_OVERRIDE_SBU:
-        className = 'fd-has-color-status-2';
-        message = t('functions.variable.warnings.override');
         break;
       default:
         return null;
