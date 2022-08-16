@@ -12,7 +12,6 @@ import { Microfrontend } from 'shared/contexts/Microfrontend';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
-import ServiceCatalogUIWrapper from './service-catalog-ui/Wrapper';
 
 import './styles/reset.css';
 import './styles/sapIllus-Fills.css';
@@ -55,7 +54,6 @@ ReactDOM.render(
       <Suspense fallback={<Spinner />}>
         <CommandPaletteProvider>
           <App />
-          <ServiceCatalogUIWrapper />
         </CommandPaletteProvider>
       </Suspense>
     </BrowserRouter>
