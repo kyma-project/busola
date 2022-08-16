@@ -306,6 +306,7 @@ GenericList.propTypes = {
   compact: PropTypes.bool,
   className: PropTypes.string,
   currentlyEditedResourceUID: PropTypes.string,
+  sortBy: PropTypes.func,
   messages: MessagesProps,
   searchSettings: SearchProps,
 };
