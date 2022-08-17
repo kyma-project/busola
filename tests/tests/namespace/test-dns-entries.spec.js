@@ -37,7 +37,7 @@ context('Test DNS Entries', () => {
 
     // dns name
     cy.getIframeBody()
-      .find('[placeholder^="Select the DNSname"]:visible')
+      .find('[placeholder^="Select the DNSName"]:visible')
       .type(DNS_NAME)
       .click();
 
