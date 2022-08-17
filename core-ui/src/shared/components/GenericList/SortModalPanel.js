@@ -10,6 +10,8 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
   const [name, setName] = useState(sort.name);
   const { t } = useTranslation();
 
+  const { t } = useTranslation();
+
   const sortOpeningComponent = (
     <Tooltip content={t('common.tooltips.sort')}>
       <Button

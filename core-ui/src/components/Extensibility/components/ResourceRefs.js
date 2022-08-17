@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 
 export function ResourceRefs({ value, structure, schema, disableMargin }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { widgetT } = useGetTranslation();
   const resourceType = structure.kind;
   //kyma logpipeline api can return object in place of array wrongly, if only one record is defined
@@ -52,7 +52,6 @@ export function ResourceRefs({ value, structure, schema, disableMargin }) {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       disableMargin={disableMargin}
-      i18n={i18n}
       showSearchField={false}
       sortBy={sortBy}
     />

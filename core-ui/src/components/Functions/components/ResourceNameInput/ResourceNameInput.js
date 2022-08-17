@@ -11,7 +11,7 @@ export function ResourceNameInput({ nameStatus, kind, ...otherProps }) {
     <MessageStrip type="error">{nameStatus}</MessageStrip>
   ) : null;
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <div className="resource-name-input">
@@ -19,7 +19,7 @@ export function ResourceNameInput({ nameStatus, kind, ...otherProps }) {
         <FormLabel className="resource-name-input__label" required={true}>
           {t('common.headers.name')}
         </FormLabel>
-        <K8sNameInput {...otherProps} kind={kind} i18n={i18n} />
+        <K8sNameInput {...otherProps} kind={kind} />
         {validationMessage}
       </FormItem>
     </div>

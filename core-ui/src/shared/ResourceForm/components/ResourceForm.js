@@ -54,7 +54,7 @@ export function ResourceForm({
     };
   }
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const createResource = useCreateResource({
     singularName,
     pluralKind,
@@ -156,7 +156,6 @@ export function ResourceForm({
               editor={actionsEditor}
               title={`${resource?.metadata?.name || singularName}.yaml`}
               saveHidden
-              i18n={i18n}
             />
             {editor}
           </>

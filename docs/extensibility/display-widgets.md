@@ -360,7 +360,7 @@ ResourceRefs widgets render the lists of links to the associated resources. The 
 
 ### Table
 
-Table widgets display array data as rows of a table instead of free-standing components. The **children** parameter defines the values used to render the columns. Similar to the **list** section of the Config Map, you should use inline widgets only as children.
+Table widgets display array data as rows of a table instead of free-standing components. The **children** parameter defines the values used to render the columns. Similar to the **list** section of the ConfigMap, you should use inline widgets only as children.
 
 #### Widget-specific parameters
 

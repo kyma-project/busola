@@ -75,7 +75,7 @@ export default function AccessStrategies({
   showSearchField = true,
   compact = false,
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const headerRenderer = () => [
     t('api-rules.access-strategies.labels.path'),
@@ -101,7 +101,6 @@ export default function AccessStrategies({
         noSearchResultMessage={
           ACCESS_STRATEGIES_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY
         }
-        i18n={i18n}
       />
     </div>
   );
