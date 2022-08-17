@@ -45,11 +45,7 @@ const resolveType = status => {
   }
 };
 
-const translate = (i18n, arrayOfVariableNames, fallbackValue) => {
-  if (!i18n) return fallbackValue;
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { t } = useTranslation(null, { i18n });
+const translate = (t, arrayOfVariableNames, fallbackValue) => {
   return t(arrayOfVariableNames, { defaultValue: fallbackValue });
 };
 
@@ -77,8 +73,8 @@ export const StatusBadge = ({
   tooltipProps = {},
   noTooltip = false,
   className,
-  i18n,
 }) => {
+  const { t } = useTranslation();
   if (autoResolveType) type = resolveType(value);
   else
     for (const key of TYPE_FALLBACK.keys()) {
@@ -106,12 +102,12 @@ export const StatusBadge = ({
   );
   const fallbackValue = value.toString();
   const badgeContent = translate(
-    i18n,
+    t,
     [i18nFullVariableName, commonStatusVariableName],
     fallbackValue,
   );
   let content = translate(
-    i18n,
+    t,
     [tooltipVariableName, commonTooltipVariableName, i18nFullVariableName],
     fallbackValue,
   );
@@ -191,6 +187,5 @@ StatusBadge.propTypes = {
   noTooltip: PropTypes.bool,
   resourceKind: PropTypes.string,
   tooltipProps: PropTypes.object,
-  i18n: PropTypes.object,
   className: PropTypes.string,
 };

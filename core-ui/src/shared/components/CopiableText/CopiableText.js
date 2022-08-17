@@ -20,9 +20,8 @@ export function CopiableText({
   children,
   iconOnly,
   compact,
-  i18n,
 }) {
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation();
   return (
     <div className="copiable-text">
       {!iconOnly ? children || textToCopy : null}

@@ -12,7 +12,7 @@ To automatically add the UI page for your CRD, follow these steps:
 2.  Click **Create Extension +**, and select your resource from the list.
 3.  Optionally, you can uncheck the UI elements that are not necessary.
 
-> **NOTE:** The UI elements visible in this form are only suggestions. You can change the configuration later in your Config Map.
+> **NOTE:** The UI elements visible in this form are only suggestions. You can change the configuration later in your ConfigMap.
 
 4.  Click **Create**.
 

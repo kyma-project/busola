@@ -3,8 +3,9 @@ import { LayoutPanel } from 'fundamental-react';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { useTranslation } from 'react-i18next';
 
-export const ErrorPanel = ({ error, title, i18n }) => {
-  const { t } = useTranslation(null, { i18n });
+export const ErrorPanel = ({ error, title }) => {
+  const { t } = useTranslation();
+
   return (
     <LayoutPanel className="fd-margin--md">
       <LayoutPanel.Header>

@@ -8,7 +8,7 @@ import {
 import { AppContext } from 'components/App/AppContext';
 
 export const useGetSchema = ({ schemaId, skip, resource }) => {
-  if (!schemaId) {
+  if (!schemaId && resource) {
     const { group, version, kind } = resource;
     schemaId = `${group}/${version}/${kind}`;
   }
@@ -26,7 +26,8 @@ export const useGetSchema = ({ schemaId, skip, resource }) => {
       return;
     }
     sendWorkerMessage('getSchema', schemaId);
-    addWorkerListener('schemaComputed', ({ schema }) => {
+
+    addWorkerListener(`schemaComputed:${schemaId}`, ({ schema }) => {
       setSchema(schema);
       setError(null);
       setLoading(false);

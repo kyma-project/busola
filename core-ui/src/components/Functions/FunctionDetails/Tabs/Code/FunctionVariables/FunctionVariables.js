@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
 
-import { Icon, InfoLabel } from 'fundamental-react';
+import { InfoLabel } from 'fundamental-react';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
@@ -11,86 +11,22 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import CreateVariable from './CreateVariable/CreateVariable';
 import EditVariable from './EditVariable/EditVariable';
 
-import {
-  VARIABLE_VALIDATION,
-  VARIABLE_TYPE,
-  WARNINGS_VARIABLE_VALIDATION,
-} from 'components/Functions/helpers/functionVariables';
+import { VARIABLE_TYPE } from 'components/Functions/helpers/functionVariables';
 import { useUpdateFunction, UPDATE_TYPE } from 'components/Functions/hooks';
 
 import { validateVariables } from './validation';
 
-import './FunctionEnvs.scss';
 import { formatMessage } from 'components/Functions/helpers/misc';
 import { useTranslation } from 'react-i18next';
+import './FunctionEnvs.scss';
 
 const textSearchProperties = ['name', 'value', 'type'];
-
-function VariableStatus({ validation }) {
-  const { t } = useTranslation();
-
-  if (!WARNINGS_VARIABLE_VALIDATION.includes(validation)) {
-    return null;
-  }
-
-  const statusClassName = 'fd-has-color-status-2';
-  const control = (
-    <div>
-      <span className={statusClassName}>
-        {t('functions.variable.warnings.text')}
-      </span>
-      <Icon
-        ariaLabel="Warning"
-        glyph="message-warning"
-        size="s"
-        className={`${statusClassName} fd-margin-begin--tiny`}
-      />
-    </div>
-  );
-
-  let message = '';
-  switch (validation) {
-    case VARIABLE_VALIDATION.CAN_OVERRIDE_SBU: {
-      message = t('functions.variable.warnings.variable-can-override-sbu');
-      break;
-    }
-    case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_CUSTOM_ENV_AND_SBU: {
-      message = t('functions.variable.warnings.sbu-can-be-overridden.by-both');
-      break;
-    }
-    case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_CUSTOM_ENV: {
-      message = t(
-        'functions.variable.warnings.sbu-can-be-overridden.by-custom-env',
-      );
-      break;
-    }
-    case VARIABLE_VALIDATION.CAN_OVERRIDE_BY_SBU: {
-      message = t('functions.variable.warnings.sbu-can-be-overridden.by-sbu');
-      break;
-    }
-    default: {
-      message = t('functions.variable.warnings.variable-can-override-sbu');
-    }
-  }
-
-  return <Tooltip content={message}>{control}</Tooltip>;
-}
 
 function VariableSource({ variable }) {
   const { t } = useTranslation();
 
   let source = t('functions.variable.type.custom');
   let tooltipTitle = t('functions.variable.tooltip.custom');
-
-  if (variable.type === VARIABLE_TYPE.BINDING_USAGE) {
-    source = t('functions.variable.type.service-binding');
-    tooltipTitle = formatMessage(
-      t('functions.variable.tooltip.service-binding'),
-      {
-        serviceInstanceName: variable.serviceInstanceName,
-      },
-    );
-  }
 
   if (variable.valueFrom) {
     if (variable.valueFrom.configMapKeyRef) {
@@ -175,12 +111,10 @@ export default function FunctionVariables({
   configmaps,
   customVariables,
   customValueFromVariables,
-  injectedVariables,
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
-    i18n,
     resourceType: t('functions.variable.title.environment-variables'),
   });
 
@@ -208,7 +142,6 @@ export default function FunctionVariables({
     <ControlledBy ownerReferences={variable.owners} />,
     <VariableSource variable={variable} />,
     <VariableKey variable={variable} />,
-    <VariableStatus validation={variable.validation} />,
   ];
 
   const addEnvModal = (
@@ -218,13 +151,12 @@ export default function FunctionVariables({
       configmaps={configmaps}
       customVariables={customVariables}
       customValueFromVariables={customValueFromVariables}
-      injectedVariables={injectedVariables}
     />
   );
 
   const entries = [
-    ...validateVariables(customVariables, [], injectedVariables, []),
-    ...validateVariables(customValueFromVariables, [], injectedVariables, []),
+    ...validateVariables(customVariables),
+    ...validateVariables(customValueFromVariables),
   ];
 
   function prepareVariablesInput(newVariables) {
@@ -247,7 +179,7 @@ export default function FunctionVariables({
       oldVariable => oldVariable.id !== variable.id,
     );
 
-    newVariables = validateVariables(newVariables, [], injectedVariables, []);
+    newVariables = validateVariables(newVariables);
     const preparedVariable = prepareVariablesInput(newVariables);
 
     updateFunctiontionVariables({
@@ -269,7 +201,6 @@ export default function FunctionVariables({
           configmaps={configmaps}
           customVariables={customVariables}
           customValueFromVariables={customValueFromVariables}
-          injectedVariables={injectedVariables}
           variable={variable}
         />
       ),
@@ -298,9 +229,8 @@ export default function FunctionVariables({
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
-        notFoundMessage={t('functions.variable.not-found')}
-        noSearchResultMessage={t('functions.variable.not-match')}
-        i18n={i18n}
+        notFoundMessage="functions.variable.not-found"
+        noSearchResultMessage="functions.variable.not-match"
       />
       <DeleteMessageBox
         resource={chosenVariable}

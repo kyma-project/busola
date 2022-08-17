@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
@@ -33,15 +33,18 @@ export function ResourceForm({
   className,
   onlyYaml = false,
   toggleFormFn,
-  customSchemaId,
   autocompletionDisabled,
-  customSchemaUri,
   readOnly,
   handleNameChange,
   nameProps,
   labelsProps,
   disableDefaultFields,
 }) {
+  // readonly schema ID, set only once
+  const [resourceSchemaId] = useState(
+    resource.apiVersion + '/' + resource.kind,
+  );
+
   if (!handleNameChange) {
     handleNameChange = name => {
       jp.value(resource, '$.metadata.name', name);
@@ -51,7 +54,7 @@ export function ResourceForm({
     };
   }
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const createResource = useCreateResource({
     singularName,
     pluralKind,
@@ -105,10 +108,9 @@ export function ResourceForm({
       value={resource}
       onChange={setResource}
       onMount={setActionsEditor}
-      customSchemaId={customSchemaId}
-      customSchemaUri={customSchemaUri}
       autocompletionDisabled={autocompletionDisabled}
       readOnly={readOnly}
+      schemaId={resourceSchemaId}
       updateValueOnParentChange={presets?.length}
     />
   );
@@ -154,7 +156,6 @@ export function ResourceForm({
               editor={actionsEditor}
               title={`${resource?.metadata?.name || singularName}.yaml`}
               saveHidden
-              i18n={i18n}
             />
             {editor}
           </>

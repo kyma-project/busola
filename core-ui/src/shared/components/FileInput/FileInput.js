@@ -18,12 +18,11 @@ export function FileInput({
   acceptedFileFormats,
   inputRef,
   required,
-  i18n,
   allowMultiple,
 }) {
   const [fileNames, setFileNames] = useState([]);
   const [draggingOverCounter, setDraggingCounter] = useState(0);
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation();
 
   // needed for onDrag to fire
   function dragOver(e) {

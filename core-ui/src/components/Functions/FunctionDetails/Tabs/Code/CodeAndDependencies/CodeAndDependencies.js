@@ -150,7 +150,6 @@ export default function CodeAndDependencies({ func }) {
       title: t('functions.variable.header.source'),
       body: (
         <Editor
-          id="function-code"
           language={monacoEditorLang}
           originalValue={func.spec.source}
           value={code}
@@ -166,7 +165,6 @@ export default function CodeAndDependencies({ func }) {
       title: t('functions.details.title.dependencies'),
       body: (
         <Editor
-          id="function-dependencies"
           language={monacoEditorDeps}
           originalValue={func.spec.deps}
           value={dependencies}

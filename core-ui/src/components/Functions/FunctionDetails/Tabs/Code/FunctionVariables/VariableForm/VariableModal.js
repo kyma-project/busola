@@ -10,7 +10,6 @@ export default function VariableModal({
   resources = [],
   customVariables,
   customValueFromVariables,
-  injectedVariables,
   variable = null,
   type = VARIABLE_TYPE.CUSTOM,
   title,
@@ -18,7 +17,6 @@ export default function VariableModal({
   confirmText,
   alwaysOpen,
   onModalOpenStateChange,
-  i18n,
   isEdit,
 }) {
   const [invalidModalPopupMessage, setInvalidModalPopupMessage] = useState('');
@@ -41,13 +39,11 @@ export default function VariableModal({
           type={type}
           customVariables={customVariables}
           customValueFromVariables={customValueFromVariables}
-          injectedVariables={injectedVariables}
           setInvalidModalPopupMessage={setInvalidModalPopupMessage}
           formType={FORM_TYPE.CREATE}
           isEdit={isEdit}
         />
       )}
-      i18n={i18n}
     />
   );
 }

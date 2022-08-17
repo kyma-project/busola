@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 export const NetworkPolicyPorts = ({ ports, title }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   if (!ports?.length) return null;
 
@@ -25,7 +25,6 @@ export const NetworkPolicyPorts = ({ ports, title }) => {
       entries={ports || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      i18n={i18n}
       showSearchField={false}
     />
   );

@@ -8,7 +8,7 @@ describe('StatusBadge', () => {
 
     const status = queryByRole('status');
     expect(status).toBeInTheDocument();
-    expect(status).toHaveTextContent('INITIAL');
+    expect(status).toHaveTextContent('common.statuses.initial');
   });
 
   it('displays warning when autoResolveType is set and "children" is a node', () => {
@@ -26,9 +26,7 @@ describe('StatusBadge', () => {
   it('renders status text with DEFAULT_STATUSES_PATH', () => {
     const DEFAULT_STATUSES_PATH = 'common.statuses.initial';
     // 'common.statuses.initial,common.statuses.initial,fallback';
-    const { queryByRole } = render(
-      <StatusBadge i18n={{ a: 'a' }}>Initial</StatusBadge>,
-    );
+    const { queryByRole } = render(<StatusBadge>Initial</StatusBadge>);
     const status = queryByRole('status');
     expect(status).toBeInTheDocument();
     expect(status).toHaveTextContent(DEFAULT_STATUSES_PATH);
@@ -38,9 +36,7 @@ describe('StatusBadge', () => {
     const RESOURCE_KIND = 'resource';
     const RESOURCE_STATUSES_PATH = 'resource.statuses.initial';
     const { queryByRole } = render(
-      <StatusBadge i18n={{ a: 'a' }} resourceKind={RESOURCE_KIND}>
-        Initial
-      </StatusBadge>,
+      <StatusBadge resourceKind={RESOURCE_KIND}>Initial</StatusBadge>,
     );
     const status = queryByRole('status');
     expect(status).toBeInTheDocument();
@@ -49,18 +45,14 @@ describe('StatusBadge', () => {
 
   it('renders status text without tooltip', () => {
     const { getByTestId } = render(
-      <StatusBadge i18n={{ a: 'a' }} noTooltip>
-        Initial
-      </StatusBadge>,
+      <StatusBadge noTooltip>Initial</StatusBadge>,
     );
     const status = getByTestId('no-tooltip');
     expect(status).toBeInTheDocument();
   });
 
   it('renders status text with tooltip', () => {
-    const { getByTestId } = render(
-      <StatusBadge i18n={{ a: 'a' }}>Initial</StatusBadge>,
-    );
+    const { getByTestId } = render(<StatusBadge>Initial</StatusBadge>);
     const status = getByTestId('has-tooltip');
     expect(status).toBeInTheDocument();
   });

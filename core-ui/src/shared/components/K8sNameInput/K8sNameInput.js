@@ -18,14 +18,13 @@ export const K8sNameInput = ({
   label = 'common.labels.name',
   required = true,
   defaultValue,
-  i18n,
   value,
   onChange,
   inputRef,
   pattern = k8sNamePattern,
   ...props
 }) => {
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation();
   const validationProps = useValidation({
     inputRef,
     onChange,

@@ -20,7 +20,7 @@ export function Dropdown({
   className,
   ...fdSelectProps
 }) {
-  const { t } = useTranslation(null);
+  const { t } = useTranslation();
   if (!options || !options.length) {
     options = [
       {

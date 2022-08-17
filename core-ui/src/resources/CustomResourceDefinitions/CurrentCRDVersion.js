@@ -12,7 +12,7 @@ import { CustomResources } from 'components/CustomResources/CustomResources';
 import './CurrentCRDVersion.scss';
 
 const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const headerRenderer = () => [
     t('common.headers.name'),
@@ -35,13 +35,12 @@ const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       testid="crd-additional-printer-columns"
-      i18n={i18n}
     />
   );
 };
 
 export const CurrentCRDVersion = resource => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const namespace = LuigiClient.getContext().namespaceId;
 
@@ -62,7 +61,6 @@ export const CurrentCRDVersion = resource => {
           type={storageVersion.served ? 'positive' : 'informative'}
           className="version-status"
           resourceKind="custom-resource-definitions"
-          i18n={i18n}
         >
           {storageVersion.served
             ? t('custom-resource-definitions.status.served')
@@ -73,7 +71,6 @@ export const CurrentCRDVersion = resource => {
             type="positive"
             className="version-status"
             resourceKind="custom-resource-definitions"
-            i18n={i18n}
           >
             {t('custom-resource-definitions.status.storage')}
           </StatusBadge>
@@ -83,7 +80,6 @@ export const CurrentCRDVersion = resource => {
         crd={resource}
         version={storageVersion}
         namespace={namespace}
-        i18n={i18n}
         omitColumnsIds={
           resource.spec.scope !== 'Namespaced' ? ['namespace'] : []
         }
