@@ -3,7 +3,7 @@ import { Dropdown as BusolaDropown } from 'shared/components/Dropdown/Dropdown';
 import { useTranslation } from 'react-i18next';
 
 export function Dropdown({ value, setValue, error, loading, ...props }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const getValidationState = () => {
     if (error) {
@@ -34,7 +34,6 @@ export function Dropdown({ value, setValue, error, loading, ...props }) {
       fullWidth
       selectedKey={value}
       onSelect={(_, selected) => setValue(selected.key, selected)}
-      i18n={i18n}
       validationState={getValidationState()}
       {...dropdownProps}
     />

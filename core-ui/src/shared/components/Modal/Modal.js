@@ -48,9 +48,8 @@ export function Modal({
   tooltipData,
   children,
   className,
-  i18n,
 }) {
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation();
   const [show, setShow] = React.useState(false);
   function onOpen() {
     if (onShow) {

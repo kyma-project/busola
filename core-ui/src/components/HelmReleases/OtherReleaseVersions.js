@@ -6,7 +6,7 @@ import { Link } from 'fundamental-react';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 
 export function OtherReleaseVersions({ releaseSecret, secrets }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   secrets = secrets.filter(
     s => s.metadata.name !== releaseSecret.metadata.name,
@@ -42,7 +42,6 @@ export function OtherReleaseVersions({ releaseSecret, secrets }) {
       entries={secrets}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      i18n={i18n}
       pagination={{ autoHide: true }}
     />
   );

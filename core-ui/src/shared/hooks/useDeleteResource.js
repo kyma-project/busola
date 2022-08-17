@@ -10,12 +10,11 @@ import { prettifyNameSingular } from 'shared/utils/helpers';
 import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
 
 export function useDeleteResource({
-  i18n,
   resourceName,
   resourceType,
   navigateToListAfterDelete = false,
 }) {
-  const { t } = useTranslation(['translation'], { i18n });
+  const { t } = useTranslation();
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const deleteResourceMutation = useDelete();

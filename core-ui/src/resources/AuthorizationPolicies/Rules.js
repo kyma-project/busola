@@ -117,7 +117,7 @@ const Operation = ({ name, value }) => {
 };
 
 const When = ({ when }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const headerRenderer = () => [
     t('authorization-policies.headers.key'),
@@ -137,7 +137,6 @@ const When = ({ when }) => {
       entries={when || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      i18n={i18n}
     />
   );
 };

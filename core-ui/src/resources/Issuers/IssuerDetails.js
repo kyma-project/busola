@@ -8,7 +8,7 @@ import { IssuerDomains } from './IssuerDomains';
 import { IssuerCreate } from './IssuerCreate';
 
 export function IssuerDetails(props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const customColumns = [
     {
@@ -18,11 +18,7 @@ export function IssuerDetails(props) {
     {
       header: t('issuers.state'),
       value: issuer => (
-        <ResourceStatus
-          status={issuer.status}
-          resourceKind="issuers"
-          i18n={i18n}
-        />
+        <ResourceStatus status={issuer.status} resourceKind="issuers" />
       ),
     },
     {

@@ -13,8 +13,8 @@ const nameAndValueRegexp = '[a-z0-9A-Z]([a-z0-9A-Z-_\\.]{0,61}[a-z0-9A-Z])?';
 const pattern = `^((${domainRegexp})/)?${nameAndValueRegexp}=(${nameAndValueRegexp})?$`;
 export const labelRegexp = new RegExp(pattern);
 
-export const Label = ({ text, onClick, i18n }) => {
-  const { t } = useTranslation(null, { i18n });
+export const Label = ({ text, onClick }) => {
+  const { t } = useTranslation();
 
   return (
     <Token
@@ -40,7 +40,6 @@ export const LabelSelectorInput = ({
   onChange,
   type = 'Labels',
   className,
-  i18n,
   compact,
 }) => {
   const [isValid, setValid] = useState(true);
@@ -97,7 +96,7 @@ export const LabelSelectorInput = ({
     onChange(newLabels);
   }
 
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation();
 
   const inputClassNames = classNames('fd-input label-selector__input', {
     'fd-input--compact': compact,
@@ -121,12 +120,7 @@ export const LabelSelectorInput = ({
             ))}
 
             {createLabelsToDisplay(labels).map(l => (
-              <Label
-                key={l}
-                text={l}
-                onClick={() => deleteLabel(l)}
-                i18n={i18n}
-              />
+              <Label key={l} text={l} onClick={() => deleteLabel(l)} />
             ))}
             <input
               ref={inputRef}

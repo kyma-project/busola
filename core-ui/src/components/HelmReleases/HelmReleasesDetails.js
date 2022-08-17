@@ -14,7 +14,7 @@ import { OtherReleaseVersions } from './OtherReleaseVersions';
 import { findRecentRelease } from './findRecentRelease';
 
 function HelmReleasesDetails({ releaseName }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { namespaceId: namespace } = useMicrofrontendContext();
   const breadcrumbItems = [
     { name: t('helm-releases.title'), path: '/' },
@@ -33,7 +33,6 @@ function HelmReleasesDetails({ releaseName }) {
       <ResourceNotFound
         resource={prettifyNameSingular(undefined, t('helm-releases.title'))}
         breadcrumbs={breadcrumbItems}
-        i18n={i18n}
       />
     );
   }

@@ -9,7 +9,7 @@ import { CustomResources } from 'components/CustomResources/CustomResources';
 import { LayoutPanel, Link } from 'fundamental-react';
 
 export default function CustomResourcesOfType({ crdName, namespace }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { data: crd, loading, error } = useGet(
     `/apis/apiextensions.k8s.io/v1/customresourcedefinitions/` + crdName,
   );
@@ -55,7 +55,6 @@ export default function CustomResourcesOfType({ crdName, namespace }) {
         namespace={namespace}
         crd={crd}
         version={crd.spec.versions.find(v => v.served)}
-        i18n={i18n}
         showTitle={false}
         showNamespace={false}
       />
