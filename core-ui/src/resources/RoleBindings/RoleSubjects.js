@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { SubjectLink } from './SubjectLink';
 
 export const RoleSubjects = binding => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const headerRenderer = () => [
     t('role-bindings.headers.kind'),
@@ -26,7 +26,6 @@ export const RoleSubjects = binding => {
       entries={binding?.subjects || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      i18n={i18n}
       searchSettings={{
         textSearchProperties: ['kind', 'name', 'namespace'],
       }}

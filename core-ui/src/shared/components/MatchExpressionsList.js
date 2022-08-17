@@ -5,7 +5,7 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Tokens } from 'shared/components/Tokens';
 
 export const MatchExpressionsList = ({ expressions }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const headerRenderer = () => [
     t('match-expressions.headers.key'),
     t('match-expressions.headers.operator'),
@@ -24,7 +24,6 @@ export const MatchExpressionsList = ({ expressions }) => {
       entries={expressions || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      i18n={i18n}
       searchSettings={{
         showSearchField: false,
       }}

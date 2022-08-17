@@ -45,7 +45,7 @@ export function SecretForm({
     onSubmit(secretInput);
   };
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const metadataContent = (
     <>
       <div className="secrets-form-metadata">
@@ -56,7 +56,6 @@ export function SecretForm({
             kind="Secret"
             className="fd-margin-bottom--sm"
             readOnly={readonlyName}
-            i18n={i18n}
           />
         </div>
         <TextFormItem
@@ -65,13 +64,12 @@ export function SecretForm({
           inputProps={{ value: secret.type, disabled: true }}
         />
       </div>
-      <LabelSelectorInput labels={labels} onChange={setLabels} i18n={i18n} />
+      <LabelSelectorInput labels={labels} onChange={setLabels} />
       <LabelSelectorInput
         className="fd-margin-top--sm fd-margin-bottom--tiny"
         labels={annotations}
         onChange={setAnnotations}
         type={t('secrets.labels.annotations')}
-        i18n={i18n}
       />
     </>
   );
@@ -89,7 +87,6 @@ export function SecretForm({
           setEncoded={setEncoded}
         />
       )}
-      i18n={i18n}
     />
   );
 

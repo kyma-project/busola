@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
 export function IssuerDomains(issuer) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   return (
     <div className="panel-grid">
       <GenericList
@@ -15,7 +15,6 @@ export function IssuerDomains(issuer) {
         showHeader={false}
         className="fd-margin--xs"
         entries={issuer.spec.acme?.domains?.include || []}
-        i18n={i18n}
         searchSettings={{
           showSearchField: false,
         }}
@@ -28,7 +27,6 @@ export function IssuerDomains(issuer) {
         showHeader={false}
         className="fd-margin--xs"
         entries={issuer.spec.acme?.domains?.exclude || []}
-        i18n={i18n}
         searchSettings={{
           showSearchField: false,
         }}

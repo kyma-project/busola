@@ -12,7 +12,7 @@ import { RelatedCRDsList } from './RelatedCRDsList';
 import { CustomResourceDefinitionCreate } from './CustomResourceDefinitionCreate';
 
 export function CustomResourceDefinitionDetails(props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const customColumns = [
     {
@@ -47,7 +47,6 @@ export function CustomResourceDefinitionDetails(props) {
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         testid="crd-names"
-        i18n={i18n}
         searchSettings={{
           showSearchField: false,
         }}

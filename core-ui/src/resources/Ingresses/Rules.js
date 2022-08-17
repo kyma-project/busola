@@ -41,7 +41,7 @@ const getPort = (serviceName, port, services) => {
 };
 
 export const Rules = ({ rules }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { namespaceId: namespace } = useMicrofrontendContext();
 
   const { data: services } = useGetList()(
@@ -107,7 +107,6 @@ export const Rules = ({ rules }) => {
               <Backend backend={path.backend} services={services} />,
             ]}
             entries={rule?.http?.paths}
-            i18n={i18n}
             searchSettings={{
               showSearchField: false,
             }}

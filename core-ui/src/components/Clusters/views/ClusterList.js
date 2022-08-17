@@ -24,10 +24,9 @@ import { loadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID
 function ClusterList() {
   const { clusters, activeClusterName, features } = useMicrofrontendContext();
   const notification = useNotification();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
-    i18n,
     resourceType: t('clusters.labels.name'),
   });
 
@@ -219,7 +218,6 @@ function ClusterList() {
         rowRenderer={rowRenderer}
         actions={actions}
         extraHeaderContent={extraHeaderContent}
-        i18n={i18n}
         sortBy={{
           name: (a, b) => a.contextName?.localeCompare(b.contextName),
         }}

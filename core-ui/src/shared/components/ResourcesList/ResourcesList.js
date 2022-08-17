@@ -84,7 +84,7 @@ export function ResourcesList(props) {
   }
 
   return (
-    <YamlEditorProvider i18n={props.i18n}>
+    <YamlEditorProvider>
       {!props.isCompact && (
         <PageHeader
           title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
@@ -146,7 +146,6 @@ export function ResourceListRenderer({
   readOnly,
   navigateFn,
   testid,
-  i18n,
   omitColumnsIds = ['namespace'],
   customListActions = [],
   createFormProps,
@@ -168,13 +167,12 @@ export function ResourceListRenderer({
     resourceUrl,
     resourceType,
   });
-  const { t } = useTranslation(['translation'], { i18n });
-  const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
+  const { t } = useTranslation();
+  const { isProtected, protectedResourceWarning } = useProtectedResources();
 
   const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
-    i18n,
     resourceTitle,
     resourceType,
   });
@@ -410,7 +408,6 @@ export function ResourceListRenderer({
             />
           </ErrorBoundary>
         )}
-        i18n={i18n}
         modalOpeningComponent={<></>}
         customCloseAction={() => setShowEditDialog(false)}
       />
@@ -430,7 +427,6 @@ export function ResourceListRenderer({
         extraHeaderContent={extraHeaderContent}
         testid={testid}
         currentlyEditedResourceUID={currentlyEditedResourceUID}
-        i18n={i18n}
         sortBy={sortBy}
         searchSettings={{
           textSearchProperties: [

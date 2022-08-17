@@ -53,7 +53,6 @@ export const GenericList = ({
   compact,
   className,
   currentlyEditedResourceUID,
-  i18n,
   sortBy,
   notFoundMessage,
   searchSettings,
@@ -85,7 +84,7 @@ export const GenericList = ({
       pagination.itemsPerPage || settings?.pagination?.pageSize;
   }
 
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = React.useState(
     pagination?.initialPage || 1,
   );
@@ -133,7 +132,6 @@ export const GenericList = ({
           showSearchControl={searchSettings?.showSearchControl}
           allowSlashShortcut={searchSettings?.allowSlashShortcut}
           disabled={!entries.length}
-          i18n={i18n}
         />
       )}
       {sortBy && (
@@ -141,7 +139,6 @@ export const GenericList = ({
           sortBy={sortBy}
           sort={sort}
           setSort={setSort}
-          t={t}
           disabled={!entries.length}
         />
       )}

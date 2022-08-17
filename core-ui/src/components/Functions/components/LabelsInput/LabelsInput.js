@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import './LabelsInput.scss';
 
 export function LabelsInput({ showFormLabel = true, ...otherProps }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   return (
     <div className="resource-labels-input">
       {showFormLabel && (
@@ -15,7 +15,7 @@ export function LabelsInput({ showFormLabel = true, ...otherProps }) {
           {t('common.headers.labels')}
         </FormLabel>
       )}
-      <LabelSelectorInput i18n={i18n} {...otherProps} />
+      <LabelSelectorInput {...otherProps} />
     </div>
   );
 }

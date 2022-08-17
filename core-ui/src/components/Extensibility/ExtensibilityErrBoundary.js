@@ -63,8 +63,8 @@ ExtensibilityErrBoundaryComponent.defaultProps = {
   displayButton: true,
 };
 
-export const ExtensibilityErrBoundary = ({ i18n, ...props }) => {
-  const { t } = useTranslation(null, { i18n });
+export const ExtensibilityErrBoundary = ({ ...props }) => {
+  const { t } = useTranslation();
   const { editorTheme } = useTheme();
   return (
     <ExtensibilityErrBoundaryComponent

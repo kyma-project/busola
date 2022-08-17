@@ -6,7 +6,7 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Tokens } from 'shared/components/Tokens';
 
 const DistributeWidget = ({ distribute }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const headerRenderer = () => [
     t('destination-rules.details.from'),
     t('destination-rules.details.to'),
@@ -27,7 +27,6 @@ const DistributeWidget = ({ distribute }) => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       testid="dr-distribution-rules"
-      i18n={i18n}
       searchSettings={{
         textSearchProperties: ['form'],
       }}
@@ -35,7 +34,7 @@ const DistributeWidget = ({ distribute }) => {
   );
 };
 const FailoverWidget = ({ failover }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const headerRenderer = () => [
     t('destination-rules.details.from'),
     t('destination-rules.details.to'),
@@ -49,7 +48,6 @@ const FailoverWidget = ({ failover }) => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       testid="dr-failover-rules"
-      i18n={i18n}
       searchSettings={{
         textSearchProperties: ['form'],
       }}

@@ -16,7 +16,7 @@ function VerbStatus({ rule, verb }) {
 
 export const Rules = resource => {
   const isNamespaced = resource.metadata.namespace;
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const headerRenderer = () => {
     const commonFields = [
@@ -93,7 +93,6 @@ export const Rules = resource => {
       entries={resource.rules || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      i18n={i18n}
       testid="rules-list"
       searchSettings={{
         textSearchProperties,

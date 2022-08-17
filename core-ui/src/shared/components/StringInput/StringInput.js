@@ -3,8 +3,8 @@ import classnames from 'classnames';
 import { Token } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
-export const SingleString = ({ text, onClick, i18n }) => {
-  const { t } = useTranslation(null, { i18n });
+export const SingleString = ({ text, onClick }) => {
+  const { t } = useTranslation();
   return (
     <Token
       title={t('components.string-input.remove')}
@@ -24,10 +24,9 @@ export const StringInput = ({
   required,
   placeholder = 'components.string-input.placeholder',
   compact,
-  i18n,
   ...props
 }) => {
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation();
   const [isValid, setValid] = useState(true);
   const inputRef = useRef(null);
 
@@ -81,12 +80,7 @@ export const StringInput = ({
       >
         {!!stringList.length &&
           stringList.map(s => (
-            <SingleString
-              key={s}
-              text={s}
-              onClick={() => deleteString(s)}
-              i18n={i18n}
-            />
+            <SingleString key={s} text={s} onClick={() => deleteString(s)} />
           ))}
         <input
           ref={inputRef}

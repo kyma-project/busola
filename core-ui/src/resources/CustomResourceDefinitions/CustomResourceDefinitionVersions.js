@@ -15,7 +15,7 @@ import { SchemaViewer } from 'shared/components/SchemaViewer/SchemaViewer';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 import './CustomResourceDefinitionVersions.scss';
 
-const CustomResources = ({ resource, namespace, version, i18n }) => {
+const CustomResources = ({ resource, namespace, version }) => {
   const { t } = useTranslation();
   const { group, names } = resource.spec;
   const name = names.plural;
@@ -32,7 +32,6 @@ const CustomResources = ({ resource, namespace, version, i18n }) => {
         entries={[]}
         headerRenderer={() => []}
         rowRenderer={() => []}
-        i18n={i18n}
         notFoundMessage={t('custom-resource-definitions.messages.no-entries')}
       />
     );
@@ -99,14 +98,13 @@ const CustomResources = ({ resource, namespace, version, i18n }) => {
     showTitle: true,
     customColumns,
     testid: 'crd-custom-resources',
-    i18n,
   };
 
   return <ResourcesList {...params} />;
 };
 
 const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const headerRenderer = () => [
     t('common.headers.name'),
@@ -129,13 +127,12 @@ const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       testid="crd-additional-printer-columns"
-      i18n={i18n}
     />
   );
 };
 
 export const CustomResourceDefinitionVersions = resource => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const namespace = LuigiClient.getContext().namespaceId;
 
@@ -156,7 +153,6 @@ export const CustomResourceDefinitionVersions = resource => {
           type={storageVersion.served ? 'positive' : 'informative'}
           className="version-status"
           resourceKind="custom-resource-definitions"
-          i18n={i18n}
         >
           {storageVersion.served
             ? t('custom-resource-definitions.status.served')
@@ -167,7 +163,6 @@ export const CustomResourceDefinitionVersions = resource => {
             type="positive"
             className="version-status"
             resourceKind="custom-resource-definitions"
-            i18n={i18n}
           >
             {t('custom-resource-definitions.status.storage')}
           </StatusBadge>
@@ -177,7 +172,6 @@ export const CustomResourceDefinitionVersions = resource => {
         resource={resource}
         version={storageVersion}
         namespace={namespace}
-        i18n={i18n}
       />
       <AdditionalPrinterColumns
         additionalPrinterColumns={

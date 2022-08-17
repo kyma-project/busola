@@ -8,7 +8,7 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { DnsProviderCreate } from './DnsProviderCreate';
 
 const Domains = resource => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const headerRenderer = () => [t('dnsproviders.domains')];
 
@@ -28,7 +28,6 @@ const Domains = resource => {
         testid="daemon-set-images"
         showHeader={false}
         className="fd-margin--xs"
-        i18n={i18n}
       />
 
       <GenericList
@@ -39,14 +38,13 @@ const Domains = resource => {
         testid="domains-exclude"
         showHeader={false}
         className="fd-margin--xs"
-        i18n={i18n}
       />
     </div>
   );
 };
 
 export function DnsProviderDetails(props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const customColumns = [
     {
@@ -61,7 +59,6 @@ export function DnsProviderDetails(props) {
         <ResourceStatus
           status={dnsprovider.status}
           resourceKind="dnsproviders"
-          i18n={i18n}
         />
       ),
     },

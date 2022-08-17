@@ -21,10 +21,9 @@ export function DecodeSecretSwitch({
   setEntries,
   isEncoded,
   setEncoded,
-  i18n,
 }) {
   const notification = useNotification();
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation();
 
   const onClick = () => {
     try {

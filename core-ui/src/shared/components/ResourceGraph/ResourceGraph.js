@@ -16,9 +16,9 @@ import { DetailsCard } from './DetailsCard/DetailsCard';
 import './ResourceGraph.scss';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
-function ResourceGraph({ resource, i18n, config }) {
+function ResourceGraph({ resource, config }) {
   const { features } = useMicrofrontendContext();
-  const { t } = useTranslation(['translation'], { i18n });
+  const { t } = useTranslation();
   const [dotSrc, setDotSrc] = useState('');
   const [isReady, setReady] = useState(false);
   const [graphEl, setGraphEl] = useState(null);
@@ -95,14 +95,13 @@ function ResourceGraph({ resource, i18n, config }) {
       </LayoutPanel.Header>
       {startedLoading && dotSrc ? (
         <LayoutPanel.Body>
-          <ErrorBoundary i18n={i18n} customMessage={t('resource-graph.error')}>
+          <ErrorBoundary customMessage={t('resource-graph.error')}>
             <div id="graph-area">
               <MemoizedGraphviz dotSrc={dotSrc} isReady={isReady} />
               <SaveGraphControls
                 content={dotSrc}
                 // .gv extension is preferred instead of .dot
                 name={`${resource.kind} ${resource.metadata.name}.gv`}
-                i18n={i18n}
               />
               {clickedResource ? (
                 <DetailsCard

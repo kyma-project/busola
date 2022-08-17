@@ -75,7 +75,7 @@ export default function AccessStrategies({
   showSearchField = true,
   compact = false,
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const headerRenderer = () => [
     t('api-rules.access-strategies.labels.path'),
@@ -95,7 +95,6 @@ export default function AccessStrategies({
         entries={strategies}
         headerRenderer={headerRenderer}
         rowRenderer={e => rowRenderer(e, t)}
-        i18n={i18n}
         searchSettings={{
           showSearchField,
           textSearchProperties,

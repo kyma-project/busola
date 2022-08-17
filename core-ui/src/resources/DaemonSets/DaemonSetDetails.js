@@ -11,7 +11,7 @@ import { DaemonSetCreate } from './DaemonSetCreate';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
 
 const Tolerations = resource => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const headerRenderer = () => [
     t('daemon-sets.tolerations.key'),
@@ -38,7 +38,6 @@ const Tolerations = resource => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       testid="daemon-set-tolerations"
-      i18n={i18n}
       searchSettings={{
         textSearchProperties,
       }}

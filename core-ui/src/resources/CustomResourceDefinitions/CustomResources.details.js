@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
 function CustomResource({ params }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const { namespaceId: namespace } = useMicrofrontendContext();
   const {
@@ -67,7 +67,6 @@ function CustomResource({ params }) {
       namespace={namespace}
       breadcrumbs={breadcrumbs}
       customComponents={[yamlPreview]}
-      i18n={i18n}
     />
   );
 }

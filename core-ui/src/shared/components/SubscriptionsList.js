@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import SubscriptionsListComponent from 'resources/Subscriptions/SubscriptionList';
 
@@ -12,7 +11,6 @@ const getServiceName = sink => {
 };
 
 export function SubscriptionsList({ serviceName, namespace, prefix }) {
-  const { i18n } = useTranslation();
   const params = {
     hasDetailsView: true,
     fixedPath: true,
@@ -25,7 +23,6 @@ export function SubscriptionsList({ serviceName, namespace, prefix }) {
     filter: subscription => {
       return getServiceName(subscription.spec.sink) === serviceName;
     },
-    i18n,
   };
 
   return <SubscriptionsListComponent {...params} />;
