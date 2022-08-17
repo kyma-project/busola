@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: gitrepositories.serverless.kyma-project.io
-  namespace: resources
+  namespace: dd
   labels:
     app.kubernetes.io/name: gitrepositories.serverless.kyma-project.io
     busola.io/extension: resource
@@ -11,11 +11,10 @@ data:
   details: |-
     {
       "header": [{
-        "formula": "$exists(data) ? data : 'none'",
+        "source": "$exists(spec.auth.type) ? spec.auth.type : 'none'",
         "highlights": {
           "informative": ["basic", "key", "none"],
         },
-        "path": "spec.auth.type",
         "widget": "Badge"
       }],
       "body": []
@@ -36,31 +35,31 @@ data:
         "simple": "true"
       },
       {
-        "kind": "Secret",
-        "namespace": "pizzas",
         "path": "spec.auth.secretName",
-        "scope": "namespace",
-        "version": "v1",
-        "widget": "Resource"
-      },
-
+        "widget": "Resource",
+        "resource": {
+          "kind": "Secret",
+          "scope": "namespace",
+          "namespace": "pizzas",
+          "version": "v1"
+        }
+      }
     ]
   list: |-
     [
       {
-        "path": "spec.url",
+        "source": "spec.url",
         "type": "string"
       },
       {
-        "formula": "$exists(data) ? data : 'none'",
+        "source": "$exists(spec.auth.type) ? spec.auth.type : 'none'",
         "highlights": {
           "informative": ["basic", "key", "none"],
         },
-        "path": "spec.auth.type",
         "widget": "Badge"
       },
       {
-        "path": "spec.auth.secretName",
+        "source": "spec.auth.secretName",
         "type": "string"
       }
     ]
@@ -71,8 +70,9 @@ data:
         "kind": "GitRepository",
         "version": "v1alpha1"
       },
-      "urlPath": "example-gitrepositories",
+      "urlPath": "example-gitrepositories-dd",
       "scope": "namespace",
+      "name": "gr-dd"
     }
   translations: |-
     {
