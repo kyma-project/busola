@@ -1,0 +1,86 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: virtual-services
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: virtual-services
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  details: |
+    {
+      "body":[
+        {
+          "widget": "ResourceList",
+          "path": "$gateways",
+          "name": "Gateways"
+        },
+          {
+            "name": "Hosts",
+            "widget": "Panel",
+            "children": [
+              {"path": "spec.hosts", "widget": "Labels"},
+              {"path": "spec.exportTo", "widget": "Labels", "visibility": "$exists(*)"}
+            ]
+          },
+          {
+            "widget": "CodeViewer",
+            "path": "spec.http",
+            "visibility": "$exists(*)"
+          },        
+          {
+            "widget": "CodeViewer",
+            "path": "spec.tcp",
+            "visibility": "$exists(*)"
+          },
+          {
+            "widget": "CodeViewer",
+            "path": "spec.tls",
+            "visibility": "$exists(*)"
+          }
+      ]
+    }
+  form: |-
+    []
+  list: |-
+    [
+      { 
+        "path": "spec.hosts",
+        "widget": "JoinedArray"
+      },
+      { 
+        "path": "spec.gateways",
+        "widget": "JoinedArray"
+      },
+    ]
+  dataSources: |-
+    { 
+      "gateways":{
+        "resource": {
+          "kind": "Gateway",
+          "group": "networking.istio.io",
+          "version": "v1beta1"
+        }
+      }
+    }
+  general: |-
+    {
+      "resource": {
+        "kind": "VirtualService",
+        "group": "networking.istio.io",
+        "version": "v1beta1"
+      },
+      "urlPath": "lyczeq-vs",
+      "category": "Lyczeq",
+      "scope": "namespace",
+      "description": "{{[VirtualService](https://istio.io/latest/docs/reference/config/networking/virtual-service/)}} describes a configuration that affects traffic routing. ."
+    }
+  translations: |
+    en:
+      spec.hosts: Hosts
+      spec.gateways: Gateways
+      spec.http: HTTP
+      spec.tls: TLS
+      spec.tcp: TCP
+      spec.exportTo: Export To
