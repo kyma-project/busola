@@ -257,7 +257,7 @@ Those fields are used to build the related resource URL and filter the received 
 
   This function should return a boolean value.
 
-### Example
+### Examples
 
 ```json
 {
@@ -276,10 +276,35 @@ Those fields are used to build the related resource URL and filter the received 
     "myPods": {
       "resource": {
         "kind": "Pod",
-        "group": "api",
         "version": "v1",
       },
       "ownerLabelSelectorPath": "spec.selector.matchLabels"
+    }
+  }
+}
+```
+
+```json
+{
+  "secrets": {
+    "general": ...
+    "details": {
+       "body": [
+         {
+            "widget": "ResourceList",
+            "path": "$mySecrets"
+        }
+      ]
+    }
+  },
+  "dataSources": {
+    "mySecrets": {
+      "resource": {
+        "kind": "Secret",
+        "version": "v1",
+        "namespace": null
+      },
+      "filter": "$root.spec.secretName = $item.metadata.name and $root.metadata.namespace = $item.metadata.namespace"
     }
   }
 }
