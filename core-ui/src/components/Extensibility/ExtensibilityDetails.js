@@ -32,7 +32,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   /* TODO re-enable validation
   const ajv = new Ajv();
   if (!ajv.validate(extensibilitySchemas?.details, resMetaData?.details)) {
-    throwConfigError(t('extensibility.errors'), { error: ajv.errors });
+    throwConfigError(t('extensibility.configuration-error'), { error: ajv.errors });
   }
   */
 
