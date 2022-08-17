@@ -19,7 +19,6 @@ export function CertificateDetails(props) {
         <ResourceStatus
           status={certificate.status}
           resourceKind="certificates"
-          i18n={i18n}
         />
       ),
     },

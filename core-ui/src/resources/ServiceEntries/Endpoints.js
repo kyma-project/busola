@@ -7,7 +7,7 @@ import { navigateToResource } from 'shared/helpers/universalLinks';
 import { Link } from 'fundamental-react';
 
 export const Endpoints = ({ serviceentry }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const headerRenderer = _ => [
     t('service-entries.headers.endpoints.address'),
@@ -51,7 +51,6 @@ export const Endpoints = ({ serviceentry }) => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={endpoints || []}
-      i18n={i18n}
       showSearchField={false}
     />
   );

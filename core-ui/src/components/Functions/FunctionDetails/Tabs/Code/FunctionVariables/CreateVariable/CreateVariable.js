@@ -13,7 +13,7 @@ export default function CreateVariable({
   customVariables,
   customValueFromVariables,
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const addNewVariableButton = (
     <Button glyph="add" typeAttr="button">
@@ -52,7 +52,7 @@ export default function CreateVariable({
   };
   function openModalWithProps(props) {
     LuigiClient.uxManager().addBackdrop();
-    setCurrentModal(<VariableModal {...props} {...commonProps} i18n={i18n} />);
+    setCurrentModal(<VariableModal {...props} {...commonProps} />);
   }
 
   return (

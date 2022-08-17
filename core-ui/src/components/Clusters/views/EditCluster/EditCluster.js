@@ -226,9 +226,8 @@ function EditClusterComponent({
 }
 
 export function EditCluster(props) {
-  const { i18n } = useTranslation();
   return (
-    <ErrorBoundary i18n={i18n}>
+    <ErrorBoundary>
       <EditClusterComponent {...props} />
     </ErrorBoundary>
   );

@@ -14,7 +14,7 @@ import { getFunctionStatus } from '../helpers/functions/getFunctionStatus';
 export function FunctionStatusBadge({ resourceKind, status }) {
   const translatedStatus = getFunctionStatus(status);
   const statusPhase = translatedStatus.phase;
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   let badgeType = statusType(statusPhase);
   if (badgeType === 'info') {
@@ -30,7 +30,6 @@ export function FunctionStatusBadge({ resourceKind, status }) {
   }
   return (
     <StatusBadge
-      i18n={i18n}
       resourceKind={resourceKind}
       additionalContent={tooltipText}
       type={badgeType}

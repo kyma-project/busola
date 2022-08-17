@@ -14,7 +14,7 @@ import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { groupBy } from 'lodash';
 
 function HelmReleasesList() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { namespaceId: namespace } = useMicrofrontendContext();
 
   const { data, loading, error } = useGetList(
@@ -78,7 +78,6 @@ function HelmReleasesList() {
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
-        i18n={i18n}
         serverDataLoading={loading}
         serverDataError={error}
         allowSlashShortcut
