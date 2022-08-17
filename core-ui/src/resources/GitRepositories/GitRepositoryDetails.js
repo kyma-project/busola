@@ -10,7 +10,7 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GitRepositoryCreate } from './GitRepositoryCreate';
 
 export function GitRepositoryDetails(props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const customColumns = [
     {
@@ -20,7 +20,7 @@ export function GitRepositoryDetails(props) {
     {
       header: t('git-repositories.labels.auth'),
       value: repo => (
-        <StatusBadge i18n={i18n} resourceKind="git-repositories" type="info">
+        <StatusBadge resourceKind="git-repositories" type="info">
           {repo.spec.auth?.type || 'none'}
         </StatusBadge>
       ),

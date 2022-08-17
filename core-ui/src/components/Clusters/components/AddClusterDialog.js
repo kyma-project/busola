@@ -23,7 +23,7 @@ function AddClusterDialogComponent({ show, onCancel }) {
   );
 }
 export function AddClusterDialog({ show, onCancel }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <Dialog
@@ -32,7 +32,7 @@ export function AddClusterDialog({ show, onCancel }) {
       title={t('clusters.add.title')}
       actions={[]}
     >
-      <ErrorBoundary i18n={i18n}>
+      <ErrorBoundary>
         <AddClusterDialogComponent onCancel={onCancel} show={show} />
       </ErrorBoundary>
     </Dialog>

@@ -12,7 +12,7 @@ import { RelatedCRDsList } from './RelatedCRDsList';
 import { CustomResourceDefinitionCreate } from './CustomResourceDefinitionCreate';
 
 export function CustomResourceDefinitionDetails(props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const customColumns = [
     {
@@ -48,7 +48,6 @@ export function CustomResourceDefinitionDetails(props) {
         showSearchField={false}
         rowRenderer={rowRenderer}
         testid="crd-names"
-        i18n={i18n}
       />
     );
   };

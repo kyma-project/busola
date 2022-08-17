@@ -1,10 +1,7 @@
 import React from 'react';
 import { FileInput } from 'shared/components/FileInput/FileInput';
-import { useTranslation } from 'react-i18next';
 
 export function YamlFileUploader({ onYamlContentAdded }) {
-  const { i18n } = useTranslation();
-
   const readFile = file => {
     return new Promise(resolve => {
       const reader = new FileReader();
@@ -25,7 +22,6 @@ export function YamlFileUploader({ onYamlContentAdded }) {
     <FileInput
       fileInputChanged={onYamlContentUploaded}
       acceptedFileFormats=".yaml,.yml"
-      i18n={i18n}
       allowMultiple
     />
   );

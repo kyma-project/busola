@@ -14,7 +14,7 @@ export default function EditVariable({
   customValueFromVariables,
   variable,
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const modalOpeningComponent = (
     <Button compact option="transparent" glyph="edit" />
@@ -42,7 +42,6 @@ export default function EditVariable({
       resources={resources}
       customVariables={customVariables}
       customValueFromVariables={customValueFromVariables}
-      i18n={i18n}
       isEdit
     />
   );

@@ -38,10 +38,9 @@ export function SearchInput({
   showSearchControl = true,
   disabled = false,
   onKeyDown,
-  i18n,
   allowSlashShortcut,
 }) {
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation();
   const [isSearchHidden, setSearchHidden] = React.useState(true);
   const searchInputRef = React.useRef();
 

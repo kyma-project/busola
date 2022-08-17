@@ -1,9 +1,7 @@
 import React from 'react';
 import { PodList } from 'resources/Pods/PodList';
-import { useTranslation } from 'react-i18next';
 
 export const RelatedPods = ({ namespace = '', filter }) => {
-  const { i18n } = useTranslation();
   const podListParams = {
     hasDetailsView: true,
     fixedPath: true,
@@ -13,7 +11,6 @@ export const RelatedPods = ({ namespace = '', filter }) => {
     isCompact: true,
     filter,
     showTitle: true,
-    i18n,
     disableCreate: true,
   };
 

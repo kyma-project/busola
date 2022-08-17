@@ -5,13 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 
-export const ResourceNotFound = ({
-  resource,
-  breadcrumbs,
-  customMessage,
-  i18n,
-}) => {
-  const { t } = useTranslation(null, { i18n });
+export const ResourceNotFound = ({ resource, breadcrumbs, customMessage }) => {
+  const { t } = useTranslation();
   return (
     <>
       <PageHeader title="" breadcrumbItems={breadcrumbs} />
