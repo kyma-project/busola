@@ -52,7 +52,7 @@ export function CodeViewer({ value, structure, schema }) {
     <ReadonlyEditorPanel
       title={widgetT(structure)}
       value={parsedValue}
-      editorProps={{ language }}
+      editorProps={{ language, updateValueOnParentChange: true }}
     />
   );
 }
