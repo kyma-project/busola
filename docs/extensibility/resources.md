@@ -4,14 +4,14 @@
 
 - [Overview](#overview)
 - [Extension version](#extension-version)
-- [_general_ section](#general-section)
-- [_form_ section](#form-section)
-- [_list_ section](#list-section)
-- [_details_ section](#details-section)
+- [_general_ section](#_general_-section)
+- [_form_ section](#_form_-section)
+- [_list_ section](#_list_-section)
+- [_details_ section](#_details_-section)
   - [Data scoping](#data-scoping)
-- [_dataSources_ section](#datasources-section)
+- [_dataSources_ section](#_datasources_-section)
   - [Data source configuration object fields](#data-source-configuration-object-fields)
-- [_translations_ section](#translations-section)
+- [_translations_ section](#_translations_-section)
   - [Value preprocessors](#value-preprocessors)
     - [List of value preprocessors](#list-of-value-preprocessors)
 
@@ -189,7 +189,10 @@ Extra parameters might be available for specific widgets.
       "widget": "Panel",
       "children": [
         { "source": "applyTo" },
-        { "source": "match.context", "visibility": "$exists(data.spec.config)" }
+        {
+          "source": "match.context",
+          "visibility": "$exists(data.match.context)"
+        }
       ]
     },
     {
