@@ -7,19 +7,14 @@ import { prettifyKind } from 'shared/utils/helpers';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { shouldBeVisible, Widget } from './components/Widget';
-import {
-  useGetTranslation,
-  TranslationBundleContext,
-  throwConfigError,
-} from './helpers';
+import { useGetTranslation, TranslationBundleContext } from './helpers';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 import { useGetSchema } from 'hooks/useGetSchema';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
-  const { extensibilitySchemas } = useMicrofrontendContext();
+  // const { extensibilitySchemas } = useMicrofrontendContext();
   const { t, widgetT, exists } = useGetTranslation();
   const { urlPath, resource } = resMetaData?.general ?? {};
 
