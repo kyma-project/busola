@@ -1,9 +1,2 @@
 {
-  "config": {
-    "features":{
-      "EXTENSIBILITY": {
-        "isEnabled": true
-      }
-    }
-  }
 }

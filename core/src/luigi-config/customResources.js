@@ -21,16 +21,15 @@ import {
   getCurrentConfig,
   getCurrentContextNamespace,
 } from './cluster-management/cluster-management';
+import { destinationRules } from './customResources/destinationRules';
 
 let customResources = {};
 
-async function loadBusolaClusterCRs() {
+async function loadBusolaClusterCRs(url) {
   try {
     const cacheBuster = '?cache-buster=' + Date.now();
 
-    const response = await fetch(
-      `/assets/customResources/customResources.json${cacheBuster}`,
-    );
+    const response = await fetch(`${url}${cacheBuster}`);
 
     return await response.json();
   } catch (e) {
@@ -109,17 +108,28 @@ export async function getCustomResources(authData) {
   const { features } = await getCurrentConfig();
   const clusterName = getActiveClusterName();
 
-  if (features.EXTENSIBILITY?.isEnabled) {
-    if (customResources[clusterName]) {
-      return customResources[clusterName];
-    }
-
-    customResources[clusterName] = Object.values({
-      ...(await loadBusolaClusterCRs()),
-      ...(await loadTargetClusterCRs(authData)),
-    });
-
+  if (customResources[clusterName]) {
     return customResources[clusterName];
   }
-  return [];
+
+  customResources[clusterName] = [destinationRules];
+
+  if (features.EXTENSIBILITY?.isEnabled) {
+    const clusterCustomResources = await loadBusolaClusterCRs(
+      '/assets/customResources/customResources.json',
+    );
+    const targetClusterCustomResources = await loadTargetClusterCRs(authData);
+
+    const additionalExtResources = Object.values({
+      ...clusterCustomResources,
+      ...targetClusterCustomResources,
+    });
+
+    customResources[clusterName] = [
+      ...customResources[clusterName],
+      ...additionalExtResources,
+    ];
+  }
+
+  return customResources[clusterName];
 }
