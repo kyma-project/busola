@@ -1,7 +1,30 @@
 import jsonata from 'jsonata';
+import { useEffect } from 'react';
 import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
 
-export function getResourceGraphConfig(t, context) {
+export function useAddStyle({ styleId }) {
+  useEffect(
+    () => () => {
+      const element = document.getElementById(styleId);
+      if (element) {
+        document.head.removeChild(element);
+      }
+    },
+    [styleId],
+  );
+
+  return rule => {
+    let element = document.getElementById(styleId);
+    if (!element) {
+      element = document.createElement('style');
+      element.id = styleId;
+      document.head.appendChild(element);
+    }
+    element.sheet.insertRule(rule);
+  };
+}
+
+export function getResourceGraphConfig(t, context, addStyle) {
   const builtinResourceDefs = getPerResourceDefs(
     'resourceGraphConfig',
     t,
@@ -29,6 +52,14 @@ export function getResourceGraphConfig(t, context) {
       // all fields are required
       .filter(o => Object.values(o).every(Boolean))
       .map(({ resourceGraph, resource, dataSources }) => {
+        if (resourceGraph.colorVariant) {
+          const className = resource.kind.toLowerCase();
+          const cssVariable = `--sapChart_Sequence_${resourceGraph.colorVariant}`;
+          addStyle(`#graph-area .node.${className} > polygon {
+                    stroke: var(${cssVariable}) !important;
+                  }`);
+        }
+
         const config = {
           depth: resourceGraph.depth,
           resource: resource,

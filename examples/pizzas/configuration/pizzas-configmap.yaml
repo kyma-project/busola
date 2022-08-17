@@ -115,6 +115,7 @@ data:
         }
       ],
       "resourceGraph": {
+        "colorVariant": 2,
         "dataSources": [
           {
             "source": "relatedSecrets"

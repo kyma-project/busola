@@ -34,6 +34,7 @@ data:
       ],
       "resourceGraph": {
         "depth": 1,
+        "colorVariant": 3,
         "dataSources": [
           {"source": "relatedPizzas"}
         ]

@@ -2,7 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { getResourceUrl } from 'shared/helpers';
-import { getResourceGraphConfig } from 'shared/components/ResourceGraph/getResourceGraphConfig';
+import {
+  getResourceGraphConfig,
+  useAddStyle,
+} from 'shared/components/ResourceGraph/getResourceGraphConfig';
 
 export const usePrepareListProps = (resourceType, resourceI18Key) => {
   const routerParams = useParams();
@@ -30,6 +33,7 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
   const decodedResourceName = decodeURIComponent(resourceName);
 
   const context = useMicrofrontendContext();
+  const addStyle = useAddStyle({ styleId: 'graph-styles' });
 
   return {
     resourceUrl: decodedResourceUrl,
@@ -38,7 +42,7 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
     resourceName: decodedResourceName,
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
-    resourceGraphConfig: getResourceGraphConfig(t, context),
+    resourceGraphConfig: getResourceGraphConfig(t, context, addStyle),
     i18n,
   };
 };
