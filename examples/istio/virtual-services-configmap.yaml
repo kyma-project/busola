@@ -42,7 +42,17 @@ data:
       ]
     }
   form: |-
-    []
+    [
+      {
+        "path": "spec.hosts", "simple": true
+      },
+      {
+        "path": "spec.http", "simple": true, "widget": "GenericList"
+      },
+      {
+        "path": "spec.http[].name", "simple": true,
+      },
+    ]
   list: |-
     [
       { 
