@@ -46,7 +46,7 @@ export function SimpleList({
   const isLast = index => index === listSize;
   const itemsSchema = schema.get('items');
   const titleRenderer = ({ schema, storeKeys }) => {
-    const label = tFromStoreKeys(storeKeys);
+    const label = tFromStoreKeys(storeKeys, schema);
     return <FormLabel>{label}</FormLabel>;
   };
 
