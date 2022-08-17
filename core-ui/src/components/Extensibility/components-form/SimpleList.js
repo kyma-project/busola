@@ -55,7 +55,7 @@ export function SimpleList({
   return (
     <ResourceForm.CollapsibleSection
       container
-      title={<TransTitle schema={schema} storeKeys={storeKeys} />}
+      title={tFromStoreKeys(storeKeys, schema)}
       {...props}
     >
       <div className="fd-row form-field multi-input extensibility">

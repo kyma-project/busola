@@ -10,7 +10,7 @@ import { prettifyNamePlural } from 'shared/utils/helpers';
 
 export const TranslationBundleContext = createContext({
   translationBundle: 'extensibility',
-  defaultResourcePlaceholder: '',
+  // defaultResourcePlaceholder: '',
 });
 
 export const getValue = (resource, path) => {
@@ -49,7 +49,7 @@ export const useGetTranslation = path => {
       if (exists(def.path.join('.'))) {
         value = def.path.join('.');
       } else {
-        value = prettifyNamePlural(last(def.path));
+        value = prettifyNamePlural(null, last(def.path));
       }
     }
     return t(`${translationBundle}::${value}`, {
