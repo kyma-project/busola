@@ -97,7 +97,6 @@ const ListActions = ({ actions, entry, compact }) => {
 ListActions.propTypes = {
   actions: CustomPropTypes.listActions,
   entry: PropTypes.any.isRequired,
-  standaloneItems: PropTypes.number,
   compact: PropTypes.bool,
 };
 
