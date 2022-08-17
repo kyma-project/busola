@@ -110,8 +110,6 @@ The **list** section defines extra columns available in the list.
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
   - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function `$compareStrings` used to compare two strings, for example, `$compareStrings($first, $second)`
 
- <!-- compareStrings fn  - special function to compare two strings when sorting-->
-
 ### Example
 
 ```json
