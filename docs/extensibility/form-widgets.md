@@ -27,7 +27,7 @@ Text widgets render a field as a text field. They are used by default for all st
 
 ```json
 {
-  "path": "spec.my-data",
+  "source": "spec.my-data",
   "widget": "Text"
 }
 ```
@@ -46,7 +46,7 @@ Name widgets render a name input field. They contain an automatic name generator
 
 ```json
 {
-  "path": "spec.my-data",
+  "source": "spec.my-data",
   "widget": "Name"
 }
 ```
@@ -61,7 +61,7 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
 
 ```json
 {
-  "path": "spec.my-data",
+  "source": "spec.my-data",
   "widget": "CodeEditor"
 }
 ```
@@ -84,7 +84,7 @@ Resource widgets render a dropdown list of specified resources and store the sel
 ```json
 [
   {
-    "path": "spec.namespace",
+    "source": "spec.namespace",
     "widget": "Resource",
     "resource": {
       "scope": "cluster",
@@ -93,7 +93,7 @@ Resource widgets render a dropdown list of specified resources and store the sel
     }
   },
   {
-    "path": "spec.gateway",
+    "source": "spec.gateway",
     "widget": "Resource",
     "resource": {
       "kind": "Gateway",
@@ -120,7 +120,7 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 
 ```json
 {
-  "path": "spec.my-data",
+  "source": "spec.my-data",
   "widget": "KeyValuePair"
 }
 ```
@@ -143,7 +143,7 @@ ResourceRefs widgets render the lists of dropdowns to select the associated reso
 ```json
 [
   {
-    "path": "spec.my-data[]",
+    "source": "spec.my-data[]",
     "widget": "ResourceRefs",
     "resource": {
       "kind": "Secret",
@@ -151,7 +151,7 @@ ResourceRefs widgets render the lists of dropdowns to select the associated reso
     }
   },
   {
-    "path": "spec.my-gateways[]",
+    "source": "spec.my-gateways[]",
     "widget": "ResourceRefs",
     "resource": {
       "kind": "Gateway",
@@ -177,14 +177,14 @@ FormGroup widgets render an `object` as a collapsible section.
 ```json
 [
   {
-    "path": "spec.service",
+    "source": "spec.service",
     "widget": "FormGroup"
   },
   {
-    "path": "spec.service.host"
+    "source": "spec.service.host"
   },
   {
-    "path": "spec.service.port"
+    "source": "spec.service.port"
   }
 ]
 ```
@@ -200,14 +200,14 @@ GenericList widgets render an `array` as a list of collapsible sections with the
 ```json
 [
   {
-    "path": "spec.services",
+    "source": "spec.services",
     "widget": "GenericList"
   },
   {
-    "path": "spec.services[].host"
+    "source": "spec.services[].host"
   },
   {
-    "path": "spec.services[].port"
+    "source": "spec.services[].port"
   }
 ]
 ```
@@ -225,14 +225,14 @@ This type of field is only suitable for simple data types and can contain more c
 ```json
 [
   {
-    "path": "spec.services",
+    "source": "spec.services",
     "widget": "SimpleList"
   },
   {
-    "path": "spec.services[].host"
+    "source": "spec.services[].host"
   },
   {
-    "path": "spec.services[].port"
+    "source": "spec.services[].port"
   }
 ]
 ```
