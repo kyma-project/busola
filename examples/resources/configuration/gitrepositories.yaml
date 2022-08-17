@@ -74,6 +74,16 @@ data:
       "scope": "namespace",
       "name": "gr-dd"
     }
+  dataSources: |-
+    {
+      "secretRecipe": {
+        "resource": {
+          "kind": "Secret",
+          "version": "v1",
+          "namespace": "pizzas"
+        }
+      }
+    }
   translations: |-
     {
       "en": {
