@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import pluralize from 'pluralize';
+import { getApiPath as getApiPathFromNavigation } from 'shared/utils/helpers';
 
 export function wrap(str) {
   return _.chunk(str.split(''), 15)
@@ -79,7 +81,22 @@ export function findRelatedResources(originalResourceKind, config) {
       }
     }
   }
-  // todo filter unique (Pizza->PizzaOrder <=> PizzaOrder->Pizza)
 
-  return relations;
+  // remove duplicates ("Pod -> Deployment" is the same as "Deployment -> Pod")
+  return relations.filter(
+    (relation, i) => relations.findIndex(r => r.kind === relation.kind) === i,
+  );
+}
+
+export function getApiPath(relatedResource, nodes) {
+  // check if (version, group) are defined
+  const { version, group } = relatedResource;
+  if (version && group) {
+    const apiGroup = group ? `apis/${group}` : 'api';
+    return `/${apiGroup}/${version}`;
+  }
+
+  // fallback to navigation nodes
+  const resourceType = pluralize(relatedResource.kind.toLowerCase());
+  return getApiPathFromNavigation(resourceType, nodes);
 }

@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import pluralize from 'pluralize';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { getApiPath2TodoRenameOrDedupe } from 'shared/utils/helpers';
 import {
   findRelatedResources,
   match,
+  getApiPath,
 } from 'shared/components/ResourceGraph/buildGraph/helpers';
 
 function getNamespacePart({
@@ -57,7 +57,7 @@ async function cycle(store, depth, config, context) {
       if (!alreadyInStore && !alreadyToFetch) {
         // resource does not exist in store
         const resourceType = pluralize(relatedResource.kind.toLowerCase());
-        const apiPath = getApiPath2TodoRenameOrDedupe(relatedResource, [
+        const apiPath = getApiPath(relatedResource, [
           ...namespaceNodes,
           ...clusterNodes,
         ]);

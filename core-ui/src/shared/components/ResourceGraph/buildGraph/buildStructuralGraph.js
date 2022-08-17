@@ -11,7 +11,7 @@ function makeEdge(id1, id2) {
 export function buildStructuralGraph({ initialResource, store }, config) {
   const rootNode = {
     resource: initialResource,
-    depth: config.depth,
+    depth: config[initialResource.kind]?.depth || Number.POSITIVE_INFINITY,
   };
 
   const nodes = [rootNode];
