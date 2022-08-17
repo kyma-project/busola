@@ -3,13 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
-export function ResourceStatus({
-  status,
-  readyStatus = 'Ready',
-  i18n,
-  ...props
-}) {
-  const { t } = useTranslation(null, { i18n });
+export function ResourceStatus({ status, readyStatus = 'Ready', ...props }) {
+  const { t } = useTranslation();
 
   const state = status?.state || status?.status || status?.phase;
 
@@ -25,7 +20,6 @@ export function ResourceStatus({
     <StatusBadge
       autoResolveType
       additionalContent={state === readyStatus ? null : status.message}
-      i18n={i18n}
       {...props}
     >
       {state}

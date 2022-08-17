@@ -1,10 +1,7 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export function NamespaceStatus({ namespaceStatus }) {
-  const { i18n } = useTranslation();
-
   const badgeType = status => {
     switch (status) {
       case 'Active':
@@ -20,7 +17,6 @@ export function NamespaceStatus({ namespaceStatus }) {
     <StatusBadge
       resourceKind="namespaces"
       type={badgeType(namespaceStatus.phase)}
-      i18n={i18n}
     >
       {namespaceStatus.phase}
     </StatusBadge>

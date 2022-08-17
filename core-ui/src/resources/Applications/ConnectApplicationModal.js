@@ -11,7 +11,7 @@ import { useIsSKR } from './useIsSKR';
 
 export default function ConnectApplication({ applicationName }) {
   const [url, setUrl] = React.useState();
-  const { i18n, t } = useTranslation();
+  const { t } = useTranslation();
 
   const postRequest = usePost();
   const deleteTokenRequest = useDelete();
@@ -90,7 +90,6 @@ export default function ConnectApplication({ applicationName }) {
       ]}
       title={t('applications.subtitle.connect-app')}
       modalOpeningComponent={modalOpeningComponent}
-      i18n={i18n}
     >
       <p className="fd-has-color-status-4 fd-has-font-style-italic">
         {t('applications.messages.copy-url')}

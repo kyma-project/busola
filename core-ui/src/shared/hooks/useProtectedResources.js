@@ -7,8 +7,8 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
 
-export function useProtectedResources(i18n) {
-  const { t } = useTranslation(['translation'], { i18n });
+export function useProtectedResources() {
+  const { t } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const [disableResourceProtection] = useFeatureToggle(
     'disableResourceProtection',

@@ -33,7 +33,7 @@ const NodeHeader = ({ nodeName }) => {
 };
 
 export function ClusterNodes() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const prometheus = useFeature('PROMETHEUS');
   const usePrometheusQueries = prometheus?.isEnabled;
 
@@ -64,7 +64,6 @@ export function ClusterNodes() {
     const currentStatus = conditions.find(c => c?.status === 'True');
     return currentStatus ? (
       <StatusBadge
-        i18n={i18n}
         additionalContent={currentStatus.message}
         resourceKind="nodes"
         type={getStatusType(currentStatus.type)}
@@ -149,14 +148,12 @@ export function ClusterNodes() {
           !data && (usePrometheusQueries ? prometheusDataLoading : loading)
         }
         pagination={{ autoHide: true }}
-        i18n={i18n}
         testid="cluster-nodes"
       />
       {error && !data && (
         <ErrorPanel
           error={error}
           title={t('cluster-overview.headers.metrics')}
-          i18n={i18n}
         />
       )}
       <div className="fd-margin--md cluster-overview__graphs-wrapper">
