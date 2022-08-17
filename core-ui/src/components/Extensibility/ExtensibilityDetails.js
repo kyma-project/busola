@@ -20,7 +20,7 @@ import { useGetSchema } from 'hooks/useGetSchema';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
-  const { schemas: extSchemas } = useMicrofrontendContext();
+  const { extensibilitySchemas } = useMicrofrontendContext();
   const { t, widgetT, exists } = useGetTranslation();
   const { urlPath, resource } = resMetaData?.general ?? {};
 
@@ -31,7 +31,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const detailsProps = usePrepareDetailsProps(urlPath, 'name');
 
   const ajv = new Ajv();
-  if (!ajv.validate(extSchemas.details, resMetaData?.details)) {
+  if (!ajv.validate(extensibilitySchemas?.details, resMetaData?.details)) {
     throwConfigError(t('extensibility.errors'), { error: ajv.errors });
   }
 

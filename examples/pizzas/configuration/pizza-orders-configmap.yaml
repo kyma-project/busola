@@ -12,22 +12,26 @@ data:
     {
       "header": [
         {
-          "path": "spec.status",
+          "name": "Status",
+          "source": "spec.status",
           "widget": "Badge"
         },
         {
-          "path": "spec.orderDetails",
+          "name": "Order details",
+          "source": "spec.orderDetails",
           "widget": "Labels"
         }
       ],
       "body": [
         {
+          "name": "Order details",
           "widget": "CodeViewer",
-          "path": "spec.orderDetails",
+          "source": "spec.orderDetails",
           "language": "yaml"
         },
         {
-          "path": "spec.pizzas",
+          "name": "Pizzas",
+          "source": "spec.pizzas",
           "widget": "ResourceRefs",
           "kind": "Pizza",
         }
@@ -48,8 +52,8 @@ data:
         "widget": "FormGroup",
         "path": "spec.orderDetails"
       },
-      {"path": "spec.orderDetails.paymentMethod", "simple": "true"},
-      {"path": "spec.orderDetails.realization", "simple": "true"},
+      { "path": "spec.orderDetails.paymentMethod", "simple": "true"},
+      { "path": "spec.orderDetails.realization", "simple": "true"},
       {
         "simple": "true",
         "path": "spec.pizzas[]",
@@ -64,11 +68,13 @@ data:
   list: |-
     [
       {
-        "path": "spec.orderDetails.paymentMethod",
+        "name": "Payment method",
+        "source": "spec.orderDetails.paymentMethod",
         "widget": "Badge"
       },
       {
-        "path": "spec.orderDetails.realization",
+        "name": "Realization",
+        "source": "spec.orderDetails.realization"
       }
     ]
   general: |-
@@ -80,22 +86,5 @@ data:
       },
       "urlPath": "pizzaorders",
       "scope": "namespace",
-      "description": "check the translations"
-    }
-  translations: |-
-    {
-      "en": {
-        "name": "Pizza Orders",
-        "category": "Lunch",
-        "metadata.annotations": "Annotations",
-        "metadata.labels": "Labels",
-        "metadata.creationTimestamp": "Created at",
-        "spec.description": "Description",
-        "spec.orderDetails": "Order details",
-        "spec.orderDetails.paymentMethod": "Payment method",
-        "spec.orderDetails.realization": "Realization",
-        "spec.pizzas": "Pizzas",
-        "spec.status": "Status",
-        "check the translations": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
-      }
+      "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
     }

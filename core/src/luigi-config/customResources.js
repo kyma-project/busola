@@ -124,7 +124,7 @@ export async function getCustomResources(authData) {
   return [];
 }
 
-export async function getSchemas() {
+export async function getExtensibilitySchemas() {
   const cacheBuster = '?cache-buster=' + Date.now();
 
   const detailsResponse = await fetch(
