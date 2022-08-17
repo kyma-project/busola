@@ -45,7 +45,7 @@ When no highlights are provided, the following values are automatically handled:
 
 ```json
 {
-  "path": "status.value",
+  "source": "status.value",
   "widget": "Badge",
   "placeholder": "-",
   "highlights": {
@@ -73,7 +73,7 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 
 ```json
 {
-  "path": "metadata.ownerReferences",
+  "source": "metadata.ownerReferences",
   "widget": "ControlledBy",
   "placeholder": "-"
 }
@@ -85,7 +85,7 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 
 ```json
 {
-  "path": "metadata.ownerReferences",
+  "source": "metadata.ownerReferences",
   "widget": "ControlledBy",
   "placeholder": "-",
   "kindOnly": true
@@ -107,7 +107,7 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
 ```json
 {
   "name": "Joined array",
-  "path": "spec.dnsNames",
+  "source": "spec.dnsNames",
   "widget": "JoinedArray",
   "separator": ": "
 }
@@ -126,7 +126,7 @@ Labels widgets render all the object entries in the `key-value` format.
 
 ```json
 {
-  "path": "spec.orderDetails",
+  "source": "spec.orderDetails",
   "widget": "Labels",
   "placeholder": "-"
 }
@@ -140,7 +140,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 
 #### Widget-specific parameters
 
-- **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **data** - value extracted using **path**, or **root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
+- **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **data** - value extracted using **source**, or **root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
 - **linkText** - this property has access to **data** and **root**. This makes it possible to insert resource properties into a translation.
 
 #### Example
@@ -150,7 +150,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 ```json
 {
   "widget": "ResourceLink",
-  "path": "metadata.ownerReferences[0]",
+  "source": "metadata.ownerReferences[0]",
   "linkText": "otherTranslations.linkText",
   "resource": {
     "name": "data.name",
@@ -182,7 +182,7 @@ Text widgets render values as a simple text. This is the default behavior for al
 
 ```json
 {
-  "path": "spec.label",
+  "source": "spec.label",
   "widget": "Text",
   "placeholder": "-"
 }
@@ -207,7 +207,7 @@ CodeViewer widgets display values using a read-only code editor.
 
 ```json
 {
-  "path": "spec.json-data",
+  "source": "spec.json-data",
   "widget": "CodeViewer",
   "language": "yaml"
 }
@@ -236,12 +236,12 @@ Columns widgets render the child widgets in multiple columns.
     {
       "name": "columns.left",
       "widget": "Panel",
-      "children": [{ "path": "spec.value", "placeholder": "-" }]
+      "children": [{ "source": "spec.value", "placeholder": "-" }]
     },
     {
       "name": "columns.right",
       "widget": "Panel",
-      "children": [{ "path": "spec.other-value" }]
+      "children": [{ "source": "spec.other-value" }]
     }
   ]
 }
@@ -251,7 +251,7 @@ Columns widgets render the child widgets in multiple columns.
 
 ### Panel
 
-Panel widgets render an object as a separate panel with its own title (based on its `path` or `name`).
+Panel widgets render an object as a separate panel with its own title (based on its `source` or `name`).
 
 #### Example
 
@@ -260,8 +260,8 @@ Panel widgets render an object as a separate panel with its own title (based on 
   "name": "details",
   "widget": "Panel",
   "children": [
-    { "path": "spec.value" },
-    { "path": "spec.other-value", "placeholder": "-" }
+    { "source": "spec.value" },
+    { "source": "spec.other-value", "placeholder": "-" }
   ]
 }
 ```
@@ -283,11 +283,11 @@ If such resource list was already defined in Busola, the configuration will be r
 ```json
 {
   "widget": "ResourceList",
-  "path": "$myRelatedResource",
+  "source": "$myRelatedResource",
   "name": "Example ResourceList Secret",
   "children": [
     {
-      "path": "status.code",
+      "source": "status.code",
       "widget": "Badge"
     }
   ]
@@ -308,7 +308,7 @@ ResourceRefs widgets render the lists of links to the associated resources. The 
 
 ```json
 {
-  "path": "spec.item-list",
+  "source": "spec.item-list",
   "widget": "ResourceRefs",
   "kind": "Secret"
 }
@@ -328,10 +328,10 @@ Table widgets display array data as rows of a table instead of free-standing com
 
 ```json
 {
-  "path": "spec.item-list",
+  "source": "spec.item-list",
   "widget": "Table",
-  "children": [{ "path": "name" }, { "path": "status" }],
-  "collapsible": [{ "path": "description" }]
+  "children": [{ "source": "name" }, { "source": "status" }],
+  "collapsible": [{ "source": "description" }]
 }
 ```
 

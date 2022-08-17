@@ -2,7 +2,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: services
-  namespace: resources
+  namespace: dd
   labels:
     app.kubernetes.io/name: services
     busola.io/extension: resource
@@ -12,35 +12,33 @@ data:
     {
       "header": [
         {
-          "path": "metadata.ownerReferences",
+          "source": "metadata.ownerReferences",
           "widget": "ControlledBy"
         },
         {
-          "path": "spec.type",
+          "source": "spec.type",
         },
         {
-          "path": "spec.clusterIP",
+          "source": "spec.clusterIP",
         },
         {
-          "path": "spec",
           "name": "ports",
-          "formula": "$count(data.ports) ? $map(data.ports, function($value) {$value.port = $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~> $join('') : [$string($value.port), ':', $string($value.targetPort), '/', $string($value.protocol)] ~> $join('') }) ~> $join(', ')  : '-'"
+          "source": "$count(spec.ports) ? $map(spec.ports, function($value) {$value.port = $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~> $join('') : [$string($value.port), ':', $string($value.targetPort), '/', $string($value.protocol)] ~> $join('') }) ~> $join(', ')  : '-'"
         },
         {
-          "path": "",
           "name": "External IPs",
-          "formula": "$count(data.status.loadBalancer.ingress) ? $map(data.status.loadBalancer.ingress, function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '): ($count(data.spec.externalIPs) ? data.spec.externalIPs ~> $join(', '): '-')"
+          "source": "$count(status.loadBalancer.ingress) ? $map(status.loadBalancer.ingress, function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '): ($count(data.spec.externalIPs) ? data.spec.externalIPs ~> $join(', '): '-')"
         }
       ],
       "body": [
         {
           "widget": "ResourceList",
-          "path": "$subscriptions",
+          "source": "$subscriptions",
           "name": "Subscription"
         },
         {
           "widget": "ResourceList",
-          "path": "$apirules",
+          "source": "$apirules",
           "name": "API Rule"
         }
       ]
@@ -49,25 +47,23 @@ data:
   list: |-
     [
       {
-        "path": "metadata.ownerReferences",
+        "source": "metadata.ownerReferences",
         "widget": "ControlledBy",
         "kindOnly": true,
       },
       {
-        "path": "spec.type",
+        "source": "spec.type",
       },
       {
-        "path": "spec.clusterIP",
+        "source": "spec.clusterIP",
       },
       {
-        "path": "spec",
         "name": "ports",
-        "formula": "$count(data.ports) ? $map(data.ports, function($value) {$value.port = $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~> $join('') : [$string($value.port), ':', $string($value.targetPort), '/', $string($value.protocol)] ~> $join('') }) ~> $join(', ')  : '-'"
+        "source": "$count(spec.ports) ? $map(spec.ports, function($value) {$value.port = $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~> $join('') : [$string($value.port), ':', $string($value.targetPort), '/', $string($value.protocol)] ~> $join('') }) ~> $join(', ')  : '-'"
       },
       {
-        "path": "",
         "name": "External IPs",
-        "formula": "$count(data.status.loadBalancer.ingress) ? $map(data.status.loadBalancer.ingress, function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '): ($count(data.spec.externalIPs) ? data.spec.externalIPs ~> $join(', '): '-')"
+        "source": "$count(status.loadBalancer.ingress) ? $map(status.loadBalancer.ingress, function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '): ($count(data.spec.externalIPs) ? data.spec.externalIPs ~> $join(', '): '-')"
       }
     ]
   dataSources: |-
@@ -95,7 +91,7 @@ data:
         "kind": "Service",
         "version": "v1",
       },
-      "urlPath": "example-services",
+      "urlPath": "example-services-dd",
       "scope": "namespace",
     }
   translations: |-

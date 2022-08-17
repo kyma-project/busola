@@ -103,35 +103,30 @@ The **list** section defines extra columns available in the list.
 
 ### Item parameters
 
-- **path** - _[required]_ contains the path to the data used for the column.
-- **widget** - optional widget used to render the field referred to by the **path** property. By default, the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
-- **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
-- **formula** - optional formula used to modify data referred to by the **path** property. **formula** uses the following naming convention: `data.name` instead of `name`. To learn more about using formulas, see [JSONata](https://docs.jsonata.org/overview.html).
+- **source** - _[required]_ contains the path to the data used for the column. It can either have a [JSON Schema](https://json-schema.org) format or a [JSONata](https://docs.jsonata.org/overview.html) one.
+- **widget** - optional widget used to render the field referred to by the **source** property. By default, the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
+- **valuePreprocessor** - name of [value preprocessor](#value-preprocessors).
 
 ### Example
 
 ```json
 [
-  { "path": "spec.url" },
-  { "path": "spec.priority", "widget": "Badge" },
-  { "path": "spec.toppings", "formula": "$join(data.name, ', ')" },
+  { "source": "spec.url" },
+  { "source": "spec.priority", "widget": "Badge" },
+  { "source": "$join(spec.toppings.name, ', ')" },
   {
     "name": "quantityIsMore",
-    "path": "spec.toppings",
-    "formula": "$filter(data, function ($v, $i, $a) { $v.quantity > $average($a.quantity) })"
+    "source": "$filter(spec.toppings, function ($v, $i, $a) { $v.quantity > $average($a.quantity) })"
   },
-  { "path": "spec.volumes", "formula": "$join(data.name, ', ')" },
+  { "source": "$join(spec.volumes.name, ', ')" },
   {
-    "path": "spec.volumes",
-    "formula": "$filter(data, function ($v, $i, $a) {'configMap' in $keys($v)})" // List the array of Volume objects that have a config map
+    "source": "$filter(spec.volumes, function ($v, $i, $a) {'configMap' in $keys($v)})" // List the array of Volume objects that have a config map
   },
   {
-    "path": "spec.volumes",
-    "formula": "data['configMap' in $keys($)]" // This is the alternative way of listing the array of Volume objects that have a config map
+    "source": "spec.volumes['configMap' in $keys($)]" // This is the alternative way of listing the array of Volume objects that have a config map
   },
   {
-    "path": "spec.volumes",
-    "formula": "$join(data['configMap' in $keys($)].name, ', ')" // List volume names of volumes that have a config map
+    "source": "$join(spec.volumes['configMap' in $keys($)].name, ', ')" // List volume names of volumes that have a config map
   }
 ]
 ```
@@ -142,14 +137,13 @@ The **details** section defines the display structure for the details page. It c
 
 ### Items parameters
 
-- **path** - contains the path to the data used for the widget. Not required for presentational widgets.
-- **name** - used for entries without **path** to define the translation source used for labels. Required if no **path** is present.
+- **source** - contains the path to the data used for the widget. It can either have a [JSON Schema](https://json-schema.org) format or a [JSONata](https://docs.jsonata.org/overview.html) one. Not required for presentational widgets.
+- **name** - used for entries without **source** to define the translation source used for labels. Required if no **path** is present.
 - **widget** - optional widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
-- **formula** - optional formula used to modify data referred to by the **path** property. To learn more about using formulas, see [JSONata](https://docs.jsonata.org/overview.html).
 - **visibility** - by default all fields are visible; however **visibility** property can be used to control a single item display.
   - If set to `false` explicitly, the field doesn't render.
-  - If set to any string, this property is treated as jsonata formula, determining (based on current value given as `data`) if the field should be visible.
+  - If set to any string, this property is treated as JSONata format, determining (based on current value given as `data`) if the field should be visible.
   - If not set, the field always renders.
 - **children** - a list of child widgets used for all `object` and `array` fields. Not available for header widgets.
 
@@ -160,9 +154,9 @@ Extra parameters might be available for specific widgets.
 ```json
 {
   "header": [
-    { "path": "metadata.name" },
-    { "path": "spec.priority", "widget": "Badge" },
-    { "path": "spec.volumes", "formula": "$join(data.name, ', ')" }
+    { "source": "metadata.name" },
+    { "source": "spec.priority", "widget": "Badge" },
+    { "source": "$join(spec.volumes.name, ', ')" }
   ],
   "body": [
     {
@@ -177,32 +171,31 @@ Extra parameters might be available for specific widgets.
       "name": "summary",
       "widget": "Panel",
       "children": [
-        { "path": "metadata.name" },
-        { "path": "spec.priority", "widget": "Badge" },
+        { "source": "metadata.name" },
+        { "source": "spec.priority", "widget": "Badge" },
         {
           "name": "Volumes names of volumes with config map",
-          "path": "spec.volumes",
-          "formula": "$join(data['configMap' in $keys($)].name, ', ')"
+          "source": "$join(spec.volumes['configMap' in $keys($)].name, ', ')"
         }
       ]
     },
     {
-      "path": "spec.details",
+      "source": "spec.details",
       "widget": "CodeViewer",
       "language": "json"
     },
     {
-      "path": "spec.configPatches",
+      "source": "spec.configPatches",
       "widget": "Panel",
       "children": [
-        { "path": "applyTo" },
-        { "path": "match.context", "visibility": "$exists(data.spec.config)" }
+        { "source": "applyTo" },
+        { "source": "match.context", "visibility": "$exists(data.spec.config)" }
       ]
     },
     {
-      "path": "spec.configPatches",
+      "source": "spec.configPatches",
       "widget": "Table",
-      "children": [{ "path": "applyTo" }, { "path": "match.context" }]
+      "children": [{ "source": "applyTo" }, { "source": "match.context" }]
     }
   ]
 }
@@ -210,14 +203,14 @@ Extra parameters might be available for specific widgets.
 
 ### Data scoping
 
-Whenever an entry has both **path** and **children** properties, the paths of **children** are relative to the parent. For example:
+Whenever an entry has both **source** and **children** properties, the paths of **children** are relative to the parent. For example:
 
 ```json
 [
   {
-    "path": "spec",
+    "source": "spec",
     "widget": "Panel",
-    "children": [{ "path": "entry1" }, { "path": "entry2" }]
+    "children": [{ "source": "entry1" }, { "source": "entry2" }]
   }
 ]
 ```
@@ -229,16 +222,16 @@ renders the same set of data as:
   {
     "name": "spec",
     "widget": "Panel",
-    "children": [{ "path": "spec.entry1" }, { "path": "spec.entry2" }]
+    "children": [{ "source": "spec.entry1" }, { "source": "spec.entry2" }]
   }
 ]
 ```
 
 ## _dataSources_ section
 
-The **dataSources** section contains an object that maps a data source name to a data source configuration object. The data source name preceded by a dollar sign '\$' is used in the **path** expression.
+The **dataSources** section contains an object that maps a data source name to a data source configuration object. The data source name preceded by a dollar sign '\$' is used in the **source** expression.
 
-It's possible to use both data source name and a path; for example, `{"path": $myRelatedResource.metadata.labels}` returns the `metadata.labels` of the related resource.
+It's possible to use both data source name and a source; for example, `{"source": $myRelatedResource.metadata.labels}` returns the `metadata.labels` of the related resource.
 
 ### Data source configuration object fields
 
@@ -272,7 +265,7 @@ Those fields are used to build the related resource URL and filter the received 
        "body": [
          {
             "widget": "ResourceList",
-            "path": "$myPods"
+            "source": "$myPods"
         }
       ]
     }
