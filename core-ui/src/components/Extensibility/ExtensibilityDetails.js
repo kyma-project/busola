@@ -1,6 +1,5 @@
 import React from 'react';
 import pluralize from 'pluralize';
-import * as Ajv from 'ajv';
 
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -30,10 +29,12 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
 
   const detailsProps = usePrepareDetailsProps(urlPath, 'name');
 
+  /* TODO re-enable validation
   const ajv = new Ajv();
   if (!ajv.validate(extensibilitySchemas?.details, resMetaData?.details)) {
     throwConfigError(t('extensibility.errors'), { error: ajv.errors });
   }
+  */
 
   const resourceName = resMetaData?.general?.name;
   const resourceTitle = exists('name')
