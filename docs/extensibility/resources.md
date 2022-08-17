@@ -137,7 +137,7 @@ The **list** section defines extra columns available in the list.
 
 ## _details_ section
 
-The **details** section defines the display structure for the details page. It contains two sections, `header` and `body`, both of which are a list of items to display in the **header** section and the body of the page respectively. The format of the entries is similar to the **form** section, however it has extra options available.
+The **details** section defines the display structure for the details page. It contains three sections, `header`, `body` and optional `resourceGraph`. First two sections are a list of items to display in the **header** section and the body of the page respectively. The format of the entries is similar to the **form** section, however it has extra options available. The `resourceGraph` section is used to configure the ResourceGraph which shows relationships between various resources.
 
 ### Items parameters
 
@@ -154,7 +154,7 @@ The **details** section defines the display structure for the details page. It c
 
 Extra parameters might be available for specific widgets.
 
-### Example
+### Header and body xample
 
 ```json
 {
@@ -206,6 +206,54 @@ Extra parameters might be available for specific widgets.
   ]
 }
 ```
+
+### resourceGraph parameters
+
+- **depth** - defines the maximum distance from original resource to transitively related resource. Defaults to infinity.
+- **colorVariant** - optional integer in range 1 to 11 or 'neutral', denoting the SAP color variant of node's border. If not set, the node's border is the same as current text color.
+- **networkFlowKind** - optional boolean which determines if the resource should be shown on network graph, Defaults to `false`, which displays the resource on structural graph.
+- **networkFlowLevel** - optional integer which sets the horizontal position of resource's node on a network graph.
+- **dataSources** - an array of objects in shape:
+  - **source** - a string that must correspond to one of [dataSources](#datasources-section) name. It selects the related resource and the way it should be matched.
+
+### resourceGraph example
+
+```json
+{
+  "details": {
+    "resourceGraph": {
+      "colorVariant": 2,
+      "dataSources": [
+        {
+          "source": "relatedSecrets"
+        },
+        {
+          "source": "relatedPizzaOrders"
+        }
+      ]
+    }
+  },
+  "dataSources": {
+    "relatedSecrets": {
+      "resource": {
+        "kind": "Secret",
+        "version": "v1"
+      },
+      "filter": "$root.spec.recipeSecret = $item.metadata.name"
+    },
+    "relatedPizzaOrders": {
+      "resource": {
+        "kind": "PizzaOrder",
+        "group": "busola.example.com",
+        "version": "v1"
+      },
+      "filter": "$item.spec.pizzas[name = $root.metadata.name and namespace = $root.metadata.namespace]"
+    }
+  }
+}
+```
+
+<img src="./assets/ResourceGraph.png" alt="Example of a ResourceGraph"  style="border: 1px solid #D2D5D9">
 
 ### Data scoping
 

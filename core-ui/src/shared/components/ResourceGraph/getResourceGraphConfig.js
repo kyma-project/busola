@@ -52,19 +52,29 @@ export function getResourceGraphConfig(t, context, addStyle) {
       // all fields are required
       .filter(o => Object.values(o).every(Boolean))
       .map(({ resourceGraph, resource, dataSources }) => {
-        if (resourceGraph.colorVariant) {
+        const {
+          depth,
+          networkFlowKind,
+          networkFlowLevel,
+          colorVariant,
+          dataSources: graphDataSources,
+        } = resourceGraph;
+
+        if (colorVariant) {
           const className = resource.kind.toLowerCase();
-          const cssVariable = `--sapChart_Sequence_${resourceGraph.colorVariant}`;
+          const cssVariable = `--sapChart_Sequence_${colorVariant}`;
           addStyle(`#graph-area .node.${className} > polygon {
                     stroke: var(${cssVariable}) !important;
                   }`);
         }
 
         const config = {
-          depth: resourceGraph.depth,
-          resource: resource,
+          depth,
+          networkFlowKind,
+          networkFlowLevel,
+          resource,
           // bring relations[].filter from "jsonata expression format" to "normal function format"
-          relations: resourceGraph.dataSources
+          relations: graphDataSources
             .map(({ source }) => dataSources[source])
             .filter(Boolean)
             .map(relation => {
