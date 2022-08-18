@@ -233,7 +233,7 @@ In case of array-based components, an `$item` variable will contain data for eac
 ]
 ```
 
-will render `spec.data[].name` and `spec.data[].description`.
+renders `spec.data[].name` and `spec.data[].description`.
 
 ## _dataSources_ section
 
