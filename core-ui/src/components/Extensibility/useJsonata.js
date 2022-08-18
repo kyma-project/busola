@@ -8,16 +8,20 @@ export function useJsonata(query, root, extras = {}) {
   const [value, setValue] = useState('');
   const { t } = useTranslation();
   const {
+    dataSources,
     store: dataSourceStore,
     requestRelatedResource,
   } = useDataSourcesContext();
 
   useEffect(() => {
     const dataSourceFetchers = Object.fromEntries(
-      Object.entries(dataSourceStore).map(([id, def]) => () => {
-        requestRelatedResource(root, id);
-        return def.data;
-      }),
+      Object.entries(dataSources).map(([id, def]) => [
+        id,
+        () => {
+          requestRelatedResource(root, id);
+          return dataSourceStore[id].data;
+        },
+      ]),
     );
 
     if (!query) return '';
