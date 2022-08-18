@@ -73,7 +73,7 @@ data:
         {
           "name": "Pizza's recipe secret",
           "widget": "ResourceList",
-          "source": "$secretRecipe().items"
+          "source": "$secretRecipe()"
         },
         {
           "name": "columns",
