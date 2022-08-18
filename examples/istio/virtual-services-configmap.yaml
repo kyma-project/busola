@@ -11,32 +11,47 @@ data:
   details: |
     {
       "body":[
-        {
-          "widget": "ResourceList",
-          "path": "$gateways",
-          "name": "Gateways"
-        },
+          {
+            "widget": "Table",
+            "source": "spec.gateways[]",
+            "name": "Gateways",
+            "children": [
+            {
+              "source": "$item",
+              "name": "Name",
+              "widget": "ResourceLink",
+              "resource":{
+                "kind": "'Gateway'",
+                "name": "$contains(data,'/') ? $substringAfter(data, '/') : $substringBefore(data, '.')",
+                "namespace": "$contains(data,'/') ? $substringBefore(data, '/'): $split($substringAfter(data, '.'),'.')[0] "
+              }
+            }
+            ]
+          },
           {
             "name": "Hosts",
             "widget": "Panel",
             "children": [
-              {"path": "spec.hosts", "widget": "Labels"},
-              {"path": "spec.exportTo", "widget": "Labels", "visibility": "$exists(*)"}
+              {"source": "spec.hosts", "widget": "Labels", "name": "Hosts"},
+              {"name": "Export to", "source": "spec.exportTo", "widget": "Labels", "visibility": "$exists(*)"}
             ]
           },
           {
             "widget": "CodeViewer",
-            "path": "spec.http",
+            "source": "spec.http",
+            "name": "HTTP",
             "visibility": "$exists(*)"
           },        
           {
             "widget": "CodeViewer",
-            "path": "spec.tcp",
+            "source": "spec.tcp",
+            "name": "TCP",
             "visibility": "$exists(*)"
           },
           {
             "widget": "CodeViewer",
-            "path": "spec.tls",
+            "source": "spec.tls",
+            "name": "TLS",
             "visibility": "$exists(*)"
           }
       ]
@@ -56,11 +71,13 @@ data:
   list: |-
     [
       { 
-        "path": "spec.hosts",
+        "name": "Hosts",
+        "source": "spec.hosts",
         "widget": "JoinedArray"
       },
       { 
-        "path": "spec.gateways",
+        "name": "Gateways",
+        "source": "spec.gateways",
         "widget": "JoinedArray"
       },
     ]
@@ -72,16 +89,6 @@ data:
           "group": "networking.istio.io",
           "version": "v1beta1"
         },
-        "filter": "$filter(data, function($item){
-         
-            $find(resource.spec.gateways, 
-
-            function($g){
-              $substringBefore($g,'/') = $item.metadata.namespace and $substringAfter($g,'/') = $item.metadata.name
-            }
-            
-            ) 
-        })"
       }
     }
   general: |-
@@ -96,11 +103,3 @@ data:
       "scope": "namespace",
       "description": "{{[VirtualService](https://istio.io/latest/docs/reference/config/networking/virtual-service/)}} describes a configuration that affects traffic routing. ."
     }
-  translations: |
-    en:
-      spec.hosts: Hosts
-      spec.gateways: Gateways
-      spec.http: HTTP
-      spec.tls: TLS
-      spec.tcp: TCP
-      spec.exportTo: Export To
