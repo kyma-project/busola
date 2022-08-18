@@ -128,7 +128,7 @@ context('Test Pizzas', () => {
       .type('Error');
 
     cy.get('@form').contains('Status');
-    cy.get('@form').contains('Order details');
+    cy.get('@form').contains('Order Details');
     cy.get('@form').contains('Pizzas');
     cy.get('@form')
       .find('.fd-form-label--required:visible')
