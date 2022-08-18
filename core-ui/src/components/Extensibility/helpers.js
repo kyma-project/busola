@@ -5,6 +5,7 @@ import jsonata from 'jsonata';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { OrderedMap } from 'immutable';
 import { Link } from 'shared/components/Link/Link';
+import { jsonataWrapper } from './jsonataWrapper';
 
 export const TranslationBundleContext = createContext({
   translationBundle: 'extensibility',
@@ -25,7 +26,7 @@ export const getValue = (resource, path) => {
 
 export const applyFormula = (value, formula, t, additionalSources) => {
   try {
-    const expression = jsonata(formula);
+    const expression = jsonataWrapper(formula);
     return expression.evaluate({ data: value, ...additionalSources });
   } catch (e) {
     return t('extensibility.configuration-error', { error: e.message });

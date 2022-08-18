@@ -4,6 +4,8 @@ import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { useObjectState } from 'shared/useObjectState';
 import jsonata from 'jsonata';
 import * as jp from 'jsonpath';
+import { isEqual } from 'lodash';
+import { jsonataWrapper } from '../jsonataWrapper';
 
 const DataSourcesContext = createContext();
 
@@ -79,7 +81,9 @@ export function DataSourcesContextProvider({ children, dataSources }) {
       let data = await response.json();
       data = isListCall ? data.items : data;
       if (filter) {
-        data = jsonata(filter).evaluate({
+        const expression = jsonataWrapper(filter);
+
+        data = expression.evaluate({
           data,
           resource,
         });

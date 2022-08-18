@@ -13,11 +13,10 @@ export function NameRenderer({
   ...props
 }) {
   const extraPaths = schema.get('extraPaths')?.toJS() || [];
-  const nameRef = useRef(resource?.metadata?.name);
+  const showHelp = schema.toJS()?.showHelp ?? true;
 
   return (
     <K8sNameField
-      readOnly={!!nameRef.current}
       value={value}
       kind={resource.kind}
       setValue={value => {
@@ -42,6 +41,7 @@ export function NameRenderer({
       }}
       validate={value => !!value}
       required={required}
+      showHelp={showHelp}
     />
   );
 }

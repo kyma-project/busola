@@ -15,7 +15,7 @@ data:
           "kind": "Pod",
           "version": "v1",
         },
-        "filter": "$filter(data, function($item) {true})"
+        "filter": "$filter(data, function($item) {$selectorMatchByLabels($item, resource.spec.selector)})"
       }
     }
   details: |
@@ -46,7 +46,8 @@ data:
             { 
               "path": "$podSelector",
               "widget": "ResourceList",
-              "disableCreate": true
+              "disableCreate": true,
+              "isCompact": true
             }
           ]
         }
@@ -57,13 +58,13 @@ data:
       {
         "path": "spec.selector", "widget": "KeyValuePair", "simple": true
       },
-           {
+      {
         "widget": "FormGroup",
         "simple": true,
         "path": "spec.servers[].port"
       },
       { "path": "spec.servers[].port.number", "simple": "true"},
-      { "path": "spec.servers[].port.name", "simple": "true"},
+      { "path": "spec.servers[].port.name", "widget": "Name", "showHelp": false, "simple": "true"},
       { "path": "spec.servers[].port.protocol", "simple": "true"},
       { "path": "spec.servers[].port.targetPort", "simple": "true"},
       {
