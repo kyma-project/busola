@@ -16,7 +16,7 @@ data:
           "source": "spec.sauce"
         },
         {
-          "name": "Controlled By"
+          "name": "Controlled By",
           "source": "spec.ownerReferences",
           "widget": "ControlledBy",
           "placeholder": "---"

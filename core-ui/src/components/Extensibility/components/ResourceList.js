@@ -15,12 +15,14 @@ export function ResourceList({
   ...props
 }) {
   const kind = (value?.kind ?? '').replace(/List$/, '');
+  const pluralKind = pluralize(kind || '')?.toLowerCase();
   const namespace = value?.namespace;
   const namespacePart = namespace ? `/namespaces/${namespace}` : '';
-  const resourceUrl = `/${value?.apiVersion}${namespacePart}/${kind}`;
+  const api = value?.apiVersion === 'v1' ? 'api' : 'apis';
+  const resourceUrl = `/${api}/${value?.apiVersion}${namespacePart}/${pluralKind}`;
 
   const PredefinedRenderer = resources.find(
-    r => r.resourceType.toLowerCase() === pluralize(kind || '')?.toLowerCase(),
+    r => r.resourceType.toLowerCase() === pluralKind,
   );
   const ListRenderer = PredefinedRenderer
     ? PredefinedRenderer.List
