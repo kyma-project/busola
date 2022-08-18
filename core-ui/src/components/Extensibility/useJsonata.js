@@ -11,14 +11,15 @@ export function useJsonata(query, root, extras = {}) {
     store: dataSourceStore,
     requestRelatedResource,
   } = useDataSourcesContext();
+  // console.log('dataSourceStore', dataSourceStore);
 
   useEffect(() => {
-    const dataSourceFetchers = {
-      secretRecipe: () => {
-        requestRelatedResource(root, 'secretRecipe');
-        return dataSourceStore['secretRecipe'].data;
-      },
-    };
+    const dataSourceFetchers = Object.fromEntries(
+      Object.entries(dataSourceStore).map(([id, def]) => () => {
+        requestRelatedResource(root, id);
+        return def.data;
+      }),
+    );
 
     if (!query) return '';
     try {
