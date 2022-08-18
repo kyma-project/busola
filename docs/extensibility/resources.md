@@ -89,7 +89,7 @@ If you target elements of an array rather that the array itself, you can use `it
   {
     "path": "spec.items[]",
     "children": [
-      { "path": "name" },
+      { "path": "name", "name": "Item name" },
       { "path": "service.url" },
       { "path": "service.port" }
     ]
@@ -138,7 +138,7 @@ The **details** section defines the display structure for the details page. It c
 ### Items parameters
 
 - **source** - contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the widget. In its simplest form it's just the path to the value. Not required for presentational widgets.
-- **name** - Name to use for the primary label of this field. Required for most widgets (except for some rare cases that don't use a label). This can be a key to use from the **translation** section.
+- **name** - Name to use for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the **translation** section.
 - **widget** - optional widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
 - **visibility** - by default all fields are visible; however **visibility** property can be used to control a single item display.
@@ -203,7 +203,7 @@ Extra parameters might be available for specific widgets.
 
 ### Data scoping
 
-Whenever an entry has both **source** and **children** properties, the **children** elements will be provided with extra values.
+Whenever an entry has both **source** and **children** properties, the **children** elements will be provided with extra variables.
 
 In case of objects, a `$parent` variable will contain the data of the parent element.
 
@@ -232,6 +232,8 @@ In case of array-based components, an `$item` variable will contain data for eac
   }
 ]
 ```
+
+will render `spec.data[].name` and `spec.data[].description`.
 
 ## _dataSources_ section
 
@@ -293,7 +295,9 @@ Those fields are used to build the related resource URL and filter the received 
 
 ## _translations_ section
 
-This section contains all available languages formatted for i18next either as YAML or JSON, based on their paths.
+This optional section contains all available languages formatted for [i18next](https://www.i18next.com/) either as YAML or JSON, based on their paths. When a name is provided for a widget that value can be used as the key, and the value is the translation for a specific language.
+
+In addition, if no name is provided, form widgets will automatically try to fetch a translation based on it's **path** attribute, and if that fails, they will use a prettified version of it's last path item as it's name (for example `spec.itemDescription` will be prettified to "Item Description"), and by extension as a potential translation key.
 
 ### Example
 
