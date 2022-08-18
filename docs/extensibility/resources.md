@@ -239,7 +239,7 @@ will render `spec.data[].name` and `spec.data[].description`.
 
 The **dataSources** section contains an object that maps a data source name to a data source configuration object. The data source name preceded by a dollar sign '\$' is used in the **source** expression.
 
-Data sources are provided in all [JSONata](https://docs.jsonata.org/overview.html) formulas as functions to call.For example, `{ "source": $myRelatedResource().metadata.labels }` returns the `metadata.labels` of the related resource.
+Data sources are provided in all [JSONata](https://docs.jsonata.org/overview.html) formulas as functions to call. For example, `{ "source": $myRelatedResource().metadata.labels }` returns the `metadata.labels` of the related resource.
 
 Since the whole request is being provided, individual resources can be accessed using the `items` field, for example `{ "widget": "Table", "source": "$myRelatedResources().items" }`.
 
