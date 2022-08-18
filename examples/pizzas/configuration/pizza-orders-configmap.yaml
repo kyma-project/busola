@@ -84,7 +84,7 @@ data:
         "group": "busola.example.com",
         "version": "v1"
       },
-      "name": "PizzaOrders",
+      "name": "Pizza Orders",
       "category": "Lunch",
       "urlPath": "pizzaorders",
       "scope": "namespace",
