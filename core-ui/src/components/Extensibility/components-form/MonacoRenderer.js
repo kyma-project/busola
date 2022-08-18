@@ -33,7 +33,7 @@ export function MonacoRenderer({
 
   return (
     <ResourceForm.CollapsibleSection
-      title={tFromStoreKeys(storeKeys)}
+      title={tFromStoreKeys(storeKeys, schema)}
       required={required}
     >
       <Editor

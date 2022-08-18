@@ -23,8 +23,8 @@ export function KeyValuePairRenderer({
   let titleTranslation = '';
   const path = storeKeys.toArray().join('.');
 
-  if (tFromStoreKeys(storeKeys) !== path)
-    titleTranslation = tFromStoreKeys(storeKeys);
+  if (tFromStoreKeys(storeKeys, schema) !== path)
+    titleTranslation = tFromStoreKeys(storeKeys, schema);
   else if (path === 'metadata.labels')
     titleTranslation = t('common.headers.labels');
   else if (path === 'metadata.annotations')
