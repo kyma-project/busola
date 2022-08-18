@@ -13,7 +13,7 @@ export const getResourceUrl = (resource, namespace) => {
 
   const apiPath = getResourceKindUrl(resource);
   const namespacePart = namespace ? `/namespaces/${namespace}` : '';
-  const resourceType = pluralize(resource?.kind?.toLowerCase());
+  const resourceType = pluralize(resource?.kind?.toLowerCase() || '');
 
   return `${apiPath}${namespacePart}/${resourceType}`;
 };

@@ -122,13 +122,13 @@ context('Test Pizzas', () => {
     cy.get('@form').contains('Annotations');
     cy.get('@form').contains('Description');
     cy.get('@form')
-      .find('[data-testid="Status"]:visible')
+      .find('[data-testid="spec.status"]:visible')
       .find('input')
       .type(`{backspace}{backspace}{backspace}{backspace}{backspace}`)
       .type('Error');
 
     cy.get('@form').contains('Status');
-    cy.get('@form').contains('Order details');
+    cy.get('@form').contains('Order Details');
     cy.get('@form').contains('Pizzas');
     cy.get('@form')
       .find('.fd-form-label--required:visible')
@@ -185,16 +185,16 @@ context('Test Pizzas', () => {
       .as('form');
 
     cy.get('@form')
-      .find('[data-testid="Description"]:visible')
+      .find('[data-testid="spec.description"]:visible')
       .type(PIZZA_DESC);
 
     cy.get('@form')
-      .find('[data-testid="Sauce"]:visible')
+      .find('[data-testid="spec.sauce"]:visible')
       .find('input')
       .type(SAUCE);
 
     cy.get('@form')
-      .find('[data-testid="Recipe\'s secret"]:visible')
+      .find('[data-testid="spec.recipeSecret"]:visible')
       .find('input')
       .type(RECIPE);
 

@@ -31,7 +31,9 @@ export function prepareSchemaRules(ruleDefs) {
   const extractRules = ({ path, ...ruleDef }, parentPath = []) => {
     const fullPath = [
       ...parentPath,
-      ...(Array.isArray(path) ? path : path.replace(/\[]/g, '.[]').split('.')),
+      ...(Array.isArray(path)
+        ? path
+        : path?.replace(/\[]/g, '.[]')?.split('.') || []),
     ];
 
     initial(fullPath).reduce((acc, step) => {

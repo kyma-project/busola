@@ -13,7 +13,10 @@ import {
   getStaticRootNodes,
 } from './static-navigation-model';
 import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
-import { getCustomResources } from '../customResources';
+import {
+  getCustomResources,
+  getExtensibilitySchemas,
+} from '../customResources';
 import { showAlert } from '../utils/showAlert';
 
 import {
@@ -275,6 +278,7 @@ export async function createNavigation() {
         apiGroups,
         permissionSet,
         customResources,
+        extensibilitySchemas: await getExtensibilitySchemas(),
       }),
     };
   } catch (err) {
@@ -341,6 +345,7 @@ export async function createNavigationNodes({
   apiGroups,
   permissionSet,
   customResources,
+  extensibilitySchemas,
 }) {
   const authData = getAuthData();
   const activeCluster = getActiveCluster();
@@ -415,6 +420,7 @@ export async function createNavigationNodes({
         groups,
         features,
         customResources,
+        extensibilitySchemas,
         clusters: getClusters(),
         cluster: activeCluster.currentContext.cluster,
         config: activeCluster.config,

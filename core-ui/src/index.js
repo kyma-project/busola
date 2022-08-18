@@ -40,9 +40,6 @@ i18next
         console.warn(key);
       }
     },
-    parseMissingKeyHandler: (_key, defaultValue) => {
-      return defaultValue;
-    },
     interpolation: {
       escapeValue: false, // react already handles the escaping
     },

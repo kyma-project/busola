@@ -1,19 +1,13 @@
-import React, { useEffect } from 'react';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { useDataSourcesContext } from '../contexts/DataSources';
+import React from 'react';
 import { isNil } from 'lodash';
-import { widgets, valuePreprocessors } from './index';
 import { useTranslation } from 'react-i18next';
-
-import {
-  getValue,
-  applyFormula,
-  useGetTranslation,
-  useGetPlaceholder,
-  throwConfigError,
-} from '../helpers';
-import { stringifyIfBoolean } from 'shared/utils/helpers';
 import jsonata from 'jsonata';
+
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { stringifyIfBoolean } from 'shared/utils/helpers';
+import { useGetTranslation, useGetPlaceholder } from '../helpers';
+import { useJsonata } from '../useJsonata';
+import { widgets, valuePreprocessors } from './index';
 
 export const SimpleRenderer = ({ children }) => {
   return children;
@@ -62,54 +56,25 @@ export function shouldBeVisible(value, visibilityFormula) {
   }
 }
 
-export function Widget({ structure, value, inlineRenderer, ...props }) {
+export function Widget({
+  structure,
+  value,
+  inlineRenderer,
+  originalResource,
+  ...props
+}) {
   const { Plain, Text } = widgets;
   const { t } = useTranslation();
-  const {
-    store,
-    dataSources,
-    getRelatedResourceInPath,
-    requestRelatedResource,
-  } = useDataSourcesContext();
 
-  let childValue;
-
-  if (!structure || typeof structure !== 'object') {
-    throwConfigError(t('extensibility.not-an-object'), structure);
-  }
-  if (
-    typeof structure.path !== 'string' &&
-    !Array.isArray(structure.children) &&
-    !Array.isArray(structure)
-  ) {
-    throwConfigError(t('extensibility.no-path-children'), structure);
-  }
-
-  if (!structure.path) {
-    childValue = value;
-  } else {
-    const relatedResourcePath = getRelatedResourceInPath(structure.path);
-    if (relatedResourcePath) {
-      childValue = store[relatedResourcePath] || { loading: true };
-      props.dataSource = dataSources[relatedResourcePath];
-    } else {
-      childValue = getValue(value, structure.path);
-    }
-  }
+  const childValue = useJsonata(structure.source, originalResource, {
+    parent: value,
+    item: value,
+  });
 
   const { visible, error: visibleCheckError } = shouldBeVisible(
     childValue,
     structure.visibility,
   );
-
-  useEffect(() => {
-    if (!visible) return;
-    // run `requestRelatedResource` in useEffect, as it might update Context's state
-    if (structure.path && !!getRelatedResourceInPath(structure.path)) {
-      requestRelatedResource(value, structure.path);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   if (visibleCheckError) {
     return t('extensibility.configuration-error', {
@@ -127,18 +92,20 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
         value={childValue}
         structure={copiedStructure}
         inlineRenderer={inlineRenderer}
+        originalResource={originalResource}
         {...props}
       />
     );
   }
 
-  if (structure.formula) {
-    childValue = applyFormula(childValue, structure.formula, t);
-  }
-
   if (Array.isArray(structure)) {
     return (
-      <Plain value={value} structure={{ children: structure }} {...props} />
+      <Plain
+        value={value}
+        structure={{ children: structure }}
+        originalResource={originalResource}
+        {...props}
+      />
     );
   }
   let Renderer = structure.children ? Plain : Text;
@@ -158,6 +125,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
         Renderer={Renderer}
         value={item}
         structure={structure}
+        originalResource={originalResource}
         {...props}
       />
     ))
@@ -167,6 +135,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
       Renderer={Renderer}
       value={sanitizedValue}
       structure={structure}
+      originalResource={originalResource}
       {...props}
     />
   );

@@ -12,22 +12,25 @@ data:
     {
       "header": [
         {
-          "path": "spec.sauce"
+          "name": "Sauce",
+          "source": "spec.sauce"
         },
         {
-          "path": "spec.ownerReferences",
+          "name": "Controlled By",
+          "source": "spec.ownerReferences",
           "widget": "ControlledBy",
           "kindOnly": true,
           "placeholder": "---"
         },
         {
-          "path": "spec.toppings",
-          "formula": "$join(data.name, ', ')"
+          "name": "Toppings",
+          "source": "$join(spec.toppings.name, ', ')"
         },
         {
-          "path": "spec.ownerReferences[0]",
+          "name": "Owner References",
+          "source": "spec.ownerReferences[0]",
           "widget": "ResourceLink",
-          "linkText": "otherTranslations.linkText",
+          "linkText": "Go to {{data.kind}} {{data.name}}.",
           "resource": {
             "name": "data.name",
             "namespace": "root.metadata.namespace",
@@ -45,46 +48,33 @@ data:
               "children": [
                 {
                   "name": "State",
-                  "path": "status.messages[-1:].state",
+                  "source": "status.messages[-1].state",
                   "widget": "Badge"
                 },
                 {
                   "name": "Message",
-                  "path": "status.messages[-1:].message"
+                  "source": "status.messages[-1].message"
                 },
-                {
-                  "path": "spec.toppings",
-                  "formula": "$join(data.name, ', ')"
-                },
-                {
-                  "path": "spec.toppings",
-                  "formula": "$sum(data.price)",
-                  "name": "Toppings price"
-                }
+                { "name": "Toppings", "source": "$join(spec.toppings.name, ', ')" },
+                { "name": "Toppings price", "source": "$sum(spec.toppings.price)" }
               ]
             },
             {
-              "name": "topping",
-              "path": "spec.toppings",
+              "name": "Toppings",
+              "source": "spec.toppings",
               "widget": "Table",
               "children": [
-                {
-                  "path": "name"
-                },
-                {
-                  "path": "price"
-                },
-                {
-                  "path": "quantity"
-                }
+                { "name": "Name", "source": "$item.name" },
+                { "name": "Price ($)", "source": "$item.price" },
+                { "name": "Quantity", "source": "$item.quantity" }
               ]
-            }
+            },
           ]
         },
         {
+          "name": "Pizza's recipe secret",
           "widget": "ResourceList",
-          "path": "$secretRecipe",
-          "name": "Pizza's recipe secret"
+          "source": "$secretRecipe()"
         },
         {
           "name": "columns",
@@ -97,19 +87,15 @@ data:
                 {
                   "name": "Comments",
                   "widget": "JoinedArray",
-                  "path": "spec.comments",
+                  "source": "spec.comments",
                   "separator": " || "
                 }
               ]
             },
             {
-              "name": "spec.description",
+              "name": "Description",
               "widget": "Panel",
-              "children": [
-                {
-                  "path": "spec.description"
-                }
-              ]
+              "children": [{ "source": "spec.description" }]
             }
           ]
         }
@@ -142,7 +128,7 @@ data:
           "kind": "Secret",
           "scope": "namespace",
           "namespace": "pizzas",
-          "version": "v1",
+          "version": "v1"
         },
         "simple": true
       },
@@ -157,9 +143,9 @@ data:
     ]
   list: |-
     [
-      { "path": "spec.description" },
-      { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
-      { "path": "spec.toppings", "formula": "$sum(data.price)", "name": "Toppings price" }
+      { "name": "Description", "source": "spec.description" },
+      { "name": "State", "source": "status.messages[-1].state", "widget": "Badge" },
+      { "name": "Toppings price", "source": "$sum(spec.toppings.price)" }
     ]
   dataSources: |-
     {
@@ -167,7 +153,7 @@ data:
         "resource": {
           "kind": "Secret",
           "version": "v1",
-          "namespace": "pizzas",
+          "namespace": "pizzas"
         },
         "filter": "$item.metadata.name = $root.spec.recipeSecret"
       },
@@ -199,19 +185,3 @@ data:
       "scope": "namespace",
       "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
     }
-  translations: |
-    en:
-      spec.description: Description
-      spec.comments: Comments
-      spec.state: State
-      spec.sauce: Sauce
-      spec.toppings: Toppings
-      spec.recipeSecret: Recipe's secret
-      spec.toppings.name: Name
-      spec.toppings.price: Price ($)
-      spec.toppings.quantity: Quantity
-      spec.ownerReferences: Owner References
-      otherTranslations.linkText: Go to {{data.kind}} {{data.name}}.
-      spec.ownerReferences.apiVersion: API Version
-      spec.ownerReferences.kind: Kind
-      spec.ownerReferences.name: Name
