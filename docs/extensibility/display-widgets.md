@@ -278,12 +278,14 @@ ResourceList widgets render a list of Kubernetes resources. The ResourceList wid
 
 If such resource list was already defined in Busola, the configuration will be reused. To obtain custom columns, specify the `columns` field.
 
+Since the **ResourceList** widget does more than just list the items, the whole data source has to be provided (`$myResource()`) instead of just the items (`$myResource().items`).
+
 #### Example
 
 ```json
 {
   "widget": "ResourceList",
-  "source": "$myRelatedResource",
+  "source": "$myRelatedResource()",
   "name": "Example ResourceList Secret",
   "children": [
     {

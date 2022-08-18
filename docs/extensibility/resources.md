@@ -75,7 +75,7 @@ If you target elements of an array rather that the array itself, you can use `it
 ### Item parameters
 
 - **path** - _[required]_ path to the property that you want to display in the form.
-- **name** - optional name to use for the field instead of the default capitalised last part of the path.
+- **name** - optional name to use for the field instead of the default capitalised last part of the path. This can be a key to use from the **translation** section.
 - **widget** - optional widget used to render the field referred to by the **path** property. If you don't provide the widget, a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form widgets](form-widgets.md).
 - **children** - child widgets used for grouping. Child paths are relative to its parent.
 - **simple** - parameter used to display the simple form. It is `false` by default.
@@ -103,7 +103,7 @@ The **list** section defines extra columns available in the list.
 
 ### Item parameters
 
-- **source** - _[required]_ contains the path to the data used for the column. It can either have a [JSON Schema](https://json-schema.org) format or a [JSONata](https://docs.jsonata.org/overview.html) one.
+- **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form it's just the path to the value.
 - **widget** - optional widget used to render the field referred to by the **source** property. By default, the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **valuePreprocessor** - name of [value preprocessor](#value-preprocessors).
 
@@ -137,15 +137,15 @@ The **details** section defines the display structure for the details page. It c
 
 ### Items parameters
 
-- **source** - contains the path to the data used for the widget. It can either have a [JSON Schema](https://json-schema.org) format or a [JSONata](https://docs.jsonata.org/overview.html) one. Not required for presentational widgets.
-- **name** - used for entries without **source** to define the translation source used for labels. Required if no **path** is present.
+- **source** - contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the widget. In its simplest form it's just the path to the value. Not required for presentational widgets.
+- **name** - Name to use for the primary label of this field. Required for most widgets (except for some rare cases that don't use a label). This can be a key to use from the **translation** section.
 - **widget** - optional widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
 - **visibility** - by default all fields are visible; however **visibility** property can be used to control a single item display.
   - If set to `false` explicitly, the field doesn't render.
   - If set to any string, this property is treated as JSONata format, determining (based on current value given as `data`) if the field should be visible.
   - If not set, the field always renders.
-- **children** - a list of child widgets used for all `object` and `array` fields. Not available for header widgets.
+- **children** - a list of child widgets used for all `object` and `array` fields.
 
 Extra parameters might be available for specific widgets.
 
@@ -203,26 +203,32 @@ Extra parameters might be available for specific widgets.
 
 ### Data scoping
 
-Whenever an entry has both **source** and **children** properties, the paths of **children** are relative to the parent. For example:
+Whenever an entry has both **source** and **children** properties, the **children** elements will be provided with extra values.
+
+In case of objects, a `$parent` variable will contain the data of the parent element.
+
+For example:
 
 ```json
 [
   {
     "source": "spec",
     "widget": "Panel",
-    "children": [{ "source": "entry1" }, { "source": "entry2" }]
+    "children": [{ "source": "$parent.entry1" }, { "source": "$parent.entry2" }]
   }
 ]
 ```
 
-renders the same set of data as:
+will render the data for `spec.entry1` and `spec.entry2`.
+
+In case of array-based components, an `$item` variable will contain data for each child. For example:
 
 ```json
 [
   {
-    "name": "spec",
-    "widget": "Panel",
-    "children": [{ "source": "spec.entry1" }, { "source": "spec.entry2" }]
+    "source": "spec.data",
+    "widget": "Table",
+    "children": [{ "source": "$item.name" }, { "source": "$item.description" }]
   }
 ]
 ```
@@ -231,7 +237,9 @@ renders the same set of data as:
 
 The **dataSources** section contains an object that maps a data source name to a data source configuration object. The data source name preceded by a dollar sign '\$' is used in the **source** expression.
 
-It's possible to use both data source name and a source; for example, `{"source": $myRelatedResource.metadata.labels}` returns the `metadata.labels` of the related resource.
+Data sources are provided in all [JSONata](https://docs.jsonata.org/overview.html) formulas as functions to call.For example, `{ "source": $myRelatedResource().metadata.labels }` returns the `metadata.labels` of the related resource.
+
+Since the whole request is being provided, individual resources can be accessed using the `items` field, for example `{ "widget": "Table", "source": "$myRelatedResources().items" }`.
 
 ### Data source configuration object fields
 
@@ -265,7 +273,7 @@ Those fields are used to build the related resource URL and filter the received 
        "body": [
          {
             "widget": "ResourceList",
-            "source": "$myPods"
+            "source": "$myPods()"
         }
       ]
     }
