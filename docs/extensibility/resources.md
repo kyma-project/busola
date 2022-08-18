@@ -205,7 +205,7 @@ Extra parameters might be available for specific widgets.
 
 Whenever an entry has both **source** and **children** properties, the **children** elements are provided with extra variables.
 
-In case of objects, a `$parent` variable will contain the data of the parent element.
+In the case of objects, a `$parent` variable contains the data of the parent element.
 
 For example:
 
