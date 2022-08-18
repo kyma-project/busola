@@ -16,9 +16,9 @@ data:
           "source": "spec.sauce"
         },
         {
+          "name": "Controlled By"
           "source": "spec.ownerReferences",
           "widget": "ControlledBy",
-          "kindOnly": true,
           "placeholder": "---"
         },
         {
