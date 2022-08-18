@@ -203,7 +203,7 @@ Extra parameters might be available for specific widgets.
 
 ### Data scoping
 
-Whenever an entry has both **source** and **children** properties, the **children** elements will be provided with extra variables.
+Whenever an entry has both **source** and **children** properties, the **children** elements are provided with extra variables.
 
 In case of objects, a `$parent` variable will contain the data of the parent element.
 
