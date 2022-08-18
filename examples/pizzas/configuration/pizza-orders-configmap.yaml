@@ -84,6 +84,8 @@ data:
         "group": "busola.example.com",
         "version": "v1"
       },
+      "name": "PizzaOrders",
+      "category": "Lunch",
       "urlPath": "pizzaorders",
       "scope": "namespace",
       "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
