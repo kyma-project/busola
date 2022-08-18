@@ -1,6 +1,6 @@
 import React from 'react';
 import { mapValues } from 'lodash';
-import { TransTitle, PluginStack, useUIStore } from '@ui-schema/ui-schema';
+import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
 import { Button, FormLabel } from 'fundamental-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';

@@ -10,7 +10,6 @@ import { prettifyNamePlural } from 'shared/utils/helpers';
 
 export const TranslationBundleContext = createContext({
   translationBundle: 'extensibility',
-  // defaultResourcePlaceholder: '',
 });
 
 export const getValue = (resource, path) => {
@@ -63,12 +62,6 @@ export const useGetTranslation = path => {
       ...schema.toJS(),
       path: storeKeys.toArray().filter(el => typeof el === 'string'),
     });
-    // const path = storeKeys
-    // .toArray()
-    // .filter(el => typeof el === 'string') // get rid of numbers i.e. spec.ports[2].protocol
-    // .join('.');
-
-    return t(`${translationBundle}::${path}`, options) || path;
   };
 
   return {
