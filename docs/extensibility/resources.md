@@ -295,7 +295,7 @@ Those fields are used to build the related resource URL and filter the received 
 
 ## _translations_ section
 
-This optional section contains all available languages formatted for [i18next](https://www.i18next.com/) either as YAML or JSON, based on their paths. When a name is provided for a widget that value can be used as the key, and the value is the translation for a specific language.
+This optional section contains all available languages formatted for [i18next](https://www.i18next.com/) either as YAML or JSON, based on their paths. When a name is provided for a widget, that value can be used as the key, and the value is the translation for a specific language.
 
 In addition, if no name is provided, form widgets will automatically try to fetch a translation based on it's **path** attribute, and if that fails, they will use a prettified version of it's last path item as it's name (for example `spec.itemDescription` will be prettified to "Item Description"), and by extension as a potential translation key.
 
