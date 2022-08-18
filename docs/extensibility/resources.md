@@ -221,7 +221,7 @@ For example:
 
 will render the data for `spec.entry1` and `spec.entry2`.
 
-In case of array-based components, an `$item` variable will contain data for each child. For example:
+In the case of array-based components, an `$item` variable contains data for each child. For example:
 
 ```json
 [
