@@ -4,6 +4,7 @@ import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { useObjectState } from 'shared/useObjectState';
 import jsonata from 'jsonata';
 import * as jp from 'jsonpath';
+import { applyFormula, getValue } from '../helpers';
 
 const DataSourcesContext = createContext();
 
@@ -79,6 +80,16 @@ export function DataSourcesContextProvider({ children, dataSources }) {
       let data = await response.json();
       data = isListCall ? data.items : data;
       if (filter) {
+        // const expression = jsonata(filter);
+
+        // expression.registerFunction('find', (data, callback) => {
+        //   return (data || []).find(v => {
+        //     console.log(v);
+        //     console.log(callback(v));
+        //     return callback(v);
+        //   });
+        // });
+
         data = jsonata(filter).evaluate({
           data,
           resource,

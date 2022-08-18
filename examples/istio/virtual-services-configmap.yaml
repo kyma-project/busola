@@ -71,7 +71,17 @@ data:
           "kind": "Gateway",
           "group": "networking.istio.io",
           "version": "v1beta1"
-        }
+        },
+        "filter": "$filter(data, function($item){
+         
+            $find(resource.spec.gateways, 
+
+            function($g){
+              $substringBefore($g,'/') = $item.metadata.namespace and $substringAfter($g,'/') = $item.metadata.name
+            }
+            
+            ) 
+        })"
       }
     }
   general: |-

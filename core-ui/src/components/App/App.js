@@ -18,6 +18,18 @@ import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import otherRoutes from 'resources/other';
 
 export default function App() {
+  // const expression = jsonata('$test(data, function($item){$item+2})');
+  // expression.registerFunction('test', (data, callback) => {
+  //   return (data || []).map(function*(d) {
+  //     console.log(d);
+  //     console.log(yield* callback(d));
+  //     return yield* callback(d).next().value;
+  //   });
+  // });
+
+  // const x = expression.evaluate({ data: [10, 20, 30] });
+  // console.log(x);
+  // return null;
   const { cluster, language, customResources = [] } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
 
