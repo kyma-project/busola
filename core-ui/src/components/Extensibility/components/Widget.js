@@ -1,48 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { useDataSourcesContext } from '../contexts/DataSources';
+import React from 'react';
 import { isNil } from 'lodash';
-import { widgets, valuePreprocessors } from './index';
 import { useTranslation } from 'react-i18next';
-
-import { useGetTranslation, useGetPlaceholder } from '../helpers';
-import { stringifyIfBoolean } from 'shared/utils/helpers';
 import jsonata from 'jsonata';
 
-export function useJsonata(query, root, extras = {}) {
-  const [value, setValue] = useState('');
-  const { t } = useTranslation();
-  const {
-    store: dataSourceStore,
-    requestRelatedResource,
-  } = useDataSourcesContext();
-
-  useEffect(() => {
-    const dataSourceFetchers = {
-      secretRecipe: () => {
-        requestRelatedResource(root, 'secretRecipe');
-        return dataSourceStore['secretRecipe'].data;
-      },
-    };
-
-    if (!query) return '';
-    try {
-      jsonata(query).evaluate(
-        root,
-        {
-          ...dataSourceFetchers,
-          ...extras,
-        },
-        (error, result) => {
-          setValue(result);
-        },
-      );
-    } catch (e) {
-      setValue(t('extensibility.configuration-error', { error: e.message }));
-    }
-  }, [root, dataSourceStore]); // eslint-disable-line react-hooks/exhaustive-deps
-  return value;
-}
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { stringifyIfBoolean } from 'shared/utils/helpers';
+import { useGetTranslation, useGetPlaceholder } from '../helpers';
+import { useJsonata } from '../useJsonata';
+import { widgets, valuePreprocessors } from './index';
 
 export const SimpleRenderer = ({ children }) => {
   return children;
