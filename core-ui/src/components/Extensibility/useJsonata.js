@@ -11,7 +11,6 @@ export function useJsonata(query, root, extras = {}) {
     store: dataSourceStore,
     requestRelatedResource,
   } = useDataSourcesContext();
-  // console.log('dataSourceStore', dataSourceStore);
 
   useEffect(() => {
     const dataSourceFetchers = Object.fromEntries(
