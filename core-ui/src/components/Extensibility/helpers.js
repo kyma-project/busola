@@ -45,8 +45,9 @@ export const useGetTranslation = path => {
     if (def.name) {
       value = def.name;
     } else if (def.path) {
-      if (exists(def.path.join('.'))) {
-        value = def.path.join('.');
+      const path = Array.isArray(def.path) ? def.path.join('.') : def.path;
+      if (exists(path)) {
+        value = path;
       } else {
         value = prettifyNamePlural(null, last(def.path));
       }
