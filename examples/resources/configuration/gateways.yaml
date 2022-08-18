@@ -105,6 +105,9 @@ data:
       spec.servers.port.name: Name
       spec.servers.hosts: Hosts
       spec.servers.port.number: Port
+      spec.servers.tls: TLS
+      spec.servers.tls.httpsRedirect: HTTP Redirect
+      spec.servers.port: Port
       spec.servers.tls.mode: TLS Mode
       spec.servers.tls.credentialName: TLS Secret
       spec.servers.port.protocol: Protocol
