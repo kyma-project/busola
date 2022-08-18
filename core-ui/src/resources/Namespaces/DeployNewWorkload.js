@@ -7,7 +7,7 @@ import { FunctionCreate } from 'resources/Functions/FunctionCreate';
 import { useTranslation } from 'react-i18next';
 
 export default function DeployNewWorkload({ namespaceName }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
   const { features } = microfrontendContext;
 
@@ -34,7 +34,6 @@ export default function DeployNewWorkload({ namespaceName }) {
           resourceUrl={`/apis/serverless.kyma-project.io/v1alpha1/namespaces/${namespaceName}/functions`}
         />
       )}
-      i18n={i18n}
     />
   ) : null;
 
@@ -56,7 +55,6 @@ export default function DeployNewWorkload({ namespaceName }) {
           resourceUrl={`/apis/apps/v1/namespaces/${namespaceName}/deployments/`}
         />
       )}
-      i18n={i18n}
     />
   );
 

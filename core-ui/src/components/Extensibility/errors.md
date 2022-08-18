@@ -1,8 +1,8 @@
 ### Extensibility Error Handling
 
-There's a special error handler, that can be used when validating input from the EXT Config Maps.
+There's a special error handler, that can be used when validating input from the EXT ConfigMaps.
 
-When users make errors in configuration, you can display the error's message and even the responsible part of a Config Map with the `throwConfigError` handler:
+When users make errors in configuration, you can display the error's message and even the responsible part of a ConfigMap with the `throwConfigError` handler:
 
 ```js
 if (!structure || typeof structure !== 'object') {

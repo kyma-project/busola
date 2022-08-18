@@ -96,7 +96,6 @@ function ResourceDetailsRenderer(props) {
             props.resourceType,
           )}
           breadcrumbs={breadcrumbItems}
-          i18n={props.i18n}
         />
       );
     }
@@ -105,13 +104,12 @@ function ResourceDetailsRenderer(props) {
         resource={prettifyNameSingular(props.resourceTitle, props.resourceType)}
         breadcrumbs={breadcrumbItems}
         customMessage={getErrorMessage(error)}
-        i18n={props.i18n}
       />
     );
   }
 
   return (
-    <YamlEditorProvider i18n={props.i18n}>
+    <YamlEditorProvider>
       {resource && (
         <Resource
           key={resource.metadata.name}
@@ -119,7 +117,6 @@ function ResourceDetailsRenderer(props) {
           updateResourceMutation={updateResourceMutation}
           silentRefetch={silentRefetch}
           resource={resource}
-          i18n={props.i18n}
           {...props}
         />
       )}
@@ -135,7 +132,6 @@ function Resource({
   customComponents,
   editActionLabel,
   headerActions,
-  i18n,
   namespace,
   readOnly,
   resource,
@@ -150,7 +146,7 @@ function Resource({
   resourceSchema,
 }) {
   useVersionWarning({ resourceUrl, resourceType });
-  const { t } = useTranslation(['translation'], { i18n });
+  const { t } = useTranslation();
   const prettifiedResourceKind = prettifyNameSingular(
     resourceTitle,
     resource.kind,
@@ -159,10 +155,9 @@ function Resource({
 
   const pluralizedResourceKind = pluralize(prettifiedResourceKind);
   useWindowTitle(windowTitle || pluralizedResourceKind);
-  const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
+  const { isProtected, protectedResourceWarning } = useProtectedResources();
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
-    i18n,
     resourceName: resourceTitle,
     resourceType,
     navigateToListAfterDelete: true,
@@ -229,7 +224,7 @@ function Resource({
           id={`edit-${resourceType}-modal`}
           className="modal-size--l create-resource-modal"
           renderForm={props => (
-            <ErrorBoundary i18n={i18n}>
+            <ErrorBoundary>
               <CreateResourceForm
                 resource={resource}
                 resourceType={resourceType}
@@ -242,7 +237,6 @@ function Resource({
               />
             </ErrorBoundary>
           )}
-          i18n={i18n}
         />
       );
     }
@@ -360,11 +354,7 @@ function Resource({
       {children}
       {resourceGraphConfig?.[resource.kind] && (
         <Suspense fallback={<Spinner />}>
-          <ResourceGraph
-            resource={resource}
-            i18n={i18n}
-            config={resourceGraphConfig}
-          />
+          <ResourceGraph resource={resource} config={resourceGraphConfig} />
         </Suspense>
       )}
     </>

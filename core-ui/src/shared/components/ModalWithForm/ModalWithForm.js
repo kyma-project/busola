@@ -24,11 +24,10 @@ export const ModalWithForm = ({
   className,
   onModalOpenStateChange,
   alwaysOpen,
-  i18n,
   getToggleFormFn,
   ...props
 }) => {
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation();
   const [isOpen, setOpen] = useState(alwaysOpen || false);
 
   const {

@@ -3,8 +3,8 @@ import { saveAs } from 'file-saver';
 import { Button, Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
-export function SaveGraphControls({ content, name, i18n }) {
-  const { t } = useTranslation(['translation'], { i18n });
+export function SaveGraphControls({ content, name }) {
+  const { t } = useTranslation();
   return (
     <Button
       className="controls"

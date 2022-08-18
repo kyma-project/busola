@@ -8,7 +8,7 @@ import { GenericList } from 'shared/components/GenericList/GenericList';
 import { SubscriptionConditionStatus } from 'shared/components/SubscriptionConditionStatus';
 
 export function SubscriptionConditions(subscription) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const conditions = subscription?.status?.conditions;
   const headerRenderer = _ => [
@@ -32,7 +32,6 @@ export function SubscriptionConditions(subscription) {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={conditions || []}
-      i18n={i18n}
     />
   );
 }

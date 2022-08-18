@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
 
 export default function ApplicationServices({ spec: applicationSpec }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const navigateToDetails = resourceName => {
     LuigiClient.linkManager().navigate(resourceName);
@@ -37,8 +37,7 @@ export default function ApplicationServices({ spec: applicationSpec }) {
       entries={entries}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      notFoundMessage="applications.messages.service-not-found"
-      i18n={i18n}
+      notFoundMessage={t('applications.messages.service-not-found')}
     />
   );
 }

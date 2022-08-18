@@ -35,8 +35,8 @@ export function useRestartResource(baseUrl) {
 }
 
 export function useRestartAction(baseUrl) {
-  const { t, i18n } = useTranslation();
-  const { isProtected } = useProtectedResources(i18n);
+  const { t } = useTranslation();
+  const { isProtected } = useProtectedResources();
   const restartResource = useRestartResource(baseUrl);
 
   return {

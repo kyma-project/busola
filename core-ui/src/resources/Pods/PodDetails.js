@@ -36,7 +36,7 @@ function goToSecretDetails(resourceKind, name) {
 }
 
 export function PodDetails(props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const Events = () => (
     <EventsList
@@ -99,7 +99,6 @@ export function PodDetails(props) {
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         entries={resource.spec.volumes}
-        i18n={i18n}
       />
     );
   };

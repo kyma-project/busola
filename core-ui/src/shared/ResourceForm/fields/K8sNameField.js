@@ -18,7 +18,7 @@ export function K8sNameField({
   showHelp = true,
   ...props
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { isAdvanced, propertyPath, validate, readOnly, ...inputProps } = props;
 
   const generateName = () => {
@@ -49,7 +49,6 @@ export function K8sNameField({
                 showLabel={false}
                 onChange={e => setValue(e.target.value)}
                 value={value}
-                i18n={i18n}
                 readOnly={readOnly}
                 pattern={pattern}
                 {...inputProps}

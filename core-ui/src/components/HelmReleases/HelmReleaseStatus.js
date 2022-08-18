@@ -1,10 +1,7 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export function HelmReleaseStatus({ status }) {
-  const { i18n } = useTranslation();
-
   const resolveType = status => {
     switch (status) {
       case 'deployed':
@@ -21,11 +18,7 @@ export function HelmReleaseStatus({ status }) {
   };
 
   return (
-    <StatusBadge
-      resourceKind="helm-releases"
-      i18n={i18n}
-      type={resolveType(status)}
-    >
+    <StatusBadge resourceKind="helm-releases" type={resolveType(status)}>
       {status}
     </StatusBadge>
   );

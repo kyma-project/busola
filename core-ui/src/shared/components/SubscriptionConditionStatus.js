@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 
 export const SubscriptionConditionStatus = ({ condition }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const statusBadgeProperties =
     condition?.status === 'True'
       ? {
@@ -19,7 +19,6 @@ export const SubscriptionConditionStatus = ({ condition }) => {
       additionalContent={condition?.message}
       resourceKind="subscription"
       type={statusBadgeProperties.type}
-      i18n={i18n}
     >
       {statusBadgeProperties.text}
     </StatusBadge>

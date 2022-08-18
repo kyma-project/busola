@@ -1,15 +1,13 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { useTranslation } from 'react-i18next';
 
 const consoleErrorFn = jest
   .spyOn(console, 'error')
   .mockImplementation(() => jest.fn());
 
 const TestBed = ({ children }) => {
-  const { i18n } = useTranslation();
-  return <ErrorBoundary i18n={i18n}>{children}</ErrorBoundary>;
+  return <ErrorBoundary>{children}</ErrorBoundary>;
 };
 
 describe('Error Boundary', () => {
