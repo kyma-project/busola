@@ -123,3 +123,15 @@ export async function getCustomResources(authData) {
   }
   return [];
 }
+
+export async function getExtensibilitySchemas() {
+  const cacheBuster = '?cache-buster=' + Date.now();
+
+  const detailsResponse = await fetch(
+    `/assets/customResources/schema-details.json${cacheBuster}`,
+  );
+  const details = await detailsResponse.json();
+  return {
+    details,
+  };
+}

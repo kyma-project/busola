@@ -68,22 +68,22 @@ export function DataSourcesContextProvider({ children, dataSources }) {
 
   const fetchResource = async (dataSource, dataSourceName, resource) => {
     try {
-      const {
-        filter,
-        resource: { name },
-      } = dataSource;
+      const { filter } = dataSource;
 
       const relativeUrl = buildUrl(dataSource, resource);
-      const isListCall = !name;
       const response = await fetch({ relativeUrl });
-      let data = await response.json();
-      data = isListCall ? data.items : data;
-      if (filter) {
-        data = jsonata(filter).evaluate({
-          data,
+      const data = await response.json();
+      if (filter && data.items) {
+        data.items = jsonata(filter).evaluate({
+          data: data.items,
           resource,
         });
-        data = formatJsonataResult(data, { isListCall });
+        data.items = formatJsonataResult(data.items, {
+          isListCall: data.kind.match(/List$/),
+        });
+      }
+      if (!data.namespace) {
+        data.namespace = dataSource.resource.namespace;
       }
       setStore(dataSourceName, {
         loading: false,
@@ -91,7 +91,11 @@ export function DataSourcesContextProvider({ children, dataSources }) {
         data,
       });
     } catch (e) {
-      setStore(dataSourceName, { loading: false, error: e, data: null });
+      setStore(dataSourceName, {
+        loading: false,
+        error: e,
+        data: { error: e },
+      });
     }
   };
 
@@ -105,15 +109,14 @@ export function DataSourcesContextProvider({ children, dataSources }) {
     store,
     dataSources,
     getRelatedResourceInPath,
-    requestRelatedResource: (resource, path) => {
-      const dataSourceName = getRelatedResourceInPath(path);
+    requestRelatedResource: (resource, dataSourceName) => {
       const dataSource = dataSources[dataSourceName];
 
       if (!dataSourcesDict.current[dataSourceName]) {
         // mark dataSource as fetched
         dataSourcesDict.current[dataSourceName] = true;
 
-        setStore(dataSourceName, { loading: true });
+        setStore(dataSourceName, { loading: true, data: { loading: true } });
 
         fetchResource(dataSource, dataSourceName, resource);
         const REFETCH_INTERVAL = 6000;
