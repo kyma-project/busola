@@ -75,7 +75,7 @@ If you target elements of an array rather that the array itself, you can use `it
 ### Item parameters
 
 - **path** - _[required]_ path to the property that you want to display in the form.
-- **name** - optional name to use for the field instead of the default capitalised last part of the path. This can be a key to use from the **translation** section.
+- **name** - an optional name for the field instead of the default capitalized last part of the path. This can be a key from the **translation** section.
 - **widget** - optional widget used to render the field referred to by the **path** property. If you don't provide the widget, a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form widgets](form-widgets.md).
 - **children** - child widgets used for grouping. Child paths are relative to its parent.
 - **simple** - parameter used to display the simple form. It is `false` by default.
