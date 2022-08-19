@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: gitrepositories.serverless.kyma-project.io
-  namespace: dd
+  namespace: resources
   labels:
     app.kubernetes.io/name: gitrepositories.serverless.kyma-project.io
     busola.io/extension: resource
@@ -70,9 +70,8 @@ data:
         "kind": "GitRepository",
         "version": "v1alpha1"
       },
-      "urlPath": "example-gitrepositories-dd",
+      "urlPath": "example-gitrepositories",
       "scope": "namespace",
-      "name": "gr-dd"
     }
   dataSources: |-
     {
