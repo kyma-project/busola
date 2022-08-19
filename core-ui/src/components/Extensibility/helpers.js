@@ -1,6 +1,5 @@
 import React, { createContext, useContext } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import * as jp from 'jsonpath';
 import jsonata from 'jsonata';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { OrderedMap } from 'immutable';
@@ -11,18 +10,6 @@ import { prettifyNamePlural } from 'shared/utils/helpers';
 export const TranslationBundleContext = createContext({
   translationBundle: 'extensibility',
 });
-
-export const getValue = (resource, path) => {
-  if (!resource) return undefined;
-  if (!path || path === '$') return resource;
-
-  if (path.startsWith('$.')) {
-    return jp.value(resource, path);
-  } else if (path.startsWith('[')) {
-    return jp.value(resource, '$' + path);
-  }
-  return jp.value(resource, '$.' + path);
-};
 
 export const applyFormula = (value, formula, t, additionalSources) => {
   try {
