@@ -33,10 +33,10 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
 
   const listProps = usePrepareListProps(urlPath, 'name');
 
-  const resourceName = resMetaData?.general?.name;
-  listProps.resourceName = exists('name')
+  const resourceTitle = resMetaData?.general?.name;
+  listProps.resourceTitle = exists('name')
     ? t('name')
-    : resourceName || pluralize(prettifyKind(resource.kind));
+    : resourceTitle || pluralize(prettifyKind(resource.kind));
 
   if (resource.kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
@@ -68,12 +68,11 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   const isFilterAString = typeof resMetaData.resource?.filter === 'string';
   const filterFn = value =>
     applyFormula(value, resMetaData.resource.filter, tBusola);
-  listProps.filterFn = isFilterAString ? filterFn : undefined;
+  listProps.filter = isFilterAString ? filterFn : undefined;
 
   return (
     <ResourcesList
       createResourceForm={ExtensibilityCreate}
-      allowSlashShortcut
       disableCreate={disableCreate}
       {...listProps}
     />
