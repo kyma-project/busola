@@ -20,6 +20,7 @@ export const destinationRules = {
       },
       {
         source: 'spec.trafficPolicy',
+        name: 'spec.trafficPolicy',
         widget: 'CodeViewer',
         visibility: '$exists($.data)',
       },
@@ -38,7 +39,7 @@ export const destinationRules = {
   form: [
     {
       simple: true,
-      source: 'spec.host',
+      path: 'spec.host',
     },
   ],
   general: {
