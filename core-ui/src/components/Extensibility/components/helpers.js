@@ -3,12 +3,12 @@ import { Widget } from './Widget';
 export const getChildrenInfo = (structure, originalResource) => {
   if (!Array.isArray(structure.children)) {
     const sortOptions = (structure.sort || []).reduce((acc, current) => {
-      if (!current.path) {
+      if (!current.source) {
         return [...acc];
       }
 
       const obj = {
-        path: current.path,
+        source: current.source,
         sort: {
           default: current.default,
           compareFunction: current.compareFunction,
@@ -21,9 +21,16 @@ export const getChildrenInfo = (structure, originalResource) => {
   }
   const children = structure.children.map(({ name, ...props }) => ({
     header: name,
-    value: value => <Widget value={value} structure={props} />,
+    value: value => (
+      <Widget
+        value={value}
+        structure={props}
+        originalResource={originalResource}
+      />
+    ),
   }));
 
   const sortOptions = (structure?.children || []).filter(child => child.sort);
+
   return { children, sortOptions, defaultSort: false };
 };
