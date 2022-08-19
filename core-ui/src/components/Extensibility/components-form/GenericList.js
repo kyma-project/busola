@@ -49,7 +49,7 @@ export function GenericList({
   return (
     <ResourceForm.CollapsibleSection
       container
-      title={tFromStoreKeys(storeKeys)}
+      title={tFromStoreKeys(storeKeys, schema)}
       actions={setOpen => (
         <Button
           glyph="add"
@@ -72,7 +72,7 @@ export function GenericList({
           const itemsSchema = schema.get('items');
           return (
             <ResourceForm.CollapsibleSection
-              title={pluralize(tFromStoreKeys(ownKeys), 1)}
+              title={pluralize(tFromStoreKeys(ownKeys, schema), 1)}
               actions={
                 <Button
                   compact

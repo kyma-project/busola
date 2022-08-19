@@ -20,7 +20,7 @@ export function ResourceRefRender({
   const schemaResource = schema.get('resource') || {};
   const group = (schemaResource?.group || '').toLowerCase();
   const version = schemaResource?.version;
-  const resourceType = pluralize(schemaResource?.kind || '').toLowerCase();
+  const resourceType = pluralize(schemaResource?.kind || '')?.toLowerCase();
   const groupPrefix = group ? `apis/${group}` : 'api';
   const url = `/${groupPrefix}/${version}/${resourceType}`;
 

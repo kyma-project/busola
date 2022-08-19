@@ -1,6 +1,6 @@
 import React from 'react';
 import { mapValues } from 'lodash';
-import { TransTitle, PluginStack, useUIStore } from '@ui-schema/ui-schema';
+import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
 import { Button, FormLabel } from 'fundamental-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -46,7 +46,7 @@ export function SimpleList({
   const isLast = index => index === listSize;
   const itemsSchema = schema.get('items');
   const titleRenderer = ({ schema, storeKeys }) => {
-    const label = tFromStoreKeys(storeKeys);
+    const label = tFromStoreKeys(storeKeys, schema);
     return <FormLabel>{label}</FormLabel>;
   };
 
@@ -55,7 +55,7 @@ export function SimpleList({
   return (
     <ResourceForm.CollapsibleSection
       container
-      title={<TransTitle schema={schema} storeKeys={storeKeys} />}
+      title={tFromStoreKeys(storeKeys, schema)}
       {...props}
     >
       <div className="fd-row form-field multi-input extensibility">

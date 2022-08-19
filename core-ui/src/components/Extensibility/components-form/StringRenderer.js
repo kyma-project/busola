@@ -41,10 +41,10 @@ export function StringRenderer({
           data: { value },
         });
       }}
-      label={tFromStoreKeys(storeKeys)}
+      label={tFromStoreKeys(storeKeys, schema)}
       compact={compact}
       required={required}
-      data-testid={tFromStoreKeys(storeKeys)}
+      data-testid={storeKeys.join('.')}
       {...getTypeSpecificProps()}
     />
   );
