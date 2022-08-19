@@ -208,7 +208,7 @@ Extra parameters might be available for specific widgets.
 - **networkFlowKind** - optional boolean which determines if the resource should be shown on the network graph, Defaults to `false`, which displays the resource on the structural graph.
 - **networkFlowLevel** - optional integer which sets the horizontal position of the resource's node on the network graph.
 - **dataSources** - an array of objects in shape:
-  - **source** - a string that must correspond to one of [dataSources](#datasources-section) name. It selects the related resource and the way it should be matched.
+  - **source** - a string that must correspond to one of the [dataSources](#datasources-section) name. It selects the related resource and the way it should be matched.
 
 ### resourceGraph example
 
