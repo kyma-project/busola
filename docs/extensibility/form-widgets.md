@@ -204,13 +204,11 @@ FormGroup widgets render an `object` as a collapsible section.
 [
   {
     "path": "spec.service",
-    "widget": "FormGroup"
-  },
-  {
-    "path": "spec.service.host"
-  },
-  {
-    "path": "spec.service.port"
+    "widget": "FormGroup",
+    "children": [
+      { "path": "spec.service.host" },
+      { "path": "spec.service.port" }
+    ]
   }
 ]
 ```
