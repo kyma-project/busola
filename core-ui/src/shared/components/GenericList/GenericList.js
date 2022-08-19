@@ -294,7 +294,7 @@ GenericList.propTypes = {
   compact: PropTypes.bool,
   className: PropTypes.string,
   currentlyEditedResourceUID: PropTypes.string,
-  sortBy: PropTypes.func,
+  sortBy: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
   notFoundMessage: PropTypes.string,
   searchSettings: SearchProps,
 };

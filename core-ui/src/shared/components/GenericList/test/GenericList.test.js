@@ -406,7 +406,9 @@ describe('GenericList', () => {
           entries={mockEntries}
           headerRenderer={mockHeaderRenderer}
           rowRenderer={mockEntryRenderer}
-          noSearchResultMessage={noSearchResultMessage}
+          searchSettings={{
+            noSearchResultMessage,
+          }}
         />,
       );
 
@@ -422,19 +424,24 @@ describe('GenericList', () => {
     });
 
     it('Shows server error message if dataError prop is true', async () => {
-      const serverErrorMessage = 'Pico bello';
+      const serverErrorMessage = {
+        message: 'Something failed',
+        originalMessage: '',
+      };
 
       const { queryAllByRole, getByText } = render(
         <GenericList
           entries={[]}
           headerRenderer={mockHeaderRenderer}
           rowRenderer={mockEntryRenderer}
-          serverDataError={true}
+          serverDataError={serverErrorMessage}
         />,
       );
 
       expect(await queryAllByRole('row')).toHaveLength(2); // header + ServerErrorMessage dedicated row
-      expect(await getByText(serverErrorMessage)).toBeInTheDocument();
+      expect(
+        await getByText(new RegExp(serverErrorMessage.message, 'i')),
+      ).toBeInTheDocument();
     });
 
     it('Shows Spinner if dataLoading prop is true', async () => {
