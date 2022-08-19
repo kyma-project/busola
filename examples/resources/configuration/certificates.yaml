@@ -50,7 +50,7 @@ data:
             },
             {
               "source": "spec.secretName",
-              "name": "secretName"
+              "name": "Secret name"
             },
             {
               "source": "status.conditions[?(@.type==\"Ready\")].status",
