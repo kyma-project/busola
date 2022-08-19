@@ -44,11 +44,16 @@ ResourceDetails.propTypes = {
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
   resourceName: PropTypes.string,
+  resourceTitle: PropTypes.string,
   namespace: PropTypes.string,
   headerActions: PropTypes.node,
   resourceHeaderActions: PropTypes.arrayOf(PropTypes.func),
   readOnly: PropTypes.bool,
   breadcrumbs: PropTypes.array,
+  editActionLabel: PropTypes.string,
+  windowTitle: PropTypes.string,
+  resourceGraphConfig: PropTypes.object,
+  resourceSchema: PropTypes.object,
 };
 
 ResourceDetails.defaultProps = {
@@ -158,7 +163,7 @@ function Resource({
   const { isProtected, protectedResourceWarning } = useProtectedResources();
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
-    resourceName: resourceTitle,
+    resourceTitle,
     resourceType,
     navigateToListAfterDelete: true,
   });

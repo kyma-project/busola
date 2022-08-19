@@ -28,48 +28,21 @@ describe('ListActions', () => {
     });
   });
 
-  it('Renders only dropdown actions', () => {
-    const entry = { id: '123' };
+  it('Renders more actions dropdown', () => {
     const actions = [
       { name: 'action1', handler: jest.fn() },
       { name: 'action2', handler: jest.fn() },
+      { name: 'action3', handler: jest.fn() },
+      { name: 'action4', handler: jest.fn() },
     ];
     const { queryByText, queryByLabelText } = render(
-      <ListActions actions={actions} entry={entry} standaloneItems={0} />,
-    );
-
-    const moreActionsButton = queryByLabelText('more-actions');
-    expect(moreActionsButton).toBeInTheDocument();
-
-    actions.forEach(action => {
-      expect(queryByText(action.name)).not.toBeInTheDocument();
-    });
-
-    moreActionsButton.click();
-
-    actions.forEach(action => {
-      const actionButton = queryByText(action.name);
-      expect(actionButton).toBeTruthy();
-
-      actionButton.click();
-
-      expect(action.handler).toHaveBeenCalledWith(entry);
-    });
-  });
-
-  it('Renders mixed actions', () => {
-    const actions = [
-      { name: 'action1', handler: jest.fn() },
-      { name: 'action2', handler: jest.fn() },
-    ];
-    const { queryByText, queryByLabelText } = render(
-      <ListActions actions={actions} entry={{}} standaloneItems={1} />,
+      <ListActions actions={actions} entry={{}} />,
     );
 
     const moreActionsButton = queryByLabelText('more-actions');
     expect(moreActionsButton).toBeInTheDocument();
     expect(queryByText(actions[0].name)).toBeInTheDocument();
-    expect(queryByText(actions[1].name)).not.toBeInTheDocument();
+    expect(queryByText(actions[3].name)).not.toBeInTheDocument();
 
     moreActionsButton.click();
 
@@ -87,21 +60,6 @@ describe('ListActions', () => {
     expect(actionButton.querySelector('i')).toHaveClass('sap-icon--edit');
 
     expect(queryByText(actions[0].name)).not.toBeInTheDocument();
-  });
-
-  it("Doesn't render icon for dropdown button", () => {
-    const actions = [{ name: 'action', handler: jest.fn(), icon: 'edit' }];
-    const { getByLabelText, queryByText, queryByLabelText } = render(
-      <ListActions actions={actions} entry={{}} standaloneItems={0} />,
-    );
-
-    getByLabelText('more-actions').click();
-
-    const actionButton = queryByText(actions[0].name);
-    expect(actionButton).toBeInTheDocument();
-    expect(actionButton.querySelector('i')).not.toBeInTheDocument();
-
-    expect(queryByLabelText(actions[0].name)).not.toBeInTheDocument();
   });
 
   it('Renders predefined icons', () => {

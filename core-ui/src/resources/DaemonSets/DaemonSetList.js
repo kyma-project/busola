@@ -51,7 +51,7 @@ export function DaemonSetList(props) {
   return (
     <ResourcesList
       customColumns={customColumns}
-      resourceName={t('daemon-sets.title')}
+      resourceTitle={t('daemon-sets.title')}
       description={description}
       customListActions={[restartAction]}
       createResourceForm={DaemonSetCreate}

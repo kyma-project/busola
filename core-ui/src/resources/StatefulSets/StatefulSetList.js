@@ -37,7 +37,7 @@ export function StatefulSetList(props) {
 
   return (
     <ResourcesList
-      resourceName={t('stateful-sets.title')}
+      resourceTitle={t('stateful-sets.title')}
       customColumns={customColumns}
       description={description}
       customListActions={[restartAction]}

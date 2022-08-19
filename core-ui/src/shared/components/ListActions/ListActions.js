@@ -51,15 +51,15 @@ const StandaloneAction = ({ action, entry, compact }) => {
   );
 };
 
-const ListActions = ({ actions, entry, standaloneItems = 3, compact }) => {
+const ListActions = ({ actions, entry, compact }) => {
   if (!actions.length) {
     return null;
   }
 
-  const listItems = actions.slice(standaloneItems, actions.length);
+  const listItems = actions.slice(3, actions.length);
   return (
     <div className="list-actions">
-      {actions.slice(0, standaloneItems).map(a => (
+      {actions.slice(0, 3).map(a => (
         <StandaloneAction
           key={a.name}
           action={a}
@@ -97,7 +97,6 @@ const ListActions = ({ actions, entry, standaloneItems = 3, compact }) => {
 ListActions.propTypes = {
   actions: CustomPropTypes.listActions,
   entry: PropTypes.any.isRequired,
-  standaloneItems: PropTypes.number,
   compact: PropTypes.bool,
 };
 

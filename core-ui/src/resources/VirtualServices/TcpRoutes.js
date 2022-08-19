@@ -33,7 +33,9 @@ function L4MatchAttributes({ matches }) {
       rowRenderer={match => [<L4MatchAttributesItem match={match} />]}
       entries={matches}
       showHeader={false}
-      showSearchField={false}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 }

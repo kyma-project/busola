@@ -38,11 +38,13 @@ export function OtherReleaseVersions({ releaseSecret, secrets }) {
   return (
     <GenericList
       title={t('helm-releases.headers.other-release-versions')}
-      textSearchProperties={['metadata.name']}
       entries={secrets}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       pagination={{ autoHide: true }}
+      searchSettings={{
+        textSearchProperties: ['metadata.name'],
+      }}
     />
   );
 }

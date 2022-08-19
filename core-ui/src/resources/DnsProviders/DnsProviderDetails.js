@@ -27,7 +27,7 @@ const Domains = resource => {
         rowRenderer={rowRenderer}
         testid="daemon-set-images"
         showHeader={false}
-        disableMargin={true}
+        className="fd-margin--xs"
       />
 
       <GenericList
@@ -37,7 +37,7 @@ const Domains = resource => {
         rowRenderer={rowRenderer}
         testid="domains-exclude"
         showHeader={false}
-        disableMargin={true}
+        className="fd-margin--xs"
       />
     </div>
   );

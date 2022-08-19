@@ -101,7 +101,9 @@ export function GenericRoleBindingList({ descriptionKey, ...params }) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      textSearchProperties={textSearchProperties}
+      searchSettings={{
+        textSearchProperties,
+      }}
       {...params}
     />
   );

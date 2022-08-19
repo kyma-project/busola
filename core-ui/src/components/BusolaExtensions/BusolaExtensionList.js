@@ -42,7 +42,6 @@ export function BusolaPluginList(props) {
             `/details/${extension.metadata.namespace}/${extension.metadata.name}`,
           );
       }}
-      allowSlashShortcut
     />
   );
 }

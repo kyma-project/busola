@@ -59,10 +59,12 @@ export function GatewayServers(gateway) {
     <GenericList
       key="conditions"
       title={t('gateways.servers.title')}
-      showSearchField={false}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={gateway.spec.servers || []}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 }
