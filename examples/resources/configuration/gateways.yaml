@@ -61,21 +61,38 @@ data:
       {
         "widget": "FormGroup",
         "simple": true,
-        "path": "spec.servers[].port"
+        "path": "spec.servers[].port",
+        "children": [
+          { "path": "number", "simple": true},
+          { "path": "name", "widget": "Name", "showHelp": false, "simple": true},
+          {
+            "path": "protocol", 
+            "simple": true,
+            "enum": [
+              "HTTP",
+              "HTTP2",
+              "GRPC",
+              "GRPC-WEB",
+              "MONGO",
+              "REDIS",
+              "MYSQL",
+              "TCP"
+            ],
+          },
+          { "path": "targetPort", "simple": true},
+        ]
       },
-      { "path": "spec.servers[].port.number", "simple": "true"},
-      { "path": "spec.servers[].port.name", "widget": "Name", "showHelp": false, "simple": "true"},
-      { "path": "spec.servers[].port.protocol", "simple": "true"},
-      { "path": "spec.servers[].port.targetPort", "simple": "true"},
       {
         "widget": "FormGroup",
         "simple": true,
-        "path": "spec.servers[].tls"
+        "path": "spec.servers[].tls",
+        "children": [
+          { "path": "httpsRedirect", "simple": true, "visibility": "$boolean(data.spec.servers.port.protocol = 'HTTP')" },
+        ]
       },
-        {"path": "spec.servers[].tls.httpsRedirect", "simple": "true"},
       {
         "widget": "SimpleList",
-        "path": "spec.servers[].hosts", "simple": "true"
+        "path": "spec.servers[].hosts", "simple": true
       }
     ]
   general: |-
