@@ -28,8 +28,8 @@ export function NumberRenderer({
           data: { value },
         });
       }}
-      label={tFromStoreKeys(storeKeys)}
-      data-testid={tFromStoreKeys(storeKeys)}
+      label={tFromStoreKeys(storeKeys, schema)}
+      data-testid={storeKeys.join('.')}
       input={Inputs.Number}
       compact={compact}
       required={required}

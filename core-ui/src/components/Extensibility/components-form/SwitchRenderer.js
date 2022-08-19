@@ -28,8 +28,8 @@ export function SwitchRenderer({
           data: { value },
         });
       }}
-      label={tFromStoreKeys(storeKeys)}
-      data-testid={tFromStoreKeys(storeKeys)}
+      label={tFromStoreKeys(storeKeys, schema)}
+      data-testid={storeKeys.join('.')}
       input={Inputs.Switch}
       compact={compact}
     />

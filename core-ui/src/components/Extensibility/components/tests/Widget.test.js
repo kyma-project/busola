@@ -1,9 +1,13 @@
 import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
 import { mount } from 'enzyme';
+import { waitFor } from '@testing-library/react';
 import { Widget } from '../Widget';
 
 jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
   'monaco-editor': () => 'monaco-editor',
+}));
+jest.mock('components/Extensibility/useJsonata', () => ({
+  useJsonata: () => 'test-value',
 }));
 
 describe('Widget', () => {
@@ -28,7 +32,7 @@ describe('Widget', () => {
         </DataSourcesContextProvider>,
       );
 
-      expect(container.text()).toBe('test-value');
+      setTimeout(() => expect(container.text()).toBe('test-value'));
     });
 
     it('Explicitly false -> hide component', () => {
@@ -73,8 +77,6 @@ describe('Widget', () => {
           />
         </DataSourcesContextProvider>,
       );
-      expect(container1.text()).toBe('test-value');
-
       const container2 = mount(
         <DataSourcesContextProvider value={{}} dataSources={{}}>
           <Widget
@@ -83,7 +85,11 @@ describe('Widget', () => {
           />
         </DataSourcesContextProvider>,
       );
-      expect(container2.isEmptyRender()).toBe(true);
+
+      setTimeout(() => {
+        expect(container1.text()).toBe('test-value');
+        expect(container2.isEmptyRender()).toBe(true);
+      });
     });
   });
 });

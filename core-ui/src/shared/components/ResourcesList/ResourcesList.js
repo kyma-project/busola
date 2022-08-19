@@ -94,7 +94,14 @@ export function ResourcesList(props) {
           description={props.description}
         />
       )}
-      <Resources {...props} />
+      {props.resources ? (
+        <ResourceListRenderer
+          resources={(props.resources || []).filter(props.filterFn)}
+          {...props}
+        />
+      ) : (
+        <Resources {...props} />
+      )}
     </YamlEditorProvider>
   );
 }
