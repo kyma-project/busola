@@ -35,13 +35,15 @@ export function CustomResourceDefinitionList(props) {
 
   return (
     <ResourcesList
-      textSearchProperties={['spec.names.categories']}
       description={description}
       customColumns={customColumns}
       createResourceForm={
         props.hideCreateOption ? null : CustomResourceDefinitionCreate
       }
       {...props}
+      searchSettings={{
+        textSearchProperties: ['spec.names.categories'],
+      }}
     />
   );
 }

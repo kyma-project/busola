@@ -14,7 +14,7 @@ export const usePrepareListProps = (resourceType, resourceI18Key) => {
     readOnly: queryParams.get('readOnly') === 'true',
     resourceUrl,
     resourceType: resourceType,
-    resourceName: t(resourceI18Key || ''),
+    resourceTitle: t(resourceI18Key || ''),
     namespace: routerParams.namespaceId,
     i18n,
   };

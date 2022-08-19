@@ -29,7 +29,9 @@ export function RouteDestinations({
         ...rowRenderer(route),
       ]}
       entries={routes}
-      showSearchField={false}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 }

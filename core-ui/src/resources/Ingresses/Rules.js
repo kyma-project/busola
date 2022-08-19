@@ -96,7 +96,6 @@ export const Rules = ({ rules }) => {
             className="fd-margin-top--none"
             key={`rules${i}`}
             title={t('ingresses.labels.paths')}
-            showSearchField={false}
             headerRenderer={() => [
               t('ingresses.labels.path'),
               t('ingresses.labels.path-type'),
@@ -108,6 +107,9 @@ export const Rules = ({ rules }) => {
               <Backend backend={path.backend} services={services} />,
             ]}
             entries={rule?.http?.paths}
+            searchSettings={{
+              showSearchField: false,
+            }}
           />
         </LayoutPanel>
       ))}
