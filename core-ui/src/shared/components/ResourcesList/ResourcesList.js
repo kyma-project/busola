@@ -436,13 +436,13 @@ export function ResourceListRenderer({
         currentlyEditedResourceUID={currentlyEditedResourceUID}
         sortBy={sortBy}
         searchSettings={{
+          ...searchSettings,
           textSearchProperties: [
             'metadata.name',
             'metadata.namespace',
             'metadata.labels',
             ...(searchSettings?.textSearchProperties || []),
           ],
-          ...searchSettings,
         }}
       />
     </>
