@@ -1,27 +1,12 @@
 import pluralize from 'pluralize';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
 import { sortBy, useGetTranslation } from '../helpers';
 import { getChildrenInfo } from './helpers';
 
-function extractResourceData({ dataSource, originalResource }) {
-  try {
-    let { group, kind, version, namespace } = dataSource.resource;
-    namespace =
-      typeof namespace === 'undefined'
-        ? originalResource.metadata.namespace
-        : namespace;
-    const namespacePart = namespace ? `/namespaces/${namespace}` : '';
-    const apiGroup = group ? `apis/${group}` : 'api';
-    const resourceType = pluralize(kind).toLowerCase();
-    const resourceUrl = `/${apiGroup}/${version}${namespacePart}/${resourceType}`;
-
-    return { kind, resourceType, resourceUrl, namespace };
-  } catch (error) {
-    return { error };
-  }
-}
+import { Widget } from './Widget';
 
 export function ResourceList({
   value,
@@ -31,22 +16,16 @@ export function ResourceList({
   schema,
   ...props
 }) {
-  const {
-    kind,
-    resourceType,
-    resourceUrl,
-    namespace,
-    error,
-  } = extractResourceData({ dataSource, originalResource });
 
-  const { t: tExt } = useGetTranslation();
-
-  if (error) {
-    throw Error('Error in ResourceList: ' + error.message);
-  }
+  const kind = (value?.kind ?? '').replace(/List$/, '');
+  const pluralKind = pluralize(kind || '')?.toLowerCase();
+  const namespace = value?.namespace;
+  const namespacePart = namespace ? `/namespaces/${namespace}` : '';
+  const api = value?.apiVersion === 'v1' ? 'api' : 'apis';
+  const resourceUrl = `/${api}/${value?.apiVersion}${namespacePart}/${pluralKind}`;
 
   const PredefinedRenderer = resources.find(
-    r => r.resourceType.toLowerCase() === resourceType,
+    r => r.resourceType.toLowerCase() === pluralKind,
   );
 
   const ListRenderer = PredefinedRenderer
@@ -59,16 +38,16 @@ export function ResourceList({
   );
 
   // make sure "kind" is present on resources
-  if (Array.isArray(value.data)) {
-    value.data = value.data.map(d => ({ ...d, kind }));
+  if (Array.isArray(value?.items)) {
+    value.items = value.items.map(d => ({ ...d, kind }));
   }
 
   return (
     <ListRenderer
       skipDataLoading={true}
-      loading={value.loading}
-      error={value.error}
-      resources={value.data}
+      loading={value?.loading}
+      error={value?.error}
+      resources={value?.items}
       resourceUrl={resourceUrl}
       resourceType={prettifyKind(kind)}
       resourceName={prettifyKind(kind)}

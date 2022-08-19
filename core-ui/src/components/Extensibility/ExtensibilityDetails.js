@@ -14,6 +14,7 @@ import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useGetSchema } from 'hooks/useGetSchema';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
+  // const { extensibilitySchemas } = useMicrofrontendContext();
   const { t, widgetT, exists } = useGetTranslation();
   const { urlPath, resource } = resMetaData?.general ?? {};
   const { schema } = useGetSchema({
@@ -21,6 +22,13 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   });
 
   const detailsProps = usePrepareDetailsProps(urlPath, 'name');
+
+  /* TODO re-enable validation
+  const ajv = new Ajv();
+  if (!ajv.validate(extensibilitySchemas?.details, resMetaData?.details)) {
+    throwConfigError(t('extensibility.configuration-error'), { error: ajv.errors });
+  }
+  */
 
   const resourceName = resMetaData?.general?.name;
   const resourceTitle = exists('name')

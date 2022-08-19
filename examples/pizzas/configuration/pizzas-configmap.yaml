@@ -12,19 +12,24 @@ data:
     {
       "header": [
         {
-          "path": "spec.sauce"
+          "name": "Sauce",
+          "source": "spec.sauce"
         },
         {
-          "path": "spec.ownerReferences",
+          "name": "Controlled By",
+          "source": "spec.ownerReferences",
           "widget": "ControlledBy",
-          "kindOnly": true,
           "placeholder": "---"
         },
-        { "path": "spec.toppings", "formula": "$join(data.name, ', ')" }, 
         {
-          "path": "spec.ownerReferences[0]",
+          "name": "Toppings",
+          "source": "$join(spec.toppings.name, ', ')"
+        },
+        {
+          "name": "Owner References",
+          "source": "spec.ownerReferences[0]",
           "widget": "ResourceLink",
-          "linkText": "otherTranslations.linkText",
+          "linkText": "Go to {{data.kind}} {{data.name}}.",
           "resource": {
             "name": "data.name",
             "namespace": "root.metadata.namespace",
@@ -32,73 +37,74 @@ data:
           }
          }
       ],
-    "body": [
+      "body": [
         {
           "widget": "Columns",
           "children": [
             {
-            "name": "Summary",
-            "widget": "Panel",
-            "children": [
-              {
-                "name": "State",
-                "path": "status.messages[-1:].state",
-                "widget": "Badge"
-              },
-              {
-                "name": "Message",
-                "path": "status.messages[-1:].message"
-              },
-              { "path": "spec.toppings", "formula": "$join(data.name, ', ')" }, 
-              { "path": "spec.toppings", "formula": "$sum(data.price)", "name": "Toppings price" }
-            ]
-          },
+              "name": "Summary",
+              "widget": "Panel",
+              "children": [
+                {
+                  "name": "State",
+                  "source": "status.messages[-1].state",
+                  "widget": "Badge"
+                },
+                {
+                  "name": "Message",
+                  "source": "status.messages[-1].message"
+                },
+                { "name": "Name", "source": "$join(spec.toppings.name, ', ')" },
+                { "name": "Toppings price", "source": "$sum(spec.toppings.price)" }
+              ]
+            },
           {
-          "path": "spec.toppings",
-          "widget": "Table",
-          "collapsible": [{ "path": "quantity" }],
-          "children": [
-            { "path": "name", "sort": true },
-            {
-              "path": "price",
-              "sort": { "default": true, "compareFunction": "$second -$first" }
-            }
-          ]
+            "name": "Toppings",
+            "source": "spec.toppings",
+            "widget": "Table",
+            "collapsible": [{"name": "Quantity", "source": "$item.quantity" }],
+            "children": [
+              { "name": "Name", "source": "$item.name", "sort": true },
+              {
+                "name": "Price ($)", "source": "$item.price"
+                "sort": { "default": true, "compareFunction": "$second -$first" }
+              }
+            ]
         },
         {
+          "name": "Pizza's recipe secret",
           "widget": "ResourceList",
-          "path": "$secretRecipe",
+          "source": "$secretRecipe()",
           "sort": [
             {
               "path": "type",
               "default": true,
             },
           ],
-          "name": "Pizza's recipe secret"
         },
-    {
-      "name": "columns",
-      "widget": "Columns",
-      "children": [
         {
-          "name": "Comments",
-          "widget": "Panel",
+          "name": "columns",
+          "widget": "Columns",
           "children": [
             {
-            "name": "Comments",
-            "widget": "JoinedArray",
-            "path": "spec.comments",
-            "separator": " || "
+              "name": "Comments",
+              "widget": "Panel",
+              "children": [
+                {
+                  "name": "Comments",
+                  "widget": "JoinedArray",
+                  "source": "spec.comments",
+                  "separator": " || "
+                }
+              ]
+            },
+            {
+              "name": "Description",
+              "widget": "Panel",
+              "children": [{ "source": "spec.description" }]
             }
           ]
-        },
-        {
-          "name": "spec.description",
-          "widget": "Panel",
-          "children": [{ "path": "spec.description" }]
         }
-      ]
-    }
       ]
     }
   form: |-
@@ -117,7 +123,7 @@ data:
           "kind": "Secret",
           "scope": "namespace",
           "namespace": "pizzas",
-          "version": "v1",
+          "version": "v1"
         },
         "simple": true
       },
@@ -132,17 +138,17 @@ data:
     ]
   list: |-
     [
-      { "path": "spec.description","sort": { "compareFunction": "$compareStrings($first, $second)" }  },
-      { "name": "State", "path": "status.messages[-1:].state", "widget": "Badge" },
-      { "path": "spec.toppings", "formula": "$sum(data.price)", "name": "Toppings price", "sort":{"default":true} }
+      { "name": "Description", "source", "source": "spec.description","sort": { "compareFunction": "$compareStrings($first, $second)" }  },
+      { "name": "State", "source": "status.messages[-1:].state", "widget": "Badge" },
+      { "name": "Toppings price", "source": "$sum(spec.toppings.price)", "sort":{"default":true} }
     ]
   dataSources: |-
     {
-      "secretRecipe":{
+      "secretRecipe": {
         "resource": {
           "kind": "Secret",
           "version": "v1",
-          "namespace": "pizzas",
+          "namespace": "pizzas"
         },
         "filter": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"
       }
@@ -159,19 +165,3 @@ data:
       "scope": "namespace",
       "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
     }
-  translations: |
-    en:
-      spec.description: Description
-      spec.comments: Comments
-      spec.state: State
-      spec.sauce: Sauce
-      spec.toppings: Toppings
-      spec.recipeSecret: Recipe's secret
-      spec.toppings.name: Name
-      spec.toppings.price: Price ($)
-      spec.toppings.quantity: Quantity
-      spec.ownerReferences: Owner References
-      otherTranslations.linkText: Go to {{data.kind}} {{data.name}}.
-      spec.ownerReferences.apiVersion: API Version
-      spec.ownerReferences.kind: Kind
-      spec.ownerReferences.name: Name

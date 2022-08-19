@@ -12,31 +12,27 @@
       "description": "Configuration of fields/data that should be displayed in body section of resource details page.",
       "type": "array",
       "items": {
-        "$ref": "#/definitions/component"
+        "$ref": "#/$defs/component"
       }
     },
     "header": {
       "description": "Configuration of fields/data that should be displayed in header section of resource details page.",
       "type": "array",
       "items": {
-        "$ref": "#/definitions/component"
+        "$ref": "#/$defs/component"
       }
     }
   },
-  "definitions": {
+  "$defs": {
     "component": {
       "type": "object",
-      "anyOf": [
-        {"required": ["name"]},
-        {"required": ["path"]}
-      ],
       "properties": {
         "name": {
           "description": "Name of component used for dispaying translations",
           "type": "string"
         },
-        "path": {
-          "description": "The path to the resource variable",
+        "source": {
+          "description": "Jsonata script used to fetch the data",
           "examples": [
             "status.phase",
             "metadata.labels"
@@ -52,7 +48,7 @@
           "type": "string"
         },
         "children": {
-          "$ref": "#/definitions/list"
+          "$ref": "#/$defs/list"
         }
       }
     },
@@ -61,11 +57,11 @@
         {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/component"
+            "$ref": "#/$defs/component"
           }
         },
         {
-          "$ref": "#/definitions/component"
+          "$ref": "#/$defs/component"
         }
       ]
     }

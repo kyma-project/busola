@@ -9,7 +9,7 @@ export function CollapsibleRenderer({ schema, storeKeys, widgets, ...props }) {
   const { tFromStoreKeys } = useGetTranslation();
 
   return (
-    <ResourceForm.CollapsibleSection title={tFromStoreKeys(storeKeys)}>
+    <ResourceForm.CollapsibleSection title={tFromStoreKeys(storeKeys, schema)}>
       <WidgetRenderer
         {...props}
         storeKeys={storeKeys}

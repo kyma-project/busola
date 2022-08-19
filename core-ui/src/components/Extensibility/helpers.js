@@ -5,10 +5,11 @@ import jsonata from 'jsonata';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { OrderedMap } from 'immutable';
 import { Link } from 'shared/components/Link/Link';
+import { last } from 'lodash';
+import { prettifyNamePlural } from 'shared/utils/helpers';
 
 export const TranslationBundleContext = createContext({
   translationBundle: 'extensibility',
-  defaultResourcePlaceholder: '',
 });
 
 export const getValue = (resource, path) => {
@@ -36,25 +37,39 @@ export const useGetTranslation = path => {
   const { translationBundle } = useContext(TranslationBundleContext);
   const { t, i18n } = useTranslation([translationBundle]);
   //doesn't always work, add `translationBundle.` at the beginning of a path
+
+  const exists = path => i18n.exists(`${translationBundle}::${path}`);
+
+  const widgetT = (def, options = {}) => {
+    let value = '';
+    if (def.name) {
+      value = def.name;
+    } else if (def.path) {
+      const path = Array.isArray(def.path) ? def.path.join('.') : def.path;
+      if (exists(path)) {
+        value = path;
+      } else {
+        value = prettifyNamePlural(null, last(def.path));
+      }
+    }
+    return t(`${translationBundle}::${value}`, {
+      ...options,
+      defaultValue: value,
+    });
+  };
+
+  const tFromStoreKeys = (storeKeys, schema, options) => {
+    return widgetT({
+      ...schema.toJS(),
+      path: storeKeys.toArray().filter(el => typeof el === 'string'),
+    });
+  };
+
   return {
     t: (path, ...props) => t(`${translationBundle}::${path}`, ...props) || path,
-    tFromStoreKeys: (storeKeys, ...props) => {
-      const path = storeKeys
-        .toArray()
-        .filter(el => typeof el === 'string') // get rid of numbers i.e. spec.ports[2].protocol
-        .join('.');
-
-      return t(`${translationBundle}::${path}`, ...props) || path;
-    },
-    widgetT: (def, options = {}) => {
-      const items = Array.isArray(def) ? def : [def];
-      const path = items.map(item => item.name || item.path).join('.');
-      return t(`${translationBundle}::${path}`, {
-        ...options,
-        defaultValue: path,
-      });
-    },
-    exists: path => i18n.exists(`${translationBundle}::${path}`),
+    tFromStoreKeys,
+    widgetT,
+    exists,
     i18n,
   };
 };
