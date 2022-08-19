@@ -12,10 +12,9 @@ data:
     {
       "header": [
         {
-          "path": "status.conditions[?(@.type==\"Ready\")].message",
+          "source": "status.conditions[?(@.type==\"Ready\")].message",
           "type": "string",
           "name": "Status",
-          "isSelected": false,
           "widget": "Badge"
         }
       ],
@@ -25,70 +24,64 @@ data:
           "widget": "Panel",
           "children": [
             {
-              "path": "spec.commonName",
-              "type": "string",
-              "name": "commonName"
+              "source": "spec.commonName",
+              "name": "Common name"
             },
             {
-              "path": "spec.duration",
-              "type": "string",
-              "name": "duration"
+              "source": "spec.duration",
+              "name": "Duration"
             },
             {
-              "path": "spec.encodeUsagesInRequest",
-              "type": "boolean",
+              "source": "spec.encodeUsagesInRequest",
               "name": "encodeUsagesInRequest"
             },
             {
-              "path": "spec.isCA",
-              "type": "boolean",
-              "name": "isCA"
+              "source": "spec.isCA",
+              "name": "Is CA"
             },
             {
-              "path": "spec.renewBefore",
+              "source": "spec.renewBefore",
               "type": "string",
-              "name": "renewBefore"
+              "name": "Renew before"
             },
             {
-              "path": "spec.revisionHistoryLimit",
-              "type": "integer",
-              "name": "revisionHistoryLimit"
+              "source": "spec.revisionHistoryLimit",
+              "name": "Revision History Limit"
             },
             {
-              "path": "spec.secretName",
-              "type": "string",
-              "name": "secretName"
+              "source": "spec.secretName",
+              "name": "Secret name"
             },
             {
-              "path": "status.conditions[?(@.type==\"Ready\")].status",
+              "source": "status.conditions[?(@.type==\"Ready\")].status",
               "type": "string",
               "name": "Ready"
             },
             {
-              "path": "spec.secretName",
+              "source": "spec.secretName",
               "type": "string",
               "name": "Secret"
             },
             {
-              "path": "spec.issuerRef.name",
+              "source": "spec.issuerRef.name",
               "type": "string",
               "name": "Issuer"
             },
             {
-              "path": "status.conditions[?(@.type==\"Ready\")].message",
+              "source": "status.conditions[?(@.type==\"Ready\")].message",
               "type": "string",
               "name": "Status",
               "widget": "Badge"
             },
             {
-              "path": "metadata.creationTimestamp",
+              "source": "metadata.creationTimestamp",
               "type": "date",
               "name": "Age"
             }
           ]
         },
         {
-          "path": "spec",
+          "source": "spec",
           "widget": "CodeViewer"
         }
       ]
@@ -103,6 +96,7 @@ data:
     - path: spec.duration
     - path: spec.encodeUsagesInRequest
     - path: spec.isCA
+      name: Is CA
     - path: spec.renewBefore
     - path: spec.revisionHistoryLimit
     - path: spec.secretName
@@ -113,27 +107,27 @@ data:
   list: |-
     [
       {
-        "path": "spec.commonName",
-        "type": "string"
+        "source": "spec.commonName",
+        "name": "Common name"
       },
       {
-        "path": "spec.issuerRef",
+        "source": "spec.issuerRef",
         "widget": "ControlledBy",
         "kind": "Issuer",
+        "name": "Issuer ref"
       },
       {
-        "path": "status.expirationDate",
-        "type": "string"
+        "source": "status.expirationDate",
+        "name": "Expiration date"
       },
       {
         "highlights": {
           "positive": ["Ready"],
         },
-        "name": "status",
-        "path": "status.conditions[?(@.type==\"Ready\")].message",
-        "type": "string",
+        "name": "Status",
+        "source": "status.conditions[?(@.type==\"Ready\")].message",
         "widget": "Badge"
-      },
+      }
     ]
   general: |-
     {
@@ -144,27 +138,4 @@ data:
       },
       "urlPath": "example-certificates",
       "scope": "namespace"
-    }
-  translations: |-
-    {
-      "en": {
-        "name": "Certificates",
-        "metadata.annotations": "Annotations",
-        "metadata.labels": "Labels",
-        "category": "Custom Resources",
-        "metadata.creationTimestamp": "Created at",
-        "spec.commonName": "Common name",
-        "spec.issuerRef": "Issuer",
-        "spec.issuerRef.group": "Group",
-        "spec.issuerRef.kind": "Kind",
-        "spec.issuerRef.name": "Name",
-        "status": "Status",
-        "status.expirationDate": "Expiration date",
-        "spec.duration": "Duration",
-        "spec.encodeUsagesInRequest": "Encode usages in request",
-        "spec.isCA": "Is CA",
-        "spec.renewBefore": "Renew before",
-        "spec.revisionHistoryLimit": "Revision history limit",
-        "spec.secretName": "Secret name",
-      }
     }
