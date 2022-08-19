@@ -31,10 +31,7 @@ const handleTableValue = (value, t) => {
 export function Table({ value, structure, schema, disableMargin, ...props }) {
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
-  const coreHeaders = (structure.children || []).map(column => {
-    const path = `${structure.path}.${column.path}`;
-    return tExt(path);
-  });
+  const coreHeaders = (structure.children || []).map(({ name }) => tExt(name));
   const headerRenderer = () =>
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
 

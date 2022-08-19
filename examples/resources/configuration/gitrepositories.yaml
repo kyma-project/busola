@@ -11,11 +11,10 @@ data:
   details: |-
     {
       "header": [{
-        "formula": "$exists(data) ? data : 'none'",
+        "source": "$exists(spec.auth.type) ? spec.auth.type : 'none'",
         "highlights": {
           "informative": ["basic", "key", "none"],
         },
-        "path": "spec.auth.type",
         "widget": "Badge"
       }],
       "body": []
@@ -36,31 +35,31 @@ data:
         "simple": "true"
       },
       {
-        "kind": "Secret",
-        "namespace": "pizzas",
         "path": "spec.auth.secretName",
-        "scope": "namespace",
-        "version": "v1",
-        "widget": "Resource"
-      },
-
+        "widget": "Resource",
+        "resource": {
+          "kind": "Secret",
+          "scope": "namespace",
+          "namespace": "pizzas",
+          "version": "v1"
+        }
+      }
     ]
   list: |-
     [
       {
-        "path": "spec.url",
+        "source": "spec.url",
         "type": "string"
       },
       {
-        "formula": "$exists(data) ? data : 'none'",
+        "source": "$exists(spec.auth.type) ? spec.auth.type : 'none'",
         "highlights": {
           "informative": ["basic", "key", "none"],
         },
-        "path": "spec.auth.type",
         "widget": "Badge"
       },
       {
-        "path": "spec.auth.secretName",
+        "source": "spec.auth.secretName",
         "type": "string"
       }
     ]
@@ -73,6 +72,16 @@ data:
       },
       "urlPath": "example-gitrepositories",
       "scope": "namespace",
+    }
+  dataSources: |-
+    {
+      "secretRecipe": {
+        "resource": {
+          "kind": "Secret",
+          "version": "v1",
+          "namespace": "pizzas"
+        }
+      }
     }
   translations: |-
     {
