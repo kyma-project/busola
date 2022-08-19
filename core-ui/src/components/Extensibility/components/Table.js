@@ -28,7 +28,14 @@ const handleTableValue = (value, t) => {
   }
 };
 
-export function Table({ value, structure, disableMargin, schema, ...props }) {
+export function Table({
+  value,
+  structure,
+  disableMargin,
+  schema,
+  originalResource,
+  ...props
+}) {
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
 
@@ -70,15 +77,13 @@ export function Table({ value, structure, disableMargin, schema, ...props }) {
       className="extensibility-table"
       showSearchSuggestion={false}
       title={tExt(structure.name, {
-        defaultValue: tExt(structure.path, {
-          defaultValue: structure.name,
-        }),
+        defaultValue: structure.name || structure.source,
       })}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       disableMargin={disableMargin}
       {...handleTableValue(value, t)}
-      sortBy={() => sortBy(sortOptions, tExt)}
+      sortBy={() => sortBy(sortOptions, tExt, {}, originalResource)}
     />
   );
 }

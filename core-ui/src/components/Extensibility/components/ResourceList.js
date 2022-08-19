@@ -6,8 +6,6 @@ import { resources } from 'resources';
 import { sortBy, useGetTranslation } from '../helpers';
 import { getChildrenInfo } from './helpers';
 
-import { Widget } from './Widget';
-
 export function ResourceList({
   value,
   structure,
@@ -16,6 +14,7 @@ export function ResourceList({
   schema,
   ...props
 }) {
+  const { t } = useGetTranslation();
 
   const kind = (value?.kind ?? '').replace(/List$/, '');
   const pluralKind = pluralize(kind || '')?.toLowerCase();
@@ -61,7 +60,7 @@ export function ResourceList({
       {...props}
       columns={children}
       sortBy={defaultSortOptions =>
-        sortBy(sortOptions, tExt, defaultSort ? defaultSortOptions : {})
+        sortBy(sortOptions, t, defaultSort ? defaultSortOptions : {})
       }
     />
   );

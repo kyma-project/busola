@@ -184,11 +184,14 @@ export const applySortFormula = (formula, t) => {
   }
 };
 
-export const getSortingFunction = child => {
-  const { path, formula } = child;
+export const getSortingFunction = (formula, originalResource) => {
   return (a, b) => {
-    const aValue = getValue(a, path);
-    const bValue = getValue(b, path);
+    const aValue = jsonata(formula).evaluate(originalResource || a, {
+      item: a,
+    });
+    const bValue = jsonata(formula).evaluate(originalResource || b, {
+      item: b,
+    });
 
     switch (typeof aValue) {
       case 'number':
@@ -205,47 +208,47 @@ export const getSortingFunction = child => {
         return aValue.localeCompare(bValue);
       }
       default:
-        if (!formula) {
-          const parsedValueA = JSON.parse(aValue);
-          const parsedValueB = JSON.parse(bValue);
-          return parsedValueA.localeCompare(parsedValueB);
-        }
-        const aFormula = applyFormula(aValue, formula);
-        const bFormula = applyFormula(bValue, formula);
-
-        return aFormula - bFormula;
     }
   };
 };
 
 export const sortBy = (
-  sortChildren,
+  sortOptions,
   t,
   defaultSortOptions = {},
-  pathPrefix = '',
+  originalResource = null,
 ) => {
   let defaultSort = {};
-  const sortingOptions = sortChildren.reduce((acc, child) => {
-    const sortName = child.name || t(`${pathPrefix}${child.path}`);
-    let sortFn = getSortingFunction(child);
+  const sortingOptions = (sortOptions || []).reduce(
+    (acc, { name, source, sort }) => {
+      const sortName = t(name, {
+        defaultValue: name || source,
+      });
+      let sortFn = getSortingFunction(source, originalResource);
 
-    if (child.sort.compareFunction) {
-      sortFn = (a, b) => {
-        const aValue = getValue(a, child.path);
-        const bValue = getValue(b, child.path);
-        const sortFormula = applySortFormula(child.sort.compareFunction, t);
-        return sortFormula(aValue, bValue);
-      };
-    }
+      if (sort.compareFunction) {
+        sortFn = (a, b) => {
+          const aValue = jsonata(source).evaluate(originalResource || a, {
+            item: a,
+          });
+          const bValue = jsonata(source).evaluate(originalResource || b, {
+            item: b,
+          });
+          const sortFormula = applySortFormula(sort.compareFunction, t);
+          return sortFormula(aValue, bValue);
+        };
+      }
 
-    if (child.sort.default) {
-      defaultSort[sortName] = sortFn;
-      return { ...acc };
-    } else {
-      acc[sortName] = sortFn;
-      return { ...acc };
-    }
-  }, {});
+      if (sort.default) {
+        defaultSort[sortName] = sortFn;
+        return { ...acc };
+      } else {
+        acc[sortName] = sortFn;
+        return { ...acc };
+      }
+    },
+    {},
+  );
 
   return { ...defaultSort, ...defaultSortOptions, ...sortingOptions };
 };
