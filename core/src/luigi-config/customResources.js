@@ -21,7 +21,8 @@ import {
   getCurrentConfig,
   getCurrentContextNamespace,
 } from './cluster-management/cluster-management';
-import { destinationRules } from './customResources/destinationRules';
+//Luigi has to have defined the exact path with 'index'
+import { busolaOwnExtConfigs } from './customResources/index';
 
 let customResources = {};
 
@@ -111,8 +112,7 @@ export async function getCustomResources(authData) {
   if (customResources[clusterName]) {
     return customResources[clusterName];
   }
-
-  customResources[clusterName] = [destinationRules];
+  customResources[clusterName] = busolaOwnExtConfigs;
 
   if (features.EXTENSIBILITY?.isEnabled) {
     const clusterCustomResources = await loadBusolaClusterCRs(
