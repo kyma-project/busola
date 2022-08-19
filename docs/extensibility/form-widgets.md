@@ -178,13 +178,15 @@ FormGroup widgets render an `object` as a collapsible section.
 [
   {
     "path": "spec.service",
-    "widget": "FormGroup"
-  },
-  {
-    "path": "spec.service.host"
-  },
-  {
-    "path": "spec.service.port"
+    "widget": "FormGroup",
+    "children": [
+      {
+        "path": "host"
+      },
+      {
+        "path": "port"
+      }
+    ]
   }
 ]
 ```
@@ -201,13 +203,15 @@ GenericList widgets render an `array` as a list of collapsible sections with the
 [
   {
     "path": "spec.services",
-    "widget": "GenericList"
-  },
-  {
-    "path": "spec.services[].host"
-  },
-  {
-    "path": "spec.services[].port"
+    "widget": "GenericList",
+    "children": [
+      {
+        "path": "[].host"
+      },
+      {
+        "path": "[].port"
+      }
+    ]
   }
 ]
 ```
@@ -226,13 +230,15 @@ This type of field is only suitable for simple data types and can contain more c
 [
   {
     "path": "spec.services",
-    "widget": "SimpleList"
-  },
-  {
-    "path": "spec.services[].host"
-  },
-  {
-    "path": "spec.services[].port"
+    "widget": "SimpleList",
+    "children": [
+      {
+        "path": "[].host"
+      },
+      {
+        "path": "[].port"
+      }
+    ]
   }
 ]
 ```
