@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { List } from 'immutable';
 
 import { K8sNameField } from 'shared/ResourceForm/fields';

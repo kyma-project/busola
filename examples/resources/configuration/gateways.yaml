@@ -10,12 +10,12 @@ metadata:
 data:
   dataSources: |-
     {
-      "podSelector":{
+      "podSelector": {
         "resource": {
           "kind": "Pod",
           "version": "v1",
         },
-        "filter": "$filter(data, function($item) {$selectorMatchByLabels($item, resource.spec.selector)})"
+        "filter": "$filter(data, function($item) { $selectorMatchByLabels($item, resource.spec.selector) })"
       }
     }
   details: |
@@ -27,7 +27,7 @@ data:
           "widget": "Labels"
         }
       ],
-      "body":[     
+      "body": [     
         {
           "widget": "Table",
           "path": "spec.servers",
@@ -63,13 +63,14 @@ data:
         "simple": true,
         "path": "spec.servers[].port",
         "children": [
-          { "path": "number", "simple": true},
-          { "path": "name", "widget": "Name", "showHelp": false, "simple": true},
+          { "path": "number", "simple": true },
+          { "path": "name", "widget": "Name", "showHelp": false, "simple": true },
           {
             "path": "protocol", 
             "simple": true,
             "enum": [
               "HTTP",
+              "HTTPS",
               "HTTP2",
               "GRPC",
               "GRPC-WEB",
@@ -79,15 +80,26 @@ data:
               "TCP"
             ],
           },
-          { "path": "targetPort", "simple": true},
+          { "path": "targetPort", "simple": true },
         ]
       },
       {
         "widget": "FormGroup",
         "simple": true,
         "path": "spec.servers[].tls",
+        "visibility": "$item.port.protocol = 'HTTP' or $item.port.protocol = 'HTTPS'",
         "children": [
-          { "path": "httpsRedirect", "simple": true, "visibility": "$boolean(data.spec.servers.port.protocol = 'HTTP')" },
+          { "path": "httpsRedirect", "simple": true, "visibility": "$item.port.protocol = 'HTTP'" },
+          { 
+            "path": "mode", 
+            "simple": true, 
+            "visibility": "$item.port.protocol = 'HTTPS'",
+            "enum": [ ],
+          },
+          { "path": "credentialName", "simple": true, "visibility": "$item.port.protocol = 'HTTPS'" },
+          { "path": "serverCertificate", "simple": true, "visibility": "$item.port.protocol = 'HTTPS'" },
+          { "path": "privateKey", "simple": true, "visibility": "$item.port.protocol = 'HTTPS'" },
+          { "path": "caCertificates", "simple": true, "visibility": "$item.port.protocol = 'HTTPS'" },
         ]
       },
       {

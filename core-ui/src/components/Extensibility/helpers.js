@@ -1,7 +1,6 @@
 import React, { createContext, useContext } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import jsonata from 'jsonata';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { OrderedMap } from 'immutable';
 import { Link } from 'shared/components/Link/Link';
