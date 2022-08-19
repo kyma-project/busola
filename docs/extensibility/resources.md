@@ -304,7 +304,7 @@ Those fields are used to build the related resource URL and filter the received 
 - **ownerLabelSelectorPath** - the path to original object's **selector** type property; for example, `spec.selector.matchLabels` for Deployment, used to select matching Pods.
 - **filter** - [JSONata](https://docs.jsonata.org/overview.html) function enabling the user to write a custom matching logic. It can use the following variables:
 
-  - **item** - the current item of a related kind.
+  - **item** - the current item of the related kind.
   - **root** - the original resource.
 
   This function should return a boolean value.
