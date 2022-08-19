@@ -78,7 +78,7 @@ export function Table({ value, structure, disableMargin, schema, ...props }) {
       rowRenderer={rowRenderer}
       disableMargin={disableMargin}
       {...handleTableValue(value, t)}
-      sortBy={() => sortBy(sortOptions, tExt, {}, `${structure.path}.`)}
+      sortBy={() => sortBy(sortOptions, tExt)}
     />
   );
 }

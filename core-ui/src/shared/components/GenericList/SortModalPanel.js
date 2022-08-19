@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
   const [order, setOrder] = useState(sort.order);
   const [name, setName] = useState(sort.name);
-  const { t } = useTranslation();
 
   const { t } = useTranslation();
 
