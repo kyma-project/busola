@@ -34,6 +34,32 @@ Text widgets render a field as a text field. They are used by default for all st
 
 <img src="./assets/form-widgets/Text.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
 
+#### Widget-specific parameters
+
+- **enum[]** - an array of options to generate **dropdown** with input field.
+
+#### Example
+
+```json
+{
+  "path": "protocol",
+  "simple": true,
+  "enum": [
+    "HTTP",
+    "HTTPS",
+    "HTTP2",
+    "GRPC",
+    "GRPC-WEB",
+    "MONGO",
+    "REDIS",
+    "MYSQL",
+    "TCP"
+  ],
+},
+```
+
+<img src="./assets/form-widgets/Dropdown.png" alt="Example of a dropdown text widget" style="border: 1px solid #D2D5D9">
+
 ### Name
 
 Name widgets render a name input field. They contain an automatic name generator, and additionally set the label field when changed. They are added automatically to all forms, and set to the `metadata.name` value.
