@@ -206,7 +206,7 @@ Extra parameters might be available for specific widgets.
 - **depth** - defines the maximum distance from the original resource to a transitively related resource. Defaults to infinity.
 - **colorVariant** - optional integer in range 1 to 11 or 'neutral', denoting the SAP color variant of node's border. If not set, the node's border is the same as the current text color.
 - **networkFlowKind** - optional boolean which determines if the resource should be shown on network graph, Defaults to `false`, which displays the resource on structural graph.
-- **networkFlowLevel** - optional integer which sets the horizontal position of resource's node on a network graph.
+- **networkFlowLevel** - optional integer which sets the horizontal position of the resource's node on the network graph.
 - **dataSources** - an array of objects in shape:
   - **source** - a string that must correspond to one of [dataSources](#datasources-section) name. It selects the related resource and the way it should be matched.
 
