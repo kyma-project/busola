@@ -1,36 +1,16 @@
-import { loadBalancer } from './loadBalancer';
-import { connectionPool } from './connectionPool';
-import { outlierDetection } from './outlierDetection';
-import { tls } from './tls';
+import { loadBalancerGenericListSyntax } from './loadBalancer';
+import { connectionPoolGenericListSyntax } from './connectionPool';
+import { outlierDetectionGenericListSyntax } from './outlierDetection';
+import { tlsGenericListSyntax } from './tls';
 
-// export const portLevelSettings = {
-//   path: 'portLevelSettings',
-//   widget: 'GenericList',
-//   children: [
-//     { path: 'port' },
-//     // loadBalancer,
-//     // connectionPool,
-//     // outlierDetection,
-//     // tls,
-//   ],
-// };
-//
-//TODO
-export const portLevelSettings = [
-  {
-    path: 'portLevelSettings',
-    widget: 'GenericList',
-    children: [{ path: '[].port.number' }],
-  },
-  // { path: 'portLevelSettings[].port.number' },
-];
-// path: 'portLevelSettings',
-// widget: 'GenericList',
-//     children: [
-//         { path: 'port' },
-//         // loadBalancer,
-//         // connectionPool,
-//         // outlierDetection,
-//         // tls,
-//     ],
-// ;
+export const portLevelSettings = {
+  path: 'portLevelSettings',
+  widget: 'GenericList',
+  children: [
+    { path: '[].port.number' },
+    loadBalancerGenericListSyntax,
+    connectionPoolGenericListSyntax,
+    outlierDetectionGenericListSyntax,
+    tlsGenericListSyntax,
+  ],
+};

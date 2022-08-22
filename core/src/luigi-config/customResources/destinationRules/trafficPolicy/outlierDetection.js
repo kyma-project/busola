@@ -12,3 +12,7 @@ export const outlierDetection = {
     { path: 'minHealthPercent' },
   ],
 };
+
+const outlierDetectionGenericListSyntax = { ...outlierDetection };
+outlierDetectionGenericListSyntax.path = '[].outlierDetection';
+export { outlierDetectionGenericListSyntax };

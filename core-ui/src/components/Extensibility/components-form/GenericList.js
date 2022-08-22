@@ -22,6 +22,7 @@ export function GenericList({
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
   const { store } = useUIStore();
   const { value } = store?.extractValues(storeKeys) || {};
+
   const listSize = value?.size || 0;
   const schemaPlaceholder = schema.get('placeholder');
 

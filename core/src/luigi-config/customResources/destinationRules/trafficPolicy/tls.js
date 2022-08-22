@@ -8,7 +8,11 @@ export const tls = {
     { path: 'caCertificates' },
     { path: 'credentialName' },
     { path: 'subjectAltNames', widget: 'SimpleList' },
-    { path: 'sni' },
+    { path: 'sni', name: 'SNI' },
     { path: 'insecureSkipVerify' },
   ],
 };
+
+const tlsGenericListSyntax = { ...tls };
+tlsGenericListSyntax.path = '[].tls';
+export { tlsGenericListSyntax };

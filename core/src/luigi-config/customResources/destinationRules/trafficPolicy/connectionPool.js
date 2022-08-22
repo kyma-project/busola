@@ -33,3 +33,7 @@ export const connectionPool = {
   widget: 'FormGroup',
   children: [tcp, http],
 };
+
+const connectionPoolGenericListSyntax = { ...connectionPool };
+connectionPoolGenericListSyntax.path = '[].connectionPool';
+export { connectionPoolGenericListSyntax };

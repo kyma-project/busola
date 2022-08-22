@@ -80,3 +80,7 @@ export const loadBalancer = {
     },
   ],
 };
+
+const loadBalancerGenericListSyntax = { ...loadBalancer };
+loadBalancerGenericListSyntax.path = '[].loadBalancer';
+export { loadBalancerGenericListSyntax };

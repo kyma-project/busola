@@ -1,9 +1,4 @@
-import { loadBalancer } from './trafficPolicy/loadBalancer';
-import { connectionPool } from './trafficPolicy/connectionPool';
-import { outlierDetection } from './trafficPolicy/outlierDetection';
-import { tls } from './trafficPolicy/tls';
-import { portLevelSettings } from './trafficPolicy/portLevelSettings';
-import { tunnel } from './trafficPolicy/tunnel';
+import { trafficPolicyBundle } from './trafficPolicy/trafficPolicyBundle';
 import { subsets } from './subsets';
 
 export const destinationRules = {
@@ -53,14 +48,7 @@ export const destinationRules = {
       widget: 'FormGroup',
       simple: true,
       path: 'spec.trafficPolicy',
-      children: [
-        loadBalancer,
-        connectionPool,
-        outlierDetection,
-        tls,
-        ...portLevelSettings,
-        tunnel,
-      ],
+      children: trafficPolicyBundle,
     },
     subsets,
   ],
