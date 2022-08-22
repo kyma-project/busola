@@ -59,19 +59,38 @@ export function DataSourcesContextProvider({ children, dataSources }) {
       const relativeUrl = buildUrl(dataSource, resource);
       const response = await fetch({ relativeUrl });
       let data = await response.json();
-      const expression = jsonataWrapper(filter);
-      expression.assign('root', resource);
-      if (filter && data.items) {
-        data = data.items.filter(item => {
-          expression.assign('item', item);
-          return expression.evaluate();
-        });
-      } else if (filter) {
-        expression.assign('item', data);
-        if (!expression.evaluate()) {
-          data = null;
+      if (filter) {
+        // console.log(filter);
+        const expression = jsonataWrapper(filter);
+        // console.log(expression);
+        expression.assign('root', resource);
+        if (data.items) {
+          data = data.items.filter(item => {
+            console.log(item);
+            expression.assign('item', item);
+            return expression.evaluate({ data });
+          });
+          console.log(data);
+        } else {
+          expression.assign('item', data);
+          if (!expression.evaluate()) {
+            data = null;
+          }
         }
       }
+
+      console.log(data);
+      // if (filter && data.items) {
+      //   data = data.items.filter(item => {
+      //     expression.assign('item', item);
+      //     return expression.evaluate();
+      //   });
+      // } else if (filter) {
+      //   expression.assign('item', data);
+      //   if (!expression.evaluate()) {
+      //     data = null;
+      //   }
+      // }
       if (!data.namespace) {
         data.namespace = dataSource.resource.namespace;
       }
