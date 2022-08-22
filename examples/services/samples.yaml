@@ -9,7 +9,7 @@ spec:
       protocol: TCP
       port: 80
       targetPort: 8080
-      nodePort: 32734
+      nodePort: 32735
   selector:
     app: frontend
   clusterIP: 100.67.29.33

@@ -2,11 +2,6 @@
 import 'cypress-file-upload';
 import jsyaml from 'js-yaml';
 
-const PIZZA_NAME = 'hawaiian';
-const SAUCE = 'TOMATO';
-const PIZZA_DESC = 'Hawaiian pizza is a pizza originating in Canada.';
-const RECIPE = 'margherita-recipe';
-
 context('Test Services', () => {
   Cypress.skipAfterFail();
 
@@ -22,7 +17,7 @@ context('Test Services', () => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
   });
 
-  it('Creates the EXT services config', () => {
+  it('Creates the EXT Services config', () => {
     cy.getIframeBody().as('iframe');
 
     cy.getLeftNav()
@@ -64,13 +59,13 @@ context('Test Services', () => {
       .should('have.length', 1);
   });
 
-  it('Displays the Services list/detail views from the samples', () => {
+  it('Displays the EXT Services list view', () => {
     cy.loginAndSelectCluster({
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
     });
+
     cy.getLeftNav()
-      .as('nav')
       .contains('Namespaces')
       .click();
 
@@ -79,27 +74,31 @@ context('Test Services', () => {
       .contains('a', 'services')
       .click();
 
-    cy.get('@nav')
-      .contains('Custom Resources')
+    cy.getLeftNav()
+      .contains('Examples')
       .click();
 
-    cy.get('@nav')
-      .contains('Services')
+    cy.getLeftNav()
+      .contains('Custom Services')
       .click();
 
-    cy.get('@iframe').contains('DELIVERY');
-    cy.get('@iframe').contains('CASH');
-    cy.get('@iframe').contains('a', 'extensibility docs');
+    cy.get('@iframe').contains('Type');
+    cy.get('@iframe').contains('LoadBalancer');
+    cy.get('@iframe').contains('Create Custom Service');
     cy.get('@iframe')
-      .contains('a', 'margherita-order')
-      .should('be.visible');
-
-    cy.get('@iframe')
-      .contains('a', 'diavola-order')
+      .contains('a', 'test-service')
       .click({ force: true });
+  });
 
-    cy.get('@iframe').contains('paymentMethod: CARD');
-    cy.get('@iframe').contains('realization=SELF-PICKUP');
-    cy.get('@iframe').contains('h3', 'Pizzas');
+  it('Displays the EXT Services detail view', () => {
+    cy.getIframeBody()
+      .as('iframe')
+      .contains('Type');
+    cy.get('@iframe').contains('LoadBalancer');
+    cy.get('@iframe').contains('a', 'Custom Services');
+  });
+
+  it('Displays the header overridden by translations', () => {
+    cy.getIframeBody().contains('Cluster IP override');
   });
 });
