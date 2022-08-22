@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { getResourceUrl } from 'resources/Namespaces/YamlUpload/helpers';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useGetTranslation } from 'components/Extensibility/helpers';
-import * as Inputs from 'shared/ResourceForm/inputs';
 import { ResourceForm } from 'shared/ResourceForm';
+import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
+import { jsonataWrapper } from '../jsonataWrapper';
 
 export function ResourceRenderer({
   onChange,
@@ -17,6 +17,7 @@ export function ResourceRenderer({
   compact,
   ...props
 }) {
+  console.log(props);
   const { namespaceId } = useMicrofrontendContext();
 
   const { tFromStoreKeys } = useGetTranslation();
@@ -31,30 +32,49 @@ export function ResourceRenderer({
     scope === 'namespace' ? namespace : null,
   );
 
-  const { data } = useGetList()(url);
-
-  const options = (data || []).map(res => ({
-    key: res.metadata.name,
-    text: res.metadata.name,
-  }));
+  let expression;
+  if (schema.get('filter')) {
+    expression = jsonataWrapper(schema.get('filter'));
+    expression.assign('root', props?.resource);
+  }
 
   return (
     <ResourceForm.FormField
-      value={value}
-      setValue={value => {
-        onChange({
-          storeKeys,
-          scopes: ['value'],
-          type: 'set',
-          schema,
-          required,
-          data: { value },
-        });
-      }}
       label={tFromStoreKeys(storeKeys, schema)}
       data-testid={storeKeys.join('.')}
-      input={Inputs.ComboboxInput}
-      options={options}
+      input={() => (
+        <K8sResourceSelectWithUseGetList
+          url={url}
+          filter={item => {
+            if (expression) {
+              expression.assign('item', item);
+              return expression.evaluate();
+            } else return true;
+          }}
+          onChange={value => {
+            onChange({
+              storeKeys,
+              scopes: ['value'],
+              type: 'set',
+              schema,
+              required,
+              data: { value },
+            });
+          }}
+          onSelect={value => {
+            onChange({
+              storeKeys,
+              scopes: ['value'],
+              type: 'set',
+              schema,
+              required,
+              data: { value },
+            });
+          }}
+          value={value}
+          resourceType={kind}
+        />
+      )}
       compact={compact}
       required={required}
     />
