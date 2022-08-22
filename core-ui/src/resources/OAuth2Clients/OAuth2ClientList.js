@@ -36,7 +36,7 @@ export function OAuth2ClientList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      resourceName={t('oauth2-clients.title')}
+      resourceTitle={t('oauth2-clients.title')}
       createResourceForm={OAuth2ClientCreate}
       {...props}
     />

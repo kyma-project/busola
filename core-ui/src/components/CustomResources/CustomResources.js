@@ -57,8 +57,10 @@ export function CustomResources({
     omitColumnsIds,
     hideCreateOption,
     createResourceForm: props => <CRCreate {...props} crd={crd} />,
-    allowSlashShortcut: true,
     resourceUrlPrefix: `/apis/${group}/${version.name}`,
+    searchSettings: {
+      allowSlashShortcut: true,
+    },
   };
 
   return <ResourcesList {...params} />;

@@ -45,7 +45,6 @@ export default function PodList({ namespace, functionName, isActive }) {
   return (
     <GenericList
       className="pods-of-function"
-      showSearchField={false}
       compact
       title={t('functions.pod-list.title')}
       entries={pods || []}
@@ -53,6 +52,9 @@ export default function PodList({ namespace, functionName, isActive }) {
       rowRenderer={rowRenderer}
       serverDataError={error}
       serverDataLoading={loading}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 }

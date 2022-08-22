@@ -9,22 +9,16 @@ export const Details = React.lazy(() =>
 );
 
 export const resourceGraphConfig = (t, context) => ({
-  relations: [
-    {
-      kind: 'Pod',
-    },
-    {
-      kind: 'StorageClass',
-    },
-    {
-      kind: 'PersistentVolume',
-      clusterwide: true,
-    },
-  ],
   depth: 1,
   networkFlowLevel: 1,
-  matchers: {
-    StorageClass: (pvc, sc) => pvc.spec.storageClassName === sc.metadata.name,
-    PersistentVolume: (pvc, pv) => pvc.spec.volumeName === pv.metadata.name,
-  },
+  relations: [
+    {
+      resource: { kind: 'StorageClass', namespace: null },
+      filter: (pvc, sc) => pvc.spec.storageClassName === sc.metadata.name,
+    },
+    {
+      resource: { kind: 'PersistentVolume', namespace: null },
+      filter: (pvc, pv) => pvc.spec.volumeName === pv.metadata.name,
+    },
+  ],
 });

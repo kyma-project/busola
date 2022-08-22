@@ -108,7 +108,6 @@ export function EventList(props) {
 
   return (
     <ResourcesList
-      textSearchProperties={textSearchProperties}
       listHeaderActions={[MessageSelector]}
       customColumns={customColumns}
       omitColumnsIds={['namespace', 'labels', 'created']}
@@ -120,9 +119,12 @@ export function EventList(props) {
       {...props}
       hasDetailsView={true}
       readOnly={true}
-      filterFn={res => {
+      filter={res => {
         if (displayType.key === EVENT_MESSAGE_TYPE.ALL.key) return true;
         return res.type === displayType.key;
+      }}
+      searchSettings={{
+        textSearchProperties,
       }}
     />
   );

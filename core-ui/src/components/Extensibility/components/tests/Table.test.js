@@ -12,6 +12,8 @@ const translations = {
   'myResource.path::resource.array-data': 'Array Data',
 };
 
+const genericNotFoundMessage = 'components.generic-list.messages.not-found';
+
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str, { defaultValue } = {}) => translations[str] || defaultValue || str,
@@ -80,9 +82,9 @@ describe('Table', () => {
       const list = component.find(GenericList);
       expect(list).toHaveLength(1);
 
-      const { entries, genericErrorMessage } = list.props();
+      const { entries, notFoundMessage } = list.props();
       expect(entries).toMatchObject(value);
-      expect(genericErrorMessage).toBeFalsy();
+      expect(notFoundMessage).toBe(genericNotFoundMessage);
     });
 
     it('for nullish value defaults to empty array', () => {
@@ -90,9 +92,9 @@ describe('Table', () => {
       const list = component.find(GenericList);
       expect(list).toHaveLength(1);
 
-      const { entries, genericErrorMessage } = list.props();
+      const { entries, notFoundMessage } = list.props();
       expect(entries).toMatchObject([]);
-      expect(genericErrorMessage).toBeFalsy();
+      expect(notFoundMessage).toBe(genericNotFoundMessage);
     });
 
     it('otherwise renders error', () => {
@@ -100,9 +102,9 @@ describe('Table', () => {
       const list = component.find(GenericList);
       expect(list).toHaveLength(1);
 
-      const { entries, genericErrorMessage } = list.props();
+      const { entries, notFoundMessage } = list.props();
       expect(entries).toMatchObject([]);
-      expect(genericErrorMessage).toBe('extensibility.widgets.table.error');
+      expect(notFoundMessage).toBe('extensibility.widgets.table.error');
     });
   });
 
