@@ -59,13 +59,117 @@ data:
   form: |-
     [
       {
-        "widget": "GenericList", "name": "HTTP", "path": "spec.http", "simple": true,
-        "children": [
+        "path": "spec.tls", "simple": true, "widget": "GenericList", "name": "TLS", "children":[
           {
-            "path": "[].name", "simple": true
-          }
+            "path": "[].match", "simple": true, "widget": "GenericList", "name": "Match", "children": [
+
+              {
+                "path": "[].sourceNamespace", "simple": true, "name": "Source Namespace"
+              },
+              {
+                "path": "[].port", "simple": true, "name": "Port"
+              },
+              {
+                "path": "[].sniHosts", "simple": true, "widget": "SimpleList", "name": "SNI Hosts"
+              },
+              {
+                "path": "[].destinationSubnets", "simple": true, "widget": "SimpleList", "name": "Destination Subets"
+              },
+              {
+                "path": "[].sourceLabels", "simple": true, "widget": "KeyValuePair", "name": "Source Labels"
+              },
+              {
+                "path": "[].gateways", "simple": true, "widget": "SimpleList", "name": "Gateways"
+              },
+
+            ]
+          },
+
+          {
+            "path": "[].route", "simple": true, "widget": "GenericList", "name": "Route", "children": [
+
+              {
+                "path": "[].weight", "simple": true, "name": "Weight"
+              },
+              {
+                "path": "[].destination", "simple": true, "widget": "FormGroup", "name": "Destination", "children": [
+
+                  {
+                    "path": "host", "simple": true, "name": "Host"
+                  },
+                  {
+                    "path": "subset", "simple": true, "name": "Host"
+                  },
+                  {
+                    "path": "port.number", "simple": true, "name": "Port number"
+                  }
+                
+                ]
+              },
+
+
+            ]
+          },
         ]
-      },  
+      },
+
+      {
+        "path": "spec.tcp", "simple": true, "name": "TCP", "widget": "GenericList", "children": [
+
+          {
+            "path": "[].match", "simple": true, "name": "Match", "children": [
+
+              {
+                "path": "[].sourceNamespace", "simple": true, "name": "Source Namespace"
+              },
+              {
+                "path": "[].port", "simple": true, "name": "Port"
+              },
+              {
+                "path": "[].sniHosts", "simple": true, "widget": "SimpleList", "name": "SNI Hosts"
+              },
+              {
+                "path": "[].destinationSubnets", "simple": true, "widget": "SimpleList", "name": "Destination Subets"
+              },
+              {
+                "path": "[].sourceLabels", "simple": true, "widget": "KeyValuePair", "name": "Source Labels"
+              },
+              {
+                "path": "[].gateways", "simple": true, "widget": "SimpleList", "name": "Gateways"
+              }
+
+            ]
+          },
+
+          {
+            "path": "[].route", "simple": true, "name": "Route", "children": [
+
+              {
+                "path": "[].weight", "simple": true, "name": "Weight"
+              },
+              {
+                "path": "[].destination", "simple": true, "widget": "FormGroup", "name": "Destination", "children": [
+
+                  {
+                    "path": "host", "simple": true, "name": "Host"
+                  },
+                  {
+                    "path": "subset", "simple": true, "name": "Host"
+                  },
+                  {
+                    "path": "port.number", "simple": true, "name": "Port number"
+                  }
+                
+                ]
+              },
+
+            ]
+          },
+
+        ]
+      },
+
+
       {
         "path": "spec.hosts", "simple": true , "name": "Hosts", "widget": "SimpleList"
       },
