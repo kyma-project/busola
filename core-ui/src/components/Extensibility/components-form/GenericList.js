@@ -22,7 +22,7 @@ export function GenericList({
   const { store } = useUIStore();
   const { value } = store?.extractValues(storeKeys) || {};
   const listSize = value?.size || 0;
-
+  console.log('sk', storeKeys?.toJS());
   const addItem = () => {
     onChange({
       storeKeys,
@@ -43,6 +43,8 @@ export function GenericList({
       required,
     });
   };
+
+  console.log(value?.toJS());
 
   const { tFromStoreKeys } = useGetTranslation();
 

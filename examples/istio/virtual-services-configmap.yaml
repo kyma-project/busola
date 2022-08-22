@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: virtual-services
-  namespace: kube-public
+  namespace: lyczeq
   labels:
     app.kubernetes.io/name: virtual-services
     busola.io/extension: resource
@@ -59,13 +59,21 @@ data:
   form: |-
     [
       {
-        "path": "spec.hosts", "simple": true
+        "widget": "GenericList", "name": "HTTP", "path": "spec.http", "simple": true,
+        "children": [
+          {
+            "path": "[].name", "simple": true
+          }
+        ]
+      },  
+      {
+        "path": "spec.hosts", "simple": true , "name": "Hosts", "widget": "SimpleList"
       },
       {
-        "path": "spec.http", "simple": true, "widget": "GenericList"
+        "path": "spec.gateways", "simple": true, "name": "Gateways", "widget": "SimpleList"
       },
       {
-        "path": "spec.http[].name", "simple": true,
+        "path": "spec.exportTo", "name": "Export To", "widget": "SimpleList"
       },
     ]
   list: |-
