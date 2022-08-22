@@ -13,11 +13,9 @@ export const resourceGraphConfig = () => ({
   networkFlowLevel: -2,
   relations: [
     {
-      kind: 'Service',
+      resource: { kind: 'Service' },
+      filter: (subscription, service) =>
+        getServiceName(subscription.spec.sink) === service.metadata.name,
     },
   ],
-  matchers: {
-    Service: (subscription, service) =>
-      getServiceName(subscription.spec.sink) === service.metadata.name,
-  },
 });
