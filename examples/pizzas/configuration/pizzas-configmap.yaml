@@ -58,18 +58,19 @@ data:
                 { "name": "Toppings price", "source": "$sum(spec.toppings.price)" }
               ]
             },
-          {
-            "name": "Toppings",
-            "source": "spec.toppings",
-            "widget": "Table",
-            "collapsible": [{"name": "Quantity", "source": "$item.quantity" }],
-            "children": [
-              { "name": "Name", "source": "$item.name", "sort": true },
-              {
-                "name": "Price ($)", "source": "$item.price"
+            {
+              "name": "Toppings",
+              "source": "spec.toppings",
+              "widget": "Table",
+              "collapsible": [{"name": "Quantity", "source": "$item.quantity" }],
+              "children": [
+                { "name": "Name", "source": "$item.name", "sort": true },
+                { "name": "Price ($)", "source": "$item.price",
                 "sort": { "default": true, "compareFunction": "$second -$first" }
               }
-            ]
+              ]
+            },
+          ]
         },
         {
           "name": "Pizza's recipe secret",
@@ -77,7 +78,7 @@ data:
           "source": "$secretRecipe()",
           "sort": [
             {
-              "path": "type",
+              "source": "type",
               "default": true,
             },
           ],
@@ -138,9 +139,9 @@ data:
     ]
   list: |-
     [
-      { "name": "Description", "source", "source": "spec.description","sort": { "compareFunction": "$compareStrings($first, $second)" }  },
-      { "name": "State", "source": "status.messages[-1:].state", "widget": "Badge" },
-      { "name": "Toppings price", "source": "$sum(spec.toppings.price)", "sort":{"default":true} }
+      { "name": "Description", "source": "spec.description", "sort": { "compareFunction": "$compareStrings($first, $second)" } },
+      { "name": "State", "source": "status.messages[-1].state", "widget": "Badge" },
+      { "name": "Toppings price", "source": "$sum(spec.toppings.price)", "sort":{"default": true} }
     ]
   dataSources: |-
     {

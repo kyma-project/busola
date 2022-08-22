@@ -17,9 +17,11 @@ data:
         },
         {
           "source": "spec.type",
+          "name": "Type"
         },
         {
           "source": "spec.clusterIP",
+          "name": "Cluster IP"
         },
         {
           "name": "ports",
@@ -33,23 +35,23 @@ data:
       "body": [
         {
           "widget": "ResourceList",
-          "source": "$subscriptions().items",
+          "source": "$subscriptions()",
           "name": "Subscription",
           "children": [
             {
-              "source": "metadata.name", "name": "Name", "sort": "true", "widget": "ResourceLink", 
+              "source": "$item", "name": "Name", "sort": "true", "widget": "ResourceLink", 
               "resource": {
-                "name": "data.name",
+                "name": "data.metadata.name",
                 "namespace": "root.metadata.namespace",
                 "kind": "data.kind"
               }
             },
             {
-              "source": "spec.filter.filters[0].eventType.value", "name": "First event Type", "sort": {
+              "source": "$item.spec.filter.filters[0].eventType.value", "name": "First event type", "sort": {
               "default": true, "compareFunction": "$compareStrings($first, $second)"}
             },
             {
-              "source": "status.ready", 
+              "source": "$item.status.ready", 
               "name": "Ready",
               "sort": true,
               "widget": "Badge",
@@ -62,15 +64,15 @@ data:
         },
         {
           "widget": "ResourceList",
-          "source": "$apirules().items",
+          "source": "$apirules()",
           "name": "API Rule",
           "sort": [
             {
-              "path": "spec.service.host",
+              "source": "spec.service.host",
               "default": true
             },
             {
-              "path": "spec.service.port",
+              "source": "spec.service.port",
               "compareFunction": $first - $second
             }
           ]
@@ -81,15 +83,20 @@ data:
   list: |-
     [
       {
+        "name": "Controlled by",
         "source": "metadata.ownerReferences",
         "widget": "ControlledBy",
-        "kindOnly": true,
+        "kindOnly": true
       },
       {
+        "name": "Type",
         "source": "spec.type",
+        "sort": {"compareFunction": "$compareStrings($second, $first)"}
       },
       {
+        "name": "Cluster IP",
         "source": "spec.clusterIP",
+        "sort": true
       },
       {
         "name": "ports",
@@ -127,17 +134,4 @@ data:
       },
       "urlPath": "example-services",
       "scope": "namespace",
-    }
-  translations: |-
-    {
-      "en": {
-        "name": "Services",
-        "category": "Custom Resources",
-        "metadata.annotations": "Annotations",
-        "metadata.labels": "Labels",
-        "metadata.ownerReferences": "Controlled  By",
-        "ports": "Ports",
-        "spec.clusterIP": "Cluster IP",
-        "spec.type": "Service Type"
-      }
     }
