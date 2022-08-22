@@ -92,15 +92,16 @@ export default function AccessStrategies({
     >
       <GenericList
         title={t(ACCESS_STRATEGIES_PANEL.LIST.TITLE)}
-        showSearchField={showSearchField}
-        textSearchProperties={textSearchProperties}
-        showSearchSuggestion={false}
         entries={strategies}
         headerRenderer={headerRenderer}
         rowRenderer={e => rowRenderer(e, t)}
-        noSearchResultMessage={
-          ACCESS_STRATEGIES_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY
-        }
+        searchSettings={{
+          showSearchField,
+          textSearchProperties,
+          showSearchSuggestion: false,
+          noSearchResultMessage:
+            ACCESS_STRATEGIES_PANEL.LIST.ERRORS.NOT_MATCHING_SEARCH_QUERY,
+        }}
       />
     </div>
   );

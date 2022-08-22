@@ -194,7 +194,9 @@ function HttpMatchRequests({ matches }) {
       rowRenderer={match => [<HttpMatchRequest match={match} />]}
       entries={matches}
       showHeader={false}
-      showSearchField={false}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 }

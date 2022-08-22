@@ -81,9 +81,8 @@ export function GroupingListPage({
             <ResourceListRenderer
               resourceUrl={resourceUrl}
               resourceType="CustomResourceDefinition"
-              resourceName="customresourcedefinition"
+              resourceTitle="customresourcedefinition"
               hasDetailsView={true}
-              showSearchField={false}
               showTitle={true}
               title={group}
               resources={crds}
@@ -103,6 +102,9 @@ export function GroupingListPage({
                     ]
                   : []),
               ]}
+              searchSettings={{
+                showSearchField: false,
+              }}
               {...resourceListProps}
             />
           </li>

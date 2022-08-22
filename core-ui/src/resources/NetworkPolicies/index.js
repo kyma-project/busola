@@ -13,11 +13,12 @@ export const resourceGraphConfig = (t, context) => ({
   networkFlowLevel: -1,
   relations: [
     {
-      kind: 'Pod',
+      resource: { kind: 'Pod' },
+      filter: (policy, pod) =>
+        matchBySelector(
+          policy.spec.podSelector.matchLabels,
+          pod.metadata.labels,
+        ),
     },
   ],
-  matchers: {
-    Pod: (policy, pod) =>
-      matchBySelector(policy.spec.podSelector.matchLabels, pod.metadata.labels),
-  },
 });

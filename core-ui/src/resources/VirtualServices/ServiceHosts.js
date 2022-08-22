@@ -13,11 +13,13 @@ export function ServiceHosts(service) {
     <GenericList
       key="gateways"
       title={t('virtualservices.hosts')}
-      showSearchField={false}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       showHeader={false}
       entries={service.spec.hosts || []}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 }

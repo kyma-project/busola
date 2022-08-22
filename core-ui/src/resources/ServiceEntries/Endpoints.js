@@ -51,7 +51,9 @@ export const Endpoints = ({ serviceentry }) => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={endpoints || []}
-      showSearchField={false}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 };

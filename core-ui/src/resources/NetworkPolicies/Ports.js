@@ -25,7 +25,9 @@ export const NetworkPolicyPorts = ({ ports, title }) => {
       entries={ports || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      showSearchField={false}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 };
