@@ -71,7 +71,7 @@ export const destinationRules = {
       'spec.exportTo': 'Exported To Namespaces',
       'spec.host': 'Host',
       'spec.trafficPolicy': 'Traffic Policy',
-      'spec.subset': 'Subset',
+      'spec.subsets': 'Subsets',
       'spec.workloadSelector': 'Workload Selector',
     },
   },

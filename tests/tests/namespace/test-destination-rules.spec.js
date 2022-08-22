@@ -56,6 +56,14 @@ context('Test Destination Rules', () => {
     cy.getIframeBody()
       .contains('LEAST_CONN')
       .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Subsets')
+      .should('not.exist');
+
+    cy.getIframeBody()
+      .contains('Workload Selector')
+      .should('not.exist');
   });
 
   it('Check the Destination Rule list', () => {
