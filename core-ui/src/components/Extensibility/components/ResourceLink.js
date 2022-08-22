@@ -7,7 +7,10 @@ import jsonata from 'jsonata';
 
 function getLinkData({ value, formulas, originalResource, t }) {
   const applyFormula = formula =>
-    jsonata(formula).evaluate({ data: value, root: originalResource });
+    jsonata(formula).evaluate({
+      data: value,
+      root: originalResource,
+    });
 
   try {
     return {
@@ -48,7 +51,7 @@ export function ResourceLink({ value, structure, originalResource }) {
   const linkContent = tExt(structure.linkText, {
     data: value,
     root: originalResource,
-    defaultValue: value?.name,
+    defaultValue: structure.linkText || linkData?.name,
   });
 
   return (
