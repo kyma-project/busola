@@ -70,7 +70,6 @@ export function Table({
     };
   };
 
-
   const sortOptions = (structure?.children || []).filter(child => child.sort);
 
   const className = `extensibility-table ${
