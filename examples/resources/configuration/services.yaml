@@ -115,7 +115,7 @@ data:
           "group": "gateway.kyma-project.io",
           "version": "v1alpha1"
         },
-        "filter": "$filter(data, function($item) {$item.spec.service.name = resource.metadata.name})"
+        "filter": "$item.spec.service.name = $root.metadata.name"
       },
       "subscriptions":{
         "resource": {
@@ -123,7 +123,7 @@ data:
           "group": "eventing.kyma-project.io",
           "version": "v1alpha1"
         },
-        "filter": "$filter(data, function($item) {$substringAfter($substringBefore($item.spec.sink, '.'), '://') = resource.metadata.name})"
+        "filter": "$substringAfter($substringBefore($item.spec.sink, '.'), '://') = $root.metadata.name"
       }
     }
   general: |-

@@ -52,7 +52,9 @@ export function ResourceRefs({ value, structure, schema, disableMargin }) {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       disableMargin={disableMargin}
-      showSearchField={false}
+      searchSettings={{
+        showSearchField: false,
+      }}
       sortBy={sortBy}
     />
   );

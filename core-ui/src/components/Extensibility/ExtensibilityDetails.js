@@ -58,7 +58,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   ];
   return (
     <ResourceDetails
-      windowTitle={resourceTitle}
+      resourceTitle={resourceTitle}
       customColumns={
         Array.isArray(header)
           ? header.map((def, i) => ({

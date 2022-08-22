@@ -38,7 +38,9 @@ const Ports = serviceentry => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={ports || []}
-      showSearchField={false}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 };
