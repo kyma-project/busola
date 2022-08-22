@@ -29,6 +29,7 @@ export function DeploymentDetails(props) {
 
   const MatchSelector = deployment => (
     <Selector
+      key="match-selector"
       namespace={deployment.metadata.namespace}
       labels={deployment.spec?.selector?.matchLabels}
       expressions={deployment?.spec.selector?.matchExpressions}
@@ -37,7 +38,7 @@ export function DeploymentDetails(props) {
   );
 
   const DeploymentPodTemplate = deployment => (
-    <PodTemplate template={deployment.spec.template} />
+    <PodTemplate key="pod-template" template={deployment.spec.template} />
   );
 
   const StatsComponent = deployment => {
@@ -50,6 +51,7 @@ export function DeploymentDetails(props) {
 
     return (
       <StatsPanel
+        key="deployment-stats-panel"
         type="pod"
         mode="multiple"
         pod={connectedPods}

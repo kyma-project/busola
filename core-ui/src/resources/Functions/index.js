@@ -9,9 +9,4 @@ export const Details = React.lazy(() => import('./FunctionDetails'));
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
   networkFlowLevel: -2,
-  relations: [
-    {
-      kind: 'Service',
-    },
-  ],
 });
