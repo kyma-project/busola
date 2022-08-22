@@ -317,12 +317,12 @@ Since the **ResourceList** widget does more than just list the items, you must p
   "name": "Example ResourceList Secret with children",
   "children": [
     {
-      "source": "metadata.name",
+      "source": "$item",
       "name": "Name",
       "sort": "true",
       "widget": "ResourceLink",
       "resource": {
-        "name": "data.name",
+        "name": "data.metadata.name",
         "namespace": "root.metadata.namespace",
         "kind": "data.kind"
       }
