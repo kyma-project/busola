@@ -24,6 +24,7 @@ data:
                 "kind": "'Gateway'",
                 "name": "$contains(data,'/') ? $substringAfter(data, '/') : $substringBefore(data, '.')",
                 "namespace": "$contains(data,'/') ? $substringBefore(data, '/'): $split($substringAfter(data, '.'),'.')[0] "
+                # discuss that split -> default ns -> vs have gateways specified in a different way than in the Istio VS docs
               }
             }
             ]
@@ -61,7 +62,7 @@ data:
       {
         "path": "spec.tls", "simple": true, "widget": "GenericList", "name": "TLS", "children":[
           {
-            "path": "[].match", "simple": true, "widget": "GenericList", "name": "Match", "children": [
+            "path": "[].match", "simple": true, "widget": "GenericList", "name": "Matches", "children": [
 
               {
                 "path": "[].sourceNamespace", "simple": true, "name": "Source Namespace"
@@ -73,7 +74,7 @@ data:
                 "path": "[].sniHosts", "simple": true, "widget": "SimpleList", "name": "SNI Hosts"
               },
               {
-                "path": "[].destinationSubnets", "simple": true, "widget": "SimpleList", "name": "Destination Subets"
+                "path": "[].destinationSubnets", "simple": true, "widget": "SimpleList", "name": "Destination Subnets"
               },
               {
                 "path": "[].sourceLabels", "simple": true, "widget": "KeyValuePair", "name": "Source Labels"
@@ -86,7 +87,7 @@ data:
           },
 
           {
-            "path": "[].route", "simple": true, "widget": "GenericList", "name": "Route", "children": [
+            "path": "[].route", "simple": true, "widget": "GenericList", "name": "Routes", "children": [
 
               {
                 "path": "[].weight", "simple": true, "name": "Weight"
@@ -98,7 +99,7 @@ data:
                     "path": "host", "simple": true, "name": "Host"
                   },
                   {
-                    "path": "subset", "simple": true, "name": "Host"
+                    "path": "subset", "simple": true, "name": "Subset"
                   },
                   {
                     "path": "port.number", "simple": true, "name": "Port number"
@@ -117,7 +118,7 @@ data:
         "path": "spec.tcp", "simple": true, "name": "TCP", "widget": "GenericList", "children": [
 
           {
-            "path": "[].match", "simple": true, "name": "Match", "children": [
+            "path": "[].match", "simple": true, "name": "Matches", "children": [
 
               {
                 "path": "[].sourceNamespace", "simple": true, "name": "Source Namespace"
@@ -129,7 +130,7 @@ data:
                 "path": "[].sniHosts", "simple": true, "widget": "SimpleList", "name": "SNI Hosts"
               },
               {
-                "path": "[].destinationSubnets", "simple": true, "widget": "SimpleList", "name": "Destination Subets"
+                "path": "[].destinationSubnets", "simple": true, "widget": "SimpleList", "name": "Destination Subnets"
               },
               {
                 "path": "[].sourceLabels", "simple": true, "widget": "KeyValuePair", "name": "Source Labels"
@@ -142,7 +143,7 @@ data:
           },
 
           {
-            "path": "[].route", "simple": true, "name": "Route", "children": [
+            "path": "[].route", "simple": true, "name": "Routes", "children": [
 
               {
                 "path": "[].weight", "simple": true, "name": "Weight"
@@ -154,7 +155,7 @@ data:
                     "path": "host", "simple": true, "name": "Host"
                   },
                   {
-                    "path": "subset", "simple": true, "name": "Host"
+                    "path": "subset", "simple": true, "name": "Subset"
                   },
                   {
                     "path": "port.number", "simple": true, "name": "Port number"
@@ -167,6 +168,38 @@ data:
           },
 
         ]
+      },
+
+
+      {
+        "path": "spec.http", "simple": true, "name": "HTTP", "widget": "GenericList","children":[
+
+          {
+            "path": "[].route", "simple": true, "name": "Routes", "children": [
+
+              {
+                "path": "[].weight", "simple": true, "name": "Weight"
+              },
+              {
+                "path": "[].destination", "simple": true, "widget": "FormGroup", "name": "Destination", "children": [
+
+                  {
+                    "path": "host", "simple": true, "name": "Host"
+                  },
+                  {
+                    "path": "subset", "simple": true, "name": "Subset"
+                  },
+                  {
+                    "path": "port.number", "simple": true, "name": "Port number"
+                  }
+                
+                ]
+              },
+
+            ]
+          },
+
+        ] 
       },
 
 
