@@ -15,10 +15,10 @@ data:
           "kind": "Pod",
           "version": "v1",
         },
-        "filter": "$filter(data, function($item) { $selectorMatchByLabels($item, resource.spec.selector) })"
+        "filter": "$selectorMatchByLabels($item, $root.spec.selector)"
       }
     }
-  details: |
+  details: |-
     {
       "header": [
         {
@@ -47,8 +47,6 @@ data:
             { 
               "source": "$podSelector()",
               "widget": "ResourceList",
-              "disableCreate": true,
-              "isCompact": true
             }
           ]
         }
@@ -99,11 +97,18 @@ data:
             "placeholder": "placeholders.dropdown"
           },
           { 
-            "path": "credentialName", 
-            "simple": true, 
-            "visibility": "$item.port.protocol = 'HTTPS'",
-            "placeholder": "Start typing to select Secret from the List"
-          },
+                "path": "credentialName", 
+                "simple": true, 
+                "widget": "Resource",
+                "resource": {
+                  "kind": "Secret",
+                  "version": "v1",
+                  "namespace": "istio-system",
+                  "scope": "namespace",
+                },
+                "filter": "$filter(data, function($item) { ($filterMatchingSecrets($item) })",
+                "visibility": "$item.port.protocol = 'HTTPS'",
+              },
           { 
             "path": "serverCertificate", 
             "simple": true, 
