@@ -181,7 +181,7 @@ data:
                 "path": "[].weight", "simple": true, "name": "Weight"
               },
               {
-                "path": "[].destination", "simple": true, "widget": "FormGroup", "name": "Destination", "children": [
+                "path": "[].destination", "simple": true, "name": "Destination", "widget": "FormGroup", "children": [
 
                   {
                     "path": "host", "simple": true, "name": "Host"
@@ -195,6 +195,43 @@ data:
                 
                 ]
               },
+              {
+                "path": "[].headers", "simple": true, "name": "Headers", "widget": "FormGroup", "children": [
+
+                  {
+                    "path": "response", "simple": true, "name": "Response", "widget": "FormGroup", "children": [
+                    
+                      {
+                        "path": "set", "simple": true, "name": "Set", "widget": "KeyValuePair" 
+                      },
+                      {
+                        "path": "add", "simple": true, "name": "Add", "widget": "KeyValuePair" 
+                      },
+                      {
+                        "path": "remove", "simple": true, "name": "Remove", "widget": "KeyValuePair" 
+                      },
+
+                    ]
+                  },
+                  {
+                    "path": "request", "simple": true, "name": "Request", "widget": "FormGroup", "children": [
+                    
+                      {
+                        "path": "set", "simple": true, "name": "Set", "widget": "KeyValuePair" 
+                      },
+                      {
+                        "path": "add", "simple": true, "name": "Add", "widget": "KeyValuePair" 
+                      },
+                      {
+                        "path": "remove", "simple": true, "name": "Remove", "widget": "KeyValuePair" 
+                      },
+
+                    ]
+                  }
+
+                ]
+              }
+              
 
             ]
           },
