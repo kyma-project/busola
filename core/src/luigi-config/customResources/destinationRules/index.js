@@ -1,3 +1,11 @@
+import { loadBalancer } from './trafficPolicy/loadBalancer';
+import { connectionPool } from './trafficPolicy/connectionPool';
+import { outlierDetection } from './trafficPolicy/outlierDetection';
+import { tls } from './trafficPolicy/tls';
+import { portLevelSettings } from './trafficPolicy/portLevelSettings';
+import { tunnel } from './trafficPolicy/tunnel';
+import { subsets } from './subsets';
+
 export const destinationRules = {
   details: {
     header: [],
@@ -41,6 +49,20 @@ export const destinationRules = {
       simple: true,
       path: 'spec.host',
     },
+    {
+      widget: 'FormGroup',
+      simple: true,
+      path: 'spec.trafficPolicy',
+      children: [
+        loadBalancer,
+        connectionPool,
+        outlierDetection,
+        tls,
+        ...portLevelSettings,
+        tunnel,
+      ],
+    },
+    subsets,
   ],
   general: {
     resource: {
