@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import pluralize from 'pluralize';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { getApiPath } from 'shared/utils/helpers';
-import { match } from 'shared/components/ResourceGraph/buildGraph/helpers';
+import {
+  findRelatedResources,
+  match,
+  getApiPath,
+} from 'shared/components/ResourceGraph/buildGraph/helpers';
 
 function getNamespacePart({
   resourceToFetch,
@@ -45,17 +48,16 @@ async function cycle(store, depth, config, context) {
     if (store.current[kind].length === 0) {
       continue;
     }
-
-    for (const relation of config[kind]?.relations || []) {
-      const alreadyInStore = !!store.current[relation.kind];
+    for (const relatedResource of findRelatedResources(kind, config)) {
+      const alreadyInStore = !!store.current[relatedResource.kind];
       const alreadyToFetch = !!resourcesToFetch.find(
-        r => r.kind === relation.kind,
+        r => r.kind === relatedResource.kind,
       );
 
       if (!alreadyInStore && !alreadyToFetch) {
         // resource does not exist in store
-        const resourceType = pluralize(relation.kind.toLowerCase());
-        const apiPath = getApiPath(resourceType, [
+        const resourceType = pluralize(relatedResource.kind.toLowerCase());
+        const apiPath = getApiPath(relatedResource, [
           ...namespaceNodes,
           ...clusterNodes,
         ]);
@@ -64,8 +66,8 @@ async function cycle(store, depth, config, context) {
           resourcesToFetch.push({
             fromKind: kind,
             resourceType,
-            kind: relation.kind,
-            clusterwide: relation.clusterwide,
+            kind: relatedResource.kind,
+            clusterwide: relatedResource.namespace === null,
             apiPath,
           });
         }

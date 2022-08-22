@@ -7,20 +7,6 @@ import * as jp from 'jsonpath';
 
 const DataSourcesContext = createContext();
 
-function formatJsonataResult(result, { isListCall }) {
-  // if no entries matched, JSONata returns undefined, make it empty list
-  if (isListCall && !result) {
-    result = [];
-  }
-  // JSONata adds "sequence=true" field
-  delete result.sequence;
-  // if 1 entry matched, JSONata returns it, wrap it in list
-  if (isListCall && !Array.isArray(result)) {
-    result = [result];
-  }
-  return result;
-}
-
 export function DataSourcesContextProvider({ children, dataSources }) {
   const fetch = useFetch();
   // store
@@ -72,15 +58,19 @@ export function DataSourcesContextProvider({ children, dataSources }) {
 
       const relativeUrl = buildUrl(dataSource, resource);
       const response = await fetch({ relativeUrl });
-      const data = await response.json();
+      let data = await response.json();
+      const expression = jsonata(filter);
+      expression.assign('root', resource);
       if (filter && data.items) {
-        data.items = jsonata(filter).evaluate({
-          data: data.items,
-          resource,
+        data = data.items.filter(item => {
+          expression.assign('item', item);
+          return expression.evaluate();
         });
-        data.items = formatJsonataResult(data.items, {
-          isListCall: data.kind.match(/List$/),
-        });
+      } else if (filter) {
+        expression.assign('item', data);
+        if (!expression.evaluate()) {
+          data = null;
+        }
       }
       if (!data.namespace) {
         data.namespace = dataSource.resource.namespace;

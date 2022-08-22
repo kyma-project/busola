@@ -23,10 +23,12 @@ export const RoleSubjects = binding => {
     <GenericList
       title={t('role-bindings.headers.subjects')}
       key="subjects"
-      textSearchProperties={['kind', 'name', 'namespace']}
       entries={binding?.subjects || []}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
+      searchSettings={{
+        textSearchProperties: ['kind', 'name', 'namespace'],
+      }}
     />
   );
 };

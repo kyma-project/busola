@@ -56,7 +56,9 @@ export const LabelSelector = ({ selector, title }) => {
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         key="policy-types"
-        showSearchField={false}
+        searchSettings={{
+          showSearchField: false,
+        }}
       />
     );
   }

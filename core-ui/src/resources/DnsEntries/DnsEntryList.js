@@ -31,7 +31,7 @@ export function DnsEntryList(params) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      resourceName={t('dnsentries.title')}
+      resourceTitle={t('dnsentries.title')}
       createResourceForm={DnsEntryCreate}
       {...params}
     />

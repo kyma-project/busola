@@ -9,9 +9,4 @@ export const Details = React.lazy(() => import('./CronJobDetails'));
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
   networkFlowLevel: -2,
-  relations: [
-    {
-      kind: 'Job',
-    },
-  ],
 });

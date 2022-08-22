@@ -66,7 +66,6 @@ const DefaultRowRenderer = ({
   entry,
   actions,
   rowRenderer,
-  actionsStandaloneItems,
   compact,
   isBeingEdited = false,
 }) => {
@@ -88,12 +87,7 @@ const DefaultRowRenderer = ({
   });
   const actionsCell = (
     <td className="fd-table__cell">
-      <ListActions
-        actions={actions}
-        entry={entry}
-        standaloneItems={actionsStandaloneItems}
-        compact={compact}
-      />
+      <ListActions actions={actions} entry={entry} compact={compact} />
     </td>
   );
   return (
