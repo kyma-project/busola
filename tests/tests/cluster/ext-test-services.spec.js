@@ -7,7 +7,7 @@ const SAUCE = 'TOMATO';
 const PIZZA_DESC = 'Hawaiian pizza is a pizza originating in Canada.';
 const RECIPE = 'margherita-recipe';
 
-context('Test Git Repositories', () => {
+context('Test Services', () => {
   Cypress.skipAfterFail();
 
   before(() => {
@@ -15,14 +15,14 @@ context('Test Git Repositories', () => {
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
     });
-    cy.createNamespace('pizzas');
+    cy.createNamespace('services');
   });
 
   beforeEach(() => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
   });
 
-  it('Creates the EXT git repositories config', () => {
+  it('Creates the EXT services config', () => {
     cy.getIframeBody().as('iframe');
 
     cy.getLeftNav()
@@ -33,7 +33,7 @@ context('Test Git Repositories', () => {
       .contains('Upload YAML')
       .click();
 
-    cy.loadFiles('examples/pizzas/configuration/gitrepositories.yaml').then(
+    cy.loadFiles('examples/pizzas/configuration/services.yaml').then(
       resources => {
         const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
         cy.pasteToMonaco(input);
@@ -47,7 +47,7 @@ context('Test Git Repositories', () => {
     cy.get('@iframe')
       .find('.fd-dialog__body')
       .find('.sap-icon--message-success')
-      .should('have.length', 4);
+      .should('have.length', 1);
   });
 
   it('Displays the Git repositories list/detail views from the samples', () => {
@@ -62,7 +62,7 @@ context('Test Git Repositories', () => {
 
     cy.getIframeBody()
       .as('iframe')
-      .contains('a', 'default')
+      .contains('a', 'services')
       .click();
 
     cy.get('@nav')
@@ -70,7 +70,7 @@ context('Test Git Repositories', () => {
       .click();
 
     cy.get('@nav')
-      .contains('Git repositories')
+      .contains('Services')
       .click();
 
     cy.get('@iframe').contains('DELIVERY');
