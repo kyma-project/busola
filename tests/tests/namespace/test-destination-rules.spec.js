@@ -54,7 +54,6 @@ context('Test Destination Rules', () => {
 
   it('Check Destination Rule details', () => {
     cy.getIframeBody()
-      .find('[data-testid=traffic-policy]')
       .contains('LEAST_CONN')
       .should('be.visible');
   });
