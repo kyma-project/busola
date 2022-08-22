@@ -133,7 +133,7 @@ The **list** section defines extra columns available in the list.
 
 ## _details_ section
 
-The **details** section defines the display structure for the details page. It contains two sections, `header` and `body`, both of which are a list of items to display in the **header** section and the body of the page respectively. The format of the entries is similar to the **form** section, however it has extra options available.
+The **details** section defines the display structure for the details page. It contains three sections, `header`, `body`, and optional `resourceGraph`. The first two sections are a list of items to display in the **header** section and the body of the page respectively. The format of the entries is similar to the **form** section, however it has extra options available. The `resourceGraph` section is used to configure the ResourceGraph which shows relationships between various resources.
 
 ### Items parameters
 
@@ -149,7 +149,7 @@ The **details** section defines the display structure for the details page. It c
 
 Extra parameters might be available for specific widgets.
 
-### Example
+### Header and body xample
 
 ```json
 {
@@ -200,6 +200,54 @@ Extra parameters might be available for specific widgets.
   ]
 }
 ```
+
+### resourceGraph parameters
+
+- **depth** - defines the maximum distance from the original resource to a transitively related resource. Defaults to infinity.
+- **colorVariant** - optional integer in range 1 to 11 or 'neutral', denoting the SAP color variant of the node's border. If not set, the node's border is the same as the current text color.
+- **networkFlowKind** - optional boolean which determines if the resource should be shown on the network graph, Defaults to `false`, which displays the resource on the structural graph.
+- **networkFlowLevel** - optional integer which sets the horizontal position of the resource's node on the network graph.
+- **dataSources** - an array of objects in shape:
+  - **source** - a string that must correspond to one of the [dataSources](#datasources-section) name. It selects the related resource and the way it should be matched.
+
+### resourceGraph example
+
+```json
+{
+  "details": {
+    "resourceGraph": {
+      "colorVariant": 2,
+      "dataSources": [
+        {
+          "source": "relatedSecrets"
+        },
+        {
+          "source": "relatedPizzaOrders"
+        }
+      ]
+    }
+  },
+  "dataSources": {
+    "relatedSecrets": {
+      "resource": {
+        "kind": "Secret",
+        "version": "v1"
+      },
+      "filter": "$root.spec.recipeSecret = $item.metadata.name"
+    },
+    "relatedPizzaOrders": {
+      "resource": {
+        "kind": "PizzaOrder",
+        "group": "busola.example.com",
+        "version": "v1"
+      },
+      "filter": "$item.spec.pizzas[name = $root.metadata.name and namespace = $root.metadata.namespace]"
+    }
+  }
+}
+```
+
+<img src="./assets/ResourceGraph.png" alt="Example of a ResourceGraph"  style="border: 1px solid #D2D5D9">
 
 ### Data scoping
 
@@ -254,18 +302,14 @@ Those fields are used to build the related resource URL and filter the received 
   - **namespace** - the resource's Namespace name; it defaults to the original resource's Namespace. If set to `null`, cluster-wide resources or resources in all Namespaces are matched.
   - **name** - a specific resource name; leave empty to match all resources of a given type.
 - **ownerLabelSelectorPath** - the path to original object's **selector** type property; for example, `spec.selector.matchLabels` for Deployment, used to select matching Pods.
-- **filter** - [JSONata](https://docs.jsonata.org/overview.html) function enabling the user to write a custom matching logic. It receives a data context of:
+- **filter** - [JSONata](https://docs.jsonata.org/overview.html) function enabling the user to write a custom matching logic. It uses the following variables:
 
-  ```js
-  {
-    data, // related resource
-    resource, // original resource
-  }
-  ```
+  - **item** - the current item of the related kind.
+  - **root** - the original resource.
 
   This function should return a boolean value.
 
-### Example
+### Examples
 
 ```json
 {
@@ -284,10 +328,35 @@ Those fields are used to build the related resource URL and filter the received 
     "myPods": {
       "resource": {
         "kind": "Pod",
-        "group": "api",
         "version": "v1",
       },
       "ownerLabelSelectorPath": "spec.selector.matchLabels"
+    }
+  }
+}
+```
+
+```json
+{
+  "secrets": {
+    "general": ...
+    "details": {
+       "body": [
+         {
+            "widget": "ResourceList",
+            "path": "$mySecrets"
+        }
+      ]
+    }
+  },
+  "dataSources": {
+    "mySecrets": {
+      "resource": {
+        "kind": "Secret",
+        "version": "v1",
+        "namespace": null
+      },
+      "filter": "$root.spec.secretName = $item.metadata.name and $root.metadata.namespace = $item.metadata.namespace"
     }
   }
 }

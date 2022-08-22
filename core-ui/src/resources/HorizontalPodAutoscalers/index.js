@@ -11,9 +11,4 @@ export const Details = React.lazy(() =>
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
   networkFlowLevel: -1,
-  relations: [
-    {
-      kind: 'Deployment',
-    },
-  ],
 });

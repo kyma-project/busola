@@ -2,7 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { getResourceUrl } from 'shared/helpers';
-import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
+import {
+  getResourceGraphConfig,
+  useAddStyle,
+} from 'shared/components/ResourceGraph/getResourceGraphConfig';
 
 export const usePrepareListProps = (resourceType, resourceI18Key) => {
   const routerParams = useParams();
@@ -20,7 +23,6 @@ export const usePrepareListProps = (resourceType, resourceI18Key) => {
   };
 };
 
-let savedResourceGraph = null;
 export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
   const { resourceName, namespaceId } = useParams();
   const queryParams = new URLSearchParams(window.location.search);
@@ -31,9 +33,7 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
   const decodedResourceName = decodeURIComponent(resourceName);
 
   const context = useMicrofrontendContext();
-  if (!savedResourceGraph) {
-    savedResourceGraph = getPerResourceDefs('resourceGraphConfig', t, context);
-  }
+  const addStyle = useAddStyle({ styleId: 'graph-styles' });
 
   return {
     resourceUrl: decodedResourceUrl,
@@ -42,7 +42,7 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
     resourceName: decodedResourceName,
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
-    resourceGraphConfig: savedResourceGraph,
+    resourceGraphConfig: getResourceGraphConfig(t, context, addStyle),
     i18n,
   };
 };

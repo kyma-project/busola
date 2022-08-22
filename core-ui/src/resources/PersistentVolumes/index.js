@@ -7,17 +7,11 @@ export const List = React.lazy(() => import('./PersistentVolumeList'));
 export const Details = React.lazy(() => import('./PersistentVolumeDetails'));
 
 export const resourceGraphConfig = (t, context) => ({
+  depth: 1,
   relations: [
     {
-      kind: 'StorageClass',
-    },
-    {
-      kind: 'PersistentVolumeClaim',
-      clusterwide: true,
+      resource: { kind: 'StorageClass', namespace: null },
+      filter: (pv, sc) => pv.spec.storageClassName === sc.metadata.name,
     },
   ],
-  depth: 1,
-  matchers: {
-    StorageClass: (pv, sc) => pv.spec.storageClassName === sc.metadata.name,
-  },
 });
