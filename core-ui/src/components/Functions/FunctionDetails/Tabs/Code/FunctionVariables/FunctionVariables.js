@@ -221,16 +221,18 @@ export default function FunctionVariables({
     <div className="function-variables">
       <GenericList
         title={t('functions.variable.title.environment-variables')}
-        showSearchField={true}
-        showSearchSuggestion={false}
-        textSearchProperties={textSearchProperties}
         extraHeaderContent={addEnvModal}
         actions={actions}
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
-        notFoundMessage="functions.variable.not-found"
-        noSearchResultMessage="functions.variable.not-match"
+        notFoundMessage={t('functions.variable.not-found')}
+        searchSettings={{
+          showSearchField: true,
+          showSearchSuggestion: false,
+          textSearchProperties,
+          noSearchResultMessage: t('functions.variable.not-match'),
+        }}
       />
       <DeleteMessageBox
         resource={chosenVariable}

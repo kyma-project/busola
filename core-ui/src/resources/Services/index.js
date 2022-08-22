@@ -13,29 +13,12 @@ export const resourceGraphConfig = (t, context) => ({
   networkFlowLevel: -1,
   relations: [
     {
-      kind: 'Deployment',
-    },
-    {
-      kind: 'APIRule',
-    },
-    {
-      kind: 'Function',
-    },
-    {
-      kind: 'Subscription',
-    },
-    {
-      kind: 'Ingress',
-    },
-    {
-      kind: 'VirtualService',
+      resource: { kind: 'Function' },
+      filter: (service, functión) =>
+        matchByOwnerReference({
+          resource: service,
+          owner: functión,
+        }),
     },
   ],
-  matchers: {
-    Function: (service, functión) =>
-      matchByOwnerReference({
-        resource: service,
-        owner: functión,
-      }),
-  },
 });

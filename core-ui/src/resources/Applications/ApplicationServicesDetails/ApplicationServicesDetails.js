@@ -102,21 +102,33 @@ function ApplicationServiceDetails({ applicationName, serviceName }) {
           <GenericList
             key="application-service-apis"
             title={t('applications.headers.apis')}
-            textSearchProperties={['name', 'accessLabel', 'centralGatewayUrl']}
             entries={APIs}
             headerRenderer={headerRenderer}
             rowRenderer={rowRenderer}
             notFoundMessage={t('applications.messages.no-apis')}
+            searchSettings={{
+              textSearchProperties: [
+                'name',
+                'accessLabel',
+                'centralGatewayUrl',
+              ],
+            }}
           />
 
           <GenericList
             key="application-service-events"
             title={t('applications.headers.events')}
-            textSearchProperties={['name', 'accessLabel', 'centralGatewayUrl']}
             entries={events}
             headerRenderer={headerRenderer}
             rowRenderer={rowRenderer}
             notFoundMessage={t('applications.messages.no-events')}
+            searchSettings={{
+              textSearchProperties: [
+                'name',
+                'accessLabel',
+                'centralGatewayUrl',
+              ],
+            }}
           />
         </>
       )}

@@ -37,7 +37,9 @@ function TlsMatchAttributes({ matches }) {
       rowRenderer={match => [<TlsMatchAttributesItem match={match} />]}
       entries={matches}
       showHeader={false}
-      showSearchField={false}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 }

@@ -1,4 +1,5 @@
 import {
+  findRelatedResources,
   makeNode,
   match,
 } from 'shared/components/ResourceGraph/buildGraph/helpers';
@@ -10,7 +11,7 @@ function makeEdge(id1, id2) {
 export function buildStructuralGraph({ initialResource, store }, config) {
   const rootNode = {
     resource: initialResource,
-    depth: config.depth,
+    depth: config[initialResource.kind]?.depth || Number.POSITIVE_INFINITY,
   };
 
   const nodes = [rootNode];
@@ -24,17 +25,7 @@ export function buildStructuralGraph({ initialResource, store }, config) {
 
     const kind = node.resource.kind;
 
-    if (!config[kind]?.relations) {
-      console.warn(
-        'relation for kind not found',
-        kind,
-        'config:',
-        config[kind],
-      );
-      continue;
-    }
-
-    for (const relation of config[kind]?.relations) {
+    for (const relation of findRelatedResources(kind, config)) {
       for (const relatedResource of store[relation.kind] || []) {
         // don't backtrack
         if (relatedResource.kind === node.fromKind) {

@@ -2,7 +2,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: services
-  namespace: dd
+  namespace: resource
   labels:
     app.kubernetes.io/name: services
     busola.io/extension: resource
@@ -74,7 +74,7 @@ data:
           "group": "gateway.kyma-project.io",
           "version": "v1alpha1"
         },
-        "filter": "$filter(data, function($item) {$item.spec.service.name = resource.metadata.name})"
+        "filter": "$item.spec.service.name = $root.metadata.name"
       },
       "subscriptions":{
         "resource": {
@@ -82,7 +82,7 @@ data:
           "group": "eventing.kyma-project.io",
           "version": "v1alpha1"
         },
-        "filter": "$filter(data, function($item) {$substringAfter($substringBefore($item.spec.sink, '.'), '://') = resource.metadata.name})"
+        "filter": "$substringAfter($substringBefore($item.spec.sink, '.'), '://') = $root.metadata.name"
       }
     }
   general: |-
@@ -91,7 +91,7 @@ data:
         "kind": "Service",
         "version": "v1",
       },
-      "urlPath": "example-services-dd",
+      "urlPath": "example-services",
       "scope": "namespace",
     }
   translations: |-

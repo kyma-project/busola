@@ -13,28 +13,26 @@ export const resourceGraphConfig = (t, context) => ({
   networkFlowLevel: -2,
   relations: [
     {
-      kind: 'Service',
+      resource: { kind: 'HorizontalPodAutoscaler' },
+      filter: (deployment, hpa) =>
+        hpa.spec.scaleTargetRef?.kind === 'Deployment' &&
+        hpa.spec.scaleTargetRef?.name === deployment.metadata.name,
     },
     {
-      kind: 'HorizontalPodAutoscaler',
+      resource: { kind: 'Service' },
+      filter: (deployment, service) =>
+        matchBySelector(
+          deployment.spec.selector.matchLabels,
+          service.spec.selector,
+        ),
     },
     {
-      kind: 'ReplicaSet',
+      resource: { kind: 'ReplicaSet' },
+      filter: (deployment, replicaSet) =>
+        matchByOwnerReference({
+          resource: replicaSet,
+          owner: deployment,
+        }),
     },
   ],
-  matchers: {
-    HorizontalPodAutoscaler: (deployment, hpa) =>
-      hpa.spec.scaleTargetRef?.kind === 'Deployment' &&
-      hpa.spec.scaleTargetRef?.name === deployment.metadata.name,
-    Service: (deployment, service) =>
-      matchBySelector(
-        deployment.spec.selector.matchLabels,
-        service.spec.selector,
-      ),
-    ReplicaSet: (deployment, replicaSet) =>
-      matchByOwnerReference({
-        resource: replicaSet,
-        owner: deployment,
-      }),
-  },
 });

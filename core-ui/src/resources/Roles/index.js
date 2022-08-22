@@ -9,12 +9,10 @@ export const Details = React.lazy(() => import('./RoleDetails'));
 export const resourceGraphConfig = (t, context) => ({
   relations: [
     {
-      kind: 'RoleBinding',
+      resource: { kind: 'RoleBinding' },
+      filter: (cr, rb) =>
+        rb.roleRef.kind === 'Role' && rb.roleRef.name === cr.metadata.name,
     },
   ],
-  matchers: {
-    RoleBinding: (cr, rb) =>
-      rb.roleRef.kind === 'Role' && rb.roleRef.name === cr.metadata.name,
-  },
   depth: 2,
 });

@@ -35,7 +35,14 @@ data:
           "widget": "ResourceRefs",
           "kind": "Pizza",
         }
-      ]
+      ],
+      "resourceGraph": {
+        "depth": 1,
+        "colorVariant": 3,
+        "dataSources": [
+          {"source": "relatedPizzas"}
+        ]
+      }
     }
   form: |-
     [
@@ -89,4 +96,15 @@ data:
       "urlPath": "pizzaorders",
       "scope": "namespace",
       "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
+    }
+  dataSources: |-
+    {
+      "relatedPizzas": {
+        "resource": {
+            "kind": "Pizza",
+            "group": "busola.example.com",
+            "version": "v1"
+        },
+        "filter": "$root.spec.pizzas[name = $item.metadata.name and namespace = $item.metadata.namespace]"
+      }
     }

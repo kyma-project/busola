@@ -213,22 +213,23 @@ function ClusterList() {
       {editDialog}
       <PageHeader title={t('clusters.overview.title-all-clusters')} />
       <GenericList
-        textSearchProperties={textSearchProperties}
-        showSearchSuggestion={false}
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         actions={actions}
         extraHeaderContent={extraHeaderContent}
-        noSearchResultMessage={'clusters.list.no-clusters-found'}
-        allowSlashShortcut
         sortBy={{
           name: (a, b) => a.contextName?.localeCompare(b.contextName),
+        }}
+        searchSettings={{
+          textSearchProperties,
+          showSearchSuggestion: false,
+          noSearchResultMessage: t('clusters.list.no-clusters-found'),
         }}
       />
       <DeleteMessageBox
         resource={chosenCluster}
-        resourceName={chosenCluster?.kubeconfig['current-context']}
+        resourceTitle={chosenCluster?.kubeconfig['current-context']}
         deleteFn={e => {
           deleteCluster(e.name);
           notification.notifySuccess({

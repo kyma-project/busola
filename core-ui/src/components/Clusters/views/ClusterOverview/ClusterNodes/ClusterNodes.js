@@ -137,8 +137,6 @@ export function ClusterNodes() {
     <>
       <GenericList
         title={t('cluster-overview.headers.nodes')}
-        allowSlashShortcut={false}
-        showSearchField={false}
         actions={[]}
         entries={data || []}
         headerRenderer={headerRenderer}
@@ -149,6 +147,10 @@ export function ClusterNodes() {
         }
         pagination={{ autoHide: true }}
         testid="cluster-nodes"
+        searchSettings={{
+          showSearchField: false,
+          allowSlashShortcut: false,
+        }}
       />
       {error && !data && (
         <ErrorPanel

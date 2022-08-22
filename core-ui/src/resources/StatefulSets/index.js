@@ -13,14 +13,12 @@ export const resourceGraphConfig = (t, context) => ({
   networkFlowLevel: -1,
   relations: [
     {
-      kind: 'Pod',
+      resource: { kind: 'Pod' },
+      filter: (ss, pod) =>
+        matchByOwnerReference({
+          resource: pod,
+          owner: ss,
+        }),
     },
   ],
-  matchers: {
-    Pod: (ss, pod) =>
-      matchByOwnerReference({
-        resource: pod,
-        owner: ss,
-      }),
-  },
 });
