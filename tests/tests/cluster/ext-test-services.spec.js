@@ -33,7 +33,7 @@ context('Test Services', () => {
       .contains('Upload YAML')
       .click();
 
-    cy.loadFiles('examples/pizzas/configuration/services.yaml').then(
+    cy.loadFiles('examples/services/configuration/services.yaml').then(
       resources => {
         const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
         cy.pasteToMonaco(input);
@@ -48,9 +48,23 @@ context('Test Services', () => {
       .find('.fd-dialog__body')
       .find('.sap-icon--message-success')
       .should('have.length', 1);
+
+    cy.loadFiles('examples/services/samples.yaml').then(resources => {
+      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+      cy.pasteToMonaco(input);
+    });
+
+    cy.get('@iframe')
+      .contains('Submit')
+      .click();
+
+    cy.get('@iframe')
+      .find('.fd-dialog__body')
+      .find('.sap-icon--message-success')
+      .should('have.length', 1);
   });
 
-  it('Displays the Git repositories list/detail views from the samples', () => {
+  it('Displays the Services list/detail views from the samples', () => {
     cy.loginAndSelectCluster({
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
