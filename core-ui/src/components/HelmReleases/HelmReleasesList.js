@@ -74,7 +74,6 @@ function HelmReleasesList() {
         }
       />
       <GenericList
-        textSearchProperties={['recentRelease.chart.metadata.name']}
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
@@ -83,6 +82,9 @@ function HelmReleasesList() {
         allowSlashShortcut
         sortBy={{
           name: (a, b) => a.releaseName.localeCompare(b.releaseName),
+        }}
+        searchSettings={{
+          textSearchProperties: ['recentRelease.chart.metadata.name'],
         }}
       />
     </>

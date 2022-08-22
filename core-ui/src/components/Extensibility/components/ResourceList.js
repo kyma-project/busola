@@ -49,7 +49,7 @@ export function ResourceList({
       resources={value?.items}
       resourceUrl={resourceUrl}
       resourceType={prettifyKind(kind)}
-      resourceName={prettifyKind(kind)}
+      resourceTitle={prettifyKind(kind)}
       namespace={namespace}
       isCompact
       title={structure.name}

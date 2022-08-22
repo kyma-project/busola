@@ -51,14 +51,13 @@ ResourcesList.propTypes = {
   createActionLabel: PropTypes.string,
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
-  resourceName: PropTypes.string,
+  resourceTitle: PropTypes.string,
   namespace: PropTypes.string,
   hasDetailsView: PropTypes.bool,
   fixedPath: PropTypes.bool,
   isCompact: PropTypes.bool,
   showTitle: PropTypes.bool,
   filter: PropTypes.func,
-  filterFn: PropTypes.func,
   listHeaderActions: PropTypes.node,
   description: PropTypes.node,
   readOnly: PropTypes.bool,
@@ -77,7 +76,6 @@ ResourcesList.defaultProps = {
   listHeaderActions: null,
   readOnly: false,
   disableCreate: false,
-  filterFn: () => true,
 };
 
 export function ResourcesList(props) {
@@ -89,7 +87,7 @@ export function ResourcesList(props) {
     <YamlEditorProvider>
       {!props.isCompact && (
         <PageHeader
-          title={prettifyNamePlural(props.resourceName, props.resourceType)}
+          title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
           actions={props.customHeaderActions}
           description={props.description}
         />
@@ -108,21 +106,18 @@ export function ResourcesList(props) {
 
 function Resources(props) {
   const {
-    windowTitle,
-    resourceName,
+    resourceTitle,
     resourceType,
     filter,
-    filterFn,
     resourceUrl,
     skipDataLoading,
     isCompact,
   } = props;
-  useWindowTitle(
-    windowTitle || prettifyNamePlural(resourceName, resourceType),
-    { skip: isCompact },
-  );
+  useWindowTitle(prettifyNamePlural(resourceTitle, resourceType), {
+    skip: isCompact,
+  });
 
-  const { loading, error, data: resources, silentRefetch } = useGetList(filter)(
+  const { loading, error, data: resources, silentRefetch } = useGetList()(
     resourceUrl,
     {
       pollingInterval: 3000,
@@ -134,7 +129,7 @@ function Resources(props) {
     <ResourceListRenderer
       loading={loading}
       error={error}
-      resources={(resources || []).filter(filterFn)}
+      resources={filter ? (resources || []).filter(filter) : resources || []}
       silentRefetch={silentRefetch}
       {...props}
     />
@@ -144,7 +139,7 @@ function Resources(props) {
 export function ResourceListRenderer({
   resourceUrl,
   resourceType,
-  resourceName,
+  resourceTitle,
   namespace,
   customColumns = [],
   columns,
@@ -158,7 +153,6 @@ export function ResourceListRenderer({
   readOnly,
   navigateFn,
   testid,
-  textSearchProperties = [],
   omitColumnsIds = ['namespace'],
   customListActions = [],
   createFormProps,
@@ -167,8 +161,6 @@ export function ResourceListRenderer({
   error,
   resources,
   silentRefetch = () => {},
-  showSearchField = true,
-  allowSlashShortcut,
   resourceUrlPrefix,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate,
@@ -176,6 +168,7 @@ export function ResourceListRenderer({
     name: nameLocaleSort,
     time: timeSort,
   },
+  searchSettings,
 }) {
   useVersionWarning({
     resourceUrl,
@@ -187,7 +180,7 @@ export function ResourceListRenderer({
   const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
-    resourceName,
+    resourceTitle,
     resourceType,
   });
 
@@ -205,7 +198,7 @@ export function ResourceListRenderer({
   useEffect(() => closeEditor(), [namespace]);
 
   const prettifiedResourceName = prettifyNameSingular(
-    resourceName,
+    resourceTitle,
     resourceType,
   );
 
@@ -412,7 +405,7 @@ export function ResourceListRenderer({
             <CreateResourceForm
               resource={activeResource}
               resourceType={resourceType}
-              resourceName={resourceName}
+              resourceTitle={resourceTitle}
               resourceUrl={resourceUrl}
               namespace={namespace}
               refetchList={silentRefetch}
@@ -431,14 +424,6 @@ export function ResourceListRenderer({
       />
       <GenericList
         title={showTitle ? title || prettifiedResourceName : null}
-        textSearchProperties={[
-          'metadata.name',
-          'metadata.namespace',
-          'metadata.labels',
-          ...textSearchProperties,
-        ]}
-        allowSlashShortcut={allowSlashShortcut}
-        showSearchField={showSearchField}
         actions={actions}
         entries={resources || []}
         headerRenderer={headerRenderer}
@@ -450,6 +435,15 @@ export function ResourceListRenderer({
         testid={testid}
         currentlyEditedResourceUID={currentlyEditedResourceUID}
         sortBy={sortBy}
+        searchSettings={{
+          ...searchSettings,
+          textSearchProperties: [
+            'metadata.name',
+            'metadata.namespace',
+            'metadata.labels',
+            ...(searchSettings?.textSearchProperties || []),
+          ],
+        }}
       />
     </>
   );

@@ -13,11 +13,13 @@ export function ServiceGateways(service) {
     <GenericList
       key="gateways"
       title={t('virtualservices.gateways')}
-      showSearchField={false}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       showHeader={false}
       entries={service.spec.gateways || []}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 }

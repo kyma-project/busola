@@ -22,7 +22,7 @@ const handleTableValue = (value, t) => {
     default: {
       return {
         entries: [],
-        genericErrorMessage: t('extensibility.widgets.table.error'),
+        notFoundMessage: t('extensibility.widgets.table.error'),
       };
     }
   }
@@ -70,20 +70,24 @@ export function Table({
     };
   };
 
+
   const sortOptions = (structure?.children || []).filter(child => child.sort);
+
+  const className = `extensibility-table ${
+    disableMargin ? 'fd-margin--xs' : ''
+  }`;
 
   return (
     <GenericList
-      className="extensibility-table"
-      showSearchSuggestion={false}
+      className={className}
       title={tExt(structure.name, {
         defaultValue: structure.name || structure.source,
       })}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      disableMargin={disableMargin}
       {...handleTableValue(value, t)}
       sortBy={() => sortBy(sortOptions, tExt, {}, originalResource)}
+      searchSettings={{ showSearchSuggestion: false }}
     />
   );
 }

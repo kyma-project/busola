@@ -38,7 +38,9 @@ const Tolerations = resource => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       testid="daemon-set-tolerations"
-      textSearchProperties={textSearchProperties}
+      searchSettings={{
+        textSearchProperties,
+      }}
     />
   );
 };

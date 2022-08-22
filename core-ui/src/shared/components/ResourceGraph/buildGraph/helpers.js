@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import pluralize from 'pluralize';
+import { getApiPath as getApiPathFromNavigation } from 'shared/utils/helpers';
 
 export function wrap(str) {
   return _.chunk(str.split(''), 15)
@@ -40,10 +42,17 @@ export function match(resourceA, resourceB, config) {
   const kindB = resourceB.kind;
 
   let matcher = null;
-  if (config[kindA]?.matchers?.[kindB]) {
-    matcher = config[kindA].matchers[kindB];
-  } else if (config[kindB]?.matchers?.[kindA]) {
-    matcher = config[kindB].matchers[kindA];
+  const relationA = config[kindA]?.relations?.find(
+    r => r.resource.kind === kindB,
+  );
+  const relationB = config[kindB]?.relations?.find(
+    r => r.resource.kind === kindA,
+  );
+
+  if (relationA) {
+    matcher = relationA.filter;
+  } else if (relationB) {
+    matcher = relationB.filter;
     // order matters!
     [resourceA, resourceB] = [resourceB, resourceA];
   }
@@ -52,8 +61,42 @@ export function match(resourceA, resourceB, config) {
     try {
       return matcher(resourceA, resourceB);
     } catch (e) {
-      console.warn(e);
+      console.debug(e);
     }
   }
   return false;
+}
+
+export function findRelatedResources(originalResourceKind, config) {
+  const relations = (config[originalResourceKind].relations || []).map(
+    ({ resource }) => resource,
+  );
+
+  for (const [otherKind, otherConfig] of Object.entries(config)) {
+    if (otherKind === originalResourceKind) continue;
+
+    for (const otherRelation of otherConfig.relations || []) {
+      if (otherRelation.resource.kind === originalResourceKind) {
+        relations.push({ kind: otherKind });
+      }
+    }
+  }
+
+  // remove duplicates ("Pod -> Deployment" is the same as "Deployment -> Pod")
+  return relations.filter(
+    (relation, i) => relations.findIndex(r => r.kind === relation.kind) === i,
+  );
+}
+
+export function getApiPath(relatedResource, nodes) {
+  // check if (version, group) are defined
+  const { version, group } = relatedResource;
+  if (version && group) {
+    const apiGroup = group ? `apis/${group}` : 'api';
+    return `/${apiGroup}/${version}`;
+  }
+
+  // fallback to navigation nodes
+  const resourceType = pluralize(relatedResource.kind.toLowerCase());
+  return getApiPathFromNavigation(resourceType, nodes);
 }

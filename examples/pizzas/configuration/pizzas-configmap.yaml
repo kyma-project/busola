@@ -19,6 +19,7 @@ data:
           "name": "Controlled By",
           "source": "spec.ownerReferences",
           "widget": "ControlledBy",
+          "kindOnly": true,
           "placeholder": "---"
         },
         {
@@ -35,7 +36,7 @@ data:
             "namespace": "root.metadata.namespace",
             "kind": "data.kind"
           }
-         }
+        }
       ],
       "body": [
         {
@@ -54,7 +55,7 @@ data:
                   "name": "Message",
                   "source": "status.messages[-1].message"
                 },
-                { "name": "Name", "source": "$join(spec.toppings.name, ', ')" },
+                { "name": "Toppings", "source": "$join(spec.toppings.name, ', ')" },
                 { "name": "Toppings price", "source": "$sum(spec.toppings.price)" }
               ]
             },
@@ -106,7 +107,18 @@ data:
             }
           ]
         }
-      ]
+      ],
+      "resourceGraph": {
+        "colorVariant": 2,
+        "dataSources": [
+          {
+            "source": "relatedSecrets"
+          },
+          {
+            "source": "relatedPizzaOrders"
+          }
+        ]
+      }
     }
   form: |-
     [
@@ -151,7 +163,22 @@ data:
           "version": "v1",
           "namespace": "pizzas"
         },
-        "filter": "$filter(data, function($item) {$item.metadata.name = resource.spec.recipeSecret})"
+        "filter": "$item.metadata.name = $root.spec.recipeSecret"
+      },
+      "relatedSecrets": {
+        "resource": {
+            "kind": "Secret",
+            "version": "v1",
+        },
+        "filter": "$root.spec.recipeSecret = $item.metadata.name"
+      },
+      "relatedPizzaOrders": {
+        "resource": {
+          "kind": "PizzaOrder",
+          "group": "busola.example.com",
+          "version": "v1"
+        },
+        "filter": "$item.spec.pizzas[name = $root.metadata.name and namespace = $root.metadata.namespace]",
       }
     }
   general: |-

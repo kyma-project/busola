@@ -24,10 +24,12 @@ const DistributeWidget = ({ distribute }) => {
       className="destination-rule-refs-panel"
       title={t('destination-rules.details.distribution')}
       entries={distribute}
-      textSearchProperties={['from']}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       testid="dr-distribution-rules"
+      searchSettings={{
+        textSearchProperties: ['form'],
+      }}
     />
   );
 };
@@ -42,11 +44,13 @@ const FailoverWidget = ({ failover }) => {
     <GenericList
       className="destination-rule-refs-panel"
       title={t('destination-rules.details.failover')}
-      textSearchProperties={['from']}
       entries={failover}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       testid="dr-failover-rules"
+      searchSettings={{
+        textSearchProperties: ['form'],
+      }}
     />
   );
 };
