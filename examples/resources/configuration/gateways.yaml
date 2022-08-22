@@ -22,29 +22,30 @@ data:
     {
       "header": [
         {
-          "path": "spec.selector",
           "source": "spec.selector",
-          "widget": "Labels"
+          "widget": "Labels",
+          "name": "spec.selector"
         }
       ],
       "body": [     
         {
           "widget": "Table",
-          "path": "spec.servers",
+          "source": "spec.servers",
+          "name": "spec.servers",
           "children": [
-            { "path": "port.name" },
-            { "path": "hosts" },
-            { "path": "port.number" },
-            { "path": "tls.mode" },
-            { "path": "tls.credentialName" }
+            { "source": "$item.port.name", "name": "spec.servers.port.name" },
+            { "source": "$item.hosts", "name": "spec.servers.hosts" },
+            { "source": "$item.port.number", "name": "spec.servers.port.number" },
+            { "source": "$item.tls.mode", "name": "spec.servers.tls.mode" },
+            { "source": "$item.tls.credentialName", "name": "spec.servers.tls.credentialName" }
           ]
         },
         {
           "widget": "Panel",
-          "name": "Selector",
+          "name": "spec.selector",
           "children": [
             { 
-              "path": "$podSelector",
+              "source": "$podSelector()",
               "widget": "ResourceList",
               "disableCreate": true,
               "isCompact": true
@@ -79,6 +80,7 @@ data:
               "MYSQL",
               "TCP"
             ],
+            "placeholder": "placeholders.dropdown",
           },
           { "path": "targetPort", "simple": true },
         ]
@@ -94,12 +96,32 @@ data:
             "path": "mode", 
             "simple": true, 
             "visibility": "$item.port.protocol = 'HTTPS'",
-            "enum": [ ],
+            "placeholder": "placeholders.dropdown"
           },
-          { "path": "credentialName", "simple": true, "visibility": "$item.port.protocol = 'HTTPS'" },
-          { "path": "serverCertificate", "simple": true, "visibility": "$item.port.protocol = 'HTTPS'" },
-          { "path": "privateKey", "simple": true, "visibility": "$item.port.protocol = 'HTTPS'" },
-          { "path": "caCertificates", "simple": true, "visibility": "$item.port.protocol = 'HTTPS'" },
+          { 
+            "path": "credentialName", 
+            "simple": true, 
+            "visibility": "$item.port.protocol = 'HTTPS'",
+            "placeholder": "Start typing to select Secret from the List"
+          },
+          { 
+            "path": "serverCertificate", 
+            "simple": true, 
+            "visibility": "$item.port.protocol = 'HTTPS'",
+            "placeholder": "placeholders.serverCertificate"
+          },
+          { 
+            "path": "privateKey", 
+            "simple": true, 
+            "visibility": "$item.port.protocol = 'HTTPS'",
+            "placeholder": "placeholders.privateKey",
+          },
+          { 
+            "path": "caCertificates", 
+            "simple": true, 
+            "visibility": "$item.port.protocol = 'HTTPS'",
+            "placeholder": "placeholders.caCertificates",
+          },
         ]
       },
       {
@@ -122,7 +144,7 @@ data:
   list: |-
     [
       { 
-        "path": "spec.selector",
+        "source": "spec.selector",
         "widget": "Labels"
       },
     ]
@@ -144,3 +166,7 @@ data:
       spec.servers.tls.privateKey: Private Key
       spec.servers.tls.caCertificates: CA Certificate
       spec.servers.hosts: Hosts
+      placeholders.dropdown: Type or choose an option
+      placeholders.serverCertificate: Enter the certificate path
+      placeholders.privateKey: Enter the private key path
+      placeholders.caCertificates: Enter the CA certificates path
