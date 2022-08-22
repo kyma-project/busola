@@ -45,6 +45,7 @@ export function StringRenderer({
       compact={compact}
       required={required}
       data-testid={storeKeys.join('.')}
+      placeholder={schema.get('placeholder') || ''}
       {...getTypeSpecificProps()}
     />
   );
