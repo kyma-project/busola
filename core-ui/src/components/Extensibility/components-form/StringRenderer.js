@@ -3,6 +3,7 @@ import React from 'react';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { useGetTranslation } from 'components/Extensibility/helpers';
+import { fromJS } from 'immutable';
 
 export function StringRenderer({
   onChange,
@@ -19,8 +20,7 @@ export function StringRenderer({
 
   const getTypeSpecificProps = () => {
     if (schema.get('enum')) {
-      const options = schema
-        .get('enum')
+      const options = fromJS(schema.get('enum'))
         .toArray()
         .map(key => ({ key, text: key }));
       return { input: Inputs.ComboboxInput, options };

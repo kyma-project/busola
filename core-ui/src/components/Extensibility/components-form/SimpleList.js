@@ -96,13 +96,7 @@ export function SimpleList({
                     level={level + 1}
                     schemaKeys={schemaKeys?.push('items')}
                     compact
-                    placeholder={
-                      placeholder
-                        ? tExt(placeholder, {
-                            defaultValue: placeholder,
-                          })
-                        : null
-                    }
+                    placeholder={placeholder && tExt(placeholder)}
                   />
                   <span className="item-action">
                     {!isLast(index) && (
