@@ -1,0 +1,35 @@
+apiVersion: busola.example.com/v1
+kind: PizzaOrder
+metadata:
+  name: margherita-order
+  labels:
+    app.kubernetes.io/name: margherita-order
+  annotations: {}
+  namespace: pizzas
+spec:
+  status: Error
+  description: Something went wrong...
+  orderDetails:
+    paymentMethod: CASH
+    realization: DELIVERY
+  pizzas:
+    - name: margherita
+      namespace: pizzas
+---
+apiVersion: busola.example.com/v1
+kind: PizzaOrder
+metadata:
+  name: diavola-order
+  labels:
+    app.kubernetes.io/name: diavola-order
+  annotations: {}
+  namespace: pizzas
+spec:
+  orderDetails:
+    paymentMethod: CARD
+    realization: SELF-PICKUP
+  description: The clients asks to prepare the pizza as soon as possible.
+  pizzas:
+    - name: diavola
+      namespace: pizzas
+  status: Ready
