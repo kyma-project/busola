@@ -236,6 +236,26 @@ data:
             ]
           },
 
+            {
+              "path": "[].corsPolicy", "simple": true, "name": "CORS Policy", "widget": "FormGroup", "children": [
+                {
+                  "path": "allowCredentials", "simple": true, "name": "Allow Credentials", "type": "boolean"
+                }, 
+                {
+                  "path": "allowMethods", "simple": true, "name": "Allow Methods", "widget": "SimpleList"
+                },
+                {
+                  "path": "allowHeaders", "simple": true, "name": "Allow Headers", "widget": "SimpleList"
+                },
+                {
+                  "path": "exposeHeaders", "simple": true, "name": "Expose Headers", "widget": "SimpleList"
+                },
+                {
+                  "path": "maxAge", "simple": true, "name": "Max Age"
+                }
+              ]
+            }
+
         ] 
       },
 
