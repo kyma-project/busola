@@ -36,7 +36,6 @@
     "cluster/test-custom-resources.spec.js",
     "cluster/test-navigation-features.spec.js",
     "cluster/test-pizzas.spec.js",
-    "cluster/ext-test-services.spec.js",
     "cluster/run-after.spec.js",
     "extensibility/ext-test-pizzas.spec.js",
     "extensibility/ext-test-services.spec.js",
