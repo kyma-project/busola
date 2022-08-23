@@ -47,7 +47,7 @@ export function StringRenderer({
       label={tFromStoreKeys(storeKeys, schema)}
       placeholder={
         schemaPlaceholder
-          ? t(schemaPlaceholder, { defaultValue: placeholder })
+          ? tExt(schemaPlaceholder, { defaultValue: placeholder })
           : placeholder
       }
       compact={compact}

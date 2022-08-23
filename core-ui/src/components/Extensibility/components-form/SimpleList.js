@@ -101,7 +101,7 @@ export function SimpleList({
                         ? tExt(placeholder, {
                             defaultValue: placeholder,
                           })
-                        : ''
+                        : null
                     }
                   />
                   <span className="item-action">
