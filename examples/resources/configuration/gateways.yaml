@@ -18,7 +18,7 @@ data:
         "filter": "$selectorMatchByLabels($item, $root.spec.selector)"
       }
     }
-  details: |-
+  details: |
     {
       "header": [
         {
@@ -47,6 +47,8 @@ data:
             { 
               "source": "$podSelector()",
               "widget": "ResourceList",
+              "disableCreate": true,
+              "isCompact": true
             }
           ]
         }
@@ -55,7 +57,9 @@ data:
   form: |-
     [
       {
-        "path": "spec.selector", "widget": "KeyValuePair", "simple": true
+        "path": "spec.selector", 
+        "widget": "KeyValuePair", 
+        "simple": true
       },
       {
         "widget": "FormGroup",
@@ -63,7 +67,12 @@ data:
         "path": "spec.servers[].port",
         "children": [
           { "path": "number", "simple": true },
-          { "path": "name", "widget": "Name", "showHelp": false, "simple": true },
+          { 
+            "path": "name", 
+            "widget": "Name", 
+            "showHelp": false, 
+            "simple": true 
+          },
           {
             "path": "protocol", 
             "simple": true,
@@ -97,18 +106,18 @@ data:
             "placeholder": "placeholders.dropdown"
           },
           { 
-                "path": "credentialName", 
-                "simple": true, 
-                "widget": "Resource",
-                "resource": {
-                  "kind": "Secret",
-                  "version": "v1",
-                  "namespace": "istio-system",
-                  "scope": "namespace",
-                },
-                "filter": "$filter(data, function($item) { ($filterMatchingSecrets($item) })",
-                "visibility": "$item.port.protocol = 'HTTPS'",
-              },
+            "path": "credentialName", 
+            "simple": true, 
+            "widget": "Resource",
+            "resource": {
+              "kind": "Secret",
+              "version": "v1",
+              "namespace": "istio-system",
+              "scope": "namespace",
+            },
+            "filter": "$item.type = 'kubernetes.io/tls' or ($item.type = 'Opaque' and $contains($item.data, 'key') and $contains($item.data, 'cert'))",
+            "visibility": "$item.port.protocol = 'HTTPS'",
+          },
           { 
             "path": "serverCertificate", 
             "simple": true, 
@@ -144,7 +153,7 @@ data:
       "urlPath": "cherry-gateways",
       "category": "Istio",
       "scope": "namespace",
-      "description": "{{[Gateways](https://istio.io/latest/docs/reference/config/networking/gateway/)}} describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections. ."
+      "description": "{{[Gateways](https://istio.io/latest/docs/reference/config/networking/gateway/)}} describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections."
     }
   list: |-
     [
