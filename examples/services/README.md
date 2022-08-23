@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `services` example showcases the Busola's extensibility feature with the native Kubernetes resource.
+The `services` example showcases the Busola's extensibility feature with the Kubernetes Service resource.
 
 The `configuration.yaml` file consists of a ConfigMap that store the information about the extensibility configuration.
 
