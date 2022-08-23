@@ -33,11 +33,7 @@ export function NumberRenderer({
         });
       }}
       label={tFromStoreKeys(storeKeys, schema)}
-      placeholder={
-        schemaPlaceholder
-          ? tExt(schemaPlaceholder, { defaultValue: placeholder })
-          : placeholder
-      }
+      placeholder={schemaPlaceholder ? tExt(schemaPlaceholder) : placeholder}
       data-testid={storeKeys.join('.')}
       input={Inputs.Number}
       compact={compact}

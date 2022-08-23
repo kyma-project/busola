@@ -45,11 +45,7 @@ export function StringRenderer({
         });
       }}
       label={tFromStoreKeys(storeKeys, schema)}
-      placeholder={
-        schemaPlaceholder
-          ? tExt(schemaPlaceholder, { defaultValue: placeholder })
-          : placeholder
-      }
+      placeholder={schemaPlaceholder ? tExt(schemaPlaceholder) : placeholder}
       compact={compact}
       required={required}
       data-testid={storeKeys.join('.')}
