@@ -44,8 +44,6 @@ export function GenericList({
     });
   };
 
-  console.log(value?.toJS());
-
   const { tFromStoreKeys } = useGetTranslation();
 
   return (
