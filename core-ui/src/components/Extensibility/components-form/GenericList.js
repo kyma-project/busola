@@ -19,10 +19,12 @@ export function GenericList({
   ...props
 }) {
   const { t } = useTranslation();
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
   const { store } = useUIStore();
   const { value } = store?.extractValues(storeKeys) || {};
   const listSize = value?.size || 0;
-  console.log('sk', storeKeys?.toJS());
+  const placeholder = schema.get('placeholder');
+
   const addItem = () => {
     onChange({
       storeKeys,
@@ -43,8 +45,6 @@ export function GenericList({
       required,
     });
   };
-
-  const { tFromStoreKeys } = useGetTranslation();
 
   return (
     <ResourceForm.CollapsibleSection
@@ -90,6 +90,7 @@ export function GenericList({
                 storeKeys={ownKeys}
                 level={level + 1}
                 schemaKeys={schemaKeys?.push('items')}
+                placeholder={tExt(placeholder, { defaultValue: placeholder })}
               />
             </ResourceForm.CollapsibleSection>
           );
