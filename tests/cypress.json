@@ -16,8 +16,6 @@
   "experimentalInteractiveRunEvents": true,
   "testFiles": [
     "cluster/run-before.spec.js",
-    "cluster/test-pizzas.spec.js",
-    "cluster/test-git-repos.spec.js",
     "cluster/test-edit-cluster.spec.js",
     "cluster/test-applications.spec.js",
     "cluster/test-download-a-kubeconfig.spec.js",
@@ -37,6 +35,8 @@
     "cluster/test-command-palette.spec.js",
     "cluster/test-custom-resources.spec.js",
     "cluster/test-navigation-features.spec.js",
+    "cluster/test-pizzas.spec.js",
+    "cluster/ext-test-services.spec.js",
     "cluster/run-after.spec.js",
     "namespace/run-before.spec.js",
     "namespace/test-namespace-overview.spec.js",
