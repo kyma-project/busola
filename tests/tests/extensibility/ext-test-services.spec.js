@@ -18,13 +18,11 @@ context('Test Services', () => {
   });
 
   it('Creates the EXT Services config', () => {
-    cy.getIframeBody().as('iframe');
-
     cy.getLeftNav()
       .contains('Cluster Details')
       .click();
 
-    cy.get('@iframe')
+    cy.getIframeBody()
       .contains('Upload YAML')
       .click();
 
@@ -35,11 +33,11 @@ context('Test Services', () => {
       },
     );
 
-    cy.get('@iframe')
+    cy.getIframeBody()
       .contains('Submit')
       .click();
 
-    cy.get('@iframe')
+    cy.getIframeBody()
       .find('.fd-dialog__body')
       .find('.sap-icon--message-success')
       .should('have.length', 1);
@@ -49,11 +47,11 @@ context('Test Services', () => {
       cy.pasteToMonaco(input);
     });
 
-    cy.get('@iframe')
+    cy.getIframeBody()
       .contains('Submit')
       .click();
 
-    cy.get('@iframe')
+    cy.getIframeBody()
       .find('.fd-dialog__body')
       .find('.sap-icon--message-success')
       .should('have.length', 1);
@@ -70,7 +68,6 @@ context('Test Services', () => {
       .click();
 
     cy.getIframeBody()
-      .as('iframe')
       .contains('a', 'services')
       .click();
 
@@ -82,23 +79,26 @@ context('Test Services', () => {
       .contains('Custom Services')
       .click();
 
-    cy.get('@iframe').contains('Type');
-    cy.get('@iframe').contains('LoadBalancer');
-    cy.get('@iframe').contains('Create Custom Service');
-    cy.get('@iframe')
-      .contains('a', 'test-service')
-      .click({ force: true });
+    cy.getIframeBody().contains('Type');
+    cy.getIframeBody().contains('LoadBalancer');
+    cy.getIframeBody().contains('Create Custom Service');
+  });
+
+  it('Displays the header overridden by translations (on List)', () => {
+    cy.getIframeBody().contains('Cluster IP override');
   });
 
   it('Displays the EXT Services detail view', () => {
     cy.getIframeBody()
-      .as('iframe')
-      .contains('Type');
-    cy.get('@iframe').contains('LoadBalancer');
-    cy.get('@iframe').contains('a', 'Custom Services');
+      .contains('a', 'test-service')
+      .click({ force: true });
+
+    cy.getIframeBody().contains('Type');
+    cy.getIframeBody().contains('LoadBalancer');
+    cy.getIframeBody().contains('a', 'Custom Services');
   });
 
-  it('Displays the header overridden by translations', () => {
+  it('Displays the header overridden by translations (on Details)', () => {
     cy.getIframeBody().contains('Cluster IP override');
   });
 });

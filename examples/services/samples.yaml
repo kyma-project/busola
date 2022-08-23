@@ -12,9 +12,6 @@ spec:
       nodePort: 32735
   selector:
     app: frontend
-  clusterIP: 10.43.0.0
-  clusterIPs:
-    - 10.43.0.0
   type: LoadBalancer
   sessionAffinity: None
   externalTrafficPolicy: Cluster
