@@ -23,7 +23,7 @@ export function GenericList({
   const { store } = useUIStore();
   const { value } = store?.extractValues(storeKeys) || {};
   const listSize = value?.size || 0;
-  const placeholder = schema.get('placeholder');
+  const schemaPlaceholder = schema.get('placeholder');
 
   const addItem = () => {
     onChange({
@@ -90,7 +90,7 @@ export function GenericList({
                 storeKeys={ownKeys}
                 level={level + 1}
                 schemaKeys={schemaKeys?.push('items')}
-                placeholder={placeholder && tExt(placeholder)}
+                placeholder={schemaPlaceholder && tExt(schemaPlaceholder)}
               />
             </ResourceForm.CollapsibleSection>
           );
