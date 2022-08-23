@@ -55,7 +55,14 @@ data:
             "name": "TLS",
             "visibility": "$exists(*)"
           }
-      ]
+      ],
+      "resourceGraph": {
+        "dataSources": [
+          {
+            "source": "gateways"
+          }
+        ]
+      }
     }
   form: |-
     [
@@ -289,8 +296,10 @@ data:
         "resource": {
           "kind": "Gateway",
           "group": "networking.istio.io",
-          "version": "v1beta1"
+          "version": "v1beta1",
+          "namespace": null
         },
+        "filter": "$filter($root.spec.gateways, function($g){$substringBefore($g,'/') = $item.metadata.namespace and $substringAfter($g, '/') = $item.metadata.name}) "
       }
     }
   general: |-
