@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
@@ -38,6 +38,7 @@ export function ResourceSchema({
 
   const translationBundle = path || 'extensibility';
   const { t } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
+  const [rootRule, setRootRule] = useState({});
 
   const fullSchemaRules = [
     { path: 'metadata.name', simple: true },
@@ -49,7 +50,9 @@ export function ResourceSchema({
   const advancedRules = fullSchemaRules.filter(item => item.advanced ?? true);
 
   const myRules = advanced ? advancedRules : simpleRules;
-  const preparedRules = prepareSchemaRules(myRules);
+  useEffect(() => {
+    setRootRule(prepareSchemaRules(myRules));
+  }, [schemaRules]);
 
   if (isEmpty(schema)) return null;
 
@@ -71,7 +74,7 @@ export function ResourceSchema({
         store={store}
         showValidity={true}
         onChange={onChange}
-        schemaRules={preparedRules}
+        rootRule={rootRule}
       >
         <FormStack isRoot schema={schemaMap} resource={resource} />
       </UIStoreProvider>

@@ -1,13 +1,14 @@
 import React from 'react';
 import { merge, initial, last } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
-import { List } from 'immutable';
+import { List, OrderedMap, fromJS } from 'immutable';
 
-const byPath = a => b => JSON.stringify(b.path) === JSON.stringify(a);
+const eqPath = (a, b) => JSON.stringify(b) === JSON.stringify(a);
+const byPath = a => b => eqPath(b.path, a);
 
 // JS findLast doesn't work in firefox yet
 const findLast = (rules = [], condition) => {
-  const reversedRules = rules.reverse();
+  const reversedRules = rules.reverse().filter(rule => !rule.var);
   return reversedRules.find(condition);
 };
 
@@ -17,63 +18,57 @@ const propertiesWrapper = src => ({
 });
 
 export function prepareSchemaRules(ruleDefs) {
-  const rules = [{ path: [], children: [] }];
-
-  const addRule = rule => {
-    rules.push(rule);
-    const parentPath = initial(rule.path);
-    const lastParent = findLast(rules, byPath(parentPath));
-    if (lastParent) {
-      lastParent.children.push(rule);
-    }
-  };
+  const root = { path: [], children: [] };
+  let stack = [root];
 
   const extractRules = ({ path, ...ruleDef }, parentPath = []) => {
-    const fullPath = [
-      ...parentPath,
-      ...(Array.isArray(path)
-        ? path
-        : path?.replace(/\[]/g, '.[]')?.split('.') || []),
-    ];
+    const fullPath = path
+      ? [
+          ...parentPath,
+          ...(Array.isArray(path)
+            ? path
+            : path?.replace(/\[]/g, '.[]')?.split('.') || []),
+        ]
+      : [...parentPath, '*'];
 
-    initial(fullPath).reduce((acc, step) => {
+    fullPath.reduce((acc, step, index) => {
       const myPath = [...acc, step];
-      const lastRule = findLast(rules, byPath(myPath));
-      if (!lastRule) {
-        addRule({
-          path: myPath,
-          auto: true,
-          children: [],
-        });
+      if (!stack[index + 1] || !eqPath(stack[index + 1].path, myPath)) {
+        if (stack[index + 1]) {
+          stack = stack.slice(0, index + 1);
+        }
+        const stackTop = stack[index];
+        const rule =
+          index === fullPath.length - 1
+            ? {
+                ...ruleDef,
+                path: myPath,
+                children: [],
+              }
+            : {
+                path: myPath,
+                children: [],
+              };
+        stackTop.children.push(rule);
+        stack.push(rule);
       }
       return myPath;
     }, []);
 
-    const lastRule = findLast(rules, byPath(fullPath));
-    if (!lastRule || !lastRule.auto) {
-      addRule({
-        ...ruleDef,
-        path: fullPath,
-        children: [],
-      });
-    } else {
-      merge(lastRule, ruleDef);
-      lastRule.auto = false;
-      lastRule.children = [];
-    }
     ruleDef.children?.forEach(subDef => extractRules(subDef, fullPath));
   };
 
   ruleDefs.forEach(subDef => extractRules(subDef));
 
-  return rules;
+  return root;
 }
 
 export function SchemaRulesInjector({
   schema,
   storeKeys,
   currentPluginIndex,
-  schemaRules,
+  rootRule,
+  varsStore,
   ...props
 }) {
   const nextPluginIndex = currentPluginIndex + 1;
@@ -82,12 +77,30 @@ export function SchemaRulesInjector({
   const path = storeKeys.map(item => (typeof item === 'number' ? '[]' : item));
 
   const { simple, advanced, path: myPath, children: childRules, ...itemRule } =
-    schema.get('schemaRule') ?? schemaRules.find(byPath(path)) ?? {};
+    schema.get('schemaRule') ?? rootRule;
+
+  if (schema.get('var')) {
+    return (
+      <Plugin
+        {...props}
+        currentPluginIndex={nextPluginIndex}
+        schema={schema}
+        value="blah"
+        onChange={e => {
+          // TODO
+        }}
+        storeKeys={fromJS([schema.get('var')])}
+      />
+    );
+  }
 
   let newSchema = schema.mergeDeep(itemRule);
   if (schema.get('properties')) {
     const newProperties = childRules
       ?.map(rule => {
+        if (rule.var) {
+          return ['', fromJS({ ...rule, schemaRule: rule })];
+        }
         const propertyKey = last(rule.path);
         const property = newSchema
           .get('properties')
@@ -106,6 +119,7 @@ export function SchemaRulesInjector({
       currentPluginIndex={nextPluginIndex}
       schema={newSchema}
       storeKeys={storeKeys}
+      // varsStore={varsStore}
     />
   );
 }

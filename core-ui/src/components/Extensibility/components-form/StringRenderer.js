@@ -18,10 +18,7 @@ export function StringRenderer({
 
   const getTypeSpecificProps = () => {
     if (schema.get('enum')) {
-      const options = schema
-        .get('enum')
-        .toArray()
-        .map(key => ({ key, text: key }));
+      const options = schema.toJS().enum.map(key => ({ key, text: key }));
       return { input: Inputs.ComboboxInput, options };
     } else {
       return { input: Inputs.Text };
