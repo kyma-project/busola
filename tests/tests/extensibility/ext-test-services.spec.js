@@ -26,12 +26,10 @@ context('Test Services', () => {
       .contains('Upload YAML')
       .click();
 
-    cy.loadFiles('examples/services/configuration/services.yaml').then(
-      resources => {
-        const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
-        cy.pasteToMonaco(input);
-      },
-    );
+    cy.loadFiles('examples/services/configuration.yaml').then(resources => {
+      const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
+      cy.pasteToMonaco(input);
+    });
 
     cy.getIframeBody()
       .contains('Submit')
