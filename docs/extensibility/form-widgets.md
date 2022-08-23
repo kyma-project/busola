@@ -36,7 +36,7 @@ Text widgets render a field as a text field. They are used by default for all st
 
 #### Widget-specific parameters
 
-- **placeholder** - specifies a short hint that describes the expected value of an input field.
+- **placeholder** - specifies a short hint about the input field value.
 
 ### Name
 
@@ -220,7 +220,7 @@ GenericList widgets render an `array` as a list of collapsible sections with the
 
 #### Widget-specific parameters
 
-- **placeholder** - specifies a short hint that describes the expected value of an input field.
+- **placeholder** - specifies a short hint about the input field value.
 
 ### SimpleList
 
@@ -249,7 +249,7 @@ This type of field is only suitable for simple data types and can contain more c
 
 #### Widget-specific parameters
 
-- **placeholder** - specifies a short hint that describes the expected value of an input field.
+- **placeholder** - specifies a short hint about the input field value.
 
 #### Scalar values
 
