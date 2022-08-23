@@ -12,9 +12,10 @@ export function StringRenderer({
   storeKeys,
   required,
   compact,
+  placeholder,
   ...props
 }) {
-  const { tFromStoreKeys } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
   const getTypeSpecificProps = () => {
     if (schema.get('enum')) {
@@ -27,6 +28,8 @@ export function StringRenderer({
       return { input: Inputs.Text };
     }
   };
+
+  const schemaPlaceholder = schema.get('placeholder');
 
   return (
     <ResourceForm.FormField
@@ -42,6 +45,11 @@ export function StringRenderer({
         });
       }}
       label={tFromStoreKeys(storeKeys, schema)}
+      placeholder={
+        schemaPlaceholder
+          ? t(schemaPlaceholder, { defaultValue: placeholder })
+          : placeholder
+      }
       compact={compact}
       required={required}
       data-testid={storeKeys.join('.')}
