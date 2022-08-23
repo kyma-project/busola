@@ -12,10 +12,15 @@ export function ResourceRefRender({
   schema,
   storeKeys,
   resource,
+  widgets,
+  ...props
 }) {
   const { t } = useTranslation();
   // TODO the value obtained by ui-schema is undefined for this component
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
+
+  const { WidgetRenderer } = widgets;
+  const ownSchema = schema.delete('widget');
 
   const schemaResource = schema.get('resource') || {};
   const group = (schemaResource?.group || '').toLowerCase();
@@ -29,7 +34,7 @@ export function ResourceRefRender({
   return (
     <ExternalResourceRef
       title={t('extensibility.widgets.resource-ref.header')}
-      value={value.toJS()}
+      value={value?.toJS()}
       resources={data}
       setValue={value => {
         onChange({
@@ -44,6 +49,13 @@ export function ResourceRefRender({
       required
       loading={loading}
       error={error}
-    />
+    >
+      <WidgetRenderer
+        {...props}
+        storeKeys={storeKeys}
+        schema={ownSchema}
+        widgets={widgets}
+      />
+    </ExternalResourceRef>
   );
 }
