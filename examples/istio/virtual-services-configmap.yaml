@@ -50,31 +50,22 @@ data:
             "visibility": "$exists(*)"
           },
           {
-            "widget": "CodeViewer",
-            "source": "spec.tls[]",
-            "name": "TLS",
-            "visibility": "$exists(*)",
-          },
-                    {
             "widget": "Table",
-            "source": "spec.tls",
-            "name": "TLS",
+            "source": "spec.tcp",
+            "name": "TCP",
             "visibility": "$exists(*)",
             "children": [
                 {
                 "source": "$item.match", "name": "Matches", "widget": "Table", "children": [
                   {
-                    "source": "$item.sniHosts", "name": "SNI Hosts", "widget": "JoinedArray"
-                  },
-                  {
-                    "source": "$item.sourceLabels", "name": "Source Labels", "widget": "Labels"
+                    "source": "$item.destinationSubnets", "name": "Destination Subnets",
+                    "widget": "JoinedArray"
                   },
                   {
                     "source": "$item.port", "name": "Port"
                   },
                   {
-                    "source": "$item.destinationSubnets", "name": "Destination Subnets",
-                    "widget": "JoinedArray"
+                    "source": "$item.sourceLabels", "name": "Source Labels", "widget": "Labels"
                   },
                   {
                     "source": "$item.gateways", "name": "Gateways", "widget": "JoinedArray"
@@ -92,13 +83,73 @@ data:
                   {
                     "source": "$item.destination", "name": "Destination", "widget": "Panel", "children": [
                       {
+                        "source": "$item.host", "name": "Host"
+                      },
+                      {
+                          "source": "$parent.subset", "name": "Subset"
+                      },
+                      {
+                        "source": "$parent.port.number", "name": "Port"
+                      },
+                    ] 
+                  },
+                  {
+                    "source": "$item.weight", "name": "Weight"
+                  }
+                ]
+              }
+            ],
+          },
+          {
+            "widget": "CodeViewer",
+            "source": "spec.tls[]",
+            "name": "TLS",
+            "visibility": "$exists(*)",
+          },
+          {
+            "widget": "Table",
+            "source": "spec.tls",
+            "name": "TLS",
+            "visibility": "$exists(*)",
+            "children": [
+                {
+                "source": "$item.match", "name": "Matches", "widget": "Table", "children": [
+                  {
+                    "source": "$item.sniHosts", "name": "SNI Hosts", "widget": "JoinedArray"
+                  },
+                  {
+                    "source": "$item.destinationSubnets", "name": "Destination Subnets",
+                    "widget": "JoinedArray"
+                  },
+                  {
+                    "source": "$item.port", "name": "Port"
+                  },
+                  {
+                    "source": "$item.sourceLabels", "name": "Source Labels", "widget": "Labels"
+                  },
+                  {
+                    "source": "$item.gateways", "name": "Gateways", "widget": "JoinedArray"
+                  },
+                  {
+                    "source": "$item.sourceNamespace", "name": "Source Namespace"
+                  }
+                ]
+              },
+            ],
+            "collapsible": [
+              {
+                "source": "$item.route", "name": "Routes", "widget": "Table",
+                "children": [
+                  {
+                     "name": "Destination", "widget": "Panel", "children": [
+                      {
                         "source": "$item.destination.host", "name": "Host"
                       },
                       {
-                          "source": "$item.destination.subset", "name": "Subset"
+                          "source": "$parent.subset", "name": "Subset"
                       },
                       {
-                        "source": "$item.destination.port.number", "name": "Port"
+                        "source": "$parent.port.number", "name": "Port"
                       },
                     ] 
                   },
