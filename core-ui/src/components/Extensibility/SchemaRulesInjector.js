@@ -68,7 +68,9 @@ export function SchemaRulesInjector({
   storeKeys,
   currentPluginIndex,
   rootRule,
-  varsStore,
+  varStore,
+  setVarStore,
+  value,
   ...props
 }) {
   const nextPluginIndex = currentPluginIndex + 1;
@@ -76,19 +78,18 @@ export function SchemaRulesInjector({
 
   const path = storeKeys.map(item => (typeof item === 'number' ? '[]' : item));
 
+  const varName = schema.get('var');
   const { simple, advanced, path: myPath, children: childRules, ...itemRule } =
     schema.get('schemaRule') ?? rootRule;
 
-  if (schema.get('var')) {
+  if (varName) {
     return (
       <Plugin
         {...props}
         currentPluginIndex={nextPluginIndex}
         schema={schema}
-        value="blah"
-        onChange={e => {
-          // TODO
-        }}
+        value={varStore[varName]}
+        onChange={e => setVarStore(varName, e.data.value)}
         storeKeys={fromJS([schema.get('var')])}
       />
     );
@@ -119,7 +120,9 @@ export function SchemaRulesInjector({
       currentPluginIndex={nextPluginIndex}
       schema={newSchema}
       storeKeys={storeKeys}
-      // varsStore={varsStore}
+      varStore={varStore}
+      setVarStore={setVarStore}
+      value={value}
     />
   );
 }
