@@ -268,6 +268,33 @@ Panel widgets render an object as a separate panel with its own title (based on 
 
 <img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
 
+#### Widget-specific parameters
+
+- **header** - an optional array which allows to display for example Labels in Panel header.
+
+#### Example
+
+```json
+{
+  "widget": "Panel",
+  "name": "spec.selector",
+  "children": [
+    {
+      "source": "$podSelector()",
+      "widget": "ResourceList"
+    }
+  ],
+  "header": [
+    {
+      "source": "spec.selector",
+      "widget": "Labels",
+      "name": "spec.selector",
+      "visibility": "spec.selector"
+    }
+  ]
+}
+```
+
 ### Plain
 
 Plain widgets render all contents of an object or list sequentially without any decorations. This is the default behavior for all objects and arrays.
