@@ -13,6 +13,20 @@ const propertiesWrapper = src => ({
   map: cb => List(src?.map(([key, val]) => cb(val, key))),
 });
 
+function extractVariables(varStore, vars, indexes) {
+  if (!indexes?.length) {
+    return {};
+  }
+
+  return Object.fromEntries(
+    vars.map(varName => [
+      varName,
+      // `$${varName}`,
+      indexes.reduce((acc, index) => acc?.[index], varStore[varName]),
+    ]),
+  );
+}
+
 export function prepareSchemaRules(ruleDefs) {
   const root = { path: [], children: [] };
   let stack = [root];
@@ -31,12 +45,16 @@ export function prepareSchemaRules(ruleDefs) {
       : [...parentPath, `$${varName}`]
     ).filter(item => !!item);
 
+    let lastArrayIndex;
     fullPath.reduce((acc, step, index) => {
       const myPath = [...acc, step];
+      if (step === '[]') lastArrayIndex = index;
+
       if (!stack[index + 1] || !eqPath(stack[index + 1].path, myPath)) {
         if (stack[index + 1]) {
           stack = stack.slice(0, index + 1);
         }
+
         const stackTop = stack[index];
         const rule =
           index === fullPath.length - 1
@@ -45,17 +63,27 @@ export function prepareSchemaRules(ruleDefs) {
                 var: varName,
                 path: myPath,
                 children: [],
+                itemVars: [],
               }
             : {
                 var: varName,
                 path: myPath,
                 children: [],
+                itemVars: [],
               };
         stackTop.children.push(rule);
         stack.push(rule);
       }
       return myPath;
     }, []);
+
+    if (lastArrayIndex) {
+      const lastArrayRule = stack[lastArrayIndex + 1];
+      if (varName) lastArrayRule.itemVars.push(varName);
+      stack
+        .slice(lastArrayIndex + 1)
+        .forEach(item => (item.itemVars = lastArrayRule.itemVars));
+    }
 
     ruleDef.children?.forEach(subDef => extractRules(subDef, fullPath));
   };
@@ -121,6 +149,7 @@ export function SchemaRulesInjector({
         if (rule.var) {
           return ['', fromJS({ ...rule, schemaRule: rule })];
         }
+
         const propertyKey = last(rule.path);
         const property = newSchema
           .get('properties')
@@ -132,8 +161,9 @@ export function SchemaRulesInjector({
           .toArray()
           .findLastIndex(item => typeof item === 'number');
 
+        let lastArrayStoreKeys = null;
         if (lastArrayIndex > 0) {
-          const lastArrayStoreKeys = storeKeys.slice(0, lastArrayIndex + 1);
+          lastArrayStoreKeys = storeKeys.slice(0, lastArrayIndex + 1);
 
           lastArrayItem = lastArrayStoreKeys
             .toArray()
@@ -141,9 +171,17 @@ export function SchemaRulesInjector({
         }
 
         if (rule.visibility) {
+          const indexes = storeKeys
+            .filter(item => typeof item === 'number')
+            .toArray();
+          const index = last(indexes);
+          const variables = extractVariables(varStore, rule.itemVars, indexes);
           const visible = jsonataWrapper(rule.visibility).evaluate(resource, {
             ...varStore,
             item: lastArrayItem,
+            vars: variables,
+            indexes,
+            index,
           });
           if (!visible) return null;
         }

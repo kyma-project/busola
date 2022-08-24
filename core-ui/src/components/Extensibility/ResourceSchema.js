@@ -27,9 +27,10 @@ export function ResourceSchema({
   path,
   store,
   setStore,
+  varStore,
+  setVarStore,
   ...extraParams
 }) {
-  const [varStore, setVarStore] = useState({});
   const [rootRule, setRootRule] = useState({});
 
   const onChange = useCallback(
