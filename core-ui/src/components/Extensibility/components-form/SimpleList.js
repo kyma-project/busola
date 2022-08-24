@@ -20,12 +20,12 @@ export function SimpleList({
   widgets,
   ...props
 }) {
-  const { t } = useTranslation();
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
+  const { t } = useTranslation();
   const { store } = useUIStore();
   const { value } = store?.extractValues(storeKeys) || {};
   const listSize = value?.size || 0;
-  const placeholder = schema.get('placeholder');
+  const schemaPlaceholder = schema.get('placeholder');
 
   const removeItem = index => {
     onChange({
@@ -96,13 +96,7 @@ export function SimpleList({
                     level={level + 1}
                     schemaKeys={schemaKeys?.push('items')}
                     compact
-                    placeholder={
-                      placeholder
-                        ? tExt(placeholder, {
-                            defaultValue: placeholder,
-                          })
-                        : null
-                    }
+                    placeholder={schemaPlaceholder && tExt(schemaPlaceholder)}
                   />
                   <span className="item-action">
                     {!isLast(index) && (

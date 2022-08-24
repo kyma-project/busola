@@ -15,9 +15,9 @@ export function NumberRenderer({
   placeholder,
   ...props
 }) {
-  const { tFromStoreKeys, t } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
-  const ownPlaceholder = schema.get('placeholder');
+  const schemaPlaceholder = schema.get('placeholder');
 
   return (
     <ResourceForm.FormField
@@ -33,11 +33,7 @@ export function NumberRenderer({
         });
       }}
       label={tFromStoreKeys(storeKeys, schema)}
-      placeholder={
-        ownPlaceholder
-          ? t(ownPlaceholder, { defaultValue: placeholder })
-          : placeholder
-      }
+      placeholder={schemaPlaceholder ? tExt(schemaPlaceholder) : placeholder}
       data-testid={storeKeys.join('.')}
       input={Inputs.Number}
       compact={compact}
