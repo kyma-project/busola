@@ -3,6 +3,8 @@ import { merge, initial, last } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 import { List, OrderedMap, fromJS } from 'immutable';
 
+import { jsonataWrapper } from './jsonataWrapper';
+
 const eqPath = (a, b) => JSON.stringify(b) === JSON.stringify(a);
 const byPath = a => b => eqPath(b.path, a);
 
@@ -71,6 +73,7 @@ export function SchemaRulesInjector({
   varStore,
   setVarStore,
   value,
+  resource,
   ...props
 }) {
   const nextPluginIndex = currentPluginIndex + 1;
@@ -107,6 +110,27 @@ export function SchemaRulesInjector({
           .get('properties')
           .get(propertyKey)
           ?.set('schemaRule', rule);
+
+        let lastArrayItem;
+        const lastArrayIndex = storeKeys
+          .toArray()
+          .findLastIndex(item => typeof item === 'number');
+
+        if (lastArrayIndex > 0) {
+          const lastArrayStoreKeys = storeKeys.slice(0, lastArrayIndex + 1);
+
+          lastArrayItem = lastArrayStoreKeys
+            .toArray()
+            .reduce((item, key) => item?.[key], resource);
+        }
+
+        if (rule.visibility) {
+          const visible = jsonataWrapper(rule.visibility).evaluate(resource, {
+            ...varStore,
+            item: lastArrayItem,
+          });
+          if (!visible) return null;
+        }
         return property ? [propertyKey, property] : null;
       })
       .filter(rule => !!rule);
