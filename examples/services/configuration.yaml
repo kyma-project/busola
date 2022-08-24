@@ -2,7 +2,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: services
-  namespace: resource
+  namespace: services
   labels:
     app.kubernetes.io/name: services
     busola.io/extension: resource
@@ -11,18 +11,21 @@ data:
   details: |-
     {
       "header": [
-        {
+        { 
+          "name": "Controlled by",
           "source": "metadata.ownerReferences",
           "widget": "ControlledBy"
         },
         {
+          "name": "Type",
           "source": "spec.type",
         },
         {
+          "name": "Cluster IP",
           "source": "spec.clusterIP",
         },
         {
-          "name": "ports",
+          "name": "Ports",
           "source": "$count(spec.ports) ? $map(spec.ports, function($value) {$value.port = $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~> $join('') : [$string($value.port), ':', $string($value.targetPort), '/', $string($value.protocol)] ~> $join('') }) ~> $join(', ')  : '-'"
         },
         {
@@ -47,18 +50,21 @@ data:
   list: |-
     [
       {
+        "name": "Controlled By",
         "source": "metadata.ownerReferences",
         "widget": "ControlledBy",
         "kindOnly": true,
       },
       {
+        "name": "Type",
         "source": "spec.type",
       },
       {
+        "name": "Cluster IP",
         "source": "spec.clusterIP",
       },
       {
-        "name": "ports",
+        "name": "Ports",
         "source": "$count(spec.ports) ? $map(spec.ports, function($value) {$value.port = $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~> $join('') : [$string($value.port), ':', $string($value.targetPort), '/', $string($value.protocol)] ~> $join('') }) ~> $join(', ')  : '-'"
       },
       {
@@ -93,17 +99,12 @@ data:
       },
       "urlPath": "example-services",
       "scope": "namespace",
+      "name": "Custom Services",
+      "category": "Examples",
     }
   translations: |-
     {
       "en": {
-        "name": "Services",
-        "category": "Custom Resources",
-        "metadata.annotations": "Annotations",
-        "metadata.labels": "Labels",
-        "metadata.ownerReferences": "Controlled  By",
-        "ports": "Ports",
-        "spec.clusterIP": "Cluster IP",
-        "spec.type": "Service Type"
+        "Cluster IP": "Cluster IP override"
       }
     }
