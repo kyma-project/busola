@@ -51,9 +51,59 @@ data:
           },
           {
             "widget": "CodeViewer",
+            "source": "spec.tls[]",
+            "name": "TLS",
+            "visibility": "$exists(*)",
+          },
+                    {
+            "widget": "Table",
             "source": "spec.tls",
             "name": "TLS",
-            "visibility": "$exists(*)"
+            "visibility": "$exists(*)",
+            "children": [
+                {
+                "source": "$item.match", "name": "Matches", "widget": "Table", "children": [
+                  {
+                    "source": "$item.sniHosts", "name": "SNI Hosts", "widget": "JoinedArray"
+                  },
+                  {
+                    "source": "$item.sourceLabels", "name": "Source Labels", "widget": "Labels"
+                  },
+                  {
+                    "source": "$item.port", "name": "Port"
+                  },
+                  {
+                    "source": "$item.destinationSubnets", "name": "Destination Subnets",
+                    "widget": "JoinedArray"
+                  },
+                  {
+                    "source": "$item.gateways", "name": "Gateways", "widget": "JoinedArray"
+                  },
+                  {
+                    "source": "$item.sourceNamespace", "name": "Source Namespace"
+                  }
+                ]
+              },
+            ],
+            "collapsible": [
+              {
+                "source": "$item.route", "name": "Routes", "widget": "Table",
+                "children": [
+                  {
+                    "source": "$item.destination.host", "name": "Destination host"
+                  },
+                  {
+                      "source": "$item.destination.subset", "name": "Destination Subset"
+                  },
+                  {
+                    "source": "$item.destination.port.number", "name": "Destination port"
+                  },
+                  {
+                    "source": "$item.weight", "name": "Weight"
+                  }
+                ]
+              }
+            ],
           }
       ],
       "resourceGraph": {
