@@ -54,7 +54,7 @@ export function ResourceSchema({
   const myRules = advanced ? advancedRules : simpleRules;
   useEffect(() => {
     setRootRule(prepareSchemaRules(myRules));
-  }, [schemaRules]);
+  }, [schemaRules]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isEmpty(schema)) return null;
 

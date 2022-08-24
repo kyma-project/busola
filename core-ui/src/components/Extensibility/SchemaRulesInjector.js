@@ -1,19 +1,12 @@
 import React from 'react';
-import { merge, initial, last } from 'lodash';
+import { last } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
-import { List, OrderedMap, fromJS } from 'immutable';
+import { List, fromJS } from 'immutable';
 import * as jp from 'jsonpath';
 
 import { jsonataWrapper } from './jsonataWrapper';
 
 const eqPath = (a, b) => JSON.stringify(b) === JSON.stringify(a);
-const byPath = a => b => eqPath(b.path, a);
-
-// JS findLast doesn't work in firefox yet
-const findLast = (rules = [], condition) => {
-  const reversedRules = rules.reverse().filter(rule => !rule.var);
-  return reversedRules.find(condition);
-};
 
 // fake an OrderedMap-like structure using List to allow for duplicate keys
 const propertiesWrapper = src => ({
@@ -85,8 +78,6 @@ export function SchemaRulesInjector({
 }) {
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
-
-  const path = storeKeys.map(item => (typeof item === 'number' ? '[]' : item));
 
   const varName = schema.get('var');
   const { simple, advanced, path: myPath, children: childRules, ...itemRule } =
