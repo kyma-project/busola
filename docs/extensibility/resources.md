@@ -6,6 +6,7 @@
 - [Extension version](#extension-version)
 - [_general_ section](#general-section)
 - [_form_ section](#form-section)
+  - [Variable fields](#variable-fields)
 - [_list_ section](#list-section)
 - [_details_ section](#details-section)
   - [Data scoping](#data-scoping)
@@ -70,6 +71,8 @@ The **general** section is required and contains basic information about the res
 
 The **form** section contains a list of objects that define which fields you must include in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to the simple form by providing the `simple: true` flag. You can also remove it from the advanced form by providing the `advanced: false` flag.
 
+Any parameters that are not handled by the widget are added to the schema directly, so it's possible to add or override existing values, for example add an **enum** parameter to provide selectable values in a field.
+
 If you target elements of an array rather that the array itself, you can use `items[]` notation.
 
 ### Item parameters
@@ -80,6 +83,7 @@ If you target elements of an array rather that the array itself, you can use `it
 - **children** - child widgets used for grouping. Child paths are relative to its parent.
 - **simple** - parameter used to display the simple form. It is `false` by default.
 - **advanced** - parameter used to display the advanced form. It is `true` by default.
+- **visibility** - a [JSONata](https://docs.jsonata.org/overview.html) expression controlling the visibility of the element.
 
 ### Example
 
@@ -94,6 +98,47 @@ If you target elements of an array rather that the array itself, you can use `it
       { "path": "service.port" }
     ]
   }
+]
+```
+
+### Variable fields
+
+Additionally it's possible to define variable fields. In this case **path** is ommited and instead a **var** argument is used to specify variable name to assign to. Such a value is not added to the resultant yaml, but instead stored in memory and provided to any [JSONata](https://docs.jsonata.org/overview.html) handlers as variables (e.g. `$foo`). If the variable field is placed in an array property, the resultant variable is also an array.
+
+When using a variable inside an array it has to be wrapped inside a `[]` element (see example).
+
+### Item parameters
+
+- **var** - _[required]_ variable name.
+- **type** - _[required]_ type of field, as defined by JSON Schema.
+
+All other fields can be used analogous to regular form items (except for the **path** and **children** parameters).
+
+### Predefined variables
+
+All jsonata expressions have a few variables that are predefined instead of being read from variable fields.
+
+- **\$item** - when in an array this contains the current item.
+- **\$index** - contains the index of the current item within the array.
+- **\$indexes** - contains a list of all the indexex for nested arrays.
+- **\$vars** - contains a map of all the variables for current item.
+
+### Example
+
+In the example the visibility for item price and description are analogous - first one uses scoped variables for the current item, the second extracts the value from an array variable using provided index.
+
+```json
+[
+  { "var": "useDescription", "type": "boolean" },
+  { "path": "spec.description": "visibility": "$useDescription" },
+  { "path": "spec.items", "widget": "GenericList": "children": [
+    { "path": "[]", "children": [
+      { "path": "name" },
+      { "var": "itemMode", "type": "string", "enum": ["simple", "verbose"] },
+      { "path": "price", "visibility": "$vars.itemMode = 'verbose'" },
+      { "path": "description", "visibility": "$itemMode[$index] = 'verbose'" }
+    ]}
+  ]}
 ]
 ```
 
