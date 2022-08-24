@@ -90,13 +90,17 @@ data:
                 "source": "$item.route", "name": "Routes", "widget": "Table",
                 "children": [
                   {
-                    "source": "$item.destination.host", "name": "Destination host"
-                  },
-                  {
-                      "source": "$item.destination.subset", "name": "Destination Subset"
-                  },
-                  {
-                    "source": "$item.destination.port.number", "name": "Destination port"
+                    "source": "$item.destination", "name": "Destination", "widget": "Panel", "children": [
+                      {
+                        "source": "$item.destination.host", "name": "Host"
+                      },
+                      {
+                          "source": "$item.destination.subset", "name": "Subset"
+                      },
+                      {
+                        "source": "$item.destination.port.number", "name": "Port"
+                      },
+                    ] 
                   },
                   {
                     "source": "$item.weight", "name": "Weight"
