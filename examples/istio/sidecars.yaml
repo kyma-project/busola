@@ -1,0 +1,135 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sidecars.networking.istio.io
+  namespace: ak
+  labels:
+    app.kubernetes.io/name: sidecars.networking.istio.io
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |-
+    {
+      "podSelector": {
+        "resource": {
+          "kind": "Pod",
+          "version": "v1",
+        },
+        "filter": "$filter(data, function($item) {true})"
+      }
+    }
+  details: |-
+    {
+      "header": [{ 
+        "name": "spec.outboundTrafficPolicy.mode",
+        "source": "spec.outboundTrafficPolicy.mode"
+        }],
+      "body": [
+        {
+          "widget": "Table",
+          "source": "spec.egress",
+          "name": "Egress",
+          "visibility": "$exists(*)",
+          "children": [
+            {
+              "source": "$item.port", 
+              "name": "Port", 
+              "widget": "Panel", 
+              "visibility": "$exists(*)",
+              "children": [
+                {
+                  "source": "$item.number", "name": "Port"
+                },
+                {
+                    "source": "$item.protocol", "name": "Protocol"
+                },
+                {
+                  "source": "$item.name", "name": "Name"
+                },
+                {
+                    "source": "$item.targetPoint", "name": "Target Point"
+                },
+              ] 
+            },
+             { "source": "$item.bind", "name": "bind" },
+            { "source": "$item.captureMode", "name": "captureMode" },
+            { "source": "$item.hosts", "name": "hosts", "widget": "Labels"}
+          ]
+        },
+        {
+          "widget": "Table",
+          "source": "spec.ingress",
+          "name": "Ingress",
+          "visibility": "$exists(*)",
+          "children": [
+            {
+              "source": "$item.port", 
+              "name": "Port", 
+              "widget": "Panel", 
+              "visibility": "$exists(*)",
+              "children": [
+                {
+                  "source": "$item.number", "name": "Port"
+                },
+                {
+                    "source": "$item.protocol", "name": "Protocol"
+                },
+                {
+                  "source": "$item.name", "name": "Name"
+                },
+                {
+                    "source": "$item.targetPoint", "name": "Target Point"
+                },
+              ] 
+            },
+             { "source": "$item.bind", "name": "bind" },
+            { "source": "$item.captureMode", "name": "captureMode" },
+            { "source": "$item.defaultEndpoint", "name": "spec.egress.hosts", "widget": "Labels"}
+          ]
+        },
+        {
+          "widget": "Panel",
+          "name": "spec.workloadSelector",
+          "children": [
+            { 
+              "source": "$podSelector",
+              "widget": "ResourceList",
+              "disableCreate": true,
+              "isCompact": true
+            }
+          ]
+        }
+      ]
+    }
+  form: '[]'
+  general: |-
+    {
+      "resource": {
+        "kind": "Sidecar",
+        "group": "networking.istio.io",
+        "version": "v1alpha3"
+      },
+      "name": "Sidecars",
+      "category": "AK",
+      "urlPath": "ak-sidecars",
+      "scope": "namespace"
+    }
+  list: |-
+    [
+      { "source": "spec.outboundTrafficPolicy.mode"},
+      { "source": "spec.workloadSelector.labels", "widget": "Labels"}
+    ]
+  translations: |-
+    {
+      "en": {
+        "metadata.annotations": "Annotations",
+        "metadata.labels": "Labels",
+        "spec.outboundTrafficPolicy.mode": "Outbound Traffic Policy",
+        "spec.workloadSelector": "Workload Selector",
+        "spec.workloadSelector.labels": "Workload Selector Labels",
+        "bind": "Bind",
+        "captureMode": "Capture Mode",
+        "defaultEndpoint": "Default Endpoint",
+        "hosts": "Hosts"
+      }
+    }
