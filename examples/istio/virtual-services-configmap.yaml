@@ -100,6 +100,19 @@ data:
               {
                 "source": "$item.route", "name": "Routes", "widget": "Table", "children":[
                   {
+                    "source": "$item.destination", "name": "Destination", "widget": "Panel", "children": [
+                      {
+                        "source": "$item.host", "name": "Host"
+                      },
+                      {
+                          "source": "$parent.subset", "name": "Subset"
+                      },
+                      {
+                        "source": "$parent.port.number", "name": "Port"
+                      },
+                    ] 
+                  },
+                  {
                     "source": "$item.weight", "name": "Weight",
                   },
                   {
@@ -133,7 +146,29 @@ data:
                     ] 
                   },
                 ]
-              }
+              },
+              {
+                "source": "$item.redirect", "name": "Redirect", "widget": "Panel", "children": [
+                  {
+                    "source": "$parent.uri", "name": "URI"
+                  },
+                  {
+                    "source": "$parent.authority", "name": "Authority"
+                  },
+                  {
+                    "source": "$parent.port", "name": "Port"
+                  },
+                  {
+                    "source": "$parent.derivePort", "name": "Derive Port", "widget": "Labels"
+                  },
+                  {
+                    "source": "$parent.scheme", "name": "Scheme"
+                  },
+                  {
+                    "source": "$parent.redirectCode", "name": "Redirect Code"
+                  },
+                ]
+              },
             ]
           },        
           {
@@ -184,7 +219,7 @@ data:
                     "source": "$item.weight", "name": "Weight"
                   }
                 ]
-              }
+              },
             ],
           },
           {
