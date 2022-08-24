@@ -59,7 +59,14 @@ data:
               "disableCreate": true,
               "isCompact": true
             }
-          ]
+          ],
+          "header": [
+            {
+              "source": "spec.selector",
+              "widget": "Labels",
+              "name": "spec.selector"
+            }
+          ],
         }
       ]
     }
