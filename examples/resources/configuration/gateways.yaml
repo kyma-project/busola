@@ -140,7 +140,9 @@ data:
       },
       {
         "widget": "SimpleList",
-        "path": "spec.servers[].hosts", "simple": true
+        "path": "spec.servers[].hosts", 
+        "simple": true,
+        "placeholder": "placeholders.hosts"
       }
     ]
   general: |-
@@ -184,3 +186,4 @@ data:
       placeholders.serverCertificate: Enter the certificate path
       placeholders.privateKey: Enter the private key path
       placeholders.caCertificates: Enter the CA certificates path
+      placeholders.hosts: For example, *.api.mydomain.com
