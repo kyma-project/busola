@@ -78,15 +78,9 @@ export function ResourceSchema({
         onChange={onChange}
         rootRule={rootRule}
         varStore={varStore}
-        setVarStore={(key, val) => {
-          if (typeof val !== 'undefined' && val !== varStore[key]) {
-            setVarStore({
-              ...varStore,
-              [key]: val,
-            });
-          }
-        }}
+        setVarStore={setVarStore}
       >
+        <pre>{JSON.stringify(varStore, null, '  ')}</pre>
         <FormStack isRoot schema={schemaMap} resource={resource} />
       </UIStoreProvider>
     </UIMetaProvider>

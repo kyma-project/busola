@@ -2,6 +2,7 @@ import React from 'react';
 import { merge, initial, last } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 import { List, OrderedMap, fromJS } from 'immutable';
+import * as jp from 'jsonpath';
 
 import { jsonataWrapper } from './jsonataWrapper';
 
@@ -23,15 +24,19 @@ export function prepareSchemaRules(ruleDefs) {
   const root = { path: [], children: [] };
   let stack = [root];
 
-  const extractRules = ({ path, ...ruleDef }, parentPath = []) => {
-    const fullPath = path
+  const extractRules = (
+    { path, var: varName, ...ruleDef },
+    parentPath = [],
+  ) => {
+    const fullPath = (path
       ? [
           ...parentPath,
           ...(Array.isArray(path)
             ? path
             : path?.replace(/\[]/g, '.[]')?.split('.') || []),
         ]
-      : [...parentPath, '*'];
+      : [...parentPath, `$${varName}`]
+    ).filter(item => !!item);
 
     fullPath.reduce((acc, step, index) => {
       const myPath = [...acc, step];
@@ -44,10 +49,12 @@ export function prepareSchemaRules(ruleDefs) {
           index === fullPath.length - 1
             ? {
                 ...ruleDef,
+                var: varName,
                 path: myPath,
                 children: [],
               }
             : {
+                var: varName,
                 path: myPath,
                 children: [],
               };
@@ -86,19 +93,37 @@ export function SchemaRulesInjector({
     schema.get('schemaRule') ?? rootRule;
 
   if (varName) {
+    const varSuffix = storeKeys
+      .filter(item => typeof item === 'number')
+      .map(item => `[${item}]`)
+      .join('');
+    const varPath = `$.${varName}${varSuffix}`;
     return (
       <Plugin
         {...props}
         currentPluginIndex={nextPluginIndex}
         schema={schema}
-        value={varStore[varName]}
-        onChange={e => setVarStore(varName, e.data.value)}
+        value={jp.value(varStore, varPath)}
+        onChange={e => {
+          const newVal = e.data.value;
+          const oldVal = jp.value(varStore, varPath);
+          if (typeof newVal !== 'undefined' && newVal !== oldVal) {
+            jp.value(varStore, varPath, newVal);
+            setVarStore({ ...varStore });
+          }
+        }}
         storeKeys={fromJS([schema.get('var')])}
       />
     );
   }
 
   let newSchema = schema.mergeDeep(itemRule);
+
+  if (schema.get('items')) {
+    const newItems = schema.get('items').set('schemaRule', childRules[0]);
+    newSchema = newSchema.set('items', newItems);
+  }
+
   if (schema.get('properties')) {
     const newProperties = childRules
       ?.map(rule => {
@@ -147,6 +172,7 @@ export function SchemaRulesInjector({
       varStore={varStore}
       setVarStore={setVarStore}
       value={value}
+      resource={resource}
     />
   );
 }
