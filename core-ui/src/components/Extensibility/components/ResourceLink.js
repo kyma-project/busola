@@ -13,7 +13,12 @@ function getLinkData({ value, formulas, originalResource, t }) {
     return {
       linkData: {
         name: applyFormula(formulas.name),
-        namespace: formulas.namespace && applyFormula(formulas.namespace),
+        namespace:
+          formulas.namespace &&
+          formulas.namespace.substring(formulas.namespace.lastIndexOf('.')) ===
+            '.namespace'
+            ? applyFormula(formulas.namespace)
+            : formulas.namespace,
         kind: applyFormula(formulas.kind),
       },
     };
@@ -48,7 +53,7 @@ export function ResourceLink({ value, structure, originalResource }) {
   const linkContent = tExt(structure.linkText, {
     data: value,
     root: originalResource,
-    defaultValue: value?.name,
+    defaultValue: structure.linkText || linkData?.name,
   });
 
   return (

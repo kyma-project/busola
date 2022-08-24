@@ -37,7 +37,16 @@ data:
             { "source": "$item.hosts", "name": "spec.servers.hosts" },
             { "source": "$item.port.number", "name": "spec.servers.port.number" },
             { "source": "$item.tls.mode", "name": "spec.servers.tls.mode" },
-            { "source": "$item.tls.credentialName", "name": "spec.servers.tls.credentialName" }
+            {
+              "widget": "ResourceLink", 
+              "source": "$item.tls.credentialName", 
+              "name": "spec.servers.tls.credentialName",
+              "resource": {
+                "name": "data",
+                "namespace": "istio-system",
+                "kind": "'Secret'"
+              }
+            }
           ]
         },
         {
