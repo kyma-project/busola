@@ -69,7 +69,8 @@ data:
             {
               "source": "spec.selector",
               "widget": "Labels",
-              "name": "spec.selector"
+              "name": "spec.selector",
+              "visibility": "spec.selector"
             }
           ],
         }
