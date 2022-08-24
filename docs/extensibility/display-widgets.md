@@ -332,8 +332,8 @@ Table widgets display array data as rows of a table instead of free-standing com
 {
   "source": "spec.item-list",
   "widget": "Table",
-  "children": [{ "source": "name" }, { "source": "status" }],
-  "collapsible": [{ "source": "description" }]
+  "children": [{ "source": "$item.name" }, { "source": "$item.status" }],
+  "collapsible": [{ "source": "$item.description" }]
 }
 ```
 
