@@ -18,10 +18,27 @@ export function Panel({
     'fd-margin--md': !disableMargin,
   });
 
+  const header = structure?.header || [];
+
   return (
     <LayoutPanel className={panelClassNames}>
       <LayoutPanel.Header>
-        <LayoutPanel.Head title={widgetT(structure)} />
+        <LayoutPanel.Head
+          title={widgetT(structure)}
+          className="fd-margin-end--sm"
+        />
+        {Array.isArray(header)
+          ? header.map((def, idx) => (
+              <Widget
+                key={idx}
+                value={value}
+                structure={def}
+                schema={schema}
+                inlineContext={true}
+                {...props}
+              />
+            ))
+          : null}
       </LayoutPanel.Header>
       <LayoutPanel.Body>
         {Array.isArray(structure?.children)
