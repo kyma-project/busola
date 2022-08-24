@@ -42,13 +42,100 @@ data:
             "source": "spec.http",
             "name": "HTTP",
             "visibility": "$exists(*)"
-          },        
-          {
-            "widget": "CodeViewer",
-            "source": "spec.tcp",
-            "name": "TCP",
-            "visibility": "$exists(*)"
           },
+          {
+            "widget": "Table",
+            "source": "spec.http",
+            "name": "HTTP",
+            "visibility": "$exists(*)",
+            "children": [
+              {
+               "source": "$item.name", "name": "Name"
+              }
+            ],
+            "collapsible": [
+              {
+                "source": "$item.match", "name": "Matches", "widget": "Table", "children":[
+                  {
+                    "source": "$item.name", "name": "Name",
+                  },
+                  {
+                    "source": "$item.uri", "name": "URI", "widget": "Labels",
+                  },
+                  {
+                    "source": "$item.scheme", "name": "URI Scheme", "widget": "Labels",
+                  },
+                  {
+                    "source": "$item.method", "name": "Method", "widget": "Labels",
+                  },
+                  {
+                    "source": "$item.authority", "name": "Authority", "widget": "Labels",
+                  },
+                  {
+                    "source": "$item.headers", "name": "Headers"
+                  },
+                  {
+                    "source": "$item.port", "name": "Port"
+                  },
+                  {
+                    "source": "$item.sourceLabels", "name": "Source Labels", "widget": "Labels"
+                  },
+                  {
+                    "source": "$item.gateways", "name": "Gateways", "widget": "JoinedArray"
+                  },
+                  {
+                    "source": "$item.queryParams", "name": "Query Params"
+                  },
+                  {
+                    "source": "$item.ignoreUriCase", "name": "Ignore URI Case"
+                  },
+                  {
+                    "source": "$item.withoutHeaders", "name": "Without Headers"
+                  },
+                  {
+                    "source": "$item.sourceNamespace", "name": "Source namespace"
+                  },
+                ]
+              },
+              {
+                "source": "$item.route", "name": "Routes", "widget": "Table", "children":[
+                  {
+                    "source": "$item.weight", "name": "Weight",
+                  },
+                  {
+                    "source": "$item.headers", "name": "Headers", "widget": "Panel", "children": [
+                        {
+                          "source": "$parent.request", "name": "Request", "widget": "Panel", "children":[
+                              {
+                                "source": "$parent.set", "name": "Set", "widget": "Labels"
+                              },
+                              {
+                                "source": "$parent.add", "name": "Add", "widget": "Labels"
+                              },
+                              {
+                                "source": "$parent.remove", "name": "Remove", "widget": "JoinedArray"
+                              }
+                          ]
+                        },
+                        {
+                        "source": "$parent.response", "name": "Response", "widget": "Panel", "children": [
+                              {
+                                "source": "$parent.set", "name": "Set", "widget": "Labels"
+                              },
+                              {
+                                "source": "$parent.add", "name": "Add", "widget": "Labels"
+                              },
+                              {
+                                "source": "$parent.remove", "name": "Remove", "widget": "JoinedArray"
+                              }
+                          ]
+                        },
+                    ] 
+                  },
+                ]
+              }
+            ]
+          },        
           {
             "widget": "Table",
             "source": "spec.tcp",
@@ -99,12 +186,6 @@ data:
                 ]
               }
             ],
-          },
-          {
-            "widget": "CodeViewer",
-            "source": "spec.tls[]",
-            "name": "TLS",
-            "visibility": "$exists(*)",
           },
           {
             "widget": "Table",
