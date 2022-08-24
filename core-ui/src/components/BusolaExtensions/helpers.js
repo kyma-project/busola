@@ -117,11 +117,10 @@ export function createConfigmap(crd, data) {
   const filterViewProps = arr =>
     arr
       .filter(e => e.isSelected)
-      .map(e => {
-        delete e.isSelected;
-        delete e.required;
-        return e;
-      });
+      .map(e => ({
+        name: e.name,
+        source: e.path,
+      }));
 
   data.list = filterViewProps(data.list);
   data.details.body[0].children = filterViewProps(
