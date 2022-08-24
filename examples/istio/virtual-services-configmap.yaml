@@ -51,6 +51,9 @@ data:
             "children": [
               {
                "source": "$item.name", "name": "Name"
+              },
+              {
+                 "source": "$item.timeout", "name": "Timeout"
               }
             ],
             "collapsible": [
@@ -169,6 +172,59 @@ data:
                   },
                 ]
               },
+              {
+                "source": "$item.delegate", "name": "Delegate", "widget": "Panel", "children": [
+                    {
+                      "source": "$parent.name", "name": "Name"
+                    },
+                    {
+                      "source": "$parent.namespace", "name": "Namespace"
+                    },
+                ]
+              },
+              {
+                "source": "$item.rewrite", "name": "Rewrite", "widget": "Panel", "children": [
+                    {
+                      "source": "$parent.uri", "name": "URI"
+                    },
+                    {
+                      "source": "$parent.authority", "name": "Authority"
+                    },
+                ]
+              },
+              {
+                "source": "$item.retries", "name": "Retries", "widget": "Panel", "children": [
+                    {
+                      "source": "$parent.attempts", "name": "Attempts"
+                    },
+                    {
+                      "source": "$parent.perTryTimeout", "name": "Per Try Timeout"
+                    },
+                    {
+                      "source": "$parent.retryOn", "name": "Retry On"
+                    },
+                    {
+                      "source": "$parent.retryRemoteLocalities", "name": "Retry Remote Localities"
+                    },
+                ]
+              },
+              {
+                "source": "$item.fault", "name": "Fault", "widget": "Panel", "children": [
+                  {
+                    "source": "$parent.delay", "name": "Delay", "widget": "Panel", "children": [
+                      {
+                        "source": "$parent.fixedDelay", "name": "Fixed Delay"
+                      },
+                      {
+                        "source": "$parent.percentage.value", "name": "Percentage"
+                      },
+                      {
+                        "source": "$parent.percent", "name": "Percent"
+                      }
+                    ]
+                  }
+                ]
+              }
             ]
           },        
           {
