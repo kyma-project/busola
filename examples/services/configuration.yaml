@@ -2,7 +2,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: services
-  namespace: resource
+  namespace: services
   labels:
     app.kubernetes.io/name: services
     busola.io/extension: resource
@@ -11,20 +11,21 @@ data:
   details: |-
     {
       "header": [
-        {
+        { 
+          "name": "Controlled by",
           "source": "metadata.ownerReferences",
           "widget": "ControlledBy"
         },
         {
+          "name": "Type",
           "source": "spec.type",
-          "name": "Type"
         },
         {
+          "name": "Cluster IP",
           "source": "spec.clusterIP",
-          "name": "Cluster IP"
         },
         {
-          "name": "ports",
+          "name": "Ports",
           "source": "$count(spec.ports) ? $map(spec.ports, function($value) {$value.port = $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~> $join('') : [$string($value.port), ':', $string($value.targetPort), '/', $string($value.protocol)] ~> $join('') }) ~> $join(', ')  : '-'"
         },
         {
@@ -83,7 +84,7 @@ data:
   list: |-
     [
       {
-        "name": "Controlled by",
+        "name": "Controlled By",
         "source": "metadata.ownerReferences",
         "widget": "ControlledBy",
         "kindOnly": true
@@ -99,7 +100,7 @@ data:
         "sort": true
       },
       {
-        "name": "ports",
+        "name": "Ports",
         "source": "$count(spec.ports) ? $map(spec.ports, function($value) {$value.port = $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~> $join('') : [$string($value.port), ':', $string($value.targetPort), '/', $string($value.protocol)] ~> $join('') }) ~> $join(', ')  : '-'"
       },
       {
@@ -134,4 +135,6 @@ data:
       },
       "urlPath": "example-services",
       "scope": "namespace",
+      "name": "Custom Services",
+      "category": "Examples",
     }

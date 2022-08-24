@@ -52,7 +52,10 @@ context('Test Pizzas', () => {
       .find('.sap-icon--message-success')
       .should('have.length', 4);
 
-    cy.loadFiles('examples/pizzas/samples.yaml').then(resources => {
+    cy.loadFiles(
+      'examples/pizzas/samples/pizzas-samples.yaml',
+      'examples/pizzas/samples/pizza-orders-samples.yaml',
+    ).then(resources => {
       const input = resources.map(r => jsyaml.dump(r)).join('\n---\n');
       cy.pasteToMonaco(input);
     });
