@@ -34,7 +34,12 @@ data:
           "name": "spec.servers",
           "children": [
             { "source": "$item.port.name", "name": "spec.servers.port.name" },
-            { "source": "$item.hosts", "name": "spec.servers.hosts" },
+            {
+              "widget": "JoinedArray",
+              "separator": 'break',
+              "source": "$item.hosts", 
+              "name": "spec.servers.hosts" 
+            },
             { "source": "$item.port.number", "name": "spec.servers.port.number" },
             { "source": "$item.tls.mode", "name": "spec.servers.tls.mode" },
             {
