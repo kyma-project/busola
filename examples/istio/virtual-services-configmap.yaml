@@ -54,6 +54,9 @@ data:
               },
               {
                  "source": "$item.timeout", "name": "Timeout"
+              },
+              {
+                 "source": "$item.mirrorPercentage.value", "name": "Mirror Percentage"
               }
             ],
             "collapsible": [
@@ -222,9 +225,84 @@ data:
                         "source": "$parent.percent", "name": "Percent"
                       }
                     ]
+                  },
+                  {
+                    "source": "$parent.abort", "name": "Abort", "widget": "Panel", "children": [
+                      {
+                        "source": "$parent.httpStatus", "name": "HTTP Status"
+                      },
+                      {
+                        "source": "$parent.percentage.value", "name": "Percentage"
+                      }
+                    ]
                   }
                 ]
-              }
+              },
+              {
+                "source": "$item.mirror", "name": "Destination", "widget": "Panel", "children": [
+                  {
+                    "source": "$parent.host", "name": "Host"
+                  },
+                  {
+                    "source": "$parent.subset", "name": "Subset"
+                  },
+                  {
+                    "source": "$parent.port.number", "name": "Port"
+                  },
+                ]
+              },
+              {
+                "source": "$item.corsPolicy", "name": "CORS Policy", "widget": "Panel", "children": [
+                  {
+                    "source": "$parent.allowOrigins", "name": "Allow Origins", "widget": "JoinedArray"
+                  },
+                  {
+                    "source": "$parent.allowMethods", "name": "Allow Methods", "widget": "JoinedArray"
+                  },
+                  {
+                    "source": "$parent.allowHeaders", "name": "Allow Headers", "widget": "JoinedArray"
+                  },
+                  {
+                    "source": "$parent.exposeHeaders", "name": "Expose Headers", "widget": "JoinedArray"
+                  },
+                  {
+                    "source": "$parent.maxAge", "name": "Max Age"
+                  },
+                  {
+                    "source": "$parent.allowCredentials", "name": "Allow Credentials"
+                  }
+                ]
+              },
+              {
+                "source": "$item.headers", "name": "Headers", "widget": "Panel", "children": [
+                    {
+                      "source": "$parent.request", "name": "Request", "widget": "Panel", "children":[
+                          {
+                            "source": "$parent.set", "name": "Set", "widget": "Labels"
+                          },
+                          {
+                            "source": "$parent.add", "name": "Add", "widget": "Labels"
+                          },
+                          {
+                            "source": "$parent.remove", "name": "Remove", "widget": "JoinedArray"
+                          }
+                      ]
+                    },
+                    {
+                    "source": "$parent.response", "name": "Response", "widget": "Panel", "children": [
+                          {
+                            "source": "$parent.set", "name": "Set", "widget": "Labels"
+                          },
+                          {
+                            "source": "$parent.add", "name": "Add", "widget": "Labels"
+                          },
+                          {
+                            "source": "$parent.remove", "name": "Remove", "widget": "JoinedArray"
+                          }
+                      ]
+                    },
+                ] 
+              },
             ]
           },        
           {
