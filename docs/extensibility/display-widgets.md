@@ -155,7 +155,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
   "resource": {
     "name": "data.name",
     "namespace": "root.metadata.namespace",
-    "kind": "data.kind"
+    "kind": "'Deployment'"
   }
 }
 ```
