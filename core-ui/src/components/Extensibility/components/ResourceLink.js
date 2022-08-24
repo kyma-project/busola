@@ -13,12 +13,7 @@ function getLinkData({ value, formulas, originalResource, t }) {
     return {
       linkData: {
         name: applyFormula(formulas.name),
-        namespace:
-          formulas.namespace &&
-          formulas.namespace.substring(formulas.namespace.lastIndexOf('.')) ===
-            '.namespace'
-            ? applyFormula(formulas.namespace)
-            : formulas.namespace,
+        namespace: formulas.namespace && applyFormula(formulas.namespace),
         kind: applyFormula(formulas.kind),
       },
     };
