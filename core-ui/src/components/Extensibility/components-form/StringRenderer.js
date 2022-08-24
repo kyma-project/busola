@@ -3,6 +3,7 @@ import React from 'react';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { useGetTranslation } from 'components/Extensibility/helpers';
+import { fromJS } from 'immutable';
 
 export function StringRenderer({
   onChange,
@@ -12,14 +13,14 @@ export function StringRenderer({
   storeKeys,
   required,
   compact,
+  placeholder,
   ...props
 }) {
-  const { tFromStoreKeys } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
   const getTypeSpecificProps = () => {
     if (schema.get('enum')) {
-      const options = schema
-        .get('enum')
+      const options = fromJS(schema.get('enum'))
         .toArray()
         .map(key => ({ key, text: key }));
       return { input: Inputs.ComboboxInput, options };
@@ -27,6 +28,8 @@ export function StringRenderer({
       return { input: Inputs.Text };
     }
   };
+
+  const schemaPlaceholder = schema.get('placeholder');
 
   return (
     <ResourceForm.FormField
@@ -42,6 +45,7 @@ export function StringRenderer({
         });
       }}
       label={tFromStoreKeys(storeKeys, schema)}
+      placeholder={schemaPlaceholder ? tExt(schemaPlaceholder) : placeholder}
       compact={compact}
       required={required}
       data-testid={storeKeys.join('.')}
