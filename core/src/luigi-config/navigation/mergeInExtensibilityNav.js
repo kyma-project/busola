@@ -15,10 +15,10 @@ export const mergeInExtensibilityNav = (nodes, extensionNodes) => {
       return extensionHasSameLabel && extensionHasSamePath;
     });
     if (indexOfNodeToRemove > -1) {
-      // navigation is corrupted when we insert the EXT node in the same place, so EXT nodes are always pushed at the end
-      busolaNavigationNodes.splice(indexOfNodeToRemove, 1);
+      busolaNavigationNodes.splice(indexOfNodeToRemove, 1, node);
+    } else {
+      busolaNavigationNodes.push(node);
     }
-    busolaNavigationNodes.push(node);
   });
 
   return busolaNavigationNodes;
