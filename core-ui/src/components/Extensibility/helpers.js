@@ -129,9 +129,9 @@ export const getObjectValueWorkaround = (
 
 export const useCreateResourceDescription = descID => {
   const { t, i18n } = useGetTranslation();
+  if (!descID) return;
 
   let trans = t(descID);
-
   if (typeof trans === 'string') {
     const i18VarRegex = /{{.*?}}/g;
     const matchesIterator = trans?.matchAll(i18VarRegex);

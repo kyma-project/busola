@@ -19,7 +19,7 @@ export function useJsonata(query, root, extras = {}) {
         id,
         () => {
           requestRelatedResource(root, id);
-          return dataSourceStore[id].data;
+          return dataSourceStore?.[id]?.data;
         },
       ]),
     );
