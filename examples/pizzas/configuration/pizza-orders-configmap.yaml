@@ -57,10 +57,12 @@ data:
       {
         "simple": "true",
         "widget": "FormGroup",
-        "path": "spec.orderDetails"
+        "path": "spec.orderDetails",
+        "children": [
+          { "path": "paymentMethod", "simple": "true"},
+          { "path": "realization", "simple": "true"}
+        ]
       },
-      { "path": "spec.orderDetails.paymentMethod", "simple": "true"},
-      { "path": "spec.orderDetails.realization", "simple": "true"},
       {
         "simple": "true",
         "path": "spec.pizzas[]",
