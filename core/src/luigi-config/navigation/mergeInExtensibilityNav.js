@@ -10,9 +10,10 @@ const findNodeWithSameLabelAndPath = (busolaNode, extNode) => {
   if (isNodeASwapCandidate(busolaNode)) {
     return false;
   }
-  const extHasSameLabel = busolaNode.label === extNode.label;
-  const extHasSamePath = busolaNode.pathSegment === extNode.pathSegment;
-  return extHasSameLabel && extHasSamePath;
+  return (
+    busolaNode.label === extNode.label &&
+    busolaNode.pathSegment === extNode.pathSegment
+  );
 };
 
 const replaceOrAddNode = (nodeList, node, index) => {
@@ -31,10 +32,12 @@ export const mergeInExtensibilityNav = (nodes, extensionNodes) => {
       return;
     }
 
-    const sameLabelAndPath = partial(findNodeWithSameLabelAndPath, extNode);
-    const replaceElementIndex = busolaNodeList.findIndex(sameLabelAndPath);
+    const findSameLabelAndPath = partial(findNodeWithSameLabelAndPath, extNode);
+    const elementToBeReplacedIndex = busolaNodeList.findIndex(
+      findSameLabelAndPath,
+    );
 
-    replaceOrAddNode(busolaNodeList, extNode, replaceElementIndex);
+    replaceOrAddNode(busolaNodeList, extNode, elementToBeReplacedIndex);
   });
 
   return busolaNodeList;
