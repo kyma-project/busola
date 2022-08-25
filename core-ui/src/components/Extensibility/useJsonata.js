@@ -39,6 +39,6 @@ export function useJsonata(query, root, extras = {}) {
     } catch (e) {
       setValue(t('extensibility.configuration-error', { error: e.message }));
     }
-  }, [root, dataSourceStore]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [root, dataSourceStore, extras]); // eslint-disable-line react-hooks/exhaustive-deps
   return value;
 }
