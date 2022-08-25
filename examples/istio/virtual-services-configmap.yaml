@@ -142,7 +142,7 @@ data:
                   },
                   {
                     "source": "$item.headers", "name": "Headers", "widget": "Panel", 
-                    "visibility": "$exists(*)", "children": [
+                    "visibility": "$exists(*)", children": [
                         {
                           "source": "$item.request", "name": "Request", "widget": "Panel", 
                           "visibility": "$exists(*)", "children":[
@@ -176,7 +176,8 @@ data:
                 ]
               },
               {
-                "source": "$item.redirect", "name": "Redirect", "widget": "Panel", "children": [
+                "source": "$item.redirect", "name": "Redirect", "widget": "Panel", 
+                "visibility": "$exists(*)", "children": [
                   {
                     "source": "$item.uri", "name": "URI"
                   },
@@ -198,7 +199,8 @@ data:
                 ]
               },
               {
-                "source": "$item.delegate", "name": "Delegate", "widget": "Panel", "children": [
+                "source": "$item.delegate", "name": "Delegate", "widget": "Panel", 
+                "visibility": "$exists(*)", "children": [
                     {
                       "source": "$item.name", "name": "Name"
                     },
@@ -208,7 +210,8 @@ data:
                 ]
               },
               {
-                "source": "$item.rewrite", "name": "Rewrite", "widget": "Panel", "children": [
+                "source": "$item.rewrite", "name": "Rewrite", "widget": "Panel", 
+                "visibility": "$exists(*)", "children": [
                     {
                       "source": "$item.uri", "name": "URI"
                     },
@@ -218,7 +221,8 @@ data:
                 ]
               },
               {
-                "source": "$item.retries", "name": "Retries", "widget": "Panel", "children": [
+                "source": "$item.retries", "name": "Retries", "widget": "Panel", 
+                "visibility": "$exists(*)", "children": [
                     {
                       "source": "$item.attempts", "name": "Attempts"
                     },
@@ -234,9 +238,11 @@ data:
                 ]
               },
               {
-                "source": "$item.fault", "name": "Fault", "widget": "Panel", "children": [
+                "source": "$item.fault", "name": "Fault", "widget": "Panel", 
+                "visibility": "$exists(*)", "children": [
                   {
-                    "source": "$item.delay", "name": "Delay", "widget": "Panel", "children": [
+                    "source": "$item.delay", "name": "Delay", "widget": "Panel", 
+                    "visibility": "$exists(*)", "children": [
                       {
                         "source": "$item.fixedDelay", "name": "Fixed Delay"
                       },
@@ -249,7 +255,8 @@ data:
                     ]
                   },
                   {
-                    "source": "$item.abort", "name": "Abort", "widget": "Panel", "children": [
+                    "source": "$item.abort", "name": "Abort", "widget": "Panel", 
+                    "visibility": "$exists(*)", "children": [
                       {
                         "source": "$item.httpStatus", "name": "HTTP Status"
                       },
@@ -261,7 +268,8 @@ data:
                 ]
               },
               {
-                "source": "$item.mirror", "name": "Destination", "widget": "Panel", "children": [
+                "source": "$item.mirror", "name": "Destination", "widget": "Panel", 
+                "visibility": "$exists(*)", "children": [
                   {
                     "source": "$item.host", "name": "Host"
                   },
@@ -274,7 +282,8 @@ data:
                 ]
               },
               {
-                "source": "$item.corsPolicy", "name": "CORS Policy", "widget": "Panel", "children": [
+                "source": "$item.corsPolicy", "name": "CORS Policy", "widget": "Panel", 
+                "visibility": "$exists(*)", "children": [
                   {
                     "source": "$item.allowOrigins", "name": "Allow Origins"
                   },
@@ -296,9 +305,11 @@ data:
                 ]
               },
               {
-                "source": "$item.headers", "name": "Headers", "widget": "Panel", "children": [
+                "source": "$item.headers", "name": "Headers", "widget": "Panel", 
+                "visibility": "$exists(*)", "children": [
                     {
-                      "source": "$item.request", "name": "Request", "widget": "Panel", "children":[
+                      "source": "$item.request", "name": "Request", "widget": "Panel", 
+                      "visibility": "$exists(*)", "children":[
                           {
                             "source": "$item.set", "name": "Set", "widget": "Labels"
                           },
@@ -311,7 +322,8 @@ data:
                       ]
                     },
                     {
-                    "source": "$item.response", "name": "Response", "widget": "Panel", "children": [
+                    "source": "$item.response", "name": "Response", "widget": "Panel", 
+                    "visibility": "$exists(*)", "children": [
                           {
                             "source": "$item.set", "name": "Set", "widget": "Labels"
                           },
@@ -334,7 +346,8 @@ data:
             "visibility": "$exists(*)",
             "children": [
                 {
-                "source": "$item.match", "name": "Matches", "widget": "Table", "children": [
+                "source": "$item.match", "name": "Matches", "widget": "Table", 
+                "visibility": "$exists(*)", "children": [
                   {
                     "source": "$item.destinationSubnets", "name": "Destination Subnets",
                     "widget": "JoinedArray"
@@ -357,9 +370,9 @@ data:
             "collapsible": [
               {
                 "source": "$item.route", "name": "Routes", "widget": "Table",
-                "children": [
+                "visibility": "$exists(*)", "children": [
                   {
-                    "source": "$item.destination", "name": "Destination", "widget": "Panel", "children": [
+                    "source": "$item.destination", "name": "Destination", "widget": "Panel", "visibility": "$exists(*)", "children": [
                       {
                         "source": "$item.host", "name": "Host"
                       },
@@ -385,7 +398,8 @@ data:
             "visibility": "$exists(*)",
             "children": [
                 {
-                "source": "$item.match", "name": "Matches", "widget": "Table", "children": [
+                "source": "$item.match", "name": "Matches", "widget": "Table", 
+                "visibility": "$exists(*)", "children": [
                   {
                     "source": "$item.sniHosts", "name": "SNI Hosts", "widget": "JoinedArray"
                   },
@@ -411,7 +425,7 @@ data:
             "collapsible": [
               {
                 "source": "$item.route", "name": "Routes", "widget": "Table",
-                "children": [
+                "visibility": "$exists(*)", "children": [
                   {
                      "name": "Destination", "widget": "Panel", "children": [
                       {
