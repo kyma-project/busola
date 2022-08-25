@@ -57,7 +57,24 @@ data:
               },
               {
                  "source": "$item.mirrorPercentage.value", "name": "Mirror Percentage"
-              }
+              },
+              {
+                "source": "$item.corsPolicy",
+                "name": "CORS Policy", 
+                "widget": "Panel", 
+                "visibility": "$exists(*)",
+                "children": [
+                  {
+                    "source": "$item.allowHeaders", "name": "Allow Headers", "widget": "JoinedArray"
+                  },
+                  {
+                    "source": "$item.allowMethods", "name": "Allow Methods", "widget": "JoinedArray"
+                  },
+                  {
+                    "source": "$item.maxAge", "name": "Max Age"
+                  },
+                ] 
+              },
             ],
             "collapsible": [
               {
@@ -111,10 +128,10 @@ data:
                         "source": "$item.host", "name": "Host"
                       },
                       {
-                          "source": "$parent.subset", "name": "Subset"
+                          "source": "$item.subset", "name": "Subset"
                       },
                       {
-                        "source": "$parent.port.number", "name": "Port"
+                        "source": "$item.port.number", "name": "Port"
                       },
                     ] 
                   },
@@ -124,28 +141,28 @@ data:
                   {
                     "source": "$item.headers", "name": "Headers", "widget": "Panel", "children": [
                         {
-                          "source": "$parent.request", "name": "Request", "widget": "Panel", "children":[
+                          "source": "$item.request", "name": "Request", "widget": "Panel", "children":[
                               {
-                                "source": "$parent.set", "name": "Set", "widget": "Labels"
+                                "source": "$item.set", "name": "Set", "widget": "Labels"
                               },
                               {
-                                "source": "$parent.add", "name": "Add", "widget": "Labels"
+                                "source": "$item.add", "name": "Add", "widget": "Labels"
                               },
                               {
-                                "source": "$parent.remove", "name": "Remove", "widget": "JoinedArray"
+                                "source": "$item.remove", "name": "Remove", "widget": "JoinedArray"
                               }
                           ]
                         },
                         {
-                        "source": "$parent.response", "name": "Response", "widget": "Panel", "children": [
+                        "source": "$item.response", "name": "Response", "widget": "Panel", "children": [
                               {
-                                "source": "$parent.set", "name": "Set", "widget": "Labels"
+                                "source": "$item.set", "name": "Set", "widget": "Labels"
                               },
                               {
-                                "source": "$parent.add", "name": "Add", "widget": "Labels"
+                                "source": "$item.add", "name": "Add", "widget": "Labels"
                               },
                               {
-                                "source": "$parent.remove", "name": "Remove", "widget": "JoinedArray"
+                                "source": "$item.remove", "name": "Remove", "widget": "JoinedArray"
                               }
                           ]
                         },
@@ -156,83 +173,83 @@ data:
               {
                 "source": "$item.redirect", "name": "Redirect", "widget": "Panel", "children": [
                   {
-                    "source": "$parent.uri", "name": "URI"
+                    "source": "$item.uri", "name": "URI"
                   },
                   {
-                    "source": "$parent.authority", "name": "Authority"
+                    "source": "$item.authority", "name": "Authority"
                   },
                   {
-                    "source": "$parent.port", "name": "Port"
+                    "source": "$item.port", "name": "Port"
                   },
                   {
-                    "source": "$parent.derivePort", "name": "Derive Port", "widget": "Labels"
+                    "source": "$item.derivePort", "name": "Derive Port", "widget": "Labels"
                   },
                   {
-                    "source": "$parent.scheme", "name": "Scheme"
+                    "source": "$item.scheme", "name": "Scheme"
                   },
                   {
-                    "source": "$parent.redirectCode", "name": "Redirect Code"
+                    "source": "$item.redirectCode", "name": "Redirect Code"
                   },
                 ]
               },
               {
                 "source": "$item.delegate", "name": "Delegate", "widget": "Panel", "children": [
                     {
-                      "source": "$parent.name", "name": "Name"
+                      "source": "$item.name", "name": "Name"
                     },
                     {
-                      "source": "$parent.namespace", "name": "Namespace"
+                      "source": "$item.namespace", "name": "Namespace"
                     },
                 ]
               },
               {
                 "source": "$item.rewrite", "name": "Rewrite", "widget": "Panel", "children": [
                     {
-                      "source": "$parent.uri", "name": "URI"
+                      "source": "$item.uri", "name": "URI"
                     },
                     {
-                      "source": "$parent.authority", "name": "Authority"
+                      "source": "$item.authority", "name": "Authority"
                     },
                 ]
               },
               {
                 "source": "$item.retries", "name": "Retries", "widget": "Panel", "children": [
                     {
-                      "source": "$parent.attempts", "name": "Attempts"
+                      "source": "$item.attempts", "name": "Attempts"
                     },
                     {
-                      "source": "$parent.perTryTimeout", "name": "Per Try Timeout"
+                      "source": "$item.perTryTimeout", "name": "Per Try Timeout"
                     },
                     {
-                      "source": "$parent.retryOn", "name": "Retry On"
+                      "source": "$item.retryOn", "name": "Retry On"
                     },
                     {
-                      "source": "$parent.retryRemoteLocalities", "name": "Retry Remote Localities"
+                      "source": "$item.retryRemoteLocalities", "name": "Retry Remote Localities"
                     },
                 ]
               },
               {
                 "source": "$item.fault", "name": "Fault", "widget": "Panel", "children": [
                   {
-                    "source": "$parent.delay", "name": "Delay", "widget": "Panel", "children": [
+                    "source": "$item.delay", "name": "Delay", "widget": "Panel", "children": [
                       {
-                        "source": "$parent.fixedDelay", "name": "Fixed Delay"
+                        "source": "$item.fixedDelay", "name": "Fixed Delay"
                       },
                       {
-                        "source": "$parent.percentage.value", "name": "Percentage"
+                        "source": "$item.percentage.value", "name": "Percentage"
                       },
                       {
-                        "source": "$parent.percent", "name": "Percent"
+                        "source": "$item.percent", "name": "Percent"
                       }
                     ]
                   },
                   {
-                    "source": "$parent.abort", "name": "Abort", "widget": "Panel", "children": [
+                    "source": "$item.abort", "name": "Abort", "widget": "Panel", "children": [
                       {
-                        "source": "$parent.httpStatus", "name": "HTTP Status"
+                        "source": "$item.httpStatus", "name": "HTTP Status"
                       },
                       {
-                        "source": "$parent.percentage.value", "name": "Percentage"
+                        "source": "$item.percentage.value", "name": "Percentage"
                       }
                     ]
                   }
@@ -241,63 +258,63 @@ data:
               {
                 "source": "$item.mirror", "name": "Destination", "widget": "Panel", "children": [
                   {
-                    "source": "$parent.host", "name": "Host"
+                    "source": "$item.host", "name": "Host"
                   },
                   {
-                    "source": "$parent.subset", "name": "Subset"
+                    "source": "$item.subset", "name": "Subset"
                   },
                   {
-                    "source": "$parent.port.number", "name": "Port"
+                    "source": "$item.port.number", "name": "Port"
                   },
                 ]
               },
               {
                 "source": "$item.corsPolicy", "name": "CORS Policy", "widget": "Panel", "children": [
                   {
-                    "source": "$parent.allowOrigins", "name": "Allow Origins", "widget": "JoinedArray"
+                    "source": "$item.allowOrigins", "name": "Allow Origins"
                   },
                   {
-                    "source": "$parent.allowMethods", "name": "Allow Methods", "widget": "JoinedArray"
+                    "source": "$item.allowMethods", "name": "Allow Methods", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$parent.allowHeaders", "name": "Allow Headers", "widget": "JoinedArray"
+                    "source": "$item.allowHeaders", "name": "Allow Headers", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$parent.exposeHeaders", "name": "Expose Headers", "widget": "JoinedArray"
+                    "source": "$item.exposeHeaders", "name": "Expose Headers", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$parent.maxAge", "name": "Max Age"
+                    "source": "$item.maxAge", "name": "Max Age"
                   },
                   {
-                    "source": "$parent.allowCredentials", "name": "Allow Credentials"
+                    "source": "$item.allowCredentials", "name": "Allow Credentials"
                   }
                 ]
               },
               {
                 "source": "$item.headers", "name": "Headers", "widget": "Panel", "children": [
                     {
-                      "source": "$parent.request", "name": "Request", "widget": "Panel", "children":[
+                      "source": "$item.request", "name": "Request", "widget": "Panel", "children":[
                           {
-                            "source": "$parent.set", "name": "Set", "widget": "Labels"
+                            "source": "$item.set", "name": "Set", "widget": "Labels"
                           },
                           {
-                            "source": "$parent.add", "name": "Add", "widget": "Labels"
+                            "source": "$item.add", "name": "Add", "widget": "Labels"
                           },
                           {
-                            "source": "$parent.remove", "name": "Remove", "widget": "JoinedArray"
+                            "source": "$item.remove", "name": "Remove", "widget": "JoinedArray"
                           }
                       ]
                     },
                     {
-                    "source": "$parent.response", "name": "Response", "widget": "Panel", "children": [
+                    "source": "$item.response", "name": "Response", "widget": "Panel", "children": [
                           {
-                            "source": "$parent.set", "name": "Set", "widget": "Labels"
+                            "source": "$item.set", "name": "Set", "widget": "Labels"
                           },
                           {
-                            "source": "$parent.add", "name": "Add", "widget": "Labels"
+                            "source": "$item.add", "name": "Add", "widget": "Labels"
                           },
                           {
-                            "source": "$parent.remove", "name": "Remove", "widget": "JoinedArray"
+                            "source": "$item.remove", "name": "Remove", "widget": "JoinedArray"
                           }
                       ]
                     },
@@ -342,10 +359,10 @@ data:
                         "source": "$item.host", "name": "Host"
                       },
                       {
-                          "source": "$parent.subset", "name": "Subset"
+                          "source": "$item.subset", "name": "Subset"
                       },
                       {
-                        "source": "$parent.port.number", "name": "Port"
+                        "source": "$item.port.number", "name": "Port"
                       },
                     ] 
                   },
@@ -396,10 +413,10 @@ data:
                         "source": "$item.destination.host", "name": "Host"
                       },
                       {
-                          "source": "$parent.subset", "name": "Subset"
+                          "source": "$item.subset", "name": "Subset"
                       },
                       {
-                        "source": "$parent.port.number", "name": "Port"
+                        "source": "$item.port.number", "name": "Port"
                       },
                     ] 
                   },
@@ -411,14 +428,14 @@ data:
             ],
           }
       ],
-      "resourceGraph": {
-        "dataSources": [
-          {
-            "source": "gateways"
-          }
-        ]
-      }
     }
+  # "resourceGraph": {
+  #   "dataSources": [
+  #     {
+  #       "source": "gateways"
+  #     }
+  #   ]
+  # }
   form: |-
     [
       {
@@ -645,18 +662,18 @@ data:
         "widget": "JoinedArray"
       },
     ]
-  dataSources: |-
-    { 
-      "gateways":{
-        "resource": {
-          "kind": "Gateway",
-          "group": "networking.istio.io",
-          "version": "v1beta1",
-          "namespace": null
-        },
-        "filter": "$filter($root.spec.gateways, function($g){$substringBefore($g,'/') = $item.metadata.namespace and $substringAfter($g, '/') = $item.metadata.name}) "
-      }
-    }
+  # dataSources: |-
+  #   {
+  #     "gateways":{
+  #       "resource": {
+  #         "kind": "Gateway",
+  #         "group": "networking.istio.io",
+  #         "version": "v1beta1",
+  #         "namespace": null
+  #       },
+  #       "filter": "$filter($root.spec.gateways, function($g){$substringBefore($g,'/') = $item.metadata.namespace and $substringAfter($g, '/') = $item.metadata.name}) "
+  #     }
+  #   }
   general: |-
     {
       "resource": {
