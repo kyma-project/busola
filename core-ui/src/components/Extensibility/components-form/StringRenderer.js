@@ -30,6 +30,7 @@ export function StringRenderer({
   };
 
   const schemaPlaceholder = schema.get('placeholder');
+  const schemaRequired = schema.get('required');
 
   return (
     <ResourceForm.FormField
@@ -47,7 +48,7 @@ export function StringRenderer({
       label={tFromStoreKeys(storeKeys, schema)}
       placeholder={schemaPlaceholder ? tExt(schemaPlaceholder) : placeholder}
       compact={compact}
-      required={required}
+      required={required || schemaRequired}
       data-testid={storeKeys.join('.')}
       {...getTypeSpecificProps()}
     />
