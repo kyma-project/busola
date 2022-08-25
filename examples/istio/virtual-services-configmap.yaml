@@ -427,9 +427,9 @@ data:
                 "source": "$item.route", "name": "Routes", "widget": "Table",
                 "visibility": "$exists(*)", "children": [
                   {
-                     "name": "Destination", "widget": "Panel", "children": [
+                    "source": "$item.destination", "name": "Destination", "widget": "Panel", "children": [
                       {
-                        "source": "$item.destination.host", "name": "Host"
+                        "source": "$item.host", "name": "Host"
                       },
                       {
                           "source": "$item.subset", "name": "Subset"
@@ -448,13 +448,6 @@ data:
           }
       ],
     }
-  # "resourceGraph": {
-  #   "dataSources": [
-  #     {
-  #       "source": "gateways"
-  #     }
-  #   ]
-  # }
   form: |-
     [
       {
@@ -681,18 +674,26 @@ data:
         "widget": "JoinedArray"
       },
     ]
-  # dataSources: |-
-  #   {
-  #     "gateways":{
-  #       "resource": {
-  #         "kind": "Gateway",
-  #         "group": "networking.istio.io",
-  #         "version": "v1beta1",
-  #         "namespace": null
-  #       },
-  #       "filter": "$filter($root.spec.gateways, function($g){$substringBefore($g,'/') = $item.metadata.namespace and $substringAfter($g, '/') = $item.metadata.name}) "
-  #     }
-  #   }
+  dataSources: |-
+    {
+      "gateways":{
+        "resource": {
+          "kind": "Gateway",
+          "group": "networking.istio.io",
+          "version": "v1beta1",
+          "namespace": null
+        },
+        "filter": "$filter($root.spec.gateways, function($g){$substringBefore($g,'/') = $item.metadata.namespace and $substringAfter($g, '/') = $item.metadata.name}) "
+      },
+      "services":{
+        "resource": {
+          "kind": "Service",
+          "version": "v1",
+          "namespace": null
+        },
+        "filter": "$filter($root.spec.http.route, function($r) {$filter($r.destination.host, function($h){$substringBefore($h, '.') = $item.metadata.name and $split($substringAfter($h, '.'),'.')[0] = $item.metadata.namespace} )} "
+      }
+    }
   general: |-
     {
       "resource": {
