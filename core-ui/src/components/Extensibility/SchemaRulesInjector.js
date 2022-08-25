@@ -35,7 +35,7 @@ export function prepareSchemaRules(ruleDefs) {
       ...(Array.isArray(path)
         ? path
         : path?.replace(/\[]/g, '.[]')?.split('.') || []),
-    ];
+    ].filter(segment => !!segment);
 
     initial(fullPath).reduce((acc, step) => {
       const myPath = [...acc, step];
