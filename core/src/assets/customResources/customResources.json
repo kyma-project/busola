@@ -14,8 +14,12 @@
             },
             {
               "source": "spec.exportTo",
+              "name": "spec.exportTo",
               "widget": "JoinedArray",
-              "separator": ", "
+              "separator": " ",
+              "child": {
+                "widget": "Badge"
+              }
             }
           ]
         },
@@ -26,12 +30,14 @@
           "visibility": "$exists($.data)"
         },
         {
-          "source": "spec.subset",
+          "source": "spec.subsets",
+          "name": "spec.subsets",
           "widget": "CodeViewer",
           "visibility": "$exists($.data)"
         },
         {
           "source": "spec.workloadSelector",
+          "name": "spec.workloadSelector",
           "widget": "CodeViewer",
           "visibility": "$exists($.data)"
         }

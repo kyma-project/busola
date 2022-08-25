@@ -33,10 +33,6 @@ context('Test Destination Rules', () => {
       .contains('Create Destination Rule')
       .click();
 
-    cy.getIframeBody()
-      .contains('button', 'YAML')
-      .click();
-
     cy.wrap(loadDR(DR_NAME, Cypress.env('NAMESPACE_NAME'))).then(DR_CONFIG => {
       const DR = JSON.stringify(DR_CONFIG);
       cy.pasteToMonaco(DR);
