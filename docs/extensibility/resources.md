@@ -308,6 +308,7 @@ Those fields are used to build the related resource URL and filter the received 
   - **root** - the original resource.
 
   This function should return a boolean value.
+  You can also use the matchByLabelSelector option to see the matched Pods. To do that, provide pods as `$item` and labels path.
 
 ### Examples
 
