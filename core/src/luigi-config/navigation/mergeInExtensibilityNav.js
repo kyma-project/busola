@@ -1,25 +1,41 @@
-export const mergeInExtensibilityNav = (nodes, extensionNodes) => {
-  const busolaNavigationNodes = [...nodes];
+import { partial } from 'lodash';
 
-  extensionNodes.forEach(node => {
-    if (!node.label || !node.pathSegment) {
+const isNodeASwapCandidate = node => {
+  if (!node.label || !node.pathSegment) {
+    return true;
+  }
+};
+
+const findNodeWithSameLabelAndPath = (busolaNode, extNode) => {
+  if (isNodeASwapCandidate(busolaNode)) {
+    return false;
+  }
+  const extHasSameLabel = busolaNode.label === extNode.label;
+  const extHasSamePath = busolaNode.pathSegment === extNode.pathSegment;
+  return extHasSameLabel && extHasSamePath;
+};
+
+const replaceOrAddNode = (nodeList, node, index) => {
+  if (index > -1) {
+    nodeList.splice(index, 1, node);
+  } else {
+    nodeList.push(node);
+  }
+};
+
+export const mergeInExtensibilityNav = (nodes, extensionNodes) => {
+  const busolaNodeList = [...nodes];
+
+  extensionNodes.forEach(extNode => {
+    if (isNodeASwapCandidate(extNode)) {
       return;
     }
 
-    const indexOfNodeToRemove = busolaNavigationNodes.findIndex(nativeNode => {
-      if (!nativeNode.label || !nativeNode.pathSegment) {
-        return false;
-      }
-      const extensionHasSameLabel = nativeNode.label === node.label;
-      const extensionHasSamePath = nativeNode.pathSegment === node.pathSegment;
-      return extensionHasSameLabel && extensionHasSamePath;
-    });
-    if (indexOfNodeToRemove > -1) {
-      busolaNavigationNodes.splice(indexOfNodeToRemove, 1, node);
-    } else {
-      busolaNavigationNodes.push(node);
-    }
+    const sameLabelAndPath = partial(findNodeWithSameLabelAndPath, extNode);
+    const replaceElementIndex = busolaNodeList.findIndex(sameLabelAndPath);
+
+    replaceOrAddNode(busolaNodeList, extNode, replaceElementIndex);
   });
 
-  return busolaNavigationNodes;
+  return busolaNodeList;
 };
