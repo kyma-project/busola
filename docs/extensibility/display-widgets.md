@@ -162,7 +162,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
   "resource": {
     "name": "data.name",
     "namespace": "root.metadata.namespace",
-    "kind": "data.kind"
+    "kind": "'Deployment'"
   }
 }
 ```
@@ -296,7 +296,7 @@ Since the **ResourceList** widget does more than just list the items, you must p
   "name": "Example ResourceList Secret",
   "children": [
     {
-      "source": "status.code",
+      "source": "$item.status.code",
       "widget": "Badge"
     }
   ]
@@ -339,8 +339,8 @@ Table widgets display array data as rows of a table instead of free-standing com
 {
   "source": "spec.item-list",
   "widget": "Table",
-  "children": [{ "source": "name" }, { "source": "status" }],
-  "collapsible": [{ "source": "description" }]
+  "children": [{ "source": "$item.name" }, { "source": "$item.status" }],
+  "collapsible": [{ "source": "$item.description" }]
 }
 ```
 
