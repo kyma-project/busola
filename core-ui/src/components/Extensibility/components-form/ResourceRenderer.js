@@ -17,7 +17,6 @@ export function ResourceRenderer({
   compact,
   ...props
 }) {
-  console.log(props);
   const { namespaceId } = useMicrofrontendContext();
 
   const { tFromStoreKeys } = useGetTranslation();
