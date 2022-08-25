@@ -78,7 +78,8 @@ data:
             ],
             "collapsible": [
               {
-                "source": "$item.match", "name": "Matches", "widget": "Table", "children":[
+                "source": "$item.match", "name": "Matches", "widget": "Table", 
+                "visibility": "$exists(*)", "children":[
                   {
                     "source": "$item.name", "name": "Name",
                   },
@@ -121,9 +122,10 @@ data:
                 ]
               },
               {
-                "source": "$item.route", "name": "Routes", "widget": "Table", "children":[
+                "source": "$item.route", "name": "Routes", "widget": "Table", 
+                "visibility": "$exists(*)", "children":[
                   {
-                    "source": "$item.destination", "name": "Destination", "widget": "Panel", "children": [
+                    "source": "$item.destination", "name": "Destination", "widget": "Panel", "visibility": "$exists(*)", "children": [
                       {
                         "source": "$item.host", "name": "Host"
                       },
@@ -139,9 +141,11 @@ data:
                     "source": "$item.weight", "name": "Weight",
                   },
                   {
-                    "source": "$item.headers", "name": "Headers", "widget": "Panel", "children": [
+                    "source": "$item.headers", "name": "Headers", "widget": "Panel", 
+                    "visibility": "$exists(*)", "children": [
                         {
-                          "source": "$item.request", "name": "Request", "widget": "Panel", "children":[
+                          "source": "$item.request", "name": "Request", "widget": "Panel", 
+                          "visibility": "$exists(*)", "children":[
                               {
                                 "source": "$item.set", "name": "Set", "widget": "Labels"
                               },
@@ -154,7 +158,8 @@ data:
                           ]
                         },
                         {
-                        "source": "$item.response", "name": "Response", "widget": "Panel", "children": [
+                        "source": "$item.response", "name": "Response", "widget": "Panel", 
+                        "visibility": "$exists(*)", "children": [
                               {
                                 "source": "$item.set", "name": "Set", "widget": "Labels"
                               },
