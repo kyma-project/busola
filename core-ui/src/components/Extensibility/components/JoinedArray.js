@@ -31,7 +31,7 @@ export function JoinedArray({ value, structure, schema }) {
   }
 
   return (
-    value.join(structure?.separator ? structure.separator : ' ') ||
+    value.join(structure?.separator ? structure.separator : ', ') ||
     emptyLeafPlaceholder
   );
 }
