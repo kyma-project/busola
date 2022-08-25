@@ -15,7 +15,7 @@ export function JoinedArray({ value, structure, schema }) {
   }
 
   if (structure?.separator === 'break') {
-    return value.map(val => <p>{val}</p>);
+    return value.map((val, i) => <p key={i}>{val}</p>);
   } else {
     return (
       value.join(structure?.separator ? structure.separator : ', ') ||

@@ -15,7 +15,7 @@ data:
           "kind": "Pod",
           "version": "v1",
         },
-        "filter": "$selectorMatchByLabels($item, $root.spec.selector)"
+        "filter": "$matchByLabelSelector($item, $root.spec.selector)"
       }
     }
   details: |

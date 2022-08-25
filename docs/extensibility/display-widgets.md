@@ -98,10 +98,6 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 
 JoinedArray widgets render all the values of an array of strings as a comma-separated list.
 
-#### Widget-specific parameters
-
-- **separator** - a string by which the elements of the array will be separated by. The default value is a comma `,`.
-
 #### Example
 
 ```json
@@ -114,6 +110,10 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
 ```
 
 <img src="./assets/display-widgets/JoinedArray.png" alt="Example of a joined array widget" width="20%" style="border: 1px solid #D2D5D9">
+
+#### Widget-specific parameters
+
+- **separator** - a string by which the elements of the array will be separated by. The default value is a comma `,`. You can use `break` to separate elements by new line.
 
 ### Labels
 
