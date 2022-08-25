@@ -1,4 +1,6 @@
 import React from 'react';
+import { memo } from '@ui-schema/ui-schema';
+import { extractValue } from '@ui-schema/ui-schema/UIStore';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { getResourceUrl } from 'resources/Namespaces/YamlUpload/helpers';
@@ -7,7 +9,7 @@ import { useGetTranslation } from 'components/Extensibility/helpers';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { ResourceForm } from 'shared/ResourceForm';
 
-export function ResourceRenderer({
+function ResourceRendererCore({
   onChange,
   onKeyDown,
   value,
@@ -60,3 +62,5 @@ export function ResourceRenderer({
     />
   );
 }
+
+export const ResourceRenderer = extractValue(memo(ResourceRendererCore));

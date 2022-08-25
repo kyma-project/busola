@@ -1,4 +1,6 @@
 import React from 'react';
+import { memo } from '@ui-schema/ui-schema';
+import { extractValue } from '@ui-schema/ui-schema/UIStore';
 import { ExternalResourceRef } from 'shared/components/ResourceRef/ExternalResourceRef';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import pluralize from 'pluralize';
@@ -6,13 +8,14 @@ import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
 
-export function ResourceRefRender({
+function ResourceRefRenderCore({
   onChange,
   value,
   schema,
   storeKeys,
   resource,
 }) {
+  s;
   const { t } = useTranslation();
   // TODO the value obtained by ui-schema is undefined for this component
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
@@ -47,3 +50,5 @@ export function ResourceRefRender({
     />
   );
 }
+
+export const ResourceRefRender = extractValue(memo(ResourceRefRenderCore));

@@ -1,4 +1,6 @@
 import React from 'react';
+import { memo } from '@ui-schema/ui-schema';
+import { extractValue } from '@ui-schema/ui-schema/UIStore';
 
 import { KeyValueField } from 'shared/ResourceForm/fields';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
@@ -6,7 +8,7 @@ import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
 import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
 
-export function KeyValuePairRenderer({
+function KeyValuePairRendererCore({
   storeKeys,
   schema,
   value,
@@ -48,3 +50,7 @@ export function KeyValuePairRenderer({
     />
   );
 }
+
+export const KeyValuePairRenderer = extractValue(
+  memo(KeyValuePairRendererCore),
+);

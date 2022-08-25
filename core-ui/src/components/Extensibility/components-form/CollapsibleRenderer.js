@@ -1,9 +1,11 @@
 import React from 'react';
+import { memo } from '@ui-schema/ui-schema';
+import { extractValue } from '@ui-schema/ui-schema/UIStore';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 
-export function CollapsibleRenderer({ schema, storeKeys, widgets, ...props }) {
+function CollapsibleRendererCore({ schema, storeKeys, widgets, ...props }) {
   const { WidgetRenderer } = widgets;
   const ownSchema = schema.delete('widget');
   const { tFromStoreKeys } = useGetTranslation();
@@ -19,3 +21,5 @@ export function CollapsibleRenderer({ schema, storeKeys, widgets, ...props }) {
     </ResourceForm.CollapsibleSection>
   );
 }
+
+export const CollapsibleRenderer = extractValue(memo(CollapsibleRendererCore));

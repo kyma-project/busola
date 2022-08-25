@@ -1,9 +1,11 @@
 import React, { useRef } from 'react';
+import { memo } from '@ui-schema/ui-schema';
+import { extractValue } from '@ui-schema/ui-schema/UIStore';
 import { List } from 'immutable';
 
 import { K8sNameField } from 'shared/ResourceForm/fields';
 
-export function NameRenderer({
+function NameRendererCore({
   storeKeys,
   resource,
   value,
@@ -45,3 +47,4 @@ export function NameRenderer({
     />
   );
 }
+export const NameRenderer = extractValue(memo(NameRendererCore));

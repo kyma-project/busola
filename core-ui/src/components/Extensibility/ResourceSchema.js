@@ -17,6 +17,7 @@ function FormContainer({ children }) {
     </div>
   );
 }
+
 const FormStack = injectPluginStack(FormContainer);
 
 export function ResourceSchema({
@@ -36,6 +37,9 @@ export function ResourceSchema({
     [setStore],
   );
 
+  const uiWidgets = React.useMemo(() => widgets, [widgets]);
+  const uiStore = React.useMemo(() => store, [store]);
+
   const translationBundle = path || 'extensibility';
   const { t } = useTranslation([translationBundle]); //doesn't always work, add `translationBundle.` at the beggining of a path
 
@@ -49,26 +53,32 @@ export function ResourceSchema({
   const advancedRules = fullSchemaRules.filter(item => item.advanced ?? true);
 
   const myRules = advanced ? advancedRules : simpleRules;
-  const preparedRules = prepareSchemaRules(myRules);
-
-  if (isEmpty(schema)) return null;
+  // const preparedRules = prepareSchemaRules(myRules);
+  const preparedRules = React.useMemo(() => prepareSchemaRules(myRules), [
+    myRules,
+  ]);
 
   let newSchema = schema;
   delete newSchema.properties.metadata;
+  const schemaMap = React.useMemo(() => createOrderedMap(newSchema), [
+    newSchema,
+  ]);
 
-  newSchema = {
-    ...newSchema,
-    properties: { ...newSchema.properties },
-  };
+  if (isEmpty(schema)) return null;
 
-  const schemaMap = createOrderedMap(newSchema);
+  // newSchema = {
+  //   ...newSchema,
+  //   properties: { ...newSchema.properties },
+  // };
+
+  // const schemaMap = createOrderedMap(newSchema);
   return (
     <UIMetaProvider
-      widgets={widgets}
-      t={(path, ...props) => t(`${translationBundle}::${path}`, ...props)}
+      widgets={uiWidgets}
+      // t={(path, ...props) => t(`${translationBundle}::${path}`, ...props)}
     >
       <UIStoreProvider
-        store={store}
+        store={uiStore}
         showValidity={true}
         onChange={onChange}
         schemaRules={preparedRules}

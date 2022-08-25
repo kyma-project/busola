@@ -99,7 +99,7 @@ export function ExtensibilityCreate({
         onSubmit={() => {}}
         path={general?.urlPath || ''}
       />
-      <ResourceSchema
+      {/* <ResourceSchema
         advanced
         key={api.version}
         schema={errorOpenApi ? {} : schema}
@@ -108,7 +108,7 @@ export function ExtensibilityCreate({
         store={store}
         setStore={setStore}
         path={general?.urlPath || ''}
-      />
+      /> */}
     </ResourceForm>
   );
 }

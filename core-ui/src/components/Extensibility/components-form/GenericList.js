@@ -1,4 +1,6 @@
 import React from 'react';
+import { memo } from '@ui-schema/ui-schema';
+import { extractValue } from '@ui-schema/ui-schema/UIStore';
 import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
 import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +9,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import pluralize from 'pluralize';
 
-export function GenericList({
+function GenericListCore({
   storeKeys,
   onChange,
   schema,
@@ -98,3 +100,5 @@ export function GenericList({
     </ResourceForm.CollapsibleSection>
   );
 }
+
+export const GenericList = extractValue(memo(GenericListCore));

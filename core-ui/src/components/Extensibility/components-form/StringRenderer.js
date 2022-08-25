@@ -1,11 +1,13 @@
 import React from 'react';
+import { memo } from '@ui-schema/ui-schema';
+import { extractValue } from '@ui-schema/ui-schema/UIStore';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { fromJS } from 'immutable';
 
-export function StringRenderer({
+function StringRendererCore({
   onChange,
   onKeyDown,
   value,
@@ -53,3 +55,4 @@ export function StringRenderer({
     />
   );
 }
+export const StringRenderer = extractValue(memo(StringRendererCore));

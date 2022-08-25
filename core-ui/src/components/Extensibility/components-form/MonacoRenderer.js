@@ -1,15 +1,11 @@
 import React, { useCallback } from 'react';
+import { memo } from '@ui-schema/ui-schema';
+import { extractValue } from '@ui-schema/ui-schema/UIStore';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 
-export function MonacoRenderer({
-  storeKeys,
-  value,
-  onChange,
-  schema,
-  required,
-}) {
+function MonacoRendererCore({ storeKeys, value, onChange, schema, required }) {
   const { tFromStoreKeys } = useGetTranslation();
   const handleChange = useCallback(
     value => {
@@ -45,3 +41,5 @@ export function MonacoRenderer({
     </ResourceForm.CollapsibleSection>
   );
 }
+
+export const MonacoRenderer = extractValue(memo(MonacoRendererCore));

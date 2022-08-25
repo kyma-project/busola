@@ -1,4 +1,6 @@
 import React from 'react';
+import { memo } from '@ui-schema/ui-schema';
+import { extractValue } from '@ui-schema/ui-schema/UIStore';
 import { mapValues } from 'lodash';
 import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
 import { Button, FormLabel } from 'fundamental-react';
@@ -8,7 +10,7 @@ import { useGetTranslation } from 'components/Extensibility/helpers';
 
 import { ResourceForm } from 'shared/ResourceForm';
 
-export function SimpleList({
+function SimpleListCore({
   storeKeys,
   onChange,
   schema,
@@ -118,3 +120,5 @@ export function SimpleList({
     </ResourceForm.CollapsibleSection>
   );
 }
+
+export const SimpleList = extractValue(memo(SimpleListCore));
