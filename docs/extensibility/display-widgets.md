@@ -289,7 +289,7 @@ Since the **ResourceList** widget does more than just list the items, you must p
   "name": "Example ResourceList Secret",
   "children": [
     {
-      "source": "status.code",
+      "source": "$item.status.code",
       "widget": "Badge"
     }
   ]
