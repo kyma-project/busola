@@ -8,8 +8,38 @@ metadata:
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
 data:
+  dataSources: |-
+    {
+      "gateways":{
+        "resource": {
+          "kind": "Gateway",
+          "group": "networking.istio.io",
+          "version": "v1beta1",
+          "namespace": null
+        },
+        "filter": "$filter($root.spec.http.route, function($r) { $filter($r.destination.host, function($h){$substringBefore($h, '.') = $item.metadata.name and $split($substringAfter($h, '.'),'.')[0] = $item.metadata.namespace} ) })"
+      },
+      "services":{
+        "resource": {
+          "kind": "Service",
+          "version": "v1",
+          "namespace": null
+        },
+        "filter": "$filter($root.spec.http.route, function($r) { $filter($r.destination.host, function($h){($substringBefore($h, '.') = $item.metadata.name) and ($split($substringAfter($h, '.'),'.')[0] = $item.metadata.namespace)} ) })"
+      }
+    }
   details: |
     {
+      "resourceGraph":{
+        "dataSources": [
+          {
+            "source": "gateways"
+          },
+          {
+            "source": "services"
+          }
+        ]
+      },
       "body":[
           {
             "widget": "Table",
@@ -661,6 +691,18 @@ data:
         "path": "spec.exportTo", "name": "Export To", "widget": "SimpleList"
       },
     ]
+  general: |-
+    {
+      "resource": {
+        "kind": "VirtualService",
+        "group": "networking.istio.io",
+        "version": "v1beta1"
+      },
+      "urlPath": "lyczeq-vs",
+      "category": "Lyczeq",
+      "scope": "namespace",
+      "description": "{{[VirtualService](https://istio.io/latest/docs/reference/config/networking/virtual-service/)}} describes a configuration that affects traffic routing. ."
+    }
   list: |-
     [
       { 
@@ -674,35 +716,3 @@ data:
         "widget": "JoinedArray"
       },
     ]
-  dataSources: |-
-    {
-      "gateways":{
-        "resource": {
-          "kind": "Gateway",
-          "group": "networking.istio.io",
-          "version": "v1beta1",
-          "namespace": null
-        },
-        "filter": "$filter($root.spec.gateways, function($g){$substringBefore($g,'/') = $item.metadata.namespace and $substringAfter($g, '/') = $item.metadata.name}) "
-      },
-      "services":{
-        "resource": {
-          "kind": "Service",
-          "version": "v1",
-          "namespace": null
-        },
-        "filter": "$filter($root.spec.http.route, function($r) {$filter($r.destination.host, function($h){$substringBefore($h, '.') = $item.metadata.name and $split($substringAfter($h, '.'),'.')[0] = $item.metadata.namespace} )} "
-      }
-    }
-  general: |-
-    {
-      "resource": {
-        "kind": "VirtualService",
-        "group": "networking.istio.io",
-        "version": "v1beta1"
-      },
-      "urlPath": "lyczeq-vs",
-      "category": "Lyczeq",
-      "scope": "namespace",
-      "description": "{{[VirtualService](https://istio.io/latest/docs/reference/config/networking/virtual-service/)}} describes a configuration that affects traffic routing. ."
-    }
