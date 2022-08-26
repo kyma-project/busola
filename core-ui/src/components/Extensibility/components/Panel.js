@@ -44,21 +44,21 @@ export function Panel({
             ))
           : null}
       </LayoutPanel.Header>
-      <LayoutPanel.Body className={bodyClassNames}>
-        {Array.isArray(structure?.children)
-          ? structure.children?.map((def, idx) => (
-              <Widget
-                key={idx}
-                value={value}
-                structure={def}
-                schema={schema}
-                inlineRenderer={InlineWidget}
-                inlineContext={true}
-                {...props}
-              />
-            ))
-          : null}
-      </LayoutPanel.Body>
+      {Array.isArray(structure?.children) ? (
+        <LayoutPanel.Body className={bodyClassNames}>
+          {structure.children?.map((def, idx) => (
+            <Widget
+              key={idx}
+              value={value}
+              structure={def}
+              schema={schema}
+              inlineRenderer={InlineWidget}
+              inlineContext={true}
+              {...props}
+            />
+          ))}
+        </LayoutPanel.Body>
+      ) : null}
     </LayoutPanel>
   );
 }

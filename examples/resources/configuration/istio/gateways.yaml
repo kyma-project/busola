@@ -63,7 +63,14 @@ data:
               "source": "$podSelector()",
               "widget": "ResourceList",
               "disableCreate": true,
-              "isCompact": true
+              "isCompact": true,
+              "visibility": "$boolean($root.spec.selector)"
+            },
+            {
+              "source": "spec.selector",
+              "widget": "Panel",
+              "name": "selector.matchesAllPods",
+              "visibility": "$not($exists(*)) or $not($boolean(*))"
             }
           ],
           "header": [
@@ -71,7 +78,7 @@ data:
               "source": "spec.selector",
               "widget": "Labels",
               "name": "spec.selector",
-              "visibility": "$exists(*)"
+              "visibility": "$boolean(*)"
             }
           ],
         }
@@ -203,7 +210,7 @@ data:
       spec.gateways: Gateways
       spec.servers: Servers
       spec.servers.port: Port
-      spec.servers.port.name: Name
+      spec.servers.port.name: Port Name
       spec.servers.port.protocol: Protocol
       spec.servers.port.targetPort: Target Port
       spec.servers.port.number: Port Number
@@ -215,6 +222,7 @@ data:
       spec.servers.tls.privateKey: Private Key
       spec.servers.tls.caCertificates: CA Certificate
       spec.servers.hosts: Hosts
+      selector.matchesAllPods: Matches all Pods in the Namespace
       placeholders.dropdown: Type or choose an option
       placeholders.serverCertificate: Enter the certificate path
       placeholders.privateKey: Enter the private key path
