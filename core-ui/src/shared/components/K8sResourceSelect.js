@@ -48,6 +48,7 @@ export function K8sResourceSelect({
   value,
   required,
   isNamespaced = true,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -103,7 +104,7 @@ export function K8sResourceSelect({
         onChange={onChange}
         onSelectionChange={(_, selected) => onSelect(selected.text)}
         validationState={getValidationState()}
-        inputProps={{ pattern: k8sNamePattern, value }}
+        inputProps={{ pattern: k8sNamePattern, value, ...props }}
       />
     </div>
   );

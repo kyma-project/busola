@@ -52,9 +52,9 @@ export function ResourceRenderer({
   return (
     <ResourceForm.FormField
       label={tFromStoreKeys(storeKeys, schema)}
-      data-testid={storeKeys.join('.')}
       input={() => (
         <K8sResourceSelectWithUseGetList
+          data-testid={storeKeys.join('.')}
           url={url}
           filter={item => {
             if (expression) {
