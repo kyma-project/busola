@@ -38,6 +38,17 @@ export function ResourceRenderer({
     expression.assign('root', props?.resource);
   }
 
+  function changeValue(value) {
+    onChange({
+      storeKeys,
+      scopes: ['value'],
+      type: 'set',
+      schema,
+      required,
+      data: { value },
+    });
+  }
+
   return (
     <ResourceForm.FormField
       label={tFromStoreKeys(storeKeys, schema)}
@@ -51,26 +62,8 @@ export function ResourceRenderer({
               return expression.evaluate();
             } else return true;
           }}
-          onChange={value => {
-            onChange({
-              storeKeys,
-              scopes: ['value'],
-              type: 'set',
-              schema,
-              required,
-              data: { value },
-            });
-          }}
-          onSelect={value => {
-            onChange({
-              storeKeys,
-              scopes: ['value'],
-              type: 'set',
-              schema,
-              required,
-              data: { value },
-            });
-          }}
+          onChange={value => changeValue(value)}
+          onSelect={value => changeValue(value)}
           value={value}
           resourceType={kind}
         />

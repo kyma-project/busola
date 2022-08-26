@@ -1,7 +1,7 @@
 import React from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import jsonata from 'jsonata';
+import { jsonataWrapper } from '../jsonataWrapper';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
@@ -48,7 +48,7 @@ export function shouldBeVisible(value, visibilityFormula) {
   if (!visibilityFormula) return { visible: visibilityFormula !== false };
 
   try {
-    const expression = jsonata(visibilityFormula);
+    const expression = jsonataWrapper(visibilityFormula);
     return { visible: !!expression.evaluate({ data: value }) };
   } catch (e) {
     console.warn('Widget::shouldBeVisible error:', e);

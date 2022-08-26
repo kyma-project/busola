@@ -14,6 +14,7 @@ export function NameRenderer({
 }) {
   const extraPaths = schema.get('extraPaths')?.toJS() || [];
   const showHelp = schema.toJS()?.showHelp ?? true;
+  const schemaRequired = schema.get('required');
 
   return (
     <K8sNameField
@@ -40,7 +41,7 @@ export function NameRenderer({
         ]);
       }}
       validate={value => !!value}
-      required={required}
+      required={schemaRequired ?? required}
       showHelp={showHelp}
     />
   );

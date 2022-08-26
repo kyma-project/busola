@@ -48,7 +48,7 @@ data:
               "name": "spec.servers.tls.credentialName",
               "resource": {
                 "name": "data",
-                "namespace": "istio-system",
+                "namespace": "'istio-system'",
                 "kind": "'Secret'"
               }
             }
@@ -57,6 +57,7 @@ data:
         {
           "widget": "Panel",
           "name": "spec.selector",
+          "disablePadding": true,
           "children": [
             { 
               "source": "$podSelector()",
@@ -70,7 +71,7 @@ data:
               "source": "spec.selector",
               "widget": "Labels",
               "name": "spec.selector",
-              "visibility": "spec.selector"
+              "visibility": "$exists(*)"
             }
           ],
         }
@@ -81,19 +82,25 @@ data:
       {
         "path": "spec.selector", 
         "widget": "KeyValuePair", 
-        "simple": true
+        "simple": true,
+        "required": true
       },
       {
         "widget": "FormGroup",
         "simple": true,
         "path": "spec.servers[].port",
         "children": [
-          { "path": "number", "simple": true },
+          { 
+            "path": "number", 
+            "simple": true,
+            "required": true
+          },
           { 
             "path": "name", 
             "widget": "Name", 
             "showHelp": false, 
-            "simple": true 
+            "simple": true ,
+            "required": true
           },
           {
             "path": "protocol", 
@@ -109,6 +116,7 @@ data:
               "MYSQL",
               "TCP"
             ],
+            "required": true,
             "placeholder": "placeholders.dropdown",
           },
           { "path": "targetPort", "simple": true },
@@ -125,6 +133,7 @@ data:
             "path": "mode", 
             "simple": true, 
             "visibility": "$item.port.protocol = 'HTTPS'",
+            "required": true,
             "placeholder": "placeholders.dropdown"
           },
           { 
@@ -163,6 +172,7 @@ data:
       {
         "widget": "SimpleList",
         "path": "spec.servers[].hosts", 
+        "required": true,
         "simple": true,
         "placeholder": "placeholders.hosts"
       }
