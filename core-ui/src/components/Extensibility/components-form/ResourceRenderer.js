@@ -51,17 +51,6 @@ export function ResourceRenderer({
               return expression.evaluate();
             } else return true;
           }}
-          onChange={e => {
-            const value = e.target.value;
-            onChange({
-              storeKeys,
-              scopes: ['value'],
-              type: 'set',
-              schema,
-              required,
-              data: { value },
-            });
-          }}
           onSelect={value =>
             onChange({
               storeKeys,
