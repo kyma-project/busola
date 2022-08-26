@@ -51,6 +51,8 @@ export const destinationRules = {
       children: trafficPolicyBundle,
     },
     subsets,
+    { path: 'spec.exportTo', widget: 'SimpleList' },
+    { path: 'spec.workloadSelector', widget: 'KeyValuePair' },
   ],
   general: {
     resource: {

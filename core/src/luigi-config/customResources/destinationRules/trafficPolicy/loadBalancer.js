@@ -31,33 +31,39 @@ const localityLoadBalancer = {
 const httpCookie = {
   path: 'httpCookie',
   widget: 'FormGroup',
+  visibility: "$consistentHashSelector = 'httpCookie'",
   children: [{ path: 'name' }, { path: 'path' }, { path: 'ttl' }],
 };
 
-//TODO
-const consistentHashSelector = {
-  path: 'consistentHashSelector',
-  enum: [
-    'httpHeaderName',
-    'httpCookie',
-    'useSourceIp',
-    'httpQueryParameterName',
-    'minimumRingSize-WEB',
-  ],
-};
 const consistentHash = {
   widget: 'FormGroup',
   path: 'consistentHash',
+  // visibility: "$loadBalancerSelector = 'consistentHash'"
   children: [
+    // TODO
+    // {
+    //   var: 'consistentHashSelector',
+    //   name: 'chooseConsistentHashSelector',
+    //   type: 'string',
+    //   enum: [
+    //     'httpHeaderName',
+    //     'httpCookie',
+    //     'useSourceIp',
+    //     'httpQueryParameterName',
+    //   ],
+    // },
     {
       path: 'httpHeaderName',
+      visibility: "$consistentHashSelector = 'httpHeaderName'",
     },
     httpCookie,
     {
       path: 'useSourceIp',
+      visibility: "$consistentHashSelector = 'useSourceIp'",
     },
     {
       path: 'httpQueryParameterName',
+      visibility: "$consistentHashSelector = 'httpQueryParameterName'",
     },
     {
       path: 'minimumRingSize',
@@ -69,10 +75,20 @@ export const loadBalancer = {
   widget: 'FormGroup',
   path: 'loadBalancer',
   children: [
+    //TODO simple or consistnetHash
+    // {
+    //   var: 'loadBalancerSelector',
+    //   name: 'chooseLoadBalancerSelector',
+    //   type: 'string',
+    //   enum: [
+    //     'simple',
+    //     'consistentHash'
+    //   ],
+    // },
     {
       path: 'simple',
+      // visibility: "$loadBalancerSelector = 'simple'"
     },
-    // consistentHashSelector,
     consistentHash,
     localityLoadBalancer,
     {
