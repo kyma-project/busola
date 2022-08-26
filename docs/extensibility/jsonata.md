@@ -3,7 +3,7 @@
 **Table of Contents**
 
 - [Overview](#overview)
-- [Preset functions](#preset-function)
+- [Preset functions](#preset-functions)
   - [_matchByLabelSelector_](#matchByLabelSelector)
 
 ## Overview
