@@ -81,7 +81,6 @@ export function ResourceSchema({
         varStore={varStore}
         setVarStore={setVarStore}
       >
-        <pre>{JSON.stringify(varStore, null, '  ')}</pre>
         <FormStack isRoot schema={schemaMap} resource={resource} />
       </UIStoreProvider>
     </UIMetaProvider>
