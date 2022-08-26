@@ -29,7 +29,6 @@ const handleTableValue = (value, t) => {
 };
 
 export function Table({ value, structure, schema, disableMargin, ...props }) {
-  console.log(value, structure);
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
   const coreHeaders = (structure.children || []).map(({ name }) => tExt(name));

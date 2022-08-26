@@ -93,7 +93,7 @@ export const loadBalancer = {
     consistentHash,
     localityLoadBalancer,
     {
-      path: 'warmupDurationSecs',
+      path: 'warmupDurationSecs', //this is in the docs but not in the schema
     },
   ],
 };
