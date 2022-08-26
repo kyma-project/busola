@@ -97,9 +97,14 @@ export function SchemaRulesInjector({
           ?.set('schemaRule', rule);
 
         let lastArrayItem;
-        const lastArrayIndex = storeKeys
+        let lastArrayIndex = storeKeys
           .toArray()
-          .findLastIndex(item => typeof item === 'number');
+          // workaround for findLastIndex, Firefox isn't supporting it
+          .reverse()
+          .findIndex(item => typeof item === 'number');
+
+        // workaround for findLastIndex, Firefox isn't supporting it
+        lastArrayIndex = storeKeys.toArray().length - 1 - lastArrayIndex;
 
         if (lastArrayIndex > 0) {
           const lastArrayStoreKeys = storeKeys.slice(0, lastArrayIndex + 1);
