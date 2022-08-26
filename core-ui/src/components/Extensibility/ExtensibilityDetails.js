@@ -12,8 +12,11 @@ import { ExtensibilityCreate } from './ExtensibilityCreate';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 import { useGetSchema } from 'hooks/useGetSchema';
+import { tempDetails } from 'components/Extensibility/tempRes/tempDetails';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
+  resMetaData.details = tempDetails;
+
   // const { extensibilitySchemas } = useMicrofrontendContext();
   const { t, widgetT, exists } = useGetTranslation();
   const { urlPath, resource } = resMetaData?.general ?? {};

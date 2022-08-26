@@ -3,6 +3,7 @@ const localityLoadBalancer = {
   widget: 'FormGroup',
   children: [
     { path: 'enabled', type: 'boolean' },
+    //todo one of distribute // failover
     {
       path: 'distribute',
       widget: 'GenericList',
