@@ -18,10 +18,10 @@ To test the extensibility feature using the Pizza example, simply upload all the
 kubectl create namespace pizzas && kubectl apply -f configuration/ --recursive
 ```
 
-2. Apply the `samples.yaml` file:
+2. Apply the samples:
 
 ```bash
-kubectl apply -f samples.yaml
+kubectl apply -f samples/ --recursive
 ```
 
 After uploading the files, refresh the browser. You should see new items in the left-side navigation.

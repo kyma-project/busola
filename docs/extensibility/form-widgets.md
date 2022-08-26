@@ -34,6 +34,10 @@ Text widgets render a field as a text field. They are used by default for all st
 
 <img src="./assets/form-widgets/Text.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
 
+#### Widget-specific parameters
+
+- **placeholder** - specifies a short hint about the input field value.
+
 ### Name
 
 Name widgets render a name input field. They contain an automatic name generator, and additionally set the label field when changed. They are added automatically to all forms, and set to the `metadata.name` value.
@@ -178,13 +182,15 @@ FormGroup widgets render an `object` as a collapsible section.
 [
   {
     "path": "spec.service",
-    "widget": "FormGroup"
-  },
-  {
-    "path": "spec.service.host"
-  },
-  {
-    "path": "spec.service.port"
+    "widget": "FormGroup",
+    "children": [
+      {
+        "path": "host"
+      },
+      {
+        "path": "port"
+      }
+    ]
   }
 ]
 ```
@@ -201,18 +207,24 @@ GenericList widgets render an `array` as a list of collapsible sections with the
 [
   {
     "path": "spec.services",
-    "widget": "GenericList"
-  },
-  {
-    "path": "spec.services[].host"
-  },
-  {
-    "path": "spec.services[].port"
+    "widget": "GenericList",
+    "children": [
+      {
+        "path": "[].host"
+      },
+      {
+        "path": "[].port"
+      }
+    ]
   }
 ]
 ```
 
 <img src="./assets/form-widgets/GenericList.png" alt="Example of a GenericList widget" style="border: 1px solid #D2D5D9">
+
+#### Widget-specific parameters
+
+- **placeholder** - specifies a short hint about the input field value.
 
 ### SimpleList
 
@@ -226,18 +238,24 @@ This type of field is only suitable for simple data types and can contain more c
 [
   {
     "path": "spec.services",
-    "widget": "SimpleList"
-  },
-  {
-    "path": "spec.services[].host"
-  },
-  {
-    "path": "spec.services[].port"
+    "widget": "SimpleList",
+    "children": [
+      {
+        "path": "[].host"
+      },
+      {
+        "path": "[].port"
+      }
+    ]
   }
 ]
 ```
 
 <img src="./assets/form-widgets/SimpleList.png" alt="Example of a SimpleList widget" style="border: 1px solid #D2D5D9">
+
+#### Widget-specific parameters
+
+- **placeholder** - specifies a short hint about the input field value.
 
 #### Scalar values
 

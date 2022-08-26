@@ -68,7 +68,7 @@ data:
                 { "name": "Price ($)", "source": "$item.price" },
                 { "name": "Quantity", "source": "$item.quantity" }
               ]
-            },
+            }
           ]
         },
         {
@@ -116,10 +116,16 @@ data:
     [
       { "path": "spec.description", "widget": "Text" , "simple": true},
       { "path": "spec.sauce", "widget": "Text" , "simple": true},
-      { "path": "spec.toppings", "widget": "GenericList", "simple": true},
-      { "path": "spec.toppings[].name", "simple": true},
-      { "path": "spec.toppings[].price", "simple": true},
-      { "path": "spec.toppings[].quantity", "simple": true},
+      {
+        "path": "spec.toppings",
+        "widget": "GenericList",
+        "simple": true,
+        "children": [
+          { "path": "[].name", "simple": true},
+          { "path": "[].price", "simple": true},
+          { "path": "[].quantity", "simple": true}
+        ]
+      },
       { "path": "spec.comments", "widget": "SimpleList", "simple": true},
       {
         "path": "spec.recipeSecret",
@@ -133,13 +139,15 @@ data:
         "simple": true
       },
       {
-      "path": "spec.ownerReferences",
-      "widget": "GenericList",
-      "simple": true
-      },
-      { "path": "spec.ownerReferences[].apiVersion", "simple": true},
-      { "path": "spec.ownerReferences[].kind", "simple": true},
-      { "path": "spec.ownerReferences[].name", "simple": true}
+        "path": "spec.ownerReferences",
+        "widget": "GenericList",
+        "simple": true,
+        "children": [
+          { "path": "[].apiVersion", "simple": true},
+          { "path": "[].kind", "simple": true},
+          { "path": "[].name", "simple": true}
+        ]
+      }
     ]
   list: |-
     [

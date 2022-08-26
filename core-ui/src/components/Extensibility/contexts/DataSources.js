@@ -62,7 +62,7 @@ export function DataSourcesContextProvider({ children, dataSources }) {
       const expression = jsonata(filter);
       expression.assign('root', resource);
       if (filter && data.items) {
-        data = data.items.filter(item => {
+        data.items = data.items.filter(item => {
           expression.assign('item', item);
           return expression.evaluate();
         });
