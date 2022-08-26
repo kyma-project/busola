@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { Link } from 'shared/components/Link/Link';
 import { GatewayCreate } from './GatewayCreate';
-import { GatewaySelector } from './GatewaySelector';
+import { Labels } from 'shared/components/Labels/Labels';
 import { Trans } from 'react-i18next';
 
 export function GatewayList(props) {
@@ -12,7 +12,9 @@ export function GatewayList(props) {
   const customColumns = [
     {
       header: t('gateways.selector'),
-      value: gateway => <GatewaySelector key="selector" gateway={gateway} />,
+      value: gateway => (
+        <Labels key="selector" labels={gateway.spec.selector} />
+      ),
     },
   ];
 
