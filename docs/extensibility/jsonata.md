@@ -4,7 +4,7 @@
 
 - [Overview](#overview)
 - [Preset functions](#preset-functions)
-  - [_matchByLabelSelector_](#matchByLabelSelector)
+  - [_matchByLabelSelector_](#matchbylabelselector)
 
 ## Overview
 
