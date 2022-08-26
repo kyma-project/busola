@@ -1,10 +1,12 @@
 import React from 'react';
-import { Token } from 'fundamental-react';
+import { Labels as BusolaLabels } from 'shared/components/Labels/Labels';
+import { isNil } from 'lodash';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 export function GatewaySelector({ gateway }) {
-  return Object.entries(gateway.spec.selector).map(([key, value]) => (
-    <Token readOnly key={key} buttonLabel="">
-      {key}={value}
-    </Token>
-  ));
+  if (isNil(gateway.spec.selector)) {
+    return EMPTY_TEXT_PLACEHOLDER;
+  } else {
+    return <BusolaLabels labels={gateway.spec.selector} />;
+  }
 }
