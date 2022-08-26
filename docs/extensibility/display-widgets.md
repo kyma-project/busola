@@ -113,7 +113,7 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
 
 #### Widget-specific parameters
 
-- **separator** - a string by which the elements of the array will be separated by. The default value is a comma `,`. You can use `break` to separate elements by new line.
+- **separator** - a string by which the elements of the array will be separated by. The default value is a comma `,`. You can use `break` to separate elements with a new line.
 
 ### Labels
 
@@ -270,8 +270,8 @@ Panel widgets render an object as a separate panel with its own title (based on 
 
 #### Widget-specific parameters
 
-- **header** - an optional array which allows to display for example Labels in Panel header.
-- **disablePadding** - an optional boolean which disables the padding inside Panel body.
+- **header** - an optional array that allows you to, for example, display Labels in the panel header.
+- **disablePadding** - an optional boolean which disables the padding inside the panel body.
 
 #### Example
 

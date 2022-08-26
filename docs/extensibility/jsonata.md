@@ -8,17 +8,17 @@
 
 ## Overview
 
-This document describes useg of preset jsonata functions.
+This document describes how to use the preset JSONata functions.
 
 ## Preset functions
 
 ## matchByLabelSelector
 
-This function can be used to match pods using selector from resource.
+This function can be used to match Pods using a resource selector.
 
 ### Item parameters
 
-- **item** - pod.
+- **item** - Pod to be used.
 - **label** - path to selector labels from `$root`.
 
 ### Example
