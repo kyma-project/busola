@@ -116,15 +116,18 @@ export const getObjectValueWorkaround = (
   value,
 ) => {
   // TODO the value obtained by ui-schema is undefined for this component
-  if (schema.toJS().type === 'object') {
-    value = OrderedMap(
-      storeKeys.toArray().reduce((valueSoFar, currKey) => {
-        return valueSoFar?.[currKey];
-      }, resource),
-    );
+  try {
+    if (schema.toJS().type === 'object') {
+      value = OrderedMap(
+        storeKeys.toArray().reduce((valueSoFar, currKey) => {
+          return valueSoFar?.[currKey];
+        }, resource),
+      );
+    }
+    return value;
+  } catch {
+    return {};
   }
-
-  return value;
 };
 
 export const useCreateResourceDescription = descID => {

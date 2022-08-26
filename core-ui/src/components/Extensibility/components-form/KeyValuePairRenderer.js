@@ -30,9 +30,15 @@ export function KeyValuePairRenderer({
   else if (path === 'metadata.annotations')
     titleTranslation = t('common.headers.annotations');
 
+  try {
+    value = value ? value.toJS() : {};
+  } catch (error) {
+    value = {};
+  }
+
   return (
     <KeyValueField
-      value={value ? value.toJS() : {}}
+      value={value}
       setValue={value => {
         onChange({
           storeKeys,
