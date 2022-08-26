@@ -76,6 +76,7 @@ ResourcesList.defaultProps = {
   listHeaderActions: null,
   readOnly: false,
   disableCreate: false,
+  filterFn: () => true,
 };
 
 export function ResourcesList(props) {
