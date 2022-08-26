@@ -38,7 +38,7 @@ export function NumberRenderer({
       data-testid={storeKeys.join('.')}
       input={Inputs.Number}
       compact={compact}
-      required={required || schemaRequired}
+      required={schemaRequired ?? required}
     />
   );
 }

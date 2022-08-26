@@ -22,6 +22,7 @@ export function ResourceRenderer({
   const { tFromStoreKeys } = useGetTranslation();
   const { group, version, kind, scope = 'cluster', namespace = namespaceId } =
     schema.get('resource') || {};
+  const schemaRequired = schema.get('required');
 
   const url = getResourceUrl(
     {
@@ -75,7 +76,7 @@ export function ResourceRenderer({
         />
       )}
       compact={compact}
-      required={required}
+      required={schemaRequired ?? required}
     />
   );
 }

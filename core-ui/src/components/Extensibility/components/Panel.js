@@ -18,6 +18,10 @@ export function Panel({
     'fd-margin--md': !disableMargin,
   });
 
+  const bodyClassNames = classNames({
+    'no-padding': structure?.disablePadding,
+  });
+
   const header = structure?.header || [];
 
   return (
@@ -40,7 +44,7 @@ export function Panel({
             ))
           : null}
       </LayoutPanel.Header>
-      <LayoutPanel.Body>
+      <LayoutPanel.Body className={bodyClassNames}>
         {Array.isArray(structure?.children)
           ? structure.children?.map((def, idx) => (
               <Widget

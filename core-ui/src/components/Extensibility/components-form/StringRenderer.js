@@ -48,7 +48,7 @@ export function StringRenderer({
       label={tFromStoreKeys(storeKeys, schema)}
       placeholder={schemaPlaceholder ? tExt(schemaPlaceholder) : placeholder}
       compact={compact}
-      required={required || schemaRequired}
+      required={schemaRequired ?? required}
       data-testid={storeKeys.join('.')}
       {...getTypeSpecificProps()}
     />
