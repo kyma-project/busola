@@ -15,15 +15,6 @@
             {
               "source": "spec.exportTo",
               "name": "spec.exportTo",
-              "widget": "JoinedArray",
-              "separator": " ",
-              "child": {
-                "widget": "Badge"
-              }
-            },
-            {
-              "source": "spec.exportTo",
-              "name": "spec.exportTo",
               "widget": "Labels"
             }
           ]
