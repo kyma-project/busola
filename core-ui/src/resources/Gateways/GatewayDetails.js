@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { GatewayServers } from './GatewayServers';
-import { GatewaySelector } from './GatewaySelector';
+import { Labels } from 'shared/components/Labels/Labels';
 import { Selector } from 'shared/components/Selector/Selector';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { GatewayCreate } from './GatewayCreate';
@@ -24,7 +24,9 @@ export function GatewayDetails(props) {
   const customColumns = [
     {
       header: t('gateways.selector'),
-      value: gateway => <GatewaySelector key="selector" gateway={gateway} />,
+      value: gateway => (
+        <Labels key="selector" labels={gateway.spec.selector} />
+      ),
     },
   ];
 

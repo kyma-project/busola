@@ -60,7 +60,8 @@ export const Selector = ({
   }
 
   const isSelectorDefinedOrEmpty =
-    (!labels && !expressions) || (!selector && isIstioSelector);
+    ((!labels || Object.keys(labels).length === 0) && !expressions) ||
+    (!selector && isIstioSelector);
 
   const selectorLabels = !isEmpty(labels) ? labels : null;
 
