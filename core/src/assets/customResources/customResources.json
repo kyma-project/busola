@@ -20,6 +20,11 @@
               "child": {
                 "widget": "Badge"
               }
+            },
+            {
+              "source": "spec.exportTo",
+              "name": "spec.exportTo",
+              "widget": "Labels"
             }
           ]
         },

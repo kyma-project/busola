@@ -101,7 +101,6 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
 #### Widget-specific parameters
 
 - **separator** - a string by which the elements of the array will be separated by. The default value is a comma `,`.
-- **child** - an optional property to wrap children in an inline component of choosing.
 
 #### Example
 
@@ -110,13 +109,7 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
   "name": "Joined array",
   "source": "spec.dnsNames",
   "widget": "JoinedArray",
-  "separator": ": ",
-  "child": {
-    "widget": "Badge",
-    "highlights": {
-      "positive": ["*", "default"]
-    }
-  }
+  "separator": ": "
 }
 ```
 
@@ -124,7 +117,7 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
 
 ### Labels
 
-Labels widgets render all the object entries in the `key-value` format.
+Labels widgets render all the array or object entries in the `value` or `key-value` format.
 
 #### Widget-specific parameters
 

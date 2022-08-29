@@ -2,8 +2,6 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { JoinedArray } from '../JoinedArray';
 
-jest.mock('components/Extensibility/components', () => []);
-
 describe('JoinedArray', () => {
   it('Renders joined array', () => {
     const value = ['a', 'b', 'c'];
