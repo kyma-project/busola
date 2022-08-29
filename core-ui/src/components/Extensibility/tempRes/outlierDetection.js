@@ -8,6 +8,11 @@ export const outlierDetection = prefix => ({
       source: prefix + 'outlierDetection.splitExternalLocalOriginErrors',
       name: 'splitExternalLocalOriginErrors',
       visibility: '$exists($.data)',
+      widget: 'Badge',
+      highlights: {
+        positive: ['true'],
+        negative: ['false'],
+      },
     },
     {
       source: prefix + 'outlierDetection.consecutiveLocalOriginFailures',
@@ -18,6 +23,7 @@ export const outlierDetection = prefix => ({
       source: prefix + 'outlierDetection.consecutiveGatewayErrors',
       name: 'consecutiveGatewayErrors',
       visibility: '$exists($.data)',
+      type: 'number',
     },
     {
       source: prefix + 'outlierDetection.consecutive5xxErrors',

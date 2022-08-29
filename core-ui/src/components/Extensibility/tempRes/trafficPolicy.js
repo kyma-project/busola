@@ -1,5 +1,6 @@
 import { loadBalancer } from 'components/Extensibility/tempRes/loadBalancer';
 import { connectionPool } from 'components/Extensibility/tempRes/connectionPool';
+import { outlierDetection } from 'components/Extensibility/tempRes/outlierDetection';
 
 export const trafficPolicy = prefix => ({
   source: prefix + 'trafficPolicy',
@@ -9,5 +10,6 @@ export const trafficPolicy = prefix => ({
   children: [
     loadBalancer(prefix + 'trafficPolicy.'),
     connectionPool(prefix + 'trafficPolicy.'),
+    outlierDetection(prefix + 'trafficPolicy.'),
   ],
 });

@@ -3,9 +3,9 @@ export const outlierDetection = {
   widget: 'FormGroup',
   children: [
     { path: 'splitExternalLocalOriginErrors' },
-    { path: 'consecutiveLocalOriginFailures' },
-    { path: 'consecutiveGatewayErrors' },
-    { path: 'consecutive5xxErrors' },
+    { path: 'consecutiveLocalOriginFailures', type: 'number' },
+    { path: 'consecutiveGatewayErrors', type: 'number' },
+    { path: 'consecutive5xxErrors', type: 'number' },
     { path: 'interval' },
     { path: 'baseEjectionTime' },
     { path: 'maxEjectionPercent' },
