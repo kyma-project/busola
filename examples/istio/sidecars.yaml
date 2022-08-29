@@ -103,6 +103,11 @@ data:
     }
   form: |-
     [
+       {
+          "path": "spec.workloadSelector.labels", 
+          "widget": "KeyValuePair", 
+          "required": true
+      },
       {
         "widget": "FormGroup",
         "simple": true,
@@ -137,6 +142,20 @@ data:
           },
           { "path": "targetPort", "simple": true },
         ]
+      },
+      {
+        "widget": "FormGroup",
+        "simple": true,
+        "path": "spec.outboundTrafficPolicy",
+        "children": [{
+          "path": "mode", 
+          "name": "spec.outboundTrafficPolicy.mode",
+          "enum": [
+            "REGISTRY_ONLY",
+            "ALLOW_ANY"
+          ],
+          "placeholder": "placeholders.dropdown",
+        }]
       }
     ]
   general: |-
@@ -161,7 +180,8 @@ data:
       "en": {
         "metadata.annotations": "Annotations",
         "metadata.labels": "Labels",
-        "spec.outboundTrafficPolicy.mode": "Outbound Traffic Policy",
+        "spec.outboundTrafficPolicy": "Outbound Traffic Policy",
+        "spec.outboundTrafficPolicy.mode": "Outbound Traffic Policy Mode",
         "spec.workloadSelector": "Workload Selector",
         "spec.workloadSelector.labels": "Workload Selector Labels",
         "bind": "Bind",
@@ -169,5 +189,6 @@ data:
         "defaultEndpoint": "Default Endpoint",
         "hosts": "Hosts",
         "placeholders.dropdown": "Type or choose an option"
+
       }
     }
