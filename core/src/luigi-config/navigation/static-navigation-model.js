@@ -8,6 +8,7 @@ import {
 } from './../cluster-management/cluster-management';
 import { hasPermissionsFor, hasWildcardPermission } from './permissions';
 import { getCustomPaths } from './customPaths';
+import { mergeInExtensibilityNav } from './mergeInExtensibilityNav';
 
 export const coreUIViewGroupName = '_core_ui_';
 
@@ -1479,7 +1480,7 @@ export function getStaticChildrenNodesForNamespace(
     },
   ];
 
-  const allNodes = [...nodes, ...customPaths];
+  const allNodes = mergeInExtensibilityNav(nodes, customPaths);
   return filterNodesByAvailablePaths(allNodes, groupVersions, permissionSet);
 }
 
@@ -1932,7 +1933,8 @@ export function getStaticRootNodes(
     },
   ];
 
-  const allNodes = [...nodes, ...customPaths];
+  const allNodes = mergeInExtensibilityNav(nodes, customPaths);
+
   return filterNodesByAvailablePaths(allNodes, groupVersions, permissionSet);
 }
 
