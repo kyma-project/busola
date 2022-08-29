@@ -77,6 +77,7 @@ export const connectionPool = prefix => ({
           source: prefix + 'connectionPool.http.h2UpgradePolicy',
           name: 'h2UpgradePolicy',
           visibility: '$exists($.data)',
+          widget: 'Badge',
         },
         {
           source: prefix + 'connectionPool.http.useClientProtocol',
