@@ -65,7 +65,6 @@ export function Widget({
 }) {
   const { Plain, Text } = widgets;
   const { t } = useTranslation();
-
   const childValue = useJsonata(structure.source, originalResource, {
     parent: value,
     item: value,
