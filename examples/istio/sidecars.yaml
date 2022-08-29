@@ -15,7 +15,7 @@ data:
           "kind": "Pod",
           "version": "v1",
         },
-        "filter": "$filter(data, function($item) {true})"
+        "filter": "true"
       }
     }
   details: |-
@@ -92,7 +92,7 @@ data:
           "name": "spec.workloadSelector",
           "children": [
             { 
-              "source": "$podSelector",
+              "source": "$podSelector()",
               "widget": "ResourceList",
               "disableCreate": true,
               "isCompact": true
@@ -101,7 +101,44 @@ data:
         }
       ]
     }
-  form: '[]'
+  form: |-
+    [
+      {
+        "widget": "FormGroup",
+        "simple": true,
+        "path": "spec.ingress[].port",
+        "children": [
+          { 
+            "path": "number", 
+            "simple": true,
+            "required": true
+          },
+          { 
+            "path": "name", 
+            "widget": "Name", 
+            "showHelp": false, 
+            "simple": true ,
+            "required": true
+          },
+          {
+            "path": "protocol", 
+            "simple": true,
+            "enum": [
+              "HTTP",
+              "HTTPS",
+              "HTTP2",
+              "GRPC",
+              "MONGO",
+              "TCP",
+              "TLS"
+            ],
+            "required": true,
+            "placeholder": "placeholders.dropdown",
+          },
+          { "path": "targetPort", "simple": true },
+        ]
+      }
+    ]
   general: |-
     {
       "resource": {
@@ -116,8 +153,8 @@ data:
     }
   list: |-
     [
-      { "source": "spec.outboundTrafficPolicy.mode"},
-      { "source": "spec.workloadSelector.labels", "widget": "Labels"}
+      { "source": "spec.outboundTrafficPolicy.mode","name": "spec.outboundTrafficPolicy.mode"},
+      { "source": "spec.workloadSelector.labels", "name": "spec.workloadSelector.labels", "widget": "Labels"}
     ]
   translations: |-
     {
@@ -130,6 +167,7 @@ data:
         "bind": "Bind",
         "captureMode": "Capture Mode",
         "defaultEndpoint": "Default Endpoint",
-        "hosts": "Hosts"
+        "hosts": "Hosts",
+        "placeholders.dropdown": "Type or choose an option"
       }
     }
