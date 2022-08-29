@@ -43,6 +43,7 @@ export function Table({ value, structure, schema, disableMargin, ...props }) {
     if (!structure.collapsible) {
       return cells;
     }
+    // console.log(111111111111, structure.collapsible);
 
     return {
       cells,
@@ -53,7 +54,7 @@ export function Table({ value, structure, schema, disableMargin, ...props }) {
               value={entry}
               structure={child}
               schema={schema}
-              inlineRenderer={InlineWidget}
+              // inlineRenderer={InlineWidget}
               {...props}
             />
           ))}

@@ -74,7 +74,7 @@ export function ExtensibilityCreate({
 
   // waiting for schema from OpenAPI to be computed
   if (loading) return <Spinner />;
-  console.log(schema);
+
   return (
     <ResourceForm
       pluralKind={resourceType}

@@ -16,7 +16,7 @@ export const SimpleRenderer = ({ children }) => {
 export function InlineWidget({ children, value, structure, ...props }) {
   const { widgetT } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
-
+  // console.log(value, structure, children);
   let displayValue;
   if (!isNil(children)) {
     displayValue = children;
@@ -65,10 +65,13 @@ export function Widget({
 }) {
   const { Plain, Text } = widgets;
   const { t } = useTranslation();
+
   const childValue = useJsonata(structure.source, originalResource, {
-    parent: value,
     item: value,
+    parent: value,
   });
+
+  console.log(34554, structure, childValue);
 
   const { visible, error: visibleCheckError } = shouldBeVisible(
     childValue,

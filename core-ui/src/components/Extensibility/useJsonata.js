@@ -23,11 +23,15 @@ export function useJsonata(query, root, extras = {}) {
         },
       ]),
     );
-
+    // if (query === 'spec.trafficPolicy') {
+    //   console.log(query);
+    //   console.log(1111, extras);
+    // }
     if (!query) return '';
     try {
       jsonata(query).evaluate(
         root,
+        // extras.parent ? extras.parent : root,
         {
           ...dataSourceFetchers,
           ...extras,
@@ -39,6 +43,14 @@ export function useJsonata(query, root, extras = {}) {
     } catch (e) {
       setValue(t('extensibility.configuration-error', { error: e.message }));
     }
-  }, [root, dataSourceStore]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [
+    root,
+    dataSourceStore,
+    dataSources,
+    extras,
+    query,
+    requestRelatedResource,
+    t,
+  ]);
   return value;
 }
