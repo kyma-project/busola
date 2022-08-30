@@ -14,28 +14,19 @@ export const tempDetails = {
         },
         {
           source: 'spec.exportTo',
-          widget: 'JoinedArray',
-          separator: ', ',
+          widget: 'Labels',
+          name: 'exportTo',
+          visibility: '$count(data)',
+        },
+        {
+          source: 'spec.matchLabels',
+          widget: 'Labels',
+          name: 'matchLabels',
+          visibility: '$count(data)',
         },
       ],
     },
     trafficPolicy('spec.'),
     subsets('spec.'),
-    {
-      source: 'spec.trafficPolicy',
-      name: 'spec.trafficPolicy',
-      widget: 'CodeViewer',
-      visibility: '$exists($.data)',
-    },
-    // {
-    //   source: 'spec.subset',
-    //   widget: 'CodeViewer',
-    //   visibility: '$exists($.data)',
-    // },
-    // {
-    //   source: 'spec.workloadSelector',
-    //   widget: 'CodeViewer',
-    //   visibility: '$exists($.data)',
-    // },
   ],
 };
