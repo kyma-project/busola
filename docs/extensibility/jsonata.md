@@ -12,14 +12,14 @@ This document describes how to use the preset JSONata functions.
 
 ## Preset functions
 
-## matchByLabelSelector
+## matchByLabelSelector(item, selectorPath)
 
 This function can be used to match Pods using a resource selector.
 
 ### Item parameters
 
 - **item** - Pod to be used.
-- **label** - path to selector labels from `$root`.
+- **selectorPath** - path to selector labels from `$root`.
 
 ### Example
 

@@ -44,7 +44,7 @@ export function Panel({
             ))
           : null}
       </LayoutPanel.Header>
-      {Array.isArray(structure?.children) ? (
+      {Array.isArray(structure?.children) && (
         <LayoutPanel.Body className={bodyClassNames}>
           {structure.children?.map((def, idx) => (
             <Widget
@@ -58,7 +58,7 @@ export function Panel({
             />
           ))}
         </LayoutPanel.Body>
-      ) : null}
+      )}
     </LayoutPanel>
   );
 }
