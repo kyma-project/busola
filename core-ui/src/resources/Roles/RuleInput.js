@@ -44,6 +44,10 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
   const { namespaceId, groupVersions } = useMicrofrontendContext();
   const { t } = useTranslation();
 
+  if (!Array.isArray(rule?.apiGroups)) {
+    rule.apiGroups = [];
+  }
+
   // dictionary of pairs (apiGroup: resources in that apiGroup)
   const apiRules = rule?.apiGroups?.flat();
   const {
