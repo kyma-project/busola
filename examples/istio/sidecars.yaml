@@ -15,7 +15,7 @@ data:
           "kind": "Pod",
           "version": "v1",
         },
-        "filter": "true"
+        "filter": "$matchByLabelSelector($item, $root.spec.workloadSelector.labels)"
       }
     }
   details: |-
@@ -33,19 +33,19 @@ data:
           "children": [
             {
               "source": "$item.port", 
-              "name": "Port", 
+              "name": "item.port", 
               "widget": "Panel", 
               "visibility": "$exists(*)",
               "children": [
-                { "source": "$item.number", "name": "Port" },
-                { "source": "$item.protocol", "name": "Protocol" },
-                { "source": "$item.name", "name": "Name" },
-                { "source": "$item.targetPoint", "name": "Target Point" },
+                { "source": "$item.number", "name": "item.port.number" },
+                { "source": "$item.protocol", "name": "item.port.protocol" },
+                { "source": "$item.name", "name": "item.port.name" },
+                { "source": "$item.targetPoint", "name": "item.port.targetPoint" },
               ] 
             },
-            { "source": "$item.bind", "name": "bind" },
-            { "source": "$item.captureMode", "name": "captureMode" },
-            { "source": "$item.hosts", "name": "hosts", "widget": "Labels"}
+            { "source": "$item.bind", "name": "item.bind" },
+            { "source": "$item.captureMode", "name": "item.captureMode" },
+            { "source": "$item.hosts", "name": "item.hosts", "widget": "Labels"}
           ]
         },
         {
@@ -56,32 +56,48 @@ data:
           "children": [
             {
               "source": "$item.port", 
-              "name": "Port", 
+              "name": "item.port", 
               "widget": "Panel", 
               "visibility": "$exists(*)",
               "children": [
-                { "source": "$item.number", "name": "Port" },
-                { "source": "$item.protocol", "name": "Protocol" },
-                { "source": "$item.name", "name": "Name" },
-                { "source": "$item.targetPoint", "name": "Target Point" },
+                { "source": "$item.number", "name": "item.port.number" },
+                { "source": "$item.protocol", "name": "item.port.protocol" },
+                { "source": "$item.name", "name": "item.port.name" },
+                { "source": "$item.targetPoint", "name": "item.port.targetPoint" },
               ] 
             },
-            { "source": "$item.bind", "name": "bind" },
-            { "source": "$item.captureMode", "name": "captureMode" },
-            { "source": "$item.defaultEndpoint", "name": "spec.egress.hosts", "widget": "Labels"}
+            { "source": "$item.bind", "name": "item.bind" },
+            { "source": "$item.captureMode", "name": "item.captureMode" },
+            { "source": "$item.defaultEndpoint", "name": "item.defaultEndpoint", "widget": "Labels"}
           ]
         },
         {
           "widget": "Panel",
           "name": "spec.workloadSelector",
+          "disablePadding": true,
           "children": [
             { 
               "source": "$podSelector()",
               "widget": "ResourceList",
               "disableCreate": true,
-              "isCompact": true
+              "isCompact": true,
+              "visibility": "$boolean($root.spec.workloadSelector.labels)"
+            },
+            {
+              "source": "spec.workloadSelector.labels",
+              "widget": "Panel",
+              "name": "selector.matchesAllPods",
+              "visibility": "$not($exists(*)) or $not($boolean(*))"
             }
-          ]
+          ],
+          "header": [
+            {
+              "source": "spec.workloadSelector.labels",
+              "widget": "Labels",
+              "name": "spec.workloadSelector.labels",
+              "visibility": "$boolean(*)"
+            }
+          ],
         }
       ]
     }
@@ -184,11 +200,17 @@ data:
         "spec.outboundTrafficPolicy.mode": "Outbound Traffic Policy Mode",
         "spec.workloadSelector": "Workload Selector",
         "spec.workloadSelector.labels": "Workload Selector Labels",
-        "bind": "Bind",
-        "captureMode": "Capture Mode",
-        "defaultEndpoint": "Default Endpoint",
-        "hosts": "Hosts",
-        "placeholders.dropdown": "Type or choose an option"
-
+        "item.bind": "Bind",
+        "item.captureMode": "Capture Mode",
+        "item.defaultEndpoint": "Default Endpoint",
+        "item.hosts": "Hosts",
+        "item.port": "Port",
+        "item.port.number": "Port Number",
+        "item.port.protocol": "Protocol",
+        "item.port.name": "Port Name",
+        "item.port.targetPoint": "Target Point",
+        "placeholders.dropdown": "Type or choose an option",
+        "selector.matchesAllPods": "Matches all Pods in the Namespace",
+        "placeholders.hosts": "For example, *.api.mydomain.com"
       }
     }
