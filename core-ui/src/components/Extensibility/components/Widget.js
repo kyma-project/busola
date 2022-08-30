@@ -1,7 +1,7 @@
 import React from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import jsonata from 'jsonata';
+import { jsonataWrapper } from '../jsonataWrapper';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
@@ -43,12 +43,13 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   );
 }
 
-export function shouldBeVisible(value, visibilityFormula) {
+export function shouldBeVisible(value, visibilityFormula, originalResource) {
   // allow hidden to be set only explicitly
   if (!visibilityFormula) return { visible: visibilityFormula !== false };
 
   try {
-    const expression = jsonata(visibilityFormula);
+    const expression = jsonataWrapper(visibilityFormula);
+    expression.assign('root', originalResource);
     return { visible: !!expression.evaluate({ data: value }) };
   } catch (e) {
     console.warn('Widget::shouldBeVisible error:', e);
@@ -74,6 +75,7 @@ export function Widget({
   const { visible, error: visibleCheckError } = shouldBeVisible(
     childValue,
     structure.visibility,
+    originalResource,
   );
 
   if (visibleCheckError) {

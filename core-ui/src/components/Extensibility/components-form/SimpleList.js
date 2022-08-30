@@ -26,6 +26,7 @@ export function SimpleList({
   const { value } = store?.extractValues(storeKeys) || {};
   const listSize = value?.size || 0;
   const schemaPlaceholder = schema.get('placeholder');
+  const schemaRrequired = schema.get('required');
 
   const removeItem = index => {
     onChange({
@@ -57,6 +58,7 @@ export function SimpleList({
     <ResourceForm.CollapsibleSection
       container
       title={tFromStoreKeys(storeKeys, schema)}
+      required={schemaRrequired ?? required}
       {...props}
     >
       <div className="fd-row form-field multi-input extensibility">

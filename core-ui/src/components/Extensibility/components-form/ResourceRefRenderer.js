@@ -29,7 +29,7 @@ export function ResourceRefRender({
   return (
     <ExternalResourceRef
       title={t('extensibility.widgets.resource-ref.header')}
-      value={value.toJS()}
+      value={value?.toJS() || ''}
       resources={data}
       setValue={value => {
         onChange({

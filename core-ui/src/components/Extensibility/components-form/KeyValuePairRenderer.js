@@ -22,6 +22,7 @@ export function KeyValuePairRenderer({
 
   let titleTranslation = '';
   const path = storeKeys.toArray().join('.');
+  const schemaRequired = schema.get('required');
 
   if (tFromStoreKeys(storeKeys, schema) !== path)
     titleTranslation = tFromStoreKeys(storeKeys, schema);
@@ -50,7 +51,7 @@ export function KeyValuePairRenderer({
         });
       }}
       title={titleTranslation}
-      required={required}
+      required={schemaRequired ?? required}
     />
   );
 }
