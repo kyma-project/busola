@@ -160,7 +160,7 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 
 #### Widget-specific parameters
 
-- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in CRD, then it defaults to `false`.
+- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 
 ### ResourceRefs
 
