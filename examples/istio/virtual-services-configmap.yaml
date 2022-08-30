@@ -17,7 +17,7 @@ data:
           "version": "v1beta1",
           "namespace": null
         },
-        "filter": "$filter($root.spec.http.route, function($r) { $filter($r.destination.host, function($h){$substringBefore($h, '.') = $item.metadata.name and $split($substringAfter($h, '.'),'.')[0] = $item.metadata.namespace} ) })"
+        "filter": "$filter($root.spec.gateways, function($g){$substringBefore($g,'/') = $item.metadata.namespace and $substringAfter($g, '/') = $item.metadata.name}) "
       },
       "services":{
         "resource": {
