@@ -1,6 +1,5 @@
 import React, { createContext, useContext } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import * as jp from 'jsonpath';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { OrderedMap } from 'immutable';
 import { Link } from 'shared/components/Link/Link';
@@ -158,7 +157,7 @@ export const throwConfigError = (message, code) => {
 
 export const applySortFormula = (formula, t) => {
   try {
-    const sortFunction = jsonata(formula);
+    const sortFunction = jsonataWrapper(formula);
     sortFunction.registerFunction('compareStrings', (a, b) => {
       return a?.localeCompare(b) ?? 1;
     });
@@ -177,10 +176,10 @@ export const applySortFormula = (formula, t) => {
 
 export const getSortingFunction = (formula, originalResource) => {
   return (a, b) => {
-    const aValue = jsonata(formula).evaluate(originalResource || a, {
+    const aValue = jsonataWrapper(formula).evaluate(originalResource || a, {
       item: a,
     });
-    const bValue = jsonata(formula).evaluate(originalResource || b, {
+    const bValue = jsonataWrapper(formula).evaluate(originalResource || b, {
       item: b,
     });
 
@@ -219,12 +218,18 @@ export const sortBy = (
 
       if (sort.compareFunction) {
         sortFn = (a, b) => {
-          const aValue = jsonata(source).evaluate(originalResource || a, {
-            item: a,
-          });
-          const bValue = jsonata(source).evaluate(originalResource || b, {
-            item: b,
-          });
+          const aValue = jsonataWrapper(source).evaluate(
+            originalResource || a,
+            {
+              item: a,
+            },
+          );
+          const bValue = jsonataWrapper(source).evaluate(
+            originalResource || b,
+            {
+              item: b,
+            },
+          );
           const sortFormula = applySortFormula(sort.compareFunction, t);
           return sortFormula(aValue, bValue);
         };
