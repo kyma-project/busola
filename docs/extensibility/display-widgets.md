@@ -117,7 +117,7 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
 
 ### Labels
 
-Labels widgets render all the object entries in the `key-value` format.
+Labels widgets render all the array or object entries in the `value` or `key-value` format.
 
 #### Widget-specific parameters
 

@@ -189,7 +189,10 @@ Extra parameters might be available for specific widgets.
       "widget": "Panel",
       "children": [
         { "source": "applyTo" },
-        { "source": "match.context", "visibility": "$exists(data.spec.config)" }
+        {
+          "source": "match.context",
+          "visibility": "$exists(data.match.context)"
+        }
       ]
     },
     {
