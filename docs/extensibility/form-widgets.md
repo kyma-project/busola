@@ -287,7 +287,7 @@ This type of field is only suitable for simple data types and can contain more c
 #### Widget-specific parameters
 
 - **placeholder** - specifies a short hint about the input field value.
-- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in CRD, then it defaults to `false`.
+- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 
 #### Scalar values
 
