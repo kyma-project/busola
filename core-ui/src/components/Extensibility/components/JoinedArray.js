@@ -14,10 +14,14 @@ export function JoinedArray({ value, structure, schema }) {
     return t('extensibility.widgets.joined-array.error');
   }
 
-  return (
-    value.join(structure?.separator ? structure.separator : ', ') ||
-    emptyLeafPlaceholder
-  );
+  if (structure?.separator === 'break') {
+    return value.map((val, i) => <p key={i}>{val}</p>);
+  } else {
+    return (
+      value.join(structure?.separator ? structure.separator : ', ') ||
+      emptyLeafPlaceholder
+    );
+  }
 }
 
 JoinedArray.array = true;

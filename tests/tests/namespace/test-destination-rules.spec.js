@@ -50,9 +50,16 @@ context('Test Destination Rules', () => {
 
   it('Check Destination Rule details', () => {
     cy.getIframeBody()
-      .find('[data-testid=traffic-policy]')
       .contains('LEAST_CONN')
       .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Subsets')
+      .should('not.exist');
+
+    cy.getIframeBody()
+      .contains('Workload Selector')
+      .should('not.exist');
   });
 
   it('Check the Destination Rule list', () => {

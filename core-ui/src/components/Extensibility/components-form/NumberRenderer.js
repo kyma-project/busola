@@ -18,6 +18,7 @@ export function NumberRenderer({
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
   const schemaPlaceholder = schema.get('placeholder');
+  const schemaRequired = schema.get('required');
 
   return (
     <ResourceForm.FormField
@@ -37,7 +38,7 @@ export function NumberRenderer({
       data-testid={storeKeys.join('.')}
       input={Inputs.Number}
       compact={compact}
-      required={required}
+      required={schemaRequired ?? required}
     />
   );
 }

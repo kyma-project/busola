@@ -36,7 +36,31 @@ Text widgets render a field as a text field. They are used by default for all st
 
 #### Widget-specific parameters
 
+- **enum[]** - an array of options to generate an input field with a dropdown.
 - **placeholder** - specifies a short hint about the input field value.
+- **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
+
+#### Example
+
+```json
+{
+  "path": "protocol",
+  "simple": true,
+  "enum": [
+    "HTTP",
+    "HTTPS",
+    "HTTP2",
+    "GRPC",
+    "GRPC-WEB",
+    "MONGO",
+    "REDIS",
+    "MYSQL",
+    "TCP"
+  ],
+},
+```
+
+<img src="./assets/form-widgets/Dropdown.png" alt="Example of a dropdown text widget" style="border: 1px solid #D2D5D9">
 
 ### Name
 
@@ -45,6 +69,8 @@ Name widgets render a name input field. They contain an automatic name generator
 #### Widget-specific parameters
 
 - **extraPaths** - an array of extra paths to fill in with the contents of the field. Each path can either be a period-separated string or an array of strings.
+- **showHelp** - if set to `false` it disables the additional help message.
+- **placeholder** - specifies a short hint about the input field value.
 
 #### Example
 
@@ -82,6 +108,7 @@ Resource widgets render a dropdown list of specified resources and store the sel
   - **version** - _[required]_ API version used for all requests.
   - **scope** - either `namespace` or `cluster`. When set to `cluster`, namespaced resources are fetched from all Namespaces. Defaults to `cluster`.
   - **namespace** - Namespace to fetch resources from. Used only when scope is `namespace` and resources need to be fetched from a specific Namespace. Defaults to the active Namespace when omitted.
+- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in CRD, then it defaults to `false`.
 
 #### Example
 
@@ -130,6 +157,10 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 ```
 
 <img src="./assets/form-widgets/KeyValue.png" alt="Example of a KeyValuePair widget" style=" border: 1px solid #D2D5D9">
+
+#### Widget-specific parameters
+
+- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 
 ### ResourceRefs
 
@@ -256,6 +287,7 @@ This type of field is only suitable for simple data types and can contain more c
 #### Widget-specific parameters
 
 - **placeholder** - specifies a short hint about the input field value.
+- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 
 #### Scalar values
 
