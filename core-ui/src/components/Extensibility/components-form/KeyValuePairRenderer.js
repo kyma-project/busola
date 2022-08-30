@@ -28,6 +28,7 @@ export function KeyValuePairRenderer({
 
   let titleTranslation = '';
   const path = storeKeys.toArray().join('.');
+  const schemaRequired = schema.get('required');
 
   if (tFromStoreKeys(storeKeys, schema) !== path)
     titleTranslation = tFromStoreKeys(storeKeys, schema);
@@ -36,9 +37,15 @@ export function KeyValuePairRenderer({
   else if (path === 'metadata.annotations')
     titleTranslation = t('common.headers.annotations');
 
+  try {
+    value = value ? value.toJS() : {};
+  } catch (error) {
+    value = {};
+  }
+
   return (
     <KeyValueField
-      value={value ? value.toJS() : {}}
+      value={value}
       setValue={value => {
         onChange({
           storeKeys,
@@ -51,7 +58,7 @@ export function KeyValuePairRenderer({
       }}
       title={titleTranslation}
       input={getValueComponent(schema)}
-      required={required}
+      required={schemaRequired ?? required}
     />
   );
 }

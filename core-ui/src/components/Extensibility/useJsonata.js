@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import jsonata from 'jsonata';
+import { jsonataWrapper } from './jsonataWrapper';
 
 import { useDataSourcesContext } from './contexts/DataSources';
 
@@ -23,15 +23,11 @@ export function useJsonata(query, root, extras = {}) {
         },
       ]),
     );
-    // if (query === 'spec.trafficPolicy') {
-    //   console.log(query);
-    //   console.log(1111, extras);
-    // }
+
     if (!query) return '';
     try {
-      jsonata(query).evaluate(
+      jsonataWrapper(query).evaluate(
         root,
-        // extras.parent ? extras.parent : root,
         {
           ...dataSourceFetchers,
           ...extras,
@@ -43,14 +39,6 @@ export function useJsonata(query, root, extras = {}) {
     } catch (e) {
       setValue(t('extensibility.configuration-error', { error: e.message }));
     }
-  }, [
-    root,
-    dataSourceStore,
-    dataSources,
-    extras,
-    query,
-    requestRelatedResource,
-    t,
-  ]);
+  }, [root, dataSourceStore, extras]); // eslint-disable-line react-hooks/exhaustive-deps
   return value;
 }

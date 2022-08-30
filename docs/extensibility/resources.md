@@ -311,6 +311,7 @@ Those fields are used to build the related resource URL and filter the received 
   - **root** - the original resource.
 
   This function should return a boolean value.
+  You can also use the `matchByLabelSelector` function to see the matched Pods. To do that, provide the Pods as `$item`, and path to the labels.
 
 ### Examples
 
@@ -361,6 +362,18 @@ Those fields are used to build the related resource URL and filter the received 
       },
       "filter": "$root.spec.secretName = $item.metadata.name and $root.metadata.namespace = $item.metadata.namespace"
     }
+  }
+}
+```
+
+```json
+{
+  "podSelector": {
+    "resource": {
+      "kind": "Pod",
+      "version": "v1"
+    },
+    "filter": "$matchByLabelSelector($item, $root.spec.selector)"
   }
 }
 ```

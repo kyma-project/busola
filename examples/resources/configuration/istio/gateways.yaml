@@ -1,0 +1,231 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: gateways
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: gateways
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |-
+    {
+      "podSelector": {
+        "resource": {
+          "kind": "Pod",
+          "version": "v1",
+        },
+        "filter": "$matchByLabelSelector($item, $root.spec.selector)"
+      }
+    }
+  details: |
+    {
+      "header": [
+        {
+          "source": "spec.selector",
+          "widget": "Labels",
+          "name": "spec.selector"
+        }
+      ],
+      "body": [     
+        {
+          "widget": "Table",
+          "source": "spec.servers",
+          "name": "spec.servers",
+          "children": [
+            { "source": "$item.port.name", "name": "spec.servers.port.name" },
+            {
+              "widget": "JoinedArray",
+              "separator": 'break',
+              "source": "$item.hosts", 
+              "name": "spec.servers.hosts" 
+            },
+            { "source": "$item.port.number", "name": "spec.servers.port.number" },
+            { "source": "$item.tls.mode", "name": "spec.servers.tls.mode" },
+            {
+              "widget": "ResourceLink", 
+              "source": "$item.tls.credentialName", 
+              "name": "spec.servers.tls.credentialName",
+              "resource": {
+                "name": "data",
+                "namespace": "'istio-system'",
+                "kind": "'Secret'"
+              }
+            }
+          ]
+        },
+        {
+          "widget": "Panel",
+          "name": "spec.selector",
+          "disablePadding": true,
+          "children": [
+            { 
+              "source": "$podSelector()",
+              "widget": "ResourceList",
+              "disableCreate": true,
+              "isCompact": true,
+              "visibility": "$boolean($root.spec.selector)"
+            },
+            {
+              "source": "spec.selector",
+              "widget": "Panel",
+              "name": "selector.matchesAllPods",
+              "visibility": "$not($exists(*)) or $not($boolean(*))"
+            }
+          ],
+          "header": [
+            {
+              "source": "spec.selector",
+              "widget": "Labels",
+              "name": "spec.selector",
+              "visibility": "$boolean(*)"
+            }
+          ],
+        }
+      ]
+    }
+  form: |-
+    [
+      {
+        "path": "spec.selector", 
+        "widget": "KeyValuePair", 
+        "simple": true,
+        "required": true
+      },
+      {
+        "widget": "FormGroup",
+        "simple": true,
+        "path": "spec.servers[].port",
+        "children": [
+          { 
+            "path": "number", 
+            "simple": true,
+            "required": true
+          },
+          { 
+            "path": "name", 
+            "widget": "Name", 
+            "showHelp": false, 
+            "simple": true ,
+            "required": true
+          },
+          {
+            "path": "protocol", 
+            "simple": true,
+            "enum": [
+              "HTTP",
+              "HTTPS",
+              "HTTP2",
+              "GRPC",
+              "GRPC-WEB",
+              "MONGO",
+              "REDIS",
+              "MYSQL",
+              "TCP"
+            ],
+            "required": true,
+            "placeholder": "placeholders.dropdown",
+          },
+          { "path": "targetPort", "simple": true },
+        ]
+      },
+      {
+        "widget": "FormGroup",
+        "simple": true,
+        "path": "spec.servers[].tls",
+        "visibility": "$item.port.protocol = 'HTTP' or $item.port.protocol = 'HTTPS'",
+        "children": [
+          { "path": "httpsRedirect", "simple": true, "visibility": "$item.port.protocol = 'HTTP'" },
+          { 
+            "path": "mode", 
+            "simple": true, 
+            "visibility": "$item.port.protocol = 'HTTPS'",
+            "required": true,
+            "placeholder": "placeholders.dropdown"
+          },
+          { 
+            "path": "credentialName", 
+            "simple": true, 
+            "widget": "Resource",
+            "resource": {
+              "kind": "Secret",
+              "version": "v1",
+              "namespace": "istio-system",
+              "scope": "namespace",
+            },
+            "filter": "$item.type = 'kubernetes.io/tls' or ($item.type = 'Opaque' and $contains($item.data, 'key') and $contains($item.data, 'cert'))",
+            "visibility": "$item.port.protocol = 'HTTPS'",
+          },
+          { 
+            "path": "serverCertificate", 
+            "simple": true, 
+            "visibility": "$item.port.protocol = 'HTTPS'",
+            "placeholder": "placeholders.serverCertificate"
+          },
+          { 
+            "path": "privateKey", 
+            "simple": true, 
+            "visibility": "$item.port.protocol = 'HTTPS'",
+            "placeholder": "placeholders.privateKey",
+          },
+          { 
+            "path": "caCertificates", 
+            "simple": true, 
+            "visibility": "$item.port.protocol = 'HTTPS'",
+            "placeholder": "placeholders.caCertificates",
+          },
+        ]
+      },
+      {
+        "widget": "SimpleList",
+        "path": "spec.servers[].hosts", 
+        "required": true,
+        "simple": true,
+        "placeholder": "placeholders.hosts"
+      }
+    ]
+  general: |-
+    {
+      "resource": {
+        "kind": "Gateway",
+        "group": "networking.istio.io",
+        "version": "v1beta1"
+      },
+      "urlPath": "ext-gateways",
+      "category": "Istio",
+      "name": "Ext Gateways",
+      "scope": "namespace",
+      "description": "{{[Gateways](https://istio.io/latest/docs/reference/config/networking/gateway/)}} describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections."
+    }
+  list: |-
+    [
+      { 
+        "name": "spec.selector",
+        "source": "spec.selector",
+        "widget": "Labels"
+      },
+    ]
+  translations: |
+    en:
+      spec.selector: Selector
+      spec.gateways: Gateways
+      spec.servers: Servers
+      spec.servers.port: Port
+      spec.servers.port.name: Port Name
+      spec.servers.port.protocol: Protocol
+      spec.servers.port.targetPort: Target Port
+      spec.servers.port.number: Port Number
+      spec.servers.tls: TLS
+      spec.servers.tls.mode: TLS Mode
+      spec.servers.tls.httpsRedirect: HTTP Redirect
+      spec.servers.tls.credentialName: Credential Name
+      spec.servers.tls.serverCertificate: Server Certificate
+      spec.servers.tls.privateKey: Private Key
+      spec.servers.tls.caCertificates: CA Certificate
+      spec.servers.hosts: Hosts
+      selector.matchesAllPods: Matches all Pods in the Namespace
+      placeholders.dropdown: Type or choose an option
+      placeholders.serverCertificate: Enter the certificate path
+      placeholders.privateKey: Enter the private key path
+      placeholders.caCertificates: Enter the CA certificates path
+      placeholders.hosts: For example, *.api.mydomain.com
