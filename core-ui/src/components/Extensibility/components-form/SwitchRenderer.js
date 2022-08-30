@@ -15,6 +15,7 @@ export function SwitchRenderer({
   ...props
 }) {
   const { tFromStoreKeys } = useGetTranslation();
+
   return (
     <ResourceForm.FormField
       value={value}

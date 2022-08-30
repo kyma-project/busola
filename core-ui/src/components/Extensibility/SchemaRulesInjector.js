@@ -2,6 +2,7 @@ import React from 'react';
 import { merge, initial, last } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 import { List } from 'immutable';
+import { jsonataWrapper } from './jsonataWrapper';
 
 const byPath = a => b => JSON.stringify(b.path) === JSON.stringify(a);
 
@@ -74,6 +75,7 @@ export function SchemaRulesInjector({
   storeKeys,
   currentPluginIndex,
   schemaRules,
+  resource,
   ...props
 }) {
   const nextPluginIndex = currentPluginIndex + 1;
@@ -93,6 +95,31 @@ export function SchemaRulesInjector({
           .get('properties')
           .get(propertyKey)
           ?.set('schemaRule', rule);
+
+        let lastArrayItem;
+        let lastArrayIndex = storeKeys
+          .toArray()
+          // workaround for findLastIndex, Firefox isn't supporting it
+          .reverse()
+          .findIndex(item => typeof item === 'number');
+
+        // workaround for findLastIndex, Firefox isn't supporting it
+        lastArrayIndex = storeKeys.toArray().length - 1 - lastArrayIndex;
+
+        if (lastArrayIndex > 0) {
+          const lastArrayStoreKeys = storeKeys.slice(0, lastArrayIndex + 1);
+
+          lastArrayItem = lastArrayStoreKeys
+            .toArray()
+            .reduce((item, key) => item?.[key], resource);
+        }
+
+        if (rule.visibility) {
+          const visible = jsonataWrapper(rule.visibility).evaluate(resource, {
+            item: lastArrayItem,
+          });
+          if (!visible) return null;
+        }
         return property ? [propertyKey, property] : null;
       })
       .filter(rule => !!rule);
@@ -106,6 +133,7 @@ export function SchemaRulesInjector({
       currentPluginIndex={nextPluginIndex}
       schema={newSchema}
       storeKeys={storeKeys}
+      resource={resource}
     />
   );
 }

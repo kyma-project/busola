@@ -41,11 +41,12 @@ export function MonacoRenderer({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [required],
   );
+  const schemaRequired = schema.get('required');
 
   return (
     <ResourceForm.CollapsibleSection
       title={tFromStoreKeys(storeKeys, schema)}
-      required={required}
+      required={schemaRequired ?? required}
     >
       <Editor
         autocompletionDisabled

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import jsonata from 'jsonata';
+import { jsonataWrapper } from './jsonataWrapper';
 
 import { useDataSourcesContext } from './contexts/DataSources';
 
@@ -26,7 +26,7 @@ export function useJsonata(query, root, extras = {}) {
 
     if (!query) return '';
     try {
-      jsonata(query).evaluate(
+      jsonataWrapper(query).evaluate(
         root,
         {
           ...dataSourceFetchers,

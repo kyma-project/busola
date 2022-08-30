@@ -98,10 +98,6 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 
 JoinedArray widgets render all the values of an array of strings as a comma-separated list.
 
-#### Widget-specific parameters
-
-- **separator** - a string by which the elements of the array will be separated by. The default value is a comma `,`.
-
 #### Example
 
 ```json
@@ -114,6 +110,10 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
 ```
 
 <img src="./assets/display-widgets/JoinedArray.png" alt="Example of a joined array widget" width="20%" style="border: 1px solid #D2D5D9">
+
+#### Widget-specific parameters
+
+- **separator** - a string by which the elements of the array are separated. The default value is a comma `,`. You can use `break` to separate elements with a new line.
 
 ### Labels
 
@@ -267,6 +267,34 @@ Panel widgets render an object as a separate panel with its own title (based on 
 ```
 
 <img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
+
+#### Widget-specific parameters
+
+- **header** - an optional array that allows you to, for example, display labels in the panel header.
+- **disablePadding** - an optional boolean which disables the padding inside the panel body.
+
+#### Example
+
+```json
+{
+  "widget": "Panel",
+  "name": "spec.selector",
+  "children": [
+    {
+      "source": "$podSelector()",
+      "widget": "ResourceList"
+    }
+  ],
+  "header": [
+    {
+      "source": "spec.selector",
+      "widget": "Labels",
+      "name": "spec.selector",
+      "visibility": "spec.selector"
+    }
+  ]
+}
+```
 
 ### Plain
 
