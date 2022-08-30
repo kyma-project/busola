@@ -310,7 +310,7 @@ ResourceList widgets render a list of Kubernetes resources. The ResourceList wid
 - **sort** - optional sort option. It's an array of objects that allow you to sort by the value from the given **source**.
   - **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form it's just the path to the value.
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
-  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function `$compareStrings` used to compare two strings, for example, `$compareStrings($first, $second)`
+  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
 
 Since the **ResourceList** widget does more than just list the items, you must provide the whole data source (`$myResource()`) instead of just the items (`$myResource().items`).
 
@@ -319,16 +319,17 @@ Since the **ResourceList** widget does more than just list the items, you must p
 ```json
 {
   "widget": "ResourceList",
-  "source": "$myRelatedResource()",
+  "source": "$myDeployments()",
   "name": "Example ResourceList Deployments",
   "sort": [
     {
       "source": "spec.replicas",
-      "default": true,
       "compareFunction": "$second - $first"
     },
     {
-      "source": "$item.spec.strategy.type"
+      "source": "$item.spec.strategy.type",
+      "compareFunction": "$compareStrings($second, $first)",
+      "default": true
     }
   ]
 }
@@ -397,7 +398,7 @@ Table widgets display array data as rows of a table instead of free-standing com
 - **collapsible** - an optional array of extra widgets to display as an extra collapsible section. Uses the same format as the **children** parameter.
 - **sort** - optional sort option. If set to `true`, it allows you to sort using this value. Defaults to false. It can also be set to an object with the following properties:
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
-  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function `$compareStrings` used to compare two strings, for example, `$compareStrings($first, $second)`
+  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
 
 #### Example
 
