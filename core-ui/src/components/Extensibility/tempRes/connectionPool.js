@@ -43,44 +43,44 @@ export const connectionPool = prefix => ({
       ],
     },
     {
-      source: prefix + 'connectionPool.http',
+      source: '$parent.http',
       name: 'connectionPool.http',
       visibility: '$exists($.data)',
       widget: 'Panel',
       children: [
         {
-          source: prefix + 'connectionPool.http.http1MaxPendingRequests',
+          source: '$parent.http1MaxPendingRequests',
           name: 'http1MaxPendingRequests',
           visibility: '$exists($.data)',
         },
         {
-          source: prefix + 'connectionPool.http.http2MaxRequests',
+          source: '$parent.http2MaxRequests',
           name: 'http2MaxRequests',
           visibility: '$exists($.data)',
         },
         {
-          source: prefix + 'connectionPool.http.maxRequestsPerConnection',
+          source: '$parent.maxRequestsPerConnection',
           name: 'maxRequestsPerConnection',
           visibility: '$exists($.data)',
         },
         {
-          source: prefix + 'connectionPool.http.maxRetries',
+          source: '$parent.maxRetries',
           name: 'maxRetries',
           visibility: '$exists($.data)',
         },
         {
-          source: prefix + 'connectionPool.http.idleTimeout',
+          source: '$parent.idleTimeout',
           name: 'idleTimeout',
           visibility: '$exists($.data)',
         },
         {
-          source: prefix + 'connectionPool.http.h2UpgradePolicy',
+          source: '$parent.h2UpgradePolicy',
           name: 'h2UpgradePolicy',
           visibility: '$exists($.data)',
           widget: 'Badge',
         },
         {
-          source: prefix + 'connectionPool.http.useClientProtocol',
+          source: '$parent.useClientProtocol',
           name: 'useClientProtocol',
           visibility: '$exists($.data)',
           widget: 'Badge',
