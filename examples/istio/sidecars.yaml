@@ -37,21 +37,13 @@ data:
               "widget": "Panel", 
               "visibility": "$exists(*)",
               "children": [
-                {
-                  "source": "$item.number", "name": "Port"
-                },
-                {
-                    "source": "$item.protocol", "name": "Protocol"
-                },
-                {
-                  "source": "$item.name", "name": "Name"
-                },
-                {
-                    "source": "$item.targetPoint", "name": "Target Point"
-                },
+                { "source": "$item.number", "name": "Port" },
+                { "source": "$item.protocol", "name": "Protocol" },
+                { "source": "$item.name", "name": "Name" },
+                { "source": "$item.targetPoint", "name": "Target Point" },
               ] 
             },
-             { "source": "$item.bind", "name": "bind" },
+            { "source": "$item.bind", "name": "bind" },
             { "source": "$item.captureMode", "name": "captureMode" },
             { "source": "$item.hosts", "name": "hosts", "widget": "Labels"}
           ]
@@ -68,21 +60,13 @@ data:
               "widget": "Panel", 
               "visibility": "$exists(*)",
               "children": [
-                {
-                  "source": "$item.number", "name": "Port"
-                },
-                {
-                    "source": "$item.protocol", "name": "Protocol"
-                },
-                {
-                  "source": "$item.name", "name": "Name"
-                },
-                {
-                    "source": "$item.targetPoint", "name": "Target Point"
-                },
+                { "source": "$item.number", "name": "Port" },
+                { "source": "$item.protocol", "name": "Protocol" },
+                { "source": "$item.name", "name": "Name" },
+                { "source": "$item.targetPoint", "name": "Target Point" },
               ] 
             },
-             { "source": "$item.bind", "name": "bind" },
+            { "source": "$item.bind", "name": "bind" },
             { "source": "$item.captureMode", "name": "captureMode" },
             { "source": "$item.defaultEndpoint", "name": "spec.egress.hosts", "widget": "Labels"}
           ]
@@ -103,14 +87,13 @@ data:
     }
   form: |-
     [
-       {
-          "path": "spec.workloadSelector.labels", 
-          "widget": "KeyValuePair", 
-          "required": true
+      {
+        "path": "spec.workloadSelector.labels", 
+        "widget": "KeyValuePair", 
+        "required": true
       },
       {
         "widget": "FormGroup",
-        "simple": true,
         "path": "spec.ingress[].port",
         "children": [
           { 
@@ -145,7 +128,24 @@ data:
       },
       {
         "widget": "FormGroup",
-        "simple": true,
+        "path": "spec.ingress[].bind"
+      },
+      {
+        "widget": "FormGroup",
+        "path": "spec.ingress[].captureMode",
+        "enum": [
+          "DEFAULT",
+          "IPTABLES",
+          "NONE"
+        ],
+        "placeholder": "placeholders.dropdown",
+      },
+      {
+        "widget": "FormGroup",
+        "path": "spec.ingress[].defaultEndpoint"
+      },
+      {
+        "widget": "FormGroup",
         "path": "spec.outboundTrafficPolicy",
         "children": [{
           "path": "mode", 
