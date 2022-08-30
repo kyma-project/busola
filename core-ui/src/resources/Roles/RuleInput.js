@@ -49,13 +49,13 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
   }
 
   // dictionary of pairs (apiGroup: resources in that apiGroup)
-  const apiRules = rule?.apiGroups?.flat();
+  const apiRules = rule.apiGroups.flat();
   const {
     cache: resourcesCache,
     fetchResources,
     loadable,
     loading,
-  } = useResourcesForApiGroups(apiRules ? [...new Set(apiRules)] : []);
+  } = useResourcesForApiGroups([...new Set(apiRules)]);
   // introduce special option for '' apiGroup - Combobox doesn't accept empty string key
   const apiGroupsInputOptions = getApiGroupInputOptions(groupVersions);
 
@@ -64,7 +64,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
   const getAvailableResources = resourcesCache =>
     unique([
       ...(rule.apiGroups
-        ?.flatMap(apiGroup => resourcesCache[apiGroup] || [])
+        .flatMap(apiGroup => resourcesCache[apiGroup] || [])
         .map(r => r.name) || []),
       '*',
     ]);
