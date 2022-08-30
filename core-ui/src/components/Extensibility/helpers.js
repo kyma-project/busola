@@ -158,10 +158,6 @@ export const throwConfigError = (message, code) => {
 export const applySortFormula = (formula, t) => {
   try {
     const sortFunction = jsonataWrapper(formula);
-    sortFunction.registerFunction('compareStrings', (a, b) => {
-      return a?.localeCompare(b) ?? 1;
-    });
-
     return (a, b) => {
       sortFunction.assign('first', a);
       sortFunction.assign('second', b);
