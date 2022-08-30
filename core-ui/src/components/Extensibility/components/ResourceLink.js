@@ -7,7 +7,6 @@ import { jsonataWrapper } from '../jsonataWrapper';
 
 function getLinkData({ value, formulas, originalResource, t }) {
   const applyFormula = formula =>
-    
     jsonataWrapper(formula).evaluate({ data: value, root: originalResource });
 
   try {
