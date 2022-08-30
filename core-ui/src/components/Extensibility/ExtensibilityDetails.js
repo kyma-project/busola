@@ -16,7 +16,7 @@ import { tempDetails } from 'components/Extensibility/tempRes/tempDetails';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   resMetaData.details = tempDetails;
-
+  console.log(11111, resMetaData);
   // const { extensibilitySchemas } = useMicrofrontendContext();
   const { t, widgetT, exists } = useGetTranslation();
   const { urlPath, resource } = resMetaData?.general ?? {};

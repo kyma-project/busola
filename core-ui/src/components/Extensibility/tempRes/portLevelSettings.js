@@ -9,6 +9,7 @@ export const portLevelSettings = () => ({
   name: 'portLevelSettings',
   widget: 'Table',
   children: [{ source: '$item.port.number', name: 'port' }],
+  visibility: '$count(data)',
   collapsible: [
     loadBalancer('$item.'),
     connectionPool('$item.'),
