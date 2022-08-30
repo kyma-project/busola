@@ -28,7 +28,7 @@ export const CommandPaletteProvider = ({ children }) => {
       ?.startsWith('mac');
     const modifierKeyPressed = (isMac && metaKey) || (!isMac && ctrlKey);
 
-    if (key.toLowerCase() === 'k' && modifierKeyPressed) {
+    if ((key === 'k' || key === 'K') && modifierKeyPressed) {
       setShowDialog(showDialog => !showDialog);
       // [on Firefox] prevent opening the browser search bar via CMD/CTRL+K
       e.preventDefault();
