@@ -103,7 +103,8 @@ data:
             {
               "name": "Description",
               "widget": "Panel",
-              "children": [{ "source": "spec.description" }]
+              "children": [{ "source": "spec.description", "name": "Description" }]
+
             }
           ]
         }
@@ -159,7 +160,7 @@ data:
     ]
   list: |-
     [
-      { "name": "Description", "source": "spec.description", "sort": { "compareFunction": "$compareStrings($first, $second)" } },
+      { "name": "Description", "source": "spec.description", "sort": { "compareFunction": "$compareStrings($second, $first)" } },
       { "name": "State", "source": "status.messages[-1].state", "widget": "Badge" },
       { "name": "Toppings price", "source": "$sum(spec.toppings.price)", "sort":{"default": true} }
     ]
