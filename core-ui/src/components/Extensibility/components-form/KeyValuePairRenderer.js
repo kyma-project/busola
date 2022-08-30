@@ -5,6 +5,12 @@ import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
 import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
+import * as Inputs from 'shared/ResourceForm/inputs';
+
+const availableValueFields = {
+  text: Inputs.Text,
+  number: Inputs.Number,
+};
 
 export function KeyValuePairRenderer({
   storeKeys,
@@ -44,7 +50,14 @@ export function KeyValuePairRenderer({
         });
       }}
       title={titleTranslation}
+      input={getValueComponent(schema)}
       required={required}
     />
   );
 }
+
+const getValueComponent = schema => {
+  const valueFieldType = schema.get('valueType');
+  const valueField = availableValueFields[valueFieldType] || undefined;
+  return valueField;
+};

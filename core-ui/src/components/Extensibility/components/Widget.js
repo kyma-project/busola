@@ -71,7 +71,7 @@ export function Widget({
     parent: value,
   });
 
-  console.log(34554, structure, childValue);
+  // console.log(34554, structure, childValue);
 
   const { visible, error: visibleCheckError } = shouldBeVisible(
     childValue,
