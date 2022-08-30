@@ -270,7 +270,7 @@ Panel widgets render an object as a separate panel with its own title (based on 
 
 #### Widget-specific parameters
 
-- **header** - an optional array that allows you to, for example, display Labels in the panel header.
+- **header** - an optional array that allows you to, for example, display labels in the panel header.
 - **disablePadding** - an optional boolean which disables the padding inside the panel body.
 
 #### Example
