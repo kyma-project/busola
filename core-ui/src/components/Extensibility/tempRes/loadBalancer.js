@@ -1,51 +1,51 @@
-const consistentHash = prefix => ({
-  source: prefix + 'consistentHash',
+const consistentHash = {
+  source: '$parent.consistentHash',
   name: 'consistentHash',
   visibility: '$exists($.data)',
   widget: 'Panel',
   children: [
     {
-      source: prefix + 'consistentHash.httpHeaderName',
+      source: '$parent.httpHeaderName',
       name: 'httpHeaderName',
       visibility: '$exists($.data)',
     },
     {
-      source: prefix + 'consistentHash.useSourceIp',
+      source: '$parent.useSourceIp',
       name: 'useSourceIp',
       visibility: '$exists($.data)',
     },
     {
-      source: prefix + 'consistentHash.httpQueryParameterName',
+      source: '$parent.httpQueryParameterName',
       name: 'httpQueryParameterName',
       visibility: '$exists($.data)',
     },
     {
-      source: prefix + 'consistentHash.minimumRingSize',
+      source: '$parent.minimumRingSize',
       name: 'minimumRingSize',
       visibility: '$exists($.data)',
     },
     {
-      source: prefix + 'consistentHash.httpCookie',
+      source: '$parent.httpCookie',
       name: 'httpCookie',
       visibility: '$exists($.data)',
       widget: 'Panel',
       children: [
         {
-          source: prefix + 'consistentHash.httpCookie.name',
+          source: '$parent.name',
           name: 'name',
         },
         {
-          source: prefix + 'consistentHash.httpCookie.path',
+          source: '$parent.path',
           name: 'path',
         },
         {
-          source: prefix + 'consistentHash.httpCookie.ttl',
+          source: '$parent.ttl',
           name: 'ttl',
         },
       ],
     },
   ],
-});
+};
 export const loadBalancer = prefix => ({
   source: prefix + 'loadBalancer',
   name: 'loadBalancer',
@@ -53,31 +53,31 @@ export const loadBalancer = prefix => ({
   widget: 'Panel',
   children: [
     {
-      source: prefix + 'loadBalancer.simple',
+      source: '$parent.simple',
       name: 'simple',
       visibility: '$exists($.data)',
     },
     {
-      source: prefix + 'loadBalancer.warmupDurationSecs',
+      source: '$parent.warmupDurationSecs',
       name: 'warmupDurationSecs',
       visibility: '$exists($.data)',
     },
-    consistentHash(prefix + 'loadBalancer.'),
+    consistentHash,
     {
-      source: prefix + 'loadBalancer.localityLbSetting',
+      source: '$parent.localityLbSetting',
       name: 'localityLbSetting',
       visibility: '$exists($.data)',
       widget: 'Panel',
       children: [
         {
           name: 'enabled',
-          source: prefix + 'loadBalancer.localityLbSetting.enabled',
+          source: '$parent.enabled',
         },
         {
           widget: 'Table',
           name: 'localityLbSetting.distribute',
           visibility: '$count(data)',
-          source: prefix + 'loadBalancer.localityLbSetting.distribute',
+          source: '$parent.distribute',
           children: [
             { source: '$item.from', name: 'from' },
             { source: '$item.to', name: 'to', widget: 'Labels' },
@@ -87,7 +87,7 @@ export const loadBalancer = prefix => ({
           widget: 'Table',
           name: 'localityLbSetting.failover',
           visibility: '$count(data)',
-          source: prefix + 'loadBalancer.localityLbSetting.failover',
+          source: '$parent.failover',
           children: [
             { source: '$item.from', name: 'from' },
             { source: '$item.to', name: 'to' },
@@ -95,7 +95,7 @@ export const loadBalancer = prefix => ({
         },
         {
           name: 'localityLbSetting.failoverPriority',
-          source: prefix + 'loadBalancer.localityLbSetting.failoverPriority',
+          source: '$parent.failoverPriority',
           widget: 'JoinedArray',
           visibility: '$count(data)',
         },

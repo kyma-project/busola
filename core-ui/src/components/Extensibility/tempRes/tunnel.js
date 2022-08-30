@@ -5,18 +5,18 @@ export const tunnel = prefix => ({
   widget: 'Panel',
   children: [
     {
-      source: prefix + 'tunnel.protocol',
+      source: '$parent.protocol',
       name: 'protocol',
       visibility: '$exists($.data)',
       widget: 'Badge',
     },
     {
-      source: prefix + 'tunnel.targetHost',
+      source: '$parent.targetHost',
       name: 'targetHost',
       visibility: '$exists($.data)',
     },
     {
-      source: prefix + 'tunnel.targetPort',
+      source: '$parent.targetPort',
       name: 'targetPort',
       visibility: '$exists($.data)',
     },

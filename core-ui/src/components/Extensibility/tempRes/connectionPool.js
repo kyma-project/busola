@@ -5,37 +5,37 @@ export const connectionPool = prefix => ({
   widget: 'Panel',
   children: [
     {
-      source: prefix + 'connectionPool.tcp',
+      source: '$parent.tcp',
       name: 'connectionPool.tcp',
       visibility: '$exists($.data)',
       widget: 'Panel',
       children: [
         {
-          source: prefix + 'connectionPool.tcp.maxConnections',
+          source: '$parent.maxConnections',
           name: 'maxConnections',
           visibility: '$exists($.data)',
         },
         {
-          source: prefix + 'connectionPool.tcp.connectTimeout',
+          source: '$parent.connectTimeout',
           name: 'connectTimeout',
           visibility: '$exists($.data)',
         },
         {
-          source: prefix + 'connectionPool.tcp.tcpKeepalive',
+          source: '$parent.tcpKeepalive',
           name: 'tcpKeepalive',
           visibility: '$exists($.data)',
           widget: 'Panel',
           children: [
             {
-              source: prefix + 'connectionPool.tcp.tcpKeepalive.probes',
+              source: '$parent.probes',
               name: 'tcpKeepalive.probes',
             },
             {
-              source: prefix + 'connectionPool.tcp.tcpKeepalive.time',
+              source: '$parent.time',
               name: 'tcpKeepalive.time',
             },
             {
-              source: prefix + 'connectionPool.tcp.tcpKeepalive.interval',
+              source: '$parent.interval',
               name: 'tcpKeepalive.interval',
             },
           ],

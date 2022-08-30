@@ -5,47 +5,47 @@ export const tls = prefix => ({
   widget: 'Panel',
   children: [
     {
-      source: prefix + 'tls.mode',
+      source: '$parent.mode',
       name: 'mode',
       visibility: '$exists($.data)',
       widget: 'Badge',
     },
     {
-      source: prefix + 'tls.clientCertificate',
+      source: '$parent.clientCertificate',
       name: 'clientCertificate',
       visibility: '$exists($.data)',
     },
     {
-      source: prefix + 'tls.privateKey',
+      source: '$parent.privateKey',
       name: 'privateKey',
       visibility: '$exists($.data)',
       type: 'number',
     },
     {
-      source: prefix + 'tls.caCertificates',
+      source: '$parent.caCertificates',
       name: 'caCertificates',
       visibility: '$exists($.data)',
     },
 
     {
-      source: prefix + 'tls.credentialName',
+      source: '$parent.credentialName',
       name: 'credentialName',
       visibility: '$exists($.data)',
     },
     {
-      source: prefix + 'tls.subjectAltNames',
+      source: '$parent.subjectAltNames',
       name: 'subjectAltNames',
       visibility: '$exists($.data)',
       widget: 'Labels',
     },
 
     {
-      source: prefix + 'tls.sni',
+      source: '$parent.sni',
       name: 'SNI',
       visibility: '$exists($.data)',
     },
     {
-      source: prefix + 'tls.insecureSkipVerify',
+      source: '$parent.insecureSkipVerify',
       name: 'insecureSkipVerify',
       visibility: '$exists($.data)',
       widget: 'Badge',

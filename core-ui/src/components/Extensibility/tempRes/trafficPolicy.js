@@ -11,12 +11,11 @@ export const trafficPolicy = prefix => ({
   visibility: '$exists($.data)',
   widget: 'Panel',
   children: [
-    { source: '$parent.loadBalancer', widget: 'CodeViewer' },
-    loadBalancer(prefix + 'trafficPolicy.'),
-    connectionPool(prefix + 'trafficPolicy.'),
-    outlierDetection(prefix + 'trafficPolicy.'),
-    tls(prefix + 'trafficPolicy.'),
-    portLevelSettings(prefix + 'trafficPolicy.'),
-    tunnel(prefix + 'trafficPolicy.'),
+    loadBalancer('$parent.'),
+    connectionPool('$parent.'),
+    outlierDetection('$parent.'),
+    tls('$parent.'),
+    portLevelSettings('$parent.'),
+    tunnel('$parent.'),
   ],
 });

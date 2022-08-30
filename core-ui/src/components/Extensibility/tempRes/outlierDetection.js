@@ -5,7 +5,7 @@ export const outlierDetection = prefix => ({
   widget: 'Panel',
   children: [
     {
-      source: prefix + 'outlierDetection.splitExternalLocalOriginErrors',
+      source: '$parent.splitExternalLocalOriginErrors',
       name: 'splitExternalLocalOriginErrors',
       visibility: '$exists($.data)',
       widget: 'Badge',
@@ -15,38 +15,38 @@ export const outlierDetection = prefix => ({
       },
     },
     {
-      source: prefix + 'outlierDetection.consecutiveLocalOriginFailures',
+      source: '$parent.consecutiveLocalOriginFailures',
       name: 'consecutiveLocalOriginFailures',
       visibility: '$exists($.data)',
     },
     {
-      source: prefix + 'outlierDetection.consecutiveGatewayErrors',
+      source: '$parent.consecutiveGatewayErrors',
       name: 'consecutiveGatewayErrors',
       visibility: '$exists($.data)',
       type: 'number',
     },
     {
-      source: prefix + 'outlierDetection.consecutive5xxErrors',
+      source: '$parent.consecutive5xxErrors',
       name: 'consecutive5xxErrors',
       visibility: '$exists($.data)',
     },
     {
-      source: prefix + 'outlierDetection.interval',
+      source: '$parent.interval',
       name: 'interval',
       visibility: '$exists($.data)',
     },
     {
-      source: prefix + 'outlierDetection.baseEjectionTime',
+      source: '$parent.baseEjectionTime',
       name: 'baseEjectionTime',
       visibility: '$exists($.data)',
     },
     {
-      source: prefix + 'outlierDetection.maxEjectionPercent',
+      source: '$parent.maxEjectionPercent',
       name: 'maxEjectionPercent',
       visibility: '$exists($.data)',
     },
     {
-      source: prefix + 'outlierDetection.minHealthPercent',
+      source: '$parent.minHealthPercent',
       name: 'minHealthPercent',
       visibility: '$exists($.data)',
     },
