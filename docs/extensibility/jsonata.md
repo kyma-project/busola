@@ -16,7 +16,7 @@ This document describes how to use the preset JSONata functions.
 
 This function can be used to match Pods using a resource selector.
 
-### Item parameters
+### Function parameters
 
 - **item** - Pod to be used.
 - **selectorPath** - path to selector labels from `$root`.
