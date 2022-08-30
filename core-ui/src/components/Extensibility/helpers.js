@@ -1,10 +1,10 @@
 import React, { createContext, useContext } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import jsonata from 'jsonata';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { OrderedMap } from 'immutable';
 import { Link } from 'shared/components/Link/Link';
+import { jsonataWrapper } from './jsonataWrapper';
 import { last } from 'lodash';
 import { prettifyNamePlural } from 'shared/utils/helpers';
 
@@ -26,7 +26,7 @@ export const getValue = (resource, path) => {
 
 export const applyFormula = (value, formula, t, additionalSources) => {
   try {
-    const expression = jsonata(formula);
+    const expression = jsonataWrapper(formula);
     return expression.evaluate({ data: value, ...additionalSources });
   } catch (e) {
     return t('extensibility.configuration-error', { error: e.message });
@@ -116,15 +116,18 @@ export const getObjectValueWorkaround = (
   value,
 ) => {
   // TODO the value obtained by ui-schema is undefined for this component
-  if (schema.toJS().type === 'object') {
-    value = OrderedMap(
-      storeKeys.toArray().reduce((valueSoFar, currKey) => {
-        return valueSoFar?.[currKey];
-      }, resource),
-    );
+  try {
+    if (schema.toJS().type === 'object') {
+      value = OrderedMap(
+        storeKeys.toArray().reduce((valueSoFar, currKey) => {
+          return valueSoFar?.[currKey];
+        }, resource),
+      );
+    }
+    return value;
+  } catch {
+    return {};
   }
-
-  return value;
 };
 
 export const useCreateResourceDescription = descID => {

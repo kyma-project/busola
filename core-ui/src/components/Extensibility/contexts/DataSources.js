@@ -2,8 +2,8 @@ import pluralize from 'pluralize';
 import { createContext, useContext, useEffect, useRef } from 'react';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { useObjectState } from 'shared/useObjectState';
-import jsonata from 'jsonata';
 import * as jp from 'jsonpath';
+import { jsonataWrapper } from '../jsonataWrapper';
 
 const DataSourcesContext = createContext();
 
@@ -59,19 +59,22 @@ export function DataSourcesContextProvider({ children, dataSources }) {
       const relativeUrl = buildUrl(dataSource, resource);
       const response = await fetch({ relativeUrl });
       let data = await response.json();
-      const expression = jsonata(filter);
-      expression.assign('root', resource);
-      if (filter && data.items) {
-        data.items = data.items.filter(item => {
-          expression.assign('item', item);
-          return expression.evaluate();
-        });
-      } else if (filter) {
-        expression.assign('item', data);
-        if (!expression.evaluate()) {
-          data = null;
+      if (filter) {
+        const expression = jsonataWrapper(filter);
+        expression.assign('root', resource);
+        if (data.items) {
+          data.items = data.items.filter(item => {
+            expression.assign('item', item);
+            return expression.evaluate();
+          });
+        } else {
+          expression.assign('item', data);
+          if (!expression.evaluate()) {
+            data = null;
+          }
         }
       }
+
       if (!data.namespace) {
         data.namespace = dataSource.resource.namespace;
       }
