@@ -200,6 +200,7 @@ data:
   list: |-
     [
       { 
+        "name": "spec.selector",
         "source": "spec.selector",
         "widget": "Labels"
       },
