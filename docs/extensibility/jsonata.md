@@ -5,7 +5,7 @@
 - [Overview](#overview)
 - [Preset functions](#preset-functions)
   - [_matchByLabelSelector_](#matchbylabelselectoritem-selectorpath)
-  - [_compareStrings_](#comparestringsa-b)
+  - [_compareStrings_](#comparestringsfirst-second)
 
 ## Overview
 
