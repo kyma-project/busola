@@ -198,7 +198,6 @@ context('Test Pizzas', () => {
 
     cy.get('@form')
       .find('[data-testid="spec.recipeSecret"]:visible')
-      .find('input')
       .type(RECIPE);
 
     cy.get('@form').contains('Owner References');

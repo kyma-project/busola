@@ -1,6 +1,6 @@
 import React from 'react';
 import { isNil } from 'lodash';
-import jsonata from 'jsonata';
+import { jsonataWrapper } from '../jsonataWrapper';
 
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useGetPlaceholder } from 'components/Extensibility/helpers';
@@ -15,7 +15,7 @@ export function Badge({ value, structure, schema, ...props }) {
         return rule.includes(value);
       } else {
         try {
-          return jsonata(rule).evaluate({ data: value });
+          return jsonataWrapper(rule).evaluate({ data: value });
         } catch (e) {
           console.warn(`invalid rule: ${rule}`, e);
           return null;

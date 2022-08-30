@@ -426,6 +426,10 @@ input[type='checkbox'] {
   word-wrap: break-word;
 }
 
+.no-padding {
+  padding: 0 !important;
+}
+
 @include graph-node-border(pod, 4);
 @include graph-node-border(virtualservice, 1);
 @include graph-node-border(rolebinding, 2);

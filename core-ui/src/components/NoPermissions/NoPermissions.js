@@ -14,9 +14,8 @@ function decodeHTMLEncoded(str) {
 function NoPermissions() {
   const { t } = useTranslation();
   const [namespaceName, setNamespaceName] = useState('');
-  const {
-    currentCluster: { kubeconfig },
-  } = useMicrofrontendContext();
+  const context = useMicrofrontendContext();
+  const kubeconfig = context.currentCluster?.kubeconfig || {};
 
   let { error } = LuigiClient.getNodeParams();
   if (error) {
