@@ -16,6 +16,15 @@ data:
           "version": "v1",
         },
         "filter": "$matchByLabelSelector($item, $root.spec.selector)"
+      },
+      "relatedVirtualServices": {
+       "resource": {
+            "kind": "VirtualService",
+            "group": "networking.istio.io",
+            "version": "v1beta1",
+            "namespace": null
+        },
+        "filter": "$filter($item.spec.gateways, function($g){$substringBefore($g,'/') = $root.metadata.namespace and $substringAfter($g, '/') = $root.metadata.name}) "
       }
     }
   details: |
@@ -82,7 +91,14 @@ data:
             }
           ],
         }
-      ]
+      ],
+      "resourceGraph": {
+        "depth": 1,
+        "colorVariant": 1,
+        "dataSources": [
+          {"source": "relatedVirtualServices"}
+        ]
+      }
     }
   form: |-
     [

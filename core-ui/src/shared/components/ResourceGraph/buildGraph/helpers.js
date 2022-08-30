@@ -77,7 +77,7 @@ export function findRelatedResources(originalResourceKind, config) {
 
     for (const otherRelation of otherConfig.relations || []) {
       if (otherRelation.resource.kind === originalResourceKind) {
-        relations.push({ kind: otherKind });
+        relations.push(config[otherKind].resource);
       }
     }
   }
