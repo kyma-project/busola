@@ -21,6 +21,8 @@ import {
   getCurrentConfig,
   getCurrentContextNamespace,
 } from './cluster-management/cluster-management';
+//Luigi has to have defined the exact path with 'index'
+import { busolaOwnExtConfigs } from './customResources/index';
 
 let customResources = {};
 
@@ -109,19 +111,28 @@ export async function getCustomResources(authData) {
   const { features } = await getCurrentConfig();
   const clusterName = getActiveClusterName();
 
-  if (features.EXTENSIBILITY?.isEnabled) {
-    if (customResources[clusterName]) {
-      return customResources[clusterName];
-    }
-
-    customResources[clusterName] = Object.values({
-      ...(await loadBusolaClusterCRs()),
-      ...(await loadTargetClusterCRs(authData)),
-    });
-
+  if (customResources[clusterName]) {
     return customResources[clusterName];
   }
-  return [];
+
+  customResources[clusterName] = busolaOwnExtConfigs;
+
+  if (features.EXTENSIBILITY?.isEnabled) {
+    const clusterCustomResources = await loadBusolaClusterCRs();
+    const targetClusterCustomResources = await loadTargetClusterCRs(authData);
+
+    const additionalExtResources = Object.values({
+      ...clusterCustomResources,
+      ...targetClusterCustomResources,
+    });
+
+    customResources[clusterName] = [
+      ...customResources[clusterName],
+      ...additionalExtResources,
+    ];
+  }
+
+  return customResources[clusterName];
 }
 
 export async function getExtensibilitySchemas() {

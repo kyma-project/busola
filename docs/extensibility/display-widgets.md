@@ -256,14 +256,21 @@ Panel widgets render an object as a separate panel with its own title (based on 
 #### Example
 
 ```json
-{
-  "name": "details",
-  "widget": "Panel",
-  "children": [
-    { "source": "spec.value" },
-    { "source": "spec.other-value", "placeholder": "-" }
-  ]
-}
+[
+  {
+    "name": "details",
+    "widget": "Panel",
+    "children": [
+      { "source": "spec.value" },
+      { "source": "spec.other-value", "placeholder": "-" }
+    ]
+  },
+  {
+    "source": "spec",
+    "widget": "Panel",
+    "children": [{ "source": "$parent.entry1" }, { "source": "$parent.entry2" }]
+  }
+]
 ```
 
 <img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
