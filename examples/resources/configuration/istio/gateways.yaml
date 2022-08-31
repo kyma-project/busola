@@ -24,7 +24,7 @@ data:
             "version": "v1beta1",
             "namespace": null
         },
-        "filter": "$filter($item.spec.gateways, function($g){$substringBefore($g,'/') = $root.metadata.namespace and $substringAfter($g, '/') = $root.metadata.name}) "
+        "filter": "$filter($item.spec.gateways, function($g){$contains($g,'/') ? ($substringBefore($g,'/') = $root.metadata.namespace and $substringAfter($g, '/') = $root.metadata.name) : ($substringBefore($g, '.') = $root.metadata.name and $substringBefore($substringAfter($g, '.'), '.') = $root.metadata.namespace) }) "
       }
     }
   details: |
