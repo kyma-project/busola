@@ -24,7 +24,7 @@ This function can be used to match Pods using a resource selector.
 
 ### Example
 
-Example from dataSources
+Example from dataSources.
 
 ```json
 {
@@ -49,7 +49,7 @@ This function can be used to sort two strings alphabetically.
 
 ### Example
 
-Example from the ResourceList widget
+Example from the ResourceList widget.
 
 #### Examples
 
