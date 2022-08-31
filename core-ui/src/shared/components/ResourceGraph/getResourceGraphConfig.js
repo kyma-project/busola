@@ -79,6 +79,10 @@ export function getResourceGraphConfig(t, context, addStyle) {
                 .map(({ source }) => dataSources[source])
                 .filter(Boolean)
                 .map(relation => {
+                  if (!relation.filter) {
+                    return { ...relation, filter: () => true };
+                  }
+
                   const expression = jsonataWrapper(relation.filter);
                   const filter = (
                     originalResource,

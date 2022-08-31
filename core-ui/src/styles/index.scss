@@ -437,7 +437,6 @@ input[type='checkbox'] {
 @include graph-node-border(configmap, 5);
 @include graph-node-border(cronjob, 2);
 @include graph-node-border(function, 2);
-@include graph-node-border(gateway, 1, Light1);
 @include graph-node-border(horizontalpodautoscaler, 6);
 @include graph-node-border(job, 1);
 @include graph-node-border(oauth2client, 1);

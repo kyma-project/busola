@@ -77,7 +77,11 @@ export function findRelatedResources(originalResourceKind, config) {
 
     for (const otherRelation of otherConfig.relations || []) {
       if (otherRelation.resource.kind === originalResourceKind) {
-        relations.push({ kind: otherKind });
+        let otherResource = config[otherKind].resource;
+        if (otherRelation.resource.namespace !== undefined) {
+          otherResource.namespace = null;
+        }
+        relations.push(otherResource);
       }
     }
   }
