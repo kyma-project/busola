@@ -1,10 +1,22 @@
 import React from 'react';
 
-import { KeyValueField } from 'shared/ResourceForm/fields';
+import { KeyValueField, MultiInput } from 'shared/ResourceForm/fields';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
 import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
+import * as Inputs from 'shared/ResourceForm/inputs';
+
+const availableValueFields = {
+  text: Inputs.Text,
+  number: Inputs.Number,
+};
+
+const getValueComponent = schema => {
+  const valueFieldType = schema.get('valueType');
+  const valueField = availableValueFields[valueFieldType] || undefined;
+  return valueField;
+};
 
 export function KeyValuePairRenderer({
   storeKeys,
@@ -37,19 +49,22 @@ export function KeyValuePairRenderer({
     value = {};
   }
 
+  const setValue = value => {
+    onChange({
+      storeKeys,
+      scopes: ['value'],
+      type: 'set',
+      schema,
+      required,
+      data: { value: createOrderedMap(value) },
+    });
+  };
+
   return (
     <KeyValueField
       value={value}
-      setValue={value => {
-        onChange({
-          storeKeys,
-          scopes: ['value'],
-          type: 'set',
-          schema,
-          required,
-          data: { value: createOrderedMap(value) },
-        });
-      }}
+      setValue={setValue}
+      input={getValueComponent(schema)}
       title={titleTranslation}
       required={schemaRequired ?? required}
     />
