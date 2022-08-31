@@ -105,7 +105,7 @@ export const makeHandleRequest = () => {
 
       // change all 503 into 502
       const statusCode =
-        k8sResponse.statusCode !== 503 ? k8sResponse.statusCode : 502;
+        k8sResponse.statusCode === 503 ? 502 : k8sResponse.statusCode ;
 
       res.writeHead(statusCode, {
         'Content-Type': k8sResponse.headers['Content-Type'] || 'text/json',
