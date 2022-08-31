@@ -10,16 +10,16 @@ metadata:
 data:
   dataSources: |-
     {
-      "gateways":{
+      "relatedGateways":{
         "resource": {
           "kind": "Gateway",
           "group": "networking.istio.io",
           "version": "v1beta1",
           "namespace": null
         },
-        "filter": "$filter($root.spec.gateways, function($g){$substringBefore($g,'/') = $item.metadata.namespace and $substringAfter($g, '/') = $item.metadata.name}) "
+          "filter": "$filter($root.spec.gateways, function($g){$contains($g,'/') ? ($substringBefore($g,'/') = $item.metadata.namespace and $substringAfter($g, '/') = $item.metadata.name) : ($substringBefore($g, '.') = $item.metadata.name and $substringBefore($substringAfter($g, '.'), '.') = $item.metadata.namespace) }) "
       },
-      "services":{
+      "relatedServices":{
         "resource": {
           "kind": "Service",
           "version": "v1",
@@ -33,10 +33,10 @@ data:
       "resourceGraph":{
         "dataSources": [
           {
-            "source": "gateways"
+            "source": "relatedGateways"
           },
           {
-            "source": "services"
+            "source": "relatedServices"
           }
         ]
       },
@@ -53,8 +53,7 @@ data:
               "resource":{
                 "kind": "'Gateway'",
                 "name": "$contains(data,'/') ? $substringAfter(data, '/') : $substringBefore(data, '.')",
-                "namespace": "$contains(data,'/') ? $substringBefore(data, '/'): $split($substringAfter(data, '.'),'.')[0] "
-                # discuss that split -> default ns -> vs have gateways specified in a different way than in the Istio VS docs
+                "namespace": "$contains(data,'/') ? $substringBefore(data, '/'): $substringBefore($substringAfter(data, '.'), '.') "
               }
             }
             ]
