@@ -68,11 +68,9 @@ export function Widget({
   const { t } = useTranslation();
 
   const childValue = useJsonata(structure.source, originalResource, {
-    item: value,
     parent: value,
+    item: value,
   });
-
-  // console.log(34554, structure, childValue);
 
   const { visible, error: visibleCheckError } = shouldBeVisible(
     childValue,

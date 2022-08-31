@@ -1,45 +1,58 @@
 const localityLoadBalancer = {
   path: 'localityLbSetting',
+  name: 'Locality LB Settings',
   widget: 'FormGroup',
   children: [
-    { path: 'enabled', type: 'boolean' },
+    { path: 'enabled', name: 'Enabled', type: 'boolean' },
     //todo one of distribute // failover
     {
       path: 'distribute',
+      name: 'Distribute',
       widget: 'GenericList',
     },
     {
       path: 'distribute[].from',
+      name: 'From',
     },
     {
       path: 'distribute[].to',
+      name: 'To',
       widget: 'KeyValuePair',
       valueType: 'number',
     },
     {
       path: 'failover',
+      name: 'Failover',
       widget: 'GenericList',
     },
     {
       path: 'failover[].from',
+      name: 'From',
     },
     {
       path: 'failover[].to',
+      name: 'To',
     },
-    { path: 'failoverPriority', widget: 'SimpleList' },
+    {
+      path: 'failoverPriority',
+      name: 'Failover Priority',
+      widget: 'SimpleList',
+    },
   ],
 };
 
 const httpCookie = {
   path: 'httpCookie',
+  name: 'httpCookie',
   widget: 'FormGroup',
-  visibility: "$consistentHashSelector = 'httpCookie'",
+  // visibility: "$consistentHashSelector = 'httpCookie'",
   children: [{ path: 'name' }, { path: 'path' }, { path: 'ttl' }],
 };
 
 const consistentHash = {
   widget: 'FormGroup',
   path: 'consistentHash',
+  name: 'Consistent Hash',
   // visibility: "$loadBalancerSelector = 'consistentHash'"
   children: [
     // TODO
@@ -56,19 +69,23 @@ const consistentHash = {
     // },
     {
       path: 'httpHeaderName',
-      visibility: "$consistentHashSelector = 'httpHeaderName'",
+      name: 'HTTP Header Name',
+      // visibility: "$consistentHashSelector = 'httpHeaderName'",
     },
     httpCookie,
     {
       path: 'useSourceIp',
-      visibility: "$consistentHashSelector = 'useSourceIp'",
+      name: 'Use Source IP',
+      // visibility: "$consistentHashSelector = 'useSourceIp'",
     },
     {
       path: 'httpQueryParameterName',
-      visibility: "$consistentHashSelector = 'httpQueryParameterName'",
+      name: 'HTTP Query Parameter Name',
+      // visibility: "$consistentHashSelector = 'httpQueryParameterName'",
     },
     {
       path: 'minimumRingSize',
+      name: 'Minimum Ring Size',
     },
   ],
 };
@@ -76,6 +93,7 @@ const consistentHash = {
 export const loadBalancer = {
   widget: 'FormGroup',
   path: 'loadBalancer',
+  name: 'Load Balancer',
   children: [
     //TODO simple or consistnetHash
     // {
@@ -89,12 +107,14 @@ export const loadBalancer = {
     // },
     {
       path: 'simple',
+      name: 'Simple',
       // visibility: "$loadBalancerSelector = 'simple'"
     },
     consistentHash,
     localityLoadBalancer,
     {
       path: 'warmupDurationSecs', //this is in the docs but not in the schema
+      name: 'Warmup Duration Secs', //this is in the docs but not in the schema
     },
   ],
 };

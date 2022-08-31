@@ -13,6 +13,11 @@ const consistentHash = {
       source: '$parent.useSourceIp',
       name: 'useSourceIp',
       visibility: '$exists($.data)',
+      widget: 'Badge',
+      highlights: {
+        positive: ['true'],
+        negative: ['false'],
+      },
     },
     {
       source: '$parent.httpQueryParameterName',
@@ -56,6 +61,7 @@ export const loadBalancer = prefix => ({
       source: '$parent.simple',
       name: 'simple',
       visibility: '$exists($.data)',
+      widget: 'Badge',
     },
     {
       source: '$parent.warmupDurationSecs',
@@ -72,6 +78,11 @@ export const loadBalancer = prefix => ({
         {
           name: 'enabled',
           source: '$parent.enabled',
+          widget: 'Badge',
+          highlights: {
+            positive: ['true'],
+            negative: ['false'],
+          },
         },
         {
           widget: 'Table',

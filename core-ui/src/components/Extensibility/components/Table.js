@@ -54,7 +54,7 @@ export function Table({ value, structure, schema, disableMargin, ...props }) {
               value={entry}
               structure={child}
               schema={schema}
-              // inlineRenderer={InlineWidget}
+              inlineRenderer={InlineWidget}
               {...props}
             />
           ))}

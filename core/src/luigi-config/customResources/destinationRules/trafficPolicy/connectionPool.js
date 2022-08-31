@@ -1,11 +1,13 @@
 const tcpKeepAlive = {
   path: 'tcpKeepalive',
+  name: 'TCP Keep Alive',
   widget: 'FormGroup',
   children: [{ path: 'probes' }, { path: 'time' }, { path: 'interval' }],
 };
 
 const tcp = {
   path: 'tcp',
+  name: 'TCP',
   widget: 'FormGroup',
   children: [
     { path: 'maxConnections' },
@@ -16,20 +18,22 @@ const tcp = {
 
 const http = {
   path: 'http',
+  name: 'HTTP',
   widget: 'FormGroup',
   children: [
-    { path: 'http1MaxPendingRequests' },
-    { path: 'http2MaxRequests' },
-    { path: 'maxRequestsPerConnection' },
-    { path: 'maxRetries' },
-    { path: 'idleTimeout' },
-    { path: 'h2UpgradePolicy' },
-    { path: 'useClientProtocol' },
+    { path: 'http1MaxPendingRequests', name: 'HTTP1 Max Pending Requests' },
+    { path: 'http2MaxRequests', name: 'HTTP2 Max Requests' },
+    { path: 'maxRequestsPerConnection', name: 'Max Requests Per Connection' },
+    { path: 'maxRetries', name: 'Max Retries' },
+    { path: 'idleTimeout', name: 'Idle Timeout' },
+    { path: 'h2UpgradePolicy', name: 'H2 Upgrade Policy' },
+    { path: 'useClientProtocol', name: 'Use Client Protocol' },
   ],
 };
 
 export const connectionPool = {
   path: 'connectionPool',
+  name: 'Connection Pool',
   widget: 'FormGroup',
   children: [tcp, http],
 };
