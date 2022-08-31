@@ -1,17 +1,17 @@
 const consistentHash = {
   source: '$parent.consistentHash',
-  name: 'consistentHash',
+  name: 'Consistent Hash',
   visibility: '$exists($.data)',
   widget: 'Panel',
   children: [
     {
       source: '$parent.httpHeaderName',
-      name: 'httpHeaderName',
+      name: 'HTTP Header Name',
       visibility: '$exists($.data)',
     },
     {
       source: '$parent.useSourceIp',
-      name: 'useSourceIp',
+      name: 'Use Source IP',
       visibility: '$exists($.data)',
       widget: 'Badge',
       highlights: {
@@ -21,31 +21,31 @@ const consistentHash = {
     },
     {
       source: '$parent.httpQueryParameterName',
-      name: 'httpQueryParameterName',
+      name: 'HTTP Query Parameter Name',
       visibility: '$exists($.data)',
     },
     {
       source: '$parent.minimumRingSize',
-      name: 'minimumRingSize',
+      name: 'Minimum Ring Size',
       visibility: '$exists($.data)',
     },
     {
       source: '$parent.httpCookie',
-      name: 'httpCookie',
+      name: 'HTTP Cookie',
       visibility: '$exists($.data)',
       widget: 'Panel',
       children: [
         {
           source: '$parent.name',
-          name: 'name',
+          name: 'Name',
         },
         {
           source: '$parent.path',
-          name: 'path',
+          name: 'Path',
         },
         {
           source: '$parent.ttl',
-          name: 'ttl',
+          name: 'TTL',
         },
       ],
     },
@@ -53,30 +53,30 @@ const consistentHash = {
 };
 export const loadBalancer = prefix => ({
   source: prefix + 'loadBalancer',
-  name: 'loadBalancer',
+  name: 'Load Balancer',
   visibility: '$exists($.data)',
   widget: 'Panel',
   children: [
     {
       source: '$parent.simple',
-      name: 'simple',
+      name: 'Simple',
       visibility: '$exists($.data)',
       widget: 'Badge',
     },
     {
       source: '$parent.warmupDurationSecs',
-      name: 'warmupDurationSecs',
+      name: 'Warmup Duration Secs',
       visibility: '$exists($.data)',
     },
     consistentHash,
     {
       source: '$parent.localityLbSetting',
-      name: 'localityLbSetting',
+      name: 'Locality LB Settings',
       visibility: '$exists($.data)',
       widget: 'Panel',
       children: [
         {
-          name: 'enabled',
+          name: 'Enabled',
           source: '$parent.enabled',
           widget: 'Badge',
           highlights: {
@@ -86,26 +86,26 @@ export const loadBalancer = prefix => ({
         },
         {
           widget: 'Table',
-          name: 'localityLbSetting.distribute',
+          name: 'Distribute',
           visibility: '$count(data)',
           source: '$parent.distribute',
           children: [
-            { source: '$item.from', name: 'from' },
-            { source: '$item.to', name: 'to', widget: 'Labels' },
+            { source: '$item.from', name: 'From' },
+            { source: '$item.to', name: 'To', widget: 'Labels' },
           ],
         },
         {
           widget: 'Table',
-          name: 'localityLbSetting.failover',
+          name: 'Failover',
           visibility: '$count(data)',
           source: '$parent.failover',
           children: [
-            { source: '$item.from', name: 'from' },
-            { source: '$item.to', name: 'to' },
+            { source: '$item.from', name: 'From' },
+            { source: '$item.to', name: 'To' },
           ],
         },
         {
-          name: 'localityLbSetting.failoverPriority',
+          name: 'Failover Priority',
           source: '$parent.failoverPriority',
           widget: 'JoinedArray',
           visibility: '$count(data)',

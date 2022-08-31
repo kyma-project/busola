@@ -5,9 +5,10 @@ import { tlsGenericListSyntax } from './tls';
 
 export const portLevelSettings = {
   path: 'portLevelSettings',
+  name: 'Port Level Settings',
   widget: 'GenericList',
   children: [
-    { path: '[].port.number' },
+    { path: '[].port.number', name: 'Port Number' },
     loadBalancerGenericListSyntax,
     connectionPoolGenericListSyntax,
     outlierDetectionGenericListSyntax,

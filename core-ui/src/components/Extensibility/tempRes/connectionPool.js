@@ -1,42 +1,42 @@
 export const connectionPool = prefix => ({
   source: prefix + 'connectionPool',
-  name: 'connectionPool',
+  name: 'Connection Pool',
   visibility: '$exists($.data)',
   widget: 'Panel',
   children: [
     {
       source: '$parent.tcp',
-      name: 'connectionPool.tcp',
+      name: 'TCP',
       visibility: '$exists($.data)',
       widget: 'Panel',
       children: [
         {
           source: '$parent.maxConnections',
-          name: 'maxConnections',
+          name: 'Max Connections',
           visibility: '$exists($.data)',
         },
         {
           source: '$parent.connectTimeout',
-          name: 'connectTimeout',
+          name: 'Connect Timeout',
           visibility: '$exists($.data)',
         },
         {
           source: '$parent.tcpKeepalive',
-          name: 'tcpKeepalive',
+          name: 'TCP Keep Alive',
           visibility: '$exists($.data)',
           widget: 'Panel',
           children: [
             {
               source: '$parent.probes',
-              name: 'tcpKeepalive.probes',
+              name: 'Probes',
             },
             {
               source: '$parent.time',
-              name: 'tcpKeepalive.time',
+              name: 'Time',
             },
             {
               source: '$parent.interval',
-              name: 'tcpKeepalive.interval',
+              name: 'Interval',
             },
           ],
         },
@@ -44,44 +44,44 @@ export const connectionPool = prefix => ({
     },
     {
       source: '$parent.http',
-      name: 'connectionPool.http',
+      name: 'HTTP',
       visibility: '$exists($.data)',
       widget: 'Panel',
       children: [
         {
           source: '$parent.http1MaxPendingRequests',
-          name: 'http1MaxPendingRequests',
+          name: 'HTTP1 Max Pending Requests',
           visibility: '$exists($.data)',
         },
         {
           source: '$parent.http2MaxRequests',
-          name: 'http2MaxRequests',
+          name: 'HTTP2 Max Requests',
           visibility: '$exists($.data)',
         },
         {
           source: '$parent.maxRequestsPerConnection',
-          name: 'maxRequestsPerConnection',
+          name: 'Max Requests Per Connection',
           visibility: '$exists($.data)',
         },
         {
           source: '$parent.maxRetries',
-          name: 'maxRetries',
+          name: 'Max Retries',
           visibility: '$exists($.data)',
         },
         {
           source: '$parent.idleTimeout',
-          name: 'idleTimeout',
+          name: 'Idle Timeout',
           visibility: '$exists($.data)',
         },
         {
           source: '$parent.h2UpgradePolicy',
-          name: 'h2UpgradePolicy',
+          name: 'H2 Upgrade Policy',
           visibility: '$exists($.data)',
           widget: 'Badge',
         },
         {
           source: '$parent.useClientProtocol',
-          name: 'useClientProtocol',
+          name: 'Use Client Protocol',
           visibility: '$exists($.data)',
           widget: 'Badge',
           highlights: {

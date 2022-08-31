@@ -1,33 +1,36 @@
 export const translations = {
   en: {
+    // default
     'metadata.annotations': 'Annotations',
     'metadata.labels': 'Labels',
     'metadata.creationTimestamp': 'Created at',
+    // desc
     'resource.description':
       '{{[Destination Rule](https://istio.io/latest/docs/reference/config/networking/destination-rule)}} specifies rules that apply to traffic intended for a service after routing.',
-    references: 'References',
-    'spec.exportTo': 'Exported To Namespaces',
-    'spec.host': 'Host',
-    'spec.trafficPolicy': 'Traffic Policy dd',
-    'spec.subsets': 'Subsets',
-    'spec.workloadSelector': 'Workload Selector',
-    'spec.trafficPolicy.connectionPool.tcp': 'TcP',
+    // top level
+    References: 'References',
     probes: 'Probes',
+    'Export To': 'Export To',
+    'Workload Selector / Match Labels': 'Workload Selector / Match Labels',
+    // occurs more than once
+    'Traffic Policy': 'Traffic Policy',
+    Interval: 'Interval',
+    Name: 'Name',
     time: 'Time',
     interval: 'Interval',
-    //
-    //
-    //
-    //
-    //common
+    Host: 'Host',
     // connection pool
+    'Connection Pool': 'Connection Pool',
     'TCP Keep Alive': 'TCP Keep Alive',
+    Probes: 'Probes',
+    Time: 'Time',
     TCP: 'TCP',
     HTTP: 'HTTP',
     'HTTP1 Max Pending Requests': 'HTTP1 Max Pending Requests',
+    'Max Connections': 'Max Connections',
+    'Connect Timeout': 'Connect Timeout',
     'HTTP2 Max Requests': 'HTTP2 Max Requests',
     'Max Requests Per Connection': 'Max Requests Per Connection',
-    'Connection Pool': 'Connection Pool',
     'Max Retries': 'Max Retries',
     'Idle Timeout': 'Idle Timeout',
     'H2 Upgrade Policy': 'H2 Upgrade Policy',
@@ -40,7 +43,9 @@ export const translations = {
     To: 'To',
     Failover: 'Failover',
     'Failover Priority': 'Failover Priority',
-    httpCookie: 'HTTP Cookie',
+    'HTTP Cookie': 'HTTP Cookie',
+    Path: 'Path',
+    TTL: 'TTL',
     'Consistent Hash': 'Consistent Hash',
     'HTTP Header Name': 'HTTP Header Name',
     'Use Source IP': 'Use Source IP',
@@ -54,8 +59,29 @@ export const translations = {
     'Consecutive Local Origin Failures': 'Consecutive Local Origin Failures',
     'Consecutive Gateway Errors': 'Consecutive Gateway Errors',
     'Consecutive 5xx Errors': 'Consecutive 5xx Errors',
-    Interval: 'Interval',
     'Base Ejection Time': 'Base Ejection Time',
     'Max Ejection Percent': 'Max Ejection Percent',
+    'Min Health Percent': 'Min Health Percent',
+    // port level settings
+    'Port Level Settings': 'Port Level Settings',
+    'Port Number': 'Port Number',
+    // tls
+    TLS: 'TLS',
+    Mode: 'Mode',
+    'Client Certificate': 'Client Certificate',
+    'Private Key': 'Private Key',
+    'CA Certificates': 'CA Certificates',
+    'Credential Name': 'Credential Name',
+    'Subject Alt Names': 'Subject Alt Names',
+    SNI: 'SNI',
+    'Insecure Skip Verify': 'Insecure Skip Verify',
+    //tunnel
+    Tunnel: 'Tunnel',
+    Protocol: 'Protocol',
+    'Target Host': 'Target Host',
+    'Target Port': 'Target Port',
+    //subsets
+    Subsets: 'Subsets',
+    Labels: 'Labels',
   },
 };

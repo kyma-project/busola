@@ -2,7 +2,11 @@ const tcpKeepAlive = {
   path: 'tcpKeepalive',
   name: 'TCP Keep Alive',
   widget: 'FormGroup',
-  children: [{ path: 'probes' }, { path: 'time' }, { path: 'interval' }],
+  children: [
+    { path: 'probes', name: 'Probes' },
+    { path: 'time', name: 'Time' },
+    { path: 'interval', name: 'Interval' },
+  ],
 };
 
 const tcp = {
@@ -10,8 +14,8 @@ const tcp = {
   name: 'TCP',
   widget: 'FormGroup',
   children: [
-    { path: 'maxConnections' },
-    { path: 'connectTimeout' },
+    { path: 'maxConnections', name: 'Max Connections' },
+    { path: 'connectTimeout', name: 'Connect Timeout' },
     tcpKeepAlive,
   ],
 };

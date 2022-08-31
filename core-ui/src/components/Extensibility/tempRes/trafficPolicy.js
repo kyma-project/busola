@@ -7,7 +7,7 @@ import { tunnel } from 'components/Extensibility/tempRes/tunnel';
 
 export const trafficPolicy = prefix => ({
   source: prefix + 'trafficPolicy',
-  name: 'trafficPolicy',
+  name: 'Traffic Policy',
   visibility: '$exists($.data)',
   widget: 'Panel',
   children: [

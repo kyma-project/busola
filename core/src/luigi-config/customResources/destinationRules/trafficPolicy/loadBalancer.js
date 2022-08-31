@@ -43,10 +43,14 @@ const localityLoadBalancer = {
 
 const httpCookie = {
   path: 'httpCookie',
-  name: 'httpCookie',
+  name: 'HTTP Cookie',
   widget: 'FormGroup',
   // visibility: "$consistentHashSelector = 'httpCookie'",
-  children: [{ path: 'name' }, { path: 'path' }, { path: 'ttl' }],
+  children: [
+    { path: 'name', name: 'Name' },
+    { path: 'path', name: 'Path' },
+    { path: 'ttl', name: 'TTL' },
+  ],
 };
 
 const consistentHash = {

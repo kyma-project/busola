@@ -5,7 +5,7 @@ export const tempDetails = {
   header: [],
   body: [
     {
-      name: 'references',
+      name: 'References',
       widget: 'Panel',
       children: [
         {
@@ -15,13 +15,13 @@ export const tempDetails = {
         {
           source: 'spec.exportTo',
           widget: 'Labels',
-          name: 'exportTo',
+          name: 'Export To',
           visibility: '$count(data)',
         },
         {
-          source: 'spec.matchLabels',
+          source: 'spec.workloadSelector.matchLabels',
           widget: 'Labels',
-          name: 'matchLabels',
+          name: 'Workload Selector / Match Labels',
           visibility: '$count(data)',
         },
       ],

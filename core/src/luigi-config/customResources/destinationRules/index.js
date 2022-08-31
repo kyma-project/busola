@@ -6,7 +6,7 @@ export const destinationRules = {
     header: [],
     body: [
       {
-        name: 'references',
+        name: 'References',
         widget: 'Panel',
         children: [
           {
@@ -43,16 +43,22 @@ export const destinationRules = {
     {
       simple: true,
       path: 'spec.host',
+      name: 'Host',
     },
     {
       widget: 'FormGroup',
       simple: true,
       path: 'spec.trafficPolicy',
+      name: 'Traffic Policy',
       children: trafficPolicyBundle,
     },
     subsets,
-    { path: 'spec.exportTo', widget: 'SimpleList' },
-    { path: 'spec.workloadSelector', widget: 'KeyValuePair' },
+    { path: 'spec.exportTo', name: 'Export To', widget: 'SimpleList' },
+    {
+      path: 'spec.workloadSelector.matchLabels',
+      name: 'Workload Selector / Match Labels',
+      widget: 'KeyValuePair',
+    },
   ],
   general: {
     resource: {
@@ -84,7 +90,6 @@ export const destinationRules = {
       'spec.host': 'Host',
       'spec.trafficPolicy': 'Traffic Policy',
       'spec.subsets': 'Subsets',
-      'spec.workloadSelector': 'Workload Selector',
     },
   },
 };
