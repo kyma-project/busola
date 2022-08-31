@@ -138,3 +138,9 @@ data:
       "name": "Custom Services",
       "category": "Examples",
     }
+  translations: |-
+    {
+      "en": {
+        "Cluster IP": "Cluster IP override"
+      }
+    }
