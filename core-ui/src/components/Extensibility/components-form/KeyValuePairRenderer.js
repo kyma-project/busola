@@ -8,7 +8,7 @@ import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
 const availableValueFields = {
-  text: Inputs.Text,
+  string: Inputs.Text,
   number: Inputs.Number,
 };
 

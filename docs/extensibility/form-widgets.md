@@ -145,7 +145,7 @@ Complex widgets handle more advanced data structures such as arrays or objects.
 
 ### KeyValuePair
 
-KeyValuePair widgets render an `object` value as a list of dual text fields. One is used for a key and the other for a value, allowing for adding and removing entries.
+KeyValuePair widgets render an `object` value as a list of key (`string`) and value (`string|number`) fields. One is used for a key and the other for a value, allowing for adding and removing entries.
 
 #### Example
 
@@ -161,6 +161,7 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 #### Widget-specific parameters
 
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
+- **valueType** - `string` or `number`, the default value is `string`, determines what input field is used for the value fields.
 
 ### ResourceRefs
 
