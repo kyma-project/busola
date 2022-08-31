@@ -112,6 +112,7 @@ export async function getCustomResources(authData) {
   if (customResources[clusterName]) {
     return customResources[clusterName];
   }
+
   customResources[clusterName] = busolaOwnExtConfigs;
 
   if (features.EXTENSIBILITY?.isEnabled) {

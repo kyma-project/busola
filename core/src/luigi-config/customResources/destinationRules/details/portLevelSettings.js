@@ -1,8 +1,8 @@
-import { loadBalancer } from 'components/Extensibility/tempRes/loadBalancer';
-import { connectionPool } from 'components/Extensibility/tempRes/connectionPool';
-import { outlierDetection } from 'components/Extensibility/tempRes/outlierDetection';
-import { tls } from 'components/Extensibility/tempRes/tls';
-import { tunnel } from 'components/Extensibility/tempRes/tunnel';
+import { loadBalancer } from './loadBalancer';
+import { connectionPool } from './connectionPool';
+import { outlierDetection } from './outlierDetection';
+import { tls } from './tls';
+import { tunnel } from './tunnel';
 
 export const portLevelSettings = () => ({
   source: '$parent.portLevelSettings',

@@ -1,4 +1,4 @@
-import { trafficPolicy } from 'components/Extensibility/tempRes/trafficPolicy';
+import { trafficPolicy } from './trafficPolicy';
 
 export const subsets = prefix => ({
   source: prefix + 'subsets',

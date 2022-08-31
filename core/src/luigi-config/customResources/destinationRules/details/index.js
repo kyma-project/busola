@@ -1,7 +1,7 @@
 import { trafficPolicy } from './trafficPolicy';
-import { subsets } from 'components/Extensibility/tempRes/subsets';
+import { subsets } from './subsets';
 
-export const tempDetails = {
+export const details = {
   header: [],
   body: [
     {
