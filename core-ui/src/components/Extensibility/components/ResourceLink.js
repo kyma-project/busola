@@ -44,6 +44,7 @@ export function ResourceLink({ value, structure, originalResource }) {
       error: linkDataError.message,
     });
   }
+
   const linkContent = tExt(structure.linkText, {
     data: value,
     root: originalResource,
