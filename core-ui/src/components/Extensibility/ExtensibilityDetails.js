@@ -9,15 +9,14 @@ import { useGetCRbyPath } from './useGetCRbyPath';
 import { shouldBeVisible, Widget } from './components/Widget';
 import { useGetTranslation, TranslationBundleContext } from './helpers';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
-import { DataSourcesContextProvider } from './contexts/DataSources';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
+import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useGetSchema } from 'hooks/useGetSchema';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   // const { extensibilitySchemas } = useMicrofrontendContext();
   const { t, widgetT, exists } = useGetTranslation();
   const { urlPath, resource } = resMetaData?.general ?? {};
-
   const { schema } = useGetSchema({
     resource,
   });

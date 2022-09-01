@@ -3,8 +3,8 @@ import pluralize from 'pluralize';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
-
-import { Widget } from './Widget';
+import { sortBy, useGetTranslation } from '../helpers';
+import { getChildrenInfo } from './helpers';
 
 export function ResourceList({
   value,
@@ -14,6 +14,8 @@ export function ResourceList({
   schema,
   ...props
 }) {
+  const { t } = useGetTranslation();
+
   const kind = (value?.kind ?? '').replace(/List$/, '');
   const pluralKind = pluralize(kind || '')?.toLowerCase();
   const namespace = value?.namespace;
@@ -24,17 +26,15 @@ export function ResourceList({
   const PredefinedRenderer = resources.find(
     r => r.resourceType.toLowerCase() === pluralKind,
   );
+
   const ListRenderer = PredefinedRenderer
     ? PredefinedRenderer.List
     : ResourcesList;
 
-  let columns;
-  if (Array.isArray(structure.children)) {
-    columns = structure.children.map(({ name, ...props }) => ({
-      header: name,
-      value: value => <Widget value={value} structure={props} />,
-    }));
-  }
+  const { children, sortOptions, defaultSort } = getChildrenInfo(
+    structure,
+    originalResource,
+  );
 
   // make sure "kind" is present on resources
   if (Array.isArray(value?.items)) {
@@ -58,7 +58,10 @@ export function ResourceList({
       fixedPath={true}
       {...structure}
       {...props}
-      columns={columns}
+      columns={children}
+      sortBy={defaultSortOptions =>
+        sortBy(sortOptions, t, defaultSort ? defaultSortOptions : {})
+      }
     />
   );
 }

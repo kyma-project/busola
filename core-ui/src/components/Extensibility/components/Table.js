@@ -4,7 +4,7 @@ import { isNil } from 'lodash';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import { useGetTranslation } from '../helpers';
+import { sortBy, useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 
 import './Table.scss';
@@ -28,9 +28,17 @@ const handleTableValue = (value, t) => {
   }
 };
 
-export function Table({ value, structure, schema, disableMargin, ...props }) {
+export function Table({
+  value,
+  structure,
+  disableMargin,
+  schema,
+  originalResource,
+  ...props
+}) {
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
+
   const coreHeaders = (structure.children || []).map(({ name }) => tExt(name));
   const headerRenderer = () =>
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
@@ -62,6 +70,8 @@ export function Table({ value, structure, schema, disableMargin, ...props }) {
     };
   };
 
+  const sortOptions = (structure?.children || []).filter(child => child.sort);
+
   const className = `extensibility-table ${
     disableMargin ? 'fd-margin--xs' : ''
   }`;
@@ -70,13 +80,12 @@ export function Table({ value, structure, schema, disableMargin, ...props }) {
     <GenericList
       className={className}
       title={tExt(structure.name, {
-        defaultValue: tExt(structure.path, {
-          defaultValue: structure.name,
-        }),
+        defaultValue: structure.name || structure.source,
       })}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       {...handleTableValue(value, t)}
+      sortBy={() => sortBy(sortOptions, tExt, {}, originalResource)}
       searchSettings={{ showSearchSuggestion: false }}
     />
   );
