@@ -85,7 +85,7 @@ export function ExtensibilityCreate({
       simpleRules: prepareSchemaRules(
         fullSchemaRules.filter(item => item.simple ?? false),
       ),
-      advancedRues: prepareSchemaRules(
+      advancedRules: prepareSchemaRules(
         fullSchemaRules.filter(item => item.advanced ?? true),
       ),
     };
