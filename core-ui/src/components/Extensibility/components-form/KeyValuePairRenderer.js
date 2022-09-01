@@ -1,21 +1,62 @@
 import React from 'react';
 
-import { KeyValueField, MultiInput } from 'shared/ResourceForm/fields';
+import { KeyValueField } from 'shared/ResourceForm/fields';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
 import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
 import * as Inputs from 'shared/ResourceForm/inputs';
+import { Dropdown } from 'shared/ResourceForm/inputs';
 
-const availableValueFields = {
-  text: Inputs.Text,
-  number: Inputs.Number,
+const getEnumComponent = (
+  enumValues,
+  isKeyInput = true,
+  input = Inputs.Text,
+) => {
+  if (!Array.isArray(enumValues)) return input;
+
+  const options = enumValues.map(opt => ({ key: opt, text: opt }));
+  return ({ onChange, setValue, onBlur, value, ...props }) => (
+    <Dropdown
+      {...props}
+      value={value}
+      options={options}
+      setValue={v => {
+        isKeyInput
+          ? onChange({
+              target: {
+                value: v,
+              },
+            })
+          : setValue(v);
+        onBlur();
+      }}
+    />
+  );
 };
 
-const getValueComponent = schema => {
-  const valueFieldType = schema.get('valueType');
-  const valueField = availableValueFields[valueFieldType] || undefined;
-  return valueField;
+const getValueComponent = valueInfo => {
+  const { type, keyEnum: valuKeyEnum, valueEnum } = valueInfo || {};
+
+  switch (type) {
+    case 'number':
+      return getEnumComponent(valueEnum, false, Inputs.Number);
+    case 'object':
+      return ({ setValue, value }) => (
+        <KeyValueField
+          value={value}
+          setValue={v => {
+            setValue(v);
+          }}
+          input={{
+            key: getEnumComponent(valuKeyEnum),
+            value: getEnumComponent(valueEnum, false),
+          }}
+        />
+      );
+    default:
+      return getEnumComponent(valueEnum, false);
+  }
 };
 
 export function KeyValuePairRenderer({
@@ -35,6 +76,7 @@ export function KeyValuePairRenderer({
   let titleTranslation = '';
   const path = storeKeys.toArray().join('.');
   const schemaRequired = schema.get('required');
+  const valueInfo = schema.get('value') || {};
 
   if (tFromStoreKeys(storeKeys, schema) !== path)
     titleTranslation = tFromStoreKeys(storeKeys, schema);
@@ -49,24 +91,26 @@ export function KeyValuePairRenderer({
     value = {};
   }
 
-  const setValue = value => {
-    onChange({
-      storeKeys,
-      scopes: ['value'],
-      type: 'set',
-      schema,
-      required,
-      data: { value: createOrderedMap(value) },
-    });
-  };
-
   return (
     <KeyValueField
       value={value}
-      setValue={setValue}
-      input={getValueComponent(schema)}
+      setValue={value => {
+        onChange({
+          storeKeys,
+          scopes: ['value'],
+          type: 'set',
+          schema,
+          required,
+          data: { value: createOrderedMap(value) },
+        });
+      }}
+      input={{
+        value: getValueComponent(valueInfo),
+        key: getEnumComponent(schema.get('keyEnum')),
+      }}
       title={titleTranslation}
       required={schemaRequired ?? required}
+      initialValue={valueInfo.type === 'object' ? {} : ''}
     />
   );
 }

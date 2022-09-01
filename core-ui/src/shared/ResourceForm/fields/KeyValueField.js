@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormInput, Button } from 'fundamental-react';
+import { Button } from 'fundamental-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { useTranslation } from 'react-i18next';
 
@@ -8,15 +8,18 @@ import { base64Decode, base64Encode, readFromFile } from 'shared/helpers';
 import { MultiInput } from './MultiInput';
 import * as Inputs from '../inputs';
 
+import './KeyValuePair.scss';
+
 export function KeyValueField({
   actions = [],
   encodable = false,
   defaultOpen,
   isAdvanced,
-  input = Inputs.Text,
+  input = {},
   keyProps = {
     pattern: '([A-Za-z0-9][-A-Za-z0-9_./]*)?[A-Za-z0-9]',
   },
+  initialValue = '',
   readableFromFile = false,
   lockedKeys = [],
   lockedValues = [],
@@ -24,9 +27,13 @@ export function KeyValueField({
   ...props
 }) {
   const { t } = useTranslation();
-
   const [valuesEncoded, setValuesEncoded] = useState(false);
   const [decodeErrors, setDecodeErrors] = useState({});
+  input = {
+    key: Inputs.Text,
+    value: Inputs.Text,
+    ...input,
+  };
 
   const toggleEncoding = () => {
     setDecodeErrors({});
@@ -35,7 +42,7 @@ export function KeyValueField({
 
   const dataValue = value => {
     if (!encodable || valuesEncoded) {
-      return value?.val || '';
+      return value?.val || initialValue;
     } else {
       try {
         return base64Decode(value?.val || '');
@@ -77,24 +84,25 @@ export function KeyValueField({
           .reduce((acc, entry) => ({ ...acc, [entry.key]: entry.val }), {})
       }
       inputs={[
-        ({ value, setValue, ref, updateValue, focus }) => (
-          <FormInput
-            compact
-            disabled={lockedKeys.includes(value?.key)}
-            key="key"
-            value={value?.key || ''}
-            ref={ref}
-            onChange={e =>
-              setValue({ val: value?.val || '', key: e.target.value })
-            }
-            onKeyDown={e => focus(e, 1)}
-            onBlur={updateValue}
-            {...keyProps}
-            placeholder={t('components.key-value-field.enter-key')}
-          />
-        ),
+        ({ value, setValue, ref, updateValue, focus }) =>
+          input.key({
+            disabled: lockedKeys.includes(value?.key),
+            key: 'key',
+            value: value?.key || '',
+            ref: ref,
+            onChange: e =>
+              setValue({
+                val: value?.val || initialValue,
+                key: e.target.value,
+              }),
+            onKeyDown: e => focus(e, 1),
+            onBlur: updateValue,
+            placeholder: t('components.key-value-field.enter-key'),
+            ...keyProps,
+          }),
         ({ focus, value, setValue, updateValue, ...props }) =>
-          input({
+          input.value({
+            className: 'value-input',
             key: 'value',
             onKeyDown: e => focus(e),
             value: dataValue(value),
