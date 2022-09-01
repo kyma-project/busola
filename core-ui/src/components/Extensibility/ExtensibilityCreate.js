@@ -73,22 +73,23 @@ export function ExtensibilityCreate({
     resource: api,
   });
 
-  const fullSchemaRules = [
-    { path: 'metadata.name', simple: true },
-    { path: 'metadata.labels' },
-    { path: 'metadata.annotations' },
-    ...(createResource?.form ?? []),
-  ];
-  const simpleRules = useMemo(() => {
-    return prepareSchemaRules(
-      fullSchemaRules.filter(item => item.simple ?? false),
-    );
+  const { simpleRules, advancedRules } = useMemo(() => {
+    const fullSchemaRules = [
+      { path: 'metadata.name', simple: true },
+      { path: 'metadata.labels' },
+      { path: 'metadata.annotations' },
+      ...(createResource?.form ?? []),
+    ];
+
+    return {
+      simpleRules: prepareSchemaRules(
+        fullSchemaRules.filter(item => item.simple ?? false),
+      ),
+      advancedRues: prepareSchemaRules(
+        fullSchemaRules.filter(item => item.advanced ?? true),
+      ),
+    };
   }, [createResource]);
-  const advancedRules = useMemo(
-    () =>
-      prepareSchemaRules(fullSchemaRules.filter(item => item.advanced ?? true)),
-    [createResource],
-  );
 
   // waiting for schema from OpenAPI to be computed
   if (loading) return <Spinner />;
