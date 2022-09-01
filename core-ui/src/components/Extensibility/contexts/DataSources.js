@@ -59,6 +59,7 @@ export function DataSourcesContextProvider({ children, dataSources }) {
       const relativeUrl = buildUrl(dataSource, resource);
       const response = await fetch({ relativeUrl });
       let data = await response.json();
+
       if (filter) {
         const expression = jsonataWrapper(filter);
         expression.assign('root', resource);
