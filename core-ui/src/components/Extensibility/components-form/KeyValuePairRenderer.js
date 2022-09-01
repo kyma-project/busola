@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { Dropdown } from 'shared/ResourceForm/inputs';
+import './KeyValuePairRenderer.scss';
 
 const getEnumComponent = (
   enumValues,
@@ -44,6 +45,7 @@ const getValueComponent = valueInfo => {
     case 'object':
       return ({ setValue, value }) => (
         <KeyValueField
+          className="nested-key-value-pair"
           value={value}
           setValue={v => {
             setValue(v);
