@@ -480,49 +480,49 @@ data:
   form: |-
     [
       {
-        "path": "spec.tls", "simple": true, "widget": "GenericList", "name": "TLS", "children":[
+        "path": "spec.tls", "widget": "GenericList", "name": "TLS", "children":[
           {
-            "path": "[].match", "simple": true, "widget": "GenericList", "name": "Matches", "children": [
+            "path": "[].match", "widget": "GenericList", "name": "Matches", "children": [
 
               {
-                "path": "[].sourceNamespace", "simple": true, "name": "Source Namespace"
+                "path": "[].sourceNamespace", "name": "Source Namespace"
               },
               {
-                "path": "[].port", "simple": true, "name": "Port"
+                "path": "[].port", "name": "Port"
               },
               {
-                "path": "[].sniHosts", "simple": true, "widget": "SimpleList", "name": "SNI Hosts"
+                "path": "[].sniHosts", "widget": "SimpleList", "name": "SNI Hosts"
               },
               {
-                "path": "[].destinationSubnets", "simple": true, "widget": "SimpleList", "name": "Destination Subnets"
+                "path": "[].destinationSubnets",  "widget": "SimpleList", "name": "Destination Subnets"
               },
               {
-                "path": "[].sourceLabels", "simple": true, "widget": "KeyValuePair", "name": "Source Labels"
+                "path": "[].sourceLabels",  "widget": "KeyValuePair", "name": "Source Labels"
               },
               {
-                "path": "[].gateways", "simple": true, "widget": "SimpleList", "name": "Gateways"
+                "path": "[].gateways", "widget": "SimpleList", "name": "Gateways"
               },
 
             ]
           },
 
           {
-            "path": "[].route", "simple": true, "widget": "GenericList", "name": "Routes", "children": [
+            "path": "[].route", "widget": "GenericList", "name": "Routes", "children": [
 
               {
-                "path": "[].weight", "simple": true, "name": "Weight"
+                "path": "[].weight", "name": "Weight"
               },
               {
-                "path": "[].destination", "simple": true, "widget": "FormGroup", "name": "Destination", "children": [
+                "path": "[].destination", "widget": "FormGroup", "name": "Destination", "children": [
 
                   {
-                    "path": "host", "simple": true, "name": "Host"
+                    "path": "host", "name": "Host"
                   },
                   {
-                    "path": "subset", "simple": true, "name": "Subset"
+                    "path": "subset", "name": "Subset"
                   },
                   {
-                    "path": "port.number", "simple": true, "name": "Port number"
+                    "path": "port.number", "name": "Port number"
                   }
                 
                 ]
@@ -535,50 +535,50 @@ data:
       },
 
       {
-        "path": "spec.tcp", "simple": true, "name": "TCP", "widget": "GenericList", "children": [
+        "path": "spec.tcp", "name": "TCP", "widget": "GenericList", "children": [
 
           {
-            "path": "[].match", "simple": true, "name": "Matches", "children": [
+            "path": "[].match", "name": "Matches", "children": [
 
               {
-                "path": "[].sourceNamespace", "simple": true, "name": "Source Namespace"
+                "path": "[].sourceNamespace", "name": "Source Namespace"
               },
               {
-                "path": "[].port", "simple": true, "name": "Port"
+                "path": "[].port", "name": "Port"
               },
               {
-                "path": "[].sniHosts", "simple": true, "widget": "SimpleList", "name": "SNI Hosts"
+                "path": "[].sniHosts", "widget": "SimpleList", "name": "SNI Hosts"
               },
               {
-                "path": "[].destinationSubnets", "simple": true, "widget": "SimpleList", "name": "Destination Subnets"
+                "path": "[].destinationSubnets", "widget": "SimpleList", "name": "Destination Subnets"
               },
               {
-                "path": "[].sourceLabels", "simple": true, "widget": "KeyValuePair", "name": "Source Labels"
+                "path": "[].sourceLabels", "name":"Source Labels", "widget": "KeyValuePair"
               },
               {
-                "path": "[].gateways", "simple": true, "widget": "SimpleList", "name": "Gateways"
+                "path": "[].gateways", "widget": "SimpleList", "name": "Gateways"
               }
 
             ]
           },
 
           {
-            "path": "[].route", "simple": true, "name": "Routes", "children": [
+            "path": "[].route", "name": "Routes", "children": [
 
               {
-                "path": "[].weight", "simple": true, "name": "Weight"
+                "path": "[].weight", "name": "Weight"
               },
               {
-                "path": "[].destination", "simple": true, "widget": "FormGroup", "name": "Destination", "children": [
+                "path": "[].destination", "widget": "FormGroup", "name": "Destination", "children": [
 
                   {
-                    "path": "host", "simple": true, "name": "Host"
+                    "path": "host", "name": "Host"
                   },
                   {
-                    "path": "subset", "simple": true, "name": "Subset"
+                    "path": "subset", "name": "Subset"
                   },
                   {
-                    "path": "port.number", "simple": true, "name": "Port number"
+                    "path": "port.number", "name": "Port number"
                   }
                 
                 ]
@@ -592,58 +592,64 @@ data:
 
 
       {
-        "path": "spec.http", "simple": true, "name": "HTTP", "widget": "GenericList","children":[
-
+        "path": "spec.http", "name": "HTTP", "widget": "GenericList","children":[
           {
-            "path": "[].route", "simple": true, "name": "Routes", "children": [
+            "path": "[].match", "name": "Matches", "widget": "GenericList", "children": [
+              {
+                "path": "[].headers", "name": "Headers", "widget": "KeyValuePair",
+              }
+            ]
+          },
+          {
+            "path": "[].route", "name": "Routes", "children": [
 
               {
-                "path": "[].weight", "simple": true, "name": "Weight"
+                "path": "[].weight", "name": "Weight"
               },
               {
-                "path": "[].destination", "simple": true, "name": "Destination", "widget": "FormGroup", "children": [
+                "path": "[].destination", "name": "Destination", "widget": "FormGroup", "children": [
 
                   {
-                    "path": "host", "simple": true, "name": "Host"
+                    "path": "host", "name": "Host"
                   },
                   {
-                    "path": "subset", "simple": true, "name": "Subset"
+                    "path": "subset", "name": "Subset"
                   },
                   {
-                    "path": "port.number", "simple": true, "name": "Port number"
+                    "path": "port.number", "name": "Port number"
                   }
                 
                 ]
               },
               {
-                "path": "[].headers", "simple": true, "name": "Headers", "widget": "FormGroup", "children": [
+                "path": "[].headers", "name": "Headers", "widget": "FormGroup", "children": [
 
                   {
-                    "path": "response", "simple": true, "name": "Response", "widget": "FormGroup", "children": [
+                    "path": "response", "name": "Response", "widget": "FormGroup", "children": [
                     
                       {
-                        "path": "set", "simple": true, "name": "Set", "widget": "KeyValuePair" 
+                        "path": "set", "name": "Set", "widget": "KeyValuePair" 
                       },
                       {
-                        "path": "add", "simple": true, "name": "Add", "widget": "KeyValuePair" 
+                        "path": "add", "name": "Add", "widget": "KeyValuePair" 
                       },
                       {
-                        "path": "remove", "simple": true, "name": "Remove", "widget": "KeyValuePair" 
+                        "path": "remove", "name": "Remove", "widget": "KeyValuePair" 
                       },
 
                     ]
                   },
                   {
-                    "path": "request", "simple": true, "name": "Request", "widget": "FormGroup", "children": [
+                    "path": "request", "name": "Request", "widget": "FormGroup", "children": [
                     
                       {
-                        "path": "set", "simple": true, "name": "Set", "widget": "KeyValuePair" 
+                        "path": "set", "name": "Set", "widget": "KeyValuePair" 
                       },
                       {
-                        "path": "add", "simple": true, "name": "Add", "widget": "KeyValuePair" 
+                        "path": "add", "name": "Add", "widget": "KeyValuePair" 
                       },
                       {
-                        "path": "remove", "simple": true, "name": "Remove", "widget": "KeyValuePair" 
+                        "path": "remove", "name": "Remove", "widget": "KeyValuePair" 
                       },
 
                     ]
@@ -657,21 +663,21 @@ data:
           },
 
             {
-              "path": "[].corsPolicy", "simple": true, "name": "CORS Policy", "widget": "FormGroup", "children": [
+              "path": "[].corsPolicy", "name": "CORS Policy", "widget": "FormGroup", "children": [
                 {
-                  "path": "allowCredentials", "simple": true, "name": "Allow Credentials", "type": "boolean"
+                  "path": "allowCredentials", "name": "Allow Credentials", "type": "boolean"
                 }, 
                 {
-                  "path": "allowMethods", "simple": true, "name": "Allow Methods", "widget": "SimpleList"
+                  "path": "allowMethods", "name": "Allow Methods", "widget": "SimpleList"
                 },
                 {
-                  "path": "allowHeaders", "simple": true, "name": "Allow Headers", "widget": "SimpleList"
+                  "path": "allowHeaders", "name": "Allow Headers", "widget": "SimpleList"
                 },
                 {
-                  "path": "exposeHeaders", "simple": true, "name": "Expose Headers", "widget": "SimpleList"
+                  "path": "exposeHeaders", "name": "Expose Headers", "widget": "SimpleList"
                 },
                 {
-                  "path": "maxAge", "simple": true, "name": "Max Age"
+                  "path": "maxAge", "name": "Max Age"
                 }
               ]
             }
@@ -684,7 +690,7 @@ data:
         "path": "spec.hosts", "simple": true , "name": "Hosts", "widget": "SimpleList"
       },
       {
-        "path": "spec.gateways", "simple": true, "name": "Gateways", "widget": "SimpleList"
+        "path": "spec.gateways", "name": "Gateways", "widget": "SimpleList"
       },
       {
         "path": "spec.exportTo", "name": "Export To", "widget": "SimpleList"
