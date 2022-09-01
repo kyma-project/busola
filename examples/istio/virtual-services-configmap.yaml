@@ -483,15 +483,14 @@ data:
         "path": "spec.tls", "widget": "GenericList", "name": "TLS", "children":[
           {
             "path": "[].match", "widget": "GenericList", "name": "Matches", "required": true, "children": [
-
+              {
+                "path": "[].sniHosts", "widget": "SimpleList", "name": "SNI Hosts", "required": true
+              },
               {
                 "path": "[].sourceNamespace", "name": "Source Namespace"
               },
               {
                 "path": "[].port", "name": "Port"
-              },
-              {
-                "path": "[].sniHosts", "widget": "SimpleList", "name": "SNI Hosts", "required": true
               },
               {
                 "path": "[].destinationSubnets",  "widget": "SimpleList", "name": "Destination Subnets"
@@ -508,10 +507,6 @@ data:
 
           {
             "path": "[].route", "widget": "GenericList", "name": "Routes", "children": [
-
-              {
-                "path": "[].weight", "name": "Weight"
-              },
               {
                 "path": "[].destination", "widget": "FormGroup", "name": "Destination", "required": true, "children": [
 
@@ -527,7 +522,9 @@ data:
                 
                 ]
               },
-
+              {
+                "path": "[].weight", "name": "Weight"
+              },
 
             ]
           },
@@ -561,18 +558,12 @@ data:
 
             ]
           },
-
           {
             "path": "[].route", "name": "Routes", "children": [
-
               {
-                "path": "[].weight", "name": "Weight"
-              },
-              {
-                "path": "[].destination", "widget": "FormGroup", "name": "Destination", "children": [
-
+                "path": "[].destination", "widget": "FormGroup", "name": "Destination", "required": true, "children": [
                   {
-                    "path": "host", "name": "Host"
+                    "path": "host", "name": "Host", "required": true,
                   },
                   {
                     "path": "subset", "name": "Subset"
@@ -582,6 +573,9 @@ data:
                   }
                 
                 ]
+              },
+              {
+                "path": "[].weight", "name": "Weight"
               },
 
             ]
