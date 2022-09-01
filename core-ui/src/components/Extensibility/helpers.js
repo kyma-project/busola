@@ -1,6 +1,5 @@
 import React, { createContext, useContext } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import * as jp from 'jsonpath';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { OrderedMap } from 'immutable';
 import { Link } from 'shared/components/Link/Link';
@@ -11,18 +10,6 @@ import { prettifyNamePlural } from 'shared/utils/helpers';
 export const TranslationBundleContext = createContext({
   translationBundle: 'extensibility',
 });
-
-export const getValue = (resource, path) => {
-  if (!resource) return undefined;
-  if (!path || path === '$') return resource;
-
-  if (path.startsWith('$.')) {
-    return jp.value(resource, path);
-  } else if (path.startsWith('[')) {
-    return jp.value(resource, '$' + path);
-  }
-  return jp.value(resource, '$.' + path);
-};
 
 export const applyFormula = (value, formula, t, additionalSources) => {
   try {
@@ -166,4 +153,94 @@ export const throwConfigError = (message, code) => {
   const e = new Error(message, { cause: code });
   e.name = 'Extensibility Config Error';
   throw e;
+};
+
+export const applySortFormula = (formula, t) => {
+  try {
+    const sortFunction = jsonataWrapper(formula);
+    return (a, b) => {
+      sortFunction.assign('first', a);
+      sortFunction.assign('second', b);
+      if (a === undefined) return -1;
+      if (b === undefined) return 1;
+      return sortFunction.evaluate();
+    };
+  } catch (e) {
+    return t('extensibility.configuration-error', { error: e.message });
+  }
+};
+
+export const getSortingFunction = (formula, originalResource) => {
+  return (a, b) => {
+    const aValue = jsonataWrapper(formula).evaluate(originalResource || a, {
+      item: a,
+    });
+    const bValue = jsonataWrapper(formula).evaluate(originalResource || b, {
+      item: b,
+    });
+
+    switch (typeof aValue) {
+      case 'number':
+      case 'boolean':
+      case 'undefined': {
+        if (aValue === undefined) return -1;
+        if (bValue === undefined) return 1;
+        return aValue - bValue;
+      }
+      case 'string': {
+        if (Date.parse(aValue)) {
+          return new Date(aValue).getTime() - new Date(bValue).getTime();
+        }
+        return aValue.localeCompare(bValue);
+      }
+      default:
+    }
+  };
+};
+
+export const sortBy = (
+  sortOptions,
+  t,
+  defaultSortOptions = {},
+  originalResource = null,
+) => {
+  let defaultSort = {};
+  const sortingOptions = (sortOptions || []).reduce(
+    (acc, { name, source, sort }) => {
+      const sortName = t(name, {
+        defaultValue: name || source,
+      });
+      let sortFn = getSortingFunction(source, originalResource);
+
+      if (sort.compareFunction) {
+        sortFn = (a, b) => {
+          const aValue = jsonataWrapper(source).evaluate(
+            originalResource || a,
+            {
+              item: a,
+            },
+          );
+          const bValue = jsonataWrapper(source).evaluate(
+            originalResource || b,
+            {
+              item: b,
+            },
+          );
+          const sortFormula = applySortFormula(sort.compareFunction, t);
+          return sortFormula(aValue, bValue);
+        };
+      }
+
+      if (sort.default) {
+        defaultSort[sortName] = sortFn;
+        return { ...acc };
+      } else {
+        acc[sortName] = sortFn;
+        return { ...acc };
+      }
+    },
+    {},
+  );
+
+  return { ...defaultSort, ...defaultSortOptions, ...sortingOptions };
 };

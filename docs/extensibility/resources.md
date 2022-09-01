@@ -103,15 +103,24 @@ The **list** section defines extra columns available in the list.
 
 ### Item parameters
 
-- **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form it's just the path to the value.
+- **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form, it's the path to the value.
 - **widget** - optional widget used to render the field referred to by the **source** property. By default, the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **valuePreprocessor** - name of [value preprocessor](#value-preprocessors).
+- **sort** - optional sort option. If set to `true`, it allows you to sort using this value. Defaults to false. It can also be set to an object with the following properties:
+  - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
+  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
 
 ### Example
 
 ```json
 [
-  { "source": "spec.url" },
+  {
+    "source": "spec.url",
+    "sort": {
+      "default": true,
+      "compareFunction": "$compareStrings($first, $second)"
+    }
+  },
   { "source": "spec.priority", "widget": "Badge" },
   { "source": "$join(spec.toppings.name, ', ')" },
   {
@@ -137,7 +146,7 @@ The **details** section defines the display structure for the details page. It c
 
 ### Items parameters
 
-- **source** - contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the widget. In its simplest form it's just the path to the value. Not required for presentational widgets.
+- **source** - contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the widget. In its simplest form, it's the path to the value. Not required for presentational widgets.
 - **name** - Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the **translation** section.
 - **widget** - optional widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
 - **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),

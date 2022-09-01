@@ -14,5 +14,9 @@ export function jsonataWrapper(expression) {
     );
   });
 
+  exp.registerFunction('compareStrings', (first, second) => {
+    return first?.localeCompare(second) ?? 1;
+  });
+
   return exp;
 }
