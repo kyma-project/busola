@@ -639,6 +639,9 @@ data:
               {
                 "path": "[].sourceNamespace", "name": "sourceNamespace"
               },
+              {
+                "path": "[].statPrefix", "name": "statPrefix"
+              },
             ]
           },
           {
@@ -698,11 +701,70 @@ data:
 
                 ]
               }
-              
-
             ]
           },
-
+            {
+              "path": "[].redirect", "name": "redirect", "widget": "FormGroup", "children": [
+                {
+                  "path": "uri", "name": "uri"
+                },
+                {
+                  "path": "authority", "name": "authority"
+                },
+                {
+                  "path": "port", "name": "port"
+                },
+                {
+                  "path": "derivePort", "name": "derivePort"
+                },
+                {
+                  "path": "scheme", "name": "scheme"
+                },
+                {
+                  "path": "redirectCode", "name": "redirectCode"
+                }
+              ]
+            },
+            {
+              "path": "[].directResponse", "name": "directResponse", "widget": "FormGroup", "children": [
+                {
+                  "path": "status", "name": "status", "required": true
+                },
+                {
+                  "path": "body", "name": "body", "widget": "FormGroup", "children": [
+                    {
+                      "path": "string", "name": "string"
+                    },
+                    {
+                      "path": "bytes", "name": "bytes"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "path": "[].delegate", "name": "delegate", "widget": "FormGroup", "children": [
+                {
+                  "path": "name", "name": "name"
+                },
+                {
+                  "path": "namespace", "name": "namespace"
+                }
+              ]
+            },
+            {
+              "path": "[].rewrite", "name": "rewrite", "widget": "FormGroup", "children": [
+                {
+                  "path": "uri", "name": "uri"
+                },
+                {
+                  "path": "authority", "name": "authority"
+                }
+              ]
+            },
+            {
+              "path": "[].timeout", "name": "timeout"
+            },
             {
               "path": "[].corsPolicy", "name": "CORS Policy", "widget": "FormGroup", "children": [
                 {
