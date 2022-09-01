@@ -95,6 +95,7 @@ export const YamlEditorProvider = ({ children }) => {
   return (
     <YamlEditorContext.Provider
       value={{
+        isOpen,
         setEditedYaml,
         closeEditor,
         currentlyEditedResourceUID: (isOpen && yaml?.metadata?.uid) || null, // provide the UID of the currently edited resource if possible

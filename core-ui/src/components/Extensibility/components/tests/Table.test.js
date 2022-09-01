@@ -3,10 +3,6 @@ import { mount } from 'enzyme';
 import { TranslationBundleContext } from 'components/Extensibility/helpers';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
-  'monaco-editor': () => 'monaco-editor',
-}));
-
 const translations = {
   'myResource.path::my-title': 'My Title',
   'myResource.path::resource.array-data': 'Array Data',
