@@ -9,7 +9,6 @@ export const form = [
   },
   {
     widget: 'FormGroup',
-    simple: true,
     path: 'spec.trafficPolicy',
     name: 'Traffic Policy',
     children: trafficPolicyBundle,
