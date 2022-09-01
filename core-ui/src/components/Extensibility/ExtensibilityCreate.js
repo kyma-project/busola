@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { createStore } from '@ui-schema/ui-schema';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import Immutable from 'immutable';
@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useGetSchema } from 'hooks/useGetSchema';
 import { prettifyKind } from 'shared/utils/helpers';
+import { prepareSchemaRules } from './SchemaRulesInjector';
 
 export function ExtensibilityCreate({
   formElementRef,
@@ -72,6 +73,23 @@ export function ExtensibilityCreate({
     resource: api,
   });
 
+  const fullSchemaRules = [
+    { path: 'metadata.name', simple: true },
+    { path: 'metadata.labels' },
+    { path: 'metadata.annotations' },
+    ...(createResource?.form ?? []),
+  ];
+  const simpleRules = useMemo(() => {
+    return prepareSchemaRules(
+      fullSchemaRules.filter(item => item.simple ?? false),
+    );
+  }, [createResource]);
+  const advancedRules = useMemo(
+    () =>
+      prepareSchemaRules(fullSchemaRules.filter(item => item.advanced ?? true)),
+    [createResource],
+  );
+
   // waiting for schema from OpenAPI to be computed
   if (loading) return <Spinner />;
 
@@ -92,7 +110,7 @@ export function ExtensibilityCreate({
         simple
         key={api.version}
         schema={errorOpenApi ? {} : schema}
-        schemaRules={createResource?.form}
+        schemaRules={simpleRules}
         resource={resource}
         store={store}
         setStore={setStore}
@@ -103,7 +121,7 @@ export function ExtensibilityCreate({
         advanced
         key={api.version}
         schema={errorOpenApi ? {} : schema}
-        schemaRules={createResource?.form}
+        schemaRules={advancedRules}
         resource={resource}
         store={store}
         setStore={setStore}
