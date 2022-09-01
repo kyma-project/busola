@@ -640,15 +640,11 @@ data:
           },
           {
             "path": "[].route", "name": "Routes", "children": [
-
-              {
-                "path": "[].weight", "name": "Weight"
-              },
-              {
-                "path": "[].destination", "name": "Destination", "widget": "FormGroup", "children": [
+             {
+                "path": "[].destination", "name": "Destination", "required": true, "widget": "FormGroup", "children": [
 
                   {
-                    "path": "host", "name": "Host"
+                    "path": "host", "name": "Host", "required": true
                   },
                   {
                     "path": "subset", "name": "Subset"
@@ -658,6 +654,9 @@ data:
                   }
                 
                 ]
+              },
+              {
+                "path": "[].weight", "name": "Weight"
               },
               {
                 "path": "[].headers", "name": "Headers", "widget": "FormGroup", "children": [
