@@ -16,9 +16,11 @@ import { LimitPresets, MemoryPresets } from './Presets';
 import { CONFIG } from './config';
 
 import './NamespaceCreate.scss';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection';
-const ISTIO_INJECTION_VALUE = 'disabled';
+const ISTIO_INJECTION_DISABLED = 'disabled';
+const ISTIO_INJECTION_ENABLED = 'enabled';
 
 export function NamespaceCreate({
   formElementRef,
@@ -31,6 +33,9 @@ export function NamespaceCreate({
   ...props
 }) {
   const { t } = useTranslation();
+
+  const { features } = useMicrofrontendContext();
+  const isIstioFeatureOn = features?.ISTIO?.isEnabled;
 
   const [namespace, setNamespace] = useState(
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),
@@ -66,21 +71,12 @@ export function NamespaceCreate({
 
   useEffect(() => {
     // toggles istio-injection label when 'Disable sidecar injection' is clicked
-    if (isSidecar) {
-      jp.value(
-        namespace,
-        `$.metadata.labels["${ISTIO_INJECTION_LABEL}"]`,
-        ISTIO_INJECTION_VALUE,
-      );
-      setNamespace({ ...namespace });
-    } else {
-      const labels = namespace.metadata.labels || {};
-      delete labels[ISTIO_INJECTION_LABEL];
-      setNamespace({
-        ...namespace,
-        metadata: { ...namespace.metadata, labels },
-      });
-    }
+    jp.value(
+      namespace,
+      `$.metadata.labels["${ISTIO_INJECTION_LABEL}"]`,
+      isSidecar ? ISTIO_INJECTION_DISABLED : ISTIO_INJECTION_ENABLED,
+    );
+    setNamespace({ ...namespace });
     // eslint-disable-next-line
   }, [isSidecar]);
 
@@ -89,7 +85,7 @@ export function NamespaceCreate({
     if (
       isSidecar &&
       jp.value(namespace, `$.metadata.labels["${ISTIO_INJECTION_LABEL}"]`) !==
-        ISTIO_INJECTION_VALUE
+        ISTIO_INJECTION_DISABLED
     ) {
       setSidecar(false);
     }
@@ -199,7 +195,7 @@ export function NamespaceCreate({
       }}
     >
       <ResourceForm.FormField
-        advanced
+        advanced={!isIstioFeatureOn}
         label={t('namespaces.create-modal.disable-sidecar')}
         input={() => (
           <Switch
@@ -211,7 +207,6 @@ export function NamespaceCreate({
           />
         )}
       />
-
       {!initialNamespace ? (
         <ResourceForm.CollapsibleSection
           advanced
@@ -257,7 +252,6 @@ export function NamespaceCreate({
           </FormFieldset>
         </ResourceForm.CollapsibleSection>
       ) : null}
-
       {!initialNamespace ? (
         <ResourceForm.CollapsibleSection
           advanced
