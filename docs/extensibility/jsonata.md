@@ -5,6 +5,7 @@
 - [Overview](#overview)
 - [Preset functions](#preset-functions)
   - [_matchByLabelSelector_](#matchbylabelselectoritem-selectorpath)
+  - [_compareStrings_](#comparestringsfirst-second)
 
 ## Overview
 
@@ -23,7 +24,7 @@ This function can be used to match Pods using a resource selector.
 
 ### Example
 
-Example from dataSources
+Example from dataSources.
 
 ```json
 {
@@ -34,5 +35,35 @@ Example from dataSources
     },
     "filter": "$matchByLabelSelector($item, $root.spec.selector)"
   }
+}
+```
+
+## compareStrings(first, second)
+
+This function can be used to sort two strings alphabetically.
+
+### Function parameters
+
+- **first** - first string to compare.
+- **second** - second string to compare.
+
+### Example
+
+Example from the ResourceList widget.
+
+#### Examples
+
+```json
+{
+  "widget": "ResourceList",
+  "source": "$myDeployments()",
+  "name": "Example ResourceList Deployments",
+  "sort": [
+    {
+      "source": "$item.spec.strategy.type",
+      "compareFunction": "$compareStrings($second, $first)",
+      "default": true
+    }
+  ]
 }
 ```

@@ -83,7 +83,8 @@ data:
       },
       {
         "name": "Realization",
-        "source": "spec.orderDetails.realization"
+        "source": "spec.orderDetails.realization",
+        "sort": true
       }
     ]
   general: |-

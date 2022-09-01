@@ -22,6 +22,7 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import { SortModalPanel } from './SortModalPanel';
+import { isEmpty } from 'lodash';
 import './GenericList.scss';
 
 const defaultSort = {
@@ -67,7 +68,8 @@ export const GenericList = ({
   });
 
   const sorting = (sort, resources) => {
-    if (!sortBy) return resources;
+    if (!sortBy || isEmpty(sortBy)) return resources;
+
     const sortFunction = Object.entries(sortBy).filter(([name]) => {
       return name === sort.name;
     })[0][1];
@@ -134,7 +136,7 @@ export const GenericList = ({
           disabled={!entries.length}
         />
       )}
-      {sortBy && (
+      {sortBy && !isEmpty(sortBy) && (
         <SortModalPanel
           sortBy={sortBy}
           sort={sort}

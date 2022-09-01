@@ -63,10 +63,12 @@ data:
               "name": "Toppings",
               "source": "spec.toppings",
               "widget": "Table",
+              "collapsible": [{"name": "Quantity", "source": "$item.quantity" }],
               "children": [
-                { "name": "Name", "source": "$item.name" },
-                { "name": "Price ($)", "source": "$item.price" },
-                { "name": "Quantity", "source": "$item.quantity" }
+                { "name": "Name", "source": "$item.name", "sort": true },
+                { "name": "Price ($)", "source": "$item.price",
+                "sort": { "default": true, "compareFunction": "$second -$first" }
+              }
               ]
             }
           ]
@@ -74,7 +76,13 @@ data:
         {
           "name": "Pizza's recipe secret",
           "widget": "ResourceList",
-          "source": "$secretRecipe()"
+          "source": "$secretRecipe()",
+          "sort": [
+            {
+              "source": "type",
+              "default": true,
+            },
+          ],
         },
         {
           "name": "columns",
@@ -95,7 +103,8 @@ data:
             {
               "name": "Description",
               "widget": "Panel",
-              "children": [{ "source": "spec.description" }]
+              "children": [{ "source": "spec.description", "name": "Description" }]
+
             }
           ]
         }
@@ -151,9 +160,9 @@ data:
     ]
   list: |-
     [
-      { "name": "Description", "source": "spec.description" },
+      { "name": "Description", "source": "spec.description", "sort": { "compareFunction": "$compareStrings($second, $first)" } },
       { "name": "State", "source": "status.messages[-1].state", "widget": "Badge" },
-      { "name": "Toppings price", "source": "$sum(spec.toppings.price)" }
+      { "name": "Toppings price", "source": "$sum(spec.toppings.price)", "sort":{"default": true} }
     ]
   dataSources: |-
     {

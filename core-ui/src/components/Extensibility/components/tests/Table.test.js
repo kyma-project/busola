@@ -3,10 +3,6 @@ import { mount } from 'enzyme';
 import { TranslationBundleContext } from 'components/Extensibility/helpers';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
-  'monaco-editor': () => 'monaco-editor',
-}));
-
 const translations = {
   'myResource.path::my-title': 'My Title',
   'myResource.path::resource.array-data': 'Array Data',
@@ -47,14 +43,14 @@ describe('Table', () => {
         <TranslationBundleContext.Provider
           value={{ translationBundle: 'myResource.path' }}
         >
-          <Table value={[]} structure={{ path: 'resource.array-data' }} />
+          <Table value={[]} structure={{ source: 'resource.array-data' }} />
         </TranslationBundleContext.Provider>,
       );
       const list = component.find(GenericList);
       expect(list).toHaveLength(1);
 
       const { title } = list.props();
-      expect(title).toBe('Array Data');
+      expect(title).toBe('resource.array-data');
     });
 
     it('No translated name or path, fall back to non-translated name', () => {
