@@ -22,6 +22,41 @@ const ISTIO_INJECTION_LABEL = 'istio-injection';
 const ISTIO_INJECTION_DISABLED = 'disabled';
 const ISTIO_INJECTION_ENABLED = 'enabled';
 
+const useSidecar = (initialNamespace, res, setRes) => {
+  const { features } = useMicrofrontendContext();
+  const isIstioFeatureOn = features?.ISTIO?.isEnabled;
+
+  const [isSidecar, setSidecar] = useState(
+    initialNamespace
+      ? !!initialNamespace?.metadata?.labels?.[ISTIO_INJECTION_LABEL]
+      : true,
+  );
+
+  useEffect(() => {
+    // toggles istio-injection label when 'Disable sidecar injection' is clicked
+    jp.value(
+      res,
+      `$.metadata.labels["${ISTIO_INJECTION_LABEL}"]`,
+      isSidecar ? ISTIO_INJECTION_DISABLED : ISTIO_INJECTION_ENABLED,
+    );
+    setRes({ ...res });
+    // eslint-disable-next-line
+  }, [isSidecar]);
+
+  useEffect(() => {
+    // toggles 'Disable sidecar injection' when istio-injection label is deleted manually
+    if (
+      isSidecar &&
+      jp.value(res, `$.metadata.labels["${ISTIO_INJECTION_LABEL}"]`) !==
+        ISTIO_INJECTION_DISABLED
+    ) {
+      setSidecar(false);
+    }
+  }, [isSidecar, setSidecar, res]);
+
+  return { isIstioFeatureOn, isSidecar, setSidecar };
+};
+
 export function NamespaceCreate({
   formElementRef,
   onChange,
@@ -34,22 +69,22 @@ export function NamespaceCreate({
 }) {
   const { t } = useTranslation();
 
-  const { features } = useMicrofrontendContext();
-  const isIstioFeatureOn = features?.ISTIO?.isEnabled;
-
   const [namespace, setNamespace] = useState(
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),
   );
+
+  const { isIstioFeatureOn, isSidecar, setSidecar } = useSidecar(
+    initialNamespace,
+    namespace,
+    setNamespace,
+  );
+
   // container limits
   const [withLimits, setWithLimits] = useState(false);
   const [limits, setLimits] = useState(createLimitRangeTemplate({}));
   // memory quotas
   const [withMemory, setWithMemory] = useState(false);
   const [memory, setMemory] = useState(createResourceQuotaTemplate({}));
-
-  const [isSidecar, setSidecar] = useState(
-    initialNamespace?.metadata?.labels?.[ISTIO_INJECTION_LABEL],
-  );
 
   const createLimitResource = useCreateResource({
     singularName: 'LimitRange',
@@ -196,7 +231,7 @@ export function NamespaceCreate({
     >
       <ResourceForm.FormField
         advanced={!isIstioFeatureOn}
-        label={t('namespaces.create-modal.disable-sidecar')}
+        label={t('namespaces.create-modal.enable-sidecar')}
         input={() => (
           <Switch
             compact
