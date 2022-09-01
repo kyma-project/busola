@@ -36,6 +36,15 @@ export function ResourceRefs({ value, structure, schema, disableMargin }) {
     name,
   ];
 
+  const sortBy = defaultSort => {
+    const { name } = defaultSort;
+    return {
+      name,
+      namespace: (a, b) =>
+        a.metadata?.namespace.localeCompare(b.metadata?.namespace),
+    };
+  };
+
   return (
     <GenericList
       title={widgetT(structure)}
@@ -46,6 +55,7 @@ export function ResourceRefs({ value, structure, schema, disableMargin }) {
       searchSettings={{
         showSearchField: false,
       }}
+      sortBy={sortBy}
     />
   );
 }
