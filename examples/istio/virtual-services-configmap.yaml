@@ -812,6 +812,22 @@ data:
               ]
             },
             {
+              "path": "[].mirror", "name": "mirror", "widget": "FormGroup", "children": [
+                {
+                  "path": "host", "name": "host", "required": true
+                },
+                {
+                  "path": "subset", "name": "subset"
+                },
+                {
+                  "path": "port.number", "name": "port.number"
+                }
+              ]
+            },
+            {
+              "path": "[].mirrorPercentage.value", "name": "mirrorPercentage"
+            },
+            {
               "path": "[].corsPolicy", "name": "CORS Policy", "widget": "FormGroup", "children": [
                 {
                   "path": "allowCredentials", "name": "Allow Credentials", "type": "boolean"
@@ -829,8 +845,42 @@ data:
                   "path": "maxAge", "name": "Max Age"
                 }
               ]
-            }
+            },
+            {
+              "path": "[].headers", "name": "Headers", "widget": "FormGroup", "children": [
 
+                {
+                  "path": "response", "name": "Response", "widget": "FormGroup", "children": [
+                  
+                    {
+                      "path": "set", "name": "Set", "widget": "KeyValuePair" 
+                    },
+                    {
+                      "path": "add", "name": "Add", "widget": "KeyValuePair" 
+                    },
+                    {
+                      "path": "remove", "name": "Remove", "widget": "KeyValuePair" 
+                    },
+
+                  ]
+                },
+                {
+                  "path": "request", "name": "Request", "widget": "FormGroup", "children": [
+                  
+                    {
+                      "path": "set", "name": "Set", "widget": "KeyValuePair" 
+                    },
+                    {
+                      "path": "add", "name": "Add", "widget": "KeyValuePair" 
+                    },
+                    {
+                      "path": "remove", "name": "Remove", "widget": "KeyValuePair" 
+                    },
+
+                  ]
+                }
+              ]
+            }
         ] 
       },
 
