@@ -687,7 +687,7 @@ data:
 
 
       {
-        "path": "spec.hosts", "simple": true , "name": "Hosts", "widget": "SimpleList"
+        "path": "spec.hosts", "name": "Hosts", "widget": "SimpleList"
       },
       {
         "path": "spec.gateways", "name": "Gateways", "widget": "SimpleList"
