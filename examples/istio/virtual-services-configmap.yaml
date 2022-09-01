@@ -482,7 +482,7 @@ data:
       {
         "path": "spec.tls", "widget": "GenericList", "name": "TLS", "children":[
           {
-            "path": "[].match", "widget": "GenericList", "name": "Matches", "children": [
+            "path": "[].match", "widget": "GenericList", "name": "Matches", "required": true, "children": [
 
               {
                 "path": "[].sourceNamespace", "name": "Source Namespace"
@@ -491,7 +491,7 @@ data:
                 "path": "[].port", "name": "Port"
               },
               {
-                "path": "[].sniHosts", "widget": "SimpleList", "name": "SNI Hosts"
+                "path": "[].sniHosts", "widget": "SimpleList", "name": "SNI Hosts", "required": true
               },
               {
                 "path": "[].destinationSubnets",  "widget": "SimpleList", "name": "Destination Subnets"
@@ -513,10 +513,10 @@ data:
                 "path": "[].weight", "name": "Weight"
               },
               {
-                "path": "[].destination", "widget": "FormGroup", "name": "Destination", "children": [
+                "path": "[].destination", "widget": "FormGroup", "name": "Destination", "required": true, "children": [
 
                   {
-                    "path": "host", "name": "Host"
+                    "path": "host", "name": "Host", "required": true
                   },
                   {
                     "path": "subset", "name": "Subset"
