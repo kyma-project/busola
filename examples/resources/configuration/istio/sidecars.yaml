@@ -99,7 +99,14 @@ data:
             }
           ],
         }
-      ]
+      ],
+      "resourceGraph": {
+        "depth": 1,
+        "colorVariant": 1,
+        "dataSources": [
+          {"source": "podSelector"}
+        ]
+      }
     }
   form: |-
     [
