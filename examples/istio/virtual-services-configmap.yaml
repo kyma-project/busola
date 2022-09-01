@@ -590,14 +590,55 @@ data:
         ]
       },
 
-
       {
-        "path": "spec.http", "name": "HTTP", "widget": "GenericList","children":[
+        "path": "spec.http", "simple": true, "name": "HTTP", "widget": "GenericList","children":[
           {
             "path": "[].match", "name": "Matches", "widget": "GenericList", "children": [
               {
-                "path": "[].headers", "name": "Headers", "widget": "KeyValuePair",
-              }
+                "path": "[].name", "name": "Name"
+              },
+              {
+                "path": "[].uri", "name": "uri", "widget": "KeyValuePair", "keyEnum": ['prefix', 'exact', 'regex']
+              },
+              {
+                "path": "[].scheme", "name": "scheme", "widget": "KeyValuePair", "keyEnum": ['prefix', 'exact', 'regex']
+              },
+              {
+                "path": "[].method", "name": "method", "widget": "KeyValuePair", "keyEnum": ['prefix', 'exact', 'regex']
+              },
+              {
+                "path": "[].authority", "name": "authority", "widget": "KeyValuePair", "keyEnum": ['prefix', 'exact', 'regex']
+              },
+              {
+                "path": "[].headers", "name": "headers", "widget": "KeyValuePair", "value": {
+                  "type": "object", "keyEnum": ['prefix', 'exact', 'regex']
+                }
+              },
+              {
+                "path": "[].port", "name": "Port"
+              },
+              {
+                "path": "[].sourceLabels", "name": "sourceLabels", "widget": "KeyValuePair"
+              },
+              {
+                "path": "[].gateways", "name": "gateways", "widget": "SimpleList"
+              },
+              {
+                "path": "[].queryParams", "name": "queryParams", "widget": "KeyValuePair", "value": {
+                  "type": "object", "keyEnum": ['prefix', 'exact', 'regex']
+                }
+              },
+              {
+                "path": "[].ignoreUriCase", "name": "ignoreUriCase"
+              },
+              {
+                "path": "[].withoutHeaders", "name": "withoutHeaders", "widget": "KeyValuePair", "value": {
+                  "type": "object", "keyEnum": ['prefix', 'exact', 'regex']
+                }
+              },
+              {
+                "path": "[].sourceNamespace", "name": "sourceNamespace"
+              },
             ]
           },
           {
