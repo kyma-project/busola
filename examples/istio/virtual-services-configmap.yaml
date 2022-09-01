@@ -766,6 +766,52 @@ data:
               "path": "[].timeout", "name": "timeout"
             },
             {
+              "path": "[].retries", "name": "retries", "widget": "FormGroup", "children": [
+                {
+                  "path": "attempts", "name": "attempts", "required": true
+                },
+                {
+                  "path": "perTryTimeout", "name": "perTryTimeout"
+                },
+                {
+                  "path": "retryOn", "name": "retryOn"
+                },
+                {
+                  "path": "retryRemoteLocalities", "name": "retryRemoteLocalities"
+                }
+              ]
+            },
+            {
+              "path": "[].fault", "name": "fault", "widget": "FormGroup", "children": [
+                {
+                  "path": "delay", "name": "delay", "widget": "FormGroup", "children": [
+                    {
+                      "path": "fixedDelay", "name": "fixedDelay", "required": true
+                    },
+                    {
+                      "path": "percentage.value", "name": "percentage"
+                    },
+                    {
+                      "path": "percent", "name": "percent"
+                    },
+                  ]
+                },
+                {
+                  "path": "abort", "name": "abort", "widget": "FormGroup", "children": [
+                    {
+                      "path": "httpStatus", "name": "httpStatus", "required": true
+                    },
+                    {
+                      "path": "grpcStatus", "name": "grpcStatus"
+                    },
+                    {
+                      "path": "percentage.value", "name": "percentage"
+                    },
+                  ]
+                },
+              ]
+            },
+            {
               "path": "[].corsPolicy", "name": "CORS Policy", "widget": "FormGroup", "children": [
                 {
                   "path": "allowCredentials", "name": "Allow Credentials", "type": "boolean"
