@@ -105,9 +105,7 @@ data:
     [
       {
         "path": "spec.workloadSelector.labels", 
-        "widget": "KeyValuePair", 
-        "required": true
-      },
+        "widget": "KeyValuePair"      },
       {
         "widget": "FormGroup",
         "path": "spec.ingress[].port",
