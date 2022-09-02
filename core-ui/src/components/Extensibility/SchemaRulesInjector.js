@@ -159,11 +159,15 @@ export function SchemaRulesInjector({
         let lastArrayItem;
         const lastArrayIndex = storeKeys
           .toArray()
-          .findLastIndex(item => typeof item === 'number');
+          // workaround for findLastIndex, Firefox isn't supporting it
+          .reverse()
+          .findIndex(item => typeof item === 'number');
 
-        let lastArrayStoreKeys = null;
+        // workaround for findLastIndex, Firefox isn't supporting it
+        lastArrayIndex = storeKeys.toArray().length - 1 - lastArrayIndex;
+
         if (lastArrayIndex > 0) {
-          lastArrayStoreKeys = storeKeys.slice(0, lastArrayIndex + 1);
+          const lastArrayStoreKeys = storeKeys.slice(0, lastArrayIndex + 1);
 
           lastArrayItem = lastArrayStoreKeys
             .toArray()

@@ -158,7 +158,7 @@ context('Test Pizzas', () => {
       .click({ force: true });
 
     cy.get('@iframe')
-      .contains('Hot salami, Pickled jalapeños, Cheese')
+      .contains('Pickled jalapeños, Hot salami, Cheese')
       .should('be.visible');
 
     cy.get('@iframe')
@@ -198,7 +198,6 @@ context('Test Pizzas', () => {
 
     cy.get('@form')
       .find('[data-testid="spec.recipeSecret"]:visible')
-      .find('input')
       .type(RECIPE);
 
     cy.get('@form').contains('Owner References');

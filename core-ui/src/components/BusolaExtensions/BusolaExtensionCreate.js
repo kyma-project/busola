@@ -65,8 +65,10 @@ export function BusolaExtensionCreate({ formElementRef, onChange }) {
           value={crd?.metadata.name}
           setValue={value => {
             const crd = crds.find(crd => crd.metadata.name === value);
-            setCrd(crd);
-            setState(createExtensibilityTemplate(crd, t));
+            if (crd) {
+              setCrd(crd);
+              setState(createExtensibilityTemplate(crd, t));
+            }
           }}
           input={Inputs.ComboboxInput}
           options={(crds ?? []).map(crd => ({
