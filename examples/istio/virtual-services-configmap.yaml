@@ -44,11 +44,12 @@ data:
           {
             "widget": "Table",
             "source": "spec.gateways[]",
-            "name": "Gateways",
+            "name": "gateways",
+            "visibility": "$exists(*)",
             "children": [
             {
               "source": "$item",
-              "name": "Name",
+              "name": "t-name",
               "widget": "ResourceLink",
               "resource":{
                 "kind": "'Gateway'",
@@ -59,94 +60,73 @@ data:
             ]
           },
           {
-            "name": "Hosts",
+            "name": "summary",
             "widget": "Panel",
+            "source": "spec",
+            "visibility": "$boolean($exists(data.exportTo) or $exists(data.hosts))",
             "children": [
-              {"source": "spec.hosts", "widget": "Labels", "name": "Hosts"},
-              {"name": "Export to", "source": "spec.exportTo", "widget": "Labels", "visibility": "$exists(*)"}
+              { "name": "exportTo", "source": "$item.exportTo", "widget": "Labels", "visibility": "$exists(*)"},
+              { "name": "hosts", "source": "$item.hosts", "widget": "JoinedArray", "visibility": "$exists(*)"}
             ]
-          },
-          {
-            "widget": "CodeViewer",
-            "source": "spec.http",
-            "name": "HTTP",
-            "visibility": "$exists(*)"
           },
           {
             "widget": "Table",
             "source": "spec.http",
-            "name": "HTTP",
+            "name": "spec.http",
             "visibility": "$exists(*)",
             "children": [
               {
-               "source": "$item.name", "name": "Name"
+               "source": "$item.name", "name": "t-name"
               },
               {
-                 "source": "$item.timeout", "name": "Timeout"
+                 "source": "$item.timeout", "name": "timeout"
               },
               {
-                 "source": "$item.mirrorPercentage.value", "name": "Mirror Percentage"
-              },
-              {
-                "source": "$item.corsPolicy",
-                "name": "CORS Policy", 
-                "widget": "Panel", 
-                "visibility": "$exists(*)",
-                "children": [
-                  {
-                    "source": "$item.allowHeaders", "name": "Allow Headers", "widget": "JoinedArray"
-                  },
-                  {
-                    "source": "$item.allowMethods", "name": "Allow Methods", "widget": "JoinedArray"
-                  },
-                  {
-                    "source": "$item.maxAge", "name": "Max Age"
-                  },
-                ] 
-              },
+                 "source": "$item.mirrorPercentage.value", "name": "mirrorPercentage"
+              }
             ],
             "collapsible": [
               {
-                "source": "$item.match", "name": "Matches", "widget": "Table", 
+                "source": "$item.match", "name": "matches", "widget": "Table", 
                 "visibility": "$exists(*)", "children":[
                   {
-                    "source": "$item.name", "name": "Name",
+                    "source": "$item.name", "name": "t-name",
                   },
                   {
-                    "source": "$item.uri", "name": "URI", "widget": "Labels",
+                    "source": "$item.uri", "name": "uri", "widget": "Labels",
                   },
                   {
-                    "source": "$item.scheme", "name": "URI Scheme", "widget": "Labels",
+                    "source": "$item.scheme", "name": "scheme", "widget": "Labels",
                   },
                   {
-                    "source": "$item.method", "name": "Method", "widget": "Labels",
+                    "source": "$item.method", "name": "method", "widget": "Labels",
                   },
                   {
-                    "source": "$item.authority", "name": "Authority", "widget": "Labels",
+                    "source": "$item.authority", "name": "authority", "widget": "Labels",
                   },
                   {
-                    "source": "$item.headers", "name": "Headers"
+                    "source": "$item.headers", "name": "headers"
                   },
                   {
-                    "source": "$item.port", "name": "Port"
+                    "source": "$item.port", "name": "port"
                   },
                   {
-                    "source": "$item.sourceLabels", "name": "Source Labels", "widget": "Labels"
+                    "source": "$item.sourceLabels", "name": "sourceLabels ", "widget": "Labels"
                   },
                   {
-                    "source": "$item.gateways", "name": "Gateways", "widget": "JoinedArray"
+                    "source": "$item.gateways", "name": "gateways", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.queryParams", "name": "Query Params"
+                    "source": "$item.queryParams", "name": "queryParams"
                   },
                   {
-                    "source": "$item.ignoreUriCase", "name": "Ignore URI Case"
+                    "source": "$item.ignoreUriCase", "name": "ignoreUriCase"
                   },
                   {
-                    "source": "$item.withoutHeaders", "name": "Without Headers"
+                    "source": "$item.withoutHeaders", "name": "withoutHeaders"
                   },
                   {
-                    "source": "$item.sourceNamespace", "name": "Source namespace"
+                    "source": "$item.sourceNamespace", "name": "sourceNamespace"
                   },
                 ]
               },
@@ -482,9 +462,9 @@ data:
       {
         "path": "spec.tls", "widget": "GenericList", "name": "TLS", "children":[
           {
-            "path": "[].match", "widget": "GenericList", "name": "Matches", "required": true, "children": [
+            "path": "[].match", "widget": "GenericList", "name": "Matches", "children": [
               {
-                "path": "[].sniHosts", "widget": "SimpleList", "name": "SNI Hosts", "required": true
+                "path": "[].sniHosts", "widget": "SimpleList", "name": "SNI Hosts", 
               },
               {
                 "path": "[].sourceNamespace", "name": "Source Namespace"
@@ -508,10 +488,10 @@ data:
           {
             "path": "[].route", "widget": "GenericList", "name": "Routes", "children": [
               {
-                "path": "[].destination", "widget": "FormGroup", "name": "Destination", "required": true, "children": [
+                "path": "[].destination", "widget": "FormGroup", "name": "Destination", "children": [
 
                   {
-                    "path": "host", "name": "Host", "required": true
+                    "path": "host", "name": "Host", 
                   },
                   {
                     "path": "subset", "name": "Subset"
@@ -561,9 +541,9 @@ data:
           {
             "path": "[].route", "name": "Routes", "children": [
               {
-                "path": "[].destination", "widget": "FormGroup", "name": "Destination", "required": true, "children": [
+                "path": "[].destination", "widget": "FormGroup", "name": "Destination","children": [
                   {
-                    "path": "host", "name": "Host", "required": true,
+                    "path": "host", "name": "Host"
                   },
                   {
                     "path": "subset", "name": "Subset"
@@ -641,10 +621,10 @@ data:
           {
             "path": "[].route", "name": "Routes", "children": [
              {
-                "path": "[].destination", "name": "Destination", "required": true, "widget": "FormGroup", "children": [
+                "path": "[].destination", "name": "Destination", "widget": "FormGroup", "children": [
 
                   {
-                    "path": "host", "name": "Host", "required": true
+                    "path": "host", "name": "Host"
                   },
                   {
                     "path": "subset", "name": "Subset"
@@ -721,7 +701,7 @@ data:
             {
               "path": "[].directResponse", "name": "directResponse", "widget": "FormGroup", "children": [
                 {
-                  "path": "status", "name": "status", "required": true
+                  "path": "status", "name": "status"
                 },
                 {
                   "path": "body", "name": "body", "widget": "FormGroup", "children": [
@@ -761,7 +741,7 @@ data:
             {
               "path": "[].retries", "name": "retries", "widget": "FormGroup", "children": [
                 {
-                  "path": "attempts", "name": "attempts", "required": true
+                  "path": "attempts", "name": "attempts"
                 },
                 {
                   "path": "perTryTimeout", "name": "perTryTimeout"
@@ -779,7 +759,7 @@ data:
                 {
                   "path": "delay", "name": "delay", "widget": "FormGroup", "children": [
                     {
-                      "path": "fixedDelay", "name": "fixedDelay", "required": true
+                      "path": "fixedDelay", "name": "fixedDelay", 
                     },
                     {
                       "path": "percentage.value", "name": "percentage"
@@ -792,7 +772,7 @@ data:
                 {
                   "path": "abort", "name": "abort", "widget": "FormGroup", "children": [
                     {
-                      "path": "httpStatus", "name": "httpStatus", "required": true
+                      "path": "httpStatus", "name": "httpStatus"
                     },
                     {
                       "path": "grpcStatus", "name": "grpcStatus"
@@ -807,7 +787,7 @@ data:
             {
               "path": "[].mirror", "name": "mirror", "widget": "FormGroup", "children": [
                 {
-                  "path": "host", "name": "host", "required": true
+                  "path": "host", "name": "host"
                 },
                 {
                   "path": "subset", "name": "subset"
@@ -879,13 +859,13 @@ data:
 
 
       {
-        "path": "spec.hosts", "name": "Hosts", "widget": "SimpleList"
+        "path": "spec.hosts", "name": "hosts", "widget": "SimpleList"
       },
       {
-        "path": "spec.gateways", "name": "Gateways", "widget": "SimpleList"
+        "path": "spec.gateways", "name": "gateways", "widget": "SimpleList"
       },
       {
-        "path": "spec.exportTo", "name": "Export To", "widget": "SimpleList"
+        "path": "spec.exportTo", "name": "exportTo", "widget": "SimpleList"
       },
     ]
   general: |-
@@ -895,21 +875,46 @@ data:
         "group": "networking.istio.io",
         "version": "v1beta1"
       },
-      "urlPath": "lyczeq-vs",
-      "category": "Lyczeq",
+      "urlPath": "ext-virtualservices",
+      "category": "Istio",
+      "name": "Ext VirtualServices",
       "scope": "namespace",
       "description": "{{[VirtualService](https://istio.io/latest/docs/reference/config/networking/virtual-service/)}} describes a configuration that affects traffic routing. ."
     }
   list: |-
     [
       { 
-        "name": "Hosts",
+        "name": "hosts",
         "source": "spec.hosts",
         "widget": "JoinedArray"
       },
       { 
-        "name": "Gateways",
+        "name": "gateways",
         "source": "spec.gateways",
         "widget": "JoinedArray"
       },
     ]
+  translations: |
+    en:
+      t-name: Name
+      gateways: Gateways
+      hosts: Hosts
+      exportTo: Export to
+      summary: Summary
+      http: HTTP
+      tls: TLS
+      tcp: TCP
+      mirrorPercentage: Mirror Percentage
+      timeout: Timeout
+      matches: Matches
+      uri: URI
+      scheme: Scheme
+      method: Method
+      authority: Authority
+      headers: Headers
+      port: Port
+      sourceLabels: Source Labels
+      queryParams: Query Params
+      ignoreUriCase: Ignore URI Case
+      withoutHeaders: Without Headers
+      sourceNamespace: Source Namespace
