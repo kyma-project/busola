@@ -13,17 +13,15 @@ export const useSidecar = ({
   const { features } = useMicrofrontendContext();
   const isIstioFeatureOn = features?.ISTIO?.isEnabled;
 
-  const existingResourceInjectionValue = jp.value(
-    initialRes || {},
-    `${path}["${[label]}"]`,
-  );
+  const isInitSidecarInjectionTurnedOn =
+    jp.value(initialRes || {}, `${path}["${[label]}"]`) === enabled;
 
   const [isSidecarEnabled, setSidecarEnabled] = useState(
-    initialRes ? existingResourceInjectionValue === enabled : false,
+    isInitSidecarInjectionTurnedOn,
   );
 
   useEffect(() => {
-    // toggles istio-injection label when 'Disable sidecar injection' is clicked
+    // toggles istio-injection when 'Enable sidecar injection' is clicked
     const addSidecarToYaml = () => {
       jp.value(res, `${path}["${[label]}"]`, enabled);
       setRes({ ...res });
@@ -46,14 +44,15 @@ export const useSidecar = ({
   }, [isSidecarEnabled, setSidecarEnabled, setRes, path, label, enabled]);
 
   useEffect(() => {
-    // toggles 'Enable sidecar injection' when istio-injection label is deleted in yaml
+    // toggles 'Enable sidecar injection' when istio-injection is deleted in yaml
 
     const isSidecarDisabledInYaml =
       jp.value(res, `${path}["${label}"]`) !== enabled;
+
     if (isSidecarEnabled && isSidecarDisabledInYaml) {
       setSidecarEnabled(false);
     }
-  }, [isSidecarEnabled, setSidecarEnabled, setRes, path, label, enabled]);
+  }, [isSidecarEnabled, setSidecarEnabled, setRes, path, label, enabled, res]);
 
   return { isIstioFeatureOn, isSidecarEnabled, setSidecarEnabled };
 };

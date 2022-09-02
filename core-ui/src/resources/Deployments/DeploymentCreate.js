@@ -15,7 +15,6 @@ import {
 } from './templates';
 
 import './DeploymentCreate.scss';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { Switch } from 'fundamental-react';
 import { useSidecar } from 'shared/hooks/useSidecarInjection';
 

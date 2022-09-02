@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
-import { Switch } from 'fundamental-react';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 import { cloneDeep } from 'lodash';
 
@@ -37,12 +35,9 @@ export function JobCreate({
   ...props
 }) {
   const { t } = useTranslation();
-  const { features } = useMicrofrontendContext();
-  const istioEnabled = features.ISTIO?.isEnabled;
+
   const defaultSidecarAnnotations = initialJob
     ? initialJob?.spec?.template?.metadata?.annotations
-    : istioEnabled
-    ? { [SIDECAR_INJECTION_LABEL]: SIDECAR_INJECTION_VALUE }
     : {};
 
   const [job, setJob] = useState(
@@ -54,34 +49,6 @@ export function JobCreate({
   useEffect(() => {
     setCustomValid(isJobValid(job));
   }, [job, setCustomValid]);
-
-  const onSwitchChange = () => {
-    const isSidecar =
-      jp.value(
-        job,
-        `$.spec.template.metadata.annotations["${SIDECAR_INJECTION_LABEL}"]`,
-      ) !== SIDECAR_INJECTION_VALUE;
-    if (isSidecar) {
-      jp.value(
-        job,
-        `$.spec.template.metadata.annotations["${SIDECAR_INJECTION_LABEL}"]`,
-        SIDECAR_INJECTION_VALUE,
-      );
-      setJob({ ...job });
-    } else {
-      const templateAnnotations =
-        job.spec.template?.metadata?.annotations || {};
-      delete templateAnnotations[SIDECAR_INJECTION_LABEL];
-
-      jp.value(
-        job,
-        '$.spec.template.metadata.annotations',
-        templateAnnotations,
-      );
-
-      setJob({ ...job });
-    }
-  };
 
   return (
     <ResourceForm
@@ -98,22 +65,6 @@ export function JobCreate({
       }
       createUrl={resourceUrl}
     >
-      <ResourceForm.FormField
-        label={t('jobs.create-modal.disable-sidecar')}
-        input={() => (
-          <Switch
-            compact
-            onChange={onSwitchChange}
-            checked={
-              jp.value(
-                job,
-                `$.spec.template.metadata.annotations["${SIDECAR_INJECTION_LABEL}"]`,
-              ) === SIDECAR_INJECTION_VALUE
-            }
-          />
-        )}
-      />
-
       <JobSpecSection advanced propertyPath="$.spec" readOnly={!!initialJob} />
 
       <ContainerSection
