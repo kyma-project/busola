@@ -117,6 +117,7 @@ data:
         "widget": "FormGroup",
         "path": "spec.ingress[].port",
         "required": true,
+        "simple": true,
         "children": [
           { 
             "path": "number", 
@@ -150,7 +151,8 @@ data:
       },
       {
         "widget": "FormGroup",
-        "path": "spec.ingress[].bind"
+        "path": "spec.ingress[].bind",
+        "simple": true
       },
       {
         "widget": "FormGroup",
@@ -160,16 +162,19 @@ data:
           "IPTABLES",
           "NONE"
         ],
+        "simple": true,
         "placeholder": "placeholders.dropdown",
       },
       {
         "widget": "FormGroup",
         "path": "spec.ingress[].defaultEndpoint",
         "required": true,
+        "simple": true
       },
       {
         "widget": "FormGroup",
         "path": "spec.egress[].port",
+        "simple": true,
         "children": [
           { 
             "path": "number", 
@@ -203,11 +208,13 @@ data:
       },
       {
         "widget": "FormGroup",
-        "path": "spec.egress[].bind"
+        "path": "spec.egress[].bind",
+        "simple": true
       },
       {
         "widget": "FormGroup",
         "path": "spec.egress[].captureMode",
+        "simple": true,
         "enum": [
           "DEFAULT",
           "IPTABLES",
@@ -219,6 +226,7 @@ data:
         "widget": "SimpleList",
         "path": "spec.egress[].hosts", 
         "required": true,
+        "simple": true,
         "placeholder": "placeholders.hosts"
       },
       {
