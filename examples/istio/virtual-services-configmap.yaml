@@ -72,7 +72,7 @@ data:
           {
             "widget": "Table",
             "source": "spec.http",
-            "name": "spec.http",
+            "name": "http",
             "visibility": "$exists(*)",
             "children": [
               {
@@ -111,7 +111,7 @@ data:
                     "source": "$item.port", "name": "port"
                   },
                   {
-                    "source": "$item.sourceLabels", "name": "sourceLabels ", "widget": "Labels"
+                    "source": "$item.sourceLabels", "name": "sourceLabels", "widget": "Labels"
                   },
                   {
                     "source": "$item.gateways", "name": "gateways", "widget": "JoinedArray"
@@ -131,52 +131,52 @@ data:
                 ]
               },
               {
-                "source": "$item.route", "name": "Routes", "widget": "Table", 
+                "source": "$item.route", "name": "routes", "widget": "Table", 
                 "visibility": "$exists(*)", "children":[
                   {
-                    "source": "$item.destination", "name": "Destination", "widget": "Panel", "visibility": "$exists(*)", "children": [
+                    "source": "$item.destination", "name": "destination", "widget": "Panel", "visibility": "$exists(*)", "children": [
                       {
-                        "source": "$item.host", "name": "Host"
+                        "source": "$item.host", "name": "host"
                       },
                       {
-                          "source": "$item.subset", "name": "Subset"
+                          "source": "$item.subset", "name": "subset"
                       },
                       {
-                        "source": "$item.port.number", "name": "Port"
+                        "source": "$item.port.number", "name": "port-number"
                       },
                     ] 
                   },
                   {
-                    "source": "$item.weight", "name": "Weight",
+                    "source": "$item.weight", "name": "weight",
                   },
                   {
-                    "source": "$item.headers", "name": "Headers", "widget": "Panel", 
+                    "source": "$item.headers", "name": "headers", "widget": "Panel", 
                     "visibility": "$exists(*)", children": [
                         {
-                          "source": "$item.request", "name": "Request", "widget": "Panel", 
+                          "source": "$item.request", "name": "request", "widget": "Panel", 
                           "visibility": "$exists(*)", "children":[
                               {
-                                "source": "$item.set", "name": "Set", "widget": "Labels"
+                                "source": "$item.set", "name": "set", "widget": "Labels"
                               },
                               {
-                                "source": "$item.add", "name": "Add", "widget": "Labels"
+                                "source": "$item.add", "name": "add", "widget": "Labels"
                               },
                               {
-                                "source": "$item.remove", "name": "Remove", "widget": "JoinedArray"
+                                "source": "$item.remove", "name": "remove", "widget": "JoinedArray"
                               }
                           ]
                         },
                         {
-                        "source": "$item.response", "name": "Response", "widget": "Panel", 
+                        "source": "$item.response", "name": "response", "widget": "Panel", 
                         "visibility": "$exists(*)", "children": [
                               {
-                                "source": "$item.set", "name": "Set", "widget": "Labels"
+                                "source": "$item.set", "name": "set", "widget": "Labels"
                               },
                               {
-                                "source": "$item.add", "name": "Add", "widget": "Labels"
+                                "source": "$item.add", "name": "add", "widget": "Labels"
                               },
                               {
-                                "source": "$item.remove", "name": "Remove", "widget": "JoinedArray"
+                                "source": "$item.remove", "name": "remove", "widget": "JoinedArray"
                               }
                           ]
                         },
@@ -185,81 +185,81 @@ data:
                 ]
               },
               {
-                "source": "$item.redirect", "name": "Redirect", "widget": "Panel", 
+                "source": "$item.redirect", "name": "redirect", "widget": "Panel", 
                 "visibility": "$exists(*)", "children": [
                   {
-                    "source": "$item.uri", "name": "URI"
+                    "source": "$item.uri", "name": "uri"
                   },
                   {
-                    "source": "$item.authority", "name": "Authority"
+                    "source": "$item.authority", "name": "authority"
                   },
                   {
-                    "source": "$item.port", "name": "Port"
+                    "source": "$item.port", "name": "port"
                   },
                   {
-                    "source": "$item.derivePort", "name": "Derive Port", "widget": "Labels"
+                    "source": "$item.derivePort", "name": "derivePort", "widget": "Labels"
                   },
                   {
-                    "source": "$item.scheme", "name": "Scheme"
+                    "source": "$item.scheme", "name": "scheme"
                   },
                   {
-                    "source": "$item.redirectCode", "name": "Redirect Code"
+                    "source": "$item.redirectCode", "name": "redirectCode"
                   },
                 ]
               },
               {
-                "source": "$item.delegate", "name": "Delegate", "widget": "Panel", 
+                "source": "$item.delegate", "name": "delegate", "widget": "Panel", 
                 "visibility": "$exists(*)", "children": [
                     {
-                      "source": "$item.name", "name": "Name"
+                      "source": "$item.name", "name": "t-name"
                     },
                     {
-                      "source": "$item.namespace", "name": "Namespace"
+                      "source": "$item.namespace", "name": "namespace"
                     },
                 ]
               },
               {
-                "source": "$item.rewrite", "name": "Rewrite", "widget": "Panel", 
+                "source": "$item.rewrite", "name": "rewrite", "widget": "Panel", 
                 "visibility": "$exists(*)", "children": [
                     {
-                      "source": "$item.uri", "name": "URI"
+                      "source": "$item.uri", "name": "uri"
                     },
                     {
-                      "source": "$item.authority", "name": "Authority"
+                      "source": "$item.authority", "name": "authority"
                     },
                 ]
               },
               {
-                "source": "$item.retries", "name": "Retries", "widget": "Panel", 
+                "source": "$item.retries", "name": "retries", "widget": "Panel", 
                 "visibility": "$exists(*)", "children": [
                     {
-                      "source": "$item.attempts", "name": "Attempts"
+                      "source": "$item.attempts", "name": "attempts"
                     },
                     {
-                      "source": "$item.perTryTimeout", "name": "Per Try Timeout"
+                      "source": "$item.perTryTimeout", "name": "perTryTimeout"
                     },
                     {
-                      "source": "$item.retryOn", "name": "Retry On"
+                      "source": "$item.retryOn", "name": "retryOn"
                     },
                     {
-                      "source": "$item.retryRemoteLocalities", "name": "Retry Remote Localities"
+                      "source": "$item.retryRemoteLocalities", "name": "retryRemoteLocalities"
                     },
                 ]
               },
               {
-                "source": "$item.fault", "name": "Fault", "widget": "Panel", 
+                "source": "$item.fault", "name": "fault", "widget": "Panel", 
                 "visibility": "$exists(*)", "children": [
                   {
-                    "source": "$item.delay", "name": "Delay", "widget": "Panel", 
+                    "source": "$item.delay", "name": "delay", "widget": "Panel", 
                     "visibility": "$exists(*)", "children": [
                       {
-                        "source": "$item.fixedDelay", "name": "Fixed Delay"
+                        "source": "$item.fixedDelay", "name": "fixedDelay"
                       },
                       {
-                        "source": "$item.percentage.value", "name": "Percentage"
+                        "source": "$item.percentage.value", "name": "percentage.value"
                       },
                       {
-                        "source": "$item.percent", "name": "Percent"
+                        "source": "$item.percent", "name": "percent"
                       }
                     ]
                   },
@@ -267,80 +267,80 @@ data:
                     "source": "$item.abort", "name": "Abort", "widget": "Panel", 
                     "visibility": "$exists(*)", "children": [
                       {
-                        "source": "$item.httpStatus", "name": "HTTP Status"
+                        "source": "$item.httpStatus", "name": "httpStatus"
                       },
                       {
-                        "source": "$item.percentage.value", "name": "Percentage"
+                        "source": "$item.percentage.value", "name": "percentage.value"
                       }
                     ]
                   }
                 ]
               },
               {
-                "source": "$item.mirror", "name": "Destination", "widget": "Panel", 
+                "source": "$item.mirror", "name": "destination", "widget": "Panel", 
                 "visibility": "$exists(*)", "children": [
                   {
-                    "source": "$item.host", "name": "Host"
+                    "source": "$item.host", "name": "host"
                   },
                   {
-                    "source": "$item.subset", "name": "Subset"
+                    "source": "$item.subset", "name": "subset"
                   },
                   {
-                    "source": "$item.port.number", "name": "Port"
+                    "source": "$item.port.number", "name": "port.number"
                   },
                 ]
               },
               {
-                "source": "$item.corsPolicy", "name": "CORS Policy", "widget": "Panel", 
+                "source": "$item.corsPolicy", "name": "corsPolicy", "widget": "Panel", 
                 "visibility": "$exists(*)", "children": [
                   {
-                    "source": "$item.allowOrigins", "name": "Allow Origins"
+                    "source": "$item.allowOrigins", "name": "allowOrigins"
                   },
                   {
-                    "source": "$item.allowMethods", "name": "Allow Methods", "widget": "JoinedArray"
+                    "source": "$item.allowMethods", "name": "allowMethods", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.allowHeaders", "name": "Allow Headers", "widget": "JoinedArray"
+                    "source": "$item.allowHeaders", "name": "allowHeaders", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.exposeHeaders", "name": "Expose Headers", "widget": "JoinedArray"
+                    "source": "$item.exposeHeaders", "name": "exposeHeaders", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.maxAge", "name": "Max Age"
+                    "source": "$item.maxAge", "name": "maxAge"
                   },
                   {
-                    "source": "$item.allowCredentials", "name": "Allow Credentials"
+                    "source": "$item.allowCredentials", "name": "allowCredentials"
                   }
                 ]
               },
               {
-                "source": "$item.headers", "name": "Headers", "widget": "Panel", 
+                "source": "$item.headers", "name": "headers", "widget": "Panel", 
                 "visibility": "$exists(*)", "children": [
                     {
-                      "source": "$item.request", "name": "Request", "widget": "Panel", 
+                      "source": "$item.request", "name": "request", "widget": "Panel", 
                       "visibility": "$exists(*)", "children":[
                           {
-                            "source": "$item.set", "name": "Set", "widget": "Labels"
+                            "source": "$item.set", "name": "set", "widget": "Labels"
                           },
                           {
-                            "source": "$item.add", "name": "Add", "widget": "Labels"
+                            "source": "$item.add", "name": "add", "widget": "Labels"
                           },
                           {
-                            "source": "$item.remove", "name": "Remove", "widget": "JoinedArray"
+                            "source": "$item.remove", "name": "remove", "widget": "JoinedArray"
                           }
                       ]
                     },
                     {
-                    "source": "$item.response", "name": "Response", "widget": "Panel", 
+                    "source": "$item.response", "name": "response", "widget": "Panel", 
                     "visibility": "$exists(*)", "children": [
                           {
-                            "source": "$item.set", "name": "Set", "widget": "Labels"
+                            "source": "$item.set", "name": "set", "widget": "Labels"
                           },
                           {
-                            "source": "$item.add", "name": "Add", "widget": "Labels"
+                            "source": "$item.add", "name": "add", "widget": "Labels"
                           },
                           {
-                            "source": "$item.remove", "name": "Remove", "widget": "JoinedArray"
+                            "source": "$item.remove", "name": "remove", "widget": "JoinedArray"
                           }
                       ]
                     },
@@ -918,3 +918,39 @@ data:
       ignoreUriCase: Ignore URI Case
       withoutHeaders: Without Headers
       sourceNamespace: Source Namespace
+      routes: Routes
+      destination: Destination
+      host: Host
+      subset: Subset
+      port-number: Port number
+      weight: Weight
+      request: Request
+      response: Response
+      set: Set
+      add: Add
+      remove: Remove
+      redirect: Redirect
+      derivePort: Derive Port
+      redirectCode: Redirect Code
+      delegate: Delegate
+      namespace: Namespace
+      rewrite: Rewrite
+      retries: Retries
+      attempts: Attempts
+      perTryTimeout: Per Try Timeout
+      retryOn: Retry On
+      retryRemoteLocalities: Retry Remote Localities
+      fault: Fault
+      delay: Delay
+      fixedDelay: Fixed Delay
+      abort: Abort
+      percentage.value: Percentage Value
+      percent: Percent
+      httpStatus: HTTP Status
+      corsPolicy: CORS Policy
+      allowOrigins: Allow Origins
+      allowMethods: Allow Methods
+      allowHeaders: Allow Headers
+      exposeHeaders: Expose Headers
+      maxAge: Max Age
+      allowCredentials: Allow Credentials
