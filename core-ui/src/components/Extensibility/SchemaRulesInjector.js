@@ -15,13 +15,12 @@ const propertiesWrapper = src => ({
 
 function extractVariables(varStore, vars, indexes) {
   if (!indexes?.length) {
-    return {};
+    return varStore;
   }
 
   return Object.fromEntries(
     vars.map(varName => [
       varName,
-      // `$${varName}`,
       indexes.reduce((acc, index) => acc?.[index], varStore[varName]),
     ]),
   );
@@ -182,8 +181,9 @@ export function SchemaRulesInjector({
           const variables = extractVariables(varStore, rule.itemVars, indexes);
           const visible = jsonataWrapper(rule.visibility).evaluate(resource, {
             ...varStore,
+            ...variables,
+            vars: varStore,
             item: lastArrayItem,
-            vars: variables,
             indexes,
             index,
           });

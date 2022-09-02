@@ -103,7 +103,7 @@ If you target elements of an array rather that the array itself, you can use `it
 
 ### Variable fields
 
-Additionally it's possible to define variable fields. In this case **path** is ommited and instead a **var** argument is used to specify variable name to assign to. Such a value is not added to the resultant yaml, but instead stored in memory and provided to any [JSONata](https://docs.jsonata.org/overview.html) handlers as variables (e.g. `$foo`). If the variable field is placed in an array property, the resultant variable is also an array.
+Additionally it's possible to define variable fields. In this case **path** is ommited and instead a **var** argument is used to specify variable name to assign to. Such a value is not added to the resultant yaml, but instead stored in memory and provided to any [JSONata](https://docs.jsonata.org/overview.html) handlers as variables (e.g. `$foo`). Variables will be provided for the current context - so if a variable is defined inside an array, the value is for that specific item. To access raw values, the predefined `$vars` variable has to be used.
 
 When using a variable inside an array it has to be wrapped inside a `[]` element (see example).
 
@@ -121,11 +121,11 @@ All jsonata expressions have a few variables that are predefined instead of bein
 - **\$item** - when in an array this contains the current item.
 - **\$index** - contains the index of the current item within the array.
 - **\$indexes** - contains a list of all the indexex for nested arrays.
-- **\$vars** - contains a map of all the variables for current item.
+- **\$vars** - contains a map of all the raw variable values.
 
 ### Example
 
-In the example the visibility for item price and description are analogous - first one uses scoped variables for the current item, the second extracts the value from an array variable using provided index.
+In the example the visibility for item price and color are analogous - the former one uses scoped variables for the current item, the latter extracts the value from an array variable using provided index - this is mostly useful for complex scenarios only.
 
 ```json
 [
@@ -135,8 +135,9 @@ In the example the visibility for item price and description are analogous - fir
     { "path": "[]", "children": [
       { "path": "name" },
       { "var": "itemMode", "type": "string", "enum": ["simple", "verbose"] },
-      { "path": "price", "visibility": "$vars.itemMode = 'verbose'" },
-      { "path": "description", "visibility": "$itemMode[$index] = 'verbose'" }
+      { "path": "price", "visibility": "$itemMode = 'verbose'" },
+      { "path": "color", "visibility": "$vars.itemMode[$index] = 'verbose'" },
+      { "path": "description", "visibility": "$useDescription" }
     ]}
   ]}
 ]
