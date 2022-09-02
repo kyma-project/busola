@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: virtual-services
-  namespace: lyczeq
+  namespace: kube-public
   labels:
     app.kubernetes.io/name: virtual-services
     busola.io/extension: resource
