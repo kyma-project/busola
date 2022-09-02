@@ -19,43 +19,7 @@ import './NamespaceCreate.scss';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection';
-const ISTIO_INJECTION_DISABLED = 'disabled';
 const ISTIO_INJECTION_ENABLED = 'enabled';
-
-const useSidecar = (initialNamespace, res, setRes) => {
-  const { features } = useMicrofrontendContext();
-  const isIstioFeatureOn = features?.ISTIO?.isEnabled;
-
-  const [isSidecar, setSidecar] = useState(
-    initialNamespace
-      ? !!initialNamespace?.metadata?.labels?.[ISTIO_INJECTION_LABEL]
-      : true,
-  );
-
-  useEffect(() => {
-    // toggles istio-injection label when 'Disable sidecar injection' is clicked
-    jp.value(
-      res,
-      `$.metadata.labels["${ISTIO_INJECTION_LABEL}"]`,
-      isSidecar ? ISTIO_INJECTION_DISABLED : ISTIO_INJECTION_ENABLED,
-    );
-    setRes({ ...res });
-    // eslint-disable-next-line
-  }, [isSidecar]);
-
-  useEffect(() => {
-    // toggles 'Disable sidecar injection' when istio-injection label is deleted manually
-    if (
-      isSidecar &&
-      jp.value(res, `$.metadata.labels["${ISTIO_INJECTION_LABEL}"]`) !==
-        ISTIO_INJECTION_DISABLED
-    ) {
-      setSidecar(false);
-    }
-  }, [isSidecar, setSidecar, res]);
-
-  return { isIstioFeatureOn, isSidecar, setSidecar };
-};
 
 export function NamespaceCreate({
   formElementRef,
@@ -73,7 +37,7 @@ export function NamespaceCreate({
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),
   );
 
-  const { isIstioFeatureOn, isSidecar, setSidecar } = useSidecar(
+  const { isIstioFeatureOn, isSidecarEnabled, setSidecarEnabled } = useSidecar(
     initialNamespace,
     namespace,
     setNamespace,
@@ -103,28 +67,6 @@ export function NamespaceCreate({
     createUrl: `/api/v1/namespaces/${namespace?.metadata?.name}/resourcequotas`,
     afterCreatedFn: () => {},
   });
-
-  useEffect(() => {
-    // toggles istio-injection label when 'Disable sidecar injection' is clicked
-    jp.value(
-      namespace,
-      `$.metadata.labels["${ISTIO_INJECTION_LABEL}"]`,
-      isSidecar ? ISTIO_INJECTION_DISABLED : ISTIO_INJECTION_ENABLED,
-    );
-    setNamespace({ ...namespace });
-    // eslint-disable-next-line
-  }, [isSidecar]);
-
-  useEffect(() => {
-    // toggles 'Disable sidecar injection' when istio-injection label is deleted manually
-    if (
-      isSidecar &&
-      jp.value(namespace, `$.metadata.labels["${ISTIO_INJECTION_LABEL}"]`) !==
-        ISTIO_INJECTION_DISABLED
-    ) {
-      setSidecar(false);
-    }
-  }, [isSidecar, setSidecar, namespace]);
 
   useEffect(() => {
     const name = namespace.metadata?.name;
@@ -235,10 +177,8 @@ export function NamespaceCreate({
         input={() => (
           <Switch
             compact
-            onChange={e => {
-              setSidecar(!isSidecar);
-            }}
-            checked={isSidecar}
+            onChange={() => setSidecarEnabled(value => !value)}
+            checked={isSidecarEnabled}
           />
         )}
       />
@@ -348,3 +288,47 @@ export function NamespaceCreate({
 }
 
 NamespaceCreate.allowEdit = true;
+
+const useSidecar = (initialNamespace, res, setRes) => {
+  const { features } = useMicrofrontendContext();
+  const isIstioFeatureOn = features?.ISTIO?.isEnabled;
+
+  const [isSidecarEnabled, setSidecarEnabled] = useState(
+    initialNamespace
+      ? !!initialNamespace?.metadata?.labels?.[ISTIO_INJECTION_LABEL]
+      : false,
+  );
+
+  useEffect(() => {
+    // toggles istio-injection label when 'Enable sidecar injection' is clicked
+    if (isSidecarEnabled) {
+      jp.value(
+        res,
+        `$.metadata.labels["${ISTIO_INJECTION_LABEL}"]`,
+        ISTIO_INJECTION_ENABLED,
+      );
+      setRes({ ...res });
+    } else {
+      const labels = res.metadata.labels || {};
+      delete labels[ISTIO_INJECTION_LABEL];
+      setRes({
+        ...res,
+        metadata: { ...res.metadata, labels },
+      });
+    }
+    // eslint-disable-next-line
+  }, [isSidecarEnabled]);
+
+  useEffect(() => {
+    // toggles 'Enable sidecar injection' when istio-injection label is deleted in yaml
+    if (
+      isSidecarEnabled &&
+      jp.value(res, `$.metadata.labels["${ISTIO_INJECTION_LABEL}"]`) !==
+        ISTIO_INJECTION_ENABLED
+    ) {
+      setSidecarEnabled(false);
+    }
+  }, [isSidecarEnabled, setSidecarEnabled, res]);
+
+  return { isIstioFeatureOn, isSidecarEnabled, setSidecarEnabled };
+};
