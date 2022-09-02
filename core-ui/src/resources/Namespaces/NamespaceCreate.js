@@ -301,13 +301,16 @@ const useSidecar = (initialNamespace, res, setRes) => {
   );
 
   useEffect(() => {
-    // toggles istio-injection label when 'Disable sidecar injection' is clicked
-    if (isSidecarEnabled) {
+    // toggles istio-injection 'Enable sidecar injection' is clicked
+    const addSidecarToYaml = () =>
       jp.value(
         res,
         `$.metadata.labels["${ISTIO_INJECTION_LABEL}"]`,
         ISTIO_INJECTION_ENABLED,
       );
+
+    if (isSidecarEnabled) {
+      addSidecarToYaml();
       setRes({ ...res });
     } else {
       const labels = res.metadata.labels || {};
@@ -321,12 +324,12 @@ const useSidecar = (initialNamespace, res, setRes) => {
   }, [isSidecarEnabled]);
 
   useEffect(() => {
-    // toggles 'Enable sidecar injection' when istio-injection label is deleted in yaml
-    if (
-      isSidecarEnabled &&
+    // toggles 'Enable sidecar injection' when istio-injection is changed in yaml
+    const disabledInYaml =
       jp.value(res, `$.metadata.labels["${ISTIO_INJECTION_LABEL}"]`) !==
-        ISTIO_INJECTION_ENABLED
-    ) {
+      ISTIO_INJECTION_ENABLED;
+
+    if (isSidecarEnabled && disabledInYaml) {
       setSidecarEnabled(false);
     }
   }, [isSidecarEnabled, setSidecarEnabled, res]);
