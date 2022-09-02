@@ -16,6 +16,11 @@ import {
 } from './templates';
 
 import './DeploymentCreate.scss';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { Switch } from 'fundamental-react';
+
+const ISTIO_INJECTION_LABEL = 'sidecar.istio.io/inject';
+const ISTIO_INJECTION_ENABLED = 'true';
 
 export function DeploymentCreate({
   formElementRef,
@@ -32,6 +37,11 @@ export function DeploymentCreate({
     initialDeployment
       ? _.cloneDeep(initialDeployment)
       : createDeploymentTemplate(namespace),
+  );
+  const { isIstioFeatureOn, isSidecarEnabled, setSidecarEnabled } = useSidecar(
+    initialDeployment,
+    deployment,
+    setDeployment,
   );
 
   useEffect(() => {
@@ -69,6 +79,18 @@ export function DeploymentCreate({
       initialResource={initialDeployment}
       handleNameChange={handleNameChange}
     >
+      <ResourceForm.FormField
+        advanced={!isIstioFeatureOn}
+        label={t('namespaces.create-modal.enable-sidecar')}
+        input={() => (
+          <Switch
+            compact
+            onChange={() => setSidecarEnabled(value => !value)}
+            checked={isSidecarEnabled}
+          />
+        )}
+      />
+
       <SimpleContainersView
         simple
         resource={deployment}
@@ -87,3 +109,54 @@ export function DeploymentCreate({
   );
 }
 DeploymentCreate.allowEdit = true;
+
+const useSidecar = (initialNamespace, res, setRes) => {
+  const { features } = useMicrofrontendContext();
+  const isIstioFeatureOn = features?.ISTIO?.isEnabled;
+
+  const [isSidecarEnabled, setSidecarEnabled] = useState(
+    initialNamespace
+      ? initialNamespace?.spec?.template?.metadata?.annotations?.[
+          ISTIO_INJECTION_LABEL
+        ] === ISTIO_INJECTION_ENABLED
+      : false,
+  );
+
+  useEffect(() => {
+    // toggles istio-injection label when 'Disable sidecar injection' is clicked
+    if (isSidecarEnabled) {
+      jp.value(
+        res,
+        `$.spec.template.metadata.annotations["${ISTIO_INJECTION_LABEL}"]`,
+        ISTIO_INJECTION_ENABLED,
+      );
+      setRes({ ...res });
+    } else {
+      const annotations = res.spec?.template?.metadata?.annotations;
+      if (annotations) {
+        delete annotations[ISTIO_INJECTION_LABEL];
+        const newRes = { ...res };
+        newRes.spec.template.metadata.annotations = annotations;
+
+        setRes(newRes);
+      }
+    }
+
+    // eslint-disable-next-line
+  }, [isSidecarEnabled]);
+
+  useEffect(() => {
+    // toggles 'Enable sidecar injection' when istio-injection label is deleted in yaml
+    if (
+      isSidecarEnabled &&
+      jp.value(
+        res,
+        `$.spec.template.metadata.annotations["${ISTIO_INJECTION_LABEL}"]`,
+      ) !== ISTIO_INJECTION_ENABLED
+    ) {
+      setSidecarEnabled(false);
+    }
+  }, [isSidecarEnabled, setSidecarEnabled, res]);
+
+  return { isIstioFeatureOn, isSidecarEnabled, setSidecarEnabled };
+};

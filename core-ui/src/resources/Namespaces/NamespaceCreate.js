@@ -295,12 +295,13 @@ const useSidecar = (initialNamespace, res, setRes) => {
 
   const [isSidecarEnabled, setSidecarEnabled] = useState(
     initialNamespace
-      ? !!initialNamespace?.metadata?.labels?.[ISTIO_INJECTION_LABEL]
+      ? initialNamespace?.metadata?.labels?.[ISTIO_INJECTION_LABEL] ===
+          ISTIO_INJECTION_ENABLED
       : false,
   );
 
   useEffect(() => {
-    // toggles istio-injection label when 'Enable sidecar injection' is clicked
+    // toggles istio-injection label when 'Disable sidecar injection' is clicked
     if (isSidecarEnabled) {
       jp.value(
         res,
