@@ -28,8 +28,6 @@ export function ResourceSchema({
   setVarStore,
   ...extraParams
 }) {
-  const [rootRule, setRootRule] = useState({});
-
   const onChange = useCallback(
     actions => {
       setStore(prevStore => storeUpdater(actions)(prevStore));

@@ -157,7 +157,7 @@ export function SchemaRulesInjector({
           ?.set('schemaRule', rule);
 
         let lastArrayItem;
-        const lastArrayIndex = storeKeys
+        let lastArrayIndex = storeKeys
           .toArray()
           // workaround for findLastIndex, Firefox isn't supporting it
           .reverse()
