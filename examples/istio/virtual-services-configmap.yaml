@@ -128,6 +128,9 @@ data:
                   {
                     "source": "$item.sourceNamespace", "name": "sourceNamespace"
                   },
+                  {
+                    "source": "$item.statPrefix", "name": "statPrefix"
+                  },
                 ]
               },
               {
@@ -142,7 +145,7 @@ data:
                           "source": "$item.subset", "name": "subset"
                       },
                       {
-                        "source": "$item.port.number", "name": "port-number"
+                        "source": "$item.port.number", "name": "port.number"
                       },
                     ] 
                   },
@@ -205,6 +208,25 @@ data:
                   {
                     "source": "$item.redirectCode", "name": "redirectCode"
                   },
+                ]
+              },
+              {
+                "source": "$item.directResponse", "name": "directResponse", "widget": "Panel",
+                "visibility": "$exists(*)", "children": [
+                  {
+                    "source": "$item.status", "name": "status"
+                  },
+                  {
+                    "source": "$item.body", "name": "body", "widget": "Panel", 
+                    "visibility": "$exists(*)", "children": [
+                      {
+                        "source": "$item.string", "name": "string"
+                      },
+                      {
+                        "source": "$item.bytes", "name": "bytes"
+                      },
+                    ]
+                  }
                 ]
               },
               {
@@ -277,7 +299,7 @@ data:
                 ]
               },
               {
-                "source": "$item.mirror", "name": "destination", "widget": "Panel", 
+                "source": "$item.mirror", "name": "Mirror", "widget": "Panel", 
                 "visibility": "$exists(*)", "children": [
                   {
                     "source": "$item.host", "name": "host"
@@ -351,50 +373,50 @@ data:
           {
             "widget": "Table",
             "source": "spec.tcp",
-            "name": "TCP",
+            "name": "tcp",
             "visibility": "$exists(*)",
             "children": [
                 {
-                "source": "$item.match", "name": "Matches", "widget": "Table", 
+                "source": "$item.match", "name": "matches", "widget": "Table", 
                 "visibility": "$exists(*)", "children": [
                   {
-                    "source": "$item.destinationSubnets", "name": "Destination Subnets",
+                    "source": "$item.destinationSubnets", "name": "destinationSubnets",
                     "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.port", "name": "Port"
+                    "source": "$item.port", "name": "port"
                   },
                   {
-                    "source": "$item.sourceLabels", "name": "Source Labels", "widget": "Labels"
+                    "source": "$item.sourceLabels", "name": "sourceLabels", "widget": "Labels"
                   },
                   {
-                    "source": "$item.gateways", "name": "Gateways", "widget": "JoinedArray"
+                    "source": "$item.gateways", "name": "gateways", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.sourceNamespace", "name": "Source Namespace"
+                    "source": "$item.sourceNamespace", "name": "sourceNamespace"
                   }
                 ]
               },
             ],
             "collapsible": [
               {
-                "source": "$item.route", "name": "Routes", "widget": "Table",
+                "source": "$item.route", "name": "routes", "widget": "Table",
                 "visibility": "$exists(*)", "children": [
                   {
-                    "source": "$item.destination", "name": "Destination", "widget": "Panel", "visibility": "$exists(*)", "children": [
+                    "source": "$item.destination", "name": "destination", "widget": "Panel", "visibility": "$exists(*)", "children": [
                       {
-                        "source": "$item.host", "name": "Host"
+                        "source": "$item.host", "name": "host"
                       },
                       {
-                          "source": "$item.subset", "name": "Subset"
+                          "source": "$item.subset", "name": "subset"
                       },
                       {
-                        "source": "$item.port.number", "name": "Port"
+                        "source": "$item.port.number", "name": "port"
                       },
                     ] 
                   },
                   {
-                    "source": "$item.weight", "name": "Weight"
+                    "source": "$item.weight", "name": "weight"
                   }
                 ]
               },
@@ -403,53 +425,53 @@ data:
           {
             "widget": "Table",
             "source": "spec.tls",
-            "name": "TLS",
+            "name": "tls",
             "visibility": "$exists(*)",
             "children": [
                 {
-                "source": "$item.match", "name": "Matches", "widget": "Table", 
+                "source": "$item.match", "name": "matches", "widget": "Table", 
                 "visibility": "$exists(*)", "children": [
                   {
-                    "source": "$item.sniHosts", "name": "SNI Hosts", "widget": "JoinedArray"
+                    "source": "$item.sniHosts", "name": "sniHosts", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.destinationSubnets", "name": "Destination Subnets",
+                    "source": "$item.destinationSubnets", "name": "destinationSubnets",
                     "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.port", "name": "Port"
+                    "source": "$item.port", "name": "port"
                   },
                   {
-                    "source": "$item.sourceLabels", "name": "Source Labels", "widget": "Labels"
+                    "source": "$item.sourceLabels", "name": "sourceLabels", "widget": "Labels"
                   },
                   {
-                    "source": "$item.gateways", "name": "Gateways", "widget": "JoinedArray"
+                    "source": "$item.gateways", "name": "gateways", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.sourceNamespace", "name": "Source Namespace"
+                    "source": "$item.sourceNamespace", "name": "sourceNamespace"
                   }
                 ]
               },
             ],
             "collapsible": [
               {
-                "source": "$item.route", "name": "Routes", "widget": "Table",
+                "source": "$item.route", "name": "routes", "widget": "Table",
                 "visibility": "$exists(*)", "children": [
                   {
-                    "source": "$item.destination", "name": "Destination", "widget": "Panel", "children": [
+                    "source": "$item.destination", "name": "destination", "widget": "Panel", "children": [
                       {
-                        "source": "$item.host", "name": "Host"
+                        "source": "$item.host", "name": "host"
                       },
                       {
-                          "source": "$item.subset", "name": "Subset"
+                          "source": "$item.subset", "name": "subset"
                       },
                       {
-                        "source": "$item.port.number", "name": "Port"
+                        "source": "$item.port.number", "name": "port.number"
                       },
                     ] 
                   },
                   {
-                    "source": "$item.weight", "name": "Weight"
+                    "source": "$item.weight", "name": "weight"
                   }
                 ]
               }
@@ -460,50 +482,50 @@ data:
   form: |-
     [
       {
-        "path": "spec.tls", "widget": "GenericList", "name": "TLS", "children":[
+        "path": "spec.tls", "widget": "GenericList", "name": "tls", "children":[
           {
-            "path": "[].match", "widget": "GenericList", "name": "Matches", "children": [
+            "path": "[].match", "widget": "GenericList", "name": "matches", "children": [
               {
-                "path": "[].sniHosts", "widget": "SimpleList", "name": "SNI Hosts", 
+                "path": "[].sniHosts", "widget": "SimpleList", "name": "sniHosts", 
               },
               {
-                "path": "[].sourceNamespace", "name": "Source Namespace"
+                "path": "[].sourceNamespace", "name": "sourceNamespace"
               },
               {
-                "path": "[].port", "name": "Port"
+                "path": "[].port", "name": "port"
               },
               {
-                "path": "[].destinationSubnets",  "widget": "SimpleList", "name": "Destination Subnets"
+                "path": "[].destinationSubnets",  "widget": "SimpleList", "name": "destinationSubnets"
               },
               {
-                "path": "[].sourceLabels",  "widget": "KeyValuePair", "name": "Source Labels"
+                "path": "[].sourceLabels",  "widget": "KeyValuePair", "name": "sourceLabels"
               },
               {
-                "path": "[].gateways", "widget": "SimpleList", "name": "Gateways"
+                "path": "[].gateways", "widget": "SimpleList", "name": "gateways"
               },
 
             ]
           },
 
           {
-            "path": "[].route", "widget": "GenericList", "name": "Routes", "children": [
+            "path": "[].route", "widget": "GenericList", "name": "routes", "children": [
               {
-                "path": "[].destination", "widget": "FormGroup", "name": "Destination", "children": [
+                "path": "[].destination", "widget": "FormGroup", "name": "destination", "children": [
 
                   {
-                    "path": "host", "name": "Host", 
+                    "path": "host", "name": "host", 
                   },
                   {
-                    "path": "subset", "name": "Subset"
+                    "path": "subset", "name": "subset"
                   },
                   {
-                    "path": "port.number", "name": "Port number"
+                    "path": "port.number", "name": "port.number"
                   }
                 
                 ]
               },
               {
-                "path": "[].weight", "name": "Weight"
+                "path": "[].weight", "name": "weight"
               },
 
             ]
@@ -512,50 +534,50 @@ data:
       },
 
       {
-        "path": "spec.tcp", "name": "TCP", "widget": "GenericList", "children": [
+        "path": "spec.tcp", "name": "tcp", "widget": "GenericList", "children": [
 
           {
-            "path": "[].match", "name": "Matches", "children": [
+            "path": "[].match", "name": "matches", "children": [
 
               {
-                "path": "[].sourceNamespace", "name": "Source Namespace"
+                "path": "[].sourceNamespace", "name": "sourceNamespace"
               },
               {
-                "path": "[].port", "name": "Port"
+                "path": "[].port", "name": "port"
               },
               {
-                "path": "[].sniHosts", "widget": "SimpleList", "name": "SNI Hosts"
+                "path": "[].sniHosts", "widget": "SimpleList", "name": "sniHosts"
               },
               {
-                "path": "[].destinationSubnets", "widget": "SimpleList", "name": "Destination Subnets"
+                "path": "[].destinationSubnets", "widget": "SimpleList", "name": "destinationSubnets"
               },
               {
-                "path": "[].sourceLabels", "name":"Source Labels", "widget": "KeyValuePair"
+                "path": "[].sourceLabels", "name":"sourceLabels", "widget": "KeyValuePair"
               },
               {
-                "path": "[].gateways", "widget": "SimpleList", "name": "Gateways"
+                "path": "[].gateways", "widget": "SimpleList", "name": "gateways"
               }
 
             ]
           },
           {
-            "path": "[].route", "name": "Routes", "children": [
+            "path": "[].route", "name": "routes", "children": [
               {
-                "path": "[].destination", "widget": "FormGroup", "name": "Destination","children": [
+                "path": "[].destination", "widget": "FormGroup", "name": "destination","children": [
                   {
-                    "path": "host", "name": "Host"
+                    "path": "host", "name": "host"
                   },
                   {
-                    "path": "subset", "name": "Subset"
+                    "path": "subset", "name": "subset"
                   },
                   {
-                    "path": "port.number", "name": "Port number"
+                    "path": "port.number", "name": "port.number"
                   }
                 
                 ]
               },
               {
-                "path": "[].weight", "name": "Weight"
+                "path": "[].weight", "name": "weight"
               },
 
             ]
@@ -565,11 +587,11 @@ data:
       },
 
       {
-        "path": "spec.http", "simple": true, "name": "HTTP", "widget": "GenericList","children":[
+        "path": "spec.http", "simple": true, "name": "http", "widget": "GenericList","children":[
           {
-            "path": "[].match", "name": "Matches", "widget": "GenericList", "children": [
+            "path": "[].match", "name": "matches", "widget": "GenericList", "children": [
               {
-                "path": "[].name", "name": "Name"
+                "path": "[].name", "name": "t-name"
               },
               {
                 "path": "[].uri", "name": "uri", "widget": "KeyValuePair", "keyEnum": ['prefix', 'exact', 'regex']
@@ -589,7 +611,7 @@ data:
                 }
               },
               {
-                "path": "[].port", "name": "Port"
+                "path": "[].port", "name": "port"
               },
               {
                 "path": "[].sourceLabels", "name": "sourceLabels", "widget": "KeyValuePair"
@@ -619,54 +641,54 @@ data:
             ]
           },
           {
-            "path": "[].route", "name": "Routes", "children": [
+            "path": "[].route", "name": "routes", "children": [
              {
-                "path": "[].destination", "name": "Destination", "widget": "FormGroup", "children": [
+                "path": "[].destination", "name": "destination", "widget": "FormGroup", "children": [
 
                   {
-                    "path": "host", "name": "Host"
+                    "path": "host", "name": "host"
                   },
                   {
-                    "path": "subset", "name": "Subset"
+                    "path": "subset", "name": "subset"
                   },
                   {
-                    "path": "port.number", "name": "Port number"
+                    "path": "port.number", "name": "port.number"
                   }
                 
                 ]
               },
               {
-                "path": "[].weight", "name": "Weight"
+                "path": "[].weight", "name": "weight"
               },
               {
-                "path": "[].headers", "name": "Headers", "widget": "FormGroup", "children": [
+                "path": "[].headers", "name": "headers", "widget": "FormGroup", "children": [
 
                   {
-                    "path": "response", "name": "Response", "widget": "FormGroup", "children": [
+                    "path": "response", "name": "response", "widget": "FormGroup", "children": [
                     
                       {
-                        "path": "set", "name": "Set", "widget": "KeyValuePair" 
+                        "path": "set", "name": "set", "widget": "KeyValuePair" 
                       },
                       {
-                        "path": "add", "name": "Add", "widget": "KeyValuePair" 
+                        "path": "add", "name": "add", "widget": "KeyValuePair" 
                       },
                       {
-                        "path": "remove", "name": "Remove", "widget": "KeyValuePair" 
+                        "path": "remove", "name": "remove", "widget": "SimpleList" 
                       },
 
                     ]
                   },
                   {
-                    "path": "request", "name": "Request", "widget": "FormGroup", "children": [
+                    "path": "request", "name": "request", "widget": "FormGroup", "children": [
                     
                       {
-                        "path": "set", "name": "Set", "widget": "KeyValuePair" 
+                        "path": "set", "name": "set", "widget": "KeyValuePair" 
                       },
                       {
-                        "path": "add", "name": "Add", "widget": "KeyValuePair" 
+                        "path": "add", "name": "add", "widget": "KeyValuePair" 
                       },
                       {
-                        "path": "remove", "name": "Remove", "widget": "KeyValuePair" 
+                        "path": "remove", "name": "remove", "widget": "SimpleList" 
                       },
 
                     ]
@@ -762,7 +784,7 @@ data:
                       "path": "fixedDelay", "name": "fixedDelay", 
                     },
                     {
-                      "path": "percentage.value", "name": "percentage"
+                      "path": "percentage.value", "name": "percentage.value"
                     },
                     {
                       "path": "percent", "name": "percent"
@@ -778,7 +800,7 @@ data:
                       "path": "grpcStatus", "name": "grpcStatus"
                     },
                     {
-                      "path": "percentage.value", "name": "percentage"
+                      "path": "percentage.value", "name": "percentage.value"
                     },
                   ]
                 },
@@ -801,53 +823,53 @@ data:
               "path": "[].mirrorPercentage.value", "name": "mirrorPercentage"
             },
             {
-              "path": "[].corsPolicy", "name": "CORS Policy", "widget": "FormGroup", "children": [
+              "path": "[].corsPolicy", "name": "corsPolicy", "widget": "FormGroup", "children": [
                 {
-                  "path": "allowCredentials", "name": "Allow Credentials", "type": "boolean"
+                  "path": "allowCredentials", "name": "allowCredentials", "type": "boolean"
                 }, 
                 {
-                  "path": "allowMethods", "name": "Allow Methods", "widget": "SimpleList"
+                  "path": "allowMethods", "name": "allowMethods", "widget": "SimpleList"
                 },
                 {
-                  "path": "allowHeaders", "name": "Allow Headers", "widget": "SimpleList"
+                  "path": "allowHeaders", "name": "allowHeaders", "widget": "SimpleList"
                 },
                 {
-                  "path": "exposeHeaders", "name": "Expose Headers", "widget": "SimpleList"
+                  "path": "exposeHeaders", "name": "exposeHeaders", "widget": "SimpleList"
                 },
                 {
-                  "path": "maxAge", "name": "Max Age"
+                  "path": "maxAge", "name": "maxAge"
                 }
               ]
             },
             {
-              "path": "[].headers", "name": "Headers", "widget": "FormGroup", "children": [
+              "path": "[].headers", "name": "headers", "widget": "FormGroup", "children": [
 
                 {
-                  "path": "response", "name": "Response", "widget": "FormGroup", "children": [
+                  "path": "response", "name": "response", "widget": "FormGroup", "children": [
                   
                     {
-                      "path": "set", "name": "Set", "widget": "KeyValuePair" 
+                      "path": "set", "name": "set", "widget": "KeyValuePair" 
                     },
                     {
-                      "path": "add", "name": "Add", "widget": "KeyValuePair" 
+                      "path": "add", "name": "add", "widget": "KeyValuePair" 
                     },
                     {
-                      "path": "remove", "name": "Remove", "widget": "KeyValuePair" 
+                      "path": "remove", "name": "remove", "widget": "SimpleList" 
                     },
 
                   ]
                 },
                 {
-                  "path": "request", "name": "Request", "widget": "FormGroup", "children": [
+                  "path": "request", "name": "request", "widget": "FormGroup", "children": [
                   
                     {
-                      "path": "set", "name": "Set", "widget": "KeyValuePair" 
+                      "path": "set", "name": "set", "widget": "KeyValuePair" 
                     },
                     {
-                      "path": "add", "name": "Add", "widget": "KeyValuePair" 
+                      "path": "add", "name": "add", "widget": "KeyValuePair" 
                     },
                     {
-                      "path": "remove", "name": "Remove", "widget": "KeyValuePair" 
+                      "path": "remove", "name": "remove", "widget": "SimpleList" 
                     },
 
                   ]
@@ -904,6 +926,7 @@ data:
       http: HTTP
       tls: TLS
       tcp: TCP
+      mirror: Mirror
       mirrorPercentage: Mirror Percentage
       timeout: Timeout
       matches: Matches
@@ -918,11 +941,12 @@ data:
       ignoreUriCase: Ignore URI Case
       withoutHeaders: Without Headers
       sourceNamespace: Source Namespace
+      statPrefix: Stat Prefix
       routes: Routes
       destination: Destination
       host: Host
       subset: Subset
-      port-number: Port number
+      port.number: Port Number
       weight: Weight
       request: Request
       response: Response
@@ -932,6 +956,11 @@ data:
       redirect: Redirect
       derivePort: Derive Port
       redirectCode: Redirect Code
+      directResponse: Direct Response
+      status: Status
+      body: Body
+      string: String
+      bytes: Bytes
       delegate: Delegate
       namespace: Namespace
       rewrite: Rewrite
@@ -947,6 +976,7 @@ data:
       percentage.value: Percentage Value
       percent: Percent
       httpStatus: HTTP Status
+      grpcStatus: GRPC Status
       corsPolicy: CORS Policy
       allowOrigins: Allow Origins
       allowMethods: Allow Methods
@@ -954,3 +984,5 @@ data:
       exposeHeaders: Expose Headers
       maxAge: Max Age
       allowCredentials: Allow Credentials
+      destinationSubnets: Destination Subnets
+      sniHosts: SNI Hosts
