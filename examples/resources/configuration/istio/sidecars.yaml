@@ -152,6 +152,7 @@ data:
       {
         "widget": "FormGroup",
         "path": "spec.ingress[].bind",
+        "placeholder": "placeholders.bind",
         "simple": true
       },
       {
@@ -168,6 +169,7 @@ data:
       {
         "widget": "FormGroup",
         "path": "spec.ingress[].defaultEndpoint",
+        "placeholder": "placeholders.defaultEndpoint",
         "required": true,
         "simple": true
       },
@@ -209,6 +211,7 @@ data:
       {
         "widget": "FormGroup",
         "path": "spec.egress[].bind",
+        "placeholder": "placeholders.bind",
         "simple": true
       },
       {
@@ -282,6 +285,8 @@ data:
         "item.port.targetPoint": "Target Point",
         "placeholders.dropdown": "Type or choose an option",
         "selector.matchesAllPods": "Matches all Pods in the Namespace",
-        "placeholders.hosts": "For example, *.api.mydomain.com"
+        "placeholders.hosts": "For example, *.api.mydomain.com",
+        "placeholders.defaultEndpoint": "For example, 127.0.0.1:PORT",
+        "placeholders.bind": "For example, IPv4: x.x.x.x",
       }
     }
