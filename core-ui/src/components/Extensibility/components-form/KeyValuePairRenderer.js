@@ -110,6 +110,7 @@ export function KeyValuePairRenderer({
         value: getValueComponent(valueInfo),
         key: getEnumComponent(schema.get('keyEnum')),
       }}
+      className="key-enum"
       title={titleTranslation}
       required={schemaRequired ?? required}
       initialValue={valueInfo.type === 'object' ? {} : ''}

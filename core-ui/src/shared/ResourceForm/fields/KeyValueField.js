@@ -8,7 +8,7 @@ import { base64Decode, base64Encode, readFromFile } from 'shared/helpers';
 import { MultiInput } from './MultiInput';
 import * as Inputs from '../inputs';
 
-import './KeyValuePair.scss';
+import './KeyValueField.scss';
 
 export function KeyValueField({
   actions = [],

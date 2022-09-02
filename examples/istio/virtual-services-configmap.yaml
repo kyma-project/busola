@@ -828,7 +828,7 @@ data:
                   "path": "allowCredentials", "name": "allowCredentials", "type": "boolean"
                 }, 
                 {
-                  "path": "allowMethods", "name": "allowMethods", "widget": "SimpleList"
+                  "path": "allowMethods", "name": "allowMethods", "widget": "SimpleList", "placeholder": "allowMethods.placeholder"
                 },
                 {
                   "path": "allowHeaders", "name": "allowHeaders", "widget": "SimpleList"
@@ -837,7 +837,7 @@ data:
                   "path": "exposeHeaders", "name": "exposeHeaders", "widget": "SimpleList"
                 },
                 {
-                  "path": "maxAge", "name": "maxAge"
+                  "path": "maxAge", "name": "maxAge", "placeholder": "maxAge.placeholder"
                 }
               ]
             },
@@ -980,9 +980,11 @@ data:
       corsPolicy: CORS Policy
       allowOrigins: Allow Origins
       allowMethods: Allow Methods
+      allowMethods.placeholder: For example, GET
       allowHeaders: Allow Headers
       exposeHeaders: Expose Headers
       maxAge: Max Age
+      maxAge.placeholder: For example, 24h
       allowCredentials: Allow Credentials
       destinationSubnets: Destination Subnets
       sniHosts: SNI Hosts
