@@ -36,13 +36,47 @@ data:
       "body": [
         {
           "widget": "ResourceList",
-          "source": "$subscriptions",
-          "name": "Subscription"
+          "source": "$subscriptions()",
+          "name": "Subscription",
+          "children": [
+            {
+              "source": "$item", "name": "Name", "sort": "true", "widget": "ResourceLink", 
+              "resource": {
+                "name": "data.metadata.name",
+                "namespace": "root.metadata.namespace",
+                "kind": "data.kind"
+              }
+            },
+            {
+              "source": "$item.spec.filter.filters[0].eventType.value", "name": "First event type", "sort": {
+              "default": true, "compareFunction": "$compareStrings($first, $second)"}
+            },
+            {
+              "source": "$item.status.ready", 
+              "name": "Ready",
+              "sort": true,
+              "widget": "Badge",
+              "highlights": {
+                "positive": ["true"],
+                "negative": ["false"]
+              }
+            },
+          ]    
         },
         {
           "widget": "ResourceList",
-          "source": "$apirules",
-          "name": "API Rule"
+          "source": "$apirules()",
+          "name": "API Rule",
+          "sort": [
+            {
+              "source": "spec.service.host",
+              "default": true
+            },
+            {
+              "source": "spec.service.port",
+              "compareFunction": $first - $second
+            }
+          ]
         }
       ]
     }
@@ -53,15 +87,17 @@ data:
         "name": "Controlled By",
         "source": "metadata.ownerReferences",
         "widget": "ControlledBy",
-        "kindOnly": true,
+        "kindOnly": true
       },
       {
         "name": "Type",
         "source": "spec.type",
+        "sort": {"compareFunction": "$compareStrings($second, $first)"}
       },
       {
         "name": "Cluster IP",
         "source": "spec.clusterIP",
+        "sort": true
       },
       {
         "name": "Ports",

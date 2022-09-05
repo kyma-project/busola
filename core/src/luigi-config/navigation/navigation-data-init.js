@@ -428,7 +428,6 @@ export async function createNavigationNodes({
         kubeconfigIdContents: await handleKubeconfigIdIfPresent(),
         language: i18next.language,
         ssoData: getSSOAuthData(),
-        groupVersions,
         apiGroups,
         groupVersions,
         settings: {

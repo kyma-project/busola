@@ -3,11 +3,11 @@ import { Link } from 'fundamental-react';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 import { useTranslation } from 'react-i18next';
 import { useGetPlaceholder, useGetTranslation } from '../helpers';
-import jsonata from 'jsonata';
+import { jsonataWrapper } from '../jsonataWrapper';
 
 function getLinkData({ value, formulas, originalResource, t }) {
   const applyFormula = formula =>
-    jsonata(formula).evaluate({ data: value, root: originalResource });
+    jsonataWrapper(formula).evaluate({ data: value, root: originalResource });
 
   try {
     return {

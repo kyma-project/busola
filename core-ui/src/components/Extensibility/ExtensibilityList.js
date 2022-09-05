@@ -12,6 +12,7 @@ import {
   TranslationBundleContext,
   useGetTranslation,
   applyFormula,
+  sortBy,
 } from './helpers';
 import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
@@ -70,10 +71,13 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     applyFormula(value, resMetaData.resource.filter, tBusola);
   listProps.filter = isFilterAString ? filterFn : undefined;
 
+  const sortOptions = (resMetaData?.list || []).filter(element => element.sort);
+
   return (
     <ResourcesList
       createResourceForm={ExtensibilityCreate}
       disableCreate={disableCreate}
+      sortBy={defaultSortOptions => sortBy(sortOptions, t, defaultSortOptions)}
       {...listProps}
     />
   );

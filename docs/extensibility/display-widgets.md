@@ -98,10 +98,6 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 
 JoinedArray widgets render all the values of an array of strings as a comma-separated list.
 
-#### Widget-specific parameters
-
-- **separator** - a string by which the elements of the array will be separated by. The default value is a comma `,`.
-
 #### Example
 
 ```json
@@ -115,9 +111,13 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
 
 <img src="./assets/display-widgets/JoinedArray.png" alt="Example of a joined array widget" width="20%" style="border: 1px solid #D2D5D9">
 
+#### Widget-specific parameters
+
+- **separator** - a string by which the elements of the array are separated. The default value is a comma `,`. You can use `break` to separate elements with a new line.
+
 ### Labels
 
-Labels widgets render all the object entries in the `key-value` format.
+Labels widgets render all the array or object entries in the `value` or `key-value` format.
 
 #### Widget-specific parameters
 
@@ -268,6 +268,34 @@ Panel widgets render an object as a separate panel with its own title (based on 
 
 <img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
 
+#### Widget-specific parameters
+
+- **header** - an optional array that allows you to, for example, display labels in the panel header.
+- **disablePadding** - an optional boolean which disables the padding inside the panel body.
+
+#### Example
+
+```json
+{
+  "widget": "Panel",
+  "name": "spec.selector",
+  "children": [
+    {
+      "source": "$podSelector()",
+      "widget": "ResourceList"
+    }
+  ],
+  "header": [
+    {
+      "source": "spec.selector",
+      "widget": "Labels",
+      "name": "spec.selector",
+      "visibility": "spec.selector"
+    }
+  ]
+}
+```
+
 ### Plain
 
 Plain widgets render all contents of an object or list sequentially without any decorations. This is the default behavior for all objects and arrays.
@@ -276,27 +304,70 @@ Plain widgets render all contents of an object or list sequentially without any 
 
 ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with [related resources](resources.md#datasources-section).
 
-If such resource list was already defined in Busola, the configuration will be reused. To obtain custom columns, specify the `columns` field.
+#### Widget-specific parameters
+
+- **children** optional field used to obtain custom columns. If not set, the configuration is reused based on the existing resource list defined in Busola.
+- **sort** - optional sort option. It's an array of objects that allows you to sort by the value from the given **source**.
+  - **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form, it's the path to the value.
+  - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
+  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
 
 Since the **ResourceList** widget does more than just list the items, you must provide the whole data source (`$myResource()`) instead of just the items (`$myResource().items`).
 
-#### Example
+#### Examples
 
 ```json
 {
   "widget": "ResourceList",
-  "source": "$myRelatedResource()",
-  "name": "Example ResourceList Secret",
-  "children": [
+  "source": "$myDeployments()",
+  "name": "Example ResourceList Deployments",
+  "sort": [
     {
-      "source": "$item.status.code",
-      "widget": "Badge"
+      "source": "spec.replicas",
+      "compareFunction": "$second - $first"
+    },
+    {
+      "source": "$item.spec.strategy.type",
+      "compareFunction": "$compareStrings($second, $first)",
+      "default": true
     }
   ]
 }
 ```
 
 <img src="./assets/display-widgets/ResourceList.png" alt="Example of a ResourceList widget" style="border: 1px solid #D2D5D9">
+
+---
+
+```json
+{
+  "widget": "ResourceList",
+  "path": "$mySecrets",
+  "name": "Example ResourceList Secret with children",
+  "children": [
+    {
+      "source": "$item",
+      "name": "Name",
+      "sort": "true",
+      "widget": "ResourceLink",
+      "resource": {
+        "name": "data.metadata.name",
+        "namespace": "root.metadata.namespace",
+        "kind": "data.kind"
+      }
+    },
+    {
+      "source": "type",
+      "name": "Type",
+      "sort": {
+        "default": true
+      }
+    }
+  ]
+}
+```
+
+<img src="./assets/display-widgets/ResourceListChildren.png" alt="Example of a ResourceList widget with children" style="border: 1px solid #D2D5D9">
 
 ### ResourceRefs
 
@@ -325,15 +396,24 @@ Table widgets display array data as rows of a table instead of free-standing com
 #### Widget-specific parameters
 
 - **collapsible** - an optional array of extra widgets to display as an extra collapsible section. Uses the same format as the **children** parameter.
+- **sort** - optional sort option. If set to `true`, it allows you to sort using this value. Defaults to false. It can also be set to an object with the following properties:
+  - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
+  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
 
 #### Example
 
 ```json
 {
-  "source": "spec.item-list",
+  "source": "spec.toppings",
   "widget": "Table",
-  "children": [{ "source": "$item.name" }, { "source": "$item.status" }],
-  "collapsible": [{ "source": "$item.description" }]
+  "collapsible": [{ "source": "quantity" }],
+  "children": [
+    { "source": "$item.name", "sort": true },
+    {
+      "source": "$item.price",
+      "sort": { "default": true, "compareFunction": "$second -$first" }
+    }
+  ]
 }
 ```
 

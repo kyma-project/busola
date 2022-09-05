@@ -1,4 +1,4 @@
-import jsonata from 'jsonata';
+import { jsonataWrapper } from 'components/Extensibility/jsonataWrapper';
 import { useEffect } from 'react';
 import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
 
@@ -74,12 +74,16 @@ export function getResourceGraphConfig(t, context, addStyle) {
               networkFlowKind,
               networkFlowLevel,
               resource,
-              // bring relations[].filter from "jsonata expression format" to "normal function format"
+              // bring relations[].filter from "jsonataWrapper expression format" to "normal function format"
               relations: graphDataSources
                 .map(({ source }) => dataSources[source])
                 .filter(Boolean)
                 .map(relation => {
-                  const expression = jsonata(relation.filter);
+                  if (!relation.filter) {
+                    return { ...relation, filter: () => true };
+                  }
+
+                  const expression = jsonataWrapper(relation.filter);
                   const filter = (
                     originalResource,
                     possiblyRelatedResource,

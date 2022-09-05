@@ -53,6 +53,11 @@ jest.mock('graphviz-react', () => ({
   Graphviz: () => 'Graphviz mock',
 }));
 
+// suppress "SyntaxError: Cannot use 'import.meta' outside a module"
+jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
+  'monaco-editor': () => 'monaco-editor',
+}));
+
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => {

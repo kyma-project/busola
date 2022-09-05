@@ -1,5 +1,6 @@
 import rbacRulesMatched from './rbac-rules-matcher';
 import _ from 'lodash';
+import pluralize from 'pluralize';
 
 export function navigationPermissionChecker(
   nodeToCheckPermissionsFor,
@@ -37,7 +38,7 @@ export function hasPermissionsFor(
     p => p.apiGroups.includes(apiGroup) || p.apiGroups[0] === '*',
   );
   const matchingPermission = permissionsForApiGroup.find(p =>
-    p.resources.includes(resourceType),
+    p.resources.includes(pluralize(resourceType)),
   );
   const wildcardPermission = permissionsForApiGroup.find(
     p => p.resources[0] === '*',
