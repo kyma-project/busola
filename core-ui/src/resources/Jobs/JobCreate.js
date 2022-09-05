@@ -11,9 +11,6 @@ import { JobSpecSection } from './SpecSection';
 import { ContainerSection, ContainersSection } from './ContainersSection';
 import { MessageStrip } from 'fundamental-react';
 
-const SIDECAR_INJECTION_LABEL = 'sidecar.istio.io/inject';
-const SIDECAR_INJECTION_VALUE = 'false';
-
 function isJobValid(job = {}) {
   const isNameValid = jp.value(job, '$.metadata.name');
 
