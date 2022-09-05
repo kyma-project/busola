@@ -20,6 +20,7 @@ import { useSidecar } from 'shared/hooks/useSidecarInjection';
 
 const ISTIO_INJECTION_LABEL = 'sidecar.istio.io/inject';
 const ISTIO_INJECTION_ENABLED = 'true';
+const ISTIO_INJECTION_DISABLED = 'false';
 
 export function DeploymentCreate({
   formElementRef,
@@ -41,9 +42,10 @@ export function DeploymentCreate({
     initialRes: initialDeployment,
     res: deployment,
     setRes: setDeployment,
-    path: '$.spec.template.metadata.annotations',
+    path: '$.spec.template.metadata.labels',
     label: ISTIO_INJECTION_LABEL,
     enabled: ISTIO_INJECTION_ENABLED,
+    disabled: ISTIO_INJECTION_DISABLED,
   });
 
   useEffect(() => {

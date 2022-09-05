@@ -9,6 +9,7 @@ export const useSidecar = ({
   path,
   label,
   enabled,
+  disabled,
 }) => {
   const { features } = useMicrofrontendContext();
   const isIstioFeatureOn = features?.ISTIO?.isEnabled;
@@ -22,29 +23,18 @@ export const useSidecar = ({
 
   useEffect(() => {
     // toggles istio-injection when 'Enable sidecar injection' is clicked
-    const addSidecarToYaml = () => {
-      jp.value(res, `${path}["${[label]}"]`, enabled);
+    const toggleLabelInYaml = () => {
+      const newValue = isSidecarEnabled ? enabled : disabled;
+      jp.value(res, `${path}["${[label]}"]`, newValue);
       setRes({ ...res });
     };
+    toggleLabelInYaml();
 
-    const removeSidecarFromYaml = () => {
-      const istioParentObject = jp.value(res, path);
-      if (istioParentObject) {
-        delete istioParentObject[label];
-        jp.value(res, path, istioParentObject);
-        setRes(res);
-      }
-    };
-
-    if (isSidecarEnabled) {
-      addSidecarToYaml();
-    } else {
-      removeSidecarFromYaml();
-    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSidecarEnabled, setSidecarEnabled, setRes, path, label, enabled]);
 
   useEffect(() => {
-    // toggles 'Enable sidecar injection' when istio-injection is deleted in yaml
+    // toggles 'Enable sidecar injection' off when istio-injection is deleted in yaml
 
     const isSidecarDisabledInYaml =
       jp.value(res, `${path}["${label}"]`) !== enabled;
