@@ -116,16 +116,16 @@ All other fields can be used analogously to regular form items (except for the *
 
 ### Predefined variables
 
-All jsonata expressions have a few variables that are predefined instead of being read from variable fields.
+All JSONata expressions have a few variables that are predefined instead of being read from variable fields.
 
 - **\$item** - when in an array this contains the current item.
 - **\$index** - contains the index of the current item within the array.
-- **\$indexes** - contains a list of all the indexex for nested arrays.
+- **\$indexes** - contains a list of all the indexes for nested arrays.
 - **\$vars** - contains a map of all the raw variable values.
 
 ### Example
 
-In the example the visibility for item price and color are analogous - the former one uses scoped variables for the current item, the latter extracts the value from an array variable using provided index - this is mostly useful for complex scenarios only.
+In the example, the visibility for item price and color are analogous - the former uses scoped variables for the current item, and the latter extracts the value from an array variable using provided index - this is mostly useful for complex scenarios only.
 
 ```json
 [
