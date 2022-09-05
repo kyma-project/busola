@@ -71,7 +71,7 @@ The **general** section is required and contains basic information about the res
 
 The **form** section contains a list of objects that define which fields you must include in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to the simple form by providing the `simple: true` flag. You can also remove it from the advanced form by providing the `advanced: false` flag.
 
-Any parameters that are not handled by the widget are added to the schema directly, so it's possible to add or override existing values, for example add an **enum** parameter to provide selectable values in a field.
+Any parameters that are not handled by the widget are added to the schema directly, so it's possible to add or override existing values. For example, add an **enum** parameter to provide selectable values in a field.
 
 If you target elements of an array rather that the array itself, you can use `items[]` notation.
 
