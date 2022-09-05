@@ -26,6 +26,7 @@ export function ExtensibilityCreate({
   toggleFormFn,
   resourceName,
 }) {
+  const [varStore, setVarStore] = useState({});
   const { namespaceId: namespace } = useMicrofrontendContext();
   const notification = useNotification();
   const { t } = useTranslation();
@@ -117,6 +118,8 @@ export function ExtensibilityCreate({
         setStore={setStore}
         onSubmit={() => {}}
         path={general?.urlPath || ''}
+        varStore={varStore}
+        setVarStore={setVarStore}
       />
       <ResourceSchema
         advanced
@@ -127,6 +130,8 @@ export function ExtensibilityCreate({
         store={store}
         setStore={setStore}
         path={general?.urlPath || ''}
+        varStore={varStore}
+        setVarStore={setVarStore}
       />
     </ResourceForm>
   );
