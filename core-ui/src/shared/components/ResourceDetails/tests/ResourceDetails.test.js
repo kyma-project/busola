@@ -2,10 +2,6 @@ import { render, waitFor } from '@testing-library/react';
 import { mount } from 'enzyme';
 import { ResourceDetails } from '../ResourceDetails';
 
-jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
-  'monaco-editor': () => 'monaco-editor',
-}));
-
 jest.mock('shared/hooks/BackendAPI/useGet', () => ({
   useGet: () => {
     return {

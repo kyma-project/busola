@@ -2,9 +2,6 @@ import { DataSourcesContextProvider } from 'components/Extensibility/contexts/Da
 import { mount } from 'enzyme';
 import { Widget } from '../Widget';
 
-jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
-  'monaco-editor': () => 'monaco-editor',
-}));
 jest.mock('components/Extensibility/useJsonata', () => ({
   useJsonata: () => 'test-value',
 }));
