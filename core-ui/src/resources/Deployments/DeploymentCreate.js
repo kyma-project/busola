@@ -83,17 +83,19 @@ export function DeploymentCreate({
       initialResource={initialDeployment}
       handleNameChange={handleNameChange}
     >
-      <ResourceForm.FormField
-        advanced={!isIstioFeatureOn}
-        label={t('namespaces.create-modal.enable-sidecar')}
-        input={() => (
-          <Switch
-            compact
-            onChange={() => setSidecarEnabled(value => !value)}
-            checked={isSidecarEnabled}
-          />
-        )}
-      />
+      {isIstioFeatureOn ? (
+        <ResourceForm.FormField
+          simple
+          label={t('namespaces.create-modal.enable-sidecar')}
+          input={() => (
+            <Switch
+              compact
+              onChange={() => setSidecarEnabled(value => !value)}
+              checked={isSidecarEnabled}
+            />
+          )}
+        />
+      ) : null}
 
       <SimpleContainersView
         simple
