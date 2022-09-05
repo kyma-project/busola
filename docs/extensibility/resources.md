@@ -103,7 +103,7 @@ If you target elements of an array rather that the array itself, you can use `it
 
 ### Variable fields
 
-Additionally it's possible to define variable fields. In this case **path** is ommited and instead a **var** argument is used to specify variable name to assign to. Variable names have to be unique across the extension. Such a value is not added to the resultant yaml, but instead stored in memory and provided to any [JSONata](https://docs.jsonata.org/overview.html) handlers as variables (e.g. `$foo`). Variables will be provided for the current context - so if a variable is defined inside an array, the value is for that specific item. To access raw values, the predefined `$vars` variable has to be used.
+Additionally, it's possible to define variable fields. In this case, **path** is omitted, and a **var** argument is used to specify the variable name to assign. Variable names have to be unique across the extension. Such a value is not added to the resultant YAML but instead stored in memory and provided to any [JSONata](https://docs.jsonata.org/overview.html) handlers as variables, for example, `$foo`. Variables are provided for the current context. If a variable is defined inside an array, the value is specified for that specific item. To access raw values, the predefined `$vars` variable has to be used.
 
 When using a variable inside an array it has to be wrapped inside a `[]` element (see example).
 
