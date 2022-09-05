@@ -112,7 +112,7 @@ When using a variable inside an array it has to be wrapped inside a `[]` element
 - **var** - _[required]_ variable name.
 - **type** - _[required]_ type of field, as defined by JSON Schema.
 
-All other fields can be used analogous to regular form items (except for the **path** and **children** parameters).
+All other fields can be used analogously to regular form items (except for the **path** and **children** parameters).
 
 ### Predefined variables
 
