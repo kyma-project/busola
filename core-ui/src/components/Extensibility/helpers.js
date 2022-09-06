@@ -244,3 +244,15 @@ export const sortBy = (
 
   return { ...defaultSort, ...defaultSortOptions, ...sortingOptions };
 };
+
+export const getRemainingProps = (schema, required) => {
+  const schemaRequired = schema.get('required');
+  const showInfo = schema.get('showInfo');
+  const tooltipContent = schema.get('tooltip');
+
+  return {
+    required: schemaRequired ?? required,
+    showInfo,
+    tooltipContent,
+  };
+};

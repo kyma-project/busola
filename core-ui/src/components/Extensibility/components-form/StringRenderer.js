@@ -2,7 +2,10 @@ import React from 'react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import { useGetTranslation } from 'components/Extensibility/helpers';
+import {
+  useGetTranslation,
+  getRemainingProps,
+} from 'components/Extensibility/helpers';
 
 export function StringRenderer({
   onChange,
@@ -16,6 +19,7 @@ export function StringRenderer({
   ...props
 }) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
+  const schemaPlaceholder = schema.get('schemaPlaceholder');
 
   const getTypeSpecificProps = () => {
     if (schema.get('enum')) {
@@ -24,23 +28,6 @@ export function StringRenderer({
     } else {
       return { input: Inputs.Text };
     }
-  };
-
-  const getRemainingProps = () => {
-    const jsSchema = schema.toJS() || {};
-    const {
-      placeholder: schemaPlaceholder,
-      required: schemaRequired,
-      showInfo,
-      tooltip: tooltipContent,
-    } = jsSchema;
-
-    return {
-      schemaPlaceholder,
-      required: schemaRequired ?? required,
-      showInfo,
-      tooltipContent,
-    };
   };
 
   return (
@@ -59,8 +46,9 @@ export function StringRenderer({
       label={tFromStoreKeys(storeKeys, schema)}
       compact={compact}
       data-testid={storeKeys.join('.')}
+      schemaPlaceholder={schemaPlaceholder}
       {...getTypeSpecificProps()}
-      {...getRemainingProps()}
+      {...getRemainingProps(schema, required)}
     />
   );
 }

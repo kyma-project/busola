@@ -4,7 +4,10 @@ import { KeyValueField } from 'shared/ResourceForm/fields';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
-import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
+import {
+  getObjectValueWorkaround,
+  getRemainingProps,
+} from 'components/Extensibility/helpers';
 
 export function KeyValuePairRenderer({
   storeKeys,
@@ -22,7 +25,6 @@ export function KeyValuePairRenderer({
 
   let titleTranslation = '';
   const path = storeKeys.toArray().join('.');
-  const schemaRequired = schema.get('required');
 
   if (tFromStoreKeys(storeKeys, schema) !== path)
     titleTranslation = tFromStoreKeys(storeKeys, schema);
@@ -51,7 +53,7 @@ export function KeyValuePairRenderer({
         });
       }}
       title={titleTranslation}
-      required={schemaRequired ?? required}
+      {...getRemainingProps(schema, required)}
     />
   );
 }
