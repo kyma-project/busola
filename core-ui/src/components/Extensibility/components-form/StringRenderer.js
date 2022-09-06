@@ -26,8 +26,22 @@ export function StringRenderer({
     }
   };
 
-  const schemaPlaceholder = schema.get('placeholder');
-  const schemaRequired = schema.get('required');
+  const getRemainingProps = () => {
+    const jsSchema = schema.toJS() || {};
+    const {
+      placeholder: schemaPlaceholder,
+      required: schemaRequired,
+      showInfo,
+      tooltip: tooltipContent,
+    } = jsSchema;
+
+    return {
+      schemaPlaceholder,
+      required: schemaRequired ?? required,
+      showInfo,
+      tooltipContent,
+    };
+  };
 
   return (
     <ResourceForm.FormField
@@ -43,11 +57,10 @@ export function StringRenderer({
         });
       }}
       label={tFromStoreKeys(storeKeys, schema)}
-      placeholder={schemaPlaceholder ? tExt(schemaPlaceholder) : placeholder}
       compact={compact}
-      required={schemaRequired ?? required}
       data-testid={storeKeys.join('.')}
       {...getTypeSpecificProps()}
+      {...getRemainingProps()}
     />
   );
 }
