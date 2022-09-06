@@ -2,7 +2,10 @@ import React from 'react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import { useGetTranslation } from 'components/Extensibility/helpers';
+import {
+  useGetTranslation,
+  getRemainingProps,
+} from 'components/Extensibility/helpers';
 
 export function NumberRenderer({
   onChange,
@@ -38,7 +41,7 @@ export function NumberRenderer({
       data-testid={storeKeys.join('.')}
       input={Inputs.Number}
       compact={compact}
-      required={schemaRequired ?? required}
+      {...getRemainingProps(schema, required)}
     />
   );
 }
