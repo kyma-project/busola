@@ -24,6 +24,8 @@ export function ResourceSchema({
   path,
   store,
   setStore,
+  varStore,
+  setVarStore,
   ...extraParams
 }) {
   const onChange = useCallback(
@@ -55,7 +57,9 @@ export function ResourceSchema({
         store={uiStore}
         showValidity={true}
         onChange={onChange}
-        schemaRules={schemaRules}
+        rootRule={schemaRules}
+        varStore={varStore}
+        setVarStore={setVarStore}
       >
         <FormStack isRoot schema={schemaMap} resource={resource} />
       </UIStoreProvider>

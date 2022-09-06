@@ -7,8 +7,8 @@ export function jsonataWrapper(expression) {
   exp.registerFunction('matchByLabelSelector', (pod, labels) => {
     if (!pod.metadata?.labels || !labels) return false;
 
-    const podLabels = Object.entries(pod.metadata?.labels);
-    const resourceLabels = Object.entries(labels);
+    const podLabels = Object?.entries(pod.metadata?.labels);
+    const resourceLabels = Object?.entries(labels);
     return resourceLabels.every(resLabel =>
       podLabels.some(podLabel => isEqual(resLabel, podLabel)),
     );
