@@ -175,6 +175,53 @@ data:
       },
       {
         "widget": "FormGroup",
+        "simple": true,
+        "path": "spec.ingress[].tls",
+        "visibility": "$item.port.protocol = 'HTTP' or $item.port.protocol = 'HTTPS'",
+        "children": [
+          { "path": "httpsRedirect", "simple": true, "visibility": "$item.port.protocol = 'HTTP'" },
+          { 
+            "path": "mode", 
+            "simple": true, 
+            "visibility": "$item.port.protocol = 'HTTPS'",
+            "required": true,
+            "placeholder": "placeholders.dropdown"
+          },
+          { 
+            "path": "credentialName", 
+            "simple": true, 
+            "widget": "Resource",
+            "resource": {
+              "kind": "Secret",
+              "version": "v1",
+              "namespace": "istio-system",
+              "scope": "namespace",
+            },
+            "filter": "$item.type = 'kubernetes.io/tls' or ($item.type = 'Opaque' and $contains($item.data, 'key') and $contains($item.data, 'cert'))",
+            "visibility": "$item.port.protocol = 'HTTPS'",
+          },
+          { 
+            "path": "serverCertificate", 
+            "simple": true, 
+            "visibility": "$item.port.protocol = 'HTTPS'",
+            "placeholder": "placeholders.serverCertificate"
+          },
+          { 
+            "path": "privateKey", 
+            "simple": true, 
+            "visibility": "$item.port.protocol = 'HTTPS'",
+            "placeholder": "placeholders.privateKey",
+          },
+          { 
+            "path": "caCertificates", 
+            "simple": true, 
+            "visibility": "$item.port.protocol = 'HTTPS'",
+            "placeholder": "placeholders.caCertificates",
+          },
+        ]
+      },
+      {
+        "widget": "FormGroup",
         "path": "spec.egress[].port",
         "simple": true,
         "children": [
@@ -270,6 +317,13 @@ data:
       "en": {
         "metadata.annotations": "Annotations",
         "metadata.labels": "Labels",
+        "spec.ingress.tls": "TLS",
+        "spec.ingress.tls.mode": "TLS Mode",
+        "spec.ingress.tls.httpsRedirect": "HTTP Redirect",
+        "spec.ingress.tls.credentialName": "Credential Name",
+        "spec.ingress.tls.serverCertificate": "Server Certificate",
+        "spec.ingress.tls.privateKey": "Private Key",
+        "spec.ingress.tls.caCertificates": "CA Certificate",
         "spec.outboundTrafficPolicy": "Outbound Traffic Policy",
         "spec.outboundTrafficPolicy.mode": "Outbound Traffic Policy Mode",
         "spec.workloadSelector": "Workload Selector",
@@ -287,6 +341,10 @@ data:
         "selector.matchesAllPods": "Matches all Pods in the Namespace",
         "placeholders.hosts": "For example, *.api.mydomain.com",
         "placeholders.defaultEndpoint": "For example, 127.0.0.1:PORT",
-        "placeholders.bind": "For example, IPv4: x.x.x.x",
+        "placeholders.bind": "Enter the IPv4 or IPv6",
+        "placeholders.serverCertificate": "Enter the certificate path",
+        "placeholders.privateKey": "Enter the private key path",
+        "placeholders.caCertificates": "Enter the CA certificates path"
+      
       }
     }
