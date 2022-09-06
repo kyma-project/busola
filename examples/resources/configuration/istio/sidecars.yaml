@@ -45,7 +45,7 @@ data:
             },
             { "source": "$item.bind", "name": "Bind" },
             { "source": "$item.captureMode", "name": "Capture Mode" },
-            { "source": "$item.hosts", "name": "item.hosts", "widget": "Labels"}
+            { "source": "$item.hosts", "name": "Hosts", "widget": "Labels"}
           ]
         },
         {
@@ -64,6 +64,7 @@ data:
                 { "source": "$item.name", "name": "Name" },
                 { "source": "$item.protocol", "name": "Protocol" },
                 { "source": "$item.targetPoint", "name": "Target Point" },
+                { "source": "$parent.tls.mode", "name": "TLS Mode" },
               ] 
             },
             { "source": "$item.bind", "name": "Bind" },
@@ -94,6 +95,7 @@ data:
             {
               "source": "spec.workloadSelector.labels",
               "widget": "Labels",
+              "name": "Workload Selector",
               "visibility": "$boolean(*)"
             }
           ],
@@ -111,6 +113,7 @@ data:
     [
       {
         "path": "spec.workloadSelector.labels", 
+        "name": "Workload Selector",
         "widget": "KeyValuePair"
       },
       {
@@ -234,9 +237,8 @@ data:
         "simple": true,
         "path": "spec.ingress[].tls",
         "name": "TLS",
-        "visibility": "$item.port.protocol = 'HTTP' or $item.port.protocol = 'HTTPS'",
+        "visibility": "$item.port.protocol = 'HTTPS'",
         "children": [
-          { "path": "httpsRedirect", "name": "HTTP Redirect", "simple": true, "visibility": "$item.port.protocol = 'HTTP'" },
           { 
             "path": "mode", 
             "name": "TLS Mode",
@@ -244,20 +246,6 @@ data:
             "visibility": "$item.port.protocol = 'HTTPS'",
             "required": true,
             "placeholder": "Type or choose an option"
-          },
-          { 
-            "path": "credentialName", 
-            "name": "Credential Name",
-            "simple": true, 
-            "widget": "Resource",
-            "resource": {
-              "kind": "Secret",
-              "version": "v1",
-              "namespace": "istio-system",
-              "scope": "namespace",
-            },
-            "filter": "$item.type = 'kubernetes.io/tls' or ($item.type = 'Opaque' and $contains($item.data, 'key') and $contains($item.data, 'cert'))",
-            "visibility": "$item.port.protocol = 'HTTPS'",
           },
           { 
             "path": "serverCertificate", 
