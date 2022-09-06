@@ -85,7 +85,6 @@ export function DeploymentCreate({
     >
       {isIstioFeatureOn ? (
         <ResourceForm.FormField
-          simple
           label={t('namespaces.create-modal.enable-sidecar')}
           input={() => (
             <Switch
