@@ -13,7 +13,8 @@ export function NameRenderer({
   ...props
 }) {
   const extraPaths = schema.get('extraPaths')?.toJS() || [];
-  const showHelp = schema.toJS()?.showHelp ?? true;
+  const showInfo = schema.get('showInfo');
+  const tooltipContent = schema.get('tooltip');
   const schemaRequired = schema.get('required');
 
   return (
@@ -42,7 +43,8 @@ export function NameRenderer({
       }}
       validate={value => !!value}
       required={schemaRequired ?? required}
-      showHelp={showHelp}
+      showInfo={showInfo}
+      tooltipContent={tooltipContent}
     />
   );
 }
