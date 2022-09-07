@@ -16,7 +16,7 @@ export function K8sNameField({
   prefix,
   pattern,
   showHelp = true,
-  showInfo,
+  inputInfo,
   tooltipContent,
   ...props
 }) {
@@ -39,7 +39,7 @@ export function K8sNameField({
       className={className}
       propertyPath="$.metadata.name"
       label={t('common.labels.name')}
-      showInfo={showInfo}
+      inputInfo={inputInfo}
       tooltipContent={tooltipContent}
       input={() => {
         return (
@@ -66,7 +66,7 @@ export function K8sNameField({
                 />
               </Tooltip>
             </div>
-            {showHelp && showInfo === undefined ? (
+            {showHelp && inputInfo === undefined ? (
               <p style={{ color: 'var(--sapNeutralTextColor)' }}>
                 {t('common.tooltips.k8s-name-input')}
               </p>
