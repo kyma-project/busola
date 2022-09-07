@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import * as _ from 'lodash';
-
 import { ResourceForm } from 'shared/ResourceForm';
 import {
   SimpleContainersView,
@@ -16,6 +15,12 @@ import {
 } from './templates';
 
 import './DeploymentCreate.scss';
+import { Switch } from 'fundamental-react';
+import { useSidecar } from 'shared/hooks/useSidecarInjection';
+
+const ISTIO_INJECTION_LABEL = 'sidecar.istio.io/inject';
+const ISTIO_INJECTION_ENABLED = 'true';
+const ISTIO_INJECTION_DISABLED = 'false';
 
 export function DeploymentCreate({
   formElementRef,
@@ -33,6 +38,15 @@ export function DeploymentCreate({
       ? _.cloneDeep(initialDeployment)
       : createDeploymentTemplate(namespace),
   );
+  const { isIstioFeatureOn, isSidecarEnabled, setSidecarEnabled } = useSidecar({
+    initialRes: initialDeployment,
+    res: deployment,
+    setRes: setDeployment,
+    path: '$.spec.template.metadata.labels',
+    label: ISTIO_INJECTION_LABEL,
+    enabled: ISTIO_INJECTION_ENABLED,
+    disabled: ISTIO_INJECTION_DISABLED,
+  });
 
   useEffect(() => {
     const hasAnyContainers = !!(
@@ -69,6 +83,19 @@ export function DeploymentCreate({
       initialResource={initialDeployment}
       handleNameChange={handleNameChange}
     >
+      {isIstioFeatureOn ? (
+        <ResourceForm.FormField
+          label={t('namespaces.create-modal.enable-sidecar')}
+          input={() => (
+            <Switch
+              compact
+              onChange={() => setSidecarEnabled(value => !value)}
+              checked={isSidecarEnabled}
+            />
+          )}
+        />
+      ) : null}
+
       <SimpleContainersView
         simple
         resource={deployment}
