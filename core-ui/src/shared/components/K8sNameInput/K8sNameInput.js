@@ -61,11 +61,7 @@ export const K8sNameInput = ({
           {t(label)}
         </FormLabel>
       )}
-      {showHelp ? (
-        <Tooltip content={t('common.tooltips.k8s-name-input')}>{input}</Tooltip>
-      ) : (
-        input
-      )}
+      {input}
     </>
   );
 };
