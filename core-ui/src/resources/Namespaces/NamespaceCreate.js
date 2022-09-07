@@ -13,12 +13,14 @@ import { createResourceQuotaTemplate } from 'resources/ResourceQuotas/templates'
 import { MemoryInput } from './MemoryQuotas';
 import { createNamespaceTemplate } from './templates';
 import { LimitPresets, MemoryPresets } from './Presets';
+import { useSidecar } from 'shared/hooks/useSidecarInjection';
 import { CONFIG } from './config';
 
 import './NamespaceCreate.scss';
 
 const ISTIO_INJECTION_LABEL = 'istio-injection';
-const ISTIO_INJECTION_VALUE = 'disabled';
+const ISTIO_INJECTION_ENABLED = 'enabled';
+const ISTIO_INJECTION_DISABLED = 'disabled';
 
 export function NamespaceCreate({
   formElementRef,
@@ -35,16 +37,23 @@ export function NamespaceCreate({
   const [namespace, setNamespace] = useState(
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),
   );
+
+  const { isIstioFeatureOn, isSidecarEnabled, setSidecarEnabled } = useSidecar({
+    initialRes: initialNamespace,
+    res: namespace,
+    setRes: setNamespace,
+    path: '$.metadata.labels',
+    label: ISTIO_INJECTION_LABEL,
+    enabled: ISTIO_INJECTION_ENABLED,
+    disabled: ISTIO_INJECTION_DISABLED,
+  });
+
   // container limits
   const [withLimits, setWithLimits] = useState(false);
   const [limits, setLimits] = useState(createLimitRangeTemplate({}));
   // memory quotas
   const [withMemory, setWithMemory] = useState(false);
   const [memory, setMemory] = useState(createResourceQuotaTemplate({}));
-
-  const [isSidecar, setSidecar] = useState(
-    initialNamespace?.metadata?.labels?.[ISTIO_INJECTION_LABEL],
-  );
 
   const createLimitResource = useCreateResource({
     singularName: 'LimitRange',
@@ -63,37 +72,6 @@ export function NamespaceCreate({
     createUrl: `/api/v1/namespaces/${namespace?.metadata?.name}/resourcequotas`,
     afterCreatedFn: () => {},
   });
-
-  useEffect(() => {
-    // toggles istio-injection label when 'Disable sidecar injection' is clicked
-    if (isSidecar) {
-      jp.value(
-        namespace,
-        `$.metadata.labels["${ISTIO_INJECTION_LABEL}"]`,
-        ISTIO_INJECTION_VALUE,
-      );
-      setNamespace({ ...namespace });
-    } else {
-      const labels = namespace.metadata.labels || {};
-      delete labels[ISTIO_INJECTION_LABEL];
-      setNamespace({
-        ...namespace,
-        metadata: { ...namespace.metadata, labels },
-      });
-    }
-    // eslint-disable-next-line
-  }, [isSidecar]);
-
-  useEffect(() => {
-    // toggles 'Disable sidecar injection' when istio-injection label is deleted manually
-    if (
-      isSidecar &&
-      jp.value(namespace, `$.metadata.labels["${ISTIO_INJECTION_LABEL}"]`) !==
-        ISTIO_INJECTION_VALUE
-    ) {
-      setSidecar(false);
-    }
-  }, [isSidecar, setSidecar, namespace]);
 
   useEffect(() => {
     const name = namespace.metadata?.name;
@@ -198,19 +176,18 @@ export function NamespaceCreate({
         lockedValues: [ISTIO_INJECTION_LABEL],
       }}
     >
-      <ResourceForm.FormField
-        advanced
-        label={t('namespaces.create-modal.disable-sidecar')}
-        input={() => (
-          <Switch
-            compact
-            onChange={e => {
-              setSidecar(!isSidecar);
-            }}
-            checked={isSidecar}
-          />
-        )}
-      />
+      {isIstioFeatureOn ? (
+        <ResourceForm.FormField
+          label={t('namespaces.create-modal.enable-sidecar')}
+          input={() => (
+            <Switch
+              compact
+              onChange={() => setSidecarEnabled(value => !value)}
+              checked={isSidecarEnabled}
+            />
+          )}
+        />
+      ) : null}
 
       {!initialNamespace ? (
         <ResourceForm.CollapsibleSection
@@ -257,7 +234,6 @@ export function NamespaceCreate({
           </FormFieldset>
         </ResourceForm.CollapsibleSection>
       ) : null}
-
       {!initialNamespace ? (
         <ResourceForm.CollapsibleSection
           advanced

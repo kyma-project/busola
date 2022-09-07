@@ -41,6 +41,7 @@ export function createDeploymentTemplate(namespaceId) {
         metadata: {
           labels: {
             app: '',
+            'sidecar.istio.io/inject': 'false',
           },
         },
         spec: {
@@ -84,6 +85,7 @@ export function createPresets(namespace, translate) {
               metadata: {
                 labels: {
                   app: 'echo-server',
+                  'sidecar.istio.io/inject': 'false',
                 },
               },
               spec: {
@@ -124,6 +126,7 @@ export function createPresets(namespace, translate) {
               metadata: {
                 labels: {
                   app: 'httpbin',
+                  'sidecar.istio.io/inject': 'false',
                 },
               },
               spec: {
