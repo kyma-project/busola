@@ -166,7 +166,9 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 ```json
 {
   "path": "spec.my-data",
-  "widget": "KeyValuePair"
+  "widget": "KeyValuePair",
+  "inputInfo": "Key and value must start and end with an alphanumeric character.",
+  "tooltip": "Labels are intended to be used to specify identifying attributes of objects that are meaningful and relevant to users, but do not directly imply semantics to the core system."
 }
 ```
 
@@ -277,6 +279,8 @@ This type of field is only suitable for simple data types and can contain more c
 
 - **placeholder** - specifies a short hint about the input field value.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
+- **inputInfo** - a string that can be shown below the last input field to guide the User how to fill in the input.
+- **tooltip** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label.
 
 #### Example
 

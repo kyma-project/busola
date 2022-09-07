@@ -27,6 +27,7 @@ export function SimpleList({
   const listSize = value?.size || 0;
   const schemaPlaceholder = schema.get('placeholder');
   const schemaRrequired = schema.get('required');
+  const inputInfo = schema.get('inputInfo');
 
   const removeItem = index => {
     onChange({
@@ -89,30 +90,43 @@ export function SimpleList({
               const ownKeys = storeKeys.push(index);
 
               return (
-                <li key={index}>
-                  <PluginStack
-                    showValidity={showValidity}
-                    schema={itemsSchema}
-                    parentSchema={schema}
-                    storeKeys={ownKeys}
-                    level={level + 1}
-                    schemaKeys={schemaKeys?.push('items')}
-                    compact
-                    placeholder={schemaPlaceholder && tExt(schemaPlaceholder)}
-                  />
-                  <span className="item-action">
-                    {!isLast(index) && (
-                      <Button
-                        disabled={readOnly}
-                        compact
-                        glyph="delete"
-                        type="negative"
-                        onClick={() => removeItem(index)}
-                        ariaLabel={t('common.buttons.delete')}
-                      />
-                    )}
-                  </span>
-                </li>
+                <>
+                  <li key={index}>
+                    <PluginStack
+                      showValidity={showValidity}
+                      schema={itemsSchema}
+                      parentSchema={schema}
+                      storeKeys={ownKeys}
+                      level={level + 1}
+                      schemaKeys={schemaKeys?.push('items')}
+                      compact
+                      placeholder={schemaPlaceholder && tExt(schemaPlaceholder)}
+                      inputInfo="sssss"
+                    />
+                    <span className="item-action">
+                      {!isLast(index) && (
+                        <Button
+                          disabled={readOnly}
+                          compact
+                          glyph="delete"
+                          type="negative"
+                          onClick={() => removeItem(index)}
+                          ariaLabel={t('common.buttons.delete')}
+                        />
+                      )}
+                    </span>
+                  </li>
+                  {isLast(index) && inputInfo && (
+                    <p
+                      style={{
+                        color: 'var(--sapNeutralTextColor)',
+                        margin: '0 8px',
+                      }}
+                    >
+                      {inputInfo}
+                    </p>
+                  )}
+                </>
               );
             })}
         </ul>
