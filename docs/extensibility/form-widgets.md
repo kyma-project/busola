@@ -23,6 +23,14 @@ Simple widgets represent a single scalar value.
 
 Text widgets render a field as a text field. They are used by default for all string values.
 
+#### Widget-specific parameters
+
+- **enum[]** - an array of options to generate an input field with a dropdown.
+- **placeholder** - specifies a short hint about the input field value.
+- **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
+- **showInfo** - a string that can be shown below the input field to guide the User how to fill in the input.
+- **tooltip** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label.
+
 #### Example
 
 ```json
@@ -33,12 +41,6 @@ Text widgets render a field as a text field. They are used by default for all st
 ```
 
 <img src="./assets/form-widgets/Text.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
-
-#### Widget-specific parameters
-
-- **enum[]** - an array of options to generate an input field with a dropdown.
-- **placeholder** - specifies a short hint about the input field value.
-- **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
 
 #### Example
 
@@ -57,10 +59,13 @@ Text widgets render a field as a text field. They are used by default for all st
     "MYSQL",
     "TCP"
   ],
+  "showInfo": "Choose a protocol type from the dropdown.",
+  "tooltip": "Specifies which protocol to use for tunneling the downstream connection."
 },
 ```
 
-<img src="./assets/form-widgets/Dropdown.png" alt="Example of a dropdown text widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Dropdown.png" alt="Example of a dropdown text widget with a tooltip" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Dropdown2.png" alt="Example of a dropdown text widget" style="border: 1px solid #D2D5D9">
 
 ### Name
 
@@ -69,8 +74,9 @@ Name widgets render a name input field. They contain an automatic name generator
 #### Widget-specific parameters
 
 - **extraPaths** - an array of extra paths to fill in with the contents of the field. Each path can either be a period-separated string or an array of strings.
-- **showHelp** - if set to `false` it disables the additional help message.
 - **placeholder** - specifies a short hint about the input field value.
+- **showInfo** - a string that can be shown below the input field to guide the User how to fill in the input. It defaults to `Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1').`. To disable any suggestion, set this value to `null`.
+- **tooltip** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label.
 
 #### Example
 
@@ -91,10 +97,12 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
 
 ```json
 {
-  "path": "spec.my-data",
+  "path": "spec.data",
   "widget": "CodeEditor"
 }
 ```
+
+<img src="./assets/form-widgets/CodeEditor.png" alt="Example of a code editor widget" style="border: 1px solid #D2D5D9">
 
 ### Resource
 
@@ -147,6 +155,12 @@ Complex widgets handle more advanced data structures such as arrays or objects.
 
 KeyValuePair widgets render an `object` value as a list of dual text fields. One is used for a key and the other for a value, allowing for adding and removing entries.
 
+#### Widget-specific parameters
+
+- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
+- **showInfo** - a string that can be shown below the last input field to guide the User how to fill in the input.
+- **tooltip** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label.
+
 #### Example
 
 ```json
@@ -157,10 +171,6 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 ```
 
 <img src="./assets/form-widgets/KeyValue.png" alt="Example of a KeyValuePair widget" style=" border: 1px solid #D2D5D9">
-
-#### Widget-specific parameters
-
-- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 
 ### ResourceRefs
 
@@ -232,6 +242,10 @@ FormGroup widgets render an `object` as a collapsible section.
 
 GenericList widgets render an `array` as a list of collapsible sections with their own sub-forms. An **add** button is present to add new entries.
 
+#### Widget-specific parameters
+
+- **placeholder** - specifies a short hint about the input field value.
+
 #### Example
 
 ```json
@@ -253,15 +267,16 @@ GenericList widgets render an `array` as a list of collapsible sections with the
 
 <img src="./assets/form-widgets/GenericList.png" alt="Example of a GenericList widget" style="border: 1px solid #D2D5D9">
 
-#### Widget-specific parameters
-
-- **placeholder** - specifies a short hint about the input field value.
-
 ### SimpleList
 
 SimpleList widgets render an `array` as a table with rows representing data items and columns representing different fields. New items are added automatically when new entries are typed in.
 
 This type of field is only suitable for simple data types and can contain more complex structures in its items.
+
+#### Widget-specific parameters
+
+- **placeholder** - specifies a short hint about the input field value.
+- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 
 #### Example
 
@@ -283,11 +298,6 @@ This type of field is only suitable for simple data types and can contain more c
 ```
 
 <img src="./assets/form-widgets/SimpleList.png" alt="Example of a SimpleList widget" style="border: 1px solid #D2D5D9">
-
-#### Widget-specific parameters
-
-- **placeholder** - specifies a short hint about the input field value.
-- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 
 #### Scalar values
 

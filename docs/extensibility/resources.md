@@ -130,16 +130,30 @@ In the example, the visibility for item price and color are analogous - the form
 ```json
 [
   { "var": "useDescription", "type": "boolean" },
-  { "path": "spec.description": "visibility": "$useDescription" },
-  { "path": "spec.items", "widget": "GenericList": "children": [
-    { "path": "[]", "children": [
-      { "path": "name" },
-      { "var": "itemMode", "type": "string", "enum": ["simple", "verbose"] },
-      { "path": "price", "visibility": "$itemMode = 'verbose'" },
-      { "path": "color", "visibility": "$vars.itemMode[$index] = 'verbose'" },
-      { "path": "description", "visibility": "$useDescription" }
-    ]}
-  ]}
+  { "path": "spec.description", "visibility": "$useDescription" },
+  {
+    "path": "spec.items",
+    "widget": "GenericList",
+    "children": [
+      {
+        "path": "[]",
+        "children": [
+          { "path": "name" },
+          {
+            "var": "itemMode",
+            "type": "string",
+            "enum": ["simple", "verbose"]
+          },
+          { "path": "price", "visibility": "$itemMode = 'verbose'" },
+          {
+            "path": "color",
+            "visibility": "$vars.itemMode[$index] = 'verbose'"
+          },
+          { "path": "description", "visibility": "$useDescription" }
+        ]
+      }
+    ]
+  }
 ]
 ```
 
