@@ -126,7 +126,6 @@ export function createConfigmap(crd, data) {
   data.details.body[0].children = filterViewProps(
     data.details.body[0].children,
   );
-  console.log(data.details);
   if (!data.details.body[0].children.length) {
     data.details.body.splice(0, 1);
   }
