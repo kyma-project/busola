@@ -99,10 +99,7 @@ export function ExtensibilityCreate({
     <VarStoreContextProvider>
       <ResourceForm
         pluralKind={resourceType}
-        singularNameu={pluralize(
-          resourceName || prettifyKind(resource.kind),
-          1,
-        )}
+        singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
         resource={resource}
         setResource={updateResource}
         formElementRef={formElementRef}
