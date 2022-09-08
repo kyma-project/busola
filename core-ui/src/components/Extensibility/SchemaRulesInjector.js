@@ -179,7 +179,7 @@ export function SchemaRulesInjector({
             .toArray();
           const index = last(indexes);
           const variables = extractVariables(varStore, rule.itemVars, indexes);
-          const visible = jsonataWrapper(rule.visibility).evaluate(resource, {
+          const visible = !!jsonataWrapper(rule.visibility).evaluate(resource, {
             ...varStore,
             ...variables,
             vars: varStore,

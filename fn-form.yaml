@@ -69,14 +69,29 @@ data:
         "enum": ["nodejs12", "nodejs14", "nodejs16", "python39"]
       },
       {
-        "advanced": true,
         "path": "spec.runtimeImageOverride",
         "required": false
       },
       {
-        "advanced": true,
         "path": "replicas",
         "required": false
+      },
+      {
+        "path": "spec.source.gitRepository.url",
+        "visibility": "$.spec.source.gitRepository"
+      },
+      {
+        "widget": "FormGroup",
+        "path": "spec.source.gitRepository.auth",
+        "visibility": "$.spec.source.gitRepository",
+        "children": [
+          {
+            "path": "secretName"
+          },
+          {
+            "path": "type"
+          }
+        ]
       },
       {
         "path": "spec.scaleConfig",
@@ -137,6 +152,18 @@ data:
             "path": "resources.requests.memory"
           },
         ]
+      },
+      {
+        "path": "spec.source.inline.source",
+        "widget": "CodeEditor",
+        "language": "$contains($root.spec.runtime, 'node') ? 'javascript' : 'python'",
+        "visibility": "$.spec.source.inline"
+      },
+      {
+        "path": "spec.source.inline.dependencies",
+        "widget": "CodeEditor",
+        "language": "$contains($root.spec.runtime, 'node') ? 'javascript' : 'plaintext'",
+        "visibility": "$.spec.source.inline"
       }
     ]
   general: |-
@@ -170,7 +197,13 @@ data:
         "spec.scaleConfig.maxReplicas": "Max Replicas",
         "spec.resourceConfiguration.function": "Runtime Profile",
         "spec.resourceConfiguration.build": "Build Job Profile",
-        "Profile": "Profile"
+        "Profile": "Profile",
+        "spec.source.inline.source": "Source",
+        "spec.source.inline.dependencies": "Dependencies",
+        "spec.source.gitRepository.url": "Repository URL",
+        "spec.source.gitRepository.auth": "Repository Authorization",
+        "spec.source.gitRepository.auth.secretName": "Secret Name",
+        "spec.source.gitRepository.auth.type": "Type"
       }
     }
   template: |-
@@ -183,7 +216,7 @@ data:
       source:
         inline:
           source: |-
-            module.exports = 
+            module.exports = {
               main: async function (event, context) {
                 const message = `Hello World`
                   + ` from the Kyma Function ${context["function-name"]}`
