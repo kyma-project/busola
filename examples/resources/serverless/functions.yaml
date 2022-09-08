@@ -1,0 +1,115 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: functions.serverless.kyma-project.io
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: functions.serverless.kyma-project.io
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  details: |-
+    {
+      "header": [],
+      "body": [
+        {
+          "name": "Summary",
+          "widget": "Panel",
+          "children": [
+            {
+              "name": "replicas",
+              "source": "spec.replicas"
+            },
+            {
+              "name": "runtime",
+              "source": "spec.runtime"
+            },
+            {
+              "name": "runtimeImageOverride",
+              "source": "spec.runtimeImageOverride"
+            },
+            {
+              "name": "Configured",
+              "source": "status.conditions[?(@.type=='ConfigurationReady')].status"
+            },
+            {
+              "name": "Built",
+              "source": "status.conditions[?(@.type=='BuildReady')].status"
+            },
+            {
+              "name": "Running",
+              "source": "status.conditions[?(@.type=='Running')].status"
+            },
+            {
+              "name": "Runtime",
+              "source": "spec.runtime"
+            },
+            {
+              "name": "Version",
+              "source": "metadata.generation"
+            },
+            {
+              "name": "Age",
+              "source": "metadata.creationTimestamp"
+            }
+          ]
+        },
+        {
+          "path": "spec",
+          "widget": "CodeViewer"
+        }
+      ]
+    }
+  form: |-
+    [
+      {
+        "simple": true,
+        "path": "spec.replicas",
+        "required": false
+      },
+      {
+        "simple": true,
+        "path": "spec.runtime",
+        "required": true
+      },
+      {
+        "simple": true,
+        "path": "spec.runtimeImageOverride",
+        "required": false
+      }
+    ]
+  general: |-
+    {
+      "resource": {
+        "kind": "Function",
+        "group": "serverless.kyma-project.io",
+        "version": "v1alpha2"
+      },
+      "name": "Ext Functions",
+      "category": "Workloads",
+      "urlPath": "ext-functions",
+      "scope": "namespace"
+    }
+  list: |-
+    [
+      {
+        "name": "Runtime",
+        "source": "spec.runtime === 'nodejs14' ? 'Node.js 14' : (spec.runtime === 'nodejs16' ? 'Node.js 16' : (spec.runtime === 'nodejs12' ? 'Node.js 12 - Deprecated' : (spec.runtime === 'python39' ? 'Python 3.9' : spec.runtime)))"
+      },
+      {
+        "name": "Source Type",
+        "source": "spec.source.gitRepository ? 'Git Repository' : 'Inline Editor'"
+      },
+      {
+        "name": "Status",
+        "source": "status.conditions[?(@.type=='BuildReady')].status"
+      }
+    ]
+  translations: |-
+    {
+      "en": {
+        "metadata.annotations": "Annotations",
+        "metadata.labels": "Labels",
+        "metadata.creationTimestamp": "Created at"
+      }
+    }
