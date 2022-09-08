@@ -94,7 +94,7 @@ data:
     [
       {
         "name": "Runtime",
-        "source": "spec.runtime === 'nodejs14' ? 'Node.js 14' : (spec.runtime === 'nodejs16' ? 'Node.js 16' : (spec.runtime === 'nodejs12' ? 'Node.js 12 - Deprecated' : (spec.runtime === 'python39' ? 'Python 3.9' : spec.runtime)))"
+        "source": "spec.runtime = 'nodejs14' ? 'Node.js 14' : (spec.runtime = 'nodejs16' ? 'Node.js 16' : (spec.runtime = 'nodejs12' ? 'Node.js 12 - Deprecated' : (spec.runtime = 'python39' ? 'Python 3.9' : spec.runtime)))"
       },
       {
         "name": "Source Type",
