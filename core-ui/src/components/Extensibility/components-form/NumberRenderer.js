@@ -20,6 +20,10 @@ export function NumberRenderer({
   const schemaPlaceholder = schema.get('placeholder');
   const schemaRequired = schema.get('required');
 
+  const numberProps = Object.fromEntries(
+    ['min', 'max'].map(prop => [prop, schema.get(prop)]),
+  );
+
   return (
     <ResourceForm.FormField
       value={value}
@@ -30,7 +34,7 @@ export function NumberRenderer({
           type: 'set',
           schema,
           required,
-          data: { value: value || undefined },
+          data: { value: value ?? undefined },
         });
       }}
       label={tFromStoreKeys(storeKeys, schema)}
@@ -39,6 +43,7 @@ export function NumberRenderer({
       input={Inputs.Number}
       compact={compact}
       required={schemaRequired ?? required}
+      {...numberProps}
     />
   );
 }

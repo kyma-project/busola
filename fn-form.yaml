@@ -85,12 +85,14 @@ data:
           {
             "advanced": true,
             "path": "minReplicas",
-            "required": false
+            "required": false,
+            "min": "1"
           },
           {
             "advanced": true,
             "path": "maxReplicas",
-            "required": false
+            "required": false,
+            "min": "1"
           },
         ]
       },
