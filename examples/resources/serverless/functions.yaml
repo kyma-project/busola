@@ -107,21 +107,23 @@ data:
           "positive": ["RUNNING"],
           "negative": ["FAILED", "NEW_REVISION_ERROR"],
           "informative": ["INITIALIZING"],
-          "critical": ["DEPLOYING", "BUILDING"]
+          "critical": ["DEPLOYING", "BUILDING", "PENDING"]
         },
         "source": "(status = undefined or status.conditions = undefined or $count(status.conditions) = 0) 
           ? 'INITIALIZING' 
           : $count($filter(status.conditions, function($v) { $v.status = 'False' })) != 0
-            ? $count($filter(status.conditions, function($v) { $v.type = 'Running' and $v.status = 'True' })) = 0 
+            ? $count($filter(status.conditions, function($v) { $v.type = 'Running' and $v.status = 'True' })) != 0 
               ? 'NEW_REVISION_ERROR'
               : 'FAILED'
-            : $count($filter(status.conditions, function($v) { $v.type = 'ConfigurationReady' and $v.status = 'True' })) = 0 
-              ? 'INITIALIZING' 
-              : $count($filter(status.conditions, function($v) { $v.type = 'BuildReady' and $v.status = 'True' })) = 0 
-                ? 'BUILDING'
-                : $count($filter(status.conditions, function($v) { $v.type = 'Running' and $v.status = 'True' })) = 0 
-                  ? 'DEPLOYING'
-                  : 'RUNNING'
+            : $count($filter(status.conditions, function($v) { $v.type = 'ConfigurationReady' and $v.status = 'True' })) != 0 
+              ? $count($filter(status.conditions, function($v) { $v.type = 'BuildReady' and $v.status = 'True' })) != 0 
+                ? $count($filter(status.conditions, function($v) { $v.type = 'Running' and $v.status = 'True' })) != 0 
+                  ? 'RUNNING'
+                  : $count($filter(status.conditions, function($v) { $v.type = 'Running' and $v.status = 'Unknown' and $v.reason = 'MinReplicasNotAvailable' })) != 0 
+                    ? 'PENDING'
+                    : 'DEPLOYING'
+                : 'BUILDING'
+              : 'INITIALIZING'
             "
       }
     ]
