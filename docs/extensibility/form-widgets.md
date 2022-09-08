@@ -147,12 +147,21 @@ Complex widgets handle more advanced data structures such as arrays or objects.
 
 KeyValuePair widgets render an `object` value as a list of dual text fields. One is used for a key and the other for a value, allowing for adding and removing entries.
 
+#### Widget-specific parameters
+
+- **keyEnum[]** - an array of options to generate a key input field with a dropdown.
+- **value**:
+  - **type** - a string that specifies the type of the value input. The options are `object`, `number`, `text`. Defaults to `text`.
+  - **keyEnum[]** - an array of options to generate a key input field with a dropdown only if the `type` is set to `object`.
+  - **valueEnum[]** - an array of options to generate a value input field with a dropdown.
+
 #### Example
 
 ```json
 {
   "path": "spec.my-data",
-  "widget": "KeyValuePair"
+  "widget": "KeyValuePair",
+  "keyEnum": ["prefix", "regex", "exact"]
 }
 ```
 

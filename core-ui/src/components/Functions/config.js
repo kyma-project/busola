@@ -30,11 +30,15 @@ export const WEBHOOK_ENVS = {
 };
 
 const jsCodeAndDeps = {
-  code: `module.exports = { 
-  main: function (event, context) {
-    return "Hello World!";
-  }
-}`,
+  code: `module.exports = {
+    main: async function (event, context) {
+      const message = \`Hello World\`
+        + \` from the Kyma Function \${context["function-name"]}\`
+        + \` running on \${context.runtime}!\`;
+      console.log(message);
+      return message;
+    }
+  }`,
   deps: `{ 
   "name": "{functionName}",
   "version": "1.0.0",
@@ -49,7 +53,9 @@ const defaultCodeAndDeps = {
   nodejs16: { ...jsCodeAndDeps },
   python39: {
     code: `def main(event, context):
-    return "Hello World"`,
+    message = "Hello World from the Kyma Function "+context['function-name']+" running on "+context['runtime']+ "!";
+    print(message)
+    return message`,
     deps: '',
   },
 };

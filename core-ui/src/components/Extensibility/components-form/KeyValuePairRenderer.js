@@ -5,6 +5,61 @@ import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
 import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
+import * as Inputs from 'shared/ResourceForm/inputs';
+import { Dropdown } from 'shared/ResourceForm/inputs';
+import './KeyValuePairRenderer.scss';
+
+const getEnumComponent = (
+  enumValues,
+  isKeyInput = true,
+  input = Inputs.Text,
+) => {
+  if (!Array.isArray(enumValues)) return input;
+
+  const options = enumValues.map(opt => ({ key: opt, text: opt }));
+  return ({ onChange, setValue, onBlur, value, ...props }) => (
+    <Dropdown
+      {...props}
+      value={value}
+      options={options}
+      setValue={v => {
+        isKeyInput
+          ? onChange({
+              target: {
+                value: v,
+              },
+            })
+          : setValue(v);
+        onBlur();
+      }}
+    />
+  );
+};
+
+const getValueComponent = valueInfo => {
+  const { type, keyEnum: valuKeyEnum, valueEnum } = valueInfo || {};
+
+  switch (type) {
+    case 'number':
+      return getEnumComponent(valueEnum, false, Inputs.Number);
+    case 'object':
+      return ({ setValue, value }) => (
+        <KeyValueField
+          className="nested-key-value-pair"
+          value={value}
+          setValue={v => {
+            setValue(v);
+          }}
+          input={{
+            key: getEnumComponent(valuKeyEnum),
+            value: getEnumComponent(valueEnum, false),
+          }}
+        />
+      );
+    default:
+      return getEnumComponent(valueEnum, false);
+  }
+};
 
 export function KeyValuePairRenderer({
   storeKeys,
@@ -23,6 +78,7 @@ export function KeyValuePairRenderer({
   let titleTranslation = '';
   const path = storeKeys.toArray().join('.');
   const schemaRequired = schema.get('required');
+  const valueInfo = schema.get('value') || {};
 
   if (tFromStoreKeys(storeKeys, schema) !== path)
     titleTranslation = tFromStoreKeys(storeKeys, schema);
@@ -50,8 +106,14 @@ export function KeyValuePairRenderer({
           data: { value: createOrderedMap(value) },
         });
       }}
+      input={{
+        value: getValueComponent(valueInfo),
+        key: getEnumComponent(schema.get('keyEnum')),
+      }}
+      className="key-enum"
       title={titleTranslation}
       required={schemaRequired ?? required}
+      initialValue={valueInfo.type === 'object' ? {} : ''}
     />
   );
 }
