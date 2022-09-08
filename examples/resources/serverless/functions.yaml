@@ -105,7 +105,7 @@ data:
         "widget": "Badge",
         "highlights": {
           "positive": ["RUNNING"],
-          "negative": ["FAILED", "NEW_REVISION_ERROR"],
+          "negative": ["FAILED", "ERROR"],
           "informative": ["INITIALIZING"],
           "critical": ["DEPLOYING", "BUILDING", "PENDING"]
         },
@@ -113,7 +113,7 @@ data:
           ? 'INITIALIZING' 
           : $count($filter(status.conditions, function($v) { $v.status = 'False' })) != 0
             ? $count($filter(status.conditions, function($v) { $v.type = 'Running' and $v.status = 'True' })) != 0 
-              ? 'NEW_REVISION_ERROR'
+              ? 'ERROR'
               : 'FAILED'
             : $count($filter(status.conditions, function($v) { $v.type = 'ConfigurationReady' and $v.status = 'True' })) != 0 
               ? $count($filter(status.conditions, function($v) { $v.type = 'BuildReady' and $v.status = 'True' })) != 0 
