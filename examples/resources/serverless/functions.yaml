@@ -102,7 +102,11 @@ data:
       },
       {
         "name": "Status",
-        "source": "status.conditions[?(@.type=='BuildReady')].status"
+        "source": "(status = undefined or status.conditions = undefined or $count(status.conditions) = 0) 
+          ? 'Initializing' 
+          : $count($filter(status.conditions, function($v) { $v.status = 'False' })) != 0
+            ? 'Error'
+            : 'Ready'"
       }
     ]
   translations: |-
