@@ -92,6 +92,39 @@ export function prepareSchemaRules(ruleDefs) {
   return root;
 }
 
+const createJsonataPath = storeKeys => {
+  let path = '$';
+  storeKeys
+    .toJS()
+    .filter(e => e)
+    .forEach((segment, idx) => {
+      if (typeof segment === 'string') {
+        const prefix = idx === 0 ? '' : '.';
+
+        path += `${prefix}${segment}`;
+      } else if (typeof segment === 'number') {
+        path += `[${segment.toString()}]`;
+      }
+    });
+  return `${path}.`;
+};
+const createJPPath = storeKeys => {
+  let path = '$.';
+  storeKeys
+    .toJS()
+    .filter(e => e)
+    .forEach((segment, idx) => {
+      if (typeof segment === 'string') {
+        const prefix = idx === 0 ? '' : '.';
+
+        path += `${prefix}${segment}`;
+      } else if (typeof segment === 'number') {
+        path += `[${segment.toString()}]`;
+      }
+    });
+  return `${path}`;
+};
+
 export function SchemaRulesInjector({
   schema,
   storeKeys,
@@ -99,6 +132,7 @@ export function SchemaRulesInjector({
   rootRule,
   varStore,
   setVarStore,
+  updateResource,
   value,
   resource,
   ...props
@@ -111,11 +145,10 @@ export function SchemaRulesInjector({
     schema.get('schemaRule') ?? rootRule;
 
   if (varName) {
-    const varSuffix = storeKeys
-      .filter(item => typeof item === 'number')
-      .map(item => `[${item}]`)
-      .join('');
-    const varPath = `$.${varName}${varSuffix}`;
+    const varParentObjectPath = createJPPath(storeKeys);
+
+    const varPath = `${varParentObjectPath}.${varName}`;
+
     return (
       <Plugin
         {...props}
@@ -126,6 +159,36 @@ export function SchemaRulesInjector({
           const newVal = e.data.value;
           const oldVal = jp.value(varStore, varPath);
           if (typeof newVal !== 'undefined' && newVal !== oldVal) {
+            ///////////////////// UPDATE RESOURCE
+
+            const valParentObject = jp.value(resource, varParentObjectPath);
+
+            if (typeof valParentObject === 'object') {
+              // this introduces limitations:
+              // - enum values MUST be real object property name, probably not a problem since translations will help
+              // - in this version vars MUST be introduced only at the same level as the properties they concern
+              //   {
+              //       var: 'loadBalancerSelector',
+              //       name: 'chooseLoadBalancerSelector',
+              //       type: 'string',
+              //   enum: ['simple', 'consistentHash'],
+              //   },
+
+              const keysToRemove = schema.toJS().enum.filter(e => e !== newVal);
+
+              const newObj = {};
+
+              Object.entries(valParentObject).forEach(([key, val]) => {
+                if (!keysToRemove.includes(key)) {
+                  newObj[key] = val;
+                }
+              });
+
+              jp.value(resource, varParentObjectPath, newObj);
+
+              updateResource({ ...resource });
+            }
+
             jp.value(varStore, varPath, newVal);
             setVarStore({ ...varStore });
           }
@@ -179,15 +242,38 @@ export function SchemaRulesInjector({
             .toArray();
           const index = last(indexes);
           const variables = extractVariables(varStore, rule.itemVars, indexes);
-          const visible = jsonataWrapper(rule.visibility).evaluate(resource, {
-            ...varStore,
-            ...variables,
-            vars: varStore,
-            item: lastArrayItem,
-            indexes,
-            index,
-          });
-          if (!visible) return null;
+
+          const varParentPath = createJsonataPath(storeKeys);
+
+          const ruleWithParentPath = rule.visibility?.replace(
+            '$',
+            varParentPath,
+          );
+
+          const visible = jsonataWrapper(ruleWithParentPath).evaluate(
+            resource,
+            {
+              ...varStore,
+              ...variables,
+              vars: varStore,
+              item: lastArrayItem,
+              indexes,
+              index,
+            },
+          );
+
+          if (!visible) {
+            const jpPath = createJPPath(storeKeys);
+
+            const cos = jp.value(varStore, jpPath);
+            console.log(1111, cos);
+
+            // clearValue
+
+            // here I need to clear the value
+
+            return null;
+          }
         }
         return property ? [propertyKey, property] : null;
       })

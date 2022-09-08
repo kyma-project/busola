@@ -19,6 +19,7 @@ const FormStack = injectPluginStack(FormContainer);
 export function ResourceSchema({
   advanced,
   resource,
+  updateResource,
   schema,
   schemaRules = [],
   path,
@@ -58,6 +59,7 @@ export function ResourceSchema({
         showValidity={true}
         onChange={onChange}
         rootRule={schemaRules}
+        updateResource={updateResource}
         varStore={varStore}
         setVarStore={setVarStore}
       >

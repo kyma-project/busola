@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState, useCallback } from 'react';
 import { createStore } from '@ui-schema/ui-schema';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import Immutable from 'immutable';
@@ -15,6 +15,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useGetSchema } from 'hooks/useGetSchema';
 import { prettifyKind } from 'shared/utils/helpers';
 import { prepareSchemaRules } from './SchemaRulesInjector';
+import { destinationRules } from './dr.js';
 
 export function ExtensibilityCreate({
   formElementRef,
@@ -26,6 +27,9 @@ export function ExtensibilityCreate({
   toggleFormFn,
   resourceName,
 }) {
+  // THIS OVERWRITES ALL EXT FORMS
+  createResource = destinationRules;
+
   const [varStore, setVarStore] = useState({});
   const { namespaceId: namespace } = useMicrofrontendContext();
   const notification = useNotification();
@@ -43,10 +47,11 @@ export function ExtensibilityCreate({
     createStore(createOrderedMap(resource)),
   );
 
-  const updateResource = res =>
-    setStore(prevStore => prevStore.set('values', Immutable.fromJS(res)));
-
-  //TODO filter schema based on form configuration
+  const updateResource = useCallback(
+    res =>
+      setStore(prevStore => prevStore.set('values', Immutable.fromJS(res))),
+    [setStore],
+  );
 
   useEffect(() => {
     setResource(store.valuesToJS());
@@ -100,7 +105,7 @@ export function ExtensibilityCreate({
       pluralKind={resourceType}
       singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
       resource={resource}
-      setResource={updateResource}
+      updateResource={updateResource}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
@@ -114,6 +119,7 @@ export function ExtensibilityCreate({
         schema={errorOpenApi ? {} : schema}
         schemaRules={simpleRules}
         resource={resource}
+        updateResource={updateResource}
         store={store}
         setStore={setStore}
         onSubmit={() => {}}
@@ -125,6 +131,7 @@ export function ExtensibilityCreate({
         advanced
         key={api.version}
         schema={errorOpenApi ? {} : schema}
+        updateResource={updateResource}
         schemaRules={advancedRules}
         resource={resource}
         store={store}
