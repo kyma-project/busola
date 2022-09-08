@@ -5,6 +5,7 @@ import { List, fromJS } from 'immutable';
 import * as jp from 'jsonpath';
 
 import { jsonataWrapper } from './jsonataWrapper';
+import { useVariables } from './helpers';
 
 const eqPath = (a, b) => JSON.stringify(b) === JSON.stringify(a);
 
@@ -12,19 +13,6 @@ const eqPath = (a, b) => JSON.stringify(b) === JSON.stringify(a);
 const propertiesWrapper = src => ({
   map: cb => List(src?.map(([key, val]) => cb(val, key))),
 });
-
-function extractVariables(varStore, vars, indexes) {
-  if (!indexes?.length) {
-    return varStore;
-  }
-
-  return Object.fromEntries(
-    vars.map(varName => [
-      varName,
-      indexes.reduce((acc, index) => acc?.[index], varStore[varName]),
-    ]),
-  );
-}
 
 export function prepareSchemaRules(ruleDefs) {
   const root = { path: [], children: [] };
@@ -97,12 +85,12 @@ export function SchemaRulesInjector({
   storeKeys,
   currentPluginIndex,
   rootRule,
-  varStore,
-  setVarStore,
   value,
   resource,
   ...props
 }) {
+  const { vars, setVar } = useVariables();
+
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
 
@@ -121,15 +109,8 @@ export function SchemaRulesInjector({
         {...props}
         currentPluginIndex={nextPluginIndex}
         schema={schema}
-        value={jp.value(varStore, varPath)}
-        onChange={e => {
-          const newVal = e.data.value;
-          const oldVal = jp.value(varStore, varPath);
-          if (typeof newVal !== 'undefined' && newVal !== oldVal) {
-            jp.value(varStore, varPath, newVal);
-            setVarStore({ ...varStore });
-          }
-        }}
+        value={jp.value(vars, varPath)}
+        onChange={e => setVar(varPath, e.data.value)}
         storeKeys={fromJS([schema.get('var')])}
       />
     );
@@ -155,40 +136,6 @@ export function SchemaRulesInjector({
           .get(propertyKey)
           ?.set('schemaRule', rule);
 
-        let lastArrayItem;
-        let lastArrayIndex = storeKeys
-          .toArray()
-          // workaround for findLastIndex, Firefox isn't supporting it
-          .reverse()
-          .findIndex(item => typeof item === 'number');
-
-        // workaround for findLastIndex, Firefox isn't supporting it
-        lastArrayIndex = storeKeys.toArray().length - 1 - lastArrayIndex;
-
-        if (lastArrayIndex > 0) {
-          const lastArrayStoreKeys = storeKeys.slice(0, lastArrayIndex + 1);
-
-          lastArrayItem = lastArrayStoreKeys
-            .toArray()
-            .reduce((item, key) => item?.[key], resource);
-        }
-
-        if (rule.visibility) {
-          const indexes = storeKeys
-            .filter(item => typeof item === 'number')
-            .toArray();
-          const index = last(indexes);
-          const variables = extractVariables(varStore, rule.itemVars, indexes);
-          const visible = jsonataWrapper(rule.visibility).evaluate(resource, {
-            ...varStore,
-            ...variables,
-            vars: varStore,
-            item: lastArrayItem,
-            indexes,
-            index,
-          });
-          if (!visible) return null;
-        }
         return property ? [propertyKey, property] : null;
       })
       .filter(rule => !!rule);
@@ -202,8 +149,6 @@ export function SchemaRulesInjector({
       currentPluginIndex={nextPluginIndex}
       schema={newSchema}
       storeKeys={storeKeys}
-      varStore={varStore}
-      setVarStore={setVarStore}
       value={value}
       resource={resource}
     />

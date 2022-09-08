@@ -1,12 +1,13 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState, createContext } from 'react';
 import { createStore } from '@ui-schema/ui-schema';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import Immutable from 'immutable';
 import pluralize from 'pluralize';
+import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { createTemplate } from './helpers';
+import { createTemplate, VarStoreContext } from './helpers';
 
 import { ResourceSchema } from './ResourceSchema';
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -96,44 +97,56 @@ export function ExtensibilityCreate({
   if (loading) return <Spinner />;
 
   return (
-    <ResourceForm
-      pluralKind={resourceType}
-      singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
-      resource={resource}
-      setResource={updateResource}
-      formElementRef={formElementRef}
-      createUrl={resourceUrl}
-      setCustomValid={setCustomValid}
-      onlyYaml={!schema}
-      initialResource={initialResource}
-      afterCreatedFn={afterCreatedFn}
+    <VarStoreContext.Provider
+      value={{
+        vars: varStore,
+        setVar: (path, value) => {
+          const oldVal = jp.value(varStore, path);
+          if (typeof value !== 'undefined' && value !== oldVal) {
+            jp.value(varStore, path, value);
+            setVarStore({ ...varStore });
+          }
+        },
+      }}
     >
-      <ResourceSchema
-        simple
-        key={api.version}
-        schema={errorOpenApi ? {} : schema}
-        schemaRules={simpleRules}
+      <ResourceForm
+        pluralKind={resourceType}
+        singularNameu={pluralize(
+          resourceName || prettifyKind(resource.kind),
+          1,
+        )}
         resource={resource}
-        store={store}
-        setStore={setStore}
-        onSubmit={() => {}}
-        path={general?.urlPath || ''}
-        varStore={varStore}
-        setVarStore={setVarStore}
-      />
-      <ResourceSchema
-        advanced
-        key={api.version}
-        schema={errorOpenApi ? {} : schema}
-        schemaRules={advancedRules}
-        resource={resource}
-        store={store}
-        setStore={setStore}
-        path={general?.urlPath || ''}
-        varStore={varStore}
-        setVarStore={setVarStore}
-      />
-    </ResourceForm>
+        setResource={updateResource}
+        formElementRef={formElementRef}
+        createUrl={resourceUrl}
+        setCustomValid={setCustomValid}
+        onlyYaml={!schema}
+        initialResource={initialResource}
+        afterCreatedFn={afterCreatedFn}
+      >
+        <ResourceSchema
+          simple
+          key={api.version}
+          schema={errorOpenApi ? {} : schema}
+          schemaRules={simpleRules}
+          resource={resource}
+          store={store}
+          setStore={setStore}
+          onSubmit={() => {}}
+          path={general?.urlPath || ''}
+        />
+        <ResourceSchema
+          advanced
+          key={api.version}
+          schema={errorOpenApi ? {} : schema}
+          schemaRules={advancedRules}
+          resource={resource}
+          store={store}
+          setStore={setStore}
+          path={general?.urlPath || ''}
+        />
+      </ResourceForm>
+    </VarStoreContext.Provider>
   );
 }
 
