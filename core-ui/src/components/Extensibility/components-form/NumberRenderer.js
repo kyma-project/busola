@@ -30,7 +30,7 @@ export function NumberRenderer({
           type: 'set',
           schema,
           required,
-          data: { value },
+          data: { value: value || undefined },
         });
       }}
       label={tFromStoreKeys(storeKeys, schema)}
