@@ -21,7 +21,6 @@ export function NumberRenderer({
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
   const schemaPlaceholder = schema.get('placeholder');
-  const schemaRequired = schema.get('required');
 
   return (
     <ResourceForm.FormField

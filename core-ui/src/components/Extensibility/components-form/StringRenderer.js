@@ -18,7 +18,7 @@ export function StringRenderer({
   placeholder,
   ...props
 }) {
-  const { tFromStoreKeys, t: tExt } = useGetTranslation();
+  const { tFromStoreKeys } = useGetTranslation();
   const schemaPlaceholder = schema.get('schemaPlaceholder');
 
   const getTypeSpecificProps = () => {

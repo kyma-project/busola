@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { FormLabel, FormInput } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
