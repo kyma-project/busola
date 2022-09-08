@@ -5,11 +5,13 @@ import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { useVariables } from '../hooks/useVariables';
 
 export function VisibilityHandler({
+  value,
   schema,
   storeKeys,
   currentPluginIndex,
-  rootRule,
   resource,
+  onChange,
+  required,
   ...props
 }) {
   const { itemVars } = useVariables();
@@ -22,7 +24,19 @@ export function VisibilityHandler({
       itemVars(resource, rule.itemVars, storeKeys),
     );
 
-    if (!visible) return null;
+    if (!visible) {
+      if (value) {
+        onChange({
+          storeKeys,
+          scopes: ['value'],
+          type: 'set',
+          schema,
+          required,
+          data: {},
+        });
+      }
+      return null;
+    }
   }
 
   const nextPluginIndex = currentPluginIndex + 1;
@@ -35,6 +49,9 @@ export function VisibilityHandler({
       schema={schema}
       storeKeys={storeKeys}
       resource={resource}
+      value={value}
+      onChange={onChange}
+      required={required}
     />
   );
 }

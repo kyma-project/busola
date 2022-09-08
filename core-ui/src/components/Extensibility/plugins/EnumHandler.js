@@ -8,7 +8,6 @@ export function EnumHandler({
   schema,
   storeKeys,
   currentPluginIndex,
-  rootRule,
   value,
   resource,
   ...props
