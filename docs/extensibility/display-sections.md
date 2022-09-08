@@ -1,5 +1,10 @@
 # Display widgets
 
+- [Resource _list_ overview](#resource-list-overview)
+- [Resource _details_ overview](#resource-details-section)
+  - [Header and body item parameters](#header-and-body-item-parameters)
+  - [ResourceGraph parameters](#resourcegraph-parameters)
+  - [Data scoping](#data-scoping)
 - [Inline widgets](#inline-widgets)
   - [Badge](#badge)
   - [ControlledBy](#controlledby)
@@ -15,6 +20,210 @@
   - [ResourceList](#resourcelist)
   - [ResourceRefs](#resourcerefs)
   - [Table](#table)
+
+## Resource _list_ overview
+
+You customize the resource list by adding objects to the `list: []` Config Map section. Each object adds a new column to your table.
+
+### Available list item parameters
+
+- **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form, it's the path to the value.
+- **widget** - optional widget used to render the field referred to by the **source** property. By default, the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
+- **valuePreprocessor** - name of [value preprocessor](#value-preprocessors).
+- **sort** - optional sort option. If set to `true`, it allows you to sort the resource list using this value. Defaults to false. It can also be set to an object with the following properties:
+  - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
+  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
+
+### Example
+
+```json
+[
+  {
+    "source": "spec.url",
+    "sort": {
+      "default": true,
+      "compareFunction": "$compareStrings($first, $second)"
+    }
+  },
+  { "source": "spec.priority", "widget": "Badge" },
+  { "source": "$join(spec.toppings.name, ', ')" },
+  {
+    "name": "quantityIsMore",
+    "source": "$filter(spec.toppings, function ($v, $i, $a) { $v.quantity > $average($a.quantity) })"
+  },
+  { "source": "$join(spec.volumes.name, ', ')" },
+  {
+    "source": "$filter(spec.volumes, function ($v, $i, $a) {'configMap' in $keys($v)})" // List the array of Volume objects that have a config map
+  },
+  {
+    "source": "spec.volumes['configMap' in $keys($)]" // This is the alternative way of listing the array of Volume objects that have a config map
+  },
+  {
+    "source": "$join(spec.volumes['configMap' in $keys($)].name, ', ')" // List volume names of volumes that have a config map
+  }
+]
+```
+
+## Resource _details_ overview
+
+The **details** section defines the display structure for the details page.
+It contains three sections, `header`, `body`, and optional `resourceGraph`.
+The first two sections are a list of widgets to display in the **header** section and the body of the page respectively.
+The format of the entries is similar to the **form** section, however it has extra options available.
+The `resourceGraph` section is used to configure the ResourceGraph which shows relationships between various resources.
+
+### Header and body item parameters
+
+- **source** - contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the widget. In its simplest form, it's the path to the value. Not required for presentational widgets.
+- **name** - Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the **translation** section.
+- **widget** - optional widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
+- **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
+- **visibility** - by default all fields are visible; however **visibility** property can be used to control a single item display.
+  - If set to `false` explicitly, the field doesn't render.
+  - If set to any string, this property is treated as JSONata format, determining (based on current value given as `data`) if the field should be visible.
+  - If not set, the field always renders.
+- **children** - a list of child widgets used for all `object` and `array` fields.
+
+Extra parameters might be available for specific widgets.
+
+### Header and body example
+
+```json
+{
+  "header": [
+    { "source": "metadata.name" },
+    { "source": "spec.priority", "widget": "Badge" },
+    { "source": "$join(spec.volumes.name, ', ')" }
+  ],
+  "body": [
+    {
+      "name": "columns",
+      "widget": "Columns",
+      "children": [
+        { "name": "left-panel", "widget": "Panel" },
+        { "name": "right-panel", "widget": "Panel" }
+      ]
+    },
+    {
+      "name": "summary",
+      "widget": "Panel",
+      "children": [
+        { "source": "metadata.name" },
+        { "source": "spec.priority", "widget": "Badge" },
+        {
+          "name": "Volumes names of volumes with config map",
+          "source": "$join(spec.volumes['configMap' in $keys($)].name, ', ')"
+        }
+      ]
+    },
+    {
+      "source": "spec.details",
+      "widget": "CodeViewer",
+      "language": "json"
+    },
+    {
+      "source": "spec.configPatches",
+      "widget": "Panel",
+      "children": [
+        { "source": "applyTo" },
+        {
+          "source": "match.context",
+          "visibility": "$exists(data.match.context)"
+        }
+      ]
+    },
+    {
+      "source": "spec.configPatches",
+      "widget": "Table",
+      "children": [{ "source": "applyTo" }, { "source": "match.context" }]
+    }
+  ]
+}
+```
+
+### resourceGraph parameters
+
+- **depth** - defines the maximum distance from the original resource to a transitively related resource. Defaults to infinity.
+- **colorVariant** - optional integer in range 1 to 11 or 'neutral', denoting the SAP color variant of the node's border. If not set, the node's border is the same as the current text color.
+- **networkFlowKind** - optional boolean which determines if the resource should be shown on the network graph, Defaults to `false`, which displays the resource on the structural graph.
+- **networkFlowLevel** - optional integer which sets the horizontal position of the resource's node on the network graph.
+- **dataSources** - an array of objects in shape:
+  - **source** - a string that must correspond to one of the [dataSources](#datasources-section) name. It selects the related resource and the way it should be matched.
+
+### resourceGraph example
+
+```json
+{
+  "details": {
+    "resourceGraph": {
+      "colorVariant": 2,
+      "dataSources": [
+        {
+          "source": "relatedSecrets"
+        },
+        {
+          "source": "relatedPizzaOrders"
+        }
+      ]
+    }
+  },
+  "dataSources": {
+    "relatedSecrets": {
+      "resource": {
+        "kind": "Secret",
+        "version": "v1"
+      },
+      "filter": "$root.spec.recipeSecret = $item.metadata.name"
+    },
+    "relatedPizzaOrders": {
+      "resource": {
+        "kind": "PizzaOrder",
+        "group": "busola.example.com",
+        "version": "v1"
+      },
+      "filter": "$item.spec.pizzas[name = $root.metadata.name and namespace = $root.metadata.namespace]"
+    }
+  }
+}
+```
+
+<img src="./assets/ResourceGraph.png" alt="Example of a ResourceGraph"  style="border: 1px solid #D2D5D9">
+
+### Data scoping
+
+Whenever an entry has both **source** and **children** properties, the **children** elements are provided with extra variables.
+
+In the case of objects, a `$parent` variable contains the data of the parent element.
+
+For example:
+
+```json
+[
+  {
+    "source": "spec",
+    "widget": "Panel",
+    "children": [{ "source": "$parent.entry1" }, { "source": "$parent.entry2" }]
+  }
+]
+```
+
+will render the data for `spec.entry1` and `spec.entry2`.
+
+In the case of array-based components, an `$item` variable contains data for each child. For example:
+
+```json
+[
+  {
+    "source": "spec.data",
+    "widget": "Table",
+    "children": [{ "source": "$item.name" }, { "source": "$item.description" }]
+  }
+]
+```
+
+renders `spec.data[].name` and `spec.data[].description`.
+
+---
 
 You can use display widgets in the lists and details pages.
 
