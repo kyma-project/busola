@@ -1,8 +1,8 @@
 import React from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
-import { jsonataWrapper } from '../jsonataWrapper';
-import { useVariables } from '../helpers';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
+import { useVariables } from '../helpers/useVariables';
 
 export function EnumHandler({
   schema,

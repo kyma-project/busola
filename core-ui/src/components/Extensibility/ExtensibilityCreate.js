@@ -1,21 +1,22 @@
-import React, { useMemo, useEffect, useState, createContext } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { createStore } from '@ui-schema/ui-schema';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import Immutable from 'immutable';
 import pluralize from 'pluralize';
 import * as jp from 'jsonpath';
+import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { createTemplate, VarStoreContext } from './helpers';
-
-import { ResourceSchema } from './ResourceSchema';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useTranslation } from 'react-i18next';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useGetSchema } from 'hooks/useGetSchema';
 import { prettifyKind } from 'shared/utils/helpers';
-import { prepareSchemaRules } from './SchemaRulesInjector';
+
+import { ResourceSchema } from './ResourceSchema';
+import { createTemplate } from './helpers';
+import { VarStoreContext } from './helpers/useVariables';
+import { prepareSchemaRules } from './helpers/prepareSchemaRules';
 
 export function ExtensibilityCreate({
   formElementRef,

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { jsonataWrapper } from './jsonataWrapper';
 
-import { useDataSourcesContext } from './contexts/DataSources';
+import { jsonataWrapper } from './jsonataWrapper';
+import { useDataSourcesContext } from '../contexts/DataSources';
 
 export function useJsonata(query, root, extras = {}) {
   const [value, setValue] = useState('');

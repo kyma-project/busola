@@ -1,12 +1,12 @@
 import React from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { jsonataWrapper } from '../jsonataWrapper';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
 import { useGetTranslation, useGetPlaceholder } from '../helpers';
-import { useJsonata } from '../useJsonata';
+import { useJsonata } from '../helpers/useJsonata';
 import { widgets, valuePreprocessors } from './index';
 
 export const SimpleRenderer = ({ children }) => {

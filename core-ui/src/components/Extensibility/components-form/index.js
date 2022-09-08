@@ -12,7 +12,7 @@ import { PluginSimpleStack } from '@ui-schema/ui-schema/PluginSimpleStack';
 import { ValidityReporter } from '@ui-schema/ui-schema/ValidityReporter';
 import { validators } from '@ui-schema/ui-schema/Validators/validators';
 
-import { SchemaRulesInjector } from '../SchemaRulesInjector';
+import { SchemaRulesInjector } from '../plugins/SchemaRulesInjector';
 import { EnumHandler } from '../plugins/EnumHandler';
 import { VisibilityHandler } from '../plugins/VisibilityHandler';
 

@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useRef } from 'react';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { useObjectState } from 'shared/useObjectState';
 import * as jp from 'jsonpath';
-import { jsonataWrapper } from '../jsonataWrapper';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 const DataSourcesContext = createContext();
 
