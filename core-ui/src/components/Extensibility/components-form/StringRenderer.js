@@ -15,11 +15,21 @@ export function StringRenderer({
   placeholder,
   ...props
 }) {
-  const { tFromStoreKeys, t: tExt } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt, exists } = useGetTranslation();
 
   const getTypeSpecificProps = () => {
     if (schema.get('enum')) {
-      const options = schema.toJS().enum.map(key => ({ key, text: key }));
+      // todo add docs
+      const translationPath = storeKeys
+        .toArray()
+        .filter(el => typeof el === 'string')
+        .join('.');
+      const options = schema.toJS().enum.map(key => ({
+        key,
+        text: exists(translationPath + '.' + key)
+          ? tExt(translationPath + '.' + key)
+          : key,
+      }));
       return { input: Inputs.ComboboxInput, options };
     } else {
       return { input: Inputs.Text };
