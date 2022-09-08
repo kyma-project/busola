@@ -25,10 +25,11 @@ export function EnumHandler({
   let newSchema = schema;
 
   if (typeof schemaEnum === 'string') {
-    const newEnum = jsonataWrapper(schemaEnum).evaluate(
-      resource,
-      itemVars(resource, rule.itemVars, storeKeys),
-    );
+    const newEnum =
+      jsonataWrapper(schemaEnum).evaluate(
+        resource,
+        itemVars(resource, rule.itemVars, storeKeys),
+      ) || [];
     newSchema = schema.set('enum', newEnum);
   }
 
