@@ -6,7 +6,7 @@ import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
 import { useGetTranslation, useGetPlaceholder } from '../helpers';
-import { useJsonata } from '../helpers/useJsonata';
+import { useJsonata } from '../hooks/useJsonata';
 import { widgets, valuePreprocessors } from './index';
 
 export const SimpleRenderer = ({ children }) => {

@@ -3,7 +3,6 @@ import { createStore } from '@ui-schema/ui-schema';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import Immutable from 'immutable';
 import pluralize from 'pluralize';
-import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -15,7 +14,7 @@ import { prettifyKind } from 'shared/utils/helpers';
 
 import { ResourceSchema } from './ResourceSchema';
 import { createTemplate } from './helpers';
-import { VarStoreContext } from './helpers/useVariables';
+import { VarStoreContextProvider } from './contexts/VarStore';
 import { prepareSchemaRules } from './helpers/prepareSchemaRules';
 
 export function ExtensibilityCreate({
@@ -28,7 +27,6 @@ export function ExtensibilityCreate({
   toggleFormFn,
   resourceName,
 }) {
-  const [varStore, setVarStore] = useState({});
   const { namespaceId: namespace } = useMicrofrontendContext();
   const notification = useNotification();
   const { t } = useTranslation();
@@ -98,18 +96,7 @@ export function ExtensibilityCreate({
   if (loading) return <Spinner />;
 
   return (
-    <VarStoreContext.Provider
-      value={{
-        vars: varStore,
-        setVar: (path, value) => {
-          const oldVal = jp.value(varStore, path);
-          if (typeof value !== 'undefined' && value !== oldVal) {
-            jp.value(varStore, path, value);
-            setVarStore({ ...varStore });
-          }
-        },
-      }}
-    >
+    <VarStoreContextProvider>
       <ResourceForm
         pluralKind={resourceType}
         singularNameu={pluralize(
@@ -147,7 +134,7 @@ export function ExtensibilityCreate({
           path={general?.urlPath || ''}
         />
       </ResourceForm>
-    </VarStoreContext.Provider>
+    </VarStoreContextProvider>
   );
 }
 

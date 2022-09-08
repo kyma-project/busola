@@ -7,7 +7,7 @@ import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
 import { ExternalResourceRef } from 'shared/components/ResourceRef/ExternalResourceRef';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
-import { useVariables } from '../helpers/useVariables';
+import { useVariables } from '../hooks/useVariables';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 export function ResourceRefRender({

@@ -1,10 +1,7 @@
-import { createContext, useContext } from 'react';
+import { useContext } from 'react';
 import { last } from 'lodash';
 
-export const VarStoreContext = createContext({
-  vars: {},
-  setVar: () => {},
-});
+import { VarStoreContext } from '../contexts/VarStore';
 
 export function extractVariables(varStore, vars, indexes) {
   if (!indexes?.length) {
