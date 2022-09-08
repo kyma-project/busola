@@ -265,6 +265,8 @@ clusters:
     go-to-btp-cockpit: To view your clusters, go to
     subtitle: Let's add one now!
     title: There are no clusters yet
+  gardener:
+    add: Connect Gardener cluster
   kubeconfig: kubeconfig
   labels:
     client-id: Client ID

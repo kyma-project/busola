@@ -135,14 +135,25 @@ function ClusterList() {
   ];
 
   const extraHeaderContent = (
-    <Button
-      option="transparent"
-      glyph="add"
-      className="fd-margin-begin--sm"
-      onClick={() => setShowAdd(true)}
-    >
-      {t('clusters.add.title')}
-    </Button>
+    <>
+      <Button
+        option="transparent"
+        glyph="add"
+        className="fd-margin-begin--sm"
+        onClick={() => setShowAdd(true)}
+      >
+        {t('clusters.add.title')}
+      </Button>
+      {features.GARDENER_LOGIN?.isEnabled && (
+        <Button
+          option="transparent"
+          glyph="add"
+          className="fd-margin-begin--sm"
+        >
+          {t('clusters.gardener.add')}
+        </Button>
+      )}
+    </>
   );
 
   const addDialog = (
@@ -177,6 +188,10 @@ function ClusterList() {
     </>
   );
 
+  const gardenerLoginButton = features.GARDENER_LOGIN?.isEnabled && (
+    <Button>{t('clusters.gardener.add')}</Button>
+  );
+
   if (!entries.length) {
     const subtitle = t('clusters.empty.subtitle');
     return (
@@ -199,6 +214,7 @@ function ClusterList() {
               >
                 {t('clusters.add.title')}
               </Button>
+              {gardenerLoginButton}
               {loadDefaultClusterButton}
             </>
           }
