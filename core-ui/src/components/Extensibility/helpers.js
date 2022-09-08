@@ -1,5 +1,6 @@
 import React, { createContext, useContext } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { merge } from 'lodash';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { OrderedMap } from 'immutable';
 import { Link } from 'shared/components/Link/Link';
@@ -78,6 +79,19 @@ export function createTemplate(api, namespace, scope) {
   if (namespace && scope === 'namespace')
     template.metadata.namespace = namespace;
   return template;
+}
+
+export function createPresets(resource, presets) {
+  let preparedPresets = [];
+  preparedPresets.push({
+    name: 'default',
+    value: resource,
+  });
+  presets.forEach(preset => {
+    preparedPresets.push(merge({}, { value: resource }, preset));
+  });
+
+  return preparedPresets;
 }
 
 export const useGetPlaceholder = structure => {

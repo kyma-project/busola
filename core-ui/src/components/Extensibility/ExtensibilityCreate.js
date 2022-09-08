@@ -6,7 +6,7 @@ import pluralize from 'pluralize';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { createTemplate } from './helpers';
+import { createPresets, createTemplate } from './helpers';
 
 import { ResourceSchema } from './ResourceSchema';
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -31,12 +31,18 @@ export function ExtensibilityCreate({
   const notification = useNotification();
   const { t } = useTranslation();
   const general = createResource?.general;
+
   const api = general?.resource || {};
 
   const [resource, setResource] = useState(
     initialResource ||
       createResource?.template ||
       createTemplate(api, namespace, general?.scope),
+  );
+
+  const presets = createPresets(
+    createResource?.template || createTemplate(api, namespace, general?.scope),
+    createResource?.presets,
   );
 
   const [store, setStore] = useState(() =>
@@ -106,6 +112,7 @@ export function ExtensibilityCreate({
       setCustomValid={setCustomValid}
       onlyYaml={!schema}
       initialResource={initialResource}
+      presets={!initialResource && presets}
       afterCreatedFn={afterCreatedFn}
     >
       <ResourceSchema
