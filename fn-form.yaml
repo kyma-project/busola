@@ -1,0 +1,192 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: functions.serverless.kyma-project.io
+  namespace: pw-function-form
+  labels:
+    app.kubernetes.io/name: functions.serverless.kyma-project.io
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  details: |-
+    {
+      "header": [],
+      "body": [
+        {
+          "name": "Summary",
+          "widget": "Panel",
+          "children": [
+            {
+              "name": "replicas",
+              "source": "spec.replicas"
+            },
+            {
+              "name": "runtime",
+              "source": "spec.runtime"
+            },
+            {
+              "name": "runtimeImageOverride",
+              "source": "spec.runtimeImageOverride"
+            },
+            {
+              "name": "Configured",
+              "source": "status.conditions[?(@.type=='ConfigurationReady')].status"
+            },
+            {
+              "name": "Built",
+              "source": "status.conditions[?(@.type=='BuildReady')].status"
+            },
+            {
+              "name": "Running",
+              "source": "status.conditions[?(@.type=='Running')].status"
+            },
+            {
+              "name": "Runtime",
+              "source": "spec.runtime"
+            },
+            {
+              "name": "Version",
+              "source": "metadata.generation"
+            },
+            {
+              "name": "Age",
+              "source": "metadata.creationTimestamp"
+            }
+          ]
+        },
+        {
+          "path": "spec",
+          "widget": "CodeViewer"
+        }
+      ]
+    }
+  form: |-
+    [
+      {
+        "simple": true,
+        "path": "spec.runtime",
+        "required": true,
+        "enum": ["nodejs12", "nodejs14", "nodejs16", "python39"]
+      },
+      {
+        "advanced": true,
+        "path": "spec.runtimeImageOverride",
+        "required": false
+      },
+      {
+        "advanced": true,
+        "path": "replicas",
+        "required": false
+      },
+      {
+        "path": "spec.scaleConfig",
+        "widget": "FormGroup",
+        "children": [
+          {
+            "advanced": true,
+            "path": "minReplicas",
+            "required": false
+          },
+          {
+            "advanced": true,
+            "path": "maxReplicas",
+            "required": false
+          },
+        ]
+      },
+      {
+        "path": "spec.resourceConfiguration.function",
+        "widget": "FormGroup",
+        "children": [
+          {
+            "path": "profile"
+          },
+          {
+            "path": "resources.limits.cpu"
+          },
+          {
+            "path": "resources.limits.memory"
+          },
+          {
+            "path": "resources.requests.cpu"
+          },
+          {
+            "path": "resources.requests.memory"
+          },
+        ]
+      },
+       {
+        "path": "spec.resourceConfiguration.build",
+        "widget": "FormGroup",
+        "children": [
+          {
+            "path": "profile"
+          },
+          {
+            "path": "resources.limits.cpu"
+          },
+          {
+            "path": "resources.limits.memory"
+          },
+          {
+            "path": "resources.requests.cpu"
+          },
+          {
+            "path": "resources.requests.memory"
+          },
+        ]
+      }
+    ]
+  general: |-
+    {
+      "resource": {
+        "kind": "Function",
+        "group": "serverless.kyma-project.io",
+        "version": "v1alpha2"
+      },
+      "name": "Functions with form only",
+      "category": "PW",
+      "urlPath": "ext-functions--form",
+      "scope": "namespace"
+    }
+  list: |-
+    []
+  translations: |-
+    {
+      "en": {
+        "metadata.annotations": "Annotations",
+        "metadata.labels": "Labels",
+        "metadata.creationTimestamp": "Created at",
+        "spec.runtime": "Runtime",
+        "spec.runtimeImageOverride": "Runtime Image Override",
+        "spec.runtime.nodejs16": "Node.js 16",
+        "spec.runtime.nodejs14": "Node.js 14",
+        "spec.runtime.nodejs12": "Node.js 12 - Deprecated",
+        "spec.runtime.python39": "Python 3.9",
+        "spec.scaleConfig": "Scaling Configuration",
+        "spec.scaleConfig.minReplicas": "Min Replicas",
+        "spec.scaleConfig.maxReplicas": "Max Replicas",
+        "spec.resourceConfiguration.function": "Runtime Profile",
+        "spec.resourceConfiguration.build": "Build Job Profile",
+        "Profile": "Profile"
+      }
+    }
+  template: |-
+    apiVersion: serverless.kyma-project.io/v1alpha2
+    kind: Function
+    metadata:
+      name: ''
+    spec:
+      runtime: nodejs14
+      source:
+        inline:
+          source: |-
+            module.exports = 
+              main: async function (event, context) {
+                const message = `Hello World`
+                  + ` from the Kyma Function ${context["function-name"]}`
+                  + ` running on ${context.runtime}!`;
+                console.log(message);
+                return message;
+              }
+            }
