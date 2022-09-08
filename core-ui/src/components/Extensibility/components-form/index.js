@@ -81,7 +81,7 @@ export const widgets = {
     KeyValuePair: KeyValuePairRenderer,
     CodeEditor: MonacoRenderer,
     FormGroup: CollapsibleRenderer,
-    ResourceRefs: ResourceRefRender,
+    ResourceRef: ResourceRefRender,
     Resource: ResourceRenderer,
   },
 };

@@ -7,7 +7,7 @@
   - [Resource](#resource)
 - [Complex widgets](#complex-widgets)
   - [KeyValuePair](#keyvaluepair)
-  - [ResourceRefs](#resourcerefs)
+  - [ResourceRef](#resourceref)
 - [Presentation widgets](#presentation-widgets)
   - [FormGroup](#formgroup)
   - [GenericList](#genericlist)
@@ -171,9 +171,9 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 
-### ResourceRefs
+### ResourceRef
 
-ResourceRefs widgets render the lists of dropdowns to select the associated resources' names and Namespaces. The corresponding specification object must be an array of objects `{name: 'foo', namespace: 'bar'}`.
+ResourceRef widgets render two dropdowns to select the associated resources' names and Namespaces. The corresponding specification object is of the form `{name: 'foo', namespace: 'bar'}`. If this widget is provided with children, they are rendered as usual.
 
 #### Widget-specific parameters
 
@@ -181,32 +181,39 @@ ResourceRefs widgets render the lists of dropdowns to select the associated reso
   - **kind** - _[required]_ Kubernetes kind of the resource.
   - **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
   - **version** - _[required]_ API version used for all requests.
+- **provideVar** - When this field is defined, the chosen resource will be provided as a variable of this name.
+- **toInternal** - A JSONata function to convert from the stored value to the `{name, namespace}` format. Useful for example when the data is stored as a string.
+- **toExternal** - A corresponding function to convert back to store.
 
 #### Example
 
 ```json
 [
   {
-    "path": "spec.my-data[]",
-    "widget": "ResourceRefs",
+    "path": "spec.my-data",
+    "widget": "ResourceRef",
     "resource": {
       "kind": "Secret",
       "version": "v1"
-    }
+    },
+    "provideVar": "secret",
+    "children": [{ "path": "key", "enum": "$keys($secret.data)" }]
   },
   {
-    "path": "spec.my-gateways[]",
-    "widget": "ResourceRefs",
+    "path": "spec.my-gateways",
+    "widget": "ResourceRef",
     "resource": {
       "kind": "Gateway",
       "group": "networking.istio.io",
       "version": "v1alpha3"
-    }
+    },
+    "toInternal": "( $values := $split($, '/'); { 'namespace': $values[0], 'name': $values[1] } )",
+    "toExternal": "namespace & '/' & name"
   }
 ]
 ```
 
-<img src="./assets/form-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/ResourceRef.png" alt="Example of a ResourceRef widget" style="border: 1px solid #D2D5D9">
 
 ## Presentation widgets
 
