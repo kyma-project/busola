@@ -93,12 +93,12 @@ export function createExtensibilityTemplate(crd, t) {
                 {
                   name: 'Created at',
                   isSelected: true,
-                  path: 'metadata.creationTimestamp',
+                  source: 'metadata.creationTimestamp',
                   type: 'date',
                 },
               ],
         },
-        { path: 'spec', widget: 'CodeViewer' },
+        { source: 'spec', widget: 'CodeViewer' },
       ],
     },
     translations: {
