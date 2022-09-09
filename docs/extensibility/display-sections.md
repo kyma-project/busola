@@ -26,7 +26,7 @@
 You can customize the resource list by adding objects to the **list** section in your resource ConfigMap.
 Each object adds a new column to your table.
 
-### Available list item parameters
+### Available _list_ section parameters
 
 - **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form, it's the path to the value.
 - **widget** - optional widget used to render the field referred to by the **source** property. By default, the value is displayed verbatim.
