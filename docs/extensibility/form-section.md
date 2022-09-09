@@ -21,7 +21,7 @@ The **form** section contains a list of objects that define which fields will be
 
 Any parameters that are not handled by the widget are added to the schema directly, so it's possible to add or override existing values. For example, add an **enum** parameter to provide selectable values in a field.
 
-If you target elements of an array rather that the array itself, you can use `items[]` notation.
+If you target elements of an array rather than the array itself, you can use the `items[]` notation.
 
 ### Item parameters
 
