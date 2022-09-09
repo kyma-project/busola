@@ -1,10 +1,10 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: extensibility-functions
+  name: functions
   namespace: kube-public
   labels:
-    app.kubernetes.io/name: extensibility-functions
+    app.kubernetes.io/name: functions
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
 data:
