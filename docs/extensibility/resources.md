@@ -77,7 +77,7 @@ Should you want to add your own columns, the [display sections docs](display-sec
 
 ## _details_ section
 
-The **details** section presents a resource details. To customize it, see the [display sections docs](display-sections.md). Default details header contains some basic information. Body is by default empty.
+The **details** section presents the resource details. To customize it, see [Display sections](display-sections.md). The default details header contains some basic information. The body is empty by default.
 
 ## _dataSources_ section
 
