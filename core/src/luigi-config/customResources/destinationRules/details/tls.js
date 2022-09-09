@@ -1,5 +1,5 @@
 export const tls = prefix => ({
-  source: prefix + 'tls',
+  source: `${prefix}tls`,
   name: 'TLS',
   visibility: '$exists($.data)',
   widget: 'Panel',

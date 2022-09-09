@@ -1,5 +1,5 @@
 export const outlierDetection = prefix => ({
-  source: prefix + 'outlierDetection',
+  source: `${prefix}outlierDetection`,
   name: 'outlierDetection',
   visibility: '$exists($.data)',
   widget: 'Panel',

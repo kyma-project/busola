@@ -6,7 +6,7 @@ import { portLevelSettings } from './portLevelSettings';
 import { tunnel } from './tunnel';
 
 export const trafficPolicy = prefix => ({
-  source: prefix + 'trafficPolicy',
+  source: `${prefix}trafficPolicy`,
   name: 'Traffic Policy',
   visibility: '$exists($.data)',
   widget: 'Panel',

@@ -1,5 +1,5 @@
 export const tunnel = prefix => ({
-  source: prefix + 'tunnel',
+  source: `${prefix}tunnel`,
   name: 'Tunnel',
   visibility: '$exists($.data)',
   widget: 'Panel',

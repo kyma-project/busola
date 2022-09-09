@@ -52,7 +52,7 @@ const consistentHash = {
   ],
 };
 export const loadBalancer = prefix => ({
-  source: prefix + 'loadBalancer',
+  source: `${prefix}loadBalancer`,
   name: 'Load Balancer',
   visibility: '$exists($.data)',
   widget: 'Panel',

@@ -1,5 +1,5 @@
 export const connectionPool = prefix => ({
-  source: prefix + 'connectionPool',
+  source: `${prefix}connectionPool`,
   name: 'Connection Pool',
   visibility: '$exists($.data)',
   widget: 'Panel',

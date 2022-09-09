@@ -1,7 +1,7 @@
 import { trafficPolicy } from './trafficPolicy';
 
 export const subsets = prefix => ({
-  source: prefix + 'subsets',
+  source: `${prefix}subsets`,
   name: 'Subsets',
   widget: 'Table',
   visibility: '$count(data)',
