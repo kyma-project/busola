@@ -3,6 +3,11 @@ import { shallow } from 'enzyme';
 import { render } from '@testing-library/react';
 import { Badge } from '../Badge';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+
+jest.mock('../../useJsonata', () => ({
+  useJsonata: value => value,
+}));
 
 describe('Badge', () => {
   it('Renders a badge with a default type', () => {
@@ -65,5 +70,20 @@ describe('Badge', () => {
 
     const { getByText } = render(<Badge value={value} structure={structure} />);
     expect(getByText('-')).toBeVisible();
+  });
+
+  it('Renders a badge with a tooltip', () => {
+    const value = 'yes';
+    const structure = {
+      tooltip: 'tooltip',
+    };
+
+    const wrapper = shallow(<Badge value={value} structure={structure} />);
+    const status = wrapper.find(StatusBadge);
+    const tooltip = wrapper.find(Tooltip);
+    const tooltipProps = tooltip.props();
+    expect(tooltipProps.content).toEqual('tooltip');
+    expect(status).toHaveLength(1);
+    expect(tooltip).toHaveLength(1);
   });
 });
