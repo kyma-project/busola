@@ -73,7 +73,7 @@ The first two sections are a list of widgets to display in the **header** sectio
 The format of the entries is similar to the **form** section, however it has extra options available.
 The `resourceGraph` section is used to configure the ResourceGraph which shows relationships between various resources.
 
-### Header and body item parameters
+### Header and body parameters
 
 - **source** - contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the widget. In its simplest form, it's the path to the value. Not required for presentational widgets.
 - **name** - Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the **translation** section.
