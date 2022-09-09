@@ -68,7 +68,7 @@ The **general** section is required and contains basic information about the res
 ## _form_ section
 
 To customize the **form** section see the [form section docs](form-section.md).
-Views created with the extensibility [ConfigMap wizard](README.md) have by default a straightforward form configuration that might suffice your needs.
+Views created with the extensibility [ConfigMap wizard](README.md) have a straightforward form configuration by default.
 
 ## _list_ section
 
