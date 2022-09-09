@@ -73,11 +73,11 @@ Views created with the extensibility [ConfigMap wizard](README.md) have a straig
 ## _list_ section
 
 The **list** section presents the resources of a kind, that is, Secrets or ConfigMaps, and comes with a few predefined columns: resource name, creation time, and labels.
-Should you want to add your own columns, see [Display sections](display-sections.md) to learn how to customize both list and details views.
+Should you want to add your own columns, see [Display section](display-section.md) to learn how to customize both list and details views.
 
 ## _details_ section
 
-The **details** section presents the resource details. To customize it, see [Display sections](display-sections.md). The default details header contains some basic information. The body is empty by default.
+The **details** section presents the resource details. To customize it, see [Display section](display-section.md). The default details header contains some basic information. The body is empty by default.
 
 ## _dataSources_ section
 
