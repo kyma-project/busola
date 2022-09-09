@@ -1,7 +1,7 @@
 # Display widgets
 
 - [Resource _list_ overview](#resource-list-overview)
-- [Resource _details_ overview](#resource-details-section)
+- [Resource _details_ overview](#resource-details-overview)
   - [Header and body item parameters](#header-and-body-item-parameters)
   - [ResourceGraph parameters](#resourcegraph-parameters)
   - [Data scoping](#data-scoping)
@@ -23,13 +23,14 @@
 
 ## Resource _list_ overview
 
-You customize the resource list by adding objects to the `list: []` Config Map section. Each object adds a new column to your table.
+You can customize the resource list by adding objects to the **list** section in your resource ConfigMap.
+Each object adds a new column to your table.
 
 ### Available list item parameters
 
 - **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form, it's the path to the value.
-- **widget** - optional widget used to render the field referred to by the **source** property. By default, the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
-- **valuePreprocessor** - name of [value preprocessor](#value-preprocessors).
+- **widget** - optional widget used to render the field referred to by the **source** property. By default, the value is displayed verbatim.
+- **valuePreprocessor** - name of [value preprocessor](resources.md#value-preprocessors).
 - **sort** - optional sort option. If set to `true`, it allows you to sort the resource list using this value. Defaults to false. It can also be set to an object with the following properties:
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
   - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
@@ -76,8 +77,8 @@ The `resourceGraph` section is used to configure the ResourceGraph which shows r
 
 - **source** - contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the widget. In its simplest form, it's the path to the value. Not required for presentational widgets.
 - **name** - Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the **translation** section.
-- **widget** - optional widget to render the defined entry. By default the value is displayed verbatim. For more information about the available widgets, see [Display widgets](display-widgets.md).
-- **valuePreprocessor** - name of [value preprocessor](#value-preprocessors),
+- **widget** - optional widget to render the defined entry. By default the value is displayed verbatim.
+- **valuePreprocessor** - name of [value preprocessor](resources.md#value-preprocessors),
 - **visibility** - by default all fields are visible; however **visibility** property can be used to control a single item display.
   - If set to `false` explicitly, the field doesn't render.
   - If set to any string, this property is treated as JSONata format, determining (based on current value given as `data`) if the field should be visible.
@@ -148,7 +149,7 @@ Extra parameters might be available for specific widgets.
 - **networkFlowKind** - optional boolean which determines if the resource should be shown on the network graph, Defaults to `false`, which displays the resource on the structural graph.
 - **networkFlowLevel** - optional integer which sets the horizontal position of the resource's node on the network graph.
 - **dataSources** - an array of objects in shape:
-  - **source** - a string that must correspond to one of the [dataSources](#datasources-section) name. It selects the related resource and the way it should be matched.
+  - **source** - a string that must correspond to one of the [dataSources](resources.md#datasources-section) name. It selects the related resource and the way it should be matched.
 
 ### resourceGraph example
 
