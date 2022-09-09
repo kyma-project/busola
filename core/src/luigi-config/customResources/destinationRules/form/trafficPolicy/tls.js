@@ -1,5 +1,5 @@
-export const tls = {
-  path: 'tls',
+export const tls = ({ isArray }) => ({
+  path: isArray ? '[].tls' : 'tls',
   name: 'TLS',
   widget: 'FormGroup',
   children: [
@@ -16,8 +16,4 @@ export const tls = {
     { path: 'sni', name: 'SNI' },
     { path: 'insecureSkipVerify', name: 'Insecure Skip Verify' },
   ],
-};
-
-const tlsGenericListSyntax = { ...tls };
-tlsGenericListSyntax.path = '[].tls';
-export { tlsGenericListSyntax };
+});

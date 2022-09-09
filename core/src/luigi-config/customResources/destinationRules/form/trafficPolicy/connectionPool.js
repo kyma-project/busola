@@ -35,13 +35,9 @@ const http = {
   ],
 };
 
-export const connectionPool = {
-  path: 'connectionPool',
+export const connectionPool = ({ isArray }) => ({
+  path: isArray ? '[].connectionPool' : 'connectionPool',
   name: 'Connection Pool',
   widget: 'FormGroup',
   children: [tcp, http],
-};
-
-const connectionPoolGenericListSyntax = { ...connectionPool };
-connectionPoolGenericListSyntax.path = '[].connectionPool';
-export { connectionPoolGenericListSyntax };
+});

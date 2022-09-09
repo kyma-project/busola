@@ -11,7 +11,7 @@ export const translations = {
     References: 'References',
     probes: 'Probes',
     'Export To': 'Export To',
-    'Workload Selector / Match Labels': 'Workload Selector / Match Labels',
+    'Workload Selector Match Labels': 'Workload Selector Match Labels',
     // occurs more than once
     'Traffic Policy': 'Traffic Policy',
     Interval: 'Interval',
@@ -54,6 +54,9 @@ export const translations = {
     'Load Balancer': 'Load Balancer',
     Simple: 'Simple',
     'Warmup Duration Secs': 'Warmup Duration Secs',
+    ChooseConsistentHashSelector: 'Select Hash Type',
+    ChooseLoadBalancerSelector: 'Select Balancer Type',
+    ChooseLbSelector: 'Select LB Settings',
     // outlier detection
     'Split External Local Origin Errors': 'Split External Local Origin Errors',
     'Consecutive Local Origin Failures': 'Consecutive Local Origin Failures',

@@ -21,7 +21,7 @@ export const details = {
         {
           source: 'spec.workloadSelector.matchLabels',
           widget: 'Labels',
-          name: 'Workload Selector / Match Labels',
+          name: 'Workload Selector Match Labels',
           visibility: '$count(data)',
         },
       ],

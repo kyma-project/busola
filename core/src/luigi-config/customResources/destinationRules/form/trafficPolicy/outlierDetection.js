@@ -1,5 +1,5 @@
-export const outlierDetection = {
-  path: 'outlierDetection',
+export const outlierDetection = ({ isArray }) => ({
+  path: isArray ? '[].outlierDetection' : 'outlierDetection',
   widget: 'FormGroup',
   children: [
     {
@@ -26,8 +26,4 @@ export const outlierDetection = {
     { path: 'maxEjectionPercent', name: 'Max Ejection Percent' },
     { path: 'minHealthPercent', name: 'Min Health Percent' },
   ],
-};
-
-const outlierDetectionGenericListSyntax = { ...outlierDetection };
-outlierDetectionGenericListSyntax.path = '[].outlierDetection';
-export { outlierDetectionGenericListSyntax };
+});

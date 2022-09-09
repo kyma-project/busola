@@ -1,14 +1,20 @@
-const localityLoadBalancer = {
+const localityLoadBalancer = ({ uniqueVarPrefix }) => ({
   path: 'localityLbSetting',
   name: 'Locality LB Settings',
   widget: 'FormGroup',
   children: [
     { path: 'enabled', name: 'Enabled', type: 'boolean' },
-    //todo one of distribute // failover
+    {
+      var: `${uniqueVarPrefix}LbSelector`,
+      name: 'ChooseLbSelector',
+      type: 'string',
+      enum: ['distribute', 'failover'],
+    },
     {
       path: 'distribute',
       name: 'Distribute',
       widget: 'GenericList',
+      visibility: `$${uniqueVarPrefix}LbSelector  = 'distribute'`,
     },
     {
       path: 'distribute[].from',
@@ -26,6 +32,7 @@ const localityLoadBalancer = {
       path: 'failover',
       name: 'Failover',
       widget: 'GenericList',
+      visibility: `$${uniqueVarPrefix}LbSelector  = 'failover'`,
     },
     {
       path: 'failover[].from',
@@ -38,93 +45,89 @@ const localityLoadBalancer = {
     {
       path: 'failoverPriority',
       name: 'Failover Priority',
+      visibility: `$${uniqueVarPrefix}LbSelector  = 'failover'`,
       widget: 'SimpleList',
     },
   ],
-};
+});
 
-const httpCookie = {
+const httpCookie = ({ uniqueVarPrefix }) => ({
   path: 'httpCookie',
   name: 'HTTP Cookie',
   widget: 'FormGroup',
-  // visibility: "$consistentHashSelector = 'httpCookie'",
+  visibility: `$${uniqueVarPrefix}consistentHashSelector  = 'httpCookie'`,
   children: [
-    { path: 'name', name: 'Name' },
+    { path: 'name', name: 'Name', required: true },
     { path: 'path', name: 'Path' },
-    { path: 'ttl', name: 'TTL' },
+    { path: 'ttl', name: 'TTL', required: true },
   ],
-};
+});
 
-const consistentHash = {
+const consistentHash = ({ uniqueVarPrefix }) => ({
   widget: 'FormGroup',
   path: 'consistentHash',
   name: 'Consistent Hash',
-  // visibility: "$loadBalancerSelector = 'consistentHash'"
+  visibility: `$${uniqueVarPrefix}loadBalancerSelector = 'consistentHash'`,
   children: [
-    // TODO
-    // {
-    //   var: 'consistentHashSelector',
-    //   name: 'chooseConsistentHashSelector',
-    //   type: 'string',
-    //   enum: [
-    //     'httpHeaderName',
-    //     'httpCookie',
-    //     'useSourceIp',
-    //     'httpQueryParameterName',
-    //   ],
-    // },
+    {
+      var: `${uniqueVarPrefix}consistentHashSelector`,
+      name: 'ChooseConsistentHashSelector',
+      type: 'string',
+      enum: [
+        'httpHeaderName',
+        'httpCookie',
+        'useSourceIp',
+        'httpQueryParameterName',
+      ],
+    },
     {
       path: 'httpHeaderName',
       name: 'HTTP Header Name',
-      // visibility: "$consistentHashSelector = 'httpHeaderName'",
+      required: true,
+      visibility: `$${uniqueVarPrefix}consistentHashSelector = 'httpHeaderName'`,
     },
-    httpCookie,
+    httpCookie({ uniqueVarPrefix }),
     {
       path: 'useSourceIp',
       name: 'Use Source IP',
-      // visibility: "$consistentHashSelector = 'useSourceIp'",
+      required: true,
+      visibility: `$${uniqueVarPrefix}consistentHashSelector = 'useSourceIp'`,
     },
     {
       path: 'httpQueryParameterName',
       name: 'HTTP Query Parameter Name',
-      // visibility: "$consistentHashSelector = 'httpQueryParameterName'",
+      required: true,
+      visibility: `$${uniqueVarPrefix}consistentHashSelector= 'httpQueryParameterName'`,
     },
     {
       path: 'minimumRingSize',
       name: 'Minimum Ring Size',
     },
   ],
-};
+});
 
-export const loadBalancer = {
+export const loadBalancer = ({ uniqueVarPrefix, isArray }) => ({
   widget: 'FormGroup',
-  path: 'loadBalancer',
+  path: isArray ? '[].loadBalancer' : 'loadBalancer',
   name: 'Load Balancer',
   children: [
-    //TODO simple or consistnetHash
-    // {
-    //   var: 'loadBalancerSelector',
-    //   name: 'chooseLoadBalancerSelector',
-    //   type: 'string',
-    //   enum: [
-    //     'simple',
-    //     'consistentHash'
-    //   ],
-    // },
+    {
+      var: `${uniqueVarPrefix}loadBalancerSelector`,
+      name: 'ChooseLoadBalancerSelector',
+      type: 'string',
+      enum: ['simple', 'consistentHash'],
+    },
     {
       path: 'simple',
       name: 'Simple',
-      // visibility: "$loadBalancerSelector = 'simple'"
+      required: true,
+      visibility: `$${uniqueVarPrefix}loadBalancerSelector = 'simple'`,
     },
-    consistentHash,
-    localityLoadBalancer,
+    consistentHash({ uniqueVarPrefix }),
+    localityLoadBalancer({ uniqueVarPrefix }),
     {
       path: 'warmupDurationSecs', //this is in the docs but not in the schema
       name: 'Warmup Duration Secs', //this is in the docs but not in the schema
     },
   ],
-};
-
-const loadBalancerGenericListSyntax = { ...loadBalancer };
-loadBalancerGenericListSyntax.path = '[].loadBalancer';
-export { loadBalancerGenericListSyntax };
+});

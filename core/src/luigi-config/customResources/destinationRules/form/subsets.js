@@ -1,4 +1,9 @@
-import { trafficPolicyBundle } from './trafficPolicy/trafficPolicyBundle';
+import { loadBalancer } from './trafficPolicy/loadBalancer';
+import { connectionPool } from './trafficPolicy/connectionPool';
+import { outlierDetection } from './trafficPolicy/outlierDetection';
+import { tls } from './trafficPolicy/tls';
+import { portLevelSettings } from './trafficPolicy/portLevelSettings';
+import { tunnel } from './trafficPolicy/tunnel';
 
 export const subsets = {
   path: 'spec.subsets',
@@ -10,7 +15,14 @@ export const subsets = {
     {
       path: '[].trafficPolicy',
       name: 'Traffic Policy',
-      children: trafficPolicyBundle,
+      children: [
+        loadBalancer({ uniqueVarPrefix: 'subsets', isArray: false }),
+        connectionPool({ isArray: false }),
+        outlierDetection({ isArray: false }),
+        tls({ isArray: false }),
+        portLevelSettings({ uniqueVarPrefix: 'subsetPortLevel' }),
+        tunnel,
+      ],
     },
   ],
 };
