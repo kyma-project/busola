@@ -266,7 +266,9 @@ clusters:
     subtitle: Let's add one now!
     title: There are no clusters yet
   gardener:
-    add: Connect Gardener cluster
+    connect: Connect
+    enter-kubeconfig: Enter your kubeconfig file here
+    title: Connect Gardener cluster
   kubeconfig: kubeconfig
   labels:
     client-id: Client ID

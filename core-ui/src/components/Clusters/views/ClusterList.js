@@ -20,121 +20,7 @@ import { ClusterStorageType } from './ClusterStorageType';
 
 import './ClusterList.scss';
 import { loadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID';
-import { base64Decode } from 'shared/helpers';
-
-function GARDENER_LOGIN() {
-  const kubeconfigRobot = jsyaml.load(`apiVersion: v1
-kind: Config
-current-context: garden-hasselhoff-busola-tester
-contexts:
-  - name: garden-hasselhoff-busola-tester
-    context:
-      cluster: garden
-      user: busola-tester
-      namespace: garden-hasselhoff
-clusters:
-  - name: garden
-    cluster:
-      server: https://api.canary.gardener.cloud.sap
-users:
-  - name: busola-tester
-    user:
-  `);
-  const kubeconfigNoRobot = jsyaml.load(`kind: Config
-apiVersion: v1
-clusters:
-  - name: garden-kyma-dev
-    cluster:
-      server: https://api.canary.gardener.cloud.sap
-contexts:
-  - context:
-      cluster: garden-kyma-dev
-      user: oidc-login
-      namespace: garden-kyma-dev
-    name: garden-kyma-dev
-current-context: garden-kyma-dev
-users:
-  - name: oidc-login
-    user:
-  `);
-
-  const kubeconfig = kubeconfigNoRobot;
-
-  const ssrr = {
-    typeMeta: {
-      kind: 'SelfSubjectRulesReview',
-      aPIVersion: 'authorization.k8s.io/v1',
-    },
-    spec: { namespace: '*' },
-  };
-
-  const ssrUrl = `http://localhost:3001/backend/apis/authorization.k8s.io/v1/selfsubjectrulesreviews`;
-  fetch(ssrUrl, {
-    method: 'POST',
-    body: JSON.stringify(ssrr),
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Cluster-Url': kubeconfig.clusters[0].cluster.server,
-      'X-K8s-Authorization': `Bearer ${kubeconfig.users[0].user.token}`,
-    },
-  })
-    .then(res => res.json())
-    .then(res => {
-      console.log('CLUSTERWIDE RESOURCE RULES', res.status.resourceRules);
-      const availableProjects = [
-        ...new Set(
-          res.status.resourceRules
-            .filter(
-              r =>
-                r.apiGroups.includes('core.gardener.cloud') &&
-                r.resources.includes('projects') &&
-                r.resourceNames,
-            )
-            .flatMap(r => r.resourceNames),
-        ),
-      ];
-      console.log('AVAILABLE PROJECTS', availableProjects);
-
-      availableProjects.forEach(project => {
-        const url = `http://localhost:3001/backend/apis/core.gardener.cloud/v1beta1/namespaces/garden-${project}/shoots`;
-        fetch(url, {
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Cluster-Url': kubeconfig.clusters[0].cluster.server,
-            'X-K8s-Authorization': `Bearer ${kubeconfig.users[0].user.token}`,
-          },
-        })
-          .then(res => res.json())
-          .then(res => console.log('SHOOTS IN ', project, res.items));
-      });
-
-      const payload = {
-        apiVersion: 'authentication.gardener.cloud/v1alpha1',
-        kind: 'AdminKubeconfigRequest',
-        spec: {
-          expirationSeconds: 1000,
-        },
-      };
-
-      const kubeconfigUrl = `http://localhost:3001/backend/apis/core.gardener.cloud/v1beta1/namespaces/${'garden-hasselhoff'}/shoots/${'kmain'}/adminkubeconfig`;
-      fetch(kubeconfigUrl, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Cluster-Url': kubeconfig.clusters[0].cluster.server,
-          'X-K8s-Authorization': `Bearer ${kubeconfig.users[0].user.token}`,
-        },
-      })
-        .then(res => res.json())
-        .then(res =>
-          console.log(
-            'KUBECONFIG FOR KMAIN',
-            base64Decode(res.status.kubeconfig),
-          ),
-        );
-    });
-}
+import { ConnectGardenerClusterModal } from './GardenerClusters/ConnectGardenerClusterModal';
 
 function ClusterList() {
   const { clusters, activeClusterName, features } = useMicrofrontendContext();
@@ -260,14 +146,17 @@ function ClusterList() {
         {t('clusters.add.title')}
       </Button>
       {features.GARDENER_LOGIN?.isEnabled && (
-        <Button
-          onClick={GARDENER_LOGIN}
-          option="transparent"
-          glyph="add"
-          className="fd-margin-begin--sm"
-        >
-          {t('clusters.gardener.add')}
-        </Button>
+        <ConnectGardenerClusterModal
+          modalOpeningComponent={
+            <Button
+              option="transparent"
+              glyph="add"
+              className="fd-margin-begin--sm"
+            >
+              {t('clusters.gardener.title')}
+            </Button>
+          }
+        />
       )}
     </>
   );
@@ -305,7 +194,9 @@ function ClusterList() {
   );
 
   const gardenerLoginButton = features.GARDENER_LOGIN?.isEnabled && (
-    <Button onClick={GARDENER_LOGIN}>{t('clusters.gardener.add')}</Button>
+    <ConnectGardenerClusterModal
+      modalOpeningComponent={<Button>{t('clusters.gardener.title')}</Button>}
+    />
   );
 
   if (!entries.length) {
