@@ -70,7 +70,6 @@ Each object adds a new column to your table.
 The **details** section defines the display structure for the details page.
 It contains three sections, `header`, `body`, and optional `resourceGraph`.
 The first two sections are a list of widgets to display in the **header** section and the body of the page respectively.
-The format of the entries is similar to the **form** section, however it has extra options available.
 The `resourceGraph` section is used to configure the ResourceGraph which shows relationships between various resources.
 
 ### Header and body parameters
