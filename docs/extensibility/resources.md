@@ -72,7 +72,7 @@ Views created with the extensibility [ConfigMap wizard](README.md) have a straig
 
 ## _list_ section
 
-The **list** section presents the resources of a kind (i.e. secrets or configMaps) and comes with a few predefined columns: resource name, creation time and labels.
+The **list** section presents the resources of a kind, that is, Secrets or ConfigMaps, and comes with a few predefined columns: resource name, creation time, and labels.
 Should you want to add your own columns, the [display sections docs](display-sections.md) presents how to customize both list and details views.
 
 ## _details_ section
