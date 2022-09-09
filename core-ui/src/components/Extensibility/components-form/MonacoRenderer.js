@@ -2,13 +2,36 @@ import React, { useCallback } from 'react';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
+import { jsonataWrapper } from '../jsonataWrapper';
 
-const getValue = (storeKeys, resource) => {
+function getValue(storeKeys, resource) {
   let value = resource;
   const keys = storeKeys.toJS();
   keys.forEach(key => (value = value?.[key]));
-  return JSON.stringify(value, null, 2);
-};
+  return value;
+}
+
+function formatValue(value, language) {
+  if (language === 'json') {
+    return JSON.stringify(value, null, 2);
+  } else {
+    return value;
+  }
+}
+
+// todo add docs
+function getLanguage(schema, value, resource) {
+  const languageFormula = schema.get('language');
+  try {
+    const expression = jsonataWrapper(languageFormula);
+    expression.assign('root', resource);
+    expression.assign('item', value);
+    return expression.evaluate();
+  } catch (e) {
+    console.warn(e);
+    return 'json';
+  }
+}
 
 export function MonacoRenderer({
   storeKeys,
@@ -21,13 +44,18 @@ export function MonacoRenderer({
   const { tFromStoreKeys } = useGetTranslation();
 
   const value = getValue(storeKeys, resource);
+  const language = getLanguage(schema, value, resource);
+  const formattedValue = formatValue(value, language);
+  // console.log({ value, language, formattedValue });
 
   const handleChange = useCallback(
     value => {
       let parsedValue = value;
-      try {
-        parsedValue = JSON.parse(value);
-      } catch (e) {}
+      if (language === 'json') {
+        try {
+          parsedValue = JSON.parse(value);
+        } catch (e) {}
+      }
 
       onChange({
         storeKeys,
@@ -39,7 +67,7 @@ export function MonacoRenderer({
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [required],
+    [required, language],
   );
   const schemaRequired = schema.get('required');
 
@@ -51,8 +79,8 @@ export function MonacoRenderer({
       <Editor
         autocompletionDisabled
         updateValueOnParentChange
-        value={value}
-        language="json"
+        value={formattedValue}
+        language={language}
         onChange={handleChange}
       />
     </ResourceForm.CollapsibleSection>
