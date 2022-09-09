@@ -18,7 +18,9 @@ const localityLoadBalancer = {
       path: 'distribute[].to',
       name: 'To',
       widget: 'KeyValuePair',
-      valueType: 'number',
+      value: {
+        type: 'number',
+      },
     },
     {
       path: 'failover',
