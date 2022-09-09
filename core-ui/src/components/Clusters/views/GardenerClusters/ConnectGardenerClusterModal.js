@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import LuigiClient from '@luigi-project/client';
 import jsyaml from 'js-yaml';
 import { Modal } from 'shared/components/Modal/Modal';
 import { useTranslation } from 'react-i18next';
@@ -95,7 +96,6 @@ async function GARDENER_LOGIN(kubeconfigText, setReport) {
     }
   }
 
-  setReport('Clusters added! Refresh the page to see them on Cluster List.');
   kubeconfigs.forEach(kubeconfig => {
     const contextName = kubeconfig['current-context'];
     const context =
@@ -114,6 +114,11 @@ async function GARDENER_LOGIN(kubeconfigText, setReport) {
       },
       false,
     );
+  });
+
+  setReport('Clusters added!');
+  LuigiClient.sendCustomMessage({
+    id: 'busola.reloadNavigation',
   });
 }
 

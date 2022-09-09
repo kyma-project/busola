@@ -129,6 +129,10 @@ export const communication = {
       await reloadNavigation();
     },
 
+    'busola.reloadNavigation': async () => {
+      await reloadNavigation();
+    },
+
     'busola.showMessage': ({ message, title, type }) => {
       Luigi.customMessages().sendToAll({
         id: 'busola.showMessage',
