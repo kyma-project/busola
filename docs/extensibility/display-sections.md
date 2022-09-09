@@ -2,7 +2,7 @@
 
 - [Resource _list_ overview](#resource-list-overview)
 - [Resource _details_ overview](#resource-details-overview)
-  - [Header and body item parameters](#header-and-body-item-parameters)
+  - [Header and body parameters](#header-and-body-parameters)
   - [ResourceGraph parameters](#resourcegraph-parameters)
   - [Data scoping](#data-scoping)
 - [Inline widgets](#inline-widgets)
