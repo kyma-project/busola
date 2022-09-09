@@ -6,7 +6,6 @@ import { TrafficPolicyWidget } from './TrafficPolicy';
 
 export const Subset = destinationRule => {
   const { t } = useTranslation();
-
   return destinationRule.spec?.subsets ? (
     <LayoutPanel
       className="fd-margin--md destination-rule-refs-panel"
@@ -15,38 +14,34 @@ export const Subset = destinationRule => {
       <LayoutPanel.Header>
         <LayoutPanel.Head title={t('destination-rules.details.subsets')} />
       </LayoutPanel.Header>
-      {destinationRule.spec.subsets.map(subset => {
-        return (
-          <LayoutPanel
-            className="fd-margin--md destination-rule-refs-panel"
-            key={subset.name}
-          >
+      {destinationRule.spec.subsets.map(subset => (
+        <LayoutPanel
+          className="fd-margin--md destination-rule-refs-panel"
+          key={subset.name}
+        >
+          <LayoutPanel.Header>
+            <LayoutPanel.Head
+              title={`${t('destination-rules.details.subset')}: ${subset.name}`}
+            />
+          </LayoutPanel.Header>
+          <FormItem>
+            <FormLabel>{t('common.headers.labels')}</FormLabel>
+            <Tokens
+              tokens={Object.entries(subset?.labels || {})
+                .filter(el => el)
+                .map(([key, value]) => `${key}: ${value}`)}
+            />
+          </FormItem>
+          <LayoutPanel className="fd-margin--md destination-rule-refs-panel">
             <LayoutPanel.Header>
               <LayoutPanel.Head
-                title={`${t('destination-rules.details.subset')}: ${
-                  subset.name
-                }`}
+                title={t('destination-rules.details.traffic-policy')}
               />
             </LayoutPanel.Header>
-            <FormItem>
-              <FormLabel>{t('common.headers.labels')}</FormLabel>
-              <Tokens
-                tokens={Object.entries(subset?.labels || {})
-                  .filter(el => el)
-                  .map(([key, value]) => `${key}: ${value}`)}
-              />
-            </FormItem>
-            <LayoutPanel className="fd-margin--md destination-rule-refs-panel">
-              <LayoutPanel.Header>
-                <LayoutPanel.Head
-                  title={t('destination-rules.details.traffic-policy')}
-                />
-              </LayoutPanel.Header>
-              <TrafficPolicyWidget trafficPolicy={subset.trafficPolicy} />
-            </LayoutPanel>
+            <TrafficPolicyWidget trafficPolicy={subset.trafficPolicy} />
           </LayoutPanel>
-        );
-      })}
+        </LayoutPanel>
+      ))}
     </LayoutPanel>
   ) : null;
 };
