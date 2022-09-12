@@ -21,7 +21,38 @@ data:
         },
       ],
       "body": [     
-        
+          {
+            "name": "summary",
+            "widget": "Panel",
+            "source": "spec",
+            "visibility": "$boolean($exists(data.hosts) or $exists(data.addresses) or $exists(data.exportTo) or $exists(data.subjectAltNames))",
+            "children": [
+              { "name": "spec.hosts", "source": "$item.hosts", "widget": "JoinedArray", "visibility": "$exists(*)"},
+              { "name": "spec.addresses", "source": "$item.addresses", "widget": "JoinedArray", "visibility": "$exists(*)"},
+              { "name": "spec.exportTo", "source": "$item.exportTo", "widget": "Labels", "visibility": "$exists(*)"},
+              { "name": "spec.subjectAltNames", "source": "$item.subjectAltNames", "widget": "JoinedArray", "visibility": "$exists(*)"},
+            ]
+          },
+          {
+            "name": "spec.ports",
+            "widget": "Table",
+            "source": "spec.ports",
+            "visibility": "$exists(*)",
+            "children": [
+              {
+                "name": "spec.ports.number", "source": "$item.number", "sort": true
+              },
+              {
+                "name": "spec.ports.protocol", "source": "$item.protocol", "sort": true
+              },
+              {
+                "name": "spec.ports.name", "source": "$item.name", "sort": true
+              },
+              {
+                "name": "spec.ports.targetPort", "source": "$item.targetPort", "sort": true
+              },
+            ]
+          }
       ],
     }
   form: |-
@@ -38,7 +69,9 @@ data:
             "path": "[].number", "name": "spec.ports.number", "required": true
           },
           {
-            "path": "[].protocol", "name": "spec.ports.protocol", "required": true
+            "path": "[].protocol", "name": "spec.ports.protocol", "required": true, "enum": [
+              'HTTP', 'HTTPS', 'GRPC', 'HTTP2', 'MONGO', 'TCP', 'TLS'
+            ]
           },
           {
             "path": "[].name", "name": "spec.ports.name", "required": true
@@ -107,14 +140,17 @@ data:
       {
         "source": "spec.location",
         "name": "spec.location",
+        "sort": true
       },
       {
         "source": "spec.resolution",
         "name": "spec.resolution",
+        "sort": true
       },
     ]
   translations: |
     en:
+      summary: Summary
       spec.hosts: Hosts
       spec.addresses: Addresses
       spec.ports: Ports
