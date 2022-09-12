@@ -182,7 +182,7 @@ ResourceRef widgets render two dropdowns to select the associated resources' nam
   - **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
   - **version** - _[required]_ API version used for all requests.
 - **provideVar** - When this field is defined, the chosen resource will be provided as a variable of this name.
-- **toInternal** - A JSONata function to convert from the stored value to the `{name, namespace}` format. Useful for example when the data is stored as a string.
+- **toInternal** - A JSONata function to convert from the stored value to the `{name, namespace}` format. Useful, for example, when the data is stored as a string.
 - **toExternal** - A corresponding function to convert back to store.
 
 #### Example
