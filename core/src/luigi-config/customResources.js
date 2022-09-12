@@ -97,7 +97,7 @@ async function loadTargetClusterCRs(authData) {
         );
         return null;
       } else if (!urlPath) {
-        cr?.general.urlPath = pluralize(resource.kind).toLowerCase();
+        cr.general.urlPath = pluralize(resource.kind).toLowerCase();
       }
 
       return cr;
