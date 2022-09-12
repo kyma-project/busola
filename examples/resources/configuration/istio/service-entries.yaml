@@ -52,6 +52,32 @@ data:
                 "name": "spec.ports.targetPort", "source": "$item.targetPort", "sort": true
               },
             ]
+          },
+          {
+            "name": "spec.endpoints",
+            "widget": "Table",
+            "source": "spec.endpoints",
+            "visibility": "$exists(*)",
+            "children": [
+              {
+                "name": "spec.endpoints.address", "source": "$item.address", "sort": true
+              },
+              {
+                "name": "spec.endpoints.ports", "source": "$item.ports", "widget": "Labels"
+              },
+              {
+                "name": "spec.endpoints.labels", "source": "$item.labels", "widget": "Labels"
+              },
+              {
+                "name": "spec.endpoints.network", "source": "$item.network", "sort": true
+              },
+              {
+                "name": "spec.endpoints.weight", "source": "$item.weight"
+              },
+              {
+                "name": "spec.endpoints.serviceAccount", "source": "$item.serviceAccount"
+              },
+            ]
           }
       ],
     }
