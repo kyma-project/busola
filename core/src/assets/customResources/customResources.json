@@ -42,11 +42,7 @@
     "form": [
       {
         "simple": true,
-        "path": "spec.host",
-        "name": "Data",
-        "widget": "CodeEditor",
-        "description": "Data that will be passed on to the application.",
-        "inputInfo": "Data needs to be a valid JSON object."
+        "path": "spec.host"
       }
     ],
     "general": {
@@ -55,7 +51,7 @@
         "group": "networking.istio.io",
         "version": "v1beta1"
       },
-      "name": "Destination Rules 2",
+      "name": "Destination Rules",
       "category": "Istio",
       "urlPath": "destinationrules",
       "scope": "namespace",
