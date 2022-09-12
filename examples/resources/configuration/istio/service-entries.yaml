@@ -34,7 +34,23 @@ data:
     }
   list: |-
     [
+      {
+        "source": "spec.location",
+        "name": "spec.location",
+      },
+      {
+        "source": "spec.resolution",
+        "name": "spec.resolution",
+      },
     ]
   translations: |
     en:
-      spec.selector: Selector
+      spec.hosts: Hosts
+      spec.addresses: Addresses
+      spec.ports: Ports
+      spec.location: Location
+      spec.resolution: Resolution
+      spec.endpoints: Endpoints
+      spec.workloadSelector: Workload Selector
+      spec.exportTo: Export To
+      spec.subjectAltNames: Subject Alt Names
