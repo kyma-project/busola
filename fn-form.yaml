@@ -109,6 +109,7 @@ data:
       {
         "path": "spec.scaleConfig",
         "widget": "FormGroup",
+        "columns": "2",
         "children": [
           {
             "advanced": true,
@@ -129,41 +130,31 @@ data:
         "widget": "FormGroup",
         "children": [
           {
-            "path": "profile"
+            "path": "resources.limits",
+            "widget": "CodeEditor",
+            "language": "'YAML'"
           },
           {
-            "path": "resources.limits.cpu"
-          },
-          {
-            "path": "resources.limits.memory"
-          },
-          {
-            "path": "resources.requests.cpu"
-          },
-          {
-            "path": "resources.requests.memory"
-          },
+            "path": "resources.requests",
+            "widget": "CodeEditor",
+            "language": "'YAML'"
+          }
         ]
       },
-       {
+      {
         "path": "spec.resourceConfiguration.build",
         "widget": "FormGroup",
         "children": [
           {
-            "path": "profile"
+            "path": "resources.limits",
+            "widget": "CodeEditor",
+            "language": "'YAML'"
           },
           {
-            "path": "resources.limits.cpu"
-          },
-          {
-            "path": "resources.limits.memory"
-          },
-          {
-            "path": "resources.requests.cpu"
-          },
-          {
-            "path": "resources.requests.memory"
-          },
+            "path": "resources.requests",
+            "widget": "CodeEditor",
+            "language": "'YAML'"
+          }
         ]
       },
       {

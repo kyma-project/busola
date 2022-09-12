@@ -87,14 +87,21 @@ Name widgets render a name input field. They contain an automatic name generator
 
 CodeEditor widgets render a versatile code editor that can be used to edit any variable. The editor's default language is JSON.
 
+#### Widget-specific parameters
+
+- **language** - a jsonata expression resolving the desired language. It has access to `$root` variable, containing entire resource.
+
 #### Example
 
 ```json
 {
   "path": "spec.my-data",
-  "widget": "CodeEditor"
+  "widget": "CodeEditor",
+  "language": "'JSON'"
 }
 ```
+
+> NOTE: Remember to put both single and double quotes if you want to use plain language (e.g. "'YAML'"). Specyfing just double quotes ("YAML") makes Busola try to access nonexistent `YAML` variable, resulting the language to be `undefined`.
 
 ### Resource
 
@@ -222,6 +229,10 @@ Presentation widgets do not handle data directly and only serve to group content
 ### FormGroup
 
 FormGroup widgets render an `object` as a collapsible section.
+
+#### Widget-specific parameters
+
+- **columns** - number of columns the contents should be rendered in. Defaults to 1.
 
 #### Example
 

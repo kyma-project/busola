@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import jsyaml from 'js-yaml';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
@@ -14,6 +15,8 @@ function getValue(storeKeys, resource) {
 function formatValue(value, language) {
   if (language === 'json') {
     return JSON.stringify(value, null, 2);
+  } else if (language === 'yaml') {
+    return typeof value === 'undefined' ? '' : jsyaml.dump(value);
   } else {
     return value;
   }
@@ -26,7 +29,7 @@ function getLanguage(schema, value, resource) {
     const expression = jsonataWrapper(languageFormula);
     expression.assign('root', resource);
     expression.assign('item', value);
-    return expression.evaluate();
+    return (expression.evaluate() || '').toLowerCase();
   } catch (e) {
     console.warn(e);
     return 'json';
@@ -54,6 +57,10 @@ export function MonacoRenderer({
       if (language === 'json') {
         try {
           parsedValue = JSON.parse(value);
+        } catch (e) {}
+      } else if (language === 'yaml') {
+        try {
+          parsedValue = jsyaml.load(value);
         } catch (e) {}
       }
 

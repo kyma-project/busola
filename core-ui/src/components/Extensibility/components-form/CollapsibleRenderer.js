@@ -8,14 +8,22 @@ export function CollapsibleRenderer({ schema, storeKeys, widgets, ...props }) {
   const ownSchema = schema.delete('widget');
   const { tFromStoreKeys } = useGetTranslation();
 
+  const columns = schema.get('columns');
+  const style = {
+    display: 'grid',
+    gridTemplateColumns: `repeat(${columns}, 1fr)`,
+  };
+
   return (
     <ResourceForm.CollapsibleSection title={tFromStoreKeys(storeKeys, schema)}>
-      <WidgetRenderer
-        {...props}
-        storeKeys={storeKeys}
-        schema={ownSchema}
-        widgets={widgets}
-      />
+      <div style={style}>
+        <WidgetRenderer
+          {...props}
+          storeKeys={storeKeys}
+          schema={ownSchema}
+          widgets={widgets}
+        />
+      </div>
     </ResourceForm.CollapsibleSection>
   );
 }
