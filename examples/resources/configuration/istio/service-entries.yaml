@@ -11,7 +11,14 @@ data:
   details: |
     {
       "header": [
-
+        {
+          "source": "spec.location",
+          "name": "spec.location",
+        },
+        {
+          "source": "spec.resolution",
+          "name": "spec.resolution",
+        },
       ],
       "body": [     
         
