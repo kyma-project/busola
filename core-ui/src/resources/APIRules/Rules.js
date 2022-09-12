@@ -25,7 +25,7 @@ export function RuleForm({ rule, rules, setRules, isAdvanced }) {
         required
         propertyPath="$.path"
         label={t('api-rules.access-strategies.labels.path')}
-        description={t('api-rules.access-strategies.tooltips.path')}
+        inputInfo={t('api-rules.access-strategies.tooltips.path')}
         input={Inputs.Text}
         placeholder={t('api-rules.placeholders.path')}
         pattern="^[a-z0-9\/\(\)\?.!*\-]+"

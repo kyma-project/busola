@@ -247,12 +247,12 @@ export const sortBy = (
 
 export const getRemainingProps = (schema, required) => {
   const schemaRequired = schema.get('required');
-  const description = schema.get('description');
-  const tooltipContent = schema.get('tooltip');
+  const inputInfo = schema.get('inputInfo');
+  const tooltipContent = schema.get('description');
 
   return {
     required: schemaRequired ?? required,
-    description,
+    inputInfo,
     tooltipContent,
   };
 };

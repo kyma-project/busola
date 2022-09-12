@@ -43,8 +43,8 @@ export function MonacoRenderer({
     [required],
   );
   const schemaRequired = schema.get('required');
-  const description = schema.get('description');
-  const tooltipContent = schema.get('tooltip');
+  const inputInfo = schema.get('inputInfo');
+  const tooltipContent = schema.get('description');
 
   return (
     <ResourceForm.CollapsibleSection
@@ -66,8 +66,8 @@ export function MonacoRenderer({
         language="json"
         onChange={handleChange}
       />
-      {description && (
-        <p style={{ color: 'var(--sapNeutralTextColor)' }}>{description}</p>
+      {inputInfo && (
+        <p style={{ color: 'var(--sapNeutralTextColor)' }}>{inputInfo}</p>
       )}
     </ResourceForm.CollapsibleSection>
   );
