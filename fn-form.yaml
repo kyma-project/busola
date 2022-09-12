@@ -63,6 +63,12 @@ data:
   form: |-
     [
       {
+        "var": "sourceType",
+        "widget": "Text",
+        "enum": ["Inline", "Git Repository"],
+        "defaultValue": "$exists(spec.source.gitRepository) ? 'Git Repository' : 'Inline'"
+      },
+      {
         "simple": true,
         "path": "spec.runtime",
         "required": true,
@@ -77,20 +83,27 @@ data:
         "required": false
       },
       {
-        "path": "spec.source.gitRepository.url",
-        "visibility": "$.spec.source.gitRepository"
-      },
-      {
+        "path": "spec.source.gitRepository",
         "widget": "FormGroup",
-        "path": "spec.source.gitRepository.auth",
-        "visibility": "$.spec.source.gitRepository",
+        "visibility": "$sourceType = 'Git Repository'",
         "children": [
+          { "path": "url" },
+          { "path": "baseDir" },
+          { "path": "reference" },
           {
-            "path": "secretName"
+            "var": "useAuthorization",
+            "type": "boolean",
+            "defaultValue": "$exists($.spec.source.gitRepository.auth)"
           },
           {
-            "path": "type"
-          }
+            "widget": "FormGroup",
+            "path": "auth",
+            "visibility": "$useAuthorization",
+            "children": [
+              { "path": "secretName" },
+              { "path": "type" }
+            ]
+          },
         ]
       },
       {
@@ -154,17 +167,21 @@ data:
         ]
       },
       {
-        "path": "spec.source.inline.source",
-        "widget": "CodeEditor",
-        "language": "$contains($root.spec.runtime, 'node') ? 'javascript' : 'python'",
-        "visibility": "$.spec.source.inline"
+        "path": "spec.source.inline",
+        "visibility": "$sourceType = 'Inline'",
+        "children": [
+          {
+            "path": "source",
+            "widget": "CodeEditor",
+            "language": "$contains($root.spec.runtime, 'node') ? 'javascript' : 'python'",
+          },
+          {
+            "path": "dependencies",
+            "widget": "CodeEditor",
+            "language": "$contains($root.spec.runtime, 'node') ? 'javascript' : 'plaintext'",
+          }
+        ]
       },
-      {
-        "path": "spec.source.inline.dependencies",
-        "widget": "CodeEditor",
-        "language": "$contains($root.spec.runtime, 'node') ? 'javascript' : 'plaintext'",
-        "visibility": "$.spec.source.inline"
-      }
     ]
   general: |-
     {
@@ -200,10 +217,17 @@ data:
         "Profile": "Profile",
         "spec.source.inline.source": "Source",
         "spec.source.inline.dependencies": "Dependencies",
+        "spec.source.gitRepository": "Repository Configuration",
         "spec.source.gitRepository.url": "Repository URL",
+        "spec.source.gitRepository.baseDir": "Base Directory",
+        "spec.source.gitRepository.reference": "Reference",
         "spec.source.gitRepository.auth": "Repository Authorization",
         "spec.source.gitRepository.auth.secretName": "Secret Name",
-        "spec.source.gitRepository.auth.type": "Type"
+        "spec.source.gitRepository.auth.type": "Type",
+        "spec.source.gitRepository.auth.type.basic": "BASIC (password or token)",
+        "spec.source.gitRepository.auth.type.key": "SSH Key",
+        "sourceType": "Source Type",
+        "useAuthorization": "Use Authorization"
       }
     }
   template: |-

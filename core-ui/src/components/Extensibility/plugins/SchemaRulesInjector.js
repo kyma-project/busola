@@ -5,6 +5,7 @@ import { List, fromJS } from 'immutable';
 import * as jp from 'jsonpath';
 
 import { useVariables } from '../hooks/useVariables';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 // fake an OrderedMap-like structure using List to allow for duplicate keys
 const propertiesWrapper = src => ({
@@ -35,6 +36,19 @@ export function SchemaRulesInjector({
       .map(item => `[${item}]`)
       .join('');
     const varPath = `$.${varName}${varSuffix}`;
+
+    // quick & dirty fix for default values for variables, TODO remove
+    if (!vars.hasOwnProperty(varName) && schema.get('defaultValue')) {
+      try {
+        setVar(
+          varPath,
+          jsonataWrapper(schema.get('defaultValue')).evaluate(resource),
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
     return (
       <Plugin
         {...props}
