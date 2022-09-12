@@ -27,7 +27,7 @@ export function SimpleList({
   const listSize = value?.size || 0;
   const schemaPlaceholder = schema.get('placeholder');
   const schemaRrequired = schema.get('required');
-  const inputInfo = schema.get('inputInfo');
+  const description = schema.get('description');
 
   const removeItem = index => {
     onChange({
@@ -101,7 +101,7 @@ export function SimpleList({
                       schemaKeys={schemaKeys?.push('items')}
                       compact
                       placeholder={schemaPlaceholder && tExt(schemaPlaceholder)}
-                      inputInfo="sssss"
+                      description="sssss"
                     />
                     <span className="item-action">
                       {!isLast(index) && (
@@ -116,14 +116,14 @@ export function SimpleList({
                       )}
                     </span>
                   </li>
-                  {isLast(index) && inputInfo && (
+                  {isLast(index) && description && (
                     <p
                       style={{
                         color: 'var(--sapNeutralTextColor)',
                         margin: '0 8px',
                       }}
                     >
-                      {inputInfo}
+                      {description}
                     </p>
                   )}
                 </>

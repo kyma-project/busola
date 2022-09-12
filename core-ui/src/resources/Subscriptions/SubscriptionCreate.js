@@ -197,7 +197,7 @@ export const SubscriptionCreate = ({
         value={firstEventTypeValues.eventName}
         input={Inputs.Text}
         placeholder={t('subscriptions.create.placeholders.event-name')}
-        inputInfo={t('subscriptions.tooltips.event-name')}
+        description={t('subscriptions.tooltips.event-name')}
         validate={() => {
           const { eventName } = firstEventTypeValues;
           const tokens = eventName.split('.');

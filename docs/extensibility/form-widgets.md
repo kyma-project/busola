@@ -28,7 +28,7 @@ Text widgets render a field as a text field. They are used by default for all st
 - **enum[]** - an array of options to generate an input field with a dropdown.
 - **placeholder** - specifies a short hint about the input field value.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
-- **inputInfo** - a string that can be shown below the input field to guide the User how to fill in the input.
+- **description** - a string that can be shown below the input field to guide the User how to fill in the input.
 - **tooltip** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label.
 
 #### Example
@@ -59,7 +59,7 @@ Text widgets render a field as a text field. They are used by default for all st
     "MYSQL",
     "TCP"
   ],
-  "inputInfo": "Choose a protocol type from the dropdown.",
+  "description": "Choose a protocol type from the dropdown.",
   "tooltip": "Specifies which protocol to use for tunneling the downstream connection."
 },
 ```
@@ -75,7 +75,7 @@ Name widgets render a name input field. They contain an automatic name generator
 
 - **extraPaths** - an array of extra paths to fill in with the contents of the field. Each path can either be a period-separated string or an array of strings.
 - **placeholder** - specifies a short hint about the input field value.
-- **inputInfo** - a string that can be shown below the input field to guide the User how to fill in the input. It defaults to `Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1').`. To disable any suggestion, set this value to `null`.
+- **description** - a string that can be shown below the input field to guide the User how to fill in the input. It defaults to `Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1').`. To disable any suggestion, set this value to `null`.
 - **tooltip** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label.
 
 #### Example
@@ -158,7 +158,7 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 #### Widget-specific parameters
 
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
-- **inputInfo** - a string that can be shown below the last input field to guide the User how to fill in the input.
+- **description** - a string that can be shown below the last input field to guide the User how to fill in the input.
 - **tooltip** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label.
 - **keyEnum[]** - an array of options to generate a key input field with a dropdown.
 - **value**:
@@ -172,7 +172,7 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 {
   "path": "spec.my-data",
   "widget": "KeyValuePair",
-  "inputInfo": "Key and value must start and end with an alphanumeric character.",
+  "description": "Key and value must start and end with an alphanumeric character.",
   "tooltip": "Labels are intended to be used to specify identifying attributes of objects that are meaningful and relevant to users, but do not directly imply semantics to the core system.",
   "keyEnum": ["prefix", "regex", "exact"]
 }
@@ -285,7 +285,7 @@ This type of field is only suitable for simple data types and can contain more c
 
 - **placeholder** - specifies a short hint about the input field value.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
-- **inputInfo** - a string that can be shown below the last input field to guide the User how to fill in the input.
+- **description** - a string that can be shown below the last input field to guide the User how to fill in the input.
 - **tooltip** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label.
 
 #### Example

@@ -17,7 +17,7 @@ export function FormField({
   defaultValue,
   messageStrip,
   compact = false,
-  inputInfo,
+  description,
   ...props
 }) {
   const { validate, ...inputProps } = props;
@@ -34,8 +34,8 @@ export function FormField({
         {messageStrip
           ? messageStrip
           : input({ required, disabled, ...inputProps })}
-        {inputInfo && (
-          <p style={{ color: 'var(--sapNeutralTextColor)' }}>{inputInfo}</p>
+        {description && (
+          <p style={{ color: 'var(--sapNeutralTextColor)' }}>{description}</p>
         )}
       </div>
     </div>

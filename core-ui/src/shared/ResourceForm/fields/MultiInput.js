@@ -32,7 +32,7 @@ export function MultiInput({
   readOnly,
   noEdit,
   newItemAction,
-  inputInfo,
+  description,
   ...props
 }) {
   const { t } = useTranslation();
@@ -215,8 +215,8 @@ export function MultiInput({
               )}
             </li>
           ))}
-          {inputInfo && (
-            <p style={{ color: 'var(--sapNeutralTextColor)' }}>{inputInfo}</p>
+          {description && (
+            <p style={{ color: 'var(--sapNeutralTextColor)' }}>{description}</p>
           )}
         </ul>
       </div>

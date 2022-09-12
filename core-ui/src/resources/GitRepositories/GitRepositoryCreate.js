@@ -88,7 +88,7 @@ export function GitRepositoryCreate({
         required
         propertyPath="$.spec.url"
         label={t('git-repositories.labels.url')}
-        inputInfo={t('git-repositories.tooltips.url')}
+        description={t('git-repositories.tooltips.url')}
         placeholder={t('git-repositories.placeholders.url')}
         input={Inputs.Text}
         validationState={getUrlValidationState()}
