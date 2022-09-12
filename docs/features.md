@@ -140,6 +140,16 @@ Note that some features must be run before the application starts the bootstrap 
   }
   ```
 
+- **GARDENER_LOGIN** - is used to enable or disable the option of logging in with Gardener kubeconfig.
+
+  Default settings:
+
+  ```json
+  "EXTERNAL_NODES": {
+    "isEnabled": false,
+  }
+  ```
+
 - **ISTIO** - is used to show or hide the Istio-related views and to define which APIs are required for the views to be shown properly.
   For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 

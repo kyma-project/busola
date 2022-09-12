@@ -90,10 +90,7 @@
         "isEnabled": false
       },
       "GARDENER_LOGIN": {
-        "isEnabled": true,
-        "todo change above to false": true,
-        "todo add docs": true,
-        "todo update busola-deploy": "dunno"
+        "isEnabled": false
       }
     }
   }
