@@ -7,6 +7,9 @@ import { useTranslation } from 'react-i18next';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 
 import { ResourceForm } from 'shared/ResourceForm';
+import { Label } from '../../../shared/ResourceForm/components/Label';
+
+import './SimpleList.scss';
 
 export function SimpleList({
   storeKeys,
@@ -26,8 +29,9 @@ export function SimpleList({
   const { value } = store?.extractValues(storeKeys) || {};
   const listSize = value?.size || 0;
   const schemaPlaceholder = schema.get('placeholder');
-  const schemaRrequired = schema.get('required');
+  const schemaRequired = schema.get('required');
   const description = schema.get('description');
+  const tooltipContent = schema.get('tooltip');
 
   const removeItem = index => {
     onChange({
@@ -59,77 +63,89 @@ export function SimpleList({
     <ResourceForm.CollapsibleSection
       container
       title={tFromStoreKeys(storeKeys, schema)}
-      required={schemaRrequired ?? required}
+      required={schemaRequired ?? required}
       {...props}
     >
-      <div className="fd-row form-field multi-input extensibility">
-        <ul className={listClasses}>
-          {isObject && (
-            <li>
-              <PluginStack
-                schema={itemsSchema}
-                widgets={{
-                  ...widgets,
-                  types: mapValues(widgets.types, () => titleRenderer),
-                  custom: {
-                    ...mapValues(widgets.custom, () => titleRenderer),
-                    Null: () => '',
-                  },
-                }}
-                parentSchema={schema}
-                storeKeys={storeKeys.push(0)}
-                level={level + 1}
-                schemaKeys={schemaKeys?.push('items')}
-              />
-              <span className="item-action"></span>
-            </li>
-          )}
-          {Array(listSize + 1)
-            .fill(null)
-            .map((_val, index) => {
-              const ownKeys = storeKeys.push(index);
+      <div className="fd-row simple-list">
+        <div className="fd-col fd-col-md--4 fd-margin-bottom--sm">
+          <Label
+            required={schemaRequired ?? required}
+            tooltipContent={tooltipContent}
+          >
+            {tFromStoreKeys(storeKeys, schema)}
+          </Label>
+        </div>
+        <div className="fd-col fd-col-md--7 form-field multi-input extensibility">
+          <ul className={listClasses}>
+            {isObject && (
+              <li>
+                <PluginStack
+                  schema={itemsSchema}
+                  widgets={{
+                    ...widgets,
+                    types: mapValues(widgets.types, () => titleRenderer),
+                    custom: {
+                      ...mapValues(widgets.custom, () => titleRenderer),
+                      Null: () => '',
+                    },
+                  }}
+                  parentSchema={schema}
+                  storeKeys={storeKeys.push(0)}
+                  level={level + 1}
+                  schemaKeys={schemaKeys?.push('items')}
+                />
+                <span className="item-action"></span>
+              </li>
+            )}
+            {Array(listSize + 1)
+              .fill(null)
+              .map((_val, index) => {
+                const ownKeys = storeKeys.push(index);
 
-              return (
-                <>
-                  <li key={index}>
-                    <PluginStack
-                      showValidity={showValidity}
-                      schema={itemsSchema}
-                      parentSchema={schema}
-                      storeKeys={ownKeys}
-                      level={level + 1}
-                      schemaKeys={schemaKeys?.push('items')}
-                      compact
-                      placeholder={schemaPlaceholder && tExt(schemaPlaceholder)}
-                      description="sssss"
-                    />
-                    <span className="item-action">
-                      {!isLast(index) && (
-                        <Button
-                          disabled={readOnly}
-                          compact
-                          glyph="delete"
-                          type="negative"
-                          onClick={() => removeItem(index)}
-                          ariaLabel={t('common.buttons.delete')}
-                        />
-                      )}
-                    </span>
-                  </li>
-                  {isLast(index) && description && (
-                    <p
-                      style={{
-                        color: 'var(--sapNeutralTextColor)',
-                        margin: '0 8px',
-                      }}
-                    >
-                      {description}
-                    </p>
-                  )}
-                </>
-              );
-            })}
-        </ul>
+                return (
+                  <>
+                    <li key={index}>
+                      <PluginStack
+                        showValidity={showValidity}
+                        schema={itemsSchema}
+                        parentSchema={schema}
+                        storeKeys={ownKeys}
+                        level={level + 1}
+                        schemaKeys={schemaKeys?.push('items')}
+                        compact
+                        placeholder={
+                          schemaPlaceholder && tExt(schemaPlaceholder)
+                        }
+                        description={description}
+                      />
+                      <span className="item-action">
+                        {!isLast(index) && (
+                          <Button
+                            disabled={readOnly}
+                            compact
+                            glyph="delete"
+                            type="negative"
+                            onClick={() => removeItem(index)}
+                            ariaLabel={t('common.buttons.delete')}
+                          />
+                        )}
+                      </span>
+                    </li>
+                    {isLast(index) && description && (
+                      <p
+                        style={{
+                          color: 'var(--sapNeutralTextColor)',
+                          margin: '0 8px',
+                        }}
+                      >
+                        {description}
+                      </p>
+                    )}
+                  </>
+                );
+              })}
+          </ul>
+        </div>
       </div>
     </ResourceForm.CollapsibleSection>
   );
