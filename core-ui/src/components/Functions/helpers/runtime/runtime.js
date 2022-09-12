@@ -72,7 +72,7 @@ export const checkDepsValidity = (runtime, deps) => {
     case nodejs16:
     case nodejs14:
     case nodejs12:
-      return isJson(deps);
+      return deps.length === 0 || isJson(deps);
     default:
       return true;
   }
