@@ -4,7 +4,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import {
   useGetTranslation,
-  getRemainingProps,
+  getPropsFromSchema,
 } from 'components/Extensibility/helpers';
 
 export function StringRenderer({
@@ -48,7 +48,7 @@ export function StringRenderer({
       data-testid={storeKeys.join('.')}
       schemaPlaceholder={schemaPlaceholder}
       {...getTypeSpecificProps()}
-      {...getRemainingProps(schema, required)}
+      {...getPropsFromSchema(schema, required)}
     />
   );
 }

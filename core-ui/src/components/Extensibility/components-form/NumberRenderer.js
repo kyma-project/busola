@@ -4,7 +4,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import {
   useGetTranslation,
-  getRemainingProps,
+  getPropsFromSchema,
 } from 'components/Extensibility/helpers';
 
 export function NumberRenderer({
@@ -40,7 +40,7 @@ export function NumberRenderer({
       data-testid={storeKeys.join('.')}
       input={Inputs.Number}
       compact={compact}
-      {...getRemainingProps(schema, required)}
+      {...getPropsFromSchema(schema, required)}
     />
   );
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { List } from 'immutable';
 
 import { K8sNameField } from 'shared/ResourceForm/fields';
+import { getPropsFromSchema } from 'components/Extensibility/helpers';
 
 export function NameRenderer({
   storeKeys,
@@ -13,9 +14,6 @@ export function NameRenderer({
   ...props
 }) {
   const extraPaths = schema.get('extraPaths')?.toJS() || [];
-  const inputInfo = schema.get('inputInfo');
-  const tooltipContent = schema.get('description');
-  const schemaRequired = schema.get('required');
 
   return (
     <K8sNameField
@@ -42,9 +40,7 @@ export function NameRenderer({
         ]);
       }}
       validate={value => !!value}
-      required={schemaRequired ?? required}
-      inputInfo={inputInfo}
-      tooltipContent={tooltipContent}
+      {...getPropsFromSchema(schema, required)}
     />
   );
 }

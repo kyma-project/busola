@@ -6,7 +6,7 @@ import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
 import {
   getObjectValueWorkaround,
-  getRemainingProps,
+  getPropsFromSchema,
 } from 'components/Extensibility/helpers';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { Dropdown } from 'shared/ResourceForm/inputs';
@@ -115,7 +115,7 @@ export function KeyValuePairRenderer({
       className="key-enum"
       title={titleTranslation}
       initialValue={valueInfo.type === 'object' ? {} : ''}
-      {...getRemainingProps(schema, required)}
+      {...getPropsFromSchema(schema, required)}
     />
   );
 }
