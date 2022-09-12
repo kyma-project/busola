@@ -33,7 +33,7 @@ data:
         "path": "spec.addresses", "name": "spec.addresses", "widget": "SimpleList"
       },
       {
-        "path": "spec.ports", "name": "Ports", "widget": "GenericList", "simple": true, "required": true, "children": [
+        "path": "spec.ports", "name": "Ports", "widget": "GenericList", "children": [
           {
             "path": "[].number", "name": "spec.ports.number", "required": true
           },
@@ -47,7 +47,47 @@ data:
             "path": "[].targetPort", "name": "spec.ports.targetPort"
           },
         ]
-      }
+      },
+      {
+        "path": "spec.location", "name": "spec.location"
+      },
+      {
+        "path": "spec.resolution", "name": "spec.resolution"
+      },
+      {
+        "path": "spec.endpoints", "name": "spec.endpoints", "widget": "GenericList", "children": [
+          {
+            "path": "[].address", "name": "spec.endpoints.address"
+          },
+          {
+            "path": "[].ports", "name": "spec.endpoints.ports", "widget": "KeyValuePair", "value": { "type": "number" }
+          },
+          {
+            "path": "[].labels", "name": "spec.endpoints.labels", "widget": "KeyValuePair"
+          },
+          {
+            "path": "[].network", "name": "spec.endpoints.network"
+          },
+          {
+            "path": "[].locality", "name": "spec.endpoints.locality"
+          },
+          {
+            "path": "[].weight", "name": "spec.endpoints.weight"
+          },
+          {
+            "path": "[].serviceAccount", "name": "spec.endpoints.serviceAccount"
+          },
+        ]
+      },
+      {
+        "path": "spec.workloadSelector.labels", "name": "spec.workloadSelector", "widget": "KeyValuePair"
+      },
+      {
+        "path": "spec.exportTo", "name": "spec.exportTo", "widget": "SimpleList"
+      },
+      {
+        "path": "spec.subjectAltNames", "name": "spec.subjectAltNames", "widget": "SimpleList"
+      },
     ]
   general: |-
     {
@@ -85,6 +125,13 @@ data:
       spec.location: Location
       spec.resolution: Resolution
       spec.endpoints: Endpoints
+      spec.endpoints.address: Address
+      spec.endpoints.ports: Ports
+      spec.endpoints.labels: Labels
+      spec.endpoints.network: Network
+      spec.endpoints.locality: Locality
+      spec.endpoints.weight: Weight
+      spec.endpoints.serviceAccount: Service Account
       spec.workloadSelector: Workload Selector
       spec.exportTo: Export To
       spec.subjectAltNames: Subject Alt Names
