@@ -72,6 +72,7 @@ export default function CodeAndDependencies({ func }) {
     }
 
     setDisabledCause(DISABLED_CAUSES.VALID);
+    setDependencies(deps);
   }
 
   function handleSave() {

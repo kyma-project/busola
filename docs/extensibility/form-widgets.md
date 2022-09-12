@@ -160,6 +160,11 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 - **inputInfo** - a string that can be shown below the last input field to guide the User how to fill in the input.
 - **tooltip** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label.
+- **keyEnum[]** - an array of options to generate a key input field with a dropdown.
+- **value**:
+  - **type** - a string that specifies the type of the value input. The options are `object`, `number`, `text`. Defaults to `text`.
+  - **keyEnum[]** - an array of options to generate a key input field with a dropdown only if the `type` is set to `object`.
+  - **valueEnum[]** - an array of options to generate a value input field with a dropdown.
 
 #### Example
 
@@ -168,7 +173,8 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
   "path": "spec.my-data",
   "widget": "KeyValuePair",
   "inputInfo": "Key and value must start and end with an alphanumeric character.",
-  "tooltip": "Labels are intended to be used to specify identifying attributes of objects that are meaningful and relevant to users, but do not directly imply semantics to the core system."
+  "tooltip": "Labels are intended to be used to specify identifying attributes of objects that are meaningful and relevant to users, but do not directly imply semantics to the core system.",
+  "keyEnum": ["prefix", "regex", "exact"]
 }
 ```
 
