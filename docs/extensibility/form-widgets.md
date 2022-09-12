@@ -27,9 +27,9 @@ Text widgets render a field as a text field. They are used by default for all st
 
 - **enum[]** - an array of options to generate an input field with a dropdown.
 - **placeholder** - specifies a short hint about the input field value.
-- **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
+- **required** - a boolean which specifies if a field is required. The default value is taken from the CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
 - **inputInfo** - a string that can be shown below the input field to guide the User how to fill in the input.
-- **description** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label.
+- **description** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 
 #### Example
 
@@ -76,7 +76,7 @@ Name widgets render a name input field. They contain an automatic name generator
 - **extraPaths** - an array of extra paths to fill in with the contents of the field. Each path can either be a period-separated string or an array of strings.
 - **placeholder** - specifies a short hint about the input field value.
 - **inputInfo** - a string that can be shown below the input field to guide the User how to fill in the input. It defaults to `Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1').`. To disable any suggestion, set this value to `null`.
-- **description** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label.
+- **description** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 
 #### Example
 
@@ -93,12 +93,19 @@ Name widgets render a name input field. They contain an automatic name generator
 
 CodeEditor widgets render a versatile code editor that can be used to edit any variable. The editor's default language is JSON.
 
+#### Widget-specific parameters
+
+- **inputInfo** - a string that can be shown below the input field to guide the User how to fill in the input.
+- **description** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+
 #### Example
 
 ```json
 {
   "path": "spec.data",
-  "widget": "CodeEditor"
+  "widget": "CodeEditor",
+  "inputInfo": "Data needs to be a valid JSON object.",
+  "description": "Data that will be passed on to the application."
 }
 ```
 
@@ -159,7 +166,7 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 - **inputInfo** - a string that can be shown below the last input field to guide the User how to fill in the input.
-- **description** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label.
+- **description** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 - **keyEnum[]** - an array of options to generate a key input field with a dropdown.
 - **value**:
   - **type** - a string that specifies the type of the value input. The options are `object`, `number`, `text`. Defaults to `text`.
@@ -286,7 +293,7 @@ This type of field is only suitable for simple data types and can contain more c
 - **placeholder** - specifies a short hint about the input field value.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 - **inputInfo** - a string that can be shown below the last input field to guide the User how to fill in the input.
-- **description** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label.
+- **description** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 
 #### Example
 
