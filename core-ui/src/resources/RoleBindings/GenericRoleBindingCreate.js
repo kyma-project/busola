@@ -51,13 +51,19 @@ export function GenericRoleBindingCreate({
   } = useGetList()(rolesUrl, { skip: !namespace });
 
   const clusterRolesUrl = `/apis/${DEFAULT_APIGROUP}/v1/clusterroles`;
-  const {
+  let {
     data: clusterRoles,
     loading: clusterRolesLoading = true,
     error: clusterRolesError,
   } = useGetList()(clusterRolesUrl, {
     skip: !hasPermissionsForClusterRoles,
   });
+
+  // ignore no permissions for ClusterRoles
+  if (clusterRolesError?.code === 403) {
+    clusterRoles = [];
+    clusterRolesError = null;
+  }
 
   const rolesLoading =
     (!namespace ? false : namespaceRolesLoading) || clusterRolesLoading;
