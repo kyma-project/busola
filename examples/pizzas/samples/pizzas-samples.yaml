@@ -46,7 +46,7 @@ spec:
   comments:
     - I would like the spiciest pizza.
     - I would like to ask for a discount for students.
-  description: 'Diavola is such a spicy pizza,it includes hot salami and pickled jalapeños!'
+  description: 'Diavola is such a spicy pizza, it includes hot salami and pickled jalapeños!'
   toppings:
     - name: Hot salami
       price: 10

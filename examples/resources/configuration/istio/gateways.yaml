@@ -226,11 +226,8 @@ data:
       {
         "name": "ingressgateway",
         "value": {
-          "apiVersion": "networking.istio.io/v1beta1",
-          "kind": "Gateway",
           "metadata": {
             "name": "httpbin-gateway",
-            "namespace": "$namespace",
             "labels": {
               "app.kubernetes.io/name": "httpbin-gateway",
             },

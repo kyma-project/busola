@@ -83,16 +83,32 @@ export function createTemplate(api, namespace, scope) {
   return template;
 }
 
+export function getDefaultPreset(presets, emptyTemplate) {
+  if (!presets || !presets.length) return null;
+  const defaultPreset = presets.find(preset => preset.default === true);
+  return defaultPreset
+    ? merge({}, { value: emptyTemplate }, defaultPreset)
+    : null;
+}
+
 export function createPresets(resource, presets) {
+  if (!presets || !presets.length) return null;
   let preparedPresets = [];
-  preparedPresets.push({
-    name: 'default',
-    value: resource,
-  });
+  let hasDefaultPreset = false;
+
   presets.forEach(preset => {
+    if (preset.default === true) hasDefaultPreset = true;
     preparedPresets.push(merge({}, { value: resource }, preset));
   });
 
+  if (!hasDefaultPreset) {
+    preparedPresets.unshift({
+      name: 'default',
+      value: resource,
+    });
+  }
+
+  if (hasDefaultPreset && preparedPresets.length <= 1) return null;
   return preparedPresets;
 }
 
