@@ -17,6 +17,8 @@ import {
 import { SingleSubjectForm, SingleSubjectInput } from './SubjectForm';
 import { validateBinding } from './helpers';
 import { RoleForm } from './RoleForm';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { hasPermissionsFor } from './temp';
 
 export function GenericRoleBindingCreate({
   formElementRef,
@@ -30,6 +32,7 @@ export function GenericRoleBindingCreate({
   ...props
 }) {
   const { t } = useTranslation();
+  const { permissionSet } = useMicrofrontendContext();
 
   const [binding, setBinding] = useState(
     cloneDeep(initialRoleBinding) || createBindingTemplate(namespace),
@@ -42,19 +45,29 @@ export function GenericRoleBindingCreate({
   const rolesUrl = `/apis/${DEFAULT_APIGROUP}/v1/namespaces/${namespace}/roles`;
   const {
     data: roles,
-    loading: namespaceRolesLoading = true,
+    loading: namespaceRolesLoading,
     error: namespaceRolesError,
   } = useGetList()(rolesUrl, { skip: !namespace });
 
+  const hasPermissionsForClusterRoles = hasPermissionsFor(
+    DEFAULT_APIGROUP,
+    'clusterroles',
+    permissionSet,
+  );
   const clusterRolesUrl = `/apis/${DEFAULT_APIGROUP}/v1/clusterroles`;
   const {
     data: clusterRoles,
-    loading: clusterRolesLoading = true,
+    loading: clusterRolesLoading,
     error: clusterRolesError,
-  } = useGetList()(clusterRolesUrl);
+  } = useGetList()(clusterRolesUrl, {
+    skip: !hasPermissionsForClusterRoles,
+  });
+
   const rolesLoading =
     (!namespace ? false : namespaceRolesLoading) || clusterRolesLoading;
+
   const rolesError = namespaceRolesError || clusterRolesError;
+
   const rolesNames = (roles || []).map(role => ({
     key: `role-${role.metadata.name}`,
     text: `${role.metadata.name} (R)`,
