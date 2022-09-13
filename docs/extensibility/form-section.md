@@ -1,5 +1,7 @@
-# Form widgets
+# Create forms with extensibility
 
+- [_Form_ overview](#form-overview)
+  - [Variable fields](#variable-fields)
 - [Simple widgets](#simple-widgets)
   - [Text](#text)
   - [Name](#name)
@@ -12,6 +14,84 @@
   - [FormGroup](#formgroup)
   - [GenericList](#genericlist)
   - [SimpleList](#simplelist)
+
+# Form overview
+
+The **form** section contains a list of objects that define which fields are included in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to the simple form by providing the `simple: true` flag. You can also remove it from the advanced form by providing the `advanced: false` flag.
+
+Any parameters that are not handled by the widget are added to the schema directly, so it's possible to add or override existing values. For example, add an **enum** parameter to provide selectable values in a field.
+
+If you target elements of an array rather than the array itself, you can use the `items[]` notation.
+
+### Item parameters
+
+- **path** - _[required]_ path to the property that you want to display in the form.
+- **name** - an optional name for the field instead of the default capitalized last part of the path. This can be a key from the **translation** section.
+- **widget** - optional widget used to render the field referred to by the **path** property. If you don't provide the widget, a default handler is used depending on the data type provided in the schema. For more information about the available widgets, see [Form section](form-section.md).
+- **children** - child widgets used for grouping. Child paths are relative to its parent.
+- **simple** - parameter used to display the simple form. It is `false` by default.
+- **advanced** - parameter used to display the advanced form. It is `true` by default.
+- **visibility** - a [JSONata](https://docs.jsonata.org/overview.html) expression controlling the visibility of the element.
+
+### Example
+
+```json
+[
+  { "path": "spec.priority", "simple": true },
+  {
+    "path": "spec.items[]",
+    "children": [
+      { "path": "name", "name": "Item name" },
+      { "path": "service.url" },
+      { "path": "service.port" }
+    ]
+  }
+]
+```
+
+### Variable fields
+
+Additionally, it's possible to define variable fields. In this case, **path** is omitted, and a **var** argument is used to specify the variable name to assign. Variable names have to be unique across the extension. Such a value is not added to the resultant YAML but instead stored in memory and provided to any [JSONata](https://docs.jsonata.org/overview.html) handlers as variables, for example, `$foo`. Variables are provided for the current context. If a variable is defined inside an array, the value is specified for that specific item. To access raw values, the predefined `$vars` variable has to be used.
+
+When using a variable inside an array it has to be wrapped inside a `[]` element (see [example](#example)).
+
+### Item parameters
+
+- **var** - _[required]_ variable name.
+- **type** - _[required]_ type of field, as defined by JSON Schema.
+
+All other fields can be used analogously to regular form items (except for the **path** and **children** parameters).
+
+### Predefined variables
+
+All JSONata expressions have a few variables that are predefined instead of being read from variable fields.
+
+- **\$item** - when in an array this contains the current item.
+- **\$index** - contains the index of the current item within the array.
+- **\$indexes** - contains a list of all the indexes for nested arrays.
+- **\$vars** - contains a map of all the raw variable values.
+
+### Example
+
+In the example, the visibility for item price and color are analogous - the former uses scoped variables for the current item, and the latter extracts the value from an array variable using provided index - this is mostly useful for complex scenarios only.
+
+```json
+[
+  { "var": "useDescription", "type": "boolean" },
+  { "path": "spec.description": "visibility": "$useDescription" },
+  { "path": "spec.items", "widget": "GenericList": "children": [
+    { "path": "[]", "children": [
+      { "path": "name" },
+      { "var": "itemMode", "type": "string", "enum": ["simple", "verbose"] },
+      { "path": "price", "visibility": "$itemMode = 'verbose'" },
+      { "path": "color", "visibility": "$vars.itemMode[$index] = 'verbose'" },
+      { "path": "description", "visibility": "$useDescription" }
+    ]}
+  ]}
+]
+```
+
+# Form widgets
 
 Form widgets are used in the resource forms.
 
@@ -152,7 +232,7 @@ Complex widgets handle more advanced data structures such as arrays or objects.
 
 ### KeyValuePair
 
-KeyValuePair widgets render an `object` value as a list of dual text fields. One is used for a key and the other for a value, allowing for adding and removing entries.
+KeyValuePair widgets render an `object` value as a list of fields. One is used for a key and the other for a value, allowing for adding and removing entries.
 
 #### Widget-specific parameters
 
@@ -173,10 +253,6 @@ KeyValuePair widgets render an `object` value as a list of dual text fields. One
 ```
 
 <img src="./assets/form-widgets/KeyValue.png" alt="Example of a KeyValuePair widget" style=" border: 1px solid #D2D5D9">
-
-#### Widget-specific parameters
-
-- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 
 ### ResourceRef
 
