@@ -88,74 +88,66 @@ data:
         "widget": "KeyValuePair"
       },
       {
-        "simple": true,
         "path": "spec.action",
         "required": false
       },
       {
-        "simple": true,
         "path": "spec.provider",
         "widget": "Text"
       },
       {
-        "simple": true,
         "path": "spec.rules",
         "widget": "GenericList",
         "children": [
           {
             "path": "[].from",
-            "simple": true,
             "widget": "GenericList",
             "children": [
               {
                 "path": "[].source",
                 "widget": "FormGroup",
-                "simple": true,
                 "children": [
-                  { "simple": true, "path": "principals", "widget": "SimpleList" },
-                  { "simple": true, "path": "notPrincipals", "widget": "SimpleList" },
-                  { "simple": true, "path": "requestPrincipals", "widget": "SimpleList" },
-                  { "simple": true, "path": "notRequestPrincipals", "widget": "SimpleList" },
-                  { "simple": true, "path": "namespaces", "widget": "SimpleList" },
-                  { "simple": true, "path": "notNamespaces", "widget": "SimpleList" },
-                  { "simple": true, "path": "ipBlocks", "widget": "SimpleList" },
-                  { "simple": true, "path": "notIpBlocks", "widget": "SimpleList" },
-                  { "simple": true, "path": "remoteIpBlocks", "widget": "SimpleList" },
-                  { "simple": true, "path": "notRemoteIpBlocks", "widget": "SimpleList" }
+                  { "path": "principals", "widget": "SimpleList" },
+                  { "path": "notPrincipals", "widget": "SimpleList" },
+                  { "path": "requestPrincipals", "widget": "SimpleList" },
+                  { "path": "notRequestPrincipals", "widget": "SimpleList" },
+                  { "path": "namespaces", "widget": "SimpleList" },
+                  { "path": "notNamespaces", "widget": "SimpleList" },
+                  { "path": "ipBlocks", "widget": "SimpleList" },
+                  { "path": "notIpBlocks", "widget": "SimpleList" },
+                  { "path": "remoteIpBlocks", "widget": "SimpleList" },
+                  { "path": "notRemoteIpBlocks", "widget": "SimpleList" }
                 ]
               }
             ]
           },
           {
             "path": "[].to",
-            "simple": true,
             "widget": "GenericList",
             "children": [
               {
                 "path": "[].operation",
                 "widget": "FormGroup",
-                "simple": true,
                 "children": [
-                  { "simple": true, "path": "hosts", "widget": "SimpleList" },
-                  { "simple": true, "path": "notHosts", "widget": "SimpleList" },
-                  { "simple": true, "path": "ports", "widget": "SimpleList" },
-                  { "simple": true, "path": "notPorts", "widget": "SimpleList" },
-                  { "simple": true, "path": "methods", "widget": "SimpleList" },
-                  { "simple": true, "path": "notMethods", "widget": "SimpleList" },
-                  { "simple": true, "path": "paths", "widget": "SimpleList" },
-                  { "simple": true, "path": "notPaths", "widget": "SimpleList" }
+                  { "path": "hosts", "widget": "SimpleList" },
+                  { "path": "notHosts", "widget": "SimpleList" },
+                  { "path": "ports", "widget": "SimpleList" },
+                  { "path": "notPorts", "widget": "SimpleList" },
+                  { "path": "methods", "widget": "SimpleList" },
+                  { "path": "notMethods", "widget": "SimpleList" },
+                  { "path": "paths", "widget": "SimpleList" },
+                  { "path": "notPaths", "widget": "SimpleList" }
                 ]
               }
             ]
           },
           {
             "path": "[].when",
-            "simple": true,
             "widget": "GenericList",
             "children": [
-              { "simple": true, "path": "[].key", "widget": "Text" },
-              { "simple": true, "path": "[].values", "widget": "SimpleList" },
-              { "simple": true, "path": "[].notValues", "widget": "SimpleList" }
+              { "path": "[].key", "widget": "Text" },
+              { "path": "[].values", "widget": "SimpleList" },
+              { "path": "[].notValues", "widget": "SimpleList" }
             ]
           },
         ]
