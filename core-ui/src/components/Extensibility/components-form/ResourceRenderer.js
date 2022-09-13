@@ -5,7 +5,7 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
-import { jsonataWrapper } from '../jsonataWrapper';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 export function ResourceRenderer({
   onChange,

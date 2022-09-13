@@ -5,6 +5,7 @@ import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
+import 'core-js/actual/array/find-last-index';
 
 import App from './components/App/App';
 
