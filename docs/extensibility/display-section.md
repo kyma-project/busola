@@ -77,7 +77,7 @@ The `resourceGraph` component is used to configure the ResourceGraph which shows
 - **source** - contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the widget. In its simplest form, it's the path to the value. Not required for presentational widgets.
 - **name** - Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the **translation** section.
 - **widget** - optional widget to render the defined entry. By default the value is displayed verbatim.
-- **valuePreprocessor** - name of [value preprocessor](resources.md#value-preprocessors),
+- **valuePreprocessor** - name of [value preprocessor](resources.md#value-preprocessors).
 - **visibility** - by default all fields are visible; however **visibility** property can be used to control a single item display.
   - If set to `false` explicitly, the field doesn't render.
   - If set to any string, this property is treated as JSONata format, determining (based on current value given as `data`) if the field should be visible.
