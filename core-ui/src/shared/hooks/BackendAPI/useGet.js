@@ -14,7 +14,7 @@ const useGetHook = processDataFn =>
     const lastAuthData = React.useRef(null);
     const lastResourceVersion = React.useRef(null);
     const [data, setData] = React.useState(null);
-    const [loading, setLoading] = React.useState(true);
+    const [loading, setLoading] = React.useState(!skip);
     const [error, setError] = React.useState(null);
     const { authData } = useMicrofrontendContext();
     const fetch = useFetch();
