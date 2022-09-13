@@ -65,9 +65,7 @@ export function GenericRoleBindingCreate({
 
   const rolesLoading =
     (!namespace ? false : namespaceRolesLoading) || clusterRolesLoading;
-
   const rolesError = namespaceRolesError || clusterRolesError;
-
   const rolesNames = (roles || []).map(role => ({
     key: `role-${role.metadata.name}`,
     text: `${role.metadata.name} (R)`,

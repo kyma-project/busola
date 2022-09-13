@@ -1,14 +1,5 @@
 import pluralize from 'pluralize';
 
-export function hasWildcardPermission(permissionSet) {
-  return !!permissionSet.find(
-    rule =>
-      rule.apiGroups[0] === '*' &&
-      rule.resources[0] === '*' &&
-      rule.verbs[0] === '*',
-  );
-}
-
 export function hasPermissionsFor(
   apiGroup,
   resourceType,
