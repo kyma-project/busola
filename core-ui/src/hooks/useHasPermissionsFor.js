@@ -1,12 +1,13 @@
 import pluralize from 'pluralize';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 export function hasPermissionsFor(
   apiGroup,
   resourceType,
-  groupVersions,
+  permissionSet,
   verbs = [],
 ) {
-  const permissionsForApiGroup = groupVersions.filter(
+  const permissionsForApiGroup = permissionSet.filter(
     p => p.apiGroups.includes(apiGroup) || p.apiGroups[0] === '*',
   );
   const matchingPermission = permissionsForApiGroup.find(p =>
@@ -28,4 +29,12 @@ export function hasPermissionsFor(
   }
 
   return !!matchingPermission || !!wildcardPermission;
+}
+
+export function useHasPermissionsFor(queries) {
+  const { permissionSet } = useMicrofrontendContext();
+
+  return queries.map(([apiGroup, resourceType, verbs]) =>
+    hasPermissionsFor(apiGroup, resourceType, permissionSet, verbs),
+  );
 }
