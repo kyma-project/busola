@@ -2,7 +2,7 @@ import { DataSourcesContextProvider } from 'components/Extensibility/contexts/Da
 import { mount } from 'enzyme';
 import { Widget } from '../Widget';
 
-jest.mock('components/Extensibility/useJsonata', () => ({
+jest.mock('components/Extensibility/hooks/useJsonata', () => ({
   useJsonata: () => 'test-value',
 }));
 
