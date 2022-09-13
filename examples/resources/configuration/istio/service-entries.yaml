@@ -8,6 +8,16 @@ metadata:
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
 data:
+  dataSources: |
+    {
+      "podSelector": {
+        "resource": {
+          "kind": "Pod",
+          "version": "v1",
+        },
+        "filter": "$matchByLabelSelector($item, $root.spec.workloadSelector.labels)"
+      },
+    }
   details: |
     {
       "header": [
@@ -77,6 +87,26 @@ data:
               {
                 "name": "spec.endpoints.serviceAccount", "source": "$item.serviceAccount"
               },
+            ]
+          },
+          {
+            "name": "spec.workloadSelector",
+            "widget": "Panel",
+            "source": "spec.workloadSelector.labels",
+            "disablePadding": true,
+            "children": [
+              { 
+                "source": "$podSelector()",
+                "widget": "ResourceList",
+                "disableCreate": true,
+              }
+            ],
+            "header": [
+              {
+                "widget": "Labels",
+                "source": "spec.workloadSelector.labels",
+                "visibility": "$exists(*)"
+              }
             ]
           }
       ],
