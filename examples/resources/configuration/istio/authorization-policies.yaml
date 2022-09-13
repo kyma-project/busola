@@ -1,0 +1,118 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: authorization-policies
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: authorization-policies
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |-
+    {
+      "podSelector": {
+        "resource": {
+          "kind": "Pod",
+          "version": "v1",
+        },
+        "filter": "$matchByLabelSelector($item, $root.spec.selector.matchLabels)"
+      }
+    }
+  details: |-
+    {
+      "header": [
+        {
+          "source": "spec.action",
+          "name": "spec.action"
+        },
+        {
+          "source": "spec.provider",
+          "widget": "Labels",
+          "name": "spec.provider"
+        }
+      ],
+      "body": [
+        {
+          "widget": Panel,
+          "name": spec.rules,
+          "disablePadding": true,
+          "children": [
+            {
+              "source": "spec.rules.from",
+              "widget": "CodeViewer"
+            },
+            {
+              "source": "spec.rules.to",
+              "widget": "CodeViewer"
+            },
+            {
+              "source": "spec.rules.when",
+              "widget": "CodeViewer"
+            },
+          ],
+        },
+        {
+          "widget": "Panel",
+          "name": "spec.selector.matchLabels",
+          "disablePadding": true,
+          "children": [
+            { 
+              "source": "$podSelector()",
+              "widget": "ResourceList",
+              "disableCreate": true,
+              "isCompact": true,
+              "visibility": "$boolean($root.spec.selector.matchLabels)"
+            },
+            {
+              "source": "spec.selector",
+              "widget": "Panel",
+              "name": "selector.matchesAllPods",
+              "visibility": "$not($exists(*)) or $not($boolean(*))"
+            }
+          ],
+          "header": [
+            {
+              "source": "spec.selector.matchLabels",
+              "widget": "Labels",
+              "name": "spec.selector.matchLabels",
+              "visibility": "$boolean(*)"
+            }
+          ],
+        }
+      ]
+    }
+  form: |-
+    [
+      {
+        "simple": true,
+        "path": "spec.action",
+        "required": false
+      }
+    ]
+  general: |-
+    {
+      "resource": {
+        "kind": "AuthorizationPolicy",
+        "group": "security.istio.io",
+        "version": "v1beta1"
+      },
+      "name": "Ext Authorization Policies",
+      "category": "Istio",
+      "urlPath": "ext-authorizationpolicies",
+      "scope": "namespace",
+      "description": "{{[Istio Authorization Policy](https://istio.io/latest/docs/reference/config/security/authorization-policy/)}} allows for workload access management in the mesh."
+    }
+  list: |-
+    [
+      {
+        "name": "action",
+        "source": "spec.action"
+      }
+    ]
+  translations: |-
+    en:
+      spec.action: Action
+      spec.provider: Provider
+      spec.rules: Rules
+      spec.selector.matchLabels: Selector
+      selector.matchesAllPods: Matches all Pods in the Namespace
