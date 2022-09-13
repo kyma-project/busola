@@ -207,7 +207,7 @@ For example:
 ]
 ```
 
-will render the data for `spec.entry1` and `spec.entry2`.
+renders the data for `spec.entry1` and `spec.entry2`.
 
 In the case of array-based components, an `$item` variable contains data for each child. For example:
 
