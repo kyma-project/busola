@@ -33,20 +33,20 @@ data:
       ],
       "body": [
         {
-          "widget": Panel,
-          "name": spec.rules,
-          "disablePadding": true,
-          "children": [
+          "widget": Table,
+          "name": "spec.rules",
+          "source": "spec.rules",
+          "collapsible": [
             {
-              "source": "spec.rules.from",
+              "source": "$item.from",
               "widget": "CodeViewer"
             },
             {
-              "source": "spec.rules.to",
+              "source": "$item.to",
               "widget": "CodeViewer"
             },
             {
-              "source": "spec.rules.when",
+              "source": "$item.when",
               "widget": "CodeViewer"
             },
           ],
@@ -84,9 +84,81 @@ data:
   form: |-
     [
       {
+        "path": "spec.selector.matchLabels", 
+        "widget": "KeyValuePair"
+      },
+      {
         "simple": true,
         "path": "spec.action",
         "required": false
+      },
+      {
+        "simple": true,
+        "path": "spec.provider",
+        "widget": "Text"
+      },
+      {
+        "simple": true,
+        "path": "spec.rules",
+        "widget": "GenericList",
+        "children": [
+          {
+            "path": "[].from",
+            "simple": true,
+            "widget": "GenericList",
+            "children": [
+              {
+                "path": "[].source",
+                "widget": "FormGroup",
+                "simple": true,
+                "children": [
+                  { "simple": true, "path": "principals", "widget": "SimpleList" },
+                  { "simple": true, "path": "notPrincipals", "widget": "SimpleList" },
+                  { "simple": true, "path": "requestPrincipals", "widget": "SimpleList" },
+                  { "simple": true, "path": "notRequestPrincipals", "widget": "SimpleList" },
+                  { "simple": true, "path": "namespaces", "widget": "SimpleList" },
+                  { "simple": true, "path": "notNamespaces", "widget": "SimpleList" },
+                  { "simple": true, "path": "ipBlocks", "widget": "SimpleList" },
+                  { "simple": true, "path": "notIpBlocks", "widget": "SimpleList" },
+                  { "simple": true, "path": "remoteIpBlocks", "widget": "SimpleList" },
+                  { "simple": true, "path": "notRemoteIpBlocks", "widget": "SimpleList" }
+                ]
+              }
+            ]
+          },
+          {
+            "path": "[].to",
+            "simple": true,
+            "widget": "GenericList",
+            "children": [
+              {
+                "path": "[].operation",
+                "widget": "FormGroup",
+                "simple": true,
+                "children": [
+                  { "simple": true, "path": "hosts", "widget": "SimpleList" },
+                  { "simple": true, "path": "notHosts", "widget": "SimpleList" },
+                  { "simple": true, "path": "ports", "widget": "SimpleList" },
+                  { "simple": true, "path": "notPorts", "widget": "SimpleList" },
+                  { "simple": true, "path": "methods", "widget": "SimpleList" },
+                  { "simple": true, "path": "notMethods", "widget": "SimpleList" },
+                  { "simple": true, "path": "paths", "widget": "SimpleList" },
+                  { "simple": true, "path": "notPaths", "widget": "SimpleList" }
+                ]
+              }
+            ]
+          },
+          {
+            "path": "[].when",
+            "simple": true,
+            "widget": "GenericList",
+            "children": [
+              { "simple": true, "path": "[].key", "widget": "Text" },
+              { "simple": true, "path": "[].values", "widget": "SimpleList" },
+              { "simple": true, "path": "[].notValues", "widget": "SimpleList" }
+            ]
+          },
+        ]
       }
     ]
   general: |-
@@ -114,5 +186,6 @@ data:
       spec.action: Action
       spec.provider: Provider
       spec.rules: Rules
+      spec.rules.from: From
       spec.selector.matchLabels: Selector
       selector.matchesAllPods: Matches all Pods in the Namespace
