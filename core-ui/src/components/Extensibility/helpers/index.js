@@ -1,11 +1,13 @@
 import React, { createContext, useContext } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { OrderedMap } from 'immutable';
-import { Link } from 'shared/components/Link/Link';
-import { jsonataWrapper } from './jsonataWrapper';
 import { last } from 'lodash';
+
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { Link } from 'shared/components/Link/Link';
 import { prettifyNamePlural } from 'shared/utils/helpers';
+
+import { jsonataWrapper } from './jsonataWrapper';
 
 export const TranslationBundleContext = createContext({
   translationBundle: 'extensibility',

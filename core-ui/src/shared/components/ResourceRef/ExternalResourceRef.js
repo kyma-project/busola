@@ -28,6 +28,7 @@ export function ExternalResourceRef({
   noSection,
   error,
   index,
+  children,
 }) {
   const { t } = useTranslation();
   const namespacesUrl = '/api/v1/namespaces';
@@ -174,6 +175,7 @@ export function ExternalResourceRef({
       required={required}
     >
       {content()}
+      {children}
     </ResourceForm.CollapsibleSection>
   );
 }

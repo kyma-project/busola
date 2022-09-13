@@ -3,7 +3,7 @@ import { Link } from 'fundamental-react';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 import { useTranslation } from 'react-i18next';
 import { useGetPlaceholder, useGetTranslation } from '../helpers';
-import { jsonataWrapper } from '../jsonataWrapper';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 function getLinkData({ value, formulas, originalResource, t }) {
   const applyFormula = formula =>
