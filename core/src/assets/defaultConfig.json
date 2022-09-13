@@ -90,7 +90,7 @@
         "isEnabled": false
       },
       "GARDENER_LOGIN": {
-        "isEnabled": false
+        "isEnabled": true
       }
     }
   }
