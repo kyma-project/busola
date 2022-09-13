@@ -1,6 +1,6 @@
 import React from 'react';
 import { isNil } from 'lodash';
-import { jsonataWrapper } from '../jsonataWrapper';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useGetPlaceholder } from 'components/Extensibility/helpers';

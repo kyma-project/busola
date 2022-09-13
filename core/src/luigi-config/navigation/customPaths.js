@@ -93,7 +93,7 @@ const getCustomNodes = (crs, scope) => {
 export const getCustomPaths = (customResources, scope) => {
   const getScopedCrs = (crs, scope) => {
     const scopedCrs = crs?.filter(cr => {
-      const crScope = cr.general?.scope;
+      const crScope = cr?.general?.scope;
       if (
         !crScope ||
         (crScope.toLowerCase() !== 'namespace' &&

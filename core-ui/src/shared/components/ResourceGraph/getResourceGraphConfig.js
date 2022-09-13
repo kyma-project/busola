@@ -1,4 +1,4 @@
-import { jsonataWrapper } from 'components/Extensibility/jsonataWrapper';
+import { jsonataWrapper } from 'components/Extensibility/helpers/jsonataWrapper';
 import { useEffect } from 'react';
 import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
 

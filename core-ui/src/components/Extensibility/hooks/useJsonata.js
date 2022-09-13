@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { jsonataWrapper } from './jsonataWrapper';
 
-import { useDataSourcesContext } from './contexts/DataSources';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
+import { DataSourcesContext } from '../contexts/DataSources';
 
 export function useJsonata(query, root, extras = {}) {
   const [value, setValue] = useState('');
@@ -11,7 +11,7 @@ export function useJsonata(query, root, extras = {}) {
     dataSources,
     store: dataSourceStore,
     requestRelatedResource,
-  } = useDataSourcesContext();
+  } = useContext(DataSourcesContext);
 
   useEffect(() => {
     const dataSourceFetchers = Object.fromEntries(
