@@ -45,6 +45,8 @@ const getValueComponent = valueInfo => {
   switch (type) {
     case 'number':
       return getEnumComponent(valueEnum, false, Inputs.Number);
+    case 'string':
+      return getEnumComponent(valueEnum, false, Inputs.Text);
     case 'object':
       return ({ setValue, value }) => (
         <KeyValueField

@@ -66,7 +66,7 @@ data:
       {
         "simple": "true",
         "path": "spec.pizzas[]",
-        "widget": "ResourceRefs",
+        "widget": "ResourceRef",
         "resource": {
           "kind": "Pizza",
           "group": "busola.example.com",
