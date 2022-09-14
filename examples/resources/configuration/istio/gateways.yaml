@@ -95,7 +95,8 @@ data:
         "depth": 1,
         "colorVariant": 1,
         "dataSources": [
-          {"source": "relatedVirtualServices"}
+          {"source": "relatedVirtualServices"},
+          {"source": "podSelector"},
         ]
       }
     }
