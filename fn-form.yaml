@@ -26,7 +26,8 @@ data:
             },
             {
               "name": "runtimeImageOverride",
-              "source": "spec.runtimeImageOverride"
+              "source": "spec.runtimeImageOverride",
+              "placeholder": "runtimeImageOverride"
             },
             {
               "name": "Configured",
@@ -131,14 +132,12 @@ data:
         "children": [
           {
             "path": "resources.limits",
-            "widget": "CodeEditor",
-            "language": "'YAML'"
+            "widget": "KeyValuePair"
           },
           {
             "path": "resources.requests",
-            "widget": "CodeEditor",
-            "language": "'YAML'"
-          }
+            "widget": "KeyValuePair"
+          },
         ]
       },
       {
@@ -147,14 +146,12 @@ data:
         "children": [
           {
             "path": "resources.limits",
-            "widget": "CodeEditor",
-            "language": "'YAML'"
+            "widget": "KeyValuePair"
           },
           {
             "path": "resources.requests",
-            "widget": "CodeEditor",
-            "language": "'YAML'"
-          }
+            "widget": "KeyValuePair"
+          },
         ]
       },
       {
@@ -205,7 +202,8 @@ data:
         "spec.scaleConfig.maxReplicas": "Max Replicas",
         "spec.resourceConfiguration.function": "Runtime Profile",
         "spec.resourceConfiguration.build": "Build Job Profile",
-        "Profile": "Profile",
+        "Limits": "Limits",
+        "Requests": "Requests",
         "spec.source.inline.source": "Source",
         "spec.source.inline.dependencies": "Dependencies",
         "spec.source.gitRepository": "Repository Configuration",
