@@ -221,7 +221,7 @@ data:
         "widget": "Labels"
       },
     ]
-  translations: |-
+  translations: |
     en:
       spec.selector: Selector
       spec.gateways: Gateways
