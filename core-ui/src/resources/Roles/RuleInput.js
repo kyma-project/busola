@@ -71,11 +71,12 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
   const availableResources = getAvailableResources(resourcesCache);
 
   const addAllApiGroups = () => {
-    jp.value(
-      rule,
-      '$.apiGroups',
-      apiGroupsInputOptions.map(g => g.key),
-    );
+    jp.value(rule, '$.apiGroups', [
+      '',
+      ...apiGroupsInputOptions
+        .map(g => g.key)
+        .filter(k => k !== EMPTY_API_GROUP_KEY),
+    ]);
     setRules([...rules]);
   };
 
