@@ -14,8 +14,13 @@ export function NodeDetailsHeader({ nodeName, node, loading, error }) {
     { name: '' },
   ];
 
+  console.log(node);
   const internalIP = node?.status.addresses.find(a => a.type === 'InternalIP');
   const hostname = node?.status.addresses.find(a => a.type === 'Hostname');
+  const labels = Object.entries(node?.metadata?.labels || {});
+  const [, region] = labels.find(([k, v]) => k.endsWith('region')) || [];
+  const [, zone] = labels.find(([k, v]) => k.endsWith('zone')) || [];
+  console.log(region, zone);
 
   return (
     <PageHeader title={nodeName} breadcrumbItems={breadcrumbs}>
@@ -36,6 +41,12 @@ export function NodeDetailsHeader({ nodeName, node, loading, error }) {
           </PageHeader.Column>
           <PageHeader.Column title={t('common.labels.hostname')}>
             {hostname.address}
+          </PageHeader.Column>
+          <PageHeader.Column title={t('common.headers.region')}>
+            {region}
+          </PageHeader.Column>
+          <PageHeader.Column title={t('common.headers.zone')}>
+            {zone}
           </PageHeader.Column>
         </>
       )}

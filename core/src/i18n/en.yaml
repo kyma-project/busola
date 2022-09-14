@@ -456,11 +456,13 @@ common:
     namespace: Namespace
     owner: Controlled By
     pods: Pods
+    region: Region
     resource: Resource
     resources: Resources
     status: Status
     value: Value
     version: Version
+    zone: Zone
   labels:
     category: Category
     data: Data

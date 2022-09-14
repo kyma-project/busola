@@ -82,10 +82,17 @@ export function ClusterNodes() {
     t('common.headers.created'),
     t('common.headers.version'),
     t('common.headers.status'),
+    t('common.headers.region'),
+    t('common.headers.zone'),
   ];
 
   const rowRenderer = entry => {
     const { cpu, memory } = entry?.metrics || {};
+    const labels = Object.entries(entry.metadata.labels);
+    const [, region] = labels.find(([k, v]) => k.endsWith('region')) || [];
+    const [, zone] = labels.find(([k, v]) => k.endsWith('zone')) || [];
+
+    console.log('region', region, 'zone', zone);
     return [
       <NodeHeader nodeName={entry.metadata?.name} />,
       cpu ? (
@@ -121,6 +128,8 @@ export function ClusterNodes() {
       />,
       entry.status?.nodeInfo?.kubeProxyVersion || EMPTY_TEXT_PLACEHOLDER,
       getStatus(entry.status),
+      region,
+      zone,
     ];
   };
 
