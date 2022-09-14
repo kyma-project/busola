@@ -63,20 +63,104 @@ data:
   form: |-
     [
       {
-        "simple": true,
-        "path": "spec.replicas",
-        "required": false
+        "var": "sourceType",
+        "widget": "Text",
+        "enum": ["Inline", "Git Repository"],
+        "defaultValue": "$exists(spec.source.gitRepository) ? 'Git Repository' : 'Inline'"
       },
       {
         "simple": true,
         "path": "spec.runtime",
-        "required": true
+        "enum": ["nodejs12", "nodejs14", "nodejs16", "python39"]
+      },
+      { "path": "spec.runtimeImageOverride" },
+      {
+        "path": "spec.source.gitRepository",
+        "widget": "FormGroup",
+        "visibility": "$sourceType = 'Git Repository'",
+        "children": [
+          { "path": "url" },
+          { "path": "baseDir", "required": true },
+          { "path": "reference", "required": true },
+          {
+            "var": "useAuthorization",
+            "type": "boolean",
+            "defaultValue": "$exists($.spec.source.gitRepository.auth)"
+          },
+          {
+            "widget": "FormGroup",
+            "path": "auth",
+            "visibility": "$useAuthorization",
+            "children": [
+              { "path": "secretName" },
+              { "path": "type" }
+            ]
+          },
+        ]
       },
       {
-        "simple": true,
-        "path": "spec.runtimeImageOverride",
-        "required": false
-      }
+        "path": "spec.scaleConfig",
+        "widget": "FormGroup",
+        "columns": "2",
+        "children": [
+          {
+            "advanced": true,
+            "path": "minReplicas",
+            "required": false,
+            "min": "1"
+          },
+          {
+            "advanced": true,
+            "path": "maxReplicas",
+            "required": false,
+            "min": "1"
+          },
+        ]
+      },
+      {
+        "path": "spec.resourceConfiguration.function",
+        "widget": "FormGroup",
+        "children": [
+          {
+            "path": "resources.limits",
+            "widget": "KeyValuePair"
+          },
+          {
+            "path": "resources.requests",
+            "widget": "KeyValuePair"
+          },
+        ]
+      },
+      {
+        "path": "spec.resourceConfiguration.build",
+        "widget": "FormGroup",
+        "children": [
+          {
+            "path": "resources.limits",
+            "widget": "KeyValuePair"
+          },
+          {
+            "path": "resources.requests",
+            "widget": "KeyValuePair"
+          },
+        ]
+      },
+      {
+        "path": "spec.source.inline",
+        "visibility": "$sourceType = 'Inline'",
+        "children": [
+          {
+            "path": "source",
+            "widget": "CodeEditor",
+            "language": "$contains($root.spec.runtime, 'node') ? 'javascript' : 'python'",
+          },
+          {
+            "path": "dependencies",
+            "widget": "CodeEditor",
+            "language": "$contains($root.spec.runtime, 'node') ? 'javascript' : 'plaintext'",
+          }
+        ]
+      },
     ]
   general: |-
     {
