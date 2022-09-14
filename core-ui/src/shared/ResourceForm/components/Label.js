@@ -2,6 +2,8 @@ import React from 'react';
 import { FormLabel, Icon } from 'fundamental-react';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
+import './Label.scss';
+
 export function Label({ required, tooltipContent, children }) {
   return (
     <>
