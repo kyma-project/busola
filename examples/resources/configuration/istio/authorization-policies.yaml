@@ -43,73 +43,75 @@ data:
           "collapsible": [
             {
               "source": "$item.from",
-              "widget": "Panel",
-              "name": "From",
+              "widget": "Table",
+              "name": "spec.rules.from",
               "disablePadding": true,
+              "showHeader": false,
+              "showSearchField": false,
               "visibility": "$exists(*)",
-              "children": [
+              "collapsible": [
                 {
                   "source": "$item.source",
                   "widget": "Panel",
-                  "name": "Source",
+                  "name": "spec.rules.from.source",
                   "children": [
                     { 
                       "source": "$item.principals", 
-                      "name": "Principals", 
+                      "name": "spec.rules.from.source.principals", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notPrincipals", 
-                      "name": "notPrincipals", 
+                      "name": "spec.rules.from.source.notPrincipals", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.requestPrincipals", 
-                      "name": "requestPrincipals", 
+                      "name": "spec.rules.from.source.requestPrincipals", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notRequestPrincipals", 
-                      "name": "notRequestPrincipals", 
+                      "name": "spec.rules.from.source.notRequestPrincipals", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.namespaces", 
-                      "name": "namespaces", 
+                      "name": "spec.rules.from.source.namespaces", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notNamespaces", 
-                      "name": "notNamespaces", 
+                      "name": "spec.rules.from.source.notNamespaces", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.ipBlocks", 
-                      "name": "ipBlocks", 
+                      "name": "spec.rules.from.source.ipBlocks", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notIpBlocks", 
-                      "name": "notIpBlocks", 
+                      "name": "spec.rules.from.source.notIpBlocks", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.remoteIpBlocks", 
-                      "name": "remoteIpBlocks", 
+                      "name": "spec.rules.from.source.remoteIpBlocks", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notRemoteIpBlocks", 
-                      "name": "notRemoteIpBlocks", 
+                      "name": "spec.rules.from.source.notRemoteIpBlocks", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
@@ -119,61 +121,63 @@ data:
             },
             {
               "source": "$item.to",
-              "widget": "Panel",
-              "name": "To",
+              "widget": "Table",
+              "name": "spec.rules.to",
               "disablePadding": true,
+              "showHeader": false,
+              "showSearchField": false,
               "visibility": "$exists(*)",
-              "children": [
+              "collapsible": [
                 {
                   "source": "$item.operation",
                   "widget": "Panel",
-                  "name": "Operation",
+                  "name": "spec.rules.to.operation",
                   "children": [
                     { 
                       "source": "$item.Hosts", 
-                      "name": "Hosts", 
+                      "name": "spec.rules.to.operation.hosts", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notHosts", 
-                      "name": "notHosts", 
+                      "name": "spec.rules.to.operation.notHosts", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.ports", 
-                      "name": "Ports", 
+                      "name": "spec.rules.to.operation.ports", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notPorts", 
-                      "name": "notPorts", 
+                      "name": "spec.rules.to.operation.notPorts", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.methods", 
-                      "name": "methods", 
+                      "name": "spec.rules.to.operation.methods", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notMethods", 
-                      "name": "notMethods", 
+                      "name": "spec.rules.to.operation.notMethods", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.paths", 
-                      "name": "paths", 
+                      "name": "spec.rules.to.operation.paths", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notPaths", 
-                      "name": "notPaths", 
+                      "name": "spec.rules.to.operation.notPaths", 
                       "widget": "JoinedArray",
                       "visibility": "$exists(*)"
                     }
@@ -183,26 +187,25 @@ data:
             },
             {
               "source": "$item.when",
-              "widget": "Panel",
-              "name": "When",
-              "disablePadding": true,
+              "widget": "Table",
+              "name": "spec.rules.when",
               "visibility": "$exists(*)",
               "children": [
                 { 
                   "source": "$item.key",
-                  "name": "key",
+                  "name": "spec.rules.when.key",
                   "visibility": "$exists(*)"
                 },
                 { 
                   "source": "$item.values", 
-                  "name": "values", 
+                  "name": "spec.rules.when.values", 
                   "widget": "JoinedArray",
                   "separator": "break",
                   "visibility": "$exists(*)"
                 },
                 { 
                   "source": "$item.notValues", 
-                  "name": "notValues", 
+                  "name": "spec.rules.when.notValues", 
                   "widget": "JoinedArray",
                   "separator": "break",
                   "visibility": "$exists(*)"
@@ -339,5 +342,30 @@ data:
       spec.provider: Provider
       spec.rules: Rules
       spec.rules.from: From
+      spec.rules.from.source: Source
+      spec.rules.from.source.principals: Principals
+      spec.rules.from.source.notPrincipals: NotPrincipals
+      spec.rules.from.source.requestPrincipals: RequestPrincipals
+      spec.rules.from.source.notRequestPrincipals: NotRequestPrincipals
+      spec.rules.from.source.namespaces: Namespaces
+      spec.rules.from.source.notNamespaces: NotNamespaces
+      spec.rules.from.source.ipBlocks: IpBlocks
+      spec.rules.from.source.notIpBlocks: NotIpBlocks
+      spec.rules.from.source.remoteIpBlocks: RemoteIpBlocks
+      spec.rules.from.source.notRemoteIpBlocks: NotRemoteIpBlocks
+      spec.rules.to: To
+      spec.rules.to.operation: Operation
+      spec.rules.to.operation.hosts: Hosts
+      spec.rules.to.operation.notHosts: NotHosts
+      spec.rules.to.operation.ports: Ports
+      spec.rules.to.operation.notPorts: NotPorts
+      spec.rules.to.operation.methods: Methods
+      spec.rules.to.operation.notMethods: NotMethods
+      spec.rules.to.operation.paths: Paths
+      spec.rules.to.operation.notPaths: NotPaths
+      spec.rules.when: When
+      spec.rules.when.key: Key
+      spec.rules.when.values: Values
+      spec.rules.when.notValues: NotValues
       spec.selector.matchLabels: Selector
       selector.matchesAllPods: Matches all Pods in the Namespace
