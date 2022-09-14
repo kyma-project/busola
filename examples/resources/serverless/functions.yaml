@@ -1,10 +1,10 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: functions.serverless.kyma-project.io
+  name: functions
   namespace: kube-public
   labels:
-    app.kubernetes.io/name: functions.serverless.kyma-project.io
+    app.kubernetes.io/name: functions
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
 data:
@@ -135,11 +135,3 @@ data:
         "
       }
     ]
-  translations: |-
-    {
-      "en": {
-        "metadata.annotations": "Annotations",
-        "metadata.labels": "Labels",
-        "metadata.creationTimestamp": "Created at"
-      }
-    }

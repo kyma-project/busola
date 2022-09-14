@@ -2,6 +2,7 @@ import React from 'react';
 import { isNil } from 'lodash';
 import { useJsonata } from '../hooks/useJsonata';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
+import { useJsonata } from '../hooks/useJsonata';
 
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { useGetPlaceholder } from 'components/Extensibility/helpers';
