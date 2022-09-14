@@ -18,8 +18,10 @@ export function NodeDetailsHeader({ nodeName, node, loading, error }) {
   const internalIP = node?.status.addresses.find(a => a.type === 'InternalIP');
   const hostname = node?.status.addresses.find(a => a.type === 'Hostname');
   const labels = Object.entries(node?.metadata?.labels || {});
-  const [, region] = labels.find(([k, v]) => k.endsWith('region')) ?? [];
-  const [, zone] = labels.find(([k, v]) => k.endsWith('zone')) ?? [];
+  const [, region] =
+    labels.find(([k, v]) => k === 'topology.kubernetes.io/region') ?? [];
+  const [, zone] =
+    labels.find(([k, v]) => k === 'topology.kubernetes.io/zone') ?? [];
 
   return (
     <PageHeader title={nodeName} breadcrumbItems={breadcrumbs}>
