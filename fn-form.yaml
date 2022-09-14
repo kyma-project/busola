@@ -26,8 +26,7 @@ data:
             },
             {
               "name": "runtimeImageOverride",
-              "source": "spec.runtimeImageOverride",
-              "placeholder": "runtimeImageOverride"
+              "source": "spec.runtimeImageOverride"
             },
             {
               "name": "Configured",
@@ -72,25 +71,17 @@ data:
       {
         "simple": true,
         "path": "spec.runtime",
-        "required": true,
         "enum": ["nodejs12", "nodejs14", "nodejs16", "python39"]
       },
-      {
-        "path": "spec.runtimeImageOverride",
-        "required": false
-      },
-      {
-        "path": "replicas",
-        "required": false
-      },
+      { "path": "spec.runtimeImageOverride" },
       {
         "path": "spec.source.gitRepository",
         "widget": "FormGroup",
         "visibility": "$sourceType = 'Git Repository'",
         "children": [
           { "path": "url" },
-          { "path": "baseDir" },
-          { "path": "reference" },
+          { "path": "baseDir", "required": true },
+          { "path": "reference", "required": true },
           {
             "var": "useAuthorization",
             "type": "boolean",
