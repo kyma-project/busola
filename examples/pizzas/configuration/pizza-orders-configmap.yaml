@@ -125,7 +125,7 @@ data:
         }
       },
       {
-        "name": "cars-pickup",
+        "name": "card-pickup",
         "value": {
           "spec": {
             "orderDetails": {
