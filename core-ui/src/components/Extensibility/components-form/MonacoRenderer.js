@@ -22,7 +22,6 @@ function formatValue(value, language) {
   }
 }
 
-// todo add docs
 function getLanguage(schema, value, resource) {
   const languageFormula = schema.get('language');
   try {
@@ -49,7 +48,6 @@ export function MonacoRenderer({
   const value = getValue(storeKeys, resource);
   const language = getLanguage(schema, value, resource);
   const formattedValue = formatValue(value, language);
-  // console.log({ value, language, formattedValue });
 
   const handleChange = useCallback(
     value => {

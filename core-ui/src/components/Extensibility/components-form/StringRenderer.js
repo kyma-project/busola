@@ -19,7 +19,6 @@ export function StringRenderer({
 
   const getTypeSpecificProps = () => {
     if (schema.get('enum')) {
-      // todo add docs
       const translationPath = storeKeys
         .toArray()
         .filter(el => typeof el === 'string')
