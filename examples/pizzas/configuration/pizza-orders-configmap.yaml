@@ -111,3 +111,28 @@ data:
         "filter": "$root.spec.pizzas[name = $item.metadata.name and namespace = $item.metadata.namespace]"
       }
     }
+  presets: |-
+    [
+      {
+        "name": "cash-delivery",
+        "value": {
+          "spec": {
+            "orderDetails": {
+              "paymentMethod": "CASH",
+              "realization": "DELIVERY",
+            }
+          }
+        }
+      },
+      {
+        "name": "cars-pickup",
+        "value": {
+          "spec": {
+            "orderDetails": {
+              "paymentMethod": "CARD",
+              "realization": "SELF-PICKUP",
+            }
+          }
+        }
+      }
+    ]
