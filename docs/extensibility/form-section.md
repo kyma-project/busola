@@ -169,7 +169,7 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
 
 #### Widget-specific parameters
 
-- **language** - a jsonata expression resolving the desired language. It has access to `$root` variable, containing entire resource.
+- **language** - a jsonata expression resolving the desired language. It has access to `$root` variable, containing the entire resource.
 
 #### Example
 
