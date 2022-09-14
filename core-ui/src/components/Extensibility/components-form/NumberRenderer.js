@@ -36,11 +36,11 @@ export function NumberRenderer({
         });
       }}
       label={tFromStoreKeys(storeKeys, schema)}
-      placeholder={schemaPlaceholder ? tExt(schemaPlaceholder) : placeholder}
+      placeholder={tExt(schemaPlaceholder) || tExt(placeholder)}
       data-testid={storeKeys.join('.')}
       input={Inputs.Number}
       compact={compact}
-      {...getPropsFromSchema(schema, required)}
+      {...getPropsFromSchema(schema, required, tExt)}
     />
   );
 }

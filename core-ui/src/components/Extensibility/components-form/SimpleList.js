@@ -113,9 +113,7 @@ export function SimpleList({
                         level={level + 1}
                         schemaKeys={schemaKeys?.push('items')}
                         compact
-                        placeholder={
-                          schemaPlaceholder && tExt(schemaPlaceholder)
-                        }
+                        placeholder={tExt(schemaPlaceholder)}
                         inputInfo={inputInfo}
                       />
                       <span className="item-action">

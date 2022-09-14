@@ -17,7 +17,7 @@ export function SwitchRenderer({
   compact,
   ...props
 }) {
-  const { tFromStoreKeys } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
   return (
     <ResourceForm.FormField
@@ -36,7 +36,7 @@ export function SwitchRenderer({
       data-testid={storeKeys.join('.')}
       input={Inputs.Switch}
       compact={compact}
-      {...getPropsFromSchema(schema, required)}
+      {...getPropsFromSchema(schema, required, tExt)}
     />
   );
 }

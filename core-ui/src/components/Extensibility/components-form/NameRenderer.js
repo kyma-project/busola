@@ -2,6 +2,7 @@ import React from 'react';
 import { List } from 'immutable';
 
 import { K8sNameField } from 'shared/ResourceForm/fields';
+import { useGetTranslation } from 'components/Extensibility/helpers';
 import { getPropsFromSchema } from 'components/Extensibility/helpers';
 
 export function NameRenderer({
@@ -13,6 +14,7 @@ export function NameRenderer({
   required,
   ...props
 }) {
+  const { t: tExt } = useGetTranslation();
   const extraPaths = schema.get('extraPaths')?.toJS() || [];
 
   return (
@@ -40,7 +42,7 @@ export function NameRenderer({
         ]);
       }}
       validate={value => !!value}
-      {...getPropsFromSchema(schema, required)}
+      {...getPropsFromSchema(schema, required, tExt)}
     />
   );
 }

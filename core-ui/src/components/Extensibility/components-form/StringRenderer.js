@@ -18,8 +18,8 @@ export function StringRenderer({
   placeholder,
   ...props
 }) {
-  const { tFromStoreKeys } = useGetTranslation();
-  const schemaPlaceholder = schema.get('schemaPlaceholder');
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
+  const schemaPlaceholder = schema.get('placeholder');
 
   const getTypeSpecificProps = () => {
     if (schema.get('enum')) {
@@ -46,9 +46,9 @@ export function StringRenderer({
       label={tFromStoreKeys(storeKeys, schema)}
       compact={compact}
       data-testid={storeKeys.join('.')}
-      schemaPlaceholder={schemaPlaceholder}
+      schemaPlaceholder={tExt(schemaPlaceholder) || tExt(placeholder)}
       {...getTypeSpecificProps()}
-      {...getPropsFromSchema(schema, required)}
+      {...getPropsFromSchema(schema, required, tExt)}
     />
   );
 }

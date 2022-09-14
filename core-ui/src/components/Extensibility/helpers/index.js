@@ -55,7 +55,8 @@ export const useGetTranslation = path => {
   };
 
   return {
-    t: (path, ...props) => t(`${translationBundle}::${path}`, ...props) || path,
+    t: (path, ...props) =>
+      path ? t(`${translationBundle}::${path}`, ...props) || path : undefined,
     tFromStoreKeys,
     widgetT,
     exists,
@@ -247,14 +248,14 @@ export const sortBy = (
   return { ...defaultSort, ...defaultSortOptions, ...sortingOptions };
 };
 
-export const getPropsFromSchema = (schema, required) => {
+export const getPropsFromSchema = (schema, required, t) => {
   const schemaRequired = schema.get('required');
   const inputInfo = schema.get('inputInfo');
   const tooltipContent = schema.get('description');
 
   return {
     required: schemaRequired ?? required,
-    inputInfo,
-    tooltipContent,
+    inputInfo: t(inputInfo),
+    tooltipContent: t(tooltipContent),
   };
 };
