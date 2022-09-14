@@ -17,7 +17,7 @@ export function NodeDetailsHeader({ nodeName, node, loading, error }) {
 
   const internalIP = node?.status.addresses.find(a => a.type === 'InternalIP');
   const hostname = node?.status.addresses.find(a => a.type === 'Hostname');
-  const labels = Object.entries(node?.metadata?.labels || {});
+  const labels = Object.entries(node?.metadata?.labels ?? {});
   const [, region] =
     labels.find(([k, v]) => k === 'topology.kubernetes.io/region') ?? [];
   const [, zone] =
