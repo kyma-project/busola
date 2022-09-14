@@ -1,11 +1,11 @@
 import pluralize from 'pluralize';
-import { createContext, useContext, useEffect, useRef } from 'react';
+import { createContext, useEffect, useRef } from 'react';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { useObjectState } from 'shared/useObjectState';
 import * as jp from 'jsonpath';
-import { jsonataWrapper } from '../jsonataWrapper';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
-const DataSourcesContext = createContext();
+export const DataSourcesContext = createContext();
 
 export function DataSourcesContextProvider({ children, dataSources }) {
   const fetch = useFetch();
@@ -129,8 +129,4 @@ export function DataSourcesContextProvider({ children, dataSources }) {
       {children}
     </DataSourcesContext.Provider>
   );
-}
-
-export function useDataSourcesContext() {
-  return useContext(DataSourcesContext);
 }
