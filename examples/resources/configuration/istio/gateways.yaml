@@ -96,7 +96,6 @@ data:
         "colorVariant": 1,
         "dataSources": [
           {"source": "relatedVirtualServices"},
-          {"source": "podSelector"},
         ]
       }
     }
