@@ -36,18 +36,178 @@ data:
           "widget": Table,
           "name": "spec.rules",
           "source": "spec.rules",
+          "disablePadding": true,
+          "showHeader": false,
+          "showSearchField": false,
+          "visibility": "$exists(*)",
           "collapsible": [
             {
               "source": "$item.from",
-              "widget": "CodeViewer"
+              "widget": "Panel",
+              "name": "From",
+              "disablePadding": true,
+              "visibility": "$exists(*)",
+              "children": [
+                {
+                  "source": "$item.source",
+                  "widget": "Panel",
+                  "name": "Source",
+                  "children": [
+                    { 
+                      "source": "$item.principals", 
+                      "name": "Principals", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.notPrincipals", 
+                      "name": "notPrincipals", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.requestPrincipals", 
+                      "name": "requestPrincipals", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.notRequestPrincipals", 
+                      "name": "notRequestPrincipals", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.namespaces", 
+                      "name": "namespaces", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.notNamespaces", 
+                      "name": "notNamespaces", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.ipBlocks", 
+                      "name": "ipBlocks", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.notIpBlocks", 
+                      "name": "notIpBlocks", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.remoteIpBlocks", 
+                      "name": "remoteIpBlocks", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.notRemoteIpBlocks", 
+                      "name": "notRemoteIpBlocks", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                  ]
+                }
+              ]
             },
             {
               "source": "$item.to",
-              "widget": "CodeViewer"
+              "widget": "Panel",
+              "name": "To",
+              "disablePadding": true,
+              "visibility": "$exists(*)",
+              "children": [
+                {
+                  "source": "$item.operation",
+                  "widget": "Panel",
+                  "name": "Operation",
+                  "children": [
+                    { 
+                      "source": "$item.Hosts", 
+                      "name": "Hosts", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.notHosts", 
+                      "name": "notHosts", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.ports", 
+                      "name": "Ports", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.notPorts", 
+                      "name": "notPorts", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.methods", 
+                      "name": "methods", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.notMethods", 
+                      "name": "notMethods", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.paths", 
+                      "name": "paths", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    },
+                    { 
+                      "source": "$item.notPaths", 
+                      "name": "notPaths", 
+                      "widget": "JoinedArray",
+                      "visibility": "$exists(*)"
+                    }
+                  ]
+                }
+              ]
             },
             {
               "source": "$item.when",
-              "widget": "CodeViewer"
+              "widget": "Panel",
+              "name": "When",
+              "disablePadding": true,
+              "visibility": "$exists(*)",
+              "children": [
+                { 
+                  "source": "$item.key",
+                  "name": "key",
+                  "visibility": "$exists(*)"
+                },
+                { 
+                  "source": "$item.values", 
+                  "name": "values", 
+                  "widget": "JoinedArray",
+                  "separator": "break",
+                  "visibility": "$exists(*)"
+                },
+                { 
+                  "source": "$item.notValues", 
+                  "name": "notValues", 
+                  "widget": "JoinedArray",
+                  "separator": "break",
+                  "visibility": "$exists(*)"
+                }
+              ]
             },
           ],
         },

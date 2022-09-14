@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { isNil } from 'lodash';
+import classNames from 'classnames';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
@@ -43,6 +44,10 @@ export function Table({
   const headerRenderer = () =>
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
 
+  const tdClassNames = classNames({
+    'collapsible-panel': !structure?.disablePadding,
+  });
+
   const rowRenderer = entry => {
     const cells = (structure.children || []).map(column => (
       <Widget value={entry} structure={column} schema={schema} {...props} />
@@ -55,7 +60,7 @@ export function Table({
     return {
       cells,
       collapseContent: (
-        <td colspan="100%" className="collapsible-panel">
+        <td colspan="100%" className={tdClassNames}>
           {structure.collapsible.map(child => (
             <Widget
               value={entry}
@@ -78,6 +83,7 @@ export function Table({
 
   return (
     <GenericList
+      showHeader={structure?.showHeader}
       className={className}
       title={tExt(structure.name, {
         defaultValue: structure.name || structure.source,
@@ -86,7 +92,10 @@ export function Table({
       rowRenderer={rowRenderer}
       {...handleTableValue(value, t)}
       sortBy={() => sortBy(sortOptions, tExt, {}, originalResource)}
-      searchSettings={{ showSearchSuggestion: false }}
+      searchSettings={{
+        showSearchSuggestion: false,
+        showSearchField: structure?.showSearchField,
+      }}
     />
   );
 }
