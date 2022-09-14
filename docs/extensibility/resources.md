@@ -95,7 +95,7 @@ Those fields are used to build the related resource URL and filter the received 
   - **kind** - _[required]_ Kubernetes resource kind.
   - **group** - Kubernetes resource group. Not provided for Kubernetes resources in the core (also called legacy) group.
   - **version** - _[required]_ Kubernetes resource version.
-  - **namespace** - the resource's Namespace name; it defaults to the original resource's Namespace. If set to `null`, cluster-wide resources or resources in all Namespaces are matched.
+  - **namespace** - the resource's Namespace name. Defaults to the original resource's Namespace. If set to `null`, cluster-wide resources or resources in all Namespaces are matched.
   - **name** - a specific resource name; leave empty to match all resources of a given type.
 - **ownerLabelSelectorPath** - the path to original object's **selector** type property; for example, `spec.selector.matchLabels` for Deployment, used to select matching Pods.
 - **filter** - [JSONata](https://docs.jsonata.org/overview.html) function enabling the user to write a custom matching logic. It uses the following variables:
