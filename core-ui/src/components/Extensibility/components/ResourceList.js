@@ -5,7 +5,18 @@ import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
 import { sortBy, useGetTranslation } from '../helpers';
 import { getChildrenInfo } from './helpers';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
+const getProperNamespacePart = (givenNamespace, currentNamespace) => {
+  switch (true) {
+    case typeof givenNamespace === 'string':
+      return `/namespaces/${givenNamespace}`;
+    case givenNamespace === null:
+      return '';
+    default:
+      return `/namespaces/${currentNamespace}`;
+  }
+};
 export function ResourceList({
   value,
   structure,
@@ -15,13 +26,13 @@ export function ResourceList({
   ...props
 }) {
   const { t } = useGetTranslation();
-
+  const { namespaceId } = useMicrofrontendContext();
   const kind = (value?.kind ?? '').replace(/List$/, '');
   const pluralKind = pluralize(kind || '')?.toLowerCase();
-  const namespace = value?.namespace;
-  const namespacePart = namespace ? `/namespaces/${namespace}` : '';
+  const namespacePart = getProperNamespacePart(value?.namespace, namespaceId);
   const api = value?.apiVersion === 'v1' ? 'api' : 'apis';
-  const resourceUrl = `/${api}/${value?.apiVersion}${namespacePart}/${pluralKind}`;
+  const resourceUrlPrefix = `/${api}/${value?.apiVersion}`;
+  const resourceUrl = `${resourceUrlPrefix}${namespacePart}/${pluralKind}`;
 
   const PredefinedRenderer = resources.find(
     r => r.resourceType.toLowerCase() === pluralKind,
@@ -48,9 +59,10 @@ export function ResourceList({
       error={value?.error}
       resources={value?.items}
       resourceUrl={resourceUrl}
+      resourceUrlPrefix={resourceUrlPrefix}
       resourceType={prettifyKind(kind)}
       resourceTitle={prettifyKind(kind)}
-      namespace={namespace}
+      namespace={namespaceId}
       isCompact
       title={structure.name}
       showTitle={true}
