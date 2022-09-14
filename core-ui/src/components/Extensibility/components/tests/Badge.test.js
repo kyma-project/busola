@@ -5,7 +5,7 @@ import { Badge } from '../Badge';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
-jest.mock('../../useJsonata', () => ({
+jest.mock('../../hooks/useJsonata', () => ({
   useJsonata: value => value,
 }));
 
