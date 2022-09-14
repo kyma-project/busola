@@ -95,6 +95,7 @@ export function Table({
       searchSettings={{
         showSearchSuggestion: false,
         showSearchField: structure?.showSearchField,
+        allowSlashShortcut: false,
       }}
     />
   );
