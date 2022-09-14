@@ -30,6 +30,14 @@ data:
           "name": "spec.resolution",
         },
       ],
+      "resourceGraph": {
+        "colorVariant": 2,
+        "dataSources": [
+          {
+            "source": "podSelector"
+          }
+        ]
+      },
       "body": [     
           {
             "name": "summary",
@@ -93,6 +101,7 @@ data:
             "name": "spec.workloadSelector",
             "widget": "Panel",
             "source": "spec.workloadSelector.labels",
+            "visibility": "$exists(*)",
             "disablePadding": true,
             "children": [
               { 
@@ -117,7 +126,7 @@ data:
         "path": "spec.hosts", "name": "spec.hosts", "widget": "SimpleList", "simple": true, "required": true
       },
       {
-        "path": "spec.addresses", "name": "spec.addresses", "widget": "SimpleList"
+        "path": "spec.addresses", "name": "spec.addresses", "widget": "SimpleList", "placeholder": "placeholders.addreses"
       },
       {
         "path": "spec.ports", "name": "Ports", "widget": "GenericList", "children": [
@@ -125,7 +134,7 @@ data:
             "path": "[].number", "name": "spec.ports.number", "required": true
           },
           {
-            "path": "[].protocol", "name": "spec.ports.protocol", "required": true, "enum": [
+            "path": "[].protocol", "name": "spec.ports.protocol", "required": true, "placeholder": "placeholders.dropdown", "enum": [
               'HTTP', 'HTTPS', 'GRPC', 'HTTP2', 'MONGO', 'TCP', 'TLS'
             ]
           },
@@ -138,10 +147,10 @@ data:
         ]
       },
       {
-        "path": "spec.location", "name": "spec.location"
+        "path": "spec.location", "name": "spec.location", "placeholder": "placeholders.dropdown"
       },
       {
-        "path": "spec.resolution", "name": "spec.resolution"
+        "path": "spec.resolution", "name": "spec.resolution", "placeholder": "placeholders.dropdown"
       },
       {
         "path": "spec.endpoints", "name": "spec.endpoints", "widget": "GenericList", "children": [
@@ -227,3 +236,5 @@ data:
       spec.workloadSelector: Workload Selector
       spec.exportTo: Export To
       spec.subjectAltNames: Subject Alt Names
+      placeholders.dropdown: Type or choose an option
+      placeholders.addreses: For example, 127.0.0.1
