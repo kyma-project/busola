@@ -175,6 +175,8 @@ Those fields are used to build the related resource URL and filter the received 
 
 The **presets** section contains a list of objects that define which preset and template will be used in the form view. If any preset has been defined, it will be displayed in the drop-down list along with a second "Default" setting. If the user selects a preset, the form will be filled with the property defined in the values.
 
+<img src="./assets/Presets.png" alt="Preset list with one entry defined as default" style="border: 1px solid #D2D5D9">
+
 ### preset configuration object fields
 
 - **name** - _[required]_ a name to display on presets dropdown,
