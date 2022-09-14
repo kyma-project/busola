@@ -92,7 +92,6 @@ export function ClusterNodes() {
     const [, region] = labels.find(([k, v]) => k.endsWith('region')) || [];
     const [, zone] = labels.find(([k, v]) => k.endsWith('zone')) || [];
 
-    console.log('region', region, 'zone', zone);
     return [
       <NodeHeader nodeName={entry.metadata?.name} />,
       cpu ? (
