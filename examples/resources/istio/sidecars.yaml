@@ -130,7 +130,7 @@ data:
           { 
             "path": "name", 
             "widget": "Name", 
-            "showHelp": false, 
+            "inputInfo": null, 
             "simple": true ,
             "required": true,
           },
@@ -189,7 +189,7 @@ data:
           { 
             "path": "name", 
             "widget": "Name", 
-            "showHelp": false, 
+            "inputInfo": null, 
             "simple": true ,
             "required": true,
           },
