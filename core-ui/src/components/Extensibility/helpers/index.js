@@ -54,10 +54,19 @@ export const useGetTranslation = path => {
     });
   };
 
+  const unstringify = value => {
+    try {
+      return new Function('return ' + value + ';')();
+    } catch (e) {
+      return value;
+    }
+  };
+
   return {
     t: (path, ...props) => {
       const translation = t(`${translationBundle}::${path}`, ...props) || path;
-      return translation !== 'undefined' ? translation : undefined;
+      // change 'undefined' to undefined etc.
+      return unstringify(translation);
     },
     tFromStoreKeys,
     widgetT,
