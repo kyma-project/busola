@@ -186,14 +186,14 @@ export function ResourceForm({
                   propertyPath="$.metadata.labels"
                   title={t('common.headers.labels')}
                   className="fd-margin-top--sm"
-                  showInfo={t('common.tooltips.key-value')}
+                  inputInfo={t('common.tooltips.key-value')}
                   {...labelsProps}
                 />
                 <KeyValueField
                   advanced
                   propertyPath="$.metadata.annotations"
                   title={t('common.headers.annotations')}
-                  showInfo={t('common.tooltips.key-value')}
+                  inputInfo={t('common.tooltips.key-value')}
                 />
               </>
             )}

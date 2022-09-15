@@ -7,7 +7,7 @@ export function Label({ required, tooltipContent, children }) {
     <>
       <FormLabel required={required}>{children}</FormLabel>
       {tooltipContent && (
-        <Tooltip className="info-tooltip" delay={0} content={tooltipContent}>
+        <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
           <Icon ariaLabel="" glyph="question-mark" />
         </Tooltip>
       )}

@@ -17,7 +17,7 @@ export function Badge({
   ...props
 }) {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
-  const tooltip = useJsonata(structure?.tooltip, originalResource);
+  const tooltip = useJsonata(structure?.description, originalResource);
 
   let type = null;
   if (structure?.highlights) {
