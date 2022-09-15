@@ -209,7 +209,7 @@ data:
                 : 'BUILDING'
               : 'INITIALIZING'
         ",
-        "tooltip": "($.status = undefined or $.status.conditions = undefined or $count($.status.conditions) = 0) 
+        "description": "($.status = undefined or $.status.conditions = undefined or $count($.status.conditions) = 0) 
           ? null 
           : $count($filter($.status.conditions, function($v) { $v.status = 'False' })) != 0
             ? $count($filter($.status.conditions, function($v) { $v.type = 'Running' and $v.status = 'True' })) != 0 

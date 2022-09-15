@@ -90,7 +90,7 @@ export function GenericList({
                 storeKeys={ownKeys}
                 level={level + 1}
                 schemaKeys={schemaKeys?.push('items')}
-                placeholder={schemaPlaceholder && tExt(schemaPlaceholder)}
+                placeholder={tExt(schemaPlaceholder)}
               />
             </ResourceForm.CollapsibleSection>
           );

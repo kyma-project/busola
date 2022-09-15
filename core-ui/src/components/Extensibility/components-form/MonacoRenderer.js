@@ -4,6 +4,7 @@ import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
+import { Label } from '../../../shared/ResourceForm/components/Label';
 
 function getValue(storeKeys, resource) {
   let value = resource;
@@ -75,12 +76,22 @@ export function MonacoRenderer({
     [required, language],
   );
   const schemaRequired = schema.get('required');
+  const inputInfo = schema.get('inputInfo');
+  const tooltipContent = schema.get('description');
 
   return (
     <ResourceForm.CollapsibleSection
       title={tFromStoreKeys(storeKeys, schema)}
       required={schemaRequired ?? required}
     >
+      <div className="fd-margin-bottom--sm">
+        <Label
+          required={schemaRequired ?? required}
+          tooltipContent={tooltipContent}
+        >
+          {tFromStoreKeys(storeKeys, schema)}
+        </Label>
+      </div>
       <Editor
         autocompletionDisabled
         updateValueOnParentChange
@@ -88,6 +99,9 @@ export function MonacoRenderer({
         language={language}
         onChange={handleChange}
       />
+      {inputInfo && (
+        <p style={{ color: 'var(--sapNeutralTextColor)' }}>{inputInfo}</p>
+      )}
     </ResourceForm.CollapsibleSection>
   );
 }
