@@ -4,7 +4,10 @@ import { KeyValueField } from 'shared/ResourceForm/fields';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import { useTranslation } from 'react-i18next';
-import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
+import {
+  getObjectValueWorkaround,
+  getPropsFromSchema,
+} from 'components/Extensibility/helpers';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { Dropdown } from 'shared/ResourceForm/inputs';
 import './KeyValuePairRenderer.scss';
@@ -74,12 +77,11 @@ export function KeyValuePairRenderer({
   // TODO the value obtained by ui-schema is undefined for this component
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
 
-  const { tFromStoreKeys } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
   const { t } = useTranslation();
 
   let titleTranslation = '';
   const path = storeKeys.toArray().join('.');
-  const schemaRequired = schema.get('required');
   const valueInfo = schema.get('value') || {};
 
   if (tFromStoreKeys(storeKeys, schema) !== path)
@@ -114,8 +116,8 @@ export function KeyValuePairRenderer({
       }}
       className="key-enum"
       title={titleTranslation}
-      required={schemaRequired ?? required}
       initialValue={valueInfo.type === 'object' ? {} : ''}
+      {...getPropsFromSchema(schema, required, tExt)}
     />
   );
 }
