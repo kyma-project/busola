@@ -124,7 +124,12 @@ data:
   form: |-
     [
       { "path": "spec.description", "widget": "Text" , "simple": true},
-      { "path": "spec.sauce", "widget": "Text" , "simple": true},
+      { "path": "spec.sauce", 
+        "widget": "Text" , 
+        "simple": true, 
+        "placeholder": "Type or choose from the dropdown.",
+        "inputInfo": "Supported options are GARLIC and TOMATO."
+      },
       {
         "path": "spec.toppings",
         "widget": "GenericList",

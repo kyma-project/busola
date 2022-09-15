@@ -75,7 +75,7 @@ describe('Badge', () => {
   it('Renders a badge with a tooltip', () => {
     const value = 'yes';
     const structure = {
-      tooltip: 'tooltip',
+      description: 'tooltip',
     };
 
     const wrapper = shallow(<Badge value={value} structure={structure} />);
