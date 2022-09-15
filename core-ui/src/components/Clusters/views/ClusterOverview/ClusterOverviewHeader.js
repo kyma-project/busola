@@ -41,7 +41,7 @@ const GardenerProvider = () => {
   const provider = useGetGardenerProvider({
     skip: !showGardenerMetadata,
   });
-  console.log(provider);
+
   if (!showGardenerMetadata) return null;
   if (!provider) return null;
 
