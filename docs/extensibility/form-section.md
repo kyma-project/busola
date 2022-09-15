@@ -123,7 +123,7 @@ Text widgets render a field as a text field. They are used by default for all st
 - **placeholder** - specifies a short hint about the input field value.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
 - **inputInfo** - a string that can be shown below the input field to guide the User how to fill in the input.
-- **description** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+- **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 
 #### Example
 
