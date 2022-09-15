@@ -60,7 +60,11 @@ export const RoleForm = ({
           showAllEntries
           searchFullString
           placeholder={t('common.messages.type-to-select', {
-            value: t('common.headers.resource'),
+            value: t(
+              binding.roleRef.kind === 'ClusterRole'
+                ? 'cluster-roles.name_singular'
+                : 'roles.name_singular',
+            ),
           })}
           options={options}
           selectedKey={props.value}

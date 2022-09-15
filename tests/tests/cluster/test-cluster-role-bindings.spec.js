@@ -27,7 +27,7 @@ context('Test Cluster Role Bindings', () => {
       .type(CRB_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Start typing to select Resource from the list"]')
+      .find('[placeholder="Start typing to select ClusterRole from the list"]')
       .type('admin');
 
     cy.getIframeBody()
