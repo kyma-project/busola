@@ -2,34 +2,30 @@
 import 'cypress-file-upload';
 import { mockBusolaConfig } from '../../support/helpers';
 
-function mockKymaSystemForbidden() {
+function mockShootCMForbidden() {
   const requestData = {
     method: 'GET',
-    url: '/backend/api/v1/namespaces/kyma-system',
+    url: 'backend/api/v1/namespaces/kube-system/configmaps/shoot-info',
   };
   cy.intercept(requestData, { statusCode: 403 });
 }
 
-context('Test Kyma version', () => {
+context('Test Gardener provider', () => {
   Cypress.skipAfterFail();
   const getConfig = enabled => ({
     config: {
       features: {
-        SHOW_KYMA_VERSION: { isEnabled: enabled },
+        SHOW_GARDENER_METADATA: { isEnabled: enabled },
       },
     },
   });
 
-  it('No Kyma Version when feature is disabled', () => {
+  it('No Gardener Provider when feature is disabled', () => {
     mockBusolaConfig(getConfig(false));
     cy.loginAndSelectCluster();
 
     cy.getIframeBody()
-      .contains('Kubernetes:')
-      .should('exist');
-
-    cy.getIframeBody()
-      .contains('Kyma:')
+      .contains('Provider')
       .should('not.exist');
   });
 
@@ -39,21 +35,17 @@ context('Test Kyma version', () => {
     cy.loginAndSelectCluster();
 
     cy.getIframeBody()
-      .contains('Kyma:')
+      .contains('Provider')
       .should('exist');
   });
 
   it('Fails gracefully', () => {
     mockBusolaConfig(getConfig(true));
-    mockKymaSystemForbidden();
+    mockShootCMForbidden();
     cy.loginAndSelectCluster();
 
     cy.getIframeBody()
-      .contains('Kubernetes:')
-      .should('exist');
-
-    cy.getIframeBody()
-      .contains('Kyma:')
+      .contains('Provider:')
       .should('not.exist');
   });
 });
