@@ -440,7 +440,7 @@ data:
   translations: |-
     en:
       description.action: Optional. The action to take if the request is matched with the rules. Default is ALLOW if not specified.
-      description.rules.from.principals: Optional. A list of peer identities derived from the peer certificate. The peer identity is in the format of '<TRUST_DOMAIN>/ns/<NAMESPACE>/sa/<SERVICE_ACCOUNT>', for example, 'cluster.local/ns/default/sa/productpage'. If not set, any principal is allowed.
+      description.rules.from.principals: Optional. A list of peer identities derived from the peer certificate. The peer identity is in the format of '<TRUSTDOMAIN> /ns/ <NAMESPACE> /sa/ <SERVICEACCOUNT>', for example, 'cluster.local/ns/default/sa/productpage'. If not set, any principal is allowed.
       description.rules.from.notPrincipals: Optional. A list of negative match of peer identities.
       description.rules.from.requestPrincipals: Optional. A list of request identities derived from the JWT. The request identity is in the format of '<ISS>/<SUB>', for example, 'example.com/sub-1'. If not set, any request principal is allowed.
       description.rules.from.notRequestPrincipals: Optional. A list of negative match of request identities.
