@@ -88,11 +88,8 @@ export function ClusterNodes() {
 
   const rowRenderer = entry => {
     const { cpu, memory } = entry?.metrics || {};
-    const labels = Object.entries(entry?.metadata?.labels ?? {});
-    const [, region] =
-      labels.find(([k, v]) => k === 'topology.kubernetes.io/region') ?? [];
-    const [, zone] =
-      labels.find(([k, v]) => k === 'topology.kubernetes.io/zone') ?? [];
+    const region = entry?.metadata?.labels?.['topology.kubernetes.io/region'];
+    const zone = entry?.metadata?.labels?.['topology.kubernetes.io/zone'];
 
     return [
       <NodeHeader nodeName={entry.metadata?.name} />,
