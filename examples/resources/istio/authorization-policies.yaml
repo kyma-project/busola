@@ -459,8 +459,8 @@ data:
       description.rules.to.paths: Optional. A list of paths as specified in the HTTP request. If not set, any path is allowed. Must be used only with HTTP.
       description.rules.to.notPaths: Optional. A list of negative match of paths.
       description.rules.when.key: The name of an Istio attribute.
-      description.rules.when.values: Optional. A list of allowed values for the attribute. Note: at least one of values or not_values must be set.
-      description.rules.when.notValues: Optional. A list of negative match of values for the attribute. Note: at least one of values or not_values must be set.
+      description.rules.when.values: Optional. A list of allowed values for the attribute. At least one of values or notValues must be set.
+      description.rules.when.notValues: Optional. A list of negative match of values for the attribute. At least one of values or notValues must be set.
       placeholders.dropdown: Type or choose an option.
       spec.action: Action
       spec.provider: Provider
