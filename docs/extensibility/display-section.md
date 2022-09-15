@@ -240,7 +240,7 @@ Badge widgets render texts as a status badge, using a set of predefined rules to
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
   If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 - **highlights** - an optional map of highlight rules. Key refers to the type of highlight, while the rule can just be a plain array of values or a string containing a jsonata rule. Allowed keys are `informative` `positive`, `negative` and `critical`.
-- **tooltip** - a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch additional information that will be displayed in a tooltip when hovering over the badge.
+- **description** - a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch additional information that will be displayed in a tooltip when hovering over the badge.
 
 #### Default highlight rules
 
@@ -262,7 +262,7 @@ When no highlights are provided, the following values are automatically handled:
     "positive": ["Running", "ok"],
     "negative": "data < 0"
   },
-  "tooltip": "status.message"
+  "description": "status.message"
 }
 ```
 

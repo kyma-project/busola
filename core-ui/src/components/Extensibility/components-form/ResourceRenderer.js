@@ -2,7 +2,10 @@ import React from 'react';
 
 import { getResourceUrl } from 'resources/Namespaces/YamlUpload/helpers';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { useGetTranslation } from 'components/Extensibility/helpers';
+import {
+  useGetTranslation,
+  getPropsFromSchema,
+} from 'components/Extensibility/helpers';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
@@ -19,10 +22,9 @@ export function ResourceRenderer({
 }) {
   const { namespaceId } = useMicrofrontendContext();
 
-  const { tFromStoreKeys } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
   const { group, version, kind, scope = 'cluster', namespace = namespaceId } =
     schema.get('resource') || {};
-  const schemaRequired = schema.get('required');
 
   const url = getResourceUrl(
     {
@@ -66,7 +68,7 @@ export function ResourceRenderer({
         />
       )}
       compact={compact}
-      required={schemaRequired ?? required}
+      {...getPropsFromSchema(schema, required, tExt)}
     />
   );
 }
