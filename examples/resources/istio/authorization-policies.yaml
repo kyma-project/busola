@@ -40,7 +40,8 @@ data:
           "showHeader": false,
           "showSearchField": false,
           "visibility": "$exists(*)",
-          "collapsibleTitle": "'Rule #' & $string($index + 1) & ($exists($item.from) ? ' From' : '') & ($exists($item.to) ? ' To' : '') & ($exists($item.when) ? ' When' : '')",
+          # "collapsibleTitle": "'Rule #' & $string($index + 1) & ($exists($item.from) ? ' From' : '') & ($exists($item.to) ? ' To' : '') & ($exists($item.when) ? ' When' : '')",
+          "collapsibleTitle": "'Rule #' & $string($index + 1) & (' ' & $join($keys($item), ' '))",
           "collapsible": [
             {
               "source": "$item.from",
@@ -50,6 +51,7 @@ data:
               "showHeader": false,
               "showSearchField": false,
               "visibility": "$exists(*)",
+              "collapsibleTitle": "'From #' & $string($index + 1) & (' ' & $join($keys($item.source), ' '))",
               "collapsible": [
                 {
                   "source": "$item.source",
@@ -128,6 +130,7 @@ data:
               "showHeader": false,
               "showSearchField": false,
               "visibility": "$exists(*)",
+              "collapsibleTitle": "'To #' & $string($index + 1) & (' ' & $join($keys($item.operation), ' '))",
               "collapsible": [
                 {
                   "source": "$item.operation",

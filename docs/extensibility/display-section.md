@@ -630,7 +630,7 @@ Table widgets display array data as rows of a table instead of free-standing com
 {
   "source": "spec.toppings",
   "widget": "Table",
-  "collapsibleTitle": "'Topping #' & $string($index + 1) & ($exists($item.quantity) ? ' quantity' : '')",
+  "collapsibleTitle": "'Topping #' & $string($index + 1) & (' ' & $join($keys($item), ' '))",
   "collapsible": [{ "source": "quantity" }],
   "children": [
     { "source": "$item.name", "sort": true },
