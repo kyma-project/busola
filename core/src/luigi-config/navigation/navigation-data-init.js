@@ -415,6 +415,7 @@ export async function createNavigationNodes({
         },
       ],
       context: {
+        permissionSet,
         authData,
         activeClusterName,
         groups,

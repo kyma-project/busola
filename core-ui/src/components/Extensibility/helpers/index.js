@@ -55,8 +55,21 @@ export const useGetTranslation = path => {
     });
   };
 
+  const unstringify = value => {
+    try {
+      // eslint-disable-next-line no-new-func
+      return new Function('return ' + value + ';')();
+    } catch (e) {
+      return value;
+    }
+  };
+
   return {
-    t: (path, ...props) => t(`${translationBundle}::${path}`, ...props) || path,
+    t: (path, ...props) => {
+      const translation = t(`${translationBundle}::${path}`, ...props) || path;
+      // change 'undefined' to undefined etc.
+      return unstringify(translation);
+    },
     tFromStoreKeys,
     widgetT,
     exists,
@@ -281,4 +294,16 @@ export const sortBy = (
   );
 
   return { ...defaultSort, ...defaultSortOptions, ...sortingOptions };
+};
+
+export const getPropsFromSchema = (schema, required, t) => {
+  const schemaRequired = schema.get('required');
+  const inputInfo = schema.get('inputInfo');
+  const tooltipContent = schema.get('description');
+
+  return {
+    required: schemaRequired ?? required,
+    inputInfo: t(inputInfo),
+    tooltipContent: t(tooltipContent),
+  };
 };
