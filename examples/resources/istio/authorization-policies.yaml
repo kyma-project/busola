@@ -264,7 +264,8 @@ data:
       {
         "path": "spec.action",
         "placeholder": "placeholders.dropdown",
-        "simple": true
+        "simple": true,
+        "description": "description.action"
       },
       {
         "path": "spec.provider",
@@ -291,15 +292,51 @@ data:
                     "widget": "SimpleList",
                     "description": "description.rules.from.principals"
                   },
-                  { "path": "notPrincipals", "widget": "SimpleList" },
-                  { "path": "requestPrincipals", "widget": "SimpleList" },
-                  { "path": "notRequestPrincipals", "widget": "SimpleList" },
-                  { "path": "namespaces", "widget": "SimpleList" },
-                  { "path": "notNamespaces", "widget": "SimpleList" },
-                  { "path": "ipBlocks", "widget": "SimpleList" },
-                  { "path": "notIpBlocks", "widget": "SimpleList" },
-                  { "path": "remoteIpBlocks", "widget": "SimpleList" },
-                  { "path": "notRemoteIpBlocks", "widget": "SimpleList" }
+                  { 
+                    "path": "notPrincipals", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.from.notPrincipals"
+                  },
+                  { 
+                    "path": "requestPrincipals", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.from.requestPrincipals"
+                  },
+                  { 
+                    "path": "notRequestPrincipals", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.from.notRequestPrincipals"
+                  },
+                  { 
+                    "path": "namespaces", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.from.namespaces"
+                  },
+                  { 
+                    "path": "notNamespaces", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.from.notNamespaces"
+                  },
+                  { 
+                    "path": "ipBlocks", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.from.ipBlocks"
+                  },
+                  { 
+                    "path": "notIpBlocks", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.from.notIpBlocks"
+                  },
+                  { 
+                    "path": "remoteIpBlocks", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.from.remoteIpBlocks"
+                  },
+                  { 
+                    "path": "notRemoteIpBlocks", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.from.notRemoteIpBlocks"
+                  }
                 ]
               }
             ]
@@ -312,14 +349,46 @@ data:
                 "path": "[].operation",
                 "widget": "FormGroup",
                 "children": [
-                  { "path": "hosts", "widget": "SimpleList" },
-                  { "path": "notHosts", "widget": "SimpleList" },
-                  { "path": "ports", "widget": "SimpleList" },
-                  { "path": "notPorts", "widget": "SimpleList" },
-                  { "path": "methods", "widget": "SimpleList" },
-                  { "path": "notMethods", "widget": "SimpleList" },
-                  { "path": "paths", "widget": "SimpleList" },
-                  { "path": "notPaths", "widget": "SimpleList" }
+                  { 
+                    "path": "hosts", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.to.hosts"
+                  },
+                  { 
+                    "path": "notHosts", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.to.notHosts"
+                  },
+                  { 
+                    "path": "ports", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.to.ports"
+                  },
+                  { 
+                    "path": "notPorts", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.to.notPorts"
+                  },
+                  { 
+                    "path": "methods", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.to.methods"
+                  },
+                  { 
+                    "path": "notMethods", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.to.notMethods"
+                  },
+                  { 
+                    "path": "paths", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.to.paths"
+                  },
+                  { 
+                    "path": "notPaths", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.to.notPaths"
+                  }
                 ]
               }
             ]
@@ -328,9 +397,21 @@ data:
             "path": "[].when",
             "widget": "GenericList",
             "children": [
-              { "path": "[].key", "widget": "Text" },
-              { "path": "[].values", "widget": "SimpleList" },
-              { "path": "[].notValues", "widget": "SimpleList" }
+              { 
+                "path": "[].key", 
+                "widget": "Text",
+                "description": "description.rules.when.key"
+              },
+              { 
+                "path": "[].values", 
+                "widget": "SimpleList",
+                "description": "description.rules.when.values"
+              },
+              { 
+                "path": "[].notValues", 
+                "widget": "SimpleList",
+                "description": "description.rules.when.notValues"
+              }
             ]
           },
         ]
@@ -358,8 +439,29 @@ data:
     ]
   translations: |-
     en:
-      description.rules.from.principals: A list of peer identities derived from the peer certificate. The peer identity is in the format of '<TRUST_DOMAIN>/ns/<NAMESPACE>/sa/<SERVICE_ACCOUNT>', for example, 'cluster.local/ns/default/sa/productpage'. This field requires mTLS enabled and is the same as the source.principal attribute. If not set, any principal is allowed.
-      placeholders.dropdown: Type or choose an option
+      description.action: Optional. The action to take if the request is matched with the rules. Default is ALLOW if not specified.
+      description.rules.from.principals: Optional. A list of peer identities derived from the peer certificate. The peer identity is in the format of '<TRUST_DOMAIN>/ns/<NAMESPACE>/sa/<SERVICE_ACCOUNT>', for example, 'cluster.local/ns/default/sa/productpage'. If not set, any principal is allowed.
+      description.rules.from.notPrincipals: Optional. A list of negative match of peer identities.
+      description.rules.from.requestPrincipals: Optional. A list of request identities derived from the JWT. The request identity is in the format of '<ISS>/<SUB>', for example, 'example.com/sub-1'. If not set, any request principal is allowed.
+      description.rules.from.notRequestPrincipals: Optional. A list of negative match of request identities.
+      description.rules.from.namespaces: Optional. A list of namespaces derived from the peer certificate. If not set, any namespace is allowed.
+      description.rules.from.notNamespaces: Optional. A list of negative match of namespaces.
+      description.rules.from.ipBlocks: Optional. A list of IP blocks, populated from the source address of the IP packet. Single IP (e.g. '1.2.3.4') and CIDR (e.g. '1.2.3.0/24') are supported. If not set, any IP is allowed.
+      description.rules.from.notIpBlocks: Optional. A list of negative match of IP blocks.
+      description.rules.from.remoteIpBlocks: Optional. A list of IP blocks, populated from X-Forwarded-For header or proxy protocol. To make use of this field, you must configure the numTrustedProxies field of the gatewayTopology under the meshConfig when you install Istio or using an annotation on the ingress gateway. If not set, any IP is allowed.
+      description.rules.from.notRemoteIpBlocks: Optional. A list of negative match of remote IP blocks.
+      description.rules.to.hosts: Optional. A list of hosts as specified in the HTTP request. The match is case-insensitive. If not set, any host is allowed. Must be used only with HTTP.
+      description.rules.to.notHosts: Optional. A list of negative match of hosts as specified in the HTTP request. The match is case-insensitive.
+      description.rules.to.ports: Optional. A list of ports as specified in the connection. If not set, any port is allowed.
+      description.rules.to.notPorts: Optional. A list of negative match of ports as specified in the connection.
+      description.rules.to.methods: Optional. A list of methods as specified in the HTTP request. If not set, any method is allowed. Must be used only with HTTP.
+      description.rules.to.notMethods: Optional. A list of negative match of methods as specified in the HTTP request.
+      description.rules.to.paths: Optional. A list of paths as specified in the HTTP request. If not set, any path is allowed. Must be used only with HTTP.
+      description.rules.to.notPaths: Optional. A list of negative match of paths.
+      description.rules.when.key: The name of an Istio attribute.
+      description.rules.when.values: Optional. A list of allowed values for the attribute. Note: at least one of values or not_values must be set.
+      description.rules.when.notValues: Optional. A list of negative match of values for the attribute. Note: at least one of values or not_values must be set.
+      placeholders.dropdown: Type or choose an option.
       spec.action: Action
       spec.provider: Provider
       spec.rules: Rules
