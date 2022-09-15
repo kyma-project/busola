@@ -263,6 +263,7 @@ data:
       },
       {
         "path": "spec.action",
+        "placeholder": "placeholders.dropdown",
         "simple": true
       },
       {
@@ -285,7 +286,11 @@ data:
                 "path": "[].source",
                 "widget": "FormGroup",
                 "children": [
-                  { "path": "principals", "widget": "SimpleList" },
+                  { 
+                    "path": "principals", 
+                    "widget": "SimpleList",
+                    "description": "description.rules.from.principals"
+                  },
                   { "path": "notPrincipals", "widget": "SimpleList" },
                   { "path": "requestPrincipals", "widget": "SimpleList" },
                   { "path": "notRequestPrincipals", "widget": "SimpleList" },
@@ -353,6 +358,8 @@ data:
     ]
   translations: |-
     en:
+      description.rules.from.principals: A list of peer identities derived from the peer certificate. The peer identity is in the format of '<TRUST_DOMAIN>/ns/<NAMESPACE>/sa/<SERVICE_ACCOUNT>', for example, 'cluster.local/ns/default/sa/productpage'. This field requires mTLS enabled and is the same as the source.principal attribute. If not set, any principal is allowed.
+      placeholders.dropdown: Type or choose an option
       spec.action: Action
       spec.provider: Provider
       spec.rules: Rules
