@@ -365,7 +365,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-- **SHOW_GARDENER_METADATA** - determines if the metadata given from the Gardener should be displayed.
+- **SHOW_GARDENER_METADATA** - determines if the metadata given from the Gardener should be displayed. The displayed information is the value from the `shoot-info` ConfigMap based in the `kube-system` namespace. If the ConfigMap doesn't exist, the information won't be displayed.
 
   ```json
   "SHOW_GARDENER_METADATA": {
@@ -373,7 +373,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-- **SHOW_KYMA_VERSION** – determines if the Kyma version should be visible on the Cluster Details page. The displayed version is the value of the `reconciler.kyma-project.io/origin-version` label in the `kyma-system` Namespace. If the value of the label is missing or there is no `kyma-system` Namespace, the `Unknown` version will be displayed.
+- **SHOW_KYMA_VERSION** – determines if the Kyma version should be visible on the Cluster Details page. The displayed version is the value of the `reconciler.kyma-project.io/origin-version` label in the `kyma-system` Namespace. If the value of the label is missing or there is no `kyma-system` Namespace, the information won't be displayed.
 
   ```json
   "SHOW_KYMA_VERSION": {
