@@ -518,7 +518,7 @@ Plain widgets render all contents of an object or list sequentially without any 
 
 ### ResourceList
 
-ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with the [related resources](resources.md#datasources-section).
+ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with the [related resources](datasources-section.md).
 
 #### Widget-specific parameters
 
