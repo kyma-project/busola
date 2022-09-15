@@ -416,7 +416,8 @@ common:
     view-yaml: View YAML
   create-form:
     autocomplete-unavailable-error: Monaco autocompletion unavailable. {{error}}.
-    choose-preset: Choose option
+    choose-preset: Choose preset
+    default-preset: default
     editor-error: 'Parse error: {{error}}, previous valid input will be used'
     messages:
       create-failure: 'Failed to create the {{resourceType}}: {{error}}'
@@ -541,7 +542,7 @@ common:
     error: Error
     generate-name: Generate name
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' and ''.'' (e.g.: ''my.name-1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
@@ -1449,7 +1450,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
