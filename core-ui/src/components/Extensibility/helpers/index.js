@@ -56,6 +56,7 @@ export const useGetTranslation = path => {
 
   const unstringify = value => {
     try {
+      /*jslint evil: true */
       return new Function('return ' + value + ';')();
     } catch (e) {
       return value;
