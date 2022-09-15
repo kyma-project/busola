@@ -31,6 +31,14 @@ data:
           "name": "spec.provider"
         }
       ],
+      "resourceGraph": {
+        "colorVariant": 3,
+        "dataSources": [
+          {
+            "source": "podSelector"
+          }
+        ]
+      },
       "body": [
         {
           "widget": Table,
@@ -227,7 +235,6 @@ data:
               "source": "$podSelector()",
               "widget": "ResourceList",
               "disableCreate": true,
-              "isCompact": true,
               "visibility": "$boolean($root.spec.selector.matchLabels)"
             },
             {
