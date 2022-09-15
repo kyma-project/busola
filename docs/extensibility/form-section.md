@@ -397,7 +397,7 @@ This type of field is only suitable for simple data types and can contain more c
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
 
-- **description** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+- **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 
 #### Example
 
