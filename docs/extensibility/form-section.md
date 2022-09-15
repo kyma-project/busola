@@ -190,7 +190,7 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
 #### Widget-specific parameters
 
 - **inputInfo** - a string below the input field that shows how to fill in the input.
-- **description** - a string that will be displayed in a tooltip when hovering over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+- **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 
 #### Example
 
