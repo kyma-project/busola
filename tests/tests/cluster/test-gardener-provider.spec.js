@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { mockBusolaConfig } from '../../support/helpers';
 
 function mockShootCMForbidden() {
   const requestData = {
@@ -12,16 +11,10 @@ function mockShootCMForbidden() {
 
 context('Test Gardener provider', () => {
   Cypress.skipAfterFail();
-  const getConfig = enabled => ({
-    config: {
-      features: {
-        SHOW_GARDENER_METADATA: { isEnabled: enabled },
-      },
-    },
-  });
 
   it('No Gardener Provider when feature is disabled', () => {
-    mockBusolaConfig(getConfig(false));
+    cy.setBusolaFeature('SHOW_GARDENER_METADATA', false);
+
     cy.loginAndSelectCluster();
 
     cy.getIframeBody()
@@ -30,7 +23,7 @@ context('Test Gardener provider', () => {
   });
 
   it('Enabled by ConfigMap', () => {
-    mockBusolaConfig(getConfig(true));
+    cy.setBusolaFeature('SHOW_GARDENER_METADATA', true);
 
     cy.loginAndSelectCluster();
 
@@ -40,7 +33,7 @@ context('Test Gardener provider', () => {
   });
 
   it('Fails gracefully', () => {
-    mockBusolaConfig(getConfig(true));
+    cy.setBusolaFeature('SHOW_GARDENER_METADATA', true);
     mockShootCMForbidden();
     cy.loginAndSelectCluster();
 

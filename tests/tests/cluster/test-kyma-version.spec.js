@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { mockBusolaConfig } from '../../support/helpers';
 
 function mockKymaSystemForbidden() {
   const requestData = {
@@ -12,16 +11,9 @@ function mockKymaSystemForbidden() {
 
 context('Test Kyma version', () => {
   Cypress.skipAfterFail();
-  const getConfig = enabled => ({
-    config: {
-      features: {
-        SHOW_KYMA_VERSION: { isEnabled: enabled },
-      },
-    },
-  });
 
   it('No Kyma Version when feature is disabled', () => {
-    mockBusolaConfig(getConfig(false));
+    cy.setBusolaFeature('SHOW_KYMA_VERSION', false);
     cy.loginAndSelectCluster();
 
     cy.getIframeBody()
@@ -34,7 +26,7 @@ context('Test Kyma version', () => {
   });
 
   it('Enabled by ConfigMap', () => {
-    mockBusolaConfig(getConfig(true));
+    cy.setBusolaFeature('SHOW_KYMA_VERSION', true);
 
     cy.loginAndSelectCluster();
 
@@ -44,7 +36,7 @@ context('Test Kyma version', () => {
   });
 
   it('Fails gracefully', () => {
-    mockBusolaConfig(getConfig(true));
+    cy.setBusolaFeature('SHOW_KYMA_VERSION', true);
     mockKymaSystemForbidden();
     cy.loginAndSelectCluster();
 
