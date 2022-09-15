@@ -266,7 +266,7 @@ KeyValuePair widgets render an `object` value as a list of fields. One is used f
   - **type** - a string that specifies the type of the value input. The options are `object`, `number`, `text`. Defaults to `text`.
   - **keyEnum[]** - an array of options to generate a key input field with a dropdown only if the `type` is set to `object`.
   - **valueEnum[]** - an array of options to generate a value input field with a dropdown.
-- **inputInfo** - a string that can be shown below the last input field to guide the User how to fill in the input.
+- **inputInfo** - a string below the input field that shows how to fill in the input.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 
 #### Example
