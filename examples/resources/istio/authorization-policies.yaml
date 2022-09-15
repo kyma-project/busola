@@ -40,6 +40,7 @@ data:
           "showHeader": false,
           "showSearchField": false,
           "visibility": "$exists(*)",
+          "collapsibleTitle": "'Rule #' & $string($index + 1) & ($exists($item.from) ? ' From' : '') & ($exists($item.to) ? ' To' : '') & ($exists($item.when) ? ' When' : '')",
           "collapsible": [
             {
               "source": "$item.from",

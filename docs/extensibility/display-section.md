@@ -616,6 +616,7 @@ Table widgets display array data as rows of a table instead of free-standing com
 #### Widget-specific parameters
 
 - **collapsible** - an optional array of extra widgets to display as an extra collapsible section. Uses the same format as the **children** parameter.
+- **collapsibleTitle** - an optional prop for **collapsible**, where could be define title for collapsible sections as string or jsonata function.
 - **disablePadding** - an optional boolean which disables the padding inside the panel body.
 - **showHeader** - an optional boolean which disables displaying head row.
 - **showSearchField** - an optional boolean which disables displaying search input.
@@ -629,6 +630,7 @@ Table widgets display array data as rows of a table instead of free-standing com
 {
   "source": "spec.toppings",
   "widget": "Table",
+  "collapsibleTitle": "'Topping #' & $string($index + 1) & ($exists($item.quantity) ? ' quantity' : '')",
   "collapsible": [{ "source": "quantity" }],
   "children": [
     { "source": "$item.name", "sort": true },

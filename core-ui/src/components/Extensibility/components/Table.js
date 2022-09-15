@@ -9,6 +9,7 @@ import { sortBy, useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 
 import './Table.scss';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 const handleTableValue = (value, t) => {
   switch (true) {
@@ -45,10 +46,34 @@ export function Table({
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
 
   const tdClassNames = classNames({
-    'collapsible-panel': !structure?.disablePadding,
+    'collapsible-panel': !structure.disablePadding,
   });
 
-  const rowRenderer = entry => {
+  const rowRenderer = (entry, index) => {
+    const makeTitle = () => {
+      const defaultTitle =
+        tExt(structure.name, {
+          defaultValue: structure.name || structure.source,
+        }) +
+        ' #' +
+        (index + 1);
+      if (structure.collapsibleTitle) {
+        try {
+          const expression = jsonataWrapper(structure.collapsibleTitle);
+          expression.assign('index', index);
+          expression.assign('item', entry);
+          expression.assign('root', originalResource);
+
+          return expression.evaluate();
+        } catch (e) {
+          console.warn(e);
+          return defaultTitle;
+        }
+      } else {
+        return defaultTitle;
+      }
+    };
+
     const cells = (structure.children || []).map(column => (
       <Widget value={entry} structure={column} schema={schema} {...props} />
     ));
@@ -59,6 +84,7 @@ export function Table({
 
     return {
       cells,
+      title: makeTitle(),
       collapseContent: (
         <td colspan="100%" className={tdClassNames}>
           {structure.collapsible.map(child => (
