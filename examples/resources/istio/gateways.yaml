@@ -14,6 +14,7 @@ data:
         "resource": {
           "kind": "Pod",
           "version": "v1",
+          "namespace": null
         },
         "filter": "$matchByLabelSelector($item, $root.spec.selector)"
       },
