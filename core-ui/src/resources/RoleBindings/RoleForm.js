@@ -6,18 +6,17 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { useTranslation } from 'react-i18next';
 import { Dropdown } from 'shared/ResourceForm/inputs';
 import { ResourceFormWrapper } from 'shared/ResourceForm/components/Wrapper';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 export const RoleForm = ({
   loading,
   error,
   roles,
   clusterRoles,
+  namespace,
   binding,
   setBinding,
 }) => {
   const { t } = useTranslation();
-  const { namespaceId: namespace } = useMicrofrontendContext();
 
   if (loading) return <Spinner compact={true} />;
   if (error) return error.message;
