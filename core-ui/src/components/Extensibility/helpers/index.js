@@ -55,8 +55,10 @@ export const useGetTranslation = path => {
   };
 
   return {
-    t: (path, ...props) =>
-      path ? t(`${translationBundle}::${path}`, ...props) || path : undefined,
+    t: (path, ...props) => {
+      const translation = t(`${translationBundle}::${path}`, ...props) || path;
+      return translation !== 'undefined' ? translation : undefined;
+    },
     tFromStoreKeys,
     widgetT,
     exists,
