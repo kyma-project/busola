@@ -1,10 +1,11 @@
 import React from 'react';
-import { last } from 'lodash';
+import { last, isNil } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 import { List, fromJS } from 'immutable';
 import * as jp from 'jsonpath';
 
 import { useVariables } from '../hooks/useVariables';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 // fake an OrderedMap-like structure using List to allow for duplicate keys
 const propertiesWrapper = src => ({
@@ -35,12 +36,20 @@ export function SchemaRulesInjector({
       .map(item => `[${item}]`)
       .join('');
     const varPath = `$.${varName}${varSuffix}`;
+
+    let varValue = jp.value(vars, varPath);
+    let valueExpr = schema.get('value');
+    if (isNil(varValue) && valueExpr) {
+      console.log('i no has value, but has expr', varPath, valueExpr);
+      varValue = jsonataWrapper(valueExpr).evaluate(resource, vars);
+      console.log('my new val', varValue);
+    }
     return (
       <Plugin
         {...props}
         currentPluginIndex={nextPluginIndex}
         schema={schema}
-        value={jp.value(vars, varPath)}
+        value={varValue}
         onChange={e => setVar(varPath, e.data.value)}
         storeKeys={fromJS([schema.get('var')])}
       />

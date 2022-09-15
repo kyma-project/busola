@@ -16,8 +16,9 @@ import { ResourceSchema } from './ResourceSchema';
 import { createTemplate } from './helpers';
 import { VarStoreContextProvider } from './contexts/VarStore';
 import { prepareSchemaRules } from './helpers/prepareSchemaRules';
+import { useVariables } from './hooks/useVariables';
 
-export function ExtensibilityCreate({
+export function ExtensibilityCreateCore({
   formElementRef,
   setCustomValid,
   resourceType,
@@ -27,6 +28,7 @@ export function ExtensibilityCreate({
   toggleFormFn,
   resourceName,
 }) {
+  const { prepareVars, readVars } = useVariables();
   const { namespaceId: namespace } = useMicrofrontendContext();
   const notification = useNotification();
   const { t } = useTranslation();
@@ -82,6 +84,9 @@ export function ExtensibilityCreate({
       ...(createResource?.form ?? []),
     ];
 
+    prepareVars(fullSchemaRules);
+    readVars(resource);
+
     return {
       simpleRules: prepareSchemaRules(
         fullSchemaRules.filter(item => item.simple ?? false),
@@ -90,49 +95,54 @@ export function ExtensibilityCreate({
         fullSchemaRules.filter(item => item.advanced ?? true),
       ),
     };
-  }, [createResource]);
+  }, [createResource]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // waiting for schema from OpenAPI to be computed
   if (loading) return <Spinner />;
 
   return (
-    <VarStoreContextProvider>
-      <ResourceForm
-        pluralKind={resourceType}
-        singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
+    <ResourceForm
+      pluralKind={resourceType}
+      singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
+      resource={resource}
+      setResource={updateResource}
+      formElementRef={formElementRef}
+      createUrl={resourceUrl}
+      setCustomValid={setCustomValid}
+      onlyYaml={!schema}
+      initialResource={initialResource}
+      afterCreatedFn={afterCreatedFn}
+    >
+      <ResourceSchema
+        simple
+        key={api.version}
+        schema={errorOpenApi ? {} : schema}
+        schemaRules={simpleRules}
         resource={resource}
-        setResource={updateResource}
-        formElementRef={formElementRef}
-        createUrl={resourceUrl}
-        setCustomValid={setCustomValid}
-        onlyYaml={!schema}
-        initialResource={initialResource}
-        afterCreatedFn={afterCreatedFn}
-      >
-        <ResourceSchema
-          simple
-          key={api.version}
-          schema={errorOpenApi ? {} : schema}
-          schemaRules={simpleRules}
-          resource={resource}
-          store={store}
-          setStore={setStore}
-          onSubmit={() => {}}
-          path={general?.urlPath || ''}
-        />
-        <ResourceSchema
-          advanced
-          key={api.version}
-          schema={errorOpenApi ? {} : schema}
-          schemaRules={advancedRules}
-          resource={resource}
-          store={store}
-          setStore={setStore}
-          path={general?.urlPath || ''}
-        />
-      </ResourceForm>
-    </VarStoreContextProvider>
+        store={store}
+        setStore={setStore}
+        onSubmit={() => {}}
+        path={general?.urlPath || ''}
+      />
+      <ResourceSchema
+        advanced
+        key={api.version}
+        schema={errorOpenApi ? {} : schema}
+        schemaRules={advancedRules}
+        resource={resource}
+        store={store}
+        setStore={setStore}
+        path={general?.urlPath || ''}
+      />
+    </ResourceForm>
   );
 }
 
+export function ExtensibilityCreate(props) {
+  return (
+    <VarStoreContextProvider>
+      <ExtensibilityCreateCore {...props} />
+    </VarStoreContextProvider>
+  );
+}
 ExtensibilityCreate.allowEdit = true;
