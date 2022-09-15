@@ -140,6 +140,44 @@ Note that some features must be run before the application starts the bootstrap 
   }
   ```
 
+* **GZIP** – is used to indicate whether the response from the backend server should be compressed or not.
+
+Backend feature. Cannot be modified at the cluster's ConfigMap level.
+
+Default settings:
+
+```json
+"GZIP": {
+  "isEnabled": true,
+}
+```
+
+- **HIDDEN_NAMESPACES** – is used to define a list of Namespaces that are considered system, and are hidden by default.
+
+Default settings:
+
+```bash
+"HIDDEN_NAMESPACES": {
+  "isEnabled": true,
+  "config": {
+    "namespaces": [
+      "compass-system",
+      "istio-system",
+      "knative-eventing",
+      "knative-serving",
+      "kube-system",
+      "kyma-backup",
+      "kyma-installer",
+      "kyma-integration",
+      "kyma-system",
+      "natss",
+      "kube-node-lease",
+      "serverless-system"
+    ]
+  }
+}
+```
+
 - **ISTIO** - is used to show or hide the Istio-related views and to define which APIs are required for the views to be shown properly.
   For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
@@ -170,44 +208,6 @@ Note that some features must be run before the application starts the bootstrap 
       "issuer": "https://apskyxzcl.accounts400.ondemand.com",
       "jwksUri": "https://apskyxzcl.accounts400.ondemand.com/oauth2/certs"
     }
-  }
-  ```
-
-- **HIDDEN_NAMESPACES** – is used to define a list of Namespaces that are considered system, and are hidden by default.
-
-  Default settings:
-
-  ```bash
-  "HIDDEN_NAMESPACES": {
-    "isEnabled": true,
-    "config": {
-      "namespaces": [
-        "compass-system",
-        "istio-system",
-        "knative-eventing",
-        "knative-serving",
-        "kube-system",
-        "kyma-backup",
-        "kyma-installer",
-        "kyma-integration",
-        "kyma-system",
-        "natss",
-        "kube-node-lease",
-        "serverless-system"
-      ]
-    }
-  }
-  ```
-
-* **GZIP** – is used to indicate whether the response from the backend server should be compressed or not.
-
-  Backend feature. Cannot be modified at the cluster's ConfigMap level.
-
-  Default settings:
-
-  ```json
-  "GZIP": {
-    "isEnabled": true,
   }
   ```
 
@@ -362,6 +362,14 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
         "apiGroup": "serverless.kyma-project.io"
       }
     ]
+  },
+  ```
+
+- **SHOW_GARDENER_METADATA** - determines if the metadata given from the Gardener should be displayed.
+
+  ```json
+  "SHOW_GARDENER_METADATA": {
+    "isEnabled": true
   },
   ```
 

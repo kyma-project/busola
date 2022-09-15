@@ -10,6 +10,21 @@ import { ClusterStorageType } from '../ClusterStorageType';
 import { useKymaVersionQuery } from './useKymaVersionQuery';
 import { YamlUploadDialog } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
+const ClusterProvider = () => {
+  const { t } = useTranslation();
+  const gardenerShootCMUrl =
+    '/api/v1/namespaces/kube-system/configmaps/shoot-info';
+  const { data, error } = useGet(gardenerShootCMUrl);
+
+  if (error) return null;
+
+  return (
+    <PageHeader.Column title={t('gardener.headers.provider')}>
+      <p className="gardener-provider ">{data?.data.provider}</p>
+    </PageHeader.Column>
+  );
+};
+
 export function ClusterOverviewHeader() {
   const { t } = useTranslation();
   const { cluster, config } = useMicrofrontendContext();
@@ -21,6 +36,7 @@ export function ClusterOverviewHeader() {
   } = useGet('/version');
   const { features } = useMicrofrontendContext();
   const showKymaVersion = features.SHOW_KYMA_VERSION?.isEnabled;
+  const showGardenerMetadata = features.SHOW_GARDENER_METADATA?.isEnabled;
 
   const kymaVersion = useKymaVersionQuery({ skip: !showKymaVersion });
 
@@ -68,6 +84,7 @@ export function ClusterOverviewHeader() {
         <PageHeader.Column title={t('clusters.storage.title')}>
           <ClusterStorageType clusterConfig={config} />
         </PageHeader.Column>
+        {!showGardenerMetadata && <ClusterProvider />}
       </PageHeader>
       <YamlUploadDialog
         show={showAdd}
