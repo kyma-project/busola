@@ -120,8 +120,14 @@ export function EventList(props) {
       hasDetailsView={true}
       readOnly={true}
       filter={res => {
-        if (displayType.key === EVENT_MESSAGE_TYPE.ALL.key) return true;
-        return res.type === displayType.key;
+        const typeFilter =
+          displayType.key === EVENT_MESSAGE_TYPE.ALL.key ||
+          res.type === displayType.key;
+
+        const propsFilter =
+          typeof props.filter === 'function' ? props.filter(res) : true;
+
+        return typeFilter && propsFilter;
       }}
       searchSettings={{
         textSearchProperties,
