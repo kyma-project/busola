@@ -4,7 +4,7 @@ export function useGetGardenerProvider({ skip }) {
   const gardenerShootCMUrl =
     '/api/v1/namespaces/kube-system/configmaps/shoot-info';
   const { data, error, loading } = useGet(gardenerShootCMUrl, {
-    skip: !skip,
+    skip,
   });
 
   if (error || loading) return null;

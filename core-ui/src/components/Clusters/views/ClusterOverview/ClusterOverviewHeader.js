@@ -32,7 +32,7 @@ const Versions = () => {
   );
 };
 
-const ClusterProvider = () => {
+const GardenerProvider = () => {
   const { t } = useTranslation();
   const { features } = useMicrofrontendContext();
 
@@ -41,13 +41,13 @@ const ClusterProvider = () => {
   const provider = useGetGardenerProvider({
     skip: !showGardenerMetadata,
   });
-
+  console.log(provider);
   if (!showGardenerMetadata) return null;
   if (!provider) return null;
 
   return (
     <PageHeader.Column title={t('gardener.headers.provider')}>
-      <p className="gardener-provider ">{provider ?? EMPTY_TEXT_PLACEHOLDER}</p>
+      <p className="gardener-provider ">{provider}</p>
     </PageHeader.Column>
   );
 };
@@ -82,7 +82,7 @@ export function ClusterOverviewHeader() {
         <PageHeader.Column title={t('clusters.storage.title')}>
           <ClusterStorageType clusterConfig={config} />
         </PageHeader.Column>
-        <ClusterProvider />
+        <GardenerProvider />
       </PageHeader>
       <YamlUploadDialog
         show={showAdd}
