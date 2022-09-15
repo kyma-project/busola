@@ -84,7 +84,7 @@ export function ClusterOverviewHeader() {
         <PageHeader.Column title={t('clusters.storage.title')}>
           <ClusterStorageType clusterConfig={config} />
         </PageHeader.Column>
-        {!showGardenerMetadata && <ClusterProvider />}
+        {showGardenerMetadata && <ClusterProvider />}
       </PageHeader>
       <YamlUploadDialog
         show={showAdd}
