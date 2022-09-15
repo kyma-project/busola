@@ -256,15 +256,19 @@ data:
       },
       {
         "path": "spec.action",
-        "required": false
+        "simple": true
       },
       {
         "path": "spec.provider",
-        "widget": "Text"
+        "widget": "FormGroup",
+        "children":[
+          { "path": "name" }
+        ]
       },
       {
         "path": "spec.rules",
         "widget": "GenericList",
+        "simple": true,
         "children": [
           {
             "path": "[].from",
