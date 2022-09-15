@@ -45,7 +45,7 @@ export function SchemaRulesInjector({
           jsonataWrapper(schema.get('defaultValue')).evaluate(resource),
         );
       } catch (e) {
-        console.log(e);
+        console.warn(e);
       }
     }
 
