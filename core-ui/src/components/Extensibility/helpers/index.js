@@ -56,7 +56,7 @@ export const useGetTranslation = path => {
 
   const unstringify = value => {
     try {
-      /*jslint evil: true */
+      // eslint-disable-next-line no-new-func
       return new Function('return ' + value + ';')();
     } catch (e) {
       return value;
