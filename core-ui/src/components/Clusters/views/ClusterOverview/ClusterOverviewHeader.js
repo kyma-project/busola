@@ -7,7 +7,6 @@ import { Button } from 'fundamental-react';
 import { ClusterStorageType } from '../ClusterStorageType';
 import { YamlUploadDialog } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { useGetVersions } from './useGetVersions';
-import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useGetGardenerProvider } from './useGetGardenerProvider';
 
 const Versions = () => {
