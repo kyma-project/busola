@@ -67,55 +67,55 @@ data:
                     { 
                       "source": "$item.notPrincipals", 
                       "name": "spec.rules.from.source.notPrincipals", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.requestPrincipals", 
                       "name": "spec.rules.from.source.requestPrincipals", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notRequestPrincipals", 
                       "name": "spec.rules.from.source.notRequestPrincipals", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.namespaces", 
                       "name": "spec.rules.from.source.namespaces", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notNamespaces", 
                       "name": "spec.rules.from.source.notNamespaces", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.ipBlocks", 
                       "name": "spec.rules.from.source.ipBlocks", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notIpBlocks", 
                       "name": "spec.rules.from.source.notIpBlocks", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.remoteIpBlocks", 
                       "name": "spec.rules.from.source.remoteIpBlocks", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notRemoteIpBlocks", 
                       "name": "spec.rules.from.source.notRemoteIpBlocks", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                   ]
@@ -140,49 +140,49 @@ data:
                     { 
                       "source": "$item.Hosts", 
                       "name": "spec.rules.to.operation.hosts", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notHosts", 
                       "name": "spec.rules.to.operation.notHosts", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.ports", 
                       "name": "spec.rules.to.operation.ports", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notPorts", 
                       "name": "spec.rules.to.operation.notPorts", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.methods", 
                       "name": "spec.rules.to.operation.methods", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notMethods", 
                       "name": "spec.rules.to.operation.notMethods", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.paths", 
                       "name": "spec.rules.to.operation.paths", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     },
                     { 
                       "source": "$item.notPaths", 
                       "name": "spec.rules.to.operation.notPaths", 
-                      "widget": "JoinedArray",
+                      "widget": "Labels",
                       "visibility": "$exists(*)"
                     }
                   ]
