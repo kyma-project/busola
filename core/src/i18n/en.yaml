@@ -1787,6 +1787,7 @@ role-bindings:
     group-name: Group name
     kind: Kind
     role: Role
+    role-type: Role Type
     subject: Subject
     subjects: Subjects
     tooltips:
