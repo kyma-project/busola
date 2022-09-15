@@ -91,19 +91,25 @@ export function getDefaultPreset(presets, emptyTemplate) {
     : null;
 }
 
-export function createPresets(resource, presets) {
+export function PreparePresets(resource, presets) {
+  const { t: tExt } = useGetTranslation();
+  const { t } = useTranslation();
+
   if (!presets || !presets.length) return null;
   let preparedPresets = [];
   let hasDefaultPreset = false;
 
   presets.forEach(preset => {
     if (preset.default === true) hasDefaultPreset = true;
-    preparedPresets.push(merge({}, { value: resource }, preset));
+
+    preparedPresets.push(
+      merge({}, { value: resource }, { ...preset, name: tExt(preset.name) }),
+    );
   });
 
   if (!hasDefaultPreset) {
     preparedPresets.unshift({
-      name: 'default',
+      name: t('common.create-form.default-preset'),
       value: resource,
     });
   }
