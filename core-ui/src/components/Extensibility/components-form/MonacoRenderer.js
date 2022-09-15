@@ -44,7 +44,7 @@ export function MonacoRenderer({
   required,
   resource,
 }) {
-  const { tFromStoreKeys } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
   const value = getValue(storeKeys, resource);
   const language = getLanguage(schema, value, resource);
@@ -87,7 +87,7 @@ export function MonacoRenderer({
       <div className="fd-margin-bottom--sm">
         <Label
           required={schemaRequired ?? required}
-          tooltipContent={tooltipContent}
+          tooltipContent={tExt(tooltipContent)}
         >
           {tFromStoreKeys(storeKeys, schema)}
         </Label>
@@ -100,7 +100,7 @@ export function MonacoRenderer({
         onChange={handleChange}
       />
       {inputInfo && (
-        <p style={{ color: 'var(--sapNeutralTextColor)' }}>{inputInfo}</p>
+        <p style={{ color: 'var(--sapNeutralTextColor)' }}>{tExt(inputInfo)}</p>
       )}
     </ResourceForm.CollapsibleSection>
   );
