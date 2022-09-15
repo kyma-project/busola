@@ -10,53 +10,113 @@ metadata:
 data:
   details: |-
     {
-      "header": [],
+      "header": [
+      {
+        "name": "Status",
+        "widget": "Badge",
+        "highlights": {
+          "positive": ["RUNNING"],
+          "negative": ["FAILED", "ERROR"],
+          "informative": ["INITIALIZING"],
+          "critical": ["DEPLOYING", "BUILDING", "PENDING"]
+        },
+        "source": "($.status = undefined or $.status.conditions = undefined or $count($.status.conditions) = 0) 
+          ? 'INITIALIZING' 
+          : $count($filter($.status.conditions, function($v) { $v.status = 'False' })) != 0
+            ? $count($filter($.status.conditions, function($v) { $v.type = 'Running' and $v.status = 'True' })) != 0 
+              ? 'ERROR'
+              : 'FAILED'
+            : $count($filter($.status.conditions, function($v) { $v.type = 'ConfigurationReady' and $v.status = 'True' })) != 0 
+              ? $count($filter($.status.conditions, function($v) { $v.type = 'BuildReady' and $v.status = 'True' })) != 0 
+                ? $count($filter($.status.conditions, function($v) { $v.type = 'Running' and $v.status = 'True' })) != 0 
+                  ? 'RUNNING'
+                  : $count($filter($.status.conditions, function($v) { $v.type = 'Running' and $v.status = 'Unknown' and $v.reason = 'MinReplicasNotAvailable' })) != 0 
+                    ? 'PENDING'
+                    : 'DEPLOYING'
+                : 'BUILDING'
+              : 'INITIALIZING'
+        ",
+        "tooltip": "($.status = undefined or $.status.conditions = undefined or $count($.status.conditions) = 0) 
+          ? null 
+          : $count($filter($.status.conditions, function($v) { $v.status = 'False' })) != 0
+            ? $count($filter($.status.conditions, function($v) { $v.type = 'Running' and $v.status = 'True' })) != 0 
+              ? 'New revision error: ' & $filter($.status.conditions, function($v) { $v.status = 'False' })[0].message
+              : 'Error: ' & $filter($.status.conditions, function($v) { $v.status = 'False' })[0].message
+            : null
+        "
+      },
+      {
+        "name": "Source Type",
+        "source": "spec.source.gitRepository ? 'Git Repository' : 'Inline Editor'"
+      },
+      {
+        "name": "Runtime",
+        "source": "spec.runtime = 'nodejs16' ? 'Node.js 16' : (spec.runtime = 'nodejs14' ? 'Node.js 14' : (spec.runtime = 'nodejs12' ? 'Node.js 12 - Deprecated' : (spec.runtime = 'python39' ? 'Python 3.9' : spec.runtime)))"
+      }
+      ],
       "body": [
         {
-          "name": "Summary",
+          "source": "spec.source.inline.source",
+          "widget": "CodeViewer",
+          "name": "Source",
+          "language": "javascript",
+          "visibility": "$exists($.data)"
+        }, {
+          "source": "spec.source.inline.dependencies",
+          "widget": "CodeViewer",
+          "name": "Dependencies",
+          "language": "json",
+          "visibility": "$exists($.data)"
+        }, {
+          "source": "spec.source.gitRepository",
           "widget": "Panel",
-          "children": [
-            {
-              "name": "replicas",
-              "source": "spec.replicas"
-            },
-            {
-              "name": "runtime",
-              "source": "spec.runtime"
-            },
-            {
-              "name": "runtimeImageOverride",
-              "source": "spec.runtimeImageOverride"
-            },
-            {
-              "name": "Configured",
-              "source": "status.conditions[?(@.type=='ConfigurationReady')].status"
-            },
-            {
-              "name": "Built",
-              "source": "status.conditions[?(@.type=='BuildReady')].status"
-            },
-            {
-              "name": "Running",
-              "source": "status.conditions[?(@.type=='Running')].status"
-            },
-            {
-              "name": "Runtime",
-              "source": "spec.runtime"
-            },
-            {
-              "name": "Version",
-              "source": "metadata.generation"
-            },
-            {
-              "name": "Age",
-              "source": "metadata.creationTimestamp"
-            }
-          ]
-        },
-        {
-          "path": "spec",
-          "widget": "CodeViewer"
+          "name": "Repository Configuration",
+          "visibility": "$exists($.data)",
+          "children": [{
+            "name": "Url",
+            "source": "spec.source.gitRepository.url"
+          }, {
+            "name": "Reference",
+            "source": "spec.source.gitRepository.reference"
+          }, {
+            "name": "Base Directory",
+            "source": "spec.source.gitRepository.baseDir"
+          }]
+        }, {
+          "source": "spec.env",
+          "widget": "Table",
+          "name": "Environment Variables",
+          "children": [{
+            "source": "$item.name",
+            "name": "Name",
+          }, {
+            "source": "$item.value",
+            "name": "Value"
+          }, {
+            "name": "Value From",
+            "source": "$exists($item.valueFrom.configMapKeyRef)
+              ? $item.valueFrom.configMapKeyRef.name 
+              : $item.valueFrom.secretKeyRef.name"
+          }, {
+            "name": "Controlled By",
+            "widget": "ControlledBy",
+            "source": "$item.owners"
+          }, {
+            "name": "Source",
+            "widget": "Badge",
+            "source": "$exists($item.valueFrom.configMapKeyRef)
+              ? 'CONFIG MAP' 
+              : $exists($item.valueFrom.secretKeyRef)
+                ? 'SECRET'
+                : 'CUSTOM'"
+          }, {
+            "name": "Key",
+            "source": "$exists($item.valueFrom.configMapKeyRef)
+              ? $item.valueFrom.configMapKeyRef.key 
+              : $exists($item.valueFrom.secretKeyRef)
+                ? $item.valueFrom.secretKeyRef.key 
+                : 'N/A'"
+          }]
         }
       ]
     }
