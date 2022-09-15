@@ -18,7 +18,7 @@ export function NumberRenderer({
   placeholder,
   ...props
 }) {
-  const { tFromStoreKeys, t: tExt } = useGetTranslation();
+  const { tFromStoreKeys, tryTranslate } = useGetTranslation();
 
   const schemaPlaceholder = schema.get('placeholder');
 
@@ -40,12 +40,12 @@ export function NumberRenderer({
         });
       }}
       label={tFromStoreKeys(storeKeys, schema)}
-      placeholder={tExt(schemaPlaceholder) || tExt(placeholder)}
+      placeholder={tryTranslate(schemaPlaceholder) || tryTranslate(placeholder)}
       data-testid={storeKeys.join('.')}
       input={Inputs.Number}
       compact={compact}
       {...numberProps}
-      {...getPropsFromSchema(schema, required, tExt)}
+      {...getPropsFromSchema(schema, required, tryTranslate)}
     />
   );
 }

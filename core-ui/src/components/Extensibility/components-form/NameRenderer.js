@@ -14,7 +14,7 @@ export function NameRenderer({
   required,
   ...props
 }) {
-  const { t: tExt } = useGetTranslation();
+  const { tryTranslate } = useGetTranslation();
   const extraPaths = schema.get('extraPaths')?.toJS() || [];
 
   return (
@@ -42,7 +42,7 @@ export function NameRenderer({
         ]);
       }}
       validate={value => !!value}
-      {...getPropsFromSchema(schema, required, tExt)}
+      {...getPropsFromSchema(schema, required, tryTranslate)}
     />
   );
 }

@@ -77,7 +77,7 @@ export function KeyValuePairRenderer({
   // TODO the value obtained by ui-schema is undefined for this component
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
 
-  const { tFromStoreKeys, t: tExt } = useGetTranslation();
+  const { tFromStoreKeys, tryTranslate } = useGetTranslation();
   const { t } = useTranslation();
 
   let titleTranslation = '';
@@ -117,7 +117,7 @@ export function KeyValuePairRenderer({
       className="key-enum"
       title={titleTranslation}
       initialValue={valueInfo.type === 'object' ? {} : ''}
-      {...getPropsFromSchema(schema, required, tExt)}
+      {...getPropsFromSchema(schema, required, tryTranslate)}
     />
   );
 }

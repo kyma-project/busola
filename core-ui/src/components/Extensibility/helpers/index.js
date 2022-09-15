@@ -69,6 +69,7 @@ export const useGetTranslation = path => {
       // change 'undefined' to undefined etc.
       return unstringify(translation);
     },
+    tryTranslate: path => (exists(path) ? t(path) : ''),
     tFromStoreKeys,
     widgetT,
     exists,

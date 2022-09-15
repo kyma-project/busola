@@ -71,6 +71,7 @@ data:
       {
         "simple": true,
         "path": "spec.runtime",
+        "placeholder": "placeholders.spec.runtime",
         "enum": ["nodejs12", "nodejs14", "nodejs16", "python39"]
       },
       { "path": "spec.runtimeImageOverride" },
@@ -219,3 +220,25 @@ data:
         "
       }
     ]
+  translations: |
+    en:
+      spec.scaleConfig: Scale Config
+      spec.scaleConfig.maxReplicas: Max Replicas
+      spec.scaleConfig.minReplicas: Min Replicas
+      spec.source.inline.dependencies: Dependencies
+      spec.source.inline.source: Source
+      Requests: Requests
+      Limits: Limits
+      spec.runtime: Runtime
+      spec.runtimeImageOverride: Runtime Image Override
+      Status: Status
+      Runtime: Runtime
+      'Max Replicas': Max Replicas
+      'Source Type': Source Type
+      spec.runtime.nodejs12: NodeJS 12 (Deprecated)
+      spec.runtime.nodejs14: NodeJS 14
+      spec.runtime.nodejs16: NodeJS 16
+      spec.runtime.python39: Python 3.9
+      spec.resourceConfiguration.build: Build
+      spec.resourceConfiguration.function: Function
+      placeholders.spec.runtime: Choose Function runtime
