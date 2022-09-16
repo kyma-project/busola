@@ -626,7 +626,7 @@ Table widgets display array data as rows of a table instead of free-standing com
 {
   "source": "spec.toppings",
   "widget": "Table",
-  "collapsible": [{ "source": "quantity" }],
+  "collapsible": [{ "source": "$item.quantity" }],
   "children": [
     { "source": "$item.name", "sort": true },
     {
