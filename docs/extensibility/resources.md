@@ -41,7 +41,7 @@ The **general** section is required and contains basic information about the res
   - **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
   - **name** - title used in the navigation and on the list screen. It defaults to its resource kind.
 - **category** the name of a category used for the left-hand menu. It is placed in the `Custom Resources` category by default.
-- **icon** the suffix name of an icon used for the left-hand menu. the default value is `customized`. The list of icons can be found [here](https://sap.github.io/fundamental-react/?path=/docs/component-api-icon--primary) .
+- **icon** the suffix name of an icon used for the left-hand menu. the default value is `customized`. The list of icons can be found [here](https://sap.github.io/fundamental-react/?path=/docs/component-api-icon--primary).
 - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
 - **urlPath** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
 - **defaultPlaceholder** - to be shown in place of empty resource leaves. Overridden by the widget-level **placeholder**. Defaults to `-`.
