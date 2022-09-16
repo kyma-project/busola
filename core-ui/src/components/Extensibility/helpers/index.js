@@ -1,8 +1,7 @@
 import React, { createContext, useContext } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { OrderedMap } from 'immutable';
-import { last } from 'lodash';
-import { merge } from 'lodash';
+import { last, merge } from 'lodash';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Link } from 'shared/components/Link/Link';
@@ -98,7 +97,7 @@ export function getDefaultPreset(presets, emptyTemplate) {
     : null;
 }
 
-export function PreparePresets(resource, presets) {
+export function usePreparePresets(resource, presets) {
   const { t: tExt } = useGetTranslation();
   const { t } = useTranslation();
 

@@ -13,7 +13,7 @@ import { useGetSchema } from 'hooks/useGetSchema';
 import { prettifyKind } from 'shared/utils/helpers';
 
 import { ResourceSchema } from './ResourceSchema';
-import { PreparePresets, createTemplate, getDefaultPreset } from './helpers';
+import { usePreparePresets, createTemplate, getDefaultPreset } from './helpers';
 import { VarStoreContextProvider } from './contexts/VarStore';
 import { prepareSchemaRules } from './helpers/prepareSchemaRules';
 
@@ -44,7 +44,7 @@ export function ExtensibilityCreate({
     initialResource || defaultPreset?.value || emptyTemplate,
   );
 
-  const presets = PreparePresets(emptyTemplate, createResource?.presets);
+  const presets = usePreparePresets(emptyTemplate, createResource?.presets);
 
   const [store, setStore] = useState(() =>
     createStore(createOrderedMap(resource)),
