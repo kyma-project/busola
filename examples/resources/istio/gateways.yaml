@@ -73,7 +73,6 @@ data:
               "source": "$podSelector()",
               "widget": "ResourceList",
               "disableCreate": true,
-              "isCompact": true,
               "visibility": "$boolean($root.spec.selector)"
             },
             {
