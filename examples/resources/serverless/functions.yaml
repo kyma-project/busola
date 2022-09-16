@@ -1,10 +1,10 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: functions
-  namespace: kube-public
+  name: dd-functions
+  namespace: dd
   labels:
-    app.kubernetes.io/name: functions
+    app.kubernetes.io/name: dd-functions
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
 data:
@@ -86,37 +86,51 @@ data:
           "source": "spec.env",
           "widget": "Table",
           "name": "Environment Variables",
-          "children": [{
-            "source": "$item.name",
-            "name": "Name",
-          }, {
-            "source": "$item.value",
-            "name": "Value"
-          }, {
-            "name": "Value From",
-            "source": "$exists($item.valueFrom.configMapKeyRef)
-              ? $item.valueFrom.configMapKeyRef.name 
-              : $item.valueFrom.secretKeyRef.name"
-          }, {
-            "name": "Controlled By",
-            "widget": "ControlledBy",
-            "source": "$item.owners"
-          }, {
-            "name": "Source",
-            "widget": "Badge",
-            "source": "$exists($item.valueFrom.configMapKeyRef)
-              ? 'CONFIG MAP' 
-              : $exists($item.valueFrom.secretKeyRef)
-                ? 'SECRET'
-                : 'CUSTOM'"
-          }, {
-            "name": "Key",
-            "source": "$exists($item.valueFrom.configMapKeyRef)
-              ? $item.valueFrom.configMapKeyRef.key 
-              : $exists($item.valueFrom.secretKeyRef)
-                ? $item.valueFrom.secretKeyRef.key 
-                : 'N/A'"
-          }]
+          "children": [
+            {
+              "source": "$item.name",
+              "name": "Name",
+            }, {
+              "source": "$item.value",
+              "name": "Value"
+            }, {
+              "name": "Value From",
+              "source": "$exists($item.valueFrom.configMapKeyRef)
+                ? $item.valueFrom.configMapKeyRef.name 
+                : $item.valueFrom.secretKeyRef.name"
+            }, {
+              "name": "Controlled By",
+              "widget": "ControlledBy",
+              "source": "$item.owners"
+            }, {
+              "name": "Source",
+              "widget": "Badge",
+              "source": "$exists($item.valueFrom.configMapKeyRef)
+                ? 'CONFIG MAP' 
+                : $exists($item.valueFrom.secretKeyRef)
+                  ? 'SECRET'
+                  : 'CUSTOM'"
+            }, {
+              "name": "Key",
+              "source": "$exists($item.valueFrom.configMapKeyRef)
+                ? $item.valueFrom.configMapKeyRef.key 
+                : $exists($item.valueFrom.secretKeyRef)
+                  ? $item.valueFrom.secretKeyRef.key 
+                  : 'N/A'"
+            }
+          ]
+        }, {
+          "widget": "ResourceList",
+          "source": "$replicas()",
+          "name": "Replicas of the Function"
+        }, {
+          "widget": "ResourceList",
+          "source": "$apiRules()",
+          "name": "API Rules"
+        }, {
+          "widget": "ResourceList",
+          "source": "$subscriptions()",
+          "name": "Subscriptions"
         }
       ]
     }
@@ -145,9 +159,9 @@ data:
         "group": "serverless.kyma-project.io",
         "version": "v1alpha2"
       },
-      "name": "Ext Functions",
-      "category": "Workloads",
-      "urlPath": "ext-functions",
+      "name": "DD Functions",
+      "category": "DD",
+      "urlPath": "dd-functions",
       "scope": "namespace"
     }
   list: |-
@@ -195,3 +209,29 @@ data:
         "
       }
     ]
+  dataSources: |-
+    {
+      "replicas": {
+        "resource": {
+          "kind": "Pod",
+          "version": "v1",
+        },
+        "filter": "$item.metadata.labels[x='x']"
+      },
+      "apiRules": {
+        "resource": {
+          "kind": "APIRule",
+          "version": "v1alpha1",
+          "group": "gateway.kyma-project.io"
+        },
+        "filter": "$contains($item.spec.service.name, $root.metadata.name)"
+      },
+      "subscriptions": {
+        "resource": {
+          "kind": "Subscription",
+          "version": "v1alpha1",
+          "group": "eventing.kyma-project.io"
+        },
+        "filter": "$contains($item.spec.sink, $root.metadata.name)"
+      }
+    }
