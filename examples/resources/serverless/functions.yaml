@@ -131,6 +131,81 @@ data:
           "widget": "ResourceList",
           "source": "$subscriptions()",
           "name": "Subscriptions"
+        }, {
+          "widget": "Panel",
+          "name": "Resources and Replicas",
+          "children": [{
+            "widget": "Panel",
+            "description": "Minimum and maximum number of running Replicas.",
+            "name": "Scaling Options",
+            "children": [{
+              "name": "Minimum Replicas",
+              "source": "spec.scaleConfig.minReplicas"
+            }, {
+              "name": "Maximum Replicas",
+              "source": "spec.scaleConfig.maxReplicas"
+            }]
+          }, {
+            "widget": "Panel",
+            "name": "Runtime Profile",
+            "children": [{
+              "widget": "Columns",
+              "inline": false,
+              "children": [{
+                "name": "Requests",
+                "widget": "Panel",
+                "description": "Minimum amount of compute resources required.",
+                "children": [{
+                  "name": "Memory",
+                  "source": "spec.resourceConfiguration.function.resources.requests.memory"
+                }, {
+                  "name": "CPU",
+                  "source": "spec.resourceConfiguration.function.resources.requests.cpu"
+                }]
+              }, {
+                "name": "Limits",
+                "widget": "Panel",
+                "description": "Maximum amount of compute resources allowed.",
+                "children": [{
+                  "name": "Memory",
+                  "source": "spec.resourceConfiguration.function.resources.limits.memory"
+                }, {
+                  "name": "CPU",
+                  "source": "spec.resourceConfiguration.function.resources.limits.cpu"
+                }]
+              }]
+            }]
+          }, {
+            "widget": "Panel",
+            "name": "Build Job Profile",
+            "children": [{
+              "widget": "Columns",
+              "inline": false,
+              "children": [{
+                "name": "Requests",
+                "widget": "Panel",
+                "description": "Minimum amount of compute resources required.",
+                "children": [{
+                  "name": "Memory",
+                  "source": "spec.resourceConfiguration.build.resources.requests.memory"
+                }, {
+                  "name": "CPU",
+                  "source": "spec.resourceConfiguration.build.resources.requests.cpu"
+                }]
+              }, {
+                "name": "Limits",
+                "widget": "Panel",
+                "description": "Maximum amount of compute resources allowed.",
+                "children": [{
+                  "name": "Memory",
+                  "source": "spec.resourceConfiguration.build.resources.limits.memory"
+                }, {
+                  "name": "CPU",
+                  "source": "spec.resourceConfiguration.build.resources.limits.cpu"
+                }]
+              }]
+            }]
+          }]
         }
       ]
     }

@@ -23,12 +23,14 @@ export function Panel({
   });
 
   const header = structure?.header || [];
+  const description = structure?.description;
 
   return (
     <LayoutPanel className={panelClassNames}>
       <LayoutPanel.Header>
         <LayoutPanel.Head
           title={widgetT(structure)}
+          description={description}
           className="fd-margin-end--sm"
         />
         {Array.isArray(header)
