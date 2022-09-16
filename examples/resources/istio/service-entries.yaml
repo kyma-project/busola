@@ -1,10 +1,10 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: serviceentries
-  namespace: lyczeq
+  name: service-entries
+  namespace: kube-public
   labels:
-    app.kubernetes.io/name: serviceentries
+    app.kubernetes.io/name: service-entries
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
 data:
