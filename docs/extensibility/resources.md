@@ -10,8 +10,6 @@
 - [_details_ section](#details-section)
 - [_dataSources_ section](#datasources-section)
   - [Data source configuration object fields](#data-source-configuration-object-fields)
-- [_presets_ section](#presets-section)
-  - [Preset configuration object fields](#preset-configuration-object-fields)
 - [_translations_ section](#translations-section)
   - [Value preprocessors](#value-preprocessors)
     - [List of value preprocessors](#list-of-value-preprocessors)
@@ -172,63 +170,6 @@ Those fields are used to build the related resource URL and filter the received 
     "filter": "$matchByLabelSelector($item, $root.spec.selector)"
   }
 }
-```
-
-## _presets_ section
-
-The **presets** section contains a list of objects that define which preset and template will be used in the form view. If any preset has been defined, it will be displayed in the drop-down list along with a second "Default" setting. If the user selects a preset, the form will be filled with the property defined in the values.
-
-<img src="./assets/Presets.png" alt="Preset list with one entry defined as default" style="border: 1px solid #D2D5D9">
-
-### preset configuration object fields
-
-- **name** - _[required]_ a name to display on presets dropdown,
-- **value** - _[required]_ contains fields that will be set when this preset is chosen from the list.
-- **default** - For `default` equal to `true`, it prefills form with values defined in value. It also replaces the default preset on the dropdown of presets.
-
-### Example
-
-```json
-[
-  {
-    "name": "new default",
-    "default": true,
-    "value": {
-      "metadata": {
-        "name": "my-name"
-      },
-      "spec": {
-        "description": "The description that will be set"
-      }
-    }
-  },
-  {
-    "name": "preset",
-    "value": {
-      "metadata": {
-        "name": "second-one"
-      },
-      "spec": {
-        "data": "regex",
-        "description": "A different description",
-        "items": [
-          {
-            "name": "item-1",
-            "value": 10
-          },
-          {
-            "name": "item-2",
-            "value": 11
-          },
-          {
-            "name": "item-3",
-            "value": 5
-          }
-        ]
-      }
-    }
-  }
-]
 ```
 
 ## _translations_ section
