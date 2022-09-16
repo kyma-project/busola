@@ -40,7 +40,7 @@ data:
       },
       "body": [     
           {
-            "name": "summary",
+            "name": "configuration",
             "widget": "Panel",
             "source": "spec",
             "visibility": "$boolean($exists(data.hosts) or $exists(data.addresses) or $exists(data.subjectAltNames))",
@@ -215,7 +215,7 @@ data:
     ]
   translations: |
     en:
-      summary: Summary
+      configuration: Configuration
       spec.hosts: Hosts
       spec.addresses: Addresses
       spec.ports: Ports
