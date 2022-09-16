@@ -91,6 +91,9 @@ data:
               "source": "$item.name",
               "name": "Name",
             }, {
+              "source": "'->'",
+              "name": "",
+            }, {
               "source": "$item.value",
               "name": "Value"
             }, {
@@ -99,7 +102,7 @@ data:
                 ? $item.valueFrom.configMapKeyRef.name 
                 : $item.valueFrom.secretKeyRef.name"
             }, {
-              "name": "Controlled By",
+              "name": "Source Controlled By",
               "widget": "ControlledBy",
               "source": "$item.owners"
             }, {
