@@ -14,6 +14,7 @@ data:
         "resource": {
           "kind": "Pod",
           "version": "v1",
+          "namespace": null
         },
         "filter": "$matchByLabelSelector($item, $root.spec.selector)"
       },
@@ -115,12 +116,13 @@ data:
           { 
             "path": "number", 
             "simple": true,
-            "required": true
+            "required": true,
+            "inputInfo": "inputInfo.spec.servers.port.number"
           },
           { 
             "path": "name", 
             "widget": "Name", 
-            "showHelp": false, 
+            "inputInfo": null, 
             "simple": true ,
             "required": true
           },
@@ -244,3 +246,4 @@ data:
       placeholders.privateKey: Enter the private key path
       placeholders.caCertificates: Enter the CA certificates path
       placeholders.hosts: For example, *.api.mydomain.com
+      inputInfo.spec.servers.port.number: Must be a on-negative number.
