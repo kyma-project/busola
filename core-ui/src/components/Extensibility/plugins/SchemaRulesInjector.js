@@ -38,12 +38,6 @@ export function SchemaRulesInjector({
     const varPath = `$.${varName}${varSuffix}`;
 
     let varValue = jp.value(vars, varPath);
-    let valueExpr = schema.get('value');
-    if (isNil(varValue) && valueExpr) {
-      console.log('i no has value, but has expr', varPath, valueExpr);
-      varValue = jsonataWrapper(valueExpr).evaluate(resource, vars);
-      console.log('my new val', varValue);
-    }
     return (
       <Plugin
         {...props}

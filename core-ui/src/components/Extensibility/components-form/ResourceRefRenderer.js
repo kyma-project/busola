@@ -59,7 +59,7 @@ export function ResourceRefRender({
             res.metadata.namespace === value.namespace &&
             res.metadata.name === value.name,
         );
-        if (provideVar) setVar(provideVar, resource);
+        if (provideVar) setVar(`$.${provideVar}`, resource);
 
         onChange({
           storeKeys: storeKeys,
