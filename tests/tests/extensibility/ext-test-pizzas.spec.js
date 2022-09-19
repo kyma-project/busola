@@ -189,11 +189,13 @@ context('Test Pizzas', () => {
 
     cy.get('@form')
       .find('[data-testid="spec.description"]:visible')
+      .clear()
       .type(PIZZA_DESC);
 
     cy.get('@form')
       .find('[data-testid="spec.sauce"]:visible')
       .find('input')
+      .clear()
       .type(SAUCE);
 
     cy.get('@form')
@@ -204,6 +206,7 @@ context('Test Pizzas', () => {
 
     cy.get('@form')
       .find('[arialabel="Pizza name"]:visible')
+      .clear()
       .type(PIZZA_NAME);
 
     cy.get('@form')

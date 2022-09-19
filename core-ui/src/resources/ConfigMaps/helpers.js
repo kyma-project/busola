@@ -16,7 +16,7 @@ export function createPresets(defs, namespaceId, t) {
 
   return [
     {
-      name: t('common.labels.default-preset'),
+      name: t('common.labels.clear-form'),
       value: createConfigMapTemplate(namespaceId),
     },
     ...defs.map(({ name, ...value }) => ({

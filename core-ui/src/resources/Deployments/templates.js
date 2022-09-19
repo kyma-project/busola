@@ -56,7 +56,7 @@ export function createDeploymentTemplate(namespaceId) {
 export function createPresets(namespace, translate) {
   return [
     {
-      name: translate('common.labels.default-preset'),
+      name: translate('common.labels.clear-form'),
       value: {
         deployment: createDeploymentTemplate(namespace),
       },
