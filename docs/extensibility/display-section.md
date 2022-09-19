@@ -119,7 +119,7 @@ Extra parameters might be available for specific widgets.
     {
       "source": "spec.details",
       "widget": "CodeViewer",
-      "language": "json"
+      "language": "'json'"
     },
     {
       "source": "spec.configPatches",
@@ -422,7 +422,7 @@ CodeViewer widgets display values using a read-only code editor.
 {
   "source": "spec.json-data",
   "widget": "CodeViewer",
-  "language": "yaml"
+  "language": "'yaml'"
 }
 ```
 

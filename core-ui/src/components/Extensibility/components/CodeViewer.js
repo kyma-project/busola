@@ -16,7 +16,7 @@ export function CodeViewer({ value, structure, originalResource, schema }) {
   const notification = useNotification();
 
   const getLanguage = () => {
-    const languageFormula = structure.language;
+    const languageFormula = structure?.language;
     if (languageFormula) {
       try {
         const expression = jsonataWrapper(languageFormula);
@@ -27,8 +27,9 @@ export function CodeViewer({ value, structure, originalResource, schema }) {
         console.warn(e);
         return 'json';
       }
+    } else {
+      return detectLanguage(value);
     }
-    return detectLanguage(value);
   };
 
   const getValueAndLang = (value, structure) => {

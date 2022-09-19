@@ -27,7 +27,7 @@ data:
           "name": "Order details",
           "widget": "CodeViewer",
           "source": "spec.orderDetails",
-          "language": "yaml"
+          "language": "'yaml'"
         },
         {
           "name": "Pizzas",
