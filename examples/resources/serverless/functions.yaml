@@ -294,7 +294,7 @@ data:
           "kind": "Pod",
           "version": "v1",
         },
-        "filter": "$item.metadata.labels[x='x']"
+        "filter": "($item.metadata.labels.'serverless.kyma-project.io/function-name' = $root.metadata.name) and ($item.metadata.labels.'serverless.kyma-project.io/resource' = 'deployment')"
       },
       "apiRules": {
         "resource": {
