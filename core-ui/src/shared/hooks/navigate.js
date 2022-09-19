@@ -84,7 +84,7 @@ export function navigateToList(resourceType) {
 export function navigateToResource(resource) {
   const {
     metadata: { name, namespace },
-    kind,
+    kind = '',
   } = resource;
 
   let path = `${pluralize(kind.toLowerCase())}/details/${encodeURIComponent(
@@ -98,7 +98,11 @@ export function navigateToResource(resource) {
     .navigate(path);
 }
 
-export function nagivateToResourceAfterCreate(namespace, name, pluralKind) {
+export function nagivateToResourceAfterCreate(
+  namespace,
+  name,
+  pluralKind = '',
+) {
   const encodedName = encodeURIComponent(name);
   if (namespace) {
     LuigiClient.linkManager()
