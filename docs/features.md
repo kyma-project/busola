@@ -365,7 +365,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-- **SHOW_GARDENER_METADATA** - determines if the metadata given from the Gardener should be displayed. The displayed information is the value from the `shoot-info` ConfigMap based in the `kube-system` namespace. If the ConfigMap doesn't exist, the information won't be displayed.
+- **SHOW_GARDENER_METADATA** - determines if the metadata taken from Gardener should be displayed. The displayed information is the value from the `shoot-info` ConfigMap based on the `kube-system` Namespace. If the ConfigMap doesn't exist, the information is not displayed.
 
   ```json
   "SHOW_GARDENER_METADATA": {
