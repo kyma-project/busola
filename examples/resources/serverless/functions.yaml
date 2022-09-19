@@ -56,159 +56,190 @@ data:
       ],
       "body": [
         {
-          "source": "spec.source.inline.source",
-          "widget": "CodeViewer",
-          "name": "Source",
-          "language": "javascript",
-          "visibility": "$exists($.data)"
-        }, {
-          "source": "spec.source.inline.dependencies",
-          "widget": "CodeViewer",
-          "name": "Dependencies",
-          "language": "json",
-          "visibility": "$exists($.data)"
-        }, {
-          "source": "spec.source.gitRepository",
-          "widget": "Panel",
-          "name": "Repository Configuration",
-          "visibility": "$exists($.data)",
-          "children": [{
-            "name": "Url",
-            "source": "spec.source.gitRepository.url"
-          }, {
-            "name": "Reference",
-            "source": "spec.source.gitRepository.reference"
-          }, {
-            "name": "Base Directory",
-            "source": "spec.source.gitRepository.baseDir"
-          }]
-        }, {
-          "source": "spec.env",
-          "widget": "Table",
-          "name": "Environment Variables",
+          "widget": "Tabs",
           "children": [
             {
-              "source": "$item.name",
-              "name": "Name",
-            }, {
-              "source": "'->'",
-              "name": "",
-            }, {
-              "source": "$item.value",
-              "name": "Value"
-            }, {
-              "name": "Value From",
-              "source": "$exists($item.valueFrom.configMapKeyRef)
-                ? $item.valueFrom.configMapKeyRef.name 
-                : $item.valueFrom.secretKeyRef.name"
-            }, {
-              "name": "Source Controlled By",
-              "widget": "ControlledBy",
-              "source": "$item.owners"
-            }, {
-              "name": "Source",
-              "widget": "Badge",
-              "source": "$exists($item.valueFrom.configMapKeyRef)
-                ? 'CONFIG MAP' 
-                : $exists($item.valueFrom.secretKeyRef)
-                  ? 'SECRET'
-                  : 'CUSTOM'"
-            }, {
-              "name": "Key",
-              "source": "$exists($item.valueFrom.configMapKeyRef)
-                ? $item.valueFrom.configMapKeyRef.key 
-                : $exists($item.valueFrom.secretKeyRef)
-                  ? $item.valueFrom.secretKeyRef.key 
-                  : 'N/A'"
+              "name": "Code",
+              "children": [ 
+                {
+                  "source": "spec.source.inline.source",
+                  "widget": "CodeViewer",
+                  "name": "Source",
+                  "language": "javascript",
+                  "visibility": "$exists($.data)"
+                }, {
+                  "source": "spec.source.inline.dependencies",
+                  "widget": "CodeViewer",
+                  "name": "Dependencies",
+                  "language": "json",
+                  "visibility": "$exists($.data)"
+                }, {
+                  "source": "spec.source.gitRepository",
+                  "widget": "Panel",
+                  "name": "Repository Configuration",
+                  "visibility": "$exists($.data)",
+                  "children": [{
+                    "name": "Url",
+                    "source": "spec.source.gitRepository.url"
+                  }, {
+                    "name": "Reference",
+                    "source": "spec.source.gitRepository.reference"
+                  }, {
+                    "name": "Base Directory",
+                    "source": "spec.source.gitRepository.baseDir"
+                  }]
+                }, {
+                  "source": "spec.env",
+                  "widget": "Table",
+                  "name": "Environment Variables",
+                  "children": [
+                    {
+                      "source": "$item.name",
+                      "name": "Name",
+                    }, {
+                      "source": "'->'",
+                      "name": "",
+                    }, {
+                      "source": "$item.value",
+                      "name": "Value"
+                    }, {
+                      "name": "Value From",
+                      "widget": "ResourceLink",
+                      "source": "$item.valueFrom",
+                      "linkText": "data.configMapKeyRef ? data.configMapKeyRef.name : data.secretKeyRef.name",
+                      "resource": {
+                        "name": "data.configMapKeyRef ? data.configMapKeyRef.name : data.secretKeyRef.name",
+                        "namespace": "root.metadata.namespace",
+                        "kind": "data.configMapKeyRef
+                        ? 'ConfigMap' 
+                        : 'Secret'"
+                      }
+                    }, {
+                      "name": "Source Controlled By",
+                      "widget": "ControlledBy",
+                      "source": "$item.owners"
+                    }, {
+                      "name": "Source",
+                      "widget": "Badge",
+                      "source": "$exists($item.valueFrom.configMapKeyRef)
+                        ? 'CONFIG MAP' 
+                        : $exists($item.valueFrom.secretKeyRef)
+                          ? 'SECRET'
+                          : 'CUSTOM'"
+                    }, {
+                      "name": "Key",
+                      "source": "$exists($item.valueFrom.configMapKeyRef)
+                        ? $item.valueFrom.configMapKeyRef.key 
+                        : $exists($item.valueFrom.secretKeyRef)
+                          ? $item.valueFrom.secretKeyRef.key 
+                          : 'N/A'"
+                    }
+                  ]
+                }, {
+                  "widget": "ResourceList",
+                  "source": "$replicas()",
+                  "name": "Replicas of the Function"
+                }
+              ]
+            },
+            {
+              "name": "Configuration",
+              "children": [ 
+                {
+                  "widget": "ResourceList",
+                  "source": "$apiRules()",
+                  "name": "API Rules"
+                }, {
+                  "widget": "ResourceList",
+                  "source": "$subscriptions()",
+                  "name": "Subscriptions"
+                }
+              ]
+            }, 
+            {
+              "name": "Resources",
+              "children": [  
+                {
+                  "widget": "Panel",
+                  "name": "Resources and Replicas",
+                  "children": [
+                    {
+                      "widget": "Panel",
+                      "description": "Minimum and maximum number of running Replicas.",
+                      "name": "Scaling Options",
+                      "children": [{
+                        "name": "Minimum Replicas",
+                        "source": "spec.scaleConfig.minReplicas"
+                      }, {
+                        "name": "Maximum Replicas",
+                        "source": "spec.scaleConfig.maxReplicas"
+                      }]
+                    }, {
+                      "widget": "Panel",
+                      "name": "Runtime Profile",
+                      "children": [{
+                        "widget": "Columns",
+                        "inline": false,
+                        "children": [{
+                          "name": "Requests",
+                          "widget": "Panel",
+                          "description": "Minimum amount of compute resources required.",
+                          "children": [{
+                            "name": "Memory",
+                            "source": "spec.resourceConfiguration.function.resources.requests.memory"
+                          }, {
+                            "name": "CPU",
+                            "source": "spec.resourceConfiguration.function.resources.requests.cpu"
+                          }]
+                        }, {
+                          "name": "Limits",
+                          "widget": "Panel",
+                          "description": "Maximum amount of compute resources allowed.",
+                          "children": [{
+                            "name": "Memory",
+                            "source": "spec.resourceConfiguration.function.resources.limits.memory"
+                          }, {
+                            "name": "CPU",
+                            "source": "spec.resourceConfiguration.function.resources.limits.cpu"
+                          }]
+                        }]
+                      }]
+                    }, {
+                      "widget": "Panel",
+                      "name": "Build Job Profile",
+                      "children": [{
+                        "widget": "Columns",
+                        "inline": false,
+                        "children": [{
+                          "name": "Requests",
+                          "widget": "Panel",
+                          "description": "Minimum amount of compute resources required.",
+                          "children": [{
+                            "name": "Memory",
+                            "source": "spec.resourceConfiguration.build.resources.requests.memory"
+                          }, {
+                            "name": "CPU",
+                            "source": "spec.resourceConfiguration.build.resources.requests.cpu"
+                          }]
+                        }, {
+                          "name": "Limits",
+                          "widget": "Panel",
+                          "description": "Maximum amount of compute resources allowed.",
+                          "children": [{
+                            "name": "Memory",
+                            "source": "spec.resourceConfiguration.build.resources.limits.memory"
+                          }, {
+                            "name": "CPU",
+                            "source": "spec.resourceConfiguration.build.resources.limits.cpu"
+                          }]
+                        }]
+                      }]
+                    }
+                  ]
+                }
+              ]
             }
           ]
-        }, {
-          "widget": "ResourceList",
-          "source": "$replicas()",
-          "name": "Replicas of the Function"
-        }, {
-          "widget": "ResourceList",
-          "source": "$apiRules()",
-          "name": "API Rules"
-        }, {
-          "widget": "ResourceList",
-          "source": "$subscriptions()",
-          "name": "Subscriptions"
-        }, {
-          "widget": "Panel",
-          "name": "Resources and Replicas",
-          "children": [{
-            "widget": "Panel",
-            "description": "Minimum and maximum number of running Replicas.",
-            "name": "Scaling Options",
-            "children": [{
-              "name": "Minimum Replicas",
-              "source": "spec.scaleConfig.minReplicas"
-            }, {
-              "name": "Maximum Replicas",
-              "source": "spec.scaleConfig.maxReplicas"
-            }]
-          }, {
-            "widget": "Panel",
-            "name": "Runtime Profile",
-            "children": [{
-              "widget": "Columns",
-              "inline": false,
-              "children": [{
-                "name": "Requests",
-                "widget": "Panel",
-                "description": "Minimum amount of compute resources required.",
-                "children": [{
-                  "name": "Memory",
-                  "source": "spec.resourceConfiguration.function.resources.requests.memory"
-                }, {
-                  "name": "CPU",
-                  "source": "spec.resourceConfiguration.function.resources.requests.cpu"
-                }]
-              }, {
-                "name": "Limits",
-                "widget": "Panel",
-                "description": "Maximum amount of compute resources allowed.",
-                "children": [{
-                  "name": "Memory",
-                  "source": "spec.resourceConfiguration.function.resources.limits.memory"
-                }, {
-                  "name": "CPU",
-                  "source": "spec.resourceConfiguration.function.resources.limits.cpu"
-                }]
-              }]
-            }]
-          }, {
-            "widget": "Panel",
-            "name": "Build Job Profile",
-            "children": [{
-              "widget": "Columns",
-              "inline": false,
-              "children": [{
-                "name": "Requests",
-                "widget": "Panel",
-                "description": "Minimum amount of compute resources required.",
-                "children": [{
-                  "name": "Memory",
-                  "source": "spec.resourceConfiguration.build.resources.requests.memory"
-                }, {
-                  "name": "CPU",
-                  "source": "spec.resourceConfiguration.build.resources.requests.cpu"
-                }]
-              }, {
-                "name": "Limits",
-                "widget": "Panel",
-                "description": "Maximum amount of compute resources allowed.",
-                "children": [{
-                  "name": "Memory",
-                  "source": "spec.resourceConfiguration.build.resources.limits.memory"
-                }, {
-                  "name": "CPU",
-                  "source": "spec.resourceConfiguration.build.resources.limits.cpu"
-                }]
-              }]
-            }]
-          }]
         }
       ]
     }
