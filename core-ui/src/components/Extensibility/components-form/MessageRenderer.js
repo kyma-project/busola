@@ -4,8 +4,6 @@ import { useGetTranslation } from 'components/Extensibility/helpers';
 import { MessageStrip } from 'fundamental-react';
 
 export function MessageRenderer({
-  onChange,
-  onKeyDown,
   value,
   schema,
   storeKeys,
@@ -15,6 +13,7 @@ export function MessageRenderer({
   console.log('first');
   const { t: tExt } = useGetTranslation();
   const message = schema.get('message');
+  const schemaType = schema.get('type') || 'information';
 
-  return <MessageStrip>{tExt(message)}</MessageStrip>;
+  return <MessageStrip type={schemaType}>{tExt(message)}</MessageStrip>;
 }
