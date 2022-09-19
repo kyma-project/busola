@@ -103,24 +103,19 @@ export function usePreparePresets(resource, presets) {
 
   if (!presets || !presets.length) return null;
   let preparedPresets = [];
-  let hasDefaultPreset = false;
 
   presets.forEach(preset => {
-    if (preset.default === true) hasDefaultPreset = true;
-
     preparedPresets.push(
       merge({}, { value: resource }, { ...preset, name: tExt(preset.name) }),
     );
   });
 
-  if (!hasDefaultPreset) {
-    preparedPresets.unshift({
-      name: t('common.create-form.clear-form'),
-      value: resource,
-    });
-  }
+  preparedPresets.unshift({
+    name: t('common.create-form.clear-form'),
+    value: resource,
+  });
 
-  if (hasDefaultPreset && preparedPresets.length <= 1) return null;
+  if (preparedPresets.length <= 1) return null;
   return preparedPresets;
 }
 
