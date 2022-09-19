@@ -1,11 +1,10 @@
 import React from 'react';
-import { last, isNil } from 'lodash';
+import { last } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 import { List, fromJS } from 'immutable';
 import * as jp from 'jsonpath';
 
 import { useVariables } from '../hooks/useVariables';
-import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 // fake an OrderedMap-like structure using List to allow for duplicate keys
 const propertiesWrapper = src => ({
