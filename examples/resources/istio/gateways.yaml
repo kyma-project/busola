@@ -191,6 +191,11 @@ data:
             "visibility": "$item.port.protocol = 'HTTPS'",
             "placeholder": "placeholders.caCertificates",
           },
+          {
+            "simple": true,
+            "visibility": "$item.port.protocol ='HTTPS'",
+            "message": "TLS Server of mode SIMPLE or MUTUAL needs either credential name, or private key and server certificate pair.".
+          }
         ]
       },
       {
