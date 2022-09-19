@@ -416,7 +416,8 @@ common:
     view-yaml: View YAML
   create-form:
     autocomplete-unavailable-error: Monaco autocompletion unavailable. {{error}}.
-    choose-preset: Choose option
+    choose-preset: Choose preset
+    clear-form: Clear
     editor-error: 'Parse error: {{error}}, previous valid input will be used'
     messages:
       create-failure: 'Failed to create the {{resourceType}}: {{error}}'
@@ -465,8 +466,8 @@ common:
     zone: Zone
   labels:
     category: Category
+    clear-form: Clear
     data: Data
-    default-preset: Default
     hostname: Hostname
     issuer: Issuer
     kubernetes: Kubernetes

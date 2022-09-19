@@ -207,3 +207,79 @@ data:
       "scope": "namespace",
       "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
     }
+  presets: |-
+    [
+      {
+        "name": "Margherita",
+        "default": true,
+        "value": {
+          "metadata": {
+            "name": "margherita",
+            "labels": {
+              "app.kubernetes.io/name": "margherita",
+            },
+          },
+          "spec": {
+            "comments": [
+              "Please, make my pizza quickly.",
+              "Margherita is a delicious pizza!",
+            ],
+            "description": "Margherita is a simple, vegetarian pizza.",
+            "sauce": "GARLIC",
+            "toppings": [
+              {
+                "name": "Tomato sauce",
+                "price": 3,
+                "quantity": 1,
+              },
+              {
+                "name": "Cheese",
+                "price": 5,
+                "quantity": 4,
+              },
+              {
+                "name": "Basil",
+                "price": 7,
+                "quantity": 6,
+              },
+            ],
+          }
+        }
+      },
+      {
+        "name": "Diavola",
+        "value": {
+          "metadata": {
+            "name": "diavola",
+            "labels": {
+              "app.kubernetes.io/name": "diavola",
+            },
+          },
+          "spec": {
+            "comments": [
+              "I would like the spiciest pizza.",
+              "I would like to ask for a discount for students.",
+            ],
+            "description": "Diavola is such a spicy pizza, it includes hot salami and pickled jalapeños!",
+            "sauce": "TOMATO",
+            "toppings": [
+              {
+                "name": "Hot salami",
+                "price": 10,
+                "quantity": 5,
+              },
+              {
+                "name": "Pickled jalapeños",
+                "price": 18,
+                "quantity": 10,
+              },
+              {
+                "name": "Cheese",
+                "price": 4,
+                "quantity": 5,
+              },
+            ],
+          }
+        }
+      }
+    ]
