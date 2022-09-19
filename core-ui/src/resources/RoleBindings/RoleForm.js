@@ -32,6 +32,10 @@ export const RoleForm = ({
           selectedKey={props.value}
           options={['Role', 'ClusterRole'].map(v => ({ key: v, text: v }))}
           {...props}
+          setValue={value => {
+            binding.roleRef.name = '';
+            props.setValue(value);
+          }}
           disabled={!namespace}
         />
       )}
