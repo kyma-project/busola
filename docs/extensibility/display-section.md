@@ -354,7 +354,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 #### Widget-specific parameters
 
 - **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **data** - value extracted using **source**, or **root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
-- **linkText** - this property has access to **data** and **root**. This makes it possible to insert resource properties into a translation.
+- **linkText** - a jsonata expression resolving the link text, this property has access to **data** and **root**. To insert dynamic parts of translations, use double quotes `Go to {{data.name}}`.
 
 #### Example
 
@@ -364,7 +364,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 {
   "widget": "ResourceLink",
   "source": "metadata.ownerReferences[0]",
-  "linkText": "'otherTranslations.linkText'",
+  "linkText": "data.status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'",
   "resource": {
     "name": "data.name",
     "namespace": "root.metadata.namespace",
@@ -379,7 +379,8 @@ ResourceLink widgets render internal links to Kubernetes resources.
 
 ```yaml
 en:
-  otherTranslations.linkText: 'Go to {{data.kind}} {{data.name}}'.
+  otherTranslations.linkText: 'Go to {{data.kind}} {{data.name}}'
+  otherTranslations.errorLinkText: 'Error in {{data.kind}} {{data.name}}'
 ```
 
 ### Text
@@ -413,7 +414,7 @@ CodeViewer widgets display values using a read-only code editor.
 
 #### Widget-specific parameters
 
-- **language** - used for code highlighting. The editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
+- **language** - a jsonata expression resolving the desired language, used for code highlighting. It has access to the `$root` variable, containing the entire resource. The editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
   If the language is not specified, the editor tries to display the content as `yaml` with a fallback to `json`.
 
 #### Example
@@ -422,7 +423,7 @@ CodeViewer widgets display values using a read-only code editor.
 {
   "source": "spec.json-data",
   "widget": "CodeViewer",
-  "language": "'yaml'"
+  "language": "$root.spec.language = 'JavaScript' ? 'javascript' : 'yaml'"
 }
 ```
 
@@ -462,6 +463,36 @@ Columns widgets render the child widgets in multiple columns.
 
 <img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
 
+### Tabs
+
+Tabs widgets render the child widgets in multiple tabs.
+
+#### Example
+
+```json
+{
+  "widget": "Tabs",
+  "children": [
+    {
+      "name": "General",
+      "children": [{
+        "widget": "Panel",
+        "name": "Overview",
+        "source": ...
+      }],
+    },
+    {
+      "name": "Resources",
+      "children": [{
+        "widget": "ResourceRefs",
+        "source": ...
+      }]
+    }
+  ]
+}
+```
+
+<img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">
 ### Panel
 
 Panel widgets render an object as a separate panel with its own title (based on its `source` or `name`).
