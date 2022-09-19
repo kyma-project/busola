@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
+import { Label } from '../../../shared/ResourceForm/components/Label';
 
 const getValue = (storeKeys, resource) => {
   let value = resource;
@@ -18,7 +19,7 @@ export function MonacoRenderer({
   required,
   resource,
 }) {
-  const { tFromStoreKeys } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
   const value = getValue(storeKeys, resource);
 
@@ -42,12 +43,22 @@ export function MonacoRenderer({
     [required],
   );
   const schemaRequired = schema.get('required');
+  const inputInfo = schema.get('inputInfo');
+  const tooltipContent = schema.get('description');
 
   return (
     <ResourceForm.CollapsibleSection
       title={tFromStoreKeys(storeKeys, schema)}
       required={schemaRequired ?? required}
     >
+      <div className="fd-margin-bottom--sm">
+        <Label
+          required={schemaRequired ?? required}
+          tooltipContent={tExt(tooltipContent)}
+        >
+          {tFromStoreKeys(storeKeys, schema)}
+        </Label>
+      </div>
       <Editor
         autocompletionDisabled
         updateValueOnParentChange
@@ -55,6 +66,9 @@ export function MonacoRenderer({
         language="json"
         onChange={handleChange}
       />
+      {inputInfo && (
+        <p style={{ color: 'var(--sapNeutralTextColor)' }}>{tExt(inputInfo)}</p>
+      )}
     </ResourceForm.CollapsibleSection>
   );
 }
