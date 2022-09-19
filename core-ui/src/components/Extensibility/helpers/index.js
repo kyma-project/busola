@@ -54,20 +54,14 @@ export const useGetTranslation = path => {
     });
   };
 
-  const unstringify = value => {
-    try {
-      // eslint-disable-next-line no-new-func
-      return new Function('return ' + value + ';')();
-    } catch (e) {
-      return value;
-    }
-  };
-
   return {
     t: (path, ...props) => {
       const translation = t(`${translationBundle}::${path}`, ...props) || path;
-      // change 'undefined' to undefined etc.
-      return unstringify(translation);
+      return translation === 'undefined'
+        ? undefined
+        : translation === 'null'
+        ? null
+        : translation;
     },
     tryTranslate: path => (exists(path) ? t(path) : ''),
     tFromStoreKeys,
