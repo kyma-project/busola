@@ -226,7 +226,7 @@ data:
   presets: |-
     [
       {
-        "name": "ingressgateway",
+        "name": "Ingress Gateway",
         "value": {
           "metadata": {
             "name": "httpbin-gateway",

@@ -46,7 +46,7 @@ export function createRolePresets(namespace, translate, groupVersions) {
 
   return [
     {
-      name: translate('common.labels.default-preset'),
+      name: translate('common.labels.clear-form'),
       value: createRoleTemplate(namespace),
     },
     {

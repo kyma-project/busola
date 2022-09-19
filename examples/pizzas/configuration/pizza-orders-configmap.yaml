@@ -116,7 +116,7 @@ data:
   presets: |-
     [
       {
-        "name": "cash-delivery",
+        "name": "Cash Delivery",
         "value": {
           "spec": {
             "orderDetails": {
@@ -127,7 +127,7 @@ data:
         }
       },
       {
-        "name": "card-pickup",
+        "name": "Card Pickup",
         "value": {
           "spec": {
             "orderDetails": {

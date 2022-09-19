@@ -210,7 +210,7 @@ data:
   presets: |-
     [
       {
-        "name": "margherita",
+        "name": "Margherita",
         "default": true,
         "value": {
           "metadata": {
@@ -247,7 +247,7 @@ data:
         }
       },
       {
-        "name": "diavola",
+        "name": "Diavola",
         "value": {
           "metadata": {
             "name": "diavola",

@@ -115,7 +115,7 @@ export function usePreparePresets(resource, presets) {
 
   if (!hasDefaultPreset) {
     preparedPresets.unshift({
-      name: t('common.create-form.default-preset'),
+      name: t('common.create-form.clear-form'),
       value: resource,
     });
   }
