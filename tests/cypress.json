@@ -21,6 +21,7 @@
     "cluster/test-download-a-kubeconfig.spec.js",
     "cluster/test-cluster-overview.spec.js",
     "cluster/kyma-version.spec.js",
+    "cluster/test-gardener-provider.spec.js",
     "cluster/test-kyma-version.spec.js",
     "cluster/test-cluster-role-bindings.spec.js",
     "cluster/test-storage-classes.spec.js",

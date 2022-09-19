@@ -456,11 +456,13 @@ common:
     namespace: Namespace
     owner: Controlled By
     pods: Pods
+    region: Region
     resource: Resource
     resources: Resources
     status: Status
     value: Value
     version: Version
+    zone: Zone
   labels:
     category: Category
     data: Data
@@ -1150,6 +1152,9 @@ functions:
       config-map: Config Map
       custom: Custom
       secret: Secret
+gardener:
+  headers:
+    provider: Provider
 gateways:
   aria-labels:
     host: Host
@@ -1785,6 +1790,7 @@ role-bindings:
     group-name: Group name
     kind: Kind
     role: Role
+    role-type: Role Type
     subject: Subject
     subjects: Subjects
     tooltips:

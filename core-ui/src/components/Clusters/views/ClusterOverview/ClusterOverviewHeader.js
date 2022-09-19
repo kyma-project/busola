@@ -1,34 +1,60 @@
-import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
-import { useTranslation } from 'react-i18next';
-import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { getErrorMessage } from 'shared/utils/helpers';
-import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { Button } from 'fundamental-react';
-import { ClusterStorageType } from '../ClusterStorageType';
-import { useKymaVersionQuery } from './useKymaVersionQuery';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { YamlUploadDialog } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
+import { PageHeader } from 'shared/components/PageHeader/PageHeader';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { ClusterStorageType } from '../ClusterStorageType';
+import { useGetGardenerProvider } from './useGetGardenerProvider';
+import { useGetVersions } from './useGetVersions';
+
+const Versions = () => {
+  const { t } = useTranslation();
+  const { loading, kymaVersion, k8sVersion } = useGetVersions();
+
+  return (
+    <PageHeader.Column title={t('clusters.overview.version')}>
+      {loading || (
+        <>
+          <p>
+            {t('common.labels.kubernetes')}: {k8sVersion}
+          </p>
+          {kymaVersion && (
+            <p>
+              {t('common.labels.kyma')}: {kymaVersion}
+            </p>
+          )}
+        </>
+      )}
+    </PageHeader.Column>
+  );
+};
+
+const GardenerProvider = () => {
+  const { t } = useTranslation();
+  const { features } = useMicrofrontendContext();
+
+  const showGardenerMetadata = features.SHOW_GARDENER_METADATA?.isEnabled;
+
+  const provider = useGetGardenerProvider({
+    skip: !showGardenerMetadata,
+  });
+
+  if (!showGardenerMetadata) return null;
+  if (!provider) return null;
+
+  return (
+    <PageHeader.Column title={t('gardener.headers.provider')}>
+      <p className="gardener-provider ">{provider}</p>
+    </PageHeader.Column>
+  );
+};
 
 export function ClusterOverviewHeader() {
   const { t } = useTranslation();
   const { cluster, config } = useMicrofrontendContext();
   const [showAdd, setShowAdd] = useState(false);
-  const {
-    data: version,
-    error: versionError,
-    loading: versionLoading,
-  } = useGet('/version');
-  const { features } = useMicrofrontendContext();
-  const showKymaVersion = features.SHOW_KYMA_VERSION?.isEnabled;
-
-  const kymaVersion = useKymaVersionQuery({ skip: !showKymaVersion });
-
-  function formatClusterVersion() {
-    if (versionLoading) return t('common.headers.loading');
-    if (versionError) return getErrorMessage(versionError);
-    return version.gitVersion;
-  }
 
   const actions = (
     <Button
@@ -48,26 +74,14 @@ export function ClusterOverviewHeader() {
         title={t('clusters.overview.title-current-cluster')}
         actions={actions}
       >
-        <PageHeader.Column title={t('clusters.overview.version')}>
-          {showKymaVersion ? (
-            <>
-              <p>
-                {t('common.labels.kubernetes')}: {formatClusterVersion()}
-              </p>
-              <p>
-                {t('common.labels.kyma')}: {kymaVersion}
-              </p>
-            </>
-          ) : (
-            formatClusterVersion()
-          )}
-        </PageHeader.Column>
+        <Versions />
         <PageHeader.Column title={t('clusters.common.api-server-address')}>
           {cluster?.cluster.server}
         </PageHeader.Column>
         <PageHeader.Column title={t('clusters.storage.title')}>
           <ClusterStorageType clusterConfig={config} />
         </PageHeader.Column>
+        <GardenerProvider />
       </PageHeader>
       <YamlUploadDialog
         show={showAdd}
