@@ -37,7 +37,7 @@ export function createRuleTemplate(isNamespaced) {
     apiGroups: [],
     resources: [],
     resourceNames: [],
-    ...(isNamespaced ? { nonResourceURLs: [] } : null),
+    ...(isNamespaced ? null : { nonResourceURLs: [] }),
   };
 }
 
