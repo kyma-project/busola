@@ -103,11 +103,11 @@ data:
                       "name": "Value From",
                       "widget": "ResourceLink",
                       "source": "$item.valueFrom",
-                      "linkText": "data.configMapKeyRef ? data.configMapKeyRef.name : data.secretKeyRef.name",
+                      "linkText": "$exists(data.configMapKeyRef)? data.configMapKeyRef.name : data.secretKeyRef.name",
                       "resource": {
-                        "name": "data.configMapKeyRef ? data.configMapKeyRef.name : data.secretKeyRef.name",
+                        "name": "$exists(data.configMapKeyRef) ? data.configMapKeyRef.name : data.secretKeyRef.name",
                         "namespace": "root.metadata.namespace",
-                        "kind": "data.configMapKeyRef
+                        "kind": "$exists(data.configMapKeyRef)
                         ? 'ConfigMap' 
                         : 'Secret'"
                       }
@@ -135,7 +135,8 @@ data:
                 }, {
                   "widget": "ResourceList",
                   "source": "$replicas()",
-                  "name": "Replicas of the Function"
+                  "name": "Replicas of the Function",
+                  "disableCreate": true
                 }
               ]
             },

@@ -364,7 +364,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 {
   "widget": "ResourceLink",
   "source": "metadata.ownerReferences[0]",
-  "linkText": "otherTranslations.linkText",
+  "linkText": "'otherTranslations.linkText'",
   "resource": {
     "name": "data.name",
     "namespace": "root.metadata.namespace",
@@ -379,7 +379,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 
 ```yaml
 en:
-  otherTranslations.linkText: Go to {{data.kind}} {{data.name}}.
+  otherTranslations.linkText: 'Go to {{data.kind}} {{data.name}}'.
 ```
 
 ### Text
