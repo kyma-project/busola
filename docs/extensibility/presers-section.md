@@ -1,12 +1,12 @@
 # _presets_ section
 
-The **presets** section contains a list of objects that define which preset and template will be used in the form view. If any preset has been defined, it will be displayed in the drop-down list along with a second "Clear" setting. If the user selects a preset, the form will be filled with the property defined in the values.
+The **presets** section contains a list of objects that define which preset and template are used in the form view. If you specify a preset, it is displayed in the dropdown list along with the **Clear** option. If a user selects a preset, the form is filled with the property defined in the **value** property.
 
 ## preset configuration object fields
 
-- **name** - _[required]_ a name to display on presets dropdown,
-- **value** - _[required]_ contains fields that will be set when this preset is chosen from the list.
-- **default** - For `default` equal to `true`, it prefills form with values defined in value. Defaults to `false`.
+- **name** - _[required]_ a name to display on the preset's dropdown,
+- **value** - _[required]_ contains fields that are set when you choose this preset from the list.
+- **default** - For `default` equal to `true`, it prefills form with values defined in the **value** property. Defaults to `false`.
 
 ## Example
 
@@ -20,7 +20,7 @@ The **presets** section contains a list of objects that define which preset and 
         "name": "my-name"
       },
       "spec": {
-        "description": "The description that will be set"
+        "description": "A set description"
       }
     }
   },
