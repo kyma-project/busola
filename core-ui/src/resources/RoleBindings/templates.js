@@ -41,7 +41,7 @@ function createNamespacedBindingTemplate(namespace) {
     },
     subjects: [newSubject()],
     roleRef: {
-      kind: '',
+      kind: 'Role',
       name: '',
       apiGroup: DEFAULT_APIGROUP,
     },
@@ -56,7 +56,7 @@ function createClusterBindingTemplate() {
     },
     subjects: [newSubject()],
     roleRef: {
-      kind: '',
+      kind: 'ClusterRole',
       name: '',
       apiGroup: DEFAULT_APIGROUP,
     },

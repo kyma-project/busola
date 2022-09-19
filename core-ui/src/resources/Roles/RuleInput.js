@@ -145,7 +145,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
             compact
             glyph="add"
             onClick={addAllResources}
-            disabled={loading}
+            disabled={loading || !apiRules?.length}
           >
             {t('roles.buttons.add-all')}
           </Button>,
