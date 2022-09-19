@@ -1,0 +1,240 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: service-entries
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: service-entries
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |
+    {
+      "podSelector": {
+        "resource": {
+          "kind": "Pod",
+          "version": "v1",
+        },
+        "filter": "$matchByLabelSelector($item, $root.spec.workloadSelector.labels)"
+      },
+    }
+  details: |
+    {
+      "header": [
+        {
+          "source": "spec.location",
+          "name": "spec.location",
+        },
+        {
+          "source": "spec.resolution",
+          "name": "spec.resolution",
+        },
+      ],
+      "resourceGraph": {
+        "colorVariant": 2,
+        "dataSources": [
+          {
+            "source": "podSelector"
+          }
+        ]
+      },
+      "body": [     
+          {
+            "name": "configuration",
+            "widget": "Panel",
+            "source": "spec",
+            "visibility": "$boolean($exists(data.hosts) or $exists(data.addresses) or $exists(data.subjectAltNames))",
+            "children": [
+              { "name": "spec.hosts", "source": "$item.hosts", "widget": "JoinedArray", "visibility": "$exists(*)"},
+              { "name": "spec.addresses", "source": "$item.addresses", "widget": "JoinedArray", "visibility": "$exists(*)"},
+              { "name": "spec.exportTo", "source": "$item.exportTo", "widget": "Labels", "placeholder": "Exported to all Namespaces"},
+              { "name": "spec.subjectAltNames", "source": "$item.subjectAltNames", "widget": "JoinedArray", "visibility": "$exists(*)"},
+            ]
+          },
+          {
+            "name": "spec.ports",
+            "widget": "Table",
+            "source": "spec.ports",
+            "visibility": "$exists(*)",
+            "children": [
+              {
+                "name": "spec.ports.number", "source": "$item.number", "sort": true
+              },
+              {
+                "name": "spec.ports.protocol", "source": "$item.protocol", "sort": true
+              },
+              {
+                "name": "spec.ports.name", "source": "$item.name", "sort": true
+              },
+              {
+                "name": "spec.ports.targetPort", "source": "$item.targetPort", "sort": true
+              },
+            ]
+          },
+          {
+            "name": "spec.endpoints",
+            "widget": "Table",
+            "source": "spec.endpoints",
+            "visibility": "$exists(*)",
+            "children": [
+              {
+                "name": "spec.endpoints.address", "source": "$item.address", "sort": true
+              },
+              {
+                "name": "spec.endpoints.ports", "source": "$item.ports", "widget": "Labels"
+              },
+              {
+                "name": "spec.endpoints.labels", "source": "$item.labels", "widget": "Labels"
+              },
+              {
+                "name": "spec.endpoints.network", "source": "$item.network", "sort": true
+              },
+              {
+                "name": "spec.endpoints.weight", "source": "$item.weight"
+              },
+              {
+                "name": "spec.endpoints.serviceAccount", "source": "$item.serviceAccount"
+              },
+            ]
+          },
+          {
+            "name": "spec.workloadSelector",
+            "widget": "Panel",
+            "source": "spec.workloadSelector.labels",
+            "visibility": "$exists(*)",
+            "disablePadding": true,
+            "children": [
+              { 
+                "source": "$podSelector()",
+                "widget": "ResourceList",
+                "disableCreate": true,
+              }
+            ],
+            "header": [
+              {
+                "widget": "Labels",
+                "source": "spec.workloadSelector.labels",
+                "visibility": "$exists(*)"
+              }
+            ]
+          }
+      ],
+    }
+  form: |-
+    [
+      {
+        "path": "spec.hosts", "name": "spec.hosts", "widget": "SimpleList", "simple": true, "required": true
+      },
+      {
+        "path": "spec.addresses", "name": "spec.addresses", "widget": "SimpleList", "placeholder": "placeholders.addreses"
+      },
+      {
+        "path": "spec.ports", "name": "Ports", "widget": "GenericList", "children": [
+          {
+            "path": "[].number", "name": "spec.ports.number", "required": true
+          },
+          {
+            "path": "[].protocol", "name": "spec.ports.protocol", "required": true, "placeholder": "placeholders.dropdown", "enum": [
+              'HTTP', 'HTTPS', 'GRPC', 'HTTP2', 'MONGO', 'TCP', 'TLS'
+            ]
+          },
+          {
+            "path": "[].name", "name": "spec.ports.name", "required": true
+          },
+          {
+            "path": "[].targetPort", "name": "spec.ports.targetPort"
+          },
+        ]
+      },
+      {
+        "path": "spec.location", "name": "spec.location", "placeholder": "placeholders.dropdown"
+      },
+      {
+        "path": "spec.resolution", "name": "spec.resolution", "placeholder": "placeholders.dropdown"
+      },
+      {
+        "path": "spec.endpoints", "name": "spec.endpoints", "widget": "GenericList", "children": [
+          {
+            "path": "[].address", "name": "spec.endpoints.address"
+          },
+          {
+            "path": "[].ports", "name": "spec.endpoints.ports", "widget": "KeyValuePair", "value": { "type": "number" }
+          },
+          {
+            "path": "[].labels", "name": "spec.endpoints.labels", "widget": "KeyValuePair"
+          },
+          {
+            "path": "[].network", "name": "spec.endpoints.network"
+          },
+          {
+            "path": "[].locality", "name": "spec.endpoints.locality"
+          },
+          {
+            "path": "[].weight", "name": "spec.endpoints.weight"
+          },
+          {
+            "path": "[].serviceAccount", "name": "spec.endpoints.serviceAccount"
+          },
+        ]
+      },
+      {
+        "path": "spec.workloadSelector.labels", "name": "spec.workloadSelector", "widget": "KeyValuePair"
+      },
+      {
+        "path": "spec.exportTo", "name": "spec.exportTo", "widget": "SimpleList"
+      },
+      {
+        "path": "spec.subjectAltNames", "name": "spec.subjectAltNames", "widget": "SimpleList"
+      },
+    ]
+  general: |-
+    {
+      "resource": {
+        "kind": "ServiceEntry",
+        "group": "networking.istio.io",
+        "version": "v1beta1"
+      },
+      "urlPath": "ext-serviceentries",
+      "category": "Istio",
+      "name": "Ext Service Entries",
+      "scope": "namespace",
+      "description": "{{[ServiceEntry](https://istio.io/latest/docs/reference/config/networking/service-entry/)}} allows for adding more entries to the internal service registry of Istio."
+    }
+  list: |-
+    [
+      {
+        "source": "spec.location",
+        "name": "spec.location",
+        "sort": true
+      },
+      {
+        "source": "spec.resolution",
+        "name": "spec.resolution",
+        "sort": true
+      },
+    ]
+  translations: |
+    en:
+      configuration: Configuration
+      spec.hosts: Hosts
+      spec.addresses: Addresses
+      spec.ports: Ports
+      spec.ports.number: Number
+      spec.ports.protocol: Protocol
+      spec.ports.name: Name
+      spec.ports.targetPort: Target Port
+      spec.location: Location
+      spec.resolution: Resolution
+      spec.endpoints: Endpoints
+      spec.endpoints.address: Address
+      spec.endpoints.ports: Ports
+      spec.endpoints.labels: Labels
+      spec.endpoints.network: Network
+      spec.endpoints.locality: Locality
+      spec.endpoints.weight: Weight
+      spec.endpoints.serviceAccount: Service Account
+      spec.workloadSelector: Workload Selector
+      spec.exportTo: Export To
+      spec.subjectAltNames: Subject Alt Names
+      placeholders.dropdown: Type or choose an option
+      placeholders.addreses: For example, 127.0.0.1

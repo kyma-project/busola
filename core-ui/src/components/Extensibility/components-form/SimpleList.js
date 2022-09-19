@@ -70,7 +70,7 @@ export function SimpleList({
         <div className="fd-col fd-col-md--4 fd-margin-bottom--sm">
           <Label
             required={schemaRequired ?? required}
-            tooltipContent={tooltipContent}
+            tooltipContent={tExt(tooltipContent)}
           >
             {tFromStoreKeys(storeKeys, schema)}
           </Label>
@@ -136,7 +136,7 @@ export function SimpleList({
                           margin: '0 8px',
                         }}
                       >
-                        {inputInfo}
+                        {tExt(inputInfo)}
                       </p>
                     )}
                   </>
