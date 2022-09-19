@@ -46,11 +46,11 @@ data:
         "
       },
       {
-        "name": "Source Type",
+        "name": "sourceType",
         "source": "spec.source.gitRepository ? 'Git Repository' : 'Inline Editor'"
       },
       {
-        "name": "Runtime",
+        "name": "runtimeType",
         "source": "spec.runtime = 'nodejs16' ? 'Node.js 16' : (spec.runtime = 'nodejs14' ? 'Node.js 14' : (spec.runtime = 'nodejs12' ? 'Node.js 12 - Deprecated' : (spec.runtime = 'python39' ? 'Python 3.9' : spec.runtime)))"
       }
       ],
@@ -59,48 +59,48 @@ data:
           "widget": "Tabs",
           "children": [
             {
-              "name": "Code",
+              "name": "tabs.code",
               "children": [ 
                 {
                   "source": "spec.source.inline.source",
                   "widget": "CodeViewer",
-                  "name": "Source",
+                  "name": "spec.source",
                   "language": "$contains($root.spec.runtime, 'python') ? 'python': 'javascript'",
                   "visibility": "$exists($.data)"
                 }, {
                   "source": "spec.source.inline.dependencies",
                   "widget": "CodeViewer",
-                  "name": "Dependencies",
+                  "name": "spec.dependencies",
                   "language": "'json'",
                   "visibility": "$exists($.data)"
                 }, {
                   "source": "spec.source.gitRepository",
                   "widget": "Panel",
-                  "name": "Repository Configuration",
+                  "name": "gitRepositoryConfig",
                   "visibility": "$exists($.data)",
                   "children": [{
-                    "name": "Url",
+                    "name": "spec.source.gitRepository.url",
                     "source": "spec.source.gitRepository.url"
                   }, {
-                    "name": "Reference",
+                    "name": "spec.source.gitRepository.reference",
                     "source": "spec.source.gitRepository.reference"
                   }, {
-                    "name": "Base Directory",
+                    "name": "spec.source.gitRepository.baseDir",
                     "source": "spec.source.gitRepository.baseDir"
                   }]
                 }, {
                   "source": "spec.env",
                   "widget": "Table",
-                  "name": "Environment Variables",
+                  "name": "spec.env",
                   "children": [
                     {
                       "source": "$item.name",
-                      "name": "Name",
+                      "name": "spec.env.name",
                     }, {
                       "source": "$item.value",
-                      "name": "Value"
+                      "name": "spec.env.value"
                     }, {
-                      "name": "Value From",
+                      "name": "spec.env.valueFrom",
                       "widget": "ResourceLink",
                       "source": "$item.valueFrom",
                       "linkText": "$exists(data.configMapKeyRef)? data.configMapKeyRef.name : data.secretKeyRef.name",
@@ -112,11 +112,11 @@ data:
                         : 'Secret'"
                       }
                     }, {
-                      "name": "Source Controlled By",
+                      "name": "spec.env.controlledBy",
                       "widget": "ControlledBy",
                       "source": "$item.owners"
                     }, {
-                      "name": "Source",
+                      "name": "spec.env.source",
                       "widget": "Badge",
                       "source": "$exists($item.valueFrom.configMapKeyRef)
                         ? 'CONFIG MAP' 
@@ -124,7 +124,7 @@ data:
                           ? 'SECRET'
                           : 'CUSTOM'"
                     }, {
-                      "name": "Key",
+                      "name": "spec.env.key",
                       "source": "$exists($item.valueFrom.configMapKeyRef)
                         ? $item.valueFrom.configMapKeyRef.key 
                         : $exists($item.valueFrom.secretKeyRef)
@@ -135,7 +135,7 @@ data:
                 }, {
                   "widget": "ResourceList",
                   "source": "$replicas()",
-                  "name": "Replicas of the Function",
+                  "name": "replicas",
                   "disableCreate": true
                 }
               ]
@@ -322,3 +322,24 @@ data:
         "filter": "$contains($item.spec.sink, $root.metadata.name)"
       }
     }
+  translations: |
+    en: 
+      gitRepositoryConfig: Repository Configuration
+      replicas: Replicas of the Function
+      runtimeType: Runtime
+      source: Source
+      sourceType: Source Type
+      spec.dependencies: Dependencies
+      spec.source.gitRepository.url: Url
+      spec.source.gitRepository.reference: Reference
+      spec.source.gitRepository.baseDir: Base Directory
+      spec.env: Environment Variables
+      spec.env.name: Name
+      spec.env.value: Value
+      spec.env.valueFrom: Value From
+      spec.env.controlledBy: Source Controlled By
+      spec.env.source: Source
+      spec.env.key: Key
+      tabs.code: Code
+      tabs.configuration: Configuration
+      tabs.resources: Resources

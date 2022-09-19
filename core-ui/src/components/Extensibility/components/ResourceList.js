@@ -25,7 +25,7 @@ export function ResourceList({
   schema,
   ...props
 }) {
-  const { t } = useGetTranslation();
+  const { widgetT, t } = useGetTranslation();
   const { namespaceId } = useMicrofrontendContext();
   const kind = (value?.kind ?? '').replace(/List$/, '');
   const pluralKind = pluralize(kind || '')?.toLowerCase();
@@ -64,7 +64,7 @@ export function ResourceList({
       resourceTitle={prettifyKind(kind)}
       namespace={namespaceId}
       isCompact
-      title={structure.name}
+      title={widgetT(structure)}
       showTitle={true}
       hasDetailsView={structure.hasDetailsView ?? !!PredefinedRenderer?.Details}
       fixedPath={true}
