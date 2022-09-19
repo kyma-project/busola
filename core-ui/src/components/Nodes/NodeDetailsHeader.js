@@ -2,6 +2,7 @@ import React from 'react';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { useTranslation } from 'react-i18next';
+import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
 export function NodeDetailsHeader({ nodeName, node, loading, error }) {
   const { t } = useTranslation();
@@ -16,6 +17,8 @@ export function NodeDetailsHeader({ nodeName, node, loading, error }) {
 
   const internalIP = node?.status.addresses.find(a => a.type === 'InternalIP');
   const hostname = node?.status.addresses.find(a => a.type === 'Hostname');
+  const region = node?.metadata?.labels?.['topology.kubernetes.io/region'];
+  const zone = node?.metadata?.labels?.['topology.kubernetes.io/zone'];
 
   return (
     <PageHeader title={nodeName} breadcrumbItems={breadcrumbs}>
@@ -36,6 +39,12 @@ export function NodeDetailsHeader({ nodeName, node, loading, error }) {
           </PageHeader.Column>
           <PageHeader.Column title={t('common.labels.hostname')}>
             {hostname.address}
+          </PageHeader.Column>
+          <PageHeader.Column title={t('common.headers.region')}>
+            {region ?? EMPTY_TEXT_PLACEHOLDER}
+          </PageHeader.Column>
+          <PageHeader.Column title={t('common.headers.zone')}>
+            {zone ?? EMPTY_TEXT_PLACEHOLDER}
           </PageHeader.Column>
         </>
       )}
