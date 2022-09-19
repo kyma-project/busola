@@ -102,13 +102,10 @@ export function usePreparePresets(resource, presets) {
   const { t } = useTranslation();
 
   if (!presets || !presets.length) return null;
-  let preparedPresets = [];
 
-  presets.forEach(preset => {
-    preparedPresets.push(
-      merge({}, { value: resource }, { ...preset, name: tExt(preset.name) }),
-    );
-  });
+  const preparedPresets = presets.map(preset =>
+    merge({}, { value: resource }, { ...preset, name: tExt(preset.name) }),
+  );
 
   preparedPresets.unshift({
     name: t('common.create-form.clear-form'),
