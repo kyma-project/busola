@@ -55,7 +55,7 @@ describe('ResourceLink', () => {
       <ResourceLink
         value={value}
         structure={{
-          linkText: 'link-text',
+          linkText: "'link-text'",
           resource: {
             name: 'data.name',
             kind: 'data.kind',
