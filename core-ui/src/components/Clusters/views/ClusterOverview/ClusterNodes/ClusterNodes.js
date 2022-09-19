@@ -82,10 +82,15 @@ export function ClusterNodes() {
     t('common.headers.created'),
     t('common.headers.version'),
     t('common.headers.status'),
+    t('common.headers.region'),
+    t('common.headers.zone'),
   ];
 
   const rowRenderer = entry => {
     const { cpu, memory } = entry?.metrics || {};
+    const region = entry?.metadata?.labels?.['topology.kubernetes.io/region'];
+    const zone = entry?.metadata?.labels?.['topology.kubernetes.io/zone'];
+
     return [
       <NodeHeader nodeName={entry.metadata?.name} />,
       cpu ? (
@@ -121,6 +126,8 @@ export function ClusterNodes() {
       />,
       entry.status?.nodeInfo?.kubeProxyVersion || EMPTY_TEXT_PLACEHOLDER,
       getStatus(entry.status),
+      region ?? EMPTY_TEXT_PLACEHOLDER,
+      zone ?? EMPTY_TEXT_PLACEHOLDER,
     ];
   };
 

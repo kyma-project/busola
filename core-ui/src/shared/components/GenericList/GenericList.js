@@ -192,6 +192,7 @@ export const GenericList = ({
 
     return pagedItems.map((e, index) => (
       <RowRenderer
+        index={index}
         key={e.metadata?.uid || e.name || e.metadata?.name || index}
         entry={e}
         actions={actions}
