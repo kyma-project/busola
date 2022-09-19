@@ -1,19 +1,19 @@
 # _presets_ section
 
-The **presets** section contains a list of objects that define which preset and template will be used in the form view. If any preset has been defined, it will be displayed in the drop-down list along with a second "Default" setting. If the user selects a preset, the form will be filled with the property defined in the values.
+The **presets** section contains a list of objects that define which preset and template will be used in the form view. If any preset has been defined, it will be displayed in the drop-down list along with a second "Clear" setting. If the user selects a preset, the form will be filled with the property defined in the values.
 
 ## preset configuration object fields
 
 - **name** - _[required]_ a name to display on presets dropdown,
 - **value** - _[required]_ contains fields that will be set when this preset is chosen from the list.
-- **default** - For `default` equal to `true`, it prefills form with values defined in value. It also replaces the default preset on the dropdown of presets.
+- **default** - For `default` equal to `true`, it prefills form with values defined in value.
 
 ## Example
 
 ```json
 [
   {
-    "name": "new default",
+    "name": "template",
     "default": true,
     "value": {
       "metadata": {
