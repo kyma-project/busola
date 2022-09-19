@@ -65,13 +65,13 @@ data:
                   "source": "spec.source.inline.source",
                   "widget": "CodeViewer",
                   "name": "Source",
-                  "language": "javascript",
+                  "language": "$contains($root.spec.runtime, 'python') ? 'python': 'javascript'",
                   "visibility": "$exists($.data)"
                 }, {
                   "source": "spec.source.inline.dependencies",
                   "widget": "CodeViewer",
                   "name": "Dependencies",
-                  "language": "json",
+                  "language": "'json'",
                   "visibility": "$exists($.data)"
                 }, {
                   "source": "spec.source.gitRepository",
@@ -96,9 +96,6 @@ data:
                     {
                       "source": "$item.name",
                       "name": "Name",
-                    }, {
-                      "source": "'->'",
-                      "name": "",
                     }, {
                       "source": "$item.value",
                       "name": "Value"
