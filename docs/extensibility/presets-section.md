@@ -1,6 +1,6 @@
 # _presets_ section
 
-The **presets** section contains a list of objects that define which preset and template are used in the form view. If you specify a preset, it is displayed in the dropdown list along with the **Clear** option. If a user selects a preset, the form is filled with the property defined in the **value** property.
+The **presets** section contains a list of objects that define which preset and template are used in the form view. If you specify a preset, it is displayed in the dropdown list along with the **Clear** option. When you select a preset, the form is filled with the values defined in the **value** property.
 
 ## preset configuration object fields
 
