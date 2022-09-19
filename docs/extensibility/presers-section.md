@@ -6,7 +6,7 @@ The **presets** section contains a list of objects that define which preset and 
 
 - **name** - _[required]_ a name to display on presets dropdown,
 - **value** - _[required]_ contains fields that will be set when this preset is chosen from the list.
-- **default** - For `default` equal to `true`, it prefills form with values defined in value.
+- **default** - For `default` equal to `true`, it prefills form with values defined in value. Defaults to `false`.
 
 ## Example
 
