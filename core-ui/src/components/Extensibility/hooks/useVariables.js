@@ -95,8 +95,8 @@ export function useVariables() {
       .filter(def => def.dynamicValue)
       .forEach(def => {
         delete vars[def.var];
-        setVars({ ...vars });
       });
+    setVars({ ...vars });
   };
 
   const readVars = resource => {

@@ -6,6 +6,7 @@ import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
+import { ModeSelector } from 'shared/ResourceForm/components/ModeSelector';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -28,7 +29,7 @@ export function ExtensibilityCreateCore({
   toggleFormFn,
   resourceName,
 }) {
-  const { prepareVars, readVars } = useVariables();
+  const { prepareVars, resetVars, readVars } = useVariables();
   const { namespaceId: namespace } = useMicrofrontendContext();
   const notification = useNotification();
   const { t } = useTranslation();
@@ -45,8 +46,17 @@ export function ExtensibilityCreateCore({
     createStore(createOrderedMap(resource)),
   );
 
-  const updateResource = res =>
-    setStore(prevStore => prevStore.set('values', Immutable.fromJS(res)));
+  const updateResource = res => {
+    const newStore = Immutable.fromJS(res);
+    setStore(prevStore => prevStore.set('values', newStore));
+  };
+
+  const modeChanged = (from, to) => {
+    if (from === ModeSelector.MODE_YAML) {
+      resetVars();
+      readVars(resource);
+    }
+  };
 
   //TODO filter schema based on form configuration
 
@@ -112,6 +122,7 @@ export function ExtensibilityCreateCore({
       onlyYaml={!schema}
       initialResource={initialResource}
       afterCreatedFn={afterCreatedFn}
+      onModeChange={modeChanged}
     >
       <ResourceSchema
         simple
