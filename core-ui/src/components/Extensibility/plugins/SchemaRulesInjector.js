@@ -36,13 +36,12 @@ export function SchemaRulesInjector({
       .join('');
     const varPath = `$.${varName}${varSuffix}`;
 
-    let varValue = jp.value(vars, varPath);
     return (
       <Plugin
         {...props}
         currentPluginIndex={nextPluginIndex}
         schema={schema}
-        value={varValue}
+        value={jp.value(vars, varPath)}
         onChange={e => setVar(varPath, e.data.value)}
         storeKeys={fromJS([schema.get('var')])}
       />
