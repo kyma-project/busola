@@ -142,7 +142,7 @@ Note that some features must be run before the application starts the bootstrap 
 
 * **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
 
-Backend feature. Cannot be modified at the cluster's ConfigMap level.
+> **NOTE:** It's a backend feature, so it cannot be modified at the cluster's ConfigMap level.
 
 Default settings:
 
