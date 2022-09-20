@@ -28,7 +28,7 @@ context('Create Namespace', () => {
 
     cy.getIframeBody()
       .find('[aria-label="expand Apply Total Memory Quotas"]')
-      .contains('Choose option')
+      .contains('Choose preset')
       .click();
 
     cy.getIframeBody()

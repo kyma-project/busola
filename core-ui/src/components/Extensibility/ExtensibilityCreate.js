@@ -13,7 +13,7 @@ import { useGetSchema } from 'hooks/useGetSchema';
 import { prettifyKind } from 'shared/utils/helpers';
 
 import { ResourceSchema } from './ResourceSchema';
-import { createTemplate } from './helpers';
+import { usePreparePresets, createTemplate, getDefaultPreset } from './helpers';
 import { VarStoreContextProvider } from './contexts/VarStore';
 import { prepareSchemaRules } from './helpers/prepareSchemaRules';
 
@@ -31,13 +31,20 @@ export function ExtensibilityCreate({
   const notification = useNotification();
   const { t } = useTranslation();
   const general = createResource?.general;
+
   const api = general?.resource || {};
 
-  const [resource, setResource] = useState(
-    initialResource ||
-      createResource?.template ||
-      createTemplate(api, namespace, general?.scope),
+  const emptyTemplate = createTemplate(api, namespace, general?.scope);
+  const defaultPreset = getDefaultPreset(
+    createResource?.presets,
+    emptyTemplate,
   );
+
+  const [resource, setResource] = useState(
+    initialResource || defaultPreset?.value || emptyTemplate,
+  );
+
+  const presets = usePreparePresets(emptyTemplate, createResource?.presets);
 
   const [store, setStore] = useState(() =>
     createStore(createOrderedMap(resource)),
@@ -106,6 +113,7 @@ export function ExtensibilityCreate({
         createUrl={resourceUrl}
         setCustomValid={setCustomValid}
         onlyYaml={!schema}
+        presets={!initialResource && presets}
         initialResource={initialResource}
         afterCreatedFn={afterCreatedFn}
       >

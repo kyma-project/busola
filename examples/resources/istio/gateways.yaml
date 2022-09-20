@@ -222,6 +222,39 @@ data:
         "widget": "Labels"
       },
     ]
+  presets: |-
+    [
+      {
+        "name": "Ingress Gateway",
+        "value": {
+          "metadata": {
+            "name": "httpbin-gateway",
+            "labels": {
+              "app.kubernetes.io/name": "httpbin-gateway",
+            },
+          },
+          "spec": {
+            "selector": {
+              "istio": "ingressgateway",
+            },
+            "servers": [
+              {
+                "port": {
+                  "number": 443,
+                  "name": "https",
+                  "protocol": "HTTPS",
+                },
+                "tls": {
+                  "mode": "SIMPLE",
+                  "credentialName": "",
+                },
+                "hosts": [],
+              },
+            ],
+          }
+        }
+      }
+    ]
   translations: |
     en:
       spec.selector: Selector
