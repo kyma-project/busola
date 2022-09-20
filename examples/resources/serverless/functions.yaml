@@ -70,7 +70,7 @@ data:
                 }, {
                   "source": "spec.source.inline.dependencies",
                   "widget": "CodeViewer",
-                  "name": "spec.dependencies",
+                  "name": "code.dependencies",
                   "language": "'json'",
                   "visibility": "$exists($.data)"
                 }, {
@@ -329,6 +329,7 @@ data:
       tabs.resources: Resources
       code.gitRepositoryConfig: Repository Configuration
       code.replicas: Replicas of the Function
+      code.source: Source
       code.dependencies: Dependencies
       code.gitRepository.url: Url
       code.gitRepository.reference: Reference
@@ -344,7 +345,6 @@ data:
       configuration.subscriptions: Subscriptions
       header.runtime: Runtime
       header.status: Status
-      header.source: Source
       header.sourceType: Source Type
       resources.scalingOptions: Scaling Options
       resources.minReplicas: Minimum Replicas

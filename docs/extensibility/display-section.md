@@ -15,6 +15,7 @@
 - [Block widgets](#block-widgets)
   - [CodeViewer](#codeviewer)
   - [Columns](#columns)
+  - [Tabs](#tabs)
   - [Panel](#panel)
   - [Plain](#plain)
   - [ResourceList](#resourcelist)
