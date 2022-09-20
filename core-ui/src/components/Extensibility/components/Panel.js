@@ -12,7 +12,7 @@ export function Panel({
   disableMargin = false,
   ...props
 }) {
-  const { widgetT, t: tExt } = useGetTranslation();
+  const { widgetT } = useGetTranslation();
 
   const panelClassNames = classNames({
     'fd-margin--md': !disableMargin,
