@@ -73,7 +73,6 @@ data:
               "source": "$podSelector()",
               "widget": "ResourceList",
               "disableCreate": true,
-              "isCompact": true,
               "visibility": "$boolean($root.spec.selector)"
             },
             {
@@ -117,12 +116,13 @@ data:
           { 
             "path": "number", 
             "simple": true,
-            "required": true
+            "required": true,
+            "inputInfo": "inputInfo.spec.servers.port.number"
           },
           { 
             "path": "name", 
             "widget": "Name", 
-            "showHelp": false, 
+            "inputInfo": null, 
             "simple": true ,
             "required": true
           },
@@ -222,6 +222,39 @@ data:
         "widget": "Labels"
       },
     ]
+  presets: |-
+    [
+      {
+        "name": "Ingress Gateway",
+        "value": {
+          "metadata": {
+            "name": "httpbin-gateway",
+            "labels": {
+              "app.kubernetes.io/name": "httpbin-gateway",
+            },
+          },
+          "spec": {
+            "selector": {
+              "istio": "ingressgateway",
+            },
+            "servers": [
+              {
+                "port": {
+                  "number": 443,
+                  "name": "https",
+                  "protocol": "HTTPS",
+                },
+                "tls": {
+                  "mode": "SIMPLE",
+                  "credentialName": "",
+                },
+                "hosts": [],
+              },
+            ],
+          }
+        }
+      }
+    ]
   translations: |
     en:
       spec.selector: Selector
@@ -246,3 +279,4 @@ data:
       placeholders.privateKey: Enter the private key path
       placeholders.caCertificates: Enter the CA certificates path
       placeholders.hosts: For example, *.api.mydomain.com
+      inputInfo.spec.servers.port.number: Must be a on-negative number.

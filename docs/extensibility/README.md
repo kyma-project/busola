@@ -26,9 +26,9 @@ To create your CRD ConfigMap, follow these steps:
 
 > **NOTE:** You can choose your Namespace, but the `kube-public` Namespace is recommended.
 
-1. Click **Create Config Map +** and enter the name of your ConfigMap.
-2. Under **Data**, add the required fields to define how to handle your CRD.
-3. Go to the **Advanced** tab and in the **Labels** form enter `busola.io/extension` as a key, and `resource` as a value.
+2. Click **Create Config Map +** and enter the name of your ConfigMap.
+3. Under **Data**, add the required fields to define how to handle your CRD.
+4. Go to the **Advanced** tab and in the **Labels** form enter `busola.io/extension` as a key, and `resource` as a value.
 
 > **NOTE:** Do not overwrite the existing name label.
 

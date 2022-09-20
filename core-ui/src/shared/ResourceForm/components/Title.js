@@ -16,7 +16,7 @@ export function Title({
       )}
       <span className="title-content">{title}</span>
       {tooltipContent && (
-        <Tooltip className="info-tooltip" delay={0} content={tooltipContent}>
+        <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
           <Icon ariaLabel="" glyph="question-mark" />
         </Tooltip>
       )}

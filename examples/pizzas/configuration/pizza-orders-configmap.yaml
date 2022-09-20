@@ -53,6 +53,8 @@ data:
       {
         "simple": true,
         "path": "spec.status",
+        "placeholder": "Type or choose from the dropdown.",
+        "inputInfo": "Supported options are Error and Ready."
       },
       {
         "simple": "true",
@@ -60,7 +62,7 @@ data:
         "path": "spec.orderDetails",
         "children": [
           { "path": "paymentMethod", "simple": "true"},
-          { "path": "realization", "simple": "true"}
+          { "path": "realization", "simple": "true", "description": "Describes if we should deliver the order the customer" }
         ]
       },
       {
@@ -111,3 +113,28 @@ data:
         "filter": "$root.spec.pizzas[name = $item.metadata.name and namespace = $item.metadata.namespace]"
       }
     }
+  presets: |-
+    [
+      {
+        "name": "Cash Delivery",
+        "value": {
+          "spec": {
+            "orderDetails": {
+              "paymentMethod": "CASH",
+              "realization": "DELIVERY",
+            }
+          }
+        }
+      },
+      {
+        "name": "Card Pickup",
+        "value": {
+          "spec": {
+            "orderDetails": {
+              "paymentMethod": "CARD",
+              "realization": "SELF-PICKUP",
+            }
+          }
+        }
+      }
+    ]

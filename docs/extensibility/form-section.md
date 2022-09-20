@@ -78,16 +78,30 @@ In the example, the visibility for item price and color are analogous - the form
 ```json
 [
   { "var": "useDescription", "type": "boolean" },
-  { "path": "spec.description": "visibility": "$useDescription" },
-  { "path": "spec.items", "widget": "GenericList": "children": [
-    { "path": "[]", "children": [
-      { "path": "name" },
-      { "var": "itemMode", "type": "string", "enum": ["simple", "verbose"] },
-      { "path": "price", "visibility": "$itemMode = 'verbose'" },
-      { "path": "color", "visibility": "$vars.itemMode[$index] = 'verbose'" },
-      { "path": "description", "visibility": "$useDescription" }
-    ]}
-  ]}
+  { "path": "spec.description", "visibility": "$useDescription" },
+  {
+    "path": "spec.items",
+    "widget": "GenericList",
+    "children": [
+      {
+        "path": "[]",
+        "children": [
+          { "path": "name" },
+          {
+            "var": "itemMode",
+            "type": "string",
+            "enum": ["simple", "verbose"]
+          },
+          { "path": "price", "visibility": "$itemMode = 'verbose'" },
+          {
+            "path": "color",
+            "visibility": "$vars.itemMode[$index] = 'verbose'"
+          },
+          { "path": "description", "visibility": "$useDescription" }
+        ]
+      }
+    ]
+  }
 ]
 ```
 
@@ -103,6 +117,14 @@ Simple widgets represent a single scalar value.
 
 Text widgets render a field as a text field. They are used by default for all string values.
 
+#### Widget-specific parameters
+
+- **enum[]** - an array of options to generate an input field with a dropdown. Optionally can be a string containing a JSONata expression returning an array of options.
+- **placeholder** - specifies a short hint about the input field value.
+- **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
+- **inputInfo** - a string below the input field that shows how to fill in the input.
+- **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+
 #### Example
 
 ```json
@@ -113,12 +135,6 @@ Text widgets render a field as a text field. They are used by default for all st
 ```
 
 <img src="./assets/form-widgets/Text.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
-
-#### Widget-specific parameters
-
-- **enum[]** - an array of options to generate an input field with a dropdown. Optionally can be a string containing a JSONata expression returning an array of options.
-- **placeholder** - specifies a short hint about the input field value.
-- **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
 
 #### Example
 
@@ -137,10 +153,13 @@ Text widgets render a field as a text field. They are used by default for all st
     "MYSQL",
     "TCP"
   ],
+  "description": "Choose a protocol type from the dropdown.",
+  "tooltip": "Specifies which protocol to use for tunneling the downstream connection."
 },
 ```
 
-<img src="./assets/form-widgets/Dropdown.png" alt="Example of a dropdown text widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Dropdown.png" alt="Example of a dropdown text widget with a tooltip" style="border: 1px solid #D2D5D9">
+<img src="./assets/form-widgets/Dropdown2.png" alt="Example of a dropdown text widget" style="border: 1px solid #D2D5D9">
 
 ### Name
 
@@ -149,8 +168,9 @@ Name widgets render a name input field. They contain an automatic name generator
 #### Widget-specific parameters
 
 - **extraPaths** - an array of extra paths to fill in with the contents of the field. Each path can either be a period-separated string or an array of strings.
-- **showHelp** - if set to `false` it disables the additional help message.
 - **placeholder** - specifies a short hint about the input field value.
+- **inputInfo** - a string below the input field that shows how to fill in the input. It defaults to `Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1').`. To disable any suggestion, set this value to `null`.
+- **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 
 #### Example
 
@@ -167,14 +187,23 @@ Name widgets render a name input field. They contain an automatic name generator
 
 CodeEditor widgets render a versatile code editor that can be used to edit any variable. The editor's default language is JSON.
 
+#### Widget-specific parameters
+
+- **inputInfo** - a string below the input field that shows how to fill in the input.
+- **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+
 #### Example
 
 ```json
 {
-  "path": "spec.my-data",
-  "widget": "CodeEditor"
+  "path": "spec.data",
+  "widget": "CodeEditor",
+  "inputInfo": "Data needs to be a valid JSON object.",
+  "description": "Data that will be passed on to the application."
 }
 ```
+
+<img src="./assets/form-widgets/CodeEditor.png" alt="Example of a code editor widget" style="border: 1px solid #D2D5D9">
 
 ### Resource
 
@@ -189,6 +218,8 @@ Resource widgets render a dropdown list of specified resources and store the sel
   - **scope** - either `namespace` or `cluster`. When set to `cluster`, namespaced resources are fetched from all Namespaces. Defaults to `cluster`.
   - **namespace** - Namespace to fetch resources from. Used only when scope is `namespace` and resources need to be fetched from a specific Namespace. Defaults to the active Namespace when omitted.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in CRD, then it defaults to `false`.
+- **inputInfo** - a string below the input field that shows how to fill in the input.
+- **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 
 #### Example
 
@@ -229,11 +260,14 @@ KeyValuePair widgets render an `object` value as a list of fields. One is used f
 
 #### Widget-specific parameters
 
+- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 - **keyEnum[]** - an array of options to generate a key input field with a dropdown.
 - **value**:
   - **type** - a string that specifies the type of the value input. The options are `object`, `number`, `text`. Defaults to `text`.
   - **keyEnum[]** - an array of options to generate a key input field with a dropdown only if the `type` is set to `object`.
   - **valueEnum[]** - an array of options to generate a value input field with a dropdown.
+- **inputInfo** - a string below the input field that shows how to fill in the input.
+- **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 
 #### Example
 
@@ -241,6 +275,8 @@ KeyValuePair widgets render an `object` value as a list of fields. One is used f
 {
   "path": "spec.my-data",
   "widget": "KeyValuePair",
+  "description": "Key and value must start and end with an alphanumeric character.",
+  "tooltip": "Labels are intended to be used to specify identifying attributes of objects that are meaningful and relevant to users, but do not directly imply semantics to the core system.",
   "keyEnum": ["prefix", "regex", "exact"]
 }
 ```
@@ -324,6 +360,10 @@ FormGroup widgets render an `object` as a collapsible section.
 
 GenericList widgets render an array as a list of collapsible sections with their own sub-forms. An **add** button is present to add new entries.
 
+#### Widget-specific parameters
+
+- **placeholder** - specifies a short hint about the input field value.
+
 #### Example
 
 ```json
@@ -345,15 +385,19 @@ GenericList widgets render an array as a list of collapsible sections with their
 
 <img src="./assets/form-widgets/GenericList.png" alt="Example of a GenericList widget" style="border: 1px solid #D2D5D9">
 
-#### Widget-specific parameters
-
-- **placeholder** - specifies a short hint about the input field value.
-
 ### SimpleList
 
 SimpleList widgets render an array as a table with rows representing data items and columns representing different fields. New items are added automatically when new entries are typed in.
 
 > **NOTE:** This type of field is only suitable for simple data types and can't contain more complex structures in its items.
+
+#### Widget-specific parameters
+
+- **placeholder** - specifies a short hint about the input field value.
+- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
+- **inputInfo** - a string below the input field that shows how to fill in the input.
+
+- **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 
 #### Example
 
@@ -377,11 +421,6 @@ SimpleList widgets render an array as a table with rows representing data items 
 ```
 
 <img src="./assets/form-widgets/SimpleList.png" alt="Example of a SimpleList widget" style="border: 1px solid #D2D5D9">
-
-#### Widget-specific parameters
-
-- **placeholder** - specifies a short hint about the input field value.
-- **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 
 #### Scalar values
 
