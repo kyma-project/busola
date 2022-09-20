@@ -494,6 +494,7 @@ Tabs widgets render the child widgets in multiple tabs.
 ```
 
 <img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">
+
 ### Panel
 
 Panel widgets render an object as a separate panel with its own title (based on its `source` or `name`).
@@ -524,6 +525,7 @@ Panel widgets render an object as a separate panel with its own title (based on 
 
 - **header** - an optional array that allows you to, for example, display labels in the panel header.
 - **disablePadding** - an optional boolean which disables the padding inside the panel body.
+- **description** - displays a custom description on the resource list page. It can contain links. If the **translations** section has a translation entry with the ID that is the same as the **description** string, the translation is used.
 
 #### Example
 

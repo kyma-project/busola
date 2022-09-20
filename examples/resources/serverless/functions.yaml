@@ -347,7 +347,7 @@ data:
       resources.scalingOptions: Scaling Options
       resources.minReplicas: Minimum Replicas
       resources.maxReplicas: Maximum Replicas
-      resources.description: Minimum and maximum number of running Replicas.
+      resources.description: Minimum and maximum number of running Replicas {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}.
       resources.runtimeProfile: Runtime Profile
       resources.buildProfile: Build Job Profile
       resources.requests.memory: Memory Requests

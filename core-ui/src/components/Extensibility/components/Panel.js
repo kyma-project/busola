@@ -1,7 +1,7 @@
 import React from 'react';
 import { LayoutPanel } from 'fundamental-react';
 
-import { useGetTranslation } from '../helpers';
+import { useCreateResourceDescription, useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 import classNames from 'classnames';
 
@@ -23,14 +23,14 @@ export function Panel({
   });
 
   const header = structure?.header || [];
-  const description = structure?.description;
+  const description = useCreateResourceDescription(structure?.description);
 
   return (
     <LayoutPanel className={panelClassNames}>
       <LayoutPanel.Header>
         <LayoutPanel.Head
           title={widgetT(structure)}
-          description={tExt(description)}
+          description={description}
           className="fd-margin-end--sm"
         />
         {Array.isArray(header)
