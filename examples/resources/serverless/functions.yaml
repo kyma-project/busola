@@ -175,40 +175,38 @@ data:
                   "inline": false,
                   "children": [
                     {
-                      "name": "resources.requests",
+                      "name": "resources.runtimeProfile",
                       "widget": "Panel",
-                      "description": "resources.requests.description",
                       "children": [
                         {
-                          "name": "resources.runtimeProfile.memory",
+                          "name": "resources.requests.memory",
                           "source": "spec.resourceConfiguration.function.resources.requests.memory"
                         }, {
-                          "name": "resources.runtimeProfile.cpu",
+                          "name": "resources.requests.cpu",
                           "source": "spec.resourceConfiguration.function.resources.requests.cpu"
                         }, {
-                          "name": "resources.buildJobProfile.memory",
-                          "source": "spec.resourceConfiguration.build.resources.requests.memory"
+                          "name": "resources.limits.memory",
+                          "source": "spec.resourceConfiguration.function.resources.limits.memory"
                         }, {
-                          "name": "resources.buildJobProfile.cpu",
-                          "source": "spec.resourceConfiguration.build.resources.requests.cpu"
+                          "name": "resources.limits.cpu",
+                          "source": "spec.resourceConfiguration.function.resources.limits.cpu"
                         }
                       ]
                     }, {
-                      "name": "resources.limits",
+                      "name": "resources.buildProfile",
                       "widget": "Panel",
-                      "description": "resources.limits.description",
                       "children": [
                         {
-                          "name": "resources.runtimeProfile.memory",
-                          "source": "spec.resourceConfiguration.function.resources.limits.memory"
+                          "name": "resources.requests.memory",
+                          "source": "spec.resourceConfiguration.build.resources.requests.memory"
                         }, {
-                          "name": "resources.runtimeProfile.cpu",
-                          "source": "spec.resourceConfiguration.function.resources.limits.cpu"
+                          "name": "resources.requests.cpu",
+                          "source": "spec.resourceConfiguration.build.resources.requests.cpu"
                         }, {
-                          "name": "resources.buildJobProfile.memory",
+                          "name": "resources.limits.memory",
                           "source": "spec.resourceConfiguration.build.resources.limits.memory"
                         }, {
-                          "name": "resources.buildJobProfile.cpu",
+                          "name": "resources.limits.cpu",
                           "source": "spec.resourceConfiguration.build.resources.limits.cpu"
                         }
                       ]
@@ -350,11 +348,9 @@ data:
       resources.minReplicas: Minimum Replicas
       resources.maxReplicas: Maximum Replicas
       resources.description: Minimum and maximum number of running Replicas.
-      resources.requests: Requests
-      resources.requests.description: Minimum amount of compute resources required.
-      resources.limits: Limits
-      resources.limits.description: Maximum amount of compute resources allowed.
-      resources.runtimeProfile.memory: Runtime Profile Memory
-      resources.runtimeProfile.cpu: Runtime Profile CPU
-      resources.buildJobProfile.memory: Build Job Profile Memory
-      resources.buildJobProfile.cpu: Build Job Profile CPU
+      resources.runtimeProfile: Runtime Profile
+      resources.buildProfile: Build Job Profile
+      resources.requests.memory: Memory Requests
+      resources.requests.cpu: CPU Requests
+      resources.limits.memory: Memory Limits
+      resources.limits.cpu: CPU Limits
