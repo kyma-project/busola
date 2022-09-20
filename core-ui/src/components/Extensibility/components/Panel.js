@@ -12,7 +12,7 @@ export function Panel({
   disableMargin = false,
   ...props
 }) {
-  const { widgetT } = useGetTranslation();
+  const { widgetT, t: tExt } = useGetTranslation();
 
   const panelClassNames = classNames({
     'fd-margin--md': !disableMargin,
@@ -30,7 +30,7 @@ export function Panel({
       <LayoutPanel.Header>
         <LayoutPanel.Head
           title={widgetT(structure)}
-          description={description}
+          description={tExt(description)}
           className="fd-margin-end--sm"
         />
         {Array.isArray(header)

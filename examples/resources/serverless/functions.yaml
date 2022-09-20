@@ -12,7 +12,7 @@ data:
     {
       "header": [
       {
-        "name": "Status",
+        "name": "header.status",
         "widget": "Badge",
         "highlights": {
           "positive": ["RUNNING"],
@@ -46,11 +46,11 @@ data:
         "
       },
       {
-        "name": "sourceType",
+        "name": "header.sourceType",
         "source": "spec.source.gitRepository ? 'Git Repository' : 'Inline Editor'"
       },
       {
-        "name": "runtimeType",
+        "name": "header.runtime",
         "source": "spec.runtime = 'nodejs16' ? 'Node.js 16' : (spec.runtime = 'nodejs14' ? 'Node.js 14' : (spec.runtime = 'nodejs12' ? 'Node.js 12 - Deprecated' : (spec.runtime = 'python39' ? 'Python 3.9' : spec.runtime)))"
       }
       ],
@@ -64,7 +64,7 @@ data:
                 {
                   "source": "spec.source.inline.source",
                   "widget": "CodeViewer",
-                  "name": "spec.source",
+                  "name": "code.source",
                   "language": "$contains($root.spec.runtime, 'python') ? 'python': 'javascript'",
                   "visibility": "$exists($.data)"
                 }, {
@@ -76,31 +76,31 @@ data:
                 }, {
                   "source": "spec.source.gitRepository",
                   "widget": "Panel",
-                  "name": "gitRepositoryConfig",
+                  "name": "code.gitRepositoryConfig",
                   "visibility": "$exists($.data)",
                   "children": [{
-                    "name": "spec.source.gitRepository.url",
+                    "name": "code.gitRepository.url",
                     "source": "spec.source.gitRepository.url"
                   }, {
-                    "name": "spec.source.gitRepository.reference",
+                    "name": "code.gitRepository.reference",
                     "source": "spec.source.gitRepository.reference"
                   }, {
-                    "name": "spec.source.gitRepository.baseDir",
+                    "name": "code.gitRepository.baseDir",
                     "source": "spec.source.gitRepository.baseDir"
                   }]
                 }, {
                   "source": "spec.env",
                   "widget": "Table",
-                  "name": "spec.env",
+                  "name": "code.env",
                   "children": [
                     {
                       "source": "$item.name",
-                      "name": "spec.env.name",
+                      "name": "code.env.name",
                     }, {
                       "source": "$item.value",
-                      "name": "spec.env.value"
+                      "name": "code.env.value"
                     }, {
-                      "name": "spec.env.valueFrom",
+                      "name": "code.env.valueFrom",
                       "widget": "ResourceLink",
                       "source": "$item.valueFrom",
                       "linkText": "$exists(data.configMapKeyRef)? data.configMapKeyRef.name : data.secretKeyRef.name",
@@ -112,11 +112,11 @@ data:
                         : 'Secret'"
                       }
                     }, {
-                      "name": "spec.env.controlledBy",
+                      "name": "code.env.controlledBy",
                       "widget": "ControlledBy",
                       "source": "$item.owners"
                     }, {
-                      "name": "spec.env.source",
+                      "name": "code.env.source",
                       "widget": "Badge",
                       "source": "$exists($item.valueFrom.configMapKeyRef)
                         ? 'CONFIG MAP' 
@@ -124,7 +124,7 @@ data:
                           ? 'SECRET'
                           : 'CUSTOM'"
                     }, {
-                      "name": "spec.env.key",
+                      "name": "code.env.key",
                       "source": "$exists($item.valueFrom.configMapKeyRef)
                         ? $item.valueFrom.configMapKeyRef.key 
                         : $exists($item.valueFrom.secretKeyRef)
@@ -135,38 +135,38 @@ data:
                 }, {
                   "widget": "ResourceList",
                   "source": "$replicas()",
-                  "name": "replicas",
+                  "name": "code.replicas",
                   "disableCreate": true
                 }
               ]
             },
             {
-              "name": "Configuration",
+              "name": "tabs.configuration",
               "children": [ 
                 {
                   "widget": "ResourceList",
                   "source": "$apiRules()",
-                  "name": "API Rules"
+                  "name": "configuration.apiRules"
                 }, {
                   "widget": "ResourceList",
                   "source": "$subscriptions()",
-                  "name": "Subscriptions"
+                  "name": "configuration.subscriptions"
                 }
               ]
             }, 
             {
-              "name": "Resources",
+              "name": "tabs.resources",
               "children": [
                 {
                   "widget": "Panel",
-                  "description": "Minimum and maximum number of running Replicas.",
-                  "name": "Scaling Options",
+                  "description": "resources.description",
+                  "name": "resources.scalingOptions",
                   "children": [
                     {
-                      "name": "Minimum Replicas",
+                      "name": "resources.minReplicas",
                       "source": "spec.scaleConfig.minReplicas"
                     }, {
-                      "name": "Maximum Replicas",
+                      "name": "resources.maxReplicas",
                       "source": "spec.scaleConfig.maxReplicas"
                     }
                   ]
@@ -175,40 +175,40 @@ data:
                   "inline": false,
                   "children": [
                     {
-                      "name": "Requests",
+                      "name": "resources.requests",
                       "widget": "Panel",
-                      "description": "Minimum amount of compute resources required.",
+                      "description": "resources.requests.description",
                       "children": [
                         {
-                          "name": "Runtime Profile Memory",
+                          "name": "resources.runtimeProfile.memory",
                           "source": "spec.resourceConfiguration.function.resources.requests.memory"
                         }, {
-                          "name": "Runtime Profile CPU",
+                          "name": "resources.runtimeProfile.cpu",
                           "source": "spec.resourceConfiguration.function.resources.requests.cpu"
                         }, {
-                          "name": "Build Job Profile Memory",
+                          "name": "resources.buildJobProfile.memory",
                           "source": "spec.resourceConfiguration.build.resources.requests.memory"
                         }, {
-                          "name": "Build Job Profile CPU",
+                          "name": "resources.buildJobProfile.cpu",
                           "source": "spec.resourceConfiguration.build.resources.requests.cpu"
                         }
                       ]
                     }, {
-                      "name": "Limits",
+                      "name": "resources.limits",
                       "widget": "Panel",
-                      "description": "Maximum amount of compute resources allowed.",
+                      "description": "resources.limits.description",
                       "children": [
                         {
-                          "name": "Runtime Profile Memory",
+                          "name": "resources.runtimeProfile.memory",
                           "source": "spec.resourceConfiguration.function.resources.limits.memory"
                         }, {
-                          "name": "Runtime Profile CPU",
+                          "name": "resources.runtimeProfile.cpu",
                           "source": "spec.resourceConfiguration.function.resources.limits.cpu"
                         }, {
-                          "name": "Build Job Profile Memory",
+                          "name": "resources.buildJobProfile.memory",
                           "source": "spec.resourceConfiguration.build.resources.limits.memory"
                         }, {
-                          "name": "Build Job Profile CPU",
+                          "name": "resources.buildJobProfile.cpu",
                           "source": "spec.resourceConfiguration.build.resources.limits.cpu"
                         }
                       ]
@@ -254,15 +254,15 @@ data:
   list: |-
     [
       {
-        "name": "Runtime",
+        "name": "header.runtime",
         "source": "spec.runtime = 'nodejs16' ? 'Node.js 16' : (spec.runtime = 'nodejs14' ? 'Node.js 14' : (spec.runtime = 'nodejs12' ? 'Node.js 12 - Deprecated' : (spec.runtime = 'python39' ? 'Python 3.9' : spec.runtime)))"
       },
       {
-        "name": "Source Type",
+        "name": "header.sourceType",
         "source": "spec.source.gitRepository ? 'Git Repository' : 'Inline Editor'"
       },
       {
-        "name": "Status",
+        "name": "header.status",
         "widget": "Badge",
         "highlights": {
           "positive": ["RUNNING"],
@@ -324,22 +324,37 @@ data:
     }
   translations: |
     en: 
-      gitRepositoryConfig: Repository Configuration
-      replicas: Replicas of the Function
-      runtimeType: Runtime
-      source: Source
-      sourceType: Source Type
-      spec.dependencies: Dependencies
-      spec.source.gitRepository.url: Url
-      spec.source.gitRepository.reference: Reference
-      spec.source.gitRepository.baseDir: Base Directory
-      spec.env: Environment Variables
-      spec.env.name: Name
-      spec.env.value: Value
-      spec.env.valueFrom: Value From
-      spec.env.controlledBy: Source Controlled By
-      spec.env.source: Source
-      spec.env.key: Key
       tabs.code: Code
       tabs.configuration: Configuration
       tabs.resources: Resources
+      code.gitRepositoryConfig: Repository Configuration
+      code.replicas: Replicas of the Function
+      code.dependencies: Dependencies
+      code.gitRepository.url: Url
+      code.gitRepository.reference: Reference
+      code.gitRepository.baseDir: Base Directory
+      code.env: Environment Variables
+      code.env.name: Name
+      code.env.value: Value
+      code.env.valueFrom: Value From
+      code.env.controlledBy: Source Controlled By
+      code.env.source: Source
+      code.env.key: Key
+      configuration.apiRules: API Rules
+      configuration.subscriptions: Subscriptions
+      header.runtime: Runtime
+      header.status: Status
+      header.source: Source
+      header.sourceType: Source Type
+      resources.scalingOptions: Scaling Options
+      resources.minReplicas: Minimum Replicas
+      resources.maxReplicas: Maximum Replicas
+      resources.description: Minimum and maximum number of running Replicas.
+      resources.requests: Requests
+      resources.requests.description: Minimum amount of compute resources required.
+      resources.limits: Limits
+      resources.limits.description: Maximum amount of compute resources allowed.
+      resources.runtimeProfile.memory: Runtime Profile Memory
+      resources.runtimeProfile.cpu: Runtime Profile CPU
+      resources.buildJobProfile.memory: Build Job Profile Memory
+      resources.buildJobProfile.cpu: Build Job Profile CPU
