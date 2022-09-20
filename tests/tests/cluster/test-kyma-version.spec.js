@@ -1,25 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
 
-function mockShowKymaVersion(enabled) {
-  const requestData = {
-    method: 'GET',
-    url: '/backend/api/v1/namespaces/kube-public/configmaps/busola-config',
-  };
-  const configmapMock = {
-    data: {
-      config: JSON.stringify({
-        config: {
-          features: {
-            SHOW_KYMA_VERSION: { isEnabled: enabled },
-          },
-        },
-      }),
-    },
-  };
-  cy.intercept(requestData, configmapMock);
-}
-
 function mockKymaSystemForbidden() {
   const requestData = {
     method: 'GET',
@@ -32,33 +13,39 @@ context('Test Kyma version', () => {
   Cypress.skipAfterFail();
 
   it('No Kyma Version when feature is disabled', () => {
-    mockShowKymaVersion(false);
+    cy.setBusolaFeature('SHOW_KYMA_VERSION', false);
     cy.loginAndSelectCluster();
+
+    cy.getIframeBody()
+      .contains('Kubernetes:')
+      .should('exist');
 
     cy.getIframeBody()
       .contains('Kyma:')
       .should('not.exist');
   });
 
-  it('Enabled by configmap', () => {
-    mockShowKymaVersion(true);
+  it('Enabled by ConfigMap', () => {
+    cy.setBusolaFeature('SHOW_KYMA_VERSION', true);
+
     cy.loginAndSelectCluster();
 
     cy.getIframeBody()
       .contains('Kyma:')
-      .should('exist')
-      .parent()
-      .contains('Unknown')
-      .should('not.exist');
+      .should('exist');
   });
 
   it('Fails gracefully', () => {
-    mockShowKymaVersion(true);
+    cy.setBusolaFeature('SHOW_KYMA_VERSION', true);
     mockKymaSystemForbidden();
     cy.loginAndSelectCluster();
 
     cy.getIframeBody()
-      .contains('Kyma: Unknown')
+      .contains('Kubernetes:')
       .should('exist');
+
+    cy.getIframeBody()
+      .contains('Kyma:')
+      .should('not.exist');
   });
 });

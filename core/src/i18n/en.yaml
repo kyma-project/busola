@@ -416,7 +416,8 @@ common:
     view-yaml: View YAML
   create-form:
     autocomplete-unavailable-error: Monaco autocompletion unavailable. {{error}}.
-    choose-preset: Choose option
+    choose-preset: Choose preset
+    clear-form: Clear
     editor-error: 'Parse error: {{error}}, previous valid input will be used'
     messages:
       create-failure: 'Failed to create the {{resourceType}}: {{error}}'
@@ -456,15 +457,17 @@ common:
     namespace: Namespace
     owner: Controlled By
     pods: Pods
+    region: Region
     resource: Resource
     resources: Resources
     status: Status
     value: Value
     version: Version
+    zone: Zone
   labels:
     category: Category
+    clear-form: Clear
     data: Data
-    default-preset: Default
     hostname: Hostname
     issuer: Issuer
     kubernetes: Kubernetes
@@ -1152,6 +1155,9 @@ functions:
       config-map: Config Map
       custom: Custom
       secret: Secret
+gardener:
+  headers:
+    provider: Provider
 gateways:
   aria-labels:
     host: Host
@@ -1787,6 +1793,7 @@ role-bindings:
     group-name: Group name
     kind: Kind
     role: Role
+    role-type: Role Type
     subject: Subject
     subjects: Subjects
     tooltips:
