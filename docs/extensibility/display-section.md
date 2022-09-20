@@ -267,9 +267,9 @@ When no highlights are provided, the following values are automatically handled:
 }
 ```
 
-<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="20%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="40%" style="border: 1px solid #D2D5D9">
 <br/><br/>
-<img src="./assets/display-widgets/Bagde2.png" alt="Example of a badge widget with a tooltip" width="20%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Bagde2.png" alt="Example of a badge widget with a tooltip" width="40%" style="border: 1px solid #D2D5D9">
 
 ### ControlledBy
 
@@ -293,7 +293,7 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 }
 ```
 
-<img src="./assets/display-widgets/ControlledBy.png" alt="Example of a ControlledBy widget" width="50%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ControlledBy.png" alt="Example of a ControlledBy widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ##### Kind only
 
@@ -306,7 +306,7 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 }
 ```
 
-<img src="./assets/display-widgets/ControlledBy--kindOnly.png" alt="Example of a ControlledBy widget without name link" width="50%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ControlledBy--kindOnly.png" alt="Example of a ControlledBy widget without name link" width="40%" style="border: 1px solid #D2D5D9">
 
 ### JoinedArray
 
@@ -346,7 +346,7 @@ Labels widgets render all the array or object entries in the `value` or `key-val
 }
 ```
 
-<img src="./assets/display-widgets/Labels.png" alt="Example of a Labels widget" width="20%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Labels.png" alt="Example of a Labels widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ### ResourceLink
 
@@ -374,7 +374,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 }
 ```
 
-<img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ##### _translations_ section
 
@@ -403,7 +403,7 @@ Text widgets render values as a simple text. This is the default behavior for al
 }
 ```
 
-<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="20%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ## Block widgets
 
@@ -504,8 +504,9 @@ Panel widgets render an object as a separate panel with its own title (based on 
 ```json
 [
   {
-    "name": "details",
+    "name": "Details",
     "widget": "Panel",
+    "description": "To check the extensibility documentation go to the {{[Busola page](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}.",
     "children": [
       { "source": "spec.value" },
       { "source": "spec.other-value", "placeholder": "-" }
