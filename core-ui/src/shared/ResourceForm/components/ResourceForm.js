@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
@@ -41,8 +41,9 @@ export function ResourceForm({
   disableDefaultFields,
 }) {
   // readonly schema ID, set only once
-  const [resourceSchemaId] = useState(
-    resource.apiVersion + '/' + resource.kind,
+  const resourceSchemaId = useMemo(
+    () => resource.apiVersion + '/' + resource.kind,
+    [], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   if (!handleNameChange) {
@@ -102,7 +103,6 @@ export function ResourceForm({
       }}
     />
   );
-
   let editor = (
     <EditorWrapper
       value={resource}

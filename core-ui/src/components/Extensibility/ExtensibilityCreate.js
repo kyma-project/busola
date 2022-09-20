@@ -1,9 +1,8 @@
-import React, { useMemo, useEffect, useState } from 'react';
-import { createStore } from '@ui-schema/ui-schema';
-import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
+import React, { useCallback, useMemo, useState } from 'react';
 import Immutable from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
+import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
@@ -16,6 +15,10 @@ import { ResourceSchema } from './ResourceSchema';
 import { createTemplate } from './helpers';
 import { VarStoreContextProvider } from './contexts/VarStore';
 import { prepareSchemaRules } from './helpers/prepareSchemaRules';
+import {
+  getResourceObjFromUIStore,
+  getUIStoreFromResourceObj,
+} from './helpers/immutableConverter';
 
 export function ExtensibilityCreate({
   formElementRef,
@@ -33,24 +36,18 @@ export function ExtensibilityCreate({
   const general = createResource?.general;
   const api = general?.resource || {};
 
-  const [resource, setResource] = useState(
-    initialResource ||
-      createResource?.template ||
-      createTemplate(api, namespace, general?.scope),
+  const [store, setStore] = useState(
+    getUIStoreFromResourceObj(
+      initialResource ||
+        createResource?.template ||
+        createTemplate(api, namespace, general?.scope),
+    ),
   );
 
-  const [store, setStore] = useState(() =>
-    createStore(createOrderedMap(resource)),
-  );
+  const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
-  const updateResource = res =>
+  const updateUIStore = res =>
     setStore(prevStore => prevStore.set('values', Immutable.fromJS(res)));
-
-  //TODO filter schema based on form configuration
-
-  useEffect(() => {
-    setResource(store.valuesToJS());
-  }, [store.values]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const afterCreatedFn = async defaultAfterCreatedFn => {
     if (createResource?.details) {
@@ -70,7 +67,11 @@ export function ExtensibilityCreate({
     toggleFormFn(false);
   };
 
-  const { schema, error: errorOpenApi, loading } = useGetSchema({
+  const {
+    schema,
+    error: errorOpenApi,
+    loading: loadingOpenAPISchema,
+  } = useGetSchema({
     resource: api,
   });
 
@@ -92,8 +93,23 @@ export function ExtensibilityCreate({
     };
   }, [createResource]);
 
-  // waiting for schema from OpenAPI to be computed
-  if (loading) return <Spinner />;
+  const handleNameChange = useCallback(
+    resourceName => {
+      const resource = getResourceObjFromUIStore(store);
+      jp.value(resource, '$.metadata.name', resourceName);
+      jp.value(
+        resource,
+        "$.metadata.labels['app.kubernetes.io/name']",
+        resourceName,
+      );
+      setStore(prevStore =>
+        prevStore.set('values', Immutable.fromJS(resource)),
+      );
+    },
+    [store, setStore],
+  );
+
+  if (loadingOpenAPISchema) return <Spinner />;
 
   return (
     <VarStoreContextProvider>
@@ -101,13 +117,14 @@ export function ExtensibilityCreate({
         pluralKind={resourceType}
         singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
         resource={resource}
-        setResource={updateResource}
+        setResource={updateUIStore}
         formElementRef={formElementRef}
         createUrl={resourceUrl}
         setCustomValid={setCustomValid}
         onlyYaml={!schema}
         initialResource={initialResource}
         afterCreatedFn={afterCreatedFn}
+        handleNameChange={handleNameChange}
       >
         <ResourceSchema
           simple
