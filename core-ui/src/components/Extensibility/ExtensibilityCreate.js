@@ -56,8 +56,11 @@ export function ExtensibilityCreate({
 
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
-  const updateUIStore = res =>
-    setStore(prevStore => prevStore.set('values', Immutable.fromJS(res)));
+  const updateStore = useCallback(
+    res =>
+      setStore(prevStore => prevStore.set('values', Immutable.fromJS(res))),
+    [setStore],
+  );
 
   const afterCreatedFn = async defaultAfterCreatedFn => {
     if (createResource?.details) {
@@ -111,11 +114,9 @@ export function ExtensibilityCreate({
         "$.metadata.labels['app.kubernetes.io/name']",
         resourceName,
       );
-      setStore(prevStore =>
-        prevStore.set('values', Immutable.fromJS(resource)),
-      );
+      updateStore(resource);
     },
-    [resource, setStore],
+    [resource, updateStore],
   );
 
   if (loadingOpenAPISchema) return <Spinner />;
@@ -126,7 +127,7 @@ export function ExtensibilityCreate({
         pluralKind={resourceType}
         singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
         resource={resource}
-        setResource={updateUIStore}
+        setResource={updateStore}
         formElementRef={formElementRef}
         createUrl={resourceUrl}
         setCustomValid={setCustomValid}
