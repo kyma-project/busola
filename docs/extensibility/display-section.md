@@ -1,4 +1,4 @@
-# Display widgets
+# Customize UI display
 
 - [Resource _list_ overview](#resource-list-overview)
 - [Resource _details_ overview](#resource-details-overview)
@@ -68,9 +68,13 @@ Each object adds a new column to your table.
 ## Resource _details_ overview
 
 The **details** section defines the display structure for the details page.
-It contains three components, `header`, `body`, and optional `resourceGraph`.
+It contains three optional components, `header`, `body`, and `resourceGraph`.
+
+> **NOTE:** `header` and `body` are arrays of objects, and the `resourceGraph` component is an object.
+
+
 The first two components are a list of widgets to display in the **header** section and the body of the page respectively.
-The `resourceGraph` component is used to configure the ResourceGraph which shows relationships between various resources.
+You can use the `resourceGraph` component to configure the ResourceGraph, which shows relationships between resources.
 
 ### Header and body parameters
 
@@ -78,7 +82,7 @@ The `resourceGraph` component is used to configure the ResourceGraph which shows
 - **name** - Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the **translation** section.
 - **widget** - optional widget to render the defined entry. By default the value is displayed verbatim.
 - **valuePreprocessor** - name of [value preprocessor](resources.md#value-preprocessors).
-- **visibility** - by default all fields are visible; however **visibility** property can be used to control a single item display.
+- **visibility** - by default all fields are visible; however, you can use the **visibility** property to control a single item display.
   - If set to `false` explicitly, the field doesn't render.
   - If set to any string, this property is treated as JSONata format, determining (based on current value given as `data`) if the field should be visible.
   - If not set, the field always renders.
@@ -143,12 +147,12 @@ Extra parameters might be available for specific widgets.
 
 ### resourceGraph parameters
 
-- **depth** - defines the maximum distance from the original resource to a transitively related resource. Defaults to infinity.
-- **colorVariant** - optional integer in range 1 to 11 or 'neutral', denoting the SAP color variant of the node's border. If not set, the node's border is the same as the current text color.
+- **depth** - defines the maximum distance from the original resource to a transitively related resource. Defaults to `infinity`.
+- **colorVariant** - optional integer in range 1 to 11 or `neutral`, denoting the SAP color variant of the node's border. If not set, the node's border is the same as the current text color.
 - **networkFlowKind** - optional boolean which determines if the resource should be shown on the network graph, Defaults to `false`, which displays the resource on the structural graph.
 - **networkFlowLevel** - optional integer which sets the horizontal position of the resource's node on the network graph.
 - **dataSources** - an array of objects in shape:
-  - **source** - a string that must correspond to one of the [dataSources](resources.md#datasources-section) name. It selects the related resource and the way it should be matched.
+  - **source** - a string that must correspond to one of the [dataSources](datasources-section.md) name. It selects the related resource and the way it should be matched.
 
 ### resourceGraph example
 
@@ -522,11 +526,11 @@ Plain widgets render all contents of an object or list sequentially without any 
 
 ### ResourceList
 
-ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with [related resources](resources.md#datasources-section).
+ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with the [related resources](datasources-section.md).
 
 #### Widget-specific parameters
 
-- **children** optional field used to obtain custom columns. If not set, the configuration is reused based on the existing resource list defined in Busola.
+- **children** optional field used to obtain custom columns. If not set, the configuration is reused based on the existing resource list, defined in Busola.
 - **sort** - optional sort option. It's an array of objects that allows you to sort by the value from the given **source**.
   - **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form, it's the path to the value.
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
