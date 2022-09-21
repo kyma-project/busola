@@ -4,9 +4,9 @@ import { MessageStrip } from 'fundamental-react';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import classNames from 'classnames';
 
-export const Message = ({ value, schema, structure }) => {
+export const Alert = ({ value, schema, structure }) => {
   const { t: tExt } = useGetTranslation();
-  const message = structure.message || value;
+  const alert = structure.alert || value;
   const schemaType = structure.type || 'information';
 
   const messageClassNames = classNames({
@@ -15,7 +15,7 @@ export const Message = ({ value, schema, structure }) => {
 
   return (
     <div className={messageClassNames}>
-      <MessageStrip type={schemaType}>{tExt(message)}</MessageStrip>
+      <MessageStrip type={schemaType}>{tExt(alert)}</MessageStrip>
     </div>
   );
 };
