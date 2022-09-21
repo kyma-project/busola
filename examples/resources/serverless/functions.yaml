@@ -157,7 +157,7 @@ data:
                   "var": "envType",
                   "widget": "Text",
                   "enum": ["Custom", "From Config Map", "From Secret"],
-                  "dynamicValue": "$exists($item.valueFrom.secretKeyRef) ? 'From Config Map' : ($exists($item.valueFrom.configMapKeyRef) ? 'From Config Map' : 'Custom')"
+                  "dynamicValue": "$exists($item.valueFrom.secretKeyRef) ? 'From Secret' : ($exists($item.valueFrom.configMapKeyRef) ? 'From Config Map' : 'Custom')"
                 },
                 { "path": "name" },
                 {
@@ -165,32 +165,36 @@ data:
                   "visibility": "$envType = 'Custom'"
                 },
                 {
-                  "path": "valueFrom.secretKeyRef",
+                  "path": "valueFrom.secretKeyRef.name",
                   "widget": "Resource",
                   "resource": {
                     "kind": "Secret",
-                    "version": "v1",
+                    "version": "v1"
                   },
                   "provideVar": "secret",
-                  "children": [{
-                    "path": "key",
-                    "enum": "$keys($secret.data)"
-                  }],
                   "visibility": "$envType = 'From Secret'"
                 },
                 {
-                  "path": "valueFrom.configMapKeyRef",
+                    "path": "valueFrom.secretKeyRef.key",
+                    "widget": "Text",
+                    "enum": "$keys($secret.data)",
+                    "visibility": "$envType = 'From Secret'"
+                },
+                {
+                  "path": "valueFrom.configMapKeyRef.name",
                   "widget": "Resource",
                   "resource": {
                     "kind": "ConfigMap",
                     "version": "v1"
                   },
                   "provideVar": "configMap",
-                  "children": [{
-                    "path": "key",
-                    "enum": "$keys($configMap.data)"
-                  }],
                   "visibility": "$envType = 'From Config Map'"
+                },
+                {
+                    "path": "valueFrom.configMapKeyRef.key",
+                    "widget": "Text",
+                    "enum": "$keys($configMap.data)",
+                    "visibility": "$envType = 'From Config Map'"
                 }
               ]
             }
@@ -293,6 +297,8 @@ data:
       spec.resourceConfiguration.build: Build
       spec.resourceConfiguration.function: Function
       placeholders.spec.runtime: Choose Function runtime
+      spec.env.name: Variable Name
+      envType: Variable Type
   presets: |-
     - name: NodeJS Function
       default: true

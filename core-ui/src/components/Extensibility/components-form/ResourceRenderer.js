@@ -9,6 +9,7 @@ import {
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
+import { useVariables } from '../hooks/useVariables';
 
 export function ResourceRenderer({
   onChange,
@@ -21,10 +22,12 @@ export function ResourceRenderer({
   ...props
 }) {
   const { namespaceId } = useMicrofrontendContext();
+  const { setVar } = useVariables();
 
   const { tFromStoreKeys, tryTranslate } = useGetTranslation();
   const { group, version, kind, scope = 'cluster', namespace = namespaceId } =
     schema.get('resource') || {};
+  const provideVar = schema.get('provideVar');
 
   const url = getResourceUrl(
     {
@@ -53,7 +56,10 @@ export function ResourceRenderer({
               return expression.evaluate();
             } else return true;
           }}
-          onSelect={value =>
+          onSelect={(value, resources) => {
+            const resource = resources.find(r => r.metadata.name === value);
+            if (provideVar && resource) setVar(`$.${provideVar}`, resource);
+
             onChange({
               storeKeys,
               scopes: ['value'],
@@ -61,8 +67,8 @@ export function ResourceRenderer({
               schema,
               required,
               data: { value },
-            })
-          }
+            });
+          }}
           value={value}
           resourceType={kind}
         />
