@@ -11,7 +11,6 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useGetSchema } from 'hooks/useGetSchema';
 import { prettifyKind } from 'shared/utils/helpers';
-import { ModeSelector } from 'shared/ResourceForm/components/ModeSelector';
 
 import { ResourceSchema } from './ResourceSchema';
 import { usePreparePresets, createTemplate, getDefaultPreset } from './helpers';
