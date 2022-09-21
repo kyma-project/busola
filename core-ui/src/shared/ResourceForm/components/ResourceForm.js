@@ -39,6 +39,7 @@ export function ResourceForm({
   nameProps,
   labelsProps,
   disableDefaultFields,
+  onModeChange,
 }) {
   // readonly schema ID, set only once
   const [resourceSchemaId] = useState(
@@ -124,7 +125,10 @@ export function ResourceForm({
       {onlyYaml ? null : (
         <ModeSelector
           mode={mode}
-          setMode={setMode}
+          setMode={newMode => {
+            setMode(newMode);
+            if (onModeChange) onModeChange(mode, newMode);
+          }}
           isEditing={!!initialResource}
         />
       )}

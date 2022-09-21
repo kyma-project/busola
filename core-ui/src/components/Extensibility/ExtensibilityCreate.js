@@ -16,8 +16,9 @@ import { ResourceSchema } from './ResourceSchema';
 import { usePreparePresets, createTemplate, getDefaultPreset } from './helpers';
 import { VarStoreContextProvider } from './contexts/VarStore';
 import { prepareSchemaRules } from './helpers/prepareSchemaRules';
+import { useVariables } from './hooks/useVariables';
 
-export function ExtensibilityCreate({
+export function ExtensibilityCreateCore({
   formElementRef,
   setCustomValid,
   resourceType,
@@ -27,11 +28,11 @@ export function ExtensibilityCreate({
   toggleFormFn,
   resourceName,
 }) {
+  const { prepareVars, resetVars, readVars } = useVariables();
   const { namespaceId: namespace } = useMicrofrontendContext();
   const notification = useNotification();
   const { t } = useTranslation();
   const general = createResource?.general;
-
   const api = general?.resource || {};
 
   const emptyTemplate = createTemplate(api, namespace, general?.scope);
@@ -50,10 +51,12 @@ export function ExtensibilityCreate({
     createStore(createOrderedMap(resource)),
   );
 
-  const updateResource = res =>
-    setStore(prevStore => prevStore.set('values', Immutable.fromJS(res)));
-
-  //TODO filter schema based on form configuration
+  const updateResource = res => {
+    resetVars();
+    readVars(res);
+    const newStore = Immutable.fromJS(res);
+    setStore(prevStore => prevStore.set('values', newStore));
+  };
 
   useEffect(() => {
     setResource(store.valuesToJS());
@@ -89,6 +92,9 @@ export function ExtensibilityCreate({
       ...(createResource?.form ?? []),
     ];
 
+    prepareVars(fullSchemaRules);
+    readVars(resource);
+
     return {
       simpleRules: prepareSchemaRules(
         fullSchemaRules.filter(item => item.simple ?? false),
@@ -97,48 +103,54 @@ export function ExtensibilityCreate({
         fullSchemaRules.filter(item => item.advanced ?? true),
       ),
     };
-  }, [createResource]);
+  }, [createResource]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // waiting for schema from OpenAPI to be computed
   if (loading) return <Spinner />;
 
   return (
-    <VarStoreContextProvider>
-      <ResourceForm
-        pluralKind={resourceType}
-        singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
+    <ResourceForm
+      pluralKind={resourceType}
+      singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
+      resource={resource}
+      setResource={updateResource}
+      formElementRef={formElementRef}
+      createUrl={resourceUrl}
+      setCustomValid={setCustomValid}
+      onlyYaml={!schema}
+      presets={!initialResource && presets}
+      initialResource={initialResource}
+      afterCreatedFn={afterCreatedFn}
+    >
+      <ResourceSchema
+        simple
+        key={api.version}
+        schema={errorOpenApi ? {} : schema}
+        schemaRules={simpleRules}
         resource={resource}
-        setResource={updateResource}
-        formElementRef={formElementRef}
-        createUrl={resourceUrl}
-        setCustomValid={setCustomValid}
-        onlyYaml={!schema}
-        presets={!initialResource && presets}
-        initialResource={initialResource}
-        afterCreatedFn={afterCreatedFn}
-      >
-        <ResourceSchema
-          simple
-          key={api.version}
-          schema={errorOpenApi ? {} : schema}
-          schemaRules={simpleRules}
-          resource={resource}
-          store={store}
-          setStore={setStore}
-          onSubmit={() => {}}
-          path={general?.urlPath || ''}
-        />
-        <ResourceSchema
-          advanced
-          key={api.version}
-          schema={errorOpenApi ? {} : schema}
-          schemaRules={advancedRules}
-          resource={resource}
-          store={store}
-          setStore={setStore}
-          path={general?.urlPath || ''}
-        />
-      </ResourceForm>
+        store={store}
+        setStore={setStore}
+        onSubmit={() => {}}
+        path={general?.urlPath || ''}
+      />
+      <ResourceSchema
+        advanced
+        key={api.version}
+        schema={errorOpenApi ? {} : schema}
+        schemaRules={advancedRules}
+        resource={resource}
+        store={store}
+        setStore={setStore}
+        path={general?.urlPath || ''}
+      />
+    </ResourceForm>
+  );
+}
+
+export function ExtensibilityCreate(props) {
+  return (
+    <VarStoreContextProvider>
+      <ExtensibilityCreateCore {...props} />
     </VarStoreContextProvider>
   );
 }
