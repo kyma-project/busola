@@ -121,6 +121,7 @@ export function ExtensibilityCreate({
 
   if (loadingOpenAPISchema) return <Spinner />;
 
+  console.log(111, resource);
   return (
     <VarStoreContextProvider>
       {JSON.stringify(resource)}
