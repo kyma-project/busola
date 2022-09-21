@@ -123,6 +123,7 @@ export function ExtensibilityCreate({
 
   return (
     <VarStoreContextProvider>
+      {JSON.stringify(resource)}
       <ResourceForm
         pluralKind={resourceType}
         singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}

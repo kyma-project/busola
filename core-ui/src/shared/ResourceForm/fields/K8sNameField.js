@@ -45,6 +45,7 @@ export function K8sNameField({
         return (
           <>
             <div className="k8s-name-field">
+              {value}: {JSON.stringify(value)}
               <K8sNameInput
                 kind={kind}
                 compact
