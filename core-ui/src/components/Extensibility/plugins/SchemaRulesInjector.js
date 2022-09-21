@@ -37,18 +37,6 @@ export function SchemaRulesInjector({
       .join('');
     const varPath = `$.${varName}${varSuffix}`;
 
-    // quick & dirty fix for default values for variables, TODO remove in #1835
-    if (!vars.hasOwnProperty(varName) && schema.get('defaultValue')) {
-      try {
-        setVar(
-          varPath,
-          jsonataWrapper(schema.get('defaultValue')).evaluate(resource),
-        );
-      } catch (e) {
-        console.warn(e);
-      }
-    }
-
     return (
       <Plugin
         {...props}

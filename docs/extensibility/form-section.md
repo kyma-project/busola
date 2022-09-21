@@ -1,7 +1,7 @@
 # Create forms with extensibility
 
 - [_Form_ overview](#form-overview)
-  - [Variable fields](#variable-fields)
+- [Variable fields](#variable-fields)
 - [Simple widgets](#simple-widgets)
   - [Text](#text)
   - [Name](#name)
@@ -49,7 +49,7 @@ If you target elements of an array rather than the array itself, you can use the
 ]
 ```
 
-### Variable fields
+## Variable fields
 
 Additionally, it's possible to define variable fields. In this case, **path** is omitted, and a **var** argument is used to specify the variable name to assign. Variable names have to be unique across the extension. Such a value is not added to the resultant YAML but instead stored in memory and provided to any [JSONata](https://docs.jsonata.org/overview.html) handlers as variables, for example, `$foo`. Variables are provided for the current context. If a variable is defined inside an array, the value is specified for that specific item. To access raw values, the predefined `$vars` variable has to be used.
 
@@ -59,6 +59,8 @@ When using a variable inside an array it has to be wrapped inside a `[]` element
 
 - **var** - _[required]_ variable name.
 - **type** - _[required]_ type of field, as defined by JSON Schema.
+- **defaultValue** - default value used for the variable when opening the form.
+- **dynamicVariable** - a JSONata expression used to calculate the value of the variable. This happens when opening the form or after editing the raw YAML of the resource.
 
 All other fields can be used analogously to regular form items (except for the **path** and **children** parameters).
 
@@ -77,7 +79,11 @@ In the example, the visibility for item price and color are analogous - the form
 
 ```json
 [
-  { "var": "useDescription", "type": "boolean" },
+  {
+    "var": "useDescription",
+    "type": "boolean",
+    "dynamicValue": "$boolean(spec.description)"
+  },
   { "path": "spec.description", "visibility": "$useDescription" },
   {
     "path": "spec.items",
@@ -368,7 +374,7 @@ FormGroup widgets render an `object` as a collapsible section.
 
 ### GenericList
 
-GenericList widgets render an `array` as a list of collapsible sections with their own sub-forms. An **add** button is present to add new entries.
+GenericList widgets render an array as a list of collapsible sections with their own sub-forms. An **Add** button is present to add new entries.
 
 #### Widget-specific parameters
 
@@ -397,9 +403,9 @@ GenericList widgets render an `array` as a list of collapsible sections with the
 
 ### SimpleList
 
-SimpleList widgets render an `array` as a table with rows representing data items and columns representing different fields. New items are added automatically when new entries are typed in.
+SimpleList widgets render an array as a table with rows representing data items and columns representing different fields. New items are added automatically when new entries are typed in.
 
-This type of field is only suitable for simple data types and can contain more complex structures in its items.
+> **NOTE:** This type of field is only suitable for simple data types and can't contain more complex structures in its items.
 
 #### Widget-specific parameters
 
@@ -418,10 +424,12 @@ This type of field is only suitable for simple data types and can contain more c
     "widget": "SimpleList",
     "children": [
       {
-        "path": "[].host"
+        "path": "[].host",
+        "placeholder": "Enter the required host"
       },
       {
-        "path": "[].port"
+        "path": "[].port",
+        "placeholder": "Enter the required port"
       }
     ]
   }
@@ -432,4 +440,4 @@ This type of field is only suitable for simple data types and can contain more c
 
 #### Scalar values
 
-When array items are scalars instead of objects, no header with the field title will be rendered in the resulting table.
+When array items are scalars instead of objects, no header with the field title is rendered in the resulting table.
