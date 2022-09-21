@@ -27,6 +27,8 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /app/core/assets/config
+            - name: extensions
+              mountPath: /app/core/assets/extensions
       volumes:
         - name: config
           configMap:
@@ -34,3 +36,9 @@ spec:
             items:
               - key: config
                 path: config.json
+        - name: extensions
+          configMap:
+            name: builtin-resource-extensions.yaml
+            items:
+              - key: extensions.yaml
+                path: extensions.yaml

@@ -104,27 +104,27 @@ ${extensions}
     cb(null, file);
   });
 
-  // return gulp
-  //   .src('extensions/**/*.yaml')
-  //   .pipe(loadExtensions)
-  //   .pipe(
-  //     concat('builtin-resource-extensions.configmap.yaml', {
-  //       newLine: '---\n',
-  //     }),
-  //   )
-  //   .pipe(intoConfigMap)
-  //   .pipe(gulp.dest('./resources/web/'))
-
   return gulp
     .src('extensions/**/*.yaml')
     .pipe(loadExtensions)
     .pipe(
-      concat('extensions.yaml', {
+      concat('builtin-resource-extensions.configmap.yaml', {
         newLine: '---\n',
       }),
     )
-    .pipe(gulp.dest('./core/src/assets'))
     .pipe(intoConfigMap)
-    .pipe(rename('builtin-resource-extensions.configmap.yaml'))
     .pipe(gulp.dest('./resources/web/'));
+
+  // return gulp
+  //   .src('extensions/**/*.yaml')
+  //   .pipe(loadExtensions)
+  //   .pipe(
+  //     concat('extensions.yaml', {
+  //       newLine: '---\n',
+  //     }),
+  //   )
+  //   .pipe(gulp.dest('./core/src/assets/extensions'))
+  //   .pipe(intoConfigMap)
+  //   .pipe(rename('builtin-resource-extensions.configmap.yaml'))
+  //   .pipe(gulp.dest('./resources/web/'));
 });

@@ -16,8 +16,10 @@ ENV CI true
 COPY . /app
 
 RUN make resolve
-RUN make validate
-RUN make pull-licenses
+# RUN make validate
+# RUN make pull-licenses
+
+RUN npm run pack-extensions
 
 RUN cd /app/core && make test && make build
 RUN cd /app/core-ui && make test && make build
