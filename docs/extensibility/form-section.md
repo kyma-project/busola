@@ -59,7 +59,7 @@ When using a variable inside an array it has to be wrapped inside a `[]` element
 
 - **var** - _[required]_ variable name.
 - **type** - _[required]_ type of field, as defined by JSON Schema.
-- **defaultValue** - default value to use for the variable when opening the form.
+- **defaultValue** - default value used for the variable when opening the form.
 - **dynamicVariable** - a JSONata expression used to calculate the value of the variable. This happens when opening the form or after editing the raw YAML of the resource.
 
 All other fields can be used analogously to regular form items (except for the **path** and **children** parameters).
