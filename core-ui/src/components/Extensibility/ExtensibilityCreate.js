@@ -35,12 +35,15 @@ export function ExtensibilityCreate({
   const { t } = useTranslation();
   const general = createResource?.general;
 
-  const api = general?.resource || {};
+  const api = useMemo(() => general?.resource || {}, [general?.resource]);
 
-  const emptyTemplate = createTemplate(api, namespace, general?.scope);
-  const defaultPreset = getDefaultPreset(
-    createResource?.presets,
-    emptyTemplate,
+  const emptyTemplate = useMemo(
+    () => createTemplate(api, namespace, general?.scope),
+    [api, namespace, general?.scope],
+  );
+  const defaultPreset = useMemo(
+    () => getDefaultPreset(createResource?.presets, emptyTemplate),
+    [createResource?.presets, emptyTemplate],
   );
 
   const [store, setStore] = useState(
@@ -102,7 +105,6 @@ export function ExtensibilityCreate({
 
   const handleNameChange = useCallback(
     resourceName => {
-      const resource = getResourceObjFromUIStore(store);
       jp.value(resource, '$.metadata.name', resourceName);
       jp.value(
         resource,
@@ -113,7 +115,7 @@ export function ExtensibilityCreate({
         prevStore.set('values', Immutable.fromJS(resource)),
       );
     },
-    [store, setStore],
+    [resource, setStore],
   );
 
   if (loadingOpenAPISchema) return <Spinner />;
