@@ -32,7 +32,12 @@ export function ResourceRefRender({
   const provideVar = schema.get('provideVar');
 
   if (toInternal) {
-    value = jsonataWrapper(toInternal).evaluate(value);
+    try {
+      value = jsonataWrapper(toInternal).evaluate(value);
+    } catch (e) {
+      value = {};
+      console.error(e);
+    }
   }
 
   const group = (schemaResource?.group || '').toLowerCase();
@@ -52,7 +57,12 @@ export function ResourceRefRender({
       resources={data}
       setValue={value => {
         if (toExternal) {
-          value = jsonataWrapper(toExternal).evaluate(value);
+          try {
+            value = jsonataWrapper(toExternal).evaluate(value);
+          } catch (e) {
+            value = null;
+            console.error(e);
+          }
         }
         const resource = data.find(
           res =>
