@@ -6,6 +6,7 @@ import { resources } from 'resources';
 import { sortBy, useGetTranslation } from '../helpers';
 import { getChildrenInfo } from './helpers';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { ExtensibilityCreate } from '../ExtensibilityCreate';
 
 const getProperNamespacePart = (givenNamespace, currentNamespace) => {
   switch (true) {
@@ -68,12 +69,13 @@ export function ResourceList({
       showTitle={true}
       hasDetailsView={structure.hasDetailsView ?? !!PredefinedRenderer?.Details}
       fixedPath={true}
-      {...structure}
-      {...props}
       columns={children}
       sortBy={defaultSortOptions =>
         sortBy(sortOptions, t, defaultSort ? defaultSortOptions : {})
       }
+      createResourceForm={ExtensibilityCreate}
+      {...structure}
+      {...props}
     />
   );
 }
