@@ -38,7 +38,8 @@ spec:
                 path: config.json
         - name: extensions
           configMap:
-            name: builtin-resource-extensions.yaml
+            name: busola-builtin-resource-extensions
             items:
               - key: extensions.yaml
                 path: extensions.yaml
+            optional: true
