@@ -1,7 +1,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: gateways
+  name: cherry-gateways
   namespace: kube-public
   labels:
     app.kubernetes.io/name: gateways
@@ -37,7 +37,7 @@ data:
           "name": "spec.selector"
         }
       ],
-      "body": [     
+      "body": [
         {
           "widget": "Table",
           "source": "spec.servers",
@@ -192,13 +192,12 @@ data:
             "placeholder": "placeholders.caCertificates",
           },
           {
-            "var": "xd",
             "simple": true,
-            "widget": "Message",
+            "widget": "Alert",
             "type": "warning",
-            "message": "TLS Server of mode SIMPLE or MUTUAL needs either credential name, or private key and server certificate pair.",
+            "alert": "TLS Server of mode SIMPLE or MUTUAL needs either credential name, or private key and server certificate pair.",
             "visibility": "$item.port.protocol = 'HTTPS'",
-          },
+          }
         ]
       },
       {
@@ -216,9 +215,9 @@ data:
         "group": "networking.istio.io",
         "version": "v1beta1"
       },
-      "urlPath": "ext-gateways",
-      "category": "Istio",
-      "name": "Ext Gateways",
+      "urlPath": "cherry-gateways",
+      "category": "Cherry",
+      "name": "Cherry Gateways",
       "scope": "namespace",
       "description": "{{[Gateways](https://istio.io/latest/docs/reference/config/networking/gateway/)}} describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections."
     }
