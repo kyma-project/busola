@@ -4,7 +4,7 @@ The optional **dataSources** section contains an object that maps a data source 
 
 Data sources are provided in all [JSONata](https://docs.jsonata.org/overview.html) formulas as functions to call. For example, `{ "source": $myRelatedResource().metadata.labels }` returns the `metadata.labels` of the related resource.
 
-Since the whole request is being provided, individual resources can be accessed using the `items` field, for example `{ "widget": "Table", "source": "$myRelatedResources().items" }`.
+When you provide the whole request, you can access individual resources using the `items` field, for example `{ "widget": "Table", "source": "$myRelatedResources().items" }`.
 
 ## Data source configuration object fields
 
