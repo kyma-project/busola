@@ -53,7 +53,6 @@ export function KubeconfigUpload({
         autocompletionDisabled
         language="yaml"
         value={kubeconfig ? jsyaml.dump(kubeconfig) : ''}
-        customSchemaId="cluster"
         onMount={setEditor}
         onChange={updateKubeconfig}
       />

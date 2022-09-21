@@ -29,6 +29,18 @@
     padding: 16px;
     background: var(--sapPageHeader_Background);
     flex-grow: 1;
+
+    &--open {
+      max-height: 1000em;
+    }
+
+    &--closed {
+      transform: scaleY(0) translateY(-100%);
+      max-height: 0px;
+      padding-top: 0;
+      padding-bottom: 0;
+      overflow: hidden;
+    }
   }
 
   .fd-message-strip {
@@ -50,10 +62,6 @@
 
   .title-content {
     margin-right: 0.5rem;
-  }
-
-  .info-tooltip {
-    cursor: help;
   }
 
   .actions {

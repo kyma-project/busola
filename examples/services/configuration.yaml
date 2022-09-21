@@ -1,0 +1,146 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: services
+  namespace: services
+  labels:
+    app.kubernetes.io/name: services
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  details: |-
+    {
+      "header": [
+        { 
+          "name": "Controlled by",
+          "source": "metadata.ownerReferences",
+          "widget": "ControlledBy"
+        },
+        {
+          "name": "Type",
+          "source": "spec.type",
+        },
+        {
+          "name": "Cluster IP",
+          "source": "spec.clusterIP",
+        },
+        {
+          "name": "Ports",
+          "source": "$count(spec.ports) ? $map(spec.ports, function($value) {$value.port = $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~> $join('') : [$string($value.port), ':', $string($value.targetPort), '/', $string($value.protocol)] ~> $join('') }) ~> $join(', ')  : '-'"
+        },
+        {
+          "name": "External IPs",
+          "source": "$count(status.loadBalancer.ingress) ? $map(status.loadBalancer.ingress, function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '): ($count(data.spec.externalIPs) ? data.spec.externalIPs ~> $join(', '): '-')"
+        }
+      ],
+      "body": [
+        {
+          "widget": "ResourceList",
+          "source": "$subscriptions()",
+          "name": "Subscription",
+          "children": [
+            {
+              "source": "$item", "name": "Name", "sort": "true", "widget": "ResourceLink", 
+              "resource": {
+                "name": "data.metadata.name",
+                "namespace": "root.metadata.namespace",
+                "kind": "data.kind"
+              }
+            },
+            {
+              "source": "$item.spec.filter.filters[0].eventType.value", "name": "First event type", "sort": {
+              "default": true, "compareFunction": "$compareStrings($first, $second)"}
+            },
+            {
+              "source": "$item.status.ready", 
+              "name": "Ready",
+              "sort": true,
+              "widget": "Badge",
+              "highlights": {
+                "positive": ["true"],
+                "negative": ["false"]
+              }
+            },
+          ]    
+        },
+        {
+          "widget": "ResourceList",
+          "source": "$apirules()",
+          "name": "API Rule",
+          "sort": [
+            {
+              "source": "spec.service.host",
+              "default": true
+            },
+            {
+              "source": "spec.service.port",
+              "compareFunction": $first - $second
+            }
+          ]
+        }
+      ]
+    }
+  form: '[]'
+  list: |-
+    [
+      {
+        "name": "Controlled By",
+        "source": "metadata.ownerReferences",
+        "widget": "ControlledBy",
+        "kindOnly": true
+      },
+      {
+        "name": "Type",
+        "source": "spec.type",
+        "sort": {"compareFunction": "$compareStrings($second, $first)"}
+      },
+      {
+        "name": "Cluster IP",
+        "source": "spec.clusterIP",
+        "sort": true
+      },
+      {
+        "name": "Ports",
+        "source": "$count(spec.ports) ? $map(spec.ports, function($value) {$value.port = $value.targetPort ? [$string($value.port), '/', $string($value.protocol)] ~> $join('') : [$string($value.port), ':', $string($value.targetPort), '/', $string($value.protocol)] ~> $join('') }) ~> $join(', ')  : '-'"
+      },
+      {
+        "name": "External IPs",
+        "source": "$count(status.loadBalancer.ingress) ? $map(status.loadBalancer.ingress, function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '): ($count(data.spec.externalIPs) ? data.spec.externalIPs ~> $join(', '): '-')"
+      }
+    ]
+  dataSources: |-
+    {
+      "apirules":{
+        "resource": {
+          "kind": "APIRule",
+          "group": "gateway.kyma-project.io",
+          "version": "v1alpha1"
+        },
+        "filter": "$item.spec.service.name = $root.metadata.name"
+      },
+      "subscriptions":{
+        "resource": {
+          "kind": "Subscription",
+          "group": "eventing.kyma-project.io",
+          "version": "v1alpha1"
+        },
+        "filter": "$substringAfter($substringBefore($item.spec.sink, '.'), '://') = $root.metadata.name"
+      }
+    }
+  general: |-
+    {
+      "resource": {
+        "kind": "Service",
+        "version": "v1",
+      },
+      "urlPath": "example-services",
+      "scope": "namespace",
+      "name": "Custom Services",
+      "category": "Examples",
+    }
+  translations: |-
+    {
+      "en": {
+        "Cluster IP": "Cluster IP override"
+      }
+    }

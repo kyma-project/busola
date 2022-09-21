@@ -22,7 +22,7 @@ context('Test Service Accounts', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[ariaLabel="Service Account name"]')
+      .find('[ariaLabel="ServiceAccount name"]')
       .clear()
       .type(SERVICE_NAME);
 
@@ -80,12 +80,14 @@ context('Test Service Accounts', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter key"]')
+      .find('[placeholder="Enter key"]:visible')
+      .filterWithNoValue()
       .type('test.key');
 
     cy.getIframeBody()
-      .find('[index="1"]')
-      .clear()
+      .find('[placeholder="Enter value"]:visible')
+      .filterWithNoValue()
+      .first()
       .type('test-value');
 
     cy.getIframeBody()

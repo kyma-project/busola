@@ -29,11 +29,12 @@ const DrawerHeader = ({ title, closeEditor }) => (
   </header>
 );
 
-export const YamlEditorProvider = ({ children, i18n }) => {
+export const YamlEditorProvider = ({ children }) => {
   const [yaml, setYaml] = useState(null);
   const [title, setTitle] = useState('');
   const [isOpen, setOpen] = useState(false);
   const [isReadOnly, setReadOnly] = useState(false);
+  const [isProtected, setIsProtected] = useState(false);
   const [changedYaml, setChangedYaml] = useState(null);
   const onSaveFn = useRef(_ => {});
 
@@ -50,11 +51,12 @@ export const YamlEditorProvider = ({ children, i18n }) => {
     LuigiClient.uxManager().setDirtyStatus(!!changedYaml);
   }, [changedYaml]);
 
-  function setEditedYaml(newYaml, title, onSaveHandler, readOnly) {
+  function setEditedYaml(newYaml, title, onSaveHandler, readOnly, isProtected) {
     onSaveFn.current = onSaveHandler;
     setTitle(title);
     setYaml(newYaml);
     setReadOnly(readOnly);
+    setIsProtected(isProtected);
   }
 
   function closeEditor() {
@@ -83,8 +85,8 @@ export const YamlEditorProvider = ({ children, i18n }) => {
           title={title}
           onSave={handleSaveClick}
           saveDisabled={!isValidYaml(changedYaml)}
-          i18n={i18n}
           readOnly={isReadOnly}
+          isProtected={isProtected}
         />
       )}
     </SideDrawer>
@@ -93,6 +95,7 @@ export const YamlEditorProvider = ({ children, i18n }) => {
   return (
     <YamlEditorContext.Provider
       value={{
+        isOpen,
         setEditedYaml,
         closeEditor,
         currentlyEditedResourceUID: (isOpen && yaml?.metadata?.uid) || null, // provide the UID of the currently edited resource if possible

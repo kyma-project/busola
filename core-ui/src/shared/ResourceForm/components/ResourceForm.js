@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
@@ -9,6 +9,8 @@ import { ModeSelector } from './ModeSelector';
 import { ResourceFormWrapper } from './Wrapper';
 import { Presets } from './Presets';
 import { useCreateResource } from '../useCreateResource';
+import { KeyValueField, K8sNameField } from '../fields';
+import * as jp from 'jsonpath';
 
 import './ResourceForm.scss';
 
@@ -31,12 +33,28 @@ export function ResourceForm({
   className,
   onlyYaml = false,
   toggleFormFn,
-  customSchemaId,
   autocompletionDisabled,
-  customSchemaUri,
   readOnly,
+  handleNameChange,
+  nameProps,
+  labelsProps,
+  disableDefaultFields,
 }) {
-  const { i18n } = useTranslation();
+  // readonly schema ID, set only once
+  const [resourceSchemaId] = useState(
+    resource.apiVersion + '/' + resource.kind,
+  );
+
+  if (!handleNameChange) {
+    handleNameChange = name => {
+      jp.value(resource, '$.metadata.name', name);
+      jp.value(resource, "$.metadata.labels['app.kubernetes.io/name']", name);
+
+      setResource({ ...resource });
+    };
+  }
+
+  const { t } = useTranslation();
   const createResource = useCreateResource({
     singularName,
     pluralKind,
@@ -46,6 +64,7 @@ export function ResourceForm({
     afterCreatedFn,
     toggleFormFn,
   });
+
   const handleInitialMode = () => {
     if (onlyYaml) return ModeSelector.MODE_YAML;
 
@@ -89,15 +108,16 @@ export function ResourceForm({
       value={resource}
       onChange={setResource}
       onMount={setActionsEditor}
-      customSchemaId={customSchemaId}
-      customSchemaUri={customSchemaUri}
       autocompletionDisabled={autocompletionDisabled}
       readOnly={readOnly}
+      schemaId={resourceSchemaId}
+      updateValueOnParentChange={presets?.length}
     />
   );
   editor = renderEditor
     ? renderEditor({ defaultEditor: editor, Editor: EditorWrapper })
     : editor;
+
   return (
     <section className={classnames('resource-form', className)}>
       {presetsSelector}
@@ -116,6 +136,15 @@ export function ResourceForm({
               setResource={setResource}
               isAdvanced={false}
             >
+              {!disableDefaultFields && (
+                <K8sNameField
+                  propertyPath="$.metadata.name"
+                  kind={singularName}
+                  readOnly={readOnly || !!initialResource}
+                  setValue={handleNameChange}
+                  {...nameProps}
+                />
+              )}
               {children}
             </ResourceFormWrapper>
           </div>
@@ -127,7 +156,6 @@ export function ResourceForm({
               editor={actionsEditor}
               title={`${resource?.metadata?.name || singularName}.yaml`}
               saveHidden
-              i18n={i18n}
             />
             {editor}
           </>
@@ -144,6 +172,31 @@ export function ResourceForm({
             isAdvanced={true}
             validationRef={validationRef}
           >
+            {!disableDefaultFields && (
+              <>
+                <K8sNameField
+                  propertyPath="$.metadata.name"
+                  kind={singularName}
+                  readOnly={readOnly || !!initialResource}
+                  setValue={handleNameChange}
+                  {...nameProps}
+                />
+                <KeyValueField
+                  advanced
+                  propertyPath="$.metadata.labels"
+                  title={t('common.headers.labels')}
+                  className="fd-margin-top--sm"
+                  inputInfo={t('common.tooltips.key-value')}
+                  {...labelsProps}
+                />
+                <KeyValueField
+                  advanced
+                  propertyPath="$.metadata.annotations"
+                  title={t('common.headers.annotations')}
+                  inputInfo={t('common.tooltips.key-value')}
+                />
+              </>
+            )}
             {children}
           </ResourceFormWrapper>
         </div>

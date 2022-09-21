@@ -4,30 +4,32 @@ import { useTranslation } from 'react-i18next';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
 export function IssuerDomains(issuer) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   return (
     <div className="panel-grid">
       <GenericList
         key="included-domains"
         title={t('issuers.domains.included')}
-        showSearchField={false}
         headerRenderer={() => []}
         rowRenderer={domain => [domain]}
         showHeader={false}
-        disableMargin={true}
+        className="fd-margin--xs"
         entries={issuer.spec.acme?.domains?.include || []}
-        i18n={i18n}
+        searchSettings={{
+          showSearchField: false,
+        }}
       />
       <GenericList
         key="excluded-domains"
         title={t('issuers.domains.excluded')}
-        showSearchField={false}
         headerRenderer={() => []}
         rowRenderer={domain => [domain]}
         showHeader={false}
-        disableMargin={true}
+        className="fd-margin--xs"
         entries={issuer.spec.acme?.domains?.exclude || []}
-        i18n={i18n}
+        searchSettings={{
+          showSearchField: false,
+        }}
       />
     </div>
   );

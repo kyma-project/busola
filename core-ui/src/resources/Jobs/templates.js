@@ -60,7 +60,7 @@ export function createContainerTemplate() {
 export function createJobPresets(namespace, translate, templateAnnotations) {
   return [
     {
-      name: translate('common.labels.default-preset'),
+      name: translate('common.labels.clear-form'),
       value: createJobTemplate(namespace, templateAnnotations),
     },
 
@@ -107,7 +107,7 @@ export function createCronJobPresets(
 ) {
   return [
     {
-      name: translate('common.labels.default-preset'),
+      name: translate('common.labels.clear-form'),
       value: createCronJobTemplate(namespace, templateAnnotations),
     },
     {

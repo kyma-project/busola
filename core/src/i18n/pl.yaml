@@ -1,9 +1,3 @@
-addons:
-  errors:
-    cannot-create: Nie można utworzyć konfiguracji dodatków
-  messages:
-    created: Utworzono konfigurację dodatków {{name}}
-  title: Dodatki
 api-rules:
   access-strategies:
     buttons:
@@ -40,20 +34,13 @@ api-rules:
   title: Reguły API
 applications:
   title: Aplikacje
-brokers:
-  title: Brokerzy
-catalog:
-  menu-title: Katalog
-  subtitle: Rozszerz możliwości za pomocą dodatkowych usług instalowanych poza klastrem.
-  title: Katalog serwisów
-cluster-addons:
-  title: Dodatki do klastra
 cluster-role-bindings:
   title: Powiązania ról klastra
 cluster-roles:
   title: Role klastra
 clusters:
   add:
+    load-default: Załaduj domyślny klaster
     title: Dodaj klaster
   buttons:
     apply-configuration: Zastosuj konfigurację
@@ -324,34 +311,19 @@ functions:
     popup-error: Przynajmniej jedna ze zmiennych ma niepoprawny format, jest zastrzerzona, zduplikowana lub pusta.
     title:
       environment-variables: Zmienne środowiskowe
-      injected-variables: Zmienne środowiskowe wstrzyknięte poprzez Service Binding
     tooltip:
       config-map: 'Ta zmienna pochodzi z Mapy Konfiguracji: "{resourceName}".'
       custom: Ta zmienna została wprowadzona przez użytkownika.
       secret: 'Ta zmienna pochodzi z Sekretu: "{resourceName}".'
-      service-binding: 'Ta zmienna została wstrzyknięta przez Service Binding odwołujący się do instancji serwisu: "{serviceInstanceName}".'
       text: Ta zmienna pochodzi z zasobu. Aby uzyskać wartość, kliknij link.
     type:
       config-map: Mapa Konfiguracji
       custom: Niestandardowe
       secret: Sekret
-      service-binding: Service Binding
-    warnings:
-      override: Ta nazwa zmiennej jest identyczna ze zmienną wstrzykniętą przez Service Binding. Kontynuuj, jeśli chcesz, aby mogły się wzajemnie nadpisywać. W przeciwnym razie wybierz inną nazwę.
-      sbu-can-be-overridden:
-        by-both: Ta zmienna może być nadpisana przez jedną z niestandardowych zmiennych lub przez zmienną wstrzykniętą przez jeden z Service Bindingów.
-        by-custom-env: Ta zmienną może nadpisać lub być nadpisana przez jedną z niestandardowych zmiennych.
-        by-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden z Service Bindingów.
-      text: Ostrzeżenie
-      variable-can-override-sbu: Ta zmienna może nadpisać lub być nadpisana przez zmienną wstrzykniętą przez jeden ze stworzonych Service Bindingów.
 generic-list:
   no-entries-found: Nie znaleziono wpisów
 git-repositories:
   title: Repozytoria Git
-instances:
-  no-specific-plan-parameters:
-    tooltip: Usługodawca nie określił konkretnych parametrów dla wybranego planu. Zapoznaj się z dokumentacją, aby poznać wymagane parametry i zdefiniuj je jako JSON w edytorze.
-  title: Instancje
 integration:
   title: Integracja
 jobs:

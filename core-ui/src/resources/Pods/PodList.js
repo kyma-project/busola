@@ -4,7 +4,7 @@ import { Link } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { ControlledByKind } from 'shared/components/ControlledBy/ControlledBy';
+import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { Link as ReactSharedLink } from 'shared/components/Link/Link';
 
 import { PodCreate } from './PodCreate';
@@ -20,7 +20,10 @@ export function PodList(params) {
       header: t('common.headers.owner'),
       value: pod => {
         return (
-          <ControlledByKind ownerReferences={pod.metadata.ownerReferences} />
+          <ControlledBy
+            ownerReferences={pod.metadata.ownerReferences}
+            kindOnly
+          />
         );
       },
     },

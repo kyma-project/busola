@@ -33,7 +33,7 @@ const NodeHeader = ({ nodeName }) => {
 };
 
 export function ClusterNodes() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const prometheus = useFeature('PROMETHEUS');
   const usePrometheusQueries = prometheus?.isEnabled;
 
@@ -64,7 +64,6 @@ export function ClusterNodes() {
     const currentStatus = conditions.find(c => c?.status === 'True');
     return currentStatus ? (
       <StatusBadge
-        i18n={i18n}
         additionalContent={currentStatus.message}
         resourceKind="nodes"
         type={getStatusType(currentStatus.type)}
@@ -83,10 +82,15 @@ export function ClusterNodes() {
     t('common.headers.created'),
     t('common.headers.version'),
     t('common.headers.status'),
+    t('common.headers.region'),
+    t('common.headers.zone'),
   ];
 
   const rowRenderer = entry => {
     const { cpu, memory } = entry?.metrics || {};
+    const region = entry?.metadata?.labels?.['topology.kubernetes.io/region'];
+    const zone = entry?.metadata?.labels?.['topology.kubernetes.io/zone'];
+
     return [
       <NodeHeader nodeName={entry.metadata?.name} />,
       cpu ? (
@@ -122,6 +126,8 @@ export function ClusterNodes() {
       />,
       entry.status?.nodeInfo?.kubeProxyVersion || EMPTY_TEXT_PLACEHOLDER,
       getStatus(entry.status),
+      region ?? EMPTY_TEXT_PLACEHOLDER,
+      zone ?? EMPTY_TEXT_PLACEHOLDER,
     ];
   };
 
@@ -138,8 +144,6 @@ export function ClusterNodes() {
     <>
       <GenericList
         title={t('cluster-overview.headers.nodes')}
-        allowSlashShortcut={false}
-        showSearchField={false}
         actions={[]}
         entries={data || []}
         headerRenderer={headerRenderer}
@@ -149,14 +153,16 @@ export function ClusterNodes() {
           !data && (usePrometheusQueries ? prometheusDataLoading : loading)
         }
         pagination={{ autoHide: true }}
-        i18n={i18n}
         testid="cluster-nodes"
+        searchSettings={{
+          showSearchField: false,
+          allowSlashShortcut: false,
+        }}
       />
       {error && !data && (
         <ErrorPanel
           error={error}
           title={t('cluster-overview.headers.metrics')}
-          i18n={i18n}
         />
       )}
       <div className="fd-margin--md cluster-overview__graphs-wrapper">

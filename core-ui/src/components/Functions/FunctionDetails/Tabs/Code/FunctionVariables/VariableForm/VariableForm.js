@@ -23,6 +23,7 @@ const EMPTY_VARIABLE_CUSTOM = {
   },
   additionalProps: { dirty: true },
 };
+
 const EMPTY_VARIABLE_SECRET = {
   type: VARIABLE_TYPE.SECRET,
   variable: {
@@ -50,11 +51,13 @@ const EMPTY_VARIABLE_CONFIG_MAP = {
   },
   additionalProps: { dirty: true },
 };
+
 const EMPTY_VARIABLE = {
   CUSTOM: EMPTY_VARIABLE_CUSTOM,
   SECRET: EMPTY_VARIABLE_SECRET,
   CONFIG_MAP: EMPTY_VARIABLE_CONFIG_MAP,
 };
+
 export default function VariableForm({
   formElementRef,
   setCustomValid = () => void 0,
@@ -65,7 +68,6 @@ export default function VariableForm({
   type,
   customVariables,
   customValueFromVariables,
-  injectedVariables,
   isEdit,
 }) {
   const updateFunctiontionVariables = useUpdateFunction({
@@ -157,7 +159,6 @@ export default function VariableForm({
           currentVariable={currentVariable}
           resources={resources}
           variables={[...customVariables, ...customValueFromVariables]}
-          injectedVariables={injectedVariables}
           onUpdateVariable={onUpdateVariable}
           setValidity={setCustomValid}
           setCustomValid={setCustomValid}
@@ -170,7 +171,6 @@ export default function VariableForm({
           currentVariable={currentVariable}
           resources={resources}
           variables={[...customVariables, ...customValueFromVariables]}
-          injectedVariables={injectedVariables}
           onUpdateVariable={onUpdateVariable}
           setValidity={setCustomValid}
           setCustomValid={setCustomValid}

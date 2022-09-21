@@ -2,12 +2,10 @@ import React from 'react';
 import { useTheme } from 'shared/contexts/ThemeContext';
 import { LayoutPanel } from 'fundamental-react';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
-import { useTranslation } from 'react-i18next';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
 export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
   const { editorTheme } = useTheme();
-  const { i18n } = useTranslation();
   const [editor, setEditor] = React.useState(null);
 
   const options = {
@@ -28,7 +26,6 @@ export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
           editor={editor}
           title={title}
           saveDisabled={true}
-          i18n={i18n}
         />
         <Editor
           theme={editorTheme}

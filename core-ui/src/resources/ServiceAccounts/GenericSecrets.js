@@ -12,7 +12,7 @@ export const GenericSecrets = ({
   allowKubeconfigDownload,
   prefix,
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const downloadKubeconfig = useDownloadSecretKubeconfig();
 
   const secretsUrl = `/api/v1/namespaces/${namespace}/secrets`;
@@ -43,7 +43,6 @@ export const GenericSecrets = ({
         customListActions,
         title,
         readOnly: true,
-        i18n,
         createFormProps: { prefix },
       }}
     />

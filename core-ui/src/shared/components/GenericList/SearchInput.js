@@ -10,6 +10,7 @@ import 'core-js/es/array/flat-map';
 import { MESSAGES } from 'shared/components/GenericList/constants';
 import { getEntryMatches } from 'shared/components/GenericList/helpers';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 
 SearchInput.propTypes = {
   searchQuery: PropTypes.string,
@@ -38,11 +39,11 @@ export function SearchInput({
   showSearchControl = true,
   disabled = false,
   onKeyDown,
-  i18n,
   allowSlashShortcut,
 }) {
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation();
   const [isSearchHidden, setSearchHidden] = React.useState(true);
+  const { isOpen: isSideDrawerOpened } = useYamlEditor();
   const searchInputRef = React.useRef();
 
   const onKeyPress = e => {
@@ -53,7 +54,7 @@ export function SearchInput({
     );
     if (isCommandPalleteOpen) return;
 
-    if (key === '/' && !disabled && allowSlashShortcut) {
+    if (key === '/' && !disabled && allowSlashShortcut && !isSideDrawerOpened) {
       openSearchList();
     }
   };
@@ -64,7 +65,11 @@ export function SearchInput({
     }
   }, [isSearchHidden]);
 
-  useEventListener('keydown', onKeyPress, [disabled, allowSlashShortcut]);
+  useEventListener('keydown', onKeyPress, [
+    disabled,
+    allowSlashShortcut,
+    isSideDrawerOpened,
+  ]);
   useCustomMessageListener(
     'busola.toggle-open-search',
     () => {

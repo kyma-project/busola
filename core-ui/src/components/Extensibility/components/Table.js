@@ -1,13 +1,15 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { isNil } from 'lodash';
+import classNames from 'classnames';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import { useGetTranslation } from '../helpers';
+import { sortBy, useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 
 import './Table.scss';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 const handleTableValue = (value, t) => {
   switch (true) {
@@ -22,24 +24,58 @@ const handleTableValue = (value, t) => {
     default: {
       return {
         entries: [],
-        genericErrorMessage: t('extensibility.widgets.table.error'),
+        notFoundMessage: t('extensibility.widgets.table.error'),
       };
     }
   }
 };
 
-export function Table({ value, structure, schema, disableMargin }) {
+export function Table({
+  value,
+  structure,
+  disableMargin,
+  schema,
+  originalResource,
+  ...props
+}) {
   const { t } = useTranslation();
-  const { t: tExt, widgetT } = useGetTranslation();
-  const coreHeaders = (structure.children || []).map(column =>
-    widgetT([structure, column]),
-  );
+  const { t: tExt } = useGetTranslation();
+
+  const coreHeaders = (structure.children || []).map(({ name }) => tExt(name));
   const headerRenderer = () =>
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
 
-  const rowRenderer = entry => {
+  const tdClassNames = classNames({
+    'collapsible-panel': !structure.disablePadding,
+  });
+
+  const rowRenderer = (entry, index) => {
+    const makeTitle = () => {
+      const defaultTitle =
+        tExt(structure.name, {
+          defaultValue: structure.name || structure.source,
+        }) +
+        ' #' +
+        (index + 1);
+      if (structure.collapsibleTitle) {
+        try {
+          const expression = jsonataWrapper(structure.collapsibleTitle);
+          expression.assign('index', index);
+          expression.assign('item', entry);
+          expression.assign('root', originalResource);
+
+          return expression.evaluate();
+        } catch (e) {
+          console.warn(e);
+          return defaultTitle;
+        }
+      } else {
+        return defaultTitle;
+      }
+    };
+
     const cells = (structure.children || []).map(column => (
-      <Widget value={entry} structure={column} schema={schema} />
+      <Widget value={entry} structure={column} schema={schema} {...props} />
     ));
 
     if (!structure.collapsible) {
@@ -48,14 +84,16 @@ export function Table({ value, structure, schema, disableMargin }) {
 
     return {
       cells,
+      title: makeTitle(),
       collapseContent: (
-        <td colspan="100%" className="collapsible-panel">
+        <td colspan="100%" className={tdClassNames}>
           {structure.collapsible.map(child => (
             <Widget
               value={entry}
               structure={child}
               schema={schema}
               inlineRenderer={InlineWidget}
+              {...props}
             />
           ))}
         </td>
@@ -63,19 +101,28 @@ export function Table({ value, structure, schema, disableMargin }) {
     };
   };
 
+  const sortOptions = (structure?.children || []).filter(child => child.sort);
+
+  const className = `extensibility-table ${
+    disableMargin ? 'fd-margin--xs' : ''
+  }`;
+
   return (
     <GenericList
-      className="extensibility-table"
-      showSearchSuggestion={false}
+      showHeader={structure?.showHeader}
+      className={className}
       title={tExt(structure.name, {
-        defaultValue: tExt(structure.path, {
-          defaultValue: structure.name,
-        }),
+        defaultValue: structure.name || structure.source,
       })}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
-      disableMargin={disableMargin}
       {...handleTableValue(value, t)}
+      sortBy={() => sortBy(sortOptions, tExt, {}, originalResource)}
+      searchSettings={{
+        showSearchSuggestion: false,
+        showSearchField: structure?.showSearchField,
+        allowSlashShortcut: false,
+      }}
     />
   );
 }

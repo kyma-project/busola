@@ -12,7 +12,7 @@ const navigateTo = path => _ =>
     .navigate(path);
 
 export default function PodList({ namespace, functionName, isActive }) {
-  const { i18n, t } = useTranslation();
+  const { t } = useTranslation();
   const labelSelectors = `serverless.kyma-project.io/function-name=${functionName},serverless.kyma-project.io/resource=deployment`;
   const resourceUrl = `/api/v1/namespaces/${namespace}/pods?labelSelector=${labelSelectors}`;
   const { data: pods, error, loading = true } = useGetList()(resourceUrl, {
@@ -45,7 +45,6 @@ export default function PodList({ namespace, functionName, isActive }) {
   return (
     <GenericList
       className="pods-of-function"
-      showSearchField={false}
       compact
       title={t('functions.pod-list.title')}
       entries={pods || []}
@@ -53,7 +52,9 @@ export default function PodList({ namespace, functionName, isActive }) {
       rowRenderer={rowRenderer}
       serverDataError={error}
       serverDataLoading={loading}
-      i18n={i18n}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 }

@@ -22,20 +22,8 @@ describe('validateVariables', () => {
         validation: VARIABLE_VALIDATION.NONE,
       },
       {
-        id: 'variable2',
-        name: 'variable2',
-        validation: VARIABLE_VALIDATION.NONE,
-      },
-      {
         id: 'variable3',
         name: 'variable3',
-        validation: VARIABLE_VALIDATION.NONE,
-      },
-    ];
-    const injectedVariables = [
-      {
-        name: 'variable2',
-        type: VARIABLE_TYPE.BINDING_USAGE,
         validation: VARIABLE_VALIDATION.NONE,
       },
     ];
@@ -52,20 +40,13 @@ describe('validateVariables', () => {
         validation: VARIABLE_VALIDATION.DUPLICATED,
       },
       {
-        id: 'variable2',
-        name: 'variable2',
-        validation: VARIABLE_VALIDATION.CAN_OVERRIDE_SBU,
-      },
-      {
         id: 'variable3',
         name: 'variable3',
         validation: VARIABLE_VALIDATION.NONE,
       },
     ];
 
-    expect(validateVariables(customVariables, [], injectedVariables)).toEqual(
-      expectedVariables,
-    );
+    expect(validateVariables(customVariables)).toEqual(expectedVariables);
   });
 });
 
@@ -267,22 +248,6 @@ describe('getValidationStatus', () => {
       varDirty: true,
     };
     expect(getValidationStatus(args)).toEqual(VARIABLE_VALIDATION.NONE);
-
-    // Not duplicated with injected
-    let injectedVariables = [
-      {
-        id: 'variable1',
-        name: 'variable1',
-        type: VARIABLE_TYPE.BINDING_USAGE,
-      },
-    ];
-    args = {
-      injectedVariables,
-      varID: 'variable',
-      varName: 'variable',
-      varDirty: true,
-    };
-    expect(getValidationStatus(args)).toEqual(VARIABLE_VALIDATION.NONE);
   });
 
   test('should return EMPTY status', () => {
@@ -354,24 +319,5 @@ describe('getValidationStatus', () => {
       varDirty: true,
     };
     expect(getValidationStatus(args)).toEqual(VARIABLE_VALIDATION.RESTRICTED);
-  });
-
-  test('should return CAN_OVERRIDE_SBU status', () => {
-    const injectedVariables = [
-      {
-        id: 'variable1',
-        name: 'variable',
-        type: VARIABLE_TYPE.BINDING_USAGE,
-      },
-    ];
-    const args = {
-      injectedVariables,
-      varID: 'variable',
-      varName: 'variable',
-      varDirty: true,
-    };
-    expect(getValidationStatus(args)).toEqual(
-      VARIABLE_VALIDATION.CAN_OVERRIDE_SBU,
-    );
   });
 });

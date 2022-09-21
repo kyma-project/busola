@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'fundamental-react';
+import { Button, Icon } from 'fundamental-react';
 import ListActions from 'shared/components/ListActions/ListActions';
 import classNames from 'classnames';
 
@@ -36,11 +36,17 @@ export const HeaderRenderer = ({ actions, headerRenderer }) => {
   ];
 };
 
-export const RowRenderer = ({ entry, actions, rowRenderer, ...others }) => {
+export const RowRenderer = ({
+  entry,
+  actions,
+  rowRenderer,
+  index,
+  ...others
+}) => {
   const filteredActions = actions.filter(a =>
     a.skipAction ? !a.skipAction(entry) : true,
   );
-  const resolvedRowRenderer = rowRenderer(entry);
+  const resolvedRowRenderer = rowRenderer(entry, index);
 
   if (Array.isArray(resolvedRowRenderer)) {
     return (
@@ -66,7 +72,6 @@ const DefaultRowRenderer = ({
   entry,
   actions,
   rowRenderer,
-  actionsStandaloneItems,
   compact,
   isBeingEdited = false,
 }) => {
@@ -88,12 +93,7 @@ const DefaultRowRenderer = ({
   });
   const actionsCell = (
     <td className="fd-table__cell">
-      <ListActions
-        actions={actions}
-        entry={entry}
-        standaloneItems={actionsStandaloneItems}
-        compact={compact}
-      />
+      <ListActions actions={actions} entry={entry} compact={compact} />
     </td>
   );
   return (
@@ -109,6 +109,7 @@ const DefaultRowRenderer = ({
 
 const CollapsedRowRenderer = ({
   rowRenderer: {
+    title,
     cells,
     collapseContent,
     withCollapseControl = true,
@@ -126,12 +127,17 @@ const CollapsedRowRenderer = ({
           data-testid={
             isOpen ? 'collapse-button-open' : 'collapse-button-close'
           }
-          glyph={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
           option="transparent"
           onClick={() => setOpen(!isOpen)}
           compact={true}
           typeAttr="button"
-        />
+        >
+          <Icon
+            className="fd-margin-end--tiny"
+            glyph={isOpen ? 'navigation-up-arrow' : 'navigation-down-arrow'}
+          />
+          {title}
+        </Button>
       ) : (
         <></>
       ),

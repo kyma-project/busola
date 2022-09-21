@@ -3,16 +3,13 @@ import { Button } from 'fundamental-react';
 import { Modal } from '../Modal/Modal';
 import { FormRadioGroup, FormRadioItem } from 'fundamental-react';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { useTranslation } from 'react-i18next';
 
-export const SortModalPanel = ({
-  sortBy,
-  sort,
-  setSort,
-  t,
-  disabled = false,
-}) => {
+export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
   const [order, setOrder] = useState(sort.order);
   const [name, setName] = useState(sort.name);
+
+  const { t } = useTranslation();
 
   const sortOpeningComponent = (
     <Tooltip content={t('common.tooltips.sort')}>
@@ -72,7 +69,7 @@ export const SortModalPanel = ({
                 checked={name === value}
                 inputProps={{ onChange: () => {} }}
               >
-                {t(`common.sorting.${value}`)}
+                {t(`common.sorting.${value}`, { defaultValue: value })}
               </FormRadioItem>
             );
           })}

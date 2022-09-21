@@ -16,14 +16,13 @@ export const LogsLink = ({
   from = 'now-1h',
   to = 'now',
   dataSource = 'Loki',
-  i18n,
   children,
 }) => {
   const { features } = useMicrofrontendContext();
   const { data, loading, error } = useGet(
     '/apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana',
   );
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation();
 
   if (!features.OBSERVABILITY?.isEnabled) {
     return null;
@@ -86,5 +85,4 @@ LogsLink.propTypes = {
   from: PropTypes.string,
   to: PropTypes.string,
   dataSource: PropTypes.string,
-  i18n: PropTypes.object,
 };

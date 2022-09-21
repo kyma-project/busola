@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
 
 import PersistentVolumeClaimsListComponent from 'resources/PersistentVolumeClaims/PersistentVolumeClaimList';
@@ -12,7 +11,7 @@ export function PersistentVolumeClaimsList(storageclass) {
         `namespaces/${resource.metadata.namespace}/persistentvolumeclaims/details/${resource.metadata.name}`,
       );
   };
-  const { i18n } = useTranslation();
+
   const params = {
     hasDetailsView: true,
     navigateFn,
@@ -23,7 +22,6 @@ export function PersistentVolumeClaimsList(storageclass) {
     filter: persistentvolumesclaim =>
       persistentvolumesclaim.spec.storageClassName ===
       storageclass.metadata.name,
-    i18n,
   };
 
   return <PersistentVolumeClaimsListComponent {...params} />;

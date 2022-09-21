@@ -10,11 +10,11 @@ import { prettifyNameSingular } from 'shared/utils/helpers';
 import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
 
 export function useDeleteResource({
-  i18n,
+  resourceTitle,
   resourceType,
   navigateToListAfterDelete = false,
 }) {
-  const { t } = useTranslation(['translation'], { i18n });
+  const { t } = useTranslation();
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const deleteResourceMutation = useDelete();
@@ -24,7 +24,10 @@ export function useDeleteResource({
 
   const notification = useNotification();
 
-  const prettifiedResourceName = prettifyNameSingular(undefined, resourceType);
+  const prettifiedResourceName = prettifyNameSingular(
+    resourceTitle,
+    resourceType,
+  );
 
   const performDelete = async (resource, resourceUrl, deleteFn) => {
     const withoutQueryString = path => path?.split('?')?.[0];
@@ -74,14 +77,14 @@ export function useDeleteResource({
 
   const DeleteMessageBox = ({
     resource,
-    resourceName,
+    resourceTitle,
     resourceUrl,
     deleteFn,
   }) => (
     <MessageBox
       type="warning"
       title={t('common.delete-dialog.title', {
-        name: resourceName || resource?.metadata?.name,
+        name: resourceTitle || resource?.metadata?.name,
       })}
       actions={[
         <Button
@@ -102,7 +105,7 @@ export function useDeleteResource({
       <p>
         {t('common.delete-dialog.message', {
           type: prettifiedResourceName,
-          name: resourceName || resource?.metadata?.name,
+          name: resourceTitle || resource?.metadata?.name,
         })}
       </p>
       <div className="fd-margin-top--sm">

@@ -7,11 +7,7 @@ import { MessageStrip } from 'fundamental-react';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import {
-  K8sNameField,
-  KeyValueField,
-  RuntimeResources,
-} from 'shared/ResourceForm/fields';
+import { RuntimeResources } from 'shared/ResourceForm/fields';
 import {
   functionAvailableLanguages,
   getDefaultDependencies,
@@ -79,10 +75,11 @@ export function FunctionCreate({
     },
   ];
 
-  const repositoryOptions = repositories?.map(repository => ({
-    key: repository.metadata.name,
-    text: `${repository.metadata.name} (${repository.spec.url})`,
-  }));
+  const repositoryOptions =
+    repositories?.map(repository => ({
+      key: repository.metadata.name,
+      text: `${repository.metadata.name} (${repository.spec.url})`,
+    })) || [];
 
   useEffect(() => {
     if (!type) {
@@ -142,28 +139,13 @@ export function FunctionCreate({
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
       initialResource={initialFunction}
+      handleNameChange={name => {
+        jp.value(func, '$.metadata.name', name);
+        jp.value(func, "$.metadata.labels['app.kubernetes.io/name']", name);
+        jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
+        setFunction({ ...func });
+      }}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={t('functions.name_singular')}
-        setValue={name => {
-          jp.value(func, '$.metadata.name', name);
-          jp.value(func, "$.metadata.labels['app.kubernetes.io/name']", name);
-          jp.value(func, '$.spec.deps', getDefaultDependencies(name, runtime));
-          setFunction({ ...func });
-        }}
-        readOnly={!!initialFunction}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
       <ResourceForm.FormField
         required
         propertyPath="$.spec.runtime"
@@ -184,7 +166,7 @@ export function FunctionCreate({
         input={Inputs.Dropdown}
         options={sourceTypeOptions}
       />
-      {func?.spec?.type === 'git' && !repositories.length && (
+      {func?.spec?.type === 'git' && !(repositories || []).length && (
         <MessageStrip
           advanced
           className="fd-margin-top--sm"
@@ -222,7 +204,7 @@ export function FunctionCreate({
         propertyPath="$.spec.buildResources"
         presets={CONFIG['buildJobResourcesPresets']}
       />
-      {func?.spec?.type === 'git' && repositories.length && (
+      {func?.spec?.type === 'git' && (repositories || []).length && (
         <>
           <ResourceForm.FormField
             advanced

@@ -19,14 +19,14 @@ import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
 
 import './ClusterList.scss';
+import { loadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID';
 
 function ClusterList() {
-  const { clusters, activeClusterName } = useMicrofrontendContext();
+  const { clusters, activeClusterName, features } = useMicrofrontendContext();
   const notification = useNotification();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
-    i18n,
     resourceType: t('clusters.labels.name'),
   });
 
@@ -163,6 +163,20 @@ function ClusterList() {
     />
   );
 
+  const loadDefaultClusterButton = (
+    <>
+      {features?.KUBECONFIG_ID?.isEnabled &&
+        features?.KUBECONFIG_ID?.config?.defaultKubeconfig && (
+          <Button
+            onClick={() => loadDefaultKubeconfigId()}
+            className="fd-margin-end--tiny fd-margin-begin--tiny"
+          >
+            {t('clusters.add.load-default')}
+          </Button>
+        )}
+    </>
+  );
+
   if (!entries.length) {
     const subtitle = t('clusters.empty.subtitle');
     return (
@@ -178,9 +192,15 @@ function ClusterList() {
           title={t('clusters.empty.title')}
           subtitle={subtitle}
           actions={
-            <Button onClick={() => setShowAdd(true)}>
-              {t('clusters.add.title')}
-            </Button>
+            <>
+              <Button
+                onClick={() => setShowAdd(true)}
+                className="fd-margin-end--tiny fd-margin-begin--tiny"
+              >
+                {t('clusters.add.title')}
+              </Button>
+              {loadDefaultClusterButton}
+            </>
           }
         />
       </>
@@ -193,23 +213,23 @@ function ClusterList() {
       {editDialog}
       <PageHeader title={t('clusters.overview.title-all-clusters')} />
       <GenericList
-        textSearchProperties={textSearchProperties}
-        showSearchSuggestion={false}
         entries={entries}
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         actions={actions}
         extraHeaderContent={extraHeaderContent}
-        noSearchResultMessage={'clusters.list.no-clusters-found'}
-        i18n={i18n}
-        allowSlashShortcut
         sortBy={{
           name: (a, b) => a.contextName?.localeCompare(b.contextName),
+        }}
+        searchSettings={{
+          textSearchProperties,
+          showSearchSuggestion: false,
+          noSearchResultMessage: t('clusters.list.no-clusters-found'),
         }}
       />
       <DeleteMessageBox
         resource={chosenCluster}
-        resourceName={chosenCluster?.kubeconfig['current-context']}
+        resourceTitle={chosenCluster?.kubeconfig['current-context']}
         deleteFn={e => {
           deleteCluster(e.name);
           notification.notifySuccess({

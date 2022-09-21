@@ -1,24 +1,19 @@
-import React, { useEffect } from 'react';
-import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import { useRelationsContext } from '../contexts/RelationsContext';
+import React from 'react';
 import { isNil } from 'lodash';
-import { widgets, valuePreprocessors } from './index';
 import { useTranslation } from 'react-i18next';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
-import {
-  getValue,
-  ApplyFormula,
-  useGetTranslation,
-  useGetPlaceholder,
-} from '../helpers';
+import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
-import jsonata from 'jsonata';
+import { useGetTranslation, useGetPlaceholder } from '../helpers';
+import { useJsonata } from '../hooks/useJsonata';
+import { widgets, valuePreprocessors } from './index';
 
 export const SimpleRenderer = ({ children }) => {
   return children;
 };
 
-export function InlineWidget({ children, value, structure }) {
+export function InlineWidget({ children, value, structure, ...props }) {
   const { widgetT } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
@@ -31,7 +26,9 @@ export function InlineWidget({ children, value, structure }) {
     displayValue = emptyLeafPlaceholder;
   }
 
-  return <LayoutPanelRow name={widgetT(structure)} value={displayValue} />;
+  return (
+    <LayoutPanelRow name={widgetT(structure)} value={displayValue} {...props} />
+  );
 }
 
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
@@ -46,12 +43,13 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   );
 }
 
-export function shouldBeVisible(value, visibilityFormula) {
+export function shouldBeVisible(value, visibilityFormula, originalResource) {
   // allow hidden to be set only explicitly
   if (!visibilityFormula) return { visible: visibilityFormula !== false };
 
   try {
-    const expression = jsonata(visibilityFormula);
+    const expression = jsonataWrapper(visibilityFormula);
+    expression.assign('root', originalResource);
     return { visible: !!expression.evaluate({ data: value }) };
   } catch (e) {
     console.warn('Widget::shouldBeVisible error:', e);
@@ -59,43 +57,26 @@ export function shouldBeVisible(value, visibilityFormula) {
   }
 }
 
-export function Widget({ structure, value, inlineRenderer, ...props }) {
+export function Widget({
+  structure,
+  value,
+  inlineRenderer,
+  originalResource,
+  ...props
+}) {
   const { Plain, Text } = widgets;
-  const { t, i18n } = useTranslation();
-  const {
-    store,
-    relations,
-    getRelatedResourceInPath,
-    requestRelatedResource,
-  } = useRelationsContext();
+  const { t } = useTranslation();
 
-  let childValue;
-  if (!structure.path) {
-    childValue = value;
-  } else {
-    const relatedResourcePath = getRelatedResourceInPath(structure.path);
-    if (relatedResourcePath) {
-      childValue = store[relatedResourcePath] || { loading: true };
-      props.relation = relations[relatedResourcePath];
-      props.originalResource = value;
-    } else {
-      childValue = getValue(value, structure.path);
-    }
-  }
+  const childValue = useJsonata(structure.source, originalResource, {
+    parent: value,
+    item: value,
+  });
 
   const { visible, error: visibleCheckError } = shouldBeVisible(
     childValue,
     structure.visibility,
+    originalResource,
   );
-
-  useEffect(() => {
-    if (!visible) return;
-    // run `requestRelatedResource` in useEffect, as it might update Context's state
-    if (structure.path && !!getRelatedResourceInPath(structure.path)) {
-      requestRelatedResource(value, structure.path);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   if (visibleCheckError) {
     return t('extensibility.configuration-error', {
@@ -113,18 +94,20 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
         value={childValue}
         structure={copiedStructure}
         inlineRenderer={inlineRenderer}
+        originalResource={originalResource}
         {...props}
       />
     );
   }
 
-  if (structure.formula) {
-    childValue = ApplyFormula(childValue, structure.formula, i18n);
-  }
-
   if (Array.isArray(structure)) {
     return (
-      <Plain value={value} structure={{ children: structure }} {...props} />
+      <Plain
+        value={value}
+        structure={{ children: structure }}
+        originalResource={originalResource}
+        {...props}
+      />
     );
   }
   let Renderer = structure.children ? Plain : Text;
@@ -144,6 +127,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
         Renderer={Renderer}
         value={item}
         structure={structure}
+        originalResource={originalResource}
         {...props}
       />
     ))
@@ -153,6 +137,7 @@ export function Widget({ structure, value, inlineRenderer, ...props }) {
       Renderer={Renderer}
       value={sanitizedValue}
       structure={structure}
+      originalResource={originalResource}
       {...props}
     />
   );

@@ -32,6 +32,7 @@ export function MultiInput({
   readOnly,
   noEdit,
   newItemAction,
+  inputInfo,
   ...props
 }) {
   const { t } = useTranslation();
@@ -214,6 +215,9 @@ export function MultiInput({
               )}
             </li>
           ))}
+          {inputInfo && (
+            <p style={{ color: 'var(--sapNeutralTextColor)' }}>{inputInfo}</p>
+          )}
         </ul>
       </div>
     </ResourceForm.CollapsibleSection>

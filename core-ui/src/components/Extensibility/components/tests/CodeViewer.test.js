@@ -3,10 +3,6 @@ import { shallow } from 'enzyme';
 import { CodeViewer } from '../CodeViewer';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
-jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
-  'monaco-editor': () => {},
-}));
-
 jest.mock('../../helpers', () => ({
   useGetTranslation: () => ({
     widgetT: key => key,

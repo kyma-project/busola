@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: whoami-resource-quota
+  namespace: whoami
+spec:
+  hard:
+    limits.memory: 128Mi
+    requests.memory: 96Mi
+    limits.cpu: 1000m
+    requests.cpu: 500m
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoami
+  namespace: whoami
+  labels:
+    app.kubernetes.io/name: whoami
+spec:
+  selector:
+    matchLabels:
+      app: whoami
+  template:
+    metadata:
+      labels:
+        app: whoami
+        sidecar.istio.io/inject: 'false'
+    spec:
+      containers:
+        - name: whoami
+          image: traefik/whoami:latest
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /health
+              port: 80
+            initialDelaySeconds: 30
+            timeoutSeconds: 30
+          resources:
+            limits:
+              cpu: 250m
+              memory: 32Mi
+            requests:
+              cpu: 100m
+              memory: 24Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami
+  namespace: whoami
+spec:
+  selector:
+    app: whoami
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: whoami
+  namespace: whoami
+  labels:
+    app: whoami
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: whoami
+  minReplicas: 1
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 80

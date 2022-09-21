@@ -24,13 +24,12 @@ export default function ResourceVariableInput({
   currentVariable = {},
   variables = [],
   resources = [],
-  injectedVariables = [],
   onUpdateVariable,
   setValidity,
   setInvalidModalPopupMessage,
   isEdit,
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [variable, setVariable] = useState(currentVariable);
   const debouncedCallback = useDebouncedCallback(newVariable => {
     onUpdateVariable(newVariable);
@@ -94,7 +93,6 @@ export default function ResourceVariableInput({
     const name = event.target.value;
     const validation = getValidationStatus({
       userVariables: variables,
-      injectedVariables,
       restrictedVariables: CONFIG.restrictedVariables,
       varName: name,
       varID: variable.id,
@@ -116,7 +114,6 @@ export default function ResourceVariableInput({
   function onChangeValueFrom(valueFrom) {
     const validation = getValidationStatus({
       userVariables: variables,
-      injectedVariables,
       restrictedVariables: CONFIG.restrictedVariables,
       varName: variable.name,
       varID: variable.id,
@@ -160,7 +157,6 @@ export default function ResourceVariableInput({
         className = 'fd-has-color-status-3';
         message = t('functions.variable.errors.invalid-config');
         break;
-
       case VARIABLE_VALIDATION.DUPLICATED:
         className = 'fd-has-color-status-3';
         message = t('functions.variable.errors.duplicated');
@@ -168,10 +164,6 @@ export default function ResourceVariableInput({
       case VARIABLE_VALIDATION.RESTRICTED:
         className = 'fd-has-color-status-3';
         message = t('functions.variable.errors.restricted');
-        break;
-      case VARIABLE_VALIDATION.CAN_OVERRIDE_SBU:
-        className = 'fd-has-color-status-2';
-        message = t('functions.variable.warnings.override');
         break;
       default:
         className = 'fd-has-color-status-3';
@@ -263,7 +255,6 @@ export default function ResourceVariableInput({
               selectedKey={
                 currentVariable?.valueFrom?.secretKeyRef?.key || null
               }
-              i18n={i18n}
             />
           </FormItem>
           {takeAll && (
@@ -297,7 +288,6 @@ export default function ResourceVariableInput({
               selectedKey={
                 currentVariable?.valueFrom?.configMapKeyRef?.name || null
               }
-              i18n={i18n}
             />
           </FormItem>
           <FormItem className="grid-input-fields">
@@ -318,7 +308,6 @@ export default function ResourceVariableInput({
               selectedKey={
                 currentVariable?.valueFrom?.configMapKeyRef?.key || null
               }
-              i18n={i18n}
             />
           </FormItem>
         </>

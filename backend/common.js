@@ -103,7 +103,11 @@ export const makeHandleRequest = () => {
           'Response headers are potentially dangerous',
         );
 
-      res.writeHead(k8sResponse.statusCode, {
+      // change all 503 into 502
+      const statusCode =
+        k8sResponse.statusCode === 503 ? 502 : k8sResponse.statusCode;
+
+      res.writeHead(statusCode, {
         'Content-Type': k8sResponse.headers['Content-Type'] || 'text/json',
         'Content-Encoding': k8sResponse.headers['content-encoding'] || '',
       });

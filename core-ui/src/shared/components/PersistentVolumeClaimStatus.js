@@ -25,7 +25,7 @@ const createPhaseProperties = (phase, t) => {
 };
 
 export const PersistentVolumeClaimStatus = ({ phase }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const phaseProperties = createPhaseProperties(phase, t);
 
   return (
@@ -33,7 +33,6 @@ export const PersistentVolumeClaimStatus = ({ phase }) => {
       resourceKind="persistentvolumeclaim"
       type={phaseProperties.type}
       tooltipContent={phaseProperties?.tooltipContent}
-      i18n={i18n}
     >
       {phase}
     </StatusBadge>

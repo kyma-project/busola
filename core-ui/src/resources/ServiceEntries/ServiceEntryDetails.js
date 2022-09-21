@@ -13,7 +13,7 @@ import { Endpoints } from './Endpoints';
 import { ServiceEntryCreate } from './ServiceEntryCreate';
 
 const Ports = serviceentry => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const ports = serviceentry.spec?.ports;
 
@@ -38,8 +38,9 @@ const Ports = serviceentry => {
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={ports || []}
-      i18n={i18n}
-      showSearchField={false}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 };

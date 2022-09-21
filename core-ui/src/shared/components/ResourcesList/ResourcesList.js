@@ -51,7 +51,7 @@ ResourcesList.propTypes = {
   createActionLabel: PropTypes.string,
   resourceUrl: PropTypes.string.isRequired,
   resourceType: PropTypes.string.isRequired,
-  resourceName: PropTypes.string,
+  resourceTitle: PropTypes.string,
   namespace: PropTypes.string,
   hasDetailsView: PropTypes.bool,
   fixedPath: PropTypes.bool,
@@ -65,6 +65,7 @@ ResourcesList.propTypes = {
   testid: PropTypes.string,
   omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
   resourceUrlPrefix: PropTypes.string,
+  disableCreate: PropTypes.bool,
 };
 
 ResourcesList.defaultProps = {
@@ -74,6 +75,8 @@ ResourcesList.defaultProps = {
   showTitle: false,
   listHeaderActions: null,
   readOnly: false,
+  disableCreate: false,
+  filterFn: () => true,
 };
 
 export function ResourcesList(props) {
@@ -82,35 +85,40 @@ export function ResourcesList(props) {
   }
 
   return (
-    <YamlEditorProvider i18n={props.i18n}>
+    <YamlEditorProvider>
       {!props.isCompact && (
         <PageHeader
-          title={prettifyNamePlural(props.resourceName, props.resourceType)}
+          title={prettifyNamePlural(props.resourceTitle, props.resourceType)}
           actions={props.customHeaderActions}
           description={props.description}
         />
       )}
-      <Resources {...props} />
+      {props.resources ? (
+        <ResourceListRenderer
+          resources={(props.resources || []).filter(props.filterFn)}
+          {...props}
+        />
+      ) : (
+        <Resources {...props} />
+      )}
     </YamlEditorProvider>
   );
 }
 
 function Resources(props) {
   const {
-    windowTitle,
-    resourceName,
+    resourceTitle,
     resourceType,
     filter,
     resourceUrl,
     skipDataLoading,
     isCompact,
   } = props;
-  useWindowTitle(
-    windowTitle || prettifyNamePlural(resourceName, resourceType),
-    { skip: isCompact },
-  );
+  useWindowTitle(prettifyNamePlural(resourceTitle, resourceType), {
+    skip: isCompact,
+  });
 
-  const { loading, error, data: resources, silentRefetch } = useGetList(filter)(
+  const { loading, error, data: resources, silentRefetch } = useGetList()(
     resourceUrl,
     {
       pollingInterval: 3000,
@@ -122,7 +130,7 @@ function Resources(props) {
     <ResourceListRenderer
       loading={loading}
       error={error}
-      resources={resources}
+      resources={filter ? (resources || []).filter(filter) : resources || []}
       silentRefetch={silentRefetch}
       {...props}
     />
@@ -132,7 +140,7 @@ function Resources(props) {
 export function ResourceListRenderer({
   resourceUrl,
   resourceType,
-  resourceName,
+  resourceTitle,
   namespace,
   customColumns = [],
   columns,
@@ -146,38 +154,34 @@ export function ResourceListRenderer({
   readOnly,
   navigateFn,
   testid,
-  i18n,
-  textSearchProperties = [],
-  omitColumnsIds = [],
+  omitColumnsIds = ['namespace'],
   customListActions = [],
   createFormProps,
   pagination,
-  showNamespace = false,
   loading,
   error,
   resources,
   silentRefetch = () => {},
-  showSearchField = true,
-  allowSlashShortcut,
   resourceUrlPrefix,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
-  disableCreate = false,
+  disableCreate,
   sortBy = {
     name: nameLocaleSort,
     time: timeSort,
   },
+  searchSettings,
 }) {
   useVersionWarning({
     resourceUrl,
     resourceType,
   });
-  const { t } = useTranslation(['translation'], { i18n });
-  const { isProtected, protectedResourceWarning } = useProtectedResources(i18n);
+  const { t } = useTranslation();
+  const { isProtected, protectedResourceWarning } = useProtectedResources();
 
   const [toggleFormFn, getToggleFormFn] = useState(() => {});
 
   const [DeleteMessageBox, handleResourceDelete] = useDeleteResource({
-    i18n,
+    resourceTitle,
     resourceType,
   });
 
@@ -195,15 +199,60 @@ export function ResourceListRenderer({
   useEffect(() => closeEditor(), [namespace]);
 
   const prettifiedResourceName = prettifyNameSingular(
-    resourceName,
+    resourceTitle,
     resourceType,
   );
 
-  if (columns) {
-    customColumns = columns;
-  }
+  const defaultColumns = [
+    {
+      header: t('common.headers.name'),
+      value: entry =>
+        hasDetailsView ? (
+          <Link
+            className="fd-link"
+            onClick={_ => {
+              if (navigateFn) return navigateFn(entry);
+              if (fixedPath) return navigateToResource(entry);
+              navigateToDetails(resourceType, entry.metadata.name);
+            }}
+          >
+            {nameSelector(entry)}
+          </Link>
+        ) : (
+          <b>{nameSelector(entry)}</b>
+        ),
+      id: 'name',
+    },
+    {
+      header: t('common.headers.namespace'),
+      value: entry => entry.metadata.namespace,
+      id: 'namespace',
+    },
+    {
+      header: t('common.headers.created'),
+      value: entry => (
+        <ReadableCreationTimestamp
+          timestamp={entry.metadata.creationTimestamp}
+        />
+      ),
+      id: 'created',
+    },
+    {
+      header: t('common.headers.labels'),
+      value: entry => (
+        <div style={{ maxWidth: '36rem' }}>
+          <Labels labels={entry.metadata.labels} shortenLongLabels />
+        </div>
+      ),
+      id: 'labels',
+    },
+  ];
 
-  customColumns = customColumns.filter(col => !omitColumnsIds.includes(col.id));
+  customColumns =
+    columns ||
+    [...defaultColumns, ...customColumns].filter(
+      col => !omitColumnsIds.includes(col.id),
+    );
 
   const handleSaveClick = resourceData => async newYAML => {
     try {
@@ -234,6 +283,7 @@ export function ResourceListRenderer({
       resource,
       nameSelector(resource) + '.yaml',
       handleSaveClick(resource),
+      isProtected(resource),
       isProtected(resource),
     );
   };
@@ -270,6 +320,7 @@ export function ResourceListRenderer({
     setActiveResource(activeResource);
     setShowEditDialog(true);
   };
+
   const actions = readOnly
     ? customListActions
     : [
@@ -283,13 +334,19 @@ export function ResourceListRenderer({
           : null,
         {
           name: t('common.buttons.edit'),
-          tooltip: t('common.buttons.edit'),
+          tooltip: entry =>
+            isProtected(entry)
+              ? t('common.tooltips.protected-resources-view-yaml')
+              : t('common.buttons.edit'),
           icon: entry => (isProtected(entry) ? 'show-edit' : 'edit'),
           handler: handleResourceEdit,
         },
         {
           name: t('common.buttons.delete'),
-          tooltip: t('common.buttons.delete'),
+          tooltip: entry =>
+            isProtected(entry)
+              ? t('common.tooltips.protected-resources-info')
+              : t('common.buttons.delete'),
           icon: 'delete',
           disabledHandler: isProtected,
           handler: resource => {
@@ -303,35 +360,12 @@ export function ResourceListRenderer({
       ].filter(e => e);
 
   const headerRenderer = () => [
-    t('common.headers.name'),
-    ...(showNamespace ? [t('common.headers.namespace')] : []),
-    t('common.headers.created'),
-    t('common.headers.labels'),
-    ...customColumns.map(col => col.header),
+    ...customColumns.map(col => col.header || null),
     '',
   ];
 
   const rowRenderer = entry => [
-    hasDetailsView ? (
-      <Link
-        className="fd-link"
-        onClick={_ => {
-          if (navigateFn) return navigateFn(entry);
-          if (fixedPath) return navigateToResource(entry);
-          navigateToDetails(resourceType, entry.metadata.name);
-        }}
-      >
-        {nameSelector(entry)}
-      </Link>
-    ) : (
-      <b>{nameSelector(entry)}</b>
-    ),
-    ...(showNamespace ? [entry.metadata.namespace] : []),
-    <ReadableCreationTimestamp timestamp={entry.metadata.creationTimestamp} />,
-    <div style={{ maxWidth: '36rem' /*TODO*/ }}>
-      <Labels labels={entry.metadata.labels} shortenLongLabels />
-    </div>,
-    ...customColumns.map(col => col.value(entry)),
+    ...customColumns.map(col => (col.value ? col.value(entry) : null)),
     protectedResourceWarning(entry),
   ];
 
@@ -368,11 +402,11 @@ export function ResourceListRenderer({
         id={`add-${resourceType}-modal`}
         className="modal-size--l create-resource-modal"
         renderForm={props => (
-          <ErrorBoundary i18n={i18n}>
+          <ErrorBoundary>
             <CreateResourceForm
               resource={activeResource}
               resourceType={resourceType}
-              resourceName={resourceName}
+              resourceTitle={resourceTitle}
               resourceUrl={resourceUrl}
               namespace={namespace}
               refetchList={silentRefetch}
@@ -382,7 +416,6 @@ export function ResourceListRenderer({
             />
           </ErrorBoundary>
         )}
-        i18n={i18n}
         modalOpeningComponent={<></>}
         customCloseAction={() => setShowEditDialog(false)}
       />
@@ -392,14 +425,6 @@ export function ResourceListRenderer({
       />
       <GenericList
         title={showTitle ? title || prettifiedResourceName : null}
-        textSearchProperties={[
-          'metadata.name',
-          'metadata.namespace',
-          'metadata.labels',
-          ...textSearchProperties,
-        ]}
-        allowSlashShortcut={allowSlashShortcut}
-        showSearchField={showSearchField}
         actions={actions}
         entries={resources || []}
         headerRenderer={headerRenderer}
@@ -410,8 +435,16 @@ export function ResourceListRenderer({
         extraHeaderContent={extraHeaderContent}
         testid={testid}
         currentlyEditedResourceUID={currentlyEditedResourceUID}
-        i18n={i18n}
         sortBy={sortBy}
+        searchSettings={{
+          ...searchSettings,
+          textSearchProperties: [
+            'metadata.name',
+            'metadata.namespace',
+            'metadata.labels',
+            ...(searchSettings?.textSearchProperties || []),
+          ],
+        }}
       />
     </>
   );

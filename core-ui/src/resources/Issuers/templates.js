@@ -48,7 +48,7 @@ export function createExternalAccountBinding({ keySecretRef, keyId }) {
 export function createPresets(namespace, translate) {
   return [
     {
-      name: translate('common.labels.default-preset'),
+      name: translate('common.labels.clear-form'),
       value: createIssuerTemplate(namespace),
     },
     {

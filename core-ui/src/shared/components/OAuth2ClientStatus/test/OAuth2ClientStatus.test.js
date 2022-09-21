@@ -6,13 +6,13 @@ describe('PodRestarts', () => {
   it('Shows OK for no error', () => {
     const client = { status: { reconciliationError: {} } };
     const { queryByRole } = render(<OAuth2ClientStatus client={client} />);
-    expect(queryByRole('status')).toHaveTextContent('ok');
+    expect(queryByRole('status')).toHaveTextContent('common.statuses.ok');
   });
 
   it('Shows OK for no status', () => {
     const client = {};
     const { queryByRole } = render(<OAuth2ClientStatus client={client} />);
-    expect(queryByRole('status')).toHaveTextContent('ok');
+    expect(queryByRole('status')).toHaveTextContent('common.statuses.ok');
   });
 
   it('Shows error code for error', () => {
@@ -20,6 +20,6 @@ describe('PodRestarts', () => {
       status: { reconciliationError: { code: 'NOT_OK', description: '' } },
     };
     const { queryByRole } = render(<OAuth2ClientStatus client={client} />);
-    expect(queryByRole('status')).toHaveTextContent('NOT_OK');
+    expect(queryByRole('status')).toHaveTextContent('common.statuses.not_ok');
   });
 });

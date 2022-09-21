@@ -1,11 +1,14 @@
 import React from 'react';
 
-import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { getResourceUrl } from 'resources/Namespaces/YamlUpload/helpers';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { useGetTranslation } from 'components/Extensibility/helpers';
-import * as Inputs from 'shared/ResourceForm/inputs';
+import {
+  useGetTranslation,
+  getPropsFromSchema,
+} from 'components/Extensibility/helpers';
 import { ResourceForm } from 'shared/ResourceForm';
+import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 export function ResourceRenderer({
   onChange,
@@ -19,12 +22,9 @@ export function ResourceRenderer({
 }) {
   const { namespaceId } = useMicrofrontendContext();
 
-  const { tFromStoreKeys } = useGetTranslation();
-  const group = schema.get('group');
-  const version = schema.get('version');
-  const kind = schema.get('kind');
-  const scope = schema.get('scope') || 'cluster';
-  const namespace = schema.get('namespace') || namespaceId;
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
+  const { group, version, kind, scope = 'cluster', namespace = namespaceId } =
+    schema.get('resource') || {};
 
   const url = getResourceUrl(
     {
@@ -34,30 +34,41 @@ export function ResourceRenderer({
     scope === 'namespace' ? namespace : null,
   );
 
-  const { data } = useGetList()(url);
-
-  const options = (data || []).map(res => ({
-    key: res.metadata.name,
-    text: res.metadata.name,
-  }));
+  let expression;
+  if (schema.get('filter')) {
+    expression = jsonataWrapper(schema.get('filter'));
+    expression.assign('root', props?.resource);
+  }
 
   return (
     <ResourceForm.FormField
-      value={value}
-      setValue={value => {
-        onChange({
-          storeKeys,
-          scopes: ['value'],
-          type: 'set',
-          schema,
-          required,
-          data: { value },
-        });
-      }}
-      label={tFromStoreKeys(storeKeys)}
-      input={Inputs.ComboboxInput}
-      options={options}
+      label={tFromStoreKeys(storeKeys, schema)}
+      input={() => (
+        <K8sResourceSelectWithUseGetList
+          data-testid={storeKeys.join('.')}
+          url={url}
+          filter={item => {
+            if (expression) {
+              expression.assign('item', item);
+              return expression.evaluate();
+            } else return true;
+          }}
+          onSelect={value =>
+            onChange({
+              storeKeys,
+              scopes: ['value'],
+              type: 'set',
+              schema,
+              required,
+              data: { value },
+            })
+          }
+          value={value}
+          resourceType={kind}
+        />
+      )}
       compact={compact}
+      {...getPropsFromSchema(schema, required, tExt)}
     />
   );
 }

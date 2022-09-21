@@ -1,58 +1,68 @@
 import pluralize from 'pluralize';
+
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
-import { Widget } from './Widget';
+import { sortBy, useGetTranslation } from '../helpers';
+import { getChildrenInfo } from './helpers';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
+const getProperNamespacePart = (givenNamespace, currentNamespace) => {
+  switch (true) {
+    case typeof givenNamespace === 'string':
+      return `/namespaces/${givenNamespace}`;
+    case givenNamespace === null:
+      return '';
+    default:
+      return `/namespaces/${currentNamespace}`;
+  }
+};
 export function ResourceList({
   value,
-  relations,
   structure,
-  relation,
+  dataSource,
   originalResource,
   schema,
   ...props
 }) {
-  const namespace =
-    typeof relation.namespace === 'undefined'
-      ? originalResource.metadata.namespace
-      : relation.namespace;
-  const { group, kind, version } = relation;
-  const namespacePart = namespace ? `/namespaces/${namespace}` : '';
-  const resourceUrl = `/${group}/${version}${namespacePart}/${pluralize(
-    kind,
-  ).toLowerCase()}`;
+  const { t } = useGetTranslation();
+  const { namespaceId } = useMicrofrontendContext();
+  const kind = (value?.kind ?? '').replace(/List$/, '');
+  const pluralKind = pluralize(kind || '')?.toLowerCase();
+  const namespacePart = getProperNamespacePart(value?.namespace, namespaceId);
+  const api = value?.apiVersion === 'v1' ? 'api' : 'apis';
+  const resourceUrlPrefix = `/${api}/${value?.apiVersion}`;
+  const resourceUrl = `${resourceUrlPrefix}${namespacePart}/${pluralKind}`;
 
   const PredefinedRenderer = resources.find(
-    r => r.resourceType.toLowerCase() === pluralize(kind).toLowerCase(),
+    r => r.resourceType.toLowerCase() === pluralKind,
   );
+
   const ListRenderer = PredefinedRenderer
     ? PredefinedRenderer.List
     : ResourcesList;
 
-  let columns;
-  if (Array.isArray(structure.columns)) {
-    columns = structure.columns.map(({ name, ...props }) => ({
-      header: name,
-      value: value => <Widget value={value} structure={props} />,
-    }));
-  }
+  const { children, sortOptions, defaultSort } = getChildrenInfo(
+    structure,
+    originalResource,
+  );
 
   // make sure "kind" is present on resources
-  if (Array.isArray(value.data)) {
-    value.data = value.data.map(d => ({ ...d, kind }));
+  if (Array.isArray(value?.items)) {
+    value.items = value.items.map(d => ({ ...d, kind }));
   }
 
   return (
     <ListRenderer
       skipDataLoading={true}
-      loading={value.loading}
-      error={value.error}
-      resources={value.data}
+      loading={value?.loading}
+      error={value?.error}
+      resources={value?.items}
       resourceUrl={resourceUrl}
+      resourceUrlPrefix={resourceUrlPrefix}
       resourceType={prettifyKind(kind)}
-      resourceName={prettifyKind(kind)}
-      namespace={namespace}
+      resourceTitle={prettifyKind(kind)}
+      namespace={namespaceId}
       isCompact
       title={structure.name}
       showTitle={true}
@@ -60,7 +70,10 @@ export function ResourceList({
       fixedPath={true}
       {...structure}
       {...props}
-      columns={columns}
+      columns={children}
+      sortBy={defaultSortOptions =>
+        sortBy(sortOptions, t, defaultSort ? defaultSortOptions : {})
+      }
     />
   );
 }

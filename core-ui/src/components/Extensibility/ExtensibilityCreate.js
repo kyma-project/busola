@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { createStore } from '@ui-schema/ui-schema';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import Immutable from 'immutable';
+import pluralize from 'pluralize';
+import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { useGetTranslation } from './helpers';
-
-import { createTemplate } from './helpers';
-import { ResourceSchema } from './ResourceSchema';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useTranslation } from 'react-i18next';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+import { useGetSchema } from 'hooks/useGetSchema';
 import { prettifyKind } from 'shared/utils/helpers';
+
+import { ResourceSchema } from './ResourceSchema';
+import { usePreparePresets, createTemplate, getDefaultPreset } from './helpers';
+import { VarStoreContextProvider } from './contexts/VarStore';
+import { prepareSchemaRules } from './helpers/prepareSchemaRules';
 
 export function ExtensibilityCreate({
   formElementRef,
@@ -26,15 +30,21 @@ export function ExtensibilityCreate({
   const { namespaceId: namespace } = useMicrofrontendContext();
   const notification = useNotification();
   const { t } = useTranslation();
-  const { t: tExt, exists } = useGetTranslation();
-  const api = createResource?.resource || {};
-  const schema = createResource?.schema;
+  const general = createResource?.general;
+
+  const api = general?.resource || {};
+
+  const emptyTemplate = createTemplate(api, namespace, general?.scope);
+  const defaultPreset = getDefaultPreset(
+    createResource?.presets,
+    emptyTemplate,
+  );
 
   const [resource, setResource] = useState(
-    initialResource ||
-      createResource?.template ||
-      createTemplate(api, namespace, createResource?.resource?.scope),
+    initialResource || defaultPreset?.value || emptyTemplate,
   );
+
+  const presets = usePreparePresets(emptyTemplate, createResource?.presets);
 
   const [store, setStore] = useState(() =>
     createStore(createOrderedMap(resource)),
@@ -67,45 +77,69 @@ export function ExtensibilityCreate({
     toggleFormFn(false);
   };
 
+  const { schema, error: errorOpenApi, loading } = useGetSchema({
+    resource: api,
+  });
+
+  const { simpleRules, advancedRules } = useMemo(() => {
+    const fullSchemaRules = [
+      { path: 'metadata.name', simple: true },
+      { path: 'metadata.labels' },
+      { path: 'metadata.annotations' },
+      ...(createResource?.form ?? []),
+    ];
+
+    return {
+      simpleRules: prepareSchemaRules(
+        fullSchemaRules.filter(item => item.simple ?? false),
+      ),
+      advancedRules: prepareSchemaRules(
+        fullSchemaRules.filter(item => item.advanced ?? true),
+      ),
+    };
+  }, [createResource]);
+
+  // waiting for schema from OpenAPI to be computed
+  if (loading) return <Spinner />;
+
   return (
-    <ResourceForm
-      pluralKind={resourceType}
-      singularName={
-        exists('name')
-          ? tExt('name')
-          : prettifyKind(createResource.resource?.kind || '')
-      }
-      resource={resource}
-      setResource={updateResource}
-      formElementRef={formElementRef}
-      createUrl={resourceUrl}
-      setCustomValid={setCustomValid}
-      onlyYaml={!schema}
-      initialResource={initialResource}
-      afterCreatedFn={afterCreatedFn}
-    >
-      <ResourceSchema
-        simple
-        key={api.version}
-        schema={schema || {}}
-        schemaRules={createResource?.form}
+    <VarStoreContextProvider>
+      <ResourceForm
+        pluralKind={resourceType}
+        singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
         resource={resource}
-        store={store}
-        setStore={setStore}
-        onSubmit={() => {}}
-        path={createResource?.resource?.path || ''}
-      />
-      <ResourceSchema
-        advanced
-        key={api.version}
-        schema={schema || {}}
-        schemaRules={createResource?.form}
-        resource={resource}
-        store={store}
-        setStore={setStore}
-        path={createResource?.resource?.path || ''}
-      />
-    </ResourceForm>
+        setResource={updateResource}
+        formElementRef={formElementRef}
+        createUrl={resourceUrl}
+        setCustomValid={setCustomValid}
+        onlyYaml={!schema}
+        presets={!initialResource && presets}
+        initialResource={initialResource}
+        afterCreatedFn={afterCreatedFn}
+      >
+        <ResourceSchema
+          simple
+          key={api.version}
+          schema={errorOpenApi ? {} : schema}
+          schemaRules={simpleRules}
+          resource={resource}
+          store={store}
+          setStore={setStore}
+          onSubmit={() => {}}
+          path={general?.urlPath || ''}
+        />
+        <ResourceSchema
+          advanced
+          key={api.version}
+          schema={errorOpenApi ? {} : schema}
+          schemaRules={advancedRules}
+          resource={resource}
+          store={store}
+          setStore={setStore}
+          path={general?.urlPath || ''}
+        />
+      </ResourceForm>
+    </VarStoreContextProvider>
   );
 }
 

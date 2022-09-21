@@ -23,9 +23,14 @@ Cypress.Commands.add('createSimpleFunction', functionName => {
     .click();
 
   cy.getIframeBody()
-    .find('[placeholder="Enter key"]')
+    .find('[placeholder="Enter key"]:visible')
     .last()
-    .type(`example{enter}${functionName}`);
+    .type('example');
+
+  cy.getIframeBody()
+    .find('[placeholder="Enter value"]:visible')
+    .eq(1)
+    .type(functionName);
 
   cy.getIframeBody()
     .contains('label', 'Labels')
