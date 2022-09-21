@@ -68,7 +68,11 @@ Each object adds a new column to your table.
 ## Resource _details_ overview
 
 The **details** section defines the display structure for the details page.
-It contains three components, `header`, `body`, and optional `resourceGraph`.
+It contains three optional components, `header`, `body`, and `resourceGraph`.
+
+> **NOTE:** `header` and `body` are arrays of objects, and the `resourceGraph` component is an object.
+
+
 The first two components are a list of widgets to display in the **header** section and the body of the page respectively.
 You can use the `resourceGraph` component to configure the ResourceGraph which shows relationships between resources.
 
