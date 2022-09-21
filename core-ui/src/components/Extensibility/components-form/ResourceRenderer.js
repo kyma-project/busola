@@ -24,7 +24,7 @@ export function ResourceRenderer({
   const { namespaceId } = useMicrofrontendContext();
   const { setVar } = useVariables();
 
-  const { tFromStoreKeys, tryTranslate } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
   const { group, version, kind, scope = 'cluster', namespace = namespaceId } =
     schema.get('resource') || {};
   const provideVar = schema.get('provideVar');
@@ -74,7 +74,7 @@ export function ResourceRenderer({
         />
       )}
       compact={compact}
-      {...getPropsFromSchema(schema, required, tryTranslate)}
+      {...getPropsFromSchema(schema, required, tExt)}
     />
   );
 }

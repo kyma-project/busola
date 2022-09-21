@@ -63,7 +63,6 @@ export const useGetTranslation = path => {
         ? null
         : translation;
     },
-    tryTranslate: path => (exists(path) ? t(path) : ''),
     tFromStoreKeys,
     widgetT,
     exists,
