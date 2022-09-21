@@ -35,6 +35,7 @@ export function SchemaRulesInjector({
       .map(item => `[${item}]`)
       .join('');
     const varPath = `$.${varName}${varSuffix}`;
+
     return (
       <Plugin
         {...props}
