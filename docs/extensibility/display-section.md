@@ -13,6 +13,7 @@
   - [ResourceLink](#resourcelink)
   - [Text](#text)
 - [Block widgets](#block-widgets)
+  - [Alert](#alert)
   - [CodeViewer](#codeviewer)
   - [Columns](#columns)
   - [Panel](#panel)
@@ -406,6 +407,37 @@ Text widgets render values as a simple text. This is the default behavior for al
 ## Block widgets
 
 Block widgets are more complex layouts and you must use them only in the details body.
+
+### Alert
+
+Alert widgets display values using predefined types.
+
+#### Widget-specific parameters
+
+- **alert** - information what has to be displayed.
+- **alertFormula** - jsonata formula for information what has to be displayed.
+- **disableMargin** - an optional boolean which disables the margin outside the alert body.
+- **type** - type of alert:
+  - **information** - Defalut
+  - **warning**
+  - **error**
+  - **success**
+
+#### Example
+
+```json
+{
+  "widget": "Alert",
+  "type": "warning",
+  "alert": "I am some warning for user"
+},
+{
+  "source": "$item.port.number",
+  "widget": "Alert",
+  "alertFormula": "$item = 80  ? 'Using Default 80' : 'Using Different Port then 80'",
+  "disableMargin": true
+},
+```
 
 ### CodeViewer
 
