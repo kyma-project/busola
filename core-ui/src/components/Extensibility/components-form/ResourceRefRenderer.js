@@ -1,11 +1,11 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
 import { fromJS } from 'immutable';
 
 import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
 import { ExternalResourceRef } from 'shared/components/ResourceRef/ExternalResourceRef';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useGetTranslation } from 'components/Extensibility/helpers';
 
 import { useVariables } from '../hooks/useVariables';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
@@ -19,7 +19,7 @@ export function ResourceRefRender({
   widgets,
   ...props
 }) {
-  const { t } = useTranslation();
+  const { tFromStoreKeys } = useGetTranslation();
   // TODO the value obtained by ui-schema is undefined for this component
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
 
@@ -32,7 +32,12 @@ export function ResourceRefRender({
   const provideVar = schema.get('provideVar');
 
   if (toInternal) {
-    value = jsonataWrapper(toInternal).evaluate(value);
+    try {
+      value = jsonataWrapper(toInternal).evaluate(value);
+    } catch (e) {
+      value = {};
+      console.error(e);
+    }
   }
 
   const group = (schemaResource?.group || '').toLowerCase();
@@ -47,19 +52,24 @@ export function ResourceRefRender({
 
   return (
     <ExternalResourceRef
-      title={t('extensibility.widgets.resource-ref.header')}
+      title={tFromStoreKeys(storeKeys, schema)}
       value={fromJS(value).toJS() || ''}
       resources={data}
       setValue={value => {
         if (toExternal) {
-          value = jsonataWrapper(toExternal).evaluate(value);
+          try {
+            value = jsonataWrapper(toExternal).evaluate(value);
+          } catch (e) {
+            value = null;
+            console.error(e);
+          }
         }
         const resource = data.find(
           res =>
             res.metadata.namespace === value.namespace &&
             res.metadata.name === value.name,
         );
-        if (provideVar) setVar(provideVar, resource);
+        if (provideVar) setVar(`$.${provideVar}`, resource);
 
         onChange({
           storeKeys: storeKeys,
