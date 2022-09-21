@@ -27,20 +27,9 @@ import { busolaOwnExtConfigs } from './customResources/index';
 async function getBuiltinCustomResources() {
   try {
     const response = await fetch('/assets/extensions.yaml');
-    const rawExtensions = jsyaml.loadAll(await response.text());
-    const convertYamlToObject = yamlString => {
-      try {
-        return jsyaml.load(yamlString, { json: true });
-      } catch (error) {
-        console.log('cannot parse ', yamlString, error);
-        return null;
-      }
-    };
-    const parsedExtensions = rawExtensions.map(ext =>
-      mapValues(ext, convertYamlToObject),
-    );
-    // console.log(parsedExtensions);
-    return parsedExtensions;
+    const extensions = jsyaml.loadAll(await response.text());
+    console.log(extensions);
+    return extensions;
   } catch (e) {
     console.log(e);
   }
@@ -142,7 +131,6 @@ export async function getCustomResources(authData) {
       ...busolaOwnExtConfigs,
       ...(await getBuiltinCustomResources()),
     ];
-    console.log(customResources[clusterName]);
     const clusterCustomResources = await loadBusolaClusterCRs();
     const targetClusterCustomResources = await loadTargetClusterCRs(authData);
 
