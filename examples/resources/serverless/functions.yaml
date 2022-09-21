@@ -66,7 +66,7 @@ data:
         "var": "sourceType",
         "widget": "Text",
         "enum": ["Inline", "Git Repository"],
-        "defaultValue": "$exists(spec.source.gitRepository) ? 'Git Repository' : 'Inline'"
+        "dynamicValue": "$exists(spec.source.gitRepository) ? 'Git Repository' : 'Inline'"
       },
       {
         "simple": true,
@@ -86,7 +86,7 @@ data:
           {
             "var": "useAuthorization",
             "type": "boolean",
-            "defaultValue": "$exists($.spec.source.gitRepository.auth)"
+            "dynamicValue": "$exists($.spec.source.gitRepository.auth)"
           },
           {
             "widget": "FormGroup",
@@ -145,6 +145,56 @@ data:
             "widget": "KeyValuePair"
           },
         ]
+      },
+      {
+        "path": "spec.env",
+        "widget": "GenericList",
+        "children": [
+          {
+            "path": "[]",
+              "children": [
+                {
+                  "var": "envType",
+                  "widget": "Text",
+                  "enum": ["Custom", "From Config Map", "From Secret"],
+                  "dynamicValue": "$exists($item.valueFrom.secretKeyRef) ? 'From Config Map' : ($exists($item.valueFrom.configMapKeyRef) ? 'From Config Map' : 'Custom')"
+                },
+                { "path": "name" },
+                {
+                  "path": "value",
+                  "visibility": "$envType = 'Custom'"
+                },
+                {
+                  "path": "valueFrom.secretKeyRef",
+                  "widget": "Resource",
+                  "resource": {
+                    "kind": "Secret",
+                    "version": "v1",
+                  },
+                  "provideVar": "secret",
+                  "children": [{
+                    "path": "key",
+                    "enum": "$keys($secret.data)"
+                  }],
+                  "visibility": "$envType = 'From Secret'"
+                },
+                {
+                  "path": "valueFrom.configMapKeyRef",
+                  "widget": "Resource",
+                  "resource": {
+                    "kind": "ConfigMap",
+                    "version": "v1"
+                  },
+                  "provideVar": "configMap",
+                  "children": [{
+                    "path": "key",
+                    "enum": "$keys($configMap.data)"
+                  }],
+                  "visibility": "$envType = 'From Config Map'"
+                }
+              ]
+            }
+        ],
       },
       {
         "path": "spec.source.inline",
@@ -227,6 +277,7 @@ data:
       spec.scaleConfig.minReplicas: Min Replicas
       spec.source.inline.dependencies: Dependencies
       spec.source.inline.source: Source
+      spec.env: Environment Variables
       Requests: Requests
       Limits: Limits
       spec.runtime: Runtime
@@ -242,3 +293,32 @@ data:
       spec.resourceConfiguration.build: Build
       spec.resourceConfiguration.function: Function
       placeholders.spec.runtime: Choose Function runtime
+  presets: |-
+    - name: NodeJS Function
+      default: true
+      value:
+        spec:
+          runtime: nodejs14
+          source:
+            inline:
+              source: |-
+                module.exports = {
+                  main: async function (event, context) {
+                    const message = `Hello World`
+                      + ` from the Kyma Function ${context["function-name"]}`
+                      + ` running on ${context.runtime}!`;
+                    console.log(message);
+                    return message;
+                  }
+                }
+    - name: Python Function
+      value:
+        spec:
+          runtime: python39
+          source:
+            inline:
+              source: |-
+                def main(event, context):
+                    message = "Hello World from the Kyma Function "+context['function-name']+" running on "+context['runtime']+ "!";
+                    print(message)
+                    return message
