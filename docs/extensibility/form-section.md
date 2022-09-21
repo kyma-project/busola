@@ -2,6 +2,7 @@
 
 - [_Form_ overview](#form-overview)
   - [Variable fields](#variable-fields)
+  - [Alert](#Alert)
 - [Simple widgets](#simple-widgets)
   - [Text](#text)
   - [Name](#name)
@@ -104,6 +105,39 @@ In the example, the visibility for item price and color are analogous - the form
   }
 ]
 ```
+
+### Alert
+
+Alert widgets display information for user using predefined types.
+
+#### Widget-specific parameters
+
+- **alert** - information what has to be displayed.
+- **alertFormula** - jsonata formula for information what has to be displayed.
+- **disableMargin** - an optional boolean which disables the margin outside the alert body.
+- **type** - type of alert:
+  - **information** - Defalut
+  - **warning**
+  - **error**
+  - **success**
+
+#### Example
+
+```json
+{
+  "simple": true,
+  "widget": "Alert",
+  "type": "warning",
+  "alert": "TLS Server of mode SIMPLE or MUTUAL needs either credential name, or private key and server certificate pair.",
+  "visibility": "$item.port.protocol = 'HTTPS'",
+},
+{
+  "widget": "Alert",
+  "alertFormula": "$item = 80  ? 'Using Default 80' : 'Using Different Port then 80'",
+},
+```
+
+<img src="./assets/form-widgets/Alert.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
 
 # Form widgets
 

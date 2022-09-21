@@ -84,7 +84,7 @@ export const widgets = {
     FormGroup: CollapsibleRenderer,
     ResourceRef: ResourceRefRender,
     Resource: ResourceRenderer,
-    Message: AlertRenderer,
+    Alert: AlertRenderer,
   },
 };
 export default widgets;
