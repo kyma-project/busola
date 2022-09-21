@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { last, initial, tail } from 'lodash';
+import { last, initial, tail, trim } from 'lodash';
 import * as jp from 'jsonpath';
 
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
@@ -7,7 +7,7 @@ import { VarStoreContext } from '../contexts/VarStore';
 
 const pathToJP = path =>
   '$' +
-  path
+  trim(path, '.')
     .split(/\./)
     .map(item => `["${item}"]`)
     .join('');
