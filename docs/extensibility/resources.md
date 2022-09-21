@@ -20,7 +20,7 @@ You can provide all the ConfigMap data sections as either JSON or YAML.
 
 The version is a string value that defines in which version the extension is configured. It is stored as a value of the `busola.io/extension-version` label. If the configuration is created with the **Create Extension** button, this value is provided automatically. When created manually, use the latest version number, for example, `'0.5'`.
 
-> **NOTE:**: Busola supports only the two latest versions of the configuration. Whenever a new version of the configuration is proposed, go to your Extension and click the **Migrate** button to migrate your configuration to the latest version.
+> **NOTE:**: Busola supports only the two latest versions of the configuration. Whenever a new version of the configuration is proposed, go to your Extension and migrate your configuration to the latest version.
 
 ## _general_ section
 
@@ -33,7 +33,7 @@ The **general** section is required and contains basic information about the res
   - **version** - _[required]_ API version used for all requests.
   - **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
 - **name** - title used in the navigation and on the list screen. It defaults to its resource kind.
-- **category** - the name of a category used for the left-hand menu. It is placed in the `Custom Resources` category by default.
+- **category** - the name of a category used for the left-hand menu. By default, it's placed in the `Custom Resources` category.
 - **icon** suffix of an icon name used for the left-hand menu. the default value is `customized`. You can find the list of icons [here](https://sap.github.io/fundamental-react/?path=/docs/component-api-icon--primary).
 - **scope** - either `namespace` or `cluster`. Defaults to `cluster`.
 - **urlPath** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
@@ -69,11 +69,11 @@ Views created with the extensibility [ConfigMap wizard](README.md) have a straig
 ## _list_ section
 
 The **list** section presents the resources of a kind, that is, Secrets or ConfigMaps, and comes with a few predefined columns: **Name**, **Created**, and **Labels**.
-Should you want to add your own columns, see [Customize UI display](display-section.md) to learn how to customize both list and details views.
+If you want to add your own columns, see [Customize UI display](display-section.md) to learn how to customize both list and details views.
 
 ## _details_ section
 
-The **details** section presents the resource details. To customize it, see [Customize UI display](display-section.md). The default details header contains some basic information. The body is empty by default.
+The **details** section presents the resource details. To customize it, see [Customize UI display](display-section.md). The default details header contains some basic information. By default, the body is empty.
 
 ## Value preprocessors
 

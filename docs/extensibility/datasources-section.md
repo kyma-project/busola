@@ -1,6 +1,6 @@
 # _dataSources_ section
 
-The optional **dataSources** section contains an object that maps a data source name to a data source configuration object. The data source name preceded by a dollar sign '\$' is used in the **source** expression.
+The optional **dataSources** section contains an object that maps a data source name to a data source configuration object. The data source name, preceded by a dollar sign '\$', is used in the **source** expression.
 
 Data sources are provided in all [JSONata](https://docs.jsonata.org/overview.html) formulas as functions to call. For example, `{ "source": $myRelatedResource().metadata.labels }` returns the `metadata.labels` of the related resource.
 
@@ -8,7 +8,7 @@ Since the whole request is being provided, individual resources can be accessed 
 
 ## Data source configuration object fields
 
-Those fields are used to build the related resource URL and filter the received data.
+Busola uses the following fields to build the related resource URL and filter the received data.
 
 - **resource**:
   - **kind** - _[required]_ Kubernetes resource kind.
