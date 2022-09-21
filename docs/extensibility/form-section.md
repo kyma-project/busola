@@ -358,7 +358,7 @@ FormGroup widgets render an `object` as a collapsible section.
 
 ### GenericList
 
-GenericList widgets render an `array` as a list of collapsible sections with their own sub-forms. An **add** button is present to add new entries.
+GenericList widgets render an array as a list of collapsible sections with their own sub-forms. An **Add** button is present to add new entries.
 
 #### Widget-specific parameters
 
@@ -387,9 +387,9 @@ GenericList widgets render an `array` as a list of collapsible sections with the
 
 ### SimpleList
 
-SimpleList widgets render an `array` as a table with rows representing data items and columns representing different fields. New items are added automatically when new entries are typed in.
+SimpleList widgets render an array as a table with rows representing data items and columns representing different fields. New items are added automatically when new entries are typed in.
 
-This type of field is only suitable for simple data types and can contain more complex structures in its items.
+> **NOTE:** This type of field is only suitable for simple data types and can't contain more complex structures in its items.
 
 #### Widget-specific parameters
 
@@ -408,10 +408,12 @@ This type of field is only suitable for simple data types and can contain more c
     "widget": "SimpleList",
     "children": [
       {
-        "path": "[].host"
+        "path": "[].host",
+        "placeholder": "Enter the required host"
       },
       {
-        "path": "[].port"
+        "path": "[].port",
+        "placeholder": "Enter the required port"
       }
     ]
   }
@@ -422,4 +424,4 @@ This type of field is only suitable for simple data types and can contain more c
 
 #### Scalar values
 
-When array items are scalars instead of objects, no header with the field title will be rendered in the resulting table.
+When array items are scalars instead of objects, no header with the field title is rendered in the resulting table.
