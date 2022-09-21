@@ -53,18 +53,11 @@ export function ExtensibilityCreateCore({
   );
 
   const updateResource = res => {
+    resetVars();
+    readVars(res);
     const newStore = Immutable.fromJS(res);
     setStore(prevStore => prevStore.set('values', newStore));
   };
-
-  const modeChanged = (from, to) => {
-    if (from === ModeSelector.MODE_YAML) {
-      resetVars();
-      readVars(resource);
-    }
-  };
-
-  //TODO filter schema based on form configuration
 
   useEffect(() => {
     setResource(store.valuesToJS());
@@ -129,7 +122,6 @@ export function ExtensibilityCreateCore({
       presets={!initialResource && presets}
       initialResource={initialResource}
       afterCreatedFn={afterCreatedFn}
-      onModeChange={modeChanged}
     >
       <ResourceSchema
         simple
