@@ -23,28 +23,25 @@ Those fields are used to build the related resource URL and filter the received 
   - **root** - the original resource.
 
   This function should return a boolean value.
-  You can also use the `matchByLabelSelector` function to see the matched Pods. To do that, provide the Pods as `$item`, and path to the labels.
+  You can also use the [`matchByLabelSelector` function](jsonata.md#matchbylabelselectoritem-selectorpath) to see the matched Pods. To do that, provide the Pods as `$item`, and path to the labels.
 
 ## Examples
 
 ```json
 {
-  "deployments": {
-    "general": ...
-    "details": {
-       "body": [
-         {
-            "widget": "ResourceList",
-            "source": "$myPods()"
-        }
-      ]
-    }
+  "details": {
+    "body": [
+      {
+        "widget": "ResourceList",
+        "source": "$myPods()"
+      }
+    ]
   },
   "dataSources": {
     "myPods": {
       "resource": {
         "kind": "Pod",
-        "version": "v1",
+        "version": "v1"
       },
       "ownerLabelSelectorPath": "spec.selector.matchLabels"
     }
@@ -54,17 +51,14 @@ Those fields are used to build the related resource URL and filter the received 
 
 ```json
 {
-  "secrets": {
-    "general": ...
-    "details": {
-       "body": [
-         {
-            "widget": "ResourceList",
-            "path": "$mySecrets"
-        }
-      ]
-    }
-  },
+  "details": {
+    "body": [
+      {
+        "widget": "ResourceList",
+        "path": "$mySecrets"
+      }
+    ]
+   },
   "dataSources": {
     "mySecrets": {
       "resource": {
