@@ -358,7 +358,7 @@ FormGroup widgets render an `object` as a collapsible section.
 
 ### GenericList
 
-GenericList widgets render an array as a list of collapsible sections with their own sub-forms. An **add** button is present to add new entries.
+GenericList widgets render an array as a list of collapsible sections with their own sub-forms. An **Add** button is present to add new entries.
 
 #### Widget-specific parameters
 
