@@ -58,7 +58,7 @@ Busola uses the following fields to build the related resource URL and filter th
         "path": "$mySecrets"
       }
     ]
-   },
+  },
   "dataSources": {
     "mySecrets": {
       "resource": {
