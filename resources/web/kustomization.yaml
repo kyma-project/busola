@@ -5,3 +5,4 @@ resources:
   - deployment.yaml
   - hpa.yaml
   - service.yaml
+  - builtin-resource-extensions.configmap.yaml # todo!
