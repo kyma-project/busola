@@ -15,12 +15,12 @@
 - [Block widgets](#block-widgets)
   - [CodeViewer](#codeviewer)
   - [Columns](#columns)
-  - [Tabs](#tabs)
   - [Panel](#panel)
   - [Plain](#plain)
   - [ResourceList](#resourcelist)
   - [ResourceRefs](#resourcerefs)
   - [Table](#table)
+  - [Tabs](#tabs)
 
 ## Resource _list_ overview
 
@@ -464,37 +464,6 @@ Columns widgets render the child widgets in multiple columns.
 
 <img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
 
-### Tabs
-
-Tabs widgets render the child widgets in multiple tabs.
-
-#### Example
-
-```json
-{
-  "widget": "Tabs",
-  "children": [
-    {
-      "name": "General",
-      "children": [{
-        "widget": "Panel",
-        "name": "Overview",
-        "source": ...
-      }],
-    },
-    {
-      "name": "Resources",
-      "children": [{
-        "widget": "ResourceRefs",
-        "source": ...
-      }]
-    }
-  ]
-}
-```
-
-<img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">
-
 ### Panel
 
 Panel widgets render an object as a separate panel with its own title (based on its `source` or `name`).
@@ -678,3 +647,34 @@ Table widgets display array data as rows of a table instead of free-standing com
 ```
 
 <img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
+
+### Tabs
+
+Tabs widgets render the child widgets in multiple tabs.
+
+#### Example
+
+```json
+{
+  "widget": "Tabs",
+  "children": [
+    {
+      "name": "General",
+      "children": [{
+        "widget": "Panel",
+        "name": "Overview",
+        "source": ...
+      }],
+    },
+    {
+      "name": "Resources",
+      "children": [{
+        "widget": "ResourceRefs",
+        "source": ...
+      }]
+    }
+  ]
+}
+```
+
+<img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">
