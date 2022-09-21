@@ -53,6 +53,16 @@ export function ResourceList({
     value.items = value.items.map(d => ({ ...d, kind }));
   }
 
+  const resourceSchema = {
+    general: {
+      resource: {
+        kind: kind,
+        version: value?.apiVersion,
+        group: value?.group,
+      },
+    },
+  };
+
   return (
     <ListRenderer
       skipDataLoading={true}
@@ -73,6 +83,7 @@ export function ResourceList({
       sortBy={defaultSortOptions =>
         sortBy(sortOptions, t, defaultSort ? defaultSortOptions : {})
       }
+      createFormProps={{ resourceSchema }}
       createResourceForm={ExtensibilityCreate}
       {...structure}
       {...props}

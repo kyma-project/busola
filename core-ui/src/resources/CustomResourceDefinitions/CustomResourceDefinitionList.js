@@ -37,10 +37,10 @@ export function CustomResourceDefinitionList(props) {
     <ResourcesList
       description={description}
       customColumns={customColumns}
+      {...props}
       createResourceForm={
         props.hideCreateOption ? null : CustomResourceDefinitionCreate
       }
-      {...props}
       searchSettings={{
         textSearchProperties: ['spec.names.categories'],
       }}

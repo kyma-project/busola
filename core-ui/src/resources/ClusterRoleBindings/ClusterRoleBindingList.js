@@ -8,8 +8,8 @@ export function ClusterRoleBindingList(props) {
   return (
     <GenericRoleBindingList
       descriptionKey={'cluster-role-bindings.description'}
-      createResourceForm={ClusterRoleBindingCreate}
       {...props}
+      createResourceForm={ClusterRoleBindingCreate}
     />
   );
 }

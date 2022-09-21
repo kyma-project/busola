@@ -40,8 +40,8 @@ export function DnsProviderList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={DnsProviderCreate}
       {...props}
+      createResourceForm={DnsProviderCreate}
     />
   );
 }
