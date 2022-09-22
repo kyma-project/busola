@@ -11,6 +11,7 @@ import { JoinedArray } from './JoinedArray';
 import { ResourceList } from './ResourceList';
 import { ResourceLink } from './ResourceLink.js';
 import { Labels } from './Labels';
+import { Externallink } from './Externallink';
 
 import { PendingWrapper } from './PendingWrapper';
 
@@ -29,6 +30,7 @@ export const widgets = {
   ResourceList,
   ResourceLink,
   Labels,
+  Externallink,
 };
 
 export const valuePreprocessors = {
