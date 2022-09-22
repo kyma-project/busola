@@ -112,10 +112,6 @@ data:
                         : 'Secret'"
                       }
                     }, {
-                      "name": "code.env.controlledBy",
-                      "widget": "ControlledBy",
-                      "source": "$item.owners"
-                    }, {
                       "name": "code.env.source",
                       "widget": "Badge",
                       "source": "$exists($item.valueFrom.configMapKeyRef)
@@ -336,7 +332,6 @@ data:
       code.env.name: Name
       code.env.value: Value
       code.env.valueFrom: Value From
-      code.env.controlledBy: Source Controlled By
       code.env.source: Source
       code.env.key: Key
       configuration.apiRules: API Rules
