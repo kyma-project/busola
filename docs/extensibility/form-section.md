@@ -215,7 +215,7 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
 
 <img src="./assets/form-widgets/CodeEditor.png" alt="Example of a code editor widget" style="border: 1px solid #D2D5D9">
 
-> NOTE: Remember to put both single and double quotes if you want to use plain language (e.g. "'YAML'"). Specyfing just double quotes ("YAML") makes Busola try to access nonexistent `YAML` variable, resulting the language to be `undefined`.
+> NOTE: Remember to put both single and double quotes if you want to use plain language (for example, "'YAML'"). Specifying just double quotes ("YAML") makes Busola try to access a nonexistent `YAML` variable, resulting in the language being `undefined`.
 
 ### Resource
 
