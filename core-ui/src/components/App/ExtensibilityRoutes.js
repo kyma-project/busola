@@ -4,12 +4,12 @@ import { Route } from 'react-router-dom';
 
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
-export const createExtensibilityRoutes = (cr, language) => {
-  const List = React.lazy(() => import('../Extensibility/ExtensibilityList'));
-  const Details = React.lazy(() =>
-    import('../Extensibility/ExtensibilityDetails'),
-  );
+const List = React.lazy(() => import('../Extensibility/ExtensibilityList'));
+const Details = React.lazy(() =>
+  import('../Extensibility/ExtensibilityDetails'),
+);
 
+export const createExtensibilityRoutes = (cr, language) => {
   const urlPath = cr?.general?.urlPath;
 
   const translationBundle = urlPath || 'extensibility';
