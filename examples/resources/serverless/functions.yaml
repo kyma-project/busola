@@ -10,53 +10,208 @@ metadata:
 data:
   details: |-
     {
-      "header": [],
+      "header": [
+      {
+        "name": "header.status",
+        "widget": "Badge",
+        "highlights": {
+          "positive": ["RUNNING"],
+          "negative": ["FAILED", "ERROR"],
+          "informative": ["INITIALIZING"],
+          "critical": ["DEPLOYING", "BUILDING", "PENDING"]
+        },
+        "source": "($.status = undefined or $.status.conditions = undefined or $count($.status.conditions) = 0) 
+          ? 'INITIALIZING' 
+          : $count($filter($.status.conditions, function($v) { $v.status = 'False' })) != 0
+            ? $count($filter($.status.conditions, function($v) { $v.type = 'Running' and $v.status = 'True' })) != 0 
+              ? 'ERROR'
+              : 'FAILED'
+            : $count($filter($.status.conditions, function($v) { $v.type = 'ConfigurationReady' and $v.status = 'True' })) != 0 
+              ? $count($filter($.status.conditions, function($v) { $v.type = 'BuildReady' and $v.status = 'True' })) != 0 
+                ? $count($filter($.status.conditions, function($v) { $v.type = 'Running' and $v.status = 'True' })) != 0 
+                  ? 'RUNNING'
+                  : $count($filter($.status.conditions, function($v) { $v.type = 'Running' and $v.status = 'Unknown' and $v.reason = 'MinReplicasNotAvailable' })) != 0 
+                    ? 'PENDING'
+                    : 'DEPLOYING'
+                : 'BUILDING'
+              : 'INITIALIZING'
+        ",
+        "description": "($.status = undefined or $.status.conditions = undefined or $count($.status.conditions) = 0) 
+          ? null 
+          : $count($filter($.status.conditions, function($v) { $v.status = 'False' })) != 0
+            ? $count($filter($.status.conditions, function($v) { $v.type = 'Running' and $v.status = 'True' })) != 0 
+              ? 'New revision error: ' & $filter($.status.conditions, function($v) { $v.status = 'False' })[0].message
+              : 'Error: ' & $filter($.status.conditions, function($v) { $v.status = 'False' })[0].message
+            : null
+        "
+      },
+      {
+        "name": "header.sourceType",
+        "source": "spec.source.gitRepository ? 'Git Repository' : 'Inline Editor'"
+      },
+      {
+        "name": "header.runtime",
+        "source": "spec.runtime = 'nodejs16' ? 'Node.js 16' : (spec.runtime = 'nodejs14' ? 'Node.js 14' : (spec.runtime = 'nodejs12' ? 'Node.js 12 - Deprecated' : (spec.runtime = 'python39' ? 'Python 3.9' : spec.runtime)))"
+      }
+      ],
       "body": [
         {
-          "name": "Summary",
-          "widget": "Panel",
+          "widget": "Tabs",
           "children": [
             {
-              "name": "replicas",
-              "source": "spec.replicas"
+              "name": "tabs.code",
+              "children": [ 
+                {
+                  "source": "spec.source.inline.source",
+                  "widget": "CodeViewer",
+                  "name": "code.source",
+                  "language": "$contains($root.spec.runtime, 'python') ? 'python': 'javascript'",
+                  "visibility": "$exists($.data)"
+                }, {
+                  "source": "spec.source.inline.dependencies",
+                  "widget": "CodeViewer",
+                  "name": "code.dependencies",
+                  "language": "'json'",
+                  "visibility": "$exists($.data)"
+                }, {
+                  "source": "spec.source.gitRepository",
+                  "widget": "Panel",
+                  "name": "code.gitRepositoryConfig",
+                  "visibility": "$exists($.data)",
+                  "children": [{
+                    "name": "code.gitRepository.url",
+                    "source": "spec.source.gitRepository.url"
+                  }, {
+                    "name": "code.gitRepository.reference",
+                    "source": "spec.source.gitRepository.reference"
+                  }, {
+                    "name": "code.gitRepository.baseDir",
+                    "source": "spec.source.gitRepository.baseDir"
+                  }]
+                }, {
+                  "source": "spec.env",
+                  "widget": "Table",
+                  "name": "code.env",
+                  "children": [
+                    {
+                      "source": "$item.name",
+                      "name": "code.env.name",
+                    }, {
+                      "source": "$item.value",
+                      "name": "code.env.value"
+                    }, {
+                      "name": "code.env.valueFrom",
+                      "widget": "ResourceLink",
+                      "source": "$item.valueFrom",
+                      "linkText": "$exists(data.configMapKeyRef)? data.configMapKeyRef.name : data.secretKeyRef.name",
+                      "resource": {
+                        "name": "$exists(data.configMapKeyRef) ? data.configMapKeyRef.name : data.secretKeyRef.name",
+                        "namespace": "root.metadata.namespace",
+                        "kind": "$exists(data.configMapKeyRef)
+                        ? 'ConfigMap' 
+                        : 'Secret'"
+                      }
+                    }, {
+                      "name": "code.env.source",
+                      "widget": "Badge",
+                      "source": "$exists($item.valueFrom.configMapKeyRef)
+                        ? 'CONFIG MAP' 
+                        : $exists($item.valueFrom.secretKeyRef)
+                          ? 'SECRET'
+                          : 'CUSTOM'"
+                    }, {
+                      "name": "code.env.key",
+                      "source": "$exists($item.valueFrom.configMapKeyRef)
+                        ? $item.valueFrom.configMapKeyRef.key 
+                        : $exists($item.valueFrom.secretKeyRef)
+                          ? $item.valueFrom.secretKeyRef.key 
+                          : 'N/A'"
+                    }
+                  ]
+                }, {
+                  "widget": "ResourceList",
+                  "source": "$replicas()",
+                  "name": "code.replicas",
+                  "disableCreate": true
+                }
+              ]
             },
             {
-              "name": "runtime",
-              "source": "spec.runtime"
-            },
+              "name": "tabs.configuration",
+              "children": [ 
+                {
+                  "widget": "ResourceList",
+                  "source": "$apiRules()",
+                  "name": "configuration.apiRules"
+                }, {
+                  "widget": "ResourceList",
+                  "source": "$subscriptions()",
+                  "name": "configuration.subscriptions"
+                }
+              ]
+            }, 
             {
-              "name": "runtimeImageOverride",
-              "source": "spec.runtimeImageOverride"
-            },
-            {
-              "name": "Configured",
-              "source": "status.conditions[?(@.type=='ConfigurationReady')].status"
-            },
-            {
-              "name": "Built",
-              "source": "status.conditions[?(@.type=='BuildReady')].status"
-            },
-            {
-              "name": "Running",
-              "source": "status.conditions[?(@.type=='Running')].status"
-            },
-            {
-              "name": "Runtime",
-              "source": "spec.runtime"
-            },
-            {
-              "name": "Version",
-              "source": "metadata.generation"
-            },
-            {
-              "name": "Age",
-              "source": "metadata.creationTimestamp"
+              "name": "tabs.resources",
+              "children": [
+                {
+                  "widget": "Panel",
+                  "description": "resources.description",
+                  "name": "resources.scalingOptions",
+                  "children": [
+                    {
+                      "name": "resources.minReplicas",
+                      "source": "spec.scaleConfig.minReplicas"
+                    }, {
+                      "name": "resources.maxReplicas",
+                      "source": "spec.scaleConfig.maxReplicas"
+                    }
+                  ]
+                }, {
+                  "widget": "Columns",
+                  "inline": false,
+                  "children": [
+                    {
+                      "name": "resources.runtimeProfile",
+                      "widget": "Panel",
+                      "children": [
+                        {
+                          "name": "resources.requests.memory",
+                          "source": "spec.resourceConfiguration.function.resources.requests.memory"
+                        }, {
+                          "name": "resources.requests.cpu",
+                          "source": "spec.resourceConfiguration.function.resources.requests.cpu"
+                        }, {
+                          "name": "resources.limits.memory",
+                          "source": "spec.resourceConfiguration.function.resources.limits.memory"
+                        }, {
+                          "name": "resources.limits.cpu",
+                          "source": "spec.resourceConfiguration.function.resources.limits.cpu"
+                        }
+                      ]
+                    }, {
+                      "name": "resources.buildProfile",
+                      "widget": "Panel",
+                      "children": [
+                        {
+                          "name": "resources.requests.memory",
+                          "source": "spec.resourceConfiguration.build.resources.requests.memory"
+                        }, {
+                          "name": "resources.requests.cpu",
+                          "source": "spec.resourceConfiguration.build.resources.requests.cpu"
+                        }, {
+                          "name": "resources.limits.memory",
+                          "source": "spec.resourceConfiguration.build.resources.limits.memory"
+                        }, {
+                          "name": "resources.limits.cpu",
+                          "source": "spec.resourceConfiguration.build.resources.limits.cpu"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             }
           ]
-        },
-        {
-          "path": "spec",
-          "widget": "CodeViewer"
         }
       ]
     }
@@ -243,15 +398,15 @@ data:
   list: |-
     [
       {
-        "name": "Runtime",
+        "name": "header.runtime",
         "source": "spec.runtime = 'nodejs16' ? 'Node.js 16' : (spec.runtime = 'nodejs14' ? 'Node.js 14' : (spec.runtime = 'nodejs12' ? 'Node.js 12 - Deprecated' : (spec.runtime = 'python39' ? 'Python 3.9' : spec.runtime)))"
       },
       {
-        "name": "Source Type",
+        "name": "header.sourceType",
         "source": "spec.source.gitRepository ? 'Git Repository' : 'Inline Editor'"
       },
       {
-        "name": "Status",
+        "name": "header.status",
         "widget": "Badge",
         "highlights": {
           "positive": ["RUNNING"],
@@ -285,8 +440,65 @@ data:
         "
       }
     ]
+  dataSources: |-
+    {
+      "replicas": {
+        "resource": {
+          "kind": "Pod",
+          "version": "v1",
+        },
+        "filter": "($item.metadata.labels.'serverless.kyma-project.io/function-name' = $root.metadata.name) and ($item.metadata.labels.'serverless.kyma-project.io/resource' = 'deployment')"
+      },
+      "apiRules": {
+        "resource": {
+          "kind": "APIRule",
+          "version": "v1alpha1",
+          "group": "gateway.kyma-project.io"
+        },
+        "filter": "$contains($item.spec.service.name, $root.metadata.name)"
+      },
+      "subscriptions": {
+        "resource": {
+          "kind": "Subscription",
+          "version": "v1alpha1",
+          "group": "eventing.kyma-project.io"
+        },
+        "filter": "$contains($item.spec.sink, $root.metadata.name)"
+      }
+    }
   translations: |
-    en:
+    en: 
+      tabs.code: Code
+      tabs.configuration: Configuration
+      tabs.resources: Resources
+      code.gitRepositoryConfig: Repository Configuration
+      code.replicas: Replicas of the Function
+      code.source: Source
+      code.dependencies: Dependencies
+      code.gitRepository.url: Url
+      code.gitRepository.reference: Reference
+      code.gitRepository.baseDir: Base Directory
+      code.env: Environment Variables
+      code.env.name: Name
+      code.env.value: Value
+      code.env.valueFrom: Value From
+      code.env.source: Source
+      code.env.key: Key
+      configuration.apiRules: API Rules
+      configuration.subscriptions: Subscriptions
+      header.runtime: Runtime
+      header.status: Status
+      header.sourceType: Source Type
+      resources.scalingOptions: Scaling Options
+      resources.minReplicas: Minimum Replicas
+      resources.maxReplicas: Maximum Replicas
+      resources.description: Minimum and maximum number of running Replicas.
+      resources.runtimeProfile: Runtime Profile
+      resources.buildProfile: Build Job Profile
+      resources.requests.memory: Memory Requests
+      resources.requests.cpu: CPU Requests
+      resources.limits.memory: Memory Limits
+      resources.limits.cpu: CPU Limits
       spec.scaleConfig: Scale Config
       spec.scaleConfig.maxReplicas: Max Replicas
       spec.scaleConfig.minReplicas: Min Replicas

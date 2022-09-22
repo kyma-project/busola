@@ -6,6 +6,7 @@ import { resources } from 'resources';
 import { sortBy, useGetTranslation } from '../helpers';
 import { getChildrenInfo } from './helpers';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { ExtensibilityCreate } from '../ExtensibilityCreate';
 
 const getProperNamespacePart = (givenNamespace, currentNamespace) => {
   switch (true) {
@@ -25,7 +26,7 @@ export function ResourceList({
   schema,
   ...props
 }) {
-  const { t } = useGetTranslation();
+  const { widgetT, t } = useGetTranslation();
   const { namespaceId } = useMicrofrontendContext();
   const kind = (value?.kind ?? '').replace(/List$/, '');
   const pluralKind = pluralize(kind || '')?.toLowerCase();
@@ -52,6 +53,16 @@ export function ResourceList({
     value.items = value.items.map(d => ({ ...d, kind }));
   }
 
+  const resourceSchema = {
+    general: {
+      resource: {
+        kind: kind,
+        version: value?.apiVersion,
+        group: value?.group,
+      },
+    },
+  };
+
   return (
     <ListRenderer
       skipDataLoading={true}
@@ -64,16 +75,18 @@ export function ResourceList({
       resourceTitle={prettifyKind(kind)}
       namespace={namespaceId}
       isCompact
-      title={structure.name}
+      title={widgetT(structure)}
       showTitle={true}
       hasDetailsView={structure.hasDetailsView ?? !!PredefinedRenderer?.Details}
       fixedPath={true}
-      {...structure}
-      {...props}
       columns={children}
       sortBy={defaultSortOptions =>
         sortBy(sortOptions, t, defaultSort ? defaultSortOptions : {})
       }
+      createFormProps={{ resourceSchema }}
+      createResourceForm={ExtensibilityCreate}
+      {...structure}
+      {...props}
     />
   );
 }
