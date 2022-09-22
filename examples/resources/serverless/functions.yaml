@@ -218,20 +218,169 @@ data:
   form: |-
     [
       {
-        "simple": true,
-        "path": "spec.replicas",
-        "required": false
+        "var": "sourceType",
+        "widget": "Text",
+        "enum": ["Inline", "Git Repository"],
+        "dynamicValue": "$exists(spec.source.gitRepository) ? 'Git Repository' : 'Inline'"
       },
       {
         "simple": true,
         "path": "spec.runtime",
-        "required": true
+        "placeholder": "placeholders.spec.runtime",
+        "enum": ["nodejs12", "nodejs14", "nodejs16", "python39"]
+      },
+      { "path": "spec.runtimeImageOverride" },
+      {
+        "path": "spec.source.gitRepository",
+        "widget": "FormGroup",
+        "visibility": "$sourceType = 'Git Repository'",
+        "children": [
+          { "path": "url" },
+          { "path": "baseDir", "required": true },
+          { "path": "reference", "required": true },
+          {
+            "var": "useAuthorization",
+            "type": "boolean",
+            "dynamicValue": "$exists($.spec.source.gitRepository.auth)"
+          },
+          {
+            "widget": "FormGroup",
+            "path": "auth",
+            "visibility": "$useAuthorization",
+            "children": [
+              {
+                "path": "secretName",
+                "widget": "Resource",
+                "resource": {
+                  "kind": "Secret",
+                  "version": "v1",
+                  "scope": "namespace"
+                }
+              },
+              { "path": "type" }
+            ]
+          },
+        ]
       },
       {
-        "simple": true,
-        "path": "spec.runtimeImageOverride",
-        "required": false
-      }
+        "path": "spec.scaleConfig",
+        "widget": "FormGroup",
+        "columns": "2",
+        "children": [
+          {
+            "advanced": true,
+            "path": "minReplicas",
+            "required": false,
+            "min": "1"
+          },
+          {
+            "advanced": true,
+            "path": "maxReplicas",
+            "required": false,
+            "min": "1"
+          },
+        ]
+      },
+      {
+        "path": "spec.resourceConfiguration.function",
+        "widget": "FormGroup",
+        "children": [
+          {
+            "path": "resources.limits",
+            "widget": "KeyValuePair"
+          },
+          {
+            "path": "resources.requests",
+            "widget": "KeyValuePair"
+          },
+        ]
+      },
+      {
+        "path": "spec.resourceConfiguration.build",
+        "widget": "FormGroup",
+        "children": [
+          {
+            "path": "resources.limits",
+            "widget": "KeyValuePair"
+          },
+          {
+            "path": "resources.requests",
+            "widget": "KeyValuePair"
+          },
+        ]
+      },
+      {
+        "path": "spec.env",
+        "widget": "GenericList",
+        "children": [
+          {
+            "path": "[]",
+              "children": [
+                {
+                  "var": "envType",
+                  "widget": "Text",
+                  "enum": ["Custom", "From Config Map", "From Secret"],
+                  "dynamicValue": "$exists($item.valueFrom.secretKeyRef) ? 'From Secret' : ($exists($item.valueFrom.configMapKeyRef) ? 'From Config Map' : 'Custom')"
+                },
+                { "path": "name" },
+                {
+                  "path": "value",
+                  "visibility": "$envType = 'Custom'"
+                },
+                {
+                  "path": "valueFrom.secretKeyRef.name",
+                  "widget": "Resource",
+                  "resource": {
+                    "kind": "Secret",
+                    "version": "v1",
+                    "scope": "namespace"
+                  },
+                  "provideVar": "secret",
+                  "visibility": "$envType = 'From Secret'"
+                },
+                {
+                    "path": "valueFrom.secretKeyRef.key",
+                    "widget": "Text",
+                    "enum": "$keys($secret.data)",
+                    "visibility": "$envType = 'From Secret'"
+                },
+                {
+                  "path": "valueFrom.configMapKeyRef.name",
+                  "widget": "Resource",
+                  "resource": {
+                    "kind": "ConfigMap",
+                    "version": "v1",
+                    "scope": "namespace"
+                  },
+                  "provideVar": "configMap",
+                  "visibility": "$envType = 'From Config Map'"
+                },
+                {
+                    "path": "valueFrom.configMapKeyRef.key",
+                    "widget": "Text",
+                    "enum": "$keys($configMap.data)",
+                    "visibility": "$envType = 'From Config Map'"
+                }
+              ]
+            }
+        ],
+      },
+      {
+        "path": "spec.source.inline",
+        "visibility": "$sourceType = 'Inline'",
+        "children": [
+          {
+            "path": "source",
+            "widget": "CodeEditor",
+            "language": "$contains($root.spec.runtime, 'node') ? 'javascript' : 'python'",
+          },
+          {
+            "path": "dependencies",
+            "widget": "CodeEditor",
+            "language": "$contains($root.spec.runtime, 'node') ? 'javascript' : 'plaintext'",
+          }
+        ]
+      },
     ]
   general: |-
     {
@@ -243,7 +392,8 @@ data:
       "name": "Ext Functions",
       "category": "Workloads",
       "urlPath": "ext-functions",
-      "scope": "namespace"
+      "scope": "namespace",
+      "description": "{{[Function](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/svls-01-function/#documentation-content/)}} is a simple code snippet that you can run without provisioning or managing servers."
     }
   list: |-
     [
@@ -349,3 +499,56 @@ data:
       resources.requests.cpu: CPU Requests
       resources.limits.memory: Memory Limits
       resources.limits.cpu: CPU Limits
+      spec.scaleConfig: Scale Config
+      spec.scaleConfig.maxReplicas: Max Replicas
+      spec.scaleConfig.minReplicas: Min Replicas
+      spec.source.inline.dependencies: Dependencies
+      spec.source.inline.source: Source
+      spec.env: Environment Variables
+      Requests: Requests
+      Limits: Limits
+      spec.runtime: Runtime
+      spec.runtimeImageOverride: Runtime Image Override
+      Status: Status
+      Runtime: Runtime
+      'Source Type': Source Type
+      spec.runtime.nodejs12: Node.js 12 - Deprecated
+      spec.runtime.nodejs14: Node.js 14
+      spec.runtime.nodejs16: Node.js 16
+      spec.runtime.python39: Python 3.9
+      spec.resourceConfiguration.build: Build
+      spec.resourceConfiguration.function: Function
+      placeholders.spec.runtime: Choose Function runtime
+      spec.env.name: Variable Name
+      envType: Variable Type
+      'Node.js Function': Node.js Function
+      'Python Function': Python Function
+  presets: |-
+    - name: Node.js Function
+      default: true
+      value:
+        spec:
+          runtime: nodejs14
+          source:
+            inline:
+              source: |-
+                module.exports = {
+                  main: async function (event, context) {
+                    const message = `Hello World`
+                      + ` from the Kyma Function ${context["function-name"]}`
+                      + ` running on ${context.runtime}!`;
+                    console.log(message);
+                    return message;
+                  }
+                }
+    - name: Python Function
+      value:
+        spec:
+          runtime: python39
+          source:
+            inline:
+              source: |-
+                def main(event, context):
+                    message = "Hello World from the Kyma Function "+context['function-name']+" running on "+context['runtime']+ "!";
+                    print(message)
+                    return message
