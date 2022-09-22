@@ -13,6 +13,7 @@ import {
   useGetTranslation,
   applyFormula,
   sortBy,
+  getTextSearchProperties,
 } from './helpers';
 import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
@@ -72,12 +73,18 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   listProps.filter = isFilterAString ? filterFn : undefined;
 
   const sortOptions = (resMetaData?.list || []).filter(element => element.sort);
+  const searchOptions = (resMetaData?.list || []).filter(
+    element => element.search,
+  );
 
   return (
     <ResourcesList
       createResourceForm={ExtensibilityCreate}
       disableCreate={disableCreate}
       sortBy={defaultSortOptions => sortBy(sortOptions, t, defaultSortOptions)}
+      searchSettings={{
+        textSearchProperties: getTextSearchProperties(searchOptions),
+      }}
       {...listProps}
     />
   );
