@@ -19,7 +19,7 @@
 
 The **form** section contains a list of objects that define which fields are included in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to the simple form by providing the `simple: true` flag. You can also remove it from the advanced form by providing the `advanced: false` flag.
 
-Any parameters that are not handled by the widget are added to the schema directly, so it's possible to add or override existing values. For example, add an **enum** parameter to provide selectable values in a field or specify additional parameters to improve the schema validation, e.g. `min` and `max` attributes for numeric inputs to enable HTML validation.
+Any parameters that are not handled by the widget are added to the schema directly, so it's possible to add or override existing values. For example, add an **enum** parameter to provide selectable values in a field or specify additional parameters to improve the schema validation, for example, `min` and `max` attributes for numeric inputs to enable HTML validation.
 
 If you target elements of an array rather than the array itself, you can use the `items[]` notation.
 
