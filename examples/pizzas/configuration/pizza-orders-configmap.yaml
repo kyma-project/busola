@@ -100,7 +100,7 @@ data:
       "category": "Lunch",
       "urlPath": "pizzaorders",
       "scope": "namespace",
-      "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
+      "description": "Customize the Pizza Order view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
     }
   dataSources: |-
     {

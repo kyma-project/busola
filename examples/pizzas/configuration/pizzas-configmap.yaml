@@ -205,7 +205,7 @@ data:
       "name": "Pizzas",
       "category": "Lunch",
       "scope": "namespace",
-      "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
+      "description": "Customize the Pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
     }
   presets: |-
     [
