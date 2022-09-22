@@ -32,8 +32,8 @@ export function ServiceAccountList(props) {
       customColumns={customColumns}
       description={description}
       resourceTitle={t('service-accounts.title')}
-      createResourceForm={ServiceAccountCreate}
       {...props}
+      createResourceForm={ServiceAccountCreate}
     />
   );
 }

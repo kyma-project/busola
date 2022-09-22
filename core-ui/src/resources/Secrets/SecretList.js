@@ -41,8 +41,8 @@ export function SecretList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={SecretCreate}
       {...props}
+      createResourceForm={SecretCreate}
     />
   );
 }

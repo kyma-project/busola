@@ -39,8 +39,8 @@ export function CronJobList(props) {
       customColumns={customColumns}
       resourceTitle={t('cron-jobs.title')}
       description={description}
-      createResourceForm={CronJobCreate}
       {...props}
+      createResourceForm={CronJobCreate}
     />
   );
 }

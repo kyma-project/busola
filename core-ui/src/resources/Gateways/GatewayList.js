@@ -31,8 +31,8 @@ export function GatewayList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={GatewayCreate}
       {...props}
+      createResourceForm={GatewayCreate}
     />
   );
 }

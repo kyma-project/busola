@@ -79,8 +79,8 @@ export function ServiceList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={ServiceCreate}
       {...props}
+      createResourceForm={ServiceCreate}
     />
   );
 }
