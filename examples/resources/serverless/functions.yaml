@@ -93,7 +93,15 @@ data:
             "path": "auth",
             "visibility": "$useAuthorization",
             "children": [
-              { "path": "secretName" },
+              {
+                "path": "secretName",
+                "widget": "Resource",
+                "resource": {
+                  "kind": "Secret",
+                  "version": "v1",
+                  "scope": "namespace"
+                }
+              },
               { "path": "type" }
             ]
           },
@@ -169,7 +177,8 @@ data:
                   "widget": "Resource",
                   "resource": {
                     "kind": "Secret",
-                    "version": "v1"
+                    "version": "v1",
+                    "scope": "namespace"
                   },
                   "provideVar": "secret",
                   "visibility": "$envType = 'From Secret'"
@@ -185,7 +194,8 @@ data:
                   "widget": "Resource",
                   "resource": {
                     "kind": "ConfigMap",
-                    "version": "v1"
+                    "version": "v1",
+                    "scope": "namespace"
                   },
                   "provideVar": "configMap",
                   "visibility": "$envType = 'From Config Map'"
@@ -227,7 +237,8 @@ data:
       "name": "Ext Functions",
       "category": "Workloads",
       "urlPath": "ext-functions",
-      "scope": "namespace"
+      "scope": "namespace",
+      "description": "{{[Function](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/svls-01-function/#documentation-content/)}} is a simple code snippet that you can run without provisioning or managing servers."
     }
   list: |-
     [
@@ -288,7 +299,6 @@ data:
       spec.runtimeImageOverride: Runtime Image Override
       Status: Status
       Runtime: Runtime
-      'Max Replicas': Max Replicas
       'Source Type': Source Type
       spec.runtime.nodejs12: Node.js 12 - Deprecated
       spec.runtime.nodejs14: Node.js 14
@@ -299,8 +309,10 @@ data:
       placeholders.spec.runtime: Choose Function runtime
       spec.env.name: Variable Name
       envType: Variable Type
+      'Node.js Function': Node.js Function
+      'Python Function': Python Function
   presets: |-
-    - name: NodeJS Function
+    - name: Node.js Function
       default: true
       value:
         spec:
