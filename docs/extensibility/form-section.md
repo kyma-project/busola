@@ -208,7 +208,7 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
   "path": "spec.data",
   "widget": "CodeEditor",
   "inputInfo": "Data needs to be a valid JSON object.",
-  "description": "Data that will be passed on to the application.",
+  "description": "Data is passed on to the application.",
   "language": "'JSON'"
 }
 ```
