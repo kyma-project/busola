@@ -18,7 +18,7 @@ export function StringRenderer({
   placeholder,
   ...props
 }) {
-  const { tFromStoreKeys, t: tExt } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt, exists } = useGetTranslation();
   const schemaPlaceholder = schema.get('placeholder');
 
   const getTypeSpecificProps = () => {
@@ -29,7 +29,9 @@ export function StringRenderer({
         .join('.');
       const options = schema.toJS().enum.map(key => ({
         key,
-        text: tExt(translationPath + '.' + key) || key,
+        text: exists(translationPath + '.' + key)
+          ? tExt(translationPath + '.' + key)
+          : key,
       }));
       return { input: Inputs.ComboboxInput, options };
     } else {

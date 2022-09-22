@@ -290,9 +290,9 @@ data:
       Runtime: Runtime
       'Max Replicas': Max Replicas
       'Source Type': Source Type
-      spec.runtime.nodejs12: NodeJS 12 (Deprecated)
-      spec.runtime.nodejs14: NodeJS 14
-      spec.runtime.nodejs16: NodeJS 16
+      spec.runtime.nodejs12: Node.js 12 - Deprecated
+      spec.runtime.nodejs14: Node.js 14
+      spec.runtime.nodejs16: Node.js 16
       spec.runtime.python39: Python 3.9
       spec.resourceConfiguration.build: Build
       spec.resourceConfiguration.function: Function
