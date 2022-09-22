@@ -349,7 +349,7 @@ FormGroup widgets render an `object` as a collapsible section.
 
 #### Widget-specific parameters
 
-- **columns** - number of columns the content should be rendered in. Defaults to 1.
+- **columns** - number of columns the content is rendered in. Defaults to 1.
 
 #### Example
 
