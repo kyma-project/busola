@@ -297,14 +297,13 @@ const isValueMatching = (value, input) => {
   return value
     .toString()
     .toLowerCase()
-    .includes(input?.toLowerCase());
+    .includes(input.toString().toLowerCase());
 };
 
 const getSearchingFunction = (searchOption, originalResource) => {
   return (entry, input) => {
-    const formula = searchOption.source;
     const value =
-      jsonataWrapper(formula).evaluate(originalResource ?? entry, {
+      jsonataWrapper(searchOption.source).evaluate(originalResource ?? entry, {
         item: entry,
       }) || '';
 
@@ -316,7 +315,8 @@ export const getTextSearchProperties = (
   searchOptions,
   originalResource = null,
 ) => {
-  return searchOptions.map(searchOption =>
+  console.log(searchOptions);
+  return (searchOptions || []).map(searchOption =>
     getSearchingFunction(searchOption, originalResource),
   );
 };
