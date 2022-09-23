@@ -42,8 +42,8 @@ export function NamespaceList(props) {
       customColumns={customColumns}
       description={description}
       filter={FilterNamespaces}
-      createResourceForm={NamespaceCreate}
       {...props}
+      createResourceForm={NamespaceCreate}
     />
   );
 }

@@ -43,8 +43,8 @@ export function APIRuleList(props) {
       customColumns={customColumns}
       resourceTitle={t('api-rules.title')}
       description={description}
-      createResourceForm={APIRuleCreate}
       {...props}
+      createResourceForm={APIRuleCreate}
     />
   );
 }
