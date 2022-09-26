@@ -10,16 +10,12 @@ const propertiesWrapper = src => ({
 
 export function SchemaRulesInjector({
   schema,
-  // storeKeys,
   currentPluginIndex,
   rootRule,
   value,
   resource,
   ...props
 }) {
-  // console.log('SchemaRulesInjector', props.storeKeys.join('.'));
-  // console.log('props', props);
-
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
 
@@ -36,7 +32,7 @@ export function SchemaRulesInjector({
   if (schema.get('properties')) {
     const newProperties = childRules
       ?.map(rule => {
-        if (rule.var) {
+        if (rule.custom) {
           return ['', fromJS({ ...rule, schemaRule: rule })];
         }
 
