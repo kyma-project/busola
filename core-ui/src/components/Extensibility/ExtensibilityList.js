@@ -77,13 +77,19 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
     element => element.search,
   );
 
+  const textSearchProperties = getTextSearchProperties({
+    searchOptions,
+    defaultSearch: true,
+  });
+
   return (
     <ResourcesList
       createResourceForm={ExtensibilityCreate}
       disableCreate={disableCreate}
       sortBy={defaultSortOptions => sortBy(sortOptions, t, defaultSortOptions)}
       searchSettings={{
-        textSearchProperties: getTextSearchProperties(searchOptions),
+        textSearchProperties: defaultSearchProperties =>
+          textSearchProperties(defaultSearchProperties),
       }}
       {...listProps}
     />

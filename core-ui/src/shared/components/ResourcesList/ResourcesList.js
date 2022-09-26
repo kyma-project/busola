@@ -387,6 +387,22 @@ export function ResourceListRenderer({
     ),
   ];
 
+  const textSearchProperties = () => {
+    const defaultSearchProperties = [
+      'metadata.name',
+      'metadata.namespace',
+      'metadata.labels',
+    ];
+
+    if (typeof searchSettings?.textSearchProperties === 'function')
+      return searchSettings.textSearchProperties(defaultSearchProperties);
+
+    return [
+      ...defaultSearchProperties,
+      ...(searchSettings?.textSearchProperties || []),
+    ];
+  };
+
   return (
     <>
       <ModalWithForm
@@ -438,12 +454,7 @@ export function ResourceListRenderer({
         sortBy={sortBy}
         searchSettings={{
           ...searchSettings,
-          textSearchProperties: [
-            'metadata.name',
-            'metadata.namespace',
-            'metadata.labels',
-            ...(searchSettings?.textSearchProperties || []),
-          ],
+          textSearchProperties: textSearchProperties(),
         }}
       />
     </>

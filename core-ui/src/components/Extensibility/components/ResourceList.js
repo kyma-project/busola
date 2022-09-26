@@ -49,10 +49,11 @@ export function ResourceList({
 
   const { searchOptions, defaultSearch } = getSearchDetails(structure);
 
-  const textSearchProperties = getTextSearchProperties(
+  const textSearchProperties = getTextSearchProperties({
     searchOptions,
     originalResource,
-  );
+    defaultSearch,
+  });
 
   // make sure "kind" is present on resources
   if (Array.isArray(value?.items)) {
@@ -92,7 +93,8 @@ export function ResourceList({
       createFormProps={{ resourceSchema }}
       createResourceForm={ExtensibilityCreate}
       searchSettings={{
-        textSearchProperties,
+        textSearchProperties: defaultSortOptions =>
+          textSearchProperties(defaultSortOptions),
       }}
       {...structure}
       {...props}

@@ -25,7 +25,6 @@ const getSortOptions = structure => {
 
 export const getSortDetails = structure => {
   const sortOptions = getSortOptions(structure);
-
   return { sortOptions, defaultSort: shouldUseDefaultColumns(structure) };
 };
 
@@ -51,7 +50,6 @@ const getSearchOptions = structure => {
 
 export const getSearchDetails = structure => {
   const searchOptions = getSearchOptions(structure);
-
   return { searchOptions, defaultSearch: shouldUseDefaultColumns(structure) };
 };
 
