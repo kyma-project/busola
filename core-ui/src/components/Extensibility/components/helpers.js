@@ -1,7 +1,9 @@
 import { Widget } from './Widget';
 
+const shouldUseDefaultColumns = structure => !Array.isArray(structure.children);
+
 const getSortOptions = structure => {
-  if (Array.isArray(structure.children)) {
+  if (!shouldUseDefaultColumns(structure)) {
     return structure.children.filter(child => child.sort);
   }
 
@@ -24,16 +26,14 @@ const getSortOptions = structure => {
 export const getSortDetails = structure => {
   const sortOptions = getSortOptions(structure);
 
-  if (!Array.isArray(structure.children)) {
-    return { sortOptions, defaultSort: true };
-  }
-  return { sortOptions, defaultSort: false };
+  return { sortOptions, defaultSort: shouldUseDefaultColumns(structure) };
 };
 
 const getSearchOptions = structure => {
-  if (Array.isArray(structure.children)) {
+  if (!shouldUseDefaultColumns(structure)) {
     return structure.children.filter(child => child.search);
   }
+
   return (structure?.search || []).reduce((acc, current) => {
     if (!current.source) {
       return [...acc];
@@ -52,14 +52,11 @@ const getSearchOptions = structure => {
 export const getSearchDetails = structure => {
   const searchOptions = getSearchOptions(structure);
 
-  if (!Array.isArray(structure.children)) {
-    return { searchOptions, defaultSearch: true };
-  }
-  return { searchOptions, defaultSearch: false };
+  return { searchOptions, defaultSearch: shouldUseDefaultColumns(structure) };
 };
 
 export const getChildren = (structure, originalResource) => {
-  if (!Array.isArray(structure.children)) {
+  if (shouldUseDefaultColumns(structure)) {
     return null;
   }
 
