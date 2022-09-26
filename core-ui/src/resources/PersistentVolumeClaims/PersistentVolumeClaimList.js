@@ -42,8 +42,8 @@ export function PersistentVolumeClaimList(props) {
     <ResourcesList
       description={description}
       customColumns={customColumns}
-      createResourceForm={PersistentVolumeClaimCreate}
       {...props}
+      createResourceForm={PersistentVolumeClaimCreate}
     />
   );
 }

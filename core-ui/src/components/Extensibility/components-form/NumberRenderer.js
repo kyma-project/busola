@@ -22,6 +22,10 @@ export function NumberRenderer({
 
   const schemaPlaceholder = schema.get('placeholder');
 
+  const numberProps = Object.fromEntries(
+    ['min', 'max'].map(prop => [prop, schema.get(prop)]),
+  );
+
   return (
     <ResourceForm.FormField
       value={value}
@@ -40,6 +44,7 @@ export function NumberRenderer({
       data-testid={storeKeys.join('.')}
       input={Inputs.Number}
       compact={compact}
+      {...numberProps}
       {...getPropsFromSchema(schema, required, tExt)}
     />
   );

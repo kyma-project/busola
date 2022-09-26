@@ -68,8 +68,8 @@ export function FunctionList(props) {
       customHeaderActions={headerActions}
       customColumns={customColumns}
       description={description}
-      createResourceForm={FunctionCreate}
       {...props}
+      createResourceForm={FunctionCreate}
     />
   );
 }

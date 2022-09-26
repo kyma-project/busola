@@ -43,8 +43,8 @@ export function SubscriptionList(props) {
       resourceTitle={t('subscriptions.title')}
       customColumns={customColumns}
       description={description}
-      createResourceForm={SubscriptionCreate}
       {...props}
+      createResourceForm={SubscriptionCreate}
     />
   );
 }

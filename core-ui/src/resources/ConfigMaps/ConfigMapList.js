@@ -35,8 +35,8 @@ export function ConfigMapList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={ConfigMapCreate}
       {...props}
+      createResourceForm={ConfigMapCreate}
     />
   );
 }

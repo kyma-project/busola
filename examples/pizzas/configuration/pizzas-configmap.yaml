@@ -30,7 +30,7 @@ data:
           "name": "Owner References",
           "source": "spec.ownerReferences[0]",
           "widget": "ResourceLink",
-          "linkText": "Go to {{data.kind}} {{data.name}}.",
+          "linkText": "'Go to {{data.kind}} {{data.name}}.'",
           "resource": {
             "name": "data.name",
             "namespace": "root.metadata.namespace",

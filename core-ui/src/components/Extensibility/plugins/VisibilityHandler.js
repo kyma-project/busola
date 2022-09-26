@@ -18,8 +18,11 @@ export function VisibilityHandler({
 
   const rule = schema.get('schemaRule');
 
-  if (rule?.visibility) {
-    const visible = jsonataWrapper(rule.visibility).evaluate(
+  // rule.visibility won't work for "var", we must use schema.get('visibility')
+  const visibilityFormula = schema.get('visibility');
+
+  if (visibilityFormula) {
+    const visible = jsonataWrapper(visibilityFormula).evaluate(
       resource,
       itemVars(resource, rule.itemVars, storeKeys),
     );

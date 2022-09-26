@@ -61,8 +61,8 @@ export function CertificateList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={CertificateCreate}
       {...props}
+      createResourceForm={CertificateCreate}
     />
   );
 }
