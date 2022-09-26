@@ -45,7 +45,10 @@ export function ResourceLink({ value, structure, originalResource }) {
     });
   }
 
-  const linkText = jsonataWrapper(structure.linkText).evaluate();
+  const linkText = structure.linkText
+    ? jsonataWrapper(structure.linkText).evaluate()
+    : '';
+
   const linkContent = tExt(linkText, {
     data: value,
     root: originalResource,
