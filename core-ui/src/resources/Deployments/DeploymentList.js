@@ -60,8 +60,8 @@ export function DeploymentList(props) {
       customColumns={customColumns}
       description={description}
       customListActions={[restartAction]}
-      createResourceForm={DeploymentCreate}
       {...props}
+      createResourceForm={DeploymentCreate}
     />
   );
 }

@@ -36,8 +36,8 @@ export function IssuerList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={IssuerCreate}
       {...props}
+      createResourceForm={IssuerCreate}
     />
   );
 }

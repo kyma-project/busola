@@ -37,8 +37,8 @@ export function SidecarList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={SidecarCreate}
       {...props}
+      createResourceForm={SidecarCreate}
     />
   );
 }

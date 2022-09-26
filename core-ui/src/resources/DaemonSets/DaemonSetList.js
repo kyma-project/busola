@@ -54,8 +54,8 @@ export function DaemonSetList(props) {
       resourceTitle={t('daemon-sets.title')}
       description={description}
       customListActions={[restartAction]}
-      createResourceForm={DaemonSetCreate}
       {...props}
+      createResourceForm={DaemonSetCreate}
     />
   );
 }

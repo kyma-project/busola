@@ -37,8 +37,8 @@ export function LimitRangeList(props) {
     <ResourcesList
       resourceTitle={t('limit-ranges.title')}
       customColumns={customColumns}
-      createResourceForm={LimitRangeCreate}
       {...props}
+      createResourceForm={LimitRangeCreate}
     />
   );
 }
