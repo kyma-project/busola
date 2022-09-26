@@ -293,15 +293,11 @@ export const getPropsFromSchema = (schema, required, t) => {
   };
 };
 
-const isValueMatching = (value, input, customSearchFormula) => {
-  if (customSearchFormula !== null) return customSearchFormula ? value : null;
-
+const isValueMatching = (value, input) => {
   return (value ?? '')
     .toString()
     .toLowerCase()
-    .includes(input.toString().toLowerCase())
-    ? value
-    : null;
+    .includes(input.toString().toLowerCase());
 };
 
 const getSearchingFunction = (searchOption, originalResource) => {
@@ -312,19 +308,18 @@ const getSearchingFunction = (searchOption, originalResource) => {
         item: entry,
       }) || '';
 
-    let customSearchFormula = null;
+    if (!search?.searchFormula)
+      return isValueMatching(value, input) ? value : null;
 
-    if (search?.searchFormula) {
-      const jsonata = jsonataWrapper(search?.searchFormula);
-      jsonata.assign('input', input);
+    const jsonata = jsonataWrapper(search?.searchFormula);
+    jsonata.assign('input', input);
 
-      customSearchFormula = jsonata.evaluate(originalResource ?? entry, {
-        item: entry,
-        input,
-      });
-    }
+    const doesSearchFormulaMatch = jsonata.evaluate(originalResource ?? entry, {
+      item: entry,
+      input,
+    });
 
-    return isValueMatching(value, input, customSearchFormula);
+    return doesSearchFormulaMatch ? value : null;
   };
 };
 
