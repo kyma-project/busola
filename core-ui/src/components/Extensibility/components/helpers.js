@@ -12,14 +12,14 @@ const getSortOptions = structure => {
       return [...acc];
     }
 
-    const obj = {
+    const sortOption = {
       source: current.source,
       sort: {
         default: current.default,
         compareFunction: current.compareFunction,
       },
     };
-    return [...acc, obj];
+    return [...acc, sortOption];
   }, []);
 };
 
@@ -38,13 +38,13 @@ const getSearchOptions = structure => {
       return [...acc];
     }
 
-    const obj = {
+    const searchOption = {
       source: current.source,
       search: {
         searchFormula: current.searchFormula,
       },
     };
-    return [...acc, obj];
+    return [...acc, searchOption];
   }, []);
 };
 
