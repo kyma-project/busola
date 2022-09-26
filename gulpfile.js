@@ -129,5 +129,5 @@ data:
       }),
     )
     .pipe(intoConfigMap)
-    .pipe(gulp.dest('./resources/web/'));
+    .pipe(gulp.dest('./resources/extensions-patch/'));
 });
