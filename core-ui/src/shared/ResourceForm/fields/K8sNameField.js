@@ -61,10 +61,11 @@ export function K8sNameField({
                   compact
                   option="transparent"
                   onClick={generateName}
-                  glyph="synchronize"
                   ariaLabel="Generate name button"
                   disabled={readOnly}
-                />
+                >
+                  {t('common.buttons.generate-name')}
+                </Button>
               </Tooltip>
             </div>
             {showHelp && inputInfo === undefined ? (
