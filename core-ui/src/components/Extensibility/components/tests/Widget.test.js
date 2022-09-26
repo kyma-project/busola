@@ -6,6 +6,8 @@ jest.mock('components/Extensibility/hooks/useJsonata', () => ({
   useJsonata: () => 'test-value',
 }));
 
+jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
+
 describe('Widget', () => {
   describe('structure.visible', () => {
     it('not set -> render component as usual', () => {
