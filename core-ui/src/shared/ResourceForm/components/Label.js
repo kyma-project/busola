@@ -1,16 +1,13 @@
 import React from 'react';
-import { FormLabel, Icon } from 'fundamental-react';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
+import { FormLabel } from 'fundamental-react';
+import './Label.scss';
 
 export function Label({ required, tooltipContent, children }) {
   return (
     <>
-      <FormLabel required={required}>{children}</FormLabel>
-      {tooltipContent && (
-        <Tooltip className="has-tooltip" delay={0} content={tooltipContent}>
-          <Icon ariaLabel="" glyph="question-mark" />
-        </Tooltip>
-      )}
+      <FormLabel required={required} includeColon>
+        {children}
+      </FormLabel>
     </>
   );
 }

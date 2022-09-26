@@ -52,8 +52,10 @@ export function GenericList({
       title={tFromStoreKeys(storeKeys, schema)}
       actions={setOpen => (
         <Button
-          glyph="add"
           compact
+          option="transparent"
+          glyph="add"
+          iconBeforeText
           onClick={() => {
             addItem();
             setOpen(true);
@@ -76,6 +78,7 @@ export function GenericList({
               actions={
                 <Button
                   compact
+                  option="transparent"
                   glyph="delete"
                   type="negative"
                   onClick={() => removeItem(index)}
