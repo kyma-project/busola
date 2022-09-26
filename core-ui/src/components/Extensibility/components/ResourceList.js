@@ -51,7 +51,6 @@ export function ResourceList({
 
   const textSearchProperties = getTextSearchProperties({
     searchOptions,
-    originalResource,
     defaultSearch,
   });
 
