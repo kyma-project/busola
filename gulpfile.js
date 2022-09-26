@@ -71,15 +71,32 @@ gulp.task('pack-extensions', function() {
     return jsyaml.load(yamlString, { json: true });
   };
 
-  const loadExtensions = through2.obj(function(file, _, cb) {
-    const { data } = jsyaml.load(file.contents.toString());
+  const checkExtensionVersion = metadata => {
+    // also update Extensibility/migration.js
+    const SUPPORTED_VERSIONS = ['0.4', '0.5'];
+
+    const version = metadata.labels?.['busola.io/extension-version'];
+    if (!SUPPORTED_VERSIONS.includes(version)) {
+      throw Error(
+        `Unsupported version ${clc.magenta(version)} for ${clc.magenta(
+          metadata.name,
+        )} extension.`,
+      );
+    }
+  };
+
+  const loadExtensions = through2.obj((file, _, cb) => {
+    const { data, metadata } = jsyaml.load(file.contents.toString());
+
+    checkExtensionVersion(metadata);
+
     file.contents = Buffer.from(
       jsyaml.dump(mapValues(data, convertYamlToObject)),
     );
     cb(null, file);
   });
 
-  const intoConfigMap = through2.obj(function(file, _, cb) {
+  const intoConfigMap = through2.obj((file, _, cb) => {
     const addIndent = str =>
       str
         .split('\n')
@@ -96,11 +113,10 @@ metadata:
     app.kubernetes.io/name: busola-builtin-resource-extensions
     busola.io/extension: builtin-resources
 data:
-  extensions.yaml: |-`;
+  extensions.yaml: |-
+`;
 
-    file.contents = Buffer.from(`${configMapHeader}
-${extensions}
-  `);
+    file.contents = Buffer.from(configMapHeader + extensions);
     cb(null, file);
   });
 
@@ -114,17 +130,4 @@ ${extensions}
     )
     .pipe(intoConfigMap)
     .pipe(gulp.dest('./resources/web/'));
-
-  // return gulp
-  //   .src('extensions/**/*.yaml')
-  //   .pipe(loadExtensions)
-  //   .pipe(
-  //     concat('extensions.yaml', {
-  //       newLine: '---\n',
-  //     }),
-  //   )
-  //   .pipe(gulp.dest('./core/src/assets/extensions'))
-  //   .pipe(intoConfigMap)
-  //   .pipe(rename('builtin-resource-extensions.configmap.yaml'))
-  //   .pipe(gulp.dest('./resources/web/'));
 });
