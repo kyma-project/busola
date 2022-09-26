@@ -294,7 +294,7 @@ export const getPropsFromSchema = (schema, required, t) => {
 };
 
 const isValueMatching = (value, input) => {
-  return value
+  return (value ?? '')
     .toString()
     .toLowerCase()
     .includes(input.toString().toLowerCase());
@@ -315,7 +315,6 @@ export const getTextSearchProperties = (
   searchOptions,
   originalResource = null,
 ) => {
-  console.log(searchOptions);
   return (searchOptions || []).map(searchOption =>
     getSearchingFunction(searchOption, originalResource),
   );
