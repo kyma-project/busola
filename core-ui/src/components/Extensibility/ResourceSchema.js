@@ -37,12 +37,13 @@ export function ResourceSchema({
 
   const schemaMap = useMemo(() => {
     let newSchema = schema;
-    delete newSchema.properties.metadata;
-
-    newSchema = {
-      ...newSchema,
-      properties: { ...newSchema.properties },
-    };
+    if (newSchema?.properties) {
+      delete newSchema.properties.metadata;
+      newSchema = {
+        ...newSchema,
+        properties: { ...newSchema.properties },
+      };
+    }
 
     return createOrderedMap(newSchema);
   }, [schema]);

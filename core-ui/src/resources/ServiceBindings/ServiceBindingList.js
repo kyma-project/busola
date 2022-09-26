@@ -61,11 +61,11 @@ export function ServiceBindingList(props) {
       customColumns={customColumns}
       resourceTitle={t('btp-service-bindings.title')}
       description={description}
-      createResourceForm={ServiceBindingCreate}
       {...props}
       searchSettings={{
         textSearchProperties: ['spec.serviceInstanceName', 'spec.externalName'],
       }}
+      createResourceForm={ServiceBindingCreate}
     />
   );
 }

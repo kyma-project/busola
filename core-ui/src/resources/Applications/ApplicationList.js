@@ -37,8 +37,8 @@ export function ApplicationList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={ApplicationCreate}
       {...props}
+      createResourceForm={ApplicationCreate}
     />
   );
 }

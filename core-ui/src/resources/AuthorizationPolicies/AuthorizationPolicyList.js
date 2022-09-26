@@ -29,8 +29,8 @@ export function AuthorizationPolicyList(props) {
     <ResourcesList
       description={description}
       customColumns={customColumns}
-      createResourceForm={AuthorizationPolicyCreate}
       {...props}
+      createResourceForm={AuthorizationPolicyCreate}
     />
   );
 }

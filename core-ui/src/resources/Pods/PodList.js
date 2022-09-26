@@ -71,7 +71,6 @@ export function PodList(params) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={PodCreate}
       sortBy={defaultSort => ({
         ...defaultSort,
         status: (a, b) =>
@@ -80,6 +79,7 @@ export function PodList(params) {
           ),
       })}
       {...params}
+      createResourceForm={PodCreate}
     />
   );
 }
