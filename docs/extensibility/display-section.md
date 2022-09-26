@@ -318,8 +318,8 @@ ExternalLink widgets render the link to external page.
 
 #### Widget-specific parameters
 
-- **linkFormula** - an optional jsonata function to generate custom link.
-- **textFormula** - an optional string or item which will be displayed as link.
+- **linkFormula** - an optional JSONata function to generate a custom link.
+- **textFormula** - an optional string or item which is displayed as a link.
 
 #### Examples
 
