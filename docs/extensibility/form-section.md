@@ -19,7 +19,7 @@
 
 The **form** section contains a list of objects that define which fields are included in the final form. All given fields are placed in the advanced form by default. It's possible to add a field to the simple form by providing the `simple: true` flag. You can also remove it from the advanced form by providing the `advanced: false` flag.
 
-Any parameters that are not handled by the widget are added to the schema directly, so it's possible to add or override existing values. For example, add an **enum** parameter to provide selectable values in a field.
+Any parameters that are not handled by the widget are added to the schema directly, so it's possible to add or override existing values. For example, add an **enum** parameter to provide selectable values in a field or specify additional parameters to improve the schema validation, for example, `min` and `max` attributes for numeric inputs to enable HTML validation.
 
 If you target elements of an array rather than the array itself, you can use the `items[]` notation.
 
@@ -195,6 +195,7 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
 
 #### Widget-specific parameters
 
+- **language** - a JSONata expression resolving the desired language. It has access to the `$root` variable, containing the entire resource.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 
@@ -202,14 +203,19 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
 
 ```json
 {
+  "path": "spec.my-data",
+  "widget": "CodeEditor",
   "path": "spec.data",
   "widget": "CodeEditor",
   "inputInfo": "Data needs to be a valid JSON object.",
-  "description": "Data that will be passed on to the application."
+  "description": "Data is passed on to the application.",
+  "language": "'JSON'"
 }
 ```
 
 <img src="./assets/form-widgets/CodeEditor.png" alt="Example of a code editor widget" style="border: 1px solid #D2D5D9">
+
+> NOTE: Remember to put both single and double quotes if you want to use plain language (for example, "'YAML'"). Specifying just double quotes ("YAML") makes Busola try to access a nonexistent `YAML` variable, resulting in the language being `undefined`.
 
 ### Resource
 
@@ -340,6 +346,10 @@ Presentation widgets do not handle data directly and only serve to group content
 ### FormGroup
 
 FormGroup widgets render an `object` as a collapsible section.
+
+#### Widget-specific parameters
+
+- **columns** - number of columns the content is rendered in. Defaults to 1.
 
 #### Example
 

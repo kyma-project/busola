@@ -61,8 +61,8 @@ export function GitRepositoryList(props) {
       customColumns={customColumns}
       createActionLabel={t('git-repositories.labels.create')}
       description={description}
-      createResourceForm={GitRepositoryCreate}
       {...props}
+      createResourceForm={GitRepositoryCreate}
     />
   );
 }

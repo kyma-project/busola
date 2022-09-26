@@ -75,7 +75,13 @@ export function Table({
     };
 
     const cells = (structure.children || []).map(column => (
-      <Widget value={entry} structure={column} schema={schema} {...props} />
+      <Widget
+        value={entry}
+        structure={column}
+        schema={schema}
+        originalResource={originalResource}
+        {...props}
+      />
     ));
 
     if (!structure.collapsible) {
@@ -93,6 +99,7 @@ export function Table({
               structure={child}
               schema={schema}
               inlineRenderer={InlineWidget}
+              originalResource={originalResource}
               {...props}
             />
           ))}

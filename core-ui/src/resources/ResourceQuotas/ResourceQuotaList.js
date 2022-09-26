@@ -26,8 +26,8 @@ export function ResourceQuotaList(props) {
     <ResourcesList
       resourceTitle={t('resource-quotas.title')}
       customColumns={customColumns}
-      createResourceForm={ResourceQuotaCreate}
       {...props}
+      createResourceForm={ResourceQuotaCreate}
     />
   );
 }

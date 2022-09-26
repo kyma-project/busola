@@ -1,0 +1,7 @@
+.collapsible-renderer__grid-wrapper {
+  display: grid;
+
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr !important; // override inline style
+  }
+}

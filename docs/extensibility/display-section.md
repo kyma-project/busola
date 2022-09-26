@@ -20,6 +20,7 @@
   - [ResourceList](#resourcelist)
   - [ResourceRefs](#resourcerefs)
   - [Table](#table)
+  - [Tabs](#tabs)
 
 ## Resource _list_ overview
 
@@ -124,7 +125,7 @@ Extra parameters might be available for specific widgets.
     {
       "source": "spec.details",
       "widget": "CodeViewer",
-      "language": "json"
+      "language": "'json'"
     },
     {
       "source": "spec.configPatches",
@@ -271,9 +272,9 @@ When no highlights are provided, the following values are automatically handled:
 }
 ```
 
-<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="20%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="40%" style="border: 1px solid #D2D5D9">
 <br/><br/>
-<img src="./assets/display-widgets/Bagde2.png" alt="Example of a badge widget with a tooltip" width="20%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Bagde2.png" alt="Example of a badge widget with a tooltip" width="40%" style="border: 1px solid #D2D5D9">
 
 ### ControlledBy
 
@@ -297,7 +298,7 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 }
 ```
 
-<img src="./assets/display-widgets/ControlledBy.png" alt="Example of a ControlledBy widget" width="50%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ControlledBy.png" alt="Example of a ControlledBy widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ##### Kind only
 
@@ -310,7 +311,7 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 }
 ```
 
-<img src="./assets/display-widgets/ControlledBy--kindOnly.png" alt="Example of a ControlledBy widget without name link" width="50%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ControlledBy--kindOnly.png" alt="Example of a ControlledBy widget without name link" width="40%" style="border: 1px solid #D2D5D9">
 
 ### JoinedArray
 
@@ -350,7 +351,7 @@ Labels widgets render all the array or object entries in the `value` or `key-val
 }
 ```
 
-<img src="./assets/display-widgets/Labels.png" alt="Example of a Labels widget" width="20%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Labels.png" alt="Example of a Labels widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ### ResourceLink
 
@@ -359,7 +360,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 #### Widget-specific parameters
 
 - **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **data** - value extracted using **source**, or **root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
-- **linkText** - this property has access to **data** and **root**. This makes it possible to insert resource properties into a translation.
+- **linkText** - a JSONata expression resolving a link text, this property has access to **data** and **root**. To insert dynamic parts of translations, use double quotes `Go to {{data.name}}`.
 
 #### Example
 
@@ -369,7 +370,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 {
   "widget": "ResourceLink",
   "source": "metadata.ownerReferences[0]",
-  "linkText": "otherTranslations.linkText",
+  "linkText": "data.status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'",
   "resource": {
     "name": "data.name",
     "namespace": "root.metadata.namespace",
@@ -378,13 +379,14 @@ ResourceLink widgets render internal links to Kubernetes resources.
 }
 ```
 
-<img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ##### _translations_ section
 
 ```yaml
 en:
-  otherTranslations.linkText: Go to {{data.kind}} {{data.name}}.
+  otherTranslations.linkText: 'Go to {{data.kind}} {{data.name}}'
+  otherTranslations.errorLinkText: 'Error in {{data.kind}} {{data.name}}'
 ```
 
 ### Text
@@ -406,7 +408,7 @@ Text widgets render values as a simple text. This is the default behavior for al
 }
 ```
 
-<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="20%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ## Block widgets
 
@@ -418,7 +420,7 @@ CodeViewer widgets display values using a read-only code editor.
 
 #### Widget-specific parameters
 
-- **language** - used for code highlighting. The editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
+- **language** - a JSONata expression resolving the desired language, used for code highlighting. It has access to the `$root` variable, containing the entire resource. The editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
   If the language is not specified, the editor tries to display the content as `yaml` with a fallback to `json`.
 
 #### Example
@@ -427,7 +429,7 @@ CodeViewer widgets display values using a read-only code editor.
 {
   "source": "spec.json-data",
   "widget": "CodeViewer",
-  "language": "yaml"
+  "language": "$root.spec.language = 'JavaScript' ? 'javascript' : 'yaml'"
 }
 ```
 
@@ -476,8 +478,9 @@ Panel widgets render an object as a separate panel with its own title (based on 
 ```json
 [
   {
-    "name": "details",
+    "name": "Details",
     "widget": "Panel",
+    "description": "To check the extensibility documentation go to the {{[Busola page](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}.",
     "children": [
       { "source": "spec.value" },
       { "source": "spec.other-value", "placeholder": "-" }
@@ -497,6 +500,7 @@ Panel widgets render an object as a separate panel with its own title (based on 
 
 - **header** - an optional array that allows you to, for example, display labels in the panel header.
 - **disablePadding** - an optional boolean which disables the padding inside the panel body.
+- **description** - displays a custom description on the resource list page. It can contain links. If the **translations** section has a translation entry with the ID that is the same as the **description** string, the translation is used.
 
 #### Example
 
@@ -653,3 +657,34 @@ Table widgets display array data as rows of a table instead of free-standing com
 ```
 
 <img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
+
+### Tabs
+
+Tabs widgets render the child widgets in multiple tabs.
+
+#### Example
+
+```json
+{
+  "widget": "Tabs",
+  "children": [
+    {
+      "name": "General",
+      "children": [{
+        "widget": "Panel",
+        "name": "Overview",
+        "source": ...
+      }],
+    },
+    {
+      "name": "Resources",
+      "children": [{
+        "widget": "ResourceRefs",
+        "source": ...
+      }]
+    }
+  ]
+}
+```
+
+<img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">
