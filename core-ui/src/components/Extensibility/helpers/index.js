@@ -293,21 +293,38 @@ export const getPropsFromSchema = (schema, required, t) => {
   };
 };
 
-const isValueMatching = (value, input) => {
+const isValueMatching = (value, input, customSearchFormula) => {
+  if (customSearchFormula !== null) return customSearchFormula ? value : null;
+
   return (value ?? '')
     .toString()
     .toLowerCase()
-    .includes(input.toString().toLowerCase());
+    .includes(input.toString().toLowerCase())
+    ? value
+    : null;
 };
 
 const getSearchingFunction = (searchOption, originalResource) => {
+  const { source, search } = searchOption;
   return (entry, input) => {
     const value =
-      jsonataWrapper(searchOption.source).evaluate(originalResource ?? entry, {
+      jsonataWrapper(source).evaluate(originalResource ?? entry, {
         item: entry,
       }) || '';
 
-    return isValueMatching(value, input) ? value : null;
+    let customSearchFormula = null;
+
+    if (search?.searchFormula) {
+      const jsonata = jsonataWrapper(search?.searchFormula);
+      jsonata.assign('input', input);
+
+      customSearchFormula = jsonata.evaluate(originalResource ?? entry, {
+        item: entry,
+        input,
+      });
+    }
+
+    return isValueMatching(value, input, customSearchFormula);
   };
 };
 
