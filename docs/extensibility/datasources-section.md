@@ -27,59 +27,39 @@ Busola uses the following fields to build the related resource URL and filter th
 
 ## Examples
 
-```json
-{
-  "details": {
-    "body": [
-      {
-        "widget": "ResourceList",
-        "source": "$myPods()"
-      }
-    ]
-  },
-  "dataSources": {
-    "myPods": {
-      "resource": {
-        "kind": "Pod",
-        "version": "v1"
-      },
-      "ownerLabelSelectorPath": "spec.selector.matchLabels"
-    }
-  }
-}
+```yaml
+details:
+  body:
+    - widget: ResourceList
+      source: '$myPods()'
+dataSources:
+  myPods:
+    resource:
+      kind: Pod
+      version: v1
+    ownerLabelSelectorPath: spec.selector.matchLabels
 ```
 
-```json
-{
-  "details": {
-    "body": [
-      {
-        "widget": "ResourceList",
-        "path": "$mySecrets"
-      }
-    ]
-  },
-  "dataSources": {
-    "mySecrets": {
-      "resource": {
-        "kind": "Secret",
-        "version": "v1",
-        "namespace": null
-      },
-      "filter": "$root.spec.secretName = $item.metadata.name and $root.metadata.namespace = $item.metadata.namespace"
-    }
-  }
-}
+```yaml
+details:
+  body:
+    - widget: ResourceList
+      path: '$mySecrets'
+dataSources:
+  mySecrets:
+    resource:
+      kind: Secret
+      version: v1
+      namespace:
+    filter:
+      '$root.spec.secretName = $item.metadata.name and $root.metadata.namespace
+      = $item.metadata.namespace'
 ```
 
-```json
-{
-  "podSelector": {
-    "resource": {
-      "kind": "Pod",
-      "version": "v1"
-    },
-    "filter": "$matchByLabelSelector($item, $root.spec.selector)"
-  }
-}
+```yaml
+podSelector:
+  resource:
+    kind: Pod
+    version: v1
+  filter: '$matchByLabelSelector($item, $root.spec.selector)'
 ```
