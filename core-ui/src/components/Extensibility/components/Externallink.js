@@ -3,7 +3,7 @@ import { Link } from 'fundamental-react';
 import { isNil } from 'lodash';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
-export const Externallink = ({ value, schema, structure, ...props }) => {
+export const ExternalLink = ({ value, schema, structure, ...props }) => {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
   const linkFormula = structure.linkFormula;
@@ -25,20 +25,20 @@ export const Externallink = ({ value, schema, structure, ...props }) => {
 
   let href;
   if (typeof value === 'string') {
-    href = value.substring(0, 8) === 'https://' ? value : `https://${value}`;
+    href = value.startsWith('https://') ? value : `https://${value}`;
   }
 
   if (isNil(value)) return emptyLeafPlaceholder;
-  else
-    return (
-      <p>
-        <Link
-          href={linkFormula ? jsonata(linkFormula) : href}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {textFormula ? jsonata(textFormula) : value}
-        </Link>
-      </p>
-    );
+
+  return (
+    <p>
+      <Link
+        href={linkFormula ? jsonata(linkFormula) : href}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {textFormula ? jsonata(textFormula) : value}
+      </Link>
+    </p>
+  );
 };
