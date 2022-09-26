@@ -9,6 +9,8 @@ const through2 = require('through2');
 const jsyaml = require('js-yaml');
 const { mapValues } = require('lodash');
 const concat = require('gulp-concat');
+const clean = require('gulp-clean');
+const fetch = require('node-fetch');
 
 const exec = promisify(childProcess.exec);
 
@@ -52,7 +54,7 @@ const THEMES = [
   { path: 'sap_fiori_3_light_dark/css_variables.css', name: 'light_dark' },
   { path: 'sap_fiori_3/css_variables.css', name: 'default' },
 ];
-gulp.task('copy-themes', function() {
+gulp.task('copy-themes', () => {
   return Promise.all(
     THEMES.map(({ path, name }) =>
       gulp
@@ -66,7 +68,43 @@ gulp.task('copy-themes', function() {
   );
 });
 
-gulp.task('pack-extensions', function() {
+gulp.task('clean-extensions', () => {
+  return gulp
+    .src('extensions/downloads', { read: false, allowEmpty: true })
+    .pipe(clean());
+});
+
+gulp.task('download-extensions', () => {
+  const loadExtensions = through2.obj(async function(extensionsFile, _, cb) {
+    const list = JSON.parse(extensionsFile.contents.toString());
+
+    const requests = list.map(({ url }) =>
+      fetch(url)
+        .then(res => res.text())
+        .then(contents => ({
+          contents,
+          name: url.substr(url.lastIndexOf('/') + 1),
+        })),
+    );
+
+    const results = await Promise.all(requests);
+
+    results.forEach(({ contents, name }) => {
+      const file = extensionsFile.clone();
+      file.contents = Buffer.from(contents);
+      file.path = name;
+      this.push(file);
+    });
+    cb();
+  });
+
+  return gulp
+    .src('extensions/extensions.json')
+    .pipe(loadExtensions)
+    .pipe(gulp.dest('extensions/downloads/-')); // gulp strips the last path component
+});
+
+gulp.task('pack-extensions', () => {
   const convertYamlToObject = yamlString => {
     return jsyaml.load(yamlString, { json: true });
   };
@@ -129,5 +167,5 @@ data:
       }),
     )
     .pipe(intoConfigMap)
-    .pipe(gulp.dest('./resources/extensions-patch/'));
+    .pipe(gulp.dest('resources/extensions-patch/'));
 });
