@@ -631,7 +631,6 @@ Table widgets display array data as rows of a table instead of free-standing com
 - **collapsibleTitle** - an optional option for **collapsible** to define title for the collapsible sections, as string or the JSONata function.
 - **disablePadding** - an optional boolean which disables the padding inside the panel body.
 - **showHeader** - an optional boolean which disables displaying the head row.
-- **showSearchField** - an optional boolean which disables displaying the search input.
 - **sort** - optional sort option. If set to `true`, it allows you to sort using this value. Defaults to false. It can also be set to an object with the following properties:
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
   - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`

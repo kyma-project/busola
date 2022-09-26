@@ -303,23 +303,27 @@ const isValueMatching = (value, input) => {
 const getSearchingFunction = (searchOption, originalResource) => {
   const { source, search } = searchOption;
   return (entry, input) => {
-    const value =
-      jsonataWrapper(source).evaluate(originalResource ?? entry, {
+    try {
+      const value =
+        jsonataWrapper(source).evaluate(originalResource ?? entry, {
+          item: entry,
+        }) || '';
+
+      if (!search?.searchFormula)
+        return isValueMatching(value, input) ? value : null;
+
+      const jsonata = jsonataWrapper(search?.searchFormula);
+      jsonata.assign('input', input);
+
+      const foundValues = jsonata.evaluate(originalResource ?? entry, {
         item: entry,
-      }) || '';
+        input,
+      });
 
-    if (!search?.searchFormula)
-      return isValueMatching(value, input) ? value : null;
-
-    const jsonata = jsonataWrapper(search?.searchFormula);
-    jsonata.assign('input', input);
-
-    const foundValues = jsonata.evaluate(originalResource ?? entry, {
-      item: entry,
-      input,
-    });
-
-    return foundValues;
+      return foundValues;
+    } catch (e) {
+      return null;
+    }
   };
 };
 
