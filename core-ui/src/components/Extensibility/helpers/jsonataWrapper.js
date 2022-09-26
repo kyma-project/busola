@@ -14,6 +14,13 @@ export function jsonataWrapper(expression) {
     );
   });
 
+  exp.registerFunction('matchByResoure', (resourceKind, resourceName) => e => {
+    return (
+      e.involvedObject?.name === resourceName &&
+      e.involvedObject?.kind === resourceKind
+    );
+  });
+
   exp.registerFunction('compareStrings', (first, second) => {
     return first?.localeCompare(second) ?? 1;
   });
