@@ -311,11 +311,10 @@ const getSearchingFunction = (searchOption, originalResource) => {
   };
 };
 
-const searchingFunctions = (searchOptions, originalResource) => {
-  return (searchOptions || []).map(searchOption =>
+const searchingFunctions = (searchOptions, originalResource) =>
+  (searchOptions || []).map(searchOption =>
     getSearchingFunction(searchOption, originalResource),
   );
-};
 
 export const getTextSearchProperties = ({
   searchOptions,
