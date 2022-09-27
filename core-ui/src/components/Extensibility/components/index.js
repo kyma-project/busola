@@ -12,6 +12,7 @@ import { ResourceList } from './ResourceList';
 import { EventsList } from './EventsList';
 import { ResourceLink } from './ResourceLink.js';
 import { Labels } from './Labels';
+import { ExternalLink } from './ExternalLink';
 import { Tabs } from './Tabs';
 
 import { PendingWrapper } from './PendingWrapper';
@@ -31,6 +32,7 @@ export const widgets = {
   ResourceList,
   ResourceLink,
   Labels,
+  ExternalLink,
   Tabs,
   EventsList,
 };
