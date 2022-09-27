@@ -1,5 +1,5 @@
 import { useGetPlaceholder } from 'components/Extensibility/helpers';
-import { Link } from 'fundamental-react';
+import { Icon, Link } from 'fundamental-react';
 import { isNil } from 'lodash';
 
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
@@ -39,6 +39,12 @@ export const ExternalLink = ({ value, schema, structure, ...props }) => {
         rel="noopener noreferrer"
       >
         {textFormula ? jsonata(textFormula) : value}
+        <Icon
+          glyph="inspect"
+          size="s"
+          className="fd-margin-begin--tiny"
+          ariaLabel="This link will be opened in a new tab"
+        />
       </Link>
     </p>
   );
