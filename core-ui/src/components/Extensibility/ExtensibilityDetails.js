@@ -30,6 +30,11 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   }
   */
 
+  // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
+  if (!resource) {
+    return null;
+  }
+
   const resourceName = resMetaData?.general?.name;
   const resourceTitle = exists('name')
     ? t('name')
