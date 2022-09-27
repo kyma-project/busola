@@ -216,15 +216,15 @@ When no highlights are provided, the following values are automatically handled:
 #### Example
 
 ```yaml
-source: status.value
-widget: Badge
-placeholder: '-'
-highlights:
-  positive:
-    - Running
-    - ok
-  negative: data < 0
-description: status.message
+- source: status.value
+  widget: Badge
+  placeholder: '-'
+  highlights:
+    positive:
+      - Running
+      - ok
+    negative: data < 0
+  description: status.message
 ```
 
 <img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="40%" style="border: 1px solid #D2D5D9">
@@ -246,9 +246,9 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 ##### Kind and name link
 
 ```yaml
-source: metadata.ownerReferences
-widget: ControlledBy
-placeholder: '-'
+- source: metadata.ownerReferences
+  widget: ControlledBy
+  placeholder: '-'
 ```
 
 <img src="./assets/display-widgets/ControlledBy.png" alt="Example of a ControlledBy widget" width="40%" style="border: 1px solid #D2D5D9">
@@ -256,10 +256,10 @@ placeholder: '-'
 ##### Kind only
 
 ```yaml
-source: metadata.ownerReferences
-widget: ControlledBy
-placeholder: '-'
-kindOnly: true
+- source: metadata.ownerReferences
+  widget: ControlledBy
+  placeholder: '-'
+  kindOnly: true
 ```
 
 <img src="./assets/display-widgets/ControlledBy--kindOnly.png" alt="Example of a ControlledBy widget without name link" width="40%" style="border: 1px solid #D2D5D9">
@@ -278,11 +278,11 @@ ExternalLink widgets render the link to an external page.
 ##### linkFormula and textFormula usage
 
 ```yaml
-source: '$item'
-name: spec.servers.port.name
-widget: ExternalLink
-linkFormula: "'https://' & $item.port.name & ':' & $string($item.port.number)"
-textFormula: '$item.port.name'
+- source: '$item'
+  name: spec.servers.port.name
+  widget: ExternalLink
+  linkFormula: "'https://' & $item.port.name & ':' & $string($item.port.number)"
+  textFormula: '$item.port.name'
 ```
 
 <img src="./assets/display-widgets/ExternalLink.png" alt="Example of a ExternalLink widget" width="50%" style="border: 1px solid #D2D5D9">
@@ -290,9 +290,9 @@ textFormula: '$item.port.name'
 ##### Source only
 
 ```yaml
-widget: ExternalLink
-source: '$item.hosts'
-name: spec.servers.hosts
+- widget: ExternalLink
+  source: '$item.hosts'
+  name: spec.servers.hosts
 ```
 
 <img src="./assets/display-widgets/ExternalLink2.png" alt="Example of a ExternalLink widget without linkFormula and textFormula" width="50%" style="border: 1px solid #D2D5D9">
@@ -304,10 +304,10 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
 #### Example
 
 ```yaml
-name: Joined array
-source: spec.dnsNames
-widget: JoinedArray
-separator: ': '
+- name: Joined array
+  source: spec.dnsNames
+  widget: JoinedArray
+  separator: ': '
 ```
 
 <img src="./assets/display-widgets/JoinedArray.png" alt="Example of a joined array widget" width="20%" style="border: 1px solid #D2D5D9">
@@ -326,9 +326,9 @@ Labels widgets render all the array or object entries in the `value` or `key-val
   If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 
 ```yaml
-source: spec.orderDetails
-widget: Labels
-placeholder: '-'
+- source: spec.orderDetails
+  widget: Labels
+  placeholder: '-'
 ```
 
 <img src="./assets/display-widgets/Labels.png" alt="Example of a Labels widget" width="40%" style="border: 1px solid #D2D5D9">
@@ -347,13 +347,13 @@ ResourceLink widgets render internal links to Kubernetes resources.
 ##### _details_ section
 
 ```yaml
-widget: ResourceLink
-source: metadata.ownerReferences[0]
-linkText: "data.status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'"
-resource:
-  name: data.name
-  namespace: root.metadata.namespace
-  kind: "'Deployment'"
+- widget: ResourceLink
+  source: metadata.ownerReferences[0]
+  linkText: "data.status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'"
+  resource:
+    name: data.name
+    namespace: root.metadata.namespace
+    kind: "'Deployment'"
 ```
 
 <img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" width="40%" style="border: 1px solid #D2D5D9">
@@ -378,9 +378,9 @@ Text widgets render values as a simple text. This is the default behavior for al
 #### Example
 
 ```yaml
-source: spec.label
-widget: Text
-placeholder: '-'
+- source: spec.label
+  widget: Text
+  placeholder: '-'
 ```
 
 <img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="40%" style="border: 1px solid #D2D5D9">
@@ -401,9 +401,9 @@ CodeViewer widgets display values using a read-only code editor.
 #### Example
 
 ```yaml
-source: spec.json-data
-widget: CodeViewer
-language: "$root.spec.language = 'JavaScript' ? 'javascript' : 'yaml'"
+- source: spec.json-data
+  widget: CodeViewer
+  language: "$root.spec.language = 'JavaScript' ? 'javascript' : 'yaml'"
 ```
 
 <img src="./assets/display-widgets/CodeViewer.png" alt="Example of a CodeViewer widget" style="border: 1px solid #D2D5D9">
@@ -422,18 +422,18 @@ Columns widgets render the child widgets in multiple columns.
 #### Example
 
 ```yaml
-name: columns.container
-widget: Columns
-children:
-  - name: columns.left
-    widget: Panel
-    children:
-      - source: spec.value
-        placeholder: '-'
-  - name: columns.right
-    widget: Panel
-    children:
-      - source: spec.other-value
+- name: columns.container
+  widget: Columns
+  children:
+    - name: columns.left
+      widget: Panel
+      children:
+        - source: spec.value
+          placeholder: '-'
+    - name: columns.right
+      widget: Panel
+      children:
+        - source: spec.other-value
 ```
 
 <img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
@@ -470,16 +470,16 @@ Panel widgets render an object as a separate panel with its own title (based on 
 #### Example
 
 ```yaml
-widget: Panel
-name: spec.selector
-children:
-  - source: '$podSelector()'
-    widget: ResourceList
-header:
-  - source: spec.selector
-    widget: Labels
-    name: spec.selector
-    visibility: spec.selector
+- widget: Panel
+  name: spec.selector
+  children:
+    - source: '$podSelector()'
+      widget: ResourceList
+  header:
+    - source: spec.selector
+      widget: Labels
+      name: spec.selector
+      visibility: spec.selector
 ```
 
 ### Plain
@@ -503,15 +503,15 @@ Since the **ResourceList** widget does more than just list the items, you must p
 #### Examples
 
 ```yaml
-widget: ResourceList
-source: '$myDeployments()'
-name: Example ResourceList Deployments
-sort:
-  - source: spec.replicas
-    compareFunction: '$second - $first'
-  - source: '$item.spec.strategy.type'
-    compareFunction: '$compareStrings($second, $first)'
-    default: true
+- widget: ResourceList
+  source: '$myDeployments()'
+  name: Example ResourceList Deployments
+  sort:
+    - source: spec.replicas
+      compareFunction: '$second - $first'
+    - source: '$item.spec.strategy.type'
+      compareFunction: '$compareStrings($second, $first)'
+      default: true
 ```
 
 <img src="./assets/display-widgets/ResourceList.png" alt="Example of a ResourceList widget" style="border: 1px solid #D2D5D9">
@@ -519,22 +519,22 @@ sort:
 ---
 
 ```yaml
-widget: ResourceList
-path: '$mySecrets'
-name: Example ResourceList Secret with children
-children:
-  - source: '$item'
-    name: Name
-    sort: 'true'
-    widget: ResourceLink
-    resource:
-      name: data.metadata.name
-      namespace: root.metadata.namespace
-      kind: data.kind
-  - source: type
-    name: Type
-    sort:
-      default: true
+- widget: ResourceList
+  path: '$mySecrets'
+  name: Example ResourceList Secret with children
+  children:
+    - source: '$item'
+      name: Name
+      sort: 'true'
+      widget: ResourceLink
+      resource:
+        name: data.metadata.name
+        namespace: root.metadata.namespace
+        kind: data.kind
+    - source: type
+      name: Type
+      sort:
+        default: true
 ```
 
 <img src="./assets/display-widgets/ResourceListChildren.png" alt="Example of a ResourceList widget with children" style="border: 1px solid #D2D5D9">
@@ -550,9 +550,9 @@ ResourceRefs widgets render the lists of links to the associated resources. The 
 #### Example
 
 ```yaml
-source: spec.item-list
-widget: ResourceRefs
-kind: Secret
+- source: spec.item-list
+  widget: ResourceRefs
+  kind: Secret
 ```
 
 <img src="./assets/display-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">
@@ -575,20 +575,20 @@ Table widgets display array data as rows of a table instead of free-standing com
 #### Example
 
 ```yaml
-source: spec.toppings
-widget: Table
-collapsibleTitle:
-  "'Topping #' & $string($index + 1) & (' ' & $join($keys($item),
-  ' '))"
-collapsible:
-  - source: quantity
-children:
-  - source: '$item.name'
-    sort: true
-  - source: '$item.price'
-    sort:
-      default: true
-      compareFunction: '$second -$first'
+- source: spec.toppings
+  widget: Table
+  collapsibleTitle:
+    "'Topping #' & $string($index + 1) & (' ' & $join($keys($item),
+    ' '))"
+  collapsible:
+    - source: quantity
+  children:
+    - source: '$item.name'
+      sort: true
+    - source: '$item.price'
+      sort:
+        default: true
+        compareFunction: '$second -$first'
 ```
 
 <img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
@@ -600,17 +600,17 @@ Tabs widgets render the child widgets in multiple tabs.
 #### Example
 
 ```yaml
-widget: Tabs
-children:
-  - name: General
-    children:
-      - widget: Panel
-        name: Overview
-        source: '...'
-  - name: Resources
-    children:
-      - widget: ResourceRefs
-        source: '...'
+- widget: Tabs
+  children:
+    - name: General
+      children:
+        - widget: Panel
+          name: Overview
+          source: '...'
+    - name: Resources
+      children:
+        - widget: ResourceRefs
+          source: '...'
 ```
 
 <img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">

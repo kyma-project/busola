@@ -27,11 +27,11 @@ You can use this function to match Pods using a resource selector.
 Example from [dataSources](datasources-section.md).
 
 ```yaml
-podSelector:
-  resource:
-    kind: Pod
-    version: v1
-  filter: '$matchByLabelSelector($item, $root.spec.selector)'
+- podSelector:
+    resource:
+      kind: Pod
+      version: v1
+    filter: '$matchByLabelSelector($item, $root.spec.selector)'
 ```
 
 ## compareStrings(first, second)
@@ -50,11 +50,11 @@ Example from the [ResourceList widget](display-section.md#resourcelist).
 #### Examples
 
 ```yaml
-widget: ResourceList
-source: '$myDeployments()'
-name: Example ResourceList Deployments
-sort:
-  - source: '$item.spec.strategy.type'
-    compareFunction: '$compareStrings($second, $first)'
-    default: true
+- widget: ResourceList
+  source: '$myDeployments()'
+  name: Example ResourceList Deployments
+  sort:
+    - source: '$item.spec.strategy.type'
+      compareFunction: '$compareStrings($second, $first)'
+      default: true
 ```
