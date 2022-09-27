@@ -28,7 +28,7 @@ async function getBuiltinCustomResources() {
   try {
     const response = await fetch('/assets/extensions/extensions.yaml');
     const extensions = jsyaml.loadAll(await response.text());
-    console.log(extensions);
+    console.log({ extensions });
     return extensions;
   } catch (e) {
     console.log(e);
@@ -126,10 +126,13 @@ export async function getCustomResources(authData) {
     return customResources[clusterName];
   }
 
+  console.log('ext enabled', features.EXTENSIBILITY?.isEnabled);
+  customResources[clusterName] = await getBuiltinCustomResources();
+
   if (features.EXTENSIBILITY?.isEnabled) {
     customResources[clusterName] = [
       ...busolaOwnExtConfigs,
-      ...(await getBuiltinCustomResources()),
+      ...customResources[clusterName],
     ];
     const clusterCustomResources = await loadBusolaClusterCRs();
     const targetClusterCustomResources = await loadTargetClusterCRs(authData);
@@ -143,9 +146,9 @@ export async function getCustomResources(authData) {
       ...customResources[clusterName],
       ...additionalExtResources,
     ];
-    return customResources[clusterName];
   }
-  return [];
+  console.log('custom res', customResources[clusterName]);
+  return customResources[clusterName];
 }
 
 export async function getExtensibilitySchemas() {

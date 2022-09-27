@@ -26,6 +26,8 @@ export async function getBusolaClusterParams() {
           mapParams.config?.features,
         );
 
+      console.log({ defaultParams, mapParams });
+
       params = merge(defaultParams, mapParams);
     } catch (e) {
       console.warn('Cannot load cluster params: ', e);

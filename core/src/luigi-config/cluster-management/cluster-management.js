@@ -158,6 +158,8 @@ export async function getCurrentConfig() {
     ? await getTargetClusterConfig()
     : {};
 
+  console.log({ targetCluterConfig });
+
   const features = {
     ...DEFAULT_FEATURES,
     ...busolaClusterParams?.config?.features,
@@ -169,6 +171,8 @@ export async function getCurrentConfig() {
     ...targetCluterConfig?.config,
   };
   config.features = features;
+
+  console.log({ config });
 
   return config;
 }
