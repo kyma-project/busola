@@ -74,15 +74,18 @@ export function Table({
       }
     };
 
-    const cells = (structure.children || []).map(column => (
-      <Widget
-        value={entry}
-        structure={column}
-        schema={schema}
-        originalResource={originalResource}
-        {...props}
-      />
-    ));
+    const cells = (structure.children || []).map(column => {
+      return (
+        <Widget
+          {...props}
+          value={entry}
+          arrayItem={entry}
+          structure={column}
+          schema={schema}
+          originalResource={originalResource}
+        />
+      );
+    });
 
     if (!structure.collapsible) {
       return cells;
@@ -95,12 +98,13 @@ export function Table({
         <td colspan="100%" className={tdClassNames}>
           {structure.collapsible.map(child => (
             <Widget
+              {...props}
               value={entry}
+              arrayItem={entry}
               structure={child}
               schema={schema}
               inlineRenderer={InlineWidget}
               originalResource={originalResource}
-              {...props}
             />
           ))}
         </td>
