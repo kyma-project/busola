@@ -60,7 +60,8 @@ export function CustomFieldInjector({
         currentPluginIndex={nextPluginIndex}
         schema={schema}
         onChange={() => {}}
-        storeKeys={List([])}
+        storeKeys={storeKeys}
+        resource={resource}
       />
     );
   }
