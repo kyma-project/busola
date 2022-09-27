@@ -256,7 +256,7 @@ KeyValuePair widgets render an `object` value as a list of fields. One is used f
 path: spec.my-data
 widget: KeyValuePair
 description: Key and value must start and end with an alphanumeric character.
-tooltip:
+tooltip: >
   Labels are intended to be used to specify identifying attributes of objects
   that are meaningful and relevant to users, but do not directly imply semantics to
   the core system.
@@ -300,9 +300,11 @@ ResourceRef widgets render two dropdowns to select the associated resources' nam
     kind: Gateway
     group: networking.istio.io
     version: v1alpha3
-  toInternal:
-    "( $values := $split($, '/'); { 'namespace': $values[0], 'name': $values[1]
-    } )"
+  toInternal: |
+    (
+      $values := $split($, '/');
+      { 'namespace': $values[0], 'name': $values[1] }
+    )
   toExternal: namespace & '/' & name
 ```
 
