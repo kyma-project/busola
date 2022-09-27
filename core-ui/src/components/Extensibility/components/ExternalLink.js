@@ -44,6 +44,12 @@ export const ExternalLink = ({
         rel="noopener noreferrer"
       >
         {value}
+        <Icon
+          glyph="inspect"
+          size="s"
+          className="fd-margin-begin--tiny"
+          ariaLabel="This link will be opened in a new tab"
+        />
       </Link>
     </p>
   );
