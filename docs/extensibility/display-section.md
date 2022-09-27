@@ -318,8 +318,7 @@ ExternalLink widgets render the link to external page.
 
 #### Widget-specific parameters
 
-- **linkFormula** - an optional JSONata function to generate a custom link.
-- **textFormula** - an optional string or item which is displayed as a link.
+- **link** - an optional JSONata function to generate a custom link.
 
 #### Examples
 
@@ -327,11 +326,10 @@ ExternalLink widgets render the link to external page.
 
 ```json
 {
-  "source": "$item",
-  "name": "spec.servers.port.name",
   "widget": "ExternalLink",
-  "linkFormula": "'https://' & $item.port.name & ':' & $string($item.port.number)",
-  "textFormula": "$item.port.name"
+  "source": "$item.port.name",
+  "name": "spec.servers.port.name",
+  "link": "'https://' & $item.port.name & ':' & $string($item.port.number)"
 }
 ```
 
