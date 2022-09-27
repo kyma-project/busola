@@ -6,7 +6,8 @@ export function prepareSchemaRules(ruleDefs) {
 
   const extractRules = (
     { path, var: varName, ...ruleDef },
-    parentPath = [],
+    parentPath,
+    index,
   ) => {
     const fullPath = (path
       ? [
@@ -15,7 +16,7 @@ export function prepareSchemaRules(ruleDefs) {
             ? path
             : path?.replace(/\[]/g, '.[]')?.split('.') || []),
         ]
-      : [...parentPath, `$${varName}`]
+      : [...parentPath, varName ? `$${varName}` : `custom${index}`]
     ).filter(item => !!item);
 
     let lastArrayIndex;
@@ -34,6 +35,7 @@ export function prepareSchemaRules(ruleDefs) {
             ? {
                 ...ruleDef,
                 var: varName,
+                custom: !path,
                 path: myPath,
                 children: [],
                 itemVars: [],
@@ -58,10 +60,12 @@ export function prepareSchemaRules(ruleDefs) {
         .forEach(item => (item.itemVars = lastArrayRule.itemVars));
     }
 
-    ruleDef.children?.forEach(subDef => extractRules(subDef, fullPath));
+    ruleDef.children?.forEach((subDef, index) =>
+      extractRules(subDef, fullPath, index),
+    );
   };
 
-  ruleDefs.forEach(subDef => extractRules(subDef));
+  ruleDefs.forEach((subDef, index) => extractRules(subDef, [], index));
 
   return root;
 }
