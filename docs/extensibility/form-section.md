@@ -2,7 +2,7 @@
 
 - [_Form_ overview](#form-overview)
 - [Variable fields](#variable-fields)
-- [Alert](#Alert)
+- [Alert](#alert)
 - [Simple widgets](#simple-widgets)
   - [Text](#text)
   - [Name](#name)
