@@ -337,7 +337,7 @@ export const getTextSearchProperties = ({
   originalResource = null,
   defaultSearch,
 }) => {
-  return defaultSearchProperties => [
+  return (defaultSearchProperties = []) => [
     ...(defaultSearch ? defaultSearchProperties : []),
     ...searchingFunctions(searchOptions, originalResource),
   ];
