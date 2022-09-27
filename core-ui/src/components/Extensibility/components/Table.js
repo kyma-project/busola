@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { isNil } from 'lodash';
+import classNames from 'classnames';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
@@ -8,6 +9,7 @@ import { sortBy, useGetTranslation } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
 
 import './Table.scss';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 const handleTableValue = (value, t) => {
   switch (true) {
@@ -43,9 +45,43 @@ export function Table({
   const headerRenderer = () =>
     structure.collapsible ? ['', ...coreHeaders] : coreHeaders;
 
-  const rowRenderer = entry => {
+  const tdClassNames = classNames({
+    'collapsible-panel': !structure.disablePadding,
+  });
+
+  const rowRenderer = (entry, index) => {
+    const makeTitle = () => {
+      const defaultTitle =
+        tExt(structure.name, {
+          defaultValue: structure.name || structure.source,
+        }) +
+        ' #' +
+        (index + 1);
+      if (structure.collapsibleTitle) {
+        try {
+          const expression = jsonataWrapper(structure.collapsibleTitle);
+          expression.assign('index', index);
+          expression.assign('item', entry);
+          expression.assign('root', originalResource);
+
+          return expression.evaluate();
+        } catch (e) {
+          console.warn(e);
+          return defaultTitle;
+        }
+      } else {
+        return defaultTitle;
+      }
+    };
+
     const cells = (structure.children || []).map(column => (
-      <Widget value={entry} structure={column} schema={schema} {...props} />
+      <Widget
+        value={entry}
+        structure={column}
+        schema={schema}
+        originalResource={originalResource}
+        {...props}
+      />
     ));
 
     if (!structure.collapsible) {
@@ -54,14 +90,16 @@ export function Table({
 
     return {
       cells,
+      title: makeTitle(),
       collapseContent: (
-        <td colspan="100%" className="collapsible-panel">
+        <td colspan="100%" className={tdClassNames}>
           {structure.collapsible.map(child => (
             <Widget
               value={entry}
               structure={child}
               schema={schema}
               inlineRenderer={InlineWidget}
+              originalResource={originalResource}
               {...props}
             />
           ))}
@@ -78,6 +116,7 @@ export function Table({
 
   return (
     <GenericList
+      showHeader={structure?.showHeader}
       className={className}
       title={tExt(structure.name, {
         defaultValue: structure.name || structure.source,
@@ -86,7 +125,11 @@ export function Table({
       rowRenderer={rowRenderer}
       {...handleTableValue(value, t)}
       sortBy={() => sortBy(sortOptions, tExt, {}, originalResource)}
-      searchSettings={{ showSearchSuggestion: false }}
+      searchSettings={{
+        showSearchSuggestion: false,
+        showSearchField: structure?.showSearchField,
+        allowSlashShortcut: false,
+      }}
     />
   );
 }

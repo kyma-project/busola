@@ -229,6 +229,39 @@ data:
         "widget": "Labels"
       },
     ]
+  presets: |-
+    [
+      {
+        "name": "Ingress Gateway",
+        "value": {
+          "metadata": {
+            "name": "httpbin-gateway",
+            "labels": {
+              "app.kubernetes.io/name": "httpbin-gateway",
+            },
+          },
+          "spec": {
+            "selector": {
+              "istio": "ingressgateway",
+            },
+            "servers": [
+              {
+                "port": {
+                  "number": 443,
+                  "name": "https",
+                  "protocol": "HTTPS",
+                },
+                "tls": {
+                  "mode": "SIMPLE",
+                  "credentialName": "",
+                },
+                "hosts": [],
+              },
+            ],
+          }
+        }
+      }
+    ]
   translations: |
     en:
       alert.tls.https: TLS Server of mode SIMPLE or MUTUAL needs either credential name, or private key and server certificate pair.

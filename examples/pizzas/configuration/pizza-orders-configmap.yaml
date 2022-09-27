@@ -27,7 +27,7 @@ data:
           "name": "Order details",
           "widget": "CodeViewer",
           "source": "spec.orderDetails",
-          "language": "yaml"
+          "language": "'yaml'"
         },
         {
           "name": "Pizzas",
@@ -113,3 +113,28 @@ data:
         "filter": "$root.spec.pizzas[name = $item.metadata.name and namespace = $item.metadata.namespace]"
       }
     }
+  presets: |-
+    [
+      {
+        "name": "Cash Delivery",
+        "value": {
+          "spec": {
+            "orderDetails": {
+              "paymentMethod": "CASH",
+              "realization": "DELIVERY",
+            }
+          }
+        }
+      },
+      {
+        "name": "Card Pickup",
+        "value": {
+          "spec": {
+            "orderDetails": {
+              "paymentMethod": "CARD",
+              "realization": "SELF-PICKUP",
+            }
+          }
+        }
+      }
+    ]

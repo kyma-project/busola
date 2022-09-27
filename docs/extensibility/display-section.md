@@ -1,4 +1,4 @@
-# Display widgets
+# Customize UI display
 
 - [Resource _list_ overview](#resource-list-overview)
 - [Resource _details_ overview](#resource-details-overview)
@@ -8,6 +8,7 @@
 - [Inline widgets](#inline-widgets)
   - [Badge](#badge)
   - [ControlledBy](#controlledby)
+  - [ExternalLink](#externallink)
   - [JoinedArray](#joinedarray)
   - [Labels](#labels)
   - [ResourceLink](#resourcelink)
@@ -21,6 +22,7 @@
   - [ResourceList](#resourcelist)
   - [ResourceRefs](#resourcerefs)
   - [Table](#table)
+  - [Tabs](#tabs)
 
 ## Resource _list_ overview
 
@@ -69,9 +71,12 @@ Each object adds a new column to your table.
 ## Resource _details_ overview
 
 The **details** section defines the display structure for the details page.
-It contains three components, `header`, `body`, and optional `resourceGraph`.
+It contains three optional components, `header`, `body`, and `resourceGraph`.
+
+> **NOTE:** `header` and `body` are arrays of objects, and the `resourceGraph` component is an object.
+
 The first two components are a list of widgets to display in the **header** section and the body of the page respectively.
-The `resourceGraph` component is used to configure the ResourceGraph which shows relationships between various resources.
+You can use the `resourceGraph` component to configure the ResourceGraph, which shows relationships between resources.
 
 ### Header and body parameters
 
@@ -79,7 +84,7 @@ The `resourceGraph` component is used to configure the ResourceGraph which shows
 - **name** - Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the **translation** section.
 - **widget** - optional widget to render the defined entry. By default the value is displayed verbatim.
 - **valuePreprocessor** - name of [value preprocessor](resources.md#value-preprocessors).
-- **visibility** - by default all fields are visible; however **visibility** property can be used to control a single item display.
+- **visibility** - by default all fields are visible; however, you can use the **visibility** property to control a single item display.
   - If set to `false` explicitly, the field doesn't render.
   - If set to any string, this property is treated as JSONata format, determining (based on current value given as `data`) if the field should be visible.
   - If not set, the field always renders.
@@ -120,7 +125,7 @@ Extra parameters might be available for specific widgets.
     {
       "source": "spec.details",
       "widget": "CodeViewer",
-      "language": "json"
+      "language": "'json'"
     },
     {
       "source": "spec.configPatches",
@@ -144,12 +149,12 @@ Extra parameters might be available for specific widgets.
 
 ### resourceGraph parameters
 
-- **depth** - defines the maximum distance from the original resource to a transitively related resource. Defaults to infinity.
-- **colorVariant** - optional integer in range 1 to 11 or 'neutral', denoting the SAP color variant of the node's border. If not set, the node's border is the same as the current text color.
+- **depth** - defines the maximum distance from the original resource to a transitively related resource. Defaults to `infinity`.
+- **colorVariant** - optional integer in range 1 to 11 or `neutral`, denoting the SAP color variant of the node's border. If not set, the node's border is the same as the current text color.
 - **networkFlowKind** - optional boolean which determines if the resource should be shown on the network graph, Defaults to `false`, which displays the resource on the structural graph.
 - **networkFlowLevel** - optional integer which sets the horizontal position of the resource's node on the network graph.
 - **dataSources** - an array of objects in shape:
-  - **source** - a string that must correspond to one of the [dataSources](resources.md#datasources-section) name. It selects the related resource and the way it should be matched.
+  - **source** - a string that must correspond to one of the [dataSources](datasources-section.md) name. It selects the related resource and the way it should be matched.
 
 ### resourceGraph example
 
@@ -267,9 +272,9 @@ When no highlights are provided, the following values are automatically handled:
 }
 ```
 
-<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="20%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="40%" style="border: 1px solid #D2D5D9">
 <br/><br/>
-<img src="./assets/display-widgets/Bagde2.png" alt="Example of a badge widget with a tooltip" width="20%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Bagde2.png" alt="Example of a badge widget with a tooltip" width="40%" style="border: 1px solid #D2D5D9">
 
 ### ControlledBy
 
@@ -293,7 +298,7 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 }
 ```
 
-<img src="./assets/display-widgets/ControlledBy.png" alt="Example of a ControlledBy widget" width="50%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ControlledBy.png" alt="Example of a ControlledBy widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ##### Kind only
 
@@ -306,7 +311,44 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 }
 ```
 
-<img src="./assets/display-widgets/ControlledBy--kindOnly.png" alt="Example of a ControlledBy widget without name link" width="50%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ControlledBy--kindOnly.png" alt="Example of a ControlledBy widget without name link" width="40%" style="border: 1px solid #D2D5D9">
+
+### ExternalLink
+
+ExternalLink widgets render the link to external page.
+
+#### Widget-specific parameters
+
+- **linkFormula** - an optional JSONata function to generate a custom link.
+- **textFormula** - an optional string or item which is displayed as a link.
+
+#### Examples
+
+##### linkFormula and textFormula usage
+
+```json
+{
+  "source": "$item",
+  "name": "spec.servers.port.name",
+  "widget": "ExternalLink",
+  "linkFormula": "'https://' & $item.port.name & ':' & $string($item.port.number)",
+  "textFormula": "$item.port.name"
+}
+```
+
+<img src="./assets/display-widgets/ExternalLink.png" alt="Example of a ExternalLink widget" width="50%" style="border: 1px solid #D2D5D9">
+
+##### Source only
+
+```json
+{
+  "widget": "ExternalLink",
+  "source": "$item.hosts",
+  "name": "spec.servers.hosts"
+}
+```
+
+<img src="./assets/display-widgets/ExternalLink2.png" alt="Example of a ExternalLink widget without linkFormula and textFormula" width="50%" style="border: 1px solid #D2D5D9">
 
 ### JoinedArray
 
@@ -346,7 +388,7 @@ Labels widgets render all the array or object entries in the `value` or `key-val
 }
 ```
 
-<img src="./assets/display-widgets/Labels.png" alt="Example of a Labels widget" width="20%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Labels.png" alt="Example of a Labels widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ### ResourceLink
 
@@ -355,7 +397,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 #### Widget-specific parameters
 
 - **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **data** - value extracted using **source**, or **root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
-- **linkText** - this property has access to **data** and **root**. This makes it possible to insert resource properties into a translation.
+- **linkText** - a JSONata expression resolving a link text, this property has access to **data** and **root**. To insert dynamic parts of translations, use double quotes `Go to {{data.name}}`.
 
 #### Example
 
@@ -365,7 +407,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 {
   "widget": "ResourceLink",
   "source": "metadata.ownerReferences[0]",
-  "linkText": "otherTranslations.linkText",
+  "linkText": "data.status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'",
   "resource": {
     "name": "data.name",
     "namespace": "root.metadata.namespace",
@@ -374,13 +416,14 @@ ResourceLink widgets render internal links to Kubernetes resources.
 }
 ```
 
-<img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ##### _translations_ section
 
 ```yaml
 en:
-  otherTranslations.linkText: Go to {{data.kind}} {{data.name}}.
+  otherTranslations.linkText: 'Go to {{data.kind}} {{data.name}}'
+  otherTranslations.errorLinkText: 'Error in {{data.kind}} {{data.name}}'
 ```
 
 ### Text
@@ -402,7 +445,7 @@ Text widgets render values as a simple text. This is the default behavior for al
 }
 ```
 
-<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="20%" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ## Block widgets
 
@@ -445,7 +488,7 @@ CodeViewer widgets display values using a read-only code editor.
 
 #### Widget-specific parameters
 
-- **language** - used for code highlighting. The editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
+- **language** - a JSONata expression resolving the desired language, used for code highlighting. It has access to the `$root` variable, containing the entire resource. The editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
   If the language is not specified, the editor tries to display the content as `yaml` with a fallback to `json`.
 
 #### Example
@@ -454,7 +497,7 @@ CodeViewer widgets display values using a read-only code editor.
 {
   "source": "spec.json-data",
   "widget": "CodeViewer",
-  "language": "yaml"
+  "language": "$root.spec.language = 'JavaScript' ? 'javascript' : 'yaml'"
 }
 ```
 
@@ -503,8 +546,9 @@ Panel widgets render an object as a separate panel with its own title (based on 
 ```json
 [
   {
-    "name": "details",
+    "name": "Details",
     "widget": "Panel",
+    "description": "To check the extensibility documentation go to the {{[Busola page](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}.",
     "children": [
       { "source": "spec.value" },
       { "source": "spec.other-value", "placeholder": "-" }
@@ -524,6 +568,7 @@ Panel widgets render an object as a separate panel with its own title (based on 
 
 - **header** - an optional array that allows you to, for example, display labels in the panel header.
 - **disablePadding** - an optional boolean which disables the padding inside the panel body.
+- **description** - displays a custom description on the resource list page. It can contain links. If the **translations** section has a translation entry with the ID that is the same as the **description** string, the translation is used.
 
 #### Example
 
@@ -554,11 +599,11 @@ Plain widgets render all contents of an object or list sequentially without any 
 
 ### ResourceList
 
-ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with [related resources](resources.md#datasources-section).
+ResourceList widgets render a list of Kubernetes resources. The ResourceList widgets should be used along with the [related resources](datasources-section.md).
 
 #### Widget-specific parameters
 
-- **children** optional field used to obtain custom columns. If not set, the configuration is reused based on the existing resource list defined in Busola.
+- **children** optional field used to obtain custom columns. If not set, the configuration is reused based on the existing resource list, defined in Busola.
 - **sort** - optional sort option. It's an array of objects that allows you to sort by the value from the given **source**.
   - **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form, it's the path to the value.
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
@@ -648,6 +693,10 @@ Table widgets display array data as rows of a table instead of free-standing com
 #### Widget-specific parameters
 
 - **collapsible** - an optional array of extra widgets to display as an extra collapsible section. Uses the same format as the **children** parameter.
+- **collapsibleTitle** - an optional option for **collapsible** to define title for the collapsible sections, as string or the JSONata function.
+- **disablePadding** - an optional boolean which disables the padding inside the panel body.
+- **showHeader** - an optional boolean which disables displaying the head row.
+- **showSearchField** - an optional boolean which disables displaying the search input.
 - **sort** - optional sort option. If set to `true`, it allows you to sort using this value. Defaults to false. It can also be set to an object with the following properties:
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
   - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
@@ -658,7 +707,8 @@ Table widgets display array data as rows of a table instead of free-standing com
 {
   "source": "spec.toppings",
   "widget": "Table",
-  "collapsible": [{ "source": "$item.quantity" }],
+  "collapsibleTitle": "'Topping #' & $string($index + 1) & (' ' & $join($keys($item), ' '))",
+  "collapsible": [{ "source": "quantity" }],
   "children": [
     { "source": "$item.name", "sort": true },
     {
@@ -670,3 +720,34 @@ Table widgets display array data as rows of a table instead of free-standing com
 ```
 
 <img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
+
+### Tabs
+
+Tabs widgets render the child widgets in multiple tabs.
+
+#### Example
+
+```json
+{
+  "widget": "Tabs",
+  "children": [
+    {
+      "name": "General",
+      "children": [{
+        "widget": "Panel",
+        "name": "Overview",
+        "source": ...
+      }],
+    },
+    {
+      "name": "Resources",
+      "children": [{
+        "widget": "ResourceRefs",
+        "source": ...
+      }]
+    }
+  ]
+}
+```
+
+<img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">

@@ -13,6 +13,7 @@ import { ValidityReporter } from '@ui-schema/ui-schema/ValidityReporter';
 import { validators } from '@ui-schema/ui-schema/Validators/validators';
 
 import { SchemaRulesInjector } from '../plugins/SchemaRulesInjector';
+import { CustomFieldInjector } from '../plugins/CustomFieldInjector';
 import { EnumHandler } from '../plugins/EnumHandler';
 import { VisibilityHandler } from '../plugins/VisibilityHandler';
 
@@ -37,6 +38,7 @@ const pluginStack = [
   DependentHandler,
   ConditionalHandler,
   SchemaRulesInjector,
+  CustomFieldInjector,
   EnumHandler,
   VisibilityHandler,
   PluginSimpleStack,

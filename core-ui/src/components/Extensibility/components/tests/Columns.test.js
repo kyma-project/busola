@@ -3,6 +3,8 @@ import { shallow } from 'enzyme';
 import { Columns } from '../Columns';
 import { Widget } from '../Widget';
 
+jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
+
 describe('Columns', () => {
   it('Renders columns', () => {
     const structure = {

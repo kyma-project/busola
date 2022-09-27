@@ -19,8 +19,8 @@ export function NetworkPolicyList(props) {
   return (
     <ResourcesList
       description={description}
-      createResourceForm={NetworkPolicyCreate}
       {...props}
+      createResourceForm={NetworkPolicyCreate}
     />
   );
 }

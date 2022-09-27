@@ -40,8 +40,8 @@ export function IngressList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={IngressCreate}
       {...props}
+      createResourceForm={IngressCreate}
     />
   );
 }

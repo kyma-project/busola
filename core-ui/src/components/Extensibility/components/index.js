@@ -12,6 +12,8 @@ import { ResourceList } from './ResourceList';
 import { ResourceLink } from './ResourceLink.js';
 import { Labels } from './Labels';
 import { Alert } from './Alert';
+import { ExternalLink } from './ExternalLink';
+import { Tabs } from './Tabs';
 
 import { PendingWrapper } from './PendingWrapper';
 
@@ -31,6 +33,8 @@ export const widgets = {
   ResourceLink,
   Labels,
   Alert,
+  ExternalLink,
+  Tabs,
 };
 
 export const valuePreprocessors = {

@@ -416,7 +416,8 @@ common:
     view-yaml: View YAML
   create-form:
     autocomplete-unavailable-error: Monaco autocompletion unavailable. {{error}}.
-    choose-preset: Choose option
+    choose-preset: Choose preset
+    clear-form: Clear
     editor-error: 'Parse error: {{error}}, previous valid input will be used'
     messages:
       create-failure: 'Failed to create the {{resourceType}}: {{error}}'
@@ -465,8 +466,8 @@ common:
     zone: Zone
   labels:
     category: Category
+    clear-form: Clear
     data: Data
-    default-preset: Default
     hostname: Hostname
     issuer: Issuer
     kubernetes: Kubernetes
@@ -992,8 +993,6 @@ extensibility:
     code-viewer-error: 'CodeViewer: The received resource is in a language other than defined: {{error}}.'
     joined-array:
       error: 'Configuration error: The joined array widget configuration is incorrect. Path value must be an array type.'
-    resource-ref:
-      header: Resource Reference
     table:
       error: The table widget configuration is incorrect. Path value must be an array type.
 functions:

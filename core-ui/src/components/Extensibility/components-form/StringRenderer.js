@@ -18,12 +18,28 @@ export function StringRenderer({
   placeholder,
   ...props
 }) {
-  const { tFromStoreKeys, t: tExt } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt, exists } = useGetTranslation();
   const schemaPlaceholder = schema.get('placeholder');
 
   const getTypeSpecificProps = () => {
     if (schema.get('enum')) {
-      const options = schema.toJS().enum.map(key => ({ key, text: key }));
+      const translationPath = storeKeys
+        .toArray()
+        .filter(el => typeof el === 'string')
+        .join('.');
+
+      let enumOptions = schema.toJS().enum;
+      // if there's only 1 option, it will be not in an array
+      if (typeof enumOptions === 'string') {
+        enumOptions = [enumOptions];
+      }
+
+      const options = enumOptions.map(key => ({
+        key,
+        text: exists(translationPath + '.' + key)
+          ? tExt(translationPath + '.' + key)
+          : key,
+      }));
       return { input: Inputs.ComboboxInput, options };
     } else {
       return { input: Inputs.Text };

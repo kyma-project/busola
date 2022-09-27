@@ -10,6 +10,8 @@ const translations = {
 
 const genericNotFoundMessage = 'components.generic-list.messages.not-found';
 
+jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
+
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str, { defaultValue } = {}) => translations[str] || defaultValue || str,
