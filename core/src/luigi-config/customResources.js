@@ -28,8 +28,11 @@ async function getBuiltinCustomResources() {
   try {
     const response = await fetch('/assets/extensions/extensions.yaml');
     const extensions = jsyaml.loadAll(await response.text());
-    console.log({ extensions });
-    return extensions;
+    if (Array.isArray(extensions)) {
+      return extensions;
+    } else {
+      return [];
+    }
   } catch (e) {
     console.log(e);
   }
@@ -126,7 +129,6 @@ export async function getCustomResources(authData) {
     return customResources[clusterName];
   }
 
-  console.log('ext enabled', features.EXTENSIBILITY?.isEnabled);
   customResources[clusterName] = await getBuiltinCustomResources();
 
   if (features.EXTENSIBILITY?.isEnabled) {
@@ -147,7 +149,6 @@ export async function getCustomResources(authData) {
       ...additionalExtResources,
     ];
   }
-  console.log('custom res', customResources[clusterName]);
   return customResources[clusterName];
 }
 

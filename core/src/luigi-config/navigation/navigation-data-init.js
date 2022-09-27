@@ -228,8 +228,6 @@ export async function createNavigation() {
 
     const customResources = await getCustomResources(authData);
 
-    console.log('feats', await getFeatures());
-
     const optionsForCurrentCluster = {
       contextSwitcher: {
         defaultLabel: 'Select Namespace ...',
