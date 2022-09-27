@@ -1,5 +1,5 @@
 import { useGetPlaceholder } from 'components/Extensibility/helpers';
-import { Link } from 'fundamental-react';
+import { Icon, Link } from 'fundamental-react';
 import { isNil } from 'lodash';
 
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
