@@ -134,7 +134,7 @@ export function Table({
       {...handleTableValue(value, t)}
       sortBy={() => sortBy(sortOptions, tExt, {}, originalResource)}
       searchSettings={{
-        showSearchField: sortOptions.length > 0,
+        showSearchField: searchOptions.length > 0,
         allowSlashShortcut: false,
         textSearchProperties: textSearchProperties(),
       }}
