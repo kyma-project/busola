@@ -8,6 +8,7 @@
 - [Inline widgets](#inline-widgets)
   - [Badge](#badge)
   - [ControlledBy](#controlledby)
+  - [ExternalLink](#externallink)
   - [JoinedArray](#joinedarray)
   - [Labels](#labels)
   - [ResourceLink](#resourcelink)
@@ -312,6 +313,43 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 ```
 
 <img src="./assets/display-widgets/ControlledBy--kindOnly.png" alt="Example of a ControlledBy widget without name link" width="40%" style="border: 1px solid #D2D5D9">
+
+### ExternalLink
+
+ExternalLink widgets render the link to external page.
+
+#### Widget-specific parameters
+
+- **linkFormula** - an optional JSONata function to generate a custom link.
+- **textFormula** - an optional string or item which is displayed as a link.
+
+#### Examples
+
+##### linkFormula and textFormula usage
+
+```json
+{
+  "source": "$item",
+  "name": "spec.servers.port.name",
+  "widget": "ExternalLink",
+  "linkFormula": "'https://' & $item.port.name & ':' & $string($item.port.number)",
+  "textFormula": "$item.port.name"
+}
+```
+
+<img src="./assets/display-widgets/ExternalLink.png" alt="Example of a ExternalLink widget" width="50%" style="border: 1px solid #D2D5D9">
+
+##### Source only
+
+```json
+{
+  "widget": "ExternalLink",
+  "source": "$item.hosts",
+  "name": "spec.servers.hosts"
+}
+```
+
+<img src="./assets/display-widgets/ExternalLink2.png" alt="Example of a ExternalLink widget without linkFormula and textFormula" width="50%" style="border: 1px solid #D2D5D9">
 
 ### JoinedArray
 
