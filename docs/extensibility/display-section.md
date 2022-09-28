@@ -512,8 +512,8 @@ EventsList widget render a list of Events.
 
 #### Widget-specific parameters
 
-- **filterBy** - A JSONata function to filter events.
-- **defaultType** - either `ALL`, `NORMAL` or `WARNING`. When set to `NORMAL` events with `type: normal` are displayed, when set to `WARNING` only events with `type: warning` are displayed. By default all events are fetched.
+- **filterBy** - A JSONata function to filter events. There is a special custom function [matchByResoure](jsonata.md#matchbyresourceitem-kind-name) used to filter events for specific resource, for example, `$matchByResoure($item, $root.kind, $root.metadata.name)`
+- **defaultType** - either `ALL`, `NORMAL` or `WARNING`. When set to `NORMAL` or `WARNING` events with specific type are displayed. By default all events are fetched.
 - **hideInvolvedObjects** - optional flag. If set to `true`, the **Involved Objects** column will be hidden. Defaults to false.
 
 #### Examples

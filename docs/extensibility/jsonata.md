@@ -5,6 +5,7 @@
 - [Overview](#overview)
 - [Preset functions](#preset-functions)
   - [_matchByLabelSelector_](#matchbylabelselectoritem-selectorpath)
+  - [_matchByResoure_](#matchbyresourceitem-kind-name)
   - [_compareStrings_](#comparestringsfirst-second)
 
 ## Overview
@@ -35,6 +36,30 @@ Example from dataSources.
     },
     "filter": "$matchByLabelSelector($item, $root.spec.selector)"
   }
+}
+```
+
+## matchByResource(item, kind, name)
+
+This function can be used to match Events using a resource selector.
+
+### Function parameters
+
+- **item** - Event to be used.
+- **kind** - path to kind from `$root`.
+- **name** - path to name from `$root`.
+
+### Example
+
+Example from dataSources.
+
+```json
+{
+  "widget": "EventsList",
+  "filterBy": "$matchByResoure($item, $root.kind, $root.metadata.name)",
+  "name": "events",
+  "defaultType": "NORMAL",
+  "hideInvolvedObjects": true
 }
 ```
 
