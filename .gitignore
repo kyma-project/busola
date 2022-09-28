@@ -57,3 +57,7 @@ core-ui/public/themes/@sap-theming/*
 
 resources/extensions-patch/builtin-resource-extensions.configmap.yaml
 extensions/downloads/*
+
+# files are present in repo, but the changes are ignored
+extensions/extensions.json
+core/src/assets/extensions.yaml
