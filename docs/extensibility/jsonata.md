@@ -16,7 +16,7 @@ This document describes how to use the preset JSONata functions.
 
 ## matchByLabelSelector(item, selectorPath)
 
-This function can be used to match Pods using a resource selector.
+You can use this function to match Pods using a resource selector.
 
 ### Function parameters
 
@@ -25,18 +25,14 @@ This function can be used to match Pods using a resource selector.
 
 ### Example
 
-Example from dataSources.
+Example from [dataSources](datasources-section.md).
 
-```json
-{
-  "podSelector": {
-    "resource": {
-      "kind": "Pod",
-      "version": "v1"
-    },
-    "filter": "$matchByLabelSelector($item, $root.spec.selector)"
-  }
-}
+```yaml
+- podSelector:
+    resource:
+      kind: Pod
+      version: v1
+    filter: '$matchByLabelSelector($item, $root.spec.selector)'
 ```
 
 ## matchByResource(item, kind, name)
@@ -65,7 +61,7 @@ Example from dataSources.
 
 ## compareStrings(first, second)
 
-This function can be used to sort two strings alphabetically.
+You can use this function to sort two strings alphabetically.
 
 ### Function parameters
 
@@ -74,21 +70,16 @@ This function can be used to sort two strings alphabetically.
 
 ### Example
 
-Example from the ResourceList widget.
+Example from the [ResourceList widget](display-section.md#resourcelist).
 
 #### Examples
 
-```json
-{
-  "widget": "ResourceList",
-  "source": "$myDeployments()",
-  "name": "Example ResourceList Deployments",
-  "sort": [
-    {
-      "source": "$item.spec.strategy.type",
-      "compareFunction": "$compareStrings($second, $first)",
-      "default": true
-    }
-  ]
-}
+```yaml
+- widget: ResourceList
+  source: '$myDeployments()'
+  name: Example ResourceList Deployments
+  sort:
+    - source: '$item.spec.strategy.type'
+      compareFunction: '$compareStrings($second, $first)'
+      default: true
 ```

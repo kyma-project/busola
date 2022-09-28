@@ -1,0 +1,7 @@
+.resource-form .tooltip-column {
+  align-self: center;
+
+  [class*='sap-icon'] {
+    color: var(--sapButton_TextColor);
+  }
+}
