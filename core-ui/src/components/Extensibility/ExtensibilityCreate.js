@@ -91,12 +91,7 @@ export function ExtensibilityCreateCore({
   });
 
   const { simpleRules, advancedRules } = useMemo(() => {
-    const fullSchemaRules = [
-      { path: 'metadata.name', simple: true },
-      { path: 'metadata.labels' },
-      { path: 'metadata.annotations' },
-      ...(createResource?.form ?? []),
-    ];
+    const fullSchemaRules = createResource?.form ?? [];
 
     prepareVars(fullSchemaRules);
     readVars(resource);

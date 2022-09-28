@@ -36,18 +36,15 @@ If you target elements of an array rather than the array itself, you can use the
 
 ### Example
 
-```json
-[
-  { "path": "spec.priority", "simple": true },
-  {
-    "path": "spec.items[]",
-    "children": [
-      { "path": "name", "name": "Item name" },
-      { "path": "service.url" },
-      { "path": "service.port" }
-    ]
-  }
-]
+```yaml
+- path: spec.priority
+  simple: true
+- path: spec.items[]
+  children:
+    - path: name
+      name: Item name
+    - path: service.url
+    - path: service.port
 ```
 
 ## Variable fields
@@ -78,38 +75,29 @@ All JSONata expressions have a few variables that are predefined instead of bein
 
 In the example, the visibility for item price and color are analogous - the former uses scoped variables for the current item, and the latter extracts the value from an array variable using provided index - this is mostly useful for complex scenarios only.
 
-```json
-[
-  {
-    "var": "useDescription",
-    "type": "boolean",
-    "dynamicValue": "$boolean(spec.description)"
-  },
-  { "path": "spec.description", "visibility": "$useDescription" },
-  {
-    "path": "spec.items",
-    "widget": "GenericList",
-    "children": [
-      {
-        "path": "[]",
-        "children": [
-          { "path": "name" },
-          {
-            "var": "itemMode",
-            "type": "string",
-            "enum": ["simple", "verbose"]
-          },
-          { "path": "price", "visibility": "$itemMode = 'verbose'" },
-          {
-            "path": "color",
-            "visibility": "$vars.itemMode[$index] = 'verbose'"
-          },
-          { "path": "description", "visibility": "$useDescription" }
-        ]
-      }
-    ]
-  }
-]
+```yaml
+- var: useDescription
+  type: boolean
+  dynamicValue: '$boolean(spec.description)'
+- path: spec.description
+  visibility: '$useDescription'
+- path: spec.items
+  widget: GenericList
+  children:
+    - path: '[]'
+      children:
+        - path: name
+        - var: itemMode
+          type: string
+          enum:
+            - simple
+            - verbose
+        - path: price
+          visibility: "$itemMode = 'verbose'"
+        - path: color
+          visibility: "$vars.itemMode[$index] = 'verbose'"
+        - path: description
+          visibility: '$useDescription'
 ```
 
 # Form widgets
@@ -167,35 +155,30 @@ Text widgets render a field as a text field. They are used by default for all st
 
 #### Example
 
-```json
-{
-  "path": "spec.my-data",
-  "widget": "Text"
-}
+```yaml
+- path: spec.my-data
+  widget: Text
 ```
 
 <img src="./assets/form-widgets/Text.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
 
 #### Example
 
-```json
-{
-  "path": "protocol",
-  "simple": true,
-  "enum": [
-    "HTTP",
-    "HTTPS",
-    "HTTP2",
-    "GRPC",
-    "GRPC-WEB",
-    "MONGO",
-    "REDIS",
-    "MYSQL",
-    "TCP"
-  ],
-  "description": "Choose a protocol type from the dropdown.",
-  "tooltip": "Specifies which protocol to use for tunneling the downstream connection."
-},
+```yaml
+- path: protocol
+  simple: true
+  enum:
+    - HTTP
+    - HTTPS
+    - HTTP2
+    - GRPC
+    - GRPC-WEB
+    - MONGO
+    - REDIS
+    - MYSQL
+    - TCP
+  description: Choose a protocol type from the dropdown.
+  tooltip: Specifies which protocol to use for tunneling the downstream connection.
 ```
 
 <img src="./assets/form-widgets/Dropdown.png" alt="Example of a dropdown text widget with a tooltip" style="border: 1px solid #D2D5D9">
@@ -214,11 +197,9 @@ Name widgets render a name input field. They contain an automatic name generator
 
 #### Example
 
-```json
-{
-  "path": "spec.my-data",
-  "widget": "Name"
-}
+```yaml
+- path: spec.my-data
+  widget: Name
 ```
 
 <img src="./assets/form-widgets/Name.png" alt="Example of a name widget" style="border: 1px solid #D2D5D9">
@@ -235,16 +216,12 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
 
 #### Example
 
-```json
-{
-  "path": "spec.my-data",
-  "widget": "CodeEditor",
-  "path": "spec.data",
-  "widget": "CodeEditor",
-  "inputInfo": "Data needs to be a valid JSON object.",
-  "description": "Data is passed on to the application.",
-  "language": "'JSON'"
-}
+```yaml
+- path: spec.data
+  widget: CodeEditor
+  inputInfo: Data needs to be a valid JSON object.
+  description: Data is passed on to the application.
+  language: "'JSON'"
 ```
 
 <img src="./assets/form-widgets/CodeEditor.png" alt="Example of a code editor widget" style="border: 1px solid #D2D5D9">
@@ -269,29 +246,21 @@ Resource widgets render a dropdown list of specified resources and store the sel
 
 #### Example
 
-```json
-[
-  {
-    "path": "spec.namespace",
-    "widget": "Resource",
-    "resource": {
-      "scope": "cluster",
-      "kind": "Namespace",
-      "version": "v1"
-    }
-  },
-  {
-    "path": "spec.gateway",
-    "widget": "Resource",
-    "resource": {
-      "kind": "Gateway",
-      "scope": "namespace",
-      "namespace": "kyma-system",
-      "group": "networking.istio.io",
-      "version": "v1alpha3"
-    }
-  }
-]
+```yaml
+- path: spec.namespace
+  widget: Resource
+  resource:
+    scope: cluster
+    kind: Namespace
+    version: v1
+- path: spec.gateway
+  widget: Resource
+  resource:
+    kind: Gateway
+    scope: namespace
+    namespace: kyma-system
+    group: networking.istio.io
+    version: v1alpha3
 ```
 
 <img src="./assets/form-widgets/Resource.png" alt="Example of a Resource widget" style="border: 1px solid #D2D5D9">
@@ -317,14 +286,18 @@ KeyValuePair widgets render an `object` value as a list of fields. One is used f
 
 #### Example
 
-```json
-{
-  "path": "spec.my-data",
-  "widget": "KeyValuePair",
-  "description": "Key and value must start and end with an alphanumeric character.",
-  "tooltip": "Labels are intended to be used to specify identifying attributes of objects that are meaningful and relevant to users, but do not directly imply semantics to the core system.",
-  "keyEnum": ["prefix", "regex", "exact"]
-}
+```yaml
+- path: spec.my-data
+  widget: KeyValuePair
+  description: Key and value must start and end with an alphanumeric character.
+  tooltip: >
+    Labels are intended to be used to specify identifying attributes of objects
+    that are meaningful and relevant to users, but do not directly imply semantics
+    to the core system.
+  keyEnum:
+    - prefix
+    - regex
+    - exact
 ```
 
 <img src="./assets/form-widgets/KeyValue.png" alt="Example of a KeyValuePair widget" style=" border: 1px solid #D2D5D9">
@@ -345,30 +318,28 @@ ResourceRef widgets render two dropdowns to select the associated resources' nam
 
 #### Example
 
-```json
-[
-  {
-    "path": "spec.my-data",
-    "widget": "ResourceRef",
-    "resource": {
-      "kind": "Secret",
-      "version": "v1"
-    },
-    "provideVar": "secret",
-    "children": [{ "path": "key", "enum": "$keys($secret.data)" }]
-  },
-  {
-    "path": "spec.my-gateways",
-    "widget": "ResourceRef",
-    "resource": {
-      "kind": "Gateway",
-      "group": "networking.istio.io",
-      "version": "v1alpha3"
-    },
-    "toInternal": "( $values := $split($, '/'); { 'namespace': $values[0], 'name': $values[1] } )",
-    "toExternal": "namespace & '/' & name"
-  }
-]
+```yaml
+- path: spec.my-data
+  widget: ResourceRef
+  resource:
+    kind: Secret
+    version: v1
+  provideVar: secret
+  children:
+    - path: key
+      enum: '$keys($secret.data)'
+- path: spec.my-gateways
+  widget: ResourceRef
+  resource:
+    kind: Gateway
+    group: networking.istio.io
+    version: v1alpha3
+  toInternal: |
+    (
+      $values := $split($, '/');
+      { 'namespace': $values[0], 'name': $values[1] }
+    )
+  toExternal: namespace & '/' & name
 ```
 
 <img src="./assets/form-widgets/ResourceRef.png" alt="Example of a ResourceRef widget" style="border: 1px solid #D2D5D9">
@@ -387,21 +358,12 @@ FormGroup widgets render an `object` as a collapsible section.
 
 #### Example
 
-```json
-[
-  {
-    "path": "spec.service",
-    "widget": "FormGroup",
-    "children": [
-      {
-        "path": "host"
-      },
-      {
-        "path": "port"
-      }
-    ]
-  }
-]
+```yaml
+- path: spec.service
+  widget: FormGroup
+  children:
+    - path: host
+    - path: port
 ```
 
 <img src="./assets/form-widgets/FormGroup.png" alt="Example of a FormGroup widget" style="border: 1px solid #D2D5D9">
@@ -416,21 +378,12 @@ GenericList widgets render an array as a list of collapsible sections with their
 
 #### Example
 
-```json
-[
-  {
-    "path": "spec.services",
-    "widget": "GenericList",
-    "children": [
-      {
-        "path": "[].host"
-      },
-      {
-        "path": "[].port"
-      }
-    ]
-  }
-]
+```yaml
+- path: spec.services
+  widget: GenericList
+  children:
+    - path: '[].host'
+    - path: '[].port'
 ```
 
 <img src="./assets/form-widgets/GenericList.png" alt="Example of a GenericList widget" style="border: 1px solid #D2D5D9">
@@ -451,23 +404,14 @@ SimpleList widgets render an array as a table with rows representing data items 
 
 #### Example
 
-```json
-[
-  {
-    "path": "spec.services",
-    "widget": "SimpleList",
-    "children": [
-      {
-        "path": "[].host",
-        "placeholder": "Enter the required host"
-      },
-      {
-        "path": "[].port",
-        "placeholder": "Enter the required port"
-      }
-    ]
-  }
-]
+```yaml
+- path: spec.services
+  widget: SimpleList
+  children:
+    - path: '[].host'
+      placeholder: Enter the required host
+    - path: '[].port'
+      placeholder: Enter the required port
 ```
 
 <img src="./assets/form-widgets/SimpleList.png" alt="Example of a SimpleList widget" style="border: 1px solid #D2D5D9">

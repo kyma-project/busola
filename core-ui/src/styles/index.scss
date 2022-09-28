@@ -102,6 +102,11 @@ body {
 
 .fd-dialog {
   z-index: 1000;
+
+  .fd-dialog__content {
+    resize: both;
+  }
+
   .fd-dialog__footer {
     button {
       margin-left: 6px;
