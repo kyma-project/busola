@@ -577,9 +577,7 @@ Table widgets display array data as rows of a table instead of free-standing com
 ```yaml
 - source: spec.toppings
   widget: Table
-  collapsibleTitle:
-    "'Topping #' & $string($index + 1) & (' ' & $join($keys($item),
-    ' '))"
+  collapsibleTitle: "'Topping #' & $string($index + 1) & (' ' & $join($keys($item), ' '))"
   collapsible:
     - source: quantity
   children:
