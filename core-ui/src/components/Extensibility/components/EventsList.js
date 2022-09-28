@@ -5,7 +5,7 @@ import { resources } from 'resources';
 
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { useMessageList } from 'hooks/useMessageList';
+import { useMessageList, EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
@@ -30,6 +30,7 @@ export function EventsList({
   const kind = 'Event';
   const pluralKind = pluralize(kind || '')?.toLowerCase();
 
+  const defaultType = EVENT_MESSAGE_TYPE[structure.defaultType];
   const resourceUrl = namespaceId
     ? `/api/v1/namespaces/${namespaceId}/events`
     : '/api/v1/events';
@@ -120,12 +121,11 @@ export function EventsList({
   }
 
   const {
-    EVENT_MESSAGE_TYPE,
     displayType,
     MessageSelector,
     formatInvolvedObject,
     formatSourceObject,
-  } = useMessageList(structure.defaultType);
+  } = useMessageList(defaultType);
 
   return (
     <ResourcesList

@@ -16,6 +16,7 @@
 - [Block widgets](#block-widgets)
   - [CodeViewer](#codeviewer)
   - [Columns](#columns)
+  - [EventsList](#eventslist)
   - [Panel](#panel)
   - [Plain](#plain)
   - [ResourceList](#resourcelist)
@@ -504,6 +505,43 @@ Columns widgets render the child widgets in multiple columns.
 ```
 
 <img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
+
+### EventsList
+
+EventsList widget render a list of Events.
+
+#### Widget-specific parameters
+
+- **filterBy** - A JSONata function to filter events.
+- **defaultType** - either `ALL`, `NORMAL` or `WARNING`. When set to `NORMAL` events with `type: normal` are displayed, when set to `WARNING` only events with `type: warning` are displayed. By default all events are fetched.
+- **hideInvolvedObjects** - optional flag. If set to `true`, the **Involved Objects** column will be hidden. Defaults to false.
+
+#### Examples
+
+```json
+{
+  "widget": "EventsList",
+  "filterBy": "$matchByResoure($item, $root.kind, $root.metadata.name)",
+  "name": "events",
+  "defaultType": "NORMAL"
+}
+```
+
+<img src="./assets/display-widgets/EventsList.png" alt="Example of a EventsList widget" style="border: 1px solid #D2D5D9">
+
+---
+
+```json
+{
+  "widget": "EventsList",
+  "filterBy": "$matchByResoure($item, $root.kind, $root.metadata.name)",
+  "name": "events",
+  "defaultType": "NORMAL",
+  "hideInvolvedObjects": true
+}
+```
+
+<img src="./assets/display-widgets/EventsListHiddenField.png" alt="Example of a EventsList widget with hidden involved objects" style="border: 1px solid #D2D5D9">
 
 ### Panel
 

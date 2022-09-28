@@ -137,8 +137,8 @@ data:
                   "widget": "EventsList",
                   "filterBy": "$matchByResoure($item, $root.kind, $root.metadata.name)",
                   "name": "events",
-                  "defaultType": { key: 'Warning', text: 'warnings' },
-                  "hideInvolvedObjects": false,
+                  "defaultType": "NORMAL",
+                  "hideInvolvedObjects": true,
                 }
               ]
             },
