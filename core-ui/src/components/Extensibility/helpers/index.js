@@ -309,10 +309,10 @@ const getSearchingFunction = (searchOption, originalResource) => {
           item: entry,
         }) || '';
 
-      if (!search?.searchFormula)
+      if (!search?.searchFunction)
         return isValueMatching(value, input) ? value : null;
 
-      const jsonata = jsonataWrapper(search?.searchFormula);
+      const jsonata = jsonataWrapper(search?.searchFunction);
       jsonata.assign('input', input);
 
       const foundValues = jsonata.evaluate(originalResource ?? entry, {

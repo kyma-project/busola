@@ -41,7 +41,7 @@ const getSearchOptions = structure => {
     const searchOption = {
       source: current.source,
       search: {
-        searchFormula: current.searchFormula,
+        searchFunction: current.searchFunction,
       },
     };
     return [...acc, searchOption];
