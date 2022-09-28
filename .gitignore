@@ -54,6 +54,6 @@ tests/fixtures/kubeconfig-k3s.yaml
 tests/fixtures/sa-kubeconfig.yaml
 
 core-ui/public/themes/@sap-theming/*
-core/src/assets/extensions/extensions.yaml
+
 resources/extensions-patch/builtin-resource-extensions.configmap.yaml
 extensions/downloads/*
