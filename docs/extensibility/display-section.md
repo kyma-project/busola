@@ -407,18 +407,15 @@ Alert widgets display values using predefined types.
 
 #### Example
 
-```json
-{
-  "widget": "Alert",
-  "type": "warning",
-  "alert": "I am some warning for user"
-},
-{
-  "source": "$item.port.number",
-  "widget": "Alert",
-  "alertFormula": "$item = 80  ? 'Using Default 80' : 'Using Different Port then 80'",
-  "disableMargin": true
-},
+```yaml
+- widget: Alert
+  type: warning
+  alert: I am some warning for user
+
+- source: $item.port.number
+  widget: Alert
+  alertFormula: "$item = 80  ? 'Using Default 80' : 'Using Different Port then 80'"
+  disableMargin: true
 ```
 
 ### CodeViewer

@@ -121,18 +121,15 @@ Alert widgets display information for user using predefined types.
 
 #### Example
 
-```json
-{
-  "simple": true,
-  "widget": "Alert",
-  "type": "warning",
-  "alert": "TLS Server of mode SIMPLE or MUTUAL needs either credential name, or private key and server certificate pair.",
-  "visibility": "$item.port.protocol = 'HTTPS'",
-},
-{
-  "widget": "Alert",
-  "alertFormula": "$item = 80  ? 'Using Default 80' : 'Using Different Port then 80'",
-},
+```yaml
+- simple: true
+  widget: Alert
+  type: warning
+  alert: TLS Server of mode SIMPLE or MUTUAL needs either credential name, or private key and server certificate pair.
+  visibility: "$item.port.protocol = 'HTTPS'"
+
+- widget: Alert
+  alertFormula: "$item = 80  ? 'Using Default 80' : 'Using Different Port then 80'"
 ```
 
 <img src="./assets/form-widgets/Alert.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
