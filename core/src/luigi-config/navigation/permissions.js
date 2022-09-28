@@ -115,3 +115,13 @@ export const doesResourceExist = (groupName, resourceName) => {
 
   return doesExists;
 };
+
+export const doesUserHavePermission = (
+  groupName,
+  resourceName,
+  permissionSet,
+) => {
+  console.log(1111, groupName, resourceName, permissionSet);
+
+  // wildcardPermission
+};

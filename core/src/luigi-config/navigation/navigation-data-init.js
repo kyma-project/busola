@@ -48,6 +48,7 @@ import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/pagination';
 import { getFeatures, initFeatures } from '../feature-discovery';
 import * as fetchCache from './../cache/fetch-cache';
 import { handleKubeconfigIdIfPresent } from './../kubeconfig-id';
+import { clusterOpenApi } from './clusterOpenApi';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -347,6 +348,7 @@ export async function createNavigationNodes({
   customResources,
   extensibilitySchemas,
 }) {
+  ////////
   const authData = getAuthData();
   const activeCluster = getActiveCluster();
 

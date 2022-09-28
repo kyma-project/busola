@@ -3,6 +3,7 @@ import {
   hasWildcardPermission,
   hasPermission,
   doesResourceExist,
+  doesUserHavePermission,
 } from './permissions';
 import { clusterOpenApi } from './clusterOpenApi';
 
@@ -22,7 +23,7 @@ export const excludeNavigationNode = (node, groupVersions, permissionSet) => {
     }
   } else if (hasRequiredGroupResource(node)) {
     //used only for Custom Resources node
-    if (isRequiredGroupResourceNotPermitted(node)) {
+    if (isRequiredGroupResourceNotPermitted(node, permissionSet)) {
       markNavNodeToBeDeleted(node);
     }
   }
@@ -80,11 +81,11 @@ const isARequiredFeatureDisabled = node =>
 const hasRequiredGroupResource = node =>
   typeof node.context?.requiredGroupResource === 'object';
 
-const isRequiredGroupResourceNotPermitted = node => {
+const isRequiredGroupResourceNotPermitted = (node, permissionSet) => {
   const { group, resource } = node.context.requiredGroupResource;
 
   const doesExist = doesResourceExist(group, resource);
-
+  const isPermitted = doesUserHavePermission(group, resource, permissionSet);
   console.log(doesExist);
 
   return true;
