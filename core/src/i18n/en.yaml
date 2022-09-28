@@ -407,6 +407,7 @@ common:
     delete: Delete
     edit: Edit
     edit-yaml: Edit YAML
+    generate-name: Generate
     load: Load
     ok: OK
     restart: Restart

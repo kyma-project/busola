@@ -2,6 +2,7 @@
   background: var(--sapNeutralBackground);
   display: flex;
   flex-direction: column;
+  padding-right: 0;
 
   header {
     display: flex;
@@ -21,12 +22,17 @@
     }
   }
 
-  &:last-child > header {
+  &.collapsed:last-child > header {
     border-bottom: 1px solid var(--sapList_GroupHeaderBorderColor);
   }
 
   .content {
-    padding: 16px;
+    padding: {
+      left: 16px;
+      right: 0;
+      top: 16px;
+      bottom: 24px;
+    }
     background: var(--sapPageHeader_Background);
     flex-grow: 1;
 
@@ -40,6 +46,12 @@
       padding-top: 0;
       padding-bottom: 0;
       overflow: hidden;
+    }
+
+    > .collapsible-renderer__grid-wrapper
+      > .resource-form__collapsible-section:first-child,
+    > .resource-form__collapsible-section:first-child {
+      margin-top: -16px;
     }
   }
 
