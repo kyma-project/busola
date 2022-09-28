@@ -23,6 +23,7 @@
     margin-bottom: -16px;
     z-index: 10;
     min-height: 16px;
+    pointer-events: none;
   }
 
   & > .dropdown {
