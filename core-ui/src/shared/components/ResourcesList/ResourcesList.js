@@ -88,8 +88,6 @@ export function ResourcesList(props) {
     return <></>; // wait for the context update
   }
 
-  console.log(props);
-
   return (
     <YamlEditorProvider>
       {!props.isCompact && (
@@ -343,8 +341,10 @@ export function ResourceListRenderer({
         {
           name: t('common.buttons.edit'),
           tooltip: entry =>
-            isProtected(entry) || disableEdit
+            isProtected(entry)
               ? t('common.tooltips.protected-resources-view-yaml')
+              : disableEdit
+              ? t('common.buttons.view-yaml')
               : t('common.buttons.edit'),
           icon: entry =>
             isProtected(entry) || disableEdit ? 'show-edit' : 'edit',
@@ -353,8 +353,10 @@ export function ResourceListRenderer({
         {
           name: t('common.buttons.delete'),
           tooltip: entry =>
-            isProtected(entry) || disableDelete
+            isProtected(entry)
               ? t('common.tooltips.protected-resources-info')
+              : disableDelete
+              ? null
               : t('common.buttons.delete'),
           icon: 'delete',
           disabledHandler: entry => isProtected(entry) || disableDelete,

@@ -16,19 +16,13 @@ import { useGetSchema } from 'hooks/useGetSchema';
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   // const { extensibilitySchemas } = useMicrofrontendContext();
   const { t, widgetT, exists } = useGetTranslation();
-  const { urlPath, resource } = resMetaData?.general ?? {};
+  const { urlPath, resource, disableEdit, disableDelete } =
+    resMetaData?.general ?? {};
   const { schema } = useGetSchema({
     resource,
   });
 
   const detailsProps = usePrepareDetailsProps(urlPath, 'name');
-
-  /* TODO re-enable validation
-  const ajv = new Ajv();
-  if (!ajv.validate(extensibilitySchemas?.details, resMetaData?.details)) {
-    throwConfigError(t('extensibility.configuration-error'), { error: ajv.errors });
-  }
-  */
 
   const resourceName = resMetaData?.general?.name;
   const resourceTitle = exists('name')
@@ -59,6 +53,8 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   return (
     <ResourceDetails
       resourceTitle={resourceTitle}
+      disableEdit={disableEdit}
+      disableDelete={disableDelete}
       customColumns={
         Array.isArray(header)
           ? header.map((def, i) => ({

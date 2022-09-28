@@ -54,6 +54,8 @@ ResourceDetails.propTypes = {
   windowTitle: PropTypes.string,
   resourceGraphConfig: PropTypes.object,
   resourceSchema: PropTypes.object,
+  disableEdit: PropTypes.bool,
+  disableDelete: PropTypes.bool,
 };
 
 ResourceDetails.defaultProps = {
@@ -62,6 +64,8 @@ ResourceDetails.defaultProps = {
   headerActions: null,
   resourceHeaderActions: [],
   readOnly: false,
+  disableEdit: false,
+  disableDelete: false,
 };
 
 export function ResourceDetails(props) {
@@ -149,6 +153,8 @@ function Resource({
   resourceTitle,
   resourceGraphConfig,
   resourceSchema,
+  disableEdit,
+  disableDelete,
 }) {
   useVersionWarning({ resourceUrl, resourceType });
   const { t } = useTranslation();
@@ -196,6 +202,15 @@ function Resource({
             {t('common.buttons.view-yaml')}
           </Button>
         </Tooltip>
+      );
+    } else if (disableEdit) {
+      return (
+        <Button
+          className="fd-margin-end--tiny"
+          onClick={() => openYaml(resource)}
+        >
+          {t('common.buttons.view-yaml')}
+        </Button>
       );
     } else if (!CreateResourceForm || !CreateResourceForm?.allowEdit) {
       return (
@@ -270,7 +285,7 @@ function Resource({
       {resourceHeaderActions.map(resourceAction => resourceAction(resource))}
       {deleteButtonWrapper(
         <Button
-          disabled={protectedResource}
+          disabled={protectedResource || disableDelete}
           onClick={() => handleResourceDelete({ resourceUrl })}
           option="transparent"
           type="negative"
