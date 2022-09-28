@@ -65,9 +65,12 @@ data:
               "widget": "Table",
               "collapsible": [{"name": "Quantity", "source": "$item.quantity" }],
               "children": [
-                { "name": "Name", "source": "$item.name", "sort": true },
+                { "name": "Name", "search": true, "source": "$item.name", "sort": true },
                 { "name": "Price ($)", "source": "$item.price",
-                "sort": { "default": true, "compareFunction": "$second -$first" }
+                "search": {
+                  "searchFunction": "$filter($item.price, function($p){$p > $number($input)})"
+                },
+                "sort": { "default": true, "compareFunction": "$second -$first"}
               }
               ]
             }
@@ -165,9 +168,10 @@ data:
     ]
   list: |-
     [
-      { "name": "Description", "source": "spec.description", "sort": { "compareFunction": "$compareStrings($second, $first)" } },
+      { "name": "Description","search": true,  "source": "spec.description", "sort": { "compareFunction": "$compareStrings($second, $first)" } },
       { "name": "State", "source": "status.messages[-1].state", "widget": "Badge" },
-      { "name": "Toppings price", "source": "$sum(spec.toppings.price)", "sort":{"default": true} }
+      { "name": "Toppings price", "source": "$sum(spec.toppings.price)", "sort":{"default": true},
+      "search": true}
     ]
   dataSources: |-
     {
