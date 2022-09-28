@@ -5,7 +5,7 @@
 - [Overview](#overview)
 - [Preset functions](#preset-functions)
   - [_matchByLabelSelector_](#matchbylabelselectoritem-selectorpath)
-  - [_matchByResoure_](#matchbyresourceitem-kind-name)
+  - [_matchByResource_](#matchbyresourceitem-kind-name)
   - [_compareStrings_](#comparestringsfirst-second)
 
 ## Overview
@@ -56,7 +56,7 @@ Example from dataSources.
 ```json
 {
   "widget": "EventsList",
-  "filterBy": "$matchByResoure($item, $root.kind, $root.metadata.name)",
+  "filterBy": "$matchByResource($item, $root.kind, $root.metadata.name)",
   "name": "events",
   "defaultType": "NORMAL",
   "hideInvolvedObjects": true

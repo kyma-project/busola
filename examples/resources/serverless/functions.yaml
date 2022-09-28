@@ -135,7 +135,7 @@ data:
                   "disableCreate": true
                 }, {
                   "widget": "EventsList",
-                  "filterBy": "$matchByResoure($item, $root.kind, $root.metadata.name)",
+                  "filterBy": "$matchByResource($item, $root.kind, $root.metadata.name)",
                   "name": "events",
                   "defaultType": "NORMAL",
                   "hideInvolvedObjects": true,
