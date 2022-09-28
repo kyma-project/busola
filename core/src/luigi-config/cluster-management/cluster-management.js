@@ -15,6 +15,7 @@ import { clearClusterCache } from '../cache/storage';
 import { isNil } from 'lodash';
 import { DEFAULT_FEATURES } from '../constants';
 import i18next from 'i18next';
+import { clusterOpenApi } from '../navigation/clusterOpenApi';
 
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
@@ -71,6 +72,10 @@ export async function setCluster(clusterName) {
       clusterName,
       params.kubeconfig,
     );
+
+    /////////////// lalalalala
+    // TODO loading
+    await clusterOpenApi.fetch();
 
     if (hasNonOidcAuth(kubeconfigUser)) {
       setAuthData(kubeconfigUser);
@@ -188,6 +193,8 @@ export async function deleteActiveCluster() {
   await deleteCluster(getActiveClusterName());
   await reloadAuth();
   clearAuthData();
+
+  clusterOpenApi.clear(); // TODO any other place where to clear it
   clearK8Version();
   saveActiveClusterName(null);
   Luigi.navigation().navigate('/clusters');

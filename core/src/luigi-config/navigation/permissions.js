@@ -1,6 +1,7 @@
 import rbacRulesMatched from './rbac-rules-matcher';
 import _ from 'lodash';
 import pluralize from 'pluralize';
+import { clusterOpenApi } from './clusterOpenApi';
 
 export function navigationPermissionChecker(
   nodeToCheckPermissionsFor,
@@ -86,3 +87,31 @@ export function hasAnyRoleBound(permissionSet) {
 
   return verbs.some(v => usefulVerbs.includes(v));
 }
+
+export const hasPermission = node => {
+  const resourceList = clusterOpenApi.getResourceNameList;
+
+  console.log(resourceList, node);
+};
+
+export const doesResourceExist = (groupName, resourceName) => {
+  const resourceIdList = clusterOpenApi.getResourceNameList;
+
+  const reversedGroupName = groupName
+    .split('.')
+    .reverse()
+    .join('.');
+  const singularResourceName = pluralize(resourceName, 1);
+  const singularNameRegex = new RegExp(`${singularResourceName}$`, 'i');
+
+  const doesExists = !!resourceIdList.find(resourceId => {
+    return (
+      resourceId.startsWith(reversedGroupName) &&
+      singularNameRegex.test(resourceId)
+    );
+  });
+
+  console.log(resourceIdList, reversedGroupName, singularNameRegex, doesExists);
+
+  return doesExists;
+};

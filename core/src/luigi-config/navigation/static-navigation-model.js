@@ -10,6 +10,8 @@ import { hasPermissionsFor, hasWildcardPermission } from './permissions';
 import { getCustomPaths } from './customPaths';
 import { mergeInExtensibilityNav } from './mergeInExtensibilityNav';
 
+import { excludeNavigationNode } from './excludeNavigationNode';
+
 export const coreUIViewGroupName = '_core_ui_';
 
 async function importJsYaml() {
@@ -1481,6 +1483,7 @@ export function getStaticChildrenNodesForNamespace(
   ];
 
   const allNodes = mergeInExtensibilityNav(nodes, customPaths);
+
   return filterNodesByAvailablePaths(allNodes, groupVersions, permissionSet);
 }
 
@@ -1954,52 +1957,59 @@ function filterNodesByAvailablePaths(nodes, groupVersions, permissionSet) {
         permissionSet,
       );
     }
-
-    checkSingleNode(node, groupVersions, permissionSet);
+    // console.log(111, node);
+    excludeNavigationNode(node, groupVersions, permissionSet);
   }
 
   return nodes.filter(n => !n.toDelete);
 }
-
-function checkSingleNode(node, groupVersions, permissionSet) {
-  if (node.context?.requiredFeatures) {
-    for (const feature of node.context.requiredFeatures || []) {
-      if (!feature || feature.isEnabled === false) {
-        node.toDelete = true;
-        return;
-      }
-    }
-  }
-
-  if (!node.viewUrl || !node.resourceType) {
-    // used for Custom Resources node
-    if (node.context?.requiredGroupResource) {
-      const { group, resource } = node.context.requiredGroupResource;
-      if (!hasPermissionsFor(group, resource, permissionSet)) {
-        node.toDelete = true;
-      }
-    }
-    return;
-  }
-  const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
-  if (!apiPath) return;
-
-  if (hasWildcardPermission(permissionSet)) {
-    // we have '*' in permissions, just check if this resource exists
-    const groupVersion = apiPath
-      .replace(/^\/apis\//, '')
-      .replace(/^\/api\//, '');
-
-    if (!groupVersions.find(g => g.includes(groupVersion))) {
-      node.toDelete = true;
-      return;
-    }
-  } else {
-    // we need to filter through permissions to check the node availability
-    const apiGroup = extractApiGroup(apiPath);
-    if (!hasPermissionsFor(apiGroup, node.resourceType, permissionSet)) {
-      node.toDelete = true;
-      return;
-    }
-  }
-}
+//
+// function checkSingleNode(node, groupVersions, permissionSet) {
+//   // hasWildcardPermissions
+//
+//   //markToBeDeletedIfFeatureDisabledinConfig i.e. extensibility
+//   if (node.context?.requiredFeatures) {
+//     for (const feature of node.context.requiredFeatures || []) {
+//       console.log(11111, feature, node);
+//       if (!feature || feature.isEnabled === false) {
+//         node.toDelete = true;
+//         return;
+//       }
+//     }
+//   }
+//
+//   if (!node.viewUrl || !node.resourceType) {
+//     // does only CustomResource shouldIncludeCustomResource
+//     // console.log('viewUrl', node);
+//     // used for Custom Resources node
+//     if (node.context?.requiredGroupResource) {
+//       const { group, resource } = node.context.requiredGroupResource;
+//       if (!hasPermissionsFor(group, resource, permissionSet)) {
+//         node.toDelete = true;
+//       }
+//     }
+//     return;
+//   }
+//
+//   const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
+//   if (!apiPath) return;
+//   // console.log(apiPath);
+//   if (hasWildcardPermission(permissionSet)) {
+//     // we have '*' in permissions, just check if this resource exists
+//     const groupVersion = apiPath
+//       .replace(/^\/apis\//, '')
+//       .replace(/^\/api\//, '');
+//
+//     if (!groupVersions.find(g => g.includes(groupVersion))) {
+//       node.toDelete = true;
+//       return;
+//     }
+//   } else {
+//     // we need to filter through permissions to check the node availability
+//     const apiGroup = extractApiGroup(apiPath);
+//     if (!hasPermissionsFor(apiGroup, node.resourceType, permissionSet)) {
+//       node.toDelete = true;
+//       return;
+//     }
+//   }
+// }
