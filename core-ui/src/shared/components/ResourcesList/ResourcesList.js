@@ -66,6 +66,8 @@ ResourcesList.propTypes = {
   omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
   resourceUrlPrefix: PropTypes.string,
   disableCreate: PropTypes.bool,
+  disableEdit: PropTypes.bool,
+  disableDelete: PropTypes.bool,
 };
 
 ResourcesList.defaultProps = {
@@ -76,6 +78,8 @@ ResourcesList.defaultProps = {
   listHeaderActions: null,
   readOnly: false,
   disableCreate: false,
+  disableEdit: false,
+  disableDelete: false,
   filterFn: () => true,
 };
 
@@ -83,6 +87,8 @@ export function ResourcesList(props) {
   if (!props.resourceUrl) {
     return <></>; // wait for the context update
   }
+
+  console.log(props);
 
   return (
     <YamlEditorProvider>
@@ -165,6 +171,8 @@ export function ResourceListRenderer({
   resourceUrlPrefix,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate,
+  disableEdit,
+  disableDelete,
   sortBy = {
     name: nameLocaleSort,
     time: timeSort,
@@ -283,7 +291,7 @@ export function ResourceListRenderer({
       resource,
       nameSelector(resource) + '.yaml',
       handleSaveClick(resource),
-      isProtected(resource),
+      isProtected(resource) || disableEdit,
       isProtected(resource),
     );
   };
@@ -335,20 +343,21 @@ export function ResourceListRenderer({
         {
           name: t('common.buttons.edit'),
           tooltip: entry =>
-            isProtected(entry)
+            isProtected(entry) || disableEdit
               ? t('common.tooltips.protected-resources-view-yaml')
               : t('common.buttons.edit'),
-          icon: entry => (isProtected(entry) ? 'show-edit' : 'edit'),
+          icon: entry =>
+            isProtected(entry) || disableEdit ? 'show-edit' : 'edit',
           handler: handleResourceEdit,
         },
         {
           name: t('common.buttons.delete'),
           tooltip: entry =>
-            isProtected(entry)
+            isProtected(entry) || disableDelete
               ? t('common.tooltips.protected-resources-info')
               : t('common.buttons.delete'),
           icon: 'delete',
-          disabledHandler: isProtected,
+          disabledHandler: entry => isProtected(entry) || disableDelete,
           handler: resource => {
             handleResourceDelete({
               resourceUrl: prepareResourceUrl(resourceUrl, resource),
