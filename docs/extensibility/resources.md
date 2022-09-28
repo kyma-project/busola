@@ -44,21 +44,18 @@ The **general** section is required and contains basic information about the res
 
 ### Example
 
-```json
-{
-  "resource": {
-    "kind": "MyResource",
-    "version": "v1alpha3",
-    "group": "networking.istio.io"
-  },
-  "name": "MyResourceName",
-  "category": "My Category",
-  "scope": "namespace",
-  "defaultPlaceholder": "- not set -",
-  "description": "See the {{[docs](https://github.com/kyma-project/busola)}} for more information.",
-  "filter": "$filter(data, function($item) {$item.type = 'Opaque'})",
-  "disableCreate": false
-}
+```yaml
+resource:
+  kind: MyResource
+  version: v1alpha3
+  group: networking.istio.io
+name: MyResourceName
+category: My Category
+scope: namespace
+defaultPlaceholder: '- not set -'
+description: See the {{[docs](https://github.com/kyma-project/busola)}} for more information.
+filter: "$filter(data, function($item) {$item.type = 'Opaque'})"
+disableCreate: false
 ```
 
 ## _form_ section
