@@ -10,47 +10,28 @@ The **presets** section contains a list of objects that define which preset and 
 
 ## Example
 
-```json
-[
-  {
-    "name": "template",
-    "default": true,
-    "value": {
-      "metadata": {
-        "name": "my-name"
-      },
-      "spec": {
-        "description": "A set description"
-      }
-    }
-  },
-  {
-    "name": "preset",
-    "value": {
-      "metadata": {
-        "name": "second-one"
-      },
-      "spec": {
-        "data": "regex",
-        "description": "A different description",
-        "items": [
-          {
-            "name": "item-1",
-            "value": 10
-          },
-          {
-            "name": "item-2",
-            "value": 11
-          },
-          {
-            "name": "item-3",
-            "value": 5
-          }
-        ]
-      }
-    }
-  }
-]
+```yaml
+- name: template
+  default: true
+  value:
+    metadata:
+      name: my-name
+    spec:
+      description: A set description
+- name: preset
+  value:
+    metadata:
+      name: second-one
+    spec:
+      data: regex
+      description: A different description
+      items:
+        - name: item-1
+          value: 10
+        - name: item-2
+          value: 11
+        - name: item-3
+          value: 5
 ```
 
 <img src="./assets/Presets.png" alt="Preset list with one entry defined as default" style="border: 1px solid #D2D5D9">
