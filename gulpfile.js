@@ -162,10 +162,12 @@ data:
     .src('extensions/**/*.yaml')
     .pipe(loadExtensions)
     .pipe(
-      concat('builtin-resource-extensions.configmap.yaml', {
+      concat('extensions.yaml', {
         newLine: '---\n',
       }),
     )
+    .pipe(gulp.dest('core/src/assets/extensions'))
+    .pipe(rename('builtin-resource-extensions.configmap.yaml'))
     .pipe(intoConfigMap)
     .pipe(gulp.dest('resources/extensions-patch/'));
 });

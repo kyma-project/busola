@@ -60,4 +60,4 @@ extensions/downloads/*
 
 # files are present in repo, but the changes are ignored
 extensions/extensions.json
-core/src/assets/extensions.yaml
+core/src/assets/extensions/extensions.yaml

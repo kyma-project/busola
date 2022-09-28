@@ -1,0 +1,10 @@
+# use the name of an image built on a pipeline
+FROM busola
+
+RUN npm run prepare-extensions
+RUN npm run pack-extensions
+
+
+EXPOSE 3001
+ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
+CMD ["node", "backend-production.js"]
