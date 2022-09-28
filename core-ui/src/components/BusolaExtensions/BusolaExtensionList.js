@@ -28,6 +28,9 @@ export function BusolaPluginList(props) {
 
   return (
     <ResourcesList
+      searchSettings={{
+        textSearchProperties: ['metadata.namespace'],
+      }}
       customColumns={customColumns}
       description={description}
       createResourceForm={BusolaExtensionCreate}

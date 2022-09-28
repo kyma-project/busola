@@ -388,11 +388,7 @@ export function ResourceListRenderer({
   ];
 
   const textSearchProperties = () => {
-    const defaultSearchProperties = [
-      'metadata.name',
-      'metadata.namespace',
-      'metadata.labels',
-    ];
+    const defaultSearchProperties = ['metadata.name', 'metadata.labels'];
 
     if (typeof searchSettings?.textSearchProperties === 'function')
       return searchSettings.textSearchProperties(defaultSearchProperties);

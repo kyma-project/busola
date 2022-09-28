@@ -59,6 +59,7 @@ export function CustomResources({
     createResourceForm: props => <CRCreate {...props} crd={crd} />,
     resourceUrlPrefix: `/apis/${group}/${version.name}`,
     searchSettings: {
+      textSearchProperties: ['metadata.namespace'],
       allowSlashShortcut: true,
     },
   };
