@@ -396,6 +396,8 @@ command-palette:
   search:
     remove-ns-context: Remove Namespace context
 common:
+  ariaLabel:
+    new-tab-link: This link will be opened in a new tab.
   buttons:
     add: Add
     add-new: Add New
@@ -549,7 +551,6 @@ common:
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
-    new-tab-link: This link will be opened in a new tab.
     protected-resources-info: To allow for modifying protected resources go to Preferences > Clusters.
     protected-resources-view-yaml: View YAML. To allow for modifying protected resources go to Preferences > Clusters.
     read-file: Read file content as a single value, with file name as a key.

@@ -49,7 +49,7 @@ export const ExternalLink = ({
         glyph="inspect"
         size="s"
         className="fd-margin-begin--tiny"
-        ariaLabel={t('common.tooltips.new-tab-link')}
+        ariaLabel={t('common.ariaLabel.new-tab-link')}
       />
     </Link>
   );
