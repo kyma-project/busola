@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 
 export const Link = ({ url, text, className, children }) => {
+  const { t } = useTranslation;
+
   return (
     <a
       className={className}
@@ -15,7 +18,7 @@ export const Link = ({ url, text, className, children }) => {
         glyph="inspect"
         size="s"
         className="fd-margin-begin--tiny"
-        ariaLabel="This link will be opened in a new tab"
+        ariaLabel={t('common.tooltips.new-tab-link')}
       />
     </a>
   );

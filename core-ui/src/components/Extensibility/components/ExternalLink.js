@@ -1,6 +1,7 @@
 import { useGetPlaceholder } from 'components/Extensibility/helpers';
 import { Icon, Link } from 'fundamental-react';
 import { isNil } from 'lodash';
+import { useTranslation } from 'react-i18next';
 
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
@@ -12,6 +13,7 @@ export const ExternalLink = ({
   ...props
 }) => {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
+  const { t } = useTranslation();
 
   const linkFormula = structure.link;
 
@@ -37,20 +39,18 @@ export const ExternalLink = ({
   if (isNil(value)) return emptyLeafPlaceholder;
 
   return (
-    <p>
-      <Link
-        href={linkFormula ? jsonata(linkFormula) : href}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {value}
-        <Icon
-          glyph="inspect"
-          size="s"
-          className="fd-margin-begin--tiny"
-          ariaLabel="This link will be opened in a new tab"
-        />
-      </Link>
-    </p>
+    <Link
+      href={linkFormula ? jsonata(linkFormula) : href}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {value}
+      <Icon
+        glyph="inspect"
+        size="s"
+        className="fd-margin-begin--tiny"
+        ariaLabel={t('common.tooltips.new-tab-link')}
+      />
+    </Link>
   );
 };
