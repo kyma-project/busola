@@ -24,6 +24,7 @@ spec:
             spec:
               description: Information about our pizza
               type: object
+              required: ['description', 'sauce', 'recipeSecret']
               properties:
                 description:
                   description: Pizza description
@@ -34,11 +35,13 @@ spec:
                   enum:
                     - GARLIC
                     - TOMATO
+                    - WHITE
                 toppings:
                   description: List of toppings for our pizza
                   type: array
                   items:
                     type: object
+                    required: ['name', 'price', 'quantity']
                     properties:
                       name:
                         description: The name of the topping

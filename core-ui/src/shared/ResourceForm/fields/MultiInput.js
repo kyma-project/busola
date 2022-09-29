@@ -32,6 +32,7 @@ export function MultiInput({
   readOnly,
   noEdit,
   newItemAction,
+  inputInfo,
   ...props
 }) {
   const { t } = useTranslation();
@@ -177,7 +178,7 @@ export function MultiInput({
     >
       <div className="fd-row form-field multi-input">
         {!fullWidth && (
-          <div className="fd-col fd-col-md--4">
+          <div className="fd-col fd-col-md--4 form-field__label">
             <ResourceForm.Label
               required={required}
               tooltipContent={tooltipContent}
@@ -200,6 +201,7 @@ export function MultiInput({
                 <Button
                   disabled={readOnly}
                   compact
+                  option="transparent"
                   className={classnames({
                     hidden: isEntryLocked(entry),
                   })}
@@ -214,6 +216,9 @@ export function MultiInput({
               )}
             </li>
           ))}
+          {inputInfo && (
+            <p style={{ color: 'var(--sapNeutralTextColor)' }}>{inputInfo}</p>
+          )}
         </ul>
       </div>
     </ResourceForm.CollapsibleSection>

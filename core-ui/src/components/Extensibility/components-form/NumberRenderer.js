@@ -2,7 +2,10 @@ import React from 'react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import { useGetTranslation } from 'components/Extensibility/helpers';
+import {
+  useGetTranslation,
+  getPropsFromSchema,
+} from 'components/Extensibility/helpers';
 
 export function NumberRenderer({
   onChange,
@@ -12,9 +15,17 @@ export function NumberRenderer({
   storeKeys,
   required,
   compact,
+  placeholder,
   ...props
 }) {
-  const { tFromStoreKeys } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
+
+  const schemaPlaceholder = schema.get('placeholder');
+
+  const numberProps = Object.fromEntries(
+    ['min', 'max'].map(prop => [prop, schema.get(prop)]),
+  );
+
   return (
     <ResourceForm.FormField
       value={value}
@@ -28,9 +39,13 @@ export function NumberRenderer({
           data: { value },
         });
       }}
-      label={tFromStoreKeys(storeKeys)}
+      label={tFromStoreKeys(storeKeys, schema)}
+      placeholder={tExt(schemaPlaceholder) || tExt(placeholder)}
+      data-testid={storeKeys.join('.')}
       input={Inputs.Number}
       compact={compact}
+      {...numberProps}
+      {...getPropsFromSchema(schema, required, tExt)}
     />
   );
 }

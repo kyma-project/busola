@@ -8,7 +8,7 @@ import { Link } from 'shared/components/Link/Link';
 import { DnsProviderCreate } from './DnsProviderCreate';
 
 export function DnsProviderList(props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const customColumns = [
     {
       header: t('dnsproviders.headers.type'),
@@ -22,7 +22,6 @@ export function DnsProviderList(props) {
         <ResourceStatus
           status={dnsprovider.status}
           resourceKind="dnsproviders"
-          i18n={i18n}
         />
       ),
     },
@@ -41,8 +40,8 @@ export function DnsProviderList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={DnsProviderCreate}
       {...props}
+      createResourceForm={DnsProviderCreate}
     />
   );
 }

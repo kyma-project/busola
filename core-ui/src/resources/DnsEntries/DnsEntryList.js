@@ -8,16 +8,12 @@ import { Link } from 'shared/components/Link/Link';
 import { DnsEntryCreate } from './DnsEntryCreate';
 
 export function DnsEntryList(params) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const customColumns = [
     {
       header: t('dnsentries.headers.status'),
       value: dnsentry => (
-        <ResourceStatus
-          status={dnsentry.status}
-          resourceKind="dnsentries"
-          i18n={i18n}
-        />
+        <ResourceStatus status={dnsentry.status} resourceKind="dnsentries" />
       ),
     },
   ];
@@ -35,9 +31,9 @@ export function DnsEntryList(params) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      resourceName={t('dnsentries.title')}
-      createResourceForm={DnsEntryCreate}
+      resourceTitle={t('dnsentries.title')}
       {...params}
+      createResourceForm={DnsEntryCreate}
     />
   );
 }

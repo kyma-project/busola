@@ -37,7 +37,7 @@ export function createRuleTemplate(isNamespaced) {
     apiGroups: [],
     resources: [],
     resourceNames: [],
-    ...(isNamespaced ? { nonResourceURLs: [] } : null),
+    ...(isNamespaced ? null : { nonResourceURLs: [] }),
   };
 }
 
@@ -46,7 +46,7 @@ export function createRolePresets(namespace, translate, groupVersions) {
 
   return [
     {
-      name: translate('common.labels.default-preset'),
+      name: translate('common.labels.clear-form'),
       value: createRoleTemplate(namespace),
     },
     {

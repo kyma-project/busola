@@ -102,6 +102,11 @@ body {
 
 .fd-dialog {
   z-index: 1000;
+
+  .fd-dialog__content {
+    resize: both;
+  }
+
   .fd-dialog__footer {
     button {
       margin-left: 6px;
@@ -426,6 +431,10 @@ input[type='checkbox'] {
   word-wrap: break-word;
 }
 
+.no-padding {
+  padding: 0 !important;
+}
+
 @include graph-node-border(pod, 4);
 @include graph-node-border(virtualservice, 1);
 @include graph-node-border(rolebinding, 2);
@@ -433,7 +442,6 @@ input[type='checkbox'] {
 @include graph-node-border(configmap, 5);
 @include graph-node-border(cronjob, 2);
 @include graph-node-border(function, 2);
-@include graph-node-border(gateway, 1, Light1);
 @include graph-node-border(horizontalpodautoscaler, 6);
 @include graph-node-border(job, 1);
 @include graph-node-border(oauth2client, 1);

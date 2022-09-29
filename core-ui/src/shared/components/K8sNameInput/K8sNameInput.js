@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
-import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { FormLabel, FormInput } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { useValidation } from 'shared/hooks/useValidation';
 
-export const k8sNamePattern = '^[a-z0-9]([-a-z0-9]*[a-z0-9])?$';
+export const k8sNamePattern = '^[a-z0-9]([-.a-z0-9]*[a-z0-9])?$';
 
 export const K8sNameInput = ({
   _ref,
@@ -18,14 +17,13 @@ export const K8sNameInput = ({
   label = 'common.labels.name',
   required = true,
   defaultValue,
-  i18n,
   value,
   onChange,
   inputRef,
   pattern = k8sNamePattern,
   ...props
 }) => {
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation();
   const validationProps = useValidation({
     inputRef,
     onChange,
@@ -62,11 +60,7 @@ export const K8sNameInput = ({
           {t(label)}
         </FormLabel>
       )}
-      {showHelp ? (
-        <Tooltip content={t('common.tooltips.k8s-name-input')}>{input}</Tooltip>
-      ) : (
-        input
-      )}
+      {input}
     </>
   );
 };

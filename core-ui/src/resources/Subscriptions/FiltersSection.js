@@ -42,6 +42,7 @@ function SingleFilterInputs({ filter, setFilter }) {
         input={Inputs.Text}
         placeholder={t('subscriptions.create.placeholders.event-type')}
         tooltipContent={t('subscriptions.tooltips.event-type-advanced')}
+        inputInfo={t('subscriptions.tooltips.event-type-advanced-info')}
         validate={value => !validateMessage(value)}
         validateMessage={validateMessage}
       />

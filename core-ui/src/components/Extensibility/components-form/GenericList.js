@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
+import pluralize from 'pluralize';
 
 export function GenericList({
   storeKeys,
@@ -18,9 +19,11 @@ export function GenericList({
   ...props
 }) {
   const { t } = useTranslation();
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
   const { store } = useUIStore();
   const { value } = store?.extractValues(storeKeys) || {};
   const listSize = value?.size || 0;
+  const schemaPlaceholder = schema.get('placeholder');
 
   const addItem = () => {
     onChange({
@@ -43,16 +46,16 @@ export function GenericList({
     });
   };
 
-  const { tFromStoreKeys } = useGetTranslation();
-
   return (
     <ResourceForm.CollapsibleSection
       container
-      title={tFromStoreKeys(storeKeys)}
+      title={tFromStoreKeys(storeKeys, schema)}
       actions={setOpen => (
         <Button
-          glyph="add"
           compact
+          option="transparent"
+          glyph="add"
+          iconBeforeText
           onClick={() => {
             addItem();
             setOpen(true);
@@ -71,10 +74,11 @@ export function GenericList({
           const itemsSchema = schema.get('items');
           return (
             <ResourceForm.CollapsibleSection
-              title={tFromStoreKeys(ownKeys)}
+              title={pluralize(tFromStoreKeys(ownKeys, schema), 1)}
               actions={
                 <Button
                   compact
+                  option="transparent"
                   glyph="delete"
                   type="negative"
                   onClick={() => removeItem(index)}
@@ -89,6 +93,7 @@ export function GenericList({
                 storeKeys={ownKeys}
                 level={level + 1}
                 schemaKeys={schemaKeys?.push('items')}
+                placeholder={tExt(schemaPlaceholder)}
               />
             </ResourceForm.CollapsibleSection>
           );

@@ -11,34 +11,28 @@ export const resourceGraphConfig = (t, context) => ({
   networkFlowLevel: -2,
   relations: [
     {
-      kind: 'APIRule',
-    },
-    {
-      kind: 'Gateway',
-      clusterwide: true,
-    },
-    {
-      kind: 'Service',
-    },
-  ],
-  matchers: {
-    Gateway: (vs, gateway) =>
-      vs.spec.gateways.some(g => {
-        const [name, namespace] = g.split('.');
-        return (
-          name === gateway.metadata.name &&
-          namespace === gateway.metadata.namespace
-        );
-      }),
-    Service: (vs, service) =>
-      vs.spec.http.some(h =>
-        h.route.some(r => {
-          const [name, namespace] = r.destination?.host.split('.');
+      resource: { kind: 'Gateway', namespace: null },
+      filter: (vs, gateway) =>
+        vs.spec.gateways.some(g => {
+          const [name, namespace] = g.split('.');
           return (
-            name === service.metadata.name &&
-            namespace === service.metadata.namespace
+            name === gateway.metadata.name &&
+            namespace === gateway.metadata.namespace
           );
         }),
-      ),
-  },
+    },
+    {
+      resource: { kind: 'Service' },
+      filter: (vs, service) =>
+        vs.spec.http.some(h =>
+          h.route.some(r => {
+            const [name, namespace] = r.destination?.host.split('.');
+            return (
+              name === service.metadata.name &&
+              namespace === service.metadata.namespace
+            );
+          }),
+        ),
+    },
+  ],
 });

@@ -5,7 +5,6 @@ import * as _ from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import { K8sNameField, KeyValueField } from 'shared/ResourceForm/fields';
 import {
   SimpleContainersView,
   AdvancedContainersView,
@@ -58,25 +57,8 @@ export function ReplicaSetCreate({
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       initialResource={initialReplicaSet}
+      handleNameChange={handleNameChange}
     >
-      <K8sNameField
-        propertyPath="$.metadata.name"
-        kind={t('replica-sets.name_singular')}
-        setValue={handleNameChange}
-        readOnly={!!initialReplicaSet}
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.labels"
-        title={t('common.headers.labels')}
-        className="fd-margin-top--sm"
-      />
-      <KeyValueField
-        advanced
-        propertyPath="$.metadata.annotations"
-        title={t('common.headers.annotations')}
-      />
-
       <ResourceForm.FormField
         required
         propertyPath="$.spec.replicas"

@@ -40,11 +40,11 @@ export function SubscriptionList(props) {
 
   return (
     <ResourcesList
-      resourceName={t('subscriptions.title')}
+      resourceTitle={t('subscriptions.title')}
       customColumns={customColumns}
       description={description}
-      createResourceForm={SubscriptionCreate}
       {...props}
+      createResourceForm={SubscriptionCreate}
     />
   );
 }

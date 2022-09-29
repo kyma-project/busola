@@ -12,9 +12,8 @@ export default function CreateVariable({
   configmaps,
   customVariables,
   customValueFromVariables,
-  injectedVariables,
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const addNewVariableButton = (
     <Button glyph="add" typeAttr="button">
@@ -24,11 +23,10 @@ export default function CreateVariable({
   const [currentModal, setCurrentModal] = useState();
 
   const commonProps = {
-    func: func,
+    func,
     confirmText: t('common.buttons.create'),
-    customVariables: customVariables,
-    customValueFromVariables: customValueFromVariables,
-    injectedVariables: injectedVariables,
+    customVariables,
+    customValueFromVariables,
     onModalOpenStateChange: state => {
       if (!state) setCurrentModal();
     },
@@ -54,7 +52,7 @@ export default function CreateVariable({
   };
   function openModalWithProps(props) {
     LuigiClient.uxManager().addBackdrop();
-    setCurrentModal(<VariableModal {...props} {...commonProps} i18n={i18n} />);
+    setCurrentModal(<VariableModal {...props} {...commonProps} />);
   }
 
   return (

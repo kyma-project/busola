@@ -13,18 +13,7 @@ context('Test Events', () => {
       .click();
 
     cy.getIframeBody()
-      .find('tbody tr')
-      .its('length')
-      .should('be.gte', 1);
-
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="search-input"]')
-      .type(Cypress.env('NAMESPACE_NAME'), {
-        force: true,
-      });
-
-    cy.getIframeBody()
-      .find('a[data-testid="details-link"]:visible', { log: false })
+      .find('td a')
       .first()
       .click({ force: true });
   });

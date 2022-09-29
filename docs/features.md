@@ -15,26 +15,9 @@ If the stage is not set, the feature is loaded only on-demand, most often by the
 
 Note that some features must be run before the application starts the bootstrap process (for example, SSO_LOGIN), so they are out of the normal feature flow.
 
-#### The features list
+#### Features list
 
 > **TIP:** The list is ordered alphabetically.
-
-- **ADDONS** – is used to show or hide the **Addons** view and to define which APIs are required for the view to be shown properly.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```json
-  "ADDONS": {
-    "isEnabled": true,
-    "selectors": [
-      {
-        "type": "apiGroup",
-        "apiGroup": "addons.kyma-project.io"
-      }
-    ]
-  },
-  ```
 
 - **API_GATEWAY** – is used to show or hide the **API Gateway** view and to define which APIs are required for the view to be shown properly.
   It is also used to determine if the **API Gateway** list should be displayed in the **Function** and **Service** details.
@@ -88,7 +71,7 @@ Note that some features must be run before the application starts the bootstrap 
   },
   ```
 
-- **CUSTOM_DOMAINS** – is used to show or hide the **DNS Entry**, **DNS Provider**, **Gateway**, **Issuer**, and **Certificate** views.
+- **CUSTOM_DOMAINS** – is used to show or hide the **DNSEntry**, **DNSProvider**, **Gateway**, **Issuer**, and **Certificate** views.
   For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
   Default settings:
@@ -106,7 +89,7 @@ Note that some features must be run before the application starts the bootstrap 
   ```
 
 - **EVENTING** – is used to show or hide the **Eventing** view and to define which APIs are required for the view to be shown properly.
-  It is also used to determine if the **Event Subscriptions** should be displayed in **Function** and **Service** details.
+  It is also used to determine if the **EventSubscriptions** should be displayed in **Function** and **Service** details.
   For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
   Default settings:
@@ -157,6 +140,44 @@ Note that some features must be run before the application starts the bootstrap 
   }
   ```
 
+* **GZIP** – is used to indicate whether a response from the backend server should be compressed or not.
+
+> **NOTE:** It's a backend feature, so it cannot be modified at the cluster's ConfigMap level.
+
+Default settings:
+
+```json
+"GZIP": {
+  "isEnabled": true,
+}
+```
+
+- **HIDDEN_NAMESPACES** – is used to define a list of Namespaces that are considered system, and are hidden by default.
+
+Default settings:
+
+```bash
+"HIDDEN_NAMESPACES": {
+  "isEnabled": true,
+  "config": {
+    "namespaces": [
+      "compass-system",
+      "istio-system",
+      "knative-eventing",
+      "knative-serving",
+      "kube-system",
+      "kyma-backup",
+      "kyma-installer",
+      "kyma-integration",
+      "kyma-system",
+      "natss",
+      "kube-node-lease",
+      "serverless-system"
+    ]
+  }
+}
+```
+
 - **ISTIO** - is used to show or hide the Istio-related views and to define which APIs are required for the views to be shown properly.
   For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 
@@ -176,7 +197,7 @@ Note that some features must be run before the application starts the bootstrap 
 
 - **JWT_CHECK_CONFIG** – is used to configure data necessary for the backend authentication, such as an issuer and JWKS (JSON Web Key Set) address. When the feature is disabled no authentication occurs on backend side.
 
-  Backend feature. Cannot be modified at the cluster's Config Map level.
+  Backend feature. Cannot be modified at the cluster's ConfigMap level.
 
   Default settings:
 
@@ -187,44 +208,6 @@ Note that some features must be run before the application starts the bootstrap 
       "issuer": "https://apskyxzcl.accounts400.ondemand.com",
       "jwksUri": "https://apskyxzcl.accounts400.ondemand.com/oauth2/certs"
     }
-  }
-  ```
-
-- **HIDDEN_NAMESPACES** – is used to define a list of Namespace names that are considered system, and are hidden by default.
-
-  Default settings:
-
-  ```bash
-  "HIDDEN_NAMESPACES": {
-    "isEnabled": true,
-    "config": {
-      "namespaces": [
-        "compass-system",
-        "istio-system",
-        "knative-eventing",
-        "knative-serving",
-        "kube-system",
-        "kyma-backup",
-        "kyma-installer",
-        "kyma-integration",
-        "kyma-system",
-        "natss",
-        "kube-node-lease",
-        "serverless-system"
-      ]
-    }
-  }
-  ```
-
-* **GZIP** – is used to indicate whether the response from the backend server should be compressed or not.
-
-  Backend feature. Cannot be modified at the cluster's Config Map level.
-
-  Default settings:
-
-  ```json
-  "GZIP": {
-    "isEnabled": true,
   }
   ```
 
@@ -304,11 +287,12 @@ Note that some features must be run before the application starts the bootstrap 
   ```
 
 * **PROTECTED_RESOURCES** – is used to block the edit and delete functions based on the determined rules. If the resource meets the rule requirements, the resource becomes protected and cannot be edited/deleted.
+
   Each resource requires the **match** field, which includes a list of key-value pairs. The proper rule description is when the definition given in the key matches the value.
 
   To switch comparison mode from **standard** to **regex**, set the **regex** parameter to `true`.
 
-  Optionally, you can provide the **message** parameter, which displays a simple message, or **messageSrc**, which is a yaml path where the message to be displayed is included. If neither **message** nor **messageSrc** is provided, a generic message is used.
+  Optionally, you can provide the **message** parameter, which displays a simple message, or **messageSrc**, which is a YAML path where the message to be displayed is included. If neither **message** nor **messageSrc** is provided, a generic message is used.
 
   Example:
 
@@ -381,43 +365,15 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-  > NOTE: Both **SERVICE_CATALOG** and **SERVICE_CATALOG_ADDONS** features are used to determine if **Service Bindings** (in the **Configuration** tab) and environment variables injected by **Service Bindings** (in the **Code** Tab) are displayed in the **Functions** view.
-
-- **SERVICE_CATALOG** – is used to show or hide the **Service Catalog** views (**Catalog**, **Instances**, and **Brokers**) and to define which APIs are required for the view to be shown properly.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
+- **SHOW_GARDENER_METADATA** - determines if the metadata taken from Gardener should be displayed. The displayed information is the value from the `shoot-info` ConfigMap based on the `kube-system` Namespace. If the ConfigMap doesn't exist, the information is not displayed.
 
   ```json
-  "SERVICE_CATALOG": {
-    "isEnabled": true,
-    "selectors": [
-      {
-        "type": "apiGroup",
-        "apiGroup": "servicecatalog.k8s.io"
-      }
-    ]
+  "SHOW_GARDENER_METADATA": {
+    "isEnabled": true
   },
   ```
 
-- **SERVICE_CATALOG_ADDONS** – is used to show or hide the **Service Catalog Addons** view and to define which APIs are required for the view to be shown properly.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```json
-  "SERVICE_CATALOG_ADDONS": {
-    "isEnabled": true,
-    "selectors": [
-      {
-        "type": "apiGroup",
-        "apiGroup": "servicecatalog.kyma-project.io"
-      }
-    ]
-  },
-  ```
-
-- **SHOW_KYMA_VERSION** – determines if the Kyma version should be visible on the Cluster Details page. The displayed version is the value of the `reconciler.kyma-project.io/origin-version` label in the `kyma-system` Namespace. If the value of the label is missing or there is no `kyma-system` Namespace, the `Unknown` version will be displayed.
+- **SHOW_KYMA_VERSION** – determines if the Kyma version should be visible on the **Cluster Details** page. The displayed version is the value of the `reconciler.kyma-project.io/origin-version` label in the `kyma-system` Namespace. If the value of the label is missing or there is no `kyma-system` Namespace, the information is not displayed.
 
   ```json
   "SHOW_KYMA_VERSION": {
@@ -425,7 +381,7 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-- **SSO_LOGIN** – is used to configure data necessary for the SSO login such as an issuer address, client’s ID, client’s Secret and scopes. If `clientSecret` is omitted, a public client is used. This feature is out of standard features flow, so it will run immediately.
+- **SSO_LOGIN** – is used to configure data necessary for the SSO login such as an issuer address, client’s ID, client’s Secret and scopes. If `clientSecret` is omitted, a public client is used. This feature is out of standard features flow, so it runs immediately.
 
   ```json
   "SSO_LOGIN": {
@@ -447,7 +403,9 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   },
   ```
 
-- **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at a resource details view.
+  > NOTE: Enable this feature on the frontend and backend.
+
+* **VISUAL_RESOURCES** – determines if the resource graphs should be rendered at the resource details view.
 
   ```json
   "VISUAL_RESOURCES": {

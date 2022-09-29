@@ -13,24 +13,13 @@ function matchByTlsCredentials(gateway, secret) {
 }
 
 export const resourceGraphConfig = (t, context) => ({
+  depth: 1,
   networkFlowKind: true,
+  networkFlowLevel: -3,
   relations: [
     {
-      kind: 'APIRule',
-      clusterwide: true,
-    },
-    {
-      kind: 'Secret',
-      clusterwide: true,
-    },
-    {
-      kind: 'VirtualService',
-      clusterwide: true,
+      resource: { kind: 'Secret', namespace: null },
+      filter: (gateway, secret) => matchByTlsCredentials(secret, gateway),
     },
   ],
-  depth: 1,
-  networkFlowLevel: -3,
-  matchers: {
-    Secret: (gateway, secret) => matchByTlsCredentials(secret, gateway),
-  },
 });

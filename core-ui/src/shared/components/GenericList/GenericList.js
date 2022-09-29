@@ -22,6 +22,7 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import { SortModalPanel } from './SortModalPanel';
+import { isEmpty } from 'lodash';
 import './GenericList.scss';
 
 const defaultSort = {
@@ -29,37 +30,36 @@ const defaultSort = {
   time: timeSort,
 };
 
+const defaultSearch = {
+  showSearchField: true,
+  textSearchProperties: ['name', 'description'],
+  showSearchControl: true,
+  showSearchSuggestion: true,
+  allowSlashShortcut: true,
+  noSearchResultMessage: 'components.generic-list.messages.no-search-results',
+};
+
 export const GenericList = ({
-  entries = [],
-  entriesKind,
+  entries,
   actions,
+  extraHeaderContent,
   title,
   headerRenderer,
   rowRenderer,
-  notFoundMessage,
-  noSearchResultMessage,
-  serverErrorMessage,
-  extraHeaderContent,
-  showSearchField,
-  textSearchProperties,
-  showSearchSuggestion,
-  showSearchControl,
-  actionsStandaloneItems,
   testid,
-  showRootHeader,
   showHeader,
   serverDataError,
   serverDataLoading,
-  disableMargin,
   pagination,
   compact,
   className,
   currentlyEditedResourceUID,
-  i18n,
-  allowSlashShortcut,
   sortBy,
-  genericErrorMessage,
+  notFoundMessage,
+  searchSettings,
 }) => {
+  searchSettings = { ...defaultSearch, ...searchSettings };
+
   if (typeof sortBy === 'function') sortBy = sortBy(defaultSort);
 
   const [sort, setSort] = useState({
@@ -68,7 +68,8 @@ export const GenericList = ({
   });
 
   const sorting = (sort, resources) => {
-    if (!sortBy) return resources;
+    if (!sortBy || isEmpty(sortBy)) return resources;
+
     const sortFunction = Object.entries(sortBy).filter(([name]) => {
       return name === sort.name;
     })[0][1];
@@ -85,7 +86,7 @@ export const GenericList = ({
       pagination.itemsPerPage || settings?.pagination?.pageSize;
   }
 
-  const { t } = useTranslation(null, { i18n });
+  const { t } = useTranslation();
   const [currentPage, setCurrentPage] = React.useState(
     pagination?.initialPage || 1,
   );
@@ -103,7 +104,11 @@ export const GenericList = ({
       }
     }
     setFilteredEntries(
-      filterEntries(sorting(sort, entries), searchQuery, textSearchProperties),
+      filterEntries(
+        sorting(sort, entries),
+        searchQuery,
+        searchSettings?.textSearchProperties,
+      ),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -118,26 +123,24 @@ export const GenericList = ({
 
   const headerActions = (
     <>
-      {showSearchField && (
+      {searchSettings?.showSearchField && (
         <SearchInput
-          entriesKind={entriesKind || title || ''}
+          entriesKind={title || ''}
           searchQuery={searchQuery}
           filteredEntries={filteredEntries}
           handleQueryChange={setSearchQuery}
-          suggestionProperties={textSearchProperties}
-          showSuggestion={showSearchSuggestion}
-          showSearchControl={showSearchControl}
+          suggestionProperties={searchSettings?.textSearchProperties}
+          showSuggestion={searchSettings?.showSearchSuggestion}
+          showSearchControl={searchSettings?.showSearchControl}
+          allowSlashShortcut={searchSettings?.allowSlashShortcut}
           disabled={!entries.length}
-          i18n={i18n}
-          allowSlashShortcut={allowSlashShortcut}
         />
       )}
-      {sortBy && (
+      {sortBy && !isEmpty(sortBy) && (
         <SortModalPanel
           sortBy={sortBy}
           sort={sort}
           setSort={setSort}
-          t={t}
           disabled={!entries.length}
         />
       )}
@@ -149,11 +152,7 @@ export const GenericList = ({
     if (serverDataError) {
       return (
         <BodyFallback>
-          <p>
-            {serverErrorMessage
-              ? serverErrorMessage
-              : getErrorMessage(serverDataError)}
-          </p>
+          <p>{getErrorMessage(serverDataError)}</p>
         </BodyFallback>
       );
     }
@@ -165,18 +164,20 @@ export const GenericList = ({
         </BodyFallback>
       );
     }
-
     if (!filteredEntries.length) {
       if (searchQuery) {
         return (
           <BodyFallback>
-            <p>{t(noSearchResultMessage)}</p>
+            <p>
+              {t(searchSettings.noSearchResultMessage) ||
+                searchSettings.noSearchResultMessage}
+            </p>
           </BodyFallback>
         );
       }
       return (
         <BodyFallback>
-          <p>{genericErrorMessage || t(notFoundMessage)}</p>
+          <p>{t(notFoundMessage) || notFoundMessage}</p>
         </BodyFallback>
       );
     }
@@ -191,10 +192,10 @@ export const GenericList = ({
 
     return pagedItems.map((e, index) => (
       <RowRenderer
+        index={index}
         key={e.metadata?.uid || e.name || e.metadata?.name || index}
         entry={e}
         actions={actions}
-        actionsStandaloneItems={actionsStandaloneItems}
         rowRenderer={rowRenderer}
         compact={compact}
         isBeingEdited={
@@ -213,19 +214,17 @@ export const GenericList = ({
   const panelClassNames = classnames(
     'generic-list',
     {
-      'fd-margin--md': !disableMargin,
+      'fd-margin--md': !className?.includes('fd-margin'),
     },
     className,
   );
 
   return (
     <LayoutPanel className={panelClassNames} data-testid={testid}>
-      {showRootHeader && (
-        <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
-          <LayoutPanel.Head title={title} />
-          <LayoutPanel.Actions>{headerActions}</LayoutPanel.Actions>
-        </LayoutPanel.Header>
-      )}
+      <LayoutPanel.Header className="fd-has-padding-left-small fd-has-padding-right-small">
+        <LayoutPanel.Head title={title} />
+        <LayoutPanel.Actions>{headerActions}</LayoutPanel.Actions>
+      </LayoutPanel.Header>
 
       <LayoutPanel.Body className="fd-has-padding-none">
         <table className={tableClassNames}>
@@ -267,20 +266,8 @@ const PaginationProps = PropTypes.shape({
   autoHide: PropTypes.bool,
 });
 
-GenericList.propTypes = {
-  title: PropTypes.string,
-  entriesKind: PropTypes.string,
-  entries: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
-  ).isRequired,
-  headerRenderer: PropTypes.func.isRequired,
-  rowRenderer: PropTypes.func.isRequired,
-  actions: CustomPropTypes.listActions,
-  extraHeaderContent: PropTypes.node,
+const SearchProps = PropTypes.shape({
   showSearchField: PropTypes.bool,
-  notFoundMessage: PropTypes.string,
-  noSearchResultMessage: PropTypes.string,
-  serverErrorMessage: PropTypes.string,
   textSearchProperties: PropTypes.arrayOf(
     PropTypes.oneOfType([
       PropTypes.string.isRequired,
@@ -289,33 +276,39 @@ GenericList.propTypes = {
   ),
   showSearchSuggestion: PropTypes.bool,
   showSearchControl: PropTypes.bool,
-  actionsStandaloneItems: PropTypes.number,
+  allowSlashShortcut: PropTypes.bool,
+  noSearchResultMessage: PropTypes.string,
+});
+
+GenericList.propTypes = {
+  title: PropTypes.string,
+  entries: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  ).isRequired,
+  headerRenderer: PropTypes.func.isRequired,
+  rowRenderer: PropTypes.func.isRequired,
+  actions: CustomPropTypes.listActions,
+  extraHeaderContent: PropTypes.node,
   testid: PropTypes.string,
-  showRootHeader: PropTypes.bool,
   showHeader: PropTypes.bool,
   serverDataError: PropTypes.any,
   serverDataLoading: PropTypes.bool,
-  disableMargin: PropTypes.bool,
   pagination: PaginationProps,
   compact: PropTypes.bool,
   className: PropTypes.string,
   currentlyEditedResourceUID: PropTypes.string,
-  genericErrorMessage: PropTypes.string,
+  sortBy: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+  notFoundMessage: PropTypes.string,
+  searchSettings: SearchProps,
 };
 
 GenericList.defaultProps = {
-  notFoundMessage: 'components.generic-list.messages.not-found',
-  noSearchResultMessage: 'components.generic-list.messages.no-search-results',
+  entries: [],
   actions: [],
-  textSearchProperties: ['name', 'description'],
-  showSearchField: true,
-  showSearchControl: true,
-  showRootHeader: true,
   showHeader: true,
-  showSearchSuggestion: true,
   serverDataError: null,
   serverDataLoading: false,
-  disableMargin: false,
   compact: true,
-  genericErrorMessage: null,
+  notFoundMessage: 'components.generic-list.messages.not-found',
+  searchSettings: defaultSearch,
 };

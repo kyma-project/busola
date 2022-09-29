@@ -1,13 +1,16 @@
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { useRelationsContext } from '../contexts/RelationsContext';
+
+import { DataSourcesContext } from '../contexts/DataSources';
 import { Widget } from './Widget';
 
 // receives { data, loading, error }, displays loading or error state and passes the value down
 export function PendingWrapper({ value, ...props }) {
   const { t } = useTranslation();
 
-  const { getRelatedResourceInPath } = useRelationsContext();
+  const { getRelatedResourceInPath } = useContext(DataSourcesContext);
 
   if (typeof value !== 'object') {
     return value ?? null;

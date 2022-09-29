@@ -33,9 +33,9 @@ export function VirtualServiceList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      resourceName={t('virtualservices.title')}
-      createResourceForm={VirtualServiceCreate}
+      resourceTitle={t('virtualservices.title')}
       {...props}
+      createResourceForm={VirtualServiceCreate}
     />
   );
 }

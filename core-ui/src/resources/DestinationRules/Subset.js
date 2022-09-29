@@ -27,7 +27,7 @@ export const Subset = destinationRule => {
           <FormItem>
             <FormLabel>{t('common.headers.labels')}</FormLabel>
             <Tokens
-              tokens={Object.entries(subset.labels)
+              tokens={Object.entries(subset?.labels || {})
                 .filter(el => el)
                 .map(([key, value]) => `${key}: ${value}`)}
             />

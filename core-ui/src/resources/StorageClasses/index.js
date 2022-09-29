@@ -7,23 +7,13 @@ export const List = React.lazy(() => import('./StorageClassList'));
 export const Details = React.lazy(() => import('./StorageClassDetails'));
 
 export const resourceGraphConfig = (t, context) => ({
+  networkFlowLevel: 2,
   relations: [
     {
-      kind: 'PersistentVolume',
-      clusterwide: true,
-    },
-    {
-      kind: 'PersistentVolumeClaim',
-      clusterwide: true,
-    },
-    {
-      kind: 'Secret',
-      clusterwide: true,
+      resource: { kind: 'Secret', namespace: null },
+      filter: (sc, secret) =>
+        sc.parameters?.secretName === secret.metadata.name,
     },
   ],
-  networkFlowLevel: 2,
-  matchers: {
-    Secret: (sc, secret) => sc.parameters?.secretName === secret.metadata.name,
-  },
   depth: 1,
 });

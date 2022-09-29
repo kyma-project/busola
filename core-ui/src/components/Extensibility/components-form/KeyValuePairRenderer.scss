@@ -1,0 +1,26 @@
+.nested-key-value-pair {
+  margin-left: 16px;
+
+  .fd-input {
+    width: 140px;
+  }
+
+  div.fd-col {
+    display: none;
+  }
+
+  header.expand {
+    width: 200px;
+  }
+
+  & + .fd-button--negative {
+    top: 0.15rem !important;
+    right: 3rem;
+  }
+}
+
+.key-enum {
+  div.dropdown {
+    align-self: center;
+  }
+}

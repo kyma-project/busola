@@ -36,8 +36,8 @@ export const JobList = props => {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={JobCreate}
       {...props}
+      createResourceForm={JobCreate}
     />
   );
 };

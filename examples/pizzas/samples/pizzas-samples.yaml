@@ -1,0 +1,85 @@
+apiVersion: busola.example.com/v1
+kind: Pizza
+metadata:
+  name: margherita
+  labels:
+    app.kubernetes.io/name: margherita
+  annotations: {}
+  namespace: pizzas
+spec:
+  ownerReferences:
+    - apiVersion: busola.example.com/v1
+      kind: PizzaOrder
+      name: margherita-order
+  recipeSecret: margherita-recipe
+  comments:
+    - 'Please, make my pizza quickly.'
+    - Margherita is a delicious pizza!
+  description: 'Margherita is a simple, vegetarian pizza.'
+  sauce: GARLIC
+  toppings:
+    - name: Tomato sauce
+      price: 3
+      quantity: 1
+    - name: Cheese
+      price: 5
+      quantity: 4
+    - name: Basil
+      price: 7
+      quantity: 6
+---
+apiVersion: busola.example.com/v1
+kind: Pizza
+metadata:
+  name: diavola
+  labels:
+    app.kubernetes.io/name: diavola
+  annotations: {}
+  namespace: pizzas
+spec:
+  ownerReferences:
+    - apiVersion: busola.example.com/v1
+      kind: PizzaOrder
+      name: diavola-order
+  recipeSecret: diavola-recipe
+  sauce: TOMATO
+  comments:
+    - I would like the spiciest pizza.
+    - I would like to ask for a discount for students.
+  description: 'Diavola is such a spicy pizza, it includes hot salami and pickled jalapeños!'
+  toppings:
+    - name: Hot salami
+      price: 10
+      quantity: 5
+    - name: Pickled jalapeños
+      price: 18
+      quantity: 10
+    - name: Cheese
+      price: 4
+      quantity: 5
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: margherita-recipe
+  namespace: pizzas
+  labels:
+    app.kubernetes.io/name: margherita-recipe
+  annotations: {}
+data:
+  recipe: >-
+    SW5ncmVkaWVudHMKSG9tZW1hZGUgUGl6emEgRG91Z2g6CjLCvSBjdXBzICgzMDAgZykgdW5ibGVhY2hlZCBhbGwtcHVycG9zZSBmbG91cgoxIHRlYXNwb29uIGdyYW51bGF0ZWQgc3VnYXIKwr0gdGVhc3Bvb24gYWN0aXZlIGRyeSB5ZWFzdCBvciBTQUYgaW5zdGFudCB5ZWFzdArCviB0ZWFzcG9vbiBEaWFtb25kIENyeXN0YWwga29zaGVyIHNhbHQKNyBvdW5jZXMgKDEwNcKwRiB0byAxMTXCsEYpIHdhcm0gd2F0ZXIKMSB0YWJsZXNwb29uIGV4dHJhIHZpcmdpbiBvbGl2ZSBvaWwKc2Vtb2xpbmEgYW5kIGFsbC1wdXJwb3NlIGZsb3VyIGZvciBkdXN0aW5nIHRoZSBwaXp6YSBwZWVsClBpenphIFNhdWNlOgoxIGN1cCBwdXJlZWQgb3IgY3J1c2hlZCBjYW5uZWQgU2FuIE1hcnphbm8gdG9tYXRvZXMgKG9yIGNhbm5lZCBJdGFsaWFuIHBsdW0gdG9tYXRvZXMpCjItMyBmcmVzaCBnYXJsaWMgY2xvdmVzIGdyYXRlZCB3aXRoIGEgbWljcm9wbGFuZSBvciBwcmVzc2VkCjEgdGVhc3Bvb24gZXh0cmEgdmlyZ2luIG9saXZlIG9pbCBwbHVzIG1vcmUgZm9yIGRyaXp6bGluZwoyLTMgbGFyZ2UgcGluY2hlcyBvZiBrb3NoZXIgc2FsdCB0byB0YXN0ZQrCvCB0ZWFzcG9vbiBmcmVzaGx5IGdyb3VuZCBibGFjayBwZXBwZXIKVG9wcGluZ3M6CjItMyB0YWJsZXNwb29ucyBmaW5lbHkgZ3JhdGVkIHBhcm1pZ2lhbm8tcmVnZ2lhbm8gY2hlZXNlIHBsdXMgbW9yZSBmb3Igc2VydmluZwo3IG91bmNlcyBmcmVzaCBtb3p6YXJlbGxhIGNoZWVzZSAobm90IHBhY2tlZCBpbiB3YXRlcikgY3V0IGludG8gwr0taW5jaCBjdWJlcwo1LTYgbGFyZ2UgZnJlc2ggYmFzaWwgbGVhdmVzIHBsdXMgbW9yZSBmb3IgZ2FybmlzaGluZwpkcmllZCByZWQgcGVwcGVyIGZsYWtlcyBvcHRpb25hbA==
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: diavola-recipe
+  namespace: pizzas
+  labels:
+    app.kubernetes.io/name: diavola-recipe
+  annotations: {}
+data:
+  recipe: >-
+    SU5HUkVESUVOVFMgMzAwIGdtIGNhbm5lZCBwZWVsZWQgdG9tYXRvZXMgMSB0YnNwIG9saXZlIG9pbCwgcGx1cyBleHRyYSB0byBzZXJ2ZSAxMjAgZ20gdGhpbmx5IHNsaWNlZCBob3Qgc2FsYW1pIDEtMiBwaWNrbGVkIGphbGFwZcOxb3MsIG9yIHRvIHRhc3RlIDIwMCBnbSB0aGlubHkgc2xpY2VkIHNjYW1vcnphLCBkaWNlZCBQaXp6YSBkb3VnaCAyIHRzcCBleHRyYS12aXJnaW4gb2xpdmUgb2lsLCBwbHVzIGV4dHJhIGZvciBicnVzaGluZyAyIHRzcCBkcmllZCB5ZWFzdCwgb3IgMjBnbSBmcmVzaCB5ZWFzdCAxLjEga2cgc3RvbmVncm91bmQgYmFrZXIncyBmbG91ciwgcGx1cyBleHRyYSBmb3IgZHVzdGluZyAoc2VlIG5vdGUp

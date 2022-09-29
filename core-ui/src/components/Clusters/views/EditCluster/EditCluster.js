@@ -185,6 +185,7 @@ function EditClusterComponent({
         createUrl={resourceUrl}
         onSubmit={onComplete}
         autocompletionDisabled
+        disableDefaultFields={true}
       >
         <K8sNameField
           kind={t('clusters.name_singular')}
@@ -225,9 +226,8 @@ function EditClusterComponent({
 }
 
 export function EditCluster(props) {
-  const { i18n } = useTranslation();
   return (
-    <ErrorBoundary i18n={i18n}>
+    <ErrorBoundary>
       <EditClusterComponent {...props} />
     </ErrorBoundary>
   );

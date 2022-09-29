@@ -43,7 +43,6 @@ export function CertificateList(props) {
         <ResourceStatus
           status={certificate.status}
           resourceKind="certificates"
-          i18n={i18n}
         />
       ),
     },
@@ -62,8 +61,8 @@ export function CertificateList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      createResourceForm={CertificateCreate}
       {...props}
+      createResourceForm={CertificateCreate}
     />
   );
 }

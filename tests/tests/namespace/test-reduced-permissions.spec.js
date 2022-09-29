@@ -39,7 +39,7 @@ context('Test reduced permissions', () => {
       .type(CR_NAME);
 
     cy.getIframeBody()
-      .find('[ariaLabel="Role name"]:visible')
+      .find('[ariaLabel="ClusterRole name"]:visible')
       .type(CR_NAME);
 
     // api groups
@@ -95,7 +95,7 @@ context('Test reduced permissions', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[ariaLabel="Service Account name"]:visible')
+      .find('[ariaLabel="ServiceAccount name"]:visible')
       .type(SA_NAME);
 
     cy.getIframeBody()
@@ -117,21 +117,23 @@ context('Test reduced permissions', () => {
 
     // subject type - select it first so the list starts loading
     cy.getIframeBody()
+      .find('[role=dialog]')
       .contains('User')
       .click();
     cy.getIframeBody()
+      .find('[role=list]')
       .contains('ServiceAccount')
       .click();
 
     // name
     cy.getIframeBody()
-      .find('[ariaLabel="Cluster Role Binding name"]:visible')
+      .find('[ariaLabel="ClusterRoleBinding name"]:visible')
       .type(CRB_NAME);
 
     // role
     cy.getIframeBody()
       .find(
-        '[placeholder="Start typing to select Role Binding from the list"]:visible',
+        '[placeholder="Start typing to select ClusterRole from the list"]:visible',
       )
       .type(CR_NAME);
     cy.getIframeBody()

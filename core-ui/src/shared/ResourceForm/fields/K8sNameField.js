@@ -16,9 +16,11 @@ export function K8sNameField({
   prefix,
   pattern,
   showHelp = true,
+  inputInfo,
+  tooltipContent,
   ...props
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { isAdvanced, propertyPath, validate, readOnly, ...inputProps } = props;
 
   const generateName = () => {
@@ -37,33 +39,41 @@ export function K8sNameField({
       className={className}
       propertyPath="$.metadata.name"
       label={t('common.labels.name')}
-      tooltipContent={showHelp ? t('common.tooltips.k8s-name-input') : null}
+      inputInfo={inputInfo}
+      tooltipContent={tooltipContent}
       input={() => {
         return (
-          <div className="k8s-name-field">
-            <K8sNameInput
-              kind={kind}
-              compact
-              required
-              showHelp={false}
-              showLabel={false}
-              onChange={e => setValue(e.target.value)}
-              value={value}
-              i18n={i18n}
-              readOnly={readOnly}
-              pattern={pattern}
-              {...inputProps}
-            />
-            <Tooltip content={t('common.tooltips.generate-name')}>
-              <Button
+          <>
+            <div className="k8s-name-field">
+              <K8sNameInput
+                kind={kind}
                 compact
-                onClick={generateName}
-                glyph="synchronize"
-                ariaLabel="Generate name button"
-                disabled={readOnly}
+                required
+                showLabel={false}
+                onChange={e => setValue(e.target.value)}
+                value={value}
+                readOnly={readOnly}
+                pattern={pattern}
+                {...inputProps}
               />
-            </Tooltip>
-          </div>
+              <Tooltip content={t('common.tooltips.generate-name')}>
+                <Button
+                  compact
+                  option="transparent"
+                  onClick={generateName}
+                  ariaLabel="Generate name button"
+                  disabled={readOnly}
+                >
+                  {t('common.buttons.generate-name')}
+                </Button>
+              </Tooltip>
+            </div>
+            {showHelp && inputInfo === undefined ? (
+              <p style={{ color: 'var(--sapNeutralTextColor)' }}>
+                {t('common.tooltips.k8s-name-input')}
+              </p>
+            ) : null}
+          </>
         );
       }}
     />

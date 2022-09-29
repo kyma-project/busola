@@ -1,42 +1,54 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
-import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { prettifyKind } from 'shared/utils/helpers';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
-import { TranslationBundleContext, useGetTranslation } from './helpers';
+import {
+  useCreateResourceDescription,
+  TranslationBundleContext,
+  useGetTranslation,
+  applyFormula,
+  sortBy,
+} from './helpers';
 import { Widget } from './components/Widget';
-import { RelationsContextProvider } from './contexts/RelationsContext';
+import { DataSourcesContextProvider } from './contexts/DataSources';
+import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
+import { useGetSchema } from 'hooks/useGetSchema';
+import { useTranslation } from 'react-i18next';
 
 export const ExtensibilityListCore = ({ resMetaData }) => {
-  const { t, widgetT } = useGetTranslation();
-  const { path, kind } = resMetaData?.resource ?? {};
+  const { t, widgetT, exists } = useGetTranslation();
+  const { t: tBusola } = useTranslation();
 
-  const schema = resMetaData?.schema;
-  const relations = resMetaData?.relations || {};
+  const { urlPath, disableCreate, resource, description } =
+    resMetaData?.general ?? {};
 
-  const listProps = usePrepareListProps(path, 'name');
+  const dataSources = resMetaData?.dataSources || {};
+  const { schema } = useGetSchema({
+    resource,
+  });
 
-  if (kind) {
+  const listProps = usePrepareListProps(urlPath, 'name');
+
+  const resourceTitle = resMetaData?.general?.name;
+  listProps.resourceTitle = exists('name')
+    ? t('name')
+    : resourceTitle || pluralize(prettifyKind(resource.kind));
+
+  if (resource.kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
       /[a-z0-9-]+\/?$/,
-      pluralize(kind).toLowerCase(),
+      pluralize(resource.kind).toLowerCase(),
     );
   }
   listProps.createFormProps = { resourceSchema: resMetaData };
 
-  listProps.resourceName = t('name', {
-    defaultValue: pluralize(prettifyKind(kind)),
-  });
+  listProps.description = useCreateResourceDescription(description);
 
-  listProps.description = t('description', {
-    defaultValue: ' ',
-  });
   listProps.customColumns = Array.isArray(resMetaData?.list)
     ? resMetaData?.list.map((column, i) => ({
         header: widgetT(column),
@@ -46,41 +58,49 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
             value={resource}
             structure={column}
             schema={schema}
-            relations={relations}
+            dataSources={dataSources}
+            originalResource={resource}
+            inlineContext={true}
           />
         ),
       }))
     : [];
+
+  const isFilterAString = typeof resMetaData.resource?.filter === 'string';
+  const filterFn = value =>
+    applyFormula(value, resMetaData.resource.filter, tBusola);
+  listProps.filter = isFilterAString ? filterFn : undefined;
+
+  const sortOptions = (resMetaData?.list || []).filter(element => element.sort);
+
   return (
     <ResourcesList
       createResourceForm={ExtensibilityCreate}
-      allowSlashShortcut
+      disableCreate={disableCreate}
+      sortBy={defaultSortOptions => sortBy(sortOptions, t, defaultSortOptions)}
       {...listProps}
     />
   );
 };
 
-export const ExtensibilityList = () => {
-  const { t } = useTranslation();
+const ExtensibilityList = () => {
   const resMetaData = useGetCRbyPath();
-  const { path } = resMetaData?.resource ?? {};
+  const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};
 
   return (
     <TranslationBundleContext.Provider
       value={{
-        translationBundle: path,
-        defaultResourcePlaceholder: resMetaData?.resource?.defaultPlaceholder,
+        translationBundle: urlPath,
+        defaultResourcePlaceholder: defaultPlaceholder,
       }}
     >
-      <RelationsContextProvider relations={resMetaData?.relations || {}}>
-        <ErrorBoundary
-          customMessage={t('extensibility.error')}
-          displayButton={false}
-          key={path}
-        >
+      <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
+        <ExtensibilityErrBoundary key={urlPath}>
           <ExtensibilityListCore resMetaData={resMetaData} />
-        </ErrorBoundary>
-      </RelationsContextProvider>
+        </ExtensibilityErrBoundary>
+      </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>
   );
 };
+
+export default ExtensibilityList;

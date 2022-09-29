@@ -7,15 +7,33 @@ import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { isValidYaml } from 'shared/contexts/YamlEditorContext/isValidYaml';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useGetTranslation } from '../helpers';
+import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
-export function CodeViewer({ value, structure, schema }) {
+export function CodeViewer({ value, structure, originalResource, schema }) {
   const { widgetT } = useGetTranslation();
   const { t } = useTranslation();
 
   const notification = useNotification();
 
+  const getLanguage = () => {
+    const languageFormula = structure?.language;
+    if (languageFormula) {
+      try {
+        const expression = jsonataWrapper(languageFormula);
+        expression.assign('root', originalResource);
+        expression.assign('item', value);
+        return (expression.evaluate() || '').toLowerCase();
+      } catch (e) {
+        console.warn(e);
+        return 'json';
+      }
+    } else {
+      return detectLanguage(value);
+    }
+  };
+
   const getValueAndLang = (value, structure) => {
-    let language = structure?.language || detectLanguage(value);
+    let language = getLanguage(structure, value, originalResource);
     let parsedValue = '';
 
     if (!isNil(value)) {
@@ -52,7 +70,7 @@ export function CodeViewer({ value, structure, schema }) {
     <ReadonlyEditorPanel
       title={widgetT(structure)}
       value={parsedValue}
-      editorProps={{ language }}
+      editorProps={{ language, updateValueOnParentChange: true }}
     />
   );
 }
@@ -66,6 +84,7 @@ function detectLanguage(value) {
     return '';
   }
 }
+
 function stringifyIfObject(value) {
   return isNil(value)
     ? ''

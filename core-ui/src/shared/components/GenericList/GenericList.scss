@@ -1,6 +1,11 @@
 .generic-list {
   height: fit-content;
 
+  .fd-layout-panel__actions {
+    display: flex;
+    align-items: center;
+  }
+
   .fd-table {
     tr {
       cursor: default;

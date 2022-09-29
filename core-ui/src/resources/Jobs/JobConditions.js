@@ -6,7 +6,7 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
 export function JobConditions(job) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const headerRenderer = () => [
     t('jobs.conditions.type'),
     t('jobs.conditions.status'),
@@ -25,7 +25,6 @@ export function JobConditions(job) {
   const rowRenderer = condition => {
     return [
       <StatusBadge
-        i18n={i18n}
         resourceKind="jobs"
         additionalContent={condition.message}
         type={conditionTypeStatus(condition.type)}
@@ -42,11 +41,12 @@ export function JobConditions(job) {
     <GenericList
       key="conditions"
       title={t('jobs.conditions.title')}
-      showSearchField={false}
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       entries={job.status?.conditions || []}
-      i18n={i18n}
+      searchSettings={{
+        showSearchField: false,
+      }}
     />
   );
 }

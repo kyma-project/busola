@@ -5,6 +5,7 @@ import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
+import 'core-js/actual/array/find-last-index';
 
 import App from './components/App/App';
 
@@ -12,7 +13,6 @@ import { Microfrontend } from 'shared/contexts/Microfrontend';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
-import ServiceCatalogUIWrapper from './service-catalog-ui/Wrapper';
 
 import './styles/reset.css';
 import './styles/sapIllus-Fills.css';
@@ -41,9 +41,6 @@ i18next
         console.warn(key);
       }
     },
-    parseMissingKeyHandler: (_key, defaultValue) => {
-      return defaultValue;
-    },
     interpolation: {
       escapeValue: false, // react already handles the escaping
     },
@@ -55,7 +52,6 @@ ReactDOM.render(
       <Suspense fallback={<Spinner />}>
         <CommandPaletteProvider>
           <App />
-          <ServiceCatalogUIWrapper />
         </CommandPaletteProvider>
       </Suspense>
     </BrowserRouter>

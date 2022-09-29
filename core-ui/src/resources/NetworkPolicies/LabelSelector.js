@@ -6,7 +6,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const LabelSelector = ({ selector, title }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   if (!selector) {
     return null;
@@ -56,8 +56,9 @@ export const LabelSelector = ({ selector, title }) => {
         headerRenderer={headerRenderer}
         rowRenderer={rowRenderer}
         key="policy-types"
-        i18n={i18n}
-        showSearchField={false}
+        searchSettings={{
+          showSearchField: false,
+        }}
       />
     );
   }

@@ -23,7 +23,8 @@ context('Clean up Namespace', () => {
 
     cy.getIframeBody()
       .contains('button', 'Delete')
-      .click();
+      .filter(':visible', { log: false })
+      .click({ force: true });
   });
 
   it('Check if the Namespace is terminated (step 2)', { retries: 3 }, () => {

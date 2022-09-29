@@ -20,7 +20,7 @@ export function GroupingListPage({
   showCrdScope,
 }) {
   const [searchQuery, setSearchQuery] = useState('');
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   useWindowTitle(title);
 
   const resourceUrl = `/apis/apiextensions.k8s.io/v1/customresourcedefinitions`;
@@ -81,12 +81,10 @@ export function GroupingListPage({
             <ResourceListRenderer
               resourceUrl={resourceUrl}
               resourceType="CustomResourceDefinition"
-              resourceName="customresourcedefinition"
+              resourceTitle="customresourcedefinition"
               hasDetailsView={true}
-              showSearchField={false}
               showTitle={true}
               title={group}
-              i18n={i18n}
               resources={crds}
               customColumns={[
                 {
@@ -104,6 +102,9 @@ export function GroupingListPage({
                     ]
                   : []),
               ]}
+              searchSettings={{
+                showSearchField: false,
+              }}
               {...resourceListProps}
             />
           </li>
@@ -114,7 +115,7 @@ export function GroupingListPage({
   return (
     <>
       {header}
-      <YamlEditorProvider i18n={i18n}>{lists}</YamlEditorProvider>
+      <YamlEditorProvider>{lists}</YamlEditorProvider>
     </>
   );
 }

@@ -11,7 +11,7 @@ import { Link as ReactSharedLink } from 'shared/components/Link/Link';
 import { GitRepositoryCreate } from './GitRepositoryCreate';
 
 export function GitRepositoryList(props) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const customColumns = [
     {
@@ -21,7 +21,7 @@ export function GitRepositoryList(props) {
     {
       header: t('git-repositories.labels.auth'),
       value: repo => (
-        <StatusBadge i18n={i18n} resourceKind="git-repositories" type="info">
+        <StatusBadge resourceKind="git-repositories" type="info">
           {repo.spec.auth?.type || 'none'}
         </StatusBadge>
       ),
@@ -61,8 +61,8 @@ export function GitRepositoryList(props) {
       customColumns={customColumns}
       createActionLabel={t('git-repositories.labels.create')}
       description={description}
-      createResourceForm={GitRepositoryCreate}
       {...props}
+      createResourceForm={GitRepositoryCreate}
     />
   );
 }

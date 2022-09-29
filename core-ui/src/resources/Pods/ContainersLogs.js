@@ -22,7 +22,7 @@ const MAX_TIMEFRAME_IN_SECONDS = Number.MAX_SAFE_INTEGER;
 const DEFAULT_TIMEFRAME = HOUR_IN_SECONDS * 6;
 
 const ContainersLogs = ({ params }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   useWindowTitle('Logs');
   const notification = useNotification();
@@ -210,7 +210,6 @@ const ContainersLogs = ({ params }) => {
             </Switch>
             <LogsLink
               className="fd-margin-begin--tiny"
-              i18n={i18n}
               query={`{namespace="${params.namespace}",pod="${params.podName}",container="${params.containerName}"}`}
             >
               {t('grafana.open-in-grafana')}
@@ -224,12 +223,11 @@ const ContainersLogs = ({ params }) => {
             </Button>
             <SearchInput
               disabled={!logsToSave?.length}
-              entriesKind={'Logs'}
+              title={'Logs'}
               searchQuery={searchQuery}
               handleQueryChange={setSearchQuery}
               showSuggestion={false}
               onKeyDown={changeSelectedLog}
-              i18n={i18n}
             />
           </LayoutPanel.Actions>
         </LayoutPanel.Header>

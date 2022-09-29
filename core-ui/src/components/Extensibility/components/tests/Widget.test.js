@@ -1,18 +1,20 @@
-import { RelationsContextProvider } from 'components/Extensibility/contexts/RelationsContext';
+import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
 import { mount } from 'enzyme';
 import { Widget } from '../Widget';
 
-jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
-  'monaco-editor': () => 'monaco-editor',
+jest.mock('components/Extensibility/hooks/useJsonata', () => ({
+  useJsonata: () => 'test-value',
 }));
+
+jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
 
 describe('Widget', () => {
   describe('structure.visible', () => {
     it('not set -> render component as usual', () => {
       const container = mount(
-        <RelationsContextProvider value={{}} relations={{}}>
-          <Widget value="test-value" structure={{ path: null }} />
-        </RelationsContextProvider>,
+        <DataSourcesContextProvider value={{}} dataSources={{}}>
+          <Widget value="test-value" structure={{ path: '' }} />
+        </DataSourcesContextProvider>,
       );
 
       expect(container.text()).toBe('test-value');
@@ -20,25 +22,25 @@ describe('Widget', () => {
 
     it('falsy (but not boolean "false") -> render component as usual', () => {
       const container = mount(
-        <RelationsContextProvider value={{}} relations={{}}>
+        <DataSourcesContextProvider value={{}} dataSources={{}}>
           <Widget
             value="test-value"
-            structure={{ path: null, visibility: null }}
+            structure={{ path: '', visibility: null }}
           />
-        </RelationsContextProvider>,
+        </DataSourcesContextProvider>,
       );
 
-      expect(container.text()).toBe('test-value');
+      setTimeout(() => expect(container.text()).toBe('test-value'));
     });
 
     it('Explicitly false -> hide component', () => {
       const container = mount(
-        <RelationsContextProvider value={{}} relations={{}}>
+        <DataSourcesContextProvider value={{}} dataSources={{}}>
           <Widget
             value="test-value"
-            structure={{ path: null, visibility: false }}
+            structure={{ path: '', visibility: false }}
           />
-        </RelationsContextProvider>,
+        </DataSourcesContextProvider>,
       );
 
       expect(container.isEmptyRender()).toBe(true);
@@ -49,12 +51,12 @@ describe('Widget', () => {
       console.warn = jest.fn();
 
       const container = mount(
-        <RelationsContextProvider value={{}} relations={{}}>
+        <DataSourcesContextProvider value={{}} dataSources={{}}>
           <Widget
             value="test-value"
-            structure={{ path: null, visibility: '+=' }}
+            structure={{ path: '', visibility: '+=' }}
           />
-        </RelationsContextProvider>,
+        </DataSourcesContextProvider>,
       );
 
       expect(container.text()).toBe('extensibility.configuration-error');
@@ -66,24 +68,26 @@ describe('Widget', () => {
 
     it('jsonata -> control visibility', () => {
       const container1 = mount(
-        <RelationsContextProvider value={{}} relations={{}}>
+        <DataSourcesContextProvider value={{}} dataSources={{}}>
           <Widget
             value="test-value"
-            structure={{ path: null, visibility: '$contains(data, "test")' }}
+            structure={{ path: '', visibility: '$contains(data, "test")' }}
           />
-        </RelationsContextProvider>,
+        </DataSourcesContextProvider>,
       );
-      expect(container1.text()).toBe('test-value');
-
       const container2 = mount(
-        <RelationsContextProvider value={{}} relations={{}}>
+        <DataSourcesContextProvider value={{}} dataSources={{}}>
           <Widget
             value="test-value"
-            structure={{ path: null, visibility: '$contains(data, "tets")' }}
+            structure={{ path: '', visibility: '$contains(data, "tets")' }}
           />
-        </RelationsContextProvider>,
+        </DataSourcesContextProvider>,
       );
-      expect(container2.isEmptyRender()).toBe(true);
+
+      setTimeout(() => {
+        expect(container1.text()).toBe('test-value');
+        expect(container2.isEmptyRender()).toBe(true);
+      });
     });
   });
 });

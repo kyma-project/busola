@@ -13,7 +13,7 @@ export const OAuth2ClientStatus = ({ client }) => {
         type="success"
         additionalContent={t('oauth2-clients.tooltips.ok')}
       >
-        {t('common.buttons.ok')}
+        OK
       </StatusBadge>
     );
   }

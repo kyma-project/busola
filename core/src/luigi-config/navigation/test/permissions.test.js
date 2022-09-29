@@ -4,10 +4,10 @@ describe('hasPermissionsFor', () => {
   test('true for exact group & resource', () => {
     const exactPermissions = {
       apiGroups: ['exact-group-name'],
-      resources: ['exact-resource'],
+      resources: ['exact-resources'],
     };
     expect(
-      hasPermissionsFor('exact-group-name', 'exact-resource', [
+      hasPermissionsFor('exact-group-name', 'exact-resources', [
         exactPermissions,
       ]),
     ).toBe(true);
@@ -28,10 +28,12 @@ describe('hasPermissionsFor', () => {
   test('true for matching resource and wildcard group', () => {
     const wildcardApiGroupPermissions = {
       apiGroups: ['*'],
-      resources: ['resource'],
+      resources: ['resources'],
     };
     expect(
-      hasPermissionsFor('api-group', 'resource', [wildcardApiGroupPermissions]),
+      hasPermissionsFor('api-group', 'resources', [
+        wildcardApiGroupPermissions,
+      ]),
     ).toBe(true);
   });
 
@@ -50,7 +52,7 @@ describe('hasPermissionsFor', () => {
         resources: ['group'],
       },
     ];
-    expect(hasPermissionsFor('api-group', 'resource', permissionSet)).toBe(
+    expect(hasPermissionsFor('api-group', 'resources', permissionSet)).toBe(
       false,
     );
   });
@@ -64,7 +66,7 @@ describe('hasPermissionsFor', () => {
       },
     ];
     expect(
-      hasPermissionsFor('api-group', 'resource', permissionSet, [
+      hasPermissionsFor('api-group', 'resources', permissionSet, [
         'add',
         'remove',
         'cancel',
@@ -81,7 +83,7 @@ describe('hasPermissionsFor', () => {
       },
     ];
     expect(
-      hasPermissionsFor('api-group', 'resource', permissionSet, [
+      hasPermissionsFor('api-group', 'resources', permissionSet, [
         'add',
         'remove',
       ]),
@@ -97,7 +99,7 @@ describe('hasPermissionsFor', () => {
       },
     ];
     expect(
-      hasPermissionsFor('api-group', 'resource', permissionSet, ['add']),
+      hasPermissionsFor('api-group', 'resources', permissionSet, ['add']),
     ).toBe(false);
   });
 });

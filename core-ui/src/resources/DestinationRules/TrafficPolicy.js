@@ -9,10 +9,35 @@ import { TlsSettings } from './TlsSettings';
 
 import { useTranslation } from 'react-i18next';
 
+const PortTrafficPolicies = ({ portLevelSettings }) => {
+  const { t } = useTranslation();
+
+  return (
+    <>
+      {portLevelSettings?.map(portTrafficPolicy => (
+        <LayoutPanel
+          className="fd-margin--md"
+          key={portTrafficPolicy.port.number}
+        >
+          <LayoutPanel.Header>
+            <LayoutPanel.Head
+              title={t('destination-rules.details.port-traffic-policy', {
+                port: portTrafficPolicy.port.number,
+              })}
+            />
+          </LayoutPanel.Header>
+          <TrafficPolicyWidget trafficPolicy={portTrafficPolicy} />
+        </LayoutPanel>
+      ))}
+    </>
+  );
+};
+
 export const TrafficPolicyWidget = ({ trafficPolicy }) => {
   if (!trafficPolicy) {
     return null;
   }
+
   return (
     <>
       {trafficPolicy.connectionPool?.tcp ? (
@@ -28,30 +53,16 @@ export const TrafficPolicyWidget = ({ trafficPolicy }) => {
         <OutlierDetection outlierDetection={trafficPolicy.outlierDetection} />
       ) : null}
       {trafficPolicy.tls ? <TlsSettings tls={trafficPolicy.tls} /> : null}
+
+      <PortTrafficPolicies
+        portLevelSettings={trafficPolicy.portLevelSettings}
+      />
     </>
   );
 };
 
 export const TrafficPolicy = destinationRule => {
   const { t } = useTranslation();
-
-  const portTrafficPolicies = destinationRule.spec.trafficPolicy?.portLevelSettings?.map(
-    portTrafficPolicy => (
-      <LayoutPanel
-        className="fd-margin--md"
-        key={portTrafficPolicy.port.number}
-      >
-        <LayoutPanel.Header>
-          <LayoutPanel.Head
-            title={t('destination-rules.details.port-traffic-policy', {
-              port: portTrafficPolicy.port.number,
-            })}
-          />
-        </LayoutPanel.Header>
-        <TrafficPolicyWidget trafficPolicy={portTrafficPolicy} />
-      </LayoutPanel>
-    ),
-  );
 
   return destinationRule.spec.trafficPolicy ? (
     <LayoutPanel
@@ -66,7 +77,9 @@ export const TrafficPolicy = destinationRule => {
       </LayoutPanel.Header>
 
       <TrafficPolicyWidget trafficPolicy={destinationRule.spec.trafficPolicy} />
-      {portTrafficPolicies}
+      <PortTrafficPolicies
+        portLevelSettings={destinationRule.spec.portLevelSettings}
+      />
     </LayoutPanel>
   ) : null;
 };

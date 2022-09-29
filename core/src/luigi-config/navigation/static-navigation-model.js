@@ -8,6 +8,7 @@ import {
 } from './../cluster-management/cluster-management';
 import { hasPermissionsFor, hasWildcardPermission } from './permissions';
 import { getCustomPaths } from './customPaths';
+import { mergeInExtensibilityNav } from './mergeInExtensibilityNav';
 
 export const coreUIViewGroupName = '_core_ui_';
 
@@ -854,122 +855,6 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('service-management.title'),
-      pathSegment: 'catalog',
-      navigationContext: 'catalog',
-      label: i18next.t('catalog.menu-title'),
-      viewUrl: config.coreUIModuleUrl + '/catalog',
-
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      context: {
-        requiredFeatures: [features.SERVICE_CATALOG],
-      },
-      children: [
-        {
-          pathSegment: 'ServiceClass',
-          children: [
-            {
-              pathSegment: ':serviceId',
-              viewUrl:
-                config.coreUIModuleUrl + '/catalog/serviceclass/:serviceId',
-              children: [
-                {
-                  pathSegment: 'plans',
-                  viewUrl:
-                    config.coreUIModuleUrl +
-                    '/catalog/serviceclass/:serviceId/plans',
-                },
-                {
-                  pathSegment: 'plan',
-                  children: [
-                    {
-                      pathSegment: ':planId',
-                      viewUrl:
-                        config.coreUIModuleUrl +
-                        '/catalog/serviceclass/:serviceId/plan/:planId',
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-        {
-          pathSegment: 'ClusterServiceClass',
-          children: [
-            {
-              pathSegment: ':serviceId',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/catalog/clusterserviceclass/:serviceId',
-              children: [
-                {
-                  pathSegment: 'plans',
-                  viewUrl:
-                    config.coreUIModuleUrl +
-                    '/catalog/clusterserviceclass/:serviceId/plans',
-                },
-                {
-                  pathSegment: 'plan',
-                  children: [
-                    {
-                      pathSegment: ':planId',
-                      viewUrl:
-                        config.coreUIModuleUrl +
-                        '/catalog/clusterserviceclass/:serviceId/plan/:planId',
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('service-management.title'),
-      pathSegment: 'instances',
-      navigationContext: 'instances',
-      label: i18next.t('instances.title'),
-      viewUrl: config.coreUIModuleUrl + '/instances',
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.SERVICE_CATALOG],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':instanceName',
-              viewUrl:
-                config.coreUIModuleUrl + '/instances/details/:instanceName',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('service-management.title'),
-      pathSegment: 'brokers',
-      navigationContext: 'brokers',
-      label: i18next.t('brokers.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/servicebrokers?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/servicecatalog.k8s.io/v1beta1',
-          readOnly: true,
-          hasDetailsView: false,
-        }),
-      viewGroup: coreUIViewGroupName,
-      context: {
-        requiredFeatures: [features.SERVICE_CATALOG],
-      },
-    },
-    {
-      category: i18next.t('service-management.title'),
       pathSegment: 'serviceinstances',
       navigationContext: 'serviceinstances',
       resourceType: 'serviceinstances',
@@ -1128,43 +1013,6 @@ export function getStaticChildrenNodesForNamespace(
       },
       pathSegment: '_configuration_category_placeholder_',
       hideFromNav: true,
-    },
-    {
-      category: i18next.t('configuration.title'),
-      pathSegment: 'addons',
-      resourceType: 'addonsconfigurations',
-      navigationContext: 'addonsconfigurations',
-      label: i18next.t('addons.navigation-title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/addonsconfigurations?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.ADDONS],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':addonName',
-              resourceType: 'addonsconfigurations',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/addonsconfigurations/:addonName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
     },
     {
       category: i18next.t('configuration.title'),
@@ -1632,7 +1480,7 @@ export function getStaticChildrenNodesForNamespace(
     },
   ];
 
-  const allNodes = [...nodes, ...customPaths];
+  const allNodes = mergeInExtensibilityNav(nodes, customPaths);
   return filterNodesByAvailablePaths(allNodes, groupVersions, permissionSet);
 }
 
@@ -1795,47 +1643,6 @@ export function getStaticRootNodes(
                   viewGroup: coreUIViewGroupName,
                 },
               ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      pathSegment: 'addons-configs',
-      navigationContext: 'clusteraddonsconfigurations',
-      resourceType: 'clusteraddonsconfigurations',
-      label: i18next.t('cluster-addons.navigation-title'),
-      category: {
-        label: i18next.t('integration.title'),
-        icon: 'settings',
-        collapsible: true,
-      },
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/clusteraddonsconfigurations?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      context: {
-        requiredFeatures: [features.ADDONS],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':addonName',
-              resourceType: 'clusteraddonsconfigurations',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/clusteraddonsconfigurations/:addonName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/addons.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
             },
           ],
         },
@@ -2080,6 +1887,37 @@ export function getStaticRootNodes(
         },
       ],
     },
+    {
+      category: i18next.t('configuration.title'),
+      pathSegment: 'busolaextensions',
+      navigationContext: 'busolaextensions',
+      label: i18next.t('extensibility.title'),
+      viewUrl: config.coreUIModuleUrl + '/busolaextensions',
+      keepSelectedForChildren: true,
+      viewGroup: coreUIViewGroupName,
+      context: {
+        requiredFeatures: [features.EXTENSIBILITY],
+      },
+      children: [
+        {
+          pathSegment: 'details',
+          children: [
+            {
+              pathSegment: ':namespace',
+              children: [
+                {
+                  pathSegment: ':name',
+                  resourceType: 'configmaps',
+                  viewUrl:
+                    config.coreUIModuleUrl +
+                    '/busolaextensions/details/:namespace/:name',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
     // OTHER
     {
       pathSegment: 'preferences',
@@ -2095,7 +1933,8 @@ export function getStaticRootNodes(
     },
   ];
 
-  const allNodes = [...nodes, ...customPaths];
+  const allNodes = mergeInExtensibilityNav(nodes, customPaths);
+
   return filterNodesByAvailablePaths(allNodes, groupVersions, permissionSet);
 }
 

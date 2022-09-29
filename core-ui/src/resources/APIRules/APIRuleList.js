@@ -41,10 +41,10 @@ export function APIRuleList(props) {
   return (
     <ResourcesList
       customColumns={customColumns}
-      resourceName={t('api-rules.title')}
+      resourceTitle={t('api-rules.title')}
       description={description}
-      createResourceForm={APIRuleCreate}
       {...props}
+      createResourceForm={APIRuleCreate}
     />
   );
 }

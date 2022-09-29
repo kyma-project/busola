@@ -3,10 +3,6 @@ import { shallow } from 'enzyme';
 import { CodeViewer } from '../CodeViewer';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 
-jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
-  'monaco-editor': () => {},
-}));
-
 jest.mock('../../helpers', () => ({
   useGetTranslation: () => ({
     widgetT: key => key,
@@ -32,7 +28,7 @@ describe('CodeViewer', () => {
     const value = {
       key: 'value',
     };
-    const structure = { language: 'json' };
+    const structure = { language: "'json'" };
 
     const wrapper = shallow(<CodeViewer value={value} structure={structure} />);
     const editor = wrapper.find(ReadonlyEditorPanel);
@@ -43,7 +39,7 @@ describe('CodeViewer', () => {
     expect(editor).toHaveLength(1);
   });
 
-  it('Renders CodeViewer component with a predefined language', () => {
+  it('Renders CodeViewer component without an empty value', () => {
     const value = null;
 
     const wrapper = shallow(<CodeViewer value={value} />);

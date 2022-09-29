@@ -27,11 +27,11 @@ export function DestinationRuleList(props) {
 
   return (
     <ResourcesList
-      resourceName={t('destination-rules.title')}
+      resourceTitle={t('destination-rules.title')}
       customColumns={customColumns}
       description={description}
-      createResourceForm={DestinationRuleCreate}
       {...props}
+      createResourceForm={DestinationRuleCreate}
     />
   );
 }

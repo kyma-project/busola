@@ -35,14 +35,17 @@ export function useRestartResource(baseUrl) {
 }
 
 export function useRestartAction(baseUrl) {
-  const { t, i18n } = useTranslation();
-  const { isProtected } = useProtectedResources(i18n);
+  const { t } = useTranslation();
+  const { isProtected } = useProtectedResources();
   const restartResource = useRestartResource(baseUrl);
 
   return {
     name: t('common.buttons.restart'),
     icon: 'refresh',
-    tooltip: t('common.buttons.restart'),
+    tooltip: entry =>
+      isProtected(entry)
+        ? t('common.tooltips.protected-resources-info')
+        : t('common.buttons.restart'),
     disabledHandler: isProtected,
     handler: restartResource,
   };

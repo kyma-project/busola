@@ -12,6 +12,11 @@ import { PluginSimpleStack } from '@ui-schema/ui-schema/PluginSimpleStack';
 import { ValidityReporter } from '@ui-schema/ui-schema/ValidityReporter';
 import { validators } from '@ui-schema/ui-schema/Validators/validators';
 
+import { SchemaRulesInjector } from '../plugins/SchemaRulesInjector';
+import { CustomFieldInjector } from '../plugins/CustomFieldInjector';
+import { EnumHandler } from '../plugins/EnumHandler';
+import { VisibilityHandler } from '../plugins/VisibilityHandler';
+
 import { StringRenderer } from './StringRenderer';
 import { NumberRenderer } from './NumberRenderer';
 import { SwitchRenderer } from './SwitchRenderer';
@@ -31,6 +36,10 @@ const pluginStack = [
   DefaultHandler,
   DependentHandler,
   ConditionalHandler,
+  SchemaRulesInjector,
+  CustomFieldInjector,
+  EnumHandler,
+  VisibilityHandler,
   PluginSimpleStack,
   ValidityReporter,
 ];
@@ -49,7 +58,6 @@ export const widgets = {
     array: GenericList,
   },
   custom: {
-    Null: () => '',
     /*
     Accordions: AccordionsRenderer,
     */
@@ -75,7 +83,7 @@ export const widgets = {
     KeyValuePair: KeyValuePairRenderer,
     CodeEditor: MonacoRenderer,
     FormGroup: CollapsibleRenderer,
-    ResourceRefs: ResourceRefRender,
+    ResourceRef: ResourceRefRender,
     Resource: ResourceRenderer,
   },
 };

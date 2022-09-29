@@ -49,7 +49,7 @@ ErrorBoundaryComponent.defaultProps = {
   displayButton: true,
 };
 
-export const ErrorBoundary = ({ i18n, ...props }) => {
-  const { t } = useTranslation(null, { i18n });
+export const ErrorBoundary = ({ ...props }) => {
+  const { t } = useTranslation();
   return <ErrorBoundaryComponent {...props} t={t} />;
 };

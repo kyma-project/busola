@@ -48,6 +48,7 @@ export function K8sResourceSelect({
   value,
   required,
   isNamespaced = true,
+  ...props
 }) {
   const { t } = useTranslation();
 
@@ -101,9 +102,9 @@ export function K8sResourceSelect({
         arrowLabel="Combobox input arrow"
         options={options}
         onChange={onChange}
-        onSelectionChange={(_, selected) => onSelect(selected.text)}
+        onSelectionChange={(_, selected) => onSelect(selected.text, data)}
         validationState={getValidationState()}
-        inputProps={{ pattern: k8sNamePattern, value }}
+        inputProps={{ pattern: k8sNamePattern, value, ...props }}
       />
     </div>
   );
