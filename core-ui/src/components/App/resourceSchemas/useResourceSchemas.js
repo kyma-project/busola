@@ -30,6 +30,7 @@ export const useResourceSchemas = () => {
     fetch('/openapi/v2')
       .then(res => res.json())
       .then(data => {
+        console.log(data);
         sendWorkerMessage('sendingOpenapi', data, activeClusterName);
       })
       .catch(err => {
