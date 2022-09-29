@@ -25,8 +25,9 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT, exists } = useGetTranslation();
   const { t: tBusola } = useTranslation();
 
-  const { urlPath, disableCreate, resource, description } =
+  const { urlPath, resource, description, features } =
     resMetaData?.general ?? {};
+  const { disableCreate, disableEdit, disableDelete } = features?.actions ?? {};
 
   const dataSources = resMetaData?.dataSources || {};
   const { schema } = useGetSchema({
@@ -84,14 +85,16 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
 
   return (
     <ResourcesList
-      createResourceForm={ExtensibilityCreate}
+      {...listProps}
       disableCreate={disableCreate}
+      disableEdit={disableEdit}
+      disableDelete={disableDelete}
+      createResourceForm={ExtensibilityCreate}
       sortBy={defaultSortOptions => sortBy(sortOptions, t, defaultSortOptions)}
       searchSettings={{
         textSearchProperties: defaultSearchProperties =>
           textSearchProperties(defaultSearchProperties),
       }}
-      {...listProps}
     />
   );
 };

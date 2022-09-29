@@ -304,6 +304,11 @@ ExternalLink widgets render the link to an external page.
 
 JoinedArray widgets render all the values of an array of strings as a comma-separated list.
 
+#### Widget-specific parameters
+
+- **separator** - a string by which the elements of the array are separated. The default value is a comma `,`. You can use `break` to separate elements with a new line.
+- **children** - an optional field to define widgets used for rendering array items. If not provided, the content is rendered as a string.
+
 #### Example
 
 ```yaml
@@ -311,13 +316,15 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
   source: spec.dnsNames
   widget: JoinedArray
   separator: ': '
+- name: Joined array
+  source: spec.statuses
+  widget: JoinedArray
+  children:
+    - source: $item
+      widget: Badge
 ```
 
 <img src="./assets/display-widgets/JoinedArray.png" alt="Example of a joined array widget" width="20%" style="border: 1px solid #D2D5D9">
-
-#### Widget-specific parameters
-
-- **separator** - a string by which the elements of the array are separated. The default value is a comma `,`. You can use `break` to separate elements with a new line.
 
 ### Labels
 
