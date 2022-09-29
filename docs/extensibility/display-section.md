@@ -304,7 +304,7 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
 #### Widget-specific parameters
 
 - **separator** - a string by which the elements of the array are separated. The default value is a comma `,`. You can use `break` to separate elements with a new line.
-- **children** - optional field to defined widgets used for rendering array items. If not provided, the content is rendered as a string.
+- **children** - optional field to define widgets used for rendering array items. If not provided, the content is rendered as a string.
 
 #### Example
 
