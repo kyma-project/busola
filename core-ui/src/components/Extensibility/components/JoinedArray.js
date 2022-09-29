@@ -32,14 +32,14 @@ export function JoinedArray({ value, structure, schema, ...props }) {
   } else if (structure?.children) {
     return (
       <div>
-        {value.map((val, i) =>
-          structure?.children?.map((def, idx) => (
-            <>
+        {value.map((val, i) => (
+          <>
+            {structure?.children?.map((def, idx) => (
               <Widget structure={def} value={val} key={idx} {...props} />
-              {i !== value.length - 1 && separator}
-            </>
-          )),
-        )}
+            ))}
+            {i !== value.length - 1 && separator}
+          </>
+        ))}
       </div>
     );
   } else {
