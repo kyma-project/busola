@@ -88,6 +88,17 @@ Note that some features must be run before the application starts the bootstrap 
   },
   ```
 
+- **DISABLED_NODES** - an array of IDs of navigation nodes that are hidden from navigation. Format: `<category>.<nodeName>` or `namespace.<category>.<nodeName>`).
+
+  Default settings:
+
+  ```bash
+  "DISABLED_NODES": {
+    "isEnabled": false,
+    "nodes": []
+  }
+  ```
+
 - **EVENTING** – is used to show or hide the **Eventing** view and to define which APIs are required for the view to be shown properly.
   It is also used to determine if the **EventSubscriptions** should be displayed in **Function** and **Service** details.
   For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
@@ -106,16 +117,15 @@ Note that some features must be run before the application starts the bootstrap 
   },
   ```
 
-- **DISABLED_NODES** - an array of IDs of navigation nodes that are hidden from navigation. Format: `<category>.<nodeName>` or `namespace.<category>.<nodeName>`).
+- **EXTENSIBILITY** - is used to indicate wheter the Busola [extensibility](extensibility/README.md) feature should be enabled.
 
-  Default settings:
+Default settings:
 
-  ```bash
-  "DISABLED_NODES": {
-    "isEnabled": false,
-    "nodes": []
-  }
-  ```
+```json
+"EXTENSIBILITY": {
+  "isEnabled": false,
+}
+```
 
 - **EXTERNAL_NODES** - a list of links to external websites. `category`: a category name, `icon`: an optional icon, `children`: a list of pairs (label and link).
 
