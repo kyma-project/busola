@@ -22,18 +22,18 @@ export function JoinedArray({ value, structure, schema, ...props }) {
   if (separator === 'break') {
     return value.map((val, i) => (
       <p key={i}>
-        {structure.children
-          ? structure.children?.map((def, idx) => (
+        {structure?.children
+          ? structure?.children?.map((def, idx) => (
               <Widget structure={def} value={val} key={idx} {...props} />
             ))
           : val}
       </p>
     ));
-  } else if (structure.children) {
+  } else if (structure?.children) {
     return (
       <div>
         {value.map((val, i) =>
-          structure.children?.map((def, idx) => (
+          structure?.children?.map((def, idx) => (
             <>
               <Widget structure={def} value={val} key={idx} {...props} />
               {i !== value.length - 1 && separator}
