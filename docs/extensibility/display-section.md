@@ -270,7 +270,7 @@ ExternalLink widgets render the link to an external page.
 
 #### Widget-specific parameters
 
-- **link** - an optional JSONata function to generate a custom link.
+- **link** - an optional JSONata function to generate a custom link. Default value is taken from **source**.
 
 #### Examples
 
