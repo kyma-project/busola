@@ -111,7 +111,6 @@ Alert widgets display information for user using predefined types.
 #### Widget-specific parameters
 
 - **alert** - information what has to be displayed.
-- **alertFormula** - jsonata formula for information what has to be displayed.
 - **disableMargin** - an optional boolean which disables the margin outside the alert body.
 - **type** - type of alert:
   - **information** - Defalut
@@ -125,11 +124,11 @@ Alert widgets display information for user using predefined types.
 - simple: true
   widget: Alert
   type: warning
-  alert: TLS Server of mode SIMPLE or MUTUAL needs either credential name, or private key and server certificate pair.
+  alert: "'alert.tls.https'"
   visibility: "$item.port.protocol = 'HTTPS'"
 
 - widget: Alert
-  alertFormula: "$item = 80  ? 'Using Default 80' : 'Using Different Port then 80'"
+  alert: "$item = 80  ? 'Using Default 80' : 'Using Different Port then 80'"
 ```
 
 <img src="./assets/form-widgets/Alert.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">

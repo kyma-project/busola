@@ -396,8 +396,7 @@ Alert widgets display values using predefined types.
 
 #### Widget-specific parameters
 
-- **alert** - information what has to be displayed.
-- **alertFormula** - jsonata formula for information what has to be displayed.
+- **source** - information what has to be displayed.
 - **disableMargin** - an optional boolean which disables the margin outside the alert body.
 - **type** - type of alert:
   - **information** - Defalut
@@ -408,13 +407,12 @@ Alert widgets display values using predefined types.
 #### Example
 
 ```yaml
-- widget: Alert
-  type: warning
-  alert: I am some warning for user
-
-- source: $item.port.number
+- source: "'I am some warning for user'"
   widget: Alert
-  alertFormula: "$item = 80  ? 'Using Default 80' : 'Using Different Port then 80'"
+  type: warning
+
+- source: "$item.port.number = 80  ? 'Using Default 80' : 'Using Different Port then 80'"
+  widget: Alert
   disableMargin: true
 ```
 
