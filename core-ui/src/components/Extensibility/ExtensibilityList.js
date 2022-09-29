@@ -24,7 +24,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT, exists } = useGetTranslation();
   const { t: tBusola } = useTranslation();
 
-  const { urlPath, configureActions, resource, description } =
+  const { urlPath, features, resource, description } =
     resMetaData?.general ?? {};
 
   const dataSources = resMetaData?.dataSources || {};
@@ -76,7 +76,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   return (
     <ResourcesList
       {...listProps}
-      {...configureActions}
+      {...features.actions}
       createResourceForm={ExtensibilityCreate}
       sortBy={defaultSortOptions => sortBy(sortOptions, t, defaultSortOptions)}
     />
