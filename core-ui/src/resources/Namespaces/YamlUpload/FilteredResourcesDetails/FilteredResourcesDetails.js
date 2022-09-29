@@ -44,7 +44,7 @@ const WarningButton = ({
             ? t('common.buttons.see-warnings')
             : t('common.buttons.hide-warnings')}
         </p>
-        {!warningsNumber ? (
+        {isNaN(warningsNumber) ? (
           <Spinner className="warning-spinner" size="s" center={false} />
         ) : (
           <p>{warningsNumber}</p>
