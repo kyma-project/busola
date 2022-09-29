@@ -52,7 +52,7 @@ While the users can provide extensions, Busola also uses the extensibility mecha
    ]
    ```
 
-And then use the `npm run prepare-extensions` command to donwload them into the `extensions` directory.
+and then use the `npm run prepare-extensions` command to download them into the `extensions` directory.
 
 2. Run the `npm run pack-extensions` command. This will gather all the YAML files from `extensions` directory and merge them into:
 
