@@ -451,27 +451,23 @@ EventsList widget render a list of Events.
 
 #### Examples
 
-```json
-{
-  "widget": "EventsList",
-  "filterBy": "$matchByResource($item, $root.kind, $root.metadata.name)",
-  "name": "events",
-  "defaultType": "NORMAL"
-}
+```yaml
+- widget: EventsList
+  filterBy: '$matchByResource($item, $root.kind, $root.metadata.name)'
+  name: events
+  defaultType: NORMAL
 ```
 
 <img src="./assets/display-widgets/EventsList.png" alt="Example of a EventsList widget" style="border: 1px solid #D2D5D9">
 
 ---
 
-```json
-{
-  "widget": "EventsList",
-  "filterBy": "$matchByResource($item, $root.kind, $root.metadata.name)",
-  "name": "events",
-  "defaultType": "NORMAL",
-  "hideInvolvedObjects": true
-}
+```yaml
+- widget: EventsList
+  filterBy: '$matchByResource($item, $root.kind, $root.metadata.name)'
+  name: events
+  defaultType: NORMAL
+  hideInvolvedObjects: true
 ```
 
 <img src="./assets/display-widgets/EventsListHiddenField.png" alt="Example of a EventsList widget with hidden involved objects" style="border: 1px solid #D2D5D9">

@@ -41,22 +41,20 @@ This function can be used to match Events using a resource selector.
 
 ### Function parameters
 
-- **item** - Event to be used.
-- **kind** - path to kind from `$root`.
-- **name** - path to name from `$root`.
+- **item** - Event to check.
+- **kind** - resource kind to match against.
+- **name** - resource name to match against.
 
 ### Example
 
 Example from dataSources.
 
-```json
-{
-  "widget": "EventsList",
-  "filterBy": "$matchByResource($item, $root.kind, $root.metadata.name)",
-  "name": "events",
-  "defaultType": "NORMAL",
-  "hideInvolvedObjects": true
-}
+```yaml
+- widget: EventsList
+  filterBy: '$matchByResource($item, $root.kind, $root.metadata.name)'
+  name: events
+  defaultType: NORMAL
+  hideInvolvedObjects: true
 ```
 
 ## compareStrings(first, second)
