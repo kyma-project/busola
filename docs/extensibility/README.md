@@ -36,7 +36,7 @@ To create your CRD ConfigMap, follow these steps:
 
 To see an exemplary configuration of the Busola extensibility feature, see the [Pizza example](examples/../../../examples/pizzas/README.md).
 
-## Builtin extensions
+## Built-in extensions
 
 While extensions can be provided by the users, Busola itself also uses extensibility mechanism to create some of the default views. Those default extensions are always present, even if `EXTENSIBILITY` feature is disabled.
 
