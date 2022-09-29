@@ -16,8 +16,7 @@ import { useGetSchema } from 'hooks/useGetSchema';
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   // const { extensibilitySchemas } = useMicrofrontendContext();
   const { t, widgetT, exists } = useGetTranslation();
-  const { urlPath, resource, disableEdit, disableDelete } =
-    resMetaData?.general ?? {};
+  const { urlPath, resource, disableActions } = resMetaData?.general ?? {};
   const { schema } = useGetSchema({
     resource,
   });
@@ -52,9 +51,8 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   ];
   return (
     <ResourceDetails
+      {...disableActions}
       resourceTitle={resourceTitle}
-      disableEdit={disableEdit}
-      disableDelete={disableDelete}
       customColumns={
         Array.isArray(header)
           ? header.map((def, i) => ({
