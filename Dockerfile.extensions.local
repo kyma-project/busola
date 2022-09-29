@@ -1,9 +1,4 @@
 # use the name of an image built on a pipeline
 FROM busola
 
-WORKDIR /app
 RUN mv /app/extensions.yaml /app/core/assets/extensions/extensions.yaml
-
-EXPOSE 3001
-ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
-CMD ["node", "backend-production.js"]

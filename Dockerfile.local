@@ -21,8 +21,8 @@ RUN make resolve
 RUN make validate
 RUN make pull-licenses
 
-RUN cd /app/core && make build-docker
-RUN cd /app/core-ui && make build
+RUN cd /app/core && make test && make build-docker
+RUN cd /app/core-ui && make test && make build
 RUN cd /app/backend && npm run build
 
 # build extensions, to be used in 3rd stage
@@ -44,6 +44,7 @@ COPY --from=builder /app/backend/backend-production.js /app/backend-production.j
 COPY --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --from=builder /app/backend/package* /app/
 
+# move out the packed extensions for further use
 RUN mv /app/core/assets/extensions/extensions.yaml /app/extensions.yaml
 
 RUN npm ci --only=production
