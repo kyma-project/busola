@@ -59,7 +59,7 @@ and then use the `npm run prepare-extensions` command to download them into the 
 - `core/src/assets/extensions/extensions.yaml` is a plain YAML file, which you can use during the local development. This file is a list of all extracted configurations, without the ConfigMap header.
 - `resources/extensions-patch/builtin-resource-extensions.configmap.yaml` is a ConfigMap with the`extensions.yaml` key, containing all extracted configurations.
 
-3. To deploy a Busola with builtin extensions on a cluster, use either `resources/apply-resources.sh` (while deploying Busola on a cluster without Istio) or `resources/apply-resources-istio.sh` (while deploying Busola on a cluster with Istio), then use the following commands to patch the created Busola instance with builtin extensions.
+3. To deploy a Busola with the built-in extensions on a cluster, use either `resources/apply-resources.sh` (while deploying Busola on a cluster without Istio) or `resources/apply-resources-istio.sh` (while deploying Busola on a cluster with Istio), then use the following commands to patch the created Busola instance with the built-in extensions.
 
 ```bash
 export NAMESPACE=<namespace where Busola is already installed>
