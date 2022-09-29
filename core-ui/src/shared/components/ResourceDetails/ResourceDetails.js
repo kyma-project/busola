@@ -301,7 +301,7 @@ function Resource({
       resource,
       resource.metadata.name + '.yaml',
       handleSaveClick(resource),
-      protectedResource,
+      protectedResource || disableEdit,
       protectedResource,
     );
   };
