@@ -16,7 +16,7 @@
 - [Block widgets](#block-widgets)
   - [CodeViewer](#codeviewer)
   - [Columns](#columns)
-  - [EventsList](#eventslist)
+  - [EventList](#eventlist)
   - [Panel](#panel)
   - [Plain](#plain)
   - [ResourceList](#resourcelist)
@@ -439,9 +439,9 @@ Columns widgets render the child widgets in multiple columns.
 
 <img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
 
-### EventsList
+### EventList
 
-EventsList widget render a list of Events.
+EventList widget renders a list of Events.
 
 #### Widget-specific parameters
 
@@ -452,25 +452,25 @@ EventsList widget render a list of Events.
 #### Examples
 
 ```yaml
-- widget: EventsList
+- widget: EventList
   filterBy: '$matchByResource($item, $root.kind, $root.metadata.name)'
   name: events
   defaultType: NORMAL
 ```
 
-<img src="./assets/display-widgets/EventsList.png" alt="Example of a EventsList widget" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/EventList.png" alt="Example of a EventList widget" style="border: 1px solid #D2D5D9">
 
 ---
 
 ```yaml
-- widget: EventsList
+- widget: EventList
   filterBy: '$matchByResource($item, $root.kind, $root.metadata.name)'
   name: events
   defaultType: NORMAL
   hideInvolvedObjects: true
 ```
 
-<img src="./assets/display-widgets/EventsListHiddenField.png" alt="Example of a EventsList widget with hidden involved objects" style="border: 1px solid #D2D5D9">
+<img src="./assets/display-widgets/EventListHiddenField.png" alt="Example of a EventList widget with hidden involved objects" style="border: 1px solid #D2D5D9">
 
 ### Panel
 

@@ -16,7 +16,7 @@ import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
-export function EventsList({
+export function EventList({
   value,
   structure,
   dataSource,

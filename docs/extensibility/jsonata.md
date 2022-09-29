@@ -50,7 +50,7 @@ This function can be used to match Events using a resource selector.
 Example from dataSources.
 
 ```yaml
-- widget: EventsList
+- widget: EventList
   filterBy: '$matchByResource($item, $root.kind, $root.metadata.name)'
   name: events
   defaultType: NORMAL

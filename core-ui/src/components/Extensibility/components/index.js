@@ -9,7 +9,7 @@ import { ResourceRefs } from './ResourceRefs';
 import { ControlledBy } from './ControlledBy';
 import { JoinedArray } from './JoinedArray';
 import { ResourceList } from './ResourceList';
-import { EventsList } from './EventsList';
+import { EventList } from './EventList';
 import { ResourceLink } from './ResourceLink.js';
 import { Labels } from './Labels';
 import { ExternalLink } from './ExternalLink';
@@ -34,7 +34,7 @@ export const widgets = {
   Labels,
   ExternalLink,
   Tabs,
-  EventsList,
+  EventList,
 };
 
 export const valuePreprocessors = {
