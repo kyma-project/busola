@@ -32,14 +32,13 @@ export const ExternalLink = ({ value, schema, structure, ...props }) => {
   if (isNil(value)) return emptyLeafPlaceholder;
 
   return (
-    <p>
-      <Link
-        href={linkFormula ? jsonata(linkFormula) : href}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {textFormula ? jsonata(textFormula) : value}
-      </Link>
-    </p>
+    <Link
+      href={linkFormula ? jsonata(linkFormula) : href}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {textFormula ? jsonata(textFormula) : value}
+    </Link>
   );
 };
+ExternalLink.inline = true;
