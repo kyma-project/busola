@@ -208,9 +208,9 @@ data:
         "group": "networking.istio.io",
         "version": "v1beta1"
       },
-      "urlPath": "ext-gateways",
+      "urlPath": "gateways",
       "category": "Istio",
-      "name": "Ext Gateways",
+      "name": "Gateways",
       "scope": "namespace",
       "description": "{{[Gateways](https://istio.io/latest/docs/reference/config/networking/gateway/)}} describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections."
     }

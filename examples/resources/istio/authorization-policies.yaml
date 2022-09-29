@@ -424,9 +424,9 @@ data:
         "group": "security.istio.io",
         "version": "v1beta1"
       },
-      "name": "Ext Authorization Policies",
+      "name": "Authorization Policies",
       "category": "Istio",
-      "urlPath": "ext-authorizationpolicies",
+      "urlPath": "authorizationpolicies",
       "scope": "namespace",
       "description": "{{[Istio Authorization Policy](https://istio.io/latest/docs/reference/config/security/authorization-policy/)}} allows for workload access management in the mesh."
     }

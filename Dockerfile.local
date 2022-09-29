@@ -26,6 +26,7 @@ RUN cd /app/core-ui && make test && make build
 RUN cd /app/backend && npm run build
 
 # build extensions, to be used at 3rd stage, in Dockerfile.extensions.local
+RUN cp -a examples/resources/istio extensions
 RUN npm run prepare-extensions
 RUN npm run pack-extensions
 
