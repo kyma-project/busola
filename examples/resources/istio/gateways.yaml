@@ -195,7 +195,7 @@ data:
             "simple": true,
             "widget": "Alert",
             "type": "warning",
-            "alert": "alert.tls.https",
+            "alert": "'alert.tls.https'",
             "visibility": "$item.port.protocol = 'HTTPS'",
           }
         ]

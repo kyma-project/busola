@@ -7,7 +7,6 @@ import { jsonataWrapper } from '../helpers/jsonataWrapper';
 export function AlertRenderer({ value, schema, storeKeys, compact, ...props }) {
   const { t: tExt } = useGetTranslation();
   const alert = schema.get('alert');
-  const alertFormula = schema.get('alertFormula');
   const schemaType = schema.get('type') || 'information';
 
   function alertJsonata(alertFormula) {
@@ -26,7 +25,7 @@ export function AlertRenderer({ value, schema, storeKeys, compact, ...props }) {
 
   return (
     <MessageStrip type={schemaType} className="fd-margin-top--sm">
-      {alertFormula ? alertJsonata(alertFormula) : tExt(alert)}
+      {tExt(alertJsonata(alert))}
     </MessageStrip>
   );
 }
