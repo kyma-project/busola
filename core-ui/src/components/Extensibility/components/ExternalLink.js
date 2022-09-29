@@ -54,3 +54,4 @@ export const ExternalLink = ({
     </Link>
   );
 };
+ExternalLink.inline = true;
