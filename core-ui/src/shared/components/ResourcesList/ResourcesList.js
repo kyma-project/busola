@@ -66,6 +66,8 @@ ResourcesList.propTypes = {
   omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
   resourceUrlPrefix: PropTypes.string,
   disableCreate: PropTypes.bool,
+  disableEdit: PropTypes.bool,
+  disableDelete: PropTypes.bool,
 };
 
 ResourcesList.defaultProps = {
@@ -76,6 +78,8 @@ ResourcesList.defaultProps = {
   listHeaderActions: null,
   readOnly: false,
   disableCreate: false,
+  disableEdit: false,
+  disableDelete: false,
   filterFn: () => true,
 };
 
@@ -165,6 +169,8 @@ export function ResourceListRenderer({
   resourceUrlPrefix,
   nameSelector = entry => entry?.metadata.name, // overriden for CRDGroupList
   disableCreate,
+  disableEdit,
+  disableDelete,
   sortBy = {
     name: nameLocaleSort,
     time: timeSort,
@@ -283,7 +289,7 @@ export function ResourceListRenderer({
       resource,
       nameSelector(resource) + '.yaml',
       handleSaveClick(resource),
-      isProtected(resource),
+      isProtected(resource) || disableEdit,
       isProtected(resource),
     );
   };
@@ -337,8 +343,11 @@ export function ResourceListRenderer({
           tooltip: entry =>
             isProtected(entry)
               ? t('common.tooltips.protected-resources-view-yaml')
+              : disableEdit
+              ? t('common.buttons.view-yaml')
               : t('common.buttons.edit'),
-          icon: entry => (isProtected(entry) ? 'show-edit' : 'edit'),
+          icon: entry =>
+            isProtected(entry) || disableEdit ? 'show-edit' : 'edit',
           handler: handleResourceEdit,
         },
         {
@@ -346,9 +355,11 @@ export function ResourceListRenderer({
           tooltip: entry =>
             isProtected(entry)
               ? t('common.tooltips.protected-resources-info')
+              : disableDelete
+              ? null
               : t('common.buttons.delete'),
           icon: 'delete',
-          disabledHandler: isProtected,
+          disabledHandler: entry => isProtected(entry) || disableDelete,
           handler: resource => {
             handleResourceDelete({
               resourceUrl: prepareResourceUrl(resourceUrl, resource),
