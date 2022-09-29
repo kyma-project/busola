@@ -42,7 +42,7 @@ While the users can provide extensions, Busola also uses the extensibility mecha
 
 ### Embedding an extension in Busola
 
-1. Place your extension ConfigMaps in `extensions` directory. If your extensions are hosted externally, you can specify their URLs in the `extensions/extensions.json` file, for example:
+1. Place your extension ConfigMaps in the `extensions` directory. If your extensions are hosted externally, you can specify their URLs in the `extensions/extensions.json` file, for example:
 
    ```json
    [
