@@ -1,7 +1,6 @@
 import {
   hasPermissionsFor,
   hasWildcardPermission,
-  hasPermission,
   doesResourceExist,
   doesUserHavePermission,
 } from './permissions';
@@ -22,46 +21,60 @@ export const excludeNavigationNode = (node, groupVersions, permissionSet) => {
       markNavNodeToBeDeleted(node);
     }
   } else if (hasRequiredGroupResource(node)) {
-    //used only for Custom Resources node
+    //used only for the Custom Resources node
     if (isRequiredGroupResourceNotPermitted(node, permissionSet)) {
       markNavNodeToBeDeleted(node);
     }
-  }
-
-  if (!node.viewUrl || !node.resourceType) {
-    // does only CustomResource shouldIncludeCustomResource
-    // console.log('viewUrl', node);
-    // used for Custom Resources node
-    if (node.context?.requiredGroupResource) {
-      const { group, resource } = node.context.requiredGroupResource;
-      if (!hasPermissionsFor(group, resource, permissionSet)) {
-        node.toDelete = true;
-      }
-    }
-    return;
-  }
-
-  const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
-  if (!apiPath) return;
-  // console.log(apiPath);
-  if (hasWildcardPermission(permissionSet)) {
-    // we have '*' in permissions, just check if this resource exists
+  } else if (node.viewUrl && node.resourceType) {
+    const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
+    if (!apiPath) return;
     const groupVersion = apiPath
       .replace(/^\/apis\//, '')
       .replace(/^\/api\//, '');
+    //resourceType === destinaitonrules, pizza
+    // skad brac resource group?
+    // group: 'apiextensions.k8s.io',
+    console.log(node.resourceType, groupVersion);
 
-    if (!groupVersions.find(g => g.includes(groupVersion))) {
-      node.toDelete = true;
-      return;
-    }
-  } else {
-    // we need to filter through permissions to check the node availability
-    const apiGroup = extractApiGroup(apiPath);
-    if (!hasPermissionsFor(apiGroup, node.resourceType, permissionSet)) {
-      node.toDelete = true;
-      return;
-    }
+    // const doesExist = doesResourceExist()
+    // const isPermitted = doesUserHavePermission(
+    //     { groupName: group, resourceName: resource },
+    //     permissionSet,
+    // );
   }
+  //
+  // if (!node.viewUrl || !node.resourceType) {
+  //   // does only CustomResource shouldIncludeCustomResource
+  //   // console.log('viewUrl', node);
+  //   // used for Custom Resources node
+  //   // if (node.context?.requiredGroupResource) {
+  //   //   const { group, resource } = node.context.requiredGroupResource;
+  //   //   if (!hasPermissionsFor(group, resource, permissionSet)) {
+  //   //     node.toDelete = true;
+  //   //   }
+  //   // }
+  //   return;
+  // }
+
+  // console.log(apiPath);
+  // if (hasWildcardPermission(permissionSet)) {
+  //   // we have '*' in permissions, just check if this resource exists
+  //   const groupVersion = apiPath
+  //     .replace(/^\/apis\//, '')
+  //     .replace(/^\/api\//, '');
+  //
+  //   if (!groupVersions.find(g => g.includes(groupVersion))) {
+  //     node.toDelete = true;
+  //     return;
+  //   }
+  // } else {
+  //   // we need to filter through permissions to check the node availability
+  //   const apiGroup = extractApiGroup(apiPath);
+  //   if (!hasPermissionsFor(apiGroup, node.resourceType, permissionSet)) {
+  //     node.toDelete = true;
+  //     return;
+  //   }
+  // }
 };
 
 const markNavNodeToBeDeleted = node => {
@@ -85,8 +98,10 @@ const isRequiredGroupResourceNotPermitted = (node, permissionSet) => {
   const { group, resource } = node.context.requiredGroupResource;
 
   const doesExist = doesResourceExist(group, resource);
-  const isPermitted = doesUserHavePermission(group, resource, permissionSet);
-  console.log(doesExist);
+  const isPermitted = doesUserHavePermission(
+    { groupName: group, resourceName: resource },
+    permissionSet,
+  );
 
-  return true;
+  return !doesExist || !isPermitted;
 };

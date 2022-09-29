@@ -88,12 +88,6 @@ export function hasAnyRoleBound(permissionSet) {
   return verbs.some(v => usefulVerbs.includes(v));
 }
 
-export const hasPermission = node => {
-  const resourceList = clusterOpenApi.getResourceNameList;
-
-  console.log(resourceList, node);
-};
-
 export const doesResourceExist = (groupName, resourceName) => {
   const resourceIdList = clusterOpenApi.getResourceNameList;
 
@@ -111,17 +105,33 @@ export const doesResourceExist = (groupName, resourceName) => {
     );
   });
 
-  console.log(resourceIdList, reversedGroupName, singularNameRegex, doesExists);
-
   return doesExists;
 };
 
-export const doesUserHavePermission = (
-  groupName,
-  resourceName,
-  permissionSet,
-) => {
-  console.log(1111, groupName, resourceName, permissionSet);
+//doesUserHavePermission(['get', 'list', '*'], resource, permissionSet)
+const permissions = ['get', 'list'];
+export const doesUserHavePermission = (resource, permissionSet) => {
+  const { groupName, resourceName } = resource;
 
-  // wildcardPermission
+  console.log(1111, groupName, resourceName, permissionSet);
+  const permission = permissionSet.find(set => {
+    const sameApiGroup =
+      set.apiGroups?.includes(groupName) || set.apiGroups?.includes('*');
+    const sameResourceName =
+      set.resources?.includes(resourceName) || set.resources?.includes('*');
+
+    const permissionRegex = new RegExp( // formats '^get$|^list$|^\*$' etc.
+      `^\\*$|${permissions.map(verb => '^' + verb + '$').join('|')}`,
+    );
+    console.log(1212, permissionRegex, set.verbs);
+    const sufficientPermissions = set.verbs?.some(verb => {
+      console.log(33333, verb, permissionRegex);
+      return permissionRegex.test(verb);
+    });
+    console.log(2222, sameApiGroup, sameResourceName, sufficientPermissions);
+
+    return sameApiGroup && sameResourceName && sufficientPermissions;
+  });
+
+  return !!permission;
 };
