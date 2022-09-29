@@ -54,7 +54,7 @@ While the users can provide extensions, Busola also uses the extensibility mecha
 
 and then use the `npm run prepare-extensions` command to download them into the `extensions` directory.
 
-2. Run the `npm run pack-extensions` command. This will gather all the YAML files from `extensions` directory and merge them into:
+2. Run the `npm run pack-extensions` command. This gathers all the YAML files from the `extensions` directory and merges them into:
 
 - `core/src/assets/extensions/extensions.yaml` plain YAML file, which can be used during the local development. This file is a list of all extracted configurations, without the ConfigMap header.
 - `resources/extensions-patch/builtin-resource-extensions.configmap.yaml`. This file is a ConfigMap with `extensions.yaml` key, containing all extracted configurations.
