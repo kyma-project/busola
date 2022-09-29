@@ -38,7 +38,7 @@ To see an exemplary configuration of the Busola extensibility feature, see the [
 
 ## Built-in extensions
 
-While extensions can be provided by the users, Busola itself also uses extensibility mechanism to create some of the default views. Those default extensions are always present, even if `EXTENSIBILITY` feature is disabled.
+While the users can provide extensions, Busola also uses the extensibility mechanism to create some of the default views. Those default extensions are always present, even if the `EXTENSIBILITY` feature is disabled.
 
 ### Embedding an extension in Busola
 
