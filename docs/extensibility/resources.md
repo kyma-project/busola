@@ -41,7 +41,7 @@ The **general** section is required and contains basic information about the res
 - **description** - displays a custom description on the resource list page. It can contain links. If the **translations** section has a translation entry with the ID that is the same as the **description** string, the translation is used.
 - **filter** - optional [JSONata](https://docs.jsonata.org/overview.html) [filter](https://docs.jsonata.org/higher-order-functions#filter) used to filter the resources shown at the list section property.
 - **features** - an optional object for the features configuration.
-  - **actions** - an optional object of actions configuration.
+  - **actions** - an optional object for the actions configuration.
     - **disableCreate** - when set to `true`, it disables the **Create** button. Defaults to `false`.
     - **disableEdit** - when set to `true`, it disables the **Edit** button. Defaults to `false`.
     - **disableDelete** - when set to `true`, it disables the **Delete** button. Defaults to `false`.
