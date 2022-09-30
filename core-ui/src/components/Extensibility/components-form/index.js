@@ -28,6 +28,7 @@ import { MonacoRenderer } from './MonacoRenderer';
 import { ResourceRenderer } from './ResourceRenderer';
 import { ResourceRefRender } from './ResourceRefRenderer';
 import { SimpleList } from './SimpleList';
+import { AlertRenderer } from './AlertRenderer';
 
 const pluginStack = [
   ReferencingHandler,
@@ -85,6 +86,7 @@ export const widgets = {
     FormGroup: CollapsibleRenderer,
     ResourceRef: ResourceRefRender,
     Resource: ResourceRenderer,
+    Alert: AlertRenderer,
   },
 };
 export default widgets;
