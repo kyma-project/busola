@@ -47,8 +47,6 @@ This function can be used to match Events using a resource selector.
 
 ### Example
 
-Example from dataSources.
-
 ```yaml
 - widget: EventList
   filterBy: '$matchEvents($item, $root.kind, $root.metadata.name)'
