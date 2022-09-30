@@ -507,7 +507,7 @@ ResourceList widgets render a list of Kubernetes resources. The ResourceList wid
   - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
 - **search** - optional search option. It's an array of objects that allows you to search for resources including the value from the given **source**.
   - **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form, it's the path to the value.
-  - **searchFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) search function. It allows to use `$input` variable to get the search input's value that can be used to search for more complex data.
+  - **searchFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) search function. It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.
 
 Since the **ResourceList** widget does more than just list the items, you must provide the whole data source (`$myResource()`) instead of just the items (`$myResource().items`).
 
