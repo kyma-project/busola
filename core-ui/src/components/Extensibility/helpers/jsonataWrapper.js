@@ -15,7 +15,7 @@ export function jsonataWrapper(expression) {
   });
 
   exp.registerFunction(
-    'matchByResource',
+    'matchEvents',
     (resource, resourceKind, resourceName) => {
       return (
         resource?.involvedObject?.name === resourceName &&

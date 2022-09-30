@@ -5,7 +5,7 @@
 - [Overview](#overview)
 - [Preset functions](#preset-functions)
   - [_matchByLabelSelector_](#matchbylabelselectoritem-selectorpath)
-  - [_matchByResource_](#matchbyresourceitem-kind-name)
+  - [_matchEvents_](#matcheventsitem-kind-name)
   - [_compareStrings_](#comparestringsfirst-second)
 
 ## Overview
@@ -35,7 +35,7 @@ Example from [dataSources](datasources-section.md).
     filter: '$matchByLabelSelector($item, $root.spec.selector)'
 ```
 
-## matchByResource(item, kind, name)
+## matchEvents(item, kind, name)
 
 This function can be used to match Events using a resource selector.
 
@@ -51,7 +51,7 @@ Example from dataSources.
 
 ```yaml
 - widget: EventList
-  filterBy: '$matchByResource($item, $root.kind, $root.metadata.name)'
+  filterBy: '$matchEvents($item, $root.kind, $root.metadata.name)'
   name: events
   defaultType: NORMAL
   hideInvolvedObjects: true
