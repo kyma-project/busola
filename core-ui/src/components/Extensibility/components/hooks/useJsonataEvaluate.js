@@ -20,10 +20,10 @@ export function useJsonataEvaluate(root) {
     ]),
   );
 
-  return (query, extras) => {
-    return jsonataWrapper(query).evaluate(root, {
+  return (query, extras) =>
+    jsonataWrapper(query).evaluate(root, {
+      root,
       ...dataSourceFetchers,
       ...extras,
     });
-  };
 }
