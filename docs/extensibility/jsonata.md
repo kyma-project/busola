@@ -43,7 +43,7 @@ You can use this function to match Events using a resource selector.
 
 - **item** - Event to be checked.
 - **kind** - kind of the Event emitting resource
-- **name** - name of the event emitting resource
+- **name** - name of the Event emitting resource
 
 ### Example
 
