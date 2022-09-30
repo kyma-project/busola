@@ -16,6 +16,7 @@ import { isNil } from 'lodash';
 import { DEFAULT_FEATURES } from '../constants';
 import i18next from 'i18next';
 import { clusterOpenApi } from '../navigation/clusterOpenApi';
+import { loadingState } from '../loading-state';
 
 const CURRENT_CLUSTER_NAME_KEY = 'busola.current-cluster-name';
 
@@ -56,6 +57,7 @@ export function getAfterLoginLocation(clusterName, kubeconfig) {
 
 export async function setCluster(clusterName) {
   try {
+    loadingState.setLoading(true);
     const clusters = getClusters();
     const params = clusters[clusterName];
 
@@ -81,6 +83,7 @@ export async function setCluster(clusterName) {
       setAuthData(kubeconfigUser);
       Luigi.navigation().navigate(targetLocation);
       await saveCARequired();
+      loadingState.setLoading(false);
       await loadTargetClusterConfig();
       await clusterStorage.checkClusterStorageType(originalStorage);
       await reloadNavigation();
@@ -91,6 +94,7 @@ export async function setCluster(clusterName) {
     }
     clearK8Version();
   } catch (e) {
+    loadingState.setLoading(false);
     console.warn(e);
     alert('An error occured while setting up the cluster.');
     saveActiveClusterName(null);
