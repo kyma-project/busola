@@ -37,7 +37,7 @@ Example from [dataSources](datasources-section.md).
 
 ## matchEvents(item, kind, name)
 
-This function can be used to match Events using a resource selector.
+You can use this function to match Events using a resource selector.
 
 ### Function parameters
 
