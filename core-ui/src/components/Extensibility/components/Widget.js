@@ -60,6 +60,7 @@ export function shouldBeVisible(value, visibilityFormula, originalResource) {
 export function Widget({
   structure,
   value,
+  arrayItem,
   inlineRenderer,
   originalResource,
   ...props
@@ -69,7 +70,7 @@ export function Widget({
 
   const childValue = useJsonata(structure.source, originalResource, {
     parent: value,
-    item: value,
+    item: arrayItem || originalResource,
   });
 
   const { visible, error: visibleCheckError } = shouldBeVisible(
@@ -121,11 +122,12 @@ export function Widget({
   const sanitizedValue = stringifyIfBoolean(childValue);
 
   return Array.isArray(childValue) && !Renderer.array ? (
-    childValue.map(item => (
+    childValue.map(valueItem => (
       <SingleWidget
         inlineRenderer={inlineRenderer}
         Renderer={Renderer}
-        value={item}
+        value={valueItem}
+        arrayItem={value}
         structure={structure}
         originalResource={originalResource}
         {...props}
@@ -136,6 +138,7 @@ export function Widget({
       inlineRenderer={inlineRenderer}
       Renderer={Renderer}
       value={sanitizedValue}
+      arrayItem={arrayItem}
       structure={structure}
       originalResource={originalResource}
       {...props}
