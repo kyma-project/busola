@@ -270,19 +270,17 @@ ExternalLink widgets render the link to an external page.
 
 #### Widget-specific parameters
 
-- **linkFormula** - an optional JSONata function to generate a custom link.
-- **textFormula** - an optional string or item which is displayed as a link.
+- **link** - an optional JSONata function to generate a custom link. Default value is taken from **source**.
 
 #### Examples
 
 ##### linkFormula and textFormula usage
 
 ```yaml
-- source: '$item'
+- source: '$item.port.name'
   name: spec.servers.port.name
   widget: ExternalLink
-  linkFormula: "'https://' & $item.port.name & ':' & $string($item.port.number)"
-  textFormula: '$item.port.name'
+  link: "'https://' & $item.port.name & ':' & $string($item.port.number)"
 ```
 
 <img src="./assets/display-widgets/ExternalLink.png" alt="Example of a ExternalLink widget" width="50%" style="border: 1px solid #D2D5D9">
