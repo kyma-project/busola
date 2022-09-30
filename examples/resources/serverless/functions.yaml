@@ -134,8 +134,8 @@ data:
                   "name": "code.replicas",
                   "disableCreate": true
                 }, {
-                  "widget": "EventsList",
-                  "filterBy": "$matchByResource($item, $root.kind, $root.metadata.name)",
+                  "widget": "EventList",
+                  "filterBy": "$matchEvents($item, $root.kind, $root.metadata.name)",
                   "name": "events",
                   "defaultType": "NORMAL",
                   "hideInvolvedObjects": true,
