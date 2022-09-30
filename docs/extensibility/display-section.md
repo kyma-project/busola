@@ -14,6 +14,7 @@
   - [ResourceLink](#resourcelink)
   - [Text](#text)
 - [Block widgets](#block-widgets)
+  - [Alert](#alert)
   - [CodeViewer](#codeviewer)
   - [Columns](#columns)
   - [Panel](#panel)
@@ -393,6 +394,27 @@ Text widgets render values as a simple text. This is the default behavior for al
 ## Block widgets
 
 Block widgets are more complex layouts and you must use them only in the details body.
+
+### Alert
+
+Alert widgets display values using predefined types.
+
+#### Widget-specific parameters
+
+- **disableMargin** - an optional boolean which disables the margin outside the alert body.
+- **severity** - specifies one of the alert severities: **information**, **warning**, **error**, or **success**. By default, it's set to **information**.
+
+#### Example
+
+```yaml
+- source: "'I am some warning for a user'"
+  widget: Alert
+  severity: warning
+
+- source: "$item.port.number = 80  ? 'Using Default 80' : 'Using Different Port then 80'"
+  widget: Alert
+  disableMargin: true
+```
 
 ### CodeViewer
 

@@ -29,12 +29,14 @@ export function extractVariables(varStore, vars, indexes) {
     return varStore;
   }
 
-  return Object.fromEntries(
-    vars.map(varName => [
-      varName,
-      indexes.reduce((acc, index) => acc?.[index], varStore[varName]),
-    ]),
-  );
+  return vars
+    ? Object.fromEntries(
+        vars.map(varName => [
+          varName,
+          indexes.reduce((acc, index) => acc?.[index], varStore[varName]),
+        ]),
+      )
+    : {};
 }
 
 export function useVariables() {
