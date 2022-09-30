@@ -405,11 +405,7 @@ Alert widgets display values using predefined types.
 
 - **source** - information what has to be displayed.
 - **disableMargin** - an optional boolean which disables the margin outside the alert body.
-- **type** - type of alert:
-  - **information** - Defalut
-  - **warning**
-  - **error**
-  - **success**
+- **type** - type of alert. One of **information**, **warning**, **error** or **success**. By default it's set to **information**.
 
 #### Example
 
