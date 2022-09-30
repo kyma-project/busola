@@ -403,14 +403,13 @@ Alert widgets display values using predefined types.
 
 #### Widget-specific parameters
 
-- **source** - information what has to be displayed.
 - **disableMargin** - an optional boolean which disables the margin outside the alert body.
 - **type** - type of alert. One of **information**, **warning**, **error** or **success**. By default it's set to **information**.
 
 #### Example
 
 ```yaml
-- source: "'I am some warning for user'"
+- source: "'I am some warning for a user'"
   widget: Alert
   type: warning
 

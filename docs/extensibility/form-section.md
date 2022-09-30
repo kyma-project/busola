@@ -106,17 +106,13 @@ Form widgets are used in the resource forms.
 
 ### Alert
 
-Alert widgets display information for user using predefined types.
+Alert widgets display values using predefined types.
 
 #### Widget-specific parameters
 
-- **alert** - information what has to be displayed.
+- **source** - information that has to be displayed.
 - **disableMargin** - an optional boolean which disables the margin outside the alert body.
-- **type** - type of alert:
-  - **information** - Defalut
-  - **warning**
-  - **error**
-  - **success**
+- **type** - type of alert. One of **information**, **warning**, **error** or **success**. By default it's set to **information**.
 
 #### Example
 
