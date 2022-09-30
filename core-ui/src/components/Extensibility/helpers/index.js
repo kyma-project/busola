@@ -292,3 +292,53 @@ export const getPropsFromSchema = (schema, required, t) => {
     tooltipContent: t(tooltipContent),
   };
 };
+
+const isValueMatching = (value, input) => {
+  return (value ?? '')
+    .toString()
+    .toLowerCase()
+    .includes(input.toString().toLowerCase());
+};
+
+const getSearchingFunction = (searchOption, originalResource) => {
+  const { source, search } = searchOption;
+  return (entry, input) => {
+    try {
+      const value =
+        jsonataWrapper(source).evaluate(originalResource ?? entry, {
+          item: entry,
+        }) || '';
+
+      if (!search?.searchFunction)
+        return isValueMatching(value, input) ? value : null;
+
+      const jsonata = jsonataWrapper(search?.searchFunction);
+      jsonata.assign('input', input);
+
+      const foundValues = jsonata.evaluate(originalResource ?? entry, {
+        item: entry,
+        input,
+      });
+
+      return foundValues;
+    } catch (e) {
+      return null;
+    }
+  };
+};
+
+const searchingFunctions = (searchOptions, originalResource) =>
+  (searchOptions || []).map(searchOption =>
+    getSearchingFunction(searchOption, originalResource),
+  );
+
+export const getTextSearchProperties = ({
+  searchOptions,
+  originalResource = null,
+  defaultSearch,
+}) => {
+  return (defaultSearchProperties = []) => [
+    ...(defaultSearch ? defaultSearchProperties : []),
+    ...searchingFunctions(searchOptions, originalResource),
+  ];
+};

@@ -37,11 +37,14 @@ Each object adds a new column to your table.
 - **sort** - optional sort option. If set to `true`, it allows you to sort the resource list using this value. Defaults to false. It can also be set to an object with the following properties:
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
   - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
+- **search** - optional search option. If set to `true`, it allows you to search the resource list by this value. Defaults to false. It can also be set to an object with the following property:
+  - **searchFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) search function. It allows to use `$input` variable to get the search input's value that can be used to search for more complex data.
 
 ### Example
 
 ```yaml
 - source: spec.url
+  search: true
   sort:
     default: true
     compareFunction: '$compareStrings($first, $second)'
@@ -524,6 +527,9 @@ ResourceList widgets render a list of Kubernetes resources. The ResourceList wid
   - **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form, it's the path to the value.
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
   - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
+- **search** - optional search option. It's an array of objects that allows you to search for resources including the value from the given **source**.
+  - **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form, it's the path to the value.
+  - **searchFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) search function. It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.
 
 Since the **ResourceList** widget does more than just list the items, you must provide the whole data source (`$myResource()`) instead of just the items (`$myResource().items`).
 
@@ -539,6 +545,10 @@ Since the **ResourceList** widget does more than just list the items, you must p
     - source: '$item.spec.strategy.type'
       compareFunction: '$compareStrings($second, $first)'
       default: true
+  search:
+    - source: spec.replicas
+    - source: spec.containers
+      searchFunction: '$filter(spec.containers, function($c){ $contains($c.image, $input) })'
 ```
 
 <img src="./assets/display-widgets/ResourceList.png" alt="Example of a ResourceList widget" style="border: 1px solid #D2D5D9">
@@ -560,6 +570,7 @@ Since the **ResourceList** widget does more than just list the items, you must p
         kind: data.kind
     - source: type
       name: Type
+      search: true
       sort:
         default: true
 ```
@@ -594,10 +605,11 @@ Table widgets display array data as rows of a table instead of free-standing com
 - **collapsibleTitle** - an optional option for **collapsible** to define title for the collapsible sections, as string or the JSONata function.
 - **disablePadding** - an optional boolean which disables the padding inside the panel body.
 - **showHeader** - an optional boolean which disables displaying the head row.
-- **showSearchField** - an optional boolean which disables displaying the search input.
 - **sort** - optional sort option. If set to `true`, it allows you to sort using this value. Defaults to false. It can also be set to an object with the following properties:
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
   - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
+- **search** - optional search option. If set to `true`, it allows you to search the resource list by this value. Defaults to false. It can also be set to an object with the following property:
+  - **searchFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) search function. It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.
 
 #### Example
 
@@ -614,6 +626,8 @@ Table widgets display array data as rows of a table instead of free-standing com
       sort:
         default: true
         compareFunction: '$second -$first'
+      search:
+        searchFunction: '$filter($item.price, function($p){ $p > $number($input) }'
 ```
 
 <img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
