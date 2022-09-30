@@ -402,14 +402,14 @@ Alert widgets display values using predefined types.
 #### Widget-specific parameters
 
 - **disableMargin** - an optional boolean which disables the margin outside the alert body.
-- **type** - specifies one of the alert types: **information**, **warning**, **error**, or **success**. By default, it's set to **information**.
+- **severity** - specifies one of the alert severity: **information**, **warning**, **error**, or **success**. By default, it's set to **information**.
 
 #### Example
 
 ```yaml
 - source: "'I am some warning for a user'"
   widget: Alert
-  type: warning
+  severity: warning
 
 - source: "$item.port.number = 80  ? 'Using Default 80' : 'Using Different Port then 80'"
   widget: Alert

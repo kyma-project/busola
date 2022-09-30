@@ -7,7 +7,7 @@ import { jsonataWrapper } from '../helpers/jsonataWrapper';
 export function AlertRenderer({ value, schema, storeKeys, compact, ...props }) {
   const { t: tExt } = useGetTranslation();
   const alert = schema.get('alert');
-  const schemaType = schema.get('type') || 'information';
+  const schemaType = schema.get('severity') || 'information';
 
   function alertJsonata(alertFormula) {
     try {

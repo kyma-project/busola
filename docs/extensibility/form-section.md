@@ -112,14 +112,14 @@ Alert widgets display values using predefined types.
 
 - **alert** - information that has to be displayed.
 - **disableMargin** - an optional boolean which disables the margin outside the alert body.
-- **type** - specifies one of the alert types: **information**, **warning**, **error**, or **success**. By default, it's set to **information**.
+- **severity** - specifies one of the alert severity: **information**, **warning**, **error**, or **success**. By default, it's set to **information**.
 
 #### Example
 
 ```yaml
 - simple: true
   widget: Alert
-  type: warning
+  severity: warning
   alert: "'alert.tls.https'"
   visibility: "$item.port.protocol = 'HTTPS'"
 
