@@ -54,13 +54,22 @@ export function CustomFieldInjector({
       />
     );
   } else {
+    function getValue(storeKeys, resource) {
+      let value = resource;
+      const keys = storeKeys.toJS();
+      keys.filter(key => key !== '').forEach(key => (value = value?.[key]));
+      return value;
+    }
+
     return (
       <Plugin
         {...props}
         currentPluginIndex={nextPluginIndex}
         schema={schema}
         onChange={() => {}}
-        storeKeys={List([])}
+        value={getValue(storeKeys, resource)}
+        storeKeys={storeKeys}
+        resource={resource}
       />
     );
   }

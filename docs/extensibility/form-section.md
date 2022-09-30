@@ -2,6 +2,7 @@
 
 - [_Form_ overview](#form-overview)
 - [Variable fields](#variable-fields)
+- [Alert](#alert)
 - [Simple widgets](#simple-widgets)
   - [Text](#text)
   - [Name](#name)
@@ -102,6 +103,31 @@ In the example, the visibility for item price and color are analogous - the form
 # Form widgets
 
 Form widgets are used in the resource forms.
+
+### Alert
+
+Alert widgets display values using predefined types.
+
+#### Widget-specific parameters
+
+- **alert** - information that you want to display.
+- **disableMargin** - an optional boolean which disables the margin outside the alert body.
+- **severity** - specifies one of the alert severities: **information**, **warning**, **error**, or **success**. By default, it's set to **information**.
+
+#### Example
+
+```yaml
+- simple: true
+  widget: Alert
+  severity: warning
+  alert: "'alert.tls.https'"
+  visibility: "$item.port.protocol = 'HTTPS'"
+
+- widget: Alert
+  alert: "$item = 80  ? 'Using Default 80' : 'Using Different Port then 80'"
+```
+
+<img src="./assets/form-widgets/Alert.png" alt="Example of a text widget" style="border: 1px solid #D2D5D9">
 
 ## Simple widgets
 
