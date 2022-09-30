@@ -587,7 +587,7 @@ Table widgets display array data as rows of a table instead of free-standing com
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
   - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
 - **search** - optional search option. If set to `true`, it allows you to search the resource list by this value. Defaults to false. It can also be set to an object with the following property:
-  - **searchFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) search function. It allows to use `$input` variable to get the search input's value that can be used to search for more complex data.
+  - **searchFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) search function. It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.
 
 #### Example
 
