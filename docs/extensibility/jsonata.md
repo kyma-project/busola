@@ -41,9 +41,9 @@ You can use this function to match Events using a resource selector.
 
 ### Function parameters
 
-- **item** - Event to check.
-- **kind** - resource kind to match against.
-- **name** - resource name to match against.
+- **item** - Event to be checked.
+- **kind** - kind of the Event emitting resource
+- **name** - name of the event emitting resource
 
 ### Example
 
