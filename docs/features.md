@@ -117,7 +117,7 @@ Note that some features must be run before the application starts the bootstrap 
   },
   ```
 
-- **EXTENSIBILITY** - is used to indicate wheter the Busola [extensibility](extensibility/README.md) feature should be enabled.
+- **EXTENSIBILITY** - is used to indicate whether the Busola [extensibility](extensibility/README.md) feature should be enabled.
 
 Default settings:
 
