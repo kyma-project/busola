@@ -3,8 +3,8 @@ import pluralize from 'pluralize';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
-import { sortBy, useGetTranslation } from '../helpers';
-import { getChildrenInfo } from './helpers';
+import { getTextSearchProperties, sortBy, useGetTranslation } from '../helpers';
+import { getChildren, getSearchDetails, getSortDetails } from './helpers';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ExtensibilityCreate } from '../ExtensibilityCreate';
 
@@ -43,10 +43,16 @@ export function ResourceList({
     ? PredefinedRenderer.List
     : ResourcesList;
 
-  const { children, sortOptions, defaultSort } = getChildrenInfo(
-    structure,
-    originalResource,
-  );
+  const children = getChildren(structure, originalResource);
+
+  const { sortOptions, defaultSort } = getSortDetails(structure);
+
+  const { searchOptions, defaultSearch } = getSearchDetails(structure);
+
+  const textSearchProperties = getTextSearchProperties({
+    searchOptions,
+    defaultSearch,
+  });
 
   // make sure "kind" is present on resources
   if (Array.isArray(value?.items)) {
@@ -85,6 +91,10 @@ export function ResourceList({
       }
       createFormProps={{ resourceSchema }}
       createResourceForm={ExtensibilityCreate}
+      searchSettings={{
+        textSearchProperties: defaultSortOptions =>
+          textSearchProperties(defaultSortOptions),
+      }}
       {...structure}
       {...props}
     />
