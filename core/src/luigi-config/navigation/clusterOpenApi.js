@@ -31,8 +31,26 @@ class clusterOpenApiClass {
     this.resourceNameList = [];
   }
   setResourceNameList() {
-    this.resourceNameList = Object.keys(this.openApi.definitions);
+    this.resourceNameList = Object.keys(this.openApi.paths);
+
     console.log(this.resourceNameList);
+    console.log(this.openApi.paths);
+
+    // this.openApi.definitions.forEach(def => {
+    //   if (!def['x-kubernetes-group-version-kind']) {
+    //     console.log('ALERT', def);
+    //   }
+    //
+    //   if (def['x-kubernetes-group-version-kind']?.length !== 1) {
+    //     console.log(
+    //       'NO SINGLE COS',
+    //       def['x-kubernetes-group-version-kind']?.length,
+    //     );
+    //   }
+    //   if (!def['x-kubernetes-group-version-kind']?.[0]?.group) {
+    //     console.log('NO GROUP', def);
+    //   }
+    // });
   }
 }
 export const clusterOpenApi = new clusterOpenApiClass();

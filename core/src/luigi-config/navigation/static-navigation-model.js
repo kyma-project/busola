@@ -547,7 +547,7 @@ export function getStaticChildrenNodesForNamespace(
     {
       category: i18next.t('discovery-and-network.title'),
       pathSegment: 'horizontalpodautoscalers',
-      resourceType: 'hpas',
+      resourceType: 'horizontalpodautoscalers',
       navigationContext: 'horizontalpodautoscalers',
       label: i18next.t('hpas.title'),
       viewUrl:
@@ -565,7 +565,7 @@ export function getStaticChildrenNodesForNamespace(
           children: [
             {
               pathSegment: ':horizontalPodAutoscalersName',
-              resourceType: 'hpas',
+              resourceType: 'horizontalpodautoscalers',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/horizontalpodautoscalers/:horizontalPodAutoscalersName?' +

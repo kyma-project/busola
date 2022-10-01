@@ -88,49 +88,63 @@ export function hasAnyRoleBound(permissionSet) {
   return verbs.some(v => usefulVerbs.includes(v));
 }
 
+//TODO groupName includes version - what if version is not actual? should we exclude it
+//TODO pizza
+
+// "/apis/busola.example.com/v1/namespaces/{namespace}/pizzaorders"
+// "/apis/busola.example.com/v1/namespaces/{namespace}/pizzaorders/{name}"
+// "/apis/busola.example.com/v1/namespaces/{namespace}/pizzas"
+// "/apis/busola.example.com/v1/namespaces/{namespace}/pizzas/{name}"
+// "/apis/busola.example.com/v1/pizzaorders"
+// "/apis/busola.example.com/v1/pizzas"
+
 export const doesResourceExist = (groupName, resourceName) => {
   const resourceIdList = clusterOpenApi.getResourceNameList;
+  const resourceNamePlural = pluralize(resourceName);
 
-  const reversedGroupName = groupName
-    .split('.')
-    .reverse()
-    .join('.');
-  const singularResourceName = pluralize(resourceName, 1);
-  const singularNameRegex = new RegExp(`${singularResourceName}$`, 'i');
-
-  const doesExists = !!resourceIdList.find(resourceId => {
-    return (
-      resourceId.startsWith(reversedGroupName) &&
-      singularNameRegex.test(resourceId)
-    );
+  // an example string matching the regex: /(api|apis)/GROUP_NAME/.../RESOURCE_NAME
+  const regexString = `^\\/(api|apis)\\/${groupName}\\/.*?\\/${resourceNamePlural}$`;
+  const resourceGroupAndKindRegex = new RegExp(regexString, 'i');
+  const doesExist = !!resourceIdList.find(resourceId => {
+    return resourceGroupAndKindRegex.test(resourceId);
   });
 
-  return doesExists;
+  console.log(555555, resourceGroupAndKindRegex, doesExist);
+
+  return doesExist;
 };
 
 //doesUserHavePermission(['get', 'list', '*'], resource, permissionSet)
 const permissions = ['get', 'list'];
 export const doesUserHavePermission = (resource, permissionSet) => {
   const { groupName, resourceName } = resource;
+  const resourceNamePlural = pluralize(resourceName);
 
   console.log(1111, groupName, resourceName, permissionSet);
   const permission = permissionSet.find(set => {
-    const sameApiGroup =
+    const isSameApiGroup =
       set.apiGroups?.includes(groupName) || set.apiGroups?.includes('*');
-    const sameResourceName =
-      set.resources?.includes(resourceName) || set.resources?.includes('*');
+    const isSameResourceName =
+      set.resources?.includes(resourceNamePlural) ||
+      set.resources?.includes('*');
 
-    const permissionRegex = new RegExp( // formats '^get$|^list$|^\*$' etc.
+    // creates a regex such as '^\*$|^VERB1$|^VERB2' etc.
+    const permissionRegex = new RegExp(
       `^\\*$|${permissions.map(verb => '^' + verb + '$').join('|')}`,
     );
     console.log(1212, permissionRegex, set.verbs);
-    const sufficientPermissions = set.verbs?.some(verb => {
+    const areSufficientPermissions = set.verbs?.some(verb => {
       console.log(33333, verb, permissionRegex);
       return permissionRegex.test(verb);
     });
-    console.log(2222, sameApiGroup, sameResourceName, sufficientPermissions);
+    // console.log(
+    //   2222,
+    //   isSameApiGroup,
+    //   isSameResourceName,
+    //   areSufficientPermissions,
+    // );
 
-    return sameApiGroup && sameResourceName && sufficientPermissions;
+    return isSameApiGroup && isSameResourceName && areSufficientPermissions;
   });
 
   return !!permission;

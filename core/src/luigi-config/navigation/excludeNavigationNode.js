@@ -20,21 +20,19 @@ export const excludeNavigationNode = (node, groupVersions, permissionSet) => {
     if (isARequiredFeatureDisabled(node)) {
       markNavNodeToBeDeleted(node);
     }
-  } else if (hasRequiredGroupResource(node)) {
+  } else if (dependsOnOtherResource(node)) {
     //used only for the Custom Resources node
-    if (isRequiredGroupResourceNotPermitted(node, permissionSet)) {
+    if (isParentResourceDisallowed(node, permissionSet)) {
       markNavNodeToBeDeleted(node);
     }
-  } else if (node.viewUrl && node.resourceType) {
-    const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
-    if (!apiPath) return;
-    const groupVersion = apiPath
-      .replace(/^\/apis\//, '')
-      .replace(/^\/api\//, '');
-    //resourceType === destinaitonrules, pizza
-    // skad brac resource group?
-    // group: 'apiextensions.k8s.io',
-    console.log(node.resourceType, groupVersion);
+  } else if (hasCompleteInformation(node)) {
+    if (isResourceDisallowed(node, permissionSet)) {
+      markNavNodeToBeDeleted(node);
+    }
+
+    // console.log(node.resourceType, apiPath);
+
+    //"/api/v1/namespaces/{namespace}/serviceaccounts",
 
     // const doesExist = doesResourceExist()
     // const isPermitted = doesUserHavePermission(
@@ -91,10 +89,10 @@ const isARequiredFeatureDisabled = node =>
     configFeature => !configFeature || configFeature.isEnabled === false,
   );
 
-const hasRequiredGroupResource = node =>
+const dependsOnOtherResource = node =>
   typeof node.context?.requiredGroupResource === 'object';
 
-const isRequiredGroupResourceNotPermitted = (node, permissionSet) => {
+const isParentResourceDisallowed = (node, permissionSet) => {
   const { group, resource } = node.context.requiredGroupResource;
 
   const doesExist = doesResourceExist(group, resource);
@@ -104,4 +102,28 @@ const isRequiredGroupResourceNotPermitted = (node, permissionSet) => {
   );
 
   return !doesExist || !isPermitted;
+};
+
+const isResourceDisallowed = (node, permissionSet) => {
+  const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
+  const resourceGroup = apiPath.replace(/^\/apis?\//, '');
+
+  const doesExist = doesResourceExist(resourceGroup, node.resourceType);
+  const isPermitted = doesUserHavePermission(
+    { groupName: resourceGroup, resourceName: node.resourceType },
+    permissionSet,
+  );
+
+  return !doesExist || !isPermitted;
+};
+
+const hasCompleteInformation = node => {
+  if (typeof node.viewUrl === 'string') {
+    const apiPath = new URL(node.viewUrl || '').searchParams.get(
+      'resourceApiPath',
+    );
+
+    return apiPath && node.resourceType;
+  }
+  return false;
 };
