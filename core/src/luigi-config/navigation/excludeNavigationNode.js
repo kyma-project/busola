@@ -1,6 +1,6 @@
 import { doesResourceExist, doesUserHavePermission } from './permissions';
 
-export const excludeNavigationNode = (node, groupVersions, permissionSet) => {
+export const excludeNavigationNode = (node, permissionSet) => {
   if (dependsOnConfigFeatures(node)) {
     if (isARequiredFeatureDisabled(node)) {
       markNavNodeToBeDeleted(node);

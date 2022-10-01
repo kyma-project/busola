@@ -5,7 +5,6 @@ import {
 } from './../cluster-management/cluster-management';
 import { getSSOAuthData } from '../auth/sso';
 import * as fetchCache from './../cache/fetch-cache';
-import { extractGroupVersions } from '../utils/extractGroupVersions';
 
 export async function failFastFetch(input, auth, init = {}) {
   function createAuthHeaders(auth) {

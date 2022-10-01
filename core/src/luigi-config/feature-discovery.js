@@ -1,5 +1,4 @@
 import { getAuthData } from './auth/auth-storage';
-import * as fetchCache from './cache/fetch-cache';
 import {
   getActiveCluster,
   getCurrentConfig,
@@ -10,7 +9,6 @@ import { apiGroup } from './feature-checks';
 import { createNavigationNodes } from './navigation/navigation-data-init';
 import { fetchPermissions } from './navigation/queries';
 import { configChanged } from './utils/configChanged';
-import { extractGroupVersions } from './utils/extractGroupVersions';
 
 // convert features from old format (selectors) to new format (checks)
 export function convertStaticFeatures(features = {}) {
@@ -119,14 +117,9 @@ export async function updateFeature(featureName) {
       const permissionSet = await fetchPermissions(authData, namespace);
       const customResources = await getCustomResources(authData);
 
-      const { data } = await fetchCache.get('/apis');
-      const apiGroups = data.groups;
-      const groupVersions = extractGroupVersions(data);
       const cfg = Luigi.getConfig();
       cfg.navigation.nodes = await createNavigationNodes({
         features: lastResolvedFeatures,
-        groupVersions,
-        apiGroups,
         permissionSet,
         customResources,
       });

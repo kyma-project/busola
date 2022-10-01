@@ -54,7 +54,6 @@ async function downloadKubeconfig() {
 }
 
 export function getStaticChildrenNodesForNamespace(
-  groupVersions,
   permissionSet,
   features,
   customResources,
@@ -1486,12 +1485,11 @@ export function getStaticChildrenNodesForNamespace(
 
   const allNodes = mergeInExtensibilityNav(nodes, customPaths);
 
-  return filterNodesByAvailablePaths(allNodes, groupVersions, permissionSet);
+  return filterNodesByAvailablePaths(allNodes, permissionSet);
 }
 
 export function getStaticRootNodes(
   namespaceChildrenNodesResolver,
-  groupVersions,
   permissionSet,
   features,
   customResources,
@@ -1544,7 +1542,6 @@ export function getStaticRootNodes(
           keepSelectedForChildren: false,
           children: async () =>
             await namespaceChildrenNodesResolver(
-              groupVersions,
               permissionSet,
               features,
               customResources,
@@ -1940,7 +1937,7 @@ export function getStaticRootNodes(
 
   const allNodes = mergeInExtensibilityNav(nodes, customPaths);
 
-  return filterNodesByAvailablePaths(allNodes, groupVersions, permissionSet);
+  return filterNodesByAvailablePaths(allNodes, permissionSet);
 }
 
 function extractApiGroup(apiPath) {
@@ -1950,68 +1947,14 @@ function extractApiGroup(apiPath) {
   return apiPath.split('/')[2];
 }
 
-function filterNodesByAvailablePaths(nodes, groupVersions, permissionSet) {
+function filterNodesByAvailablePaths(nodes, permissionSet) {
   for (const node of nodes) {
     if (typeof node.children === 'object') {
-      node.children = filterNodesByAvailablePaths(
-        node.children,
-        groupVersions,
-        permissionSet,
-      );
+      node.children = filterNodesByAvailablePaths(node.children, permissionSet);
     }
     // console.log(111, node);
-    excludeNavigationNode(node, groupVersions, permissionSet);
+    excludeNavigationNode(node, permissionSet);
   }
 
   return nodes.filter(n => !n.toDelete);
 }
-//
-// function checkSingleNode(node, groupVersions, permissionSet) {
-//   // hasWildcardPermissions
-//
-//   //markToBeDeletedIfFeatureDisabledinConfig i.e. extensibility
-//   if (node.context?.requiredFeatures) {
-//     for (const feature of node.context.requiredFeatures || []) {
-//       console.log(11111, feature, node);
-//       if (!feature || feature.isEnabled === false) {
-//         node.toDelete = true;
-//         return;
-//       }
-//     }
-//   }
-//
-//   if (!node.viewUrl || !node.resourceType) {
-//     // does only CustomResource shouldIncludeCustomResource
-//     // console.log('viewUrl', node);
-//     // used for Custom Resources node
-//     if (node.context?.requiredGroupResource) {
-//       const { group, resource } = node.context.requiredGroupResource;
-//       if (!hasPermissionsFor(group, resource, permissionSet)) {
-//         node.toDelete = true;
-//       }
-//     }
-//     return;
-//   }
-//
-//   const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
-//   if (!apiPath) return;
-//   // console.log(apiPath);
-//   if (hasWildcardPermission(permissionSet)) {
-//     // we have '*' in permissions, just check if this resource exists
-//     const groupVersion = apiPath
-//       .replace(/^\/apis\//, '')
-//       .replace(/^\/api\//, '');
-//
-//     if (!groupVersions.find(g => g.includes(groupVersion))) {
-//       node.toDelete = true;
-//       return;
-//     }
-//   } else {
-//     // we need to filter through permissions to check the node availability
-//     const apiGroup = extractApiGroup(apiPath);
-//     if (!hasPermissionsFor(apiGroup, node.resourceType, permissionSet)) {
-//       node.toDelete = true;
-//       return;
-//     }
-//   }
-// }
