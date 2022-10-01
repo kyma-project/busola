@@ -12,7 +12,7 @@ import {
   getStaticChildrenNodesForNamespace,
   getStaticRootNodes,
 } from './static-navigation-model';
-import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
+import { hasAnyRoleBound } from './permissions';
 import {
   getCustomResources,
   getExtensibilitySchemas,
@@ -269,8 +269,8 @@ export async function createNavigation() {
 
     return {
       preloadViewGroups: false,
-      nodeAccessibilityResolver: node =>
-        navigationPermissionChecker(node, permissionSet),
+      // nodeAccessibilityResolver: node =>
+      //   navigationPermissionChecker(node, permissionSet),
       appSwitcher: await createAppSwitcher(),
       ...optionsForCurrentCluster,
       nodes: await createNavigationNodes({

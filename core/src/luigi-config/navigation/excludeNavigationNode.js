@@ -1,10 +1,4 @@
-import {
-  hasPermissionsFor,
-  hasWildcardPermission,
-  doesResourceExist,
-  doesUserHavePermission,
-} from './permissions';
-import { clusterOpenApi } from './clusterOpenApi';
+import { doesResourceExist, doesUserHavePermission } from './permissions';
 
 export const excludeNavigationNode = (node, groupVersions, permissionSet) => {
   if (dependsOnConfigFeatures(node)) {
@@ -43,9 +37,13 @@ const dependsOnOtherResource = node =>
 const isParentResourceDisallowed = (node, permissionSet) => {
   const { group, resource } = node.context.requiredGroupResource;
 
-  const doesExist = doesResourceExist(group, resource);
+  const doesExist = doesResourceExist({
+    resourceGroup: group,
+    resourceKind: resource,
+  });
   const isPermitted = doesUserHavePermission(
-    { groupName: group, resourceName: resource },
+    ['get', 'list'],
+    { resourceGroup: group, resourceKind: resource },
     permissionSet,
   );
 
@@ -56,9 +54,13 @@ const isResourceDisallowed = (node, permissionSet) => {
   const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
   const resourceGroup = apiPath.replace(/^\/apis?\//, '');
 
-  const doesExist = doesResourceExist(resourceGroup, node.resourceType);
+  const doesExist = doesResourceExist({
+    resourceGroup,
+    resourceKind: node.resourceType,
+  });
   const isPermitted = doesUserHavePermission(
-    { groupName: resourceGroup, resourceName: node.resourceType },
+    ['get', 'list'],
+    { resourceGroup, resourceKind: node.resourceType },
     permissionSet,
   );
 

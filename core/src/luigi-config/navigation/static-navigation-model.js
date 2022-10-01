@@ -6,7 +6,7 @@ import {
   getActiveClusterName,
   getClusters,
 } from './../cluster-management/cluster-management';
-import { hasPermissionsFor, hasWildcardPermission } from './permissions';
+import { doesUserHavePermission } from './permissions';
 import { getCustomPaths } from './customPaths';
 import { mergeInExtensibilityNav } from './mergeInExtensibilityNav';
 
@@ -67,9 +67,11 @@ export function getStaticChildrenNodesForNamespace(
       link: `/cluster/${encodedClusterName}/overview`,
       label: i18next.t('clusters.overview.back'),
       icon: 'nav-back',
-      hideFromNav: !hasPermissionsFor('', 'namespaces', permissionSet, [
-        'list',
-      ]),
+      hideFromNav: !doesUserHavePermission(
+        ['get', 'list'],
+        { resourceGroup: '', resourceKind: 'namespace' },
+        permissionSet,
+      ),
     },
     {
       pathSegment: 'details',

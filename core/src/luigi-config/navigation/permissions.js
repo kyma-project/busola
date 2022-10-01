@@ -1,33 +1,6 @@
-import rbacRulesMatched from './rbac-rules-matcher';
 import _ from 'lodash';
 import pluralize from 'pluralize';
 import { clusterOpenApi } from './clusterOpenApi';
-
-export function navigationPermissionChecker(
-  nodeToCheckPermissionsFor,
-  selfSubjectRulesReview,
-) {
-  const noRulesApplied =
-    !Array.isArray(nodeToCheckPermissionsFor.requiredPermissions) ||
-    !nodeToCheckPermissionsFor.requiredPermissions.length;
-
-  return (
-    noRulesApplied ||
-    rbacRulesMatched(
-      nodeToCheckPermissionsFor.requiredPermissions,
-      selfSubjectRulesReview,
-    )
-  );
-}
-
-export function hasWildcardPermission(permissionSet) {
-  return !!permissionSet.find(
-    rule =>
-      rule.apiGroups[0] === '*' &&
-      rule.resources[0] === '*' &&
-      rule.verbs[0] === '*',
-  );
-}
 
 export function hasPermissionsFor(
   apiGroup,
@@ -35,28 +8,28 @@ export function hasPermissionsFor(
   groupVersions,
   verbs = [],
 ) {
-  const permissionsForApiGroup = groupVersions.filter(
-    p => p.apiGroups.includes(apiGroup) || p.apiGroups[0] === '*',
-  );
-  const matchingPermission = permissionsForApiGroup.find(p =>
-    p.resources.includes(pluralize(resourceType)),
-  );
-  const wildcardPermission = permissionsForApiGroup.find(
-    p => p.resources[0] === '*',
-  );
-
-  for (const verb of verbs) {
-    if (
-      !matchingPermission?.verbs.includes(verb) &&
-      !wildcardPermission?.verbs.includes(verb) &&
-      matchingPermission?.verbs[0] !== '*' &&
-      wildcardPermission?.verbs[0] !== '*'
-    ) {
-      return false;
-    }
-  }
-
-  return !!matchingPermission || !!wildcardPermission;
+  // const permissionsForApiGroup = groupVersions.filter(
+  //   p => p.apiGroups.includes(apiGroup) || p.apiGroups[0] === '*',
+  // );
+  // const matchingPermission = permissionsForApiGroup.find(p =>
+  //   p.resources.includes(pluralize(resourceType)),
+  // );
+  // const wildcardPermission = permissionsForApiGroup.find(
+  //   p => p.resources[0] === '*',
+  // );
+  //
+  // for (const verb of verbs) {
+  //   if (
+  //     !matchingPermission?.verbs.includes(verb) &&
+  //     !wildcardPermission?.verbs.includes(verb) &&
+  //     matchingPermission?.verbs[0] !== '*' &&
+  //     wildcardPermission?.verbs[0] !== '*'
+  //   ) {
+  //     return false;
+  //   }
+  // }
+  //
+  // return !!matchingPermission || !!wildcardPermission;
 }
 
 export function hasAnyRoleBound(permissionSet) {
@@ -89,8 +62,9 @@ export function hasAnyRoleBound(permissionSet) {
 }
 
 //TODO groupName includes version - what if version is not actual? should we exclude it
-//TODO pizza
+//TODO check paths returned by openAPI
 
+// MULTIPLE?
 // "/apis/busola.example.com/v1/namespaces/{namespace}/pizzaorders"
 // "/apis/busola.example.com/v1/namespaces/{namespace}/pizzaorders/{name}"
 // "/apis/busola.example.com/v1/namespaces/{namespace}/pizzas"
@@ -98,54 +72,52 @@ export function hasAnyRoleBound(permissionSet) {
 // "/apis/busola.example.com/v1/pizzaorders"
 // "/apis/busola.example.com/v1/pizzas"
 
-export const doesResourceExist = (groupName, resourceName) => {
+// WATCH?
+// "/apis/apiextensions.k8s.io/v1/customresourcedefinitions"
+// "/apis/apiextensions.k8s.io/v1/customresourcedefinitions/{name}"
+// "/apis/apiextensions.k8s.io/v1/customresourcedefinitions/{name}/status"
+// "/apis/apiextensions.k8s.io/v1/watch/customresourcedefinitions"
+// "/apis/apiextensions.k8s.io/v1/watch/customresourcedefinitions/{name}"
+
+export const doesResourceExist = ({ resourceGroup, resourceKind }) => {
   const resourceIdList = clusterOpenApi.getResourceNameList;
-  const resourceNamePlural = pluralize(resourceName);
+  const resourceNamePlural = pluralize(resourceKind);
 
   // an example string matching the regex: /(api|apis)/GROUP_NAME/.../RESOURCE_NAME
-  const regexString = `^\\/(api|apis)\\/${groupName}\\/.*?\\/${resourceNamePlural}$`;
+  const regexString = `^\\/(api|apis)\\/${resourceGroup}\\/.*?\\/${resourceNamePlural}$`;
   const resourceGroupAndKindRegex = new RegExp(regexString, 'i');
   const doesExist = !!resourceIdList.find(resourceId => {
     return resourceGroupAndKindRegex.test(resourceId);
   });
 
-  // console.log(555555, resourceGroupAndKindRegex, doesExist);
-
   return doesExist;
 };
 
-//doesUserHavePermission(['get', 'list', '*'], resource, permissionSet)
-const permissions = ['get', 'list'];
-export const doesUserHavePermission = (resource, permissionSet) => {
-  const { groupName, resourceName } = resource;
-  const resourceNamePlural = pluralize(resourceName);
+export const doesUserHavePermission = (
+  permissions = ['get', 'list'],
+  resource = { resourceGroup: '', resourceKind: '' },
+  permissionSet,
+) => {
+  const { resourceGroup, resourceKind } = resource;
+  const resourceKindPlural = pluralize(resourceKind);
 
-  // console.log(1111, groupName, resourceName, permissionSet);
-  const permission = permissionSet.find(set => {
+  const isPermitted = permissionSet.find(set => {
     const isSameApiGroup =
-      set.apiGroups?.includes(groupName) || set.apiGroups?.includes('*');
-    const isSameResourceName =
-      set.resources?.includes(resourceNamePlural) ||
+      set.apiGroups?.includes(resourceGroup) || set.apiGroups?.includes('*');
+    const isSameResourceKind =
+      set.resources?.includes(resourceKindPlural) ||
       set.resources?.includes('*');
 
     // creates a regex such as '^\*$|^VERB1$|^VERB2' etc.
     const permissionRegex = new RegExp(
       `^\\*$|${permissions.map(verb => '^' + verb + '$').join('|')}`,
     );
-    // console.log(1212, permissionRegex, set.verbs);
     const areSufficientPermissions = set.verbs?.some(verb => {
-      // console.log(33333, verb, permissionRegex);
       return permissionRegex.test(verb);
     });
-    // console.log(
-    //   2222,
-    //   isSameApiGroup,
-    //   isSameResourceName,
-    //   areSufficientPermissions,
-    // );
 
-    return isSameApiGroup && isSameResourceName && areSufficientPermissions;
+    return isSameApiGroup && isSameResourceKind && areSufficientPermissions;
   });
 
-  return !!permission;
+  return !!isPermitted;
 };
