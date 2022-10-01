@@ -109,7 +109,7 @@ export const doesResourceExist = (groupName, resourceName) => {
     return resourceGroupAndKindRegex.test(resourceId);
   });
 
-  console.log(555555, resourceGroupAndKindRegex, doesExist);
+  // console.log(555555, resourceGroupAndKindRegex, doesExist);
 
   return doesExist;
 };
@@ -120,7 +120,7 @@ export const doesUserHavePermission = (resource, permissionSet) => {
   const { groupName, resourceName } = resource;
   const resourceNamePlural = pluralize(resourceName);
 
-  console.log(1111, groupName, resourceName, permissionSet);
+  // console.log(1111, groupName, resourceName, permissionSet);
   const permission = permissionSet.find(set => {
     const isSameApiGroup =
       set.apiGroups?.includes(groupName) || set.apiGroups?.includes('*');
@@ -132,9 +132,9 @@ export const doesUserHavePermission = (resource, permissionSet) => {
     const permissionRegex = new RegExp(
       `^\\*$|${permissions.map(verb => '^' + verb + '$').join('|')}`,
     );
-    console.log(1212, permissionRegex, set.verbs);
+    // console.log(1212, permissionRegex, set.verbs);
     const areSufficientPermissions = set.verbs?.some(verb => {
-      console.log(33333, verb, permissionRegex);
+      // console.log(33333, verb, permissionRegex);
       return permissionRegex.test(verb);
     });
     // console.log(
