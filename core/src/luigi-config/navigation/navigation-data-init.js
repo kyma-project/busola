@@ -441,6 +441,7 @@ export async function createNavigationNodes({
         },
         clusterNodes: simplifyNodes(clusterNodes),
         namespaceNodes: simplifyNodes(namespaceNodes),
+        openApi: clusterOpenApi.getOpenApi,
       },
     },
   ];

@@ -20,7 +20,7 @@ class clusterOpenApiClass {
       authData,
     );
 
-    //TODO handle the error, add loader
+    //TODO handle the error
     this.openApi = await clusterOpenApiResponse.json();
 
     this.setResourceNameList();
