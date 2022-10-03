@@ -221,6 +221,8 @@ export async function createNavigation() {
       getCurrentContextNamespace(activeCluster?.kubeconfig),
     );
 
+    const { apiGroups, groupVersions } = await fetchAvailableApis(authData);
+
     const activeClusterName = activeCluster?.kubeconfig['current-context'];
 
     await initFeatures();
@@ -273,6 +275,8 @@ export async function createNavigation() {
       ...optionsForCurrentCluster,
       nodes: await createNavigationNodes({
         features: await getFeatures(),
+        groupVersions,
+        apiGroups,
         permissionSet,
         customResources,
         extensibilitySchemas: await getExtensibilitySchemas(),
@@ -338,13 +342,12 @@ async function getObservabilityNodes(authData) {
 
 export async function createNavigationNodes({
   features,
-  // groupVersions,
-  // apiGroups,
+  groupVersions,
+  apiGroups,
   permissionSet,
   customResources,
   extensibilitySchemas,
 }) {
-  ////////
   const authData = getAuthData();
   const activeCluster = getActiveCluster();
 
@@ -361,7 +364,6 @@ export async function createNavigationNodes({
   const createClusterNodes = async () => {
     const staticNodes = getStaticRootNodes(
       getChildrenNodesForNamespace,
-      // groupVersions,
       permissionSet,
       features,
       customResources,
@@ -427,6 +429,8 @@ export async function createNavigationNodes({
         kubeconfigIdContents: await handleKubeconfigIdIfPresent(),
         language: i18next.language,
         ssoData: getSSOAuthData(),
+        apiGroups,
+        groupVersions,
         settings: {
           pagination: {
             pageSize: getPageSize(),

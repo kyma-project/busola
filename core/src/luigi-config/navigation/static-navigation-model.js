@@ -1940,19 +1940,11 @@ export function getStaticRootNodes(
   return filterNodesByAvailablePaths(allNodes, permissionSet);
 }
 
-function extractApiGroup(apiPath) {
-  if (apiPath === '/api/v1') {
-    return ''; // core api group
-  }
-  return apiPath.split('/')[2];
-}
-
 function filterNodesByAvailablePaths(nodes, permissionSet) {
   for (const node of nodes) {
     if (typeof node.children === 'object') {
       node.children = filterNodesByAvailablePaths(node.children, permissionSet);
     }
-    // console.log(111, node);
     excludeNavigationNode(node, permissionSet);
   }
 
