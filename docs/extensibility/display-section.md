@@ -494,7 +494,7 @@ EventList widget renders a list of Events.
 
 ```yaml
 - widget: EventList
-  filterBy: '$matchEvents($item, $root.kind, $root.metadata.name)'
+  filter: '$matchEvents($item, $root.kind, $root.metadata.name)'
   name: events
   defaultType: information
   hideInvolvedObjects: true
