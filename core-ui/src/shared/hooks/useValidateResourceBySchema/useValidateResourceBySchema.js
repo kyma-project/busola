@@ -2,19 +2,23 @@ import { useRef, useState, useEffect } from 'react';
 import { validator } from '@exodus/schemasafe';
 
 const validateResourceBySchema = async resource => {
-  const schema = await import('./schemav2.json');
+  const schema = await import('./schema.js');
 
-  const warnings = schema?.rules.reduce((accumulator, currentRule) => {
-    try {
-      const schemaValidator = validator(currentRule.schema);
-      const result = schemaValidator(resource);
+  const warnings = (schema?.schema.rules || []).reduce(
+    (accumulator, currentRule) => {
+      try {
+        const schemaValidator = validator(currentRule.schema);
+        const result = schemaValidator(resource);
 
-      if (!result) return [currentRule.messageOnFailure, ...accumulator];
-      return [...accumulator];
-    } catch {
-      return [...accumulator];
-    }
-  }, []);
+        if (!result) return [currentRule.messageOnFailure, ...accumulator];
+        return [...accumulator];
+      } catch {
+        return [...accumulator];
+      }
+    },
+    [],
+  );
+
   return warnings;
 };
 

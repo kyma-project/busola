@@ -4,9 +4,28 @@
 // distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.  Modifications Copyright (c) 2022 SAP SE or an SAP affiliate company. All rights reserved.
 
 export const schema = {
+  apiVersion: 'v1',
+  aliases: [
+    {
+      properties: {
+        kind: {
+          enum: [
+            'Deployment',
+            'Pod',
+            'DaemonSet',
+            'StatefulSet',
+            'ReplicaSet',
+            'CronJob',
+            'Job',
+          ],
+        },
+      },
+    },
+  ],
   rules: [
     {
       id: 1,
+      name: 'Ensure each container image has a pinned (tag) version',
       uniqueName: 'CONTAINERS_MISSING_IMAGE_VALUE_VERSION',
       enabledByDefault: true,
       documentationUrl: 'https://hub.datree.io/ensure-image-pinned-version',
@@ -40,7 +59,7 @@ export const schema = {
                       items: {
                         properties: {
                           image: {
-                            pattern: '@sha.*|:(w|.|-)+$',
+                            pattern: '\\@sha.*|:(\\w|\\.|\\-)+$',
                             not: {
                               pattern: '.*:(latest|LATEST)$',
                             },
@@ -52,20 +71,11 @@ export const schema = {
                 },
               },
             },
-            else: false,
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/imageValuePattern',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/imageValuePattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -127,17 +137,9 @@ export const schema = {
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/memoryRequestPattern',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/memoryRequestPattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -199,17 +201,9 @@ export const schema = {
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/cpuRequestPattern',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/cpuRequestPattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -271,17 +265,9 @@ export const schema = {
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/memoryLimitPattern',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/memoryLimitPattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -343,17 +329,9 @@ export const schema = {
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/cpuLimitPattern',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/cpuLimitPattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -367,13 +345,7 @@ export const schema = {
         'Incorrect value for key `host` - specify host instead of using a wildcard character ("*")',
       category: 'Networking',
       schema: {
-        if: {
-          properties: {
-            kind: {
-              enum: ['Ingress'],
-            },
-          },
-        },
+        if: { properties: { kind: { enum: ['Ingress'] } } },
         then: {
           properties: {
             spec: {
@@ -384,9 +356,7 @@ export const schema = {
                     properties: {
                       host: {
                         type: 'string',
-                        not: {
-                          enum: ['*'],
-                        },
+                        not: { enum: ['*'] },
                       },
                     },
                   },
@@ -407,22 +377,39 @@ export const schema = {
         'Incorrect value for key `type` - `NodePort` will open a port on all nodes where it can be reached by the network external to the cluster',
       category: 'Networking',
       schema: {
-        if: {
-          properties: {
-            kind: {
-              enum: ['Service'],
-            },
-          },
-        },
+        if: { properties: { kind: { enum: ['Service'] } } },
         then: {
           properties: {
             spec: {
               properties: {
                 type: {
                   type: 'string',
-                  not: {
-                    enum: ['NodePort'],
-                  },
+                  not: { enum: ['NodePort'] },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 8,
+      name: 'Ensure CronJob scheduler is valid',
+      uniqueName: 'CRONJOB_INVALID_SCHEDULE_VALUE',
+      enabledByDefault: true,
+      documentationUrl: 'https://hub.datree.io/ensure-cronjob-scheduler-valid',
+      messageOnFailure:
+        'Incorrect value for key `schedule` - the (cron) schedule expressions is not valid and, therefore, will not work as expected',
+      category: 'CronJob',
+      schema: {
+        if: { properties: { kind: { enum: ['CronJob'] } } },
+        then: {
+          properties: {
+            spec: {
+              properties: {
+                schedule: {
+                  pattern:
+                    '(^((\\*\\/)?([0-5]?[0-9])((\\,|\\-|\\/)([0-5]?[0-9]))*|\\*)\\s+((\\*\\/)?((2[0-3]|1[0-9]|[0-9]|00))((\\,|\\-|\\/)(2[0-3]|1[0-9]|[0-9]|00))*|\\*)\\s+((\\*\\/)?([1-9]|[12][0-9]|3[01])((\\,|\\-|\\/)([1-9]|[12][0-9]|3[01]))*|\\*)\\s+((\\*\\/)?([1-9]|1[0-2])((\\,|\\-|\\/)([1-9]|1[0-2]))*|\\*|(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|des))\\s+((\\*\\/)?[0-6]((\\,|\\-|\\/)[0-6])*|\\*|00|(sun|mon|tue|wed|thu|fri|sat))\\s*$)|@(annually|yearly|monthly|weekly|daily|hourly|reboot)',
                 },
               },
             },
@@ -460,11 +447,7 @@ export const schema = {
             metadata: {
               properties: {
                 labels: {
-                  patternProperties: {
-                    '^.*$': {
-                      format: 'hostname',
-                    },
-                  },
+                  patternProperties: { '^.*$': { format: 'hostname' } },
                   additionalProperties: false,
                 },
               },
@@ -474,7 +457,6 @@ export const schema = {
       },
     },
     {
-      //TODO: what to do with this one?
       id: 10,
       name: 'Ensure deployment-like resource is using a valid restart policy',
       uniqueName: 'WORKLOAD_INCORRECT_RESTARTPOLICY_VALUE_ALWAYS',
@@ -504,9 +486,7 @@ export const schema = {
                   properties: {
                     spec: {
                       properties: {
-                        restartPolicy: {
-                          enum: ['Always'],
-                        },
+                        restartPolicy: { enum: ['Always'] },
                       },
                     },
                   },
@@ -549,9 +529,7 @@ export const schema = {
                 spec: {
                   properties: {
                     containers: {
-                      items: {
-                        required: ['livenessProbe'],
-                      },
+                      items: { required: ['livenessProbe'] },
                     },
                   },
                 },
@@ -559,17 +537,9 @@ export const schema = {
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/specContainers',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/specContainers' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -604,9 +574,7 @@ export const schema = {
                 spec: {
                   properties: {
                     containers: {
-                      items: {
-                        required: ['readinessProbe'],
-                      },
+                      items: { required: ['readinessProbe'] },
                     },
                   },
                 },
@@ -614,17 +582,9 @@ export const schema = {
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/specContainers',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/specContainers' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -638,19 +598,9 @@ export const schema = {
       category: 'Other',
       schema: {
         if: {
-          properties: {
-            kind: {
-              enum: ['HorizontalPodAutoscaler'],
-            },
-          },
+          properties: { kind: { enum: ['HorizontalPodAutoscaler'] } },
         },
-        then: {
-          properties: {
-            spec: {
-              required: ['minReplicas'],
-            },
-          },
-        },
+        then: { properties: { spec: { required: ['minReplicas'] } } },
       },
     },
     {
@@ -664,19 +614,9 @@ export const schema = {
       category: 'Other',
       schema: {
         if: {
-          properties: {
-            kind: {
-              enum: ['HorizontalPodAutoscaler'],
-            },
-          },
+          properties: { kind: { enum: ['HorizontalPodAutoscaler'] } },
         },
-        then: {
-          properties: {
-            spec: {
-              required: ['maxReplicas'],
-            },
-          },
-        },
+        then: { properties: { spec: { required: ['maxReplicas'] } } },
       },
     },
     {
@@ -707,13 +647,7 @@ export const schema = {
         then: {
           properties: {
             metadata: {
-              properties: {
-                namespace: {
-                  not: {
-                    enum: ['default'],
-                  },
-                },
-              },
+              properties: { namespace: { not: { enum: ['default'] } } },
             },
           },
         },
@@ -729,22 +663,10 @@ export const schema = {
         'Incorrect value for key `replicas` - running 2 or more replicas will increase the availability of the service',
       category: 'Workload',
       schema: {
-        if: {
-          properties: {
-            kind: {
-              enum: ['Deployment'],
-            },
-          },
-        },
+        if: { properties: { kind: { enum: ['Deployment'] } } },
         then: {
           properties: {
-            spec: {
-              properties: {
-                replicas: {
-                  minimum: 2,
-                },
-              },
-            },
+            spec: { properties: { replicas: { minimum: 2 } } },
           },
         },
       },
@@ -759,21 +681,11 @@ export const schema = {
         'Missing property object `startingDeadlineSeconds` - set a time limit to the cron execution to allow killing it if exceeded',
       category: 'CronJob',
       schema: {
-        if: {
-          properties: {
-            kind: {
-              enum: ['CronJob'],
-            },
-          },
-        },
+        if: { properties: { kind: { enum: ['CronJob'] } } },
         then: {
           properties: {
             spec: {
-              properties: {
-                startingDeadlineSeconds: {
-                  type: 'number',
-                },
-              },
+              properties: { startingDeadlineSeconds: { type: 'number' } },
               required: ['startingDeadlineSeconds'],
             },
           },
@@ -877,17 +789,9 @@ export const schema = {
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/specContainers',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/specContainers' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -917,13 +821,7 @@ export const schema = {
         },
         then: {
           properties: {
-            metadata: {
-              properties: {
-                labels: {
-                  required: ['owner'],
-                },
-              },
-            },
+            metadata: { properties: { labels: { required: ['owner'] } } },
           },
         },
       },
@@ -938,21 +836,11 @@ export const schema = {
         'Missing label object `env` - add a proper environment description (e.g. "prod", "testing", etc.) to the Deployment config',
       category: 'Workload',
       schema: {
-        if: {
-          properties: {
-            kind: {
-              enum: ['Deployment'],
-            },
-          },
-        },
+        if: { properties: { kind: { enum: ['Deployment'] } } },
         then: {
           properties: {
             metadata: {
-              properties: {
-                labels: {
-                  required: ['env'],
-                },
-              },
+              properties: { labels: { required: ['env'] } },
               required: ['labels'],
             },
           },
@@ -960,7 +848,58 @@ export const schema = {
         },
       },
     },
-
+    {
+      id: 23,
+      name: 'Ensure each container image has a digest tag',
+      uniqueName: 'CONTAINERS_MISSING_IMAGE_VALUE_DIGEST',
+      enabledByDefault: false,
+      documentationUrl: 'https://hub.datree.io/ensure-digest-tag',
+      messageOnFailure:
+        'Incorrect value for key `image` - add a digest tag (starts with `@sha256:`) to represent an immutable version of the image',
+      category: 'Containers',
+      schema: {
+        definitions: {
+          imageValuePattern: {
+            if: {
+              properties: {
+                kind: {
+                  enum: [
+                    'Deployment',
+                    'Pod',
+                    'DaemonSet',
+                    'StatefulSet',
+                    'ReplicaSet',
+                    'CronJob',
+                    'Job',
+                  ],
+                },
+              },
+            },
+            then: {
+              properties: {
+                spec: {
+                  properties: {
+                    containers: {
+                      type: 'array',
+                      items: {
+                        properties: {
+                          image: {
+                            pattern: '.*\\@sha256\\:\\S{64}$',
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [{ $ref: '#/definitions/imageValuePattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
+      },
+    },
     {
       id: 24,
       name: 'Prevent CronJob from executing jobs concurrently',
@@ -971,20 +910,12 @@ export const schema = {
         "Missing property object `concurrencyPolicy` - the behavior will be more deterministic if jobs won't run concurrently",
       category: 'CronJob',
       schema: {
-        if: {
-          properties: {
-            kind: {
-              enum: ['CronJob'],
-            },
-          },
-        },
+        if: { properties: { kind: { enum: ['CronJob'] } } },
         then: {
           properties: {
             spec: {
               properties: {
-                concurrencyPolicy: {
-                  enum: ['Forbid', 'Replace'],
-                },
+                concurrencyPolicy: { enum: ['Forbid', 'Replace'] },
               },
               required: ['concurrencyPolicy'],
             },
@@ -1002,14 +933,7 @@ export const schema = {
         "Incorrect value for key `kind` - raw pod won't be rescheduled in the event of a node failure",
       category: 'Other',
       schema: {
-        properties: {
-          kind: {
-            type: 'string',
-            not: {
-              enum: ['Pod'],
-            },
-          },
-        },
+        properties: { kind: { type: 'string', not: { enum: ['Pod'] } } },
       },
     },
     {
@@ -1043,28 +967,16 @@ export const schema = {
               properties: {
                 spec: {
                   properties: {
-                    hostPID: {
-                      not: {
-                        enum: [true, 'true'],
-                      },
-                    },
+                    hostPID: { not: { enum: [true, 'true'] } },
                   },
                 },
               },
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/specContainers',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/specContainers' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -1098,28 +1010,16 @@ export const schema = {
               properties: {
                 spec: {
                   properties: {
-                    hostIPC: {
-                      not: {
-                        enum: [true, 'true'],
-                      },
-                    },
+                    hostIPC: { not: { enum: [true, 'true'] } },
                   },
                 },
               },
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/specContainers',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/specContainers' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -1153,28 +1053,16 @@ export const schema = {
               properties: {
                 spec: {
                   properties: {
-                    hostNetwork: {
-                      not: {
-                        enum: [true, 'true'],
-                      },
-                    },
+                    hostNetwork: { not: { enum: [true, 'true'] } },
                   },
                 },
               },
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/specContainers',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/specContainers' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -1214,9 +1102,7 @@ export const schema = {
                         properties: {
                           securityContext: {
                             properties: {
-                              runAsUser: {
-                                minimum: 10000,
-                              },
+                              runAsUser: { minimum: 10000 },
                             },
                           },
                         },
@@ -1228,17 +1114,9 @@ export const schema = {
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/specContainers',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/specContainers' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -1339,19 +1217,11 @@ export const schema = {
           },
         },
         allOf: [
-          {
-            $ref: '#/definitions/specContainers',
-          },
-          {
-            $ref: '#/definitions/specVolumes',
-          },
+          { $ref: '#/definitions/specContainers' },
+          { $ref: '#/definitions/specVolumes' },
         ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -1367,8 +1237,30 @@ export const schema = {
       schema: {
         if: {
           properties: {
-            kind: {
-              enum: ['ConfigMap'],
+            kind: { enum: ['ConfigMap'] },
+            metadata: {
+              anyOf: [
+                {
+                  properties: {
+                    name: {
+                      enum: [
+                        'nginx-config',
+                        'nginx-conf',
+                        'ingress-nginx-controller',
+                      ],
+                    },
+                  },
+                  required: ['name'],
+                },
+                {
+                  properties: {
+                    namespace: {
+                      enum: ['ingress-nginx', 'nginx-ingress'],
+                    },
+                  },
+                  required: ['namespace'],
+                },
+              ],
             },
           },
         },
@@ -1376,13 +1268,12 @@ export const schema = {
           properties: {
             data: {
               properties: {
-                'allow-snippet-annotations': {
-                  enum: ['false'],
-                },
+                'allow-snippet-annotations': { enum: ['false'] },
               },
               required: ['allow-snippet-annotations'],
             },
           },
+          required: ['data'],
         },
       },
     },
@@ -1397,22 +1288,14 @@ export const schema = {
         'Forbidden property object `server-snippet` - ingress-nginx custom snippets are not allowed',
       category: 'Security',
       schema: {
-        if: {
-          properties: {
-            kind: {
-              enum: ['Ingress'],
-            },
-          },
-        },
+        if: { properties: { kind: { enum: ['Ingress'] } } },
         then: {
           properties: {
             metadata: {
               properties: {
                 annotations: {
                   not: {
-                    propertyNames: {
-                      pattern: '^.*server-snippet$',
-                    },
+                    propertyNames: { pattern: '^.*server-snippet$' },
                   },
                 },
               },
@@ -1459,17 +1342,9 @@ export const schema = {
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/subPathPattern',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/subPathPattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -1483,13 +1358,7 @@ export const schema = {
         'Incorrect value for key `addresses` - IP address is within vulnerable ranges (127.0.0.0/8 and 169.254.0.0/16)',
       category: 'Security',
       schema: {
-        if: {
-          properties: {
-            kind: {
-              enum: ['EndpointSlice'],
-            },
-          },
-        },
+        if: { properties: { kind: { enum: ['EndpointSlice'] } } },
         then: {
           properties: {
             endpoints: {
@@ -1504,10 +1373,400 @@ export const schema = {
                           {
                             pattern: '^(169\\.254\\.)',
                           },
-                          {
-                            pattern: '^(127\\.)',
-                          },
+                          { pattern: '^(127\\.)' },
                         ],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 35,
+      name: 'Ensure Workflow DAG fail-fast on node failure',
+      uniqueName: 'ARGO_WORKFLOW_INCORRECT_FAILFAST_VALUE_FALSE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-workflow-dag-fail-fast-on-node-failure',
+      messageOnFailure:
+        'Incorrect value for key `failFast` - value should be `true` to prevent DAG from running on all branches, regardless of the failed outcomes of the DAG branches',
+      category: 'Argo',
+      schema: {
+        if: {
+          properties: {
+            kind: { enum: ['Workflow'] },
+            spec: {
+              properties: {
+                templates: {
+                  type: 'array',
+                  items: {
+                    properties: {
+                      dag: {
+                        properties: {
+                          failFast: { required: ['failFast'] },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        then: {
+          properties: {
+            spec: {
+              properties: {
+                templates: {
+                  type: 'array',
+                  items: {
+                    properties: {
+                      dag: {
+                        properties: { failFast: { const: true } },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 36,
+      name: 'Prevent Workflow pods from using the default service account',
+      uniqueName: 'ARGO_WORKFLOW_INCORRECT_SERVICE_ACCOUNT_NAME_VALUE_DEFAULT',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-workflow-pods-from-using-the-default-service-account',
+      messageOnFailure:
+        'Incorrect value for key `serviceAccountName` - when set to `default` container is exposed to possible attacks',
+      category: 'Argo',
+      schema: {
+        if: {
+          properties: { kind: { enum: ['WorkflowTemplate', 'Workflow'] } },
+        },
+        then: {
+          properties: {
+            spec: {
+              properties: {
+                serviceAccountName: {
+                  type: 'string',
+                  not: { const: 'default' },
+                },
+              },
+              required: ['serviceAccountName'],
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 37,
+      name: 'Ensure ConfigMap is recognized by ArgoCD',
+      uniqueName: 'ARGO_CONFIGMAP_MISSING_PART_OF_LABEL_VALUE_ARGOCD',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-configmap-is-recognized-by-argocd',
+      messageOnFailure:
+        "Incorrect value for annotation `app.kubernetes.io/part-of` - value should be `argocd`, or ArgoCD won't recognize this resource",
+      category: 'Argo',
+      schema: {
+        if: {
+          properties: {
+            kind: { enum: ['ConfigMap'] },
+            metadata: {
+              properties: {
+                name: {
+                  enum: [
+                    'argocd-tls-certs-cm',
+                    'argocd-rbac-cm',
+                    'argocd-ssh-known-hosts-cm',
+                    'argocd-cmd-params-cm',
+                    'argocd-cm',
+                  ],
+                },
+              },
+            },
+          },
+        },
+        then: {
+          properties: {
+            metadata: {
+              properties: {
+                labels: {
+                  properties: {
+                    'app.kubernetes.io/part-of': {
+                      type: 'string',
+                      const: 'argocd',
+                    },
+                  },
+                  required: ['app.kubernetes.io/part-of'],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 38,
+      name: 'Ensure Rollout pause step has a configured duration',
+      uniqueName: 'ARGO_ROLLOUT_MISSING_PAUSE_DURATION',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-rollout-pause-step-has-a-configured-duration',
+      messageOnFailure:
+        'Missing the key `duration` - prevent the rollout from waiting indefinitely for the pause condition',
+      category: 'Argo',
+      schema: {
+        if: { properties: { kind: { enum: ['Rollout'] } } },
+        then: {
+          properties: {
+            spec: {
+              properties: {
+                strategy: {
+                  properties: {
+                    canary: {
+                      type: 'object',
+                      properties: {
+                        steps: {
+                          type: 'array',
+                          items: {
+                            properties: {
+                              pause: {
+                                type: 'object',
+                                properties: {
+                                  duration: {
+                                    type: 'string',
+                                  },
+                                },
+                                required: ['duration'],
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 39,
+      name:
+        'Ensure Application and AppProject are part of the argocd namespace',
+      uniqueName: 'ARGO_APP_PROJECT_INCORRECT_NAMESPACE_VALUE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-application-and-appproject-are-part-of-the-argocd-namespace',
+      messageOnFailure:
+        'Incorrect value for property `namespace` - Application and AppProject have to be installed on the argocd namespace',
+      category: 'Argo',
+      schema: {
+        if: {
+          properties: { kind: { enum: ['Application', 'AppProject'] } },
+        },
+        then: {
+          properties: {
+            metadata: {
+              properties: {
+                namespace: { type: 'string', const: 'argocd' },
+              },
+              required: ['namespace'],
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 40,
+      name: 'Prevent Workflow from having an empty retry strategy',
+      uniqueName: 'ARGO_WORKFLOW_INCORRECT_RETRY_STRATEGY_VALUE_EMPTY',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/prevent-workflow-from-having-an-empty-retry-strategy',
+      messageOnFailure:
+        'Incorrect value for key `retryStrategy` - empty value (`{}`) can cause failed/errored steps to keep retrying, which can result in OOM issues',
+      category: 'Argo',
+      schema: {
+        if: { properties: { kind: { enum: ['Workflow'] } } },
+        then: {
+          properties: {
+            spec: {
+              properties: {
+                templates: {
+                  items: {
+                    properties: {
+                      retryStrategy: {
+                        type: 'object',
+                        minProperties: 1,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 41,
+      name: 'Ensure Rollout has revision history set',
+      uniqueName: 'ARGO_WORKFLOW_INCORRECT_REVISION_HISTORY_LIMIT_VALUE_0',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-rollout-has-revision-history-set',
+      messageOnFailure:
+        'Incorrect value for key `revisionHistoryLimit` - value above 0 is required to enable rolling back from a failed deployment',
+      category: 'Argo',
+      schema: {
+        if: { properties: { kind: { enum: ['Rollout'] } } },
+        then: {
+          properties: {
+            spec: {
+              properties: { revisionHistoryLimit: { minimum: 1 } },
+              required: ['revisionHistoryLimit'],
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 42,
+      name: 'Ensure Rollout allows broadcasting IP table changes',
+      uniqueName: 'ARGO_ROLLOUT_INCORRECT_SCALE_DOWN_DELAY_VALUE_BELOW_30',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-rollout-allows-broadcasting-ip-table-changes',
+      messageOnFailure:
+        'Incorrect value for key `scaleDownDelaySeconds` - value should be at least 30 to prevent packets from being sent to a node that killed the pod',
+      category: 'Argo',
+      schema: {
+        if: { properties: { kind: { enum: ['Rollout'] } } },
+        then: {
+          properties: {
+            spec: {
+              properties: {
+                strategy: {
+                  properties: {
+                    blueGreen: {
+                      type: 'object',
+                      properties: {
+                        scaleDownDelaySeconds: {
+                          type: 'integer',
+                          minimum: 30,
+                        },
+                      },
+                      required: ['scaleDownDelaySeconds'],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 43,
+      name: 'Ensure Rollout that is marked as degraded scales down ReplicaSet',
+      uniqueName: 'ARGO_ROLLOUT_INCORRECT_PROGRESS_DEADLINE_ABORT_VALUE_FALSE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-rollout-that-is-marked-as-degraded-scales-down-replicaset',
+      messageOnFailure:
+        'Incorrect value for key `progressDeadlineAbort` - value should be `true` to prevent the rollout pod from retrying indefinitely',
+      category: 'Argo',
+      schema: {
+        if: {
+          properties: {
+            kind: { enum: ['Rollout'] },
+            spec: {
+              properties: {
+                allOf: {
+                  properties: {
+                    progressDeadlineSeconds: { type: 'integer' },
+                  },
+                },
+              },
+            },
+          },
+        },
+        then: {
+          properties: {
+            spec: {
+              properties: { progressDeadlineAbort: { const: true } },
+              required: ['progressDeadlineAbort'],
+            },
+          },
+        },
+      },
+    },
+    {
+      id: 44,
+      name: 'Ensure Workflow retry policy catches relevant errors only',
+      uniqueName:
+        'ARGO_WORKFLOW_ENSURE_RETRY_ON_BOTH_ERROR_AND_TRANSIENT_ERROR',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-workflow-retry-policy-catches-relevant-errors-only',
+      messageOnFailure:
+        'Incorrect value for key `retryPolicy` - the expression should include retry on steps that failed either on transient or Argo controller errors',
+      category: 'Argo',
+      schema: {
+        if: {
+          allOf: [
+            { properties: { kind: { enum: ['Workflow'] } } },
+            {
+              properties: {
+                spec: {
+                  properties: {
+                    templates: {
+                      type: 'array',
+                      contains: {
+                        properties: {
+                          retryStrategy: {
+                            properties: {
+                              retryPolicy: { const: 'Always' },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        },
+        then: {
+          properties: {
+            spec: {
+              properties: {
+                templates: {
+                  type: 'array',
+                  contains: {
+                    properties: {
+                      retryStrategy: {
+                        properties: {
+                          retryPolicy: { const: 'Always' },
+                          expression: {
+                            const:
+                              'lastRetry.status == "Error" or (lastRetry.status == "Failed" and asInt(lastRetry.exitCode) not in [0])',
+                          },
+                        },
+                        required: ['retryPolicy', 'expression'],
                       },
                     },
                   },
@@ -1540,9 +1799,7 @@ export const schema = {
                       properties: {
                         securityContext: {
                           properties: {
-                            readOnlyRootFilesystem: {
-                              const: true,
-                            },
+                            readOnlyRootFilesystem: { const: true },
                           },
                           required: ['readOnlyRootFilesystem'],
                         },
@@ -1555,46 +1812,29 @@ export const schema = {
             },
           },
           podSecurityContextPattern: {
-            if: {
-              properties: {
-                kind: {
-                  enum: ['Pod'],
-                },
-              },
-            },
+            if: { properties: { kind: { enum: ['Pod'] } } },
             then: {
               properties: {
                 spec: {
                   properties: {
                     securityContext: {
                       properties: {
-                        readOnlyRootFilesystem: {
-                          const: true,
-                        },
+                        readOnlyRootFilesystem: { const: true },
                       },
                       required: ['readOnlyRootFilesystem'],
                     },
                   },
-                  required: ['securityContext'],
                 },
               },
             },
           },
         },
-        anyOf: [
-          {
-            $ref: '#/definitions/containerSecurityPattern',
-          },
-          {
-            $ref: '#/definitions/podSecurityContextPattern',
-          },
+        allOf: [
+          { $ref: '#/definitions/containerSecurityPattern' },
+          { $ref: '#/definitions/podSecurityContextPattern' },
         ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -1615,28 +1855,16 @@ export const schema = {
                 properties: {
                   volumes: {
                     type: 'array',
-                    items: {
-                      not: {
-                        required: ['hostPath'],
-                      },
-                    },
+                    items: { not: { required: ['hostPath'] } },
                   },
                 },
               },
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/specVolumePattern',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/specVolumePattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -1661,9 +1889,7 @@ export const schema = {
                       properties: {
                         securityContext: {
                           properties: {
-                            allowPrivilegeEscalation: {
-                              const: false,
-                            },
+                            allowPrivilegeEscalation: { const: false },
                           },
                           required: ['allowPrivilegeEscalation'],
                         },
@@ -1676,17 +1902,9 @@ export const schema = {
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/specContainerPattern',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/specContainerPattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -1700,13 +1918,7 @@ export const schema = {
         'Incorrect value for key `resources` and/or `verbs` - allowing containers to run the exec command can be exploited by attackers',
       category: 'NSA',
       schema: {
-        if: {
-          properties: {
-            kind: {
-              enum: ['Role', 'ClusterRole'],
-            },
-          },
-        },
+        if: { properties: { kind: { enum: ['Role', 'ClusterRole'] } } },
         then: {
           properties: {
             rules: {
@@ -1716,18 +1928,12 @@ export const schema = {
                   resources: {
                     type: 'array',
                     not: {
-                      items: {
-                        enum: ['*', 'pods/exec'],
-                      },
+                      items: { enum: ['*', 'pods/exec'] },
                     },
                   },
                   verbs: {
                     type: 'array',
-                    not: {
-                      items: {
-                        enum: ['create', '*'],
-                      },
-                    },
+                    not: { items: { enum: ['create', '*'] } },
                   },
                 },
               },
@@ -1794,17 +2000,9 @@ export const schema = {
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/specContainerPattern',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/specContainerPattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -1843,17 +2041,9 @@ export const schema = {
             },
           },
         },
-        allOf: [
-          {
-            $ref: '#/definitions/specContainerPattern',
-          },
-        ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        allOf: [{ $ref: '#/definitions/specContainerPattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -1878,9 +2068,7 @@ export const schema = {
                       properties: {
                         securityContext: {
                           properties: {
-                            runAsGroup: {
-                              minimum: 1000,
-                            },
+                            runAsGroup: { minimum: 1000 },
                           },
                         },
                       },
@@ -1891,23 +2079,13 @@ export const schema = {
             },
           },
           podSecurityContextPattern: {
-            if: {
-              properties: {
-                kind: {
-                  enum: ['Pod'],
-                },
-              },
-            },
+            if: { properties: { kind: { enum: ['Pod'] } } },
             then: {
               properties: {
                 spec: {
                   properties: {
                     securityContext: {
-                      properties: {
-                        runAsGroup: {
-                          minimum: 1000,
-                        },
-                      },
+                      properties: { runAsGroup: { minimum: 1000 } },
                     },
                   },
                 },
@@ -1916,19 +2094,11 @@ export const schema = {
           },
         },
         allOf: [
-          {
-            $ref: '#/definitions/specContainerPattern',
-          },
-          {
-            $ref: '#/definitions/podSecurityContextPattern',
-          },
+          { $ref: '#/definitions/specContainerPattern' },
+          { $ref: '#/definitions/podSecurityContextPattern' },
         ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -1953,9 +2123,7 @@ export const schema = {
                       properties: {
                         securityContext: {
                           properties: {
-                            runAsNonRoot: {
-                              const: true,
-                            },
+                            runAsNonRoot: { const: true },
                           },
                           required: ['runAsNonRoot'],
                         },
@@ -1968,23 +2136,13 @@ export const schema = {
             },
           },
           podSecurityContextPattern: {
-            if: {
-              properties: {
-                kind: {
-                  enum: ['Pod'],
-                },
-              },
-            },
+            if: { properties: { kind: { enum: ['Pod'] } } },
             then: {
               properties: {
                 spec: {
                   properties: {
                     securityContext: {
-                      properties: {
-                        runAsNonRoot: {
-                          const: true,
-                        },
-                      },
+                      properties: { runAsNonRoot: { const: true } },
                       required: ['runAsNonRoot'],
                     },
                   },
@@ -1994,19 +2152,11 @@ export const schema = {
           },
         },
         allOf: [
-          {
-            $ref: '#/definitions/containerSecurityPattern',
-          },
-          {
-            $ref: '#/definitions/podSecurityContextPattern',
-          },
+          { $ref: '#/definitions/containerSecurityPattern' },
+          { $ref: '#/definitions/podSecurityContextPattern' },
         ],
-        additionalProperties: {
-          $ref: '#',
-        },
-        items: {
-          $ref: '#',
-        },
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
     {
@@ -2022,20 +2172,12 @@ export const schema = {
       schema: {
         definitions: {
           podPattern: {
-            if: {
-              properties: {
-                kind: {
-                  enum: ['Pod'],
-                },
-              },
-            },
+            if: { properties: { kind: { enum: ['Pod'] } } },
             then: {
               properties: {
                 spec: {
                   properties: {
-                    automountServiceAccountToken: {
-                      const: false,
-                    },
+                    automountServiceAccountToken: { const: false },
                   },
                   required: ['automountServiceAccountToken'],
                 },
@@ -2044,29 +2186,19 @@ export const schema = {
           },
           serviceAccountPattern: {
             if: {
-              properties: {
-                kind: {
-                  enum: ['ServiceAccount'],
-                },
-              },
+              properties: { kind: { enum: ['ServiceAccount'] } },
             },
             then: {
               properties: {
-                automountServiceAccountToken: {
-                  const: false,
-                },
+                automountServiceAccountToken: { const: false },
               },
               required: ['automountServiceAccountToken'],
             },
           },
         },
         allOf: [
-          {
-            $ref: '#/definitions/podPattern',
-          },
-          {
-            $ref: '#/definitions/serviceAccountPattern',
-          },
+          { $ref: '#/definitions/podPattern' },
+          { $ref: '#/definitions/serviceAccountPattern' },
         ],
       },
     },
@@ -2086,11 +2218,7 @@ export const schema = {
             properties: {
               metadata: {
                 type: 'object',
-                properties: {
-                  name: {
-                    type: 'string',
-                  },
-                },
+                properties: { name: { type: 'string' } },
                 required: ['name'],
               },
             },
@@ -2100,25 +2228,437 @@ export const schema = {
             properties: {
               metadata: {
                 type: 'object',
-                properties: {
-                  generateName: {
-                    type: 'string',
-                  },
-                },
+                properties: { generateName: { type: 'string' } },
                 required: ['generateName'],
               },
             },
             required: ['metadata'],
           },
         },
-        anyOf: [
-          {
-            $ref: '#/definitions/metadataNamePattern',
+        if: {
+          properties: { kind: { not: { enum: ['Kustomization'] } } },
+        },
+        then: {
+          anyOf: [
+            { $ref: '#/definitions/metadataNamePattern' },
+            { $ref: '#/definitions/metadataGenerateNamePattern' },
+          ],
+        },
+      },
+    },
+    {
+      id: 55,
+      name: 'Ensure each container probe has an initial delay configured',
+      uniqueName: 'CONTAINERS_INCORRECT_INITIALDELAYSECONDS_VALUE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-initial-probe-delay',
+      messageOnFailure:
+        'Incorrect value for key `initialDelaySeconds` - set explicitly to control the start time before a probe is initiated (min 0)',
+      category: 'Containers',
+      schema: {
+        definitions: {
+          probePattern: {
+            if: {
+              properties: {
+                spec: {
+                  properties: {
+                    containers: {
+                      items: {
+                        anyOf: [
+                          {
+                            required: ['livenessProbe'],
+                          },
+                          {
+                            required: ['readinessProbe'],
+                          },
+                          {
+                            required: ['startupProbe'],
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            then: {
+              properties: {
+                spec: {
+                  properties: {
+                    containers: {
+                      items: {
+                        properties: {
+                          livenessProbe: {
+                            properties: {
+                              initialDelaySeconds: { minimum: 0 },
+                            },
+                            required: ['initialDelaySeconds'],
+                          },
+                          readinessProbe: {
+                            properties: {
+                              initialDelaySeconds: { minimum: 0 },
+                            },
+                            required: ['initialDelaySeconds'],
+                          },
+                          startupProbe: {
+                            properties: {
+                              initialDelaySeconds: { minimum: 0 },
+                            },
+                            required: ['initialDelaySeconds'],
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
-          {
-            $ref: '#/definitions/metadataGenerateNamePattern',
+        },
+        allOf: [{ $ref: '#/definitions/probePattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
+      },
+    },
+    {
+      id: 56,
+      name: 'Ensure each container probe has a configured frequency',
+      uniqueName: 'CONTAINERS_INCORRECT_PERIODSECONDS_VALUE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-probe-frequency',
+      messageOnFailure:
+        'Incorrect value for key `periodSeconds` - set explicitly to control how often a probe is performed (min 1)',
+      category: 'Containers',
+      schema: {
+        definitions: {
+          probePattern: {
+            if: {
+              properties: {
+                spec: {
+                  properties: {
+                    containers: {
+                      items: {
+                        anyOf: [
+                          {
+                            required: ['livenessProbe'],
+                          },
+                          {
+                            required: ['readinessProbe'],
+                          },
+                          {
+                            required: ['startupProbe'],
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            then: {
+              properties: {
+                spec: {
+                  properties: {
+                    containers: {
+                      items: {
+                        properties: {
+                          livenessProbe: {
+                            properties: {
+                              periodSeconds: { minimum: 1 },
+                            },
+                            required: ['periodSeconds'],
+                          },
+                          readinessProbe: {
+                            properties: {
+                              periodSeconds: { minimum: 1 },
+                            },
+                            required: ['periodSeconds'],
+                          },
+                          startupProbe: {
+                            properties: {
+                              periodSeconds: { minimum: 1 },
+                            },
+                            required: ['periodSeconds'],
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
-        ],
+        },
+        allOf: [{ $ref: '#/definitions/probePattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
+      },
+    },
+    {
+      id: 57,
+      name: 'Ensure each container probe has a configured timeout',
+      uniqueName: 'CONTAINERS_INCORRECT_TIMEOUTSECONDS_VALUE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-probe-timeout',
+      messageOnFailure:
+        'Incorrect value for key `timeoutSeconds` - set explicitly to control when a probe times out (min 1)',
+      category: 'Containers',
+      schema: {
+        definitions: {
+          probePattern: {
+            if: {
+              properties: {
+                spec: {
+                  properties: {
+                    containers: {
+                      items: {
+                        anyOf: [
+                          {
+                            required: ['livenessProbe'],
+                          },
+                          {
+                            required: ['readinessProbe'],
+                          },
+                          {
+                            required: ['startupProbe'],
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            then: {
+              properties: {
+                spec: {
+                  properties: {
+                    containers: {
+                      items: {
+                        properties: {
+                          livenessProbe: {
+                            properties: {
+                              timeoutSeconds: { minimum: 1 },
+                            },
+                            required: ['timeoutSeconds'],
+                          },
+                          readinessProbe: {
+                            properties: {
+                              timeoutSeconds: { minimum: 1 },
+                            },
+                            required: ['timeoutSeconds'],
+                          },
+                          startupProbe: {
+                            properties: {
+                              timeoutSeconds: { minimum: 1 },
+                            },
+                            required: ['timeoutSeconds'],
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [{ $ref: '#/definitions/probePattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
+      },
+    },
+    {
+      id: 58,
+      name:
+        'Ensure each container probe has a configured minimum success threshold',
+      uniqueName: 'CONTAINERS_INCORRECT_SUCCESSTHRESHOLD_VALUE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-probe-min-success-threshold',
+      messageOnFailure:
+        'Incorrect value for key `successThreshold` - set explicitly to control when a probe is considered successful after having failed',
+      category: 'Containers',
+      schema: {
+        definitions: {
+          probePattern: {
+            if: {
+              properties: {
+                spec: {
+                  properties: {
+                    containers: {
+                      items: {
+                        anyOf: [
+                          {
+                            required: ['livenessProbe'],
+                          },
+                          {
+                            required: ['readinessProbe'],
+                          },
+                          {
+                            required: ['startupProbe'],
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            then: {
+              properties: {
+                spec: {
+                  properties: {
+                    containers: {
+                      items: {
+                        properties: {
+                          livenessProbe: {
+                            properties: {
+                              successThreshold: { const: 1 },
+                            },
+                            required: ['successThreshold'],
+                          },
+                          readinessProbe: {
+                            properties: {
+                              successThreshold: { minimum: 1 },
+                            },
+                            required: ['successThreshold'],
+                          },
+                          startupProbe: {
+                            properties: {
+                              successThreshold: { const: 1 },
+                            },
+                            required: ['successThreshold'],
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [{ $ref: '#/definitions/probePattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
+      },
+    },
+    {
+      id: 59,
+      name: 'Ensure each container probe has a configured failure threshold',
+      uniqueName: 'CONTAINERS_INCORRECT_FAILURETHRESHOLD_VALUE',
+      enabledByDefault: false,
+      documentationUrl:
+        'https://hub.datree.io/built-in-rules/ensure-probe-failure-threshold',
+      messageOnFailure:
+        'Incorrect value for key `failureThreshold` - set explicitly to control the number of retries after a probe fails (min 1)',
+      category: 'Containers',
+      schema: {
+        definitions: {
+          probePattern: {
+            if: {
+              properties: {
+                spec: {
+                  properties: {
+                    containers: {
+                      items: {
+                        anyOf: [
+                          {
+                            required: ['livenessProbe'],
+                          },
+                          {
+                            required: ['readinessProbe'],
+                          },
+                          {
+                            required: ['startupProbe'],
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            then: {
+              properties: {
+                spec: {
+                  properties: {
+                    containers: {
+                      items: {
+                        properties: {
+                          livenessProbe: {
+                            properties: {
+                              failureThreshold: { minimum: 1 },
+                            },
+                            required: ['failureThreshold'],
+                          },
+                          readinessProbe: {
+                            properties: {
+                              failureThreshold: { minimum: 1 },
+                            },
+                            required: ['failureThreshold'],
+                          },
+                          startupProbe: {
+                            properties: {
+                              failureThreshold: { minimum: 1 },
+                            },
+                            required: ['failureThreshold'],
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [{ $ref: '#/definitions/probePattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
+      },
+    },
+    {
+      id: 60,
+      name: 'Ensure each container has a configured pre-stop hook',
+      uniqueName: 'CONTAINERS_MISSING_PRESTOP_KEY',
+      enabledByDefault: false,
+      documentationUrl: 'https://hub.datree.io/built-in-rules/ensure-prestop',
+      messageOnFailure:
+        'Missing property object `preStop` - set to ensure graceful shutdown of the container',
+      category: 'Containers',
+      schema: {
+        definitions: {
+          prestopPattern: {
+            properties: {
+              spec: {
+                properties: {
+                  containers: {
+                    type: 'array',
+                    items: {
+                      properties: {
+                        lifecycle: {
+                          properties: {
+                            preStop: { type: 'object' },
+                          },
+                          required: ['preStop'],
+                        },
+                      },
+                      required: ['lifecycle'],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        allOf: [{ $ref: '#/definitions/prestopPattern' }],
+        additionalProperties: { $ref: '#' },
+        items: { $ref: '#' },
       },
     },
   ],
