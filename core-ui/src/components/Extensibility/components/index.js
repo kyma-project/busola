@@ -11,6 +11,7 @@ import { JoinedArray } from './JoinedArray';
 import { ResourceList } from './ResourceList';
 import { ResourceLink } from './ResourceLink.js';
 import { Labels } from './Labels';
+import { Alert } from './Alert';
 import { ExternalLink } from './ExternalLink';
 import { Tabs } from './Tabs';
 
@@ -31,6 +32,7 @@ export const widgets = {
   ResourceList,
   ResourceLink,
   Labels,
+  Alert,
   ExternalLink,
   Tabs,
 };

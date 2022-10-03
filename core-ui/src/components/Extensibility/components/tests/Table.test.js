@@ -1,7 +1,9 @@
-import { Table } from '../Table';
-import { mount } from 'enzyme';
+import { fireEvent, render } from '@testing-library/react';
+import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
 import { TranslationBundleContext } from 'components/Extensibility/helpers';
+import { mount } from 'enzyme';
 import { GenericList } from 'shared/components/GenericList/GenericList';
+import { Table } from '../Table';
 
 const translations = {
   'myResource.path::my-title': 'My Title',
@@ -103,6 +105,85 @@ describe('Table', () => {
       const { entries, notFoundMessage } = list.props();
       expect(entries).toMatchObject([]);
       expect(notFoundMessage).toBe('extensibility.widgets.table.error');
+    });
+  });
+
+  describe('searching', () => {
+    it('Renders Table without a search input', () => {
+      const structure = {
+        children: [],
+      };
+
+      const component = render(<Table value={null} structure={structure} />);
+      const searchInput = component.queryByLabelText('search-input');
+      expect(searchInput).toBeNull();
+    });
+
+    it('Renders Table with a search input', () => {
+      const structure = {
+        children: [{ source: 'test', search: true }],
+      };
+
+      const component = render(<Table value={[]} structure={structure} />);
+      const searchInput = component.queryByLabelText('search-input');
+      expect(searchInput).toBeInTheDocument();
+    });
+
+    it('Should search for simple data', async () => {
+      const structure = {
+        children: [{ source: '$item.test', search: true }],
+      };
+      const listData = [{ test: 'temp' }, { test: 'buf' }];
+
+      const { findByText, getByLabelText, findAllByRole, queryByText } = render(
+        <DataSourcesContextProvider value={{}} dataSources={{}}>
+          <Table value={listData} structure={structure} />
+        </DataSourcesContextProvider>,
+      );
+
+      // expect unfiltered results to exist
+      await findByText('temp');
+      await findByText('buf');
+
+      const searchInput = getByLabelText('search-input');
+      fireEvent.change(searchInput, { target: { value: 'tem' } });
+
+      //there are two items with role='row', the header and the table's row
+      const rows = await findAllByRole('row');
+      expect(rows).toHaveLength(2);
+      expect(rows.at(1)).toHaveTextContent('temp');
+      expect(queryByText('buf')).not.toBeInTheDocument();
+    });
+
+    fit('Should search for complex data with a predefined function', async () => {
+      const structure = {
+        children: [
+          {
+            source: '$item.test',
+            search: {
+              searchFunction:
+                '$filter($item.test, function($e){$contains($e, $input)})',
+            },
+          },
+        ],
+      };
+      const listData = [{ test: ['aa'] }, { test: ['cc'] }];
+
+      const { findByText, getByLabelText, findAllByRole, queryByText } = render(
+        <DataSourcesContextProvider value={{}} dataSources={{}}>
+          <Table value={listData} structure={structure} />
+        </DataSourcesContextProvider>,
+      );
+      await findByText('aa');
+      await findByText('cc');
+
+      const searchInput = getByLabelText('search-input');
+      await fireEvent.change(searchInput, { target: { value: 'aa' } });
+
+      const rows = await findAllByRole('row');
+      expect(rows).toHaveLength(2);
+      expect(rows.at(1)).toHaveTextContent('aa');
+      expect(queryByText('cc')).not.toBeInTheDocument();
     });
   });
 
