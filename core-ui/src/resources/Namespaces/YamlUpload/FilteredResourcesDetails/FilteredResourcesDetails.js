@@ -55,7 +55,7 @@ const ValidationWarnings = ({ resource }) => {
   const [areWarningsVisible, setVisibleWarnings] = useState(false);
   const isInCurrentNamespace = useIsInCurrentNamespace(resource);
   const warnings = useValidateResourceBySchema(resource);
-  const isButtonShown = warnings?.length > 0 || isInCurrentNamespace;
+  const isButtonShown = warnings?.length > 0 || !isInCurrentNamespace;
 
   return (
     <div>
