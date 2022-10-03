@@ -5,8 +5,9 @@ import classNames from 'classnames';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import { sortBy, useGetTranslation } from '../helpers';
+import { sortBy, useGetTranslation, getTextSearchProperties } from '../helpers';
 import { Widget, InlineWidget } from './Widget';
+import { getSearchDetails, getSortDetails } from './helpers';
 
 import './Table.scss';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
@@ -74,15 +75,18 @@ export function Table({
       }
     };
 
-    const cells = (structure.children || []).map(column => (
-      <Widget
-        value={entry}
-        structure={column}
-        schema={schema}
-        originalResource={originalResource}
-        {...props}
-      />
-    ));
+    const cells = (structure.children || []).map(column => {
+      return (
+        <Widget
+          {...props}
+          value={entry}
+          arrayItem={entry}
+          structure={column}
+          schema={schema}
+          originalResource={originalResource}
+        />
+      );
+    });
 
     if (!structure.collapsible) {
       return cells;
@@ -95,12 +99,13 @@ export function Table({
         <td colspan="100%" className={tdClassNames}>
           {structure.collapsible.map(child => (
             <Widget
+              {...props}
               value={entry}
+              arrayItem={entry}
               structure={child}
               schema={schema}
               inlineRenderer={InlineWidget}
               originalResource={originalResource}
-              {...props}
             />
           ))}
         </td>
@@ -108,7 +113,14 @@ export function Table({
     };
   };
 
-  const sortOptions = (structure?.children || []).filter(child => child.sort);
+  const { sortOptions } = getSortDetails(structure);
+
+  const { searchOptions, defaultSearch } = getSearchDetails(structure);
+
+  const textSearchProperties = getTextSearchProperties({
+    searchOptions,
+    defaultSearch,
+  });
 
   const className = `extensibility-table ${
     disableMargin ? 'fd-margin--xs' : ''
@@ -126,9 +138,9 @@ export function Table({
       {...handleTableValue(value, t)}
       sortBy={() => sortBy(sortOptions, tExt, {}, originalResource)}
       searchSettings={{
-        showSearchSuggestion: false,
-        showSearchField: structure?.showSearchField,
+        showSearchField: searchOptions.length > 0,
         allowSlashShortcut: false,
+        textSearchProperties: textSearchProperties(),
       }}
     />
   );

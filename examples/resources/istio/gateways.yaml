@@ -37,7 +37,7 @@ data:
           "name": "spec.selector"
         }
       ],
-      "body": [     
+      "body": [
         {
           "widget": "Table",
           "source": "spec.servers",
@@ -191,6 +191,13 @@ data:
             "visibility": "$item.port.protocol = 'HTTPS'",
             "placeholder": "placeholders.caCertificates",
           },
+          {
+            "simple": true,
+            "widget": "Alert",
+            "type": "warning",
+            "alert": "'alert.tls.https'",
+            "visibility": "$item.port.protocol = 'HTTPS'",
+          }
         ]
       },
       {
@@ -257,6 +264,7 @@ data:
     ]
   translations: |
     en:
+      alert.tls.https: TLS Server of mode SIMPLE or MUTUAL needs either credential name, or private key and server certificate pair.
       spec.selector: Selector
       spec.gateways: Gateways
       spec.servers: Servers

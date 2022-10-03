@@ -118,13 +118,13 @@ export function EventList({
       omitColumnsIds={['namespace', 'labels', 'created']}
       sortBy={sortByFn}
       description={description}
-      fixedPath={true}
+      fixedPath
       showTitle={isCompact}
       title={t('events.title')}
       {...props}
       isCompact={isCompact}
-      hasDetailsView={true}
-      readOnly={true}
+      hasDetailsView
+      readOnly
       filter={res => {
         const typeFilter =
           displayType.key === EVENT_MESSAGE_TYPE.ALL.key ||
