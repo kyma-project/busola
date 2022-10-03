@@ -94,7 +94,7 @@ export function YamlResourcesList({ resourcesData, isValidationOn }) {
                   glyph={getIcon(r?.status)}
                   ariaLabel="status"
                 />
-                {r?.value?.kind} {r?.value?.metadata?.name} -{' '}
+                {String(r?.value?.kind)} {String(r?.value?.metadata?.name)} -{' '}
                 {getStatus(r?.status)}
                 <p>{r?.message}</p>
               </li>

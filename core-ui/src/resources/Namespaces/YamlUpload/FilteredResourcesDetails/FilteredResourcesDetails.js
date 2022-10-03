@@ -100,7 +100,7 @@ export const FilteredResourcesDetails = ({
           key={`${r?.value?.kind}-${r.value?.metadata?.name}`}
         >
           <p style={{ fontSize: '16px' }}>
-            {r?.value?.kind} {r?.value?.metadata?.name}
+            {String(r?.value?.kind)} {String(r?.value?.metadata?.name)}
           </p>
           {isValidationOn ? <ValidationWarnings resource={r?.value} /> : null}
         </li>
