@@ -83,6 +83,13 @@ export const doesUserHavePermission = (
 ) => {
   const { resourceGroup: resourceGroupAndVersion, resourceKind } = resource;
   const resourceKindPlural = pluralize(resourceKind);
+
+  if (resourceKindPlural === 'namespaces') {
+    //TODO if cluster roles, if namespaced kubeconfig
+    // if at the end there are any namespaced resources --> leave this node
+    return true;
+  }
+
   const resourceGroup = resourceGroupAndVersion.split('/')[0];
 
   const isPermitted = permissionSet.find(set => {
