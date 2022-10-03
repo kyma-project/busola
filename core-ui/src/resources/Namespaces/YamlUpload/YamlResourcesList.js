@@ -101,7 +101,7 @@ export function YamlResourcesList({ resourcesData, namespace }) {
                 className="fd-margin-begin--sm"
                 style={{ listStyle: 'disc' }}
               >
-                {r?.value?.kind} {r?.value?.metadata?.name}
+                {String(r?.value?.kind)} {String(r?.value?.metadata?.name)}
                 {getWarning(r.value)}
               </li>
             ))}
@@ -126,7 +126,7 @@ export function YamlResourcesList({ resourcesData, namespace }) {
                   glyph={getIcon(r?.status)}
                   ariaLabel="status"
                 />
-                {r?.value?.kind} {r?.value?.metadata?.name} -{' '}
+                {String(r?.value?.kind)} {String(r?.value?.metadata?.name)} -{' '}
                 {getStatus(r?.status)}
                 <p>{r?.message}</p>
               </li>
