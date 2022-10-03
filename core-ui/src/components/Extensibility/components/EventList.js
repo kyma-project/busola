@@ -10,16 +10,29 @@ export function EventList({ structure, originalResource }) {
   const { widgetT } = useGetTranslation();
   const jsonataFn = useJsonataEvaluate(originalResource);
 
-  const defaultType = EVENT_MESSAGE_TYPE[structure.defaultType];
+  const renameDefaultType = defaultType => {
+    switch ((defaultType || '').toLowerCase()) {
+      case 'information':
+        return 'NORMAL';
+      case 'warning':
+        return 'WARNING';
+      default:
+        return 'ALL';
+    }
+  };
+
+  const defaultType =
+    EVENT_MESSAGE_TYPE[renameDefaultType(structure.defaultType)];
+
   const resourceUrl = namespaceId
     ? `/api/v1/namespaces/${namespaceId}/events`
     : '/api/v1/events';
 
   const filter = res => {
-    if (!structure.filterBy) return true;
+    if (!structure.filter) return true;
 
     try {
-      return jsonataFn(structure.filterBy, { item: res });
+      return !!jsonataFn(structure.filter, { item: res });
     } catch (e) {
       return false;
     }
