@@ -75,8 +75,6 @@ export async function setCluster(clusterName) {
       params.kubeconfig,
     );
 
-    /////////////// lalalalala
-    // TODO loading
     await clusterOpenApi.fetch();
 
     if (hasNonOidcAuth(kubeconfigUser)) {
@@ -95,6 +93,7 @@ export async function setCluster(clusterName) {
     clearK8Version();
   } catch (e) {
     loadingState.setLoading(false);
+    clusterOpenApi.clear();
     console.warn(e);
     alert('An error occured while setting up the cluster.');
     saveActiveClusterName(null);

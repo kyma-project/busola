@@ -17,23 +17,6 @@ export const excludeNavigationNode = (node, permissionSet) => {
   }
 };
 
-const markNavNodeToBeDeleted = node => {
-  node.toDelete = true;
-  return node;
-};
-
-const dependsOnConfigFeatures = node =>
-  Array.isArray(node.context?.requiredFeatures) &&
-  node.context.requiredFeatures.length;
-
-const isARequiredFeatureDisabled = node =>
-  !!node.context.requiredFeatures.find(
-    configFeature => !configFeature || configFeature.isEnabled === false,
-  );
-
-const dependsOnOtherResource = node =>
-  typeof node.context?.requiredGroupResource === 'object';
-
 const isParentResourceDisallowed = (node, permissionSet) => {
   const { group, resource } = node.context.requiredGroupResource;
 
@@ -66,6 +49,23 @@ const isResourceDisallowed = (node, permissionSet) => {
 
   return !doesExist || !isPermitted;
 };
+
+const markNavNodeToBeDeleted = node => {
+  node.toDelete = true;
+  return node;
+};
+
+const dependsOnConfigFeatures = node =>
+  Array.isArray(node.context?.requiredFeatures) &&
+  node.context.requiredFeatures.length;
+
+const isARequiredFeatureDisabled = node =>
+  !!node.context.requiredFeatures.find(
+    configFeature => !configFeature || configFeature.isEnabled === false,
+  );
+
+const dependsOnOtherResource = node =>
+  typeof node.context?.requiredGroupResource === 'object';
 
 const hasCompleteInformation = node => {
   if (typeof node.viewUrl === 'string') {

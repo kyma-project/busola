@@ -61,24 +61,6 @@ export function hasAnyRoleBound(permissionSet) {
   return verbs.some(v => usefulVerbs.includes(v));
 }
 
-//TODO groupName includes version - what if version is not actual? should we exclude it
-//TODO check paths returned by openAPI
-
-// MULTIPLE?
-// "/apis/busola.example.com/v1/namespaces/{namespace}/pizzaorders"
-// "/apis/busola.example.com/v1/namespaces/{namespace}/pizzaorders/{name}"
-// "/apis/busola.example.com/v1/namespaces/{namespace}/pizzas"
-// "/apis/busola.example.com/v1/namespaces/{namespace}/pizzas/{name}"
-// "/apis/busola.example.com/v1/pizzaorders"
-// "/apis/busola.example.com/v1/pizzas"
-
-// WATCH?
-// "/apis/apiextensions.k8s.io/v1/customresourcedefinitions"
-// "/apis/apiextensions.k8s.io/v1/customresourcedefinitions/{name}"
-// "/apis/apiextensions.k8s.io/v1/customresourcedefinitions/{name}/status"
-// "/apis/apiextensions.k8s.io/v1/watch/customresourcedefinitions"
-// "/apis/apiextensions.k8s.io/v1/watch/customresourcedefinitions/{name}"
-
 export const doesResourceExist = ({ resourceGroup, resourceKind }) => {
   const resourceIdList = clusterOpenApi.getResourceNameList;
   const resourceNamePlural = pluralize(resourceKind);
@@ -104,6 +86,7 @@ export const doesUserHavePermission = (
   const isPermitted = permissionSet.find(set => {
     const isSameApiGroup =
       set.apiGroups?.includes(resourceGroup) || set.apiGroups?.includes('*');
+
     const isSameResourceKind =
       set.resources?.includes(resourceKindPlural) ||
       set.resources?.includes('*');
