@@ -60,11 +60,9 @@ const ValidationWarnings = ({ resource }) => {
     <div>
       {isButtonShown && (
         <WarningButton
-          handleShowWarnings={() => {
-            setVisibleWarnings(prevState => !prevState);
-          }}
+          handleShowWarnings={() => setVisibleWarnings(prevState => !prevState)}
           areWarningsVisible={areWarningsVisible}
-          warningsNumber={warnings?.length + Number(!isInCurrentNamespace)}
+          warningsNumber={warnings.length + Number(!isInCurrentNamespace)}
         />
       )}
       {areWarningsVisible ? (

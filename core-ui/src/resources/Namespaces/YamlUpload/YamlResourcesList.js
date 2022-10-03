@@ -65,7 +65,10 @@ export function YamlResourcesList({
     if (showResourcesToUpload()) {
       return (
         <>
-          <div className="fd-display-flex fd-justify-between fd-align-center fd-margin--tiny">
+          <div
+            className="fd-display-flex fd-justify-between fd-align-center fd-margin--tiny"
+            style={{ height: '20px' }}
+          >
             <p>
               {t(
                 filteredResources.length === 1
