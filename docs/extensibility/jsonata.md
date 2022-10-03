@@ -49,7 +49,7 @@ You can use this function to match Events using a resource selector.
 
 ```yaml
 - widget: EventList
-  filterBy: '$matchEvents($item, $root.kind, $root.metadata.name)'
+  filter: '$matchEvents($item, $root.kind, $root.metadata.name)'
   name: events
   defaultType: NORMAL
   hideInvolvedObjects: true
