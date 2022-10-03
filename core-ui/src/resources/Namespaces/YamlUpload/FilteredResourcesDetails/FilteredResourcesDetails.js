@@ -10,16 +10,13 @@ import './FilteredResourcesDetails.scss';
 
 const NamespaceWarning = ({ resource }) => {
   const { t } = useTranslation();
-  if (!useIsInCurrentNamespace(resource)) {
-    return (
-      <MessageStrip type="warning" className="fd-margin-top--sm">
-        {t('upload-yaml.warnings.different-namespace', {
-          namespace: resource?.metadata?.namespace,
-        })}
-      </MessageStrip>
-    );
-  }
-  return null;
+  return useIsInCurrentNamespace(resource) ? null : (
+    <MessageStrip type="warning" className="fd-margin-top--sm">
+      {t('upload-yaml.warnings.different-namespace', {
+        namespace: resource?.metadata?.namespace,
+      })}
+    </MessageStrip>
+  );
 };
 
 const WarningButton = ({
