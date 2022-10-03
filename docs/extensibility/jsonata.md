@@ -5,6 +5,7 @@
 - [Overview](#overview)
 - [Preset functions](#preset-functions)
   - [_matchByLabelSelector_](#matchbylabelselectoritem-selectorpath)
+  - [_matchEvents_](#matcheventsitem-kind-name)
   - [_compareStrings_](#comparestringsfirst-second)
 
 ## Overview
@@ -32,6 +33,26 @@ Example from [dataSources](datasources-section.md).
       kind: Pod
       version: v1
     filter: '$matchByLabelSelector($item, $root.spec.selector)'
+```
+
+## matchEvents(item, kind, name)
+
+You can use this function to match Events using a resource selector.
+
+### Function parameters
+
+- **item** - Event to be checked.
+- **kind** - kind of the Event emitting resource.
+- **name** - name of the Event emitting resource.
+
+### Example
+
+```yaml
+- widget: EventList
+  filter: '$matchEvents($item, $root.kind, $root.metadata.name)'
+  name: events
+  defaultType: NORMAL
+  hideInvolvedObjects: true
 ```
 
 ## compareStrings(first, second)
