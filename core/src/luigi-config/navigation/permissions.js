@@ -65,9 +65,10 @@ export const doesResourceExist = ({ resourceGroup, resourceKind }) => {
   const resourceIdList = clusterOpenApi.getResourceNameList;
   const resourceNamePlural = pluralize(resourceKind);
 
-  // an example string matching the regex: /(api|apis)/GROUP_NAME/.../RESOURCE_NAME
-  const regexString = `^\\/(api|apis)\\/${resourceGroup}\\/.*?\\/${resourceNamePlural}$`;
+  // an example string matching the regex: /(api|apis)/GROUP_NAME/RESOURCE_VERSION/RESOURCE_NAME
+  const regexString = `^\\/(api|apis)\\/${resourceGroup}\\/${resourceNamePlural}$`;
   const resourceGroupAndKindRegex = new RegExp(regexString, 'i');
+
   const doesExist = !!resourceIdList.find(resourceId => {
     return resourceGroupAndKindRegex.test(resourceId);
   });
@@ -80,8 +81,9 @@ export const doesUserHavePermission = (
   resource = { resourceGroup: '', resourceKind: '' },
   permissionSet,
 ) => {
-  const { resourceGroup, resourceKind } = resource;
+  const { resourceGroup: resourceGroupAndVersion, resourceKind } = resource;
   const resourceKindPlural = pluralize(resourceKind);
+  const resourceGroup = resourceGroupAndVersion.split('/')[0];
 
   const isPermitted = permissionSet.find(set => {
     const isSameApiGroup =

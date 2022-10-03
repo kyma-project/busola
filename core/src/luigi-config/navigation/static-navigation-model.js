@@ -1457,7 +1457,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: coreUIViewGroupName,
       context: {
         requiredGroupResource: {
-          group: 'apiextensions.k8s.io',
+          group: 'apiextensions.k8s.io/v1',
           resource: 'customresourcedefinitions',
         },
       },
@@ -1868,7 +1868,7 @@ export function getStaticRootNodes(
       viewGroup: coreUIViewGroupName,
       context: {
         requiredGroupResource: {
-          group: 'apiextensions.k8s.io',
+          group: 'apiextensions.k8s.io/v1',
           resource: 'customresourcedefinitions',
         },
       },
