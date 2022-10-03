@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useIsInCurrentNamespace } from 'shared/hooks/useIsInCurrentNamespace';
 import { useValidateResourceBySchema } from 'shared/hooks/useValidateResourceBySchema/useValidateResourceBySchema';
-import { useTranslation } from 'react-i18next';
 
 import { Button, MessageStrip } from 'fundamental-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
@@ -25,7 +25,6 @@ const WarningButton = ({
   warningsNumber,
 }) => {
   const { t } = useTranslation();
-
   return (
     <Button
       onClick={handleShowWarnings}
