@@ -102,12 +102,13 @@ export function YamlUploadDialog({ show, onCancel }) {
             resourcesData={resourcesData}
             setResourcesData={updateYamlContent}
             setLastOperationState={setLastOperationState}
-            handleResourceValidation={() => setValidationOn(prev => !prev)}
-            isValidationOn={isValidationOn}
           />
-          <div className="fd-margin-begin--tiny fd-margin-end--tiny">
-            {t('upload-yaml.info', { namespace: defaultNamespace })}
+          <div>
+            <p style={{ height: '80px' }}>
+              {t('upload-yaml.info', { namespace: defaultNamespace })}
+            </p>
             <YamlResourcesList
+              handleResourceValidation={() => setValidationOn(prev => !prev)}
               isValidationOn={isValidationOn}
               resourcesData={resourcesWithStatuses}
               namespace={namespaceId}

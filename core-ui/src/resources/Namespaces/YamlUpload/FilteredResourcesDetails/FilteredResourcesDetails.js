@@ -38,7 +38,7 @@ const WarningButton = ({
       <div>
         <p>
           {!areWarningsVisible
-            ? t('common.buttons.see-warnings')
+            ? t('common.buttons.show-warnings')
             : t('common.buttons.hide-warnings')}
         </p>
         {isNaN(warningsNumber) ? (

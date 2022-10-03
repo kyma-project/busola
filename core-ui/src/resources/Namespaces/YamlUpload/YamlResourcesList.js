@@ -1,5 +1,6 @@
 import React from 'react';
 import { Icon } from 'fundamental-react';
+import { Switch } from 'shared/ResourceForm/inputs';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -8,10 +9,14 @@ import {
   STATE_UPDATED,
   STATE_CREATED,
 } from './useUploadResources';
-import './YamlResourcesList.scss';
 import { FilteredResourcesDetails } from './FilteredResourcesDetails/FilteredResourcesDetails';
+import './YamlResourcesList.scss';
 
-export function YamlResourcesList({ resourcesData, isValidationOn }) {
+export function YamlResourcesList({
+  resourcesData,
+  isValidationOn,
+  handleResourceValidation,
+}) {
   const { t } = useTranslation();
   const filteredResources = resourcesData?.filter(
     resource => resource !== null,
@@ -59,26 +64,35 @@ export function YamlResourcesList({ resourcesData, isValidationOn }) {
   } else {
     if (showResourcesToUpload()) {
       return (
-        <div>
-          <p className="fd-margin-top--md">
-            {t(
-              filteredResources.length === 1
-                ? 'upload-yaml.you-will-create_one'
-                : 'upload-yaml.you-will-create_other',
-              {
-                count: filteredResources.length || 0,
-              },
-            )}
-          </p>
+        <>
+          <div className="fd-display-flex fd-justify-between fd-align-center fd-margin--tiny">
+            <p>
+              {t(
+                filteredResources.length === 1
+                  ? 'upload-yaml.you-will-create_one'
+                  : 'upload-yaml.you-will-create_other',
+                {
+                  count: filteredResources.length || 0,
+                },
+              )}
+            </p>
+            <div className="validate-resources">
+              <p>{t('settings.clusters.validateResources')}</p>
+              <Switch
+                onChange={handleResourceValidation}
+                checked={isValidationOn}
+              />
+            </div>
+          </div>
           <FilteredResourcesDetails
             filteredResources={filteredResources}
             isValidationOn={isValidationOn}
           />
-        </div>
+        </>
       );
     } else {
       return (
-        <div className="fd-margin-top--md">
+        <>
           <div id="upload-progress-bar-container">
             <div
               id="upload-progress-bar"
@@ -100,7 +114,7 @@ export function YamlResourcesList({ resourcesData, isValidationOn }) {
               </li>
             ))}
           </ul>
-        </div>
+        </>
       );
     }
   }

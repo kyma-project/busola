@@ -5,9 +5,6 @@ import jsyaml from 'js-yaml';
 
 import { YamlFileUploader } from './YamlFileUploader';
 import { OPERATION_STATE_INITIAL } from './YamlUploadDialog';
-import { Switch } from 'shared/ResourceForm/inputs';
-import './YamlUpload.scss';
-
 const isK8sResource = resource => {
   if (!resource) return true;
   return resource.apiVersion && resource.kind && resource.metadata;
@@ -17,8 +14,6 @@ function YamlUpload({
   resourcesData,
   setResourcesData,
   setLastOperationState,
-  isValidationOn,
-  handleResourceValidation,
 }) {
   const [error, setError] = useState('');
   const [editor, setEditor] = useState(null);
@@ -59,16 +54,7 @@ function YamlUpload({
           editor.getModel().setValue(val);
         }}
       />
-      <div className="info-wrapper fd-margin-bottom--sm fd-margin-top--sm">
-        <p className="editor-label">{t('upload-yaml.or-paste-here')}</p>
-        <div className="switch-wrapper">
-          <p>{t('settings.clusters.validateResources')}</p>
-          <Switch
-            onChange={handleResourceValidation}
-            checked={isValidationOn}
-          />
-        </div>
-      </div>
+      <p className="fd-margin--tiny">{t('upload-yaml.or-paste-here')}</p>
       <Editor
         autocompletionDisabled
         height="60vh"
