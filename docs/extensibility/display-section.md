@@ -17,6 +17,7 @@
   - [Alert](#alert)
   - [CodeViewer](#codeviewer)
   - [Columns](#columns)
+  - [EventList](#eventlist)
   - [Panel](#panel)
   - [Plain](#plain)
   - [ResourceList](#resourcelist)
@@ -467,6 +468,39 @@ Columns widgets render the child widgets in multiple columns.
 ```
 
 <img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
+
+### EventList
+
+EventList widget renders a list of Events.
+
+#### Widget-specific parameters
+
+- **filter** - A JSONata function you can use to filter Events emitted by a specific resource. There is a special custom function [matchEvents](jsonata.md#matcheventsitem-kind-name) you can use to filter Events, for example, `$matchEvents($item, $root.kind, $root.metadata.name)`.
+- **defaultType** - either `all`, `information` or `warning`. When set to `information` or `warning` Events with specific type are displayed. By default all Events are fetched.
+- **hideInvolvedObjects** - optional flag. If set to `true`, the **Involved Objects** column is hidden. Defaults to `false`.
+
+#### Examples
+
+```yaml
+- widget: EventList
+  filter: '$matchEvents($item, $root.kind, $root.metadata.name)'
+  name: events
+  defaultType: information
+```
+
+<img src="./assets/display-widgets/EventList.png" alt="Example of a EventList widget" style="border: 1px solid #D2D5D9">
+
+---
+
+```yaml
+- widget: EventList
+  filter: '$matchEvents($item, $root.kind, $root.metadata.name)'
+  name: events
+  defaultType: information
+  hideInvolvedObjects: true
+```
+
+<img src="./assets/display-widgets/EventListHiddenField.png" alt="Example of a EventList widget with hidden involved objects" style="border: 1px solid #D2D5D9">
 
 ### Panel
 

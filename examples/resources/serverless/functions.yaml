@@ -133,6 +133,12 @@ data:
                   "source": "$replicas()",
                   "name": "code.replicas",
                   "disableCreate": true
+                }, {
+                  "widget": "EventList",
+                  "filter": "$matchEvents($item, $root.kind, $root.metadata.name)",
+                  "name": "events",
+                  "defaultType": "information",
+                  "hideInvolvedObjects": true,
                 }
               ]
             },
@@ -484,6 +490,7 @@ data:
       code.env.valueFrom: Value From
       code.env.source: Source
       code.env.key: Key
+      events: Events
       configuration.apiRules: API Rules
       configuration.subscriptions: Subscriptions
       header.runtime: Runtime

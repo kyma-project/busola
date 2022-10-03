@@ -9,6 +9,7 @@ import { ResourceRefs } from './ResourceRefs';
 import { ControlledBy } from './ControlledBy';
 import { JoinedArray } from './JoinedArray';
 import { ResourceList } from './ResourceList';
+import { EventList } from './EventList';
 import { ResourceLink } from './ResourceLink.js';
 import { Labels } from './Labels';
 import { Alert } from './Alert';
@@ -35,6 +36,7 @@ export const widgets = {
   Alert,
   ExternalLink,
   Tabs,
+  EventList,
 };
 
 export const valuePreprocessors = {
