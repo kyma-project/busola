@@ -1,9 +1,8 @@
-import React, { useMemo, useEffect, useState } from 'react';
-import { createStore } from '@ui-schema/ui-schema';
-import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
+import React, { useCallback, useMemo, useState } from 'react';
 import Immutable from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
+import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
@@ -16,6 +15,10 @@ import { ResourceSchema } from './ResourceSchema';
 import { usePreparePresets, createTemplate, getDefaultPreset } from './helpers';
 import { VarStoreContextProvider } from './contexts/VarStore';
 import { prepareSchemaRules } from './helpers/prepareSchemaRules';
+import {
+  getResourceObjFromUIStore,
+  getUIStoreFromResourceObj,
+} from './helpers/immutableConverter';
 import { useVariables } from './hooks/useVariables';
 
 export function ExtensibilityCreateCore({
@@ -33,34 +36,33 @@ export function ExtensibilityCreateCore({
   const notification = useNotification();
   const { t } = useTranslation();
   const general = createResource?.general;
-  const api = general?.resource || {};
+  const api = useMemo(() => general?.resource || {}, [general?.resource]);
 
-  const emptyTemplate = createTemplate(api, namespace, general?.scope);
-  const defaultPreset = getDefaultPreset(
-    createResource?.presets,
-    emptyTemplate,
+  const emptyTemplate = useMemo(
+    () => createTemplate(api, namespace, general?.scope),
+    [api, namespace, general?.scope],
+  );
+  const defaultPreset = useMemo(
+    () => getDefaultPreset(createResource?.presets, emptyTemplate),
+    [createResource?.presets, emptyTemplate],
   );
 
-  const [resource, setResource] = useState(
-    initialResource || defaultPreset?.value || emptyTemplate,
+  const [store, setStore] = useState(
+    getUIStoreFromResourceObj(
+      initialResource || defaultPreset?.value || emptyTemplate,
+    ),
   );
 
   const presets = usePreparePresets(emptyTemplate, createResource?.presets);
 
-  const [store, setStore] = useState(() =>
-    createStore(createOrderedMap(resource)),
-  );
+  const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
-  const updateResource = res => {
+  const updateStore = res => {
     resetVars();
     readVars(res);
     const newStore = Immutable.fromJS(res);
     setStore(prevStore => prevStore.set('values', newStore));
   };
-
-  useEffect(() => {
-    setResource(store.valuesToJS());
-  }, [store.values]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const afterCreatedFn = async defaultAfterCreatedFn => {
     if (createResource?.details) {
@@ -80,17 +82,16 @@ export function ExtensibilityCreateCore({
     toggleFormFn(false);
   };
 
-  const { schema, error: errorOpenApi, loading } = useGetSchema({
+  const {
+    schema,
+    error: errorOpenApi,
+    loading: loadingOpenAPISchema,
+  } = useGetSchema({
     resource: api,
   });
 
   const { simpleRules, advancedRules } = useMemo(() => {
-    const fullSchemaRules = [
-      { path: 'metadata.name', simple: true },
-      { path: 'metadata.labels' },
-      { path: 'metadata.annotations' },
-      ...(createResource?.form ?? []),
-    ];
+    const fullSchemaRules = createResource?.form ?? [];
 
     prepareVars(fullSchemaRules);
     readVars(resource);
@@ -105,15 +106,27 @@ export function ExtensibilityCreateCore({
     };
   }, [createResource]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // waiting for schema from OpenAPI to be computed
-  if (loading) return <Spinner />;
+  const handleNameChange = useCallback(
+    resourceName => {
+      jp.value(resource, '$.metadata.name', resourceName);
+      jp.value(
+        resource,
+        "$.metadata.labels['app.kubernetes.io/name']",
+        resourceName,
+      );
+      updateStore(resource);
+    },
+    [resource], // eslint-disable-line react-hooks/exhaustive-deps,
+  );
+
+  if (loadingOpenAPISchema) return <Spinner />;
 
   return (
     <ResourceForm
       pluralKind={resourceType}
       singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
       resource={resource}
-      setResource={updateResource}
+      setResource={updateStore}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
@@ -121,6 +134,7 @@ export function ExtensibilityCreateCore({
       presets={!initialResource && presets}
       initialResource={initialResource}
       afterCreatedFn={afterCreatedFn}
+      handleNameChange={handleNameChange}
     >
       <ResourceSchema
         simple

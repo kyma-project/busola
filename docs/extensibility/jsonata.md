@@ -5,6 +5,7 @@
 - [Overview](#overview)
 - [Preset functions](#preset-functions)
   - [_matchByLabelSelector_](#matchbylabelselectoritem-selectorpath)
+  - [_matchEvents_](#matcheventsitem-kind-name)
   - [_compareStrings_](#comparestringsfirst-second)
 
 ## Overview
@@ -15,7 +16,7 @@ This document describes how to use the preset JSONata functions.
 
 ## matchByLabelSelector(item, selectorPath)
 
-This function can be used to match Pods using a resource selector.
+You can use this function to match Pods using a resource selector.
 
 ### Function parameters
 
@@ -24,23 +25,39 @@ This function can be used to match Pods using a resource selector.
 
 ### Example
 
-Example from dataSources.
+Example from [dataSources](datasources-section.md).
 
-```json
-{
-  "podSelector": {
-    "resource": {
-      "kind": "Pod",
-      "version": "v1"
-    },
-    "filter": "$matchByLabelSelector($item, $root.spec.selector)"
-  }
-}
+```yaml
+- podSelector:
+    resource:
+      kind: Pod
+      version: v1
+    filter: '$matchByLabelSelector($item, $root.spec.selector)'
+```
+
+## matchEvents(item, kind, name)
+
+You can use this function to match Events using a resource selector.
+
+### Function parameters
+
+- **item** - Event to be checked.
+- **kind** - kind of the Event emitting resource.
+- **name** - name of the Event emitting resource.
+
+### Example
+
+```yaml
+- widget: EventList
+  filter: '$matchEvents($item, $root.kind, $root.metadata.name)'
+  name: events
+  defaultType: NORMAL
+  hideInvolvedObjects: true
 ```
 
 ## compareStrings(first, second)
 
-This function can be used to sort two strings alphabetically.
+You can use this function to sort two strings alphabetically.
 
 ### Function parameters
 
@@ -49,21 +66,16 @@ This function can be used to sort two strings alphabetically.
 
 ### Example
 
-Example from the ResourceList widget.
+Example from the [ResourceList widget](display-section.md#resourcelist).
 
 #### Examples
 
-```json
-{
-  "widget": "ResourceList",
-  "source": "$myDeployments()",
-  "name": "Example ResourceList Deployments",
-  "sort": [
-    {
-      "source": "$item.spec.strategy.type",
-      "compareFunction": "$compareStrings($second, $first)",
-      "default": true
-    }
-  ]
-}
+```yaml
+- widget: ResourceList
+  source: '$myDeployments()'
+  name: Example ResourceList Deployments
+  sort:
+    - source: '$item.spec.strategy.type'
+      compareFunction: '$compareStrings($second, $first)'
+      default: true
 ```

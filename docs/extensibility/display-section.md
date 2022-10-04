@@ -14,8 +14,10 @@
   - [ResourceLink](#resourcelink)
   - [Text](#text)
 - [Block widgets](#block-widgets)
+  - [Alert](#alert)
   - [CodeViewer](#codeviewer)
   - [Columns](#columns)
+  - [EventList](#eventlist)
   - [Panel](#panel)
   - [Plain](#plain)
   - [ResourceList](#resourcelist)
@@ -36,35 +38,28 @@ Each object adds a new column to your table.
 - **sort** - optional sort option. If set to `true`, it allows you to sort the resource list using this value. Defaults to false. It can also be set to an object with the following properties:
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
   - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
+- **search** - optional search option. If set to `true`, it allows you to search the resource list by this value. Defaults to false. It can also be set to an object with the following property:
+  - **searchFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) search function. It allows to use `$input` variable to get the search input's value that can be used to search for more complex data.
 
 ### Example
 
-```json
-[
-  {
-    "source": "spec.url",
-    "sort": {
-      "default": true,
-      "compareFunction": "$compareStrings($first, $second)"
-    }
-  },
-  { "source": "spec.priority", "widget": "Badge" },
-  { "source": "$join(spec.toppings.name, ', ')" },
-  {
-    "name": "quantityIsMore",
-    "source": "$filter(spec.toppings, function ($v, $i, $a) { $v.quantity > $average($a.quantity) })"
-  },
-  { "source": "$join(spec.volumes.name, ', ')" },
-  {
-    "source": "$filter(spec.volumes, function ($v, $i, $a) {'configMap' in $keys($v)})" // List the array of Volume objects that have a config map
-  },
-  {
-    "source": "spec.volumes['configMap' in $keys($)]" // This is the alternative way of listing the array of Volume objects that have a config map
-  },
-  {
-    "source": "$join(spec.volumes['configMap' in $keys($)].name, ', ')" // List volume names of volumes that have a config map
-  }
-]
+```yaml
+- source: spec.url
+  search: true
+  sort:
+    default: true
+    compareFunction: '$compareStrings($first, $second)'
+- source: spec.priority
+  widget: Badge
+- source: "$join(spec.toppings.name, ', ')"
+- name: quantityIsMore
+  source:
+    '$filter(spec.toppings, function ($v, $i, $a) { $v.quantity > $average($a.quantity)
+    })'
+- source: "$join(spec.volumes.name, ', ')"
+- source: "$filter(spec.volumes, function ($v, $i, $a) {'configMap' in $keys($v)})" # List the array of volume objects that have a ConfigMap
+- source: spec.volumes['configMap' in $keys($)] # This is the alternative way of listing the array of volume objects that have a ConfigMap
+- source: "$join(spec.volumes['configMap' in $keys($)].name, ', ')" # List volume names of volumes that have a ConfigMap
 ```
 
 ## Resource _details_ overview
@@ -93,57 +88,42 @@ Extra parameters might be available for specific widgets.
 
 ### Header and body example
 
-```json
-{
-  "header": [
-    { "source": "metadata.name" },
-    { "source": "spec.priority", "widget": "Badge" },
-    { "source": "$join(spec.volumes.name, ', ')" }
-  ],
-  "body": [
-    {
-      "name": "columns",
-      "widget": "Columns",
-      "children": [
-        { "name": "left-panel", "widget": "Panel" },
-        { "name": "right-panel", "widget": "Panel" }
-      ]
-    },
-    {
-      "name": "summary",
-      "widget": "Panel",
-      "children": [
-        { "source": "metadata.name" },
-        { "source": "spec.priority", "widget": "Badge" },
-        {
-          "name": "Volumes names of volumes with config map",
-          "source": "$join(spec.volumes['configMap' in $keys($)].name, ', ')"
-        }
-      ]
-    },
-    {
-      "source": "spec.details",
-      "widget": "CodeViewer",
-      "language": "'json'"
-    },
-    {
-      "source": "spec.configPatches",
-      "widget": "Panel",
-      "children": [
-        { "source": "applyTo" },
-        {
-          "source": "match.context",
-          "visibility": "$exists(data.match.context)"
-        }
-      ]
-    },
-    {
-      "source": "spec.configPatches",
-      "widget": "Table",
-      "children": [{ "source": "applyTo" }, { "source": "match.context" }]
-    }
-  ]
-}
+```yaml
+header:
+  - source: metadata.name
+  - source: spec.priority
+    widget: Badge
+  - source: "$join(spec.volumes.name, ', ')"
+body:
+  - name: columns
+    widget: Columns
+    children:
+      - name: left-panel
+        widget: Panel
+      - name: right-panel
+        widget: Panel
+  - name: summary
+    widget: Panel
+    children:
+      - source: metadata.name
+      - source: spec.priority
+        widget: Badge
+      - name: Volumes names of volumes with config map
+        source: "$join(spec.volumes['configMap' in $keys($)].name, ', ')"
+  - source: spec.details
+    widget: CodeViewer
+    language: "'json'"
+  - source: spec.configPatches
+    widget: Panel
+    children:
+      - source: applyTo
+      - source: match.context
+        visibility: '$exists(data.match.context)'
+  - source: spec.configPatches
+    widget: Table
+    children:
+      - source: applyTo
+      - source: match.context
 ```
 
 ### resourceGraph parameters
@@ -157,39 +137,25 @@ Extra parameters might be available for specific widgets.
 
 ### resourceGraph example
 
-```json
-{
-  "details": {
-    "resourceGraph": {
-      "colorVariant": 2,
-      "dataSources": [
-        {
-          "source": "relatedSecrets"
-        },
-        {
-          "source": "relatedPizzaOrders"
-        }
-      ]
-    }
-  },
-  "dataSources": {
-    "relatedSecrets": {
-      "resource": {
-        "kind": "Secret",
-        "version": "v1"
-      },
-      "filter": "$root.spec.recipeSecret = $item.metadata.name"
-    },
-    "relatedPizzaOrders": {
-      "resource": {
-        "kind": "PizzaOrder",
-        "group": "busola.example.com",
-        "version": "v1"
-      },
-      "filter": "$item.spec.pizzas[name = $root.metadata.name and namespace = $root.metadata.namespace]"
-    }
-  }
-}
+```yaml
+details:
+  resourceGraph:
+    colorVariant: 2
+    dataSources:
+      - source: relatedSecrets
+      - source: relatedPizzaOrders
+dataSources:
+  relatedSecrets:
+    resource:
+      kind: Secret
+      version: v1
+    filter: '$root.spec.recipeSecret = $item.metadata.name'
+  relatedPizzaOrders:
+    resource:
+      kind: PizzaOrder
+      group: busola.example.com
+      version: v1
+    filter: '$item.spec.pizzas[name = $root.metadata.name and namespace = $root.metadata.namespace]'
 ```
 
 <img src="./assets/ResourceGraph.png" alt="Example of a ResourceGraph"  style="border: 1px solid #D2D5D9">
@@ -202,28 +168,24 @@ In the case of objects, a `$parent` variable contains the data of the parent ele
 
 For example:
 
-```json
-[
-  {
-    "source": "spec",
-    "widget": "Panel",
-    "children": [{ "source": "$parent.entry1" }, { "source": "$parent.entry2" }]
-  }
-]
+```yaml
+- source: spec
+  widget: Panel
+  children:
+    - source: '$parent.entry1'
+    - source: '$parent.entry2'
 ```
 
 renders the data for `spec.entry1` and `spec.entry2`.
 
 In the case of array-based components, an `$item` variable contains data for each child. For example:
 
-```json
-[
-  {
-    "source": "spec.data",
-    "widget": "Table",
-    "children": [{ "source": "$item.name" }, { "source": "$item.description" }]
-  }
-]
+```yaml
+- source: spec.data
+  widget: Table
+  children:
+    - source: '$item.name'
+    - source: '$item.description'
 ```
 
 renders `spec.data[].name` and `spec.data[].description`.
@@ -258,17 +220,16 @@ When no highlights are provided, the following values are automatically handled:
 
 #### Example
 
-```json
-{
-  "source": "status.value",
-  "widget": "Badge",
-  "placeholder": "-",
-  "highlights": {
-    "positive": ["Running", "ok"],
-    "negative": "data < 0"
-  },
-  "description": "status.message"
-}
+```yaml
+- source: status.value
+  widget: Badge
+  placeholder: '-'
+  highlights:
+    positive:
+      - Running
+      - ok
+    negative: data < 0
+  description: status.message
 ```
 
 <img src="./assets/display-widgets/Badge.png" alt="Example of a badge widget" width="40%" style="border: 1px solid #D2D5D9">
@@ -289,62 +250,52 @@ ControlledBy widgets render the kind and the name with a link to the resources t
 
 ##### Kind and name link
 
-```json
-{
-  "source": "metadata.ownerReferences",
-  "widget": "ControlledBy",
-  "placeholder": "-"
-}
+```yaml
+- source: metadata.ownerReferences
+  widget: ControlledBy
+  placeholder: '-'
 ```
 
 <img src="./assets/display-widgets/ControlledBy.png" alt="Example of a ControlledBy widget" width="40%" style="border: 1px solid #D2D5D9">
 
 ##### Kind only
 
-```json
-{
-  "source": "metadata.ownerReferences",
-  "widget": "ControlledBy",
-  "placeholder": "-",
-  "kindOnly": true
-}
+```yaml
+- source: metadata.ownerReferences
+  widget: ControlledBy
+  placeholder: '-'
+  kindOnly: true
 ```
 
 <img src="./assets/display-widgets/ControlledBy--kindOnly.png" alt="Example of a ControlledBy widget without name link" width="40%" style="border: 1px solid #D2D5D9">
 
 ### ExternalLink
 
-ExternalLink widgets render the link to external page.
+ExternalLink widgets render the link to an external page.
 
 #### Widget-specific parameters
 
-- **linkFormula** - an optional JSONata function to generate a custom link.
-- **textFormula** - an optional string or item which is displayed as a link.
+- **link** - an optional JSONata function to generate a custom link. Default value is taken from **source**.
 
 #### Examples
 
 ##### linkFormula and textFormula usage
 
-```json
-{
-  "source": "$item",
-  "name": "spec.servers.port.name",
-  "widget": "ExternalLink",
-  "linkFormula": "'https://' & $item.port.name & ':' & $string($item.port.number)",
-  "textFormula": "$item.port.name"
-}
+```yaml
+- source: '$item.port.name'
+  name: spec.servers.port.name
+  widget: ExternalLink
+  link: "'https://' & $item.port.name & ':' & $string($item.port.number)"
 ```
 
 <img src="./assets/display-widgets/ExternalLink.png" alt="Example of a ExternalLink widget" width="50%" style="border: 1px solid #D2D5D9">
 
 ##### Source only
 
-```json
-{
-  "widget": "ExternalLink",
-  "source": "$item.hosts",
-  "name": "spec.servers.hosts"
-}
+```yaml
+- widget: ExternalLink
+  source: '$item.hosts'
+  name: spec.servers.hosts
 ```
 
 <img src="./assets/display-widgets/ExternalLink2.png" alt="Example of a ExternalLink widget without linkFormula and textFormula" width="50%" style="border: 1px solid #D2D5D9">
@@ -353,22 +304,27 @@ ExternalLink widgets render the link to external page.
 
 JoinedArray widgets render all the values of an array of strings as a comma-separated list.
 
-#### Example
-
-```json
-{
-  "name": "Joined array",
-  "source": "spec.dnsNames",
-  "widget": "JoinedArray",
-  "separator": ": "
-}
-```
-
-<img src="./assets/display-widgets/JoinedArray.png" alt="Example of a joined array widget" width="20%" style="border: 1px solid #D2D5D9">
-
 #### Widget-specific parameters
 
 - **separator** - a string by which the elements of the array are separated. The default value is a comma `,`. You can use `break` to separate elements with a new line.
+- **children** - an optional field to define widgets used for rendering array items. If not provided, the content is rendered as a string.
+
+#### Example
+
+```yaml
+- name: Joined array
+  source: spec.dnsNames
+  widget: JoinedArray
+  separator: ': '
+- name: Joined array
+  source: spec.statuses
+  widget: JoinedArray
+  children:
+    - source: $item
+      widget: Badge
+```
+
+<img src="./assets/display-widgets/JoinedArray.png" alt="Example of a joined array widget" width="20%" style="border: 1px solid #D2D5D9">
 
 ### Labels
 
@@ -379,12 +335,10 @@ Labels widgets render all the array or object entries in the `value` or `key-val
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
   If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 
-```json
-{
-  "source": "spec.orderDetails",
-  "widget": "Labels",
-  "placeholder": "-"
-}
+```yaml
+- source: spec.orderDetails
+  widget: Labels
+  placeholder: '-'
 ```
 
 <img src="./assets/display-widgets/Labels.png" alt="Example of a Labels widget" width="40%" style="border: 1px solid #D2D5D9">
@@ -402,17 +356,14 @@ ResourceLink widgets render internal links to Kubernetes resources.
 
 ##### _details_ section
 
-```json
-{
-  "widget": "ResourceLink",
-  "source": "metadata.ownerReferences[0]",
-  "linkText": "data.status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'",
-  "resource": {
-    "name": "data.name",
-    "namespace": "root.metadata.namespace",
-    "kind": "'Deployment'"
-  }
-}
+```yaml
+- widget: ResourceLink
+  source: metadata.ownerReferences[0]
+  linkText: "data.status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'"
+  resource:
+    name: data.name
+    namespace: root.metadata.namespace
+    kind: "'Deployment'"
 ```
 
 <img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" width="40%" style="border: 1px solid #D2D5D9">
@@ -436,12 +387,10 @@ Text widgets render values as a simple text. This is the default behavior for al
 
 #### Example
 
-```json
-{
-  "source": "spec.label",
-  "widget": "Text",
-  "placeholder": "-"
-}
+```yaml
+- source: spec.label
+  widget: Text
+  placeholder: '-'
 ```
 
 <img src="./assets/display-widgets/Text.png" alt="Example of a text widget" width="40%" style="border: 1px solid #D2D5D9">
@@ -449,6 +398,27 @@ Text widgets render values as a simple text. This is the default behavior for al
 ## Block widgets
 
 Block widgets are more complex layouts and you must use them only in the details body.
+
+### Alert
+
+Alert widgets display values using predefined types.
+
+#### Widget-specific parameters
+
+- **disableMargin** - an optional boolean which disables the margin outside the alert body.
+- **severity** - specifies one of the alert severities: **information**, **warning**, **error**, or **success**. By default, it's set to **information**.
+
+#### Example
+
+```yaml
+- source: "'I am some warning for a user'"
+  widget: Alert
+  severity: warning
+
+- source: "$item.port.number = 80  ? 'Using Default 80' : 'Using Different Port then 80'"
+  widget: Alert
+  disableMargin: true
+```
 
 ### CodeViewer
 
@@ -461,12 +431,10 @@ CodeViewer widgets display values using a read-only code editor.
 
 #### Example
 
-```json
-{
-  "source": "spec.json-data",
-  "widget": "CodeViewer",
-  "language": "$root.spec.language = 'JavaScript' ? 'javascript' : 'yaml'"
-}
+```yaml
+- source: spec.json-data
+  widget: CodeViewer
+  language: "$root.spec.language = 'JavaScript' ? 'javascript' : 'yaml'"
 ```
 
 <img src="./assets/display-widgets/CodeViewer.png" alt="Example of a CodeViewer widget" style="border: 1px solid #D2D5D9">
@@ -484,26 +452,55 @@ Columns widgets render the child widgets in multiple columns.
 
 #### Example
 
-```json
-{
-  "name": "columns.container",
-  "widget": "Columns",
-  "children": [
-    {
-      "name": "columns.left",
-      "widget": "Panel",
-      "children": [{ "source": "spec.value", "placeholder": "-" }]
-    },
-    {
-      "name": "columns.right",
-      "widget": "Panel",
-      "children": [{ "source": "spec.other-value" }]
-    }
-  ]
-}
+```yaml
+- name: columns.container
+  widget: Columns
+  children:
+    - name: columns.left
+      widget: Panel
+      children:
+        - source: spec.value
+          placeholder: '-'
+    - name: columns.right
+      widget: Panel
+      children:
+        - source: spec.other-value
 ```
 
 <img src="./assets/display-widgets/Columns.png" alt="Example of a columns widget" style="border: 1px solid #D2D5D9">
+
+### EventList
+
+EventList widget renders a list of Events.
+
+#### Widget-specific parameters
+
+- **filter** - A JSONata function you can use to filter Events emitted by a specific resource. There is a special custom function [matchEvents](jsonata.md#matcheventsitem-kind-name) you can use to filter Events, for example, `$matchEvents($item, $root.kind, $root.metadata.name)`.
+- **defaultType** - either `all`, `information` or `warning`. When set to `information` or `warning` Events with specific type are displayed. By default all Events are fetched.
+- **hideInvolvedObjects** - optional flag. If set to `true`, the **Involved Objects** column is hidden. Defaults to `false`.
+
+#### Examples
+
+```yaml
+- widget: EventList
+  filter: '$matchEvents($item, $root.kind, $root.metadata.name)'
+  name: events
+  defaultType: information
+```
+
+<img src="./assets/display-widgets/EventList.png" alt="Example of a EventList widget" style="border: 1px solid #D2D5D9">
+
+---
+
+```yaml
+- widget: EventList
+  filter: '$matchEvents($item, $root.kind, $root.metadata.name)'
+  name: events
+  defaultType: information
+  hideInvolvedObjects: true
+```
+
+<img src="./assets/display-widgets/EventListHiddenField.png" alt="Example of a EventList widget with hidden involved objects" style="border: 1px solid #D2D5D9">
 
 ### Panel
 
@@ -511,23 +508,19 @@ Panel widgets render an object as a separate panel with its own title (based on 
 
 #### Example
 
-```json
-[
-  {
-    "name": "Details",
-    "widget": "Panel",
-    "description": "To check the extensibility documentation go to the {{[Busola page](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}.",
-    "children": [
-      { "source": "spec.value" },
-      { "source": "spec.other-value", "placeholder": "-" }
-    ]
-  },
-  {
-    "source": "spec",
-    "widget": "Panel",
-    "children": [{ "source": "$parent.entry1" }, { "source": "$parent.entry2" }]
-  }
-]
+```yaml
+- name: Details
+  widget: Panel
+  description: To check the extensibility documentation go to the {{[Busola page](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}.
+  children:
+    - source: spec.value
+    - source: spec.other-value
+      placeholder: '-'
+- source: spec
+  widget: Panel
+  children:
+    - source: '$parent.entry1'
+    - source: '$parent.entry2'
 ```
 
 <img src="./assets/display-widgets/Panel.png" alt="Example of a panel widget" style="border: 1px solid #D2D5D9">
@@ -540,25 +533,17 @@ Panel widgets render an object as a separate panel with its own title (based on 
 
 #### Example
 
-```json
-{
-  "widget": "Panel",
-  "name": "spec.selector",
-  "children": [
-    {
-      "source": "$podSelector()",
-      "widget": "ResourceList"
-    }
-  ],
-  "header": [
-    {
-      "source": "spec.selector",
-      "widget": "Labels",
-      "name": "spec.selector",
-      "visibility": "spec.selector"
-    }
-  ]
-}
+```yaml
+- widget: Panel
+  name: spec.selector
+  children:
+    - source: '$podSelector()'
+      widget: ResourceList
+  header:
+    - source: spec.selector
+      widget: Labels
+      name: spec.selector
+      visibility: spec.selector
 ```
 
 ### Plain
@@ -576,60 +561,52 @@ ResourceList widgets render a list of Kubernetes resources. The ResourceList wid
   - **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form, it's the path to the value.
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
   - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
+- **search** - optional search option. It's an array of objects that allows you to search for resources including the value from the given **source**.
+  - **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form, it's the path to the value.
+  - **searchFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) search function. It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.
 
 Since the **ResourceList** widget does more than just list the items, you must provide the whole data source (`$myResource()`) instead of just the items (`$myResource().items`).
 
 #### Examples
 
-```json
-{
-  "widget": "ResourceList",
-  "source": "$myDeployments()",
-  "name": "Example ResourceList Deployments",
-  "sort": [
-    {
-      "source": "spec.replicas",
-      "compareFunction": "$second - $first"
-    },
-    {
-      "source": "$item.spec.strategy.type",
-      "compareFunction": "$compareStrings($second, $first)",
-      "default": true
-    }
-  ]
-}
+```yaml
+- widget: ResourceList
+  source: '$myDeployments()'
+  name: Example ResourceList Deployments
+  sort:
+    - source: spec.replicas
+      compareFunction: '$second - $first'
+    - source: '$item.spec.strategy.type'
+      compareFunction: '$compareStrings($second, $first)'
+      default: true
+  search:
+    - source: spec.replicas
+    - source: spec.containers
+      searchFunction: '$filter(spec.containers, function($c){ $contains($c.image, $input) })'
 ```
 
 <img src="./assets/display-widgets/ResourceList.png" alt="Example of a ResourceList widget" style="border: 1px solid #D2D5D9">
 
 ---
 
-```json
-{
-  "widget": "ResourceList",
-  "path": "$mySecrets",
-  "name": "Example ResourceList Secret with children",
-  "children": [
-    {
-      "source": "$item",
-      "name": "Name",
-      "sort": "true",
-      "widget": "ResourceLink",
-      "resource": {
-        "name": "data.metadata.name",
-        "namespace": "root.metadata.namespace",
-        "kind": "data.kind"
-      }
-    },
-    {
-      "source": "type",
-      "name": "Type",
-      "sort": {
-        "default": true
-      }
-    }
-  ]
-}
+```yaml
+- widget: ResourceList
+  path: '$mySecrets'
+  name: Example ResourceList Secret with children
+  children:
+    - source: '$item'
+      name: Name
+      sort: 'true'
+      widget: ResourceLink
+      resource:
+        name: data.metadata.name
+        namespace: root.metadata.namespace
+        kind: data.kind
+    - source: type
+      name: Type
+      search: true
+      sort:
+        default: true
 ```
 
 <img src="./assets/display-widgets/ResourceListChildren.png" alt="Example of a ResourceList widget with children" style="border: 1px solid #D2D5D9">
@@ -644,12 +621,10 @@ ResourceRefs widgets render the lists of links to the associated resources. The 
 
 #### Example
 
-```json
-{
-  "source": "spec.item-list",
-  "widget": "ResourceRefs",
-  "kind": "Secret"
-}
+```yaml
+- source: spec.item-list
+  widget: ResourceRefs
+  kind: Secret
 ```
 
 <img src="./assets/display-widgets/ResourceRefs.png" alt="Example of a ResourceRefs widget" style="border: 1px solid #D2D5D9">
@@ -664,27 +639,29 @@ Table widgets display array data as rows of a table instead of free-standing com
 - **collapsibleTitle** - an optional option for **collapsible** to define title for the collapsible sections, as string or the JSONata function.
 - **disablePadding** - an optional boolean which disables the padding inside the panel body.
 - **showHeader** - an optional boolean which disables displaying the head row.
-- **showSearchField** - an optional boolean which disables displaying the search input.
 - **sort** - optional sort option. If set to `true`, it allows you to sort using this value. Defaults to false. It can also be set to an object with the following properties:
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
   - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
+- **search** - optional search option. If set to `true`, it allows you to search the resource list by this value. Defaults to false. It can also be set to an object with the following property:
+  - **searchFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) search function. It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.
 
 #### Example
 
-```json
-{
-  "source": "spec.toppings",
-  "widget": "Table",
-  "collapsibleTitle": "'Topping #' & $string($index + 1) & (' ' & $join($keys($item), ' '))",
-  "collapsible": [{ "source": "quantity" }],
-  "children": [
-    { "source": "$item.name", "sort": true },
-    {
-      "source": "$item.price",
-      "sort": { "default": true, "compareFunction": "$second -$first" }
-    }
-  ]
-}
+```yaml
+- source: spec.toppings
+  widget: Table
+  collapsibleTitle: "'Topping #' & $string($index + 1) & (' ' & $join($keys($item), ' '))"
+  collapsible:
+    - source: quantity
+  children:
+    - source: '$item.name'
+      sort: true
+    - source: '$item.price'
+      sort:
+        default: true
+        compareFunction: '$second -$first'
+      search:
+        searchFunction: '$filter($item.price, function($p){ $p > $number($input) }'
 ```
 
 <img src="./assets/display-widgets/Table.png" alt="Example of a table widget" style="border: 1px solid #D2D5D9">
@@ -695,27 +672,18 @@ Tabs widgets render the child widgets in multiple tabs.
 
 #### Example
 
-```json
-{
-  "widget": "Tabs",
-  "children": [
-    {
-      "name": "General",
-      "children": [{
-        "widget": "Panel",
-        "name": "Overview",
-        "source": ...
-      }],
-    },
-    {
-      "name": "Resources",
-      "children": [{
-        "widget": "ResourceRefs",
-        "source": ...
-      }]
-    }
-  ]
-}
+```yaml
+- widget: Tabs
+  children:
+    - name: General
+      children:
+        - widget: Panel
+          name: Overview
+          source: '...'
+    - name: Resources
+      children:
+        - widget: ResourceRefs
+          source: '...'
 ```
 
 <img src="./assets/display-widgets/Tabs.png" alt="Example of a tabs widget" style="border: 1px solid #D2D5D9">

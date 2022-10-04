@@ -396,6 +396,8 @@ command-palette:
   search:
     remove-ns-context: Remove Namespace context
 common:
+  ariaLabel:
+    new-tab-link: This link will be opened in a new tab.
   buttons:
     add: Add
     add-new: Add New
@@ -407,6 +409,7 @@ common:
     delete: Delete
     edit: Edit
     edit-yaml: Edit YAML
+    generate-name: Generate
     load: Load
     ok: OK
     restart: Restart

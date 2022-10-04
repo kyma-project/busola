@@ -124,7 +124,6 @@ function EditClusterComponent({
         label={t('clusters.labels.client-secret')}
         input={Inputs.Text}
         advanced
-        required
         value={clientSecret}
         setValue={val => {
           setClientSecret(val);

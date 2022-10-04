@@ -13,6 +13,7 @@ import {
   useGetTranslation,
   applyFormula,
   sortBy,
+  getTextSearchProperties,
 } from './helpers';
 import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
@@ -24,8 +25,9 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   const { t, widgetT, exists } = useGetTranslation();
   const { t: tBusola } = useTranslation();
 
-  const { urlPath, disableCreate, resource, description } =
+  const { urlPath, resource, description, features } =
     resMetaData?.general ?? {};
+  const { disableCreate, disableEdit, disableDelete } = features?.actions ?? {};
 
   const dataSources = resMetaData?.dataSources || {};
   const { schema } = useGetSchema({
@@ -37,7 +39,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   const resourceTitle = resMetaData?.general?.name;
   listProps.resourceTitle = exists('name')
     ? t('name')
-    : resourceTitle || pluralize(prettifyKind(resource.kind));
+    : resourceTitle || pluralize(prettifyKind(resource.kind || ''));
 
   if (resource.kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
@@ -72,13 +74,27 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   listProps.filter = isFilterAString ? filterFn : undefined;
 
   const sortOptions = (resMetaData?.list || []).filter(element => element.sort);
+  const searchOptions = (resMetaData?.list || []).filter(
+    element => element.search,
+  );
+
+  const textSearchProperties = getTextSearchProperties({
+    searchOptions,
+    defaultSearch: true,
+  });
 
   return (
     <ResourcesList
-      createResourceForm={ExtensibilityCreate}
-      disableCreate={disableCreate}
-      sortBy={defaultSortOptions => sortBy(sortOptions, t, defaultSortOptions)}
       {...listProps}
+      disableCreate={disableCreate}
+      disableEdit={disableEdit}
+      disableDelete={disableDelete}
+      createResourceForm={ExtensibilityCreate}
+      sortBy={defaultSortOptions => sortBy(sortOptions, t, defaultSortOptions)}
+      searchSettings={{
+        textSearchProperties: defaultSearchProperties =>
+          textSearchProperties(defaultSearchProperties),
+      }}
     />
   );
 };

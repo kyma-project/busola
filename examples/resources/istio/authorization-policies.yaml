@@ -46,7 +46,6 @@ data:
           "source": "spec.rules",
           "disablePadding": true,
           "showHeader": false,
-          "showSearchField": false,
           "visibility": "$exists(*)",
           # "collapsibleTitle": "'Rule #' & $string($index + 1) & ($exists($item.from) ? ' From' : '') & ($exists($item.to) ? ' To' : '') & ($exists($item.when) ? ' When' : '')",
           "collapsibleTitle": "'Rule #' & $string($index + 1) & (' ' & $join($keys($item), ' '))",
@@ -57,7 +56,6 @@ data:
               "name": "spec.rules.from",
               "disablePadding": true,
               "showHeader": false,
-              "showSearchField": false,
               "visibility": "$exists(*)",
               "collapsibleTitle": "'From #' & $string($index + 1) & (' ' & $join($keys($item.source), ' '))",
               "collapsible": [
@@ -136,7 +134,6 @@ data:
               "name": "spec.rules.to",
               "disablePadding": true,
               "showHeader": false,
-              "showSearchField": false,
               "visibility": "$exists(*)",
               "collapsibleTitle": "'To #' & $string($index + 1) & (' ' & $join($keys($item.operation), ' '))",
               "collapsible": [
@@ -424,9 +421,9 @@ data:
         "group": "security.istio.io",
         "version": "v1beta1"
       },
-      "name": "Ext Authorization Policies",
+      "name": "Authorization Policies",
       "category": "Istio",
-      "urlPath": "ext-authorizationpolicies",
+      "urlPath": "authorizationpolicies",
       "scope": "namespace",
       "description": "{{[Istio Authorization Policy](https://istio.io/latest/docs/reference/config/security/authorization-policy/)}} allows for workload access management in the mesh."
     }

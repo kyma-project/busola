@@ -1,21 +1,28 @@
 import { useGetPlaceholder } from 'components/Extensibility/helpers';
-import { Link } from 'fundamental-react';
+import { Icon, Link } from 'fundamental-react';
 import { isNil } from 'lodash';
+import { useTranslation } from 'react-i18next';
 
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
-export const ExternalLink = ({ value, schema, structure, ...props }) => {
+export const ExternalLink = ({
+  value,
+  schema,
+  structure,
+  arrayItem,
+  ...props
+}) => {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
+  const { t } = useTranslation();
 
-  const linkFormula = structure.linkFormula;
-  const textFormula = structure.textFormula;
+  const linkFormula = structure.link;
 
   function jsonata(formula) {
     try {
       const expression = jsonataWrapper(formula);
 
       expression.assign('root', props.originalResource);
-      expression.assign('item', value);
+      expression.assign('item', arrayItem);
 
       return expression.evaluate();
     } catch (e) {
@@ -32,14 +39,19 @@ export const ExternalLink = ({ value, schema, structure, ...props }) => {
   if (isNil(value)) return emptyLeafPlaceholder;
 
   return (
-    <p>
-      <Link
-        href={linkFormula ? jsonata(linkFormula) : href}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {textFormula ? jsonata(textFormula) : value}
-      </Link>
-    </p>
+    <Link
+      href={linkFormula ? jsonata(linkFormula) : href}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {value}
+      <Icon
+        glyph="inspect"
+        size="s"
+        className="fd-margin-begin--tiny"
+        ariaLabel={t('common.ariaLabel.new-tab-link')}
+      />
+    </Link>
   );
 };
+ExternalLink.inline = true;
