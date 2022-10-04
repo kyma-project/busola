@@ -29,7 +29,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const resourceName = resMetaData?.general?.name;
   const resourceTitle = exists('name')
     ? t('name')
-    : resourceName || prettifyKind(resource.kind);
+    : resourceName || prettifyKind(resource.kind || '');
 
   detailsProps.resourceTitle = resourceTitle;
 
