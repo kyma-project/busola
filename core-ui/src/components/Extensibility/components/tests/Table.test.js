@@ -20,6 +20,15 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    i18n: {
+      exists: () => true,
+    },
+    t: value => value,
+  }),
+}));
+
 // use `mount` instead of `shallow` as the latter doesn't work with contexts
 describe('Table', () => {
   // tests creating the title based on name & path

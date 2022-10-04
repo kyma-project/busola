@@ -2,6 +2,18 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { OAuth2ClientStatus } from '../OAuth2ClientStatus';
 
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    i18n: {
+      exists: () => true,
+    },
+    t: value => {
+      if (typeof value === 'object') return value[0];
+      return value;
+    },
+  }),
+}));
+
 describe('PodRestarts', () => {
   it('Shows OK for no error', () => {
     const client = { status: { reconciliationError: {} } };

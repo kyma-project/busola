@@ -3,6 +3,15 @@ import { render } from '@testing-library/react';
 
 import ApiRuleStatus from '../ApiRuleStatus';
 
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    i18n: {
+      exists: () => true,
+    },
+    t: value => value,
+  }),
+}));
+
 describe('ApiRuleStatus', () => {
   it('Renders Unknown status if status is null', () => {
     const apiRule = { status: null };

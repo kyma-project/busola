@@ -9,6 +9,15 @@ jest.mock('../../hooks/useJsonata', () => ({
   useJsonata: value => value,
 }));
 
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    i18n: {
+      exists: () => true,
+    },
+    t: value => value,
+  }),
+}));
+
 describe('Badge', () => {
   it('Renders a badge with a default type', () => {
     const value = 'Unknown';
