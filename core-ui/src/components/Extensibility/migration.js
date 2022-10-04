@@ -3,7 +3,7 @@ import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 
 const versionPath = `$.metadata.labels["${EXTENSION_VERSION_LABEL}"]`;
-const SUPPORTED_VERSIONS = ['0.4', '0.5'];
+const SUPPORTED_VERSIONS = ['0.4', '0.5']; // also update the gulpfile.js
 const LATEST_VERSION = '0.5';
 
 export const getSupportedVersions = () => SUPPORTED_VERSIONS;

@@ -35,3 +35,33 @@ To create your CRD ConfigMap, follow these steps:
 5. Click **Create**.
 
 To see an exemplary configuration of the Busola extensibility feature, see the [Pizza example](examples/../../../examples/pizzas/README.md).
+
+## Built-in extensions
+
+While the users can provide extensions, Busola also uses the extensibility mechanism to create some of the default views. Those default extensions are always present, even if the `EXTENSIBILITY` feature is disabled.
+
+### Embedding an extension in Busola
+
+1. Place your extension ConfigMaps in the `extensions` directory. If your extensions are hosted externally, you can specify their URLs in the `extensions/extensions.json` file, for example:
+
+   ```json
+   [
+     {
+       "url": "https://raw.githubusercontent.com/kyma-project/busola/main/examples/pizzas/configuration/pizzas-configmap.yaml"
+     }
+   ]
+   ```
+
+and then use the `npm run prepare-extensions` command to download them into the `extensions` directory.
+
+2. Run the `npm run pack-extensions` command. This gathers all the YAML files from the `extensions` directory and merges them into:
+
+- `core/src/assets/extensions/extensions.yaml` is a plain YAML file, which you can use during the local development. This file is a list of all extracted configurations, without the ConfigMap header.
+- `resources/extensions-patch/builtin-resource-extensions.configmap.yaml` is a ConfigMap with the`extensions.yaml` key, containing all extracted configurations.
+
+3. To deploy Busola with the built-in extensions on a cluster, use either `resources/apply-resources.sh` (while deploying Busola on a cluster without Istio) or `resources/apply-resources-istio.sh` (while deploying Busola on a cluster with Istio), then use the following commands to patch the created Busola instance with the built-in extensions.
+
+```bash
+export NAMESPACE=<namespace where Busola is already installed>
+kubectl apply -k resources/extensions-patch --namespace=$NAMESPACE
+```
