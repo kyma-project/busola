@@ -55,7 +55,11 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
       compact
       type="negative"
       onClick={onDelete}
-    />
+      option="transparent"
+      iconBeforeText
+    >
+      {t('common.buttons.remove')}
+    </Button>
   );
 
   const keyInput = (

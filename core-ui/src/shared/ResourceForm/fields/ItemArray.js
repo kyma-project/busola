@@ -53,7 +53,11 @@ export function ItemArray({
               type="negative"
               onClick={() => remove(i)}
               disabled={readOnly}
-            />
+              option="transparent"
+              iconBeforeText
+            >
+              {t('common.buttons.remove')}
+            </Button>
           }
         >
           {renderItem(current, i)}
@@ -78,6 +82,7 @@ export function ItemArray({
             setOpen(true);
           }}
           disabled={readOnly}
+          option="transparent"
           iconBeforeText
         >
           {t('common.buttons.add')} {nameSingular}
