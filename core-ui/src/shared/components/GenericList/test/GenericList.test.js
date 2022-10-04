@@ -4,6 +4,18 @@ import { render, fireEvent, queryByText } from '@testing-library/react';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    i18n: {
+      exists: () => true,
+    },
+    t: value => {
+      if (typeof value === 'object') return value[0];
+      return value;
+    },
+  }),
+}));
+
 describe('GenericList', () => {
   const defaultNotFoundText = 'components.generic-list.messages.not-found';
 

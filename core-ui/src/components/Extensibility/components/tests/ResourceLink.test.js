@@ -8,6 +8,18 @@ jest.mock('shared/helpers/universalLinks', () => ({
   navigateToResource: params => mockNavigate(params),
 }));
 
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    i18n: {
+      exists: () => true,
+    },
+    t: value => {
+      if (typeof value === 'object') return value[0];
+      return value;
+    },
+  }),
+}));
+
 describe('ResourceLink', () => {
   const value = { kind: 'test-kind', name: 'value-name' };
   const originalResource = {
