@@ -63,6 +63,7 @@ export function KeyValueField({
         option="transparent"
         glyph={valuesEncoded ? 'show' : 'hide'}
         onClick={toggleEncoding}
+        iconBeforeText
       >
         {valuesEncoded
           ? t('secrets.buttons.decode')

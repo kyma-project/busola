@@ -116,7 +116,13 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         emptyStringKey={EMPTY_API_GROUP_KEY}
         defaultOpen
         actions={
-          <Button compact glyph="add" onClick={addAllApiGroups}>
+          <Button
+            compact
+            glyph="add"
+            onClick={addAllApiGroups}
+            option="transparent"
+            iconBeforeText
+          >
             {t('roles.buttons.add-all')}
           </Button>
         }
@@ -135,6 +141,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
             <Button
               compact
               glyph="refresh"
+              option="transparent"
               onClick={fetchResources}
               disabled={!loadable}
               ariaLabel={t('roles.buttons.load')}
@@ -145,8 +152,10 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
           <Button
             compact
             glyph="add"
+            option="transparent"
             onClick={addAllResources}
             disabled={loading || !apiRules?.length}
+            iconBeforeText
           >
             {t('roles.buttons.add-all')}
           </Button>,
@@ -159,7 +168,13 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         options={verbs.map(i => ({ key: i, text: i }))}
         defaultOpen
         actions={[
-          <Button compact glyph="add" onClick={addAllVerbs}>
+          <Button
+            compact
+            glyph="add"
+            onClick={addAllVerbs}
+            option="transparent"
+            iconBeforeText
+          >
             {t('roles.buttons.add-all')}
           </Button>,
         ]}

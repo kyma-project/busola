@@ -143,6 +143,7 @@ export default function RepositoryConfig({ func }) {
           setIsEditMode(prev => !prev);
         }}
         disabled={isEditMode && !isValid}
+        iconBeforeText
       >
         {isEditMode ? saveText : editText}
       </Button>

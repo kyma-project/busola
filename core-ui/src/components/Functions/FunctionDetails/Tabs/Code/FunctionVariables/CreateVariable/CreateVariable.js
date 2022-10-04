@@ -16,7 +16,7 @@ export default function CreateVariable({
   const { t } = useTranslation();
 
   const addNewVariableButton = (
-    <Button glyph="add" typeAttr="button">
+    <Button glyph="add" typeAttr="button" iconBeforeText>
       {t('functions.variable.buttons.add')}
     </Button>
   );
