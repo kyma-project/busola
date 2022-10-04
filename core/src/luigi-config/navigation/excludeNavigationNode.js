@@ -5,12 +5,14 @@ export const excludeNavigationNode = (node, permissionSet) => {
     if (isARequiredFeatureDisabled(node)) {
       markNavNodeToBeDeleted(node);
     }
-  } else if (dependsOnOtherResource(node)) {
+  }
+  if (dependsOnOtherResource(node)) {
     //used only for the Custom Resources node
     if (isParentResourceDisallowed(node, permissionSet)) {
       markNavNodeToBeDeleted(node);
     }
-  } else if (hasCompleteInformation(node)) {
+  }
+  if (hasCompleteInformation(node)) {
     if (isResourceDisallowed(node, permissionSet)) {
       markNavNodeToBeDeleted(node);
     }
@@ -33,8 +35,20 @@ const isParentResourceDisallowed = (node, permissionSet) => {
   return !doesExist || !isPermitted;
 };
 
+const tryGetResourceApiPath = viewUrl => {
+  try {
+    return new URL(viewUrl).searchParams.get('resourceApiPath');
+  } catch (_) {
+    return null;
+  }
+};
+
 const isResourceDisallowed = (node, permissionSet) => {
-  const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
+  const apiPath = tryGetResourceApiPath(node.viewUrl);
+  if (!apiPath) {
+    return false;
+  }
+
   const resourceGroup = apiPath.replace(/^\/apis?\//, '');
 
   const doesExist = doesResourceExist({

@@ -79,7 +79,11 @@ export const doesUserHavePermission = (
   resource = { resourceGroup: '', resourceKind: '' },
   permissionSet,
 ) => {
-  const { resourceGroup: resourceGroupAndVersion, resourceKind } = resource;
+  let { resourceGroup: resourceGroupAndVersion, resourceKind } = resource;
+
+  // replace "v1" with the core group
+  if (resourceGroupAndVersion === 'v1') resourceGroupAndVersion = '';
+
   const resourceKindPlural = pluralize(resourceKind);
 
   if (resourceKindPlural === 'namespaces') {
