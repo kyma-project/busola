@@ -106,6 +106,7 @@ export function AdvancedContainersView({
               onChange(new Event('input', { bubbles: true }));
               setOpen(true);
             }}
+            iconBeforeText
           >
             {t('deployments.create-modal.advanced.add-container')}
           </Button>

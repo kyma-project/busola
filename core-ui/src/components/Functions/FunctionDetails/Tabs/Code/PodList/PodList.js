@@ -37,6 +37,7 @@ export default function PodList({ namespace, functionName, isActive }) {
         `pods/details/${entry.metadata.name}/containers/function`,
       )}
       glyph="form"
+      iconBeforeText
     >
       {t('functions.pod-list.buttons.view-logs')}
     </Button>,

@@ -78,6 +78,7 @@ export function ItemArray({
             setOpen(true);
           }}
           disabled={readOnly}
+          iconBeforeText
         >
           {t('common.buttons.add')} {nameSingular}
         </Button>

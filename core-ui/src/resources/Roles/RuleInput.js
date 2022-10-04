@@ -116,7 +116,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         emptyStringKey={EMPTY_API_GROUP_KEY}
         defaultOpen
         actions={
-          <Button compact glyph="add" onClick={addAllApiGroups}>
+          <Button compact glyph="add" onClick={addAllApiGroups} iconBeforeText>
             {t('roles.buttons.add-all')}
           </Button>
         }
@@ -147,6 +147,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
             glyph="add"
             onClick={addAllResources}
             disabled={loading || !apiRules?.length}
+            iconBeforeText
           >
             {t('roles.buttons.add-all')}
           </Button>,
@@ -159,7 +160,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         options={verbs.map(i => ({ key: i, text: i }))}
         defaultOpen
         actions={[
-          <Button compact glyph="add" onClick={addAllVerbs}>
+          <Button compact glyph="add" onClick={addAllVerbs} iconBeforeText>
             {t('roles.buttons.add-all')}
           </Button>,
         ]}

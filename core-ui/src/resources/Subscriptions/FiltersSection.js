@@ -147,6 +147,7 @@ export function FiltersSection({
               onChange(new Event('input', { bubbles: true }));
               setOpen(true);
             }}
+            iconBeforeText
           >
             {t('subscriptions.create.labels.add-filter')}
           </Button>
