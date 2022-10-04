@@ -57,13 +57,8 @@ export function createContainerTemplate() {
   };
 }
 
-export function createJobPresets(namespace, translate, templateAnnotations) {
+export function createJobPresets(namespace) {
   return [
-    {
-      name: translate('common.labels.clear-form'),
-      value: createJobTemplate(namespace, templateAnnotations),
-    },
-
     {
       name: 'Hello',
       value: {
@@ -100,16 +95,8 @@ export function createJobPresets(namespace, translate, templateAnnotations) {
   ];
 }
 
-export function createCronJobPresets(
-  namespace,
-  translate,
-  templateAnnotations,
-) {
+export function createCronJobPresets(namespace) {
   return [
-    {
-      name: translate('common.labels.clear-form'),
-      value: createCronJobTemplate(namespace, templateAnnotations),
-    },
     {
       name: 'Hello',
       value: {

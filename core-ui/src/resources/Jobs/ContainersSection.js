@@ -55,7 +55,7 @@ export const ContainerSection = ({ readOnly, ...props }) => {
             setValue(value);
           }}
         >
-          Add container
+          {t('jobs.create-modal.add-container')}
         </Button>
       </MessageStrip>
     </div>
