@@ -98,16 +98,12 @@ export function navigateToResource(resource) {
     .navigate(path);
 }
 
-export function nagivateToResourceAfterCreate(
-  namespace,
-  name,
-  pluralKind = '',
-) {
+export function nagivateToResourceAfterCreate(namespace, name, urlPath = '') {
   const encodedName = encodeURIComponent(name);
   if (namespace) {
     LuigiClient.linkManager()
       .fromContext('namespace')
-      .navigate(`/${pluralKind.toLowerCase()}/details/${encodedName}`);
+      .navigate(`/${urlPath}/details/${encodedName}`);
   } else {
     LuigiClient.linkManager().navigate(`details/${encodedName}`);
   }

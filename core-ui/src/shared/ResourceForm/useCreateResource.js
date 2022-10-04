@@ -14,6 +14,7 @@ export function useCreateResource({
   createUrl,
   afterCreatedFn,
   toggleFormFn,
+  urlPath,
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -37,7 +38,7 @@ export function useCreateResource({
       nagivateToResourceAfterCreate(
         namespaceId,
         resource.metadata.name,
-        pluralKind,
+        urlPath || pluralKind.toLowerCase(),
       );
   };
 

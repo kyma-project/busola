@@ -27,7 +27,7 @@ export function ResourceList({
   ...props
 }) {
   const { widgetT, t } = useGetTranslation();
-  const { namespaceId } = useMicrofrontendContext();
+  const { namespaceId, customResources } = useMicrofrontendContext();
   const kind = (value?.kind ?? '').replace(/List$/, '');
   const pluralKind = pluralize(kind || '')?.toLowerCase();
   const namespacePart = getProperNamespacePart(value?.namespace, namespaceId);
@@ -35,13 +35,14 @@ export function ResourceList({
   const resourceUrlPrefix = `/${api}/${value?.apiVersion}`;
   const resourceUrl = `${resourceUrlPrefix}${namespacePart}/${pluralKind}`;
 
+  const ExtensibilityFormRendererSchema = customResources.filter(
+    cR => cR.general?.resource?.kind === kind,
+  )[0];
   const PredefinedRenderer = resources.find(
     r => r.resourceType.toLowerCase() === pluralKind,
   );
 
-  const ListRenderer = PredefinedRenderer
-    ? PredefinedRenderer.List
-    : ResourcesList;
+  const ListRenderer = PredefinedRenderer?.List || ResourcesList;
 
   const children = getChildren(structure, originalResource);
 
@@ -89,7 +90,9 @@ export function ResourceList({
       sortBy={defaultSortOptions =>
         sortBy(sortOptions, t, defaultSort ? defaultSortOptions : {})
       }
-      createFormProps={{ resourceSchema }}
+      createFormProps={{
+        resourceSchema: ExtensibilityFormRendererSchema ?? resourceSchema,
+      }}
       createResourceForm={ExtensibilityCreate}
       searchSettings={{
         textSearchProperties: defaultSortOptions =>
