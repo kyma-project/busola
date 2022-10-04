@@ -30,6 +30,7 @@ export function ExtensibilityCreateCore({
   resourceSchema: createResource,
   toggleFormFn,
   resourceName,
+  ...props
 }) {
   const { prepareVars, resetVars, readVars } = useVariables();
   const { namespaceId: namespace } = useMicrofrontendContext();
@@ -123,6 +124,7 @@ export function ExtensibilityCreateCore({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind={resourceType}
       singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
       resource={resource}
