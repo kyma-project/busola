@@ -65,13 +65,11 @@ export const doesResourceExist = ({ resourceGroup, resourceKind }) => {
   const resourceIdList = clusterOpenApi.getResourceNameList;
   const resourceNamePlural = pluralize(resourceKind);
 
-  // an example string matching the regex: /(api|apis)/GROUP_NAME/RESOURCE_VERSION/RESOURCE_NAME
-  const regexString = `^\\/(api|apis)\\/${resourceGroup}\\/${resourceNamePlural}$`;
-  const resourceGroupAndKindRegex = new RegExp(regexString, 'i');
+  const path = `/${
+    resourceGroup === 'v1' ? 'api' : 'apis'
+  }/${resourceGroup}/${resourceNamePlural}`;
 
-  const doesExist = !!resourceIdList.find(resourceId => {
-    return resourceGroupAndKindRegex.test(resourceId);
-  });
+  const doesExist = !!resourceIdList.includes(path);
 
   return doesExist;
 };
