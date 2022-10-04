@@ -159,7 +159,7 @@ export const getObjectValueWorkaround = (
 };
 
 export const useCreateResourceDescription = descID => {
-  const { exists, t, i18n } = useGetTranslation();
+  const { t, i18n } = useGetTranslation();
   if (!descID) return;
 
   let trans = t(descID);
