@@ -1,7 +1,8 @@
 import React from 'react';
 import { FormInput } from 'fundamental-react';
 
-export function Number({ value, setValue, ...props }) {
+export function Number({ value = '', setValue, ...props }) {
+  console.log(value);
   return (
     <FormInput
       compact
