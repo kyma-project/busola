@@ -1,17 +1,26 @@
 import { doesResourceExist, doesUserHavePermission } from './permissions';
 
 export const excludeNavigationNode = (node, permissionSet) => {
+  if (isNamespaceNode(node)) {
+    //namespace node is required to load busola for the namespace scoped kubeconfigs
+    return;
+  }
+
   if (dependsOnConfigFeatures(node)) {
     if (isARequiredFeatureDisabled(node)) {
       markNavNodeToBeDeleted(node);
+      return;
     }
   }
+
   if (dependsOnOtherResource(node)) {
     //used only for the Custom Resources node
     if (isParentResourceDisallowed(node, permissionSet)) {
       markNavNodeToBeDeleted(node);
+      return;
     }
   }
+
   if (hasCompleteInformation(node)) {
     if (isResourceDisallowed(node, permissionSet)) {
       markNavNodeToBeDeleted(node);
@@ -23,45 +32,36 @@ const isParentResourceDisallowed = (node, permissionSet) => {
   const { group, resource } = node.context.requiredGroupResource;
 
   const doesExist = doesResourceExist({
-    resourceGroup: group,
+    resourceGroupAndVersion: group,
     resourceKind: resource,
   });
   const isPermitted = doesUserHavePermission(
     ['get', 'list'],
-    { resourceGroup: group, resourceKind: resource },
+    { resourceGroupAndVersion: group, resourceKind: resource },
     permissionSet,
   );
 
   return !doesExist || !isPermitted;
-};
-
-const tryGetResourceApiPath = viewUrl => {
-  try {
-    return new URL(viewUrl).searchParams.get('resourceApiPath');
-  } catch (_) {
-    return null;
-  }
 };
 
 const isResourceDisallowed = (node, permissionSet) => {
   const apiPath = tryGetResourceApiPath(node.viewUrl);
-  if (!apiPath) {
-    return false;
+  if (apiPath) {
+    const resourceGroupAndVersion = apiPath.replace(/^\/apis?\//, '');
+
+    const doesExist = doesResourceExist({
+      resourceGroupAndVersion,
+      resourceKind: node.resourceType,
+    });
+    const isPermitted = doesUserHavePermission(
+      ['get', 'list'],
+      { resourceGroupAndVersion, resourceKind: node.resourceType },
+      permissionSet,
+    );
+
+    return !doesExist || !isPermitted;
   }
-
-  const resourceGroup = apiPath.replace(/^\/apis?\//, '');
-
-  const doesExist = doesResourceExist({
-    resourceGroup,
-    resourceKind: node.resourceType,
-  });
-  const isPermitted = doesUserHavePermission(
-    ['get', 'list'],
-    { resourceGroup, resourceKind: node.resourceType },
-    permissionSet,
-  );
-
-  return !doesExist || !isPermitted;
+  return false;
 };
 
 const markNavNodeToBeDeleted = node => {
@@ -78,6 +78,9 @@ const isARequiredFeatureDisabled = node =>
     configFeature => !configFeature || configFeature.isEnabled === false,
   );
 
+const isNamespaceNode = node =>
+  node.resourceType === 'namespace' || node.resourceType === 'namespaces';
+
 const dependsOnOtherResource = node =>
   typeof node.context?.requiredGroupResource === 'object';
 
@@ -90,4 +93,12 @@ const hasCompleteInformation = node => {
     return apiPath && node.resourceType;
   }
   return false;
+};
+
+const tryGetResourceApiPath = viewUrl => {
+  try {
+    return new URL(viewUrl).searchParams.get('resourceApiPath');
+  } catch (_) {
+    return null;
+  }
 };

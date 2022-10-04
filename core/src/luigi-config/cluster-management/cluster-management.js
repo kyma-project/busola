@@ -196,8 +196,7 @@ export async function deleteActiveCluster() {
   await deleteCluster(getActiveClusterName());
   await reloadAuth();
   clearAuthData();
-
-  clusterOpenApi.clear(); // TODO any other place where to clear it
+  clusterOpenApi.clear();
   clearK8Version();
   saveActiveClusterName(null);
   Luigi.navigation().navigate('/clusters');

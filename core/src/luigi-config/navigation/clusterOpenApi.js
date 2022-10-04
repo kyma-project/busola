@@ -5,13 +5,13 @@ import { config } from './../config';
 class clusterOpenApiClass {
   constructor() {
     this.openApi = {};
-    this.resourceNameList = [];
+    this.resourcePathIdList = [];
   }
   get getOpenApi() {
     return this.openApi;
   }
-  get getResourceNameList() {
-    return this.resourceNameList;
+  get getResourcePathIdList() {
+    return this.resourcePathIdList;
   }
   async fetch() {
     const authData = getAuthData();
@@ -22,14 +22,14 @@ class clusterOpenApiClass {
 
     this.openApi = await clusterOpenApiResponse.json();
 
-    this.setResourceNameList();
+    this.setResourcePathIdList();
   }
   clear() {
     this.openApi = {};
-    this.resourceNameList = [];
+    this.resourcePathIdList = [];
   }
-  setResourceNameList() {
-    this.resourceNameList = Object.keys(this.openApi.paths);
+  setResourcePathIdList() {
+    this.resourcePathIdList = Object.keys(this.openApi.paths);
   }
 }
 export const clusterOpenApi = new clusterOpenApiClass();

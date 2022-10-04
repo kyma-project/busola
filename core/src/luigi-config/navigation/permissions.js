@@ -2,36 +2,6 @@ import _ from 'lodash';
 import pluralize from 'pluralize';
 import { clusterOpenApi } from './clusterOpenApi';
 
-export function hasPermissionsFor(
-  apiGroup,
-  resourceType,
-  groupVersions,
-  verbs = [],
-) {
-  // const permissionsForApiGroup = groupVersions.filter(
-  //   p => p.apiGroups.includes(apiGroup) || p.apiGroups[0] === '*',
-  // );
-  // const matchingPermission = permissionsForApiGroup.find(p =>
-  //   p.resources.includes(pluralize(resourceType)),
-  // );
-  // const wildcardPermission = permissionsForApiGroup.find(
-  //   p => p.resources[0] === '*',
-  // );
-  //
-  // for (const verb of verbs) {
-  //   if (
-  //     !matchingPermission?.verbs.includes(verb) &&
-  //     !wildcardPermission?.verbs.includes(verb) &&
-  //     matchingPermission?.verbs[0] !== '*' &&
-  //     wildcardPermission?.verbs[0] !== '*'
-  //   ) {
-  //     return false;
-  //   }
-  // }
-  //
-  // return !!matchingPermission || !!wildcardPermission;
-}
-
 export function hasAnyRoleBound(permissionSet) {
   const ssrr = {
     apiGroups: ['authorization.k8s.io'],
@@ -61,38 +31,31 @@ export function hasAnyRoleBound(permissionSet) {
   return verbs.some(v => usefulVerbs.includes(v));
 }
 
-export const doesResourceExist = ({ resourceGroup, resourceKind }) => {
-  const resourceIdList = clusterOpenApi.getResourceNameList;
+export const doesResourceExist = ({
+  resourceGroupAndVersion,
+  resourceKind,
+}) => {
+  const resourceIdList = clusterOpenApi.getResourcePathIdList;
   const resourceNamePlural = pluralize(resourceKind);
 
-  const path = `/${
-    resourceGroup === 'v1' ? 'api' : 'apis'
-  }/${resourceGroup}/${resourceNamePlural}`;
+  const resourcePathId = `/${
+    resourceGroupAndVersion === 'v1' ? 'api' : 'apis'
+  }/${resourceGroupAndVersion}/${resourceNamePlural}`.toLowerCase();
 
-  const doesExist = !!resourceIdList.includes(path);
+  const doesExist = !!resourceIdList.includes(resourcePathId);
 
   return doesExist;
 };
 
 export const doesUserHavePermission = (
   permissions = ['get', 'list'],
-  resource = { resourceGroup: '', resourceKind: '' },
+  resource = { resourceGroupAndVersion: '', resourceKind: '' },
   permissionSet,
 ) => {
-  let { resourceGroup: resourceGroupAndVersion, resourceKind } = resource;
-
-  // replace "v1" with the core group
-  if (resourceGroupAndVersion === 'v1') resourceGroupAndVersion = '';
+  let { resourceGroupAndVersion, resourceKind } = resource;
 
   const resourceKindPlural = pluralize(resourceKind);
-
-  if (resourceKindPlural === 'namespaces') {
-    //TODO if cluster roles, if namespaced kubeconfig
-    // if at the end there are any namespaced resources --> leave this node
-    return true;
-  }
-
-  const resourceGroup = resourceGroupAndVersion.split('/')[0];
+  const resourceGroup = getResourceGroup(resourceGroupAndVersion);
 
   const isPermitted = permissionSet.find(set => {
     const isSameApiGroup =
@@ -114,4 +77,10 @@ export const doesUserHavePermission = (
   });
 
   return !!isPermitted;
+};
+
+const getResourceGroup = resourceGroupAndVersion => {
+  // native resources don't have resourceGroup
+  if (resourceGroupAndVersion === 'v1') return '';
+  return resourceGroupAndVersion.split('/')[0];
 };

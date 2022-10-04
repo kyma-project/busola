@@ -68,7 +68,7 @@ export function getStaticChildrenNodesForNamespace(
       icon: 'nav-back',
       hideFromNav: !doesUserHavePermission(
         ['get', 'list'],
-        { resourceGroup: '', resourceKind: 'namespace' },
+        { resourceGroupAndVersion: 'v1', resourceKind: 'namespace' },
         permissionSet,
       ),
     },

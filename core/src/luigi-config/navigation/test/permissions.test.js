@@ -15,37 +15,48 @@ jest.mock('../clusterOpenApi', () => ({
 describe('doesResourceExist', () => {
   test('if it returns correct values', () => {
     expect(
-      doesResourceExist({ resourceGroup: 'v1', resourceKind: 'pod' }),
-    ).toBe(true);
-
-    expect(
-      doesResourceExist({ resourceGroup: 'v1', resourceKind: 'pods' }),
+      doesResourceExist({ resourceGroupAndVersion: 'v1', resourceKind: 'pod' }),
     ).toBe(true);
 
     expect(
       doesResourceExist({
-        resourceGroup: 'rbac.authorization.k8s.io/v1',
+        resourceGroupAndVersion: 'v1',
+        resourceKind: 'pods',
+      }),
+    ).toBe(true);
+
+    expect(
+      doesResourceExist({
+        resourceGroupAndVersion: 'rbac.authorization.k8s.io/v1',
         resourceKind: 'clusterroles',
       }),
     ).toBe(true);
 
     expect(
-      doesResourceExist({ resourceGroup: 'v1', resourceKind: 'secrets' }),
+      doesResourceExist({
+        resourceGroupAndVersion: 'v1',
+        resourceKind: 'secrets',
+      }),
     ).toBe(false);
   });
 });
 
-//apiextensions.k8s.io/v1; ('customresourcedefinitions');
-// apps/v1 deployment
-//busola.example.com/v1   pizzaorder
-
 const crd = {
-  resourceGroup: 'apiextensions.k8s.io/v1',
+  resourceGroupAndVersion: 'apiextensions.k8s.io/v1',
   resourceKind: 'customresourcedefinitions',
 };
-const deployment = { resourceGroup: 'apps/v1', resourceKind: 'deployments' };
+const deployment = {
+  resourceGroupAndVersion: 'apps/v1',
+  resourceKind: 'deployments',
+};
+
+const pod = {
+  resourceGroupAndVersion: 'v1',
+  resourceKind: 'pods',
+};
+
 const pizza = {
-  resourceGroup: 'busola.example.com/v1',
+  resourceGroupAndVersion: 'busola.example.com/v1',
   resourceKind: 'pizzas',
 };
 
@@ -72,8 +83,8 @@ describe('doesUserHavePermission', () => {
   test('checks selected resources permissions', () => {
     const selectedResourcesPermissions = {
       verbs: ['*'],
-      apiGroups: ['apiextensions.k8s.io', 'apps'], // missing pizzaordergroup 'busola.example.com'
-      resources: ['customresourcedefinitions', 'deployments', 'pizzaorders'],
+      apiGroups: ['apiextensions.k8s.io', 'apps', ''], // '' is the apiGroup for native resources
+      resources: ['customresourcedefinitions', 'deployments', 'pods'],
     };
 
     expect(
@@ -87,8 +98,11 @@ describe('doesUserHavePermission', () => {
         selectedResourcesPermissions,
       ]),
     ).toBe(false);
+
+    expect(
+      doesUserHavePermission(['list'], pod, [selectedResourcesPermissions]),
+    ).toBe(true);
   });
-  //
   test('checks selected verbs permissions', () => {
     const selectedVerbsPermissions = {
       verbs: ['list'],

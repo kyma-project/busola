@@ -269,8 +269,6 @@ export async function createNavigation() {
 
     return {
       preloadViewGroups: false,
-      // nodeAccessibilityResolver: node =>
-      //   navigationPermissionChecker(node, permissionSet),
       appSwitcher: await createAppSwitcher(),
       ...optionsForCurrentCluster,
       nodes: await createNavigationNodes({
