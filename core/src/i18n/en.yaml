@@ -412,7 +412,6 @@ common:
     generate-name: Generate
     load: Load
     ok: OK
-    remove: Remove
     restart: Restart
     save: Save
     submit: Submit

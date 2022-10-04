@@ -54,10 +54,7 @@ export function ItemArray({
               onClick={() => remove(i)}
               disabled={readOnly}
               option="transparent"
-              iconBeforeText
-            >
-              {t('common.buttons.remove')}
-            </Button>
+            />
           }
         >
           {renderItem(current, i)}

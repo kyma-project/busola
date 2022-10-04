@@ -99,10 +99,7 @@ function SingleFilterSection({ value: filters, setValue: setFilters }) {
           compact
           onClick={() => removeFilter(i)}
           option="transparent"
-          iconBeforeText
-        >
-          {t('common.buttons.remove')}
-        </Button>
+        />
       }
     >
       <SingleFilterInputs

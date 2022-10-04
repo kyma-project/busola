@@ -89,10 +89,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
           option="transparent"
           compact
           onClick={() => removeContainer(i)}
-          iconBeforeText
-        >
-          {t('common.buttons.remove')}
-        </Button>
+        />
       }
     >
       <SingleContainerSection

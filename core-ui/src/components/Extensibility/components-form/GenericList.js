@@ -83,10 +83,7 @@ export function GenericList({
                   type="negative"
                   onClick={() => removeItem(index)}
                   disabled={readOnly}
-                  iconBeforeText
-                >
-                  {t('common.buttons.remove')}
-                </Button>
+                />
               }
             >
               <PluginStack
