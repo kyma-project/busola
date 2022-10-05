@@ -199,6 +199,7 @@ export default function ResourcesManagement({ func }) {
         typeAttr="submit"
         onClick={() => setIsEditMode(prev => !prev)}
         disabled={isEditMode && !isValid}
+        iconBeforeText
       >
         {isEditMode ? saveText : editText}
       </Button>
