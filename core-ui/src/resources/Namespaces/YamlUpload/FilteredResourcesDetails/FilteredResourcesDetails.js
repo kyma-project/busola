@@ -40,7 +40,11 @@ const useNamespaceWarning = resource => {
   const { t } = useTranslation();
   return useIsInCurrentNamespace(resource)
     ? []
-    : [t('upload-yaml.warnings.different-namespace')];
+    : [
+        t('upload-yaml.warnings.different-namespace', {
+          namespace: resource?.metadata?.namespace,
+        }),
+      ];
 };
 
 const ValidationWarnings = ({ resource }) => {
