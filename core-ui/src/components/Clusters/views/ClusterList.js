@@ -140,6 +140,7 @@ function ClusterList() {
       glyph="add"
       className="fd-margin-begin--sm"
       onClick={() => setShowAdd(true)}
+      iconBeforeText
     >
       {t('clusters.add.title')}
     </Button>

@@ -45,6 +45,7 @@ export function DecodeSecretSwitch({
       option="transparent"
       glyph={isEncoded ? 'show' : 'hide'}
       onClick={onClick}
+      iconBeforeText
     >
       {isEncoded ? t('secrets.buttons.decode') : t('secrets.buttons.encode')}
     </Button>

@@ -75,6 +75,7 @@ export function KeyValueForm({
           type="ghost"
           typeAttr="button"
           onClick={addEntry}
+          iconBeforeText
         >
           {t('components.key-value-form.add-entry')}
         </Button>

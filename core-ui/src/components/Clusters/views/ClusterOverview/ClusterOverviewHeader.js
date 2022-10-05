@@ -63,6 +63,7 @@ export function ClusterOverviewHeader() {
         setShowAdd(true);
         LuigiClient.uxManager().addBackdrop();
       }}
+      iconBeforeText
     >
       {t('upload-yaml.title')}
     </Button>

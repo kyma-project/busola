@@ -98,6 +98,7 @@ function SingleFilterSection({ value: filters, setValue: setFilters }) {
           type="negative"
           compact
           onClick={() => removeFilter(i)}
+          option="transparent"
         />
       }
     >
@@ -147,6 +148,8 @@ export function FiltersSection({
               onChange(new Event('input', { bubbles: true }));
               setOpen(true);
             }}
+            option="transparent"
+            iconBeforeText
           >
             {t('subscriptions.create.labels.add-filter')}
           </Button>
