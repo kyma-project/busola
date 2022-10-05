@@ -86,7 +86,7 @@ export const GenericList = ({
       pagination.itemsPerPage || settings?.pagination?.pageSize;
   }
 
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [currentPage, setCurrentPage] = React.useState(
     pagination?.initialPage || 1,
   );
@@ -169,15 +169,20 @@ export const GenericList = ({
         return (
           <BodyFallback>
             <p>
-              {t(searchSettings.noSearchResultMessage) ||
-                searchSettings.noSearchResultMessage}
+              {i18n.exists(searchSettings.noSearchResultMessage)
+                ? t(searchSettings.noSearchResultMessage)
+                : searchSettings.noSearchResultMessage}
             </p>
           </BodyFallback>
         );
       }
       return (
         <BodyFallback>
-          <p>{t(notFoundMessage) || notFoundMessage}</p>
+          <p>
+            {i18n.exists(notFoundMessage)
+              ? t(notFoundMessage)
+              : notFoundMessage}
+          </p>
         </BodyFallback>
       );
     }
