@@ -75,10 +75,12 @@ export function AdvancedContainersView({
                 setResource({ ...resource });
               }}
               resourceType={t('secrets.name_singular')}
-              value={jp.value(
-                resource,
-                '$.spec.template.spec.imagePullSecrets[0].name',
-              )}
+              value={
+                jp.value(
+                  resource,
+                  '$.spec.template.spec.imagePullSecrets[0].name',
+                ) ?? ''
+              }
             />
           )}
         />
