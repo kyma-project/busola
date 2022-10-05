@@ -102,20 +102,15 @@ export function getDefaultPreset(presets, emptyTemplate) {
     : null;
 }
 
-export function usePreparePresets(resource, presets) {
+export function usePreparePresets(presets) {
   const { t: tExt } = useGetTranslation();
-  const { t } = useTranslation();
 
   if (!presets || !presets.length) return null;
 
-  const preparedPresets = presets.map(preset =>
-    merge({}, { value: resource }, { ...preset, name: tExt(preset.name) }),
-  );
-
-  preparedPresets.unshift({
-    name: t('common.create-form.clear-form'),
-    value: resource,
-  });
+  const preparedPresets = presets.map(preset => ({
+    ...preset,
+    name: tExt(preset.name),
+  }));
 
   if (preparedPresets.length <= 1) return null;
   return preparedPresets;
