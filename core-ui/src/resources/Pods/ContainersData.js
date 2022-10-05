@@ -26,6 +26,7 @@ export default function ContainersData({ type, containers, statuses }) {
             onClick={() =>
               LuigiClient.linkManager().navigate(`containers/${container.name}`)
             }
+            iconBeforeText
           >
             {t('pods.buttons.view-logs')}
           </Button>

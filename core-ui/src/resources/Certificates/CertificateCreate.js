@@ -132,6 +132,7 @@ export function CertificateCreate({
                 option="transparent"
                 glyph={csrIsEncoded ? 'show' : 'hide'}
                 onClick={() => setCsrIsEncoded(!csrIsEncoded)}
+                iconBeforeText
               >
                 {csrIsEncoded
                   ? t('secrets.buttons.decode')

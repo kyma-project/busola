@@ -24,6 +24,20 @@ import {
 //Luigi has to have defined the exact path with 'index'
 import { busolaOwnExtConfigs } from './customResources/index';
 
+async function getBuiltinCustomResources() {
+  try {
+    const response = await fetch('/assets/extensions/extensions.yaml');
+    const extensions = jsyaml.loadAll(await response.text());
+    if (Array.isArray(extensions)) {
+      return extensions;
+    } else {
+      return [];
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 let customResources = {};
 
 async function loadBusolaClusterCRs() {
@@ -115,9 +129,13 @@ export async function getCustomResources(authData) {
     return customResources[clusterName];
   }
 
-  if (features.EXTENSIBILITY?.isEnabled) {
-    customResources[clusterName] = busolaOwnExtConfigs;
+  customResources[clusterName] = await getBuiltinCustomResources();
 
+  if (features.EXTENSIBILITY?.isEnabled) {
+    customResources[clusterName] = [
+      ...busolaOwnExtConfigs,
+      ...customResources[clusterName],
+    ];
     const clusterCustomResources = await loadBusolaClusterCRs();
     const targetClusterCustomResources = await loadTargetClusterCRs(authData);
 
@@ -130,9 +148,8 @@ export async function getCustomResources(authData) {
       ...customResources[clusterName],
       ...additionalExtResources,
     ];
-    return customResources[clusterName];
   }
-  return [];
+  return customResources[clusterName];
 }
 
 export async function getExtensibilitySchemas() {
