@@ -22,6 +22,7 @@ export function CertificateCreate({
   namespace,
   resource: initialCertificate,
   resourceUrl,
+  handleSetResetFormFn,
   ...props
 }) {
   const { t } = useTranslation();
@@ -52,6 +53,17 @@ export function CertificateCreate({
       }
     }
   };
+
+  useEffect(() => {
+    handleSetResetFormFn(() => () => {
+      setWithCSR(!!jp.value(certificate, '$.spec.csr'));
+      setCertificate(
+        initialCertificate
+          ? cloneDeep(initialCertificate)
+          : createTemplate(namespace),
+      );
+    });
+  }, []);
 
   useEffect(() => {
     if (withCSR) {
@@ -114,6 +126,7 @@ export function CertificateCreate({
       initialResource={initialCertificate}
       createUrl={resourceUrl}
       nameProps={{ 'data-cy': 'cert-name' }}
+      handleSetResetFormFn={handleSetResetFormFn}
     >
       <ResourceForm.FormField
         label={t('certificates.with-csr')}
