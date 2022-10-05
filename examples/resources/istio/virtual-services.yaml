@@ -897,9 +897,9 @@ data:
         "group": "networking.istio.io",
         "version": "v1beta1"
       },
-      "urlPath": "ext-virtualservices",
+      "urlPath": "virtualservices",
       "category": "Istio",
-      "name": "Ext VirtualServices",
+      "name": "VirtualServices",
       "scope": "namespace",
       "description": "{{[VirtualService](https://istio.io/latest/docs/reference/config/networking/virtual-service/)}} describes a configuration that affects traffic routing. ."
     }

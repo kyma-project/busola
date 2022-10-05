@@ -292,9 +292,9 @@ data:
         "group": "networking.istio.io",
         "version": "v1alpha3"
       },
-      "urlPath": "ext-sidecars",
+      "urlPath": "sidecars",
       "category": "Istio",
-      "name": "Ext Sidecars",
+      "name": "Sidecars",
       "scope": "namespace",
       "description": "{{[Sidecar](https://istio.io/latest/docs/reference/config/networking/sidecar/)}} manages the incoming and outgoing communication in a workload it is attached to."
 

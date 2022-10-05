@@ -64,6 +64,7 @@ export function NamespaceDetails(props) {
           setShowAdd(true);
           LuigiClient.uxManager().addBackdrop();
         }}
+        iconBeforeText
       >
         {t('upload-yaml.title')}
       </Button>

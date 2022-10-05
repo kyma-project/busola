@@ -1,0 +1,14 @@
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/1
+  value:
+    name: extensions
+    mountPath: /app/core/assets/extensions
+- op: add
+  path: /spec/template/spec/volumes/1
+  value:
+    name: extensions
+    configMap:
+      name: busola-builtin-resource-extensions
+      items:
+        - key: extensions.yaml
+          path: extensions.yaml

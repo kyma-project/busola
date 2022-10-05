@@ -39,7 +39,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   const resourceTitle = resMetaData?.general?.name;
   listProps.resourceTitle = exists('name')
     ? t('name')
-    : resourceTitle || pluralize(prettifyKind(resource.kind));
+    : resourceTitle || pluralize(prettifyKind(resource.kind || ''));
 
   if (resource.kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(

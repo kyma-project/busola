@@ -118,6 +118,7 @@ export default function CodeAndDependencies({ func }) {
       typeAttr="button"
       disabled={disabled}
       onClick={handleSave}
+      iconBeforeText
     >
       {t('common.buttons.save')}
     </Button>

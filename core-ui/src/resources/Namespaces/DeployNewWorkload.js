@@ -59,7 +59,7 @@ export default function DeployNewWorkload({ namespaceName }) {
   );
 
   const control = (
-    <Button className="fd-margin-end--tiny" glyph="add">
+    <Button className="fd-margin-end--tiny" glyph="add" iconBeforeText>
       {t('namespaces.overview.workloads.deploy-new')}
     </Button>
   );
