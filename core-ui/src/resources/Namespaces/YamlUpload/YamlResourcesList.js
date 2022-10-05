@@ -80,7 +80,7 @@ export function YamlResourcesList({
               )}
             </p>
             <div className="validate-resources">
-              <p>{t('settings.clusters.validateResources')}</p>
+              <p>{t('upload-yaml.labels.validate-resources')}</p>
               <Switch
                 onChange={handleResourceValidation}
                 checked={isValidationOn}

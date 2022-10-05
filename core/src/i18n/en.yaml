@@ -410,12 +410,10 @@ common:
     edit: Edit
     edit-yaml: Edit YAML
     generate-name: Generate
-    hide-warnings: Hide Warnings
     load: Load
     ok: OK
     restart: Restart
     save: Save
-    show-warnings: Show Warnings
     submit: Submit
     update: Update
     view-yaml: View YAML
@@ -1984,7 +1982,6 @@ settings:
     dontConfirmDelete: Delete without confirmation
     showHiddenNamespaces: Show hidden Namespaces
     title: Clusters
-    validateResources: Validate Resources
   interface:
     description: Appearance, language
     themes:
@@ -2106,7 +2103,12 @@ top-nav:
   profile:
     preferences: $t(preferences.title)
 upload-yaml:
+  buttons:
+    hide-warnings: Hide warnings
+    show-warnings: Show warnings
   info: You can upload multiple resources, separated in YAML by '---'. If a resource already exists, it will be updated, otherwise a new one will be created. If the Namespace is not given, the '{{namespace}}' one will be used.
+  labels:
+    validate-resources: Validate resources
   messages:
     no-warnings-found: No warnings found
     not-a-k8s-resource: Not a Kubernetes resource!

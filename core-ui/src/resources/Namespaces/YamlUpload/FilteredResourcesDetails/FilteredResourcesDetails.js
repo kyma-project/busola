@@ -27,8 +27,8 @@ const WarningButton = ({
       <div>
         <p>
           {!areWarningsVisible
-            ? t('common.buttons.show-warnings')
-            : t('common.buttons.hide-warnings')}
+            ? t('upload-yaml.buttons.show-warnings')
+            : t('upload-yaml.buttons.hide-warnings')}
         </p>
         <p>{warningsNumber}</p>
       </div>
