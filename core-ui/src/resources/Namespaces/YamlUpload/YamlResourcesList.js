@@ -1,21 +1,23 @@
 import React from 'react';
-import pluralize from 'pluralize';
-import { Icon, MessageStrip } from 'fundamental-react';
+import { Icon } from 'fundamental-react';
+import { Switch } from 'shared/ResourceForm/inputs';
 import { useTranslation } from 'react-i18next';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import {
   STATE_ERROR,
   STATE_WAITING,
   STATE_UPDATED,
   STATE_CREATED,
 } from './useUploadResources';
+import { FilteredResourcesDetails } from './FilteredResourcesDetails/FilteredResourcesDetails';
 import './YamlResourcesList.scss';
 
-export function YamlResourcesList({ resourcesData, namespace }) {
+export function YamlResourcesList({
+  resourcesData,
+  isValidationOn,
+  handleResourceValidation,
+}) {
   const { t } = useTranslation();
-  const { namespaceNodes } = useMicrofrontendContext();
-
   const filteredResources = resourcesData?.filter(
     resource => resource !== null,
   );
@@ -37,27 +39,6 @@ export function YamlResourcesList({ resourcesData, namespace }) {
         (filteredResources?.length || 0)) *
       100
     );
-  };
-
-  const getWarning = resource => {
-    const resourceType = pluralize(resource?.kind?.toLowerCase());
-    const resourceNamespace = resource?.metadata?.namespace;
-    const hasCurrentNamespace =
-      namespace && resourceNamespace ? resourceNamespace === namespace : true;
-    const isKnownNamespaceWide = !!namespaceNodes?.find(
-      n => n.resourceType === resourceType,
-    );
-
-    if (isKnownNamespaceWide && !hasCurrentNamespace) {
-      return (
-        <MessageStrip type="warning">
-          {t('upload-yaml.warnings.different-namespace', {
-            namespace: resource?.metadata?.namespace,
-          })}
-        </MessageStrip>
-      );
-    }
-    return null;
   };
 
   const getIcon = status => {
@@ -83,34 +64,38 @@ export function YamlResourcesList({ resourcesData, namespace }) {
   } else {
     if (showResourcesToUpload()) {
       return (
-        <div>
-          <p className="fd-margin-top--md">
-            {t(
-              filteredResources.length === 1
-                ? 'upload-yaml.you-will-create_one'
-                : 'upload-yaml.you-will-create_other',
-              {
-                count: filteredResources.length || 0,
-              },
-            )}
-          </p>
-          <ul>
-            {filteredResources?.map(r => (
-              <li
-                key={`${r?.value?.kind}-${r?.value?.metadata?.name}`}
-                className="fd-margin-begin--sm"
-                style={{ listStyle: 'disc' }}
-              >
-                {String(r?.value?.kind)} {String(r?.value?.metadata?.name)}
-                {getWarning(r.value)}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <>
+          <div
+            className="fd-display-flex fd-justify-between fd-align-center fd-margin--tiny"
+            style={{ minHeight: '20px' }}
+          >
+            <p>
+              {t(
+                filteredResources.length === 1
+                  ? 'upload-yaml.you-will-create_one'
+                  : 'upload-yaml.you-will-create_other',
+                {
+                  count: filteredResources.length || 0,
+                },
+              )}
+            </p>
+            <div className="validate-resources">
+              <p>{t('upload-yaml.labels.validate-resources')}</p>
+              <Switch
+                onChange={handleResourceValidation}
+                checked={isValidationOn}
+              />
+            </div>
+          </div>
+          <FilteredResourcesDetails
+            filteredResources={filteredResources}
+            isValidationOn={isValidationOn}
+          />
+        </>
       );
     } else {
       return (
-        <div className="fd-margin-top--md">
+        <>
           <div id="upload-progress-bar-container">
             <div
               id="upload-progress-bar"
@@ -132,7 +117,7 @@ export function YamlResourcesList({ resourcesData, namespace }) {
               </li>
             ))}
           </ul>
-        </div>
+        </>
       );
     }
   }
