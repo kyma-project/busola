@@ -104,7 +104,7 @@ export function YamlUploadDialog({ show, onCancel }) {
             setLastOperationState={setLastOperationState}
           />
           <div>
-            <p style={{ height: '80px' }}>
+            <p className="fd-margin-begin--tiny" style={{ minHeight: '80px' }}>
               {t('upload-yaml.info', { namespace: defaultNamespace })}
             </p>
             <YamlResourcesList
