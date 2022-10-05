@@ -5,7 +5,7 @@ import { ComboboxInput as FundamentalComboboxInput } from 'fundamental-react';
 import './ComboboxInput.scss';
 
 export function ComboboxInput({
-  value,
+  value = '',
   setValue,
   selectedKey,
   options,
