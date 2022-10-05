@@ -35,7 +35,7 @@ export function ResourceList({
   const resourceUrlPrefix = `/${api}/${value?.apiVersion}`;
   const resourceUrl = `${resourceUrlPrefix}${namespacePart}/${pluralKind}`;
 
-  const ExtensibilityFormRendererSchema = customResources.filter(
+  const ExtensibilityRendererSchema = customResources.filter(
     cR => cR.general?.resource?.kind === kind,
   )[0];
   const PredefinedRenderer = resources.find(
@@ -60,7 +60,7 @@ export function ResourceList({
     value.items = value.items.map(d => ({ ...d, kind }));
   }
 
-  const resourceSchema = {
+  const resourceSchema = ExtensibilityRendererSchema || {
     general: {
       resource: {
         kind: kind,
@@ -90,9 +90,7 @@ export function ResourceList({
       sortBy={defaultSortOptions =>
         sortBy(sortOptions, t, defaultSort ? defaultSortOptions : {})
       }
-      createFormProps={{
-        resourceSchema: ExtensibilityFormRendererSchema ?? resourceSchema,
-      }}
+      createFormProps={{ resourceSchema }}
       createResourceForm={ExtensibilityCreate}
       searchSettings={{
         textSearchProperties: defaultSortOptions =>
