@@ -54,8 +54,9 @@ export const ContainerSection = ({ readOnly, ...props }) => {
             jp.value(value, '$[0]', createContainerTemplate());
             setValue(value);
           }}
+          option="transparent"
         >
-          Add container
+          {t('deployment.create-modal.advanced.add-container')}
         </Button>
       </MessageStrip>
     </div>

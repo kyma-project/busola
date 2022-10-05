@@ -55,6 +55,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
       compact
       type="negative"
       onClick={onDelete}
+      option="transparent"
     />
   );
 
