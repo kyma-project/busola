@@ -86,6 +86,7 @@ export default function SecretData({ secret }) {
               glyph={isCollapsed ? 'show' : 'hide'}
               disabled={!secret?.data}
               onClick={() => setCollapsed(!isCollapsed)}
+              iconBeforeText
             >
               {isCollapsed
                 ? t('secrets.buttons.expand')
@@ -99,6 +100,7 @@ export default function SecretData({ secret }) {
             onClick={() => {
               return isEncoded ? encode() : decode();
             }}
+            iconBeforeText
           >
             {isEncoded
               ? t('secrets.buttons.decode')

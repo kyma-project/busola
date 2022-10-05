@@ -45,8 +45,10 @@ const resolveType = status => {
   }
 };
 
-const translate = (t, arrayOfVariableNames, fallbackValue) => {
-  return t(arrayOfVariableNames, { defaultValue: fallbackValue });
+const translate = (i18n, t, arrayOfVariableNames, fallbackValue) => {
+  return i18n.exists(arrayOfVariableNames)
+    ? t(arrayOfVariableNames)
+    : fallbackValue;
 };
 
 const prepareTranslationPath = (resourceKind, value, type) => {
@@ -74,7 +76,7 @@ export const StatusBadge = ({
   noTooltip = false,
   className,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   if (autoResolveType) type = resolveType(value);
   else
     for (const key of TYPE_FALLBACK.keys()) {
@@ -102,11 +104,13 @@ export const StatusBadge = ({
   );
   const fallbackValue = value.toString();
   const badgeContent = translate(
+    i18n,
     t,
     [i18nFullVariableName, commonStatusVariableName],
     fallbackValue,
   );
   let content = translate(
+    i18n,
     t,
     [tooltipVariableName, commonTooltipVariableName, i18nFullVariableName],
     fallbackValue,

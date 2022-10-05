@@ -41,10 +41,13 @@ export const useGetTranslation = path => {
         value = prettifyNamePlural(null, last(def.path));
       }
     }
-    return t(`${translationBundle}::${value}`, {
-      ...options,
-      defaultValue: value,
-    });
+
+    return exists(value)
+      ? t(`${translationBundle}::${value}`, {
+          ...options,
+          defaultValue: value,
+        })
+      : value;
   };
 
   const tFromStoreKeys = (storeKeys, schema, options) => {
@@ -56,7 +59,9 @@ export const useGetTranslation = path => {
 
   return {
     t: (path, ...props) => {
-      const translation = t(`${translationBundle}::${path}`, ...props) || path;
+      const translation = exists(path)
+        ? t(`${translationBundle}::${path}`, ...props)
+        : path;
       return translation === 'undefined'
         ? undefined
         : translation === 'null'
@@ -172,6 +177,7 @@ export const useCreateResourceDescription = descID => {
         <Trans
           i18nKey={trans}
           i18n={i18n}
+          t={t}
           components={matches.map((result, idx) => {
             const url = result.match(/\((.*?)\)/)[1];
 

@@ -86,6 +86,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
         <Button
           glyph="delete"
           type="negative"
+          option="transparent"
           compact
           onClick={() => removeContainer(i)}
         />

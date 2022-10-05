@@ -17,7 +17,7 @@ export const usePrepareListProps = (resourceType, resourceI18Key) => {
     readOnly: queryParams.get('readOnly') === 'true',
     resourceUrl,
     resourceType: resourceType,
-    resourceTitle: t(resourceI18Key || ''),
+    resourceTitle: i18n.exists(resourceI18Key) ? t(resourceI18Key) : '',
     namespace: routerParams.namespaceId,
     i18n,
   };
@@ -38,7 +38,9 @@ export const usePrepareDetailsProps = (resourceType, resourceI18Key) => {
   return {
     resourceUrl: decodedResourceUrl,
     resourceType: resourceType,
-    resourceTitle: resourceI18Key ? t(resourceI18Key) : resourceI18Key,
+    resourceTitle: i18n.exists(resourceI18Key)
+      ? t(resourceI18Key)
+      : resourceI18Key,
     resourceName: decodedResourceName,
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
