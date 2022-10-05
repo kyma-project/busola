@@ -104,7 +104,7 @@ export function CronJobCreate({
       createUrl={resourceUrl}
     >
       <ResourceForm.FormField
-        label={t('jobs.create-modal.disable-sidecar')}
+        label={t('namespaces.create-modal.enable-sidecar')}
         input={() => (
           <Switch
             compact

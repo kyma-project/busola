@@ -20,7 +20,7 @@ export function createJobTemplate(namespace, templateAnnotations) {
   };
 }
 
-export function createCronJobTemplate(namespace, templateAnnotations) {
+export function createCronJobTemplate(namespace) {
   return {
     apiVersion: 'batch/v1',
     kind: 'CronJob',
@@ -33,9 +33,7 @@ export function createCronJobTemplate(namespace, templateAnnotations) {
       jobTemplate: {
         spec: {
           template: {
-            metadata: {
-              annotations: templateAnnotations,
-            },
+            metadata: {},
             spec: {
               containers: [createContainerTemplate()],
               restartPolicy: 'OnFailure',
