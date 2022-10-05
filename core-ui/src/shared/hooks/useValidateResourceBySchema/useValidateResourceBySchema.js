@@ -23,7 +23,9 @@ const validateResourceBySchema = async resource => {
 };
 
 export const useValidateResourceBySchema = resource => {
-  const [warnings, setWarnings] = useState(validateResourceBySchema(resource));
+  const [warnings, setWarnings] = useState(() =>
+    validateResourceBySchema(resource),
+  );
 
   const intervalRef = useRef();
 
