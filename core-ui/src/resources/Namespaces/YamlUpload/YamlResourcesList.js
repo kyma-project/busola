@@ -67,7 +67,7 @@ export function YamlResourcesList({
         <>
           <div
             className="fd-display-flex fd-justify-between fd-align-center fd-margin--tiny"
-            style={{ height: '20px' }}
+            style={{ minHeight: '20px' }}
           >
             <p>
               {t(

@@ -54,7 +54,7 @@ function YamlUpload({
           editor.getModel().setValue(val);
         }}
       />
-      <p style={{ height: '20px' }} className="fd-margin--tiny">
+      <p style={{ minHeight: '20px' }} className="fd-margin--tiny">
         {t('upload-yaml.or-paste-here')}
       </p>
       <Editor
