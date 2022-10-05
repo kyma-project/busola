@@ -8,23 +8,13 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import './FilteredResourcesDetails.scss';
 
-const NamespaceWarning = ({ resource }) => {
-  const { t } = useTranslation();
-  return useIsInCurrentNamespace(resource) ? null : (
-    <MessageStrip type="warning" className="fd-margin-top--sm">
-      {t('upload-yaml.warnings.different-namespace', {
-        namespace: resource?.metadata?.namespace,
-      })}
-    </MessageStrip>
-  );
-};
-
 const WarningButton = ({
   handleShowWarnings,
   areWarningsVisible,
   warningsNumber,
 }) => {
   const { t } = useTranslation();
+
   return (
     <Button
       onClick={handleShowWarnings}
@@ -40,35 +30,58 @@ const WarningButton = ({
             ? t('common.buttons.show-warnings')
             : t('common.buttons.hide-warnings')}
         </p>
-        {isNaN(warningsNumber) ? (
-          <Spinner className="warning-spinner" size="s" center={false} />
-        ) : (
-          <p>{warningsNumber}</p>
-        )}
+        <p>{warningsNumber}</p>
       </div>
     </Button>
   );
 };
 
+const useNamespaceWarning = resource => {
+  const { t } = useTranslation();
+  return useIsInCurrentNamespace(resource)
+    ? []
+    : [t('upload-yaml.warnings.different-namespace')];
+};
+
 const ValidationWarnings = ({ resource }) => {
+  const { t } = useTranslation();
   const [areWarningsVisible, setVisibleWarnings] = useState(false);
-  const isInCurrentNamespace = useIsInCurrentNamespace(resource);
-  const warnings = useValidateResourceBySchema(resource);
-  const isButtonShown = warnings?.length > 0 || !isInCurrentNamespace;
+
+  //we expect two types here: []string or Promise
+  const warnings = [
+    useValidateResourceBySchema,
+    useNamespaceWarning,
+  ].map(validate => validate(resource));
+
+  // if the element isn't an Array it means it's a Promise
+  if (warnings.some(w => w.then))
+    return (
+      <MessageStrip
+        type="warning"
+        className="fd-margin-bottom--sm fd-messsage_strip__content"
+      >
+        <p> {t('common.headers.loading')}</p>
+        <Spinner className="warning-spinner" size="s" center={false} />
+      </MessageStrip>
+    );
+
+  if (warnings.flat().length === 0)
+    return (
+      <MessageStrip type="success" className="fd-margin-bottom--sm">
+        {t('upload-yaml.messages.no-warnings-found')}
+      </MessageStrip>
+    );
 
   return (
     <div>
-      {isButtonShown && (
-        <WarningButton
-          handleShowWarnings={() => setVisibleWarnings(prevState => !prevState)}
-          areWarningsVisible={areWarningsVisible}
-          warningsNumber={warnings.length + Number(!isInCurrentNamespace)}
-        />
-      )}
+      <WarningButton
+        handleShowWarnings={() => setVisibleWarnings(prevState => !prevState)}
+        areWarningsVisible={areWarningsVisible}
+        warningsNumber={warnings.flat().length}
+      />
       {areWarningsVisible ? (
         <ul className="warnings-list">
-          <NamespaceWarning resource={resource} />
-          {warnings.map(err => (
+          {warnings.flat().map(err => (
             <li key={`${resource?.kind}-${resource?.metadata?.name}-${err}`}>
               <MessageStrip type="warning" className="fd-margin-top--sm">
                 {err}
