@@ -389,6 +389,7 @@ export function ResourceListRenderer({
           setActiveResource(undefined);
           setShowEditDialog(true);
         }}
+        iconBeforeText
       >
         {createActionLabel ||
           t('components.resources-list.create', {
