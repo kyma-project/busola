@@ -48,7 +48,7 @@ export function ResourceForm({
     [], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  const ref = useRef(null);
+  const resourceRef = useRef(null);
 
   if (!handleNameChange) {
     handleNameChange = name => {
@@ -59,10 +59,10 @@ export function ResourceForm({
     };
   }
 
-  if (!ref.current) {
-    ref.current = JSON.stringify(resource);
+  if (!resourceRef.current) {
+    resourceRef.current = JSON.stringify(resource);
     handleSetResetFormFn(() => () => {
-      setResource(JSON.parse(ref.current));
+      setResource(JSON.parse(resourceRef.current));
     });
   }
 
