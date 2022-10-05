@@ -57,7 +57,7 @@ const ValidationWarnings = ({ resource }) => {
     useNamespaceWarning,
   ].map(validate => validate(resource));
 
-  // if the element isn't an Array it means it's a Promise
+  // if the element has the then function, it means it's a Promise
   if (warnings.some(w => w.then))
     return (
       <MessageStrip
