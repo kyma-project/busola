@@ -14,21 +14,6 @@ const genericNotFoundMessage = 'components.generic-list.messages.not-found';
 
 jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (str, { defaultValue } = {}) => translations[str] || defaultValue || str,
-  }),
-}));
-
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    i18n: {
-      exists: () => true,
-    },
-    t: value => value,
-  }),
-}));
-
 // use `mount` instead of `shallow` as the latter doesn't work with contexts
 describe('Table', () => {
   // tests creating the title based on name & path
