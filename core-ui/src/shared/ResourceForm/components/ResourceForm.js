@@ -122,7 +122,7 @@ export function ResourceForm({
       autocompletionDisabled={autocompletionDisabled}
       readOnly={readOnly}
       schemaId={resourceSchemaId}
-      updateValueOnParentChange={presets?.length}
+      updateValueOnParentChange={true}
     />
   );
   editor = renderEditor
