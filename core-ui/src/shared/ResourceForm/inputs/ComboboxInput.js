@@ -33,7 +33,7 @@ export function ComboboxInput({
           ((_, selected) =>
             setValue(selected.key !== -1 ? selected.key : selected.text))
         }
-        typedValue={value || typedValue}
+        typedValue={value ?? typedValue}
         selectedKey={value || selectedKey}
         placeholder={placeholder}
         options={options}
