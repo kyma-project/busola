@@ -97,8 +97,7 @@ export function navigateToResource(resource) {
     .fromContext('cluster')
     .navigate(path);
 }
-
-export function nagivateToResourceAfterCreate(namespace, name, urlPath = '') {
+export function navigateToResourceAfterCreate(namespace, name, urlPath = '') {
   const encodedName = encodeURIComponent(name);
   if (namespace) {
     LuigiClient.linkManager()
