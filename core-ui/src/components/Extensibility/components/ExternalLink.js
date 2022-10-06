@@ -55,3 +55,4 @@ export const ExternalLink = ({
   );
 };
 ExternalLink.inline = true;
+ExternalLink.copiable = true;

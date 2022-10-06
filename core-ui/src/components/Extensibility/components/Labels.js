@@ -28,3 +28,4 @@ export function Labels({ schema, value, structure }) {
 
 Labels.inline = true;
 Labels.array = true;
+Labels.copiable = true;

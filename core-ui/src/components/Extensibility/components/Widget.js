@@ -14,6 +14,8 @@ export const SimpleRenderer = ({ children }) => {
   return children;
 };
 
+SimpleRenderer.copiable = true;
+
 export function InlineWidget({ children, value, structure, ...props }) {
   const { widgetT } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
@@ -32,25 +34,38 @@ export function InlineWidget({ children, value, structure, ...props }) {
   );
 }
 
+InlineWidget.copiable = Renderer => Renderer?.copiable;
+InlineWidget.copyFunction = (value, structure, Renderer) =>
+  Renderer?.copyFunction ? Renderer.copyFunction(value, structure) : '';
+
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
 
-  const CopiableWrapper = ({ children, copiable, value }) => {
-    if (copiable) {
-      return (
-        <CopiableText
-          textToCopy={typeof value === 'object' ? JSON.stringify(value) : value}
-        >
-          {children}
-        </CopiableText>
-      );
-    } else {
-      return children;
-    }
+  const CopiableWrapper = ({ children, value, structure }) => {
+    const isRenderCopiable =
+      typeof InlineRenderer.copiable === 'function'
+        ? InlineRenderer.copiable(Renderer)
+        : InlineRenderer.copiable;
+
+    if (!structure.copiable || !isRenderCopiable) return children;
+
+    const defaultCopyFunction = value =>
+      typeof value === 'object' ? JSON.stringify(value) : value;
+
+    const copyFunction =
+      typeof InlineRenderer.copyFunction === 'function'
+        ? InlineRenderer.copyFunction
+        : defaultCopyFunction;
+
+    return (
+      <CopiableText textToCopy={copyFunction(value, structure, Renderer)}>
+        {children}
+      </CopiableText>
+    );
   };
 
-  return Renderer.inline && InlineRenderer ? (
-    <CopiableWrapper copiable={props.structure.copiable} value={props.value}>
+  return Renderer.inline ? (
+    <CopiableWrapper structure={props.structure} value={props.value}>
       <InlineRenderer {...props}>
         <Renderer {...props} />
       </InlineRenderer>

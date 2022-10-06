@@ -6,12 +6,12 @@
   - [ResourceGraph parameters](#resourcegraph-parameters)
   - [Data scoping](#data-scoping)
 - [Inline widgets](#inline-widgets)
-  - [Badge](#badge)TUTAJ
-  - [ControlledBy](#controlledby)NIE
-  - [ExternalLink](#externallink)TAK
+  - [Badge](#badge)CUSTOM
+  - [ControlledBy](#controlledby)
+  - [ExternalLink](#externallink)CUSTOM
   - [JoinedArray](#joinedarray)CUSTOM
   - [Labels](#labels)TAK
-  - [ResourceLink](#resourcelink)TAK
+  - [ResourceLink](#resourcelink)
   - [Text](#text)TAK
 - [Block widgets](#block-widgets)
   - [Alert](#alert)
