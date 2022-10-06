@@ -45,9 +45,9 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
 
   const CopiableWrapper = ({ children }) => {
     const isRenderCopiable =
-      typeof InlineRenderer.copiable === 'function'
-        ? InlineRenderer.copiable(Renderer)
-        : InlineRenderer.copiable;
+      typeof Renderer.copiable === 'function'
+        ? Renderer.copiable(Renderer)
+        : Renderer.copiable;
 
     if (!props.structure.copiable || !isRenderCopiable) return children;
 
@@ -55,8 +55,8 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
       typeof value === 'object' ? JSON.stringify(value) : value;
 
     const copyFunction =
-      typeof InlineRenderer.copyFunction === 'function'
-        ? InlineRenderer.copyFunction
+      typeof Renderer.copyFunction === 'function'
+        ? Renderer.copyFunction
         : defaultCopyFunction;
 
     return (
