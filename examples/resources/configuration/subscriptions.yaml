@@ -21,18 +21,22 @@ data:
   details: |-
     header: 
       - name: Status
-        source: status.ready
+        source: 'status.ready = false ? "error" : "ready"'
         widget: Badge
+        description: status.conditions.message
       - name: Sink
         source: spec.sink
       - source: '$substringBefore($substring(spec.sink, 7), ".")'
-        # widget: ControlledBy
-        placeholder: '-'
+        widget: ControlledBy
     body: 
       - source: status.conditions
         widget: Table
         name: Condidtions
         children:
+          - source: 'status.ready = false ? "error" : "ready"'
+            name: Type
+            widget: Badge
+            description: status.conditions.message
           - source: '$item.status'
             name: Status
           - source: '$item.reason'
@@ -73,45 +77,6 @@ data:
         hideInvolvedObjects: true
       - source: spec
         widget: CodeViewer
-    # {
-    #   "header": [],
-    #   "body": [
-    #     {
-    #       "name": "Summary",
-    #       "widget": "Panel",
-    #       "children": [
-    #         {
-    #           "name": "id",
-    #           "source": "spec.id"
-    #         },
-    #         {
-    #           "name": "protocol",
-    #           "source": "spec.protocol"
-    #         },
-    #         {
-    #           "name": "sink",
-    #           "source": "spec.sink"
-    #         },
-    #         {
-    #           "name": "Ready",
-    #           "source": "status.ready"
-    #         },
-    #         {
-    #           "name": "Age",
-    #           "source": "metadata.creationTimestamp"
-    #         },
-    #         {
-    #           "name": "Clean Event Types",
-    #           "source": "status.cleanEventTypes"
-    #         }
-    #       ]
-    #     },
-    #     {
-    #       "source": "spec",
-    #       "widget": "CodeViewer"
-    #     }
-    #   ]
-    # }
   form: |-
     - simple: true
       path: spec.sink
@@ -128,10 +93,11 @@ data:
       required: false
   list: |-
     - name: Status
-      source: status.ready
+      source: 'status.ready = false ? "error" : "ready"'
       widget: Badge
+      description: status.conditions.message
     - name: Event Types
-      source: spec.filter.filters.eventType.value
+      source: status.cleanEventTypes
       widget: Labels
   translations: |-
     en:

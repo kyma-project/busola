@@ -110,7 +110,8 @@ export const ControlledBy = ({
 }) => {
   if (
     !ownerReferences ||
-    (Array.isArray(ownerReferences) && !ownerReferences?.length)
+    !Array.isArray(ownerReferences) ||
+    !ownerReferences?.length
   )
     return placeholder;
 

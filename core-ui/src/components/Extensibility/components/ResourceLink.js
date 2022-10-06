@@ -28,7 +28,7 @@ export function ResourceLink({ value, structure, originalResource }) {
   const { t: tExt } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
-  if (!value) {
+  if (!value || !value?.length) {
     return emptyLeafPlaceholder;
   }
 
