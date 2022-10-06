@@ -8,7 +8,7 @@ const resourceNameList = [
 
 jest.mock('../clusterOpenApi', () => ({
   clusterOpenApi: {
-    getResourceNameList: resourceNameList,
+    getResourcePathIdList: resourceNameList,
   },
 }));
 
