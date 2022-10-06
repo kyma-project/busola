@@ -37,6 +37,7 @@ export function Table({
   disableMargin,
   schema,
   originalResource,
+  arrayItems,
   ...props
 }) {
   const { t } = useTranslation();
@@ -80,7 +81,8 @@ export function Table({
         <Widget
           {...props}
           value={entry}
-          arrayItem={entry}
+          scope={entry}
+          arrayItems={[...arrayItems, entry]}
           structure={column}
           schema={schema}
           originalResource={originalResource}
@@ -101,7 +103,8 @@ export function Table({
             <Widget
               {...props}
               value={entry}
-              arrayItem={entry}
+              scope={entry}
+              arrayItems={[...arrayItems, entry]}
               structure={child}
               schema={schema}
               inlineRenderer={InlineWidget}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { isNil } from 'lodash';
+import { isNil, last } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
@@ -32,6 +32,7 @@ export function InlineWidget({ children, value, structure, ...props }) {
 }
 
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
+  console.log('SingleWidget');
   const InlineRenderer = inlineRenderer || SimpleRenderer;
 
   return Renderer.inline && InlineRenderer ? (
@@ -43,48 +44,72 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   );
 }
 
-export function shouldBeVisible(value, visibilityFormula, originalResource) {
-  // allow hidden to be set only explicitly
-  if (!visibilityFormula) return { visible: visibilityFormula !== false };
+// export function shouldBeVisible(value, visibilityFormula, originalResource) {
+// // allow hidden to be set only explicitly
+// if (!visibilityFormula) return { visible: visibilityFormula !== false };
 
-  try {
-    const expression = jsonataWrapper(visibilityFormula);
-    expression.assign('root', originalResource);
-    return { visible: !!expression.evaluate({ data: value }) };
-  } catch (e) {
-    console.warn('Widget::shouldBeVisible error:', e);
-    return { visible: false, error: e };
-  }
-}
+// try {
+// const expression = jsonataWrapper(visibilityFormula);
+// expression.assign('root', originalResource);
+// return { visible: !!expression.evaluate({ data: value }) };
+// } catch (e) {
+// console.warn('Widget::shouldBeVisible error:', e);
+// return { visible: false, error: e };
+// }
+// }
 
 export function Widget({
   structure,
   value,
-  arrayItem,
+  arrayItems = [],
   inlineRenderer,
   originalResource,
   ...props
 }) {
+  console.log('Widget', structure.name, structure.source, {
+    structure,
+    arrayItems,
+  });
   const { Plain, Text } = widgets;
   const { t } = useTranslation();
 
-  const childValue = useJsonata(structure.source, originalResource, {
-    parent: value,
-    item: arrayItem || originalResource,
+  //const jsonata = useJsonata({
+  // resource: originalResource,
+  // data: value,
+  // arrayItems
+  // });
+
+  // const [childValue] = jsonata(structure.source);
+  // const [childValue] = useMemo(() => jsonata(structure.source, { value }), [jsonata, structure.source, value]);
+  const [childValue] = useJsonata(structure.source, {
+    resource: originalResource,
+    scope: value,
+    arrayItems,
   });
-
-  const { visible, error: visibleCheckError } = shouldBeVisible(
-    childValue,
+  // const [visible, visibilityError] = jsonata(structure.visibility, { value: childValue });
+  console.log('childValue for visibility', childValue);
+  const [visible, visibilityError] = useJsonata(
     structure.visibility,
-    originalResource,
+    {
+      resource: originalResource,
+      scope: value,
+      arrayItems,
+      value: childValue,
+    },
+    true,
   );
+  console.log('visible?', visible, visibilityError);
 
-  if (visibleCheckError) {
+  if (visibilityError) {
+    // return visible;
     return t('extensibility.configuration-error', {
-      error: visibleCheckError.message,
+      error: visibilityError.message,
     });
   }
   if (!visible) return null;
+
+  console.log('visible!');
+  // console.log('visible?', structure.visibility, visible);
 
   if (structure.valuePreprocessor) {
     const Preprocessor = valuePreprocessors[structure.valuePreprocessor];
@@ -124,24 +149,26 @@ export function Widget({
   return Array.isArray(childValue) && !Renderer.array ? (
     childValue.map(valueItem => (
       <SingleWidget
+        {...props}
         inlineRenderer={inlineRenderer}
         Renderer={Renderer}
         value={valueItem}
-        arrayItem={value}
+        arrayItems={[...arrayItems, valueItem]}
         structure={structure}
         originalResource={originalResource}
-        {...props}
+        scope={valueItem}
       />
     ))
   ) : (
     <SingleWidget
+      {...props}
       inlineRenderer={inlineRenderer}
       Renderer={Renderer}
       value={sanitizedValue}
-      arrayItem={arrayItem}
+      scope={value}
+      arrayItems={arrayItems}
       structure={structure}
       originalResource={originalResource}
-      {...props}
     />
   );
 }

@@ -66,8 +66,8 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
         Array.isArray(header)
           ? header.map((def, i) => ({
               header: widgetT(def),
-              visibility: resource =>
-                shouldBeVisible(resource, def.visibility, resource),
+              // visibility: resource =>
+              // shouldBeVisible(resource, def.visibility, resource),
               value: resource => (
                 <Widget
                   key={i}
