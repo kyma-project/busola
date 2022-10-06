@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { isNil, last } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
@@ -73,31 +73,37 @@ export function Widget({
   const { Plain, Text } = widgets;
   const { t } = useTranslation();
 
-  //const jsonata = useJsonata({
-  // resource: originalResource,
-  // data: value,
-  // arrayItems
-  // });
-
-  // const [childValue] = jsonata(structure.source);
-  // const [childValue] = useMemo(() => jsonata(structure.source, { value }), [jsonata, structure.source, value]);
-  const [childValue] = useJsonata(structure.source, {
+  const jsonata = useJsonata({
     resource: originalResource,
     scope: value,
     arrayItems,
   });
-  // const [visible, visibilityError] = jsonata(structure.visibility, { value: childValue });
+  useEffect(() => {
+    console.log('jsonata function changed');
+  }, [jsonata]);
+
+  const [childValue] = jsonata(structure.source);
+  // const [childValue] = useMemo(() => jsonata(structure.source, { value }), [jsonata, structure.source, value]);
+  // const [childValue] = useJsonata(structure.source, {
+  // resource: originalResource,
+  // scope: value,
+  // arrayItems,
+  // });
+
   console.log('childValue for visibility', childValue);
-  const [visible, visibilityError] = useJsonata(
-    structure.visibility,
-    {
-      resource: originalResource,
-      scope: value,
-      arrayItems,
-      value: childValue,
-    },
-    true,
-  );
+  const [visible, visibilityError] = jsonata(structure.visibility, {
+    value: childValue,
+  });
+  // const [visible, visibilityError] = useJsonata(
+  // structure.visibility,
+  // {
+  // resource: originalResource,
+  // scope: value,
+  // arrayItems,
+  // value: childValue,
+  // },
+  // true,
+  // );
   console.log('visible?', visible, visibilityError);
 
   if (visibilityError) {
