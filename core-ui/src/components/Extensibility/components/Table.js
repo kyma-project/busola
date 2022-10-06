@@ -39,6 +39,15 @@ export function Table({
   originalResource,
   ...props
 }) {
+  // cleanup jsonata results
+  if (!Array.isArray(value)) {
+    if (isNil(value)) {
+      value = [];
+    } else {
+      value = [value];
+    }
+  }
+
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
 
