@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
-import { Switch } from 'fundamental-react';
 import { cloneDeep } from 'lodash';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
 import { CronJobSpecSection } from 'resources/Jobs/SpecSection';
 import {
@@ -19,9 +17,6 @@ import {
   createCronJobTemplate,
   createCronJobPresets,
 } from 'resources/Jobs/templates';
-
-const SIDECAR_INJECTION_LABEL = 'sidecar.istio.io/inject';
-const SIDECAR_INJECTION_VALUE = 'false';
 
 function isCronJobValid(cronJob) {
   const containers =
@@ -42,50 +37,14 @@ export function CronJobCreate({
   ...props
 }) {
   const { t } = useTranslation();
-  const { features } = useMicrofrontendContext();
-  const istioEnabled = features.ISTIO?.isEnabled;
-  const defaultSidecarAnnotations = initialCronJob
-    ? initialCronJob?.spec.jobTemplate.spec.template.metadata.annotations
-    : istioEnabled
-    ? { [SIDECAR_INJECTION_LABEL]: SIDECAR_INJECTION_VALUE }
-    : {};
 
   const [cronJob, setCronJob] = useState(
-    cloneDeep(initialCronJob) ||
-      createCronJobTemplate(namespace, defaultSidecarAnnotations),
+    cloneDeep(initialCronJob) || createCronJobTemplate(namespace),
   );
 
   useEffect(() => {
     setCustomValid(isCronJobValid(cronJob));
   }, [cronJob, setCustomValid]);
-
-  const onSwitchChange = () => {
-    const isSidecar =
-      jp.value(
-        cronJob,
-        `$.spec.jobTemplate.spec.template.metadata.annotations["${SIDECAR_INJECTION_LABEL}"]`,
-      ) !== SIDECAR_INJECTION_VALUE;
-
-    if (isSidecar) {
-      jp.value(
-        cronJob,
-        `$.spec.jobTemplate.spec.template.metadata.annotations["${SIDECAR_INJECTION_LABEL}"]`,
-        SIDECAR_INJECTION_VALUE,
-      );
-      setCronJob({ ...cronJob });
-    } else {
-      const jobTemplateAnnotations =
-        cronJob.spec.jobTemplate?.spec?.template?.metadata?.annotations || {};
-      delete jobTemplateAnnotations[SIDECAR_INJECTION_LABEL];
-
-      jp.value(
-        cronJob,
-        '$.spec.jobTemplate.spec.template.metadata.annotations',
-        jobTemplateAnnotations,
-      );
-      setCronJob({ ...cronJob });
-    }
-  };
 
   return (
     <ResourceForm
@@ -97,26 +56,9 @@ export function CronJobCreate({
       setResource={setCronJob}
       onChange={onChange}
       formElementRef={formElementRef}
-      presets={
-        !initialCronJob &&
-        createCronJobPresets(namespace, t, defaultSidecarAnnotations)
-      }
+      presets={!initialCronJob && createCronJobPresets(namespace)}
       createUrl={resourceUrl}
     >
-      <ResourceForm.FormField
-        label={t('namespaces.create-modal.enable-sidecar')}
-        input={() => (
-          <Switch
-            compact
-            onChange={onSwitchChange}
-            checked={jp.value(
-              cronJob,
-              `$.spec.jobTemplate.spec.template.metadata.annotations["${SIDECAR_INJECTION_LABEL}"]`,
-            )}
-          />
-        )}
-      />
-
       <CronJobSpecSection advanced propertyPath="$.spec" />
 
       <ScheduleSection propertyPath="$.spec.schedule" />

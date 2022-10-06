@@ -33,7 +33,6 @@ export function createCronJobTemplate(namespace) {
       jobTemplate: {
         spec: {
           template: {
-            metadata: {},
             spec: {
               containers: [createContainerTemplate()],
               restartPolicy: 'OnFailure',
