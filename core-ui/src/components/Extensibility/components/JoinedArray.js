@@ -52,9 +52,7 @@ JoinedArray.inline = true;
 JoinedArray.copiable = true;
 JoinedArray.copyFunction = ({ value, structure }) => {
   let separator = structure?.separator ?? ', ';
-  separator = 'break';
   separator = separator === 'break' ? '\n' : separator;
-  if (Array.isArray(value)) return value.join(separator);
 
-  return '';
+  return Array.isArray(value) ? value.join(separator) : '';
 };

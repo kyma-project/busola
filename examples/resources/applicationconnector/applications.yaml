@@ -100,9 +100,6 @@ data:
     }
   form: |-
     [
-      { "path": "metadata.name" },
-      { "path": "metadata.description" },
-      { "path": "metadata.namespace" },
       { "path": "spec.description" },
       { "path": "spec.accessLabel" }
     ]
