@@ -8,6 +8,7 @@ import { stringifyIfBoolean } from 'shared/utils/helpers';
 import { useGetTranslation, useGetPlaceholder } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
 import { widgets, valuePreprocessors } from './index';
+import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
 export const SimpleRenderer = ({ children }) => {
   return children;
@@ -34,10 +35,26 @@ export function InlineWidget({ children, value, structure, ...props }) {
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
 
+  const CopiableWrapper = ({ children, copiable, value }) => {
+    if (copiable) {
+      return (
+        <CopiableText
+          textToCopy={typeof value === 'object' ? JSON.stringify(value) : value}
+        >
+          {children}
+        </CopiableText>
+      );
+    } else {
+      return children;
+    }
+  };
+
   return Renderer.inline && InlineRenderer ? (
-    <InlineRenderer {...props}>
-      <Renderer {...props} />
-    </InlineRenderer>
+    <CopiableWrapper copiable={props.structure.copiable} value={props.value}>
+      <InlineRenderer {...props}>
+        <Renderer {...props} />
+      </InlineRenderer>
+    </CopiableWrapper>
   ) : (
     <Renderer {...props} />
   );
