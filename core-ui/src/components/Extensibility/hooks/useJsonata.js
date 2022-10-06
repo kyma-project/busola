@@ -8,7 +8,7 @@ import { DataSourcesContext } from '../contexts/DataSources';
 export function useJsonata(
   query,
   { resource, scope, arrayItems, ...extras },
-  defaultValue = '',
+  defaultValue = null,
 ) {
   console.log('useJsonata', query);
   const [value, setValue] = useState(defaultValue);
@@ -52,7 +52,10 @@ export function useJsonata(
         },
       );
     } catch (e) {
-      setValue(t('extensibility.configuration-error', { error: e.message }));
+      setValue(
+        defaultValue ??
+          t('extensibility.configuration-error', { error: e.message }),
+      );
       setError(e);
     }
     // }, [query, resource, data, dataSourceStore]); // eslint-disable-line react-hooks/exhaustive-deps

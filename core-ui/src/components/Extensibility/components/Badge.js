@@ -14,10 +14,16 @@ export function Badge({
   structure,
   schema,
   originalResource,
-  ...props
+  scope,
+  arrayItems,
 }) {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
-  const tooltip = useJsonata(structure?.description, originalResource);
+  const [tooltip] = useJsonata(structure?.description, {
+    resource: originalResource,
+    scope,
+    value,
+    arrayItems,
+  });
 
   let type = null;
   if (structure?.highlights) {

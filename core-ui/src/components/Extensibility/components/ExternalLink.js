@@ -3,7 +3,6 @@ import { Icon, Link } from 'fundamental-react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-// import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { useJsonata } from '../hooks/useJsonata';
 
 export const ExternalLink = ({
