@@ -35,21 +35,23 @@ export function InlineWidget({ children, value, structure, ...props }) {
 }
 
 InlineWidget.copiable = Renderer => Renderer?.copiable;
-InlineWidget.copyFunction = (value, structure, Renderer) =>
-  Renderer?.copyFunction ? Renderer.copyFunction(value, structure) : '';
+InlineWidget.copyFunction = (props, Renderer, defaultCopyFunction) =>
+  Renderer?.copyFunction
+    ? Renderer.copyFunction(props, Renderer, defaultCopyFunction)
+    : defaultCopyFunction(props, Renderer, defaultCopyFunction);
 
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
 
-  const CopiableWrapper = ({ children, value, structure }) => {
+  const CopiableWrapper = ({ children }) => {
     const isRenderCopiable =
       typeof InlineRenderer.copiable === 'function'
         ? InlineRenderer.copiable(Renderer)
         : InlineRenderer.copiable;
 
-    if (!structure.copiable || !isRenderCopiable) return children;
+    if (!props.structure.copiable || !isRenderCopiable) return children;
 
-    const defaultCopyFunction = value =>
+    const defaultCopyFunction = ({ value }) =>
       typeof value === 'object' ? JSON.stringify(value) : value;
 
     const copyFunction =
@@ -58,18 +60,21 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
         : defaultCopyFunction;
 
     return (
-      <CopiableText textToCopy={copyFunction(value, structure, Renderer)}>
+      <CopiableText
+        compact
+        textToCopy={copyFunction(props, Renderer, defaultCopyFunction)}
+      >
         {children}
       </CopiableText>
     );
   };
 
   return Renderer.inline ? (
-    <CopiableWrapper structure={props.structure} value={props.value}>
-      <InlineRenderer {...props}>
+    <InlineRenderer {...props}>
+      <CopiableWrapper structure={props.structure} value={props.value}>
         <Renderer {...props} />
-      </InlineRenderer>
-    </CopiableWrapper>
+      </CopiableWrapper>
+    </InlineRenderer>
   ) : (
     <Renderer {...props} />
   );

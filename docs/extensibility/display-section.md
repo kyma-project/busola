@@ -6,7 +6,7 @@
   - [ResourceGraph parameters](#resourcegraph-parameters)
   - [Data scoping](#data-scoping)
 - [Inline widgets](#inline-widgets)
-  - [Badge](#badge)CUSTOM
+  - [Badge](#badge)TAK
   - [ControlledBy](#controlledby)
   - [ExternalLink](#externallink)CUSTOM
   - [JoinedArray](#joinedarray)CUSTOM

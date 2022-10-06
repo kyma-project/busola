@@ -5,23 +5,12 @@ import { useTranslation } from 'react-i18next';
 
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
-export const ExternalLink = ({
-  value,
-  schema,
-  structure,
-  arrayItem,
-  ...props
-}) => {
-  const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
-  const { t } = useTranslation();
-
-  const linkFormula = structure.link;
-
-  function jsonata(formula) {
+function makeHref({ value, formula, originalResource, arrayItem }) {
+  if (formula) {
     try {
       const expression = jsonataWrapper(formula);
 
-      expression.assign('root', props.originalResource);
+      expression.assign('root', originalResource);
       expression.assign('item', arrayItem);
 
       return expression.evaluate();
@@ -30,17 +19,30 @@ export const ExternalLink = ({
       return { error: e };
     }
   }
-
-  let href;
   if (typeof value === 'string') {
-    href = value.startsWith('https://') ? value : `https://${value}`;
+    value = value.startsWith('https://') ? value : `https://${value}`;
   }
+  return value ?? '';
+}
+export function ExternalLink({
+  value,
+  structure,
+  arrayItem,
+  originalResource,
+}) {
+  const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
+  const { t } = useTranslation();
 
   if (isNil(value)) return emptyLeafPlaceholder;
 
   return (
     <Link
-      href={linkFormula ? jsonata(linkFormula) : href}
+      href={makeHref({
+        value,
+        formula: structure.link,
+        originalResource,
+        arrayItem,
+      })}
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -53,6 +55,19 @@ export const ExternalLink = ({
       />
     </Link>
   );
-};
+}
 ExternalLink.inline = true;
 ExternalLink.copiable = true;
+ExternalLink.copyFunction = ({
+  originalResource,
+  value,
+  structure,
+  arrayItem,
+}) => {
+  return makeHref({
+    value,
+    formula: structure.link,
+    originalResource,
+    arrayItem,
+  });
+};
