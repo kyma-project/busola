@@ -35,7 +35,7 @@ export const ExternalLink = ({
 
   return (
     <Link href={link || href} target="_blank" rel="noopener noreferrer">
-      {value} ({link || href})
+      {value}
       <Icon
         glyph="inspect"
         size="s"
