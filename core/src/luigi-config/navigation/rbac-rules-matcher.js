@@ -1,32 +1,3 @@
-export default function rbacRulesMatched(
-  requiredPermissions,
-  selfSubjectRulesReview,
-) {
-  if (
-    !isNonEmptyArray(requiredPermissions) ||
-    !isNonEmptyArray(selfSubjectRulesReview)
-  ) {
-    return true;
-  }
-  for (let i = 0, len = requiredPermissions.length; i < len; i++) {
-    let requiredPermission = requiredPermissions[i];
-    for (let j = 0, vlen = requiredPermission.verbs.length; j < vlen; j++) {
-      let atomicVerb = requiredPermission.verbs[j];
-      let atomicVerbPermission = {
-        apiGroup: requiredPermission.apiGroup,
-        resource: requiredPermission.resource,
-        verbs: [atomicVerb],
-      };
-      if (
-        !matchingVerbRuleFound(selfSubjectRulesReview, atomicVerbPermission)
-      ) {
-        return false;
-      }
-    }
-  }
-  return true;
-}
-
 const isNonEmptyArray = array => {
   return (
     array !== null &&

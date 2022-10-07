@@ -25,6 +25,8 @@ import { readFeatureToggles } from './utils/feature-toggles';
 import { ssoLogin } from './auth/sso';
 import { setNavFooterText } from './nav-footer';
 import { resolveSecondaryFeatures } from './feature-discovery';
+import { clusterOpenApi } from './navigation/clusterOpenApi';
+import { loadingState } from './loading-state';
 
 const luigiAfterInit = () => Luigi.ux().hideAppLoadingIndicator();
 
@@ -48,6 +50,16 @@ async function initializeBusola() {
   initTheme();
 
   const activeCluster = getActiveCluster();
+  if (activeCluster) {
+    loadingState.setLoading(true);
+    try {
+      await clusterOpenApi.fetch();
+    } catch (e) {
+      console.warn(e);
+    }
+    loadingState.setLoading(false);
+  }
+
   Luigi.setConfig({
     communication,
     navigation: await createNavigation(),
