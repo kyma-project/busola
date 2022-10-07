@@ -1,12 +1,14 @@
 import pluralize from 'pluralize';
-
+import React from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
 import { getTextSearchProperties, sortBy, useGetTranslation } from '../helpers';
 import { getChildren, getSearchDetails, getSortDetails } from './helpers';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { ExtensibilityCreate } from '../ExtensibilityCreate';
+import ExtensibilityList from '../ExtensibilityList';
+
+// const EXT = React.lazy(() => import('../ExtensibilityList'));
 
 const getProperNamespacePart = (givenNamespace, currentNamespace) => {
   switch (true) {
@@ -34,13 +36,32 @@ export function ResourceList({
   const api = value?.apiVersion === 'v1' ? 'api' : 'apis';
   const resourceUrlPrefix = `/${api}/${value?.apiVersion}`;
   const resourceUrl = `${resourceUrlPrefix}${namespacePart}/${pluralKind}`;
+  console.log(value);
 
-  const ExtensibilityRendererSchema = customResources.filter(
+  const extensibilityResourceSchema = customResources.find(
     cR => cR.general?.resource?.kind === kind,
-  )[0];
+  );
+
   const PredefinedRenderer = resources.find(
     r => r.resourceType.toLowerCase() === pluralKind,
   );
+
+  if (!structure.children && extensibilityResourceSchema)
+    return (
+      <ExtensibilityList
+        overrideResMetadata={extensibilityResourceSchema || {}}
+        isCompact
+        resourceUrl={resourceUrl}
+        hasDetailsView
+        showTitle
+        skipDataLoading
+        resources={value?.items}
+        error={value?.error}
+        loading={value?.loading}
+        title={t(structure.name)}
+        fixedPath
+      />
+    );
 
   const ListRenderer = PredefinedRenderer?.List || ResourcesList;
 
@@ -59,16 +80,6 @@ export function ResourceList({
   if (Array.isArray(value?.items)) {
     value.items = value.items.map(d => ({ ...d, kind }));
   }
-
-  const resourceSchema = ExtensibilityRendererSchema || {
-    general: {
-      resource: {
-        kind: kind,
-        version: value?.apiVersion,
-        group: value?.group,
-      },
-    },
-  };
 
   return (
     <ListRenderer
@@ -90,8 +101,6 @@ export function ResourceList({
       sortBy={defaultSortOptions =>
         sortBy(sortOptions, t, defaultSort ? defaultSortOptions : {})
       }
-      createFormProps={{ resourceSchema }}
-      createResourceForm={ExtensibilityCreate}
       searchSettings={{
         textSearchProperties: defaultSortOptions =>
           textSearchProperties(defaultSortOptions),
