@@ -1,14 +1,14 @@
 import pluralize from 'pluralize';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
 import { resources } from 'resources';
 import { getTextSearchProperties, sortBy, useGetTranslation } from '../helpers';
 import { getChildren, getSearchDetails, getSortDetails } from './helpers';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import ExtensibilityList from '../ExtensibilityList';
+import { Spinner } from 'shared/components/Spinner/Spinner';
 
-// const EXT = React.lazy(() => import('../ExtensibilityList'));
+const ExtensibilityList = React.lazy(() => import('../ExtensibilityList'));
 
 const getProperNamespacePart = (givenNamespace, currentNamespace) => {
   switch (true) {
@@ -48,19 +48,21 @@ export function ResourceList({
 
   if (!structure.children && extensibilityResourceSchema)
     return (
-      <ExtensibilityList
-        overrideResMetadata={extensibilityResourceSchema || {}}
-        isCompact
-        resourceUrl={resourceUrl}
-        hasDetailsView
-        showTitle
-        skipDataLoading
-        resources={value?.items}
-        error={value?.error}
-        loading={value?.loading}
-        title={t(structure.name)}
-        fixedPath
-      />
+      <Suspense fallback={<Spinner />}>
+        <ExtensibilityList
+          overrideResMetadata={extensibilityResourceSchema || {}}
+          isCompact
+          resourceUrl={resourceUrl}
+          hasDetailsView
+          showTitle
+          skipDataLoading
+          resources={value?.items}
+          error={value?.error}
+          loading={value?.loading}
+          title={t(structure.name)}
+          fixedPath
+        />
+      </Suspense>
     );
 
   const ListRenderer = PredefinedRenderer?.List || ResourcesList;
