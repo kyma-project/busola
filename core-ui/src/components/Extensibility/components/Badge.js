@@ -1,6 +1,5 @@
 import React from 'react';
 import { isNil } from 'lodash';
-import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { useJsonata } from '../hooks/useJsonata';
 
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
@@ -18,12 +17,14 @@ export function Badge({
   arrayItems,
 }) {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
-  const [tooltip] = useJsonata(structure?.description, {
+  const jsonata = useJsonata({
     resource: originalResource,
     scope,
     value,
     arrayItems,
   });
+
+  const [tooltip] = jsonata(structure?.description);
 
   let type = null;
   if (structure?.highlights) {
@@ -32,7 +33,7 @@ export function Badge({
         return rule.includes(value);
       } else {
         try {
-          return jsonataWrapper(rule).evaluate({ data: value });
+          return jsonata(rule);
         } catch (e) {
           console.warn(`invalid rule: ${rule}`, e);
           return null;

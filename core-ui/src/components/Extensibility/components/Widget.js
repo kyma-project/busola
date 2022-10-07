@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
-import { isNil, last } from 'lodash';
+import React from 'react';
+import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
@@ -32,7 +31,6 @@ export function InlineWidget({ children, value, structure, ...props }) {
 }
 
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
-  console.log('SingleWidget');
   const InlineRenderer = inlineRenderer || SimpleRenderer;
 
   return Renderer.inline && InlineRenderer ? (
@@ -78,44 +76,23 @@ export function Widget({
     scope: value,
     arrayItems,
   });
-  useEffect(() => {
-    console.log('jsonata function changed');
-  }, [jsonata]);
 
   const [childValue] = jsonata(structure.source);
-  // const [childValue] = useMemo(() => jsonata(structure.source, { value }), [jsonata, structure.source, value]);
-  // const [childValue] = useJsonata(structure.source, {
-  // resource: originalResource,
-  // scope: value,
-  // arrayItems,
-  // });
 
-  console.log('childValue for visibility', childValue);
-  const [visible, visibilityError] = jsonata(structure.visibility, {
-    value: childValue,
-  });
-  // const [visible, visibilityError] = useJsonata(
-  // structure.visibility,
-  // {
-  // resource: originalResource,
-  // scope: value,
-  // arrayItems,
-  // value: childValue,
-  // },
-  // true,
-  // );
-  console.log('visible?', visible, visibilityError);
+  const [visible, visibilityError] = jsonata(
+    structure.visibility,
+    {
+      value: childValue,
+    },
+    true,
+  );
 
   if (visibilityError) {
-    // return visible;
     return t('extensibility.configuration-error', {
       error: visibilityError.message,
     });
   }
   if (!visible) return null;
-
-  console.log('visible!');
-  // console.log('visible?', structure.visibility, visible);
 
   if (structure.valuePreprocessor) {
     const Preprocessor = valuePreprocessors[structure.valuePreprocessor];

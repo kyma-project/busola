@@ -66,7 +66,7 @@ export function useJsonata(
   */
 
   // TODO
-  return (query, defaultValue, extras = {}) => {
+  return (query, extras = {}, defaultValue = null) => {
     if (!query) {
       return [defaultValue, null];
     }

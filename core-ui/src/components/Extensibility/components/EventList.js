@@ -1,14 +1,27 @@
 import React from 'react';
+
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
-import { useGetTranslation } from '../helpers';
 import { EventList as EventListComponent } from 'resources/Events/EventList';
-import { useJsonataEvaluate } from './hooks/useJsonataEvaluate';
 
-export function EventList({ structure, originalResource }) {
+import { useGetTranslation } from '../helpers';
+import { useJsonata } from '../hooks/useJsonata';
+
+export function EventList({
+  structure,
+  originalResource,
+  scope,
+  value,
+  arrayItems,
+}) {
   const { namespaceId } = useMicrofrontendContext();
   const { widgetT } = useGetTranslation();
-  const jsonataFn = useJsonataEvaluate(originalResource);
+  const jsonata = useJsonata({
+    resource: originalResource,
+    scope,
+    value,
+    arrayItems,
+  });
 
   const renameDefaultType = defaultType => {
     switch ((defaultType || '').toLowerCase()) {
@@ -32,7 +45,7 @@ export function EventList({ structure, originalResource }) {
     if (!structure.filter) return true;
 
     try {
-      return !!jsonataFn(structure.filter, { item: res });
+      return !!jsonata(structure.filter, { scope: res });
     } catch (e) {
       return false;
     }

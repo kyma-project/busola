@@ -17,12 +17,13 @@ export const ExternalLink = ({
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   const { t } = useTranslation();
 
-  const [link, linkError] = useJsonata({
+  const jsonata = useJsonata({
     resource: originalResource,
     scope,
     value,
     arrayItems,
-  })(structure.link);
+  });
+  const [link, linkError] = jsonata(structure.link);
   if (linkError) return linkError.message;
 
   let href;

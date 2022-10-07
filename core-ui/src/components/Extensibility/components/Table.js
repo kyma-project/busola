@@ -6,11 +6,11 @@ import classNames from 'classnames';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
 import { sortBy, useGetTranslation, getTextSearchProperties } from '../helpers';
+import { useJsonata } from '../hooks/useJsonata';
 import { Widget, InlineWidget } from './Widget';
 import { getSearchDetails, getSortDetails } from './helpers';
 
 import './Table.scss';
-import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 const handleTableValue = (value, t) => {
   switch (true) {
@@ -37,11 +37,18 @@ export function Table({
   disableMargin,
   schema,
   originalResource,
+  scope,
   arrayItems,
   ...props
 }) {
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
+  const jsonata = useJsonata({
+    resource: originalResource,
+    scope,
+    value,
+    arrayItems,
+  });
 
   const coreHeaders = (structure.children || []).map(({ name }) => tExt(name));
   const headerRenderer = () =>
@@ -61,12 +68,10 @@ export function Table({
         (index + 1);
       if (structure.collapsibleTitle) {
         try {
-          const expression = jsonataWrapper(structure.collapsibleTitle);
-          expression.assign('index', index);
-          expression.assign('item', entry);
-          expression.assign('root', originalResource);
-
-          return expression.evaluate();
+          return jsonata(structure.collapsibleTitle, {
+            scope: entry,
+            arrayItems: [...arrayItems, entry],
+          });
         } catch (e) {
           console.warn(e);
           return defaultTitle;

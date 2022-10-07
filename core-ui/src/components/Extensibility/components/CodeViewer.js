@@ -23,16 +23,13 @@ export function CodeViewer({
 
   const notification = useNotification();
 
-  const [language] = useJsonata(
-    structure.language,
-    {
-      resource: originalResource,
-      scope,
-      value,
-      arrayItems,
-    },
-    detectLanguage(value),
-  );
+  const jsonata = useJsonata({
+    resource: originalResource,
+    scope,
+    value,
+    arrayItems,
+  });
+  const [language] = jsonata(structure.language, {}, detectLanguage(value));
 
   const getValue = (value, structure) => {
     if (!isNil(value)) {
