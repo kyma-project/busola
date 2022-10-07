@@ -24,6 +24,8 @@ Any parameters that are not handled by the widget are added to the schema direct
 
 If you target elements of an array rather than the array itself, you can use the `items[]` notation.
 
+todo info about overriding default fields
+
 ### Item parameters
 
 - **path** - _[required]_ path to the property that you want to display in the form.
@@ -275,6 +277,7 @@ KeyValuePair widgets render an `object` value as a list of fields. One is used f
   - **valueEnum[]** - an array of options to generate a value input field with a dropdown.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+- **defaultOpen** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
 #### Example
 
