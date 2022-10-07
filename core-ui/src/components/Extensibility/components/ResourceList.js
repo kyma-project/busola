@@ -36,7 +36,6 @@ export function ResourceList({
   const api = value?.apiVersion === 'v1' ? 'api' : 'apis';
   const resourceUrlPrefix = `/${api}/${value?.apiVersion}`;
   const resourceUrl = `${resourceUrlPrefix}${namespacePart}/${pluralKind}`;
-  console.log(value);
 
   const extensibilityResourceSchema = customResources.find(
     cR => cR.general?.resource?.kind === kind,
