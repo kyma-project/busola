@@ -42,20 +42,6 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   );
 }
 
-// export function shouldBeVisible(value, visibilityFormula, originalResource) {
-// // allow hidden to be set only explicitly
-// if (!visibilityFormula) return { visible: visibilityFormula !== false };
-
-// try {
-// const expression = jsonataWrapper(visibilityFormula);
-// expression.assign('root', originalResource);
-// return { visible: !!expression.evaluate({ data: value }) };
-// } catch (e) {
-// console.warn('Widget::shouldBeVisible error:', e);
-// return { visible: false, error: e };
-// }
-// }
-
 export function Widget({
   structure,
   value,
@@ -64,10 +50,6 @@ export function Widget({
   originalResource,
   ...props
 }) {
-  console.log('Widget', structure.name, structure.source, {
-    structure,
-    arrayItems,
-  });
   const { Plain, Text } = widgets;
   const { t } = useTranslation();
 

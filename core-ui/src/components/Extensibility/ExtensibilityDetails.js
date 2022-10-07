@@ -68,32 +68,28 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
       resourceTitle={resourceTitle}
       customColumns={
         Array.isArray(header)
-          ? header.map((def, i) => {
-              const headerItem = {
-                header: widgetT(def),
-                visibility: resource => {
-                  const [visible, error] = jsonata(
-                    def.visibility,
-                    { resource },
-                    true,
-                  );
-                  return { visible, error };
-                },
-                value: resource => (
-                  <Widget
-                    key={i}
-                    value={resource}
-                    structure={def}
-                    schema={schema}
-                    dataSources={dataSources}
-                    originalResource={resource}
-                    inlineContext={true}
-                  />
-                ),
-              };
-              console.log('header item', headerItem);
-              return headerItem;
-            })
+          ? header.map((def, i) => ({
+              header: widgetT(def),
+              visibility: resource => {
+                const [visible, error] = jsonata(
+                  def.visibility,
+                  { resource },
+                  true,
+                );
+                return { visible, error };
+              },
+              value: resource => (
+                <Widget
+                  key={i}
+                  value={resource}
+                  structure={def}
+                  schema={schema}
+                  dataSources={dataSources}
+                  originalResource={resource}
+                  inlineContext={true}
+                />
+              ),
+            }))
           : []
       }
       customComponents={
