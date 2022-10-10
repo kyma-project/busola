@@ -13,7 +13,6 @@ import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 export const SimpleRenderer = ({ children }) => {
   return children;
 };
-
 SimpleRenderer.copiable = true;
 
 export function InlineWidget({ children, value, structure, ...props }) {
@@ -33,7 +32,6 @@ export function InlineWidget({ children, value, structure, ...props }) {
     <LayoutPanelRow name={widgetT(structure)} value={displayValue} {...props} />
   );
 }
-
 InlineWidget.copiable = Renderer => Renderer?.copiable;
 InlineWidget.copyFunction = (props, Renderer, defaultCopyFunction) =>
   Renderer?.copyFunction
@@ -44,12 +42,12 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
 
   const CopiableWrapper = ({ children }) => {
-    const isRenderCopiable =
+    const isRendererCopiable =
       typeof Renderer.copiable === 'function'
         ? Renderer.copiable(Renderer)
         : Renderer.copiable;
 
-    if (!props.structure.copiable || !isRenderCopiable) return children;
+    if (!props.structure.copiable || !isRendererCopiable) return children;
 
     const defaultCopyFunction = ({ value }) =>
       typeof value === 'object' ? JSON.stringify(value) : value;
