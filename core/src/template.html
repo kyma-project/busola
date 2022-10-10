@@ -8,6 +8,34 @@
       name="viewport"
       content="width=device-width,  initial-scale=1, maximum-scale=1, minimum-scale=1"
     />
+    <style>
+      [luigi-app-root] {
+        height: 100vh;
+      }
+
+      #overlay,
+      #spinner {
+        position: fixed;
+        z-index: 1000;
+        visibility: hidden;
+      }
+
+      #overlay {
+        top: 0;
+
+        width: 100vw;
+        height: 100vh;
+
+        background: var(--sapBaseColor);
+        opacity: 0.2;
+      }
+
+      #spinner {
+        top: 50vh;
+        left: 50vw;
+        margin-top: -50px;
+      }
+    </style>
   </head>
 
   <body>
@@ -15,6 +43,18 @@
       <div class="fd-spinner">
         <div></div>
       </div>
+    </div>
+    <div luigi-app-root></div>
+    <div id="overlay"></div>
+    <div
+      class=" fd-busy-indicator--l"
+      aria-hidden="false"
+      aria-label="Loading"
+      id="spinner"
+    >
+      <div class="fd-busy-indicator--circle-0"></div>
+      <div class="fd-busy-indicator--circle-1"></div>
+      <div class="fd-busy-indicator--circle-2"></div>
     </div>
   </body>
 </html>

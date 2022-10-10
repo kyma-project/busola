@@ -26,6 +26,8 @@ context('Test resource upload', () => {
       .contains('Cluster Details')
       .click();
 
+    cy.wait(500);
+
     cy.getIframeBody()
       .contains('Upload YAML')
       .click();
