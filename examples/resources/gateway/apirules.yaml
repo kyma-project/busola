@@ -51,14 +51,54 @@ data:
               "name": "rules.path",
             },
             {
-              "source": "$map($item.accessStrategies, function($value) {$value.handler})",
-              "name": "accessStrategies.handlers",
-              "widget": "JoinedArray",
-            },
-            {
               "source": "$item.methods",
               "name": "rules.methods",
               "widget": "Badge",
+            }
+          ],
+          "collapsible": [
+            {
+              "source": "$item.accessStrategies",
+              "widget": "Table",
+              "disablePadding": true,
+              "name": "accessStrategies",
+              "children": [
+                {
+                  "source": "$item.handler",
+                  "name": "accessStrategies.handlers",
+                  "widget": "Badge",
+                },
+                {
+                  "source": "$item.config.required_scope",
+                  "name": "accessStrategies.required_scope",
+                },
+                {
+                  "source": "$item.config.jwks_urls",
+                  "name": "accessStrategies.jwks_urls",
+                },
+                {
+                  "source": "$item.config.trusted_issuers",
+                  "name": "accessStrategies.trusted_issuers",
+                }
+              ]
+            },
+            {
+              "source": "$item.mutators",
+              "widget": "Table",
+              "disablePadding": true,
+              "name": "mutators",
+              "visibility": "$exists($item.mutators)",
+              "children": [
+                {
+                  "source": "$item.handler",
+                  "name": "mutators.handlers",
+                  "widget": "Badge",
+                },
+                {
+                  "source": "$item.config",
+                  "name": "mutators.config",
+                },
+              ]
             },
           ],
         },
@@ -117,7 +157,13 @@ data:
     en:
       accessStrategies: Access Strategies
       accessStrategies.handlers: Handlers
+      accessStrategies.jwks_urls: JWKS Urls
+      accessStrategies.trusted_issuers: Trusted Issuers
+      accessStrategies.required_scope: Required Scope
       host: Host
+      mutators: Mutators
+      mutators.config: Config
+      mutators.handlers: Handlers
       rules: Rules
       rules.methods: Methods
       rules.path: Path
