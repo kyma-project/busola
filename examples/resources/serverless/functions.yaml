@@ -103,11 +103,11 @@ data:
                       "name": "code.env.valueFrom",
                       "widget": "ResourceLink",
                       "source": "$item.valueFrom",
-                      "linkText": "$exists(data.configMapKeyRef)? data.configMapKeyRef.name : data.secretKeyRef.name",
+                      "linkText": "$exists($item.valueFrom.configMapKeyRef)? $item.valueFrom.configMapKeyRef.name : $item.valueFrom.secretKeyRef.name",
                       "resource": {
-                        "name": "$exists(data.configMapKeyRef) ? data.configMapKeyRef.name : data.secretKeyRef.name",
-                        "namespace": "root.metadata.namespace",
-                        "kind": "$exists(data.configMapKeyRef)
+                        "name": "$exists($item.valueFrom.configMapKeyRef) ? $item.valueFrom.configMapKeyRef.name : $item.valueFrom.secretKeyRef.name",
+                        "namespace": "$root.metadata.namespace",
+                        "kind": "$exists($item.valueFrom.configMapKeyRef)
                         ? 'ConfigMap' 
                         : 'Secret'"
                       }
@@ -395,9 +395,9 @@ data:
         "group": "serverless.kyma-project.io",
         "version": "v1alpha2"
       },
-      "name": "Ext Functions",
-      "category": "Workloads",
-      "urlPath": "ext-functions",
+      "name": "DD Functions",
+      "category": "DD",
+      "urlPath": "dd-functions",
       "scope": "namespace",
       "description": "{{[Function](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/svls-01-function/#documentation-content/)}} is a simple code snippet that you can run without provisioning or managing servers."
     }
