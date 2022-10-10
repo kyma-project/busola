@@ -116,13 +116,18 @@ export function ExtensibilityCreateCore({
       defaultOpen: false,
     };
 
-    const nameField =
-      schemaRules.find(r => r.path === 'metadata.name') || defaultNameField;
-    const labelsField =
-      schemaRules.find(r => r.path === 'metadata.labels') || defaultLabelsField;
-    const annotationsField =
-      schemaRules.find(r => r.path === 'metadata.annotations') ||
-      defaultAnnotationsField;
+    const nameField = {
+      ...defaultNameField,
+      ...schemaRules.find(r => r.path === 'metadata.name'),
+    };
+    const labelsField = {
+      ...defaultLabelsField,
+      ...schemaRules.find(r => r.path === 'metadata.labels'),
+    };
+    const annotationsField = {
+      ...defaultAnnotationsField,
+      ...schemaRules.find(r => r.path === 'metadata.annotations'),
+    };
 
     return [
       nameField,
