@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import Immutable, { List } from 'immutable';
+import Immutable from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
@@ -90,50 +90,8 @@ export function ExtensibilityCreateCore({
     resource: api,
   });
 
-  const prepareRules = schemaRules => {
-    const PREDEFINED_PATHS = [
-      'metadata.name',
-      'metadata.labels',
-      'metadata.annotations',
-    ];
-
-    const defaultNameField = {
-      path: 'metadata.name',
-      simple: true,
-      widget: 'Name',
-      required: true,
-      inputInfo: t('common.tooltips.k8s-name-input'),
-      extraPaths: List(['metadata.labels["app.kubernetes.io/name"']),
-    };
-    const defaultLabelsField = {
-      path: 'metadata.labels',
-      widget: 'KeyValuePair',
-      defaultOpen: false,
-    };
-    const defaultAnnotationsField = {
-      path: 'metadata.annotations',
-      widget: 'KeyValuePair',
-      defaultOpen: false,
-    };
-
-    const nameField =
-      schemaRules.find(r => r.path === 'metadata.name') || defaultNameField;
-    const labelsField =
-      schemaRules.find(r => r.path === 'metadata.labels') || defaultLabelsField;
-    const annotationsField =
-      schemaRules.find(r => r.path === 'metadata.annotations') ||
-      defaultAnnotationsField;
-
-    return [
-      nameField,
-      labelsField,
-      annotationsField,
-      ...schemaRules.filter(r => !PREDEFINED_PATHS.includes(r.path)),
-    ];
-  };
-
   const { simpleRules, advancedRules } = useMemo(() => {
-    const fullSchemaRules = prepareRules(createResource?.form ?? []);
+    const fullSchemaRules = createResource?.form ?? [];
 
     prepareVars(fullSchemaRules);
     readVars(resource);
@@ -177,7 +135,6 @@ export function ExtensibilityCreateCore({
       initialResource={initialResource}
       afterCreatedFn={afterCreatedFn}
       handleNameChange={handleNameChange}
-      disableDefaultFields
     >
       <ResourceSchema
         simple

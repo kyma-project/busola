@@ -38,6 +38,7 @@ export function ResourceSchema({
   const schemaMap = useMemo(() => {
     let newSchema = schema;
     if (newSchema?.properties) {
+      delete newSchema.properties.metadata;
       newSchema = {
         ...newSchema,
         properties: { ...newSchema.properties },
