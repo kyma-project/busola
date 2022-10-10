@@ -30,6 +30,7 @@ export function NamespaceCreate({
   onCompleted,
   onError,
   setCustomValid,
+  handleSetResetFormFn,
   ...props
 }) {
   const { t } = useTranslation();
@@ -90,6 +91,23 @@ export function NamespaceCreate({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [namespace.metadata?.name]);
 
+  useEffect(() => {
+    const resetFunction = () => {
+      setLimits(createLimitRangeTemplate({}));
+
+      setMemory(createResourceQuotaTemplate({}));
+
+      setNamespace(
+        initialNamespace
+          ? cloneDeep(initialNamespace)
+          : createNamespaceTemplate(),
+      );
+    };
+
+    handleSetResetFormFn(() => resetFunction);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   async function afterNamespaceCreated() {
     if (!initialNamespace) {
       LuigiClient.linkManager().navigate(`${namespace.metadata?.name}/details`);
@@ -139,6 +157,7 @@ export function NamespaceCreate({
           <Editor
             value={limits}
             setValue={setLimits}
+            updateValueOnParentChange
             schemaId="v1/LimitRange"
           />
         </ResourceForm.CollapsibleSection>
@@ -150,6 +169,7 @@ export function NamespaceCreate({
           <Editor
             value={memory}
             setValue={setMemory}
+            updateValueOnParentChange
             schemaId="v1/ResourceQuota"
           />
         </ResourceForm.CollapsibleSection>
@@ -175,6 +195,7 @@ export function NamespaceCreate({
         lockedKeys: [ISTIO_INJECTION_LABEL],
         lockedValues: [ISTIO_INJECTION_LABEL],
       }}
+      handleSetResetFormFn={handleSetResetFormFn}
     >
       {isIstioFeatureOn ? (
         <ResourceForm.FormField
