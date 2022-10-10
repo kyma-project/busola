@@ -1,0 +1,126 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: apirules
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: apirules
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |-
+    {
+      "virtualServices":{
+        "resource": {
+          "kind": "VirtualService",
+            "group": "networking.istio.io",
+            "version": "v1beta1",
+            "namespace": null,
+        },
+        "filter": "$contains($item.metadata.ownerReferences[0].name, $root.metadata.name) and $contains($item.metadata.ownerReferences[0].kind, $root.kind)",
+      },
+    }
+  details: |
+    {
+      "header": [
+        { 
+          "name": "service-name",
+          "source": "spec.service",
+          "widget": "ResourceLink",
+          "linkText": "'{{data.name}} (port: {{data.port}})'",
+          "resource": {
+            "name": "data.name",
+            "namespace": "root.metadata.namespace",
+            "kind": "'Service'"
+          }
+        },
+        { 
+          "name": "host",
+          "source": "spec",
+          "widget": "APIRuleHost",
+        },
+      ],
+      "body": [
+        {
+          "source": "spec.rules",
+          "widget": "Table",
+          "name": "rules",
+          "children": [
+            {
+              "source": "$item.path",
+              "name": "rules.path",
+            },
+            {
+              "source": "$map($item.accessStrategies, function($value) {$value.handler})",
+              "name": "accessStrategies.handlers",
+              "widget": "JoinedArray",
+            },
+            {
+              "source": "$item.methods",
+              "name": "rules.methods",
+              "widget": "Badge",
+            },
+          ],
+        },
+        {
+          "widget": "ResourceList",
+          "source": "$virtualServices()",
+          "name": "virtualService",
+          "disableCreate": true
+        },
+      ],
+    }
+  general: |-
+    {
+      "resource": {
+        "kind": "apirules",
+        "group": "gateway.kyma-project.io",
+        "version": "v1beta1"
+      },
+      "urlPath": "ak-apirules",
+      "category": "AK",
+      "name": "AK API Rules",
+      "scope": "namespace",
+      "description": "{{[APIRule](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/apix-01-apirule/#documentation-content)}} allows for exposing a service externally."
+    }
+  list: |-
+    [
+      { 
+        "name": "host",
+        "source": "spec",
+        "widget": "APIRuleHost",
+      },
+      { 
+        "name": "service-name",
+        "source": "spec.service",
+        "widget": "ResourceLink",
+        "linkText": "'{{data.name}} (port: {{data.port}})'",
+        "resource": {
+          "name": "data.name",
+          "namespace": "root.metadata.namespace",
+          "kind": "'Service'"
+        }
+      },
+      {
+        "name": "status",
+        "widget": "Badge",
+        "highlights": {
+          "positive": ["OK"],
+          "negative": ["ERROR"],
+          "critical": ["SKIPPED"]
+        },
+        "source": "status.APIRuleStatus.code ? status.APIRuleStatus.code : 'UNKNOWN'",
+        "description": "status.APIRuleStatus.desc"
+      }
+    ]
+  translations: |
+    en:
+      accessStrategies: Access Strategies
+      accessStrategies.handlers: Handlers
+      host: Host
+      rules: Rules
+      rules.methods: Methods
+      rules.path: Path
+      service-name: Service Name
+      status: Status
+      virtualService: Virtual Service
