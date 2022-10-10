@@ -15,11 +15,7 @@ export function NameRenderer({
   required,
 }) {
   const { t: tExt } = useGetTranslation();
-  const schemaExtraPaths = schema.get('extraPaths');
-  const extraPaths =
-    (Array.isArray(schemaExtraPaths)
-      ? schemaExtraPaths
-      : schemaExtraPaths?.toJS()) || [];
+  const extraPaths = schema.get('extraPaths') || [];
 
   return (
     <K8sNameField

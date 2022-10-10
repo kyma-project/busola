@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import Immutable, { List } from 'immutable';
+import Immutable from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
@@ -103,7 +103,7 @@ export function ExtensibilityCreateCore({
       widget: 'Name',
       required: true,
       inputInfo: t('common.tooltips.k8s-name-input'),
-      extraPaths: List(['metadata.labels["app.kubernetes.io/name"]']),
+      extraPaths: ['metadata.labels["app.kubernetes.io/name"]'],
     };
     const defaultLabelsField = {
       path: 'metadata.labels',
