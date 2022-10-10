@@ -12,7 +12,7 @@ import {
   getStaticChildrenNodesForNamespace,
   getStaticRootNodes,
 } from './static-navigation-model';
-import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
+import { hasAnyRoleBound } from './permissions';
 import {
   getCustomResources,
   getExtensibilitySchemas,
@@ -48,6 +48,7 @@ import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/pagination';
 import { getFeatures, initFeatures } from '../feature-discovery';
 import * as fetchCache from './../cache/fetch-cache';
 import { handleKubeconfigIdIfPresent } from './../kubeconfig-id';
+import { clusterOpenApi } from './clusterOpenApi';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -268,8 +269,6 @@ export async function createNavigation() {
 
     return {
       preloadViewGroups: false,
-      nodeAccessibilityResolver: node =>
-        navigationPermissionChecker(node, permissionSet),
       appSwitcher: await createAppSwitcher(),
       ...optionsForCurrentCluster,
       nodes: await createNavigationNodes({
@@ -363,7 +362,6 @@ export async function createNavigationNodes({
   const createClusterNodes = async () => {
     const staticNodes = getStaticRootNodes(
       getChildrenNodesForNamespace,
-      groupVersions,
       permissionSet,
       features,
       customResources,
@@ -439,6 +437,7 @@ export async function createNavigationNodes({
         },
         clusterNodes: simplifyNodes(clusterNodes),
         namespaceNodes: simplifyNodes(namespaceNodes),
+        openApi: clusterOpenApi.getOpenApi,
       },
     },
   ];
@@ -478,7 +477,6 @@ async function getNamespaces() {
 }
 
 async function getChildrenNodesForNamespace(
-  groupVersions,
   permissionSet,
   features,
   customResources,
@@ -486,7 +484,6 @@ async function getChildrenNodesForNamespace(
   const disabledNodes = getDisabledNodes(features);
 
   const staticNodes = getStaticChildrenNodesForNamespace(
-    groupVersions,
     permissionSet,
     features,
     customResources,

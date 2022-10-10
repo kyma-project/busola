@@ -6,9 +6,11 @@ import {
   getActiveClusterName,
   getClusters,
 } from './../cluster-management/cluster-management';
-import { hasPermissionsFor, hasWildcardPermission } from './permissions';
+import { doesUserHavePermission } from './permissions';
 import { getCustomPaths } from './customPaths';
 import { mergeInExtensibilityNav } from './mergeInExtensibilityNav';
+
+import { excludeNavigationNode } from './excludeNavigationNode';
 
 export const coreUIViewGroupName = '_core_ui_';
 
@@ -52,7 +54,6 @@ async function downloadKubeconfig() {
 }
 
 export function getStaticChildrenNodesForNamespace(
-  groupVersions,
   permissionSet,
   features,
   customResources,
@@ -65,9 +66,11 @@ export function getStaticChildrenNodesForNamespace(
       link: `/cluster/${encodedClusterName}/overview`,
       label: i18next.t('clusters.overview.back'),
       icon: 'nav-back',
-      hideFromNav: !hasPermissionsFor('', 'namespaces', permissionSet, [
-        'list',
-      ]),
+      hideFromNav: !doesUserHavePermission(
+        ['get', 'list'],
+        { resourceGroupAndVersion: 'v1', resourceKind: 'namespace' },
+        permissionSet,
+      ),
     },
     {
       pathSegment: 'details',
@@ -545,7 +548,7 @@ export function getStaticChildrenNodesForNamespace(
     {
       category: i18next.t('discovery-and-network.title'),
       pathSegment: 'horizontalpodautoscalers',
-      resourceType: 'hpas',
+      resourceType: 'horizontalpodautoscalers',
       navigationContext: 'horizontalpodautoscalers',
       label: i18next.t('hpas.title'),
       viewUrl:
@@ -563,7 +566,7 @@ export function getStaticChildrenNodesForNamespace(
           children: [
             {
               pathSegment: ':horizontalPodAutoscalersName',
-              resourceType: 'hpas',
+              resourceType: 'horizontalpodautoscalers',
               viewUrl:
                 config.coreUIModuleUrl +
                 '/namespaces/:namespaceId/horizontalpodautoscalers/:horizontalPodAutoscalersName?' +
@@ -1454,7 +1457,7 @@ export function getStaticChildrenNodesForNamespace(
       viewGroup: coreUIViewGroupName,
       context: {
         requiredGroupResource: {
-          group: 'apiextensions.k8s.io',
+          group: 'apiextensions.k8s.io/v1',
           resource: 'customresourcedefinitions',
         },
       },
@@ -1481,12 +1484,12 @@ export function getStaticChildrenNodesForNamespace(
   ];
 
   const allNodes = mergeInExtensibilityNav(nodes, customPaths);
-  return filterNodesByAvailablePaths(allNodes, groupVersions, permissionSet);
+
+  return filterNodesByAvailablePaths(allNodes, permissionSet);
 }
 
 export function getStaticRootNodes(
   namespaceChildrenNodesResolver,
-  groupVersions,
   permissionSet,
   features,
   customResources,
@@ -1539,7 +1542,6 @@ export function getStaticRootNodes(
           keepSelectedForChildren: false,
           children: async () =>
             await namespaceChildrenNodesResolver(
-              groupVersions,
               permissionSet,
               features,
               customResources,
@@ -1866,7 +1868,7 @@ export function getStaticRootNodes(
       viewGroup: coreUIViewGroupName,
       context: {
         requiredGroupResource: {
-          group: 'apiextensions.k8s.io',
+          group: 'apiextensions.k8s.io/v1',
           resource: 'customresourcedefinitions',
         },
       },
@@ -1935,71 +1937,16 @@ export function getStaticRootNodes(
 
   const allNodes = mergeInExtensibilityNav(nodes, customPaths);
 
-  return filterNodesByAvailablePaths(allNodes, groupVersions, permissionSet);
+  return filterNodesByAvailablePaths(allNodes, permissionSet);
 }
 
-function extractApiGroup(apiPath) {
-  if (apiPath === '/api/v1') {
-    return ''; // core api group
-  }
-  return apiPath.split('/')[2];
-}
-
-function filterNodesByAvailablePaths(nodes, groupVersions, permissionSet) {
+function filterNodesByAvailablePaths(nodes, permissionSet) {
   for (const node of nodes) {
     if (typeof node.children === 'object') {
-      node.children = filterNodesByAvailablePaths(
-        node.children,
-        groupVersions,
-        permissionSet,
-      );
+      node.children = filterNodesByAvailablePaths(node.children, permissionSet);
     }
-
-    checkSingleNode(node, groupVersions, permissionSet);
+    excludeNavigationNode(node, permissionSet);
   }
 
   return nodes.filter(n => !n.toDelete);
-}
-
-function checkSingleNode(node, groupVersions, permissionSet) {
-  if (node.context?.requiredFeatures) {
-    for (const feature of node.context.requiredFeatures || []) {
-      if (!feature || feature.isEnabled === false) {
-        node.toDelete = true;
-        return;
-      }
-    }
-  }
-
-  if (!node.viewUrl || !node.resourceType) {
-    // used for Custom Resources node
-    if (node.context?.requiredGroupResource) {
-      const { group, resource } = node.context.requiredGroupResource;
-      if (!hasPermissionsFor(group, resource, permissionSet)) {
-        node.toDelete = true;
-      }
-    }
-    return;
-  }
-  const apiPath = new URL(node.viewUrl).searchParams.get('resourceApiPath');
-  if (!apiPath) return;
-
-  if (hasWildcardPermission(permissionSet)) {
-    // we have '*' in permissions, just check if this resource exists
-    const groupVersion = apiPath
-      .replace(/^\/apis\//, '')
-      .replace(/^\/api\//, '');
-
-    if (!groupVersions.find(g => g.includes(groupVersion))) {
-      node.toDelete = true;
-      return;
-    }
-  } else {
-    // we need to filter through permissions to check the node availability
-    const apiGroup = extractApiGroup(apiPath);
-    if (!hasPermissionsFor(apiGroup, node.resourceType, permissionSet)) {
-      node.toDelete = true;
-      return;
-    }
-  }
 }

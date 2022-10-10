@@ -13,6 +13,8 @@ context('Test Cluster Overview', () => {
       .contains('Cluster Details')
       .click();
 
+    cy.wait(500);
+
     cy.getIframeBody()
       .contains('h3', 'Cluster Details')
       .should('be.visible');
