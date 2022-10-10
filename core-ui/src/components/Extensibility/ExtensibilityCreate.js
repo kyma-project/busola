@@ -103,7 +103,7 @@ export function ExtensibilityCreateCore({
       widget: 'Name',
       required: true,
       inputInfo: t('common.tooltips.k8s-name-input'),
-      extraPaths: List(['metadata.labels["app.kubernetes.io/name"']),
+      extraPaths: List(['metadata.labels["app.kubernetes.io/name"]']),
     };
     const defaultLabelsField = {
       path: 'metadata.labels',
