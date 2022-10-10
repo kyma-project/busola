@@ -1,6 +1,5 @@
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useEffect, useRef, useState } from 'react';
-import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import {
   sendWorkerMessage,
   addWorkerListener,
@@ -9,8 +8,7 @@ import {
 } from './resourceSchemaWorkerApi';
 
 export const useResourceSchemas = () => {
-  const fetch = useSingleGet();
-  const { activeClusterName, authData } = useMicrofrontendContext();
+  const { activeClusterName, authData, openApi } = useMicrofrontendContext();
   const [areSchemasComputed, setAreSchemasComputed] = useState(false);
   const [schemasError, setSchemasError] = useState(null);
   const lastFetched = useRef();
@@ -27,15 +25,7 @@ export const useResourceSchemas = () => {
     if (lastFetched.current === activeClusterName) return;
     lastFetched.current = activeClusterName;
 
-    fetch('/openapi/v2')
-      .then(res => res.json())
-      .then(data => {
-        sendWorkerMessage('sendingOpenapi', data, activeClusterName);
-      })
-      .catch(err => {
-        setSchemasError('unable to fetch /openapi/v2');
-        console.error(err);
-      });
+    sendWorkerMessage('sendingOpenapi', openApi, activeClusterName);
 
     addWorkerListener('computedToJSON', () => {
       setAreSchemasComputed(true);
@@ -53,7 +43,7 @@ export const useResourceSchemas = () => {
 
     // fetch not included
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeClusterName, setAreSchemasComputed, authData]);
+  }, [activeClusterName, setAreSchemasComputed, authData, openApi]);
 
   useEffect(() => {
     return () => {

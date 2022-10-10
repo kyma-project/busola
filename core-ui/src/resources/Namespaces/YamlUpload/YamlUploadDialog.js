@@ -21,6 +21,7 @@ export const OPERATION_STATE_SOME_FAILED = 'SOME_FAILED';
 export function YamlUploadDialog({ show, onCancel }) {
   const { t } = useTranslation();
   const { namespaceId } = useMicrofrontendContext();
+  const [isValidationOn, setValidationOn] = useState(true);
   const defaultNamespace = namespaceId || 'default';
 
   const [resourcesData, setResourcesData] = useState();
@@ -29,6 +30,7 @@ export function YamlUploadDialog({ show, onCancel }) {
   const [lastOperationState, setLastOperationState] = useState(
     OPERATION_STATE_INITIAL,
   );
+
   const fetchResources = useUploadResources(
     resourcesWithStatuses,
     setResourcesWithStatuses,
@@ -101,9 +103,13 @@ export function YamlUploadDialog({ show, onCancel }) {
             setResourcesData={updateYamlContent}
             setLastOperationState={setLastOperationState}
           />
-          <div className="fd-margin-begin--tiny fd-margin-end--tiny">
-            {t('upload-yaml.info', { namespace: defaultNamespace })}
+          <div>
+            <p className="fd-margin-begin--tiny" style={{ minHeight: '80px' }}>
+              {t('upload-yaml.info', { namespace: defaultNamespace })}
+            </p>
             <YamlResourcesList
+              handleResourceValidation={() => setValidationOn(prev => !prev)}
+              isValidationOn={isValidationOn}
               resourcesData={resourcesWithStatuses}
               namespace={namespaceId}
             />

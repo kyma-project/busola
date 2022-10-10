@@ -1,62 +1,6 @@
-import rbacRulesMatched from './rbac-rules-matcher';
 import _ from 'lodash';
 import pluralize from 'pluralize';
-
-export function navigationPermissionChecker(
-  nodeToCheckPermissionsFor,
-  selfSubjectRulesReview,
-) {
-  const noRulesApplied =
-    !Array.isArray(nodeToCheckPermissionsFor.requiredPermissions) ||
-    !nodeToCheckPermissionsFor.requiredPermissions.length;
-
-  return (
-    noRulesApplied ||
-    rbacRulesMatched(
-      nodeToCheckPermissionsFor.requiredPermissions,
-      selfSubjectRulesReview,
-    )
-  );
-}
-
-export function hasWildcardPermission(permissionSet) {
-  return !!permissionSet.find(
-    rule =>
-      rule.apiGroups[0] === '*' &&
-      rule.resources[0] === '*' &&
-      rule.verbs[0] === '*',
-  );
-}
-
-export function hasPermissionsFor(
-  apiGroup,
-  resourceType,
-  groupVersions,
-  verbs = [],
-) {
-  const permissionsForApiGroup = groupVersions.filter(
-    p => p.apiGroups.includes(apiGroup) || p.apiGroups[0] === '*',
-  );
-  const matchingPermission = permissionsForApiGroup.find(p =>
-    p.resources.includes(pluralize(resourceType)),
-  );
-  const wildcardPermission = permissionsForApiGroup.find(
-    p => p.resources[0] === '*',
-  );
-
-  for (const verb of verbs) {
-    if (
-      !matchingPermission?.verbs.includes(verb) &&
-      !wildcardPermission?.verbs.includes(verb) &&
-      matchingPermission?.verbs[0] !== '*' &&
-      wildcardPermission?.verbs[0] !== '*'
-    ) {
-      return false;
-    }
-  }
-
-  return !!matchingPermission || !!wildcardPermission;
-}
+import { clusterOpenApi } from './clusterOpenApi';
 
 export function hasAnyRoleBound(permissionSet) {
   const ssrr = {
@@ -86,3 +30,57 @@ export function hasAnyRoleBound(permissionSet) {
 
   return verbs.some(v => usefulVerbs.includes(v));
 }
+
+export const doesResourceExist = ({
+  resourceGroupAndVersion,
+  resourceKind,
+}) => {
+  const resourceIdList = clusterOpenApi.getResourcePathIdList;
+  const resourceNamePlural = pluralize(resourceKind);
+
+  const resourcePathId = `/${
+    resourceGroupAndVersion === 'v1' ? 'api' : 'apis'
+  }/${resourceGroupAndVersion}/${resourceNamePlural}`.toLowerCase();
+
+  const doesExist = !!resourceIdList.includes(resourcePathId);
+
+  return doesExist;
+};
+
+export const doesUserHavePermission = (
+  permissions = ['get', 'list'],
+  resource = { resourceGroupAndVersion: '', resourceKind: '' },
+  permissionSet,
+) => {
+  let { resourceGroupAndVersion, resourceKind } = resource;
+
+  const resourceKindPlural = pluralize(resourceKind);
+  const resourceGroup = getResourceGroup(resourceGroupAndVersion);
+
+  const isPermitted = permissionSet.find(set => {
+    const isSameApiGroup =
+      set.apiGroups?.includes(resourceGroup) || set.apiGroups?.includes('*');
+
+    const isSameResourceKind =
+      set.resources?.includes(resourceKindPlural) ||
+      set.resources?.includes('*');
+
+    // creates a regex such as '^\*$|^VERB1$|^VERB2' etc.
+    const permissionRegex = new RegExp(
+      `^\\*$|${permissions.map(verb => '^' + verb + '$').join('|')}`,
+    );
+    const areSufficientPermissions = set.verbs?.some(verb => {
+      return permissionRegex.test(verb);
+    });
+
+    return isSameApiGroup && isSameResourceKind && areSufficientPermissions;
+  });
+
+  return !!isPermitted;
+};
+
+const getResourceGroup = resourceGroupAndVersion => {
+  // native resources don't have resourceGroup
+  if (resourceGroupAndVersion === 'v1') return '';
+  return resourceGroupAndVersion.split('/')[0];
+};

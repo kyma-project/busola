@@ -1,105 +1,125 @@
-import { hasPermissionsFor } from './../permissions';
+import { doesResourceExist, doesUserHavePermission } from './../permissions';
 
-describe('hasPermissionsFor', () => {
-  test('true for exact group & resource', () => {
-    const exactPermissions = {
-      apiGroups: ['exact-group-name'],
-      resources: ['exact-resources'],
-    };
+const resourceNameList = [
+  '/api/v1/pods',
+  '/api/v1/namespaces/{namespace}/secrets/{name}',
+  '/apis/rbac.authorization.k8s.io/v1/clusterroles',
+];
+
+jest.mock('../clusterOpenApi', () => ({
+  clusterOpenApi: {
+    getResourcePathIdList: resourceNameList,
+  },
+}));
+
+describe('doesResourceExist', () => {
+  test('if it returns correct values', () => {
     expect(
-      hasPermissionsFor('exact-group-name', 'exact-resources', [
-        exactPermissions,
-      ]),
+      doesResourceExist({ resourceGroupAndVersion: 'v1', resourceKind: 'pod' }),
     ).toBe(true);
-  });
 
-  test('true for matching group and wildcard resource', () => {
-    const wildcardResourcesPermissions = {
-      apiGroups: ['api-group'],
+    expect(
+      doesResourceExist({
+        resourceGroupAndVersion: 'v1',
+        resourceKind: 'pods',
+      }),
+    ).toBe(true);
+
+    expect(
+      doesResourceExist({
+        resourceGroupAndVersion: 'rbac.authorization.k8s.io/v1',
+        resourceKind: 'clusterroles',
+      }),
+    ).toBe(true);
+
+    expect(
+      doesResourceExist({
+        resourceGroupAndVersion: 'v1',
+        resourceKind: 'secrets',
+      }),
+    ).toBe(false);
+  });
+});
+
+const crd = {
+  resourceGroupAndVersion: 'apiextensions.k8s.io/v1',
+  resourceKind: 'customresourcedefinitions',
+};
+const deployment = {
+  resourceGroupAndVersion: 'apps/v1',
+  resourceKind: 'deployments',
+};
+
+const pod = {
+  resourceGroupAndVersion: 'v1',
+  resourceKind: 'pods',
+};
+
+const pizza = {
+  resourceGroupAndVersion: 'busola.example.com/v1',
+  resourceKind: 'pizzas',
+};
+
+describe('doesUserHavePermission', () => {
+  test('checks wildcard permissions', () => {
+    const wildcardPermissions = {
+      verbs: ['*'],
+      apiGroups: ['*'],
       resources: ['*'],
     };
+
     expect(
-      hasPermissionsFor('api-group', 'exact-resource', [
-        wildcardResourcesPermissions,
-      ]),
+      doesUserHavePermission(['get', 'list'], crd, [wildcardPermissions]),
     ).toBe(true);
+
+    expect(
+      doesUserHavePermission(['watch'], deployment, [wildcardPermissions]),
+    ).toBe(true);
+
+    //checks for '*' permissions
+    expect(doesUserHavePermission([], pizza, [wildcardPermissions])).toBe(true);
   });
 
-  test('true for matching resource and wildcard group', () => {
-    const wildcardApiGroupPermissions = {
-      apiGroups: ['*'],
-      resources: ['resources'],
+  test('checks selected resources permissions', () => {
+    const selectedResourcesPermissions = {
+      verbs: ['*'],
+      apiGroups: ['apiextensions.k8s.io', 'apps', ''], // '' is the apiGroup for native resources
+      resources: ['customresourcedefinitions', 'deployments', 'pods'],
     };
+
     expect(
-      hasPermissionsFor('api-group', 'resources', [
-        wildcardApiGroupPermissions,
+      doesUserHavePermission(['get', 'list'], crd, [
+        selectedResourcesPermissions,
       ]),
     ).toBe(true);
-  });
 
-  test('false if match is not found', () => {
-    const permissionSet = [
-      {
-        apiGroups: ['*'],
-        resources: ['resource-1', 'resource-2'],
-      },
-      {
-        apiGroups: ['group'],
-        resources: ['*'],
-      },
-      {
-        apiGroups: ['resource-3'],
-        resources: ['group'],
-      },
-    ];
-    expect(hasPermissionsFor('api-group', 'resources', permissionSet)).toBe(
-      false,
-    );
-  });
-
-  test('false if required verb is not found', () => {
-    const permissionSet = [
-      {
-        apiGroups: ['*'],
-        resources: ['*'],
-        verbs: ['add', 'remove'],
-      },
-    ];
     expect(
-      hasPermissionsFor('api-group', 'resources', permissionSet, [
-        'add',
-        'remove',
-        'cancel',
+      doesUserHavePermission(['create', 'get'], pizza, [
+        selectedResourcesPermissions,
       ]),
     ).toBe(false);
-  });
 
-  test('true for wildcard verb', () => {
-    const permissionSet = [
-      {
-        apiGroups: ['*'],
-        resources: ['*'],
-        verbs: ['*'],
-      },
-    ];
     expect(
-      hasPermissionsFor('api-group', 'resources', permissionSet, [
-        'add',
-        'remove',
-      ]),
+      doesUserHavePermission(['list'], pod, [selectedResourcesPermissions]),
     ).toBe(true);
   });
+  test('checks selected verbs permissions', () => {
+    const selectedVerbsPermissions = {
+      verbs: ['list'],
+      apiGroups: ['*'],
+      resources: ['*'],
+    };
 
-  test('false if all required verb is not found', () => {
-    const permissionSet = [
-      {
-        apiGroups: ['*'],
-        resources: ['*'],
-        verbs: ['tets'],
-      },
-    ];
     expect(
-      hasPermissionsFor('api-group', 'resources', permissionSet, ['add']),
+      doesUserHavePermission(['get'], crd, [selectedVerbsPermissions]),
     ).toBe(false);
+
+    expect(
+      doesUserHavePermission(['create'], crd, [selectedVerbsPermissions]),
+    ).toBe(false);
+
+    expect(
+      doesUserHavePermission(['list'], crd, [selectedVerbsPermissions]),
+    ).toBe(true);
   });
 });

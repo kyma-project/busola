@@ -9,7 +9,7 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
   const [order, setOrder] = useState(sort.order);
   const [name, setName] = useState(sort.name);
 
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const sortOpeningComponent = (
     <Tooltip content={t('common.tooltips.sort')}>
@@ -69,7 +69,9 @@ export const SortModalPanel = ({ sortBy, sort, setSort, disabled = false }) => {
                 checked={name === value}
                 inputProps={{ onChange: () => {} }}
               >
-                {t(`common.sorting.${value}`, { defaultValue: value })}
+                {i18n.exists(`common.sorting.${value}`)
+                  ? t(`common.sorting.${value}`)
+                  : value}
               </FormRadioItem>
             );
           })}
