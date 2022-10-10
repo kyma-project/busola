@@ -32,6 +32,7 @@ export function SimpleList({
   const schemaRequired = schema.get('required');
   const inputInfo = schema.get('inputInfo');
   const tooltipContent = schema.get('description');
+  const defaultOpen = schema.get('defaultOpen');
 
   const removeItem = index => {
     onChange({
@@ -61,6 +62,7 @@ export function SimpleList({
 
   return (
     <ResourceForm.CollapsibleSection
+      defaultOpen={defaultOpen}
       container
       title={tFromStoreKeys(storeKeys, schema)}
       required={schemaRequired ?? required}

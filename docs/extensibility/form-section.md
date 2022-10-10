@@ -222,6 +222,7 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
 - **language** - a JSONata expression resolving the desired language. It has access to the `$root` variable, containing the entire resource.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+- **defaultOpen** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
 #### Example
 
@@ -325,6 +326,7 @@ ResourceRef widgets render two dropdowns to select the associated resources' nam
 - **provideVar** - When this field is defined, the chosen resource will be provided as a variable of this name.
 - **toInternal** - A JSONata function to convert from the stored value to the `{name, namespace}` format. Useful, for example, when the data is stored as a string.
 - **toExternal** - A corresponding function to convert back to store.
+- **defaultOpen** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
 #### Example
 
@@ -365,6 +367,7 @@ FormGroup widgets render an `object` as a collapsible section.
 #### Widget-specific parameters
 
 - **columns** - number of columns the content is rendered in. Defaults to 1.
+- **defaultOpen** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
 #### Example
 
@@ -385,6 +388,7 @@ GenericList widgets render an array as a list of collapsible sections with their
 #### Widget-specific parameters
 
 - **placeholder** - specifies a short hint about the input field value.
+- **defaultOpen** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
 #### Example
 
@@ -409,8 +413,8 @@ SimpleList widgets render an array as a table with rows representing data items 
 - **placeholder** - specifies a short hint about the input field value.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
-
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+- **defaultOpen** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
 #### Example
 

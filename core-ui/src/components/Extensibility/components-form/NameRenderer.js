@@ -13,10 +13,13 @@ export function NameRenderer({
   onChange,
   schema,
   required,
-  ...props
 }) {
   const { t: tExt } = useGetTranslation();
-  const extraPaths = schema.get('extraPaths')?.toJS() || [];
+  const schemaExtraPaths = schema.get('extraPaths');
+  const extraPaths =
+    (Array.isArray(schemaExtraPaths)
+      ? schemaExtraPaths
+      : schemaExtraPaths?.toJS()) || [];
 
   return (
     <K8sNameField
