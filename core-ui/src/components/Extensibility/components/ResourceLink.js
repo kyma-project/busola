@@ -28,7 +28,7 @@ export function ResourceLink({ value, structure, originalResource }) {
   const { t: tExt } = useGetTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
 
-  if (!value || !value?.length) {
+  if (!value) {
     return emptyLeafPlaceholder;
   }
 
@@ -50,7 +50,7 @@ export function ResourceLink({ value, structure, originalResource }) {
     : '';
 
   const linkContent = tExt(linkText, {
-    data: value,
+    data: linkData?.name || value,
     root: originalResource,
     defaultValue: linkText || linkData?.name,
   });

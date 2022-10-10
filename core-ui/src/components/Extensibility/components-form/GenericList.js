@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 import pluralize from 'pluralize';
+import { fromJS } from 'immutable';
 
 export function GenericList({
   storeKeys,
@@ -24,14 +25,16 @@ export function GenericList({
   const { value } = store?.extractValues(storeKeys) || {};
   const listSize = value?.size || 0;
   const schemaPlaceholder = schema.get('placeholder');
+  const itemTemplate = schema.get('template') || {};
 
-  const addItem = () => {
+  const addItem = itemTemplate => {
     onChange({
       storeKeys,
       scopes: ['value', 'internal'],
       type: 'list-item-add',
       schema,
       required,
+      itemValue: fromJS(itemTemplate),
     });
   };
 
@@ -57,7 +60,7 @@ export function GenericList({
           glyph="add"
           iconBeforeText
           onClick={() => {
-            addItem();
+            addItem(itemTemplate);
             setOpen(true);
           }}
           disabled={readOnly}

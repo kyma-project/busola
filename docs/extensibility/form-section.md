@@ -367,6 +367,7 @@ GenericList widgets render an array as a list of collapsible sections with their
 #### Widget-specific parameters
 
 - **placeholder** - specifies a short hint about the input field value.
+- **template** - specifies default structure for item.
 
 #### Example
 
@@ -376,6 +377,21 @@ GenericList widgets render an array as a list of collapsible sections with their
   children:
     - path: '[].host'
     - path: '[].port'
+
+ - widget: GenericList
+   path: spec.filter.filters
+   children:
+     - path: '[].eventType.value'
+       placeholder: placeholder.eventType
+     - path: '[].eventSource.value'
+   template:
+     eventSource:
+     property: source
+       type: exact
+       value: ''
+     eventType:
+       property: type
+       type: exact
 ```
 
 <img src="./assets/form-widgets/GenericList.png" alt="Example of a GenericList widget" style="border: 1px solid #D2D5D9">

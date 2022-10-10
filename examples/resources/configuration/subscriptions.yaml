@@ -20,85 +20,118 @@ data:
     urlPath: cherry-subscriptions
   details: |-
     header: 
-      - name: Status
+      - name: status.conditions.status
         source: 'status.ready = false ? "error" : "ready"'
         widget: Badge
         description: status.conditions.message
-      - name: Sink
+      - name: spec.sink
         source: spec.sink
-      - source: '$substringBefore($substring(spec.sink, 7), ".")'
-        widget: ControlledBy
+      - source: spec.sink
+        widget: ResourceLink
+        name: spec.sink.controlledBy
+        linkText: "'spec.sink.link'"
+        resource:
+          name: '$substringBefore($substringAfter(data, "http://"), ".")'
+          namespace: root.metadata.namespace
+          kind: "'Service'"
     body: 
       - source: status.conditions
         widget: Table
-        name: Condidtions
+        name: status.conditions
         children:
           - source: 'status.ready = false ? "error" : "ready"'
-            name: Type
+            name: status.type
             widget: Badge
             description: status.conditions.message
           - source: '$item.status'
-            name: Status
+            name: status.conditions.status
           - source: '$item.reason'
-            name: Reason
+            name: status.conditions.reason
           - source: '$readableTimestamp($item.lastTransitionTime)'
-            name: Last Transition
+            name: status.conditions.lastTransitionTime
       - source: spec.filter.filters
         widget: Table
-        name: Filters
+        name: spec.filters
         disablePadding: true
         showHeader: false
         collapsibleTitle: '"Filter #" & $string($index + 1) & " " & ($item.eventType.value)'
         collapsible:
-          - source: '$parent.eventType'
-            widget: Panel
-            name: Event Type
+          - widget: Columns
             children:
-              - source: '$parent.property'
-                name: Property
-              - source: '$parent.type'
-                name: Type
-              - source: '$parent.value'
-                name: Value
-          - source: '$parent.eventSource'
-            widget: Panel
-            name: Event Source
-            children:
-              - source: '$parent.property'
-                name: Property
-              - source: '$parent.type'
-                name: Type
-              - source: '$parent.value = "" ? "Handled by the NATS backend" : $parent.value'
-                name: Value
+              - source: '$item.eventType'
+                widget: Panel
+                name: spec.filter.eventType
+                children:
+                  - source: '$parent.property'
+                    name: spec.filter.event.property
+                  - source: '$parent.type'
+                    name: spec.filter.event.type
+                  - source: '$parent.value'
+                    name: spec.filter.event.value
+              - source: '$item.eventSource'
+                widget: Panel
+                name: spec.filter.eventSource
+                children:
+                  - source: '$parent.property'
+                    name: spec.filter.event.property
+                  - source: '$parent.type'
+                    name: spec.filter.event.type
+                  - source: '$parent.value = "" ? "Handled by the NATS backend" : $parent.value'
+                    name: spec.filter.event.value
       - widget: EventList
         filter: '$matchEvents($item, $root.kind, $root.metadata.name)'
-        name: Events
+        name: events
         defaultType: NORMAL
         hideInvolvedObjects: true
-      - source: spec
-        widget: CodeViewer
   form: |-
-    - simple: true
-      path: spec.sink
-      name: Sink
+    - path: spec.sink
+      name: spec.sink
       required: true
-    - simple: true
-      path: spec.filter.filters[].eventType.value
-      name: Event Type
-      placeholder: placeholder.eventType
-      required: true
-    - simple: true
-      path: spec.filter.filters[].eventSource.value
-      name: Event Source
-      required: false
+      simple: true
+    - widget: GenericList
+      path: spec.filter.filters
+      simple: true
+      children:
+        - path: '[].eventType.value'
+          name: spec.filter.eventType
+          placeholder: placeholder.eventType
+          required: true
+        - path: '[].eventSource.value'
+          name: spec.filter.eventSource
+          required: false
+      template:
+        eventSource:
+          property: source
+          type: exact
+          value: ''
+        eventType:
+          property: type
+          type: exact
+          value: sap.kyma.custom.APPNAME.EVENTNAME.EVENTNAME.EVENTVERSION
   list: |-
-    - name: Status
+    - name: status.conditions.status
       source: 'status.ready = false ? "error" : "ready"'
       widget: Badge
       description: status.conditions.message
-    - name: Event Types
+    - name: status.cleanEventTypes
       source: status.cleanEventTypes
       widget: Labels
   translations: |-
     en:
+      events: Events
       placeholder.eventType: Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1
+      spec.filters: Filters
+      spec.filter.eventType: Event Type
+      spec.filter.eventSource: Event Source
+      spec.filter.event.property: Property
+      spec.filter.event.type: Type
+      spec.filter.event.value: Value
+      spec.sink: Sink
+      spec.sink.controlledBy: Controlled By
+      spec.sink.link: Service {{data}}
+      status.cleanEventTypes: Event Types
+      status.conditions: Condidtions
+      status.conditions.lastTransitionTime: Last Transition
+      status.conditions.reason: Reason
+      status.conditions.status: Status
+      status.type: Type
