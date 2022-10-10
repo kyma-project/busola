@@ -12,9 +12,9 @@ import {
   TranslationBundleContext,
   useGetTranslation,
   applyFormula,
-  sortBy,
   getTextSearchProperties,
 } from './helpers';
+import { sortBy } from './helpers/sortBy';
 import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';

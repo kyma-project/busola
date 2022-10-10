@@ -8,7 +8,7 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { useGetTranslation } from 'components/Extensibility/helpers';
 
 import { useVariables } from '../hooks/useVariables';
-import { jsonataWrapper } from '../helpers/jsonataWrapper';
+import { useJsonata } from '../hooks/useJsonata';
 
 export function ResourceRefRender({
   onChange,
@@ -17,8 +17,14 @@ export function ResourceRefRender({
   storeKeys,
   resource,
   widgets,
+  originalResource,
   ...props
 }) {
+  const jsonata = useJsonata({
+    resource: originalResource,
+    scope: value,
+    value,
+  });
   const { tFromStoreKeys } = useGetTranslation();
   // TODO the value obtained by ui-schema is undefined for this component
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
@@ -32,12 +38,8 @@ export function ResourceRefRender({
   const provideVar = schema.get('provideVar');
 
   if (toInternal) {
-    try {
-      value = jsonataWrapper(toInternal).evaluate(value);
-    } catch (e) {
-      value = {};
-      console.error(e);
-    }
+    const [internal, error] = jsonata(toInternal);
+    value = error ? {} : internal;
   }
 
   const group = (schemaResource?.group || '').toLowerCase();
@@ -57,12 +59,11 @@ export function ResourceRefRender({
       resources={data}
       setValue={value => {
         if (toExternal) {
-          try {
-            value = jsonataWrapper(toExternal).evaluate(value);
-          } catch (e) {
-            value = null;
-            console.error(e);
-          }
+          const [external, error] = jsonata(toExternal, {
+            scope: value,
+            value,
+          });
+          value = error ? {} : external;
         }
         const resource = data.find(
           res =>

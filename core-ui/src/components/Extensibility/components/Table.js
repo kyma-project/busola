@@ -5,8 +5,9 @@ import classNames from 'classnames';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import { sortBy, useGetTranslation, getTextSearchProperties } from '../helpers';
+import { useGetTranslation, getTextSearchProperties } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
+import { sortBy } from '../helpers/sortBy';
 import { Widget, InlineWidget } from './Widget';
 import { getSearchDetails, getSortDetails } from './helpers';
 
@@ -144,7 +145,7 @@ export function Table({
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       {...handleTableValue(value, t)}
-      sortBy={() => sortBy(sortOptions, tExt, {}, originalResource)}
+      sortBy={() => sortBy(jsonata, sortOptions, tExt, {}, originalResource)}
       searchSettings={{
         showSearchField: searchOptions.length > 0,
         allowSlashShortcut: false,

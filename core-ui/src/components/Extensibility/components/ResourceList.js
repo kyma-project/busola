@@ -2,10 +2,13 @@ import pluralize from 'pluralize';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
-import { resources } from 'resources';
-import { getTextSearchProperties, sortBy, useGetTranslation } from '../helpers';
-import { getChildren, getSearchDetails, getSortDetails } from './helpers';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { resources } from 'resources';
+
+import { getTextSearchProperties, useGetTranslation } from '../helpers';
+import { sortBy } from '../helpers/sortBy';
+import { useJsonata } from '../hooks/useJsonata';
+import { getChildren, getSearchDetails, getSortDetails } from './helpers';
 import { ExtensibilityCreate } from '../ExtensibilityCreate';
 
 const getProperNamespacePart = (givenNamespace, currentNamespace) => {
@@ -24,6 +27,8 @@ export function ResourceList({
   dataSource,
   originalResource,
   schema,
+  scope,
+  arrayItems,
   ...props
 }) {
   const { widgetT, t } = useGetTranslation();
@@ -34,6 +39,12 @@ export function ResourceList({
   const api = value?.apiVersion === 'v1' ? 'api' : 'apis';
   const resourceUrlPrefix = `/${api}/${value?.apiVersion}`;
   const resourceUrl = `${resourceUrlPrefix}${namespacePart}/${pluralKind}`;
+  const jsonata = useJsonata({
+    resource: originalResource,
+    scope,
+    value,
+    arrayItems,
+  });
 
   const PredefinedRenderer = resources.find(
     r => r.resourceType.toLowerCase() === pluralKind,
@@ -87,7 +98,7 @@ export function ResourceList({
       fixedPath={true}
       columns={children}
       sortBy={defaultSortOptions =>
-        sortBy(sortOptions, t, defaultSort ? defaultSortOptions : {})
+        sortBy(jsonata, sortOptions, t, defaultSort ? defaultSortOptions : {})
       }
       createFormProps={{ resourceSchema }}
       createResourceForm={ExtensibilityCreate}
