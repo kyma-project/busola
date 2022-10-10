@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import Immutable from 'immutable';
+import Immutable, { List } from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
@@ -100,8 +100,13 @@ export function ExtensibilityCreateCore({
     const defaultNameField = {
       path: 'metadata.name',
       simple: true,
+      widget: 'Name',
       required: true,
       inputInfo: t('common.tooltips.k8s-name-input'),
+      extraPaths: List([
+        'spec.accessLabel',
+        'metadata.labels["app.kubernetes.io/name"',
+      ]),
     };
     const defaultLabelsField = {
       path: 'metadata.labels',
