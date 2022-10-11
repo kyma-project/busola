@@ -288,61 +288,61 @@ data:
                     "path": "principals", 
                     "widget": "SimpleList",
                     "description": "description.rules.from.principals",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notPrincipals", 
                     "widget": "SimpleList",
                     "description": "description.rules.from.notPrincipals",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "requestPrincipals", 
                     "widget": "SimpleList",
                     "description": "description.rules.from.requestPrincipals",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notRequestPrincipals", 
                     "widget": "SimpleList",
                     "description": "description.rules.from.notRequestPrincipals",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "namespaces", 
                     "widget": "SimpleList",
                     "description": "description.rules.from.namespaces",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notNamespaces", 
                     "widget": "SimpleList",
                     "description": "description.rules.from.notNamespaces",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "ipBlocks", 
                     "widget": "SimpleList",
                     "description": "description.rules.from.ipBlocks",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notIpBlocks", 
                     "widget": "SimpleList",
                     "description": "description.rules.from.notIpBlocks",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "remoteIpBlocks", 
                     "widget": "SimpleList",
                     "description": "description.rules.from.remoteIpBlocks",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notRemoteIpBlocks", 
                     "widget": "SimpleList",
                     "description": "description.rules.from.notRemoteIpBlocks",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   }
                 ]
               }
@@ -360,49 +360,49 @@ data:
                     "path": "hosts", 
                     "widget": "SimpleList",
                     "description": "description.rules.to.hosts",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notHosts", 
                     "widget": "SimpleList",
                     "description": "description.rules.to.notHosts",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "ports", 
                     "widget": "SimpleList",
                     "description": "description.rules.to.ports",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notPorts", 
                     "widget": "SimpleList",
                     "description": "description.rules.to.notPorts",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "methods", 
                     "widget": "SimpleList",
                     "description": "description.rules.to.methods",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notMethods", 
                     "widget": "SimpleList",
                     "description": "description.rules.to.notMethods",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "paths", 
                     "widget": "SimpleList",
                     "description": "description.rules.to.paths",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notPaths", 
                     "widget": "SimpleList",
                     "description": "description.rules.to.notPaths",
-                    "children": [{ "path": "[]" }]}
+                    "children": [{ "path": "[]" }]
                   }
                 ]
               }
@@ -421,13 +421,13 @@ data:
                 "path": "[].values", 
                 "widget": "SimpleList",
                 "description": "description.rules.when.values",
-                "children": [{ "path": "[]" }]}
+                "children": [{ "path": "[]" }]
               },
               { 
                 "path": "[].notValues", 
                 "widget": "SimpleList",
                 "description": "description.rules.when.notValues",
-                "children": [{ "path": "[]" }]}
+                "children": [{ "path": "[]" }]
               }
             ]
           },

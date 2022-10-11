@@ -147,7 +147,7 @@ data:
         "path": "spec.comments",
         "widget": "SimpleList",
         "simple": true,
-        "children": [{ "path": "[]" }]}
+        "children": [{ "path": "[]" }]
       {
         "path": "spec.recipeSecret",
         "widget": "Resource",

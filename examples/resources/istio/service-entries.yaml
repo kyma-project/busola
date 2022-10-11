@@ -128,14 +128,14 @@ data:
         "widget": "SimpleList",
         "simple": true,
         "required": true,
-        "children": [{ "path": "[]" }]}
+        "children": [{ "path": "[]" }]
       },
       {
         "path": "spec.addresses",
         "name": "spec.addresses",
         "widget": "SimpleList",
         "placeholder": "placeholders.addreses",
-        "children": [{ "path": "[]" }]}
+        "children": [{ "path": "[]" }]
       },
       {
         "path": "spec.ports", "name": "Ports", "widget": "GenericList", "children": [
@@ -193,13 +193,13 @@ data:
         "path": "spec.exportTo",
         "name": "spec.exportTo",
         "widget": "SimpleList",
-        "children": [{ "path": "[]" }]}
+        "children": [{ "path": "[]" }]
       },
       {
         "path": "spec.subjectAltNames",
         "name": "spec.subjectAltNames",
         "widget": "SimpleList",
-        "children": [{ "path": "[]" }]}
+        "children": [{ "path": "[]" }]
       },
     ]
   general: |-

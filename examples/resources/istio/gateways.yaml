@@ -206,7 +206,7 @@ data:
         "required": true,
         "simple": true,
         "placeholder": "placeholders.hosts",
-        "children": [{ "path": "[]" }]}
+        "children": [{ "path": "[]" }]
       }
     ]
   general: |-
