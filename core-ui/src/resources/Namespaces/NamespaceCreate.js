@@ -93,15 +93,20 @@ export function NamespaceCreate({
 
   useEffect(() => {
     const resetFunction = () => {
-      setLimits(createLimitRangeTemplate({}));
-
-      setMemory(createResourceQuotaTemplate({}));
-
       setNamespace(
         initialNamespace
           ? cloneDeep(initialNamespace)
           : createNamespaceTemplate(),
       );
+
+      if (!initialNamespace) {
+        setLimits(createLimitRangeTemplate({}));
+        setMemory(createResourceQuotaTemplate({}));
+        jp.value(namespace, `metadata.labels`, {
+          [ISTIO_INJECTION_LABEL]: ISTIO_INJECTION_DISABLED,
+        });
+        setNamespace({ ...namespace });
+      }
     };
 
     handleSetResetFormFn(() => resetFunction);
