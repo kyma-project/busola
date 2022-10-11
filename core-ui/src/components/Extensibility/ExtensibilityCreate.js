@@ -20,6 +20,7 @@ import {
   getUIStoreFromResourceObj,
 } from './helpers/immutableConverter';
 import { useVariables } from './hooks/useVariables';
+import { prepareRules } from './helpers/prepareRules';
 
 export function ExtensibilityCreateCore({
   formElementRef,
@@ -92,7 +93,7 @@ export function ExtensibilityCreateCore({
   });
 
   const { simpleRules, advancedRules } = useMemo(() => {
-    const fullSchemaRules = createResource?.form ?? [];
+    const fullSchemaRules = prepareRules(createResource?.form ?? [], t);
 
     prepareVars(fullSchemaRules);
     readVars(resource);
@@ -137,6 +138,7 @@ export function ExtensibilityCreateCore({
       initialResource={initialResource}
       afterCreatedFn={afterCreatedFn}
       handleNameChange={handleNameChange}
+      disableDefaultFields
     >
       <ResourceSchema
         simple
