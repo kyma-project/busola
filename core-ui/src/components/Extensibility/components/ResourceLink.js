@@ -50,7 +50,7 @@ export function ResourceLink({ value, structure, originalResource }) {
     : '';
 
   const linkContent = tExt(linkText, {
-    data: linkData?.name || value,
+    data: linkData || value,
     root: originalResource,
     defaultValue: linkText || linkData?.name,
   });

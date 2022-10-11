@@ -128,7 +128,7 @@ data:
       spec.filter.event.value: Value
       spec.sink: Sink
       spec.sink.controlledBy: Controlled By
-      spec.sink.link: Service {{data}}
+      spec.sink.link: Service {{data.name}}
       status.cleanEventTypes: Event Types
       status.conditions: Condidtions
       status.conditions.lastTransitionTime: Last Transition
