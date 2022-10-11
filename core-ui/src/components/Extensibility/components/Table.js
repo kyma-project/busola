@@ -70,6 +70,7 @@ export function Table({
       if (structure.collapsibleTitle) {
         try {
           return jsonata(structure.collapsibleTitle, {
+            index: index,
             scope: entry,
             arrayItems: [...arrayItems, entry],
           });
