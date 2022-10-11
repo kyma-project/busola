@@ -148,6 +148,7 @@ data:
         "widget": "SimpleList",
         "simple": true,
         "children": [{ "path": "[]" }]
+      },
       {
         "path": "spec.recipeSecret",
         "widget": "Resource",
