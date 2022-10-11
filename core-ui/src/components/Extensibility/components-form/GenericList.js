@@ -26,6 +26,7 @@ export function GenericList({
   const listSize = value?.size || 0;
   const schemaPlaceholder = schema.get('placeholder');
   const itemTemplate = schema.get('template') || {};
+  const defaultOpen = schema.get('defaultExpanded');
 
   const addItem = itemTemplate => {
     onChange({
@@ -51,6 +52,7 @@ export function GenericList({
 
   return (
     <ResourceForm.CollapsibleSection
+      defaultOpen={defaultOpen}
       container
       title={tFromStoreKeys(storeKeys, schema)}
       actions={setOpen => (
