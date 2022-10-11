@@ -103,11 +103,11 @@ data:
                       "name": "code.env.valueFrom",
                       "widget": "ResourceLink",
                       "source": "$item.valueFrom",
-                      "linkText": "$exists($item.valueFrom.configMapKeyRef)? $item.valueFrom.configMapKeyRef.name : $item.valueFrom.secretKeyRef.name",
+                      "linkText": "$exists($item.configMapKeyRef)? $item.configMapKeyRef.name : $item.secretKeyRef.name",
                       "resource": {
-                        "name": "$exists($item.valueFrom.configMapKeyRef) ? $item.valueFrom.configMapKeyRef.name : $item.valueFrom.secretKeyRef.name",
+                        "name": "$exists($item.configMapKeyRef) ? $item.configMapKeyRef.name : $item.secretKeyRef.name",
                         "namespace": "$root.metadata.namespace",
-                        "kind": "$exists($item.valueFrom.configMapKeyRef)
+                        "kind": "$exists($item.configMapKeyRef)
                         ? 'ConfigMap' 
                         : 'Secret'"
                       }
