@@ -12,8 +12,13 @@ export function CollapsibleRenderer({ schema, storeKeys, widgets, ...props }) {
   const columns = schema.get('columns');
   const gridTemplateColumns = `repeat(${columns}, 1fr)`;
 
+  const defaultOpen = schema.get('defaultExpanded');
+
   return (
-    <ResourceForm.CollapsibleSection title={tFromStoreKeys(storeKeys, schema)}>
+    <ResourceForm.CollapsibleSection
+      title={tFromStoreKeys(storeKeys, schema)}
+      defaultOpen={defaultOpen}
+    >
       <div
         className="collapsible-renderer__grid-wrapper"
         style={{ gridTemplateColumns }}
