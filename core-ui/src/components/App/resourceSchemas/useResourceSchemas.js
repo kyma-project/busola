@@ -6,6 +6,8 @@ import {
   addWorkerErrorListener,
   terminateWorker,
 } from './resourceSchemaWorkerApi';
+import { useSetRecoilState } from 'recoil';
+import { openapiSchemasState } from 'state/openapiSchemasAtom';
 
 export const useResourceSchemas = () => {
   const { activeClusterName, authData, openApi } = useMicrofrontendContext();
@@ -51,5 +53,6 @@ export const useResourceSchemas = () => {
     };
   }, []);
 
-  return { areSchemasComputed, schemasError };
+  const setSchemasState = useSetRecoilState(openapiSchemasState);
+  setSchemasState({ areSchemasComputed, schemasError });
 };
