@@ -32,7 +32,7 @@ export function SimpleList({
   const schemaRequired = schema.get('required');
   const inputInfo = schema.get('inputInfo');
   const tooltipContent = schema.get('description');
-  const defaultOpen = schema.get('defaultOpen');
+  const defaultOpen = schema.get('defaultExpanded');
 
   const removeItem = index => {
     onChange({

@@ -12,7 +12,7 @@ export function CollapsibleRenderer({ schema, storeKeys, widgets, ...props }) {
   const columns = schema.get('columns');
   const gridTemplateColumns = `repeat(${columns}, 1fr)`;
 
-  const defaultOpen = schema.get('defaultOpen');
+  const defaultOpen = schema.get('defaultExpanded');
 
   return (
     <ResourceForm.CollapsibleSection

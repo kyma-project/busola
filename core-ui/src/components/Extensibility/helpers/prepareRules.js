@@ -16,12 +16,12 @@ export function prepareRules(schemaRules, t) {
   const defaultLabelsField = {
     path: 'metadata.labels',
     widget: 'KeyValuePair',
-    defaultOpen: false,
+    defaultExpanded: false,
   };
   const defaultAnnotationsField = {
     path: 'metadata.annotations',
     widget: 'KeyValuePair',
-    defaultOpen: false,
+    defaultExpanded: false,
   };
 
   const nameField = {

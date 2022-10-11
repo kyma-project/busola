@@ -49,7 +49,7 @@ export function MonacoRenderer({
   const value = getValue(storeKeys, resource);
   const language = getLanguage(schema, value, resource);
   const formattedValue = formatValue(value, language);
-  const defaultOpen = schema.get('defaultOpen');
+  const defaultOpen = schema.get('defaultExpanded');
 
   const handleChange = useCallback(
     value => {

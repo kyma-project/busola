@@ -24,7 +24,7 @@ export function GenericList({
   const { value } = store?.extractValues(storeKeys) || {};
   const listSize = value?.size || 0;
   const schemaPlaceholder = schema.get('placeholder');
-  const defaultOpen = schema.get('defaultOpen');
+  const defaultOpen = schema.get('defaultExpanded');
 
   const addItem = () => {
     onChange({
