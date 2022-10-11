@@ -79,7 +79,7 @@ data:
               "source": "spec.selector",
               "widget": "Panel",
               "name": "selector.matchesAllPods",
-              "visibility": "$not($exists(*)) or $not($boolean(*))"
+              "visibility": "$not($exists($value)) or $not($boolean($value))"
             }
           ],
           "header": [
@@ -87,7 +87,7 @@ data:
               "source": "spec.selector",
               "widget": "Labels",
               "name": "spec.selector",
-              "visibility": "$boolean(*)"
+              "visibility": "$boolean($value)"
             }
           ],
         }
