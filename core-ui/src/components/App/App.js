@@ -41,7 +41,7 @@ export default function App() {
           </WithTitle>
         }
       />
-      {/* extensibility routes should go first, so if someone overwites the default view, the new one should have a higher priority */}
+      {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
       {customResources?.map(cr => createExtensibilityRoutes(cr, language))}
       {resourceRoutes}
       {otherRoutes}
