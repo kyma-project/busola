@@ -13,6 +13,7 @@ context('Test Cluster Overview', () => {
       .contains('Cluster Details')
       .click();
 
+    // this is to address a Luigi race condition, can be removed together with Luigi
     cy.wait(500);
 
     cy.getIframeBody()
