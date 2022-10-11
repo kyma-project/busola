@@ -32,10 +32,8 @@ export function ResourceLink({
   const [name, nameError] = jsonata(structure.resource.name);
   const [namespace, namespaceError] = jsonata(structure.resource.namespace);
   const [kind, kindError] = jsonata(structure.resource.kind);
-  const [linkText, linkTextError] = jsonata(structure.linkText);
 
-  const jsonataError =
-    nameError || namespaceError || kindError || linkTextError;
+  const jsonataError = nameError || namespaceError || kindError;
   if (jsonataError) {
     return t('extensibility.configuration-error', {
       error: jsonataError.message,
@@ -47,7 +45,7 @@ export function ResourceLink({
       className="fd-link"
       onClick={() => navigateToResource({ name, namespace, kind })}
     >
-      {tExt(linkText)}
+      {tExt(value)}
     </Link>
   );
 }
