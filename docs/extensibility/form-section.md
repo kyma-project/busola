@@ -410,4 +410,11 @@ SimpleList widgets render an array as a table with rows representing data items 
 
 #### Scalar values
 
-When array items are scalars instead of objects, no header with the field title is rendered in the resulting table.
+When array items are scalars instead of objects a child still has to be provided with the path `[]`, no header with the field title is then rendered in the resulting table.
+
+```yaml
+- path: spec.services
+  widget: SimpleList
+  children:
+    - path: '[]'
+```
