@@ -1,5 +1,5 @@
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   sendWorkerMessage,
   addWorkerListener,
@@ -11,14 +11,12 @@ import { openapiSchemasState } from 'state/openapiSchemasAtom';
 
 export const useResourceSchemas = () => {
   const { activeClusterName, authData, openApi } = useMicrofrontendContext();
-  const [areSchemasComputed, setAreSchemasComputed] = useState(false);
-  const [schemasError, setSchemasError] = useState(null);
+  const setSchemasState = useSetRecoilState(openapiSchemasState);
   const lastFetched = useRef();
 
   useEffect(() => {
     if (!activeClusterName || !authData) {
-      setSchemasError(null);
-      setAreSchemasComputed(false);
+      setSchemasState({ areSchemasComputed: false, schemasError: null });
       lastFetched.current = null;
       return;
     }
@@ -30,29 +28,23 @@ export const useResourceSchemas = () => {
     sendWorkerMessage('sendingOpenapi', openApi, activeClusterName);
 
     addWorkerListener('computedToJSON', () => {
-      setAreSchemasComputed(true);
+      setSchemasState({ areSchemasComputed: true, schemasError: null });
     });
 
     addWorkerListener('customError', err => {
-      setSchemasError(err);
+      setSchemasState({ areSchemasComputed: false, schemasError: err });
       console.error(err);
     });
 
     addWorkerErrorListener(err => {
-      setSchemasError(err);
+      setSchemasState({ areSchemasComputed: false, schemasError: err });
       console.error(err);
     });
-
-    // fetch not included
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeClusterName, setAreSchemasComputed, authData, openApi]);
+  }, [activeClusterName, authData, openApi, setSchemasState]);
 
   useEffect(() => {
     return () => {
       terminateWorker();
     };
   }, []);
-
-  const setSchemasState = useSetRecoilState(openapiSchemasState);
-  setSchemasState({ areSchemasComputed, schemasError });
 };
