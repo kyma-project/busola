@@ -100,6 +100,8 @@ export function NamespaceCreate({
       );
 
       if (!initialNamespace) {
+        setWithLimits(false);
+        setWithMemory(false);
         setLimits(createLimitRangeTemplate({}));
         setMemory(createResourceQuotaTemplate({}));
         jp.value(namespace, `metadata.labels`, {
