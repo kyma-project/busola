@@ -143,7 +143,11 @@ data:
           { "path": "[].quantity", "simple": true}
         ]
       },
-      { "path": "spec.comments", "widget": "SimpleList", "simple": true},
+      {
+        "path": "spec.comments",
+        "widget": "SimpleList",
+        "simple": true,
+        "children": [{ "path": "[]" }]}
       {
         "path": "spec.recipeSecret",
         "widget": "Resource",

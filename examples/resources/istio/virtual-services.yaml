@@ -486,7 +486,10 @@ data:
           {
             "path": "[].match", "widget": "GenericList", "name": "matches", "children": [
               {
-                "path": "[].sniHosts", "widget": "SimpleList", "name": "sniHosts", 
+                "path": "[].sniHosts",
+                "widget": "SimpleList",
+                "name": "sniHosts",
+                "children": [{ "path": "[]" }]}
               },
               {
                 "path": "[].sourceNamespace", "name": "sourceNamespace"
@@ -495,13 +498,19 @@ data:
                 "path": "[].port", "name": "port"
               },
               {
-                "path": "[].destinationSubnets",  "widget": "SimpleList", "name": "destinationSubnets"
+                "path": "[].destinationSubnets",
+                "widget": "SimpleList",
+                "name": "destinationSubnets",
+                "children": [{ "path": "[]" }]}
               },
               {
                 "path": "[].sourceLabels",  "widget": "KeyValuePair", "name": "sourceLabels"
               },
               {
-                "path": "[].gateways", "widget": "SimpleList", "name": "gateways"
+                "path": "[].gateways",
+                "widget": "SimpleList",
+                "name": "gateways",
+                "children": [{ "path": "[]" }]}
               },
 
             ]
@@ -546,16 +555,25 @@ data:
                 "path": "[].port", "name": "port"
               },
               {
-                "path": "[].sniHosts", "widget": "SimpleList", "name": "sniHosts"
+                "path": "[].sniHosts",
+                "widget": "SimpleList",
+                "name": "sniHosts",
+                "children": [{ "path": "[]" }]}
               },
               {
-                "path": "[].destinationSubnets", "widget": "SimpleList", "name": "destinationSubnets"
+                "path": "[].destinationSubnets",
+                "widget": "SimpleList",
+                "name": "destinationSubnets",
+                "children": [{ "path": "[]" }]}
               },
               {
                 "path": "[].sourceLabels", "name":"sourceLabels", "widget": "KeyValuePair"
               },
               {
-                "path": "[].gateways", "widget": "SimpleList", "name": "gateways"
+                "path": "[].gateways",
+                "widget": "SimpleList",
+                "name": "gateways",
+                "children": [{ "path": "[]" }]}
               }
 
             ]
@@ -617,7 +635,10 @@ data:
                 "path": "[].sourceLabels", "name": "sourceLabels", "widget": "KeyValuePair"
               },
               {
-                "path": "[].gateways", "name": "gateways", "widget": "SimpleList"
+                "path": "[].gateways",
+                "name": "gateways",
+                "widget": "SimpleList",
+                "children": [{ "path": "[]" }]}
               },
               {
                 "path": "[].queryParams", "name": "queryParams", "widget": "KeyValuePair", "value": {
@@ -673,7 +694,10 @@ data:
                         "path": "add", "name": "add", "widget": "KeyValuePair" 
                       },
                       {
-                        "path": "remove", "name": "remove", "widget": "SimpleList" 
+                        "path": "remove",
+                        "name": "remove",
+                        "widget": "SimpleList",
+                        "children": [{ "path": "[]" }]}
                       },
 
                     ]
@@ -688,7 +712,10 @@ data:
                         "path": "add", "name": "add", "widget": "KeyValuePair" 
                       },
                       {
-                        "path": "remove", "name": "remove", "widget": "SimpleList" 
+                        "path": "remove",
+                        "name": "remove",
+                        "widget": "SimpleList",
+                        "children": [{ "path": "[]" }]}
                       },
 
                     ]
@@ -828,13 +855,23 @@ data:
                   "path": "allowCredentials", "name": "allowCredentials", "type": "boolean"
                 }, 
                 {
-                  "path": "allowMethods", "name": "allowMethods", "widget": "SimpleList", "placeholder": "allowMethods.placeholder"
+                  "path": "allowMethods",
+                  "name": "allowMethods",
+                  "widget": "SimpleList",
+                  "placeholder": "allowMethods.placeholder",
+                  "children": [{ "path": "[]" }]}
                 },
                 {
-                  "path": "allowHeaders", "name": "allowHeaders", "widget": "SimpleList"
+                  "path": "allowHeaders",
+                  "name": "allowHeaders",
+                  "widget": "SimpleList",
+                  "children": [{ "path": "[]" }]}
                 },
                 {
-                  "path": "exposeHeaders", "name": "exposeHeaders", "widget": "SimpleList"
+                  "path": "exposeHeaders",
+                  "name": "exposeHeaders",
+                  "widget": "SimpleList",
+                  "children": [{ "path": "[]" }]}
                 },
                 {
                   "path": "maxAge", "name": "maxAge", "placeholder": "maxAge.placeholder"
@@ -854,7 +891,10 @@ data:
                       "path": "add", "name": "add", "widget": "KeyValuePair" 
                     },
                     {
-                      "path": "remove", "name": "remove", "widget": "SimpleList" 
+                      "path": "remove",
+                      "name": "remove",
+                      "widget": "SimpleList",
+                      "children": [{ "path": "[]" }]}
                     },
 
                   ]
@@ -869,7 +909,10 @@ data:
                       "path": "add", "name": "add", "widget": "KeyValuePair" 
                     },
                     {
-                      "path": "remove", "name": "remove", "widget": "SimpleList" 
+                      "path": "remove",
+                      "name": "remove",
+                      "widget": "SimpleList",
+                      "children": [{ "path": "[]" }]}
                     },
 
                   ]
@@ -881,13 +924,22 @@ data:
 
 
       {
-        "path": "spec.hosts", "name": "hosts", "widget": "SimpleList"
+        "path": "spec.hosts",
+        "name": "hosts",
+        "widget": "SimpleList",
+        "children": [{ "path": "[]" }]}
       },
       {
-        "path": "spec.gateways", "name": "gateways", "widget": "SimpleList"
+        "path": "spec.gateways",
+        "name": "gateways",
+        "widget": "SimpleList",
+        "children": [{ "path": "[]" }]}
       },
       {
-        "path": "spec.exportTo", "name": "exportTo", "widget": "SimpleList"
+        "path": "spec.exportTo",
+        "name": "exportTo",
+        "widget": "SimpleList",
+        "children": [{ "path": "[]" }]}
       },
     ]
   general: |-

@@ -205,7 +205,8 @@ data:
         "path": "spec.servers[].hosts", 
         "required": true,
         "simple": true,
-        "placeholder": "placeholders.hosts"
+        "placeholder": "placeholders.hosts",
+        "children": [{ "path": "[]" }]}
       }
     ]
   general: |-
