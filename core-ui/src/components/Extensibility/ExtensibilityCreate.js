@@ -20,6 +20,7 @@ import {
   getUIStoreFromResourceObj,
 } from './helpers/immutableConverter';
 import { useVariables } from './hooks/useVariables';
+import { prepareRules } from './helpers/prepareRules';
 
 export function ExtensibilityCreateCore({
   formElementRef,
@@ -90,55 +91,8 @@ export function ExtensibilityCreateCore({
     resource: api,
   });
 
-  const prepareRules = schemaRules => {
-    const PREDEFINED_PATHS = [
-      'metadata.name',
-      'metadata.labels',
-      'metadata.annotations',
-    ];
-
-    const defaultNameField = {
-      path: 'metadata.name',
-      simple: true,
-      widget: 'Name',
-      required: true,
-      inputInfo: t('common.tooltips.k8s-name-input'),
-      extraPaths: ['metadata.labels["app.kubernetes.io/name"]'],
-    };
-    const defaultLabelsField = {
-      path: 'metadata.labels',
-      widget: 'KeyValuePair',
-      defaultOpen: false,
-    };
-    const defaultAnnotationsField = {
-      path: 'metadata.annotations',
-      widget: 'KeyValuePair',
-      defaultOpen: false,
-    };
-
-    const nameField = {
-      ...defaultNameField,
-      ...schemaRules.find(r => r.path === 'metadata.name'),
-    };
-    const labelsField = {
-      ...defaultLabelsField,
-      ...schemaRules.find(r => r.path === 'metadata.labels'),
-    };
-    const annotationsField = {
-      ...defaultAnnotationsField,
-      ...schemaRules.find(r => r.path === 'metadata.annotations'),
-    };
-
-    return [
-      nameField,
-      labelsField,
-      annotationsField,
-      ...schemaRules.filter(r => !PREDEFINED_PATHS.includes(r.path)),
-    ];
-  };
-
   const { simpleRules, advancedRules } = useMemo(() => {
-    const fullSchemaRules = prepareRules(createResource?.form ?? []);
+    const fullSchemaRules = prepareRules(createResource?.form ?? [], t);
 
     prepareVars(fullSchemaRules);
     readVars(resource);
