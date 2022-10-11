@@ -102,7 +102,7 @@ In the example, the visibility for item price and color are analogous - the form
 
 ## Default fields
 
-Each form is created with following fields:
+Each form is created with the following fields:
 
 - `metadata.name` - on simple and advanced form, as a [Name](#name) widget.
 - `metadata.labels` - on advanced form, as a [KeyValuePair](#keyvaluepair) widget.
