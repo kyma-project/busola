@@ -13,4 +13,4 @@ export const Text = ({ value, schema, structure }) => {
   return isNil(value) ? emptyLeafPlaceholder : sanitizedValue;
 };
 Text.inline = true;
-Text.copiable = true;
+Text.copyable = true;

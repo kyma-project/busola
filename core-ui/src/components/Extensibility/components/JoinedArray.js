@@ -49,7 +49,7 @@ export function JoinedArray({ value, structure, schema, ...props }) {
 
 JoinedArray.array = true;
 JoinedArray.inline = true;
-JoinedArray.copiable = true;
+JoinedArray.copyable = true;
 JoinedArray.copyFunction = ({ value, structure }) => {
   let separator = structure?.separator ?? ', ';
   separator = separator === 'break' ? '\n' : separator;

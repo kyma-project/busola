@@ -1,6 +1,7 @@
 import { fireEvent, render } from '@testing-library/react';
 import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
 import { act } from 'react-dom/test-utils';
+import copyToClipboard from 'copy-to-clipboard';
 
 // those tests are in separate file as we need to mock the `widgets` collection from `./../index.js`...
 // ... which originals in turn are required in other `Widget.test.js`
@@ -15,13 +16,12 @@ jest.doMock('./../index', () => {
   };
 });
 
-const mockCopyToClipboard = jest.fn();
-jest.mock('copy-to-clipboard', () => mockCopyToClipboard);
+jest.mock('copy-to-clipboard');
 
-describe('Widget.copiable', () => {
+describe('Widget.copyable', () => {
   it('Render copy button', async () => {
-    const { Widget } = await import('./../Widget');
-    MockWidget.copiable = true;
+    const { Widget } = await import('../Widget');
+    MockWidget.copyable = true;
     MockWidget.inline = true;
 
     const { getByRole } = render(
@@ -30,7 +30,7 @@ describe('Widget.copiable', () => {
           structure={{
             source: '"test-value"',
             widget: 'CopiableMockWidget',
-            copiable: true,
+            copyable: true,
           }}
         />
       </DataSourcesContextProvider>,
@@ -45,46 +45,46 @@ describe('Widget.copiable', () => {
 
       fireEvent.click(button);
 
-      expect(mockCopyToClipboard).toHaveBeenCalledWith('test-value');
+      expect(copyToClipboard).toHaveBeenCalledWith('test-value');
     });
   });
 
-  it('Widget.Inline, !Widget.copiable, schema.copiable => do not render copy button', async () => {
-    const { Widget } = await import('./../Widget');
-    MockWidget.copiable = false;
+  it('Widget.Inline, !Widget.copyable, schema.copyable => do not render copy button', async () => {
+    const { Widget } = await import('../Widget');
+    MockWidget.copyable = false;
     MockWidget.inline = true;
 
     const { queryByRole } = render(
       <DataSourcesContextProvider value={{}} dataSources={{}}>
-        <Widget structure={{ widget: 'CopiableMockWidget', copiable: true }} />
+        <Widget structure={{ widget: 'CopiableMockWidget', copyable: true }} />
       </DataSourcesContextProvider>,
     );
 
     expect(queryByRole('button')).not.toBeInTheDocument();
   });
 
-  it('!Widget.Inline, Widget.copiable, schema.copiable => do not render copy button', async () => {
-    const { Widget } = await import('./../Widget');
-    MockWidget.copiable = true;
+  it('!Widget.Inline, Widget.copyable, schema.copyable => do not render copy button', async () => {
+    const { Widget } = await import('../Widget');
+    MockWidget.copyable = true;
     MockWidget.inline = false;
 
     const { queryByRole } = render(
       <DataSourcesContextProvider value={{}} dataSources={{}}>
-        <Widget structure={{ widget: 'CopiableMockWidget', copiable: true }} />
+        <Widget structure={{ widget: 'CopiableMockWidget', copyable: true }} />
       </DataSourcesContextProvider>,
     );
 
     expect(queryByRole('button')).not.toBeInTheDocument();
   });
 
-  it('Widget.Inline, Widget.copiable, !schema.copiable => do not render copy button', async () => {
-    const { Widget } = await import('./../Widget');
-    MockWidget.copiable = true;
+  it('Widget.Inline, Widget.copyable, !schema.copyable => do not render copy button', async () => {
+    const { Widget } = await import('../Widget');
+    MockWidget.copyable = true;
     MockWidget.inline = false;
 
     const { queryByRole } = render(
       <DataSourcesContextProvider value={{}} dataSources={{}}>
-        <Widget structure={{ widget: 'CopiableMockWidget', copiable: false }} />
+        <Widget structure={{ widget: 'CopiableMockWidget', copyable: false }} />
       </DataSourcesContextProvider>,
     );
 
@@ -92,8 +92,8 @@ describe('Widget.copiable', () => {
   });
 
   it('Custom copy function', async () => {
-    const { Widget } = await import('./../Widget');
-    MockWidget.copiable = true;
+    const { Widget } = await import('../Widget');
+    MockWidget.copyable = true;
     MockWidget.inline = true;
     MockWidget.copyFunction = ({ value }) => 'this is ' + value;
 
@@ -103,7 +103,7 @@ describe('Widget.copiable', () => {
           structure={{
             source: '"test-value"',
             widget: 'CopiableMockWidget',
-            copiable: true,
+            copyable: true,
           }}
         />
       </DataSourcesContextProvider>,
@@ -118,7 +118,7 @@ describe('Widget.copiable', () => {
 
       fireEvent.click(button);
 
-      expect(mockCopyToClipboard).toHaveBeenCalledWith('this is test-value');
+      expect(copyToClipboard).toHaveBeenCalledWith('this is test-value');
     });
   });
 });

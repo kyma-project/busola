@@ -57,7 +57,7 @@ export function ExternalLink({
   );
 }
 ExternalLink.inline = true;
-ExternalLink.copiable = true;
+ExternalLink.copyable = true;
 ExternalLink.copyFunction = ({
   originalResource,
   value,

@@ -57,4 +57,4 @@ export function Badge({
   );
 }
 Badge.inline = true;
-Badge.copiable = true;
+Badge.copyable = true;
