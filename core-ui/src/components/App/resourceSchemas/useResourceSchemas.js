@@ -15,7 +15,8 @@ export const useResourceSchemas = () => {
   const lastFetched = useRef();
 
   useEffect(() => {
-    if (!activeClusterName || !authData) {
+    const isOngoingClusterChange = !activeClusterName || !authData;
+    if (isOngoingClusterChange) {
       setSchemasState({ areSchemasComputed: false, schemasError: null });
       lastFetched.current = null;
       return;
