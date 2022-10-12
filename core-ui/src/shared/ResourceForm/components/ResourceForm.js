@@ -41,7 +41,7 @@ export function ResourceForm({
   disableDefaultFields,
   onModeChange,
   urlPath,
-  handleSetResetFormFn = () => {}
+  handleSetResetFormFn = () => {},
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
