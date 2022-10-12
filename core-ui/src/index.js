@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
+import { RecoilRoot } from 'recoil';
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
@@ -48,13 +49,15 @@ i18next
 
 ReactDOM.render(
   <Microfrontend env={process.env}>
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <Suspense fallback={<Spinner />}>
-        <CommandPaletteProvider>
-          <App />
-        </CommandPaletteProvider>
-      </Suspense>
-    </BrowserRouter>
+    <RecoilRoot>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <Suspense fallback={<Spinner />}>
+          <CommandPaletteProvider>
+            <App />
+          </CommandPaletteProvider>
+        </Suspense>
+      </BrowserRouter>
+    </RecoilRoot>
   </Microfrontend>,
   document.getElementById('root'),
 );
