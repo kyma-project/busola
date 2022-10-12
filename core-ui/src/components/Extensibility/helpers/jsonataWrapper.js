@@ -1,5 +1,6 @@
 import jsonata from 'jsonata';
 import { isEqual } from 'lodash';
+import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 
 export function jsonataWrapper(expression) {
   const exp = jsonata(expression);
@@ -26,6 +27,10 @@ export function jsonataWrapper(expression) {
 
   exp.registerFunction('compareStrings', (first, second) => {
     return first?.localeCompare(second) ?? 1;
+  });
+
+  exp.registerFunction('readableTimestamp', timestamp => {
+    return ReadableCreationTimestamp((timestamp = { timestamp }));
   });
 
   return exp;
