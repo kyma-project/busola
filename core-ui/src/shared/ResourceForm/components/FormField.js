@@ -29,10 +29,10 @@ export function FormField({
 
   return (
     <div className={classnames('fd-row form-field', className)}>
-      <div className="fd-col fd-col-md--4 form-field__label">
+      <div className="fd-col fd-col-md--3 form-field__label">
         <Label required={required && !disabled}>{label}</Label>
       </div>
-      <div className="fd-col fd-col-md--7">
+      <div className="fd-col fd-col-md--8">
         {messageStrip
           ? messageStrip
           : input({ required, disabled, ...inputProps })}

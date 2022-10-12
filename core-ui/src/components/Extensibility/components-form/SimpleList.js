@@ -21,6 +21,7 @@ export function SimpleList({
   readOnly,
   level,
   widgets,
+  lvl = 0,
   ...props
 }) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
@@ -66,10 +67,11 @@ export function SimpleList({
       container
       title={tFromStoreKeys(storeKeys, schema)}
       required={schemaRequired ?? required}
+      lvl={lvl}
       {...props}
     >
       <div className="fd-row simple-list">
-        <div className="fd-col fd-col-md--4 fd-margin-bottom--sm">
+        <div className="fd-col fd-col-md--3 fd-margin-bottom--sm">
           <Label
             required={schemaRequired ?? required}
             tooltipContent={tExt(tooltipContent)}
@@ -77,7 +79,7 @@ export function SimpleList({
             {tFromStoreKeys(storeKeys, schema)}
           </Label>
         </div>
-        <div className="fd-col fd-col-md--7 form-field multi-input extensibility">
+        <div className="fd-col fd-col-md--8 form-field multi-input extensibility">
           <ul className={listClasses}>
             {isObject && (
               <li>
@@ -94,6 +96,7 @@ export function SimpleList({
                   parentSchema={schema}
                   storeKeys={storeKeys.push(0)}
                   level={level + 1}
+                  lvl={lvl + 1}
                   schemaKeys={schemaKeys?.push('items')}
                 />
                 <span className="item-action"></span>

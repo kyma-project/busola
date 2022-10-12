@@ -112,7 +112,7 @@ export function MultiInput({
   const listClasses = classnames({
     'text-array-input__list': true,
     'fd-col': true,
-    'fd-col-md--7': !fullWidth,
+    'fd-col-md--8': !fullWidth,
     'fd-col-md--12': fullWidth,
   });
 
@@ -178,7 +178,7 @@ export function MultiInput({
     >
       <div className="fd-row form-field multi-input">
         {!fullWidth && (
-          <div className="fd-col fd-col-md--4 form-field__label">
+          <div className="fd-col fd-col-md--3 form-field__label">
             <ResourceForm.Label
               required={required}
               tooltipContent={tooltipContent}
