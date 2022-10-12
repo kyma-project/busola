@@ -100,6 +100,23 @@ In the example, the visibility for item price and color are analogous - the form
           visibility: '$useDescription'
 ```
 
+## Default fields
+
+Each form is created with the following fields:
+
+- `metadata.name` - on simple and advanced form, as a [Name](#name) widget.
+- `metadata.labels` - on advanced form, as a [KeyValuePair](#keyvaluepair) widget.
+- `metadata.annotations` - on advanced form, as a [KeyValuePair](#keyvaluepair) widget.
+
+You can change them by specyfing overrides in schema, for example:
+
+```yaml
+- path: metadata.name
+  inputInfo: 'This is an important field.' # overrides the default information
+- path: metadata.annotations
+  visibility: false # hides annotations
+```
+
 # Form widgets
 
 Form widgets are used in the resource forms.
@@ -205,6 +222,7 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
 - **language** - a JSONata expression resolving the desired language. It has access to the `$root` variable, containing the entire resource.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+- **defaultExpanded** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
 #### Example
 
@@ -275,6 +293,7 @@ KeyValuePair widgets render an `object` value as a list of fields. One is used f
   - **valueEnum[]** - an array of options to generate a value input field with a dropdown.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+- **defaultExpanded** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
 #### Example
 
@@ -307,6 +326,7 @@ ResourceRef widgets render two dropdowns to select the associated resources' nam
 - **provideVar** - When this field is defined, the chosen resource will be provided as a variable of this name.
 - **toInternal** - A JSONata function to convert from the stored value to the `{name, namespace}` format. Useful, for example, when the data is stored as a string.
 - **toExternal** - A corresponding function to convert back to store.
+- **defaultExpanded** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
 #### Example
 
@@ -347,6 +367,7 @@ FormGroup widgets render an `object` as a collapsible section.
 #### Widget-specific parameters
 
 - **columns** - number of columns the content is rendered in. Defaults to 1.
+- **defaultExpanded** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
 #### Example
 
@@ -367,6 +388,7 @@ GenericList widgets render an array as a list of collapsible sections with their
 #### Widget-specific parameters
 
 - **placeholder** - specifies a short hint about the input field value.
+- **defaultExpanded** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
 #### Example
 
@@ -391,8 +413,8 @@ SimpleList widgets render an array as a table with rows representing data items 
 - **placeholder** - specifies a short hint about the input field value.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CRD; if it doesn't exist in the CRD, then it defaults to `false`.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
-
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+- **defaultExpanded** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
 #### Example
 
