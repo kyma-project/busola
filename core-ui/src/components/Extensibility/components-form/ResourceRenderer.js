@@ -14,7 +14,7 @@ import { useVariables } from '../hooks/useVariables';
 export function ResourceRenderer({
   onChange,
   onKeyDown,
-  value,
+  value = '',
   schema,
   storeKeys,
   required,

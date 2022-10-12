@@ -1,7 +1,13 @@
 import React from 'react';
 import { FormRadioGroup, Checkbox } from 'fundamental-react';
 
-export function Checkboxes({ value, setValue, options, inline, ...props }) {
+export function Checkboxes({
+  value = [],
+  setValue,
+  options,
+  inline,
+  ...props
+}) {
   const updateValue = (key, checked) => {
     if (checked) {
       setValue([...(value || []), key]);
