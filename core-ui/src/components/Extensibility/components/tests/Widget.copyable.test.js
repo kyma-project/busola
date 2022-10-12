@@ -18,6 +18,13 @@ jest.doMock('./../index', () => {
 
 jest.mock('copy-to-clipboard');
 
+const environmentMock = ({ children }) => (
+  <DataSourcesContextProvider value={{}} dataSources={{}}>
+    {children}
+  </DataSourcesContextProvider>
+);
+
+// Widget needs to be imported in each test so that mocking './../index' works
 describe('Widget.copyable', () => {
   it('Render copy button', async () => {
     const { Widget } = await import('../Widget');
@@ -25,20 +32,19 @@ describe('Widget.copyable', () => {
     MockWidget.inline = true;
 
     const { getByRole } = render(
-      <DataSourcesContextProvider value={{}} dataSources={{}}>
-        <Widget
-          structure={{
-            source: '"test-value"',
-            widget: 'CopyableMockWidget',
-            copyable: true,
-          }}
-        />
-      </DataSourcesContextProvider>,
+      <Widget
+        structure={{
+          source: '"test-value"',
+          widget: 'CopyableMockWidget',
+          copyable: true,
+        }}
+      />,
+      { wrapper: environmentMock },
     );
 
     // wait is added because `useJsonata` in `Widget` doesn't return immediately
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve));
+      await new Promise(setTimeout);
 
       // find copy button
       const button = getByRole('button');
@@ -49,29 +55,27 @@ describe('Widget.copyable', () => {
     });
   });
 
-  it('Widget.Inline, !Widget.copyable, schema.copyable => do not render copy button', async () => {
-    const { Widget } = await import('../Widget');
-    MockWidget.copyable = false;
-    MockWidget.inline = true;
-
-    const { queryByRole } = render(
-      <DataSourcesContextProvider value={{}} dataSources={{}}>
-        <Widget structure={{ widget: 'CopyableMockWidget', copyable: true }} />
-      </DataSourcesContextProvider>,
-    );
-
-    expect(queryByRole('button')).not.toBeInTheDocument();
-  });
-
   it('!Widget.Inline, Widget.copyable, schema.copyable => do not render copy button', async () => {
     const { Widget } = await import('../Widget');
     MockWidget.copyable = true;
     MockWidget.inline = false;
 
     const { queryByRole } = render(
-      <DataSourcesContextProvider value={{}} dataSources={{}}>
-        <Widget structure={{ widget: 'CopyableMockWidget', copyable: true }} />
-      </DataSourcesContextProvider>,
+      <Widget structure={{ widget: 'CopyableMockWidget', copyable: true }} />,
+      { wrapper: environmentMock },
+    );
+
+    expect(queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  it('Widget.Inline, !Widget.copyable, schema.copyable => do not render copy button', async () => {
+    const { Widget } = await import('../Widget');
+    MockWidget.copyable = false;
+    MockWidget.inline = true;
+
+    const { queryByRole } = render(
+      <Widget structure={{ widget: 'CopyableMockWidget', copyable: true }} />,
+      { wrapper: environmentMock },
     );
 
     expect(queryByRole('button')).not.toBeInTheDocument();
@@ -80,12 +84,11 @@ describe('Widget.copyable', () => {
   it('Widget.Inline, Widget.copyable, !schema.copyable => do not render copy button', async () => {
     const { Widget } = await import('../Widget');
     MockWidget.copyable = true;
-    MockWidget.inline = false;
+    MockWidget.inline = true;
 
     const { queryByRole } = render(
-      <DataSourcesContextProvider value={{}} dataSources={{}}>
-        <Widget structure={{ widget: 'CopyableMockWidget', copyable: false }} />
-      </DataSourcesContextProvider>,
+      <Widget structure={{ widget: 'CopyableMockWidget', copyable: false }} />,
+      { wrapper: environmentMock },
     );
 
     expect(queryByRole('button')).not.toBeInTheDocument();
@@ -98,15 +101,14 @@ describe('Widget.copyable', () => {
     MockWidget.copyFunction = ({ value }) => 'this is ' + value;
 
     const { getByRole } = render(
-      <DataSourcesContextProvider value={{}} dataSources={{}}>
-        <Widget
-          structure={{
-            source: '"test-value"',
-            widget: 'CopyableMockWidget',
-            copyable: true,
-          }}
-        />
-      </DataSourcesContextProvider>,
+      <Widget
+        structure={{
+          source: '"test-value"',
+          widget: 'CopyableMockWidget',
+          copyable: true,
+        }}
+      />,
+      { wrapper: environmentMock },
     );
 
     // wait is added because `useJsonata` in `Widget` doesn't return immediately
