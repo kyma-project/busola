@@ -18,13 +18,12 @@ export function AlertRenderer({
     resource: originalResource,
     scope: value,
     value,
-    // arrayItems,
   });
   const alert = schema.get('alert');
   const schemaType = schema.get('severity') || 'information';
 
   function alertJsonata(alertFormula) {
-    const [value, error] = jsonata(alertFormula)[0];
+    const [value, error] = jsonata(alertFormula);
 
     if (error) {
       console.warn('Widget::shouldBeVisible error:', error);

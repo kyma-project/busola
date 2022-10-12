@@ -8,7 +8,6 @@ import {
 } from 'components/Extensibility/helpers';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
-// import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
 
@@ -29,7 +28,6 @@ export function ResourceRenderer({
     resource: originalResource,
     scope: value,
     value,
-    // arrayItems,
   });
 
   const { tFromStoreKeys, t: tExt } = useGetTranslation();

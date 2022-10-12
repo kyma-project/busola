@@ -29,7 +29,8 @@ export function CodeViewer({
     value,
     arrayItems,
   });
-  const [language] = jsonata(structure.language, {}, detectLanguage(value));
+  let [language] = jsonata(structure.language, {}, detectLanguage(value));
+  language = language.toLowerCase();
 
   const getValue = (value, structure) => {
     if (!isNil(value)) {
