@@ -40,12 +40,15 @@ export function ResourceForm({
   labelsProps,
   disableDefaultFields,
   onModeChange,
+  handleSetResetFormFn = () => {},
 }) {
   // readonly schema ID, set only once
   const resourceSchemaId = useMemo(
     () => resource.apiVersion + '/' + resource.kind,
     [], // eslint-disable-line react-hooks/exhaustive-deps
   );
+
+  const resourceRef = useRef(null);
 
   if (!handleNameChange) {
     handleNameChange = name => {
@@ -54,6 +57,13 @@ export function ResourceForm({
 
       setResource({ ...resource });
     };
+  }
+
+  if (!resourceRef.current) {
+    resourceRef.current = JSON.stringify(resource);
+    handleSetResetFormFn(() => () => {
+      setResource(JSON.parse(resourceRef.current));
+    });
   }
 
   const { t } = useTranslation();
@@ -112,7 +122,7 @@ export function ResourceForm({
       autocompletionDisabled={autocompletionDisabled}
       readOnly={readOnly}
       schemaId={resourceSchemaId}
-      updateValueOnParentChange={presets?.length}
+      updateValueOnParentChange={true}
     />
   );
   editor = renderEditor
