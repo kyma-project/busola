@@ -4,7 +4,7 @@ metadata:
   name: subscriptions
   namespace: kube-public
   labels:
-    app.kubernetes.io/name: subscriptions.eventing.kyma-project.io
+    app.kubernetes.io/name: subscriptions
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
 data:
@@ -86,8 +86,9 @@ data:
   form: |-
     - path: spec.sink
       name: spec.sink
-      required: true
       simple: true
+      inputInfo: inputInfo.sink
+      placeholder: placeholder.sink
     - widget: GenericList
       path: spec.filter.filters
       simple: true
@@ -95,7 +96,7 @@ data:
         - path: '[].eventType.value'
           name: spec.filter.eventType
           placeholder: placeholder.eventType
-          required: true
+          inputInfo: inputInfo.eventType
         - path: '[].eventSource.value'
           name: spec.filter.eventSource
           required: false
@@ -107,7 +108,7 @@ data:
         eventType:
           property: type
           type: exact
-          value: sap.kyma.custom.APPNAME.EVENTNAME.EVENTNAME.EVENTVERSION
+          value: ''
   list: |-
     - name: status.conditions.status
       source: 'status.ready = false ? "error" : "ready"'
@@ -118,8 +119,11 @@ data:
       widget: Labels
   translations: |-
     en:
+      inputInfo.sink: Sink must have this construction 'http://SERVICENAME.NAMESPACE.svc.cluster.local'
+      inputInfo.eventType: Event Type must have this construction 'sap.kyma.custom.APPNAME.EVENTNAME.EVENTNAME.EVENTVERSION'
       events: Events
       placeholder.eventType: Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1
+      placeholder.sink: Enter the sink, for example, http://service.default.svc.cluster.local
       spec.filters: Filters
       spec.filter.eventType: Event Type
       spec.filter.eventSource: Event Source

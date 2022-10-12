@@ -388,7 +388,7 @@ GenericList widgets render an array as a list of collapsible sections with their
 #### Widget-specific parameters
 
 - **placeholder** - specifies a short hint about the input field value.
-- **template** - specifies default structure for item.
+- **template** - specifies default structure for a list item.
 - **defaultExpanded** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
 #### Example
@@ -408,7 +408,7 @@ GenericList widgets render an array as a list of collapsible sections with their
      - path: '[].eventSource.value'
    template:
      eventSource:
-     property: source
+       property: source
        type: exact
        value: ''
      eventType:
