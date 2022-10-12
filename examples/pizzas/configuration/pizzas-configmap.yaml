@@ -28,13 +28,12 @@ data:
         },
         {
           "name": "Owner References",
-          "source": "spec.ownerReferences[0]",
           "widget": "ResourceLink",
-          "linkText": "'Go to {{data.kind}} {{data.name}}.'",
+          "source": "'Go to ' & $item.spec.ownerReferences[0].kind & ' ' & $item.spec.ownerReferences[0].name",
           "resource": {
-            "name": "data.name",
-            "namespace": "root.metadata.namespace",
-            "kind": "data.kind"
+            "name": "$item.spec.ownerReferences[0].name",
+            "namespace": "$root.metadata.namespace",
+            "kind": "$item.spec.ownerReferences[0].kind"
           }
         }
       ],
@@ -63,10 +62,10 @@ data:
               "name": "Toppings",
               "source": "spec.toppings",
               "widget": "Table",
-              "collapsible": [{"name": "Quantity", "source": "$item.quantity" }],
+              "collapsible": [{"name": "Quantity", "source": "quantity" }],
               "children": [
-                { "name": "Name", "search": true, "source": "$item.name", "sort": true },
-                { "name": "Price ($)", "source": "$item.price",
+                { "name": "Name", "search": true, "source": "name", "sort": true },
+                { "name": "Price ($)", "source": "price",
                 "search": {
                   "searchFunction": "$filter($item.price, function($p){$p > $number($input)})"
                 },

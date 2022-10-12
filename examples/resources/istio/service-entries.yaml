@@ -43,31 +43,31 @@ data:
             "name": "configuration",
             "widget": "Panel",
             "source": "spec",
-            "visibility": "$boolean($exists(data.hosts) or $exists(data.addresses) or $exists(data.subjectAltNames))",
+            "visibility": "$boolean($exists($value.hosts) or $exists($value.addresses) or $exists($value.subjectAltNames))",
             "children": [
-              { "name": "spec.hosts", "source": "$item.hosts", "widget": "JoinedArray", "visibility": "$exists(*)"},
-              { "name": "spec.addresses", "source": "$item.addresses", "widget": "JoinedArray", "visibility": "$exists(*)"},
-              { "name": "spec.exportTo", "source": "$item.exportTo", "widget": "Labels", "placeholder": "Exported to all Namespaces"},
-              { "name": "spec.subjectAltNames", "source": "$item.subjectAltNames", "widget": "JoinedArray", "visibility": "$exists(*)"},
+              { "name": "spec.hosts", "source": "hosts", "widget": "JoinedArray", "visibility": "$exists($value)"},
+              { "name": "spec.addresses", "source": "addresses", "widget": "JoinedArray", "visibility": "$exists($value)"},
+              { "name": "spec.exportTo", "source": "exportTo", "widget": "Labels", "placeholder": "Exported to all Namespaces"},
+              { "name": "spec.subjectAltNames", "source": "subjectAltNames", "widget": "JoinedArray", "visibility": "$exists($value)"},
             ]
           },
           {
             "name": "spec.ports",
             "widget": "Table",
             "source": "spec.ports",
-            "visibility": "$exists(*)",
+            "visibility": "$exists($value)",
             "children": [
               {
-                "name": "spec.ports.number", "source": "$item.number", "sort": true
+                "name": "spec.ports.number", "source": "number", "sort": true
               },
               {
-                "name": "spec.ports.protocol", "source": "$item.protocol", "sort": true
+                "name": "spec.ports.protocol", "source": "protocol", "sort": true
               },
               {
-                "name": "spec.ports.name", "source": "$item.name", "sort": true
+                "name": "spec.ports.name", "source": "name", "sort": true
               },
               {
-                "name": "spec.ports.targetPort", "source": "$item.targetPort", "sort": true
+                "name": "spec.ports.targetPort", "source": "targetPort", "sort": true
               },
             ]
           },
@@ -75,25 +75,25 @@ data:
             "name": "spec.endpoints",
             "widget": "Table",
             "source": "spec.endpoints",
-            "visibility": "$exists(*)",
+            "visibility": "$exists($value)",
             "children": [
               {
-                "name": "spec.endpoints.address", "source": "$item.address", "sort": true
+                "name": "spec.endpoints.address", "source": "address", "sort": true
               },
               {
-                "name": "spec.endpoints.ports", "source": "$item.ports", "widget": "Labels"
+                "name": "spec.endpoints.ports", "source": "ports", "widget": "Labels"
               },
               {
-                "name": "spec.endpoints.labels", "source": "$item.labels", "widget": "Labels"
+                "name": "spec.endpoints.labels", "source": "labels", "widget": "Labels"
               },
               {
-                "name": "spec.endpoints.network", "source": "$item.network", "sort": true
+                "name": "spec.endpoints.network", "source": "network", "sort": true
               },
               {
-                "name": "spec.endpoints.weight", "source": "$item.weight"
+                "name": "spec.endpoints.weight", "source": "weight"
               },
               {
-                "name": "spec.endpoints.serviceAccount", "source": "$item.serviceAccount"
+                "name": "spec.endpoints.serviceAccount", "source": "serviceAccount"
               },
             ]
           },
@@ -101,7 +101,7 @@ data:
             "name": "spec.workloadSelector",
             "widget": "Panel",
             "source": "spec.workloadSelector.labels",
-            "visibility": "$exists(*)",
+            "visibility": "$exists($value)",
             "disablePadding": true,
             "children": [
               { 
@@ -114,7 +114,7 @@ data:
               {
                 "widget": "Labels",
                 "source": "spec.workloadSelector.labels",
-                "visibility": "$exists(*)"
+                "visibility": "$exists($value)"
               }
             ]
           }

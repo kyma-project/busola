@@ -30,7 +30,7 @@ data:
         },
         {
           "name": "External IPs",
-          "source": "$count(status.loadBalancer.ingress) ? $map(status.loadBalancer.ingress, function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '): ($count(data.spec.externalIPs) ? data.spec.externalIPs ~> $join(', '): '-')"
+          "source": "$count(status.loadBalancer.ingress) ? $map(status.loadBalancer.ingress, function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '): ($count($item.spec.externalIPs) ? $item.spec.externalIPs ~> $join(', '): '-')"
         }
       ],
       "body": [
@@ -42,17 +42,17 @@ data:
             {
               "source": "$item", "name": "Name", "sort": "true", "widget": "ResourceLink", 
               "resource": {
-                "name": "data.metadata.name",
-                "namespace": "root.metadata.namespace",
-                "kind": "data.kind"
+                "name": "$item.metadata.name",
+                "namespace": "$root.metadata.namespace",
+                "kind": "$item.kind"
               }
             },
             {
-              "source": "$item.spec.filter.filters[0].eventType.value", "name": "First event type", "sort": {
+              "source": "spec.filter.filters[0].eventType.value", "name": "First event type", "sort": {
               "default": true, "compareFunction": "$compareStrings($first, $second)"}
             },
             {
-              "source": "$item.status.ready", 
+              "source": "status.ready", 
               "name": "Ready",
               "sort": true,
               "widget": "Badge",
@@ -105,7 +105,7 @@ data:
       },
       {
         "name": "External IPs",
-        "source": "$count(status.loadBalancer.ingress) ? $map(status.loadBalancer.ingress, function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '): ($count(data.spec.externalIPs) ? data.spec.externalIPs ~> $join(', '): '-')"
+        "source": "$count(status.loadBalancer.ingress) ? $map(status.loadBalancer.ingress, function($value) {$value.ip ? $value.ip : $value.hostname}) ~> $join(', '): ($count($item.spec.externalIPs) ? $item.spec.externalIPs ~> $join(', '): '-')"
       }
     ]
   dataSources: |-
