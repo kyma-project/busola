@@ -101,12 +101,14 @@ export function NamespaceCreate({
 
       if (!initialNamespace) {
         setWithLimits(false);
-        setWithMemory(false);
         setLimits(createLimitRangeTemplate({}));
+        setWithMemory(false);
+
         setMemory(createResourceQuotaTemplate({}));
         jp.value(namespace, `metadata.labels`, {
           [ISTIO_INJECTION_LABEL]: ISTIO_INJECTION_DISABLED,
         });
+        jp.value(namespace, 'metadata.name', '');
         setNamespace({ ...namespace });
       }
     };
