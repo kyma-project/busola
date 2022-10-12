@@ -2,7 +2,7 @@ import { atom, RecoilState } from 'recoil';
 
 type OpenApiSchemasState = {
   areSchemasComputed: boolean;
-  schemasError: null | object;
+  schemasError: null | Error;
 };
 
 const defaultValue = {
@@ -10,7 +10,9 @@ const defaultValue = {
   schemasError: null,
 };
 
-export const openapiSchemasState: RecoilState<OpenApiSchemasState> = atom({
+export const openapiSchemasState: RecoilState<OpenApiSchemasState> = atom<
+  OpenApiSchemasState
+>({
   key: 'openapiSchemasState',
   default: defaultValue,
 });

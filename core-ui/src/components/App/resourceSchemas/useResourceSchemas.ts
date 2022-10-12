@@ -10,9 +10,13 @@ import { useSetRecoilState } from 'recoil';
 import { openapiSchemasState } from 'state/openapiSchemasAtom';
 
 export const useResourceSchemas = () => {
-  const { activeClusterName, authData, openApi } = useMicrofrontendContext();
+  const {
+    activeClusterName,
+    authData,
+    openApi,
+  } = useMicrofrontendContext() as any;
   const setSchemasState = useSetRecoilState(openapiSchemasState);
-  const lastFetched = useRef();
+  const lastFetched = useRef<Error | null>(null);
 
   useEffect(() => {
     const isOngoingClusterChange = !activeClusterName || !authData;
@@ -32,12 +36,12 @@ export const useResourceSchemas = () => {
       setSchemasState({ areSchemasComputed: true, schemasError: null });
     });
 
-    addWorkerListener('customError', err => {
+    addWorkerListener('customError', (err: Error) => {
       setSchemasState({ areSchemasComputed: false, schemasError: err });
       console.error(err);
     });
 
-    addWorkerErrorListener(err => {
+    addWorkerErrorListener((err: Error) => {
       setSchemasState({ areSchemasComputed: false, schemasError: err });
       console.error(err);
     });
