@@ -11,7 +11,7 @@ jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
 const MockWidget = ({ value }) => value;
 jest.doMock('./../index', () => {
   return {
-    widgets: { CopiableMockWidget: MockWidget },
+    widgets: { CopyableMockWidget: MockWidget },
     valuePreprocessors: [],
   };
 });
@@ -29,7 +29,7 @@ describe('Widget.copyable', () => {
         <Widget
           structure={{
             source: '"test-value"',
-            widget: 'CopiableMockWidget',
+            widget: 'CopyableMockWidget',
             copyable: true,
           }}
         />
@@ -56,7 +56,7 @@ describe('Widget.copyable', () => {
 
     const { queryByRole } = render(
       <DataSourcesContextProvider value={{}} dataSources={{}}>
-        <Widget structure={{ widget: 'CopiableMockWidget', copyable: true }} />
+        <Widget structure={{ widget: 'CopyableMockWidget', copyable: true }} />
       </DataSourcesContextProvider>,
     );
 
@@ -70,7 +70,7 @@ describe('Widget.copyable', () => {
 
     const { queryByRole } = render(
       <DataSourcesContextProvider value={{}} dataSources={{}}>
-        <Widget structure={{ widget: 'CopiableMockWidget', copyable: true }} />
+        <Widget structure={{ widget: 'CopyableMockWidget', copyable: true }} />
       </DataSourcesContextProvider>,
     );
 
@@ -84,7 +84,7 @@ describe('Widget.copyable', () => {
 
     const { queryByRole } = render(
       <DataSourcesContextProvider value={{}} dataSources={{}}>
-        <Widget structure={{ widget: 'CopiableMockWidget', copyable: false }} />
+        <Widget structure={{ widget: 'CopyableMockWidget', copyable: false }} />
       </DataSourcesContextProvider>,
     );
 
@@ -102,7 +102,7 @@ describe('Widget.copyable', () => {
         <Widget
           structure={{
             source: '"test-value"',
-            widget: 'CopiableMockWidget',
+            widget: 'CopyableMockWidget',
             copyable: true,
           }}
         />

@@ -41,13 +41,13 @@ InlineWidget.copyFunction = (props, Renderer, defaultCopyFunction) =>
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
 
-  const CopiableWrapper = ({ children }) => {
-    const isRendererCopiable =
+  const CopyableWrapper = ({ children }) => {
+    const isRendererCopyable =
       typeof Renderer.copyable === 'function'
         ? Renderer.copyable(Renderer)
         : Renderer.copyable;
 
-    if (!props.structure.copyable || !isRendererCopiable) return children;
+    if (!props.structure.copyable || !isRendererCopyable) return children;
 
     const defaultCopyFunction = ({ value }) =>
       typeof value === 'object' ? JSON.stringify(value) : value;
@@ -69,9 +69,9 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
 
   return Renderer.inline ? (
     <InlineRenderer {...props}>
-      <CopiableWrapper structure={props.structure} value={props.value}>
+      <CopyableWrapper structure={props.structure} value={props.value}>
         <Renderer {...props} />
-      </CopiableWrapper>
+      </CopyableWrapper>
     </InlineRenderer>
   ) : (
     <Renderer {...props} />
