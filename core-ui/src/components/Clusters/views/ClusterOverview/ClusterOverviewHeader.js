@@ -1,4 +1,5 @@
 import LuigiClient from '@luigi-project/client';
+import Preferences from 'components/Preferences/Preferences';
 import { Button } from 'fundamental-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -56,17 +57,35 @@ export function ClusterOverviewHeader() {
   const { cluster, config } = useMicrofrontendContext();
   const [showAdd, setShowAdd] = useState(false);
 
+  const [showPreferences, setShowPreferences] = useState(false);
+
   const actions = (
-    <Button
-      glyph="add"
-      onClick={() => {
-        setShowAdd(true);
-        LuigiClient.uxManager().addBackdrop();
-      }}
-      iconBeforeText
-    >
-      {t('upload-yaml.title')}
-    </Button>
+    <>
+      <Button
+        glyph="add"
+        onClick={() => {
+          setShowAdd(true);
+          LuigiClient.uxManager().addBackdrop();
+        }}
+        iconBeforeText
+      >
+        {t('upload-yaml.title')}
+      </Button>
+      <Button
+        onClick={() => {
+          setShowPreferences(true);
+        }}
+      >
+        preferences
+      </Button>
+    </>
+  );
+
+  const preferencesDialog = (
+    <Preferences
+      show={showPreferences}
+      onCancel={() => setShowPreferences(false)}
+    />
   );
 
   return (
@@ -91,6 +110,7 @@ export function ClusterOverviewHeader() {
           LuigiClient.uxManager().removeBackdrop();
         }}
       />
+      {preferencesDialog}
     </>
   );
 }

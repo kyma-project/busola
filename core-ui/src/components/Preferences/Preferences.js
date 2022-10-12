@@ -11,9 +11,9 @@ import { Tab } from 'shared/components/Tabs/Tab';
 import { Tabs } from 'shared/components/Tabs/Tabs';
 import { VerticalTabs } from 'shared/components/VerticalTabs/VerticalTabs';
 import { useTranslation } from 'react-i18next';
-import { Icon } from 'fundamental-react';
+import { Button, Dialog, Icon } from 'fundamental-react';
 
-function Preferences() {
+function Preferences({ show, onCancel }) {
   const { t } = useTranslation();
 
   const tabs = [
@@ -42,46 +42,56 @@ function Preferences() {
       id: 2,
     },
   ];
+
+  const actions = [<Button onClick={onCancel}>Close</Button>];
+
   return (
-    <VerticalTabs tabs={tabs} height="100vh">
-      <VerticalTabs.Content id={1}>
-        <Tabs className="fd-tabs fd-has-padding-left-regular">
-          <Tab
-            key="theme-settings"
-            id="theme-settings"
-            title={t('settings.theme')}
-          >
-            <ThemeChooser />
-          </Tab>
-          <Tab
-            key="language-settings"
-            id="language-settings"
-            title={t('settings.language')}
-          >
-            <LanguageSettings />
-          </Tab>
-          <Tab
-            key="other-settings"
-            id="other-settings"
-            title={t('settings.other.title')}
-          >
-            <OtherSettings />
-          </Tab>
-        </Tabs>
-      </VerticalTabs.Content>
-      <VerticalTabs.Content id={2}>
-        <div>
-          <NamespaceSettings />
-          <ConfirmationSettings />
-          <ProtectedSettings />
-        </div>
-      </VerticalTabs.Content>
-    </VerticalTabs>
+    <Dialog
+      show={show}
+      title={'Preferences'}
+      actions={actions}
+      className="preferences-dialog"
+    >
+      <VerticalTabs tabs={tabs} height="100vh">
+        <VerticalTabs.Content id={1}>
+          <Tabs className="fd-tabs fd-has-padding-left-regular">
+            <Tab
+              key="theme-settings"
+              id="theme-settings"
+              title={t('settings.theme')}
+            >
+              <ThemeChooser />
+            </Tab>
+            <Tab
+              key="language-settings"
+              id="language-settings"
+              title={t('settings.language')}
+            >
+              <LanguageSettings />
+            </Tab>
+            <Tab
+              key="other-settings"
+              id="other-settings"
+              title={t('settings.other.title')}
+            >
+              <OtherSettings />
+            </Tab>
+          </Tabs>
+        </VerticalTabs.Content>
+        <VerticalTabs.Content id={2}>
+          <div>
+            <NamespaceSettings />
+            <ConfirmationSettings />
+            <ProtectedSettings />
+          </div>
+        </VerticalTabs.Content>
+      </VerticalTabs>
+    </Dialog>
   );
 }
 
 /* for some mysterious reason hooks fail in root component, so instead a
  * wrapper component has to be exported */
-export default function Preferencs() {
-  return <Preferences />;
+export default function Preferencs({ ...props }) {
+  return <Preferences {...props} />;
 }
