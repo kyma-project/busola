@@ -36,6 +36,7 @@
     "react-i18next": "^11.15.3",
     "react-router-dom": "^6.3.0",
     "react-tippy": "^1.4.0",
+    "recoil": "^0.7.6",
     "rfc6902": "^4.0.1",
     "use-debounce": "^7.0.1",
     "yup": "^0.28.5"
