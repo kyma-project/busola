@@ -6,12 +6,10 @@ import copyToClipboard from 'copy-to-clipboard';
 // those tests are in separate file as we need to mock the `widgets` collection from `./../index.js`...
 // ... which originals in turn are required in other `Widget.test.js`
 
-jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
-
-const MockWidget = ({ value }) => value;
+const CopyableMockWidget = ({ value }) => value;
 jest.doMock('./../index', () => {
   return {
-    widgets: { CopyableMockWidget: MockWidget },
+    widgets: { CopyableMockWidget },
     valuePreprocessors: [],
   };
 });
@@ -28,8 +26,8 @@ const environmentMock = ({ children }) => (
 describe('Widget.copyable', () => {
   it('Render copy button', async () => {
     const { Widget } = await import('../Widget');
-    MockWidget.copyable = true;
-    MockWidget.inline = true;
+    CopyableMockWidget.copyable = true;
+    CopyableMockWidget.inline = true;
 
     const { getByRole } = render(
       <Widget
@@ -55,50 +53,33 @@ describe('Widget.copyable', () => {
     });
   });
 
-  it('!Widget.Inline, Widget.copyable, schema.copyable => do not render copy button', async () => {
-    const { Widget } = await import('../Widget');
-    MockWidget.copyable = true;
-    MockWidget.inline = false;
+  test.each([
+    [false, true, true],
+    [true, false, true],
+    [true, true, false],
+  ])(
+    'Widget.Inline=%s, Widget.copyable=%s, schema.copyable=%s => do not render copy button',
+    async (widgetInline, widgetCopyable, schemaCopyable) => {
+      const { Widget } = await import('../Widget');
+      CopyableMockWidget.inline = widgetInline;
+      CopyableMockWidget.copyable = widgetCopyable;
 
-    const { queryByRole } = render(
-      <Widget structure={{ widget: 'CopyableMockWidget', copyable: true }} />,
-      { wrapper: environmentMock },
-    );
+      const { queryByRole } = render(
+        <Widget
+          structure={{ widget: 'CopyableMockWidget', copyable: schemaCopyable }}
+        />,
+        { wrapper: environmentMock },
+      );
 
-    expect(queryByRole('button')).not.toBeInTheDocument();
-  });
-
-  it('Widget.Inline, !Widget.copyable, schema.copyable => do not render copy button', async () => {
-    const { Widget } = await import('../Widget');
-    MockWidget.copyable = false;
-    MockWidget.inline = true;
-
-    const { queryByRole } = render(
-      <Widget structure={{ widget: 'CopyableMockWidget', copyable: true }} />,
-      { wrapper: environmentMock },
-    );
-
-    expect(queryByRole('button')).not.toBeInTheDocument();
-  });
-
-  it('Widget.Inline, Widget.copyable, !schema.copyable => do not render copy button', async () => {
-    const { Widget } = await import('../Widget');
-    MockWidget.copyable = true;
-    MockWidget.inline = true;
-
-    const { queryByRole } = render(
-      <Widget structure={{ widget: 'CopyableMockWidget', copyable: false }} />,
-      { wrapper: environmentMock },
-    );
-
-    expect(queryByRole('button')).not.toBeInTheDocument();
-  });
+      expect(queryByRole('button')).not.toBeInTheDocument();
+    },
+  );
 
   it('Custom copy function', async () => {
     const { Widget } = await import('../Widget');
-    MockWidget.copyable = true;
-    MockWidget.inline = true;
-    MockWidget.copyFunction = ({ value }) => 'this is ' + value;
+    CopyableMockWidget.copyable = true;
+    CopyableMockWidget.inline = true;
+    CopyableMockWidget.copyFunction = ({ value }) => 'this is ' + value;
 
     const { getByRole } = render(
       <Widget
@@ -113,7 +94,7 @@ describe('Widget.copyable', () => {
 
     // wait is added because `useJsonata` in `Widget` doesn't return immediately
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve));
+      await new Promise(setTimeout);
 
       // find copy button
       const button = getByRole('button');
