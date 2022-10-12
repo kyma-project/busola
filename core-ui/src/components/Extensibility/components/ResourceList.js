@@ -1,3 +1,4 @@
+import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import React, { Suspense } from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -59,7 +60,21 @@ export function ResourceList({
           error={value?.error}
           loading={value?.loading}
           title={t(structure.name)}
-          fixedPath
+          navigateFn={entry => {
+            const {
+              kind,
+              metadata: { name, namespace },
+            } = entry;
+
+            const namespacePart = namespace ? `namespaces/${namespace}/` : '';
+            const resourceTypePart =
+              extensibilityResourceSchema.general.urlPath ||
+              pluralize(kind.toLowerCase());
+
+            LuigiClient.linkManager()
+              .fromContext('cluster')
+              .navigate(namespacePart + resourceTypePart + '/details/' + name);
+          }}
         />
       </Suspense>
     );
