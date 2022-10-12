@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cherry-sidecars
+  name: sidecars
   namespace: kube-public
   labels:
     app.kubernetes.io/name: sidecars
@@ -13,9 +13,9 @@ data:
         kind: Sidecar
         group: networking.istio.io
         version: v1alpha3
-    urlPath: cherry-sidecars
-    category: Cherry
-    name: Cherry Sidecars
+    urlPath: sidecars
+    category: Istio
+    name: Sidecars
     scope: namespace
     description: '{{[Sidecar](https://istio.io/latest/docs/reference/config/networking/sidecar/)}} manages the incoming and outgoing communication in a workload it is attached to.'
   dataSources: |-
