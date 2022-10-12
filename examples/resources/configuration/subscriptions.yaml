@@ -119,8 +119,8 @@ data:
       widget: Labels
   translations: |-
     en:
-      inputInfo.sink: Sink must have this construction 'http://SERVICENAME.NAMESPACE.svc.cluster.local'
-      inputInfo.eventType: Event Type must have this construction 'sap.kyma.custom.APPNAME.EVENTNAME.EVENTNAME.EVENTVERSION'
+      inputInfo.sink: Sink structure, 'http://SERVICE.NAMESPACE.svc.cluster.local'
+      inputInfo.eventType: Event Type structure, 'sap.kyma.custom.APP.EVENTNAME.EVENTNAME.VERSION'
       events: Events
       placeholder.eventType: Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1
       placeholder.sink: Enter the sink, for example, http://service.default.svc.cluster.local
