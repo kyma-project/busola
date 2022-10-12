@@ -31,6 +31,7 @@ export function ExtensibilityCreateCore({
   resourceSchema: createResource,
   toggleFormFn,
   resourceName,
+  ...props
 }) {
   const { prepareVars, resetVars, readVars } = useVariables();
   const { namespaceId: namespace } = useMicrofrontendContext();
@@ -54,7 +55,7 @@ export function ExtensibilityCreateCore({
     ),
   );
 
-  const presets = usePreparePresets(emptyTemplate, createResource?.presets);
+  const presets = usePreparePresets(createResource?.presets);
 
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
@@ -124,6 +125,7 @@ export function ExtensibilityCreateCore({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind={resourceType}
       singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
       resource={resource}

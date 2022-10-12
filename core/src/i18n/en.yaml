@@ -412,6 +412,7 @@ common:
     generate-name: Generate
     load: Load
     ok: OK
+    reset: Reset
     restart: Restart
     save: Save
     submit: Submit
@@ -420,7 +421,6 @@ common:
   create-form:
     autocomplete-unavailable-error: Monaco autocompletion unavailable. {{error}}.
     choose-preset: Choose preset
-    clear-form: Clear
     editor-error: 'Parse error: {{error}}, previous valid input will be used'
     messages:
       create-failure: 'Failed to create the {{resourceType}}: {{error}}'
@@ -469,7 +469,6 @@ common:
     zone: Zone
   labels:
     category: Category
-    clear-form: Clear
     data: Data
     hostname: Hostname
     issuer: Issuer
@@ -1421,6 +1420,7 @@ jobs:
     title: Conditions
     type: Type
   create-modal:
+    add-container: Add container
     at-least-one-container-required: CronJob must have at least one container.
     container: Container
     containers: Containers

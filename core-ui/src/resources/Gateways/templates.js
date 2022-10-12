@@ -32,10 +32,6 @@ export function createGatewayTemplate(namespace) {
 export function createPresets(namespace, translate) {
   return [
     {
-      name: translate('common.labels.clear-form'),
-      value: createGatewayTemplate(namespace),
-    },
-    {
       name: 'ingressgateway',
       value: {
         apiVersion: 'networking.istio.io/v1beta1',
