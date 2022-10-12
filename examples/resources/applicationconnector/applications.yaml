@@ -100,6 +100,10 @@ data:
     }
   form: |-
     [
+      {
+        "path": "metadata.name",
+        "extraPaths": ["spec.accessLabel", "metadata.labels['app.kubernetes.io/name']"]
+      },
       { "path": "spec.description" },
       { "path": "spec.accessLabel" }
     ]
