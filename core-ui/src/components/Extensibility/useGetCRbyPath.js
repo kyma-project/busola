@@ -13,7 +13,7 @@ export const useGetCRbyPath = () => {
       `/namespaces/${namespaceId}`,
       '',
     );
-    return crPath.split('/')[1] === urlPath;
+    return crPath.includes(`/${urlPath}`);
   });
 
   return resource;
