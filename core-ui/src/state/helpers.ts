@@ -1,8 +1,11 @@
 import { AtomEffect } from 'recoil';
 
-export const localStorageEffect: <T>(
-  localStorageKey: string,
-) => AtomEffect<T> = (localStorageKey: string) => ({ setSelf, onSet }) => {
+type LocalStorageEffectFn = <T>(localStorageKey: string) => AtomEffect<T>;
+
+export const localStorageEffect: LocalStorageEffectFn = localStorageKey => ({
+  setSelf,
+  onSet,
+}) => {
   const savedValue = localStorage.getItem(localStorageKey);
   if (savedValue != null) {
     setSelf(JSON.parse(savedValue));
