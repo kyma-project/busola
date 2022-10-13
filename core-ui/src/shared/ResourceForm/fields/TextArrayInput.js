@@ -36,29 +36,31 @@ export function TextArrayInput({
           internalValue,
           setMultiValue,
         }) => (
-          <FormInput
-            placeholder={Math.abs(index) === 1 ? placeholder : ''}
-            key={index}
-            compact
-            value={value || ''}
-            ref={ref}
-            onChange={e => {
-              setValue(e.target.value);
-              updateValue();
-            }}
-            onKeyDown={e => focus(e)}
-            onBlur={() => {
-              const fieldValue = internalValue?.filter(val => !!val);
-              setMultiValue(
-                typeof customFormatFn === 'function'
-                  ? customFormatFn(fieldValue)
-                  : fieldValue,
-              );
-            }}
-            readOnly={readOnly}
-            {...inputProps}
-            ariaLabel={ariaLabel}
-          />
+          <div className="fd-col fd-col-md--11">
+            <FormInput
+              placeholder={Math.abs(index) === 1 ? placeholder : ''}
+              key={index}
+              compact
+              value={value || ''}
+              ref={ref}
+              onChange={e => {
+                setValue(e.target.value);
+                updateValue();
+              }}
+              onKeyDown={e => focus(e)}
+              onBlur={() => {
+                const fieldValue = internalValue?.filter(val => !!val);
+                setMultiValue(
+                  typeof customFormatFn === 'function'
+                    ? customFormatFn(fieldValue)
+                    : fieldValue,
+                );
+              }}
+              readOnly={readOnly}
+              {...inputProps}
+              ariaLabel={ariaLabel}
+            />
+          </div>
         ),
       ]}
       {...props}

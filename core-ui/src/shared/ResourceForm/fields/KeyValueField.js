@@ -87,6 +87,7 @@ export function KeyValueField({
       inputs={[
         ({ value, setValue, ref, updateValue, focus }) =>
           input.key({
+            fullWidth: true,
             disabled: lockedKeys.includes(value?.key),
             key: 'key',
             value: value?.key || '',
@@ -103,6 +104,7 @@ export function KeyValueField({
           }),
         ({ focus, value, setValue, updateValue, ...props }) =>
           input.value({
+            fullWidth: true,
             className: 'value-input',
             key: 'value',
             onKeyDown: e => focus(e),

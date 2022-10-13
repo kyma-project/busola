@@ -18,7 +18,12 @@ export function ComboboxInput({
   ...props
 }) {
   return (
-    <div className={classnames('resource-form-combobox', className)}>
+    <div
+      className={classnames(
+        'resource-form-combobox fd-col fd-col-md--11',
+        className,
+      )}
+    >
       <FundamentalComboboxInput
         ariaLabel="Combobox input"
         arrowLabel="Combobox input arrow"

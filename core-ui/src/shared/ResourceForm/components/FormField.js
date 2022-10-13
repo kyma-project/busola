@@ -33,12 +33,14 @@ export function FormField({
         <Label required={required && !disabled}>{label}</Label>
       </div>
       <div className="fd-col fd-col-md--8">
-        {messageStrip
-          ? messageStrip
-          : input({ required, disabled, ...inputProps })}
-        {inputInfo && (
-          <p style={{ color: 'var(--sapNeutralTextColor)' }}>{inputInfo}</p>
-        )}
+        <div className="fd-row">
+          {messageStrip
+            ? messageStrip
+            : input({ required, disabled, ...inputProps })}
+          {inputInfo && (
+            <p style={{ color: 'var(--sapNeutralTextColor)' }}>{inputInfo}</p>
+          )}
+        </div>
       </div>
       <div className="fd-col fd-col-md--1 tooltip-column">
         {tooltipContent && (
