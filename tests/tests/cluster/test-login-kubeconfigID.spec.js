@@ -93,7 +93,7 @@ context('Test login - kubeconfigID', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '*assets/config/config.json*',
+        url: '*assets/config/config.yaml*',
       },
       JSON.stringify({
         config: {
