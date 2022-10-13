@@ -27,7 +27,12 @@ export const form = [
     ],
   },
   subsets,
-  { path: 'spec.exportTo', name: 'Export To', widget: 'SimpleList' },
+  {
+    path: 'spec.exportTo',
+    name: 'Export To',
+    widget: 'SimpleList',
+    children: [{ path: '[]' }],
+  },
   {
     path: 'spec.workloadSelector.matchLabels',
     name: 'Workload Selector Match Labels',
