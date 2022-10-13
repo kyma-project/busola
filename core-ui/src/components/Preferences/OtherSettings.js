@@ -1,16 +1,16 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Select } from 'shared/components/Select/Select';
-import { pageSizeSettings } from 'state/pageSizeStateAtom';
+import { pageSizeState } from 'state/pageSizeStateAtom';
 import { useRecoilState } from 'recoil';
+const AVAILABLE_PAGE_SIZES = [10, 20, 50];
 
 export default function OtherSettings() {
   const { t } = useTranslation();
-  const [{ pageSize, availablePageSizes }, setPageSize] = useRecoilState(
-    pageSizeSettings,
-  );
 
-  const pageSizeOptions = availablePageSizes.map(s => ({
+  const [pageSize, setPageSize] = useRecoilState(pageSizeState);
+
+  const pageSizeOptions = AVAILABLE_PAGE_SIZES.map(s => ({
     key: s.toString(),
     text: s.toString(),
   }));
