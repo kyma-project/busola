@@ -60,6 +60,16 @@ Common variables are the primary means to bypass the default scoping.
 - **\$item** - refers to the most recent array item. When not in an array, it's equal to **\$root**
 - **\$items** - contains an array of references to all parent array items (with the last item being equal to **\$item**)
 - **\$value** - when used in a jsonata other than **source** (for example **visibility**, but also other widget-specific formulas) contains the value returned by the source
+- **\$index** - exists in array components, refers to the index of the current item of an array.
+
+#### Example
+
+```yaml
+- widget: Table
+  source: spec.rules
+  visibility: $exists($value)
+  collapsibleTitle: "'Rule #' & $string($index + 1)"
+```
 
 ## Data sources
 
