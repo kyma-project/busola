@@ -36,7 +36,6 @@
     "react-i18next": "^11.15.3",
     "react-router-dom": "^6.3.0",
     "react-tippy": "^1.4.0",
-    "recoil": "^0.7.6",
     "rfc6902": "^4.0.1",
     "use-debounce": "^7.0.1",
     "yup": "^0.28.5"
@@ -79,16 +78,11 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.3",
-    "@types/jest": "^29.1.2",
-    "@types/node": "^18.8.5",
-    "@types/react": "^18.0.21",
-    "@types/react-dom": "^18.0.6",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
     "babel-polyfill": "^6.26.0",
     "enzyme": "^3.10.0",
     "enzyme-to-json": "^3.4.0",
     "react-app-rewired": "^2.2.1",
-    "react-scripts": "^5.0.0",
-    "typescript": "^4.8.4"
+    "react-scripts": "^5.0.0"
   }
 }
