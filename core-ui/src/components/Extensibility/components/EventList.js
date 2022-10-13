@@ -45,7 +45,11 @@ export function EventList({
     if (!structure.filter) return true;
 
     try {
-      return !!jsonata(structure.filter, { scope: res });
+      const [eventFilter, eventFilterError] = jsonata(structure.filter, {
+        scope: res,
+      });
+      if (eventFilterError) return false;
+      return !!eventFilter;
     } catch (e) {
       return false;
     }

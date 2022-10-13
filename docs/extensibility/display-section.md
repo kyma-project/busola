@@ -464,7 +464,7 @@ EventList widget renders a list of Events.
 
 #### Widget-specific parameters
 
-- **filter** - a [JSONata](jsonata.md) function you can use to filter Events emitted by a specific resource. There is a special custom function [matchEvents](jsonata.md#matcheventsitem-kind-name) you can use to filter Events, for example, `$matchEvents($item, $root.kind, $root.metadata.name)`.
+- **filter** - a [JSONata](jsonata.md) function you can use to filter Events emitted by a specific resource. There is a special custom function [matchEvents](jsonata.md#matcheventsitem-kind-name) you can use to filter Events, for example, `$matchEvents($$, $root.kind, $root.metadata.name)`.
 - **defaultType** - either `all`, `information` or `warning`. When set to `information` or `warning` Events with specific type are displayed. By default all Events are fetched.
 - **hideInvolvedObjects** - optional flag. If set to `true`, the **Involved Objects** column is hidden. Defaults to `false`.
 
@@ -472,7 +472,7 @@ EventList widget renders a list of Events.
 
 ```yaml
 - widget: EventList
-  filter: '$matchEvents($item, $root.kind, $root.metadata.name)'
+  filter: '$matchEvents($$, $root.kind, $root.metadata.name)'
   name: events
   defaultType: information
 ```
@@ -483,7 +483,7 @@ EventList widget renders a list of Events.
 
 ```yaml
 - widget: EventList
-  filter: '$matchEvents($item, $root.kind, $root.metadata.name)'
+  filter: '$matchEvents($$, $root.kind, $root.metadata.name)'
   name: events
   defaultType: information
   hideInvolvedObjects: true

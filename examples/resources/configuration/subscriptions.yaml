@@ -79,7 +79,7 @@ data:
                   - source: '$parent.value = "" ? "Handled by the NATS backend" : $parent.value'
                     name: spec.filter.event.value
       - widget: EventList
-        filter: '$matchEvents($item, $root.kind, $root.metadata.name)'
+        filter: "$matchEvents($$, $root.kind, $root.metadata.name)"
         name: events
         defaultType: NORMAL
         hideInvolvedObjects: true

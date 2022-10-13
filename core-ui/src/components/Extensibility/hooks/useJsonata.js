@@ -32,13 +32,16 @@ export function useJsonata(
       return [defaultValue, null];
     }
     try {
-      const value = jsonataWrapper(query).evaluate(scope || resource, {
-        ...dataSourceFetchers,
-        root: resource,
-        items: arrayItems,
-        item: last(extras?.arrayItems) || last(arrayItems) || resource,
-        ...extras,
-      });
+      const value = jsonataWrapper(query).evaluate(
+        extras.scope || scope || resource,
+        {
+          ...dataSourceFetchers,
+          root: resource,
+          items: arrayItems,
+          item: last(extras?.arrayItems) || last(arrayItems) || resource,
+          ...extras,
+        },
+      );
       return [value, null];
     } catch (e) {
       return [t('extensibility.configuration-error', { error: e.message }), e];
