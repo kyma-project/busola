@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LayoutPanel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
 
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import { Pagination } from 'shared/components/GenericList/Pagination/Pagination';
@@ -18,14 +19,12 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import { SortModalPanel } from './SortModalPanel';
 import { isEmpty } from 'lodash';
-import './GenericList.scss';
-import { useRecoilValue } from 'recoil';
 import { pageSizeState } from 'state/pageSizeStateAtom';
+import './GenericList.scss';
 
 const defaultSort = {
   name: nameLocaleSort,

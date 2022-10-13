@@ -13,7 +13,6 @@ import { reloadAuth } from './auth/auth';
 import { setFeatureToggle } from './utils/feature-toggles';
 import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
-import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
 import { getCorrespondingNamespaceLocation } from './navigation/navigation-helpers';
 import { featureCommunicationEntries } from './feature-discovery';
 import * as fetchCache from './cache/fetch-cache';
@@ -156,7 +155,6 @@ export const communication = {
         pathId,
       });
     },
-    ...pageSizeCommunicationEntry,
     ...featureCommunicationEntries,
   },
 };
