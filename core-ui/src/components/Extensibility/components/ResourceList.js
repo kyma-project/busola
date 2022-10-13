@@ -61,19 +61,25 @@ export function ResourceList({
           loading={value?.loading}
           title={t(structure.name)}
           navigateFn={entry => {
-            const {
-              kind,
-              metadata: { name, namespace },
-            } = entry;
+            try {
+              const {
+                kind,
+                metadata: { name, namespace },
+              } = entry;
 
-            const namespacePart = namespace ? `namespaces/${namespace}/` : '';
-            const resourceTypePart =
-              extensibilityResourceSchema.general.urlPath ||
-              pluralize(kind.toLowerCase());
+              const namespacePart = namespace ? `namespaces/${namespace}/` : '';
+              const resourceTypePart =
+                extensibilityResourceSchema.general.urlPath ||
+                pluralize(kind.toLowerCase());
 
-            LuigiClient.linkManager()
-              .fromContext('cluster')
-              .navigate(namespacePart + resourceTypePart + '/details/' + name);
+              LuigiClient.linkManager()
+                .fromContext('cluster')
+                .navigate(
+                  namespacePart + resourceTypePart + '/details/' + name,
+                );
+            } catch (e) {
+              alert(1);
+            }
           }}
         />
       </Suspense>
