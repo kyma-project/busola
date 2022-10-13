@@ -2,6 +2,16 @@ import { destinationRules } from './index.mjs';
 import jsyaml from 'js-yaml';
 import * as fs from 'fs';
 
+function stringifyObjValue (configMapData) {
+  const result = {}
+  Object.entries(configMapData).forEach(([key, value]) => {
+    result[key] = jsyaml.dump(value, { noRefs: true });
+  });
+  return result
+}
+
+const stringifiedConfigMapData = stringifyObjValue(destinationRules);
+
 const configMap = {
   kind: 'ConfigMap',
   apiVersion: 'v1',
@@ -14,9 +24,8 @@ const configMap = {
       'busola.io/extension-version': '0.5',
     },
   },
-  data: destinationRules,
+  data: stringifiedConfigMapData,
 };
-
 const configMapYaml = jsyaml.dump(configMap, { noRefs: true });
 
 fs.writeFile('destination-rules.yaml', configMapYaml, err => {
