@@ -20,6 +20,7 @@ import './styles/sapIllus-Fills.css';
 import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
+import { RecoilRoot } from 'recoil';
 
 i18next
   .use(initReactI18next)

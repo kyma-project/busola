@@ -11,7 +11,6 @@ import { useAppTracking } from 'hooks/tracking';
 
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
 import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
-import { AppContext } from './AppContext';
 
 import { resourceRoutes } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
@@ -22,7 +21,7 @@ export default function App() {
   const { t, i18n } = useTranslation();
 
   useLoginWithKubeconfigID();
-  const schemaInfo = useResourceSchemas();
+  useResourceSchemas();
 
   useEffect(() => {
     i18n.changeLanguage(language);
@@ -32,24 +31,21 @@ export default function App() {
   useAppTracking();
 
   return (
-    <AppContext.Provider value={{ schemaInfo }}>
+    <Routes key={cluster?.name}>
       {/* force rerender on cluster change*/}
-      <Routes key={cluster?.name}>
-        <Route
-          path="/overview" // overview route should stay static
-          element={
-            <WithTitle title={t('clusters.overview.title-current-cluster')}>
-              <ClusterOverview />
-            </WithTitle>
-          }
-        />
-
-        {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
-        {customResources?.map(cr => createExtensibilityRoutes(cr, language))}
-        {resourceRoutes}
-        {otherRoutes}
-        <Route path="" element={<MainFrameRedirection />} />
-      </Routes>
-    </AppContext.Provider>
+      <Route
+        path="/overview" // overview route should stay static
+        element={
+          <WithTitle title={t('clusters.overview.title-current-cluster')}>
+            <ClusterOverview />
+          </WithTitle>
+        }
+      />
+      {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
+      {customResources?.map(cr => createExtensibilityRoutes(cr, language))}
+      {resourceRoutes}
+      {otherRoutes}
+      <Route path="" element={<MainFrameRedirection />} />
+    </Routes>
   );
 }
