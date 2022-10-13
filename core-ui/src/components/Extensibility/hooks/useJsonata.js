@@ -34,10 +34,10 @@ export function useJsonata(
     try {
       const value = jsonataWrapper(query).evaluate(scope || resource, {
         ...dataSourceFetchers,
-        ...extras,
         root: resource,
         items: arrayItems,
-        item: last(arrayItems) || resource,
+        item: last(extras?.arrayItems) || last(arrayItems) || resource,
+        ...extras,
       });
       return [value, null];
     } catch (e) {
