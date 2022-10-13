@@ -7,8 +7,7 @@ config:
           default: https://www.sap.com/corporate/en/legal/impressum.html
           de: https://www.sap.com/corporate/de/legal/impressum.html
         privacy:
-          default: >-
-            https://help.sap.com/viewer/82bdf2271c6041f79387c122147cf774/Cloud/en-US
+          default: https://help.sap.com/viewer/82bdf2271c6041f79387c122147cf774/Cloud/en-US
         copyright:
           default: https://www.sap.com/corporate/en/legal/copyright.html
           de: https://www.sap.com/corporate/de/legal/copyright.html

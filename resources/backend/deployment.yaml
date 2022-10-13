@@ -50,4 +50,4 @@ spec:
             name: busola-config
             items:
               - key: config
-                path: config.json
+                path: config.yaml
