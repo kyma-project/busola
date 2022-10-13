@@ -1,25 +1,17 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useTranslation } from 'react-i18next';
 import { Select } from 'shared/components/Select/Select';
+import { pageSizeState, AVAILABLE_PAGE_SIZES } from 'state/pageSizeStateAtom';
+import { useRecoilState } from 'recoil';
 
 export default function OtherSettings() {
   const { t } = useTranslation();
-  const { settings } = useMicrofrontendContext();
-  const { pageSize, AVAILABLE_PAGE_SIZES } = settings.pagination;
+  const [pageSize, setPageSize] = useRecoilState(pageSizeState);
 
   const pageSizeOptions = AVAILABLE_PAGE_SIZES.map(s => ({
     key: s.toString(),
     text: s.toString(),
   }));
-
-  const setPageSize = pageSize => {
-    LuigiClient.sendCustomMessage({
-      id: 'busola.set-page-size',
-      pageSize,
-    });
-  };
 
   return (
     <div className="preferences-row">

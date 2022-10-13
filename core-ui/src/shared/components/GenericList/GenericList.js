@@ -24,6 +24,8 @@ import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import { SortModalPanel } from './SortModalPanel';
 import { isEmpty } from 'lodash';
 import './GenericList.scss';
+import { useRecoilValue } from 'recoil';
+import { pageSizeState } from 'state/pageSizeStateAtom';
 
 const defaultSort = {
   name: nameLocaleSort,
@@ -80,10 +82,9 @@ export const GenericList = ({
     }
   };
 
-  const { settings } = useMicrofrontendContext();
+  const pageSize = useRecoilValue(pageSizeState);
   if (pagination) {
-    pagination.itemsPerPage =
-      pagination.itemsPerPage || settings?.pagination?.pageSize;
+    pagination.itemsPerPage = pagination.itemsPerPage || pageSize;
   }
 
   const { i18n, t } = useTranslation();
