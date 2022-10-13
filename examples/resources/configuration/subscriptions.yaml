@@ -29,10 +29,9 @@ data:
       - source: spec.sink
         widget: ResourceLink
         name: spec.sink.controlledBy
-        linkText: "'spec.sink.link'"
         resource:
-          name: '$substringBefore($substringAfter(data, "http://"), ".")'
-          namespace: root.metadata.namespace
+          name: '$substringBefore($substringAfter(spec.sink, "http://"), ".")'
+          namespace: $root.metadata.namespace
           kind: "'Service'"
     body: 
       - source: status.conditions
@@ -132,7 +131,6 @@ data:
       spec.filter.event.value: Value
       spec.sink: Sink
       spec.sink.controlledBy: Controlled By
-      spec.sink.link: Service {{data.name}}
       status.cleanEventTypes: Event Types
       status.conditions: Condidtions
       status.conditions.lastTransitionTime: Last Transition
