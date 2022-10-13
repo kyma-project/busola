@@ -52,9 +52,9 @@ RUN npm ci --only=production
 
 # use sessionStorage as default
 # enable OBSERVABILITY & SHOW_KYMA_VERSION for production
-RUN yq -i '.config.features.OBSERVABILITY.isEnabled = true' core/assets/defaultConfig.yaml
-RUN yq -i '.config.features.SHOW_KYMA_VERSION.isEnabled = true' core/assets/defaultConfig.yaml 
-RUN yq -i '.config.defaultStorage = "sessionStorage"' core/assets/defaultConfig.yaml 
+RUN yq eval -i '.config.features.OBSERVABILITY.isEnabled = true' core/assets/defaultConfig.yaml
+RUN yq eval -i '.config.features.SHOW_KYMA_VERSION.isEnabled = true' core/assets/defaultConfig.yaml 
+RUN yq eval -i '.config.defaultStorage = "sessionStorage"' core/assets/defaultConfig.yaml 
 
 EXPOSE 3001
 ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
