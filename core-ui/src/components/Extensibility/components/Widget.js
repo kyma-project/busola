@@ -62,7 +62,7 @@ export function Widget({
   const [childValue] = jsonata(structure.source);
 
   const [visible, visibilityError] = jsonata(
-    structure.visibility,
+    structure.visibility?.toString(),
     {
       value: childValue,
     },
@@ -74,7 +74,8 @@ export function Widget({
       error: visibilityError.message,
     });
   }
-  if (!visible) return null;
+
+  if (visible === false) return null;
 
   if (structure.valuePreprocessor) {
     const Preprocessor = valuePreprocessors[structure.valuePreprocessor];

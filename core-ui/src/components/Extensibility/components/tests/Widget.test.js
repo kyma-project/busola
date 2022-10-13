@@ -2,22 +2,28 @@ import { DataSourcesContextProvider } from 'components/Extensibility/contexts/Da
 import { mount } from 'enzyme';
 import { Widget } from '../Widget';
 
-jest.mock('components/Extensibility/hooks/useJsonata', () => ({
-  useJsonata: () => 'test-value',
-}));
-
 jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
+
+jest.mock('../../hooks/useJsonata', () => ({
+  useJsonata: () => {
+    return query => {
+      const jsonataResponse = query === 'false' ? false : query;
+      const jsonataError = query === 'error' ? 'Error!' : null;
+      return [jsonataResponse, jsonataError];
+    };
+  },
+}));
 
 describe('Widget', () => {
   describe('structure.visible', () => {
     it('not set -> render component as usual', () => {
       const container = mount(
         <DataSourcesContextProvider value={{}} dataSources={{}}>
-          <Widget value="test-value" structure={{ path: '' }} />
+          <Widget value="test-value" structure={{ source: 'child-value' }} />
         </DataSourcesContextProvider>,
       );
 
-      expect(container.text()).toBe('test-value');
+      expect(container.text()).toBe('child-value');
     });
 
     it('falsy (but not boolean "false") -> render component as usual', () => {
@@ -25,7 +31,7 @@ describe('Widget', () => {
         <DataSourcesContextProvider value={{}} dataSources={{}}>
           <Widget
             value="test-value"
-            structure={{ path: '', visibility: null }}
+            structure={{ source: '', visibility: null }}
           />
         </DataSourcesContextProvider>,
       );
@@ -38,7 +44,7 @@ describe('Widget', () => {
         <DataSourcesContextProvider value={{}} dataSources={{}}>
           <Widget
             value="test-value"
-            structure={{ path: '', visibility: false }}
+            structure={{ source: '', visibility: false }}
           />
         </DataSourcesContextProvider>,
       );
@@ -47,23 +53,18 @@ describe('Widget', () => {
     });
 
     it('jsonata error -> display error', () => {
-      const originalConsoleWarn = console.warn;
       console.warn = jest.fn();
 
       const container = mount(
         <DataSourcesContextProvider value={{}} dataSources={{}}>
           <Widget
             value="test-value"
-            structure={{ path: '', visibility: '+=' }}
+            structure={{ source: '', visibility: 'error' }}
           />
         </DataSourcesContextProvider>,
       );
-
+      console.log(container.text());
       expect(container.text()).toBe('extensibility.configuration-error');
-      expect(console.warn.mock.calls[0][0]).toBe(
-        'Widget::shouldBeVisible error:',
-      );
-      console.warn = originalConsoleWarn;
     });
 
     it('jsonata -> control visibility', () => {
@@ -71,7 +72,7 @@ describe('Widget', () => {
         <DataSourcesContextProvider value={{}} dataSources={{}}>
           <Widget
             value="test-value"
-            structure={{ path: '', visibility: '$contains(data, "test")' }}
+            structure={{ source: '', visibility: '$contains(data, "test")' }}
           />
         </DataSourcesContextProvider>,
       );
@@ -79,7 +80,7 @@ describe('Widget', () => {
         <DataSourcesContextProvider value={{}} dataSources={{}}>
           <Widget
             value="test-value"
-            structure={{ path: '', visibility: '$contains(data, "tets")' }}
+            structure={{ source: '', visibility: '$contains(data, "tets")' }}
           />
         </DataSourcesContextProvider>,
       );
