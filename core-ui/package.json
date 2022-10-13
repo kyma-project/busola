@@ -24,6 +24,7 @@
     "graphviz-react": "^1.2.0",
     "http-status-codes": "^2.2.0",
     "jsonata": "^1.8.6",
+    "jsonschema": "^1.4.1",
     "lodash-es": "^4.17.21",
     "monaco-editor": "^0.33.0",
     "monaco-yaml": "^4.0.0-alpha.2",
@@ -38,6 +39,7 @@
     "react-tippy": "^1.4.0",
     "recoil": "^0.7.5",
     "rfc6902": "^4.0.1",
+    "url": "^0.11.0",
     "use-debounce": "^7.0.1",
     "yup": "^0.28.5"
   },
