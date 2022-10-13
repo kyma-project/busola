@@ -10,6 +10,8 @@ module.exports = {
       ...config.resolve.alias,
     };
 
+    config.resolve.extensions = [...config.resolve.extensions, '.ts', '.tsx'];
+
     return config;
   },
   jest: function(config) {
