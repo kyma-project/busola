@@ -15,9 +15,9 @@ data:
         "group": "applicationconnector.kyma-project.io",
         "version": "v1alpha1"
       },
-      "name": "Ext Applications",
+      "name": "Applications",
       "category": "Integration",
-      "urlPath": "ext-applications",
+      "urlPath": "applications",
       "scope": "cluster",
       "description": "{{[Application](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/ac-01-application)}} represents an external solution connected to Kyma."
     }
