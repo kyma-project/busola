@@ -12,6 +12,7 @@ const validateResourceBySchema = async resource => {
 
         if (result.errors.length > 0)
           return [currentRule.messageOnFailure, ...accumulator];
+
         return [...accumulator];
       } catch {
         return [...accumulator];
