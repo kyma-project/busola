@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from 'react';
-import { validator } from '@exodus/schemasafe';
 import { Validator } from 'jsonschema';
 
 const validateResourceBySchema = async resource => {
