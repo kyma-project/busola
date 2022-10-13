@@ -72,6 +72,7 @@ export function CollapsibleSection({
           resource={resource}
           setResource={setResource}
           isAdvanced={isAdvanced}
+          lvl={lvl + 1}
         >
           {children}
         </ResourceFormWrapper>
