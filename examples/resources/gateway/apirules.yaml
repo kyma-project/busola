@@ -209,28 +209,7 @@ data:
     [
       {
         "simple": "true",
-        "path": "spec.service.name",
-        "name": "service-name",
-        "widget": "Resource",
-        "resource": {
-          "kind": "Service",
-          "version": "v1",
-          "scope": "namespace"
-        },
-        "filter": "$filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != 'serving.knative.dev/revision' }) })"
-      },
-      # {
-      #   "simple": "true",
-      #   "path": "spec.service.port",
-      #   "name": "service.port",
-      # },
-      # {
-      #   "var": "useDescription",
-      #   "type": "boolean",
-      #   "dynamicValue": "'$boolean(spec.description)'",
-      # },
-      {
-        "simple": "true",
+        "required": true,
         "path": "spec.gateway",
         "name": "gateway",
         "widget": "Resource",
@@ -243,6 +222,146 @@ data:
         # "visibility": "$not($exists($relatedGateways()))",
         "filter": "$filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != 'serving.knative.dev/revision' }) })"
       },
+      {
+        "simple": "true",
+        "required": true,
+        "path": "spec.host",
+        "name": "host",
+      },
+      {
+        "simple": "true",
+        "path": "spec.rules", 
+        "name": "rules", 
+        "widget": "GenericList", 
+        "children": [
+          {
+            "required": true, 
+            "path": "[].accessStrategies", 
+            "name": "accessStrategies", 
+            "widget": "GenericList", 
+            "children": [
+              {
+                "path": "[].config",
+                "name": "accessStrategies.config",
+                "widget": "FormGroup",
+                "children": [
+                  {
+                    "widget": "SimpleList",
+                    "path": "jwks_urls", 
+                    "children": [{ "path": "[]" }]
+                  },
+                  {
+                    "widget": "SimpleList",
+                    "path": "trusted_issuers", 
+                    "children": [{ "path": "[]" }]
+                  },
+                ],
+              }, 
+              {
+                "required": true, 
+                "path": "[].handler",
+                "name": "accessStrategies.handler",
+              },
+            ],
+          },
+          {
+            "required": true, 
+            "path": "[].methods", 
+            "name": "rules.methods", 
+            "widget": "SimpleList",
+            "children": [{
+               "path": "[]" , 
+               "enum": [
+                  "GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"
+                ]
+            }],
+          },
+          {
+            "path": "[].mutators", 
+            "name": "mutators", 
+            "widget": "GenericList", 
+            "children": [
+              
+            ],
+          },
+          {
+            "simple": "true",
+            "required": true,
+            "path": "[].path",
+            "name": "path",
+          },
+          {
+            "path": "[].service", 
+            "name": "service", 
+            "widget": "FormGroup",
+            "children": [
+              {
+                "path": "external",
+                "name": "service.external",
+              },
+              {
+                "simple": "true",
+                "required": true,
+                "path": "name",
+                "name": "service-name",
+                "widget": "Resource",
+                "resource": {
+                  "kind": "Service",
+                  "version": "v1",
+                  "scope": "namespace"
+                },
+                "filter": "$filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != 'serving.knative.dev/revision' }) })"
+              },
+              { 
+                "simple": true,
+                "path": "port", 
+                "name": "service.port",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        "simple": "true",
+        "required": true,
+        "path": "spec.service", 
+        "name": "service", 
+        "widget": "FormGroup",
+        "children": [
+          {
+            "path": "external",
+            "name": "service.external",
+          },
+          {
+            "simple": "true",
+            "required": true,
+            "path": "name",
+            "name": "service-name",
+            "widget": "Resource",
+            "resource": {
+              "kind": "Service",
+              "version": "v1",
+              "scope": "namespace"
+            },
+            "filter": "$filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != 'serving.knative.dev/revision' }) })"
+          },
+          { 
+            "simple": true,
+            "path": "port", 
+            "name": "service.port",
+          },
+        ],
+      },
+      # {
+      #   "simple": "true",
+      #   "path": "spec.service.port",
+      #   "name": "service.port",
+      # },
+      # {
+      #   "var": "useDescription",
+      #   "type": "boolean",
+      #   "dynamicValue": "'$boolean(spec.description)'",
+      # },
       # {
       #   "var": "accessToGateways",
       #   "dynamicValue": "$not($exists($relatedGateways().error))",
@@ -305,6 +424,8 @@ data:
     en:
       accessStrategies: Access Strategies
       accessStrategies.handlers: Handlers
+      accessStrategies.handler: Handler
+      accessStrategies.config: Config
       accessStrategies.jwks_urls: JWKS Urls
       accessStrategies.trusted_issuers: Trusted Issuers
       accessStrategies.required_scope: Required Scope
