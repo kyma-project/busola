@@ -80,7 +80,7 @@ You can use the `resourceGraph` component to configure the ResourceGraph, which 
 - **valuePreprocessor** - name of [value preprocessor](resources.md#value-preprocessors).
 - **visibility** - by default all fields are visible; however, you can use the **visibility** property to control a single item display.
   - If set to `false` explicitly, the field doesn't render.
-  - If set to any string, this property is treated as [JSONata](jsonata.md) format, determining (based on current value given as `data`) if the field should be visible.
+  - If set to any string, this property is treated as [JSONata](jsonata.md) format, determining (based on current value given as `$value`) if the field should be visible.
   - If not set, the field always renders.
 - **children** - a list of child widgets used for all `object` and `array` fields.
 
@@ -118,7 +118,7 @@ body:
     children:
       - source: applyTo
       - source: match.context
-        visibility: '$exists(data.match.context)'
+        visibility: '$exists($value.match.context)'
   - source: spec.configPatches
     widget: Table
     children:
@@ -164,7 +164,7 @@ dataSources:
 
 Whenever an entry has both **source** and **children** properties, the **children** elements are provided with extra variables.
 
-In the case of objects, a `$parent` variable contains the data of the parent element.
+In the case of objects, a `$root` variable contains the data of the parent element.
 
 For example:
 
@@ -172,13 +172,11 @@ For example:
 - source: spec
   widget: Panel
   children:
-    - source: '$parent.entry1'
-    - source: '$parent.entry2'
+    - source: '$root.entry1'
+    - source: '$root.entry2'
 ```
 
 renders the data for `spec.entry1` and `spec.entry2`.
-
-In the case of array-based components, an `$item` variable contains data for each child. For example:
 
 ```yaml
 - source: spec.data
@@ -228,7 +226,7 @@ When no highlights are provided, the following values are automatically handled:
     positive:
       - Running
       - ok
-    negative: data < 0
+    negative: $item < 0
   description: status.message
 ```
 
@@ -349,8 +347,8 @@ ResourceLink widgets render internal links to Kubernetes resources.
 
 #### Widget-specific parameters
 
-- **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **data** - value extracted using **source**, or **root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
-- **linkText** - a [JSONata](jsonata.md) expression resolving a link text, this property has access to **data** and **root**. To insert dynamic parts of translations, use double quotes `Go to {{data.name}}`.
+- **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
+- **source** - a [JSONata](jsonata.md) expression resolving a link text, this property has access to **\$item** and **\$root**. To insert dynamic parts of translations, use double quotes `Go to {{metadata.name}}`.
 
 #### Example
 
@@ -358,23 +356,14 @@ ResourceLink widgets render internal links to Kubernetes resources.
 
 ```yaml
 - widget: ResourceLink
-  source: metadata.ownerReferences[0]
-  linkText: "data.status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'"
+  source: "metadata.ownerReferences[0].status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'"
   resource:
-    name: data.name
-    namespace: root.metadata.namespace
+    name: metadata.ownerReferences[0].name
+    namespace: $root.metadata.namespace
     kind: "'Deployment'"
 ```
 
 <img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" width="40%" style="border: 1px solid #D2D5D9">
-
-##### _translations_ section
-
-```yaml
-en:
-  otherTranslations.linkText: 'Go to {{data.kind}} {{data.name}}'
-  otherTranslations.errorLinkText: 'Error in {{data.kind}} {{data.name}}'
-```
 
 ### Text
 
@@ -599,9 +588,9 @@ Since the **ResourceList** widget does more than just list the items, you must p
       sort: 'true'
       widget: ResourceLink
       resource:
-        name: data.metadata.name
+        name: $item.metadata.name
         namespace: root.metadata.namespace
-        kind: data.kind
+        kind: $item.kind
     - source: type
       name: Type
       search: true

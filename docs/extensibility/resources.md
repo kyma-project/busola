@@ -58,7 +58,7 @@ category: My Category
 scope: namespace
 defaultPlaceholder: '- not set -'
 description: See the {{[docs](https://github.com/kyma-project/busola)}} for more information.
-filter: "$filter(data, function($item) {$item.type = 'Opaque'})"
+filter: "$filter($item, function($data) {$data.type = 'Opaque'})"
 features:
   actions:
     disableCreate: true
