@@ -20,6 +20,7 @@ import {
   getUIStoreFromResourceObj,
 } from './helpers/immutableConverter';
 import { useVariables } from './hooks/useVariables';
+import { prepareRules } from './helpers/prepareRules';
 
 export function ExtensibilityCreateCore({
   formElementRef,
@@ -30,6 +31,7 @@ export function ExtensibilityCreateCore({
   resourceSchema: createResource,
   toggleFormFn,
   resourceName,
+  ...props
 }) {
   const { prepareVars, resetVars, readVars } = useVariables();
   const { namespaceId: namespace } = useMicrofrontendContext();
@@ -53,7 +55,7 @@ export function ExtensibilityCreateCore({
     ),
   );
 
-  const presets = usePreparePresets(emptyTemplate, createResource?.presets);
+  const presets = usePreparePresets(createResource?.presets);
 
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
@@ -91,7 +93,7 @@ export function ExtensibilityCreateCore({
   });
 
   const { simpleRules, advancedRules } = useMemo(() => {
-    const fullSchemaRules = createResource?.form ?? [];
+    const fullSchemaRules = prepareRules(createResource?.form ?? [], t);
 
     prepareVars(fullSchemaRules);
     readVars(resource);
@@ -123,6 +125,7 @@ export function ExtensibilityCreateCore({
 
   return (
     <ResourceForm
+      {...props}
       pluralKind={resourceType}
       singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
       resource={resource}
@@ -135,6 +138,7 @@ export function ExtensibilityCreateCore({
       initialResource={initialResource}
       afterCreatedFn={afterCreatedFn}
       handleNameChange={handleNameChange}
+      disableDefaultFields
     >
       <ResourceSchema
         simple

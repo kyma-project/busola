@@ -130,3 +130,18 @@ Example from the [ResourceList widget](display-section.md#resourcelist).
       compareFunction: '$compareStrings($second, $first)'
       default: true
 ```
+
+## readableTimestamp(timestamp)
+
+You can use this function to convert time to readable time.
+
+### Function parameters
+
+- **timestamp** - timestamp to convert.
+
+### Example
+
+```yaml
+- source: '$readableTimestamp($item.lastTransitionTime)'
+  name: status.conditions.lastTransitionTime
+```

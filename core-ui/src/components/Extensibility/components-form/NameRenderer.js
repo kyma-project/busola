@@ -1,5 +1,6 @@
 import React from 'react';
 import { List } from 'immutable';
+import * as jp from 'jsonpath';
 
 import { K8sNameField } from 'shared/ResourceForm/fields';
 import { useGetTranslation } from 'components/Extensibility/helpers';
@@ -12,10 +13,9 @@ export function NameRenderer({
   onChange,
   schema,
   required,
-  ...props
 }) {
   const { t: tExt } = useGetTranslation();
-  const extraPaths = schema.get('extraPaths')?.toJS() || [];
+  const extraPaths = schema.get('extraPaths') || [];
 
   return (
     <K8sNameField
@@ -32,7 +32,11 @@ export function NameRenderer({
             data: { value },
           },
           ...extraPaths.map(path => ({
-            storeKeys: List(Array.isArray(path) ? path : path.split('.')),
+            storeKeys: List(
+              Array.isArray(path)
+                ? path
+                : jp.parse(path).map(e => e.expression.value),
+            ),
             scopes: ['value'],
             type: 'set',
             schema,

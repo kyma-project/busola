@@ -52,6 +52,7 @@ export function MonacoRenderer({
 
   const language = getLanguage(jsonata, schema, value, resource);
   const formattedValue = formatValue(value, language);
+  const defaultOpen = schema.get('defaultExpanded');
 
   const handleChange = useCallback(
     value => {
@@ -87,6 +88,7 @@ export function MonacoRenderer({
     <ResourceForm.CollapsibleSection
       title={tFromStoreKeys(storeKeys, schema)}
       required={schemaRequired ?? required}
+      defaultOpen={defaultOpen}
     >
       <div className="fd-margin-bottom--sm">
         <Label

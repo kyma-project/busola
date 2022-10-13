@@ -123,10 +123,19 @@ data:
   form: |-
     [
       {
-        "path": "spec.hosts", "name": "spec.hosts", "widget": "SimpleList", "simple": true, "required": true
+        "path": "spec.hosts",
+        "name": "spec.hosts",
+        "widget": "SimpleList",
+        "simple": true,
+        "required": true,
+        "children": [{ "path": "[]" }]
       },
       {
-        "path": "spec.addresses", "name": "spec.addresses", "widget": "SimpleList", "placeholder": "placeholders.addreses"
+        "path": "spec.addresses",
+        "name": "spec.addresses",
+        "widget": "SimpleList",
+        "placeholder": "placeholders.addreses",
+        "children": [{ "path": "[]" }]
       },
       {
         "path": "spec.ports", "name": "Ports", "widget": "GenericList", "children": [
@@ -181,10 +190,16 @@ data:
         "path": "spec.workloadSelector.labels", "name": "spec.workloadSelector", "widget": "KeyValuePair"
       },
       {
-        "path": "spec.exportTo", "name": "spec.exportTo", "widget": "SimpleList"
+        "path": "spec.exportTo",
+        "name": "spec.exportTo",
+        "widget": "SimpleList",
+        "children": [{ "path": "[]" }]
       },
       {
-        "path": "spec.subjectAltNames", "name": "spec.subjectAltNames", "widget": "SimpleList"
+        "path": "spec.subjectAltNames",
+        "name": "spec.subjectAltNames",
+        "widget": "SimpleList",
+        "children": [{ "path": "[]" }]
       },
     ]
   general: |-

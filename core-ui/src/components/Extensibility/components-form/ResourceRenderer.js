@@ -14,7 +14,7 @@ import { useJsonata } from '../hooks/useJsonata';
 export function ResourceRenderer({
   onChange,
   onKeyDown,
-  value,
+  value = '',
   schema,
   storeKeys,
   required,

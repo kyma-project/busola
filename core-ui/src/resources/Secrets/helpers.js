@@ -39,10 +39,6 @@ export function createSecretTemplate(namespaceId) {
 
 export function createPresets(secretDefs, namespaceId, t) {
   return [
-    {
-      name: t('common.labels.clear-form'),
-      value: createSecretTemplate(namespaceId),
-    },
     ...secretDefs.map(({ title, name, type, data, ...value }) => ({
       name: title || name || type,
       value: {

@@ -172,7 +172,8 @@ data:
         "path": "spec.egress[].hosts", 
         "required": true,
         "simple": true,
-        "placeholder": "For example, *.api.mydomain.com"
+        "placeholder": "For example, *.api.mydomain.com",
+        "children": [{ "path": "[]" }]
       },
       {
         "widget": "FormGroup",
