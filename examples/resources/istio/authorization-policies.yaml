@@ -287,52 +287,62 @@ data:
                   { 
                     "path": "principals", 
                     "widget": "SimpleList",
-                    "description": "description.rules.from.principals"
+                    "description": "description.rules.from.principals",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notPrincipals", 
                     "widget": "SimpleList",
-                    "description": "description.rules.from.notPrincipals"
+                    "description": "description.rules.from.notPrincipals",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "requestPrincipals", 
                     "widget": "SimpleList",
-                    "description": "description.rules.from.requestPrincipals"
+                    "description": "description.rules.from.requestPrincipals",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notRequestPrincipals", 
                     "widget": "SimpleList",
-                    "description": "description.rules.from.notRequestPrincipals"
+                    "description": "description.rules.from.notRequestPrincipals",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "namespaces", 
                     "widget": "SimpleList",
-                    "description": "description.rules.from.namespaces"
+                    "description": "description.rules.from.namespaces",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notNamespaces", 
                     "widget": "SimpleList",
-                    "description": "description.rules.from.notNamespaces"
+                    "description": "description.rules.from.notNamespaces",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "ipBlocks", 
                     "widget": "SimpleList",
-                    "description": "description.rules.from.ipBlocks"
+                    "description": "description.rules.from.ipBlocks",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notIpBlocks", 
                     "widget": "SimpleList",
-                    "description": "description.rules.from.notIpBlocks"
+                    "description": "description.rules.from.notIpBlocks",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "remoteIpBlocks", 
                     "widget": "SimpleList",
-                    "description": "description.rules.from.remoteIpBlocks"
+                    "description": "description.rules.from.remoteIpBlocks",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notRemoteIpBlocks", 
                     "widget": "SimpleList",
-                    "description": "description.rules.from.notRemoteIpBlocks"
+                    "description": "description.rules.from.notRemoteIpBlocks",
+                    "children": [{ "path": "[]" }]
                   }
                 ]
               }
@@ -349,42 +359,50 @@ data:
                   { 
                     "path": "hosts", 
                     "widget": "SimpleList",
-                    "description": "description.rules.to.hosts"
+                    "description": "description.rules.to.hosts",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notHosts", 
                     "widget": "SimpleList",
-                    "description": "description.rules.to.notHosts"
+                    "description": "description.rules.to.notHosts",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "ports", 
                     "widget": "SimpleList",
-                    "description": "description.rules.to.ports"
+                    "description": "description.rules.to.ports",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notPorts", 
                     "widget": "SimpleList",
-                    "description": "description.rules.to.notPorts"
+                    "description": "description.rules.to.notPorts",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "methods", 
                     "widget": "SimpleList",
-                    "description": "description.rules.to.methods"
+                    "description": "description.rules.to.methods",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notMethods", 
                     "widget": "SimpleList",
-                    "description": "description.rules.to.notMethods"
+                    "description": "description.rules.to.notMethods",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "paths", 
                     "widget": "SimpleList",
-                    "description": "description.rules.to.paths"
+                    "description": "description.rules.to.paths",
+                    "children": [{ "path": "[]" }]
                   },
                   { 
                     "path": "notPaths", 
                     "widget": "SimpleList",
-                    "description": "description.rules.to.notPaths"
+                    "description": "description.rules.to.notPaths",
+                    "children": [{ "path": "[]" }]
                   }
                 ]
               }
@@ -402,12 +420,14 @@ data:
               { 
                 "path": "[].values", 
                 "widget": "SimpleList",
-                "description": "description.rules.when.values"
+                "description": "description.rules.when.values",
+                "children": [{ "path": "[]" }]
               },
               { 
                 "path": "[].notValues", 
                 "widget": "SimpleList",
-                "description": "description.rules.when.notValues"
+                "description": "description.rules.when.notValues",
+                "children": [{ "path": "[]" }]
               }
             ]
           },
