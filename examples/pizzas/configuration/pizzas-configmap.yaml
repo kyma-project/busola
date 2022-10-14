@@ -155,7 +155,6 @@ data:
         "resource": {
           "kind": "Secret",
           "scope": "namespace",
-          "namespace": "pizzas",
           "version": "v1"
         },
         "simple": true
@@ -183,8 +182,7 @@ data:
       "secretRecipe": {
         "resource": {
           "kind": "Secret",
-          "version": "v1",
-          "namespace": "pizzas"
+          "version": "v1"
         },
         "filter": "$item.metadata.name = $root.spec.recipeSecret"
       },
