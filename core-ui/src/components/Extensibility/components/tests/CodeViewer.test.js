@@ -40,7 +40,6 @@ describe('CodeViewer', () => {
     const editor = wrapper.find(ReadonlyEditorPanel);
     const { value: valueProps, editorProps } = editor.props();
     const { language } = editorProps;
-    console.log(editorProps);
     expect(valueProps).toEqual(JSON.stringify(value, null, 2));
     expect(language).toEqual('json');
     expect(editor).toHaveLength(1);
