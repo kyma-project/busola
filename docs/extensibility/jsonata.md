@@ -31,7 +31,7 @@ spec:
         status: ok
 ```
 
-The following definition have their scope changed as follows:
+The following definition has their scope changed as follows:
 
 ```yaml
 - source: spec.name # top level, scope is the same as resource
