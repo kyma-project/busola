@@ -45,12 +45,14 @@ function Preferences({ show, onCancel }) {
     },
   ];
 
-  const actions = [<Button onClick={onCancel}>Close</Button>];
+  const actions = [
+    <Button onClick={onCancel}>{t('common.buttons.cancel')}</Button>,
+  ];
 
   return (
     <Dialog
       show={show}
-      title={'Preferences'}
+      title={t('preferences.title')}
       actions={actions}
       className="preferences-dialog"
     >
