@@ -11,7 +11,7 @@
 
 ## Overview
 
-This document describes how to use jsonata expressions [JSONata](https://docs.jsonata.org/overview.html) throughout the extensions.
+This document describes how to use JSONata expressions [JSONata](https://docs.jsonata.org/overview.html) throughout the extensions.
 
 ## Scoping
 
