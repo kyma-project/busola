@@ -1,11 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   addWorkerListener,
   sendWorkerMessage,
   addWorkerErrorListener,
   isWorkerAvailable,
 } from 'components/App/resourceSchemas/resourceSchemaWorkerApi';
-import { AppContext } from 'components/App/AppContext';
+import { useRecoilValue } from 'recoil';
+import { openapiSchemasState } from 'state/openapiSchemasAtom';
 
 export const useGetSchema = ({ schemaId, skip, resource }) => {
   if (!schemaId && resource) {
@@ -13,9 +14,10 @@ export const useGetSchema = ({ schemaId, skip, resource }) => {
     schemaId = `${group}/${version}/${kind}`;
   }
 
-  const { areSchemasComputed, schemasError } = useContext(
-    AppContext,
-  ).schemaInfo;
+  const { areSchemasComputed, schemasError } = useRecoilValue(
+    openapiSchemasState,
+  );
+
   const isWorkerOkay = isWorkerAvailable && !schemasError;
   const [schema, setSchema] = useState(null);
   const [error, setError] = useState(null);
