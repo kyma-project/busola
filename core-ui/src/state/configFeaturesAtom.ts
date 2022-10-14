@@ -14,9 +14,4 @@ export const configFeaturesState: RecoilState<ConfigFeaturesState> = atom<
 >({
   key: 'configFeaturesState',
   default: defaultValue,
-  effects: [
-    ({ onSet, resetSelf }) => {
-      onSet((newValue, oldValue) => {});
-    },
-  ],
 });

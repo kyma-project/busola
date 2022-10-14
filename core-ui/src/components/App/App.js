@@ -16,6 +16,7 @@ import { resourceRoutes } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import otherRoutes from 'resources/other';
 import { Sidebar } from 'sidebar/Sidebar';
+import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 
 export default function App() {
   const { cluster, language, customResources = [] } = useMicrofrontendContext();
@@ -23,6 +24,8 @@ export default function App() {
 
   useLoginWithKubeconfigID();
   useResourceSchemas();
+
+  useLuigiContextMigrator();
 
   useEffect(() => {
     i18n.changeLanguage(language);

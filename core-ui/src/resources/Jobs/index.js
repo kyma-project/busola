@@ -30,6 +30,11 @@ export const resourceGraphConfig = (t, context) => ({
   ],
 });
 
+export const category = 'workloads.title';
+//resourceType //if empty resourceType.toLowerCase
+//pathSegment //if empty resourceType
+export const label = 'jobs.title'; //if empty resourceType
+
 const luigi = {
   category: i18next.t('workloads.title'), // zostaje jako categoryID
 

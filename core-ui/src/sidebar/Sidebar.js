@@ -1,8 +1,10 @@
 import React from 'react';
-import { useCreateNavigation } from 'sidebar/useCreateNavigation';
+import { useCreateCompleteNavList } from 'sidebar/useCreateCompleteNavList';
+import { useFilterNavList } from 'sidebar/useFilterNavList';
 
 export const Sidebar = () => {
-  useCreateNavigation();
+  const { completeNavList } = useCreateCompleteNavList();
+  const { filteredNavList } = useFilterNavList(completeNavList);
 
-  return <div>Sidebar</div>;
+  return <div>{JSON.stringify(filteredNavList)}</div>;
 };
