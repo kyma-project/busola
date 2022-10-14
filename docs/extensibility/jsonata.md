@@ -56,7 +56,7 @@ The following definition has their scope changed as follows:
 
 Common variables are the primary means to bypass the default scoping.
 
-- **\$root** - always contains the reference to the resource, so any jsonata in the above can always be `$root.spec.name`
+- **\$root** - always contains the reference to the resource, so any JSONata can always be `$root.spec.name`.
 - **\$item** - refers to the most recent array item. When not in an array, it's equal to **\$root**
 - **\$items** - contains an array of references to all parent array items (with the last item being equal to **\$item**)
 - **\$value** - when used in a jsonata other than **source** (for example **visibility**, but also other widget-specific formulas) contains the value returned by the source
