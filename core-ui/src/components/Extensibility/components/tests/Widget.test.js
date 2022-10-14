@@ -63,7 +63,6 @@ describe('Widget', () => {
           />
         </DataSourcesContextProvider>,
       );
-      console.log(container.text());
       expect(container.text()).toBe('extensibility.configuration-error');
     });
 
