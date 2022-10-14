@@ -15,7 +15,7 @@ This document describes how to use JSONata expressions [JSONata](https://docs.js
 
 ## Scoping
 
-The primary data source of jsonata expressions changes depending on where it's used. Starting with the root it contains the whole resource, but whenever it's in a child whose parent has a **source** (in lists and details) or **path** (in forms) parameter, the scope changes to data from that source or path.
+The primary data source of JSONata expressions changes depending on where it's used. Starting with the root, it contains the whole resource, but whenever it's in a child whose parent has a **source** (in lists and details) or **path** (in forms) parameter, the scope changes to data from that source or path.
 
 Additionally in arrays, scope changes to the array item.
 
