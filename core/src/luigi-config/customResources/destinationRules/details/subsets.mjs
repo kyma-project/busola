@@ -1,4 +1,4 @@
-import { trafficPolicy } from './trafficPolicy';
+import { trafficPolicy } from './trafficPolicy.mjs';
 
 export const subsets = prefix => ({
   source: `${prefix}subsets`,

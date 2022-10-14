@@ -47,6 +47,7 @@ const localityLoadBalancer = ({ uniqueVarPrefix }) => ({
       name: 'Failover Priority',
       visibility: `$${uniqueVarPrefix}LbSelector  = 'failover'`,
       widget: 'SimpleList',
+      children: [{ path: '[]' }],
     },
   ],
 });
