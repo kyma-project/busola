@@ -23,20 +23,16 @@ export const getSortingFunction = (jsonata, formula, originalResource) => {
 };
 
 export const applySortFormula = (jsonata, formula, t) => {
-  try {
-    return (a, b) => {
-      if (a === undefined) return -1;
-      if (b === undefined) return 1;
-      return jsonata(formula, {
-        scope: {
-          first: a,
-          second: b,
-        },
-      })[0];
-    };
-  } catch (e) {
-    return t('extensibility.configuration-error', { error: e.message });
-  }
+  return (a, b) => {
+    if (a === undefined) return -1;
+    if (b === undefined) return 1;
+    return jsonata(formula, {
+      scope: {
+        first: a,
+        second: b,
+      },
+    })[0];
+  };
 };
 
 export const sortBy = (
