@@ -9,34 +9,26 @@ metadata:
     busola.io/extension-version: '0.5'
 data:
   dataSources: |-
-    {
-      "relatedGateways":{
-        "resource": {
-          "kind": "Gateway",
-          "group": "networking.istio.io",
-          "version": "v1beta1",
-          "namespace": null
-        },
-        "filter": "$filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != 'serving.knative.dev/revision' }) })"
-      },
-      "relatedServices": {
-        "resource": {
-          "kind": "Service",
-          "version": "v1",
-          "namespace": null
-        },
-        "filter": "$contains($item.metadata.namespace, $root.metadata.namespace)"
-      },
-      "virtualServices": {
-        "resource": {
-          "kind": "VirtualService",
-            "group": "networking.istio.io",
-            "version": "v1beta1",
-            "namespace": null,
-        },
-        "filter": "$contains($item.metadata.ownerReferences[0].name, $root.metadata.name) and $contains($item.metadata.ownerReferences[0].kind, $root.kind)",
-      },
-    }
+    relatedGateways:
+      resource: 
+        kind: Gateway
+        group: networking.istio.io
+        version: v1beta1
+        namespace: null
+      filter: '$filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != "serving.knative.dev/revision" }) })'
+    relatedServices:
+      resource: 
+        kind: Service
+        version: v1
+        namespace: null
+      filter: '$contains($item.metadata.namespace, $root.metadata.namespace)'
+    virtualServices:
+      resource: 
+        kind: VirtualService
+        group: networking.istio.io
+        version: v1beta1
+        namespace: null
+      filter: '$contains($item.metadata.ownerReferences[0].name, $root.metadata.name) and $contains($item.metadata.ownerReferences[0].kind, $root.kind)'
   details: |-
     {
       "header": [
@@ -178,31 +170,6 @@ data:
           "name": "virtualService",
           "disableCreate": true
         },
-        {
-          "widget": "ResourceList",
-          "source": "$relatedGateways()",
-          "name": "gateway",
-          "disableCreate": true
-        },
-        {
-          "source": "$relatedGateways().items",
-          "name": "gateway",
-          "widget": "CodeViewer",
-        },
-        {
-          "var": "accessToGateways",
-          "dynamicValue": "'$exists($relatedGateways().error)'",
-        },
-        {
-          "source": "$accessToGateways",
-          "name": "accessToGateways",
-          "widget": "CodeViewer",
-        },
-        {
-          "source": "$exists($relatedGateways().error)",
-          "name": "gateway",
-          "widget": "CodeViewer",
-        },
       ],
     }
   form: |-
@@ -210,17 +177,41 @@ data:
       {
         "simple": "true",
         "required": true,
+        "path": "spec.service", 
+        "name": "service", 
+        "widget": "FormGroup",
+        "children": [
+          {
+            "path": "external",
+            "name": "service.external",
+          },
+          {
+            "simple": "true",
+            "required": true,
+            "path": "name",
+            "name": "service-name",
+            "widget": "Resource",
+            "resource": {
+              "kind": "Service",
+              "version": "v1",
+              "scope": "namespace"
+            },
+            "filter": "$filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != 'serving.knative.dev/revision' }) })"
+          },
+          { 
+            "simple": true,
+            "path": "port", 
+            "name": "service.port",
+          },
+        ],
+      },
+      {
+        "simple": "true",
+        "required": true,
         "path": "spec.gateway",
         "name": "gateway",
-        "widget": "Resource",
-        "resource": {
-          "kind": "Gateway",
-          "group": "networking.istio.io",
-          "version": "v1beta1",
-          "namespace": null
-        },
-        # "visibility": "$not($exists($relatedGateways()))",
-        "filter": "$filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != 'serving.knative.dev/revision' }) })"
+        "inputInfo": "inputInfo.gateway",
+        "placeholder": "placeholder.gateway",
       },
       {
         "simple": "true",
@@ -246,14 +237,14 @@ data:
                 "widget": "FormGroup",
                 "children": [
                   {
-                    "widget": "SimpleList",
+                    # "widget": "SimpleList",
                     "path": "jwks_urls", 
-                    "children": [{ "path": "[]" }]
+                    # "children": [{ "path": "[]" }]
                   },
                   {
-                    "widget": "SimpleList",
+                    # "widget": "SimpleList",
                     "path": "trusted_issuers", 
-                    "children": [{ "path": "[]" }]
+                    # "children": [{ "path": "[]" }]
                   },
                 ],
               }, 
@@ -321,61 +312,6 @@ data:
           },
         ],
       },
-      {
-        "simple": "true",
-        "required": true,
-        "path": "spec.service", 
-        "name": "service", 
-        "widget": "FormGroup",
-        "children": [
-          {
-            "path": "external",
-            "name": "service.external",
-          },
-          {
-            "simple": "true",
-            "required": true,
-            "path": "name",
-            "name": "service-name",
-            "widget": "Resource",
-            "resource": {
-              "kind": "Service",
-              "version": "v1",
-              "scope": "namespace"
-            },
-            "filter": "$filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != 'serving.knative.dev/revision' }) })"
-          },
-          { 
-            "simple": true,
-            "path": "port", 
-            "name": "service.port",
-          },
-        ],
-      },
-      # {
-      #   "simple": "true",
-      #   "path": "spec.service.port",
-      #   "name": "service.port",
-      # },
-      # {
-      #   "var": "useDescription",
-      #   "type": "boolean",
-      #   "dynamicValue": "'$boolean(spec.description)'",
-      # },
-      # {
-      #   "var": "accessToGateways",
-      #   "dynamicValue": "$not($exists($relatedGateways().error))",
-      # },
-      #  {
-      #   "var": "accessToGateways",
-      #   "widget": "Text",
-      #   "dynamicValue": "'true'",
-      # },
-      # {
-      #   "var": "sourceType",
-      #   "widget": "Text",
-      #   "dynamicValue": "$string($relatedGateways())"
-      # },
     ]
   general: |-
     {
@@ -423,17 +359,19 @@ data:
   translations: |
     en:
       accessStrategies: Access Strategies
-      accessStrategies.handlers: Handlers
-      accessStrategies.handler: Handler
       accessStrategies.config: Config
+      accessStrategies.handler: Handler
+      accessStrategies.handlers: Handlers
       accessStrategies.jwks_urls: JWKS Urls
       accessStrategies.trusted_issuers: Trusted Issuers
       accessStrategies.required_scope: Required Scope
       gateway: Gateway
       host: Host
+      inputInfo.gateway: Gateway structure, 'http://{GATEWAY}.{NAMESPACE}.svc.cluster.local'
       mutators: Mutators
       mutators.config: Config
       mutators.handlers: Handlers
+      placeholder.gateway: Enter the gateway, for example, http://kyma-gateway.kyma-system.svc.cluster.local
       rules: Rules
       rules.methods: Methods
       rules.path: Path
