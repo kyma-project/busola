@@ -1,9 +1,9 @@
-import { loadBalancer } from './loadBalancer';
-import { connectionPool } from './connectionPool';
-import { outlierDetection } from './outlierDetection';
-import { tls } from './tls';
-import { portLevelSettings } from './portLevelSettings';
-import { tunnel } from './tunnel';
+import { loadBalancer } from './loadBalancer.mjs';
+import { connectionPool } from './connectionPool.mjs';
+import { outlierDetection } from './outlierDetection.mjs';
+import { tls } from './tls.mjs';
+import { portLevelSettings } from './portLevelSettings.mjs';
+import { tunnel } from './tunnel.mjs';
 
 export const trafficPolicy = prefix => ({
   source: `${prefix}trafficPolicy`,

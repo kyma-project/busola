@@ -1,6 +1,6 @@
-import { form } from './form/index';
-import { details } from './details/index';
-import { translations } from './translations';
+import { form } from './form/index.mjs';
+import { details } from './details/index.mjs';
+import { translations } from './translations.mjs';
 
 export const destinationRules = {
   general: {
