@@ -2,7 +2,7 @@
 
 The optional **dataSources** section contains an object that maps a data source name to a data source configuration object. The data source name, preceded by a dollar sign '\$', is used in the **source** expression.
 
-Data sources are provided in all [JSONata](https://docs.jsonata.org/overview.html) formulas as functions to call. For example, `{ "source": $myRelatedResource().metadata.labels }` returns the `metadata.labels` of the related resource.
+Data sources are provided in all [JSONata](jsonata.md) formulas as functions to call. For example, `{ "source": $myRelatedResource().metadata.labels }` returns the `metadata.labels` of the related resource.
 
 When you provide the whole request, you can access individual resources using the `items` field, for example `{ "widget": "Table", "source": "$myRelatedResources().items" }`.
 
@@ -17,7 +17,7 @@ Busola uses the following fields to build the related resource URL and filter th
   - **namespace** - the resource's Namespace name; it defaults to the original resource's Namespace. If set to `null`, cluster-wide resources or resources in all Namespaces are matched.
   - **name** - a specific resource name; leave empty to match all resources of a given type.
 - **ownerLabelSelectorPath** - the path to original object's **selector** type property; for example, `spec.selector.matchLabels` for Deployment, used to select matching Pods.
-- **filter** - [JSONata](https://docs.jsonata.org/overview.html) function enabling the user to write a custom matching logic. It uses the following variables:
+- **filter** - a [JSONata](jsonata.md) function enabling the user to write a custom matching logic. It uses the following variables:
 
   - **item** - the current item of the related kind.
   - **root** - the original resource.

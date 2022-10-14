@@ -102,12 +102,11 @@ data:
                     }, {
                       "name": "code.env.valueFrom",
                       "widget": "ResourceLink",
-                      "source": "$item.valueFrom",
-                      "linkText": "$exists(data.configMapKeyRef)? data.configMapKeyRef.name : data.secretKeyRef.name",
+                      "source": "$exists($item.valueFrom.configMapKeyRef)? $item.valueFrom.configMapKeyRef.name : $item.valueFrom.secretKeyRef.name",
                       "resource": {
-                        "name": "$exists(data.configMapKeyRef) ? data.configMapKeyRef.name : data.secretKeyRef.name",
-                        "namespace": "root.metadata.namespace",
-                        "kind": "$exists(data.configMapKeyRef)
+                        "name": "$exists($item.valueFrom.configMapKeyRef) ? $item.valueFrom.configMapKeyRef.name : $item.valueFrom.secretKeyRef.name",
+                        "namespace": "$root.metadata.namespace",
+                        "kind": "$exists($item.valueFrom.configMapKeyRef)
                         ? 'ConfigMap' 
                         : 'Secret'"
                       }

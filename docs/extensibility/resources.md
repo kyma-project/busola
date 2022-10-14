@@ -39,7 +39,7 @@ The **general** section is required and contains basic information about the res
 - **urlPath** - path fragment for this resource used in the URL. Defaults to pluralized lowercase **kind**. Used to provide an alternative URL to avoid conflicts with other resources.
 - **defaultPlaceholder** - to be shown in place of an empty text placeholder. Overridden by the widget-level **placeholder**. Defaults to `-`.
 - **description** - displays a custom description on the resource list page. It can contain links. If the **translations** section has a translation entry with the ID that is the same as the **description** string, the translation is used.
-- **filter** - optional [JSONata](https://docs.jsonata.org/overview.html) [filter](https://docs.jsonata.org/higher-order-functions#filter) used to filter the resources shown at the list section property.
+- **filter** - optional [JSONata](jsonata.md) [filter](https://docs.jsonata.org/higher-order-functions#filter) used to filter the resources shown at the list section property.
 - **features** - an optional object for the features configuration.
   - **actions** - an optional object for the actions configuration.
     - **disableCreate** - when set to `true`, it disables the **Create** button. Defaults to `false`.
@@ -58,7 +58,7 @@ category: My Category
 scope: namespace
 defaultPlaceholder: '- not set -'
 description: See the {{[docs](https://github.com/kyma-project/busola)}} for more information.
-filter: "$filter(data, function($item) {$item.type = 'Opaque'})"
+filter: "$filter($item, function($data) {$data.type = 'Opaque'})"
 features:
   actions:
     disableCreate: true

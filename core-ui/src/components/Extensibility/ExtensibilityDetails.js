@@ -5,13 +5,15 @@ import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { prettifyKind } from 'shared/utils/helpers';
 
-import { useGetCRbyPath } from './useGetCRbyPath';
-import { shouldBeVisible, Widget } from './components/Widget';
-import { useGetTranslation, TranslationBundleContext } from './helpers';
-import { ExtensibilityCreate } from './ExtensibilityCreate';
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useGetSchema } from 'hooks/useGetSchema';
+
+import { useGetCRbyPath } from './useGetCRbyPath';
+import { Widget } from './components/Widget';
+import { ExtensibilityCreate } from './ExtensibilityCreate';
+import { useGetTranslation, TranslationBundleContext } from './helpers';
+import { useJsonata } from './hooks/useJsonata';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   // const { extensibilitySchemas } = useMicrofrontendContext();
@@ -23,6 +25,8 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const { schema } = useGetSchema({
     resource,
   });
+
+  const jsonata = useJsonata({});
 
   const detailsProps = usePrepareDetailsProps(urlPath, 'name');
 
@@ -66,8 +70,14 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
         Array.isArray(header)
           ? header.map((def, i) => ({
               header: widgetT(def),
-              visibility: resource =>
-                shouldBeVisible(resource, def.visibility, resource),
+              visibility: resource => {
+                const [visible, error] = jsonata(
+                  def.visibility,
+                  { resource },
+                  true,
+                );
+                return { visible, error };
+              },
               value: resource => (
                 <Widget
                   key={i}
