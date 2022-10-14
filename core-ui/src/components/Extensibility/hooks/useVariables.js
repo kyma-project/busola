@@ -1,10 +1,9 @@
 import { useContext, useState } from 'react';
-import { last, initial, mapValues, tail, trim } from 'lodash';
+import { last, initial, tail, trim } from 'lodash';
 import * as jp from 'jsonpath';
 
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { VarStoreContext } from '../contexts/VarStore';
-import { DataSourcesContext } from '../contexts/DataSources';
 
 const pathToJP = path =>
   '$' +
@@ -43,12 +42,6 @@ export function extractVariables(varStore, vars, indexes) {
 export function useVariables() {
   const { vars, setVar, setVars } = useContext(VarStoreContext);
   const [defs, setDefs] = useState({});
-  const {
-    dataSources,
-    store: dataSourceStore,
-    requestRelatedResource,
-  } = useContext(DataSourcesContext);
-
   const itemVars = (resource, names, storeKeys) => {
     let lastArrayItem;
     let lastArrayIndex = storeKeys
@@ -110,13 +103,6 @@ export function useVariables() {
 
   const readVars = resource => {
     const readVar = (def, path, base = resource) => {
-      const dataSourceFetchers = mapValues(dataSources, (_, id) => {
-        return () => {
-          requestRelatedResource(base, id);
-          return dataSourceStore?.[id]?.data;
-        };
-      });
-
       if (path.length) {
         return (jp.value(base, pathToJP(path[0])) ?? []).map(item =>
           applyDefaults(def, readVar(def, tail(path), item)),
@@ -126,7 +112,6 @@ export function useVariables() {
       } else if (def.dynamicValue) {
         return jsonataWrapper(def.dynamicValue).evaluate(resource, {
           item: base,
-          ...dataSourceFetchers,
         });
       }
     };
