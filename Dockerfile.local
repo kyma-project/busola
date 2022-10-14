@@ -36,7 +36,7 @@ WORKDIR /app
 
 RUN apk --no-cache upgrade && \
   apk --no-cache add nginx && \
-  apk add --update nodejs npm jq yq
+  apk add --update nodejs npm yq
 WORKDIR /app
 
 COPY --from=builder /app/core/src /app/core
