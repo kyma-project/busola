@@ -15,7 +15,7 @@ export async function getBusolaClusterParams() {
       );
       if (
         defaultConfigResponse.status >= 400 ||
-        defaultConfigResponse.headers.get('Content-Type' === 'text/html')
+        defaultConfigResponse.headers.get('Content-Type') === 'text/html'
       ) {
         console.warn('Cannot load cluster YAML params: ', e);
         defaultConfigResponse = await fetch(
