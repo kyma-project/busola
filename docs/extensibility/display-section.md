@@ -348,7 +348,7 @@ ResourceLink widgets render internal links to Kubernetes resources.
 #### Widget-specific parameters
 
 - **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
-- **source** - a [JSONata](jsonata.md) expression resolving a link text, this property has access to **\$item** and **\$root**. To insert dynamic parts of translations, use double quotes `Go to {{metadata.name}}`.
+- **source** - a [JSONata](jsonata.md) expression resolving a link text, this property has access to **\$item** and **\$root**.
 
 #### Example
 
