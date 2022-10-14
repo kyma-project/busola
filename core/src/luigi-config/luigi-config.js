@@ -105,7 +105,7 @@ async function initializeBusola() {
 
   await handleKubeconfigIdIfPresent();
 
-  readFeatureToggles(['showHiddenNamespaces', 'disableResourceProtection']);
+  readFeatureToggles(['showHiddenNamespaces']);
 
   await ssoLogin(luigiAfterInit);
 

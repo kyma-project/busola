@@ -1,17 +1,18 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import * as jp from 'jsonpath';
 import { Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
+import { disableResourceProtectionState } from 'state/disableResourceProtectionAtom';
 
 export function useProtectedResources() {
   const { t } = useTranslation();
   const microfrontendContext = useMicrofrontendContext();
-  const [disableResourceProtection] = useFeatureToggle(
-    'disableResourceProtection',
+  const disableResourceProtection = useRecoilValue(
+    disableResourceProtectionState,
   );
 
   const protectedResourceRules = microfrontendContext.features
