@@ -21,7 +21,7 @@ import { ExtensibilityErrBoundary } from 'components/Extensibility/Extensibility
 import { useGetSchema } from 'hooks/useGetSchema';
 import { useTranslation } from 'react-i18next';
 
-export const ExtensibilityListCore = ({ resMetaData }) => {
+export const ExtensibilityListCore = ({ resMetaData, ...props }) => {
   const { t, widgetT, exists } = useGetTranslation();
   const { t: tBusola } = useTranslation();
 
@@ -86,6 +86,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   return (
     <ResourcesList
       {...listProps}
+      {...props}
       disableCreate={disableCreate}
       disableEdit={disableEdit}
       disableDelete={disableDelete}
@@ -99,8 +100,9 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   );
 };
 
-const ExtensibilityList = () => {
-  const resMetaData = useGetCRbyPath();
+const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
+  const defaultResMetadata = useGetCRbyPath();
+  const resMetaData = overrideResMetadata || defaultResMetadata;
   const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};
 
   return (
@@ -112,7 +114,7 @@ const ExtensibilityList = () => {
     >
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary key={urlPath}>
-          <ExtensibilityListCore resMetaData={resMetaData} />
+          <ExtensibilityListCore resMetaData={resMetaData} {...props} />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>
