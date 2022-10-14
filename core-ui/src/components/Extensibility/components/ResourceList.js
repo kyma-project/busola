@@ -1,5 +1,6 @@
+import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
-
+import React, { Suspense } from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
@@ -9,7 +10,9 @@ import { getTextSearchProperties, useGetTranslation } from '../helpers';
 import { sortBy } from '../helpers/sortBy';
 import { useJsonata } from '../hooks/useJsonata';
 import { getChildren, getSearchDetails, getSortDetails } from './helpers';
-import { ExtensibilityCreate } from '../ExtensibilityCreate';
+import { Spinner } from 'shared/components/Spinner/Spinner';
+
+const ExtensibilityList = React.lazy(() => import('../ExtensibilityList'));
 
 const getProperNamespacePart = (givenNamespace, currentNamespace) => {
   switch (true) {
@@ -32,7 +35,7 @@ export function ResourceList({
   ...props
 }) {
   const { widgetT, t } = useGetTranslation();
-  const { namespaceId } = useMicrofrontendContext();
+  const { namespaceId, customResources } = useMicrofrontendContext();
   const kind = (value?.kind ?? '').replace(/List$/, '');
   const pluralKind = pluralize(kind || '')?.toLowerCase();
   const namespacePart = getProperNamespacePart(value?.namespace, namespaceId);
@@ -46,13 +49,54 @@ export function ResourceList({
     arrayItems,
   });
 
+  const extensibilityResourceSchema = customResources.find(
+    cR => cR.general?.resource?.kind === kind,
+  );
+
   const PredefinedRenderer = resources.find(
     r => r.resourceType.toLowerCase() === pluralKind,
   );
 
-  const ListRenderer = PredefinedRenderer
-    ? PredefinedRenderer.List
-    : ResourcesList;
+  if (!structure.children && extensibilityResourceSchema)
+    return (
+      <Suspense fallback={<Spinner />}>
+        <ExtensibilityList
+          overrideResMetadata={extensibilityResourceSchema || {}}
+          isCompact
+          resourceUrl={resourceUrl}
+          hasDetailsView
+          showTitle
+          skipDataLoading
+          resources={value?.items}
+          error={value?.error}
+          loading={value?.loading}
+          title={t(structure.name)}
+          navigateFn={entry => {
+            try {
+              const {
+                kind,
+                metadata: { name, namespace },
+              } = entry;
+
+              const namespacePart = namespace ? `namespaces/${namespace}/` : '';
+              const resourceTypePart =
+                extensibilityResourceSchema.general.urlPath ||
+                pluralize(kind.toLowerCase());
+
+              LuigiClient.linkManager()
+                .fromContext('cluster')
+                .navigate(
+                  namespacePart + resourceTypePart + '/details/' + name,
+                );
+            } catch (e) {
+              alert(1);
+            }
+          }}
+        />
+      </Suspense>
+    );
+
+  const ListRenderer = PredefinedRenderer?.List || ResourcesList;
 
   const children = getChildren(structure, originalResource);
 
@@ -69,16 +113,6 @@ export function ResourceList({
   if (Array.isArray(value?.items)) {
     value.items = value.items.map(d => ({ ...d, kind }));
   }
-
-  const resourceSchema = {
-    general: {
-      resource: {
-        kind: kind,
-        version: value?.apiVersion,
-        group: value?.group,
-      },
-    },
-  };
 
   return (
     <ListRenderer
@@ -100,8 +134,6 @@ export function ResourceList({
       sortBy={defaultSortOptions =>
         sortBy(jsonata, sortOptions, t, defaultSort ? defaultSortOptions : {})
       }
-      createFormProps={{ resourceSchema }}
-      createResourceForm={ExtensibilityCreate}
       searchSettings={{
         textSearchProperties: defaultSortOptions =>
           textSearchProperties(defaultSortOptions),

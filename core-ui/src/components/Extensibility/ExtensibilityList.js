@@ -22,7 +22,7 @@ import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useJsonata } from './hooks/useJsonata';
 
-export const ExtensibilityListCore = ({ resMetaData }) => {
+export const ExtensibilityListCore = ({ resMetaData, ...props }) => {
   const { t, widgetT, exists } = useGetTranslation();
   const { t: tBusola } = useTranslation();
   const jsonata = useJsonata({});
@@ -88,6 +88,7 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   return (
     <ResourcesList
       {...listProps}
+      {...props}
       disableCreate={disableCreate}
       disableEdit={disableEdit}
       disableDelete={disableDelete}
@@ -103,8 +104,9 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   );
 };
 
-const ExtensibilityList = () => {
-  const resMetaData = useGetCRbyPath();
+const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
+  const defaultResMetadata = useGetCRbyPath();
+  const resMetaData = overrideResMetadata || defaultResMetadata;
   const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};
 
   return (
@@ -116,7 +118,7 @@ const ExtensibilityList = () => {
     >
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary key={urlPath}>
-          <ExtensibilityListCore resMetaData={resMetaData} />
+          <ExtensibilityListCore resMetaData={resMetaData} {...props} />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>
