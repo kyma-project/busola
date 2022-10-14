@@ -278,9 +278,9 @@ export async function createNavigation() {
       ...optionsForCurrentCluster,
       nodes: await createNavigationNodes({
         features: await getFeatures(),
-        groupVersions,
-        apiGroups,
-        permissionSet,
+        groupVersions, // nie potrzebuje?
+        apiGroups, // nie potrzebuje?
+        permissionSet, /// mam
         customResources,
         extensibilitySchemas: await getExtensibilitySchemas(),
       }),

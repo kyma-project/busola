@@ -16,7 +16,7 @@ export const useResourceSchemas = () => {
     openApi,
   } = useMicrofrontendContext() as any;
   const setSchemasState = useSetRecoilState(openapiSchemasState);
-  const lastFetched = useRef<Error | null>(null);
+  const lastFetched = useRef<string | null>(null);
 
   useEffect(() => {
     const isOngoingClusterChange = !activeClusterName || !authData;
