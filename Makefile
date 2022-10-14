@@ -30,11 +30,11 @@ release: build-image push-image
 release-local: build-image-local push-image-local build-image-kyma-dashboard push-image-kyma-dashboard
 
 build-image:
-	sed -i '/version/c\   \"version\" : \"$(TAG)\"' core/src/assets/version.json
+	sed -i 's/version: dev/version: ${TAG}/' core/src/assets/version.yaml
 	docker build -t $(IMG_NAME) -f Dockerfile .
 
 build-image-local:
-	sed -i '/version/c\   \"version\" : \"$(TAG)\"' core/src/assets/version.json
+	sed -i 's/version: dev/version: ${TAG}/' core/src/assets/version.yaml
 	docker build -t $(LOCAL_IMG_NAME) -f Dockerfile.local .
 
 build-image-kyma-dashboard:
