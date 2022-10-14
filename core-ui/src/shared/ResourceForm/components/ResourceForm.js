@@ -40,6 +40,7 @@ export function ResourceForm({
   labelsProps,
   disableDefaultFields,
   onModeChange,
+  urlPath,
   handleSetResetFormFn = () => {},
 }) {
   // readonly schema ID, set only once
@@ -75,6 +76,7 @@ export function ResourceForm({
     createUrl,
     afterCreatedFn,
     toggleFormFn,
+    urlPath,
   });
 
   const handleInitialMode = () => {

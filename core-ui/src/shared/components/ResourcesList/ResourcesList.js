@@ -7,10 +7,9 @@ import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { navigateToDetails } from 'shared/hooks/navigate';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { navigateToResource } from 'shared/hooks/navigate';
+import { navigateToResource, navigateToDetails } from 'shared/hooks/navigate';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
