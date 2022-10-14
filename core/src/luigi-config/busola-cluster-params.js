@@ -13,7 +13,10 @@ export async function getBusolaClusterParams() {
       let defaultConfigResponse = await fetch(
         '/assets/defaultConfig.yaml' + cacheBuster,
       );
-      if (defaultConfigResponse.status >= 400) {
+      if (
+        defaultConfigResponse.status >= 400 ||
+        defaultConfigResponse.headers.get('Content-Type')
+      ) {
         console.warn('Cannot load cluster YAML params: ', e);
         defaultConfigResponse = await fetch(
           '/assets/defaultConfig.json' + cacheBuster,
@@ -23,7 +26,10 @@ export async function getBusolaClusterParams() {
       let configMapResponse = await fetch(
         '/assets/config/config.yaml' + cacheBuster,
       );
-      if (configMapResponse.status >= 400) {
+      if (
+        configMapResponse.status >= 400 ||
+        configMapResponse.headers.get('Content-Type')
+      ) {
         console.warn('Cannot load cluster YAML params: ', e);
         configMapResponse = await fetch(
           '/assets/config/config.json' + cacheBuster,
