@@ -1,5 +1,5 @@
-import { trafficPolicy } from './trafficPolicy';
-import { subsets } from './subsets';
+import { trafficPolicy } from './trafficPolicy.mjs';
+import { subsets } from './subsets.mjs';
 
 export const details = {
   header: [],
