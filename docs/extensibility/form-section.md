@@ -32,7 +32,7 @@ If you target elements of an array rather than the array itself, you can use the
 - **children** - child widgets used for grouping. Child paths are relative to its parent.
 - **simple** - parameter used to display the simple form. It is `false` by default.
 - **advanced** - parameter used to display the advanced form. It is `true` by default.
-- **visibility** - a [JSONata](https://docs.jsonata.org/overview.html) expression controlling the visibility of the element.
+- **visibility** - a [JSONata](jsonata.md) expression controlling the visibility of the element.
 
 ### Example
 
@@ -49,7 +49,7 @@ If you target elements of an array rather than the array itself, you can use the
 
 ## Variable fields
 
-Additionally, it's possible to define variable fields. In this case, **path** is omitted, and a **var** argument is used to specify the variable name to assign. Variable names have to be unique across the extension. Such a value is not added to the resultant YAML but instead stored in memory and provided to any [JSONata](https://docs.jsonata.org/overview.html) handlers as variables, for example, `$foo`. Variables are provided for the current context. If a variable is defined inside an array, the value is specified for that specific item. To access raw values, the predefined `$vars` variable has to be used.
+Additionally, it's possible to define variable fields. In this case, **path** is omitted, and a **var** argument is used to specify the variable name to assign. Variable names have to be unique across the extension. Such a value is not added to the resultant YAML but instead stored in memory and provided to any [JSONata](jsonata.md) handlers as variables, for example, `$foo`. Variables are provided for the current context. If a variable is defined inside an array, the value is specified for that specific item. To access raw values, the predefined `$vars` variable has to be used.
 
 When using a variable inside an array it has to be wrapped inside a `[]` element (see [example](#example)).
 
@@ -58,18 +58,9 @@ When using a variable inside an array it has to be wrapped inside a `[]` element
 - **var** - _[required]_ variable name.
 - **type** - _[required]_ type of field, as defined by JSON Schema.
 - **defaultValue** - default value used for the variable when opening the form.
-- **dynamicVariable** - a JSONata expression used to calculate the value of the variable. This happens when opening the form or after editing the raw YAML of the resource.
+- **dynamicVariable** - a [JSONata](jsonata.md) expression used to calculate the value of the variable. This happens when opening the form or after editing the raw YAML of the resource.
 
 All other fields can be used analogously to regular form items (except for the **path** and **children** parameters).
-
-### Predefined variables
-
-All JSONata expressions have a few variables that are predefined instead of being read from variable fields.
-
-- **\$item** - when in an array this contains the current item.
-- **\$index** - contains the index of the current item within the array.
-- **\$indexes** - contains a list of all the indexes for nested arrays.
-- **\$vars** - contains a map of all the raw variable values.
 
 ### Example
 
@@ -138,7 +129,7 @@ Alert widgets display values using predefined types.
   widget: Alert
   severity: warning
   alert: "'alert.tls.https'"
-  visibility: "$item.port.protocol = 'HTTPS'"
+  visibility: "$value.port.protocol = 'HTTPS'"
 
 - widget: Alert
   alert: "$item = 80  ? 'Using Default 80' : 'Using Different Port then 80'"
@@ -156,7 +147,7 @@ Text widgets render a field as a text field. They are used by default for all st
 
 #### Widget-specific parameters
 
-- **enum[]** - an array of options to generate an input field with a dropdown. Optionally can be a string containing a JSONata expression returning an array of options.
+- **enum[]** - an array of options to generate an input field with a dropdown. Optionally can be a string containing a [JSONata](jsonata.md) expression returning an array of options.
 - **placeholder** - specifies a short hint about the input field value.
 - **required** - a boolean which specifies if a field is required. The default value is taken from CustomResourceDefintion (CRD); if it doesn't exist in the CRD, then it defaults to `false`.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
@@ -219,7 +210,7 @@ CodeEditor widgets render a versatile code editor that can be used to edit any v
 
 #### Widget-specific parameters
 
-- **language** - a JSONata expression resolving the desired language. It has access to the `$root` variable, containing the entire resource.
+- **language** - a [JSONata](jsonata.md) expression resolving the desired language. It has access to the `$root` variable, containing the entire resource.
 - **inputInfo** - a string below the input field that shows how to fill in the input.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
 - **defaultExpanded** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
@@ -323,9 +314,9 @@ ResourceRef widgets render two dropdowns to select the associated resources' nam
   - **kind** - _[required]_ Kubernetes kind of the resource.
   - **group** - API group used for all requests. Not provided for Kubernetes resources in the core (also called legacy) group.
   - **version** - _[required]_ API version used for all requests.
-- **provideVar** - When this field is defined, the chosen resource will be provided as a variable of this name.
-- **toInternal** - A JSONata function to convert from the stored value to the `{name, namespace}` format. Useful, for example, when the data is stored as a string.
-- **toExternal** - A corresponding function to convert back to store.
+- **provideVar** - when this field is defined, the chosen resource will be provided as a variable of this name.
+- **toInternal** - a [JSONata](jsonata.md) function to convert from the stored value to the `{name, namespace}` format. Useful, for example, when the data is stored as a string.
+- **toExternal** - a corresponding function to convert back to store.
 - **defaultExpanded** - a boolean that specifies if the widget should be expanded by default. Defaults to `false`.
 
 #### Example

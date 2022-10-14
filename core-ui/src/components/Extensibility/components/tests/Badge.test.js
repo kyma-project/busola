@@ -6,7 +6,9 @@ import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 
 jest.mock('../../hooks/useJsonata', () => ({
-  useJsonata: value => value,
+  useJsonata: () => {
+    return structure => [structure];
+  },
 }));
 
 describe('Badge', () => {
