@@ -298,7 +298,6 @@ data:
       "name": "Sidecars",
       "scope": "namespace",
       "description": "{{[Sidecar](https://istio.io/latest/docs/reference/config/networking/sidecar/)}} manages the incoming and outgoing communication in a workload it is attached to."
-
     }
   list: |-
     [
