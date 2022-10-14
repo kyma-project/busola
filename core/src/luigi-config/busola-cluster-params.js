@@ -32,7 +32,6 @@ export async function getBusolaClusterParams() {
 
       const defaultParams = jsyaml.load(await defaultConfigResponse.text());
       const mapParams = jsyaml.load(await configMapResponse.text());
-      console.log({ defaultParams, mapParams });
 
       if (defaultParams.config?.features)
         defaultParams.config.features = convertStaticFeatures(
