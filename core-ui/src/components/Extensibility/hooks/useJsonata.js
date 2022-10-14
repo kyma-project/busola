@@ -1,12 +1,15 @@
 import { useState, useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
+import { last, mapValues } from 'lodash';
 
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { DataSourcesContext } from '../contexts/DataSources';
-import { mapValues } from 'lodash';
 
-export function useJsonata(query, root, extras = {}) {
-  const [value, setValue] = useState('');
+export function useJsonata(
+  // query,
+  { resource, scope, arrayItems },
+) {
+  const [dataSourceFetchers, setDataSourceFetchers] = useState({});
   const { t } = useTranslation();
   const {
     dataSources,
@@ -17,26 +20,31 @@ export function useJsonata(query, root, extras = {}) {
   useEffect(() => {
     const dataSourceFetchers = mapValues(dataSources, (_, id) => {
       return () => {
-        requestRelatedResource(root, id);
+        requestRelatedResource(resource, id);
         return dataSourceStore?.[id]?.data;
       };
     });
+    setDataSourceFetchers(dataSourceFetchers);
+  }, [dataSourceStore]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    if (!query) return '';
+  return (query, extras = {}, defaultValue = null) => {
+    if (!query) {
+      return [defaultValue, null];
+    }
     try {
-      jsonataWrapper(query).evaluate(
-        root,
+      const value = jsonataWrapper(query).evaluate(
+        extras.scope || scope || resource,
         {
           ...dataSourceFetchers,
+          root: resource,
+          items: arrayItems,
+          item: last(extras?.arrayItems) || last(arrayItems) || resource,
           ...extras,
         },
-        (error, result) => {
-          setValue(result);
-        },
       );
+      return [value, null];
     } catch (e) {
-      setValue(t('extensibility.configuration-error', { error: e.message }));
+      return [t('extensibility.configuration-error', { error: e.message }), e];
     }
-  }, [root, dataSourceStore, JSON.stringify(extras)]); // eslint-disable-line react-hooks/exhaustive-deps
-  return value;
+  };
 }

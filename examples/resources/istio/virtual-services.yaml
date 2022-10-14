@@ -45,141 +45,141 @@ data:
             "widget": "Table",
             "source": "spec.gateways[]",
             "name": "gateways",
-            "visibility": "$exists(*)",
+            "visibility": "$exists($value)",
             "children": [
-            {
-              "source": "$item",
-              "name": "t-name",
-              "widget": "ResourceLink",
-              "resource":{
-                "kind": "'Gateway'",
-                "name": "$contains(data,'/') ? $substringAfter(data, '/') : $substringBefore(data, '.')",
-                "namespace": "$contains(data,'/') ? $substringBefore(data, '/'): $substringBefore($substringAfter(data, '.'), '.') "
+              {
+                "source": "$item",
+                "name": "t-name",
+                "widget": "ResourceLink",
+                "resource":{
+                  "kind": "'Gateway'",
+                  "name": "$contains($item,'/') ? $substringAfter($item, '/') : $substringBefore($item, '.')",
+                  "namespace": "$contains($item,'/') ? $substringBefore($item, '/'): $substringBefore($substringAfter($item, '.'), '.') "
+                }
               }
-            }
             ]
           },
           {
             "name": "summary",
             "widget": "Panel",
             "source": "spec",
-            "visibility": "$boolean($exists(data.exportTo) or $exists(data.hosts))",
+            "visibility": "$boolean($exists($item.exportTo) or $exists($item.hosts))",
             "children": [
-              { "name": "exportTo", "source": "$item.exportTo", "widget": "Labels", "visibility": "$exists(*)"},
-              { "name": "hosts", "source": "$item.hosts", "widget": "JoinedArray", "visibility": "$exists(*)"}
+              { "name": "exportTo", "source": "exportTo", "widget": "Labels", "visibility": "$exists($value)"},
+              { "name": "hosts", "source": "hosts", "widget": "JoinedArray", "visibility": "$exists($value)"}
             ]
           },
           {
             "widget": "Table",
             "source": "spec.http",
             "name": "http",
-            "visibility": "$exists(*)",
+            "visibility": "$exists($value)",
             "children": [
               {
-               "source": "$item.name", "name": "t-name"
+               "source": "name", "name": "t-name"
               },
               {
-                 "source": "$item.timeout", "name": "timeout"
+                 "source": "timeout", "name": "timeout"
               },
               {
-                 "source": "$item.mirrorPercentage.value", "name": "mirrorPercentage"
+                 "source": "mirrorPercentage.value", "name": "mirrorPercentage"
               }
             ],
             "collapsible": [
               {
-                "source": "$item.match", "name": "matches", "widget": "Table", 
-                "visibility": "$exists(*)", "children":[
+                "source": "match", "name": "matches", "widget": "Table", 
+                "visibility": "$exists($value)", "children":[
                   {
-                    "source": "$item.name", "name": "t-name",
+                    "source": "name", "name": "t-name",
                   },
                   {
-                    "source": "$item.uri", "name": "uri", "widget": "Labels",
+                    "source": "uri", "name": "uri", "widget": "Labels",
                   },
                   {
-                    "source": "$item.scheme", "name": "scheme", "widget": "Labels",
+                    "source": "scheme", "name": "scheme", "widget": "Labels",
                   },
                   {
-                    "source": "$item.method", "name": "method", "widget": "Labels",
+                    "source": "method", "name": "method", "widget": "Labels",
                   },
                   {
-                    "source": "$item.authority", "name": "authority", "widget": "Labels",
+                    "source": "authority", "name": "authority", "widget": "Labels",
                   },
                   {
-                    "source": "$item.headers", "name": "headers"
+                    "source": "headers", "name": "headers"
                   },
                   {
-                    "source": "$item.port", "name": "port"
+                    "source": "port", "name": "port"
                   },
                   {
-                    "source": "$item.sourceLabels", "name": "sourceLabels", "widget": "Labels"
+                    "source": "sourceLabels", "name": "sourceLabels", "widget": "Labels"
                   },
                   {
-                    "source": "$item.gateways", "name": "gateways", "widget": "JoinedArray"
+                    "source": "gateways", "name": "gateways", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.queryParams", "name": "queryParams"
+                    "source": "queryParams", "name": "queryParams"
                   },
                   {
-                    "source": "$item.ignoreUriCase", "name": "ignoreUriCase"
+                    "source": "ignoreUriCase", "name": "ignoreUriCase"
                   },
                   {
-                    "source": "$item.withoutHeaders", "name": "withoutHeaders"
+                    "source": "withoutHeaders", "name": "withoutHeaders"
                   },
                   {
-                    "source": "$item.sourceNamespace", "name": "sourceNamespace"
+                    "source": "sourceNamespace", "name": "sourceNamespace"
                   },
                   {
-                    "source": "$item.statPrefix", "name": "statPrefix"
+                    "source": "statPrefix", "name": "statPrefix"
                   },
                 ]
               },
               {
-                "source": "$item.route", "name": "routes", "widget": "Table", 
-                "visibility": "$exists(*)", "children":[
+                "source": "route", "name": "routes", "widget": "Table", 
+                "visibility": "$exists($value)", "children":[
                   {
-                    "source": "$item.destination", "name": "destination", "widget": "Panel", "visibility": "$exists(*)", "children": [
+                    "source": "destination", "name": "destination", "widget": "Panel", "visibility": "$exists($value)", "children": [
                       {
-                        "source": "$item.host", "name": "host"
+                        "source": "host", "name": "host"
                       },
                       {
-                          "source": "$item.subset", "name": "subset"
+                          "source": "subset", "name": "subset"
                       },
                       {
-                        "source": "$item.port.number", "name": "port.number"
+                        "source": "port.number", "name": "port.number"
                       },
                     ] 
                   },
                   {
-                    "source": "$item.weight", "name": "weight",
+                    "source": "weight", "name": "weight",
                   },
                   {
-                    "source": "$item.headers", "name": "headers", "widget": "Panel", 
-                    "visibility": "$exists(*)", children": [
+                    "source": "headers", "name": "headers", "widget": "Panel", 
+                    "visibility": "$exists($value)", children": [
                         {
-                          "source": "$item.request", "name": "request", "widget": "Panel", 
-                          "visibility": "$exists(*)", "children":[
+                          "source": "request", "name": "request", "widget": "Panel", 
+                          "visibility": "$exists($value)", "children":[
                               {
-                                "source": "$item.set", "name": "set", "widget": "Labels"
+                                "source": "set", "name": "set", "widget": "Labels"
                               },
                               {
-                                "source": "$item.add", "name": "add", "widget": "Labels"
+                                "source": "add", "name": "add", "widget": "Labels"
                               },
                               {
-                                "source": "$item.remove", "name": "remove", "widget": "JoinedArray"
+                                "source": "remove", "name": "remove", "widget": "JoinedArray"
                               }
                           ]
                         },
                         {
-                        "source": "$item.response", "name": "response", "widget": "Panel", 
-                        "visibility": "$exists(*)", "children": [
+                        "source": "response", "name": "response", "widget": "Panel", 
+                        "visibility": "$exists($value)", "children": [
                               {
-                                "source": "$item.set", "name": "set", "widget": "Labels"
+                                "source": "set", "name": "set", "widget": "Labels"
                               },
                               {
-                                "source": "$item.add", "name": "add", "widget": "Labels"
+                                "source": "add", "name": "add", "widget": "Labels"
                               },
                               {
-                                "source": "$item.remove", "name": "remove", "widget": "JoinedArray"
+                                "source": "remove", "name": "remove", "widget": "JoinedArray"
                               }
                           ]
                         },
@@ -188,181 +188,181 @@ data:
                 ]
               },
               {
-                "source": "$item.redirect", "name": "redirect", "widget": "Panel", 
-                "visibility": "$exists(*)", "children": [
+                "source": "redirect", "name": "redirect", "widget": "Panel", 
+                "visibility": "$exists($value)", "children": [
                   {
-                    "source": "$item.uri", "name": "uri"
+                    "source": "uri", "name": "uri"
                   },
                   {
-                    "source": "$item.authority", "name": "authority"
+                    "source": "authority", "name": "authority"
                   },
                   {
-                    "source": "$item.port", "name": "port"
+                    "source": "port", "name": "port"
                   },
                   {
-                    "source": "$item.derivePort", "name": "derivePort", "widget": "Labels"
+                    "source": "derivePort", "name": "derivePort", "widget": "Labels"
                   },
                   {
-                    "source": "$item.scheme", "name": "scheme"
+                    "source": "scheme", "name": "scheme"
                   },
                   {
-                    "source": "$item.redirectCode", "name": "redirectCode"
+                    "source": "redirectCode", "name": "redirectCode"
                   },
                 ]
               },
               {
-                "source": "$item.directResponse", "name": "directResponse", "widget": "Panel",
-                "visibility": "$exists(*)", "children": [
+                "source": "directResponse", "name": "directResponse", "widget": "Panel",
+                "visibility": "$exists($value)", "children": [
                   {
-                    "source": "$item.status", "name": "status"
+                    "source": "status", "name": "status"
                   },
                   {
-                    "source": "$item.body", "name": "body", "widget": "Panel", 
-                    "visibility": "$exists(*)", "children": [
+                    "source": "body", "name": "body", "widget": "Panel", 
+                    "visibility": "$exists($value)", "children": [
                       {
-                        "source": "$item.string", "name": "string"
+                        "source": "string", "name": "string"
                       },
                       {
-                        "source": "$item.bytes", "name": "bytes"
+                        "source": "bytes", "name": "bytes"
                       },
                     ]
                   }
                 ]
               },
               {
-                "source": "$item.delegate", "name": "delegate", "widget": "Panel", 
-                "visibility": "$exists(*)", "children": [
+                "source": "delegate", "name": "delegate", "widget": "Panel", 
+                "visibility": "$exists($value)", "children": [
                     {
-                      "source": "$item.name", "name": "t-name"
+                      "source": "name", "name": "t-name"
                     },
                     {
-                      "source": "$item.namespace", "name": "namespace"
-                    },
-                ]
-              },
-              {
-                "source": "$item.rewrite", "name": "rewrite", "widget": "Panel", 
-                "visibility": "$exists(*)", "children": [
-                    {
-                      "source": "$item.uri", "name": "uri"
-                    },
-                    {
-                      "source": "$item.authority", "name": "authority"
+                      "source": "namespace", "name": "namespace"
                     },
                 ]
               },
               {
-                "source": "$item.retries", "name": "retries", "widget": "Panel", 
-                "visibility": "$exists(*)", "children": [
+                "source": "rewrite", "name": "rewrite", "widget": "Panel", 
+                "visibility": "$exists($value)", "children": [
                     {
-                      "source": "$item.attempts", "name": "attempts"
+                      "source": "uri", "name": "uri"
                     },
                     {
-                      "source": "$item.perTryTimeout", "name": "perTryTimeout"
-                    },
-                    {
-                      "source": "$item.retryOn", "name": "retryOn"
-                    },
-                    {
-                      "source": "$item.retryRemoteLocalities", "name": "retryRemoteLocalities"
+                      "source": "authority", "name": "authority"
                     },
                 ]
               },
               {
-                "source": "$item.fault", "name": "fault", "widget": "Panel", 
-                "visibility": "$exists(*)", "children": [
+                "source": "retries", "name": "retries", "widget": "Panel", 
+                "visibility": "$exists($value)", "children": [
+                    {
+                      "source": "attempts", "name": "attempts"
+                    },
+                    {
+                      "source": "perTryTimeout", "name": "perTryTimeout"
+                    },
+                    {
+                      "source": "retryOn", "name": "retryOn"
+                    },
+                    {
+                      "source": "retryRemoteLocalities", "name": "retryRemoteLocalities"
+                    },
+                ]
+              },
+              {
+                "source": "fault", "name": "fault", "widget": "Panel", 
+                "visibility": "$exists($value)", "children": [
                   {
-                    "source": "$item.delay", "name": "delay", "widget": "Panel", 
-                    "visibility": "$exists(*)", "children": [
+                    "source": "delay", "name": "delay", "widget": "Panel", 
+                    "visibility": "$exists($value)", "children": [
                       {
-                        "source": "$item.fixedDelay", "name": "fixedDelay"
+                        "source": "fixedDelay", "name": "fixedDelay"
                       },
                       {
-                        "source": "$item.percentage.value", "name": "percentage.value"
+                        "source": "percentage.value", "name": "percentage.value"
                       },
                       {
-                        "source": "$item.percent", "name": "percent"
+                        "source": "percent", "name": "percent"
                       }
                     ]
                   },
                   {
-                    "source": "$item.abort", "name": "Abort", "widget": "Panel", 
-                    "visibility": "$exists(*)", "children": [
+                    "source": "abort", "name": "Abort", "widget": "Panel", 
+                    "visibility": "$exists($value)", "children": [
                       {
-                        "source": "$item.httpStatus", "name": "httpStatus"
+                        "source": "httpStatus", "name": "httpStatus"
                       },
                       {
-                        "source": "$item.percentage.value", "name": "percentage.value"
+                        "source": "percentage.value", "name": "percentage.value"
                       }
                     ]
                   }
                 ]
               },
               {
-                "source": "$item.mirror", "name": "Mirror", "widget": "Panel", 
-                "visibility": "$exists(*)", "children": [
+                "source": "mirror", "name": "Mirror", "widget": "Panel", 
+                "visibility": "$exists($value)", "children": [
                   {
-                    "source": "$item.host", "name": "host"
+                    "source": "host", "name": "host"
                   },
                   {
-                    "source": "$item.subset", "name": "subset"
+                    "source": "subset", "name": "subset"
                   },
                   {
-                    "source": "$item.port.number", "name": "port.number"
+                    "source": "port.number", "name": "port.number"
                   },
                 ]
               },
               {
-                "source": "$item.corsPolicy", "name": "corsPolicy", "widget": "Panel", 
-                "visibility": "$exists(*)", "children": [
+                "source": "corsPolicy", "name": "corsPolicy", "widget": "Panel", 
+                "visibility": "$exists($value)", "children": [
                   {
-                    "source": "$item.allowOrigins", "name": "allowOrigins"
+                    "source": "allowOrigins", "name": "allowOrigins"
                   },
                   {
-                    "source": "$item.allowMethods", "name": "allowMethods", "widget": "JoinedArray"
+                    "source": "allowMethods", "name": "allowMethods", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.allowHeaders", "name": "allowHeaders", "widget": "JoinedArray"
+                    "source": "allowHeaders", "name": "allowHeaders", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.exposeHeaders", "name": "exposeHeaders", "widget": "JoinedArray"
+                    "source": "exposeHeaders", "name": "exposeHeaders", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.maxAge", "name": "maxAge"
+                    "source": "maxAge", "name": "maxAge"
                   },
                   {
-                    "source": "$item.allowCredentials", "name": "allowCredentials"
+                    "source": "allowCredentials", "name": "allowCredentials"
                   }
                 ]
               },
               {
-                "source": "$item.headers", "name": "headers", "widget": "Panel", 
-                "visibility": "$exists(*)", "children": [
+                "source": "headers", "name": "headers", "widget": "Panel", 
+                "visibility": "$exists($value)", "children": [
                     {
-                      "source": "$item.request", "name": "request", "widget": "Panel", 
-                      "visibility": "$exists(*)", "children":[
+                      "source": "request", "name": "request", "widget": "Panel", 
+                      "visibility": "$exists($value)", "children":[
                           {
-                            "source": "$item.set", "name": "set", "widget": "Labels"
+                            "source": "set", "name": "set", "widget": "Labels"
                           },
                           {
-                            "source": "$item.add", "name": "add", "widget": "Labels"
+                            "source": "add", "name": "add", "widget": "Labels"
                           },
                           {
-                            "source": "$item.remove", "name": "remove", "widget": "JoinedArray"
+                            "source": "remove", "name": "remove", "widget": "JoinedArray"
                           }
                       ]
                     },
                     {
-                    "source": "$item.response", "name": "response", "widget": "Panel", 
-                    "visibility": "$exists(*)", "children": [
+                    "source": "response", "name": "response", "widget": "Panel", 
+                    "visibility": "$exists($value)", "children": [
                           {
-                            "source": "$item.set", "name": "set", "widget": "Labels"
+                            "source": "set", "name": "set", "widget": "Labels"
                           },
                           {
-                            "source": "$item.add", "name": "add", "widget": "Labels"
+                            "source": "add", "name": "add", "widget": "Labels"
                           },
                           {
-                            "source": "$item.remove", "name": "remove", "widget": "JoinedArray"
+                            "source": "remove", "name": "remove", "widget": "JoinedArray"
                           }
                       ]
                     },
@@ -374,49 +374,49 @@ data:
             "widget": "Table",
             "source": "spec.tcp",
             "name": "tcp",
-            "visibility": "$exists(*)",
+            "visibility": "$exists($value)",
             "children": [
                 {
-                "source": "$item.match", "name": "matches", "widget": "Table", 
-                "visibility": "$exists(*)", "children": [
+                "source": "match", "name": "matches", "widget": "Table", 
+                "visibility": "$exists($value)", "children": [
                   {
-                    "source": "$item.destinationSubnets", "name": "destinationSubnets",
+                    "source": "destinationSubnets", "name": "destinationSubnets",
                     "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.port", "name": "port"
+                    "source": "port", "name": "port"
                   },
                   {
-                    "source": "$item.sourceLabels", "name": "sourceLabels", "widget": "Labels"
+                    "source": "sourceLabels", "name": "sourceLabels", "widget": "Labels"
                   },
                   {
-                    "source": "$item.gateways", "name": "gateways", "widget": "JoinedArray"
+                    "source": "gateways", "name": "gateways", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.sourceNamespace", "name": "sourceNamespace"
+                    "source": "sourceNamespace", "name": "sourceNamespace"
                   }
                 ]
               },
             ],
             "collapsible": [
               {
-                "source": "$item.route", "name": "routes", "widget": "Table",
-                "visibility": "$exists(*)", "children": [
+                "source": "route", "name": "routes", "widget": "Table",
+                "visibility": "$exists($value)", "children": [
                   {
-                    "source": "$item.destination", "name": "destination", "widget": "Panel", "visibility": "$exists(*)", "children": [
+                    "source": "destination", "name": "destination", "widget": "Panel", "visibility": "$exists($value)", "children": [
                       {
-                        "source": "$item.host", "name": "host"
+                        "source": "host", "name": "host"
                       },
                       {
-                          "source": "$item.subset", "name": "subset"
+                          "source": "subset", "name": "subset"
                       },
                       {
-                        "source": "$item.port.number", "name": "port"
+                        "source": "port.number", "name": "port"
                       },
                     ] 
                   },
                   {
-                    "source": "$item.weight", "name": "weight"
+                    "source": "weight", "name": "weight"
                   }
                 ]
               },
@@ -426,52 +426,52 @@ data:
             "widget": "Table",
             "source": "spec.tls",
             "name": "tls",
-            "visibility": "$exists(*)",
+            "visibility": "$exists($value)",
             "children": [
                 {
-                "source": "$item.match", "name": "matches", "widget": "Table", 
-                "visibility": "$exists(*)", "children": [
+                "source": "match", "name": "matches", "widget": "Table", 
+                "visibility": "$exists($value)", "children": [
                   {
-                    "source": "$item.sniHosts", "name": "sniHosts", "widget": "JoinedArray"
+                    "source": "sniHosts", "name": "sniHosts", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.destinationSubnets", "name": "destinationSubnets",
+                    "source": "destinationSubnets", "name": "destinationSubnets",
                     "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.port", "name": "port"
+                    "source": "port", "name": "port"
                   },
                   {
-                    "source": "$item.sourceLabels", "name": "sourceLabels", "widget": "Labels"
+                    "source": "sourceLabels", "name": "sourceLabels", "widget": "Labels"
                   },
                   {
-                    "source": "$item.gateways", "name": "gateways", "widget": "JoinedArray"
+                    "source": "gateways", "name": "gateways", "widget": "JoinedArray"
                   },
                   {
-                    "source": "$item.sourceNamespace", "name": "sourceNamespace"
+                    "source": "sourceNamespace", "name": "sourceNamespace"
                   }
                 ]
               },
             ],
             "collapsible": [
               {
-                "source": "$item.route", "name": "routes", "widget": "Table",
-                "visibility": "$exists(*)", "children": [
+                "source": "route", "name": "routes", "widget": "Table",
+                "visibility": "$exists($value)", "children": [
                   {
-                    "source": "$item.destination", "name": "destination", "widget": "Panel", "children": [
+                    "source": "destination", "name": "destination", "widget": "Panel", "children": [
                       {
-                        "source": "$item.host", "name": "host"
+                        "source": "host", "name": "host"
                       },
                       {
-                          "source": "$item.subset", "name": "subset"
+                          "source": "subset", "name": "subset"
                       },
                       {
-                        "source": "$item.port.number", "name": "port.number"
+                        "source": "port.number", "name": "port.number"
                       },
                     ] 
                   },
                   {
-                    "source": "$item.weight", "name": "weight"
+                    "source": "weight", "name": "weight"
                   }
                 ]
               }
