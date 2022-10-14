@@ -19,7 +19,7 @@ The primary data source of JSONata expressions changes depending on where it's u
 
 Additionally, scope in arrays changes to the array item.
 
-For example for this resource:
+For example, for this resource:
 
 ```yaml
 spec:
