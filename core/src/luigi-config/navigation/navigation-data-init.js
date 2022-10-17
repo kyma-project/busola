@@ -113,11 +113,6 @@ async function createClusterManagementNodes(features, customResources) {
         return false;
       },
     },
-    {
-      pathSegment: 'preferences',
-      viewUrl: config.coreUIModuleUrl + '/preferences',
-      openNodeInModal: { title: i18next.t('preferences.title'), size: 'm' },
-    },
   ];
 
   const clusterManagementNode = {
@@ -243,13 +238,6 @@ export async function createNavigation() {
           {
             icon: 'settings',
             label: i18next.t('top-nav.profile.preferences'),
-            link: `/cluster/${encodeURIComponent(
-              activeClusterName,
-            )}/preferences`,
-            openNodeInModal: {
-              title: i18next.t('preferences.title'),
-              size: 'm',
-            },
           },
         ],
       },

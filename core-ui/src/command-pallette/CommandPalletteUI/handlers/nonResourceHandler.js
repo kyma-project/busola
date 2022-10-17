@@ -60,20 +60,6 @@ function createResults(context) {
           onActivate: () => false,
           customActionText: t('command-palette.item-actions.show-help'),
         };
-      case 'preferences':
-        return [
-          {
-            label: t('preferences.title'),
-            query: 'preferences',
-            onActivate: () => {
-              LuigiClient.linkManager().openAsModal('/clusters/preferences', {
-                title: t('preferences.title'),
-                size: 'm',
-              });
-            },
-            customActionText: t('command-palette.item-actions.open'),
-          },
-        ];
       case 'overview':
         if (activeClusterName) {
           return [
