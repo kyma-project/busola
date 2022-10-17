@@ -367,6 +367,12 @@ data:
         "description": "status.APIRuleStatus.desc"
       }
     ]
+  presets: |-
+    - name: Default gateway
+      default: true
+      value:
+        spec:
+          gateway: kyma-gateway.kyma-system.svc.cluster.local
   translations: |
     en:
       accessStrategies: Access Strategies
@@ -378,11 +384,11 @@ data:
       accessStrategies.required_scope: Required Scope
       gateway: Gateway
       host: Host
-      inputInfo.gateway: Gateway structure, 'http://{GATEWAY}.{NAMESPACE}.svc.cluster.local'
+      inputInfo.gateway: Gateway structure, '{GATEWAY}.{NAMESPACE}.svc.cluster.local'
       mutators: Mutators
       mutators.config: Config
       mutators.handlers: Handlers
-      placeholder.gateway: Enter the gateway, for example, http://kyma-gateway.kyma-system.svc.cluster.local
+      placeholder.gateway: Enter the gateway, for example, kyma-gateway.kyma-system.svc.cluster.local
       rules: Rules
       rules.methods: Methods
       rules.path: Path
