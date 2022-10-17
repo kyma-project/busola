@@ -72,6 +72,7 @@ data:
                   "name": "Access Label"
                 },
                 {
+                  "widget": "ExternalLink",
                   "source": "$item.centralGatewayUrl",
                   "name": "Central Gateway URL",
                   "copyable": true
@@ -88,6 +89,7 @@ data:
                   "name": "Access Label"
                 },
                 {
+                  "widget": "ExternalLink",
                   "source": "$item.centralGatewayUrl",
                   "name": "Central Gateway URL",
                   "copyable": true

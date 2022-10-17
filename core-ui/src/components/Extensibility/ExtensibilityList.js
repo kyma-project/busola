@@ -1,9 +1,12 @@
 import React from 'react';
 import pluralize from 'pluralize';
+import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
 import { prettifyKind } from 'shared/utils/helpers';
+import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
+import { useGetSchema } from 'hooks/useGetSchema';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
@@ -12,18 +15,17 @@ import {
   TranslationBundleContext,
   useGetTranslation,
   applyFormula,
-  sortBy,
   getTextSearchProperties,
 } from './helpers';
+import { sortBy } from './helpers/sortBy';
 import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
-import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
-import { useGetSchema } from 'hooks/useGetSchema';
-import { useTranslation } from 'react-i18next';
+import { useJsonata } from './hooks/useJsonata';
 
 export const ExtensibilityListCore = ({ resMetaData, ...props }) => {
   const { t, widgetT, exists } = useGetTranslation();
   const { t: tBusola } = useTranslation();
+  const jsonata = useJsonata({});
 
   const { urlPath, resource, description, features } =
     resMetaData?.general ?? {};
@@ -91,7 +93,9 @@ export const ExtensibilityListCore = ({ resMetaData, ...props }) => {
       disableEdit={disableEdit}
       disableDelete={disableDelete}
       createResourceForm={ExtensibilityCreate}
-      sortBy={defaultSortOptions => sortBy(sortOptions, t, defaultSortOptions)}
+      sortBy={defaultSortOptions =>
+        sortBy(jsonata, sortOptions, t, defaultSortOptions)
+      }
       searchSettings={{
         textSearchProperties: defaultSearchProperties =>
           textSearchProperties(defaultSearchProperties),

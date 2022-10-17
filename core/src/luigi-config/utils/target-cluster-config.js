@@ -1,5 +1,6 @@
 import * as fetchCache from './../cache/fetch-cache';
 import { reloadNavigation } from '../navigation/navigation-data-init';
+import jsyaml from 'js-yaml';
 
 const CONFIGMAP_URL = '/api/v1/namespaces/kube-public/configmaps/busola-config';
 
@@ -9,7 +10,7 @@ export function getTargetClusterConfig() {
     if (!res || res.status === 404) {
       return {};
     }
-    return JSON.parse(res.data?.data?.config || '{}') || {};
+    return jsyaml.load(res.data?.data?.config || '{}') || {};
   } catch (e) {
     console.warn('cannot get cluster config', e);
     return {};
