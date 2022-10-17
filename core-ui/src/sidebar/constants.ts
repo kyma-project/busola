@@ -1,13 +1,13 @@
 export enum PredefinedCategories {
-  'workloads' = 'workloads',
-  'discovery-and-network' = 'discovery-and-network',
-  'istio' = 'istio',
-  'service-management' = 'service-management',
-  'storage' = 'storage',
-  'apps' = 'apps',
-  'configuration' = 'configuration',
-  'integration' = 'integration',
-  'temporary' = 'temporary',
+  'workloads' = 'Workloads',
+  'discovery-and-network' = 'Discovery-and-network',
+  'istio' = 'Istio',
+  'service-management' = 'Service-management',
+  'storage' = 'Storage',
+  'apps' = 'Apps',
+  'configuration' = 'Configuration',
+  'integration' = 'Integration',
+  'temporary' = 'Temporary',
 }
 
 export const CATEGORIES = {

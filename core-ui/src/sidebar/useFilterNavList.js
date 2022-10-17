@@ -7,6 +7,7 @@ import { openapiPathIdListSelector } from 'state/openapi/openapiPathIdSelector';
 import { configFeaturesState } from 'state/configFeaturesAtom';
 import { filterExistingAndAllowedNodes } from 'sidebar/filterExistingAndAllowedNodes';
 import { isEmpty } from 'lodash';
+import { activeClusterNameState } from 'state/activeClusterNameAtom';
 
 export const useFilterNavList = () => {
   const completeResourceList = useRecoilValue(completeResourceListSelector);
@@ -17,6 +18,12 @@ export const useFilterNavList = () => {
   const [filteredNavList, setFilteredNavList] = useState(null);
 
   const fetchPermissions = useFetchPermissions();
+
+  useEffect(() => {
+    return () => {
+      setFilteredNavList(null);
+    };
+  }, [activeNamespaceId]);
 
   //called each time namespace changes
   useEffect(() => {

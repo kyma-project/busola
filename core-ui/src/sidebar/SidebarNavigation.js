@@ -15,7 +15,7 @@ export const SidebarNavigation = () => {
   //extensions
   //cluster details
 
-  // on limited view destination rules   // swap with EXT
+  // on limited view destination rules are not shown   // swap with EXT
 
   return (
     <nav>

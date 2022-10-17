@@ -1,7 +1,5 @@
 import React from 'react';
-
 import { matchByOwnerReference } from 'shared/utils/helpers';
-import i18next from 'i18next';
 import { PredefinedCategories } from 'sidebar/constants';
 
 export const resourceType = 'Jobs';
@@ -34,52 +32,52 @@ export const resourceGraphConfig = (t, context) => ({
     },
   ],
 });
-
-const luigi = {
-  category: i18next.t('workloads.title'), // zostaje jako categoryID
-
-  ///
-  categoryIcon: 'jklsdf', // domyslne
-  dependsOnFeatures: ['ISTIO'],
-  ////
-
-  resourceType: 'jobs', // brane z linii 8, change case
-
-  //optional
-  pathSegment: 'jobs', // może być opcjonalnie, ma byc tylko jak jest inny od resourceType
-  //pathSegemnt to urlPath w ext config
-
-  //optional
-  label: i18next.t('jobs.title'), // if defined, overwrite name in nav
-  // label is overwritten by ext name
-
-  /// osobno apiVersion, apiGroup, hasDetailsView, fn do kompilowania tego dla kubernetesa
-  // viewUrl:
-  // config.coreUIModuleUrl +
-  // '/namespaces/:namespaceId/jobs?' +
-  // toSearchParamsString({
-  //   resourceApiPath: '/apis/batch/v1',
-  //   hasDetailsView: true, // move 1 level up
-  // }),
-  // viewGroup: coreUIViewGroupName,
-  // keepSelectedForChildren: true,
-
-  // navigationContext: 'jobs',
-  // children: [
-  //   {
-  //     pathSegment: 'details',
-  //     children: [
-  //       {
-  //         pathSegment: ':jobName',
-  //         resourceType: 'jobs',
-  //         viewUrl:
-  //           config.coreUIModuleUrl +
-  //           '/namespaces/:namespaceId/jobs/:jobName?' +
-  //           toSearchParamsString({
-  //             resourceApiPath: '/apis/batch/v1',
-  //           }),
-  //       },
-  //     ],
-  //   },
-  // ],
-};
+//
+// const luigi = {
+//   category: i18next.t('workloads.title'), // zostaje jako categoryID
+//
+//   ///
+//   categoryIcon: 'jklsdf', // domyslne
+//   dependsOnFeatures: ['ISTIO'],
+//   ////
+//
+//   resourceType: 'jobs', // brane z linii 8, change case
+//
+//   //optional
+//   pathSegment: 'jobs', // może być opcjonalnie, ma byc tylko jak jest inny od resourceType
+//   //pathSegemnt to urlPath w ext config
+//
+//   //optional
+//   label: i18next.t('jobs.title'), // if defined, overwrite name in nav
+//   // label is overwritten by ext name
+//
+//   /// osobno apiVersion, apiGroup, hasDetailsView, fn do kompilowania tego dla kubernetesa
+//   // viewUrl:
+//   // config.coreUIModuleUrl +
+//   // '/namespaces/:namespaceId/jobs?' +
+//   // toSearchParamsString({
+//   //   resourceApiPath: '/apis/batch/v1',
+//   //   hasDetailsView: true, // move 1 level up
+//   // }),
+//   // viewGroup: coreUIViewGroupName,
+//   // keepSelectedForChildren: true,
+//
+//   // navigationContext: 'jobs',
+//   // children: [
+//   //   {
+//   //     pathSegment: 'details',
+//   //     children: [
+//   //       {
+//   //         pathSegment: ':jobName',
+//   //         resourceType: 'jobs',
+//   //         viewUrl:
+//   //           config.coreUIModuleUrl +
+//   //           '/namespaces/:namespaceId/jobs/:jobName?' +
+//   //           toSearchParamsString({
+//   //             resourceApiPath: '/apis/batch/v1',
+//   //           }),
+//   //       },
+//   //     ],
+//   //   },
+//   // ],
+// };
