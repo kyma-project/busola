@@ -43,7 +43,7 @@ spec:
               value: 0.0.0.0
           volumeMounts:
             - name: config
-              mountPath: /app/config
+              mountPath: /app/config-yaml
       volumes:
         - name: config
           configMap:
