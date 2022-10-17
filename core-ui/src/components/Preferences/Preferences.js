@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dialog, Icon } from 'fundamental-react';
 
 import { Tab } from 'shared/components/Tabs/Tab';
 import { Tabs } from 'shared/components/Tabs/Tabs';
 import { VerticalTabs } from 'shared/components/VerticalTabs/VerticalTabs';
+import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
 
 import NamespaceSettings from './NamespaceSettings';
 import ProtectedSettings from './ProtectedSettings';
@@ -15,8 +16,9 @@ import ConfirmationSettings from './ConfirmationSettings';
 
 import './Preferences.scss';
 
-function Preferences({ show, onCancel }) {
+function Preferences() {
   const { t } = useTranslation();
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const tabs = [
     {
@@ -46,12 +48,20 @@ function Preferences({ show, onCancel }) {
   ];
 
   const actions = [
-    <Button onClick={onCancel}>{t('common.buttons.cancel')}</Button>,
+    <Button onClick={() => setModalOpen(prevState => !prevState)}>
+      {t('common.buttons.cancel')}
+    </Button>,
   ];
+
+  useCustomMessageListener('open-preferences', () => {
+    console.log(isModalOpen);
+
+    setModalOpen(true);
+  });
 
   return (
     <Dialog
-      show={show}
+      show={isModalOpen}
       title={t('preferences.title')}
       actions={actions}
       className="preferences-dialog"
@@ -96,6 +106,11 @@ function Preferences({ show, onCancel }) {
 
 /* for some mysterious reason hooks fail in root component, so instead a
  * wrapper component has to be exported */
-export default function Preferencs({ ...props }) {
-  return <Preferences {...props} />;
+export function PreferencesProvider({ children }) {
+  return (
+    <>
+      <Preferences />
+      {children}
+    </>
+  );
 }

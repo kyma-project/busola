@@ -9,7 +9,7 @@ import {
   tryRestorePreviousLocation,
 } from './navigation/previous-location';
 import { communication } from './communication';
-import { createSettings } from './settings';
+import { createSettings, attachPreferencesModal } from './settings';
 import { clusterLogin } from './auth/auth';
 import { handleKubeconfigIdIfPresent } from './kubeconfig-id';
 import {
@@ -76,6 +76,8 @@ async function initializeBusola() {
   await new Promise(resolve => setTimeout(resolve, 100));
 
   await setNavFooterText();
+  await attachPreferencesModal();
+
   if (!getActiveCluster()) {
     if (!window.location.pathname.startsWith('/clusters')) {
       Luigi.navigation().navigate('/clusters');
