@@ -38,6 +38,11 @@ export const label = 'jobs.title'; //if empty resourceType
 const luigi = {
   category: i18next.t('workloads.title'), // zostaje jako categoryID
 
+  ///
+  categoryIcon: 'jklsdf', // domyslne
+  dependsOnFeatures: ['ISTIO'],
+  ////
+
   resourceType: 'jobs', // brane z linii 8, change case
 
   //optional

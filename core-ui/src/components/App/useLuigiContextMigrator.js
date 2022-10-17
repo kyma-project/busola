@@ -6,6 +6,7 @@ import { configFeaturesState } from 'state/configFeaturesAtom';
 import { activeClusterNameState } from 'state/activeClusterNameAtom';
 import { authDataState } from 'state/authDataAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { extResourcesState } from 'state/extResourcesState';
 
 export const useLuigiContextMigrator = () => {
   const {
@@ -13,12 +14,14 @@ export const useLuigiContextMigrator = () => {
     activeClusterName,
     authData,
     namespaceId,
+    customResources,
   } = useMicrofrontendContext();
 
   useUpdateRecoilIfValueChanged(features, configFeaturesState);
   useUpdateRecoilIfValueChanged(activeClusterName, activeClusterNameState);
   useUpdateRecoilIfValueChanged(authData, authDataState);
   useUpdateRecoilIfValueChanged(namespaceId, activeNamespaceIdState);
+  useUpdateRecoilIfValueChanged(customResources, extResourcesState);
 };
 
 const useUpdateRecoilIfValueChanged = (val, recoilAtom) => {

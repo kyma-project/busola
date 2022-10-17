@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { configFeaturesState } from 'state/configFeaturesAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useFetchPermissions } from './useFetchPermissions';
+import { completeResourceListSelector } from 'state/completeResourceListSelector';
 
 //called each time namespace changes
-export const useFilterNavList = completeNavList => {
-  const configFeatures = useRecoilValue(configFeaturesState);
+export const useFilterNavList = () => {
+  const completeResourceList = useRecoilValue(completeResourceListSelector);
   const activeNamespaceId = useRecoilValue(activeNamespaceIdState);
 
   const [filteredNavList, setFilteredNavList] = useState({});
@@ -14,7 +14,7 @@ export const useFilterNavList = completeNavList => {
   const fetchPermissions = useFetchPermissions();
 
   useEffect(() => {
-    if (completeNavList.length === 0) return;
+    if (completeResourceList.length === 0) return;
 
     async function effectFn() {
       //filterCompleteListByFeatures from configFeature
@@ -24,17 +24,16 @@ export const useFilterNavList = completeNavList => {
 
       //filterCompleteListByResourceScope cluster/namespace
       const scope = activeNamespaceId ? 'namespace' : 'cluster';
-      const filteredByScope = filterByScope(completeNavList, scope);
+      const filteredByScope = filterByScope(completeResourceList, scope);
 
       const sortedToCategories = sortByCategories(filteredByScope);
 
-      console.log(sortedToCategories);
       setFilteredNavList(sortedToCategories);
     }
 
     void effectFn();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [completeNavList, activeNamespaceId]);
+  }, [completeResourceList, activeNamespaceId]);
 
   return { filteredNavList };
 };
