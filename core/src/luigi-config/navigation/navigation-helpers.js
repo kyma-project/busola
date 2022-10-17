@@ -40,14 +40,6 @@ export const hideDisabledNodes = (disabledNavNodes, nodes, inNamespace) => {
   }
 };
 
-export function hideByNodeCategory(node, showExperimentalCategory) {
-  if (node.category === 'Experimental') {
-    return { ...node, hideFromNav: !showExperimentalCategory };
-  } else {
-    return node;
-  }
-}
-
 export function createNamespacesList(rawNamespaceNames) {
   let namespaces = [];
   rawNamespaceNames

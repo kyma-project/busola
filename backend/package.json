@@ -20,6 +20,7 @@
     "express-jwt": "^6.1.1",
     "https": "^1.0.0",
     "jose": "^2.0.6",
+    "js-yaml": "^4.1.0",
     "jwks-rsa": "^2.0.5",
     "lodash.merge": "^4.6.2",
     "pino-http": "^5.7.0",

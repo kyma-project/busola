@@ -5,12 +5,13 @@ import { mount } from 'enzyme';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Table } from '../Table';
 
-const translations = {
-  'myResource.path::my-title': 'My Title',
-  'myResource.path::resource.array-data': 'Array Data',
-};
-
 const genericNotFoundMessage = 'components.generic-list.messages.not-found';
+
+jest.mock('../../hooks/useJsonata', () => ({
+  useJsonata: () => {
+    return structure => [structure];
+  },
+}));
 
 jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
 
@@ -163,20 +164,24 @@ describe('Table', () => {
       };
       const listData = [{ test: ['aa'] }, { test: ['cc'] }];
 
-      const { findByText, getByLabelText, findAllByRole, queryByText } = render(
+      const {
+        findAllByText,
+        getByLabelText,
+        findAllByRole,
+        queryByText,
+      } = render(
         <DataSourcesContextProvider value={{}} dataSources={{}}>
-          <Table value={listData} structure={structure} />
+          <Table value={listData} structure={structure} arrayItems={listData} />
         </DataSourcesContextProvider>,
       );
-      await findByText('aa');
-      await findByText('cc');
+      await findAllByText('$item.test');
 
       const searchInput = getByLabelText('search-input');
       await fireEvent.change(searchInput, { target: { value: 'aa' } });
 
       const rows = await findAllByRole('row');
       expect(rows).toHaveLength(2);
-      expect(rows.at(1)).toHaveTextContent('aa');
+      expect(rows.at(1)).toHaveTextContent('$item.test');
       expect(queryByText('cc')).not.toBeInTheDocument();
     });
   });

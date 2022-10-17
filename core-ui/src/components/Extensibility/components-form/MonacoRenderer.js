@@ -1,10 +1,12 @@
 import React, { useCallback } from 'react';
 import jsyaml from 'js-yaml';
+
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useGetTranslation } from 'components/Extensibility/helpers';
-import { jsonataWrapper } from '../helpers/jsonataWrapper';
+
 import { Label } from '../../../shared/ResourceForm/components/Label';
+import { useJsonata } from '../hooks/useJsonata';
 
 function getValue(storeKeys, resource) {
   let value = resource;
@@ -23,17 +25,11 @@ function formatValue(value, language) {
   }
 }
 
-function getLanguage(schema, value, resource) {
+function getLanguage(jsonata, schema, value, resource) {
   const languageFormula = schema.get('language');
-  try {
-    const expression = jsonataWrapper(languageFormula);
-    expression.assign('root', resource);
-    expression.assign('item', value);
-    return (expression.evaluate() || '').toLowerCase();
-  } catch (e) {
-    console.warn(e);
-    return 'json';
-  }
+  const [language, error] = jsonata(languageFormula);
+
+  return error ? 'json' : (language || '').toLowerCase();
 }
 
 export function MonacoRenderer({
@@ -44,11 +40,18 @@ export function MonacoRenderer({
   required,
   resource,
   lvl = 0,
+  originalResource,
 }) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
   const value = getValue(storeKeys, resource);
-  const language = getLanguage(schema, value, resource);
+  const jsonata = useJsonata({
+    resource: originalResource,
+    scope: value,
+    value,
+  });
+
+  const language = getLanguage(jsonata, schema, value, resource);
   const formattedValue = formatValue(value, language);
   const defaultOpen = schema.get('defaultExpanded');
 
@@ -77,6 +80,7 @@ export function MonacoRenderer({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [required, language],
   );
+
   const schemaRequired = schema.get('required');
   const inputInfo = schema.get('inputInfo');
   const tooltipContent = schema.get('description');

@@ -12,6 +12,7 @@ export const tls = ({ isArray }) => ({
       path: 'subjectAltNames',
       name: 'Subject Alt Names',
       widget: 'SimpleList',
+      children: [{ path: '[]' }],
     },
     { path: 'sni', name: 'SNI' },
     { path: 'insecureSkipVerify', name: 'Insecure Skip Verify' },

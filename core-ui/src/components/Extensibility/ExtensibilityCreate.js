@@ -138,6 +138,7 @@ export function ExtensibilityCreateCore({
       initialResource={initialResource}
       afterCreatedFn={afterCreatedFn}
       handleNameChange={handleNameChange}
+      urlPath={general.urlPath}
       disableDefaultFields
     >
       <ResourceSchema
