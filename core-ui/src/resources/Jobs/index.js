@@ -5,6 +5,13 @@ import i18next from 'i18next';
 
 export const resourceType = 'Jobs';
 export const namespaced = true;
+export const category = 'workloads.title';
+//resourceType //if empty resourceType.toLowerCase
+//pathSegment //if empty resourceType
+export const label = 'jobs.title'; //if empty resourceType
+
+export const apiGroup = '';
+export const apiVersion = 'batch/v1';
 
 export const List = React.lazy(() => import('./JobList'));
 export const Details = React.lazy(() => import('./JobDetails'));
@@ -29,11 +36,6 @@ export const resourceGraphConfig = (t, context) => ({
     },
   ],
 });
-
-export const category = 'workloads.title';
-//resourceType //if empty resourceType.toLowerCase
-//pathSegment //if empty resourceType
-export const label = 'jobs.title'; //if empty resourceType
 
 const luigi = {
   category: i18next.t('workloads.title'), // zostaje jako categoryID

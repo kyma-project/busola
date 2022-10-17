@@ -14,7 +14,7 @@ export const useFetchPermissions = () => {
     };
 
     return postRequest(path, ssrr, {}).then(res => {
-      return res;
+      return res.status.resourceRules;
     });
   };
 };

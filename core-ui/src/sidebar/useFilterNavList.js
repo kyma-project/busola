@@ -2,38 +2,53 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useFetchPermissions } from './useFetchPermissions';
-import { completeResourceListSelector } from 'state/completeResourceListSelector';
+import { completeResourceListSelector } from 'state/resourceList/completeResourceListSelector';
+import { openapiPathIdListSelector } from 'state/openapi/openapiPathIdSelector';
+import { configFeaturesState } from 'state/configFeaturesAtom';
+import { filterExistingAndAllowedNodes } from 'sidebar/filterExistingAndAllowedNodes';
+import { isEmpty } from 'lodash';
 
-//called each time namespace changes
 export const useFilterNavList = () => {
   const completeResourceList = useRecoilValue(completeResourceListSelector);
   const activeNamespaceId = useRecoilValue(activeNamespaceIdState);
+  const openapiPathIdList = useRecoilValue(openapiPathIdListSelector);
+  const configFeatures = useRecoilValue(configFeaturesState);
 
-  const [filteredNavList, setFilteredNavList] = useState({});
+  const [filteredNavList, setFilteredNavList] = useState(null);
 
   const fetchPermissions = useFetchPermissions();
 
+  //called each time namespace changes
   useEffect(() => {
-    if (completeResourceList.length === 0) return;
+    if (isEmpty(completeResourceList) || isEmpty(openapiPathIdList)) {
+      return;
+    }
 
     async function effectFn() {
-      //filterCompleteListByFeatures from configFeature
+      const namespaceCode = activeNamespaceId ? activeNamespaceId : '*';
+      const permissionSet = await fetchPermissions({
+        namespace: namespaceCode,
+      });
 
-      const permissionSet = await fetchPermissions({ namespace: '*' });
-      //filterCompleteListByPermissions
-
-      //filterCompleteListByResourceScope cluster/namespace
       const scope = activeNamespaceId ? 'namespace' : 'cluster';
-      const filteredByScope = filterByScope(completeResourceList, scope);
+      const currentScopeNodes = filterByScope(completeResourceList, scope);
+      const allowedNodes = currentScopeNodes.filter(node =>
+        filterExistingAndAllowedNodes(
+          node,
+          permissionSet,
+          openapiPathIdList,
+          configFeatures,
+        ),
+      );
 
-      const sortedToCategories = sortByCategories(filteredByScope);
+      const sortedToCategories = sortByCategories(allowedNodes);
 
       setFilteredNavList(sortedToCategories);
     }
 
     void effectFn();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [completeResourceList, activeNamespaceId]);
+  }, [completeResourceList, activeNamespaceId, openapiPathIdList]);
 
   return { filteredNavList };
 };

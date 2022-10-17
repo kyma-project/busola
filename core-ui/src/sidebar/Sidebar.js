@@ -1,8 +1,19 @@
 import React from 'react';
-import { useFilterNavList } from 'sidebar/useFilterNavList';
+import { SidebarNavigation } from 'sidebar/SidebarNavigation';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
 export const Sidebar = () => {
-  const { filteredNavList } = useFilterNavList();
+  const { kubeconfig } = useMicrofrontendContext();
 
-  return <div>{JSON.stringify(filteredNavList)}</div>;
+  if (!kubeconfig) return null;
+  return (
+    <aside>
+      <section>
+        <ErrorBoundary customMessage="navigation error" displayButton={false}>
+          <SidebarNavigation />
+        </ErrorBoundary>
+      </section>
+    </aside>
+  );
 };
