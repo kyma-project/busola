@@ -7,7 +7,6 @@ import { openapiPathIdListSelector } from 'state/openapi/openapiPathIdSelector';
 import { configFeaturesState } from 'state/configFeaturesAtom';
 import { filterExistingAndAllowedNodes } from 'sidebar/filterExistingAndAllowedNodes';
 import { isEmpty } from 'lodash';
-import { activeClusterNameState } from 'state/activeClusterNameAtom';
 
 export const useFilterNavList = () => {
   const completeResourceList = useRecoilValue(completeResourceListSelector);

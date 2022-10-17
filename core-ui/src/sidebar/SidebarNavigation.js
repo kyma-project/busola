@@ -15,8 +15,6 @@ export const SidebarNavigation = () => {
   //extensions
   //cluster details
 
-  // on limited view destination rules are not shown   // swap with EXT
-
   return (
     <nav>
       <p>{JSON.stringify(filteredNavList)}</p>

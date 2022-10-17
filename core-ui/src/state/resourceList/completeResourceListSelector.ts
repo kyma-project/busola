@@ -29,7 +29,6 @@ export const completeResourceListSelector = selector({
         busolaResourceNodeList,
         extResourceNodeList,
       );
-
       return merged;
     }
   },

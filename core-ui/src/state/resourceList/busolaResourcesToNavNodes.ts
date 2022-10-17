@@ -10,7 +10,8 @@ export const busolaResourcesToNavNodes = (
   node.pathSegment = (
     resource.pathSegment || resource.resourceType
   ).toLowerCase();
-  node.label = resource.label || resource.resourceType;
+  node.label =
+    resource.label || resource.resourceType.split(/(?=[A-Z])/).join(' ');
   node.namespaced = !!resource.namespaced;
   node.requiredFeatures = resource.requiredFeatures || [];
   node.apiGroup = resource.apiGroup || ''; //TODO provide apiGroup in all resourece
