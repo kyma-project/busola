@@ -51,7 +51,6 @@ export const ExternalLink = ({
     </Link>
   );
 };
-
 ExternalLink.inline = true;
 ExternalLink.copyable = true;
 ExternalLink.copyFunction = ({ value, structure }, _, __, jsonata) => {
