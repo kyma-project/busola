@@ -18,7 +18,6 @@ export const useLuigiContextMigrator = () => {
     customResources,
     openApi,
   } = useMicrofrontendContext();
-  console.log(useMicrofrontendContext());
 
   useUpdateRecoilIfValueChanged(features, configFeaturesState);
   useUpdateRecoilIfValueChanged(activeClusterName, activeClusterNameState);

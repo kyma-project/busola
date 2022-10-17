@@ -25,9 +25,9 @@ export const useFilterNavList = () => {
     }
 
     async function effectFn() {
-      const namespaceCode = activeNamespaceId ? activeNamespaceId : '*';
+      const namespaceName = activeNamespaceId ? activeNamespaceId : '*';
       const permissionSet = await fetchPermissions({
-        namespace: namespaceCode,
+        namespace: namespaceName,
       });
 
       const scope = activeNamespaceId ? 'namespace' : 'cluster';
@@ -41,9 +41,9 @@ export const useFilterNavList = () => {
         ),
       );
 
-      const sortedToCategories = sortByCategories(allowedNodes);
+      // const sortedToCategories = sortByCategories(allowedNodes);
 
-      setFilteredNavList(sortedToCategories);
+      setFilteredNavList(allowedNodes);
     }
 
     void effectFn();
