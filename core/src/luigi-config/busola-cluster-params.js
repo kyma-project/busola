@@ -1,5 +1,6 @@
 import { merge } from 'lodash';
 import { convertStaticFeatures } from './feature-discovery';
+import jsyaml from 'js-yaml';
 
 let params = null;
 
@@ -7,15 +8,36 @@ export async function getBusolaClusterParams() {
   if (!params) {
     try {
       const cacheBuster = '?cache-buster=' + Date.now();
-      const defaultConfigResponse = await fetch(
-        '/assets/defaultConfig.json' + cacheBuster,
-      );
-      const configMapResponse = await fetch(
-        '/assets/config/config.json' + cacheBuster,
-      );
 
-      const defaultParams = await defaultConfigResponse.json();
-      const mapParams = await configMapResponse.json();
+      // workaround, to delete after updating stage and prod with YAMLs
+      let defaultConfigResponse = await fetch(
+        '/assets/defaultConfig.yaml' + cacheBuster,
+      );
+      if (
+        defaultConfigResponse.status >= 400 ||
+        defaultConfigResponse.headers.get('Content-Type') === 'text/html'
+      ) {
+        console.warn('Cannot load cluster YAML params: ');
+        defaultConfigResponse = await fetch(
+          '/assets/defaultConfig.json' + cacheBuster,
+        );
+      }
+      // workaround, to delete after updating stage and prod with YAMLs
+      let configMapResponse = await fetch(
+        '/assets/config-yaml/config.yaml' + cacheBuster,
+      );
+      if (
+        configMapResponse.status >= 400 ||
+        configMapResponse.headers.get('Content-Type') === 'text/html'
+      ) {
+        console.warn('Cannot load cluster YAML params: ');
+        configMapResponse = await fetch(
+          '/assets/config/config.json' + cacheBuster,
+        );
+      }
+
+      const defaultParams = jsyaml.load(await defaultConfigResponse.text());
+      const mapParams = jsyaml.load(await configMapResponse.text());
 
       if (defaultParams.config?.features)
         defaultParams.config.features = convertStaticFeatures(

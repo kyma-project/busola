@@ -1,17 +1,18 @@
 import React from 'react';
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { stringifyIfBoolean } from 'shared/utils/helpers';
 import { useGetTranslation, useGetPlaceholder } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
 import { widgets, valuePreprocessors } from './index';
+import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
 export const SimpleRenderer = ({ children }) => {
   return children;
 };
+SimpleRenderer.copyable = true;
 
 export function InlineWidget({ children, value, structure, ...props }) {
   const { widgetT } = useGetTranslation();
@@ -30,37 +31,66 @@ export function InlineWidget({ children, value, structure, ...props }) {
     <LayoutPanelRow name={widgetT(structure)} value={displayValue} {...props} />
   );
 }
+InlineWidget.copyable = Renderer => Renderer?.copyable;
+InlineWidget.copyFunction = (props, Renderer, defaultCopyFunction) =>
+  Renderer?.copyFunction
+    ? Renderer.copyFunction(props, Renderer, defaultCopyFunction)
+    : defaultCopyFunction(props, Renderer, defaultCopyFunction);
 
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
 
-  return Renderer.inline && InlineRenderer ? (
+  const CopyableWrapper = ({ children }) => {
+    const isRendererCopyable =
+      typeof Renderer.copyable === 'function'
+        ? Renderer.copyable(Renderer)
+        : Renderer.copyable;
+
+    const jsonata = useJsonata({
+      resource: props.originalResource,
+      scope: props.scope,
+      value: props.value,
+      arrayItems: props.arrayItems,
+    });
+
+    if (!props.structure.copyable || !isRendererCopyable) return children;
+
+    const defaultCopyFunction = ({ value }) =>
+      typeof value === 'object' ? JSON.stringify(value) : value;
+
+    const copyFunction =
+      typeof Renderer.copyFunction === 'function'
+        ? Renderer.copyFunction
+        : defaultCopyFunction;
+
+    const textToCopy = copyFunction(
+      props,
+      Renderer,
+      defaultCopyFunction,
+      jsonata,
+    );
+    return (
+      <CopiableText compact textToCopy={textToCopy} disabled={!textToCopy}>
+        {children}
+      </CopiableText>
+    );
+  };
+
+  return Renderer.inline ? (
     <InlineRenderer {...props}>
-      <Renderer {...props} />
+      <CopyableWrapper structure={props.structure} value={props.value}>
+        <Renderer {...props} />
+      </CopyableWrapper>
     </InlineRenderer>
   ) : (
     <Renderer {...props} />
   );
 }
 
-export function shouldBeVisible(value, visibilityFormula, originalResource) {
-  // allow hidden to be set only explicitly
-  if (!visibilityFormula) return { visible: visibilityFormula !== false };
-
-  try {
-    const expression = jsonataWrapper(visibilityFormula);
-    expression.assign('root', originalResource);
-    return { visible: !!expression.evaluate({ data: value }) };
-  } catch (e) {
-    console.warn('Widget::shouldBeVisible error:', e);
-    return { visible: false, error: e };
-  }
-}
-
 export function Widget({
   structure,
   value,
-  arrayItem,
+  arrayItems = [],
   inlineRenderer,
   originalResource,
   ...props
@@ -68,23 +98,29 @@ export function Widget({
   const { Plain, Text } = widgets;
   const { t } = useTranslation();
 
-  const childValue = useJsonata(structure.source, originalResource, {
-    parent: value,
-    item: arrayItem || originalResource,
+  const jsonata = useJsonata({
+    resource: originalResource,
+    scope: value,
+    arrayItems,
   });
 
-  const { visible, error: visibleCheckError } = shouldBeVisible(
-    childValue,
-    structure.visibility,
-    originalResource,
+  const [childValue] = jsonata(structure.source);
+
+  const [visible, visibilityError] = jsonata(
+    structure.visibility?.toString(),
+    {
+      value: childValue,
+    },
+    true,
   );
 
-  if (visibleCheckError) {
+  if (visibilityError) {
     return t('extensibility.configuration-error', {
-      error: visibleCheckError.message,
+      error: visibilityError.message,
     });
   }
-  if (!visible) return null;
+
+  if (visible === false) return null;
 
   if (structure.valuePreprocessor) {
     const Preprocessor = valuePreprocessors[structure.valuePreprocessor];
@@ -124,24 +160,26 @@ export function Widget({
   return Array.isArray(childValue) && !Renderer.array ? (
     childValue.map(valueItem => (
       <SingleWidget
+        {...props}
         inlineRenderer={inlineRenderer}
         Renderer={Renderer}
         value={valueItem}
-        arrayItem={value}
+        arrayItems={[...arrayItems, valueItem]}
         structure={structure}
         originalResource={originalResource}
-        {...props}
+        scope={valueItem}
       />
     ))
   ) : (
     <SingleWidget
+      {...props}
       inlineRenderer={inlineRenderer}
       Renderer={Renderer}
       value={sanitizedValue}
-      arrayItem={arrayItem}
+      scope={value}
+      arrayItems={arrayItems}
       structure={structure}
       originalResource={originalResource}
-      {...props}
     />
   );
 }

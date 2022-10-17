@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: eu.gcr.io/kyma-project/busola-backend:PR-1869
+          image: eu.gcr.io/kyma-project/busola-backend:PR-1943
           imagePullPolicy: Always
           resources:
             limits:
@@ -43,11 +43,11 @@ spec:
               value: 0.0.0.0
           volumeMounts:
             - name: config
-              mountPath: /app/config
+              mountPath: /app/config-yaml
       volumes:
         - name: config
           configMap:
             name: busola-config
             items:
               - key: config
-                path: config.json
+                path: config.yaml

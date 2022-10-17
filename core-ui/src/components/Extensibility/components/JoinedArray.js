@@ -5,7 +5,13 @@ import { useGetPlaceholder } from 'components/Extensibility/helpers';
 
 import { Widget } from './Widget';
 
-export function JoinedArray({ value, structure, schema, ...props }) {
+export function JoinedArray({
+  value,
+  structure,
+  schema,
+  arrayItems,
+  ...props
+}) {
   const { t } = useTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   if (isNil(value)) {
@@ -35,7 +41,13 @@ export function JoinedArray({ value, structure, schema, ...props }) {
         {value.map((val, i) => (
           <>
             {structure?.children?.map((def, idx) => (
-              <Widget structure={def} value={val} key={idx} {...props} />
+              <Widget
+                structure={def}
+                arrayItems={[...arrayItems, val]}
+                value={val}
+                key={idx}
+                {...props}
+              />
             ))}
             {i !== value.length - 1 && separator}
           </>
@@ -49,3 +61,10 @@ export function JoinedArray({ value, structure, schema, ...props }) {
 
 JoinedArray.array = true;
 JoinedArray.inline = true;
+JoinedArray.copyable = true;
+JoinedArray.copyFunction = ({ value, structure }) => {
+  let separator = structure?.separator ?? ', ';
+  separator = separator === 'break' ? '\n' : separator;
+
+  return Array.isArray(value) ? value.join(separator) : '';
+};

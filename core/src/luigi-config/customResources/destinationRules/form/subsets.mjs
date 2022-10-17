@@ -1,9 +1,9 @@
-import { loadBalancer } from './trafficPolicy/loadBalancer';
-import { connectionPool } from './trafficPolicy/connectionPool';
-import { outlierDetection } from './trafficPolicy/outlierDetection';
-import { tls } from './trafficPolicy/tls';
-import { portLevelSettings } from './trafficPolicy/portLevelSettings';
-import { tunnel } from './trafficPolicy/tunnel';
+import { loadBalancer } from './trafficPolicy/loadBalancer.mjs';
+import { connectionPool } from './trafficPolicy/connectionPool.mjs';
+import { outlierDetection } from './trafficPolicy/outlierDetection.mjs';
+import { tls } from './trafficPolicy/tls.mjs';
+import { portLevelSettings } from './trafficPolicy/portLevelSettings.mjs';
+import { tunnel } from './trafficPolicy/tunnel.mjs';
 
 export const subsets = {
   path: 'spec.subsets',

@@ -1,10 +1,10 @@
-import { subsets } from './subsets';
-import { loadBalancer } from './trafficPolicy/loadBalancer';
-import { connectionPool } from './trafficPolicy/connectionPool';
-import { outlierDetection } from './trafficPolicy/outlierDetection';
-import { tls } from './trafficPolicy/tls';
-import { portLevelSettings } from './trafficPolicy/portLevelSettings';
-import { tunnel } from './trafficPolicy/tunnel';
+import { subsets } from './subsets.mjs';
+import { loadBalancer } from './trafficPolicy/loadBalancer.mjs';
+import { connectionPool } from './trafficPolicy/connectionPool.mjs';
+import { outlierDetection } from './trafficPolicy/outlierDetection.mjs';
+import { tls } from './trafficPolicy/tls.mjs';
+import { portLevelSettings } from './trafficPolicy/portLevelSettings.mjs';
+import { tunnel } from './trafficPolicy/tunnel.mjs';
 
 export const form = [
   {
@@ -27,7 +27,12 @@ export const form = [
     ],
   },
   subsets,
-  { path: 'spec.exportTo', name: 'Export To', widget: 'SimpleList' },
+  {
+    path: 'spec.exportTo',
+    name: 'Export To',
+    widget: 'SimpleList',
+    children: [{ path: '[]' }],
+  },
   {
     path: 'spec.workloadSelector.matchLabels',
     name: 'Workload Selector Match Labels',

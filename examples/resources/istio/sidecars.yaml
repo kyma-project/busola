@@ -29,47 +29,47 @@ data:
           "widget": "Table",
           "source": "spec.egress",
           "name": "Egress",
-          "visibility": "$exists(*)",
+          "visibility": "$exists($value)",
           "children": [
             {
-              "source": "$item.port", 
+              "source": "port", 
               "name": "Port", 
               "widget": "Panel", 
-              "visibility": "$exists(*)",
+              "visibility": "$exists($value)",
               "children": [
-                { "source": "$item.number", "name": "Number" },
-                { "source": "$item.name", "name": "Name" },
-                { "source": "$item.protocol", "name": "Protocol" },
-                { "source": "$item.targetPoint", "name": "Target Point" },
+                { "source": "number", "name": "Number" },
+                { "source": "name", "name": "Name" },
+                { "source": "protocol", "name": "Protocol" },
+                { "source": "targetPoint", "name": "Target Point" },
               ] 
             },
-            { "source": "$item.bind", "name": "Bind" },
-            { "source": "$item.captureMode", "name": "Capture Mode" },
-            { "source": "$item.hosts", "name": "Hosts", "widget": "Labels"}
+            { "source": "bind", "name": "Bind" },
+            { "source": "captureMode", "name": "Capture Mode" },
+            { "source": "hosts", "name": "Hosts", "widget": "Labels"}
           ]
         },
         {
           "widget": "Table",
           "source": "spec.ingress",
           "name": "Ingress",
-          "visibility": "$exists(*)",
+          "visibility": "$exists($value)",
           "children": [
             {
-              "source": "$item.port", 
+              "source": "port", 
               "name": "Port", 
               "widget": "Panel", 
-              "visibility": "$exists(*)",
+              "visibility": "$exists($value)",
               "children": [
-                { "source": "$item.number", "name": "Number" },
-                { "source": "$item.name", "name": "Name" },
-                { "source": "$item.protocol", "name": "Protocol" },
-                { "source": "$item.targetPoint", "name": "Target Point" },
+                { "source": "number", "name": "Number" },
+                { "source": "name", "name": "Name" },
+                { "source": "protocol", "name": "Protocol" },
+                { "source": "targetPoint", "name": "Target Point" },
                 { "source": "$parent.tls.mode", "name": "TLS Mode" },
               ] 
             },
-            { "source": "$item.bind", "name": "Bind" },
-            { "source": "$item.captureMode", "name": "Capture Mode" },
-            { "source": "$item.defaultEndpoint", "name": "Default Endpoint", "widget": "Labels"}
+            { "source": "bind", "name": "Bind" },
+            { "source": "captureMode", "name": "Capture Mode" },
+            { "source": "defaultEndpoint", "name": "Default Endpoint", "widget": "Labels"}
           ]
         },
         {
@@ -88,7 +88,7 @@ data:
               "source": "spec.workloadSelector.labels",
               "widget": "Panel",
               "name": "Matches all Pods in the Namespace",
-              "visibility": "$not($exists(*)) or $not($boolean(*))"
+              "visibility": "$not($exists($value)) or $not($boolean($value))"
             }
           ],
           "header": [
@@ -96,7 +96,7 @@ data:
               "source": "spec.workloadSelector.labels",
               "widget": "Labels",
               "name": "Workload Selector",
-              "visibility": "$boolean(*)"
+              "visibility": "$boolean($value)"
             }
           ],
         }
@@ -298,7 +298,6 @@ data:
       "name": "Sidecars",
       "scope": "namespace",
       "description": "{{[Sidecar](https://istio.io/latest/docs/reference/config/networking/sidecar/)}} manages the incoming and outgoing communication in a workload it is attached to."
-
     }
   list: |-
     [

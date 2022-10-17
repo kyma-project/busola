@@ -5,12 +5,13 @@ import classNames from 'classnames';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import { sortBy, useGetTranslation, getTextSearchProperties } from '../helpers';
+import { useGetTranslation, getTextSearchProperties } from '../helpers';
+import { useJsonata } from '../hooks/useJsonata';
+import { sortBy } from '../helpers/sortBy';
 import { Widget, InlineWidget } from './Widget';
 import { getSearchDetails, getSortDetails } from './helpers';
 
 import './Table.scss';
-import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
 const handleTableValue = (value, t) => {
   switch (true) {
@@ -37,10 +38,27 @@ export function Table({
   disableMargin,
   schema,
   originalResource,
+  scope,
+  arrayItems,
   ...props
 }) {
+  // cleanup jsonata results
+  if (!Array.isArray(value)) {
+    if (isNil(value)) {
+      value = [];
+    } else {
+      value = [value];
+    }
+  }
+
   const { t } = useTranslation();
   const { t: tExt } = useGetTranslation();
+  const jsonata = useJsonata({
+    resource: originalResource,
+    scope,
+    value,
+    arrayItems,
+  });
 
   const coreHeaders = (structure.children || []).map(({ name }) => tExt(name));
   const headerRenderer = () =>
@@ -60,12 +78,11 @@ export function Table({
         (index + 1);
       if (structure.collapsibleTitle) {
         try {
-          const expression = jsonataWrapper(structure.collapsibleTitle);
-          expression.assign('index', index);
-          expression.assign('item', entry);
-          expression.assign('root', originalResource);
-
-          return expression.evaluate();
+          return jsonata(structure.collapsibleTitle, {
+            index: index,
+            scope: entry,
+            arrayItems: [...arrayItems, entry],
+          });
         } catch (e) {
           console.warn(e);
           return defaultTitle;
@@ -80,7 +97,8 @@ export function Table({
         <Widget
           {...props}
           value={entry}
-          arrayItem={entry}
+          scope={entry}
+          arrayItems={[...arrayItems, entry]}
           structure={column}
           schema={schema}
           originalResource={originalResource}
@@ -101,7 +119,8 @@ export function Table({
             <Widget
               {...props}
               value={entry}
-              arrayItem={entry}
+              scope={entry}
+              arrayItems={[...arrayItems, entry]}
               structure={child}
               schema={schema}
               inlineRenderer={InlineWidget}
@@ -136,7 +155,7 @@ export function Table({
       headerRenderer={headerRenderer}
       rowRenderer={rowRenderer}
       {...handleTableValue(value, t)}
-      sortBy={() => sortBy(sortOptions, tExt, {}, originalResource)}
+      sortBy={() => sortBy(jsonata, sortOptions, tExt, {}, originalResource)}
       searchSettings={{
         showSearchField: searchOptions.length > 0,
         allowSlashShortcut: false,

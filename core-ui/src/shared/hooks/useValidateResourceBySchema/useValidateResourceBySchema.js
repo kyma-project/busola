@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { validator } from '@exodus/schemasafe';
+import { Validator } from 'jsonschema';
 
 const validateResourceBySchema = async resource => {
   const schema = await import('./schema.js');
@@ -7,10 +7,12 @@ const validateResourceBySchema = async resource => {
   const warnings = (schema?.schema.rules || []).reduce(
     (accumulator, currentRule) => {
       try {
-        const schemaValidator = validator(currentRule.schema);
-        const result = schemaValidator(resource);
+        const schemaValidator = new Validator();
+        const result = schemaValidator.validate(resource, currentRule.schema);
 
-        if (!result) return [currentRule.messageOnFailure, ...accumulator];
+        if (result.errors.length > 0)
+          return [currentRule.messageOnFailure, ...accumulator];
+
         return [...accumulator];
       } catch {
         return [...accumulator];

@@ -6,6 +6,7 @@ const merge = require('lodash.merge');
 
 import { makeHandleRequest, serveStaticApp, serveMonaco } from './common';
 import { handleTracking } from './tracking.js';
+import jsyaml from 'js-yaml';
 //import { requestLogger } from './utils/other'; //uncomment this to log the outgoing traffic
 const { setupJWTCheck } = require('./jwtCheck');
 
@@ -13,11 +14,30 @@ global.config = {};
 
 try {
   // config from the copnfiguration file
-  const defaultConfig = JSON.parse(
-    fs.readFileSync('./settings/defaultConfig.json'),
-  );
+
+  // workaround, to delete after updating stage and prod with YAMLs
+  let defaultConfig;
+  try {
+    defaultConfig = jsyaml.load(
+      fs.readFileSync('./settings/defaultConfig.yaml'),
+    );
+  } catch (e) {
+    console.warn('Cannot load cluster params: ', e);
+    defaultConfig = jsyaml.load(
+      fs.readFileSync('./settings/defaultConfig.json'),
+    );
+  }
+
   // config retrieved from busola's config map
-  const configFromMap = JSON.parse(fs.readFileSync('./config/config.json'));
+
+  // workaround, to delete after updating stage and prod with YAMLs
+  let configFromMap;
+  try {
+    configFromMap = jsyaml.load(fs.readFileSync('./config-yaml/config.yaml'));
+  } catch (e) {
+    console.warn('Cannot load cluster params: ', e);
+    configFromMap = jsyaml.load(fs.readFileSync('./config/config.json'));
+  }
 
   global.config = merge(defaultConfig, configFromMap).config;
 } catch (e) {

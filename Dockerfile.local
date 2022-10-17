@@ -35,8 +35,8 @@ FROM alpine:3.15.0
 WORKDIR /app
 
 RUN apk --no-cache upgrade && \
-    apk --no-cache add nginx && \
-    apk add --update nodejs npm jq
+  apk --no-cache add nginx && \
+  apk add --update nodejs npm yq
 WORKDIR /app
 
 COPY --from=builder /app/core/src /app/core
@@ -51,12 +51,10 @@ RUN mv /app/core/assets/extensions/extensions.yaml /app/extensions.yaml
 RUN npm ci --only=production
 
 # use sessionStorage as default
-RUN sed -i 's/"storage": "localStorage",/"storage": "sessionStorage",/g' core/assets/defaultConfig.json
 # enable OBSERVABILITY & SHOW_KYMA_VERSION for production
-RUN cat core/assets/defaultConfig.json \
-  | jq '.config.features.OBSERVABILITY.isEnabled = true' \
-  | jq '.config.features.SHOW_KYMA_VERSION.isEnabled = true' \
-  | tee core/assets/defaultConfig.json > /dev/null
+RUN yq eval -i '.config.features.OBSERVABILITY.isEnabled = true' core/assets/defaultConfig.yaml
+RUN yq eval -i '.config.features.SHOW_KYMA_VERSION.isEnabled = true' core/assets/defaultConfig.yaml 
+RUN yq eval -i '.config.defaultStorage = "sessionStorage"' core/assets/defaultConfig.yaml 
 
 EXPOSE 3001
 ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true

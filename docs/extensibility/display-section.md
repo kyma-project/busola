@@ -32,14 +32,14 @@ Each object adds a new column to your table.
 
 ### Available _list_ section parameters
 
-- **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form, it's the path to the value.
+- **source** - _[required]_ contains a [JSONata](jsonata.md) expression used to fetch data for the column. In its simplest form, it's the path to the value.
 - **widget** - optional widget used to render the field referred to by the **source** property. By default, the value is displayed verbatim.
 - **valuePreprocessor** - name of [value preprocessor](resources.md#value-preprocessors).
 - **sort** - optional sort option. If set to `true`, it allows you to sort the resource list using this value. Defaults to false. It can also be set to an object with the following properties:
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
-  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
+  - **compareFunction** - optional [JSONata](jsonata.md) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
 - **search** - optional search option. If set to `true`, it allows you to search the resource list by this value. Defaults to false. It can also be set to an object with the following property:
-  - **searchFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) search function. It allows to use `$input` variable to get the search input's value that can be used to search for more complex data.
+  - **searchFunction** - optional [JSONata](jsonata.md) search function. It allows to use `$input` variable to get the search input's value that can be used to search for more complex data.
 
 ### Example
 
@@ -74,13 +74,13 @@ You can use the `resourceGraph` component to configure the ResourceGraph, which 
 
 ### Header and body parameters
 
-- **source** - contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the widget. In its simplest form, it's the path to the value. Not required for presentational widgets.
+- **source** - contains a [JSONata](jsonata.md) expression used to fetch data for the widget. In its simplest form, it's the path to the value. Not required for presentational widgets.
 - **name** - Name for the primary label of this field. Required for most widgets (except for some rare cases that don't display a label). This can be a key to use from the **translation** section.
 - **widget** - optional widget to render the defined entry. By default the value is displayed verbatim.
 - **valuePreprocessor** - name of [value preprocessor](resources.md#value-preprocessors).
 - **visibility** - by default all fields are visible; however, you can use the **visibility** property to control a single item display.
   - If set to `false` explicitly, the field doesn't render.
-  - If set to any string, this property is treated as JSONata format, determining (based on current value given as `data`) if the field should be visible.
+  - If set to any string, this property is treated as [JSONata](jsonata.md) format, determining (based on current value given as `$value`) if the field should be visible.
   - If not set, the field always renders.
 - **children** - a list of child widgets used for all `object` and `array` fields.
 
@@ -118,7 +118,7 @@ body:
     children:
       - source: applyTo
       - source: match.context
-        visibility: '$exists(data.match.context)'
+        visibility: '$exists($value.match.context)'
   - source: spec.configPatches
     widget: Table
     children:
@@ -164,7 +164,7 @@ dataSources:
 
 Whenever an entry has both **source** and **children** properties, the **children** elements are provided with extra variables.
 
-In the case of objects, a `$parent` variable contains the data of the parent element.
+In the case of objects, a `$root` variable contains the data of the parent element.
 
 For example:
 
@@ -172,13 +172,11 @@ For example:
 - source: spec
   widget: Panel
   children:
-    - source: '$parent.entry1'
-    - source: '$parent.entry2'
+    - source: '$root.entry1'
+    - source: '$root.entry2'
 ```
 
 renders the data for `spec.entry1` and `spec.entry2`.
-
-In the case of array-based components, an `$item` variable contains data for each child. For example:
 
 ```yaml
 - source: spec.data
@@ -206,8 +204,9 @@ Badge widgets render texts as a status badge, using a set of predefined rules to
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
   If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
-- **highlights** - an optional map of highlight rules. Key refers to the type of highlight, while the rule can just be a plain array of values or a string containing a jsonata rule. Allowed keys are `informative` `positive`, `negative` and `critical`.
-- **description** - a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch additional information that will be displayed in a tooltip when hovering over the badge.
+- **highlights** - an optional map of highlight rules. Key refers to the type of highlight, while the rule can just be a plain array of values or a string containing a [JSONata](jsonata.md) rule. Allowed keys are `informative` `positive`, `negative` and `critical`.
+- **description** - a [JSONata](jsonata.md) expression used to fetch additional information that will be displayed in a tooltip when hovering over the badge.
+- **copyable** - an optional flag to display a **Copy to clipboard** button next to the widget. By default set to `false`.
 
 #### Default highlight rules
 
@@ -228,7 +227,7 @@ When no highlights are provided, the following values are automatically handled:
     positive:
       - Running
       - ok
-    negative: data < 0
+    negative: $item < 0
   description: status.message
 ```
 
@@ -275,7 +274,8 @@ ExternalLink widgets render the link to an external page.
 
 #### Widget-specific parameters
 
-- **link** - an optional JSONata function to generate a custom link. Default value is taken from **source**.
+- **link** - an optional [JSONata](jsonata.md) function to generate a custom link. Default value is taken from **source**.
+- **copyable** - an optional flag to display a **Copy to clipboard** button next to the widget. By default set to `false`.
 
 #### Examples
 
@@ -308,6 +308,7 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
 
 - **separator** - a string by which the elements of the array are separated. The default value is a comma `,`. You can use `break` to separate elements with a new line.
 - **children** - an optional field to define widgets used for rendering array items. If not provided, the content is rendered as a string.
+- **copyable** - an optional flag to display a **Copy to clipboard** button next to the widget. By default set to `false`.
 
 #### Example
 
@@ -334,6 +335,7 @@ Labels widgets render all the array or object entries in the `value` or `key-val
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
   If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+- **copyable** - an optional flag to display a **Copy to clipboard** button next to the widget. By default set to `false`.
 
 ```yaml
 - source: spec.orderDetails
@@ -349,8 +351,8 @@ ResourceLink widgets render internal links to Kubernetes resources.
 
 #### Widget-specific parameters
 
-- **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **data** - value extracted using **source**, or **root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
-- **linkText** - a JSONata expression resolving a link text, this property has access to **data** and **root**. To insert dynamic parts of translations, use double quotes `Go to {{data.name}}`.
+- **resource** - To create a hyperlink, Busola needs the name and the kind of the target resource; they must be passed into the **resource** object as property paths in either **\$item** - value extracted using **source**, or **\$root** - the original resource. If the target resource is in a `namespace`, provide **namespace**, **name**, and **kind** properties.
+- **source** - a [JSONata](jsonata.md) expression resolving a link text, this property has access to **\$item** and **\$root**.
 
 #### Example
 
@@ -358,23 +360,14 @@ ResourceLink widgets render internal links to Kubernetes resources.
 
 ```yaml
 - widget: ResourceLink
-  source: metadata.ownerReferences[0]
-  linkText: "data.status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'"
+  source: "metadata.ownerReferences[0].status = 'Running' ? 'otherTranslations.linkText' : 'otherTranslations.errorLinkText'"
   resource:
-    name: data.name
-    namespace: root.metadata.namespace
+    name: metadata.ownerReferences[0].name
+    namespace: $root.metadata.namespace
     kind: "'Deployment'"
 ```
 
 <img src="./assets/display-widgets/ResourceLink.png" alt="Example of a ResourceLink widget" width="40%" style="border: 1px solid #D2D5D9">
-
-##### _translations_ section
-
-```yaml
-en:
-  otherTranslations.linkText: 'Go to {{data.kind}} {{data.name}}'
-  otherTranslations.errorLinkText: 'Error in {{data.kind}} {{data.name}}'
-```
 
 ### Text
 
@@ -384,6 +377,7 @@ Text widgets render values as a simple text. This is the default behavior for al
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
   If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+- **copyable** - an optional flag to display a **Copy to clipboard** button next to the widget. By default set to `false`.
 
 #### Example
 
@@ -426,7 +420,7 @@ CodeViewer widgets display values using a read-only code editor.
 
 #### Widget-specific parameters
 
-- **language** - a JSONata expression resolving the desired language, used for code highlighting. It has access to the `$root` variable, containing the entire resource. The editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
+- **language** - a [JSONata](jsonata.md) expression resolving the desired language, used for code highlighting. It has access to the `$root` variable, containing the entire resource. The editor supports languages handled by [Monaco](https://code.visualstudio.com/docs/languages/overview).
   If the language is not specified, the editor tries to display the content as `yaml` with a fallback to `json`.
 
 #### Example
@@ -475,7 +469,7 @@ EventList widget renders a list of Events.
 
 #### Widget-specific parameters
 
-- **filter** - A JSONata function you can use to filter Events emitted by a specific resource. There is a special custom function [matchEvents](jsonata.md#matcheventsitem-kind-name) you can use to filter Events, for example, `$matchEvents($item, $root.kind, $root.metadata.name)`.
+- **filter** - a [JSONata](jsonata.md) function you can use to filter Events emitted by a specific resource. There is a special custom function [matchEvents](jsonata.md#matcheventsitem-kind-name) you can use to filter Events, for example, `$matchEvents($$, $root.kind, $root.metadata.name)`.
 - **defaultType** - either `all`, `information` or `warning`. When set to `information` or `warning` Events with specific type are displayed. By default all Events are fetched.
 - **hideInvolvedObjects** - optional flag. If set to `true`, the **Involved Objects** column is hidden. Defaults to `false`.
 
@@ -483,7 +477,7 @@ EventList widget renders a list of Events.
 
 ```yaml
 - widget: EventList
-  filter: '$matchEvents($item, $root.kind, $root.metadata.name)'
+  filter: '$matchEvents($$, $root.kind, $root.metadata.name)'
   name: events
   defaultType: information
 ```
@@ -494,7 +488,7 @@ EventList widget renders a list of Events.
 
 ```yaml
 - widget: EventList
-  filter: '$matchEvents($item, $root.kind, $root.metadata.name)'
+  filter: '$matchEvents($$, $root.kind, $root.metadata.name)'
   name: events
   defaultType: information
   hideInvolvedObjects: true
@@ -556,14 +550,14 @@ ResourceList widgets render a list of Kubernetes resources. The ResourceList wid
 
 #### Widget-specific parameters
 
-- **children** optional field used to obtain custom columns. If not set, the configuration is reused based on the existing resource list, defined in Busola.
+- **children** optional field used to obtain custom columns. If not set, the configuration is reused based on the existing resource list, defined in Busola or using extensibility.
 - **sort** - optional sort option. It's an array of objects that allows you to sort by the value from the given **source**.
-  - **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form, it's the path to the value.
+  - **source** - _[required]_ contains a [JSONata](jsonata.md) expression used to fetch data for the column. In its simplest form, it's the path to the value.
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
-  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
+  - **compareFunction** - optional [JSONata](jsonata.md) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
 - **search** - optional search option. It's an array of objects that allows you to search for resources including the value from the given **source**.
-  - **source** - _[required]_ contains a [JSONata](https://docs.jsonata.org/overview.html) expression used to fetch data for the column. In its simplest form, it's the path to the value.
-  - **searchFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) search function. It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.
+  - **source** - _[required]_ contains a [JSONata](jsonata.md) expression used to fetch data for the column. In its simplest form, it's the path to the value.
+  - **searchFunction** - optional [JSONata](jsonata.md) search function. It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.
 
 Since the **ResourceList** widget does more than just list the items, you must provide the whole data source (`$myResource()`) instead of just the items (`$myResource().items`).
 
@@ -576,7 +570,7 @@ Since the **ResourceList** widget does more than just list the items, you must p
   sort:
     - source: spec.replicas
       compareFunction: '$second - $first'
-    - source: '$item.spec.strategy.type'
+    - source: spec.strategy.type
       compareFunction: '$compareStrings($second, $first)'
       default: true
   search:
@@ -599,9 +593,9 @@ Since the **ResourceList** widget does more than just list the items, you must p
       sort: 'true'
       widget: ResourceLink
       resource:
-        name: data.metadata.name
+        name: $item.metadata.name
         namespace: root.metadata.namespace
-        kind: data.kind
+        kind: $item.kind
     - source: type
       name: Type
       search: true
@@ -636,14 +630,14 @@ Table widgets display array data as rows of a table instead of free-standing com
 #### Widget-specific parameters
 
 - **collapsible** - an optional array of extra widgets to display as an extra collapsible section. Uses the same format as the **children** parameter.
-- **collapsibleTitle** - an optional option for **collapsible** to define title for the collapsible sections, as string or the JSONata function.
+- **collapsibleTitle** - an optional option for **collapsible** to define title for the collapsible sections, as string or the [JSONata](jsonata.md) function.
 - **disablePadding** - an optional boolean which disables the padding inside the panel body.
 - **showHeader** - an optional boolean which disables displaying the head row.
 - **sort** - optional sort option. If set to `true`, it allows you to sort using this value. Defaults to false. It can also be set to an object with the following properties:
   - **default** - optional flag. If set to `true`, the list view is sorted by this value by default.
-  - **compareFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
+  - **compareFunction** - optional [JSONata](jsonata.md) compare function. It is required to use `$first` and `$second` variables when comparing two values. There is a special custom function [compareStrings](jsonata.md#comparestringsfirst-second) used to compare two strings, for example, `$compareStrings($first, $second)`
 - **search** - optional search option. If set to `true`, it allows you to search the resource list by this value. Defaults to false. It can also be set to an object with the following property:
-  - **searchFunction** - optional [JSONata](https://docs.jsonata.org/overview.html) search function. It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.
+  - **searchFunction** - optional [JSONata](jsonata.md) search function. It allows you to use the `$input` variable to get the search input's value that can be used to search for more complex data.
 
 #### Example
 
@@ -654,9 +648,9 @@ Table widgets display array data as rows of a table instead of free-standing com
   collapsible:
     - source: quantity
   children:
-    - source: '$item.name'
+    - source: name
       sort: true
-    - source: '$item.price'
+    - source: price
       sort:
         default: true
         compareFunction: '$second -$first'

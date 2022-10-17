@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
+import jsyaml from 'js-yaml';
 import config from '../../config';
 import { loadFile } from '../../support/loadFile';
 
@@ -93,9 +94,9 @@ context('Test login - kubeconfigID', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '*assets/config/config.json*',
+        url: '*assets/config-yaml/config.yaml*',
       },
-      JSON.stringify({
+      jsyaml.dump({
         config: {
           features: {
             KUBECONFIG_ID: {

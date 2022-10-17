@@ -9,11 +9,11 @@ export const useGetCRbyPath = () => {
       (scope?.toLowerCase() === 'namespace') === !!namespaceId;
     if (!hasCorrectScope) return false;
 
-    const crPath = window.location.pathname.replace(
-      `/namespaces/${namespaceId}`,
-      '',
-    );
-    return crPath.includes(`/${urlPath}`);
+    const crPath = window.location.pathname
+      .replace(`/namespaces/${namespaceId}`, '')
+      .replace('/core-ui', '');
+
+    return crPath.split('/')[1] === urlPath;
   });
 
   return resource;
