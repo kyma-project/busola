@@ -206,6 +206,7 @@ Badge widgets render texts as a status badge, using a set of predefined rules to
   If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
 - **highlights** - an optional map of highlight rules. Key refers to the type of highlight, while the rule can just be a plain array of values or a string containing a [JSONata](jsonata.md) rule. Allowed keys are `informative` `positive`, `negative` and `critical`.
 - **description** - a [JSONata](jsonata.md) expression used to fetch additional information that will be displayed in a tooltip when hovering over the badge.
+- **copyable** - an optional flag to display a **Copy to clipboard** button next to the widget. By default set to `false`.
 
 #### Default highlight rules
 
@@ -274,6 +275,7 @@ ExternalLink widgets render the link to an external page.
 #### Widget-specific parameters
 
 - **link** - an optional [JSONata](jsonata.md) function to generate a custom link. Default value is taken from **source**.
+- **copyable** - an optional flag to display a **Copy to clipboard** button next to the widget. By default set to `false`.
 
 #### Examples
 
@@ -306,6 +308,7 @@ JoinedArray widgets render all the values of an array of strings as a comma-sepa
 
 - **separator** - a string by which the elements of the array are separated. The default value is a comma `,`. You can use `break` to separate elements with a new line.
 - **children** - an optional field to define widgets used for rendering array items. If not provided, the content is rendered as a string.
+- **copyable** - an optional flag to display a **Copy to clipboard** button next to the widget. By default set to `false`.
 
 #### Example
 
@@ -332,6 +335,7 @@ Labels widgets render all the array or object entries in the `value` or `key-val
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
   If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+- **copyable** - an optional flag to display a **Copy to clipboard** button next to the widget. By default set to `false`.
 
 ```yaml
 - source: spec.orderDetails
@@ -373,6 +377,7 @@ Text widgets render values as a simple text. This is the default behavior for al
 
 - **placeholder** - an optional property to change the default empty text placeholder `-` with a custom string.
   If the **translations** section has a translation entry with the ID that is the same as the **placeholder** string, the translation is used.
+- **copyable** - an optional flag to display a **Copy to clipboard** button next to the widget. By default set to `false`.
 
 #### Example
 

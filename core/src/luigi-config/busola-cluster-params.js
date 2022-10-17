@@ -24,7 +24,7 @@ export async function getBusolaClusterParams() {
       }
       // workaround, to delete after updating stage and prod with YAMLs
       let configMapResponse = await fetch(
-        '/assets/config/config.yaml' + cacheBuster,
+        '/assets/config-yaml/config.yaml' + cacheBuster,
       );
       if (
         configMapResponse.status >= 400 ||

@@ -5,14 +5,24 @@ import { useTranslation } from 'react-i18next';
 
 import { useJsonata } from '../hooks/useJsonata';
 
+const makeHref = ({ jsonata, value, structure }) => {
+  const [link, linkError] = jsonata(structure.link);
+  if (linkError) return linkError.message;
+
+  let href;
+  if (typeof value === 'string') {
+    href = value.startsWith('https://') ? value : `https://${value}`;
+  }
+
+  return link || href;
+};
+
 export const ExternalLink = ({
   scope,
   value,
-  schema,
   structure,
   arrayItems,
   originalResource,
-  ...props
 }) => {
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   const { t } = useTranslation();
@@ -23,18 +33,13 @@ export const ExternalLink = ({
     value,
     arrayItems,
   });
-  const [link, linkError] = jsonata(structure.link);
-  if (linkError) return linkError.message;
 
-  let href;
-  if (typeof value === 'string') {
-    href = value.startsWith('https://') ? value : `https://${value}`;
-  }
+  const href = makeHref({ jsonata, value, structure });
 
   if (isNil(value)) return emptyLeafPlaceholder;
 
   return (
-    <Link href={link || href} target="_blank" rel="noopener noreferrer">
+    <Link href={href} target="_blank" rel="noopener noreferrer">
       {value}
       <Icon
         glyph="inspect"
@@ -47,3 +52,7 @@ export const ExternalLink = ({
   );
 };
 ExternalLink.inline = true;
+ExternalLink.copyable = true;
+ExternalLink.copyFunction = ({ value, structure }, _, __, jsonata) => {
+  return makeHref({ jsonata, value, structure });
+};

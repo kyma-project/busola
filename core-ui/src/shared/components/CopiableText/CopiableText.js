@@ -20,6 +20,7 @@ export function CopiableText({
   children,
   iconOnly,
   compact,
+  ...buttonProps
 }) {
   const { t } = useTranslation();
   return (
@@ -32,6 +33,7 @@ export function CopiableText({
           option="transparent"
           className="fd-margin-begin--tiny"
           onClick={() => copyToCliboard(textToCopy)}
+          {...buttonProps}
         >
           {buttonText ? buttonText : null}
         </Button>
