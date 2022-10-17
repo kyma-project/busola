@@ -1,5 +1,4 @@
 import { doesResourceExist, doesUserHavePermission } from './permissions';
-import { apiGroup, apiVersion } from 'resources/Jobs';
 
 export const filterExistingAndAllowedNodes = (
   node,

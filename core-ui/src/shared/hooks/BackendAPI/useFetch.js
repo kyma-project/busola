@@ -8,6 +8,8 @@ export const useFetch = () => {
   const { authData, cluster, config, ssoData } = useMicrofrontendContext();
   const { fromConfig } = useConfig();
 
+  console.log(1111, fromConfig, baseUrl(fromConfig));
+
   if (!authData) return () => {};
 
   return async ({ relativeUrl, abortController, init }) => {

@@ -14,6 +14,9 @@ export const Sidebar = () => {
           <SidebarNavigation />
         </ErrorBoundary>
       </section>
+      <section>
+        <footer> </footer>
+      </section>
     </aside>
   );
 };

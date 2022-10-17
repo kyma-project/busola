@@ -1,5 +1,7 @@
 import React from 'react';
 import { useFilterNavList } from 'sidebar/useFilterNavList';
+import { useRecoilValue } from 'recoil';
+import { navigationNodesSelector } from 'state/navigation/navigationNodesSelector';
 
 export const SidebarNavigation = () => {
   const { filteredNavList } = useFilterNavList();
@@ -15,7 +17,7 @@ export const SidebarNavigation = () => {
   //extensions
   //cluster details
 
-  // on limited view destination rules are not shown   // swap with EXT
+  useRecoilValue(navigationNodesSelector);
 
   return (
     <nav>

@@ -21,7 +21,7 @@ export const doesUserHavePermission = (
   resource,
   permissionSet,
 ) => {
-  let { resourceGroupAndVersion, resourceKind } = resource;
+  const { resourceGroupAndVersion, resourceKind } = resource;
 
   const resourceKindPlural = pluralize(resourceKind);
   const resourceGroup = getResourceGroup(resourceGroupAndVersion);
