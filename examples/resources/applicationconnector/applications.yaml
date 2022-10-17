@@ -68,6 +68,10 @@ data:
               "source": "$item.entries[type = 'API']",
               "children": [
                 {
+                  "source": "$item.name",
+                  "name": "Name"
+                },
+                {
                   "source": "$item.accessLabel",
                   "name": "Access Label"
                 },
@@ -84,6 +88,10 @@ data:
               "name": "Events",
               "source": "$item.entries[type = 'Events']",
               "children": [
+                {
+                  "source": "$item.name",
+                  "name": "Name"
+                },
                 {
                   "source": "$item.accessLabel",
                   "name": "Access Label"
