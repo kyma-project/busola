@@ -8,8 +8,8 @@ import {
 } from 'components/Extensibility/helpers';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
-import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { useVariables } from '../hooks/useVariables';
+import { useJsonata } from '../hooks/useJsonata';
 
 export function ResourceRenderer({
   onChange,
@@ -19,10 +19,16 @@ export function ResourceRenderer({
   storeKeys,
   required,
   compact,
+  originalResource,
   ...props
 }) {
   const { namespaceId } = useMicrofrontendContext();
   const { setVar } = useVariables();
+  const jsonata = useJsonata({
+    resource: originalResource,
+    scope: value,
+    value,
+  });
 
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
   const { group, version, kind, scope = 'cluster', namespace = namespaceId } =
@@ -37,12 +43,6 @@ export function ResourceRenderer({
     scope === 'namespace' ? namespace : null,
   );
 
-  let expression;
-  if (schema.get('filter')) {
-    expression = jsonataWrapper(schema.get('filter'));
-    expression.assign('root', props?.resource);
-  }
-
   return (
     <ResourceForm.FormField
       label={tFromStoreKeys(storeKeys, schema)}
@@ -51,9 +51,9 @@ export function ResourceRenderer({
           data-testid={storeKeys.join('.')}
           url={url}
           filter={item => {
-            if (expression) {
-              expression.assign('item', item);
-              return expression.evaluate();
+            if (schema.get('filter')) {
+              const [value] = jsonata(schema.get('filter'), { scope: item });
+              return value;
             } else return true;
           }}
           onSelect={(value, resources) => {

@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+import jsyaml from 'js-yaml';
 
 function mockFeatures(features) {
   const requestData = {
@@ -7,7 +8,7 @@ function mockFeatures(features) {
   };
   const configmapMock = {
     data: {
-      config: JSON.stringify({ config: { features } }),
+      config: jsyaml.dump({ config: { features } }),
     },
   };
   cy.intercept(requestData, configmapMock);

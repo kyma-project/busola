@@ -139,7 +139,7 @@ export const ControlledBy = ({
 
   return (
     <ul className="controlled-by-list">
-      {ownerReferences.map(owner => (
+      {ownerReferences.filter(Boolean).map(owner => (
         <li key={owner.kind + owner.name}>
           <OwnerRef owner={owner} />
         </li>

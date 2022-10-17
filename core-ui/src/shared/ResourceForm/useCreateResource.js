@@ -2,7 +2,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
-import { nagivateToResourceAfterCreate } from 'shared/hooks/navigate';
+import { navigateToResourceAfterCreate } from 'shared/hooks/navigate';
 import { createPatch } from 'rfc6902';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
@@ -14,6 +14,7 @@ export function useCreateResource({
   createUrl,
   afterCreatedFn,
   toggleFormFn,
+  urlPath,
 }) {
   const { t } = useTranslation();
   const notification = useNotification();
@@ -34,10 +35,10 @@ export function useCreateResource({
       ),
     });
     if (!isEdit)
-      nagivateToResourceAfterCreate(
+      navigateToResourceAfterCreate(
         namespaceId,
         resource.metadata.name,
-        pluralKind,
+        urlPath || pluralKind.toLowerCase(),
       );
   };
 

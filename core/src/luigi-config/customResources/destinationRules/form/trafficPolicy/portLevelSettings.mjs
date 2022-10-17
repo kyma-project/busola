@@ -1,7 +1,7 @@
-import { loadBalancer } from './loadBalancer';
-import { connectionPool } from './connectionPool';
-import { outlierDetection } from './outlierDetection';
-import { tls } from './tls';
+import { loadBalancer } from './loadBalancer.mjs';
+import { connectionPool } from './connectionPool.mjs';
+import { outlierDetection } from './outlierDetection.mjs';
+import { tls } from './tls.mjs';
 
 export const portLevelSettings = ({ uniqueVarPrefix }) => ({
   path: 'portLevelSettings',
