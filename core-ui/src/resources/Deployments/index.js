@@ -4,6 +4,8 @@ import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
 
 export const resourceType = 'Deployments';
 export const namespaced = true;
+export const apiGroup = 'apps';
+export const apiVersion = 'v1';
 
 export const List = React.lazy(() => import('./DeploymentList'));
 export const Details = React.lazy(() => import('./DeploymentDetails'));

@@ -2,6 +2,8 @@ import React from 'react';
 
 export const resourceType = 'Ingresses';
 export const namespaced = true;
+export const apiGroup = 'networking.k8s.io';
+export const apiVersion = 'v1';
 
 export const List = React.lazy(() => import('./IngressList'));
 export const Details = React.lazy(() => import('./IngressDetails'));

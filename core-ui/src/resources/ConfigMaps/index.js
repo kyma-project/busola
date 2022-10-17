@@ -2,6 +2,8 @@ import React from 'react';
 
 export const resourceType = 'ConfigMaps';
 export const namespaced = true;
+export const apiGroup = '';
+export const apiVersion = 'v1';
 
 export const List = React.lazy(() => import('./ConfigMapList'));
 export const Details = React.lazy(() => import('./ConfigMapDetails'));

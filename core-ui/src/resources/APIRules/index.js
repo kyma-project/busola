@@ -9,6 +9,9 @@ export const resourceI18Key = 'api-rules.title';
 export const List = React.lazy(() => import('./APIRuleList'));
 export const Details = React.lazy(() => import('./APIRuleDetails'));
 
+export const apiGroup = 'gateway.kyma-project.io';
+export const apiVersion = 'v1alpha1';
+
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,
   networkFlowLevel: -3,

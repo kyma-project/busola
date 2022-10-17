@@ -4,6 +4,8 @@ import { getServiceName } from './helpers';
 
 export const resourceType = 'Subscriptions';
 export const namespaced = true;
+export const apiGroup = 'eventing.kyma-project.io';
+export const apiVersion = 'v1alpha1';
 
 export const List = React.lazy(() => import('./SubscriptionList'));
 export const Details = React.lazy(() => import('./SubscriptionDetails'));

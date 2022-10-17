@@ -4,6 +4,8 @@ import { matchByOwnerReference } from 'shared/utils/helpers';
 
 export const resourceType = 'Services';
 export const namespaced = true;
+export const apiGroup = '';
+export const apiVersion = 'v1';
 
 export const List = React.lazy(() => import('./ServiceList'));
 export const Details = React.lazy(() => import('./ServiceDetails'));

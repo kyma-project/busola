@@ -2,6 +2,8 @@ import React from 'react';
 
 export const resourceType = 'ServiceAccounts';
 export const namespaced = true;
+export const apiGroup = '';
+export const apiVersion = 'v1';
 
 export const List = React.lazy(() => import('./ServiceAccountList'));
 export const Details = React.lazy(() => import('./ServiceAccountDetails'));

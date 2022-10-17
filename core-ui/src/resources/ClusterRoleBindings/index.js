@@ -2,6 +2,8 @@ import React from 'react';
 
 export const resourceType = 'ClusterRoleBindings';
 export const namespaced = false;
+export const apiGroup = 'rbac.authorization.k8s.io';
+export const apiVersion = 'v1';
 
 export const List = React.lazy(() => import('./ClusterRoleBindingList'));
 export const Details = React.lazy(() => import('./ClusterRoleBindingDetails'));
