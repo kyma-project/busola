@@ -205,12 +205,25 @@ data:
           },
         ],
       },
+      # {
+      #   "simple": "true",
+      #   "var": "accessToGateways",
+      #   "widget": "Text",
+      #   "dynamicValue": "$not($exists($relatedGateways().error))",
+      # },
+      # {        
+      #   "simple": "true",
+      #   "var": "gatewaysString",
+      #   "widget": "Text",
+      #   "dynamicValue": "$string($relatedGateways())",
+      # },
       {
         "simple": "true",
         "required": true,
         "path": "spec.gateway",
         "name": "gateway",
         "inputInfo": "inputInfo.gateway",
+        # "visibility": "$accessToGateways",
         "placeholder": "placeholder.gateway",
       },
       {
@@ -230,23 +243,12 @@ data:
             "path": "[].accessStrategies", 
             "name": "accessStrategies", 
             "widget": "GenericList", 
-            "children": [
+            "children": [ 
               {
                 "path": "[].config",
                 "name": "accessStrategies.config",
-                "widget": "FormGroup",
-                "children": [
-                  {
-                    # "widget": "SimpleList",
-                    "path": "jwks_urls", 
-                    # "children": [{ "path": "[]" }]
-                  },
-                  {
-                    # "widget": "SimpleList",
-                    "path": "trusted_issuers", 
-                    # "children": [{ "path": "[]" }]
-                  },
-                ],
+                "widget": "KeyValuePair",
+                "keyEnum": ['jwks_urls', 'trusted_issuers', 'required_scope'],
               }, 
               {
                 "required": true, 
@@ -271,8 +273,17 @@ data:
             "path": "[].mutators", 
             "name": "mutators", 
             "widget": "GenericList", 
-            "children": [
-              
+            "children": [ 
+              {
+                "path": "[].config",
+                "name": "accessStrategies.config",
+                "widget": "KeyValuePair",
+              }, 
+              {
+                "required": true, 
+                "path": "[].handler",
+                "name": "accessStrategies.handler",
+              },
             ],
           },
           {
