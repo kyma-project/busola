@@ -2,7 +2,7 @@ export enum PredefinedCategories {
   'workloads' = 'workloads',
   'discovery-and-network' = 'discovery-and-network',
   'istio' = 'istio',
-  'service-management' = 'service',
+  'service-management' = 'service-management',
   'storage' = 'storage',
   'apps' = 'apps',
   'configuration' = 'configuration',

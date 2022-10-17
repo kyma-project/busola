@@ -41,9 +41,9 @@ export const useFilterNavList = () => {
         ),
       );
 
-      // const sortedToCategories = sortByCategories(allowedNodes);
+      const sortedToCategories = sortByCategories(allowedNodes);
 
-      setFilteredNavList(allowedNodes);
+      setFilteredNavList(sortedToCategories);
     }
 
     void effectFn();
