@@ -63,11 +63,14 @@ function SingleWidget({ inlineRenderer, Renderer, ...props }) {
         ? Renderer.copyFunction
         : defaultCopyFunction;
 
+    const textToCopy = copyFunction(
+      props,
+      Renderer,
+      defaultCopyFunction,
+      jsonata,
+    );
     return (
-      <CopiableText
-        compact
-        textToCopy={copyFunction(props, Renderer, defaultCopyFunction, jsonata)}
-      >
+      <CopiableText compact textToCopy={textToCopy} disabled={!textToCopy}>
         {children}
       </CopiableText>
     );
