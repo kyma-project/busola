@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import * as _ from 'lodash';
+import * as Inputs from 'shared/ResourceForm/inputs';
 import { ResourceForm } from 'shared/ResourceForm';
 import {
   SimpleContainersView,
   AdvancedContainersView,
 } from 'shared/components/Deployment/ContainersViews';
+import { useSidecar } from 'shared/hooks/useSidecarInjection';
 
 import {
   createContainerTemplate,
@@ -15,8 +17,6 @@ import {
 } from './templates';
 
 import './DeploymentCreate.scss';
-import { Switch } from 'fundamental-react';
-import { useSidecar } from 'shared/hooks/useSidecarInjection';
 
 const ISTIO_INJECTION_LABEL = 'sidecar.istio.io/inject';
 const ISTIO_INJECTION_ENABLED = 'true';
@@ -86,13 +86,9 @@ export function DeploymentCreate({
       {isIstioFeatureOn ? (
         <ResourceForm.FormField
           label={t('namespaces.create-modal.enable-sidecar')}
-          input={() => (
-            <Switch
-              compact
-              onChange={() => setSidecarEnabled(value => !value)}
-              checked={isSidecarEnabled}
-            />
-          )}
+          input={Inputs.Switch}
+          checked={isSidecarEnabled}
+          onChange={() => setSidecarEnabled(value => !value)}
         />
       ) : null}
 

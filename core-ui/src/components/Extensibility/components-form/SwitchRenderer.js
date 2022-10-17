@@ -36,6 +36,7 @@ export function SwitchRenderer({
       data-testid={storeKeys.join('.')}
       input={Inputs.Switch}
       compact={compact}
+      {...props}
       {...getPropsFromSchema(schema, required, tExt)}
     />
   );

@@ -13,6 +13,8 @@ import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { ResourceForm } from '..';
 import * as Inputs from '../inputs';
 
+import './RuntimeResources.scss';
+
 function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
   const units = ['K', 'Ki', 'M', 'Mi', 'G', 'Gi', 'Ti', 'T'];
   const options = [
