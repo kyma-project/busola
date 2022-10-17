@@ -1,4 +1,5 @@
 import React from 'react';
+import { PredefinedCategories } from 'sidebar/constants';
 
 export const resourceType = 'OAuth2Clients';
 export const namespaced = true;
@@ -8,6 +9,7 @@ export const List = React.lazy(() => import('./OAuth2ClientList'));
 export const Details = React.lazy(() => import('./OAuth2ClientDetails'));
 export const apiGroup = 'hydra.ory.sh';
 export const apiVersion = 'v1alpha1';
+export const category = PredefinedCategories.configuration;
 
 export const secrets = (t, context) => [
   {

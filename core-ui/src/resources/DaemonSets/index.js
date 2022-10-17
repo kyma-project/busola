@@ -1,11 +1,13 @@
 import React from 'react';
 
 import { matchByOwnerReference } from 'shared/utils/helpers';
+import { PredefinedCategories } from 'sidebar/constants';
 
 export const resourceType = 'DaemonSets';
 export const namespaced = true;
 export const apiGroup = 'apps';
 export const apiVersion = 'v1';
+export const category = PredefinedCategories.workloads;
 
 export const List = React.lazy(() => import('./DaemonSetList'));
 export const Details = React.lazy(() => import('./DaemonSetDetails'));

@@ -2,13 +2,14 @@ import React from 'react';
 
 import { matchByOwnerReference } from 'shared/utils/helpers';
 import i18next from 'i18next';
+import { PredefinedCategories } from 'sidebar/constants';
 
 export const resourceType = 'Jobs';
 export const namespaced = true;
-export const category = 'workloads.title';
 export const label = 'jobs.title';
 export const apiGroup = '';
 export const apiVersion = 'batch/v1';
+export const category = PredefinedCategories.workloads;
 
 export const List = React.lazy(() => import('./JobList'));
 export const Details = React.lazy(() => import('./JobDetails'));

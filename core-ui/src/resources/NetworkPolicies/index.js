@@ -1,11 +1,13 @@
 import React from 'react';
 
 import { matchBySelector } from 'shared/utils/helpers';
+import { PredefinedCategories } from 'sidebar/constants';
 
 export const resourceType = 'NetworkPolicies';
 export const namespaced = true;
 export const apiGroup = 'networking.k8s.io';
 export const apiVersion = 'v1';
+export const category = PredefinedCategories['discovery-and-network'];
 
 export const List = React.lazy(() => import('./NetworkPolicyList'));
 export const Details = React.lazy(() => import('./NetworkPolicyDetails'));

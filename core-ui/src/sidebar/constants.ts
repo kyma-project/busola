@@ -1,5 +1,5 @@
-export enum PREDEFINED_CATEGORIES {
-  'workloads ' = 'workloads',
+export enum PredefinedCategories {
+  'workloads' = 'workloads',
   'discovery-and-network' = 'discovery-and-network',
   'istio' = 'istio',
   'service-management' = 'service',
@@ -7,6 +7,7 @@ export enum PREDEFINED_CATEGORIES {
   'apps' = 'apps',
   'configuration' = 'configuration',
   'integration' = 'integration',
+  'temporary' = 'temporary',
 }
 
 export const CATEGORIES = {

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { matchByOwnerReference } from 'shared/utils/helpers';
+import { PredefinedCategories } from 'sidebar/constants';
 
 export const resourceType = 'APIRules';
 export const namespaced = true;
@@ -11,6 +12,7 @@ export const Details = React.lazy(() => import('./APIRuleDetails'));
 
 export const apiGroup = 'gateway.kyma-project.io';
 export const apiVersion = 'v1alpha1';
+export const category = PredefinedCategories['discovery-and-network'];
 
 export const resourceGraphConfig = (t, context) => ({
   networkFlowKind: true,

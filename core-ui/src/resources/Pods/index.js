@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
+import { PredefinedCategories } from 'sidebar/constants';
 
 function matchByMount(volumeResourceType) {
   const valueFromKey = volumeResourceType + 'KeyRef';
@@ -29,6 +30,7 @@ export const resourceType = 'Pods';
 export const namespaced = true;
 export const apiGroup = '';
 export const apiVersion = 'v1';
+export const category = PredefinedCategories.workloads;
 
 export const List = React.lazy(() => import('./PodList'));
 export const Details = React.lazy(() => import('./PodDetails'));

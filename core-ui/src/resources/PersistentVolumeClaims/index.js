@@ -1,9 +1,11 @@
 import React from 'react';
+import { PredefinedCategories } from 'sidebar/constants';
 
 export const resourceType = 'PersistentVolumeClaims';
 export const namespaced = true;
 export const apiGroup = '';
 export const apiVersion = 'v1';
+export const category = PredefinedCategories.storage;
 
 export const List = React.lazy(() => import('./PersistentVolumeClaimList'));
 export const Details = React.lazy(() =>
