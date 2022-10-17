@@ -141,32 +141,30 @@ export function MultiInput({
   }, [inputs, internalValue]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const inputComponents = internalValue.map((entry, index) =>
-    inputs.map((input, inputIndex) => (
-      <div className="fd-col-md--6">
-        {input({
-          index: (index + 1) * keys,
-          value: entry,
-          setValue: entry => setEntry(entry, index),
-          ref: refs[index]?.[inputIndex],
-          updateValue: () => updateValue(internalValue),
-          internalValue,
-          setMultiValue: setValue,
-          focus: (e, target) => {
-            if (e.key === 'Enter') {
-              if (typeof target === 'undefined') {
-                focus(refs[index + 1]?.[0]);
-              } else {
-                focus(refs[index][target]);
-              }
-            } else if (e.key === 'ArrowDown') {
+    inputs.map((input, inputIndex) =>
+      input({
+        index: (index + 1) * keys,
+        value: entry,
+        setValue: entry => setEntry(entry, index),
+        ref: refs[index]?.[inputIndex],
+        updateValue: () => updateValue(internalValue),
+        internalValue,
+        setMultiValue: setValue,
+        focus: (e, target) => {
+          if (e.key === 'Enter') {
+            if (typeof target === 'undefined') {
               focus(refs[index + 1]?.[0]);
-            } else if (e.key === 'ArrowUp') {
-              focus(refs[index - 1]?.[0]);
+            } else {
+              focus(refs[index][target]);
             }
-          },
-        })}
-      </div>
-    )),
+          } else if (e.key === 'ArrowDown') {
+            focus(refs[index + 1]?.[0]);
+          } else if (e.key === 'ArrowUp') {
+            focus(refs[index - 1]?.[0]);
+          }
+        },
+      }),
+    ),
   );
 
   return (

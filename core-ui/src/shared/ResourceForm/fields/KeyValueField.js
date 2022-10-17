@@ -85,72 +85,81 @@ export function KeyValueField({
           .reduce((acc, entry) => ({ ...acc, [entry.key]: entry.val }), {})
       }
       inputs={[
-        ({ value, setValue, ref, updateValue, focus }) =>
-          input.key({
-            fullWidth: true,
-            disabled: lockedKeys.includes(value?.key),
-            key: 'key',
-            value: value?.key || '',
-            ref: ref,
-            onChange: e =>
-              setValue({
-                val: value?.val || initialValue,
-                key: e.target.value,
-              }),
-            onKeyDown: e => focus(e, 1),
-            onBlur: updateValue,
-            placeholder: t('components.key-value-field.enter-key'),
-            ...keyProps,
-          }),
-        ({ focus, value, setValue, updateValue, ...props }) =>
-          input.value({
-            fullWidth: true,
-            className: 'value-input',
-            key: 'value',
-            onKeyDown: e => focus(e),
-            value: dataValue(value),
-            placeholder: t('components.key-value-field.enter-value'),
-            disabled: lockedValues.includes(value?.key),
-            setValue: val => {
-              setValue({
-                ...value,
-                val: valuesEncoded || !encodable ? val : base64Encode(val),
-              });
-              updateValue();
-            },
-            validationState:
-              value?.key && decodeErrors[value.key]
-                ? {
-                    state: 'error',
-                    text: t('secrets.messages.decode-error', {
-                      message: decodeErrors[value.key],
-                    }),
+        ({ value, setValue, ref, updateValue, focus }) => (
+          <div className="fd-col fd-col-md--6">
+            {input.key({
+              fullWidth: true,
+              disabled: lockedKeys.includes(value?.key),
+              key: 'key',
+              value: value?.key || '',
+              ref: ref,
+              onChange: e =>
+                setValue({
+                  val: value?.val || initialValue,
+                  key: e.target.value,
+                }),
+              onKeyDown: e => focus(e, 1),
+              onBlur: updateValue,
+              placeholder: t('components.key-value-field.enter-key'),
+              ...keyProps,
+            })}
+          </div>
+        ),
+        ({ focus, value, setValue, updateValue, ...props }) => (
+          <div className="fd-col fd-col-md--6">
+            {input.value({
+              fullWidth: true,
+              className: 'value-input',
+              key: 'value',
+              onKeyDown: e => focus(e),
+              value: dataValue(value),
+              placeholder: t('components.key-value-field.enter-value'),
+              disabled: lockedValues.includes(value?.key),
+              setValue: val => {
+                setValue({
+                  ...value,
+                  val: valuesEncoded || !encodable ? val : base64Encode(val),
+                });
+                updateValue();
+              },
+              validationState:
+                value?.key && decodeErrors[value.key]
+                  ? {
+                      state: 'error',
+                      text: t('secrets.messages.decode-error', {
+                        message: decodeErrors[value.key],
+                      }),
+                    }
+                  : undefined,
+              ...props,
+            })}
+          </div>
+        ),
+        ({ value, setValue, updateValue }) => (
+          <div className="fd-col fd-col-md--6">
+            {readableFromFile ? (
+              <Tooltip content={t('common.tooltips.read-file')}>
+                <Button
+                  compact
+                  className="read-from-file"
+                  onClick={() =>
+                    readFromFile()?.then(result => {
+                      setValue({
+                        key: value?.key || result.name,
+                        val: !encodable
+                          ? result.content
+                          : base64Encode(result.content),
+                      });
+                      updateValue();
+                    })
                   }
-                : undefined,
-            ...props,
-          }),
-        ({ value, setValue, updateValue }) =>
-          readableFromFile ? (
-            <Tooltip content={t('common.tooltips.read-file')}>
-              <Button
-                compact
-                className="read-from-file"
-                onClick={() =>
-                  readFromFile()?.then(result => {
-                    setValue({
-                      key: value?.key || result.name,
-                      val: !encodable
-                        ? result.content
-                        : base64Encode(result.content),
-                    });
-                    updateValue();
-                  })
-                }
-              >
-                {t('components.key-value-form.read-value')}
-              </Button>
-            </Tooltip>
-          ) : null,
+                >
+                  {t('components.key-value-form.read-value')}
+                </Button>
+              </Tooltip>
+            ) : null}
+          </div>
+        ),
       ]}
       actions={actions}
       required={required}

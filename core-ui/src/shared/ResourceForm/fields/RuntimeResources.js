@@ -106,6 +106,7 @@ export function RuntimeResources({ value, setValue, presets, ...props }) {
 
   return (
     <ResourceForm.CollapsibleSection
+      lvl={2}
       actions={
         presets && (
           <ResourceForm.Presets

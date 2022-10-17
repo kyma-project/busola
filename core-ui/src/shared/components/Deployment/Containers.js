@@ -78,6 +78,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
 
   return containers.map((container, i) => (
     <ResourceForm.CollapsibleSection
+      lvl={1}
       key={i}
       title={t('deployments.create-modal.advanced.container-header', {
         name: container?.name || i + 1,
