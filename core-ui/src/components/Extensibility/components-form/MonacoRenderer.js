@@ -39,7 +39,7 @@ export function MonacoRenderer({
   schema,
   required,
   resource,
-  lvl = 0,
+  nestingLevel = 0,
   originalResource,
 }) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
@@ -90,7 +90,7 @@ export function MonacoRenderer({
       title={tFromStoreKeys(storeKeys, schema)}
       required={schemaRequired ?? required}
       defaultOpen={defaultOpen}
-      lvl={lvl}
+      nestingLevel={nestingLevel}
     >
       <div className="fd-margin-bottom--sm">
         <Label

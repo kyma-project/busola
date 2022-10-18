@@ -21,7 +21,7 @@ export function SimpleList({
   readOnly,
   level,
   widgets,
-  lvl = 0,
+  nestingLevel = 0,
   ...props
 }) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
@@ -67,7 +67,7 @@ export function SimpleList({
       container
       title={tFromStoreKeys(storeKeys, schema)}
       required={schemaRequired ?? required}
-      lvl={lvl}
+      nestingLevel={nestingLevel}
       {...props}
     >
       <div className="fd-row simple-list">
@@ -98,7 +98,7 @@ export function SimpleList({
                       parentSchema={schema}
                       storeKeys={storeKeys.push(0)}
                       level={level + 1}
-                      lvl={lvl + 1}
+                      nestingLevel={nestingLevel + 1}
                       schemaKeys={schemaKeys?.push('items')}
                     />
                   </div>

@@ -8,7 +8,7 @@ export function CollapsibleRenderer({
   schema,
   storeKeys,
   widgets,
-  lvl = 0,
+  nestingLevel = 0,
   ...props
 }) {
   const { WidgetRenderer } = widgets;
@@ -24,7 +24,7 @@ export function CollapsibleRenderer({
     <ResourceForm.CollapsibleSection
       title={tFromStoreKeys(storeKeys, schema)}
       defaultOpen={defaultOpen}
-      lvl={lvl}
+      nestingLevel={nestingLevel}
     >
       <div
         className="collapsible-renderer__grid-wrapper"
@@ -35,7 +35,7 @@ export function CollapsibleRenderer({
           storeKeys={storeKeys}
           schema={ownSchema}
           widgets={widgets}
-          lvl={lvl + 1}
+          nestingLevel={nestingLevel + 1}
         />
       </div>
     </ResourceForm.CollapsibleSection>

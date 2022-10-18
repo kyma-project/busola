@@ -19,7 +19,7 @@ export function CollapsibleSection({
   className,
   required,
   tooltipContent,
-  lvl = 0,
+  nestingLevel = 0,
 }) {
   const [open, setOpen] = useState(defaultOpen);
   const actionsRef = useRef();
@@ -49,7 +49,7 @@ export function CollapsibleSection({
       <header
         onClick={toggle}
         aria-label={`expand ${title}`}
-        style={{ marginLeft: `${lvl * 16}px` }}
+        style={{ marginLeft: `${nestingLevel * 16}px` }}
       >
         {
           <Title
@@ -72,7 +72,7 @@ export function CollapsibleSection({
           resource={resource}
           setResource={setResource}
           isAdvanced={isAdvanced}
-          lvl={lvl + 1}
+          nestingLevel={nestingLevel + 1}
         >
           {children}
         </ResourceFormWrapper>

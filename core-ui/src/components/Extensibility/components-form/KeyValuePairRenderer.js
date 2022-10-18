@@ -73,7 +73,7 @@ export function KeyValuePairRenderer({
   onChange,
   required,
   resource,
-  lvl = 0,
+  nestingLevel = 0,
 }) {
   // TODO the value obtained by ui-schema is undefined for this component
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
@@ -100,7 +100,7 @@ export function KeyValuePairRenderer({
 
   return (
     <KeyValueField
-      lvl={lvl}
+      nestingLevel={nestingLevel}
       value={value}
       setValue={value => {
         onChange({
