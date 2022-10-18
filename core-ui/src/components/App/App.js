@@ -17,6 +17,7 @@ import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import otherRoutes from 'resources/other';
 import { Sidebar } from 'sidebar/Sidebar';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
+import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 
 export default function App() {
   const { cluster, language, customResources = [] } = useMicrofrontendContext();
@@ -26,6 +27,7 @@ export default function App() {
   useResourceSchemas();
 
   useLuigiContextMigrator();
+  useConfigContextMigrator();
 
   useEffect(() => {
     i18n.changeLanguage(language);

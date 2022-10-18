@@ -3,6 +3,7 @@ import { atom, RecoilState } from 'recoil';
 type AuthDataState = {
   'client-certificate-data': string;
   'client-key-data': string;
+  token?: string;
 } | null;
 
 const defaultValue = null;

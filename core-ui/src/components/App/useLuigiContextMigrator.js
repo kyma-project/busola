@@ -8,6 +8,9 @@ import { authDataState } from 'state/authDataAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { extResourcesState } from 'state/extResourcesAtom';
 import { openapiState } from 'state/openapi/openapiAtom';
+import { clusterState } from 'state/clusterAtom';
+import { clusterConfigState } from 'state/clusterConfigAtom';
+import { ssoDataState } from 'state/ssoDataAtom';
 
 export const useLuigiContextMigrator = () => {
   const {
@@ -17,6 +20,9 @@ export const useLuigiContextMigrator = () => {
     namespaceId,
     customResources,
     openApi,
+    cluster,
+    config,
+    ssoData,
   } = useMicrofrontendContext();
 
   useUpdateRecoilIfValueChanged(features, configFeaturesState);
@@ -25,6 +31,9 @@ export const useLuigiContextMigrator = () => {
   useUpdateRecoilIfValueChanged(namespaceId, activeNamespaceIdState);
   useUpdateRecoilIfValueChanged(customResources, extResourcesState);
   useUpdateRecoilIfValueChanged(openApi, openapiState);
+  useUpdateRecoilIfValueChanged(config, clusterConfigState);
+  useUpdateRecoilIfValueChanged(cluster, clusterState);
+  useUpdateRecoilIfValueChanged(ssoData, ssoDataState);
 };
 
 const useUpdateRecoilIfValueChanged = (val, recoilAtom) => {
