@@ -16,42 +16,11 @@ export const filterExistingAndAllowedNodes = (
       return false;
     }
   }
-  // TODO see what resources used this fn
-  // if (dependsOnOtherResource(node)) {
-  //   //used only for the Custom Resources node
-  //   if (isParentResourceDisallowed(node, permissionSet, resourceIdList)) {
-  //     return false;
-  //   }
-  // }
 
-  // if (hasCompleteNavigationInformation(node)) {
-  if (isResourceDisallowed(node, permissionSet, resourceIdList)) {
-    return false;
-  }
-  // }
-
-  return true;
+  return isResourceAllowed(node, permissionSet, resourceIdList);
 };
 
-// TODO see what resources used this fn
-// const isParentResourceDisallowed = (node, permissionSet, resourceIdList) => {
-//   const { group, resource } = node.context.requiredGroupResource;
-//
-//   const doesExist = doesResourceExist({
-//     resourceGroupAndVersion: group,
-//     resourceKind: resource,
-//     resourceIdList,
-//   });
-//   const isPermitted = doesUserHavePermission(
-//     ['get', 'list'],
-//     { resourceGroupAndVersion: group, resourceKind: resource },
-//     permissionSet,
-//   );
-//
-//   return !doesExist || !isPermitted;
-// };
-
-const isResourceDisallowed = (node, permissionSet, resourceIdList) => {
+const isResourceAllowed = (node, permissionSet, resourceIdList) => {
   const stringJoiner = node.apiGroup ? '/' : '';
 
   const resourceGroupAndVersion = `${node.apiGroup}${stringJoiner}${node.apiVersion}`;
@@ -67,7 +36,7 @@ const isResourceDisallowed = (node, permissionSet, resourceIdList) => {
     permissionSet,
   );
 
-  return !doesExist || !isPermitted;
+  return doesExist && isPermitted;
 };
 
 const dependsOnConfigFeatures = node =>
@@ -82,18 +51,3 @@ const isARequiredFeatureDisabled = (node, configFeatures) => {
 
 const isNamespaceNode = node =>
   node.resourceType === 'namespace' || node.resourceType === 'namespaces';
-//
-// const dependsOnOtherResource = node =>
-//   //what with requiredGroupResource
-//   typeof node.context?.requiredGroupResource === 'object';
-
-// const hasCompleteNavigationInformation = node => {
-//   if (typeof node.viewUrl === 'string') {
-//     const apiPath = new URL(node.viewUrl || '').searchParams.get(
-//       'resourceApiPath',
-//     );
-//
-//     return apiPath && node.resourceType;
-//   }
-//   return false;
-// };
