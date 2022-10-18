@@ -217,20 +217,17 @@ export async function createNavigation() {
     // we assume all users can make SelfSubjectRulesReview request
     const activeCluster = getActiveCluster();
 
-    // rewrite
     const permissionSet = await fetchPermissions(
       authData,
       getCurrentContextNamespace(activeCluster?.kubeconfig),
     );
 
-    //GLOBAL
     const { apiGroups, groupVersions } = await fetchAvailableApis(authData);
 
     const activeClusterName = activeCluster?.kubeconfig['current-context'];
 
-    await initFeatures(); //features from config
+    await initFeatures();
 
-    // rewrite
     const customResources = await getCustomResources(authData);
 
     const optionsForCurrentCluster = {
@@ -271,7 +268,6 @@ export async function createNavigation() {
       saveLocation(`/no-permissions?${NODE_PARAM_PREFIX}error=${error}`);
     }
 
-    //
     return {
       preloadViewGroups: false,
       appSwitcher: await createAppSwitcher(),

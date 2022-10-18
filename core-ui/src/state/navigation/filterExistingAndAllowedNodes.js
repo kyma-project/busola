@@ -16,7 +16,7 @@ export const filterExistingAndAllowedNodes = (
       return false;
     }
   }
-  //
+  // TODO see what resources used this fn
   // if (dependsOnOtherResource(node)) {
   //   //used only for the Custom Resources node
   //   if (isParentResourceDisallowed(node, permissionSet, resourceIdList)) {

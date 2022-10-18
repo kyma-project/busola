@@ -51,11 +51,11 @@ export type ExtResource = {
   dataSources: Record<string, any>;
 };
 export type NavNode = {
-  resourceType: string; // Jobs
+  resourceType: string; // Jobs, CronJobs etc.
   category: string;
   namespaced: boolean;
-  label: string; // // może być opcjonalnie, ma byc tylko jak jest inny od resourceType
-  pathSegment: string; // może być opcjonalnie, ma byc tylko jak jest inny od resourceType, pathSegemnt to urlPath w ext config
+  label: string;
+  pathSegment: string;
   requiredFeatures: ConfigFeaturesNames[];
   apiVersion: string;
   apiGroup: string;
