@@ -38,7 +38,7 @@ function MemoryInput({ label, propertyPath, container = {}, setContainer }) {
   return (
     <FormItem>
       <FormLabel required>{label}</FormLabel>
-      <div className="memory-input">
+      <div className="memory-input fd-col fd-col-md--11">
         <FormInput
           compact
           type="number"
@@ -83,7 +83,13 @@ function CpuInput({ label, propertyPath, container = {}, setContainer }) {
   );
 }
 
-export function RuntimeResources({ value, setValue, presets, ...props }) {
+export function RuntimeResources({
+  value,
+  setValue,
+  presets,
+  nestingLevel = 0,
+  ...props
+}) {
   const { t } = useTranslation();
 
   const mappedPresets = Object.entries(presets || {}).map(
@@ -106,7 +112,7 @@ export function RuntimeResources({ value, setValue, presets, ...props }) {
 
   return (
     <ResourceForm.CollapsibleSection
-      nestingLevel={2}
+      nestingLevel={nestingLevel}
       actions={
         presets && (
           <ResourceForm.Presets

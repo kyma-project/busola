@@ -41,6 +41,7 @@ function SingleContainerSection({ container, setContainer }) {
         title={t('deployments.create-modal.advanced.runtime-profile')}
         propertyPath="$.resources"
         canChangeState={false}
+        nestingLevel={1}
         defaultOpen
       />
     </ResourceForm.Wrapper>
