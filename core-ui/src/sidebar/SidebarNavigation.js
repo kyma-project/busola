@@ -6,16 +6,16 @@ import { navigationNodesSelector } from 'state/navigation/navigationNodesSelecto
 export const SidebarNavigation = () => {
   const { filteredNavList } = useFilterNavList();
 
-  useRecoilValue(navigationNodesSelector);
+  const navigationNodes = useRecoilValue(navigationNodesSelector);
 
   return (
     <nav>
-      <p>{JSON.stringify(filteredNavList)}</p>
+      <p>{JSON.stringify(navigationNodes)}</p>
       <br />
       <br />
       <br />
       <br />
-      {Object.entries(filteredNavList || {})?.map(([key, value]) => (
+      {Object.entries(navigationNodes || {})?.map(([key, value]) => (
         <p>
           {key}: {value.length} {'->'}{' '}
           {value.map(v => v.resourceType).join(', ')}

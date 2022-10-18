@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { getServiceName } from './helpers';
-import { PredefinedCategories } from 'sidebar/constants';
+import { PredefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'Subscriptions';
 export const namespaced = true;

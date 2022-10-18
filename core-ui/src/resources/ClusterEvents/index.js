@@ -1,4 +1,4 @@
-import { PredefinedCategories } from 'sidebar/constants';
+import { PredefinedCategories } from 'state/navigation/categories';
 
 export { List, Details, resourceType } from 'resources/Events';
 export const namespaced = false;

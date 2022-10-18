@@ -1,6 +1,6 @@
 import React from 'react';
 import { ConfigFeaturesNames } from 'state/types';
-import { PredefinedCategories } from 'sidebar/constants';
+import { PredefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'VirtualServices';
 export const namespaced = true;

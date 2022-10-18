@@ -1,5 +1,5 @@
 import React from 'react';
-import { PredefinedCategories } from 'sidebar/constants';
+import { PredefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'ServiceBindings';
 export const namespaced = true;

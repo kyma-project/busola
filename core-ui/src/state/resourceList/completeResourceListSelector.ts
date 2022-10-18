@@ -7,12 +7,14 @@ import { configFeaturesState } from '../configFeaturesAtom';
 import { busolaResourcesToNavNodes } from './busolaResourcesToNavNodes';
 import { extResourcesToNavNodes } from './extResourcesToNavNodes';
 
-export const completeResourceListSelector = selector({
+type ResourceList = NavNode[];
+
+export const completeResourceListSelector = selector<ResourceList>({
   key: 'completeResourceListSelector',
   get: ({ get }) => {
     const extResources = get(extResourcesState);
     const features = get(configFeaturesState);
-    if (isEmpty(features)) return;
+    if (isEmpty(features)) return [];
     const isExtensibilityOn = features.EXTENSIBILITY?.isEnabled;
     const isExtensionsLoaded = extResources?.length;
 
@@ -42,6 +44,7 @@ export const completeResourceListSelector = selector({
       );
       return mergedNodeList;
     }
+    return [];
   },
 });
 

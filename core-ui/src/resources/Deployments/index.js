@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
-import { PredefinedCategories } from 'sidebar/constants';
+import { PredefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'Deployments';
 export const namespaced = true;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { matchByOwnerReference } from 'shared/utils/helpers';
-import { PredefinedCategories } from 'sidebar/constants';
+import { PredefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'Jobs';
 export const namespaced = true;
