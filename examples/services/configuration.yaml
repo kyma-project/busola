@@ -1,8 +1,8 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: services
-  namespace: services
+  name: cherry-new-services
+  namespace: kube-public
   labels:
     app.kubernetes.io/name: services
     busola.io/extension: resource
@@ -34,14 +34,14 @@ data:
         source: $subscriptions()
         name: Subscription
         children:
-          - source: $item
+          - source: metadata.name
             name: Name
             sort: 'true'
             widget: ResourceLink
             resource:
-              name: $item.metadata.name
+              name: metadata.name
               namespace: $root.metadata.namespace
-              kind: $item.kind
+              kind: kind
           - source: spec.filter.filters[0].eventType.value
             name: First event type
             sort:
@@ -109,10 +109,10 @@ data:
     resource:
       kind: Service
       version: v1
-    urlPath: example-services
+    urlPath: new-example-services
     scope: namespace
-    name: Custom Services
-    category: Examples
+    name: New Custom Services
+    category: Cherry
   translations: |-
     en:
       Cluster IP: Cluster IP override
