@@ -5,7 +5,7 @@ import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { openapiPathIdListSelector } from '../openapi/openapiPathIdSelector';
 import { isEmpty } from 'lodash';
 import { NavNode } from '../types';
-import { filterExistingAndAllowedNodes } from '../../sidebar/filterExistingAndAllowedNodes';
+import { filterExistingAndAllowedNodes } from './filterExistingAndAllowedNodes';
 import { configFeaturesState } from '../configFeaturesAtom';
 
 export const navigationNodesSelector = selector({
