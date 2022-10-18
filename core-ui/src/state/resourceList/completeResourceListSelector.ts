@@ -21,12 +21,12 @@ export const completeResourceListSelector = selector<ResourceList>({
     const busolaResourceNodeList = resources.map(busolaResourcesToNavNodes);
 
     //TODO Add manually
-    // missing on NS
+    // // missing on NS
     // custom resources
     // helm releases
     // cluster overview
     // back to cluster details
-    // missing on cluster
+    // // missing on cluster
     // custom resources
     // extensions
     // cluster details

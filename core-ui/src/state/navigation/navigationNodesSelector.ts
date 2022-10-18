@@ -3,14 +3,14 @@ import { completeResourceListSelector } from '../resourceList/completeResourceLi
 import { fetchPermissions } from './fetchPermissions';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { openapiPathIdListSelector } from '../openapi/openapiPathIdSelector';
-import { isEmpty } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import { NavNode } from '../types';
 import { filterExistingAndAllowedNodes } from './filterExistingAndAllowedNodes';
 import { configFeaturesState } from '../configFeaturesAtom';
+import { CATEGORIES, Category } from './categories';
 
-export const navigationNodesSelector = selector({
+export const navigationNodesSelector = selector<Category[]>({
   key: 'navigationNodesSelector',
-
   get: async ({ get }) => {
     const resourceList = get(completeResourceListSelector);
     const activeNamespaceId = get(activeNamespaceIdState);
@@ -32,9 +32,9 @@ export const navigationNodesSelector = selector({
         configFeatures,
       ),
     );
-    const sortedNodes = sortByCategories(allowedNodes);
+    const assignedToCategories = assignNodesToCategories(allowedNodes);
 
-    return sortedNodes;
+    return assignedToCategories;
   },
 });
 
@@ -58,17 +58,40 @@ const filterByScope = (navList: NavNode[], scope: 'cluster' | 'namespace') => {
   return filteredList;
 };
 
-const sortByCategories = (navList: NavNode[]): any => {
-  const sortedToCategories: any = {};
+const assignNodesToCategories = (navList: NavNode[]): Category[] => {
+  const categories = cloneDeep(CATEGORIES);
 
-  navList.forEach(resource => {
-    const categoryKey = resource.category;
-
-    if (!sortedToCategories[categoryKey]) {
-      sortedToCategories[categoryKey] = [];
+  navList.forEach(node => {
+    //TODO process the top level nodes
+    if (
+      (node.resourceType === 'events' || node.resourceType === 'namespaces') &&
+      node.apiGroup === ''
+    ) {
+      categories.unshift({
+        topLevelNode: true,
+        key: '',
+        label: '',
+        icon: '',
+        items: [node],
+      });
+      return;
     }
-    sortedToCategories[categoryKey].push(resource);
+
+    const existingCategory = categories.find(
+      category => category.key === node.category,
+    );
+
+    if (existingCategory) {
+      existingCategory.items.push(node);
+    } else {
+      categories.push({
+        key: node.category,
+        label: node.label || node.category,
+        icon: node.icon || 'customize',
+        items: [node],
+      });
+    }
   });
 
-  return sortedToCategories;
+  return categories;
 };

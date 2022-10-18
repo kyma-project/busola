@@ -5,6 +5,8 @@ import { navigationNodesSelector } from 'state/navigation/navigationNodesSelecto
 export const SidebarNavigation = () => {
   const navigationNodes = useRecoilValue(navigationNodesSelector);
 
+  //useasync recoilValue ??????
+
   return (
     <nav>
       <p>{JSON.stringify(navigationNodes)}</p>
@@ -12,10 +14,10 @@ export const SidebarNavigation = () => {
       <br />
       <br />
       <br />
-      {Object.entries(navigationNodes || {})?.map(([key, value]) => (
-        <p>
-          {key}: {value.length} {'->'}{' '}
-          {value.map(v => v.resourceType).join(', ')}
+      {navigationNodes.map(value => (
+        <p key={value.key}>
+          {value.key}: {value.items.length} {'->'}{' '}
+          {value.items.map(v => v.resourceType).join(', ')}
         </p>
       ))}
     </nav>

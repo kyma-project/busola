@@ -16,5 +16,6 @@ export const busolaResourcesToNavNodes = (
   node.requiredFeatures = resource.requiredFeatures || [];
   node.apiGroup = resource.apiGroup || '';
   node.apiVersion = resource.apiVersion || '';
+  node.icon = resource.icon;
   return node;
 };

@@ -39,6 +39,7 @@ export type ExtResource = {
     urlPath: string;
     scope: 'namespace' | 'cluster';
     description?: string;
+    icon?: string;
   };
   list: any[];
   details: {
@@ -59,4 +60,5 @@ export type NavNode = {
   requiredFeatures: ConfigFeaturesNames[];
   apiVersion: string;
   apiGroup: string;
+  icon?: string;
 };

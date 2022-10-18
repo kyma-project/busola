@@ -1,3 +1,5 @@
+import { NavNode } from '../types';
+
 export enum PredefinedCategories {
   'workloads' = 'Workloads',
   'discovery-and-network' = 'Discovery-and-network',
@@ -7,40 +9,62 @@ export enum PredefinedCategories {
   'apps' = 'Apps',
   'configuration' = 'Configuration',
   'integration' = 'Integration',
-  'temporary' = 'Temporary',
 }
 
-export const CATEGORIES = {
-  workloads: {
+export type Category = {
+  key: PredefinedCategories | string;
+  icon: string;
+  label: string;
+  items: NavNode[];
+  topLevelNode?: boolean;
+};
+export const CATEGORIES: Category[] = [
+  {
+    key: PredefinedCategories.workloads,
     icon: 'source-code',
     label: 'workloads.title',
+    items: [],
   },
-  'discovery-and-network': {
+  {
+    key: PredefinedCategories['discovery-and-network'],
     icon: 'instance',
     label: 'discovery-and-network.title',
+    items: [],
   },
-  istio: {
+  {
+    key: PredefinedCategories.istio,
     icon: 'overview-chart',
     label: 'overview-chart',
+    items: [],
   },
-  'service-management': {
+  {
+    key: PredefinedCategories['service-management'],
     icon: 'add-coursebook',
     label: 'service-management.title',
+    items: [],
   },
-  storage: {
+  {
+    key: PredefinedCategories.storage,
     icon: 'sap-box',
     label: 'storage.title',
+    items: [],
   },
-  apps: {
+  {
+    key: PredefinedCategories.apps,
     icon: 'example',
     label: 'apps.title',
+    items: [],
   },
-  configuration: {
+  {
+    key: PredefinedCategories.configuration,
     icon: 'settings',
     label: 'configuration.title',
+    items: [],
   },
-  integration: {
+  {
+    key: PredefinedCategories.integration,
     icon: 'overview-chart',
     label: 'integration.title',
+    items: [],
   },
-};
+];
