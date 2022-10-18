@@ -112,8 +112,8 @@ export function MultiInput({
   const listClasses = classnames({
     'text-array-input__list': true,
     'fd-col': true,
-    'fd-col-md--8': !fullWidth,
-    'fd-col-md--12': fullWidth,
+    'fd-col-md--8': !fullWidth && (title || label),
+    'fd-col-md--12': fullWidth && !(title || label),
   });
 
   useEffect(() => {
@@ -177,7 +177,7 @@ export function MultiInput({
       {...props}
     >
       <div className="fd-row form-field multi-input">
-        {!fullWidth && (
+        {!fullWidth && (title || label) && (
           <div className="fd-col fd-col-md--3 form-field__label">
             <ResourceForm.Label
               required={required}
