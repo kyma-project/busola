@@ -61,3 +61,10 @@ export function JoinedArray({
 
 JoinedArray.array = true;
 JoinedArray.inline = true;
+JoinedArray.copyable = true;
+JoinedArray.copyFunction = ({ value, structure }) => {
+  let separator = structure?.separator ?? ', ';
+  separator = separator === 'break' ? '\n' : separator;
+
+  return Array.isArray(value) ? value.join(separator) : '';
+};

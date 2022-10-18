@@ -1,0 +1,119 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: applications
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: applications
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  general: |-
+    {
+      "resource": {
+        "kind": "Application",
+        "group": "applicationconnector.kyma-project.io",
+        "version": "v1alpha1"
+      },
+      "name": "Applications",
+      "category": "Integration",
+      "urlPath": "applications",
+      "scope": "cluster",
+      "description": "{{[Application](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/ac-01-application)}} represents an external solution connected to Kyma."
+    }
+  details: |-
+    {
+      "header": [
+        {
+          "name": "Description",
+          "source": "spec.description"
+        },
+        {
+          "name": "Access Label",
+          "source": "spec.accessLabel"
+        }
+      ],
+      "body": [
+        {
+          "widget": "Table",
+          "source": "spec.services",
+          "name": "Provided Services and Events",
+           "children": [
+            {
+              "source": "$count($item.entries[type='API'])", 
+              "name": "APIs"
+            },
+            {
+              "source": "$count($item.entries[type='Events'])", 
+              "name": "Events"
+            },
+            {
+              "source": "$item.providerDisplayName",
+              "name": "Provider"
+            }
+          ],
+          "collapsibleTitle": "$item.displayName",
+          "collapsible": [
+          {
+            "widget": "Plain",
+            "children": [
+              {
+                "source": "$item.longDescription"
+              }
+            ]
+          },
+            {
+              "widget": "Table",
+              "name": "APIs",
+              "source": "$item.entries[type = 'API']",
+              "children": [
+                {
+                  "source": "$item.name",
+                  "name": "Name"
+                },
+                {
+                  "source": "$item.accessLabel",
+                  "name": "Access Label"
+                },
+                {
+                  "widget": "ExternalLink",
+                  "source": "$item.centralGatewayUrl",
+                  "name": "Central Gateway URL",
+                  "copyable": true
+                }
+              ]
+            },
+            {
+              "widget": "Table",
+              "name": "Events",
+              "source": "$item.entries[type = 'Events']",
+              "children": [
+                {
+                  "source": "$item.name",
+                  "name": "Name"
+                },
+                {
+                  "source": "$item.accessLabel",
+                  "name": "Access Label"
+                },
+                {
+                  "widget": "ExternalLink",
+                  "source": "$item.centralGatewayUrl",
+                  "name": "Central Gateway URL",
+                  "copyable": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  form: |-
+    [
+      {
+        "path": "metadata.name",
+        "extraPaths": ["spec.accessLabel", "metadata.labels['app.kubernetes.io/name']"]
+      },
+      { "path": "spec.description" },
+      { "path": "spec.accessLabel" }
+    ]
