@@ -33,7 +33,7 @@ try {
   // workaround, to delete after updating stage and prod with YAMLs
   let configFromMap;
   try {
-    configFromMap = jsyaml.load(fs.readFileSync('./config/config.yaml'));
+    configFromMap = jsyaml.load(fs.readFileSync('./config-yaml/config.yaml'));
   } catch (e) {
     console.warn('Cannot load cluster params: ', e);
     configFromMap = jsyaml.load(fs.readFileSync('./config/config.json'));

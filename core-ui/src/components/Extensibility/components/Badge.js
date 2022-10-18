@@ -64,3 +64,4 @@ export function Badge({
   );
 }
 Badge.inline = true;
+Badge.copyable = true;
