@@ -6,17 +6,6 @@ import { navigationNodesSelector } from 'state/navigation/navigationNodesSelecto
 export const SidebarNavigation = () => {
   const { filteredNavList } = useFilterNavList();
 
-  //missing on NS
-  //custom resources
-  //helm releases   ??
-  //overview
-  //back to cluster details
-
-  //missing on cluster
-  //custom resources
-  //extensions
-  //cluster details
-
   useRecoilValue(navigationNodesSelector);
 
   return (

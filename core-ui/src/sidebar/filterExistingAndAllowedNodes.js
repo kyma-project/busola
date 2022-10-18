@@ -33,8 +33,7 @@ export const filterExistingAndAllowedNodes = (
   return true;
 };
 
-//TODO what about Custom Resources
-
+// TODO see what resources used this fn
 // const isParentResourceDisallowed = (node, permissionSet, resourceIdList) => {
 //   const { group, resource } = node.context.requiredGroupResource;
 //

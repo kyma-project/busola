@@ -18,6 +18,17 @@ export const completeResourceListSelector = selector({
 
     const busolaResourceNodeList = resources.map(busolaResourcesToNavNodes);
 
+    //TODO Add manually
+    // missing on NS
+    // custom resources
+    // helm releases
+    // cluster overview
+    // back to cluster details
+    // missing on cluster
+    // custom resources
+    // extensions
+    // cluster details
+
     if (!isExtensibilityOn) {
       return busolaResourceNodeList;
     }
