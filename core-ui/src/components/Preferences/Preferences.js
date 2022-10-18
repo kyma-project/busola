@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dialog, Icon } from 'fundamental-react';
+import LuigiClient from '@luigi-project/client';
 
 import { Tab } from 'shared/components/Tabs/Tab';
 import { Tabs } from 'shared/components/Tabs/Tabs';
@@ -13,7 +14,6 @@ import ThemeChooser from './ThemeChooser';
 import LanguageSettings from './LanguageSettings';
 import OtherSettings from './OtherSettings';
 import ConfirmationSettings from './ConfirmationSettings';
-
 import './Preferences.scss';
 
 function Preferences() {
@@ -47,16 +47,18 @@ function Preferences() {
     },
   ];
 
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    LuigiClient.uxManager().removeBackdrop();
+  };
+
   const actions = [
-    <Button onClick={() => setModalOpen(prevState => !prevState)}>
-      {t('common.buttons.cancel')}
-    </Button>,
+    <Button onClick={handleCloseModal}>{t('common.buttons.cancel')}</Button>,
   ];
 
   useCustomMessageListener('open-preferences', () => {
-    console.log(isModalOpen);
-
     setModalOpen(true);
+    LuigiClient.uxManager().addBackdrop();
   });
 
   return (
@@ -104,8 +106,6 @@ function Preferences() {
   );
 }
 
-/* for some mysterious reason hooks fail in root component, so instead a
- * wrapper component has to be exported */
 export function PreferencesProvider({ children }) {
   return (
     <>
