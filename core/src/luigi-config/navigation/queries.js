@@ -96,7 +96,18 @@ export function fetchPermissions(auth, namespace = '*') {
     body: JSON.stringify(ssrr),
   })
     .then(res => res.json())
-    .then(res => res.status.resourceRules);
+    .then(res => {
+      const { incomplete, resourceRules } = res.status;
+      // add wildcard as a fallback - backend will deny the requests if necessary anyway
+      if (incomplete) {
+        resourceRules.push({
+          verbs: ['*'],
+          apiGroups: ['*'],
+          resources: ['*'],
+        });
+      }
+      return resourceRules;
+    });
 }
 
 export async function fetchAvailableApis() {
