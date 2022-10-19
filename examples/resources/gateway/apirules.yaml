@@ -8,7 +8,7 @@ metadata:
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
 data:
-  dataSources: |-
+  dataSources: |
     relatedGateways:
       resource: 
         kind: Gateway
@@ -29,139 +29,89 @@ data:
         version: v1beta1
         namespace: null
       filter: '$contains($item.metadata.ownerReferences[0].name, $root.metadata.name) and $contains($item.metadata.ownerReferences[0].kind, $root.kind)'
-  details: |-
-    {
-      "header": [
-        {
-          "name": "status",
-          "widget": "Badge",
-          "highlights": {
-            "positive": ["OK"],
-            "negative": ["ERROR"],
-            "critical": ["SKIPPED"]
-          },
-          "source": "status.APIRuleStatus.code ? status.APIRuleStatus.code : 'UNKNOWN'",
-          "description": "status.APIRuleStatus.desc"
-        },
-        { 
-          "name": "host",
-          "source": "spec",
-          "widget": "APIRuleHost",
-        },
-      ],
-      "body": [
-        { 
-          "name": "service",
-          "source": "spec.service",
-          "widget": "Panel",
-          "children": [
-            { 
-              "name": "service.name",
-              "source": "name",
-              "widget": "ResourceLink",
-              "resource": {
-                "name": "$root.spec.service.name",
-                "namespace": "$root.metadata.namespace",
-                "kind": "'Service'"
-              }
-            },
-            { 
-              "name": "service.port",
-              "source": "port",
-            }
-          ]
-        },
-        {
-          "source": "spec.rules",
-          "widget": "Table",
-          "name": "rules",
-          "children": [
-            {
-              "source": "$item.path",
-              "name": "rules.path",
-            },
-            {
-              "source": "$item.methods",
-              "name": "rules.methods",
-              "widget": "Badge",
-            }
-          ],
-          "collapsible": [
-            {
-              "source": "$item.accessStrategies",
-              "widget": "Table",
-              "disablePadding": true,
-              "name": "accessStrategies",
-              "children": [
-                {
-                  "source": "$item.handler",
-                  "name": "accessStrategies.handlers",
-                  "widget": "Badge",
-                },
-                {
-                  "source": "$item.config.required_scope",
-                  "name": "accessStrategies.required_scope",
-                },
-                {
-                  "source": "$item.config.jwks_urls",
-                  "name": "accessStrategies.jwks_urls",
-                },
-                {
-                  "source": "$item.config.trusted_issuers",
-                  "name": "accessStrategies.trusted_issuers",
-                }
-              ]
-            },
-            {
-              "source": "$item.mutators",
-              "widget": "Table",
-              "disablePadding": true,
-              "name": "mutators",
-              "visibility": "$exists($item.mutators)",
-              "children": [
-                {
-                  "source": "$item.handler",
-                  "name": "mutators.handlers",
-                  "widget": "Badge",
-                },
-                {
-                  "source": "$item.config",
-                  "name": "mutators.config",
-                },
-              ]
-            },
-            { 
-              "name": "service",
-              "source": "$item.service",
-              "widget": "Panel",
-              "visibility": "$exists($item.service)",
-              "children": [
-                { 
-                  "name": "service.name",
-                  "source": "$item.service.name",
-                  "widget": "ResourceLink",
-                  "resource": {
-                    "name": "$item",
-                    "namespace": "root.metadata.namespace",
-                    "kind": "'Service'"
-                  }
-                },
-                { 
-                  "name": "service.port",
-                  "source": "$item.service.port",
-                }
-              ]
-            },
-          ],
-        },
-        {
-          "widget": "ResourceList",
-          "source": "$virtualServices()",
-          "name": "virtualService",
-          "disableCreate": true
-        },
-      ],
-    }
+  details: |
+    header: 
+      - name: status
+        widget: Badge
+        highlights: 
+          positive:
+            - 'OK'
+          negative:
+            - 'ERROR'
+          critical:
+            - 'SKIPPED'
+        source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "UNKNOWN"'
+        description: status.APIRuleStatus.desc
+      - name: host
+        source: spec
+        widget: APIRuleHost
+    body: 
+      - name: service
+        source: spec.service
+        widget: Panel
+        children: 
+          - name: service.name
+            source: name
+            widget: ResourceLink
+            resource:
+              name: $root.spec.service.name
+              namespace: $root.metadata.namespace
+              kind: 'Service'
+          - name: service.port
+            source: port
+      - source: spec.rules
+        widget: Table
+        name: rules
+        children: 
+          - source: $item.path
+            name: rules.path
+          - source: $item.methods
+            name: rules.methods
+            widget: Badge
+        collapsible: 
+          - source: $item.accessStrategies
+            widget: Table
+            disablePadding: true
+            name: accessStrategies
+            children:
+              - source: $item.handler
+                name: accessStrategies.handlers
+                widget: Badge
+              - source: $item.config.required_scope
+                name: accessStrategies.required_scope
+              - source: $item.config.jwks_urls
+                name: accessStrategies.jwks_urls
+              - source: $item.config.trusted_issuers
+                name: accessStrategies.trusted_issuers
+          - source: $item.mutators
+            widget: Table
+            disablePadding: true
+            name: mutators
+            visibility: $exists($item.mutators)
+            children:
+              - source: $item.handler
+                name: mutators.handlers
+                widget: Badge
+              - source: $item.config
+                name: mutators.config
+          - name: service
+            source: $item.service
+            widget: Panel
+            visibility: $exists($item.service)
+            children: 
+              - name: service.name
+                source: $item.service.name
+                widget: ResourceLink
+                resource: 
+                  name: $item
+                  namespace: root.metadata.namespace
+                  kind: 'Service'
+              - name: service.port
+                source: $item.service.port
+      - widget: ResourceList
+        source: $virtualServices()
+        name: virtualService
+        disableCreate: true
   form: |-
     [
       {
