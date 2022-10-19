@@ -1,6 +1,6 @@
 import { doesUserHavePermission } from './permissions';
 import { NavNode } from '../../types';
-import { PermissionSet } from '../fetchPermissions';
+import { PermissionSet } from '../../permissionSetsAtom';
 
 export const filterPermittedNodes = (
   nodes: NavNode[],
