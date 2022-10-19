@@ -199,6 +199,12 @@ data:
       },
       {
         "simple": "true",
+        "var": "notAccessToGateways",
+        "widget": "Text",
+        "dynamicValue": "$exists($relatedGateways().error)",
+      },
+      {
+        "simple": "true",
         "required": true,
         "path": "spec.gateway",
         "name": "gateway",
@@ -210,27 +216,8 @@ data:
         },
         # "visibility": "$accessToGateways",
         # "filter": "($contains($item.metadata.namespace, $root.metadata.namespace) or $contains($item.metadata.namespace, 'kyma-system'))",
-        "toInternal": " ($values := $split($, '.'); 'namespace': $values[0], 'name': $values[1] })",
-        "toExternal": "namespace & '.' & name & '.svc.cluster.local'",
-      },
-      {
-        "simple": "true",
-        "var": "notAccessToGateways",
-        "widget": "Text",
-        "dynamicValue": "$exists($relatedGateways().error)",
-      },
-      {
-        "simple": "true",
-        "required": true,
-        "path": "spec.gateway",
-        "name": "gateway-name",
-        "widget": "Resource",
-        "resource": {
-          "kind": "Gateway",
-          "group": "networking.istio.io",
-          "version": "v1beta1",        },
-        # "visibility": "$accessToGateways",
-        # "filter": "($contains($item.metadata.namespace, $root.metadata.namespace) or $contains($item.metadata.namespace, 'kyma-system'))",
+        "toInternal": " ($values := $split($, '.'); { 'namespace': $values[1], 'name': $values[0] })",
+        "toExternal": "name & '.' & namespace & '.svc.cluster.local'",
       },
       {        
         "simple": "true",

@@ -4,7 +4,6 @@ import * as jp from 'jsonpath';
 
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { VarStoreContext } from '../contexts/VarStore';
-import { DataSourcesContext } from '../contexts/DataSources';
 
 const pathToJP = path =>
   '$' +
@@ -43,11 +42,6 @@ export function extractVariables(varStore, vars, indexes) {
 export function useVariables() {
   const { vars, setVar, setVars } = useContext(VarStoreContext);
   const [defs, setDefs] = useState({});
-  const {
-    dataSources,
-    store: dataSourceStore,
-    requestRelatedResource,
-  } = useContext(DataSourcesContext);
 
   const itemVars = (resource, names, storeKeys) => {
     let lastArrayItem;
