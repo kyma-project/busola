@@ -13,9 +13,9 @@ export const completeResourceListSelector = selector<ResourceList>({
   key: 'completeResourceListSelector',
   get: ({ get }) => {
     const extResources = get(extResourcesState);
-    const features = get(configFeaturesState);
-    if (isEmpty(features)) return [];
-    const isExtensibilityOn = features.EXTENSIBILITY?.isEnabled;
+    const configFeatures = get(configFeaturesState);
+    if (isEmpty(configFeatures)) return [];
+    const isExtensibilityOn = configFeatures.EXTENSIBILITY?.isEnabled;
     const isExtensionsLoaded = extResources?.length;
 
     const busolaResourceNodeList = resources.map(busolaResourcesToNavNodes);

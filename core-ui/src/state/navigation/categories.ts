@@ -34,7 +34,7 @@ export const CATEGORIES: Category[] = [
   {
     key: PredefinedCategories.istio,
     icon: 'overview-chart',
-    label: 'overview-chart',
+    label: 'istio.title',
     items: [],
   },
   {
