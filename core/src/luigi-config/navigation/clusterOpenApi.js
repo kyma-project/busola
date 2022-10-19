@@ -14,15 +14,21 @@ class clusterOpenApiClass {
     return this.resourcePathIdList;
   }
   async fetch() {
+    this.clear();
     const authData = getAuthData();
     const clusterOpenApiResponse = await failFastFetch(
       `${config.backendAddress}/openapi/v2`,
       authData,
     );
 
-    this.openApi = await clusterOpenApiResponse.json();
+    const result = await clusterOpenApiResponse.json();
 
-    this.setResourcePathIdList();
+    if (result.status === 'Failure') {
+      throw Error(`Cannot fetch cluster APIs: ${result.message}.`);
+    } else {
+      this.openApi = result;
+      this.setResourcePathIdList();
+    }
   }
   clear() {
     this.openApi = {};
