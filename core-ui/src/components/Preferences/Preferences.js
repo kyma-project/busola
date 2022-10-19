@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dialog, Icon } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
@@ -15,10 +15,14 @@ import LanguageSettings from './LanguageSettings';
 import OtherSettings from './OtherSettings';
 import ConfirmationSettings from './ConfirmationSettings';
 import './Preferences.scss';
+import { useRecoilState } from 'recoil';
+import { isPreferencesModalOpenState } from 'state/isPreferencesModalOpenAtom';
 
 function Preferences() {
   const { t } = useTranslation();
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useRecoilState(
+    isPreferencesModalOpenState,
+  );
 
   const tabs = [
     {
@@ -58,8 +62,11 @@ function Preferences() {
 
   useCustomMessageListener('open-preferences', () => {
     setModalOpen(true);
-    LuigiClient.uxManager().addBackdrop();
   });
+
+  const handleOnKeyDown = e => {
+    if (e.key === 'Escape') setModalOpen(false);
+  };
 
   return (
     <Dialog
@@ -67,6 +74,7 @@ function Preferences() {
       title={t('preferences.title')}
       actions={actions}
       className="preferences-dialog"
+      onKeyDown={handleOnKeyDown}
     >
       <VerticalTabs tabs={tabs} height="100vh">
         <VerticalTabs.Content id={1}>

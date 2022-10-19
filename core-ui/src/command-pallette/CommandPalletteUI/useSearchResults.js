@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSetRecoilState } from 'recoil';
+import { isPreferencesModalOpenState } from 'state/isPreferencesModalOpenAtom';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
@@ -25,6 +27,9 @@ export function useSearchResults({
   const [showHiddenNamespaces] = useFeatureToggle('showHiddenNamespaces');
   const fetch = useFetch();
   const { t } = useTranslation();
+  const setOpenPreferencesModal = useSetRecoilState(
+    isPreferencesModalOpenState,
+  );
 
   const preprocessedQuery = query.trim().toLowerCase();
   const context = {
@@ -41,6 +46,7 @@ export function useSearchResults({
     resourceCache,
     updateResourceCache,
     t,
+    setOpenPreferencesModal,
   };
 
   useEffect(() => {

@@ -60,6 +60,15 @@ function createResults(context) {
           onActivate: () => false,
           customActionText: t('command-palette.item-actions.show-help'),
         };
+      case 'preferences':
+        return {
+          label: 'Preferences',
+          query: 'preferences',
+          onActivate: () => {
+            context.setOpenPreferencesModal(true);
+          },
+          customActionText: t('command-palette.help.open-preferences'),
+        };
       case 'overview':
         if (activeClusterName) {
           return [
