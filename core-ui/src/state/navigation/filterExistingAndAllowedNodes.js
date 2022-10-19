@@ -21,9 +21,9 @@ export const filterExistingAndAllowedNodes = (
 };
 
 const isResourceAllowed = (node, permissionSet, resourceIdList) => {
-  const stringJoiner = node.apiGroup ? '/' : '';
-
-  const resourceGroupAndVersion = `${node.apiGroup}${stringJoiner}${node.apiVersion}`;
+  const resourceGroupAndVersion = `${node.apiGroup}${node.apiGroup ? '/' : ''}${
+    node.apiVersion
+  }`;
 
   const doesExist = doesResourceExist({
     resourceGroupAndVersion,

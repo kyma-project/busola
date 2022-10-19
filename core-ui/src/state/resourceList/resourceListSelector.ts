@@ -18,27 +18,27 @@ import { extResourcesToNavNodes } from './extResourcesToNavNodes';
 // extensions
 // cluster details
 
-type ResourceList = NavNode[];
-
-export const resourceListSelector = selector<ResourceList>({
+export const resourceListSelector = selector<NavNode[]>({
   key: 'resourceListSelector',
   get: ({ get }) => {
     const configFeatures = get(configFeaturesState);
     const extResources = get(extResourcesState);
 
-    let resNodeList: ResourceList = [];
+    let resNodeList: NavNode[] = [];
 
     if (!configFeatures) return resNodeList;
 
     const isExtensibilityOn = configFeatures.EXTENSIBILITY?.isEnabled;
     const areExtensionsLoaded = isExtensibilityOn && extResources;
-    if (areExtensionsLoaded) {
-      const extNodeList = extResources.map(extResourcesToNavNodes);
-      resNodeList = mergeInExtensibilityNav(resNodeList, extNodeList);
-    }
 
     if (!isExtensibilityOn) {
       resNodeList = resources.map(busolaResourcesToNavNodes);
+    }
+
+    if (areExtensionsLoaded) {
+      resNodeList = resources.map(busolaResourcesToNavNodes);
+      const extNodeList = extResources.map(extResourcesToNavNodes);
+      resNodeList = mergeInExtensibilityNav(resNodeList, extNodeList);
     }
 
     return resNodeList;

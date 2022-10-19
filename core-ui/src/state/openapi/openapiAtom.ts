@@ -3,12 +3,9 @@ import { atom, RecoilState } from 'recoil';
 type OpenapiState = {
   swagger: string;
   paths: Record<string, any>;
-};
+} | null;
 
-const defaultValue = {
-  swagger: '2.0',
-  paths: {},
-};
+const defaultValue = null;
 
 export const openapiState: RecoilState<OpenapiState> = atom<OpenapiState>({
   key: 'openapiState',
