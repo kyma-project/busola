@@ -2,7 +2,15 @@ import { GetRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { getPostFn } from '../utils/getPostFn';
 
-export const fetchPermissions = async (get: GetRecoilValue) => {
+export type PermissionSet = {
+  verbs: string[];
+  apiGroups: string[];
+  resources: string[];
+};
+
+export const fetchPermissions = async (
+  get: GetRecoilValue,
+): Promise<PermissionSet[] | null> => {
   const activeNamespaceId = get(activeNamespaceIdState);
   const postFn = getPostFn(get);
 
@@ -21,4 +29,5 @@ export const fetchPermissions = async (get: GetRecoilValue) => {
 
     return permissions.status.resourceRules;
   }
+  return null;
 };

@@ -1,15 +1,17 @@
 import { RecoilValueReadOnly, selector } from 'recoil';
 import { isEmpty } from 'lodash';
 import { resourceListSelector } from '../resourceList/resourceListSelector';
-import { fetchPermissions } from './fetchPermissions';
+import { fetchPermissions, PermissionSet } from './fetchPermissions';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { openapiPathIdListSelector } from '../openapi/openapiPathIdSelector';
 import { configFeaturesState } from '../configFeaturesAtom';
-import { filterExistingAndAllowedNodes } from './filterExistingAndAllowedNodes';
-import { filterByScope } from './filterByScope';
+import { filterExistingNodes } from './filters/filterExistingNodes';
+import { filterScopeNodes } from './filters/filterScopeNodes';
+import { filterNodesWithDisabledFeatures } from './filters/filterNodesWithDisabledFeatures';
 import { assignNodesToCategories } from './assignToCategories';
 import { Category } from './categories';
 import { NavNode } from '../types';
+import { filterPermittedNodes } from './filters/filterPermittedNodes';
 
 export const navigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
   Category[]
@@ -21,20 +23,27 @@ export const navigationNodesSelector: RecoilValueReadOnly<Category[]> = selector
     const openapiPathIdList = get(openapiPathIdListSelector);
     const configFeatures = get(configFeaturesState);
 
-    if (!openapiPathIdList || isEmpty(resourceList)) return [];
+    if (!openapiPathIdList || !configFeatures || isEmpty(resourceList))
+      return [];
+    const permissionSet = (await fetchPermissions(get)) as PermissionSet[];
 
-    const permissionSet = await fetchPermissions(get);
     const scope = activeNamespaceId ? 'namespace' : 'cluster';
 
-    const currentScopeNodes: NavNode[] = filterByScope(resourceList, scope);
+    const currentScopeNodes: NavNode[] = filterScopeNodes(resourceList, scope);
 
-    const allowedNodes: NavNode[] = currentScopeNodes.filter(node =>
-      filterExistingAndAllowedNodes(
-        node,
-        permissionSet,
-        openapiPathIdList,
-        configFeatures,
-      ),
+    const noDisabledFeaturesNodes: NavNode[] = filterNodesWithDisabledFeatures(
+      currentScopeNodes,
+      configFeatures,
+    );
+
+    const existingNodes: NavNode[] = filterExistingNodes(
+      noDisabledFeaturesNodes,
+      openapiPathIdList,
+    );
+
+    const allowedNodes: NavNode[] = filterPermittedNodes(
+      existingNodes,
+      permissionSet,
     );
 
     const assignedToCategories: Category[] = assignNodesToCategories(

@@ -1,6 +1,6 @@
-import { NavNode } from '../types';
+import { NavNode } from '../../types';
 
-export const filterByScope = (
+export const filterScopeNodes = (
   navList: NavNode[],
   scope: 'cluster' | 'namespace',
 ) => {
