@@ -72,15 +72,15 @@ context('Test Cluster configuration', () => {
 
     cy.contains('Preferences').click();
 
-    cy.getModalIframeBody()
+    cy.getIframeBody()
       .contains('Other')
       .click();
 
-    cy.getModalIframeBody()
+    cy.getIframeBody()
       .contains('20')
       .click();
 
-    cy.getModalIframeBody()
+    cy.getIframeBody()
       .contains('10')
       .click();
 

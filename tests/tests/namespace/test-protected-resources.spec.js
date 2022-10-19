@@ -134,11 +134,11 @@ context('Test Protected Resources', () => {
 
     cy.contains('Preferences').click();
 
-    cy.getModalIframeBody()
+    cy.getIframeBody()
       .contains('Cluster interaction')
       .click();
 
-    cy.getModalIframeBody()
+    cy.getIframeBody()
       .contains(
         '.preferences-row',
         'Allow for modification of protected resources',

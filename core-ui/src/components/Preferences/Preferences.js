@@ -53,7 +53,7 @@ function Preferences() {
   };
 
   const actions = [
-    <Button onClick={handleCloseModal}>{t('common.buttons.cancel')}</Button>,
+    <Button onClick={handleCloseModal}>{t('common.buttons.close')}</Button>,
   ];
 
   useCustomMessageListener('open-preferences', () => {
