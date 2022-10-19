@@ -3,7 +3,7 @@ import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 
 import * as Inputs from 'shared/ResourceForm/inputs';
-import { Select } from 'fundamental-react';
+import { Select } from 'shared/components/Select/Select';
 import { PROTOCOLS, DEFAULT_PORTS, isTLSProtocol } from './../helpers';
 import { switchTLS } from './TlsForm';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -58,6 +58,7 @@ export const PortsForm = ({ server = {}, servers, setServers }) => {
             placeholder={t(
               'gateways.create-modal.advanced.placeholders.port.protocol',
             )}
+            fullWidth
           />
         )}
       />

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { FormFieldset } from 'fundamental-react';
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import { Select } from 'fundamental-react';
+import { Select } from 'shared/components/Select/Select';
 import { ServiceAccountRef } from 'shared/components/ResourceRef/ServiceAccountRef';
 
 import { DEFAULT_APIGROUP, SUBJECT_KINDS } from './templates';
@@ -69,6 +69,7 @@ export function SingleSubjectForm({
               key: kind,
               text: kind,
             }))}
+            fullWidth
           />
         )}
       />
