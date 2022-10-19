@@ -1,7 +1,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: cherry-new-services
+  name: services
   namespace: kube-public
   labels:
     app.kubernetes.io/name: services
@@ -109,10 +109,10 @@ data:
     resource:
       kind: Service
       version: v1
-    urlPath: new-example-services
+    urlPath: example-services
     scope: namespace
-    name: New Custom Services
-    category: Cherry
+    name: Custom Services
+    category: Examples
   translations: |-
     en:
       Cluster IP: Cluster IP override
