@@ -2,7 +2,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: services
-  namespace: kube-public
+  namespace: services
   labels:
     app.kubernetes.io/name: services
     busola.io/extension: resource
