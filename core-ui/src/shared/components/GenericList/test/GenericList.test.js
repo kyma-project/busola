@@ -1,5 +1,4 @@
 import React from 'react';
-import 'core-js/es/array/flat-map';
 import { render, fireEvent, queryByText } from 'reactTestingUtils';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';

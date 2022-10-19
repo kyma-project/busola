@@ -58,7 +58,6 @@ export const PortsForm = ({ server = {}, servers, setServers }) => {
             placeholder={t(
               'gateways.create-modal.advanced.placeholders.port.protocol',
             )}
-            fullWidth
           />
         )}
       />

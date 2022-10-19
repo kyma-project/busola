@@ -69,7 +69,6 @@ export function SingleSubjectForm({
               key: kind,
               text: kind,
             }))}
-            fullWidth
           />
         )}
       />
