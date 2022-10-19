@@ -57,18 +57,16 @@ export function ClusterOverviewHeader() {
   const [showAdd, setShowAdd] = useState(false);
 
   const actions = (
-    <>
-      <Button
-        glyph="add"
-        onClick={() => {
-          setShowAdd(true);
-          LuigiClient.uxManager().addBackdrop();
-        }}
-        iconBeforeText
-      >
-        {t('upload-yaml.title')}
-      </Button>
-    </>
+    <Button
+      glyph="add"
+      onClick={() => {
+        setShowAdd(true);
+        LuigiClient.uxManager().addBackdrop();
+      }}
+      iconBeforeText
+    >
+      {t('upload-yaml.title')}
+    </Button>
   );
 
   return (
