@@ -1,7 +1,7 @@
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render } from 'reactTestingUtils';
 import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
 import { TranslationBundleContext } from 'components/Extensibility/helpers';
-import { mount } from 'enzyme';
+import { mount } from 'enzymeUtils';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Table } from '../Table';
 

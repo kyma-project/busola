@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render } from 'reactTestingUtils';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Selector } from '../Selector';
