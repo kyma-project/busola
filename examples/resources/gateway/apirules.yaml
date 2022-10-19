@@ -15,13 +15,13 @@ data:
         group: networking.istio.io
         version: v1beta1
         namespace: null
-      filter: '$filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != "serving.knative.dev/revision" }) })'
+      filter: '$contains($item.metadata.namespace, $root.metadata.namespace) or $contains($item.metadata.namespace, "kyma-system")'
     relatedServices:
       resource: 
         kind: Service
         version: v1
         namespace: null
-      filter: '$contains($item.metadata.namespace, $root.metadata.namespace)'
+      filter: '$filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != "serving.knative.dev/revision" }) })'
     virtualServices:
       resource: 
         kind: VirtualService
@@ -56,23 +56,18 @@ data:
           "widget": "Panel",
           "children": [
             { 
-              "name": "service.external",
-              "source": "spec.service.external",
-            },
-            { 
               "name": "service.name",
-              "source": "spec.service.name",
+              "source": "name",
               "widget": "ResourceLink",
-              "linkText": "'{{data}}'",
               "resource": {
-                "name": "data",
-                "namespace": "root.metadata.namespace",
+                "name": "$root.spec.service.name",
+                "namespace": "$root.metadata.namespace",
                 "kind": "'Service'"
               }
             },
             { 
               "name": "service.port",
-              "source": "spec.service.port",
+              "source": "port",
             }
           ]
         },
@@ -142,16 +137,11 @@ data:
               "visibility": "$exists($item.service)",
               "children": [
                 { 
-                  "name": "service.external",
-                  "source": "$item.service.external",
-                },
-                { 
                   "name": "service.name",
                   "source": "$item.service.name",
                   "widget": "ResourceLink",
-                  "linkText": "'{{data}}'",
                   "resource": {
-                    "name": "data",
+                    "name": "$item",
                     "namespace": "root.metadata.namespace",
                     "kind": "'Service'"
                   }
@@ -182,10 +172,6 @@ data:
         "widget": "FormGroup",
         "children": [
           {
-            "path": "external",
-            "name": "service.external",
-          },
-          {
             "simple": "true",
             "required": true,
             "path": "name",
@@ -205,26 +191,61 @@ data:
           },
         ],
       },
-      # {
-      #   "simple": "true",
-      #   "var": "accessToGateways",
-      #   "widget": "Text",
-      #   "dynamicValue": "$not($exists($relatedGateways().error))",
-      # },
-      # {        
-      #   "simple": "true",
-      #   "var": "gatewaysString",
-      #   "widget": "Text",
-      #   "dynamicValue": "$string($relatedGateways())",
-      # },
+      {
+        "simple": "true",
+        "var": "accessToGateways",
+        "widget": "Text",
+        "dynamicValue": "$not($exists($relatedGateways().error))",
+      },
+      {
+        "simple": "true",
+        "required": true,
+        "path": "spec.gateway",
+        "name": "gateway",
+        "widget": "ResourceRef",
+        "resource": {
+          "kind": "Gateway",
+          "group": "networking.istio.io",
+          "version": "v1beta1",        
+        },
+        # "visibility": "$accessToGateways",
+        # "filter": "($contains($item.metadata.namespace, $root.metadata.namespace) or $contains($item.metadata.namespace, 'kyma-system'))",
+        "toInternal": " ($values := $split($, '.'); 'namespace': $values[0], 'name': $values[1] })",
+        "toExternal": "namespace & '.' & name & '.svc.cluster.local'",
+      },
+      {
+        "simple": "true",
+        "var": "notAccessToGateways",
+        "widget": "Text",
+        "dynamicValue": "$exists($relatedGateways().error)",
+      },
+      {
+        "simple": "true",
+        "required": true,
+        "path": "spec.gateway",
+        "name": "gateway-name",
+        "widget": "Resource",
+        "resource": {
+          "kind": "Gateway",
+          "group": "networking.istio.io",
+          "version": "v1beta1",        },
+        # "visibility": "$accessToGateways",
+        # "filter": "($contains($item.metadata.namespace, $root.metadata.namespace) or $contains($item.metadata.namespace, 'kyma-system'))",
+      },
+      {        
+        "simple": "true",
+        "var": "gatewaysString",
+        "widget": "Text",
+        "dynamicValue": "$string($relatedGateways())",
+      },
       {
         "simple": "true",
         "required": true,
         "path": "spec.gateway",
         "name": "gateway",
         "inputInfo": "inputInfo.gateway",
-        # "visibility": "$accessToGateways",
-        "placeholder": "placeholder.gateway",
+        # "visibility": "$notAccessToGateways",
+        # "placeholder": "placeholder.gateway",
       },
       {
         "simple": "true",
@@ -245,6 +266,18 @@ data:
             "widget": "GenericList", 
             "children": [ 
               {
+                  "var": "handlerType",
+                  "widget": "Text",
+                  "dynamicValue": "$item.handler"
+                },
+              {
+                "path": "[].config",
+                "name": "accessStrategies.config",
+                "widget": "KeyValuePair",
+                "keyEnum": ['jwks_urls', 'trusted_issuers', 'required_scope'],
+                "visibility": "[].handler=jwt"
+              }, 
+              {
                 "path": "[].config",
                 "name": "accessStrategies.config",
                 "widget": "KeyValuePair",
@@ -254,6 +287,9 @@ data:
                 "required": true, 
                 "path": "[].handler",
                 "name": "accessStrategies.handler",
+                "keyEnum": [
+                  'allow', 'noop', 'jwt', 'oauth2_introspection'
+                ]
               },
             ],
           },
@@ -298,10 +334,6 @@ data:
             "widget": "FormGroup",
             "children": [
               {
-                "path": "external",
-                "name": "service.external",
-              },
-              {
                 "simple": "true",
                 "required": true,
                 "path": "name",
@@ -324,19 +356,22 @@ data:
         ],
       },
     ]
-  general: |-
-    {
-      "resource": {
-        "kind": "APIRule",
-        "group": "gateway.kyma-project.io",
-        "version": "v1beta1"
-      },
-      "urlPath": "ak-apirules",
-      "category": "AK",
-      "name": "AK API Rules",
-      "scope": "namespace",
-      "description": "{{[APIRule](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/apix-01-apirule/#documentation-content)}} allows for exposing a service externally."
-    }
+  general: >-
+    resource:
+      kind: APIRule
+      group: gateway.kyma-project.io
+      version: v1beta1
+    name: AK API Rules
+
+    category: AK
+
+    scope: namespace
+
+    description:
+    '{{[APIRule](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/apix-01-apirule/#documentation-content)}}
+    allows for exposing a service externally.'
+
+    urlPath: ak-apirules
   list: |-
     [
       { 
@@ -346,12 +381,11 @@ data:
       },
       { 
         "name": "service-name",
-        "source": "spec.service",
+        "source": "$join([$string(spec.service.name), ' (port: ', $string(spec.service.port), ')'])",
         "widget": "ResourceLink",
-        "linkText": "'{{data.name}} (port: {{data.port}})'",
         "resource": {
-          "name": "data.name",
-          "namespace": "root.metadata.namespace",
+          "name": "$root.spec.service.name",
+          "namespace": "$root.metadata.namespace",
           "kind": "'Service'"
         }
       },
@@ -393,7 +427,6 @@ data:
       rules.methods: Methods
       rules.path: Path
       service: Service
-      service.external: External
       service.name: Name
       service.port: Port
       service-name: Service Name

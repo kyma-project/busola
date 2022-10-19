@@ -14,12 +14,14 @@ import { prettifyKind } from 'shared/utils/helpers';
 import { ResourceSchema } from './ResourceSchema';
 import { usePreparePresets, createTemplate, getDefaultPreset } from './helpers';
 import { VarStoreContextProvider } from './contexts/VarStore';
+
 import { prepareSchemaRules } from './helpers/prepareSchemaRules';
 import {
   getResourceObjFromUIStore,
   getUIStoreFromResourceObj,
 } from './helpers/immutableConverter';
 import { useVariables } from './hooks/useVariables';
+import { useDataSources } from './hooks/useDataSources';
 import { prepareRules } from './helpers/prepareRules';
 
 export function ExtensibilityCreateCore({
@@ -58,10 +60,10 @@ export function ExtensibilityCreateCore({
   const presets = usePreparePresets(createResource?.presets);
 
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
-
+  const { dataSourceFetchers } = useDataSources(resource);
   const updateStore = res => {
     resetVars();
-    readVars(res);
+    readVars(res, dataSourceFetchers);
     const newStore = Immutable.fromJS(res);
     setStore(prevStore => prevStore.set('values', newStore));
   };
@@ -96,7 +98,7 @@ export function ExtensibilityCreateCore({
     const fullSchemaRules = prepareRules(createResource?.form ?? [], t);
 
     prepareVars(fullSchemaRules);
-    readVars(resource);
+    readVars(resource, dataSourceFetchers);
 
     return {
       simpleRules: prepareSchemaRules(

@@ -82,8 +82,8 @@ export function useVariables() {
   };
 
   const prepareVars = rules => {
-    const getLevel = (rules, path = '') =>
-      rules.forEach(rule => {
+    const getLevel = (rules, path = '') => {
+      return rules.forEach(rule => {
         const rulePath = path ? `${path}.${rule.path}` : rule.path;
         if (rule.var) {
           defs[rule.var] = {
@@ -94,6 +94,7 @@ export function useVariables() {
           getLevel(rule.children, rulePath);
         }
       });
+    };
 
     getLevel(rules);
     setDefs({ ...defs });
@@ -108,18 +109,19 @@ export function useVariables() {
     setVars({ ...vars });
   };
 
-  const readVars = resource => {
-    const readVar = (def, path, base = resource) => {
-      const dataSourceFetchers = mapValues(dataSources, (_, id) => {
-        return () => {
-          requestRelatedResource(base, id);
-          return dataSourceStore?.[id]?.data;
-        };
-      });
-
+  const readVars = (resource, dataSourceFetchers) => {
+    const readVar = (
+      def,
+      path,
+      base = resource,
+      dSourceFetchers = dataSourceFetchers,
+    ) => {
       if (path.length) {
         return (jp.value(base, pathToJP(path[0])) ?? []).map(item =>
-          applyDefaults(def, readVar(def, tail(path), item)),
+          applyDefaults(
+            def,
+            readVar(def, tail(path), item, dataSourceFetchers),
+          ),
         );
       } else if (def.defaultValue) {
         return def.defaultValue;
@@ -134,7 +136,11 @@ export function useVariables() {
     Object.values(defs)
       .filter(def => typeof vars[def.var] === 'undefined')
       .forEach(def => {
-        const pureVal = readVar(def, initial(def.path.split(/\[\]\.?/)));
+        const pureVal = readVar(
+          def,
+          initial(def.path.split(/\[\]\.?/)),
+          dataSourceFetchers,
+        );
         vars[def.var] = applyDefaults(def, pureVal);
       });
 
