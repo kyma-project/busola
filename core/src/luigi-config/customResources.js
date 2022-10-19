@@ -27,14 +27,15 @@ import { busolaOwnExtConfigs } from './customResources/index';
 async function getBuiltinCustomResources() {
   try {
     const response = await fetch('/assets/extensions/extensions.yaml');
-    const extensions = await response.text();
+    const extensions = jsyaml.loadAll(await response.text());
     if (Array.isArray(extensions)) {
-      return jsyaml.loadAll(extensions);
+      return extensions;
     } else {
       return [];
     }
   } catch (e) {
     console.log(e);
+    return [];
   }
 }
 
