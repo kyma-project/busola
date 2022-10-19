@@ -9,451 +9,311 @@ metadata:
     busola.io/extension-version: '0.5'
 data:
   dataSources: |-
-    {
-      "podSelector": {
-        "resource": {
-          "kind": "Pod",
-          "version": "v1",
-        },
-        "filter": "$matchByLabelSelector($item, $root.spec.selector.matchLabels)"
-      }
-    }
+    podSelector:
+      resource:
+        kind: Pod
+        version: v1
+      filter: $matchByLabelSelector($item, $root.spec.selector.matchLabels)
   details: |-
-    {
-      "header": [
-        {
-          "source": "spec.action",
-          "name": "spec.action"
-        },
-        {
-          "source": "spec.provider",
-          "widget": "Labels",
-          "name": "spec.provider"
-        }
-      ],
-      "resourceGraph": {
-        "colorVariant": 3,
-        "dataSources": [
-          {
-            "source": "podSelector"
-          }
-        ]
-      },
-      "body": [
-        {
-          "widget": Table,
-          "name": "spec.rules",
-          "source": "spec.rules",
-          "disablePadding": true,
-          "showHeader": false,
-          "visibility": "$exists($value)",
-          # "collapsibleTitle": "'Rule #' & $string($index + 1) & ($exists($item.from) ? ' From' : '') & ($exists($item.to) ? ' To' : '') & ($exists($item.when) ? ' When' : '')",
-          "collapsibleTitle": "'Rule #' & $string($index + 1) & (' ' & $join($keys($item), ' '))",
-          "collapsible": [
-            {
-              "source": "$item.from",
-              "widget": "Table",
-              "name": "spec.rules.from",
-              "disablePadding": true,
-              "showHeader": false,
-              "visibility": "$exists($value)",
-              "collapsibleTitle": "'From #' & $string($index + 1) & (' ' & $join($keys($item.source), ' '))",
-              "collapsible": [
-                {
-                  "source": "$item.source",
-                  "widget": "Panel",
-                  "name": "spec.rules.from.source",
-                  "children": [
-                    { 
-                      "source": "$item.principals", 
-                      "name": "spec.rules.from.source.principals", 
-                      "widget": "JoinedArray",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.notPrincipals", 
-                      "name": "spec.rules.from.source.notPrincipals", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.requestPrincipals", 
-                      "name": "spec.rules.from.source.requestPrincipals", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.notRequestPrincipals", 
-                      "name": "spec.rules.from.source.notRequestPrincipals", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.namespaces", 
-                      "name": "spec.rules.from.source.namespaces", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.notNamespaces", 
-                      "name": "spec.rules.from.source.notNamespaces", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.ipBlocks", 
-                      "name": "spec.rules.from.source.ipBlocks", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.notIpBlocks", 
-                      "name": "spec.rules.from.source.notIpBlocks", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.remoteIpBlocks", 
-                      "name": "spec.rules.from.source.remoteIpBlocks", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.notRemoteIpBlocks", 
-                      "name": "spec.rules.from.source.notRemoteIpBlocks", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                  ]
-                }
-              ]
-            },
-            {
-              "source": "$item.to",
-              "widget": "Table",
-              "name": "spec.rules.to",
-              "disablePadding": true,
-              "showHeader": false,
-              "visibility": "$exists($value)",
-              "collapsibleTitle": "'To #' & $string($index + 1) & (' ' & $join($keys($item.operation), ' '))",
-              "collapsible": [
-                {
-                  "source": "$item.operation",
-                  "widget": "Panel",
-                  "name": "spec.rules.to.operation",
-                  "children": [
-                    { 
-                      "source": "$item.Hosts", 
-                      "name": "spec.rules.to.operation.hosts", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.notHosts", 
-                      "name": "spec.rules.to.operation.notHosts", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.ports", 
-                      "name": "spec.rules.to.operation.ports", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.notPorts", 
-                      "name": "spec.rules.to.operation.notPorts", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.methods", 
-                      "name": "spec.rules.to.operation.methods", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.notMethods", 
-                      "name": "spec.rules.to.operation.notMethods", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.paths", 
-                      "name": "spec.rules.to.operation.paths", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    },
-                    { 
-                      "source": "$item.notPaths", 
-                      "name": "spec.rules.to.operation.notPaths", 
-                      "widget": "Labels",
-                      "visibility": "$exists($value)"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "source": "$item.when",
-              "widget": "Table",
-              "name": "spec.rules.when",
-              "visibility": "$exists($value)",
-              "children": [
-                { 
-                  "source": "$item.key",
-                  "name": "spec.rules.when.key",
-                  "visibility": "$exists($value)"
-                },
-                { 
-                  "source": "$item.values", 
-                  "name": "spec.rules.when.values", 
-                  "widget": "JoinedArray",
-                  "separator": "break",
-                  "visibility": "$exists($value)"
-                },
-                { 
-                  "source": "$item.notValues", 
-                  "name": "spec.rules.when.notValues", 
-                  "widget": "JoinedArray",
-                  "separator": "break",
-                  "visibility": "$exists($value)"
-                }
-              ]
-            },
-          ],
-        },
-        {
-          "widget": "Panel",
-          "name": "spec.selector.matchLabels",
-          "disablePadding": true,
-          "children": [
-            { 
-              "source": "$podSelector()",
-              "widget": "ResourceList",
-              "disableCreate": true,
-              "visibility": "$boolean($root.spec.selector.matchLabels)"
-            },
-            {
-              "source": "spec.selector",
-              "widget": "Panel",
-              "name": "selector.matchesAllPods",
-              "visibility": "$not($exists($value)) or $not($boolean($value))"
-            }
-          ],
-          "header": [
-            {
-              "source": "spec.selector.matchLabels",
-              "widget": "Labels",
-              "name": "spec.selector.matchLabels",
-              "visibility": "$boolean($value)"
-            }
-          ],
-        }
-      ]
-    }
+    header:
+      - source: spec.action
+        name: spec.action
+      - source: spec.provider
+        widget: Labels
+        name: spec.provider
+    resourceGraph:
+      colorVariant: 3
+      dataSources:
+        - source: podSelector
+    body:
+      - widget: Table
+        name: spec.rules
+        source: spec.rules
+        disablePadding: true
+        showHeader: false
+        visibility: $exists($value)
+        collapsibleTitle: '"Rule #" & $string($index + 1) & (" " & $join($keys($item), " "))'
+        collapsible:
+          - source: $item.from
+            widget: Table
+            name: spec.rules.from
+            disablePadding: true
+            showHeader: false
+            visibility: $exists($value)
+            collapsibleTitle: '"From #" & $string($index + 1) & (" " & $join($keys($item.source), " "))'
+            collapsible:
+              - source: $item.source
+                widget: Panel
+                name: spec.rules.from.source
+                children:
+                  - source: $item.principals
+                    name: spec.rules.from.source.principals
+                    widget: JoinedArray
+                    visibility: $exists($value)
+                  - source: $item.notPrincipals
+                    name: spec.rules.from.source.notPrincipals
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: $item.requestPrincipals
+                    name: spec.rules.from.source.requestPrincipals
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: $item.notRequestPrincipals
+                    name: spec.rules.from.source.notRequestPrincipals
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: $item.namespaces
+                    name: spec.rules.from.source.namespaces
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: $item.notNamespaces
+                    name: spec.rules.from.source.notNamespaces
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: $item.ipBlocks
+                    name: spec.rules.from.source.ipBlocks
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: $item.notIpBlocks
+                    name: spec.rules.from.source.notIpBlocks
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: $item.remoteIpBlocks
+                    name: spec.rules.from.source.remoteIpBlocks
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: $item.notRemoteIpBlocks
+                    name: spec.rules.from.source.notRemoteIpBlocks
+                    widget: Labels
+                    visibility: $exists($value)
+          - source: $item.to
+            widget: Table
+            name: spec.rules.to
+            disablePadding: true
+            showHeader: false
+            visibility: $exists($value)
+            collapsibleTitle: '"To #" & $string($index + 1) & (" " & $join($keys($item.operation), " "))'
+            collapsible:
+              - source: $item.operation
+                widget: Panel
+                name: spec.rules.to.operation
+                children:
+                  - source: $item.Hosts
+                    name: spec.rules.to.operation.hosts
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: $item.notHosts
+                    name: spec.rules.to.operation.notHosts
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: $item.ports
+                    name: spec.rules.to.operation.ports
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: $item.notPorts
+                    name: spec.rules.to.operation.notPorts
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: $item.methods
+                    name: spec.rules.to.operation.methods
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: $item.notMethods
+                    name: spec.rules.to.operation.notMethods
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: $item.paths
+                    name: spec.rules.to.operation.paths
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: $item.notPaths
+                    name: spec.rules.to.operation.notPaths
+                    widget: Labels
+                    visibility: $exists($value)
+          - source: $item.when
+            widget: Table
+            name: spec.rules.when
+            visibility: $exists($value)
+            children:
+              - source: $item.key
+                name: spec.rules.when.key
+                visibility: $exists($value)
+              - source: $item.values
+                name: spec.rules.when.values
+                widget: JoinedArray
+                separator: break
+                visibility: $exists($value)
+              - source: $item.notValues
+                name: spec.rules.when.notValues
+                widget: JoinedArray
+                separator: break
+                visibility: $exists($value)
+      - widget: Panel
+        name: spec.selector.matchLabels
+        disablePadding: true
+        children:
+          - source: $podSelector()
+            widget: ResourceList
+            disableCreate: true
+            visibility: $boolean($root.spec.selector.matchLabels)
+          - source: spec.selector
+            widget: Panel
+            name: selector.matchesAllPods
+            visibility: $not($exists($value)) or $not($boolean($value))
+        header:
+          - source: spec.selector.matchLabels
+            widget: Labels
+            name: spec.selector.matchLabels
+            visibility: $boolean($value)
   form: |-
-    [
-      {
-        "path": "spec.selector.matchLabels", 
-        "widget": "KeyValuePair"
-      },
-      {
-        "path": "spec.action",
-        "placeholder": "placeholders.dropdown",
-        "simple": true,
-        "description": "description.action"
-      },
-      {
-        "path": "spec.provider",
-        "widget": "FormGroup",
-        "children":[
-          { "path": "name" }
-        ]
-      },
-      {
-        "path": "spec.rules",
-        "widget": "GenericList",
-        "simple": true,
-        "children": [
-          {
-            "path": "[].from",
-            "widget": "GenericList",
-            "children": [
-              {
-                "path": "[].source",
-                "widget": "FormGroup",
-                "children": [
-                  { 
-                    "path": "principals", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.from.principals",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "notPrincipals", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.from.notPrincipals",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "requestPrincipals", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.from.requestPrincipals",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "notRequestPrincipals", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.from.notRequestPrincipals",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "namespaces", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.from.namespaces",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "notNamespaces", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.from.notNamespaces",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "ipBlocks", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.from.ipBlocks",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "notIpBlocks", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.from.notIpBlocks",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "remoteIpBlocks", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.from.remoteIpBlocks",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "notRemoteIpBlocks", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.from.notRemoteIpBlocks",
-                    "children": [{ "path": "[]" }]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "path": "[].to",
-            "widget": "GenericList",
-            "children": [
-              {
-                "path": "[].operation",
-                "widget": "FormGroup",
-                "children": [
-                  { 
-                    "path": "hosts", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.to.hosts",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "notHosts", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.to.notHosts",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "ports", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.to.ports",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "notPorts", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.to.notPorts",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "methods", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.to.methods",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "notMethods", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.to.notMethods",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "paths", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.to.paths",
-                    "children": [{ "path": "[]" }]
-                  },
-                  { 
-                    "path": "notPaths", 
-                    "widget": "SimpleList",
-                    "description": "description.rules.to.notPaths",
-                    "children": [{ "path": "[]" }]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "path": "[].when",
-            "widget": "GenericList",
-            "children": [
-              { 
-                "path": "[].key", 
-                "widget": "Text",
-                "description": "description.rules.when.key"
-              },
-              { 
-                "path": "[].values", 
-                "widget": "SimpleList",
-                "description": "description.rules.when.values",
-                "children": [{ "path": "[]" }]
-              },
-              { 
-                "path": "[].notValues", 
-                "widget": "SimpleList",
-                "description": "description.rules.when.notValues",
-                "children": [{ "path": "[]" }]
-              }
-            ]
-          },
-        ]
-      }
-    ]
+    - path: spec.selector.matchLabels
+      widget: KeyValuePair
+    - path: spec.action
+      placeholder: placeholders.dropdown
+      simple: true
+      description: description.action
+    - path: spec.provider
+      widget: FormGroup
+      children:
+        - path: name
+    - path: spec.rules
+      widget: GenericList
+      simple: true
+      children:
+        - path: '[].from'
+          widget: GenericList
+          children:
+            - path: '[].source'
+              widget: FormGroup
+              children:
+                - path: principals
+                  widget: SimpleList
+                  description: description.rules.from.principals
+                  children:
+                    - path: '[]'
+                - path: notPrincipals
+                  widget: SimpleList
+                  description: description.rules.from.notPrincipals
+                  children:
+                    - path: '[]'
+                - path: requestPrincipals
+                  widget: SimpleList
+                  description: description.rules.from.requestPrincipals
+                  children:
+                    - path: '[]'
+                - path: notRequestPrincipals
+                  widget: SimpleList
+                  description: description.rules.from.notRequestPrincipals
+                  children:
+                    - path: '[]'
+                - path: namespaces
+                  widget: SimpleList
+                  description: description.rules.from.namespaces
+                  children:
+                    - path: '[]'
+                - path: notNamespaces
+                  widget: SimpleList
+                  description: description.rules.from.notNamespaces
+                  children:
+                    - path: '[]'
+                - path: ipBlocks
+                  widget: SimpleList
+                  description: description.rules.from.ipBlocks
+                  children:
+                    - path: '[]'
+                - path: notIpBlocks
+                  widget: SimpleList
+                  description: description.rules.from.notIpBlocks
+                  children:
+                    - path: '[]'
+                - path: remoteIpBlocks
+                  widget: SimpleList
+                  description: description.rules.from.remoteIpBlocks
+                  children:
+                    - path: '[]'
+                - path: notRemoteIpBlocks
+                  widget: SimpleList
+                  description: description.rules.from.notRemoteIpBlocks
+                  children:
+                    - path: '[]'
+        - path: '[].to'
+          widget: GenericList
+          children:
+            - path: '[].operation'
+              widget: FormGroup
+              children:
+                - path: hosts
+                  widget: SimpleList
+                  description: description.rules.to.hosts
+                  children:
+                    - path: '[]'
+                - path: notHosts
+                  widget: SimpleList
+                  description: description.rules.to.notHosts
+                  children:
+                    - path: '[]'
+                - path: ports
+                  widget: SimpleList
+                  description: description.rules.to.ports
+                  children:
+                    - path: '[]'
+                - path: notPorts
+                  widget: SimpleList
+                  description: description.rules.to.notPorts
+                  children:
+                    - path: '[]'
+                - path: methods
+                  widget: SimpleList
+                  description: description.rules.to.methods
+                  children:
+                    - path: '[]'
+                - path: notMethods
+                  widget: SimpleList
+                  description: description.rules.to.notMethods
+                  children:
+                    - path: '[]'
+                - path: paths
+                  widget: SimpleList
+                  description: description.rules.to.paths
+                  children:
+                    - path: '[]'
+                - path: notPaths
+                  widget: SimpleList
+                  description: description.rules.to.notPaths
+                  children:
+                    - path: '[]'
+        - path: '[].when'
+          widget: GenericList
+          children:
+            - path: '[].key'
+              widget: Text
+              description: description.rules.when.key
+            - path: '[].values'
+              widget: SimpleList
+              description: description.rules.when.values
+              children:
+                - path: '[]'
+            - path: '[].notValues'
+              widget: SimpleList
+              description: description.rules.when.notValues
+              children:
+                - path: '[]'
   general: |-
-    {
-      "resource": {
-        "kind": "AuthorizationPolicy",
-        "group": "security.istio.io",
-        "version": "v1beta1"
-      },
-      "name": "Authorization Policies",
-      "category": "Istio",
-      "urlPath": "authorizationpolicies",
-      "scope": "namespace",
-      "description": "{{[Istio Authorization Policy](https://istio.io/latest/docs/reference/config/security/authorization-policy/)}} allows for workload access management in the mesh."
-    }
+    resource:
+      kind: AuthorizationPolicy
+      group: security.istio.io
+      version: v1beta1
+    name: Authorization Policies
+    category: Istio
+    urlPath: authorizationpolicies
+    scope: namespace
+    description: >-
+      {{[Istio Authorization
+      Policy](https://istio.io/latest/docs/reference/config/security/authorization-policy/)}}
+      allows for workload access management in the mesh.
   list: |-
-    [
-      {
-        "name": "action",
-        "source": "spec.action"
-      }
-    ]
+    - name: action
+      source: spec.action
   translations: |-
     en:
       description.action: Optional. The action to take if the request is matched with the rules. Default is ALLOW if not specified.
