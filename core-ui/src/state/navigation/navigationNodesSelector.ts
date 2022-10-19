@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import { completeResourceListSelector } from '../resourceList/completeResourceListSelector';
+import { resourceListSelector } from '../resourceList/resourceListSelector';
 import { fetchPermissions } from './fetchPermissions';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { openapiPathIdListSelector } from '../openapi/openapiPathIdSelector';
@@ -12,7 +12,7 @@ import { CATEGORIES, Category } from './categories';
 export const navigationNodesSelector = selector<Category[]>({
   key: 'navigationNodesSelector',
   get: async ({ get }) => {
-    const resourceList = get(completeResourceListSelector);
+    const resourceList = get(resourceListSelector);
     const activeNamespaceId = get(activeNamespaceIdState);
     const openapiPathIdList = get(openapiPathIdListSelector);
     const configFeatures = get(configFeaturesState);

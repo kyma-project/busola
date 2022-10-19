@@ -1,8 +1,8 @@
 import { NavNode } from '../types';
 
-export const busolaResourcesToNavNodes = (
-  resource: Partial<NavNode> & Pick<NavNode, 'resourceType'>,
-) => {
+type PartialNavNode = Partial<NavNode> & Pick<NavNode, 'resourceType'>;
+
+export const busolaResourcesToNavNodes = (resource: PartialNavNode) => {
   const node: NavNode = {} as NavNode;
 
   node.category = resource.category || 'temporary';

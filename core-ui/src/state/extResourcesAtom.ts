@@ -1,9 +1,9 @@
 import { atom, RecoilState } from 'recoil';
 import { ExtResource } from './types';
 
-type ExtResourcesAtom = ExtResource[];
+type ExtResourcesAtom = ExtResource[] | null;
 
-const defaultValue: ExtResourcesAtom = [];
+const defaultValue: ExtResourcesAtom = null;
 
 export const extResourcesState: RecoilState<ExtResourcesAtom> = atom<
   ExtResourcesAtom

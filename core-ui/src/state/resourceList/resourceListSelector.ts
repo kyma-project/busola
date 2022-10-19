@@ -1,50 +1,47 @@
 import { selector } from 'recoil';
 import { extResourcesState } from '../extResourcesAtom';
 import { resources } from 'resources';
-import { isEmpty, partial } from 'lodash';
+import { partial } from 'lodash';
 import { NavNode } from '../types';
 import { configFeaturesState } from '../configFeaturesAtom';
 import { busolaResourcesToNavNodes } from './busolaResourcesToNavNodes';
 import { extResourcesToNavNodes } from './extResourcesToNavNodes';
 
+//TODO Add manually
+// // missing on NS
+// custom resources
+// helm releases
+// cluster overview
+// back to cluster details
+// // missing on cluster
+// custom resources
+// extensions
+// cluster details
+
 type ResourceList = NavNode[];
 
-export const completeResourceListSelector = selector<ResourceList>({
-  key: 'completeResourceListSelector',
+export const resourceListSelector = selector<ResourceList>({
+  key: 'resourceListSelector',
   get: ({ get }) => {
-    const extResources = get(extResourcesState);
     const configFeatures = get(configFeaturesState);
-    if (isEmpty(configFeatures)) return [];
+    const extResources = get(extResourcesState);
+
+    let resNodeList: ResourceList = [];
+
+    if (!configFeatures) return resNodeList;
+
     const isExtensibilityOn = configFeatures.EXTENSIBILITY?.isEnabled;
-    const isExtensionsLoaded = extResources?.length;
-
-    const busolaResourceNodeList = resources.map(busolaResourcesToNavNodes);
-
-    //TODO Add manually
-    // // missing on NS
-    // custom resources
-    // helm releases
-    // cluster overview
-    // back to cluster details
-    // // missing on cluster
-    // custom resources
-    // extensions
-    // cluster details
+    const areExtensionsLoaded = isExtensibilityOn && extResources;
+    if (areExtensionsLoaded) {
+      const extNodeList = extResources.map(extResourcesToNavNodes);
+      resNodeList = mergeInExtensibilityNav(resNodeList, extNodeList);
+    }
 
     if (!isExtensibilityOn) {
-      return busolaResourceNodeList;
+      resNodeList = resources.map(busolaResourcesToNavNodes);
     }
 
-    if (isExtensibilityOn && isExtensionsLoaded) {
-      const extResourceNodeList = extResources.map(extResourcesToNavNodes);
-
-      const mergedNodeList = mergeInExtensibilityNav(
-        busolaResourceNodeList,
-        extResourceNodeList,
-      );
-      return mergedNodeList;
-    }
-    return [];
+    return resNodeList;
   },
 });
 
