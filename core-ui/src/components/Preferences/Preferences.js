@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Dialog, Icon } from 'fundamental-react';
 import { useRecoilState } from 'recoil';
 
-import { isPreferencesModalOpenState } from 'state/isPreferencesModalOpenAtom';
+import { isPreferencesOpenState } from 'state/isPreferencesModalOpenAtom';
 import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
 import { Tab } from 'shared/components/Tabs/Tab';
 import { Tabs } from 'shared/components/Tabs/Tabs';
@@ -20,9 +20,7 @@ import './Preferences.scss';
 
 function Preferences() {
   const { t } = useTranslation();
-  const [isModalOpen, setModalOpen] = useRecoilState(
-    isPreferencesModalOpenState,
-  );
+  const [isModalOpen, setModalOpen] = useRecoilState(isPreferencesOpenState);
 
   const tabs = [
     {

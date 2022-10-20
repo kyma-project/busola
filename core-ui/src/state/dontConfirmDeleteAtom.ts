@@ -1,11 +1,17 @@
 import { atom, RecoilState } from 'recoil';
 import { localStorageEffect } from './helpers';
 
+type DontConfirmDelete = boolean;
+
 const DONT_CONFIRM_DELETE_STORAGE_KEY = 'busola.dontConfirmDelete';
 const DEFAULT_DONT_CONFIRM_DELETE = false;
 
-export const dontConfirmDeleteState: RecoilState<boolean> = atom<boolean>({
+export const dontConfirmDeleteState: RecoilState<DontConfirmDelete> = atom<
+  DontConfirmDelete
+>({
   key: 'dontConfirmDeleteState',
   default: DEFAULT_DONT_CONFIRM_DELETE,
-  effects: [localStorageEffect<boolean>(DONT_CONFIRM_DELETE_STORAGE_KEY)],
+  effects: [
+    localStorageEffect<DontConfirmDelete>(DONT_CONFIRM_DELETE_STORAGE_KEY),
+  ],
 });

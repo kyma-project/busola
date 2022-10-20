@@ -1,18 +1,21 @@
 import { atom, AtomEffect, RecoilState } from 'recoil';
 import LuigiClient from '@luigi-project/client';
 
-const DEFAULT_IS_PREFERENCES_MODAL_OPEN = false;
-
 type backdropEffectFn = () => AtomEffect<boolean>;
+type IsPreferencesOpen = boolean;
 
-export const backdropEffect: backdropEffectFn = () => ({ onSet }) => {
+const backdropEffect: backdropEffectFn = () => ({ onSet }) => {
   onSet(newValue => {
     if (newValue) LuigiClient.uxManager().addBackdrop();
     else LuigiClient.uxManager().removeBackdrop();
   });
 };
 
-export const isPreferencesModalOpenState: RecoilState<boolean> = atom<boolean>({
+const DEFAULT_IS_PREFERENCES_MODAL_OPEN = false;
+
+export const isPreferencesOpenState: RecoilState<IsPreferencesOpen> = atom<
+  IsPreferencesOpen
+>({
   key: 'isPreferencesModalOpenedState',
   default: DEFAULT_IS_PREFERENCES_MODAL_OPEN,
   effects: [backdropEffect()],
