@@ -1,4 +1,4 @@
-import { atom, AtomEffect } from 'recoil';
+import { atom, AtomEffect, RecoilState } from 'recoil';
 import LuigiClient from '@luigi-project/client';
 
 const DEFAULT_IS_PREFERENCES_MODAL_OPEN = false;
@@ -12,7 +12,7 @@ export const backdropEffect: backdropEffectFn = () => ({ onSet }) => {
   });
 };
 
-export const isPreferencesModalOpenState = atom<boolean>({
+export const isPreferencesModalOpenState: RecoilState<boolean> = atom<boolean>({
   key: 'isPreferencesModalOpenedState',
   default: DEFAULT_IS_PREFERENCES_MODAL_OPEN,
   effects: [backdropEffect()],
