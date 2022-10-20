@@ -1,13 +1,13 @@
 import React from 'react';
-import { ConfigFeaturesNames } from 'state/types';
-import { PredefinedCategories } from 'state/navigation/categories';
+import { configFeaturesNames } from 'state/types';
+import { predefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'VirtualServices';
 export const namespaced = true;
-export const requiredFeatures = [ConfigFeaturesNames.ISTIO];
+export const requiredFeatures = [configFeaturesNames.ISTIO];
 export const apiGroup = 'networking.istio.io';
 export const apiVersion = 'v1beta1';
-export const category = PredefinedCategories.istio;
+export const category = predefinedCategories.istio;
 
 export const List = React.lazy(() => import('./VirtualServiceList'));
 export const Details = React.lazy(() => import('./VirtualServiceDetails'));

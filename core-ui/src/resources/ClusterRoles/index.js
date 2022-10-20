@@ -1,11 +1,11 @@
 import React from 'react';
-import { PredefinedCategories } from 'state/navigation/categories';
+import { predefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'ClusterRoles';
 export const namespaced = false;
 export const apiGroup = 'rbac.authorization.k8s.io';
 export const apiVersion = 'v1';
-export const category = PredefinedCategories.configuration;
+export const category = predefinedCategories.configuration;
 
 export const List = React.lazy(() => import('./ClusterRoleList'));
 export const Details = React.lazy(() => import('./ClusterRoleDetails'));

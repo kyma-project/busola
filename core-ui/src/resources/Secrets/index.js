@@ -1,11 +1,11 @@
 import React from 'react';
-import { PredefinedCategories } from 'state/navigation/categories';
+import { predefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'Secrets';
 export const namespaced = true;
 export const apiGroup = '';
 export const apiVersion = 'v1';
-export const category = PredefinedCategories.configuration;
+export const category = predefinedCategories.configuration;
 
 export const List = React.lazy(() => import('./SecretList'));
 export const Details = React.lazy(() => import('./SecretDetails'));

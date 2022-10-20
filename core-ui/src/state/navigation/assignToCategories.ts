@@ -1,5 +1,5 @@
 import { NavNode } from '../types';
-import { CATEGORIES, Category } from './categories';
+import { CATEGORIES, Category, PredefinedCategories } from './categories';
 import { cloneDeep } from 'lodash';
 
 export const assignNodesToCategories = (navList: NavNode[]): Category[] => {
@@ -14,7 +14,7 @@ export const assignNodesToCategories = (navList: NavNode[]): Category[] => {
     ) {
       categories.unshift({
         topLevelNode: true,
-        key: '',
+        key: '' as PredefinedCategories,
         label: '',
         icon: '',
         items: [node],
@@ -30,7 +30,7 @@ export const assignNodesToCategories = (navList: NavNode[]): Category[] => {
       existingCategory.items.push(node);
     } else {
       categories.push({
-        key: node.category,
+        key: node.category as PredefinedCategories,
         label: node.label || node.category,
         icon: node.icon || 'customize',
         items: [node],

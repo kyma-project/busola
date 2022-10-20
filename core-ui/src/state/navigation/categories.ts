@@ -1,68 +1,71 @@
 import { NavNode } from '../types';
 
-export enum PredefinedCategories {
-  'workloads' = 'Workloads',
-  'discovery-and-network' = 'Discovery-and-network',
-  'istio' = 'Istio',
-  'service-management' = 'Service-management',
-  'storage' = 'Storage',
-  'apps' = 'Apps',
-  'configuration' = 'Configuration',
-  'integration' = 'Integration',
-}
+export type PredefinedCategories = typeof predefinedCategories[keyof typeof predefinedCategories];
+
+export const predefinedCategories = {
+  workloads: 'Workloads',
+  'discovery-and-network': 'Discovery-and-network',
+  istio: 'Istio',
+  'service-management': 'Service-management',
+  storage: 'Storage',
+  apps: 'Apps',
+  configuration: 'Configuration',
+  integration: 'Integration',
+} as const;
 
 export type Category = {
-  key: PredefinedCategories | string;
+  key: PredefinedCategories;
   icon: string;
   label: string;
   items: NavNode[];
+
   topLevelNode?: boolean;
 };
 export const CATEGORIES: Category[] = [
   {
-    key: PredefinedCategories.workloads,
+    key: predefinedCategories.workloads,
     icon: 'source-code',
     label: 'workloads.title',
     items: [],
   },
   {
-    key: PredefinedCategories['discovery-and-network'],
+    key: predefinedCategories['discovery-and-network'],
     icon: 'instance',
     label: 'discovery-and-network.title',
     items: [],
   },
   {
-    key: PredefinedCategories.istio,
+    key: predefinedCategories.istio,
     icon: 'overview-chart',
     label: 'istio.title',
     items: [],
   },
   {
-    key: PredefinedCategories['service-management'],
+    key: predefinedCategories['service-management'],
     icon: 'add-coursebook',
     label: 'service-management.title',
     items: [],
   },
   {
-    key: PredefinedCategories.storage,
+    key: predefinedCategories.storage,
     icon: 'sap-box',
     label: 'storage.title',
     items: [],
   },
   {
-    key: PredefinedCategories.apps,
+    key: predefinedCategories.apps,
     icon: 'example',
     label: 'apps.title',
     items: [],
   },
   {
-    key: PredefinedCategories.configuration,
+    key: predefinedCategories.configuration,
     icon: 'settings',
     label: 'configuration.title',
     items: [],
   },
   {
-    key: PredefinedCategories.integration,
+    key: predefinedCategories.integration,
     icon: 'overview-chart',
     label: 'integration.title',
     items: [],

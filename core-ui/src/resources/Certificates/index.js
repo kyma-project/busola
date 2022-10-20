@@ -1,11 +1,11 @@
 import React from 'react';
-import { PredefinedCategories } from 'state/navigation/categories';
+import { predefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'Certificates';
 export const namespaced = true;
 export const apiGroup = 'cert.gardener.cloud';
 export const apiVersion = 'v1alpha1';
-export const category = PredefinedCategories.configuration;
+export const category = predefinedCategories.configuration;
 
 export const List = React.lazy(() => import('./CertificateList'));
 export const Details = React.lazy(() => import('./CertificateDetails'));
