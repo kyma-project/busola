@@ -36,7 +36,7 @@ export const useLuigiContextMigrator = () => {
   useUpdateRecoilIfValueChanged(ssoData, ssoDataState);
 };
 
-const useUpdateRecoilIfValueChanged = (val, recoilAtom) => {
+export const useUpdateRecoilIfValueChanged = (val, recoilAtom) => {
   const setRecoilState = useSetRecoilState(recoilAtom);
   const prev = useRef(null);
   useEffect(() => {

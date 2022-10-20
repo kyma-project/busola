@@ -24,7 +24,7 @@ export const permissionSetsAtom: RecoilValue<PermissionSetState> = selector<
       const ssrr = {
         typeMeta: {
           kind: 'SelfSubjectRulesReview',
-          apiVersion: 'authorization.k8s.io/v1',
+          APIVersion: 'authorization.k8s.io/v1',
         },
         spec: { namespace: namespaceName },
       };
