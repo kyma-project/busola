@@ -15,29 +15,13 @@ global.config = {};
 try {
   // config from the copnfiguration file
 
-  // workaround, to delete after updating stage and prod with YAMLs
-  let defaultConfig;
-  try {
-    defaultConfig = jsyaml.load(
-      fs.readFileSync('./settings/defaultConfig.yaml'),
-    );
-  } catch (e) {
-    console.warn('Cannot load cluster params: ', e);
-    defaultConfig = jsyaml.load(
-      fs.readFileSync('./settings/defaultConfig.json'),
-    );
-  }
+  const defaultConfig = jsyaml.load(
+    fs.readFileSync('./settings/defaultConfig.yaml'),
+  );
 
   // config retrieved from busola's config map
 
-  // workaround, to delete after updating stage and prod with YAMLs
-  let configFromMap;
-  try {
-    configFromMap = jsyaml.load(fs.readFileSync('./config-yaml/config.yaml'));
-  } catch (e) {
-    console.warn('Cannot load cluster params: ', e);
-    configFromMap = jsyaml.load(fs.readFileSync('./config/config.json'));
-  }
+  const configFromMap = jsyaml.load(fs.readFileSync('./config/config.yaml'));
 
   global.config = merge(defaultConfig, configFromMap).config;
 } catch (e) {
