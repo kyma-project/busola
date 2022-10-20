@@ -2,7 +2,7 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useTranslation } from 'react-i18next';
-import { Select } from 'shared/components/Select/Select';
+import { Select } from 'fundamental-react';
 
 export default function OtherSettings() {
   const { t } = useTranslation();
