@@ -151,7 +151,9 @@ context('Test Protected Resources', () => {
       .find('.fd-switch')
       .click();
 
-    cy.get('[data-testid="modal-mf"] [aria-label="close"]').click();
+    cy.getIframeBody()
+      .contains('Close')
+      .click();
   });
 
   it("Don't protect a resource", () => {

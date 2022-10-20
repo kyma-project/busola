@@ -39,6 +39,11 @@ const requestData = {
 context('Test Cluster configuration', () => {
   Cypress.skipAfterFail();
 
+  // Luigi throws error of the "replace" function when entering the Preferences dialog. Remove the code below after Luigi's removal
+  Cypress.on('uncaught:exception', () => {
+    return false;
+  });
+
   it('Applies config from target cluster', () => {
     cy.intercept(requestData, configMock);
     cy.loginAndSelectCluster();

@@ -203,7 +203,7 @@ context('Test Command Palette navigation', () => {
     getQueryInput().trigger('keydown', { key: 'Enter' });
 
     cy.getIframeBody()
-      .containts('Cluster information')
+      .contains('Cluster information')
       .should('be.visible');
   });
 
