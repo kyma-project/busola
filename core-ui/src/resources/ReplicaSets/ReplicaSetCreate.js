@@ -12,8 +12,6 @@ import {
 
 import { createContainerTemplate, createReplicaSetTemplate } from './templates';
 
-import './ReplicaSetCreate.scss';
-
 export function ReplicaSetCreate({
   resourceUrl,
   resource: initialReplicaSet,
