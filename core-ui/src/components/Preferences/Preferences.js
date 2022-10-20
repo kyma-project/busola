@@ -1,12 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dialog, Icon } from 'fundamental-react';
-import LuigiClient from '@luigi-project/client';
+import { useRecoilState } from 'recoil';
 
+import { isPreferencesModalOpenState } from 'state/isPreferencesModalOpenAtom';
+import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
 import { Tab } from 'shared/components/Tabs/Tab';
 import { Tabs } from 'shared/components/Tabs/Tabs';
 import { VerticalTabs } from 'shared/components/VerticalTabs/VerticalTabs';
-import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
 
 import NamespaceSettings from './NamespaceSettings';
 import ProtectedSettings from './ProtectedSettings';
@@ -14,9 +15,8 @@ import ThemeChooser from './ThemeChooser';
 import LanguageSettings from './LanguageSettings';
 import OtherSettings from './OtherSettings';
 import ConfirmationSettings from './ConfirmationSettings';
+
 import './Preferences.scss';
-import { useRecoilState } from 'recoil';
-import { isPreferencesModalOpenState } from 'state/isPreferencesModalOpenAtom';
 
 function Preferences() {
   const { t } = useTranslation();
@@ -53,7 +53,6 @@ function Preferences() {
 
   const handleCloseModal = () => {
     setModalOpen(false);
-    LuigiClient.uxManager().removeBackdrop();
   };
 
   const actions = [
@@ -64,7 +63,7 @@ function Preferences() {
     setModalOpen(true);
   });
 
-  const handleOnKeyDown = e => {
+  const handleCloseWithEscape = e => {
     if (e.key === 'Escape') setModalOpen(false);
   };
 
@@ -74,7 +73,7 @@ function Preferences() {
       title={t('preferences.title')}
       actions={actions}
       className="preferences-dialog"
-      onKeyDown={handleOnKeyDown}
+      onKeyDown={handleCloseWithEscape}
     >
       <VerticalTabs tabs={tabs} height="100vh">
         <VerticalTabs.Content id={1}>
