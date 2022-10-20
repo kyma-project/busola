@@ -1,5 +1,5 @@
 import { LayoutPanel } from 'fundamental-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import { isEmpty } from 'lodash';
@@ -80,14 +80,15 @@ export const GenericList = ({
   };
 
   const pageSize = useRecoilValue(pageSizeState);
-  if (pagination) {
-    pagination.itemsPerPage = pagination.itemsPerPage || pageSize;
-  }
+  pagination = useMemo(() => {
+    return { itemsPerPage: pageSize, ...(pagination || {}) };
+  }, [pageSize, pagination]);
 
   const { i18n, t } = useTranslation();
   const [currentPage, setCurrentPage] = React.useState(
     pagination?.initialPage || 1,
   );
+
   const [filteredEntries, setFilteredEntries] = useState(() =>
     sorting(sort, entries),
   );
