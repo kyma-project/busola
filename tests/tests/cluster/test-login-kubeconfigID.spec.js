@@ -94,7 +94,7 @@ context('Test login - kubeconfigID', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '*assets/config-yaml/config.yaml*',
+        url: '*assets/config/config.yaml*',
       },
       jsyaml.dump({
         config: {
