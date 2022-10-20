@@ -10,7 +10,7 @@ export function createFunctionTemplate(namespace) {
       },
     },
     spec: {
-      runtime: 'nodejs14',
+      runtime: '',
       type: '',
       minReplicas: 1,
       maxReplicas: 5,
