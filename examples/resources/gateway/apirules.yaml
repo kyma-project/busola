@@ -8,7 +8,7 @@ metadata:
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
 data:
-  dataSources: |
+  dataSources: |-
     relatedGateways:
       resource: 
         kind: Gateway
@@ -113,186 +113,132 @@ data:
         name: virtualService
         disableCreate: true
   form: |-
-    [
-      {
-        "simple": "true",
-        "required": true,
-        "path": "spec.service", 
-        "name": "service", 
-        "widget": "FormGroup",
-        "children": [
-          {
-            "simple": "true",
-            "required": true,
-            "path": "name",
-            "name": "service-name",
-            "widget": "Resource",
-            "resource": {
-              "kind": "Service",
-              "version": "v1",
-              "scope": "namespace"
-            },
-            "filter": "$filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != 'serving.knative.dev/revision' }) })"
-          },
-          { 
-            "simple": true,
-            "path": "port", 
-            "name": "service.port",
-          },
-        ],
-      },
-      {
-        "simple": "true",
-        "var": "accessToGateways",
-        "widget": "Text",
-        "dynamicValue": "$not($exists($relatedGateways().error))",
-      },
-      {
-        "simple": "true",
-        "var": "notAccessToGateways",
-        "widget": "Text",
-        "dynamicValue": "$exists($relatedGateways().error)",
-      },
-      {
-        "simple": "true",
-        "required": true,
-        "path": "spec.gateway",
-        "name": "gateway",
-        "widget": "ResourceRef",
-        "resource": {
-          "kind": "Gateway",
-          "group": "networking.istio.io",
-          "version": "v1beta1",        
-        },
-        # "visibility": "$accessToGateways",
-        # "filter": "($contains($item.metadata.namespace, $root.metadata.namespace) or $contains($item.metadata.namespace, 'kyma-system'))",
-        "toInternal": " ($values := $split($, '.'); { 'namespace': $values[1], 'name': $values[0] })",
-        "toExternal": "name & '.' & namespace & '.svc.cluster.local'",
-      },
-      {        
-        "simple": "true",
-        "var": "gatewaysString",
-        "widget": "Text",
-        "dynamicValue": "$string($relatedGateways())",
-      },
-      {
-        "simple": "true",
-        "required": true,
-        "path": "spec.gateway",
-        "name": "gateway",
-        "inputInfo": "inputInfo.gateway",
-        # "visibility": "$notAccessToGateways",
-        # "placeholder": "placeholder.gateway",
-      },
-      {
-        "simple": "true",
-        "required": true,
-        "path": "spec.host",
-        "name": "host",
-      },
-      {
-        "simple": "true",
-        "path": "spec.rules", 
-        "name": "rules", 
-        "widget": "GenericList", 
-        "children": [
-          {
-            "required": true, 
-            "path": "[].accessStrategies", 
-            "name": "accessStrategies", 
-            "widget": "GenericList", 
-            "children": [ 
-              {
-                  "var": "handlerType",
-                  "widget": "Text",
-                  "dynamicValue": "$item.handler"
-                },
-              {
-                "path": "[].config",
-                "name": "accessStrategies.config",
-                "widget": "KeyValuePair",
-                "keyEnum": ['jwks_urls', 'trusted_issuers', 'required_scope'],
-                "visibility": "[].handler=jwt"
-              }, 
-              {
-                "path": "[].config",
-                "name": "accessStrategies.config",
-                "widget": "KeyValuePair",
-                "keyEnum": ['jwks_urls', 'trusted_issuers', 'required_scope'],
-              }, 
-              {
-                "required": true, 
-                "path": "[].handler",
-                "name": "accessStrategies.handler",
-                "keyEnum": [
-                  'allow', 'noop', 'jwt', 'oauth2_introspection'
-                ]
-              },
-            ],
-          },
-          {
-            "required": true, 
-            "path": "[].methods", 
-            "name": "rules.methods", 
-            "widget": "SimpleList",
-            "children": [{
-               "path": "[]" , 
-               "enum": [
-                  "GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"
-                ]
-            }],
-          },
-          {
-            "path": "[].mutators", 
-            "name": "mutators", 
-            "widget": "GenericList", 
-            "children": [ 
-              {
-                "path": "[].config",
-                "name": "accessStrategies.config",
-                "widget": "KeyValuePair",
-              }, 
-              {
-                "required": true, 
-                "path": "[].handler",
-                "name": "accessStrategies.handler",
-              },
-            ],
-          },
-          {
-            "simple": "true",
-            "required": true,
-            "path": "[].path",
-            "name": "path",
-          },
-          {
-            "path": "[].service", 
-            "name": "service", 
-            "widget": "FormGroup",
-            "children": [
-              {
-                "simple": "true",
-                "required": true,
-                "path": "name",
-                "name": "service-name",
-                "widget": "Resource",
-                "resource": {
-                  "kind": "Service",
-                  "version": "v1",
-                  "scope": "namespace"
-                },
-                "filter": "$filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != 'serving.knative.dev/revision' }) })"
-              },
-              { 
-                "simple": true,
-                "path": "port", 
-                "name": "service.port",
-              },
-            ],
-          },
-        ],
-      },
-    ]
+    - simple: true
+      required: true
+      path: spec.service
+      name: service
+      widget: FormGroup
+      children:
+        - simple: true
+          required: true
+          path: name
+          name: service-name
+          widget: Resource
+          resource:
+            kind: Service
+            version: v1
+            scope: namespace
+          filter: $filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != 'serving.knative.dev/revision' }) })"
+        - simple: true
+          path: port 
+          name: service.port
+    - simple: true
+      var: accessToGateways
+      widget: Text
+      dynamicValue: $not($exists($relatedGateways().error))
+    - simple: true
+      var: notAccessToGateways
+      widget: Text
+      dynamicValue: $exists($relatedGateways().error)
+    - simple: true
+      required: true
+      path: spec.gateway
+      name: gateway
+      widget: ResourceRef
+      resource:
+        kind: Gateway
+        group: networking.istio.io
+        version: v1beta1        
+      # visibility: $accessToGateways
+      # filter: ($contains($item.metadata.namespace, $root.metadata.namespace) or $contains($item.metadata.namespace, 'kyma-system'))
+      toInternal:  '($values := $split($, "."); { "namespace": $values[1], "name": $values[0] })'
+      toExternal: 'name & "." & namespace & ".svc.cluster.local"'
+    - simple: true
+      var: gatewaysString
+      widget: Text
+      dynamicValue: $string($relatedGateways())
+    - simple: true
+      required: true
+      path: spec.gateway
+      name: gateway
+      inputInfo: inputInfo.gateway
+      # visibility: $notAccessToGateways
+      # placeholder: placeholder.gateway
+    - simple: true
+      required: true
+      path: spec.host
+      name: host
+    - simple: true
+      path: spec.rules 
+      name: rules 
+      widget: GenericList 
+      children:
+        - required: true
+          path: '[].accessStrategies'
+          name: accessStrategies 
+          widget: GenericList 
+          children:
+            - var: handlerType
+              widget: Text
+              dynamicValue: $item.handler
+            - path: '[].config'
+              name: accessStrategies.config
+              widget: KeyValuePair
+              keyEnum:
+                - jwks_urls
+                - trusted_issuers
+                - required_scope
+            - required: true
+              path: '[].handler'
+              name: accessStrategies.handler
+              keyEnum:
+                - allow
+                - noop
+                - jwt
+                - oauth2_introspection
+        # - required: true
+        #   path: '[].methods'
+        #   name: rules.methods 
+        #   widget: SimpleList
+        #   children:
+        #     path: '[]' 
+        #     enum:
+        #       - GET
+        #       - POST
+        #       - PUT
+        #       - DELETE
+        #       - PATCH
+        #       - HEAD
+        # - path: '[].mutators' 
+        #   name: mutators 
+        #   widget: GenericList 
+        #   children:
+        #     - path: '[].config'
+        #       name: accessStrategies.config
+        #       widget: KeyValuePair
+        #     - required: true
+        #       path: '[].handler'
+        #       name: accessStrategies.handler
+        # - simple: true
+        #   required: true
+        #   path: [].path
+        #   name: path
+        # - path: [].service 
+        #   name: service 
+        #   widget: FormGroup
+        #   children:
+        #     - simple: true
+        #       required: true
+        #       path: name
+        #       name: service-name
+        #       widget: Resource
+        #       resource:
+        #         kind: Service
+        #         version: v1
+        #         scope: namespace
+        #     - simple: true
+        #       path: port 
+        #       name: service.port
   general: >-
     resource:
       kind: APIRule
@@ -309,35 +255,28 @@ data:
     allows for exposing a service externally.'
 
     urlPath: ak-apirules
-  list: |-
-    [
-      { 
-        "name": "host",
-        "source": "spec",
-        "widget": "APIRuleHost",
-      },
-      { 
-        "name": "service-name",
-        "source": "$join([$string(spec.service.name), ' (port: ', $string(spec.service.port), ')'])",
-        "widget": "ResourceLink",
-        "resource": {
-          "name": "$root.spec.service.name",
-          "namespace": "$root.metadata.namespace",
-          "kind": "'Service'"
-        }
-      },
-      {
-        "name": "status",
-        "widget": "Badge",
-        "highlights": {
-          "positive": ["OK"],
-          "negative": ["ERROR"],
-          "critical": ["SKIPPED"]
-        },
-        "source": "status.APIRuleStatus.code ? status.APIRuleStatus.code : 'UNKNOWN'",
-        "description": "status.APIRuleStatus.desc"
-      }
-    ]
+  list: |
+    - name: host
+      source: spec
+      widget: APIRuleHost
+    - name: service-name
+      source: '$join([$string(spec.service.name), " (port: ", $string(spec.service.port), ")"])'
+      widget: ResourceLink
+      resource:
+        name: $root.spec.service.name
+        namespace: $root.metadata.namespace
+        kind: 'Service'
+    - name: status
+      widget: Badge
+      highlights: 
+        positive:
+          - 'OK'
+        negative:
+          - 'ERROR'
+        critical:
+          - 'SKIPPED'
+      source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "UNKNOWN"'
+      description: status.APIRuleStatus.desc
   presets: |-
     - name: Default gateway
       default: true
@@ -359,7 +298,6 @@ data:
       mutators: Mutators
       mutators.config: Config
       mutators.handlers: Handlers
-      placeholder.gateway: Enter the gateway, for example, kyma-gateway.kyma-system.svc.cluster.local
       rules: Rules
       rules.methods: Methods
       rules.path: Path
