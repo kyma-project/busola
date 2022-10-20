@@ -1,13 +1,15 @@
 import { atom, RecoilState } from 'recoil';
 
-type ConfigState = {
+export type ClusterConfigState = {
   requiresCA: boolean;
   storage: 'localStorage' | 'sessionStorage' | string;
 } | null;
 
-const defaultValue: ConfigState = null;
+const defaultValue: ClusterConfigState = null;
 
-export const clusterConfigState: RecoilState<ConfigState> = atom<ConfigState>({
+export const clusterConfigState: RecoilState<ClusterConfigState> = atom<
+  ClusterConfigState
+>({
   key: 'clusterConfigState',
   default: defaultValue,
 });

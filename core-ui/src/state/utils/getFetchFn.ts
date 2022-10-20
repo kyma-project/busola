@@ -13,7 +13,7 @@ export const getFetchFn = (get: GetRecoilValue) => {
   const ssoData = get(ssoDataState);
   const { fromConfig } = get(configState) || {};
 
-  if ((authData || ssoData) && cluster && clusterConfig && fromConfig) {
+  if (authData && cluster && clusterConfig && fromConfig) {
     return createFetchFn({
       authData,
       cluster,

@@ -8,19 +8,19 @@ export const assignNodesToCategories = (navList: NavNode[]): Category[] => {
   navList.forEach(node => {
     //TODO process the top level nodes, cluster details
     //example:
-    // if (
-    //   (node.resourceType === 'events' || node.resourceType === 'namespaces') &&
-    //   node.apiGroup === ''
-    // ) {
-    //   categories.unshift({
-    //     topLevelNode: true,
-    //     key: '',
-    //     label: '',
-    //     icon: '',
-    //     items: [node],
-    //   });
-    //   return;
-    // }
+    if (
+      (node.resourceType === 'events' || node.resourceType === 'namespaces') &&
+      node.apiGroup === ''
+    ) {
+      categories.unshift({
+        topLevelNode: true,
+        key: '',
+        label: '',
+        icon: '',
+        items: [node],
+      });
+      return;
+    }
 
     const existingCategory = categories.find(
       category => category.key === node.category,

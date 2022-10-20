@@ -3,6 +3,11 @@ import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { baseUrl, throwHttpError } from 'shared/hooks/BackendAPI/config';
 import { useConfig } from 'shared/contexts/ConfigContext';
+import { AuthDataState } from '../../../state/authDataAtom';
+import { SsoDataState } from '../../../state/ssoDataAtom';
+import { ClusterConfigState } from '../../../state/clusterConfigAtom';
+import { FromConfig } from '../../../state/configAtom';
+import { ClusterState } from '../../../state/clusterAtom';
 
 export type FetchFn = ({
   relativeUrl,
@@ -11,7 +16,7 @@ export type FetchFn = ({
 }: {
   relativeUrl: string;
   init: any;
-  abortController?: any;
+  abortController?: AbortController;
 }) => Promise<Response>;
 
 export const createFetchFn = ({
@@ -21,11 +26,11 @@ export const createFetchFn = ({
   ssoData,
   fromConfig,
 }: {
-  authData: any;
-  cluster: any;
-  config: any;
-  ssoData: any;
-  fromConfig: any;
+  authData: AuthDataState;
+  cluster: ClusterState;
+  config: ClusterConfigState;
+  ssoData: SsoDataState;
+  fromConfig: FromConfig;
 }) => async ({
   relativeUrl,
   abortController,
@@ -33,15 +38,16 @@ export const createFetchFn = ({
 }: {
   relativeUrl: string;
   init: any;
-  abortController?: any;
+  abortController?: AbortController;
 }) => {
-  checkForTokenExpiration(authData?.token);
+  const token = authData && 'token' in authData ? authData.token : undefined;
+  checkForTokenExpiration(token);
   checkForTokenExpiration(ssoData?.idToken, { reason: 'sso-expiration' });
   init = {
     ...init,
     headers: {
       ...(init?.headers || {}),
-      ...createHeaders(authData, cluster.cluster, config.requiresCA, ssoData),
+      ...createHeaders(authData, cluster?.cluster, config?.requiresCA, ssoData),
     },
     signal: abortController?.signal,
   };

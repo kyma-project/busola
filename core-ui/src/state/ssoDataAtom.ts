@@ -1,6 +1,6 @@
 import { atom, RecoilState } from 'recoil';
 
-type SsoDataState = {
+export type SsoDataState = {
   idToken?: string;
 } | null;
 

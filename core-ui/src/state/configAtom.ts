@@ -1,12 +1,14 @@
 import { atom, RecoilState } from 'recoil';
 
-type ConfigState = {
-  fromConfig: (domain: string, backendAddress: string) => string;
+export type FromConfig = (domain: string, backendAddress: string) => string;
+
+export type ConfigURL = {
+  fromConfig: FromConfig;
 } | null;
 
-const defaultValue: ConfigState = null;
+const defaultValue: ConfigURL = null;
 
-export const configState: RecoilState<ConfigState> = atom<ConfigState>({
+export const configState: RecoilState<ConfigURL> = atom<ConfigURL>({
   key: 'configState',
   default: defaultValue,
 });

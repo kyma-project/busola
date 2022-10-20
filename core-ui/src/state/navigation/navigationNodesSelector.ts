@@ -27,8 +27,6 @@ export const navigationNodesSelector: RecoilValueReadOnly<Category[]> = selector
     const configFeatures = get(configFeaturesState);
     const permissionSet = get(permissionSetsAtom);
 
-    console.log(permissionSet);
-
     const areDependenciesInitialized =
       openapiPathIdList &&
       configFeatures &&

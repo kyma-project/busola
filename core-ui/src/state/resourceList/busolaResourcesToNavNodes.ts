@@ -5,7 +5,7 @@ type PartialNavNode = Partial<NavNode> & Pick<NavNode, 'resourceType'>;
 export const busolaResourcesToNavNodes = (resource: PartialNavNode) => {
   const node: NavNode = {} as NavNode;
 
-  node.category = resource.category || 'temporary';
+  node.category = resource.category || '';
   node.resourceType = resource.resourceType.toLowerCase();
   node.pathSegment = (
     resource.pathSegment || resource.resourceType

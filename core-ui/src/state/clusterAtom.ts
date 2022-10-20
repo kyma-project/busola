@@ -1,6 +1,6 @@
 import { atom, RecoilState } from 'recoil';
 
-type ClusterState = {
+export type ClusterState = {
   cluster: {
     server: string;
     'certificate-authority-data': string;
