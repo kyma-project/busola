@@ -6,7 +6,7 @@ import {
   isWorkerAvailable,
 } from 'components/App/resourceSchemas/resourceSchemaWorkerApi';
 import { useRecoilValue } from 'recoil';
-import { openapiSchemasState } from 'state/openapiSchemasAtom';
+import { schemaWorkerStatusState } from 'state/schemaWorkerStatusAtom';
 
 export const useGetSchema = ({ schemaId, skip, resource }) => {
   if (!schemaId && resource) {
@@ -15,7 +15,7 @@ export const useGetSchema = ({ schemaId, skip, resource }) => {
   }
 
   const { areSchemasComputed, schemasError } = useRecoilValue(
-    openapiSchemasState,
+    schemaWorkerStatusState,
   );
 
   const isWorkerOkay = isWorkerAvailable && !schemasError;

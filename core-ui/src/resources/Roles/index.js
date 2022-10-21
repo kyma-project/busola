@@ -1,10 +1,14 @@
 import React from 'react';
+import { predefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'Roles';
 export const namespaced = true;
 
 export const List = React.lazy(() => import('./RoleList'));
 export const Details = React.lazy(() => import('./RoleDetails'));
+export const apiGroup = 'rbac.authorization.k8s.io';
+export const apiVersion = 'v1';
+export const category = predefinedCategories.configuration;
 
 export const resourceGraphConfig = (t, context) => ({
   relations: [
