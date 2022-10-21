@@ -214,7 +214,9 @@ context('Test Command Palette navigation', () => {
       .find('[aria-label=command-palette-search]')
       .should('not.exist');
 
-    cy.get('[data-testid="modal-mf"] [aria-label="close"]').click();
+    cy.getIframeBody()
+      .contains('Close')
+      .click();
 
     cy.getIframeBody().contains('Cluster Details');
 

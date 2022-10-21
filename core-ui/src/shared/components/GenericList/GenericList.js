@@ -81,7 +81,8 @@ export const GenericList = ({
 
   const pageSize = useRecoilValue(pageSizeState);
   pagination = useMemo(() => {
-    return { itemsPerPage: pageSize, ...(pagination || {}) };
+    if (pagination) return { itemsPerPage: pageSize, ...(pagination || {}) };
+    return undefined;
   }, [pageSize, pagination]);
 
   const { i18n, t } = useTranslation();

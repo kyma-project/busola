@@ -11,19 +11,19 @@ describe('GenericList', () => {
 
   const mockEntries = [
     {
-      id: '11',
+      id: '1',
       name: 'first_entry',
       description: 'testdescription1',
       metadata: { labels: { label1: 'val1' } },
     },
     {
-      id: '22',
+      id: '2',
       name: 'second_entry',
       description: 'testdescription2',
       metadata: { labels: { label1: 'val2' } },
     },
     {
-      id: '33',
+      id: '3',
       name: 'THIRD_ENTRY',
       description: 'testdescription3',
       metadata: { labels: { label1: 'otherval' } },
@@ -164,7 +164,7 @@ describe('GenericList', () => {
     const mockCollapseEntryRenderer = entry => ({
       cells: [entry.id, entry.name, entry.description],
       collapseContent: <td colSpan="4">{entry.name}</td>,
-      showCollapseControl: entry.id !== '33',
+      showCollapseControl: entry.id !== '3',
     });
 
     const { getByText, getAllByTestId } = render(
