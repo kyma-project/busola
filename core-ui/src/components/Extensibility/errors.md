@@ -22,7 +22,7 @@ name: isSecretRecipe
 
 he will see a notification like:
 
-```yaml
+```
 Your extension configuration is incorrect.
 A widget lacks one of the required properties, add either "path" or "children".
     type: boolean

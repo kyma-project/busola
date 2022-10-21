@@ -124,9 +124,7 @@ export async function getCustomResources(authData) {
     ];
     const targetClusterCustomResources = await loadTargetClusterCRs(authData);
 
-    const additionalExtResources = Object.values({
-      ...targetClusterCustomResources,
-    });
+    const additionalExtResources = Object.values(targetClusterCustomResources);
 
     customResources[clusterName] = [
       ...customResources[clusterName],
