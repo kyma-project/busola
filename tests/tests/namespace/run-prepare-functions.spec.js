@@ -30,7 +30,7 @@ context('Prepare funtions for testing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Node.js 12')
+      .contains('Node.js 16')
       .click();
 
     cy.getIframeBody()
@@ -39,7 +39,7 @@ context('Prepare funtions for testing', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('Node.js 12')
+      .contains('Node.js 16')
       .should('be.visible');
   });
 
