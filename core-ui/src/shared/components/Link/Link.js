@@ -27,4 +27,5 @@ export const Link = ({ url, text, className, children }) => {
 Link.propTypes = {
   url: PropTypes.string.isRequired,
   text: PropTypes.string,
+  children: PropTypes.any,
 };

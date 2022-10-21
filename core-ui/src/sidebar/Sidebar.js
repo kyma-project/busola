@@ -2,11 +2,12 @@ import React from 'react';
 import { SidebarNavigation } from 'sidebar/SidebarNavigation';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { Footer } from './Footer/Footer';
 
 export const Sidebar = () => {
   const { kubeconfig } = useMicrofrontendContext();
-
   if (!kubeconfig) return null;
+
   return (
     <aside>
       <section>
@@ -15,7 +16,7 @@ export const Sidebar = () => {
         </ErrorBoundary>
       </section>
       <section>
-        <footer> </footer>
+        <Footer />
       </section>
     </aside>
   );
