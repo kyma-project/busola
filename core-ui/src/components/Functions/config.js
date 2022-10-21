@@ -47,8 +47,6 @@ const jsCodeAndDeps = {
 };
 
 const defaultCodeAndDeps = {
-  nodejs10: { ...jsCodeAndDeps },
-  nodejs12: { ...jsCodeAndDeps },
   nodejs14: { ...jsCodeAndDeps },
   nodejs16: { ...jsCodeAndDeps },
   python39: {

@@ -10,7 +10,6 @@ describe('prettyRuntime', () => {
     ['python39', 'Python 3.9'],
     ['nodejs16', 'Node.js 16'],
     ['nodejs14', 'Node.js 14'],
-    ['nodejs12', 'Node.js 12 - Deprecated'],
     [undefined, 'Unknown: undefined'],
     [null, 'Unknown: null'],
     ['custom-one', 'Unknown: custom-one'],
@@ -25,7 +24,6 @@ describe('runtimeToMonacoEditorLang', () => {
     ['python39', { language: 'python', dependencies: 'plaintext' }],
     ['nodejs16', { language: 'javascript', dependencies: 'json' }],
     ['nodejs14', { language: 'javascript', dependencies: 'json' }],
-    ['nodejs12', { language: 'javascript', dependencies: 'json' }],
     ['', { language: 'plaintext', dependencies: 'plaintext' }],
     [undefined, { language: 'plaintext', dependencies: 'plaintext' }],
     [null, { language: 'plaintext', dependencies: 'plaintext' }],
@@ -48,15 +46,6 @@ describe('getDefaultDependencies', () => {
 }`,
     ],
     [
-      'other-test-name',
-      'nodejs12',
-      `{ 
-  "name": "other-test-name",
-  "version": "1.0.0",
-  "dependencies": {}
-}`,
-    ],
-    [
       'yet-another-test-name',
       'nodejs16',
       `{ 
@@ -67,9 +56,8 @@ describe('getDefaultDependencies', () => {
     ],
     [null, 'python39', ''],
     [undefined, 'nodejs14', ''],
-    [undefined, 'nodejs12', ''],
     [undefined, 'nodejs16', ''],
-    ['', 'nodejs12', ``],
+    ['', 'nodejs16', ``],
   ])('.getDefaultDependencies(%s, %s)', (name, runtime, expected) => {
     const result = getDefaultDependencies(name, runtime);
     expect(result).toEqual(expected);
