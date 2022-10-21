@@ -1,8 +1,12 @@
 import React from 'react';
+import { predefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'DnsProviders';
 export const namespaced = true;
 export const resourceI18Key = 'dnsproviders.title';
+export const apiGroup = 'dns.gardener.cloud';
+export const apiVersion = 'v1alpha1';
+export const category = predefinedCategories.configuration;
 
 export const List = React.lazy(() => import('./DnsProviderList'));
 export const Details = React.lazy(() => import('./DnsProviderDetails'));

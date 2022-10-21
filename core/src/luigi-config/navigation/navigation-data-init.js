@@ -204,6 +204,7 @@ export async function createNavigation() {
 
     // we assume all users can make SelfSubjectRulesReview request
     const activeCluster = getActiveCluster();
+
     const permissionSet = await fetchPermissions(
       authData,
       getCurrentContextNamespace(activeCluster?.kubeconfig),
