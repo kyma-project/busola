@@ -17,7 +17,7 @@ export const doesResourceExist = ({
 };
 
 export const doesUserHavePermission = (
-  permissions = ['get', 'list'],
+  permissions = ['list'],
   resource,
   permissionSet,
 ) => {
