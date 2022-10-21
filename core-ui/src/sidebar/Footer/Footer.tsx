@@ -12,10 +12,10 @@ export function Footer() {
     <footer>
       <div>
         {legalLinks.map(legalLink => (
-          <Link url={legalLink.link} text={legalLink.label} className=""></Link>
+          <Link url={legalLink.link} text={legalLink.label} />
         ))}
         <p>{t('common.labels.version')}</p>
-        <Link url={githubLink} text={busolaVersion} className="" />
+        <Link url={githubLink} text={busolaVersion} />
       </div>
     </footer>
   );
