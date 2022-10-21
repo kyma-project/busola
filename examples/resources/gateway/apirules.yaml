@@ -134,12 +134,8 @@ data:
           name: service.port
     - simple: true
       var: accessToGateways
-      widget: Text
+      # widget: Text
       dynamicValue: $not($exists($relatedGateways().error))
-    - simple: true
-      var: notAccessToGateways
-      widget: Text
-      dynamicValue: $exists($relatedGateways().error)
     - simple: true
       required: true
       path: spec.gateway
@@ -150,20 +146,22 @@ data:
         group: networking.istio.io
         version: v1beta1        
       # visibility: $accessToGateways
-      # filter: ($contains($item.metadata.namespace, $root.metadata.namespace) or $contains($item.metadata.namespace, 'kyma-system'))
       toInternal:  '($values := $split($, "."); { "namespace": $values[1], "name": $values[0] })'
       toExternal: 'name & "." & namespace & ".svc.cluster.local"'
     - simple: true
       var: gatewaysString
-      widget: Text
+      # widget: Text
       dynamicValue: $string($relatedGateways())
+    - simple: true
+      var: notAccessToGateways
+      # widget: Text
+      dynamicValue: $exists($relatedGateways().error)
     - simple: true
       required: true
       path: spec.gateway
       name: gateway
       inputInfo: inputInfo.gateway
       # visibility: $notAccessToGateways
-      # placeholder: placeholder.gateway
     - simple: true
       required: true
       path: spec.host
