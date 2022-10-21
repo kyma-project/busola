@@ -15,20 +15,16 @@ if (!structure.path && !structure.children && !Array.isArray(structure)) {
 
 If user makes an error by forgetting `path` in a widget
 
-```json
-{
-  "type": "boolean",
-  "name": "isSecretRecipe"
-}
+```yaml
+type: boolean
+name: isSecretRecipe
 ```
 
 he will see a notification like:
 
-```
+```yaml
 Your extension configuration is incorrect.
 A widget lacks one of the required properties, add either "path" or "children".
-    {
-    "type": "boolean",
-    "name": "isSecretRecipe"
-    }
+    type: boolean
+    name: isSecretRecipe
 ```
