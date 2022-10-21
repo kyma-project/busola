@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import jsyaml from 'js-yaml';
 import { useTranslation, TFunction } from 'react-i18next';
+import jsyaml from 'js-yaml';
 
 const BUSOLA_GITHUB_REPOSITORY_LINK = 'https://github.com/kyma-project/busola';
 const BUSOLA_GITHUB_PULLS_LINK = 'https://github.com/kyma-project/busola';
@@ -48,6 +48,7 @@ export const useGetBusolaVersionDetails = (): BusolaVersionDetails => {
     const getVersion = async () => {
       const busolaVersion = await getBusolaVersion(t);
       const githubLink = createGithubLink(busolaVersion);
+
       setVersionDetails({
         busolaVersion,
         githubLink,
@@ -55,7 +56,6 @@ export const useGetBusolaVersionDetails = (): BusolaVersionDetails => {
     };
 
     getVersion();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
