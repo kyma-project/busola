@@ -48,9 +48,10 @@
 
 .key {
   display: inline;
-  background: #e1e1e1;
+  background: var(--sapNeutralColor);
   padding-right: 4px;
   padding-left: 3px;
   border-radius: 2px;
   font-weight: bold;
+  color: var(--sapNeutralBackground);
 }
