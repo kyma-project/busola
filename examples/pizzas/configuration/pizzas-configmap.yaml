@@ -8,284 +8,215 @@ metadata:
     busola.io/extension: resource
     busola.io/extension-version: '0.5'
 data:
-  details: |
-    {
-      "header": [
-        {
-          "name": "Sauce",
-          "source": "spec.sauce"
-        },
-        {
-          "name": "Controlled By",
-          "source": "spec.ownerReferences",
-          "widget": "ControlledBy",
-          "kindOnly": true,
-          "placeholder": "---"
-        },
-        {
-          "name": "Toppings",
-          "source": "$join(spec.toppings.name, ', ')"
-        },
-        {
-          "name": "Owner References",
-          "widget": "ResourceLink",
-          "source": "'Go to ' & $item.spec.ownerReferences[0].kind & ' ' & $item.spec.ownerReferences[0].name",
-          "resource": {
-            "name": "$item.spec.ownerReferences[0].name",
-            "namespace": "$root.metadata.namespace",
-            "kind": "$item.spec.ownerReferences[0].kind"
-          }
-        }
-      ],
-      "body": [
-        {
-          "widget": "Columns",
-          "children": [
-            {
-              "name": "Summary",
-              "widget": "Panel",
-              "children": [
-                {
-                  "name": "State",
-                  "source": "status.messages[-1].state",
-                  "widget": "Badge"
-                },
-                {
-                  "name": "Message",
-                  "source": "status.messages[-1].message"
-                },
-                { "name": "Toppings", "source": "$join(spec.toppings.name, ', ')" },
-                { "name": "Toppings price", "source": "$sum(spec.toppings.price)" }
-              ]
-            },
-            {
-              "name": "Toppings",
-              "source": "spec.toppings",
-              "widget": "Table",
-              "collapsible": [{"name": "Quantity", "source": "quantity" }],
-              "children": [
-                { "name": "Name", "search": true, "source": "name", "sort": true },
-                { "name": "Price ($)", "source": "price",
-                "search": {
-                  "searchFunction": "$filter($item.price, function($p){$p > $number($input)})"
-                },
-                "sort": { "default": true, "compareFunction": "$second -$first"}
-              }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "Pizza's recipe secret",
-          "widget": "ResourceList",
-          "source": "$secretRecipe()",
-          "sort": [
-            {
-              "source": "type",
-              "default": true,
-            },
-          ],
-        },
-        {
-          "name": "columns",
-          "widget": "Columns",
-          "children": [
-            {
-              "name": "Comments",
-              "widget": "Panel",
-              "children": [
-                {
-                  "name": "Comments",
-                  "widget": "JoinedArray",
-                  "source": "spec.comments",
-                  "separator": " || "
-                }
-              ]
-            },
-            {
-              "name": "Description",
-              "widget": "Panel",
-              "children": [{ "source": "spec.description", "name": "Description" }]
-
-            }
-          ]
-        }
-      ],
-      "resourceGraph": {
-        "colorVariant": 2,
-        "dataSources": [
-          {
-            "source": "relatedSecrets"
-          },
-          {
-            "source": "relatedPizzaOrders"
-          }
-        ]
-      }
-    }
+  details: |-
+    header:
+      - name: Sauce
+        source: spec.sauce
+      - name: Controlled By
+        source: spec.ownerReferences
+        widget: ControlledBy
+        kindOnly: true
+        placeholder: '---'
+      - name: Toppings
+        source: $join(spec.toppings.name, ', ')
+      - name: Owner References
+        widget: ResourceLink
+        source: >-
+          'Go to ' & $item.spec.ownerReferences[0].kind & ' ' &
+          $item.spec.ownerReferences[0].name
+        resource:
+          name: $item.spec.ownerReferences[0].name
+          namespace: $root.metadata.namespace
+          kind: $item.spec.ownerReferences[0].kind
+    body:
+      - widget: Columns
+        children:
+          - name: Summary
+            widget: Panel
+            children:
+              - name: State
+                source: status.messages[-1].state
+                widget: Badge
+              - name: Message
+                source: status.messages[-1].message
+              - name: Toppings
+                source: $join(spec.toppings.name, ', ')
+              - name: Toppings price
+                source: $sum(spec.toppings.price)
+          - name: Toppings
+            source: spec.toppings
+            widget: Table
+            collapsible:
+              - name: Quantity
+                source: quantity
+            children:
+              - name: Name
+                search: true
+                source: name
+                sort: true
+              - name: Price ($)
+                source: price
+                search:
+                  searchFunction: $filter($item.price, function($p){$p > $number($input)})
+                sort:
+                  default: true
+                  compareFunction: $second -$first
+      - name: Pizza's recipe secret
+        widget: ResourceList
+        source: $secretRecipe()
+        sort:
+          - source: type
+            default: true
+      - name: columns
+        widget: Columns
+        children:
+          - name: Comments
+            widget: Panel
+            children:
+              - name: Comments
+                widget: JoinedArray
+                source: spec.comments
+                separator: ' || '
+          - name: Description
+            widget: Panel
+            children:
+              - source: spec.description
+                name: Description
+    resourceGraph:
+      colorVariant: 2
+      dataSources:
+        - source: relatedSecrets
+        - source: relatedPizzaOrders
   form: |-
-    [
-      { "path": "spec.description", "widget": "Text" , "simple": true},
-      { "path": "spec.sauce", 
-        "widget": "Text" , 
-        "simple": true, 
-        "placeholder": "Type or choose from the dropdown.",
-        "inputInfo": "Supported options are GARLIC and TOMATO."
-      },
-      {
-        "path": "spec.toppings",
-        "widget": "GenericList",
-        "simple": true,
-        "children": [
-          { "path": "[].name", "simple": true},
-          { "path": "[].price", "simple": true},
-          { "path": "[].quantity", "simple": true}
-        ]
-      },
-      {
-        "path": "spec.comments",
-        "widget": "SimpleList",
-        "simple": true,
-        "children": [{ "path": "[]" }]
-      },
-      {
-        "path": "spec.recipeSecret",
-        "widget": "Resource",
-        "resource": {
-          "kind": "Secret",
-          "scope": "namespace",
-          "version": "v1"
-        },
-        "simple": true
-      },
-      {
-        "path": "spec.ownerReferences",
-        "widget": "GenericList",
-        "simple": true,
-        "children": [
-          { "path": "[].apiVersion", "simple": true},
-          { "path": "[].kind", "simple": true},
-          { "path": "[].name", "simple": true}
-        ]
-      }
-    ]
+    - path: spec.description
+      widget: Text
+      simple: true
+    - path: spec.sauce
+      widget: Text
+      simple: true
+      placeholder: Type or choose from the dropdown.
+      inputInfo: Supported options are GARLIC and TOMATO.
+    - path: spec.toppings
+      widget: GenericList
+      simple: true
+      children:
+        - path: '[].name'
+          simple: true
+        - path: '[].price'
+          simple: true
+        - path: '[].quantity'
+          simple: true
+    - path: spec.comments
+      widget: SimpleList
+      simple: true
+      children:
+        - path: '[]'
+    - path: spec.recipeSecret
+      widget: Resource
+      resource:
+        kind: Secret
+        scope: namespace
+        version: v1
+      simple: true
+    - path: spec.ownerReferences
+      widget: GenericList
+      simple: true
+      children:
+        - path: '[].apiVersion'
+          simple: true
+        - path: '[].kind'
+          simple: true
+        - path: '[].name'
+          simple: true
   list: |-
-    [
-      { "name": "Description","search": true,  "source": "spec.description", "sort": { "compareFunction": "$compareStrings($second, $first)" } },
-      { "name": "State", "source": "status.messages[-1].state", "widget": "Badge" },
-      { "name": "Toppings price", "source": "$sum(spec.toppings.price)", "sort":{"default": true},
-      "search": true}
-    ]
+    - name: Description
+      search: true
+      source: spec.description
+      sort:
+        compareFunction: $compareStrings($second, $first)
+    - name: State
+      source: status.messages[-1].state
+      widget: Badge
+    - name: Toppings price
+      source: $sum(spec.toppings.price)
+      sort:
+        default: true
+      search: true
   dataSources: |-
-    {
-      "secretRecipe": {
-        "resource": {
-          "kind": "Secret",
-          "version": "v1"
-        },
-        "filter": "$item.metadata.name = $root.spec.recipeSecret"
-      },
-      "relatedSecrets": {
-        "resource": {
-            "kind": "Secret",
-            "version": "v1",
-        },
-        "filter": "$root.spec.recipeSecret = $item.metadata.name"
-      },
-      "relatedPizzaOrders": {
-        "resource": {
-          "kind": "PizzaOrder",
-          "group": "busola.example.com",
-          "version": "v1"
-        },
-        "filter": "$item.spec.pizzas[name = $root.metadata.name and namespace = $root.metadata.namespace]",
-      }
-    }
+    secretRecipe:
+      resource:
+        kind: Secret
+        version: v1
+      filter: $item.metadata.name = $root.spec.recipeSecret
+    relatedSecrets:
+      resource:
+        kind: Secret
+        version: v1
+      filter: $root.spec.recipeSecret = $item.metadata.name
+    relatedPizzaOrders:
+      resource:
+        kind: PizzaOrder
+        group: busola.example.com
+        version: v1
+      filter: >-
+        $item.spec.pizzas[name = $root.metadata.name and namespace =
+        $root.metadata.namespace]
   general: |-
-    {
-      "resource": {
-        "kind": "Pizza",
-        "group": "busola.example.com",
-        "version": "v1"
-      },
-      "name": "Pizzas",
-      "category": "Lunch",
-      "scope": "namespace",
-      "description": "Customize the Pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
-    }
+    resource:
+      kind: Pizza
+      group: busola.example.com
+      version: v1
+    name: Pizzas
+    category: Lunch
+    scope: namespace
+    description: >-
+      Customize the Pizza view further with the Busola {{[extensibility
+      docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}.
   presets: |-
-    [
-      {
-        "name": "Margherita",
-        "default": true,
-        "value": {
-          "metadata": {
-            "name": "margherita",
-            "labels": {
-              "app.kubernetes.io/name": "margherita",
-            },
-          },
-          "spec": {
-            "comments": [
-              "Please, make my pizza quickly.",
-              "Margherita is a delicious pizza!",
-            ],
-            "description": "Margherita is a simple, vegetarian pizza.",
-            "sauce": "GARLIC",
-            "toppings": [
-              {
-                "name": "Tomato sauce",
-                "price": 3,
-                "quantity": 1,
-              },
-              {
-                "name": "Cheese",
-                "price": 5,
-                "quantity": 4,
-              },
-              {
-                "name": "Basil",
-                "price": 7,
-                "quantity": 6,
-              },
-            ],
-          }
-        }
-      },
-      {
-        "name": "Diavola",
-        "value": {
-          "metadata": {
-            "name": "diavola",
-            "labels": {
-              "app.kubernetes.io/name": "diavola",
-            },
-          },
-          "spec": {
-            "comments": [
-              "I would like the spiciest pizza.",
-              "I would like to ask for a discount for students.",
-            ],
-            "description": "Diavola is such a spicy pizza, it includes hot salami and pickled jalapeños!",
-            "sauce": "TOMATO",
-            "toppings": [
-              {
-                "name": "Hot salami",
-                "price": 10,
-                "quantity": 5,
-              },
-              {
-                "name": "Pickled jalapeños",
-                "price": 18,
-                "quantity": 10,
-              },
-              {
-                "name": "Cheese",
-                "price": 4,
-                "quantity": 5,
-              },
-            ],
-          }
-        }
-      }
-    ]
+    - name: Margherita
+      default: true
+      value:
+        metadata:
+          name: margherita
+          labels:
+            app.kubernetes.io/name: margherita
+        spec:
+          comments:
+            - Please, make my pizza quickly.
+            - Margherita is a delicious pizza!
+          description: Margherita is a simple, vegetarian pizza.
+          sauce: GARLIC
+          toppings:
+            - name: Tomato sauce
+              price: 3
+              quantity: 1
+            - name: Cheese
+              price: 5
+              quantity: 4
+            - name: Basil
+              price: 7
+              quantity: 6
+    - name: Diavola
+      value:
+        metadata:
+          name: diavola
+          labels:
+            app.kubernetes.io/name: diavola
+        spec:
+          comments:
+            - I would like the spiciest pizza.
+            - I would like to ask for a discount for students.
+          description: >-
+            Diavola is such a spicy pizza, it includes hot salami and pickled
+            jalapeños!
+          sauce: TOMATO
+          toppings:
+            - name: Hot salami
+              price: 10
+              quantity: 5
+            - name: Pickled jalapeños
+              price: 18
+              quantity: 10
+            - name: Cheese
+              price: 4
+              quantity: 5

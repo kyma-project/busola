@@ -7,10 +7,12 @@ import { stringifyIfBoolean } from 'shared/utils/helpers';
 import { useGetTranslation, useGetPlaceholder } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
 import { widgets, valuePreprocessors } from './index';
+import { CopiableText } from 'shared/components/CopiableText/CopiableText';
 
 export const SimpleRenderer = ({ children }) => {
   return children;
 };
+SimpleRenderer.copyable = true;
 
 export function InlineWidget({ children, value, structure, ...props }) {
   const { widgetT } = useGetTranslation();
@@ -29,13 +31,56 @@ export function InlineWidget({ children, value, structure, ...props }) {
     <LayoutPanelRow name={widgetT(structure)} value={displayValue} {...props} />
   );
 }
+InlineWidget.copyable = Renderer => Renderer?.copyable;
+InlineWidget.copyFunction = (props, Renderer, defaultCopyFunction) =>
+  Renderer?.copyFunction
+    ? Renderer.copyFunction(props, Renderer, defaultCopyFunction)
+    : defaultCopyFunction(props, Renderer, defaultCopyFunction);
 
 function SingleWidget({ inlineRenderer, Renderer, ...props }) {
   const InlineRenderer = inlineRenderer || SimpleRenderer;
 
-  return Renderer.inline && InlineRenderer ? (
+  const CopyableWrapper = ({ children }) => {
+    const isRendererCopyable =
+      typeof Renderer.copyable === 'function'
+        ? Renderer.copyable(Renderer)
+        : Renderer.copyable;
+
+    const jsonata = useJsonata({
+      resource: props.originalResource,
+      scope: props.scope,
+      value: props.value,
+      arrayItems: props.arrayItems,
+    });
+
+    if (!props.structure.copyable || !isRendererCopyable) return children;
+
+    const defaultCopyFunction = ({ value }) =>
+      typeof value === 'object' ? JSON.stringify(value) : value;
+
+    const copyFunction =
+      typeof Renderer.copyFunction === 'function'
+        ? Renderer.copyFunction
+        : defaultCopyFunction;
+
+    const textToCopy = copyFunction(
+      props,
+      Renderer,
+      defaultCopyFunction,
+      jsonata,
+    );
+    return (
+      <CopiableText compact textToCopy={textToCopy} disabled={!textToCopy}>
+        {children}
+      </CopiableText>
+    );
+  };
+
+  return Renderer.inline ? (
     <InlineRenderer {...props}>
-      <Renderer {...props} />
+      <CopyableWrapper structure={props.structure} value={props.value}>
+        <Renderer {...props} />
+      </CopyableWrapper>
     </InlineRenderer>
   ) : (
     <Renderer {...props} />
