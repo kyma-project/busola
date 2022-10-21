@@ -5,8 +5,10 @@ import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { Footer } from './Footer/Footer';
 
 export const Sidebar = () => {
-  const { kubeconfig } = useMicrofrontendContext();
-  if (!kubeconfig) return null;
+  const { features } = useMicrofrontendContext();
+
+  // turn on the feature locally to work on the new Navigation
+  if (!features?.REACT_NAVIGATION?.isEnabled) return null;
 
   return (
     <aside>

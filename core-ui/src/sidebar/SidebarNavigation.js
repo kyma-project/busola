@@ -5,8 +5,6 @@ import { navigationNodesSelector } from 'state/navigation/navigationNodesSelecto
 export const SidebarNavigation = () => {
   const navigationNodes = useRecoilValueLoadable(navigationNodesSelector);
 
-  // return <></>;
-
   switch (navigationNodes.state) {
     case 'hasValue':
       return (
