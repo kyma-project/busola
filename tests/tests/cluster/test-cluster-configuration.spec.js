@@ -89,7 +89,9 @@ context('Test Cluster configuration', () => {
       .contains('10')
       .click();
 
-    cy.get('[aria-label="close"]').click();
+    cy.getIframeBody()
+      .contains('Close')
+      .click();
 
     cy.getIframeBody()
       .find('[role=row]')
