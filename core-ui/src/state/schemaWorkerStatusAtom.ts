@@ -1,6 +1,6 @@
 import { atom, RecoilState } from 'recoil';
 
-type OpenApiSchemasState = {
+type SchemaWorkerStatusState = {
   areSchemasComputed: boolean;
   schemasError: null | Error;
 };
@@ -10,9 +10,9 @@ const defaultValue = {
   schemasError: null,
 };
 
-export const openapiSchemasState: RecoilState<OpenApiSchemasState> = atom<
-  OpenApiSchemasState
+export const schemaWorkerStatusState: RecoilState<SchemaWorkerStatusState> = atom<
+  SchemaWorkerStatusState
 >({
-  key: 'openapiSchemasState',
+  key: 'schemaWorkerStatusState',
   default: defaultValue,
 });
