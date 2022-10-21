@@ -4,10 +4,6 @@ export const filterScopeNodes = (
   navList: NavNode[],
   scope: 'cluster' | 'namespace',
 ) => {
-  if (!(scope === 'cluster' || scope === 'namespace')) {
-    console.error('Navigation scope is not defined.');
-    return [];
-  }
   const isNamespace = scope === 'namespace';
   const isCluster = scope === 'cluster';
 
