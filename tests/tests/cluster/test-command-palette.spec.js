@@ -205,6 +205,10 @@ context('Test Command Palette navigation', () => {
     cy.getIframeBody()
       .contains('Cluster interaction')
       .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Close')
+      .click();
   });
 
   it('Disables Command Palette if a modal is present', () => {
@@ -213,10 +217,6 @@ context('Test Command Palette navigation', () => {
     cy.getModalIframeBody()
       .find('[aria-label=command-palette-search]')
       .should('not.exist');
-
-    cy.getIframeBody()
-      .contains('Close')
-      .click();
 
     cy.getIframeBody().contains('Cluster Details');
 
