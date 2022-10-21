@@ -120,8 +120,9 @@ export async function getCustomResources(authData) {
   if (features.EXTENSIBILITY?.isEnabled) {
     customResources[clusterName] = [
       ...busolaOwnExtConfigs,
-      ...customResources[clusterName],
+      ...customResources[clusterName].flat(),
     ];
+
     const targetClusterCustomResources = await loadTargetClusterCRs(authData);
 
     const additionalExtResources = Object.values(targetClusterCustomResources);
@@ -131,6 +132,7 @@ export async function getCustomResources(authData) {
       ...additionalExtResources,
     ];
   }
+
   return customResources[clusterName];
 }
 
