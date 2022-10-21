@@ -178,9 +178,6 @@ data:
           name: accessStrategies 
           widget: GenericList 
           children:
-            - var: handlerType
-              widget: Text
-              dynamicValue: $item.handler
             - path: '[].config'
               name: accessStrategies.config
               widget: KeyValuePair
@@ -191,54 +188,54 @@ data:
             - required: true
               path: '[].handler'
               name: accessStrategies.handler
-              keyEnum:
+              enum:
                 - allow
                 - noop
                 - jwt
                 - oauth2_introspection
-        # - required: true
-        #   path: '[].methods'
-        #   name: rules.methods 
-        #   widget: SimpleList
-        #   children:
-        #     path: '[]' 
-        #     enum:
-        #       - GET
-        #       - POST
-        #       - PUT
-        #       - DELETE
-        #       - PATCH
-        #       - HEAD
-        # - path: '[].mutators' 
-        #   name: mutators 
-        #   widget: GenericList 
-        #   children:
-        #     - path: '[].config'
-        #       name: accessStrategies.config
-        #       widget: KeyValuePair
-        #     - required: true
-        #       path: '[].handler'
-        #       name: accessStrategies.handler
-        # - simple: true
-        #   required: true
-        #   path: [].path
-        #   name: path
-        # - path: [].service 
-        #   name: service 
-        #   widget: FormGroup
-        #   children:
-        #     - simple: true
-        #       required: true
-        #       path: name
-        #       name: service-name
-        #       widget: Resource
-        #       resource:
-        #         kind: Service
-        #         version: v1
-        #         scope: namespace
-        #     - simple: true
-        #       path: port 
-        #       name: service.port
+        - required: true
+          path: '[].methods'
+          name: rules.methods 
+          widget: SimpleList
+          children:
+            - path: '[]' 
+              enum:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+                - PATCH
+                - HEAD
+        - path: '[].mutators' 
+          name: mutators 
+          widget: GenericList 
+          children:
+            - path: '[].config'
+              name: accessStrategies.config
+              widget: KeyValuePair
+            - required: true
+              path: '[].handler'
+              name: accessStrategies.handler
+        - simple: true
+          required: true
+          path: '[].path'
+          name: path
+        - path: '[].service' 
+          name: service 
+          widget: FormGroup
+          children:
+            - simple: true
+              required: true
+              path: name
+              name: service-name
+              widget: Resource
+              resource:
+                kind: Service
+                version: v1
+                scope: namespace
+            - simple: true
+              path: port 
+              name: service.port
   general: >-
     resource:
       kind: APIRule
