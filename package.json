@@ -25,7 +25,8 @@
     "jsonata": "^1.8.6",
     "jsonpath": "^1.1.1",
     "jwt-decode": "^3.1.2",
-    "lodash": "^4.17.19"
+    "lodash": "^4.17.19",
+    "react-i18next": "^12.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.0",
