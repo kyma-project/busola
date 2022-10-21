@@ -5,7 +5,7 @@ import { useGetLegalLinks } from './useGetLegalLinks';
 export function Footer() {
   const { githubLink, busolaVersion } = useGetBusolaVersionDetails();
   const legalLinks = useGetLegalLinks();
-  console.log(legalLinks);
+
   return (
     <footer>
       <div>
