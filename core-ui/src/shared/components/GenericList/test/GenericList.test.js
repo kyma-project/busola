@@ -11,19 +11,19 @@ describe('GenericList', () => {
 
   const mockEntries = [
     {
-      id: '1',
+      id: '11',
       name: 'first_entry',
       description: 'testdescription1',
       metadata: { labels: { label1: 'val1' } },
     },
     {
-      id: '2',
+      id: '22',
       name: 'second_entry',
       description: 'testdescription2',
       metadata: { labels: { label1: 'val2' } },
     },
     {
-      id: '3',
+      id: '33',
       name: 'THIRD_ENTRY',
       description: 'testdescription3',
       metadata: { labels: { label1: 'otherval' } },
@@ -164,7 +164,7 @@ describe('GenericList', () => {
     const mockCollapseEntryRenderer = entry => ({
       cells: [entry.id, entry.name, entry.description],
       collapseContent: <td colSpan="4">{entry.name}</td>,
-      showCollapseControl: entry.id !== '3',
+      showCollapseControl: entry.id !== '33',
     });
 
     const { getByText, getAllByTestId } = render(
@@ -177,7 +177,7 @@ describe('GenericList', () => {
 
     mockEntries.forEach(entry =>
       Object.keys(entry)
-        .filter(key => key != 'metadata')
+        .filter(key => key !== 'metadata')
         .forEach(key => getByText(entry[key])),
     );
 
@@ -202,7 +202,7 @@ describe('GenericList', () => {
       withCollapseControl: false,
     });
 
-    const { getByText, getAllByTestId, queryAllByTestId } = render(
+    const { getAllByTestId, queryAllByTestId } = render(
       <GenericList
         entries={mockEntries}
         headerRenderer={mockHeaderRenderer}
