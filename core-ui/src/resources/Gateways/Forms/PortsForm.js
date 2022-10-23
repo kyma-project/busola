@@ -35,6 +35,7 @@ export const PortsForm = ({ server = {}, servers, setServers }) => {
       defaultOpen
       resource={server}
       setResource={() => setServers([...servers])}
+      nestingLevel={1}
     >
       <ResourceForm.FormField
         required

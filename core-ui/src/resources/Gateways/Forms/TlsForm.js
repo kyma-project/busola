@@ -30,6 +30,7 @@ const HttpTlsForm = ({ server, servers, setServers }) => {
       resource={server}
       defaultOpen={true}
       setResource={() => setServers([...servers])}
+      nestingLevel={1}
     >
       <ResourceForm.FormField
         label={t('gateways.create-modal.advanced.tls.https-redirect')}
@@ -107,6 +108,7 @@ export const TlsForm = ({ server = {}, servers, setServers, isAdvanced }) => {
       resource={server}
       setResource={() => setServers([...servers])}
       isAdvanced={isAdvanced}
+      nestingLevel={1}
     >
       <ResourceForm.FormField
         tooltipContent={t('gateways.create-modal.advanced.mode-tooltip')}

@@ -9,14 +9,15 @@ export function IssuerTypeDropdown({ type, setType }) {
     { key: 'acme', text: t('issuers.acme') },
   ];
   return (
-    <Dropdown
-      compact
-      options={options}
-      selectedKey={type}
-      onSelect={(_, selected) => setType(selected.key)}
-      placeholder={t('issuers.placeholders.type')}
-      fullWidth
-      required
-    />
+    <div className="fd-col fd-col-md--11">
+      <Dropdown
+        compact
+        options={options}
+        selectedKey={type}
+        onSelect={(_, selected) => setType(selected.key)}
+        placeholder={t('issuers.placeholders.type')}
+        required
+      />
+    </div>
   );
 }

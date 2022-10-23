@@ -22,6 +22,7 @@ export const HostsForm = ({ server = {}, servers, setServers }) => {
       inputProps={{
         placeholder: t('gateways.create-modal.advanced.placeholders.hosts'),
       }}
+      nestingLevel={1}
       defaultOpen
     />
   );
