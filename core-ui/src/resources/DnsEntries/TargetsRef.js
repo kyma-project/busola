@@ -155,7 +155,7 @@ export function TargetsRef({ resource: dnsEntry, setResource: setDnsEntry }) {
         propertyPath="$.spec.targets"
         inputs={[
           ({ value, index, setInternalValue }) => (
-            <div className="fd-col fd-col-md--11" key={index}>
+            <div className="fd-col fd-col-md--2" key={index}>
               <ResourceForm.Label
                 tooltipContent={
                   value?.isCname
@@ -165,7 +165,7 @@ export function TargetsRef({ resource: dnsEntry, setResource: setDnsEntry }) {
               >
                 {t('dnsentries.labels.use-cname')}
               </ResourceForm.Label>
-              <div>
+              <div className="fd-col fd-col-md--9">
                 <Switch
                   key={`targets-switch-${index}`}
                   compact
@@ -180,7 +180,7 @@ export function TargetsRef({ resource: dnsEntry, setResource: setDnsEntry }) {
           ({ value, setValue, index }) => {
             if (value?.isCname) {
               return (
-                <div className="fd-col fd-col-md--11" key={index}>
+                <div className="fd-col fd-col-md--9" key={index}>
                   <FormInput
                     key={`targets-input-${index}`}
                     compact
@@ -194,7 +194,7 @@ export function TargetsRef({ resource: dnsEntry, setResource: setDnsEntry }) {
               );
             } else {
               return (
-                <div className="fd-col fd-col-md--11" key={index}>
+                <div className="fd-col fd-col-md--9" key={index}>
                   <ComboboxInput
                     compact
                     id={'targets-ref'}
