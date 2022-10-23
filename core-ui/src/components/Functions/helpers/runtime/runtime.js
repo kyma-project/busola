@@ -2,23 +2,19 @@ import { CONFIG } from 'components/Functions/config';
 import { formatMessage } from 'components/Functions/helpers/misc';
 
 import {
-  PRETTY_RUNTIME_NODEJS12_NAME,
   PRETTY_RUNTIME_NODEJS14_NAME,
   PRETTY_RUNTIME_NODEJS16_NAME,
   PRETTY_RUNTIME_PYTHON39_NAME,
 } from '../../constants';
 
-export const nodejs12 = 'nodejs12';
 export const nodejs14 = 'nodejs14';
 export const nodejs16 = 'nodejs16';
-export const nodejs10 = 'nodejs10';
 export const python39 = 'python39';
 
 export const functionAvailableLanguages = {
   // order of those keys is the same as order of available runtimes shown in Create Function Modal
   [nodejs16]: PRETTY_RUNTIME_NODEJS16_NAME,
   [nodejs14]: PRETTY_RUNTIME_NODEJS14_NAME,
-  [nodejs12]: PRETTY_RUNTIME_NODEJS12_NAME,
   [python39]: PRETTY_RUNTIME_PYTHON39_NAME,
 };
 
@@ -34,8 +30,6 @@ export const runtimeToMonacoEditorLang = runtime => {
       };
     case nodejs16:
     case nodejs14:
-    case nodejs12:
-    case nodejs10:
       return {
         language: 'javascript',
         dependencies: 'json',
@@ -54,8 +48,6 @@ export const getDefaultDependencies = (name, runtime) => {
       return CONFIG.defaultFunctionCodeAndDeps.python39.deps;
     case nodejs16:
     case nodejs14:
-    case nodejs12:
-    case nodejs10:
       return !name
         ? ''
         : formatMessage(CONFIG.defaultFunctionCodeAndDeps.nodejs14.deps, {
@@ -68,10 +60,8 @@ export const getDefaultDependencies = (name, runtime) => {
 
 export const checkDepsValidity = (runtime, deps) => {
   switch (runtime) {
-    case nodejs10:
     case nodejs16:
     case nodejs14:
-    case nodejs12:
       return deps.length === 0 || isJson(deps);
     default:
       return true;

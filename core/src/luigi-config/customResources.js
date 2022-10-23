@@ -41,21 +41,6 @@ async function getBuiltinCustomResources() {
 
 let customResources = {};
 
-async function loadBusolaClusterCRs() {
-  try {
-    const cacheBuster = '?cache-buster=' + Date.now();
-
-    const response = await fetch(
-      `/assets/customResources/customResources.json${cacheBuster}`,
-    );
-
-    return await response.json();
-  } catch (e) {
-    console.warn(`Cannot load customResources.json: `, e);
-    return null;
-  }
-}
-
 async function loadTargetClusterCRs(authData) {
   const activeCluster = getActiveCluster();
   const namespace =
@@ -135,21 +120,19 @@ export async function getCustomResources(authData) {
   if (features.EXTENSIBILITY?.isEnabled) {
     customResources[clusterName] = [
       ...busolaOwnExtConfigs,
-      ...customResources[clusterName],
+      ...customResources[clusterName].flat(),
     ];
-    const clusterCustomResources = await loadBusolaClusterCRs();
+
     const targetClusterCustomResources = await loadTargetClusterCRs(authData);
 
-    const additionalExtResources = Object.values({
-      ...clusterCustomResources,
-      ...targetClusterCustomResources,
-    });
+    const additionalExtResources = Object.values(targetClusterCustomResources);
 
     customResources[clusterName] = [
       ...customResources[clusterName],
       ...additionalExtResources,
     ];
   }
+
   return customResources[clusterName];
 }
 
