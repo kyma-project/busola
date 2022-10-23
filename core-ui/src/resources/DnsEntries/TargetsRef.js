@@ -64,7 +64,7 @@ export function TargetsInput({
       </div>
       <ul className="text-array-input__list fd-col fd-col-md--8">
         {internalValue.map((entry, index) => (
-          <li key={index}>
+          <li key={index} className="fd-row">
             {inputs.map((input, i) =>
               input({
                 index: i,
@@ -73,13 +73,17 @@ export function TargetsInput({
                 setInternalValue: entry => setInternalEntry(entry, index),
               }),
             )}
-            <Button
-              compact
-              className={classnames({ hidden: isLast(index) })}
-              glyph="delete"
-              type="negative"
-              onClick={() => removeValue(index)}
-            />
+            <div className="fd-col fd-col-md--1 action-button">
+              {!isLast(index) && (
+                <Button
+                  compact
+                  glyph="delete"
+                  type="negative"
+                  option="transparent"
+                  onClick={() => removeValue(index)}
+                />
+              )}
+            </div>
           </li>
         ))}
       </ul>
@@ -151,34 +155,32 @@ export function TargetsRef({ resource: dnsEntry, setResource: setDnsEntry }) {
         propertyPath="$.spec.targets"
         inputs={[
           ({ value, index, setInternalValue }) => (
-            <div className="fd-col fd-col-md--3" key={index}>
-              <div className="fd-row form-field multi-input__row">
-                <ResourceForm.Label
-                  tooltipContent={
-                    value?.isCname
-                      ? t('dnsentries.tooltips.use-a')
-                      : t('dnsentries.tooltips.use-cname')
+            <div className="fd-col fd-col-md--11" key={index}>
+              <ResourceForm.Label
+                tooltipContent={
+                  value?.isCname
+                    ? t('dnsentries.tooltips.use-a')
+                    : t('dnsentries.tooltips.use-cname')
+                }
+              >
+                {t('dnsentries.labels.use-cname')}
+              </ResourceForm.Label>
+              <div>
+                <Switch
+                  key={`targets-switch-${index}`}
+                  compact
+                  onChange={e =>
+                    setInternalValue({ ...value, isCname: !value?.isCname })
                   }
-                >
-                  {t('dnsentries.labels.use-cname')}
-                </ResourceForm.Label>
-                <div>
-                  <Switch
-                    key={`targets-switch-${index}`}
-                    compact
-                    onChange={e =>
-                      setInternalValue({ ...value, isCname: !value?.isCname })
-                    }
-                    checked={value?.isCname}
-                  />
-                </div>
+                  checked={value?.isCname}
+                />
               </div>
             </div>
           ),
           ({ value, setValue, index }) => {
             if (value?.isCname) {
               return (
-                <div className="fd-col fd-col-md--9" key={index}>
+                <div className="fd-col fd-col-md--11" key={index}>
                   <FormInput
                     key={`targets-input-${index}`}
                     compact
@@ -192,7 +194,7 @@ export function TargetsRef({ resource: dnsEntry, setResource: setDnsEntry }) {
               );
             } else {
               return (
-                <div className="fd-col fd-col-md--9" key={index}>
+                <div className="fd-col fd-col-md--11" key={index}>
                   <ComboboxInput
                     compact
                     id={'targets-ref'}
