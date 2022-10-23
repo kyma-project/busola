@@ -16,9 +16,5 @@ export function Number({ value = '', setValue, ...props }) {
 }
 
 export function Port({ ...props }) {
-  return (
-    <div className="fd-col fd-col-md--11">
-      <Number min={1} max={65535} {...props} />
-    </div>
-  );
+  return <Number min={1} max={65535} {...props} />;
 }

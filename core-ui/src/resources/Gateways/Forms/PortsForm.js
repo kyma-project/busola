@@ -9,7 +9,12 @@ import { switchTLS } from './TlsForm';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField } from 'shared/ResourceForm/fields';
 
-export const PortsForm = ({ server = {}, servers, setServers }) => {
+export const PortsForm = ({
+  server = {},
+  servers,
+  setServers,
+  nestingLevel = 0,
+}) => {
   const { t } = useTranslation();
 
   const onProtocolSelect = (_, selected) => {
@@ -35,7 +40,7 @@ export const PortsForm = ({ server = {}, servers, setServers }) => {
       defaultOpen
       resource={server}
       setResource={() => setServers([...servers])}
-      nestingLevel={1}
+      nestingLevel={nestingLevel + 1}
     >
       <ResourceForm.FormField
         required
