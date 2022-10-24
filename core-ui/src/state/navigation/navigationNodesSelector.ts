@@ -1,5 +1,5 @@
 import { RecoilValueReadOnly, selector } from 'recoil';
-import { isEmpty } from 'lodash';
+import { isEmpty, partial } from 'lodash';
 import { resourceListSelector } from '../resourceList/resourceListSelector';
 import {
   activeNamespaceIdState,
@@ -7,18 +7,11 @@ import {
 } from '../activeNamespaceIdAtom';
 import { openapiPathIdListSelector } from '../openapi/openapiPathIdSelector';
 import { configFeaturesState } from '../configFeaturesAtom';
-import { filterExistingNodes } from './filters/filterExistingNodes';
-import { filterScopeNodes } from './filters/filterScopeNodes';
-import { filterNodesWithDisabledFeatures } from './filters/filterNodesWithDisabledFeatures';
 import { assignNodesToCategories } from './assignToCategories';
-import { filterPermittedNodes } from './filters/filterPermittedNodes';
 import { permissionSetsAtom } from '../permissionSetsAtom';
 import { Category } from './categories';
 import { NavNode } from '../types';
-import { hasCurrentScope } from './filters/hasCurrentScope';
-import { areNodeFeaturesDisabled } from './filters/areNodeFeaturesDisabled';
-import { doesNodeResourceExist } from './filters/doesNodeResourceExist';
-import { isNodeResourcePermitted } from './filters/isNodeResourcePermitted';
+import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 
 export const navigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
   Category[]
@@ -30,9 +23,10 @@ export const navigationNodesSelector: RecoilValueReadOnly<Category[]> = selector
     const openapiPathIdList = get(openapiPathIdListSelector);
     const configFeatures = get(configFeaturesState);
     const permissionSet = get(permissionSetsAtom);
+
     const areDependenciesInitialized =
-      openapiPathIdList &&
-      configFeatures &&
+      openapiPathIdList && //
+      configFeatures && //
       !isEmpty(resourceList) &&
       activeNamespaceId !== defaultNamespaceName &&
       !isEmpty(permissionSet);
@@ -41,58 +35,25 @@ export const navigationNodesSelector: RecoilValueReadOnly<Category[]> = selector
       return [];
     }
 
-    const scope = activeNamespaceId ? 'namespace' : 'cluster';
+    const scope: 'namespace' | 'cluster' = activeNamespaceId
+      ? 'namespace'
+      : 'cluster';
 
-    const allowedNodes = resourceList.filter(navNode => {
-      const currentScope = hasCurrentScope(navNode, scope);
-      const nodeFeaturesEnabledInConfig = areNodeFeaturesDisabled(
-        navNode,
-        configFeatures,
-      );
-      const nodeResourceExist = doesNodeResourceExist(
-        navNode,
-        openapiPathIdList,
-      );
-      const nodeResourcePermittedForCurrentUser = isNodeResourcePermitted(
-        navNode,
-        permissionSet,
-      );
+    const configSet = {
+      scope,
+      configFeatures,
+      openapiPathIdList,
+      permissionSet,
+    };
+    const nodeAllowedForCurrentConfigSet = partial(
+      shouldNodeBeVisible,
+      configSet,
+    );
+    const navNodes: NavNode[] = resourceList.filter(
+      nodeAllowedForCurrentConfigSet,
+    );
 
-      console.log(
-        navNode.resourceType,
-        currentScope,
-        nodeFeaturesEnabledInConfig,
-        nodeResourceExist,
-        nodeResourcePermittedForCurrentUser,
-      );
-
-      return (
-        currentScope &&
-        nodeFeaturesEnabledInConfig &&
-        nodeResourceExist &&
-        nodeResourcePermittedForCurrentUser
-      );
-    });
-
-    console.log(allowedNodes);
-    // const currentScopeNodes: NavNode[] = filterScopeNodes(resourceList, scope);
-    //
-    // const noDisabledFeaturesNodes: NavNode[] = filterNodesWithDisabledFeatures(
-    //   currentScopeNodes,
-    //   configFeatures,
-    // );
-    //
-    // const existingNodes: NavNode[] = filterExistingNodes(
-    //   noDisabledFeaturesNodes,
-    //   openapiPathIdList,
-    // );
-    //
-    // const allowedNodes: NavNode[] = filterPermittedNodes(
-    //   existingNodes,
-    //   permissionSet,
-    // );
-
-    const crdIndex = findResourceIndex(crd, allowedNodes) + 1;
+    const crdIndex = findResourceIndex(crd, navNodes) + 1;
     const crNavNode = {
       category: 'Configuration',
       resourceType: 'customresources',
@@ -104,7 +65,7 @@ export const navigationNodesSelector: RecoilValueReadOnly<Category[]> = selector
       apiVersion: 'v1',
     };
     if (crdIndex) {
-      addResource(crNavNode, crdIndex, allowedNodes);
+      addResource(crNavNode, crdIndex, navNodes);
     }
 
     //TODO
@@ -126,9 +87,7 @@ export const navigationNodesSelector: RecoilValueReadOnly<Category[]> = selector
     //   addClusterDetails;
     // }
 
-    const assignedToCategories: Category[] = assignNodesToCategories(
-      allowedNodes,
-    );
+    const assignedToCategories: Category[] = assignNodesToCategories(navNodes);
 
     return assignedToCategories;
   },

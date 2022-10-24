@@ -1,6 +1,6 @@
 import { ConfigFeatureList, NavNode } from '../../types';
 
-export const areNodeFeaturesDisabled = (
+export const areNodeFeaturesEnabled = (
   node: NavNode,
   configFeatures: ConfigFeatureList,
 ): boolean => {
