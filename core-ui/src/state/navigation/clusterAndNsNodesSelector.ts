@@ -12,7 +12,7 @@ import { NavNode, Scope } from '../types';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 import { addAdditionalNodes } from './addAdditionalNodes';
 
-export const navigationNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
+export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
   NavNode[]
 >({
   key: 'navigationNodesSelector',

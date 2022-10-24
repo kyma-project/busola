@@ -1,9 +1,9 @@
 import React from 'react';
 // import { useRecoilValueLoadable } from 'recoil';
-// import { scopedNavigationSelector } from 'state/navigation/scopedNavigationSelector';
+// import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
 
 export const SidebarNavigation = () => {
-  // const navigationNodes = useRecoilValueLoadable(scopedNavigationSelector);
+  // const navigationNodes = useRecoilValueLoadable(sidebarNavigationNodesSelector);
 
   return <></>;
 
