@@ -1,12 +1,10 @@
-import { hasCurrentScope } from './hasCurrentScope';
 import { areNodeFeaturesEnabled } from './areNodeFeaturesEnabled';
 import { doesNodeResourceExist } from './doesNodeResourceExist';
 import { isNodeResourcePermitted } from './isNodeResourcePermitted';
-import { ConfigFeatureList, NavNode, Scope } from '../../types';
+import { ConfigFeatureList, NavNode } from '../../types';
 import { PermissionSet } from '../../permissionSetsAtom';
 
 type NavConfigSet = {
-  scope: Scope;
   configFeatures: ConfigFeatureList;
   openapiPathIdList: string[];
   permissionSet: PermissionSet[];
@@ -16,9 +14,7 @@ export const shouldNodeBeVisible = (
   configSet: NavConfigSet,
   navNode: NavNode,
 ) => {
-  const { scope, configFeatures, openapiPathIdList, permissionSet } = configSet;
-
-  const currentScope = hasCurrentScope(navNode, scope);
+  const { configFeatures, openapiPathIdList, permissionSet } = configSet;
 
   const nodeFeaturesEnabledInConfig = areNodeFeaturesEnabled(
     navNode,
@@ -33,7 +29,6 @@ export const shouldNodeBeVisible = (
   );
 
   return (
-    currentScope &&
     nodeFeaturesEnabledInConfig &&
     nodeResourceExist &&
     nodeResourcePermittedForCurrentUser

@@ -1,8 +1,8 @@
 import { NavNode } from '../../types';
 
 export const hasCurrentScope = (
-  navNode: NavNode,
   scope: 'cluster' | 'namespace',
+  navNode: NavNode,
 ): boolean => {
   const isNamespace = scope === 'namespace';
   const isCluster = scope === 'cluster';

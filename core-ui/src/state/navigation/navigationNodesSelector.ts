@@ -7,15 +7,13 @@ import {
 } from '../activeNamespaceIdAtom';
 import { openapiPathIdListSelector } from '../openapi/openapiPathIdSelector';
 import { configFeaturesState } from '../configFeaturesAtom';
-import { assignNodesToCategories } from './assignToCategories';
 import { permissionSetsAtom } from '../permissionSetsAtom';
-import { Category } from './categories';
 import { NavNode, Scope } from '../types';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 import { addAdditionalNodes } from './addAdditionalNodes';
 
-export const navigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
-  Category[]
+export const navigationNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
+  NavNode[]
 >({
   key: 'navigationNodesSelector',
   get: async ({ get }) => {
@@ -36,9 +34,7 @@ export const navigationNodesSelector: RecoilValueReadOnly<Category[]> = selector
       return [];
     }
 
-    const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
     const configSet = {
-      scope,
       configFeatures,
       openapiPathIdList,
       permissionSet,
@@ -51,16 +47,13 @@ export const navigationNodesSelector: RecoilValueReadOnly<Category[]> = selector
       isNodeVisibleForCurrentConfigSet,
     );
 
+    const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
     const extendedNavNodes = addAdditionalNodes(
       navNodes,
       scope,
       configFeatures,
     );
 
-    const assignedToCategories: Category[] = assignNodesToCategories(
-      extendedNavNodes,
-    );
-
-    return assignedToCategories;
+    return extendedNavNodes;
   },
 });
