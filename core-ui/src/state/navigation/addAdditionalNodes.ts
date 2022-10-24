@@ -10,6 +10,7 @@ import { namespaceOverviewNode } from 'resources/Namespaces/namespaceOverviewNod
 
 import * as secretMetadata from 'resources/Secrets';
 import * as crdMetadata from 'resources/CustomResourceDefinitions';
+import * as cmMetadata from 'resources/ConfigMaps';
 
 export const addAdditionalNodes = (
   navNodes: NavNode[],
@@ -25,7 +26,8 @@ export const addAdditionalNodes = (
   }
 
   const isExtEnabled = configFeatures.EXTENSIBILITY?.isEnabled;
-  if (isExtEnabled && scope === 'cluster') {
+  const cmIndex = findResourceIndex(cm, navNodes) + 1;
+  if (isExtEnabled && cmIndex && scope === 'cluster') {
     addResource(extensionsNavNode, extNavList.length, extNavList);
   }
 
@@ -50,4 +52,5 @@ const addResource = (resource: NavNode, index: number, list: NavNode[]) => {
 };
 
 const crd = mapBusolaResourceToNavNode(crdMetadata);
+const cm = mapBusolaResourceToNavNode(cmMetadata);
 const secret = mapBusolaResourceToNavNode(secretMetadata);
