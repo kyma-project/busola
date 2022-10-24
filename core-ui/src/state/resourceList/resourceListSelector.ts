@@ -7,17 +7,6 @@ import { configFeaturesState } from '../configFeaturesAtom';
 import { busolaResourcesToNavNodes } from './busolaResourcesToNavNodes';
 import { extResourcesToNavNodes } from './extResourcesToNavNodes';
 
-//TODO Add manually
-// // missing on NS
-// custom resources
-// helm releases
-// cluster overview
-// back to cluster details
-// // missing on cluster
-// custom resources
-// extensions
-// cluster details
-
 export const resourceListSelector = selector<NavNode[]>({
   key: 'resourceListSelector',
   get: ({ get }) => {
