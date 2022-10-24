@@ -29,7 +29,7 @@ UI developed within Busola should be compliant with [Fiori Design Guidelines](ht
 - Don't use comments when you can use a variable.
 - You must be able to explain your code in a simple language (understand the algorithm).
 - Don't use the `any` type, this is the last resort.
-- Try to keep the Pull Request small if possible. Split big PRs into smaller ones, keep it civil for a reviewer.
+- Try to keep the pull request (PR) small if possible. Split big PRs into smaller ones, keep it civil for a reviewer.
 - Use translations instead of a simple string.
 - Organise files related to the same component in one folder.
 - Write tests for new components.
