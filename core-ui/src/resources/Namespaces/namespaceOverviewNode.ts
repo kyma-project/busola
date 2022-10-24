@@ -1,4 +1,4 @@
-import { NavNode } from '../../types';
+import { NavNode } from '../../state/types';
 
 export const namespaceOverviewNode: NavNode = {
   category: '',

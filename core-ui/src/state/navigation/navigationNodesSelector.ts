@@ -12,7 +12,7 @@ import { permissionSetsAtom } from '../permissionSetsAtom';
 import { Category } from './categories';
 import { NavNode, Scope } from '../types';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
-import { addAdditionalNodes } from './additionalNodes/addAdditionalNodes';
+import { addAdditionalNodes } from './addAdditionalNodes';
 
 export const navigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
   Category[]
@@ -43,12 +43,12 @@ export const navigationNodesSelector: RecoilValueReadOnly<Category[]> = selector
       openapiPathIdList,
       permissionSet,
     };
-    const isNodeAllowedForCurrentConfigSet = partial(
+    const isNodeVisibleForCurrentConfigSet = partial(
       shouldNodeBeVisible,
       configSet,
     );
     const navNodes: NavNode[] = resourceList.filter(
-      isNodeAllowedForCurrentConfigSet,
+      isNodeVisibleForCurrentConfigSet,
     );
 
     const extendedNavNodes = addAdditionalNodes(

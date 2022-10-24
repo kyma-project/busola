@@ -1,4 +1,4 @@
-import { Scope } from '../../types';
+import { Scope } from '../../state/types';
 
 export const createCustomResourcesNavNode = (scope: Scope) => ({
   category: 'Configuration',

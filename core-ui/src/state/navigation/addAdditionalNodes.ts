@@ -1,11 +1,13 @@
-import { ConfigFeatureList, NavNode, Scope } from '../../types';
+import { ConfigFeatureList, NavNode, Scope } from '../types';
 import { isEqual } from 'lodash';
-import { createCustomResourcesNavNode } from './customResourcesNode';
-import { helmReleasesNode } from './helmReleasesNode';
-import { createClusterNode } from './clusterDetails';
-import { namespaceOverviewNode } from './namespaceOverviewNode';
-import { extensionsNavNode } from './extensionsNode';
-import { mapBusolaResourceToNavNode } from '../../resourceList/mapBusolaResourceToNavNode';
+import { mapBusolaResourceToNavNode } from '../resourceList/mapBusolaResourceToNavNode';
+
+import { createClusterNode } from 'components/Clusters/views/ClusterOverview/clusterDetailsNode';
+import { extensionsNavNode } from 'components/BusolaExtensions/extensionsNode';
+import { helmReleasesNode } from 'components/HelmReleases/helmReleasesNode';
+import { createCustomResourcesNavNode } from 'components/CustomResources/customResourcesNode';
+import { namespaceOverviewNode } from 'resources/Namespaces/namespaceOverviewNode';
+
 import * as secretMetadata from 'resources/Secrets';
 import * as crdMetadata from 'resources/CustomResourceDefinitions';
 
@@ -23,7 +25,7 @@ export const addAdditionalNodes = (
   }
 
   const isExtEnabled = configFeatures.EXTENSIBILITY?.isEnabled;
-  if (isExtEnabled) {
+  if (isExtEnabled && scope === 'cluster') {
     addResource(extensionsNavNode, extNavList.length, extNavList);
   }
 
@@ -32,7 +34,7 @@ export const addAdditionalNodes = (
     addResource(createCustomResourcesNavNode(scope), crdIndex, extNavList);
   }
 
-  const secretIndex = findResourceIndex(secret, navNodes);
+  const secretIndex = findResourceIndex(secret, navNodes) + 1;
   if (secretIndex) {
     addResource(helmReleasesNode, secretIndex, extNavList);
   }
