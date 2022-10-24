@@ -4,8 +4,8 @@ import { resources } from 'resources';
 import { partial } from 'lodash';
 import { NavNode } from '../types';
 import { configFeaturesState } from '../configFeaturesAtom';
-import { busolaResourcesToNavNodes } from './busolaResourcesToNavNodes';
-import { extResourcesToNavNodes } from './extResourcesToNavNodes';
+import { mapBusolaResourceToNavNode } from './mapBusolaResourceToNavNode';
+import { mapExtResourceToNavNode } from './mapExtResourceToNavNode';
 
 export const resourceListSelector = selector<NavNode[]>({
   key: 'resourceListSelector',
@@ -21,12 +21,12 @@ export const resourceListSelector = selector<NavNode[]>({
     const areExtensionsLoaded = isExtensibilityOn && extResources;
 
     if (!isExtensibilityOn) {
-      resNodeList = resources.map(busolaResourcesToNavNodes);
+      resNodeList = resources.map(mapBusolaResourceToNavNode);
     }
 
     if (areExtensionsLoaded) {
-      resNodeList = resources.map(busolaResourcesToNavNodes);
-      const extNodeList = extResources.map(extResourcesToNavNodes);
+      resNodeList = resources.map(mapBusolaResourceToNavNode);
+      const extNodeList = extResources.map(mapExtResourceToNavNode);
       resNodeList = mergeInExtensibilityNav(resNodeList, extNodeList);
     }
 
