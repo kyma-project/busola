@@ -62,7 +62,7 @@ function createResults(context) {
         };
       case 'preferences':
         return {
-          label: 'Preferences',
+          label: t('preferences.title'),
           query: 'preferences',
           onActivate: () => {
             context.setOpenPreferencesModal(true);
