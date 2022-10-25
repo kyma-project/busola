@@ -1,4 +1,4 @@
-import { fireEvent, render } from 'reactTestingUtils';
+import { fireEvent, render } from 'testing/reactTestingUtils';
 import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
 import { TranslationBundleContext } from 'components/Extensibility/helpers';
 import { mount } from 'enzymeUtils';

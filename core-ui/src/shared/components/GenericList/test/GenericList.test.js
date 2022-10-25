@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, queryByText } from 'reactTestingUtils';
+import { render, fireEvent, queryByText } from 'testing/reactTestingUtils';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
