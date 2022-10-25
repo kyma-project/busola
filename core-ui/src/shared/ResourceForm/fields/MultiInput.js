@@ -218,10 +218,8 @@ export function MultiInput({
                       ariaLabel={t('common.buttons.delete')}
                     />
                   )}
+                  {isLast(index) && newItemAction}
                 </div>
-                {isLast(index) && (
-                  <span className="new-item-action">{newItemAction}</span>
-                )}
               </div>
             </li>
           ))}
