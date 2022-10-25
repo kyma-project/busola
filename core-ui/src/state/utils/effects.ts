@@ -1,4 +1,5 @@
 import { AtomEffect } from 'recoil';
+import LuigiClient from '@luigi-project/client';
 
 type LocalStorageEffectFn = <T>(localStorageKey: string) => AtomEffect<T>;
 
@@ -14,4 +15,17 @@ export const localStorageEffect: LocalStorageEffectFn = localStorageKey => ({
   onSet(newValue =>
     localStorage.setItem(localStorageKey, JSON.stringify(newValue)),
   );
+};
+
+type LuigiMessageEffect = <T>(luigiMessageId: string) => AtomEffect<T>;
+
+export const luigiMessageEffect: LuigiMessageEffect = luigiMessageId => ({
+  onSet,
+}) => {
+  onSet(newValue => {
+    LuigiClient.sendCustomMessage({
+      id: luigiMessageId,
+      showHiddenNamespaces: newValue,
+    });
+  });
 };
