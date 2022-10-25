@@ -29,7 +29,7 @@ data:
         version: v1beta1
         namespace: null
       filter: '$contains($item.metadata.ownerReferences[0].name, $root.metadata.name) and $contains($item.metadata.ownerReferences[0].kind, $root.kind)'
-  details: |
+  details: |-
     header: 
       - name: status
         widget: Badge
@@ -145,7 +145,7 @@ data:
         kind: Gateway
         group: networking.istio.io
         version: v1beta1        
-      # visibility: $accessToGateways
+      visibility: $accessToGateways
       toInternal:  '($values := $split($, "."); { "namespace": $values[1], "name": $values[0] })'
       toExternal: 'name & "." & namespace & ".svc.cluster.local"'
     - simple: true
@@ -161,7 +161,7 @@ data:
       path: spec.gateway
       name: gateway
       inputInfo: inputInfo.gateway
-      # visibility: $notAccessToGateways
+      visibility: $notAccessToGateways
     - simple: true
       required: true
       path: spec.host
@@ -234,21 +234,15 @@ data:
             - simple: true
               path: port 
               name: service.port
-  general: >-
+  general: |-
     resource:
       kind: APIRule
       group: gateway.kyma-project.io
       version: v1beta1
-    name: AK API Rules
-
+    name: API Rules
     category: AK
-
     scope: namespace
-
-    description:
-    '{{[APIRule](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/apix-01-apirule/#documentation-content)}}
-    allows for exposing a service externally.'
-
+    description: '{{[APIRule](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/apix-01-apirule/#documentation-content)}} allows for exposing a service externally.'
     urlPath: ak-apirules
   list: |
     - name: host
