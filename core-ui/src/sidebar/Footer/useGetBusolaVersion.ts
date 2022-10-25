@@ -55,8 +55,7 @@ export const useGetBusolaVersionDetails = (): BusolaVersionDetails => {
       });
     };
 
-    getVersion();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    void getVersion();
   }, []);
 
   return versionDetails;

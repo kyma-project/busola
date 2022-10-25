@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useRecoilValue } from 'recoil';
+import { configFeaturesState } from 'state/configFeaturesAtom';
 
 type LegalLink = {
   label: string;
@@ -8,8 +9,8 @@ type LegalLink = {
 
 export const useGetLegalLinks = (): LegalLink[] => {
   const { t, i18n } = useTranslation();
-  const { features } = useMicrofrontendContext() as any;
-  const legalLinksConfig = features?.LEGAL_LINKS?.config as Record<
+  const configFeatures = useRecoilValue(configFeaturesState);
+  const legalLinksConfig = configFeatures?.LEGAL_LINKS?.config as Record<
     string,
     Record<string, string>
   >;

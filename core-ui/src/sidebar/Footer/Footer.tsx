@@ -10,13 +10,11 @@ export function Footer() {
 
   return (
     <footer>
-      <div>
-        {legalLinks.map(legalLink => (
-          <Link url={legalLink.link} text={legalLink.label} />
-        ))}
-        <p>{t('common.labels.version')}</p>
-        <Link url={githubLink} text={busolaVersion} />
-      </div>
+      {legalLinks.map(legalLink => (
+        <Link url={legalLink.link} text={legalLink.label} />
+      ))}
+      <p>{t('common.labels.version')}</p>
+      <Link url={githubLink} text={busolaVersion} />
     </footer>
   );
 }
