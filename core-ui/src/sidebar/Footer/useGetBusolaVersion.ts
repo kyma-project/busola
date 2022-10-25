@@ -24,8 +24,6 @@ function createGithubLink(version: string): string {
 }
 
 async function getBusolaVersion(t: TFunction): Promise<string> {
-  if (process.env.NODE_ENV === 'development') return DEV_VERSION;
-
   return await fetch('assets/version.yaml')
     .then(response => {
       return response.text();
