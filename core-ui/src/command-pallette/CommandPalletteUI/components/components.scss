@@ -41,16 +41,17 @@
     td {
       padding-bottom: 4px;
       padding-top: 4px;
-      border-top: 1px solid #d5d3d3;
+      border-top: 1px solid var(--sapContent_Illustrative_Color6);
     }
   }
 }
 
 .key {
   display: inline;
-  background: #e1e1e1;
+  background: var(--sapNeutralColor);
   padding-right: 4px;
   padding-left: 3px;
   border-radius: 2px;
   font-weight: bold;
+  color: var(--sapNeutralBackground);
 }
