@@ -7,15 +7,16 @@ const BUSOLA_GITHUB_LINKS = {
   PULLS: 'https://github.com/kyma-project/busola/pull',
   COMMITS: 'https://github.com/kyma-project/busola/commit',
 };
+const DEV_VERSION = 'dev';
 
 function createGithubLink(version: string): string {
-  const devVersion = 'dev';
   const unknownVersion = 'Unknown';
 
-  if (version !== devVersion && version !== unknownVersion) {
+  if (version !== DEV_VERSION && version !== unknownVersion) {
     if (version.startsWith('PR-')) {
       return `${BUSOLA_GITHUB_LINKS.PULLS}/${version.slice(3)}`;
     }
+
     return `${BUSOLA_GITHUB_LINKS.COMMITS}/${version}`;
   }
 
@@ -23,6 +24,8 @@ function createGithubLink(version: string): string {
 }
 
 async function getBusolaVersion(t: TFunction): Promise<string> {
+  if (process.env.NODE_ENV === 'development') return DEV_VERSION;
+
   return await fetch('assets/version.yaml')
     .then(response => {
       return response.text();
@@ -58,7 +61,7 @@ export const useGetBusolaVersionDetails = (): BusolaVersionDetails => {
     };
 
     void getVersion();
-  }, []);
+  }, [t]);
 
   return versionDetails;
 };
