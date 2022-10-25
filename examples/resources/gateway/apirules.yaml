@@ -130,6 +130,7 @@ data:
             scope: namespace
           filter: $filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != 'serving.knative.dev/revision' }) })"
         - simple: true
+          required: true
           path: port 
           name: service.port
     - simple: true
@@ -232,6 +233,7 @@ data:
                 version: v1
                 scope: namespace
             - simple: true
+              required: true
               path: port 
               name: service.port
   general: |-
