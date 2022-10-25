@@ -1,27 +1,27 @@
+import classnames from 'classnames';
 import { LayoutPanel } from 'fundamental-react';
+import { isEmpty } from 'lodash';
+import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
-import { isEmpty } from 'lodash';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
 
 import {
   BodyFallback,
   HeaderRenderer,
   RowRenderer,
 } from 'shared/components/GenericList/components';
+import { filterEntries } from 'shared/components/GenericList/helpers';
 import { Pagination } from 'shared/components/GenericList/Pagination/Pagination';
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import ListActions from 'shared/components/ListActions/ListActions';
-import { SortModalPanel } from './SortModalPanel';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import CustomPropTypes from 'shared/typechecking/CustomPropTypes';
-import { filterEntries } from 'shared/components/GenericList/helpers';
+import { SortModalPanel } from './SortModalPanel';
 
 import { nameLocaleSort, timeSort } from 'shared/helpers/sortingfunctions';
 import { getErrorMessage } from 'shared/utils/helpers';
-import { pageSizeState } from 'state/pageSizeAtom';
+import { pageSizeState } from 'state/preferences/pageSizeAtom';
 import './GenericList.scss';
 
 const defaultSort = {

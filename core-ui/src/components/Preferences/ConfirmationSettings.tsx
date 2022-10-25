@@ -1,8 +1,7 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { Switch } from 'fundamental-react';
-import { dontConfirmDeleteState } from 'state/dontConfirmDeleteAtom';
+import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom';
 
 export default function ConfirmationSettings() {
   const { t } = useTranslation();

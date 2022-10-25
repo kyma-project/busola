@@ -1,10 +1,9 @@
-import React from 'react';
-import { useRecoilState } from 'recoil';
-import { useTranslation } from 'react-i18next';
 import { Switch } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
+import { useRecoilState } from 'recoil';
 
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { disableResourceProtectionState } from 'state/disableResourceProtectionAtom';
+import { disableResourceProtectionState } from 'state/preferences/disableResourceProtectionAtom';
 
 export default function ProtectedSettings() {
   const { t } = useTranslation();

@@ -1,5 +1,5 @@
 import { atom, RecoilState } from 'recoil';
-import { localStorageEffect } from './helpers';
+import { localStorageEffect } from '../utils/effects';
 
 type PageSize = number;
 

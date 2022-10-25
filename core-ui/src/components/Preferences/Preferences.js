@@ -1,20 +1,19 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { Button, Dialog, Icon } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 
-import { isPreferencesOpenState } from 'state/isPreferencesModalOpenAtom';
 import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
 import { Tab } from 'shared/components/Tabs/Tab';
 import { Tabs } from 'shared/components/Tabs/Tabs';
 import { VerticalTabs } from 'shared/components/VerticalTabs/VerticalTabs';
+import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 
+import ConfirmationSettings from './ConfirmationSettings';
+import LanguageSettings from './LanguageSettings';
 import NamespaceSettings from './NamespaceSettings';
+import OtherSettings from './OtherSettings';
 import ProtectedSettings from './ProtectedSettings';
 import ThemeChooser from './ThemeChooser';
-import LanguageSettings from './LanguageSettings';
-import OtherSettings from './OtherSettings';
-import ConfirmationSettings from './ConfirmationSettings';
 
 import './Preferences.scss';
 

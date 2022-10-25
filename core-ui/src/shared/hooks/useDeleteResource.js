@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { useTranslation } from 'react-i18next';
-import { Button, Checkbox, MessageBox, MessageStrip } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
+import { Button, Checkbox, MessageBox, MessageStrip } from 'fundamental-react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useRecoilState } from 'recoil';
 
-import { navigateToList } from 'shared/hooks/navigate';
-import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { useNotification } from 'shared/contexts/NotificationContext';
+import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
+import { navigateToList } from 'shared/hooks/navigate';
 import { prettifyNameSingular } from 'shared/utils/helpers';
-import { dontConfirmDeleteState } from 'state/dontConfirmDeleteAtom';
+import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom';
 
 export function useDeleteResource({
   resourceTitle,

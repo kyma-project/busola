@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
-import { isPreferencesOpenState } from 'state/isPreferencesModalOpenAtom';
-import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
-import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
+import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { getHiddenNamespaces } from 'shared/helpers/getHiddenNamespaces';
+import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
+import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
 import * as handlers from './handlers';
 
 export const LOADING_INDICATOR = 'LOADING_INDICATOR';

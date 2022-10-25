@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 import { Select } from 'fundamental-react';
-import { pageSizeState } from 'state/pageSizeAtom';
+import { pageSizeState } from 'state/preferences/pageSizeAtom';
 const AVAILABLE_PAGE_SIZES = [10, 20, 50];
 
 export default function OtherSettings() {

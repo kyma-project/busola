@@ -1,12 +1,11 @@
-import React from 'react';
-import { useRecoilValue } from 'recoil';
-import * as jp from 'jsonpath';
 import { Icon } from 'fundamental-react';
+import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { disableResourceProtectionState } from 'state/disableResourceProtectionAtom';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { disableResourceProtectionState } from 'state/preferences/disableResourceProtectionAtom';
 
 export function useProtectedResources() {
   const { t } = useTranslation();
