@@ -6,7 +6,7 @@ export const createClusterNode = (scope: Scope): NavNode => ({
   resourceType: 'overview',
   pathSegment: 'overview',
   label: scope === 'namespace' ? 'Back To Cluster Details' : 'Cluster Details',
-  namespaced: true,
+  namespaced: scope === 'namespace',
   requiredFeatures: [],
   apiGroup: '',
   apiVersion: '',
