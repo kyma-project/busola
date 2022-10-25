@@ -1,31 +1,66 @@
 import React from 'react';
+import { SideNav } from 'fundamental-react';
 import { useRecoilValueLoadable } from 'recoil';
 import { navigationNodesSelector } from 'state/navigation/navigationNodesSelector';
+import { useTranslation } from 'react-i18next';
 
 export const SidebarNavigation = () => {
+  const { i18n, t } = useTranslation();
   const navigationNodes = useRecoilValueLoadable(navigationNodesSelector);
 
-  switch (navigationNodes.state) {
-    case 'hasValue':
-      return (
-        <nav>
-          <p>{JSON.stringify(navigationNodes.contents)}</p>
-          <br />
-          <br />
-          <br />
-          <br />
-          {navigationNodes.contents.map(value => (
-            <p key={value.key}>
-              {value.key}: {value.items.length} {'->'}{' '}
-              {value.items.map(v => v.resourceType).join(', ')}
-            </p>
+  if (navigationNodes.state === 'loading') return 'loading';
+  if (navigationNodes.state === 'hasError') return 'error';
+  if (navigationNodes.state !== 'hasValue') return navigationNodes;
+
+  const filteredNavigationNodes =
+    navigationNodes?.contents?.filter(nn => nn.items?.length > 0) || [];
+  const topLevelNodes = filteredNavigationNodes?.filter(nn => nn.topLevelNode);
+  const categoryNodes = filteredNavigationNodes?.filter(nn => !nn.topLevelNode);
+
+  const hasTranslations = translation => {
+    //add proper translations instead of returnObjects
+    return i18n.exists(translation) &&
+      typeof t(translation, { returnObjects: true }) !== 'object'
+      ? t(translation)
+      : translation;
+  };
+  const NavItem = ({ node }) => {
+    return (
+      <SideNav.ListItem
+        id={node.key}
+        name={hasTranslations(node.label)}
+        url="#"
+        glyph={node.icon}
+      />
+    );
+  };
+
+  const CategoryItem = ({ node }) => {
+    return (
+      <SideNav.ListItem
+        expandSubmenuLabel={`Expand ${node.key || node.label} category`}
+        id={node.key}
+        name={hasTranslations(node.key || node.label)}
+        url="#"
+        glyph={node.icon || 'customize'}
+      >
+        <SideNav.List level={2}>
+          {node.items?.map(nn => (
+            <NavItem node={nn} />
           ))}
-        </nav>
-      );
-    case 'loading':
-      return <div>Loading...</div>;
-    case 'hasError':
-    default:
-      throw navigationNodes.contents;
-  }
+        </SideNav.List>
+      </SideNav.ListItem>
+    );
+  };
+
+  return (
+    <SideNav skipLink={{ href: '', label: 'Side navigation' }}>
+      {topLevelNodes.map(node =>
+        node.items?.map(item => <NavItem node={item} />),
+      )}
+      {categoryNodes.map(node => (
+        <CategoryItem node={node} />
+      ))}
+    </SideNav>
+  );
 };
