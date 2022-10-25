@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { last, initial, mapValues, tail, trim } from 'lodash';
+import { last, initial, tail, trim } from 'lodash';
 import * as jp from 'jsonpath';
 
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
