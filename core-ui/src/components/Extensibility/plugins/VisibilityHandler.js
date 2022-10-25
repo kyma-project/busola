@@ -1,8 +1,8 @@
 import React from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
-import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { useVariables } from '../hooks/useVariables';
+import { useJsonata } from '../hooks/useJsonata';
 
 export function VisibilityHandler({
   value,
@@ -15,6 +15,7 @@ export function VisibilityHandler({
   ...props
 }) {
   const { itemVars } = useVariables();
+  const jsonata = useJsonata({ resource });
 
   const rule = schema.get('schemaRule');
 
@@ -22,10 +23,7 @@ export function VisibilityHandler({
   const visibilityFormula = schema.get('visibility');
 
   if (visibilityFormula) {
-    const visible = jsonataWrapper(visibilityFormula).evaluate(
-      resource,
-      itemVars(resource, rule.itemVars, storeKeys),
-    );
+    const [visible] = jsonata(itemVars(resource, rule.itemVars, storeKeys));
 
     if (!visible) {
       if (value) {

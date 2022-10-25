@@ -1,8 +1,8 @@
 import React from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
-import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { useVariables } from '../hooks/useVariables';
+import { useJsonata } from '../hooks/useJsonata';
 
 export function EnumHandler({
   schema,
@@ -12,7 +12,9 @@ export function EnumHandler({
   resource,
   ...props
 }) {
+  console.group('EnumHandler');
   const { itemVars } = useVariables();
+  const jsonata = useJsonata({ resource });
 
   const rule = schema.get('schemaRule');
 
@@ -24,14 +26,15 @@ export function EnumHandler({
   let newSchema = schema;
 
   if (typeof schemaEnum === 'string') {
-    const newEnum =
-      jsonataWrapper(schemaEnum).evaluate(
-        resource,
-        itemVars(resource, rule.itemVars, storeKeys),
-      ) || [];
+    const [newEnum] = jsonata(
+      schemaEnum,
+      itemVars(resource, rule.itemVars, storeKeys),
+      [],
+    );
     newSchema = schema.set('enum', newEnum);
   }
 
+  console.groupEnd();
   return (
     <Plugin
       {...props}

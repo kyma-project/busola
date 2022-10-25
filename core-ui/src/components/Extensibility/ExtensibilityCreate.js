@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useMemo,
+  useState,
+  useContext,
+  useEffect,
+} from 'react';
 import Immutable from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +19,10 @@ import { prettifyKind } from 'shared/utils/helpers';
 
 import { ResourceSchema } from './ResourceSchema';
 import { usePreparePresets, createTemplate, getDefaultPreset } from './helpers';
+import {
+  DataSourcesContextProvider,
+  DataSourcesContext,
+} from './contexts/DataSources';
 import { VarStoreContextProvider } from './contexts/VarStore';
 import { prepareSchemaRules } from './helpers/prepareSchemaRules';
 import {
@@ -58,6 +68,8 @@ export function ExtensibilityCreateCore({
   const presets = usePreparePresets(createResource?.presets);
 
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
+
+  const dataSourcesContext = useContext(DataSourcesContext);
 
   const updateStore = res => {
     resetVars();
@@ -168,9 +180,13 @@ export function ExtensibilityCreateCore({
 
 export function ExtensibilityCreate(props) {
   return (
-    <VarStoreContextProvider>
-      <ExtensibilityCreateCore {...props} />
-    </VarStoreContextProvider>
+    <DataSourcesContextProvider
+      dataSources={props.resourceSchema?.dataSources || {}}
+    >
+      <VarStoreContextProvider>
+        <ExtensibilityCreateCore {...props} />
+      </VarStoreContextProvider>
+    </DataSourcesContextProvider>
   );
 }
 

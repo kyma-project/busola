@@ -5,34 +5,43 @@ import { last, mapValues } from 'lodash';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { DataSourcesContext } from '../contexts/DataSources';
 
+function getDataSourceFetchers(
+  resource,
+  { dataSources, store, requestRelatedResource },
+) {
+  return mapValues(dataSources, (_, id) => {
+    return () => requestRelatedResource(resource, id);
+  });
+}
+
 export function useJsonata(
   // query,
   { resource, scope, arrayItems },
 ) {
-  const [dataSourceFetchers, setDataSourceFetchers] = useState({});
+  const [value, setValue] = useState('');
+  const [error, setError] = useState(null);
   const { t } = useTranslation();
-  const {
-    dataSources,
-    store: dataSourceStore,
-    requestRelatedResource,
-  } = useContext(DataSourcesContext);
+  const dataSourcesContext = useContext(DataSourcesContext);
+
+  const [dataSourceFetchers, setDataSourceFetchers] = useState(
+    getDataSourceFetchers(resource, dataSourcesContext),
+  );
 
   useEffect(() => {
-    const dataSourceFetchers = mapValues(dataSources, (_, id) => {
-      return () => {
-        requestRelatedResource(resource, id);
-        return dataSourceStore?.[id]?.data;
-      };
-    });
+    const dataSourceFetchers = getDataSourceFetchers(
+      resource,
+      dataSourcesContext,
+    );
     setDataSourceFetchers(dataSourceFetchers);
-  }, [dataSourceStore]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [dataSourcesContext.store]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (query, extras = {}, defaultValue = null) => {
     if (!query) {
-      return [defaultValue, null];
+      return [defaultValue, null, Promise.resolve([defaultValue, null])];
     }
-    try {
-      const value = jsonataWrapper(query).evaluate(
+
+    const promise = new Promise(resolve =>
+      jsonataWrapper(query).evaluate(
         extras.scope || scope || resource,
         {
           ...dataSourceFetchers,
@@ -41,10 +50,23 @@ export function useJsonata(
           item: last(extras?.arrayItems) || last(arrayItems) || resource,
           ...extras,
         },
-      );
-      return [value, null];
-    } catch (e) {
-      return [t('extensibility.configuration-error', { error: e.message }), e];
-    }
+        (err, val) => {
+          if (err) {
+            resolve([
+              t('extensibility.configuration-error', { error: err.message }),
+              err,
+            ]);
+          } else {
+            resolve([val, null]);
+          }
+        },
+      ),
+    );
+
+    promise.then(([val, err]) => {
+      setValue(val);
+      setError(err);
+    });
+    return [value, error, promise];
   };
 }

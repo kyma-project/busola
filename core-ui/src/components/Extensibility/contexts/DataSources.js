@@ -84,6 +84,7 @@ export function DataSourcesContextProvider({ children, dataSources }) {
         error: null,
         data,
       });
+      return data;
     } catch (e) {
       setStore(dataSourceName, {
         loading: false,
@@ -112,7 +113,7 @@ export function DataSourcesContextProvider({ children, dataSources }) {
 
         setStore(dataSourceName, { loading: true, data: { loading: true } });
 
-        fetchResource(dataSource, dataSourceName, resource);
+        const firstFetch = fetchResource(dataSource, dataSourceName, resource);
         const REFETCH_INTERVAL = 6000;
         intervals.current.push(
           setInterval(
@@ -120,6 +121,10 @@ export function DataSourcesContextProvider({ children, dataSources }) {
             REFETCH_INTERVAL,
           ),
         );
+
+        return firstFetch;
+      } else {
+        return Promise.resolve();
       }
     },
   };
