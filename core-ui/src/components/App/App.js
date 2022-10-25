@@ -15,6 +15,9 @@ import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
 import { resourceRoutes } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import otherRoutes from 'resources/other';
+import { Sidebar } from 'sidebar/Sidebar';
+import { useLuigiContextMigrator } from './useLuigiContextMigrator';
+import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 
 export default function App() {
   const { cluster, language, customResources = [] } = useMicrofrontendContext();
@@ -22,6 +25,9 @@ export default function App() {
 
   useLoginWithKubeconfigID();
   useResourceSchemas();
+
+  useLuigiContextMigrator();
+  useConfigContextMigrator();
 
   useEffect(() => {
     i18n.changeLanguage(language);
@@ -31,21 +37,24 @@ export default function App() {
   useAppTracking();
 
   return (
-    <Routes key={cluster?.name}>
-      {/* force rerender on cluster change*/}
-      <Route
-        path="/overview" // overview route should stay static
-        element={
-          <WithTitle title={t('clusters.overview.title-current-cluster')}>
-            <ClusterOverview />
-          </WithTitle>
-        }
-      />
-      {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
-      {customResources?.map(cr => createExtensibilityRoutes(cr, language))}
-      {resourceRoutes}
-      {otherRoutes}
-      <Route path="" element={<MainFrameRedirection />} />
-    </Routes>
+    <div>
+      <Sidebar />
+      <Routes key={cluster?.name}>
+        {/* force rerender on cluster change*/}
+        <Route
+          path="/overview" // overview route should stay static
+          element={
+            <WithTitle title={t('clusters.overview.title-current-cluster')}>
+              <ClusterOverview />
+            </WithTitle>
+          }
+        />
+        {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
+        {customResources?.map(cr => createExtensibilityRoutes(cr, language))}
+        {resourceRoutes}
+        {otherRoutes}
+        <Route path="" element={<MainFrameRedirection />} />
+      </Routes>
+    </div>
   );
 }

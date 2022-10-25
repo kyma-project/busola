@@ -53,8 +53,7 @@ data:
       - name: header.runtime
         source: >-
           spec.runtime = 'nodejs16' ? 'Node.js 16' : (spec.runtime = 'nodejs14' ?
-          'Node.js 14' : (spec.runtime = 'nodejs12' ? 'Node.js 12 - Deprecated' :
-          (spec.runtime = 'python39' ? 'Python 3.9' : spec.runtime)))
+          'Node.js 14' : (spec.runtime = 'python39' ? 'Python 3.9' : spec.runtime))
     body:
       - widget: Tabs
         children:
@@ -180,7 +179,6 @@ data:
       path: spec.runtime
       placeholder: placeholders.spec.runtime
       enum:
-        - nodejs12
         - nodejs14
         - nodejs16
         - python39
@@ -302,8 +300,7 @@ data:
     - name: header.runtime
       source: >-
         spec.runtime = 'nodejs16' ? 'Node.js 16' : (spec.runtime = 'nodejs14' ?
-        'Node.js 14' : (spec.runtime = 'nodejs12' ? 'Node.js 12 - Deprecated' :
-        (spec.runtime = 'python39' ? 'Python 3.9' : spec.runtime)))
+        'Node.js 14' : (spec.runtime = 'python39' ? 'Python 3.9' : spec.runtime))
     - name: header.sourceType
       source: 'spec.source.gitRepository ? "Git Repository" : "Inline Editor"'
     - name: header.status
@@ -412,7 +409,6 @@ data:
       Status: Status
       Runtime: Runtime
       'Source Type': Source Type
-      spec.runtime.nodejs12: Node.js 12 - Deprecated
       spec.runtime.nodejs14: Node.js 14
       spec.runtime.nodejs16: Node.js 16
       spec.runtime.python39: Python 3.9

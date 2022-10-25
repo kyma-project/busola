@@ -7,7 +7,7 @@ import {
   terminateWorker,
 } from './resourceSchemaWorkerApi';
 import { useSetRecoilState } from 'recoil';
-import { openapiSchemasState } from 'state/openapiSchemasAtom';
+import { schemaWorkerStatusState } from 'state/schemaWorkerStatusAtom';
 
 export const useResourceSchemas = () => {
   const {
@@ -15,8 +15,8 @@ export const useResourceSchemas = () => {
     authData,
     openApi,
   } = useMicrofrontendContext() as any;
-  const setSchemasState = useSetRecoilState(openapiSchemasState);
-  const lastFetched = useRef<Error | null>(null);
+  const setSchemasState = useSetRecoilState(schemaWorkerStatusState);
+  const lastFetched = useRef<string | null>(null);
 
   useEffect(() => {
     const isOngoingClusterChange = !activeClusterName || !authData;
