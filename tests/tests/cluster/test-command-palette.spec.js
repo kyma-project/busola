@@ -214,14 +214,6 @@ context('Test Command Palette navigation', () => {
   it('Disables Command Palette if a modal is present', () => {
     openCommandPalette();
 
-    cy.getModalIframeBody()
-      .find('[aria-label=command-palette-search]')
-      .should('not.exist');
-
-    cy.getIframeBody().contains('Cluster Details');
-
-    openCommandPalette();
-
     getQueryInput().type('deploy');
     getQueryInput().trigger('keydown', { key: 'Enter' });
 
