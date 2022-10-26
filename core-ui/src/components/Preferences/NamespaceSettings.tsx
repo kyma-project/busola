@@ -1,22 +1,18 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
-import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { Switch } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { Switch } from 'fundamental-react';
+import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
+import { groupsState } from 'state/groupsAtom';
 
 export default function NamespaceSettings() {
   const { t } = useTranslation();
-  const { groups } = useMicrofrontendContext();
-  const [showHiddenNamespaces, setShowHiddenNamespaces] = useFeatureToggle(
-    'showHiddenNamespaces',
+  const groups = useRecoilValue(groupsState);
+  const [showHiddenNamespaces, setShowHiddenNamespaces] = useRecoilState(
+    showHiddenNamespacesState,
   );
 
   const toggleVisibility = () => {
-    LuigiClient.sendCustomMessage({
-      id: 'busola.showHiddenNamespaces',
-      showHiddenNamespaces: !showHiddenNamespaces,
-    });
     setShowHiddenNamespaces(!showHiddenNamespaces);
   };
 

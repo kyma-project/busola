@@ -1,3 +1,4 @@
+import { elementReady } from './nav-footer';
 import { getTheme } from './utils/theme';
 
 export function createSettings(params) {
@@ -15,4 +16,14 @@ export function createSettings(params) {
     customSandboxRules: ['allow-downloads'],
     hideNavigation: true,
   };
+}
+
+export async function attachPreferencesModal() {
+  elementReady('[data-testid=preferences]').then(async preferencesButton => {
+    preferencesButton.addEventListener('click', () => {
+      Luigi.customMessages().sendToAll({
+        id: 'open-preferences',
+      });
+    });
+  });
 }
