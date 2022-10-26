@@ -16,7 +16,7 @@ export const languageEffect: LanguageEffectFn = () => ({ onSet, setSelf }) => {
         id: 'busola.language',
         language: JSON.parse(savedValue),
       });
-      console.log('inside', LuigiClient.isLuigiClientInitialized());
+
       LuigiClient.removeInitListener(initListenerId);
     });
 
@@ -33,6 +33,7 @@ export const languageEffect: LanguageEffectFn = () => ({ onSet, setSelf }) => {
   });
 };
 
+// when removing Luigi, the languageEffect can be changed to localStorageEffect
 export const languageAtom: RecoilState<Language> = atom<Language>({
   key: 'languageState',
   default: DEFAULT_LANGUAGE,
