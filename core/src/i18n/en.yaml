@@ -107,23 +107,6 @@ applications:
     provisioning: The Application is being provisioned asynchronously.
 apps:
   title: Apps
-authorization-policies:
-  description: <0>Istio Authorization Policy</0> allows for workload access management in the mesh.
-  headers:
-    action: Action
-    from: From
-    key: Key
-    not-values: Not Values
-    operation: Operation
-    provider: Provider
-    rule: Rule {{ruleNumber}}
-    rules: Rules
-    source: Source
-    to: To
-    values: Values
-    when: When
-  name_singular: Authorization Policy
-  title: Authorization Policies
 btp-instances:
   description: ' <0>BTP Service Instance</0> makes the functionality of a service available for consumption.'
   external-name: External Name
@@ -546,7 +529,7 @@ common:
     error: Error
     generate-name: Generate name
     hide: Hide read-only fields
-    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1')."
+    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' and ''.'' (e.g.: ''my.name-1'').'
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
@@ -1158,72 +1141,6 @@ functions:
 gardener:
   headers:
     provider: Provider
-gateways:
-  aria-labels:
-    host: Host
-    port-name: Port name
-  create-modal:
-    advanced:
-      add-server: Add server
-      delete-server: Delete server
-      enable-tls: Enable TLS
-      hosts: Hosts
-      mode-tooltip: Indicates whether connections to the port are secured using TLS.
-      placeholders:
-        hosts: $t(domains.example)
-        port:
-          protocol: Enter the protocol
-        tls:
-          ca-certificates: Enter the CA certificates path
-          mode: Select TLS Mode
-          private-key: Enter the private key path
-          server-certificate: Enter the certificate path
-      port:
-        name: Name
-        number: Number
-        ports: Ports
-        protocol: Protocol
-        target-port: Target port
-      tls:
-        ca-certificates: CA Certificate
-        credentialName: Credential Name
-        disabled-for-non-https: TLS settings are not available for a non-HTTPS protocol.
-        https-redirect: HTTPS Redirect
-        https-redirect-description: Enable 301 redirect for all HTTP connections.
-        max-protocol-version: Max Protocol Version
-        messages:
-          invalid-tls-warning: TLS Server of mode SIMPLE or MUTUAL needs either credential name, or private key and server certificate pair.
-        min-protocol-version: Min Protocol Version
-        mode: TLS Mode
-        private-key: Private Key
-        server-certificate: Server Certificate
-        tls: TLS
-    at-least-one-server-required: Gateway must have at least one server.
-    simple:
-      selector: Selector
-      server: Server
-      servers: Servers
-    title: Create Gateway
-    tooltips:
-      ca-certificates: The path to a file containing certificate authority (CA) certificates, which verify a presented client-side certificate.
-      credential-name: The name of the Secret. Required properties are key and cert; for mutual TLS (mTLS), caceert is also required. Alternatively, you can use a Secret of type tls for server certificates along with a ca.crt key for CA certificates.
-      hosts: At least one host exposed by the Gateway, in FQDN format with optional wildcard character in the left-most component.
-      private-key: The path to the file holding the server’s private key.
-      protocol: The protocol exposed on the port. TLS implies that the connection is routed based on the SNI header to the destination, without terminating the TLS connection.
-      selector: One or more labels that indicate a set of Pods on which the Gateway configuration is applied. By default, workloads are searched across all Namespaces based on label selectors.
-      server-certificate: The path to the file holding the server-side TLS certificate you want to use.
-      target-port: The port number on the endpoint where the traffic is received.
-  description: ' <0>Gateway</0> describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections.'
-  name_singular: Gateway
-  selector: Selector
-  servers:
-    hosts: Hosts
-    name: Name
-    port: Port
-    secret: TLS Secret
-    title: Servers
-    tls: TLS Mode
-  title: Gateways
 generic-list:
   no-entries-found: No entries found
 git-repositories:
@@ -1456,7 +1373,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
+  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
@@ -1938,30 +1855,6 @@ service-accounts:
   name_singular: ServiceAccount
   service-account: Service Account
   title: Service Accounts
-service-entries:
-  description: <0>ServiceEntry</0> allows for adding more entries to the internal service registry of Istio.
-  headers:
-    addresses: Adresses
-    configuration: Configuration
-    endpoints:
-      address: Address
-      locality: Locality
-      network: Network
-      title: Endpoints
-      weight: Weight
-    export-to: Export to
-    export-to-empty: Exported to all Namespaces
-    hosts: Hosts
-    location: Location
-    ports:
-      number: Number
-      protocol: Protocol
-      target-point: Target Point
-      title: Ports
-    resolution: Resolution
-    subject-alt-names: Subject Alt Names
-  name_singular: ServiceEntry
-  title: Service Entries
 service-management:
   title: Service Management
 services:
@@ -2006,24 +1899,6 @@ settings:
     default-page-size: Default Page Size
     title: Other
   theme: Theme
-sidecars:
-  description: <0>Sidecar</0> manages the incoming and outgoing communication in a workload it is attached to.
-  headers:
-    bind: Bind
-    capture-mode: Capture Mode
-    default-endpoint: Default Endpoint
-    egress: Egress
-    hosts: Hosts
-    ingress: Ingress
-    outbound-traffic-policy: Outbound Traffic Policy
-    port:
-      number: Number
-      protocol: Protocol
-      target-point: Target Point
-      title: Port
-    workload-selector-labels: Workload Selector Labels
-  name_singular: Sidecar
-  title: Sidecars
 stateful-sets:
   description: <0>StatefulSet</0> is used for the management of Pods' deployment and scaling.
   name_singular: StatefulSet
@@ -2125,75 +2000,9 @@ upload-yaml:
   you-will-create_one: 'You will create 1 resource:'
   you-will-create_other: 'You will create {{count}} resources:'
 virtualservices:
-  description: <0>VirtualService</0> describes a configuration that affects traffic routing.
   gateways: Gateways
-  headers:
-    add: add
-    remove: remove
-    request: Request
-    response: Response
-    set: set
-    title: Headers
   hosts: Hosts
-  http-routes:
-    cors:
-      allow-credentials: Allow Credentials
-      allow-headers: Allow Headers
-      allow-methods: Allow Methods
-      allow-origins: Allow Origins
-      expose-headers: Expose Headers
-      max-age: Max Age
-      title: CORS Policy
-    delegate: Delegate
-    fault:
-      abort: Abort Fault Injection
-      delay: Delay Fault Injection
-    mirror: Mirror
-    redirect:
-      authority: Authority
-      derivePort: Derive Port
-      port: Port
-      redirectCode: Redirect Code
-      scheme: Scheme
-      title: Redirect
-      uri: URI
-    rewrite:
-      authority: Authority
-      title: Rewrite
-      uri: URI
-    route:
-      headers: Header Manipulation
-    timeout: Timeout
-    title: HTTP Route
-  matches:
-    authority: Authority
-    destination-subnets: Destination Subnets
-    exact: is exactly
-    gateways: Gateways
-    header: Header {{field}}
-    ignore-case: (ignore case)
-    method: Method
-    port: Port
-    prefix: starts with
-    regex: matches
-    scheme: Scheme
-    sni-hosts: SNI Hosts
-    source-labels: Source Labels
-    source-namespace: Source Namespace
-    title: Matches
-    uri: URI
-    without-header: Without header {{field}}
   name_singular: VirtualService
-  route:
-    destination: Destination
-    weight: Weight
-  routes: Destinations
-  tcp-routes:
-    title: TCP Route
-  title: Virtual Services
-  tls-routes:
-    matches: Matches
-    title: TLS Route
 workload-selector:
   title: Workload Selector
 workloads:
