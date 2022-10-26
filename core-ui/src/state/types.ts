@@ -1,3 +1,5 @@
+export type Scope = 'namespace' | 'cluster';
+
 export type ConfigFeature = {
   isEnabled?: boolean;
   stage?: 'PRIMARY' | 'SECONDARY';
@@ -64,4 +66,5 @@ export type NavNode = {
   apiVersion: string;
   apiGroup: string;
   icon?: string;
+  topLevelNode?: boolean;
 };

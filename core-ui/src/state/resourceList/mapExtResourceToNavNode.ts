@@ -1,6 +1,6 @@
 import { ExtResource, NavNode } from '../types';
 
-export const extResourcesToNavNodes = (extRes: ExtResource) => {
+export const mapExtResourceToNavNode = (extRes: ExtResource) => {
   const node: NavNode = {} as NavNode;
 
   node.category = extRes.general.category;
