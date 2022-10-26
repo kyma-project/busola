@@ -36,6 +36,10 @@ context('Test Sidecars', () => {
     cy.goToNamespaceDetails();
   });
 
+  beforeEach(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+  });
+
   it('Create a Sidecar', () => {
     cy.navigateTo('Istio', 'Sidecars');
 
@@ -43,12 +47,87 @@ context('Test Sidecars', () => {
       .contains('Create Sidecar')
       .click();
 
-    cy.wrap(
-      loadSidecar(SIDECAR_NAME, Cypress.env('NAMESPACE_NAME'), FILE_NAME),
-    ).then(SIDECAR_CONFIG => {
-      const sidecar = JSON.stringify(SIDECAR_CONFIG);
-      cy.pasteToMonaco(sidecar);
-    });
+    // Name
+    cy.getIframeBody()
+      .find('[ariaLabel="Sidecar name"]:visible', { log: false })
+      .type(SIDECAR_NAME);
+
+    // Egress
+    cy.getIframeBody()
+      .find('[ariaLabel="expand Egress"]:visible', { log: false })
+      .contains('Add')
+      .click();
+
+    cy.getIframeBody()
+      .find('[ariaLabel="expand Egress"]:visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
+      .find('[ariaLabel="expand Port"]:visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter the port number"]:visible', { log: false })
+      .type('9080');
+
+    cy.getIframeBody()
+      .find('[ariaLabel="Sidecar name"]:visible', { log: false })
+      .filterWithNoValue()
+      .type('egresshttp');
+
+    cy.getIframeBody()
+      .find('[ariaLabel="Combobox input"]:visible', { log: false })
+      .first()
+      .type('HTTP');
+
+    cy.getIframeBody()
+      .find('[ariaLabel="expand Hosts"]:visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="For example, *.api.mydomain.com"]:visible', {
+        log: false,
+      })
+      .type('prod-us1/*');
+
+    cy.getIframeBody()
+      .find('[ariaLabel="expand Egress"]:visible', { log: false })
+      .first()
+      .click();
+
+    // Ingress
+    cy.getIframeBody()
+      .find('[ariaLabel="expand Ingress"]:visible', { log: false })
+      .contains('Add')
+      .click();
+
+    cy.getIframeBody()
+      .find('[ariaLabel="expand Ingress"]:visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
+      .find('[ariaLabel="expand Port"]:visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter the port number"]:visible', { log: false })
+      .type('9080');
+
+    cy.getIframeBody()
+      .find('[ariaLabel="Sidecar name"]:visible', { log: false })
+      .filterWithNoValue()
+      .type('somename');
+
+    cy.getIframeBody()
+      .find('[ariaLabel="Combobox input"]:visible', { log: false })
+      .first()
+      .type('HTTP');
+
+    cy.getIframeBody()
+      .find('[placeholder="For example, 127.0.0.1:PORT"]:visible', {
+        log: false,
+      })
+      .type('unix:///var/run/someuds.sock');
 
     cy.getIframeBody()
       .find('[role="dialog"]')
