@@ -1,3 +1,17 @@
+.preferences-dialog {
+  .fd-dialog__body {
+    background: var(--sapBackgroundColor);
+    overflow-y: hidden;
+    width: 80vw;
+    height: 80vw;
+    padding: 0;
+  }
+
+  .vertical-tabs-wrapper {
+    height: 100% !important;
+  }
+}
+
 .preferences-row {
   display: grid;
   grid-template-columns: 3fr 3fr;

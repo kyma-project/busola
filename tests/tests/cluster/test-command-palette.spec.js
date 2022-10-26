@@ -17,6 +17,11 @@ function getQueryInput() {
 context('Test Command Palette navigation', () => {
   Cypress.skipAfterFail();
 
+  // Luigi throws error of the "replace" function when entering the Preferences dialog. Remove the code below after Luigi's removal
+  Cypress.on('uncaught:exception', () => {
+    return false;
+  });
+
   before(() => {
     cy.loginAndSelectCluster();
   });
@@ -197,20 +202,16 @@ context('Test Command Palette navigation', () => {
 
     getQueryInput().trigger('keydown', { key: 'Enter' });
 
-    cy.getModalIframeBody().should('be.visible');
+    cy.getIframeBody()
+      .contains('Cluster interaction')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Close')
+      .click();
   });
 
   it('Disables Command Palette if a modal is present', () => {
-    openCommandPalette();
-
-    cy.getModalIframeBody()
-      .find('[aria-label=command-palette-search]')
-      .should('not.exist');
-
-    cy.get('[data-testid="modal-mf"] [aria-label="close"]').click();
-
-    cy.getIframeBody().contains('Cluster Details');
-
     openCommandPalette();
 
     getQueryInput().type('deploy');

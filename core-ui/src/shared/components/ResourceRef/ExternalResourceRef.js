@@ -2,11 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ComboboxInput, MessageStrip } from 'fundamental-react';
 import classnames from 'classnames';
+import { useRecoilValue } from 'recoil';
 
+import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { getFeatureToggle } from 'shared/hooks/useFeatureToggle';
+import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { getHiddenNamespaces } from 'shared/helpers/getHiddenNamespaces';
 import { ResourceForm } from 'shared/ResourceForm';
 
 import './ExternalResourceRef.scss';
@@ -36,8 +37,9 @@ export function ExternalResourceRef({
     namespacesUrl,
   );
 
-  const showHiddenNamespaces = getFeatureToggle('showHiddenNamespaces');
-  const hiddenNamespaces = getHiddenNamespaces();
+  const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
+
+  const hiddenNamespaces = useGetHiddenNamespaces();
 
   const namespacesOptions = (namespaces || [])
     .filter(ns =>

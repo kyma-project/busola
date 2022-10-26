@@ -6,8 +6,11 @@ import LuigiClient from '@luigi-project/client';
 export default function LanguageSettings() {
   const { t, i18n } = useTranslation();
   const languages = [{ key: 'en', text: 'English' }];
+
   const selectLanguage = (_, language) => {
     i18n.changeLanguage(language.key);
+
+    //remove sendCustomMessage when removing Luigi
     LuigiClient.sendCustomMessage({
       id: 'busola.language',
       language: language.key,

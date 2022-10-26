@@ -98,8 +98,8 @@ export const resources = [
   ClusterRoles,
   StorageClasses,
   PersistentVolumes,
-  CustomResourceDefinitions,
   ClusterRoleBindings,
+  CustomResourceDefinitions,
 ];
 
 export const resourceRoutes = <>{resources.map(createResourceRoutes)}</>;
