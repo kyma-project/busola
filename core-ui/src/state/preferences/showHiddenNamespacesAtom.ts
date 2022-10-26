@@ -15,6 +15,9 @@ export const showHiddenNamespacesState: RecoilState<ShowHiddenNamespaces> = atom
     localStorageEffect<ShowHiddenNamespaces>(
       SHOW_HIDDEN_NAMESPACES_STORAGE_KEY,
     ),
-    luigiMessageEffect<ShowHiddenNamespaces>('busola.showHiddenNamespaces'),
+    luigiMessageEffect<ShowHiddenNamespaces>(
+      'busola.showHiddenNamespaces',
+      'showHiddenNamespaces',
+    ),
   ],
 });

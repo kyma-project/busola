@@ -17,15 +17,19 @@ export const localStorageEffect: LocalStorageEffectFn = localStorageKey => ({
   );
 };
 
-type LuigiMessageEffect = <T>(luigiMessageId: string) => AtomEffect<T>;
+type LuigiMessageEffect = <T>(
+  luigiMessageId: string,
+  newValueKey: string,
+) => AtomEffect<T>;
 
-export const luigiMessageEffect: LuigiMessageEffect = luigiMessageId => ({
-  onSet,
-}) => {
+export const luigiMessageEffect: LuigiMessageEffect = (
+  luigiMessageId,
+  newValueKey,
+) => ({ onSet }) => {
   onSet(newValue => {
     LuigiClient.sendCustomMessage({
       id: luigiMessageId,
-      showHiddenNamespaces: newValue,
+      [newValueKey]: newValue,
     });
   });
 };
