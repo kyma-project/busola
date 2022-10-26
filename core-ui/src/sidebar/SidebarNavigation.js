@@ -3,8 +3,11 @@ import { SideNav } from 'fundamental-react';
 import { useRecoilValueLoadable } from 'recoil';
 import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
 import { useTranslation } from 'react-i18next';
+import { luigiNavigate } from 'resources/createResourceRoutes';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 export const SidebarNavigation = () => {
+  const { namespaceId } = useMicrofrontendContext();
   const { i18n, t } = useTranslation();
   const navigationNodes = useRecoilValueLoadable(
     sidebarNavigationNodesSelector,
@@ -20,19 +23,22 @@ export const SidebarNavigation = () => {
   const categoryNodes = filteredNavigationNodes?.filter(nn => !nn.topLevelNode);
 
   const hasTranslations = translation => {
-    //add proper translations instead of returnObjects
+    // TODO: add proper translations instead of returnObjects
     return i18n.exists(translation) &&
       typeof t(translation, { returnObjects: true }) !== 'object'
       ? t(translation)
       : translation;
   };
+
   const NavItem = ({ node }) => {
     return (
       <SideNav.ListItem
+        key={node.key}
         id={node.key}
         name={hasTranslations(node.label)}
         url="#"
         glyph={node.icon}
+        onClick={() => luigiNavigate(node, namespaceId)}
       />
     );
   };
@@ -40,6 +46,7 @@ export const SidebarNavigation = () => {
   const CategoryItem = ({ node }) => {
     return (
       <SideNav.ListItem
+        key={node.key}
         expandSubmenuLabel={`Expand ${node.key || node.label} category`}
         id={node.key}
         name={hasTranslations(node.key || node.label)}
@@ -48,7 +55,7 @@ export const SidebarNavigation = () => {
       >
         <SideNav.List level={2}>
           {node.items?.map(nn => (
-            <NavItem node={nn} />
+            <NavItem node={nn} key={node.key} />
           ))}
         </SideNav.List>
       </SideNav.ListItem>
@@ -61,7 +68,7 @@ export const SidebarNavigation = () => {
         node.items?.map(item => <NavItem node={item} />),
       )}
       {categoryNodes.map(node => (
-        <CategoryItem node={node} />
+        <CategoryItem node={node} key={node.key} />
       ))}
     </SideNav>
   );

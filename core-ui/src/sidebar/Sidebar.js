@@ -13,13 +13,13 @@ export const Sidebar = () => {
   if (!features?.REACT_NAVIGATION?.isEnabled) return null;
 
   return (
-    <aside class="sidebar">
-      <section>
+    <aside className="sidebar">
+      <section className="sidebar__content">
         <ErrorBoundary customMessage="navigation error" displayButton={false}>
           <SidebarNavigation />
         </ErrorBoundary>
       </section>
-      <section>
+      <section className="sidebar__footer">
         <Footer />
       </section>
     </aside>
