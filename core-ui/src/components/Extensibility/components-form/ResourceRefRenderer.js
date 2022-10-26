@@ -18,6 +18,7 @@ export function ResourceRefRender({
   resource,
   widgets,
   originalResource,
+  nestingLevel,
   ...props
 }) {
   const jsonata = useJsonata({
@@ -86,6 +87,7 @@ export function ResourceRefRender({
       required
       loading={loading}
       error={error}
+      nestingLevel={nestingLevel}
     >
       {schema.get('type') === 'object' && (
         <WidgetRenderer
