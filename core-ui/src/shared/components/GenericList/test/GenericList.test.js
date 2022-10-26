@@ -1,6 +1,5 @@
 import React from 'react';
-import 'core-js/es/array/flat-map';
-import { render, fireEvent, queryByText } from '@testing-library/react';
+import { render, fireEvent, queryByText } from 'testing/reactTestingUtils';
 
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
@@ -178,7 +177,7 @@ describe('GenericList', () => {
 
     mockEntries.forEach(entry =>
       Object.keys(entry)
-        .filter(key => key != 'metadata')
+        .filter(key => key !== 'metadata')
         .forEach(key => getByText(entry[key])),
     );
 
@@ -203,7 +202,7 @@ describe('GenericList', () => {
       withCollapseControl: false,
     });
 
-    const { getByText, getAllByTestId, queryAllByTestId } = render(
+    const { getAllByTestId, queryAllByTestId } = render(
       <GenericList
         entries={mockEntries}
         headerRenderer={mockHeaderRenderer}

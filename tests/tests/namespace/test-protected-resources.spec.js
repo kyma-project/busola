@@ -34,6 +34,11 @@ const configMap = JSON.stringify({
 context('Test Protected Resources', () => {
   Cypress.skipAfterFail();
 
+  // Luigi throws error of the "replace" function when entering the Preferences dialog. Remove the code below after Luigi's removal
+  Cypress.on('uncaught:exception', () => {
+    return false;
+  });
+
   before(() => {
     cy.intercept(
       {
@@ -134,11 +139,11 @@ context('Test Protected Resources', () => {
 
     cy.contains('Preferences').click();
 
-    cy.getModalIframeBody()
+    cy.getIframeBody()
       .contains('Cluster interaction')
       .click();
 
-    cy.getModalIframeBody()
+    cy.getIframeBody()
       .contains(
         '.preferences-row',
         'Allow for modification of protected resources',
@@ -146,7 +151,9 @@ context('Test Protected Resources', () => {
       .find('.fd-switch')
       .click();
 
-    cy.get('[data-testid="modal-mf"] [aria-label="close"]').click();
+    cy.getIframeBody()
+      .contains('Close')
+      .click();
   });
 
   it("Don't protect a resource", () => {

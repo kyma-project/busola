@@ -1,22 +1,13 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useRecoilState } from 'recoil';
 import { Switch } from 'fundamental-react';
-import LuigiClient from '@luigi-project/client';
-import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
+import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom';
 
 export default function ConfirmationSettings() {
   const { t } = useTranslation();
-  const [dontConfirmDelete, setDontConfirmDelete] = useFeatureToggle(
-    'dontConfirmDelete',
+  const [dontConfirmDelete, setDontConfirmDelete] = useRecoilState(
+    dontConfirmDeleteState,
   );
-
-  const toggleValue = () => {
-    LuigiClient.sendCustomMessage({
-      id: 'busola.dontConfirmDelete',
-      value: !dontConfirmDelete,
-    });
-    setDontConfirmDelete(!dontConfirmDelete);
-  };
 
   return (
     <div className="preferences-row">
@@ -30,7 +21,7 @@ export default function ConfirmationSettings() {
           }}
           className="fd-has-display-inline-block fd-margin-begin--tiny"
           checked={dontConfirmDelete}
-          onChange={toggleValue}
+          onChange={() => setDontConfirmDelete(previousState => !previousState)}
           compact
         />
       </div>

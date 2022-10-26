@@ -1,24 +1,18 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { NamespaceStatus } from './NamespaceStatus';
+import { useRecoilValue } from 'recoil';
+import { useTranslation, Trans } from 'react-i18next';
+import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
+import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-import { getFeatureToggle } from 'shared/hooks/useFeatureToggle';
-import { getHiddenNamespaces } from 'shared/helpers/getHiddenNamespaces';
 import { Link } from 'shared/components/Link/Link';
-import { Trans } from 'react-i18next';
 import { NamespaceCreate } from './NamespaceCreate';
-
-const FilterNamespaces = namespace => {
-  const showHiddenNamespaces = getFeatureToggle('showHiddenNamespaces');
-  const hiddenNamespaces = getHiddenNamespaces();
-
-  return showHiddenNamespaces
-    ? true
-    : !hiddenNamespaces.includes(namespace.metadata.name);
-};
+import { NamespaceStatus } from './NamespaceStatus';
 
 export function NamespaceList(props) {
   const { t } = useTranslation();
+  const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
+  const hiddenNamespaces = useGetHiddenNamespaces();
+
   const customColumns = [
     {
       header: t('common.headers.status'),
@@ -27,6 +21,12 @@ export function NamespaceList(props) {
       ),
     },
   ];
+
+  const namespaceFilter = namespace => {
+    return showHiddenNamespaces
+      ? true
+      : !hiddenNamespaces.includes(namespace.metadata.name);
+  };
 
   const description = (
     <Trans i18nKey="namespaces.description">
@@ -41,7 +41,7 @@ export function NamespaceList(props) {
     <ResourcesList
       customColumns={customColumns}
       description={description}
-      filter={FilterNamespaces}
+      filter={namespaceFilter}
       {...props}
       createResourceForm={NamespaceCreate}
     />
