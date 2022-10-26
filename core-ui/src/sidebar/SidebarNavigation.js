@@ -1,12 +1,14 @@
 import React from 'react';
 import { SideNav } from 'fundamental-react';
 import { useRecoilValueLoadable } from 'recoil';
-import { navigationNodesSelector } from 'state/navigation/navigationNodesSelector';
+import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
 import { useTranslation } from 'react-i18next';
 
 export const SidebarNavigation = () => {
   const { i18n, t } = useTranslation();
-  const navigationNodes = useRecoilValueLoadable(navigationNodesSelector);
+  const navigationNodes = useRecoilValueLoadable(
+    sidebarNavigationNodesSelector,
+  );
 
   if (navigationNodes.state === 'loading') return 'loading';
   if (navigationNodes.state === 'hasError') return 'error';
