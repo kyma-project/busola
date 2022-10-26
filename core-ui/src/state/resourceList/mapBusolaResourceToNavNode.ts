@@ -2,7 +2,7 @@ import { NavNode } from '../types';
 
 type PartialNavNode = Partial<NavNode> & Pick<NavNode, 'resourceType'>;
 
-export const busolaResourcesToNavNodes = (resource: PartialNavNode) => {
+export const mapBusolaResourceToNavNode = (resource: PartialNavNode) => {
   const node: NavNode = {} as NavNode;
 
   node.category = resource.category || '';
@@ -17,5 +17,6 @@ export const busolaResourcesToNavNodes = (resource: PartialNavNode) => {
   node.apiGroup = resource.apiGroup || '';
   node.apiVersion = resource.apiVersion || '';
   node.icon = resource.icon;
+  node.topLevelNode = resource.topLevelNode || false;
   return node;
 };
