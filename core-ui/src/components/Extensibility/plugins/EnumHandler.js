@@ -12,7 +12,6 @@ export function EnumHandler({
   resource,
   ...props
 }) {
-  console.group('EnumHandler');
   const { itemVars } = useVariables();
   const jsonata = useJsonata({ resource });
 
@@ -34,7 +33,6 @@ export function EnumHandler({
     newSchema = schema.set('enum', newEnum);
   }
 
-  console.groupEnd();
   return (
     <Plugin
       {...props}
