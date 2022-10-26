@@ -19,6 +19,8 @@ import { Sidebar } from 'sidebar/Sidebar';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 
+import './App.scss';
+
 export default function App() {
   const { cluster, language, customResources = [] } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
@@ -37,24 +39,26 @@ export default function App() {
   useAppTracking();
 
   return (
-    <div>
+    <div id="page-wrap">
       <Sidebar />
-      <Routes key={cluster?.name}>
-        {/* force rerender on cluster change*/}
-        <Route
-          path="/overview" // overview route should stay static
-          element={
-            <WithTitle title={t('clusters.overview.title-current-cluster')}>
-              <ClusterOverview />
-            </WithTitle>
-          }
-        />
-        {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
-        {customResources?.map(cr => createExtensibilityRoutes(cr, language))}
-        {resourceRoutes}
-        {otherRoutes}
-        <Route path="" element={<MainFrameRedirection />} />
-      </Routes>
+      <div id="content-wrap">
+        <Routes key={cluster?.name}>
+          {/* force rerender on cluster change*/}
+          <Route
+            path="/overview" // overview route should stay static
+            element={
+              <WithTitle title={t('clusters.overview.title-current-cluster')}>
+                <ClusterOverview />
+              </WithTitle>
+            }
+          />
+          {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
+          {customResources?.map(cr => createExtensibilityRoutes(cr, language))}
+          {resourceRoutes}
+          {otherRoutes}
+          <Route path="" element={<MainFrameRedirection />} />
+        </Routes>
+      </div>
     </div>
   );
 }

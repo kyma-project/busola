@@ -4,6 +4,8 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { Footer } from './Footer/Footer';
 
+import './Sidebar.scss';
+
 export const Sidebar = () => {
   const { features } = useMicrofrontendContext();
 
@@ -11,7 +13,7 @@ export const Sidebar = () => {
   if (!features?.REACT_NAVIGATION?.isEnabled) return null;
 
   return (
-    <aside>
+    <aside class="sidebar">
       <section>
         <ErrorBoundary customMessage="navigation error" displayButton={false}>
           <SidebarNavigation />

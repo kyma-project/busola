@@ -1,0 +1,13 @@
+#page-wrap {
+  display: grid;
+  grid-template-rows: 55px calc(100vh - 55px);
+  grid-template-columns: 240px auto;
+  grid-template-areas: 'filter products';
+}
+
+#content-wrap {
+  flex-wrap: wrap;
+  margin: auto;
+  grid-area: products;
+  overflow: auto;
+}

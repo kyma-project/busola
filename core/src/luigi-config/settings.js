@@ -13,5 +13,6 @@ export function createSettings(params) {
       hideAutomatically: false,
     },
     customSandboxRules: ['allow-downloads'],
+    hideNavigation: false,
   };
 }

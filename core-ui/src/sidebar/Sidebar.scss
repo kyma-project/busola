@@ -1,0 +1,7 @@
+.sidebar {
+  grid-area: filter;
+  height: 100vh;
+  width: 250px;
+  position: fixed;
+  overflow-x: auto;
+}
