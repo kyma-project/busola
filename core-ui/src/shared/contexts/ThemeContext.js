@@ -46,6 +46,7 @@ export const ThemeProvider = ({ children, env }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme]);
 
+  // not needed?
   useEffect(() => {
     window.parent.postMessage({ msg: 'busola.getCurrentTheme' }, '*'); // send a message to the parent app and expect a response shortly
     const changeTheme = event => {
@@ -56,14 +57,19 @@ export const ThemeProvider = ({ children, env }) => {
     return _ => window.removeEventListener('message', changeTheme);
   }, []);
 
+  // done
   useEffect(() => {
     const listenerId = LuigiClient.addCustomMessageListener(
       'busola.theme',
-      ({ theme }) => setTheme(theme),
+      ({ theme }) => {
+        setTheme(theme);
+        console.log(theme);
+      },
     );
     return () => LuigiClient.removeCustomMessageListener(listenerId);
   }, []);
 
+  // done
   function handleThemeChange(name) {
     LuigiClient.sendCustomMessage({ id: 'busola.theme', name });
     setTheme(name);
