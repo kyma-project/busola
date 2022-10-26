@@ -147,6 +147,7 @@ data:
         group: networking.istio.io
         version: v1beta1        
       visibility: $accessToGateways
+      overwrite: false
       toInternal:  '($values := $split($, "."); { "namespace": $values[1], "name": $values[0] })'
       toExternal: 'name & "." & namespace & ".svc.cluster.local"'
     - simple: true
@@ -163,6 +164,7 @@ data:
       name: gateway
       inputInfo: inputInfo.gateway
       visibility: $notAccessToGateways
+      overwrite: false
     - simple: true
       required: true
       path: spec.host
@@ -176,6 +178,8 @@ data:
           path: '[].accessStrategies'
           name: accessStrategies 
           widget: GenericList 
+          template:
+            path: '/.*'
           children:
             - path: '[].config'
               name: accessStrategies.config
@@ -219,6 +223,7 @@ data:
           required: true
           path: '[].path'
           name: path
+          inputInfo: inputInfo.path
         - path: '[].service' 
           name: service 
           widget: FormGroup
@@ -286,6 +291,7 @@ data:
       gateway: Gateway
       host: Host
       inputInfo.gateway: Gateway structure, '{GATEWAY}.{NAMESPACE}.svc.cluster.local'
+      inputInfo.path: "Path can contain alphanumeric characters and '/', '.', '*', '?', '!', '-', '(', and ')'."
       mutators: Mutators
       mutators.config: Config
       mutators.handlers: Handlers
