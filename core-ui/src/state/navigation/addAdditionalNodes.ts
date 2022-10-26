@@ -11,6 +11,7 @@ import { namespaceOverviewNode } from 'resources/Namespaces/namespaceOverviewNod
 import * as secretMetadata from 'resources/Secrets';
 import * as crdMetadata from 'resources/CustomResourceDefinitions';
 import * as cmMetadata from 'resources/ConfigMaps';
+import { areNodeFeaturesEnabled } from './filters/areNodeFeaturesEnabled';
 
 export const addAdditionalNodes = (
   navNodes: NavNode[],
@@ -25,7 +26,10 @@ export const addAdditionalNodes = (
     addResource(namespaceOverviewNode, extNavList.length, extNavList);
   }
 
-  const isExtEnabled = configFeatures.EXTENSIBILITY?.isEnabled;
+  const isExtEnabled = areNodeFeaturesEnabled(
+    extensionsNavNode,
+    configFeatures,
+  );
   const cmIndex = findResourceIndex(cm, navNodes) + 1;
   if (isExtEnabled && cmIndex && scope === 'cluster') {
     addResource(extensionsNavNode, extNavList.length, extNavList);

@@ -1,4 +1,4 @@
-import { NavNode } from 'state/types';
+import { configFeaturesNames, NavNode } from 'state/types';
 
 export const extensionsNavNode: NavNode = {
   category: 'Configuration',
@@ -6,7 +6,7 @@ export const extensionsNavNode: NavNode = {
   pathSegment: 'configmaps',
   label: 'Extensions',
   namespaced: false,
-  requiredFeatures: [],
+  requiredFeatures: [configFeaturesNames.EXTENSIBILITY],
   apiGroup: '',
   apiVersion: 'v1',
 };
