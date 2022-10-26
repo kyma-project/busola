@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { getHiddenNamespaces } from 'shared/helpers/getHiddenNamespaces';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
-import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
+import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
 import * as handlers from './handlers';
+import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 
 export const LOADING_INDICATOR = 'LOADING_INDICATOR';
 
@@ -23,8 +23,8 @@ export function useSearchResults({
     clusterNodes,
     namespaceNodes,
   } = useMicrofrontendContext();
-  const hiddenNamespaces = getHiddenNamespaces();
-  const [showHiddenNamespaces] = useFeatureToggle('showHiddenNamespaces');
+  const hiddenNamespaces = useGetHiddenNamespaces();
+  const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
   const fetch = useFetch();
   const { t } = useTranslation();
   const setOpenPreferencesModal = useSetRecoilState(isPreferencesOpenState);
