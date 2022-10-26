@@ -1,6 +1,6 @@
-import { Scope } from '../../state/types';
+import { NavNode, Scope } from '../../state/types';
 
-export const createCustomResourcesNavNode = (scope: Scope) => ({
+export const createCustomResourcesNavNode = (scope: Scope): NavNode => ({
   category: 'Configuration',
   resourceType: 'customresources',
   pathSegment: 'customresources',

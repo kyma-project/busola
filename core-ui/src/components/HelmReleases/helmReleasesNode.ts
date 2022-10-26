@@ -1,10 +1,12 @@
-export const helmReleasesNode = {
+import { NavNode } from 'state/types';
+
+export const helmReleasesNode: NavNode = {
   category: 'Apps',
   resourceType: 'helmreleases',
   pathSegment: 'helmreleases',
   label: 'Helm Releases',
   namespaced: true,
   requiredFeatures: [],
-  apiGroup: 'source.toolkit.fluxcd.io',
-  apiVersion: 'v1beta2',
+  apiGroup: '',
+  apiVersion: 'v1',
 };

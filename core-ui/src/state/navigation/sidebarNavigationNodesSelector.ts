@@ -14,7 +14,7 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
   Category[]
 >({
   key: 'scopedNavigationSelector',
-  get: async ({ get }) => {
+  get: ({ get }) => {
     const navNodes: NavNode[] = get(clusterAndNsNodesSelector);
     const activeNamespaceId = get(activeNamespaceIdState);
     const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';

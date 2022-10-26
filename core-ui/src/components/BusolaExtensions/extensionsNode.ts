@@ -1,4 +1,6 @@
-export const extensionsNavNode = {
+import { NavNode } from 'state/types';
+
+export const extensionsNavNode: NavNode = {
   category: 'Configuration',
   resourceType: 'configmaps',
   pathSegment: 'configmaps',
