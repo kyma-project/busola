@@ -10,7 +10,8 @@ type LanguageEffectFn = () => AtomEffect<string>;
 
 export const languageEffect: LanguageEffectFn = () => ({ onSet, setSelf }) => {
   setSelf(() => {
-    const savedValue = localStorage.getItem(LANGUAGE_STORAGE_KEY) || 'en';
+    const savedValue =
+      localStorage.getItem(LANGUAGE_STORAGE_KEY) || JSON.stringify('en');
     const initListenerId = LuigiClient.addInitListener(_ => {
       LuigiClient.sendCustomMessage({
         id: 'busola.language',
