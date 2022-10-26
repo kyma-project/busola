@@ -118,7 +118,7 @@ export function SingleSubjectForm({
           }}
           setValue={setServiceAccount}
           index={index}
-          nestingLevel={nestingLevel}
+          nestingLevel={nestingLevel + 1}
         />
       )}
     </FormFieldset>

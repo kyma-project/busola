@@ -178,7 +178,7 @@ export function ExternalResourceRef({
       defaultOpen={defaultOpen}
       isAdvanced={isAdvanced}
       required={required}
-      nestingLevel={nestingLevel + 1}
+      nestingLevel={nestingLevel}
     >
       {content()}
       {children}
