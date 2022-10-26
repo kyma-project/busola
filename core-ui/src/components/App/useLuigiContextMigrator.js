@@ -2,7 +2,7 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useSetRecoilState } from 'recoil';
 import { useEffect, useRef } from 'react';
 import { isEqual } from 'lodash';
-import { configFeaturesState } from 'state/configFeaturesAtom';
+import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { activeClusterNameState } from 'state/activeClusterNameAtom';
 import { authDataState } from 'state/authDataAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';

@@ -6,8 +6,8 @@ import {
   defaultValue as defaultNamespaceName,
 } from '../activeNamespaceIdAtom';
 import { openapiPathIdListSelector } from '../openapi/openapiPathIdSelector';
-import { configFeaturesState } from '../configFeaturesAtom';
-import { permissionSetsAtom } from '../permissionSetsAtom';
+import { configFeaturesState } from '../configFeatures/configFeaturesAtom';
+import { permissionSetsSelector } from '../permissionSetsSelector';
 import { NavNode, Scope } from '../types';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 import { addAdditionalNodes } from './addAdditionalNodes';
@@ -21,7 +21,8 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     const activeNamespaceId = get(activeNamespaceIdState);
     const openapiPathIdList = get(openapiPathIdListSelector);
     const configFeatures = get(configFeaturesState);
-    const permissionSet = get(permissionSetsAtom);
+    const permissionSet = get(permissionSetsSelector);
+    console.log(1111, 'areDependenciesInitialized');
 
     const areDependenciesInitialized =
       openapiPathIdList && //
@@ -29,6 +30,8 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
       !isEmpty(resourceList) &&
       activeNamespaceId !== defaultNamespaceName &&
       !isEmpty(permissionSet);
+
+    console.log(1111, areDependenciesInitialized);
 
     if (!areDependenciesInitialized) {
       return [];
