@@ -1,27 +1,27 @@
-import { useTranslation } from 'react-i18next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSetRecoilState } from 'recoil';
 import { Select } from 'fundamental-react';
-import LuigiClient from '@luigi-project/client';
+import { languageAtom } from 'state/preferences/languageAtom';
+
+const AVAILABLE_LANGUAGES = [
+  { key: 'en', text: 'English' },
+  { key: 'pl', text: 'Polski' },
+];
 
 export default function LanguageSettings() {
   const { t, i18n } = useTranslation();
-  const languages = [{ key: 'en', text: 'English' }];
+  const setLanguage = useSetRecoilState(languageAtom);
 
   const selectLanguage = (_, language) => {
-    i18n.changeLanguage(language.key);
-
-    //remove sendCustomMessage when removing Luigi
-    LuigiClient.sendCustomMessage({
-      id: 'busola.language',
-      language: language.key,
-    });
+    setLanguage(language.key);
   };
 
   return (
     <div className="preferences-row">
       <span className="fd-has-color-status-4">{t('settings.language')}</span>
       <Select
-        options={languages}
+        options={AVAILABLE_LANGUAGES}
         selectedKey={i18n.language}
         onSelect={selectLanguage}
       />
