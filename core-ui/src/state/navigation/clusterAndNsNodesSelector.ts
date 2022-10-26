@@ -22,21 +22,17 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     const openapiPathIdList = get(openapiPathIdListSelector);
     const configFeatures = get(configFeaturesState);
     const permissionSet = get(permissionSetsSelector);
-    console.log(1111, 'areDependenciesInitialized');
 
     const areDependenciesInitialized =
-      openapiPathIdList && //
-      configFeatures && //
-      !isEmpty(resourceList) &&
+      !isEmpty(openapiPathIdList) &&
       activeNamespaceId !== defaultNamespaceName &&
+      !isEmpty(configFeatures) &&
+      !isEmpty(resourceList) &&
       !isEmpty(permissionSet);
-
-    console.log(1111, areDependenciesInitialized);
 
     if (!areDependenciesInitialized) {
       return [];
     }
-
     const configSet = {
       configFeatures,
       openapiPathIdList,

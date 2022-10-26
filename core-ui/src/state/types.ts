@@ -20,7 +20,6 @@ export const configFeaturesNames = {
   LEGAL_LINKS: 'LEGAL_LINKS',
   SSO_LOGIN: 'SSO_LOGIN',
   KUBECONFIG_ID: 'KUBECONFIG_ID',
-  SENTRY: 'SENTRY',
   OBSERVABILITY: 'OBSERVABILITY',
   HIDDEN_NAMESPACES: 'HIDDEN_NAMESPACES',
   VISUAL_RESOURCES: 'VISUAL_RESOURCES',
@@ -30,6 +29,15 @@ export const configFeaturesNames = {
 
 export type ConfigFeatureList = {
   [key in ConfigFeaturesNames]?: ConfigFeature;
+};
+
+export type LazyConfigFeaturesNames = typeof lazyConfigFeaturesNames[keyof typeof lazyConfigFeaturesNames];
+export const lazyConfigFeaturesNames = {
+  PROMETHEUS: 'PROMETHEUS',
+  SENTRY: 'SENTRY',
+} as const;
+export type LazyConfigFeatureList = {
+  [key in LazyConfigFeaturesNames]?: ConfigFeature;
 };
 
 export type ExtResource = {

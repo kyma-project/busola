@@ -15,7 +15,9 @@ export const resourceListSelector = selector<NavNode[]>({
 
     let resNodeList: NavNode[] = [];
 
-    if (!configFeatures) return resNodeList;
+    if (!configFeatures) {
+      return resNodeList;
+    }
 
     const isExtensibilityOn = configFeatures.EXTENSIBILITY?.isEnabled;
     const areExtensionsLoaded = isExtensibilityOn && extResources;
@@ -29,7 +31,6 @@ export const resourceListSelector = selector<NavNode[]>({
       const extNodeList = extResources.map(mapExtResourceToNavNode);
       resNodeList = mergeInExtensibilityNav(resNodeList, extNodeList);
     }
-
     return resNodeList;
   },
 });
