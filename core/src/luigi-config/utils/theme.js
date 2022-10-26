@@ -1,5 +1,6 @@
 export function setTheme(name) {
-  localStorage.setItem('busola.theme', name);
+  localStorage.setItem('busola.theme', JSON.stringify(name));
+
   const link = document.querySelector('head #_theme');
   if (name === 'light' && link) {
     link.parentNode.removeChild(link);
@@ -24,7 +25,12 @@ function addLinkNode() {
 }
 
 export const getTheme = () => {
-  return localStorage.getItem('busola.theme') || 'light_dark';
+  const storedTheme = localStorage.getItem('busola.theme') || 'light_dark';
+  try {
+    return JSON.parse(storedTheme);
+  } catch (e) {
+    return 'light_dark';
+  }
 };
 
 export function initTheme() {
