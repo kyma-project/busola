@@ -1,9 +1,11 @@
 import React from 'react';
+import { useRecoilState } from 'recoil';
 import { SideNav } from 'fundamental-react';
 import { useRecoilValueLoadable } from 'recoil';
 import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
 import { useTranslation } from 'react-i18next';
 import { luigiNavigate } from 'resources/createResourceRoutes';
+import { expandedCategoriesState } from 'state/navigation/expandedCategoriesAtom';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 export const SidebarNavigation = () => {
@@ -11,6 +13,11 @@ export const SidebarNavigation = () => {
   const { i18n, t } = useTranslation();
   const navigationNodes = useRecoilValueLoadable(
     sidebarNavigationNodesSelector,
+  );
+
+  const fakeExpandedCategories = ['Istio', 'Workloads'];
+  const [expandedCategories, setExpandedCategories] = useRecoilState(
+    expandedCategoriesState,
   );
 
   if (navigationNodes.state === 'loading') return 'loading';
@@ -33,8 +40,8 @@ export const SidebarNavigation = () => {
   const NavItem = ({ node }) => {
     return (
       <SideNav.ListItem
-        key={node.key}
-        id={node.key}
+        key={node.pathSegment}
+        id={node.pathSegment}
         name={hasTranslations(node.label)}
         url="#"
         glyph={node.icon}
@@ -52,6 +59,10 @@ export const SidebarNavigation = () => {
         name={hasTranslations(node.key || node.label)}
         url="#"
         glyph={node.icon || 'customize'}
+        expanded={fakeExpandedCategories.includes(node.key)} //TODO
+        onClick={e => {
+          console.log(node, expandedCategories);
+        }}
       >
         <SideNav.List level={2}>
           {node.items?.map(nn => (
@@ -62,14 +73,23 @@ export const SidebarNavigation = () => {
     );
   };
 
+  const pathSegments = window.location.pathname?.split('/') || [];
+  const selectedId = pathSegments[pathSegments.length - 1];
   return (
-    <SideNav skipLink={{ href: '', label: 'Side navigation' }}>
-      {topLevelNodes.map(node =>
-        node.items?.map(item => <NavItem node={item} />),
-      )}
-      {categoryNodes.map(node => (
-        <CategoryItem node={node} key={node.key} />
-      ))}
+    // TODO: Show children for condensed in fundamental
+    // TODO: Selected id doesn't work
+    <SideNav
+      selectedId={selectedId}
+      skipLink={{ href: '', label: 'Side navigation' }}
+    >
+      <SideNav.List>
+        {topLevelNodes.map(node =>
+          node.items?.map(item => <NavItem node={item} />),
+        )}
+        {categoryNodes.map(node => (
+          <CategoryItem node={node} key={node.key} />
+        ))}
+      </SideNav.List>
     </SideNav>
   );
 };
