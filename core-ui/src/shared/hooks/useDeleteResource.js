@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Button, Checkbox, MessageBox, MessageStrip } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
+import { Button, Checkbox, MessageBox, MessageStrip } from 'fundamental-react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useRecoilState } from 'recoil';
 
-import { navigateToList } from 'shared/hooks/navigate';
-import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
 import { useNotification } from 'shared/contexts/NotificationContext';
+import { useDelete } from 'shared/hooks/BackendAPI/useMutation';
+import { navigateToList } from 'shared/hooks/navigate';
 import { prettifyNameSingular } from 'shared/utils/helpers';
-import { useFeatureToggle } from 'shared/hooks/useFeatureToggle';
+import { dontConfirmDeleteState } from 'state/preferences/dontConfirmDeleteAtom';
 
 export function useDeleteResource({
   resourceTitle,
@@ -18,10 +19,9 @@ export function useDeleteResource({
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const deleteResourceMutation = useDelete();
-  const [dontConfirmDelete, setDontConfirmDelete] = useFeatureToggle(
-    'dontConfirmDelete',
+  const [dontConfirmDelete, setDontConfirmDelete] = useRecoilState(
+    dontConfirmDeleteState,
   );
-
   const notification = useNotification();
 
   const prettifiedResourceName = prettifyNameSingular(
@@ -33,10 +33,6 @@ export function useDeleteResource({
     const withoutQueryString = path => path?.split('?')?.[0];
     const url = withoutQueryString(resourceUrl);
 
-    LuigiClient.sendCustomMessage({
-      id: 'busola.dontConfirmDelete',
-      value: dontConfirmDelete,
-    });
     try {
       if (deleteFn) {
         deleteFn(resource, url);
@@ -95,7 +91,7 @@ export function useDeleteResource({
         >
           {t('common.buttons.delete')}
         </Button>,
-        <Button onClick={() => setDontConfirmDelete(false)} compact>
+        <Button onClick={() => setShowDeleteDialog(false)} compact>
           {t('common.buttons.cancel')}
         </Button>,
       ]}
@@ -111,7 +107,7 @@ export function useDeleteResource({
       <div className="fd-margin-top--sm">
         <Checkbox
           checked={dontConfirmDelete}
-          onChange={() => setDontConfirmDelete(!dontConfirmDelete)}
+          onChange={() => setDontConfirmDelete(prevState => !prevState)}
         >
           {t('common.delete-dialog.delete-confirm')}
         </Checkbox>

@@ -44,7 +44,6 @@ import { loadTargetClusterConfig } from '../utils/target-cluster-config';
 import { checkClusterStorageType } from '../cluster-management/clusters-storage';
 import { getSSOAuthData } from '../auth/sso';
 import { setNavFooterText } from '../nav-footer';
-import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/pagination';
 import { getFeatures, initFeatures } from '../feature-discovery';
 import * as fetchCache from './../cache/fetch-cache';
 import { handleKubeconfigIdIfPresent } from './../kubeconfig-id';
@@ -114,11 +113,6 @@ async function createClusterManagementNodes(features, customResources) {
         return false;
       },
     },
-    {
-      pathSegment: 'preferences',
-      viewUrl: config.coreUIModuleUrl + '/preferences',
-      openNodeInModal: { title: i18next.t('preferences.title'), size: 'm' },
-    },
   ];
 
   const clusterManagementNode = {
@@ -137,12 +131,6 @@ async function createClusterManagementNodes(features, customResources) {
       features,
       customResources,
       ssoData: getSSOAuthData(),
-      settings: {
-        pagination: {
-          pageSize: getPageSize(),
-          AVAILABLE_PAGE_SIZES,
-        },
-      },
     },
   };
 
@@ -251,13 +239,6 @@ export async function createNavigation() {
           {
             icon: 'settings',
             label: i18next.t('top-nav.profile.preferences'),
-            link: `/cluster/${encodeURIComponent(
-              activeClusterName,
-            )}/preferences`,
-            openNodeInModal: {
-              title: i18next.t('preferences.title'),
-              size: 'm',
-            },
           },
         ],
       },
@@ -430,12 +411,6 @@ export async function createNavigationNodes({
         ssoData: getSSOAuthData(),
         apiGroups,
         groupVersions,
-        settings: {
-          pagination: {
-            pageSize: getPageSize(),
-            AVAILABLE_PAGE_SIZES,
-          },
-        },
         clusterNodes: simplifyNodes(clusterNodes),
         namespaceNodes: simplifyNodes(namespaceNodes),
         openApi: clusterOpenApi.getOpenApi,
