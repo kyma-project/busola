@@ -1,9 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 import { Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
-export const Link = ({ url, text, className, children }) => {
+type LinkProps = {
+  url: string;
+  text?: string;
+  className?: string;
+  children?: ReactNode;
+};
+
+export const Link = ({ url, text, className, children }: LinkProps) => {
   const { t } = useTranslation();
 
   return (
@@ -22,9 +28,4 @@ export const Link = ({ url, text, className, children }) => {
       />
     </a>
   );
-};
-
-Link.propTypes = {
-  url: PropTypes.string.isRequired,
-  text: PropTypes.string,
 };
