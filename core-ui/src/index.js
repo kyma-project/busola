@@ -1,5 +1,6 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import ReactDOM from 'react-dom';
+import { RecoilRoot } from 'recoil';
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
@@ -13,13 +14,13 @@ import { Microfrontend } from 'shared/contexts/Microfrontend';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
+import { PreferencesProvider } from 'components/Preferences/Preferences';
 
 import './styles/reset.css';
 import './styles/sapIllus-Fills.css';
 import './styles/sapIllus-Layout.css';
 import './styles/index.scss';
 import './styles/fiori-helpers.scss';
-import { RecoilRoot } from 'recoil';
 
 i18next
   .use(initReactI18next)
@@ -53,7 +54,9 @@ ReactDOM.render(
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Suspense fallback={<Spinner />}>
           <CommandPaletteProvider>
-            <App />
+            <PreferencesProvider>
+              <App />
+            </PreferencesProvider>
           </CommandPaletteProvider>
         </Suspense>
       </BrowserRouter>

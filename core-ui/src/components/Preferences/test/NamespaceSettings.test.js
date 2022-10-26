@@ -1,6 +1,6 @@
 import React from 'react';
 import LuigiClient from '@luigi-project/client';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent } from 'testing/reactTestingUtils';
 import NamespaceSettings from '../NamespaceSettings';
 
 let mockGroups = [];

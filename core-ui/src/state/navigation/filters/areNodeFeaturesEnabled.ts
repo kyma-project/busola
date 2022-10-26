@@ -1,16 +1,9 @@
 import { ConfigFeatureList, NavNode } from '../../types';
 
-export const filterNodesWithDisabledFeatures = (
-  nodes: NavNode[],
-  configFeatures: ConfigFeatureList,
-): NavNode[] => {
-  return nodes.filter(node => areNodeFeaturesDisabled(node, configFeatures));
-};
-
-const areNodeFeaturesDisabled = (
+export const areNodeFeaturesEnabled = (
   node: NavNode,
   configFeatures: ConfigFeatureList,
-) => {
+): boolean => {
   if (dependsOnConfigFeatures(node)) {
     if (isARequiredFeatureDisabled(node, configFeatures)) {
       return false;
