@@ -615,52 +615,6 @@ export function getStaticChildrenNodesForNamespace(
     },
     // ISTIO
     {
-      category: {
-        label: i18next.t('istio.title'),
-        icon: 'overview-chart',
-        collapsible: true,
-      },
-      pathSegment: '_istio_category_placeholder_',
-      hideFromNav: true,
-    },
-    {
-      category: i18next.t('istio.title'),
-      resourceType: 'gateways',
-      pathSegment: 'gateways',
-      label: i18next.t('gateways.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/gateways?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/networking.istio.io/v1beta1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.ISTIO],
-      },
-
-      navigationContext: 'gateways',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':gatewayName',
-              resourceType: 'gateways',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/gateways/:gatewayName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
       category: i18next.t('istio.title'),
       resourceType: 'destinationrules',
       pathSegment: 'destinationrules',
