@@ -1,9 +1,11 @@
 import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
-import { navigationNodesSelector } from 'state/navigation/navigationNodesSelector';
+import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
 
 export const SidebarNavigation = () => {
-  const navigationNodes = useRecoilValueLoadable(navigationNodesSelector);
+  const navigationNodes = useRecoilValueLoadable(
+    sidebarNavigationNodesSelector,
+  );
 
   switch (navigationNodes.state) {
     case 'hasValue':
