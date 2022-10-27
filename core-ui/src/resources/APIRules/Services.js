@@ -53,7 +53,7 @@ const ApiRuleServices = apiRule => {
                   namespacePart + resourceTypePart + '/details/' + name,
                 );
             } catch (e) {
-              alert(1);
+              console.error(e);
             }
           }}
         />
