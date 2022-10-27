@@ -41,12 +41,8 @@ export const communication = {
       localStorage.setItem('busola.luigi-language', JSON.stringify(language));
       i18next.changeLanguage(language).then(() => reloadNavigation());
     },
-    'busola.theme': ({ name }) => {
+    'busola.luigi-theme': ({ name }) => {
       setTheme(name);
-      Luigi.customMessages().sendToAll({
-        id: 'busola.theme',
-        theme: name,
-      });
     },
     'busola.showHiddenNamespaces': ({ showHiddenNamespaces }) => {
       setFeatureToggle('showHiddenNamespaces', showHiddenNamespaces);

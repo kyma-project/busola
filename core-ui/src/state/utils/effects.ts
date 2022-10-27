@@ -8,6 +8,7 @@ export const localStorageEffect: LocalStorageEffectFn = localStorageKey => ({
   onSet,
 }) => {
   const savedValue = localStorage.getItem(localStorageKey);
+  console.log(localStorageKey, savedValue);
   if (savedValue != null) {
     try {
       setSelf(JSON.parse(savedValue));
