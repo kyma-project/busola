@@ -30,7 +30,7 @@ context('Test Sidecars', () => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
   });
 
-  t('Creates the EXT pizza config', () => {
+  it('Creates the EXT sidecars config', () => {
     cy.getIframeBody().as('iframe');
 
     cy.getLeftNav()
