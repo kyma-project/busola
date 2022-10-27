@@ -26,13 +26,14 @@ export default function App() {
   const { cluster, customResources = [] } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
   const language = useRecoilValue(languageAtom);
-  const theme = useRecoilValue(themeState);
-  console.log('rt', theme);
+
   useLoginWithKubeconfigID();
   useResourceSchemas();
 
   useLuigiContextMigrator();
   useConfigContextMigrator();
+
+  void useRecoilValue(themeState);
 
   useEffect(() => {
     i18n.changeLanguage(language);

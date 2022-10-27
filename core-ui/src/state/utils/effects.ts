@@ -12,6 +12,7 @@ export const localStorageEffect: LocalStorageEffectFn = localStorageKey => ({
 
     try {
       if (savedValue !== null) return JSON.parse(savedValue);
+      return previousValue;
     } catch (error) {
       return previousValue;
     }
