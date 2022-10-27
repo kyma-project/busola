@@ -7,10 +7,12 @@ import { Footer } from './Footer/Footer';
 import './Sidebar.scss';
 
 export const Sidebar = () => {
+  const pathname = window.location.pathname;
   const { features } = useMicrofrontendContext();
 
   // turn on the feature locally to work on the new Navigation
   if (!features?.REACT_NAVIGATION?.isEnabled) return null;
+  if (pathname === '/clusters') return null;
 
   return (
     <aside className="sidebar">

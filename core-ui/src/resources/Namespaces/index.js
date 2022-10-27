@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const resourceType = 'namespaces';
+export const resourceType = 'Namespaces';
 export const namespaced = false;
 export const apiGroup = '';
 export const apiVersion = 'v1';
