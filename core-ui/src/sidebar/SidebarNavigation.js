@@ -1,13 +1,11 @@
 import React from 'react';
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import { useRecoilValueLoadable } from 'recoil';
 import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
-import { openapiPathIdListSelector } from 'state/openapi/openapiPathIdSelector';
 
 export const SidebarNavigation = () => {
   const navigationNodes = useRecoilValueLoadable(
     sidebarNavigationNodesSelector,
   );
-  // const aaa = useRecoilValue(openapiPathIdListSelector);
 
   switch (navigationNodes.state) {
     case 'hasValue':
