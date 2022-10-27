@@ -41,11 +41,9 @@ context('Test Sidecars', () => {
       .contains('Upload YAML')
       .click();
 
-    cy.wrap(loadFile('examples/resourced/istio/sidecars.yaml')).then(
-      resource => {
-        cy.pasteToMonaco(resource);
-      },
-    );
+    cy.loadFiles('examples/resourced/istio/sidecars.yaml').then(resource => {
+      cy.pasteToMonaco(resource);
+    });
 
     cy.get('@iframe')
       .contains('Submit')
