@@ -28,8 +28,10 @@ context('Test DNS Providers', () => {
       .contains('Choose Provider type')
       .filter(':visible', { log: false })
       .click();
+
     cy.getIframeBody()
       .contains(PROVIDER_TYPE_PRETTY)
+      .scrollIntoView()
       .click();
 
     // secret
@@ -114,6 +116,7 @@ context('Test DNS Providers', () => {
     cy.getIframeBody()
       .find('[role=dialog]')
       .contains('Exclude Domains')
+      .scrollIntoView()
       .filter(':visible', { log: false })
       .click();
 

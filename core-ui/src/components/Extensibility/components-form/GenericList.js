@@ -17,6 +17,7 @@ export function GenericList({
   required,
   readOnly,
   level,
+  nestingLevel = 0,
   ...props
 }) {
   const { t } = useTranslation();
@@ -55,6 +56,7 @@ export function GenericList({
       defaultOpen={defaultOpen}
       container
       title={tFromStoreKeys(storeKeys, schema)}
+      nestingLevel={nestingLevel}
       actions={setOpen => (
         <Button
           compact
@@ -80,6 +82,7 @@ export function GenericList({
           return (
             <ResourceForm.CollapsibleSection
               title={pluralize(tFromStoreKeys(ownKeys, schema), 1)}
+              nestingLevel={nestingLevel + 1}
               actions={
                 <Button
                   compact
@@ -99,6 +102,7 @@ export function GenericList({
                 level={level + 1}
                 schemaKeys={schemaKeys?.push('items')}
                 placeholder={tExt(schemaPlaceholder)}
+                nestingLevel={nestingLevel + 1}
               />
             </ResourceForm.CollapsibleSection>
           );

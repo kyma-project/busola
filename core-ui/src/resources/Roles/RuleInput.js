@@ -5,6 +5,7 @@ import * as jp from 'jsonpath';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput, TextArrayInput } from 'shared/ResourceForm/fields';
+import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { InvalidRoleError } from './InvalidRoleError';
 import { useResourcesForApiGroups } from './useResourcesForApiGroups';
 import {
@@ -115,6 +116,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         options={apiGroupsInputOptions}
         emptyStringKey={EMPTY_API_GROUP_KEY}
         defaultOpen
+        nestingLevel={2}
         actions={
           <Button
             compact
@@ -134,18 +136,21 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         propertyPath="$.resources"
         options={availableResources.map(i => ({ key: i, text: i }))}
         defaultOpen
+        nestingLevel={2}
         newItemAction={
           loading ? (
             <BusyIndicator size="s" show={true} />
           ) : (
-            <Button
-              compact
-              glyph="refresh"
-              option="transparent"
-              onClick={fetchResources}
-              disabled={!loadable}
-              ariaLabel={t('roles.buttons.load')}
-            />
+            <Tooltip content={t('roles.tooltips.load')}>
+              <Button
+                compact
+                glyph="refresh"
+                option="transparent"
+                onClick={fetchResources}
+                disabled={!loadable}
+                ariaLabel={t('roles.buttons.load')}
+              />
+            </Tooltip>
           )
         }
         actions={[
@@ -167,6 +172,7 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         propertyPath="$.verbs"
         options={verbs.map(i => ({ key: i, text: i }))}
         defaultOpen
+        nestingLevel={2}
         actions={[
           <Button
             compact
@@ -183,12 +189,14 @@ export function RuleInput({ rule, rules, setRules, isAdvanced }) {
         <TextArrayInput
           title={t('roles.headers.resource-names')}
           propertyPath="$.resourceNames"
+          nestingLevel={2}
         />
       )}
       {isAdvanced && !namespaceId && (
         <ComboboxArrayInput
           title={t('roles.headers.non-resource-urls')}
           propertyPath="$.nonResourceURLs"
+          nestingLevel={2}
           options={nonResourceUrls.map(i => ({ key: i, text: i }))}
         />
       )}

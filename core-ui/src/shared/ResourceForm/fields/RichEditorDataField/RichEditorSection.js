@@ -101,6 +101,7 @@ export function RichEditorSection({ item, onChange, onDelete, pushValue }) {
       language={language || ''}
       actions={deleteButton}
       defaultOpen
+      nestingLevel={1}
     >
       {keyInput}
       <div className="rich-editor__dropdown-wrapper">{languageDropdown}</div>

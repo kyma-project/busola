@@ -2,7 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { TextArrayInput } from 'shared/ResourceForm/fields';
 
-export const HostsForm = ({ server = {}, servers, setServers }) => {
+export const HostsForm = ({
+  server = {},
+  servers,
+  setServers,
+  nestingLevel = 0,
+}) => {
   const { t } = useTranslation();
 
   const setValue = hosts => {
@@ -22,6 +27,7 @@ export const HostsForm = ({ server = {}, servers, setServers }) => {
       inputProps={{
         placeholder: t('gateways.create-modal.advanced.placeholders.hosts'),
       }}
+      nestingLevel={nestingLevel + 1}
       defaultOpen
     />
   );

@@ -3,8 +3,6 @@ import { FormInput } from 'fundamental-react';
 
 import { MultiInput } from './MultiInput';
 
-import './TextArrayInput.scss';
-
 export function TextArrayInput({
   defaultOpen,
   inputProps: _inputProps,
