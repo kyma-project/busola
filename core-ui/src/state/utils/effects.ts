@@ -1,24 +1,40 @@
 import { AtomEffect } from 'recoil';
 import LuigiClient from '@luigi-project/client';
 
-type LocalStorageEffectFn = <T>(localStorageKey: string) => AtomEffect<T>;
+type LocalStorageEffectFn = <T>(
+  localStorageKey: string,
+  setSelfFn?: any,
+) => AtomEffect<T>;
 
-export const localStorageEffect: LocalStorageEffectFn = localStorageKey => ({
-  setSelf,
-  onSet,
-}) => {
-  const savedValue = localStorage.getItem(localStorageKey);
-  console.log(localStorageKey, savedValue);
-  if (savedValue != null) {
-    try {
-      setSelf(param => {
-        // console.log('para', localStorageKey, param);
-        try {
-          return JSON.parse(savedValue);
-        } catch {}
-      });
-    } catch {}
-  }
+export const localStorageEffect: LocalStorageEffectFn = (
+  localStorageKey,
+  setSelfFn,
+) => ({ setSelf, onSet }) => {
+  setSelf(previousValue => {
+    const savedValue = localStorage.getItem(localStorageKey);
+
+    if (savedValue !== null) return JSON.parse(savedValue);
+    return previousValue;
+  });
+
+  // setSelf(previousValue => {
+  //   const savedValue = localStorage.getItem(localStorageKey);
+  //   console.log(localStorageKey, savedValue);
+
+  //   if (savedValue === null) {
+  //     setSelfFn && setSelfFn(previousValue);
+  //     return previousValue;
+  //   }
+
+  //   try {
+  //     const parsedValue = JSON.parse(savedValue);
+  //     setSelfFn && setSelfFn(parsedValue);
+  //     return parsedValue;
+  //   } catch (_) {
+  //     setSelfFn && setSelfFn(previousValue);
+  //     return previousValue;
+  //   }
+  // });
 
   onSet(newValue =>
     localStorage.setItem(localStorageKey, JSON.stringify(newValue)),

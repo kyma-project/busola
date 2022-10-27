@@ -1,5 +1,5 @@
 export function setTheme(name) {
-  localStorage.setItem('busola.luigi-theme', JSON.stringify(name));
+  localStorage.setItem('busola.luigi-theme', name);
   const link = document.querySelector('head #_theme');
   if (name === 'light' && link) {
     link.parentNode.removeChild(link);
@@ -24,25 +24,9 @@ function addLinkNode() {
 }
 
 export const getTheme = () => {
-  const x = localStorage.getItem('busola.luigi-theme') || 'hcb';
-  console.log('luigi', x);
-  return x;
+  return localStorage.getItem('busola.luigi-theme') || 'light_dark';
 };
 
 export function initTheme() {
   setTheme(getTheme());
-
-  window.addEventListener(
-    'message',
-    event => {
-      if (event.data.msg === 'busola.getCurrentTheme') {
-        event.source &&
-          event.source.postMessage(
-            { msg: 'busola.getCurrentTheme.response', name: getTheme() },
-            event.origin,
-          );
-      }
-    },
-    false,
-  );
 }
