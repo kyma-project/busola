@@ -3,7 +3,6 @@ import { LayoutPanel } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import * as Sentry from '@sentry/react';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
-import { useTheme } from 'shared/contexts/ThemeContext';
 
 class ExtensibilityErrBoundaryComponent extends React.Component {
   constructor(props) {
@@ -43,7 +42,6 @@ class ExtensibilityErrBoundaryComponent extends React.Component {
             <p>{message}</p>
             {hasCause ? (
               <Editor
-                editorTheme={this.props.editorTheme}
                 height="10em"
                 value={JSON.stringify(this.state.error.cause, null, 2)}
                 autocompletionDisabled
@@ -65,12 +63,6 @@ ExtensibilityErrBoundaryComponent.defaultProps = {
 
 export const ExtensibilityErrBoundary = ({ ...props }) => {
   const { t } = useTranslation();
-  const { editorTheme } = useTheme();
-  return (
-    <ExtensibilityErrBoundaryComponent
-      {...props}
-      t={t}
-      editorTheme={editorTheme}
-    />
-  );
+
+  return <ExtensibilityErrBoundaryComponent {...props} t={t} />;
 };
