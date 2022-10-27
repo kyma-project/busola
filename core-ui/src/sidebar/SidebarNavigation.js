@@ -1,20 +1,20 @@
 import React from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValueLoadable, useRecoilValue } from 'recoil';
 import { SideNav } from 'fundamental-react';
-import { useRecoilValueLoadable } from 'recoil';
+// import { useRecoilValueLoadable } from 'recoil';
 import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
 import { useTranslation } from 'react-i18next';
 import { luigiNavigate } from 'resources/createResourceRoutes';
 import { expandedCategoriesState } from 'state/navigation/expandedCategoriesAtom';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export const SidebarNavigation = () => {
-  const { namespaceId } = useMicrofrontendContext();
   const { i18n, t } = useTranslation();
   const navigationNodes = useRecoilValueLoadable(
     sidebarNavigationNodesSelector,
   );
-
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [expandedCategories, setExpandedCategories] = useRecoilState(
     expandedCategoriesState,
   );
@@ -86,6 +86,8 @@ export const SidebarNavigation = () => {
   return (
     // TODO: Show children for condensed in fundamental
     // TODO: Selected id doesn't work
+    // TODO: Remove 'TypeError: onItemSelect is not a function' errors in fundamental
+    // TODO: Fix max width in fundamental
     <SideNav
       selectedId={selectedId}
       skipLink={{ href: '', label: 'Side navigation' }}
