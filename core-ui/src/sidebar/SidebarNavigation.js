@@ -1,11 +1,12 @@
 import React from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { SideNav } from 'fundamental-react';
 import { useRecoilValueLoadable } from 'recoil';
 import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
 import { useTranslation } from 'react-i18next';
 import { luigiNavigate } from 'resources/createResourceRoutes';
 import { expandedCategoriesState } from 'state/navigation/expandedCategoriesAtom';
+import { activeClusterNameState } from 'state/activeClusterNameAtom';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 export const SidebarNavigation = () => {
@@ -59,9 +60,18 @@ export const SidebarNavigation = () => {
         name={hasTranslations(node.key || node.label)}
         url="#"
         glyph={node.icon || 'customize'}
-        expanded={fakeExpandedCategories.includes(node.key)} //TODO
-        onClick={e => {
-          console.log(node, expandedCategories);
+        expanded={expandedCategories?.includes(node.key)}
+        onClick={() => {
+          const wasExpanded = expandedCategories?.includes(node.key);
+          let newExpandedCategories = [...expandedCategories];
+          if (wasExpanded) {
+            newExpandedCategories = newExpandedCategories?.filter(
+              el => el !== node.key,
+            );
+          } else {
+            newExpandedCategories?.push(node.key);
+          }
+          setExpandedCategories(newExpandedCategories);
         }}
       >
         <SideNav.List level={2}>

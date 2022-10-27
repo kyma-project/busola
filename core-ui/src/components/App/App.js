@@ -16,6 +16,7 @@ import { resourceRoutes } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import otherRoutes from 'resources/other';
 import { Sidebar } from 'sidebar/Sidebar';
+import { Header } from 'header/Header';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 
@@ -39,26 +40,31 @@ export default function App() {
   useAppTracking();
 
   return (
-    <div id="page-wrap">
-      <Sidebar />
-      <div id="content-wrap">
-        <Routes key={cluster?.name}>
-          {/* force rerender on cluster change*/}
-          <Route
-            path="/overview" // overview route should stay static
-            element={
-              <WithTitle title={t('clusters.overview.title-current-cluster')}>
-                <ClusterOverview />
-              </WithTitle>
-            }
-          />
-          {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
-          {customResources?.map(cr => createExtensibilityRoutes(cr, language))}
-          {resourceRoutes}
-          {otherRoutes}
-          <Route path="" element={<MainFrameRedirection />} />
-        </Routes>
+    <>
+      <Header></Header>
+      <div id="page-wrap">
+        <Sidebar />
+        <div id="content-wrap">
+          <Routes key={cluster?.name}>
+            {/* force rerender on cluster change*/}
+            <Route
+              path="/overview" // overview route should stay static
+              element={
+                <WithTitle title={t('clusters.overview.title-current-cluster')}>
+                  <ClusterOverview />
+                </WithTitle>
+              }
+            />
+            {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
+            {customResources?.map(cr =>
+              createExtensibilityRoutes(cr, language),
+            )}
+            {resourceRoutes}
+            {otherRoutes}
+            <Route path="" element={<MainFrameRedirection />} />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
