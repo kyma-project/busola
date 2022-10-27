@@ -5,10 +5,7 @@ import { Select } from 'fundamental-react';
 import { languageAtom } from 'state/preferences/languageAtom';
 import { Option } from 'fundamental-react/lib/Select/Select';
 
-const AVAILABLE_LANGUAGES = [
-  { key: 'en', text: 'English' },
-  { key: 'pl', text: 'Polski' },
-];
+const AVAILABLE_LANGUAGES = [{ key: 'en', text: 'English' }];
 
 export default function LanguageSettings() {
   const { t, i18n } = useTranslation();

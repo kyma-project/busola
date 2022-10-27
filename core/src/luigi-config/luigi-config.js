@@ -31,7 +31,7 @@ import { loadingState } from './loading-state';
 const luigiAfterInit = () => Luigi.ux().hideAppLoadingIndicator();
 
 export const i18n = i18next.use(i18nextBackend).init({
-  lng: JSON.parse(localStorage.getItem('busola.luigi-language')) || 'en',
+  lng: localStorage.getItem('busola.luigi-language') || 'en',
   fallbackLng: 'en',
   nsSeparator: '::',
   backend: {

@@ -38,7 +38,7 @@ window.addEventListener('keydown', e => {
 export const communication = {
   customMessagesListeners: {
     'busola.luigi-language': ({ language }) => {
-      localStorage.setItem('busola.luigi-language', JSON.stringify(language));
+      localStorage.setItem('busola.luigi-language', language);
       i18next.changeLanguage(language).then(() => reloadNavigation());
     },
     'busola.luigi-theme': ({ name }) => {
