@@ -22,7 +22,11 @@ import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useJsonata } from './hooks/useJsonata';
 
-export const ExtensibilityListCore = ({ resMetaData, ...props }) => {
+export const ExtensibilityListCore = ({
+  resMetaData,
+  filterFunction,
+  ...props
+}) => {
   const { t, widgetT, exists } = useGetTranslation();
   const { t: tBusola } = useTranslation();
   const jsonata = useJsonata({});
@@ -73,7 +77,7 @@ export const ExtensibilityListCore = ({ resMetaData, ...props }) => {
   const isFilterAString = typeof resMetaData.resource?.filter === 'string';
   const filterFn = value =>
     applyFormula(value, resMetaData.resource.filter, tBusola);
-  listProps.filter = isFilterAString ? filterFn : undefined;
+  listProps.filter = isFilterAString ? filterFn : filterFunction;
 
   const sortOptions = (resMetaData?.list || []).filter(element => element.sort);
   const searchOptions = (resMetaData?.list || []).filter(
