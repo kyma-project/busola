@@ -20,12 +20,14 @@ import otherRoutes from 'resources/other';
 import { Sidebar } from 'sidebar/Sidebar';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
+import { themeState } from 'state/preferences/themeAtom';
 
 export default function App() {
   const { cluster, customResources = [] } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
   const language = useRecoilValue(languageAtom);
-
+  const theme = useRecoilValue(themeState);
+  console.log('rt', theme);
   useLoginWithKubeconfigID();
   useResourceSchemas();
 

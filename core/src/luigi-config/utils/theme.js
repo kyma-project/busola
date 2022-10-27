@@ -24,7 +24,9 @@ function addLinkNode() {
 }
 
 export const getTheme = () => {
-  return localStorage.getItem('busola.luigi-theme') || 'light_dark';
+  const x = localStorage.getItem('busola.luigi-theme') || 'hcb';
+  console.log('luigi', x);
+  return x;
 };
 
 export function initTheme() {

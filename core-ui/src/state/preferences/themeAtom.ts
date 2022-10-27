@@ -4,7 +4,7 @@ import { localStorageEffect, luigiMessageEffect } from '../utils/effects';
 type Theme = 'dark' | 'light' | 'light_dark' | 'hcw' | 'hcb' | 'default';
 
 const THEME_STORAGE_KEY = 'busola.theme';
-const DEFAULT_THEME = 'default';
+const DEFAULT_THEME = 'hcb';
 
 function applyThemeToLinkNode(name: Theme, publicUrl: string): any {
   const link = document.querySelector('head #_theme') as HTMLLinkElement;

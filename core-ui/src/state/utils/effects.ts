@@ -11,7 +11,12 @@ export const localStorageEffect: LocalStorageEffectFn = localStorageKey => ({
   console.log(localStorageKey, savedValue);
   if (savedValue != null) {
     try {
-      setSelf(JSON.parse(savedValue));
+      setSelf(param => {
+        // console.log('para', localStorageKey, param);
+        try {
+          return JSON.parse(savedValue);
+        } catch {}
+      });
     } catch {}
   }
 
