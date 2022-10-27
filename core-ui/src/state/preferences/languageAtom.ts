@@ -12,6 +12,6 @@ export const languageAtom: RecoilState<Language> = atom<Language>({
   default: DEFAULT_LANGUAGE,
   effects: [
     localStorageEffect(LANGUAGE_STORAGE_KEY),
-    luigiMessageEffect('busola.language', 'language'),
+    luigiMessageEffect('busola.luigi-language', 'language'),
   ],
 });
