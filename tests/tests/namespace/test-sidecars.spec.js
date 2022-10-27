@@ -1,8 +1,5 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadFile } from '../../support/loadFile';
-
-const FILE_NAME = 'test-sidecar.yaml';
 
 const SIDECAR_NAME =
   'test-' +
@@ -16,16 +13,6 @@ const IGRES_NAME = 'somename';
 const PORT_PROTOCOL = 'HTTP';
 const EGRESS_HOST = 'testhost/*';
 const DEFAULT_ENDPOINT = '127.0.0.1:8080';
-
-async function loadSidecar(name, namespace, fileName) {
-  const resource = await loadFile(fileName);
-  const newResource = { ...resource };
-
-  newResource.metadata.name = name;
-  newResource.metadata.namespace = namespace;
-
-  return newResource;
-}
 
 context('Test Sidecars', () => {
   Cypress.skipAfterFail();
