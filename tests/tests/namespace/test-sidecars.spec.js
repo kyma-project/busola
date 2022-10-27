@@ -41,7 +41,7 @@ context('Test Sidecars', () => {
       .contains('Upload YAML')
       .click();
 
-    cy.loadFiles('examples/resourced/istio/sidecars.yaml').then(resource => {
+    cy.loadFiles('examples/resources/istio/sidecars.yaml').then(resource => {
       cy.pasteToMonaco(resource);
     });
 
