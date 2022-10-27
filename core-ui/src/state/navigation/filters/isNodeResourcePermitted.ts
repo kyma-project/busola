@@ -2,14 +2,10 @@ import { doesUserHavePermission } from './permissions';
 import { NavNode } from '../../types';
 import { PermissionSet } from '../../permissionSetsAtom';
 
-export const filterPermittedNodes = (
-  nodes: NavNode[],
+export const isNodeResourcePermitted = (
+  node: NavNode,
   permissionSet: PermissionSet[],
 ) => {
-  return nodes.filter(node => isResourcePermitted(node, permissionSet));
-};
-
-const isResourcePermitted = (node: NavNode, permissionSet: PermissionSet[]) => {
   const resourceGroupAndVersion = `${node.apiGroup}${node.apiGroup ? '/' : ''}${
     node.apiVersion
   }`;
