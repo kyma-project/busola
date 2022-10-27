@@ -3,9 +3,5 @@
   height: 50px;
   position: fixed;
   background-color: var(--sapShellColor, #354a5f);
-
-  .header-left {
-  }
-  .header-right {
-  }
+  z-index: 9;
 }

@@ -1,9 +1,9 @@
-import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Shellbar } from 'fundamental-react';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { activeClusterNameState } from 'state/activeClusterNameAtom';
+import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 import { clustersState } from 'state/clustersAtom';
 
 import './Header.scss';
@@ -13,6 +13,7 @@ export const Header = () => {
   const [activeCluster, setActiveCluster] = useRecoilState(
     activeClusterNameState,
   );
+  const [_, setModalOpen] = useRecoilState(isPreferencesOpenState);
   const clusters = useRecoilValue(clustersState);
 
   if (!features?.REACT_NAVIGATION?.isEnabled) return null;
@@ -34,6 +35,7 @@ export const Header = () => {
 
   return (
     <Shellbar
+      className="header"
       logo={
         <img
           alt="SAP"
@@ -49,9 +51,7 @@ export const Header = () => {
       profileMenu={[
         {
           name: 'Settings',
-          callback: e => {
-            console.log('open settings', e);
-          },
+          callback: _ => setModalOpen(true),
         },
       ]}
     />

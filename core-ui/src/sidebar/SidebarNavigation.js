@@ -74,7 +74,7 @@ export const SidebarNavigation = () => {
       >
         <SideNav.List level={2}>
           {node.items?.map(nn => (
-            <NavItem node={nn} key={node.key} />
+            <NavItem node={nn} key={nn.key} />
           ))}
         </SideNav.List>
       </SideNav.ListItem>
