@@ -28,8 +28,9 @@ function addLinkNode() {
 type AddLinkEffect = () => AtomEffect<Theme>;
 export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
   setSelf(param => {
-    applyThemeToLinkNode(param as Theme, process.env.PUBLIC_URL);
-    return param as Theme;
+    const defaultValue = param as Theme;
+    applyThemeToLinkNode(defaultValue, process.env.PUBLIC_URL);
+    return defaultValue;
   });
 
   onSet(newTheme => {
@@ -37,18 +38,11 @@ export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
   });
 };
 
-// const setThemeWhenReadingLocalStorage = (newTheme: Theme) => {
-//   applyThemeToLinkNode(newTheme, process.env.PUBLIC_URL);
-// };
-
 export const themeState: RecoilState<Theme> = atom<Theme>({
   key: 'themeState',
   default: DEFAULT_THEME,
   effects: [
-    localStorageEffect<Theme>(
-      THEME_STORAGE_KEY,
-      // setThemeWhenReadingLocalStorage,
-    ),
+    localStorageEffect<Theme>(THEME_STORAGE_KEY),
     luigiMessageEffect('busola.luigi-theme', 'name'),
     addLinkEffect(),
   ],
