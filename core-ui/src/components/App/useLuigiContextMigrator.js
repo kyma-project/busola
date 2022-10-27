@@ -10,6 +10,7 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { extResourcesState } from 'state/extResourcesAtom';
 import { openapiState } from 'state/openapi/openapiAtom';
 import { clusterState } from 'state/clusterAtom';
+import { clustersState } from 'state/clustersAtom';
 import { clusterConfigState } from 'state/clusterConfigAtom';
 import { ssoDataState } from 'state/ssoDataAtom';
 
@@ -22,6 +23,7 @@ export const useLuigiContextMigrator = () => {
     customResources,
     openApi,
     cluster,
+    clusters,
     config,
     ssoData,
     groups,
@@ -36,6 +38,7 @@ export const useLuigiContextMigrator = () => {
   useUpdateRecoilIfValueChanged(openApi, openapiState);
   useUpdateRecoilIfValueChanged(config, clusterConfigState);
   useUpdateRecoilIfValueChanged(cluster, clusterState);
+  useUpdateRecoilIfValueChanged(clusters, clustersState);
   useUpdateRecoilIfValueChanged(ssoData, ssoDataState);
 };
 

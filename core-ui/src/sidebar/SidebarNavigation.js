@@ -1,12 +1,11 @@
 import React from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { SideNav } from 'fundamental-react';
 import { useRecoilValueLoadable } from 'recoil';
 import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
 import { useTranslation } from 'react-i18next';
 import { luigiNavigate } from 'resources/createResourceRoutes';
 import { expandedCategoriesState } from 'state/navigation/expandedCategoriesAtom';
-import { activeClusterNameState } from 'state/activeClusterNameAtom';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 export const SidebarNavigation = () => {
@@ -16,7 +15,6 @@ export const SidebarNavigation = () => {
     sidebarNavigationNodesSelector,
   );
 
-  const fakeExpandedCategories = ['Istio', 'Workloads'];
   const [expandedCategories, setExpandedCategories] = useRecoilState(
     expandedCategoriesState,
   );
