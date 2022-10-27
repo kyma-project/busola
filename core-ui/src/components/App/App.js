@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
 
 import { MainFrameRedirection } from 'shared/components/MainFrameRedirection/MainFrameRedirection';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
@@ -11,6 +12,7 @@ import { useAppTracking } from 'hooks/tracking';
 
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
 import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
+import { languageAtom } from 'state/preferences/languageAtom';
 
 import { resourceRoutes } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
@@ -20,8 +22,9 @@ import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 
 export default function App() {
-  const { cluster, language, customResources = [] } = useMicrofrontendContext();
+  const { cluster, customResources = [] } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
+  const language = useRecoilValue(languageAtom);
 
   useLoginWithKubeconfigID();
   useResourceSchemas();
@@ -50,7 +53,9 @@ export default function App() {
           }
         />
         {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
-        {customResources?.map(cr => createExtensibilityRoutes(cr, language))}
+        {customResources?.map(cr =>
+          createExtensibilityRoutes(cr, i18n.language),
+        )}
         {resourceRoutes}
         {otherRoutes}
         <Route path="" element={<MainFrameRedirection />} />
