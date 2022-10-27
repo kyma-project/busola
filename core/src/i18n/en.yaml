@@ -68,6 +68,7 @@ api-rules:
     ok: Resource created
     skipped: Skipped creating the resource
     unknown: Unknown resource state
+  virtual-services: Virtual Services
 applications:
   buttons:
     connect: Connect Application
@@ -1999,10 +2000,6 @@ upload-yaml:
     incorrect-namespace: The cluster-wide resources shouldn't have a Namespace.
   you-will-create_one: 'You will create 1 resource:'
   you-will-create_other: 'You will create {{count}} resources:'
-virtualservices:
-  gateways: Gateways
-  hosts: Hosts
-  name_singular: VirtualService
 workload-selector:
   title: Workload Selector
 workloads:

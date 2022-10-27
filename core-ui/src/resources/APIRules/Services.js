@@ -4,12 +4,14 @@ import pluralize from 'pluralize';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { useTranslation } from 'react-i18next';
 
 const ExtensibilityList = React.lazy(() =>
   import('../../components/Extensibility/ExtensibilityList'),
 );
 
 const ApiRuleServices = apiRule => {
+  const { t } = useTranslation();
   const namespace = apiRule.metadata.namespace;
   const url = `/apis/networking.istio.io/v1beta1/namespaces/${namespace}/virtualservices`;
   const filterByOwnerRef = ({ metadata }) =>
@@ -22,7 +24,7 @@ const ApiRuleServices = apiRule => {
     cR => cR.general?.resource?.kind === 'VirtualService',
   );
 
-  if (!extensibilityVirtualServices) {
+  if (extensibilityVirtualServices) {
     return (
       <Suspense fallback={<Spinner />}>
         <ExtensibilityList
@@ -32,7 +34,7 @@ const ApiRuleServices = apiRule => {
           resourceUrl={url}
           hasDetailsView
           showTitle
-          title={'VirtualServicesList'}
+          title={t('api-rules.virtual-services')}
           navigateFn={entry => {
             try {
               const {
