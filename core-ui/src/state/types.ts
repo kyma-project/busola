@@ -67,4 +67,5 @@ export type NavNode = {
   apiGroup: string;
   icon?: string;
   topLevelNode?: boolean;
+  externalUrl?: string;
 };
