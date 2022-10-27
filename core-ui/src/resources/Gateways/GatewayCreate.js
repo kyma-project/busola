@@ -72,6 +72,7 @@ export function GatewayCreate({
             servers={values}
             setServers={setValues}
             isAdvanced={isAdvanced}
+            nestingLevel={1}
           />
         )}
         newResourceTemplateFn={newServer}

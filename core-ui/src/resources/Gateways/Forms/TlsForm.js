@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, MessageStrip } from 'fundamental-react';
+import { MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import {
   TSL_MODES,
@@ -12,7 +12,7 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import * as Inputs from 'shared/ResourceForm/inputs';
 
-const HttpTlsForm = ({ server, servers, setServers }) => {
+const HttpTlsForm = ({ server, servers, setServers, nestingLevel = 0 }) => {
   const handleHttpsRedirect = () => {
     if (!server?.tls) {
       server['tls'] = {
@@ -30,19 +30,16 @@ const HttpTlsForm = ({ server, servers, setServers }) => {
       resource={server}
       defaultOpen={true}
       setResource={() => setServers([...servers])}
+      nestingLevel={nestingLevel + 1}
     >
       <ResourceForm.FormField
         label={t('gateways.create-modal.advanced.tls.https-redirect')}
         tooltipContent={t(
           'gateways.create-modal.advanced.tls.https-redirect-description',
         )}
-        input={() => (
-          <Switch
-            compact
-            onChange={handleHttpsRedirect}
-            checked={server.tls?.httpsRedirect}
-          />
-        )}
+        input={Inputs.Switch}
+        checked={server.tls?.httpsRedirect}
+        onChange={handleHttpsRedirect}
       />
     </ResourceForm.CollapsibleSection>
   );
@@ -69,7 +66,13 @@ const filterMatchingSecrets = secret =>
   secret.type === 'kubernetes.io/tls' ||
   (secret.type === 'Opaque' && 'key' in secret.data && 'cert' in secret.data);
 
-export const TlsForm = ({ server = {}, servers, setServers, isAdvanced }) => {
+export const TlsForm = ({
+  server = {},
+  servers,
+  setServers,
+  isAdvanced,
+  nestingLevel = 0,
+}) => {
   const { t } = useTranslation();
 
   const resourceOptions = TSL_MODES.map(mode => ({
@@ -94,7 +97,12 @@ export const TlsForm = ({ server = {}, servers, setServers, isAdvanced }) => {
   const isHTTP = isHTTPProtocol(server?.port?.protocol);
   if (isHTTP) {
     return (
-      <HttpTlsForm server={server} servers={servers} setServers={setServers} />
+      <HttpTlsForm
+        server={server}
+        servers={servers}
+        setServers={setServers}
+        nestingLevel={nestingLevel}
+      />
     );
   }
 
@@ -107,6 +115,7 @@ export const TlsForm = ({ server = {}, servers, setServers, isAdvanced }) => {
       resource={server}
       setResource={() => setServers([...servers])}
       isAdvanced={isAdvanced}
+      nestingLevel={nestingLevel + 1}
     >
       <ResourceForm.FormField
         tooltipContent={t('gateways.create-modal.advanced.mode-tooltip')}

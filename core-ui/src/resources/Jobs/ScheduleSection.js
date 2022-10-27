@@ -56,7 +56,10 @@ function TimeInput({ entries, index, name, setSchedule }) {
             placeholder={t('cron-jobs.create-modal.' + name)}
             required
           />
-          <p style={{ color: 'var(--sapNeutralTextColor)' }}>
+          <p
+            style={{ color: 'var(--sapNeutralTextColor)' }}
+            className="fd-col-md--12"
+          >
             {t('cron-jobs.create-modal.tooltips.' + name)}
           </p>
         </>

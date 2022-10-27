@@ -1,5 +1,4 @@
 .resource-form__collapsible-section {
-  background: var(--sapNeutralBackground);
   display: flex;
   flex-direction: column;
   padding-right: 0;
@@ -10,6 +9,7 @@
     cursor: pointer;
     padding: 8px 16px;
     border-top: 1px solid var(--sapList_GroupHeaderBorderColor);
+    background: var(--sapNeutralBackground);
 
     .control-icon {
       margin-right: 8px;
@@ -28,7 +28,6 @@
 
   .content {
     padding: {
-      left: 16px;
       right: 0;
       top: 16px;
       bottom: 24px;
