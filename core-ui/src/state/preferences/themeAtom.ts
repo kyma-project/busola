@@ -1,7 +1,7 @@
 import { atom, RecoilState, AtomEffect } from 'recoil';
 import { localStorageEffect, luigiMessageEffect } from '../utils/effects';
 
-type Theme = 'dark' | 'light' | 'light_dark' | 'hcw' | 'hcb' | 'default';
+export type Theme = 'dark' | 'light' | 'light_dark' | 'hcw' | 'hcb';
 
 const THEME_STORAGE_KEY = 'busola.theme';
 const DEFAULT_THEME = 'light_dark';
