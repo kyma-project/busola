@@ -1,13 +1,13 @@
 #page-wrap {
   display: grid;
   grid-auto-columns: 240px auto;
-  grid-template-areas: 'filter products';
+  grid-template-areas: 'sidebar content';
 }
 
 #content-wrap {
   width: 100%;
   flex-wrap: wrap;
   margin: auto;
-  grid-area: products;
+  grid-area: content;
   overflow: auto;
 }
