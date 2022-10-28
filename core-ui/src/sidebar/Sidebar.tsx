@@ -22,9 +22,7 @@ export const Sidebar = () => {
           <SidebarNavigation />
         </ErrorBoundary>
       </section>
-      <section className="sidebar__footer">
-        <Footer />
-      </section>
+      <Footer />
     </aside>
   );
 };

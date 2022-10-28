@@ -1,0 +1,26 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  box-sizing: border-box;
+  height: 130px;
+  padding: 10px;
+  border-top: 1px solid var(--sapGroup_ContentBorderColor);
+  border-right: 1px solid var(--sapGroup_ContentBorderColor);
+
+  .footer__legal-links {
+    display: flex;
+    flex-wrap: wrap;
+
+    .fd-link {
+      margin: 0 5px 5px 5px;
+      width: fit-content;
+    }
+  }
+
+  .footer__kyma-version {
+    color: var(--sapList_TextColor);
+    font-size: var(--sapFontSize, 0.875rem);
+    font-family: var(--sapFontFamily);
+  }
+}
