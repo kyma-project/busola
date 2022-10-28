@@ -1,17 +1,18 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import { SidebarNavigation } from 'sidebar/SidebarNavigation';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { configFeaturesState } from 'state/configFeaturesAtom';
 import { Footer } from './Footer/Footer';
 
 import './Sidebar.scss';
 
 export const Sidebar = () => {
   const pathname = window.location.pathname;
-  const { features } = useMicrofrontendContext();
+  const configFeatures = useRecoilValue(configFeaturesState);
 
   // turn on the feature locally to work on the new Navigation
-  if (!features?.REACT_NAVIGATION?.isEnabled) return null;
+  if (!configFeatures?.REACT_NAVIGATION?.isEnabled) return null;
   if (pathname === '/clusters') return null;
 
   return (
