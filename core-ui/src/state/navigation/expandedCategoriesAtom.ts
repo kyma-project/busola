@@ -1,7 +1,7 @@
 import { atom, RecoilState } from 'recoil';
 import { localStorageEffect } from '../utils/effects';
 
-type ExpandedCategoriesAtom = string[] | null;
+type ExpandedCategoriesAtom = string[];
 
 const EXPANDED_CATEGORIES_STORAGE_KEY = 'busola.expanded-categories';
 const defaultValue: ExpandedCategoriesAtom = [];
