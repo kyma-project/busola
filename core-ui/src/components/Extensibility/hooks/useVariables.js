@@ -112,20 +112,24 @@ export function useVariables() {
       } else if (def.defaultValue) {
         return def.defaultValue;
       } else if (def.dynamicValue) {
-        const [, , promise] = jsonata(def.dynamicValue, {
+        return jsonata.async(def.dynamicValue, {
           resource,
           item: base,
         });
-        return promise;
+      } else {
+        return '';
       }
     };
 
     const promises = Object.values(defs)
       .filter(def => typeof vars[def.var] === 'undefined')
       .map(def => {
-        return Promise.any([readVar(def, initial(def.path.split(/\[\]\.?/)))])
-          .then(([val, err]) => applyDefaults(def, val))
-          .then(val => [def, val]);
+        return Promise.any([
+          readVar(def, initial(def.path.split(/\[\]\.?/))),
+        ]).then(([val, err]) => {
+          const newval = applyDefaults(def, val);
+          return [def, newval];
+        });
       });
 
     Promise.all(promises).then(values => {

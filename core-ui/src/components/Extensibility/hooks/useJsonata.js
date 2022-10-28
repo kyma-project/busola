@@ -9,17 +9,16 @@ function getDataSourceFetchers(
   resource,
   { dataSources, store, requestRelatedResource },
 ) {
-  return mapValues(dataSources, (_, id) => {
-    return () => requestRelatedResource(resource, id);
-  });
+  return mapValues(dataSources, (_, id) => ({
+    fetcher: () => requestRelatedResource(resource, id),
+    value: () => {
+      requestRelatedResource(resource, id);
+      return store?.[id]?.data;
+    },
+  }));
 }
 
-export function useJsonata(
-  // query,
-  { resource, scope, arrayItems },
-) {
-  const [value, setValue] = useState('');
-  const [error, setError] = useState(null);
+export function useJsonata({ resource, scope, arrayItems }) {
   const { t } = useTranslation();
   const dataSourcesContext = useContext(DataSourcesContext);
 
@@ -35,16 +34,37 @@ export function useJsonata(
     setDataSourceFetchers(dataSourceFetchers);
   }, [dataSourcesContext.store]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return (query, extras = {}, defaultValue = null) => {
+  const jsonata = (query, extras = {}, defaultValue = null) => {
     if (!query) {
-      return [defaultValue, null, Promise.resolve([defaultValue, null])];
+      return [defaultValue, null];
+    }
+    try {
+      const value = jsonataWrapper(query).evaluate(
+        extras.scope || scope || resource,
+        {
+          ...mapValues(dataSourceFetchers, dsf => dsf.value),
+          root: resource,
+          items: arrayItems,
+          item: last(extras?.arrayItems) || last(arrayItems) || resource,
+          ...extras,
+        },
+      );
+      return [value, null];
+    } catch (e) {
+      return [t('extensibility.configuration-error', { error: e.message }), e];
+    }
+  };
+
+  jsonata.async = (query, extras = {}, defaultValue = null) => {
+    if (!query) {
+      return Promise.resolve([defaultValue, null]);
     }
 
-    const promise = new Promise(resolve =>
+    return new Promise(resolve =>
       jsonataWrapper(query).evaluate(
         extras.scope || scope || resource,
         {
-          ...dataSourceFetchers,
+          ...mapValues(dataSourceFetchers, dsf => dsf.fetcher),
           root: resource,
           items: arrayItems,
           item: last(extras?.arrayItems) || last(arrayItems) || resource,
@@ -62,11 +82,7 @@ export function useJsonata(
         },
       ),
     );
-
-    promise.then(([val, err]) => {
-      setValue(val);
-      setError(err);
-    });
-    return [value, error, promise];
   };
+
+  return jsonata;
 }
