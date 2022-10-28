@@ -62,6 +62,11 @@ context('Test Sidecars', () => {
   });
 
   it('Create a Sidecar', () => {
+    cy.loginAndSelectCluster({
+      fileName: 'kubeconfig-k3s.yaml',
+      storage: 'Session storage',
+    });
+
     cy.getLeftNav()
       .as('nav')
       .contains('Namespaces')
