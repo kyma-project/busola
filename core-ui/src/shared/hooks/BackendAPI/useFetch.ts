@@ -31,7 +31,7 @@ export const createFetchFn = ({
   config: ClusterConfigState;
   ssoData: SsoDataState;
   fromConfig: FromConfig;
-}) => async ({
+}): FetchFn => async ({
   relativeUrl,
   abortController,
   init,
