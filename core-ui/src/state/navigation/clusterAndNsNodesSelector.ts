@@ -33,7 +33,6 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     if (!areDependenciesInitialized) {
       return [];
     }
-
     const configSet = {
       configFeatures,
       openapiPathIdList,

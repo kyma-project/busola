@@ -3,6 +3,7 @@ import { assignNodesToCategories } from './assignToCategories';
 import { Category } from './categories';
 import { NavNode, Scope } from '../types';
 import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
+import { observabilityNodesSelector } from './observabilityNodesSelector';
 import {
   activeNamespaceIdState,
   defaultValue as defaultNamespaceName,
@@ -24,6 +25,7 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
 
     if (
       !navNodes ||
+      !observabilityNodes ||
       activeNamespaceId === defaultNamespaceName ||
       !observabilityNodes
     ) {
