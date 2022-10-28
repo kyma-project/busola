@@ -81,13 +81,15 @@ context('Test Deployments', () => {
 
     cy.getIframeBody()
       .contains('label', 'CPU Requests (m)')
-      .next('input')
+      .next()
+      .find('input')
       .clear()
       .type('10');
 
     cy.getIframeBody()
       .contains('label', 'CPU Limits (m)')
-      .next('input')
+      .next()
+      .find('input')
       .clear()
       .type('20');
 

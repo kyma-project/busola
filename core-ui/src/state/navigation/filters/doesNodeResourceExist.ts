@@ -1,14 +1,10 @@
 import { doesResourceExist } from './permissions';
 import { NavNode } from '../../types';
 
-export const filterExistingNodes = (
-  nodes: NavNode[],
+export const doesNodeResourceExist = (
+  node: NavNode,
   resourceIdList: string[],
 ) => {
-  return nodes.filter(node => isResourcePresent(node, resourceIdList));
-};
-
-const isResourcePresent = (node: NavNode, resourceIdList: string[]) => {
   const resourceGroupAndVersion = `${node.apiGroup}${node.apiGroup ? '/' : ''}${
     node.apiVersion
   }`;

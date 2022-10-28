@@ -97,49 +97,54 @@ export function SecretRefForm({
       sectionTooltipContent={t('btp-service-bindings.tooltips.parameters-from')}
       inputs={[
         ({ value, setValue, ref, updateValue, focus }) => (
-          <Dropdown
-            compact
-            className="secret-name-dropdown"
-            options={secretNames}
-            selectedKey={value?.name}
-            ref={ref}
-            onSelect={(e, selected) => {
-              setValue({ name: selected.key });
-              updateValue();
-              focus(e);
-            }}
-            placeholder={t('btp-service-bindings.placeholders.choose-secret')}
-          />
-        ),
-        ({ value, setValue, ref, updateValue, focus }) =>
-          value?.name ? (
+          <div className="fd-col fd-col-md--6">
             <Dropdown
               compact
-              className="secret-key-dropdown"
-              options={getSecretKeys(value.name)}
-              selectedKey={value.key}
+              options={secretNames}
+              selectedKey={value?.name}
+              ref={ref}
               onSelect={(e, selected) => {
-                setValue({ ...value, key: selected.key });
+                setValue({ name: selected.key });
                 updateValue();
                 focus(e);
               }}
-              validationState={getRefValidation(value)}
-              placeholder={t(
-                'btp-service-bindings.placeholders.choose-secret-key',
-              )}
-              emptyListMessage={t(
-                'btp-service-bindings.placeholders.empty-secret',
-              )}
+              placeholder={t('btp-service-bindings.placeholders.choose-secret')}
             />
+          </div>
+        ),
+        ({ value, setValue, ref, updateValue, focus }) =>
+          value?.name ? (
+            <div className="fd-col fd-col-md--6">
+              <Dropdown
+                compact
+                className="secret-key-dropdown"
+                options={getSecretKeys(value.name)}
+                selectedKey={value.key}
+                onSelect={(e, selected) => {
+                  setValue({ ...value, key: selected.key });
+                  updateValue();
+                  focus(e);
+                }}
+                validationState={getRefValidation(value)}
+                placeholder={t(
+                  'btp-service-bindings.placeholders.choose-secret-key',
+                )}
+                emptyListMessage={t(
+                  'btp-service-bindings.placeholders.empty-secret',
+                )}
+              />
+            </div>
           ) : (
-            <Dropdown
-              compact
-              disabled
-              className="secret-key-dropdown"
-              placeholder={t(
-                'btp-service-bindings.placeholder.choose-secret-first',
-              )}
-            />
+            <div className="fd-col fd-col-md--6">
+              <Dropdown
+                compact
+                disabled
+                className="secret-key-dropdown"
+                placeholder={t(
+                  'btp-service-bindings.placeholder.choose-secret-first',
+                )}
+              />
+            </div>
           ),
       ]}
     />

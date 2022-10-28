@@ -13,6 +13,7 @@ export function WrappedText({ value, setValue, onChange, inputRef, ...props }) {
     setMultiValue,
     setResource,
     validateMessage,
+    fullWidth = false,
     ...inputProps
   } = props;
 
@@ -22,11 +23,13 @@ export function WrappedText({ value, setValue, onChange, inputRef, ...props }) {
   });
 
   return (
-    <FormInput
-      compact
-      value={value || ''}
-      {...inputProps}
-      {...validationProps}
-    />
+    <div className={fullWidth ? '' : 'fd-col fd-col-md--11'}>
+      <FormInput
+        compact
+        value={value || ''}
+        {...inputProps}
+        {...validationProps}
+      />
+    </div>
   );
 }

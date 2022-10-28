@@ -116,12 +116,13 @@ export function GenericRoleBindingCreate({
           'role-bindings.create-modal.at-least-one-subject-required',
           { resource: singularName },
         )}
-        itemRenderer={({ item, values, setValues, index }) => (
+        itemRenderer={({ item, values, setValues, index, nestingLevel }) => (
           <SingleSubjectForm
             subject={item}
             subjects={values}
             setSubjects={setValues}
             index={index}
+            nestingLevel={nestingLevel}
           />
         )}
         newResourceTemplateFn={newSubject}

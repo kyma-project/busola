@@ -87,7 +87,7 @@ export function K8sResourceSelect({
   };
 
   return (
-    <div className="combobox--full-width">
+    <div className="combobox--full-width fd-col fd-col-md--11">
       <ComboboxInput
         showAllEntries
         searchFullString

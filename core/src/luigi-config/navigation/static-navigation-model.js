@@ -1920,13 +1920,6 @@ export function getStaticRootNodes(
         },
       ],
     },
-    // OTHER
-    {
-      pathSegment: 'preferences',
-      viewUrl: config.coreUIModuleUrl + '/preferences',
-      viewGroup: coreUIViewGroupName,
-      hideFromNav: true,
-    },
     {
       pathSegment: 'download-kubeconfig',
       navigationContext: 'kubeconfig',

@@ -57,14 +57,16 @@ export function Editor({
     [setError, t, language],
   );
   return (
-    <MonacoEditor
-      {...props}
-      language={language}
-      value={parsedValue}
-      onChange={handleChange}
-      error={error}
-      schemaId={schemaId}
-    />
+    <div className="fd-col fd-col-md--11">
+      <MonacoEditor
+        {...props}
+        language={language}
+        value={parsedValue}
+        onChange={handleChange}
+        error={error}
+        schemaId={schemaId}
+      />
+    </div>
   );
 }
 
