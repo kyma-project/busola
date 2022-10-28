@@ -9,11 +9,11 @@ import { expandedCategoriesState } from 'state/navigation/expandedCategoriesAtom
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { NavNode } from 'state/types';
 import { Category } from 'state/navigation/categories';
-import { IconGlyph } from 'fundamental-react/lib/Icon/Icon';
 
 export const SidebarNavigation = () => {
   const { i18n, t } = useTranslation();
 
+  // maybe we can return already filtered nodes?
   const navigationNodes = useRecoilValueLoadable(
     sidebarNavigationNodesSelector,
   );
@@ -50,7 +50,7 @@ export const SidebarNavigation = () => {
         id={node.pathSegment}
         name={hasTranslations(node.label)}
         url="#"
-        glyph={node.icon as IconGlyph}
+        glyph={node.icon}
         onClick={() => luigiNavigate(node, namespaceId)}
       />
     );
@@ -64,7 +64,7 @@ export const SidebarNavigation = () => {
         id={node.key}
         name={hasTranslations(node.key || node.label)}
         url="#"
-        glyph={(node.icon || 'customize') as IconGlyph}
+        glyph={node.icon || 'customize'}
         expanded={expandedCategories.includes(node.key)}
         onClick={() => {
           const wasExpanded = expandedCategories?.includes(node.key);

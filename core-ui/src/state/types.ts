@@ -1,3 +1,5 @@
+import { IconGlyph } from 'fundamental-react/lib/Icon/Icon';
+
 export type Scope = 'namespace' | 'cluster';
 
 export type ConfigFeature = {
@@ -67,6 +69,6 @@ export type NavNode = {
   requiredFeatures: ConfigFeaturesNames[];
   apiVersion: string;
   apiGroup: string;
-  icon?: string;
+  icon?: IconGlyph;
   topLevelNode?: boolean;
 };
