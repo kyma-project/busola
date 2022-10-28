@@ -26,7 +26,7 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     const areDependenciesInitialized =
       !isEmpty(openapiPathIdList) &&
       activeNamespaceId !== defaultNamespaceName &&
-      configFeatures &&
+      !isEmpty(configFeatures) &&
       !isEmpty(resourceList) &&
       !isEmpty(permissionSet);
 

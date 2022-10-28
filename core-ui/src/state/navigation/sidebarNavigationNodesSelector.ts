@@ -10,7 +10,6 @@ import {
 } from '../activeNamespaceIdAtom';
 import { hasCurrentScope } from './filters/hasCurrentScope';
 import { partial } from 'lodash';
-import { observabilityNodesSelector } from './observabilityNodesSelector';
 
 export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
   Category[]
@@ -26,8 +25,7 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
     if (
       !navNodes ||
       !observabilityNodes ||
-      activeNamespaceId === defaultNamespaceName ||
-      !observabilityNodes
+      activeNamespaceId === defaultNamespaceName
     ) {
       return [];
     }
