@@ -19,64 +19,20 @@ context('Test Sidecars', () => {
   Cypress.skipAfterFail();
 
   before(() => {
-    cy.loginAndSelectCluster({
-      fileName: 'kubeconfig-k3s.yaml',
-      storage: 'Session storage',
-    });
-    cy.createNamespace('sidecars');
+    cy.loginAndSelectCluster();
+    cy.goToNamespaceDetails();
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
-  });
 
-  it('Creates the EXT sidecars config', () => {
-    cy.getIframeBody().as('iframe');
-
-    cy.getLeftNav()
-      .contains('Cluster Details')
-      .click();
-
-    cy.get('@iframe')
-      .contains('Upload YAML')
-      .click();
-
-    cy.wrap(loadFile('examples/resources/istio/sidecars.yaml')).then(config => {
-      const configJSON = JSON.stringify(config);
-
-      cy.pasteToMonaco(configJSON);
-    });
-
-    cy.get('@iframe')
-      .contains('Submit')
-      .click();
-
-    cy.get('@iframe')
-      .find('.fd-dialog__body')
-      .find('.sap-icon--message-success')
-      .should('be.visible');
-
-    cy.get('@iframe')
-      .contains('Close')
-      .click();
+    await cy.mockExtension(
+      'SIDECARS',
+      'examples/resources/istio/sidecars.yaml',
+    );
   });
 
   it('Create a Sidecar', () => {
-    cy.loginAndSelectCluster({
-      fileName: 'kubeconfig-k3s.yaml',
-      storage: 'Session storage',
-    });
-
-    cy.getLeftNav()
-      .as('nav')
-      .contains('Namespaces')
-      .click();
-
-    cy.getIframeBody()
-      .as('iframe')
-      .contains('a', 'sidecars')
-      .click();
-
     cy.navigateTo('Istio', 'Sidecars');
 
     cy.getIframeBody()
