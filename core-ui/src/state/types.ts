@@ -15,10 +15,10 @@ export const configFeaturesNames = {
   SERVERLESS: 'SERVERLESS',
   CUSTOM_DOMAINS: 'CUSTOM_DOMAINS',
   ISTIO: 'ISTIO',
-  PROMETHEUS: 'PROMETHEUS',
   APPLICATION_CONNECTOR_FLOW: 'APPLICATION_CONNECTOR_FLOW',
   LEGAL_LINKS: 'LEGAL_LINKS',
   SSO_LOGIN: 'SSO_LOGIN',
+  SENTRY: 'SENTRY',
   KUBECONFIG_ID: 'KUBECONFIG_ID',
   OBSERVABILITY: 'OBSERVABILITY',
   HIDDEN_NAMESPACES: 'HIDDEN_NAMESPACES',
@@ -34,7 +34,6 @@ export type ConfigFeatureList = {
 export type LazyConfigFeaturesNames = typeof lazyConfigFeaturesNames[keyof typeof lazyConfigFeaturesNames];
 export const lazyConfigFeaturesNames = {
   PROMETHEUS: 'PROMETHEUS',
-  SENTRY: 'SENTRY',
 } as const;
 export type LazyConfigFeatureList = {
   [key in LazyConfigFeaturesNames]?: ConfigFeature;

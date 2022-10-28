@@ -59,9 +59,7 @@ const useUpdateConfigFeatures = features => {
   const configFeatures = { ...features };
   const lazyConfigFeatures = {};
   lazyConfigFeatures[lazyConfigFeaturesNames.PROMETHEUS] = features.PROMETHEUS;
-  lazyConfigFeatures[lazyConfigFeaturesNames.SENTRY] = features.SENTRY;
   delete configFeatures[lazyConfigFeaturesNames.PROMETHEUS];
-  delete configFeatures[lazyConfigFeaturesNames.SENTRY];
 
   useUpdateRecoilIfValueChanged(configFeatures, configFeaturesState);
   useUpdateRecoilIfValueChanged(lazyConfigFeatures, lazyConfigFeaturesState);
