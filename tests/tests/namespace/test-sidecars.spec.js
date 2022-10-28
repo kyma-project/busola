@@ -41,8 +41,10 @@ context('Test Sidecars', () => {
       .contains('Upload YAML')
       .click();
 
-    cy.loadFiles('examples/resources/istio/sidecars.yaml').then(resource => {
-      cy.pasteToMonaco(resource);
+    cy.wrap(loadFile('examples/resources/istio/sidecars.yaml')).then(config => {
+      const configJSON = JSON.stringify(config);
+
+      cy.pasteToMonaco(configJSON);
     });
 
     cy.get('@iframe')
@@ -52,7 +54,7 @@ context('Test Sidecars', () => {
     cy.get('@iframe')
       .find('.fd-dialog__body')
       .find('.sap-icon--message-success')
-      .should('have.length', 4);
+      .should('be.visible');
   });
 
   it('Create a Sidecar', () => {
