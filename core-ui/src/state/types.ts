@@ -26,6 +26,7 @@ export const configFeaturesNames = {
   VISUAL_RESOURCES: 'VISUAL_RESOURCES',
   EXTENSIBILITY: 'EXTENSIBILITY',
   TRACKING: 'TRACKING',
+  REACT_NAVIGATION: 'REACT_NAVIGATION',
 } as const;
 
 export type ConfigFeatureList = {
@@ -56,6 +57,7 @@ export type ExtResource = {
   presets: any[];
   dataSources: Record<string, any>;
 };
+
 export type NavNode = {
   resourceType: string; // Jobs, CronJobs etc.
   category: string;
