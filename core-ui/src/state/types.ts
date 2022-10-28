@@ -47,7 +47,7 @@ export type ExtResource = {
     urlPath: string;
     scope: 'namespace' | 'cluster';
     description?: string;
-    icon?: string;
+    icon?: IconGlyph;
   };
   list: any[];
   details: {

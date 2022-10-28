@@ -11,7 +11,7 @@ export const assignNodesToCategories = (navList: NavNode[]): Category[] => {
         topLevelNode: true,
         key: '' as PredefinedCategories,
         label: '',
-        icon: '',
+        icon: 'customize',
         items: [node],
       });
       return;
