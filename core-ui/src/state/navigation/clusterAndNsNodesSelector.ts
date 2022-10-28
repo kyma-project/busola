@@ -11,6 +11,7 @@ import { permissionSetsAtom } from '../permissionSetsAtom';
 import { NavNode, Scope } from '../types';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 import { addAdditionalNodes } from './addAdditionalNodes';
+import { observabilityNodesSelector } from './observabilityNodesSelector';
 
 export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
   NavNode[]
@@ -22,13 +23,15 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     const openapiPathIdList = get(openapiPathIdListSelector);
     const configFeatures = get(configFeaturesState);
     const permissionSet = get(permissionSetsAtom);
+    const observabilityNodes = get(observabilityNodesSelector);
 
     const areDependenciesInitialized =
-      openapiPathIdList && //
-      configFeatures && //
+      openapiPathIdList &&
+      configFeatures &&
       !isEmpty(resourceList) &&
       activeNamespaceId !== defaultNamespaceName &&
-      !isEmpty(permissionSet);
+      !isEmpty(permissionSet) &&
+      observabilityNodes;
 
     if (!areDependenciesInitialized) {
       return [];
@@ -48,12 +51,16 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     );
 
     const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
-    const extendedNavNodes = addAdditionalNodes(
+    const navNodesWithAddons = addAdditionalNodes(
       navNodes,
       scope,
       configFeatures,
     );
+    const navNodesWithAddonsAndObeservability = [
+      ...navNodesWithAddons,
+      ...observabilityNodes,
+    ];
 
-    return extendedNavNodes;
+    return navNodesWithAddonsAndObeservability;
   },
 });
