@@ -6,12 +6,11 @@ import {
   defaultValue as defaultNamespaceName,
 } from '../activeNamespaceIdAtom';
 import { openapiPathIdListSelector } from '../openapi/openapiPathIdSelector';
-import { configFeaturesState } from '../configFeaturesAtom';
-import { permissionSetsAtom } from '../permissionSetsAtom';
+import { configFeaturesState } from '../configFeatures/configFeaturesAtom';
+import { permissionSetsSelector } from '../permissionSetsSelector';
 import { NavNode, Scope } from '../types';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
 import { addAdditionalNodes } from './addAdditionalNodes';
-import { observabilityNodesSelector } from './observabilityNodesSelector';
 
 export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
   NavNode[]
@@ -22,16 +21,14 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     const activeNamespaceId = get(activeNamespaceIdState);
     const openapiPathIdList = get(openapiPathIdListSelector);
     const configFeatures = get(configFeaturesState);
-    const permissionSet = get(permissionSetsAtom);
-    const observabilityNodes = get(observabilityNodesSelector);
+    const permissionSet = get(permissionSetsSelector);
 
     const areDependenciesInitialized =
-      openapiPathIdList &&
+      !isEmpty(openapiPathIdList) &&
+      activeNamespaceId !== defaultNamespaceName &&
       configFeatures &&
       !isEmpty(resourceList) &&
-      activeNamespaceId !== defaultNamespaceName &&
-      !isEmpty(permissionSet) &&
-      observabilityNodes;
+      !isEmpty(permissionSet);
 
     if (!areDependenciesInitialized) {
       return [];
@@ -56,11 +53,7 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
       scope,
       configFeatures,
     );
-    const navNodesWithAddonsAndObeservability = [
-      ...navNodesWithAddons,
-      ...observabilityNodes,
-    ];
 
-    return navNodesWithAddonsAndObeservability;
+    return navNodesWithAddons;
   },
 });

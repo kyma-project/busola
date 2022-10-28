@@ -9,6 +9,7 @@ import {
 } from '../activeNamespaceIdAtom';
 import { hasCurrentScope } from './filters/hasCurrentScope';
 import { partial } from 'lodash';
+import { observabilityNodesSelector } from './observabilityNodesSelector';
 
 export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
   Category[]
@@ -17,15 +18,23 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
   get: ({ get }) => {
     const navNodes: NavNode[] = get(clusterAndNsNodesSelector);
     const activeNamespaceId = get(activeNamespaceIdState);
+    const observabilityNodes = get(observabilityNodesSelector);
 
     const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
 
-    if (!navNodes || activeNamespaceId === defaultNamespaceName) {
+    if (
+      !navNodes ||
+      activeNamespaceId === defaultNamespaceName ||
+      !observabilityNodes
+    ) {
       return [];
     }
+    const navAndObservabilityNodes = [...navNodes, ...observabilityNodes];
 
     const nodesFromCurrentScope = partial(hasCurrentScope, scope);
-    const filteredNodes = navNodes.filter(nodesFromCurrentScope);
+    const filteredNodes = navAndObservabilityNodes.filter(
+      nodesFromCurrentScope,
+    );
 
     const assignedToCategories: Category[] = assignNodesToCategories(
       filteredNodes,

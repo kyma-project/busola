@@ -1,13 +1,10 @@
 import { atom, RecoilState } from 'recoil';
-import { ConfigFeatureList } from './types';
+import { ConfigFeatureList } from '../types';
 
-type ConfigFeaturesState = ConfigFeatureList | null;
-
-const defaultValue = null;
+type ConfigFeaturesState = ConfigFeatureList;
 
 export const configFeaturesState: RecoilState<ConfigFeaturesState> = atom<
   ConfigFeaturesState
 >({
   key: 'configFeaturesState',
-  default: defaultValue,
 });

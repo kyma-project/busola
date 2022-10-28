@@ -6,11 +6,8 @@ export type ClusterState = {
     'certificate-authority-data': string;
   };
   name: string;
-} | null;
-
-const defaultValue = null;
+};
 
 export const clusterState: RecoilState<ClusterState> = atom<ClusterState>({
   key: 'clusterState',
-  default: defaultValue,
 });
