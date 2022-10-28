@@ -23,7 +23,7 @@ Cypress.Commands.add('setBusolaFeature', (featureName, isEnabled) => {
   cy.intercept(requestData, configMock);
 });
 
-Cypress.Commands.add('mockExtension', async (featureName, extensionPath) => {
+Cypress.Commands.add('mockExtension', (featureName, extensionPath) => {
   cy.log(`Set Busola feature: ${featureName}`);
 
   const requestData = {
@@ -32,9 +32,7 @@ Cypress.Commands.add('mockExtension', async (featureName, extensionPath) => {
       '/backend/api/v1/configmaps?labelSelector=busola.io/extension=resource',
   };
 
-  const extensionMock = await loadFile(extensionPath).then(config => {
-    return JSON.stringify({ items: [config] });
+  loadFile(extensionPath).then(config => {
+    cy.intercept(requestData, JSON.stringify({ items: [config] }));
   });
-
-  cy.intercept(requestData, extensionMock);
 });
