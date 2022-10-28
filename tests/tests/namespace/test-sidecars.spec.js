@@ -23,7 +23,7 @@ context('Test Sidecars', () => {
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
     });
-    cy.createNamespace('pizzas');
+    cy.createNamespace('sidecars');
   });
 
   beforeEach(() => {
@@ -55,9 +55,23 @@ context('Test Sidecars', () => {
       .find('.fd-dialog__body')
       .find('.sap-icon--message-success')
       .should('be.visible');
+
+    cy.get('@iframe')
+      .contains('Close')
+      .click();
   });
 
   it('Create a Sidecar', () => {
+    cy.getLeftNav()
+      .as('nav')
+      .contains('Namespaces')
+      .click();
+
+    cy.getIframeBody()
+      .as('iframe')
+      .contains('a', 'sidecars')
+      .click();
+
     cy.navigateTo('Istio', 'Sidecars');
 
     cy.getIframeBody()
