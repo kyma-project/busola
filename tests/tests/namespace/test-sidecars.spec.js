@@ -22,13 +22,10 @@ context('Test Sidecars', () => {
     cy.goToNamespaceDetails();
   });
 
-  beforeEach(async () => {
+  beforeEach(() => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
 
-    await cy.mockExtension(
-      'SIDECARS',
-      'examples/resources/istio/sidecars.yaml',
-    );
+    cy.mockExtension('SIDECARS', 'examples/resources/istio/sidecars.yaml');
   });
 
   it('Create a Sidecar', () => {
