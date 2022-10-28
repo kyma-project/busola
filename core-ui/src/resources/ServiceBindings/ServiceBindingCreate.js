@@ -90,7 +90,6 @@ export function ServiceBindingCreate({
         title={t('btp-service-bindings.parameters')}
         propertyPath="$.spec.parameters"
         validate={parsed => !!parsed && typeof parsed === 'object'}
-        fullWidth
         advanced
         invalidValueMessage={t('btp-service-bindings.messages.params-invalid')}
         input={({ setValue, ...props }) => (

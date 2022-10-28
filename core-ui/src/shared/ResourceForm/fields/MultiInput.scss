@@ -8,8 +8,7 @@
     align-items: center;
   }
 
-  .item-action,
-  .new-item-action {
+  .item-action {
     min-width: 2rem;
     display: flex;
     align-items: center;
@@ -18,11 +17,5 @@
 
   &.extensibility li {
     align-items: center;
-
-    > :not(.item-action) {
-      flex-grow: 1;
-      flex-basis: 0;
-      margin: 0 8px;
-    }
   }
 }

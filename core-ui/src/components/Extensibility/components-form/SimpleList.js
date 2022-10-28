@@ -21,6 +21,7 @@ export function SimpleList({
   readOnly,
   level,
   widgets,
+  nestingLevel = 0,
   ...props
 }) {
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
@@ -66,10 +67,11 @@ export function SimpleList({
       container
       title={tFromStoreKeys(storeKeys, schema)}
       required={schemaRequired ?? required}
+      nestingLevel={nestingLevel}
       {...props}
     >
       <div className="fd-row simple-list">
-        <div className="fd-col fd-col-md--4 fd-margin-bottom--sm">
+        <div className="fd-col fd-col-md--3 fd-margin-bottom--sm form-field__label">
           <Label
             required={schemaRequired ?? required}
             tooltipContent={tExt(tooltipContent)}
@@ -77,10 +79,10 @@ export function SimpleList({
             {tFromStoreKeys(storeKeys, schema)}
           </Label>
         </div>
-        <div className="fd-col fd-col-md--7 form-field multi-input extensibility">
+        <div className="fd-col fd-col-md--8 form-field multi-input extensibility">
           <ul className={listClasses}>
             {isObject && (
-              <li>
+              <li className="fd-row">
                 <PluginStack
                   schema={itemsSchema}
                   widgets={{
@@ -94,9 +96,12 @@ export function SimpleList({
                   parentSchema={schema}
                   storeKeys={storeKeys.push(0)}
                   level={level + 1}
+                  nestingLevel={nestingLevel + 1}
                   schemaKeys={schemaKeys?.push('items')}
                 />
-                <span className="item-action"></span>
+                <div className="fd-col fd-col-md--1">
+                  <span className="item-action"></span>
+                </div>
               </li>
             )}
             {Array(listSize + 1)
@@ -106,7 +111,7 @@ export function SimpleList({
 
                 return (
                   <>
-                    <li key={index}>
+                    <li key={index} className="fd-row">
                       <PluginStack
                         showValidity={showValidity}
                         schema={itemsSchema}
@@ -118,18 +123,20 @@ export function SimpleList({
                         placeholder={tExt(schemaPlaceholder)}
                         inputInfo={inputInfo}
                       />
-                      <span className="item-action">
-                        {!isLast(index) && (
-                          <Button
-                            disabled={readOnly}
-                            compact
-                            glyph="delete"
-                            type="negative"
-                            onClick={() => removeItem(index)}
-                            ariaLabel={t('common.buttons.delete')}
-                          />
-                        )}
-                      </span>
+                      <div className="fd-col fd-col-md--1">
+                        <span className="item-action">
+                          {!isLast(index) && (
+                            <Button
+                              disabled={readOnly}
+                              compact
+                              glyph="delete"
+                              type="negative"
+                              onClick={() => removeItem(index)}
+                              ariaLabel={t('common.buttons.delete')}
+                            />
+                          )}
+                        </span>
+                      </div>
                     </li>
                     {isLast(index) && inputInfo && (
                       <p

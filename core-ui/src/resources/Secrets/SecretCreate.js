@@ -72,18 +72,21 @@ export function SecretCreate({
         propertyPath="$.type"
         label={t('secrets.type')}
         input={({ value, setValue }) => (
-          <ComboboxInput
-            id="secrets-type-combobox"
-            ariaLabel="Secret's type's Combobox"
-            required
-            compact
-            placeholder={t('secrets.placeholders.type')}
-            options={secretTypes.map(type => ({ key: type, text: type }))}
-            selectedKey={value}
-            typedValue={value}
-            onSelect={e => setValue(e.target.value)}
-            disabled={!!initialSecret}
-          />
+          <div className="fd-col fd-col-md--11">
+            <ComboboxInput
+              id="secrets-type-combobox"
+              ariaLabel="Secret's type's Combobox"
+              required
+              compact
+              fullWidth
+              placeholder={t('secrets.placeholders.type')}
+              options={secretTypes.map(type => ({ key: type, text: type }))}
+              selectedKey={value}
+              typedValue={value}
+              onSelect={e => setValue(e.target.value)}
+              disabled={!!initialSecret}
+            />
+          </div>
         )}
       />
       <DataField

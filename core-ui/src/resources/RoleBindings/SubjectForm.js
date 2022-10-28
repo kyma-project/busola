@@ -14,6 +14,7 @@ export function SingleSubjectForm({
   subjects,
   setSubjects,
   index,
+  nestingLevel = 0,
 }) {
   const { t } = useTranslation();
 
@@ -117,6 +118,7 @@ export function SingleSubjectForm({
           }}
           setValue={setServiceAccount}
           index={index}
+          nestingLevel={nestingLevel + 1}
         />
       )}
     </FormFieldset>
