@@ -6,7 +6,7 @@ export type ClusterState = {
     'certificate-authority-data': string;
   };
   name: string;
-};
+} | null;
 
 export const clusterState: RecoilState<ClusterState> = atom<ClusterState>({
   key: 'clusterState',
