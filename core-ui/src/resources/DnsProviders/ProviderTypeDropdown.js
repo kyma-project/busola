@@ -21,14 +21,16 @@ export function ProviderTypeDropdown({ type, setType }) {
   }));
 
   return (
-    <Dropdown
-      compact
-      options={options}
-      selectedKey={type}
-      onSelect={(_, selected) => setType(selected.key)}
-      placeholder={t('dnsproviders.placeholders.provider-type')}
-      fullWidth
-      required
-    />
+    <div className="fd-col fd-col-md--11">
+      <Dropdown
+        compact
+        options={options}
+        selectedKey={type}
+        onSelect={(_, selected) => setType(selected.key)}
+        placeholder={t('dnsproviders.placeholders.provider-type')}
+        fullWidth
+        required
+      />
+    </div>
   );
 }

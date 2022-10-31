@@ -55,28 +55,30 @@ export const RoleForm = ({
       label={t('role-bindings.create-modal.role')}
       propertyPath="$.roleRef.name"
       input={props => (
-        <ComboboxInput
-          id="role"
-          ariaLabel="Role Combobox"
-          arrowLabel="Role Combobox arrow"
-          required
-          compact
-          showAllEntries
-          searchFullString
-          placeholder={t('common.messages.type-to-select', {
-            value: t(
-              binding.roleRef.kind === 'ClusterRole'
-                ? 'cluster-roles.name_singular'
-                : 'roles.name_singular',
-            ),
-          })}
-          options={options}
-          selectedKey={props.value}
-          typedValue={props.value}
-          selectionType="manual"
-          onSelectionChange={(_, selected) => props.setValue(selected.text)}
-          {...props}
-        />
+        <div className="fd-col fd-col-md--11">
+          <ComboboxInput
+            id="role"
+            ariaLabel="Role Combobox"
+            arrowLabel="Role Combobox arrow"
+            required
+            compact
+            showAllEntries
+            searchFullString
+            placeholder={t('common.messages.type-to-select', {
+              value: t(
+                binding.roleRef.kind === 'ClusterRole'
+                  ? 'cluster-roles.name_singular'
+                  : 'roles.name_singular',
+              ),
+            })}
+            options={options}
+            selectedKey={props.value}
+            typedValue={props.value}
+            selectionType="manual"
+            onSelectionChange={(_, selected) => props.setValue(selected.text)}
+            {...props}
+          />
+        </div>
       )}
     />
   );

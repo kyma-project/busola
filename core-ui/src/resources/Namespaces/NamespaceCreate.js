@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
-import { Checkbox, FormFieldset, Switch } from 'fundamental-react';
+import { Checkbox, FormFieldset } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 
+import * as Inputs from 'shared/ResourceForm/inputs';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { createLimitRangeTemplate } from 'resources/LimitRanges/templates';
@@ -209,13 +210,9 @@ export function NamespaceCreate({
       {isIstioFeatureOn ? (
         <ResourceForm.FormField
           label={t('namespaces.create-modal.enable-sidecar')}
-          input={() => (
-            <Switch
-              compact
-              onChange={() => setSidecarEnabled(value => !value)}
-              checked={isSidecarEnabled}
-            />
-          )}
+          input={Inputs.Switch}
+          checked={isSidecarEnabled}
+          onChange={() => setSidecarEnabled(value => !value)}
         />
       ) : null}
 

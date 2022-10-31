@@ -1833,6 +1833,8 @@ roles:
     all-permissions: All permissions
     view-only: View only
   title: Roles
+  tooltips:
+    load: Load resources
 schema:
   array-item: ({{name}} item)
   fields:

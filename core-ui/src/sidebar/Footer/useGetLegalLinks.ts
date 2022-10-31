@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
-import { configFeaturesState } from 'state/configFeaturesAtom';
+import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 
 type LegalLink = {
   label: string;

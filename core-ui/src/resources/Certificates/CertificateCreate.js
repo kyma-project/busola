@@ -233,13 +233,9 @@ export function CertificateCreate({
         advanced
         label={t('certificates.existing-secret')}
         tooltipContent={t('certificates.tooltips.existing-secret')}
-        input={() => (
-          <Switch
-            compact
-            onChange={e => setExistingSecret(!existingSecret)}
-            checked={existingSecret}
-          />
-        )}
+        input={Inputs.Switch}
+        onChange={() => setExistingSecret(!existingSecret)}
+        checked={existingSecret}
       />
       {!existingSecret && (
         <ResourceForm.FormField

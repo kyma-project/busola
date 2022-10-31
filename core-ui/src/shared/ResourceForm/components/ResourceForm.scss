@@ -31,7 +31,7 @@
   }
 
   .fd-row {
-    margin: 0; // override fd's margin: 0 -.25rem;
+    margin: 0 !important; // override fd's margin: 0 -.25rem;
   }
 
   .fd-row + .resource-form__collapsible-section {
@@ -40,5 +40,9 @@
 
   .fd-switch {
     margin-top: -1.4rem;
+  }
+
+  .fd-col {
+    padding: 4px 0;
   }
 }

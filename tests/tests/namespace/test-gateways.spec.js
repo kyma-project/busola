@@ -97,7 +97,7 @@ context('Test Gateways', () => {
 
     cy.getIframeBody()
       .contains('HTTPS Redirect')
-      .should('be.visible');
+      .scrollIntoView();
 
     // change server to HTTPS
     cy.getIframeBody()

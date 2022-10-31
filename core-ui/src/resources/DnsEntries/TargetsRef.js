@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Switch, FormInput, ComboboxInput } from 'fundamental-react';
-import classnames from 'classnames';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
@@ -64,7 +63,7 @@ export function TargetsInput({
       </div>
       <ul className="text-array-input__list fd-col fd-col-md--8">
         {internalValue.map((entry, index) => (
-          <li key={index}>
+          <li key={index} className="fd-row">
             {inputs.map((input, i) =>
               input({
                 index: i,
@@ -73,13 +72,17 @@ export function TargetsInput({
                 setInternalValue: entry => setInternalEntry(entry, index),
               }),
             )}
-            <Button
-              compact
-              className={classnames({ hidden: isLast(index) })}
-              glyph="delete"
-              type="negative"
-              onClick={() => removeValue(index)}
-            />
+            <div className="fd-col fd-col-md--1 action-button">
+              {!isLast(index) && (
+                <Button
+                  compact
+                  glyph="delete"
+                  type="negative"
+                  option="transparent"
+                  onClick={() => removeValue(index)}
+                />
+              )}
+            </div>
           </li>
         ))}
       </ul>
@@ -151,27 +154,25 @@ export function TargetsRef({ resource: dnsEntry, setResource: setDnsEntry }) {
         propertyPath="$.spec.targets"
         inputs={[
           ({ value, index, setInternalValue }) => (
-            <div className="fd-col fd-col-md--3" key={index}>
-              <div className="fd-row form-field multi-input__row">
-                <ResourceForm.Label
-                  tooltipContent={
-                    value?.isCname
-                      ? t('dnsentries.tooltips.use-a')
-                      : t('dnsentries.tooltips.use-cname')
+            <div className="fd-col fd-col-md--2" key={index}>
+              <ResourceForm.Label
+                tooltipContent={
+                  value?.isCname
+                    ? t('dnsentries.tooltips.use-a')
+                    : t('dnsentries.tooltips.use-cname')
+                }
+              >
+                {t('dnsentries.labels.use-cname')}
+              </ResourceForm.Label>
+              <div className="fd-col fd-col-md--9">
+                <Switch
+                  key={`targets-switch-${index}`}
+                  compact
+                  onChange={e =>
+                    setInternalValue({ ...value, isCname: !value?.isCname })
                   }
-                >
-                  {t('dnsentries.labels.use-cname')}
-                </ResourceForm.Label>
-                <div>
-                  <Switch
-                    key={`targets-switch-${index}`}
-                    compact
-                    onChange={e =>
-                      setInternalValue({ ...value, isCname: !value?.isCname })
-                    }
-                    checked={value?.isCname}
-                  />
-                </div>
+                  checked={value?.isCname}
+                />
               </div>
             </div>
           ),

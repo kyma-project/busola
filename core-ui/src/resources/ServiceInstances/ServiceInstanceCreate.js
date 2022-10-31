@@ -62,7 +62,6 @@ export function ServiceInstanceCreate({
         title={t('btp-instances.parameters')}
         propertyPath="$.spec.parameters"
         validate={parsed => !!parsed && typeof parsed === 'object'}
-        fullWidth
         advanced
         invalidValueMessage={t('btp-instances.messages.params-invalid')}
         input={({ setValue, ...props }) => (

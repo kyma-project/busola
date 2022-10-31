@@ -18,6 +18,7 @@ export function ItemArray({
   advanced,
   isAdvanced,
   readOnly,
+  nestingLevel = 0,
   ...props
 }) {
   const { t } = useTranslation();
@@ -33,7 +34,14 @@ export function ItemArray({
   const remove = index => setValues(values.filter((_, i) => index !== i));
 
   const renderItem = (item, index) =>
-    itemRenderer({ item, values, setValues, index, isAdvanced });
+    itemRenderer({
+      item,
+      values,
+      setValues,
+      index,
+      isAdvanced,
+      nestingLevel: nestingLevel + 1,
+    });
 
   const renderAllItems = () =>
     values.map((current, i) => {
@@ -41,6 +49,7 @@ export function ItemArray({
       return (
         <ResourceForm.CollapsibleSection
           key={i}
+          nestingLevel={nestingLevel + 1}
           title={
             <>
               {nameSingular} {name || i + 1}

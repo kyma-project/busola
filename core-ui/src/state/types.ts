@@ -17,12 +17,11 @@ export const configFeaturesNames = {
   SERVERLESS: 'SERVERLESS',
   CUSTOM_DOMAINS: 'CUSTOM_DOMAINS',
   ISTIO: 'ISTIO',
-  PROMETHEUS: 'PROMETHEUS',
   APPLICATION_CONNECTOR_FLOW: 'APPLICATION_CONNECTOR_FLOW',
   LEGAL_LINKS: 'LEGAL_LINKS',
   SSO_LOGIN: 'SSO_LOGIN',
-  KUBECONFIG_ID: 'KUBECONFIG_ID',
   SENTRY: 'SENTRY',
+  KUBECONFIG_ID: 'KUBECONFIG_ID',
   OBSERVABILITY: 'OBSERVABILITY',
   HIDDEN_NAMESPACES: 'HIDDEN_NAMESPACES',
   VISUAL_RESOURCES: 'VISUAL_RESOURCES',
@@ -33,6 +32,14 @@ export const configFeaturesNames = {
 
 export type ConfigFeatureList = {
   [key in ConfigFeaturesNames]?: ConfigFeature;
+};
+
+export type LazyConfigFeaturesNames = typeof lazyConfigFeaturesNames[keyof typeof lazyConfigFeaturesNames];
+export const lazyConfigFeaturesNames = {
+  PROMETHEUS: 'PROMETHEUS',
+} as const;
+export type LazyConfigFeatureList = {
+  [key in LazyConfigFeaturesNames]?: ConfigFeature;
 };
 
 export type ExtResource = {
@@ -71,4 +78,5 @@ export type NavNode = {
   apiGroup: string;
   icon?: IconGlyph;
   topLevelNode?: boolean;
+  externalUrl?: string;
 };

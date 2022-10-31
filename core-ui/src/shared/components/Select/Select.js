@@ -9,5 +9,9 @@ export function Select({ fullWidth, ...props }) {
     };
   }
 
-  return <FdSelect {...props} />;
+  return (
+    <div className="fd-col fd-col-md--11">
+      <FdSelect {...props} />
+    </div>
+  );
 }

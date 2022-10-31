@@ -1,18 +1,19 @@
 import { RecoilValueReadOnly, selector } from 'recoil';
 import { openapiState } from './openapiAtom';
 
-type OpenapiPathIdList = string[] | null;
+type OpenapiPathIdList = string[];
 
 export const openapiPathIdListSelector: RecoilValueReadOnly<OpenapiPathIdList> = selector<
   OpenapiPathIdList
 >({
   key: 'openapiPathIdList',
   get: ({ get }) => {
-    const paths = get(openapiState)?.paths;
+    const openapi = get(openapiState);
 
-    if (paths) {
-      const openapiPathIdList = Object.keys(paths);
+    if (openapi?.paths) {
+      const openapiPathIdList = Object.keys(openapi.paths);
       return openapiPathIdList;
-    } else return null;
+    }
+    return [];
   },
 });
