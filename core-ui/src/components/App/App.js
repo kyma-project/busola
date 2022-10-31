@@ -16,7 +16,7 @@ import { useConfigContextMigrator } from 'components/App/useConfigContextMigrato
 import { Header } from 'header/Header';
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
-import { Sidebar } from 'Sidebar/Sidebar';
+import { Sidebar } from 'sidebar/Sidebar';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 

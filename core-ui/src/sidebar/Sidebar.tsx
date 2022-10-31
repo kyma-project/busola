@@ -1,6 +1,6 @@
 import { useRecoilValue } from 'recoil';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { SidebarNavigation } from 'Sidebar/SidebarNavigation';
+import { SidebarNavigation } from 'sidebar/SidebarNavigation';
 import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { Footer } from './Footer/Footer';
 
