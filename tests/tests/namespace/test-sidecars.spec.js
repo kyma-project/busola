@@ -18,14 +18,11 @@ context('Test Sidecars', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtension('SIDECARS', 'examples/resources/istio/sidecars.yaml');
+
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
-  });
-
-  beforeEach(() => {
-    cy.setBusolaFeature('EXTENSIBILITY', true);
-
-    cy.mockExtension('SIDECARS', 'examples/resources/istio/sidecars.yaml');
   });
 
   it('Create a Sidecar', () => {
