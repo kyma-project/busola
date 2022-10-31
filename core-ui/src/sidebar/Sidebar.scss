@@ -10,9 +10,14 @@
     overflow-x: hidden;
   }
 
-  .fd-nested-list__link:has(i, .fd-nested-list__icon) {
-    padding-left: 0 !important;
+  .fd-nested-list__link {
+    overflow-x: hidden;
+
+    &:has(i, .fd-nested-list__icon) {
+      padding-left: 0 !important;
+    }
   }
+
   .fd-nested-list__button.fd-button {
     i {
       color: var(--sapContent_IconColor) !important;
