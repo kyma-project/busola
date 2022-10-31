@@ -1,5 +1,4 @@
 import { load } from 'js-yaml';
-import { loadFile } from '../support/loadFile';
 
 Cypress.Commands.add('setBusolaFeature', (featureName, isEnabled) => {
   cy.log(`Set Busola feature: ${featureName} -> ${isEnabled}`);
