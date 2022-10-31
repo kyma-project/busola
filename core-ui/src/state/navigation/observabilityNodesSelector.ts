@@ -45,7 +45,6 @@ export const observabilityNodesSelector: RecoilValueReadOnly<
         try {
           url = await fetchObservabilityHost(fetchFn, backendAddress, path);
         } catch (e) {
-          url = backendAddress + '' + path;
           //this error is caught to not reach the ErrorBoundary component
           console.error('Cannot fetch an observability link: ', e);
         }
