@@ -11,6 +11,7 @@ export function SidebarNavigation() {
     sidebarNavigationNodesSelector,
   );
 
+  // if it's in the CategoryItem, it causes needless re-renders
   const [expandedCategories, setExpandedCategories] = useRecoilState(
     expandedCategoriesState,
   );
@@ -24,7 +25,6 @@ export function SidebarNavigation() {
   const topLevelNodes = filteredNavigationNodes?.filter(nn => nn.topLevelNode);
   const categoryNodes = filteredNavigationNodes?.filter(nn => !nn.topLevelNode);
 
-  // {clgdld}={clgdld}
   return (
     // TODO: Show children for condensed in fundamental
     // TODO: Remove 'TypeError: onItemSelect is not a function' errors in fundamental

@@ -1,12 +1,10 @@
 import { SideNav } from 'fundamental-react';
+import { useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
 import { memo, useCallback } from 'react';
 import { SetterOrUpdater } from 'recoil';
-// import { useRecoilState } from 'recoil';
 import { Category } from 'state/navigation/categories';
 import { ExpandedCategoriesAtom } from 'state/navigation/expandedCategoriesAtom';
-// import { expandedCategoriesState } from 'state/navigation/expandedCategoriesAtom';
-// import { useHasTranslations } from './helpers';
 import { MemoizedNavItem } from './NavItem';
 
 export function CategoryItem({
@@ -18,12 +16,10 @@ export function CategoryItem({
   expandedCategories: string[];
   handleExpandedCategories: SetterOrUpdater<ExpandedCategoriesAtom>;
 }) {
-  // const expandedCategories: string[] = [];
+  const { t } = useTranslation();
   console.log(category);
-  // const hasTranslations = useHasTranslations();
 
   const handleAddExpandedCategory = useCallback(() => {
-    //@ts-ignore
     const wasExpanded = expandedCategories.includes(category.key);
     let newExpandedCategories = [...expandedCategories];
     if (wasExpanded) {
@@ -41,8 +37,7 @@ export function CategoryItem({
       key={category.key}
       expandSubmenuLabel={`Expand ${category.key || category.label} category`}
       id={category.key}
-      // name={hasTranslations(category.key || category.label)}
-      name={category.label}
+      name={t(category.label, { defaultValue: category.label })}
       url="#"
       glyph={category.icon || 'customize'}
       expanded={expandedCategories.includes(category.key)}
