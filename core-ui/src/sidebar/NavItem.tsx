@@ -10,7 +10,7 @@ import { isEqual } from 'lodash';
 export function NavItem({ node }: { node: NavNode }) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   // const hasTranslations = useHasTranslations();
-  // console.log(node);
+  console.log(node);
   const pathSegments = window.location.pathname?.split('/') || [];
   const currentPath = pathSegments[pathSegments.length - 1];
 

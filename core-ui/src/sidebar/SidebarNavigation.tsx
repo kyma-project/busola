@@ -1,13 +1,18 @@
 import React from 'react';
-import { useRecoilValueLoadable } from 'recoil';
+import { useRecoilState, useRecoilValueLoadable } from 'recoil';
 import { SideNav } from 'fundamental-react';
 import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
 import { MemoizedCategory } from './CategoryItem';
 import { MemoizedNavItem } from './NavItem';
+import { expandedCategoriesState } from 'state/navigation/expandedCategoriesAtom';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValueLoadable(
     sidebarNavigationNodesSelector,
+  );
+
+  const [expandedCategories, setExpandedCategories] = useRecoilState(
+    expandedCategoriesState,
   );
 
   if (navigationNodes.state === 'loading') return <p>loading</p>;
@@ -33,7 +38,11 @@ export function SidebarNavigation() {
           node.items?.map(item => <MemoizedNavItem node={item} />),
         )}
         {categoryNodes.map(category => (
-          <MemoizedCategory category={category} />
+          <MemoizedCategory
+            category={category}
+            expandedCategories={expandedCategories}
+            handleExpandedCategories={setExpandedCategories}
+          />
         ))}
       </SideNav.List>
     </SideNav>
