@@ -1,6 +1,7 @@
 import { ConfigFeatureList, NavNode, Scope } from '../types';
 import { isEqual } from 'lodash';
 import { mapBusolaResourceToNavNode } from '../resourceList/mapBusolaResourceToNavNode';
+import { areNodeFeaturesEnabled } from './filters/areNodeFeaturesEnabled';
 
 import { createClusterNode } from 'components/Clusters/views/ClusterOverview/clusterDetailsNode';
 import { extensionsNavNode } from 'components/BusolaExtensions/extensionsNode';
@@ -11,7 +12,6 @@ import { namespaceOverviewNode } from 'resources/Namespaces/namespaceOverviewNod
 import * as secretMetadata from 'resources/Secrets';
 import * as crdMetadata from 'resources/CustomResourceDefinitions';
 import * as cmMetadata from 'resources/ConfigMaps';
-import { areNodeFeaturesEnabled } from './filters/areNodeFeaturesEnabled';
 
 export const addAdditionalNodes = (
   navNodes: NavNode[],

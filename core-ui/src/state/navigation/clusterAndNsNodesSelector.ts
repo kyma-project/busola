@@ -47,12 +47,12 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     );
 
     const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
-    const extendedNavNodes = addAdditionalNodes(
+    const navNodesWithAddons = addAdditionalNodes(
       navNodes,
       scope,
       configFeatures,
     );
 
-    return extendedNavNodes;
+    return navNodesWithAddons;
   },
 });
