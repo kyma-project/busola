@@ -1,24 +1,24 @@
-import React, { useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Route, Routes } from 'react-router-dom';
 
+import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
+import { useAppTracking } from 'hooks/tracking';
+import { useSentry } from 'hooks/useSentry';
 import { MainFrameRedirection } from 'shared/components/MainFrameRedirection/MainFrameRedirection';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { WithTitle } from 'shared/hooks/useWindowTitle';
-import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
-import { useSentry } from 'hooks/useSentry';
-import { useAppTracking } from 'hooks/tracking';
 
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
 import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
 
-import { resourceRoutes } from 'resources';
-import { createExtensibilityRoutes } from './ExtensibilityRoutes';
-import otherRoutes from 'resources/other';
-import { Sidebar } from 'sidebar/Sidebar';
-import { Header } from 'header/Header';
-import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
+import { Header } from 'header/Header';
+import { resourceRoutes } from 'resources';
+import otherRoutes from 'resources/other';
+import { Sidebar } from 'Sidebar/Sidebar';
+import { createExtensibilityRoutes } from './ExtensibilityRoutes';
+import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 
 import './App.scss';
 

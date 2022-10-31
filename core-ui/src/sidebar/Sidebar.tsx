@@ -1,8 +1,7 @@
-import React from 'react';
 import { useRecoilValue } from 'recoil';
-import { SidebarNavigation } from 'sidebar/SidebarNavigation';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { configFeaturesState } from 'state/configFeaturesAtom';
+import { SidebarNavigation } from 'Sidebar/SidebarNavigation';
+import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { Footer } from './Footer/Footer';
 
 import './Sidebar.scss';
