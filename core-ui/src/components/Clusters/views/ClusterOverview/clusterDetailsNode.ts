@@ -1,4 +1,4 @@
-import { NavNode, Scope } from '../../../../state/types';
+import { NavNode, Scope } from 'state/types';
 
 export const createClusterNode = (scope: Scope): NavNode => ({
   category: '',
