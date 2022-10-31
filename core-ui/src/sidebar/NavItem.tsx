@@ -1,11 +1,10 @@
 import { useRecoilValue } from 'recoil';
 import { SideNav } from 'fundamental-react';
+import { memo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { luigiNavigate } from 'resources/createResourceRoutes';
 import { NavNode } from 'state/types';
-import { memo, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
-// import { isEqual } from 'lodash';
 
 export function NavItem({ node }: { node: NavNode }) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);

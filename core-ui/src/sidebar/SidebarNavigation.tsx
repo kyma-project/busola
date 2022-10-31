@@ -2,9 +2,9 @@ import React from 'react';
 import { useRecoilState, useRecoilValueLoadable } from 'recoil';
 import { SideNav } from 'fundamental-react';
 import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
+import { expandedCategoriesState } from 'state/navigation/expandedCategoriesAtom';
 import { MemoizedCategory } from './CategoryItem';
 import { MemoizedNavItem } from './NavItem';
-import { expandedCategoriesState } from 'state/navigation/expandedCategoriesAtom';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValueLoadable(
