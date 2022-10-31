@@ -20,11 +20,11 @@ export const addAdditionalNodes = (
 ) => {
   const extNavList = [...navNodes];
 
-  addResource(createClusterNode(scope), extNavList.length, extNavList);
-
   if (scope === 'namespace') {
     addResource(namespaceOverviewNode, extNavList.length, extNavList);
   }
+
+  addResource(createClusterNode(scope), extNavList.length, extNavList);
 
   const isExtEnabled = areNodeFeaturesEnabled(
     extensionsNavNode,
