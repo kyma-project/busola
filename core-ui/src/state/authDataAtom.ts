@@ -7,9 +7,6 @@ export type AuthDataState =
     }
   | null;
 
-const defaultValue = null;
-
 export const authDataState: RecoilState<AuthDataState> = atom<AuthDataState>({
   key: 'authDataState',
-  default: defaultValue,
 });

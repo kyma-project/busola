@@ -11,6 +11,7 @@ export const predefinedCategories = {
   apps: 'Apps',
   configuration: 'Configuration',
   integration: 'Integration',
+  observability: 'Observability',
 } as const;
 
 export type Category = {
@@ -68,6 +69,12 @@ export const CATEGORIES: Category[] = [
     key: predefinedCategories.integration,
     icon: 'overview-chart',
     label: 'integration.title',
+    items: [],
+  },
+  {
+    key: predefinedCategories.observability,
+    icon: 'stethoscope',
+    label: 'observability.title',
     items: [],
   },
 ];

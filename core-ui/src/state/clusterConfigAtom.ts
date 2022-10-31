@@ -5,11 +5,8 @@ export type ClusterConfigState = {
   storage: 'localStorage' | 'sessionStorage' | string;
 } | null;
 
-const defaultValue: ClusterConfigState = null;
-
 export const clusterConfigState: RecoilState<ClusterConfigState> = atom<
   ClusterConfigState
 >({
   key: 'clusterConfigState',
-  default: defaultValue,
 });
