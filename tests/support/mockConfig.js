@@ -32,7 +32,8 @@ Cypress.Commands.add('mockExtension', (featureName, extensionPath) => {
       '/backend/api/v1/configmaps?labelSelector=busola.io/extension=resource',
   };
 
-  loadFile(extensionPath).then(config => {
-    cy.intercept(requestData, JSON.stringify({ items: [config] }));
+  cy.fixture(extensionPath).then(fileContent => {
+    const extensionConfig = load(fileContent);
+    cy.intercept(requestData, JSON.stringify({ items: [extensionConfig] }));
   });
 });
