@@ -12,7 +12,7 @@ export function Columns({ structure, inlineContext, ...props }) {
 
   return (
     <div className={classNames}>
-      {structure.children?.map(child => (
+      {(structure.children || []).map(child => (
         <Widget
           structure={child}
           key={`column-${child.path || child.name}`}
