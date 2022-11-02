@@ -12,6 +12,7 @@ lint:
 	npm run lint-check
 
 test:
+# redirection is used here to get rid of ANSI coloring from jest - --color=false or CI=true doesn't help
 	npm run test 2>&1
 
 build:
