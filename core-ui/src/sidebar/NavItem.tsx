@@ -1,12 +1,16 @@
+import { memo, useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 import { SideNav } from 'fundamental-react';
-import { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-import { luigiNavigate } from 'resources/createResourceRoutes';
 import { NavNode } from 'state/types';
+import { luigiNavigate } from 'resources/createResourceRoutes';
 
-export function NavItem({ node }: { node: NavNode }) {
+type NavItemProps = {
+  node: NavNode;
+};
+
+export function NavItem({ node }: NavItemProps) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { t } = useTranslation();
 
@@ -33,8 +37,8 @@ export function NavItem({ node }: { node: NavNode }) {
 
 const navNodesAreEqual = (prevNode: any, nextNode: any) => {
   return (
-    prevNode.pathSegment === nextNode.pathSegment &&
-    prevNode.category === nextNode.category
+    prevNode.pathSegment === nextNode.pathSegment
+    // prevNode.category === nextNode.category
   );
 };
 

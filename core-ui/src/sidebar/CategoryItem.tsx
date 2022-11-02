@@ -1,21 +1,22 @@
 import { SideNav } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { isEqual } from 'lodash';
 import { memo, useCallback } from 'react';
 import { SetterOrUpdater } from 'recoil';
 import { Category } from 'state/navigation/categories';
 import { ExpandedCategoriesAtom } from 'state/navigation/expandedCategoriesAtom';
 import { MemoizedNavItem } from './NavItem';
 
+type CategoryItemProps = {
+  category: Category;
+  expandedCategories: string[];
+  handleExpandedCategories: SetterOrUpdater<ExpandedCategoriesAtom>;
+};
+
 export function CategoryItem({
   category,
   expandedCategories,
   handleExpandedCategories,
-}: {
-  category: Category;
-  expandedCategories: string[];
-  handleExpandedCategories: SetterOrUpdater<ExpandedCategoriesAtom>;
-}) {
+}: CategoryItemProps) {
   const { t } = useTranslation();
   console.log(category);
 
@@ -39,7 +40,7 @@ export function CategoryItem({
       id={category.key}
       name={t(category.label, { defaultValue: category.label })}
       url="#"
-      glyph={category.icon || 'customize'}
+      glyph={category.icon}
       expanded={expandedCategories.includes(category.key)}
       onItemSelect={handleAddExpandedCategory}
     >
@@ -58,7 +59,7 @@ const areCategoriesEqual = (prevCategory: any, nextCategory: any) => {
   //   prevCategory.expandedCategories.includes(nextCategory.category.key) &&
   //   nextCategory.expandedCategories.includes(prevCategory.category.key);
 
-  return isEqual(prevCategory.category, nextCategory.category);
+  return prevCategory.category.key === nextCategory.category.key;
   // isThisCategoryExpanded
 };
 
