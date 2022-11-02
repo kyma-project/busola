@@ -17,6 +17,7 @@ import ThemeChooser from './ThemeChooser';
 
 import './Preferences.scss';
 import React from 'react';
+import { useEventListener } from 'hooks/useEventListener';
 
 export function Preferences() {
   const { t } = useTranslation();
@@ -49,6 +50,12 @@ export function Preferences() {
     },
   ];
 
+  const handleCloseWithEscape = (e: React.KeyboardEvent<HTMLLIElement>) => {
+    if (e.key === 'Escape') setModalOpen(false);
+  };
+
+  useEventListener('keydown', handleCloseWithEscape);
+
   const handleCloseModal = () => {
     setModalOpen(false);
   };
@@ -61,17 +68,12 @@ export function Preferences() {
     setModalOpen(true);
   });
 
-  const handleCloseWithEscape = (e: React.KeyboardEvent<HTMLLIElement>) => {
-    if (e.key === 'Escape') setModalOpen(false);
-  };
-
   return (
     <Dialog
       show={isModalOpen}
       title={t('preferences.title')}
       actions={actions}
       className="preferences-dialog"
-      onKeyDown={handleCloseWithEscape}
     >
       <VerticalTabs tabs={tabs} height="100vh">
         <VerticalTabs.Content id={1}>
