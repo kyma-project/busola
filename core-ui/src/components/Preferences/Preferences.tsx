@@ -2,6 +2,7 @@ import { Button, Dialog, Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 
+import { useEventListener } from 'hooks/useEventListener';
 import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
 import { Tab } from 'shared/components/Tabs/Tab';
 import { Tabs } from 'shared/components/Tabs/Tabs';
@@ -16,8 +17,6 @@ import ProtectedSettings from './ProtectedSettings';
 import ThemeChooser from './ThemeChooser';
 
 import './Preferences.scss';
-import React from 'react';
-import { useEventListener } from 'hooks/useEventListener';
 
 export function Preferences() {
   const { t } = useTranslation();
@@ -50,19 +49,19 @@ export function Preferences() {
     },
   ];
 
-  const handleCloseWithEscape = (e: React.KeyboardEvent<HTMLLIElement>) => {
-    if (e.key === 'Escape') setModalOpen(false);
-  };
-
-  useEventListener('keydown', handleCloseWithEscape);
-
   const handleCloseModal = () => {
     setModalOpen(false);
+  };
+
+  const handleCloseWithEscape = (e: React.KeyboardEvent<HTMLLIElement>) => {
+    if (e.key === 'Escape') handleCloseModal();
   };
 
   const actions = [
     <Button onClick={handleCloseModal}>{t('common.buttons.close')}</Button>,
   ];
+
+  useEventListener('keydown', handleCloseWithEscape);
 
   useCustomMessageListener('open-preferences', () => {
     setModalOpen(true);
