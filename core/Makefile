@@ -12,7 +12,7 @@ lint:
 	npm run lint-check
 
 test:
-	npm run test
+	CI=true npm run test
 
 build:
 	npm run build
