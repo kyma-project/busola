@@ -81,15 +81,11 @@ context('Test Sidecars', () => {
       .first()
       .click();
 
-    cy.wait(500);
-
     // Ingress
     cy.getIframeBody()
       .find('[aria-label="expand Ingress"]:visible', { log: false })
       .contains('Add')
       .click();
-
-    cy.wait(500);
 
     cy.getIframeBody()
       .find('[aria-label="expand Ingress"]:visible', { log: false })

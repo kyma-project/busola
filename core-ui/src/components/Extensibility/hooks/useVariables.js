@@ -5,7 +5,8 @@ import * as jp from 'jsonpath';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { VarStoreContext } from '../contexts/VarStore';
 
-// Cypress uses chorme 95 which isn't support findLastIndex
+// Cypress uses chorme 95 which doesn't support findLastIndex
+// issue: https://github.com/kyma-project/busola/issues/1997
 import findLastIndex from 'array.prototype.findlastindex';
 
 const pathToJP = path =>

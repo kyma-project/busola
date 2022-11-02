@@ -29,10 +29,6 @@ class ErrorBoundaryComponent extends React.Component {
               this.props.t('err-boundary.restored-initial-form')}
           </p>
 
-          <p>{this.state.error.message}</p>
-          <p>{this.state.error.cause}</p>
-          <p>{JSON.stringify(this.state.error)}</p>
-          {/* <p>{this.state.error}</p> */}
           {this.props.displayButton ? (
             <Button
               onClick={() => this.setState({ hasError: false, error: null })}
