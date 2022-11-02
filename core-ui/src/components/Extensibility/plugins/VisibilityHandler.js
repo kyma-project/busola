@@ -23,7 +23,10 @@ export function VisibilityHandler({
   const visibilityFormula = schema.get('visibility');
 
   if (visibilityFormula) {
-    const [visible] = jsonata(itemVars(resource, rule.itemVars, storeKeys));
+    const [visible] = jsonata(
+      visibilityFormula,
+      itemVars(resource, rule.itemVars, storeKeys),
+    );
 
     if (!visible) {
       if (value) {
