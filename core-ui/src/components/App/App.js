@@ -24,7 +24,7 @@ import { Sidebar } from 'sidebar/Sidebar';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 
-import './App.css';
+import './App.scss';
 
 export default function App() {
   const { cluster, customResources = [] } = useMicrofrontendContext();
