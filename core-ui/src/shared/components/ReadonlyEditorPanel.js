@@ -1,11 +1,9 @@
 import React from 'react';
-import { useTheme } from 'shared/contexts/ThemeContext';
 import { LayoutPanel } from 'fundamental-react';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
 import { Editor } from 'shared/components/MonacoEditorESM/Editor';
 
 export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
-  const { editorTheme } = useTheme();
   const [editor, setEditor] = React.useState(null);
 
   const options = {
@@ -28,7 +26,6 @@ export function ReadonlyEditorPanel({ title, value, editorProps, actions }) {
           saveDisabled={true}
         />
         <Editor
-          theme={editorTheme}
           height="20em"
           value={value}
           options={options}
