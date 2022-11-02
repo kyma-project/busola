@@ -80,7 +80,7 @@ build:
 	npm run build
 
 test:
-	CI=true npm run test -- --color=false
+	CI=true npm run test 2>&1
 
 resolve:
 	cd .. && npm run bootstrap:ci
