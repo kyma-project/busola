@@ -1,4 +1,3 @@
-import { memo, useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 import { SideNav } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
@@ -14,13 +13,8 @@ export function NavItem({ node }: NavItemProps) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { t } = useTranslation();
 
-  console.log(node);
   const pathSegments = window.location.pathname?.split('/') || [];
   const currentPath = pathSegments[pathSegments.length - 1];
-
-  const handleOnClick = useCallback(() => {
-    luigiNavigate(node, namespaceId);
-  }, [node, namespaceId]);
 
   return (
     <SideNav.ListItem
@@ -30,16 +24,7 @@ export function NavItem({ node }: NavItemProps) {
       name={t(node.label, { defaultValue: node.label })}
       url="#"
       glyph={node.icon}
-      onClick={handleOnClick}
+      onClick={() => luigiNavigate(node, namespaceId)}
     />
   );
 }
-
-const navNodesAreEqual = (prevNode: any, nextNode: any) => {
-  return (
-    prevNode.pathSegment === nextNode.pathSegment
-    // prevNode.category === nextNode.category
-  );
-};
-
-export const MemoizedNavItem = memo(NavItem, navNodesAreEqual);
