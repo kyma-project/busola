@@ -3,7 +3,7 @@ import LuigiClient from '@luigi-project/client';
 import { render, fireEvent } from 'testing/reactTestingUtils';
 import NamespaceSettings from '../NamespaceSettings';
 
-let mockGroups = [];
+let mockGroups: string[] | null = [];
 jest.mock('shared/contexts/MicrofrontendContext', () => ({
   useMicrofrontendContext: () => ({
     groups: mockGroups,
