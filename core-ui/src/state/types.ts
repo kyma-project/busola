@@ -25,6 +25,7 @@ export const configFeaturesNames = {
   VISUAL_RESOURCES: 'VISUAL_RESOURCES',
   EXTENSIBILITY: 'EXTENSIBILITY',
   TRACKING: 'TRACKING',
+  PROTECTED_RESOURCES: 'PROTECTED_RESOURCES',
 } as const;
 
 export type ConfigFeatureList = {
