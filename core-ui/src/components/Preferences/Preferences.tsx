@@ -16,8 +16,9 @@ import ProtectedSettings from './ProtectedSettings';
 import ThemeChooser from './ThemeChooser';
 
 import './Preferences.scss';
+import React from 'react';
 
-function Preferences() {
+export function Preferences() {
   const { t } = useTranslation();
   const [isModalOpen, setModalOpen] = useRecoilState(isPreferencesOpenState);
 
@@ -60,7 +61,7 @@ function Preferences() {
     setModalOpen(true);
   });
 
-  const handleCloseWithEscape = e => {
+  const handleCloseWithEscape = (e: React.KeyboardEvent<HTMLLIElement>) => {
     if (e.key === 'Escape') setModalOpen(false);
   };
 
@@ -107,14 +108,5 @@ function Preferences() {
         </VerticalTabs.Content>
       </VerticalTabs>
     </Dialog>
-  );
-}
-
-export function PreferencesProvider({ children }) {
-  return (
-    <>
-      <Preferences />
-      {children}
-    </>
   );
 }
