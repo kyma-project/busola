@@ -1,16 +1,14 @@
-import React from 'react';
-
-import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 
 import './TileButton.scss';
 
-TileButton.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string,
-  icon: PropTypes.node.isRequired,
-  isActive: PropTypes.bool,
-  handleClick: PropTypes.func.isRequired,
+type TileButtonProps = {
+  title: string;
+  description: string;
+  icon: ReactNode;
+  isActive: boolean;
+  handleClick: React.MouseEventHandler;
 };
 
 export function TileButton({
@@ -19,7 +17,7 @@ export function TileButton({
   icon,
   isActive,
   handleClick,
-}) {
+}: TileButtonProps) {
   const className = classNames('tile-button', { 'tile--active': isActive });
   return (
     <li className={className}>

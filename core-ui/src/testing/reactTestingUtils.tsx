@@ -6,8 +6,10 @@ const AllTheProviders = ({ children }: { children: ReactNode }) => {
   return <RecoilRoot>{children}</RecoilRoot>;
 };
 
-const customRender = (ui: ReactElement, options: RenderOptions) =>
-  render(ui, { wrapper: AllTheProviders, ...options });
+const customRender = (
+  ui: ReactElement,
+  options?: Omit<RenderOptions, 'wrapper'>,
+) => render(ui, { wrapper: AllTheProviders, ...options });
 
 export * from '@testing-library/react';
 

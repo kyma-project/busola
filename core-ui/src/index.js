@@ -14,7 +14,6 @@ import { Microfrontend } from 'shared/contexts/Microfrontend';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
-import { PreferencesProvider } from 'components/Preferences/Preferences';
 
 import './styles/reset.css';
 import './styles/sapIllus-Fills.css';
@@ -54,9 +53,7 @@ ReactDOM.render(
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <Suspense fallback={<Spinner />}>
           <CommandPaletteProvider>
-            <PreferencesProvider>
-              <App />
-            </PreferencesProvider>
+            <App />
           </CommandPaletteProvider>
         </Suspense>
       </BrowserRouter>

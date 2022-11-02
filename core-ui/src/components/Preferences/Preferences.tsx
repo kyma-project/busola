@@ -2,6 +2,7 @@ import { Button, Dialog, Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 
+import { useEventListener } from 'hooks/useEventListener';
 import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
 import { Tab } from 'shared/components/Tabs/Tab';
 import { Tabs } from 'shared/components/Tabs/Tabs';
@@ -17,7 +18,7 @@ import ThemeChooser from './ThemeChooser';
 
 import './Preferences.scss';
 
-function Preferences() {
+export function Preferences() {
   const { t } = useTranslation();
   const [isModalOpen, setModalOpen] = useRecoilState(isPreferencesOpenState);
 
@@ -52,17 +53,19 @@ function Preferences() {
     setModalOpen(false);
   };
 
+  const handleCloseWithEscape = (e: React.KeyboardEvent<HTMLLIElement>) => {
+    if (e.key === 'Escape') handleCloseModal();
+  };
+
   const actions = [
     <Button onClick={handleCloseModal}>{t('common.buttons.close')}</Button>,
   ];
 
+  useEventListener('keydown', handleCloseWithEscape);
+
   useCustomMessageListener('open-preferences', () => {
     setModalOpen(true);
   });
-
-  const handleCloseWithEscape = e => {
-    if (e.key === 'Escape') setModalOpen(false);
-  };
 
   return (
     <Dialog
@@ -70,7 +73,6 @@ function Preferences() {
       title={t('preferences.title')}
       actions={actions}
       className="preferences-dialog"
-      onKeyDown={handleCloseWithEscape}
     >
       <VerticalTabs tabs={tabs} height="100vh">
         <VerticalTabs.Content id={1}>
@@ -107,14 +109,5 @@ function Preferences() {
         </VerticalTabs.Content>
       </VerticalTabs>
     </Dialog>
-  );
-}
-
-export function PreferencesProvider({ children }) {
-  return (
-    <>
-      <Preferences />
-      {children}
-    </>
   );
 }
