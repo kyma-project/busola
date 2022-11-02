@@ -1,8 +1,8 @@
 import { Switch } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { disableResourceProtectionState } from 'state/preferences/disableResourceProtectionAtom';
 
 export default function ProtectedSettings() {
@@ -12,9 +12,9 @@ export default function ProtectedSettings() {
     setDisableResourceProtection,
   ] = useRecoilState(disableResourceProtectionState);
 
-  const microfrontendContext = useMicrofrontendContext();
+  const configFeatures = useRecoilValue(configFeaturesState);
   const protectedResourcesEnabled =
-    microfrontendContext?.features?.PROTECTED_RESOURCES?.isEnabled;
+    configFeatures?.PROTECTED_RESOURCES?.isEnabled;
 
   if (!protectedResourcesEnabled) return null;
 

@@ -37,16 +37,12 @@ window.addEventListener('keydown', e => {
 
 export const communication = {
   customMessagesListeners: {
-    'busola.language': ({ language }) => {
-      localStorage.setItem('busola.language', language);
+    'busola.luigi-language': ({ language }) => {
+      localStorage.setItem('busola.luigi-language', language);
       i18next.changeLanguage(language).then(() => reloadNavigation());
     },
-    'busola.theme': ({ name }) => {
+    'busola.luigi-theme': ({ name }) => {
       setTheme(name);
-      Luigi.customMessages().sendToAll({
-        id: 'busola.theme',
-        theme: name,
-      });
     },
     'busola.showHiddenNamespaces': ({ showHiddenNamespaces }) => {
       setFeatureToggle('showHiddenNamespaces', showHiddenNamespaces);
