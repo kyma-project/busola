@@ -3,7 +3,7 @@ import { extResourcesState } from '../extResourcesAtom';
 import { resources } from 'resources';
 import { partial } from 'lodash';
 import { NavNode } from '../types';
-import { configFeaturesState } from '../configFeaturesAtom';
+import { configFeaturesState } from '../configFeatures/configFeaturesAtom';
 import { mapBusolaResourceToNavNode } from './mapBusolaResourceToNavNode';
 import { mapExtResourceToNavNode } from './mapExtResourceToNavNode';
 
@@ -15,7 +15,9 @@ export const resourceListSelector = selector<NavNode[]>({
 
     let resNodeList: NavNode[] = [];
 
-    if (!configFeatures) return resNodeList;
+    if (!configFeatures) {
+      return resNodeList;
+    }
 
     const isExtensibilityOn = configFeatures.EXTENSIBILITY?.isEnabled;
     const areExtensionsLoaded = isExtensibilityOn && extResources;
@@ -29,7 +31,6 @@ export const resourceListSelector = selector<NavNode[]>({
       const extNodeList = extResources.map(mapExtResourceToNavNode);
       resNodeList = mergeInExtensibilityNav(resNodeList, extNodeList);
     }
-
     return resNodeList;
   },
 });

@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil';
-import { configFeaturesState } from 'state/configFeaturesAtom';
+import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 
 type HiddenNamespacesConfig =
   | {
