@@ -1,8 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 import { isEqual } from 'lodash';
 import { editor, Uri } from 'monaco-editor';
-import { useTheme } from 'shared/contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
+import { themeState } from 'state/preferences/themeAtom';
+
+const getEditorTheme = theme => {
+  switch (theme) {
+    case 'dark':
+      return 'vs-dark';
+    case 'hcb':
+      return 'hc-black';
+    case 'light_dark':
+      return window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'vs-dark'
+        : 'vs';
+    default:
+      return 'vs';
+  }
+};
 
 export const useCreateEditor = ({
   value,
@@ -11,7 +28,8 @@ export const useCreateEditor = ({
   language,
   readOnly,
 }) => {
-  const { editorTheme } = useTheme();
+  const theme = useRecoilValue(themeState);
+  const editorTheme = getEditorTheme(theme);
   const descriptor = useRef(new Uri());
   const divRef = useRef(null);
   const { t } = useTranslation();
