@@ -12,7 +12,7 @@ lint:
 	npm run lint-check
 
 test:
-	CI=true npm run test
+	npm run test -- --color=false
 
 build:
 	npm run build
