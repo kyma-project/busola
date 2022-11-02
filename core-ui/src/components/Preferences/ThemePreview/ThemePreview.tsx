@@ -1,7 +1,12 @@
 import React from 'react';
+import { Theme } from 'state/preferences/themeAtom';
 import './ThemePreview.scss';
 
-export function ThemePreview({ theme }) {
+type ThemePreviewProps = {
+  theme: Theme;
+};
+
+export function ThemePreview({ theme }: ThemePreviewProps) {
   if (theme === 'light_dark') {
     return (
       <div className="double-theme">

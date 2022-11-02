@@ -19,11 +19,13 @@ export function createSettings(params) {
 }
 
 export async function attachPreferencesModal() {
-  elementReady('[data-testid=preferences]').then(async preferencesButton => {
-    preferencesButton.addEventListener('click', () => {
-      Luigi.customMessages().sendToAll({
-        id: 'open-preferences',
+  elementReady(`[data-testid=luigi-topnav-profile-item]`).then(
+    async preferencesElement => {
+      preferencesElement.addEventListener('click', () => {
+        Luigi.customMessages().sendToAll({
+          id: 'open-preferences',
+        });
       });
-    });
-  });
+    },
+  );
 }
