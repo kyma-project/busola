@@ -48,11 +48,13 @@ If you target elements of an array rather than the array itself, you can use the
     - path: service.port
     - path: service.number
       visibility: "$item.port.protocol = 'HTTP'"
+      overwrite: false
       enum:
         - 80
         - 81
     - path: service.number
       visibility: "$item.port.protocol = 'HTTPS'"
+      overwrite: false
       enum:
         - 443
         - 444
