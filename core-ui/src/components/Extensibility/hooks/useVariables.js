@@ -102,7 +102,7 @@ export function useVariables() {
   };
 
   const readVars = resource => {
-    const readVar = async (def, path, base = resource) => {
+    const readVar = (def, path, base = resource) => {
       if (path.length) {
         const value = jp.value(base, pathToJP(path[0])) ?? [];
         const promises = value.map(item => readVar(def, tail(path)));
