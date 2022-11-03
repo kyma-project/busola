@@ -5,6 +5,10 @@ import * as jp from 'jsonpath';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { VarStoreContext } from '../contexts/VarStore';
 
+// Cypress uses chorme 95 which doesn't support findLastIndex
+// issue: https://github.com/kyma-project/busola/issues/1997
+import findLastIndex from 'array.prototype.findlastindex';
+
 const pathToJP = path =>
   '$' +
   trim(path, '.')
@@ -44,9 +48,10 @@ export function useVariables() {
   const [defs, setDefs] = useState({});
   const itemVars = (resource, names, storeKeys) => {
     let lastArrayItem;
-    let lastArrayIndex = storeKeys
-      .toArray()
-      .findLastIndex(item => typeof item === 'number');
+    let lastArrayIndex = findLastIndex(
+      storeKeys.toArray(),
+      item => typeof item === 'number',
+    );
 
     if (lastArrayIndex > 0) {
       const lastArrayStoreKeys = storeKeys.slice(0, lastArrayIndex + 1);
