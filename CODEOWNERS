@@ -4,6 +4,6 @@
 
 # Owners of all .md files in the repository
 
-\*.md @mmitoraj @NHingerl @grego952 @IwonaLanger
+*.md @mmitoraj @NHingerl @grego952 @IwonaLanger
 
 core/src/i18n/ @mmitoraj @NHingerl @grego952 @IwonaLanger
