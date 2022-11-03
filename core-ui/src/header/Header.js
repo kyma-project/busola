@@ -41,7 +41,7 @@ export const Header = () => {
       logo={
         <img
           alt="Kyma"
-          src={theme === 'hcw' ? 'assets/logo-black.svg' : 'assets/logo.svg'}
+          src={theme === 'hcw' ? '/assets/logo-black.svg' : '/assets/logo.svg'}
         />
       }
       productTitle="Kyma"
