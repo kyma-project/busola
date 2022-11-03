@@ -4,4 +4,16 @@
   position: fixed;
   background-color: var(--sapShellColor, #354a5f);
   z-index: 9;
+
+  .fd-avatar {
+    i {
+      color: var(--sapBaseColor, white) !important;
+    }
+  }
+
+  .fd-shellbar__group--actions {
+    .fd-shellbar__button--menu {
+      float: right;
+    }
+  }
 }
