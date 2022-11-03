@@ -4,9 +4,11 @@ import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigati
 import { expandedCategoriesState } from 'state/navigation/expandedCategoriesAtom';
 import { CategoryItem } from './CategoryItem';
 import { NavItem } from './NavItem';
+import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
 
 export function SidebarNavigation() {
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
+  const isSidebarCondensed = useRecoilValue(isSidebarCondensedState);
 
   // if it's in the CategoryItem, it causes needless re-renders
   const [expandedCategories, setExpandedCategories] = useRecoilState(
@@ -25,7 +27,7 @@ export function SidebarNavigation() {
     <SideNav
       skipLink={{ href: '', label: 'Side navigation' }}
       style={{ width: '100%' }}
-      // condensed
+      condensed={isSidebarCondensed}
     >
       <SideNav.List>
         {topLevelNodes.map(node =>

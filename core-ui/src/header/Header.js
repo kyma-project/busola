@@ -1,11 +1,12 @@
 import LuigiClient from '@luigi-project/client';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { Shellbar } from 'fundamental-react';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { activeClusterNameState } from 'state/activeClusterNameAtom';
 import { clustersState } from 'state/clustersAtom';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 import { themeState } from 'state/preferences/themeAtom';
+import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
 
 import './Header.scss';
 
@@ -14,6 +15,8 @@ export const Header = () => {
   const [activeCluster, setActiveCluster] = useRecoilState(
     activeClusterNameState,
   );
+  const setSidebarCondensed = useSetRecoilState(isSidebarCondensedState);
+
   const [_, setModalOpen] = useRecoilState(isPreferencesOpenState);
   const clusters = useRecoilValue(clustersState);
   const theme = useRecoilValue(themeState);
@@ -54,6 +57,10 @@ export const Header = () => {
         {
           name: 'Settings',
           callback: _ => setModalOpen(true),
+        },
+        {
+          name: '| | |',
+          callback: _ => setSidebarCondensed(prevState => !prevState),
         },
       ]}
     />
