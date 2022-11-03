@@ -25,7 +25,7 @@ describe('useIsSKR', () => {
     mockUseSingleGet = { error: 'not found', data: null };
     const { getByText } = render(<Testbed />);
 
-    await waitFor(() => expect(getByText('FETCHING')).toBeInTheDocument());
+    await waitFor(() => expect(getByText('FETCHIwNG')).toBeInTheDocument());
   });
 
   it('Configmap found, value not set to true', async () => {
