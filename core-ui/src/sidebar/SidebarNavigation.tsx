@@ -1,33 +1,20 @@
-import { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValueLoadable } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { SideNav } from 'fundamental-react';
 import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
 import { expandedCategoriesState } from 'state/navigation/expandedCategoriesAtom';
 import { CategoryItem } from './CategoryItem';
-import { Category } from 'state/navigation/categories';
 import { NavItem } from './NavItem';
 
 export function SidebarNavigation() {
-  const navigationNodes = useRecoilValueLoadable(
-    sidebarNavigationNodesSelector,
-  );
-
-  const [n, setN] = useState<Category[]>([]);
-
-  useEffect(() => {
-    if (navigationNodes.state === 'hasValue') {
-      setN(navigationNodes.contents);
-    }
-  }, [navigationNodes]);
+  const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
 
   // if it's in the CategoryItem, it causes needless re-renders
   const [expandedCategories, setExpandedCategories] = useRecoilState(
     expandedCategoriesState,
   );
 
-  if (navigationNodes.state === 'hasError') return <p>error</p>;
-
-  const filteredNavigationNodes = n.filter(nn => nn.items?.length > 0) || [];
+  const filteredNavigationNodes =
+    navigationNodes.filter(nn => nn.items?.length > 0) || [];
   const topLevelNodes = filteredNavigationNodes?.filter(nn => nn.topLevelNode);
   const categoryNodes = filteredNavigationNodes?.filter(nn => !nn.topLevelNode);
 
@@ -38,6 +25,7 @@ export function SidebarNavigation() {
     <SideNav
       skipLink={{ href: '', label: 'Side navigation' }}
       style={{ width: '100%' }}
+      // condensed
     >
       <SideNav.List>
         {topLevelNodes.map(node =>
