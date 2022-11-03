@@ -71,6 +71,17 @@ export const Header = () => {
       },
     })) || [];
 
+  namespacesDropdownList.unshift({
+    title: 'Namespaces Overview',
+    glyph: 'dimension',
+    callback: () => {
+      setActiveNamespace(null);
+      LuigiClient.linkManager()
+        .fromContext('cluster')
+        .navigate('namespaces/');
+    },
+  });
+
   const namespacesDropdown = {
     label: activeNamespace || 'Select Namespace...',
     compact: true,
