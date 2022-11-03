@@ -3,8 +3,9 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { Shellbar } from 'fundamental-react';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { activeClusterNameState } from 'state/activeClusterNameAtom';
-import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 import { clustersState } from 'state/clustersAtom';
+import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
+import { themeState } from 'state/preferences/themeAtom';
 
 import './Header.scss';
 
@@ -15,6 +16,7 @@ export const Header = () => {
   );
   const [_, setModalOpen] = useRecoilState(isPreferencesOpenState);
   const clusters = useRecoilValue(clustersState);
+  const theme = useRecoilValue(themeState);
 
   if (!features?.REACT_NAVIGATION?.isEnabled) return null;
 
@@ -38,8 +40,8 @@ export const Header = () => {
       className="header"
       logo={
         <img
-          alt="SAP"
-          src="//unpkg.com/fundamental-styles/dist/images/sap-logo.png"
+          alt="Kyma"
+          src={theme === 'hcw' ? 'assets/logo-black.svg' : 'assets/logo.svg'}
         />
       }
       productTitle="Kyma"
