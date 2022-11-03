@@ -1,7 +1,9 @@
+import { getCurrentConfig } from './cluster-management/cluster-management';
 import { elementReady } from './nav-footer';
 import { getTheme } from './utils/theme';
 
-export function createSettings(params) {
+export async function createSettings(params) {
+  const { features } = (await getCurrentConfig()) || {};
   return {
     responsiveNavigation: 'Fiori3',
     sideNavFooterText: ' ', // init empty footer
@@ -14,7 +16,7 @@ export function createSettings(params) {
       hideAutomatically: false,
     },
     customSandboxRules: ['allow-downloads'],
-    hideNavigation: true,
+    hideNavigation: !!features?.REACT_NAVIGATION,
   };
 }
 
