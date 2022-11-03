@@ -124,7 +124,7 @@ export function DataSourcesContextProvider({ children, dataSources }) {
 
         return firstFetch;
       } else {
-        return Promise.resolve();
+        return Promise.resolve(dataSourcesDict.current[dataSourceName]);
       }
     },
   };
