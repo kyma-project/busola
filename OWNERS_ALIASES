@@ -1,37 +1,32 @@
 aliases:
-    default-reviewers:
+  default-reviewers:
     - qbalukom
     - Wawrzyn321
     - dariadomagala
     - akucharska
     - valentinvieriu
-    - wchrapka
     - Lyczeq
     - mrCherry97
-    default-approvers:
+  default-approvers:
     - qbalukom
     - Wawrzyn321
     - dariadomagala
     - akucharska
     - valentinvieriu
-    - wchrapka
     - Lyczeq
     - mrCherry97
-    documentation-reviewers:
-    - klaudiagrz
+  documentation-reviewers:
     - mmitoraj
-    - majakurcius
     - grego952
     - NHingerl
-    documentation-approvers:
-    - klaudiagrz
+    - IwonaLanger
+  documentation-approvers:
     - mmitoraj
-    - majakurcius
     - grego952
     - NHingerl
-    technical-writers:
-    - klaudiagrz
+    - IwonaLanger
+  technical-writers:
     - mmitoraj
-    - majakurcius
     - grego952
     - NHingerl
+    - IwonaLanger
