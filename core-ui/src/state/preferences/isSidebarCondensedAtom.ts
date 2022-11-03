@@ -10,7 +10,7 @@ export const changeSidebarWidthEffect: AddLinkEffect = () => ({ onSet }) => {
   onSet(isCondensed => {
     const root: HTMLElement = document.querySelector(':root')!;
     if (isCondensed) {
-      root!.style.setProperty('--sidebar-width', '60px');
+      root!.style.setProperty('--sidebar-width', '48px');
     } else {
       root!.style.setProperty('--sidebar-width', '260px');
     }
