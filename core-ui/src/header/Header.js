@@ -14,6 +14,7 @@ import { clustersState } from 'state/clustersAtom';
 import { namespacesState } from 'state/namespacesAtom';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 import { themeState } from 'state/preferences/themeAtom';
+import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
 
 import './Header.scss';
 
@@ -26,12 +27,13 @@ export const Header = () => {
     activeNamespaceIdState,
   );
   const [namespaces, setNamespaces] = useRecoilState(namespacesState);
-
   const setModalOpen = useSetRecoilState(isPreferencesOpenState);
+  const setSidebarCondensed = useSetRecoilState(isSidebarCondensedState);
+
   const clusters = useRecoilValue(clustersState);
   const theme = useRecoilValue(themeState);
 
-  const { data, loading, error, refetch } = useGet('/api/v1/namespaces', {
+  const { data, refetch } = useGet('/api/v1/namespaces', {
     skip: !features?.REACT_NAVIGATION?.isEnabled,
   });
   const ns = data?.items?.map(n => n.metadata?.name);
@@ -83,7 +85,7 @@ export const Header = () => {
       logo={
         <img
           alt="Kyma"
-          src={theme === 'hcw' ? 'assets/logo-black.svg' : 'assets/logo.svg'}
+          src={theme === 'hcw' ? '/assets/logo-black.svg' : '/assets/logo.svg'}
         />
       }
       productTitle={activeCluster || 'Clusters'}
@@ -98,6 +100,10 @@ export const Header = () => {
         {
           name: 'Settings',
           callback: _ => setModalOpen(true),
+        },
+        {
+          name: '| | |',
+          callback: _ => setSidebarCondensed(prevState => !prevState),
         },
       ]}
     />

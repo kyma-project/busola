@@ -5,6 +5,11 @@
   grid-template-areas: 'sidebar content';
 }
 
+.no-sidebar {
+  grid-auto-columns: auto !important;
+  grid-template-areas: 'content' !important;
+}
+
 #content-wrap {
   width: 100%;
   flex-wrap: wrap;

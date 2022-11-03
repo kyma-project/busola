@@ -4,11 +4,15 @@ import { useGetBusolaVersionDetails } from './useGetBusolaVersion';
 import { useGetLegalLinks } from './useGetLegalLinks';
 
 import './Footer.scss';
+import { useRecoilValue } from 'recoil';
+import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
 
 export function Footer() {
   const { t } = useGetTranslation();
   const { githubLink, busolaVersion } = useGetBusolaVersionDetails();
   const legalLinks = useGetLegalLinks();
+  const isSidebarCondensed = useRecoilValue(isSidebarCondensedState);
+  if (isSidebarCondensed) return null;
 
   return (
     <footer className="footer">

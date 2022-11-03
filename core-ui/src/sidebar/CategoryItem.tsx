@@ -17,11 +17,9 @@ export function CategoryItem({
   handleExpandedCategories,
 }: CategoryItemProps) {
   const { t } = useTranslation();
-  // console.log(category);
 
   const handleAddExpandedCategory = () => {
     const wasExpanded = expandedCategories.includes(category.key);
-    console.log(wasExpanded);
     let newExpandedCategories = [...expandedCategories];
     if (wasExpanded) {
       newExpandedCategories = newExpandedCategories.filter(
@@ -32,7 +30,6 @@ export function CategoryItem({
     }
 
     handleExpandedCategories(newExpandedCategories);
-    console.log(expandedCategories, category.key);
   };
 
   return (

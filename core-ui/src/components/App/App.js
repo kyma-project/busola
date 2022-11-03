@@ -13,7 +13,6 @@ import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
 import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
 import { languageAtom } from 'state/preferences/languageAtom';
-import { themeState } from 'state/preferences/themeAtom';
 
 import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 import { Header } from 'header/Header';
@@ -23,6 +22,7 @@ import otherRoutes from 'resources/other';
 import { Sidebar } from 'sidebar/Sidebar';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
+import { useInitTheme } from './useInitTheme';
 
 import './App.scss';
 
@@ -33,11 +33,10 @@ export default function App() {
 
   useLoginWithKubeconfigID();
   useResourceSchemas();
+  useInitTheme();
 
   useLuigiContextMigrator();
   useConfigContextMigrator();
-
-  void useRecoilValue(themeState);
 
   useEffect(() => {
     i18n.changeLanguage(language);
@@ -48,8 +47,8 @@ export default function App() {
 
   return (
     <>
-      <Header></Header>
-      <div id="page-wrap">
+      <Header />
+      <div id="page-wrap" className={!cluster?.name && 'no-sidebar'}>
         <Sidebar />
         <div id="content-wrap">
           <Routes key={cluster?.name}>
