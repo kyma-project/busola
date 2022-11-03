@@ -50,7 +50,10 @@ export const Header = () => {
   const clustersList = [
     ...clustersNames.map(name => ({
       name,
-      callback: () => setActiveCluster(name),
+      callback: () => {
+        setActiveNamespace(null);
+        setActiveCluster(name);
+      },
     })),
     {
       name: 'Clusters Overview',
