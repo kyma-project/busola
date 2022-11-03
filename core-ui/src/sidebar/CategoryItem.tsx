@@ -18,12 +18,6 @@ export function CategoryItem({
   handleExpandedCategories,
 }: CategoryItemProps) {
   const { t } = useTranslation();
-  // console.log(category);
-
-  useEffect(() => {
-    console.log('mount ' + category.key);
-    return () => console.log('unmount ' + category.key);
-  }, [category.key]);
 
   const handleAddExpandedCategory = () => {
     const wasExpanded = expandedCategories.includes(category.key);

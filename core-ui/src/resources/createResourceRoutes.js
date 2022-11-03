@@ -16,8 +16,10 @@ export const createPath = (
   return `${namespacePrefix}/${pathSegment}${details}`;
 };
 
-export const luigiNavigate = (resource, namespace) => {
-  const path = createUrl(resource, namespace);
+export const luigiNavigate = (node, namespace) => {
+  const path = node.createUrlFn
+    ? node.createUrlFn(namespace)
+    : createUrl(node, namespace);
 
   LuigiClient.linkManager()
     .fromContext('cluster')

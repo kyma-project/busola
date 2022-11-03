@@ -80,4 +80,5 @@ export type NavNode = {
   icon?: IconGlyph;
   topLevelNode?: boolean;
   externalUrl?: string;
+  createUrlFn?: (namespaceId: string) => string;
 };
