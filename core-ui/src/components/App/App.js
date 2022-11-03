@@ -13,7 +13,6 @@ import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
 import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
 import { languageAtom } from 'state/preferences/languageAtom';
-import { themeState } from 'state/preferences/themeAtom';
 
 import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 import { Header } from 'header/Header';
@@ -25,6 +24,7 @@ import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 
 import './App.scss';
+import { useInitTheme } from './useInitTheme';
 
 export default function App() {
   const { cluster, customResources = [] } = useMicrofrontendContext();
@@ -33,11 +33,10 @@ export default function App() {
 
   useLoginWithKubeconfigID();
   useResourceSchemas();
+  useInitTheme();
 
   useLuigiContextMigrator();
   useConfigContextMigrator();
-
-  void useRecoilValue(themeState);
 
   useEffect(() => {
     i18n.changeLanguage(language);
