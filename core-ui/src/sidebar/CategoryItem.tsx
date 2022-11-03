@@ -1,5 +1,4 @@
 import { SideNav } from 'fundamental-react';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SetterOrUpdater } from 'recoil';
 import { Category } from 'state/navigation/categories';

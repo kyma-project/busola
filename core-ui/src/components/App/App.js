@@ -22,9 +22,9 @@ import otherRoutes from 'resources/other';
 import { Sidebar } from 'sidebar/Sidebar';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
+import { useInitTheme } from './useInitTheme';
 
 import './App.scss';
-import { useInitTheme } from './useInitTheme';
 
 export default function App() {
   const { cluster, customResources = [] } = useMicrofrontendContext();
