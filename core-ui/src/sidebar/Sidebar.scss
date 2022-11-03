@@ -1,9 +1,14 @@
+:root {
+  --sidebar-width: 260px;
+}
+
 .sidebar {
-  grid-area: sidebar;
   height: 100vh;
   background-color: var(--sapList_Background);
   position: fixed;
-  width: 260px;
+  width: var(--sidebar-width);
+  transition: width 0.3s;
+  left: 0;
 
   .sidebar__content {
     height: calc(100vh - 180px);

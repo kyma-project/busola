@@ -1,19 +1,13 @@
 #page-wrap {
+  display: flex;
   padding-top: 50px;
-  display: grid;
-  grid-auto-columns: 260px auto;
-  grid-template-areas: 'sidebar content';
-}
-
-.no-sidebar {
-  grid-auto-columns: auto !important;
-  grid-template-areas: 'content' !important;
 }
 
 #content-wrap {
   width: 100%;
   flex-wrap: wrap;
   margin: auto;
-  grid-area: content;
+  margin-left: var(--sidebar-width);
+  transition: margin-left 0.3s;
   overflow: auto;
 }
