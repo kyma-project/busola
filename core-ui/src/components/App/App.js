@@ -48,7 +48,7 @@ export default function App() {
   return (
     <>
       <Header />
-      <div id="page-wrap" className={!cluster?.name && 'no-sidebar'}>
+      <div id="page-wrap">
         <Sidebar />
         <div id="content-wrap">
           <Routes key={cluster?.name}>

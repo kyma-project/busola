@@ -38,6 +38,7 @@ export function SidebarNavigation() {
             category={category}
             expandedCategories={expandedCategories}
             handleExpandedCategories={setExpandedCategories}
+            isSidebarCondensed={isSidebarCondensed}
           />
         ))}
       </SideNav.List>

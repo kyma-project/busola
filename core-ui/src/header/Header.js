@@ -27,9 +27,9 @@ export const Header = () => {
     activeNamespaceIdState,
   );
   const [namespaces, setNamespaces] = useRecoilState(namespacesState);
-  const setModalOpen = useSetRecoilState(isPreferencesOpenState);
   const setSidebarCondensed = useSetRecoilState(isSidebarCondensedState);
 
+  const arePreferencesOpen = useSetRecoilState(isPreferencesOpenState);
   const clusters = useRecoilValue(clustersState);
   const theme = useRecoilValue(themeState);
 
@@ -113,7 +113,7 @@ export const Header = () => {
       profileMenu={[
         {
           name: 'Settings',
-          callback: _ => setModalOpen(true),
+          callback: _ => arePreferencesOpen(true),
         },
         {
           name: '| | |',
