@@ -17,7 +17,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 48px;
+  width: var(--sidebar-condensed-width);
 }
 
 .sidebar-switcher.fd-button {

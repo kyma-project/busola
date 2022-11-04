@@ -1,5 +1,7 @@
 :root {
-  --sidebar-width: 260px;
+  --sidebar-condensed-width: 48px;
+  --sidebar-opened-width: 260px;
+  --sidebar-width: var(--sidebar-opened-width);
 }
 
 .sidebar {
