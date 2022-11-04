@@ -546,7 +546,7 @@ common:
     error: Error
     generate-name: Generate name
     hide: Hide read-only fields
-    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' and ''.'' (e.g.: ''my.name-1'').'
+    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
@@ -1456,7 +1456,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
+  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
@@ -2008,24 +2008,6 @@ settings:
     default-page-size: Default Page Size
     title: Other
   theme: Theme
-sidecars:
-  description: <0>Sidecar</0> manages the incoming and outgoing communication in a workload it is attached to.
-  headers:
-    bind: Bind
-    capture-mode: Capture Mode
-    default-endpoint: Default Endpoint
-    egress: Egress
-    hosts: Hosts
-    ingress: Ingress
-    outbound-traffic-policy: Outbound Traffic Policy
-    port:
-      number: Number
-      protocol: Protocol
-      target-point: Target Point
-      title: Port
-    workload-selector-labels: Workload Selector Labels
-  name_singular: Sidecar
-  title: Sidecars
 stateful-sets:
   description: <0>StatefulSet</0> is used for the management of Pods' deployment and scaling.
   name_singular: StatefulSet

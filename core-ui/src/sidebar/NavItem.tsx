@@ -14,12 +14,17 @@ export function NavItem({ node }: NavItemProps) {
   const { t } = useTranslation();
 
   const isNodeSelected = () => {
+    if (node.externalUrl) return false;
     const { pathname } = window.location;
-    const namespacePart = namespaceId ? `/namespaces/${namespaceId}` : '';
-    const nodePathName = `${namespacePart}/${node.resourceType}`;
-    return pathname.startsWith(nodePathName);
+    const namespacePart = namespaceId ? `/namespaces/${namespaceId}/` : '/';
+    const resourcePart = pathname.replace(namespacePart, '');
+    const pathSegment = resourcePart.split('/')?.[0];
+    return (
+      pathSegment === node.pathSegment || pathSegment === node.resourceType
+    );
   };
 
+  // TODO: Show it's external node
   return (
     <SideNav.ListItem
       selected={isNodeSelected()}
@@ -28,7 +33,13 @@ export function NavItem({ node }: NavItemProps) {
       name={t(node.label, { defaultValue: node.label })}
       url="#"
       glyph={node.icon}
-      onClick={() => luigiNavigate(node, namespaceId)}
+      onClick={() => {
+        if (node.externalUrl) {
+          window.open(node.externalUrl, '_blank', 'noopener,noreferrer');
+        } else {
+          luigiNavigate(node, namespaceId);
+        }
+      }}
     />
   );
 }
