@@ -1,0 +1,30 @@
+.fd-shellbar--l {
+  padding-left: 0 !important;
+}
+
+.fd-shellbar__logo {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    height: 100%;
+  }
+}
+
+.nav__buton-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+}
+
+.sidebar-switcher.fd-button {
+  &:hover {
+    background-color: var(--sapShell_Hover_Background, #283848);
+    border: none;
+  }
+
+  color: var(--sapShell_InteractiveTextColor);
+}

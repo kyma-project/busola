@@ -1,20 +1,19 @@
 import LuigiClient from '@luigi-project/client';
-import { useEffect } from 'react';
-import { isEqual } from 'lodash';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { Shellbar } from 'fundamental-react';
+import { isEqual } from 'lodash';
+import { useEffect } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-
 import { activeClusterNameState } from 'state/activeClusterNameAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { clustersState } from 'state/clustersAtom';
+import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { namespacesState } from 'state/namespacesAtom';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
-import { themeState } from 'state/preferences/themeAtom';
-import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
-import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { K8sResource } from 'state/types';
+
+import { Logo } from './Logo';
 
 import './Header.scss';
 
@@ -27,11 +26,9 @@ export function Header() {
   );
   const [namespaces, setNamespaces] = useRecoilState(namespacesState);
 
-  const setSidebarCondensed = useSetRecoilState(isSidebarCondensedState);
   const arePreferencesOpen = useSetRecoilState(isPreferencesOpenState);
 
   const clusters = useRecoilValue(clustersState);
-  const theme = useRecoilValue(themeState);
   const config = useRecoilValue(configFeaturesState);
 
   //TODO: Filter hidden namespaces
@@ -107,12 +104,7 @@ export function Header() {
   return (
     <Shellbar
       className="header"
-      logo={
-        <img
-          alt="Kyma"
-          src={theme === 'hcw' ? '/assets/logo-black.svg' : '/assets/logo.svg'}
-        />
-      }
+      logo={<Logo />}
       productTitle={activeCluster || 'Clusters'}
       productMenu={clustersList}
       productSwitch={namespacesDropdown}
@@ -125,10 +117,6 @@ export function Header() {
         {
           name: 'Settings',
           callback: (_: any) => arePreferencesOpen(true),
-        },
-        {
-          name: '| | |',
-          callback: (_: any) => setSidebarCondensed(prevState => !prevState),
         },
       ]}
     />
