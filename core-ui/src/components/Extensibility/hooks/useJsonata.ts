@@ -82,7 +82,10 @@ export function useJsonata({
       );
       return [value, null];
     } catch (e) {
-      return [t('extensibility.configuration-error', { error: e.message }), e];
+      return [
+        t('extensibility.configuration-error', { error: (e as Error).message }),
+        e as Error,
+      ];
     }
   };
 
