@@ -3,7 +3,7 @@ import { assignNodesToCategories } from './assignToCategories';
 import { Category } from './categories';
 import { NavNode, Scope } from '../types';
 import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
-import { observabilityNodesSelector } from './observabilityNodesSelector';
+import { externalNodesSelector } from './externalNodesSelector';
 import {
   activeNamespaceIdState,
   defaultValue as defaultNamespaceName,
@@ -18,7 +18,7 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
   get: ({ get }) => {
     const navNodes: NavNode[] = get(clusterAndNsNodesSelector);
     const activeNamespaceId = get(activeNamespaceIdState);
-    const observabilityNodes = get(observabilityNodesSelector);
+    const observabilityNodes = get(externalNodesSelector);
 
     const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
 

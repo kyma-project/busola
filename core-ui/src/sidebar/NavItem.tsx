@@ -20,6 +20,7 @@ export function NavItem({ node }: NavItemProps) {
     return pathname.startsWith(nodePathName);
   };
 
+  // TODO: Show it's external node
   return (
     <SideNav.ListItem
       selected={isNodeSelected()}
@@ -28,7 +29,13 @@ export function NavItem({ node }: NavItemProps) {
       name={t(node.label, { defaultValue: node.label })}
       url="#"
       glyph={node.icon}
-      onClick={() => luigiNavigate(node, namespaceId)}
+      onClick={() => {
+        if (node.externalUrl) {
+          window.open(node.externalUrl, '_blank', 'noopener,noreferrer');
+        } else {
+          luigiNavigate(node, namespaceId);
+        }
+      }}
     />
   );
 }
