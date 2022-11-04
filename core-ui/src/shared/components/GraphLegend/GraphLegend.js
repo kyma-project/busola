@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import { useTheme } from 'shared/contexts/ThemeContext';
+import { themeState } from 'state/preferences/themeAtom';
 import './GraphLegend.scss';
 
 export function GraphLegend({ values, isStatsPanel = true }) {
   const { t } = useTranslation();
   const [colors, setColors] = useState([]);
-  const { theme } = useTheme();
+  const theme = useRecoilValue(themeState);
 
   const handleCss = () => {
     const canvas = document.querySelector('canvas.stats-graph');
