@@ -18,6 +18,15 @@ export interface Resource {
   };
 }
 
+export interface StoreItem {
+  loading: boolean;
+  error: Error | null;
+  data: any;
+}
+export interface Store {
+  [key: string]: StoreItem;
+}
+
 export interface DataSource {
   resource: {
     kind: string;
@@ -39,7 +48,7 @@ export interface DataSourcesDict {
 }
 
 export interface DataSourcesContextType {
-  store: any;
+  store: Store;
   dataSources: DataSources;
   getRelatedResourceInPath: any;
   requestRelatedResource: (
@@ -63,7 +72,7 @@ export const DataSourcesContextProvider: React.FC<Props> = ({
 }) => {
   const fetch = useFetch();
   // store
-  const [store, setStore] = useObjectState() as [any, any]; // TODO
+  const [store, setStore] = useObjectState<Store>();
   // safer than useState for concurrency - we don't want to duplicate the requests
   const dataSourcesDict = useRef<DataSourcesDict>({});
   // refetch intervals
