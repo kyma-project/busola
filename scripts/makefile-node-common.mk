@@ -80,7 +80,8 @@ build:
 	npm run build
 
 test:
-	CI=true npm run test
+# redirection is used here to get rid of ANSI coloring from jest - --color=false or CI=true doesn't help
+	npm run test 2>&1
 
 resolve:
 	cd .. && npm run bootstrap:ci

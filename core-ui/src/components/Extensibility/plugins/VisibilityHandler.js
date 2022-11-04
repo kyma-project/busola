@@ -21,6 +21,7 @@ export function VisibilityHandler({
 
   // rule.visibility won't work for "var", we must use schema.get('visibility')
   const visibilityFormula = schema.get('visibility');
+  const overwrite = schema.get('overwrite') ?? true;
 
   if (visibilityFormula) {
     const [visible] = jsonata(
@@ -29,7 +30,7 @@ export function VisibilityHandler({
     );
 
     if (!visible) {
-      if (value) {
+      if (value && overwrite) {
         onChange({
           storeKeys,
           scopes: ['value'],
