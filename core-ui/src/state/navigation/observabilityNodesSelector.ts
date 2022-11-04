@@ -4,7 +4,6 @@ import { predefinedCategories } from './categories';
 import { configFeaturesNames, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';
 import { FetchFn } from '../../shared/hooks/BackendAPI/useFetch';
-import { getClusterConfig } from '../../shared/utils/getClusterConfig';
 
 const createObservabilityNode = (url: string, label: string): NavNode => ({
   resourceType: '',
@@ -24,7 +23,6 @@ export const observabilityNodesSelector: RecoilValueReadOnly<
   key: 'externalNodesSelector',
   get: async ({ get }) => {
     const configFeatures = get(configFeaturesState);
-    const { backendAddress } = getClusterConfig();
     const fetchFn = getFetchFn(get);
     if (!fetchFn) {
       return null;
@@ -43,12 +41,11 @@ export const observabilityNodesSelector: RecoilValueReadOnly<
       links.map(async ({ label, path }: { label: string; path: string }) => {
         let url = '';
         try {
-          url = await fetchObservabilityHost(fetchFn, backendAddress, path);
+          url = await fetchObservabilityHost(fetchFn, path);
         } catch (e) {
           //this error is caught to not reach the ErrorBoundary component
           console.error('Cannot fetch an observability link: ', e);
         }
-
         if (url) {
           return createObservabilityNode(url, label);
         }
@@ -59,13 +56,9 @@ export const observabilityNodesSelector: RecoilValueReadOnly<
   },
 });
 
-async function fetchObservabilityHost(
-  fetchFn: FetchFn,
-  backendAddress: string,
-  vsPath: string,
-) {
+async function fetchObservabilityHost(fetchFn: FetchFn, vsPath: string) {
   const res = await fetchFn({
-    relativeUrl: backendAddress + '/' + vsPath,
+    relativeUrl: '/' + vsPath,
     init: {},
   });
   return (await res.json()).spec.hosts[0];
