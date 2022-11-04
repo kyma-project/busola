@@ -14,13 +14,14 @@ import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigI
 import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
 import { languageAtom } from 'state/preferences/languageAtom';
 
-import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 import { Header } from 'header/Header';
+import { Sidebar } from 'sidebar/Sidebar';
+import { ContentWrapper } from './ContentWrapper/ContentWrapper';
 import { Preferences } from 'components/Preferences/Preferences';
 import { resourceRoutes } from 'resources';
 import otherRoutes from 'resources/other';
-import { Sidebar } from 'sidebar/Sidebar';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
+import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 import { useInitTheme } from './useInitTheme';
 
@@ -50,7 +51,7 @@ export default function App() {
       <Header />
       <div id="page-wrap">
         <Sidebar />
-        <div id="content-wrap">
+        <ContentWrapper>
           <Routes key={cluster?.name}>
             {/* force rerender on cluster change*/}
             <Route
@@ -70,7 +71,7 @@ export default function App() {
             <Route path="" element={<MainFrameRedirection />} />
           </Routes>
           <Preferences />
-        </div>
+        </ContentWrapper>
       </div>
     </>
   );
