@@ -1,12 +1,10 @@
+import LuigiClient from '@luigi-project/client';
 import { useEffect } from 'react';
 import { isEqual } from 'lodash';
-import LuigiClient from '@luigi-project/client';
-
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { Shellbar } from 'fundamental-react';
 
-import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 
 import { activeClusterNameState } from 'state/activeClusterNameAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
@@ -15,11 +13,12 @@ import { namespacesState } from 'state/namespacesAtom';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 import { themeState } from 'state/preferences/themeAtom';
 import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
+import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
+import { K8sResource } from 'state/types';
 
 import './Header.scss';
 
-export const Header = () => {
-  const { features } = useMicrofrontendContext();
+export function Header() {
   const [activeCluster, setActiveCluster] = useRecoilState(
     activeClusterNameState,
   );
@@ -27,22 +26,31 @@ export const Header = () => {
     activeNamespaceIdState,
   );
   const [namespaces, setNamespaces] = useRecoilState(namespacesState);
-  const setSidebarCondensed = useSetRecoilState(isSidebarCondensedState);
 
+  const setSidebarCondensed = useSetRecoilState(isSidebarCondensedState);
   const arePreferencesOpen = useSetRecoilState(isPreferencesOpenState);
+
   const clusters = useRecoilValue(clustersState);
   const theme = useRecoilValue(themeState);
+  const config = useRecoilValue(configFeaturesState);
 
-  const { data, refetch } = useGet('/api/v1/namespaces', {
-    skip: !features?.REACT_NAVIGATION?.isEnabled,
-  });
-  const ns = data?.items?.map(n => n.metadata?.name);
+  //TODO: Filter hidden namespaces
+  //TODO: Refetch on dropdown open
+  const { data, refetch } = useGetList()('/api/v1/namespaces', {
+    skip: !config?.REACT_NAVIGATION?.isEnabled,
+    pollingInterval: 0,
+    onDataReceived: () => {},
+  }) as { data: Array<K8sResource> | null; refetch: () => void };
+
+  const ns = data?.map((n: K8sResource) => n.metadata?.name);
 
   useEffect(() => {
-    if (ns && !isEqual(namespaces, ns)) setNamespaces(ns);
+    if (ns && !isEqual(namespaces?.[activeCluster], ns)) {
+      setNamespaces(prev => ({ ...prev, [activeCluster]: ns }));
+    }
   }, [ns, namespaces, setNamespaces]);
 
-  if (!features?.REACT_NAVIGATION?.isEnabled) return null;
+  if (!config?.REACT_NAVIGATION?.isEnabled) return null;
 
   const clustersNames =
     Object.keys(clusters || {})?.filter(name => name !== activeCluster) || [];
@@ -51,7 +59,7 @@ export const Header = () => {
     ...clustersNames.map(name => ({
       name,
       callback: () => {
-        setActiveNamespace(null);
+        setActiveNamespace('');
         setActiveCluster(name);
       },
     })),
@@ -63,9 +71,23 @@ export const Header = () => {
     },
   ];
 
+  const namespacesOverviewNode = {
+    title: 'Namespaces Overview',
+    glyph: 'dimension',
+    image: '',
+    callback: () => {
+      setActiveNamespace('');
+      LuigiClient.linkManager()
+        .fromContext('cluster')
+        .navigate('namespaces/');
+    },
+  };
+
   const namespacesDropdownList =
-    namespaces?.map(n => ({
+    namespaces?.[activeCluster]?.map(n => ({
       title: n,
+      glyph: '',
+      image: '',
       callback: () => {
         setActiveNamespace(n);
         LuigiClient.linkManager()
@@ -73,17 +95,6 @@ export const Header = () => {
           .navigate('namespaces/' + n);
       },
     })) || [];
-
-  namespacesDropdownList.unshift({
-    title: 'Namespaces Overview',
-    glyph: 'dimension',
-    callback: () => {
-      setActiveNamespace(null);
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate('namespaces/');
-    },
-  });
 
   const namespacesDropdown = {
     label: activeNamespace || 'Select Namespace...',
@@ -105,7 +116,7 @@ export const Header = () => {
       productTitle={activeCluster || 'Clusters'}
       productMenu={clustersList}
       productSwitch={namespacesDropdown}
-      productSwitchList={namespacesDropdownList}
+      productSwitchList={[namespacesOverviewNode, ...namespacesDropdownList]}
       profile={{
         glyph: 'customer',
         colorAccent: 10,
@@ -113,13 +124,13 @@ export const Header = () => {
       profileMenu={[
         {
           name: 'Settings',
-          callback: _ => arePreferencesOpen(true),
+          callback: (_: any) => arePreferencesOpen(true),
         },
         {
           name: '| | |',
-          callback: _ => setSidebarCondensed(prevState => !prevState),
+          callback: (_: any) => setSidebarCondensed(prevState => !prevState),
         },
       ]}
     />
   );
-};
+}
