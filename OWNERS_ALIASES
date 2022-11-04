@@ -5,7 +5,6 @@ aliases:
     - dariadomagala
     - akucharska
     - valentinvieriu
-    - wchrapka
     - Lyczeq
     - mrCherry97
     default-approvers:
@@ -14,24 +13,20 @@ aliases:
     - dariadomagala
     - akucharska
     - valentinvieriu
-    - wchrapka
     - Lyczeq
     - mrCherry97
     documentation-reviewers:
-    - klaudiagrz
     - mmitoraj
-    - majakurcius
     - grego952
     - NHingerl
+    - IwonaLanger
     documentation-approvers:
-    - klaudiagrz
     - mmitoraj
-    - majakurcius
     - grego952
     - NHingerl
+    - IwonaLanger
     technical-writers:
-    - klaudiagrz
     - mmitoraj
-    - majakurcius
     - grego952
     - NHingerl
+    - IwonaLanger
