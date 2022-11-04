@@ -1,5 +1,5 @@
 import pluralize from 'pluralize';
-import { createContext, useEffect, useRef } from 'react';
+import { createContext, useEffect, useRef, FC } from 'react';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { useObjectState } from 'shared/useObjectState';
 import * as jp from 'jsonpath';
@@ -23,6 +23,7 @@ export interface StoreItem {
   error: Error | null;
   data: any;
 }
+
 export interface Store {
   [key: string]: StoreItem;
 }
@@ -50,7 +51,7 @@ export interface DataSourcesDict {
 export interface DataSourcesContextType {
   store: Store;
   dataSources: DataSources;
-  getRelatedResourceInPath: any;
+  getRelatedResourceInPath: (path: string) => string | undefined;
   requestRelatedResource: (
     resource: Resource,
     dataSourceName: string,
@@ -66,7 +67,7 @@ interface Props {
   children: JSX.Element;
 }
 
-export const DataSourcesContextProvider: React.FC<Props> = ({
+export const DataSourcesContextProvider: FC<Props> = ({
   children,
   dataSources,
 }) => {
@@ -169,33 +170,35 @@ export const DataSourcesContextProvider: React.FC<Props> = ({
     );
   };
 
-  const contextValue = {
+  const requestRelatedResource = (resource: any, dataSourceName: string) => {
+    const dataSource = dataSources[dataSourceName];
+
+    if (!dataSourcesDict.current[dataSourceName]) {
+      // mark dataSource as fetched
+      dataSourcesDict.current[dataSourceName] = true;
+
+      setStore(dataSourceName, { loading: true, data: { loading: true } });
+
+      const firstFetch = fetchResource(dataSource, dataSourceName, resource);
+      const REFETCH_INTERVAL = 6000;
+      intervals.current.push(
+        setInterval(
+          () => fetchResource(dataSource, dataSourceName, resource),
+          REFETCH_INTERVAL,
+        ),
+      );
+
+      return firstFetch;
+    } else {
+      return Promise.resolve(dataSourcesDict.current[dataSourceName]);
+    }
+  };
+
+  const contextValue: DataSourcesContextType = {
     store,
     dataSources,
     getRelatedResourceInPath,
-    requestRelatedResource: (resource: any, dataSourceName: string) => {
-      const dataSource = dataSources[dataSourceName];
-
-      if (!dataSourcesDict.current[dataSourceName]) {
-        // mark dataSource as fetched
-        dataSourcesDict.current[dataSourceName] = true;
-
-        setStore(dataSourceName, { loading: true, data: { loading: true } });
-
-        const firstFetch = fetchResource(dataSource, dataSourceName, resource);
-        const REFETCH_INTERVAL = 6000;
-        intervals.current.push(
-          setInterval(
-            () => fetchResource(dataSource, dataSourceName, resource),
-            REFETCH_INTERVAL,
-          ),
-        );
-
-        return firstFetch;
-      } else {
-        return Promise.resolve(dataSourcesDict.current[dataSourceName]);
-      }
-    },
+    requestRelatedResource,
   };
 
   return (
