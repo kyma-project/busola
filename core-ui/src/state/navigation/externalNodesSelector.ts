@@ -80,10 +80,13 @@ export const externalNodesSelector: RecoilValueReadOnly<
           icon: IconGlyph;
           children: any[];
         }) => {
-          children.map(({ label, link }: { label: string; link: string }) => {
-            console.log(links);
-            externalNodes.push(createExternalNode(link, label, category, icon));
-          });
+          children.forEach(
+            ({ label, link }: { label: string; link: string }) => {
+              externalNodes.push(
+                createExternalNode(link, label, category, icon),
+              );
+            },
+          );
         },
       );
     }
