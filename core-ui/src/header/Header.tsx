@@ -48,7 +48,7 @@ export function Header() {
     if (ns && !isEqual(namespaces?.[activeCluster], ns)) {
       setNamespaces(prev => ({ ...prev, [activeCluster]: ns }));
     }
-  }, [ns, namespaces, setNamespaces]);
+  }, [ns, activeCluster, namespaces, setNamespaces]);
 
   if (!config?.REACT_NAVIGATION?.isEnabled) return null;
 
