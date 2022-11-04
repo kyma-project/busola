@@ -5,22 +5,78 @@ import { useObjectState } from 'shared/useObjectState';
 import * as jp from 'jsonpath';
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
 
-export const DataSourcesContext = createContext();
+export interface Resource {
+  metadata: {
+    name: string;
+    namespace: string;
+    labels: { [key: string]: string };
+    annotations: { [key: string]: string };
+    [key: string]: any;
+  };
+  spec: {
+    [key: string]: any;
+  };
+}
 
-export function DataSourcesContextProvider({ children, dataSources }) {
+export interface DataSource {
+  resource: {
+    kind: string;
+    group: string;
+    version: string;
+    namespace: string;
+    name: string;
+  };
+  ownerLabelSelectorPath: string;
+  filter: string;
+}
+
+export interface DataSources {
+  [key: string]: DataSource;
+}
+
+export interface DataSourcesDict {
+  [key: string]: any;
+}
+
+export interface DataSourcesContextType {
+  store: any;
+  dataSources: DataSources;
+  getRelatedResourceInPath: any;
+  requestRelatedResource: (
+    resource: Resource,
+    dataSourceName: string,
+  ) => Promise<any>;
+}
+
+export const DataSourcesContext = createContext<DataSourcesContextType>(
+  {} as DataSourcesContextType,
+);
+
+interface Props {
+  dataSources: DataSources;
+  children: JSX.Element;
+}
+
+export const DataSourcesContextProvider: React.FC<Props> = ({
+  children,
+  dataSources,
+}) => {
   const fetch = useFetch();
   // store
-  const [store, setStore] = useObjectState();
+  const [store, setStore] = useObjectState() as [any, any]; // TODO
   // safer than useState for concurrency - we don't want to duplicate the requests
-  const dataSourcesDict = useRef({});
+  const dataSourcesDict = useRef<DataSourcesDict>({});
   // refetch intervals
-  const intervals = useRef([]);
+  const intervals = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   // clear timeouts on component unmount
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => intervals.current.forEach(clearInterval), []);
 
-  const buildUrl = (dataSource, resource = { resource: {} }) => {
+  const buildUrl = (
+    dataSource: DataSource,
+    resource: Resource = {} as Resource,
+  ) => {
     let {
       resource: { group, kind, version, name, namespace },
       ownerLabelSelectorPath,
@@ -52,25 +108,29 @@ export function DataSourcesContextProvider({ children, dataSources }) {
     return url;
   };
 
-  const fetchResource = async (dataSource, dataSourceName, resource) => {
+  const fetchResource = async (
+    dataSource: DataSource,
+    dataSourceName: string,
+    resource: Resource,
+  ) => {
     try {
       const { filter } = dataSource;
 
       const relativeUrl = buildUrl(dataSource, resource);
       const response = await fetch({ relativeUrl });
-      let data = await response.json();
+      let data = await response?.json();
 
       if (filter) {
         const expression = jsonataWrapper(filter);
         expression.assign('root', resource);
         if (data.items) {
-          data.items = data.items.filter(item => {
+          data.items = data.items.filter((item: any) => {
             expression.assign('item', item);
-            return expression.evaluate();
+            return expression.evaluate({});
           });
         } else {
           expression.assign('item', data);
-          if (!expression.evaluate()) {
+          if (!expression.evaluate({})) {
             data = null;
           }
         }
@@ -94,7 +154,7 @@ export function DataSourcesContextProvider({ children, dataSources }) {
     }
   };
 
-  const getRelatedResourceInPath = path => {
+  const getRelatedResourceInPath = (path: string) => {
     return Object.keys(dataSources).find(dataSourceName =>
       path.startsWith('$' + dataSourceName),
     );
@@ -104,7 +164,7 @@ export function DataSourcesContextProvider({ children, dataSources }) {
     store,
     dataSources,
     getRelatedResourceInPath,
-    requestRelatedResource: (resource, dataSourceName) => {
+    requestRelatedResource: (resource: any, dataSourceName: string) => {
       const dataSource = dataSources[dataSourceName];
 
       if (!dataSourcesDict.current[dataSourceName]) {
@@ -134,4 +194,4 @@ export function DataSourcesContextProvider({ children, dataSources }) {
       {children}
     </DataSourcesContext.Provider>
   );
-}
+};

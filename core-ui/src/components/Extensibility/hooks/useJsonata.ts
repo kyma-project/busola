@@ -3,11 +3,30 @@ import { useTranslation } from 'react-i18next';
 import { last, mapValues } from 'lodash';
 
 import { jsonataWrapper } from '../helpers/jsonataWrapper';
-import { DataSourcesContext } from '../contexts/DataSources';
+import {
+  Resource,
+  DataSourcesContextType,
+  DataSourcesContext,
+} from '../contexts/DataSources';
+
+type JsonataValue = [string, Error | null];
+
+type JsonataFunction = {
+  (
+    query: string,
+    extras: { [key: string]: any },
+    defaultValue: any,
+  ): JsonataValue;
+  async: (
+    query: string,
+    extras: { [key: string]: any },
+    defaultValue: any,
+  ) => Promise<JsonataValue>;
+};
 
 function getDataSourceFetchers(
-  resource,
-  { dataSources, store, requestRelatedResource },
+  resource: Resource,
+  { dataSources, store, requestRelatedResource }: DataSourcesContextType,
 ) {
   return mapValues(dataSources, (_, id) => ({
     fetcher: () => requestRelatedResource(resource, id),
@@ -18,7 +37,15 @@ function getDataSourceFetchers(
   }));
 }
 
-export function useJsonata({ resource, scope, arrayItems }) {
+export function useJsonata({
+  resource,
+  scope,
+  arrayItems,
+}: {
+  resource: Resource;
+  scope: any;
+  arrayItems: any[];
+}): JsonataFunction {
   const { t } = useTranslation();
   const dataSourcesContext = useContext(DataSourcesContext);
 
@@ -34,7 +61,11 @@ export function useJsonata({ resource, scope, arrayItems }) {
     setDataSourceFetchers(dataSourceFetchers);
   }, [dataSourcesContext.store]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const jsonata = (query, extras = {}, defaultValue = null) => {
+  const jsonata: JsonataFunction = (
+    query,
+    extras = {},
+    defaultValue = null,
+  ) => {
     if (!query) {
       return [defaultValue, null];
     }
