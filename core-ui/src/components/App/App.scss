@@ -2,12 +2,3 @@
   display: flex;
   padding-top: 50px;
 }
-
-#content-wrap {
-  width: 100%;
-  flex-wrap: wrap;
-  margin: auto;
-  margin-left: var(--sidebar-width);
-  transition: margin-left 0.3s;
-  overflow: auto;
-}
