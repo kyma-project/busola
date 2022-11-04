@@ -1,4 +1,4 @@
-export function prepareRules(schemaRules, t) {
+export function prepareRules(schemaRules, editMode, t) {
   const PREDEFINED_PATHS = [
     'metadata.name',
     'metadata.labels',
@@ -10,6 +10,7 @@ export function prepareRules(schemaRules, t) {
     simple: true,
     widget: 'Name',
     required: true,
+    editMode,
     inputInfo: t('common.tooltips.k8s-name-input'),
     extraPaths: ['metadata.labels["app.kubernetes.io/name"]'],
   };

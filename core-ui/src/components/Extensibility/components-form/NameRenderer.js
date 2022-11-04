@@ -16,11 +16,13 @@ export function NameRenderer({
 }) {
   const { t: tExt } = useGetTranslation();
   const extraPaths = schema.get('extraPaths') || [];
+  const editMode = schema.get('editMode') || false;
 
   return (
     <K8sNameField
       value={value}
       kind={resource.kind}
+      readOnly={editMode}
       setValue={value => {
         onChange([
           {

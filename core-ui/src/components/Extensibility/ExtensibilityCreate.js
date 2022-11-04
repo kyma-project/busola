@@ -31,6 +31,7 @@ export function ExtensibilityCreateCore({
   resourceSchema: createResource,
   toggleFormFn,
   resourceName,
+  editMode = false,
   ...props
 }) {
   const { prepareVars, resetVars, readVars } = useVariables();
@@ -93,7 +94,11 @@ export function ExtensibilityCreateCore({
   });
 
   const { simpleRules, advancedRules } = useMemo(() => {
-    const fullSchemaRules = prepareRules(createResource?.form ?? [], t);
+    const fullSchemaRules = prepareRules(
+      createResource?.form ?? [],
+      editMode,
+      t,
+    );
 
     prepareVars(fullSchemaRules);
     readVars(resource);
