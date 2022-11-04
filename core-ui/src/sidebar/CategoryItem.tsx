@@ -1,10 +1,11 @@
-import { SideNav, Popover } from 'fundamental-react';
-import { ReactNode } from 'react';
+import { SideNav, Popover, Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { SetterOrUpdater } from 'recoil';
 import { Category } from 'state/navigation/categories';
 import { ExpandedCategoriesAtom } from 'state/navigation/expandedCategoriesAtom';
 import { NavItem } from './NavItem';
+import './CategoryItem.scss';
+
 type CategoryItemProps = {
   category: Category;
   expandedCategories: string[];
@@ -19,6 +20,7 @@ export function CategoryItem({
   isSidebarCondensed,
 }: CategoryItemProps) {
   const { t } = useTranslation();
+  const categoryName = t(category.label, { defaultValue: category.label });
 
   const handleAddExpandedCategory = () => {
     const wasExpanded = expandedCategories.includes(category.key);
@@ -34,49 +36,41 @@ export function CategoryItem({
     handleExpandedCategories(newExpandedCategories);
   };
 
-  const CategoryWrapper = ({ children }: { children?: JSX.Element }) => {
-    return (
-      <SideNav.ListItem
-        key={category.key}
-        expandSubmenuLabel={`Expand ${category.key || category.label} category`}
-        id={category.key}
-        name={t(category.label, { defaultValue: category.label })}
-        url="#"
-        glyph={category.icon}
-        onClick={handleAddExpandedCategory}
-        expanded={expandedCategories.includes(category.key)}
-      >
-        {children}
-      </SideNav.ListItem>
-    );
-  };
-
   const children = (
     <SideNav.List level={2}>
       {category.items?.map(nn => (
-        <NavItem node={nn} />
+        <NavItem node={nn} key={nn.pathSegment} />
       ))}
     </SideNav.List>
   );
 
-  // const Wrapper = ({ children }: { children: JSX.Element }) => {
-  //   return isSidebarCondensed ? (
-  //     <Popover body={children} control={<W />}>
-  //       {children}
-  //     </Popover>
-  //   ) : (
-  //     <W>{children}</W>
-  //   );
-  // };
-
   return isSidebarCondensed ? (
-    <Popover
-      body={<div>xdd</div>}
-      control={<CategoryWrapper>{children}</CategoryWrapper>}
-      placement="right-end"
-      noArrow={false}
-    />
+    <li className="fd-nested-list__item condensed-item">
+      <Popover
+        body={
+          <>
+            <p>{categoryName}</p>
+            {children}
+          </>
+        }
+        control={
+          <Icon glyph={category.icon} className="fd-nested-list__icon" />
+        }
+        placement="right-start"
+      />
+    </li>
   ) : (
-    <CategoryWrapper>{children}</CategoryWrapper>
+    <SideNav.ListItem
+      key={category.key}
+      expandSubmenuLabel={`Expand ${categoryName} category`}
+      id={category.key}
+      name={categoryName}
+      url="#"
+      glyph={category.icon}
+      onClick={handleAddExpandedCategory}
+      expanded={expandedCategories.includes(category.key)}
+    >
+      {children}
+    </SideNav.ListItem>
   );
 }
