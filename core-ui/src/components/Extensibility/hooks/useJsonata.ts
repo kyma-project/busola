@@ -96,12 +96,16 @@ export function useJsonata({
 
     return new Promise(resolve =>
       jsonataWrapper(query).evaluate(
-        extras.scope || scope || resource,
+        extras.scope || scope || extras.resource || resource,
         {
           ...mapValues(dataSourceFetchers, dsf => dsf.fetcher),
-          root: resource,
+          root: extras.resource || resource,
           items: arrayItems,
-          item: last(extras?.arrayItems) || last(arrayItems) || resource,
+          item:
+            last(extras?.arrayItems) ||
+            last(arrayItems) ||
+            extras.resource ||
+            resource,
           ...extras,
         },
         (err, val) => {
