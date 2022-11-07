@@ -11,6 +11,7 @@ import { clustersState } from 'state/clustersAtom';
 import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { namespacesState } from 'state/namespacesAtom';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
+import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
 import { K8sResource } from 'state/types';
 
 import { Logo } from './Logo';
@@ -25,13 +26,13 @@ export function Header() {
     activeNamespaceIdState,
   );
   const [namespaces, setNamespaces] = useRecoilState(namespacesState);
-
   const arePreferencesOpen = useSetRecoilState(isPreferencesOpenState);
 
   const clusters = useRecoilValue(clustersState);
   const config = useRecoilValue(configFeaturesState);
+  const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
+  const hiddenNamespaces = config?.HIDDEN_NAMESPACES?.config?.namespaces;
 
-  //TODO: Filter hidden namespaces
   const { data, refetch } = useGetList()('/api/v1/namespaces', {
     skip: !config?.REACT_NAVIGATION?.isEnabled,
     pollingInterval: 0,
@@ -41,13 +42,21 @@ export function Header() {
     refetch: () => void;
   };
 
-  const ns = data?.map((n: K8sResource) => n.metadata?.name);
+  const filteredNamespaces = data
+    ?.map((n: K8sResource) => n.metadata?.name)
+    ?.filter(n => {
+      if (showHiddenNamespaces) return true;
+      return !hiddenNamespaces.includes(n);
+    });
 
   useEffect(() => {
-    if (ns && !isEqual(namespaces?.[activeCluster], ns)) {
-      setNamespaces(prev => ({ ...prev, [activeCluster]: ns }));
+    if (
+      filteredNamespaces &&
+      !isEqual(namespaces?.[activeCluster], filteredNamespaces)
+    ) {
+      setNamespaces(prev => ({ ...prev, [activeCluster]: filteredNamespaces }));
     }
-  }, [ns, activeCluster, namespaces, setNamespaces]);
+  }, [filteredNamespaces, activeCluster, namespaces, setNamespaces]);
 
   if (!config?.REACT_NAVIGATION?.isEnabled) return null;
 
