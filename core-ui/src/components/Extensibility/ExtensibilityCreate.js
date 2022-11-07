@@ -156,6 +156,7 @@ export function ExtensibilityCreateCore({
         setStore={setStore}
         onSubmit={() => {}}
         path={general?.urlPath || ''}
+        editMode={editMode}
       />
       <ResourceSchema
         advanced
@@ -166,6 +167,7 @@ export function ExtensibilityCreateCore({
         store={store}
         setStore={setStore}
         path={general?.urlPath || ''}
+        editMode={editMode}
       />
     </ResourceForm>
   );
