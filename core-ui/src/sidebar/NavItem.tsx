@@ -24,7 +24,7 @@ export function NavItem({ node }: NavItemProps) {
     );
   };
 
-  // TODO: Show it's external node
+  // TODO: Show it's external node - implemented in fd, types dont match
   return (
     <SideNav.ListItem
       selected={isNodeSelected()}

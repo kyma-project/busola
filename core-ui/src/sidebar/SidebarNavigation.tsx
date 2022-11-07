@@ -22,8 +22,6 @@ export function SidebarNavigation() {
 
   return (
     // TODO: Show children for condensed in fundamental
-    // TODO: Remove 'TypeError: onItemSelect is not a function' errors in fundamental
-    // TODO: Fix max width in fundamental
     <SideNav
       skipLink={{ href: '', label: 'Side navigation' }}
       style={{ width: '100%' }}

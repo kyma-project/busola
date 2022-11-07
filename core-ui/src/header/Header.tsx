@@ -1,5 +1,5 @@
 import LuigiClient from '@luigi-project/client';
-import { Shellbar } from 'fundamental-react';
+import { Shellbar, Menu, Icon } from 'fundamental-react';
 import { isEqual } from 'lodash';
 import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -32,12 +32,15 @@ export function Header() {
   const config = useRecoilValue(configFeaturesState);
 
   //TODO: Filter hidden namespaces
-  //TODO: Refetch on dropdown open
-  const { data, refetch } = useGetList()('/api/v1/namespaces', {
+  const { data, refetch, silentRefetch } = useGetList()('/api/v1/namespaces', {
     skip: !config?.REACT_NAVIGATION?.isEnabled,
     pollingInterval: 0,
     onDataReceived: () => {},
-  }) as { data: Array<K8sResource> | null; refetch: () => void };
+  }) as {
+    data: Array<K8sResource> | null;
+    refetch: () => void;
+    silentRefetch: () => void;
+  };
 
   const ns = data?.map((n: K8sResource) => n.metadata?.name);
 
@@ -68,38 +71,34 @@ export function Header() {
     },
   ];
 
-  const namespacesOverviewNode = {
-    title: 'Namespaces Overview',
-    glyph: 'dimension',
-    image: '',
-    callback: () => {
-      setActiveNamespace('');
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate('namespaces/');
-    },
-  };
-
-  const namespacesDropdownList =
-    namespaces?.[activeCluster]?.map(n => ({
-      title: n,
-      glyph: '',
-      image: '',
-      callback: () => {
-        setActiveNamespace(n);
+  const namespacesOverviewNode = (
+    <Menu.Item
+      url="#"
+      onClick={() => {
+        setActiveNamespace('');
         LuigiClient.linkManager()
           .fromContext('cluster')
-          .navigate('namespaces/' + n);
-      },
-    })) || [];
+          .navigate('namespaces/');
+      }}
+    >
+      <Icon glyph="dimension" /> Namespaces Overview
+    </Menu.Item>
+  );
 
-  const namespacesDropdown = {
-    label: activeNamespace || 'Select Namespace...',
-    compact: true,
-    callback: () => {
-      refetch();
-    },
-  };
+  const namespacesDropdownList =
+    namespaces?.[activeCluster]?.map(n => (
+      <Menu.Item
+        url="#"
+        onClick={() => {
+          setActiveNamespace(n);
+          LuigiClient.linkManager()
+            .fromContext('cluster')
+            .navigate('namespaces/' + n);
+        }}
+      >
+        {n}
+      </Menu.Item>
+    )) || [];
 
   return (
     <Shellbar
@@ -107,12 +106,26 @@ export function Header() {
       logo={<Logo />}
       productTitle={activeCluster || 'Clusters'}
       productMenu={clustersList}
-      productSwitch={namespacesDropdown}
-      productSwitchList={[namespacesOverviewNode, ...namespacesDropdownList]}
       profile={{
         glyph: 'customer',
         colorAccent: 10,
       }}
+      actions={[
+        {
+          glyph: 'megamenu',
+          label: activeNamespace || 'Select Namespace...',
+          notificationCount: 0,
+          callback: () => refetch(),
+          menu: (
+            <Menu>
+              <Menu.List>
+                {namespacesOverviewNode}
+                {namespacesDropdownList}
+              </Menu.List>
+            </Menu>
+          ),
+        },
+      ]}
       profileMenu={[
         {
           name: 'Settings',
