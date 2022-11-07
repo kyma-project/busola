@@ -32,14 +32,13 @@ export function Header() {
   const config = useRecoilValue(configFeaturesState);
 
   //TODO: Filter hidden namespaces
-  const { data, refetch, silentRefetch } = useGetList()('/api/v1/namespaces', {
+  const { data, refetch } = useGetList()('/api/v1/namespaces', {
     skip: !config?.REACT_NAVIGATION?.isEnabled,
     pollingInterval: 0,
     onDataReceived: () => {},
   }) as {
     data: Array<K8sResource> | null;
     refetch: () => void;
-    silentRefetch: () => void;
   };
 
   const ns = data?.map((n: K8sResource) => n.metadata?.name);
