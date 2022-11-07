@@ -21,7 +21,7 @@ import { Sidebar } from 'sidebar/Sidebar';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 import { themeState } from 'state/preferences/themeAtom';
-import { Preferences } from 'components/Preferences/Preferences';
+import { Preferences } from 'components/Preferences/Preferences.tsx';
 
 export default function App() {
   const { cluster, customResources = [] } = useMicrofrontendContext();
