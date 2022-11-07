@@ -10,8 +10,8 @@ export const Sidebar = () => {
   const pathname = window.location.pathname;
   const configFeatures = useRecoilValue(configFeaturesState);
 
-  if (!configFeatures?.REACT_NAVIGATION?.isEnabled) return null;
-  if (pathname === '/clusters') return null;
+  if (!configFeatures?.REACT_NAVIGATION?.isEnabled || pathname === '/clusters')
+    return null;
 
   return (
     <aside className="sidebar">
