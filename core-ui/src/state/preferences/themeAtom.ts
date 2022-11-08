@@ -26,7 +26,6 @@ function addLinkNode() {
   document.head.appendChild(newLink);
 }
 type AddLinkEffect = () => AtomEffect<Theme>;
-
 export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
   setSelf(param => {
     const defaultValue = param as Theme;
