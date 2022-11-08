@@ -45,6 +45,10 @@ data:
             name: spec.servers.hosts
           - source: port.number
             name: spec.servers.port.number
+          - source: port.targetPort
+            name: spec.servers.port.targetPort
+          - source: port.protocol
+            name: spec.servers.port.protocol
           - source: tls.mode
             name: spec.servers.tls.mode
           - widget: ResourceLink
@@ -177,6 +181,12 @@ data:
       source: spec.selector
       widget: Labels
   presets: |-
+    - name: Default Gateway
+      default: true
+      value: 
+        spec:
+          selector:
+            istio: ingressgateway
     - name: Ingress Gateway
       value:
         metadata:
