@@ -19,7 +19,6 @@ import * as NetworkPolicies from './NetworkPolicies';
 import * as Issuers from './Issuers';
 import * as Ingresses from './Ingresses';
 import * as HorizontalPodAutoscalers from './HorizontalPodAutoscalers';
-import * as Gateways from './Gateways';
 import * as Events from './Events';
 import * as DnsProviders from './DnsProviders';
 import * as DnsEntries from './DnsEntries';
@@ -59,7 +58,6 @@ export const resources = [
   DaemonSets,
   // istio
   VirtualServices,
-  Gateways,
   DestinationRules,
   AuthorizationPolicies,
   // discovery and network
