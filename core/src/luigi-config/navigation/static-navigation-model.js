@@ -1560,59 +1560,6 @@ export function getStaticRootNodes(
       pathSegment: '_integration_category_placeholder_',
       hideFromNav: true,
     },
-    {
-      pathSegment: 'applications',
-      resourceType: 'applications',
-      navigationContext: 'applications',
-      label: i18next.t('applications.title'),
-      category: i18next.t('integration.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/applications?' +
-        toSearchParamsString({
-          resourceApiPath:
-            '/apis/applicationconnector.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      context: {
-        requiredFeatures: [features.APPLICATIONS],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':name',
-              resourceType: 'applications',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/applications/:name?' +
-                toSearchParamsString({
-                  resourceApiPath:
-                    '/apis/applicationconnector.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-              children: [
-                {
-                  pathSegment: ':serviceName',
-                  resourceType: 'applications',
-                  viewUrl:
-                    config.coreUIModuleUrl +
-                    '/applications/:name/:serviceName?' +
-                    toSearchParamsString({
-                      resourceApiPath:
-                        '/apis/applicationconnector.kyma-project.io/v1alpha1',
-                    }),
-                  viewGroup: coreUIViewGroupName,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
 
     //STORAGE CATEGORY
     {

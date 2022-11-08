@@ -37,7 +37,6 @@ import * as GitRepositories from './GitRepositories';
 import * as Functions from './Functions';
 
 // //cluster
-import * as Applications from './Applications';
 import * as ClusterRoles from './ClusterRoles';
 import * as StorageClasses from './StorageClasses';
 import * as PersistentVolumes from './PersistentVolumes';
@@ -90,7 +89,6 @@ export const resources = [
   GitRepositories,
 
   // cluster resources
-  Applications,
   ClusterEvents,
   Namespaces,
   ClusterRoles,

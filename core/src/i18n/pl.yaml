@@ -32,8 +32,6 @@ api-rules:
     loading: Ładowanie serwisów...
     ns-no-services: Brak Serwisów w tej Przestrzeni Nazw
   title: Reguły API
-applications:
-  title: Aplikacje
 cluster-role-bindings:
   title: Powiązania ról klastra
 cluster-roles:

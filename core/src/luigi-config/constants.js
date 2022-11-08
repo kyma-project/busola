@@ -4,7 +4,6 @@ const DEFAULT_MODULES = {
   BTP_CATALOG: 'services.cloud.sap.com',
   EVENTING: 'eventing.kyma-project.io',
   API_GATEWAY: 'gateway.kyma-project.io',
-  APPLICATIONS: 'applicationconnector.kyma-project.io',
   SERVERLESS: 'serverless.kyma-project.io',
   CUSTOM_DOMAINS: 'dns.gardener.cloud',
   ISTIO: 'networking.istio.io',
@@ -53,14 +52,5 @@ export const DEFAULT_FEATURES = {
     namespaces: ['kyma-system'],
     serviceNames: ['monitoring-prometheus', 'prometheus'],
     portNames: ['web', 'http-web'],
-  },
-  APPLICATION_CONNECTOR_FLOW: {
-    checks: [
-      service({
-        urlsGenerator: () => [
-          `/api/v1/namespaces/kyma-integration/services/connector-service-internal-api`,
-        ],
-      }),
-    ],
   },
 };

@@ -74,33 +74,4 @@ context('Test Applications', () => {
     cy.getIframeBody().contains('label-key=label-value');
     cy.getIframeBody().contains(APPLICATION_DESCRIPTION);
   });
-
-  it('When APPLICATION_CONNECTOR_FLOW is disabled', () => {
-    cy.intercept(serviceRequestData, { statusCode: 404 });
-    cy.getLeftNav()
-      .contains('Applications')
-      .click();
-
-    // make sure the table row is rendered before performing 'not.exist' checks
-    cy.getIframeBody()
-      .contains(APPLICATION_NAME)
-      .should('exist');
-
-    cy.getIframeBody()
-      .contains('Status')
-      .should('not.exist');
-
-    cy.getIframeBody()
-      .contains('a', APPLICATION_NAME)
-      .should('be.visible')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Connect Application')
-      .should('not.exist');
-
-    cy.getIframeBody()
-      .contains('Status')
-      .should('not.exist');
-  });
 });
