@@ -1,13 +1,13 @@
 .condensed-item {
-  width: 47px;
-  height: 44px;
+  // width: 47px;
+  // height: 44px;
   border-bottom: 1px solid var(--sapGroup_ContentBorderColor);
   position: relative;
 
   .fd-popover__control {
     height: 44px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
   }
 
