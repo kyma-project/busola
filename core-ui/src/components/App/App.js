@@ -1,28 +1,28 @@
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Route, Routes } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
-import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
-import { useAppTracking } from 'hooks/tracking';
-import { useSentry } from 'hooks/useSentry';
 import { MainFrameRedirection } from 'shared/components/MainFrameRedirection/MainFrameRedirection';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { WithTitle } from 'shared/hooks/useWindowTitle';
+import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
+import { useSentry } from 'hooks/useSentry';
+import { useAppTracking } from 'hooks/tracking';
 
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
 import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
 import { languageAtom } from 'state/preferences/languageAtom';
 
 import { Header } from 'header/Header';
-import { Sidebar } from 'sidebar/Sidebar';
 import { ContentWrapper } from './ContentWrapper/ContentWrapper';
 import { Preferences } from 'components/Preferences/Preferences';
 import { resourceRoutes } from 'resources';
-import otherRoutes from 'resources/other';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
-import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
+import otherRoutes from 'resources/other';
+import { Sidebar } from 'sidebar/Sidebar';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
+import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 import { useInitTheme } from './useInitTheme';
 
 import './App.scss';
@@ -34,10 +34,11 @@ export default function App() {
 
   useLoginWithKubeconfigID();
   useResourceSchemas();
-  useInitTheme();
 
   useLuigiContextMigrator();
   useConfigContextMigrator();
+
+  useInitTheme();
 
   useEffect(() => {
     i18n.changeLanguage(language);
