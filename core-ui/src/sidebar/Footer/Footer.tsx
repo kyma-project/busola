@@ -1,11 +1,11 @@
 import { useGetTranslation } from 'components/Extensibility/helpers';
+import { useRecoilValue } from 'recoil';
 import { Link } from 'shared/components/Link/Link';
+import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
 import { useGetBusolaVersionDetails } from './useGetBusolaVersion';
 import { useGetLegalLinks } from './useGetLegalLinks';
 
 import './Footer.scss';
-import { useRecoilValue } from 'recoil';
-import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
 
 export function Footer() {
   const { t } = useGetTranslation();
@@ -19,6 +19,7 @@ export function Footer() {
       <div className="footer__legal-links">
         {legalLinks.map(legalLink => (
           <Link
+            key={legalLink.link}
             url={legalLink.link}
             text={legalLink.label}
             className="fd-link"
