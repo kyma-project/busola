@@ -86,7 +86,7 @@ async function createAppSwitcher() {
 export async function reloadNavigation() {
   const navigation = await createNavigation();
   const { features } = (await getCurrentConfig()) || {};
-  const hideNavigation = !!features?.REACT_NAVIGATION;
+  const hideNavigation = !!features?.REACT_NAVIGATION?.isEnabled;
   const config = Luigi.getConfig();
   Luigi.setConfig({
     ...config,

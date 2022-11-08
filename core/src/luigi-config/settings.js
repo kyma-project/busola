@@ -4,6 +4,7 @@ import { getTheme } from './utils/theme';
 
 export async function createSettings(params) {
   const { features } = (await getCurrentConfig()) || {};
+
   return {
     responsiveNavigation: 'Fiori3',
     sideNavFooterText: ' ', // init empty footer
@@ -16,7 +17,7 @@ export async function createSettings(params) {
       hideAutomatically: false,
     },
     customSandboxRules: ['allow-downloads'],
-    hideNavigation: !!features?.REACT_NAVIGATION,
+    hideNavigation: !!features?.REACT_NAVIGATION?.isEnabled,
   };
 }
 
