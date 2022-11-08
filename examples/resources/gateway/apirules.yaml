@@ -129,40 +129,34 @@ data:
             scope: namespace
           filter: $filter($item,  function($v) { $sift($v.metadata.labels,  function($va, $k) { $k != 'serving.knative.dev/revision' }) })"
         - simple: true
-          required: true
           path: port 
           name: service.port
     - simple: true
       var: accessToGateways
-      # widget: Text
-      dynamicValue: $not($exists($relatedGateways().error))
+      name: accessToGateways
+      dynamicValue: "$exists($relatedGateways().items[0].metadata.name)"
     - simple: true
       required: true
       path: spec.gateway
       name: gateway
       widget: ResourceRef
+      visibility: $accessToGateways
       resource:
         kind: Gateway
         group: networking.istio.io
         version: v1beta1        
-      visibility: $accessToGateways
       overwrite: false
       toInternal:  '($values := $split($, "."); { "namespace": $values[1], "name": $values[0] })'
       toExternal: 'name & "." & namespace & ".svc.cluster.local"'
     - simple: true
-      var: gatewaysString
-      # widget: Text
-      dynamicValue: $string($relatedGateways())
-    - simple: true
-      var: notAccessToGateways
-      # widget: Text
-      dynamicValue: $exists($relatedGateways().error)
+      var: separator
+      value: ""
     - simple: true
       required: true
       path: spec.gateway
       name: gateway
+      visibility: "$not($accessToGateways)"
       inputInfo: inputInfo.gateway
-      visibility: $notAccessToGateways
       overwrite: false
     - simple: true
       required: true
@@ -172,13 +166,13 @@ data:
       path: spec.rules 
       name: rules 
       widget: GenericList 
+      template:
+        path: '/.*'
       children:
         - required: true
           path: '[].accessStrategies'
           name: accessStrategies 
           widget: GenericList 
-          template:
-            path: '/.*'
           children:
             - path: '[].config'
               name: accessStrategies.config
@@ -237,7 +231,6 @@ data:
                 version: v1
                 scope: namespace
             - simple: true
-              required: true
               path: port 
               name: service.port
   general: |-
