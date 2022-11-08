@@ -15,7 +15,6 @@ data:
         group: networking.istio.io
         version: v1beta1
         namespace: null
-      filter: '$contains($item.metadata.namespace, $root.metadata.namespace) or $contains($item.metadata.namespace, "kyma-system")'
     relatedServices:
       resource: 
         kind: Service
