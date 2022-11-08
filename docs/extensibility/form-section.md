@@ -33,7 +33,6 @@ If you target elements of an array rather than the array itself, you can use the
 - **simple** - parameter used to display the simple form. It is `false` by default.
 - **advanced** - parameter used to display the advanced form. It is `true` by default.
 - **visibility** - a [JSONata](jsonata.md) expression controlling the visibility of the element.
-- **overwrite** - parameter used to disable the overwriting (clearing) of hidden fields. Used together with **visibility**, defaults to `true`. **NOTE:** it is recommended to set **overwrite** to `false` when defining fields with the same `path` and different **visibility** conditions.
 
 ### Example
 
@@ -46,16 +45,6 @@ If you target elements of an array rather than the array itself, you can use the
       name: Item name
     - path: service.url
     - path: service.port
-    - path: service.number
-      visibility: "$item.port.protocol = 'HTTP'"
-      enum:
-        - 80
-        - 81
-    - path: service.number
-      visibility: "$item.port.protocol = 'HTTPS'"
-      enum:
-        - 443
-        - 444
 ```
 
 ## Variable fields

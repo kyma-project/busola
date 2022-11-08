@@ -21,7 +21,6 @@ import {
   getUIStoreFromResourceObj,
 } from './helpers/immutableConverter';
 import { useVariables } from './hooks/useVariables';
-import { useDataSources } from './hooks/useDataSources';
 import { prepareRules } from './helpers/prepareRules';
 
 export function ExtensibilityCreateCore({
@@ -60,10 +59,9 @@ export function ExtensibilityCreateCore({
   const presets = usePreparePresets(createResource?.presets);
 
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
-  const { dataSourceFetchers } = useDataSources(resource);
   const updateStore = res => {
     resetVars();
-    readVars(res, dataSourceFetchers);
+    readVars(res);
     const newStore = Immutable.fromJS(res);
     setStore(prevStore => prevStore.set('values', newStore));
   };
@@ -98,7 +96,7 @@ export function ExtensibilityCreateCore({
     const fullSchemaRules = prepareRules(createResource?.form ?? [], t);
 
     prepareVars(fullSchemaRules);
-    readVars(resource, dataSourceFetchers);
+    readVars(resource);
 
     return {
       simpleRules: prepareSchemaRules(

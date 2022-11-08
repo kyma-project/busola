@@ -42,7 +42,6 @@ export function extractVariables(varStore, vars, indexes) {
 export function useVariables() {
   const { vars, setVar, setVars } = useContext(VarStoreContext);
   const [defs, setDefs] = useState({});
-
   const itemVars = (resource, names, storeKeys) => {
     let lastArrayItem;
     let lastArrayIndex = storeKeys
@@ -76,8 +75,8 @@ export function useVariables() {
   };
 
   const prepareVars = rules => {
-    const getLevel = (rules, path = '') => {
-      return rules.forEach(rule => {
+    const getLevel = (rules, path = '') =>
+      rules.forEach(rule => {
         const rulePath = path ? `${path}.${rule.path}` : rule.path;
         if (rule.var) {
           defs[rule.var] = {
@@ -88,7 +87,6 @@ export function useVariables() {
           getLevel(rule.children, rulePath);
         }
       });
-    };
 
     getLevel(rules);
     setDefs({ ...defs });
@@ -103,19 +101,11 @@ export function useVariables() {
     setVars({ ...vars });
   };
 
-  const readVars = (resource, dataSourceFetchers) => {
-    const readVar = (
-      def,
-      path,
-      base = resource,
-      dSourceFetchers = dataSourceFetchers,
-    ) => {
+  const readVars = resource => {
+    const readVar = (def, path, base = resource) => {
       if (path.length) {
         return (jp.value(base, pathToJP(path[0])) ?? []).map(item =>
-          applyDefaults(
-            def,
-            readVar(def, tail(path), item, dataSourceFetchers),
-          ),
+          applyDefaults(def, readVar(def, tail(path), item)),
         );
       } else if (def.defaultValue) {
         return def.defaultValue;
@@ -130,11 +120,7 @@ export function useVariables() {
     Object.values(defs)
       .filter(def => typeof vars[def.var] === 'undefined')
       .forEach(def => {
-        const pureVal = readVar(
-          def,
-          initial(def.path.split(/\[\]\.?/)),
-          dataSourceFetchers,
-        );
+        const pureVal = readVar(def, initial(def.path.split(/\[\]\.?/)));
         vars[def.var] = applyDefaults(def, pureVal);
       });
 
