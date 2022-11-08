@@ -17,6 +17,8 @@
   "dependencies": {
     "@sap-theming/theming-base-content": "^11.1.28",
     "@sentry/tracing": "^6.12.0",
+    "@types/jsonpath": "^0.2.0",
+    "@types/pluralize": "^0.0.29",
     "file-saver": "^2.0.2",
     "i18next": "^20.3.4",
     "i18next-http-backend": "^1.3.2",
