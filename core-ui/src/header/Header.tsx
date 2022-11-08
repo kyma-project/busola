@@ -26,7 +26,7 @@ export function Header() {
     activeNamespaceIdState,
   );
   const [namespaces, setNamespaces] = useRecoilState(namespacesState);
-  const arePreferencesOpen = useSetRecoilState(isPreferencesOpenState);
+  const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
 
   const clusters = useRecoilValue(clustersState);
   const config = useRecoilValue(configFeaturesState);
@@ -137,7 +137,7 @@ export function Header() {
       profileMenu={[
         {
           name: 'Settings',
-          callback: (_: any) => arePreferencesOpen(true),
+          callback: (_: any) => setPreferencesOpen(true),
         },
       ]}
     />
