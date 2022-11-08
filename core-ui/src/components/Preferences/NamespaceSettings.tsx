@@ -23,24 +23,22 @@ export default function NamespaceSettings() {
     return groups.includes('runtimeAdmin');
   };
 
-  return (
-    shouldShowNamespaceSettings() && (
-      <div className="preferences-row">
-        <span className="fd-has-color-status-4">
-          {t('settings.clusters.showHiddenNamespaces')}
-        </span>
-        <div>
-          <Switch
-            inputProps={{
-              'aria-label': t('settings.clusters.showHiddenNamespaces'),
-            }}
-            className="fd-has-display-inline-block fd-margin-begin--tiny"
-            checked={showHiddenNamespaces}
-            onChange={toggleVisibility}
-            compact
-          />
-        </div>
+  return shouldShowNamespaceSettings() ? (
+    <div className="preferences-row">
+      <span className="fd-has-color-status-4">
+        {t('settings.clusters.showHiddenNamespaces')}
+      </span>
+      <div>
+        <Switch
+          inputProps={{
+            'aria-label': t('settings.clusters.showHiddenNamespaces'),
+          }}
+          className="fd-has-display-inline-block fd-margin-begin--tiny"
+          checked={showHiddenNamespaces}
+          onChange={toggleVisibility}
+          compact
+        />
       </div>
-    )
-  );
+    </div>
+  ) : null;
 }

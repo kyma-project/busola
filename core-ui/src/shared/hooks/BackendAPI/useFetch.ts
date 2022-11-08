@@ -15,7 +15,7 @@ export type FetchFn = ({
   init,
 }: {
   relativeUrl: string;
-  init: any;
+  init?: any;
   abortController?: AbortController;
 }) => Promise<Response>;
 
@@ -31,13 +31,13 @@ export const createFetchFn = ({
   config: ClusterConfigState;
   ssoData: SsoDataState;
   fromConfig: FromConfig;
-}) => async ({
+}): FetchFn => async ({
   relativeUrl,
   abortController,
   init,
 }: {
   relativeUrl: string;
-  init: any;
+  init?: any;
   abortController?: AbortController;
 }) => {
   const token = authData && 'token' in authData ? authData.token : undefined;

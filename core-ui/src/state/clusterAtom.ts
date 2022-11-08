@@ -8,9 +8,6 @@ export type ClusterState = {
   name: string;
 } | null;
 
-const defaultValue = null;
-
 export const clusterState: RecoilState<ClusterState> = atom<ClusterState>({
   key: 'clusterState',
-  default: defaultValue,
 });

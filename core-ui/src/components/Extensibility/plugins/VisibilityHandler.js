@@ -1,8 +1,8 @@
 import React from 'react';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
-import { jsonataWrapper } from '../helpers/jsonataWrapper';
 import { useVariables } from '../hooks/useVariables';
+import { useJsonata } from '../hooks/useJsonata';
 
 export function VisibilityHandler({
   value,
@@ -15,20 +15,22 @@ export function VisibilityHandler({
   ...props
 }) {
   const { itemVars } = useVariables();
+  const jsonata = useJsonata({ resource });
 
   const rule = schema.get('schemaRule');
 
   // rule.visibility won't work for "var", we must use schema.get('visibility')
   const visibilityFormula = schema.get('visibility');
+  const overwrite = schema.get('overwrite') ?? true;
 
   if (visibilityFormula) {
-    const visible = jsonataWrapper(visibilityFormula).evaluate(
-      resource,
+    const [visible] = jsonata(
+      visibilityFormula,
       itemVars(resource, rule.itemVars, storeKeys),
     );
 
     if (!visible) {
-      if (value) {
+      if (value && overwrite) {
         onChange({
           storeKeys,
           scopes: ['value'],

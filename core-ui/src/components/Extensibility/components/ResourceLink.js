@@ -29,9 +29,9 @@ export function ResourceLink({
     return emptyLeafPlaceholder;
   }
 
-  const [name, nameError] = jsonata(structure.resource.name);
-  const [namespace, namespaceError] = jsonata(structure.resource.namespace);
-  const [kind, kindError] = jsonata(structure.resource.kind);
+  const [name, nameError] = jsonata(structure.resource?.name);
+  const [namespace, namespaceError] = jsonata(structure.resource?.namespace);
+  const [kind, kindError] = jsonata(structure.resource?.kind);
 
   const jsonataError = nameError || namespaceError || kindError;
   if (jsonataError) {

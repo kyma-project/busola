@@ -77,7 +77,7 @@ export function GenericList({
       {Array(listSize)
         .fill(null)
         .map((_val, index) => {
-          const ownKeys = storeKeys.push(index);
+          const ownKeys = storeKeys?.push(index);
           const itemsSchema = schema.get('items');
           return (
             <ResourceForm.CollapsibleSection

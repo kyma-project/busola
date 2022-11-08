@@ -10,7 +10,7 @@ export type PermissionSet = {
 
 export type PermissionSetState = PermissionSet[];
 
-export const permissionSetsAtom: RecoilValue<PermissionSetState> = selector<
+export const permissionSetsSelector: RecoilValue<PermissionSetState> = selector<
   PermissionSetState
 >({
   key: 'PermissionSet',

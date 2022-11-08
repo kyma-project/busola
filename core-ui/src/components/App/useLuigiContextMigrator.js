@@ -2,7 +2,8 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useSetRecoilState } from 'recoil';
 import { useEffect, useRef } from 'react';
 import { isEqual } from 'lodash';
-import { configFeaturesState } from 'state/configFeaturesAtom';
+
+import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { groupsState } from 'state/groupsAtom';
 import { activeClusterNameState } from 'state/activeClusterNameAtom';
 import { authDataState } from 'state/authDataAtom';
@@ -12,6 +13,9 @@ import { openapiState } from 'state/openapi/openapiAtom';
 import { clusterState } from 'state/clusterAtom';
 import { clusterConfigState } from 'state/clusterConfigAtom';
 import { ssoDataState } from 'state/ssoDataAtom';
+import { lazyConfigFeaturesState } from 'state/configFeatures/lazyConfigFeaturesAtom';
+
+import { lazyConfigFeaturesNames } from 'state/types';
 
 export const useLuigiContextMigrator = () => {
   const {
@@ -27,7 +31,6 @@ export const useLuigiContextMigrator = () => {
     groups,
   } = useMicrofrontendContext();
 
-  useUpdateRecoilIfValueChanged(features, configFeaturesState);
   useUpdateRecoilIfValueChanged(groups, groupsState);
   useUpdateRecoilIfValueChanged(activeClusterName, activeClusterNameState);
   useUpdateRecoilIfValueChanged(authData, authDataState);
@@ -37,6 +40,8 @@ export const useLuigiContextMigrator = () => {
   useUpdateRecoilIfValueChanged(config, clusterConfigState);
   useUpdateRecoilIfValueChanged(cluster, clusterState);
   useUpdateRecoilIfValueChanged(ssoData, ssoDataState);
+
+  useUpdateConfigFeatures(features);
 };
 
 export const useUpdateRecoilIfValueChanged = (val, recoilAtom) => {
@@ -48,4 +53,14 @@ export const useUpdateRecoilIfValueChanged = (val, recoilAtom) => {
       prev.current = val;
     }
   }, [val, setRecoilState]);
+};
+
+const useUpdateConfigFeatures = features => {
+  const configFeatures = { ...features };
+  const lazyConfigFeatures = {};
+  lazyConfigFeatures[lazyConfigFeaturesNames.PROMETHEUS] = features.PROMETHEUS;
+  delete configFeatures[lazyConfigFeaturesNames.PROMETHEUS];
+
+  useUpdateRecoilIfValueChanged(configFeatures, configFeaturesState);
+  useUpdateRecoilIfValueChanged(lazyConfigFeatures, lazyConfigFeaturesState);
 };

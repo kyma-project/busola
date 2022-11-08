@@ -13,6 +13,7 @@ import { prettifyKind } from 'shared/utils/helpers';
 
 import { ResourceSchema } from './ResourceSchema';
 import { usePreparePresets, createTemplate, getDefaultPreset } from './helpers';
+import { DataSourcesContextProvider } from './contexts/DataSources';
 import { VarStoreContextProvider } from './contexts/VarStore';
 import { prepareSchemaRules } from './helpers/prepareSchemaRules';
 import {
@@ -168,9 +169,13 @@ export function ExtensibilityCreateCore({
 
 export function ExtensibilityCreate(props) {
   return (
-    <VarStoreContextProvider>
-      <ExtensibilityCreateCore {...props} />
-    </VarStoreContextProvider>
+    <DataSourcesContextProvider
+      dataSources={props.resourceSchema?.dataSources || {}}
+    >
+      <VarStoreContextProvider>
+        <ExtensibilityCreateCore {...props} />
+      </VarStoreContextProvider>
+    </DataSourcesContextProvider>
   );
 }
 

@@ -2,7 +2,6 @@ import { createResourceRoutes } from './createResourceRoutes';
 
 //namespaced
 import * as Jobs from './Jobs';
-import * as Sidecars from './Sidecars';
 import * as CronJobs from './CronJobs';
 import * as VirtualServices from './VirtualServices';
 import * as ServiceEntries from './ServiceEntries';
@@ -62,7 +61,6 @@ export const resources = [
   // istio
   VirtualServices,
   Gateways,
-  Sidecars,
   ServiceEntries,
   DestinationRules,
   AuthorizationPolicies,
