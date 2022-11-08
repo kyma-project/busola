@@ -30,7 +30,7 @@ config:
       config:
         dsn: ''
     OBSERVABILITY:
-      isEnabled: true
+      isEnabled: false
       config:
         links:
           - label: Grafana
