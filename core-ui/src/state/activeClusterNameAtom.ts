@@ -3,7 +3,7 @@ import { localStorageEffect, luigiMessageEffect } from './utils/effects';
 
 type ActiveClusterNameAtom = string;
 
-const EXPANDED_CATEGORIES_STORAGE_KEY = 'busola.current-cluster-name';
+const CURRENT_CLUSTER_NAME_STORAGE_KEY = 'busola.current-cluster-name';
 const defaultValue = '';
 
 export const activeClusterNameState: RecoilState<ActiveClusterNameAtom> = atom<
@@ -12,7 +12,7 @@ export const activeClusterNameState: RecoilState<ActiveClusterNameAtom> = atom<
   key: 'activeClusterNameState',
   default: defaultValue,
   effects: [
-    localStorageEffect<ActiveClusterNameAtom>(EXPANDED_CATEGORIES_STORAGE_KEY),
+    localStorageEffect<ActiveClusterNameAtom>(CURRENT_CLUSTER_NAME_STORAGE_KEY),
     luigiMessageEffect<ActiveClusterNameAtom>(
       'busola.setCluster',
       'clusterName',
