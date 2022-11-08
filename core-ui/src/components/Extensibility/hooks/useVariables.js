@@ -112,7 +112,6 @@ export function useVariables() {
       } else if (def.dynamicValue) {
         return jsonataWrapper(def.dynamicValue).evaluate(resource, {
           item: base,
-          ...dataSourceFetchers,
         });
       }
     };

@@ -14,7 +14,6 @@ import { prettifyKind } from 'shared/utils/helpers';
 import { ResourceSchema } from './ResourceSchema';
 import { usePreparePresets, createTemplate, getDefaultPreset } from './helpers';
 import { VarStoreContextProvider } from './contexts/VarStore';
-
 import { prepareSchemaRules } from './helpers/prepareSchemaRules';
 import {
   getResourceObjFromUIStore,
@@ -59,6 +58,7 @@ export function ExtensibilityCreateCore({
   const presets = usePreparePresets(createResource?.presets);
 
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
+
   const updateStore = res => {
     resetVars();
     readVars(res);
