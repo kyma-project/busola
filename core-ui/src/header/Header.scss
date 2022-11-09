@@ -1,6 +1,10 @@
+:root {
+  --header-height: 50px;
+}
+
 .header {
   width: 100%;
-  height: 50px;
+  height: var(--header-height);
   position: fixed;
   background-color: var(--sapShellColor, #354a5f);
   z-index: 9;

@@ -5,8 +5,8 @@
 }
 
 .sidebar {
-  margin-top: 50px;
-  height: calc(100vh - 50px);
+  margin-top: var(--header-height);
+  height: calc(100vh - var(--header-height));
   background-color: var(--sapList_Background);
   position: fixed;
   width: var(--sidebar-width);
