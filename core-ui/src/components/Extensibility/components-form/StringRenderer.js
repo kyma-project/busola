@@ -50,14 +50,15 @@ export function StringRenderer({
     <ResourceForm.FormField
       value={value}
       setValue={value => {
-        onChange({
-          storeKeys,
-          scopes: ['value'],
-          type: 'set',
-          schema,
-          required,
-          data: { value },
-        });
+        onChange &&
+          onChange({
+            storeKeys,
+            scopes: ['value'],
+            type: 'set',
+            schema,
+            required,
+            data: { value },
+          });
       }}
       label={tFromStoreKeys(storeKeys, schema)}
       compact={compact}

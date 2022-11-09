@@ -29,6 +29,7 @@ import { ResourceRenderer } from './ResourceRenderer';
 import { ResourceRefRender } from './ResourceRefRenderer';
 import { SimpleList } from './SimpleList';
 import { AlertRenderer } from './AlertRenderer';
+import { MultiType } from './MultiType';
 
 const pluginStack = [
   ReferencingHandler,
@@ -87,6 +88,24 @@ export const widgets = {
     ResourceRef: ResourceRefRender,
     Resource: ResourceRenderer,
     Alert: AlertRenderer,
+    MultiType,
   },
 };
 export default widgets;
+export const limitedWidgets = {
+  ...widgets,
+  pluginStack: [
+    ReferencingHandler,
+    ExtractStorePlugin,
+    CombiningHandler,
+    DefaultHandler,
+    DependentHandler,
+    ConditionalHandler,
+    // SchemaRulesInjector,
+    // CustomFieldInjector,
+    EnumHandler,
+    // VisibilityHandler,
+    PluginSimpleStack,
+    // ValidityReporter,
+  ],
+};

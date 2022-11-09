@@ -140,9 +140,10 @@ export async function getExtensibilitySchemas() {
   const cacheBuster = '?cache-buster=' + Date.now();
 
   const detailsResponse = await fetch(
-    `/assets/customResources/schema-details.json${cacheBuster}`,
+    `/assets/customResources/schema-details.yaml${cacheBuster}`,
   );
-  const details = await detailsResponse.json();
+  const text = await detailsResponse.text();
+  const details = await jsyaml.load(text);
   return {
     details,
   };

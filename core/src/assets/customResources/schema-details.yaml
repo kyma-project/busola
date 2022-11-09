@@ -1,0 +1,218 @@
+$schema: http://json-schema.org/draft-07/schema
+description: Schema defining structure of details configuration
+required:
+  - header
+  - body
+title: Custom pages to be displayed in Busola
+type: object
+properties:
+  header:
+    description: Configuration of fields/data that should be displayed in header section
+      of resource details page.
+    type: array
+    items:
+      $ref: "#/$defs/component"
+  body:
+    description: Configuration of fields/data that should be displayed in body section
+      of resource details page.
+    type: array
+    items:
+      $ref: "#/$defs/component"
+$defs:
+  children:
+    type: array
+    items:
+      $ref: "#/$defs/component"
+  copyable:
+    description: Display a "Copy to clipboard" button next to the widget.
+    type: boolean
+  component:
+    type: object
+    properties:
+      name:
+        description: Name of component used for dispaying translations
+        type: string
+      source:
+        description: Jsonata script used to fetch the data
+        examples:
+          - status.phase
+          - metadata.labels
+        type: string
+      widget:
+        description: Name of a widget that should be used for displaying data defined by path
+        examples:
+          - Badge
+          - CodeViewer
+        type: string
+        enum:
+          - Alert
+          - Badge
+          - CodeViewer
+          - Columns
+          - ControlledBy
+          - EventList
+          - ExternalLink
+          - JoinedArray
+          - Labels
+          - Panel
+          - Plain
+          - ResourceLink
+          - ResourceList
+          - ResourceRefs
+          - Table
+          - Tabs
+          - Text
+    allOf:
+      - $ref: "#/$widgets/Alert"
+      - $ref: "#/$widgets/Badge"
+      - $ref: "#/$widgets/CodeViewer"
+      - $ref: "#/$widgets/Columns"
+      - $ref: "#/$widgets/ControlledBy"
+      - $ref: "#/$widgets/ExternalLink"
+      - $ref: "#/$widgets/JoinedArray"
+      - $ref: "#/$widgets/Panel"
+      - $ref: "#/$widgets/Plain"
+      - $ref: "#/$widgets/Table"
+      - $ref: "#/$widgets/Text"
+$widgets:
+  Alert:
+    if:
+      properties:
+        widget:
+          const: Alert
+    then:
+      properties:
+        severity:
+          description: Specifies the severity of the alert.
+          type: string
+          enum: [information, warning, error, success]
+        disableMargin:
+          description: Disable the margin outside the alert body.
+          type: boolean
+  Badge:
+    if:
+      properties:
+        widget:
+          const: Badge
+    then:
+      properties:
+        placeholder:
+          type: string
+        highlights:
+          type: object
+          # widget: FormGroup
+          properties:
+            informative:
+              type: [string, array]
+              widget: MultiType
+              items:
+                type: string
+            positive:
+              type: [string, array]
+              widget: MultiType
+              widgets:
+                array: SimpleList
+              items:
+                type: string
+            negative:
+              type: [string, number, boolean]
+              widget: MultiType
+              items:
+                type: string
+            critical:
+              type: string
+              # type: [string, array]
+              # widget: MultiType
+              # childWidget:
+                # array: SimpleList
+        description:
+          type: string
+        copyable:
+          $ref: "#/$defs/copyable"
+  CodeViewer:
+    if:
+      properties:
+        widget:
+          const: CodeViewer
+    then:
+      properties:
+        language:
+          type: string
+  Columns:
+    if:
+      properties:
+        widget:
+          const: Columns
+    then:
+      properties:
+        children:
+          $ref: "#/$defs/children"
+  ControlledBy:
+    if:
+      properties:
+        widget:
+          const: ControlledBy
+    then:
+      properties:
+        placeholder:
+          type: string
+        kindOnly:
+          type: boolean
+  ExternalLink:
+    if:
+      properties:
+        widget:
+          const: ExternalLink
+    then:
+      properties:
+        link:
+          type: string
+        copyable:
+          $ref: "#/$defs/copyable"
+  JoinedArray:
+    if:
+      properties:
+        widget:
+          const: JoinedArray
+    then:
+      properties:
+        children:
+          $ref: "#/$defs/children"
+  Panel:
+    if:
+      properties:
+        widget:
+          const: Panel
+    then:
+      properties:
+        children:
+          $ref: "#/$defs/children"
+  Plain:
+    if:
+      properties:
+        widget:
+          const: Plain
+    then:
+      properties:
+        children:
+          $ref: "#/$defs/children"
+  Table:
+    if:
+      properties:
+        widget:
+          const: Table
+    then:
+      properties:
+        children:
+          $ref: "#/$defs/children"
+  Text:
+    if:
+      properties:
+        widget:
+          const: Text
+    then:
+      properties:
+        placeholder:
+          type: string
+        copyable:
+          $ref: "#/$defs/copyable"
