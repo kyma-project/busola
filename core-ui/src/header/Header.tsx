@@ -1,5 +1,5 @@
 import LuigiClient from '@luigi-project/client';
-import { Shellbar, Menu, Icon } from 'fundamental-react';
+import { Shellbar } from 'fundamental-react';
 import { isEqual } from 'lodash';
 import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -14,7 +14,9 @@ import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpen
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
 import { K8sResource } from 'state/types';
 
-import { Logo } from './Logo';
+import { Logo } from './Logo/Logo';
+import { NamespaceDropdown } from './NamespaceDropdown';
+import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
 
 import './Header.scss';
 
@@ -26,7 +28,7 @@ export function Header() {
     activeNamespaceIdState,
   );
   const [namespaces, setNamespaces] = useRecoilState(namespacesState);
-  const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
+  const arePreferencesOpen = useSetRecoilState(isPreferencesOpenState);
 
   const clusters = useRecoilValue(clustersState);
   const config = useRecoilValue(configFeaturesState);
@@ -79,39 +81,15 @@ export function Header() {
     },
   ];
 
-  const namespacesOverviewNode = (
-    <Menu.Item
-      url="#"
-      onClick={() => {
-        setActiveNamespace('');
-        LuigiClient.linkManager()
-          .fromContext('cluster')
-          .navigate('namespaces/');
-      }}
-    >
-      <Icon glyph="dimension" /> Namespaces Overview
-    </Menu.Item>
-  );
-
-  const namespacesDropdownList =
-    namespaces?.[activeCluster]?.map(n => (
-      <Menu.Item
-        url="#"
-        onClick={() => {
-          setActiveNamespace(n);
-          LuigiClient.linkManager()
-            .fromContext('cluster')
-            .navigate('namespaces/' + n);
-        }}
-      >
-        {n}
-      </Menu.Item>
-    )) || [];
-
   return (
     <Shellbar
       className="header"
-      logo={<Logo />}
+      logo={
+        <>
+          <SidebarSwitcher />
+          <Logo />
+        </>
+      }
       productTitle={activeCluster || 'Clusters'}
       productMenu={clustersList}
       profile={{
@@ -124,20 +102,13 @@ export function Header() {
           label: activeNamespace || 'Select Namespace...',
           notificationCount: 0,
           callback: () => refetch(),
-          menu: (
-            <Menu>
-              <Menu.List>
-                {namespacesOverviewNode}
-                {namespacesDropdownList}
-              </Menu.List>
-            </Menu>
-          ),
+          menu: <NamespaceDropdown namespaces={namespaces} />,
         },
       ]}
       profileMenu={[
         {
           name: 'Settings',
-          callback: (_: any) => setPreferencesOpen(true),
+          callback: (_: any) => arePreferencesOpen(true),
         },
       ]}
     />
