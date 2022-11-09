@@ -2,14 +2,14 @@ import { SideNav, Popover, Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { SetterOrUpdater } from 'recoil';
 import { Category } from 'state/navigation/categories';
-import { ExpandedCategoriesAtom } from 'state/navigation/expandedCategoriesAtom';
+import { ExpandedCategories } from 'state/navigation/expandedCategories/expandedCategoriesAtom';
 import { NavItem } from './NavItem';
 import './CategoryItem.scss';
 
 type CategoryItemProps = {
   category: Category;
   expandedCategories: string[];
-  handleExpandedCategories: SetterOrUpdater<ExpandedCategoriesAtom>;
+  handleExpandedCategories: SetterOrUpdater<ExpandedCategories>;
   isSidebarCondensed: boolean;
 };
 
@@ -44,6 +44,8 @@ export function CategoryItem({
     </SideNav.List>
   );
 
+  const expanded = expandedCategories.includes(category.key);
+
   return isSidebarCondensed ? (
     <li className="fd-nested-list__item condensed-item">
       <Popover
@@ -61,14 +63,14 @@ export function CategoryItem({
     </li>
   ) : (
     <SideNav.ListItem
-      key={category.key}
+      key={expanded + category.key}
       expandSubmenuLabel={`Expand ${categoryName} category`}
       id={category.key}
       name={categoryName}
       url="#"
       glyph={category.icon}
       onClick={handleAddExpandedCategory}
-      expanded={expandedCategories.includes(category.key)}
+      expanded={expanded}
     >
       {children}
     </SideNav.ListItem>

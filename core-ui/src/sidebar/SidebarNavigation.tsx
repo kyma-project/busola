@@ -1,7 +1,7 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { SideNav } from 'fundamental-react';
 import { sidebarNavigationNodesSelector } from 'state/navigation/sidebarNavigationNodesSelector';
-import { expandedCategoriesState } from 'state/navigation/expandedCategoriesAtom';
+import { expandedCategoriesSelector } from 'state/navigation/expandedCategories/expandedCategoriesSelector';
 import { CategoryItem } from './CategoryItem';
 import { NavItem } from './NavItem';
 import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
@@ -12,7 +12,7 @@ export function SidebarNavigation() {
 
   // if it's in the CategoryItem, it causes needless re-renders
   const [expandedCategories, setExpandedCategories] = useRecoilState(
-    expandedCategoriesState,
+    expandedCategoriesSelector,
   );
 
   const filteredNavigationNodes =
