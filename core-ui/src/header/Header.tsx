@@ -10,7 +10,7 @@ import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 
 import { Logo } from './Logo/Logo';
-import { NamespaceDropdown } from './NamespaceDropdown';
+import { NamespaceDropdown } from './NamespaceDropdown/NamespaceDropdown';
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
 
 import './Header.scss';

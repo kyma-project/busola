@@ -5,6 +5,8 @@ import { activeClusterNameState } from 'state/activeClusterNameAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { NamespacesState } from 'state/namespacesAtom';
 
+import './NamespaceDropdown.scss';
+
 export function NamespaceDropdown({
   namespaces,
 }: {
