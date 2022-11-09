@@ -34,7 +34,7 @@ export function NavItem({ node }: NavItemProps) {
       id={node.pathSegment}
       // @ts-ignore
       name={
-        <span className="nav-item__content">
+        <span className={node.externalUrl ? 'nav-item__external-link' : ''}>
           {t(node.label, { defaultValue: node.label })}
           {node.externalUrl && <Icon glyph="inspect" />}
         </span>
