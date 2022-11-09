@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PluginStack, useUIStore } from '@ui-schema/ui-schema';
 import { Button } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
@@ -28,6 +28,7 @@ export function GenericList({
   const schemaPlaceholder = schema.get('placeholder');
   const itemTemplate = schema.get('template') || {};
   const defaultOpen = schema.get('defaultExpanded');
+  const [isOpen, setIsOpen] = useState(false);
 
   const addItem = itemTemplate => {
     onChange({
@@ -66,6 +67,7 @@ export function GenericList({
           onClick={() => {
             addItem(itemTemplate);
             setOpen(true);
+            setIsOpen(true);
           }}
           disabled={readOnly}
         >
@@ -81,6 +83,7 @@ export function GenericList({
           const itemsSchema = schema.get('items');
           return (
             <ResourceForm.CollapsibleSection
+              defaultOpen={defaultOpen || isOpen}
               title={pluralize(tFromStoreKeys(ownKeys, schema), 1)}
               nestingLevel={nestingLevel + 1}
               actions={

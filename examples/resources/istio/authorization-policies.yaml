@@ -182,6 +182,7 @@ data:
       children:
         - path: '[].from'
           widget: GenericList
+          defaultExpanded: true
           children:
             - path: '[].source'
               widget: FormGroup
@@ -241,6 +242,7 @@ data:
           children:
             - path: '[].operation'
               widget: FormGroup
+              defaultExpanded: true
               children:
                 - path: hosts
                   widget: SimpleList
