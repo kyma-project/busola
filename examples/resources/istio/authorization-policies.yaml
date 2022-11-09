@@ -42,47 +42,47 @@ data:
             visibility: $exists($value)
             collapsibleTitle: '"From #" & $string($index + 1) & (" " & $join($keys($item.source), " "))'
             collapsible:
-              - source: $item.source
+              - source: source
                 widget: Panel
                 name: spec.rules.from.source
                 children:
-                  - source: $item.principals
+                  - source: principals
                     name: spec.rules.from.source.principals
                     widget: JoinedArray
                     visibility: $exists($value)
-                  - source: $item.notPrincipals
+                  - source: notPrincipals
                     name: spec.rules.from.source.notPrincipals
                     widget: Labels
                     visibility: $exists($value)
-                  - source: $item.requestPrincipals
+                  - source: requestPrincipals
                     name: spec.rules.from.source.requestPrincipals
                     widget: Labels
                     visibility: $exists($value)
-                  - source: $item.notRequestPrincipals
+                  - source: notRequestPrincipals
                     name: spec.rules.from.source.notRequestPrincipals
                     widget: Labels
                     visibility: $exists($value)
-                  - source: $item.namespaces
+                  - source: namespaces
                     name: spec.rules.from.source.namespaces
                     widget: Labels
                     visibility: $exists($value)
-                  - source: $item.notNamespaces
+                  - source: notNamespaces
                     name: spec.rules.from.source.notNamespaces
                     widget: Labels
                     visibility: $exists($value)
-                  - source: $item.ipBlocks
+                  - source: ipBlocks
                     name: spec.rules.from.source.ipBlocks
                     widget: Labels
                     visibility: $exists($value)
-                  - source: $item.notIpBlocks
+                  - source: notIpBlocks
                     name: spec.rules.from.source.notIpBlocks
                     widget: Labels
                     visibility: $exists($value)
-                  - source: $item.remoteIpBlocks
+                  - source: remoteIpBlocks
                     name: spec.rules.from.source.remoteIpBlocks
                     widget: Labels
                     visibility: $exists($value)
-                  - source: $item.notRemoteIpBlocks
+                  - source: notRemoteIpBlocks
                     name: spec.rules.from.source.notRemoteIpBlocks
                     widget: Labels
                     visibility: $exists($value)
@@ -94,56 +94,56 @@ data:
             visibility: $exists($value)
             collapsibleTitle: '"To #" & $string($index + 1) & (" " & $join($keys($item.operation), " "))'
             collapsible:
-              - source: $item.operation
+              - source: operation
                 widget: Panel
                 name: spec.rules.to.operation
                 children:
-                  - source: $item.Hosts
+                  - source: Hosts
                     name: spec.rules.to.operation.hosts
                     widget: Labels
                     visibility: $exists($value)
-                  - source: $item.notHosts
+                  - source: notHosts
                     name: spec.rules.to.operation.notHosts
                     widget: Labels
                     visibility: $exists($value)
-                  - source: $item.ports
+                  - source: ports
                     name: spec.rules.to.operation.ports
                     widget: Labels
                     visibility: $exists($value)
-                  - source: $item.notPorts
+                  - source: notPorts
                     name: spec.rules.to.operation.notPorts
                     widget: Labels
                     visibility: $exists($value)
-                  - source: $item.methods
+                  - source: methods
                     name: spec.rules.to.operation.methods
                     widget: Labels
                     visibility: $exists($value)
-                  - source: $item.notMethods
+                  - source: notMethods
                     name: spec.rules.to.operation.notMethods
                     widget: Labels
                     visibility: $exists($value)
-                  - source: $item.paths
+                  - source: paths
                     name: spec.rules.to.operation.paths
                     widget: Labels
                     visibility: $exists($value)
-                  - source: $item.notPaths
+                  - source: notPaths
                     name: spec.rules.to.operation.notPaths
                     widget: Labels
                     visibility: $exists($value)
-          - source: $item.when
+          - source: when
             widget: Table
             name: spec.rules.when
             visibility: $exists($value)
             children:
-              - source: $item.key
+              - source: key
                 name: spec.rules.when.key
                 visibility: $exists($value)
-              - source: $item.values
+              - source: values
                 name: spec.rules.when.values
                 widget: JoinedArray
                 separator: break
                 visibility: $exists($value)
-              - source: $item.notValues
+              - source: notValues
                 name: spec.rules.when.notValues
                 widget: JoinedArray
                 separator: break
@@ -182,10 +182,10 @@ data:
       children:
         - path: '[].from'
           widget: GenericList
-          defaultExpanded: true
           children:
             - path: '[].source'
               widget: FormGroup
+              defaultExpanded: true
               children:
                 - path: principals
                   widget: SimpleList

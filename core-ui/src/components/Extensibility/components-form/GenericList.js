@@ -28,7 +28,7 @@ export function GenericList({
   const schemaPlaceholder = schema.get('placeholder');
   const itemTemplate = schema.get('template') || {};
   const defaultOpen = schema.get('defaultExpanded');
-  const [isOpen, setIsOpen] = useState(false);
+  const [newItemIndex, setNewItemIndex] = useState(0);
 
   const addItem = itemTemplate => {
     onChange({
@@ -67,7 +67,7 @@ export function GenericList({
           onClick={() => {
             addItem(itemTemplate);
             setOpen(true);
-            setIsOpen(true);
+            setNewItemIndex(value.size);
           }}
           disabled={readOnly}
         >
@@ -83,7 +83,9 @@ export function GenericList({
           const itemsSchema = schema.get('items');
           return (
             <ResourceForm.CollapsibleSection
-              defaultOpen={defaultOpen || isOpen}
+              defaultOpen={
+                defaultOpen || index === newItemIndex ? true : undefined
+              }
               title={pluralize(tFromStoreKeys(ownKeys, schema), 1)}
               nestingLevel={nestingLevel + 1}
               actions={

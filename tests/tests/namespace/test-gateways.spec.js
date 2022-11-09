@@ -57,10 +57,6 @@ context('Test Gateways', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[aria-label="expand Server"]:visible', { log: false })
-      .click();
-
-    cy.getIframeBody()
       .find('[aria-label="expand Port"]:visible', { log: false })
       .click();
 

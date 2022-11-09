@@ -25,7 +25,12 @@ export function CollapsibleSection({
   const actionsRef = useRef();
   const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';
 
-  useEffect(() => setOpen(defaultOpen), [defaultOpen]);
+  useEffect(() => {
+    console.log(defaultOpen);
+    if (defaultOpen !== undefined) {
+      setOpen(defaultOpen);
+    }
+  }, [defaultOpen]);
 
   const toggle = e => {
     // ignore events from actions

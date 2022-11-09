@@ -1,11 +1,27 @@
 /// <reference types="cypress" />
 import 'cypress-file-upload';
-import { loadFile } from '../../support/loadFile';
+
+const AP_NAME =
+  'test-ap-' +
+  Math.random()
+    .toString()
+    .substr(2, 8);
+const ACTION = 'AUDIT';
+const METHODS = 'GET';
+const PATHS = '/user/profile/*';
+const KEY = 'request.auth.claims[iss]';
+const VALUES = 'https://test-value.com';
 
 context('Test Authorization Policies', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtension(
+      'SIDECARS',
+      'examples/resources/istio/authorization-policies.yaml',
+    );
+
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
@@ -17,11 +33,61 @@ context('Test Authorization Policies', () => {
       .contains('Create Authorization Policy')
       .click();
 
-    cy.wrap(loadFile('test-authorization-policies.yaml')).then(AP_CONFIG => {
-      const AP = JSON.stringify(AP_CONFIG);
+    // Action
+    cy.getIframeBody()
+      .find('[aria-label="Combobox input"]:visible', { log: false })
+      .type(ACTION);
 
-      cy.pasteToMonaco(AP);
-    });
+    // Name
+    cy.getIframeBody()
+      .find('[arialabel="AuthorizationPolicy name"]:visible', { log: false })
+      .type(AP_NAME);
+
+    // Rules
+    cy.getIframeBody()
+      .find('[aria-label="expand Rules"]:visible', { log: false })
+      .contains('Add')
+      .click();
+
+    // When
+    cy.getIframeBody()
+      .find('[aria-label="expand When"]:visible', { log: false })
+      .contains('Add')
+      .click();
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.rules.0.when.0.key"]:visible')
+      .type(KEY);
+
+    cy.getIframeBody()
+      .find('[aria-label="expand Values"]:visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.rules.0.when.0.values.0"]:visible')
+      .type(VALUES);
+
+    // To
+    cy.getIframeBody()
+      .find('[aria-label="expand To"]:visible', { log: false })
+      .contains('Add')
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="expand Methods"]:visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.rules.0.to.0.operation.methods.0"]:visible')
+      .type(METHODS);
+
+    cy.getIframeBody()
+      .find('[aria-label="expand Paths"]:visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.rules.0.to.0.operation.paths.0"]:visible')
+      .type(PATHS);
 
     cy.getIframeBody()
       .find('[role="dialog"]')
@@ -31,15 +97,27 @@ context('Test Authorization Policies', () => {
 
   it('Checking details', () => {
     cy.getIframeBody()
-      .contains('test-ap')
+      .contains(AP_NAME)
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('app=myapi')
+      .contains(ACTION)
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('To')
+      .contains('Rule #1 to when')
+      .click();
+
+    cy.getIframeBody()
+      .contains('To #1 methods paths')
+      .click();
+
+    cy.getIframeBody()
+      .contains(KEY)
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains(VALUES)
       .should('be.visible');
 
     cy.getIframeBody()
@@ -47,12 +125,41 @@ context('Test Authorization Policies', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('GET')
+      .contains(METHODS)
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('/user/profile/*')
+      .contains(PATHS)
       .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Matches all Pods in the Namespace')
+      .should('be.visible');
+  });
+
+  it('Edit and check changes', () => {
+    cy.getIframeBody()
+      .contains('Edit')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter key"]:visible', { log: false })
+      .filterWithNoValue()
+      .type('selector');
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter value"]:visible', { log: false })
+      .filterWithNoValue()
+      .first()
+      .type('selector-value');
+
+    cy.getIframeBody()
+      .contains('selector=selector-value')
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Matches all Pods in the Namespace')
+      .should('not.be.visible');
   });
 
   it('Inspect list', () => {
