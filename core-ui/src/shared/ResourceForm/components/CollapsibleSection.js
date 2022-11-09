@@ -26,7 +26,6 @@ export function CollapsibleSection({
   const iconGlyph = open ? 'navigation-down-arrow' : 'navigation-right-arrow';
 
   useEffect(() => {
-    console.log(defaultOpen);
     if (defaultOpen !== undefined) {
       setOpen(defaultOpen);
     }
