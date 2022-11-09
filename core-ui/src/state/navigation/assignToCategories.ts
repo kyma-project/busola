@@ -23,8 +23,7 @@ export const assignNodesToCategories = (navList: NavNode[]): Category[] => {
     if (existingCategory) {
       existingCategory.items.push(node);
     } else {
-      const childNode = { ...node };
-      delete childNode.icon;
+      const { icon, ...childNode } = node;
       categories.push({
         key: node.category as PredefinedCategories,
         label: node.category || node.label,

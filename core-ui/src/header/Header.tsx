@@ -45,7 +45,7 @@ export function Header() {
       },
     })),
     {
-      name: 'Clusters Overview',
+      name: t('clusters.overview.title-all-clusters'),
       callback: () => {
         LuigiClient.linkManager().navigate('/clusters');
       },
@@ -61,7 +61,7 @@ export function Header() {
           <Logo />
         </>
       }
-      productTitle={activeCluster || 'Clusters'}
+      productTitle={activeCluster}
       productMenu={clustersList}
       profile={{
         glyph: 'customer',
@@ -70,7 +70,7 @@ export function Header() {
       actions={[
         {
           glyph: 'megamenu',
-          label: activeNamespace || 'Select Namespace...',
+          label: activeNamespace || t('navigation.select-namespace'),
           notificationCount: 0,
           callback: () => refetch(),
           menu: <NamespaceDropdown namespaces={namespaces} />,
@@ -78,7 +78,7 @@ export function Header() {
       ]}
       profileMenu={[
         {
-          name: t('preferences.title'),
+          name: t('navigation.preferences.title'),
           callback: () => setPreferencesOpen(true),
         },
       ]}

@@ -1,9 +1,11 @@
 import { useRecoilValue } from 'recoil';
-import { SideNav } from 'fundamental-react';
+import { Icon, SideNav } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { NavNode } from 'state/types';
 import { luigiNavigate } from 'resources/createResourceRoutes';
+
+import './NavItem.scss';
 
 type NavItemProps = {
   node: NavNode;
@@ -30,7 +32,13 @@ export function NavItem({ node }: NavItemProps) {
       selected={isNodeSelected()}
       key={node.pathSegment}
       id={node.pathSegment}
-      name={t(node.label, { defaultValue: node.label })}
+      // @ts-ignore
+      name={
+        <span className="nav-item__content">
+          {t(node.label, { defaultValue: node.label })}
+          {node.externalUrl && <Icon glyph="inspect" />}
+        </span>
+      }
       url="#"
       glyph={node.icon}
       onClick={() => {

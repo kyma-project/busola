@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
-import { activeClusterNameState } from 'state/activeClusterNameAtom';
 import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { namespacesState } from 'state/namespacesAtom';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
@@ -14,7 +13,6 @@ export function useAvailableNamespaces() {
   const config = useRecoilValue(configFeaturesState);
   const hiddenNamespaces = useGetHiddenNamespaces();
   const [namespaces, setNamespaces] = useRecoilState(namespacesState);
-  const activeCluster = useRecoilValue(activeClusterNameState);
 
   const { data, refetch } = useGetList()('/api/v1/namespaces', {
     skip: !config?.REACT_NAVIGATION?.isEnabled,
@@ -33,13 +31,10 @@ export function useAvailableNamespaces() {
     });
 
   useEffect(() => {
-    if (
-      filteredNamespaces &&
-      !isEqual(namespaces?.[activeCluster], filteredNamespaces)
-    ) {
-      setNamespaces(prev => ({ ...prev, [activeCluster]: filteredNamespaces }));
+    if (filteredNamespaces && !isEqual(namespaces, filteredNamespaces)) {
+      setNamespaces(filteredNamespaces);
     }
-  }, [filteredNamespaces, activeCluster, namespaces, setNamespaces]);
+  }, [filteredNamespaces, namespaces, setNamespaces]);
 
   return { namespaces, refetch };
 }

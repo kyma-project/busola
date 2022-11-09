@@ -24,10 +24,11 @@ export async function createSettings(params) {
 export async function attachPreferencesModal() {
   elementReady(`[data-testid=luigi-topnav-profile-item]`).then(
     async preferencesElement => {
-      preferencesElement.addEventListener('click', () => {
+      preferencesElement.addEventListener('click', e => {
         Luigi.customMessages().sendToAll({
           id: 'open-preferences',
         });
+        e.stopPropagation();
       });
     },
   );

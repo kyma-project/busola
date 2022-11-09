@@ -21,7 +21,6 @@ export function SidebarNavigation() {
   const categoryNodes = filteredNavigationNodes?.filter(nn => !nn.topLevelNode);
 
   return (
-    // TODO: Show children for condensed in fundamental
     <SideNav
       skipLink={{ href: '', label: 'Side navigation' }}
       style={{ width: '100%' }}

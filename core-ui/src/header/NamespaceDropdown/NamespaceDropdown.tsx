@@ -1,7 +1,6 @@
 import LuigiClient from '@luigi-project/client';
 import { Menu, Icon } from 'fundamental-react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { activeClusterNameState } from 'state/activeClusterNameAtom';
+import { useSetRecoilState } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { NamespacesState } from 'state/namespacesAtom';
 
@@ -12,7 +11,6 @@ export function NamespaceDropdown({
 }: {
   namespaces: NamespacesState;
 }) {
-  const activeCluster = useRecoilValue(activeClusterNameState);
   const setActiveNamespace = useSetRecoilState(activeNamespaceIdState);
 
   const namespacesOverviewNode = (
@@ -30,7 +28,7 @@ export function NamespaceDropdown({
   );
 
   const namespacesDropdownList =
-    namespaces?.[activeCluster]?.map(n => (
+    namespaces.map(n => (
       <Menu.Item
         url="#"
         onClick={() => {

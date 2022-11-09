@@ -8,11 +8,11 @@ export type ClustersState = {
     };
     contextName: string;
     currentContext: {
-      cluster: {};
+      cluster: object; // todo add type
       name: string;
     };
     kubeconfig: {
-      kubeconfig: {};
+      kubeconfig: object; // todo add type
       name: string;
     };
   };

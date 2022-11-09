@@ -182,7 +182,7 @@ async function createNavigationForNoCluster() {
           label: i18next.t('top-nav.profile.preferences'),
           link: '/clusters/preferences',
           openNodeInModal: {
-            title: i18next.t('preferences.title'),
+            title: i18next.t('navigation.preferences.title'),
             size: 'm',
           },
         },

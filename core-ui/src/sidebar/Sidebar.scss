@@ -13,8 +13,11 @@
   transition: width 0.3s;
   left: 0;
 
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+
   .sidebar__content {
-    height: calc(100vh - 180px);
     overflow-x: hidden;
   }
 

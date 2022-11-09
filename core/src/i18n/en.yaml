@@ -1467,6 +1467,10 @@ namespaces:
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
+navigation:
+  preferences:
+    title: Preferences
+  select-namespace: Select Namespace...
 network-policies:
   description: <0>NetworkPolicy</0> allows you to control how a Pod communicates with different network entities.
   headers:
@@ -1654,8 +1658,6 @@ pods:
     terminated: Pod terminated
     terminating: Terminating the Pod
     unknown: Pod state unknown
-preferences:
-  title: Preferences
 pv:
   description: <0>PersistentVolume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
   details: Details
@@ -2019,7 +2021,7 @@ subscriptions:
     sink: Specifies the HTTP endpoint where matching events should be sent to.
 top-nav:
   profile:
-    preferences: $t(preferences.title)
+    preferences: $t(navigation.preferences.title)
 upload-yaml:
   buttons:
     hide-warnings: Hide warnings
