@@ -7,7 +7,7 @@ import { activeClusterNameState } from 'state/activeClusterNameAtom';
 import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { namespacesState } from 'state/namespacesAtom';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
-import { K8sResource } from 'state/types';
+import { K8sResource } from 'types';
 
 export function useAvailableNamespaces() {
   const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
