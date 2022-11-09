@@ -1,6 +1,5 @@
 .condensed-item {
-  width: 47px;
-  height: 44px;
+  box-sizing: border-box;
   border-bottom: 1px solid var(--sapGroup_ContentBorderColor);
   position: relative;
 
@@ -17,6 +16,10 @@
 
   &:last-child {
     border-bottom: 0;
+  }
+
+  i {
+    width: var(--sidebar-condensed-width);
   }
 
   ::after {
