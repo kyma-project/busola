@@ -2,6 +2,7 @@ import { isEqual } from 'lodash';
 import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { activeClusterNameState } from 'state/activeClusterNameAtom';
 import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { namespacesState } from 'state/namespacesAtom';
@@ -11,7 +12,7 @@ import { K8sResource } from 'state/types';
 export function useAvailableNamespaces() {
   const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
   const config = useRecoilValue(configFeaturesState);
-  const hiddenNamespaces = config?.HIDDEN_NAMESPACES?.config?.namespaces;
+  const hiddenNamespaces = useGetHiddenNamespaces();
   const [namespaces, setNamespaces] = useRecoilState(namespacesState);
   const activeCluster = useRecoilValue(activeClusterNameState);
 
