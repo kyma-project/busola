@@ -7,11 +7,9 @@ export function Logo() {
   const theme = useRecoilValue(themeState);
 
   return (
-    <>
-      <img
-        alt="Kyma"
-        src={theme === 'hcw' ? '/assets/logo-black.svg' : '/assets/logo.svg'}
-      />
-    </>
+    <img
+      alt="Kyma"
+      src={theme === 'hcw' ? '/assets/logo-black.svg' : '/assets/logo.svg'}
+    />
   );
 }

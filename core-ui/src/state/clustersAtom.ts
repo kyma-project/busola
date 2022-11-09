@@ -1,7 +1,7 @@
 import { atom, RecoilState } from 'recoil';
 
 export type ClustersState = {
-  [key: string]: {
+  [clusterName: string]: {
     config: {
       storage: string;
       requiresCA: boolean;
