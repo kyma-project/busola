@@ -22,18 +22,16 @@ export function CategoryItem({
   const { t } = useTranslation();
   const categoryName = t(category.label, { defaultValue: category.label });
 
+  const expanded = expandedCategories.includes(category.key);
+
   const handleAddExpandedCategory = () => {
-    const wasExpanded = expandedCategories.includes(category.key);
-    let newExpandedCategories = [...expandedCategories];
-    if (wasExpanded) {
-      newExpandedCategories = newExpandedCategories.filter(
-        el => el !== category.key,
+    if (expanded) {
+      handleExpandedCategories(
+        expandedCategories.filter(el => el !== category.key),
       );
     } else {
-      newExpandedCategories.push(category.key);
+      handleExpandedCategories([...expandedCategories, category.key]);
     }
-
-    handleExpandedCategories(newExpandedCategories);
   };
 
   const children = (
@@ -43,8 +41,6 @@ export function CategoryItem({
       ))}
     </SideNav.List>
   );
-
-  const expanded = expandedCategories.includes(category.key);
 
   return isSidebarCondensed ? (
     <li className="fd-nested-list__item condensed-item">
