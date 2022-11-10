@@ -27,7 +27,6 @@ import { useInitTheme } from './useInitTheme';
 
 import './App.scss';
 
-
 export default function App() {
   const { cluster, customResources = [] } = useMicrofrontendContext();
   const { t, i18n } = useTranslation();
