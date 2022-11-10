@@ -1874,30 +1874,6 @@ service-accounts:
   name_singular: ServiceAccount
   service-account: Service Account
   title: Service Accounts
-service-entries:
-  description: <0>ServiceEntry</0> allows for adding more entries to the internal service registry of Istio.
-  headers:
-    addresses: Adresses
-    configuration: Configuration
-    endpoints:
-      address: Address
-      locality: Locality
-      network: Network
-      title: Endpoints
-      weight: Weight
-    export-to: Export to
-    export-to-empty: Exported to all Namespaces
-    hosts: Hosts
-    location: Location
-    ports:
-      number: Number
-      protocol: Protocol
-      target-point: Target Point
-      title: Ports
-    resolution: Resolution
-    subject-alt-names: Subject Alt Names
-  name_singular: ServiceEntry
-  title: Service Entries
 service-management:
   title: Service Management
 services:

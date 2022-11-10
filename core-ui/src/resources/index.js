@@ -4,7 +4,6 @@ import { createResourceRoutes } from './createResourceRoutes';
 import * as Jobs from './Jobs';
 import * as CronJobs from './CronJobs';
 import * as VirtualServices from './VirtualServices';
-import * as ServiceEntries from './ServiceEntries';
 import * as StatefulSets from './StatefulSets';
 import * as Services from './Services';
 import * as ServiceInstances from './ServiceInstances';
@@ -59,7 +58,6 @@ export const resources = [
   DaemonSets,
   // istio
   VirtualServices,
-  ServiceEntries,
   DestinationRules,
   AuthorizationPolicies,
   // discovery and network
