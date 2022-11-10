@@ -677,7 +677,6 @@ export function getStaticChildrenNodesForNamespace(
       context: {
         requiredFeatures: [features.ISTIO],
       },
-
       navigationContext: 'virtualservices',
       children: [
         {
