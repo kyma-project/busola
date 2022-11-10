@@ -15,7 +15,6 @@ data:
       version: v1alpha1
     urlPath: applications
     scope: cluster
-    description: description
   details: |-
     header:
       - name: headers.description
