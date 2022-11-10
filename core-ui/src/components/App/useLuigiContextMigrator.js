@@ -33,8 +33,14 @@ export const useLuigiContextMigrator = () => {
     groups,
   } = useMicrofrontendContext();
 
+  const isReactNavigationEnabled = features?.REACT_NAVIGATION?.isEnabled;
+
   useUpdateRecoilIfValueChanged(groups, groupsState);
-  useUpdateRecoilIfValueChanged(activeClusterName, activeClusterNameState);
+  useUpdateRecoilIfValueChanged(
+    activeClusterName,
+    activeClusterNameState,
+    isReactNavigationEnabled,
+  );
   useUpdateRecoilIfValueChanged(authData, authDataState);
   useUpdateRecoilIfValueChanged(namespaceId, activeNamespaceIdState);
   useUpdateRecoilIfValueChanged(customResources, extResourcesState);
@@ -47,15 +53,19 @@ export const useLuigiContextMigrator = () => {
   useUpdateConfigFeatures(features);
 };
 
-export const useUpdateRecoilIfValueChanged = (val, recoilAtom) => {
+export const useUpdateRecoilIfValueChanged = (val, recoilAtom, skip) => {
   const setRecoilState = useSetRecoilState(recoilAtom);
+
   const prev = useRef(null);
+
   useEffect(() => {
+    if (skip) return;
     if (!isEqual(prev.current, val)) {
       setRecoilState(val);
+      console.log(activeClusterNameState === recoilAtom, 'test', val);
       prev.current = val;
     }
-  }, [val, setRecoilState]);
+  }, [val, setRecoilState, recoilAtom, skip]);
 };
 
 const useUpdateConfigFeatures = features => {
