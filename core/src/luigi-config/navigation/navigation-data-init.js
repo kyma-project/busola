@@ -85,7 +85,14 @@ async function createAppSwitcher() {
 
 export async function reloadNavigation() {
   const navigation = await createNavigation();
-  Luigi.setConfig({ ...Luigi.getConfig(), navigation });
+  const { features } = (await getCurrentConfig()) || {};
+  const hideNavigation = !!features?.REACT_NAVIGATION?.isEnabled;
+  const config = Luigi.getConfig();
+  Luigi.setConfig({
+    ...config,
+    navigation,
+    settings: { ...config?.settings, hideNavigation },
+  });
 
   // wait for Luigi to update DOM
   setTimeout(async () => {
@@ -175,7 +182,7 @@ async function createNavigationForNoCluster() {
           label: i18next.t('top-nav.profile.preferences'),
           link: '/clusters/preferences',
           openNodeInModal: {
-            title: i18next.t('preferences.title'),
+            title: i18next.t('navigation.preferences.title'),
             size: 'm',
           },
         },

@@ -1,0 +1,14 @@
+#content-wrap {
+  width: 100%;
+  flex-wrap: wrap;
+  margin: auto;
+  margin-left: var(--sidebar-width);
+  margin-top: var(--header-height);
+  transition: margin-left 0.3s;
+  overflow: auto;
+}
+
+.sidebar-hidden {
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+}

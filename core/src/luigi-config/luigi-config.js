@@ -67,7 +67,7 @@ async function initializeBusola() {
       nodeParamPrefix: NODE_PARAM_PREFIX,
       skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],
     },
-    settings: createSettings(activeCluster),
+    settings: await createSettings(activeCluster),
     lifecycleHooks: { luigiAfterInit },
   });
 

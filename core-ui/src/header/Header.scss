@@ -1,0 +1,22 @@
+:root {
+  --header-height: 50px;
+}
+
+.header {
+  width: 100%;
+  height: var(--header-height);
+  position: fixed;
+  background-color: var(--sapShellColor);
+  z-index: 9;
+
+  .fd-avatar {
+    i {
+      color: var(--sapBaseColor) !important;
+    }
+  }
+}
+
+.fd-shellbar--l {
+  padding-left: 0 !important;
+  padding-right: 0.5em;
+}

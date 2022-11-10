@@ -1,0 +1,38 @@
+:root {
+  --sidebar-condensed-width: 48px;
+  --sidebar-opened-width: 260px;
+  --sidebar-width: var(--sidebar-opened-width);
+}
+
+.sidebar {
+  margin-top: var(--header-height);
+  height: calc(100vh - var(--header-height));
+  background-color: var(--sapList_Background);
+  position: fixed;
+  width: var(--sidebar-width);
+  transition: width 0.3s;
+  left: 0;
+
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+
+  .sidebar__content {
+    overflow-x: hidden;
+    flex-grow: 1;
+  }
+
+  .fd-nested-list__link {
+    overflow-x: hidden;
+
+    &:has(i, .fd-nested-list__icon) {
+      padding-left: 0 !important;
+    }
+  }
+
+  .fd-nested-list__button.fd-button {
+    i {
+      color: var(--sapContent_IconColor) !important;
+    }
+  }
+}
