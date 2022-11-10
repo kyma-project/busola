@@ -39,7 +39,7 @@ export const useLuigiContextMigrator = () => {
   useUpdateRecoilIfValueChanged(
     activeClusterName,
     activeClusterNameState,
-    isReactNavigationEnabled,
+    !isReactNavigationEnabled,
   );
   useUpdateRecoilIfValueChanged(authData, authDataState);
   useUpdateRecoilIfValueChanged(namespaceId, activeNamespaceIdState);
