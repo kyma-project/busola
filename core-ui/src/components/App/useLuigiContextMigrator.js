@@ -62,7 +62,6 @@ export const useUpdateRecoilIfValueChanged = (val, recoilAtom, skip) => {
     if (skip) return;
     if (!isEqual(prev.current, val)) {
       setRecoilState(val);
-      console.log(activeClusterNameState === recoilAtom, 'test', val);
       prev.current = val;
     }
   }, [val, setRecoilState, recoilAtom, skip]);
