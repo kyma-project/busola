@@ -105,6 +105,14 @@ context('Test Authorization Policies', () => {
       .should('be.visible');
 
     cy.getIframeBody()
+      .contains(PATHS)
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Matches all Pods in the Namespace')
+      .should('be.visible');
+
+    cy.getIframeBody()
       .contains('Rule #1 to when')
       .click();
 
@@ -126,14 +134,6 @@ context('Test Authorization Policies', () => {
 
     cy.getIframeBody()
       .contains(METHODS)
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains(PATHS)
-      .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('Matches all Pods in the Namespace')
       .should('be.visible');
   });
 
