@@ -105,10 +105,6 @@ context('Test Authorization Policies', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains(PATHS)
-      .should('be.visible');
-
-    cy.getIframeBody()
       .contains('Matches all Pods in the Namespace')
       .should('be.visible');
 
@@ -119,6 +115,10 @@ context('Test Authorization Policies', () => {
     cy.getIframeBody()
       .contains('To #1 methods paths')
       .click();
+
+    cy.getIframeBody()
+      .contains(PATHS)
+      .should('be.visible');
 
     cy.getIframeBody()
       .contains(KEY)

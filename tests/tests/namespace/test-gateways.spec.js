@@ -132,18 +132,6 @@ context('Test Gateways', () => {
       })
       .click();
 
-    cy.getIframeBody()
-      .find('[aria-label="expand Server"]:visible', {
-        log: false,
-      })
-      .click();
-
-    cy.getIframeBody()
-      .find('[aria-label="expand Port"]:visible', {
-        log: false,
-      })
-      .click();
-
     // change server to HTTPS
     cy.getIframeBody()
       .find('[aria-label="Combobox input"]:visible', { log: false })
