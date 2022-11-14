@@ -1,4 +1,4 @@
-import { render } from 'reactTestingUtils';
+import { render } from 'testing/reactTestingUtils';
 import { ResourceDetails } from '../ResourceDetails';
 
 jest.mock('shared/hooks/BackendAPI/useGet', () => ({

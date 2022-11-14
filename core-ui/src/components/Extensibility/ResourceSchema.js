@@ -22,6 +22,7 @@ export function ResourceSchema({
   schemaRules = [],
   store,
   setStore,
+  editMode = false,
 }) {
   const onChange = useCallback(
     actions => {
@@ -43,6 +44,7 @@ export function ResourceSchema({
         showValidity={true}
         onChange={onChange}
         rootRule={schemaRules}
+        editMode={editMode}
       >
         <FormStack isRoot schema={schemaMap} resource={resource} />
       </UIStoreProvider>
