@@ -109,11 +109,12 @@ context('Test Authorization Policies', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('Rule #1 to when')
+      .find('[data-testid="collapse-button-open"]:visible')
       .click();
 
     cy.getIframeBody()
-      .contains('To #1 methods paths')
+      .find('[data-testid="collapse-button-open"]:visible')
+      .eq(1)
       .click();
 
     cy.getIframeBody()
