@@ -120,11 +120,9 @@ context('Test Gateways', () => {
       .contains('Edit')
       .click();
 
-    // need to be fixed in https://github.com/kyma-project/busola/issues/2007
-    // name should be disabled for edit
-    // cy.getIframeBody()
-    //   .find('[ariaLabel="Gateway name"]:visible', { log: false })
-    //   .should('have.attr', 'readonly');
+    cy.getIframeBody()
+      .find('[ariaLabel="Gateway name"]:visible', { log: false })
+      .should('have.attr', 'readonly');
 
     cy.getIframeBody()
       .find('[aria-label="expand Servers"]:visible', {
