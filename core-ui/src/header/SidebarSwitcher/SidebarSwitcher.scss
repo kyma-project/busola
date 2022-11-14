@@ -1,0 +1,15 @@
+.sidebar-switcher-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--sidebar-condensed-width);
+}
+
+.sidebar-switcher.fd-button {
+  &:hover {
+    background-color: var(--sapShell_Hover_Background, #283848);
+    border: none;
+  }
+
+  color: var(--sapShell_InteractiveTextColor);
+}

@@ -70,7 +70,7 @@ export function Preferences() {
   return (
     <Dialog
       show={isModalOpen}
-      title={t('preferences.title')}
+      title={t('navigation.preferences.title')}
       actions={actions}
       className="preferences-dialog"
     >

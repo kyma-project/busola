@@ -1,8 +1,8 @@
-import { NavNode, Scope } from '../../../../state/types';
+import { NavNode, Scope } from 'state/types';
 
 export const createClusterNode = (scope: Scope): NavNode => ({
   category: '',
-  icon: 'product',
+  icon: scope === 'namespace' ? 'slim-arrow-left' : 'database',
   resourceType: 'overview',
   pathSegment: 'overview',
   label: scope === 'namespace' ? 'Back To Cluster Details' : 'Cluster Details',
@@ -11,4 +11,5 @@ export const createClusterNode = (scope: Scope): NavNode => ({
   apiGroup: '',
   apiVersion: '',
   topLevelNode: true,
+  createUrlFn: scope === 'namespace' ? () => '/overview' : undefined,
 });

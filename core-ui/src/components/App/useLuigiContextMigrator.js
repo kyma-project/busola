@@ -11,6 +11,7 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { extResourcesState } from 'state/extResourcesAtom';
 import { openapiState } from 'state/openapi/openapiAtom';
 import { clusterState } from 'state/clusterAtom';
+import { clustersState } from 'state/clustersAtom';
 import { clusterConfigState } from 'state/clusterConfigAtom';
 import { ssoDataState } from 'state/ssoDataAtom';
 import { lazyConfigFeaturesState } from 'state/configFeatures/lazyConfigFeaturesAtom';
@@ -26,33 +27,44 @@ export const useLuigiContextMigrator = () => {
     customResources,
     openApi,
     cluster,
+    clusters,
     config,
     ssoData,
     groups,
   } = useMicrofrontendContext();
 
+  const isReactNavigationEnabled = features?.REACT_NAVIGATION?.isEnabled;
+
   useUpdateRecoilIfValueChanged(groups, groupsState);
-  useUpdateRecoilIfValueChanged(activeClusterName, activeClusterNameState);
+  useUpdateRecoilIfValueChanged(
+    activeClusterName,
+    activeClusterNameState,
+    !isReactNavigationEnabled,
+  );
   useUpdateRecoilIfValueChanged(authData, authDataState);
   useUpdateRecoilIfValueChanged(namespaceId, activeNamespaceIdState);
   useUpdateRecoilIfValueChanged(customResources, extResourcesState);
   useUpdateRecoilIfValueChanged(openApi, openapiState);
   useUpdateRecoilIfValueChanged(config, clusterConfigState);
   useUpdateRecoilIfValueChanged(cluster, clusterState);
+  useUpdateRecoilIfValueChanged(clusters, clustersState);
   useUpdateRecoilIfValueChanged(ssoData, ssoDataState);
 
   useUpdateConfigFeatures(features);
 };
 
-export const useUpdateRecoilIfValueChanged = (val, recoilAtom) => {
+export const useUpdateRecoilIfValueChanged = (val, recoilAtom, skip) => {
   const setRecoilState = useSetRecoilState(recoilAtom);
+
   const prev = useRef(null);
+
   useEffect(() => {
+    if (skip) return;
     if (!isEqual(prev.current, val)) {
       setRecoilState(val);
       prev.current = val;
     }
-  }, [val, setRecoilState]);
+  }, [val, setRecoilState, recoilAtom, skip]);
 };
 
 const useUpdateConfigFeatures = features => {
