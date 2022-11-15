@@ -5,6 +5,12 @@ context('Clean up Application', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtension(
+      'APPLICATIONS',
+      'examples/resources/applicationconnector/applications.yaml',
+    );
+
     cy.loginAndSelectCluster();
   });
 

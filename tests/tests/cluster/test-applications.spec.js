@@ -25,24 +25,24 @@ context('Test Applications', () => {
     cy.navigateTo('Integration', 'Applications');
 
     cy.getIframeBody()
-      .contains('Status')
-      .should('be.visible');
+      .contains('a', APPLICATION_NAME)
+      .should('be.visible')
+      .click();
   });
 
   it('Inspect details', () => {
     cy.intercept(serviceRequestData, { statusCode: 200, body: '{}' });
 
     cy.getIframeBody()
-      .contains('a', APPLICATION_NAME)
-      .should('be.visible')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Connect Application')
+      .contains('Access Label')
       .should('be.visible');
 
     cy.getIframeBody()
-      .contains('Status')
+      .contains('span', APPLICATION_NAME)
+      .should('be.visible');
+
+    cy.getIframeBody()
+      .contains('Provided Services and Events')
       .should('be.visible');
   });
 
@@ -58,13 +58,13 @@ context('Test Applications', () => {
     cy.getIframeBody()
       .find('[placeholder="Enter key"]:visible')
       .filterWithNoValue()
-      .type('label-key');
+      .type('labelkey');
 
     cy.getIframeBody()
       .find('[placeholder="Enter value"]:visible')
       .filterWithNoValue()
       .first()
-      .type('label-value');
+      .type('labelvalue');
 
     cy.getIframeBody()
       .find('[placeholder="Provide a description for your Application"]')
@@ -77,7 +77,7 @@ context('Test Applications', () => {
   });
 
   it('Inspect an updated application', () => {
-    cy.getIframeBody().contains('label-key=label-value');
+    cy.getIframeBody().contains('labelkey=labelvalue');
     cy.getIframeBody().contains(APPLICATION_DESCRIPTION);
   });
 });
