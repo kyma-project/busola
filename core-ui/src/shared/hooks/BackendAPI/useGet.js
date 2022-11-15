@@ -25,12 +25,7 @@ const useGetHook = processDataFn =>
     const previousRequestNotFinished = React.useRef(null);
 
     const refetch = (isSilent, currentData) => async () => {
-      if (
-        skip ||
-        !authData ||
-        abortController.current.signal.aborted ||
-        previousRequestNotFinished.current === path
-      )
+      if (skip || !authData || previousRequestNotFinished.current === path)
         return;
       if (!isSilent) setTimeout(_ => setLoading(true));
 

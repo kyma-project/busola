@@ -4,14 +4,13 @@ import { cloneDeep } from 'lodash';
 
 export const assignNodesToCategories = (navList: NavNode[]): Category[] => {
   const categories = cloneDeep(CATEGORIES);
-
   navList.forEach(node => {
     if (node.topLevelNode) {
       categories.unshift({
         topLevelNode: true,
         key: '' as PredefinedCategories,
         label: '',
-        icon: '',
+        icon: node.icon || 'customize',
         items: [node],
       });
       return;
@@ -24,11 +23,12 @@ export const assignNodesToCategories = (navList: NavNode[]): Category[] => {
     if (existingCategory) {
       existingCategory.items.push(node);
     } else {
+      const { icon, ...childNode } = node;
       categories.push({
         key: node.category as PredefinedCategories,
-        label: node.label || node.category,
+        label: node.category || node.label,
         icon: node.icon || 'customize',
-        items: [node],
+        items: [childNode],
       });
     }
   });

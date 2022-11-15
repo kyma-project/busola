@@ -625,43 +625,6 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('istio.title'),
-      resourceType: 'gateways',
-      pathSegment: 'gateways',
-      label: i18next.t('gateways.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/gateways?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/networking.istio.io/v1beta1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.ISTIO],
-      },
-
-      navigationContext: 'gateways',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':gatewayName',
-              resourceType: 'gateways',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/gateways/:gatewayName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('istio.title'),
       resourceType: 'destinationrules',
       pathSegment: 'destinationrules',
       label: i18next.t('destination-rules.title'),
@@ -765,43 +728,6 @@ export function getStaticChildrenNodesForNamespace(
                 '/namespaces/:namespaceId/authorizationpolicies/:authorizationpolicyName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/security.istio.io/v1beta1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('istio.title'),
-      resourceType: 'serviceentries',
-      pathSegment: 'serviceentries',
-      label: i18next.t('service-entries.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/serviceentries?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/networking.istio.io/v1beta1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.ISTIO],
-      },
-
-      navigationContext: 'serviceentries',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':serviceEntryName',
-              resourceType: 'serviceentries',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/serviceentries/:serviceEntryName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
                 }),
             },
           ],

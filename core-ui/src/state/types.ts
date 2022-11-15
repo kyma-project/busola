@@ -1,3 +1,5 @@
+import { IconGlyph } from 'fundamental-react/lib/Icon/Icon';
+
 export type Scope = 'namespace' | 'cluster';
 
 export type ConfigFeature = {
@@ -23,7 +25,9 @@ export const configFeaturesNames = {
   VISUAL_RESOURCES: 'VISUAL_RESOURCES',
   EXTENSIBILITY: 'EXTENSIBILITY',
   TRACKING: 'TRACKING',
+  REACT_NAVIGATION: 'REACT_NAVIGATION',
   PROTECTED_RESOURCES: 'PROTECTED_RESOURCES',
+  EXTERNAL_NODES: 'EXTERNAL_NODES',
 } as const;
 
 export type ConfigFeatureList = {
@@ -50,7 +54,7 @@ export type ExtResource = {
     urlPath: string;
     scope: 'namespace' | 'cluster';
     description?: string;
-    icon?: string;
+    icon?: IconGlyph;
   };
   list: any[];
   details: {
@@ -62,6 +66,7 @@ export type ExtResource = {
   presets: any[];
   dataSources: Record<string, any>;
 };
+
 export type NavNode = {
   resourceType: string; // Jobs, CronJobs etc.
   category: string;
@@ -71,7 +76,8 @@ export type NavNode = {
   requiredFeatures: ConfigFeaturesNames[];
   apiVersion: string;
   apiGroup: string;
-  icon?: string;
+  icon?: IconGlyph;
   topLevelNode?: boolean;
   externalUrl?: string;
+  createUrlFn?: (namespaceId: string) => string;
 };
