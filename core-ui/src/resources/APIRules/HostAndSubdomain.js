@@ -15,7 +15,7 @@ function getSelectedHost(host, hosts) {
     const hostMatch = hosts
       .filter(hasWildcard)
       .map(h => h.replace('*', ''))
-      .find(h => host?.endsWith(h));
+      .find(h => host.endsWith(h));
     return hostMatch ? '*' + hostMatch : '';
   }
 }
