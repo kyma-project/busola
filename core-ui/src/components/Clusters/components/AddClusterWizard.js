@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { MessageStrip, Wizard } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 
 import { authDataState } from '../../../state/authDataAtom';
 import { activeClusterNameState } from '../../../state/activeClusterNameAtom';
+import { clusterState } from 'state/clusterAtom';
 import { clustersState } from '../../../state/clustersAtom';
 
 import { ResourceForm } from 'shared/ResourceForm';
@@ -31,9 +32,10 @@ export function AddClusterWizard({
   const { t } = useTranslation();
   const notification = useNotification();
   const navigate = useNavigate();
-  const addC = useSetRecoilState(authDataState);
   const updateClusters = useSetRecoilState(clustersState);
-  const updateCluster = useSetRecoilState(activeClusterNameState);
+  const addCurrentCluster = useRecoilState(clusterState);
+  const setCurrentClusterName = useSetRecoilState(activeClusterNameState);
+  const addAuthData = useSetRecoilState(authDataState);
 
   const [hasAuth, setHasAuth] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);
@@ -89,9 +91,10 @@ export function AddClusterWizard({
             storage,
             config,
           },
-          addC,
-          updateCluster,
+          addCurrentCluster,
+          setCurrentClusterName,
           updateClusters,
+          addAuthData,
           navigate,
         );
       } else if (contextName === '-all-') {
@@ -104,9 +107,10 @@ export function AddClusterWizard({
               storage,
               config,
             },
-            addC,
-            updateCluster,
+            addCurrentCluster,
+            setCurrentClusterName,
             updateClusters,
+            addAuthData,
             navigate,
           );
         });
@@ -116,9 +120,10 @@ export function AddClusterWizard({
         );
         addByContext(
           { kubeconfig, context, storage, config },
-          addC,
-          updateCluster,
+          addCurrentCluster,
+          setCurrentClusterName,
           updateClusters,
+          addAuthData,
           navigate,
         );
       }

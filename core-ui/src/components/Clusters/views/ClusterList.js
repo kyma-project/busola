@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { configFeaturesState } from '../../../state/configFeatures/configFeaturesAtom';
 import { clusterState } from '../../../state/clusterAtom';
 import { clustersState } from '../../../state/clustersAtom';
+import { authDataState } from '../../../state/authDataAtom';
 
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -18,7 +19,7 @@ import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 
-import { setCluster, deleteCluster } from './../shared';
+import { addCluster, deleteCluster } from './../shared';
 import { AddClusterDialog } from '../components/AddClusterDialog';
 import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
@@ -29,7 +30,10 @@ import { loadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID
 function ClusterList() {
   const features = useRecoilValue(configFeaturesState);
   const [clusters, updateClusters] = useRecoilState(clustersState) || {};
-  const [activeClusterName, updateCluster] = useRecoilState(clusterState) || '';
+  const [cluster, setCluster] = useRecoilState(clusterState) || {};
+  const [authData, addAuthData] = useRecoilState(authDataState) || {};
+  const [activeClusterName, setCurrentClusterName] =
+    useRecoilState(clusterState) || '';
 
   const navigate = useNavigate();
   const notification = useNotification();
@@ -96,7 +100,16 @@ function ClusterList() {
       <Link
         className="fd-link"
         style={styleActiveCluster(entry)}
-        onClick={() => setCluster(entry.name, updateCluster, navigate)}
+        onClick={() =>
+          addCluster(
+            entry,
+            setCluster,
+            setCurrentClusterName,
+            updateClusters,
+            addAuthData,
+            navigate,
+          )
+        }
       >
         {entry.name}
       </Link>

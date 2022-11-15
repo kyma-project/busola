@@ -10,8 +10,9 @@ export const ContentWrapper = ({ children }: ContentWrapperProps) => {
   const configFeatures = useRecoilValue(configFeaturesState);
   const { pathname } = window.location;
 
-  const reactNavEnabled = configFeatures?.REACT_NAVIGATION?.isEnabled;
+  // const reactNavEnabled = configFeatures?.REACT_NAVIGATION?.isEnabled;
 
+  const reactNavEnabled = true;
   return (
     <div
       id="content-wrap"

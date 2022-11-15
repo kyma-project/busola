@@ -26,7 +26,7 @@ export function useGetVersions() {
 
   const formatClusterVersion = () => {
     if (k8sVersionError) return getErrorMessage(k8sVersionError);
-    return k8sVersion.gitVersion;
+    return k8sVersion?.gitVersion;
   };
 
   const kymaVersion =

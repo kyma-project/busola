@@ -25,9 +25,9 @@ function EditClusterComponent({
   editedCluster,
 }) {
   const navigate = useNavigate();
-  const addC = useSetRecoilState(authDataState);
+  const addCurrentCluster = useSetRecoilState(authDataState);
   const updateClusters = useSetRecoilState(clustersState);
-  const updateCluster = useSetRecoilState(activeClusterNameState);
+  const setCurrentClusterName = useSetRecoilState(activeClusterNameState);
   const [resource, setResource] = useState(cloneDeep(editedCluster));
 
   const [authenticationType, setAuthenticationType] = useState(
@@ -51,8 +51,8 @@ function EditClusterComponent({
           config: { ...(config || {}), config },
           currentContext: getContext(kubeconfig, contextName),
         },
-        addC,
-        updateCluster,
+        addCurrentCluster,
+        setCurrentClusterName,
         updateClusters,
         navigate,
       );

@@ -5,7 +5,7 @@ import {
   deleteCluster,
   saveActiveClusterName,
   getActiveClusterName,
-  setCluster,
+  addCluster,
 } from './cluster-management/cluster-management';
 import { clearAuthData } from './auth/auth-storage';
 import { reloadNavigation } from './navigation/navigation-data-init';
@@ -86,7 +86,7 @@ export const communication = {
     'busola.addCluster': async ({ params, switchCluster = true }) => {
       await saveClusterParams(params);
       if (switchCluster) {
-        await setCluster(params?.kubeconfig?.['current-context']);
+        await addCluster(params?.kubeconfig?.['current-context']);
       }
     },
     'busola.loadDefaultKubeconfigId': () => {
@@ -104,8 +104,8 @@ export const communication = {
       }
       await reloadNavigation();
     },
-    'busola.setCluster': ({ clusterName }) => {
-      setCluster(clusterName);
+    'busola.addCluster': ({ clusterName }) => {
+      addCluster(clusterName);
     },
 
     'busola.refreshClusters': async () => {

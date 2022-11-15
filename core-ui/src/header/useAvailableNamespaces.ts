@@ -15,7 +15,8 @@ export function useAvailableNamespaces() {
   const [namespaces, setNamespaces] = useRecoilState(namespacesState);
 
   const { data, refetch } = useGetList()('/api/v1/namespaces', {
-    skip: !config?.REACT_NAVIGATION?.isEnabled,
+    // skip: !config?.REACT_NAVIGATION?.isEnabled,
+    skip: false,
     pollingInterval: 0,
     onDataReceived: () => {},
   }) as {

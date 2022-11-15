@@ -30,7 +30,7 @@ import {
   getActiveCluster,
   getClusters,
   getActiveClusterName,
-  setCluster,
+  addCluster,
   deleteActiveCluster,
   saveActiveClusterName,
   getCurrentContextNamespace,
@@ -149,7 +149,7 @@ async function createClusterManagementNodes(features, customResources) {
       pathSegment: encodeURIComponent(clusterName),
       hideFromNav: true,
       onNodeActivation: async () => {
-        await setCluster(clusterName);
+        await addCluster(clusterName);
         return false;
       },
     }));

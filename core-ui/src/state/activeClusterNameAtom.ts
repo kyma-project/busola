@@ -14,7 +14,7 @@ export const activeClusterNameState: RecoilState<ActiveClusterNameAtom> = atom<
   effects: [
     localStorageEffect<ActiveClusterNameAtom>(CURRENT_CLUSTER_NAME_STORAGE_KEY),
     luigiMessageEffect<ActiveClusterNameAtom>(
-      'busola.setCluster',
+      'busola.addCluster',
       'clusterName',
     ),
   ],

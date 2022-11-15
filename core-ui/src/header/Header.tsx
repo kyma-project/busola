@@ -30,7 +30,7 @@ export function Header() {
   const clusters = useRecoilValue(clustersState);
   const config = useRecoilValue(configFeaturesState);
 
-  if (!config?.REACT_NAVIGATION?.isEnabled) return null;
+  // if (!config?.REACT_NAVIGATION?.isEnabled) return null;
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
     name => name !== activeCluster,
