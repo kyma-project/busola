@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { MessageStrip, Wizard } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 
 import { authDataState } from '../../../state/authDataAtom';
 import { activeClusterNameState } from '../../../state/activeClusterNameAtom';
@@ -29,6 +30,7 @@ export function AddClusterWizard({
   const { busolaClusterParams } = useMicrofrontendContext();
   const { t } = useTranslation();
   const notification = useNotification();
+  const navigate = useNavigate();
   const addC = useSetRecoilState(authDataState);
   const updateClusters = useSetRecoilState(clustersState);
   const updateCluster = useSetRecoilState(activeClusterNameState);
@@ -90,6 +92,7 @@ export function AddClusterWizard({
           addC,
           updateCluster,
           updateClusters,
+          navigate,
         );
       } else if (contextName === '-all-') {
         kubeconfig.contexts.forEach((context, index) => {
@@ -104,6 +107,7 @@ export function AddClusterWizard({
             addC,
             updateCluster,
             updateClusters,
+            navigate,
           );
         });
       } else {
@@ -115,6 +119,7 @@ export function AddClusterWizard({
           addC,
           updateCluster,
           updateClusters,
+          navigate,
         );
       }
     } catch (e) {

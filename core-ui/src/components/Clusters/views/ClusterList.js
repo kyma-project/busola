@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
 import { Link, Button, MessagePage } from 'fundamental-react';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 
 import { configFeaturesState } from '../../../state/configFeatures/configFeaturesAtom';
 import { clusterState } from '../../../state/clusterAtom';
@@ -28,8 +29,9 @@ import { loadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID
 function ClusterList() {
   const features = useRecoilValue(configFeaturesState);
   const [clusters, updateClusters] = useRecoilState(clustersState) || {};
-  const activeClusterName = useRecoilValue(clusterState);
+  const [activeClusterName, updateCluster] = useRecoilState(clusterState) || '';
 
+  const navigate = useNavigate();
   const notification = useNotification();
   const { t } = useTranslation();
 
@@ -94,7 +96,7 @@ function ClusterList() {
       <Link
         className="fd-link"
         style={styleActiveCluster(entry)}
-        onClick={() => setCluster(entry.name)}
+        onClick={() => setCluster(entry.name, updateCluster, navigate)}
       >
         {entry.name}
       </Link>

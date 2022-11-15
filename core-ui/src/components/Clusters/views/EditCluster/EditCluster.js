@@ -3,6 +3,7 @@ import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 
 import { authDataState } from '../../../../state/authDataAtom';
 import { activeClusterNameState } from '../../../../state/activeClusterNameAtom';
@@ -23,6 +24,7 @@ function EditClusterComponent({
   resourceUrl,
   editedCluster,
 }) {
+  const navigate = useNavigate();
   const addC = useSetRecoilState(authDataState);
   const updateClusters = useSetRecoilState(clustersState);
   const updateCluster = useSetRecoilState(activeClusterNameState);
@@ -52,6 +54,7 @@ function EditClusterComponent({
         addC,
         updateCluster,
         updateClusters,
+        navigate,
       );
     } catch (e) {
       notification.notifyError({

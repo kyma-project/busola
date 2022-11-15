@@ -1,18 +1,21 @@
-import LuigiClient from '@luigi-project/client';
-
 import { tryParseOIDCparams } from './components/oidc-params';
 
-export function setCluster(clusterName) {
-  LuigiClient.sendCustomMessage({
-    id: 'busola.setCluster',
-    clusterName,
-  });
+export function setCluster(clusterName, updateCluster, navigate) {
+  console.log('set cluster');
+  updateCluster(clusterName);
+  navigate(`/cluster/${clusterName}/overview`);
 }
 
-export function addCluster(params, addC, updateCluster, updateClusters) {
+export function addCluster(
+  params,
+  addC,
+  updateCluster,
+  updateClusters,
+  navigate,
+) {
   updateClusters(prev => ({ ...prev, [params.contextName]: params }));
-  updateCluster(params.contextName);
   addC(params);
+  setCluster(params.contextName, updateCluster, navigate);
 }
 
 export function deleteCluster(clusterName, updateClusters) {
@@ -81,6 +84,7 @@ export const addByContext = (
   addC,
   updateCluster,
   updateClusters,
+  navigate,
 ) => {
   const cluster = kubeconfig.clusters.find(
     c => c.name === context.context.cluster,
@@ -103,5 +107,6 @@ export const addByContext = (
     addC,
     updateCluster,
     updateClusters,
+    navigate,
   );
 };
