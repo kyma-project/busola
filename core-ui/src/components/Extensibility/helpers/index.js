@@ -112,8 +112,6 @@ export function usePreparePresets(presets, emptyTemplate) {
     name: tExt(preset.name),
   }));
 
-  console.log({ preparedPresets });
-
   if (preparedPresets.length <= 1) return null;
   return preparedPresets;
 }
