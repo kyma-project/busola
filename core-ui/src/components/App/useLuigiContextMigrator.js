@@ -11,7 +11,6 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { extResourcesState } from 'state/extResourcesAtom';
 import { openapiState } from 'state/openapi/openapiAtom';
 import { clusterState } from 'state/clusterAtom';
-import { clustersState } from 'state/clustersAtom';
 import { clusterConfigState } from 'state/clusterConfigAtom';
 import { ssoDataState } from 'state/ssoDataAtom';
 import { lazyConfigFeaturesState } from 'state/configFeatures/lazyConfigFeaturesAtom';
@@ -27,7 +26,6 @@ export const useLuigiContextMigrator = () => {
     customResources,
     openApi,
     cluster,
-    clusters,
     config,
     ssoData,
     groups,
@@ -47,7 +45,6 @@ export const useLuigiContextMigrator = () => {
   useUpdateRecoilIfValueChanged(openApi, openapiState);
   useUpdateRecoilIfValueChanged(config, clusterConfigState);
   useUpdateRecoilIfValueChanged(cluster, clusterState);
-  useUpdateRecoilIfValueChanged(clusters, clustersState);
   useUpdateRecoilIfValueChanged(ssoData, ssoDataState);
 
   useUpdateConfigFeatures(features);
@@ -70,8 +67,9 @@ export const useUpdateRecoilIfValueChanged = (val, recoilAtom, skip) => {
 const useUpdateConfigFeatures = features => {
   const configFeatures = { ...features };
   const lazyConfigFeatures = {};
-  lazyConfigFeatures[lazyConfigFeaturesNames.PROMETHEUS] = features.PROMETHEUS;
-  delete configFeatures[lazyConfigFeaturesNames.PROMETHEUS];
+  lazyConfigFeatures[lazyConfigFeaturesNames?.PROMETHEUS] =
+    features?.PROMETHEUS;
+  delete configFeatures[lazyConfigFeaturesNames?.PROMETHEUS];
 
   useUpdateRecoilIfValueChanged(configFeatures, configFeaturesState);
   useUpdateRecoilIfValueChanged(lazyConfigFeatures, lazyConfigFeaturesState);

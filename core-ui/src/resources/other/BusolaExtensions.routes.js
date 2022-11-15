@@ -10,9 +10,9 @@ const BusolaExtensionDetails = React.lazy(() =>
 
 export default (
   <>
-    <Route path="/busolaextensions" element={<BusolaExtensionList />} />
+    <Route path="busolaextensions" element={<BusolaExtensionList />} />
     <Route
-      path="/busolaextensions/details/:namespace/:name"
+      path="busolaextensions/details/:namespace/:name"
       element={<BusolaExtensionDetails />}
     />
   </>

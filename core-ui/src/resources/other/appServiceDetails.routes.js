@@ -24,7 +24,7 @@ const RoutedAppServiceDetails = () => {
 
 export default (
   <Route
-    path={'/applications/:name/:serviceName'}
+    path={'applications/:name/:serviceName'}
     element={
       <Suspense fallback={<Spinner />}>
         <RoutedAppServiceDetails />

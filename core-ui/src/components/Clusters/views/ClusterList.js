@@ -4,10 +4,14 @@ import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
 import { Link, Button, MessagePage } from 'fundamental-react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+
+import { configFeaturesState } from '../../../state/configFeatures/configFeaturesAtom';
+import { clusterState } from '../../../state/clusterAtom';
+import { clustersState } from '../../../state/clustersAtom';
 
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
@@ -22,7 +26,10 @@ import './ClusterList.scss';
 import { loadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID';
 
 function ClusterList() {
-  const { clusters, activeClusterName, features } = useMicrofrontendContext();
+  const features = useRecoilValue(configFeaturesState);
+  const [clusters, updateClusters] = useRecoilState(clustersState) || {};
+  const activeClusterName = useRecoilValue(clusterState);
+
   const notification = useNotification();
   const { t } = useTranslation();
 
@@ -37,10 +44,6 @@ function ClusterList() {
   const [editedCluster, setEditedCluster] = useState(null);
 
   useShowNodeParamsError();
-
-  if (!clusters) {
-    return null;
-  }
 
   const styleActiveCluster = entry => {
     return entry?.kubeconfig?.['current-context'] === activeClusterName
@@ -124,7 +127,7 @@ function ClusterList() {
         setChosenCluster(resource);
         handleResourceDelete({
           deleteFn: () => {
-            deleteCluster(resource?.name);
+            deleteCluster(resource?.name, updateClusters);
             notification.notifySuccess({
               content: t('clusters.disconnect'),
             });
@@ -232,7 +235,7 @@ function ClusterList() {
         resource={chosenCluster}
         resourceTitle={chosenCluster?.kubeconfig['current-context']}
         deleteFn={e => {
-          deleteCluster(e.name);
+          deleteCluster(e.name, updateClusters);
           notification.notifySuccess({
             content: t('clusters.disconnect'),
           });

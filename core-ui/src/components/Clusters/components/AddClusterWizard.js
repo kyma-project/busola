@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { MessageStrip, Wizard } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { useSetRecoilState } from 'recoil';
+
+import { authDataState } from '../../../state/authDataAtom';
+import { activeClusterNameState } from '../../../state/activeClusterNameAtom';
+import { clustersState } from '../../../state/clustersAtom';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator';
@@ -24,6 +29,9 @@ export function AddClusterWizard({
   const { busolaClusterParams } = useMicrofrontendContext();
   const { t } = useTranslation();
   const notification = useNotification();
+  const addC = useSetRecoilState(authDataState);
+  const updateClusters = useSetRecoilState(clustersState);
+  const updateCluster = useSetRecoilState(activeClusterNameState);
 
   const [hasAuth, setHasAuth] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);
@@ -65,34 +73,49 @@ export function AddClusterWizard({
     try {
       const contextName = kubeconfig['current-context'];
       if (!kubeconfig.contexts?.length) {
-        addByContext({
-          kubeconfig,
-          context: {
-            name: kubeconfig.clusters[0].name,
-            context: {
-              cluster: kubeconfig.clusters[0].name,
-              user: kubeconfig.users[0].name,
-            },
-          },
-
-          storage,
-          config,
-        });
-      } else if (contextName === '-all-') {
-        kubeconfig.contexts.forEach((context, index) => {
-          addByContext({
+        addByContext(
+          {
             kubeconfig,
-            context,
-            switchCluster: !index,
+            context: {
+              name: kubeconfig.clusters[0].name,
+              context: {
+                cluster: kubeconfig.clusters[0].name,
+                user: kubeconfig.users[0].name,
+              },
+            },
+
             storage,
             config,
-          });
+          },
+          addC,
+          updateCluster,
+          updateClusters,
+        );
+      } else if (contextName === '-all-') {
+        kubeconfig.contexts.forEach((context, index) => {
+          addByContext(
+            {
+              kubeconfig,
+              context,
+              switchCluster: !index,
+              storage,
+              config,
+            },
+            addC,
+            updateCluster,
+            updateClusters,
+          );
         });
       } else {
         const context = kubeconfig.contexts.find(
           context => context.name === contextName,
         );
-        addByContext({ kubeconfig, context, storage, config });
+        addByContext(
+          { kubeconfig, context, storage, config },
+          addC,
+          updateCluster,
+          updateClusters,
+        );
       }
     } catch (e) {
       notification.notifyError({

@@ -8,7 +8,7 @@ const HelmReleasesList = React.lazy(() =>
 
 export default (
   <Route
-    path={'/namespaces/:namespaceId/helm-releases'}
+    path={'namespaces/:namespaceId/helm-releases'}
     element={
       <Suspense fallback={<Spinner />}>
         <HelmReleasesList />

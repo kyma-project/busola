@@ -35,7 +35,7 @@ const GardenerProvider = () => {
   const { t } = useTranslation();
   const { features } = useMicrofrontendContext();
 
-  const showGardenerMetadata = features.SHOW_GARDENER_METADATA?.isEnabled;
+  const showGardenerMetadata = features?.SHOW_GARDENER_METADATA?.isEnabled;
 
   const provider = useGetGardenerProvider({
     skip: !showGardenerMetadata,

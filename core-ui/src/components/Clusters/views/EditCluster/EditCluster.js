@@ -1,13 +1,19 @@
 import React, { useState, useRef } from 'react';
 import * as jp from 'jsonpath';
+import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import { useSetRecoilState } from 'recoil';
+
+import { authDataState } from '../../../../state/authDataAtom';
+import { activeClusterNameState } from '../../../../state/activeClusterNameAtom';
+import { clustersState } from '../../../../state/clustersAtom';
+
 import { addCluster, getContext, deleteCluster } from '../../shared';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField } from 'shared/ResourceForm/fields';
 import { ChooseStorage } from 'components/Clusters/components/ChooseStorage';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { cloneDeep } from 'lodash';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { AuthenticationTypeDropdown } from 'components/Clusters/views/EditCluster/AuthenticationDropdown';
 
@@ -17,6 +23,9 @@ function EditClusterComponent({
   resourceUrl,
   editedCluster,
 }) {
+  const addC = useSetRecoilState(authDataState);
+  const updateClusters = useSetRecoilState(clustersState);
+  const updateCluster = useSetRecoilState(activeClusterNameState);
   const [resource, setResource] = useState(cloneDeep(editedCluster));
 
   const [authenticationType, setAuthenticationType] = useState(
@@ -31,14 +40,19 @@ function EditClusterComponent({
   const onComplete = () => {
     try {
       if (originalName.current !== resource?.kubeconfig?.['current-context']) {
-        deleteCluster(originalName.current);
+        deleteCluster(originalName.current, updateClusters);
       }
       const contextName = kubeconfig['current-context'];
-      addCluster({
-        kubeconfig,
-        config: { ...(config || {}), config },
-        currentContext: getContext(kubeconfig, contextName),
-      });
+      addCluster(
+        {
+          kubeconfig,
+          config: { ...(config || {}), config },
+          currentContext: getContext(kubeconfig, contextName),
+        },
+        addC,
+        updateCluster,
+        updateClusters,
+      );
     } catch (e) {
       notification.notifyError({
         title: t('clusters.messages.wrong-configuration'),

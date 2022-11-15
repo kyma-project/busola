@@ -9,18 +9,17 @@ export function setCluster(clusterName) {
   });
 }
 
-export function addCluster(params, switchCluster = true) {
-  LuigiClient.sendCustomMessage({
-    id: 'busola.addCluster',
-    params,
-    switchCluster,
-  });
+export function addCluster(params, addC, updateCluster, updateClusters) {
+  updateClusters(prev => ({ ...prev, [params.contextName]: params }));
+  updateCluster(params.contextName);
+  addC(params);
 }
 
-export function deleteCluster(clusterName) {
-  LuigiClient.sendCustomMessage({
-    id: 'busola.deleteCluster',
-    clusterName,
+export function deleteCluster(clusterName, updateClusters) {
+  updateClusters(prev => {
+    const newList = { ...prev };
+    delete newList?.[clusterName];
+    return newList;
   });
 }
 
@@ -77,13 +76,12 @@ export function hasKubeconfigAuth(kubeconfig) {
   }
 }
 
-export const addByContext = ({
-  kubeconfig,
-  context,
-  switchCluster = true,
-  storage = 'sessionStorage',
-  config = {},
-}) => {
+export const addByContext = (
+  { kubeconfig, context, storage = 'sessionStorage', config = {} },
+  addC,
+  updateCluster,
+  updateClusters,
+) => {
   const cluster = kubeconfig.clusters.find(
     c => c.name === context.context.cluster,
   );
@@ -102,6 +100,8 @@ export const addByContext = ({
       config: { ...config, storage },
       currentContext: getContext(newKubeconfig, context.name),
     },
-    switchCluster,
+    addC,
+    updateCluster,
+    updateClusters,
   );
 };

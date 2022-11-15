@@ -28,6 +28,8 @@
     "lodash-es": "^4.17.21",
     "monaco-editor": "^0.33.0",
     "monaco-yaml": "^4.0.0-alpha.2",
+    "oidc-client": "^1.11.5",
+    "oidc-client-ts": "^2.0.4",
     "pako": "^2.0.4",
     "pluralize": "^8.0.0",
     "prop-types": "^15.7.2",
