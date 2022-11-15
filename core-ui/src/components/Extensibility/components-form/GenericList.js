@@ -67,7 +67,7 @@ export function GenericList({
           onClick={() => {
             addItem(itemTemplate);
             setOpen(true);
-            setNewItemIndex(value.size);
+            setNewItemIndex(value?.size || 0);
           }}
           disabled={readOnly}
         >
