@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState, createRef } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  createRef,
+  useCallback,
+} from 'react';
 import { Button } from 'fundamental-react';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -52,6 +58,12 @@ export function MultiInput({
       setInternalValue([...internalValue, null]);
     }
   }, [internalValue]);
+
+  const toInternalCallback = useCallback(toInternal, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    setInternalValue([...toInternalCallback(value), null]);
+  }, [value, toInternalCallback]);
 
   // diff by stringify, as useEffect won't fire for the same object ref
   if (

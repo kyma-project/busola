@@ -146,7 +146,7 @@ context('Test Authorization Policies', () => {
     cy.getIframeBody()
       .find('[placeholder="Enter key"]:visible', { log: false })
       .filterWithNoValue()
-      .type('selector');
+      .type('sel');
 
     cy.getIframeBody()
       .find('[placeholder="Enter value"]:visible', { log: false })
