@@ -68,6 +68,7 @@ api-rules:
     ok: Resource created
     skipped: Skipped creating the resource
     unknown: Unknown resource state
+  virtual-services: Virtual Services
 applications:
   buttons:
     connect: Connect Application
