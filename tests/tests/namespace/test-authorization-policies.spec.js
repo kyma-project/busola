@@ -109,11 +109,11 @@ context('Test Authorization Policies', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .find('[data-testid="collapse-button-open"]', { timeout: 10000 })
+      .find('[data-testid="collapse-button-close"]', { timeout: 10000 })
       .click();
 
     cy.getIframeBody()
-      .find('[data-testid="collapse-button-open"]', { timeout: 10000 })
+      .find('[data-testid="collapse-button-close"]', { timeout: 10000 })
       .eq(1)
       .click();
 
@@ -146,7 +146,7 @@ context('Test Authorization Policies', () => {
     cy.getIframeBody()
       .find('[placeholder="Enter key"]:visible', { log: false })
       .filterWithNoValue()
-      .type('selector');
+      .type('sel');
 
     cy.getIframeBody()
       .find('[placeholder="Enter value"]:visible', { log: false })
@@ -155,7 +155,7 @@ context('Test Authorization Policies', () => {
       .type('selector-value');
 
     cy.getIframeBody()
-      .contains('selector=selector-value')
+      .contains('sel=selector-value')
       .should('be.visible');
 
     cy.getIframeBody()
