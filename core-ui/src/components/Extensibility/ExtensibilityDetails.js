@@ -38,11 +38,11 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const resourceName = resMetaData?.general?.name;
   const resourceTitle = exists('name')
     ? t('name')
-    : resourceName || prettifyKind(resource.kind || '');
+    : resourceName || prettifyKind(resource?.kind || '');
 
   detailsProps.resourceTitle = resourceTitle;
 
-  if (resource.kind) {
+  if (resource?.kind) {
     detailsProps.resourceUrl = detailsProps.resourceUrl.replace(
       urlPath,
       pluralize(resource.kind).toLowerCase(),
