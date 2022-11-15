@@ -2,7 +2,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: functions
-  namespace: kube-public
+  namespace: lyczeq
   labels:
     app.kubernetes.io/name: functions
     busola.io/extension: resource
@@ -175,6 +175,7 @@ data:
         - Inline
         - Git Repository
       dynamicValue: '$exists(spec.source.gitRepository) ? "Git Repository" : "Inline"'
+      name: header.sourceType
     - simple: true
       path: spec.runtime
       placeholder: placeholders.spec.runtime
@@ -289,8 +290,8 @@ data:
       group: serverless.kyma-project.io
       version: v1alpha2
     name: Ext Functions
-    category: Workloads
-    urlPath: ext-functions
+    category: LQ
+    urlPath: lyczeq-functions
     scope: namespace
     description: >-
       {{[Function](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/svls-01-function/#documentation-content/)}}
@@ -436,7 +437,7 @@ data:
                     console.log(message);
                     return message;
                   }
-                }
+                }'
     - name: Python Function
       value:
         spec:

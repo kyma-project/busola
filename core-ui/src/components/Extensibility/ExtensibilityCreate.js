@@ -22,7 +22,6 @@ import {
 } from './helpers/immutableConverter';
 import { useVariables } from './hooks/useVariables';
 import { prepareRules } from './helpers/prepareRules';
-import { cloneDeep } from 'lodash';
 
 export function ExtensibilityCreateCore({
   formElementRef,
@@ -59,14 +58,12 @@ export function ExtensibilityCreateCore({
   );
 
   const presets = usePreparePresets(createResource?.presets, emptyTemplate);
-  console.log(presets);
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
   const updateStore = res => {
     resetVars();
     readVars(res);
     const newStore = Immutable.fromJS(res);
-    // console.log({ newStore: newStore.toJS() });
     setStore(prevStore => prevStore.set('values', newStore));
   };
 
@@ -148,13 +145,6 @@ export function ExtensibilityCreateCore({
       handleNameChange={handleNameChange}
       urlPath={general.urlPath}
       disableDefaultFields
-      // onPresetSelected={value => {
-      //   // console.log(';XsssD');
-      //   // jp.value(resource, '$..*', value);
-      //   console.log('xd', value);
-      //   // updateStore(getUIStoreFromResourceObj(value));
-      //   updateStore(value);
-      // }}
     >
       <ResourceSchema
         simple
