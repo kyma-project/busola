@@ -109,11 +109,11 @@ context('Test Authorization Policies', () => {
       .should('be.visible');
 
     cy.getIframeBody()
-      .find('data-testid="collapse-button-open"', { timeout: 10000 })
+      .find('[data-testid="collapse-button-open"]', { timeout: 10000 })
       .click();
 
     cy.getIframeBody()
-      .find('data-testid="collapse-button-open"')
+      .find('[data-testid="collapse-button-open"]', { timeout: 10000 })
       .eq(1)
       .click();
 
