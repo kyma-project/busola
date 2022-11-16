@@ -1,16 +1,18 @@
+import { useRecoilValue } from 'recoil';
+
 import { checkForTokenExpiration } from 'shared/hooks/BackendAPI/checkForTokenExpiration';
 import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { baseUrl, throwHttpError } from 'shared/hooks/BackendAPI/config';
 import { useConfig } from 'shared/contexts/ConfigContext';
 
 import { authDataState, AuthDataState } from '../../../state/authDataAtom';
-import { SsoDataState } from '../../../state/ssoDataAtom';
-import { ClusterConfigState } from '../../../state/clusterConfigAtom';
-import { FromConfig } from '../../../state/configAtom';
-import { ClusterState } from '../../../state/clusterAtom';
-
-import { useRecoilValue } from 'recoil';
+import { ssoDataState, SsoDataState } from '../../../state/ssoDataAtom';
+import {
+  clusterConfigState,
+  ClusterConfigState,
+} from '../../../state/clusterConfigAtom';
+import { configState, FromConfig } from '../../../state/configAtom';
+import { clusterState, ClusterState } from '../../../state/clusterAtom';
 
 export type FetchFn = ({
   relativeUrl,
@@ -59,7 +61,6 @@ export const createFetchFn = ({
   try {
     console.log('1');
     const response = await fetch(baseUrl(fromConfig) + relativeUrl, init);
-    console.log('2');
     if (response.ok) {
       return response;
     } else {
@@ -73,7 +74,9 @@ export const createFetchFn = ({
 
 export const useFetch = () => {
   const authData = useRecoilValue(authDataState);
-  const { cluster, config, ssoData } = useMicrofrontendContext() as any;
+  const cluster = useRecoilValue(clusterState);
+  const config = useRecoilValue(clusterConfigState);
+  const ssoData = useRecoilValue(ssoDataState);
   const { fromConfig } = useConfig() as any;
 
   if (!authData) return () => {};

@@ -4,7 +4,7 @@ import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
 import { Link, Button, MessagePage } from 'fundamental-react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 
 import { configFeaturesState } from '../../../state/configFeatures/configFeaturesAtom';
@@ -31,10 +31,10 @@ import { loadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID
 function ClusterList() {
   const features = useRecoilValue(configFeaturesState);
   const [clusters, updateClusters] = useRecoilState(clustersState) || {};
-  const [cluster, setCluster] = useRecoilState(clusterState) || {};
-  const [authData, addAuthData] = useRecoilState(authDataState) || {};
   const [activeClusterName, setCurrentClusterName] =
     useRecoilState(activeClusterNameState) || '';
+  const setCluster = useSetRecoilState(clusterState) || {};
+  const addAuthData = useSetRecoilState(authDataState) || {};
 
   const navigate = useNavigate();
   const notification = useNotification();
