@@ -11,7 +11,7 @@ import {
   clusterConfigState,
   ClusterConfigState,
 } from '../../../state/clusterConfigAtom';
-import { configState, FromConfig } from '../../../state/configAtom';
+import { FromConfig } from '../../../state/configAtom';
 import { clusterState, ClusterState } from '../../../state/clusterAtom';
 
 export type FetchFn = ({

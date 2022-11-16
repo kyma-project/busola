@@ -4,14 +4,10 @@ import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
 import { Link, Button, MessagePage } from 'fundamental-react';
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
-import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
 import { configFeaturesState } from '../../../state/configFeatures/configFeaturesAtom';
-import { clusterState } from '../../../state/clusterAtom';
-import { clustersState } from '../../../state/clustersAtom';
-import { authDataState } from '../../../state/authDataAtom';
-import { activeClusterNameState } from '../../../state/activeClusterNameAtom';
+import { useClustersInfo } from 'state/utils/getClustersInfo';
 
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -30,13 +26,8 @@ import { loadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID
 
 function ClusterList() {
   const features = useRecoilValue(configFeaturesState);
-  const [clusters, updateClusters] = useRecoilState(clustersState) || {};
-  const [activeClusterName, setCurrentClusterName] =
-    useRecoilState(activeClusterNameState) || '';
-  const setCluster = useSetRecoilState(clusterState) || {};
-  const addAuthData = useSetRecoilState(authDataState) || {};
 
-  const navigate = useNavigate();
+  const clustersInfo = useClustersInfo();
   const notification = useNotification();
   const { t } = useTranslation();
 
@@ -49,6 +40,8 @@ function ClusterList() {
 
   const [showEdit, setShowEdit] = useState(false);
   const [editedCluster, setEditedCluster] = useState(null);
+
+  const { clusters, setClusters, activeClusterName } = clustersInfo;
 
   useShowNodeParamsError();
 
@@ -101,16 +94,7 @@ function ClusterList() {
       <Link
         className="fd-link"
         style={styleActiveCluster(entry)}
-        onClick={() =>
-          addCluster(
-            entry,
-            setCluster,
-            setCurrentClusterName,
-            updateClusters,
-            addAuthData,
-            navigate,
-          )
-        }
+        onClick={() => addCluster(entry, clustersInfo)}
       >
         {entry.name}
       </Link>
@@ -143,7 +127,7 @@ function ClusterList() {
         setChosenCluster(resource);
         handleResourceDelete({
           deleteFn: () => {
-            deleteCluster(resource?.name, updateClusters);
+            deleteCluster(resource?.name, setClusters);
             notification.notifySuccess({
               content: t('clusters.disconnect'),
             });
@@ -251,7 +235,7 @@ function ClusterList() {
         resource={chosenCluster}
         resourceTitle={chosenCluster?.kubeconfig['current-context']}
         deleteFn={e => {
-          deleteCluster(e.name, updateClusters);
+          deleteCluster(e.name, setClusters);
           notification.notifySuccess({
             content: t('clusters.disconnect'),
           });

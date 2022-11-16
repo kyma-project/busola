@@ -1,34 +1,22 @@
 import { tryParseOIDCparams } from './components/oidc-params';
 import { handleAuth } from '../../state/openapi/oidc';
 
-export function addCurrentCluster(
-  params,
-  setCluster,
-  setCurrentClusterName,
-  addAuthData,
-  navigate,
-) {
-  setCluster(params.currentContext.cluster.cluster);
+export function addCurrentCluster(params, clustersInfo) {
+  const {
+    setCurrentCluster,
+    setCurrentClusterName,
+    setAuthData,
+    navigate,
+  } = clustersInfo;
+  setCurrentCluster(params.currentContext.cluster.cluster);
   setCurrentClusterName(params.contextName);
-  handleAuth(addAuthData, params, navigate);
+  handleAuth(setAuthData, params, navigate);
 }
 
-export function addCluster(
-  params,
-  setCluster,
-  setCurrentClusterName,
-  updateClusters,
-  addAuthData,
-  navigate,
-) {
+export function addCluster(params, clustersInfo) {
+  const { updateClusters } = clustersInfo;
   updateClusters(prev => ({ ...prev, [params.contextName]: params }));
-  addCurrentCluster(
-    params,
-    setCluster,
-    setCurrentClusterName,
-    addAuthData,
-    navigate,
-  );
+  addCurrentCluster(params, clustersInfo);
 }
 
 export function deleteCluster(clusterName, updateClusters) {
@@ -94,11 +82,7 @@ export function hasKubeconfigAuth(kubeconfig) {
 
 export const addByContext = (
   { kubeconfig, context, storage = 'sessionStorage', config = {} },
-  addCurrentCluster,
-  setCurrentClusterName,
-  updateClusters,
-  addAuthData,
-  navigate,
+  clustersInfo,
 ) => {
   const cluster = kubeconfig.clusters.find(
     c => c.name === context.context.cluster,
@@ -118,10 +102,6 @@ export const addByContext = (
       config: { ...config, storage },
       currentContext: getContext(newKubeconfig, context.name),
     },
-    addCurrentCluster,
-    setCurrentClusterName,
-    updateClusters,
-    addAuthData,
-    navigate,
+    clustersInfo,
   );
 };

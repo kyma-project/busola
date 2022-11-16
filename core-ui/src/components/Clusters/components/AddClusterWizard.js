@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MessageStrip, Wizard } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { useSetRecoilState } from 'recoil';
-import { useNavigate } from 'react-router-dom';
-
-import { authDataState } from '../../../state/authDataAtom';
-import { activeClusterNameState } from '../../../state/activeClusterNameAtom';
-import { clusterState } from 'state/clusterAtom';
-import { clustersState } from '../../../state/clustersAtom';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator';
@@ -21,6 +14,7 @@ import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
 
 import './AddClusterWizard.scss';
+import { useClustersInfo } from 'state/utils/getClustersInfo';
 
 export function AddClusterWizard({
   kubeconfig,
@@ -31,11 +25,7 @@ export function AddClusterWizard({
   const { busolaClusterParams } = useMicrofrontendContext();
   const { t } = useTranslation();
   const notification = useNotification();
-  const navigate = useNavigate();
-  const updateClusters = useSetRecoilState(clustersState);
-  const addCurrentCluster = useSetRecoilState(clusterState);
-  const setCurrentClusterName = useSetRecoilState(activeClusterNameState);
-  const addAuthData = useSetRecoilState(authDataState);
+  const clustersInfo = useClustersInfo();
 
   const [hasAuth, setHasAuth] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);
@@ -91,11 +81,7 @@ export function AddClusterWizard({
             storage,
             config,
           },
-          addCurrentCluster,
-          setCurrentClusterName,
-          updateClusters,
-          addAuthData,
-          navigate,
+          clustersInfo,
         );
       } else if (contextName === '-all-') {
         kubeconfig.contexts.forEach((context, index) => {
@@ -107,25 +93,14 @@ export function AddClusterWizard({
               storage,
               config,
             },
-            addCurrentCluster,
-            setCurrentClusterName,
-            updateClusters,
-            addAuthData,
-            navigate,
+            clustersInfo,
           );
         });
       } else {
         const context = kubeconfig.contexts.find(
           context => context.name === contextName,
         );
-        addByContext(
-          { kubeconfig, context, storage, config },
-          addCurrentCluster,
-          setCurrentClusterName,
-          updateClusters,
-          addAuthData,
-          navigate,
-        );
+        addByContext({ kubeconfig, context, storage, config }, clustersInfo);
       }
     } catch (e) {
       notification.notifyError({

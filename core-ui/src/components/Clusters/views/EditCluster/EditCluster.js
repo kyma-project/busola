@@ -2,12 +2,8 @@ import React, { useState, useRef } from 'react';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useSetRecoilState } from 'recoil';
-import { useNavigate } from 'react-router-dom';
 
-import { authDataState } from '../../../../state/authDataAtom';
-import { activeClusterNameState } from '../../../../state/activeClusterNameAtom';
-import { clustersState } from '../../../../state/clustersAtom';
+import { useClustersInfo } from 'state/utils/getClustersInfo';
 
 import { addCluster, getContext, deleteCluster } from '../../shared';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -24,18 +20,14 @@ function EditClusterComponent({
   resourceUrl,
   editedCluster,
 }) {
-  const navigate = useNavigate();
-  const addCurrentCluster = useSetRecoilState(authDataState);
-  const updateClusters = useSetRecoilState(clustersState);
-  const setCurrentClusterName = useSetRecoilState(activeClusterNameState);
-  const addAuthData = useSetRecoilState(authDataState);
+  const clustersInfo = useClustersInfo();
   const [resource, setResource] = useState(cloneDeep(editedCluster));
-
   const [authenticationType, setAuthenticationType] = useState(
     resource?.kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
   );
   const notification = useNotification();
 
+  const { setClusters } = clusterInfo;
   const { kubeconfig, config } = resource;
 
   const originalName = useRef(resource?.kubeconfig?.['current-context'] || '');
@@ -43,7 +35,7 @@ function EditClusterComponent({
   const onComplete = () => {
     try {
       if (originalName.current !== resource?.kubeconfig?.['current-context']) {
-        deleteCluster(originalName.current, updateClusters);
+        deleteCluster(originalName.current, setClusters);
       }
       const contextName = kubeconfig['current-context'];
       addCluster(
@@ -52,11 +44,7 @@ function EditClusterComponent({
           config: { ...(config || {}), config },
           currentContext: getContext(kubeconfig, contextName),
         },
-        addCurrentCluster,
-        setCurrentClusterName,
-        updateClusters,
-        addAuthData,
-        navigate,
+        clustersInfo,
       );
     } catch (e) {
       notification.notifyError({
