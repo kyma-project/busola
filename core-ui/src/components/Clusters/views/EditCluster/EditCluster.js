@@ -28,6 +28,7 @@ function EditClusterComponent({
   const addCurrentCluster = useSetRecoilState(authDataState);
   const updateClusters = useSetRecoilState(clustersState);
   const setCurrentClusterName = useSetRecoilState(activeClusterNameState);
+  const addAuthData = useSetRecoilState(authDataState);
   const [resource, setResource] = useState(cloneDeep(editedCluster));
 
   const [authenticationType, setAuthenticationType] = useState(
@@ -54,6 +55,7 @@ function EditClusterComponent({
         addCurrentCluster,
         setCurrentClusterName,
         updateClusters,
+        addAuthData,
         navigate,
       );
     } catch (e) {

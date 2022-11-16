@@ -51,8 +51,8 @@ export function getContext(kubeconfig, contextName) {
   } else {
     const { context } = contexts.find(c => c.name === currentContextName);
     return {
-      cluster: kubeconfig.clusters.find(c => c.name === context.cluster),
-      user: kubeconfig.users.find(u => u.name === context.user),
+      cluster: kubeconfig.clusters.find(c => c?.name === context.cluster),
+      user: kubeconfig.users.find(u => u?.name === context.user),
     };
   }
 }

@@ -20,6 +20,9 @@ function createSSOHeader(ssoData) {
 }
 
 export function createHeaders(authData, cluster, requiresCA, ssoData) {
+  //mock
+  requiresCA = true;
+
   return {
     ...createAuthHeaders(authData),
     ...createSSOHeader(ssoData),

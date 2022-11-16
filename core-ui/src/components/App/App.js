@@ -80,6 +80,13 @@ export default function App() {
               {otherRoutes}
             </Route>
             <Route path="" element={<MainFrameRedirection />} />
+            // TODO fix it
+            <Route
+              path="/cluster/shoot--hasselhoff--kmain/namespaces/dd/details"
+              element={
+                <Navigate to="/cluster/shoot--hasselhoff--kmain/overview" />
+              }
+            />
           </Routes>
           <Preferences />
         </ContentWrapper>

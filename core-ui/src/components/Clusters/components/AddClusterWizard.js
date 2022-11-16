@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MessageStrip, Wizard } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 
 import { authDataState } from '../../../state/authDataAtom';
@@ -33,7 +33,7 @@ export function AddClusterWizard({
   const notification = useNotification();
   const navigate = useNavigate();
   const updateClusters = useSetRecoilState(clustersState);
-  const addCurrentCluster = useRecoilState(clusterState);
+  const addCurrentCluster = useSetRecoilState(clusterState);
   const setCurrentClusterName = useSetRecoilState(activeClusterNameState);
   const addAuthData = useSetRecoilState(authDataState);
 
