@@ -154,6 +154,11 @@ context('Test Authorization Policies', () => {
       .type('selector-value');
 
     cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Update')
+      .click();
+
+    cy.getIframeBody()
       .contains('sel=selector-value')
       .should('be.visible');
 
