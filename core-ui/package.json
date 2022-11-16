@@ -19,7 +19,7 @@
     "core-js": "^3.3.6",
     "cronstrue": "^1.114.0",
     "didyoumean": "^1.2.2",
-    "fundamental-react": "^0.14.4",
+    "fundamental-react": "^0.14.5-rc.4",
     "fundamental-styles": "^0.19.0",
     "graphviz-react": "^1.2.0",
     "http-status-codes": "^2.2.0",
@@ -58,7 +58,7 @@
           "**/*.ts?(x)"
         ],
         "rules": {
-          "@typescript-eslint/no-unused-vars": "error"
+          "@typescript-eslint/no-unused-vars": "warn"
         }
       }
     ]

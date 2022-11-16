@@ -208,6 +208,7 @@ Name widgets render a name input field. They contain an automatic name generator
 - **placeholder** - specifies a short hint about the input field value.
 - **inputInfo** - a string below the input field that shows how to fill in the input. It defaults to `Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1').`. To disable any suggestion, set this value to `null`.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+- **disableOnEdit** - parameter used to disable field in edit mode, defaults to `false`.
 
 #### Example
 
@@ -217,6 +218,16 @@ Name widgets render a name input field. They contain an automatic name generator
 ```
 
 <img src="./assets/form-widgets/Name.png" alt="Example of a name widget" style="border: 1px solid #D2D5D9">
+
+#### Example
+
+```yaml
+- path: spec.my-data
+  widget: Name
+  disableOnEdit: true
+```
+
+<img src="./assets/form-widgets/Name2.png" alt="Example of a name widget with disabled option to edit" style="border: 1px solid #D2D5D9">
 
 ### CodeEditor
 

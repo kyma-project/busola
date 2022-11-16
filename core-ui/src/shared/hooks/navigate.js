@@ -40,7 +40,7 @@ function navigateToNamespaceDetails(namespaceName) {
 
 export function navigateToDetails(resourceType, name) {
   const encodedName = encodeURIComponent(name);
-  switch (resourceType) {
+  switch (resourceType.toLowerCase()) {
     case 'namespaces':
       navigateToNamespaceDetails(encodedName);
       break;

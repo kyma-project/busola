@@ -4,7 +4,6 @@ import { createResourceRoutes } from './createResourceRoutes';
 import * as Jobs from './Jobs';
 import * as CronJobs from './CronJobs';
 import * as VirtualServices from './VirtualServices';
-import * as ServiceEntries from './ServiceEntries';
 import * as StatefulSets from './StatefulSets';
 import * as Services from './Services';
 import * as ServiceInstances from './ServiceInstances';
@@ -20,7 +19,6 @@ import * as NetworkPolicies from './NetworkPolicies';
 import * as Issuers from './Issuers';
 import * as Ingresses from './Ingresses';
 import * as HorizontalPodAutoscalers from './HorizontalPodAutoscalers';
-import * as Gateways from './Gateways';
 import * as Events from './Events';
 import * as DnsProviders from './DnsProviders';
 import * as DnsEntries from './DnsEntries';
@@ -60,8 +58,6 @@ export const resources = [
   DaemonSets,
   // istio
   VirtualServices,
-  Gateways,
-  ServiceEntries,
   DestinationRules,
   AuthorizationPolicies,
   // discovery and network
