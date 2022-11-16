@@ -45,7 +45,6 @@ export const createFetchFn = ({
   init?: any;
   abortController?: AbortController;
 }) => {
-  console.log('0');
   const token = authData && 'token' in authData ? authData.token : undefined;
   checkForTokenExpiration(token);
   checkForTokenExpiration(ssoData?.idToken, { reason: 'sso-expiration' });
@@ -59,7 +58,6 @@ export const createFetchFn = ({
   };
 
   try {
-    console.log('1');
     const response = await fetch(baseUrl(fromConfig) + relativeUrl, init);
     if (response.ok) {
       return response;

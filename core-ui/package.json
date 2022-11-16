@@ -46,7 +46,7 @@
     "yup": "^0.28.5"
   },
   "scripts": {
-    "start": "(cd ..; gulp copy-themes) && PORT=8889 BROWSER=none GENERATE_SOURCEMAP=false react-app-rewired start",
+    "start": "(cd ..; gulp copy-themes) && PORT=8080 BROWSER=none GENERATE_SOURCEMAP=false react-app-rewired start",
     "build": "(cd ..; gulp copy-themes) && PUBLIC_URL=/core-ui INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
