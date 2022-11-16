@@ -25,25 +25,6 @@ Cypress.Commands.add('createSimpleFunction', functionName => {
   cy.navigateToFunctionCreate(functionName);
 
   cy.getIframeBody()
-    .find('.advanced-form')
-    .contains('Labels')
-    .click();
-
-  cy.getIframeBody()
-    .find('[placeholder="Enter key"]:visible')
-    .last()
-    .type('example');
-
-  cy.getIframeBody()
-    .find('[placeholder="Enter value"]:visible')
-    .eq(1)
-    .type(functionName);
-
-  cy.getIframeBody()
-    .contains('label', 'Labels')
-    .click();
-
-  cy.getIframeBody()
     .find('[role="dialog"]')
     .contains('button', 'Create')
     .click();
