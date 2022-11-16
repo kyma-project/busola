@@ -7,15 +7,17 @@ const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
 
 context('Prepare funtions for testing', () => {
   before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtension(
+      'FUNCTIONS',
+      'examples/resources/serverless/functions.yaml',
+    );
+
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
   it('Create a simple Function', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
     cy.createSimpleFunction(FUNCTION_NAME);
   });
 
@@ -25,13 +27,10 @@ context('Prepare funtions for testing', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[aria-haspopup="listbox"]:visible')
-      .first()
-      .click();
-
-    cy.getIframeBody()
-      .contains('Node.js 16')
-      .click();
+      .find('[aria-controls="combobox-input-listbox-list"]:visible')
+      .eq(1)
+      .clear()
+      .type('Node.js 16');
 
     cy.getIframeBody()
       .find('[role=dialog]')

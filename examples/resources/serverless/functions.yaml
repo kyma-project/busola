@@ -2,7 +2,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: functions
-  namespace: lyczeq
+  namespace: kube-public
   labels:
     app.kubernetes.io/name: functions
     busola.io/extension: resource
