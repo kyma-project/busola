@@ -14,13 +14,13 @@ export function addCurrentCluster(params, clustersInfo) {
 }
 
 export function addCluster(params, clustersInfo) {
-  const { updateClusters } = clustersInfo;
-  updateClusters(prev => ({ ...prev, [params.contextName]: params }));
+  const { setClusters } = clustersInfo;
+  setClusters(prev => ({ ...prev, [params.contextName]: params }));
   addCurrentCluster(params, clustersInfo);
 }
 
-export function deleteCluster(clusterName, updateClusters) {
-  updateClusters(prev => {
+export function deleteCluster(clusterName, setClusters) {
+  setClusters(prev => {
     const newList = { ...prev };
     delete newList?.[clusterName];
     return newList;
