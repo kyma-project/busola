@@ -8,7 +8,7 @@ export function addCurrentCluster(
   addAuthData,
   navigate,
 ) {
-  setCluster(params);
+  setCluster(params.currentContext.cluster.cluster);
   setCurrentClusterName(params.contextName);
   handleAuth(addAuthData, params, navigate);
 }

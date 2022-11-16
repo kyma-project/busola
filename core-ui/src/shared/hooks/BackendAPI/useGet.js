@@ -2,21 +2,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import shortid from 'shortid';
+
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
-import shortid from 'shortid';
+import { authDataState } from '../../../state/authDataAtom';
 
 // allow <n> consecutive requests to fail before displaying error
 const ERROR_TOLERANCY = 2;
 
 const useGetHook = processDataFn =>
   function(path, { pollingInterval, onDataReceived, skip } = {}) {
+    const authData = useRecoilValue(authDataState);
     const lastAuthData = React.useRef(null);
     const lastResourceVersion = React.useRef(null);
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(!skip);
     const [error, setError] = React.useState(null);
-    const { authData } = useMicrofrontendContext();
     const fetch = useFetch();
     const abortController = React.useRef(new AbortController());
     const errorTolerancyCounter = React.useRef(0);

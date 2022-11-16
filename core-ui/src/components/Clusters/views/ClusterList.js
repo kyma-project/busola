@@ -11,6 +11,7 @@ import { configFeaturesState } from '../../../state/configFeatures/configFeature
 import { clusterState } from '../../../state/clusterAtom';
 import { clustersState } from '../../../state/clustersAtom';
 import { authDataState } from '../../../state/authDataAtom';
+import { activeClusterNameState } from '../../../state/activeClusterNameAtom';
 
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -33,7 +34,7 @@ function ClusterList() {
   const [cluster, setCluster] = useRecoilState(clusterState) || {};
   const [authData, addAuthData] = useRecoilState(authDataState) || {};
   const [activeClusterName, setCurrentClusterName] =
-    useRecoilState(clusterState) || '';
+    useRecoilState(activeClusterNameState) || '';
 
   const navigate = useNavigate();
   const notification = useNotification();
