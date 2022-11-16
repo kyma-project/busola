@@ -164,7 +164,7 @@ context('Test Authorization Policies', () => {
 
     cy.getIframeBody()
       .contains('Matches all Pods in the Namespace')
-      .should('not.be.visible');
+      .should('not.exist');
   });
 
   it('Inspect list', () => {
