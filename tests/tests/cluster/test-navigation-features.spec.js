@@ -30,6 +30,14 @@ context('Test navigation features', () => {
     cy.navigateTo('Configuration', 'Cluster Role Bindings');
 
     cy.getIframeBody()
+      .find('[aria-label="open-search"]')
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="search-input"]')
+      .type('eventing-controller');
+
+    cy.getIframeBody()
       .contains('eventing-controller (SA)') // link wrapper
       .contains('eventing-controller') // link itself
       .click();
