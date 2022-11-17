@@ -4,8 +4,8 @@ const MATCH_NAME = 'test-match';
 const URI_KEY = 'prefix';
 const URI_PREFIX = '/wpcatalog';
 
-const HEADER_KEY = 'exact';
-const HEADER_KEY1 = 'header';
+const HEADER_KEY = 'header';
+const HEADER_KEY1 = 'exact';
 const HEADER_VALUE = 'foo';
 
 const REDIRECT_URI = '/v1/bookRatings';
@@ -49,10 +49,21 @@ context('Test Virtual Services', () => {
       .contains('Add')
       .click();
 
+    // to remove after merge AP
+    cy.getIframeBody()
+      .find('[aria-label="expand HTTP"]:visible', { log: false })
+      .eq(1)
+      .click();
+
     // Matches
     cy.getIframeBody()
       .find('[aria-label="expand Matches"]:visible', { log: false })
       .contains('Add')
+      .click();
+
+    // to remove after merge AP
+    cy.getIframeBody()
+      .find('[aria-label="expand Match"]:visible', { log: false })
       .click();
 
     cy.getIframeBody()
@@ -61,7 +72,7 @@ context('Test Virtual Services', () => {
 
     // URIs
     cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
+      .find('[data-testid="select-dropdown"]:visible', { log: false })
       .first()
       .click();
 
@@ -77,10 +88,6 @@ context('Test Virtual Services', () => {
 
     // Headers
     cy.getIframeBody()
-      .find('[aria-label="expand URI"]:visible', { log: false })
-      .click();
-
-    cy.getIframeBody()
       .find('[aria-label="expand Scheme"]:visible', { log: false })
       .click();
 
@@ -94,11 +101,12 @@ context('Test Virtual Services', () => {
 
     cy.getIframeBody()
       .find('[placeholder="Enter key"]:visible', { log: false })
+      .first()
       .filterWithNoValue()
       .type(HEADER_KEY);
 
     cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
+      .find('[data-testid="select-dropdown"]:visible', { log: false })
       .first()
       .click();
 
@@ -112,13 +120,10 @@ context('Test Virtual Services', () => {
       .first()
       .type(HEADER_VALUE);
 
-    cy.getIframeBody()
-      .find('[aria-label="expand Matches"]:visible', { log: false })
-      .click();
-
     // REDIRECT
     cy.getIframeBody()
-      .find('[aria-label="expand Redirect"]:visible', { log: false })
+      .find('[aria-label="expand Redirect"]', { log: false })
+      .first()
       .click();
 
     cy.getIframeBody()
@@ -203,6 +208,11 @@ context('Test Virtual Services', () => {
       .find('[data-testid="spec.gateways.0"]:visible')
       .clear()
       .type(GATEWAY);
+
+    cy.getIframeBody()
+      .find('[role="dialog"]')
+      .contains('button', 'Update')
+      .click();
 
     // Changed details
     // cy.getIframeBody().contains(HOST1);
