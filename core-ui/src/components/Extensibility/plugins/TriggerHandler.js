@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { mapValues } from 'lodash';
+// import { mapValues } from 'lodash';
 import { getNextPlugin } from '@ui-schema/ui-schema/PluginStack';
 
 import { useTrigger, useSubscription } from '../hooks/useTriggers';
@@ -21,22 +21,37 @@ export function TriggerHandler({
 
   const trigger = useTrigger();
 
-  useSubscription(
-    mapValues(schema.get('subscribe') ?? {}, formula => () => {
-      const [value] = jsonata(formula, {
-        resource,
-        ...itemVars(resource, rule.itemVars, storeKeys),
-      });
-      onChange({
-        storeKeys,
-        scopes: ['value'],
-        type: 'set',
-        schema,
-        required,
-        data: { value },
-      });
-    }),
+  const subscriptions = Object.entries(schema.get('subscribe') ?? {}).map(
+    ([name, formula]) => {
+      const modifiers = name.split(/\./);
+      const id = modifiers.pop();
+      const callback = () => {
+        const [value] = jsonata(formula, {
+          resource,
+          ...itemVars(resource, rule.itemVars, storeKeys),
+        });
+        onChange({
+          storeKeys,
+          scopes: ['value'],
+          type: 'set',
+          schema,
+          required,
+          data: { value },
+        });
+      };
+
+      return [
+        id,
+        {
+          modifiers,
+          storeKeys,
+          callback,
+        },
+      ];
+    },
   );
+
+  useSubscription(Object.fromEntries(subscriptions));
 
   const nextPluginIndex = currentPluginIndex + 1;
   const Plugin = getNextPlugin(nextPluginIndex, props.widgets);
@@ -44,11 +59,11 @@ export function TriggerHandler({
   const myChange = useMemo(
     () => action => {
       if (action.scopes?.includes('value')) {
-        action.schema.get('trigger')?.forEach(t => trigger(t));
+        action.schema.get('trigger')?.forEach(t => trigger(t, storeKeys));
       }
       onChange(action);
     },
-    [onChange, trigger],
+    [onChange, trigger, storeKeys],
   );
 
   return (

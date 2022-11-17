@@ -2,7 +2,7 @@ import { useEffect, useContext, useRef } from 'react';
 
 import { TriggerContext } from '../contexts/Trigger';
 
-export function useTrigger() {
+export function useTrigger(storeKeys) {
   const triggers = useContext(TriggerContext);
   return triggers.trigger;
 }
