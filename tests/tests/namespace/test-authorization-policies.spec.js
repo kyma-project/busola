@@ -113,7 +113,7 @@ context('Test Authorization Policies', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[data-testid="collapse-button-close"]', { timeout: 10000 })
+      .contains('To #1 methods paths', { timeout: 10000 })
       .click();
 
     cy.getIframeBody()
