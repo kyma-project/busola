@@ -5,7 +5,6 @@ import { isEqual } from 'lodash';
 
 import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { groupsState } from 'state/groupsAtom';
-import { authDataState } from 'state/authDataAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { extResourcesState } from 'state/extResourcesAtom';
 import { openapiState } from 'state/openapi/openapiAtom';
@@ -18,7 +17,6 @@ import { lazyConfigFeaturesNames } from 'state/types';
 export const useLuigiContextMigrator = () => {
   const {
     features,
-    authData,
     namespaceId,
     customResources,
     openApi,
@@ -28,7 +26,6 @@ export const useLuigiContextMigrator = () => {
   } = useMicrofrontendContext();
 
   useUpdateRecoilIfValueChanged(groups, groupsState);
-  useUpdateRecoilIfValueChanged(authData, authDataState);
   useUpdateRecoilIfValueChanged(namespaceId, activeNamespaceIdState);
   useUpdateRecoilIfValueChanged(customResources, extResourcesState);
   useUpdateRecoilIfValueChanged(openApi, openapiState);

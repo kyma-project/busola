@@ -52,7 +52,7 @@ export const createFetchFn = ({
     ...init,
     headers: {
       ...(init?.headers || {}),
-      ...createHeaders(authData, cluster, config?.requiresCA, ssoData),
+      ...createHeaders(authData, cluster, config?.requiresCA!, ssoData), //todo '!'
     },
     signal: abortController?.signal,
   };

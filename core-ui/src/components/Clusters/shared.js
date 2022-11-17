@@ -1,16 +1,9 @@
 import { tryParseOIDCparams } from './components/oidc-params';
-import { handleAuth } from '../../state/openapi/oidc';
 
 export function addCurrentCluster(params, clustersInfo) {
-  const {
-    setCurrentCluster,
-    setCurrentClusterName,
-    setAuthData,
-    navigate,
-  } = clustersInfo;
-  setCurrentCluster(params.currentContext.cluster.cluster);
+  const { setCurrentCluster, setCurrentClusterName } = clustersInfo;
+  setCurrentCluster(params);
   setCurrentClusterName(params.contextName);
-  handleAuth(setAuthData, params, navigate);
 }
 
 export function addCluster(params, clustersInfo) {

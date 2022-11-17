@@ -27,7 +27,7 @@ function EditClusterComponent({
   );
   const notification = useNotification();
 
-  const { setClusters } = clusterInfo;
+  const { setClusters } = { setClusters: () => alert('clusterInfo') };
   const { kubeconfig, config } = resource;
 
   const originalName = useRef(resource?.kubeconfig?.['current-context'] || '');
