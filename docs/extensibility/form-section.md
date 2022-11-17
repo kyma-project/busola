@@ -143,7 +143,7 @@ or with variables:
 
 ### Scoping
 
-When a trigger is invoked in an array, by default it matches only fields in the same array item. And it bubbles all the way up to root. To subscribe to a trigger on a different level a jsonata-like notation can be used. To match triggers globally (i.e. match triggers happening in root), A `$root.foo` notation can be used. To just access a higher level, `$parent.foo` can be used instead. It's possible to repeat `$parent` multiple times to access even higher levels (e.g. `$parent.$parent.foo`).
+When a trigger is invoked in an array, by default it matches only fields in the same array item. And it bubbles all the way up to root. To subscribe to a trigger on a different level a jsonata-like notation can be used. To match triggers globally, that is, match triggers happening in root, a `$root.foo` notation can be used. To just access a higher level, `$parent.foo` can be used instead. It's possible to repeat `$parent` multiple times to access even higher levels (e.g. `$parent.$parent.foo`).
 
 ## Default fields
 
