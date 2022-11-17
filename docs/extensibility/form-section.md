@@ -35,8 +35,8 @@ If you target elements of an array rather than the array itself, you can use the
 - **visibility** - a [JSONata](jsonata.md) expression controlling the visibility of the element.
 - **overwrite** - parameter used to disable the overwriting (clearing) of hidden fields. Used together with **visibility**, defaults to `true`.
   **NOTE:** it is recommended to set **overwrite** to `false` when defining fields with the same `path` and different **visibility** conditions.
-- **trigger** - Value change triggers, see [Dynamic fields section](#dynamic-fields).
-- **subscription** - Trigger subscriptions for variable values, see [Dynamic fields section](#dynamic-fields).
+- **trigger** - Value change triggers, see [Dynamic fields section](#dynamic-field-values).
+- **subscription** - Trigger subscriptions for variable values, see [Dynamic fields section](#dynamic-field-values).
 
 ### Example
 
