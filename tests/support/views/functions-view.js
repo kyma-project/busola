@@ -35,31 +35,20 @@ Cypress.Commands.add(
   (functionName, functionPath, dependenciesPath) => {
     cy.navigateToFunctionCreate(functionName);
 
-    //close Dependencies code editor to not have problems with pasteToMonaco command
-    cy.getIframeBody()
-      .find('[aria-label="expand Dependencies"]')
-      .click();
-
     //paste code to the Source Tab code editor
     cy.getIframeBody()
       .find('[aria-label="expand Source"]')
       .readFile(functionPath)
       .then(body => {
-        cy.pasteToMonaco(body);
+        cy.pasteToMonaco(body, 0);
       });
-
-    //close Source Tab
-    cy.getIframeBody()
-      .find('[aria-label="expand Source"]')
-      .click();
 
     //open Dependencies Tab and paste the dependencies to the code editor
     cy.getIframeBody()
       .find('[aria-label="expand Dependencies"]')
-      .click()
       .readFile(dependenciesPath)
       .then(body => {
-        cy.pasteToMonaco(JSON.stringify(body));
+        cy.pasteToMonaco(JSON.stringify(body), 1);
       });
 
     // click Create button
