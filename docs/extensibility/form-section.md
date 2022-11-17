@@ -109,7 +109,7 @@ In the example, the visibility for item price and color are analogous - the form
 
 ## Dynamic field values
 
-It's possible to modify field values automatically when another value changes. This works on a subscriber system. Any field (including variable fields) can send a trigger. When that happens a field that subscribes to it will have it's value changed accordingly.
+It's possible to modify field values automatically when another value changes. This works on a subscriber system. Any field (including variable fields) can send a trigger. When that happens a field that subscribes to it will have its value changed accordingly.
 
 Triggers are listed as a **triggers** field that contains a list of string labels.
 
