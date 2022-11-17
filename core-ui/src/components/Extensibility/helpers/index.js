@@ -102,13 +102,13 @@ export function getDefaultPreset(presets, emptyTemplate) {
     : null;
 }
 
-export function usePreparePresets(presets) {
+export function usePreparePresets(presets, emptyTemplate) {
   const { t: tExt } = useGetTranslation();
 
   if (!presets || !presets.length) return null;
 
   const preparedPresets = presets.map(preset => ({
-    ...preset,
+    ...merge({}, { value: emptyTemplate }, preset),
     name: tExt(preset.name),
   }));
 
