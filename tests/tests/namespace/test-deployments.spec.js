@@ -13,14 +13,11 @@ context('Test Deployments', () => {
   });
 
   it('Create a Deployment', () => {
-    cy.getIframeBody()
-      .contains('Deploy new workload')
-      .click();
+    cy.navigateTo('Workloads', 'Deployments');
 
     cy.getIframeBody()
-      .find('[role="menuitem"]')
       .contains('Create Deployment')
-      .click({ force: true });
+      .click();
 
     cy.getIframeBody()
       .find('[ariaLabel="Deployment name"]:visible')

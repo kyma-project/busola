@@ -40,7 +40,7 @@ Cypress.Commands.add(
       .find('[aria-label="expand Source"]')
       .readFile(functionPath)
       .then(body => {
-        cy.pasteToMonaco(body, 0);
+        cy.pasteToMonaco(body);
       });
 
     //open Dependencies Tab and paste the dependencies to the code editor

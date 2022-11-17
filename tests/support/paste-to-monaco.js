@@ -1,9 +1,13 @@
-Cypress.Commands.add('findMonaco', { prevSubject: false }, monacoCount => {
-  return cy
-    .getIframeBody()
-    .find('textarea[aria-roledescription="editor"]:visible')
-    .eq(monacoCount);
-});
+Cypress.Commands.add(
+  'findMonaco',
+  { prevSubject: false },
+  (monacoCount = 0) => {
+    return cy
+      .getIframeBody()
+      .find('textarea[aria-roledescription="editor"]:visible')
+      .eq(monacoCount);
+  },
+);
 
 Cypress.Commands.add(
   'pasteToMonaco',
