@@ -23,6 +23,8 @@ import {
 import { useVariables } from './hooks/useVariables';
 import { prepareRules } from './helpers/prepareRules';
 
+import { TriggerContextProvider } from './contexts/Trigger';
+
 export function ExtensibilityCreateCore({
   formElementRef,
   setCustomValid,
@@ -178,9 +180,11 @@ export function ExtensibilityCreate(props) {
     <DataSourcesContextProvider
       dataSources={props.resourceSchema?.dataSources || {}}
     >
-      <VarStoreContextProvider>
-        <ExtensibilityCreateCore {...props} />
-      </VarStoreContextProvider>
+      <TriggerContextProvider>
+        <VarStoreContextProvider>
+          <ExtensibilityCreateCore {...props} />
+        </VarStoreContextProvider>
+      </TriggerContextProvider>
     </DataSourcesContextProvider>
   );
 }
