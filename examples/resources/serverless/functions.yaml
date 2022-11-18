@@ -175,6 +175,7 @@ data:
         - Inline
         - Git Repository
       dynamicValue: '$exists(spec.source.gitRepository) ? "Git Repository" : "Inline"'
+      name: header.sourceType
     - simple: true
       path: spec.runtime
       placeholder: placeholders.spec.runtime
@@ -275,7 +276,7 @@ data:
               enum: $keys($configMap.data)
               visibility: $envType = 'From Config Map'
     - path: spec.source.inline
-      visibility: $sourceType = 'Inline'
+      visibility: $sourceType = 'Inline' #the bug
       children:
         - path: source
           widget: CodeEditor
