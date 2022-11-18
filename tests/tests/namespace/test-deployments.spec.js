@@ -113,11 +113,7 @@ context('Test Deployments', () => {
 
   it('Edit a deployment', () => {
     cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
-    cy.getLeftNav()
-      .find('[data-testid=deployments_deployments]')
+      .contains('Deployments')
       .click();
 
     cy.getIframeBody()
