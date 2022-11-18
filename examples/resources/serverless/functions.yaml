@@ -241,6 +241,7 @@ data:
           children:
             - var: envType
               widget: Text
+              name: spec.env.source
               enum:
                 - Custom
                 - From Config Map
@@ -421,6 +422,7 @@ data:
       spec.resourceConfiguration.function: Function
       placeholders.spec.runtime: Choose Function runtime
       spec.env.name: Variable Name
+      spec.env.source: Source
       envType: Variable Type
       'Node.js Function': Node.js Function
       'Python Function': Python Function
