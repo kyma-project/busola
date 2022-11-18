@@ -184,6 +184,16 @@ data:
         - nodejs16
         - python39
     - path: spec.runtimeImageOverride
+    - path: spec.source.inline
+      visibility: $sourceType = 'Inline' #the bug
+      children:
+        - path: source
+          widget: CodeEditor
+          language: '$contains($root.spec.runtime, "node") ? "javascript" : "python"'
+          defaultExpanded: true
+        - path: dependencies
+          widget: CodeEditor
+          language: '$contains($root.spec.runtime, "node") ? "javascript" : "plaintext"'
     - path: spec.source.gitRepository
       widget: FormGroup
       visibility: $sourceType = 'Git Repository'
@@ -277,17 +287,6 @@ data:
               widget: Text
               enum: $keys($configMap.data)
               visibility: $envType = 'From Config Map'
-    - path: spec.source.inline
-      visibility: $sourceType = 'Inline' #the bug
-      children:
-        - path: source
-          widget: CodeEditor
-          language: '$contains($root.spec.runtime, "node") ? "javascript" : "python"'
-          defaultExpanded: true
-        - path: dependencies
-          widget: CodeEditor
-          language: '$contains($root.spec.runtime, "node") ? "javascript" : "plaintext"'
-          defaultExpanded: true
   general: |-
     resource:
       kind: Function
