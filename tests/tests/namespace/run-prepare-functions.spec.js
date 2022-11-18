@@ -40,7 +40,7 @@ context('Prepare funtions for testing', () => {
   // edit test case is the last one because of the following error:
   // "the object has been modified; please apply your changes to the latest
   // version and try again"
-  // we must wait for the function to remain unchanged
+  // you must wait for the function to remain unchanged
   it('Edit a simple test Function and check updated runtime', () => {
     cy.getLeftNav()
       .contains('Functions')
