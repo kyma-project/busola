@@ -374,7 +374,6 @@ command-palette:
     customresourcedefinitions: Custom Resource Definitions
     daemonsets: Daemon Sets
     destinationrules: Destination Rules
-    gitrepositories: Git Repositories
     horizontalpodautoscalers: Horizontal Pod Autoscalers
     networkpolicies: Network Policies
     oauth2clients: OAuth2 Clients
@@ -1002,31 +1001,6 @@ gardener:
     provider: Provider
 generic-list:
   no-entries-found: No entries found
-git-repositories:
-  auth:
-    basic: Basic
-    public: Public
-    ssh-key: SSH Key
-  description: <0>GitRepository</0> is used to define and manage Git repositories that store the Function's source code and dependencies.
-  errors:
-    invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
-  labels:
-    auth: Authentication
-    create: Connect Repository
-    secret: Secret
-    url: Repository URL
-  name_singular: GitRepository
-  placeholders:
-    secret: Enter a Secret name with credentials
-    url: Enter the URL address of your Git repository
-  title: Git Repositories
-  tooltips:
-    auth: 'Basic: token or password / SSH key: authentication key / Public: no authentication'
-    basic: Basic access authentication required
-    key: SSH key required
-    none: Authentication not required
-    secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
-    url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
 grafana:
   logs: Logs
   missing-domain: Grafana service does not have a host defined

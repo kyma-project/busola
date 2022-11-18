@@ -206,8 +206,6 @@ dnsproviders:
   title: Dostawcy DNS
 generic-list:
   no-entries-found: Nie znaleziono wpisów
-git-repositories:
-  title: Repozytoria Git
 integration:
   title: Integracja
 jobs:
