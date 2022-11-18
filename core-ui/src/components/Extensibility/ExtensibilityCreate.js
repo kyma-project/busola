@@ -59,8 +59,7 @@ export function ExtensibilityCreateCore({
     ),
   );
 
-  const presets = usePreparePresets(createResource?.presets);
-
+  const presets = usePreparePresets(createResource?.presets, emptyTemplate);
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
   const updateStore = res => {
