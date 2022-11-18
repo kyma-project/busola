@@ -195,6 +195,7 @@ data:
           required: true
         - var: useAuthorization
           type: boolean
+          name: code.gitRepository.auth
           dynamicValue: $exists($.spec.source.gitRepository.auth)
         - widget: FormGroup
           path: auth
@@ -377,6 +378,7 @@ data:
       code.gitRepository.url: Url
       code.gitRepository.reference: Reference
       code.gitRepository.baseDir: Base Directory
+      code.gitRepository.auth: Auth
       code.env: Environment Variables
       code.env.name: Name
       code.env.value: Value
