@@ -71,7 +71,7 @@ export function useJsonata({
     }
     try {
       const value = jsonataWrapper(query).evaluate(
-        extras.scope || scope || resource,
+        extras.scope || scope || extras.resource || resource,
         {
           ...mapValues(dataSourceFetchers, dsf => dsf.value),
           root: extras.resource || resource,
