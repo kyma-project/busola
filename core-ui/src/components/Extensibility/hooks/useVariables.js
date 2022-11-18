@@ -49,7 +49,7 @@ export function useVariables() {
       .toArray()
       .map((item, index) => ({ item, index }))
       .filter(({ item, index }) => typeof item === 'number')
-      .map(({ item, index }) => index);
+      .map(({ item, index }) => item);
 
     const items = indexes.map(index =>
       storeKeys
