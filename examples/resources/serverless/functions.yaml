@@ -185,7 +185,7 @@ data:
         - python39
     - path: spec.runtimeImageOverride
     - path: spec.source.inline
-      visibility: $sourceType = 'Inline' #the bug
+      visibility: $sourceType = 'Inline'
       children:
         - path: source
           widget: CodeEditor
