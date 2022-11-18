@@ -111,10 +111,8 @@ context('Test Authorization Policies', () => {
     cy.wait(500);
 
     cy.getIframeBody()
-      .find('[data-testid="collapse-button-close"]', { timeout: 10000 })
+      .contains('Rule #1 to when', { timeout: 10000 })
       .click();
-
-    cy.wait(500);
 
     cy.getIframeBody()
       .contains('To #1 methods paths', { timeout: 10000 })
