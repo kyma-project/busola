@@ -108,6 +108,8 @@ context('Test Authorization Policies', () => {
       .contains('Matches all Pods in the Namespace')
       .should('be.visible');
 
+    cy.wait(500);
+
     cy.getIframeBody()
       .find('[data-testid="collapse-button-close"]', { timeout: 10000 })
       .click();
