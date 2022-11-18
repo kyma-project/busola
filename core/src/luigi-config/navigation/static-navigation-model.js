@@ -1081,43 +1081,6 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
-      pathSegment: 'gitrepositories',
-      resourceType: 'gitRepositories',
-      navigationContext: 'gitrepositories',
-      label: i18next.t('git-repositories.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/gitrepositories?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      context: {
-        requiredFeatures: [features.SERVERLESS],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          resourceType: 'gitRepositories',
-          children: [
-            {
-              pathSegment: ':gitreponame',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/gitrepositories/:gitreponame?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('configuration.title'),
       resourceType: 'dnsentries',
       pathSegment: 'dnsentries',
       navigationContext: 'dnsentries',

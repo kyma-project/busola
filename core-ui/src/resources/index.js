@@ -31,7 +31,6 @@ import * as AuthorizationPolicies from './AuthorizationPolicies';
 import * as APIRules from './APIRules';
 import * as Subscriptions from './Subscriptions';
 import * as ServiceAccounts from './ServiceAccounts';
-import * as GitRepositories from './GitRepositories';
 
 // //cluster
 import * as Applications from './Applications';
@@ -81,7 +80,6 @@ export const resources = [
   Certificates,
   Subscriptions,
   ServiceAccounts,
-  GitRepositories,
 
   // cluster resources
   Applications,
