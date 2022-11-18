@@ -63,12 +63,12 @@ data:
                 widget: CodeViewer
                 name: code.source
                 language: '$contains($root.spec.runtime, "python") ? "python": "javascript"'
-                visibility: $exists(*)
+                visibility: $exists($value)
               - source: spec.source.inline.dependencies
                 widget: CodeViewer
                 name: code.dependencies
                 language: '"json"'
-                visibility: $exists(*)
+                visibility: $exists($value)
               - source: spec.source.gitRepository
                 widget: Panel
                 name: code.gitRepositoryConfig
