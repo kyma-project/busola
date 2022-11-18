@@ -159,20 +159,6 @@ context('Test Virtual Services', () => {
     cy.getIframeBody().contains(HEADER_VALUE);
     cy.getIframeBody().contains(REDIRECT_URI);
     cy.getIframeBody().contains(REDIRECT_AUTHORITY);
-    // cy.getIframeBody().contains(
-    //   'kyma-gateway-application-connector.kyma-system.svc.cluster.local',
-    // );
-    // cy.getIframeBody().contains('host1.example.com');
-    // cy.getIframeBody().contains('matches ^/uri-*regex?');
-    // cy.getIframeBody().contains('is exactly exact-uri');
-    // cy.getIframeBody().contains('starts with prefixed-uri (ignore case)');
-    // cy.getIframeBody().contains('TLS Route');
-    // cy.getIframeBody().contains('SNI Hosts');
-    // cy.getIframeBody().contains('TCP Route');
-    // cy.getIframeBody().contains('Destinations');
-    // cy.getIframeBody().contains('CORS Policy');
-    // cy.getIframeBody().contains('Redirect');
-    // cy.getIframeBody().contains('Delegate');
   });
 
   it('Edit VS and check updates', () => {
@@ -215,8 +201,8 @@ context('Test Virtual Services', () => {
       .click();
 
     // Changed details
-    // cy.getIframeBody().contains(HOST1);
-    // cy.getIframeBody().contains(HOST2);
+    cy.getIframeBody().contains(HOST1);
+    cy.getIframeBody().contains(HOST2);
     cy.getIframeBody().contains(GATEWAY);
   });
 
