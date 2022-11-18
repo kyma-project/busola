@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import CodeTab from './Tabs/Code/CodeTab';
 import ResourceManagement from './Tabs/ResourceManagement/ResourceManagement';
-import { ApiRulesList } from 'components/ApiRules/ApiRulesList';
+// import { ApiRulesList } from 'components/ApiRules/ApiRulesList';
 import { SubscriptionsList } from 'shared/components/SubscriptionsList';
 
 export default function FunctionDetails({ func }) {
@@ -14,7 +14,7 @@ export default function FunctionDetails({ func }) {
   const { features } = microfrontendContext;
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
-  const ApiRules = features?.API_GATEWAY?.isEnabled ? ApiRulesList : () => null;
+  // const ApiRules = features?.API_GATEWAY?.isEnabled ? ApiRulesList : () => null;
 
   const Subscriptions = features?.EVENTING?.isEnabled
     ? SubscriptionsList
@@ -41,11 +41,11 @@ export default function FunctionDetails({ func }) {
             id="function-configuration"
             title={t('functions.details.title.configuration')}
           >
-            <ApiRules
+            {/* <ApiRules
               prefix={func.metadata.name}
               serviceName={func.metadata.name}
               namespace={func.metadata.namespace}
-            />
+            /> */}
             <Subscriptions
               prefix={func.metadata.name}
               serviceName={func.metadata.name}
