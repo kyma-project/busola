@@ -72,7 +72,7 @@ data:
               - source: spec.source.gitRepository
                 widget: Panel
                 name: code.gitRepositoryConfig
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 children:
                   - name: code.gitRepository.url
                     source: spec.source.gitRepository.url
