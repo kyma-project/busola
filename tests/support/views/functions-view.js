@@ -46,6 +46,7 @@ Cypress.Commands.add(
     //open Dependencies Tab and paste the dependencies to the code editor
     cy.getIframeBody()
       .find('[aria-label="expand Dependencies"]')
+      .click()
       .readFile(dependenciesPath)
       .then(body => {
         cy.pasteToMonaco(JSON.stringify(body), 1);
