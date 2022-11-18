@@ -443,42 +443,6 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('discovery-and-network.title'),
-      resourceType: 'apirules',
-      pathSegment: 'apirules',
-      navigationContext: 'apirules',
-      label: i18next.t('api-rules.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/apirules?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.API_GATEWAY],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':apiName',
-              resourceType: 'apirules',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/apirules/:apiName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('discovery-and-network.title'),
       pathSegment: 'ingresses',
       resourceType: 'ingresses',
       navigationContext: 'ingresses',

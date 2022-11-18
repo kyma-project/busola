@@ -28,7 +28,6 @@ import * as DaemonSets from './DaemonSets';
 import * as ConfigMaps from './ConfigMaps';
 import * as Certificates from './Certificates';
 import * as AuthorizationPolicies from './AuthorizationPolicies';
-import * as APIRules from './APIRules';
 import * as Subscriptions from './Subscriptions';
 import * as ServiceAccounts from './ServiceAccounts';
 import * as GitRepositories from './GitRepositories';
@@ -65,7 +64,6 @@ export const resources = [
   Ingresses,
   NetworkPolicies,
   HorizontalPodAutoscalers,
-  APIRules,
   // storage
   PersistentVolumeClaims,
   // service management
