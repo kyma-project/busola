@@ -49,21 +49,10 @@ context('Test Virtual Services', () => {
       .contains('Add')
       .click();
 
-    // to remove after merge AP
-    cy.getIframeBody()
-      .find('[aria-label="expand HTTP"]:visible', { log: false })
-      .eq(1)
-      .click();
-
     // Matches
     cy.getIframeBody()
       .find('[aria-label="expand Matches"]:visible', { log: false })
       .contains('Add')
-      .click();
-
-    // to remove after merge AP
-    cy.getIframeBody()
-      .find('[aria-label="expand Match"]:visible', { log: false })
       .click();
 
     cy.getIframeBody()
