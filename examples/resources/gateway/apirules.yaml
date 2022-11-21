@@ -248,7 +248,7 @@ data:
       group: gateway.kyma-project.io
       version: v1beta1
     name: API Rules
-    category: discovery-and-network
+    category: Discovery-and-network
     scope: namespace
     description: '{{[APIRule](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/apix-01-apirule/#documentation-content)}} allows for exposing a service externally.'
     urlPath: apirules
