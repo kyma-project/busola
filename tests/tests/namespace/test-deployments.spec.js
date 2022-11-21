@@ -116,12 +116,12 @@ context('Test Deployments', () => {
       .contains('Deployments')
       .click();
 
+    cy.wait(1000);
+
     cy.getIframeBody()
       .contains('a', DEPLOYMENT_NAME)
       .should('be.visible')
       .click();
-
-    cy.wait(500);
 
     cy.getIframeBody()
       .contains('Edit')
