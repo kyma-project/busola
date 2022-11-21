@@ -22,7 +22,6 @@ import * as HorizontalPodAutoscalers from './HorizontalPodAutoscalers';
 import * as Events from './Events';
 import * as DnsProviders from './DnsProviders';
 import * as DnsEntries from './DnsEntries';
-import * as DestinationRules from './DestinationRules';
 import * as Deployments from './Deployments';
 import * as DaemonSets from './DaemonSets';
 import * as ConfigMaps from './ConfigMaps';
@@ -57,7 +56,6 @@ export const resources = [
   DaemonSets,
   // istio
   VirtualServices,
-  DestinationRules,
   // discovery and network
   Services,
   Ingresses,
