@@ -121,6 +121,8 @@ context('Test Deployments', () => {
       .should('be.visible')
       .click();
 
+    cy.wait(500);
+
     cy.getIframeBody()
       .contains('Edit')
       .click();

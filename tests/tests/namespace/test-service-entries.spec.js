@@ -88,6 +88,8 @@ context('Test Service Entries', () => {
       .contains('button', 'Create')
       .click();
 
+    cy.wait(500);
+
     cy.getIframeBody()
       .contains('h3', SE_NAME)
       .should('be.visible');

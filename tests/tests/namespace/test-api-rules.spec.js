@@ -114,6 +114,8 @@ context('Test API Rules in the Function details view', () => {
   });
 
   it('Edit the API Rule', () => {
+    cy.wait(500);
+
     cy.getIframeBody()
       .contains('Edit')
       .click();

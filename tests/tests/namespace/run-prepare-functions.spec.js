@@ -50,6 +50,8 @@ context('Prepare funtions for testing', () => {
       .contains(FUNCTION_NAME)
       .click();
 
+    cy.wait(500);
+
     cy.getIframeBody()
       .contains('button', 'Edit')
       .click();

@@ -72,6 +72,8 @@ context('Test DNS Providers', () => {
   });
 
   it('Edit DNS Provider', () => {
+    cy.wait(500);
+
     cy.getIframeBody()
       .contains('Edit')
       .click();
