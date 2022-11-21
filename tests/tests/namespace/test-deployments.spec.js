@@ -124,6 +124,10 @@ context('Test Deployments', () => {
       .click();
 
     cy.getIframeBody()
+      .find('[data-testid="has-tooltip"]')
+      .contains('span', '1 / 1', { timeout: 60 * 1000 });
+
+    cy.getIframeBody()
       .contains('Edit')
       .click();
 
