@@ -57,14 +57,6 @@ context('Test Gateways', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[aria-label="expand Server"]:visible', { log: false })
-      .click();
-
-    cy.getIframeBody()
-      .find('[aria-label="expand Port"]:visible', { log: false })
-      .click();
-
-    cy.getIframeBody()
       .find('[data-testid="spec.servers.0.port.number"]:visible')
       .type(PORT_NUMBER);
 
@@ -124,26 +116,12 @@ context('Test Gateways', () => {
       .contains('Edit')
       .click();
 
-    // need to be fixed in https://github.com/kyma-project/busola/issues/2007
-    // name should be disabled for edit
-    // cy.getIframeBody()
-    //   .find('[ariaLabel="Gateway name"]:visible', { log: false })
-    //   .should('have.attr', 'readonly');
+    cy.getIframeBody()
+      .find('[ariaLabel="Gateway name"]:visible', { log: false })
+      .should('have.attr', 'readonly');
 
     cy.getIframeBody()
       .find('[aria-label="expand Servers"]:visible', {
-        log: false,
-      })
-      .click();
-
-    cy.getIframeBody()
-      .find('[aria-label="expand Server"]:visible', {
-        log: false,
-      })
-      .click();
-
-    cy.getIframeBody()
-      .find('[aria-label="expand Port"]:visible', {
         log: false,
       })
       .click();
