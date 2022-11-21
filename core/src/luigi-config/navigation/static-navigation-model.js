@@ -677,7 +677,6 @@ export function getStaticChildrenNodesForNamespace(
       context: {
         requiredFeatures: [features.ISTIO],
       },
-
       navigationContext: 'virtualservices',
       children: [
         {
@@ -691,43 +690,6 @@ export function getStaticChildrenNodesForNamespace(
                 '/namespaces/:namespaceId/virtualservices/:virtualserviceName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/networking.istio.io/v1beta1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('istio.title'),
-      resourceType: 'authorizationpolicies',
-      pathSegment: 'authorizationpolicies',
-      label: i18next.t('authorization-policies.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/authorizationpolicies?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/security.istio.io/v1beta1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.ISTIO],
-      },
-
-      navigationContext: 'authorizationpolicies',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':authorizationpolicyName',
-              resourceType: 'authorizationpolicies',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/authorizationpolicies/:authorizationpolicyName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/security.istio.io/v1beta1',
                 }),
             },
           ],
