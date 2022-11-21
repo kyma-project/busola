@@ -374,6 +374,8 @@ command-palette:
     customresourcedefinitions: Custom Resource Definitions
     daemonsets: Daemon Sets
     destinationrules: Destination Rules
+    functions: Functions
+    gateways: Gateways
     horizontalpodautoscalers: Horizontal Pod Autoscalers
     networkpolicies: Network Policies
     oauth2clients: OAuth2 Clients

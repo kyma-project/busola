@@ -75,11 +75,11 @@ data:
                 visibility: $exists($value)
                 children:
                   - name: code.gitRepository.url
-                    source: spec.source.gitRepository.url
+                    source: url
                   - name: code.gitRepository.reference
-                    source: spec.source.gitRepository.reference
+                    source: reference
                   - name: code.gitRepository.baseDir
-                    source: spec.source.gitRepository.baseDir
+                    source: baseDir
               - source: spec.env
                 widget: Table
                 name: code.env
