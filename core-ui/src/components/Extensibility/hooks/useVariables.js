@@ -45,13 +45,13 @@ export function useVariables() {
   const [defs, setDefs] = useState({});
 
   const itemVars = (resource, names, storeKeys) => {
-    const indexes = storeKeys
+    const i = storeKeys
       .toArray()
       .map((item, index) => ({ item, index }))
       .filter(({ item, index }) => typeof item === 'number')
       .map(({ item, index }) => index);
 
-    const items = indexes.map(index =>
+    const items = i.map(index =>
       storeKeys
         .slice(0, index + 1)
         .toArray()
@@ -59,9 +59,9 @@ export function useVariables() {
     );
 
     const item = last(items) || resource;
-    const index = last(indexes);
+    const index = last(i);
 
-    const localVars = extractVariables(vars, names, indexes);
+    const localVars = extractVariables(vars, names, i);
 
     return {
       ...vars,
@@ -70,7 +70,7 @@ export function useVariables() {
       item,
       items,
       index,
-      indexes,
+      indexes: i,
     };
   };
 
