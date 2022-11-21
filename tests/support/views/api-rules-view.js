@@ -1,6 +1,6 @@
 Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
   cy.getLeftNav()
-    .contains('Discovery-and-network')
+    .contains('Discovery and Network')
     .click();
 
   cy.getLeftNav()
