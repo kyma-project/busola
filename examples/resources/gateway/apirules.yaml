@@ -129,6 +129,7 @@ data:
           trigger: [port]
         - simple: true
           required: false
+          placeholder: Enter the port number
           path: port 
           name: service.port
           subscribe:
@@ -240,6 +241,7 @@ data:
               trigger: [accessStrategyPort]
             - simple: true
               required: false
+              placeholder: Enter the port number
               path: port 
               name: service.port
               subscribe:

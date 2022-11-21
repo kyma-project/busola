@@ -1,4 +1,4 @@
-Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
+Cypress.Commands.add('createApiRule', (ApiRuleName, ApiPort, ApiRuleHost) => {
   cy.getLeftNav()
     .contains('Discovery and Network')
     .click();
@@ -12,23 +12,31 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiRuleHost) => {
     .should('be.visible')
     .click();
 
+  // Name
   cy.getIframeBody()
     .find('[ariaLabel="APIRule name"]:visible', { log: false })
     .type(ApiRuleName);
 
+  // Service
   cy.getIframeBody()
-    .find('[placeholder="Subdomain part of the APIRule address"]:visible', {
-      log: false,
-    })
-    .type(ApiRuleHost);
+    .find('[aria-label="expand Service"]:visible', { log: false })
+    .click();
 
   cy.getIframeBody()
-    .contains('Choose the service to expose')
-    .filter(':visible', { log: false })
-    .click();
+    .find('[aria-label="Choose Service"]:visible', { log: false })
+    .first()
+    .type(ApiRuleName);
+
   cy.getIframeBody()
-    .contains(ApiRuleName + ' (port: 80)')
-    .click();
+    .find('[placeholder="Enter the port number"]:visible', { log: false })
+    .clear()
+    .type(ApiPort);
+
+  // Host
+  cy.getIframeBody()
+    .find('[aria-label="Combobox input"]:visible', { log: false })
+    .first()
+    .type(ApiRuleHost);
 
   cy.getIframeBody()
     .contains('Allow')
