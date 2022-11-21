@@ -106,8 +106,8 @@ data:
                   - name: code.env.source
                     widget: Badge
                     source: >-
-                      $exists($item.valueFrom.configMapKeyRef) ? 'CONFIG MAP' :
-                      $exists($item.valueFrom.secretKeyRef) ? 'SECRET' : 'CUSTOM'
+                      $exists($item.value) ? 'CUSTOM' :
+                      $exists($item.valueFrom.configMapKeyRef) ? 'CONFIG MAP' : 'SECRET'
                   - name: code.env.key
                     source: >-
                       $exists($item.valueFrom.configMapKeyRef) ?
