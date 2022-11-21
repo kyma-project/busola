@@ -40,9 +40,6 @@ export function MultiInput({
   const [internalValue, setInternalValue] = useState([]);
   const [keys, setKeys] = useState(1);
   const [refs, setRefs] = useState([]);
-  // const refs = Array(internalValue.length)
-  // .fill()
-  // .map(() => inputs.map(() => createRef()));
 
   useEffect(() => {
     setRefs(
