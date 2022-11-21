@@ -44,11 +44,6 @@ context('Test Sidecars', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[aria-label="expand Egress"]:visible', { log: false })
-      .eq(1)
-      .click();
-
-    cy.getIframeBody()
       .find('[aria-label="expand Port"]:visible', { log: false })
       .click();
 
@@ -85,11 +80,6 @@ context('Test Sidecars', () => {
     cy.getIframeBody()
       .find('[aria-label="expand Ingress"]:visible', { log: false })
       .contains('Add')
-      .click();
-
-    cy.getIframeBody()
-      .find('[aria-label="expand Ingress"]:visible', { log: false })
-      .eq(1)
       .click();
 
     cy.getIframeBody()
