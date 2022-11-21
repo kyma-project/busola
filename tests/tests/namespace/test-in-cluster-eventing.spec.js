@@ -13,6 +13,9 @@ context('Test in-cluster eventing', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtension('API RULES', 'examples/resources/gateway/apirules.yaml');
+
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
