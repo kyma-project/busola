@@ -112,13 +112,13 @@ data:
         disableCreate: true
   form: |-
     - simple: true
-      required: true
+      required: false
       path: spec.service
       name: service
       widget: FormGroup
       children:
         - simple: true
-          required: true
+          required: false
           path: name
           name: service-name
           widget: Resource
@@ -128,6 +128,7 @@ data:
             scope: namespace
           trigger: [port]
         - simple: true
+          required: false
           path: port 
           name: service.port
           subscribe:
@@ -228,7 +229,7 @@ data:
           widget: FormGroup
           children:
             - simple: true
-              required: true
+              required: false
               path: name
               name: service-name
               widget: Resource
@@ -238,6 +239,7 @@ data:
                 scope: namespace
               trigger: [accessStrategyPort]
             - simple: true
+              required: false
               path: port 
               name: service.port
               subscribe:
