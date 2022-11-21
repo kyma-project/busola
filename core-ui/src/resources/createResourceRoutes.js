@@ -16,21 +16,21 @@ export const createPath = (
   return `${namespacePrefix}/${pathSegment}${details}`;
 };
 
-export const luigiNavigate = resource => {
-  const path = createUrl(resource);
+export const luigiNavigate = (node, namespace) => {
+  const path = node.createUrlFn
+    ? node.createUrlFn(namespace)
+    : createUrl(node, namespace);
 
   LuigiClient.linkManager()
     .fromContext('cluster')
     .navigate(path);
 };
 
-export const createUrl = ({
-  resourceType,
-  pathSegment,
-  namespaced,
-  resourceName,
-}) => {
-  const namespacePrefix = namespaced ? '/namespaces/:namespaceId' : '';
+export const createUrl = (
+  { resourceType, pathSegment, namespaced, resourceName },
+  namespace,
+) => {
+  const namespacePrefix = namespaced ? `/namespaces/${namespace}` : '';
   const details = resourceName || '';
   pathSegment = pathSegment || pluralize(resourceType).toLowerCase();
 

@@ -37,7 +37,6 @@ export function Panel({
           ? header.map((def, idx) => (
               <Widget
                 key={idx}
-                value={value}
                 structure={def}
                 schema={schema}
                 inlineContext={true}

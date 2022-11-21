@@ -2,12 +2,8 @@ import { useContext, useState } from 'react';
 import { last, initial, tail, trim } from 'lodash';
 import * as jp from 'jsonpath';
 
-import { jsonataWrapper } from '../helpers/jsonataWrapper';
+import { useJsonata } from './useJsonata';
 import { VarStoreContext } from '../contexts/VarStore';
-
-// Cypress uses Chrome 95 which doesn't support findLastIndex
-// issue: https://github.com/kyma-project/busola/issues/1997
-import findLastIndex from 'array.prototype.findlastindex';
 
 const pathToJP = path =>
   '$' +
@@ -45,26 +41,24 @@ export function extractVariables(varStore, vars, indexes) {
 
 export function useVariables() {
   const { vars, setVar, setVars } = useContext(VarStoreContext);
+  const jsonata = useJsonata({});
   const [defs, setDefs] = useState({});
+
   const itemVars = (resource, names, storeKeys) => {
-    let lastArrayItem;
-    let lastArrayIndex = findLastIndex(
-      storeKeys.toArray(),
-      item => typeof item === 'number',
+    const indexes = storeKeys
+      .toArray()
+      .map((item, index) => ({ item, index }))
+      .filter(({ item, index }) => typeof item === 'number')
+      .map(({ item, index }) => index);
+
+    const items = indexes.map(index =>
+      storeKeys
+        .slice(0, index + 1)
+        .toArray()
+        .reduce((item, key) => item?.[key], resource),
     );
 
-    if (lastArrayIndex > 0) {
-      const lastArrayStoreKeys = storeKeys.slice(0, lastArrayIndex + 1);
-
-      lastArrayItem = lastArrayStoreKeys
-        .toArray()
-        .reduce((item, key) => item?.[key], resource);
-    }
-
-    const indexes = storeKeys
-      .filter(item => typeof item === 'number')
-      .toArray();
-
+    const item = last(items) || resource;
     const index = last(indexes);
 
     const localVars = extractVariables(vars, names, indexes);
@@ -73,9 +67,10 @@ export function useVariables() {
       ...vars,
       ...localVars,
       vars,
+      item,
+      items,
       index,
       indexes,
-      item: lastArrayItem,
     };
   };
 
@@ -109,26 +104,38 @@ export function useVariables() {
   const readVars = resource => {
     const readVar = (def, path, base = resource) => {
       if (path.length) {
-        return (jp.value(base, pathToJP(path[0])) ?? []).map(item =>
-          applyDefaults(def, readVar(def, tail(path), item)),
+        const value = jp.value(base, pathToJP(path[0])) ?? [];
+        const promises = value.map(item => readVar(def, tail(path)));
+        return Promise.all(promises).then(vars =>
+          vars.map(v => applyDefaults(def, v)),
         );
       } else if (def.defaultValue) {
         return def.defaultValue;
       } else if (def.dynamicValue) {
-        return jsonataWrapper(def.dynamicValue).evaluate(resource, {
+        return jsonata.async(def.dynamicValue, {
+          resource,
           item: base,
         });
+      } else {
+        return '';
       }
     };
 
-    Object.values(defs)
+    const promises = Object.values(defs)
       .filter(def => typeof vars[def.var] === 'undefined')
-      .forEach(def => {
-        const pureVal = readVar(def, initial(def.path.split(/\[\]\.?/)));
-        vars[def.var] = applyDefaults(def, pureVal);
+      .map(def => {
+        return Promise.any([
+          readVar(def, initial(def.path.split(/\[\]\.?/))),
+        ]).then(([val, err]) => {
+          const newval = applyDefaults(def, val);
+          return [def, newval];
+        });
       });
 
-    setVars({ ...vars });
+    Promise.all(promises).then(values => {
+      values.forEach(([def, val]) => (vars[def.var] = applyDefaults(def, val)));
+      setVars({ ...vars });
+    });
   };
 
   return {

@@ -16,6 +16,7 @@ import { SchemaRulesInjector } from '../plugins/SchemaRulesInjector';
 import { CustomFieldInjector } from '../plugins/CustomFieldInjector';
 import { EnumHandler } from '../plugins/EnumHandler';
 import { VisibilityHandler } from '../plugins/VisibilityHandler';
+import { TriggerHandler } from '../plugins/TriggerHandler';
 
 import { StringRenderer } from './StringRenderer';
 import { NumberRenderer } from './NumberRenderer';
@@ -42,6 +43,7 @@ const pluginStack = [
   CustomFieldInjector,
   EnumHandler,
   VisibilityHandler,
+  TriggerHandler,
   PluginSimpleStack,
   ValidityReporter,
 ];

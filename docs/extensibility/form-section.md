@@ -35,6 +35,8 @@ If you target elements of an array rather than the array itself, you can use the
 - **visibility** - a [JSONata](jsonata.md) expression controlling the visibility of the element.
 - **overwrite** - parameter used to disable the overwriting (clearing) of hidden fields. Used together with **visibility**, defaults to `true`.
   **NOTE:** it is recommended to set **overwrite** to `false` when defining fields with the same `path` and different **visibility** conditions.
+- **trigger** - Value change triggers, see [Dynamic fields section](#dynamic-field-values).
+- **subscription** - Trigger subscriptions for variable values, see [Dynamic fields section](#dynamic-field-values).
 
 ### Example
 
@@ -104,6 +106,44 @@ In the example, the visibility for item price and color are analogous - the form
         - path: description
           visibility: '$useDescription'
 ```
+
+## Dynamic field values
+
+It's possible to modify field values automatically when another value changes. This works on a subscriber system. Any field (including variable fields) can send a trigger. When that happens a field that subscribes to it will have its value changed accordingly.
+
+Triggers are listed as a **triggers** field that contains a list of string labels.
+
+Subscriptions are a key-value object where in the most generic case the key is the name of the trigger, while the value is a [JSONata](jsonata.md) expression used to generate the new value.
+
+### Example
+
+```yaml
+- path: spec.url
+  triggers: [server]
+- path: spec.port
+  triggers: [server]
+- path: spec.server
+  subscriptions:
+    server: "'http://' & spec.url & ':' & spec.port"
+```
+
+or with variables:
+
+```yaml
+- var: url
+  type: string
+  triggers: [server]
+- var: port
+  type: string
+  triggers: [server]
+- path: spec.server
+  subscriptions:
+    server: "'http://' & $url & ':' & $port"
+```
+
+### Scoping
+
+When a trigger is invoked in an array, by default it matches only fields in the same array item. And it bubbles all the way up to root. To subscribe to a trigger on a different level a jsonata-like notation can be used. To match triggers globally, that is, match triggers happening in root, a `$root.foo` notation can be used. To just access a higher level, `$parent.foo` can be used instead. It's possible to repeat `$parent` multiple times to access even higher levels (e.g. `$parent.$parent.foo`).
 
 ## Default fields
 
@@ -208,6 +248,7 @@ Name widgets render a name input field. They contain an automatic name generator
 - **placeholder** - specifies a short hint about the input field value.
 - **inputInfo** - a string below the input field that shows how to fill in the input. It defaults to `Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1').`. To disable any suggestion, set this value to `null`.
 - **description** - a string displayed in a tooltip when you hover over a question mark icon, next to the input's label. The default value is taken from the CustomResourceDefintion (CRD).
+- **disableOnEdit** - parameter used to disable field in edit mode, defaults to `false`.
 
 #### Example
 
@@ -217,6 +258,16 @@ Name widgets render a name input field. They contain an automatic name generator
 ```
 
 <img src="./assets/form-widgets/Name.png" alt="Example of a name widget" style="border: 1px solid #D2D5D9">
+
+#### Example
+
+```yaml
+- path: spec.my-data
+  widget: Name
+  disableOnEdit: true
+```
+
+<img src="./assets/form-widgets/Name2.png" alt="Example of a name widget with disabled option to edit" style="border: 1px solid #D2D5D9">
 
 ### CodeEditor
 

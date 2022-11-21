@@ -48,7 +48,6 @@ export function ResourceForm({
     () => resource.apiVersion + '/' + resource.kind,
     [], // eslint-disable-line react-hooks/exhaustive-deps
   );
-
   const resourceRef = useRef(null);
 
   if (!handleNameChange) {

@@ -13,6 +13,7 @@ import { prettifyKind } from 'shared/utils/helpers';
 
 import { ResourceSchema } from './ResourceSchema';
 import { usePreparePresets, createTemplate, getDefaultPreset } from './helpers';
+import { DataSourcesContextProvider } from './contexts/DataSources';
 import { VarStoreContextProvider } from './contexts/VarStore';
 import { prepareSchemaRules } from './helpers/prepareSchemaRules';
 import {
@@ -21,6 +22,8 @@ import {
 } from './helpers/immutableConverter';
 import { useVariables } from './hooks/useVariables';
 import { prepareRules } from './helpers/prepareRules';
+
+import { TriggerContextProvider } from './contexts/Trigger';
 
 export function ExtensibilityCreateCore({
   formElementRef,
@@ -31,6 +34,7 @@ export function ExtensibilityCreateCore({
   resourceSchema: createResource,
   toggleFormFn,
   resourceName,
+  editMode = false,
   ...props
 }) {
   const { prepareVars, resetVars, readVars } = useVariables();
@@ -55,8 +59,7 @@ export function ExtensibilityCreateCore({
     ),
   );
 
-  const presets = usePreparePresets(createResource?.presets);
-
+  const presets = usePreparePresets(createResource?.presets, emptyTemplate);
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
   const updateStore = res => {
@@ -93,7 +96,11 @@ export function ExtensibilityCreateCore({
   });
 
   const { simpleRules, advancedRules } = useMemo(() => {
-    const fullSchemaRules = prepareRules(createResource?.form ?? [], t);
+    const fullSchemaRules = prepareRules(
+      createResource?.form ?? [],
+      editMode,
+      t,
+    );
 
     prepareVars(fullSchemaRules);
     readVars(resource);
@@ -151,6 +158,7 @@ export function ExtensibilityCreateCore({
         setStore={setStore}
         onSubmit={() => {}}
         path={general?.urlPath || ''}
+        editMode={editMode}
       />
       <ResourceSchema
         advanced
@@ -161,6 +169,7 @@ export function ExtensibilityCreateCore({
         store={store}
         setStore={setStore}
         path={general?.urlPath || ''}
+        editMode={editMode}
       />
     </ResourceForm>
   );
@@ -168,9 +177,15 @@ export function ExtensibilityCreateCore({
 
 export function ExtensibilityCreate(props) {
   return (
-    <VarStoreContextProvider>
-      <ExtensibilityCreateCore {...props} />
-    </VarStoreContextProvider>
+    <DataSourcesContextProvider
+      dataSources={props.resourceSchema?.dataSources || {}}
+    >
+      <TriggerContextProvider>
+        <VarStoreContextProvider>
+          <ExtensibilityCreateCore {...props} />
+        </VarStoreContextProvider>
+      </TriggerContextProvider>
+    </DataSourcesContextProvider>
   );
 }
 

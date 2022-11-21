@@ -486,7 +486,7 @@ common:
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
     secret: Secret
     service: Service
-    version: Kyma Dashboard version
+    version: 'Kyma Dashboard version:'
     'yes': 'Yes'
   lowercase:
     name: name
@@ -1158,72 +1158,6 @@ functions:
 gardener:
   headers:
     provider: Provider
-gateways:
-  aria-labels:
-    host: Host
-    port-name: Port name
-  create-modal:
-    advanced:
-      add-server: Add server
-      delete-server: Delete server
-      enable-tls: Enable TLS
-      hosts: Hosts
-      mode-tooltip: Indicates whether connections to the port are secured using TLS.
-      placeholders:
-        hosts: $t(domains.example)
-        port:
-          protocol: Enter the protocol
-        tls:
-          ca-certificates: Enter the CA certificates path
-          mode: Select TLS Mode
-          private-key: Enter the private key path
-          server-certificate: Enter the certificate path
-      port:
-        name: Name
-        number: Number
-        ports: Ports
-        protocol: Protocol
-        target-port: Target port
-      tls:
-        ca-certificates: CA Certificate
-        credentialName: Credential Name
-        disabled-for-non-https: TLS settings are not available for a non-HTTPS protocol.
-        https-redirect: HTTPS Redirect
-        https-redirect-description: Enable 301 redirect for all HTTP connections.
-        max-protocol-version: Max Protocol Version
-        messages:
-          invalid-tls-warning: TLS Server of mode SIMPLE or MUTUAL needs either credential name, or private key and server certificate pair.
-        min-protocol-version: Min Protocol Version
-        mode: TLS Mode
-        private-key: Private Key
-        server-certificate: Server Certificate
-        tls: TLS
-    at-least-one-server-required: Gateway must have at least one server.
-    simple:
-      selector: Selector
-      server: Server
-      servers: Servers
-    title: Create Gateway
-    tooltips:
-      ca-certificates: The path to a file containing certificate authority (CA) certificates, which verify a presented client-side certificate.
-      credential-name: The name of the Secret. Required properties are key and cert; for mutual TLS (mTLS), caceert is also required. Alternatively, you can use a Secret of type tls for server certificates along with a ca.crt key for CA certificates.
-      hosts: At least one host exposed by the Gateway, in FQDN format with optional wildcard character in the left-most component.
-      private-key: The path to the file holding the server’s private key.
-      protocol: The protocol exposed on the port. TLS implies that the connection is routed based on the SNI header to the destination, without terminating the TLS connection.
-      selector: One or more labels that indicate a set of Pods on which the Gateway configuration is applied. By default, workloads are searched across all Namespaces based on label selectors.
-      server-certificate: The path to the file holding the server-side TLS certificate you want to use.
-      target-port: The port number on the endpoint where the traffic is received.
-  description: ' <0>Gateway</0> describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections.'
-  name_singular: Gateway
-  selector: Selector
-  servers:
-    hosts: Hosts
-    name: Name
-    port: Port
-    secret: TLS Secret
-    title: Servers
-    tls: TLS Mode
-  title: Gateways
 generic-list:
   no-entries-found: No entries found
 git-repositories:
@@ -1533,6 +1467,10 @@ namespaces:
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
+navigation:
+  preferences:
+    title: Preferences
+  select-namespace: Select Namespace...
 network-policies:
   description: <0>NetworkPolicy</0> allows you to control how a Pod communicates with different network entities.
   headers:
@@ -1720,8 +1658,6 @@ pods:
     terminated: Pod terminated
     terminating: Terminating the Pod
     unknown: Pod state unknown
-preferences:
-  title: Preferences
 pv:
   description: <0>PersistentVolume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
   details: Details
@@ -1940,30 +1876,6 @@ service-accounts:
   name_singular: ServiceAccount
   service-account: Service Account
   title: Service Accounts
-service-entries:
-  description: <0>ServiceEntry</0> allows for adding more entries to the internal service registry of Istio.
-  headers:
-    addresses: Adresses
-    configuration: Configuration
-    endpoints:
-      address: Address
-      locality: Locality
-      network: Network
-      title: Endpoints
-      weight: Weight
-    export-to: Export to
-    export-to-empty: Exported to all Namespaces
-    hosts: Hosts
-    location: Location
-    ports:
-      number: Number
-      protocol: Protocol
-      target-point: Target Point
-      title: Ports
-    resolution: Resolution
-    subject-alt-names: Subject Alt Names
-  name_singular: ServiceEntry
-  title: Service Entries
 service-management:
   title: Service Management
 services:
@@ -2085,7 +1997,7 @@ subscriptions:
     sink: Specifies the HTTP endpoint where matching events should be sent to.
 top-nav:
   profile:
-    preferences: $t(preferences.title)
+    preferences: $t(navigation.preferences.title)
 upload-yaml:
   buttons:
     hide-warnings: Hide warnings
