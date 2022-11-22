@@ -1,0 +1,73 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: dnsproviders
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: dnsproviders
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  details: |-
+    header:
+      - path: status.state
+        type: string
+        name: STATUS
+        isSelected: true
+        widget: Badge
+    body:
+      - name: Summary
+        widget: Panel
+        children:
+          - name: defaultTTL
+            source: spec.defaultTTL
+          - name: type
+            source: spec.type
+          - name: TYPE
+            source: spec.type
+          - name: STATUS
+            source: status.state
+          - name: AGE
+            source: metadata.creationTimestamp
+          - name: INCLUDED_DOMAINS
+            source: status.domains.included
+          - name: INCLUDED_ZONES
+            source: status.zones.included
+          - name: MESSAGE
+            source: status.message
+      - source: spec
+        widget: CodeViewer
+  form: |-
+    - simple: true
+      path: spec.defaultTTL
+      required: false
+    - simple: true
+      path: spec.type
+      widget: Text
+      enum:
+        - AWS
+        - GCP
+        - Azure
+      required: false
+  general: |-
+    resource:
+      kind: DNSProvider
+      group: dns.gardener.cloud
+      version: v1alpha1
+    name: DNS Providers
+    category: Custom Resources
+    urlPath: dnsproviders-2
+    scope: namespace
+    description: >-
+      {{[DNS Providers](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-01-own-domain)}}
+      is used to specify and manage the configuration for the external DNS services.
+  list: |-
+    - name: Type
+      source: spec.type
+    - name: Status
+      source: status.state
+  translations: |-
+    en:
+      metadata.annotations: Annotations
+      metadata.labels: Labels
+      metadata.creationTimestamp: Created at
