@@ -18,11 +18,10 @@ context('Test API Rules in the Function details view', () => {
 
   before(() => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
-    cy.mockExtension('API RULES', 'examples/resources/gateway/apirules.yaml');
-    cy.mockExtension(
-      'FUNCTIONS',
+    cy.mockExtensions([
       'examples/resources/serverless/functions.yaml',
-    );
+      'examples/resources/gateway/apirules.yaml',
+    ]);
 
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
@@ -51,67 +50,40 @@ context('Test API Rules in the Function details view', () => {
       .contains('Create API Rule')
       .click();
 
-    // Name
     cy.getIframeBody()
       .find('[ariaLabel="APIRule name"]:visible', { log: false })
       .type(API_RULE_NAME);
 
-    // Service
     cy.getIframeBody()
-      .find('[aria-label="expand Service"]:visible', { log: false })
+      .contains('Choose the service to expose')
       .click();
 
     cy.getIframeBody()
-      .find('[aria-label="Choose Service"]:visible', { log: false })
-      .first()
-      .type(FUNCTION_NAME);
+      .contains(`${FUNCTION_NAME} (port: 80)`)
+      .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter the port number"]:visible', { log: false })
-      .clear()
-      .type(80);
-
-    // Host
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
-      .first()
+      .find('[placeholder="Subdomain part of the APIRule address"]:visible', {
+        log: false,
+      })
       .type(API_RULE_HOST);
 
-    // Rules
     cy.getIframeBody()
-      .find('[aria-label="expand Rules"]:visible', { log: false })
-      .contains('Add')
+      .contains('Allow')
+      .filter(':visible', { log: false })
       .click();
 
     cy.getIframeBody()
-      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
-      .contains('Add')
+      .contains('OAuth2')
       .click();
 
     cy.getIframeBody()
-      .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible')
-      .type('allow');
+      .find('[placeholder="Required scope"]:visible', { log: false })
+      .type('read');
 
     cy.getIframeBody()
-      .find('[aria-label="expand Methods"]:visible', { log: false })
+      .contains('POST')
       .click();
-
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.0.methods.0"]:visible')
-      .type('POST');
-
-    // cy.getIframeBody()
-    //   .contains('Allow')
-    //   .filter(':visible', { log: false })
-    //   .click();
-
-    // cy.getIframeBody()
-    //   .contains('OAuth2')
-    //   .click();
-
-    // cy.getIframeBody()
-    //   .find('[placeholder="Required scope"]:visible', { log: false })
-    //   .type('read');
 
     cy.getIframeBody()
       .find('[role=dialog]')
