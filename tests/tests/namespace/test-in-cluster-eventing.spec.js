@@ -103,6 +103,7 @@ context('Test in-cluster eventing', () => {
 
     cy.getIframeBody()
       .find('[role="status"]')
+      .first()
       .should('have.text', 'OK');
   });
 
