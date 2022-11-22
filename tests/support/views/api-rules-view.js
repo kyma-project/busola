@@ -28,6 +28,13 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiPort, ApiRuleHost) => {
     .type(ApiRuleName);
 
   cy.getIframeBody()
+    .find('[aria-label="Choose Service"]:visible', { log: false })
+    .first()
+    .next()
+    .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+    .click();
+
+  cy.getIframeBody()
     .find('[placeholder="Enter the port number"]:visible', { log: false })
     .clear()
     .type(ApiPort);
