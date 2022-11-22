@@ -21,7 +21,6 @@ export const RESOURCE_PATH = {
   DNSEntry: 'dnsentries',
   DNSProvider: 'dnsproviders',
   Event: 'events',
-  Function: 'functions',
   Gateway: 'gateways',
   HorizontalPodAutoscaler: 'horizontalpodautoscalers',
   Ingress: 'ingresses',

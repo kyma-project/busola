@@ -19,6 +19,10 @@ context('Test API Rules in the Function details view', () => {
   before(() => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
     cy.mockExtension('API RULES', 'examples/resources/gateway/apirules.yaml');
+    cy.mockExtension(
+      'FUNCTIONS',
+      'examples/resources/serverless/functions.yaml',
+    );
 
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
@@ -34,8 +38,8 @@ context('Test API Rules in the Function details view', () => {
       .click({ force: true });
 
     cy.getIframeBody()
-      .find('[role="status"]', { timeout: 60 * 1000 })
-      .should('have.text', 'Running');
+      .find('[role="status"]')
+      .contains('span', /running/i, { timeout: 60 * 3000 });
   });
 
   it('Create an API Rule for the Function', () => {
@@ -47,31 +51,17 @@ context('Test API Rules in the Function details view', () => {
       .contains('Create API Rule')
       .click();
 
-    cy.getIframeBody().contains(`${FUNCTION_NAME} (port: 80)`);
-
     cy.getIframeBody()
       .find('[ariaLabel="APIRule name"]:visible', { log: false })
-      .should(input => {
-        initialApiRule = input.val();
-        expect(initialApiRule).to.include(`${FUNCTION_NAME}-`);
-      });
+      .type(API_RULE_NAME);
 
     cy.getIframeBody()
-      .find('[ariaLabel="Generate name button"]:visible', { log: false })
+      .contains('Choose the service to expose')
       .click();
 
     cy.getIframeBody()
-      .find('[ariaLabel="APIRule name"]:visible', { log: false })
-      .should(input => {
-        const generatedApiRule = input.val();
-        expect(generatedApiRule).not.to.include(initialApiRule);
-        expect(generatedApiRule).to.include(`${FUNCTION_NAME}-`);
-      });
-
-    cy.getIframeBody()
-      .find('[ariaLabel="APIRule name"]:visible', { log: false })
-      .type(`{selectall}{backspace}`)
-      .type(API_RULE_NAME);
+      .contains(`${FUNCTION_NAME} (port: 80)`)
+      .click();
 
     cy.getIframeBody()
       .find('[placeholder="Subdomain part of the APIRule address"]:visible', {
