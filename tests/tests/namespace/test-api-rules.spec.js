@@ -51,40 +51,67 @@ context('Test API Rules in the Function details view', () => {
       .contains('Create API Rule')
       .click();
 
+    // Name
     cy.getIframeBody()
       .find('[ariaLabel="APIRule name"]:visible', { log: false })
       .type(API_RULE_NAME);
 
+    // Service
     cy.getIframeBody()
-      .contains('Choose the service to expose')
+      .find('[aria-label="expand Service"]:visible', { log: false })
       .click();
 
     cy.getIframeBody()
-      .contains(`${FUNCTION_NAME} (port: 80)`)
-      .click();
+      .find('[aria-label="Choose Service"]:visible', { log: false })
+      .first()
+      .type(FUNCTION_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Subdomain part of the APIRule address"]:visible', {
-        log: false,
-      })
+      .find('[placeholder="Enter the port number"]:visible', { log: false })
+      .clear()
+      .type(80);
+
+    // Host
+    cy.getIframeBody()
+      .find('[aria-label="Combobox input"]:visible', { log: false })
+      .first()
       .type(API_RULE_HOST);
 
+    // Rules
     cy.getIframeBody()
-      .contains('Allow')
-      .filter(':visible', { log: false })
+      .find('[aria-label="expand Rules"]:visible', { log: false })
+      .contains('Add')
       .click();
 
     cy.getIframeBody()
-      .contains('OAuth2')
+      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
+      .contains('Add')
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Required scope"]:visible', { log: false })
-      .type('read');
+      .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible')
+      .type('allow');
 
     cy.getIframeBody()
-      .contains('POST')
+      .find('[aria-label="expand Methods"]:visible', { log: false })
       .click();
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.rules.0.methods.0"]:visible')
+      .type('POST');
+
+    // cy.getIframeBody()
+    //   .contains('Allow')
+    //   .filter(':visible', { log: false })
+    //   .click();
+
+    // cy.getIframeBody()
+    //   .contains('OAuth2')
+    //   .click();
+
+    // cy.getIframeBody()
+    //   .find('[placeholder="Required scope"]:visible', { log: false })
+    //   .type('read');
 
     cy.getIframeBody()
       .find('[role=dialog]')

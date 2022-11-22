@@ -38,17 +38,28 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiPort, ApiRuleHost) => {
     .first()
     .type(ApiRuleHost);
 
+  // Rules
   cy.getIframeBody()
-    .contains('Allow')
-    .filter(':visible', { log: false })
-    .click();
-  cy.getIframeBody()
-    .contains('noop')
+    .find('[aria-label="expand Rules"]:visible', { log: false })
+    .contains('Add')
     .click();
 
   cy.getIframeBody()
-    .contains('POST')
+    .find('[aria-label="expand Access Strategies"]:visible', { log: false })
+    .contains('Add')
     .click();
+
+  cy.getIframeBody()
+    .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible')
+    .type('allow');
+
+  cy.getIframeBody()
+    .find('[aria-label="expand Methods"]:visible', { log: false })
+    .click();
+
+  cy.getIframeBody()
+    .find('[data-testid="spec.rules.0.methods.0"]:visible')
+    .type('POST');
 
   cy.getIframeBody()
     .find('[role=dialog]')
