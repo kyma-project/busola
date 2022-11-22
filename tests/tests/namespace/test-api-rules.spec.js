@@ -11,8 +11,6 @@ const API_RULE_HOST = API_RULE_NAME + '-host';
 const API_RULE_PATH = '/test-path';
 const API_RULE_DEFAULT_PATH = '/.*';
 
-let initialApiRule;
-
 context('Test API Rules in the Function details view', () => {
   Cypress.skipAfterFail();
 
@@ -63,8 +61,7 @@ context('Test API Rules in the Function details view', () => {
     cy.getIframeBody()
       .find('[aria-label="Choose Service"]:visible', { log: false })
       .first()
-      .type(FUNCTION_NAME)
-      .blur();
+      .type(FUNCTION_NAME);
 
     cy.getIframeBody()
       .find('[placeholder="Enter the port number"]:visible', { log: false })
@@ -75,8 +72,7 @@ context('Test API Rules in the Function details view', () => {
     cy.getIframeBody()
       .find('[aria-label="Combobox input"]:visible', { log: false })
       .first()
-      .type(API_RULE_HOST)
-      .blur();
+      .type(API_RULE_HOST);
 
     // Rules
     cy.getIframeBody()
@@ -91,8 +87,7 @@ context('Test API Rules in the Function details view', () => {
 
     cy.getIframeBody()
       .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible')
-      .type('oauth2_introspection')
-      .blur();
+      .type('oauth2_introspection');
 
     cy.getIframeBody()
       .find('[aria-label="expand Methods"]:visible', { log: false })
@@ -101,8 +96,7 @@ context('Test API Rules in the Function details view', () => {
     cy.getIframeBody()
       .find('[placeholder="Enter key"]:visible')
       .filterWithNoValue()
-      .type('required_scope')
-      .blur();
+      .type('required_scope');
 
     cy.getIframeBody()
       .find('[placeholder="Enter value"]:visible')
@@ -112,8 +106,7 @@ context('Test API Rules in the Function details view', () => {
 
     cy.getIframeBody()
       .find('[data-testid="spec.rules.0.methods.0"]:visible')
-      .type('POST')
-      .blur();
+      .type('POST');
 
     cy.getIframeBody()
       .find('[role=dialog]')
@@ -167,8 +160,7 @@ context('Test API Rules in the Function details view', () => {
 
     cy.getIframeBody()
       .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible')
-      .type('oauth2_introspection')
-      .blur();
+      .type('oauth2_introspection');
 
     cy.getIframeBody()
       .find('[aria-label="expand Methods"]:visible', { log: false })
@@ -179,8 +171,7 @@ context('Test API Rules in the Function details view', () => {
       .find('[placeholder="Enter key"]:visible')
       .eq(1)
       .filterWithNoValue()
-      .type('required_scope')
-      .blur();
+      .type('required_scope');
 
     cy.getIframeBody()
       .find('[placeholder="Enter value"]:visible')
@@ -191,8 +182,7 @@ context('Test API Rules in the Function details view', () => {
 
     cy.getIframeBody()
       .find('[data-testid="spec.rules.1.methods.0"]:visible')
-      .type('POST')
-      .blur();
+      .type('POST');
 
     cy.getIframeBody()
       .find('[data-testid="spec.rules.1.path"]:visible')
