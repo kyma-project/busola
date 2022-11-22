@@ -13,14 +13,11 @@ context('Test Deployments', () => {
   });
 
   it('Create a Deployment', () => {
-    cy.getIframeBody()
-      .contains('Deploy new workload')
-      .click();
+    cy.navigateTo('Workloads', 'Deployments');
 
     cy.getIframeBody()
-      .find('[role="menuitem"]')
       .contains('Create Deployment')
-      .click({ force: true });
+      .click();
 
     cy.getIframeBody()
       .find('[ariaLabel="Deployment name"]:visible')
@@ -116,17 +113,19 @@ context('Test Deployments', () => {
 
   it('Edit a deployment', () => {
     cy.getLeftNav()
-      .contains('Workloads')
+      .contains('Deployments')
       .click();
 
-    cy.getLeftNav()
-      .find('[data-testid=deployments_deployments]')
-      .click();
+    cy.wait(1000);
 
     cy.getIframeBody()
       .contains('a', DEPLOYMENT_NAME)
       .should('be.visible')
       .click();
+
+    cy.getIframeBody()
+      .find('[data-testid="has-tooltip"]')
+      .contains('span', '1 / 1', { timeout: 60 * 1000 });
 
     cy.getIframeBody()
       .contains('Edit')

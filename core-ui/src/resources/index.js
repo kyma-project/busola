@@ -30,8 +30,6 @@ import * as Certificates from './Certificates';
 import * as APIRules from './APIRules';
 import * as Subscriptions from './Subscriptions';
 import * as ServiceAccounts from './ServiceAccounts';
-import * as GitRepositories from './GitRepositories';
-import * as Functions from './Functions';
 
 // //cluster
 import * as Applications from './Applications';
@@ -47,7 +45,6 @@ export const resources = [
   // namespace resources
   Events,
   // workloads
-  Functions,
   StatefulSets,
   Jobs,
   ReplicaSets,
@@ -81,7 +78,6 @@ export const resources = [
   Certificates,
   Subscriptions,
   ServiceAccounts,
-  GitRepositories,
 
   // cluster resources
   Applications,

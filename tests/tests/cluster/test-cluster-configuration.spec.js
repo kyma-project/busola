@@ -82,10 +82,12 @@ context('Test Cluster configuration', () => {
       .click();
 
     cy.getIframeBody()
+      .find('[role=dialog]')
       .contains('20')
       .click();
 
     cy.getIframeBody()
+      .find('[role=list]:visible')
       .contains('10')
       .click();
 

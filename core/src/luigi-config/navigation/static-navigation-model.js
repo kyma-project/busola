@@ -131,43 +131,6 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('workloads.title'),
-      resourceType: 'functions',
-      pathSegment: 'functions',
-      navigationContext: 'functions',
-      label: i18next.t('functions.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/functions?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      context: {
-        requiredFeatures: [features.SERVERLESS],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          resourceType: 'functions',
-          children: [
-            {
-              pathSegment: ':functionName',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/functions/:functionName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('workloads.title'),
       pathSegment: 'deployments',
       resourceType: 'deployments',
 
@@ -1071,43 +1034,6 @@ export function getStaticChildrenNodesForNamespace(
                 '/namespaces/:namespaceId/oauth2clients/:clientName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/hydra.ory.sh/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('configuration.title'),
-      pathSegment: 'gitrepositories',
-      resourceType: 'gitRepositories',
-      navigationContext: 'gitrepositories',
-      label: i18next.t('git-repositories.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/gitrepositories?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      context: {
-        requiredFeatures: [features.SERVERLESS],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          resourceType: 'gitRepositories',
-          children: [
-            {
-              pathSegment: ':gitreponame',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/gitrepositories/:gitreponame?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
                 }),
               viewGroup: coreUIViewGroupName,
             },

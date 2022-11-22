@@ -69,9 +69,7 @@ context('Test Config Maps', () => {
       .find('[placeholder="Enter key"]:visible')
       .type(ENTRY_KEY2);
 
-    cy.findMonaco()
-      .eq(1)
-      .type(ENTRY_VALUE2);
+    cy.findMonaco(1).type(ENTRY_VALUE2);
 
     cy.getIframeBody()
       .find('[role=dialog]')
