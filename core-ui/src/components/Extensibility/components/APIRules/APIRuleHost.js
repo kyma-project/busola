@@ -3,8 +3,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { CopiableLink } from 'shared/components/Link/CopiableLink';
+import { LogsLink } from 'shared/components/LogsLink/LogsLink';
 
 function getGatewayHost(gateway) {
+  if (!gateway || !gateway.spec) return null;
   const properServer = gateway.spec.servers.filter(
     server => server.port.protocol === 'HTTPS',
   );
