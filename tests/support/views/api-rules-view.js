@@ -43,7 +43,30 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiPort, ApiRuleHost) => {
   cy.getIframeBody()
     .find('[aria-label="Combobox input"]:visible', { log: false })
     .first()
-    .type(ApiRuleHost);
+    .type('*');
+
+  cy.getIframeBody()
+    .find('span', { log: false })
+    .contains(/^\*$/i)
+    .first()
+    .click();
+
+  cy.getIframeBody()
+    .find('[aria-label="Combobox input"]:visible', { log: false })
+    .first()
+    .type('{home}{rightArrow}{backspace}');
+
+  cy.getIframeBody()
+    .find('[aria-label="Combobox input"]:visible', { log: false })
+    .first()
+    .type('subdomain');
+
+  cy.getIframeBody()
+    .find('[aria-label="Combobox input"]:visible', { log: false })
+    .first()
+    .next()
+    .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+    .click();
 
   // Rules
   cy.getIframeBody()
@@ -61,12 +84,26 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiPort, ApiRuleHost) => {
     .type('allow');
 
   cy.getIframeBody()
+    .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible', {
+      log: false,
+    })
+    .find('span')
+    .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+    .click();
+
+  cy.getIframeBody()
     .find('[aria-label="expand Methods"]:visible', { log: false })
     .click();
 
   cy.getIframeBody()
     .find('[data-testid="spec.rules.0.methods.0"]:visible')
     .type('POST');
+
+  cy.getIframeBody()
+    .find('[data-testid="spec.rules.0.methods.0"]:visible', { log: false })
+    .find('span')
+    .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+    .click();
 
   cy.getIframeBody()
     .find('[role=dialog]')
