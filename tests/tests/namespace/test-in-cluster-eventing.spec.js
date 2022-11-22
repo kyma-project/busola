@@ -13,6 +13,12 @@ context('Test in-cluster eventing', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtension(
+      'FUNCTIONS',
+      'examples/resources/serverless/functions.yaml',
+    );
+
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
@@ -27,8 +33,8 @@ context('Test in-cluster eventing', () => {
       .click({ force: true });
 
     cy.getIframeBody()
-      .find('[role="status"]', { timeout: 60 * 1000 })
-      .should('have.text', 'Running');
+      .find('[role="status"]')
+      .contains(/running/i, { timeout: 60 * 1000 });
   });
 
   it('Create a Subscription', () => {
@@ -48,6 +54,15 @@ context('Test in-cluster eventing', () => {
       .find('[ariaLabel="Subscription name"]:visible')
       .clear()
       .type(`${FUNCTION_RECEIVER_NAME}-subscription`);
+
+    cy.getIframeBody()
+      .contains('Choose Service for the sink')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role="option"]')
+      .contains(FUNCTION_RECEIVER_NAME)
+      .click();
 
     cy.getIframeBody()
       .find(
@@ -74,8 +89,8 @@ context('Test in-cluster eventing', () => {
       .click({ force: true });
 
     cy.getIframeBody()
-      .find('[role="status"]', { timeout: 60 * 1000 })
-      .should('have.text', 'Running');
+      .find('[role="status"]')
+      .contains(/running/i, { timeout: 60 * 1000 });
   });
 
   it('Create an API Rule for the publisher Function', () => {

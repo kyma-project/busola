@@ -22,6 +22,7 @@ import {
 } from './helpers/immutableConverter';
 import { useVariables } from './hooks/useVariables';
 import { prepareRules } from './helpers/prepareRules';
+import { merge } from 'lodash';
 
 import { TriggerContextProvider } from './contexts/Trigger';
 
@@ -136,7 +137,15 @@ export function ExtensibilityCreateCore({
       pluralKind={resourceType}
       singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
       resource={resource}
-      setResource={updateStore}
+      setResource={v => setStore(getUIStoreFromResourceObj(v))}
+      onPresetSelected={presetValue => {
+        const updatedResource = merge(
+          {},
+          getResourceObjFromUIStore(store),
+          presetValue,
+        );
+        setStore(getUIStoreFromResourceObj(updatedResource));
+      }}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}

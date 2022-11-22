@@ -1,4 +1,4 @@
-Cypress.Commands.add('createSimpleFunction', functionName => {
+Cypress.Commands.add('navigateToFunctionCreate', functionName => {
   cy.getLeftNav()
     .contains('Functions')
     .click();
@@ -14,27 +14,15 @@ Cypress.Commands.add('createSimpleFunction', functionName => {
   cy.getIframeBody()
     .find('.advanced-form')
     .find('[ariaLabel="Function name"]')
-    .should('have.text', '')
     .type(functionName);
+});
 
-  cy.getIframeBody()
-    .find('.advanced-form')
-    .contains('Labels')
+Cypress.Commands.add('createSimpleFunction', functionName => {
+  cy.getLeftNav()
+    .contains('Workloads')
     .click();
 
-  cy.getIframeBody()
-    .find('[placeholder="Enter key"]:visible')
-    .last()
-    .type('example');
-
-  cy.getIframeBody()
-    .find('[placeholder="Enter value"]:visible')
-    .eq(1)
-    .type(functionName);
-
-  cy.getIframeBody()
-    .contains('label', 'Labels')
-    .click();
+  cy.navigateToFunctionCreate(functionName);
 
   cy.getIframeBody()
     .find('[role="dialog"]')
@@ -45,24 +33,32 @@ Cypress.Commands.add('createSimpleFunction', functionName => {
 Cypress.Commands.add(
   'createFunction',
   (functionName, functionPath, dependenciesPath) => {
-    cy.createSimpleFunction(functionName);
+    cy.navigateToFunctionCreate(functionName);
 
-    cy.readFile(functionPath).then(body => {
-      cy.pasteToMonaco(body);
-    });
-
+    //paste code to the Source Tab code editor
     cy.getIframeBody()
-      .find('[aria-controls="function-dependencies"]')
+      .find('[aria-label="expand Source"]')
+      .readFile(functionPath)
+      .then(body => {
+        cy.pasteToMonaco(body);
+      });
+
+    //open Dependencies Tab and paste the dependencies to the code editor
+    cy.getIframeBody()
+      .find('[aria-label="expand Dependencies"]')
+      .click()
+      .readFile(dependenciesPath)
+      .then(body => {
+        cy.pasteToMonaco(JSON.stringify(body), 1);
+      });
+
+    // click Create button
+    cy.getIframeBody()
+      .find('[role=dialog]')
+      .contains('button', 'Create')
       .click();
 
-    cy.readFile(dependenciesPath).then(body => {
-      cy.pasteToMonaco(JSON.stringify(body));
-    });
-
-    cy.getIframeBody()
-      .find('.function-details')
-      .contains('button', 'Save')
-      .should('not.be.disabled')
-      .click();
+    //check whether Function has been created
+    cy.getIframeBody().contains('button', 'Edit');
   },
 );
