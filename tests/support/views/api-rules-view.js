@@ -25,7 +25,8 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiPort, ApiRuleHost) => {
   cy.getIframeBody()
     .find('[aria-label="Choose Service"]:visible', { log: false })
     .first()
-    .type(ApiRuleName);
+    .type(ApiRuleName)
+    .blur();
 
   cy.getIframeBody()
     .find('[placeholder="Enter the port number"]:visible', { log: false })
@@ -36,7 +37,8 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiPort, ApiRuleHost) => {
   cy.getIframeBody()
     .find('[aria-label="Combobox input"]:visible', { log: false })
     .first()
-    .type(ApiRuleHost);
+    .type(ApiRuleHost)
+    .blur();
 
   // Rules
   cy.getIframeBody()
@@ -51,7 +53,8 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiPort, ApiRuleHost) => {
 
   cy.getIframeBody()
     .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible')
-    .type('allow');
+    .type('allow')
+    .blur();
 
   cy.getIframeBody()
     .find('[aria-label="expand Methods"]:visible', { log: false })
@@ -59,7 +62,8 @@ Cypress.Commands.add('createApiRule', (ApiRuleName, ApiPort, ApiRuleHost) => {
 
   cy.getIframeBody()
     .find('[data-testid="spec.rules.0.methods.0"]:visible')
-    .type('POST');
+    .type('POST')
+    .blur();
 
   cy.getIframeBody()
     .find('[role=dialog]')
