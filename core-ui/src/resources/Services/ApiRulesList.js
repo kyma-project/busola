@@ -28,7 +28,22 @@ export function ApiRulesList({ serviceName, namespace }) {
     return mainService || ruleService;
   };
 
-  if (extensibilityAPIRules) {
+  const navigateToApiRule = entry => {
+    const {
+      kind,
+      metadata: { name, namespace },
+    } = entry;
+
+    const namespacePart = namespace ? `namespaces/${namespace}/` : '';
+    const resourceTypePart =
+      extensibilityAPIRules.general.urlPath || pluralize(kind.toLowerCase());
+
+    LuigiClient.linkManager()
+      .fromContext('cluster')
+      .navigate(namespacePart + resourceTypePart + '/details/' + name);
+  };
+
+  if (extensibilityAPIRules)
     return (
       <Suspense fallback={<Spinner />}>
         <ExtensibilityList
@@ -39,47 +54,25 @@ export function ApiRulesList({ serviceName, namespace }) {
           hasDetailsView
           showTitle
           title={t('api-rules')}
-          navigateFn={entry => {
-            try {
-              const {
-                kind,
-                metadata: { name, namespace },
-              } = entry;
-
-              const namespacePart = namespace ? `namespaces/${namespace}/` : '';
-              const resourceTypePart =
-                extensibilityAPIRules.general.urlPath ||
-                pluralize(kind.toLowerCase());
-
-              LuigiClient.linkManager()
-                .fromContext('cluster')
-                .navigate(
-                  namespacePart + resourceTypePart + '/details/' + name,
-                );
-            } catch (e) {
-              console.error(e);
-            }
-          }}
+          navigateFn={navigateToApiRule}
         />
       </Suspense>
     );
-  } else {
-    return (
-      <ResourcesList
-        key="api-rule-services"
-        {...{
-          hasDetailsView: true,
-          fixedPath: true,
-          resourceUrl: url,
-          resourceType: 'apirules',
-          namespace,
-          isCompact: true,
-          showTitle: true,
-          filter: filterByServiceName,
-        }}
-      />
-    );
-  }
+
+  return (
+    <ResourcesList
+      key="api-rule-services"
+      hasDetailsView
+      fixedPath
+      resourceUrl={url}
+      title={t('api-rules')}
+      resourceType={'apirules'}
+      namespace={namespace}
+      isCompact
+      showTitle
+      filter={filterByServiceName}
+    />
+  );
 }
 
 export default ApiRulesList;
