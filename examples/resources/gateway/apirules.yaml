@@ -185,11 +185,14 @@ data:
       widget: GenericList 
       template:
         path: '/.*'
+        methods: ['GET']
       children:
         - required: true
           path: '[].accessStrategies'
           name: accessStrategies 
           widget: GenericList 
+          template:
+            handler: 'allow'
           children:
             - path: '[].config'
               name: accessStrategies.config
