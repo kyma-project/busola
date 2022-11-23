@@ -7,11 +7,11 @@ import { CopiableLink } from 'shared/components/Link/CopiableLink';
 function getGatewayHost(gateway) {
   if (!gateway || !gateway.spec) return null;
 
-  const properServer = gateway.spec.servers.filter(
+  const properServers = gateway.spec.servers.filter(
     server => server.port.protocol === 'HTTPS',
   );
-  if (!properServer.length || !properServer[0].hosts?.length) return null;
-  return properServer[0].hosts[0].replace('*.', '');
+  if (!properServers.length > 0 || !properServers[0].hosts?.length) return null;
+  return properServers[0].hosts[0].replace('*.', '');
 }
 
 export const APIRuleHost = ({ value, schema, structure, ...props }) => {
