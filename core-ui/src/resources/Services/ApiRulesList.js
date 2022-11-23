@@ -5,7 +5,6 @@ import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
-// import { ApiRulesList } from 'components/ApiRules/ApiRulesList';
 
 import './ServiceDetails.scss';
 
@@ -21,15 +20,13 @@ export function ApiRulesList({ serviceName, namespace }) {
   );
 
   const url = `/apis/gateway.kyma-project.io/v1beta1/namespaces/${namespace}/apirules`;
-  const filterByServiceName = ({ spec, ...props }) => {
+  const filterByServiceName = ({ spec }) => {
     const mainService = spec.service?.name === serviceName;
     const ruleService = spec.rules?.find(
       ref => ref.service?.name === serviceName,
     );
     return mainService || ruleService;
   };
-
-  console.log('extensibilityAPIRules', extensibilityAPIRules);
 
   if (extensibilityAPIRules) {
     return (
