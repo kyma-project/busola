@@ -116,6 +116,10 @@ data:
         disableCreate: true
   form: |-
     - simple: true
+      var: accessToServices
+      name: accessToServices
+      dynamicValue: "$exists($relatedServices().items[0].metadata.name)"
+    - simple: true
       required: false
       path: spec.service
       name: service
