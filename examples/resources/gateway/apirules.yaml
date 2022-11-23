@@ -54,7 +54,7 @@ data:
             resource:
               name: $root.spec.service.name
               namespace: $root.metadata.namespace
-              kind: 'Service'
+              kind: '"Service"'
           - name: service.port
             source: port
       - source: spec.rules
@@ -101,9 +101,9 @@ data:
                 source: $item.service.name
                 widget: ResourceLink
                 resource: 
-                  name: $item
-                  namespace: root.metadata.namespace
-                  kind: 'Service'
+                  name: $item.service.name
+                  namespace: $root.metadata.namespace
+                  kind: '"Service"'
               - name: service.port
                 source: $item.service.port
       - widget: ResourceList
@@ -274,7 +274,7 @@ data:
       resource:
         name: $root.spec.service.name
         namespace: $root.metadata.namespace
-        kind: 'Service'
+        kind: '"Service"'
     - name: status
       widget: Badge
       highlights: 
