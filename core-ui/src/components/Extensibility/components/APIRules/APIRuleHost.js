@@ -23,7 +23,7 @@ export const APIRuleHost = ({ value, schema, structure, ...props }) => {
   const fqdnRegex = /^(?=.{1,254}$)((?=[a-z0-9-]{1,63}\.)(xn--+)?[a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,63}$/i;
   const isFQDN = hostname?.match(fqdnRegex);
   const [gatewayName, gatewayNamespace] = value?.gateway
-    ? value?.gateway?.split('.', 2)
+    ? value.gateway.split('.', 2)
     : [null, null];
   const gatewayUrl = `/apis/networking.istio.io/v1beta1/namespaces/${gatewayNamespace}/gateways/${gatewayName}`;
 
