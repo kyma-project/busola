@@ -190,7 +190,7 @@ context('Test API Rules in the Function details view', () => {
       .should('not.exist');
 
     cy.getIframeBody()
-      .contains('Allow')
+      .contains('allow')
       .should('not.exist');
   });
 
@@ -230,12 +230,6 @@ context('Test API Rules in the Function details view', () => {
       .filterWithNoValue()
       .first()
       .type('write');
-
-    cy.getIframeBody()
-      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
-      .eq(1)
-      .contains('Add')
-      .click();
 
     // > Methods
     cy.getIframeBody()
@@ -294,7 +288,7 @@ context('Test API Rules in the Function details view', () => {
       .should('exist');
 
     cy.getIframeBody()
-      .contains('Allow')
+      .contains('allow')
       .should('exist');
   });
 
