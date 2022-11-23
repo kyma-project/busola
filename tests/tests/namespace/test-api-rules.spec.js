@@ -231,6 +231,12 @@ context('Test API Rules in the Function details view', () => {
       .first()
       .type('write');
 
+    cy.getIframeBody()
+      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
+      .eq(1)
+      .contains('Add')
+      .click();
+
     // > Methods
     cy.getIframeBody()
       .find('[aria-label="expand Methods"]:visible', { log: false })

@@ -77,6 +77,11 @@ Cypress.Commands.add(
       .click();
 
     cy.getIframeBody()
+      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
+      .contains('Add')
+      .click();
+
+    cy.getIframeBody()
       .find('[aria-label="expand Methods"]:visible', { log: false })
       .click();
 
