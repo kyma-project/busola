@@ -37,7 +37,7 @@ Cypress.Commands.add(
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter the port number"]:visible', { log: false })
+      .find('[data-testid="spec.service.port"]:visible', { log: false })
       .clear()
       .type(ApiPort);
 
