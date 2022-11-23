@@ -77,39 +77,12 @@ Cypress.Commands.add(
       .click();
 
     cy.getIframeBody()
-      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
-      .contains('Add')
-      .click();
-
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible')
-      .type('allow');
-
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible', {
-        log: false,
-      })
-      .find('span')
-      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
-      .click();
-
-    cy.getIframeBody()
       .find('[aria-label="expand Methods"]:visible', { log: false })
       .click();
 
     cy.getIframeBody()
-      .find('[data-testid="spec.rules.0.methods.0"]:visible')
-      .type('POST');
-
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.0.methods.0"]:visible', { log: false })
-      .find('span')
-      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
-      .click();
-
-    cy.getIframeBody()
       .find('[data-testid="spec.rules.0.methods.1"]:visible')
-      .type('GET');
+      .type('POST');
 
     cy.getIframeBody()
       .find('[data-testid="spec.rules.0.methods.1"]:visible', { log: false })
