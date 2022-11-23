@@ -110,6 +110,10 @@ data:
         source: $virtualServices()
         name: virtualService
         disableCreate: true
+      - widget: ResourceList
+        source: $relatedServices()
+        name: relatedServices
+        disableCreate: true
   form: |-
     - simple: true
       required: false
@@ -129,7 +133,6 @@ data:
           trigger: [port]
         - simple: true
           required: false
-          placeholder: Enter the port number
           path: port 
           name: service.port
           subscribe:
@@ -166,11 +169,13 @@ data:
     - simple: true
       required: true
       path: spec.host
+      inputInfo: inputInfo.spec.host
       name: host
       enum: "$distinct($filter($relatedGateways().items, function ($v) { $contains($v.metadata.name, $substringBefore($root.spec.gateway, '.')) and ($contains($v.metadata.namespace, $substringBefore($substringAfter($root.spec.gateway, '.'), '.')))}).spec.servers.hosts)"
       subscribe:
         host: "$string($filter($relatedGateways().items, function ($v) { $contains($v.metadata.name, $substringBefore($root.spec.gateway, '.')) and ($contains($v.metadata.namespace, $substringBefore($substringAfter($root.spec.gateway, '.'), '.')))}).spec.servers[0].hosts[0])"
     - simple: true
+      required: true
       path: spec.rules 
       name: rules 
       widget: GenericList 
@@ -241,7 +246,6 @@ data:
               trigger: [accessStrategyPort]
             - simple: true
               required: false
-              placeholder: Enter the port number
               path: port 
               name: service.port
               subscribe:
@@ -309,3 +313,4 @@ data:
       service-name: Service Name
       status: Status
       virtualService: Virtual Service
+      inputInfo.spec.host: Host can not be a wildcard, replace * with subdomain name
