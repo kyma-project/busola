@@ -100,12 +100,12 @@ context('Test in-cluster eventing', () => {
       API_RULE_SUBDOMAIN,
     );
 
+    cy.wait(500);
+
     cy.getIframeBody()
       .find('[role="status"]')
       .first()
       .should('have.text', 'OK');
-
-    cy.wait(500);
   });
 
   let apiRuleHost;
