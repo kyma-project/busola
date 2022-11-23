@@ -110,10 +110,6 @@ data:
         source: $virtualServices()
         name: virtualService
         disableCreate: true
-      - widget: ResourceList
-        source: $relatedServices()
-        name: relatedServices
-        disableCreate: true
   form: |-
     - simple: true
       var: accessToServices
