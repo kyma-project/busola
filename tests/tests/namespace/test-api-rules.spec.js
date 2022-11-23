@@ -5,9 +5,10 @@ function openSearchWithSlashShortcut() {
   cy.get('body').type('/');
 }
 
+const random = Math.floor(Math.random() * 9999) + 1000;
 const FUNCTION_NAME = 'test-function';
 const API_RULE_NAME = 'test-api-rule';
-const API_RULE_HOST = API_RULE_NAME + '-host';
+const API_RULE_SUBDOMAIN = API_RULE_NAME + '-' + random;
 const API_RULE_PATH = '/test-path';
 const API_RULE_DEFAULT_PATH = '/.*';
 
@@ -36,7 +37,7 @@ context('Test API Rules in the Function details view', () => {
 
     cy.getIframeBody()
       .find('[role="status"]')
-      .contains('span', /running/i, { timeout: 60 * 3000 });
+      .contains('span', /running/i, { timeout: 60 * 300 });
   });
 
   it('Create an API Rule for the Function', () => {
@@ -64,7 +65,14 @@ context('Test API Rules in the Function details view', () => {
       .type(FUNCTION_NAME);
 
     cy.getIframeBody()
-      .find('[placeholder="Enter the port number"]:visible', { log: false })
+      .find('[aria-label="Choose Service"]:visible', { log: false })
+      .first()
+      .next()
+      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.service.port"]:visible', { log: false })
       .clear()
       .type(80);
 
@@ -72,7 +80,30 @@ context('Test API Rules in the Function details view', () => {
     cy.getIframeBody()
       .find('[aria-label="Combobox input"]:visible', { log: false })
       .first()
-      .type(API_RULE_HOST);
+      .type('*');
+
+    cy.getIframeBody()
+      .find('span', { log: false })
+      .contains(/^\*$/i)
+      .first()
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="Combobox input"]:visible', { log: false })
+      .first()
+      .type('{home}{rightArrow}{backspace}');
+
+    cy.getIframeBody()
+      .find('[aria-label="Combobox input"]:visible', { log: false })
+      .first()
+      .type(API_RULE_SUBDOMAIN);
+
+    cy.getIframeBody()
+      .find('[aria-label="Combobox input"]:visible', { log: false })
+      .first()
+      .next()
+      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+      .click();
 
     // Rules
     cy.getIframeBody()
@@ -90,13 +121,21 @@ context('Test API Rules in the Function details view', () => {
       .type('oauth2_introspection');
 
     cy.getIframeBody()
-      .find('[aria-label="expand Methods"]:visible', { log: false })
+      .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible', {
+        log: false,
+      })
+      .find('span')
+      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter key"]:visible')
-      .filterWithNoValue()
-      .type('required_scope');
+      .find('[data-testid="select-dropdown"]:visible')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role="list"]')
+      .contains('required_scope')
+      .click();
 
     cy.getIframeBody()
       .find('[placeholder="Enter value"]:visible')
@@ -105,8 +144,32 @@ context('Test API Rules in the Function details view', () => {
       .type('read');
 
     cy.getIframeBody()
+      .find('[aria-label="expand Methods"]:visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
       .find('[data-testid="spec.rules.0.methods.0"]:visible')
+      .type('GET');
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.rules.0.methods.0"]:visible', {
+        log: false,
+      })
+      .find('span')
+      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.rules.0.methods.1"]:visible')
       .type('POST');
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.rules.0.methods.1"]:visible', {
+        log: false,
+      })
+      .find('span')
+      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+      .click();
 
     cy.getIframeBody()
       .find('[role=dialog]')
