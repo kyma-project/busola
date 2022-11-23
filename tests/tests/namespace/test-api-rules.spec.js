@@ -209,19 +209,15 @@ context('Test API Rules in the Function details view', () => {
 
     // > Access Strategies
     cy.getIframeBody()
-      .get('[aria-label="expand Access Strategies"]:visible', { log: false })
+      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
       .eq(1)
       .contains('Add')
+      .scrollIntoView()
       .click();
 
     cy.getIframeBody()
-      .get('[aria-label="expand Methods"]:visible', { log: false })
-      .eq(1)
-      .click();
-
-    cy.getIframeBody()
-      .get('[data-testid="select-dropdown"]:visible')
-      .eq(1)
+      .find('[data-testid="select-dropdown"]:visible')
+      .scrollIntoView()
       .click();
 
     cy.getIframeBody()
@@ -230,15 +226,15 @@ context('Test API Rules in the Function details view', () => {
       .click();
 
     cy.getIframeBody()
-      .get('[placeholder="Enter value"]:visible')
+      .find('[placeholder="Enter value"]:visible')
       .filterWithNoValue()
-      .eq(1)
+      .first()
       .type('write');
 
     // > Methods
     cy.getIframeBody()
-      .get('[aria-label="expand Methods"]:visible', { log: false })
-      .eq(1)
+      .find('[aria-label="expand Methods"]:visible', { log: false })
+      .scrollIntoView()
       .click();
 
     cy.getIframeBody()
@@ -252,6 +248,7 @@ context('Test API Rules in the Function details view', () => {
       })
       .find('span')
       .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+      .scrollIntoView()
       .click();
 
     cy.getIframeBody()
