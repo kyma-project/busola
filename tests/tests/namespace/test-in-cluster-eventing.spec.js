@@ -101,7 +101,7 @@ context('Test in-cluster eventing', () => {
     );
 
     cy.getIframeBody()
-      .find('[role="status"]')
+      .find('[role="status"]:visible')
       .first()
       .should('have.text', 'OK');
 
