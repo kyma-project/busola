@@ -280,10 +280,6 @@ context('Test API Rules in the Function details view', () => {
       .click();
 
     cy.getIframeBody()
-      .contains('oauth2_introspection')
-      .should('exist');
-
-    cy.getIframeBody()
       .contains(API_RULE_PATH)
       .should('exist');
 

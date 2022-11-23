@@ -5,7 +5,7 @@ import { loadFile } from '../../support/loadFile';
 const random = Math.floor(Math.random() * 9999) + 1000;
 const FUNCTION_RECEIVER_NAME = 'in-cluster-eventing-receiver';
 const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
-const API_RULE_SUBDOMAIN = 'publisher-' + random;
+const API_RULE_SUBDOMAIN = API_RULE_AND_FUNCTION_NAME + '-' + random;
 const API_RULE_PORT_NUMBER = 80;
 const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_SUBDOMAIN}.`;
 
@@ -104,6 +104,8 @@ context('Test in-cluster eventing', () => {
       .find('[role="status"]')
       .first()
       .should('have.text', 'OK');
+
+    cy.wait(500);
   });
 
   let apiRuleHost;
