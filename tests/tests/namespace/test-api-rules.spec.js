@@ -119,6 +119,7 @@ context('Test API Rules in the Function details view', () => {
 
     cy.getIframeBody()
       .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible')
+      .clear()
       .type('oauth2_introspection');
 
     cy.getIframeBody()
@@ -147,18 +148,6 @@ context('Test API Rules in the Function details view', () => {
     // > Methods
     cy.getIframeBody()
       .find('[aria-label="expand Methods"]:visible', { log: false })
-      .click();
-
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.0.methods.0"]:visible')
-      .type('GET');
-
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.0.methods.0"]:visible', {
-        log: false,
-      })
-      .find('span')
-      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
       .click();
 
     cy.getIframeBody()
@@ -223,28 +212,12 @@ context('Test API Rules in the Function details view', () => {
       .find('[aria-label="expand Access Strategies"]:visible', { log: false })
       .eq(1)
       .contains('Add')
-      .click();
-
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.1.accessStrategies.0.handler"]:visible')
-      .type('allow');
-
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.1.accessStrategies.0.handler"]:visible', {
-        log: false,
-      })
-      .find('span')
-      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
-      .click();
-
-    cy.getIframeBody()
-      .find('[aria-label="expand Methods"]:visible', { log: false })
-      .eq(1)
+      .scrollIntoView()
       .click();
 
     cy.getIframeBody()
       .find('[data-testid="select-dropdown"]:visible')
-      .eq(1)
+      .scrollIntoView()
       .click();
 
     cy.getIframeBody()
@@ -255,17 +228,24 @@ context('Test API Rules in the Function details view', () => {
     cy.getIframeBody()
       .find('[placeholder="Enter value"]:visible')
       .filterWithNoValue()
+      .first()
+      .type('write');
+
+    cy.getIframeBody()
+      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
       .eq(1)
-      .type('read');
+      .contains('Add')
+      .click();
 
     // > Methods
     cy.getIframeBody()
       .find('[aria-label="expand Methods"]:visible', { log: false })
-      .eq(1)
+      .scrollIntoView()
       .click();
 
     cy.getIframeBody()
       .find('[data-testid="spec.rules.1.methods.0"]:visible')
+      .clear()
       .type('POST');
 
     cy.getIframeBody()
@@ -274,6 +254,7 @@ context('Test API Rules in the Function details view', () => {
       })
       .find('span')
       .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+      .scrollIntoView()
       .click();
 
     cy.getIframeBody()
