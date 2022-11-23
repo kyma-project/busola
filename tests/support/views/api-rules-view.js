@@ -108,6 +108,16 @@ Cypress.Commands.add(
       .click();
 
     cy.getIframeBody()
+      .find('[data-testid="spec.rules.0.methods.1"]:visible')
+      .type('GET');
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.rules.0.methods.1"]:visible', { log: false })
+      .find('span')
+      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
       .find('[role=dialog]')
       .contains('button', 'Create')
       .click();
