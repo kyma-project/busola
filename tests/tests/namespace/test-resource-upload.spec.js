@@ -125,8 +125,6 @@ context('Test resource upload', () => {
       .find('[role=dialog]')
       .should('not.exist');
 
-    cy.wait(500);
-
     cy.navigateTo('Integration', 'Applications');
 
     cy.getIframeBody()
