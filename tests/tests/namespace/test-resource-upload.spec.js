@@ -19,10 +19,9 @@ context('Test resource upload', () => {
 
   before(() => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
-    cy.mockExtension(
-      'APPLICATIONS',
+    cy.mockExtensions([
       'examples/resources/applicationconnector/applications.yaml',
-    );
+    ]);
 
     cy.loginAndSelectCluster();
   });
