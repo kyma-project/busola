@@ -19,7 +19,7 @@ context('Test Sidecars', () => {
 
   before(() => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
-    cy.mockExtension('SIDECARS', 'examples/resources/istio/sidecars.yaml');
+    cy.mockExtensions(['examples/resources/istio/sidecars.yaml']);
 
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

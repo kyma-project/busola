@@ -357,7 +357,7 @@ data:
     apiRules:
       resource:
         kind: APIRule
-        version: v1alpha1
+        version: v1beta1
         group: gateway.kyma-project.io
       filter: $contains($item.spec.service.name, $root.metadata.name)
     subscriptions:
