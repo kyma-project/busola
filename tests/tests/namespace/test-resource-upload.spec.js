@@ -3,7 +3,7 @@ import 'cypress-file-upload';
 import { loadFile } from '../../support/loadFile';
 import jsyaml from 'js-yaml';
 
-const APPLICATION_NAME = `${Cypress.env('APP_NAME')}-upload-yaml`;
+const APPLICATION_NAME = `dd-tets`;
 
 async function loadValidResources(namespaceName) {
   const resources = await loadFile('yaml-upload--valid.yaml', false);
@@ -124,6 +124,8 @@ context('Test resource upload', () => {
     cy.getIframeBody()
       .find('[role=dialog]')
       .should('not.exist');
+
+    cy.wait(500);
 
     cy.navigateTo('Integration', 'Applications');
 
