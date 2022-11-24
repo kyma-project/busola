@@ -1,35 +1,37 @@
-import React from 'react';
 import LuigiClient from '@luigi-project/client';
+import { RecoilRoot } from 'recoil';
+import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
 import { render, fireEvent } from 'testing/reactTestingUtils';
 import NamespaceSettings from '../NamespaceSettings';
 
-let mockGroups: string[] | null = [];
 jest.mock('shared/contexts/MicrofrontendContext', () => ({
-  useMicrofrontendContext: () => ({
-    groups: mockGroups,
-  }),
   useFeatureToggle: () => [true, () => null],
 }));
 
 describe('NamespaceSettings', () => {
-  it('Renders nothing if groups are an array missing runtimeAdmin', () => {
-    const { queryByText } = render(<NamespaceSettings />);
-    expect(queryByText('Namespace Settings')).not.toBeInTheDocument();
-  });
-
-  it.skip('Sends custom message on toggle', () => {
-    //aria-label can no more be passed to the input element. Thank you fundamental.
-    mockGroups = null;
+  it('Sends custom message on toggle', () => {
     const spy = jest.spyOn(LuigiClient, 'sendCustomMessage');
-    const { getByLabelText } = render(<NamespaceSettings />);
+    const { getByLabelText } = render(
+      <RecoilRoot
+        initializeState={state => state.set(showHiddenNamespacesState, true)}
+      >
+        <NamespaceSettings />
+      </RecoilRoot>,
+    );
 
-    fireEvent.click(getByLabelText('toggle-hidden-namespaces'));
+    const toggleElement = getByLabelText(
+      'settings.clusters.showHiddenNamespaces',
+    );
+
+    expect(toggleElement).toBeChecked();
+    fireEvent.click(toggleElement);
 
     expect(spy).toHaveBeenCalledWith({
       id: 'busola.showHiddenNamespaces',
       showHiddenNamespaces: false,
     });
-
     spy.mockRestore();
+
+    expect(toggleElement).not.toBeChecked();
   });
 });
