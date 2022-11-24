@@ -23,7 +23,7 @@ function FormContainer({ children }) {
 }
 const FormStack = injectPluginStack(FormContainer);
 
-export function SectionEditor({ data, schema, onlyYaml }) {
+export function SectionEditor({ data, schema, onlyYaml, formElementRef }) {
   const [store, setStore] = useState(() =>
     createStore(fromJS(jsyaml.load(data))),
   );
@@ -42,6 +42,7 @@ export function SectionEditor({ data, schema, onlyYaml }) {
           initialResource={resource}
           disableDefaultFields
           onlyYaml={onlyYaml}
+          formElementRef={formElementRef}
         >
           <FormStack isRoot schema={schemaMap} resource={resource} />
         </ResourceForm>
