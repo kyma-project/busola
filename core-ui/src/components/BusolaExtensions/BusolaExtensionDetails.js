@@ -41,6 +41,27 @@ export function BusolaExtensionDetails(props) {
   const updateResourceMutation = useUpdate(resourceUrl);
   const notification = useNotification();
 
+  const updateBusolaExtension = async (newBusolaExtension, configmap) => {
+    try {
+      const diff = createPatch(configmap, newBusolaExtension);
+      await updateResourceMutation(resourceUrl, diff);
+      notification.notifySuccess({
+        content: t('components.resource-details.messages.success', {
+          resourceType: 'BusolaExtension',
+        }),
+      });
+    } catch (e) {
+      console.error(e);
+      notification.notifyError({
+        content: t('components.resource-details.messages.failure', {
+          resourceType: 'BusolaExtension',
+          error: e.message,
+        }),
+      });
+      throw e;
+    }
+  };
+
   const BusolaExtensionEditor = resource => {
     const { data } = resource;
     return (
@@ -69,10 +90,21 @@ export function BusolaExtensionDetails(props) {
                 renderForm={props => (
                   <ErrorBoundary>
                     <SectionEditor
+                      {...props}
                       onlyYaml={!extensibilitySchemas[key]}
                       data={data[key]}
                       schema={extensibilitySchemas[key]}
-                      {...props}
+                      resource={data}
+                      onSubmit={newData => {
+                        const newResource = {
+                          ...resource,
+                          data: {
+                            ...data,
+                            [key]: newData,
+                          },
+                        };
+                        updateBusolaExtension(newResource, resource);
+                      }}
                     />
                   </ErrorBoundary>
                 )}
@@ -82,27 +114,6 @@ export function BusolaExtensionDetails(props) {
         ))}
       </>
     );
-  };
-
-  const updateBusolaExtension = async (newBusolaExtension, configmap) => {
-    try {
-      const diff = createPatch(configmap, newBusolaExtension);
-      await updateResourceMutation(resourceUrl, diff);
-      notification.notifySuccess({
-        content: t('components.resource-details.messages.success', {
-          resourceType: 'BusolaExtension',
-        }),
-      });
-    } catch (e) {
-      console.error(e);
-      notification.notifyError({
-        content: t('components.resource-details.messages.failure', {
-          resourceType: 'BusolaExtension',
-          error: e.message,
-        }),
-      });
-      throw e;
-    }
   };
 
   const ExtensibilityVersion = configmap => {

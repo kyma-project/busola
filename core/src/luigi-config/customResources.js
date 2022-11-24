@@ -151,13 +151,13 @@ export async function getExtensibilitySchemas() {
   const list = await getExtensibilitySchema('list');
   const general = await getExtensibilitySchema('general');
   const form = await getExtensibilitySchema('form');
-  const dataSources = await getExtensibilitySchema('dataSources');
+  // const dataSources = await getExtensibilitySchema('dataSources');
 
   return {
     details,
     list,
     general,
     form,
-    dataSources,
+    // dataSources,
   };
 }
