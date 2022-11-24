@@ -12,7 +12,6 @@ export const EVENT_MESSAGE_TYPE = {
 };
 
 export const RESOURCE_PATH = {
-  APIRule: 'apirules',
   Certificate: 'certificates',
   ConfigMap: 'configmaps',
   CronJob: 'cronjobs',
@@ -22,7 +21,6 @@ export const RESOURCE_PATH = {
   DNSEntry: 'dnsentries',
   DNSProvider: 'dnsproviders',
   Event: 'events',
-  Function: 'functions',
   Gateway: 'gateways',
   HorizontalPodAutoscaler: 'horizontalpodautoscalers',
   Ingress: 'ingresses',

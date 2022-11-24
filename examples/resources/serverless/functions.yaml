@@ -63,23 +63,23 @@ data:
                 widget: CodeViewer
                 name: code.source
                 language: '$contains($root.spec.runtime, "python") ? "python": "javascript"'
-                visibility: $exists($.data)
+                visibility: $exists($value)
               - source: spec.source.inline.dependencies
                 widget: CodeViewer
                 name: code.dependencies
                 language: '"json"'
-                visibility: $exists($.data)
+                visibility: $exists($value)
               - source: spec.source.gitRepository
                 widget: Panel
                 name: code.gitRepositoryConfig
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 children:
                   - name: code.gitRepository.url
-                    source: spec.source.gitRepository.url
+                    source: url
                   - name: code.gitRepository.reference
-                    source: spec.source.gitRepository.reference
+                    source: reference
                   - name: code.gitRepository.baseDir
-                    source: spec.source.gitRepository.baseDir
+                    source: baseDir
               - source: spec.env
                 widget: Table
                 name: code.env
@@ -106,8 +106,8 @@ data:
                   - name: code.env.source
                     widget: Badge
                     source: >-
-                      $exists($item.valueFrom.configMapKeyRef) ? 'CONFIG MAP' :
-                      $exists($item.valueFrom.secretKeyRef) ? 'SECRET' : 'CUSTOM'
+                      $exists($item.value) ? 'CUSTOM' :
+                      $exists($item.valueFrom.configMapKeyRef) ? 'CONFIG MAP' : 'SECRET'
                   - name: code.env.key
                     source: >-
                       $exists($item.valueFrom.configMapKeyRef) ?
@@ -184,6 +184,16 @@ data:
         - nodejs16
         - python39
     - path: spec.runtimeImageOverride
+    - path: spec.source.inline
+      visibility: $sourceType = 'Inline'
+      children:
+        - path: source
+          widget: CodeEditor
+          language: '$contains($root.spec.runtime, "node") ? "javascript" : "python"'
+          defaultExpanded: true
+        - path: dependencies
+          widget: CodeEditor
+          language: '$contains($root.spec.runtime, "node") ? "javascript" : "plaintext"'
     - path: spec.source.gitRepository
       widget: FormGroup
       visibility: $sourceType = 'Git Repository'
@@ -195,6 +205,7 @@ data:
           required: true
         - var: useAuthorization
           type: boolean
+          name: code.gitRepository.auth
           dynamicValue: $exists($.spec.source.gitRepository.auth)
         - widget: FormGroup
           path: auth
@@ -240,6 +251,7 @@ data:
           children:
             - var: envType
               widget: Text
+              name: spec.env.source
               enum:
                 - Custom
                 - From Config Map
@@ -275,23 +287,14 @@ data:
               widget: Text
               enum: $keys($configMap.data)
               visibility: $envType = 'From Config Map'
-    - path: spec.source.inline
-      visibility: $sourceType = 'Inline' #the bug
-      children:
-        - path: source
-          widget: CodeEditor
-          language: '$contains($root.spec.runtime, "node") ? "javascript" : "python"'
-        - path: dependencies
-          widget: CodeEditor
-          language: '$contains($root.spec.runtime, "node") ? "javascript" : "plaintext"'
   general: |-
     resource:
       kind: Function
       group: serverless.kyma-project.io
       version: v1alpha2
-    name: Ext Functions
+    name: Functions
     category: Workloads
-    urlPath: ext-functions
+    urlPath: functions
     scope: namespace
     description: >-
       {{[Function](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/svls-01-function/#documentation-content/)}}
@@ -354,7 +357,7 @@ data:
     apiRules:
       resource:
         kind: APIRule
-        version: v1alpha1
+        version: v1beta1
         group: gateway.kyma-project.io
       filter: $contains($item.spec.service.name, $root.metadata.name)
     subscriptions:
@@ -375,6 +378,7 @@ data:
       code.gitRepository.url: Url
       code.gitRepository.reference: Reference
       code.gitRepository.baseDir: Base Directory
+      code.gitRepository.auth: Auth
       code.env: Environment Variables
       code.env.name: Name
       code.env.value: Value
@@ -417,6 +421,7 @@ data:
       spec.resourceConfiguration.function: Function
       placeholders.spec.runtime: Choose Function runtime
       spec.env.name: Variable Name
+      spec.env.source: Source
       envType: Variable Type
       'Node.js Function': Node.js Function
       'Python Function': Python Function

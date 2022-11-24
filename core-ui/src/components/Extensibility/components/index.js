@@ -16,6 +16,8 @@ import { Alert } from './Alert';
 import { ExternalLink } from './ExternalLink';
 import { Tabs } from './Tabs';
 
+import { APIRuleHost } from './APIRules/APIRuleHost';
+
 import { PendingWrapper } from './PendingWrapper';
 
 export const widgets = {
@@ -37,6 +39,7 @@ export const widgets = {
   ExternalLink,
   Tabs,
   EventList,
+  APIRuleHost,
 };
 
 export const valuePreprocessors = {
