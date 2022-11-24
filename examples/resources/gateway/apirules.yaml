@@ -1,0 +1,319 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: apirules
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: apirules
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |-
+    relatedGateways:
+      resource:
+        kind: Gateway
+        group: networking.istio.io
+        version: v1beta1
+        namespace: null
+    relatedServices:
+      resource: 
+        kind: Service
+        version: v1
+        namespace: null
+    virtualServices:
+      resource: 
+        kind: VirtualService
+        group: networking.istio.io
+        version: v1beta1
+        namespace: null
+      filter: '$contains($item.metadata.ownerReferences[0].name, $root.metadata.name) and $contains($item.metadata.ownerReferences[0].kind, $root.kind)'
+  details: |
+    header: 
+      - name: status
+        widget: Badge
+        highlights: 
+          positive:
+            - 'OK'
+          negative:
+            - 'ERROR'
+          critical:
+            - 'SKIPPED'
+        source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "UNKNOWN"'
+        description: status.APIRuleStatus.desc
+      - name: host
+        source: spec
+        widget: APIRuleHost
+    body: 
+      - name: service
+        source: spec.service
+        widget: Panel
+        children: 
+          - name: service.name
+            source: name
+            widget: ResourceLink
+            resource:
+              name: $root.spec.service.name
+              namespace: $root.metadata.namespace
+              kind: '"Service"'
+          - name: service.port
+            source: port
+      - source: spec.rules
+        widget: Table
+        name: rules
+        children: 
+          - source: $item.path
+            name: rules.path
+          - source: $item.methods
+            name: rules.methods
+            widget: Badge
+        collapsible: 
+          - source: $item.accessStrategies
+            widget: Table
+            disablePadding: true
+            name: accessStrategies
+            children:
+              - source: $item.handler
+                name: accessStrategies.handlers
+                widget: Badge
+              - source: $item.config.required_scope
+                name: accessStrategies.required_scope
+              - source: $item.config.jwks_urls
+                name: accessStrategies.jwks_urls
+              - source: $item.config.trusted_issuers
+                name: accessStrategies.trusted_issuers
+          - source: $item.mutators
+            widget: Table
+            disablePadding: true
+            name: mutators
+            visibility: $exists($item.mutators)
+            children:
+              - source: $item.handler
+                name: mutators.handlers
+                widget: Badge
+              - source: $item.config
+                name: mutators.config
+          - name: service
+            source: $item.service
+            widget: Panel
+            visibility: $exists($item.service)
+            children: 
+              - name: service.name
+                source: $item.service.name
+                widget: ResourceLink
+                resource: 
+                  name: $item.service.name
+                  namespace: $root.metadata.namespace
+                  kind: '"Service"'
+              - name: service.port
+                source: $item.service.port
+      - widget: ResourceList
+        source: $virtualServices()
+        name: virtualService
+        disableCreate: true
+  form: |-
+    - simple: true
+      var: accessToServices
+      name: accessToServices
+      dynamicValue: "$exists($relatedServices().items[0].metadata.name)"
+    - simple: true
+      required: false
+      path: spec.service
+      name: service
+      widget: FormGroup
+      children:
+        - simple: true
+          required: false
+          path: name
+          name: service-name
+          widget: Resource
+          resource:
+            kind: Service
+            version: v1
+            scope: namespace
+          trigger: [port]
+        - simple: true
+          required: false
+          path: port 
+          name: service.port
+          subscribe:
+            port: "$filter($relatedServices().items, function ($v) { $contains($v.metadata.name, $root.spec.service.name)}).spec.ports[0].port"
+    - simple: true
+      var: accessToGateways
+      name: accessToGateways
+      dynamicValue: "$exists($relatedGateways().items[0].metadata.name)"
+    - simple: true
+      required: true
+      path: spec.gateway
+      name: gateway
+      widget: ResourceRef
+      visibility: $accessToGateways
+      resource:
+        kind: Gateway
+        group: networking.istio.io
+        version: v1beta1        
+      overwrite: false
+      toInternal:  '($values := $split($, "."); { "namespace": $values[1], "name": $values[0] })'
+      toExternal: 'name & "." & namespace & ".svc.cluster.local"'
+      trigger: [host]
+    - simple: true
+      var: separator
+      value: ""
+    - simple: true
+      required: true
+      path: spec.gateway
+      name: gateway
+      visibility: "$not($accessToGateways)"
+      inputInfo: inputInfo.gateway
+      overwrite: false
+      trigger: [host]
+    - simple: true
+      required: true
+      path: spec.host
+      inputInfo: inputInfo.spec.host
+      name: host
+      enum: "$distinct($filter($relatedGateways().items, function ($v) { $contains($v.metadata.name, $substringBefore($root.spec.gateway, '.')) and ($contains($v.metadata.namespace, $substringBefore($substringAfter($root.spec.gateway, '.'), '.')))}).spec.servers.hosts)"
+      subscribe:
+        host: "$string($filter($relatedGateways().items, function ($v) { $contains($v.metadata.name, $substringBefore($root.spec.gateway, '.')) and ($contains($v.metadata.namespace, $substringBefore($substringAfter($root.spec.gateway, '.'), '.')))}).spec.servers[0].hosts[0])"
+    - simple: true
+      required: true
+      path: spec.rules 
+      name: rules 
+      widget: GenericList 
+      template:
+        path: '/.*'
+        methods: ['GET']
+      children:
+        - required: true
+          path: '[].accessStrategies'
+          name: accessStrategies 
+          widget: GenericList 
+          template:
+            handler: 'allow'
+          children:
+            - path: '[].config'
+              name: accessStrategies.config
+              widget: KeyValuePair
+              keyEnum:
+                - jwks_urls
+                - trusted_issuers
+                - required_scope
+            - required: true
+              path: '[].handler'
+              name: accessStrategies.handler
+              enum:
+                - allow
+                - noop
+                - jwt
+                - oauth2_introspection
+        - required: true
+          path: '[].methods'
+          name: rules.methods 
+          widget: SimpleList
+          children:
+            - path: '[]' 
+              enum:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+                - PATCH
+                - HEAD
+        - path: '[].mutators' 
+          name: mutators 
+          widget: GenericList 
+          children:
+            - path: '[].config'
+              name: accessStrategies.config
+              widget: KeyValuePair
+            - required: true
+              path: '[].handler'
+              name: accessStrategies.handler
+        - simple: true
+          required: true
+          path: '[].path'
+          name: path
+          inputInfo: inputInfo.path
+        - path: '[].service' 
+          name: service 
+          widget: FormGroup
+          children:
+            - simple: true
+              required: false
+              path: name
+              name: service-name
+              widget: Resource
+              resource:
+                kind: Service
+                version: v1
+                scope: namespace
+              trigger: [accessStrategyPort]
+            - simple: true
+              required: false
+              path: port 
+              name: service.port
+              subscribe:
+                accessStrategyPort: "$filter($relatedServices().items, function ($v) { $contains($v.metadata.name, $root.spec.service.name)}).spec.ports[0].port"
+  general: |-
+    resource:
+      kind: APIRule
+      group: gateway.kyma-project.io
+      version: v1beta1
+    name: API Rules
+    category: Discovery and Network
+    scope: namespace
+    description: '{{[APIRule](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/apix-01-apirule/#documentation-content)}} allows for exposing a service externally.'
+    urlPath: apirules
+  list: |
+    - name: host
+      source: spec
+      widget: APIRuleHost
+    - name: service-name
+      source: '$string(spec.service.name) ? ($string(spec.service.name) & " (port: " & $string(spec.service.port) & ")") : ""'
+      widget: ResourceLink
+      resource:
+        name: $root.spec.service.name
+        namespace: $root.metadata.namespace
+        kind: '"Service"'
+    - name: status
+      widget: Badge
+      highlights: 
+        positive:
+          - 'OK'
+        negative:
+          - 'ERROR'
+        critical:
+          - 'SKIPPED'
+      source: 'status.APIRuleStatus.code ? status.APIRuleStatus.code : "UNKNOWN"'
+      description: status.APIRuleStatus.desc
+  presets: |-
+    - name: Default gateway
+      default: true
+      value:
+        spec:
+          gateway: kyma-gateway.kyma-system.svc.cluster.local
+  translations: |
+    en:
+      accessStrategies: Access Strategies
+      accessStrategies.config: Config
+      accessStrategies.handler: Handler
+      accessStrategies.handlers: Handlers
+      accessStrategies.jwks_urls: JWKS Urls
+      accessStrategies.trusted_issuers: Trusted Issuers
+      accessStrategies.required_scope: Required Scope
+      gateway: Gateway
+      host: Host
+      inputInfo.gateway: Gateway structure, '{GATEWAY}.{NAMESPACE}.svc.cluster.local'
+      inputInfo.path: "Path can contain alphanumeric characters and '/', '.', '*', '?', '!', '-', '(', and ')'."
+      mutators: Mutators
+      mutators.config: Config
+      mutators.handlers: Handlers
+      rules: Rules
+      rules.methods: Methods
+      rules.path: Path
+      service: Service
+      service.name: Name
+      service.port: Port
+      service-name: Service Name
+      status: Status
+      virtualService: Virtual Service
+      inputInfo.spec.host: Host can not be a wildcard, replace * with subdomain name

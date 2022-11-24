@@ -1,12 +1,21 @@
-Cypress.Commands.add('findMonaco', { prevSubject: false }, () => {
-  return cy
-    .getIframeBody()
-    .find('textarea[aria-roledescription="editor"]:visible');
-});
+Cypress.Commands.add(
+  'findMonaco',
+  { prevSubject: false },
+  (monacoCount = 0) => {
+    return cy
+      .getIframeBody()
+      .find('textarea[aria-roledescription="editor"]:visible')
+      .eq(monacoCount);
+  },
+);
 
-Cypress.Commands.add('pasteToMonaco', { prevSubject: false }, content => {
-  cy.findMonaco()
-    .focus()
-    .clearInput()
-    .paste({ pastePayload: content });
-});
+Cypress.Commands.add(
+  'pasteToMonaco',
+  { prevSubject: false },
+  (content, monacoCount) => {
+    cy.findMonaco(monacoCount)
+      .focus()
+      .clearInput()
+      .paste({ pastePayload: content });
+  },
+);
