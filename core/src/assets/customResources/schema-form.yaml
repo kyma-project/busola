@@ -71,7 +71,10 @@ $defs:
           type: string
       subscription:
         type: object
-        dynamicProperties:
+        widget: KeyValuePair
+        value:
+          type: string
+        additionalProperties:
           type: string
           widget: Jsonata
     allOf:

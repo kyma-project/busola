@@ -1,21 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import { Link } from 'shared/components/Link/Link';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
 import { LayoutPanel, MessageStrip, Button } from 'fundamental-react';
 import { useParams } from 'react-router-dom';
-import { UIMetaProvider } from '@ui-schema/ui-schema/UIMeta';
-import {
-  UIStoreProvider,
-  storeUpdater,
-  createStore,
-} from '@ui-schema/ui-schema';
-import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
-import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
-import jsyaml from 'js-yaml';
-import { fromJS } from 'immutable';
 
-import { ResourceForm } from 'shared/ResourceForm';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -27,8 +16,6 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { limitedWidgets } from 'components/Extensibility/components-form';
-import { getResourceObjFromUIStore } from 'components/Extensibility/helpers/immutableConverter';
 
 import {
   formatCurrentVersion,
@@ -37,57 +24,15 @@ import {
   migrateToLatest,
   getMigrationFunctions,
 } from '../../components/Extensibility/migration';
+import { SectionEditor } from './SectionEditor';
 
 import { BusolaExtensionEdit } from './BusolaExtensionEdit';
 import { SECTIONS } from './helpers';
 import { EXTENSION_VERSION_LABEL } from './constants';
 
-function FormContainer({ children }) {
-  return (
-    <div className="form-container" container="true">
-      {children}
-    </div>
-  );
-}
-const FormStack = injectPluginStack(FormContainer);
-
-function SectionEditor({ data, schema }) {
-  console.log('SectionEditor', 'data', data);
-  // console.log('SectionEditor', 'schema', schema);
-  const [store, setStore] = useState(() =>
-    // createStore(createOrderedMap(jsyaml.load(data))),
-    createStore(fromJS(jsyaml.load(data))),
-  );
-  const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
-  const schemaMap = useMemo(() => createOrderedMap(schema), [schema]);
-
-  console.log('resource', resource);
-
-  const onChange = actions => {
-    console.log('onChange', actions);
-    setStore(prevStore => storeUpdater(actions)(prevStore));
-  };
-
-  return (
-    <UIMetaProvider widgets={limitedWidgets}>
-      {/*<pre>{jsyaml.dump(store.toJS().values)}</pre>*/}
-      <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
-        <ResourceForm
-          resource={resource}
-          initialResource={resource}
-          disableDefaultFields
-        >
-          <FormStack isRoot schema={schemaMap} resource={resource} />
-        </ResourceForm>
-      </UIStoreProvider>
-    </UIMetaProvider>
-  );
-}
-
 export function BusolaExtensionDetails(props) {
   const { t } = useTranslation();
   const { extensibilitySchemas } = useMicrofrontendContext();
-  console.log('extensibilitySchemas', extensibilitySchemas);
   const { namespace, name } = useParams();
 
   const resourceUrl = `/api/v1/namespaces/${namespace}/configmaps/${name}`;
@@ -106,33 +51,30 @@ export function BusolaExtensionDetails(props) {
             value={data[key]}
             key={key + JSON.stringify(data[key])}
             actions={[
-              extensibilitySchemas[key] ? (
-                <ModalWithForm
-                  title={t('extensibility.edit-section', {
-                    section: t(`extensibility.sections.${key}`),
-                  })}
-                  modalOpeningComponent={
-                    <Button className="fd-margin-end--tiny" option="emphasized">
-                      {t('extensibility.edit-section', {
-                        section: t(`extensibility.sections.${key}`),
-                      })}
-                    </Button>
-                  }
-                  confirmText={t('common.buttons.update')}
-                  id={`edit-resource-modal`}
-                  className="modal-size--l create-resource-modal"
-                  renderForm={props => (
-                    <ErrorBoundary>
-                      <SectionEditor
-                        data={data[key]}
-                        schema={extensibilitySchemas[key]}
-                      />
-                    </ErrorBoundary>
-                  )}
-                />
-              ) : (
-                ''
-              ),
+              <ModalWithForm
+                title={t('extensibility.edit-section', {
+                  section: t(`extensibility.sections.${key}`),
+                })}
+                modalOpeningComponent={
+                  <Button className="fd-margin-end--tiny" option="emphasized">
+                    {t('extensibility.edit-section', {
+                      section: t(`extensibility.sections.${key}`),
+                    })}
+                  </Button>
+                }
+                confirmText={t('common.buttons.update')}
+                id={`edit-resource-modal`}
+                className="modal-size--l create-resource-modal"
+                renderForm={props => (
+                  <ErrorBoundary>
+                    <SectionEditor
+                      onlyYaml={!extensibilitySchemas[key]}
+                      data={data[key]}
+                      schema={extensibilitySchemas[key]}
+                    />
+                  </ErrorBoundary>
+                )}
+              />,
             ]}
           />
         ))}
