@@ -22,10 +22,8 @@ context('Test Virtual Services', () => {
 
   before(() => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
-    cy.mockExtension(
-      'GATEWAYS',
-      'examples/resources/istio/virtual-services.yaml',
-    );
+
+    cy.mockExtensions(['examples/resources/istio/virtual-services.yaml']);
 
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
