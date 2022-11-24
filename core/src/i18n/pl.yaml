@@ -1,37 +1,6 @@
-api-rules:
-  access-strategies:
-    buttons:
-      add: Dodaj strategię dostępu
-    labels:
-      required-scope: Wymagany zakres
-    messages:
-      one-method: Ta strategia dostępu wymaga co najmniej jednej metody.
-    title: Strategie dostępu
-    tooltips:
-      delete: Zdefiniuj co najmniej jedną strategię dostępu.
-      path: Ścieżka może zawierać znaki alfanumeryczne oraz „/”, „.”, „*”, „?”, „!”, „-”, „(” i „)”.
-  buttons:
-    create: Stwórz regułę API
-    edit: Edytuj regułę API "{{apiRuleName}}"
-    expose: Wystaw {{type}}
-  general-settings:
-    title: Ustawienia główne
-  list:
-    headers:
-      host: Host
-      service-name: Nazwa Serwisu
-      status: Status
-  messages:
-    create-failed: Nie udało się utworzyć reguły API
-    created: Utworzono regułę API
-    description: Udostępnij usługi poza klastrem za pomocą reguł interfejsu API.
-    not-matching-results: Nie można znaleźć reguł API pasujących do tego zapytania.
-    updated: Zaktualizowano regułę API
-  services:
-    error-load: Nie udało się wczytać listy serwisów
-    loading: Ładowanie serwisów...
-    ns-no-services: Brak Serwisów w tej Przestrzeni Nazw
-  title: Reguły API
+api-rules: Reguły API
+applications:
+  title: Aplikacje
 cluster-role-bindings:
   title: Powiązania ról klastra
 cluster-roles:

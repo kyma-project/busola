@@ -20,7 +20,7 @@ context('Test Gateways', () => {
 
   before(() => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
-    cy.mockExtension('GATEWAYS', 'examples/resources/istio/gateways.yaml');
+    cy.mockExtensions(['examples/resources/istio/gateways.yaml']);
 
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

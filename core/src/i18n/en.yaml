@@ -1,73 +1,41 @@
-api-rules:
-  access-strategies:
-    buttons:
-      add: Add Access Strategy
-    labels:
-      access-strategy: Access Strategy
-      allow: Allow
-      handler: Handler
-      jwt: JWT
-      methods: Methods
-      noop: noop
-      oauth2_introspection: OAuth2
-      path: Path
-      required-scope: Required Scope
-      types: Types
-    messages:
-      one-method: This access strategy requires at least one method.
-      one-strategy-required: Provide at least one strategy.
-      unaccepted-type: Make sure that Access Strategies have the accepted values (noop, allow, oauth2_introspection, jwt) in YAML.
-    title: Access Strategies
-    tooltips:
-      path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
+api-rules: API Rules
+applications:
   buttons:
-    create: Create API Rule
-    edit: Edit API Rule "{{apiRuleName}}"
-    expose: Expose {{type}}
-  description: <0>APIRule</0> allows for exposing a service externally.
-  form:
-    gateway: Gateway
-    host: Host
-    hostname: Hostname
-    subdomain: Subdomain
-    subdomain-placeholder: Subdomain will replace the '*' part of the $t(api-rules.form.hostname) value.
-  general-settings:
-    title: General settings
-  jwt:
-    idp-presets: IDP Presets
-    jwks-uri: JWKs URI
-    trusted-issuer: Trusted issuer URL
-  list:
-    headers:
-      host: Host
-      service-name: Service Name
-      status: Status
+    connect: Connect Application
+    create-app: $t(applications.subtitle.create-app)
+  description: <0>Application</0> represents an external solution connected to Kyma.
+  headers:
+    access-label: Access Label
+    apis: APIs
+    central-gateway-url: Central Gateway URL
+    description: Description
+    events: Events
+    service: Service
+  labels:
+    description: Description
+    namespace: Namespace
   messages:
-    create-failed: Failed to create the APIRule
-    created: APIRule created
-    description: Expose Services outside the cluster with APIRules.
-    not-matching-results: Couldn't find APIRules matching this query.
-    one-rule-required: Provide at least one APIRule.
-    updated: APIRule updated
-    will-be-available-at: APIRule will be available at {{address}}.
-  name_singular: APIRule
-  oauth:
-    required-scope: Required scope
+    cannot-create: Cannot create the Application
+    connect-disabled: Connecting Applications is disabled for SAP BTP, Kyma Runtime.
+    copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
+    create-failed: Failed to create the Application
+    created: Application created
+    no-apis: There are no APIs.
+    no-events: There are no events.
+    service-not-found: No services
+  name_singular: Application
   placeholders:
-    path: Enter the path
-    subdomain: Subdomain part of the APIRule address
-  rule: Rule
-  rules: Rules
-  services:
-    error-load: Couldn't load service list.
-    loading: Loading services...
-    ns-no-services: No Services in this Namespace
-    placeholder: Choose the service to expose
-  title: API Rules
+    description: Provide a description for your Application
+  statuses:
+    deployed: Deployed
+    provisioning: Provisioning
+  subtitle:
+    connect-app: Connect Application
+    create-app: Create Application
+    provided-services: Provided Services and Events
+  title: Applications
   tooltips:
-    ok: Resource created
-    skipped: Skipped creating the resource
-    unknown: Unknown resource state
+    provisioning: The Application is being provisioned asynchronously.
 apps:
   title: Apps
 btp-instances:
