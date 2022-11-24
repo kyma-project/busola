@@ -13,7 +13,9 @@ import {
 import { injectPluginStack } from '@ui-schema/ui-schema/applyPluginStack';
 import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
 import jsyaml from 'js-yaml';
+import { fromJS } from 'immutable';
 
+import { ResourceForm } from 'shared/ResourceForm';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -51,42 +53,35 @@ const FormStack = injectPluginStack(FormContainer);
 
 function SectionEditor({ data, schema }) {
   console.log('SectionEditor', 'data', data);
-  console.log('SectionEditor', 'schema', schema);
+  // console.log('SectionEditor', 'schema', schema);
   const [store, setStore] = useState(() =>
-    createStore(createOrderedMap(jsyaml.load(data))),
+    // createStore(createOrderedMap(jsyaml.load(data))),
+    createStore(fromJS(jsyaml.load(data))),
   );
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
   const schemaMap = useMemo(() => createOrderedMap(schema), [schema]);
 
+  console.log('resource', resource);
+
   const onChange = actions => {
+    console.log('onChange', actions);
     setStore(prevStore => storeUpdater(actions)(prevStore));
   };
 
   return (
     <UIMetaProvider widgets={limitedWidgets}>
-      <pre>{jsyaml.dump(store.toJS().values)}</pre>
-      <UIStoreProvider
-        store={store}
-        showValidity={true}
-        onChange={onChange}
-        // rootRule={schemaRules}
-      >
-        <FormStack isRoot schema={schemaMap} resource={resource} />
+      {/*<pre>{jsyaml.dump(store.toJS().values)}</pre>*/}
+      <UIStoreProvider store={store} showValidity={true} onChange={onChange}>
+        <ResourceForm
+          resource={resource}
+          initialResource={resource}
+          disableDefaultFields
+        >
+          <FormStack isRoot schema={schemaMap} resource={resource} />
+        </ResourceForm>
       </UIStoreProvider>
     </UIMetaProvider>
   );
-  /*
-  <CreateResourceForm
-    resource={resource}
-    resourceType={resourceType}
-    resourceUrl={resourceUrl}
-    namespace={namespace}
-    refetchList={silentRefetch}
-    toggleFormFn={toggleFormFn}
-    resourceSchema={resourceSchema}
-    {...props}
-  />
-  */
 }
 
 export function BusolaExtensionDetails(props) {
@@ -113,21 +108,14 @@ export function BusolaExtensionDetails(props) {
             actions={[
               extensibilitySchemas[key] ? (
                 <ModalWithForm
-                  // getToggleFormFn={getToggleFormFn}
-                  title="[[edit]]"
-                  // title={
-                  // editActionLabel ||
-                  // t('components.resource-details.edit', {
-                  // resourceType: prettifiedResourceKind,
-                  // })
-                  // }
+                  title={t('extensibility.edit-section', {
+                    section: t(`extensibility.sections.${key}`),
+                  })}
                   modalOpeningComponent={
                     <Button className="fd-margin-end--tiny" option="emphasized">
-                      [[edit {key}]]
-                      {/*editActionLabel ||
-                      t('components.resource-details.edit', {
-                        resourceType: prettifiedResourceKind,
-                      })*/}
+                      {t('extensibility.edit-section', {
+                        section: t(`extensibility.sections.${key}`),
+                      })}
                     </Button>
                   }
                   confirmText={t('common.buttons.update')}

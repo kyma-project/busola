@@ -18,6 +18,7 @@ import { EnumHandler } from '../plugins/EnumHandler';
 import { VisibilityHandler } from '../plugins/VisibilityHandler';
 import { TriggerHandler } from '../plugins/TriggerHandler';
 
+import { Jsonata } from './Jsonata';
 import { StringRenderer } from './StringRenderer';
 import { NumberRenderer } from './NumberRenderer';
 import { SwitchRenderer } from './SwitchRenderer';
@@ -66,6 +67,7 @@ export const widgets = {
     Accordions: AccordionsRenderer,
     */
     Text: StringRenderer,
+    Jsonata,
     /*
     Text: TextRenderer,
     StringIcon: StringIconRenderer,

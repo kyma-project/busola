@@ -4,7 +4,6 @@ import { PluginStack } from '@ui-schema/ui-schema';
 import { isNil } from 'lodash';
 
 import { ResourceForm } from 'shared/ResourceForm';
-// import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
 
 import { useGetTranslation } from 'components/Extensibility/helpers';
 
@@ -17,13 +16,8 @@ export function MultiType({
   resource,
   ...props
 }) {
-  console.log('MultiType::store keys', storeKeys.toJS());
   const value = storeKeys.reduce((val, key) => val?.[key], resource);
 
-  console.log('MultiType::resource', resource);
-  console.log('MultiType::value', typeof value, value);
-  console.log('MultiType::schema', schema);
-  // const { tFromStoreKeys, t: tExt, exists } = useGetTranslation();
   const { tFromStoreKeys } = useGetTranslation();
 
   const types = schema.get('type');
@@ -44,11 +38,13 @@ export function MultiType({
   }
 
   newSchema = newSchema
+    // .set('name', '') // TODO
     .set('type', selectedType)
     .set('widget', typeWidgets?.[selectedType]);
 
   const defaults = {
     string: '',
+    number: 0,
     array: [],
     object: {},
     boolean: false,
@@ -57,12 +53,10 @@ export function MultiType({
 
   return (
     <>
-      «{selectedType}»
       <ResourceForm.FormField
         value={value}
         label={tFromStoreKeys(storeKeys, schema)}
         data-testid={`${storeKeys.join('.')}-type`}
-        // placeholder={tExt(schemaPlaceholder) || tExt(placeholder)}
         input={() => (
           <ButtonSegmented>
             {types.map(type => (
@@ -71,57 +65,30 @@ export function MultiType({
                 key={type}
                 selected={type === selectedType}
                 onClick={() => {
-                  console.log('onClick?', type, defaults[type]);
                   onChange &&
                     onChange({
                       storeKeys,
                       scopes: ['value'],
                       type: 'set',
                       schema,
-                      required,
+                      required: false,
                       data: { value: defaults[type] },
                     });
                 }}
               >
-                {type}
+                {tFromStoreKeys(storeKeys.push(type), schema)}
               </Button>
             ))}
           </ButtonSegmented>
         )}
       />
       <PluginStack
-        // showValidity={showValidity}
+        {...props}
         onChange={onChange}
         schema={newSchema}
-        // parentSchema={schema}
         storeKeys={storeKeys}
         resource={resource}
-        // level={level + 1}
-        // schemaKeys={schemaKeys?.push('items')}
-        // compact
-        // placeholder={tExt(schemaPlaceholder)}
-        // inputInfo={inputInfo}
-        {...props}
       />
-      {/*type !== 'null' && <ResourceForm.FormField
-        value={value}
-        setValue={value => {
-          onChange && onChange({
-            storeKeys,
-            scopes: ['value'],
-            type: 'set',
-            schema,
-            required,
-            data: { value },
-          });
-        }}
-        label={tFromStoreKeys(storeKeys, schema)}
-        compact={compact}
-        data-testid={storeKeys.join('.')}
-        placeholder={tExt(schemaPlaceholder) || tExt(placeholder)}
-        {...getTypeSpecificProps()}
-        {...getPropsFromSchema(schema, required, tExt)}
-      />*/}
     </>
   );
 }
