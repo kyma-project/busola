@@ -6,7 +6,7 @@ import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { SubscriptionsList } from 'shared/components/SubscriptionsList';
-import { ApiRulesList } from 'components/ApiRules/ApiRulesList';
+import { ApiRulesList } from './ApiRulesList';
 
 import { ServiceCreate } from './ServiceCreate';
 import './ServiceDetails.scss';
@@ -29,7 +29,6 @@ export function ServiceDetails(props) {
   if (features?.API_GATEWAY?.isEnabled) {
     customComponents.push(service => (
       <ApiRulesList
-        prefix={service.metadata.name}
         key={service}
         serviceName={service.metadata.name}
         namespace={service.metadata.namespace}

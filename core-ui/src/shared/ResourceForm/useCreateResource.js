@@ -54,6 +54,9 @@ export function useCreateResource({
           ...resource,
           metadata: { ...initialResource.metadata, ...resource.metadata },
         };
+
+        delete mergedResource?.metadata?.resourceVersion;
+        delete initialResource?.metadata?.resourceVersion;
         await patchRequest(
           createUrl,
           createPatch(initialResource, mergedResource),
