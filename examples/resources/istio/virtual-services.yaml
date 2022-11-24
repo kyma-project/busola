@@ -55,7 +55,7 @@ data:
       - name: summary
         widget: Panel
         source: spec
-        visibility: $boolean($exists($item.exportTo) or $exists($item.hosts))
+        visibility: $boolean($exists($value.exportTo) or $exists($value.hosts))
         children:
           - name: exportTo
             source: exportTo
