@@ -31,7 +31,6 @@ import { SECTIONS } from './helpers';
 import { EXTENSION_VERSION_LABEL } from './constants';
 
 export function BusolaExtensionDetails(props) {
-  console.log('BusolaExtensionDetails', props);
   const { t } = useTranslation();
   const { extensibilitySchemas } = useMicrofrontendContext();
   const { namespace, name } = useParams();
