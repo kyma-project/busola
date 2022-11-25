@@ -120,6 +120,7 @@ data:
       path: spec.service
       name: service
       widget: FormGroup
+      defaultExpanded: true
       children:
         - simple: true
           required: false
@@ -146,6 +147,7 @@ data:
       path: spec.gateway
       name: gateway
       widget: ResourceRef
+      defaultExpanded: true
       visibility: $accessToGateways
       resource:
         kind: Gateway
@@ -179,6 +181,7 @@ data:
       path: spec.rules 
       name: rules 
       widget: GenericList 
+      defaultExpanded: true
       template:
         path: '/.*'
         methods: ['GET']
@@ -187,6 +190,7 @@ data:
           path: '[].accessStrategies'
           name: accessStrategies 
           widget: GenericList 
+          defaultExpanded: true
           template:
             handler: 'allow'
           children:
@@ -209,6 +213,7 @@ data:
           path: '[].methods'
           name: rules.methods 
           widget: SimpleList
+          defaultExpanded: true
           children:
             - path: '[]' 
               enum:
