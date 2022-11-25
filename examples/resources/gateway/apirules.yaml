@@ -190,10 +190,15 @@ data:
         path: '/.*'
         methods: ['GET']
       children:
+        - simple: true
+          required: true
+          path: '[].path'
+          name: path
+          inputInfo: inputInfo.path
         - required: true
           path: '[].accessStrategies'
           name: accessStrategies 
-          widget: GenericList 
+          widget: GenericList
           defaultExpanded: true
           template:
             handler: 'allow'
@@ -229,7 +234,7 @@ data:
                 - HEAD
         - path: '[].mutators' 
           name: mutators 
-          widget: GenericList 
+          widget: GenericList
           children:
             - path: '[].config'
               name: accessStrategies.config
@@ -237,11 +242,6 @@ data:
             - required: true
               path: '[].handler'
               name: accessStrategies.handler
-        - simple: true
-          required: true
-          path: '[].path'
-          name: path
-          inputInfo: inputInfo.path
         - path: '[].service' 
           name: service 
           widget: FormGroup
