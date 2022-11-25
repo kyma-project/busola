@@ -7,8 +7,8 @@ import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
-import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { usePut, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
+import { useGetList, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { navigateToResource, navigateToDetails } from 'shared/hooks/navigate';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
@@ -27,6 +27,8 @@ import { useTranslation } from 'react-i18next';
 import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
 import pluralize from 'pluralize';
+import { HttpError } from 'shared/hooks/BackendAPI/config';
+import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalContent';
 
 /* to allow cloning of a resource set the following on the resource create component:
  *
@@ -198,7 +200,9 @@ export function ResourceListRenderer({
     currentlyEditedResourceUID,
   } = useYamlEditor();
   const notification = useNotification();
+  const getRequest = useSingleGet();
   const updateResourceMutation = useUpdate(resourceUrl);
+  const putRequest = usePut();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => closeEditor(), [namespace]);
@@ -260,18 +264,7 @@ export function ResourceListRenderer({
     );
 
   const handleSaveClick = resourceData => async newYAML => {
-    try {
-      const diff = createPatch(resourceData, jsyaml.load(newYAML));
-      const url = prepareResourceUrl(resourceUrl, resourceData);
-
-      await updateResourceMutation(url, diff);
-      silentRefetch();
-      notification.notifySuccess({
-        content: t('components.resources-list.messages.update.success', {
-          resourceType: prettifiedResourceName,
-        }),
-      });
-    } catch (e) {
+    const showError = e => {
       console.error(e);
       notification.notifyError({
         content: t('components.resources-list.messages.update.failure', {
@@ -280,6 +273,65 @@ export function ResourceListRenderer({
         }),
       });
       throw e;
+    };
+
+    const onSuccess = () => {
+      silentRefetch();
+      notification.notifySuccess({
+        content: t('components.resources-list.messages.update.success', {
+          resourceType: prettifiedResourceName,
+        }),
+      });
+    };
+
+    const modifiedResource = jsyaml.load(newYAML);
+    const url = prepareResourceUrl(resourceUrl, resourceData);
+    const currentResource = await getRequest(url).then(res => res.json());
+    try {
+      // refetch resource to get new version
+      const diff = createPatch(currentResource, modifiedResource);
+
+      await updateResourceMutation(url, diff);
+      onSuccess();
+    } catch (e) {
+      const isConflict = e instanceof HttpError && e.code === 409;
+      if (isConflict) {
+        const makeForceUpdateFn = closeModal => {
+          return async () => {
+            delete modifiedResource?.metadata?.resourceVersion;
+            try {
+              await putRequest(url, modifiedResource);
+              closeModal();
+              onSuccess();
+              if (typeof toggleFormFn === 'function') {
+                toggleFormFn(false);
+              }
+            } catch (e) {
+              showError(e);
+            }
+          };
+        };
+
+        notification.notifyError({
+          content: (
+            <ForceUpdateModalContent
+              error={e}
+              singularName={resourceType}
+              initialResource={currentResource}
+              modifiedResource={modifiedResource}
+            />
+          ),
+          actions: (closeModal, defaultCloseButton) => [
+            <Button compact onClick={makeForceUpdateFn(closeModal)}>
+              {t('common.create-form.force-update')}
+            </Button>,
+            defaultCloseButton(closeModal),
+          ],
+          className: 'error-modal--wider',
+        });
+      } else {
+        showError(e);
+      }
     }
   };
 

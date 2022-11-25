@@ -50,7 +50,6 @@ export function ErrorModal({
     </>
   );
 
-  console.log(classNames('error-modal', className));
   return (
     <Dialog
       className={classNames('error-modal', className)}

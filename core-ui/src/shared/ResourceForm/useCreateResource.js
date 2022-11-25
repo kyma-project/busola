@@ -76,6 +76,10 @@ export function useCreateResource({
       e.preventDefault();
     }
 
+    console.log({
+      i: initialResource.metadata.resourceVersion,
+      r: resource.metadata.resourceVersion,
+    });
     const mergedResource = {
       ...initialResource,
       ...resource,
