@@ -8,11 +8,11 @@
     }
   }
 
-  .fd-dialog__body {
+  .fd-dialog__content {
     max-width: 33rem;
   }
 }
 
-.error-modal--wider .fd-dialog__body {
+.error-modal--wider .fd-dialog__content {
   max-width: 75vw;
 }

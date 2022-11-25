@@ -19,9 +19,18 @@ function ForceUpdateModalContentComponent({
   modifiedResource,
 }: ForceUpdateModalContentProps<K8sResource>) {
   const { t } = useTranslation();
+
+  const toYaml = (obj: K8sResource) => {
+    return jsyaml.dump(obj, {
+      noRefs: true,
+      // sort keys to generate a nicer diff
+      sortKeys: (a: any, b: any) => a.toString().localeCompare(b.toString()),
+    });
+  };
+
   const { divRef } = useCreateDiffEditor({
-    originalValue: jsyaml.dump(initialResource, { noRefs: true }),
-    modifiedValue: jsyaml.dump(modifiedResource, { noRefs: true }),
+    originalValue: toYaml(initialResource),
+    modifiedValue: toYaml(modifiedResource),
     language: 'yaml',
   });
 

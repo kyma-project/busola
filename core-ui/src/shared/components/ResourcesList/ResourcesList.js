@@ -272,7 +272,6 @@ export function ResourceListRenderer({
           error: e.message,
         }),
       });
-      throw e;
     };
 
     const onSuccess = () => {
@@ -285,17 +284,19 @@ export function ResourceListRenderer({
     };
 
     const modifiedResource = jsyaml.load(newYAML);
+    delete resourceData.metadata?.resourceVersion;
+    const diff = createPatch(resourceData, modifiedResource);
     const url = prepareResourceUrl(resourceUrl, resourceData);
-    const currentResource = await getRequest(url).then(res => res.json());
-    try {
-      // refetch resource to get new version
-      const diff = createPatch(currentResource, modifiedResource);
 
+    try {
       await updateResourceMutation(url, diff);
       onSuccess();
     } catch (e) {
       const isConflict = e instanceof HttpError && e.code === 409;
       if (isConflict) {
+        const response = await getRequest(url);
+        const updatedResource = await response.json();
+
         const makeForceUpdateFn = closeModal => {
           return async () => {
             delete modifiedResource?.metadata?.resourceVersion;
@@ -317,7 +318,7 @@ export function ResourceListRenderer({
             <ForceUpdateModalContent
               error={e}
               singularName={resourceType}
-              initialResource={currentResource}
+              initialResource={updatedResource}
               modifiedResource={modifiedResource}
             />
           ),
@@ -332,6 +333,8 @@ export function ResourceListRenderer({
       } else {
         showError(e);
       }
+      // throw error so that drawer doesn't close
+      throw e;
     }
   };
 
