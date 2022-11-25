@@ -72,23 +72,12 @@ context('Test Command Palette navigation', () => {
 
     cy.url().should('match', new RegExp('namespaces/default/details'));
 
-    // navigate to pod details
+    // navigate to list of cluster role bindings
     openCommandPalette();
 
     cy.getIframeBody()
       .find('[aria-label="Remove Namespace context"]')
       .should('be.visible');
-
-    getQueryInput().type('applications ');
-
-    cy.getIframeBody()
-      .contains(Cypress.env('APP_NAME'))
-      .click();
-
-    cy.url().should('match', new RegExp(`/applications/details/`));
-
-    // navigate to list of cluster role bindings
-    openCommandPalette();
 
     getQueryInput().type('crb');
 

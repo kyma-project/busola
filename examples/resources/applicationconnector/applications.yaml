@@ -9,111 +9,80 @@ metadata:
     busola.io/extension-version: '0.5'
 data:
   general: |-
-    {
-      "resource": {
-        "kind": "Application",
-        "group": "applicationconnector.kyma-project.io",
-        "version": "v1alpha1"
-      },
-      "name": "Applications",
-      "category": "Integration",
-      "urlPath": "applications",
-      "scope": "cluster",
-      "description": "{{[Application](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/ac-01-application)}} represents an external solution connected to Kyma."
-    }
+    resource:
+      kind: Application
+      group: applicationconnector.kyma-project.io
+      version: v1alpha1
+    urlPath: applications
+    scope: cluster
+    name: Applications
+    category: Integration
   details: |-
-    {
-      "header": [
-        {
-          "name": "Description",
-          "source": "spec.description"
-        },
-        {
-          "name": "Access Label",
-          "source": "spec.accessLabel"
-        }
-      ],
-      "body": [
-        {
-          "widget": "Table",
-          "source": "spec.services",
-          "name": "Provided Services and Events",
-           "children": [
-            {
-              "source": "$count($item.entries[type='API'])", 
-              "name": "APIs"
-            },
-            {
-              "source": "$count($item.entries[type='Events'])", 
-              "name": "Events"
-            },
-            {
-              "source": "$item.providerDisplayName",
-              "name": "Provider"
-            }
-          ],
-          "collapsibleTitle": "$item.displayName",
-          "collapsible": [
-          {
-            "widget": "Plain",
-            "children": [
-              {
-                "source": "$item.longDescription"
-              }
-            ]
-          },
-            {
-              "widget": "Table",
-              "name": "APIs",
-              "source": "$item.entries[type = 'API']",
-              "children": [
-                {
-                  "source": "$item.name",
-                  "name": "Name"
-                },
-                {
-                  "source": "$item.accessLabel",
-                  "name": "Access Label"
-                },
-                {
-                  "widget": "ExternalLink",
-                  "source": "$item.centralGatewayUrl",
-                  "name": "Central Gateway URL",
-                  "copyable": true
-                }
-              ]
-            },
-            {
-              "widget": "Table",
-              "name": "Events",
-              "source": "$item.entries[type = 'Events']",
-              "children": [
-                {
-                  "source": "$item.name",
-                  "name": "Name"
-                },
-                {
-                  "source": "$item.accessLabel",
-                  "name": "Access Label"
-                },
-                {
-                  "widget": "ExternalLink",
-                  "source": "$item.centralGatewayUrl",
-                  "name": "Central Gateway URL",
-                  "copyable": true
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
+    header:
+      - name: headers.description
+        source: spec.description
+      - name: headers.access-label
+        source: spec.accessLabel
+    body:
+      - widget: Table
+        source: spec.services
+        name: headers.services-and-events
+        children:
+        - source: "$count($item.entries[type='API'])"
+          name: headers.apis
+        - source: "$count($item.entries[type='Events'])"
+          name: headers.events
+        - source: "$item.providerDisplayName"
+          name: headers.provider
+        collapsibleTitle: "$item.displayName"
+        collapsible:
+        - widget: Plain
+          children:
+          - source: "$item.longDescription"
+        - widget: Table
+          name: headers.apis
+          source: "$item.entries[type = 'API']"
+          children:
+          - source: "$item.name"
+            name: headers.name
+          - source: "$item.accessLabel"
+            name: headers.access-label
+          - widget: ExternalLink
+            source: "$item.centralGatewayUrl"
+            name: headers.gateway-url
+            copyable: true
+        - widget: Table
+          name: headers.events
+          source: "$item.entries[type = 'Events']"
+          children:
+          - source: "$item.name"
+            name: headers.name
+          - source: "$item.accessLabel"
+            name: headers.access-label
+          - widget: ExternalLink
+            source: "$item.centralGatewayUrl"
+            name: headers.gateway-url
+            copyable: true
   form: |-
-    [
-      {
-        "path": "metadata.name",
-        "extraPaths": ["spec.accessLabel", "metadata.labels['app.kubernetes.io/name']"]
-      },
-      { "path": "spec.description" },
-      { "path": "spec.accessLabel" }
-    ]
+    - path: metadata.name
+      extraPaths:
+      - spec.accessLabel
+      - metadata.labels['app.kubernetes.io/name']
+    - path: spec.description
+      placeholder: placeholders.description
+    - path: spec.accessLabel
+  translations: |-
+    en: 
+      description: "{{[Application](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/ac-01-application)}}
+        represents an external solution connected to Kyma."
+      headers: 
+        access-label: Access Label
+        apis: APIs
+        description: Description
+        events: Events
+        gateway-url: Central Gateway URL
+        name: Name
+        provider: Provider
+        services-and-events: Provided Services and Events
+      placeholders: 
+        description: Provide a description for your Application
