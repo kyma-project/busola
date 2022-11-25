@@ -30,7 +30,6 @@ import * as Subscriptions from './Subscriptions';
 import * as ServiceAccounts from './ServiceAccounts';
 
 // //cluster
-import * as Applications from './Applications';
 import * as ClusterRoles from './ClusterRoles';
 import * as StorageClasses from './StorageClasses';
 import * as PersistentVolumes from './PersistentVolumes';
@@ -76,7 +75,6 @@ export const resources = [
   ServiceAccounts,
 
   // cluster resources
-  Applications,
   ClusterEvents,
   Namespaces,
   ClusterRoles,

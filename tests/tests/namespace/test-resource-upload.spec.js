@@ -18,6 +18,11 @@ context('Test resource upload', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtensions([
+      'examples/resources/applicationconnector/applications.yaml',
+    ]);
+
     cy.loginAndSelectCluster();
   });
 
