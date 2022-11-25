@@ -56,10 +56,6 @@ context('Test API Rules in the Function details view', () => {
 
     // Service
     cy.getIframeBody()
-      .find('[aria-label="expand Service"]:visible', { log: false })
-      .click();
-
-    cy.getIframeBody()
       .find('[aria-label="Choose Service"]:visible', { log: false })
       .first()
       .type(FUNCTION_NAME);
@@ -106,16 +102,7 @@ context('Test API Rules in the Function details view', () => {
       .click();
 
     // Rules
-    cy.getIframeBody()
-      .find('[aria-label="expand Rules"]:visible', { log: false })
-      .contains('Add')
-      .click();
-
     // > Access Strategies
-    cy.getIframeBody()
-      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
-      .contains('Add')
-      .click();
 
     cy.getIframeBody()
       .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible')
@@ -146,9 +133,6 @@ context('Test API Rules in the Function details view', () => {
       .type('read');
 
     // > Methods
-    cy.getIframeBody()
-      .find('[aria-label="expand Methods"]:visible', { log: false })
-      .click();
 
     cy.getIframeBody()
       .find('[data-testid="spec.rules.0.methods.1"]:visible')
@@ -202,18 +186,7 @@ context('Test API Rules in the Function details view', () => {
     cy.getIframeBody().contains(API_RULE_NAME);
 
     // Rules
-    cy.getIframeBody()
-      .find('[aria-label="expand Rules"]:visible', { log: false })
-      .contains('Add')
-      .click();
-
     // > Access Strategies
-    cy.getIframeBody()
-      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
-      .eq(1)
-      .contains('Add')
-      .scrollIntoView()
-      .click();
 
     cy.getIframeBody()
       .find('[data-testid="select-dropdown"]:visible')
@@ -232,10 +205,6 @@ context('Test API Rules in the Function details view', () => {
       .type('write');
 
     // > Methods
-    cy.getIframeBody()
-      .find('[aria-label="expand Methods"]:visible', { log: false })
-      .scrollIntoView()
-      .click();
 
     cy.getIframeBody()
       .find('[data-testid="spec.rules.1.methods.0"]:visible')
