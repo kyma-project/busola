@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react';
 import { isEqual } from 'lodash';
 
 import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
-import { groupsState } from 'state/groupsAtom';
 import { activeClusterNameState } from 'state/activeClusterNameAtom';
 import { authDataState } from 'state/authDataAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
@@ -30,12 +29,10 @@ export const useLuigiContextMigrator = () => {
     clusters,
     config,
     ssoData,
-    groups,
   } = useMicrofrontendContext();
 
   const isReactNavigationEnabled = features?.REACT_NAVIGATION?.isEnabled;
 
-  useUpdateRecoilIfValueChanged(groups, groupsState);
   useUpdateRecoilIfValueChanged(
     activeClusterName,
     activeClusterNameState,

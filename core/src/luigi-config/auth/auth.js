@@ -6,8 +6,6 @@ import {
 import { convertToURLsearch } from '../communication';
 import { parseOIDCParams } from './oidc-params';
 
-export let groups;
-
 export function hasNonOidcAuth(user) {
   return (
     user &&
@@ -67,7 +65,6 @@ async function createAuth(callback, kubeconfigUser) {
         response_mode: 'query',
         userInfoFn: async (_, authData) => {
           setAuthData({ token: authData.idToken });
-          groups = authData.profile?.['http://k8s/groups'];
 
           callback();
           return Promise.resolve({
