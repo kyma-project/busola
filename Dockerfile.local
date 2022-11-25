@@ -39,15 +39,15 @@ COPY --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --from=builder /app/backend/package* /app/
 
 # move out the packed extensions for further use
-# RUN mv /app/core/assets/extensions/extensions.yaml /app/extensions.yaml
+RUN mv /app/core-ui/public/extensions/extensions.yaml /app/extensions.yaml
 
 RUN npm ci --only=production
 
 # use sessionStorage as default
 # enable OBSERVABILITY & SHOW_KYMA_VERSION for production
-# RUN yq eval -i '.config.features.OBSERVABILITY.isEnabled = true' core/assets/defaultConfig.yaml
-# RUN yq eval -i '.config.features.SHOW_KYMA_VERSION.isEnabled = true' core/assets/defaultConfig.yaml 
-# RUN yq eval -i '.config.defaultStorage = "sessionStorage"' core/assets/defaultConfig.yaml 
+RUN yq eval -i '.config.features.OBSERVABILITY.isEnabled = true' core-ui/public/defaultConfig.yaml
+RUN yq eval -i '.config.features.SHOW_KYMA_VERSION.isEnabled = true' core-ui/public/defaultConfig.yaml 
+RUN yq eval -i '.config.defaultStorage = "sessionStorage"' core-ui/public/defaultConfig.yaml 
 
 EXPOSE 3001
 ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
