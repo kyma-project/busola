@@ -172,9 +172,9 @@ data:
       required: true
       path: spec.host
       name: host
-      enum: "$distinct($filter($relatedGateways().items, function ($v) { $contains($v.metadata.name, $substringBefore($root.spec.gateway, '.')) and ($contains($v.metadata.namespace, $substringBefore($substringAfter($root.spec.gateway, '.'), '.')))}).spec.servers.hosts)"
+      enum: "$distinct($filter($relatedGateways().items, function ($v) { $v.metadata.name = $substringBefore($root.spec.gateway, '.') and $v.metadata.namespace = $substringBefore($substringAfter($root.spec.gateway, '.'), '.')}).spec.servers.hosts)"
       subscribe:
-        host: "$string($filter($relatedGateways().items, function ($v) { $contains($v.metadata.name, $substringBefore($root.spec.gateway, '.')) and ($contains($v.metadata.namespace, $substringBefore($substringAfter($root.spec.gateway, '.'), '.')))}).spec.servers[0].hosts[0])"
+        host: "$string($filter($relatedGateways().items, function ($v) {  $v.metadata.name = $substringBefore($root.spec.gateway, '.') and $v.metadata.namespace = $substringBefore($substringAfter($root.spec.gateway, '.'), '.')}).spec.servers[0].hosts[0])"
     - simple: true
       widget: Alert
       severity: error
