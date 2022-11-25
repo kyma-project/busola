@@ -139,7 +139,7 @@ export function useCreateResource({
             </Button>,
             defaultCloseButton(closeModal),
           ],
-          className: 'error-modal--wider',
+          wider: true,
         });
       } else {
         showError(e);

@@ -14,7 +14,7 @@ type ErrorModalProps = {
     close: CloseFn,
     defaultCloseButton: (close: CloseFn) => React.ReactNode,
   ) => React.ReactNode[];
-  className?: string;
+  wider?: boolean;
 };
 
 export function ErrorModal({
@@ -23,7 +23,7 @@ export function ErrorModal({
   content,
   actions,
   close,
-  className,
+  wider,
 }: ErrorModalProps) {
   useEventListener(
     'keydown',
@@ -52,7 +52,7 @@ export function ErrorModal({
 
   return (
     <Dialog
-      className={classNames('error-modal', className)}
+      className={classNames('error-modal', { 'error-modal--wider': wider })}
       // @ts-ignore Type 'Element' is not assignable to type 'string', but we need an icon inside
       title={title}
       actions={
