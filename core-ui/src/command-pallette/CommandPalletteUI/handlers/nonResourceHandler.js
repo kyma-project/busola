@@ -1,5 +1,5 @@
 import LuigiClient from '@luigi-project/client';
-import { setCluster } from 'components/Clusters/shared';
+import { addCluster } from 'components/Clusters/shared';
 import { getSuggestion } from './helpers';
 
 function createNonResourceOptions({ activeClusterName }) {
@@ -51,7 +51,7 @@ function createResults(context) {
             name: clusterName,
           }),
           query: `cluster ${clusterName}`,
-          onActivate: () => setCluster(clusterName),
+          onActivate: () => addCluster(clusterName),
         }));
       case 'help':
         return {

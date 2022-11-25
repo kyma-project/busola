@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
@@ -24,6 +24,8 @@ import { Sidebar } from 'sidebar/Sidebar';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 import { useInitTheme } from './useInitTheme';
+
+import ClusterList from 'components/Clusters/views/ClusterList';
 
 import './App.scss';
 
@@ -54,22 +56,37 @@ export default function App() {
         <Sidebar />
         <ContentWrapper>
           <Routes key={cluster?.name}>
-            {/* force rerender on cluster change*/}
+            <Route path="clusters" element={<ClusterList />} />
             <Route
-              path="/overview" // overview route should stay static
+              path="cluster/:currentClusterName"
+              element={<Navigate to="overview" />}
+            />
+            <Route path="cluster/:currentClusterName/*">
+              <Route
+                path="overview" // overview route should stay static
+                element={
+                  <WithTitle
+                    title={t('clusters.overview.title-current-cluster')}
+                  >
+                    <ClusterOverview />
+                  </WithTitle>
+                }
+              />
+              {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
+              {customResources?.map(cr =>
+                createExtensibilityRoutes(cr, language),
+              )}
+              {resourceRoutes}
+              {otherRoutes}
+            </Route>
+            <Route path="" element={<MainFrameRedirection />} />
+            // TODO fix it
+            <Route
+              path="/cluster/shoot--hasselhoff--kmain/namespaces/dd/details"
               element={
-                <WithTitle title={t('clusters.overview.title-current-cluster')}>
-                  <ClusterOverview />
-                </WithTitle>
+                <Navigate to="/cluster/shoot--hasselhoff--kmain/overview" />
               }
             />
-            {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
-            {customResources?.map(cr =>
-              createExtensibilityRoutes(cr, language),
-            )}
-            {resourceRoutes}
-            {otherRoutes}
-            <Route path="" element={<MainFrameRedirection />} />
           </Routes>
           <Preferences />
         </ContentWrapper>

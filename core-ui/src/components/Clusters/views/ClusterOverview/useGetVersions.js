@@ -6,7 +6,7 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 export function useGetVersions() {
   const { t } = useTranslation();
   const { features } = useMicrofrontendContext();
-  const showKymaVersion = features.SHOW_KYMA_VERSION?.isEnabled;
+  const showKymaVersion = features?.SHOW_KYMA_VERSION?.isEnabled;
 
   const {
     data: k8sVersion,
@@ -26,7 +26,7 @@ export function useGetVersions() {
 
   const formatClusterVersion = () => {
     if (k8sVersionError) return getErrorMessage(k8sVersionError);
-    return k8sVersion.gitVersion;
+    return k8sVersion?.gitVersion;
   };
 
   const kymaVersion =

@@ -9,11 +9,11 @@ export const createPath = (
   config = { namespaced: true, detailsView: false, pathSegment: '' },
 ) => {
   const { namespaced = true, detailsView = false, pathSegment = '' } = config;
-  const namespacePrefix = namespaced ? '/namespaces/:namespaceId' : '';
+  const namespacePrefix = namespaced ? 'namespaces/:namespaceId/' : '';
 
   const details = detailsView ? '/:resourceName' : '';
 
-  return `${namespacePrefix}/${pathSegment}${details}`;
+  return `${namespacePrefix}${pathSegment}${details}`;
 };
 
 export const luigiNavigate = (node, namespace) => {

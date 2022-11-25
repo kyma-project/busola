@@ -14,6 +14,7 @@ import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
 
 import './AddClusterWizard.scss';
+import { useClustersInfo } from 'state/utils/getClustersInfo';
 
 export function AddClusterWizard({
   kubeconfig,
@@ -24,6 +25,7 @@ export function AddClusterWizard({
   const { busolaClusterParams } = useMicrofrontendContext();
   const { t } = useTranslation();
   const notification = useNotification();
+  const clustersInfo = useClustersInfo();
 
   const [hasAuth, setHasAuth] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);
@@ -65,34 +67,40 @@ export function AddClusterWizard({
     try {
       const contextName = kubeconfig['current-context'];
       if (!kubeconfig.contexts?.length) {
-        addByContext({
-          kubeconfig,
-          context: {
-            name: kubeconfig.clusters[0].name,
-            context: {
-              cluster: kubeconfig.clusters[0].name,
-              user: kubeconfig.users[0].name,
-            },
-          },
-
-          storage,
-          config,
-        });
-      } else if (contextName === '-all-') {
-        kubeconfig.contexts.forEach((context, index) => {
-          addByContext({
+        addByContext(
+          {
             kubeconfig,
-            context,
-            switchCluster: !index,
+            context: {
+              name: kubeconfig.clusters[0].name,
+              context: {
+                cluster: kubeconfig.clusters[0].name,
+                user: kubeconfig.users[0].name,
+              },
+            },
+
             storage,
             config,
-          });
+          },
+          clustersInfo,
+        );
+      } else if (contextName === '-all-') {
+        kubeconfig.contexts.forEach((context, index) => {
+          addByContext(
+            {
+              kubeconfig,
+              context,
+              switchCluster: !index,
+              storage,
+              config,
+            },
+            clustersInfo,
+          );
         });
       } else {
         const context = kubeconfig.contexts.find(
           context => context.name === contextName,
         );
-        addByContext({ kubeconfig, context, storage, config });
+        addByContext({ kubeconfig, context, storage, config }, clustersInfo);
       }
     } catch (e) {
       notification.notifyError({

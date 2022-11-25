@@ -25,12 +25,11 @@ import {
   addExternalNodes,
 } from './navigation-helpers';
 import { clearAuthData, getAuthData } from '../auth/auth-storage';
-import { groups } from '../auth/auth';
 import {
   getActiveCluster,
   getClusters,
   getActiveClusterName,
-  setCluster,
+  addCluster,
   deleteActiveCluster,
   saveActiveClusterName,
   getCurrentContextNamespace,
@@ -149,7 +148,7 @@ async function createClusterManagementNodes(features, customResources) {
       pathSegment: encodeURIComponent(clusterName),
       hideFromNav: true,
       onNodeActivation: async () => {
-        await setCluster(clusterName);
+        await addCluster(clusterName);
         return false;
       },
     }));
@@ -405,7 +404,6 @@ export async function createNavigationNodes({
         permissionSet,
         authData,
         activeClusterName,
-        groups,
         features,
         customResources,
         extensibilitySchemas,

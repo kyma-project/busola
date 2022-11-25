@@ -55,7 +55,7 @@ export function getAfterLoginLocation(clusterName, kubeconfig) {
   }`;
 }
 
-export async function setCluster(clusterName) {
+export async function addCluster(clusterName) {
   try {
     loadingState.setLoading(true);
     const clusters = getClusters();

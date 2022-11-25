@@ -19,5 +19,5 @@ export function useFeature(featureName) {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return features[featureName] ?? { isEnabled: false };
+  return features?.[featureName] ?? { isEnabled: false };
 }

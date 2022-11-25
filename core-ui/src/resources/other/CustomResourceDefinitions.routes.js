@@ -8,7 +8,7 @@ const CRDList = React.lazy(() =>
 
 export default (
   <Route
-    path="/customresourcedefinitions"
+    path="customresourcedefinitions"
     element={
       <Suspense fallback={<Spinner />}>
         <CRDList />

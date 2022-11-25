@@ -1,13 +1,16 @@
 import React, { useState, useRef } from 'react';
 import * as jp from 'jsonpath';
+import { cloneDeep } from 'lodash';
 import { useTranslation } from 'react-i18next';
+
+import { useClustersInfo } from 'state/utils/getClustersInfo';
+
 import { addCluster, getContext, deleteCluster } from '../../shared';
 import { ResourceForm } from 'shared/ResourceForm';
 import { K8sNameField } from 'shared/ResourceForm/fields';
 import { ChooseStorage } from 'components/Clusters/components/ChooseStorage';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { cloneDeep } from 'lodash';
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { AuthenticationTypeDropdown } from 'components/Clusters/views/EditCluster/AuthenticationDropdown';
 
@@ -17,13 +20,14 @@ function EditClusterComponent({
   resourceUrl,
   editedCluster,
 }) {
+  const clustersInfo = useClustersInfo();
   const [resource, setResource] = useState(cloneDeep(editedCluster));
-
   const [authenticationType, setAuthenticationType] = useState(
     resource?.kubeconfig?.users?.[0]?.user?.exec ? 'oidc' : 'token',
   );
   const notification = useNotification();
 
+  const { setClusters } = { setClusters: () => alert('clusterInfo') };
   const { kubeconfig, config } = resource;
 
   const originalName = useRef(resource?.kubeconfig?.['current-context'] || '');
@@ -31,14 +35,17 @@ function EditClusterComponent({
   const onComplete = () => {
     try {
       if (originalName.current !== resource?.kubeconfig?.['current-context']) {
-        deleteCluster(originalName.current);
+        deleteCluster(originalName.current, setClusters);
       }
       const contextName = kubeconfig['current-context'];
-      addCluster({
-        kubeconfig,
-        config: { ...(config || {}), config },
-        currentContext: getContext(kubeconfig, contextName),
-      });
+      addCluster(
+        {
+          kubeconfig,
+          config: { ...(config || {}), config },
+          currentContext: getContext(kubeconfig, contextName),
+        },
+        clustersInfo,
+      );
     } catch (e) {
       notification.notifyError({
         title: t('clusters.messages.wrong-configuration'),

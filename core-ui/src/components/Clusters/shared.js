@@ -1,26 +1,22 @@
-import LuigiClient from '@luigi-project/client';
-
 import { tryParseOIDCparams } from './components/oidc-params';
 
-export function setCluster(clusterName) {
-  LuigiClient.sendCustomMessage({
-    id: 'busola.setCluster',
-    clusterName,
-  });
+export function addCurrentCluster(params, clustersInfo) {
+  const { setCurrentCluster, setCurrentClusterName } = clustersInfo;
+  setCurrentCluster(params);
+  setCurrentClusterName(params.contextName);
 }
 
-export function addCluster(params, switchCluster = true) {
-  LuigiClient.sendCustomMessage({
-    id: 'busola.addCluster',
-    params,
-    switchCluster,
-  });
+export function addCluster(params, clustersInfo) {
+  const { setClusters } = clustersInfo;
+  setClusters(prev => ({ ...prev, [params.contextName]: params }));
+  addCurrentCluster(params, clustersInfo);
 }
 
-export function deleteCluster(clusterName) {
-  LuigiClient.sendCustomMessage({
-    id: 'busola.deleteCluster',
-    clusterName,
+export function deleteCluster(clusterName, setClusters) {
+  setClusters(prev => {
+    const newList = { ...prev };
+    delete newList?.[clusterName];
+    return newList;
   });
 }
 
@@ -36,8 +32,8 @@ export function getContext(kubeconfig, contextName) {
   } else {
     const { context } = contexts.find(c => c.name === currentContextName);
     return {
-      cluster: kubeconfig.clusters.find(c => c.name === context.cluster),
-      user: kubeconfig.users.find(u => u.name === context.user),
+      cluster: kubeconfig.clusters.find(c => c?.name === context.cluster),
+      user: kubeconfig.users.find(u => u?.name === context.user),
     };
   }
 }
@@ -77,13 +73,10 @@ export function hasKubeconfigAuth(kubeconfig) {
   }
 }
 
-export const addByContext = ({
-  kubeconfig,
-  context,
-  switchCluster = true,
-  storage = 'sessionStorage',
-  config = {},
-}) => {
+export const addByContext = (
+  { kubeconfig, context, storage = 'sessionStorage', config = {} },
+  clustersInfo,
+) => {
   const cluster = kubeconfig.clusters.find(
     c => c.name === context.context.cluster,
   );
@@ -102,6 +95,6 @@ export const addByContext = ({
       config: { ...config, storage },
       currentContext: getContext(newKubeconfig, context.name),
     },
-    switchCluster,
+    clustersInfo,
   );
 };

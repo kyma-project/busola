@@ -23,7 +23,7 @@ export const createExtensibilityRoutes = (cr, language) => {
     return (
       <React.Fragment key={`namespace-${urlPath}`}>
         <Route
-          path={`/namespaces/:namespaceId/${urlPath}`}
+          path={`namespaces/:namespaceId/${urlPath}`}
           exact
           element={
             <Suspense fallback={<Spinner />}>
@@ -33,7 +33,7 @@ export const createExtensibilityRoutes = (cr, language) => {
         />
         {cr.details && (
           <Route
-            path={`/namespaces/:namespaceId/${urlPath}/:resourceName`}
+            path={`namespaces/:namespaceId/${urlPath}/:resourceName`}
             exact
             element={
               <Suspense fallback={<Spinner />}>
@@ -48,7 +48,7 @@ export const createExtensibilityRoutes = (cr, language) => {
     return (
       <React.Fragment key={`cluster-${urlPath}`}>
         <Route
-          path={`/${urlPath}`}
+          path={`${urlPath}`}
           exact
           element={
             <Suspense fallback={<Spinner />}>
@@ -58,7 +58,7 @@ export const createExtensibilityRoutes = (cr, language) => {
         />
         {cr.details && (
           <Route
-            path={`/${urlPath}/:resourceName`}
+            path={`${urlPath}/:resourceName`}
             exact
             element={
               <Suspense fallback={<Spinner />}>
