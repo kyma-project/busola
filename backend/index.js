@@ -81,10 +81,9 @@ const handleRequest = makeHandleRequest();
 
 if (isDocker) {
   // yup, order matters here
-  serveStaticApp(app, '/core-ui/', '/core-ui');
+  serveStaticApp(app, '/', '/core-ui');
   serveMonaco(app);
   app.use('/backend', handleRequest);
-  serveStaticApp(app, '/', '/core');
 } else {
   handleTracking(app);
   app.use(handleRequest);

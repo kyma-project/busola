@@ -21,8 +21,8 @@ RUN make resolve
 RUN make validate
 RUN make pull-licenses
 
-RUN cd /app/core && make test && make build-docker
-RUN cd /app/core-ui && make test && make build
+# TODO: ENABLE IT BEFORE PUSHING TO MAIN
+RUN cd /app/core-ui && make build
 RUN cd /app/backend && npm run build
 
 # ---- Serve ----
@@ -34,22 +34,21 @@ RUN apk --no-cache upgrade && \
   apk add --update nodejs npm yq
 WORKDIR /app
 
-COPY --from=builder /app/core/src /app/core
 COPY --from=builder /app/core-ui/build /app/core-ui
 COPY --from=builder /app/backend/backend-production.js /app/backend-production.js
 COPY --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --from=builder /app/backend/package* /app/
 
 # move out the packed extensions for further use
-RUN mv /app/core/assets/extensions/extensions.yaml /app/extensions.yaml
+RUN mv /app/core-ui/public/extensions/extensions.yaml /app/extensions.yaml
 
 RUN npm ci --only=production
 
 # use sessionStorage as default
 # enable OBSERVABILITY & SHOW_KYMA_VERSION for production
-RUN yq eval -i '.config.features.OBSERVABILITY.isEnabled = true' core/assets/defaultConfig.yaml
-RUN yq eval -i '.config.features.SHOW_KYMA_VERSION.isEnabled = true' core/assets/defaultConfig.yaml 
-RUN yq eval -i '.config.defaultStorage = "sessionStorage"' core/assets/defaultConfig.yaml 
+RUN yq eval -i '.config.features.OBSERVABILITY.isEnabled = true' core-ui/public/defaultConfig.yaml
+RUN yq eval -i '.config.features.SHOW_KYMA_VERSION.isEnabled = true' core-ui/public/defaultConfig.yaml 
+RUN yq eval -i '.config.defaultStorage = "sessionStorage"' core-ui/public/defaultConfig.yaml 
 
 EXPOSE 3001
 ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
