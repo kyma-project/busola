@@ -47,7 +47,6 @@
     "child_process": false
   },
   "files": [
-    "core/",
     "core-ui/"
   ]
 }
