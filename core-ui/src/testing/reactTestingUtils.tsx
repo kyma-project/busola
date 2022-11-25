@@ -1,15 +1,22 @@
 import { ReactElement, ReactNode } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
-import { RecoilRoot } from 'recoil';
+import { MutableSnapshot, RecoilRoot } from 'recoil';
 
-const AllTheProviders = ({ children }: { children: ReactNode }) => {
-  return <RecoilRoot>{children}</RecoilRoot>;
+type CustomRenderOptions = Omit<RenderOptions, 'wrapper'> & {
+  initializeState: (snapshot: MutableSnapshot) => void;
 };
 
-const customRender = (
-  ui: ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>,
-) => render(ui, { wrapper: AllTheProviders, ...options });
+const customRender = (ui: ReactElement, options?: CustomRenderOptions) => {
+  const AllTheProviders = ({ children }: { children: ReactNode }) => {
+    return (
+      <RecoilRoot initializeState={options?.initializeState}>
+        {children}
+      </RecoilRoot>
+    );
+  };
+
+  return render(ui, { wrapper: AllTheProviders, ...options });
+};
 
 export * from '@testing-library/react';
 
