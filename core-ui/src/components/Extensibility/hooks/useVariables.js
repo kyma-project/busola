@@ -48,10 +48,11 @@ export function useVariables() {
     const indexes = storeKeys
       .toArray()
       .map((item, index) => ({ item, index }))
-      .filter(({ item, index }) => typeof item === 'number')
-      .map(({ item, index }) => index);
+      .filter(({ item, index }) => typeof item === 'number');
 
-    const items = indexes.map(index =>
+    const itemIndexes = indexes.map(({ item, index }) => index);
+
+    const items = itemIndexes.map(index =>
       storeKeys
         .slice(0, index + 1)
         .toArray()
@@ -59,9 +60,10 @@ export function useVariables() {
     );
 
     const item = last(items) || resource;
-    const index = last(indexes);
+    const index = last(itemIndexes);
 
-    const localVars = extractVariables(vars, names, indexes);
+    const varIndexes = indexes.map(({ item, index }) => item);
+    const localVars = extractVariables(vars, names, varIndexes);
 
     return {
       ...vars,
@@ -70,7 +72,7 @@ export function useVariables() {
       item,
       items,
       index,
-      indexes,
+      indexes: itemIndexes,
     };
   };
 

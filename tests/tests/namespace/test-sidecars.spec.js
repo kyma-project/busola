@@ -19,7 +19,7 @@ context('Test Sidecars', () => {
 
   before(() => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
-    cy.mockExtension('SIDECARS', 'examples/resources/istio/sidecars.yaml');
+    cy.mockExtensions(['examples/resources/istio/sidecars.yaml']);
 
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
@@ -41,11 +41,6 @@ context('Test Sidecars', () => {
     cy.getIframeBody()
       .find('[aria-label="expand Egress"]:visible', { log: false })
       .contains('Add')
-      .click();
-
-    cy.getIframeBody()
-      .find('[aria-label="expand Egress"]:visible', { log: false })
-      .eq(1)
       .click();
 
     cy.getIframeBody()
@@ -85,11 +80,6 @@ context('Test Sidecars', () => {
     cy.getIframeBody()
       .find('[aria-label="expand Ingress"]:visible', { log: false })
       .contains('Add')
-      .click();
-
-    cy.getIframeBody()
-      .find('[aria-label="expand Ingress"]:visible', { log: false })
-      .eq(1)
       .click();
 
     cy.getIframeBody()

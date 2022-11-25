@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react';
 import { isEqual } from 'lodash';
 
 import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
-import { groupsState } from 'state/groupsAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { extResourcesState } from 'state/extResourcesAtom';
 import { openapiState } from 'state/openapi/openapiAtom';
@@ -22,10 +21,8 @@ export const useLuigiContextMigrator = () => {
     openApi,
     config,
     ssoData,
-    groups,
   } = useMicrofrontendContext();
 
-  useUpdateRecoilIfValueChanged(groups, groupsState);
   useUpdateRecoilIfValueChanged(namespaceId, activeNamespaceIdState);
   useUpdateRecoilIfValueChanged(customResources, extResourcesState);
   useUpdateRecoilIfValueChanged(openApi, openapiState);

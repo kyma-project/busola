@@ -26,10 +26,6 @@ context('Test Custom Resources', () => {
     cy.getIframeBody()
       .contains('Functions')
       .should('be.visible');
-
-    cy.getIframeBody()
-      .contains('GitRepositories')
-      .should('be.visible');
   });
 
   it('Check single CR list', () => {

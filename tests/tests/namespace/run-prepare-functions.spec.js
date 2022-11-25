@@ -7,40 +7,15 @@ const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
 
 context('Prepare funtions for testing', () => {
   before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtensions(['examples/resources/serverless/functions.yaml']);
+
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
 
   it('Create a simple Function', () => {
-    cy.getLeftNav()
-      .contains('Workloads')
-      .click();
-
     cy.createSimpleFunction(FUNCTION_NAME);
-  });
-
-  it('Edit a receiver Function and check updated Resources', () => {
-    cy.getIframeBody()
-      .contains('button', 'Edit')
-      .click();
-
-    cy.getIframeBody()
-      .find('[aria-haspopup="listbox"]:visible')
-      .first()
-      .click();
-
-    cy.getIframeBody()
-      .contains('Node.js 16')
-      .click();
-
-    cy.getIframeBody()
-      .find('[role=dialog]')
-      .contains('button', 'Update')
-      .click();
-
-    cy.getIframeBody()
-      .contains('Node.js 16')
-      .should('be.visible');
   });
 
   it('Create a receiver Function', () => {
@@ -57,5 +32,41 @@ context('Prepare funtions for testing', () => {
       'fixtures/in-cluster-eventing-publisher.js',
       'fixtures/in-cluster-eventing-publisher-dependencies.json',
     );
+  });
+
+  // edit test case is the last one because of the following error:
+  // "the object has been modified; please apply your changes to the latest
+  // version and try again"
+  // you must wait for the function to remain unchanged
+  it('Edit a simple test Function and check updated runtime', () => {
+    cy.getLeftNav()
+      .contains('Functions')
+      .click();
+
+    cy.getIframeBody()
+      .contains(FUNCTION_NAME)
+      .click();
+
+    cy.getIframeBody()
+      .contains('button', 'Edit')
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="Combobox input arrow"]:visible')
+      .eq(1)
+      .click();
+
+    cy.getIframeBody()
+      .contains('Node.js 16')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role=dialog]')
+      .contains('button', 'Update')
+      .click();
+
+    cy.getIframeBody()
+      .contains('Node.js 16')
+      .should('be.visible');
   });
 });

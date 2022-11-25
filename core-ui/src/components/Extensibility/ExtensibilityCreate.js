@@ -22,6 +22,9 @@ import {
 } from './helpers/immutableConverter';
 import { useVariables } from './hooks/useVariables';
 import { prepareRules } from './helpers/prepareRules';
+import { merge } from 'lodash';
+
+import { TriggerContextProvider } from './contexts/Trigger';
 
 export function ExtensibilityCreateCore({
   formElementRef,
@@ -57,8 +60,7 @@ export function ExtensibilityCreateCore({
     ),
   );
 
-  const presets = usePreparePresets(createResource?.presets);
-
+  const presets = usePreparePresets(createResource?.presets, emptyTemplate);
   const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
   const updateStore = res => {
@@ -135,7 +137,15 @@ export function ExtensibilityCreateCore({
       pluralKind={resourceType}
       singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
       resource={resource}
-      setResource={updateStore}
+      setResource={v => setStore(getUIStoreFromResourceObj(v))}
+      onPresetSelected={presetValue => {
+        const updatedResource = merge(
+          {},
+          getResourceObjFromUIStore(store),
+          presetValue,
+        );
+        setStore(getUIStoreFromResourceObj(updatedResource));
+      }}
       formElementRef={formElementRef}
       createUrl={resourceUrl}
       setCustomValid={setCustomValid}
@@ -179,9 +189,11 @@ export function ExtensibilityCreate(props) {
     <DataSourcesContextProvider
       dataSources={props.resourceSchema?.dataSources || {}}
     >
-      <VarStoreContextProvider>
-        <ExtensibilityCreateCore {...props} />
-      </VarStoreContextProvider>
+      <TriggerContextProvider>
+        <VarStoreContextProvider>
+          <ExtensibilityCreateCore {...props} />
+        </VarStoreContextProvider>
+      </TriggerContextProvider>
     </DataSourcesContextProvider>
   );
 }
