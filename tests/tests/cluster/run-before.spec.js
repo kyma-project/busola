@@ -3,7 +3,14 @@
 context('Create Application', () => {
   Cypress.skipAfterFail({ skipAllSuits: true });
 
-  before(cy.loginAndSelectCluster);
+  before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtensions([
+      'examples/resources/applicationconnector/applications.yaml',
+    ]);
+
+    cy.loginAndSelectCluster();
+  });
 
   it('Create Application', () => {
     cy.navigateTo('Integration', 'Applications');

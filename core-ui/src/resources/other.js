@@ -5,7 +5,7 @@ import customResourceListOfType from './other/CustomResourceListOfType.routes.js
 import customResourcesByGroup from './other/CustomResourcesByGroup.routes.js';
 import noPermissions from './other/noPermissions.routes';
 import nodeOverview from './other/nodeOverview.routes';
-import appServiceDetails from './other/appServiceDetails.routes';
+import clusterList from './other/clusters.routes';
 import containerDetails from './other/containerDetails.routes';
 import helmReleasesList from './other/helmReleasesList.routes';
 import helmReleaseDetails from './other/helmReleaseDetails.routes';
@@ -18,7 +18,7 @@ const other = (
     {customResourcesByGroup}
     {noPermissions}
     {nodeOverview}
-    {appServiceDetails}
+    {clusterList}
     {containerDetails}
     {helmReleasesList}
     {helmReleaseDetails}
