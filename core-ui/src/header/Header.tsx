@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { activeClusterNameState } from 'state/activeClusterNameAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { clustersState } from 'state/clustersAtom';
-import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
+// import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 
 import { Logo } from './Logo/Logo';
@@ -28,7 +28,7 @@ export function Header() {
   const { namespaces, refetch } = useAvailableNamespaces();
 
   const clusters = useRecoilValue(clustersState);
-  const config = useRecoilValue(configFeaturesState);
+  // const config = useRecoilValue(configFeaturesState);
 
   // if (!config?.REACT_NAVIGATION?.isEnabled) return null;
 

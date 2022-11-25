@@ -1,5 +1,5 @@
-import { useRecoilValue } from 'recoil';
-import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
+// import { useRecoilValue } from 'recoil';
+// import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import './ContentWrapper.scss';
 
 type ContentWrapperProps = {
@@ -7,7 +7,7 @@ type ContentWrapperProps = {
 };
 
 export const ContentWrapper = ({ children }: ContentWrapperProps) => {
-  const configFeatures = useRecoilValue(configFeaturesState);
+  // const configFeatures = useRecoilValue(configFeaturesState);
   const { pathname } = window.location;
 
   // const reactNavEnabled = configFeatures?.REACT_NAVIGATION?.isEnabled;

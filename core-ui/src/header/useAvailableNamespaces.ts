@@ -3,14 +3,14 @@ import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
-import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
+// import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { namespacesState } from 'state/namespacesAtom';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
 import { K8sResource } from 'types';
 
 export function useAvailableNamespaces() {
   const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
-  const config = useRecoilValue(configFeaturesState);
+  // const config = useRecoilValue(configFeaturesState);
   const hiddenNamespaces = useGetHiddenNamespaces();
   const [namespaces, setNamespaces] = useRecoilState(namespacesState);
 

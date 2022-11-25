@@ -1,5 +1,5 @@
 import parseJWT from 'jwt-decode';
-import LuigiClient from '@luigi-project/client';
+// import LuigiClient from '@luigi-project/client';
 
 const timeout = 30; // s
 

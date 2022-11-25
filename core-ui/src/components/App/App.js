@@ -62,8 +62,9 @@ export default function App() {
               element={<Navigate to="overview" />}
             />
             <Route path="cluster/:currentClusterName/*">
+              {/*  overview route should stay static  */}
               <Route
-                path="overview" // overview route should stay static
+                path="overview"
                 element={
                   <WithTitle
                     title={t('clusters.overview.title-current-cluster')}
