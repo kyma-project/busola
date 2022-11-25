@@ -3,12 +3,13 @@ import { MessageStrip } from 'fundamental-react';
 import jsyaml from 'js-yaml';
 import { useCreateDiffEditor } from 'shared/components/MonacoEditorESM/hooks/useCreateDiffEditor';
 import { RecoilRoot } from 'recoil';
+import { K8sResource } from 'types';
 
-type ForceUpdateModalContentProps = {
+type ForceUpdateModalContentProps<TResourceType extends K8sResource> = {
   error: Error;
   singularName: string;
-  initialResource: any;
-  modifiedResource: any;
+  initialResource: TResourceType;
+  modifiedResource: TResourceType;
 };
 
 function ForceUpdateModalContentComponent({
@@ -16,7 +17,7 @@ function ForceUpdateModalContentComponent({
   singularName,
   initialResource,
   modifiedResource,
-}: ForceUpdateModalContentProps) {
+}: ForceUpdateModalContentProps<K8sResource>) {
   const { t } = useTranslation();
   const { divRef } = useCreateDiffEditor({
     originalValue: jsyaml.dump(initialResource, { noRefs: true }),
@@ -40,7 +41,10 @@ function ForceUpdateModalContentComponent({
   );
 }
 
-export function ForceUpdateModalContent(props: ForceUpdateModalContentProps) {
+// workaround for "This component must be used inside a <RecoilRoot> component."
+export function ForceUpdateModalContent(
+  props: ForceUpdateModalContentProps<K8sResource>,
+) {
   return (
     <RecoilRoot>
       <ForceUpdateModalContentComponent {...props} />

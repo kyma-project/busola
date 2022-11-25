@@ -34,7 +34,7 @@ export function ErrorModal({
       }
     },
     [],
-    { capture: true },
+    { capture: true }, // capture to not propagate further
   );
 
   const defaultCloseButton = (close: CloseFn): React.ReactNode => (
@@ -54,7 +54,7 @@ export function ErrorModal({
   return (
     <Dialog
       className={classNames('error-modal', className)}
-      // @ts-ignore Type 'Element' is not assignable to type 'string'.
+      // @ts-ignore Type 'Element' is not assignable to type 'string', but we need an icon inside
       title={title}
       actions={
         actions

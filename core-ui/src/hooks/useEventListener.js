@@ -5,8 +5,6 @@ export function useEventListener(event, handler, dependencies = [], options) {
 
   useEffect(() => {
     window.addEventListener(event, callback, options);
-    return () => {
-      window.removeEventListener(event, callback);
-    };
+    return () => window.removeEventListener(event, callback);
   }, dependencies); // eslint-disable-line react-hooks/exhaustive-deps
 }

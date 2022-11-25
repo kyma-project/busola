@@ -341,7 +341,7 @@ common:
     messages:
       create-failure: 'Failed to create the {{resourceType}}: {{error}}'
       create-success: '{{resourceType}} created'
-      force-update: All changes are overwritten if you force the resource update.
+      force-update: All remote changes are overwritten if you force the resource update.
       patch-failure: 'Failed to update the {{resourceType}}: {{error}}'
       patch-success: '{{resourceType}} updated'
     modes:
