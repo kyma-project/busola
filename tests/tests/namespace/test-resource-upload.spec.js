@@ -3,7 +3,7 @@ import 'cypress-file-upload';
 import { loadFile } from '../../support/loadFile';
 import jsyaml from 'js-yaml';
 
-const APPLICATION_NAME = `dd-tets`;
+const APPLICATION_NAME = `${Cypress.env('APP_NAME')}-upload-yaml`;
 
 async function loadValidResources(namespaceName) {
   const resources = await loadFile('yaml-upload--valid.yaml', false);
