@@ -81,7 +81,7 @@ export default function App() {
               {otherRoutes}
             </Route>
             <Route path="" element={<MainFrameRedirection />} />
-            // TODO fix it
+            {/*  TODO: Fix it  */}
             <Route
               path="/cluster/shoot--hasselhoff--kmain/namespaces/dd/details"
               element={
