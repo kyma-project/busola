@@ -171,11 +171,15 @@ data:
     - simple: true
       required: true
       path: spec.host
-      inputInfo: inputInfo.spec.host
       name: host
       enum: "$distinct($filter($relatedGateways().items, function ($v) { $contains($v.metadata.name, $substringBefore($root.spec.gateway, '.')) and ($contains($v.metadata.namespace, $substringBefore($substringAfter($root.spec.gateway, '.'), '.')))}).spec.servers.hosts)"
       subscribe:
         host: "$string($filter($relatedGateways().items, function ($v) { $contains($v.metadata.name, $substringBefore($root.spec.gateway, '.')) and ($contains($v.metadata.namespace, $substringBefore($substringAfter($root.spec.gateway, '.'), '.')))}).spec.servers[0].hosts[0])"
+    - simple: true
+      widget: Alert
+      severity: error
+      alert: '"alert.spec.host"'
+      visibility: '$substring(spec.host, 0, 1)="*"'
     - simple: true
       required: true
       path: spec.rules 
@@ -327,4 +331,4 @@ data:
       service-name: Service Name
       status: Status
       virtualService: Virtual Service
-      inputInfo.spec.host: Host can not be a wildcard, replace * with subdomain name
+      alert.spec.host: Host can not be a wildcard, replace * with subdomain name
