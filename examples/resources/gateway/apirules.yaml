@@ -291,6 +291,12 @@ data:
       value:
         spec:
           gateway: kyma-gateway.kyma-system.svc.cluster.local
+          rules:
+            - path: /.*
+              methods:
+                - GET
+              accessStrategies:
+                - handler: allow
   translations: |
     en:
       accessStrategies: Access Strategies
