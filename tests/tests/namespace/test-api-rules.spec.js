@@ -193,6 +193,7 @@ context('Test API Rules in the Function details view', () => {
 
     cy.getIframeBody()
       .find('[data-testid="select-dropdown"]:visible')
+      .eq(1)
       .scrollIntoView()
       .click();
 
