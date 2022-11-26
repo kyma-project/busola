@@ -103,11 +103,6 @@ context('Test API Rules in the Function details view', () => {
 
     // Rules
     // > Access Strategies
-    cy.getIframeBody()
-      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
-      .eq(1)
-      .contains('Add')
-      .scrollIntoView();
 
     cy.getIframeBody()
       .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible')
@@ -192,6 +187,11 @@ context('Test API Rules in the Function details view', () => {
 
     // Rules
     // > Access Strategies
+    cy.getIframeBody()
+      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
+      .eq(1)
+      .contains('Add')
+      .scrollIntoView();
 
     cy.getIframeBody()
       .find('[data-testid="select-dropdown"]:visible')
