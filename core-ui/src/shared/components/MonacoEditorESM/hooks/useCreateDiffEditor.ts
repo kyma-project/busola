@@ -1,24 +1,34 @@
 import { useEffect, useRef, useState } from 'react';
-import { isEqual } from 'lodash';
 import { editor } from 'monaco-editor';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import { themeState } from 'state/preferences/themeAtom';
 import { getEditorTheme } from './useCreateEditor';
 
+type useCreateDiffEditorProps = {
+  originalValue: string;
+  modifiedValue: string;
+  language: string;
+};
+
 export const useCreateDiffEditor = ({
   originalValue,
   modifiedValue,
   language,
-}) => {
+}: useCreateDiffEditorProps) => {
   const theme = useRecoilValue(themeState);
   const editorTheme = getEditorTheme(theme);
-  const divRef = useRef(null);
+  const divRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
 
-  const [editorInstance, setEditorInstance] = useState(null);
+  const [
+    editorInstance,
+    setEditorInstance,
+  ] = useState<editor.IStandaloneDiffEditor | null>(null);
 
   useEffect(() => {
+    if (!divRef.current) return;
+
     const originalModel = editor.createModel(originalValue, language);
     const modifiedModel = editor.createModel(modifiedValue, language);
 
@@ -39,7 +49,8 @@ export const useCreateDiffEditor = ({
     setEditorInstance(instance);
 
     return () => {
-      //   editor.getModel(descriptor.current)?.dispose();
+      originalModel.dispose();
+      modifiedModel.dispose();
       instance.dispose();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
