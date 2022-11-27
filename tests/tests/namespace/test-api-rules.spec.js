@@ -200,7 +200,9 @@ context('Test API Rules in the Function details view', () => {
     cy.getIframeBody()
       .find('[aria-label="expand Access Strategies"]:visible', { log: false })
       .first()
-      .scrollIntoView();
+      .contains('Add')
+      .scrollIntoView()
+      .click();
 
     cy.getIframeBody()
       .find('[data-testid="select-dropdown"]:visible')
