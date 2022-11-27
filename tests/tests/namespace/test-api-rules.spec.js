@@ -186,14 +186,24 @@ context('Test API Rules in the Function details view', () => {
     cy.getIframeBody().contains(API_RULE_NAME);
 
     // Rules
-    // > Access Strategies
     cy.getIframeBody()
       .find('[aria-label="expand Rules"]:visible', { log: false })
+      .contains('Add')
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="expand Rule"]:visible', { log: false })
+      .first()
+      .click();
+
+    // > Access Strategies
+    cy.getIframeBody()
+      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
+      .first()
       .scrollIntoView();
 
     cy.getIframeBody()
       .find('[data-testid="select-dropdown"]:visible')
-      .eq(1)
       .scrollIntoView()
       .click();
 
