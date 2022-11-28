@@ -1,9 +1,9 @@
 import { tryParseOIDCparams } from './components/oidc-params';
 
 export function addCurrentCluster(params, clustersInfo) {
-  const { setCurrentCluster, setCurrentClusterName } = clustersInfo;
+  const { setCurrentCluster } = clustersInfo;
   setCurrentCluster(params);
-  setCurrentClusterName(params.contextName);
+  clustersInfo.navigate(`/cluster/${params.contextName}`);
 }
 
 export function addCluster(params, clustersInfo) {

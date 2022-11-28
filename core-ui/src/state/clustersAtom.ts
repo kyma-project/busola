@@ -1,22 +1,9 @@
 import { atom, RecoilState } from 'recoil';
 import { localStorageEffect } from './utils/effects';
+import { Cluster } from './clusterAtom';
 
 export type ClustersState = {
-  [clusterName: string]: {
-    config: {
-      storage: string;
-      requiresCA: boolean;
-    };
-    contextName: string;
-    currentContext: {
-      cluster: object; // todo add type
-      name: string;
-    };
-    kubeconfig: {
-      kubeconfig: object; // todo add type
-      name: string;
-    };
-  };
+  [clusterName: string]: Cluster;
 } | null;
 
 const CLUSTERS_STORAGE_KEY = 'busola.clusters';

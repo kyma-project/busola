@@ -12,7 +12,7 @@ import {
   ClusterConfigState,
 } from '../../../state/clusterConfigAtom';
 import { FromConfig } from '../../../state/configAtom';
-import { clusterState, ClusterState } from '../../../state/clusterAtom';
+import { clusterState, ActiveClusterState } from '../../../state/clusterAtom';
 
 export type FetchFn = ({
   relativeUrl,
@@ -32,7 +32,7 @@ export const createFetchFn = ({
   fromConfig,
 }: {
   authData: AuthDataState;
-  cluster: ClusterState;
+  cluster: ActiveClusterState;
   config: ClusterConfigState;
   ssoData: SsoDataState;
   fromConfig: FromConfig;
