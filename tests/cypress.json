@@ -67,8 +67,7 @@
     "namespace/test-issuers.spec.js",
     "namespace/test-daemon-sets.spec.js",
     "namespace/test-custom-resource-definitions.spec.js",
-    "namespace/test-api-rules.spec.js",
-    "namespace/test-in-cluster-eventing.spec.js",
+
     "namespace/test-reduced-permissions.spec.js",
     "namespace/test-certificates.spec.js",
     "namespace/test-ingresses.spec.js",
