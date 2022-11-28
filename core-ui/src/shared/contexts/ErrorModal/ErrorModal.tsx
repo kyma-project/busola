@@ -27,8 +27,8 @@ export function ErrorModal({
 }: ErrorModalProps) {
   useEventListener(
     'keydown',
-    (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+    (e: Event) => {
+      if ((e as KeyboardEvent).key === 'Escape') {
         close();
         e.stopPropagation();
       }
