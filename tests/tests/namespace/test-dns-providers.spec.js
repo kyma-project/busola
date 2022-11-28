@@ -67,8 +67,13 @@ context('Test DNS Providers', () => {
     cy.getIframeBody().contains(PROVIDER_NAME);
     // type
     cy.getIframeBody().contains(PROVIDER_TYPE);
-    // indluded domain
+    // included domain
     cy.getIframeBody().contains(PROVIDER_INCLUDED_DOMAIN);
+
+    cy.wait(500);
+    cy.getIframeBody()
+      .contains(/unknown/)
+      .should('not.exist');
   });
 
   it('Edit DNS Provider', () => {

@@ -33,19 +33,6 @@ Note that some features must be run before the application starts the bootstrap 
         apiGroup: gateway.kyma-project.io
   ```
 
-- **APPLICATIONS** – is used to show or hide the **Applications** view and to define which APIs are required for the view to be shown properly.
-  For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
-
-  Default settings:
-
-  ```yaml
-  APPLICATIONS:
-    isEnabled: true
-    selectors:
-      - type: apiGroup
-        apiGroup: applicationconnector.kyma-project.io
-  ```
-
 - **BTP_CATALOG** – is used to show or hide the **BTP Catalog** view and to define which APIs are required for the view to be shown properly.
   For the view to be shown, you must enable the feature. Moreover, all the APIs listed in the selectors array must be available in a cluster.
 

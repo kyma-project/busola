@@ -131,43 +131,6 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('workloads.title'),
-      resourceType: 'functions',
-      pathSegment: 'functions',
-      navigationContext: 'functions',
-      label: i18next.t('functions.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/functions?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      context: {
-        requiredFeatures: [features.SERVERLESS],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          resourceType: 'functions',
-          children: [
-            {
-              pathSegment: ':functionName',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/functions/:functionName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('workloads.title'),
       pathSegment: 'deployments',
       resourceType: 'deployments',
 
@@ -443,42 +406,6 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('discovery-and-network.title'),
-      resourceType: 'apirules',
-      pathSegment: 'apirules',
-      navigationContext: 'apirules',
-      label: i18next.t('api-rules.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/apirules?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.API_GATEWAY],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':apiName',
-              resourceType: 'apirules',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/apirules/:apiName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/gateway.kyma-project.io/v1alpha1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('discovery-and-network.title'),
       pathSegment: 'ingresses',
       resourceType: 'ingresses',
       navigationContext: 'ingresses',
@@ -654,80 +581,6 @@ export function getStaticChildrenNodesForNamespace(
                 '/namespaces/:namespaceId/destinationrules/:destinationRuleName?' +
                 toSearchParamsString({
                   resourceApiPath: '/apis/networking.istio.io/v1beta1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('istio.title'),
-      resourceType: 'virtualservices',
-      pathSegment: 'virtualservices',
-      label: i18next.t('virtualservices.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/virtualservices?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/networking.istio.io/v1beta1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.ISTIO],
-      },
-
-      navigationContext: 'virtualservices',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':virtualserviceName',
-              resourceType: 'virtualservices',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/virtualservices/:virtualserviceName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/networking.istio.io/v1beta1',
-                }),
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('istio.title'),
-      resourceType: 'authorizationpolicies',
-      pathSegment: 'authorizationpolicies',
-      label: i18next.t('authorization-policies.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/authorizationpolicies?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/security.istio.io/v1beta1',
-          hasDetailsView: true,
-        }),
-      viewGroup: coreUIViewGroupName,
-      keepSelectedForChildren: true,
-      context: {
-        requiredFeatures: [features.ISTIO],
-      },
-
-      navigationContext: 'authorizationpolicies',
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':authorizationpolicyName',
-              resourceType: 'authorizationpolicies',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/authorizationpolicies/:authorizationpolicyName?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/security.istio.io/v1beta1',
                 }),
             },
           ],
@@ -1118,43 +971,6 @@ export function getStaticChildrenNodesForNamespace(
     },
     {
       category: i18next.t('configuration.title'),
-      pathSegment: 'gitrepositories',
-      resourceType: 'gitRepositories',
-      navigationContext: 'gitrepositories',
-      label: i18next.t('git-repositories.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/namespaces/:namespaceId/gitrepositories?' +
-        toSearchParamsString({
-          resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      context: {
-        requiredFeatures: [features.SERVERLESS],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          resourceType: 'gitRepositories',
-          children: [
-            {
-              pathSegment: ':gitreponame',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/namespaces/:namespaceId/gitrepositories/:gitreponame?' +
-                toSearchParamsString({
-                  resourceApiPath: '/apis/serverless.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: i18next.t('configuration.title'),
       resourceType: 'dnsentries',
       pathSegment: 'dnsentries',
       navigationContext: 'dnsentries',
@@ -1485,59 +1301,6 @@ export function getStaticRootNodes(
       },
       pathSegment: '_integration_category_placeholder_',
       hideFromNav: true,
-    },
-    {
-      pathSegment: 'applications',
-      resourceType: 'applications',
-      navigationContext: 'applications',
-      label: i18next.t('applications.title'),
-      category: i18next.t('integration.title'),
-      viewUrl:
-        config.coreUIModuleUrl +
-        '/applications?' +
-        toSearchParamsString({
-          resourceApiPath:
-            '/apis/applicationconnector.kyma-project.io/v1alpha1',
-          hasDetailsView: true,
-        }),
-      keepSelectedForChildren: true,
-      viewGroup: coreUIViewGroupName,
-      context: {
-        requiredFeatures: [features.APPLICATIONS],
-      },
-      children: [
-        {
-          pathSegment: 'details',
-          children: [
-            {
-              pathSegment: ':name',
-              resourceType: 'applications',
-              viewUrl:
-                config.coreUIModuleUrl +
-                '/applications/:name?' +
-                toSearchParamsString({
-                  resourceApiPath:
-                    '/apis/applicationconnector.kyma-project.io/v1alpha1',
-                }),
-              viewGroup: coreUIViewGroupName,
-              children: [
-                {
-                  pathSegment: ':serviceName',
-                  resourceType: 'applications',
-                  viewUrl:
-                    config.coreUIModuleUrl +
-                    '/applications/:name/:serviceName?' +
-                    toSearchParamsString({
-                      resourceApiPath:
-                        '/apis/applicationconnector.kyma-project.io/v1alpha1',
-                    }),
-                  viewGroup: coreUIViewGroupName,
-                },
-              ],
-            },
-          ],
-        },
-      ],
     },
 
     //STORAGE CATEGORY

@@ -36,7 +36,8 @@ export function useUploadResources(
 
   const updateState = (index, status, message = '') => {
     setResourcesData(data => {
-      data[index] = { ...data[index], status, message };
+      if (!data) return null;
+      data[index] = { ...data?.[index], status, message };
       return [...data];
     });
   };

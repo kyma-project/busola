@@ -20,7 +20,7 @@ context('Test Gateways', () => {
 
   before(() => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
-    cy.mockExtension('GATEWAYS', 'examples/resources/istio/gateways.yaml');
+    cy.mockExtensions(['examples/resources/istio/gateways.yaml']);
 
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
@@ -54,14 +54,6 @@ context('Test Gateways', () => {
     cy.getIframeBody()
       .find('[aria-label="expand Servers"]:visible', { log: false })
       .contains('Add')
-      .click();
-
-    cy.getIframeBody()
-      .find('[aria-label="expand Server"]:visible', { log: false })
-      .click();
-
-    cy.getIframeBody()
-      .find('[aria-label="expand Port"]:visible', { log: false })
       .click();
 
     cy.getIframeBody()
@@ -124,26 +116,12 @@ context('Test Gateways', () => {
       .contains('Edit')
       .click();
 
-    // need to be fixed in https://github.com/kyma-project/busola/issues/2007
-    // name should be disabled for edit
-    // cy.getIframeBody()
-    //   .find('[ariaLabel="Gateway name"]:visible', { log: false })
-    //   .should('have.attr', 'readonly');
+    cy.getIframeBody()
+      .find('[ariaLabel="Gateway name"]:visible', { log: false })
+      .should('have.attr', 'readonly');
 
     cy.getIframeBody()
       .find('[aria-label="expand Servers"]:visible', {
-        log: false,
-      })
-      .click();
-
-    cy.getIframeBody()
-      .find('[aria-label="expand Server"]:visible', {
-        log: false,
-      })
-      .click();
-
-    cy.getIframeBody()
-      .find('[aria-label="expand Port"]:visible', {
         log: false,
       })
       .click();
