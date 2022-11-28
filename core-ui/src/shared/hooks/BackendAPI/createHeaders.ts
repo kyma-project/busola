@@ -1,5 +1,5 @@
 import { AuthDataState } from 'state/authDataAtom';
-import { ClusterState } from 'state/clusterAtom';
+import { ActiveClusterState } from 'state/clusterAtom';
 import { SsoDataState } from 'state/ssoDataAtom';
 
 function createAuthHeaders(auth: AuthDataState) {
@@ -27,7 +27,7 @@ function createSSOHeader(ssoData: SsoDataState) {
 
 export function createHeaders(
   authData: AuthDataState,
-  cluster: ClusterState,
+  cluster: ActiveClusterState,
   requiresCA: boolean,
   ssoData: SsoDataState,
 ) {

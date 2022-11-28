@@ -1,12 +1,10 @@
-import LuigiClient from '@luigi-project/client';
 import { Shellbar } from 'fundamental-react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
 
-import { activeClusterNameState } from 'state/activeClusterNameAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { clustersState } from 'state/clustersAtom';
-// import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
+import { clusterState } from 'state/clusterAtom';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
 
 import { Logo } from './Logo/Logo';
@@ -15,25 +13,22 @@ import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
 
 import './Header.scss';
 import { useAvailableNamespaces } from './useAvailableNamespaces';
+import { useNavigate } from 'react-router-dom';
 
 export function Header() {
   const { t } = useTranslation();
-  const [activeCluster, setActiveCluster] = useRecoilState(
-    activeClusterNameState,
-  );
+  const navigate = useNavigate();
+  const { namespaces, refetch } = useAvailableNamespaces();
+
+  const [cluster, setCluster] = useRecoilState(clusterState);
   const [activeNamespace, setActiveNamespace] = useRecoilState(
     activeNamespaceIdState,
   );
   const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
-  const { namespaces, refetch } = useAvailableNamespaces();
-
   const clusters = useRecoilValue(clustersState);
-  // const config = useRecoilValue(configFeaturesState);
-
-  // if (!config?.REACT_NAVIGATION?.isEnabled) return null;
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
-    name => name !== activeCluster,
+    name => name !== cluster?.name,
   );
 
   const clustersList = [
@@ -41,16 +36,23 @@ export function Header() {
       name,
       callback: () => {
         setActiveNamespace('');
-        setActiveCluster(name);
+        switchCluster(name);
+        navigate(`/cluster/${name}`);
       },
     })),
     {
       name: t('clusters.overview.title-all-clusters'),
       callback: () => {
-        LuigiClient.linkManager().navigate('/clusters');
+        navigate('/clusters');
       },
     },
   ];
+
+  const switchCluster = (name: string) => {
+    if (!clusters) return;
+    const chosenCluster = { ...clusters?.[name], name };
+    setCluster(chosenCluster);
+  };
 
   return (
     <Shellbar
@@ -61,7 +63,7 @@ export function Header() {
           <Logo />
         </>
       }
-      productTitle={activeCluster}
+      productTitle={cluster?.name}
       productMenu={clustersList}
       profile={{
         glyph: 'customer',

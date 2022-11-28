@@ -2,13 +2,13 @@ import { atom, RecoilState } from 'recoil';
 import { AuthDataState } from './authDataAtom';
 import { localStorageEffect } from './utils/effects';
 
-type ClusterConfigState = {
+type ClusterConfig = {
   requiresCA: boolean;
   storage: 'localStorage' | 'sessionStorage' | string;
 } | null;
 
-export type ClusterState = {
-  config: ClusterConfigState;
+export interface Cluster {
+  config: ClusterConfig;
   contextName: string;
   currentContext: {
     cluster: {
@@ -24,14 +24,21 @@ export type ClusterState = {
     };
   };
   kubeconfig: any;
+}
+
+interface ClusterWithName extends Cluster {
   name: string;
-} | null;
+}
+
+export type ActiveClusterState = ClusterWithName | null;
 
 const CLUSTERS_STORAGE_KEY = 'busola.cluster';
 const defaultValue = null;
 
-export const clusterState: RecoilState<ClusterState> = atom<ClusterState>({
+export const clusterState: RecoilState<ActiveClusterState> = atom<
+  ActiveClusterState
+>({
   key: 'clusterState',
   default: defaultValue,
-  effects: [localStorageEffect<ClusterState>(CLUSTERS_STORAGE_KEY)],
+  effects: [localStorageEffect<ActiveClusterState>(CLUSTERS_STORAGE_KEY)],
 });
