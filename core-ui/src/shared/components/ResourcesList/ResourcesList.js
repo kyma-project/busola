@@ -307,6 +307,7 @@ export function ResourceListRenderer({
               if (typeof toggleFormFn === 'function') {
                 toggleFormFn(false);
               }
+              closeEditor();
             } catch (e) {
               showError(e);
             }
