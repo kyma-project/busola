@@ -6,7 +6,7 @@ import {
   defaultValue as defaultNamespaceName,
 } from '../activeNamespaceIdAtom';
 import { openapiPathIdListSelector } from '../openapi/openapiPathIdSelector';
-import { configFeaturesState } from '../configFeatures/configFeaturesAtom';
+import { configFeaturesState } from '../configFeatures/configFeaturesSelector';
 import { permissionSetsSelector } from '../permissionSetsSelector';
 import { NavNode, Scope } from '../types';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
@@ -26,15 +26,16 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     const areDependenciesInitialized =
       !isEmpty(openapiPathIdList) &&
       activeNamespaceId !== defaultNamespaceName &&
-      !isEmpty(configFeatures) &&
+      !!configFeatures &&
       !isEmpty(resourceList) &&
       !isEmpty(permissionSet);
 
     if (!areDependenciesInitialized) {
       return [];
     }
+
     const configSet = {
-      configFeatures,
+      configFeatures: configFeatures!,
       openapiPathIdList,
       permissionSet,
     };
@@ -50,7 +51,7 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     const navNodesWithAddons = addAdditionalNodes(
       navNodes,
       scope,
-      configFeatures,
+      configFeatures!,
     );
 
     return navNodesWithAddons;

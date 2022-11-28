@@ -2,7 +2,7 @@ import { AuthDataState } from 'state/authDataAtom';
 import { ActiveClusterState } from 'state/clusterAtom';
 import { SsoDataState } from 'state/ssoDataAtom';
 
-function createAuthHeaders(auth: AuthDataState) {
+export function createAuthHeaders(auth: AuthDataState) {
   if (!auth) {
     throw Error('No available data to authenticate the request.');
   }
@@ -30,10 +30,7 @@ export function createHeaders(
   cluster: ActiveClusterState,
   requiresCA: boolean,
   ssoData: SsoDataState,
-) {
-  //mock
-  requiresCA = true;
-
+): HeadersInit {
   return {
     ...createAuthHeaders(authData),
     ...createSSOHeader(ssoData),
@@ -41,5 +38,5 @@ export function createHeaders(
     'X-Cluster-Certificate-Authority-Data': requiresCA
       ? cluster?.currentContext.cluster.cluster['certificate-authority-data']
       : undefined,
-  };
+  } as HeadersInit;
 }

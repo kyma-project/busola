@@ -2,7 +2,7 @@ import { Switch } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
+import { configFeaturesState } from 'state/configFeatures/configFeaturesSelector';
 import { disableResourceProtectionState } from 'state/preferences/disableResourceProtectionAtom';
 
 export default function ProtectedSettings() {

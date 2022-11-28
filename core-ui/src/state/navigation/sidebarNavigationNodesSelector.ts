@@ -21,7 +21,6 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
     const observabilityNodes = get(externalNodesSelector);
 
     const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
-
     if (
       !navNodes ||
       !observabilityNodes ||

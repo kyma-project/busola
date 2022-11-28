@@ -3,11 +3,8 @@ import { useSetRecoilState } from 'recoil';
 import { useEffect, useRef } from 'react';
 import { isEqual } from 'lodash';
 
-import { configFeaturesState } from 'state/configFeatures/configFeaturesAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { extResourcesState } from 'state/extResourcesAtom';
-import { openapiState } from 'state/openapi/openapiAtom';
-import { clusterConfigState } from 'state/clusterConfigAtom';
 import { ssoDataState } from 'state/ssoDataAtom';
 import { lazyConfigFeaturesState } from 'state/configFeatures/lazyConfigFeaturesAtom';
 
@@ -18,15 +15,11 @@ export const useLuigiContextMigrator = () => {
     features,
     namespaceId,
     customResources,
-    openApi,
-    config,
     ssoData,
   } = useMicrofrontendContext();
 
   useUpdateRecoilIfValueChanged(namespaceId, activeNamespaceIdState);
   useUpdateRecoilIfValueChanged(customResources, extResourcesState);
-  useUpdateRecoilIfValueChanged(openApi, openapiState);
-  useUpdateRecoilIfValueChanged(config, clusterConfigState);
   useUpdateRecoilIfValueChanged(ssoData, ssoDataState);
 
   useUpdateConfigFeatures(features);
@@ -53,6 +46,5 @@ const useUpdateConfigFeatures = features => {
     features?.PROMETHEUS;
   delete configFeatures[lazyConfigFeaturesNames?.PROMETHEUS];
 
-  useUpdateRecoilIfValueChanged(configFeatures, configFeaturesState);
   useUpdateRecoilIfValueChanged(lazyConfigFeatures, lazyConfigFeaturesState);
 };

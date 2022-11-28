@@ -1,6 +1,6 @@
 import { authDataState } from '../authDataAtom';
 import { clusterState } from '../clusterAtom';
-import { clusterConfigState } from '../clusterConfigAtom';
+import { clusterConfigState } from '../clusterConfigSelector';
 import { ssoDataState } from '../ssoDataAtom';
 import { configState } from '../configAtom';
 import { GetRecoilValue } from 'recoil';

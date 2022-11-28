@@ -6,7 +6,7 @@ import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
 import { Link, Button, MessagePage } from 'fundamental-react';
 import { useRecoilValue } from 'recoil';
 
-import { configFeaturesState } from '../../../state/configFeatures/configFeaturesAtom';
+import { configFeaturesState } from '../../../state/configFeatures/configFeaturesSelector';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';

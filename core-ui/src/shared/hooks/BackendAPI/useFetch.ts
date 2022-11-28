@@ -10,7 +10,7 @@ import { ssoDataState, SsoDataState } from '../../../state/ssoDataAtom';
 import {
   clusterConfigState,
   ClusterConfigState,
-} from '../../../state/clusterConfigAtom';
+} from '../../../state/clusterConfigSelector';
 import { FromConfig } from '../../../state/configAtom';
 import { clusterState, ActiveClusterState } from '../../../state/clusterAtom';
 
@@ -77,7 +77,6 @@ export const useFetch = () => {
   const ssoData = useRecoilValue(ssoDataState);
   const { fromConfig } = useConfig() as any;
 
-  if (!authData) return () => {};
   const fetchFn = createFetchFn({
     authData,
     cluster,
