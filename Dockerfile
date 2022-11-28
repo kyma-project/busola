@@ -31,7 +31,6 @@ COPY --from=builder /app/core-ui/build /app/core-ui
 
 # nginx
 COPY --from=builder /app/nginx/nginx.conf /etc/nginx/
-COPY --from=builder /app/nginx/core-ui.conf /etc/nginx/
 COPY --from=builder /app/nginx/mime.types /etc/nginx/
 
 EXPOSE 8080
