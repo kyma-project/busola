@@ -53,6 +53,14 @@ jest.mock('graphviz-react', () => ({
   Graphviz: () => 'Graphviz mock',
 }));
 
+jest.mock(
+  'shared/components/MonacoEditorESM/hooks/useCreateDiffEditor.ts',
+  () => ({
+    editorInstance: {},
+    divRef: () => ({ current: null }),
+  }),
+);
+
 // suppress "SyntaxError: Cannot use 'import.meta' outside a module"
 jest.mock('shared/components/MonacoEditorESM/Editor', () => ({
   'monaco-editor': () => 'monaco-editor',
