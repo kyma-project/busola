@@ -25,7 +25,6 @@ import {
   addExternalNodes,
 } from './navigation-helpers';
 import { clearAuthData, getAuthData } from '../auth/auth-storage';
-import { groups } from '../auth/auth';
 import {
   getActiveCluster,
   getClusters,
@@ -405,7 +404,6 @@ export async function createNavigationNodes({
         permissionSet,
         authData,
         activeClusterName,
-        groups,
         features,
         customResources,
         extensibilitySchemas,
