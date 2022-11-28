@@ -233,14 +233,13 @@ data:
                 - PATCH
                 - HEAD
         - path: '[].mutators' 
-          name: mutators 
+          name: mutators
           widget: GenericList
           children:
             - path: '[].config'
               name: accessStrategies.config
               widget: KeyValuePair
-            - required: true
-              path: '[].handler'
+            - path: '[].handler'
               name: accessStrategies.handler
         - path: '[].service' 
           name: service 
