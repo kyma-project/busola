@@ -21,9 +21,9 @@ export const authDataState: RecoilValue<AuthDataState> = selector<
       'currentCluster reference changed, TODO make sure to deeply compare',
     );
 
-    const userCredentials = currentCluster.currentContext.user.user;
+    const userCredentials = currentCluster.currentContext?.user?.user;
     if (hasNonOidcAuth(userCredentials)) {
-      return currentCluster.currentContext.user.user;
+      return currentCluster.currentContext?.user?.user;
     } else {
       return { token: 'a' };
     }
