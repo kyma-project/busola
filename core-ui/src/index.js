@@ -49,7 +49,7 @@ i18next
 ReactDOM.render(
   <Microfrontend env={process.env}>
     <RecoilRoot>
-      <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <BrowserRouter>
         <Suspense fallback={<Spinner />}>
           <CommandPaletteProvider>
             <App />
