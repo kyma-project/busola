@@ -112,11 +112,13 @@ export const addByContext = (
     kubeconfig: userKubeconfig,
     context,
     storage = 'sessionStorage',
+    switchCluster, // todo
     config = {},
   }: {
     kubeconfig: Kubeconfig;
     context: KubeconfigContext;
     storage: ClusterStorage;
+    switchCluster: boolean;
     config: any;
   },
   clustersInfo: useClustersInfoType,
