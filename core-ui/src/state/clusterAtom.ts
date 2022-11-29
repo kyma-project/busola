@@ -21,7 +21,7 @@ interface ClusterWithName extends Cluster {
 
 export type ActiveClusterState = ClusterWithName | null;
 
-const CLUSTER_STORAGE_KEY = 'busola.cluster-name';
+const CLUSTER_STORAGE_KEY = 'busola.current-cluster-name';
 const defaultValue = null;
 
 export const clusterState: RecoilState<ActiveClusterState> = atom<
@@ -49,12 +49,18 @@ export const clusterState: RecoilState<ActiveClusterState> = atom<
           return null;
         }
 
+        console.log({ clusters, clusterName });
+        console.log(clusters[clusterName]);
         return { ...clusters[clusterName], name: clusterName };
       });
 
-      onSet(newValue =>
-        localStorage.setItem(CLUSTER_STORAGE_KEY, JSON.stringify(newValue)),
-      );
+      onSet(cluster => {
+        if (cluster) {
+          localStorage.setItem(CLUSTER_STORAGE_KEY, cluster.name);
+        } else {
+          localStorage.removeItem(CLUSTER_STORAGE_KEY);
+        }
+      });
     },
   ],
 });
