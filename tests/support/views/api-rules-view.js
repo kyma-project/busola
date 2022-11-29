@@ -21,10 +21,6 @@ Cypress.Commands.add(
 
     // Service
     cy.getIframeBody()
-      .find('[aria-label="expand Service"]:visible', { log: false })
-      .click();
-
-    cy.getIframeBody()
       .find('[aria-label="Choose Service"]:visible', { log: false })
       .first()
       .type(ApiRuleName);
@@ -71,20 +67,7 @@ Cypress.Commands.add(
       .click();
 
     // Rules
-    cy.getIframeBody()
-      .find('[aria-label="expand Rules"]:visible', { log: false })
-      .contains('Add')
-      .click();
-
-    cy.getIframeBody()
-      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
-      .contains('Add')
-      .click();
-
-    cy.getIframeBody()
-      .find('[aria-label="expand Methods"]:visible', { log: false })
-      .click();
-
+    // > Methods
     cy.getIframeBody()
       .find('[data-testid="spec.rules.0.methods.1"]:visible')
       .type('POST');
