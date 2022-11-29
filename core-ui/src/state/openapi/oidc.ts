@@ -1,13 +1,15 @@
+import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
 import { UserManager, UserManagerSettings } from 'oidc-client-ts';
-import { AuthDataState } from 'state/authDataAtom';
-import { parseOIDCParams } from './parseOIDCParams';
+import { KubeconfigNonOIDCAuth, KubeconfigOIDCAuth } from 'types';
 
 type OidcUser = {
   id_token: string;
 };
 
 // todo move this file outta here
-export const hasNonOidcAuth = (user?: AuthDataState) => {
+export const hasNonOidcAuth = (
+  user?: KubeconfigNonOIDCAuth | KubeconfigOIDCAuth,
+) => {
   if (!user) {
     return true;
   }
@@ -16,7 +18,11 @@ export const hasNonOidcAuth = (user?: AuthDataState) => {
   if ('token' in user) {
     return !!user.token;
   } else {
-    return !!user['client-certificate-data'] && !!user['client-key-data'];
+    return (
+      'client-certificate-data' in user &&
+      !!user['client-certificate-data'] &&
+      !!user['client-key-data']
+    );
   }
 };
 
@@ -27,7 +33,7 @@ export async function handleAuth(setAuth: any, cluster: any, navigate: any) {
     setAuth(kubeconfigUser);
     navigate(`/cluster/${cluster.contextName}`);
   } else {
-    const { issuerUrl, clientId, clientSecret, scope } = parseOIDCParams(
+    const { issuerUrl, clientId, clientSecret, scope } = parseOIDCparams(
       kubeconfigUser,
     );
 

@@ -1,29 +1,18 @@
 import { atom, RecoilState } from 'recoil';
-import { AuthDataState } from './authDataAtom';
-import { localStorageEffect } from './utils/effects';
+import { CurrentContext, ValidKubeconfig } from 'types';
+import { CLUSTERS_STORAGE_KEY } from './clustersAtom';
+import { ClusterStorage } from './types';
 
 type ClusterConfig = {
   requiresCA: boolean;
-  storage: 'localStorage' | 'sessionStorage' | string;
+  storage: ClusterStorage;
 } | null;
 
 export interface Cluster {
   config: ClusterConfig;
   contextName: string;
-  currentContext: {
-    cluster: {
-      cluster: {
-        server: string;
-        'certificate-authority-data': string;
-      };
-      name: string;
-    };
-    user: {
-      name: string;
-      user: AuthDataState;
-    };
-  };
-  kubeconfig: any;
+  currentContext: CurrentContext;
+  kubeconfig: ValidKubeconfig;
 }
 
 interface ClusterWithName extends Cluster {
@@ -32,7 +21,7 @@ interface ClusterWithName extends Cluster {
 
 export type ActiveClusterState = ClusterWithName | null;
 
-const CLUSTERS_STORAGE_KEY = 'busola.cluster';
+const CLUSTER_STORAGE_KEY = 'busola.current-cluster-name';
 const defaultValue = null;
 
 export const clusterState: RecoilState<ActiveClusterState> = atom<
@@ -40,5 +29,36 @@ export const clusterState: RecoilState<ActiveClusterState> = atom<
 >({
   key: 'clusterState',
   default: defaultValue,
-  effects: [localStorageEffect<ActiveClusterState>(CLUSTERS_STORAGE_KEY)],
+  effects: [
+    ({ setSelf, onSet }) => {
+      setSelf(() => {
+        const getClusters = () => {
+          try {
+            return JSON.parse(
+              localStorage.getItem(CLUSTERS_STORAGE_KEY) || 'null',
+            );
+          } catch {
+            return null;
+          }
+        };
+
+        const clusters = getClusters();
+        const clusterName = localStorage.getItem(CLUSTER_STORAGE_KEY);
+
+        if (!clusters || !clusterName) {
+          return null;
+        }
+
+        return { ...clusters[clusterName], name: clusterName };
+      });
+
+      onSet(cluster => {
+        if (cluster) {
+          localStorage.setItem(CLUSTER_STORAGE_KEY, cluster.name);
+        } else {
+          localStorage.removeItem(CLUSTER_STORAGE_KEY);
+        }
+      });
+    },
+  ],
 });

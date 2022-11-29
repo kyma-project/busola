@@ -3,7 +3,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
-import { MainFrameRedirection } from 'shared/components/MainFrameRedirection/MainFrameRedirection';
 import { useSentry } from 'hooks/useSentry';
 import { useAppTracking } from 'hooks/tracking';
 import { clusterState } from 'state/clusterAtom';
@@ -19,6 +18,7 @@ import { Sidebar } from 'sidebar/Sidebar';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 import { useInitTheme } from './useInitTheme';
+import { useAuthHandler } from 'state/authDataAtom';
 
 import ClusterList from 'components/Clusters/views/ClusterList';
 import ClusterRoutes from './ClusterRoutes';
@@ -37,6 +37,7 @@ export default function App() {
   useConfigContextMigrator();
 
   useInitTheme();
+  useAuthHandler();
 
   useEffect(() => {
     i18n.changeLanguage(language);
@@ -61,7 +62,6 @@ export default function App() {
               path="cluster/:currentClusterName/*"
               element={<ClusterRoutes />}
             ></Route>
-            <Route path="" element={<MainFrameRedirection />} />
           </Routes>
           <Preferences />
         </ContentWrapper>

@@ -5,10 +5,11 @@ import { authDataState } from './authDataAtom';
 import { clusterState } from './clusterAtom';
 import { configState } from './configAtom';
 import { ssoDataState } from './ssoDataAtom';
+import { ClusterStorage } from './types';
 
 export type ClusterConfigState = {
   requiresCA: boolean;
-  storage: 'localStorage' | 'sessionStorage' | string;
+  storage: ClusterStorage;
 } | null;
 
 export const clusterConfigState: RecoilValue<ClusterConfigState> = selector<
