@@ -41,7 +41,7 @@ function ClusterList() {
   const [showEdit, setShowEdit] = useState(false);
   const [editedCluster, setEditedCluster] = useState(null);
 
-  const { clusters, setClusters, activeClusterName } = clustersInfo;
+  const { clusters, activeClusterName } = clustersInfo;
 
   useShowNodeParamsError();
 
@@ -235,7 +235,7 @@ function ClusterList() {
         resource={chosenCluster}
         resourceTitle={chosenCluster?.kubeconfig['current-context']}
         deleteFn={e => {
-          deleteCluster(e.name, setClusters);
+          deleteCluster(e.name, clustersInfo);
           notification.notifySuccess({
             content: t('clusters.disconnect'),
           });
