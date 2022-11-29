@@ -6,7 +6,7 @@ export type ClustersState = {
   [clusterName: string]: Cluster;
 } | null;
 
-const CLUSTERS_STORAGE_KEY = 'busola.clusters';
+export const CLUSTERS_STORAGE_KEY = 'busola.clusters';
 const defaultValue = {};
 
 export const clustersState: RecoilState<ClustersState> = atom<ClustersState>({

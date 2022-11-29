@@ -1,7 +1,7 @@
 import { atom, RecoilState } from 'recoil';
 import { CurrentContext, ValidKubeconfig } from 'types';
+import { CLUSTERS_STORAGE_KEY } from './clustersAtom';
 import { ClusterStorage } from './types';
-import { localStorageEffect } from './utils/effects';
 
 type ClusterConfig = {
   requiresCA: boolean;
@@ -21,7 +21,7 @@ interface ClusterWithName extends Cluster {
 
 export type ActiveClusterState = ClusterWithName | null;
 
-const CLUSTERS_STORAGE_KEY = 'busola.cluster';
+const CLUSTER_STORAGE_KEY = 'busola.cluster-name';
 const defaultValue = null;
 
 export const clusterState: RecoilState<ActiveClusterState> = atom<
@@ -29,5 +29,32 @@ export const clusterState: RecoilState<ActiveClusterState> = atom<
 >({
   key: 'clusterState',
   default: defaultValue,
-  effects: [localStorageEffect<ActiveClusterState>(CLUSTERS_STORAGE_KEY)],
+  effects: [
+    ({ setSelf, onSet }) => {
+      setSelf(() => {
+        const getClusters = () => {
+          try {
+            return JSON.parse(
+              localStorage.getItem(CLUSTERS_STORAGE_KEY) || 'null',
+            );
+          } catch {
+            return null;
+          }
+        };
+
+        const clusters = getClusters();
+        const clusterName = localStorage.getItem(CLUSTER_STORAGE_KEY);
+
+        if (!clusters || !clusterName) {
+          return null;
+        }
+
+        return { ...clusters[clusterName], name: clusterName };
+      });
+
+      onSet(newValue =>
+        localStorage.setItem(CLUSTER_STORAGE_KEY, JSON.stringify(newValue)),
+      );
+    },
+  ],
 });

@@ -1,6 +1,6 @@
+import { parseOIDCparams } from 'components/Clusters/components/oidc-params';
 import { UserManager, UserManagerSettings } from 'oidc-client-ts';
 import { KubeconfigNonOIDCAuth, KubeconfigOIDCAuth } from 'types';
-import { parseOIDCParams } from './parseOIDCParams';
 
 type OidcUser = {
   id_token: string;
@@ -33,7 +33,7 @@ export async function handleAuth(setAuth: any, cluster: any, navigate: any) {
     setAuth(kubeconfigUser);
     navigate(`/cluster/${cluster.contextName}`);
   } else {
-    const { issuerUrl, clientId, clientSecret, scope } = parseOIDCParams(
+    const { issuerUrl, clientId, clientSecret, scope } = parseOIDCparams(
       kubeconfigUser,
     );
 
