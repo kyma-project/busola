@@ -29,9 +29,12 @@ export const permissionSetsSelector: RecoilValue<PermissionSetState> = selector<
         spec: { namespace: namespaceName },
       };
 
-      const permissions = await postFn(path, ssrr, {});
-
-      return permissions.status.resourceRules;
+      try {
+        const permissions = await postFn(path, ssrr, {});
+        return permissions.status.resourceRules;
+      } catch (e) {
+        return null;
+      }
     }
   },
 });

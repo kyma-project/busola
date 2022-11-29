@@ -6,7 +6,6 @@ import customResourcesByGroup from './other/CustomResourcesByGroup.routes.js';
 import noPermissions from './other/noPermissions.routes';
 import nodeOverview from './other/nodeOverview.routes';
 import clusterList from './other/clusters.routes';
-import containerDetails from './other/containerDetails.routes';
 import helmReleasesList from './other/helmReleasesList.routes';
 import helmReleaseDetails from './other/helmReleaseDetails.routes';
 import busolaExtensions from './other/BusolaExtensions.routes';
@@ -19,7 +18,6 @@ const other = (
     {noPermissions}
     {nodeOverview}
     {clusterList}
-    {containerDetails}
     {helmReleasesList}
     {helmReleaseDetails}
     {busolaExtensions}
