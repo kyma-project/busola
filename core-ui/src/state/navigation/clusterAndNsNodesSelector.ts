@@ -50,7 +50,6 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
       configFeatures!,
     );
 
-    console.log(navNodesWithAddons);
     return navNodesWithAddons;
   },
 });

@@ -61,7 +61,7 @@ export default function App() {
             <Route
               path="cluster/:currentClusterName/*"
               element={<ClusterRoutes />}
-            ></Route>
+            />
           </Routes>
           <Preferences />
         </ContentWrapper>

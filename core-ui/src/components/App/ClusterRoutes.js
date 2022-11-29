@@ -52,13 +52,10 @@ export default function ClusterRoutes() {
       />
 
       <Route
-        path="namespace/:namespaceId"
-        element={<Navigate to="namespace/:namespaceId/details" />}
+        path="namespaces/:namespaceId"
+        element={<Navigate to="namespaces/:namespaceId/details" />}
       />
-      <Route
-        path="namespace/:namespaceId/*"
-        element={<NamespaceRoutes />}
-      ></Route>
+      <Route path="namespaces/:namespaceId/*" element={<NamespaceRoutes />} />
       {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
       {customResources?.map(cr => createExtensibilityRoutes(cr, language))}
       {resourceRoutes}
