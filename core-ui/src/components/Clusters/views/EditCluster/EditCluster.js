@@ -27,7 +27,6 @@ function EditClusterComponent({
   );
   const notification = useNotification();
 
-  const { setClusters } = { setClusters: () => alert('clusterInfo') };
   const { kubeconfig, config } = resource;
 
   const originalName = useRef(resource?.kubeconfig?.['current-context'] || '');
@@ -35,7 +34,7 @@ function EditClusterComponent({
   const onComplete = () => {
     try {
       if (originalName.current !== resource?.kubeconfig?.['current-context']) {
-        deleteCluster(originalName.current, setClusters);
+        deleteCluster(originalName.current, clustersInfo);
       }
       const contextName = kubeconfig['current-context'];
       addCluster(

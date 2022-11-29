@@ -1,5 +1,5 @@
 import { UserManager, UserManagerSettings } from 'oidc-client-ts';
-import { AuthDataState } from 'state/authDataAtom';
+import { KubeconfigNonOIDCAuth, KubeconfigOIDCAuth } from 'types';
 import { parseOIDCParams } from './parseOIDCParams';
 
 type OidcUser = {
@@ -7,7 +7,9 @@ type OidcUser = {
 };
 
 // todo move this file outta here
-export const hasNonOidcAuth = (user?: AuthDataState) => {
+export const hasNonOidcAuth = (
+  user?: KubeconfigNonOIDCAuth | KubeconfigOIDCAuth,
+) => {
   if (!user) {
     return true;
   }
@@ -16,7 +18,11 @@ export const hasNonOidcAuth = (user?: AuthDataState) => {
   if ('token' in user) {
     return !!user.token;
   } else {
-    return !!user['client-certificate-data'] && !!user['client-key-data'];
+    return (
+      'client-certificate-data' in user &&
+      !!user['client-certificate-data'] &&
+      !!user['client-key-data']
+    );
   }
 };
 

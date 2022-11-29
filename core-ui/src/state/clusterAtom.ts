@@ -1,29 +1,18 @@
 import { atom, RecoilState } from 'recoil';
-import { AuthDataState } from './authDataAtom';
+import { CurrentContext, ValidKubeconfig } from 'types';
+import { ClusterStorage } from './types';
 import { localStorageEffect } from './utils/effects';
 
 type ClusterConfig = {
   requiresCA: boolean;
-  storage: 'localStorage' | 'sessionStorage' | string;
+  storage: ClusterStorage;
 } | null;
 
 export interface Cluster {
   config: ClusterConfig;
   contextName: string;
-  currentContext: {
-    cluster: {
-      cluster: {
-        server: string;
-        'certificate-authority-data': string;
-      };
-      name: string;
-    };
-    user: {
-      name: string;
-      user: AuthDataState;
-    };
-  };
-  kubeconfig: any;
+  currentContext: CurrentContext;
+  kubeconfig: ValidKubeconfig;
 }
 
 interface ClusterWithName extends Cluster {

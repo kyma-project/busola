@@ -3,7 +3,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
-import { MainFrameRedirection } from 'shared/components/MainFrameRedirection/MainFrameRedirection';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
@@ -80,7 +79,6 @@ export default function App() {
               {resourceRoutes}
               {otherRoutes}
             </Route>
-            <Route path="" element={<MainFrameRedirection />} />
             {/*  TODO: Fix it  */}
             <Route
               path="/cluster/shoot--hasselhoff--kmain/namespaces/dd/details"

@@ -1,13 +1,9 @@
 import { RecoilValue, selector } from 'recoil';
+import { KubeconfigNonOIDCAuth } from 'types';
 import { clusterState } from './clusterAtom';
 import { hasNonOidcAuth } from './openapi/oidc';
 
-export type AuthDataState =
-  | { 'client-certificate-data': string; 'client-key-data': string }
-  | {
-      token: string;
-    }
-  | null;
+export type AuthDataState = KubeconfigNonOIDCAuth | null;
 
 export const authDataState: RecoilValue<AuthDataState> = selector<
   AuthDataState
@@ -23,9 +19,9 @@ export const authDataState: RecoilValue<AuthDataState> = selector<
 
     const userCredentials = currentCluster.currentContext?.user?.user;
     if (hasNonOidcAuth(userCredentials)) {
-      return currentCluster.currentContext?.user?.user;
+      return userCredentials as KubeconfigNonOIDCAuth;
     } else {
-      return { token: 'a' };
+      return { token: 'a' }; //todo
     }
   },
 });

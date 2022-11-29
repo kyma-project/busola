@@ -127,7 +127,7 @@ function ClusterList() {
         setChosenCluster(resource);
         handleResourceDelete({
           deleteFn: () => {
-            deleteCluster(resource?.name, setClusters);
+            deleteCluster(resource?.name, clustersInfo);
             notification.notifySuccess({
               content: t('clusters.disconnect'),
             });

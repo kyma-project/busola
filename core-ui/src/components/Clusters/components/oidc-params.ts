@@ -1,3 +1,5 @@
+import { KubeconfigOIDCAuth, LoginCommand } from 'types';
+
 const OIDC_PARAM_NAMES = new Map([
   ['--oidc-issuer-url', 'issuerUrl'],
   ['--oidc-client-id', 'clientId'],
@@ -5,15 +7,15 @@ const OIDC_PARAM_NAMES = new Map([
   ['--oidc-extra-scope', 'scope'],
 ]);
 
-export function parseOIDCparams({ exec: commandData }) {
+export function parseOIDCparams({ exec: commandData }: KubeconfigOIDCAuth) {
   if (!commandData || !commandData.args) throw new Error('No args provided');
-  let output = {};
+  let output: any = {};
 
   commandData.args.forEach(arg => {
     const [argKey, argValue] = arg.split('=');
     if (!OIDC_PARAM_NAMES.has(argKey)) return;
 
-    const outputKey = OIDC_PARAM_NAMES.get(argKey);
+    const outputKey = OIDC_PARAM_NAMES.get(argKey)!;
     if (output[outputKey]) output[outputKey] += ' ' + argValue;
     else output[outputKey] = argValue;
   });
@@ -21,7 +23,7 @@ export function parseOIDCparams({ exec: commandData }) {
   return output;
 }
 
-export function tryParseOIDCparams(kubeconfigUser) {
+export function tryParseOIDCparams(kubeconfigUser: KubeconfigOIDCAuth) {
   try {
     return parseOIDCparams(kubeconfigUser);
   } catch (_) {
@@ -29,17 +31,22 @@ export function tryParseOIDCparams(kubeconfigUser) {
   }
 }
 
-export function createLoginCommand(oidcConfig) {
+export function createLoginCommand(oidcConfig: {
+  issuerUrl: string;
+  clientId: string;
+  clientSecret?: string;
+  scope: string;
+}): LoginCommand {
   return {
     apiVersion: 'client.authentication.k8s.io/v1beta1',
     command: 'kubectl',
     args: [
       'oidc-login',
       'get-token',
-      `--oidc-issuer-url=${oidcConfig.issuerUrl || ''}`,
-      `--oidc-client-id=${oidcConfig.clientId || ''}`,
+      `--oidc-issuer-url=${oidcConfig.issuerUrl}`,
+      `--oidc-client-id=${oidcConfig.clientId}`,
       `--oidc-client-secret=${oidcConfig.clientSecret || ''}`,
-      `--oidc-extra-scope=openid ${oidcConfig.scope || ''}`,
+      `--oidc-extra-scope=openid ${oidcConfig.scope}`,
       '--grant-type=auto',
     ],
   };

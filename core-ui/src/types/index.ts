@@ -5,3 +5,5 @@ export type K8sResource = {
     resourceVersion: string;
   };
 };
+
+export * from './kubeconfig';

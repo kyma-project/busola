@@ -81,3 +81,5 @@ export type NavNode = {
   externalUrl?: string;
   createUrlFn?: (namespaceId: string) => string;
 };
+
+export type ClusterStorage = 'localStorage' | 'sessionStorage' | string;
