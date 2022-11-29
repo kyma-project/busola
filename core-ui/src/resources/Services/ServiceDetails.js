@@ -22,6 +22,7 @@ export function ServiceDetails(props) {
         prefix={service.metadata.name}
         serviceName={service.metadata.name}
         namespace={service.metadata.namespace}
+        disableCreate
         key="subscriptionList"
       />
     ));
