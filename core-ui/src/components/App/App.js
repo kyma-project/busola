@@ -23,6 +23,7 @@ import { Sidebar } from 'sidebar/Sidebar';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 import { useInitTheme } from './useInitTheme';
+import { useAuthHandler } from 'state/authDataAtom';
 
 import ClusterList from 'components/Clusters/views/ClusterList';
 
@@ -40,6 +41,7 @@ export default function App() {
   useConfigContextMigrator();
 
   useInitTheme();
+  useAuthHandler();
 
   useEffect(() => {
     i18n.changeLanguage(language);

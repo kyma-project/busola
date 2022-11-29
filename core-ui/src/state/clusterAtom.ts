@@ -49,8 +49,6 @@ export const clusterState: RecoilState<ActiveClusterState> = atom<
           return null;
         }
 
-        console.log({ clusters, clusterName });
-        console.log(clusters[clusterName]);
         return { ...clusters[clusterName], name: clusterName };
       });
 
