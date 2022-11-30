@@ -16,8 +16,6 @@ import { otherRoutes } from 'resources/other';
 import { resourceRoutes } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 
-import './App.scss';
-
 export default function ClusterRoutes() {
   let { currentClusterName } = useParams() || {};
 

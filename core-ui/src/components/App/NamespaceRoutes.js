@@ -5,13 +5,11 @@ import { useParams } from 'react-router-dom';
 
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { languageAtom } from 'state/preferences/languageAtom';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 import { resourceRoutesNamespaced } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { otherRoutesNamespaced } from 'resources/other';
-
-import './App.scss';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export default function NamespaceRoutes() {
   const { customResources = [] } = useMicrofrontendContext();
