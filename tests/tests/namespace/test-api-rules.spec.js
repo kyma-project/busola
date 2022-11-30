@@ -41,8 +41,12 @@ context('Test API Rules in the Function details view', () => {
   });
 
   it('Create an API Rule for the Function', () => {
-    cy.getIframeBody()
-      .contains('Configuration')
+    cy.getLeftNav()
+      .contains('Discovery and Network')
+      .click();
+
+    cy.getLeftNav()
+      .contains('API Rules')
       .click();
 
     cy.getIframeBody()
