@@ -38,9 +38,7 @@ context('Test in-cluster eventing', () => {
   });
 
   it('Create a Subscription', () => {
-    cy.getIframeBody()
-      .contains('a', 'Configuration')
-      .click();
+    cy.navigateTo('Configuration', 'Subscriptions');
 
     cy.getIframeBody()
       .contains('button', 'Create Subscription')
