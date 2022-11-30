@@ -16,7 +16,6 @@ import { ContentWrapper } from './ContentWrapper/ContentWrapper';
 import { Preferences } from 'components/Preferences/Preferences';
 import { Sidebar } from 'sidebar/Sidebar';
 import { useLuigiContextMigrator } from './useLuigiContextMigrator';
-import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 import { useInitTheme } from './useInitTheme';
 import { useAuthHandler } from 'state/authDataAtom';
 
@@ -34,7 +33,6 @@ export default function App() {
   useResourceSchemas();
 
   useLuigiContextMigrator();
-  useConfigContextMigrator();
 
   useInitTheme();
   useAuthHandler();

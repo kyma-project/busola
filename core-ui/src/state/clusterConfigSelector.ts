@@ -1,11 +1,10 @@
 import { selector, RecoilValue } from 'recoil';
-import { baseUrl } from 'shared/hooks/BackendAPI/config';
 import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { authDataState } from './authDataAtom';
 import { clusterState } from './clusterAtom';
-import { configState } from './configAtom';
 import { ssoDataState } from './ssoDataAtom';
 import { ClusterStorage } from './types';
+import { getClusterConfig } from './utils/getBackendInfo';
 
 export type ClusterConfigState = {
   requiresCA: boolean;
@@ -19,14 +18,14 @@ export const clusterConfigState: RecoilValue<ClusterConfigState> = selector<
   get: async ({ get }) => {
     const cluster = get(clusterState);
     const authData = get(authDataState);
-    const { fromConfig } = get(configState) || {};
+    const { backendAddress } = getClusterConfig();
     const ssoData = get(ssoDataState);
 
-    if (!cluster || !authData || !fromConfig) {
+    if (!cluster || !authData || !backendAddress) {
       return null;
     }
 
-    const url = baseUrl(fromConfig).backendAddress + '/api';
+    const url = backendAddress + '/api';
     const headers = createHeaders(authData, cluster, true, ssoData);
 
     try {
