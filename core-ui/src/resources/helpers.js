@@ -2,7 +2,6 @@ import { useRecoilValue } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { getResourceUrl } from 'shared/helpers';
 import {
   getResourceGraphConfig,
   useAddStyle,
@@ -14,13 +13,11 @@ export const usePrepareListProps = ({
   resourceI18Key,
   apiGroup,
   apiVersion,
+  hasDetailsView,
 }) => {
   const routerParams = useParams();
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
-  // const resourceUrl = getResourceUrl();
-  //
-  console.log('usePrepareListProps::resourceType', resourceType);
 
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
@@ -28,13 +25,8 @@ export const usePrepareListProps = ({
     ? `/${api}/namespaces/${namespaceId}/${resourceType.toLowerCase()}`
     : `/${api}/${resourceType?.toLowerCase()}`;
 
-  // const resourceUrl = /api/v1/namespaces/default/pods
-
-  console.log('usePrepareListProps::resourceUrl', resourceUrl);
-
   return {
-    // hasDetailsView: queryParams.get('hasDetailsView') === 'true',
-    hasDetailsView: true, // TODO
+    hasDetailsView,
     readOnly: queryParams.get('readOnly') === 'true',
     resourceUrl,
     resourceType: resourceType,
@@ -53,7 +45,6 @@ export const usePrepareDetailsProps = ({
   const { resourceName, namespaceId } = useParams();
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
-  // const resourceUrl = getResourceUrl();
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
   const resourceUrl = namespaceId
     ? `/${api}/namespaces/${namespaceId}/${resourceType.toLowerCase()}`

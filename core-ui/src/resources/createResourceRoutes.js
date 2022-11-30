@@ -63,15 +63,11 @@ const DetailsWrapper = ({ children, ...props }) => {
 export const createResourceRoutes = ({
   List = null,
   Details = null,
-  // Create = null,
   namespaced = true,
   resourceType = '',
   resourceI18Key = '',
   ...props
 }) => {
-  // define resourceI18Key when calling the function, to set a custom plural resource name, for example to fix the capitalization
-  // const { namespaced = true, resourceType = '', resourceI18Key = '' } = config;
-
   const pathSegment = resourceType.toLowerCase();
 
   const listPath = createPath({ pathSegment });
@@ -88,6 +84,7 @@ export const createResourceRoutes = ({
             <ListWrapper
               resourceType={resourceType}
               resourceI18Key={resourceI18Key}
+              hasDetailsView={!!Details}
               {...props}
             >
               <List allowSlashShortcut />
