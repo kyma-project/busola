@@ -2,11 +2,11 @@ import { IconGlyph } from 'fundamental-react/lib/Icon/Icon';
 
 export type Scope = 'namespace' | 'cluster';
 
-export type ConfigFeature = {
+export interface ConfigFeature {
   isEnabled?: boolean;
   stage?: 'PRIMARY' | 'SECONDARY';
   [key: string]: any;
-};
+}
 
 export type ConfigFeaturesNames = typeof configFeaturesNames[keyof typeof configFeaturesNames];
 export const configFeaturesNames = {

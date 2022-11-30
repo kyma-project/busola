@@ -10,7 +10,7 @@ import {
 import { useClustersInfoType } from 'state/utils/getClustersInfo';
 import { tryParseOIDCparams } from './components/oidc-params';
 
-export function addCurrentCluster(
+function addCurrentCluster(
   params: NonNullable<ActiveClusterState>,
   clustersInfo: useClustersInfoType,
 ) {
@@ -22,10 +22,13 @@ export function addCurrentCluster(
 export function addCluster(
   params: NonNullable<ActiveClusterState>,
   clustersInfo: useClustersInfoType,
+  switchCluster = true,
 ) {
   const { setClusters } = clustersInfo;
   setClusters(prev => ({ ...prev, [params.contextName]: params }));
-  addCurrentCluster(params, clustersInfo);
+  if (switchCluster) {
+    addCurrentCluster(params, clustersInfo);
+  }
 }
 
 export function deleteCluster(
@@ -112,7 +115,7 @@ export const addByContext = (
     kubeconfig: userKubeconfig,
     context,
     storage = 'sessionStorage',
-    switchCluster, // todo
+    switchCluster = true,
     config = {},
   }: {
     kubeconfig: Kubeconfig;
@@ -149,7 +152,7 @@ export const addByContext = (
       currentContext: getContext(newKubeconfig, context.name),
     };
 
-    addCluster(clusterParams, clustersInfo);
+    addCluster(clusterParams, clustersInfo, switchCluster);
   } catch (e) {
     throw Error("Cannot 'addByContext': " + e);
   }
