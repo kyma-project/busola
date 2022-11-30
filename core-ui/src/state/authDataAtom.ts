@@ -16,6 +16,25 @@ type handleLoginProps = {
   onError: () => void;
 };
 
+export function createUserManager(userCredentials: KubeconfigOIDCAuth) {
+  const { issuerUrl, clientId, clientSecret, scope } = parseOIDCparams(
+    userCredentials,
+  );
+
+  return new UserManager({
+    redirect_uri: window.location.origin,
+    post_logout_redirect_uri: window.location.origin + '/logout.html',
+    loadUserInfo: true,
+    automaticSilentRenew: false,
+    client_id: clientId,
+    authority: issuerUrl,
+    client_secret: clientSecret,
+    scope: scope || 'openid',
+    response_type: 'code',
+    response_mode: 'query',
+  });
+}
+
 async function handleLogin({
   userCredentials,
   setAuth,
@@ -35,23 +54,7 @@ async function handleLogin({
     });
   };
 
-  const { issuerUrl, clientId, clientSecret, scope } = parseOIDCparams(
-    userCredentials,
-  );
-
-  const userManager = new UserManager({
-    redirect_uri: window.location.origin,
-    post_logout_redirect_uri: window.location.origin + '/logout.html',
-    loadUserInfo: true,
-    automaticSilentRenew: false,
-    client_id: clientId,
-    authority: issuerUrl,
-    client_secret: clientSecret,
-    scope: scope || 'openid',
-    response_type: 'code',
-    response_mode: 'query',
-  });
-
+  const userManager = createUserManager(userCredentials);
   try {
     const storedUser = await userManager.getUser();
 

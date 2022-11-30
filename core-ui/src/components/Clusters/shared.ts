@@ -9,6 +9,8 @@ import {
 } from 'types';
 import { useClustersInfoType } from 'state/utils/getClustersInfo';
 import { tryParseOIDCparams } from './components/oidc-params';
+import { hasNonOidcAuth } from 'state/openapi/oidc';
+import { createUserManager } from 'state/authDataAtom';
 
 function addCurrentCluster(
   params: NonNullable<ActiveClusterState>,
@@ -37,6 +39,15 @@ export function deleteCluster(
 ) {
   const { setClusters } = clustersInfo;
   setClusters(prev => {
+    const prevCredentials = prev?.[clusterName]?.currentContext.user.user;
+
+    if (!hasNonOidcAuth(prevCredentials)) {
+      const userManager = createUserManager(
+        prevCredentials as KubeconfigOIDCAuth,
+      );
+      userManager.removeUser().catch(console.warn);
+    }
+
     const newList = { ...prev };
     delete newList?.[clusterName];
     return newList;
