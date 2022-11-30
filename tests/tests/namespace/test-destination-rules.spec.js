@@ -16,10 +16,7 @@ context('Test Destination Rules', () => {
 
   before(() => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
-    cy.mockExtensions(
-      'DESTINATION RULES',
-      'examples/resources/istio/destination-rules.yaml',
-    );
+    cy.mockExtensions(['examples/resources/istio/destination-rules.yaml']);
 
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
