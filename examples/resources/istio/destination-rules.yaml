@@ -29,11 +29,11 @@ data:
           - source: spec.exportTo
             widget: Labels
             name: Export To
-            visibility: $count(data)
+            visibility: $exists($value)
           - source: spec.workloadSelector.matchLabels
             widget: Labels
             name: Workload Selector Match Labels
-            visibility: $count(data)
+            visibility: $exists($value)
       - source: spec.trafficPolicy
         name: Traffic Policy
         visibility: $exists($.data)
@@ -100,7 +100,7 @@ data:
                         - 'false'
                   - widget: Table
                     name: Distribute
-                    visibility: $count(data)
+                    visibility: $exists($value)
                     source: $parent.distribute
                     children:
                       - source: $item.from
@@ -110,7 +110,7 @@ data:
                         widget: Labels
                   - widget: Table
                     name: Failover
-                    visibility: $count(data)
+                    visibility: $exists($value)
                     source: $parent.failover
                     children:
                       - source: $item.from
@@ -120,7 +120,7 @@ data:
                   - name: Failover Priority
                     source: $parent.failoverPriority
                     widget: JoinedArray
-                    visibility: $count(data)
+                    visibility: $exists($value)
           - source: $parent.connectionPool
             name: Connection Pool
             visibility: $exists($.data)
@@ -256,7 +256,7 @@ data:
             children:
               - source: $item.port.number
                 name: port
-            visibility: $count(data)
+            visibility: $exists($value)
             collapsible:
               - source: $item.loadBalancer
                 name: Load Balancer
@@ -319,7 +319,7 @@ data:
                             - 'false'
                       - widget: Table
                         name: Distribute
-                        visibility: $count(data)
+                        visibility: $exists($value)
                         source: $parent.distribute
                         children:
                           - source: $item.from
@@ -329,7 +329,7 @@ data:
                             widget: Labels
                       - widget: Table
                         name: Failover
-                        visibility: $count(data)
+                        visibility: $exists($value)
                         source: $parent.failover
                         children:
                           - source: $item.from
@@ -339,7 +339,7 @@ data:
                       - name: Failover Priority
                         source: $parent.failoverPriority
                         widget: JoinedArray
-                        visibility: $count(data)
+                        visibility: $exists($value)
               - source: $item.connectionPool
                 name: Connection Pool
                 visibility: $exists($.data)
@@ -502,7 +502,7 @@ data:
       - source: spec.subsets
         name: Subsets
         widget: Table
-        visibility: $count(data)
+        visibility: $exists($value)
         children:
           - source: $item.name
             name: Name
@@ -576,7 +576,7 @@ data:
                             - 'false'
                       - widget: Table
                         name: Distribute
-                        visibility: $count(data)
+                        visibility: $exists($value)
                         source: $parent.distribute
                         children:
                           - source: $item.from
@@ -586,7 +586,7 @@ data:
                             widget: Labels
                       - widget: Table
                         name: Failover
-                        visibility: $count(data)
+                        visibility: $exists($value)
                         source: $parent.failover
                         children:
                           - source: $item.from
@@ -596,7 +596,7 @@ data:
                       - name: Failover Priority
                         source: $parent.failoverPriority
                         widget: JoinedArray
-                        visibility: $count(data)
+                        visibility: $exists($value)
               - source: $parent.connectionPool
                 name: Connection Pool
                 visibility: $exists($.data)
@@ -732,7 +732,7 @@ data:
                 children:
                   - source: $item.port.number
                     name: port
-                visibility: $count(data)
+                visibility: $exists($value)
                 collapsible:
                   - source: $item.loadBalancer
                     name: Load Balancer
@@ -795,7 +795,7 @@ data:
                                 - 'false'
                           - widget: Table
                             name: Distribute
-                            visibility: $count(data)
+                            visibility: $exists($value)
                             source: $parent.distribute
                             children:
                               - source: $item.from
@@ -805,7 +805,7 @@ data:
                                 widget: Labels
                           - widget: Table
                             name: Failover
-                            visibility: $count(data)
+                            visibility: $exists($value)
                             source: $parent.failover
                             children:
                               - source: $item.from
@@ -815,7 +815,7 @@ data:
                           - name: Failover Priority
                             source: $parent.failoverPriority
                             widget: JoinedArray
-                            visibility: $count(data)
+                            visibility: $exists($value)
                   - source: $item.connectionPool
                     name: Connection Pool
                     visibility: $exists($.data)
