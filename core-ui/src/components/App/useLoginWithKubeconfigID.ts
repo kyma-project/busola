@@ -106,6 +106,12 @@ export function useLoginWithKubeconfigID() {
           const previousStorageMethod =
             clusters![context.name]?.config?.storage || '';
 
+          console.log(
+            context.name,
+            shouldRedirectToCluster(context.name),
+            isShowClustersOverviewEnabled,
+          );
+
           addByContext(
             {
               kubeconfig,
