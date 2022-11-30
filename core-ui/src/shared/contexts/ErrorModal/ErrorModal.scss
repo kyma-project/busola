@@ -1,0 +1,18 @@
+.error-modal {
+  .fd-dialog__header {
+    box-shadow: none;
+    border-bottom: 1px solid var(--sapCriticalColor);
+
+    i {
+      color: var(--sapCriticalColor);
+    }
+  }
+
+  .fd-dialog__content {
+    max-width: 33rem;
+  }
+
+  &--wider .fd-dialog__content {
+    max-width: 75vw;
+  }
+}

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 
-const useMutation = method => {
+const useMutation = (method, headers) => {
   return options => {
     const fetch = useFetch();
 
@@ -12,8 +12,8 @@ const useMutation = method => {
           init: {
             method,
             headers: {
-              'Content-Type': 'application/json-patch+json',
               Accept: 'application/json',
+              ...headers,
             },
             body: JSON.stringify(data),
           },
@@ -28,5 +28,10 @@ const useMutation = method => {
   };
 };
 
-export const useUpdate = useMutation('PATCH');
+export const useUpdate = useMutation('PATCH', {
+  'Content-Type': 'application/json-patch+json',
+});
+export const usePut = useMutation('PUT', {
+  'Content-Type': 'application/json',
+});
 export const useDelete = useMutation('DELETE');
