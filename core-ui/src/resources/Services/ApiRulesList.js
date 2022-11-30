@@ -11,6 +11,7 @@ import './ServiceDetails.scss';
 const ExtensibilityList = React.lazy(() =>
   import('../../components/Extensibility/ExtensibilityList'),
 );
+
 export function ApiRulesList({ serviceName, namespace }) {
   const { t } = useTranslation();
   const { customResources } = useMicrofrontendContext();

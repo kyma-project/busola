@@ -20,7 +20,7 @@ export default function NamespaceRoutes() {
   useEffect(() => {
     if (namespace === namespaceId) return;
     setNamespace(namespaceId);
-  }, [namespaceId, namespace]);
+  }, [namespaceId, namespace, setNamespace]);
 
   return (
     <Routes>

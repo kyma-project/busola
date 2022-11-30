@@ -120,6 +120,7 @@ data:
       path: spec.service
       name: service
       widget: FormGroup
+      defaultExpanded: true
       children:
         - simple: true
           required: false
@@ -146,6 +147,7 @@ data:
       path: spec.gateway
       name: gateway
       widget: ResourceRef
+      defaultExpanded: true
       visibility: $accessToGateways
       resource:
         kind: Gateway
@@ -169,24 +171,35 @@ data:
     - simple: true
       required: true
       path: spec.host
-      inputInfo: inputInfo.spec.host
       name: host
-      enum: "$distinct($filter($relatedGateways().items, function ($v) { $contains($v.metadata.name, $substringBefore($root.spec.gateway, '.')) and ($contains($v.metadata.namespace, $substringBefore($substringAfter($root.spec.gateway, '.'), '.')))}).spec.servers.hosts)"
+      enum: "$distinct($filter($relatedGateways().items, function ($v) { $v.metadata.name = $substringBefore($root.spec.gateway, '.') and $v.metadata.namespace = $substringBefore($substringAfter($root.spec.gateway, '.'), '.')}).spec.servers.hosts)"
       subscribe:
-        host: "$string($filter($relatedGateways().items, function ($v) { $contains($v.metadata.name, $substringBefore($root.spec.gateway, '.')) and ($contains($v.metadata.namespace, $substringBefore($substringAfter($root.spec.gateway, '.'), '.')))}).spec.servers[0].hosts[0])"
+        host: "$string($filter($relatedGateways().items, function ($v) {  $v.metadata.name = $substringBefore($root.spec.gateway, '.') and $v.metadata.namespace = $substringBefore($substringAfter($root.spec.gateway, '.'), '.')}).spec.servers[0].hosts[0])"
+    - simple: true
+      widget: Alert
+      severity: error
+      alert: '"alert.spec.host"'
+      visibility: '$substring(spec.host, 0, 1)="*"'
     - simple: true
       required: true
       path: spec.rules 
       name: rules 
       widget: GenericList 
+      defaultExpanded: true
       template:
         path: '/.*'
         methods: ['GET']
       children:
+        - simple: true
+          required: true
+          path: '[].path'
+          name: path
+          inputInfo: inputInfo.path
         - required: true
           path: '[].accessStrategies'
           name: accessStrategies 
-          widget: GenericList 
+          widget: GenericList
+          defaultExpanded: true
           template:
             handler: 'allow'
           children:
@@ -209,6 +222,7 @@ data:
           path: '[].methods'
           name: rules.methods 
           widget: SimpleList
+          defaultExpanded: true
           children:
             - path: '[]' 
               enum:
@@ -219,20 +233,14 @@ data:
                 - PATCH
                 - HEAD
         - path: '[].mutators' 
-          name: mutators 
-          widget: GenericList 
+          name: mutators
+          widget: GenericList
           children:
             - path: '[].config'
               name: accessStrategies.config
               widget: KeyValuePair
-            - required: true
-              path: '[].handler'
+            - path: '[].handler'
               name: accessStrategies.handler
-        - simple: true
-          required: true
-          path: '[].path'
-          name: path
-          inputInfo: inputInfo.path
         - path: '[].service' 
           name: service 
           widget: FormGroup
@@ -291,6 +299,12 @@ data:
       value:
         spec:
           gateway: kyma-gateway.kyma-system.svc.cluster.local
+          rules:
+            - path: /.*
+              methods:
+                - GET
+              accessStrategies:
+                - handler: allow
   translations: |
     en:
       accessStrategies: Access Strategies
@@ -316,4 +330,4 @@ data:
       service-name: Service Name
       status: Status
       virtualService: Virtual Service
-      inputInfo.spec.host: Host can not be a wildcard, replace * with subdomain name
+      alert.spec.host: Host can not be a wildcard, replace * with subdomain name
