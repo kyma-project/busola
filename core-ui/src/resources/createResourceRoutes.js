@@ -1,9 +1,11 @@
 import React, { Suspense } from 'react';
-import { Spinner } from 'shared/components/Spinner/Spinner';
-import { usePrepareDetailsProps, usePrepareListProps } from './helpers';
 import { Route } from 'react-router-dom';
 import pluralize from 'pluralize';
+
+import { Spinner } from 'shared/components/Spinner/Spinner';
 import LuigiClient from '@luigi-project/client';
+
+import { usePrepareDetailsProps, usePrepareListProps } from './helpers';
 
 export const createPath = (
   config = { namespaced: true, detailsView: false, pathSegment: '' },
@@ -34,7 +36,7 @@ export const createUrl = (
   const details = resourceName || '';
   pathSegment = pathSegment || pluralize(resourceType).toLowerCase();
 
-  return `${namespacePrefix}/${pathSegment}/${details}`;
+  return `/cluster/shoot--hasselhoff--kmain${namespacePrefix}/${pathSegment}/${details}`;
 };
 
 export const createKubernetesUrl = ({
