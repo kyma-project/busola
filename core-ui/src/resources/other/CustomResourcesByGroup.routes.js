@@ -13,22 +13,12 @@ function RoutedCustomResourcesList() {
 }
 
 export default (
-  <>
-    <Route
-      path="customresources"
-      element={
-        <Suspense fallback={<Spinner />}>
-          <CustomResourcesByGroup />
-        </Suspense>
-      }
-    />
-    <Route
-      path="namespaces/:namespaceId/customresources/"
-      element={
-        <Suspense fallback={<Spinner />}>
-          <RoutedCustomResourcesList />
-        </Suspense>
-      }
-    />
-  </>
+  <Route
+    path="customresources"
+    element={
+      <Suspense fallback={<Spinner />}>
+        <CustomResourcesByGroup />
+      </Suspense>
+    }
+  />
 );

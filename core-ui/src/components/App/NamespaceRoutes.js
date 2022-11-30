@@ -8,7 +8,7 @@ import { languageAtom } from 'state/preferences/languageAtom';
 
 import { resourceRoutesNamespaced } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
-import otherRoutes from 'resources/otherNamespaced';
+import { otherRoutesNamespaced } from 'resources/other';
 
 import './App.scss';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
@@ -31,7 +31,7 @@ export default function NamespaceRoutes() {
         createExtensibilityRoutes(cr, language, true),
       )}
       {resourceRoutesNamespaced}
-      {otherRoutes}
+      {otherRoutesNamespaced}
     </Routes>
   );
 }

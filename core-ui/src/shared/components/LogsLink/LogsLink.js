@@ -18,7 +18,7 @@ export const LogsLink = ({
   dataSource = 'Loki',
   children,
 }) => {
-  const { features } = useMicrofrontendContext();
+  const { features = {} } = useMicrofrontendContext() || {};
   const { data, loading, error } = useGet(
     '/apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana',
   );

@@ -12,9 +12,9 @@ import { clustersState } from 'state/clustersAtom';
 import { languageAtom } from 'state/preferences/languageAtom';
 
 import NamespaceRoutes from './NamespaceRoutes';
+import { otherRoutes } from 'resources/other';
 import { resourceRoutes } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
-import otherRoutes from 'resources/other';
 
 import './App.scss';
 
