@@ -2,20 +2,21 @@ import { useRecoilValue } from 'recoil';
 
 import { clusterState } from 'state/clusterAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { UrlGenerators } from 'state/types';
 
-export const useUrl = () => {
+export const useUrl: () => UrlGenerators = () => {
   const currentCluster = useRecoilValue(clusterState);
   const activeNamespace = useRecoilValue(activeNamespaceIdState);
   console.log('currentCluster', currentCluster);
 
-  const clusterUrl = path => {
-    return `/cluster/${currentCluster.contextName}/${path}`;
+  const clusterUrl = (path: string) => {
+    return `/cluster/${currentCluster?.contextName}/${path}`;
   };
-  const namespaceUrl = path => {
+  const namespaceUrl = (path: string) => {
     // return `/cluster/${currentCluster}/namespaces/${namespace}/${path}`;
-    return `/cluster/${currentCluster.contextName}/namespaces/${activeNamespace}/${path}`;
+    return `/cluster/${currentCluster?.contextName}/namespaces/${activeNamespace}/${path}`;
   };
-  const scopedUrl = path => {
+  const scopedUrl = (path: string) => {
     if (activeNamespace) {
       return namespaceUrl(path);
     } else {

@@ -67,6 +67,12 @@ export type ExtResource = {
   dataSources: Record<string, any>;
 };
 
+export interface UrlGenerators {
+  clusterUrl: (path: string) => string;
+  namespaceUrl: (path: string) => string;
+  scopedUrl: (path: string) => string;
+}
+
 export type NavNode = {
   resourceType: string; // Jobs, CronJobs etc.
   category: string;
@@ -79,7 +85,7 @@ export type NavNode = {
   icon?: IconGlyph;
   topLevelNode?: boolean;
   externalUrl?: string;
-  createUrlFn?: (namespaceId: string) => string;
+  createUrlFn?: (generators: UrlGenerators) => string;
 };
 
 export type ClusterStorage = 'localStorage' | 'sessionStorage' | string;
