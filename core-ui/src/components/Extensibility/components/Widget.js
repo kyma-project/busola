@@ -113,7 +113,6 @@ export function Widget({
     },
     true,
   );
-  console.log(visible, structure.visibility);
 
   if (visibilityError) {
     return t('extensibility.configuration-error', {

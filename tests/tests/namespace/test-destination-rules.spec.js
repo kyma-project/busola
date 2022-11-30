@@ -86,24 +86,25 @@ context('Test Destination Rules', () => {
       .type('selector-value');
 
     // traffic policy
-    cy.getIframeBody()
-      .find('[aria-label="expand Traffic Policy"]:visible', { log: false })
-      .click();
+    // could be uncomment after resolving: https://github.com/kyma-project/busola/issues/2088
+    // cy.getIframeBody()
+    //   .find('[aria-label="expand Traffic Policy"]:visible', { log: false })
+    //   .click();
 
-    cy.getIframeBody()
-      .find('[aria-label="expand Load Balancer"]:visible', { log: false })
-      .click();
+    // cy.getIframeBody()
+    //   .find('[aria-label="expand Load Balancer"]:visible', { log: false })
+    //   .click();
 
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
-      .type(BALANCER);
+    // cy.getIframeBody()
+    //   .find('[aria-label="Combobox input"]:visible', { log: false })
+    //   .type(BALANCER);
 
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]', {
-        log: false,
-      })
-      .eq(1)
-      .type(SIMPLE);
+    // cy.getIframeBody()
+    //   .find('[aria-label="Combobox input"]', {
+    //     log: false,
+    //   })
+    //   .eq(1)
+    //   .type(SIMPLE);
 
     cy.getIframeBody()
       .find('[role=dialog]')
@@ -112,7 +113,7 @@ context('Test Destination Rules', () => {
 
     // changed details
     cy.getIframeBody().contains(SELECTOR);
-    cy.getIframeBody().contains(SIMPLE);
+    // After resolving: https://github.com/kyma-project/busola/issues/2088 we need to add checking loadBalancer value
   });
 
   it('Check the Destination Rule list', () => {
