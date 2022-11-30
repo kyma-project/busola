@@ -58,11 +58,18 @@ export function useLoginWithKubeconfigID() {
   const [triedGetKubeconfig, setTriedGetKubeconfig] = useState(false);
 
   kubeconfigIdFeature!.isEnabled = true;
-  kubeconfigIdFeature!.config = { kubeconfigUrl: 'http://127.0.0.1:8090' }; // todo
+  kubeconfigIdFeature!.config = {
+    kubeconfigUrl: 'http://127.0.0.1:8090',
+    showClustersOverview: true,
+  }; // todo
   useEffect(() => {
     const loadKubeconfigIdCluster = async (kubeconfigId: string) => {
       kubeconfigIdFeature!.isEnabled = true;
-      kubeconfigIdFeature!.config = { kubeconfigUrl: 'http://127.0.0.1:8090' }; // todo
+      kubeconfigIdFeature!.config = {
+        kubeconfigUrl: 'http://127.0.0.1:8090',
+
+        showClustersOverview: true,
+      }; // todo
       try {
         const kubeconfig = await loadKubeconfigById(
           kubeconfigId,
@@ -90,8 +97,9 @@ export function useLoginWithKubeconfigID() {
           !!k8currentCluster && k8currentCluster === name;
 
         const shouldRedirectToCluster = (name: string) =>
-          isOnlyOneCluster ||
-          (!isShowClustersOverviewEnabled && isK8CurrentCluster(name));
+          !isShowClustersOverviewEnabled &&
+          isOnlyOneCluster &&
+          !isK8CurrentCluster(name);
 
         // add the clusters
         kubeconfig.contexts.forEach(context => {
