@@ -76,9 +76,7 @@ context('Test in-cluster eventing', () => {
   });
 
   it('Go to details of the publisher Function', () => {
-    cy.getLeftNav()
-      .contains('Functions')
-      .click();
+    cy.navigateTo('Workloads', 'Functions');
 
     cy.getIframeBody()
       .contains('a', API_RULE_AND_FUNCTION_NAME)
