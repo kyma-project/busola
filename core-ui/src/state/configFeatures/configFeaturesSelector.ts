@@ -18,11 +18,9 @@ export const configFeaturesState: RecoilValue<ConfigFeaturesState> = selector<
   get: async () => {
     try {
       const cacheBuster = '?cache-buster=' + Date.now();
-
       const defaultConfigResponse = await fetch(
-        '/defaultConfig.yaml' + cacheBuster,
+        '/config/defaultConfig.yaml' + cacheBuster,
       );
-
       const configMapResponse = await fetch(
         '/config/config.yaml' + cacheBuster,
       );

@@ -5,17 +5,12 @@ import { isEqual } from 'lodash';
 
 import { extResourcesState } from 'state/extResourcesAtom';
 import { ssoDataState } from 'state/ssoDataAtom';
-import { lazyConfigFeaturesState } from 'state/configFeatures/lazyConfigFeaturesAtom';
-
-import { lazyConfigFeaturesNames } from 'state/types';
 
 export const useLuigiContextMigrator = () => {
-  const { features, customResources, ssoData } = useMicrofrontendContext();
+  const { customResources, ssoData } = useMicrofrontendContext();
 
   useUpdateRecoilIfValueChanged(customResources, extResourcesState);
   useUpdateRecoilIfValueChanged(ssoData, ssoDataState);
-
-  useUpdateConfigFeatures(features);
 };
 
 export const useUpdateRecoilIfValueChanged = (val, recoilAtom, skip) => {
@@ -30,14 +25,4 @@ export const useUpdateRecoilIfValueChanged = (val, recoilAtom, skip) => {
       prev.current = val;
     }
   }, [val, setRecoilState, recoilAtom, skip]);
-};
-
-const useUpdateConfigFeatures = features => {
-  const configFeatures = { ...features };
-  const lazyConfigFeatures = {};
-  lazyConfigFeatures[lazyConfigFeaturesNames?.PROMETHEUS] =
-    features?.PROMETHEUS;
-  delete configFeatures[lazyConfigFeaturesNames?.PROMETHEUS];
-
-  useUpdateRecoilIfValueChanged(lazyConfigFeatures, lazyConfigFeaturesState);
 };
