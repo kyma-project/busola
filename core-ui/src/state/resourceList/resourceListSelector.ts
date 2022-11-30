@@ -19,7 +19,8 @@ export const resourceListSelector = selector<NavNode[]>({
       return resNodeList;
     }
 
-    const isExtensibilityOn = configFeatures.EXTENSIBILITY?.isEnabled;
+    const isExtensibilityOn =
+      configFeatures?.config?.features.EXTENSIBILITY?.isEnabled;
     const areExtensionsLoaded = isExtensibilityOn && extResources;
 
     if (!isExtensibilityOn) {

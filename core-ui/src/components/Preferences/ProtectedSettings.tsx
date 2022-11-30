@@ -1,8 +1,8 @@
 import { Switch } from 'fundamental-react';
+import { useFeature } from 'hooks/useFeature';
 import { useTranslation } from 'react-i18next';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 
-import { configFeaturesState } from 'state/configFeatures/configFeaturesSelector';
 import { disableResourceProtectionState } from 'state/preferences/disableResourceProtectionAtom';
 
 export default function ProtectedSettings() {
@@ -12,9 +12,8 @@ export default function ProtectedSettings() {
     setDisableResourceProtection,
   ] = useRecoilState(disableResourceProtectionState);
 
-  const configFeatures = useRecoilValue(configFeaturesState);
-  const protectedResourcesEnabled =
-    configFeatures?.PROTECTED_RESOURCES?.isEnabled;
+  const protectedResourcesEnabled = useFeature('PROTECTED_RESOURCES')
+    ?.isEnabled;
 
   if (!protectedResourcesEnabled) return null;
 
