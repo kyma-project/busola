@@ -2,8 +2,8 @@ import jsyaml from 'js-yaml';
 import { selector, RecoilValue } from 'recoil';
 import { merge } from 'lodash';
 
-import { ConfigFeatureList } from '../types';
-import { getFetchFn } from '../utils/getFetchFn';
+import { ConfigFeatureList } from './types';
+import { getFetchFn } from './utils/getFetchFn';
 
 type Config = {
   config?: {

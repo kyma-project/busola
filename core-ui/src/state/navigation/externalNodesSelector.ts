@@ -1,5 +1,5 @@
 import { RecoilValueReadOnly, selector } from 'recoil';
-import { configFeaturesState } from '../configFeatures/configFeaturesSelector';
+import { configFeaturesState } from '../configFeaturesSelector';
 import { predefinedCategories } from './categories';
 import { ConfigFeature, configFeaturesNames, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';

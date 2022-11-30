@@ -3,7 +3,7 @@ import { extResourcesState } from '../extResourcesAtom';
 import { resources } from 'resources';
 import { partial } from 'lodash';
 import { NavNode } from '../types';
-import { configFeaturesState } from '../configFeatures/configFeaturesSelector';
+import { configFeaturesState } from '../configFeaturesSelector';
 import { mapBusolaResourceToNavNode } from './mapBusolaResourceToNavNode';
 import { mapExtResourceToNavNode } from './mapExtResourceToNavNode';
 
