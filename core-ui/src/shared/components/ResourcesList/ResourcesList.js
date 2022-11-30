@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
-import { Link, Button } from 'fundamental-react';
+import { Button } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
@@ -27,6 +28,8 @@ import { useTranslation } from 'react-i18next';
 import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
 import pluralize from 'pluralize';
+
+import { useUrl } from 'hooks/useUrl';
 
 /* to allow cloning of a resource set the following on the resource create component:
  *
@@ -199,6 +202,7 @@ export function ResourceListRenderer({
   } = useYamlEditor();
   const notification = useNotification();
   const updateResourceMutation = useUpdate(resourceUrl);
+  const { scopedUrl } = useUrl();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => closeEditor(), [namespace]);
@@ -208,6 +212,17 @@ export function ResourceListRenderer({
     resourceType,
   );
 
+  const linkTo = entry => {
+    console.log('navigateFn', navigateFn);
+    console.log('fixedPath', fixedPath);
+    // if (navigateFn) return navigateFn(entry);
+    // if (fixedPath) return navigateToResource(entry);
+    // navigateToDetails(resourceType, entry.metadata.name);
+    return scopedUrl(
+      `${pluralize(resourceType.toLowerCase())}/details/${entry.metadata.name}`,
+    );
+  };
+
   const defaultColumns = [
     {
       header: t('common.headers.name'),
@@ -215,11 +230,12 @@ export function ResourceListRenderer({
         hasDetailsView ? (
           <Link
             className="fd-link"
-            onClick={_ => {
-              if (navigateFn) return navigateFn(entry);
-              if (fixedPath) return navigateToResource(entry);
-              navigateToDetails(resourceType, entry.metadata.name);
-            }}
+            to={linkTo(entry)}
+            // onClick={_ => {
+            // if (navigateFn) return navigateFn(entry);
+            // if (fixedPath) return navigateToResource(entry);
+            // navigateToDetails(resourceType, entry.metadata.name);
+            // }}
           >
             {nameSelector(entry)}
           </Link>

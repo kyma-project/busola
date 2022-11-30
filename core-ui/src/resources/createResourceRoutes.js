@@ -51,13 +51,13 @@ export const createKubernetesUrl = ({
   return `${apiPrefix}${apiGroup}/${apiVersion}/${namespaceSegment}${resourceType}/${details}`;
 };
 
-const ListWrapper = ({ children, resourceType, resourceI18Key }) => {
-  const props = usePrepareListProps(resourceType, resourceI18Key);
-  return React.cloneElement(children, props);
+const ListWrapper = ({ children, ...props }) => {
+  const elementProps = usePrepareListProps(props);
+  return React.cloneElement(children, elementProps);
 };
-const DetailsWrapper = ({ children, resourceType, resourceI18Key }) => {
-  const props = usePrepareDetailsProps(resourceType, resourceI18Key);
-  return React.cloneElement(children, props);
+const DetailsWrapper = ({ children, ...props }) => {
+  const elementProps = usePrepareDetailsProps(props);
+  return React.cloneElement(children, elementProps);
 };
 
 export const createResourceRoutes = ({
@@ -67,6 +67,7 @@ export const createResourceRoutes = ({
   namespaced = true,
   resourceType = '',
   resourceI18Key = '',
+  ...props
 }) => {
   // define resourceI18Key when calling the function, to set a custom plural resource name, for example to fix the capitalization
   // const { namespaced = true, resourceType = '', resourceI18Key = '' } = config;
@@ -87,6 +88,7 @@ export const createResourceRoutes = ({
             <ListWrapper
               resourceType={resourceType}
               resourceI18Key={resourceI18Key}
+              {...props}
             >
               <List allowSlashShortcut />
             </ListWrapper>
@@ -101,6 +103,7 @@ export const createResourceRoutes = ({
               <DetailsWrapper
                 resourceType={resourceType}
                 resourceI18Key={resourceI18Key}
+                {...props}
               >
                 <Details />
               </DetailsWrapper>
