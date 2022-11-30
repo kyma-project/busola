@@ -53,8 +53,8 @@ export function Preferences() {
     setModalOpen(false);
   };
 
-  const handleCloseWithEscape = (e: React.KeyboardEvent<HTMLLIElement>) => {
-    if (e.key === 'Escape') handleCloseModal();
+  const handleCloseWithEscape = (e: Event) => {
+    if ((e as KeyboardEvent).key === 'Escape') handleCloseModal();
   };
 
   const actions = [

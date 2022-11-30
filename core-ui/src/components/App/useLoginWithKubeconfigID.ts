@@ -57,19 +57,8 @@ export function useLoginWithKubeconfigID() {
   const clusterInfo = useClustersInfo();
   const [triedGetKubeconfig, setTriedGetKubeconfig] = useState(false);
 
-  kubeconfigIdFeature!.isEnabled = true;
-  kubeconfigIdFeature!.config = {
-    kubeconfigUrl: 'http://127.0.0.1:8090',
-    showClustersOverview: true,
-  }; // todo
   useEffect(() => {
     const loadKubeconfigIdCluster = async (kubeconfigId: string) => {
-      kubeconfigIdFeature!.isEnabled = true;
-      kubeconfigIdFeature!.config = {
-        kubeconfigUrl: 'http://127.0.0.1:8090',
-
-        showClustersOverview: true,
-      }; // todo
       try {
         const kubeconfig = await loadKubeconfigById(
           kubeconfigId,
@@ -105,12 +94,6 @@ export function useLoginWithKubeconfigID() {
         kubeconfig.contexts.forEach(context => {
           const previousStorageMethod =
             clusters![context.name]?.config?.storage || '';
-
-          console.log(
-            context.name,
-            shouldRedirectToCluster(context.name),
-            isShowClustersOverviewEnabled,
-          );
 
           addByContext(
             {
