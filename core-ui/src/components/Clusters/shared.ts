@@ -39,8 +39,8 @@ export function deleteCluster(
 ) {
   const { setClusters } = clustersInfo;
   setClusters(prev => {
+    // todo the same function when we switch cluster from oidc one
     const prevCredentials = prev?.[clusterName]?.currentContext.user.user;
-
     if (!hasNonOidcAuth(prevCredentials)) {
       const userManager = createUserManager(
         prevCredentials as KubeconfigOIDCAuth,
