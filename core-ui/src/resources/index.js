@@ -3,7 +3,6 @@ import { createResourceRoutes } from './createResourceRoutes';
 //namespaced
 import * as Jobs from './Jobs';
 import * as CronJobs from './CronJobs';
-import * as VirtualServices from './VirtualServices';
 import * as StatefulSets from './StatefulSets';
 import * as Services from './Services';
 import * as ServiceInstances from './ServiceInstances';
@@ -26,12 +25,10 @@ import * as Deployments from './Deployments';
 import * as DaemonSets from './DaemonSets';
 import * as ConfigMaps from './ConfigMaps';
 import * as Certificates from './Certificates';
-import * as APIRules from './APIRules';
 import * as Subscriptions from './Subscriptions';
 import * as ServiceAccounts from './ServiceAccounts';
 
 // //cluster
-import * as Applications from './Applications';
 import * as ClusterRoles from './ClusterRoles';
 import * as StorageClasses from './StorageClasses';
 import * as PersistentVolumes from './PersistentVolumes';
@@ -51,14 +48,11 @@ export const resources = [
   Pods,
   Deployments,
   DaemonSets,
-  // istio
-  VirtualServices,
   // discovery and network
   Services,
   Ingresses,
   NetworkPolicies,
   HorizontalPodAutoscalers,
-  APIRules,
   // storage
   PersistentVolumeClaims,
   // service management
@@ -78,7 +72,6 @@ export const resources = [
   ServiceAccounts,
 
   // cluster resources
-  Applications,
   ClusterEvents,
   Namespaces,
   ClusterRoles,

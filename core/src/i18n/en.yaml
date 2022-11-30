@@ -1,110 +1,4 @@
-api-rules:
-  access-strategies:
-    buttons:
-      add: Add Access Strategy
-    labels:
-      access-strategy: Access Strategy
-      allow: Allow
-      handler: Handler
-      jwt: JWT
-      methods: Methods
-      noop: noop
-      oauth2_introspection: OAuth2
-      path: Path
-      required-scope: Required Scope
-      types: Types
-    messages:
-      one-method: This access strategy requires at least one method.
-      one-strategy-required: Provide at least one strategy.
-      unaccepted-type: Make sure that Access Strategies have the accepted values (noop, allow, oauth2_introspection, jwt) in YAML.
-    title: Access Strategies
-    tooltips:
-      path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
-  buttons:
-    create: Create API Rule
-    edit: Edit API Rule "{{apiRuleName}}"
-    expose: Expose {{type}}
-  description: <0>APIRule</0> allows for exposing a service externally.
-  form:
-    gateway: Gateway
-    host: Host
-    hostname: Hostname
-    subdomain: Subdomain
-    subdomain-placeholder: Subdomain will replace the '*' part of the $t(api-rules.form.hostname) value.
-  general-settings:
-    title: General settings
-  jwt:
-    idp-presets: IDP Presets
-    jwks-uri: JWKs URI
-    trusted-issuer: Trusted issuer URL
-  list:
-    headers:
-      host: Host
-      service-name: Service Name
-      status: Status
-  messages:
-    create-failed: Failed to create the APIRule
-    created: APIRule created
-    description: Expose Services outside the cluster with APIRules.
-    not-matching-results: Couldn't find APIRules matching this query.
-    one-rule-required: Provide at least one APIRule.
-    updated: APIRule updated
-    will-be-available-at: APIRule will be available at {{address}}.
-  name_singular: APIRule
-  oauth:
-    required-scope: Required scope
-  placeholders:
-    path: Enter the path
-    subdomain: Subdomain part of the APIRule address
-  rule: Rule
-  rules: Rules
-  services:
-    error-load: Couldn't load service list.
-    loading: Loading services...
-    ns-no-services: No Services in this Namespace
-    placeholder: Choose the service to expose
-  title: API Rules
-  tooltips:
-    ok: Resource created
-    skipped: Skipped creating the resource
-    unknown: Unknown resource state
-applications:
-  buttons:
-    connect: Connect Application
-    create-app: $t(applications.subtitle.create-app)
-  description: <0>Application</0> represents an external solution connected to Kyma.
-  headers:
-    access-label: Access Label
-    apis: APIs
-    central-gateway-url: Central Gateway URL
-    description: Description
-    events: Events
-    service: Service
-  labels:
-    description: Description
-    namespace: Namespace
-  messages:
-    cannot-create: Cannot create the Application
-    connect-disabled: Connecting Applications is disabled for SAP BTP, Kyma Runtime.
-    copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
-    create-failed: Failed to create the Application
-    created: Application created
-    no-apis: There are no APIs.
-    no-events: There are no events.
-    service-not-found: No services
-  name_singular: Application
-  placeholders:
-    description: Provide a description for your Application
-  statuses:
-    deployed: Deployed
-    provisioning: Provisioning
-  subtitle:
-    connect-app: Connect Application
-    create-app: Create Application
-    provided-services: Provided Services and Events
-  title: Applications
-  tooltips:
-    provisioning: The Application is being provisioned asynchronously.
+api-rules: API Rules
 apps:
   title: Apps
 btp-instances:
@@ -406,10 +300,12 @@ common:
     autocomplete-unavailable-error: Monaco autocompletion unavailable. {{error}}.
     choose-preset: Choose preset
     editor-error: 'Parse error: {{error}}, previous valid input will be used'
+    force-update: Force update
     messages:
-      create-failure: 'Failed to create the {{resourceType}}: {{error}}'
+      create-failure: 'Failed to create the {{resourceType}}: {{error}}.'
       create-success: '{{resourceType}} created'
-      patch-failure: 'Failed to update the {{resourceType}}: {{error}}'
+      force-update: All remote changes are overwritten if you force the resource update.
+      patch-failure: 'Failed to update the {{resourceType}}: {{error}}.'
       patch-success: '{{resourceType}} updated'
     modes:
       advanced: Advanced
@@ -530,7 +426,7 @@ common:
     error: Error
     generate-name: Generate name
     hide: Hide read-only fields
-    k8s-name-input: 'Name must consist of lowercase alphanumeric characters, can contain ''-'' and ''.'' (e.g.: ''my.name-1'').'
+    k8s-name-input: "Name must consist of lowercase alphanumeric characters, can contain '-' and '.' (e.g.: 'my.name-1')."
     key: Key must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     key-value: Key and value must start and end with an alphanumeric character, can contain '-', '_' or '.'.
     line: Ln
@@ -1132,7 +1028,7 @@ jobs:
     complete: Job completed
     not-complete: Job in progress
 kubeconfig-id:
-  error: 'Couldn''t load kubeconfig ID; configuration not changed (Error: ${{error}})'
+  error: "Couldn't load kubeconfig ID; configuration not changed (Error: ${{error}})"
   must-be-an-object: Kubeconfig must be a JSON or YAML object.
 legal:
   copyright: Copyright
@@ -1762,76 +1658,6 @@ upload-yaml:
     incorrect-namespace: The cluster-wide resources shouldn't have a Namespace.
   you-will-create_one: 'You will create 1 resource:'
   you-will-create_other: 'You will create {{count}} resources:'
-virtualservices:
-  description: <0>VirtualService</0> describes a configuration that affects traffic routing.
-  gateways: Gateways
-  headers:
-    add: add
-    remove: remove
-    request: Request
-    response: Response
-    set: set
-    title: Headers
-  hosts: Hosts
-  http-routes:
-    cors:
-      allow-credentials: Allow Credentials
-      allow-headers: Allow Headers
-      allow-methods: Allow Methods
-      allow-origins: Allow Origins
-      expose-headers: Expose Headers
-      max-age: Max Age
-      title: CORS Policy
-    delegate: Delegate
-    fault:
-      abort: Abort Fault Injection
-      delay: Delay Fault Injection
-    mirror: Mirror
-    redirect:
-      authority: Authority
-      derivePort: Derive Port
-      port: Port
-      redirectCode: Redirect Code
-      scheme: Scheme
-      title: Redirect
-      uri: URI
-    rewrite:
-      authority: Authority
-      title: Rewrite
-      uri: URI
-    route:
-      headers: Header Manipulation
-    timeout: Timeout
-    title: HTTP Route
-  matches:
-    authority: Authority
-    destination-subnets: Destination Subnets
-    exact: is exactly
-    gateways: Gateways
-    header: Header {{field}}
-    ignore-case: (ignore case)
-    method: Method
-    port: Port
-    prefix: starts with
-    regex: matches
-    scheme: Scheme
-    sni-hosts: SNI Hosts
-    source-labels: Source Labels
-    source-namespace: Source Namespace
-    title: Matches
-    uri: URI
-    without-header: Without header {{field}}
-  name_singular: VirtualService
-  route:
-    destination: Destination
-    weight: Weight
-  routes: Destinations
-  tcp-routes:
-    title: TCP Route
-  title: Virtual Services
-  tls-routes:
-    matches: Matches
-    title: TLS Route
 workload-selector:
   title: Workload Selector
 workloads:

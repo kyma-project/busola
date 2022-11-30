@@ -12,7 +12,6 @@ export const EVENT_MESSAGE_TYPE = {
 };
 
 export const RESOURCE_PATH = {
-  APIRule: 'apirules',
   Certificate: 'certificates',
   ConfigMap: 'configmaps',
   CronJob: 'cronjobs',

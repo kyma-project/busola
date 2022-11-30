@@ -8,10 +8,7 @@ const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
 context('Prepare funtions for testing', () => {
   before(() => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
-    cy.mockExtension(
-      'FUNCTIONS',
-      'examples/resources/serverless/functions.yaml',
-    );
+    cy.mockExtensions(['examples/resources/serverless/functions.yaml']);
 
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

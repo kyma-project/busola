@@ -17,10 +17,7 @@ context('Test Authorization Policies', () => {
 
   before(() => {
     cy.setBusolaFeature('EXTENSIBILITY', true);
-    cy.mockExtension(
-      'SIDECARS',
-      'examples/resources/istio/authorization-policies.yaml',
-    );
+    cy.mockExtensions(['examples/resources/istio/authorization-policies.yaml']);
 
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 import { themeState } from 'state/preferences/themeAtom';
 
-const getEditorTheme = theme => {
+export const getEditorTheme = theme => {
   switch (theme) {
     case 'dark':
       return 'vs-dark';
