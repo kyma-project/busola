@@ -35,7 +35,6 @@ export function NavItem({ node }: NavItemProps) {
       selected={isNodeSelected()}
       key={node.pathSegment}
       id={node.pathSegment}
-      // target={node.externalUrl ? '_blank' : null}
       glyph={node.icon}
     >
       {node.externalUrl ? (
