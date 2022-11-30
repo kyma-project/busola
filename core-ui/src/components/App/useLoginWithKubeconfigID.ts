@@ -71,13 +71,14 @@ const loadKubeconfigIdCluster = async (
 
     const isOnlyOneCluster = kubeconfig.contexts.length === 1;
     const currentContext = kubeconfig['current-context'];
+    const showClustersOverview =
+      kubeconfigIdFeature.config?.showClustersOverview;
 
     const isK8CurrentCluster = (name: string) =>
       !!currentContext && currentContext === name;
 
     const shouldRedirectToCluster = (name: string) =>
-      !kubeconfigIdFeature.config?.showClustersOverview &&
-      (isOnlyOneCluster || isK8CurrentCluster(name));
+      !showClustersOverview && (isOnlyOneCluster || isK8CurrentCluster(name));
 
     // add the clusters
     kubeconfig.contexts.forEach(context => {
@@ -95,6 +96,10 @@ const loadKubeconfigIdCluster = async (
         clusterInfo,
       );
     });
+
+    if (showClustersOverview) {
+      window.location.href = window.location.origin + '/clusters';
+    }
   } catch (e) {
     if (e instanceof Error) {
       alert(t('kubeconfig-id.error', { error: e.message }));

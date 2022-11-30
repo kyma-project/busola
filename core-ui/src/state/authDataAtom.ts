@@ -24,13 +24,11 @@ async function handleLogin({
 }: handleLoginProps): Promise<void> {
   const setupAuthEventsHooks = (userManager: UserManager) => {
     userManager.events.addAccessTokenExpiring(async () => {
-      console.log('exp');
       const user = await userManager.signinSilent();
       const token = user?.id_token!;
       setAuth({ token });
     });
     userManager.events.addSilentRenewError(e => {
-      console.log('err');
       console.warn('silent renew failed', e);
       setAuth(null);
       onError();
@@ -55,12 +53,13 @@ async function handleLogin({
   });
 
   try {
+    const storedUser = await userManager.getUser();
+
     const user =
-      // try to get stored auth data
-      (await userManager.getUser()) ||
-      // try to receive OIDC response
-      (await userManager.signinRedirectCallback(window.location.href));
-    console.log('login user', user);
+      storedUser && !storedUser.expired
+        ? storedUser
+        : await userManager.signinRedirectCallback(window.location.href);
+
     setAuth({ token: user.id_token! });
     setupAuthEventsHooks(userManager);
     onAfterLogin();
