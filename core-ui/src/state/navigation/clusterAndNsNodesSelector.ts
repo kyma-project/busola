@@ -1,10 +1,7 @@
 import { RecoilValueReadOnly, selector } from 'recoil';
 import { isEmpty, partial } from 'lodash';
 import { resourceListSelector } from '../resourceList/resourceListSelector';
-import {
-  activeNamespaceIdState,
-  defaultValue as defaultNamespaceName,
-} from '../activeNamespaceIdAtom';
+import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { openapiPathIdListSelector } from '../openapi/openapiPathIdSelector';
 import { configFeaturesState } from '../configFeatures/configFeaturesSelector';
 import { permissionSetsSelector } from '../permissionSetsSelector';
@@ -25,7 +22,6 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
 
     const areDependenciesInitialized =
       !isEmpty(openapiPathIdList) &&
-      activeNamespaceId !== defaultNamespaceName &&
       !!configFeatures &&
       !isEmpty(resourceList) &&
       !isEmpty(permissionSet);

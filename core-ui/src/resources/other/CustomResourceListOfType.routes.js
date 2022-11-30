@@ -17,14 +17,8 @@ function RoutedCustomResourcesOfType() {
 }
 
 export default (
-  <>
-    <Route
-      path="customresources/:crdName"
-      element={<RoutedCustomResourcesOfType />}
-    />
-    <Route
-      path="namespaces/:namespaceId/customresources/:crdName"
-      element={<RoutedCustomResourcesOfType />}
-    />
-  </>
+  <Route
+    path="customresources/:crdName"
+    element={<RoutedCustomResourcesOfType />}
+  />
 );

@@ -1,6 +1,7 @@
 import { Shellbar } from 'fundamental-react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { clustersState } from 'state/clustersAtom';
@@ -10,21 +11,20 @@ import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpen
 import { Logo } from './Logo/Logo';
 import { NamespaceDropdown } from './NamespaceDropdown/NamespaceDropdown';
 import { SidebarSwitcher } from './SidebarSwitcher/SidebarSwitcher';
+import { useAvailableNamespaces } from './useAvailableNamespaces';
 
 import './Header.scss';
-import { useAvailableNamespaces } from './useAvailableNamespaces';
-import { useNavigate } from 'react-router-dom';
 
 export function Header() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { namespaces, refetch } = useAvailableNamespaces();
 
-  const [cluster, setCluster] = useRecoilState(clusterState);
   const [activeNamespace, setActiveNamespace] = useRecoilState(
     activeNamespaceIdState,
   );
   const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
+  const cluster = useRecoilValue(clusterState);
   const clusters = useRecoilValue(clustersState);
 
   const inactiveClusterNames = Object.keys(clusters || {}).filter(
@@ -36,7 +36,6 @@ export function Header() {
       name,
       callback: () => {
         setActiveNamespace('');
-        switchCluster(name);
         navigate(`/cluster/${name}`);
       },
     })),
@@ -47,12 +46,6 @@ export function Header() {
       },
     },
   ];
-
-  const switchCluster = (name: string) => {
-    if (!clusters) return;
-    const chosenCluster = { ...clusters?.[name], name };
-    setCluster(chosenCluster);
-  };
 
   return (
     <Shellbar

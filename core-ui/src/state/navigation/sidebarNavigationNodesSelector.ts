@@ -4,10 +4,7 @@ import { Category } from './categories';
 import { NavNode, Scope } from '../types';
 import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
 import { externalNodesSelector } from './externalNodesSelector';
-import {
-  activeNamespaceIdState,
-  defaultValue as defaultNamespaceName,
-} from '../activeNamespaceIdAtom';
+import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { hasCurrentScope } from './filters/hasCurrentScope';
 import { partial } from 'lodash';
 
@@ -21,11 +18,7 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
     const observabilityNodes = get(externalNodesSelector);
 
     const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
-    if (
-      !navNodes ||
-      !observabilityNodes ||
-      activeNamespaceId === defaultNamespaceName
-    ) {
+    if (!navNodes || !observabilityNodes) {
       return [];
     }
     const navAndObservabilityNodes = [...navNodes, ...observabilityNodes];

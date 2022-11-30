@@ -84,4 +84,9 @@ export const resources = [
   CustomResourceDefinitions,
 ];
 
-export const resourceRoutes = <>{resources.map(createResourceRoutes)}</>;
+export const resourceRoutes = (
+  <>{resources?.filter(r => !r.namespaced)?.map(createResourceRoutes)}</>
+);
+export const resourceRoutesNamespaced = (
+  <>{resources?.filter(r => r.namespaced)?.map(createResourceRoutes)}</>
+);

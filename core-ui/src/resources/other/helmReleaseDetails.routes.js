@@ -13,7 +13,7 @@ const RoutedHelmReleaseDetails = () => {
 
 export default (
   <Route
-    path={'namespaces/:namespaceId/helm-releases/:releaseName'}
+    path={'helm-releases/:releaseName'}
     element={
       <Suspense fallback={<Spinner />}>
         <RoutedHelmReleaseDetails />
