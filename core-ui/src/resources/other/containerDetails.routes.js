@@ -21,7 +21,7 @@ const RoutedContainerDetails = () => {
 
 export default (
   <Route
-    path={'namespaces/:namespaceId/pods/:podName/containers/:containerName'}
+    path={'pods/:podName/containers/:containerName'}
     element={
       <Suspense fallback={<Spinner />}>
         <RoutedContainerDetails />

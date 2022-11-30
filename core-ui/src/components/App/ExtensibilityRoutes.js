@@ -9,7 +9,7 @@ const Details = React.lazy(() =>
   import('../Extensibility/ExtensibilityDetails'),
 );
 
-export const createExtensibilityRoutes = (cr, language) => {
+export const createExtensibilityRoutes = (cr, language, namespaced) => {
   const urlPath = cr?.general?.urlPath;
 
   const translationBundle = urlPath || 'extensibility';
@@ -19,11 +19,11 @@ export const createExtensibilityRoutes = (cr, language) => {
     cr?.translations?.[language] || {},
   );
 
-  if (cr.general?.scope === 'namespace') {
+  if (cr.general?.scope === 'namespace' && namespaced) {
     return (
       <React.Fragment key={`namespace-${urlPath}`}>
         <Route
-          path={`namespaces/:namespaceId/${urlPath}`}
+          path={urlPath}
           exact
           element={
             <Suspense fallback={<Spinner />}>
@@ -33,7 +33,7 @@ export const createExtensibilityRoutes = (cr, language) => {
         />
         {cr.details && (
           <Route
-            path={`namespaces/:namespaceId/${urlPath}/:resourceName`}
+            path={`${urlPath}/:resourceName`}
             exact
             element={
               <Suspense fallback={<Spinner />}>

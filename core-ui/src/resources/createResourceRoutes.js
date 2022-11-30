@@ -6,14 +6,13 @@ import pluralize from 'pluralize';
 import LuigiClient from '@luigi-project/client';
 
 export const createPath = (
-  config = { namespaced: true, detailsView: false, pathSegment: '' },
+  config = { detailsView: false, pathSegment: '' },
 ) => {
-  const { namespaced = true, detailsView = false, pathSegment = '' } = config;
-  const namespacePrefix = namespaced ? 'namespaces/:namespaceId/' : '';
+  const { detailsView = false, pathSegment = '' } = config;
 
   const details = detailsView ? '/:resourceName' : '';
 
-  return `${namespacePrefix}${pathSegment}${details}`;
+  return `${pathSegment}${details}`;
 };
 
 export const luigiNavigate = (node, namespace) => {
@@ -74,9 +73,9 @@ export const createResourceRoutes = ({
 
   const pathSegment = resourceType.toLowerCase();
 
-  const listPath = createPath({ namespaced, pathSegment });
+  const listPath = createPath({ pathSegment });
   const detailsPath = Details
-    ? createPath({ namespaced, pathSegment, detailsView: true })
+    ? createPath({ pathSegment, detailsView: true })
     : '';
   return (
     <React.Fragment key={listPath}>
