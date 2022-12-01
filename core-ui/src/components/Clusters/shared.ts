@@ -35,6 +35,7 @@ export function addCluster(
 ) {
   const { setClusters } = clustersInfo;
   setClusters(prev => ({ ...prev, [params.contextName]: params }));
+  console.log(params.currentContext.namespace);
   if (switchCluster) {
     addCurrentCluster(params, clustersInfo);
   }
