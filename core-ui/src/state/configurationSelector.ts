@@ -59,11 +59,7 @@ export const configurationState: RecoilValue<Configuration> = selector<
       const mapParams = configMapResponse?.data?.config
         ? (jsyaml.load(configMapResponse.data.config) as Config)
         : {};
-      console.log(
-        defaultParams?.config,
-        configParams?.config,
-        mapParams?.config,
-      );
+
       return merge(
         defaultParams?.config,
         configParams?.config,

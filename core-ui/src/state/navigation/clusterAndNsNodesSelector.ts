@@ -20,7 +20,6 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     const permissionSet = get(permissionSetsSelector);
     const configuration = get(configurationState);
     const features = configuration?.features;
-    console.log(configuration, features);
 
     const areDependenciesInitialized =
       !isEmpty(openapiPathIdList) &&
@@ -28,13 +27,6 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
       !isEmpty(resourceList) &&
       !isEmpty(permissionSet);
 
-    console.log(
-      '0',
-      !isEmpty(openapiPathIdList),
-      !!features,
-      !isEmpty(resourceList),
-      !isEmpty(permissionSet),
-    );
     if (!areDependenciesInitialized) {
       return [];
     }
@@ -44,12 +36,12 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
       openapiPathIdList,
       permissionSet,
     };
-    console.log('1');
+
     const isNodeVisibleForCurrentConfigSet = partial(
       shouldNodeBeVisible,
       configSet,
     );
-    console.log('2', isNodeVisibleForCurrentConfigSet);
+
     const navNodes: NavNode[] = resourceList.filter(
       isNodeVisibleForCurrentConfigSet,
     );
