@@ -68,7 +68,7 @@ export function match(resourceA, resourceB, config) {
 }
 
 export function findRelatedResources(originalResourceKind, config) {
-  const relations = (config[originalResourceKind].relations || []).map(
+  const relations = (config[originalResourceKind]?.relations || []).map(
     ({ resource }) => resource,
   );
 
