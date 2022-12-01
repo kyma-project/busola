@@ -13,7 +13,7 @@ Initialisation of the Busola features is based on the `stage` property, which ca
 
 If the stage is not set, the feature is loaded only on-demand, most often by the iframe. Use the `useFeature` hook to request usage of such feature.
 
-Note that some features must be run before the application starts the bootstrap process (for example, SSO_LOGIN), so they are out of the normal feature flow.
+Note that some features must be run before the application starts the bootstrap process, so they are out of the normal feature flow.
 
 #### Features list
 
@@ -303,18 +303,6 @@ The **match** keys and **messageSrc** must use the format described in the [`jso
   ```yaml
   SHOW_KYMA_VERSION:
     isEnabled: true
-  ```
-
-- **SSO_LOGIN** – is used to configure data necessary for the SSO login such as an issuer address, client’s ID, client’s Secret and scopes. If `clientSecret` is omitted, a public client is used. This feature is out of standard features flow, so it runs immediately.
-
-  ```yaml
-  SSO_LOGIN:
-    isEnabled: true
-    config:
-      issuerUrl: https://kymatest.accounts400.ondemand.com
-      scope: openid
-      clientId: 9bd05ed7-a930-44e6-8c79-e6defeb7dec9
-      clientSecret: supersecret
   ```
 
 - **TRACKING** - determines if simple application usage tracking is enabled.

@@ -4,16 +4,14 @@ import { useEffect, useRef } from 'react';
 import { isEqual } from 'lodash';
 
 import { extResourcesState } from 'state/extResourcesAtom';
-import { ssoDataState } from 'state/ssoDataAtom';
 import { lazyConfigFeaturesState } from 'state/configFeatures/lazyConfigFeaturesAtom';
 
 import { lazyConfigFeaturesNames } from 'state/types';
 
 export const useLuigiContextMigrator = () => {
-  const { features, customResources, ssoData } = useMicrofrontendContext();
+  const { features, customResources } = useMicrofrontendContext();
 
   useUpdateRecoilIfValueChanged(customResources, extResourcesState);
-  useUpdateRecoilIfValueChanged(ssoData, ssoDataState);
 
   useUpdateConfigFeatures(features);
 };
