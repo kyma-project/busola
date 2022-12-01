@@ -9,6 +9,8 @@ import { ClusterStorageType } from '../ClusterStorageType';
 import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
 
+import { useClustersInfo } from 'state/utils/getClustersInfo';
+
 const Versions = () => {
   const { t } = useTranslation();
   const { loading, kymaVersion, k8sVersion } = useGetVersions();
@@ -53,7 +55,10 @@ const GardenerProvider = () => {
 
 export function ClusterOverviewHeader() {
   const { t } = useTranslation();
-  const { cluster, config } = useMicrofrontendContext();
+  const { currentCluster } = useClustersInfo();
+  const server = currentCluster?.currentContext?.cluster?.cluster.server;
+  const config = currentCluster?.config;
+
   const [showAdd, setShowAdd] = useState(false);
 
   const actions = (
@@ -77,7 +82,7 @@ export function ClusterOverviewHeader() {
       >
         <Versions />
         <PageHeader.Column title={t('clusters.common.api-server-address')}>
-          {cluster?.cluster.server}
+          {server}
         </PageHeader.Column>
         <PageHeader.Column title={t('clusters.storage.title')}>
           <ClusterStorageType clusterConfig={config} />
