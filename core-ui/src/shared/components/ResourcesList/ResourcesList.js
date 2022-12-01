@@ -10,7 +10,6 @@ import * as jp from 'jsonpath';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { usePut, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useGetList, useSingleGet } from 'shared/hooks/BackendAPI/useGet';
-import { navigateToResource, navigateToDetails } from 'shared/hooks/navigate';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { useYamlEditor } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
 import { YamlEditorProvider } from 'shared/contexts/YamlEditorContext/YamlEditorContext';
@@ -221,7 +220,7 @@ export function ResourceListRenderer({
     // if (navigateFn) return navigateFn(entry);
     // if (fixedPath) return navigateToResource(entry);
     return scopedUrl(
-      `${pluralize(resourceType.toLowerCase())}/details/${entry.metadata.name}`,
+      `${pluralize(resourceType.toLowerCase())}/${entry.metadata.name}`,
     );
   };
 
