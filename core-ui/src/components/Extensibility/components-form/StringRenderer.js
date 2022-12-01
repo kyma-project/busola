@@ -33,6 +33,9 @@ export function StringRenderer({
       if (typeof enumOptions === 'string') {
         enumOptions = [enumOptions];
       }
+      if (!Array.isArray(enumOptions)) {
+        enumOptions = [];
+      }
 
       const options = enumOptions.map(key => ({
         key,
