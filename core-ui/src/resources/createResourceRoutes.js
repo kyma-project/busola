@@ -3,7 +3,6 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { usePrepareDetailsProps, usePrepareListProps } from './helpers';
 import { Route } from 'react-router-dom';
 import pluralize from 'pluralize';
-import LuigiClient from '@luigi-project/client';
 
 export const createPath = (
   config = { detailsView: false, pathSegment: '' },
@@ -13,16 +12,6 @@ export const createPath = (
   const details = detailsView ? '/:resourceName' : '';
 
   return `${pathSegment}${details}`;
-};
-
-export const luigiNavigate = (node, namespace) => {
-  const path = node.createUrlFn
-    ? node.createUrlFn(namespace)
-    : createUrl(node, namespace);
-
-  LuigiClient.linkManager()
-    .fromContext('cluster')
-    .navigate(path);
 };
 
 export const createUrl = (
@@ -51,32 +40,30 @@ export const createKubernetesUrl = ({
   return `${apiPrefix}${apiGroup}/${apiVersion}/${namespaceSegment}${resourceType}/${details}`;
 };
 
-const ListWrapper = ({ children, resourceType, resourceI18Key }) => {
-  const props = usePrepareListProps(resourceType, resourceI18Key);
-  return React.cloneElement(children, props);
+const ListWrapper = ({ children, ...props }) => {
+  const elementProps = usePrepareListProps(props);
+  return React.cloneElement(children, elementProps);
 };
-const DetailsWrapper = ({ children, resourceType, resourceI18Key }) => {
-  const props = usePrepareDetailsProps(resourceType, resourceI18Key);
-  return React.cloneElement(children, props);
+const DetailsWrapper = ({ children, ...props }) => {
+  const elementProps = usePrepareDetailsProps(props);
+  return React.cloneElement(children, elementProps);
 };
 
 export const createResourceRoutes = ({
   List = null,
   Details = null,
-  // Create = null,
   namespaced = true,
   resourceType = '',
   resourceI18Key = '',
+  ...props
 }) => {
-  // define resourceI18Key when calling the function, to set a custom plural resource name, for example to fix the capitalization
-  // const { namespaced = true, resourceType = '', resourceI18Key = '' } = config;
-
   const pathSegment = resourceType.toLowerCase();
 
   const listPath = createPath({ pathSegment });
   const detailsPath = Details
     ? createPath({ pathSegment, detailsView: true })
     : '';
+
   return (
     <React.Fragment key={listPath}>
       <Route
@@ -87,6 +74,8 @@ export const createResourceRoutes = ({
             <ListWrapper
               resourceType={resourceType}
               resourceI18Key={resourceI18Key}
+              hasDetailsView={!!Details}
+              {...props}
             >
               <List allowSlashShortcut />
             </ListWrapper>
@@ -101,6 +90,7 @@ export const createResourceRoutes = ({
               <DetailsWrapper
                 resourceType={resourceType}
                 resourceI18Key={resourceI18Key}
+                {...props}
               >
                 <Details />
               </DetailsWrapper>

@@ -137,7 +137,7 @@ data:
           path: port 
           name: service.port
           subscribe:
-            port: "$filter($relatedServices().items, function ($v) { $contains($v.metadata.name, $root.spec.service.name)}).spec.ports[0].port"
+            port: "$filter($relatedServices().items, function ($v) { $v.metadata.name = $root.spec.service.name and $v.metadata.namespace = $root.metadata.namespace }).spec.ports[0].port"
     - simple: true
       var: accessToGateways
       name: accessToGateways
@@ -189,6 +189,8 @@ data:
       template:
         path: '/.*'
         methods: ['GET']
+        accessStrategies:
+          - handler: 'allow'
       children:
         - simple: true
           required: true
@@ -233,13 +235,14 @@ data:
                 - PATCH
                 - HEAD
         - path: '[].mutators' 
-          name: mutators
+          name: mutators 
           widget: GenericList
           children:
             - path: '[].config'
               name: accessStrategies.config
               widget: KeyValuePair
-            - path: '[].handler'
+            - required: true
+              path: '[].handler'
               name: accessStrategies.handler
         - path: '[].service' 
           name: service 
@@ -260,7 +263,7 @@ data:
               path: port 
               name: service.port
               subscribe:
-                accessStrategyPort: "$filter($relatedServices().items, function ($v) { $contains($v.metadata.name, $root.spec.service.name)}).spec.ports[0].port"
+                accessStrategyPort: "$filter($relatedServices().items, function ($v) { $v.metadata.name = $item.service.name and $v.metadata.namespace = $root.metadata.namespace }).spec.ports[0].port"
   general: |-
     resource:
       kind: APIRule

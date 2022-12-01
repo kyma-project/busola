@@ -11,5 +11,8 @@ export const createClusterNode = (scope: Scope): NavNode => ({
   apiGroup: '',
   apiVersion: '',
   topLevelNode: true,
-  createUrlFn: scope === 'namespace' ? () => '/overview' : undefined,
+  createUrlFn:
+    scope === 'namespace'
+      ? ({ clusterUrl }) => clusterUrl('overview')
+      : undefined,
 });

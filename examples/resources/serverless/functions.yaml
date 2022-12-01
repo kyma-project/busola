@@ -128,9 +128,11 @@ data:
               - widget: ResourceList
                 source: $apiRules()
                 name: configuration.apiRules
+                disableCreate: true
               - widget: ResourceList
                 source: $subscriptions()
                 name: configuration.subscriptions
+                disableCreate: true
           - name: tabs.resources
             children:
               - widget: Panel
