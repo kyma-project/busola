@@ -41,8 +41,12 @@ context('Test API Rules in the Function details view', () => {
   });
 
   it('Create an API Rule for the Function', () => {
-    cy.getIframeBody()
-      .contains('Configuration')
+    cy.getLeftNav()
+      .contains('Discovery and Network')
+      .click();
+
+    cy.getLeftNav()
+      .contains('API Rules')
       .click();
 
     cy.getIframeBody()
@@ -200,9 +204,7 @@ context('Test API Rules in the Function details view', () => {
     cy.getIframeBody()
       .find('[aria-label="expand Access Strategies"]:visible', { log: false })
       .first()
-      .contains('Add')
-      .scrollIntoView()
-      .click();
+      .scrollIntoView();
 
     cy.getIframeBody()
       .find('[data-testid="select-dropdown"]:visible')
@@ -274,7 +276,9 @@ context('Test API Rules in the Function details view', () => {
   });
 
   it('Inspect list using slash shortcut', () => {
-    cy.navigateTo('Discovery and Network', 'API Rules');
+    cy.getLeftNav()
+      .contains('API Rules')
+      .click();
 
     openSearchWithSlashShortcut();
 
