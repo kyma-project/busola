@@ -82,16 +82,19 @@ export const externalNodesSelector: RecoilValueReadOnly<
       return null;
     }
 
-    if (!configFeatures[configFeaturesNames.EXTERNAL_NODES]?.isEnabled) {
+    if (
+      !configFeatures?.config?.features[configFeaturesNames.EXTERNAL_NODES]
+        ?.isEnabled
+    ) {
       return [];
     }
 
     const observabilityNodes = await getObservabilityNodes(
       fetchFn,
-      configFeatures[configFeaturesNames.OBSERVABILITY],
+      configFeatures?.config?.features[configFeaturesNames.OBSERVABILITY],
     );
     const externalNodes = getExternalNodes(
-      configFeatures[configFeaturesNames.EXTERNAL_NODES],
+      configFeatures?.config?.features[configFeaturesNames.EXTERNAL_NODES],
     );
 
     return [

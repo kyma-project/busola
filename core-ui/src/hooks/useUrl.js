@@ -6,7 +6,6 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 export const useUrl = () => {
   const currentCluster = useRecoilValue(clusterState);
   const activeNamespace = useRecoilValue(activeNamespaceIdState);
-  console.log('currentCluster', currentCluster);
 
   const clusterUrl = path => {
     return `/cluster/${currentCluster.contextName}/${path}`;

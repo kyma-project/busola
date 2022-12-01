@@ -9,7 +9,7 @@ type Config = {
   };
 };
 
-type ConfigFeaturesState = ConfigFeatureList | null;
+type ConfigFeaturesState = Config | null;
 
 export const configFeaturesState: RecoilValue<ConfigFeaturesState> = selector<
   ConfigFeaturesState
@@ -32,7 +32,7 @@ export const configFeaturesState: RecoilValue<ConfigFeaturesState> = selector<
       ) as Config;
       const mapParams = jsyaml.load(await configMapResponse.text()) as Config;
 
-      return merge(defaultParams, mapParams) as ConfigFeatureList;
+      return merge(defaultParams, mapParams) as Config;
     } catch (e) {
       console.warn('Cannot load cluster params: ', e);
       return null;
