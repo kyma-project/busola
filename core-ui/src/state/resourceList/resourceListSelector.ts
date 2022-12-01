@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import { externalNodesSelector } from '../navigation/externalNodesSelector';
+import { extensibilityNodesState } from '../navigation/extensibilityNodesSelector';
 import { resources } from 'resources';
 import { partial } from 'lodash';
 import { NavNode } from '../types';
@@ -9,7 +9,6 @@ import { mapBusolaResourceToNavNode } from './mapBusolaResourceToNavNode';
 export const resourceListSelector = selector<NavNode[]>({
   key: 'resourceListSelector',
   get: ({ get }) => {
-    const extResources = get(externalNodesSelector);
     const configuration = get(configurationState);
     const features = configuration?.features;
 
@@ -21,11 +20,11 @@ export const resourceListSelector = selector<NavNode[]>({
 
     resNodeList = resources.map(mapBusolaResourceToNavNode);
 
+    const extResources = get(extensibilityNodesState);
     const isExtensibilityOn = features.EXTENSIBILITY?.isEnabled;
     if (isExtensibilityOn && extResources) {
       resNodeList = mergeInExtensibilityNav(resNodeList, extResources);
     }
-
     return resNodeList;
   },
 });
