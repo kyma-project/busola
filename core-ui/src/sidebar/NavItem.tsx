@@ -15,7 +15,8 @@ type NavItemProps = {
 export function NavItem({ node }: NavItemProps) {
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { t } = useTranslation();
-  const { scopedUrl } = useUrl();
+  const urlGenerators = useUrl();
+  const { scopedUrl } = urlGenerators;
 
   const isNodeSelected = () => {
     if (node.externalUrl) return false;
@@ -42,7 +43,15 @@ export function NavItem({ node }: NavItemProps) {
           {name} <Icon glyph="inspect" />
         </a>
       ) : (
-        <Link to={scopedUrl(node.pathSegment)}>{name}</Link>
+        <Link
+          to={
+            node.createUrlFn
+              ? node.createUrlFn(urlGenerators)
+              : scopedUrl(node.pathSegment)
+          }
+        >
+          {name}
+        </Link>
       )}
     </SideNav.ListItem>
   );
