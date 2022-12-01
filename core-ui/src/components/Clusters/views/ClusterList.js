@@ -4,9 +4,7 @@ import { saveAs } from 'file-saver';
 import { useTranslation } from 'react-i18next';
 import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
 import { Link, Button, MessagePage } from 'fundamental-react';
-import { useRecoilValue } from 'recoil';
 
-import { configurationState } from 'state/configurationSelector';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
@@ -22,11 +20,12 @@ import { EditCluster } from './EditCluster/EditCluster';
 import { ClusterStorageType } from './ClusterStorageType';
 
 import './ClusterList.scss';
-import { loadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID';
+import { useLoadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID';
+import { useFeature } from 'hooks/useFeature';
 
 function ClusterList() {
-  const configuration = useRecoilValue(configurationState);
-  const features = configuration?.features;
+  const kubeconfigIdFeature = useFeature('KUBECONFIG_ID');
+  const loadDefaultKubeconfigId = useLoadDefaultKubeconfigId();
 
   const clustersInfo = useClustersInfo();
   const notification = useNotification();
@@ -170,10 +169,10 @@ function ClusterList() {
 
   const loadDefaultClusterButton = (
     <>
-      {features?.KUBECONFIG_ID?.isEnabled &&
-        features?.KUBECONFIG_ID?.config?.defaultKubeconfig && (
+      {kubeconfigIdFeature?.isEnabled &&
+        kubeconfigIdFeature?.config?.defaultKubeconfig && (
           <Button
-            onClick={() => loadDefaultKubeconfigId()}
+            onClick={loadDefaultKubeconfigId}
             className="fd-margin-end--tiny fd-margin-begin--tiny"
           >
             {t('clusters.add.load-default')}

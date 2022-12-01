@@ -4,7 +4,7 @@ import { isNodeResourcePermitted } from './isNodeResourcePermitted';
 import { ConfigFeatureList, NavNode } from '../../types';
 import { PermissionSet } from '../../permissionSetsSelector';
 
-type NavConfigSet = {
+export type NavConfigSet = {
   configFeatures: ConfigFeatureList;
   openapiPathIdList: string[];
   permissionSet: PermissionSet[];

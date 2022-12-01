@@ -16,32 +16,12 @@ type handleLoginProps = {
   onError: () => void;
 };
 
-async function handleLogin({
-  userCredentials,
-  setAuth,
-  onAfterLogin,
-  onError,
-}: handleLoginProps): Promise<void> {
-  const setupAuthEventsHooks = (userManager: UserManager) => {
-    userManager.events.addAccessTokenExpiring(async () => {
-      console.log('exp');
-      const user = await userManager.signinSilent();
-      const token = user?.id_token!;
-      setAuth({ token });
-    });
-    userManager.events.addSilentRenewError(e => {
-      console.log('err');
-      console.warn('silent renew failed', e);
-      setAuth(null);
-      onError();
-    });
-  };
-
+export function createUserManager(userCredentials: KubeconfigOIDCAuth) {
   const { issuerUrl, clientId, clientSecret, scope } = parseOIDCparams(
     userCredentials,
   );
 
-  const userManager = new UserManager({
+  return new UserManager({
     redirect_uri: window.location.origin,
     post_logout_redirect_uri: window.location.origin + '/logout.html',
     loadUserInfo: true,
@@ -53,14 +33,36 @@ async function handleLogin({
     response_type: 'code',
     response_mode: 'query',
   });
+}
 
+async function handleLogin({
+  userCredentials,
+  setAuth,
+  onAfterLogin,
+  onError,
+}: handleLoginProps): Promise<void> {
+  const setupAuthEventsHooks = (userManager: UserManager) => {
+    userManager.events.addAccessTokenExpiring(async () => {
+      const user = await userManager.signinSilent();
+      const token = user?.id_token!;
+      setAuth({ token });
+    });
+    userManager.events.addSilentRenewError(e => {
+      console.warn('silent renew failed', e);
+      setAuth(null);
+      onError();
+    });
+  };
+
+  const userManager = createUserManager(userCredentials);
   try {
+    const storedUser = await userManager.getUser();
+
     const user =
-      // try to get stored auth data
-      (await userManager.getUser()) ||
-      // try to receive OIDC response
-      (await userManager.signinRedirectCallback(window.location.href));
-    console.log('login user', user);
+      storedUser && !storedUser.expired
+        ? storedUser
+        : await userManager.signinRedirectCallback(window.location.href);
+
     setAuth({ token: user.id_token! });
     setupAuthEventsHooks(userManager);
     onAfterLogin();

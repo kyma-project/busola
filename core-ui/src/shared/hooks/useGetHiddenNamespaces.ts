@@ -1,27 +1,20 @@
-import { useRecoilValue } from 'recoil';
-import { configurationState } from 'state/configurationSelector';
+import { useFeature } from 'hooks/useFeature';
+import { ConfigFeature } from 'state/types';
 
-type HiddenNamespacesConfig =
-  | {
-      isEnabled: boolean;
-      config: {
-        namespaces: string[];
-      };
-    }
-  | undefined;
+interface HiddenNamespacesFeature extends ConfigFeature {
+  config?: {
+    namespaces?: string[];
+  };
+}
 
 export const useGetHiddenNamespaces = (): string[] => {
-  const configuration = useRecoilValue(configurationState);
-  const features = configuration?.features;
-
-  const hiddenNamespacesConfig: Partial<HiddenNamespacesConfig> =
-    features?.HIDDEN_NAMESPACES;
+  const hiddenNamespacesConfig = useFeature<HiddenNamespacesFeature>(
+    'HIDDEN_NAMESPACES',
+  );
 
   const isValidAndEnabled =
     hiddenNamespacesConfig?.isEnabled &&
     Array.isArray(hiddenNamespacesConfig?.config?.namespaces);
 
-  return isValidAndEnabled && hiddenNamespacesConfig
-    ? hiddenNamespacesConfig.config!.namespaces
-    : [];
+  return isValidAndEnabled ? hiddenNamespacesConfig!.config!.namespaces! : [];
 };

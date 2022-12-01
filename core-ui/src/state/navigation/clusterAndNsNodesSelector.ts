@@ -19,7 +19,7 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     const openapiPathIdList = get(openapiPathIdListSelector);
     const permissionSet = get(permissionSetsSelector);
     const configuration = get(configurationState);
-    const features = configuration?.features;
+    const features = configuration?.features || {};
 
     const areDependenciesInitialized =
       !isEmpty(openapiPathIdList) &&
