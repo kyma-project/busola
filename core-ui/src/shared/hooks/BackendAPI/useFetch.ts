@@ -1,6 +1,5 @@
 import { useRecoilValue } from 'recoil';
 
-import { checkForTokenExpiration } from 'shared/hooks/BackendAPI/checkForTokenExpiration';
 import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { baseUrl, throwHttpError } from 'shared/hooks/BackendAPI/config';
 import { useConfig } from 'shared/contexts/ConfigContext';
@@ -42,8 +41,6 @@ export const createFetchFn = ({
   init?: any;
   abortController?: AbortController;
 }) => {
-  const token = authData && 'token' in authData ? authData.token : undefined;
-  checkForTokenExpiration(token);
   init = {
     ...init,
     headers: {
