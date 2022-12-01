@@ -35,7 +35,7 @@ export default function ClusterRoutes() {
       return;
     }
     setCluster(currentCluster);
-  }, [currentClusterName]);
+  }, [currentClusterName, cluster, clusters, navigate, setCluster]);
 
   return (
     <Routes>

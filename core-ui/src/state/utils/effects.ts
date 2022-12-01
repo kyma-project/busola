@@ -12,9 +12,10 @@ export const localStorageEffect: LocalStorageEffectFn = localStorageKey => ({
 
     try {
       if (savedValue !== null) return JSON.parse(savedValue);
-      return previousValue;
-    } catch (error) {
-      return previousValue;
+      return previousValue || {};
+    } catch (e) {
+      console.warn('Cannot get clusters', e);
+      return previousValue || {};
     }
   });
 

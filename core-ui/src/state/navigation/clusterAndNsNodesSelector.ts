@@ -6,7 +6,10 @@ import { openapiPathIdListSelector } from '../openapi/openapiPathIdSelector';
 import { configFeaturesState } from '../configFeatures/configFeaturesSelector';
 import { permissionSetsSelector } from '../permissionSetsSelector';
 import { NavNode, Scope } from '../types';
-import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
+import {
+  NavConfigSet,
+  shouldNodeBeVisible,
+} from './filters/shouldNodeBeVisible';
 import { addAdditionalNodes } from './addAdditionalNodes';
 
 export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selector<
@@ -30,8 +33,8 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
       return [];
     }
 
-    const configSet = {
-      configFeatures: configFeatures!,
+    const configSet: NavConfigSet = {
+      configFeatures: configFeatures?.config?.features || {},
       openapiPathIdList,
       permissionSet,
     };
@@ -47,7 +50,7 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     const navNodesWithAddons = addAdditionalNodes(
       navNodes,
       scope,
-      configFeatures!,
+      configFeatures?.config?.features || {},
     );
 
     return navNodesWithAddons;
