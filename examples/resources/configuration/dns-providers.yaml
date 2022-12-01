@@ -1,0 +1,126 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: dnsproviders
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: dnsproviders
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  details: |-
+    header:
+      - source: spec.type
+        type: string
+        name: Type
+      - source: 'status.state ? status.state : "UNKNOWN"'
+        highlights:
+          informative:
+          - UNKNOWN
+        type: string
+        name: Status
+        isSelected: true
+        widget: Badge
+    body:
+      - name: columns.container
+        widget: Columns
+        children:
+        - name: Included Domains
+          widget: Table
+          showHeader: false
+          source: spec.domains.include
+          children:
+            - source: $item
+              search: true
+        - name: Excluded Domains
+          widget: Table
+          showHeader: false
+          source: spec.domains.exclude
+          children:
+            - source: $item
+              search: true
+  form: |-
+    - simple: true
+      path: spec.type
+      widget: Text
+      placeholder: Choose Provider type
+      value: Choose Provider type
+      enum:
+        - Alicloud DNS provider
+        - AWS Route 53 provider
+        - Azure DNS provider
+        - Google CloudDNS provider
+        - Openstack Designate provider
+        - Cloudflare DNS provider
+        - Infoblox DNS provider
+        - Netlify DNS provider
+      required: true
+    - name: Secret Reference
+      simple: true
+      path: spec.secretRef
+      widget: ResourceRef      
+      provideVar: secret
+      resource:
+        kind: Secret
+        version: v1
+      defaultExpanded: true
+      required: true 
+    - name: Include Domains
+      path: spec.domains.include
+      simple: true
+      widget: SimpleList
+      children:
+        - []
+      placeholder: Domain that is allowed
+      defaultExpanded: true
+      required: true
+    - name: Exclude Domains
+      path: spec.domains.exclude
+      widget: SimpleList
+      children:
+        - []
+      placeholder: Domain that is forbidden
+  general: |-
+    resource:
+      kind: DNSProvider
+      group: dns.gardener.cloud
+      version: v1alpha1
+    name: DNS Providers
+    category: Configuration
+    urlPath: dnsproviders
+    scope: namespace
+    description: >-
+      {{[DNS Providers](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-01-own-domain)}}
+      is used to specify and manage the configuration for the external DNS services.
+  list: |-
+    - name: Type
+      source: spec.type
+    - source: 'status.state ? status.state : "UNKNOWN"'
+      highlights:
+        informative:
+        - UNKNOWN
+      type: string
+      name: Status
+      isSelected: true
+      widget: Badge
+  presets: |-
+    - name: template
+      default: true
+      value: 
+        metadata:
+          name: ''
+          labels: {}
+          annotations: {}
+        spec:
+          domains:
+            include: []
+            exclude: []
+          secretRef:
+            name: ''
+            namespace: ''
+          type: ''
+  translations: |-
+    en:
+      metadata.annotations: Annotations
+      metadata.labels: Labels
+      metadata.creationTimestamp: Created at
