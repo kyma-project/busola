@@ -3,7 +3,6 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { usePrepareDetailsProps, usePrepareListProps } from './helpers';
 import { Route } from 'react-router-dom';
 import pluralize from 'pluralize';
-import LuigiClient from '@luigi-project/client';
 
 export const createPath = (
   config = { detailsView: false, pathSegment: '' },
@@ -64,6 +63,7 @@ export const createResourceRoutes = ({
   const detailsPath = Details
     ? createPath({ pathSegment, detailsView: true })
     : '';
+
   return (
     <React.Fragment key={listPath}>
       <Route
