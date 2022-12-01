@@ -1,6 +1,6 @@
 import jsyaml from 'js-yaml';
 import { merge } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { clusterState } from './clusterAtom';
 import { getFetchFn } from './utils/getFetchFn';
@@ -69,12 +69,15 @@ const getConfigs = async (fetchFn: any) => {
 };
 
 export const useGetConfiguration = () => {
+  const oldCluster = useRef('');
   const cluster = useRecoilValue(clusterState);
   const setConfig = useSetRecoilState(configurationAtom);
   const fetchFn = getFetchFn(useRecoilValue);
 
   useEffect(() => {
     const setClusterConfig = async () => {
+      if (!fetchFn || oldCluster.current === JSON.stringify(cluster)) return;
+      oldCluster.current = JSON.stringify(cluster);
       if (!cluster) {
         setConfig(null);
       } else {
@@ -84,7 +87,7 @@ export const useGetConfiguration = () => {
     };
     setClusterConfig();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cluster]);
+  }, [cluster, fetchFn]);
 };
 
 export const configurationAtom: RecoilState<Configuration> = atom<

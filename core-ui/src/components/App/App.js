@@ -17,6 +17,7 @@ import { Preferences } from 'components/Preferences/Preferences';
 import { Sidebar } from 'sidebar/Sidebar';
 import { useInitTheme } from './useInitTheme';
 import { useAuthHandler } from 'state/authDataAtom';
+import { useGetConfiguration } from 'state/configurationAtom';
 
 import ClusterList from 'components/Clusters/views/ClusterList';
 import ClusterRoutes from './ClusterRoutes';
@@ -33,6 +34,7 @@ export default function App() {
 
   useInitTheme();
   useAuthHandler();
+  useGetConfiguration();
 
   useEffect(() => {
     i18n.changeLanguage(language);
