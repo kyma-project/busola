@@ -99,7 +99,15 @@ export function useAuthHandler() {
       if (hasNonOidcAuth(userCredentials)) {
         setAuth(userCredentials as KubeconfigNonOIDCAuth);
       } else {
-        const onAfterLogin = () => navigate('/cluster/' + cluster.name);
+        const onAfterLogin = () => {
+          if (cluster.currentContext.namespace) {
+            navigate(
+              `/cluster/${cluster.name}/namespaces/${cluster.currentContext.namespace}/details`,
+            );
+          } else {
+            navigate('/cluster/' + cluster.name);
+          }
+        };
         const onError = () => navigate('/clusters');
 
         handleLogin({

@@ -24,6 +24,7 @@ export type KubeconfigContext = {
   context: {
     cluster: string;
     user: string;
+    namespace?: string;
   };
 };
 
@@ -48,6 +49,7 @@ export type ValidKubeconfig = {
 export type CurrentContext = {
   cluster: KubeconfigCluster;
   user: KubeconfigUser;
+  namespace?: string;
 };
 
 type NestedPartial<K> = {

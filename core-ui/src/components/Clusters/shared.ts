@@ -18,7 +18,14 @@ function addCurrentCluster(
 ) {
   const { setCurrentCluster } = clustersInfo;
   setCurrentCluster(params);
-  clustersInfo.navigate(`/cluster/${params.contextName}`);
+
+  if (params.currentContext.namespace) {
+    clustersInfo.navigate(
+      `/cluster/${params.contextName}/namespaces/${params.currentContext.namespace}/details`,
+    );
+  } else {
+    clustersInfo.navigate(`/cluster/${params.contextName}`);
+  }
 }
 
 export function addCluster(
@@ -79,7 +86,7 @@ export function getContext(
       const user = kubeconfig.users.find(u => u?.name === context.user);
       if (!user) throw Error('user not found');
 
-      return { cluster, user };
+      return { cluster, user, namespace: context.namespace };
     }
   } catch (e) {
     throw Error("Cannot 'getContext': " + e);
