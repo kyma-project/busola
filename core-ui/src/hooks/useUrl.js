@@ -11,7 +11,6 @@ export const useUrl = () => {
     return `/cluster/${currentCluster.contextName}/${path}`;
   };
   const namespaceUrl = path => {
-    // return `/cluster/${currentCluster}/namespaces/${namespace}/${path}`;
     return `/cluster/${currentCluster.contextName}/namespaces/${activeNamespace}/${path}`;
   };
   const scopedUrl = path => {

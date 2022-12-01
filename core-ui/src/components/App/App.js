@@ -15,10 +15,9 @@ import { Header } from 'header/Header';
 import { ContentWrapper } from './ContentWrapper/ContentWrapper';
 import { Preferences } from 'components/Preferences/Preferences';
 import { Sidebar } from 'sidebar/Sidebar';
-import { useLuigiContextMigrator } from './useLuigiContextMigrator';
-import { useConfigContextMigrator } from 'components/App/useConfigContextMigrator';
 import { useInitTheme } from './useInitTheme';
 import { useAuthHandler } from 'state/authDataAtom';
+import { useGetConfiguration } from 'state/configurationAtom';
 
 import ClusterList from 'components/Clusters/views/ClusterList';
 import ClusterRoutes from './ClusterRoutes';
@@ -33,11 +32,9 @@ export default function App() {
   useLoginWithKubeconfigID();
   useResourceSchemas();
 
-  useLuigiContextMigrator();
-  useConfigContextMigrator();
-
   useInitTheme();
   useAuthHandler();
+  useGetConfiguration();
 
   useEffect(() => {
     i18n.changeLanguage(language);
