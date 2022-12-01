@@ -54,6 +54,7 @@ export function ApiRulesList({ serviceName, namespace }) {
           resourceUrl={url}
           hasDetailsView
           showTitle
+          disableCreate
           title={t('api-rules')}
           navigateFn={navigateToApiRule}
         />
@@ -71,6 +72,7 @@ export function ApiRulesList({ serviceName, namespace }) {
       namespace={namespace}
       isCompact
       showTitle
+      disableCreate
       filter={filterByServiceName}
     />
   );
