@@ -21,6 +21,7 @@ data:
         name: Status
         isSelected: true
         widget: Badge
+        description: status.message
     body:
       - name: columns.container
         widget: Columns
@@ -103,6 +104,7 @@ data:
       name: Status
       isSelected: true
       widget: Badge
+      description: status.message
   presets: |-
     - name: template
       default: true
