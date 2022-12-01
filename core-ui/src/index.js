@@ -6,6 +6,7 @@ import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
+import { PREVIOUS_PATHNAME_KEY } from 'state/authDataAtom';
 
 import App from './components/App/App';
 
@@ -45,6 +46,11 @@ i18next
       escapeValue: false, // react already handles the escaping
     },
   });
+
+const previousPath = window.location.pathname;
+if (previousPath !== '/' && previousPath !== '/clusters') {
+  localStorage.setItem(PREVIOUS_PATHNAME_KEY, previousPath);
+}
 
 ReactDOM.render(
   <Microfrontend env={process.env}>

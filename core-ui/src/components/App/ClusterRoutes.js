@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -25,17 +25,19 @@ export default function ClusterRoutes() {
   const language = useRecoilValue(languageAtom);
   const clusters = useRecoilValue(clustersState);
   const [cluster, setCluster] = useRecoilState(clusterState);
+  const [search] = useSearchParams();
 
   useEffect(() => {
     if (cluster?.name === currentClusterName) return;
     const currentCluster = clusters?.[currentClusterName];
-    if (!currentCluster) {
+    const kubeconfigId = search.get('kubeconfigId');
+    if (!currentCluster && !kubeconfigId) {
       alert("Such cluster doesn't exist");
       navigate('/clusters');
       return;
     }
     setCluster(currentCluster);
-  }, [currentClusterName, cluster, clusters, navigate, setCluster]);
+  }, [currentClusterName, cluster, clusters, navigate, setCluster, search]);
 
   return (
     <Routes>

@@ -9,6 +9,8 @@ import { hasNonOidcAuth } from './openapi/oidc';
 
 export type AuthDataState = KubeconfigNonOIDCAuth | null;
 
+export const PREVIOUS_PATHNAME_KEY = 'busola.previous-pathname';
+
 type handleLoginProps = {
   userCredentials: KubeconfigOIDCAuth;
   setAuth: (auth: AuthDataState) => void;
@@ -100,12 +102,20 @@ export function useAuthHandler() {
         setAuth(userCredentials as KubeconfigNonOIDCAuth);
       } else {
         const onAfterLogin = () => {
-          if (cluster.currentContext.namespace) {
-            navigate(
-              `/cluster/${cluster.name}/namespaces/${cluster.currentContext.namespace}/details`,
-            );
+          const previousPath = localStorage.getItem(PREVIOUS_PATHNAME_KEY);
+          localStorage.removeItem(PREVIOUS_PATHNAME_KEY);
+
+          console.log(previousPath);
+          if (previousPath) {
+            navigate(previousPath);
           } else {
-            navigate('/cluster/' + cluster.name);
+            if (cluster.currentContext.namespace) {
+              navigate(
+                `/cluster/${cluster.name}/namespaces/${cluster.currentContext.namespace}/details`,
+              );
+            } else {
+              navigate('/cluster/' + cluster.name);
+            }
           }
         };
         const onError = () => navigate('/clusters');
