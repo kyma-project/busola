@@ -73,7 +73,7 @@ function ResourceGraph({ resource, config }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasBeenInView]);
-  if (!features.VISUAL_RESOURCES?.isEnabled) {
+  if (!features?.VISUAL_RESOURCES?.isEnabled) {
     return EMPTY_TEXT_PLACEHOLDER;
   }
 

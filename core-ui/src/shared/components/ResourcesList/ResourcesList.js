@@ -221,7 +221,7 @@ export function ResourceListRenderer({
     // if (navigateFn) return navigateFn(entry);
     // if (fixedPath) return navigateToResource(entry);
     return scopedUrl(
-      `${pluralize(resourceType.toLowerCase())}/details/${entry.metadata.name}`,
+      `${pluralize(resourceType.toLowerCase())}/${entry.metadata.name}`,
     );
   };
 
