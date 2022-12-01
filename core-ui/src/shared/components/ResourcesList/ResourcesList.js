@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import jsyaml from 'js-yaml';
-import { Link, Button } from 'fundamental-react';
+import { Button } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
@@ -29,6 +30,8 @@ import { useVersionWarning } from 'hooks/useVersionWarning';
 import pluralize from 'pluralize';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalContent';
+
+import { useUrl } from 'hooks/useUrl';
 
 /* to allow cloning of a resource set the following on the resource create component:
  *
@@ -203,6 +206,7 @@ export function ResourceListRenderer({
   const getRequest = useSingleGet();
   const updateResourceMutation = useUpdate(resourceUrl);
   const putRequest = usePut();
+  const { scopedUrl } = useUrl();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => closeEditor(), [namespace]);
@@ -212,19 +216,21 @@ export function ResourceListRenderer({
     resourceType,
   );
 
+  const linkTo = entry => {
+    // TODO fix when details are working
+    // if (navigateFn) return navigateFn(entry);
+    // if (fixedPath) return navigateToResource(entry);
+    return scopedUrl(
+      `${pluralize(resourceType.toLowerCase())}/details/${entry.metadata.name}`,
+    );
+  };
+
   const defaultColumns = [
     {
       header: t('common.headers.name'),
       value: entry =>
         hasDetailsView ? (
-          <Link
-            className="fd-link"
-            onClick={_ => {
-              if (navigateFn) return navigateFn(entry);
-              if (fixedPath) return navigateToResource(entry);
-              navigateToDetails(resourceType, entry.metadata.name);
-            }}
-          >
+          <Link className="fd-link" to={linkTo(entry)}>
             {nameSelector(entry)}
           </Link>
         ) : (
