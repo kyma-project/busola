@@ -28,14 +28,6 @@ data:
               }
             }
           },
-          "SSO_LOGIN": {
-            "isEnabled": false,
-            "config": {
-              "issuerUrl": "https://apskyxzcl.accounts400.ondemand.com",
-              "scope": "email",
-              "clientId": "d0316c58-b0fe-45cd-9960-0fea0708355a"
-            }
-          },
           "SENTRY": {
             "isEnabled": true,
             "selectors": [],
@@ -66,13 +58,6 @@ data:
           "KUBECONFIG_ID": {
             "config": {
               "kubeconfigUrl": "/kubeconfig"
-            }
-          },
-          "JWT_CHECK_CONFIG": {
-            "isEnabled": false,
-            "config": {
-              "issuer": "https://apskyxzcl.accounts400.ondemand.com",
-              "jwksUri": "https://apskyxzcl.accounts400.ondemand.com/oauth2/certs"
             }
           },
           "GZIP": {
