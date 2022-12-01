@@ -9,7 +9,7 @@ import { NavNode, Scope } from '../types';
 import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
 import { externalNodesSelector } from './externalNodesSelector';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
-import { configurationState } from '../configurationSelector';
+import { configurationAtom } from '../configurationAtom';
 import { extensibilityNodesState } from '../navigation/extensibilityNodesSelector';
 
 export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
@@ -20,7 +20,7 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
     const navNodes: NavNode[] = get(clusterAndNsNodesSelector);
     const activeNamespaceId = get(activeNamespaceIdState);
     const observabilityNodes = get(externalNodesSelector);
-    const configuration = get(configurationState);
+    const configuration = get(configurationAtom);
     const features = configuration?.features;
 
     const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';

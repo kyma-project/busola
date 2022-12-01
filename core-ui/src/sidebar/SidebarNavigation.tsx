@@ -5,8 +5,10 @@ import { expandedCategoriesSelector } from 'state/navigation/expandedCategories/
 import { CategoryItem } from './CategoryItem';
 import { NavItem } from './NavItem';
 import { isSidebarCondensedState } from 'state/preferences/isSidebarCondensedAtom';
+import { useGetConfiguration } from 'state/configurationAtom';
 
 export function SidebarNavigation() {
+  useGetConfiguration();
   const navigationNodes = useRecoilValue(sidebarNavigationNodesSelector);
   const isSidebarCondensed = useRecoilValue(isSidebarCondensedState);
 

@@ -3,7 +3,7 @@ import { isEmpty, partial } from 'lodash';
 import { resourceListSelector } from '../resourceList/resourceListSelector';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { openapiPathIdListSelector } from '../openapi/openapiPathIdSelector';
-import { configurationState } from '../configurationSelector';
+import { configurationAtom } from '../configurationAtom';
 import { permissionSetsSelector } from '../permissionSetsSelector';
 import { NavNode, Scope } from '../types';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
@@ -18,7 +18,7 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     const activeNamespaceId = get(activeNamespaceIdState);
     const openapiPathIdList = get(openapiPathIdListSelector);
     const permissionSet = get(permissionSetsSelector);
-    const configuration = get(configurationState);
+    const configuration = get(configurationAtom);
     const features = configuration?.features || {};
 
     const areDependenciesInitialized =

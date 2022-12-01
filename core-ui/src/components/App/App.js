@@ -15,7 +15,6 @@ import { Header } from 'header/Header';
 import { ContentWrapper } from './ContentWrapper/ContentWrapper';
 import { Preferences } from 'components/Preferences/Preferences';
 import { Sidebar } from 'sidebar/Sidebar';
-import { useLuigiContextMigrator } from './useLuigiContextMigrator';
 import { useInitTheme } from './useInitTheme';
 import { useAuthHandler } from 'state/authDataAtom';
 
@@ -31,8 +30,6 @@ export default function App() {
 
   useLoginWithKubeconfigID();
   useResourceSchemas();
-
-  useLuigiContextMigrator();
 
   useInitTheme();
   useAuthHandler();

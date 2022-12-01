@@ -1,5 +1,5 @@
 import { RecoilValueReadOnly, selector } from 'recoil';
-import { configurationState } from '../configurationSelector';
+import { configurationAtom } from '../configurationAtom';
 import { predefinedCategories } from './categories';
 import { ConfigFeature, configFeaturesNames, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';
@@ -76,7 +76,7 @@ export const externalNodesSelector: RecoilValueReadOnly<
 > = selector<NavNode[] | null>({
   key: 'externalNodesSelector',
   get: async ({ get }) => {
-    const configuration = get(configurationState);
+    const configuration = get(configurationAtom);
     const features = configuration?.features;
     const fetchFn = getFetchFn(get);
     if (!fetchFn || !features) {
