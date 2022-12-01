@@ -217,11 +217,9 @@ export function ResourceListRenderer({
   );
 
   const linkTo = entry => {
-    console.log('navigateFn', navigateFn);
-    console.log('fixedPath', fixedPath);
+    // TODO fix when details are working
     // if (navigateFn) return navigateFn(entry);
     // if (fixedPath) return navigateToResource(entry);
-    // navigateToDetails(resourceType, entry.metadata.name);
     return scopedUrl(
       `${pluralize(resourceType.toLowerCase())}/details/${entry.metadata.name}`,
     );
@@ -232,15 +230,7 @@ export function ResourceListRenderer({
       header: t('common.headers.name'),
       value: entry =>
         hasDetailsView ? (
-          <Link
-            className="fd-link"
-            to={linkTo(entry)}
-            // onClick={_ => {
-            // if (navigateFn) return navigateFn(entry);
-            // if (fixedPath) return navigateToResource(entry);
-            // navigateToDetails(resourceType, entry.metadata.name);
-            // }}
-          >
+          <Link className="fd-link" to={linkTo(entry)}>
             {nameSelector(entry)}
           </Link>
         ) : (
