@@ -83,6 +83,7 @@ export const useGetConfiguration = () => {
       }
     };
     setClusterConfig();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cluster]);
 };
 
