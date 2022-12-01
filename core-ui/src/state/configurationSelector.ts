@@ -5,11 +5,14 @@ import { merge } from 'lodash';
 import { ConfigFeatureList } from './types';
 import { getFetchFn } from './utils/getFetchFn';
 
+type Configuration = {
+  features?: ConfigFeatureList;
+  storageType?: string;
+} | null;
+
 type Config = {
-  config?: {
-    features: ConfigFeatureList;
-  };
-};
+  config?: Configuration;
+} | null;
 
 type ConfigMapResponse =
   | {
@@ -19,12 +22,10 @@ type ConfigMapResponse =
     }
   | undefined;
 
-type ConfigFeaturesState = ConfigFeatureList | null;
-
-export const configFeaturesState: RecoilValue<ConfigFeaturesState> = selector<
-  ConfigFeaturesState
+export const configurationState: RecoilValue<Configuration> = selector<
+  Configuration
 >({
-  key: 'configFeaturesState',
+  key: 'configurationState',
   get: async ({ get }) => {
     const fetchFn = getFetchFn(get);
     if (!fetchFn) {
@@ -58,8 +59,16 @@ export const configFeaturesState: RecoilValue<ConfigFeaturesState> = selector<
       const mapParams = configMapResponse?.data?.config
         ? (jsyaml.load(configMapResponse.data.config) as Config)
         : {};
-
-      return merge(defaultParams, configParams, mapParams) as ConfigFeatureList;
+      console.log(
+        defaultParams?.config,
+        configParams?.config,
+        mapParams?.config,
+      );
+      return merge(
+        defaultParams?.config,
+        configParams?.config,
+        mapParams?.config,
+      ) as Configuration;
     } catch (e) {
       console.warn('Cannot load cluster params: ', e);
       return null;

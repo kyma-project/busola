@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil';
-import { configFeaturesState } from 'state/configFeaturesSelector';
+import { configurationState } from 'state/configurationSelector';
 
 type HiddenNamespacesConfig =
   | {
@@ -11,10 +11,11 @@ type HiddenNamespacesConfig =
   | undefined;
 
 export const useGetHiddenNamespaces = (): string[] => {
-  const configFeatures = useRecoilValue(configFeaturesState);
+  const configuration = useRecoilValue(configurationState);
+  const features = configuration?.features;
 
   const hiddenNamespacesConfig: Partial<HiddenNamespacesConfig> =
-    configFeatures?.HIDDEN_NAMESPACES;
+    features?.HIDDEN_NAMESPACES;
 
   const isValidAndEnabled =
     hiddenNamespacesConfig?.isEnabled &&

@@ -1,5 +1,5 @@
 import { RecoilValueReadOnly, selector } from 'recoil';
-import { configFeaturesState } from '../configFeaturesSelector';
+import { configurationState } from '../configurationSelector';
 import { predefinedCategories } from './categories';
 import { ConfigFeature, configFeaturesNames, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';
@@ -76,22 +76,23 @@ export const externalNodesSelector: RecoilValueReadOnly<
 > = selector<NavNode[] | null>({
   key: 'externalNodesSelector',
   get: async ({ get }) => {
-    const configFeatures = get(configFeaturesState);
+    const configuration = get(configurationState);
+    const features = configuration?.features;
     const fetchFn = getFetchFn(get);
-    if (!fetchFn || !configFeatures) {
+    if (!fetchFn || !features) {
       return null;
     }
 
-    if (!configFeatures[configFeaturesNames.EXTERNAL_NODES]?.isEnabled) {
+    if (!features[configFeaturesNames.EXTERNAL_NODES]?.isEnabled) {
       return [];
     }
 
     const observabilityNodes = await getObservabilityNodes(
       fetchFn,
-      configFeatures[configFeaturesNames.OBSERVABILITY],
+      features[configFeaturesNames.OBSERVABILITY],
     );
     const externalNodes = getExternalNodes(
-      configFeatures[configFeaturesNames.EXTERNAL_NODES],
+      features[configFeaturesNames.EXTERNAL_NODES],
     );
 
     return [

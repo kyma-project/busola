@@ -6,7 +6,7 @@ import { useShowNodeParamsError } from 'shared/hooks/useShowNodeParamsError';
 import { Link, Button, MessagePage } from 'fundamental-react';
 import { useRecoilValue } from 'recoil';
 
-import { configFeaturesState } from 'state/configFeaturesSelector';
+import { configurationState } from 'state/configurationSelector';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 
 import { useDeleteResource } from 'shared/hooks/useDeleteResource';
@@ -25,7 +25,8 @@ import './ClusterList.scss';
 import { loadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfigID';
 
 function ClusterList() {
-  const features = useRecoilValue(configFeaturesState);
+  const configuration = useRecoilValue(configurationState);
+  const features = configuration?.features;
 
   const clustersInfo = useClustersInfo();
   const notification = useNotification();

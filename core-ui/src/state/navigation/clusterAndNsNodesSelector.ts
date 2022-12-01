@@ -3,7 +3,7 @@ import { isEmpty, partial } from 'lodash';
 import { resourceListSelector } from '../resourceList/resourceListSelector';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { openapiPathIdListSelector } from '../openapi/openapiPathIdSelector';
-import { configFeaturesState } from '../configFeaturesSelector';
+import { configurationState } from '../configurationSelector';
 import { permissionSetsSelector } from '../permissionSetsSelector';
 import { NavNode, Scope } from '../types';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
@@ -17,38 +17,45 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     const resourceList: NavNode[] = get(resourceListSelector);
     const activeNamespaceId = get(activeNamespaceIdState);
     const openapiPathIdList = get(openapiPathIdListSelector);
-    const configFeatures = get(configFeaturesState);
     const permissionSet = get(permissionSetsSelector);
+    const configuration = get(configurationState);
+    const features = configuration?.features;
+    console.log(configuration, features);
 
     const areDependenciesInitialized =
       !isEmpty(openapiPathIdList) &&
-      !!configFeatures &&
+      !!features &&
       !isEmpty(resourceList) &&
       !isEmpty(permissionSet);
 
+    console.log(
+      '0',
+      !isEmpty(openapiPathIdList),
+      !!features,
+      !isEmpty(resourceList),
+      !isEmpty(permissionSet),
+    );
     if (!areDependenciesInitialized) {
       return [];
     }
 
     const configSet = {
-      configFeatures: configFeatures!,
+      configFeatures: features!,
       openapiPathIdList,
       permissionSet,
     };
+    console.log('1');
     const isNodeVisibleForCurrentConfigSet = partial(
       shouldNodeBeVisible,
       configSet,
     );
+    console.log('2', isNodeVisibleForCurrentConfigSet);
     const navNodes: NavNode[] = resourceList.filter(
       isNodeVisibleForCurrentConfigSet,
     );
 
     const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
-    const navNodesWithAddons = addAdditionalNodes(
-      navNodes,
-      scope,
-      configFeatures!,
-    );
+    const navNodesWithAddons = addAdditionalNodes(navNodes, scope, features!);
 
     return navNodesWithAddons;
   },

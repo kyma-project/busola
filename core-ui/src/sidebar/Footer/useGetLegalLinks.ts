@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
-import { configFeaturesState } from 'state/configFeaturesSelector';
+import { configurationState } from 'state/configurationSelector';
 
 type LegalLink = {
   label: string;
@@ -9,8 +9,9 @@ type LegalLink = {
 
 export const useGetLegalLinks = (): LegalLink[] => {
   const { t, i18n } = useTranslation();
-  const configFeatures = useRecoilValue(configFeaturesState);
-  const legalLinksConfig = configFeatures?.LEGAL_LINKS?.config as Record<
+  const configuration = useRecoilValue(configurationState);
+  const features = configuration?.features;
+  const legalLinksConfig = features?.LEGAL_LINKS?.config as Record<
     string,
     Record<string, string>
   >;

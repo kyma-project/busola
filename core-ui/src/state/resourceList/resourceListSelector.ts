@@ -3,34 +3,33 @@ import { extResourcesState } from '../extResourcesAtom';
 import { resources } from 'resources';
 import { partial } from 'lodash';
 import { NavNode } from '../types';
-import { configFeaturesState } from '../configFeaturesSelector';
+import { configurationState } from '../configurationSelector';
 import { mapBusolaResourceToNavNode } from './mapBusolaResourceToNavNode';
 import { mapExtResourceToNavNode } from './mapExtResourceToNavNode';
 
 export const resourceListSelector = selector<NavNode[]>({
   key: 'resourceListSelector',
   get: ({ get }) => {
-    const configFeatures = get(configFeaturesState);
     const extResources = get(extResourcesState);
+    const configuration = get(configurationState);
+    const features = configuration?.features;
 
     let resNodeList: NavNode[] = [];
 
-    if (!configFeatures) {
+    if (!features) {
       return resNodeList;
     }
 
-    const isExtensibilityOn = configFeatures.EXTENSIBILITY?.isEnabled;
+    const isExtensibilityOn = features.EXTENSIBILITY?.isEnabled;
     const areExtensionsLoaded = isExtensibilityOn && extResources;
 
-    if (!isExtensibilityOn) {
-      resNodeList = resources.map(mapBusolaResourceToNavNode);
-    }
+    resNodeList = resources.map(mapBusolaResourceToNavNode);
 
     if (areExtensionsLoaded) {
-      resNodeList = resources.map(mapBusolaResourceToNavNode);
       const extNodeList = extResources.map(mapExtResourceToNavNode);
       resNodeList = mergeInExtensibilityNav(resNodeList, extNodeList);
     }
+
     return resNodeList;
   },
 });
