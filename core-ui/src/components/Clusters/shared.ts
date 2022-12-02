@@ -178,7 +178,7 @@ export const addByContext = (
   }
 };
 
-export function HandleResetEndpoint() {
+export function useHandleResetEndpoint() {
   const setCluster = useSetRecoilState(clusterState);
   const navigate = useNavigate();
   if (window.location.pathname === '/reset') {

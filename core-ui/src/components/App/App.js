@@ -23,14 +23,14 @@ import ClusterList from 'components/Clusters/views/ClusterList';
 import ClusterRoutes from './ClusterRoutes';
 
 import './App.scss';
-import { HandleResetEndpoint } from 'components/Clusters/shared';
+import { useHandleResetEndpoint } from 'components/Clusters/shared';
 
 export default function App() {
   const { i18n } = useTranslation();
   const language = useRecoilValue(languageAtom);
   const cluster = useRecoilValue(clusterState);
 
-  HandleResetEndpoint();
+  useHandleResetEndpoint();
   useLoginWithKubeconfigID();
   useResourceSchemas();
 
