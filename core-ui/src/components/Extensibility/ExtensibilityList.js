@@ -34,13 +34,11 @@ export const ExtensibilityListCore = ({
   const { urlPath, resource, description, features } =
     resMetaData?.general ?? {};
 
-  const { disableCreate, disableEdit, disableDelete } = features?.actions
-    ? {}
-    : {
-        disableCreate: props.disableCreate,
-        disableEdit: props.disableEdit,
-        disableDelete: props.disableDelete,
-      };
+  const { disableCreate, disableEdit, disableDelete } = features?.actions || {
+    disableCreate: props.disableCreate,
+    disableEdit: props.disableEdit,
+    disableDelete: props.disableDelete,
+  };
 
   const dataSources = resMetaData?.dataSources || {};
   const { schema } = useGetSchema({
