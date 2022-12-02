@@ -34,7 +34,7 @@ export const ExtensibilityListCore = ({
   const { urlPath, resource, description, features } =
     resMetaData?.general ?? {};
 
-  const { disableCreate, disableEdit, disableDelete } = features?.actions || {
+  const { disableCreate, disableEdit, disableDelete } = features?.actions ?? {
     disableCreate: props.disableCreate,
     disableEdit: props.disableEdit,
     disableDelete: props.disableDelete,
