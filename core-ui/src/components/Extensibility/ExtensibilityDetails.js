@@ -16,7 +16,6 @@ import { useGetTranslation, TranslationBundleContext } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
-  // const { extensibilitySchemas } = useMicrofrontendContext();
   const { t, widgetT, exists } = useGetTranslation();
 
   const { urlPath, resource, features } = resMetaData?.general ?? {};

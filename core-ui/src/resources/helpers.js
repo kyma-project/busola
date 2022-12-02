@@ -1,6 +1,8 @@
 import { useRecoilValue } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import pluralize from 'pluralize';
+
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import {
   getResourceGraphConfig,
@@ -30,7 +32,7 @@ export const usePrepareListProps = ({
     hasDetailsView,
     readOnly: queryParams.get('readOnly') === 'true',
     resourceUrl,
-    resourceType: resourceName || resourceType,
+    resourceType: resourceName || pluralize(resourceType || ''),
     resourceTitle: i18n.exists(resourceI18Key) ? t(resourceI18Key) : '',
     namespace: routerParams.namespaceId,
     i18n,
