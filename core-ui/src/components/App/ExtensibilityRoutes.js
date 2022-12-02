@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import pluralize from 'pluralize';
 import i18next from 'i18next';
 import { Route } from 'react-router-dom';
 
@@ -9,8 +10,10 @@ const Details = React.lazy(() =>
   import('../Extensibility/ExtensibilityDetails'),
 );
 
-export const createExtensibilityRoutes = (cr, language, namespaced) => {
-  const urlPath = cr?.general?.urlPath;
+export const createExtensibilityRoutes = (cr, language) => {
+  const urlPath =
+    cr?.general?.urlPath ||
+    pluralize(cr?.general?.resource?.kind?.toLowerCase() || '');
 
   const translationBundle = urlPath || 'extensibility';
   i18next.addResourceBundle(
@@ -19,55 +22,28 @@ export const createExtensibilityRoutes = (cr, language, namespaced) => {
     cr?.translations?.[language] || {},
   );
 
-  if (cr.general?.scope === 'namespace' && namespaced) {
-    return (
-      <React.Fragment key={`namespace-${urlPath}`}>
+  return (
+    <React.Fragment key={urlPath}>
+      <Route
+        path={urlPath}
+        exact
+        element={
+          <Suspense fallback={<Spinner />}>
+            <List />
+          </Suspense>
+        }
+      />
+      {cr.details && (
         <Route
-          path={urlPath}
+          path={`${urlPath}/:resourceName`}
           exact
           element={
             <Suspense fallback={<Spinner />}>
-              <List />
+              <Details />
             </Suspense>
           }
         />
-        {cr.details && (
-          <Route
-            path={`${urlPath}/:resourceName`}
-            exact
-            element={
-              <Suspense fallback={<Spinner />}>
-                <Details />
-              </Suspense>
-            }
-          />
-        )}
-      </React.Fragment>
-    );
-  } else {
-    return (
-      <React.Fragment key={`cluster-${urlPath}`}>
-        <Route
-          path={`${urlPath}`}
-          exact
-          element={
-            <Suspense fallback={<Spinner />}>
-              <List />
-            </Suspense>
-          }
-        />
-        {cr.details && (
-          <Route
-            path={`${urlPath}/:resourceName`}
-            exact
-            element={
-              <Suspense fallback={<Spinner />}>
-                <Details />
-              </Suspense>
-            }
-          />
-        )}
-      </React.Fragment>
-    );
-  }
+      )}
+    </React.Fragment>
+  );
 };

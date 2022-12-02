@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
+import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
 import { useAppTracking } from 'hooks/tracking';
 import { clusterState } from 'state/clusterAtom';
@@ -10,6 +11,7 @@ import { clusterState } from 'state/clusterAtom';
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
 import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
 import { languageAtom } from 'state/preferences/languageAtom';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 import { Header } from 'header/Header';
 import { ContentWrapper } from './ContentWrapper/ContentWrapper';
@@ -18,23 +20,33 @@ import { Sidebar } from 'sidebar/Sidebar';
 import { useInitTheme } from './useInitTheme';
 import { useAuthHandler } from 'state/authDataAtom';
 import { useGetConfiguration } from 'state/configurationAtom';
+import { useGetExtensions } from 'state/navigation/extensibilityNodeAtom';
 
 import ClusterList from 'components/Clusters/views/ClusterList';
 import ClusterRoutes from './ClusterRoutes';
 
 import './App.scss';
+import { useHandleResetEndpoint } from 'components/Clusters/shared';
 
 export default function App() {
   const { i18n } = useTranslation();
   const language = useRecoilValue(languageAtom);
   const cluster = useRecoilValue(clusterState);
+  const setNamespace = useSetRecoilState(activeNamespaceIdState);
+  const { namespace } = useUrl();
 
+  useEffect(() => {
+    setNamespace(namespace);
+  }, [setNamespace, namespace]);
+
+  useHandleResetEndpoint();
   useLoginWithKubeconfigID();
   useResourceSchemas();
 
   useInitTheme();
   useAuthHandler();
   useGetConfiguration();
+  useGetExtensions();
 
   useEffect(() => {
     i18n.changeLanguage(language);

@@ -16,7 +16,6 @@ import { useGetTranslation, TranslationBundleContext } from './helpers';
 import { useJsonata } from './hooks/useJsonata';
 
 export const ExtensibilityDetailsCore = ({ resMetaData }) => {
-  // const { extensibilitySchemas } = useMicrofrontendContext();
   const { t, widgetT, exists } = useGetTranslation();
 
   const { urlPath, resource, features } = resMetaData?.general ?? {};
@@ -28,7 +27,13 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
 
   const jsonata = useJsonata({});
 
-  const detailsProps = usePrepareDetailsProps(urlPath, 'name');
+  const detailsProps = usePrepareDetailsProps({
+    resourceCustomType: urlPath,
+    resourceType: pluralize(resource?.kind),
+    resourceI18Key: 'name',
+    apiGroup: resource?.group,
+    apiVersion: resource?.version,
+  });
 
   // there may be a moment when `resMetaData` is undefined (e.g. when switching the namespace)
   if (!resource) {
@@ -61,6 +66,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
     },
     { name: '' },
   ];
+
   return (
     <ResourceDetails
       disableEdit={disableEdit}
