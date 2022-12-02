@@ -1,10 +1,9 @@
-import { useRecoilValue } from 'recoil';
 import { Icon, SideNav } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { Link } from 'react-router-dom';
+
 import { NavNode } from 'state/types';
 import { useUrl } from 'hooks/useUrl';
-import { Link } from 'react-router-dom';
 
 import './NavItem.scss';
 
@@ -13,13 +12,15 @@ type NavItemProps = {
 };
 
 export function NavItem({ node }: NavItemProps) {
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { t } = useTranslation();
   const urlGenerators = useUrl();
   const { scopedUrl } = urlGenerators;
 
   const isNodeSelected = () => {
     if (node.externalUrl) return false;
+    return false;
+    //TODO
+    /*
     const { pathname } = window.location;
     const namespacePart = namespaceId ? `/namespaces/${namespaceId}/` : '/';
     const resourcePart = pathname.replace(namespacePart, '');
@@ -27,6 +28,7 @@ export function NavItem({ node }: NavItemProps) {
     return (
       pathSegment === node.pathSegment || pathSegment === node.resourceType
     );
+     */
   };
 
   const name = t(node.label, { defaultValue: node.label });

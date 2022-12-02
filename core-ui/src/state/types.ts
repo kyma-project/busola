@@ -67,6 +67,8 @@ export type ExtResource = {
 };
 
 export interface UrlGenerators {
+  cluster: string;
+  namespace: string;
   clusterUrl: (path: string) => string;
   namespaceUrl: (path: string) => string;
   scopedUrl: (path: string) => string;
