@@ -13,6 +13,8 @@ import {
 import { TFunction } from 'i18next';
 import { useFeature } from 'hooks/useFeature';
 import { ConfigFeature } from 'state/types';
+import { removePreviousPath } from 'state/useAfterInitHook';
+import { configurationAtom } from 'state/configurationAtom';
 
 export interface KubeconfigIdFeature extends ConfigFeature {
   config: {
@@ -105,45 +107,58 @@ const loadKubeconfigIdCluster = async (
       alert(t('kubeconfig-id.error', { error: e.message }));
       console.warn(e);
       window.location.href = window.location.origin + '/clusters';
+      removePreviousPath();
     } else {
       throw e;
     }
   }
 };
 
+export type KubeconfigIdHandleState = 'not started' | 'loading' | 'done';
+
 export function useLoginWithKubeconfigID() {
   const kubeconfigIdFeature = useFeature<KubeconfigIdFeature>('KUBECONFIG_ID');
+  const configuration = useRecoilValue(configurationAtom);
   const clusters = useRecoilValue(clustersState);
   const [search] = useSearchParams();
   const { t } = useTranslation();
   const clusterInfo = useClustersInfo();
-  const [triedGetKubeconfig, setTriedGetKubeconfig] = useState(false);
+  const [handledKubeconfigId, setHandledKubeconfigId] = useState<
+    KubeconfigIdHandleState
+  >('not started');
 
   useEffect(() => {
-    const kubeconfigId = search.get('kubeconfigId');
-    if (
-      kubeconfigIdFeature?.isEnabled &&
-      !!kubeconfigId &&
-      !!clusters &&
-      !triedGetKubeconfig
-    ) {
-      setTriedGetKubeconfig(true);
-      loadKubeconfigIdCluster(
-        kubeconfigId,
-        kubeconfigIdFeature,
-        clusters,
-        clusterInfo,
-        t,
-      );
+    const dependenciesReady = !!configuration?.features && !!clusters;
+    const flowStarted = handledKubeconfigId !== 'not started';
+    if (!dependenciesReady || flowStarted) {
+      return;
     }
+
+    const kubeconfigId = search.get('kubeconfigId');
+    if (!kubeconfigId || !kubeconfigIdFeature?.isEnabled) {
+      setHandledKubeconfigId('done');
+      return;
+    }
+
+    setHandledKubeconfigId('loading');
+    loadKubeconfigIdCluster(
+      kubeconfigId,
+      kubeconfigIdFeature,
+      clusters,
+      clusterInfo,
+      t,
+    ).then(() => setHandledKubeconfigId('done'));
   }, [
     search,
     clusters,
     kubeconfigIdFeature,
     t,
     clusterInfo,
-    triedGetKubeconfig,
+    handledKubeconfigId,
+    configuration,
   ]);
+
+  return handledKubeconfigId;
 }
 
 export function useLoadDefaultKubeconfigId() {

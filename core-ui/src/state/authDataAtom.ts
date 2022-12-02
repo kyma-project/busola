@@ -5,11 +5,28 @@ import { useNavigate } from 'react-router-dom';
 import { atom, useSetRecoilState, useRecoilValue, RecoilState } from 'recoil';
 import { KubeconfigNonOIDCAuth, KubeconfigOIDCAuth } from 'types';
 import { clusterState } from './clusterAtom';
-import { hasNonOidcAuth } from './openapi/oidc';
+import { getPreviousPath } from './useAfterInitHook';
+
+export const hasNonOidcAuth = (
+  user?: KubeconfigNonOIDCAuth | KubeconfigOIDCAuth,
+) => {
+  if (!user) {
+    return true;
+  }
+
+  // either token or a pair (client CA, client key) is present
+  if ('token' in user) {
+    return !!user.token;
+  } else {
+    return (
+      'client-certificate-data' in user &&
+      !!user['client-certificate-data'] &&
+      !!user['client-key-data']
+    );
+  }
+};
 
 export type AuthDataState = KubeconfigNonOIDCAuth | null;
-
-export const PREVIOUS_PATHNAME_KEY = 'busola.previous-pathname';
 
 type handleLoginProps = {
   userCredentials: KubeconfigOIDCAuth;
@@ -102,13 +119,7 @@ export function useAuthHandler() {
         setAuth(userCredentials as KubeconfigNonOIDCAuth);
       } else {
         const onAfterLogin = () => {
-          const previousPath = localStorage.getItem(PREVIOUS_PATHNAME_KEY);
-          localStorage.removeItem(PREVIOUS_PATHNAME_KEY);
-
-          console.log(previousPath);
-          if (previousPath) {
-            navigate(previousPath);
-          } else {
+          if (!getPreviousPath() || getPreviousPath() === '/clusters') {
             if (cluster.currentContext.namespace) {
               navigate(
                 `/cluster/${cluster.name}/namespaces/${cluster.currentContext.namespace}/details`,
