@@ -1,12 +1,12 @@
 import { Shellbar } from 'fundamental-react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
+import { useUrl } from 'hooks/useUrl';
 
 import { Logo } from './Logo/Logo';
 import { NamespaceDropdown } from './NamespaceDropdown/NamespaceDropdown';
@@ -19,10 +19,8 @@ export function Header() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { namespaces, refetch } = useAvailableNamespaces();
+  const { namespace: activeNamespace } = useUrl();
 
-  const [activeNamespace, setActiveNamespace] = useRecoilState(
-    activeNamespaceIdState,
-  );
   const setPreferencesOpen = useSetRecoilState(isPreferencesOpenState);
   const cluster = useRecoilValue(clusterState);
   const clusters = useRecoilValue(clustersState);
@@ -35,7 +33,6 @@ export function Header() {
     ...inactiveClusterNames.map(name => ({
       name,
       callback: () => {
-        setActiveNamespace('');
         navigate(`/cluster/${name}`);
       },
     })),

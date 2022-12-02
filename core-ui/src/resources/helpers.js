@@ -1,4 +1,3 @@
-import { useRecoilValue } from 'recoil';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import pluralize from 'pluralize';
@@ -8,7 +7,6 @@ import {
   getResourceGraphConfig,
   useAddStyle,
 } from 'shared/components/ResourceGraph/getResourceGraphConfig';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export const usePrepareListProps = ({
   resourceCustomType,
@@ -18,11 +16,10 @@ export const usePrepareListProps = ({
   apiVersion,
   hasDetailsView,
 }) => {
-  const routerParams = useParams();
+  const { namespaceId } = useParams();
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
 
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
   const resourceUrl = namespaceId
     ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}`
@@ -34,7 +31,7 @@ export const usePrepareListProps = ({
     resourceUrl,
     resourceType: resourceCustomType || pluralize(resourceType || ''),
     resourceTitle: i18n.exists(resourceI18Key) ? t(resourceI18Key) : '',
-    namespace: routerParams.namespaceId,
+    namespace: namespaceId,
     i18n,
   };
 };
