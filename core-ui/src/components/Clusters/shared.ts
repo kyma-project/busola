@@ -1,4 +1,4 @@
-import { ActiveClusterState } from 'state/clusterAtom';
+import { ActiveClusterState, clusterState } from 'state/clusterAtom';
 import { ClusterStorage } from 'state/types';
 import {
   CurrentContext,
@@ -11,6 +11,8 @@ import { useClustersInfoType } from 'state/utils/getClustersInfo';
 import { tryParseOIDCparams } from './components/oidc-params';
 import { hasNonOidcAuth } from 'state/openapi/oidc';
 import { createUserManager } from 'state/authDataAtom';
+import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 
 function addCurrentCluster(
   params: NonNullable<ActiveClusterState>,
@@ -175,3 +177,12 @@ export const addByContext = (
     throw Error("Cannot 'addByContext': " + e);
   }
 };
+
+export function HandleResetEndpoint() {
+  const setCluster = useSetRecoilState(clusterState);
+  const navigate = useNavigate();
+  if (window.location.pathname === '/reset') {
+    setCluster(null);
+    navigate('/clusters');
+  }
+}
