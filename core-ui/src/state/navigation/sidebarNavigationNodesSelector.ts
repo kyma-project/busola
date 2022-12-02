@@ -11,6 +11,7 @@ import { externalNodesSelector } from './externalNodesSelector';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { configurationAtom } from '../configurationAtom';
 import { extensibilityNodesState } from './extensibilityNodeAtom';
+import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
 
 export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
   Category[]
@@ -30,9 +31,13 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
     let allNodes = [...navNodes, ...observabilityNodes];
 
     const extResources = get(extensibilityNodesState);
+
     const isExtensibilityOn = features?.EXTENSIBILITY?.isEnabled;
     if (isExtensibilityOn && extResources) {
-      allNodes = mergeInExtensibilityNav(allNodes, extResources);
+      const extNavNodes = extResources?.map(ext =>
+        mapExtResourceToNavNode(ext),
+      );
+      allNodes = mergeInExtensibilityNav(allNodes, extNavNodes);
     }
 
     const nodesFromCurrentScope = partial(hasCurrentScope, scope);

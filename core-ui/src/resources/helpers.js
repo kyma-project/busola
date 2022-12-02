@@ -9,6 +9,7 @@ import {
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export const usePrepareListProps = ({
+  resourceName,
   resourceType,
   resourceI18Key,
   apiGroup,
@@ -29,7 +30,7 @@ export const usePrepareListProps = ({
     hasDetailsView,
     readOnly: queryParams.get('readOnly') === 'true',
     resourceUrl,
-    resourceType: resourceType,
+    resourceType: resourceName || resourceType,
     resourceTitle: i18n.exists(resourceI18Key) ? t(resourceI18Key) : '',
     namespace: routerParams.namespaceId,
     i18n,

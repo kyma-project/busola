@@ -1,12 +1,11 @@
 import jsyaml from 'js-yaml';
 import { mapValues } from 'lodash';
 import { useEffect } from 'react';
-import { NavNode, ExtResource } from '../types';
+import { ExtResource } from '../types';
 import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { clusterState } from '../clusterAtom';
 import { authDataState } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
-import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
 
 type ConfigMapData = {
   general: string;
@@ -73,7 +72,7 @@ const getExtensions = async (fetchFn: any) => {
     });
 
     const allExtensions = [...defaultExtensions, ...configMapsExtensions];
-    return allExtensions?.map(ext => mapExtResourceToNavNode(ext));
+    return allExtensions;
   } catch (e) {
     console.warn('Cannot load cluster params: ', e);
     return null;
@@ -101,8 +100,8 @@ export const useGetExtensions = () => {
 };
 
 const defaultValue = null;
-export const extensibilityNodesState: RecoilState<NavNode[] | null> = atom<
-  NavNode[] | null
+export const extensibilityNodesState: RecoilState<ExtResource[] | null> = atom<
+  ExtResource[] | null
 >({
   key: 'extensibilityNodesState',
   default: defaultValue,
