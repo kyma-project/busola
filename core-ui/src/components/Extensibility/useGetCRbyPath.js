@@ -1,4 +1,5 @@
 import { useRecoilValue } from 'recoil';
+import pluralize from 'pluralize';
 
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { clusterState } from 'state/clusterAtom';
@@ -11,7 +12,7 @@ export const useGetCRbyPath = () => {
 
   const resource = extensions.find(el => {
     const { scope, urlPath, resource } = el.general || {};
-    const extensionPath = urlPath || resource?.kind?.toLowerCase();
+    const extensionPath = urlPath || pluralize(resource?.kind?.toLowerCase());
     const hasCorrectScope =
       (scope?.toLowerCase() === 'namespace') === !!namespaceId;
     if (!hasCorrectScope) return false;
