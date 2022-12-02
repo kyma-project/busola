@@ -9,7 +9,8 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import './YamlUploadDialog.scss';
 import { useTranslation } from 'react-i18next';
 import { useEventListener } from 'hooks/useEventListener';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export const YamlUpload = React.lazy(() => import('./YamlUpload'));
 
@@ -20,7 +21,7 @@ export const OPERATION_STATE_SOME_FAILED = 'SOME_FAILED';
 
 export function YamlUploadDialog({ show, onCancel }) {
   const { t } = useTranslation();
-  const { namespaceId } = useMicrofrontendContext();
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [isValidationOn, setValidationOn] = useState(true);
   const defaultNamespace = namespaceId || 'default';
 

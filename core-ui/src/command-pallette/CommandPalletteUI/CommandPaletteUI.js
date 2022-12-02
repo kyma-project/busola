@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import {
   CommandPalletteHelp,
   NamespaceContextDisplay,
@@ -11,6 +10,8 @@ import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { LOADING_INDICATOR, useSearchResults } from './useSearchResults';
 import './CommandPaletteUI.scss';
 import { FormInput } from 'fundamental-react';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 function Background({ hide, children }) {
   const onBackgroundClick = e => {
@@ -31,7 +32,7 @@ function Background({ hide, children }) {
 }
 
 export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
-  const { namespaceId: namespace } = useMicrofrontendContext();
+  const namespace = useRecoilValue(activeNamespaceIdState);
 
   const [query, setQuery] = useState('');
   const [originalQuery, setOriginalQuery] = useState('');

@@ -10,8 +10,10 @@ import {
   navigateToClusterResourceDetails,
   navigateToFixedPathResourceDetails,
 } from 'shared/hooks/navigate';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { useRecoilValue } from 'recoil';
+import { clusterState } from 'state/clusterAtom';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 function pathExists(path) {
   const pathId = shortid.generate();
@@ -41,7 +43,8 @@ export const GoToDetailsLink = ({
   apiVersion,
   noBrackets = false,
 }) => {
-  const { cluster, namespaceId } = useMicrofrontendContext();
+  const cluster = useRecoilValue(clusterState);
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const activeClusterName = cluster?.name;
   const namespacedViewPath = `/cluster/${activeClusterName}/namespaces/${namespaceId}/${resource}/details/${name}`;
   const clusterWideViewPath = `/cluster/${activeClusterName}/${resource}/details/${name}`;

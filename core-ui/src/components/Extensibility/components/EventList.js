@@ -1,11 +1,12 @@
 import React from 'react';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 import { EventList as EventListComponent } from 'resources/Events/EventList';
 
 import { useGetTranslation } from '../helpers';
 import { useJsonata } from '../hooks/useJsonata';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export function EventList({
   structure,
@@ -14,7 +15,7 @@ export function EventList({
   value,
   arrayItems,
 }) {
-  const { namespaceId } = useMicrofrontendContext();
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { widgetT } = useGetTranslation();
   const jsonata = useJsonata({
     resource: originalResource,
