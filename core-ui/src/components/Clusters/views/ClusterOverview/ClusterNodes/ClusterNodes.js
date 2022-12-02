@@ -34,7 +34,7 @@ const NodeHeader = ({ nodeName }) => {
 
 export function ClusterNodes() {
   const { t } = useTranslation();
-  const prometheus = useFeature('PROMETHEUS');
+  const prometheus = useFeature('PROMETHEUS') || {};
   const usePrometheusQueries = prometheus?.isEnabled;
 
   const {
