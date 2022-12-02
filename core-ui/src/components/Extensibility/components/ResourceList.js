@@ -50,7 +50,7 @@ export function ResourceList({
     arrayItems,
   });
 
-  const extensibilityResourceSchema = customResources.find(
+  const extensibilityResourceSchema = customResources?.find(
     cR => cR.general?.resource?.kind === kind,
   );
 

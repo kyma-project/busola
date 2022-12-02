@@ -1,19 +1,27 @@
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useRecoilValue } from 'recoil';
+
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { clusterState } from 'state/clusterAtom';
+import { extensibilityNodesState } from 'state/navigation/extensibilityNodeAtom';
 
 export const useGetCRbyPath = () => {
-  const { customResources = [], namespaceId } = useMicrofrontendContext();
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const extensions = useRecoilValue(extensibilityNodesState);
+  const { name: clusterName } = useRecoilValue(clusterState) || {};
 
-  const resource = customResources.find(el => {
-    const { scope, urlPath } = el.general || {};
+  const resource = extensions.find(el => {
+    const { scope, urlPath, resource } = el.general || {};
+    const extensionPath = urlPath || resource?.kind?.toLowerCase();
     const hasCorrectScope =
       (scope?.toLowerCase() === 'namespace') === !!namespaceId;
     if (!hasCorrectScope) return false;
 
     const crPath = window.location.pathname
-      .replace(`/namespaces/${namespaceId}`, '')
-      .replace('/core-ui', '');
+      .replace(`/cluster/${clusterName}/`, '')
+      .replace(`namespaces/${namespaceId}/`, '')
+      .replace('core-ui/', '');
 
-    return crPath.split('/')[1] === urlPath;
+    return crPath.split('/')[0] === extensionPath;
   });
 
   return resource;

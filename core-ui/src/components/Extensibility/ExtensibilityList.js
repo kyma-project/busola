@@ -47,7 +47,14 @@ export const ExtensibilityListCore = ({
     resource,
   });
 
-  const listProps = usePrepareListProps(urlPath, 'name');
+  const listProps = usePrepareListProps({
+    resourceCustomType: urlPath,
+    resourceType: resource?.kind,
+    resourceI18Key: 'name',
+    apiGroup: resource?.group,
+    apiVersion: resource?.version,
+    hasDetailsView: !!resMetaData?.details,
+  });
 
   const resourceTitle = resMetaData?.general?.name;
   listProps.resourceTitle = exists('name')
