@@ -10,7 +10,7 @@ import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
 import { externalNodesSelector } from './externalNodesSelector';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { configurationAtom } from '../configurationAtom';
-import { extensibilityNodesState } from '../navigation/extensibilityNodesSelector';
+import { extensibilityNodesState } from './extensibilityNodeAtom';
 
 export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
   Category[]
