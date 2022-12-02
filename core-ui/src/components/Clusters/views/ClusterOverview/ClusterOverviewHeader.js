@@ -2,12 +2,16 @@ import LuigiClient from '@luigi-project/client';
 import { Button } from 'fundamental-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
+
 import { YamlUploadDialog } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ClusterStorageType } from '../ClusterStorageType';
 import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
+import { useFeature } from 'hooks/useFeature';
+import { configurationAtom } from 'state/configurationAtom';
+import { clusterState } from 'state/clusterAtom';
 
 const Versions = () => {
   const { t } = useTranslation();
@@ -33,9 +37,7 @@ const Versions = () => {
 
 const GardenerProvider = () => {
   const { t } = useTranslation();
-  const { features } = useMicrofrontendContext();
-
-  const showGardenerMetadata = features?.SHOW_GARDENER_METADATA?.isEnabled;
+  const showGardenerMetadata = useFeature('SHOW_GARDENER_METADATA')?.isEnabled;
 
   const provider = useGetGardenerProvider({
     skip: !showGardenerMetadata,
@@ -53,7 +55,8 @@ const GardenerProvider = () => {
 
 export function ClusterOverviewHeader() {
   const { t } = useTranslation();
-  const { cluster, config } = useMicrofrontendContext();
+  const cluster = useRecoilValue(clusterState);
+  const config = useRecoilValue(configurationAtom);
   const [showAdd, setShowAdd] = useState(false);
 
   const actions = (
@@ -77,7 +80,7 @@ export function ClusterOverviewHeader() {
       >
         <Versions />
         <PageHeader.Column title={t('clusters.common.api-server-address')}>
-          {cluster?.cluster.server}
+          {cluster?.currentContext?.cluster?.cluster?.server}
         </PageHeader.Column>
         <PageHeader.Column title={t('clusters.storage.title')}>
           <ClusterStorageType clusterConfig={config} />
