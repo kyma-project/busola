@@ -6,6 +6,8 @@ export function useFeature<T extends ConfigFeature>(
   featureName: ConfigFeaturesNames,
 ): T {
   const configuration = useRecoilValue(configurationAtom);
-  const result = configuration?.features?.[featureName] ?? { isEnabled: false };
-  return result as T;
+  const feature = configuration?.features?.[featureName] ?? {
+    isEnabled: false,
+  };
+  return feature as T;
 }
