@@ -1,6 +1,5 @@
 import { AuthDataState } from 'state/authDataAtom';
 import { ActiveClusterState } from 'state/clusterAtom';
-import { SsoDataState } from 'state/ssoDataAtom';
 
 export function createAuthHeaders(auth: AuthDataState) {
   if (!auth) {
@@ -17,23 +16,13 @@ export function createAuthHeaders(auth: AuthDataState) {
   }
 }
 
-function createSSOHeader(ssoData: SsoDataState) {
-  if (ssoData) {
-    return { Authorization: 'Bearer ' + ssoData.idToken };
-  } else {
-    return null;
-  }
-}
-
 export function createHeaders(
   authData: AuthDataState,
   cluster: ActiveClusterState,
   requiresCA: boolean,
-  ssoData: SsoDataState,
 ): HeadersInit {
   return {
     ...createAuthHeaders(authData),
-    ...createSSOHeader(ssoData),
     'X-Cluster-Url': cluster?.currentContext.cluster.cluster.server,
     'X-Cluster-Certificate-Authority-Data': requiresCA
       ? cluster?.currentContext.cluster.cluster['certificate-authority-data']

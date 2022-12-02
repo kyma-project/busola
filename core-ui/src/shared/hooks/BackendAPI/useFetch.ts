@@ -1,11 +1,9 @@
 import { useRecoilValue } from 'recoil';
 
-import { checkForTokenExpiration } from 'shared/hooks/BackendAPI/checkForTokenExpiration';
 import { createHeaders } from 'shared/hooks/BackendAPI/createHeaders';
 import { throwHttpError } from 'shared/hooks/BackendAPI/config';
 
 import { authDataState, AuthDataState } from '../../../state/authDataAtom';
-import { ssoDataState, SsoDataState } from '../../../state/ssoDataAtom';
 import {
   clusterConfigState,
   ClusterConfigState,
@@ -27,13 +25,11 @@ export const createFetchFn = ({
   authData,
   cluster,
   config,
-  ssoData,
   backendAddress,
 }: {
   authData: AuthDataState;
   cluster: ActiveClusterState;
   config: ClusterConfigState;
-  ssoData: SsoDataState;
   backendAddress: string;
 }): FetchFn => async ({
   relativeUrl,
@@ -44,14 +40,11 @@ export const createFetchFn = ({
   init?: any;
   abortController?: AbortController;
 }) => {
-  const token = authData && 'token' in authData ? authData.token : undefined;
-  checkForTokenExpiration(token);
-  checkForTokenExpiration(ssoData?.idToken, { reason: 'sso-expiration' });
   init = {
     ...init,
     headers: {
       ...(init?.headers || {}),
-      ...createHeaders(authData, cluster, config?.requiresCA!, ssoData), //todo '!'
+      ...createHeaders(authData, cluster, config?.requiresCA!), //todo '!'
     },
     signal: abortController?.signal,
   };
@@ -73,14 +66,12 @@ export const useFetch = () => {
   const authData = useRecoilValue(authDataState);
   const cluster = useRecoilValue(clusterState);
   const config = useRecoilValue(clusterConfigState);
-  const ssoData = useRecoilValue(ssoDataState);
   const { backendAddress } = getClusterConfig();
 
   const fetchFn = createFetchFn({
     authData,
     cluster,
     config,
-    ssoData,
     backendAddress,
   });
   return fetchFn;
