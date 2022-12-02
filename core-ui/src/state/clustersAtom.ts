@@ -1,5 +1,5 @@
 import { atom, RecoilState } from 'recoil';
-import { localStorageEffect } from './utils/effects';
+import { clusterStorageEffect } from './utils/effects';
 import { Cluster } from './clusterAtom';
 
 export type ClustersState = {
@@ -12,5 +12,5 @@ const defaultValue = {};
 export const clustersState: RecoilState<ClustersState> = atom<ClustersState>({
   key: 'clustersState',
   default: defaultValue,
-  effects: [localStorageEffect<ClustersState>(CLUSTERS_STORAGE_KEY)],
+  effects: [clusterStorageEffect<ClustersState>(CLUSTERS_STORAGE_KEY)],
 });
