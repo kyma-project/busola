@@ -9,7 +9,7 @@ import { CommitmentGraph } from './CommitmentGraph';
 import './ResourceCommitment.scss';
 
 export function ResourceCommitment() {
-  const { isEnabled } = useFeature('PROMETHEUS') || {};
+  const { isEnabled } = useFeature('PROMETHEUS');
   const { t } = useTranslation();
   const {
     QueryDropdown,

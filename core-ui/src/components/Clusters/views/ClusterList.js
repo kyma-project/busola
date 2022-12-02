@@ -24,7 +24,7 @@ import { useLoadDefaultKubeconfigId } from 'components/App/useLoginWithKubeconfi
 import { useFeature } from 'hooks/useFeature';
 
 function ClusterList() {
-  const kubeconfigIdFeature = useFeature('KUBECONFIG_ID') || {};
+  const kubeconfigIdFeature = useFeature('KUBECONFIG_ID');
   const loadDefaultKubeconfigId = useLoadDefaultKubeconfigId();
 
   const clustersInfo = useClustersInfo();

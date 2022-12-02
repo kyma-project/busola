@@ -5,7 +5,7 @@ import { useCurrentQuery } from './queries';
 import { useFeature } from 'hooks/useFeature';
 
 export function useMetricsQuery() {
-  const { serviceUrl } = useFeature('PROMETHEUS') || {};
+  const { serviceUrl } = useFeature('PROMETHEUS');
   const [time, setTime] = useState(Date.now());
   const { t } = useTranslation();
 
