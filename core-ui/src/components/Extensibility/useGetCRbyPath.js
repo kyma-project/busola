@@ -1,3 +1,4 @@
+import pluralize from 'pluralize';
 import { useRecoilValue } from 'recoil';
 
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
@@ -11,7 +12,7 @@ export const useGetCRbyPath = () => {
 
   const resource = extensions.find(el => {
     const { scope, urlPath, resource } = el.general || {};
-    const extensionPath = urlPath || resource?.kind?.toLowerCase();
+    const extensionPath = urlPath || pluralize(resource?.kind?.toLowerCase());
     const hasCorrectScope =
       (scope?.toLowerCase() === 'namespace') === !!namespaceId;
     if (!hasCorrectScope) return false;

@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import pluralize from 'pluralize';
 import i18next from 'i18next';
 import { Route } from 'react-router-dom';
 
@@ -11,7 +12,8 @@ const Details = React.lazy(() =>
 
 export const createExtensibilityRoutes = (cr, language) => {
   const urlPath =
-    cr?.general?.urlPath || cr?.general?.resource?.kind?.toLowerCase();
+    cr?.general?.urlPath ||
+    pluralize(cr?.general?.resource?.kind?.toLowerCase() || '');
 
   const translationBundle = urlPath || 'extensibility';
   i18next.addResourceBundle(
