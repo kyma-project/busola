@@ -10,12 +10,8 @@ import { useClustersInfo } from 'state/utils/getClustersInfo';
 function NoPermissions() {
   const { t } = useTranslation();
   const [namespaceName, setNamespaceName] = useState('');
-  const cluster = useRecoilValue(clusterState);
+  const cluster = useRecoilValue(clusterState)!;
   const clustersInfo = useClustersInfo();
-
-  if (!cluster) {
-    throw Error('XD');
-  }
 
   const updateKubeconfig = () => {
     // make a copy since we cannot edit Recoil state value
