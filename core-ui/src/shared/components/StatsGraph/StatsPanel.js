@@ -7,7 +7,7 @@ import {
   BusyIndicator,
 } from 'fundamental-react';
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
-import { useFeature } from 'shared/hooks/useFeature';
+import { useFeature } from 'hooks/useFeature';
 import { getErrorMessage } from 'shared/utils/helpers';
 import { useTranslation } from 'react-i18next';
 

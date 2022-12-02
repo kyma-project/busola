@@ -11,7 +11,7 @@ import { EVENT_MESSAGE_TYPE } from 'hooks/useMessageList';
 
 import './NodeDetails.scss';
 import { StatsPanel } from 'shared/components/StatsGraph/StatsPanel';
-import { useFeature } from 'shared/hooks/useFeature';
+import { useFeature } from 'hooks/useFeature';
 
 function NodeDetails({ nodeName }) {
   const { data, error, loading } = useNodeQuery(nodeName);

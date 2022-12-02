@@ -15,7 +15,7 @@ import { ResourceCommitment } from './ResourceCommitment/ResourceCommitment';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { ProgressBar } from 'shared/components/ProgressBar/ProgressBar';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
-import { useFeature } from 'shared/hooks/useFeature';
+import { useFeature } from 'hooks/useFeature';
 
 import './ClusterNodes.scss';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { useFeature } from 'shared/hooks/useFeature';
+import { useFeature } from 'hooks/useFeature';
 import * as Sentry from '@sentry/react';
 
 export function useVersionWarning({ resourceUrl, resourceType }) {

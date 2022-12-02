@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useFeature } from 'shared/hooks/useFeature';
+import { useFeature } from 'hooks/useFeature';
 import { LayoutPanel } from 'fundamental-react';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useMetricsQuery } from './useMetricsQuery';
