@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { useFeature } from 'shared/hooks/useFeature';
+import { useFeature } from 'hooks/useFeature';
 
 const getPrometheusSelector = data => {
   let selector = `cluster="", container!="", namespace="${data.namespace}"`;
@@ -147,7 +147,7 @@ export function usePrometheus({
 }) {
   const {
     serviceUrl = '/api/v1/namespaces/kyma-system/services/monitoring-prometheus:http-web/proxy/api/v1',
-  } = useFeature('PROMETHEUS');
+  } = useFeature('PROMETHEUS') || {};
   const step = timeSpan / items;
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
