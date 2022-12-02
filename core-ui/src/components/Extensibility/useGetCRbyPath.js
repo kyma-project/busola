@@ -10,17 +10,18 @@ export const useGetCRbyPath = () => {
   const { name: clusterName } = useRecoilValue(clusterState) || {};
 
   const resource = extensions.find(el => {
-    const { scope, urlPath } = el.general || {};
+    const { scope, urlPath, resource } = el.general || {};
+    const extensionPath = urlPath || resource?.kind?.toLowerCase();
     const hasCorrectScope =
       (scope?.toLowerCase() === 'namespace') === !!namespaceId;
     if (!hasCorrectScope) return false;
 
     const crPath = window.location.pathname
-      .replace(`/namespaces/${namespaceId}/`, '')
       .replace(`/cluster/${clusterName}/`, '')
-      .replace('/core-ui/', '');
+      .replace(`namespaces/${namespaceId}/`, '')
+      .replace('core-ui/', '');
 
-    return crPath.split('/')[0] === urlPath;
+    return crPath.split('/')[0] === extensionPath;
   });
 
   return resource;

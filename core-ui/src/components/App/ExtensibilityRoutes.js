@@ -10,7 +10,8 @@ const Details = React.lazy(() =>
 );
 
 export const createExtensibilityRoutes = (cr, language) => {
-  const urlPath = cr?.general?.urlPath;
+  const urlPath =
+    cr?.general?.urlPath || cr?.general?.resource?.kind?.toLowerCase();
 
   const translationBundle = urlPath || 'extensibility';
   i18next.addResourceBundle(

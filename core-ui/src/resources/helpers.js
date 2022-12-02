@@ -23,7 +23,7 @@ export const usePrepareListProps = ({
   const namespaceId = useRecoilValue(activeNamespaceIdState);
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
   const resourceUrl = namespaceId
-    ? `/${api}/namespaces/${namespaceId}/${resourceType.toLowerCase()}`
+    ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}`
     : `/${api}/${resourceType?.toLowerCase()}`;
 
   return {
