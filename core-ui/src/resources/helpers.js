@@ -11,7 +11,7 @@ import {
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export const usePrepareListProps = ({
-  resourceName,
+  resourceCustomType,
   resourceType,
   resourceI18Key,
   apiGroup,
@@ -32,7 +32,7 @@ export const usePrepareListProps = ({
     hasDetailsView,
     readOnly: queryParams.get('readOnly') === 'true',
     resourceUrl,
-    resourceType: resourceName || pluralize(resourceType || ''),
+    resourceType: resourceCustomType || pluralize(resourceType || ''),
     resourceTitle: i18n.exists(resourceI18Key) ? t(resourceI18Key) : '',
     namespace: routerParams.namespaceId,
     i18n,
@@ -40,6 +40,7 @@ export const usePrepareListProps = ({
 };
 
 export const usePrepareDetailsProps = ({
+  resourceCustomType,
   resourceType,
   resourceI18Key,
   apiGroup,
@@ -50,7 +51,7 @@ export const usePrepareDetailsProps = ({
   const { i18n, t } = useTranslation();
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
   const resourceUrl = namespaceId
-    ? `/${api}/namespaces/${namespaceId}/${resourceType.toLowerCase()}/${resourceName}`
+    ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}/${resourceName}`
     : `/${api}/${resourceType?.toLowerCase()}/${resourceName}`;
 
   const decodedResourceUrl = decodeURIComponent(resourceUrl);
@@ -61,7 +62,7 @@ export const usePrepareDetailsProps = ({
 
   return {
     resourceUrl: decodedResourceUrl,
-    resourceType: resourceType,
+    resourceType: resourceCustomType || pluralize(resourceType || ''),
     resourceTitle: i18n.exists(resourceI18Key)
       ? t(resourceI18Key)
       : resourceI18Key,
