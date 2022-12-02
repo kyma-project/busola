@@ -51,7 +51,7 @@ export default function ClusterRoutes() {
 
       <Route
         path="namespaces/:namespaceId"
-        element={<Navigate to="namespaces/:namespaceId/details" />}
+        element={<Navigate to="details" />}
       />
       <Route path="namespaces/:namespaceId/*" element={<NamespaceRoutes />} />
       {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
