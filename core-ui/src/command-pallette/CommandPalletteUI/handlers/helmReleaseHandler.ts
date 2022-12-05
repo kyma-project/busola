@@ -1,6 +1,4 @@
-//@ts-nocheck
 import { TFunction } from 'react-i18next';
-import LuigiClient from '@luigi-project/client';
 import { findRecentRelease } from 'components/HelmReleases/findRecentRelease';
 import { groupBy } from 'lodash';
 import { K8sResource } from 'types';
@@ -52,20 +50,20 @@ function makeListItem(
   namespace: string | null,
   t: TFunction<'translation', undefined>,
 ) {
-  const name = item.metadata.labels.name;
+  //todo: it was item.metadata.labels.name, does it change anything?
+  const name = item.metadata.name;
 
   return {
     label: name,
     category: t('configuration.title') + ' > ' + t('helm-releases.title'),
     query: `helmreleases ${name}`,
-    onActivate: () =>
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate(`/namespaces/${namespace}/helm-releases/details/${name}`),
+    onActivate: () => {
+      // todo: navigateFunction
+    },
   };
 }
 
-function concernsHelmReleases({ tokens }: { tokens: string[] }) {
+function concernsHelmReleases({ tokens }: CommandPaletteContext) {
   return tokens[0] === helmReleaseResourceType;
 }
 
@@ -110,13 +108,13 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     }),
     category: t('configuration.title') + ' > ' + t('helm-releases.title'),
     query: 'helmReleases',
-    onActivate: () =>
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate(`/namespaces/${namespace}/helm-releases`),
+    onActivate: () => {
+      // todo: navigateFunction
+    },
   };
 
   if (typeof helmReleases !== 'object') {
+    //@ts-ignore todo: how to handle 'type' in Result[]?
     return [linkToList, { type: LOADING_INDICATOR }];
   }
 
