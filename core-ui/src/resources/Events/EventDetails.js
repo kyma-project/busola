@@ -1,12 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Icon, LayoutPanel, Link } from 'fundamental-react';
+import { Icon, LayoutPanel } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 
-import {
-  formatInvolvedObject,
-  formatSourceObject,
-  navigateToNamespaceOverview,
-} from 'hooks/useMessageList';
+import { useUrl } from 'hooks/useUrl';
+import { FormatInvolvedObject, FormatSourceObject } from 'hooks/useMessageList';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTimestamp/ReadableCreationTimestamp';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
@@ -44,16 +42,17 @@ const Message = event => {
 
 export function EventDetails(props) {
   const { t } = useTranslation();
+  const { clusterUrl } = useUrl();
 
   const customColumns = [
     {
       header: t('events.headers.involved-object'),
-      value: event => formatInvolvedObject(event.involvedObject),
+      value: event => FormatInvolvedObject(event.involvedObject),
     },
     {
       header: t('events.headers.source'),
       value: event =>
-        formatSourceObject(event.source || EMPTY_TEXT_PLACEHOLDER),
+        FormatSourceObject(event.source || EMPTY_TEXT_PLACEHOLDER),
     },
     {
       header: t('common.labels.namespace'),
@@ -61,7 +60,7 @@ export function EventDetails(props) {
         <Link
           className="fd-link"
           data-testid="details-link"
-          onClick={() => navigateToNamespaceOverview(event.metadata.namespace)}
+          to={clusterUrl(`namespaces/${event.metadata.namespace}`)}
         >
           {event.metadata.namespace}
         </Link>

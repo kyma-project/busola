@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import LuigiClient from '@luigi-project/client';
-import { Link } from 'fundamental-react';
+import { Link } from 'react-router-dom';
+
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
+import { useUrl } from 'hooks/useUrl';
 
 export const EVENT_MESSAGE_TYPE = {
   ALL: { key: 'All', text: 'all' },
@@ -26,7 +28,7 @@ export const RESOURCE_PATH = {
   Ingress: 'ingresses',
   Issuer: 'issuers',
   Job: 'jobs',
-  Node: 'nodes',
+  Node: 'overview/nodes',
   PersistentVolume: 'persistentvolumes',
   PersistentVolumeClaim: 'persistentvolumeclaims',
   Pod: 'pods',
@@ -42,41 +44,16 @@ export const filterByResource = (resourceKind, resourceName) => e =>
   e.involvedObject?.name === resourceName &&
   e.involvedObject?.kind === resourceKind;
 
-const navigateToObjectDetails = ({ namespace, name, kind }) => {
-  const namespacePrefix = namespace ? `namespaces/${namespace}/` : '';
-  const path = `${namespacePrefix}${RESOURCE_PATH[kind]}/details/${name}`;
-  LuigiClient.linkManager()
-    .fromContext('cluster')
-    .navigate(path);
-};
-
-const navigateToNodeDetails = nodeName => {
-  LuigiClient.linkManager()
-    .fromContext('cluster')
-    .navigate(`/overview/nodes/${nodeName}`);
-};
-
-export const navigateToNamespaceOverview = namespaceName => {
-  LuigiClient.linkManager()
-    .fromContext('cluster')
-    .navigate(`/namespaces/${namespaceName}/details`);
-};
-
-export const formatInvolvedObject = obj => {
+export const FormatInvolvedObject = obj => {
   const namespacePrefix = obj.namespace ? `${obj.namespace}` : '';
+  const namespaceOverride = obj.namespace ? { namespace: obj.namespace } : null;
+
   const text = `${obj.kind} ${namespacePrefix}/${obj.name}`;
   const isLink = !!RESOURCE_PATH[obj.kind];
+  const { scopedUrl } = useUrl();
+  const path = `${RESOURCE_PATH[obj.kind]}/${obj.name}`;
   return isLink ? (
-    <Link
-      className="fd-link"
-      onClick={() => {
-        if (obj.kind === 'Node') {
-          navigateToNodeDetails(obj.name);
-        } else {
-          navigateToObjectDetails(obj);
-        }
-      }}
-    >
+    <Link className="fd-link" to={scopedUrl(path, namespaceOverride)}>
       {text}
     </Link>
   ) : (
@@ -84,10 +61,11 @@ export const formatInvolvedObject = obj => {
   );
 };
 
-export const formatSourceObject = obj => {
+export const FormatSourceObject = obj => {
+  const { clusterUrl } = useUrl();
   if (!obj || Object.keys(obj).length === 0) return EMPTY_TEXT_PLACEHOLDER;
   return obj.host ? (
-    <Link className="fd-link" onClick={() => navigateToNodeDetails(obj.host)}>
+    <Link className="fd-link" to={clusterUrl(`overview/nodes/${obj.host}`)}>
       {obj.host}
     </Link>
   ) : (
@@ -118,10 +96,8 @@ export const useMessageList = (defaultType = EVENT_MESSAGE_TYPE.ALL) => {
   return {
     displayType,
     setDisplayType,
-    formatInvolvedObject,
-    formatSourceObject,
-    navigateToObjectDetails,
-    navigateToNodeDetails,
+    FormatInvolvedObject,
+    FormatSourceObject,
     MessageSelector,
     EVENT_MESSAGE_TYPE,
   };
