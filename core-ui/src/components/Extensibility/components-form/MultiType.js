@@ -9,7 +9,6 @@ import { useGetTranslation } from 'components/Extensibility/helpers';
 
 export function MultiType({
   onChange,
-  // value,
   schema,
   storeKeys,
   required,
