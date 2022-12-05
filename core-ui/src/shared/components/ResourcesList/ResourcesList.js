@@ -219,9 +219,7 @@ export function ResourceListRenderer({
     // TODO fix when details are working
     // if (navigateFn) return navigateFn(entry);
     // if (fixedPath) return navigateToResource(entry);
-    return scopedUrl(
-      `${pluralize(resourceType.toLowerCase())}/${entry.metadata.name}`,
-    );
+    return scopedUrl(`${resourceType.toLowerCase()}/${entry.metadata.name}`);
   };
 
   const defaultColumns = [

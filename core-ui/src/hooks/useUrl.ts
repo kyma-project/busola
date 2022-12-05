@@ -1,22 +1,22 @@
-import { useRecoilValue } from 'recoil';
+import { useMatch } from 'react-router';
 
-import { clusterState } from 'state/clusterAtom';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { UrlGenerators } from 'state/types';
 
 export const useUrl: () => UrlGenerators = () => {
-  const currentCluster = useRecoilValue(clusterState);
-  const activeNamespace = useRecoilValue(activeNamespaceIdState);
+  const cluster =
+    useMatch({ path: '/cluster/:cluster', end: false })?.params?.cluster ?? '';
+  const namespace =
+    useMatch({ path: '/cluster/:cluster/namespaces/:namespace', end: false })
+      ?.params?.namespace ?? '';
 
   const clusterUrl = (path: string) => {
-    return `/cluster/${currentCluster?.contextName}/${path}`;
+    return `/cluster/${cluster}/${path}`;
   };
   const namespaceUrl = (path: string) => {
-    // return `/cluster/${currentCluster}/namespaces/${namespace}/${path}`;
-    return `/cluster/${currentCluster?.contextName}/namespaces/${activeNamespace}/${path}`;
+    return `/cluster/${cluster}/namespaces/${namespace}/${path}`;
   };
   const scopedUrl = (path: string) => {
-    if (activeNamespace) {
+    if (namespace) {
       return namespaceUrl(path);
     } else {
       return clusterUrl(path);
@@ -24,6 +24,8 @@ export const useUrl: () => UrlGenerators = () => {
   };
 
   return {
+    cluster,
+    namespace,
     clusterUrl,
     namespaceUrl,
     scopedUrl,

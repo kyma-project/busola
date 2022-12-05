@@ -34,20 +34,25 @@ export const ExtensibilityListCore = ({
   const { urlPath, resource, description, features } =
     resMetaData?.general ?? {};
 
-  const { disableCreate, disableEdit, disableDelete } = features?.actions
-    ? {}
-    : {
-        disableCreate: props.disableCreate,
-        disableEdit: props.disableEdit,
-        disableDelete: props.disableDelete,
-      };
+  const { disableCreate, disableEdit, disableDelete } = features?.actions ?? {
+    disableCreate: props.disableCreate,
+    disableEdit: props.disableEdit,
+    disableDelete: props.disableDelete,
+  };
 
   const dataSources = resMetaData?.dataSources || {};
   const { schema } = useGetSchema({
     resource,
   });
 
-  const listProps = usePrepareListProps(urlPath, 'name');
+  const listProps = usePrepareListProps({
+    resourceCustomType: urlPath,
+    resourceType: resource?.kind,
+    resourceI18Key: 'name',
+    apiGroup: resource?.group,
+    apiVersion: resource?.version,
+    hasDetailsView: !!resMetaData?.details,
+  });
 
   const resourceTitle = resMetaData?.general?.name;
   listProps.resourceTitle = exists('name')
