@@ -1,9 +1,8 @@
-import React, { createContext, useContext, useState } from 'react';
-import LuigiClient from '@luigi-project/client';
+import { createContext, useContext, useState } from 'react';
+import { ErrorModal } from './ErrorModal/ErrorModal';
 
 export const NotificationContext = createContext({
   isOpen: false,
-  notify: () => {},
   notifySuccess: () => {},
   notifyError: () => {},
 });
@@ -13,41 +12,9 @@ export const NotificationProvider = ({
   defaultVisibilityTime = 5000,
 }) => {
   const [toastProps, setToastProps] = useState();
-
-  const escFunction = event => {
-    if (event.key === 'Escape') {
-      event.stopPropagation();
-    }
-  };
-
-  function showLuigiNotification(notificationProps) {
-    const header =
-      (notificationProps.content && notificationProps.title) ||
-      notificationProps.type === 'error'
-        ? 'Error'
-        : 'Information';
-    const body = notificationProps.content || notificationProps.title;
-
-    document.addEventListener('keydown', escFunction, {
-      capture: true,
-    });
-
-    LuigiClient.uxManager()
-      .showConfirmationModal({
-        type: notificationProps.type,
-        body,
-        header,
-        ...notificationProps,
-      })
-      .catch(e => {
-        document.removeEventListener('keydown', escFunction, {
-          capture: true,
-        });
-      });
-  }
+  const [errorProps, setErrorProps] = useState();
 
   const methods = {
-    notify: showLuigiNotification,
     notifySuccess: function(
       notificationProps,
       visibilityTime = defaultVisibilityTime,
@@ -60,11 +27,12 @@ export const NotificationProvider = ({
       setToastProps(notificationProps);
     },
     notifyError: function(notificationProps) {
-      showLuigiNotification({
+      setErrorProps({
         type: 'error',
         buttonConfirm: false,
-        buttonDismiss: 'Close',
+        buttonDismissText: 'Close',
         header: 'Error',
+        close: () => setErrorProps(null),
         ...notificationProps,
       });
     },
@@ -87,6 +55,7 @@ export const NotificationProvider = ({
           </div>
         </div>
       )}
+      {errorProps && <ErrorModal {...errorProps} />}
       {children}
     </NotificationContext.Provider>
   );

@@ -33,7 +33,12 @@ export const ExtensibilityListCore = ({
 
   const { urlPath, resource, description, features } =
     resMetaData?.general ?? {};
-  const { disableCreate, disableEdit, disableDelete } = features?.actions ?? {};
+
+  const { disableCreate, disableEdit, disableDelete } = features?.actions ?? {
+    disableCreate: props.disableCreate,
+    disableEdit: props.disableEdit,
+    disableDelete: props.disableDelete,
+  };
 
   const dataSources = resMetaData?.dataSources || {};
   const { schema } = useGetSchema({
@@ -74,7 +79,7 @@ export const ExtensibilityListCore = ({
       }))
     : [];
 
-  const isFilterAString = typeof resMetaData.resource?.filter === 'string';
+  const isFilterAString = typeof resMetaData?.resource?.filter === 'string';
   const filterFn = value =>
     applyFormula(value, resMetaData.resource.filter, tBusola);
   listProps.filter = isFilterAString ? filterFn : filterFunction;

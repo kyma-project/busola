@@ -1,41 +1,4 @@
 api-rules: API Rules
-applications:
-  buttons:
-    connect: Connect Application
-    create-app: $t(applications.subtitle.create-app)
-  description: <0>Application</0> represents an external solution connected to Kyma.
-  headers:
-    access-label: Access Label
-    apis: APIs
-    central-gateway-url: Central Gateway URL
-    description: Description
-    events: Events
-    service: Service
-  labels:
-    description: Description
-    namespace: Namespace
-  messages:
-    cannot-create: Cannot create the Application
-    connect-disabled: Connecting Applications is disabled for SAP BTP, Kyma Runtime.
-    copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
-    create-failed: Failed to create the Application
-    created: Application created
-    no-apis: There are no APIs.
-    no-events: There are no events.
-    service-not-found: No services
-  name_singular: Application
-  placeholders:
-    description: Provide a description for your Application
-  statuses:
-    deployed: Deployed
-    provisioning: Provisioning
-  subtitle:
-    connect-app: Connect Application
-    create-app: Create Application
-    provided-services: Provided Services and Events
-  title: Applications
-  tooltips:
-    provisioning: The Application is being provisioned asynchronously.
 apps:
   title: Apps
 btp-instances:
@@ -337,10 +300,12 @@ common:
     autocomplete-unavailable-error: Monaco autocompletion unavailable. {{error}}.
     choose-preset: Choose preset
     editor-error: 'Parse error: {{error}}, previous valid input will be used'
+    force-update: Force update
     messages:
-      create-failure: 'Failed to create the {{resourceType}}: {{error}}'
+      create-failure: 'Failed to create the {{resourceType}}: {{error}}.'
       create-success: '{{resourceType}} created'
-      patch-failure: 'Failed to update the {{resourceType}}: {{error}}'
+      force-update: All remote changes are overwritten if you force the resource update.
+      patch-failure: 'Failed to update the {{resourceType}}: {{error}}.'
       patch-success: '{{resourceType}} updated'
     modes:
       advanced: Advanced

@@ -11,6 +11,7 @@ import './ServiceDetails.scss';
 const ExtensibilityList = React.lazy(() =>
   import('../../components/Extensibility/ExtensibilityList'),
 );
+
 export function ApiRulesList({ serviceName, namespace }) {
   const { t } = useTranslation();
   const { customResources } = useMicrofrontendContext();
@@ -53,6 +54,7 @@ export function ApiRulesList({ serviceName, namespace }) {
           resourceUrl={url}
           hasDetailsView
           showTitle
+          disableCreate
           title={t('api-rules')}
           navigateFn={navigateToApiRule}
         />
@@ -70,6 +72,7 @@ export function ApiRulesList({ serviceName, namespace }) {
       namespace={namespace}
       isCompact
       showTitle
+      disableCreate
       filter={filterByServiceName}
     />
   );

@@ -120,6 +120,7 @@ data:
       path: spec.service
       name: service
       widget: FormGroup
+      defaultExpanded: true
       children:
         - simple: true
           required: false
@@ -136,7 +137,7 @@ data:
           path: port 
           name: service.port
           subscribe:
-            port: "$filter($relatedServices().items, function ($v) { $contains($v.metadata.name, $root.spec.service.name)}).spec.ports[0].port"
+            port: "$filter($relatedServices().items, function ($v) { $v.metadata.name = $root.spec.service.name and $v.metadata.namespace = $root.metadata.namespace }).spec.ports[0].port"
     - simple: true
       var: accessToGateways
       name: accessToGateways
@@ -146,6 +147,7 @@ data:
       path: spec.gateway
       name: gateway
       widget: ResourceRef
+      defaultExpanded: true
       visibility: $accessToGateways
       resource:
         kind: Gateway
@@ -169,24 +171,37 @@ data:
     - simple: true
       required: true
       path: spec.host
-      inputInfo: inputInfo.spec.host
       name: host
-      enum: "$distinct($filter($relatedGateways().items, function ($v) { $contains($v.metadata.name, $substringBefore($root.spec.gateway, '.')) and ($contains($v.metadata.namespace, $substringBefore($substringAfter($root.spec.gateway, '.'), '.')))}).spec.servers.hosts)"
+      enum: "$distinct($filter($relatedGateways().items, function ($v) { $v.metadata.name = $substringBefore($root.spec.gateway, '.') and $v.metadata.namespace = $substringBefore($substringAfter($root.spec.gateway, '.'), '.')}).spec.servers.hosts)"
       subscribe:
-        host: "$string($filter($relatedGateways().items, function ($v) { $contains($v.metadata.name, $substringBefore($root.spec.gateway, '.')) and ($contains($v.metadata.namespace, $substringBefore($substringAfter($root.spec.gateway, '.'), '.')))}).spec.servers[0].hosts[0])"
+        host: "$string($filter($relatedGateways().items, function ($v) {  $v.metadata.name = $substringBefore($root.spec.gateway, '.') and $v.metadata.namespace = $substringBefore($substringAfter($root.spec.gateway, '.'), '.')}).spec.servers[0].hosts[0])"
+    - simple: true
+      widget: Alert
+      severity: error
+      alert: '"alert.spec.host"'
+      visibility: '$substring(spec.host, 0, 1)="*"'
     - simple: true
       required: true
       path: spec.rules 
       name: rules 
       widget: GenericList 
+      defaultExpanded: true
       template:
         path: '/.*'
         methods: ['GET']
+        accessStrategies:
+          - handler: 'allow'
       children:
+        - simple: true
+          required: true
+          path: '[].path'
+          name: path
+          inputInfo: inputInfo.path
         - required: true
           path: '[].accessStrategies'
           name: accessStrategies 
-          widget: GenericList 
+          widget: GenericList
+          defaultExpanded: true
           template:
             handler: 'allow'
           children:
@@ -209,6 +224,7 @@ data:
           path: '[].methods'
           name: rules.methods 
           widget: SimpleList
+          defaultExpanded: true
           children:
             - path: '[]' 
               enum:
@@ -220,7 +236,7 @@ data:
                 - HEAD
         - path: '[].mutators' 
           name: mutators 
-          widget: GenericList 
+          widget: GenericList
           children:
             - path: '[].config'
               name: accessStrategies.config
@@ -228,11 +244,6 @@ data:
             - required: true
               path: '[].handler'
               name: accessStrategies.handler
-        - simple: true
-          required: true
-          path: '[].path'
-          name: path
-          inputInfo: inputInfo.path
         - path: '[].service' 
           name: service 
           widget: FormGroup
@@ -252,7 +263,7 @@ data:
               path: port 
               name: service.port
               subscribe:
-                accessStrategyPort: "$filter($relatedServices().items, function ($v) { $contains($v.metadata.name, $root.spec.service.name)}).spec.ports[0].port"
+                accessStrategyPort: "$filter($relatedServices().items, function ($v) { $v.metadata.name = $item.service.name and $v.metadata.namespace = $root.metadata.namespace }).spec.ports[0].port"
   general: |-
     resource:
       kind: APIRule
@@ -291,6 +302,12 @@ data:
       value:
         spec:
           gateway: kyma-gateway.kyma-system.svc.cluster.local
+          rules:
+            - path: /.*
+              methods:
+                - GET
+              accessStrategies:
+                - handler: allow
   translations: |
     en:
       accessStrategies: Access Strategies
@@ -316,4 +333,4 @@ data:
       service-name: Service Name
       status: Status
       virtualService: Virtual Service
-      inputInfo.spec.host: Host can not be a wildcard, replace * with subdomain name
+      alert.spec.host: Host can not be a wildcard, replace * with subdomain name

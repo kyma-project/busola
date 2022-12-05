@@ -42,6 +42,7 @@ export function ResourceList({
   const api = value?.apiVersion === 'v1' ? 'api' : 'apis';
   const resourceUrlPrefix = `/${api}/${value?.apiVersion}`;
   const resourceUrl = `${resourceUrlPrefix}${namespacePart}/${pluralKind}`;
+
   const jsonata = useJsonata({
     resource: originalResource,
     scope,
@@ -71,6 +72,7 @@ export function ResourceList({
           error={value?.error}
           loading={value?.loading}
           title={t(structure.name)}
+          disableCreate={structure.disableCreate || false}
           navigateFn={entry => {
             try {
               const {
@@ -127,6 +129,7 @@ export function ResourceList({
       namespace={namespaceId}
       isCompact
       title={widgetT(structure)}
+      disableCreate={structure.disableCreate || false}
       showTitle={true}
       hasDetailsView={structure.hasDetailsView ?? !!PredefinedRenderer?.Details}
       fixedPath={true}
