@@ -32,7 +32,7 @@ export function AddClusterWizard({
   const [hasAuth, setHasAuth] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);
   const [storage, setStorage] = useState(
-    busolaClusterParams?.config?.storage || 'localStorage',
+    busolaClusterParams?.config?.storage || 'sessionStorage',
   );
   const {
     isValid: authValid,

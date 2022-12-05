@@ -10,8 +10,9 @@ import { ClusterStorageType } from '../ClusterStorageType';
 import { useGetGardenerProvider } from './useGetGardenerProvider';
 import { useGetVersions } from './useGetVersions';
 import { useFeature } from 'hooks/useFeature';
-import { configurationAtom } from 'state/configurationAtom';
 import { clusterState } from 'state/clusterAtom';
+
+import { useClustersInfo } from 'state/utils/getClustersInfo';
 
 const Versions = () => {
   const { t } = useTranslation();
@@ -56,7 +57,8 @@ const GardenerProvider = () => {
 export function ClusterOverviewHeader() {
   const { t } = useTranslation();
   const cluster = useRecoilValue(clusterState);
-  const config = useRecoilValue(configurationAtom);
+  const { currentCluster } = useClustersInfo();
+  const config = currentCluster?.config;
   const [showAdd, setShowAdd] = useState(false);
 
   const actions = (
