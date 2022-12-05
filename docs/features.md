@@ -113,7 +113,7 @@ EXTENSIBILITY:
   Default settings:
 
   ```json
-  "EXTERNAL_NODES": {
+  "GARDENER_LOGIN": {
     "isEnabled": false,
   }
   ```
