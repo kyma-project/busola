@@ -1,8 +1,8 @@
+import { apiGroupState } from './../state/discoverability/apiGroupsSelector';
 import { useEffect } from 'react';
 import { useFeature } from 'hooks/useFeature';
 import * as Sentry from '@sentry/react';
 import { useRecoilValue } from 'recoil';
-import { apiGroupState } from 'state/openapi/apiGroupsSelector';
 
 export function useVersionWarning({
   resourceUrl,
