@@ -1,9 +1,12 @@
 import React from 'react';
 import pluralize from 'pluralize';
+import { useTranslation } from 'react-i18next';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { usePrepareListProps } from 'resources/helpers';
 import { prettifyKind } from 'shared/utils/helpers';
+import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
+import { useGetSchema } from 'hooks/useGetSchema';
 
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
@@ -12,20 +15,30 @@ import {
   TranslationBundleContext,
   useGetTranslation,
   applyFormula,
-  sortBy,
+  getTextSearchProperties,
 } from './helpers';
+import { sortBy } from './helpers/sortBy';
 import { Widget } from './components/Widget';
 import { DataSourcesContextProvider } from './contexts/DataSources';
-import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
-import { useGetSchema } from 'hooks/useGetSchema';
-import { useTranslation } from 'react-i18next';
+import { useJsonata } from './hooks/useJsonata';
 
-export const ExtensibilityListCore = ({ resMetaData }) => {
+export const ExtensibilityListCore = ({
+  resMetaData,
+  filterFunction,
+  ...props
+}) => {
   const { t, widgetT, exists } = useGetTranslation();
   const { t: tBusola } = useTranslation();
+  const jsonata = useJsonata({});
 
-  const { urlPath, disableCreate, resource, description } =
+  const { urlPath, resource, description, features } =
     resMetaData?.general ?? {};
+
+  const { disableCreate, disableEdit, disableDelete } = features?.actions ?? {
+    disableCreate: props.disableCreate,
+    disableEdit: props.disableEdit,
+    disableDelete: props.disableDelete,
+  };
 
   const dataSources = resMetaData?.dataSources || {};
   const { schema } = useGetSchema({
@@ -37,9 +50,9 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
   const resourceTitle = resMetaData?.general?.name;
   listProps.resourceTitle = exists('name')
     ? t('name')
-    : resourceTitle || pluralize(prettifyKind(resource.kind));
+    : resourceTitle || pluralize(prettifyKind(resource?.kind || ''));
 
-  if (resource.kind) {
+  if (resource?.kind) {
     listProps.resourceUrl = listProps.resourceUrl.replace(
       /[a-z0-9-]+\/?$/,
       pluralize(resource.kind).toLowerCase(),
@@ -66,25 +79,43 @@ export const ExtensibilityListCore = ({ resMetaData }) => {
       }))
     : [];
 
-  const isFilterAString = typeof resMetaData.resource?.filter === 'string';
+  const isFilterAString = typeof resMetaData?.resource?.filter === 'string';
   const filterFn = value =>
     applyFormula(value, resMetaData.resource.filter, tBusola);
-  listProps.filter = isFilterAString ? filterFn : undefined;
+  listProps.filter = isFilterAString ? filterFn : filterFunction;
 
   const sortOptions = (resMetaData?.list || []).filter(element => element.sort);
+  const searchOptions = (resMetaData?.list || []).filter(
+    element => element.search,
+  );
+
+  const textSearchProperties = getTextSearchProperties({
+    searchOptions,
+    defaultSearch: true,
+  });
 
   return (
     <ResourcesList
-      createResourceForm={ExtensibilityCreate}
-      disableCreate={disableCreate}
-      sortBy={defaultSortOptions => sortBy(sortOptions, t, defaultSortOptions)}
       {...listProps}
+      {...props}
+      disableCreate={disableCreate}
+      disableEdit={disableEdit}
+      disableDelete={disableDelete}
+      createResourceForm={ExtensibilityCreate}
+      sortBy={defaultSortOptions =>
+        sortBy(jsonata, sortOptions, t, defaultSortOptions)
+      }
+      searchSettings={{
+        textSearchProperties: defaultSearchProperties =>
+          textSearchProperties(defaultSearchProperties),
+      }}
     />
   );
 };
 
-const ExtensibilityList = () => {
-  const resMetaData = useGetCRbyPath();
+const ExtensibilityList = ({ overrideResMetadata, ...props }) => {
+  const defaultResMetadata = useGetCRbyPath();
+  const resMetaData = overrideResMetadata || defaultResMetadata;
   const { urlPath, defaultPlaceholder } = resMetaData?.general ?? {};
 
   return (
@@ -96,7 +127,7 @@ const ExtensibilityList = () => {
     >
       <DataSourcesContextProvider dataSources={resMetaData?.dataSources || {}}>
         <ExtensibilityErrBoundary key={urlPath}>
-          <ExtensibilityListCore resMetaData={resMetaData} />
+          <ExtensibilityListCore resMetaData={resMetaData} {...props} />
         </ExtensibilityErrBoundary>
       </DataSourcesContextProvider>
     </TranslationBundleContext.Provider>

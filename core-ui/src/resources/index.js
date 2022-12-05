@@ -2,10 +2,7 @@ import { createResourceRoutes } from './createResourceRoutes';
 
 //namespaced
 import * as Jobs from './Jobs';
-import * as Sidecars from './Sidecars';
 import * as CronJobs from './CronJobs';
-import * as VirtualServices from './VirtualServices';
-import * as ServiceEntries from './ServiceEntries';
 import * as StatefulSets from './StatefulSets';
 import * as Services from './Services';
 import * as ServiceInstances from './ServiceInstances';
@@ -21,24 +18,17 @@ import * as NetworkPolicies from './NetworkPolicies';
 import * as Issuers from './Issuers';
 import * as Ingresses from './Ingresses';
 import * as HorizontalPodAutoscalers from './HorizontalPodAutoscalers';
-import * as Gateways from './Gateways';
 import * as Events from './Events';
 import * as DnsProviders from './DnsProviders';
 import * as DnsEntries from './DnsEntries';
-import * as DestinationRules from './DestinationRules';
 import * as Deployments from './Deployments';
 import * as DaemonSets from './DaemonSets';
 import * as ConfigMaps from './ConfigMaps';
 import * as Certificates from './Certificates';
-import * as AuthorizationPolicies from './AuthorizationPolicies';
-import * as APIRules from './APIRules';
 import * as Subscriptions from './Subscriptions';
 import * as ServiceAccounts from './ServiceAccounts';
-import * as GitRepositories from './GitRepositories';
-import * as Functions from './Functions';
 
 // //cluster
-import * as Applications from './Applications';
 import * as ClusterRoles from './ClusterRoles';
 import * as StorageClasses from './StorageClasses';
 import * as PersistentVolumes from './PersistentVolumes';
@@ -51,7 +41,6 @@ export const resources = [
   // namespace resources
   Events,
   // workloads
-  Functions,
   StatefulSets,
   Jobs,
   ReplicaSets,
@@ -59,19 +48,11 @@ export const resources = [
   Pods,
   Deployments,
   DaemonSets,
-  // istio
-  VirtualServices,
-  Gateways,
-  Sidecars,
-  ServiceEntries,
-  DestinationRules,
-  AuthorizationPolicies,
   // discovery and network
   Services,
   Ingresses,
   NetworkPolicies,
   HorizontalPodAutoscalers,
-  APIRules,
   // storage
   PersistentVolumeClaims,
   // service management
@@ -89,17 +70,15 @@ export const resources = [
   Certificates,
   Subscriptions,
   ServiceAccounts,
-  GitRepositories,
 
   // cluster resources
-  Applications,
   ClusterEvents,
   Namespaces,
   ClusterRoles,
   StorageClasses,
   PersistentVolumes,
-  CustomResourceDefinitions,
   ClusterRoleBindings,
+  CustomResourceDefinitions,
 ];
 
 export const resourceRoutes = <>{resources.map(createResourceRoutes)}</>;

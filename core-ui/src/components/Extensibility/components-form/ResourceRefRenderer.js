@@ -1,14 +1,14 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import pluralize from 'pluralize';
 import { fromJS } from 'immutable';
 
 import { getObjectValueWorkaround } from 'components/Extensibility/helpers';
 import { ExternalResourceRef } from 'shared/components/ResourceRef/ExternalResourceRef';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
+import { useGetTranslation } from 'components/Extensibility/helpers';
 
 import { useVariables } from '../hooks/useVariables';
-import { jsonataWrapper } from '../helpers/jsonataWrapper';
+import { useJsonata } from '../hooks/useJsonata';
 
 export function ResourceRefRender({
   onChange,
@@ -17,9 +17,16 @@ export function ResourceRefRender({
   storeKeys,
   resource,
   widgets,
+  originalResource,
+  nestingLevel,
   ...props
 }) {
-  const { t } = useTranslation();
+  const jsonata = useJsonata({
+    resource: originalResource,
+    scope: value,
+    value,
+  });
+  const { tFromStoreKeys } = useGetTranslation();
   // TODO the value obtained by ui-schema is undefined for this component
   value = getObjectValueWorkaround(schema, resource, storeKeys, value);
 
@@ -30,9 +37,11 @@ export function ResourceRefRender({
   const toInternal = schema.get('toInternal');
   const toExternal = schema.get('toExternal');
   const provideVar = schema.get('provideVar');
+  const defaultOpen = schema.get('defaultExpanded');
 
   if (toInternal) {
-    value = jsonataWrapper(toInternal).evaluate(value);
+    const [internal, error] = jsonata(toInternal);
+    value = error ? {} : internal;
   }
 
   const group = (schemaResource?.group || '').toLowerCase();
@@ -47,19 +56,24 @@ export function ResourceRefRender({
 
   return (
     <ExternalResourceRef
-      title={t('extensibility.widgets.resource-ref.header')}
+      defaultOpen={defaultOpen}
+      title={tFromStoreKeys(storeKeys, schema)}
       value={fromJS(value).toJS() || ''}
       resources={data}
       setValue={value => {
         if (toExternal) {
-          value = jsonataWrapper(toExternal).evaluate(value);
+          const [external, error] = jsonata(toExternal, {
+            scope: value,
+            value,
+          });
+          value = error ? {} : external;
         }
         const resource = data.find(
           res =>
             res.metadata.namespace === value.namespace &&
             res.metadata.name === value.name,
         );
-        if (provideVar) setVar(provideVar, resource);
+        if (provideVar) setVar(`$.${provideVar}`, resource);
 
         onChange({
           storeKeys: storeKeys,
@@ -73,6 +87,7 @@ export function ResourceRefRender({
       required
       loading={loading}
       error={error}
+      nestingLevel={nestingLevel}
     >
       {schema.get('type') === 'object' && (
         <WidgetRenderer

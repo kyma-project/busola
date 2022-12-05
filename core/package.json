@@ -39,6 +39,9 @@
     "webpack": "^5.70.0"
   },
   "jest": {
-    "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.js$"
+    "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.js$",
+    "moduleNameMapper": {
+      "\\.(css|less|sass|scss)$": "<rootDir>/__mocks__/styleMock.js"
+    }
   }
 }

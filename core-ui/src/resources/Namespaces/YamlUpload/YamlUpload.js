@@ -5,7 +5,6 @@ import jsyaml from 'js-yaml';
 
 import { YamlFileUploader } from './YamlFileUploader';
 import { OPERATION_STATE_INITIAL } from './YamlUploadDialog';
-
 const isK8sResource = resource => {
   if (!resource) return true;
   return resource.apiVersion && resource.kind && resource.metadata;
@@ -47,19 +46,20 @@ function YamlUpload({
   );
 
   return (
-    <div>
+    //when using 99%, the Monaco is more responsive.
+    <div style={{ width: '99%' }}>
       <YamlFileUploader
         onYamlContentAdded={val => {
           updateYamlContent(val);
           editor.getModel().setValue(val);
         }}
       />
-      <p className="editor-label fd-margin-bottom--sm fd-margin-top--sm">
+      <p style={{ minHeight: '20px' }} className="fd-margin--tiny">
         {t('upload-yaml.or-paste-here')}
       </p>
       <Editor
         autocompletionDisabled
-        height="400px"
+        height="60vh"
         language="yaml"
         value={yamlContentString || ''}
         onChange={updateYamlContent}

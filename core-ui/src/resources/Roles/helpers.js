@@ -37,7 +37,7 @@ export function createRuleTemplate(isNamespaced) {
     apiGroups: [],
     resources: [],
     resourceNames: [],
-    ...(isNamespaced ? { nonResourceURLs: [] } : null),
+    ...(isNamespaced ? null : { nonResourceURLs: [] }),
   };
 }
 
@@ -45,10 +45,6 @@ export function createRolePresets(namespace, translate, groupVersions) {
   const apiGroups = getApiGroupInputOptions(groupVersions).map(g => g.key);
 
   return [
-    {
-      name: translate('common.labels.default-preset'),
-      value: createRoleTemplate(namespace),
-    },
     {
       name: translate('roles.templates.all-permissions'),
       value: createRoleTemplate(namespace, {

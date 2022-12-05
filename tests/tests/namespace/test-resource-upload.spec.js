@@ -18,6 +18,11 @@ context('Test resource upload', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtensions([
+      'examples/resources/applicationconnector/applications.yaml',
+    ]);
+
     cy.loginAndSelectCluster();
   });
 
@@ -25,6 +30,9 @@ context('Test resource upload', () => {
     cy.getLeftNav()
       .contains('Cluster Details')
       .click();
+
+    // this is to address a Luigi race condition, can be removed together with Luigi
+    cy.wait(500);
 
     cy.getIframeBody()
       .contains('Upload YAML')

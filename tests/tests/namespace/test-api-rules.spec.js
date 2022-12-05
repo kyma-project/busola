@@ -5,18 +5,23 @@ function openSearchWithSlashShortcut() {
   cy.get('body').type('/');
 }
 
+const random = Math.floor(Math.random() * 9999) + 1000;
 const FUNCTION_NAME = 'test-function';
 const API_RULE_NAME = 'test-api-rule';
-const API_RULE_HOST = API_RULE_NAME + '-host';
+const API_RULE_SUBDOMAIN = API_RULE_NAME + '-' + random;
 const API_RULE_PATH = '/test-path';
 const API_RULE_DEFAULT_PATH = '/.*';
-
-let initialApiRule;
 
 context('Test API Rules in the Function details view', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtensions([
+      'examples/resources/serverless/functions.yaml',
+      'examples/resources/gateway/apirules.yaml',
+    ]);
+
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
@@ -31,66 +36,118 @@ context('Test API Rules in the Function details view', () => {
       .click({ force: true });
 
     cy.getIframeBody()
-      .find('[role="status"]', { timeout: 60 * 1000 })
-      .should('have.text', 'Running');
+      .find('[role="status"]')
+      .contains('span', /running/i, { timeout: 60 * 300 });
   });
 
   it('Create an API Rule for the Function', () => {
-    cy.getIframeBody()
-      .contains('Configuration')
+    cy.getLeftNav()
+      .contains('Discovery and Network')
+      .click();
+
+    cy.getLeftNav()
+      .contains('API Rules')
       .click();
 
     cy.getIframeBody()
       .contains('Create API Rule')
       .click();
 
-    cy.getIframeBody().contains(`${FUNCTION_NAME} (port: 80)`);
-
+    // Name
     cy.getIframeBody()
       .find('[ariaLabel="APIRule name"]:visible', { log: false })
-      .should(input => {
-        initialApiRule = input.val();
-        expect(initialApiRule).to.include(`${FUNCTION_NAME}-`);
-      });
-
-    cy.getIframeBody()
-      .find('[ariaLabel="Generate name button"]:visible', { log: false })
-      .click();
-
-    cy.getIframeBody()
-      .find('[ariaLabel="APIRule name"]:visible', { log: false })
-      .should(input => {
-        const generatedApiRule = input.val();
-        expect(generatedApiRule).not.to.include(initialApiRule);
-        expect(generatedApiRule).to.include(`${FUNCTION_NAME}-`);
-      });
-
-    cy.getIframeBody()
-      .find('[ariaLabel="APIRule name"]:visible', { log: false })
-      .type(`{selectall}{backspace}`)
       .type(API_RULE_NAME);
 
+    // Service
     cy.getIframeBody()
-      .find('[placeholder="Subdomain part of the APIRule address"]:visible', {
+      .find('[aria-label="Choose Service"]:visible', { log: false })
+      .first()
+      .type(FUNCTION_NAME);
+
+    cy.getIframeBody()
+      .find('[aria-label="Choose Service"]:visible', { log: false })
+      .first()
+      .next()
+      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+      .click();
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.service.port"]:visible', { log: false })
+      .clear()
+      .type(80);
+
+    // Host
+    cy.getIframeBody()
+      .find('[aria-label="Combobox input"]:visible', { log: false })
+      .first()
+      .type('*');
+
+    cy.getIframeBody()
+      .find('span', { log: false })
+      .contains(/^\*$/i)
+      .first()
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="Combobox input"]:visible', { log: false })
+      .first()
+      .type('{home}{rightArrow}{backspace}');
+
+    cy.getIframeBody()
+      .find('[aria-label="Combobox input"]:visible', { log: false })
+      .first()
+      .type(API_RULE_SUBDOMAIN);
+
+    cy.getIframeBody()
+      .find('[aria-label="Combobox input"]:visible', { log: false })
+      .first()
+      .next()
+      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+      .click();
+
+    // Rules
+    // > Access Strategies
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible')
+      .clear()
+      .type('oauth2_introspection');
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible', {
         log: false,
       })
-      .type(API_RULE_HOST);
-
-    cy.getIframeBody()
-      .contains('Allow')
-      .filter(':visible', { log: false })
+      .find('span')
+      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
       .click();
 
     cy.getIframeBody()
-      .contains('OAuth2')
+      .find('[data-testid="select-dropdown"]:visible')
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Required scope"]:visible', { log: false })
+      .find('[role="list"]')
+      .contains('required_scope')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter value"]:visible')
+      .filterWithNoValue()
+      .first()
       .type('read');
 
+    // > Methods
+
     cy.getIframeBody()
-      .contains('POST')
+      .find('[data-testid="spec.rules.0.methods.1"]:visible')
+      .type('POST');
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.rules.0.methods.1"]:visible', {
+        log: false,
+      })
+      .find('span')
+      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
       .click();
 
     cy.getIframeBody()
@@ -109,7 +166,11 @@ context('Test API Rules in the Function details view', () => {
       .should('exist');
 
     cy.getIframeBody()
-      .contains('OAuth2')
+      .contains('Rules #1', { timeout: 10000 })
+      .click();
+
+    cy.getIframeBody()
+      .contains('oauth2_introspection')
       .should('exist');
 
     cy.getIframeBody()
@@ -117,7 +178,7 @@ context('Test API Rules in the Function details view', () => {
       .should('not.exist');
 
     cy.getIframeBody()
-      .contains('Allow')
+      .contains('allow')
       .should('not.exist');
   });
 
@@ -128,16 +189,58 @@ context('Test API Rules in the Function details view', () => {
 
     cy.getIframeBody().contains(API_RULE_NAME);
 
+    // Rules
     cy.getIframeBody()
-      .contains('Add Rule')
+      .find('[aria-label="expand Rules"]:visible', { log: false })
+      .contains('Add')
       .click();
 
     cy.getIframeBody()
-      .contains('Rule 2')
+      .find('[aria-label="expand Rule"]:visible', { log: false })
+      .first()
+      .click();
+
+    // > Access Strategies
+    cy.getIframeBody()
+      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
+      .first()
+      .scrollIntoView();
+
+    cy.getIframeBody()
+      .find('[data-testid="select-dropdown"]:visible')
+      .scrollIntoView()
       .click();
 
     cy.getIframeBody()
-      .find('[placeholder="Enter the path"]:visible', { log: false })
+      .find('[role="list"]')
+      .contains('required_scope')
+      .click();
+
+    cy.getIframeBody()
+      .find('[placeholder="Enter value"]:visible')
+      .filterWithNoValue()
+      .first()
+      .type('write');
+
+    // > Methods
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.rules.1.methods.0"]:visible')
+      .clear()
+      .type('POST');
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.rules.1.methods.0"]:visible', {
+        log: false,
+      })
+      .find('span')
+      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+      .scrollIntoView()
+      .click();
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.rules.1.path"]:visible')
+      .clear()
       .type(API_RULE_PATH);
 
     cy.getIframeBody()
@@ -156,20 +259,26 @@ context('Test API Rules in the Function details view', () => {
       .should('exist');
 
     cy.getIframeBody()
-      .contains('OAuth2')
-      .should('exist');
+      .contains('Rules #1', { timeout: 10000 })
+      .click();
+
+    cy.getIframeBody()
+      .contains('Rules #2', { timeout: 10000 })
+      .click();
 
     cy.getIframeBody()
       .contains(API_RULE_PATH)
       .should('exist');
 
     cy.getIframeBody()
-      .contains('Allow')
+      .contains('allow')
       .should('exist');
   });
 
   it('Inspect list using slash shortcut', () => {
-    cy.navigateTo('Discovery and Network', 'API Rules');
+    cy.getLeftNav()
+      .contains('API Rules')
+      .click();
 
     openSearchWithSlashShortcut();
 

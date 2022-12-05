@@ -12,7 +12,7 @@ import {
   getStaticChildrenNodesForNamespace,
   getStaticRootNodes,
 } from './static-navigation-model';
-import { navigationPermissionChecker, hasAnyRoleBound } from './permissions';
+import { hasAnyRoleBound } from './permissions';
 import {
   getCustomResources,
   getExtensibilitySchemas,
@@ -25,7 +25,6 @@ import {
   addExternalNodes,
 } from './navigation-helpers';
 import { clearAuthData, getAuthData } from '../auth/auth-storage';
-import { groups } from '../auth/auth';
 import {
   getActiveCluster,
   getClusters,
@@ -44,10 +43,10 @@ import { loadTargetClusterConfig } from '../utils/target-cluster-config';
 import { checkClusterStorageType } from '../cluster-management/clusters-storage';
 import { getSSOAuthData } from '../auth/sso';
 import { setNavFooterText } from '../nav-footer';
-import { AVAILABLE_PAGE_SIZES, getPageSize } from '../settings/pagination';
 import { getFeatures, initFeatures } from '../feature-discovery';
 import * as fetchCache from './../cache/fetch-cache';
 import { handleKubeconfigIdIfPresent } from './../kubeconfig-id';
+import { clusterOpenApi } from './clusterOpenApi';
 
 async function createAppSwitcher() {
   const activeClusterName = getActiveClusterName();
@@ -85,7 +84,14 @@ async function createAppSwitcher() {
 
 export async function reloadNavigation() {
   const navigation = await createNavigation();
-  Luigi.setConfig({ ...Luigi.getConfig(), navigation });
+  const { features } = (await getCurrentConfig()) || {};
+  const hideNavigation = !!features?.REACT_NAVIGATION?.isEnabled;
+  const config = Luigi.getConfig();
+  Luigi.setConfig({
+    ...config,
+    navigation,
+    settings: { ...config?.settings, hideNavigation },
+  });
 
   // wait for Luigi to update DOM
   setTimeout(async () => {
@@ -113,11 +119,6 @@ async function createClusterManagementNodes(features, customResources) {
         return false;
       },
     },
-    {
-      pathSegment: 'preferences',
-      viewUrl: config.coreUIModuleUrl + '/preferences',
-      openNodeInModal: { title: i18next.t('preferences.title'), size: 'm' },
-    },
   ];
 
   const clusterManagementNode = {
@@ -136,12 +137,6 @@ async function createClusterManagementNodes(features, customResources) {
       features,
       customResources,
       ssoData: getSSOAuthData(),
-      settings: {
-        pagination: {
-          pageSize: getPageSize(),
-          AVAILABLE_PAGE_SIZES,
-        },
-      },
     },
   };
 
@@ -186,7 +181,7 @@ async function createNavigationForNoCluster() {
           label: i18next.t('top-nav.profile.preferences'),
           link: '/clusters/preferences',
           openNodeInModal: {
-            title: i18next.t('preferences.title'),
+            title: i18next.t('navigation.preferences.title'),
             size: 'm',
           },
         },
@@ -215,6 +210,7 @@ export async function createNavigation() {
 
     // we assume all users can make SelfSubjectRulesReview request
     const activeCluster = getActiveCluster();
+
     const permissionSet = await fetchPermissions(
       authData,
       getCurrentContextNamespace(activeCluster?.kubeconfig),
@@ -249,13 +245,6 @@ export async function createNavigation() {
           {
             icon: 'settings',
             label: i18next.t('top-nav.profile.preferences'),
-            link: `/cluster/${encodeURIComponent(
-              activeClusterName,
-            )}/preferences`,
-            openNodeInModal: {
-              title: i18next.t('preferences.title'),
-              size: 'm',
-            },
           },
         ],
       },
@@ -268,8 +257,6 @@ export async function createNavigation() {
 
     return {
       preloadViewGroups: false,
-      nodeAccessibilityResolver: node =>
-        navigationPermissionChecker(node, permissionSet),
       appSwitcher: await createAppSwitcher(),
       ...optionsForCurrentCluster,
       nodes: await createNavigationNodes({
@@ -363,7 +350,6 @@ export async function createNavigationNodes({
   const createClusterNodes = async () => {
     const staticNodes = getStaticRootNodes(
       getChildrenNodesForNamespace,
-      groupVersions,
       permissionSet,
       features,
       customResources,
@@ -415,9 +401,9 @@ export async function createNavigationNodes({
         },
       ],
       context: {
+        permissionSet,
         authData,
         activeClusterName,
-        groups,
         features,
         customResources,
         extensibilitySchemas,
@@ -430,14 +416,9 @@ export async function createNavigationNodes({
         ssoData: getSSOAuthData(),
         apiGroups,
         groupVersions,
-        settings: {
-          pagination: {
-            pageSize: getPageSize(),
-            AVAILABLE_PAGE_SIZES,
-          },
-        },
         clusterNodes: simplifyNodes(clusterNodes),
         namespaceNodes: simplifyNodes(namespaceNodes),
+        openApi: clusterOpenApi.getOpenApi,
       },
     },
   ];
@@ -477,7 +458,6 @@ async function getNamespaces() {
 }
 
 async function getChildrenNodesForNamespace(
-  groupVersions,
   permissionSet,
   features,
   customResources,
@@ -485,7 +465,6 @@ async function getChildrenNodesForNamespace(
   const disabledNodes = getDisabledNodes(features);
 
   const staticNodes = getStaticChildrenNodesForNamespace(
-    groupVersions,
     permissionSet,
     features,
     customResources,

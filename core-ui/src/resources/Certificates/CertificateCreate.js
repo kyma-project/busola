@@ -22,6 +22,7 @@ export function CertificateCreate({
   namespace,
   resource: initialCertificate,
   resourceUrl,
+  handleSetResetFormFn,
   ...props
 }) {
   const { t } = useTranslation();
@@ -52,6 +53,18 @@ export function CertificateCreate({
       }
     }
   };
+
+  useEffect(() => {
+    handleSetResetFormFn(() => () => {
+      setWithCSR(!!jp.value(certificate, '$.spec.csr'));
+      setCertificate(
+        initialCertificate
+          ? cloneDeep(initialCertificate)
+          : createTemplate(namespace),
+      );
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (withCSR) {
@@ -114,6 +127,7 @@ export function CertificateCreate({
       initialResource={initialCertificate}
       createUrl={resourceUrl}
       nameProps={{ 'data-cy': 'cert-name' }}
+      handleSetResetFormFn={handleSetResetFormFn}
     >
       <ResourceForm.FormField
         label={t('certificates.with-csr')}
@@ -132,6 +146,7 @@ export function CertificateCreate({
                 option="transparent"
                 glyph={csrIsEncoded ? 'show' : 'hide'}
                 onClick={() => setCsrIsEncoded(!csrIsEncoded)}
+                iconBeforeText
               >
                 {csrIsEncoded
                   ? t('secrets.buttons.decode')
@@ -218,13 +233,9 @@ export function CertificateCreate({
         advanced
         label={t('certificates.existing-secret')}
         tooltipContent={t('certificates.tooltips.existing-secret')}
-        input={() => (
-          <Switch
-            compact
-            onChange={e => setExistingSecret(!existingSecret)}
-            checked={existingSecret}
-          />
-        )}
+        input={Inputs.Switch}
+        onChange={() => setExistingSecret(!existingSecret)}
+        checked={existingSecret}
       />
       {!existingSecret && (
         <ResourceForm.FormField

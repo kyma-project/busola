@@ -81,6 +81,7 @@ export function ComboboxArrayInput({
               options={filteredOptions()}
               onKeyDown={focus}
               onBlur={onBlur}
+              fullWidth
               onSelectionChange={(_, selected) => {
                 if ((noEdit && !selected) || selected.key === -1) {
                   return;

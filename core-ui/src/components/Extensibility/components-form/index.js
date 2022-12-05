@@ -13,8 +13,10 @@ import { ValidityReporter } from '@ui-schema/ui-schema/ValidityReporter';
 import { validators } from '@ui-schema/ui-schema/Validators/validators';
 
 import { SchemaRulesInjector } from '../plugins/SchemaRulesInjector';
+import { CustomFieldInjector } from '../plugins/CustomFieldInjector';
 import { EnumHandler } from '../plugins/EnumHandler';
 import { VisibilityHandler } from '../plugins/VisibilityHandler';
+import { TriggerHandler } from '../plugins/TriggerHandler';
 
 import { StringRenderer } from './StringRenderer';
 import { NumberRenderer } from './NumberRenderer';
@@ -27,6 +29,7 @@ import { MonacoRenderer } from './MonacoRenderer';
 import { ResourceRenderer } from './ResourceRenderer';
 import { ResourceRefRender } from './ResourceRefRenderer';
 import { SimpleList } from './SimpleList';
+import { AlertRenderer } from './AlertRenderer';
 
 const pluginStack = [
   ReferencingHandler,
@@ -36,8 +39,10 @@ const pluginStack = [
   DependentHandler,
   ConditionalHandler,
   SchemaRulesInjector,
+  CustomFieldInjector,
   EnumHandler,
   VisibilityHandler,
+  TriggerHandler,
   PluginSimpleStack,
   ValidityReporter,
 ];
@@ -83,6 +88,7 @@ export const widgets = {
     FormGroup: CollapsibleRenderer,
     ResourceRef: ResourceRefRender,
     Resource: ResourceRenderer,
+    Alert: AlertRenderer,
   },
 };
 export default widgets;

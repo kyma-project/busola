@@ -1,0 +1,88 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: applications
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: applications
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  general: |-
+    resource:
+      kind: Application
+      group: applicationconnector.kyma-project.io
+      version: v1alpha1
+    urlPath: applications
+    scope: cluster
+    name: Applications
+    category: Integration
+  details: |-
+    header:
+      - name: headers.description
+        source: spec.description
+      - name: headers.access-label
+        source: spec.accessLabel
+    body:
+      - widget: Table
+        source: spec.services
+        name: headers.services-and-events
+        children:
+        - source: "$count($item.entries[type='API'])"
+          name: headers.apis
+        - source: "$count($item.entries[type='Events'])"
+          name: headers.events
+        - source: "$item.providerDisplayName"
+          name: headers.provider
+        collapsibleTitle: "$item.displayName"
+        collapsible:
+        - widget: Plain
+          children:
+          - source: "$item.longDescription"
+        - widget: Table
+          name: headers.apis
+          source: "$item.entries[type = 'API']"
+          children:
+          - source: "$item.name"
+            name: headers.name
+          - source: "$item.accessLabel"
+            name: headers.access-label
+          - widget: ExternalLink
+            source: "$item.centralGatewayUrl"
+            name: headers.gateway-url
+            copyable: true
+        - widget: Table
+          name: headers.events
+          source: "$item.entries[type = 'Events']"
+          children:
+          - source: "$item.name"
+            name: headers.name
+          - source: "$item.accessLabel"
+            name: headers.access-label
+          - widget: ExternalLink
+            source: "$item.centralGatewayUrl"
+            name: headers.gateway-url
+            copyable: true
+  form: |-
+    - path: metadata.name
+      extraPaths:
+      - spec.accessLabel
+      - metadata.labels['app.kubernetes.io/name']
+    - path: spec.description
+      placeholder: placeholders.description
+    - path: spec.accessLabel
+  translations: |-
+    en: 
+      description: "{{[Application](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/ac-01-application)}}
+        represents an external solution connected to Kyma."
+      headers: 
+        access-label: Access Label
+        apis: APIs
+        description: Description
+        events: Events
+        gateway-url: Central Gateway URL
+        name: Name
+        provider: Provider
+        services-and-events: Provided Services and Events
+      placeholders: 
+        description: Provide a description for your Application

@@ -91,8 +91,8 @@ export function PersistentVolumeList(props) {
       resourceTitle={t('pv.title')}
       customColumns={customColumns}
       description={description}
-      createResourceForm={PersistentVolumeCreate}
       {...props}
+      createResourceForm={PersistentVolumeCreate}
     />
   );
 }

@@ -87,7 +87,7 @@ export function K8sResourceSelect({
   };
 
   return (
-    <div className="combobox--full-width">
+    <div className="combobox--full-width fd-col fd-col-md--11">
       <ComboboxInput
         showAllEntries
         searchFullString
@@ -102,7 +102,7 @@ export function K8sResourceSelect({
         arrowLabel="Combobox input arrow"
         options={options}
         onChange={onChange}
-        onSelectionChange={(_, selected) => onSelect(selected.text)}
+        onSelectionChange={(_, selected) => onSelect(selected.text, data)}
         validationState={getValidationState()}
         inputProps={{ pattern: k8sNamePattern, value, ...props }}
       />

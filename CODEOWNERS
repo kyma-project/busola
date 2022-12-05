@@ -1,7 +1,7 @@
 # Default owners of the repository
-* @akucharska @dariadomagala @qbalukom @valentinvieriu @Wawrzyn321 @wchrapka @Lyczeq @mrCherry97
+* @akucharska @dariadomagala @qbalukom @Wawrzyn321 @Lyczeq @mrCherry97
 
 # Owners of all .md files in the repository
-*.md @mmitoraj @klaudiagrz @majakurcius @NHingerl @grego952
+*.md @mmitoraj @NHingerl @grego952 @IwonaLanger
 
-core/src/i18n/ @mmitoraj @klaudiagrz @majakurcius @NHingerl @grego952
+core/src/i18n/ @mmitoraj @NHingerl @grego952 @IwonaLanger

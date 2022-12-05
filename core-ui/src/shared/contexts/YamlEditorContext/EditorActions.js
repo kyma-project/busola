@@ -157,7 +157,7 @@ export function EditorActions({
       {readOnly && (
         <span
           style={{ color: 'var(--sapNeutralTextColor,#6a6d70)' }}
-          className={t('fd-object-status--critical')}
+          className={'fd-object-status--critical'}
         >
           {t('common.labels.read-only')}
         </span>

@@ -1,5 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
-import { mount } from 'enzyme';
+import { render } from 'testing/reactTestingUtils';
 import { ResourceDetails } from '../ResourceDetails';
 
 jest.mock('shared/hooks/BackendAPI/useGet', () => ({

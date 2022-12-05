@@ -1,0 +1,244 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sidecars
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: sidecars
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |-
+    podSelector:
+      resource:
+        kind: Pod
+        version: v1
+      filter: $matchByLabelSelector($item, $root.spec.workloadSelector.labels)
+  details: |-
+    header:
+      - name: Outbound Traffic Policy Mode
+        source: spec.outboundTrafficPolicy.mode
+    body:
+      - widget: Table
+        source: spec.egress
+        name: Egress
+        visibility: $exists($value)
+        children:
+          - source: port
+            name: Port
+            widget: Panel
+            visibility: $exists($value)
+            children:
+              - source: number
+                name: Number
+              - source: name
+                name: Name
+              - source: protocol
+                name: Protocol
+              - source: targetPoint
+                name: Target Point
+          - source: bind
+            name: Bind
+          - source: captureMode
+            name: Capture Mode
+          - source: hosts
+            name: Hosts
+            widget: Labels
+      - widget: Table
+        source: spec.ingress
+        name: Ingress
+        visibility: $exists($value)
+        children:
+          - source: port
+            name: Port
+            widget: Panel
+            visibility: $exists($value)
+            children:
+              - source: number
+                name: Number
+              - source: name
+                name: Name
+              - source: protocol
+                name: Protocol
+              - source: targetPoint
+                name: Target Point
+              - source: $parent.tls.mode
+                name: TLS Mode
+          - source: bind
+            name: Bind
+          - source: captureMode
+            name: Capture Mode
+          - source: defaultEndpoint
+            name: Default Endpoint
+            widget: Labels
+      - widget: Panel
+        name: Workload Selector
+        disablePadding: true
+        children:
+          - source: $podSelector()
+            widget: ResourceList
+            disableCreate: true
+            isCompact: true
+            visibility: $boolean($root.spec.workloadSelector.labels)
+          - source: spec.workloadSelector.labels
+            widget: Panel
+            name: Matches all Pods in the Namespace
+            visibility: $not($exists($value)) or $not($boolean($value))
+        header:
+          - source: spec.workloadSelector.labels
+            widget: Labels
+            name: Workload Selector
+            visibility: $boolean($value)
+    resourceGraph:
+      depth: 1
+      colorVariant: 1
+      dataSources:
+        - source: podSelector
+  form: |-
+    - path: spec.workloadSelector.labels
+      name: Workload Selector
+      widget: KeyValuePair
+    - widget: FormGroup
+      path: spec.egress[].port
+      simple: true
+      children:
+        - path: number
+          simple: true
+          required: true
+          placeholder: Enter the port number
+        - path: name
+          widget: Name
+          inputInfo: null
+          simple: true
+          required: true
+        - path: protocol
+          simple: true
+          enum:
+            - HTTP
+            - HTTPS
+            - HTTP2
+            - GRPC
+            - MONGO
+            - TCP
+            - TLS
+          required: true
+          placeholder: Type or choose an option
+        - path: targetPort
+          simple: true
+          placeholder: Enter the target port number
+    - path: spec.egress[].bind
+      placeholder: Enter the IPv4 or IPv6
+      simple: true
+    - path: spec.egress[].captureMode
+      simple: true
+      enum:
+        - DEFAULT
+        - IPTABLES
+        - NONE
+      placeholder: Type or choose an option
+    - widget: SimpleList
+      path: spec.egress[].hosts
+      required: true
+      simple: true
+      placeholder: For example, *.api.mydomain.com
+      children:
+        - path: '[]'
+    - widget: FormGroup
+      path: spec.ingress[].port
+      required: true
+      simple: true
+      children:
+        - path: number
+          simple: true
+          required: true
+          placeholder: Enter the port number
+        - path: name
+          widget: Name
+          inputInfo: null
+          simple: true
+          required: true
+        - path: protocol
+          simple: true
+          enum:
+            - HTTP
+            - HTTPS
+            - HTTP2
+            - GRPC
+            - MONGO
+            - TCP
+            - TLS
+          required: true
+          placeholder: Type or choose an option
+        - path: targetPort
+          simple: true
+          placeholder: Enter the target port number
+    - path: spec.ingress[].bind
+      placeholder: Enter the IPv4 or IPv6
+      simple: true
+    - path: spec.ingress[].captureMode
+      enum:
+        - DEFAULT
+        - IPTABLES
+        - NONE
+      simple: true
+      placeholder: Type or choose an option
+    - path: spec.ingress[].defaultEndpoint
+      placeholder: For example, 127.0.0.1:PORT
+      required: true
+      simple: true
+    - widget: FormGroup
+      simple: true
+      path: spec.ingress[].tls
+      name: TLS
+      visibility: $item.port.protocol = 'HTTPS'
+      children:
+        - path: mode
+          name: TLS Mode
+          simple: true
+          visibility: $item.port.protocol = 'HTTPS'
+          required: true
+          placeholder: Type or choose an option
+        - path: serverCertificate
+          name: Server Certificate
+          simple: true
+          visibility: $item.port.protocol = 'HTTPS'
+          placeholder: Enter the certificate path
+        - path: privateKey
+          name: Private Key
+          simple: true
+          visibility: $item.port.protocol = 'HTTPS'
+          placeholder: Enter the private key path
+        - path: caCertificates
+          name: CA Certificate
+          simple: true
+          visibility: $item.port.protocol = 'HTTPS'
+          placeholder: Enter the CA certificates path
+    - widget: FormGroup
+      path: spec.outboundTrafficPolicy
+      name: Outbound Traffic Policy
+      children:
+        - path: mode
+          name: Outbound Traffic Policy Mode
+          enum:
+            - REGISTRY_ONLY
+            - ALLOW_ANY
+          placeholder: Type or choose an option
+  general: |-
+    resource:
+      kind: Sidecar
+      group: networking.istio.io
+      version: v1alpha3
+    urlPath: sidecars
+    category: Istio
+    name: Sidecars
+    scope: namespace
+    description: >-
+      {{[Sidecar](https://istio.io/latest/docs/reference/config/networking/sidecar/)}}
+      manages the incoming and outgoing communication in a workload it is attached
+      to.
+  list: |-
+    - source: spec.outboundTrafficPolicy.mode
+      name: Outbound Traffic Policy Mode
+    - source: spec.workloadSelector.labels
+      name: Workload Selector Labels
+      widget: Labels

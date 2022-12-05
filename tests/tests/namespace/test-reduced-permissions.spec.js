@@ -133,7 +133,7 @@ context('Test reduced permissions', () => {
     // role
     cy.getIframeBody()
       .find(
-        '[placeholder="Start typing to select RoleBinding from the list"]:visible',
+        '[placeholder="Start typing to select ClusterRole from the list"]:visible',
       )
       .type(CR_NAME);
     cy.getIframeBody()
@@ -210,19 +210,6 @@ context('Test reduced permissions', () => {
   });
 
   it('Inspect reduced permissions view', () => {
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
-
-    cy.getIframeBody().contains('Are you sure you want to');
-
-    cy.getIframeBody()
-      .wait(1000)
-      .find('[data-testid="delete-confirmation"]')
-      .click();
-
-    cy.contains('Close').click();
-
     cy.getLeftNav()
       .contains('Workloads')
       .click();

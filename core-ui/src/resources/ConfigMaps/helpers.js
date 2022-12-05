@@ -15,10 +15,6 @@ export function createPresets(defs, namespaceId, t) {
   }
 
   return [
-    {
-      name: t('common.labels.default-preset'),
-      value: createConfigMapTemplate(namespaceId),
-    },
     ...defs.map(({ name, ...value }) => ({
       name,
       value,

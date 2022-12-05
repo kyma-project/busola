@@ -1,8 +1,17 @@
 import { isNil } from 'lodash';
 import { useTranslation } from 'react-i18next';
+
 import { useGetPlaceholder } from 'components/Extensibility/helpers';
 
-export function JoinedArray({ value, structure, schema }) {
+import { Widget } from './Widget';
+
+export function JoinedArray({
+  value,
+  structure,
+  schema,
+  arrayItems,
+  ...props
+}) {
   const { t } = useTranslation();
   const { emptyLeafPlaceholder } = useGetPlaceholder(structure);
   if (isNil(value)) {
@@ -14,15 +23,48 @@ export function JoinedArray({ value, structure, schema }) {
     return t('extensibility.widgets.joined-array.error');
   }
 
-  if (structure?.separator === 'break') {
-    return value.map((val, i) => <p key={i}>{val}</p>);
-  } else {
+  const separator = structure?.separator ?? ', ';
+
+  if (separator === 'break') {
+    return value.map((val, i) => (
+      <p key={i}>
+        {structure?.children
+          ? structure?.children?.map((def, idx) => (
+              <Widget structure={def} value={val} key={idx} {...props} />
+            ))
+          : val}
+      </p>
+    ));
+  } else if (structure?.children) {
     return (
-      value.join(structure?.separator ? structure.separator : ', ') ||
-      emptyLeafPlaceholder
+      <div>
+        {value.map((val, i) => (
+          <>
+            {structure?.children?.map((def, idx) => (
+              <Widget
+                structure={def}
+                arrayItems={[...arrayItems, val]}
+                value={val}
+                key={idx}
+                {...props}
+              />
+            ))}
+            {i !== value.length - 1 && separator}
+          </>
+        ))}
+      </div>
     );
+  } else {
+    return value.join(separator) || emptyLeafPlaceholder;
   }
 }
 
 JoinedArray.array = true;
 JoinedArray.inline = true;
+JoinedArray.copyable = true;
+JoinedArray.copyFunction = ({ value, structure }) => {
+  let separator = structure?.separator ?? ', ';
+  separator = separator === 'break' ? '\n' : separator;
+
+  return Array.isArray(value) ? value.join(separator) : '';
+};

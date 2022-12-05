@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+import jsyaml from 'js-yaml';
 
 function mockFeatures(features) {
   const requestData = {
@@ -7,7 +8,7 @@ function mockFeatures(features) {
   };
   const configmapMock = {
     data: {
-      config: JSON.stringify({ config: { features } }),
+      config: jsyaml.dump({ config: { features } }),
     },
   };
   cy.intercept(requestData, configmapMock);
@@ -18,7 +19,6 @@ context('Test navigation features', () => {
 
   before(() => {
     mockFeatures({
-      APPLICATIONS: { isEnabled: false },
       PROMETHEUS: null,
       VISUAL_RESOURCES: { isEnabled: false },
     });
@@ -26,13 +26,16 @@ context('Test navigation features', () => {
   });
 
   it('Disable features visible by default', () => {
-    // applications
-    cy.getLeftNav()
-      .contains('Integration')
-      .should('not.exist');
-
     // visual resources
     cy.navigateTo('Configuration', 'Cluster Role Bindings');
+
+    cy.getIframeBody()
+      .find('[aria-label="open-search"]')
+      .click();
+
+    cy.getIframeBody()
+      .find('[aria-label="search-input"]')
+      .type('eventing-controller');
 
     cy.getIframeBody()
       .contains('eventing-controller (SA)') // link wrapper

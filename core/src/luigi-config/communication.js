@@ -13,7 +13,6 @@ import { reloadAuth } from './auth/auth';
 import { setFeatureToggle } from './utils/feature-toggles';
 import { setTheme } from './utils/theme';
 import { setSSOAuthData } from './auth/sso';
-import { communicationEntry as pageSizeCommunicationEntry } from './settings/pagination';
 import { getCorrespondingNamespaceLocation } from './navigation/navigation-helpers';
 import { featureCommunicationEntries } from './feature-discovery';
 import * as fetchCache from './cache/fetch-cache';
@@ -38,27 +37,15 @@ window.addEventListener('keydown', e => {
 
 export const communication = {
   customMessagesListeners: {
-    'busola.language': ({ language }) => {
-      localStorage.setItem('busola.language', language);
+    'busola.luigi-language': ({ language }) => {
+      localStorage.setItem('busola.luigi-language', language);
       i18next.changeLanguage(language).then(() => reloadNavigation());
     },
-    'busola.theme': ({ name }) => {
+    'busola.luigi-theme': ({ name }) => {
       setTheme(name);
-      Luigi.customMessages().sendToAll({
-        id: 'busola.theme',
-        theme: name,
-      });
     },
     'busola.showHiddenNamespaces': ({ showHiddenNamespaces }) => {
       setFeatureToggle('showHiddenNamespaces', showHiddenNamespaces);
-      Luigi.configChanged();
-    },
-    'busola.disableResourceProtection': ({ disableResourceProtection }) => {
-      setFeatureToggle('disableResourceProtection', disableResourceProtection);
-      Luigi.configChanged();
-    },
-    'busola.dontConfirmDelete': ({ value }) => {
-      setFeatureToggle('dontConfirmDelete', value);
       Luigi.configChanged();
     },
     'busola.refreshNavigation': () => {
@@ -160,7 +147,6 @@ export const communication = {
         pathId,
       });
     },
-    ...pageSizeCommunicationEntry,
     ...featureCommunicationEntries,
   },
 };

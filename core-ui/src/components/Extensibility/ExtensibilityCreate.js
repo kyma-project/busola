@@ -1,9 +1,8 @@
-import React, { useMemo, useEffect, useState } from 'react';
-import { createStore } from '@ui-schema/ui-schema';
-import { createOrderedMap } from '@ui-schema/ui-schema/Utils/createMap';
+import React, { useCallback, useMemo, useState } from 'react';
 import Immutable from 'immutable';
 import pluralize from 'pluralize';
 import { useTranslation } from 'react-i18next';
+import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
@@ -13,11 +12,21 @@ import { useGetSchema } from 'hooks/useGetSchema';
 import { prettifyKind } from 'shared/utils/helpers';
 
 import { ResourceSchema } from './ResourceSchema';
-import { createTemplate } from './helpers';
+import { usePreparePresets, createTemplate, getDefaultPreset } from './helpers';
+import { DataSourcesContextProvider } from './contexts/DataSources';
 import { VarStoreContextProvider } from './contexts/VarStore';
 import { prepareSchemaRules } from './helpers/prepareSchemaRules';
+import {
+  getResourceObjFromUIStore,
+  getUIStoreFromResourceObj,
+} from './helpers/immutableConverter';
+import { useVariables } from './hooks/useVariables';
+import { prepareRules } from './helpers/prepareRules';
+import { merge } from 'lodash';
 
-export function ExtensibilityCreate({
+import { TriggerContextProvider } from './contexts/Trigger';
+
+export function ExtensibilityCreateCore({
   formElementRef,
   setCustomValid,
   resourceType,
@@ -26,31 +35,40 @@ export function ExtensibilityCreate({
   resourceSchema: createResource,
   toggleFormFn,
   resourceName,
+  editMode = false,
+  ...props
 }) {
+  const { prepareVars, resetVars, readVars } = useVariables();
   const { namespaceId: namespace } = useMicrofrontendContext();
   const notification = useNotification();
   const { t } = useTranslation();
   const general = createResource?.general;
-  const api = general?.resource || {};
+  const api = useMemo(() => general?.resource || {}, [general?.resource]);
 
-  const [resource, setResource] = useState(
-    initialResource ||
-      createResource?.template ||
-      createTemplate(api, namespace, general?.scope),
+  const emptyTemplate = useMemo(
+    () => createTemplate(api, namespace, general?.scope),
+    [api, namespace, general?.scope],
+  );
+  const defaultPreset = useMemo(
+    () => getDefaultPreset(createResource?.presets, emptyTemplate),
+    [createResource?.presets, emptyTemplate],
   );
 
-  const [store, setStore] = useState(() =>
-    createStore(createOrderedMap(resource)),
+  const [store, setStore] = useState(
+    getUIStoreFromResourceObj(
+      initialResource || defaultPreset?.value || emptyTemplate,
+    ),
   );
 
-  const updateResource = res =>
-    setStore(prevStore => prevStore.set('values', Immutable.fromJS(res)));
+  const presets = usePreparePresets(createResource?.presets, emptyTemplate);
+  const resource = useMemo(() => getResourceObjFromUIStore(store), [store]);
 
-  //TODO filter schema based on form configuration
-
-  useEffect(() => {
-    setResource(store.valuesToJS());
-  }, [store.values]); // eslint-disable-line react-hooks/exhaustive-deps
+  const updateStore = res => {
+    resetVars();
+    readVars(res);
+    const newStore = Immutable.fromJS(res);
+    setStore(prevStore => prevStore.set('values', newStore));
+  };
 
   const afterCreatedFn = async defaultAfterCreatedFn => {
     if (createResource?.details) {
@@ -70,17 +88,23 @@ export function ExtensibilityCreate({
     toggleFormFn(false);
   };
 
-  const { schema, error: errorOpenApi, loading } = useGetSchema({
+  const {
+    schema,
+    error: errorOpenApi,
+    loading: loadingOpenAPISchema,
+  } = useGetSchema({
     resource: api,
   });
 
   const { simpleRules, advancedRules } = useMemo(() => {
-    const fullSchemaRules = [
-      { path: 'metadata.name', simple: true },
-      { path: 'metadata.labels' },
-      { path: 'metadata.annotations' },
-      ...(createResource?.form ?? []),
-    ];
+    const fullSchemaRules = prepareRules(
+      createResource?.form ?? [],
+      editMode,
+      t,
+    );
+
+    prepareVars(fullSchemaRules);
+    readVars(resource);
 
     return {
       simpleRules: prepareSchemaRules(
@@ -90,48 +114,87 @@ export function ExtensibilityCreate({
         fullSchemaRules.filter(item => item.advanced ?? true),
       ),
     };
-  }, [createResource]);
+  }, [createResource]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // waiting for schema from OpenAPI to be computed
-  if (loading) return <Spinner />;
+  const handleNameChange = useCallback(
+    resourceName => {
+      jp.value(resource, '$.metadata.name', resourceName);
+      jp.value(
+        resource,
+        "$.metadata.labels['app.kubernetes.io/name']",
+        resourceName,
+      );
+      updateStore(resource);
+    },
+    [resource], // eslint-disable-line react-hooks/exhaustive-deps,
+  );
+
+  if (loadingOpenAPISchema) return <Spinner />;
 
   return (
-    <VarStoreContextProvider>
-      <ResourceForm
-        pluralKind={resourceType}
-        singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
+    <ResourceForm
+      {...props}
+      pluralKind={resourceType}
+      singularName={pluralize(resourceName || prettifyKind(resource.kind), 1)}
+      resource={resource}
+      setResource={v => setStore(getUIStoreFromResourceObj(v))}
+      onPresetSelected={presetValue => {
+        const updatedResource = merge(
+          {},
+          getResourceObjFromUIStore(store),
+          presetValue,
+        );
+        setStore(getUIStoreFromResourceObj(updatedResource));
+      }}
+      formElementRef={formElementRef}
+      createUrl={resourceUrl}
+      setCustomValid={setCustomValid}
+      onlyYaml={!schema}
+      presets={!initialResource && presets}
+      initialResource={initialResource}
+      afterCreatedFn={afterCreatedFn}
+      handleNameChange={handleNameChange}
+      urlPath={general.urlPath}
+      disableDefaultFields
+    >
+      <ResourceSchema
+        simple
+        key={api.version}
+        schema={errorOpenApi ? {} : schema}
+        schemaRules={simpleRules}
         resource={resource}
-        setResource={updateResource}
-        formElementRef={formElementRef}
-        createUrl={resourceUrl}
-        setCustomValid={setCustomValid}
-        onlyYaml={!schema}
-        initialResource={initialResource}
-        afterCreatedFn={afterCreatedFn}
-      >
-        <ResourceSchema
-          simple
-          key={api.version}
-          schema={errorOpenApi ? {} : schema}
-          schemaRules={simpleRules}
-          resource={resource}
-          store={store}
-          setStore={setStore}
-          onSubmit={() => {}}
-          path={general?.urlPath || ''}
-        />
-        <ResourceSchema
-          advanced
-          key={api.version}
-          schema={errorOpenApi ? {} : schema}
-          schemaRules={advancedRules}
-          resource={resource}
-          store={store}
-          setStore={setStore}
-          path={general?.urlPath || ''}
-        />
-      </ResourceForm>
-    </VarStoreContextProvider>
+        store={store}
+        setStore={setStore}
+        onSubmit={() => {}}
+        path={general?.urlPath || ''}
+        editMode={editMode}
+      />
+      <ResourceSchema
+        advanced
+        key={api.version}
+        schema={errorOpenApi ? {} : schema}
+        schemaRules={advancedRules}
+        resource={resource}
+        store={store}
+        setStore={setStore}
+        path={general?.urlPath || ''}
+        editMode={editMode}
+      />
+    </ResourceForm>
+  );
+}
+
+export function ExtensibilityCreate(props) {
+  return (
+    <DataSourcesContextProvider
+      dataSources={props.resourceSchema?.dataSources || {}}
+    >
+      <TriggerContextProvider>
+        <VarStoreContextProvider>
+          <ExtensibilityCreateCore {...props} />
+        </VarStoreContextProvider>
+      </TriggerContextProvider>
+    </DataSourcesContextProvider>
   );
 }
 

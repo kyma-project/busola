@@ -2,11 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ComboboxInput, MessageStrip } from 'fundamental-react';
 import classnames from 'classnames';
+import { useRecoilValue } from 'recoil';
 
+import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { getFeatureToggle } from 'shared/hooks/useFeatureToggle';
+import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { getHiddenNamespaces } from 'shared/helpers/getHiddenNamespaces';
 import { ResourceForm } from 'shared/ResourceForm';
 
 import './ExternalResourceRef.scss';
@@ -29,6 +30,7 @@ export function ExternalResourceRef({
   error,
   index,
   children,
+  nestingLevel = 0,
 }) {
   const { t } = useTranslation();
   const namespacesUrl = '/api/v1/namespaces';
@@ -36,8 +38,9 @@ export function ExternalResourceRef({
     namespacesUrl,
   );
 
-  const showHiddenNamespaces = getFeatureToggle('showHiddenNamespaces');
-  const hiddenNamespaces = getHiddenNamespaces();
+  const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
+
+  const hiddenNamespaces = useGetHiddenNamespaces();
 
   const namespacesOptions = (namespaces || [])
     .filter(ns =>
@@ -92,34 +95,36 @@ export function ExternalResourceRef({
           resource: labelPrefix,
         })}
         input={() => (
-          <ComboboxInput
-            id={`secret-namespace-combobox-${index}`}
-            ariaLabel="Secret namespace Combobox"
-            arrowLabel="Secret namespace Combobox arrow"
-            compact
-            showAllEntries
-            searchFullString
-            selectionType="manual"
-            options={namespacesOptions}
-            placeholder={t('common.placeholders.secret-ref-namespace')}
-            typedValue={value?.namespace || ''}
-            selectedKey={value?.namespace}
-            onSelect={e => {
-              setValue({
-                name: '',
-                namespace: e.target.value,
-              });
-            }}
-            validationState={
-              namespaceValid
-                ? null
-                : {
-                    state: 'error',
-                    text: t('common.messages.resource-namespace-error'),
-                  }
-            }
-            required={required}
-          />
+          <div className="fd-col fd-col-md--11">
+            <ComboboxInput
+              id={`secret-namespace-combobox-${index}`}
+              ariaLabel="Secret namespace Combobox"
+              arrowLabel="Secret namespace Combobox arrow"
+              compact
+              showAllEntries
+              searchFullString
+              selectionType="manual"
+              options={namespacesOptions}
+              placeholder={t('common.placeholders.secret-ref-namespace')}
+              typedValue={value?.namespace || ''}
+              selectedKey={value?.namespace}
+              onSelect={e => {
+                setValue({
+                  name: '',
+                  namespace: e.target.value,
+                });
+              }}
+              validationState={
+                namespaceValid
+                  ? null
+                  : {
+                      state: 'error',
+                      text: t('common.messages.resource-namespace-error'),
+                    }
+              }
+              required={required}
+            />
+          </div>
         )}
       />,
       <ResourceForm.FormField
@@ -130,34 +135,36 @@ export function ExternalResourceRef({
           resource: labelPrefix,
         })}
         input={() => (
-          <ComboboxInput
-            id={`secret-name-combobox-${index}`}
-            ariaLabel="Secret name Combobox"
-            arrowLabel="Secret name Combobox arrow"
-            compact
-            showAllEntries
-            searchFullString
-            selectionType="manual"
-            options={filteredResourcesOptions}
-            placeholder={t('common.placeholders.secret-ref-name')}
-            selectedKey={value?.name || ''}
-            typedValue={value?.name || ''}
-            onSelect={e => {
-              setValue({
-                name: e.target.value,
-                namespace: value?.namespace,
-              });
-            }}
-            validationState={
-              nameValid
-                ? null
-                : {
-                    state: 'error',
-                    text: t('common.messages.resource-name-error'),
-                  }
-            }
-            required={required}
-          />
+          <div className="fd-col fd-col-md--11">
+            <ComboboxInput
+              id={`secret-name-combobox-${index}`}
+              ariaLabel="Secret name Combobox"
+              arrowLabel="Secret name Combobox arrow"
+              compact
+              showAllEntries
+              searchFullString
+              selectionType="manual"
+              options={filteredResourcesOptions}
+              placeholder={t('common.placeholders.secret-ref-name')}
+              selectedKey={value?.name || ''}
+              typedValue={value?.name || ''}
+              onSelect={e => {
+                setValue({
+                  name: e.target.value,
+                  namespace: value?.namespace,
+                });
+              }}
+              validationState={
+                nameValid
+                  ? null
+                  : {
+                      state: 'error',
+                      text: t('common.messages.resource-name-error'),
+                    }
+              }
+              required={required}
+            />
+          </div>
         )}
       />,
     ];
@@ -173,6 +180,7 @@ export function ExternalResourceRef({
       defaultOpen={defaultOpen}
       isAdvanced={isAdvanced}
       required={required}
+      nestingLevel={nestingLevel}
     >
       {content()}
       {children}

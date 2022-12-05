@@ -56,12 +56,6 @@ export function createDeploymentTemplate(namespaceId) {
 export function createPresets(namespace, translate) {
   return [
     {
-      name: translate('common.labels.default-preset'),
-      value: {
-        deployment: createDeploymentTemplate(namespace),
-      },
-    },
-    {
       name: 'Echo server',
       value: {
         deployment: {

@@ -1,0 +1,374 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: authorization-policies
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: authorization-policies
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |-
+    podSelector:
+      resource:
+        kind: Pod
+        version: v1
+      filter: $matchByLabelSelector($item, $root.spec.selector.matchLabels)
+  details: |-
+    header:
+      - source: spec.action
+        name: spec.action
+      - source: spec.provider
+        widget: Labels
+        name: spec.provider
+    resourceGraph:
+      colorVariant: 3
+      dataSources:
+        - source: podSelector
+    body:
+      - widget: Table
+        name: spec.rules
+        source: spec.rules
+        disablePadding: true
+        showHeader: false
+        visibility: $exists($value)
+        collapsibleTitle: '"Rule #" & $string($index + 1) & (" " & $join($keys($item), " "))'
+        collapsible:
+          - source: $item.from
+            widget: Table
+            name: spec.rules.from
+            disablePadding: true
+            showHeader: false
+            visibility: $exists($value)
+            collapsibleTitle: '"From #" & $string($index + 1) & (" " & $join($keys($item.source), " "))'
+            collapsible:
+              - source: source
+                widget: Panel
+                name: spec.rules.from.source
+                children:
+                  - source: principals
+                    name: spec.rules.from.source.principals
+                    widget: JoinedArray
+                    visibility: $exists($value)
+                  - source: notPrincipals
+                    name: spec.rules.from.source.notPrincipals
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: requestPrincipals
+                    name: spec.rules.from.source.requestPrincipals
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: notRequestPrincipals
+                    name: spec.rules.from.source.notRequestPrincipals
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: namespaces
+                    name: spec.rules.from.source.namespaces
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: notNamespaces
+                    name: spec.rules.from.source.notNamespaces
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: ipBlocks
+                    name: spec.rules.from.source.ipBlocks
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: notIpBlocks
+                    name: spec.rules.from.source.notIpBlocks
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: remoteIpBlocks
+                    name: spec.rules.from.source.remoteIpBlocks
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: notRemoteIpBlocks
+                    name: spec.rules.from.source.notRemoteIpBlocks
+                    widget: Labels
+                    visibility: $exists($value)
+          - source: $item.to
+            widget: Table
+            name: spec.rules.to
+            disablePadding: true
+            showHeader: false
+            visibility: $exists($value)
+            collapsibleTitle: '"To #" & $string($index + 1) & (" " & $join($keys($item.operation), " "))'
+            collapsible:
+              - source: operation
+                widget: Panel
+                name: spec.rules.to.operation
+                children:
+                  - source: Hosts
+                    name: spec.rules.to.operation.hosts
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: notHosts
+                    name: spec.rules.to.operation.notHosts
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: ports
+                    name: spec.rules.to.operation.ports
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: notPorts
+                    name: spec.rules.to.operation.notPorts
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: methods
+                    name: spec.rules.to.operation.methods
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: notMethods
+                    name: spec.rules.to.operation.notMethods
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: paths
+                    name: spec.rules.to.operation.paths
+                    widget: Labels
+                    visibility: $exists($value)
+                  - source: notPaths
+                    name: spec.rules.to.operation.notPaths
+                    widget: Labels
+                    visibility: $exists($value)
+          - source: when
+            widget: Table
+            name: spec.rules.when
+            visibility: $exists($value)
+            children:
+              - source: key
+                name: spec.rules.when.key
+                visibility: $exists($value)
+              - source: values
+                name: spec.rules.when.values
+                widget: JoinedArray
+                separator: break
+                visibility: $exists($value)
+              - source: notValues
+                name: spec.rules.when.notValues
+                widget: JoinedArray
+                separator: break
+                visibility: $exists($value)
+      - widget: Panel
+        name: spec.selector.matchLabels
+        disablePadding: true
+        children:
+          - source: $podSelector()
+            widget: ResourceList
+            disableCreate: true
+            visibility: $boolean($root.spec.selector.matchLabels)
+          - source: spec.selector
+            widget: Panel
+            name: selector.matchesAllPods
+            visibility: $not($exists($value)) or $not($boolean($value))
+        header:
+          - source: spec.selector.matchLabels
+            widget: Labels
+            name: spec.selector.matchLabels
+            visibility: $boolean($value)
+  form: |-
+    - path: spec.selector.matchLabels
+      widget: KeyValuePair
+    - path: spec.action
+      placeholder: placeholders.dropdown
+      simple: true
+      description: description.action
+    - path: spec.provider
+      widget: FormGroup
+      children:
+        - path: name
+    - path: spec.rules
+      widget: GenericList
+      simple: true
+      children:
+        - path: '[].from'
+          widget: GenericList
+          children:
+            - path: '[].source'
+              widget: FormGroup
+              defaultExpanded: true
+              children:
+                - path: principals
+                  widget: SimpleList
+                  description: description.rules.from.principals
+                  children:
+                    - path: '[]'
+                - path: notPrincipals
+                  widget: SimpleList
+                  description: description.rules.from.notPrincipals
+                  children:
+                    - path: '[]'
+                - path: requestPrincipals
+                  widget: SimpleList
+                  description: description.rules.from.requestPrincipals
+                  children:
+                    - path: '[]'
+                - path: notRequestPrincipals
+                  widget: SimpleList
+                  description: description.rules.from.notRequestPrincipals
+                  children:
+                    - path: '[]'
+                - path: namespaces
+                  widget: SimpleList
+                  description: description.rules.from.namespaces
+                  children:
+                    - path: '[]'
+                - path: notNamespaces
+                  widget: SimpleList
+                  description: description.rules.from.notNamespaces
+                  children:
+                    - path: '[]'
+                - path: ipBlocks
+                  widget: SimpleList
+                  description: description.rules.from.ipBlocks
+                  children:
+                    - path: '[]'
+                - path: notIpBlocks
+                  widget: SimpleList
+                  description: description.rules.from.notIpBlocks
+                  children:
+                    - path: '[]'
+                - path: remoteIpBlocks
+                  widget: SimpleList
+                  description: description.rules.from.remoteIpBlocks
+                  children:
+                    - path: '[]'
+                - path: notRemoteIpBlocks
+                  widget: SimpleList
+                  description: description.rules.from.notRemoteIpBlocks
+                  children:
+                    - path: '[]'
+        - path: '[].to'
+          widget: GenericList
+          children:
+            - path: '[].operation'
+              widget: FormGroup
+              defaultExpanded: true
+              children:
+                - path: hosts
+                  widget: SimpleList
+                  description: description.rules.to.hosts
+                  children:
+                    - path: '[]'
+                - path: notHosts
+                  widget: SimpleList
+                  description: description.rules.to.notHosts
+                  children:
+                    - path: '[]'
+                - path: ports
+                  widget: SimpleList
+                  description: description.rules.to.ports
+                  children:
+                    - path: '[]'
+                - path: notPorts
+                  widget: SimpleList
+                  description: description.rules.to.notPorts
+                  children:
+                    - path: '[]'
+                - path: methods
+                  widget: SimpleList
+                  description: description.rules.to.methods
+                  children:
+                    - path: '[]'
+                - path: notMethods
+                  widget: SimpleList
+                  description: description.rules.to.notMethods
+                  children:
+                    - path: '[]'
+                - path: paths
+                  widget: SimpleList
+                  description: description.rules.to.paths
+                  children:
+                    - path: '[]'
+                - path: notPaths
+                  widget: SimpleList
+                  description: description.rules.to.notPaths
+                  children:
+                    - path: '[]'
+        - path: '[].when'
+          widget: GenericList
+          children:
+            - path: '[].key'
+              widget: Text
+              description: description.rules.when.key
+            - path: '[].values'
+              widget: SimpleList
+              description: description.rules.when.values
+              children:
+                - path: '[]'
+            - path: '[].notValues'
+              widget: SimpleList
+              description: description.rules.when.notValues
+              children:
+                - path: '[]'
+  general: |-
+    resource:
+      kind: AuthorizationPolicy
+      group: security.istio.io
+      version: v1beta1
+    name: Authorization Policies
+    category: Istio
+    urlPath: authorizationpolicies
+    scope: namespace
+    description: >-
+      {{[Istio Authorization
+      Policy](https://istio.io/latest/docs/reference/config/security/authorization-policy/)}}
+      allows for workload access management in the mesh.
+  list: |-
+    - name: action
+      source: spec.action
+  translations: |-
+    en:
+      description.action: Optional. The action to take if the request is matched with the rules. Default is ALLOW if not specified.
+      description.rules.from.principals: Optional. A list of peer identities derived from the peer certificate. The peer identity is in the format of '<TRUSTDOMAIN> /ns/ <NAMESPACE> /sa/ <SERVICEACCOUNT>', for example, 'cluster.local/ns/default/sa/productpage'. If not set, any principal is allowed.
+      description.rules.from.notPrincipals: Optional. A list of negative match of peer identities.
+      description.rules.from.requestPrincipals: Optional. A list of request identities derived from the JWT. The request identity is in the format of '<ISS>/<SUB>', for example, 'example.com/sub-1'. If not set, any request principal is allowed.
+      description.rules.from.notRequestPrincipals: Optional. A list of negative match of request identities.
+      description.rules.from.namespaces: Optional. A list of namespaces derived from the peer certificate. If not set, any namespace is allowed.
+      description.rules.from.notNamespaces: Optional. A list of negative match of namespaces.
+      description.rules.from.ipBlocks: Optional. A list of IP blocks, populated from the source address of the IP packet. Single IP (e.g. '1.2.3.4') and CIDR (e.g. '1.2.3.0/24') are supported. If not set, any IP is allowed.
+      description.rules.from.notIpBlocks: Optional. A list of negative match of IP blocks.
+      description.rules.from.remoteIpBlocks: Optional. A list of IP blocks, populated from X-Forwarded-For header or proxy protocol. To make use of this field, you must configure the numTrustedProxies field of the gatewayTopology under the meshConfig when you install Istio or using an annotation on the ingress gateway. If not set, any IP is allowed.
+      description.rules.from.notRemoteIpBlocks: Optional. A list of negative match of remote IP blocks.
+      description.rules.to.hosts: Optional. A list of hosts as specified in the HTTP request. The match is case-insensitive. If not set, any host is allowed. Must be used only with HTTP.
+      description.rules.to.notHosts: Optional. A list of negative match of hosts as specified in the HTTP request. The match is case-insensitive.
+      description.rules.to.ports: Optional. A list of ports as specified in the connection. If not set, any port is allowed.
+      description.rules.to.notPorts: Optional. A list of negative match of ports as specified in the connection.
+      description.rules.to.methods: Optional. A list of methods as specified in the HTTP request. If not set, any method is allowed. Must be used only with HTTP.
+      description.rules.to.notMethods: Optional. A list of negative match of methods as specified in the HTTP request.
+      description.rules.to.paths: Optional. A list of paths as specified in the HTTP request. If not set, any path is allowed. Must be used only with HTTP.
+      description.rules.to.notPaths: Optional. A list of negative match of paths.
+      description.rules.when.key: The name of an Istio attribute.
+      description.rules.when.values: Optional. A list of allowed values for the attribute. At least one of values or notValues must be set.
+      description.rules.when.notValues: Optional. A list of negative match of values for the attribute. At least one of values or notValues must be set.
+      placeholders.dropdown: Type or choose an option.
+      spec.action: Action
+      spec.provider: Provider
+      spec.rules: Rules
+      spec.rules.from: From
+      spec.rules.from.source: Source
+      spec.rules.from.source.principals: Principals
+      spec.rules.from.source.notPrincipals: NotPrincipals
+      spec.rules.from.source.requestPrincipals: RequestPrincipals
+      spec.rules.from.source.notRequestPrincipals: NotRequestPrincipals
+      spec.rules.from.source.namespaces: Namespaces
+      spec.rules.from.source.notNamespaces: NotNamespaces
+      spec.rules.from.source.ipBlocks: IpBlocks
+      spec.rules.from.source.notIpBlocks: NotIpBlocks
+      spec.rules.from.source.remoteIpBlocks: RemoteIpBlocks
+      spec.rules.from.source.notRemoteIpBlocks: NotRemoteIpBlocks
+      spec.rules.to: To
+      spec.rules.to.operation: Operation
+      spec.rules.to.operation.hosts: Hosts
+      spec.rules.to.operation.notHosts: NotHosts
+      spec.rules.to.operation.ports: Ports
+      spec.rules.to.operation.notPorts: NotPorts
+      spec.rules.to.operation.methods: Methods
+      spec.rules.to.operation.notMethods: NotMethods
+      spec.rules.to.operation.paths: Paths
+      spec.rules.to.operation.notPaths: NotPaths
+      spec.rules.when: When
+      spec.rules.when.key: Key
+      spec.rules.when.values: Values
+      spec.rules.when.notValues: NotValues
+      spec.selector.matchLabels: Selector
+      selector.matchesAllPods: Matches all Pods in the Namespace

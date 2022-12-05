@@ -2,7 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Tab.scss';
 
-export const Tab = ({ status, title, onClick, tabIndex, id, isActive }) => {
+export const Tab = ({
+  status,
+  title,
+  onClick,
+  tabIndex,
+  id,
+  isActive,
+  children,
+}) => {
   return (
     <li
       role="tab"

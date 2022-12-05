@@ -22,22 +22,22 @@ import {
   getCurrentContextNamespace,
 } from './cluster-management/cluster-management';
 
-let customResources = {};
-
-async function loadBusolaClusterCRs() {
+async function getBuiltinCustomResources() {
   try {
-    const cacheBuster = '?cache-buster=' + Date.now();
-
-    const response = await fetch(
-      `/assets/customResources/customResources.json${cacheBuster}`,
-    );
-
-    return await response.json();
+    const response = await fetch('/assets/extensions/extensions.yaml');
+    const extensions = jsyaml.loadAll(await response.text());
+    if (Array.isArray(extensions)) {
+      return extensions;
+    } else {
+      return [];
+    }
   } catch (e) {
-    console.warn(`Cannot load customResources.json: `, e);
-    return null;
+    console.log(e);
+    return [];
   }
 }
+
+let customResources = {};
 
 async function loadTargetClusterCRs(authData) {
   const activeCluster = getActiveCluster();
@@ -109,19 +109,26 @@ export async function getCustomResources(authData) {
   const { features } = await getCurrentConfig();
   const clusterName = getActiveClusterName();
 
-  if (features.EXTENSIBILITY?.isEnabled) {
-    if (customResources[clusterName]) {
-      return customResources[clusterName];
-    }
-
-    customResources[clusterName] = Object.values({
-      ...(await loadBusolaClusterCRs()),
-      ...(await loadTargetClusterCRs(authData)),
-    });
-
+  if (customResources[clusterName]) {
     return customResources[clusterName];
   }
-  return [];
+
+  customResources[clusterName] = await getBuiltinCustomResources();
+
+  if (features.EXTENSIBILITY?.isEnabled) {
+    customResources[clusterName] = [...customResources[clusterName].flat()];
+
+    const targetClusterCustomResources = await loadTargetClusterCRs(authData);
+
+    const additionalExtResources = Object.values(targetClusterCustomResources);
+
+    customResources[clusterName] = [
+      ...customResources[clusterName],
+      ...additionalExtResources,
+    ];
+  }
+
+  return customResources[clusterName];
 }
 
 export async function getExtensibilitySchemas() {

@@ -1,7 +1,7 @@
 .resource-form__collapsible-section {
-  background: var(--sapNeutralBackground);
   display: flex;
   flex-direction: column;
+  padding-right: 0;
 
   header {
     display: flex;
@@ -9,6 +9,7 @@
     cursor: pointer;
     padding: 8px 16px;
     border-top: 1px solid var(--sapList_GroupHeaderBorderColor);
+    background: var(--sapNeutralBackground);
 
     .control-icon {
       margin-right: 8px;
@@ -21,12 +22,16 @@
     }
   }
 
-  &:last-child > header {
+  &.collapsed:last-child > header {
     border-bottom: 1px solid var(--sapList_GroupHeaderBorderColor);
   }
 
   .content {
-    padding: 16px;
+    padding: {
+      right: 0;
+      top: 16px;
+      bottom: 24px;
+    }
     background: var(--sapPageHeader_Background);
     flex-grow: 1;
 
@@ -40,6 +45,12 @@
       padding-top: 0;
       padding-bottom: 0;
       overflow: hidden;
+    }
+
+    > .collapsible-renderer__grid-wrapper
+      > .resource-form__collapsible-section:first-child,
+    > .resource-form__collapsible-section:first-child {
+      margin-top: -16px;
     }
   }
 
@@ -62,10 +73,6 @@
 
   .title-content {
     margin-right: 0.5rem;
-  }
-
-  .info-tooltip {
-    cursor: help;
   }
 
   .actions {

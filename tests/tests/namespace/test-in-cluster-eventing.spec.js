@@ -4,15 +4,21 @@ import { loadFile } from '../../support/loadFile';
 
 const random = Math.floor(Math.random() * 9999) + 1000;
 const FUNCTION_RECEIVER_NAME = 'in-cluster-eventing-receiver';
-
 const API_RULE_AND_FUNCTION_NAME = 'in-cluster-eventing-publisher';
-const API_RULE_HOST = API_RULE_AND_FUNCTION_NAME + '-' + random;
-const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_HOST}.`;
+const API_RULE_SUBDOMAIN = API_RULE_AND_FUNCTION_NAME + '-' + random;
+const API_RULE_PORT_NUMBER = 80;
+const API_RULE_HOST_EXPECTED_PREFIX = `https://${API_RULE_SUBDOMAIN}.`;
 
 context('Test in-cluster eventing', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtensions([
+      'examples/resources/gateway/apirules.yaml',
+      'examples/resources/serverless/functions.yaml',
+    ]);
+
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
@@ -27,14 +33,12 @@ context('Test in-cluster eventing', () => {
       .click({ force: true });
 
     cy.getIframeBody()
-      .find('[role="status"]', { timeout: 60 * 1000 })
-      .should('have.text', 'Running');
+      .find('[role="status"]')
+      .contains(/running/i, { timeout: 60 * 1000 });
   });
 
   it('Create a Subscription', () => {
-    cy.getIframeBody()
-      .contains('a', 'Configuration')
-      .click();
+    cy.navigateTo('Configuration', 'Subscriptions');
 
     cy.getIframeBody()
       .contains('button', 'Create Subscription')
@@ -50,6 +54,15 @@ context('Test in-cluster eventing', () => {
       .type(`${FUNCTION_RECEIVER_NAME}-subscription`);
 
     cy.getIframeBody()
+      .contains('Choose Service for the sink')
+      .click();
+
+    cy.getIframeBody()
+      .find('[role="option"]')
+      .contains(FUNCTION_RECEIVER_NAME)
+      .click();
+
+    cy.getIframeBody()
       .find(
         '[placeholder="Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1"]',
       )
@@ -63,9 +76,7 @@ context('Test in-cluster eventing', () => {
   });
 
   it('Go to details of the publisher Function', () => {
-    cy.getLeftNav()
-      .contains('Functions')
-      .click();
+    cy.navigateTo('Workloads', 'Functions');
 
     cy.getIframeBody()
       .contains('a', API_RULE_AND_FUNCTION_NAME)
@@ -74,15 +85,22 @@ context('Test in-cluster eventing', () => {
       .click({ force: true });
 
     cy.getIframeBody()
-      .find('[role="status"]', { timeout: 60 * 1000 })
-      .should('have.text', 'Running');
+      .find('[role="status"]')
+      .contains(/running/i, { timeout: 60 * 1000 });
   });
 
   it('Create an API Rule for the publisher Function', () => {
-    cy.createApiRule(API_RULE_AND_FUNCTION_NAME, API_RULE_HOST);
+    cy.createApiRule(
+      API_RULE_AND_FUNCTION_NAME,
+      API_RULE_PORT_NUMBER,
+      API_RULE_SUBDOMAIN,
+    );
+
+    cy.wait(500);
 
     cy.getIframeBody()
-      .find('[role="status"]')
+      .find('[role="status"]:visible')
+      .first()
       .should('have.text', 'OK');
   });
 

@@ -14,7 +14,7 @@ const useGetHook = processDataFn =>
     const lastAuthData = React.useRef(null);
     const lastResourceVersion = React.useRef(null);
     const [data, setData] = React.useState(null);
-    const [loading, setLoading] = React.useState(true);
+    const [loading, setLoading] = React.useState(!skip);
     const [error, setError] = React.useState(null);
     const { authData } = useMicrofrontendContext();
     const fetch = useFetch();
@@ -25,12 +25,7 @@ const useGetHook = processDataFn =>
     const previousRequestNotFinished = React.useRef(null);
 
     const refetch = (isSilent, currentData) => async () => {
-      if (
-        skip ||
-        !authData ||
-        abortController.current.signal.aborted ||
-        previousRequestNotFinished.current === path
-      )
+      if (skip || !authData || previousRequestNotFinished.current === path)
         return;
       if (!isSilent) setTimeout(_ => setLoading(true));
 

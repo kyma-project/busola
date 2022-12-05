@@ -17,6 +17,7 @@ import {
 import { SingleSubjectForm, SingleSubjectInput } from './SubjectForm';
 import { validateBinding } from './helpers';
 import { RoleForm } from './RoleForm';
+import { useHasPermissionsFor } from 'hooks/useHasPermissionsFor';
 
 export function GenericRoleBindingCreate({
   formElementRef,
@@ -30,6 +31,9 @@ export function GenericRoleBindingCreate({
   ...props
 }) {
   const { t } = useTranslation();
+  const [hasPermissionsForClusterRoles] = useHasPermissionsFor([
+    [DEFAULT_APIGROUP, 'clusterroles'],
+  ]);
 
   const [binding, setBinding] = useState(
     cloneDeep(initialRoleBinding) || createBindingTemplate(namespace),
@@ -47,40 +51,23 @@ export function GenericRoleBindingCreate({
   } = useGetList()(rolesUrl, { skip: !namespace });
 
   const clusterRolesUrl = `/apis/${DEFAULT_APIGROUP}/v1/clusterroles`;
-  const {
+  let {
     data: clusterRoles,
     loading: clusterRolesLoading = true,
     error: clusterRolesError,
-  } = useGetList()(clusterRolesUrl);
+  } = useGetList()(clusterRolesUrl, {
+    skip: !hasPermissionsForClusterRoles,
+  });
+
+  // ignore no permissions for ClusterRoles
+  if (clusterRolesError?.code === 403) {
+    clusterRoles = [];
+    clusterRolesError = null;
+  }
+
   const rolesLoading =
     (!namespace ? false : namespaceRolesLoading) || clusterRolesLoading;
   const rolesError = namespaceRolesError || clusterRolesError;
-  const rolesNames = (roles || []).map(role => ({
-    key: `role-${role.metadata.name}`,
-    text: `${role.metadata.name} (R)`,
-    data: {
-      roleKind: 'Role',
-      roleName: role.metadata.name,
-    },
-  }));
-  const clusterRolesNames = (clusterRoles || []).map(role => ({
-    key: `clusterrole-${role.metadata.name}`,
-    text: `${role.metadata.name} (CR)`,
-    data: {
-      roleKind: 'ClusterRole',
-      roleName: role.metadata.name,
-    },
-  }));
-  const allRoles = [...rolesNames, ...clusterRolesNames];
-  const handleRoleChange = role => {
-    const newRole = {
-      kind: role.data?.roleKind,
-      name: role.data?.roleName,
-      apiGroup: DEFAULT_APIGROUP,
-    };
-    jp.value(binding, '$.roleRef', newRole);
-    setBinding({ ...binding });
-  };
 
   return (
     <ResourceForm
@@ -103,9 +90,11 @@ export function GenericRoleBindingCreate({
       <RoleForm
         loading={rolesLoading}
         error={rolesError}
-        allRoles={allRoles}
+        namespace={namespace}
+        roles={roles}
+        clusterRoles={clusterRoles}
         binding={binding}
-        handleRoleChange={handleRoleChange}
+        setBinding={setBinding}
       />
       {jp.value(binding, '$.subjects.length') ? (
         <SingleSubjectInput simple propertyPath="$.subjects" />
@@ -127,12 +116,13 @@ export function GenericRoleBindingCreate({
           'role-bindings.create-modal.at-least-one-subject-required',
           { resource: singularName },
         )}
-        itemRenderer={({ item, values, setValues, index }) => (
+        itemRenderer={({ item, values, setValues, index, nestingLevel }) => (
           <SingleSubjectForm
             subject={item}
             subjects={values}
             setSubjects={setValues}
             index={index}
+            nestingLevel={nestingLevel}
           />
         )}
         newResourceTemplateFn={newSubject}

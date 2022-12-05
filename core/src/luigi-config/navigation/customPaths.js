@@ -38,17 +38,17 @@ const getCustomNodes = (crs, scope) => {
 
         return {
           category: {
-            label: i18next.t(`${translationBundle}::category`, {
-              defaultValue: category || i18next.t('custom-resources.title'),
-            }),
+            label: i18next.exists(`${translationBundle}::category`)
+              ? i18next.t(`${translationBundle}::category`)
+              : category || i18next.t('custom-resources.title'),
             collapsible: true,
             icon: icon || 'customize',
           },
           resourceType: resource.kind.toLowerCase(),
           pathSegment: urlPath,
-          label: i18next.t(`${translationBundle}::name`, {
-            defaultValue: name || pluralize(resource.kind),
-          }),
+          label: i18next.exists(`${translationBundle}::name`)
+            ? i18next.t(`${translationBundle}::name`)
+            : name || pluralize(resource.kind),
           viewUrl:
             config.coreUIModuleUrl +
             `${
@@ -93,7 +93,7 @@ const getCustomNodes = (crs, scope) => {
 export const getCustomPaths = (customResources, scope) => {
   const getScopedCrs = (crs, scope) => {
     const scopedCrs = crs?.filter(cr => {
-      const crScope = cr.general?.scope;
+      const crScope = cr?.general?.scope;
       if (
         !crScope ||
         (crScope.toLowerCase() !== 'namespace' &&

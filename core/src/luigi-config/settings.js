@@ -1,6 +1,10 @@
+import { getCurrentConfig } from './cluster-management/cluster-management';
+import { elementReady } from './nav-footer';
 import { getTheme } from './utils/theme';
 
-export function createSettings(params) {
+export async function createSettings(params) {
+  const { features } = (await getCurrentConfig()) || {};
+
   return {
     responsiveNavigation: 'Fiori3',
     sideNavFooterText: ' ', // init empty footer
@@ -13,5 +17,19 @@ export function createSettings(params) {
       hideAutomatically: false,
     },
     customSandboxRules: ['allow-downloads'],
+    hideNavigation: !!features?.REACT_NAVIGATION?.isEnabled,
   };
+}
+
+export async function attachPreferencesModal() {
+  elementReady(`[data-testid=luigi-topnav-profile-item]`).then(
+    async preferencesElement => {
+      preferencesElement.addEventListener('click', e => {
+        Luigi.customMessages().sendToAll({
+          id: 'open-preferences',
+        });
+        e.stopPropagation();
+      });
+    },
+  );
 }

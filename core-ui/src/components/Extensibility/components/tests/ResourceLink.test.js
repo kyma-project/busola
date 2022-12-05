@@ -8,8 +8,17 @@ jest.mock('shared/helpers/universalLinks', () => ({
   navigateToResource: params => mockNavigate(params),
 }));
 
+jest.mock('../../hooks/useJsonata', () => ({
+  useJsonata: () => {
+    return query => {
+      const jsonataError = query === 'error' ? 'Error!' : null;
+      return [query, jsonataError];
+    };
+  },
+}));
+
 describe('ResourceLink', () => {
-  const value = { kind: 'test-kind', name: 'value-name' };
+  const value = 'link-to-resource';
   const originalResource = {
     name: 'original-resource-name',
     namespace: 'oiginal-resource-namrespace',
@@ -24,38 +33,32 @@ describe('ResourceLink', () => {
   });
 
   it('Fires an event on click', () => {
+    const res = {
+      name: 'data.name',
+      kind: 'data.kind',
+      namespace: 'root.namespace',
+    };
     const container = shallow(
       <ResourceLink
         value={value}
         structure={{
-          linkText: 'link-text',
-          resource: {
-            name: 'data.name',
-            kind: 'data.kind',
-            namespace: 'root.namespace',
-          },
+          source: 'data.name',
+          resource: res,
         }}
         originalResource={originalResource}
       />,
     );
 
     container.simulate('click', container);
-
-    expect(mockNavigate).toHaveBeenCalledWith({
-      kind: 'test-kind',
-      name: 'value-name',
-      namespace: 'oiginal-resource-namrespace',
-    });
+    expect(mockNavigate).toHaveBeenCalledWith(JSON.parse(JSON.stringify(res)));
   });
 
   it('Accepts config without namespace', () => {
-    console.warn = jest.fn();
-
     const container = shallow(
       <ResourceLink
         value={value}
         structure={{
-          linkText: 'link-text',
+          source: 'link-text',
           resource: {
             name: 'data.name',
             kind: 'data.kind',
@@ -66,23 +69,18 @@ describe('ResourceLink', () => {
     );
 
     // no errors here
-    expect(container.text()).toBe('extensibility::link-text');
+    expect(container.text()).toBe(`extensibility::${value}`);
   });
 
   it('Show error on invalid config', () => {
-    const originalConsoleWarn = console.warn;
-    console.warn = jest.fn();
-
     const container = shallow(
       <ResourceLink
         value={value}
-        structure={{ resource: { namespace: 'test-ns' } }}
+        structure={{ resource: { namespace: 'error' } }}
         originalResource={originalResource}
       />,
     );
 
     expect(container.text()).toBe('extensibility.configuration-error');
-    expect(console.warn.mock.calls[0][0]).toBeInstanceOf(Error);
-    console.warn = originalConsoleWarn;
   });
 });

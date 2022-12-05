@@ -41,6 +41,7 @@ function SingleContainerSection({ container, setContainer }) {
         title={t('deployments.create-modal.advanced.runtime-profile')}
         propertyPath="$.resources"
         canChangeState={false}
+        nestingLevel={1}
         defaultOpen
       />
     </ResourceForm.Wrapper>
@@ -78,6 +79,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
 
   return containers.map((container, i) => (
     <ResourceForm.CollapsibleSection
+      nestingLevel={1}
       key={i}
       title={t('deployments.create-modal.advanced.container-header', {
         name: container?.name || i + 1,
@@ -86,6 +88,7 @@ export function Containers({ value: containers, setValue: setContainers }) {
         <Button
           glyph="delete"
           type="negative"
+          option="transparent"
           compact
           onClick={() => removeContainer(i)}
         />

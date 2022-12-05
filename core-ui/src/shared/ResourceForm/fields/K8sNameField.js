@@ -16,6 +16,8 @@ export function K8sNameField({
   prefix,
   pattern,
   showHelp = true,
+  inputInfo,
+  tooltipContent,
   ...props
 }) {
   const { t } = useTranslation();
@@ -37,15 +39,16 @@ export function K8sNameField({
       className={className}
       propertyPath="$.metadata.name"
       label={t('common.labels.name')}
+      inputInfo={inputInfo}
+      tooltipContent={tooltipContent}
       input={() => {
         return (
           <>
-            <div className="k8s-name-field">
+            <div className="fd-col fd-col-md--11">
               <K8sNameInput
                 kind={kind}
                 compact
                 required
-                showHelp={false}
                 showLabel={false}
                 onChange={e => setValue(e.target.value)}
                 value={value}
@@ -53,17 +56,21 @@ export function K8sNameField({
                 pattern={pattern}
                 {...inputProps}
               />
+            </div>
+            <div className="fd-col fd-col-md--1 generate-button">
               <Tooltip content={t('common.tooltips.generate-name')}>
                 <Button
                   compact
+                  option="transparent"
                   onClick={generateName}
-                  glyph="synchronize"
                   ariaLabel="Generate name button"
                   disabled={readOnly}
-                />
+                >
+                  {t('common.buttons.generate-name')}
+                </Button>
               </Tooltip>
             </div>
-            {showHelp ? (
+            {showHelp && inputInfo === undefined ? (
               <p style={{ color: 'var(--sapNeutralTextColor)' }}>
                 {t('common.tooltips.k8s-name-input')}
               </p>

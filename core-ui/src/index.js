@@ -1,11 +1,11 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import ReactDOM from 'react-dom';
+import { RecoilRoot } from 'recoil';
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
-import 'core-js/actual/array/find-last-index';
 
 import App from './components/App/App';
 
@@ -48,13 +48,15 @@ i18next
 
 ReactDOM.render(
   <Microfrontend env={process.env}>
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <Suspense fallback={<Spinner />}>
-        <CommandPaletteProvider>
-          <App />
-        </CommandPaletteProvider>
-      </Suspense>
-    </BrowserRouter>
+    <RecoilRoot>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <Suspense fallback={<Spinner />}>
+          <CommandPaletteProvider>
+            <App />
+          </CommandPaletteProvider>
+        </Suspense>
+      </BrowserRouter>
+    </RecoilRoot>
   </Microfrontend>,
   document.getElementById('root'),
 );

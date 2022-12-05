@@ -6,27 +6,41 @@ import { useTranslation } from 'react-i18next';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
 import { isValidYaml } from 'shared/contexts/YamlEditorContext/isValidYaml';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useGetTranslation } from '../helpers';
 
-export function CodeViewer({ value, structure, schema }) {
+import { useGetTranslation } from '../helpers';
+import { useJsonata } from '../hooks/useJsonata';
+
+export function CodeViewer({
+  value,
+  structure,
+  originalResource,
+  schema,
+  scope,
+  arrayItems,
+}) {
   const { widgetT } = useGetTranslation();
   const { t } = useTranslation();
 
   const notification = useNotification();
 
-  const getValueAndLang = (value, structure) => {
-    let language = structure?.language || detectLanguage(value);
-    let parsedValue = '';
+  const jsonata = useJsonata({
+    resource: originalResource,
+    scope,
+    value,
+    arrayItems,
+  });
+  let [language] = jsonata(structure?.language, {}, detectLanguage(value));
+  language = language?.toLowerCase();
 
+  const getValue = (value, structure) => {
     if (!isNil(value)) {
       try {
         switch (language) {
           case 'yaml':
-            parsedValue = jsyaml.dump(value);
-            break;
+            return jsyaml.dump(value);
           default:
             //this includes JSON and other languages
-            parsedValue = stringifyIfObject(value);
+            return stringifyIfObject(value);
         }
       } catch (e) {
         const errMessage = t('extensibility.widgets.code-viewer-error', {
@@ -36,17 +50,13 @@ export function CodeViewer({ value, structure, schema }) {
         notification.notifyError({
           content: errMessage,
         });
-        language = '';
-        parsedValue = stringifyIfObject(value);
+        return stringifyIfObject(value);
       }
     }
-    return {
-      parsedValue,
-      language,
-    };
+    return '';
   };
 
-  const { parsedValue, language } = getValueAndLang(value, structure);
+  const parsedValue = getValue(value, structure);
 
   return (
     <ReadonlyEditorPanel
@@ -66,6 +76,7 @@ function detectLanguage(value) {
     return '';
   }
 }
+
 function stringifyIfObject(value) {
   return isNil(value)
     ? ''

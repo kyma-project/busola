@@ -1,5 +1,6 @@
 import { merge } from 'lodash';
 import { convertStaticFeatures } from './feature-discovery';
+import jsyaml from 'js-yaml';
 
 let params = null;
 
@@ -7,15 +8,17 @@ export async function getBusolaClusterParams() {
   if (!params) {
     try {
       const cacheBuster = '?cache-buster=' + Date.now();
+
       const defaultConfigResponse = await fetch(
-        '/assets/defaultConfig.json' + cacheBuster,
-      );
-      const configMapResponse = await fetch(
-        '/assets/config/config.json' + cacheBuster,
+        '/assets/defaultConfig.yaml' + cacheBuster,
       );
 
-      const defaultParams = await defaultConfigResponse.json();
-      const mapParams = await configMapResponse.json();
+      const configMapResponse = await fetch(
+        '/assets/config/config.yaml' + cacheBuster,
+      );
+
+      const defaultParams = jsyaml.load(await defaultConfigResponse.text());
+      const mapParams = jsyaml.load(await configMapResponse.text());
 
       if (defaultParams.config?.features)
         defaultParams.config.features = convertStaticFeatures(

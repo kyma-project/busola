@@ -1,129 +1,6 @@
-api-rules:
-  access-strategies:
-    buttons:
-      add: Add Access Strategy
-    labels:
-      access-strategy: Access Strategy
-      allow: Allow
-      handler: Handler
-      jwt: JWT
-      methods: Methods
-      noop: noop
-      oauth2_introspection: OAuth2
-      path: Path
-      required-scope: Required Scope
-      types: Types
-    messages:
-      one-method: This access strategy requires at least one method.
-      one-strategy-required: Provide at least one strategy.
-      unaccepted-type: Make sure that Access Strategies have the accepted values (noop, allow, oauth2_introspection, jwt) in YAML.
-    title: Access Strategies
-    tooltips:
-      path: Path can contain alphanumeric characters and  '/', '.', '*', '?', '!', '-', '(', and ')'.
-  buttons:
-    create: Create API Rule
-    edit: Edit API Rule "{{apiRuleName}}"
-    expose: Expose {{type}}
-  description: <0>APIRule</0> allows for exposing a service externally.
-  form:
-    gateway: Gateway
-    host: Host
-    hostname: Hostname
-    subdomain: Subdomain
-    subdomain-placeholder: Subdomain will replace the '*' part of the $t(api-rules.form.hostname) value.
-  general-settings:
-    title: General settings
-  jwt:
-    idp-presets: IDP Presets
-    jwks-uri: JWKs URI
-    trusted-issuer: Trusted issuer URL
-  list:
-    headers:
-      host: Host
-      service-name: Service Name
-      status: Status
-  messages:
-    create-failed: Failed to create the APIRule
-    created: APIRule created
-    description: Expose Services outside the cluster with APIRules.
-    not-matching-results: Couldn't find APIRules matching this query.
-    one-rule-required: Provide at least one APIRule.
-    updated: APIRule updated
-    will-be-available-at: APIRule will be available at {{address}}.
-  name_singular: APIRule
-  oauth:
-    required-scope: Required scope
-  placeholders:
-    path: Enter the path
-    subdomain: Subdomain part of the APIRule address
-  rule: Rule
-  rules: Rules
-  services:
-    error-load: Couldn't load service list.
-    loading: Loading services...
-    ns-no-services: No Services in this Namespace
-    placeholder: Choose the service to expose
-  title: API Rules
-  tooltips:
-    ok: Resource created
-    skipped: Skipped creating the resource
-    unknown: Unknown resource state
-applications:
-  buttons:
-    connect: Connect Application
-    create-app: $t(applications.subtitle.create-app)
-  description: <0>Application</0> represents an external solution connected to Kyma.
-  headers:
-    access-label: Access Label
-    apis: APIs
-    central-gateway-url: Central Gateway URL
-    description: Description
-    events: Events
-    service: Service
-  labels:
-    description: Description
-    namespace: Namespace
-  messages:
-    cannot-create: Cannot create the Application
-    connect-disabled: Connecting Applications is disabled for SAP BTP, Kyma Runtime.
-    copy-url: 'Copy the following URL and use it at the external system that you would like to connect to:'
-    create-failed: Failed to create the Application
-    created: Application created
-    no-apis: There are no APIs.
-    no-events: There are no events.
-    service-not-found: No services
-  name_singular: Application
-  placeholders:
-    description: Provide a description for your Application
-  statuses:
-    deployed: Deployed
-    provisioning: Provisioning
-  subtitle:
-    connect-app: Connect Application
-    create-app: Create Application
-    provided-services: Provided Services and Events
-  title: Applications
-  tooltips:
-    provisioning: The Application is being provisioned asynchronously.
+api-rules: API Rules
 apps:
   title: Apps
-authorization-policies:
-  description: <0>Istio Authorization Policy</0> allows for workload access management in the mesh.
-  headers:
-    action: Action
-    from: From
-    key: Key
-    not-values: Not Values
-    operation: Operation
-    provider: Provider
-    rule: Rule {{ruleNumber}}
-    rules: Rules
-    source: Source
-    to: To
-    values: Values
-    when: When
-  name_singular: Authorization Policy
-  title: Authorization Policies
 btp-instances:
   description: ' <0>BTP Service Instance</0> makes the functionality of a service available for consumption.'
   external-name: External Name
@@ -378,7 +255,8 @@ command-palette:
     customresourcedefinitions: Custom Resource Definitions
     daemonsets: Daemon Sets
     destinationrules: Destination Rules
-    gitrepositories: Git Repositories
+    functions: Functions
+    gateways: Gateways
     horizontalpodautoscalers: Horizontal Pod Autoscalers
     networkpolicies: Network Policies
     oauth2clients: OAuth2 Clients
@@ -400,6 +278,8 @@ command-palette:
   search:
     remove-ns-context: Remove Namespace context
 common:
+  ariaLabel:
+    new-tab-link: This link will be opened in a new tab.
   buttons:
     add: Add
     add-new: Add New
@@ -411,8 +291,10 @@ common:
     delete: Delete
     edit: Edit
     edit-yaml: Edit YAML
+    generate-name: Generate
     load: Load
     ok: OK
+    reset: Reset
     restart: Restart
     save: Save
     submit: Submit
@@ -420,12 +302,14 @@ common:
     view-yaml: View YAML
   create-form:
     autocomplete-unavailable-error: Monaco autocompletion unavailable. {{error}}.
-    choose-preset: Choose option
+    choose-preset: Choose preset
     editor-error: 'Parse error: {{error}}, previous valid input will be used'
+    force-update: Force update
     messages:
-      create-failure: 'Failed to create the {{resourceType}}: {{error}}'
+      create-failure: 'Failed to create the {{resourceType}}: {{error}}.'
       create-success: '{{resourceType}} created'
-      patch-failure: 'Failed to update the {{resourceType}}: {{error}}'
+      force-update: All remote changes are overwritten if you force the resource update.
+      patch-failure: 'Failed to update the {{resourceType}}: {{error}}.'
       patch-success: '{{resourceType}} updated'
     modes:
       advanced: Advanced
@@ -460,15 +344,16 @@ common:
     namespace: Namespace
     owner: Controlled By
     pods: Pods
+    region: Region
     resource: Resource
     resources: Resources
     status: Status
     value: Value
     version: Version
+    zone: Zone
   labels:
     category: Category
     data: Data
-    default-preset: Default
     hostname: Hostname
     issuer: Issuer
     kubernetes: Kubernetes
@@ -485,7 +370,7 @@ common:
     resource-namespace: '{{resource}} $t(common.labels.namespace)'
     secret: Secret
     service: Service
-    version: Kyma Dashboard version
+    version: 'Kyma Dashboard version:'
     'yes': 'Yes'
   lowercase:
     name: name
@@ -802,65 +687,6 @@ deployments:
     pods: $t(pods.title)
   name_singular: Deployment
   title: Deployments
-destination-rules:
-  age: Age
-  description: <0>DestinationRule</0> specifies rules that apply to traffic intended for a service after routing.
-  details:
-    alt-names: Subject Alt Names
-    base-ejection: Base Ejection Time
-    ca-certificates: CA Certificates
-    client-certificate: Client Certificate
-    client-protocol: Use Client Protocol
-    connection-timeout: Connection Timeout
-    consecutive-5xx: Consecutive 5xx Errors
-    consecutive-failures: Consecutive Local Origin Failures
-    consistent-hash: Consistent Hash
-    credential-name: Credential Name
-    distribution: Distribution
-    enabled: Enabled
-    failover: Failover
-    failover-priority: Failover Priority
-    from: From
-    h2-upgrade: H2 Upgrade Policy
-    http-cookie: HTTP cookie
-    http-header: HTTP Header Name
-    http-max: HTTP2 Max Requests
-    http-pending: HTTP1 Max Pending Requests
-    http-query-parameter: HTTP Query Parameter Name
-    http-settings: HTTP Connection Pool Settings
-    idle-timeout: Idle Timeout
-    interval: Interval
-    lb-settings: Locality LB Settings
-    load-balancer: Load Balancer
-    max-connections: Max Connections
-    max-ejection: Max Ejection Percent
-    max-per-connection: Max Requests Per Connections
-    max-retries: Max Retries
-    min-health: Min Health Percent
-    minimum-ring-size: Minimum Ring Size
-    outlier-detection: Outlier Detection
-    port-traffic-policy: Port {{port}} Traffic Policy
-    private-key: Private Key
-    probes: Probes
-    simple: Simple
-    skip-verify: Insecure Skip Verify
-    sni: SNI
-    source-ip: Use Source IP
-    split-errors: Split External Local Origin Errors
-    subset: Subset
-    subsets: Subsets
-    tcp-alive: TCP Keep Alive
-    tcp-settings: TCP Connection Pool Settings
-    time: Time
-    tls-settings: Client TLS Settings
-    to: To
-    traffic-policy: Traffic Policy
-    ttl: TTL
-  exported-to-namespaces: Exported to Namespaces
-  host: Host
-  name_singular: DestinationRule
-  state: State
-  title: Destination Rules
 discovery-and-network:
   title: Discovery and Network
 dnsentries:
@@ -994,261 +820,13 @@ extensibility:
     code-viewer-error: 'CodeViewer: The received resource is in a language other than defined: {{error}}.'
     joined-array:
       error: 'Configuration error: The joined array widget configuration is incorrect. Path value must be an array type.'
-    resource-ref:
-      header: Resource Reference
     table:
       error: The table widget configuration is incorrect. Path value must be an array type.
-functions:
-  buttons:
-    connected-repositories: Connected Repositories
-    create-function: Create Function
-  create-view:
-    buttons:
-      confirm: Create
-      create: Create a Function
-    errors:
-      cpu-default: This value must be a fixed-point number or in millicpu. For example, 0.1, 1, or 100m.
-      cpu-limits-too-low: This value must be equal to or greater than the equivalent value for Requests.
-      cpu-request-too-high: This value must be equal to or lower than the equivalent value for Limits.
-      cpu-too-low: This value is too low. The minimum value is {{minValue}}.
-      empty-source: Source cannot be empty
-      invalid: At least one field is empty or incorrectly formatted.
-      invalid-deps: Dependencies must be specified in a valid JSON format.
-      max-replicas-positive: Maximum replicas must be a positive integer.
-      max-replicas-too-low: Maximum number of replicas has to be equal or greater than minimum.
-      memory-default: 'This value must be a fixed-point number in one of the following units: Gi, G, Mi, M, Ki, or K. For example, 50Mi, 1000.5Ki, or 0.1G.'
-      memory-limits-too-low: This value must be equal to or greater than the equivalent value for Requests.
-      memory-request-too-high: This value must be equal to or lower than the equivalent value for Limits.
-      memory-too-low: This value is too low. The minimum value is {{minValue}}.
-      min-replicas-positive: Minimum number of replicas must be a positive integer.
-      min-replicas-too-high: Minimum number of replicas has to be equal to or lower than maximum.
-      no-changes: No changes made
-      no-repository-found: There are no Repositories available. Create a Repository.
-      one-field-empty: At least one field is empty
-      one-field-invalid: At least one field is invalid
-      req-base-dir: Base Directory is required
-      req-reference: Reference is required
-      required-name: Function name is required
-      too-long: Function name cannot be longer than 63 characters.
-    inline-help:
-      base-directory: Directory with your Function's code and dependencies
-      reference: Reference to the Function's source. Select a branch name or commit revision.
-      source-type: Provide code and dependencies as plain text with inline editor, or fetch them from a Git repository
-    labels:
-      base-directory: Base Directory
-      git-repository: Git Repository
-      inline-editor: Inline Editor
-      reference: Reference
-      repository: Repository
-    title: Create Function
-  description: <0>Function</0> is a simple code snippet that you can run without provisioning or managing servers.
-  details:
-    buttons:
-      diff_toggle: Diff
-      edit-configuration: Edit Configuration
-    descriptions:
-      build-job: Choose one of the predefined values for build Job's resources or set your own values ​​by selecting the "Custom" option.
-      limits: Maximum amount of compute resources allowed
-      maximum-replicas: Maximum number of running Replicas. Set it to 0 to disable the function.
-      minimum-replicas: Minimum number of running Replicas
-      requests: Minimum amount of compute resources required
-      runtime-profile: Choose one of the predefined values for Function's resources or set your own values ​​by selecting the "Custom" option.
-    errors:
-      req-reference: Reference is required
-    inline-help:
-      function-reference: Reference to the Function's source. Select a branch name or commit revision.
-    title:
-      build-job: Build Job Profile
-      code: Code
-      configuration: Configuration
-      cpu: CPU
-      dependencies: Dependencies
-      limits: Limits
-      maximum-replicas: Maximum Replicas
-      memory: Memory
-      minimum-replicas: Minimum Replicas
-      requests: Requests
-      resources: Resources
-      resources-replicas: Resources and Replicas
-      runtime-profile: Runtime Profile
-      scaling-options: Scaling Options
-  errors:
-    server: Server error. Contact your cluster admin.
+gardener:
   headers:
-    runtime: Runtime
-    source-type: Source Type
-  name_singular: Function
-  pod-list:
-    buttons:
-      view-logs: View Logs
-    title: Replicas of the Function
-  repository:
-    title: Repository Configuration
-  statuses:
-    building: Building
-    deploying: Deploying
-    initializing: Initializing
-    new-revision-error: Error
-    running: Running
-    unhealthy: Pending
-  title: Functions
-  tooltips:
-    building: Building the image
-    deploying: Deploying the Function
-    failed: Function couldn't be processed
-    initializing: Initializing the Function
-    new-revision-error: New revision error
-    running: Function created
-    unhealthy: Waiting for the required number of replicas
-  variable:
-    buttons:
-      add: Add Environment Variable
-      open:
-        config-map: Config Map Variable
-        custom: Custom Variable
-        secret: Secret Variable
-    create-modal:
-      title:
-        config-map: Create Config Map Variable
-        custom: Create Custom Variable
-        secret: Create Secret Variable
-    edit-modal:
-      title:
-        config-map: Edit Config Map Variable
-        custom: Edit Custom Variable
-        secret: Edit Secret Variable
-    errors:
-      duplicate-multiple-names: 'Some of the variables duplicate the existing names: {{names}}.'
-      duplicated: Duplicated variable name
-      empty: Variable is empty
-      invalid: Variable name must consist of alphanumeric characters, can contain '_', no blank spaces.
-      invalid-config: Select the ConfigMap name and key
-      invalid-secret: Select the Secret name and key
-      restricted: This variable name is restricted and cannot be used. Try a different name.
-    form:
-      all-keys: <All keys>
-      config-map: $t(functions.variable.type.config-map)
-      key: $t(functions.variable.header.key)
-      name: Name
-      secret: $t(functions.variable.type.secret)
-      take-all-description: Multiple single variables will be created with "Name" as a common prefix.
-      value: $t(functions.variable.header.value)
-    header:
-      key: Key
-      name: Variable Name
-      owner: Source Controlled By
-      source: Source
-      value: Value
-    not-found: This Function doesn't have any environment variables yet.
-    not-match: Couldn't find environment variables matching this query.
-    placeholders:
-      name: Variable name
-      value: Variable value
-    popup-error: At least one variable has an incorrect name format, is restricted, duplicated, or empty.
-    title:
-      environment-variables: Environment Variables
-    tooltip:
-      config-map: This variable comes from the "{resourceName}" Config Map.
-      custom: This variable was provided by the user.
-      secret: This variable comes from the "{resourceName}" Secret.
-      text: This variable comes from a resource. To get the value, follow the link.
-    type:
-      config-map: Config Map
-      custom: Custom
-      secret: Secret
-gateways:
-  aria-labels:
-    host: Host
-    port-name: Port name
-  create-modal:
-    advanced:
-      add-server: Add server
-      delete-server: Delete server
-      enable-tls: Enable TLS
-      hosts: Hosts
-      mode-tooltip: Indicates whether connections to the port are secured using TLS.
-      placeholders:
-        hosts: $t(domains.example)
-        port:
-          protocol: Enter the protocol
-        tls:
-          ca-certificates: Enter the CA certificates path
-          mode: Select TLS Mode
-          private-key: Enter the private key path
-          server-certificate: Enter the certificate path
-      port:
-        name: Name
-        number: Number
-        ports: Ports
-        protocol: Protocol
-        target-port: Target port
-      tls:
-        ca-certificates: CA Certificate
-        credentialName: Credential Name
-        disabled-for-non-https: TLS settings are not available for a non-HTTPS protocol.
-        https-redirect: HTTPS Redirect
-        https-redirect-description: Enable 301 redirect for all HTTP connections.
-        max-protocol-version: Max Protocol Version
-        messages:
-          invalid-tls-warning: TLS Server of mode SIMPLE or MUTUAL needs either credential name, or private key and server certificate pair.
-        min-protocol-version: Min Protocol Version
-        mode: TLS Mode
-        private-key: Private Key
-        server-certificate: Server Certificate
-        tls: TLS
-    at-least-one-server-required: Gateway must have at least one server.
-    simple:
-      selector: Selector
-      server: Server
-      servers: Servers
-    title: Create Gateway
-    tooltips:
-      ca-certificates: The path to a file containing certificate authority (CA) certificates, which verify a presented client-side certificate.
-      credential-name: The name of the Secret. Required properties are key and cert; for mutual TLS (mTLS), caceert is also required. Alternatively, you can use a Secret of type tls for server certificates along with a ca.crt key for CA certificates.
-      hosts: At least one host exposed by the Gateway, in FQDN format with optional wildcard character in the left-most component.
-      private-key: The path to the file holding the server’s private key.
-      protocol: The protocol exposed on the port. TLS implies that the connection is routed based on the SNI header to the destination, without terminating the TLS connection.
-      selector: One or more labels that indicate a set of Pods on which the Gateway configuration is applied. By default, workloads are searched across all Namespaces based on label selectors.
-      server-certificate: The path to the file holding the server-side TLS certificate you want to use.
-      target-port: The port number on the endpoint where the traffic is received.
-  description: ' <0>Gateway</0> describes a load balancer that operates at the edge of the mesh and receives incoming or outgoing HTTP/TCP connections.'
-  name_singular: Gateway
-  selector: Selector
-  servers:
-    hosts: Hosts
-    name: Name
-    port: Port
-    secret: TLS Secret
-    title: Servers
-    tls: TLS Mode
-  title: Gateways
+    provider: Provider
 generic-list:
   no-entries-found: No entries found
-git-repositories:
-  auth:
-    basic: Basic
-    public: Public
-    ssh-key: SSH Key
-  description: <0>GitRepository</0> is used to define and manage Git repositories that store the Function's source code and dependencies.
-  errors:
-    invalid-url: Invalid Repository URL. The URL must start with the "http(s)", "git", or "ssh" prefix and end with the ".git" suffix.
-  labels:
-    auth: Authentication
-    create: Connect Repository
-    secret: Secret
-    url: Repository URL
-  name_singular: GitRepository
-  placeholders:
-    secret: Enter a Secret name with credentials
-    url: Enter the URL address of your Git repository
-  title: Git Repositories
-  tooltips:
-    auth: 'Basic: token or password / SSH key: authentication key / Public: no authentication'
-    basic: Basic access authentication required
-    key: SSH key required
-    none: Authentication not required
-    secret: The name of the Secret with credentials used by the Function Controller to authenticate to the Git repository in order to fetch the Function's source code and dependencies.
-    url: URL must be a valid Git repository address that starts with the "http(s)", "git", or "ssh" prefix.
 grafana:
   logs: Logs
   missing-domain: Grafana service does not have a host defined
@@ -1418,6 +996,7 @@ jobs:
     title: Conditions
     type: Type
   create-modal:
+    add-container: Add container
     at-least-one-container-required: CronJob must have at least one container.
     container: Container
     containers: Containers
@@ -1530,6 +1109,10 @@ namespaces:
     total-memory-limit: Define constraints that limit total memory consumption in your Namespace.
     usage-of-memory-limits: This Namespace uses {{valueText}} of {{maxText}} its memory limits.
     usage-of-memory-requests: This Namespace uses {{valueText}} of {{maxText}} its memory requests.
+navigation:
+  preferences:
+    title: Preferences
+  select-namespace: Select Namespace...
 network-policies:
   description: <0>NetworkPolicy</0> allows you to control how a Pod communicates with different network entities.
   headers:
@@ -1717,8 +1300,6 @@ pods:
     terminated: Pod terminated
     terminating: Terminating the Pod
     unknown: Pod state unknown
-preferences:
-  title: Preferences
 pv:
   description: <0>PersistentVolume (PV)</0> is used to manage storage in a cluster that an administrator has provisioned.
   details: Details
@@ -1791,6 +1372,7 @@ role-bindings:
     group-name: Group name
     kind: Kind
     role: Role
+    role-type: Role Type
     subject: Subject
     subjects: Subjects
     tooltips:
@@ -1829,6 +1411,8 @@ roles:
     all-permissions: All permissions
     view-only: View only
   title: Roles
+  tooltips:
+    load: Load resources
 schema:
   array-item: ({{name}} item)
   fields:
@@ -1934,30 +1518,6 @@ service-accounts:
   name_singular: ServiceAccount
   service-account: Service Account
   title: Service Accounts
-service-entries:
-  description: <0>ServiceEntry</0> allows for adding more entries to the internal service registry of Istio.
-  headers:
-    addresses: Adresses
-    configuration: Configuration
-    endpoints:
-      address: Address
-      locality: Locality
-      network: Network
-      title: Endpoints
-      weight: Weight
-    export-to: Export to
-    export-to-empty: Exported to all Namespaces
-    hosts: Hosts
-    location: Location
-    ports:
-      number: Number
-      protocol: Protocol
-      target-point: Target Point
-      title: Ports
-    resolution: Resolution
-    subject-alt-names: Subject Alt Names
-  name_singular: ServiceEntry
-  title: Service Entries
 service-management:
   title: Service Management
 services:
@@ -2002,24 +1562,6 @@ settings:
     default-page-size: Default Page Size
     title: Other
   theme: Theme
-sidecars:
-  description: <0>Sidecar</0> manages the incoming and outgoing communication in a workload it is attached to.
-  headers:
-    bind: Bind
-    capture-mode: Capture Mode
-    default-endpoint: Default Endpoint
-    egress: Egress
-    hosts: Hosts
-    ingress: Ingress
-    outbound-traffic-policy: Outbound Traffic Policy
-    port:
-      number: Number
-      protocol: Protocol
-      target-point: Target Point
-      title: Port
-    workload-selector-labels: Workload Selector Labels
-  name_singular: Sidecar
-  title: Sidecars
 stateful-sets:
   description: <0>StatefulSet</0> is used for the management of Pods' deployment and scaling.
   name_singular: StatefulSet
@@ -2097,10 +1639,16 @@ subscriptions:
     sink: Specifies the HTTP endpoint where matching events should be sent to.
 top-nav:
   profile:
-    preferences: $t(preferences.title)
+    preferences: $t(navigation.preferences.title)
 upload-yaml:
+  buttons:
+    hide-warnings: Hide warnings
+    show-warnings: Show warnings
   info: You can upload multiple resources, separated in YAML by '---'. If a resource already exists, it will be updated, otherwise a new one will be created. If the Namespace is not given, the '{{namespace}}' one will be used.
+  labels:
+    validate-resources: Validate resources
   messages:
+    no-warnings-found: No warnings found
     not-a-k8s-resource: Not a Kubernetes resource!
   or-paste-here: 'or paste it here:'
   statuses:
@@ -2114,76 +1662,6 @@ upload-yaml:
     incorrect-namespace: The cluster-wide resources shouldn't have a Namespace.
   you-will-create_one: 'You will create 1 resource:'
   you-will-create_other: 'You will create {{count}} resources:'
-virtualservices:
-  description: <0>VirtualService</0> describes a configuration that affects traffic routing.
-  gateways: Gateways
-  headers:
-    add: add
-    remove: remove
-    request: Request
-    response: Response
-    set: set
-    title: Headers
-  hosts: Hosts
-  http-routes:
-    cors:
-      allow-credentials: Allow Credentials
-      allow-headers: Allow Headers
-      allow-methods: Allow Methods
-      allow-origins: Allow Origins
-      expose-headers: Expose Headers
-      max-age: Max Age
-      title: CORS Policy
-    delegate: Delegate
-    fault:
-      abort: Abort Fault Injection
-      delay: Delay Fault Injection
-    mirror: Mirror
-    redirect:
-      authority: Authority
-      derivePort: Derive Port
-      port: Port
-      redirectCode: Redirect Code
-      scheme: Scheme
-      title: Redirect
-      uri: URI
-    rewrite:
-      authority: Authority
-      title: Rewrite
-      uri: URI
-    route:
-      headers: Header Manipulation
-    timeout: Timeout
-    title: HTTP Route
-  matches:
-    authority: Authority
-    destination-subnets: Destination Subnets
-    exact: is exactly
-    gateways: Gateways
-    header: Header {{field}}
-    ignore-case: (ignore case)
-    method: Method
-    port: Port
-    prefix: starts with
-    regex: matches
-    scheme: Scheme
-    sni-hosts: SNI Hosts
-    source-labels: Source Labels
-    source-namespace: Source Namespace
-    title: Matches
-    uri: URI
-    without-header: Without header {{field}}
-  name_singular: VirtualService
-  route:
-    destination: Destination
-    weight: Weight
-  routes: Destinations
-  tcp-routes:
-    title: TCP Route
-  title: Virtual Services
-  tls-routes:
-    matches: Matches
-    title: TLS Route
 workload-selector:
   title: Workload Selector
 workloads:

@@ -9,6 +9,12 @@ jest.mock('../../helpers', () => ({
   }),
 }));
 
+jest.mock('../../hooks/useJsonata', () => ({
+  useJsonata: () => {
+    return structure => [structure];
+  },
+}));
+
 describe('CodeViewer', () => {
   it('Renders CodeViewer component and detects yaml', () => {
     const value = {
@@ -19,8 +25,8 @@ describe('CodeViewer', () => {
     const editor = wrapper.find(ReadonlyEditorPanel);
     const { value: valueProps, editorProps } = editor.props();
     const { language } = editorProps;
-    expect(valueProps).toEqual(`key: value\n`);
-    expect(language).toEqual('yaml');
+    expect(valueProps).toEqual(JSON.stringify(value, null, 2));
+    expect(language).toEqual();
     expect(editor).toHaveLength(1);
   });
 
@@ -39,7 +45,7 @@ describe('CodeViewer', () => {
     expect(editor).toHaveLength(1);
   });
 
-  it('Renders CodeViewer component with a predefined language', () => {
+  it('Renders CodeViewer component without an empty value', () => {
     const value = null;
 
     const wrapper = shallow(<CodeViewer value={value} />);

@@ -115,7 +115,7 @@ export const ControlledBy = ({
     return placeholder;
 
   const OwnerRef = ({ owner, className }) => {
-    const resource = pluralize(owner.kind).toLowerCase();
+    const resource = pluralize(owner.kind || '')?.toLowerCase();
     return (
       <div key={owner.name} className={className}>
         {owner.kind}
@@ -139,7 +139,7 @@ export const ControlledBy = ({
 
   return (
     <ul className="controlled-by-list">
-      {ownerReferences.map(owner => (
+      {ownerReferences.filter(Boolean).map(owner => (
         <li key={owner.kind + owner.name}>
           <OwnerRef owner={owner} />
         </li>

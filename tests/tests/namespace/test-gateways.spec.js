@@ -8,7 +8,10 @@ const GATEWAY_NAME =
     .substr(2, 8);
 
 const SERVER_NAME = GATEWAY_NAME + '-server';
+const PORT_NUMBER = 80;
 const TARGET_PORT = 8080;
+const PORT_PROTOCOL = 'HTTP';
+const SELECTOR = 'selector=selector-value';
 
 const KYMA_GATEWAY_CERTS = 'kyma-gateway-certs';
 
@@ -16,6 +19,9 @@ context('Test Gateways', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.setBusolaFeature('EXTENSIBILITY', true);
+    cy.mockExtensions(['examples/resources/istio/gateways.yaml']);
+
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
   });
@@ -36,7 +42,7 @@ context('Test Gateways', () => {
     cy.getIframeBody()
       .find('[placeholder="Enter key"]:visible', { log: false })
       .filterWithNoValue()
-      .type('selector-key');
+      .type('selector');
 
     cy.getIframeBody()
       .find('[placeholder="Enter value"]:visible', { log: false })
@@ -44,20 +50,46 @@ context('Test Gateways', () => {
       .first()
       .type('selector-value');
 
-    // server name
+    // server
     cy.getIframeBody()
-      .find('[ariaLabel^="Port name"]:visible', { log: false })
+      .find('[aria-label="expand Servers"]:visible', { log: false })
+      .contains('Add')
+      .click();
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.servers.0.port.number"]:visible')
+      .type(PORT_NUMBER);
+
+    cy.getIframeBody()
+      .find('[aria-label="Combobox input"]:visible', { log: false })
+      .type(PORT_PROTOCOL);
+
+    cy.getIframeBody()
+      .find('[ariaLabel^="Gateway name"]:visible', { log: false })
+      .eq(1)
       .type(SERVER_NAME);
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.servers.0.port.targetPort"]:visible')
+      .type(TARGET_PORT);
 
     // hosts
     cy.getIframeBody()
-      .find('[ariaLabel^="Host"]:visible', { log: false })
-      .type('example.com{downarrow}*.example.com');
+      .find('[aria-label="expand Hosts"]:visible', { log: false })
+      .click();
 
-    // server target port
     cy.getIframeBody()
-      .find('[ariaLabel^="Target port"]:visible', { log: false })
-      .type(TARGET_PORT);
+      .find('[placeholder="For example, *.api.mydomain.com"]:visible', {
+        log: false,
+      })
+      .type('example.com');
+
+    cy.getIframeBody()
+      .find('[placeholder="For example, *.api.mydomain.com"]:visible', {
+        log: false,
+      })
+      .filterWithNoValue()
+      .type('*.example.com');
 
     // create
     cy.getIframeBody()
@@ -67,14 +99,13 @@ context('Test Gateways', () => {
   });
 
   it('Inspect details', () => {
-    // name
     cy.getIframeBody().contains(GATEWAY_NAME);
+    cy.getIframeBody().contains(SELECTOR);
     // default selector
     cy.getIframeBody().contains('istio=ingressgateway');
-    // selector
-    cy.getIframeBody().contains('selector-key=selector-value');
-    // port (and server)
-    cy.getIframeBody().contains(`${SERVER_NAME} (80:${TARGET_PORT})`);
+    cy.getIframeBody().contains(SERVER_NAME);
+    cy.getIframeBody().contains(PORT_NUMBER);
+    cy.getIframeBody().contains(TARGET_PORT);
     // hosts
     cy.getIframeBody().contains('example.com');
     cy.getIframeBody().contains('*.example.com');
@@ -86,35 +117,48 @@ context('Test Gateways', () => {
       .click();
 
     cy.getIframeBody()
-      .find('[role=dialog]')
-      .contains('Servers')
-      .click();
-
-    // name should be disabled for edit
-    cy.getIframeBody()
       .find('[ariaLabel="Gateway name"]:visible', { log: false })
       .should('have.attr', 'readonly');
 
     cy.getIframeBody()
-      .contains('HTTPS Redirect')
-      .should('be.visible');
+      .find('[aria-label="expand Servers"]:visible', {
+        log: false,
+      })
+      .click();
 
     // change server to HTTPS
     cy.getIframeBody()
-      .filter(':visible', { log: false })
-      .contains('HTTP')
+      .find('[aria-label="Combobox input"]:visible', { log: false })
+      .clear()
+      .type('HTTPS');
+
+    cy.getIframeBody()
+      .find('[data-testid="spec.servers.0.port.number"]:visible')
+      .clear()
+      .type('443');
+
+    cy.getIframeBody()
+      .find('[aria-label="expand Port"]:visible', {
+        log: false,
+      })
       .click();
 
     cy.getIframeBody()
-      .contains(/^HTTPS$/)
+      .find('[aria-label="expand TLS"]:visible', {
+        log: false,
+      })
       .click();
 
     // secret
     cy.getIframeBody()
-      .find('[placeholder^="Start typing to select Secret"]:visible', {
+      .find('[aria-label="Choose Secret"]:visible', {
         log: false,
       })
       .type(KYMA_GATEWAY_CERTS);
+
+    cy.getIframeBody()
+      .find('[aria-label="Combobox input"]:visible', { log: false })
+      .type('SIMPLE');
 
     cy.getIframeBody()
       .find('[role=dialog]')
@@ -122,7 +166,8 @@ context('Test Gateways', () => {
       .click();
 
     // changed details
-    cy.getIframeBody().contains(`${SERVER_NAME} (443:${TARGET_PORT})`);
+    cy.getIframeBody().contains('443');
+    cy.getIframeBody().contains('HTTPS');
     cy.getIframeBody().contains(/simple/i);
     cy.getIframeBody().contains(KYMA_GATEWAY_CERTS);
   });

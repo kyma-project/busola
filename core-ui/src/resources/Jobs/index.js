@@ -1,9 +1,13 @@
 import React from 'react';
-
 import { matchByOwnerReference } from 'shared/utils/helpers';
+import { predefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'Jobs';
 export const namespaced = true;
+export const label = 'jobs.title';
+export const apiGroup = 'batch';
+export const apiVersion = 'v1';
+export const category = predefinedCategories.workloads;
 
 export const List = React.lazy(() => import('./JobList'));
 export const Details = React.lazy(() => import('./JobDetails'));

@@ -9,9 +9,14 @@ import { useMessageList } from 'hooks/useMessageList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
-export function EventList(props) {
+export function EventList({
+  defaultType,
+  hideInvolvedObjects,
+  filter,
+  isCompact,
+  ...props
+}) {
   const { t } = useTranslation();
-  const { defaultType, hideInvolvedObjects } = props;
 
   const {
     EVENT_MESSAGE_TYPE,
@@ -113,15 +118,21 @@ export function EventList(props) {
       omitColumnsIds={['namespace', 'labels', 'created']}
       sortBy={sortByFn}
       description={description}
-      fixedPath={true}
-      showTitle={props.isCompact}
+      fixedPath
+      showTitle={isCompact}
       title={t('events.title')}
       {...props}
-      hasDetailsView={true}
-      readOnly={true}
+      isCompact={isCompact}
+      hasDetailsView
+      readOnly
       filter={res => {
-        if (displayType.key === EVENT_MESSAGE_TYPE.ALL.key) return true;
-        return res.type === displayType.key;
+        const typeFilter =
+          displayType.key === EVENT_MESSAGE_TYPE.ALL.key ||
+          res.type === displayType.key;
+
+        const propsFilter = typeof filter === 'function' ? filter(res) : true;
+
+        return typeFilter && propsFilter;
       }}
       searchSettings={{
         textSearchProperties,

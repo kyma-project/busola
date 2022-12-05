@@ -40,7 +40,7 @@ function navigateToNamespaceDetails(namespaceName) {
 
 export function navigateToDetails(resourceType, name) {
   const encodedName = encodeURIComponent(name);
-  switch (resourceType) {
+  switch (resourceType.toLowerCase()) {
     case 'namespaces':
       navigateToNamespaceDetails(encodedName);
       break;
@@ -84,7 +84,7 @@ export function navigateToList(resourceType) {
 export function navigateToResource(resource) {
   const {
     metadata: { name, namespace },
-    kind,
+    kind = '',
   } = resource;
 
   let path = `${pluralize(kind.toLowerCase())}/details/${encodeURIComponent(
@@ -97,13 +97,12 @@ export function navigateToResource(resource) {
     .fromContext('cluster')
     .navigate(path);
 }
-
-export function nagivateToResourceAfterCreate(namespace, name, pluralKind) {
+export function navigateToResourceAfterCreate(namespace, name, urlPath = '') {
   const encodedName = encodeURIComponent(name);
   if (namespace) {
     LuigiClient.linkManager()
       .fromContext('namespace')
-      .navigate(`/${pluralKind.toLowerCase()}/details/${encodedName}`);
+      .navigate(`/${urlPath}/details/${encodedName}`);
   } else {
     LuigiClient.linkManager().navigate(`details/${encodedName}`);
   }

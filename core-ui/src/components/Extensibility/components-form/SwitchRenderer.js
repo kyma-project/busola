@@ -2,7 +2,10 @@ import React from 'react';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import * as Inputs from 'shared/ResourceForm/inputs';
-import { useGetTranslation } from 'components/Extensibility/helpers';
+import {
+  useGetTranslation,
+  getPropsFromSchema,
+} from 'components/Extensibility/helpers';
 
 export function SwitchRenderer({
   onChange,
@@ -14,7 +17,7 @@ export function SwitchRenderer({
   compact,
   ...props
 }) {
-  const { tFromStoreKeys } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
 
   return (
     <ResourceForm.FormField
@@ -33,6 +36,8 @@ export function SwitchRenderer({
       data-testid={storeKeys.join('.')}
       input={Inputs.Switch}
       compact={compact}
+      {...props}
+      {...getPropsFromSchema(schema, required, tExt)}
     />
   );
 }

@@ -29,13 +29,15 @@ export function Dropdown({ value, setValue, error, loading, ...props }) {
     ...dropdownProps
   } = props;
   return (
-    <BusolaDropown
-      compact
-      fullWidth
-      selectedKey={value}
-      onSelect={(_, selected) => setValue(selected.key, selected)}
-      validationState={getValidationState()}
-      {...dropdownProps}
-    />
+    <div className="fd-col fd-col-md--11">
+      <BusolaDropown
+        compact
+        fullWidth
+        selectedKey={value}
+        onSelect={(_, selected) => setValue(selected.key, selected)}
+        validationState={getValidationState()}
+        {...dropdownProps}
+      />
+    </div>
   );
 }

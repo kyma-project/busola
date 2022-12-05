@@ -30,7 +30,7 @@ export function GroupingListPage({
   if (loading) {
     return (
       <div style={{ width: '100%' }}>
-        <Spinner compact={true} />
+        <Spinner />
       </div>
     );
   }

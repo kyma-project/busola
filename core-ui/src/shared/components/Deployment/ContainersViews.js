@@ -75,10 +75,12 @@ export function AdvancedContainersView({
                 setResource({ ...resource });
               }}
               resourceType={t('secrets.name_singular')}
-              value={jp.value(
-                resource,
-                '$.spec.template.spec.imagePullSecrets[0].name',
-              )}
+              value={
+                jp.value(
+                  resource,
+                  '$.spec.template.spec.imagePullSecrets[0].name',
+                ) ?? ''
+              }
             />
           )}
         />
@@ -106,6 +108,8 @@ export function AdvancedContainersView({
               onChange(new Event('input', { bubbles: true }));
               setOpen(true);
             }}
+            option="transparent"
+            iconBeforeText
           >
             {t('deployments.create-modal.advanced.add-container')}
           </Button>

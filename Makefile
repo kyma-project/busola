@@ -2,10 +2,8 @@ IMG_NAME = busola-web
 LOCAL_IMG_NAME = busola
 IMG = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(IMG_NAME)
 LOCAL_IMG = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(LOCAL_IMG_NAME)
+KYMA_DASHBOARD_IMG = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(KYMA_DASHBOARD_IMG_NAME)
 TAG = $(DOCKER_TAG)
-
-ci-pr: resolve validate validate-libraries
-ci-master: resolve validate validate-libraries
 
 .PHONY: resolve
 resolve:
@@ -14,11 +12,6 @@ resolve:
 .PHONY: validate
 validate:
 	npm run lint-check
-
-.PHONY: validate-libraries
-validate-libraries:
-	cd common && npm run type-check
-	cd components/generic-documentation && npm run type-check
 
 .PHONY: lint
 lint:
@@ -36,11 +29,11 @@ release: build-image push-image
 release-local: build-image-local push-image-local
 
 build-image:
-	sed -i '/version/c\   \"version\" : \"$(TAG)\"' core/src/assets/version.json
+	sed -i 's/version: dev/version: ${TAG}/' core/src/assets/version.yaml
 	docker build -t $(IMG_NAME) -f Dockerfile .
 
 build-image-local:
-	sed -i '/version/c\   \"version\" : \"$(TAG)\"' core/src/assets/version.json
+	sed -i 's/version: dev/version: ${TAG}/' core/src/assets/version.yaml
 	docker build -t $(LOCAL_IMG_NAME) -f Dockerfile.local .
 
 push-image:

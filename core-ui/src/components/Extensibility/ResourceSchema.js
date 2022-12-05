@@ -17,14 +17,12 @@ function FormContainer({ children }) {
 const FormStack = injectPluginStack(FormContainer);
 
 export function ResourceSchema({
-  advanced,
   resource,
   schema,
   schemaRules = [],
-  path,
   store,
   setStore,
-  ...extraParams
+  editMode = false,
 }) {
   const onChange = useCallback(
     actions => {
@@ -35,17 +33,7 @@ export function ResourceSchema({
 
   const uiStore = useMemo(() => store, [store]);
 
-  const schemaMap = useMemo(() => {
-    let newSchema = schema;
-    delete newSchema.properties.metadata;
-
-    newSchema = {
-      ...newSchema,
-      properties: { ...newSchema.properties },
-    };
-
-    return createOrderedMap(newSchema);
-  }, [schema]);
+  const schemaMap = useMemo(() => createOrderedMap(schema), [schema]);
 
   if (isEmpty(schema)) return null;
 
@@ -56,6 +44,7 @@ export function ResourceSchema({
         showValidity={true}
         onChange={onChange}
         rootRule={schemaRules}
+        editMode={editMode}
       >
         <FormStack isRoot schema={schemaMap} resource={resource} />
       </UIStoreProvider>

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import classnames from 'classnames';
 import jsyaml from 'js-yaml';
 import { EditorActions } from 'shared/contexts/YamlEditorContext/EditorActions';
@@ -39,11 +39,16 @@ export function ResourceForm({
   nameProps,
   labelsProps,
   disableDefaultFields,
+  onModeChange,
+  urlPath,
+  handleSetResetFormFn = () => {},
 }) {
   // readonly schema ID, set only once
-  const [resourceSchemaId] = useState(
-    resource.apiVersion + '/' + resource.kind,
+  const resourceSchemaId = useMemo(
+    () => resource.apiVersion + '/' + resource.kind,
+    [], // eslint-disable-line react-hooks/exhaustive-deps
   );
+  const resourceRef = useRef(null);
 
   if (!handleNameChange) {
     handleNameChange = name => {
@@ -52,6 +57,13 @@ export function ResourceForm({
 
       setResource({ ...resource });
     };
+  }
+
+  if (!resourceRef.current) {
+    resourceRef.current = JSON.stringify(resource);
+    handleSetResetFormFn(() => () => {
+      setResource(JSON.parse(resourceRef.current));
+    });
   }
 
   const { t } = useTranslation();
@@ -63,6 +75,7 @@ export function ResourceForm({
     createUrl,
     afterCreatedFn,
     toggleFormFn,
+    urlPath,
   });
 
   const handleInitialMode = () => {
@@ -102,7 +115,6 @@ export function ResourceForm({
       }}
     />
   );
-
   let editor = (
     <EditorWrapper
       value={resource}
@@ -111,7 +123,7 @@ export function ResourceForm({
       autocompletionDisabled={autocompletionDisabled}
       readOnly={readOnly}
       schemaId={resourceSchemaId}
-      updateValueOnParentChange={presets?.length}
+      updateValueOnParentChange={true}
     />
   );
   editor = renderEditor
@@ -124,7 +136,10 @@ export function ResourceForm({
       {onlyYaml ? null : (
         <ModeSelector
           mode={mode}
-          setMode={setMode}
+          setMode={newMode => {
+            setMode(newMode);
+            if (onModeChange) onModeChange(mode, newMode);
+          }}
           isEditing={!!initialResource}
         />
       )}
@@ -186,14 +201,14 @@ export function ResourceForm({
                   propertyPath="$.metadata.labels"
                   title={t('common.headers.labels')}
                   className="fd-margin-top--sm"
-                  showInfo={t('common.tooltips.key-value')}
+                  inputInfo={t('common.tooltips.key-value')}
                   {...labelsProps}
                 />
                 <KeyValueField
                   advanced
                   propertyPath="$.metadata.annotations"
                   title={t('common.headers.annotations')}
-                  showInfo={t('common.tooltips.key-value')}
+                  inputInfo={t('common.tooltips.key-value')}
                 />
               </>
             )}

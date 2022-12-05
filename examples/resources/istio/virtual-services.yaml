@@ -1,0 +1,893 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: virtual-services
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: virtual-services
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |-
+    relatedGateways:
+      resource:
+        kind: Gateway
+        group: networking.istio.io
+        version: v1beta1
+        namespace: null
+      filter: >-
+        $filter($root.spec.gateways, function($g){$contains($g,'/') ?
+        ($substringBefore($g,'/') = $item.metadata.namespace and $substringAfter($g,
+        '/') = $item.metadata.name) : ($substringBefore($g, '.') =
+        $item.metadata.name and $substringBefore($substringAfter($g, '.'), '.') =
+        $item.metadata.namespace) }) 
+    relatedServices:
+      resource:
+        kind: Service
+        version: v1
+        namespace: null
+      filter: >-
+        $filter($root.spec.http.route, function($r) { $filter($r.destination.host,
+        function($h){($substringBefore($h, '.') = $item.metadata.name) and
+        ($split($substringAfter($h, '.'),'.')[0] = $item.metadata.namespace)} ) })
+  details: |-
+    resourceGraph:
+      dataSources:
+        - source: relatedGateways
+        - source: relatedServices
+    body:
+      - widget: Table
+        source: spec.gateways[]
+        name: gateways
+        visibility: $exists($value)
+        children:
+          - source: $item
+            name: t-name
+            widget: ResourceLink
+            resource:
+              kind: '"Gateway"'
+              name: >-
+                $contains($item,'/') ? $substringAfter($item, '/') :
+                $substringBefore($item, '.')
+              namespace: >-
+                $contains($item,'/') ? $substringBefore($item, '/'):
+                $substringBefore($substringAfter($item, '.'), '.') 
+      - name: summary
+        widget: Panel
+        source: spec
+        visibility: $boolean($exists($value.exportTo) or $exists($value.hosts))
+        children:
+          - name: exportTo
+            source: exportTo
+            widget: Labels
+            visibility: $exists($value)
+          - name: hosts
+            source: hosts
+            widget: JoinedArray
+            visibility: $exists($value)
+      - widget: Table
+        source: spec.http
+        name: http
+        visibility: $exists($value)
+        children:
+          - source: name
+            name: t-name
+          - source: timeout
+            name: timeout
+          - source: mirrorPercentage.value
+            name: mirrorPercentage
+        collapsible:
+          - source: match
+            name: matches
+            widget: Table
+            visibility: $exists($value)
+            children:
+              - source: name
+                name: t-name
+              - source: uri
+                name: uri
+                widget: Labels
+              - source: scheme
+                name: scheme
+                widget: Labels
+              - source: method
+                name: method
+                widget: Labels
+              - source: authority
+                name: authority
+                widget: Labels
+              - source: headers
+                name: headers
+              - source: port
+                name: port
+              - source: sourceLabels
+                name: sourceLabels
+                widget: Labels
+              - source: gateways
+                name: gateways
+                widget: JoinedArray
+              - source: queryParams
+                name: queryParams
+              - source: ignoreUriCase
+                name: ignoreUriCase
+              - source: withoutHeaders
+                name: withoutHeaders
+              - source: sourceNamespace
+                name: sourceNamespace
+              - source: statPrefix
+                name: statPrefix
+          - source: route
+            name: routes
+            widget: Table
+            visibility: $exists($value)
+            children:
+              - source: destination
+                name: destination
+                widget: Panel
+                visibility: $exists($value)
+                children:
+                  - source: host
+                    name: host
+                  - source: subset
+                    name: subset
+                  - source: port.number
+                    name: port.number
+              - source: weight
+                name: weight
+              - source: headers
+                name: headers
+                widget: Panel
+                visibility: $exists($value)
+                children:
+                  - source: request
+                    name: request
+                    widget: Panel
+                    visibility: $exists($value)
+                    children:
+                      - source: set
+                        name: set
+                        widget: Labels
+                      - source: add
+                        name: add
+                        widget: Labels
+                      - source: remove
+                        name: remove
+                        widget: JoinedArray
+                  - source: response
+                    name: response
+                    widget: Panel
+                    visibility: $exists($value)
+                    children:
+                      - source: set
+                        name: set
+                        widget: Labels
+                      - source: add
+                        name: add
+                        widget: Labels
+                      - source: remove
+                        name: remove
+                        widget: JoinedArray
+          - source: redirect
+            name: redirect
+            widget: Panel
+            visibility: $exists($value)
+            children:
+              - source: uri
+                name: uri
+              - source: authority
+                name: authority
+              - source: port
+                name: port
+              - source: derivePort
+                name: derivePort
+                widget: Labels
+              - source: scheme
+                name: scheme
+              - source: redirectCode
+                name: redirectCode
+          - source: directResponse
+            name: directResponse
+            widget: Panel
+            visibility: $exists($value)
+            children:
+              - source: status
+                name: status
+              - source: body
+                name: body
+                widget: Panel
+                visibility: $exists($value)
+                children:
+                  - source: string
+                    name: string
+                  - source: bytes
+                    name: bytes
+          - source: delegate
+            name: delegate
+            widget: Panel
+            visibility: $exists($value)
+            children:
+              - source: name
+                name: t-name
+              - source: namespace
+                name: namespace
+          - source: rewrite
+            name: rewrite
+            widget: Panel
+            visibility: $exists($value)
+            children:
+              - source: uri
+                name: uri
+              - source: authority
+                name: authority
+          - source: retries
+            name: retries
+            widget: Panel
+            visibility: $exists($value)
+            children:
+              - source: attempts
+                name: attempts
+              - source: perTryTimeout
+                name: perTryTimeout
+              - source: retryOn
+                name: retryOn
+              - source: retryRemoteLocalities
+                name: retryRemoteLocalities
+          - source: fault
+            name: fault
+            widget: Panel
+            visibility: $exists($value)
+            children:
+              - source: delay
+                name: delay
+                widget: Panel
+                visibility: $exists($value)
+                children:
+                  - source: fixedDelay
+                    name: fixedDelay
+                  - source: percentage.value
+                    name: percentage.value
+                  - source: percent
+                    name: percent
+              - source: abort
+                name: Abort
+                widget: Panel
+                visibility: $exists($value)
+                children:
+                  - source: httpStatus
+                    name: httpStatus
+                  - source: percentage.value
+                    name: percentage.value
+          - source: mirror
+            name: Mirror
+            widget: Panel
+            visibility: $exists($value)
+            children:
+              - source: host
+                name: host
+              - source: subset
+                name: subset
+              - source: port.number
+                name: port.number
+          - source: corsPolicy
+            name: corsPolicy
+            widget: Panel
+            visibility: $exists($value)
+            children:
+              - source: allowOrigins
+                name: allowOrigins
+              - source: allowMethods
+                name: allowMethods
+                widget: JoinedArray
+              - source: allowHeaders
+                name: allowHeaders
+                widget: JoinedArray
+              - source: exposeHeaders
+                name: exposeHeaders
+                widget: JoinedArray
+              - source: maxAge
+                name: maxAge
+              - source: allowCredentials
+                name: allowCredentials
+          - source: headers
+            name: headers
+            widget: Panel
+            visibility: $exists($value)
+            children:
+              - source: request
+                name: request
+                widget: Panel
+                visibility: $exists($value)
+                children:
+                  - source: set
+                    name: set
+                    widget: Labels
+                  - source: add
+                    name: add
+                    widget: Labels
+                  - source: remove
+                    name: remove
+                    widget: JoinedArray
+              - source: response
+                name: response
+                widget: Panel
+                visibility: $exists($value)
+                children:
+                  - source: set
+                    name: set
+                    widget: Labels
+                  - source: add
+                    name: add
+                    widget: Labels
+                  - source: remove
+                    name: remove
+                    widget: JoinedArray
+      - widget: Table
+        source: spec.tcp
+        name: tcp
+        visibility: $exists($value)
+        children:
+          - source: match
+            name: matches
+            widget: Table
+            visibility: $exists($value)
+            children:
+              - source: destinationSubnets
+                name: destinationSubnets
+                widget: JoinedArray
+              - source: port
+                name: port
+              - source: sourceLabels
+                name: sourceLabels
+                widget: Labels
+              - source: gateways
+                name: gateways
+                widget: JoinedArray
+              - source: sourceNamespace
+                name: sourceNamespace
+        collapsible:
+          - source: route
+            name: routes
+            widget: Table
+            visibility: $exists($value)
+            children:
+              - source: destination
+                name: destination
+                widget: Panel
+                visibility: $exists($value)
+                children:
+                  - source: host
+                    name: host
+                  - source: subset
+                    name: subset
+                  - source: port.number
+                    name: port
+              - source: weight
+                name: weight
+      - widget: Table
+        source: spec.tls
+        name: tls
+        visibility: $exists($value)
+        children:
+          - source: match
+            name: matches
+            widget: Table
+            visibility: $exists($value)
+            children:
+              - source: sniHosts
+                name: sniHosts
+                widget: JoinedArray
+              - source: destinationSubnets
+                name: destinationSubnets
+                widget: JoinedArray
+              - source: port
+                name: port
+              - source: sourceLabels
+                name: sourceLabels
+                widget: Labels
+              - source: gateways
+                name: gateways
+                widget: JoinedArray
+              - source: sourceNamespace
+                name: sourceNamespace
+        collapsible:
+          - source: route
+            name: routes
+            widget: Table
+            visibility: $exists($value)
+            children:
+              - source: destination
+                name: destination
+                widget: Panel
+                children:
+                  - source: host
+                    name: host
+                  - source: subset
+                    name: subset
+                  - source: port.number
+                    name: port.number
+              - source: weight
+                name: weight
+  form: |-
+    - path: spec.tls
+      widget: GenericList
+      name: tls
+      children:
+        - path: '[].match'
+          widget: GenericList
+          name: matches
+          children:
+            - path: '[].sniHosts'
+              widget: SimpleList
+              name: sniHosts
+              children:
+                - path: '[]'
+            - path: '[].sourceNamespace'
+              name: sourceNamespace
+            - path: '[].port'
+              name: port
+            - path: '[].destinationSubnets'
+              widget: SimpleList
+              name: destinationSubnets
+              children:
+                - path: '[]'
+            - path: '[].sourceLabels'
+              widget: KeyValuePair
+              name: sourceLabels
+            - path: '[].gateways'
+              widget: SimpleList
+              name: gateways
+              children:
+                - path: '[]'
+        - path: '[].route'
+          widget: GenericList
+          name: routes
+          children:
+            - path: '[].destination'
+              widget: FormGroup
+              name: destination
+              children:
+                - path: host
+                  name: host
+                - path: subset
+                  name: subset
+                - path: port.number
+                  name: port.number
+            - path: '[].weight'
+              name: weight
+    - path: spec.tcp
+      name: tcp
+      widget: GenericList
+      children:
+        - path: '[].match'
+          name: matches
+          children:
+            - path: '[].sourceNamespace'
+              name: sourceNamespace
+            - path: '[].port'
+              name: port
+            - path: '[].sniHosts'
+              widget: SimpleList
+              name: sniHosts
+              children:
+                - path: '[]'
+            - path: '[].destinationSubnets'
+              widget: SimpleList
+              name: destinationSubnets
+              children:
+                - path: '[]'
+            - path: '[].sourceLabels'
+              name: sourceLabels
+              widget: KeyValuePair
+            - path: '[].gateways'
+              widget: SimpleList
+              name: gateways
+              children:
+                - path: '[]'
+        - path: '[].route'
+          name: routes
+          children:
+            - path: '[].destination'
+              widget: FormGroup
+              name: destination
+              children:
+                - path: host
+                  name: host
+                - path: subset
+                  name: subset
+                - path: port.number
+                  name: port.number
+            - path: '[].weight'
+              name: weight
+    - path: spec.http
+      simple: true
+      name: http
+      widget: GenericList
+      children:
+        - path: '[].match'
+          name: matches
+          widget: GenericList
+          children:
+            - path: '[].name'
+              name: t-name
+            - path: '[].uri'
+              name: uri
+              widget: KeyValuePair
+              keyEnum:
+                - prefix
+                - exact
+                - regex
+            - path: '[].scheme'
+              name: scheme
+              widget: KeyValuePair
+              keyEnum:
+                - prefix
+                - exact
+                - regex
+            - path: '[].method'
+              name: method
+              widget: KeyValuePair
+              keyEnum:
+                - prefix
+                - exact
+                - regex
+            - path: '[].authority'
+              name: authority
+              widget: KeyValuePair
+              keyEnum:
+                - prefix
+                - exact
+                - regex
+            - path: '[].headers'
+              name: headers
+              widget: KeyValuePair
+              value:
+                type: object
+                keyEnum:
+                  - prefix
+                  - exact
+                  - regex
+            - path: '[].port'
+              name: port
+            - path: '[].sourceLabels'
+              name: sourceLabels
+              widget: KeyValuePair
+            - path: '[].gateways'
+              name: gateways
+              widget: SimpleList
+              children:
+                - path: '[]'
+            - path: '[].queryParams'
+              name: queryParams
+              widget: KeyValuePair
+              value:
+                type: object
+                keyEnum:
+                  - prefix
+                  - exact
+                  - regex
+            - path: '[].ignoreUriCase'
+              name: ignoreUriCase
+            - path: '[].withoutHeaders'
+              name: withoutHeaders
+              widget: KeyValuePair
+              value:
+                type: object
+                keyEnum:
+                  - prefix
+                  - exact
+                  - regex
+            - path: '[].sourceNamespace'
+              name: sourceNamespace
+            - path: '[].statPrefix'
+              name: statPrefix
+        - path: '[].route'
+          name: routes
+          children:
+            - path: '[].destination'
+              name: destination
+              widget: FormGroup
+              children:
+                - path: host
+                  name: host
+                - path: subset
+                  name: subset
+                - path: port.number
+                  name: port.number
+            - path: '[].weight'
+              name: weight
+            - path: '[].headers'
+              name: headers
+              widget: FormGroup
+              children:
+                - path: response
+                  name: response
+                  widget: FormGroup
+                  children:
+                    - path: set
+                      name: set
+                      widget: KeyValuePair
+                    - path: add
+                      name: add
+                      widget: KeyValuePair
+                    - path: remove
+                      name: remove
+                      widget: SimpleList
+                      children:
+                        - path: '[]'
+                - path: request
+                  name: request
+                  widget: FormGroup
+                  children:
+                    - path: set
+                      name: set
+                      widget: KeyValuePair
+                    - path: add
+                      name: add
+                      widget: KeyValuePair
+                    - path: remove
+                      name: remove
+                      widget: SimpleList
+                      children:
+                        - path: '[]'
+        - path: '[].redirect'
+          name: redirect
+          widget: FormGroup
+          children:
+            - path: uri
+              name: uri
+            - path: authority
+              name: authority
+            - path: port
+              name: port
+            - path: derivePort
+              name: derivePort
+            - path: scheme
+              name: scheme
+            - path: redirectCode
+              name: redirectCode
+        - path: '[].directResponse'
+          name: directResponse
+          widget: FormGroup
+          children:
+            - path: status
+              name: status
+            - path: body
+              name: body
+              widget: FormGroup
+              children:
+                - path: string
+                  name: string
+                - path: bytes
+                  name: bytes
+        - path: '[].delegate'
+          name: delegate
+          widget: FormGroup
+          children:
+            - path: name
+              name: name
+            - path: namespace
+              name: namespace
+        - path: '[].rewrite'
+          name: rewrite
+          widget: FormGroup
+          children:
+            - path: uri
+              name: uri
+            - path: authority
+              name: authority
+        - path: '[].timeout'
+          name: timeout
+        - path: '[].retries'
+          name: retries
+          widget: FormGroup
+          children:
+            - path: attempts
+              name: attempts
+            - path: perTryTimeout
+              name: perTryTimeout
+            - path: retryOn
+              name: retryOn
+            - path: retryRemoteLocalities
+              name: retryRemoteLocalities
+        - path: '[].fault'
+          name: fault
+          widget: FormGroup
+          children:
+            - path: delay
+              name: delay
+              widget: FormGroup
+              children:
+                - path: fixedDelay
+                  name: fixedDelay
+                - path: percentage.value
+                  name: percentage.value
+                - path: percent
+                  name: percent
+            - path: abort
+              name: abort
+              widget: FormGroup
+              children:
+                - path: httpStatus
+                  name: httpStatus
+                - path: grpcStatus
+                  name: grpcStatus
+                - path: percentage.value
+                  name: percentage.value
+        - path: '[].mirror'
+          name: mirror
+          widget: FormGroup
+          children:
+            - path: host
+              name: host
+            - path: subset
+              name: subset
+            - path: port.number
+              name: port.number
+        - path: '[].mirrorPercentage.value'
+          name: mirrorPercentage
+        - path: '[].corsPolicy'
+          name: corsPolicy
+          widget: FormGroup
+          children:
+            - path: allowCredentials
+              name: allowCredentials
+              type: boolean
+            - path: allowMethods
+              name: allowMethods
+              widget: SimpleList
+              placeholder: allowMethods.placeholder
+              children:
+                - path: '[]'
+            - path: allowHeaders
+              name: allowHeaders
+              widget: SimpleList
+              children:
+                - path: '[]'
+            - path: exposeHeaders
+              name: exposeHeaders
+              widget: SimpleList
+              children:
+                - path: '[]'
+            - path: maxAge
+              name: maxAge
+              placeholder: maxAge.placeholder
+        - path: '[].headers'
+          name: headers
+          widget: FormGroup
+          children:
+            - path: response
+              name: response
+              widget: FormGroup
+              children:
+                - path: set
+                  name: set
+                  widget: KeyValuePair
+                - path: add
+                  name: add
+                  widget: KeyValuePair
+                - path: remove
+                  name: remove
+                  widget: SimpleList
+                  children:
+                    - path: '[]'
+            - path: request
+              name: request
+              widget: FormGroup
+              children:
+                - path: set
+                  name: set
+                  widget: KeyValuePair
+                - path: add
+                  name: add
+                  widget: KeyValuePair
+                - path: remove
+                  name: remove
+                  widget: SimpleList
+                  children:
+                    - path: '[]'
+    - path: spec.hosts
+      name: hosts
+      widget: SimpleList
+      children:
+        - path: '[]'
+    - path: spec.gateways
+      name: gateways
+      widget: SimpleList
+      children:
+        - path: '[]'
+    - path: spec.exportTo
+      name: exportTo
+      widget: SimpleList
+      children:
+        - path: '[]'
+  general: |-
+    resource:
+      kind: VirtualService
+      group: networking.istio.io
+      version: v1beta1
+    urlPath: virtualservices
+    category: Istio
+    name: Virtual Services
+    scope: namespace
+    description: >-
+      {{[VirtualService](https://istio.io/latest/docs/reference/config/networking/virtual-service/)}}
+      describes a configuration that affects traffic routing. .
+  list: |-
+    - name: hosts
+      source: spec.hosts
+      widget: JoinedArray
+    - name: gateways
+      source: spec.gateways
+      widget: JoinedArray
+  translations: |
+    en:
+      t-name: Name
+      gateways: Gateways
+      hosts: Hosts
+      exportTo: Export to
+      summary: Summary
+      http: HTTP
+      tls: TLS
+      tcp: TCP
+      mirror: Mirror
+      mirrorPercentage: Mirror Percentage
+      timeout: Timeout
+      matches: Matches
+      uri: URI
+      scheme: Scheme
+      method: Method
+      authority: Authority
+      headers: Headers
+      port: Port
+      sourceLabels: Source Labels
+      queryParams: Query Params
+      ignoreUriCase: Ignore URI Case
+      withoutHeaders: Without Headers
+      sourceNamespace: Source Namespace
+      statPrefix: Stat Prefix
+      routes: Routes
+      destination: Destination
+      host: Host
+      subset: Subset
+      port.number: Port Number
+      weight: Weight
+      request: Request
+      response: Response
+      set: Set
+      add: Add
+      remove: Remove
+      redirect: Redirect
+      derivePort: Derive Port
+      redirectCode: Redirect Code
+      directResponse: Direct Response
+      status: Status
+      body: Body
+      string: String
+      bytes: Bytes
+      delegate: Delegate
+      namespace: Namespace
+      rewrite: Rewrite
+      retries: Retries
+      attempts: Attempts
+      perTryTimeout: Per Try Timeout
+      retryOn: Retry On
+      retryRemoteLocalities: Retry Remote Localities
+      fault: Fault
+      delay: Delay
+      fixedDelay: Fixed Delay
+      abort: Abort
+      percentage.value: Percentage Value
+      percent: Percent
+      httpStatus: HTTP Status
+      grpcStatus: GRPC Status
+      corsPolicy: CORS Policy
+      allowOrigins: Allow Origins
+      allowMethods: Allow Methods
+      allowMethods.placeholder: For example, GET
+      allowHeaders: Allow Headers
+      exposeHeaders: Expose Headers
+      maxAge: Max Age
+      maxAge.placeholder: For example, 24h
+      allowCredentials: Allow Credentials
+      destinationSubnets: Destination Subnets
+      sniHosts: SNI Hosts

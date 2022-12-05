@@ -9,105 +9,90 @@ metadata:
     busola.io/extension-version: '0.5'
 data:
   details: |-
-    {
-      "header": [
-        {
-          "name": "Status",
-          "source": "spec.status",
-          "widget": "Badge"
-        },
-        {
-          "name": "Order details",
-          "source": "spec.orderDetails",
-          "widget": "Labels"
-        }
-      ],
-      "body": [
-        {
-          "name": "Order details",
-          "widget": "CodeViewer",
-          "source": "spec.orderDetails",
-          "language": "yaml"
-        },
-        {
-          "name": "Pizzas",
-          "source": "spec.pizzas",
-          "widget": "ResourceRefs",
-          "kind": "Pizza",
-        }
-      ],
-      "resourceGraph": {
-        "depth": 1,
-        "colorVariant": 3,
-        "dataSources": [
-          {"source": "relatedPizzas"}
-        ]
-      }
-    }
+    header:
+      - name: Status
+        source: spec.status
+        widget: Badge
+      - name: Order details
+        source: spec.orderDetails
+        widget: Labels
+    body:
+      - name: Order details
+        widget: CodeViewer
+        source: spec.orderDetails
+        language: '"yaml"'
+      - name: Pizzas
+        source: spec.pizzas
+        widget: ResourceRefs
+        kind: Pizza
+    resourceGraph:
+      depth: 1
+      colorVariant: 3
+      dataSources:
+        - source: relatedPizzas
   form: |-
-    [
-      {
-        "simple": true,
-        "path": "spec.description",
-      },
-      {
-        "simple": true,
-        "path": "spec.status",
-      },
-      {
-        "simple": "true",
-        "widget": "FormGroup",
-        "path": "spec.orderDetails",
-        "children": [
-          { "path": "paymentMethod", "simple": "true"},
-          { "path": "realization", "simple": "true"}
-        ]
-      },
-      {
-        "simple": "true",
-        "path": "spec.pizzas[]",
-        "widget": "ResourceRef",
-        "resource": {
-          "kind": "Pizza",
-          "group": "busola.example.com",
-          "version": "v1",
-        }
-      }
-    ]
+    - simple: true
+      path: spec.description
+    - simple: true
+      path: spec.status
+      placeholder: Type or choose from the dropdown.
+      inputInfo: Supported options are Error and Ready.
+    - simple: 'true'
+      widget: FormGroup
+      path: spec.orderDetails
+      children:
+        - path: paymentMethod
+          simple: 'true'
+        - path: realization
+          simple: 'true'
+          description: Describes if we should deliver the order the customer
+    - simple: 'true'
+      path: spec.pizzas[]
+      widget: ResourceRef
+      resource:
+        kind: Pizza
+        group: busola.example.com
+        version: v1
   list: |-
-    [
-      {
-        "name": "Payment method",
-        "source": "spec.orderDetails.paymentMethod",
-        "widget": "Badge"
-      },
-      {
-        "name": "Realization",
-        "source": "spec.orderDetails.realization",
-        "sort": true
-      }
-    ]
+    - name: Payment method
+      source: spec.orderDetails.paymentMethod
+      widget: Badge
+      search: true
+    - name: Realization
+      source: spec.orderDetails.realization
+      sort: true
+      search: true
   general: |-
-    {
-      "resource": {
-        "kind": "PizzaOrder",
-        "group": "busola.example.com",
-        "version": "v1"
-      },
-      "name": "Pizza Orders",
-      "category": "Lunch",
-      "urlPath": "pizzaorders",
-      "scope": "namespace",
-      "description": "Customize the pizza view further with the Busola {{[extensibility docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}."
-    }
+    resource:
+      kind: PizzaOrder
+      group: busola.example.com
+      version: v1
+    name: Pizza Orders
+    category: Lunch
+    urlPath: pizzaorders
+    scope: namespace
+    description: >-
+      Customize the Pizza Order view further with the Busola {{[extensibility
+      docs](https://github.com/kyma-project/busola/tree/main/docs/extensibility)}}.
   dataSources: |-
-    {
-      "relatedPizzas": {
-        "resource": {
-            "kind": "Pizza",
-            "group": "busola.example.com",
-            "version": "v1"
-        },
-        "filter": "$root.spec.pizzas[name = $item.metadata.name and namespace = $item.metadata.namespace]"
-      }
-    }
+    relatedPizzas:
+      resource:
+        kind: Pizza
+        group: busola.example.com
+        version: v1
+      filter: >-
+        $root.spec.pizzas[name = $item.metadata.name and namespace =
+        $item.metadata.namespace]
+  presets: |-
+    - name: Cash Delivery
+      value:
+        spec:
+          orderDetails:
+            paymentMethod: CASH
+            realization: DELIVERY
+    - name: Card Pickup
+      value:
+        spec:
+          orderDetails:
+            paymentMethod: CARD
+            realization: SELF-PICKUP

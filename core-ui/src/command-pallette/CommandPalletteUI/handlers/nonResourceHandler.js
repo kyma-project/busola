@@ -61,19 +61,14 @@ function createResults(context) {
           customActionText: t('command-palette.item-actions.show-help'),
         };
       case 'preferences':
-        return [
-          {
-            label: t('preferences.title'),
-            query: 'preferences',
-            onActivate: () => {
-              LuigiClient.linkManager().openAsModal('/clusters/preferences', {
-                title: t('preferences.title'),
-                size: 'm',
-              });
-            },
-            customActionText: t('command-palette.item-actions.open'),
+        return {
+          label: t('navigation.preferences.title'),
+          query: 'preferences',
+          onActivate: () => {
+            context.setOpenPreferencesModal(true);
           },
-        ];
+          customActionText: t('command-palette.help.open-preferences'),
+        };
       case 'overview':
         if (activeClusterName) {
           return [

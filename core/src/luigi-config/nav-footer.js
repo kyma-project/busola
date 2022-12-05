@@ -1,7 +1,8 @@
 import i18next from 'i18next';
+import jsyaml from 'js-yaml';
 import { getBusolaClusterParams } from './busola-cluster-params';
 
-function elementReady(selector) {
+export function elementReady(selector) {
   return new Promise(resolve => {
     new MutationObserver((_, observer) => {
       const element = document.querySelector(selector);
@@ -42,9 +43,9 @@ export async function setNavFooterText() {
 }
 
 async function getBusolaVersion() {
-  return await fetch('/assets/version.json')
-    .then(response => response.json())
-    .then(json => json.version)
+  return await fetch('/assets/version.yaml')
+    .then(response => response.text())
+    .then(text => jsyaml.load(text).version)
     .catch(() => 'unknown');
 }
 

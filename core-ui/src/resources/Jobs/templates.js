@@ -20,7 +20,7 @@ export function createJobTemplate(namespace, templateAnnotations) {
   };
 }
 
-export function createCronJobTemplate(namespace, templateAnnotations) {
+export function createCronJobTemplate(namespace) {
   return {
     apiVersion: 'batch/v1',
     kind: 'CronJob',
@@ -33,9 +33,6 @@ export function createCronJobTemplate(namespace, templateAnnotations) {
       jobTemplate: {
         spec: {
           template: {
-            metadata: {
-              annotations: templateAnnotations,
-            },
             spec: {
               containers: [createContainerTemplate()],
               restartPolicy: 'OnFailure',
@@ -57,13 +54,8 @@ export function createContainerTemplate() {
   };
 }
 
-export function createJobPresets(namespace, translate, templateAnnotations) {
+export function createJobPresets(namespace) {
   return [
-    {
-      name: translate('common.labels.default-preset'),
-      value: createJobTemplate(namespace, templateAnnotations),
-    },
-
     {
       name: 'Hello',
       value: {
@@ -100,16 +92,8 @@ export function createJobPresets(namespace, translate, templateAnnotations) {
   ];
 }
 
-export function createCronJobPresets(
-  namespace,
-  translate,
-  templateAnnotations,
-) {
+export function createCronJobPresets(namespace) {
   return [
-    {
-      name: translate('common.labels.default-preset'),
-      value: createCronJobTemplate(namespace, templateAnnotations),
-    },
     {
       name: 'Hello',
       value: {

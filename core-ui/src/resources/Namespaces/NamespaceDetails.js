@@ -11,7 +11,6 @@ import { LimitRangeList } from 'resources/LimitRanges/LimitRangeList';
 import { ResourceQuotaList as ResourceQuotaListComponent } from 'resources/ResourceQuotas/ResourceQuotaList';
 import { YamlUploadDialog } from 'resources/Namespaces/YamlUpload/YamlUploadDialog';
 
-import DeployNewWorkload from './DeployNewWorkload';
 import { NamespaceStatus } from './NamespaceStatus';
 import { NamespaceWorkloads } from './NamespaceWorkloads/NamespaceWorkloads';
 import { ResourcesUsage } from './ResourcesUsage';
@@ -56,7 +55,6 @@ export function NamespaceDetails(props) {
 
   const headerActions = (
     <>
-      <DeployNewWorkload namespaceName={props.resourceName} />
       <Button
         className="fd-margin-end--tiny"
         glyph="add"
@@ -64,6 +62,7 @@ export function NamespaceDetails(props) {
           setShowAdd(true);
           LuigiClient.uxManager().addBackdrop();
         }}
+        iconBeforeText
       >
         {t('upload-yaml.title')}
       </Button>

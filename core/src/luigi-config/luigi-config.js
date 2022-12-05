@@ -9,7 +9,7 @@ import {
   tryRestorePreviousLocation,
 } from './navigation/previous-location';
 import { communication } from './communication';
-import { createSettings } from './settings';
+import { createSettings, attachPreferencesModal } from './settings';
 import { clusterLogin } from './auth/auth';
 import { handleKubeconfigIdIfPresent } from './kubeconfig-id';
 import {
@@ -25,11 +25,13 @@ import { readFeatureToggles } from './utils/feature-toggles';
 import { ssoLogin } from './auth/sso';
 import { setNavFooterText } from './nav-footer';
 import { resolveSecondaryFeatures } from './feature-discovery';
+import { clusterOpenApi } from './navigation/clusterOpenApi';
+import { loadingState } from './loading-state';
 
 const luigiAfterInit = () => Luigi.ux().hideAppLoadingIndicator();
 
 export const i18n = i18next.use(i18nextBackend).init({
-  lng: localStorage.getItem('busola.language') || 'en',
+  lng: localStorage.getItem('busola.luigi-language') || 'en',
   fallbackLng: 'en',
   nsSeparator: '::',
   backend: {
@@ -48,6 +50,16 @@ async function initializeBusola() {
   initTheme();
 
   const activeCluster = getActiveCluster();
+  if (activeCluster) {
+    loadingState.setLoading(true);
+    try {
+      await clusterOpenApi.fetch();
+    } catch (e) {
+      console.warn(e);
+    }
+    loadingState.setLoading(false);
+  }
+
   Luigi.setConfig({
     communication,
     navigation: await createNavigation(),
@@ -55,7 +67,7 @@ async function initializeBusola() {
       nodeParamPrefix: NODE_PARAM_PREFIX,
       skipRoutingForUrlPatterns: [/access_token=/, /id_token=/],
     },
-    settings: createSettings(activeCluster),
+    settings: await createSettings(activeCluster),
     lifecycleHooks: { luigiAfterInit },
   });
 
@@ -64,6 +76,8 @@ async function initializeBusola() {
   await new Promise(resolve => setTimeout(resolve, 100));
 
   await setNavFooterText();
+  await attachPreferencesModal();
+
   if (!getActiveCluster()) {
     if (!window.location.pathname.startsWith('/clusters')) {
       Luigi.navigation().navigate('/clusters');
@@ -93,11 +107,7 @@ async function initializeBusola() {
 
   await handleKubeconfigIdIfPresent();
 
-  readFeatureToggles([
-    'dontConfirmDelete',
-    'showHiddenNamespaces',
-    'disableResourceProtection',
-  ]);
+  readFeatureToggles(['showHiddenNamespaces']);
 
   await ssoLogin(luigiAfterInit);
 

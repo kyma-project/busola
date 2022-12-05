@@ -1,20 +1,19 @@
-import { Table } from '../Table';
-import { mount } from 'enzyme';
+import { fireEvent, render } from 'testing/reactTestingUtils';
+import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
 import { TranslationBundleContext } from 'components/Extensibility/helpers';
+import { mount } from 'testing/enzymeUtils';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-
-const translations = {
-  'myResource.path::my-title': 'My Title',
-  'myResource.path::resource.array-data': 'Array Data',
-};
+import { Table } from '../Table';
 
 const genericNotFoundMessage = 'components.generic-list.messages.not-found';
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (str, { defaultValue } = {}) => translations[str] || defaultValue || str,
-  }),
+jest.mock('../../hooks/useJsonata', () => ({
+  useJsonata: () => {
+    return structure => [structure];
+  },
 }));
+
+jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
 
 // use `mount` instead of `shallow` as the latter doesn't work with contexts
 describe('Table', () => {
@@ -101,6 +100,89 @@ describe('Table', () => {
       const { entries, notFoundMessage } = list.props();
       expect(entries).toMatchObject([]);
       expect(notFoundMessage).toBe('extensibility.widgets.table.error');
+    });
+  });
+
+  describe('searching', () => {
+    it('Renders Table without a search input', () => {
+      const structure = {
+        children: [],
+      };
+
+      const component = render(<Table value={null} structure={structure} />);
+      const searchInput = component.queryByLabelText('search-input');
+      expect(searchInput).toBeNull();
+    });
+
+    it('Renders Table with a search input', () => {
+      const structure = {
+        children: [{ source: 'test', search: true }],
+      };
+
+      const component = render(<Table value={[]} structure={structure} />);
+      const searchInput = component.queryByLabelText('search-input');
+      expect(searchInput).toBeInTheDocument();
+    });
+
+    it('Should search for simple data', async () => {
+      const structure = {
+        children: [{ source: '$item.test', search: true }],
+      };
+      const listData = [{ test: 'temp' }, { test: 'buf' }];
+
+      const { findByText, getByLabelText, findAllByRole, queryByText } = render(
+        <DataSourcesContextProvider value={{}} dataSources={{}}>
+          <Table value={listData} structure={structure} />
+        </DataSourcesContextProvider>,
+      );
+
+      // expect unfiltered results to exist
+      await findByText('temp');
+      await findByText('buf');
+
+      const searchInput = getByLabelText('search-input');
+      fireEvent.change(searchInput, { target: { value: 'tem' } });
+
+      //there are two items with role='row', the header and the table's row
+      const rows = await findAllByRole('row');
+      expect(rows).toHaveLength(2);
+      expect(rows.at(1)).toHaveTextContent('temp');
+      expect(queryByText('buf')).not.toBeInTheDocument();
+    });
+
+    fit('Should search for complex data with a predefined function', async () => {
+      const structure = {
+        children: [
+          {
+            source: '$item.test',
+            search: {
+              searchFunction:
+                '$filter($item.test, function($e){$contains($e, $input)})',
+            },
+          },
+        ],
+      };
+      const listData = [{ test: ['aa'] }, { test: ['cc'] }];
+
+      const {
+        findAllByText,
+        getByLabelText,
+        findAllByRole,
+        queryByText,
+      } = render(
+        <DataSourcesContextProvider value={{}} dataSources={{}}>
+          <Table value={listData} structure={structure} arrayItems={listData} />
+        </DataSourcesContextProvider>,
+      );
+      await findAllByText('$item.test');
+
+      const searchInput = getByLabelText('search-input');
+      await fireEvent.change(searchInput, { target: { value: 'aa' } });
+
+      const rows = await findAllByRole('row');
+      expect(rows).toHaveLength(2);
+      expect(rows.at(1)).toHaveTextContent('$item.test');
+      expect(queryByText('cc')).not.toBeInTheDocument();
     });
   });
 

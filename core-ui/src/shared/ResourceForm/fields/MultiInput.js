@@ -32,7 +32,7 @@ export function MultiInput({
   readOnly,
   noEdit,
   newItemAction,
-  showInfo,
+  inputInfo,
   ...props
 }) {
   const { t } = useTranslation();
@@ -40,9 +40,6 @@ export function MultiInput({
   const [internalValue, setInternalValue] = useState([]);
   const [keys, setKeys] = useState(1);
   const [refs, setRefs] = useState([]);
-  // const refs = Array(internalValue.length)
-  // .fill()
-  // .map(() => inputs.map(() => createRef()));
 
   useEffect(() => {
     setRefs(
@@ -112,8 +109,8 @@ export function MultiInput({
   const listClasses = classnames({
     'text-array-input__list': true,
     'fd-col': true,
-    'fd-col-md--7': !fullWidth,
-    'fd-col-md--12': fullWidth,
+    'fd-col-md--8': !fullWidth && (title || label),
+    'fd-col-md--12': fullWidth && !(title || label),
   });
 
   useEffect(() => {
@@ -177,8 +174,8 @@ export function MultiInput({
       {...props}
     >
       <div className="fd-row form-field multi-input">
-        {!fullWidth && (
-          <div className="fd-col fd-col-md--4">
+        {!fullWidth && (title || label) && (
+          <div className="fd-col fd-col-md--3 form-field__label">
             <ResourceForm.Label
               required={required}
               tooltipContent={tooltipContent}
@@ -190,33 +187,41 @@ export function MultiInput({
         <ul className={listClasses}>
           {internalValue.map((entry, index) => (
             <li key={index}>
-              {noEdit && !isLast(index) && (
-                <span className="readonly-value">{entry}</span>
-              )}
-              {(!noEdit || isLast(index)) &&
-                inputs.map(
-                  (input, inputIndex) => inputComponents[index][inputIndex],
-                )}
-              {!isLast(index) && (
-                <Button
-                  disabled={readOnly}
-                  compact
-                  className={classnames({
-                    hidden: isEntryLocked(entry),
-                  })}
-                  glyph="delete"
-                  type="negative"
-                  onClick={() => removeValue(index)}
-                  ariaLabel={t('common.buttons.delete')}
-                />
-              )}
-              {isLast(index) && (
-                <span className="new-item-action">{newItemAction}</span>
-              )}
+              <div className="fd-row">
+                <div className="fd-col fd-col-md--11">
+                  <div className="fd-row">
+                    {noEdit && !isLast(index) && (
+                      <span className="readonly-value">{entry}</span>
+                    )}
+                    {(!noEdit || isLast(index)) &&
+                      inputs.map(
+                        (input, inputIndex) =>
+                          inputComponents[index][inputIndex],
+                      )}
+                  </div>
+                </div>
+                <div className="fd-col fd-col-md--1 action-button">
+                  {!isLast(index) && (
+                    <Button
+                      disabled={readOnly}
+                      compact
+                      option="transparent"
+                      className={classnames({
+                        hidden: isEntryLocked(entry),
+                      })}
+                      glyph="delete"
+                      type="negative"
+                      onClick={() => removeValue(index)}
+                      ariaLabel={t('common.buttons.delete')}
+                    />
+                  )}
+                  {isLast(index) && newItemAction}
+                </div>
+              </div>
             </li>
           ))}
-          {showInfo && (
-            <p style={{ color: 'var(--sapNeutralTextColor)' }}>{showInfo}</p>
+          {inputInfo && (
+            <p style={{ color: 'var(--sapNeutralTextColor)' }}>{inputInfo}</p>
           )}
         </ul>
       </div>

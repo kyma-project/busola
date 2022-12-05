@@ -15,10 +15,16 @@ export function ComboboxInput({
   className,
   _ref,
   onSelectionChange,
+  fullWidth,
   ...props
 }) {
   return (
-    <div className={classnames('resource-form-combobox', className)}>
+    <div
+      className={classnames(
+        `resource-form-combobox fd-col fd-col-md--${fullWidth ? '12' : '11'}`,
+        className,
+      )}
+    >
       <FundamentalComboboxInput
         ariaLabel="Combobox input"
         arrowLabel="Combobox input arrow"
@@ -33,7 +39,7 @@ export function ComboboxInput({
           ((_, selected) =>
             setValue(selected.key !== -1 ? selected.key : selected.text))
         }
-        typedValue={value || typedValue}
+        typedValue={value ?? typedValue}
         selectedKey={value || selectedKey}
         placeholder={placeholder}
         options={options}

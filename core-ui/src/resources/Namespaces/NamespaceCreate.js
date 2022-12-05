@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
-import { Checkbox, FormFieldset, Switch } from 'fundamental-react';
+import { Checkbox, FormFieldset } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 
+import * as Inputs from 'shared/ResourceForm/inputs';
 import { ResourceForm } from 'shared/ResourceForm';
 import { useCreateResource } from 'shared/ResourceForm/useCreateResource';
 import { createLimitRangeTemplate } from 'resources/LimitRanges/templates';
@@ -30,6 +31,7 @@ export function NamespaceCreate({
   onCompleted,
   onError,
   setCustomValid,
+  handleSetResetFormFn,
   ...props
 }) {
   const { t } = useTranslation();
@@ -90,6 +92,32 @@ export function NamespaceCreate({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [namespace.metadata?.name]);
 
+  useEffect(() => {
+    const resetFunction = () => {
+      setNamespace(
+        initialNamespace
+          ? cloneDeep(initialNamespace)
+          : createNamespaceTemplate(),
+      );
+
+      if (!initialNamespace) {
+        setWithLimits(false);
+        setLimits(createLimitRangeTemplate({}));
+        setWithMemory(false);
+
+        setMemory(createResourceQuotaTemplate({}));
+        jp.value(namespace, `metadata.labels`, {
+          [ISTIO_INJECTION_LABEL]: ISTIO_INJECTION_DISABLED,
+        });
+        jp.value(namespace, 'metadata.name', '');
+        setNamespace({ ...namespace });
+      }
+    };
+
+    handleSetResetFormFn(() => resetFunction);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   async function afterNamespaceCreated() {
     if (!initialNamespace) {
       LuigiClient.linkManager().navigate(`${namespace.metadata?.name}/details`);
@@ -139,6 +167,7 @@ export function NamespaceCreate({
           <Editor
             value={limits}
             setValue={setLimits}
+            updateValueOnParentChange
             schemaId="v1/LimitRange"
           />
         </ResourceForm.CollapsibleSection>
@@ -150,6 +179,7 @@ export function NamespaceCreate({
           <Editor
             value={memory}
             setValue={setMemory}
+            updateValueOnParentChange
             schemaId="v1/ResourceQuota"
           />
         </ResourceForm.CollapsibleSection>
@@ -175,17 +205,14 @@ export function NamespaceCreate({
         lockedKeys: [ISTIO_INJECTION_LABEL],
         lockedValues: [ISTIO_INJECTION_LABEL],
       }}
+      handleSetResetFormFn={handleSetResetFormFn}
     >
       {isIstioFeatureOn ? (
         <ResourceForm.FormField
           label={t('namespaces.create-modal.enable-sidecar')}
-          input={() => (
-            <Switch
-              compact
-              onChange={() => setSidecarEnabled(value => !value)}
-              checked={isSidecarEnabled}
-            />
-          )}
+          input={Inputs.Switch}
+          checked={isSidecarEnabled}
+          onChange={() => setSidecarEnabled(value => !value)}
         />
       ) : null}
 

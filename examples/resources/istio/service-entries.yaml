@@ -1,0 +1,224 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: service-entries
+  namespace: kube-public
+  labels:
+    app.kubernetes.io/name: service-entries
+    busola.io/extension: resource
+    busola.io/extension-version: '0.5'
+data:
+  dataSources: |-
+    podSelector:
+      resource:
+        kind: Pod
+        version: v1
+      filter: $matchByLabelSelector($item, $root.spec.workloadSelector.labels)
+  details: |-
+    header:
+      - source: spec.location
+        name: spec.location
+      - source: spec.resolution
+        name: spec.resolution
+    resourceGraph:
+      colorVariant: 2
+      dataSources:
+        - source: podSelector
+    body:
+      - name: configuration
+        widget: Panel
+        source: spec
+        visibility: >-
+          $boolean($exists($value.hosts) or $exists($value.addresses) or
+          $exists($value.subjectAltNames))
+        children:
+          - name: spec.hosts
+            source: hosts
+            widget: JoinedArray
+            visibility: $exists($value)
+          - name: spec.addresses
+            source: addresses
+            widget: JoinedArray
+            visibility: $exists($value)
+          - name: spec.exportTo
+            source: exportTo
+            widget: Labels
+            placeholder: Exported to all Namespaces
+          - name: spec.subjectAltNames
+            source: subjectAltNames
+            widget: JoinedArray
+            visibility: $exists($value)
+      - name: spec.ports
+        widget: Table
+        source: spec.ports
+        visibility: $exists($value)
+        children:
+          - name: spec.ports.number
+            source: number
+            sort: true
+          - name: spec.ports.protocol
+            source: protocol
+            sort: true
+          - name: spec.ports.name
+            source: name
+            sort: true
+          - name: spec.ports.targetPort
+            source: targetPort
+            sort: true
+      - name: spec.endpoints
+        widget: Table
+        source: spec.endpoints
+        visibility: $exists($value)
+        children:
+          - name: spec.endpoints.address
+            source: address
+            sort: true
+          - name: spec.endpoints.ports
+            source: ports
+            widget: Labels
+          - name: spec.endpoints.labels
+            source: labels
+            widget: Labels
+          - name: spec.endpoints.network
+            source: network
+            sort: true
+          - name: spec.endpoints.weight
+            source: weight
+          - name: spec.endpoints.serviceAccount
+            source: serviceAccount
+      - name: spec.workloadSelector
+        widget: Panel
+        source: spec.workloadSelector.labels
+        visibility: $exists($value)
+        disablePadding: true
+        children:
+          - source: $podSelector()
+            widget: ResourceList
+            disableCreate: true
+        header:
+          - widget: Labels
+            source: spec.workloadSelector.labels
+            visibility: $exists($value)
+  form: |-
+    - path: spec.hosts
+      name: spec.hosts
+      widget: SimpleList
+      simple: true
+      required: true
+      children:
+        - path: '[]'
+    - path: spec.addresses
+      name: spec.addresses
+      widget: SimpleList
+      placeholder: placeholders.addreses
+      children:
+        - path: '[]'
+    - path: spec.ports
+      name: Ports
+      widget: GenericList
+      children:
+        - path: '[].number'
+          name: spec.ports.number
+          required: true
+        - path: '[].protocol'
+          name: spec.ports.protocol
+          required: true
+          placeholder: placeholders.dropdown
+          enum:
+            - HTTP
+            - HTTPS
+            - GRPC
+            - HTTP2
+            - MONGO
+            - TCP
+            - TLS
+        - path: '[].name'
+          name: spec.ports.name
+          required: true
+        - path: '[].targetPort'
+          name: spec.ports.targetPort
+    - path: spec.location
+      name: spec.location
+      placeholder: placeholders.dropdown
+    - path: spec.resolution
+      name: spec.resolution
+      placeholder: placeholders.dropdown
+    - path: spec.endpoints
+      name: spec.endpoints
+      widget: GenericList
+      children:
+        - path: '[].address'
+          name: spec.endpoints.address
+        - path: '[].ports'
+          name: spec.endpoints.ports
+          widget: KeyValuePair
+          value:
+            type: number
+        - path: '[].labels'
+          name: spec.endpoints.labels
+          widget: KeyValuePair
+        - path: '[].network'
+          name: spec.endpoints.network
+        - path: '[].locality'
+          name: spec.endpoints.locality
+        - path: '[].weight'
+          name: spec.endpoints.weight
+        - path: '[].serviceAccount'
+          name: spec.endpoints.serviceAccount
+    - path: spec.workloadSelector.labels
+      name: spec.workloadSelector
+      widget: KeyValuePair
+    - path: spec.exportTo
+      name: spec.exportTo
+      widget: SimpleList
+      children:
+        - path: '[]'
+    - path: spec.subjectAltNames
+      name: spec.subjectAltNames
+      widget: SimpleList
+      children:
+        - path: '[]'
+  general: |-
+    resource:
+      kind: ServiceEntry
+      group: networking.istio.io
+      version: v1beta1
+    urlPath: serviceentries
+    category: Istio
+    name: Service Entries
+    scope: namespace
+    description: >-
+      {{[ServiceEntry](https://istio.io/latest/docs/reference/config/networking/service-entry/)}}
+      allows for adding more entries to the internal service registry of Istio.
+  list: |-
+    - source: spec.location
+      name: spec.location
+      sort: true
+    - source: spec.resolution
+      name: spec.resolution
+      sort: true
+  translations: |
+    en:
+      configuration: Configuration
+      spec.hosts: Hosts
+      spec.addresses: Addresses
+      spec.ports: Ports
+      spec.ports.number: Number
+      spec.ports.protocol: Protocol
+      spec.ports.name: Name
+      spec.ports.targetPort: Target Port
+      spec.location: Location
+      spec.resolution: Resolution
+      spec.endpoints: Endpoints
+      spec.endpoints.address: Address
+      spec.endpoints.ports: Ports
+      spec.endpoints.labels: Labels
+      spec.endpoints.network: Network
+      spec.endpoints.locality: Locality
+      spec.endpoints.weight: Weight
+      spec.endpoints.serviceAccount: Service Account
+      spec.workloadSelector: Workload Selector
+      spec.exportTo: Export To
+      spec.subjectAltNames: Subject Alt Names
+      placeholders.dropdown: Type or choose an option
+      placeholders.addreses: For example, 127.0.0.1

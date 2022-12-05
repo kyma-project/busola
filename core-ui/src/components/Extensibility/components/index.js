@@ -9,8 +9,14 @@ import { ResourceRefs } from './ResourceRefs';
 import { ControlledBy } from './ControlledBy';
 import { JoinedArray } from './JoinedArray';
 import { ResourceList } from './ResourceList';
+import { EventList } from './EventList';
 import { ResourceLink } from './ResourceLink.js';
 import { Labels } from './Labels';
+import { Alert } from './Alert';
+import { ExternalLink } from './ExternalLink';
+import { Tabs } from './Tabs';
+
+import { APIRuleHost } from './APIRules/APIRuleHost';
 
 import { PendingWrapper } from './PendingWrapper';
 
@@ -29,6 +35,11 @@ export const widgets = {
   ResourceList,
   ResourceLink,
   Labels,
+  Alert,
+  ExternalLink,
+  Tabs,
+  EventList,
+  APIRuleHost,
 };
 
 export const valuePreprocessors = {

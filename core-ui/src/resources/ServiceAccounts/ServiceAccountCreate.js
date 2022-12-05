@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
-import { Switch } from 'fundamental-react';
 import { cloneDeep } from 'lodash';
 
+import * as Inputs from 'shared/ResourceForm/inputs';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { ResourceForm } from 'shared/ResourceForm';
 import { ComboboxArrayInput } from 'shared/ResourceForm/fields';
@@ -97,24 +97,20 @@ export const ServiceAccountCreate = ({
         tooltipContent={t(
           'service-accounts.create-modal.tooltips.auto-mount-token',
         )}
-        input={() => (
-          <Switch
-            compact
-            onChange={e => {
-              const automountServiceAccountToken = jp.value(
-                serviceAccount,
-                '$.automountServiceAccountToken',
-              );
-              jp.value(
-                serviceAccount,
-                '$.automountServiceAccountToken',
-                !automountServiceAccountToken,
-              );
-              setServiceAccount({ ...serviceAccount });
-            }}
-            checked={jp.value(serviceAccount, '$.automountServiceAccountToken')}
-          />
-        )}
+        input={Inputs.Switch}
+        onChange={() => {
+          const automountServiceAccountToken = jp.value(
+            serviceAccount,
+            '$.automountServiceAccountToken',
+          );
+          jp.value(
+            serviceAccount,
+            '$.automountServiceAccountToken',
+            !automountServiceAccountToken,
+          );
+          setServiceAccount({ ...serviceAccount });
+        }}
+        checked={jp.value(serviceAccount, '$.automountServiceAccountToken')}
       />
     </ResourceForm>
   );

@@ -41,8 +41,8 @@ export function StatefulSetList(props) {
       customColumns={customColumns}
       description={description}
       customListActions={[restartAction]}
-      createResourceForm={StatefulSetCreate}
       {...props}
+      createResourceForm={StatefulSetCreate}
     />
   );
 }

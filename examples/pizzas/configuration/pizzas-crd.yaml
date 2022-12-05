@@ -35,6 +35,7 @@ spec:
                   enum:
                     - GARLIC
                     - TOMATO
+                    - WHITE
                 toppings:
                   description: List of toppings for our pizza
                   type: array
