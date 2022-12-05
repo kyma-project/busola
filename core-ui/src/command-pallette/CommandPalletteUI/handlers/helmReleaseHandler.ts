@@ -1,19 +1,28 @@
+//@ts-nocheck
+import { TFunction } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
 import { findRecentRelease } from 'components/HelmReleases/findRecentRelease';
 import { groupBy } from 'lodash';
+import { K8sResource } from 'types';
+import { CommandPaletteContext, Handler, Result } from '../types';
 import { LOADING_INDICATOR } from '../useSearchResults';
 import { getSuggestionsForSingleResource } from './helpers';
 
 const helmReleaseResourceType = 'helmreleases';
 
-function getAutocompleteEntries({ tokens, namespace, resourceCache }) {
+function getAutocompleteEntries({
+  tokens,
+  namespace,
+  resourceCache,
+}: CommandPaletteContext): string[] {
   const tokenToAutocomplete = tokens[tokens.length - 1];
+
   switch (tokens.length) {
     case 1: // type
       if (helmReleaseResourceType.startsWith(tokenToAutocomplete)) {
-        return helmReleaseResourceType;
+        return [helmReleaseResourceType];
       }
-      break;
+      return [];
     case 2: // name
       const helmReleaseNames = (
         resourceCache[`${namespace}/helmreleases`] || []
@@ -26,7 +35,11 @@ function getAutocompleteEntries({ tokens, namespace, resourceCache }) {
   }
 }
 
-function getSuggestions({ tokens, namespace, resourceCache }) {
+function getSuggestions({
+  tokens,
+  namespace,
+  resourceCache,
+}: CommandPaletteContext) {
   return getSuggestionsForSingleResource({
     tokens,
     resources: resourceCache[`${namespace}/helmreleases`] || [],
@@ -34,7 +47,11 @@ function getSuggestions({ tokens, namespace, resourceCache }) {
   });
 }
 
-function makeListItem(item, namespace, t) {
+function makeListItem(
+  item: K8sResource,
+  namespace: string | null,
+  t: TFunction<'translation', undefined>,
+) {
   const name = item.metadata.labels.name;
 
   return {
@@ -48,11 +65,15 @@ function makeListItem(item, namespace, t) {
   };
 }
 
-function concernsHelmReleases({ tokens }) {
+function concernsHelmReleases({ tokens }: { tokens: string[] }) {
   return tokens[0] === helmReleaseResourceType;
 }
 
-async function fetchHelmReleases(context) {
+type Secret = K8sResource & {
+  type: string;
+};
+
+async function fetchHelmReleases(context: CommandPaletteContext) {
   if (!concernsHelmReleases(context)) {
     return;
   }
@@ -61,7 +82,9 @@ async function fetchHelmReleases(context) {
   try {
     const response = await fetch(`/api/v1/namespaces/${namespace}/secrets`);
     const data = await response.json();
-    const allReleases = data.items.filter(s => s.type === 'helm.sh/release.v1');
+    const allReleases = data.items.filter(
+      (s: Secret) => s.type === 'helm.sh/release.v1',
+    );
 
     const recentReleases = Object.values(
       groupBy(allReleases, r => r.metadata.labels.name),
@@ -73,9 +96,9 @@ async function fetchHelmReleases(context) {
   }
 }
 
-function createResults(context) {
+function createResults(context: CommandPaletteContext): Result[] | null {
   if (!concernsHelmReleases(context)) {
-    return;
+    return null;
   }
 
   const { resourceCache, tokens, namespace, t } = context;
@@ -114,10 +137,10 @@ function createResults(context) {
   }
 }
 
-export const helmReleaseHandler = {
+export const helmReleaseHandler: Handler = {
   getAutocompleteEntries,
   getSuggestions,
   fetchResources: fetchHelmReleases,
   createResults,
-  getNavigationHelp: () => [['helmreleases']],
+  getNavigationHelp: () => [{ name: 'helmreleases' }],
 };

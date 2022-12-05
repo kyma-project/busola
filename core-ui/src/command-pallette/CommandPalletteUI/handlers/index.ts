@@ -4,7 +4,7 @@ import { nonResourceHandler } from './nonResourceHandler';
 // import { nodesHandler } from './nodesHandler';
 // import { logsHandler } from './logsHandler';
 // import { crdHandler } from './crdHandler';
-// import { helmReleaseHandler } from './helmReleaseHandler';
+import { helmReleaseHandler } from './helmReleaseHandler';
 import { findCommonPrefix } from 'shared/utils/helpers';
 // import { crHandler } from './crHandler';
 // import { crListHandler } from './crListHandler';
@@ -19,7 +19,7 @@ const allHandlers: Handler[] = [
   // crdHandler,
   // crListHandler,
   // crHandler,
-  // helmReleaseHandler,
+  helmReleaseHandler,
 ];
 
 export function getSuggestions(context: CommandPaletteContext): string[] {
