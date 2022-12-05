@@ -1,33 +1,23 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link } from 'shared/components/Link/Link';
-import { Link as FdLink } from 'fundamental-react';
+import { Link as RRLink } from 'react-router-dom';
 import pluralize from 'pluralize';
 import { GroupingListPage } from './GroupingListPage';
+import { useUrl } from 'hooks/useUrl';
 
 export default function CustomResourcesByGroup({ namespace }) {
   const { t } = useTranslation();
-
-  const navigateToCustomResourceList = crd => {
-    LuigiClient.linkManager()
-      .fromContext(namespace ? 'namespace' : 'cluster')
-      .navigate('/customresources/' + crd.metadata.name);
-  };
-
+  const { clusterUrl, scopedUrl } = useUrl();
   const description = (
     <Trans i18nKey="custom-resources.description">
       <Link
         className="fd-link"
         url="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/"
       />
-      <FdLink
+      <RRLink
         className="fd-link"
-        onClick={() =>
-          LuigiClient.linkManager()
-            .fromContext('cluster')
-            .navigate('/customresourcedefinitions')
-        }
+        to={clusterUrl(`customresourcedefinitions`)}
       />
     </Trans>
   );
@@ -38,7 +28,9 @@ export default function CustomResourcesByGroup({ namespace }) {
       description={description}
       filter={crd => crd.spec.scope === (namespace ? 'Namespaced' : 'Cluster')}
       resourceListProps={{
-        navigateFn: navigateToCustomResourceList,
+        navigateFn: crd => {
+          scopedUrl('/customresources/' + crd.metadata.name);
+        },
         nameSelector: entry => pluralize(entry?.spec.names.kind || ''),
         readOnly: true,
       }}
