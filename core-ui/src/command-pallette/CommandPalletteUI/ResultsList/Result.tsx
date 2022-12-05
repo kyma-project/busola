@@ -8,7 +8,7 @@ type ResultProps = {
   index: number;
   activeIndex: number;
   setActiveIndex: (index: number) => void;
-  onItemClick: any; // todo
+  onItemClick: () => void;
 };
 
 export function Result({

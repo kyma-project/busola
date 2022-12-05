@@ -1,17 +1,26 @@
-import LuigiClient from '@luigi-project/client';
-import { LOADING_INDICATOR } from '../useSearchResults';
+import { TFunction } from 'react-i18next';
+import { K8sResource } from 'types';
+import {
+  CommandPaletteContext,
+  Handler,
+  LOADING_INDICATOR,
+  Result,
+} from '../types';
 import { getSuggestionsForSingleResource } from './helpers';
 
 const nodeResourceTypes = ['nodes', 'node', 'no'];
 
-function getAutocompleteEntries({ tokens, resourceCache }) {
+function getAutocompleteEntries(
+  context: CommandPaletteContext,
+): string[] | null {
+  const { tokens, resourceCache } = context;
   const tokenToAutocomplete = tokens[tokens.length - 1];
   switch (tokens.length) {
     case 1: // type
       if ('nodes'.startsWith(tokenToAutocomplete)) {
-        return 'nodes ';
+        return ['nodes '];
       }
-      break;
+      return null;
     case 2: // name
       const nodeNames = (resourceCache['nodes'] || []).map(
         n => n.metadata.name,
@@ -24,7 +33,8 @@ function getAutocompleteEntries({ tokens, resourceCache }) {
   }
 }
 
-function getSuggestions({ tokens, resourceCache }) {
+function getSuggestions(context: CommandPaletteContext) {
+  const { tokens, resourceCache } = context;
   return getSuggestionsForSingleResource({
     tokens,
     resources: resourceCache['nodes'] || [],
@@ -32,25 +42,28 @@ function getSuggestions({ tokens, resourceCache }) {
   });
 }
 
-function makeListItem(item, t) {
+function makeListItem(
+  item: K8sResource,
+  navigate: (path: string) => void,
+  t: TFunction<'translation', undefined>,
+): Result {
   const name = item.metadata.name;
   return {
     label: name,
     category:
       t('clusters.overview.title-current-cluster') + ' > ' + t('nodes.title'),
     query: `node ${name}`,
-    onActivate: () =>
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate('overview/nodes/' + name),
+    onActivate: () => {
+      //todo
+    },
   };
 }
 
-function isAboutNodes({ tokens }) {
+function isAboutNodes({ tokens }: { tokens: string[] }) {
   return nodeResourceTypes.includes(tokens[0]);
 }
 
-async function concernsNodes(context) {
+async function concernsNodes(context: CommandPaletteContext) {
   if (!isAboutNodes(context)) {
     return;
   }
@@ -65,15 +78,18 @@ async function concernsNodes(context) {
   }
 }
 
-function createResults(context) {
+function createResults(context: CommandPaletteContext): Result[] | null {
   if (!isAboutNodes(context)) {
-    return;
+    return null;
   }
 
   const { resourceCache, tokens, t } = context;
   const nodes = resourceCache['nodes'];
   if (typeof nodes !== 'object') {
-    return [{ type: LOADING_INDICATOR }];
+    return [
+      // todo
+      { type: LOADING_INDICATOR, label: '', query: '', onActivate: () => {} },
+    ];
   }
 
   const name = tokens[1];
@@ -82,18 +98,20 @@ function createResults(context) {
       item.metadata.name.includes(name),
     );
     if (matchedByName) {
-      return matchedByName.map(item => makeListItem(item, t));
+      return matchedByName.map(item =>
+        makeListItem(item, (t: string) => {}, t),
+      );
     }
     return null;
   } else {
-    return nodes.map(item => makeListItem(item, t));
+    return nodes.map(item => makeListItem(item, (t: string) => {}, t));
   }
 }
 
-export const nodesHandler = {
+export const nodesHandler: Handler = {
   getAutocompleteEntries,
   getSuggestions,
   fetchResources: concernsNodes,
   createResults,
-  getNavigationHelp: () => [['nodes', ['no']]],
+  getNavigationHelp: () => [{ name: 'nodes', aliases: ['no'] }],
 };

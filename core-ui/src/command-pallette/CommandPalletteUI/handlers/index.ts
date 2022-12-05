@@ -1,7 +1,7 @@
 import { nonResourceHandler } from './nonResourceHandler';
 // import { clusterResourceHandler } from './clusterResourceHandler';
 // import { namespacedResourceHandler } from './namespacedResourceHandler';
-// import { nodesHandler } from './nodesHandler';
+import { nodesHandler } from './nodesHandler';
 // import { logsHandler } from './logsHandler';
 // import { crdHandler } from './crdHandler';
 // import { helmReleaseHandler } from './helmReleaseHandler';
@@ -14,7 +14,7 @@ const allHandlers: Handler[] = [
   nonResourceHandler,
   // clusterResourceHandler,
   // namespacedResourceHandler,
-  // nodesHandler,
+  nodesHandler,
   // logsHandler,
   // crdHandler,
   // crListHandler,

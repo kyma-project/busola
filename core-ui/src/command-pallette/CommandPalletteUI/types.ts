@@ -3,6 +3,8 @@ import { NavNode } from 'state/types';
 import { useClustersInfoType } from 'state/utils/getClustersInfo';
 import { K8sResource } from 'types';
 
+export const LOADING_INDICATOR = 'LOADING_INDICATOR';
+
 export type CommandPaletteContext = {
   fetch: (relativeUrl: string) => Promise<any>;
   namespace: string | null;
@@ -15,8 +17,8 @@ export type CommandPaletteContext = {
   hiddenNamespaces: string[];
   showHiddenNamespaces: boolean;
   resourceCache: Record<string, K8sResource[]>;
-  t: TFunction<'translation', undefined>;
   updateResourceCache: (key: string, resources: K8sResource[]) => void;
+  t: TFunction<'translation', undefined>;
   setOpenPreferencesModal: (open: boolean) => void;
   clustersInfo: useClustersInfoType;
 };
@@ -45,14 +47,16 @@ export type HelpEntries = {
 
 export type Result = {
   label: string;
+  category?: string;
   query: string;
   onActivate: () => boolean | void;
   customActionText?: string;
+  type?: 'LOADING_INDICATOR';
 };
 
 export type Handler = {
   getSuggestions: (ctx: CommandPaletteContext) => string[];
-  getAutocompleteEntries: (ctx: CommandPaletteContext) => {};
+  getAutocompleteEntries: (ctx: CommandPaletteContext) => string[] | null;
   fetchResources?: (ctx: CommandPaletteContext) => Promise<any>;
   getNavigationHelp?: (ctx: CommandPaletteContext) => NavigationHelpEntries[];
   getOthersHelp?: (ctx: CommandPaletteContext) => OthersHelpEntries[];

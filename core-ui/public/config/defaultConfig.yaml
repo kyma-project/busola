@@ -61,5 +61,3 @@ config:
       isEnabled: false
     TRACKING:
       isEnabled: false
-    REACT_NAVIGATION:
-      isEnabled: true

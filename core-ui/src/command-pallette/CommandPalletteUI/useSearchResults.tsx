@@ -13,8 +13,6 @@ import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSel
 import { CommandPaletteContext, HelpEntries, Result } from './types';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 
-export const LOADING_INDICATOR = 'LOADING_INDICATOR';
-
 type useSearchResultsProps = {
   query: string;
   namespaceContext: string | null;
@@ -78,7 +76,7 @@ export function useSearchResults({
       ...result,
       onActivate: () => {
         // entry can explicitly prevent hiding of command palette by returning false
-        if (result?.onActivate() !== false) {
+        if ('onActivate' in result && result.onActivate() !== false) {
           hideCommandPalette();
         }
       },
