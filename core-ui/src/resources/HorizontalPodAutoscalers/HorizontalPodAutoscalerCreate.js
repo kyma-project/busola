@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 import { createHPATemplate } from './templates';
 
@@ -13,7 +14,7 @@ export function HorizontalPodAutoscalerCreate({
   resourceUrl,
   ...props
 }) {
-  const { namespaceId } = useMicrofrontendContext();
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [HPA, setHPA] = useState(createHPATemplate(namespaceId));
   const { t } = useTranslation();
 

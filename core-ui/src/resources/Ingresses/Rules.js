@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { GoToDetailsLink } from 'shared/components/ControlledBy/ControlledBy';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { LayoutPanel, Link } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import pluralize from 'pluralize';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 const getPort = (serviceName, port, services) => {
   const serviceLink = services?.find(
@@ -42,7 +43,7 @@ const getPort = (serviceName, port, services) => {
 
 export const Rules = ({ rules }) => {
   const { t } = useTranslation();
-  const { namespaceId: namespace } = useMicrofrontendContext();
+  const namespace = useRecoilValue(activeNamespaceIdState);
 
   const { data: services } = useGetList()(
     `/api/v1/namespaces/${namespace}/services`,

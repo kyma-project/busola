@@ -4,19 +4,17 @@ import { InfoLabel, Icon, Token } from 'fundamental-react';
 
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { SubscriptionsList } from 'shared/components/SubscriptionsList';
 import { ApiRulesList } from './ApiRulesList';
 
 import { ServiceCreate } from './ServiceCreate';
 import './ServiceDetails.scss';
+import { useFeature } from 'hooks/useFeature';
 
 export function ServiceDetails(props) {
   const { t } = useTranslation();
-  const microfrontendContext = useMicrofrontendContext();
-  const { features } = microfrontendContext;
   const customComponents = [];
-  if (features?.EVENTING?.isEnabled) {
+  if (useFeature('EVENTING')?.isEnabled) {
     customComponents.push(service => (
       <SubscriptionsList
         prefix={service.metadata.name}
@@ -27,7 +25,7 @@ export function ServiceDetails(props) {
       />
     ));
   }
-  if (features?.API_GATEWAY?.isEnabled) {
+  if (useFeature('API_GATEWAY')?.isEnabled) {
     customComponents.push(service => (
       <ApiRulesList
         key={service}

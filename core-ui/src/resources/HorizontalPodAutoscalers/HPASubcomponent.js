@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useTranslation } from 'react-i18next';
@@ -8,10 +7,12 @@ import { Link } from 'fundamental-react';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 import { Tokens } from 'shared/components/Tokens';
 import { MetricsBrief } from './helpers';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export const HPASubcomponent = props => {
   const { t } = useTranslation();
-  const { namespaceId } = useMicrofrontendContext();
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { data, error } = useGet(
     `/apis/autoscaling/v2beta2/namespaces/${namespaceId}/horizontalpodautoscalers`,
   );

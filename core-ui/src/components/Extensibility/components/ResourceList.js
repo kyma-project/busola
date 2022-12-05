@@ -11,6 +11,8 @@ import { sortBy } from '../helpers/sortBy';
 import { useJsonata } from '../hooks/useJsonata';
 import { getChildren, getSearchDetails, getSortDetails } from './helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
+import { useRecoilState } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 const ExtensibilityList = React.lazy(() => import('../ExtensibilityList'));
 
@@ -35,7 +37,8 @@ export function ResourceList({
   ...props
 }) {
   const { widgetT, t } = useGetTranslation();
-  const { namespaceId, customResources } = useMicrofrontendContext();
+  const { customResources } = useMicrofrontendContext(); // TODO
+  const namespaceId = useRecoilState(activeNamespaceIdState);
   const kind = (value?.kind ?? '').replace(/List$/, '');
   const pluralKind = pluralize(kind || '')?.toLowerCase();
   const namespacePart = getProperNamespacePart(value?.namespace, namespaceId);

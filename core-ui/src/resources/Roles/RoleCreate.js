@@ -5,10 +5,13 @@ import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 import { createRoleTemplate, createRolePresets } from './helpers';
 import { GenericRoleCreate } from './GenericRoleCreate';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export function RoleCreate(props) {
   const { t } = useTranslation();
-  const { namespaceId: namespace, groupVersions } = useMicrofrontendContext();
+  const { groupVersions } = useMicrofrontendContext(); // TODO
+  const namespace = useRecoilValue(activeNamespaceIdState);
 
   return (
     <GenericRoleCreate

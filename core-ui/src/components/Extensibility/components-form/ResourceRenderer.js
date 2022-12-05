@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { getResourceUrl } from 'resources/Namespaces/YamlUpload/helpers';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import {
   useGetTranslation,
   getPropsFromSchema,
@@ -10,6 +9,8 @@ import { ResourceForm } from 'shared/ResourceForm';
 import { K8sResourceSelectWithUseGetList } from 'shared/components/K8sResourceSelect';
 import { useVariables } from '../hooks/useVariables';
 import { useJsonata } from '../hooks/useJsonata';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export function ResourceRenderer({
   onChange,
@@ -22,7 +23,7 @@ export function ResourceRenderer({
   originalResource,
   ...props
 }) {
-  const { namespaceId } = useMicrofrontendContext();
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { setVar } = useVariables();
   const jsonata = useJsonata({
     resource: originalResource,

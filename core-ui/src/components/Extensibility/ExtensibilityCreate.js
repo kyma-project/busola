@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 
 import { ResourceForm } from 'shared/ResourceForm';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useGetSchema } from 'hooks/useGetSchema';
@@ -25,6 +24,8 @@ import { prepareRules } from './helpers/prepareRules';
 import { merge } from 'lodash';
 
 import { TriggerContextProvider } from './contexts/Trigger';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export function ExtensibilityCreateCore({
   formElementRef,
@@ -39,7 +40,7 @@ export function ExtensibilityCreateCore({
   ...props
 }) {
   const { prepareVars, resetVars, readVars } = useVariables();
-  const { namespaceId: namespace } = useMicrofrontendContext();
+  const namespace = useRecoilValue(activeNamespaceIdState);
   const notification = useNotification();
   const { t } = useTranslation();
   const general = createResource?.general;

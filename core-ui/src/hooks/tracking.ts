@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useLocation } from 'react-router-dom';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useComponentDidMount } from 'shared/useComponentDidMount';
+import { useRecoilValue } from 'recoil';
+import { clusterState } from 'state/clusterAtom';
 
-function sendTrackingRequest(body) {
+function sendTrackingRequest(body: any) {
   LuigiClient.sendCustomMessage({ id: 'busola.tracking', body });
 }
 
@@ -15,11 +16,15 @@ export function useAppTracking() {
 }
 
 function useSessionStartTracking() {
-  const { cluster } = useMicrofrontendContext();
+  const cluster = useRecoilValue(clusterState);
+
   useComponentDidMount(() => {
     sendTrackingRequest({
       event: 'SESSION_START',
-      data: { apiServerAddress: cluster?.cluster.server || null },
+      data: {
+        apiServerAddress:
+          cluster?.currentContext?.cluster?.cluster?.server || null,
+      },
     });
   });
 }
@@ -58,17 +63,17 @@ function usePageViewTracking() {
 }
 
 function useClusterChangeTracking() {
-  const { cluster } = useMicrofrontendContext();
+  const cluster = useRecoilValue(clusterState);
 
   useEffect(() => {
-    if (cluster?.cluster.server) {
+    if (cluster?.currentContext?.cluster?.cluster?.server) {
       sendTrackingRequest({
         event: 'CLUSTER_CHANGE',
         data: {
           hostname: window.location.hostname,
-          apiServerAddress: cluster.cluster.server,
+          apiServerAddress: cluster?.currentContext?.cluster?.cluster?.server,
         },
       });
     }
-  }, [cluster?.cluster.server]);
+  }, [cluster?.currentContext?.cluster?.cluster?.server]);
 }

@@ -43,7 +43,7 @@ export type ValidKubeconfig = {
   users: Array<KubeconfigUser>;
   contexts: Array<KubeconfigContext>;
   clusters: Array<KubeconfigCluster>;
-  preferences: any;
+  preferences?: any;
 };
 
 export type CurrentContext = {

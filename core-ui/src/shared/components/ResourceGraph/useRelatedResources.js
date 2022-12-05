@@ -120,7 +120,7 @@ async function cycle(store, depth, config, context) {
 }
 
 export function useRelatedResources({ resource, config, events }) {
-  const { namespaceNodes, clusterNodes } = useMicrofrontendContext();
+  const { namespaceNodes, clusterNodes } = useMicrofrontendContext(); // TODO
   const [startedLoading, setStartedLoading] = useState(false);
   const fetch = useSingleGet();
   const store = useRef({});
@@ -130,7 +130,9 @@ export function useRelatedResources({ resource, config, events }) {
 
   useEffect(() => {
     const loadRelatedResources = async () => {
-      store.current = { [kind]: [resource] };
+      store.current = {
+        [kind]: [resource],
+      };
       const depth = config[kind]?.depth || Number.POSITIVE_INFINITY;
       await cycle(store, depth, config, {
         fetch,
