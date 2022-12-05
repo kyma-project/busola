@@ -36,12 +36,6 @@ export const clusterStorageEffect: ClusterStorageEffectFn = clusterStorageKey =>
   onSet,
 }) => {
   setSelf(previousValue => {
-    console.log(
-      'setSelf clusterStorageEffect clusterStorageKey',
-      clusterStorageKey,
-      'previousValue',
-      previousValue,
-    );
     const savedValue = {
       ...JSON.parse(localStorage.getItem(clusterStorageKey) || '{}'),
       ...JSON.parse(sessionStorage.getItem(clusterStorageKey) || '{}'),
