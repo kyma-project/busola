@@ -5,7 +5,6 @@ import * as jp from 'jsonpath';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { prettifyNamePlural } from 'shared/utils/helpers';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
@@ -14,16 +13,22 @@ import { useTranslation } from 'react-i18next';
 import { SchemaViewer } from 'shared/components/SchemaViewer/SchemaViewer';
 import { navigateToResource } from 'shared/helpers/universalLinks';
 import './CustomResourceDefinitionVersions.scss';
+import { useRecoilValue } from 'recoil';
+import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSelector';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 const CustomResources = ({ resource, namespace, version }) => {
   const { t } = useTranslation();
   const { group, names } = resource.spec;
   const name = names.plural;
-  const {
-    clusterNodes,
-    namespaceNodes,
-    namespaceId,
-  } = useMicrofrontendContext();
+
+  const namespaceNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
+    node => node.namespaced,
+  );
+  const clusterNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
+    node => !node.namespaced,
+  );
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
 
   if (!version.served) {
     return (

@@ -6,7 +6,7 @@ export function useResourcesForApiGroups(apiGroups = []) {
   const [cache, setCache] = useState({});
   const [loading, setLoading] = useState(false);
   const fetch = useSingleGet();
-  const { groupVersions } = useMicrofrontendContext();
+  const { groupVersions } = useMicrofrontendContext(); // TODO
 
   const loadable = apiGroups.some(apiGroup => !cache[apiGroup]);
 

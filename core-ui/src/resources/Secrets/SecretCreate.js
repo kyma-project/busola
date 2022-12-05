@@ -28,7 +28,7 @@ export function SecretCreate({
   );
   const [lockedKeys, setLockedKeys] = useState([]);
 
-  const microfrontendContext = useMicrofrontendContext();
+  const microfrontendContext = useMicrofrontendContext(); // TODO need to check
 
   const secretDefs = getSecretDefs(t, microfrontendContext);
   const type = secret?.type;
