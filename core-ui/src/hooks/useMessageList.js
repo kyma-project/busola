@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import LuigiClient from '@luigi-project/client';
 import { Link } from 'react-router-dom';
 
 import { Dropdown } from 'shared/components/Dropdown/Dropdown';
