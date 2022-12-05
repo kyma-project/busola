@@ -11,14 +11,14 @@ export const apiGroup = 'hydra.ory.sh';
 export const apiVersion = 'v1alpha1';
 export const category = predefinedCategories.configuration;
 
-export const secrets = (t, context) => [
+export const secrets = t => [
   {
     title: t('oauth2-clients.secret'),
     data: ['client_id', 'client_secret'],
   },
 ];
 
-export const resourceGraphConfig = (t, context) => ({
+export const resourceGraphConfig = () => ({
   relations: [
     {
       resource: { kind: 'Secret' },
