@@ -29,69 +29,70 @@ data:
           - source: spec.exportTo
             widget: Labels
             name: Export To
-            visibility: $count(data)
+            visibility: $exists($value)
           - source: spec.workloadSelector.matchLabels
             widget: Labels
             name: Workload Selector Match Labels
-            visibility: $count(data)
+            visibility: $exists($value)
       - source: spec.trafficPolicy
         name: Traffic Policy
-        visibility: $exists($.data)
+        disablePadding: true
+        visibility: $exists($value)
         widget: Panel
         children:
-          - source: $parent.loadBalancer
+          - source: loadBalancer
             name: Load Balancer
-            visibility: $exists($.data)
+            visibility: $exists($value)
             widget: Panel
             children:
-              - source: $parent.simple
+              - source: simple
                 name: Simple
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Badge
-              - source: $parent.warmupDurationSecs
+              - source: warmupDurationSecs
                 name: Warmup Duration Secs
-                visibility: $exists($.data)
-              - source: $parent.consistentHash
+                visibility: $exists($value)
+              - source: consistentHash
                 name: Consistent Hash
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Panel
                 children:
-                  - source: $parent.httpHeaderName
+                  - source: httpHeaderName
                     name: HTTP Header Name
-                    visibility: $exists($.data)
-                  - source: $parent.useSourceIp
+                    visibility: $exists($value)
+                  - source: useSourceIp
                     name: Use Source IP
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Badge
                     highlights:
                       positive:
                         - 'true'
                       negative:
                         - 'false'
-                  - source: $parent.httpQueryParameterName
+                  - source: httpQueryParameterName
                     name: HTTP Query Parameter Name
-                    visibility: $exists($.data)
-                  - source: $parent.minimumRingSize
+                    visibility: $exists($value)
+                  - source: minimumRingSize
                     name: Minimum Ring Size
-                    visibility: $exists($.data)
-                  - source: $parent.httpCookie
+                    visibility: $exists($value)
+                  - source: httpCookie
                     name: HTTP Cookie
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Panel
                     children:
-                      - source: $parent.name
+                      - source: name
                         name: Name
-                      - source: $parent.path
+                      - source: path
                         name: Path
-                      - source: $parent.ttl
+                      - source: ttl
                         name: TTL
-              - source: $parent.localityLbSetting
+              - source: localityLbSetting
                 name: Locality LB Settings
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Panel
                 children:
                   - name: Enabled
-                    source: $parent.enabled
+                    source: enabled
                     widget: Badge
                     highlights:
                       positive:
@@ -99,9 +100,10 @@ data:
                       negative:
                         - 'false'
                   - widget: Table
+                    disablePadding: true
                     name: Distribute
-                    visibility: $count(data)
-                    source: $parent.distribute
+                    visibility: $exists($value)
+                    source: distribute
                     children:
                       - source: $item.from
                         name: From
@@ -109,208 +111,210 @@ data:
                         name: To
                         widget: Labels
                   - widget: Table
+                    disablePadding: true
                     name: Failover
-                    visibility: $count(data)
-                    source: $parent.failover
+                    visibility: $exists($value)
+                    source: failover
                     children:
                       - source: $item.from
                         name: From
                       - source: $item.to
                         name: To
                   - name: Failover Priority
-                    source: $parent.failoverPriority
+                    source: failoverPriority
                     widget: JoinedArray
-                    visibility: $count(data)
-          - source: $parent.connectionPool
+                    visibility: $exists($value)
+          - source: connectionPool
             name: Connection Pool
-            visibility: $exists($.data)
+            visibility: $exists($value)
             widget: Panel
             children:
-              - source: $parent.tcp
+              - source: tcp
                 name: TCP
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Panel
                 children:
-                  - source: $parent.maxConnections
+                  - source: maxConnections
                     name: Max Connections
-                    visibility: $exists($.data)
-                  - source: $parent.connectTimeout
+                    visibility: $exists($value)
+                  - source: connectTimeout
                     name: Connect Timeout
-                    visibility: $exists($.data)
-                  - source: $parent.tcpKeepalive
+                    visibility: $exists($value)
+                  - source: tcpKeepalive
                     name: TCP Keep Alive
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Panel
                     children:
-                      - source: $parent.probes
+                      - source: probes
                         name: Probes
-                      - source: $parent.time
+                      - source: time
                         name: Time
-                      - source: $parent.interval
+                      - source: interval
                         name: Interval
-              - source: $parent.http
+              - source: http
                 name: HTTP
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Panel
                 children:
-                  - source: $parent.http1MaxPendingRequests
+                  - source: http1MaxPendingRequests
                     name: HTTP1 Max Pending Requests
-                    visibility: $exists($.data)
-                  - source: $parent.http2MaxRequests
+                    visibility: $exists($value)
+                  - source: http2MaxRequests
                     name: HTTP2 Max Requests
-                    visibility: $exists($.data)
-                  - source: $parent.maxRequestsPerConnection
+                    visibility: $exists($value)
+                  - source: maxRequestsPerConnection
                     name: Max Requests Per Connection
-                    visibility: $exists($.data)
-                  - source: $parent.maxRetries
+                    visibility: $exists($value)
+                  - source: maxRetries
                     name: Max Retries
-                    visibility: $exists($.data)
-                  - source: $parent.idleTimeout
+                    visibility: $exists($value)
+                  - source: idleTimeout
                     name: Idle Timeout
-                    visibility: $exists($.data)
-                  - source: $parent.h2UpgradePolicy
+                    visibility: $exists($value)
+                  - source: h2UpgradePolicy
                     name: H2 Upgrade Policy
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Badge
-                  - source: $parent.useClientProtocol
+                  - source: useClientProtocol
                     name: Use Client Protocol
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Badge
                     highlights:
                       positive:
                         - 'true'
                       negative:
                         - 'false'
-          - source: $parent.outlierDetection
+          - source: outlierDetection
             name: outlierDetection
-            visibility: $exists($.data)
+            visibility: $exists($value)
             widget: Panel
             children:
-              - source: $parent.splitExternalLocalOriginErrors
+              - source: splitExternalLocalOriginErrors
                 name: Split External Local Origin Errors
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Badge
                 highlights:
                   positive:
                     - 'true'
                   negative:
                     - 'false'
-              - source: $parent.consecutiveLocalOriginFailures
+              - source: consecutiveLocalOriginFailures
                 name: Consecutive Local Origin Failures
-                visibility: $exists($.data)
-              - source: $parent.consecutiveGatewayErrors
+                visibility: $exists($value)
+              - source: consecutiveGatewayErrors
                 name: Consecutive Gateway Errors
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 type: number
-              - source: $parent.consecutive5xxErrors
+              - source: consecutive5xxErrors
                 name: Consecutive 5xx Errors
-                visibility: $exists($.data)
-              - source: $parent.interval
+                visibility: $exists($value)
+              - source: interval
                 name: Interval
-                visibility: $exists($.data)
-              - source: $parent.baseEjectionTime
+                visibility: $exists($value)
+              - source: baseEjectionTime
                 name: Base Ejection Time
-                visibility: $exists($.data)
-              - source: $parent.maxEjectionPercent
+                visibility: $exists($value)
+              - source: maxEjectionPercent
                 name: Max Ejection Percent
-                visibility: $exists($.data)
-              - source: $parent.minHealthPercent
+                visibility: $exists($value)
+              - source: minHealthPercent
                 name: Min Health Percent
-                visibility: $exists($.data)
-          - source: $parent.tls
+                visibility: $exists($value)
+          - source: tls
             name: TLS
-            visibility: $exists($.data)
+            visibility: $exists($value)
             widget: Panel
             children:
-              - source: $parent.mode
+              - source: mode
                 name: Mode
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Badge
-              - source: $parent.clientCertificate
+              - source: clientCertificate
                 name: Client Certificate
-                visibility: $exists($.data)
-              - source: $parent.privateKey
+                visibility: $exists($value)
+              - source: privateKey
                 name: Private Key
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 type: number
-              - source: $parent.caCertificates
+              - source: caCertificates
                 name: CA Certificates
-                visibility: $exists($.data)
-              - source: $parent.credentialName
+                visibility: $exists($value)
+              - source: credentialName
                 name: Credential Name
-                visibility: $exists($.data)
-              - source: $parent.subjectAltNames
+                visibility: $exists($value)
+              - source: subjectAltNames
                 name: Subject Alt Names
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Labels
-              - source: $parent.sni
+              - source: sni
                 name: SNI
-                visibility: $exists($.data)
-              - source: $parent.insecureSkipVerify
+                visibility: $exists($value)
+              - source: insecureSkipVerify
                 name: Insecure Skip Verify
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Badge
-          - source: $parent.portLevelSettings
+          - source: portLevelSettings
             name: portLevelSettings
             widget: Table
+            disablePadding: true
             children:
               - source: $item.port.number
                 name: port
-            visibility: $count(data)
+            visibility: $exists($value)
             collapsible:
               - source: $item.loadBalancer
                 name: Load Balancer
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Panel
                 children:
-                  - source: $parent.simple
+                  - source: simple
                     name: Simple
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Badge
-                  - source: $parent.warmupDurationSecs
+                  - source: warmupDurationSecs
                     name: Warmup Duration Secs
-                    visibility: $exists($.data)
-                  - source: $parent.consistentHash
+                    visibility: $exists($value)
+                  - source: consistentHash
                     name: Consistent Hash
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Panel
                     children:
-                      - source: $parent.httpHeaderName
+                      - source: httpHeaderName
                         name: HTTP Header Name
-                        visibility: $exists($.data)
-                      - source: $parent.useSourceIp
+                        visibility: $exists($value)
+                      - source: useSourceIp
                         name: Use Source IP
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Badge
                         highlights:
                           positive:
                             - 'true'
                           negative:
                             - 'false'
-                      - source: $parent.httpQueryParameterName
+                      - source: httpQueryParameterName
                         name: HTTP Query Parameter Name
-                        visibility: $exists($.data)
-                      - source: $parent.minimumRingSize
+                        visibility: $exists($value)
+                      - source: minimumRingSize
                         name: Minimum Ring Size
-                        visibility: $exists($.data)
-                      - source: $parent.httpCookie
+                        visibility: $exists($value)
+                      - source: httpCookie
                         name: HTTP Cookie
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Panel
                         children:
-                          - source: $parent.name
+                          - source: name
                             name: Name
-                          - source: $parent.path
+                          - source: path
                             name: Path
-                          - source: $parent.ttl
+                          - source: ttl
                             name: TTL
-                  - source: $parent.localityLbSetting
+                  - source: localityLbSetting
                     name: Locality LB Settings
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Panel
                     children:
                       - name: Enabled
-                        source: $parent.enabled
+                        source: enabled
                         widget: Badge
                         highlights:
                           positive:
@@ -318,9 +322,10 @@ data:
                           negative:
                             - 'false'
                       - widget: Table
+                        disablePadding: true
                         name: Distribute
-                        visibility: $count(data)
-                        source: $parent.distribute
+                        visibility: $exists($value)
+                        source: distribute
                         children:
                           - source: $item.from
                             name: From
@@ -328,72 +333,73 @@ data:
                             name: To
                             widget: Labels
                       - widget: Table
+                        disablePadding: true
                         name: Failover
-                        visibility: $count(data)
-                        source: $parent.failover
+                        visibility: $exists($value)
+                        source: failover
                         children:
                           - source: $item.from
                             name: From
                           - source: $item.to
                             name: To
                       - name: Failover Priority
-                        source: $parent.failoverPriority
+                        source: failoverPriority
                         widget: JoinedArray
-                        visibility: $count(data)
+                        visibility: $exists($value)
               - source: $item.connectionPool
                 name: Connection Pool
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Panel
                 children:
-                  - source: $parent.tcp
+                  - source: tcp
                     name: TCP
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Panel
                     children:
-                      - source: $parent.maxConnections
+                      - source: maxConnections
                         name: Max Connections
-                        visibility: $exists($.data)
-                      - source: $parent.connectTimeout
+                        visibility: $exists($value)
+                      - source: connectTimeout
                         name: Connect Timeout
-                        visibility: $exists($.data)
-                      - source: $parent.tcpKeepalive
+                        visibility: $exists($value)
+                      - source: tcpKeepalive
                         name: TCP Keep Alive
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Panel
                         children:
-                          - source: $parent.probes
+                          - source: probes
                             name: Probes
-                          - source: $parent.time
+                          - source: time
                             name: Time
-                          - source: $parent.interval
+                          - source: interval
                             name: Interval
-                  - source: $parent.http
+                  - source: http
                     name: HTTP
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Panel
                     children:
-                      - source: $parent.http1MaxPendingRequests
+                      - source: http1MaxPendingRequests
                         name: HTTP1 Max Pending Requests
-                        visibility: $exists($.data)
-                      - source: $parent.http2MaxRequests
+                        visibility: $exists($value)
+                      - source: http2MaxRequests
                         name: HTTP2 Max Requests
-                        visibility: $exists($.data)
-                      - source: $parent.maxRequestsPerConnection
+                        visibility: $exists($value)
+                      - source: maxRequestsPerConnection
                         name: Max Requests Per Connection
-                        visibility: $exists($.data)
-                      - source: $parent.maxRetries
+                        visibility: $exists($value)
+                      - source: maxRetries
                         name: Max Retries
-                        visibility: $exists($.data)
-                      - source: $parent.idleTimeout
+                        visibility: $exists($value)
+                      - source: idleTimeout
                         name: Idle Timeout
-                        visibility: $exists($.data)
-                      - source: $parent.h2UpgradePolicy
+                        visibility: $exists($value)
+                      - source: h2UpgradePolicy
                         name: H2 Upgrade Policy
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Badge
-                      - source: $parent.useClientProtocol
+                      - source: useClientProtocol
                         name: Use Client Protocol
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Badge
                         highlights:
                           positive:
@@ -402,107 +408,108 @@ data:
                             - 'false'
               - source: $item.outlierDetection
                 name: outlierDetection
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Panel
                 children:
-                  - source: $parent.splitExternalLocalOriginErrors
+                  - source: splitExternalLocalOriginErrors
                     name: Split External Local Origin Errors
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Badge
                     highlights:
                       positive:
                         - 'true'
                       negative:
                         - 'false'
-                  - source: $parent.consecutiveLocalOriginFailures
+                  - source: consecutiveLocalOriginFailures
                     name: Consecutive Local Origin Failures
-                    visibility: $exists($.data)
-                  - source: $parent.consecutiveGatewayErrors
+                    visibility: $exists($value)
+                  - source: consecutiveGatewayErrors
                     name: Consecutive Gateway Errors
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     type: number
-                  - source: $parent.consecutive5xxErrors
+                  - source: consecutive5xxErrors
                     name: Consecutive 5xx Errors
-                    visibility: $exists($.data)
-                  - source: $parent.interval
+                    visibility: $exists($value)
+                  - source: interval
                     name: Interval
-                    visibility: $exists($.data)
-                  - source: $parent.baseEjectionTime
+                    visibility: $exists($value)
+                  - source: baseEjectionTime
                     name: Base Ejection Time
-                    visibility: $exists($.data)
-                  - source: $parent.maxEjectionPercent
+                    visibility: $exists($value)
+                  - source: maxEjectionPercent
                     name: Max Ejection Percent
-                    visibility: $exists($.data)
-                  - source: $parent.minHealthPercent
+                    visibility: $exists($value)
+                  - source: minHealthPercent
                     name: Min Health Percent
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
               - source: $item.tls
                 name: TLS
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Panel
                 children:
-                  - source: $parent.mode
+                  - source: mode
                     name: Mode
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Badge
-                  - source: $parent.clientCertificate
+                  - source: clientCertificate
                     name: Client Certificate
-                    visibility: $exists($.data)
-                  - source: $parent.privateKey
+                    visibility: $exists($value)
+                  - source: privateKey
                     name: Private Key
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     type: number
-                  - source: $parent.caCertificates
+                  - source: caCertificates
                     name: CA Certificates
-                    visibility: $exists($.data)
-                  - source: $parent.credentialName
+                    visibility: $exists($value)
+                  - source: credentialName
                     name: Credential Name
-                    visibility: $exists($.data)
-                  - source: $parent.subjectAltNames
+                    visibility: $exists($value)
+                  - source: subjectAltNames
                     name: Subject Alt Names
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Labels
-                  - source: $parent.sni
+                  - source: sni
                     name: SNI
-                    visibility: $exists($.data)
-                  - source: $parent.insecureSkipVerify
+                    visibility: $exists($value)
+                  - source: insecureSkipVerify
                     name: Insecure Skip Verify
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Badge
               - source: $item.tunnel
                 name: Tunnel
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Panel
                 children:
-                  - source: $parent.protocol
+                  - source: protocol
                     name: Protocol
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Badge
-                  - source: $parent.targetHost
+                  - source: targetHost
                     name: Target Host
-                    visibility: $exists($.data)
-                  - source: $parent.targetPort
+                    visibility: $exists($value)
+                  - source: targetPort
                     name: Target Port
-                    visibility: $exists($.data)
-          - source: $parent.tunnel
+                    visibility: $exists($value)
+          - source: tunnel
             name: Tunnel
-            visibility: $exists($.data)
+            visibility: $exists($value)
             widget: Panel
             children:
-              - source: $parent.protocol
+              - source: protocol
                 name: Protocol
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Badge
-              - source: $parent.targetHost
+              - source: targetHost
                 name: Target Host
-                visibility: $exists($.data)
-              - source: $parent.targetPort
+                visibility: $exists($value)
+              - source: targetPort
                 name: Target Port
-                visibility: $exists($.data)
+                visibility: $exists($value)
       - source: spec.subsets
         name: Subsets
         widget: Table
-        visibility: $count(data)
+        disablePadding: true
+        visibility: $exists($value)
         children:
           - source: $item.name
             name: Name
@@ -512,62 +519,63 @@ data:
         collapsible:
           - source: $item.trafficPolicy
             name: Traffic Policy
-            visibility: $exists($.data)
+            disablePadding: true
+            visibility: $exists($value)
             widget: Panel
             children:
-              - source: $parent.loadBalancer
+              - source: loadBalancer
                 name: Load Balancer
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Panel
                 children:
-                  - source: $parent.simple
+                  - source: simple
                     name: Simple
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Badge
-                  - source: $parent.warmupDurationSecs
+                  - source: warmupDurationSecs
                     name: Warmup Duration Secs
-                    visibility: $exists($.data)
-                  - source: $parent.consistentHash
+                    visibility: $exists($value)
+                  - source: consistentHash
                     name: Consistent Hash
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Panel
                     children:
-                      - source: $parent.httpHeaderName
+                      - source: httpHeaderName
                         name: HTTP Header Name
-                        visibility: $exists($.data)
-                      - source: $parent.useSourceIp
+                        visibility: $exists($value)
+                      - source: useSourceIp
                         name: Use Source IP
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Badge
                         highlights:
                           positive:
                             - 'true'
                           negative:
                             - 'false'
-                      - source: $parent.httpQueryParameterName
+                      - source: httpQueryParameterName
                         name: HTTP Query Parameter Name
-                        visibility: $exists($.data)
-                      - source: $parent.minimumRingSize
+                        visibility: $exists($value)
+                      - source: minimumRingSize
                         name: Minimum Ring Size
-                        visibility: $exists($.data)
-                      - source: $parent.httpCookie
+                        visibility: $exists($value)
+                      - source: httpCookie
                         name: HTTP Cookie
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Panel
                         children:
-                          - source: $parent.name
+                          - source: name
                             name: Name
-                          - source: $parent.path
+                          - source: path
                             name: Path
-                          - source: $parent.ttl
+                          - source: ttl
                             name: TTL
-                  - source: $parent.localityLbSetting
+                  - source: localityLbSetting
                     name: Locality LB Settings
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Panel
                     children:
                       - name: Enabled
-                        source: $parent.enabled
+                        source: enabled
                         widget: Badge
                         highlights:
                           positive:
@@ -575,9 +583,10 @@ data:
                           negative:
                             - 'false'
                       - widget: Table
+                        disablePadding: true
                         name: Distribute
-                        visibility: $count(data)
-                        source: $parent.distribute
+                        visibility: $exists($value)
+                        source: distribute
                         children:
                           - source: $item.from
                             name: From
@@ -585,208 +594,210 @@ data:
                             name: To
                             widget: Labels
                       - widget: Table
+                        disablePadding: true
                         name: Failover
-                        visibility: $count(data)
-                        source: $parent.failover
+                        visibility: $exists($value)
+                        source: failover
                         children:
                           - source: $item.from
                             name: From
                           - source: $item.to
                             name: To
                       - name: Failover Priority
-                        source: $parent.failoverPriority
+                        source: failoverPriority
                         widget: JoinedArray
-                        visibility: $count(data)
-              - source: $parent.connectionPool
+                        visibility: $exists($value)
+              - source: connectionPool
                 name: Connection Pool
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Panel
                 children:
-                  - source: $parent.tcp
+                  - source: tcp
                     name: TCP
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Panel
                     children:
-                      - source: $parent.maxConnections
+                      - source: maxConnections
                         name: Max Connections
-                        visibility: $exists($.data)
-                      - source: $parent.connectTimeout
+                        visibility: $exists($value)
+                      - source: connectTimeout
                         name: Connect Timeout
-                        visibility: $exists($.data)
-                      - source: $parent.tcpKeepalive
+                        visibility: $exists($value)
+                      - source: tcpKeepalive
                         name: TCP Keep Alive
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Panel
                         children:
-                          - source: $parent.probes
+                          - source: probes
                             name: Probes
-                          - source: $parent.time
+                          - source: time
                             name: Time
-                          - source: $parent.interval
+                          - source: interval
                             name: Interval
-                  - source: $parent.http
+                  - source: http
                     name: HTTP
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Panel
                     children:
-                      - source: $parent.http1MaxPendingRequests
+                      - source: http1MaxPendingRequests
                         name: HTTP1 Max Pending Requests
-                        visibility: $exists($.data)
-                      - source: $parent.http2MaxRequests
+                        visibility: $exists($value)
+                      - source: http2MaxRequests
                         name: HTTP2 Max Requests
-                        visibility: $exists($.data)
-                      - source: $parent.maxRequestsPerConnection
+                        visibility: $exists($value)
+                      - source: maxRequestsPerConnection
                         name: Max Requests Per Connection
-                        visibility: $exists($.data)
-                      - source: $parent.maxRetries
+                        visibility: $exists($value)
+                      - source: maxRetries
                         name: Max Retries
-                        visibility: $exists($.data)
-                      - source: $parent.idleTimeout
+                        visibility: $exists($value)
+                      - source: idleTimeout
                         name: Idle Timeout
-                        visibility: $exists($.data)
-                      - source: $parent.h2UpgradePolicy
+                        visibility: $exists($value)
+                      - source: h2UpgradePolicy
                         name: H2 Upgrade Policy
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Badge
-                      - source: $parent.useClientProtocol
+                      - source: useClientProtocol
                         name: Use Client Protocol
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Badge
                         highlights:
                           positive:
                             - 'true'
                           negative:
                             - 'false'
-              - source: $parent.outlierDetection
+              - source: outlierDetection
                 name: outlierDetection
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Panel
                 children:
-                  - source: $parent.splitExternalLocalOriginErrors
+                  - source: splitExternalLocalOriginErrors
                     name: Split External Local Origin Errors
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Badge
                     highlights:
                       positive:
                         - 'true'
                       negative:
                         - 'false'
-                  - source: $parent.consecutiveLocalOriginFailures
+                  - source: consecutiveLocalOriginFailures
                     name: Consecutive Local Origin Failures
-                    visibility: $exists($.data)
-                  - source: $parent.consecutiveGatewayErrors
+                    visibility: $exists($value)
+                  - source: consecutiveGatewayErrors
                     name: Consecutive Gateway Errors
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     type: number
-                  - source: $parent.consecutive5xxErrors
+                  - source: consecutive5xxErrors
                     name: Consecutive 5xx Errors
-                    visibility: $exists($.data)
-                  - source: $parent.interval
+                    visibility: $exists($value)
+                  - source: interval
                     name: Interval
-                    visibility: $exists($.data)
-                  - source: $parent.baseEjectionTime
+                    visibility: $exists($value)
+                  - source: baseEjectionTime
                     name: Base Ejection Time
-                    visibility: $exists($.data)
-                  - source: $parent.maxEjectionPercent
+                    visibility: $exists($value)
+                  - source: maxEjectionPercent
                     name: Max Ejection Percent
-                    visibility: $exists($.data)
-                  - source: $parent.minHealthPercent
+                    visibility: $exists($value)
+                  - source: minHealthPercent
                     name: Min Health Percent
-                    visibility: $exists($.data)
-              - source: $parent.tls
+                    visibility: $exists($value)
+              - source: tls
                 name: TLS
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Panel
                 children:
-                  - source: $parent.mode
+                  - source: mode
                     name: Mode
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Badge
-                  - source: $parent.clientCertificate
+                  - source: clientCertificate
                     name: Client Certificate
-                    visibility: $exists($.data)
-                  - source: $parent.privateKey
+                    visibility: $exists($value)
+                  - source: privateKey
                     name: Private Key
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     type: number
-                  - source: $parent.caCertificates
+                  - source: caCertificates
                     name: CA Certificates
-                    visibility: $exists($.data)
-                  - source: $parent.credentialName
+                    visibility: $exists($value)
+                  - source: credentialName
                     name: Credential Name
-                    visibility: $exists($.data)
-                  - source: $parent.subjectAltNames
+                    visibility: $exists($value)
+                  - source: subjectAltNames
                     name: Subject Alt Names
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Labels
-                  - source: $parent.sni
+                  - source: sni
                     name: SNI
-                    visibility: $exists($.data)
-                  - source: $parent.insecureSkipVerify
+                    visibility: $exists($value)
+                  - source: insecureSkipVerify
                     name: Insecure Skip Verify
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Badge
-              - source: $parent.portLevelSettings
+              - source: portLevelSettings
                 name: portLevelSettings
                 widget: Table
+                disablePadding: true
                 children:
                   - source: $item.port.number
                     name: port
-                visibility: $count(data)
+                visibility: $exists($value)
                 collapsible:
                   - source: $item.loadBalancer
                     name: Load Balancer
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Panel
                     children:
-                      - source: $parent.simple
+                      - source: simple
                         name: Simple
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Badge
-                      - source: $parent.warmupDurationSecs
+                      - source: warmupDurationSecs
                         name: Warmup Duration Secs
-                        visibility: $exists($.data)
-                      - source: $parent.consistentHash
+                        visibility: $exists($value)
+                      - source: consistentHash
                         name: Consistent Hash
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Panel
                         children:
-                          - source: $parent.httpHeaderName
+                          - source: httpHeaderName
                             name: HTTP Header Name
-                            visibility: $exists($.data)
-                          - source: $parent.useSourceIp
+                            visibility: $exists($value)
+                          - source: useSourceIp
                             name: Use Source IP
-                            visibility: $exists($.data)
+                            visibility: $exists($value)
                             widget: Badge
                             highlights:
                               positive:
                                 - 'true'
                               negative:
                                 - 'false'
-                          - source: $parent.httpQueryParameterName
+                          - source: httpQueryParameterName
                             name: HTTP Query Parameter Name
-                            visibility: $exists($.data)
-                          - source: $parent.minimumRingSize
+                            visibility: $exists($value)
+                          - source: minimumRingSize
                             name: Minimum Ring Size
-                            visibility: $exists($.data)
-                          - source: $parent.httpCookie
+                            visibility: $exists($value)
+                          - source: httpCookie
                             name: HTTP Cookie
-                            visibility: $exists($.data)
+                            visibility: $exists($value)
                             widget: Panel
                             children:
-                              - source: $parent.name
+                              - source: name
                                 name: Name
-                              - source: $parent.path
+                              - source: path
                                 name: Path
-                              - source: $parent.ttl
+                              - source: ttl
                                 name: TTL
-                      - source: $parent.localityLbSetting
+                      - source: localityLbSetting
                         name: Locality LB Settings
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Panel
                         children:
                           - name: Enabled
-                            source: $parent.enabled
+                            source: enabled
                             widget: Badge
                             highlights:
                               positive:
@@ -794,9 +805,10 @@ data:
                               negative:
                                 - 'false'
                           - widget: Table
+                            disablePadding: true
                             name: Distribute
-                            visibility: $count(data)
-                            source: $parent.distribute
+                            visibility: $exists($value)
+                            source: distribute
                             children:
                               - source: $item.from
                                 name: From
@@ -804,72 +816,73 @@ data:
                                 name: To
                                 widget: Labels
                           - widget: Table
+                            disablePadding: true
                             name: Failover
-                            visibility: $count(data)
-                            source: $parent.failover
+                            visibility: $exists($value)
+                            source: failover
                             children:
                               - source: $item.from
                                 name: From
                               - source: $item.to
                                 name: To
                           - name: Failover Priority
-                            source: $parent.failoverPriority
+                            source: failoverPriority
                             widget: JoinedArray
-                            visibility: $count(data)
+                            visibility: $exists($value)
                   - source: $item.connectionPool
                     name: Connection Pool
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Panel
                     children:
-                      - source: $parent.tcp
+                      - source: tcp
                         name: TCP
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Panel
                         children:
-                          - source: $parent.maxConnections
+                          - source: maxConnections
                             name: Max Connections
-                            visibility: $exists($.data)
-                          - source: $parent.connectTimeout
+                            visibility: $exists($value)
+                          - source: connectTimeout
                             name: Connect Timeout
-                            visibility: $exists($.data)
-                          - source: $parent.tcpKeepalive
+                            visibility: $exists($value)
+                          - source: tcpKeepalive
                             name: TCP Keep Alive
-                            visibility: $exists($.data)
+                            visibility: $exists($value)
                             widget: Panel
                             children:
-                              - source: $parent.probes
+                              - source: probes
                                 name: Probes
-                              - source: $parent.time
+                              - source: time
                                 name: Time
-                              - source: $parent.interval
+                              - source: interval
                                 name: Interval
-                      - source: $parent.http
+                      - source: http
                         name: HTTP
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Panel
                         children:
-                          - source: $parent.http1MaxPendingRequests
+                          - source: http1MaxPendingRequests
                             name: HTTP1 Max Pending Requests
-                            visibility: $exists($.data)
-                          - source: $parent.http2MaxRequests
+                            visibility: $exists($value)
+                          - source: http2MaxRequests
                             name: HTTP2 Max Requests
-                            visibility: $exists($.data)
-                          - source: $parent.maxRequestsPerConnection
+                            visibility: $exists($value)
+                          - source: maxRequestsPerConnection
                             name: Max Requests Per Connection
-                            visibility: $exists($.data)
-                          - source: $parent.maxRetries
+                            visibility: $exists($value)
+                          - source: maxRetries
                             name: Max Retries
-                            visibility: $exists($.data)
-                          - source: $parent.idleTimeout
+                            visibility: $exists($value)
+                          - source: idleTimeout
                             name: Idle Timeout
-                            visibility: $exists($.data)
-                          - source: $parent.h2UpgradePolicy
+                            visibility: $exists($value)
+                          - source: h2UpgradePolicy
                             name: H2 Upgrade Policy
-                            visibility: $exists($.data)
+                            visibility: $exists($value)
                             widget: Badge
-                          - source: $parent.useClientProtocol
+                          - source: useClientProtocol
                             name: Use Client Protocol
-                            visibility: $exists($.data)
+                            visibility: $exists($value)
                             widget: Badge
                             highlights:
                               positive:
@@ -878,103 +891,103 @@ data:
                                 - 'false'
                   - source: $item.outlierDetection
                     name: outlierDetection
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Panel
                     children:
-                      - source: $parent.splitExternalLocalOriginErrors
+                      - source: splitExternalLocalOriginErrors
                         name: Split External Local Origin Errors
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Badge
                         highlights:
                           positive:
                             - 'true'
                           negative:
                             - 'false'
-                      - source: $parent.consecutiveLocalOriginFailures
+                      - source: consecutiveLocalOriginFailures
                         name: Consecutive Local Origin Failures
-                        visibility: $exists($.data)
-                      - source: $parent.consecutiveGatewayErrors
+                        visibility: $exists($value)
+                      - source: consecutiveGatewayErrors
                         name: Consecutive Gateway Errors
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         type: number
-                      - source: $parent.consecutive5xxErrors
+                      - source: consecutive5xxErrors
                         name: Consecutive 5xx Errors
-                        visibility: $exists($.data)
-                      - source: $parent.interval
+                        visibility: $exists($value)
+                      - source: interval
                         name: Interval
-                        visibility: $exists($.data)
-                      - source: $parent.baseEjectionTime
+                        visibility: $exists($value)
+                      - source: baseEjectionTime
                         name: Base Ejection Time
-                        visibility: $exists($.data)
-                      - source: $parent.maxEjectionPercent
+                        visibility: $exists($value)
+                      - source: maxEjectionPercent
                         name: Max Ejection Percent
-                        visibility: $exists($.data)
-                      - source: $parent.minHealthPercent
+                        visibility: $exists($value)
+                      - source: minHealthPercent
                         name: Min Health Percent
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                   - source: $item.tls
                     name: TLS
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Panel
                     children:
-                      - source: $parent.mode
+                      - source: mode
                         name: Mode
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Badge
-                      - source: $parent.clientCertificate
+                      - source: clientCertificate
                         name: Client Certificate
-                        visibility: $exists($.data)
-                      - source: $parent.privateKey
+                        visibility: $exists($value)
+                      - source: privateKey
                         name: Private Key
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         type: number
-                      - source: $parent.caCertificates
+                      - source: caCertificates
                         name: CA Certificates
-                        visibility: $exists($.data)
-                      - source: $parent.credentialName
+                        visibility: $exists($value)
+                      - source: credentialName
                         name: Credential Name
-                        visibility: $exists($.data)
-                      - source: $parent.subjectAltNames
+                        visibility: $exists($value)
+                      - source: subjectAltNames
                         name: Subject Alt Names
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Labels
-                      - source: $parent.sni
+                      - source: sni
                         name: SNI
-                        visibility: $exists($.data)
-                      - source: $parent.insecureSkipVerify
+                        visibility: $exists($value)
+                      - source: insecureSkipVerify
                         name: Insecure Skip Verify
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Badge
                   - source: $item.tunnel
                     name: Tunnel
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Panel
                     children:
-                      - source: $parent.protocol
+                      - source: protocol
                         name: Protocol
-                        visibility: $exists($.data)
+                        visibility: $exists($value)
                         widget: Badge
-                      - source: $parent.targetHost
+                      - source: targetHost
                         name: Target Host
-                        visibility: $exists($.data)
-                      - source: $parent.targetPort
+                        visibility: $exists($value)
+                      - source: targetPort
                         name: Target Port
-                        visibility: $exists($.data)
-              - source: $parent.tunnel
+                        visibility: $exists($value)
+              - source: tunnel
                 name: Tunnel
-                visibility: $exists($.data)
+                visibility: $exists($value)
                 widget: Panel
                 children:
-                  - source: $parent.protocol
+                  - source: protocol
                     name: Protocol
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
                     widget: Badge
-                  - source: $parent.targetHost
+                  - source: targetHost
                     name: Target Host
-                    visibility: $exists($.data)
-                  - source: $parent.targetPort
+                    visibility: $exists($value)
+                  - source: targetPort
                     name: Target Port
-                    visibility: $exists($.data)
+                    visibility: $exists($value)
   form: |
     - simple: true
       path: spec.host
