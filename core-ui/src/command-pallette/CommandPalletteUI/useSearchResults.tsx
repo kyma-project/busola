@@ -2,13 +2,31 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { isPreferencesOpenState } from 'state/preferences/isPreferencesModalOpenAtom';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { showHiddenNamespacesState } from 'state/preferences/showHiddenNamespacesAtom';
 import * as handlers from './handlers';
 import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
+import { K8sResource } from 'types';
+import { clustersState } from 'state/clustersAtom';
+import { clusterState } from 'state/clusterAtom';
+import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSelector';
+import { CommandPaletteContext, HelpEntries, Result } from './types';
+import { useClustersInfo } from 'state/utils/getClustersInfo';
 
-export const LOADING_INDICATOR = 'LOADING_INDICATOR';
+type useSearchResultsProps = {
+  query: string;
+  namespaceContext: string | null;
+  hideCommandPalette: () => void;
+  resourceCache: Record<string, K8sResource[]>;
+  updateResourceCache: (key: string, value: any) => void;
+};
+
+type SearchResults = {
+  results: Result[];
+  suggestedQuery: string;
+  autocompletePhrase: string | null;
+  helpEntries: HelpEntries;
+};
 
 export function useSearchResults({
   query,
@@ -16,35 +34,35 @@ export function useSearchResults({
   hideCommandPalette,
   resourceCache,
   updateResourceCache,
-}) {
-  const {
-    clusters,
-    activeClusterName,
-    clusterNodes,
-    namespaceNodes,
-  } = useMicrofrontendContext();
+}: useSearchResultsProps): SearchResults {
+  const clusters = useRecoilValue(clustersState);
+  const cluster = useRecoilValue(clusterState);
+  const navigationNodes = useRecoilValue(clusterAndNsNodesSelector);
+
   const hiddenNamespaces = useGetHiddenNamespaces();
   const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
   const fetch = useFetch();
   const { t } = useTranslation();
   const setOpenPreferencesModal = useSetRecoilState(isPreferencesOpenState);
+  const clustersInfo = useClustersInfo();
 
   const preprocessedQuery = query.trim().toLowerCase();
-  const context = {
-    fetch: url => fetch({ relativeUrl: url }),
+  const context: CommandPaletteContext = {
+    fetch: (relativeUrl: string) => fetch({ relativeUrl }),
     namespace: namespaceContext || 'default',
     clusterNames: Object.keys(clusters || {}),
-    activeClusterName,
+    activeClusterName: cluster?.name,
     query: preprocessedQuery,
     tokens: preprocessedQuery.split(/\s+/).filter(Boolean),
-    clusterNodes: clusterNodes || [],
-    namespaceNodes: namespaceNodes || [],
+    clusterNodes: navigationNodes.filter(n => !n.namespaced),
+    namespaceNodes: navigationNodes.filter(n => n.namespaced),
     hiddenNamespaces,
     showHiddenNamespaces,
     resourceCache,
     updateResourceCache,
     t,
     setOpenPreferencesModal,
+    clustersInfo,
   };
 
   useEffect(() => {
@@ -58,7 +76,7 @@ export function useSearchResults({
       ...result,
       onActivate: () => {
         // entry can explicitly prevent hiding of command palette by returning false
-        if (result.onActivate() !== false) {
+        if ('onActivate' in result && result.onActivate() !== false) {
           hideCommandPalette();
         }
       },

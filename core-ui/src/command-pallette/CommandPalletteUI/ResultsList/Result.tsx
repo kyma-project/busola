@@ -1,6 +1,16 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
+type ResultProps = {
+  label: string;
+  category: string;
+  customActionText: string;
+  index: number;
+  activeIndex: number;
+  setActiveIndex: (index: number) => void;
+  onItemClick: () => void;
+};
+
 export function Result({
   label,
   category,
@@ -9,8 +19,8 @@ export function Result({
   activeIndex,
   setActiveIndex,
   onItemClick,
-}) {
-  const resultRef = useRef();
+}: ResultProps) {
+  const resultRef = useRef<HTMLLIElement | null>(null);
   const { t } = useTranslation();
 
   const onMouseOver = useCallback(() => {
@@ -20,7 +30,7 @@ export function Result({
   }, [index, activeIndex, setActiveIndex]);
 
   useEffect(() => {
-    const target = resultRef.current;
+    const target = resultRef.current!;
     target.addEventListener('mousemove', onMouseOver);
     return () => target.removeEventListener('mousemove', onMouseOver);
     // eslint-disable-next-line react-hooks/exhaustive-deps

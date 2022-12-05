@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import {
   CommandPalletteHelp,
   NamespaceContextDisplay,
@@ -7,38 +7,55 @@ import {
 } from './components/components';
 import { ResultsList } from './ResultsList/ResultsList';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
-import { LOADING_INDICATOR, useSearchResults } from './useSearchResults';
+import { /*LOADING_INDICATOR,*/ useSearchResults } from './useSearchResults';
 import './CommandPaletteUI.scss';
 import { FormInput } from 'fundamental-react';
+import { K8sResource } from 'types';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
-function Background({ hide, children }) {
-  const onBackgroundClick = e => {
-    if (e.nativeEvent.srcElement.id === 'command-palette-background') {
-      hide();
-    }
-  };
-
+function Background({
+  hide,
+  children,
+}: {
+  hide: () => void;
+  children: ReactNode;
+}) {
   return (
     <div
       id="command-palette-background"
       className="command-palette-ui"
-      onClick={onBackgroundClick}
+      onClick={e => {
+        if ((e.target as HTMLElement).id === 'command-palette-background') {
+          hide();
+        }
+      }}
     >
       {children}
     </div>
   );
 }
 
-export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
+type CommandPaletteProps = {
+  hide: () => void;
+  resourceCache: Record<string, K8sResource[]>;
+  updateResourceCache: (key: string, resources: K8sResource[]) => void;
+};
+
+export function CommandPaletteUI({
+  hide,
+  resourceCache,
+  updateResourceCache,
+}: CommandPaletteProps) {
   const namespace = useRecoilValue(activeNamespaceIdState);
 
   const [query, setQuery] = useState('');
   const [originalQuery, setOriginalQuery] = useState('');
-  const [namespaceContext, setNamespaceContext] = useState(namespace);
+  const [namespaceContext, setNamespaceContext] = useState<string | null>(
+    namespace,
+  );
 
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [isHistoryMode, setHistoryMode] = useState(false);
@@ -59,7 +76,7 @@ export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
 
   useEffect(() => setNamespaceContext(namespace), [namespace]);
 
-  const keyDownInHistoryMode = e => {
+  const keyDownInHistoryMode = (e: KeyboardEvent) => {
     const historyEntries = getHistoryEntries();
     if (e.key === 'Enter' && results[0]) {
       // choose current entry
@@ -99,15 +116,15 @@ export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
     }
   };
 
-  const keyDownInDropdownMode = e => {
+  const keyDownInDropdownMode = (e: KeyboardEvent) => {
     if (e.key === 'Tab') {
       if (autocompletePhrase) {
         setQuery(autocompletePhrase);
       } else if (suggestedQuery) {
         setQuery(suggestedQuery);
       } else if (
-        results?.[activeResultIndex] &&
-        results[activeResultIndex] !== LOADING_INDICATOR
+        results?.[activeResultIndex] // && todo
+        // results[activeResultIndex] !== LOADING_INDICATOR
       ) {
         // fill search with active result
         setQuery(results[activeResultIndex].query || '');
@@ -140,8 +157,10 @@ export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
             aria-label="command-palette-search"
             value={!isHistoryMode ? query : ''}
             placeholder={!isHistoryMode ? '' : query}
-            onChange={e => setQuery(e.target.value)}
-            onKeyDown={e => {
+            onChange={(e: ChangeEvent) =>
+              setQuery((e.target as HTMLInputElement).value)
+            }
+            onKeyDown={(e: KeyboardEvent) => {
               if (isHistoryMode) {
                 keyDownInHistoryMode(e);
               } else {
@@ -157,7 +176,7 @@ export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
             <ShortHelpText
               showFullHelp={() => {
                 setQuery('help');
-                inputRef.current.focus();
+                inputRef.current?.focus();
               }}
             />
           )}
@@ -168,9 +187,9 @@ export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
               suggestion={
                 <SuggestedQuery
                   suggestedQuery={suggestedQuery}
-                  setQuery={query => {
+                  setQuery={(query: string) => {
                     setQuery(query);
-                    inputRef.current.focus();
+                    inputRef.current?.focus();
                   }}
                 />
               }
