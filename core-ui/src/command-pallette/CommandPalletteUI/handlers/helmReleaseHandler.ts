@@ -2,8 +2,8 @@ import { TFunction } from 'react-i18next';
 import { findRecentRelease } from 'components/HelmReleases/findRecentRelease';
 import { groupBy } from 'lodash';
 import { K8sResource } from 'types';
+import { LOADING_INDICATOR } from '../types';
 import { CommandPaletteContext, Handler, Result } from '../types';
-import { LOADING_INDICATOR } from '../useSearchResults';
 import { getSuggestionsForSingleResource } from './helpers';
 
 const helmReleaseResourceType = 'helmreleases';
@@ -50,8 +50,7 @@ function makeListItem(
   namespace: string | null,
   t: TFunction<'translation', undefined>,
 ) {
-  //todo: it was item.metadata.labels.name, does it change anything?
-  const name = item.metadata.name;
+  const name = item.metadata.labels.name;
 
   return {
     label: name,
@@ -99,7 +98,14 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     return null;
   }
 
-  const { resourceCache, tokens, namespace, t } = context;
+  const {
+    resourceCache,
+    tokens,
+    namespace,
+    navigate,
+    t,
+    activeClusterName,
+  } = context;
   const helmReleases = resourceCache[`${namespace}/helmreleases`];
 
   const linkToList = {
@@ -109,7 +115,8 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     category: t('configuration.title') + ' > ' + t('helm-releases.title'),
     query: 'helmReleases',
     onActivate: () => {
-      // todo: navigateFunction
+      const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/helm-releases`;
+      navigate(pathname);
     },
   };
 

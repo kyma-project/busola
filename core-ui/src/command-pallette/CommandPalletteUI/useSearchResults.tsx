@@ -12,6 +12,7 @@ import { clusterState } from 'state/clusterAtom';
 import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSelector';
 import { CommandPaletteContext, HelpEntries, Result } from './types';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
+import { useNavigate } from 'react-router-dom';
 
 type useSearchResultsProps = {
   query: string;
@@ -45,6 +46,7 @@ export function useSearchResults({
   const { t } = useTranslation();
   const setOpenPreferencesModal = useSetRecoilState(isPreferencesOpenState);
   const clustersInfo = useClustersInfo();
+  const navigate = useNavigate();
 
   const preprocessedQuery = query.trim().toLowerCase();
   const context: CommandPaletteContext = {
@@ -63,6 +65,7 @@ export function useSearchResults({
     t,
     setOpenPreferencesModal,
     clustersInfo,
+    navigate,
   };
 
   useEffect(() => {
