@@ -8,9 +8,9 @@ import { nonResourceHandler } from './nonResourceHandler';
 import { findCommonPrefix } from 'shared/utils/helpers';
 // import { crHandler } from './crHandler';
 // import { crListHandler } from './crListHandler';
-import { CommandPaletteContext, Handler, HelpEntries } from '../types';
+import { CommandPaletteContext, Handler, HelpEntries, Result } from '../types';
 
-const handlers: Handler[] = [
+const allHandlers: Handler[] = [
   nonResourceHandler,
   // clusterResourceHandler,
   // namespacedResourceHandler,
@@ -22,11 +22,11 @@ const handlers: Handler[] = [
   // helmReleaseHandler,
 ];
 
-export function getSuggestions(context: CommandPaletteContext) {
+export function getSuggestions(context: CommandPaletteContext): string[] {
   if (!context.query) {
     return [];
   }
-  const suggestions = handlers
+  const suggestions = allHandlers
     .flatMap(handler => handler.getSuggestions(context))
     .filter(Boolean);
 
@@ -37,12 +37,14 @@ export function getSuggestions(context: CommandPaletteContext) {
   return suggestions;
 }
 
-export function getAutocompleteEntries(context: CommandPaletteContext) {
+export function getAutocompleteEntries(
+  context: CommandPaletteContext,
+): string | null {
   if (!context.query) {
     return null;
   }
 
-  const allEntries = handlers
+  const allEntries = allHandlers
     .flatMap(handler => handler.getAutocompleteEntries(context))
     .filter(Boolean);
 
@@ -55,36 +57,38 @@ export function getAutocompleteEntries(context: CommandPaletteContext) {
   return prefix === context.query ? null : prefix;
 }
 
-export async function fetchResources(context: CommandPaletteContext) {
+export async function fetchResources(
+  context: CommandPaletteContext,
+): Promise<void> {
   if (context.activeClusterName) {
     await Promise.all(
-      handlers
+      allHandlers
         .map(handler => handler.fetchResources?.(context))
         .filter(Boolean),
     );
   }
 }
 
-export function createResults(context: CommandPaletteContext) {
+export function createResults(context: CommandPaletteContext): Result[] {
   if (!context.query) {
     return [];
   }
-  return handlers
+  return allHandlers
     .flatMap(handler => handler.createResults(context))
-    .filter(Boolean);
+    .filter(h => h !== null) as Result[];
 }
 
-export function getHelpEntries(context: CommandPaletteContext) {
+export function getHelpEntries(context: CommandPaletteContext): HelpEntries {
   const helpEntries: HelpEntries = {
-    navigation: handlers
+    navigation: allHandlers
       .map(handler => handler.getNavigationHelp?.(context) || [])
       .filter(Boolean)
       .flatMap(e => e),
-    others: handlers
+    others: allHandlers
       .map(handler => handler.getOthersHelp?.(context) || [])
       .filter(Boolean)
       .flatMap(e => e),
-    crds: handlers
+    crds: allHandlers
       .map(handler => handler.getCRsHelp?.(context) || [])
       .filter(Boolean)
       .flatMap(e => e),

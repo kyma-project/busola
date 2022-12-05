@@ -10,7 +10,7 @@ import { K8sResource } from 'types';
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
 import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSelector';
-import { CommandPaletteContext } from './types';
+import { CommandPaletteContext, HelpEntries, Result } from './types';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 
 export const LOADING_INDICATOR = 'LOADING_INDICATOR';
@@ -23,13 +23,20 @@ type useSearchResultsProps = {
   updateResourceCache: (key: string, value: any) => void;
 };
 
+type SearchResults = {
+  results: Result[];
+  suggestedQuery: string;
+  autocompletePhrase: string | null;
+  helpEntries: HelpEntries;
+};
+
 export function useSearchResults({
   query,
   namespaceContext,
   hideCommandPalette,
   resourceCache,
   updateResourceCache,
-}: useSearchResultsProps) {
+}: useSearchResultsProps): SearchResults {
   const clusters = useRecoilValue(clustersState);
   const cluster = useRecoilValue(clusterState);
   const navigationNodes = useRecoilValue(clusterAndNsNodesSelector);
