@@ -105,11 +105,7 @@ export const limitedWidgets = {
     DefaultHandler,
     DependentHandler,
     ConditionalHandler,
-    // SchemaRulesInjector,
-    // CustomFieldInjector,
     EnumHandler,
-    // VisibilityHandler,
     PluginSimpleStack,
-    // ValidityReporter,
   ],
 };

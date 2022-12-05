@@ -57,7 +57,7 @@ export function Jsonata({
   placeholder,
   ...props
 }) {
-  const { tFromStoreKeys, t: tExt, exists } = useGetTranslation();
+  const { tFromStoreKeys, t: tExt } = useGetTranslation();
   const schemaPlaceholder = schema.get('placeholder');
 
   return (

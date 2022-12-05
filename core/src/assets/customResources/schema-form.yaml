@@ -25,7 +25,6 @@ $defs:
           - status.phase
           - metadata.labels
         type: string
-        widget: Jsonata
       name:
         description: Name of component used for dispaying translations
         type: string

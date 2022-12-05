@@ -38,7 +38,6 @@ export function MultiType({
   }
 
   newSchema = newSchema
-    // .set('name', '') // TODO
     .set('type', selectedType)
     .set('widget', typeWidgets?.[selectedType]);
 
