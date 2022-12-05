@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import {
   CommandPalletteHelp,
   NamespaceContextDisplay,
@@ -11,9 +10,19 @@ import { addHistoryEntry, getHistoryEntries } from './search-history';
 import { LOADING_INDICATOR, useSearchResults } from './useSearchResults';
 import './CommandPaletteUI.scss';
 import { FormInput } from 'fundamental-react';
+import { K8sResource } from 'types';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
-function Background({ hide, children }) {
-  const onBackgroundClick = e => {
+function Background({
+  hide,
+  children,
+}: {
+  hide: () => void;
+  children: ReactNode;
+}) {
+  const onBackgroundClick = (e: any) => {
+    console.log(e);
     if (e.nativeEvent.srcElement.id === 'command-palette-background') {
       hide();
     }
@@ -30,14 +39,26 @@ function Background({ hide, children }) {
   );
 }
 
-export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
-  const { namespaceId: namespace } = useMicrofrontendContext();
+type CommandPaletteProps = {
+  hide: () => void;
+  resourceCache: Record<string, K8sResource[]>;
+  updateResourceCache: (key: string, resources: K8sResource[]) => void;
+};
+
+export function CommandPaletteUI({
+  hide,
+  resourceCache,
+  updateResourceCache,
+}: CommandPaletteProps) {
+  const namespace = useRecoilValue(activeNamespaceIdState);
 
   const [query, setQuery] = useState('');
   const [originalQuery, setOriginalQuery] = useState('');
-  const [namespaceContext, setNamespaceContext] = useState(namespace);
+  const [namespaceContext, setNamespaceContext] = useState<string | null>(
+    namespace,
+  );
 
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [isHistoryMode, setHistoryMode] = useState(false);
@@ -58,7 +79,7 @@ export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
 
   useEffect(() => setNamespaceContext(namespace), [namespace]);
 
-  const keyDownInHistoryMode = e => {
+  const keyDownInHistoryMode = (e: KeyboardEvent) => {
     const historyEntries = getHistoryEntries();
     if (e.key === 'Enter' && results[0]) {
       // choose current entry
@@ -98,7 +119,7 @@ export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
     }
   };
 
-  const keyDownInDropdownMode = e => {
+  const keyDownInDropdownMode = (e: KeyboardEvent) => {
     if (e.key === 'Tab') {
       if (autocompletePhrase) {
         setQuery(autocompletePhrase);
@@ -139,8 +160,10 @@ export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
             aria-label="command-palette-search"
             value={!isHistoryMode ? query : ''}
             placeholder={!isHistoryMode ? '' : query}
-            onChange={e => setQuery(e.target.value)}
-            onKeyDown={e => {
+            onChange={(e: ChangeEvent) =>
+              setQuery((e.target as HTMLInputElement).value)
+            }
+            onKeyDown={(e: KeyboardEvent) => {
               if (isHistoryMode) {
                 keyDownInHistoryMode(e);
               } else {
@@ -156,7 +179,7 @@ export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
             <ShortHelpText
               showFullHelp={() => {
                 setQuery('help');
-                inputRef.current.focus();
+                inputRef.current?.focus();
               }}
             />
           )}
@@ -167,9 +190,9 @@ export function CommandPaletteUI({ hide, resourceCache, updateResourceCache }) {
               suggestion={
                 <SuggestedQuery
                   suggestedQuery={suggestedQuery}
-                  setQuery={query => {
+                  setQuery={(query: string) => {
                     setQuery(query);
-                    inputRef.current.focus();
+                    inputRef.current?.focus();
                   }}
                 />
               }
