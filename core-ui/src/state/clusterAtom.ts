@@ -34,9 +34,12 @@ export const clusterState: RecoilState<ActiveClusterState> = atom<
       setSelf(() => {
         const getClusters = () => {
           try {
-            return JSON.parse(
-              localStorage.getItem(CLUSTERS_STORAGE_KEY) || 'null',
-            );
+            return {
+              ...JSON.parse(localStorage.getItem(CLUSTERS_STORAGE_KEY) || '{}'),
+              ...JSON.parse(
+                sessionStorage.getItem(CLUSTERS_STORAGE_KEY) || '{}',
+              ),
+            };
           } catch {
             return null;
           }

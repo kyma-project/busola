@@ -2,10 +2,11 @@ import { AtomEffect } from 'recoil';
 import LuigiClient from '@luigi-project/client';
 import { ClustersState } from '../clustersAtom';
 import { Cluster } from '../clusterAtom';
+import { ClusterStorage } from '../types';
 
 type LocalStorageEffectFn = <T>(localStorageKey: string) => AtomEffect<T>;
 
-let inMemoryClusters: any = {};
+const inMemoryClusters: ClustersState = {};
 
 export const localStorageEffect: LocalStorageEffectFn = localStorageKey => ({
   setSelf,
@@ -13,7 +14,7 @@ export const localStorageEffect: LocalStorageEffectFn = localStorageKey => ({
 }) => {
   setSelf(previousValue => {
     const savedValue = localStorage.getItem(localStorageKey);
-    console.log('inMemoryClusters', inMemoryClusters);
+
     try {
       if (savedValue !== null) return JSON.parse(savedValue);
       return previousValue || {};
@@ -41,14 +42,14 @@ export const clusterStorageEffect: ClusterStorageEffectFn = clusterStorageKey =>
       'previousValue',
       previousValue,
     );
-    const savedValue = localStorage.getItem(clusterStorageKey);
-    const savedValue2 = {
+    const savedValue = {
       ...JSON.parse(localStorage.getItem(clusterStorageKey) || '{}'),
       ...JSON.parse(sessionStorage.getItem(clusterStorageKey) || '{}'),
+      ...inMemoryClusters,
     };
-    console.log('savedValue2', savedValue2);
+
     try {
-      if (savedValue !== null) return JSON.parse(savedValue);
+      if (savedValue !== null) return savedValue;
       return previousValue || {};
     } catch (e) {
       console.warn('Cannot get clusters', e);
@@ -57,27 +58,18 @@ export const clusterStorageEffect: ClusterStorageEffectFn = clusterStorageKey =>
   });
 
   onSet(newValue => {
-    console.log(
-      'onSet clusterStorageEffect clusterStorageKey',
-      clusterStorageKey,
-      'newValue',
-      newValue,
-    );
     const localStorageClusters: ClustersState = {};
     const sessionStorageClusters: ClustersState = {};
     const clusters = newValue ? Object.entries(newValue) : [];
-    console.log('Object.entries(newValue)', clusters);
 
-    for (const [clusterName, cluster] of clusters) {
-      const config = cluster ? cluster.config : 'localStorage';
-      console.log(
-        'clusterName',
-        clusterName,
-        'cluster',
-        cluster.config,
-        cluster.config,
-      );
-      switch (config) {
+    for (const key in clusters) {
+      const clusterName: string = clusters[key as keyof ClustersState][0];
+      let cluster = clusters[key as keyof ClustersState][1] as Cluster;
+      const storage: ClusterStorage = cluster.config
+        ? cluster.config.storage || 'sessionStorage'
+        : 'sessionStorage';
+
+      switch (storage) {
         case 'localStorage':
           localStorageClusters[clusterName] = cluster;
           break;
@@ -94,15 +86,23 @@ export const clusterStorageEffect: ClusterStorageEffectFn = clusterStorageKey =>
             cluster?.config?.storage,
             'saving in localStorage',
           );
-          cluster.config.storage = 'localStorage';
+          cluster.config = {
+            requiresCA: cluster.config ? cluster.config.requiresCA : false,
+            storage: 'localStorage',
+          };
           localStorageClusters[clusterName] = cluster;
           break;
       }
     }
-    console.log('localStorageClusters', localStorageClusters);
-    console.log('sessionStorageClusters', sessionStorageClusters);
-    console.log('inMemoryClusters', inMemoryClusters);
-    return localStorage.setItem(clusterStorageKey, JSON.stringify(newValue));
+
+    localStorage.setItem(
+      clusterStorageKey,
+      JSON.stringify(localStorageClusters),
+    );
+    sessionStorage.setItem(
+      clusterStorageKey,
+      JSON.stringify(sessionStorageClusters),
+    );
   });
 };
 

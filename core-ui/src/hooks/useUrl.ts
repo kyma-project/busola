@@ -7,7 +7,6 @@ import { UrlGenerators } from 'state/types';
 export const useUrl: () => UrlGenerators = () => {
   const currentCluster = useRecoilValue(clusterState);
   const activeNamespace = useRecoilValue(activeNamespaceIdState);
-  console.log('currentCluster', currentCluster);
 
   const clusterUrl = (path: string) => {
     return `/cluster/${currentCluster?.contextName}/${path}`;
