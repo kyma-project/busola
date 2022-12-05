@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue, useRecoilState } from 'recoil';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { WithTitle } from 'shared/hooks/useWindowTitle';
 import { ClusterOverview } from 'components/Clusters/views/ClusterOverview/ClusterOverview';
@@ -49,15 +49,11 @@ export default function ClusterRoutes() {
         }
       />
 
-      <Route
-        path="namespaces/:namespaceId"
-        element={<Navigate to="details" />}
-      />
-      <Route path="namespaces/:namespaceId/*" element={<NamespaceRoutes />} />
       {/* extensibility routes should go first, so if someone overwrites the default view, the new one should have a higher priority */}
       {extensions?.map(cr => createExtensibilityRoutes(cr, language))}
       {resourceRoutes}
       {otherRoutes}
+      <Route path="namespaces/:namespaceId/*" element={<NamespaceRoutes />} />
     </Routes>
   );
 }
