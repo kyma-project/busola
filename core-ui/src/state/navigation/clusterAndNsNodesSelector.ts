@@ -49,7 +49,6 @@ export const clusterAndNsNodesSelector: RecoilValueReadOnly<NavNode[]> = selecto
     const scope: Scope = activeNamespaceId ? 'namespace' : 'cluster';
     const navNodesWithAddons = addAdditionalNodes(navNodes, scope, features!);
 
-    console.log(navNodesWithAddons);
     return navNodesWithAddons;
   },
 });

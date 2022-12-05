@@ -32,7 +32,6 @@ export default function App() {
   const { i18n } = useTranslation();
   const language = useRecoilValue(languageAtom);
   const cluster = useRecoilValue(clusterState);
-  console.log(cluster);
   const setNamespace = useSetRecoilState(activeNamespaceIdState);
   const { namespace } = useUrl();
 
