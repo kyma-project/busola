@@ -1,7 +1,6 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
 import { ErrorPanel } from 'shared/components/ErrorPanel/ErrorPanel';
-import { Link } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -20,13 +19,12 @@ import { useFeature } from 'hooks/useFeature';
 import './ClusterNodes.scss';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { StatusBadge } from 'shared/components/StatusBadge/StatusBadge';
+import { useUrl } from 'hooks/useUrl';
 
 const NodeHeader = ({ nodeName }) => {
-  const navigateToNodeDetails = nodeName =>
-    LuigiClient.linkManager().navigate(`nodes/${nodeName}`);
-
+  const { clusterUrl } = useUrl();
   return (
-    <Link className="fd-link" onClick={() => navigateToNodeDetails(nodeName)}>
+    <Link className="fd-link" to={clusterUrl(`overview/nodes/${nodeName}`)}>
       {nodeName}
     </Link>
   );
@@ -34,6 +32,7 @@ const NodeHeader = ({ nodeName }) => {
 
 export function ClusterNodes() {
   const { t } = useTranslation();
+
   const prometheus = useFeature('PROMETHEUS');
   const usePrometheusQueries = prometheus?.isEnabled;
 

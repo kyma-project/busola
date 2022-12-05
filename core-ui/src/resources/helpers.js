@@ -54,7 +54,7 @@ export const usePrepareDetailsProps = ({
   const decodedResourceUrl = decodeURIComponent(resourceUrl);
   const decodedResourceName = decodeURIComponent(resourceName);
 
-  const context = useMicrofrontendContext();
+  const context = useMicrofrontendContext(); // TODO with ResourceGraph
   const addStyle = useAddStyle({ styleId: 'graph-styles' });
 
   return {

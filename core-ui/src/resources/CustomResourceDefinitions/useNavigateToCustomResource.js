@@ -1,9 +1,15 @@
 import LuigiClient from '@luigi-project/client';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useRecoilValue } from 'recoil';
 import { navigateToResource } from 'shared/helpers/universalLinks';
+import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSelector';
 
 export function useNavigateToCustomResource() {
-  const { clusterNodes, namespaceNodes } = useMicrofrontendContext();
+  const clusterNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
+    node => !node.namespaced,
+  );
+  const namespaceNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
+    node => node.namespaced,
+  );
 
   return (cr, crd) => {
     const crdNamePlural = crd.spec.names.plural;

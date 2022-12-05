@@ -1,11 +1,19 @@
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import jsyaml from 'js-yaml';
 import { saveAs } from 'file-saver';
+import { useRecoilValue } from 'recoil';
+import { clusterState } from 'state/clusterAtom';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { KubeconfigCluster, ValidKubeconfig } from 'types';
 
 export function useDownloadSecretKubeconfig() {
-  const { cluster, namespaceId: namespace } = useMicrofrontendContext();
+  const cluster = useRecoilValue(clusterState)!;
+  const namespace = useRecoilValue(activeNamespaceIdState);
 
-  const createKubeconfig = (cluster, name, token) => ({
+  const createKubeconfig = (
+    cluster: KubeconfigCluster,
+    name: string,
+    token: string,
+  ): ValidKubeconfig => ({
     apiVersion: 'v1',
     kind: 'Config',
     'current-context': name,
@@ -28,12 +36,17 @@ export function useDownloadSecretKubeconfig() {
     ],
   });
 
-  return secret => {
+  return (secret: any) => {
+    // TODO
     if (secret.type !== 'kubernetes.io/service-account-token') return;
 
     const name = secret.metadata.name;
     const serviceAccountToken = atob(secret.data.token);
-    const kubeconfig = createKubeconfig(cluster, name, serviceAccountToken);
+    const kubeconfig = createKubeconfig(
+      cluster.currentContext.cluster,
+      name,
+      serviceAccountToken,
+    );
 
     const blob = new Blob([jsyaml.dump(kubeconfig)], {
       type: 'application/yaml;charset=utf-8',

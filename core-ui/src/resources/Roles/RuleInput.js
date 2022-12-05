@@ -13,6 +13,8 @@ import {
   getApiGroupInputOptions,
   unique,
 } from './helpers';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 const nonResourceUrls = [
   '/healthz/ready',
@@ -42,7 +44,8 @@ const verbs = [
 ];
 
 export function RuleInput({ rule, rules, setRules, isAdvanced }) {
-  const { namespaceId, groupVersions } = useMicrofrontendContext();
+  const { groupVersions } = useMicrofrontendContext(); // TODO
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const { t } = useTranslation();
 
   if (!Array.isArray(rule?.apiGroups)) {

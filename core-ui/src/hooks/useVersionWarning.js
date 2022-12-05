@@ -4,7 +4,7 @@ import { useFeature } from 'hooks/useFeature';
 import * as Sentry from '@sentry/react';
 
 export function useVersionWarning({ resourceUrl, resourceType }) {
-  const { apiGroups } = useMicrofrontendContext();
+  const { apiGroups } = useMicrofrontendContext(); // TODO
   const { isEnabled: isTrackingEnabled } = useFeature('SENTRY');
 
   useEffect(() => {

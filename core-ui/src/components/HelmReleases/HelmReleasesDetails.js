@@ -3,7 +3,6 @@ import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { ResourceNotFound } from 'shared/components/ResourceNotFound/ResourceNotFound';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { prettifyNameSingular } from 'shared/utils/helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
@@ -12,10 +11,12 @@ import { Link } from 'fundamental-react';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { OtherReleaseVersions } from './OtherReleaseVersions';
 import { findRecentRelease } from './findRecentRelease';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 function HelmReleasesDetails({ releaseName }) {
   const { t } = useTranslation();
-  const { namespaceId: namespace } = useMicrofrontendContext();
+  const namespace = useRecoilValue(activeNamespaceIdState);
   const breadcrumbItems = [
     { name: t('helm-releases.title'), path: '/' },
     { name: '' },

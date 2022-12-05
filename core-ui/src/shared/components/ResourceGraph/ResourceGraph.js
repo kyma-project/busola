@@ -3,7 +3,6 @@ import { MemoizedGraphviz } from './GraphvizComponent';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useRelatedResources } from 'shared/components/ResourceGraph/useRelatedResources';
 import { useIntersectionObserver } from 'shared/hooks/useIntersectionObserver';
 import { buildGraph } from 'shared/components/ResourceGraph/buildGraph';
@@ -15,9 +14,9 @@ import { SaveGraphControls } from './SaveGraphControls';
 import { DetailsCard } from './DetailsCard/DetailsCard';
 import './ResourceGraph.scss';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { useFeature } from 'hooks/useFeature';
 
 function ResourceGraph({ resource, config }) {
-  const { features } = useMicrofrontendContext();
   const { t } = useTranslation();
   const [dotSrc, setDotSrc] = useState('');
   const [isReady, setReady] = useState(false);
@@ -73,7 +72,7 @@ function ResourceGraph({ resource, config }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasBeenInView]);
-  if (!features?.VISUAL_RESOURCES?.isEnabled) {
+  if (!useFeature('VISUAL_RESOURCES')?.isEnabled) {
     return EMPTY_TEXT_PLACEHOLDER;
   }
 

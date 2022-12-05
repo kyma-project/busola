@@ -22,15 +22,15 @@ export function EventList({
     EVENT_MESSAGE_TYPE,
     displayType,
     MessageSelector,
-    formatInvolvedObject,
-    formatSourceObject,
+    FormatInvolvedObject,
+    FormatSourceObject,
   } = useMessageList(defaultType);
 
   const involvedObject = hideInvolvedObjects
     ? {}
     : {
         header: t('events.headers.involved-object'),
-        value: e => formatInvolvedObject(e.involvedObject),
+        value: e => FormatInvolvedObject(e.involvedObject),
       };
 
   const textSearchProperties = [
@@ -78,7 +78,7 @@ export function EventList({
     },
     {
       header: t('events.headers.source'),
-      value: e => formatSourceObject(e.source),
+      value: e => FormatSourceObject(e.source),
     },
     {
       header: t('events.headers.count'),

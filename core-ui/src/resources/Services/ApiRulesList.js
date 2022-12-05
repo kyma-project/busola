@@ -14,7 +14,7 @@ const ExtensibilityList = React.lazy(() =>
 
 export function ApiRulesList({ serviceName, namespace }) {
   const { t } = useTranslation();
-  const { customResources } = useMicrofrontendContext();
+  const { customResources } = useMicrofrontendContext(); // TODO
 
   const extensibilityAPIRules = customResources.find(
     cR => cR.general?.resource?.kind === 'APIRule',

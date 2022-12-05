@@ -1,23 +1,21 @@
 import { Icon } from 'fundamental-react';
+import { useFeature } from 'hooks/useFeature';
 import * as jp from 'jsonpath';
 import { useTranslation } from 'react-i18next';
 import { useRecoilValue } from 'recoil';
 
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { disableResourceProtectionState } from 'state/preferences/disableResourceProtectionAtom';
 
 export function useProtectedResources() {
   const { t } = useTranslation();
-  const microfrontendContext = useMicrofrontendContext();
+  const protectedResourcesFeature = useFeature('PROTECTED_RESOURCES');
   const disableResourceProtection = useRecoilValue(
     disableResourceProtectionState,
   );
 
-  const protectedResourceRules = microfrontendContext.features
-    ?.PROTECTED_RESOURCES?.isEnabled
-    ? microfrontendContext.features?.PROTECTED_RESOURCES?.config?.resources ||
-      []
+  const protectedResourceRules = protectedResourcesFeature?.isEnabled
+    ? protectedResourcesFeature?.config?.resources || []
     : [];
 
   const getEntryProtection = entry => {
