@@ -3,6 +3,7 @@ import { Token } from 'fundamental-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import './components.scss';
+import { HelpEntries } from '../types';
 
 export function SuggestedQuery({
   suggestedQuery,
@@ -67,20 +68,12 @@ export function ShortHelpText({ showFullHelp }: { showFullHelp: () => void }) {
   );
 }
 
-// todo brzydko
-type HelpEntries = {
-  crds: any[]; //todo
-  navigation: Array<[string, string[]?]>;
-  others: Array<[string, string, string]>;
-};
-
 export function CommandPalletteHelp({
   helpEntries,
 }: {
   helpEntries: HelpEntries;
 }) {
   const { t } = useTranslation();
-  console.log(helpEntries);
 
   return (
     <div className="help">
@@ -98,10 +91,10 @@ export function CommandPalletteHelp({
           </tr>
         </thead>
         <tbody>
-          {helpEntries.others.map(([name, shortName, description]) => (
+          {helpEntries.others.map(({ name, alias, description }) => (
             <tr key={name}>
               <td>
-                {name}, {shortName || EMPTY_TEXT_PLACEHOLDER}
+                {name}, {alias || EMPTY_TEXT_PLACEHOLDER}
               </td>
               <td>{description}</td>
             </tr>
@@ -113,10 +106,10 @@ export function CommandPalletteHelp({
       </h1>
       <table className="help-text">
         <tbody>
-          {helpEntries.navigation.map(([name, shortNames]) => (
+          {helpEntries.navigation.map(({ name, aliases }) => (
             <tr key={name}>
               <td>{name}</td>
-              <td>{shortNames?.join(', ') || EMPTY_TEXT_PLACEHOLDER}</td>
+              <td>{aliases?.join(', ') || EMPTY_TEXT_PLACEHOLDER}</td>
             </tr>
           ))}
         </tbody>

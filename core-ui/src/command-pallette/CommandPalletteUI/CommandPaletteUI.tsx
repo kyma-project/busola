@@ -7,7 +7,7 @@ import {
 } from './components/components';
 import { ResultsList } from './ResultsList/ResultsList';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
-import { LOADING_INDICATOR, useSearchResults } from './useSearchResults';
+import { /*LOADING_INDICATOR,*/ useSearchResults } from './useSearchResults';
 import './CommandPaletteUI.scss';
 import { FormInput } from 'fundamental-react';
 import { K8sResource } from 'types';
@@ -21,18 +21,15 @@ function Background({
   hide: () => void;
   children: ReactNode;
 }) {
-  const onBackgroundClick = (e: any) => {
-    console.log(e);
-    if (e.nativeEvent.srcElement.id === 'command-palette-background') {
-      hide();
-    }
-  };
-
   return (
     <div
       id="command-palette-background"
       className="command-palette-ui"
-      onClick={onBackgroundClick}
+      onClick={e => {
+        if ((e.target as HTMLElement).id === 'command-palette-background') {
+          hide();
+        }
+      }}
     >
       {children}
     </div>
@@ -126,8 +123,8 @@ export function CommandPaletteUI({
       } else if (suggestedQuery) {
         setQuery(suggestedQuery);
       } else if (
-        results?.[activeResultIndex] &&
-        results[activeResultIndex] !== LOADING_INDICATOR
+        results?.[activeResultIndex] // && todo
+        // results[activeResultIndex] !== LOADING_INDICATOR
       ) {
         // fill search with active result
         setQuery(results[activeResultIndex].query || '');
