@@ -1,19 +1,24 @@
+import { Result } from './../types';
 import LuigiClient from '@luigi-project/client';
-import { LOADING_INDICATOR } from '../useSearchResults';
+import { CommandPaletteContext, Handler, LOADING_INDICATOR } from '../types';
 import { getSuggestionsForSingleResource } from './helpers';
+import { K8sResource } from 'types';
 
 const crdResourceTypes = ['customresourcedefinitions', 'crd', 'crds'];
 
-function getAutocompleteEntries({ tokens, resourceCache }) {
+function getAutocompleteEntries({
+  tokens,
+  resourceCache,
+}: CommandPaletteContext): string[] {
   const tokenToAutocomplete = tokens[tokens.length - 1];
   switch (tokens.length) {
     case 1: // type
       if ('customresourcedefinitions'.startsWith(tokenToAutocomplete)) {
-        return 'customresourcedefinitions ';
+        return ['customresourcedefinitions '];
       } else if ('crds'.startsWith(tokenToAutocomplete)) {
-        return 'crds';
+        return ['crds'];
       }
-      break;
+      return [];
     case 2: // name
       const crdNames = (resourceCache['customresourcedefinitions'] || []).map(
         n => n.metadata.name,
@@ -26,7 +31,7 @@ function getAutocompleteEntries({ tokens, resourceCache }) {
   }
 }
 
-function getSuggestions({ tokens, resourceCache }) {
+function getSuggestions({ tokens, resourceCache }: CommandPaletteContext) {
   return getSuggestionsForSingleResource({
     tokens,
     resources: resourceCache['customresourcedefinitions'] || [],
@@ -34,7 +39,8 @@ function getSuggestions({ tokens, resourceCache }) {
   });
 }
 
-function makeListItem(item, t) {
+function makeListItem(item: K8sResource, context: CommandPaletteContext) {
+  const { t, activeClusterName, navigate } = context;
   const name = item.metadata.name;
 
   return {
@@ -42,18 +48,18 @@ function makeListItem(item, t) {
     category:
       t('configuration.title') + ' > ' + t('custom-resource-definitions.title'),
     query: `crds ${name}`,
-    onActivate: () =>
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate(`/customresourcedefinitions/details/${name}`),
+    onActivate: () => {
+      const pathname = `/cluster/${activeClusterName}/customresourcedefinitions/${name}`;
+      navigate(pathname);
+    },
   };
 }
 
-function concernsCRDs({ tokens }) {
+function concernsCRDs({ tokens }: CommandPaletteContext) {
   return crdResourceTypes.includes(tokens[0]);
 }
 
-async function fetchCRDs(context) {
+async function fetchCRDs(context: CommandPaletteContext) {
   if (!concernsCRDs(context)) {
     return;
   }
@@ -70,9 +76,9 @@ async function fetchCRDs(context) {
   }
 }
 
-function createResults(context) {
+function createResults(context: CommandPaletteContext): Result[] {
   if (!concernsCRDs(context)) {
-    return;
+    return [];
   }
 
   const { resourceCache, tokens, t } = context;
@@ -93,6 +99,7 @@ function createResults(context) {
 
   const crds = resourceCache['customresourcedefinitions'];
   if (typeof crds !== 'object') {
+    //@ts-ignore  TODO: handle typein Result
     return [linkToList, { type: LOADING_INDICATOR }];
   }
 
@@ -102,18 +109,20 @@ function createResults(context) {
       item.metadata.name.includes(name),
     );
     if (matchedByName) {
-      return matchedByName.map(item => makeListItem(item, t));
+      return matchedByName.map(item => makeListItem(item, context));
     }
-    return null;
+    return [];
   } else {
-    return [linkToList, ...crds.map(item => makeListItem(item, t))];
+    return [linkToList, ...crds.map(item => makeListItem(item, context))];
   }
 }
 
-export const crdHandler = {
+export const crdHandler: Handler = {
   getAutocompleteEntries,
   getSuggestions,
   fetchResources: fetchCRDs,
   createResults,
-  getNavigationHelp: () => [['customresourcedefinitions', ['crds']]],
+  getNavigationHelp: () => [
+    { name: 'customresourcedefinitions', aliases: ['crds'] },
+  ],
 };

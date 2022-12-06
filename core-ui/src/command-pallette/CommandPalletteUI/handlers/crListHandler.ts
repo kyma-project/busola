@@ -10,7 +10,7 @@ function getAutocompleteEntries({
   switch (tokens.length) {
     case 1: // type
       if ('customresources'.startsWith(tokenToAutocomplete)) {
-        return ['customresources'];
+        return ['customresources '];
       }
       return [];
     case 2: // name

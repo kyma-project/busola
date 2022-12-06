@@ -17,7 +17,7 @@ function getAutocompleteEntries({
   switch (tokens.length) {
     case 1: // type
       if ('pods'.startsWith(tokenToAutocomplete)) {
-        return ['pods'];
+        return ['pods '];
       }
       return [];
     case 2: // pod name
