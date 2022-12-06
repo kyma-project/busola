@@ -28,7 +28,6 @@ export type CommandPaletteContext = {
 type CRHelpEntries = {
   name: string;
   shortNames: string[];
-  description: string; // todo
 };
 
 type OthersHelpEntries = {

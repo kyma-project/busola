@@ -1,15 +1,43 @@
-import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
+import { NavigateFunction } from 'react-router-dom';
 import { prettifyKind } from 'shared/utils/helpers';
-import { LOADING_INDICATOR } from '../useSearchResults';
+import { NavNode } from 'state/types';
+import { K8sResource } from 'types';
+import {
+  CommandPaletteContext,
+  Handler,
+  LOADING_INDICATOR,
+  Result,
+} from '../types';
 import {
   autocompleteForResources,
   findNavigationNode,
-  getSuggestion,
+  makeSuggestion,
 } from './helpers';
 
+interface CustomResourceDefinition extends K8sResource {
+  spec: {
+    group: string;
+    scope: 'Cluster' | 'Namespaced';
+    names: {
+      kind: string;
+      plural: string;
+      shortNames?: string[];
+      singular: string;
+    };
+    versions: [
+      {
+        name: string;
+        served: boolean;
+      },
+    ];
+  };
+}
+
 // get all possible aliases for a cr
-function getCRAliases(crds) {
+function getCRAliases(
+  crds: CustomResourceDefinition[],
+): { crd: CustomResourceDefinition; aliases: string[] }[] {
   return crds.map(crd => {
     const names = crd.spec.names;
     // there's no "fn" shortname for function, why?
@@ -28,40 +56,67 @@ function getCRAliases(crds) {
   });
 }
 
-function getResourceKey(crd, namespace) {
+function getResourceKey(
+  crd: CustomResourceDefinition,
+  namespace: string | null,
+) {
   const { names, scope } = crd.spec;
   const isNamespaced = scope === 'Namespaced';
 
   return isNamespaced ? `${namespace}/${names.plural}` : names.plural;
 }
 
-function findMatchingNode(crd, context) {
+function findMatchingNode(
+  crd: CustomResourceDefinition,
+  context: CommandPaletteContext,
+) {
   const { namespaceNodes, clusterNodes } = context;
   const resourceType = crd.spec.names.plural;
 
   return findNavigationNode(resourceType, [...namespaceNodes, ...clusterNodes]);
 }
 
-function navigateTo({ matchingNode, namespace, crd, crName = '' }) {
-  const linkManager = LuigiClient.linkManager().fromContext('cluster');
+function navigateTo({
+  matchingNode,
+  namespace,
+  navigate,
+  activeClusterName,
+  crd,
+  crName = '',
+}: {
+  matchingNode: NavNode;
+  namespace: string | null;
+  navigate: NavigateFunction;
+  activeClusterName: string;
+  crd: CustomResourceDefinition;
+  crName?: string;
+}) {
   const isNamespaced = crd.spec.scope === 'Namespaced';
 
+  const clusterPath = `/cluster/${activeClusterName}`;
   const path = matchingNode
     ? `${matchingNode.pathSegment}/${crName ? `details/${crName}` : ''}` // custom nav node
     : `customresources/${crd.metadata.name}/${crName}`; // generic route
 
   if (isNamespaced) {
-    linkManager.navigate(`namespaces/${namespace}/${path}`);
+    navigate(`${clusterPath}/namespaces/${namespace}/${path}`);
   } else {
-    linkManager.navigate(path);
+    navigate(clusterPath + '/' + path);
   }
 }
 
-function getAutocompleteEntries({ tokens, resourceCache, namespace }) {
-  const crds = resourceCache['customresourcedefinitions'] || [];
+function getAutocompleteEntries({
+  tokens,
+  resourceCache,
+  namespace,
+}: CommandPaletteContext) {
+  const crds: CustomResourceDefinition[] =
+    (resourceCache[
+      'customresourcedefinitions'
+    ] as CustomResourceDefinition[]) || [];
 
   const crdAliases = getCRAliases(crds);
-  const suggestedALias = getSuggestion(
+  const suggestedALias = makeSuggestion(
     tokens[0],
     crdAliases.flatMap(a => a.aliases),
   );
@@ -74,17 +129,27 @@ function getAutocompleteEntries({ tokens, resourceCache, namespace }) {
   return autocompleteForResources({
     tokens,
     resources,
-    resourceTypes: crdAliases,
+    resourceTypes: crdAliases.map(({ crd, aliases }) => ({
+      resourceType: crd.spec.names.plural,
+      aliases,
+    })),
   });
 }
 
-function getSuggestions({ tokens, resourceCache, namespace }) {
-  const crds = resourceCache['customresourcedefinitions'] || [];
+function getSuggestion({
+  tokens,
+  resourceCache,
+  namespace,
+}: CommandPaletteContext): string | undefined {
+  const crds =
+    (resourceCache[
+      'customresourcedefinitions'
+    ] as CustomResourceDefinition[]) || [];
 
   const [type, name] = tokens;
 
   const crdAliases = getCRAliases(crds);
-  const suggestedALias = getSuggestion(
+  const suggestedALias = makeSuggestion(
     type,
     crdAliases.flatMap(a => a.aliases),
   );
@@ -99,14 +164,14 @@ function getSuggestions({ tokens, resourceCache, namespace }) {
     const resourceNames = (resourceCache[resourceKey] || []).map(
       n => n.metadata.name,
     );
-    const suggestedName = getSuggestion(name, resourceNames);
+    const suggestedName = makeSuggestion(name, resourceNames);
     return `${suggestedType || type} ${suggestedName || name}`;
   } else {
     return suggestedType;
   }
 }
 
-async function fetchResources(context) {
+async function fetchResources(context: CommandPaletteContext) {
   const {
     fetch,
     updateResourceCache,
@@ -115,7 +180,9 @@ async function fetchResources(context) {
     namespace,
   } = context;
 
-  let crds = resourceCache['customresourcedefinitions'];
+  let crds: CustomResourceDefinition[] = resourceCache[
+    'customresourcedefinitions'
+  ] as CustomResourceDefinition[];
   if (!crds) {
     try {
       const response = await fetch(
@@ -137,7 +204,7 @@ async function fetchResources(context) {
 
   if (!resourceCache[resourceKey]) {
     const groupVersion = `/apis/${crd.spec.group}/${
-      crd.spec.versions.find(v => v.served).name
+      crd.spec.versions.find(v => v.served)!.name // "served" version will always be here
     }`;
     const isNamespaced = crd.spec.scope === 'Namespaced';
     const namespacePart = isNamespaced ? `namespaces/${namespace}/` : '';
@@ -155,35 +222,59 @@ async function fetchResources(context) {
   }
 }
 
-function concernsCRDs({ resourceCache }) {
+function concernsCRDs({ resourceCache }: CommandPaletteContext) {
   return !!resourceCache['customresourcedefinitions'];
 }
 
-function makeListItem({ crd, item, category, context }) {
+function makeListItem({
+  crd,
+  item,
+  category,
+  context,
+}: {
+  crd: CustomResourceDefinition;
+  item: K8sResource;
+  category: string;
+  context: CommandPaletteContext;
+}) {
   const name = item.metadata.name;
-  const { namespace } = context;
-  const matchingNode = findMatchingNode(crd, context);
+  const { namespace, activeClusterName, navigate } = context;
+  const matchingNode = findMatchingNode(crd, context)!;
 
   return {
     label: name,
     query: `${crd.spec.names.plural} ${name}`,
     category,
     onActivate: () =>
-      navigateTo({ matchingNode, namespace, crd, crName: name }),
+      navigateTo({
+        matchingNode,
+        namespace,
+        navigate,
+        activeClusterName: activeClusterName!,
+        crd,
+        crName: name,
+      }),
   };
 }
 
-function createResults(context) {
+function createResults(context: CommandPaletteContext): Result[] | null {
   if (!concernsCRDs(context)) {
-    return;
+    return null;
   }
 
-  const { resourceCache, tokens, namespace, t } = context;
+  const {
+    resourceCache,
+    tokens,
+    namespace,
+    t,
+    navigate,
+    activeClusterName,
+  } = context;
 
-  const crd = getCRAliases(resourceCache['customresourcedefinitions']).find(c =>
-    c.aliases.find(alias => alias === tokens[0]),
-  )?.crd;
-  if (!crd) return;
+  const crd = getCRAliases(
+    resourceCache['customresourcedefinitions'] as CustomResourceDefinition[],
+  ).find(c => c.aliases.find(alias => alias === tokens[0]))?.crd;
+  if (!crd) return null;
 
   const listLabel = t('command-palette.results.list-of', {
     resourceType: pluralize(prettifyKind(crd.spec.names.kind)),
@@ -192,6 +283,8 @@ function createResults(context) {
   const isNamespaced = crd.spec.scope === 'Namespaced';
 
   const matchingNode = findMatchingNode(crd, context);
+
+  if (!matchingNode) return null;
 
   const defaultCategory = isNamespaced
     ? t('command-palette.crs.namespaced')
@@ -205,27 +298,45 @@ function createResults(context) {
     label: listLabel,
     category,
     query: tokens[0],
-    onActivate: () => navigateTo({ matchingNode, namespace, crd }),
+    onActivate: () =>
+      navigateTo({
+        matchingNode,
+        namespace,
+        navigate,
+        activeClusterName: activeClusterName!,
+        crd,
+      }),
+  };
+
+  const notFound: Result = {
+    type: LOADING_INDICATOR,
+    label: '',
+    query: '',
+    onActivate: () => {},
   };
 
   const resources = resourceCache[getResourceKey(crd, namespace)];
   const listItems = resources
     ? resources.map(item => makeListItem({ crd, item, category, context }))
-    : [{ type: LOADING_INDICATOR }];
+    : [notFound];
 
   return [linkToList, ...listItems];
 }
 
-function getCRsHelp({ resourceCache }) {
-  return (resourceCache['customresourcedefinitions'] || []).map(t => ({
+function getCRsHelp({ resourceCache }: CommandPaletteContext) {
+  return (
+    (resourceCache[
+      'customresourcedefinitions'
+    ] as CustomResourceDefinition[]) || []
+  ).map(t => ({
     name: t.metadata.name,
     shortNames: t.spec.names.shortNames || [t.spec.names.singular],
   }));
 }
 
-export const crHandler = {
+export const crHandler: Handler = {
   getAutocompleteEntries,
-  getSuggestions,
+  getSuggestion,
   fetchResources,
   createResults,
   getCRsHelp,

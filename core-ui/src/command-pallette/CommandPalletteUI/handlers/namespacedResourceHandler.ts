@@ -93,7 +93,6 @@ async function fetchNamespacedResource(context: CommandPaletteContext) {
     updateResourceCache,
   } = context;
   const apiPath = getApiPathForQuery(tokens, namespaceNodes, resourceTypes);
-  console.log(apiPath);
   if (!apiPath) {
     return;
   }
