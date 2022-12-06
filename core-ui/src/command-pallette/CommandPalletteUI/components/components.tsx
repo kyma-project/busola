@@ -114,7 +114,7 @@ export function CommandPalletteHelp({
           ))}
         </tbody>
       </table>
-      {helpEntries.crds.length && (
+      {helpEntries.crds.length ? (
         <>
           <h1 className="help-header">
             {t('command-palette.help.crd-aliases')}
@@ -130,7 +130,7 @@ export function CommandPalletteHelp({
             </tbody>
           </table>
         </>
-      )}
+      ) : null}
     </div>
   );
 }
