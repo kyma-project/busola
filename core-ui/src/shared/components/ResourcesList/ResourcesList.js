@@ -65,6 +65,7 @@ ResourcesList.propTypes = {
   description: PropTypes.node,
   readOnly: PropTypes.bool,
   navigateFn: PropTypes.func,
+  customUrl: PropTypes.string,
   testid: PropTypes.string,
   omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
   resourceUrlPrefix: PropTypes.string,
@@ -160,6 +161,7 @@ export function ResourceListRenderer({
   listHeaderActions,
   readOnly,
   navigateFn,
+  customUrl,
   testid,
   omitColumnsIds = ['namespace'],
   customListActions = [],
@@ -216,6 +218,7 @@ export function ResourceListRenderer({
   );
 
   const linkTo = entry => {
+    if (customUrl) return customUrl(entry);
     // TODO fix when details are working
     // if (navigateFn) return navigateFn(entry);
     // if (fixedPath) return navigateToResource(entry);

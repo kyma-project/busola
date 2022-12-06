@@ -6,9 +6,9 @@ import pluralize from 'pluralize';
 import { GroupingListPage } from './GroupingListPage';
 import { useUrl } from 'hooks/useUrl';
 
-export default function CustomResourcesByGroup({ namespace }) {
+export default function CustomResourcesByGroup() {
   const { t } = useTranslation();
-  const { clusterUrl, scopedUrl } = useUrl();
+  const { namespace, clusterUrl, scopedUrl } = useUrl();
   const description = (
     <Trans i18nKey="custom-resources.description">
       <Link
@@ -28,9 +28,7 @@ export default function CustomResourcesByGroup({ namespace }) {
       description={description}
       filter={crd => crd.spec.scope === (namespace ? 'Namespaced' : 'Cluster')}
       resourceListProps={{
-        navigateFn: crd => {
-          scopedUrl('/customresources/' + crd.metadata.name);
-        },
+        customUrl: crd => scopedUrl(`customresources/${crd.metadata.name}`),
         nameSelector: entry => pluralize(entry?.spec.names.kind || ''),
         readOnly: true,
       }}
