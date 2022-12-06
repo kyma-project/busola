@@ -119,15 +119,11 @@ function sendNamespaceSwitchMessage(
   currentNamespace: string | null,
   navigate: NavigateFunction,
 ) {
-  console.log({ newNamespace });
-  console.log({ currentNamespace });
-  console.log('xd');
   if (!currentNamespace) return;
   const newPath = window.location.pathname.replace(
     `/namespaces/${currentNamespace}`,
     `/namespaces/${newNamespace}`,
   );
-  console.log(newPath);
   navigate(newPath);
 }
 
