@@ -774,6 +774,7 @@ events:
 extensibility:
   configuration-error: 'Configuration error: {{error}}'
   description: <0>Extension</0> allows you to create a separate dedicated user interface (UI) page for your CustomResourceDefinition (CRD).
+  edit-section: Edit {{section}}
   error: Your extension configuration is incorrect.
   message:
     old-version: There is a newer version of the extensibility configuration. Please migrate to the newest version.

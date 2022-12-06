@@ -2,18 +2,20 @@ import React from 'react';
 import { Link } from 'shared/components/Link/Link';
 import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
-import { LayoutPanel, MessageStrip } from 'fundamental-react';
+import { LayoutPanel, MessageStrip, Button } from 'fundamental-react';
 import { useParams } from 'react-router-dom';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
-import { Button } from 'fundamental-react';
 import { useFeature } from 'shared/hooks/useFeature';
 import { useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { useNotification } from 'shared/contexts/NotificationContext';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
+import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
+import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
+import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 import {
   formatCurrentVersion,
@@ -22,6 +24,7 @@ import {
   migrateToLatest,
   getMigrationFunctions,
 } from '../../components/Extensibility/migration';
+import { SectionEditor } from './SectionEditor';
 
 import { BusolaExtensionEdit } from './BusolaExtensionEdit';
 import { SECTIONS } from './helpers';
@@ -29,28 +32,13 @@ import { EXTENSION_VERSION_LABEL } from './constants';
 
 export function BusolaExtensionDetails(props) {
   const { t } = useTranslation();
+  const { extensibilitySchemas } = useMicrofrontendContext();
   const { namespace, name } = useParams();
 
   const resourceUrl = `/api/v1/namespaces/${namespace}/configmaps/${name}`;
 
   const updateResourceMutation = useUpdate(resourceUrl);
   const notification = useNotification();
-
-  const BusolaExtensionEditor = resource => {
-    const { data } = resource;
-    return (
-      <>
-        {SECTIONS.map(key => (
-          <ReadonlyEditorPanel
-            editorProps={{ language: 'yaml' }}
-            title={t(`extensibility.sections.${key}`)}
-            value={data[key]}
-            key={key + JSON.stringify(data[key])}
-          />
-        ))}
-      </>
-    );
-  };
 
   const updateBusolaExtension = async (newBusolaExtension, configmap) => {
     try {
@@ -71,6 +59,60 @@ export function BusolaExtensionDetails(props) {
       });
       throw e;
     }
+  };
+
+  const BusolaExtensionEditor = resource => {
+    const { data } = resource;
+    return (
+      <>
+        {SECTIONS.map(key => (
+          <ReadonlyEditorPanel
+            editorProps={{ language: 'yaml' }}
+            title={t(`extensibility.sections.${key}`)}
+            value={data[key]}
+            key={key + JSON.stringify(data[key])}
+            actions={[
+              <ModalWithForm
+                title={t('extensibility.edit-section', {
+                  section: t(`extensibility.sections.${key}`),
+                })}
+                modalOpeningComponent={
+                  <Button className="fd-margin-end--tiny" option="emphasized">
+                    {t('extensibility.edit-section', {
+                      section: t(`extensibility.sections.${key}`),
+                    })}
+                  </Button>
+                }
+                confirmText={t('common.buttons.update')}
+                id={`edit-resource-modal`}
+                className="modal-size--l create-resource-modal"
+                renderForm={props => (
+                  <ErrorBoundary>
+                    <SectionEditor
+                      {...props}
+                      onlyYaml={!extensibilitySchemas[key]}
+                      data={data[key]}
+                      schema={extensibilitySchemas[key]}
+                      resource={data}
+                      onSubmit={newData => {
+                        const newResource = {
+                          ...resource,
+                          data: {
+                            ...data,
+                            [key]: newData,
+                          },
+                        };
+                        updateBusolaExtension(newResource, resource);
+                      }}
+                    />
+                  </ErrorBoundary>
+                )}
+              />,
+            ]}
+          />
+        ))}
+      </>
+    );
   };
 
   const ExtensibilityVersion = configmap => {

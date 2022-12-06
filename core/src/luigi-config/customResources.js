@@ -131,14 +131,28 @@ export async function getCustomResources(authData) {
   return customResources[clusterName];
 }
 
-export async function getExtensibilitySchemas() {
+export async function getExtensibilitySchema(id) {
   const cacheBuster = '?cache-buster=' + Date.now();
 
   const detailsResponse = await fetch(
-    `/assets/customResources/schema-details.json${cacheBuster}`,
+    `/assets/customResources/schema-${id}.yaml${cacheBuster}`,
   );
-  const details = await detailsResponse.json();
+  const text = await detailsResponse.text();
+  return await jsyaml.load(text);
+}
+
+export async function getExtensibilitySchemas() {
+  const details = await getExtensibilitySchema('details');
+  const list = await getExtensibilitySchema('list');
+  const general = await getExtensibilitySchema('general');
+  const form = await getExtensibilitySchema('form');
+  // const dataSources = await getExtensibilitySchema('dataSources');
+
   return {
     details,
+    list,
+    general,
+    form,
+    // dataSources,
   };
 }
