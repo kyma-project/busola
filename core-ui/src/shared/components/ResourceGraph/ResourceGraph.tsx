@@ -15,13 +15,23 @@ import { DetailsCard } from './DetailsCard/DetailsCard';
 import './ResourceGraph.scss';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useFeature } from 'hooks/useFeature';
+import { K8sResource } from 'types';
+import { ResourceGraphConfig } from './types';
 
-function ResourceGraph({ resource, config }) {
+function ResourceGraph({
+  resource,
+  config,
+}: {
+  resource: K8sResource;
+  config: ResourceGraphConfig;
+}) {
   const { t } = useTranslation();
   const [dotSrc, setDotSrc] = useState('');
   const [isReady, setReady] = useState(false);
-  const [graphEl, setGraphEl] = useState(null);
-  const [clickedResource, setClickedResource] = useState(null);
+  const [graphEl, setGraphEl] = useState<HTMLElement | null>(null);
+  const [clickedResource, setClickedResource] = useState<K8sResource | null>(
+    null,
+  );
   const isTabletOrWider = useMinWidth(TABLET);
   const { hasBeenInView } = useIntersectionObserver(graphEl, {
     skip: !isTabletOrWider,
@@ -37,14 +47,12 @@ function ResourceGraph({ resource, config }) {
   const onAllLoaded = () => {
     const initEventListeners = () => {
       for (const resourcesOfKind of Object.keys(resourcesStore.current)) {
-        for (const res of resourcesStore.current[resourcesOfKind]) {
+        for (const res of resourcesStore.current[resourcesOfKind] || []) {
           const node = document.getElementById(res.metadata.uid);
 
           if (!node) continue;
 
-          node.onclick = () => {
-            setClickedResource(res);
-          };
+          node.onclick = () => setClickedResource(res);
         }
       }
     };
@@ -57,7 +65,11 @@ function ResourceGraph({ resource, config }) {
     setReady(true);
   };
 
-  const [resourcesStore, startedLoading, startLoading] = useRelatedResources({
+  const {
+    store: resourcesStore,
+    startedLoading,
+    startLoading,
+  } = useRelatedResources({
     resource,
     config,
     events: {
@@ -84,9 +96,7 @@ function ResourceGraph({ resource, config }) {
   return (
     <LayoutPanel
       className="fd-margin--md resource-graph"
-      ref={node => {
-        setGraphEl(node);
-      }}
+      ref={(node: any) => setGraphEl(node)}
     >
       <LayoutPanel.Header>
         <LayoutPanel.Head title={t('resource-graph.title')} />

@@ -1,4 +1,5 @@
 import React from 'react';
+import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'HorizontalPodAutoscalers';
@@ -12,7 +13,7 @@ export const Details = React.lazy(() =>
   import('./HorizontalPodAutoscalerDetails'),
 );
 
-export const resourceGraphConfig = (t, context) => ({
+export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,
   networkFlowLevel: -1,
 });

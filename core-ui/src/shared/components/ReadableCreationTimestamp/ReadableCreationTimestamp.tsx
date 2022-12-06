@@ -1,15 +1,15 @@
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 
-function getDayDifference(time1, time2) {
-  return (time1 - time2) / (24 * 60 * 60 * 1000);
+function getDayDifference(time1: Date, time2: Date) {
+  return (time1.getTime() - time2.getTime()) / (24 * 60 * 60 * 1000);
 }
 
-function getHourDifference(time1, time2) {
-  return (time1 - time2) / (60 * 60 * 1000);
+function getHourDifference(time1: Date, time2: Date) {
+  return (time1.getTime() - time2.getTime()) / (60 * 60 * 1000);
 }
 
-function getMinuteDifference(time1, time2) {
-  return (time1 - time2) / (60 * 1000);
+function getMinuteDifference(time1: Date, time2: Date) {
+  return (time1.getTime() - time2.getTime()) / (60 * 1000);
 }
 
 const rtf = new Intl.RelativeTimeFormat('en', {
@@ -18,7 +18,7 @@ const rtf = new Intl.RelativeTimeFormat('en', {
   style: 'long', // other values: "short" or "narrow"
 });
 
-export const ReadableCreationTimestamp = ({ timestamp }) => {
+export const getReadableTimestamp = (timestamp: string): string => {
   if (!timestamp) return EMPTY_TEXT_PLACEHOLDER;
 
   const now = new Date();
@@ -32,3 +32,9 @@ export const ReadableCreationTimestamp = ({ timestamp }) => {
 
   return rtf.format(Math.ceil(getMinuteDifference(createdAt, now)), 'minute');
 };
+
+export const ReadableCreationTimestamp = ({
+  timestamp,
+}: {
+  timestamp: string;
+}): JSX.Element => <>{getReadableTimestamp(timestamp)}</>;

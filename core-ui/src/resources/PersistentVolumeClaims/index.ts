@@ -1,4 +1,5 @@
 import React from 'react';
+import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'PersistentVolumeClaims';
@@ -12,7 +13,7 @@ export const Details = React.lazy(() =>
   import('./PersistentVolumeClaimDetails'),
 );
 
-export const resourceGraphConfig = (t, context) => ({
+export const resourceGraphConfig = (): ResourceRelationConfig => ({
   depth: 1,
   networkFlowLevel: 1,
   relations: [

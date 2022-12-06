@@ -1,4 +1,5 @@
 import React from 'react';
+import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'ClusterRoles';
@@ -10,7 +11,7 @@ export const category = predefinedCategories.configuration;
 export const List = React.lazy(() => import('./ClusterRoleList'));
 export const Details = React.lazy(() => import('./ClusterRoleDetails'));
 
-export const resourceGraphConfig = (t, context) => ({
+export const resourceGraphConfig = (): ResourceRelationConfig => ({
   depth: 2,
   relations: [
     {

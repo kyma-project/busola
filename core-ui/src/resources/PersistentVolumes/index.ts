@@ -1,4 +1,5 @@
 import React from 'react';
+import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'PersistentVolumes';
@@ -10,7 +11,7 @@ export const category = predefinedCategories.storage;
 export const List = React.lazy(() => import('./PersistentVolumeList'));
 export const Details = React.lazy(() => import('./PersistentVolumeDetails'));
 
-export const resourceGraphConfig = (t, context) => ({
+export const resourceGraphConfig = (): ResourceRelationConfig => ({
   depth: 1,
   relations: [
     {

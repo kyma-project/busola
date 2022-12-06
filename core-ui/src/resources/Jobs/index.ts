@@ -1,4 +1,5 @@
 import React from 'react';
+import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { matchByOwnerReference } from 'shared/utils/helpers';
 import { predefinedCategories } from 'state/navigation/categories';
 
@@ -12,7 +13,7 @@ export const category = predefinedCategories.workloads;
 export const List = React.lazy(() => import('./JobList'));
 export const Details = React.lazy(() => import('./JobDetails'));
 
-export const resourceGraphConfig = (t, context) => ({
+export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,
   networkFlowLevel: -1,
   depth: 1,

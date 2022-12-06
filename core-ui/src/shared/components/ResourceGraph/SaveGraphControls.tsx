@@ -1,9 +1,14 @@
-import React from 'react';
 import { saveAs } from 'file-saver';
 import { Button, Icon } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
-export function SaveGraphControls({ content, name }) {
+export function SaveGraphControls({
+  content,
+  name,
+}: {
+  content: string;
+  name: string;
+}) {
   const { t } = useTranslation();
   return (
     <Button

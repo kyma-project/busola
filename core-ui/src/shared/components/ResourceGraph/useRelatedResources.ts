@@ -1,33 +1,37 @@
-import { useEffect, useRef, useState } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import pluralize from 'pluralize';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import {
   findRelatedResources,
+  getApiPath2Todo,
   match,
 } from 'shared/components/ResourceGraph/buildGraph/helpers';
 import { useRecoilValue } from 'recoil';
 import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSelector';
+import { NavNode } from 'state/types';
+import {
+  IHaveNoIdeaForNameHere,
+  ResourceGraphConfig,
+  ResourceGraphContext,
+  ResourceGraphEvents,
+  ResourceGraphStore,
+} from './types';
+import { K8sResource } from 'types';
 
-function getApiPath(resource, nodes) {
-  const resourceType = pluralize(resource.kind).toLowerCase();
-
-  const node = nodes.find(n => n.resourceType === resourceType);
-  if (!node) return undefined;
-
-  if (node.apiGroup) {
-    return `/apis/${node.apiGroup}/${node.apiVersion}`;
-  } else {
-    return `/api/${node.apiVersion}`;
-  }
-}
+type getNamespacePartProps = {
+  resourceToFetch: any; //todo
+  currentNamespace: string | null | undefined;
+  namespaceNodes: NavNode[];
+  clusterNodes: NavNode[];
+};
 
 function getNamespacePart({
   resourceToFetch,
   currentNamespace,
   namespaceNodes,
   clusterNodes,
-}) {
-  const findByResourceType = resourceType => node =>
+}: getNamespacePartProps) {
+  const findByResourceType = (resourceType: string) => (node: NavNode) =>
     node.resourceType === resourceType || node.pathSegment === resourceType;
 
   const namespacedNode = namespaceNodes.find(
@@ -51,14 +55,19 @@ function getNamespacePart({
 }
 
 // BFS
-async function cycle(store, depth, config, context) {
+async function cycle(
+  store: MutableRefObject<ResourceGraphStore>,
+  depth: number,
+  config: ResourceGraphConfig,
+  context: ResourceGraphContext,
+) {
   const { fetch, namespaceNodes, clusterNodes, namespace, events } = context;
   const kindsToHandle = Object.keys(store.current);
 
-  const resourcesToFetch = [];
+  const resourcesToFetch: IHaveNoIdeaForNameHere[] = [];
   for (const kind of kindsToHandle) {
     // skip fetching relations if there's no original resource
-    if (store.current[kind].length === 0) {
+    if (store.current[kind]?.length === 0) {
       continue;
     }
     for (const relatedResource of findRelatedResources(kind, config)) {
@@ -70,7 +79,7 @@ async function cycle(store, depth, config, context) {
       if (!alreadyInStore && !alreadyToFetch) {
         // resource does not exist in store
         const resourceType = pluralize(relatedResource.kind.toLowerCase());
-        const apiPath = getApiPath(relatedResource, [
+        const apiPath = getApiPath2Todo(relatedResource, [
           ...namespaceNodes,
           ...clusterNodes,
         ]);
@@ -88,7 +97,7 @@ async function cycle(store, depth, config, context) {
     }
   }
 
-  const fetchResource = async resource => {
+  const fetchResource = async (resource: IHaveNoIdeaForNameHere) => {
     const namespacePart = getNamespacePart({
       resourceToFetch: resource,
       currentNamespace: namespace,
@@ -104,13 +113,15 @@ async function cycle(store, depth, config, context) {
 
       const response = await fetch(url);
 
-      const allResourcesForKind = (await response.json()).items.map(item => ({
-        ...item,
-        kind: resource.kind, // add kind, as it's not present on list call
-      }));
+      const allResourcesForKind = (await response.json()).items.map(
+        (item: K8sResource) => ({
+          ...item,
+          kind: resource.kind, // add kind, as it's not present on list call
+        }),
+      );
 
-      const filterOnlyRelated = possiblyRelatedResource =>
-        store.current[resource.fromKind].some(oR =>
+      const filterOnlyRelated = (possiblyRelatedResource: K8sResource) =>
+        store.current[resource.fromKind]!.some(oR =>
           match(possiblyRelatedResource, oR, config),
         );
 
@@ -132,7 +143,23 @@ async function cycle(store, depth, config, context) {
   }
 }
 
-export function useRelatedResources({ resource, config, events }) {
+type useRelatedResourcesProps = {
+  resource: K8sResource;
+  config: ResourceGraphConfig;
+  events: ResourceGraphEvents;
+};
+
+type useRelatedResourcesReturnValue = {
+  store: MutableRefObject<ResourceGraphStore>;
+  startedLoading: boolean;
+  startLoading: () => void;
+};
+
+export function useRelatedResources({
+  resource,
+  config,
+  events,
+}: useRelatedResourcesProps): useRelatedResourcesReturnValue {
   const clusterNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
     node => !node.namespaced,
   );
@@ -141,9 +168,9 @@ export function useRelatedResources({ resource, config, events }) {
   );
   const [startedLoading, setStartedLoading] = useState(false);
   const fetch = useSingleGet();
-  const store = useRef({});
+  const store = useRef<ResourceGraphStore>({});
 
-  const kind = resource.kind;
+  const kind = resource.kind!;
   const { name, namespace } = resource.metadata;
 
   useEffect(() => {
@@ -167,5 +194,5 @@ export function useRelatedResources({ resource, config, events }) {
   }, [kind, name, namespace, startedLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const startLoading = () => setStartedLoading(true);
-  return [store, startedLoading, startLoading];
+  return { store, startedLoading, startLoading };
 }

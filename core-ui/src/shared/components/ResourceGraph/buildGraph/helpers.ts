@@ -1,15 +1,17 @@
 import _ from 'lodash';
 import pluralize from 'pluralize';
-import { getApiPath as getApiPathFromNavigation } from 'shared/utils/helpers';
+import { NavNode } from 'state/types';
+import { K8sResource } from 'types';
+import { RelationResource, ResourceGraphConfig } from '../types';
 
-export function wrap(str) {
-  return _.chunk(str.split(''), 15)
+export function wrap(str: string, characterCount = 15) {
+  return _.chunk(str.split(''), characterCount)
     .map(s => s.join(''))
     .join('\n');
 }
 
-export function makeNode(resource) {
-  const { kind, metadata } = resource;
+export function makeNode(resource: K8sResource) {
+  const { kind = '', metadata } = resource;
   const { name, uid } = metadata;
   // first is for rendering engine, second goes into actual DOM element
   return `"${uid}" [id="${uid}" class="${kind.toLowerCase()}" margin="0.2,0.2" label="${kind}\n${wrap(
@@ -18,8 +20,8 @@ export function makeNode(resource) {
 }
 
 // cluster is a subgraph - the id needs to be prefixed with 'cluster'
-export function makeCluster(resource, content) {
-  const { kind } = resource;
+export function makeCluster(resource: K8sResource, content: string) {
+  const { kind = '' } = resource;
   const { uid, name } = resource.metadata;
   return `subgraph "cluster_${uid}" {
     id="${uid}"
@@ -31,15 +33,19 @@ export function makeCluster(resource, content) {
 
 // nodes in the same rank should be on the same y position
 // {rank=same; "id1"; "id2"...}
-export function makeRank(resources) {
+export function makeRank(resources: K8sResource[]) {
   return `{rank=same; ${resources
     .map(resource => `"${resource.metadata.uid}";`)
     .join(' ')}}`;
 }
 
-export function match(resourceA, resourceB, config) {
-  const kindA = resourceA.kind;
-  const kindB = resourceB.kind;
+export function match(
+  resourceA: K8sResource,
+  resourceB: K8sResource,
+  config: ResourceGraphConfig,
+) {
+  const kindA = resourceA.kind!;
+  const kindB = resourceB.kind!;
 
   let matcher = null;
   const relationA = config[kindA]?.relations?.find(
@@ -67,7 +73,10 @@ export function match(resourceA, resourceB, config) {
   return false;
 }
 
-export function findRelatedResources(originalResourceKind, config) {
+export function findRelatedResources(
+  originalResourceKind: string,
+  config: ResourceGraphConfig,
+) {
   const relations = (config[originalResourceKind]?.relations || []).map(
     ({ resource }) => resource,
   );
@@ -75,9 +84,9 @@ export function findRelatedResources(originalResourceKind, config) {
   for (const [otherKind, otherConfig] of Object.entries(config)) {
     if (otherKind === originalResourceKind) continue;
 
-    for (const otherRelation of otherConfig.relations || []) {
+    for (const otherRelation of otherConfig?.relations || []) {
       if (otherRelation.resource.kind === originalResourceKind) {
-        let otherResource = structuredClone(config[otherKind].resource); // clone the resource since it's an immutable Recoil objects
+        let otherResource = structuredClone(config[otherKind]!.resource); // clone the resource since it's an immutable Recoil objects
         if (otherRelation.resource.namespace !== undefined) {
           otherResource.namespace = null;
         }
@@ -92,7 +101,10 @@ export function findRelatedResources(originalResourceKind, config) {
   );
 }
 
-export function getApiPath(relatedResource, nodes) {
+export function getApiPath(
+  relatedResource: RelationResource,
+  nodes: NavNode[],
+) {
   // check if (version, group) are defined
   const { version, group } = relatedResource;
   if (version && group) {
@@ -101,6 +113,18 @@ export function getApiPath(relatedResource, nodes) {
   }
 
   // fallback to navigation nodes
-  const resourceType = pluralize(relatedResource.kind.toLowerCase());
-  return getApiPathFromNavigation(resourceType, nodes);
+  return getApiPath2Todo(relatedResource, nodes);
+}
+
+export function getApiPath2Todo(resource: { kind: string }, nodes: NavNode[]) {
+  const resourceType = pluralize(resource.kind).toLowerCase();
+
+  const node = nodes.find(n => n.resourceType === resourceType);
+  if (!node) return undefined;
+
+  if (node.apiGroup) {
+    return `/apis/${node.apiGroup}/${node.apiVersion}`;
+  } else {
+    return `/api/${node.apiVersion}`;
+  }
 }

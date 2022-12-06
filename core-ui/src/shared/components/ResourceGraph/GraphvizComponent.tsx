@@ -1,7 +1,13 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { Graphviz } from 'graphviz-react';
 
-function GraphvizComponent({ dotSrc, isReady }) {
+function GraphvizComponent({
+  dotSrc,
+  isReady,
+}: {
+  dotSrc: string;
+  isReady: boolean;
+}) {
   return (
     <Graphviz
       dot={dotSrc}

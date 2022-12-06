@@ -1,4 +1,5 @@
 import React from 'react';
+import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'StorageClasses';
@@ -10,7 +11,7 @@ export const apiGroup = 'storage.k8s.io';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.storage;
 
-export const resourceGraphConfig = (t, context) => ({
+export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowLevel: 2,
   relations: [
     {

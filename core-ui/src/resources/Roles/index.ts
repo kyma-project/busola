@@ -1,4 +1,5 @@
 import React from 'react';
+import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 import { predefinedCategories } from 'state/navigation/categories';
 
 export const resourceType = 'Roles';
@@ -10,7 +11,7 @@ export const apiGroup = 'rbac.authorization.k8s.io';
 export const apiVersion = 'v1';
 export const category = predefinedCategories.configuration;
 
-export const resourceGraphConfig = (t, context) => ({
+export const resourceGraphConfig = (): ResourceRelationConfig => ({
   relations: [
     {
       resource: { kind: 'RoleBinding' },

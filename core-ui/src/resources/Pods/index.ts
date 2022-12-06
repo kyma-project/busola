@@ -1,28 +1,30 @@
 import React from 'react';
+import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 
 import { matchByOwnerReference, matchBySelector } from 'shared/utils/helpers';
 import { predefinedCategories } from 'state/navigation/categories';
 
-function matchByMount(volumeResourceType) {
+function matchByMount(volumeResourceType: any) {
   const valueFromKey = volumeResourceType + 'KeyRef';
 
-  return (pod, resource) => {
+  return (pod: any, resource: any) => {
     const connectedResourceName = resource.metadata.name;
-    const connectedByEnv = pod.spec.containers.some(container =>
+    const connectedByEnv = pod.spec.containers.some((container: any) =>
       container.env.find(
-        e => e.valueFrom?.[valueFromKey]?.name === connectedResourceName,
+        (e: any) => e.valueFrom?.[valueFromKey]?.name === connectedResourceName,
       ),
     );
     const connectedByVolume = pod.spec.volumes.some(
-      volume => volume[volumeResourceType]?.name === connectedResourceName,
+      (volume: any) =>
+        volume[volumeResourceType]?.name === connectedResourceName,
     );
     return connectedByEnv || connectedByVolume;
   };
 }
 
-function matchByVolumes(pod, resource) {
+function matchByVolumes(pod: any, resource: any) {
   return pod.spec.volumes.some(
-    volume => volume.secret?.secretName === resource.metadata.name,
+    (volume: any) => volume.secret?.secretName === resource.metadata.name,
   );
 }
 
@@ -35,7 +37,7 @@ export const category = predefinedCategories.workloads;
 export const List = React.lazy(() => import('./PodList'));
 export const Details = React.lazy(() => import('./PodDetails'));
 
-export const resourceGraphConfig = (t, context) => ({
+export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,
   networkFlowLevel: 0,
   relations: [
@@ -88,7 +90,7 @@ export const resourceGraphConfig = (t, context) => ({
       resource: { kind: 'PersistentVolumeClaim' },
       filter: (pod, pvc) =>
         pod.spec.volumes.some(
-          volume =>
+          (volume: any) =>
             volume.persistentVolumeClaim?.claimName === pvc.metadata.name,
         ),
     },

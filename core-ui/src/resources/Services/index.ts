@@ -1,4 +1,5 @@
 import React from 'react';
+import { ResourceRelationConfig } from 'shared/components/ResourceGraph/types';
 
 import { matchByOwnerReference } from 'shared/utils/helpers';
 import { predefinedCategories } from 'state/navigation/categories';
@@ -12,7 +13,7 @@ export const category = predefinedCategories['discovery-and-network'];
 export const List = React.lazy(() => import('./ServiceList'));
 export const Details = React.lazy(() => import('./ServiceDetails'));
 
-export const resourceGraphConfig = (t, context) => ({
+export const resourceGraphConfig = (): ResourceRelationConfig => ({
   networkFlowKind: true,
   networkFlowLevel: -1,
   relations: [
