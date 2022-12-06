@@ -6,7 +6,8 @@ const USERNAME = Cypress.env('OIDC_USER');
 const PASSWORD = Cypress.env('OIDC_PASS');
 
 Cypress.Commands.add('loginAndSelectCluster', function(params) {
-  Cypress.on('uncaught:exception', (err, runnable) => {
+  Cypress.on('uncaught:exception', err => {
+    // Ignor error from Monaco loading (Cypress issues)
     if (
       err.message.includes(
         "TypeError: Cannot read properties of null (reading 'sendError')",
@@ -15,8 +16,6 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
         "Uncaught NetworkError: Failed to execute 'importScripts' on 'WorkerGlobalScope': The script at 'http://localhost:8080/static/js/vendors-node_modules_monaco-editor_esm_vs_editor_editor_worker_js.chunk.js' failed to load.",
       )
     ) {
-      // returning false here prevents Cypress from
-      // failing the test
       return false;
     }
   });
