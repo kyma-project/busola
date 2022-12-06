@@ -3,7 +3,6 @@ import pluralize from 'pluralize';
 import React, { Suspense } from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { prettifyKind } from 'shared/utils/helpers';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { resources } from 'resources';
 
 import { getTextSearchProperties, useGetTranslation } from '../helpers';
@@ -11,8 +10,9 @@ import { sortBy } from '../helpers/sortBy';
 import { useJsonata } from '../hooks/useJsonata';
 import { getChildren, getSearchDetails, getSortDetails } from './helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { extensibilityNodesState } from 'state/navigation/extensibilityNodeAtom';
 
 const ExtensibilityList = React.lazy(() => import('../ExtensibilityList'));
 
@@ -37,7 +37,7 @@ export function ResourceList({
   ...props
 }) {
   const { widgetT, t } = useGetTranslation();
-  const { customResources } = useMicrofrontendContext(); // TODO
+  const customResources = useRecoilValue(extensibilityNodesState);
   const namespaceId = useRecoilState(activeNamespaceIdState);
   const kind = (value?.kind ?? '').replace(/List$/, '');
   const pluralKind = pluralize(kind || '')?.toLowerCase();

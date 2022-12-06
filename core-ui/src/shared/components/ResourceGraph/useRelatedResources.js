@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import pluralize from 'pluralize';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import {
   findRelatedResources,
   match,
   getApiPath,
 } from 'shared/components/ResourceGraph/buildGraph/helpers';
+import { useRecoilValue } from 'recoil';
+import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSelector';
 
 function getNamespacePart({
   resourceToFetch,
@@ -120,7 +121,12 @@ async function cycle(store, depth, config, context) {
 }
 
 export function useRelatedResources({ resource, config, events }) {
-  const { namespaceNodes, clusterNodes } = useMicrofrontendContext(); // TODO
+  const clusterNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
+    node => !node.namespaced,
+  );
+  const namespaceNodes = useRecoilValue(clusterAndNsNodesSelector).filter(
+    node => node.namespaced,
+  );
   const [startedLoading, setStartedLoading] = useState(false);
   const fetch = useSingleGet();
   const store = useRef({});
