@@ -1,5 +1,4 @@
 import { NavNode } from 'state/types';
-import { TFunction } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
 import {
   makeSuggestion,
@@ -62,14 +61,15 @@ function getSuggestion({
 function makeListItem(
   item: K8sResource,
   matchedNode: NavNode,
-  t: TFunction<'translations', undefined>,
+  context: CommandPaletteContext,
 ) {
+  const { t, activeClusterName, navigate } = context;
   const name = item.metadata.name;
   const { pathSegment, resourceType, category } = matchedNode;
 
-  const detailsLink =
-    resourceType === 'namespaces' ? `/${name}/details` : `/details/${name}`;
-  const link = pathSegment + detailsLink;
+  // const detailsLink =
+  //   resourceType === 'namespaces' ? `/${name}/details` : `/details/${name}`;
+  // const link = pathSegment + detailsLink;
 
   const resourceTypeText = t([
     `${resourceType}.title`,
@@ -81,10 +81,11 @@ function makeListItem(
     query: `${resourceType} ${name}`,
     // some resources have no category
     category: category ? category + ' > ' + resourceTypeText : resourceTypeText,
-    onActivate: () =>
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate(link),
+    onActivate: () => {
+      const pathname = `/cluster/${activeClusterName}/${pathSegment}/${name}`;
+
+      navigate(pathname);
+    },
   };
 }
 
@@ -124,8 +125,9 @@ function sendNamespaceSwitchMessage(namespaceName: string) {
 
 function makeSingleNamespaceLinks(
   namespace: K8sResource,
-  t: TFunction<'translations', undefined>,
+  context: CommandPaletteContext,
 ) {
+  const { t, activeClusterName, navigate } = context;
   const category = t('namespaces.title');
   const label = namespace.metadata.name;
   const name = namespace.metadata.name;
@@ -143,23 +145,26 @@ function makeSingleNamespaceLinks(
     label,
     category,
     query,
-    onActivate: () =>
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate('namespaces/' + name),
+    onActivate: () => {
+      const pathname = `/cluster/${activeClusterName}/namespaces/${name}`;
+      navigate(pathname);
+    },
   };
 
   return [switchContextNode, navigateToDetailsNode];
 }
 
-function createResults({
-  tokens,
-  resourceCache,
-  showHiddenNamespaces,
-  hiddenNamespaces,
-  clusterNodes,
-  t,
-}: CommandPaletteContext): Result[] {
+function createResults(context: CommandPaletteContext): Result[] {
+  const {
+    tokens,
+    clusterNodes,
+    t,
+    resourceCache,
+    showHiddenNamespaces,
+    hiddenNamespaces,
+    activeClusterName,
+    navigate,
+  } = context;
   const [type, name] = tokens;
   const resourceType = toFullResourceType(type, resourceTypes);
   const matchedNode = findNavigationNode(resourceType, clusterNodes);
@@ -180,10 +185,10 @@ function createResults({
       ? matchedNode.category + ' > ' + resourceTypeText
       : resourceTypeText,
     query: matchedNode.resourceType,
-    onActivate: () =>
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate(matchedNode.pathSegment),
+    onActivate: () => {
+      const pathname = `/cluster/${activeClusterName}/${matchedNode.pathSegment}`;
+      navigate(pathname);
+    },
   };
 
   let resources = resourceCache[resourceType];
@@ -203,13 +208,15 @@ function createResults({
     );
     // special case for a single namespace
     if (resourceType === 'namespaces' && matchedResources.length === 1) {
-      return makeSingleNamespaceLinks(matchedResources[0], t);
+      return makeSingleNamespaceLinks(matchedResources[0], context);
     }
-    return matchedResources?.map(item => makeListItem(item, matchedNode, t));
+    return matchedResources?.map(item =>
+      makeListItem(item, matchedNode, context),
+    );
   } else {
     return [
       linkToList,
-      ...resources?.map(item => makeListItem(item, matchedNode, t)),
+      ...resources?.map(item => makeListItem(item, matchedNode, context)),
     ];
   }
 }
