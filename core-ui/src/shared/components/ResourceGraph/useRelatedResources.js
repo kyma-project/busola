@@ -4,10 +4,22 @@ import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import {
   findRelatedResources,
   match,
-  getApiPath,
 } from 'shared/components/ResourceGraph/buildGraph/helpers';
 import { useRecoilValue } from 'recoil';
 import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSelector';
+
+function getApiPath(resource, nodes) {
+  const resourceType = pluralize(resource.kind).toLowerCase();
+
+  const node = nodes.find(n => n.resourceType === resourceType);
+  if (!node) return undefined;
+
+  if (node.apiGroup) {
+    return `/apis/${node.apiGroup}/${node.apiVersion}`;
+  } else {
+    return `/api/${node.apiVersion}`;
+  }
+}
 
 function getNamespacePart({
   resourceToFetch,

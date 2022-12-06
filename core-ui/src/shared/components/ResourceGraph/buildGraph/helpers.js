@@ -77,7 +77,7 @@ export function findRelatedResources(originalResourceKind, config) {
 
     for (const otherRelation of otherConfig.relations || []) {
       if (otherRelation.resource.kind === originalResourceKind) {
-        let otherResource = config[otherKind].resource;
+        let otherResource = structuredClone(config[otherKind].resource); // clone the resource since it's an immutable Recoil objects
         if (otherRelation.resource.namespace !== undefined) {
           otherResource.namespace = null;
         }
