@@ -12,7 +12,7 @@ export default (
   <>
     <Route path="busolaextensions" element={<BusolaExtensionList />} />
     <Route
-      path="busolaextensions/details/:namespace/:name"
+      path="busolaextensions/:namespace/:name"
       element={<BusolaExtensionDetails />}
     />
   </>
