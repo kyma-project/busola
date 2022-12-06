@@ -116,13 +116,18 @@ async function fetchClusterResources(context: CommandPaletteContext) {
 
 function sendNamespaceSwitchMessage(
   newNamespace: string,
-  currentNamespace: string,
+  currentNamespace: string | null,
   navigate: NavigateFunction,
 ) {
+  console.log({ newNamespace });
+  console.log({ currentNamespace });
+  console.log('xd');
+  if (!currentNamespace) return;
   const newPath = window.location.pathname.replace(
-    `$/namespaces/${currentNamespace}`,
-    `$/namespaces/${newNamespace}`,
+    `/namespaces/${currentNamespace}`,
+    `/namespaces/${newNamespace}`,
   );
+  console.log(newPath);
   navigate(newPath);
 }
 
@@ -130,7 +135,12 @@ function makeSingleNamespaceLinks(
   namespace: K8sResource,
   context: CommandPaletteContext,
 ) {
-  const { t, activeClusterName, navigate } = context;
+  const {
+    t,
+    activeClusterName,
+    navigate,
+    namespace: currentNamespace,
+  } = context;
   const category = t('namespaces.title');
   const label = namespace.metadata.name;
   const name = namespace.metadata.name;
@@ -141,7 +151,7 @@ function makeSingleNamespaceLinks(
     category,
     query,
     onActivate: () =>
-      sendNamespaceSwitchMessage(name, namespace.metadata.name, navigate),
+      sendNamespaceSwitchMessage(name, currentNamespace, navigate),
     customActionText: t('command-palette.item-actions.switch'),
   };
 
