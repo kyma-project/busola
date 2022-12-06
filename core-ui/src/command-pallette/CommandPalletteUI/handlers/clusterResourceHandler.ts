@@ -1,5 +1,6 @@
+import { NavNode } from 'state/types';
+import { TFunction } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
-import { LOADING_INDICATOR } from '../useSearchResults';
 import { getApiPath } from 'shared/utils/helpers';
 import {
   getSuggestion,
@@ -9,8 +10,18 @@ import {
   findNavigationNode,
 } from './helpers';
 import { clusterNativeResourceTypes as resourceTypes } from 'shared/constants';
+import {
+  CommandPaletteContext,
+  Handler,
+  LOADING_INDICATOR,
+  Result,
+} from '../types';
+import { K8sResource } from 'types';
 
-function getAutocompleteEntries({ tokens, resourceCache }) {
+function getAutocompleteEntries({
+  tokens,
+  resourceCache,
+}: CommandPaletteContext) {
   const fullResourceType = toFullResourceType(tokens[0], resourceTypes);
   const resources = resourceCache[fullResourceType] || [];
 
@@ -21,7 +32,7 @@ function getAutocompleteEntries({ tokens, resourceCache }) {
   });
 }
 
-function getSuggestions({ tokens, resourceCache }) {
+function getSuggestions({ tokens, resourceCache }: CommandPaletteContext) {
   const [type, name] = tokens;
   const suggestedType = getSuggestion(
     type,
@@ -42,7 +53,11 @@ function getSuggestions({ tokens, resourceCache }) {
   }
 }
 
-function makeListItem(item, matchedNode, t) {
+function makeListItem(
+  item: K8sResource,
+  matchedNode: NavNode,
+  t: TFunction<'translations', undefined>,
+) {
   const name = item.metadata.name;
   const { pathSegment, resourceType, category } = matchedNode;
 
@@ -67,12 +82,12 @@ function makeListItem(item, matchedNode, t) {
   };
 }
 
-function getApiPathForQuery({ tokens, clusterNodes }) {
+function getApiPathForQuery({ tokens, clusterNodes }: CommandPaletteContext) {
   const resourceType = toFullResourceType(tokens[0], resourceTypes);
   return getApiPath(resourceType, clusterNodes);
 }
 
-async function fetchClusterResources(context) {
+async function fetchClusterResources(context: CommandPaletteContext) {
   const apiPath = getApiPathForQuery(context);
   if (!apiPath) {
     return;
@@ -95,14 +110,17 @@ async function fetchClusterResources(context) {
   }
 }
 
-function sendNamespaceSwitchMessage(namespaceName) {
+function sendNamespaceSwitchMessage(namespaceName: string) {
   LuigiClient.sendCustomMessage({
     id: 'busola.switchNamespace',
     namespaceName,
   });
 }
 
-function makeSingleNamespaceLinks({ namespace, t }) {
+function makeSingleNamespaceLinks(
+  namespace: K8sResource,
+  t: TFunction<'translations', undefined>,
+) {
   const category = t('namespaces.title');
   const label = namespace.metadata.name;
   const name = namespace.metadata.name;
@@ -136,12 +154,12 @@ function createResults({
   hiddenNamespaces,
   clusterNodes,
   t,
-}) {
+}: CommandPaletteContext): Result[] {
   const [type, name] = tokens;
   const resourceType = toFullResourceType(type, resourceTypes);
-  const matchedNode = findNavigationNode(resourceType, clusterNodes);
+  const matchedNode: NavNode = findNavigationNode(resourceType, clusterNodes);
   if (!matchedNode) {
-    return;
+    return [];
   }
 
   const resourceTypeText = t([
@@ -165,6 +183,7 @@ function createResults({
 
   let resources = resourceCache[resourceType];
   if (typeof resources !== 'object') {
+    //@ts-ignore  TODO: handle typein Result
     return [linkToList, { type: LOADING_INDICATOR }];
   }
   if (resourceType === 'namespaces' && !showHiddenNamespaces) {
@@ -179,7 +198,7 @@ function createResults({
     );
     // special case for a single namespace
     if (resourceType === 'namespaces' && matchedResources.length === 1) {
-      return makeSingleNamespaceLinks({ namespace: matchedResources[0], t });
+      return makeSingleNamespaceLinks(matchedResources[0], t);
     }
     return matchedResources?.map(item => makeListItem(item, matchedNode, t));
   } else {
@@ -190,13 +209,14 @@ function createResults({
   }
 }
 
-export const clusterResourceHandler = {
+export const clusterResourceHandler: Handler = {
   getAutocompleteEntries,
   getSuggestions,
   fetchResources: fetchClusterResources,
   createResults,
-  getNavigationHelp: ({ clusterNodes }) =>
+  //@ts-ignore
+  getNavigationHelp: ({ clusterNodes }: CommandPaletteContext) =>
     resourceTypes
       .filter(rT => findNavigationNode(rT.resourceType, clusterNodes))
-      .map(rT => [rT.resourceType, extractShortNames(rT)]),
+      .map(rT => [{ name: rT.resourceType, aliases: extractShortNames(rT) }]),
 };
