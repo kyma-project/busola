@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ComboboxInput } from 'fundamental-react';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ResourceForm } from 'shared/ResourceForm';
 import { DataField } from 'shared/ResourceForm/fields';
 
 import { createSecretTemplate, createPresets, getSecretDefs } from './helpers';
 
 import './SecretCreate.scss';
+import { useRecoilValue } from 'recoil';
+import { configurationAtom } from 'state/configurationAtom';
 
 export function SecretCreate({
   namespace,
@@ -28,9 +29,9 @@ export function SecretCreate({
   );
   const [lockedKeys, setLockedKeys] = useState([]);
 
-  const microfrontendContext = useMicrofrontendContext(); // TODO need to check
+  const features = useRecoilValue(configurationAtom)?.features;
 
-  const secretDefs = getSecretDefs(t, microfrontendContext);
+  const secretDefs = getSecretDefs(t, features);
   const type = secret?.type;
   const currentDef =
     type === 'Opaque' ? {} : secretDefs.find(def => def.type === type);

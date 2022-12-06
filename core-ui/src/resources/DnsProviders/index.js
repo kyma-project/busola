@@ -11,7 +11,7 @@ export const category = predefinedCategories.configuration;
 export const List = React.lazy(() => import('./DnsProviderList'));
 export const Details = React.lazy(() => import('./DnsProviderDetails'));
 
-export const secrets = (t, { features } = {}) => {
+export const secrets = (t, features) => {
   if (!features?.CUSTOM_DOMAINS?.isEnabled) {
     return [];
   }

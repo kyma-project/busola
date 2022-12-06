@@ -2,8 +2,8 @@ import pluralize from 'pluralize';
 import { getPerResourceDefs } from 'shared/helpers/getResourceDefs';
 import { prettifyKind } from 'shared/utils/helpers';
 
-export const getSecretDefs = (t, context) => {
-  const defs = getPerResourceDefs('secrets', t, context);
+export const getSecretDefs = (t, features) => {
+  const defs = getPerResourceDefs('secrets', t, features);
   return Object.entries(defs)
     .map(([kind, secretsPresets]) =>
       secretsPresets.map(secretsPreset => ({

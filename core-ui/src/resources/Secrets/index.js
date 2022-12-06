@@ -10,7 +10,7 @@ export const category = predefinedCategories.configuration;
 export const List = React.lazy(() => import('./SecretList'));
 export const Details = React.lazy(() => import('./SecretDetails'));
 
-export const secrets = (t, context) => [
+export const secrets = () => [
   {
     type: 'kubernetes.io/service-account-token',
     data: [],
@@ -46,7 +46,7 @@ export const secrets = (t, context) => [
   },
 ];
 
-export const resourceGraphConfig = (t, context) => ({
+export const resourceGraphConfig = () => ({
   depth: 1,
   networkFlowLevel: 1,
 });

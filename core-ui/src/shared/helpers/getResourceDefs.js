@@ -10,13 +10,13 @@ export function getResourceDefs(defType, t, context, key) {
     .flat();
 }
 
-export function getPerResourceDefs(defType, t, context) {
+export function getPerResourceDefs(defType, t, features) {
   return Object.fromEntries(
     resources
       .filter(resource => !!resource[defType])
       .map(resource => {
         const kind = pluralize(resource.resourceType, 1);
-        const value = resource[defType](t, context);
+        const value = resource[defType](t, features);
         return [kind, value];
       }),
   );

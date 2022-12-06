@@ -1,12 +1,13 @@
 import { useState, useCallback } from 'react';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useRecoilValue } from 'recoil';
+import { groupVersionState } from 'state/discoverability/groupVersionsSelector';
 
 export function useResourcesForApiGroups(apiGroups = []) {
   const [cache, setCache] = useState({});
   const [loading, setLoading] = useState(false);
   const fetch = useSingleGet();
-  const { groupVersions } = useMicrofrontendContext(); // TODO
+  const groupVersions = useRecoilValue(groupVersionState);
 
   const loadable = apiGroups.some(apiGroup => !cache[apiGroup]);
 
