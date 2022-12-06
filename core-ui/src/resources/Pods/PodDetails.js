@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import LuigiClient from '@luigi-project/client';
-import { Link } from 'fundamental-react';
+import { Link } from 'react-router-dom';
+import pluralize from 'pluralize';
 
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
@@ -13,30 +13,12 @@ import { PodStatus } from './PodStatus';
 import ContainersData from './ContainersData';
 import { PodCreate } from './PodCreate';
 import { PodStatsGraph } from './PodStatsGraph';
-
-function toSnakeCase(inputString) {
-  return inputString
-    .split('')
-    .map(character => {
-      if (character === character.toUpperCase()) {
-        return '-' + character.toLowerCase();
-      } else {
-        return character;
-      }
-    })
-    .join('');
-}
-
-function goToSecretDetails(resourceKind, name) {
-  const preparedResourceKind = toSnakeCase(resourceKind);
-
-  LuigiClient.linkManager()
-    .fromContext('namespace')
-    .navigate(`${preparedResourceKind}s/details/${name}`);
-}
+import { useUrl } from 'hooks/useUrl';
 
 export function PodDetails(props) {
+  console.log('props', props);
   const { t } = useTranslation();
+  const { namespaceUrl } = useUrl();
 
   const Events = () => (
     <EventsList
@@ -76,14 +58,12 @@ export function PodDetails(props) {
         volumeType,
         <Link
           className="fd-link"
-          onClick={() =>
-            goToSecretDetails(
-              volumeType.toLowerCase(),
-              volume[volumeType].name ||
-                volume[volumeType].secretName ||
-                volume[volumeType].claimName,
-            )
-          }
+          to={namespaceUrl(
+            `${pluralize(volumeType.toLowerCase() || '')}/${volume[volumeType]
+              .name ||
+              volume[volumeType].secretName ||
+              volume[volumeType].claimName}`,
+          )}
         >
           {volume[volumeType].name ||
             volume[volumeType].secretName ||
@@ -106,7 +86,8 @@ export function PodDetails(props) {
   const Containers = resource => (
     <ContainersData
       key="containers"
-      type={t('pods.labels.constainers')}
+      type={t('pods.labels.containers')}
+      parentName={resource.metadata.name}
       containers={resource.spec.containers}
       statuses={resource.status.containerStatuses}
     />
@@ -114,7 +95,7 @@ export function PodDetails(props) {
   const InitContainers = resource => (
     <ContainersData
       key="init-containers"
-      type={t('pods.labels.init-constainers')}
+      type={t('pods.labels.init-containers')}
       containers={resource.spec.initContainers}
       statuses={resource.status.initContainerStatuses}
     />

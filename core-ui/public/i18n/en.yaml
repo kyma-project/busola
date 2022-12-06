@@ -1221,12 +1221,12 @@ pods:
   labels:
     args: Args
     command: Command
-    constainers: Containers
+    containers: Containers
     env: Environment
     filter-timeframe: 'Filter timeframe by:'
     image: Image
     image-pull-policy: Image Pull Policy
-    init-constainers: Init Containers
+    init-containers: Init Containers
     mount-path: Mount Path
     pod-template: Pod Template
     ports: Ports
