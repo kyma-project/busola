@@ -16,65 +16,46 @@ context('Test Cluster Overview', () => {
     // this is to address a Luigi race condition, can be removed together with Luigi
     cy.wait(500);
 
-    cy.getIframeBody()
-      .contains('h3', 'Cluster Details')
-      .should('be.visible');
+    cy.contains('h3', 'Cluster Details').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Version')
+    cy.contains('Version')
       .next('.content')
       .should('not.be.empty');
 
-    cy.getIframeBody()
-      .contains('API Server Address')
+    cy.contains('API Server Address')
       .next('.content')
       .should('not.be.empty');
 
-    cy.getIframeBody()
-      .contains('Nodes')
-      .should('be.visible');
+    cy.contains('Nodes').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Events')
-      .should('be.visible');
+    cy.contains('Events').should('be.visible');
   });
 
   it('Go to Node details', () => {
-    cy.getIframeBody()
-      .find('[data-testid=cluster-nodes]')
-      .within(_ => {
-        cy.get('a')
-          .first()
-          .click();
-      });
+    cy.get('[data-testid=cluster-nodes]').within(_ => {
+      cy.get('a')
+        .first()
+        .click();
+    });
   });
 
   it('Test Node details', () => {
-    cy.getIframeBody()
-      .contains('Pod CIDR')
+    cy.contains('Pod CIDR')
       .next('.content')
       .should('not.be.empty');
 
-    cy.getIframeBody()
-      .contains('Internal IP')
+    cy.contains('Internal IP')
       .next('.content')
       .should('not.be.empty');
 
-    cy.getIframeBody()
-      .contains('Hostname')
+    cy.contains('Hostname')
       .next('.content')
       .should('not.be.empty');
 
-    cy.getIframeBody()
-      .contains('CPU')
-      .should('be.visible');
+    cy.contains('CPU').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Machine info')
-      .should('be.visible');
+    cy.contains('Machine info').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Events')
-      .should('be.visible');
+    cy.contains('Events').should('be.visible');
   });
 });
