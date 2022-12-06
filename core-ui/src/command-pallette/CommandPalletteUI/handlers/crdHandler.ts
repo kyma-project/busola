@@ -1,5 +1,4 @@
 import { Result } from './../types';
-import LuigiClient from '@luigi-project/client';
 import { CommandPaletteContext, Handler, LOADING_INDICATOR } from '../types';
 import { getSuggestionForSingleResource } from './helpers';
 import { K8sResource } from 'types';
@@ -81,7 +80,7 @@ function createResults(context: CommandPaletteContext): Result[] {
     return [];
   }
 
-  const { resourceCache, tokens, t } = context;
+  const { resourceCache, tokens, t, navigate, activeClusterName } = context;
 
   const listLabel = t('command-palette.results.list-of', {
     resourceType: t('command-palette.crds.name-short_plural'),
@@ -91,10 +90,10 @@ function createResults(context: CommandPaletteContext): Result[] {
     category:
       t('configuration.title') + ' > ' + t('custom-resource-definitions.title'),
     query: 'crds',
-    onActivate: () =>
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate(`/customresourcedefinitions`),
+    onActivate: () => {
+      const pathname = `/cluster/${activeClusterName}/customresourcedefinitions`;
+      navigate(pathname);
+    },
   };
 
   const crds = resourceCache['customresourcedefinitions'];

@@ -1,4 +1,3 @@
-import LuigiClient from '@luigi-project/client';
 import { addCluster } from 'components/Clusters/shared';
 import { CommandPaletteContext, Handler, Result } from '../types';
 import { makeSuggestion } from './helpers';
@@ -48,7 +47,13 @@ function createResults(context: CommandPaletteContext): Result[] | null {
 
   const option = options.find(o => o.names.includes(context.tokens[0]));
   if (option) {
-    const { activeClusterName, clusterNames, clustersInfo, t } = context;
+    const {
+      activeClusterName,
+      clusterNames,
+      clustersInfo,
+      t,
+      navigate,
+    } = context;
     switch (option.type) {
       case 'clusters':
         return clusterNames.map(clusterName => ({
@@ -91,9 +96,8 @@ function createResults(context: CommandPaletteContext): Result[] | null {
               label: t('clusters.overview.title-current-cluster'),
               query: 'overview',
               onActivate: () => {
-                LuigiClient.linkManager()
-                  .fromContext('cluster')
-                  .navigate('/overview');
+                const pathname = `/cluster/${activeClusterName}/overview`;
+                navigate(pathname);
               },
             },
           ];

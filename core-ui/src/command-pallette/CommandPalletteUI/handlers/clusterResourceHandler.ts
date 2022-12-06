@@ -1,5 +1,4 @@
 import { NavNode } from 'state/types';
-import LuigiClient from '@luigi-project/client';
 import {
   makeSuggestion,
   toFullResourceType,
@@ -19,6 +18,7 @@ import {
   Result,
 } from '../types';
 import { K8sResource } from 'types';
+import { NavigateFunction } from 'react-router-dom';
 
 function getAutocompleteEntries({
   tokens,
@@ -69,7 +69,6 @@ function makeListItem(
 
   // const detailsLink =
   //   resourceType === 'namespaces' ? `/${name}/details` : `/details/${name}`;
-  // const link = pathSegment + detailsLink;
 
   const resourceTypeText = t([
     `${resourceType}.title`,
@@ -83,7 +82,6 @@ function makeListItem(
     category: category ? category + ' > ' + resourceTypeText : resourceTypeText,
     onActivate: () => {
       const pathname = `/cluster/${activeClusterName}/${pathSegment}/${name}`;
-
       navigate(pathname);
     },
   };
@@ -116,11 +114,16 @@ async function fetchClusterResources(context: CommandPaletteContext) {
   }
 }
 
-function sendNamespaceSwitchMessage(namespaceName: string) {
-  LuigiClient.sendCustomMessage({
-    id: 'busola.switchNamespace',
-    namespaceName,
-  });
+function sendNamespaceSwitchMessage(
+  newNamespace: string,
+  currentNamespace: string,
+  navigate: NavigateFunction,
+) {
+  const newPath = window.location.pathname.replace(
+    `$/namespaces/${currentNamespace}`,
+    `$/namespaces/${newNamespace}`,
+  );
+  navigate(newPath);
 }
 
 function makeSingleNamespaceLinks(
@@ -137,7 +140,8 @@ function makeSingleNamespaceLinks(
     label,
     category,
     query,
-    onActivate: () => sendNamespaceSwitchMessage(name),
+    onActivate: () =>
+      sendNamespaceSwitchMessage(name, namespace.metadata.name, navigate),
     customActionText: t('command-palette.item-actions.switch'),
   };
 
