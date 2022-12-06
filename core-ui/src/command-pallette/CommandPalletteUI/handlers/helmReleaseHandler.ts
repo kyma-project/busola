@@ -143,5 +143,5 @@ export const helmReleaseHandler: Handler = {
   getSuggestions,
   fetchResources: fetchHelmReleases,
   createResults,
-  getNavigationHelp: () => [{ name: 'helmreleases', aliases: ['helm'] }],
+  getNavigationHelp: () => [{ name: 'helmreleases', aliases: ['helmr'] }],
 };

@@ -1,14 +1,18 @@
-import LuigiClient from '@luigi-project/client';
+import { Handler, Result } from './../types';
+import { CommandPaletteContext } from '../types';
 import { getSuggestionsForSingleResource } from './helpers';
 
-function getAutocompleteEntries({ tokens, resourceCache }) {
+function getAutocompleteEntries({
+  tokens,
+  resourceCache,
+}: CommandPaletteContext): string[] {
   const tokenToAutocomplete = tokens[tokens.length - 1];
   switch (tokens.length) {
     case 1: // type
       if ('customresources'.startsWith(tokenToAutocomplete)) {
-        return 'customresources ';
+        return ['customresources'];
       }
-      break;
+      return [];
     case 2: // name
       const crdNames = (resourceCache['customresources'] || []).map(
         n => n.metadata.name,
@@ -21,7 +25,7 @@ function getAutocompleteEntries({ tokens, resourceCache }) {
   }
 }
 
-function getSuggestions({ tokens, resourceCache }) {
+function getSuggestions({ tokens, resourceCache }: CommandPaletteContext) {
   return getSuggestionsForSingleResource({
     tokens,
     resources: resourceCache['customresources'] || [],
@@ -29,16 +33,16 @@ function getSuggestions({ tokens, resourceCache }) {
   });
 }
 
-function concernsCRDs({ tokens }) {
+function concernsCRDs({ tokens }: CommandPaletteContext) {
   return tokens[0] === 'customresource' || tokens[0] === 'customresources';
 }
 
-function createResults(context) {
+function createResults(context: CommandPaletteContext): Result[] {
   if (!concernsCRDs(context)) {
-    return;
+    return [];
   }
 
-  const { namespace, t } = context;
+  const { namespace, t, navigate, activeClusterName } = context;
 
   const listLabel = t('command-palette.results.list-of', {
     resourceType: t('command-palette.crs.name-short_plural'),
@@ -50,28 +54,27 @@ function createResults(context) {
       category:
         t('configuration.title') + ' > ' + t('command-palette.crs.cluster'),
       query: 'crs',
-      onActivate: () =>
-        LuigiClient.linkManager()
-          .fromContext('cluster')
-          .navigate(`/customresources`),
+      onActivate: () => {
+        const pathname = `/cluster/${activeClusterName}/customResources`;
+        navigate(pathname);
+      },
     },
     {
       label: listLabel,
       category:
         t('configuration.title') + ' > ' + t('command-palette.crs.namespaced'),
       query: 'crds',
-      onActivate: () =>
-        LuigiClient.linkManager()
-          .fromContext('cluster')
-          .navigate(`namespaces/${namespace}/customresources`),
+      onActivate: () => {
+        const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/customResources`;
+        navigate(pathname);
+      },
     },
   ];
 }
 
-export const crListHandler = {
+export const crListHandler: Handler = {
   getAutocompleteEntries,
   getSuggestions,
-  fetchResources: () => {},
   createResults,
-  getNavigationHelp: () => [['customresources', ['crs']]],
+  getNavigationHelp: () => [{ name: 'customresources', aliases: ['crs'] }],
 };

@@ -7,7 +7,7 @@ import { nodesHandler } from './nodesHandler';
 import { helmReleaseHandler } from './helmReleaseHandler';
 import { findCommonPrefix } from 'shared/utils/helpers';
 // import { crHandler } from './crHandler';
-// import { crListHandler } from './crListHandler';
+import { crListHandler } from './crListHandler';
 import { CommandPaletteContext, Handler, HelpEntries, Result } from '../types';
 
 const allHandlers: Handler[] = [
@@ -17,7 +17,7 @@ const allHandlers: Handler[] = [
   nodesHandler,
   // logsHandler,
   // crdHandler,
-  // crListHandler,
+  crListHandler,
   // crHandler,
   helmReleaseHandler,
 ];
