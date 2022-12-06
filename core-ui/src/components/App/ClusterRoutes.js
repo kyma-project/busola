@@ -14,7 +14,7 @@ import NamespaceRoutes from './NamespaceRoutes';
 import { otherRoutes } from 'resources/other';
 import { resourceRoutes } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
-import { extensibilityNodesState } from 'state/navigation/extensibilityNodeAtom';
+import { extensionsState } from 'state/navigation/extensionsAtom';
 
 export default function ClusterRoutes() {
   let { currentClusterName } = useParams() || {};
@@ -23,7 +23,7 @@ export default function ClusterRoutes() {
   const { t } = useTranslation();
   const language = useRecoilValue(languageAtom);
   const clusters = useRecoilValue(clustersState);
-  const extensions = useRecoilValue(extensibilityNodesState);
+  const extensions = useRecoilValue(extensionsState);
   const [cluster, setCluster] = useRecoilState(clusterState);
 
   useEffect(() => {

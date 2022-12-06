@@ -7,7 +7,7 @@ import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
 import './ServiceDetails.scss';
 import { useRecoilValue } from 'recoil';
-import { extensibilityNodesState } from 'state/navigation/extensibilityNodeAtom';
+import { extensionsState } from 'state/navigation/extensionsAtom';
 
 const ExtensibilityList = React.lazy(() =>
   import('../../components/Extensibility/ExtensibilityList'),
@@ -15,9 +15,9 @@ const ExtensibilityList = React.lazy(() =>
 
 export function ApiRulesList({ serviceName, namespace }) {
   const { t } = useTranslation();
-  const customResources = useRecoilValue(extensibilityNodesState);
+  const extensions = useRecoilValue(extensionsState);
 
-  const extensibilityAPIRules = customResources.find(
+  const extensibilityAPIRules = extensions.find(
     cR => cR.general?.resource?.kind === 'APIRule',
   );
 

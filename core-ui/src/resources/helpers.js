@@ -8,7 +8,7 @@ import {
 } from 'shared/components/ResourceGraph/getResourceGraphConfig';
 import { useRecoilValue } from 'recoil';
 import { configurationAtom } from 'state/configurationAtom';
-import { extensibilityNodesState } from 'state/navigation/extensibilityNodeAtom';
+import { extensionsState } from 'state/navigation/extensionsAtom';
 
 export const usePrepareListProps = ({
   resourceCustomType,
@@ -58,7 +58,7 @@ export const usePrepareDetailsProps = ({
 
   const configuration = useRecoilValue(configurationAtom);
   const features = configuration?.features;
-  const customResources = useRecoilValue(extensibilityNodesState);
+  const extensions = useRecoilValue(extensionsState);
   const addStyle = useAddStyle({ styleId: 'graph-styles' });
 
   return {
@@ -73,7 +73,7 @@ export const usePrepareDetailsProps = ({
     resourceGraphConfig: getResourceGraphConfig(
       t,
       features,
-      customResources,
+      extensions,
       addStyle,
     ),
     i18n,

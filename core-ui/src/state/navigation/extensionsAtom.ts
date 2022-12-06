@@ -82,7 +82,7 @@ const getExtensions = async (fetchFn: any) => {
 export const useGetExtensions = () => {
   const cluster = useRecoilValue(clusterState);
   const auth = useRecoilValue(authDataState);
-  const setExtensions = useSetRecoilState(extensibilityNodesState);
+  const setExtensions = useSetRecoilState(extensionsState);
   const fetchFn = getFetchFn(useRecoilValue);
 
   useEffect(() => {
@@ -100,9 +100,9 @@ export const useGetExtensions = () => {
 };
 
 const defaultValue = null;
-export const extensibilityNodesState: RecoilState<ExtResource[] | null> = atom<
+export const extensionsState: RecoilState<ExtResource[] | null> = atom<
   ExtResource[] | null
 >({
-  key: 'extensibilityNodesState',
+  key: 'extensionsState',
   default: defaultValue,
 });

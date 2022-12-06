@@ -12,7 +12,7 @@ import { getChildren, getSearchDetails, getSortDetails } from './helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-import { extensibilityNodesState } from 'state/navigation/extensibilityNodeAtom';
+import { extensionsState } from 'state/navigation/extensionsAtom';
 
 const ExtensibilityList = React.lazy(() => import('../ExtensibilityList'));
 
@@ -37,7 +37,7 @@ export function ResourceList({
   ...props
 }) {
   const { widgetT, t } = useGetTranslation();
-  const customResources = useRecoilValue(extensibilityNodesState);
+  const extensions = useRecoilValue(extensionsState);
   const namespaceId = useRecoilState(activeNamespaceIdState);
   const kind = (value?.kind ?? '').replace(/List$/, '');
   const pluralKind = pluralize(kind || '')?.toLowerCase();
@@ -53,7 +53,7 @@ export function ResourceList({
     arrayItems,
   });
 
-  const extensibilityResourceSchema = customResources?.find(
+  const extensibilityResourceSchema = extensions?.find(
     cR => cR.general?.resource?.kind === kind,
   );
 

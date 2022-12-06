@@ -3,11 +3,11 @@ import { useRecoilValue } from 'recoil';
 import { useParams } from 'react-router-dom';
 
 import { clusterState } from 'state/clusterAtom';
-import { extensibilityNodesState } from 'state/navigation/extensibilityNodeAtom';
+import { extensionsState } from 'state/navigation/extensionsAtom';
 
 export const useGetCRbyPath = () => {
   const { namespaceId } = useParams();
-  const extensions = useRecoilValue(extensibilityNodesState);
+  const extensions = useRecoilValue(extensionsState);
   const { name: clusterName } = useRecoilValue(clusterState) || {};
 
   const resource = extensions.find(el => {
