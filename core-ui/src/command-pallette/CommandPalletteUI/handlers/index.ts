@@ -1,23 +1,23 @@
 // import { nonResourceHandler } from './nonResourceHandler';
 // import { clusterResourceHandler } from './clusterResourceHandler';
-// import { namespacedResourceHandler } from './namespacedResourceHandler';
+import { namespacedResourceHandler } from './namespacedResourceHandler';
 // import { nodesHandler } from './nodesHandler';
 // import { logsHandler } from './logsHandler';
 // import { crdHandler } from './crdHandler';
 // import { helmReleaseHandler } from './helmReleaseHandler';
 import { findCommonPrefix } from 'shared/utils/helpers';
 // import { crHandler } from './crHandler';
-import { crListHandler } from './crListHandler';
+// import { crListHandler } from './crListHandler';
 import { CommandPaletteContext, Handler, HelpEntries, Result } from '../types';
 
 const allHandlers: Handler[] = [
   // nonResourceHandler,
   // clusterResourceHandler,
-  // // namespacedResourceHandler,
+  namespacedResourceHandler,
   // nodesHandler,
   // logsHandler,
   // crdHandler,
-  crListHandler,
+  // crListHandler,
   // crHandler,
   // helmReleaseHandler,
 ];

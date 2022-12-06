@@ -82,3 +82,20 @@ export function extractShortNames({
 export function findNavigationNode(resourceType: string, navNodes: NavNode[]) {
   return navNodes.find(n => n.resourceType === resourceType);
 }
+
+export function getApiPathForQuery(
+  tokens: string[],
+  nodes: NavNode[],
+  availableResourceTypes: ResourceTypeWithAliases[],
+) {
+  const resourceType = toFullResourceType(tokens[0], availableResourceTypes);
+  const navNode = findNavigationNode(resourceType, nodes);
+
+  if (!navNode) return null;
+
+  if (navNode.apiGroup) {
+    return `/apis/${navNode.apiGroup}/${navNode.apiVersion}`;
+  } else {
+    return `/api/${navNode.apiVersion}`;
+  }
+}
