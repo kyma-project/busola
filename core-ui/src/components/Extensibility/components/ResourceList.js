@@ -10,7 +10,7 @@ import { sortBy } from '../helpers/sortBy';
 import { useJsonata } from '../hooks/useJsonata';
 import { getChildren, getSearchDetails, getSortDetails } from './helpers';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 
@@ -38,7 +38,7 @@ export function ResourceList({
 }) {
   const { widgetT, t } = useGetTranslation();
   const extensions = useRecoilValue(extensionsState);
-  const namespaceId = useRecoilState(activeNamespaceIdState);
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const kind = (value?.kind ?? '').replace(/List$/, '');
   const pluralKind = pluralize(kind || '')?.toLowerCase();
   const namespacePart = getProperNamespacePart(value?.namespace, namespaceId);
@@ -129,7 +129,7 @@ export function ResourceList({
       resourceUrlPrefix={resourceUrlPrefix}
       resourceType={prettifyKind(kind)}
       resourceTitle={prettifyKind(kind)}
-      namespace={namespaceId}
+      namespace={value?.namespace || namespaceId}
       isCompact
       title={widgetT(structure)}
       disableCreate={structure.disableCreate || false}
