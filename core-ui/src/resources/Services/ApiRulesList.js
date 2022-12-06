@@ -1,12 +1,13 @@
 import React, { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
 import './ServiceDetails.scss';
+import { useRecoilValue } from 'recoil';
+import { extensibilityNodesState } from 'state/navigation/extensibilityNodeAtom';
 
 const ExtensibilityList = React.lazy(() =>
   import('../../components/Extensibility/ExtensibilityList'),
@@ -14,7 +15,7 @@ const ExtensibilityList = React.lazy(() =>
 
 export function ApiRulesList({ serviceName, namespace }) {
   const { t } = useTranslation();
-  const { customResources } = useMicrofrontendContext(); // TODO
+  const customResources = useRecoilValue(extensibilityNodesState);
 
   const extensibilityAPIRules = customResources.find(
     cR => cR.general?.resource?.kind === 'APIRule',
