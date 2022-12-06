@@ -2,11 +2,13 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import pluralize from 'pluralize';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import {
   getResourceGraphConfig,
   useAddStyle,
 } from 'shared/components/ResourceGraph/getResourceGraphConfig';
+import { useRecoilValue } from 'recoil';
+import { configurationAtom } from 'state/configurationAtom';
+import { extensionsState } from 'state/navigation/extensionsAtom';
 
 export const usePrepareListProps = ({
   resourceCustomType,
@@ -54,7 +56,9 @@ export const usePrepareDetailsProps = ({
   const decodedResourceUrl = decodeURIComponent(resourceUrl);
   const decodedResourceName = decodeURIComponent(resourceName);
 
-  const context = useMicrofrontendContext();
+  const configuration = useRecoilValue(configurationAtom);
+  const features = configuration?.features;
+  const extensions = useRecoilValue(extensionsState);
   const addStyle = useAddStyle({ styleId: 'graph-styles' });
 
   return {
@@ -66,7 +70,12 @@ export const usePrepareDetailsProps = ({
     resourceName: decodedResourceName,
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
-    resourceGraphConfig: getResourceGraphConfig(t, context, addStyle),
+    resourceGraphConfig: getResourceGraphConfig(
+      t,
+      features,
+      extensions,
+      addStyle,
+    ),
     i18n,
   };
 };

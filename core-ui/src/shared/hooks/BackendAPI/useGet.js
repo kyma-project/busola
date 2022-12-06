@@ -5,7 +5,6 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import shortid from 'shortid';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useFetch } from 'shared/hooks/BackendAPI/useFetch';
 import { authDataState } from '../../../state/authDataAtom';
 
@@ -133,7 +132,7 @@ export const useGetStream = path => {
   const timeoutRef = React.useRef();
   const [data, setData] = React.useState([]);
   const [error, setError] = React.useState(null);
-  const { authData } = useMicrofrontendContext();
+  const authData = useRecoilValue(authDataState);
   const fetch = useFetch();
   const readerRef = React.useRef(null);
   const abortController = React.useRef(new AbortController());

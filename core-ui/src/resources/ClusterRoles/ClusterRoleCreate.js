@@ -1,14 +1,15 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { GenericRoleCreate } from 'resources/Roles/GenericRoleCreate';
 
 import { createClusterRoleTemplate, createClusterRolePresets } from './helpers';
+import { useRecoilValue } from 'recoil';
+import { groupVersionState } from 'state/discoverability/groupVersionsSelector';
 
 export function ClusterRoleCreate(props) {
   const { t } = useTranslation();
-  const { groupVersions } = useMicrofrontendContext();
+  const groupVersions = useRecoilValue(groupVersionState);
   return (
     <GenericRoleCreate
       {...props}

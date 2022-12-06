@@ -1,4 +1,3 @@
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useEffect, useRef } from 'react';
 import {
   sendWorkerMessage,
@@ -6,15 +5,17 @@ import {
   addWorkerErrorListener,
   terminateWorker,
 } from './resourceSchemaWorkerApi';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { schemaWorkerStatusState } from 'state/schemaWorkerStatusAtom';
+import { useUrl } from 'hooks/useUrl';
+import { authDataState } from 'state/authDataAtom';
+import { openapiState } from 'state/openapi/openapiSelector';
 
 export const useResourceSchemas = () => {
-  const {
-    activeClusterName,
-    authData,
-    openApi,
-  } = useMicrofrontendContext() as any;
+  const { cluster: activeClusterName } = useUrl();
+  const authData = useRecoilValue(authDataState);
+  const openApi = useRecoilValue(openapiState);
+
   const setSchemasState = useSetRecoilState(schemaWorkerStatusState);
   const lastFetched = useRef<string | null>(null);
 

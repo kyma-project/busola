@@ -10,7 +10,7 @@ import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
 import { externalNodesSelector } from './externalNodesSelector';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { configurationAtom } from '../configurationAtom';
-import { extensibilityNodesState } from './extensibilityNodeAtom';
+import { extensionsState } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
 
 export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = selector<
@@ -30,7 +30,7 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
     }
     let allNodes = [...navNodes, ...observabilityNodes];
 
-    const extResources = get(extensibilityNodesState);
+    const extResources = get(extensionsState);
 
     const isExtensibilityOn = features?.EXTENSIBILITY?.isEnabled;
     if (isExtensibilityOn && extResources) {

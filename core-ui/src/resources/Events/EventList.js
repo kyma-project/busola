@@ -8,6 +8,7 @@ import { Link as DescriptionLink } from 'shared/components/Link/Link';
 import { useMessageList } from 'hooks/useMessageList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { useUrl } from 'hooks/useUrl';
 
 export function EventList({
   defaultType,
@@ -17,20 +18,21 @@ export function EventList({
   ...props
 }) {
   const { t } = useTranslation();
-
+  const { namespaceUrl } = useUrl();
+  const resourceType = props.resourceType.toLowerCase();
   const {
     EVENT_MESSAGE_TYPE,
     displayType,
     MessageSelector,
-    formatInvolvedObject,
-    formatSourceObject,
+    FormatInvolvedObject,
+    FormatSourceObject,
   } = useMessageList(defaultType);
 
   const involvedObject = hideInvolvedObjects
     ? {}
     : {
         header: t('events.headers.involved-object'),
-        value: e => formatInvolvedObject(e.involvedObject),
+        value: e => FormatInvolvedObject(e.involvedObject),
       };
 
   const textSearchProperties = [
@@ -78,7 +80,7 @@ export function EventList({
     },
     {
       header: t('events.headers.source'),
-      value: e => formatSourceObject(e.source),
+      value: e => FormatSourceObject(e.source),
     },
     {
       header: t('events.headers.count'),
@@ -137,6 +139,11 @@ export function EventList({
       searchSettings={{
         textSearchProperties,
       }}
+      customUrl={event =>
+        namespaceUrl(`${resourceType}/${event.metadata.name}`, {
+          namespace: event.metadata.namespace,
+        })
+      }
     />
   );
 }

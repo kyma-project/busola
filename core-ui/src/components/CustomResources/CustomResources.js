@@ -3,7 +3,7 @@ import * as jp from 'jsonpath';
 import pluralize from 'pluralize';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
-import { useNavigateToCustomResource } from 'resources/CustomResourceDefinitions/useNavigateToCustomResource';
+import { useCustomResourceUrl } from 'resources/CustomResourceDefinitions/useCustomResourceUrl';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { CRCreate } from 'resources/CustomResourceDefinitions/CRCreate';
 
@@ -17,7 +17,7 @@ export function CustomResources({
 }) {
   const { group, names } = crd.spec;
   const name = names.plural;
-  const navigateFn = useNavigateToCustomResource();
+  const customUrl = useCustomResourceUrl(crd);
 
   const resourceUrl = namespace
     ? `/apis/${group}/${version.name}/namespaces/${namespace}/${name}`
@@ -45,7 +45,8 @@ export function CustomResources({
 
   const params = {
     hasDetailsView: true,
-    navigateFn: cr => navigateFn(cr, crd),
+    // navigateFn: cr => navigateFn(cr, crd),
+    customUrl,
     resourceUrl,
     title: pluralize(crd.spec.names.kind),
     resourceType: crd.spec.names.kind,

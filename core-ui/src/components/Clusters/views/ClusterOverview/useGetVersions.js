@@ -1,12 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { getErrorMessage } from 'shared/utils/helpers';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useFeature } from 'hooks/useFeature';
 
 export function useGetVersions() {
   const { t } = useTranslation();
-  const { features } = useMicrofrontendContext();
-  const showKymaVersion = features?.SHOW_KYMA_VERSION?.isEnabled;
+  const showKymaVersion = useFeature('SHOW_KYMA_VERSION')?.isEnabled;
 
   const {
     data: k8sVersion,

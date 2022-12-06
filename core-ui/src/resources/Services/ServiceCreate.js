@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { useTranslation } from 'react-i18next';
 import { ResourceForm } from 'shared/ResourceForm';
 import { createServiceTemplate } from './templates';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 export function ServiceCreate({
   formElementRef,
@@ -11,7 +12,7 @@ export function ServiceCreate({
   resourceUrl,
   ...props
 }) {
-  const { namespaceId } = useMicrofrontendContext();
+  const namespaceId = useRecoilValue(activeNamespaceIdState);
   const [service, setService] = useState(createServiceTemplate(namespaceId));
   const { t } = useTranslation();
 

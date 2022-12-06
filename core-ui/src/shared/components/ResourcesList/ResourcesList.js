@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { createPatch } from 'rfc6902';
 import { cloneDeep } from 'lodash';
 import * as jp from 'jsonpath';
+import pluralize from 'pluralize';
 
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { usePut, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
@@ -26,7 +27,6 @@ import { useProtectedResources } from 'shared/hooks/useProtectedResources';
 import { useTranslation } from 'react-i18next';
 import { nameLocaleSort, timeSort } from '../../helpers/sortingfunctions';
 import { useVersionWarning } from 'hooks/useVersionWarning';
-import pluralize from 'pluralize';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { ForceUpdateModalContent } from 'shared/ResourceForm/ForceUpdateModalContent';
 
@@ -65,6 +65,7 @@ ResourcesList.propTypes = {
   description: PropTypes.node,
   readOnly: PropTypes.bool,
   navigateFn: PropTypes.func,
+  customUrl: PropTypes.string,
   testid: PropTypes.string,
   omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
   resourceUrlPrefix: PropTypes.string,
@@ -160,6 +161,7 @@ export function ResourceListRenderer({
   listHeaderActions,
   readOnly,
   navigateFn,
+  customUrl,
   testid,
   omitColumnsIds = ['namespace'],
   customListActions = [],
@@ -216,8 +218,8 @@ export function ResourceListRenderer({
   );
 
   const linkTo = entry => {
+    if (customUrl) return customUrl(entry);
     // TODO fix when details are working
-    // if (navigateFn) return navigateFn(entry);
     // if (fixedPath) return navigateToResource(entry);
     return scopedUrl(`${resourceType.toLowerCase()}/${entry.metadata.name}`);
   };

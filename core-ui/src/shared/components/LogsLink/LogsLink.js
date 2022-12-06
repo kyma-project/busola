@@ -5,10 +5,10 @@ import { BusyIndicator, MessageStrip } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { Tooltip } from 'shared/components/Tooltip/Tooltip';
 import { Link } from 'shared/components/Link/Link';
 import './LogsLink.scss';
+import { useFeature } from 'hooks/useFeature';
 
 export const LogsLink = ({
   className,
@@ -18,13 +18,12 @@ export const LogsLink = ({
   dataSource = 'Loki',
   children,
 }) => {
-  const { features = {} } = useMicrofrontendContext() || {};
   const { data, loading, error } = useGet(
     '/apis/networking.istio.io/v1beta1/namespaces/kyma-system/virtualservices/monitoring-grafana',
   );
   const { t } = useTranslation();
 
-  if (!features.OBSERVABILITY?.isEnabled) {
+  if (!useFeature('OBSERVABILITY')?.isEnabled) {
     return null;
   }
 

@@ -6,27 +6,26 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useUrl } from 'hooks/useUrl';
 import { useSentry } from 'hooks/useSentry';
 import { useAppTracking } from 'hooks/tracking';
-import { clusterState } from 'state/clusterAtom';
 
-import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
-import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
+import { clusterState } from 'state/clusterAtom';
 import { languageAtom } from 'state/preferences/languageAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-
-import { Header } from 'header/Header';
-import { ContentWrapper } from './ContentWrapper/ContentWrapper';
-import { Preferences } from 'components/Preferences/Preferences';
-import { Sidebar } from 'sidebar/Sidebar';
-import { useInitTheme } from './useInitTheme';
 import { useAuthHandler } from 'state/authDataAtom';
 import { useGetConfiguration } from 'state/configurationAtom';
-import { useGetExtensions } from 'state/navigation/extensibilityNodeAtom';
+import { useGetExtensions } from 'state/navigation/extensionsAtom';
 
+import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
+import { useHandleResetEndpoint } from 'components/Clusters/shared';
+import { Preferences } from 'components/Preferences/Preferences';
+import { useResourceSchemas } from './resourceSchemas/useResourceSchemas';
+import { Header } from 'header/Header';
+import { ContentWrapper } from './ContentWrapper/ContentWrapper';
+import { Sidebar } from 'sidebar/Sidebar';
+import { useInitTheme } from './useInitTheme';
 import ClusterList from 'components/Clusters/views/ClusterList';
 import ClusterRoutes from './ClusterRoutes';
 
 import './App.scss';
-import { useHandleResetEndpoint } from 'components/Clusters/shared';
 import { useAfterInitHook } from 'state/useAfterInitHook';
 
 export default function App() {

@@ -2,7 +2,6 @@ import React from 'react';
 import LuigiClient from '@luigi-project/client';
 import { useTranslation, Trans } from 'react-i18next';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { Labels } from 'shared/components/Labels/Labels';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { GenericList } from 'shared/components/GenericList/GenericList';
@@ -12,10 +11,12 @@ import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { groupBy } from 'lodash';
+import { useRecoilValue } from 'recoil';
+import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
 function HelmReleasesList() {
   const { t } = useTranslation();
-  const { namespaceId: namespace } = useMicrofrontendContext();
+  const namespace = useRecoilValue(activeNamespaceIdState);
 
   const { data, loading, error } = useGetList(
     s => s.type === 'helm.sh/release.v1',

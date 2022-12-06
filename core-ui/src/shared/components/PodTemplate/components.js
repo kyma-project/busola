@@ -1,8 +1,9 @@
-import { LayoutPanel, Link } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 import { LayoutPanelRow } from '../LayoutPanelRow/LayoutPanelRow';
-import { navigateToFixedPathResourceDetails } from 'shared/hooks/navigate';
 import { useTranslation } from 'react-i18next';
 import { getPorts } from '../GetContainersPorts';
+import { Link } from 'react-router-dom';
+import { useUrl } from 'hooks/useUrl';
 
 function Table({ items, headers, rowRenderer }) {
   if (!items?.length) {
@@ -119,6 +120,7 @@ export function ContainersPanel({ title, containers }) {
 
 export function Volume({ volume }) {
   const { t } = useTranslation();
+  const { namespaceUrl } = useUrl();
   const { name, configMap, secret } = volume;
 
   const getTypeLabel = () => {
@@ -149,12 +151,10 @@ export function Volume({ volume }) {
             name={t('common.headers.resource')}
             value={
               <Link
-                onClick={() =>
-                  navigateToFixedPathResourceDetails(
-                    configMap ? 'configmaps' : 'secrets',
-                    k8sResourceName,
-                  )
-                }
+                className="fd-link"
+                to={namespaceUrl(
+                  `${configMap ? 'configmaps' : 'secrets'}/${k8sResourceName}`,
+                )}
               >
                 {k8sResourceName}
               </Link>

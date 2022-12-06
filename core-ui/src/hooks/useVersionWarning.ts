@@ -1,10 +1,17 @@
+import { apiGroupState } from './../state/discoverability/apiGroupsSelector';
 import { useEffect } from 'react';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { useFeature } from 'shared/hooks/useFeature';
+import { useFeature } from 'hooks/useFeature';
 import * as Sentry from '@sentry/react';
+import { useRecoilValue } from 'recoil';
 
-export function useVersionWarning({ resourceUrl, resourceType }) {
-  const { apiGroups } = useMicrofrontendContext();
+export function useVersionWarning({
+  resourceUrl,
+  resourceType,
+}: {
+  resourceUrl: string;
+  resourceType: string;
+}) {
+  const apiGroups = useRecoilValue(apiGroupState);
   const { isEnabled: isTrackingEnabled } = useFeature('SENTRY');
 
   useEffect(() => {
@@ -12,6 +19,7 @@ export function useVersionWarning({ resourceUrl, resourceType }) {
 
     if (resourceType.toLowerCase() === 'horizontalpodautoscalers') {
       // we don't talk about HPAs
+
       // unless it's https://github.com/kyma-project/busola/issues/1566
       return;
     }

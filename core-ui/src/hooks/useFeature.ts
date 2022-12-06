@@ -4,7 +4,10 @@ import { ConfigFeature, ConfigFeaturesNames } from 'state/types';
 
 export function useFeature<T extends ConfigFeature>(
   featureName: ConfigFeaturesNames,
-): T | undefined {
+): T {
   const configuration = useRecoilValue(configurationAtom);
-  return configuration?.features?.[featureName] as T;
+  const feature = configuration?.features?.[featureName] ?? {
+    isEnabled: false,
+  };
+  return feature as T;
 }

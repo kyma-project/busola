@@ -3,8 +3,15 @@ import { Token } from 'fundamental-react';
 import { Trans, useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import './components.scss';
+import { HelpEntries } from '../types';
 
-export function SuggestedQuery({ suggestedQuery, setQuery }) {
+export function SuggestedQuery({
+  suggestedQuery,
+  setQuery,
+}: {
+  suggestedQuery: string;
+  setQuery: (query: string) => void;
+}) {
   const { t } = useTranslation();
 
   if (!suggestedQuery) {
@@ -24,6 +31,9 @@ export function SuggestedQuery({ suggestedQuery, setQuery }) {
 export function NamespaceContextDisplay({
   namespaceContext,
   setNamespaceContext,
+}: {
+  namespaceContext: string | null;
+  setNamespaceContext: (namespace: string | null) => void;
 }) {
   const { t } = useTranslation();
 
@@ -35,7 +45,7 @@ export function NamespaceContextDisplay({
     <div className="namespace-context">
       <span className="namespace-name">{t('namespaces.name_singular')}:</span>
       <Token
-        buttonLabel={t('command-palette.search.remove-ns-context')}
+        // buttonLabel={t('command-palette.search.remove-ns-context')} todo
         className="y-fd-token y-fd-token--no-button y-fd-token--gap fd-margin-end--tiny fd-margin-begin--tiny"
         onClick={() => setNamespaceContext(null)}
       >
@@ -45,7 +55,7 @@ export function NamespaceContextDisplay({
   );
 }
 
-export function ShortHelpText({ showFullHelp }) {
+export function ShortHelpText({ showFullHelp }: { showFullHelp: () => void }) {
   const { t } = useTranslation();
 
   return (
@@ -58,7 +68,11 @@ export function ShortHelpText({ showFullHelp }) {
   );
 }
 
-export function CommandPalletteHelp({ helpEntries }) {
+export function CommandPalletteHelp({
+  helpEntries,
+}: {
+  helpEntries: HelpEntries;
+}) {
   const { t } = useTranslation();
 
   return (
@@ -77,10 +91,10 @@ export function CommandPalletteHelp({ helpEntries }) {
           </tr>
         </thead>
         <tbody>
-          {helpEntries.others.map(([name, shortName, description]) => (
+          {helpEntries.others.map(({ name, alias, description }) => (
             <tr key={name}>
               <td>
-                {name}, {shortName || EMPTY_TEXT_PLACEHOLDER}
+                {name}, {alias || EMPTY_TEXT_PLACEHOLDER}
               </td>
               <td>{description}</td>
             </tr>
@@ -92,10 +106,10 @@ export function CommandPalletteHelp({ helpEntries }) {
       </h1>
       <table className="help-text">
         <tbody>
-          {helpEntries.navigation.map(([name, shortNames]) => (
+          {helpEntries.navigation.map(({ name, aliases }) => (
             <tr key={name}>
               <td>{name}</td>
-              <td>{shortNames?.join(', ') || EMPTY_TEXT_PLACEHOLDER}</td>
+              <td>{aliases?.join(', ') || EMPTY_TEXT_PLACEHOLDER}</td>
             </tr>
           ))}
         </tbody>

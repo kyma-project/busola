@@ -2,7 +2,7 @@ import { Routes } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import { languageAtom } from 'state/preferences/languageAtom';
-import { extensibilityNodesState } from 'state/navigation/extensibilityNodeAtom';
+import { extensionsState } from 'state/navigation/extensionsAtom';
 
 import { resourceRoutesNamespaced } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
@@ -10,7 +10,7 @@ import { otherRoutesNamespaced } from 'resources/other';
 
 export default function NamespaceRoutes() {
   const language = useRecoilValue(languageAtom);
-  const extensions = useRecoilValue(extensibilityNodesState);
+  const extensions = useRecoilValue(extensionsState);
 
   return (
     <Routes>

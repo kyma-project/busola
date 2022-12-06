@@ -24,11 +24,11 @@ export function useAddStyle({ styleId }) {
   };
 }
 
-export function getResourceGraphConfig(t, context, addStyle) {
+export function getResourceGraphConfig(t, features, extensions, addStyle) {
   const builtinResourceDefs = getPerResourceDefs(
     'resourceGraphConfig',
     t,
-    context,
+    features,
   );
 
   const builtinResourceGraphConfig = Object.fromEntries(
@@ -41,9 +41,9 @@ export function getResourceGraphConfig(t, context, addStyle) {
     ]),
   );
 
-  const customResourcesGraphConfig = context.customResources
+  const extensionsGraphConfig = extensions
     ? Object.fromEntries(
-        context.customResources
+        extensions
           // gather necessary fields
           ?.map(cR => ({
             resource: cR.general?.resource,
@@ -102,5 +102,8 @@ export function getResourceGraphConfig(t, context, addStyle) {
       )
     : {};
 
-  return { ...builtinResourceGraphConfig, ...customResourcesGraphConfig };
+  return {
+    ...builtinResourceGraphConfig,
+    ...extensionsGraphConfig,
+  };
 }

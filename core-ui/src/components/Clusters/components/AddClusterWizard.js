@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { MessageStrip, Wizard } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
+import { useRecoilValue } from 'recoil';
 
 import { ResourceForm } from 'shared/ResourceForm';
 import { useCustomFormValidator } from 'shared/hooks/useCustomFormValidator';
 import { useNotification } from 'shared/contexts/NotificationContext';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 
 import { addByContext, getUser, hasKubeconfigAuth } from '../shared';
 import { AuthForm } from './AuthForm';
@@ -13,8 +13,10 @@ import { KubeconfigUpload } from './KubeconfigUpload/KubeconfigUpload';
 import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
 
-import './AddClusterWizard.scss';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
+import { configurationAtom } from 'state/configurationAtom';
+
+import './AddClusterWizard.scss';
 
 export function AddClusterWizard({
   kubeconfig,
@@ -22,7 +24,7 @@ export function AddClusterWizard({
   onCancel,
   config,
 }) {
-  const { busolaClusterParams } = useMicrofrontendContext();
+  const busolaClusterParams = useRecoilValue(configurationAtom);
   const { t } = useTranslation();
   const notification = useNotification();
   const clustersInfo = useClustersInfo();
@@ -30,7 +32,7 @@ export function AddClusterWizard({
   const [hasAuth, setHasAuth] = useState(false);
   const [hasOneContext, setHasOneContext] = useState(false);
   const [storage, setStorage] = useState(
-    busolaClusterParams?.config?.storage || 'localStorage',
+    busolaClusterParams?.config?.storage || 'sessionStorage',
   );
   const {
     isValid: authValid,
