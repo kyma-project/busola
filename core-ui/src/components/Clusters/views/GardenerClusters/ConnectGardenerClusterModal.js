@@ -6,8 +6,10 @@ import { useTranslation } from 'react-i18next';
 import { base64Decode } from 'shared/helpers';
 import { Button } from 'fundamental-react';
 import { addCluster } from 'components/Clusters/shared';
+import { useConfig } from 'shared/contexts/ConfigContext';
+import { baseUrl } from 'shared/hooks/BackendAPI/config';
 
-async function GARDENER_LOGIN(kubeconfigText, setReport) {
+async function GARDENER_LOGIN(kubeconfigText, setReport, backendUrl) {
   setReport('Performing SSR...');
   const kubeconfig = jsyaml.load(kubeconfigText);
 
@@ -22,7 +24,7 @@ async function GARDENER_LOGIN(kubeconfigText, setReport) {
     spec: { namespace: '*' },
   };
 
-  const ssrUrl = `http://localhost:3001/backend/apis/authorization.k8s.io/v1/selfsubjectrulesreviews`;
+  const ssrUrl = `${backendUrl}/apis/authorization.k8s.io/v1/selfsubjectrulesreviews`;
   const ssrResponse = await fetch(ssrUrl, {
     method: 'POST',
     body: JSON.stringify(ssrr),
@@ -52,7 +54,7 @@ async function GARDENER_LOGIN(kubeconfigText, setReport) {
 
   for (const project of availableProjects) {
     setReport('Fetching shoots in ' + project);
-    const url = `http://localhost:3001/backend/apis/core.gardener.cloud/v1beta1/namespaces/garden-${project}/shoots`;
+    const url = `${backendUrl}/apis/core.gardener.cloud/v1beta1/namespaces/garden-${project}/shoots`;
     const shootsResponse = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -81,7 +83,7 @@ async function GARDENER_LOGIN(kubeconfigText, setReport) {
         },
       };
 
-      const kubeconfigUrl = `http://localhost:3001/backend/apis/core.gardener.cloud/v1beta1/namespaces/garden-${project}/shoots/${shoot.metadata.name}/adminkubeconfig`;
+      const kubeconfigUrl = `${backendUrl}/apis/core.gardener.cloud/v1beta1/namespaces/garden-${project}/shoots/${shoot.metadata.name}/adminkubeconfig`;
       const kubeconfigResponse = await fetch(kubeconfigUrl, {
         method: 'POST',
         body: JSON.stringify(payload),
@@ -126,6 +128,8 @@ export function ConnectGardenerClusterModal({ modalOpeningComponent }) {
   const [kubeconfigText, setKubeconfigText] = useState('');
   const [report, setReport] = useState('');
   const { t } = useTranslation();
+  const { fromConfig } = useConfig();
+  const backendUrl = baseUrl(fromConfig);
 
   return (
     <Modal
@@ -151,7 +155,7 @@ export function ConnectGardenerClusterModal({ modalOpeningComponent }) {
           option="emphasized"
           onClick={async () => {
             try {
-              await GARDENER_LOGIN(kubeconfigText, setReport);
+              await GARDENER_LOGIN(kubeconfigText, setReport, backendUrl);
             } catch (e) {
               console.log(e);
               setReport('error: ' + e.message);
