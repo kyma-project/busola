@@ -1,36 +1,35 @@
 import 'cypress-file-upload';
 
 Cypress.skipAfterFail = ({ skipAllSuits = false } = {}) => {
-  before(function() {
-    // stop all if an important test failed before
-    cy.task('dynamicSharedStore', { name: 'cancelTests' }).then(
-      hasImportantTestFallen => {
-        if (hasImportantTestFallen) {
-          Cypress.runner.stop();
-        }
-      },
-    );
-  });
-
-  afterEach(function() {
-    if (this.currentTest.state === 'failed') {
-      if (!Cypress.config('isInteractive')) {
-        // isInteractive is true for headed browsers (suite started with 'cypress open' command)
-        // and false for headless ('cypress run')
-        // This will skip remaining test in the current context when a test fails.
-        Cypress.runner.stop();
-      }
-
-      if (skipAllSuits) {
-        cy.task('dynamicSharedStore', {
-          name: 'cancelTests',
-          value: true,
-        }).then(() => {
-          cy.log('Skipping all remaining tests');
-        });
-      }
-    }
-  });
+  // TODO uncomment this after fixing all tests
+  // before(function() {
+  //   // stop all if an important test failed before
+  //   cy.task('dynamicSharedStore', { name: 'cancelTests' }).then(
+  //     hasImportantTestFallen => {
+  //       if (hasImportantTestFallen) {
+  //         Cypress.runner.stop();
+  //       }
+  //     },
+  //   );
+  // });
+  // afterEach(function() {
+  //   if (this.currentTest.state === 'failed') {
+  //     if (!Cypress.config('isInteractive')) {
+  //       // isInteractive is true for headed browsers (suite started with 'cypress open' command)
+  //       // and false for headless ('cypress run')
+  //       // This will skip remaining test in the current context when a test fails.
+  //       Cypress.runner.stop();
+  //     }
+  //     if (skipAllSuits) {
+  //       cy.task('dynamicSharedStore', {
+  //         name: 'cancelTests',
+  //         value: true,
+  //       }).then(() => {
+  //         cy.log('Skipping all remaining tests');
+  //       });
+  //     }
+  //   }
+  // });
 };
 
 Cypress.Commands.add(
@@ -107,7 +106,7 @@ function paste(subject, { pastePayload }) {
 }
 
 Cypress.Commands.add('getLeftNav', () => {
-  cy.get('nav[data-testid=semiCollapsibleLeftNav]');
+  return cy.get('aside.sidebar');
 });
 
 Cypress.Commands.add('deleteInDetails', () => {
