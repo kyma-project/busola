@@ -1,18 +1,20 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { Link } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { Link as DescLink } from 'shared/components/Link/Link';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { navigateToResource } from 'shared/helpers/universalLinks';
 
 import { PersistentVolumeStatus } from './PersistentVolumeStatus';
 import { PersistentVolumeCreate } from './PersistentVolumeCreate';
+import { useUrl } from 'hooks/useUrl';
 
 export function PersistentVolumeList(props) {
   const { t } = useTranslation();
+  const { resourceUrl } = useUrl();
+
   const { data: storageClasses } = useGetList()(
     '/apis/storage.k8s.io/v1/storageclasses',
   );
@@ -29,12 +31,13 @@ export function PersistentVolumeList(props) {
           ({ metadata }) => metadata.name === pv.spec?.storageClassName,
         ) ? (
           <Link
-            onClick={() =>
-              navigateToResource({
-                kind: 'StorageClass',
+            className="fd-link"
+            to={resourceUrl({
+              kind: 'StorageClass',
+              metadata: {
                 name: pv.spec?.storageClassName,
-              })
-            }
+              },
+            })}
           >
             {pv.spec?.storageClassName}
           </Link>
@@ -53,13 +56,16 @@ export function PersistentVolumeList(props) {
           ({ metadata }) => metadata.name === pv.spec?.claimRef?.name,
         ) ? (
           <Link
-            onClick={() =>
-              navigateToResource({
-                name: pv.spec?.claimRef?.name,
+            className="fd-link"
+            to={resourceUrl(
+              {
                 kind: 'PersistentVolumeClaim',
-                namespace: pv.spec?.claimRef?.namespace,
-              })
-            }
+                metadata: {
+                  name: pv.spec?.claimRef?.name,
+                },
+              },
+              { namespace: pv.spec?.claimRef?.namespace },
+            )}
           >
             {pv.spec?.claimRef?.name}
           </Link>
