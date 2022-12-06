@@ -12,11 +12,10 @@ context('Test Download a Kubeconfig', () => {
   });
 
   it('Download a Kubeconfig from the Clusters list', () => {
-    cy.get('[data-testid=app-switcher]').click();
-    cy.get('[data-testid=clusters-overview]').click();
+    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
+    cy.contains('Clusters Overview').click();
 
-    cy.getIframeBody()
-      .find('.fd-table__body .fd-table__cell')
+    cy.get('.fd-table__body .fd-table__cell')
       .eq(0)
       .then(el => {
         const contextName = el.text();
@@ -28,9 +27,7 @@ context('Test Download a Kubeconfig', () => {
 
         cy.readFile(filepath).should('not.exist');
 
-        cy.getIframeBody()
-          .find('[data-testid=downloadkubeconfig]')
-          .click({ force: true });
+        cy.get('[data-testid=downloadkubeconfig]').click({ force: true });
 
         cy.readFile(filepath).should('exist');
         cy.task('removeFile', filepath);
