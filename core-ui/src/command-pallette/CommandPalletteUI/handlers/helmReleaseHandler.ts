@@ -1,4 +1,3 @@
-import { TFunction } from 'react-i18next';
 import { findRecentRelease } from 'components/HelmReleases/findRecentRelease';
 import { groupBy } from 'lodash';
 import { K8sResource } from 'types';
@@ -45,19 +44,16 @@ function getSuggestions({
   });
 }
 
-function makeListItem(
-  item: K8sResource,
-  namespace: string | null,
-  t: TFunction<'translation', undefined>,
-) {
+function makeListItem(item: K8sResource, context: CommandPaletteContext) {
   const name = item.metadata.labels.name;
-
+  const { t, namespace, activeClusterName, navigate } = context;
   return {
     label: name,
     category: t('configuration.title') + ' > ' + t('helm-releases.title'),
     query: `helmreleases ${name}`,
     onActivate: () => {
-      // todo: navigateFunction
+      const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/helm-releases/${name}`;
+      navigate(pathname);
     },
   };
 }
@@ -131,13 +127,13 @@ function createResults(context: CommandPaletteContext): Result[] | null {
       item.metadata.name.includes(name),
     );
     if (matchedByName) {
-      return matchedByName.map(item => makeListItem(item, namespace, t));
+      return matchedByName.map(item => makeListItem(item, context));
     }
     return null;
   } else {
     return [
       linkToList,
-      ...helmReleases.map(item => makeListItem(item, namespace, t)),
+      ...helmReleases.map(item => makeListItem(item, context)),
     ];
   }
 }
