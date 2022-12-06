@@ -1,19 +1,25 @@
-import LuigiClient from '@luigi-project/client';
-import { LOADING_INDICATOR } from '../useSearchResults';
+import { Result } from './../types';
+import { Pod } from 'types';
+import { CommandPaletteContext, Handler, LOADING_INDICATOR } from '../types';
 import { getSuggestionsForSingleResource } from './helpers';
 
 const logNames = ['logs', 'log', 'lg'];
 
-function getAutocompleteEntries({ tokens, namespace, resourceCache }) {
+function getAutocompleteEntries({
+  tokens,
+  namespace,
+  resourceCache,
+}: CommandPaletteContext) {
   const [type, name] = tokens;
   const tokenToAutocomplete = tokens[tokens.length - 1];
-  const pods = resourceCache[`${namespace}/pods`] || [];
+  const pods = (resourceCache[`${namespace}/pods`] || []) as Pod[];
+
   switch (tokens.length) {
     case 1: // type
       if ('pods'.startsWith(tokenToAutocomplete)) {
-        return 'pods ';
+        return ['pods'];
       }
-      break;
+      return [];
     case 2: // pod name
       const podNames = pods.map(n => n.metadata.name);
       return podNames
@@ -29,10 +35,9 @@ function getAutocompleteEntries({ tokens, namespace, resourceCache }) {
     default:
       return [];
   }
-  return [];
 }
 
-function getSuggestions({ tokens, resourceCache }) {
+function getSuggestions({ tokens, resourceCache }: CommandPaletteContext) {
   return getSuggestionsForSingleResource({
     tokens,
     resources: resourceCache['pods'] || [],
@@ -40,8 +45,13 @@ function getSuggestions({ tokens, resourceCache }) {
   });
 }
 
-function makeListItem(pod, containerName, t) {
+function makeListItem(
+  pod: Pod,
+  containerName: string,
+  context: CommandPaletteContext,
+) {
   const podName = pod.metadata.name;
+  const { t, activeClusterName, navigate } = context;
   const namespacePart = `namespaces/${pod.metadata.namespace}`;
 
   const containers = pod.spec.containers.filter(
@@ -58,21 +68,19 @@ function makeListItem(pod, containerName, t) {
       label,
       category: t('workloads.title') + ' > ' + t('pods.title'),
       query,
-      onActivate: () =>
-        LuigiClient.linkManager()
-          .fromContext('cluster')
-          .navigate(
-            `${namespacePart}/pods/details/${podName}/containers/${containerName}`,
-          ),
+      onActivate: () => {
+        const pathname = `/cluster/${activeClusterName}/${namespacePart}/pods/${podName}/containers/${containerName}`;
+        navigate(pathname);
+      },
     };
   });
 }
 
-function concernsLogs({ tokens }) {
+function concernsLogs({ tokens }: CommandPaletteContext) {
   return logNames.includes(tokens[0]);
 }
 
-async function fetchLogs(context) {
+async function fetchLogs(context: CommandPaletteContext) {
   if (!concernsLogs(context)) {
     return;
   }
@@ -87,14 +95,15 @@ async function fetchLogs(context) {
   }
 }
 
-function createResults(context) {
+function createResults(context: CommandPaletteContext): Result[] {
   if (!concernsLogs(context)) {
-    return;
+    return [];
   }
 
-  const { resourceCache, tokens, namespace, t } = context;
-  const pods = resourceCache[`${namespace}/pods`];
+  const { resourceCache, tokens, namespace } = context;
+  const pods = resourceCache[`${namespace}/pods`] as Pod[];
   if (typeof pods !== 'object') {
+    //@ts-ignore  TODO: handle typein Result
     return [{ type: LOADING_INDICATOR }];
   }
 
@@ -106,19 +115,19 @@ function createResults(context) {
     );
     if (matchedByPodName) {
       return matchedByPodName.flatMap(pod =>
-        makeListItem(pod, containerName, t),
+        makeListItem(pod, containerName, context),
       );
     }
-    return null;
+    return [];
   } else {
-    return pods.flatMap(pod => makeListItem(pod, containerName, t));
+    return pods.flatMap(pod => makeListItem(pod, containerName, context));
   }
 }
 
-export const logsHandler = {
+export const logsHandler: Handler = {
   getAutocompleteEntries,
   getSuggestions,
   fetchResources: fetchLogs,
   createResults,
-  getNavigationHelp: () => [['logs', ['lg']]],
+  getNavigationHelp: () => [{ name: 'logs', aliases: ['lg'] }],
 };

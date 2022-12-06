@@ -2,7 +2,7 @@ import { nonResourceHandler } from './nonResourceHandler';
 // import { clusterResourceHandler } from './clusterResourceHandler';
 // import { namespacedResourceHandler } from './namespacedResourceHandler';
 import { nodesHandler } from './nodesHandler';
-// import { logsHandler } from './logsHandler';
+import { logsHandler } from './logsHandler';
 // import { crdHandler } from './crdHandler';
 import { helmReleaseHandler } from './helmReleaseHandler';
 import { findCommonPrefix } from 'shared/utils/helpers';
@@ -15,7 +15,7 @@ const allHandlers: Handler[] = [
   // clusterResourceHandler,
   // namespacedResourceHandler,
   nodesHandler,
-  // logsHandler,
+  logsHandler,
   // crdHandler,
   crListHandler,
   // crHandler,

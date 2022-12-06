@@ -1,6 +1,6 @@
 import { findRecentRelease } from 'components/HelmReleases/findRecentRelease';
 import { groupBy } from 'lodash';
-import { K8sResource } from 'types';
+import { K8sResource, Secret } from 'types';
 import { LOADING_INDICATOR } from '../types';
 import { CommandPaletteContext, Handler, Result } from '../types';
 import { getSuggestionsForSingleResource } from './helpers';
@@ -61,10 +61,6 @@ function makeListItem(item: K8sResource, context: CommandPaletteContext) {
 function concernsHelmReleases({ tokens }: CommandPaletteContext) {
   return tokens[0] === helmReleaseResourceType;
 }
-
-type Secret = K8sResource & {
-  type: string;
-};
 
 async function fetchHelmReleases(context: CommandPaletteContext) {
   if (!concernsHelmReleases(context)) {
