@@ -1,26 +1,37 @@
+import { ResourceTypeWithAliases } from './../../../shared/constants';
 import didYouMean from 'didyoumean';
 import pluralize from 'pluralize';
+import { K8sResource } from 'types';
+import { NavNode } from 'state/types';
 
-export function getSuggestion(phrase, itemList) {
-  return didYouMean(phrase, itemList);
+export function makeSuggestion(phrase: string, itemList: string[]): string {
+  const suggestions = didYouMean(phrase, itemList);
+  return Array.isArray(suggestions) ? suggestions[0] : suggestions;
 }
 
-export function toFullResourceType(resourceType, resources) {
+export function toFullResourceType(
+  resourceType: string,
+  resources: ResourceTypeWithAliases[],
+) {
   const fullResourceType = resources.find(r => r.aliases.includes(resourceType))
     ?.resourceType;
   return fullResourceType || resourceType;
 }
 
-export function getSuggestionsForSingleResource({
+export function getSuggestionForSingleResource({
   tokens,
   resources,
   resourceTypeNames,
+}: {
+  tokens: string[];
+  resources: K8sResource[];
+  resourceTypeNames: string[];
 }) {
   const [type, name] = tokens;
-  const suggestedType = getSuggestion(type, resourceTypeNames);
+  const suggestedType = makeSuggestion(type, resourceTypeNames);
   if (name) {
     const resourceNames = resources.map(n => n.metadata.name);
-    const suggestedName = getSuggestion(name, resourceNames);
+    const suggestedName = makeSuggestion(name, resourceNames);
     if (suggestedType && suggestedName) {
       return `${suggestedType} ${suggestedName}`;
     }
@@ -29,7 +40,15 @@ export function getSuggestionsForSingleResource({
   }
 }
 
-export function autocompleteForResources({ tokens, resources, resourceTypes }) {
+export function autocompleteForResources({
+  tokens,
+  resources,
+  resourceTypes,
+}: {
+  tokens: string[];
+  resources: K8sResource[];
+  resourceTypes: ResourceTypeWithAliases[];
+}): string[] {
   const type = tokens[0];
   const tokenToAutocomplete = tokens[tokens.length - 1];
   switch (tokens.length) {
@@ -50,16 +69,16 @@ export function autocompleteForResources({ tokens, resources, resourceTypes }) {
 export function extractShortNames({
   resourceType: pluralResourceType,
   aliases,
-}) {
+}: {
+  resourceType: string;
+  aliases: string[];
+}): string[] {
   const singularResourceType = pluralize(pluralResourceType, 1);
   return aliases.filter(
     alias => alias !== singularResourceType && alias !== pluralResourceType,
   );
 }
 
-export function findNavigationNode(resourceType, nodes) {
-  return nodes.find(
-    n =>
-      n.resourceType === resourceType || n.navigationContext === resourceType,
-  );
+export function findNavigationNode(resourceType: string, navNodes: NavNode[]) {
+  return navNodes.find(n => n.resourceType === resourceType);
 }

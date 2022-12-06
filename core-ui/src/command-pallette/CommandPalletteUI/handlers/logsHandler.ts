@@ -1,7 +1,7 @@
 import { Result } from './../types';
 import { Pod } from 'types';
 import { CommandPaletteContext, Handler, LOADING_INDICATOR } from '../types';
-import { getSuggestionsForSingleResource } from './helpers';
+import { getSuggestionForSingleResource } from './helpers';
 
 const logNames = ['logs', 'log', 'lg'];
 
@@ -37,8 +37,8 @@ function getAutocompleteEntries({
   }
 }
 
-function getSuggestions({ tokens, resourceCache }: CommandPaletteContext) {
-  return getSuggestionsForSingleResource({
+function getSuggestion({ tokens, resourceCache }: CommandPaletteContext) {
+  return getSuggestionForSingleResource({
     tokens,
     resources: resourceCache['pods'] || [],
     resourceTypeNames: logNames,
@@ -126,7 +126,7 @@ function createResults(context: CommandPaletteContext): Result[] {
 
 export const logsHandler: Handler = {
   getAutocompleteEntries,
-  getSuggestions,
+  getSuggestion,
   fetchResources: fetchLogs,
   createResults,
   getNavigationHelp: () => [{ name: 'logs', aliases: ['lg'] }],

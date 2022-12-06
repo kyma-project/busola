@@ -3,7 +3,7 @@ import { TFunction } from 'react-i18next';
 import LuigiClient from '@luigi-project/client';
 import { getApiPath } from 'shared/utils/helpers';
 import {
-  getSuggestion,
+  makeSuggestion,
   toFullResourceType,
   autocompleteForResources,
   extractShortNames,
@@ -32,9 +32,12 @@ function getAutocompleteEntries({
   });
 }
 
-function getSuggestions({ tokens, resourceCache }: CommandPaletteContext) {
+function getSuggestion({
+  tokens,
+  resourceCache,
+}: CommandPaletteContext): string {
   const [type, name] = tokens;
-  const suggestedType = getSuggestion(
+  const suggestedType = makeSuggestion(
     type,
     resourceTypes.flatMap(n => n.aliases),
   );
@@ -46,7 +49,7 @@ function getSuggestions({ tokens, resourceCache }: CommandPaletteContext) {
     const resourceNames = (resourceCache[fullResourceType] || [])?.map(
       n => n.metadata.name,
     );
-    const suggestedName = getSuggestion(name, resourceNames);
+    const suggestedName = makeSuggestion(name, resourceNames);
     return `${suggestedType || type} ${suggestedName || name}`;
   } else {
     return suggestedType;
@@ -157,7 +160,7 @@ function createResults({
 }: CommandPaletteContext): Result[] {
   const [type, name] = tokens;
   const resourceType = toFullResourceType(type, resourceTypes);
-  const matchedNode: NavNode = findNavigationNode(resourceType, clusterNodes);
+  const matchedNode = findNavigationNode(resourceType, clusterNodes);
   if (!matchedNode) {
     return [];
   }
@@ -211,12 +214,11 @@ function createResults({
 
 export const clusterResourceHandler: Handler = {
   getAutocompleteEntries,
-  getSuggestions,
+  getSuggestion,
   fetchResources: fetchClusterResources,
   createResults,
-  //@ts-ignore
   getNavigationHelp: ({ clusterNodes }: CommandPaletteContext) =>
     resourceTypes
       .filter(rT => findNavigationNode(rT.resourceType, clusterNodes))
-      .map(rT => [{ name: rT.resourceType, aliases: extractShortNames(rT) }]),
+      .map(rT => ({ name: rT.resourceType, aliases: extractShortNames(rT) })),
 };

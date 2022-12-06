@@ -1,6 +1,11 @@
 export const EMPTY_TEXT_PLACEHOLDER = '-';
 
-export const namespaceNativeResourceTypes = [
+export type ResourceTypeWithAliases = {
+  resourceType: string;
+  aliases: string[];
+};
+
+export const namespaceNativeResourceTypes: ResourceTypeWithAliases[] = [
   { resourceType: 'cronjobs', aliases: ['cj', 'cronjob', 'cronjobs'] },
   { resourceType: 'daemonsets', aliases: ['daemonset', 'daemonsets', 'ds'] },
   {
@@ -69,7 +74,8 @@ export const namespaceNativeResourceTypes = [
     aliases: ['controllerrevision', 'controllerrevisions'],
   },
 ];
-export const clusterNativeResourceTypes = [
+
+export const clusterNativeResourceTypes: ResourceTypeWithAliases[] = [
   {
     resourceType: 'clusterrolebindings',
     aliases: ['clusterrolebinding', 'clusterrolebindings', 'crb'],

@@ -1,9 +1,13 @@
 import { findRecentRelease } from 'components/HelmReleases/findRecentRelease';
 import { groupBy } from 'lodash';
 import { K8sResource, Secret } from 'types';
-import { LOADING_INDICATOR } from '../types';
-import { CommandPaletteContext, Handler, Result } from '../types';
-import { getSuggestionsForSingleResource } from './helpers';
+import {
+  CommandPaletteContext,
+  Handler,
+  Result,
+  LOADING_INDICATOR,
+} from '../types';
+import { getSuggestionForSingleResource } from './helpers';
 
 const helmReleaseResourceType = 'helmreleases';
 
@@ -32,12 +36,12 @@ function getAutocompleteEntries({
   }
 }
 
-function getSuggestions({
+function getSuggestion({
   tokens,
   namespace,
   resourceCache,
 }: CommandPaletteContext) {
-  return getSuggestionsForSingleResource({
+  return getSuggestionForSingleResource({
     tokens,
     resources: resourceCache[`${namespace}/helmreleases`] || [],
     resourceTypeNames: [helmReleaseResourceType],
@@ -136,7 +140,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
 
 export const helmReleaseHandler: Handler = {
   getAutocompleteEntries,
-  getSuggestions,
+  getSuggestion,
   fetchResources: fetchHelmReleases,
   createResults,
   getNavigationHelp: () => [{ name: 'helmreleases', aliases: ['helmr'] }],

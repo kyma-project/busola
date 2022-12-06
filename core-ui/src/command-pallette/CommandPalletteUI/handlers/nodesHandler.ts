@@ -6,7 +6,7 @@ import {
   LOADING_INDICATOR,
   Result,
 } from '../types';
-import { getSuggestionsForSingleResource } from './helpers';
+import { getSuggestionForSingleResource } from './helpers';
 
 const nodeResourceTypes = ['nodes', 'node', 'no'];
 
@@ -33,9 +33,9 @@ function getAutocompleteEntries(
   }
 }
 
-function getSuggestions(context: CommandPaletteContext) {
+function getSuggestion(context: CommandPaletteContext) {
   const { tokens, resourceCache } = context;
-  return getSuggestionsForSingleResource({
+  return getSuggestionForSingleResource({
     tokens,
     resources: resourceCache['nodes'] || [],
     resourceTypeNames: nodeResourceTypes,
@@ -110,7 +110,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
 
 export const nodesHandler: Handler = {
   getAutocompleteEntries,
-  getSuggestions,
+  getSuggestion,
   fetchResources: concernsNodes,
   createResults,
   getNavigationHelp: () => [{ name: 'nodes', aliases: ['no'] }],

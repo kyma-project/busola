@@ -1,6 +1,6 @@
 import { Handler, Result } from './../types';
 import { CommandPaletteContext } from '../types';
-import { getSuggestionsForSingleResource } from './helpers';
+import { getSuggestionForSingleResource } from './helpers';
 
 function getAutocompleteEntries({
   tokens,
@@ -25,8 +25,8 @@ function getAutocompleteEntries({
   }
 }
 
-function getSuggestions({ tokens, resourceCache }: CommandPaletteContext) {
-  return getSuggestionsForSingleResource({
+function getSuggestion({ tokens, resourceCache }: CommandPaletteContext) {
+  return getSuggestionForSingleResource({
     tokens,
     resources: resourceCache['customresources'] || [],
     resourceTypeNames: ['customresources'],
@@ -74,7 +74,7 @@ function createResults(context: CommandPaletteContext): Result[] {
 
 export const crListHandler: Handler = {
   getAutocompleteEntries,
-  getSuggestions,
+  getSuggestion,
   createResults,
   getNavigationHelp: () => [{ name: 'customresources', aliases: ['crs'] }],
 };

@@ -1,7 +1,7 @@
 import LuigiClient from '@luigi-project/client';
 import { addCluster } from 'components/Clusters/shared';
 import { CommandPaletteContext, Handler, Result } from '../types';
-import { getSuggestion } from './helpers';
+import { makeSuggestion } from './helpers';
 
 function createNonResourceOptions({
   activeClusterName,
@@ -109,8 +109,8 @@ function createResults(context: CommandPaletteContext): Result[] | null {
 
 export const nonResourceHandler: Handler = {
   getAutocompleteEntries,
-  getSuggestions: context =>
-    getSuggestion(
+  getSuggestion: context =>
+    makeSuggestion(
       context.tokens[0],
       createNonResourceOptions(context).flatMap(option => option.names),
     ),

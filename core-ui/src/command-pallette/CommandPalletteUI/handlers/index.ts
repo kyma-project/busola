@@ -1,5 +1,5 @@
 import { nonResourceHandler } from './nonResourceHandler';
-// import { clusterResourceHandler } from './clusterResourceHandler';
+import { clusterResourceHandler } from './clusterResourceHandler';
 // import { namespacedResourceHandler } from './namespacedResourceHandler';
 import { nodesHandler } from './nodesHandler';
 import { logsHandler } from './logsHandler';
@@ -12,7 +12,7 @@ import { CommandPaletteContext, Handler, HelpEntries, Result } from '../types';
 
 const allHandlers: Handler[] = [
   nonResourceHandler,
-  // clusterResourceHandler,
+  clusterResourceHandler,
   // namespacedResourceHandler,
   nodesHandler,
   logsHandler,
@@ -27,8 +27,8 @@ export function getSuggestions(context: CommandPaletteContext): string[] {
     return [];
   }
   const suggestions = allHandlers
-    .flatMap(handler => handler.getSuggestions(context))
-    .filter(Boolean);
+    .map(handler => handler.getSuggestion(context))
+    .filter(Boolean) as string[];
 
   // don't suggest anything if correct word is already here
   if (suggestions.includes(context.query)) {
@@ -94,6 +94,7 @@ export function getHelpEntries(context: CommandPaletteContext): HelpEntries {
       .flatMap(e => e),
   };
 
+  console.log(helpEntries);
   helpEntries.navigation.sort((a, b) => a.name.localeCompare(b.name));
   helpEntries.others.sort((a, b) => a.name[0].localeCompare(b.name));
   return helpEntries;

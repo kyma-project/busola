@@ -1,7 +1,7 @@
 import { Result } from './../types';
 import LuigiClient from '@luigi-project/client';
 import { CommandPaletteContext, Handler, LOADING_INDICATOR } from '../types';
-import { getSuggestionsForSingleResource } from './helpers';
+import { getSuggestionForSingleResource } from './helpers';
 import { K8sResource } from 'types';
 
 const crdResourceTypes = ['customresourcedefinitions', 'crd', 'crds'];
@@ -31,8 +31,8 @@ function getAutocompleteEntries({
   }
 }
 
-function getSuggestions({ tokens, resourceCache }: CommandPaletteContext) {
-  return getSuggestionsForSingleResource({
+function getSuggestion({ tokens, resourceCache }: CommandPaletteContext) {
+  return getSuggestionForSingleResource({
     tokens,
     resources: resourceCache['customresourcedefinitions'] || [],
     resourceTypeNames: crdResourceTypes,
@@ -119,7 +119,7 @@ function createResults(context: CommandPaletteContext): Result[] {
 
 export const crdHandler: Handler = {
   getAutocompleteEntries,
-  getSuggestions,
+  getSuggestion,
   fetchResources: fetchCRDs,
   createResults,
   getNavigationHelp: () => [
