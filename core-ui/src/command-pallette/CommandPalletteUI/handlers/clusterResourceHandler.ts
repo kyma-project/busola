@@ -1,14 +1,17 @@
 import { NavNode } from 'state/types';
 import LuigiClient from '@luigi-project/client';
-import { getApiPath } from 'shared/utils/helpers';
 import {
   makeSuggestion,
   toFullResourceType,
   autocompleteForResources,
   extractShortNames,
   findNavigationNode,
+  getApiPathForQuery,
 } from './helpers';
-import { clusterNativeResourceTypes as resourceTypes } from 'shared/constants';
+import {
+  clusterNativeResourceTypes,
+  clusterNativeResourceTypes as resourceTypes,
+} from 'shared/constants';
 import {
   CommandPaletteContext,
   Handler,
@@ -86,17 +89,16 @@ function makeListItem(
   };
 }
 
-function getApiPathForQuery({ tokens, clusterNodes }: CommandPaletteContext) {
-  const resourceType = toFullResourceType(tokens[0], resourceTypes);
-  return getApiPath(resourceType, clusterNodes);
-}
-
 async function fetchClusterResources(context: CommandPaletteContext) {
-  const apiPath = getApiPathForQuery(context);
+  const { fetch, tokens, updateResourceCache, clusterNodes } = context;
+  const apiPath = getApiPathForQuery(
+    tokens,
+    clusterNodes,
+    clusterNativeResourceTypes,
+  );
   if (!apiPath) {
     return;
   }
-  const { fetch, tokens, updateResourceCache, clusterNodes } = context;
 
   const resourceType = toFullResourceType(tokens[0], resourceTypes);
   const matchedNode = findNavigationNode(resourceType, clusterNodes);

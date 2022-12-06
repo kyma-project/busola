@@ -34,7 +34,11 @@ function getSuggestion({ tokens, resourceCache }: CommandPaletteContext) {
 }
 
 function concernsCRDs({ tokens }: CommandPaletteContext) {
-  return tokens[0] === 'customresource' || tokens[0] === 'customresources';
+  return (
+    tokens[0] === 'customresource' ||
+    tokens[0] === 'customresources' ||
+    tokens[0] === 'crs'
+  );
 }
 
 function createResults(context: CommandPaletteContext): Result[] {

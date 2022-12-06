@@ -1,16 +1,26 @@
-import LuigiClient from '@luigi-project/client';
-import { LOADING_INDICATOR } from '../useSearchResults';
-import { getApiPath } from 'shared/utils/helpers';
 import {
-  getSuggestion,
+  makeSuggestion,
   toFullResourceType,
   autocompleteForResources,
   extractShortNames,
   findNavigationNode,
+  getApiPathForQuery,
 } from './helpers';
 import { namespaceNativeResourceTypes as resourceTypes } from 'shared/constants';
+import {
+  CommandPaletteContext,
+  Handler,
+  LOADING_INDICATOR,
+  Result,
+} from '../types';
+import { K8sResource } from 'types';
+import { NavNode } from 'state/types';
 
-function getAutocompleteEntries({ tokens, namespace, resourceCache }) {
+function getAutocompleteEntries({
+  tokens,
+  namespace,
+  resourceCache,
+}: CommandPaletteContext) {
   const fullResourceType = toFullResourceType(tokens[0], resourceTypes);
   const resources = resourceCache[`${namespace}/${fullResourceType}`] || [];
 
@@ -21,9 +31,13 @@ function getAutocompleteEntries({ tokens, namespace, resourceCache }) {
   });
 }
 
-function getSuggestions({ tokens, namespace, resourceCache }) {
+function getSuggestion({
+  tokens,
+  namespace,
+  resourceCache,
+}: CommandPaletteContext) {
   const [type, name] = tokens;
-  const suggestedType = getSuggestion(
+  const suggestedType = makeSuggestion(
     type,
     resourceTypes.flatMap(n => n.aliases),
   );
@@ -35,19 +49,23 @@ function getSuggestions({ tokens, namespace, resourceCache }) {
     const resourceNames = (
       resourceCache[`${namespace}/${resourceType}`] || []
     ).map(n => n.metadata.name);
-    const suggestedName = getSuggestion(name, resourceNames);
+    const suggestedName = makeSuggestion(name, resourceNames);
     return `${suggestedType || type} ${suggestedName || name}`;
   } else {
     return suggestedType;
   }
 }
 
-function makeListItem(item, matchedNode, t) {
+function makeListItem(
+  item: K8sResource,
+  matchedNode: NavNode,
+  context: CommandPaletteContext,
+) {
+  const { activeClusterName, navigate, t } = context;
   const name = item.metadata.name;
 
   const namespacePart = `namespaces/${item.metadata.namespace}`;
-  const detailsPart = `details/${name}`;
-  const link = `${namespacePart}/${matchedNode.pathSegment}/${detailsPart}`;
+  const link = `${namespacePart}/${matchedNode.pathSegment}/${name}`;
 
   return {
     label: name,
@@ -59,23 +77,14 @@ function makeListItem(item, matchedNode, t) {
         `${matchedNode.resourceType}.title`,
         `command-palette.resource-names.${matchedNode.resourceType}`,
       ]),
-    onActivate: () =>
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate(link),
+    onActivate: () => {
+      const pathname = `/cluster/${activeClusterName}/${link}`;
+      navigate(pathname);
+    },
   };
 }
 
-function getApiPathForQuery({ tokens, namespaceNodes }) {
-  const resourceType = toFullResourceType(tokens[0], resourceTypes);
-  return getApiPath(resourceType, namespaceNodes);
-}
-
-async function fetchNamespacedResource(context) {
-  const apiPath = getApiPathForQuery(context);
-  if (!apiPath) {
-    return;
-  }
+async function fetchNamespacedResource(context: CommandPaletteContext) {
   const {
     fetch,
     namespace,
@@ -83,6 +92,11 @@ async function fetchNamespacedResource(context) {
     namespaceNodes,
     updateResourceCache,
   } = context;
+  const apiPath = getApiPathForQuery(tokens, namespaceNodes, resourceTypes);
+  console.log(apiPath);
+  if (!apiPath) {
+    return;
+  }
   const resourceType = toFullResourceType(tokens[0], resourceTypes);
   const matchedNode = findNavigationNode(resourceType, namespaceNodes);
 
@@ -100,18 +114,22 @@ async function fetchNamespacedResource(context) {
   }
 }
 
-function createResults({
-  tokens,
-  namespace,
-  resourceCache,
-  namespaceNodes,
-  t,
-}) {
+function createResults(context: CommandPaletteContext): Result[] | null {
+  const {
+    tokens,
+    namespace,
+    resourceCache,
+    namespaceNodes,
+    activeClusterName,
+    navigate,
+    t,
+  } = context;
+
   const [type, name] = tokens;
   const resourceType = toFullResourceType(type, resourceTypes);
   const matchedNode = findNavigationNode(resourceType, namespaceNodes);
   if (!matchedNode) {
-    return;
+    return null;
   }
 
   const resourceTypeText = t([
@@ -125,36 +143,39 @@ function createResults({
     }),
     category: matchedNode.category + ' > ' + resourceTypeText,
     query: matchedNode.resourceType,
-    onActivate: () =>
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate(`namespaces/${namespace}/${matchedNode.pathSegment}`),
+    onActivate: () => {
+      const pathname = `/cluster/${activeClusterName}/namespaces/${namespace}/${matchedNode.pathSegment}`;
+      navigate(pathname);
+    },
   };
 
   const resources = resourceCache[`${namespace}/${resourceType}`];
   if (typeof resources !== 'object') {
-    return [linkToList, { type: LOADING_INDICATOR }];
+    return [
+      linkToList,
+      { type: LOADING_INDICATOR, label: '', onActivate: () => {}, query: '' },
+    ];
   }
 
   if (name) {
     return resources
       .filter(item => item.metadata.name.includes(name))
-      .map(item => makeListItem(item, matchedNode, t));
+      .map(item => makeListItem(item, matchedNode, context));
   } else {
     return [
       linkToList,
-      ...resources.map(item => makeListItem(item, matchedNode, t)),
+      ...resources.map(item => makeListItem(item, matchedNode, context)),
     ];
   }
 }
 
-export const namespacedResourceHandler = {
+export const namespacedResourceHandler: Handler = {
   getAutocompleteEntries,
-  getSuggestions,
+  getSuggestion,
   fetchResources: fetchNamespacedResource,
   createResults,
-  getNavigationHelp: ({ namespaceNodes }) =>
+  getNavigationHelp: ({ namespaceNodes }: CommandPaletteContext) =>
     resourceTypes
       .filter(rT => findNavigationNode(rT.resourceType, namespaceNodes))
-      .map(rT => [rT.resourceType, extractShortNames(rT)]),
+      .map(rT => ({ name: rT.resourceType, aliases: extractShortNames(rT) })),
 };

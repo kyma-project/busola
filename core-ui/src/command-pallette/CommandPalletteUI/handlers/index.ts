@@ -1,25 +1,25 @@
-import { nonResourceHandler } from './nonResourceHandler';
-import { clusterResourceHandler } from './clusterResourceHandler';
-// import { namespacedResourceHandler } from './namespacedResourceHandler';
-import { nodesHandler } from './nodesHandler';
-import { logsHandler } from './logsHandler';
-import { crdHandler } from './crdHandler';
-import { helmReleaseHandler } from './helmReleaseHandler';
+// import { nonResourceHandler } from './nonResourceHandler';
+// import { clusterResourceHandler } from './clusterResourceHandler';
+import { namespacedResourceHandler } from './namespacedResourceHandler';
+// import { nodesHandler } from './nodesHandler';
+// import { logsHandler } from './logsHandler';
+// import { crdHandler } from './crdHandler';
+// import { helmReleaseHandler } from './helmReleaseHandler';
 import { findCommonPrefix } from 'shared/utils/helpers';
 // import { crHandler } from './crHandler';
-import { crListHandler } from './crListHandler';
+// import { crListHandler } from './crListHandler';
 import { CommandPaletteContext, Handler, HelpEntries, Result } from '../types';
 
 const allHandlers: Handler[] = [
-  nonResourceHandler,
-  clusterResourceHandler,
-  // namespacedResourceHandler,
-  nodesHandler,
-  logsHandler,
-  crdHandler,
-  crListHandler,
+  // nonResourceHandler,
+  // clusterResourceHandler,
+  namespacedResourceHandler,
+  // nodesHandler,
+  // logsHandler,
+  // crdHandler,
+  // crListHandler,
   // crHandler,
-  helmReleaseHandler,
+  // helmReleaseHandler,
 ];
 
 export function getSuggestions(context: CommandPaletteContext): string[] {
@@ -94,7 +94,6 @@ export function getHelpEntries(context: CommandPaletteContext): HelpEntries {
       .flatMap(e => e),
   };
 
-  console.log(helpEntries);
   helpEntries.navigation.sort((a, b) => a.name.localeCompare(b.name));
   helpEntries.others.sort((a, b) => a.name[0].localeCompare(b.name));
   return helpEntries;
