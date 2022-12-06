@@ -6,6 +6,7 @@ import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import i18nextBackend from 'i18next-http-backend';
 import yaml from 'js-yaml';
+import { savePreviousPath } from 'state/useAfterInitHook';
 
 import App from './components/App/App';
 
@@ -45,6 +46,8 @@ i18next
       escapeValue: false, // react already handles the escaping
     },
   });
+
+savePreviousPath();
 
 ReactDOM.render(
   <Microfrontend env={process.env}>

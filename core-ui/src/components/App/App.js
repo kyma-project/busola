@@ -26,6 +26,7 @@ import ClusterList from 'components/Clusters/views/ClusterList';
 import ClusterRoutes from './ClusterRoutes';
 
 import './App.scss';
+import { useAfterInitHook } from 'state/useAfterInitHook';
 
 export default function App() {
   const { i18n } = useTranslation();
@@ -39,7 +40,7 @@ export default function App() {
   }, [setNamespace, namespace]);
 
   useHandleResetEndpoint();
-  useLoginWithKubeconfigID();
+  const kubeconfigIdState = useLoginWithKubeconfigID();
   useResourceSchemas();
 
   useInitTheme();
@@ -53,6 +54,7 @@ export default function App() {
 
   useSentry();
   useAppTracking();
+  useAfterInitHook(kubeconfigIdState);
 
   return (
     <>

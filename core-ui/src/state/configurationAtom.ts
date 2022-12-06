@@ -6,6 +6,7 @@ import { clusterState } from './clusterAtom';
 import { authDataState } from './authDataAtom';
 import { getFetchFn } from './utils/getFetchFn';
 import { ConfigFeatureList } from './types';
+import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 
 type Configuration = {
   features?: ConfigFeatureList;
@@ -26,11 +27,7 @@ type ConfigMapResponse =
 
 const defaultValue: Configuration = {};
 
-const getConfigs = async (fetchFn: any) => {
-  if (!fetchFn) {
-    return null;
-  }
-
+const getConfigs = async (fetchFn: FetchFn | undefined) => {
   try {
     const cacheBuster = '?cache-buster=' + Date.now();
 
@@ -41,13 +38,16 @@ const getConfigs = async (fetchFn: any) => {
     const configResponse = await fetch('/config/config.yaml' + cacheBuster);
 
     let configMapResponse: ConfigMapResponse;
-    try {
-      const response = await fetchFn({
-        relativeUrl: '/api/v1/namespaces/kube-public/configmaps/busola-config',
-      });
-      configMapResponse = await response.json();
-    } catch (e) {
-      console.warn('Cannot load cluster params from the target cluster: ', e);
+    if (fetchFn) {
+      try {
+        const response = await fetchFn({
+          relativeUrl:
+            '/api/v1/namespaces/kube-public/configmaps/busola-config',
+        });
+        configMapResponse = await response.json();
+      } catch (e) {
+        console.warn('Cannot load cluster params from the target cluster: ', e);
+      }
     }
 
     const defaultParams = jsyaml.load(
@@ -77,12 +77,8 @@ export const useGetConfiguration = () => {
 
   useEffect(() => {
     const setClusterConfig = async () => {
-      if (!cluster) {
-        setConfig(null);
-      } else {
-        const configs = await getConfigs(fetchFn);
-        setConfig(configs);
-      }
+      const configs = await getConfigs(fetchFn);
+      setConfig(configs);
     };
     setClusterConfig();
     // eslint-disable-next-line react-hooks/exhaustive-deps

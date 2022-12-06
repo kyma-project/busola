@@ -5,7 +5,26 @@ import { useNavigate } from 'react-router-dom';
 import { atom, useSetRecoilState, useRecoilValue, RecoilState } from 'recoil';
 import { KubeconfigNonOIDCAuth, KubeconfigOIDCAuth } from 'types';
 import { clusterState } from './clusterAtom';
-import { hasNonOidcAuth } from './openapi/oidc';
+import { getPreviousPath } from './useAfterInitHook';
+
+export const hasNonOidcAuth = (
+  user?: KubeconfigNonOIDCAuth | KubeconfigOIDCAuth,
+) => {
+  if (!user) {
+    return true;
+  }
+
+  // either token or a pair (client CA, client key) is present
+  if ('token' in user) {
+    return !!user.token;
+  } else {
+    return (
+      'client-certificate-data' in user &&
+      !!user['client-certificate-data'] &&
+      !!user['client-key-data']
+    );
+  }
+};
 
 export type AuthDataState = KubeconfigNonOIDCAuth | null;
 
@@ -100,12 +119,14 @@ export function useAuthHandler() {
         setAuth(userCredentials as KubeconfigNonOIDCAuth);
       } else {
         const onAfterLogin = () => {
-          if (cluster.currentContext.namespace) {
-            navigate(
-              `/cluster/${cluster.name}/namespaces/${cluster.currentContext.namespace}`,
-            );
-          } else {
-            navigate('/cluster/' + cluster.name);
+          if (!getPreviousPath() || getPreviousPath() === '/clusters') {
+            if (cluster.currentContext.namespace) {
+              navigate(
+                `/cluster/${cluster.name}/namespaces/${cluster.currentContext.namespace}/details`,
+              );
+            } else {
+              navigate('/cluster/' + cluster.name);
+            }
           }
         };
         const onError = () => navigate('/clusters');

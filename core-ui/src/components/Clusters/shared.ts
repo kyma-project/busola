@@ -9,7 +9,7 @@ import {
 } from 'types';
 import { useClustersInfoType } from 'state/utils/getClustersInfo';
 import { tryParseOIDCparams } from './components/oidc-params';
-import { hasNonOidcAuth } from 'state/openapi/oidc';
+import { hasNonOidcAuth } from 'state/authDataAtom';
 import { createUserManager } from 'state/authDataAtom';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';

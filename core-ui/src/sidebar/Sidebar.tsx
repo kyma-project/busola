@@ -6,7 +6,7 @@ import './Sidebar.scss';
 
 export const Sidebar = () => {
   const pathname = window.location.pathname;
-  if (pathname === '/clusters') return null;
+  if (pathname === '/clusters' || pathname === '/no-permissions') return null;
 
   return (
     <aside className="sidebar">
