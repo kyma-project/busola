@@ -9,4 +9,15 @@ export interface K8sResource {
   };
 }
 
+export interface Pod extends K8sResource {
+  spec: {
+    containers: {
+      name: string;
+    }[];
+  };
+}
+export interface Secret extends K8sResource {
+  type: string;
+}
+
 export * from './kubeconfig';

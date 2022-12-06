@@ -1,16 +1,29 @@
-import LuigiClient from '@luigi-project/client';
-import { LOADING_INDICATOR } from '../useSearchResults';
-import { getApiPath } from 'shared/utils/helpers';
+import { NavNode } from 'state/types';
 import {
-  getSuggestion,
+  makeSuggestion,
   toFullResourceType,
   autocompleteForResources,
   extractShortNames,
   findNavigationNode,
+  getApiPathForQuery,
 } from './helpers';
-import { clusterNativeResourceTypes as resourceTypes } from 'shared/constants';
+import {
+  clusterNativeResourceTypes,
+  clusterNativeResourceTypes as resourceTypes,
+} from 'shared/constants';
+import {
+  CommandPaletteContext,
+  Handler,
+  LOADING_INDICATOR,
+  Result,
+} from '../types';
+import { K8sResource } from 'types';
+import { NavigateFunction } from 'react-router-dom';
 
-function getAutocompleteEntries({ tokens, resourceCache }) {
+function getAutocompleteEntries({
+  tokens,
+  resourceCache,
+}: CommandPaletteContext) {
   const fullResourceType = toFullResourceType(tokens[0], resourceTypes);
   const resources = resourceCache[fullResourceType] || [];
 
@@ -21,9 +34,12 @@ function getAutocompleteEntries({ tokens, resourceCache }) {
   });
 }
 
-function getSuggestions({ tokens, resourceCache }) {
+function getSuggestion({
+  tokens,
+  resourceCache,
+}: CommandPaletteContext): string {
   const [type, name] = tokens;
-  const suggestedType = getSuggestion(
+  const suggestedType = makeSuggestion(
     type,
     resourceTypes.flatMap(n => n.aliases),
   );
@@ -35,20 +51,24 @@ function getSuggestions({ tokens, resourceCache }) {
     const resourceNames = (resourceCache[fullResourceType] || [])?.map(
       n => n.metadata.name,
     );
-    const suggestedName = getSuggestion(name, resourceNames);
+    const suggestedName = makeSuggestion(name, resourceNames);
     return `${suggestedType || type} ${suggestedName || name}`;
   } else {
     return suggestedType;
   }
 }
 
-function makeListItem(item, matchedNode, t) {
+function makeListItem(
+  item: K8sResource,
+  matchedNode: NavNode,
+  context: CommandPaletteContext,
+) {
+  const { t, activeClusterName, navigate } = context;
   const name = item.metadata.name;
   const { pathSegment, resourceType, category } = matchedNode;
 
-  const detailsLink =
-    resourceType === 'namespaces' ? `/${name}/details` : `/details/${name}`;
-  const link = pathSegment + detailsLink;
+  // const detailsLink =
+  //   resourceType === 'namespaces' ? `/${name}/details` : `/details/${name}`;
 
   const resourceTypeText = t([
     `${resourceType}.title`,
@@ -60,24 +80,23 @@ function makeListItem(item, matchedNode, t) {
     query: `${resourceType} ${name}`,
     // some resources have no category
     category: category ? category + ' > ' + resourceTypeText : resourceTypeText,
-    onActivate: () =>
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate(link),
+    onActivate: () => {
+      const pathname = `/cluster/${activeClusterName}/${pathSegment}/${name}`;
+      navigate(pathname);
+    },
   };
 }
 
-function getApiPathForQuery({ tokens, clusterNodes }) {
-  const resourceType = toFullResourceType(tokens[0], resourceTypes);
-  return getApiPath(resourceType, clusterNodes);
-}
-
-async function fetchClusterResources(context) {
-  const apiPath = getApiPathForQuery(context);
+async function fetchClusterResources(context: CommandPaletteContext) {
+  const { fetch, tokens, updateResourceCache, clusterNodes } = context;
+  const apiPath = getApiPathForQuery(
+    tokens,
+    clusterNodes,
+    clusterNativeResourceTypes,
+  );
   if (!apiPath) {
     return;
   }
-  const { fetch, tokens, updateResourceCache, clusterNodes } = context;
 
   const resourceType = toFullResourceType(tokens[0], resourceTypes);
   const matchedNode = findNavigationNode(resourceType, clusterNodes);
@@ -95,14 +114,29 @@ async function fetchClusterResources(context) {
   }
 }
 
-function sendNamespaceSwitchMessage(namespaceName) {
-  LuigiClient.sendCustomMessage({
-    id: 'busola.switchNamespace',
-    namespaceName,
-  });
+function sendNamespaceSwitchMessage(
+  newNamespace: string,
+  currentNamespace: string | null,
+  navigate: NavigateFunction,
+) {
+  if (!currentNamespace) return;
+  const newPath = window.location.pathname.replace(
+    `/namespaces/${currentNamespace}`,
+    `/namespaces/${newNamespace}`,
+  );
+  navigate(newPath);
 }
 
-function makeSingleNamespaceLinks({ namespace, t }) {
+function makeSingleNamespaceLinks(
+  namespace: K8sResource,
+  context: CommandPaletteContext,
+) {
+  const {
+    t,
+    activeClusterName,
+    navigate,
+    namespace: currentNamespace,
+  } = context;
   const category = t('namespaces.title');
   const label = namespace.metadata.name;
   const name = namespace.metadata.name;
@@ -112,7 +146,8 @@ function makeSingleNamespaceLinks({ namespace, t }) {
     label,
     category,
     query,
-    onActivate: () => sendNamespaceSwitchMessage(name),
+    onActivate: () =>
+      sendNamespaceSwitchMessage(name, currentNamespace, navigate),
     customActionText: t('command-palette.item-actions.switch'),
   };
 
@@ -120,28 +155,31 @@ function makeSingleNamespaceLinks({ namespace, t }) {
     label,
     category,
     query,
-    onActivate: () =>
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate('namespaces/' + name),
+    onActivate: () => {
+      const pathname = `/cluster/${activeClusterName}/namespaces/${name}`;
+      navigate(pathname);
+    },
   };
 
   return [switchContextNode, navigateToDetailsNode];
 }
 
-function createResults({
-  tokens,
-  resourceCache,
-  showHiddenNamespaces,
-  hiddenNamespaces,
-  clusterNodes,
-  t,
-}) {
+function createResults(context: CommandPaletteContext): Result[] {
+  const {
+    tokens,
+    clusterNodes,
+    t,
+    resourceCache,
+    showHiddenNamespaces,
+    hiddenNamespaces,
+    activeClusterName,
+    navigate,
+  } = context;
   const [type, name] = tokens;
   const resourceType = toFullResourceType(type, resourceTypes);
   const matchedNode = findNavigationNode(resourceType, clusterNodes);
   if (!matchedNode) {
-    return;
+    return [];
   }
 
   const resourceTypeText = t([
@@ -157,14 +195,15 @@ function createResults({
       ? matchedNode.category + ' > ' + resourceTypeText
       : resourceTypeText,
     query: matchedNode.resourceType,
-    onActivate: () =>
-      LuigiClient.linkManager()
-        .fromContext('cluster')
-        .navigate(matchedNode.pathSegment),
+    onActivate: () => {
+      const pathname = `/cluster/${activeClusterName}/${matchedNode.pathSegment}`;
+      navigate(pathname);
+    },
   };
 
   let resources = resourceCache[resourceType];
   if (typeof resources !== 'object') {
+    //@ts-ignore  TODO: handle typein Result
     return [linkToList, { type: LOADING_INDICATOR }];
   }
   if (resourceType === 'namespaces' && !showHiddenNamespaces) {
@@ -179,24 +218,26 @@ function createResults({
     );
     // special case for a single namespace
     if (resourceType === 'namespaces' && matchedResources.length === 1) {
-      return makeSingleNamespaceLinks({ namespace: matchedResources[0], t });
+      return makeSingleNamespaceLinks(matchedResources[0], context);
     }
-    return matchedResources?.map(item => makeListItem(item, matchedNode, t));
+    return matchedResources?.map(item =>
+      makeListItem(item, matchedNode, context),
+    );
   } else {
     return [
       linkToList,
-      ...resources?.map(item => makeListItem(item, matchedNode, t)),
+      ...resources?.map(item => makeListItem(item, matchedNode, context)),
     ];
   }
 }
 
-export const clusterResourceHandler = {
+export const clusterResourceHandler: Handler = {
   getAutocompleteEntries,
-  getSuggestions,
+  getSuggestion,
   fetchResources: fetchClusterResources,
   createResults,
-  getNavigationHelp: ({ clusterNodes }) =>
+  getNavigationHelp: ({ clusterNodes }: CommandPaletteContext) =>
     resourceTypes
       .filter(rT => findNavigationNode(rT.resourceType, clusterNodes))
-      .map(rT => [rT.resourceType, extractShortNames(rT)]),
+      .map(rT => ({ name: rT.resourceType, aliases: extractShortNames(rT) })),
 };

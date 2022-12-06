@@ -28,17 +28,17 @@ export type CommandPaletteContext = {
 type CRHelpEntries = {
   name: string;
   shortNames: string[];
-  description: string; // todo
-};
-type NavigationHelpEntries = {
-  name: string;
-  aliases?: string[];
 };
 
 type OthersHelpEntries = {
   name: string;
   alias: string;
   description: string;
+};
+
+export type NavigationHelpEntries = {
+  name: string;
+  aliases?: string[];
 };
 
 export type HelpEntries = {
@@ -57,7 +57,7 @@ export type Result = {
 };
 
 export type Handler = {
-  getSuggestions: (ctx: CommandPaletteContext) => string[];
+  getSuggestion: (ctx: CommandPaletteContext) => string | undefined;
   getAutocompleteEntries: (ctx: CommandPaletteContext) => string[] | null;
   fetchResources?: (ctx: CommandPaletteContext) => Promise<any>;
   getNavigationHelp?: (ctx: CommandPaletteContext) => NavigationHelpEntries[];
