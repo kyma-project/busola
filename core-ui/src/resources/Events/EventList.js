@@ -8,6 +8,7 @@ import { Link as DescriptionLink } from 'shared/components/Link/Link';
 import { useMessageList } from 'hooks/useMessageList';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
+import { useUrl } from 'hooks/useUrl';
 
 export function EventList({
   defaultType,
@@ -17,7 +18,8 @@ export function EventList({
   ...props
 }) {
   const { t } = useTranslation();
-
+  const { namespaceUrl } = useUrl();
+  const resourceType = props.resourceType.toLowerCase();
   const {
     EVENT_MESSAGE_TYPE,
     displayType,
@@ -137,6 +139,11 @@ export function EventList({
       searchSettings={{
         textSearchProperties,
       }}
+      customUrl={event =>
+        namespaceUrl(`${resourceType}/${event.metadata.name}`, {
+          namespace: event.metadata.namespace,
+        })
+      }
     />
   );
 }
