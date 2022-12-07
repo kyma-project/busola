@@ -29,147 +29,123 @@ context('Test Gateways', () => {
   it('Create Gateway', () => {
     cy.navigateTo('Istio', 'Gateways');
 
-    cy.getIframeBody()
-      .contains('Create Gateway')
-      .click();
+    cy.contains('Create Gateway').click();
 
     // name
-    cy.getIframeBody()
-      .find('[ariaLabel="Gateway name"]:visible', { log: false })
-      .type(GATEWAY_NAME);
+    cy.get('[ariaLabel="Gateway name"]:visible', { log: false }).type(
+      GATEWAY_NAME,
+    );
 
     // selector
-    cy.getIframeBody()
-      .find('[placeholder="Enter key"]:visible', { log: false })
+    cy.get('[placeholder="Enter key"]:visible', { log: false })
       .filterWithNoValue()
       .type('selector');
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter value"]:visible', { log: false })
+    cy.get('[placeholder="Enter value"]:visible', { log: false })
       .filterWithNoValue()
       .first()
       .type('selector-value');
 
     // server
-    cy.getIframeBody()
-      .find('[aria-label="expand Servers"]:visible', { log: false })
+    cy.get('[aria-label="expand Servers"]:visible', { log: false })
       .contains('Add')
       .click();
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.servers.0.port.number"]:visible')
-      .type(PORT_NUMBER);
+    cy.get('[data-testid="spec.servers.0.port.number"]:visible').type(
+      PORT_NUMBER,
+    );
 
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
-      .type(PORT_PROTOCOL);
+    cy.get('[aria-label="Combobox input"]:visible', { log: false }).type(
+      PORT_PROTOCOL,
+    );
 
-    cy.getIframeBody()
-      .find('[ariaLabel^="Gateway name"]:visible', { log: false })
+    cy.get('[ariaLabel^="Gateway name"]:visible', { log: false })
       .eq(1)
       .type(SERVER_NAME);
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.servers.0.port.targetPort"]:visible')
-      .type(TARGET_PORT);
+    cy.get('[data-testid="spec.servers.0.port.targetPort"]:visible').type(
+      TARGET_PORT,
+    );
 
     // hosts
-    cy.getIframeBody()
-      .find('[aria-label="expand Hosts"]:visible', { log: false })
-      .click();
+    cy.get('[aria-label="expand Hosts"]:visible', { log: false }).click();
 
-    cy.getIframeBody()
-      .find('[placeholder="For example, *.api.mydomain.com"]:visible', {
-        log: false,
-      })
-      .type('example.com');
+    cy.get('[placeholder="For example, *.api.mydomain.com"]:visible', {
+      log: false,
+    }).type('example.com');
 
-    cy.getIframeBody()
-      .find('[placeholder="For example, *.api.mydomain.com"]:visible', {
-        log: false,
-      })
+    cy.get('[placeholder="For example, *.api.mydomain.com"]:visible', {
+      log: false,
+    })
       .filterWithNoValue()
       .type('*.example.com');
 
     // create
-    cy.getIframeBody()
-      .find('[role=dialog]')
+    cy.get('[role=dialog]')
       .contains('button', 'Create')
       .click();
   });
 
   it('Inspect details', () => {
-    cy.getIframeBody().contains(GATEWAY_NAME);
-    cy.getIframeBody().contains(SELECTOR);
+    cy.contains(GATEWAY_NAME);
+    cy.contains(SELECTOR);
     // default selector
-    cy.getIframeBody().contains('istio=ingressgateway');
-    cy.getIframeBody().contains(SERVER_NAME);
-    cy.getIframeBody().contains(PORT_NUMBER);
-    cy.getIframeBody().contains(TARGET_PORT);
+    cy.contains('istio=ingressgateway');
+    cy.contains(SERVER_NAME);
+    cy.contains(PORT_NUMBER);
+    cy.contains(TARGET_PORT);
     // hosts
-    cy.getIframeBody().contains('example.com');
-    cy.getIframeBody().contains('*.example.com');
+    cy.contains('example.com');
+    cy.contains('*.example.com');
   });
 
   it('Edit Gateway', () => {
-    cy.getIframeBody()
-      .contains('Edit')
-      .click();
+    cy.contains('Edit').click();
 
-    cy.getIframeBody()
-      .find('[ariaLabel="Gateway name"]:visible', { log: false })
-      .should('have.attr', 'readonly');
+    cy.get('[ariaLabel="Gateway name"]:visible', { log: false }).should(
+      'have.attr',
+      'readonly',
+    );
 
-    cy.getIframeBody()
-      .find('[aria-label="expand Servers"]:visible', {
-        log: false,
-      })
-      .click();
+    cy.get('[aria-label="expand Servers"]:visible', {
+      log: false,
+    }).click();
 
     // change server to HTTPS
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
+    cy.get('[aria-label="Combobox input"]:visible', { log: false })
       .clear()
       .type('HTTPS');
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.servers.0.port.number"]:visible')
+    cy.get('[data-testid="spec.servers.0.port.number"]:visible')
       .clear()
       .type('443');
 
-    cy.getIframeBody()
-      .find('[aria-label="expand Port"]:visible', {
-        log: false,
-      })
-      .click();
+    cy.get('[aria-label="expand Port"]:visible', {
+      log: false,
+    }).click();
 
-    cy.getIframeBody()
-      .find('[aria-label="expand TLS"]:visible', {
-        log: false,
-      })
-      .click();
+    cy.get('[aria-label="expand TLS"]:visible', {
+      log: false,
+    }).click();
 
     // secret
-    cy.getIframeBody()
-      .find('[aria-label="Choose Secret"]:visible', {
-        log: false,
-      })
-      .type(KYMA_GATEWAY_CERTS);
+    cy.get('[aria-label="Choose Secret"]:visible', {
+      log: false,
+    }).type(KYMA_GATEWAY_CERTS);
 
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
-      .type('SIMPLE');
+    cy.get('[aria-label="Combobox input"]:visible', { log: false }).type(
+      'SIMPLE',
+    );
 
-    cy.getIframeBody()
-      .find('[role=dialog]')
+    cy.get('[role=dialog]')
       .contains('button', 'Update')
       .click();
 
     // changed details
-    cy.getIframeBody().contains('443');
-    cy.getIframeBody().contains('HTTPS');
-    cy.getIframeBody().contains(/simple/i);
-    cy.getIframeBody().contains(KYMA_GATEWAY_CERTS);
+    cy.contains('443');
+    cy.contains('HTTPS');
+    cy.contains(/simple/i);
+    cy.contains(KYMA_GATEWAY_CERTS);
   });
 
   it('Inspect list', () => {
