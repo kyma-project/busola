@@ -45,7 +45,6 @@ export function CustomResources({
 
   const params = {
     hasDetailsView: true,
-    // navigateFn: cr => navigateFn(cr, crd),
     customUrl,
     resourceUrl,
     title: pluralize(crd.spec.names.kind),
