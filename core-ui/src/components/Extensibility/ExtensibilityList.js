@@ -47,7 +47,6 @@ export const ExtensibilityListCore = ({
 
   const listProps = usePrepareListProps({
     resourceCustomType: urlPath,
-    resourceType: resource?.kind,
     resourceI18Key: 'name',
     apiGroup: resource?.group,
     apiVersion: resource?.version,

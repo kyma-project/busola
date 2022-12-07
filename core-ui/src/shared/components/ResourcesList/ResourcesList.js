@@ -57,14 +57,12 @@ ResourcesList.propTypes = {
   resourceTitle: PropTypes.string,
   namespace: PropTypes.string,
   hasDetailsView: PropTypes.bool,
-  fixedPath: PropTypes.bool,
   isCompact: PropTypes.bool,
   showTitle: PropTypes.bool,
   filter: PropTypes.func,
   listHeaderActions: PropTypes.node,
   description: PropTypes.node,
   readOnly: PropTypes.bool,
-  navigateFn: PropTypes.func,
   customUrl: PropTypes.string,
   testid: PropTypes.string,
   omitColumnsIds: PropTypes.arrayOf(PropTypes.string.isRequired),
@@ -155,12 +153,10 @@ export function ResourceListRenderer({
   createResourceForm: CreateResourceForm,
   createActionLabel,
   hasDetailsView,
-  fixedPath,
   title,
   showTitle,
   listHeaderActions,
   readOnly,
-  navigateFn,
   customUrl,
   testid,
   omitColumnsIds = ['namespace'],
@@ -207,7 +203,7 @@ export function ResourceListRenderer({
   const getRequest = useSingleGet();
   const updateResourceMutation = useUpdate(resourceUrl);
   const putRequest = usePut();
-  const { scopedUrl } = useUrl();
+  const { resourceUrl: resourceUrlFn } = useUrl();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => closeEditor(), [namespace]);
@@ -217,12 +213,8 @@ export function ResourceListRenderer({
     resourceType,
   );
 
-  const linkTo = entry => {
-    if (customUrl) return customUrl(entry);
-    // TODO fix when details are working
-    // if (fixedPath) return navigateToResource(entry);
-    return scopedUrl(`${resourceType.toLowerCase()}/${entry.metadata.name}`);
-  };
+  const linkTo = entry =>
+    customUrl ? customUrl(entry) : resourceUrlFn(entry, { resourceType });
 
   const defaultColumns = [
     {
