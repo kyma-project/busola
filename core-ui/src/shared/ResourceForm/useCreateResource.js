@@ -2,14 +2,13 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { useTranslation } from 'react-i18next';
 import { usePut, useUpdate } from 'shared/hooks/BackendAPI/useMutation';
 import { usePost } from 'shared/hooks/BackendAPI/usePost';
-import { navigateToResourceAfterCreate } from 'shared/hooks/navigate';
 import { createPatch } from 'rfc6902';
 import { useSingleGet } from 'shared/hooks/BackendAPI/useGet';
 import { HttpError } from 'shared/hooks/BackendAPI/config';
 import { Button } from 'fundamental-react';
 import { ForceUpdateModalContent } from './ForceUpdateModalContent';
-import { useRecoilValue } from 'recoil';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { useUrl } from 'hooks/useUrl';
+import { useNavigate } from 'react-router-dom';
 
 export function useCreateResource({
   singularName,
@@ -27,7 +26,9 @@ export function useCreateResource({
   const postRequest = usePost();
   const putRequest = usePut();
   const patchRequest = useUpdate();
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
+  const { scopedUrl } = useUrl();
+  const navigate = useNavigate();
+
   const isEdit = !!initialResource?.metadata?.name;
 
   const defaultAfterCreatedFn = () => {
@@ -41,12 +42,13 @@ export function useCreateResource({
         },
       ),
     });
-    if (!isEdit)
-      navigateToResourceAfterCreate(
-        namespaceId,
-        resource.metadata.name,
-        urlPath || pluralKind.toLowerCase(),
+    if (!isEdit) {
+      navigate(
+        scopedUrl(
+          `${urlPath || pluralKind.toLowerCase()}/${resource.metadata.name}`,
+        ),
       );
+    }
   };
 
   const showError = error => {
