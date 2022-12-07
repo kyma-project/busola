@@ -162,7 +162,8 @@ export const useGetConfiguration = () => {
         configs.features.PROMETHEUS = getPrometheusConfig(auth, apis);
       }
       setConfig(configs);
-      const x = await getFeatures(configs?.features, apis);
+      const x = await getFeatures(configs?.features);
+      console.log(x);
     };
     setClusterConfig();
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,14 +1,10 @@
-import { ApiGroupState } from 'state/discoverability/apiGroupsSelector';
 import {
   ConfigFeature,
   ConfigFeatureList,
   configFeaturesNames,
 } from 'state/types';
 
-export async function getFeatures(
-  rawFeatures: ConfigFeatureList | undefined,
-  api: ApiGroupState,
-) {
+export async function getFeatures(rawFeatures: ConfigFeatureList | undefined) {
   const resolvedFeatures = {} as ConfigFeatureList;
   for (const featureName in rawFeatures) {
     const configFeatureName = featureName as keyof typeof configFeaturesNames;
@@ -16,7 +12,6 @@ export async function getFeatures(
     resolvedFeatures[configFeatureName] = await discoverFeature(
       featureName,
       rawFeatureConfig,
-      api,
     );
   }
   // lastResolvedFeatures = resolvedFeatures;
@@ -26,7 +21,6 @@ export async function getFeatures(
 export async function discoverFeature(
   featureName: string,
   rawFeatureConfig: ConfigFeature | undefined,
-  apis: ApiGroupState,
 ) {
   try {
     if (!rawFeatureConfig) {
@@ -35,7 +29,6 @@ export async function discoverFeature(
     }
 
     // not active yet or disabled explicitly
-    console.log(rawFeatureConfig);
 
     // todo active
     // if (!rawFeatureConfig.active || rawFeatureConfig.isEnabled === false) {
@@ -53,7 +46,6 @@ export async function discoverFeature(
         return currentConfig;
       }
       const newPartialConfig = await check(featureName, currentConfig);
-      console.log('----', newPartialConfig);
       currentConfig = { ...currentConfig, ...newPartialConfig };
     }
     return currentConfig;
