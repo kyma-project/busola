@@ -65,10 +65,10 @@ Busola configuration is the product of gathering and merging the configurations 
 **Frontend:**
 
 - Built-in, hardcoded defaults.
-- Busola frontend default cluster configuration, acquired from the [defaultConfig.yaml](core/src/assets/defaultConfig.yaml) file.
+- Busola frontend default cluster configuration, acquired from the [defaultConfig.yaml](core-ui/public/config/defaultConfig.yaml) file.
 - Busola cluster configuration, available on the Busola cluster in the ConfigMap "busola/busola-config" under the key "config".
   This data is mounted to the Busola `web` and `backend` Pods, and during the local development,
-  the [defaultConfig.yaml](core/src/assets/defaultConfig.yaml) file is used.
+  the [defaultConfig.yaml](core-ui/public/config/defaultConfig.yaml) file is used.
 - Target cluster configuration, available on the target cluster in ConfigMap "kube-public/busola-config" under the key "config". Busola performs a request for that resource during the bootstrap process.
 
 ### Change the Configuration
