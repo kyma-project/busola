@@ -50,7 +50,7 @@ export const sidebarNavigationNodesSelector: RecoilValueReadOnly<Category[]> = s
   },
 });
 
-const mergeInExtensibilityNav = (
+export const mergeInExtensibilityNav = (
   nodes: NavNode[],
   extensionNodes: NavNode[],
 ) => {

@@ -34,8 +34,8 @@ export const useUrl: () => UrlGenerators = () => {
   };
 
   const resourceUrl = (resource: any, overrides: UrlOverrides = {}) => {
-    const resourceType = pluralize(
-      overrides.resourceType ?? resource.kind,
+    const resourceType = (
+      overrides.resourceType ?? pluralize(resource.kind)
     ).toLowerCase();
     const path = `${resourceType}/${resource.metadata.name}`;
     return scopedUrl(path, {

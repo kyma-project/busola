@@ -95,7 +95,7 @@ function navigateTo({
 
   const clusterPath = `/cluster/${activeClusterName}`;
   const path = matchingNode
-    ? `${matchingNode.pathSegment}/${crName ? `details/${crName}` : ''}` // custom nav node
+    ? `${matchingNode.pathSegment}/${crName || ''}` // custom nav node
     : `customresources/${crd.metadata.name}/${crName}`; // generic route
 
   if (isNamespaced) {

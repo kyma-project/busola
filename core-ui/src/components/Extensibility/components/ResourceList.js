@@ -1,4 +1,3 @@
-import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import React, { Suspense } from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
@@ -13,6 +12,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { extensionsState } from 'state/navigation/extensionsAtom';
+import { useUrl } from 'hooks/useUrl';
 
 const ExtensibilityList = React.lazy(() => import('../ExtensibilityList'));
 
@@ -45,6 +45,7 @@ export function ResourceList({
   const api = value?.apiVersion === 'v1' ? 'api' : 'apis';
   const resourceUrlPrefix = `/${api}/${value?.apiVersion}`;
   const resourceUrl = `${resourceUrlPrefix}${namespacePart}/${pluralKind}`;
+  const { scopedUrl } = useUrl();
 
   const jsonata = useJsonata({
     resource: originalResource,

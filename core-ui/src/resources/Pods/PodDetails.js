@@ -87,7 +87,6 @@ export function PodDetails(props) {
     <ContainersData
       key="containers"
       type={t('pods.labels.containers')}
-      parentName={resource.metadata.name}
       containers={resource.spec.containers}
       statuses={resource.status.containerStatuses}
     />

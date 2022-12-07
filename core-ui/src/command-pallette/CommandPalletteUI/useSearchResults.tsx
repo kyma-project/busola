@@ -9,7 +9,7 @@ import { useGetHiddenNamespaces } from 'shared/hooks/useGetHiddenNamespaces';
 import { K8sResource } from 'types';
 import { clustersState } from 'state/clustersAtom';
 import { clusterState } from 'state/clusterAtom';
-import { clusterAndNsNodesSelector } from 'state/navigation/clusterAndNsNodesSelector';
+import { availableNodesSelector } from 'state/navigation/availableNodesSelector';
 import { CommandPaletteContext, HelpEntries, Result } from './types';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
 import { useNavigate } from 'react-router-dom';
@@ -38,7 +38,7 @@ export function useSearchResults({
 }: useSearchResultsProps): SearchResults {
   const clusters = useRecoilValue(clustersState);
   const cluster = useRecoilValue(clusterState);
-  const navigationNodes = useRecoilValue(clusterAndNsNodesSelector);
+  const availableNodes = useRecoilValue(availableNodesSelector);
 
   const hiddenNamespaces = useGetHiddenNamespaces();
   const showHiddenNamespaces = useRecoilValue(showHiddenNamespacesState);
@@ -56,8 +56,8 @@ export function useSearchResults({
     activeClusterName: cluster?.name,
     query: preprocessedQuery,
     tokens: preprocessedQuery.split(/\s+/).filter(Boolean),
-    clusterNodes: navigationNodes.filter(n => !n.namespaced),
-    namespaceNodes: navigationNodes.filter(n => n.namespaced),
+    clusterNodes: availableNodes.filter(n => !n.namespaced),
+    namespaceNodes: availableNodes.filter(n => n.namespaced),
     hiddenNamespaces,
     showHiddenNamespaces,
     resourceCache,

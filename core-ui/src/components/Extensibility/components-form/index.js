@@ -18,6 +18,7 @@ import { EnumHandler } from '../plugins/EnumHandler';
 import { VisibilityHandler } from '../plugins/VisibilityHandler';
 import { TriggerHandler } from '../plugins/TriggerHandler';
 
+import { Jsonata } from './Jsonata';
 import { StringRenderer } from './StringRenderer';
 import { NumberRenderer } from './NumberRenderer';
 import { SwitchRenderer } from './SwitchRenderer';
@@ -30,6 +31,7 @@ import { ResourceRenderer } from './ResourceRenderer';
 import { ResourceRefRender } from './ResourceRefRenderer';
 import { SimpleList } from './SimpleList';
 import { AlertRenderer } from './AlertRenderer';
+import { MultiType } from './MultiType';
 
 const pluginStack = [
   ReferencingHandler,
@@ -65,6 +67,7 @@ export const widgets = {
     Accordions: AccordionsRenderer,
     */
     Text: StringRenderer,
+    Jsonata,
     /*
     Text: TextRenderer,
     StringIcon: StringIconRenderer,
@@ -89,6 +92,20 @@ export const widgets = {
     ResourceRef: ResourceRefRender,
     Resource: ResourceRenderer,
     Alert: AlertRenderer,
+    MultiType,
   },
 };
 export default widgets;
+export const limitedWidgets = {
+  ...widgets,
+  pluginStack: [
+    ReferencingHandler,
+    ExtractStorePlugin,
+    CombiningHandler,
+    DefaultHandler,
+    DependentHandler,
+    ConditionalHandler,
+    EnumHandler,
+    PluginSimpleStack,
+  ],
+};
