@@ -45,7 +45,8 @@ export function NamespaceContextDisplay({
     <div className="namespace-context">
       <span className="namespace-name">{t('namespaces.name_singular')}:</span>
       <Token
-        // buttonLabel={t('command-palette.search.remove-ns-context')} todo
+        // @ts-ignore fd-react types are wrong yet again
+        buttonLabel={t('command-palette.search.remove-ns-context')}
         className="y-fd-token y-fd-token--no-button y-fd-token--gap fd-margin-end--tiny fd-margin-begin--tiny"
         onClick={() => setNamespaceContext(null)}
       >

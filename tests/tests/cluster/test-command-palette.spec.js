@@ -48,7 +48,7 @@ context('Test Command Palette navigation', () => {
 
     cy.contains('default').click();
 
-    cy.url().should('match', new RegExp('namespaces/default/details'));
+    cy.url().should('match', new RegExp('namespaces/default'));
 
     // navigate to list of cluster role bindings
     openCommandPalette();
@@ -72,7 +72,7 @@ context('Test Command Palette navigation', () => {
 
     cy.contains('Cluster Details - Nodes').should('be.visible');
 
-    // navigate to cluster overview
+    // navigate to cluster overviewf
     openCommandPalette();
 
     getQueryInput().type('ov');
