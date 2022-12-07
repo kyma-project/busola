@@ -150,7 +150,7 @@ describe('Table', () => {
       expect(queryByText('buf')).not.toBeInTheDocument();
     });
 
-    fit('Should search for complex data with a predefined function', async () => {
+    it('Should search for complex data with a predefined function', async () => {
       const structure = {
         children: [
           {
