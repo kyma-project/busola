@@ -1,5 +1,4 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import CustomResourceDefinitionList from './CustomResourceDefinitionList';
 
