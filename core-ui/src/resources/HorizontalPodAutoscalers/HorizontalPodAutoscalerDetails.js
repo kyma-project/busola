@@ -37,10 +37,12 @@ export function HorizontalPodAutoscalerDetails(props) {
   ];
 
   const HPASpec = ({ spec, status }) => {
-    const { namespace, cluster } = useUrl();
-    const pathname = `/cluster/${cluster}/namespaces/${namespace}/${pluralize(
-      spec.scaleTargetRef.kind.toLowerCase(),
-    )}/${spec.scaleTargetRef.name}`;
+    const { namespaceUrl } = useUrl();
+    const pathname = namespaceUrl(
+      `${pluralize(spec.scaleTargetRef.kind.toLowerCase())}/${
+        spec.scaleTargetRef.name
+      }`,
+    );
 
     return (
       <LayoutPanel
