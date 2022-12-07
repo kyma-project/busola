@@ -84,7 +84,7 @@ function navigateTo({
   crd,
   crName = '',
 }: {
-  matchingNode: NavNode;
+  matchingNode?: NavNode;
   namespace: string | null;
   navigate: NavigateFunction;
   activeClusterName: string;
@@ -283,8 +283,6 @@ function createResults(context: CommandPaletteContext): Result[] | null {
   const isNamespaced = crd.spec.scope === 'Namespaced';
 
   const matchingNode = findMatchingNode(crd, context);
-
-  if (!matchingNode) return null;
 
   const defaultCategory = isNamespaced
     ? t('command-palette.crs.namespaced')

@@ -44,18 +44,17 @@ function getSuggestion(context: CommandPaletteContext) {
 
 function makeListItem(
   item: K8sResource,
-  navigate: (path: string) => void,
-  t: TFunction<'translation', undefined>,
+  context: CommandPaletteContext,
 ): Result {
+  const { t, navigate, activeClusterName } = context;
   const name = item.metadata.name;
   return {
     label: name,
     category:
       t('clusters.overview.title-current-cluster') + ' > ' + t('nodes.title'),
     query: `node ${name}`,
-    onActivate: () => {
-      //todo
-    },
+    onActivate: () =>
+      navigate(`/cluster/${activeClusterName}/overview/nodes/${name}`),
   };
 }
 
@@ -87,7 +86,6 @@ function createResults(context: CommandPaletteContext): Result[] | null {
   const nodes = resourceCache['nodes'];
   if (typeof nodes !== 'object') {
     return [
-      // todo
       { type: LOADING_INDICATOR, label: '', query: '', onActivate: () => {} },
     ];
   }
@@ -98,13 +96,11 @@ function createResults(context: CommandPaletteContext): Result[] | null {
       item.metadata.name.includes(name),
     );
     if (matchedByName) {
-      return matchedByName.map(item =>
-        makeListItem(item, (t: string) => {}, t),
-      );
+      return matchedByName.map(item => makeListItem(item, context));
     }
     return null;
   } else {
-    return nodes.map(item => makeListItem(item, (t: string) => {}, t));
+    return nodes.map(item => makeListItem(item, context));
   }
 }
 
