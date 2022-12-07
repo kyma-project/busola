@@ -39,11 +39,6 @@ const requestData = {
 context('Test Cluster configuration', () => {
   Cypress.skipAfterFail();
 
-  // Luigi throws error of the "replace" function when entering the Preferences dialog. Remove the code below after Luigi's removal
-  Cypress.on('uncaught:exception', () => {
-    return false;
-  });
-
   it('Applies config from target cluster', () => {
     cy.intercept(requestData, configMock);
     cy.loginAndSelectCluster();
@@ -71,7 +66,7 @@ context('Test Cluster configuration', () => {
 
     cy.get('[role=row]').should('have.length', 20);
 
-    cy.get('i.sap-icon--customer').click();
+    cy.get('[aria-label="topnav-profile-btn"]').click();
 
     cy.contains('Preferences').click();
 
