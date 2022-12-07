@@ -1,4 +1,3 @@
-import LuigiClient from '@luigi-project/client';
 import pluralize from 'pluralize';
 import React, { Suspense } from 'react';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
