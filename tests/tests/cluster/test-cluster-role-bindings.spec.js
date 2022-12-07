@@ -30,7 +30,7 @@ context('Test Cluster Role Bindings', () => {
       .clear()
       .type(USER_NAME);
 
-    cy.contains('[role="dialog"]button', 'Create').click();
+    cy.contains('[role="dialog"] button', 'Create').click();
   });
 
   it('Checking details', () => {
