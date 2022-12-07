@@ -32,165 +32,127 @@ context('Test Virtual Services', () => {
   it('Create a Virtual Service', () => {
     cy.navigateTo('Istio', 'Virtual Services');
 
-    cy.getIframeBody()
-      .contains('Create Virtual Service')
-      .click();
+    cy.contains('Create Virtual Service').click();
 
     // name
-    cy.getIframeBody()
-      .find('[arialabel="VirtualService name"]:visible', { log: false })
-      .type(SERVICE_NAME);
+    cy.get('[arialabel="VirtualService name"]:visible', { log: false }).type(
+      SERVICE_NAME,
+    );
 
     // HTTP
-    cy.getIframeBody()
-      .find('[aria-label="expand HTTP"]:visible', { log: false })
+    cy.get('[aria-label="expand HTTP"]:visible', { log: false })
       .contains('Add')
       .click();
 
     // Matches
-    cy.getIframeBody()
-      .find('[aria-label="expand Matches"]:visible', { log: false })
+    cy.get('[aria-label="expand Matches"]:visible', { log: false })
       .contains('Add')
       .click();
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.http.0.match.0.name"]:visible')
-      .type(MATCH_NAME);
+    cy.get('[data-testid="spec.http.0.match.0.name"]:visible').type(MATCH_NAME);
 
     // URIs
-    cy.getIframeBody()
-      .find('[data-testid="select-dropdown"]:visible', { log: false })
+    cy.get('[data-testid="select-dropdown"]:visible', { log: false })
       .first()
       .click();
 
-    cy.getIframeBody()
-      .contains(URI_KEY)
-      .click();
+    cy.contains(URI_KEY).click();
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter value"]:visible', { log: false })
+    cy.get('[placeholder="Enter value"]:visible', { log: false })
       .filterWithNoValue()
       .first()
       .type(URI_PREFIX);
 
     // Headers
-    cy.getIframeBody()
-      .find('[aria-label="expand Scheme"]:visible', { log: false })
-      .click();
+    cy.get('[aria-label="expand Scheme"]:visible', { log: false }).click();
 
-    cy.getIframeBody()
-      .find('[aria-label="expand Method"]:visible', { log: false })
-      .click();
+    cy.get('[aria-label="expand Method"]:visible', { log: false }).click();
 
-    cy.getIframeBody()
-      .find('[aria-label="expand Authority"]:visible', { log: false })
-      .click();
+    cy.get('[aria-label="expand Authority"]:visible', { log: false }).click();
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter key"]:visible', { log: false })
+    cy.get('[placeholder="Enter key"]:visible', { log: false })
       .first()
       .filterWithNoValue()
       .type(HEADER_KEY);
 
-    cy.getIframeBody()
-      .find('[data-testid="select-dropdown"]:visible', { log: false })
+    cy.get('[data-testid="select-dropdown"]:visible', { log: false })
       .first()
       .click();
 
-    cy.getIframeBody()
-      .contains(HEADER_KEY1)
-      .click();
+    cy.contains(HEADER_KEY1).click();
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter value"]:visible', { log: false })
+    cy.get('[placeholder="Enter value"]:visible', { log: false })
       .filterWithNoValue()
       .first()
       .type(HEADER_VALUE);
 
     // REDIRECT
-    cy.getIframeBody()
-      .find('[aria-label="expand Redirect"]', { log: false })
+    cy.get('[aria-label="expand Redirect"]', { log: false })
       .first()
       .click();
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.http.0.redirect.uri"]:visible')
-      .type(REDIRECT_URI);
+    cy.get('[data-testid="spec.http.0.redirect.uri"]:visible').type(
+      REDIRECT_URI,
+    );
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.http.0.redirect.authority"]:visible')
-      .type(REDIRECT_AUTHORITY);
+    cy.get('[data-testid="spec.http.0.redirect.authority"]:visible').type(
+      REDIRECT_AUTHORITY,
+    );
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Create')
       .click();
 
-    cy.url().should(
-      'match',
-      new RegExp(`/virtualservices/details/${SERVICE_NAME}$`),
-    );
+    cy.url().should('match', new RegExp(`/virtualservices/${SERVICE_NAME}$`));
   });
 
   it('Inspect Virtual Service', () => {
-    cy.getIframeBody().contains('h3', SERVICE_NAME);
+    cy.contains('h3', SERVICE_NAME);
 
-    cy.getIframeBody()
-      .find('[data-testid="collapse-button-close"]', { timeout: 10000 })
-      .click();
+    cy.get('[data-testid="collapse-button-close"]', { timeout: 10000 }).click();
 
-    cy.getIframeBody().contains(MATCH_NAME);
-    cy.getIframeBody().contains(`${URI_KEY}=${URI_PREFIX}`);
-    cy.getIframeBody().contains(HEADER_KEY);
-    cy.getIframeBody().contains(HEADER_KEY1);
-    cy.getIframeBody().contains(HEADER_VALUE);
-    cy.getIframeBody().contains(REDIRECT_URI);
-    cy.getIframeBody().contains(REDIRECT_AUTHORITY);
+    cy.contains(MATCH_NAME);
+    cy.contains(`${URI_KEY}=${URI_PREFIX}`);
+    cy.contains(HEADER_KEY);
+    cy.contains(HEADER_KEY1);
+    cy.contains(HEADER_VALUE);
+    cy.contains(REDIRECT_URI);
+    cy.contains(REDIRECT_AUTHORITY);
   });
 
   it('Edit VS and check updates', () => {
-    cy.getIframeBody()
-      .contains('Edit')
-      .click();
+    cy.contains('Edit').click();
 
     // Hosts
-    cy.getIframeBody()
-      .find('[aria-label="expand Hosts"]:visible', {
-        log: false,
-      })
-      .click();
+    cy.get('[aria-label="expand Hosts"]:visible', {
+      log: false,
+    }).click();
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.hosts.0"]:visible')
+    cy.get('[data-testid="spec.hosts.0"]:visible')
       .clear()
       .type(HOST1);
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.hosts.1"]:visible')
+    cy.get('[data-testid="spec.hosts.1"]:visible')
       .clear()
       .type(HOST2);
 
     // Gateways
-    cy.getIframeBody()
-      .find('[aria-label="expand Gateways"]:visible', {
-        log: false,
-      })
-      .click();
+    cy.get('[aria-label="expand Gateways"]:visible', {
+      log: false,
+    }).click();
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.gateways.0"]:visible')
+    cy.get('[data-testid="spec.gateways.0"]:visible')
       .clear()
       .type(GATEWAY);
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Update')
       .click();
 
     // Changed details
-    cy.getIframeBody().contains(HOST1);
-    cy.getIframeBody().contains(HOST2);
-    cy.getIframeBody().contains(GATEWAY);
+    cy.contains(HOST1);
+    cy.contains(HOST2);
+    cy.contains(GATEWAY);
   });
 
   it('Inspect service list', () => {
