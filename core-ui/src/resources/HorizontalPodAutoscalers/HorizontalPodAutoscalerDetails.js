@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, LayoutPanel } from 'fundamental-react';
-import LuigiClient from '@luigi-project/client';
+import { LayoutPanel } from 'fundamental-react';
 import pluralize from 'pluralize';
 
 import { Tokens } from 'shared/components/Tokens';
@@ -10,9 +9,11 @@ import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
+import { useUrl } from 'hooks/useUrl';
 
 import { currentMetricsParser, metricsParser } from './helpers';
 import { HorizontalPodAutoscalerCreate } from './HorizontalPodAutoscalerCreate';
+import { Link } from 'react-router-dom';
 
 export function HorizontalPodAutoscalerDetails(props) {
   const { t } = useTranslation();
@@ -35,52 +36,48 @@ export function HorizontalPodAutoscalerDetails(props) {
     },
   ];
 
-  const HPASpec = ({ spec, status }) => (
-    <LayoutPanel
-      className="fd-margin--md"
-      key="hpa-spec-ref"
-      data-testid="hpa-spec-ref"
-    >
-      <LayoutPanel.Header>
-        <LayoutPanel.Head title={t('hpas.spec')} />
-      </LayoutPanel.Header>
-      <LayoutPanel.Body>
-        <LayoutPanelRow
-          name={t('hpas.headers.min-pods')}
-          value={spec.minReplicas}
-        />
-        <LayoutPanelRow
-          name={t('hpas.current-replicas')}
-          value={status.currentReplicas}
-        />
-        <LayoutPanelRow
-          name={t('hpas.headers.max-pods')}
-          value={spec.maxReplicas}
-        />
-        <LayoutPanelRow
-          name={t('hpas.scale-target-ref')}
-          value={
-            <Link
-              className="fd-link"
-              onClick={() =>
-                LuigiClient.linkManager()
-                  .fromContext('namespace')
-                  .navigate(
-                    `${pluralize(
-                      spec.scaleTargetRef.kind.toLowerCase(),
-                    )}/details/${spec.scaleTargetRef.name}`,
-                  )
-              }
-            >
-              {spec.scaleTargetRef.apiVersion}/
-              {pluralize(spec.scaleTargetRef.kind.toLowerCase())}{' '}
-              {spec.scaleTargetRef.name}
-            </Link>
-          }
-        />
-      </LayoutPanel.Body>
-    </LayoutPanel>
-  );
+  const HPASpec = ({ spec, status }) => {
+    const { namespace, cluster } = useUrl();
+    const pathname = `/cluster/${cluster}/namespaces/${namespace}/${pluralize(
+      spec.scaleTargetRef.kind.toLowerCase(),
+    )}/${spec.scaleTargetRef.name}`;
+
+    return (
+      <LayoutPanel
+        className="fd-margin--md"
+        key="hpa-spec-ref"
+        data-testid="hpa-spec-ref"
+      >
+        <LayoutPanel.Header>
+          <LayoutPanel.Head title={t('hpas.spec')} />
+        </LayoutPanel.Header>
+        <LayoutPanel.Body>
+          <LayoutPanelRow
+            name={t('hpas.headers.min-pods')}
+            value={spec.minReplicas}
+          />
+          <LayoutPanelRow
+            name={t('hpas.current-replicas')}
+            value={status.currentReplicas}
+          />
+          <LayoutPanelRow
+            name={t('hpas.headers.max-pods')}
+            value={spec.maxReplicas}
+          />
+          <LayoutPanelRow
+            name={t('hpas.scale-target-ref')}
+            value={
+              <Link className="fd-link" to={pathname}>
+                {spec.scaleTargetRef.apiVersion}/
+                {pluralize(spec.scaleTargetRef.kind.toLowerCase())}{' '}
+                {spec.scaleTargetRef.name}
+              </Link>
+            }
+          />
+        </LayoutPanel.Body>
+      </LayoutPanel>
+    );
+  };
 
   const HPAMetrics = ({ spec, status }) => {
     const metrics = metricsParser(spec.metrics);
@@ -115,6 +112,7 @@ export function HorizontalPodAutoscalerDetails(props) {
       hideInvolvedObjects={true}
     />
   );
+
   return (
     <ResourceDetails
       resourceName={t('hpas.name_singular')}
