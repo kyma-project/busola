@@ -1,10 +1,8 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, waitFor, act } from 'testing/reactTestingUtils';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
-import { MicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
-import { ConfigContext } from 'shared/contexts/ConfigContext';
-import { act } from 'react-dom/test-utils';
-import { waitFor } from '@testing-library/react';
+import { authDataState } from 'state/authDataAtom';
+import { clusterState } from 'state/clusterAtom';
 
 const mockUseFetch = jest.fn();
 jest.mock('./../useFetch', () => ({
@@ -15,18 +13,6 @@ function Testbed({ setGetResult }) {
   const getResult = useGet('/', { pollingInterval: 100 });
   setGetResult(getResult.loading, getResult.error, getResult.data);
   return null;
-}
-
-function MockContext({ children }) {
-  return (
-    <ConfigContext.Provider value={{ fromConfig: key => key }}>
-      <MicrofrontendContext.Provider
-        value={{ authData: { token: 'test-token' }, cluster: {}, config: {} }}
-      >
-        {children}
-      </MicrofrontendContext.Provider>
-    </ConfigContext.Provider>
-  );
 }
 
 describe('useGet', () => {
@@ -45,11 +31,12 @@ describe('useGet', () => {
       .mockImplementation(() => {
         throw new Error('2'); // failing calls
       });
-    render(
-      <MockContext>
-        <Testbed setGetResult={mock} />
-      </MockContext>,
-    );
+    render(<Testbed setGetResult={mock} />, {
+      initializeState: snapshot => {
+        snapshot.set(authDataState, { token: 'test-token' });
+        snapshot.set(clusterState, {});
+      },
+    });
     await act(async () => {
       // first call - loading
       expect(mock).toHaveBeenCalledWith(true, null, null);
