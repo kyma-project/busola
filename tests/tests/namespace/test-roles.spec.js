@@ -16,18 +16,14 @@ context('Test Roles', () => {
   });
 
   it('Create a Role', () => {
+    cy.wait(500); // TODO - check why Configuration is detached from DOM
     cy.navigateTo('Configuration', 'Roles');
 
-    cy.getIframeBody()
-      .contains(ROLE_NAME)
-      .should('not.exist');
+    cy.contains(ROLE_NAME).should('not.exist');
 
-    cy.getIframeBody()
-      .contains('Create Role')
-      .click();
+    cy.contains('Create Role').click();
 
-    cy.getIframeBody()
-      .find('[ariaLabel="Role name"]:visible', { log: false })
+    cy.get('[ariaLabel="Role name"]:visible', { log: false })
       .type(ROLE_NAME)
       .click();
 
@@ -36,9 +32,7 @@ context('Test Roles', () => {
       API_GROUP,
     );
 
-    cy.getIframeBody()
-      .find('[ariaLabel="Load"]:visible', { log: false })
-      .click();
+    cy.get('[ariaLabel="Load"]:visible', { log: false }).click();
 
     chooseComboboxOption(
       '[placeholder^="Start typing to select Resources"]:visible',
@@ -55,64 +49,48 @@ context('Test Roles', () => {
       'create',
     );
 
-    cy.getIframeBody()
-      .contains('button', /^Create$/)
-      .click();
+    cy.contains('button', /^Create$/).click();
   });
 
   it('Check the Role details', () => {
-    cy.getIframeBody()
-      .contains('h3', ROLE_NAME)
-      .should('be.visible');
+    cy.contains('h3', ROLE_NAME).should('be.visible');
 
-    cy.getIframeBody()
-      .find('[data-testid=rules-list]')
+    cy.get('[data-testid=rules-list]')
       .find('[data-testid=get]')
       .should('not.have.text', '-');
 
-    cy.getIframeBody()
-      .find('[data-testid=rules-list]')
+    cy.get('[data-testid=rules-list]')
       .find('[data-testid=create]')
       .should('not.have.text', '-');
 
-    cy.getIframeBody()
-      .find('[data-testid=rules-list]')
+    cy.get('[data-testid=rules-list]')
       .find('[data-testid=watch]')
       .should('have.text', '-');
   });
 
   it('Edit the Role', () => {
-    cy.getIframeBody()
-      .contains('Edit')
-      .click();
+    cy.contains('Edit').click();
 
     chooseComboboxOption(
       '[placeholder^="Start typing to select Verbs"]:visible',
       'watch',
     );
 
-    cy.getIframeBody()
-      .contains('button', 'Update')
-      .click();
+    cy.contains('button', 'Update').click();
   });
 
   it('Check the Role details after edit', () => {
-    cy.getIframeBody()
-      .contains('h3', ROLE_NAME)
-      .should('be.visible');
+    cy.contains('h3', ROLE_NAME).should('be.visible');
 
-    cy.getIframeBody()
-      .find('[data-testid=rules-list]')
+    cy.get('[data-testid=rules-list]')
       .find('[data-testid=get]')
       .should('not.have.text', '-');
 
-    cy.getIframeBody()
-      .find('[data-testid=rules-list]')
+    cy.get('[data-testid=rules-list]')
       .find('[data-testid=create]')
       .should('not.have.text', '-');
 
-    cy.getIframeBody()
-      .find('[data-testid=rules-list]')
+    cy.get('[data-testid=rules-list]')
       .find('[data-testid=watch]')
       .should('not.have.text', '-');
   });
@@ -126,43 +104,33 @@ context('Test Roles', () => {
       .contains('Roles')
       .click();
 
-    cy.getIframeBody()
-      .contains('.fd-table__row', ROLE_NAME)
+    cy.contains('.fd-table__row', ROLE_NAME)
       .find('button[data-testid="clone"]')
       .click();
 
-    cy.getIframeBody()
-      .find('[ariaLabel="Role name"]:visible', { log: false })
+    cy.get('[ariaLabel="Role name"]:visible', { log: false })
       .type(CLONE_NAME)
       .click();
 
-    cy.getIframeBody()
-      .contains('button', /^Create$/)
-      .click();
+    cy.contains('button', /^Create$/).click();
   });
 
   it('Check the clone details', () => {
-    cy.getIframeBody()
-      .contains('h3', CLONE_NAME)
-      .should('be.visible');
+    cy.contains('h3', CLONE_NAME).should('be.visible');
 
-    cy.getIframeBody()
-      .find('[data-testid=rules-list]')
+    cy.get('[data-testid=rules-list]')
       .find('[data-testid=create]')
       .should('not.have.text', '-');
 
-    cy.getIframeBody()
-      .find('[data-testid=rules-list]')
+    cy.get('[data-testid=rules-list]')
       .find('[data-testid=get]')
       .should('not.have.text', '-');
 
-    cy.getIframeBody()
-      .find('[data-testid=rules-list]')
+    cy.get('[data-testid=rules-list]')
       .find('[data-testid=watch]')
       .should('not.have.text', '-');
 
-    cy.getIframeBody()
-      .find('[data-testid=rules-list]')
+    cy.get('[data-testid=rules-list]')
       .find('[data-testid=list]')
       .should('have.text', '-');
   });
