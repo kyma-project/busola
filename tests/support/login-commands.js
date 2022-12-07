@@ -13,7 +13,7 @@ Cypress.Commands.add('loginAndSelectCluster', function(params) {
         "TypeError: Cannot read properties of null (reading 'sendError')",
       ) ||
       err.message.includes(
-        "Uncaught NetworkError: Failed to execute 'importScripts' on 'WorkerGlobalScope': The script at 'http://localhost:8080/static/js/vendors-node_modules_monaco-editor_esm_vs_editor_editor_worker_js.chunk.js' failed to load.",
+        "Uncaught NetworkError: Failed to execute 'importScripts' on 'WorkerGlobalScope': The script at",
       )
     ) {
       return false;
