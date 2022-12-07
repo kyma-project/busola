@@ -13,42 +13,32 @@ context('Test Custom Resources', () => {
   it('Check CR groups list with slash shortcut', () => {
     cy.navigateTo('Configuration', 'Custom Resources');
 
-    cy.getIframeBody()
-      .contains('h3', 'Custom Resources')
-      .should('be.visible');
+    cy.contains('h3', 'Custom Resources').should('be.visible');
 
     openSearchWithSlashShortcut();
 
-    cy.getIframeBody()
-      .find('[type="search"]')
-      .type('app');
+    cy.get('[type="search"]').type('app');
 
-    cy.getIframeBody()
-      .find('table')
-      .should('have.length', 1);
+    cy.get('table').should('have.length', 1);
 
-    cy.getIframeBody()
+    cy.get('[role=row]')
       .contains('Applications')
       .should('be.visible');
   });
 
   it('Check single CR list', () => {
-    cy.getIframeBody()
+    cy.get('[role=row]')
       .contains('Applications')
       .click();
 
-    cy.getIframeBody()
+    cy.get('[aria-label="title"]')
       .contains('Applications')
       .should('be.visible');
 
-    cy.getIframeBody()
-      .contains(/Create Application/i)
-      .should('be.visible');
+    cy.contains(/Create Application/i).should('be.visible');
 
-    cy.getIframeBody()
-      .contains('applicationconnector.kyma-project.io')
-      .click();
+    cy.contains('applicationconnector.kyma-project.io').click();
 
-    cy.url().should('match', /customresourcedefinitions/);
+    cy.url().should('match', /customresources/);
   });
 });
