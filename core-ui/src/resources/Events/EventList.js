@@ -120,7 +120,6 @@ export function EventList({
       omitColumnsIds={['namespace', 'labels', 'created']}
       sortBy={sortByFn}
       description={description}
-      fixedPath
       showTitle={isCompact}
       title={t('events.title')}
       {...props}

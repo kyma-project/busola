@@ -76,27 +76,6 @@ export function ResourceList({
           loading={value?.loading}
           title={t(structure.name)}
           disableCreate={structure.disableCreate || false}
-          navigateFn={entry => {
-            try {
-              const {
-                kind,
-                metadata: { name, namespace },
-              } = entry;
-
-              const namespacePart = namespace ? `namespaces/${namespace}/` : '';
-              const resourceTypePart =
-                extensibilityResourceSchema.general.urlPath ||
-                pluralize(kind.toLowerCase());
-
-              LuigiClient.linkManager()
-                .fromContext('cluster')
-                .navigate(
-                  namespacePart + resourceTypePart + '/details/' + name,
-                );
-            } catch (e) {
-              alert(1);
-            }
-          }}
         />
       </Suspense>
     );
@@ -135,7 +114,6 @@ export function ResourceList({
       disableCreate={structure.disableCreate || false}
       showTitle={true}
       hasDetailsView={structure.hasDetailsView ?? !!PredefinedRenderer?.Details}
-      fixedPath={true}
       columns={children}
       sortBy={defaultSortOptions =>
         sortBy(jsonata, sortOptions, t, defaultSort ? defaultSortOptions : {})

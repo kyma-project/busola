@@ -14,7 +14,6 @@ export function CronJobJobs(cronJob) {
       key="cronJobJobs"
       {...{
         hasDetailsView: true,
-        fixedPath: true,
         resourceUrl: jobsUrl,
         resourceType: 'jobs',
         namespace,
