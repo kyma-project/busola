@@ -61,7 +61,7 @@ context('Test Cluster configuration', () => {
     cy.getLeftNav()
       .contains('Cluster Details')
       .click();
-    cy.contains('sessionStorage').should('be.visible');
+    cy.contains('SESSION STORAGE').should('be.visible');
   });
 
   it('Test pagination', () => {
@@ -69,34 +69,24 @@ context('Test Cluster configuration', () => {
 
     cy.navigateTo('Configuration', 'Cluster Roles');
 
-    cy.getIframeBody()
-      .find('[role=row]')
-      .should('have.length', 20);
+    cy.get('[role=row]').should('have.length', 20);
 
-    cy.get('[data-testid="luigi-topnav-profile-btn"]').click();
+    cy.get('i.sap-icon--customer').click();
 
     cy.contains('Preferences').click();
 
-    cy.getIframeBody()
-      .contains('Other')
-      .click();
+    cy.contains('Other').click();
 
-    cy.getIframeBody()
-      .find('[role=dialog]')
+    cy.get('[role=dialog]')
       .contains('20')
       .click();
 
-    cy.getIframeBody()
-      .find('[role=list]:visible')
+    cy.get('[role=list]:visible')
       .contains('10')
       .click();
 
-    cy.getIframeBody()
-      .contains('Close')
-      .click();
+    cy.contains('Close').click();
 
-    cy.getIframeBody()
-      .find('[role=row]')
-      .should('have.length', 10);
+    cy.get('[role=row]').should('have.length', 10);
   });
 });
