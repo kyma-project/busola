@@ -16,7 +16,6 @@ import { PodStatsGraph } from './PodStatsGraph';
 import { useUrl } from 'hooks/useUrl';
 
 export function PodDetails(props) {
-  console.log('props', props);
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
 
