@@ -23,8 +23,6 @@ context('Test Pizzas', () => {
   });
 
   it('Creates the EXT pizza config', () => {
-    cy.getIframeBody().as('iframe');
-
     cy.getLeftNav()
       .contains('Cluster Details')
       .click();

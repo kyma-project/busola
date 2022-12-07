@@ -17,16 +17,16 @@ export const useUrl: () => UrlGenerators = () => {
       ?.params?.namespace ?? '';
 
   const clusterUrl = (path: string, overrides: UrlOverrides = {}) => {
-    return `/cluster/${overrides.cluster ?? cluster}/${path}`;
+    return `/cluster/${overrides?.cluster ?? cluster}/${path}`;
   };
 
   const namespaceUrl = (path: string, overrides: UrlOverrides = {}) => {
-    return `/cluster/${overrides.cluster ??
-      cluster}/namespaces/${overrides.namespace ?? namespace}/${path}`;
+    return `/cluster/${overrides?.cluster ??
+      cluster}/namespaces/${overrides?.namespace ?? namespace}/${path}`;
   };
 
   const scopedUrl = (path: string, overrides: UrlOverrides = {}) => {
-    if (overrides.namespace ?? namespace) {
+    if (overrides?.namespace ?? namespace) {
       return namespaceUrl(path, overrides);
     } else {
       return clusterUrl(path, overrides);
