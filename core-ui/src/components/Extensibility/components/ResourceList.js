@@ -13,6 +13,7 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { extensionsState } from 'state/navigation/extensionsAtom';
+import { useUrl } from 'hooks/useUrl';
 
 const ExtensibilityList = React.lazy(() => import('../ExtensibilityList'));
 
@@ -45,6 +46,7 @@ export function ResourceList({
   const api = value?.apiVersion === 'v1' ? 'api' : 'apis';
   const resourceUrlPrefix = `/${api}/${value?.apiVersion}`;
   const resourceUrl = `${resourceUrlPrefix}${namespacePart}/${pluralKind}`;
+  const { scopedUrl } = useUrl();
 
   const jsonata = useJsonata({
     resource: originalResource,
@@ -80,19 +82,13 @@ export function ResourceList({
             try {
               const {
                 kind,
-                metadata: { name, namespace },
+                metadata: { name },
               } = entry;
-
-              const namespacePart = namespace ? `namespaces/${namespace}/` : '';
               const resourceTypePart =
                 extensibilityResourceSchema.general.urlPath ||
                 pluralize(kind.toLowerCase());
 
-              LuigiClient.linkManager()
-                .fromContext('cluster')
-                .navigate(
-                  namespacePart + resourceTypePart + '/details/' + name,
-                );
+              scopedUrl(`${resourceTypePart}/${name}`);
             } catch (e) {
               alert(1);
             }
