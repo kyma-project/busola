@@ -80,7 +80,9 @@ export function extractShortNames({
 }
 
 export function findNavigationNode(resourceType: string, navNodes: NavNode[]) {
-  return navNodes.find(n => n.resourceType === resourceType);
+  return navNodes.find(
+    n => pluralize(n.resourceType) === pluralize(resourceType),
+  );
 }
 
 export function getApiPathForQuery(
