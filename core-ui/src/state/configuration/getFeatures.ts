@@ -1,3 +1,4 @@
+import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import {
   ConfigFeature,
   ConfigFeatureList,

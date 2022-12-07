@@ -14,6 +14,8 @@ import {
   apiGroupState,
 } from 'state/discoverability/apiGroupsSelector';
 
+import { apiGroup, service } from './featureChecks';
+
 type Configuration = {
   features?: ConfigFeatureList;
   storageType?: string;
@@ -75,70 +77,42 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
   }
 };
 
-function extractGroupVersions(apis: ApiGroupState) {
-  const CORE_GROUP = 'v1';
-  if (!apis) return [CORE_GROUP];
-  return [
-    CORE_GROUP,
-    ...apis.flatMap(api => api?.versions?.map(version => version.groupVersion)),
-  ];
-}
-
-function apiGroup({
-  group,
-  auth,
-  apis,
-}: {
-  group: string;
-  auth: AuthDataState;
-  apis: ApiGroupState;
-}) {
-  const containsGroup = (groupVersions: any[]) =>
-    groupVersions?.find(g => g.includes(group));
-
-  return async ({
-    featureName,
-    featureConfig,
-  }: {
-    featureName: string;
-    featureConfig: ConfigFeature;
-  }) => {
-    if (!auth) {
-      return { ...featureConfig, isEnabled: false };
-    }
-    try {
-      const groupVersions = extractGroupVersions(apis);
-
-      return {
-        ...featureConfig,
-        isEnabled: !!containsGroup(groupVersions),
-      };
-    } catch (e) {
-      return featureConfig;
+function arrayCombine(arrays: any[]) {
+  const _arrayCombine = (arrs: any[], current: any = []) => {
+    if (arrs.length === 1) {
+      return arrs[0]?.map((e: any) => [...current, e]);
+    } else {
+      return arrs[0]?.map((e: any) =>
+        _arrayCombine(arrs.slice(1), [...current, e]),
+      );
     }
   };
+
+  return _arrayCombine(arrays).flat(arrays.length - 1);
 }
 
 const getPrometheusConfig = (
   auth: AuthDataState,
   apis: ApiGroupState,
+  fetchFn: FetchFn | undefined,
 ): ConfigFeature => {
   const prometheusDefault = {
     checks: [
       apiGroup({ group: 'monitoring.coreos.com', auth, apis }),
-      // service({
-      //   urlsGenerator: featureConfig => {
-      //     return arrayCombine([
-      //       featureConfig.namespaces,
-      //       featureConfig.serviceNames,
-      //       featureConfig.portNames,
-      //     ]).map(
-      //       ([namespace, serviceName, portName]) =>
-      //         `/api/v1/namespaces/${namespace}/services/${serviceName}:${portName}/proxy/api/v1`,
-      //     );
-      //   },
-      //   urlMutator: url => `${url}/status/runtimeinfo`,
-      // }),
+      service({
+        fetchFn,
+        urlsGenerator: featureConfig => {
+          return arrayCombine([
+            featureConfig.namespaces,
+            featureConfig.serviceNames,
+            featureConfig.portNames,
+          ]).map(
+            ([namespace, serviceName, portName]: any[]) =>
+              `/api/v1/namespaces/${namespace}/services/${serviceName}:${portName}/proxy/api/v1`,
+          );
+        },
+        urlMutator: url => `${url}/status/runtimeinfo`,
+      }),
     ],
     namespaces: ['kyma-system'],
     serviceNames: ['monitoring-prometheus', 'prometheus'],
@@ -159,7 +133,7 @@ export const useGetConfiguration = () => {
     const setClusterConfig = async () => {
       const configs = await getConfigs(fetchFn);
       if (configs?.features) {
-        configs.features.PROMETHEUS = getPrometheusConfig(auth, apis);
+        configs.features.PROMETHEUS = getPrometheusConfig(auth, apis, fetchFn);
       }
       setConfig(configs);
       const x = await getFeatures(configs?.features);
@@ -167,7 +141,7 @@ export const useGetConfiguration = () => {
     };
     setClusterConfig();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cluster, auth]);
+  }, [cluster, auth, apis]);
 };
 
 export const configurationAtom: RecoilState<Configuration> = atom<
