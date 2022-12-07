@@ -12,6 +12,11 @@ Cypress.Commands.add(
   'pasteToMonaco',
   { prevSubject: false },
   (content, monacoCount) => {
+    // Ignor Cypress issue with Monaco on CI
+    Cypress.on('uncaught:exception', err => {
+      if (err.message.includes('Unexpected usage')) return false;
+    });
+
     cy.findMonaco(monacoCount)
       .focus()
       .clearInput()

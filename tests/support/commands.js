@@ -110,17 +110,11 @@ Cypress.Commands.add('getLeftNav', () => {
 });
 
 Cypress.Commands.add('deleteInDetails', () => {
-  cy.getIframeBody()
-    .contains('button', 'Delete')
-    .click();
+  cy.contains('button', 'Delete').click();
 
-  cy.getIframeBody()
-    .find('[data-testid="delete-confirmation"]')
-    .click();
+  cy.get('[data-testid="delete-confirmation"]').click();
 
-  cy.getIframeBody()
-    .contains(/deleted/)
-    .should('be.visible');
+  cy.contains(/deleted/).should('be.visible');
 });
 
 Cypress.Commands.add(

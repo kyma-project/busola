@@ -74,6 +74,10 @@ export function Header() {
           callback: () => setPreferencesOpen(true),
         },
       ]}
+      // @ts-ignore
+      popoverPropsFor={{
+        profileMenu: { 'aria-label': 'topnav-profile-btn' },
+      }}
     />
   );
 }
