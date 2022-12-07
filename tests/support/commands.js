@@ -51,7 +51,7 @@ Cypress.Commands.add('goToNamespaceDetails', () => {
     .contains('Namespaces')
     .click();
 
-  cy.getIframeBody()
+  cy.get('[role=row]')
     .contains('a', Cypress.env('NAMESPACE_NAME'))
     .click();
 
