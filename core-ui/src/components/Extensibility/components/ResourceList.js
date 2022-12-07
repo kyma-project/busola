@@ -12,7 +12,6 @@ import { Spinner } from 'shared/components/Spinner/Spinner';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { extensionsState } from 'state/navigation/extensionsAtom';
-import { useUrl } from 'hooks/useUrl';
 
 const ExtensibilityList = React.lazy(() => import('../ExtensibilityList'));
 
@@ -45,7 +44,6 @@ export function ResourceList({
   const api = value?.apiVersion === 'v1' ? 'api' : 'apis';
   const resourceUrlPrefix = `/${api}/${value?.apiVersion}`;
   const resourceUrl = `${resourceUrlPrefix}${namespacePart}/${pluralKind}`;
-  const { scopedUrl } = useUrl();
 
   const jsonata = useJsonata({
     resource: originalResource,
@@ -77,21 +75,6 @@ export function ResourceList({
           loading={value?.loading}
           title={t(structure.name)}
           disableCreate={structure.disableCreate || false}
-          navigateFn={entry => {
-            try {
-              const {
-                kind,
-                metadata: { name },
-              } = entry;
-              const resourceTypePart =
-                extensibilityResourceSchema.general.urlPath ||
-                pluralize(kind.toLowerCase());
-
-              scopedUrl(`${resourceTypePart}/${name}`);
-            } catch (e) {
-              alert(1);
-            }
-          }}
         />
       </Suspense>
     );
@@ -122,7 +105,7 @@ export function ResourceList({
       resources={value?.items}
       resourceUrl={resourceUrl}
       resourceUrlPrefix={resourceUrlPrefix}
-      resourceType={prettifyKind(kind)}
+      resourceType={pluralize(kind)}
       resourceTitle={prettifyKind(kind)}
       namespace={value?.namespace || namespaceId}
       isCompact
@@ -130,7 +113,6 @@ export function ResourceList({
       disableCreate={structure.disableCreate || false}
       showTitle={true}
       hasDetailsView={structure.hasDetailsView ?? !!PredefinedRenderer?.Details}
-      fixedPath={true}
       columns={children}
       sortBy={defaultSortOptions =>
         sortBy(jsonata, sortOptions, t, defaultSort ? defaultSortOptions : {})

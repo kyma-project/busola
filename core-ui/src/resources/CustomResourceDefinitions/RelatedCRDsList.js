@@ -19,7 +19,6 @@ export function RelatedCRDsList(resource) {
     <CustomResourceDefinitionList
       {...{
         hasDetailsView: true,
-        fixedPath: true,
         resourceUrl,
         resourceType: 'customresourcedefinitions',
         isCompact: true,

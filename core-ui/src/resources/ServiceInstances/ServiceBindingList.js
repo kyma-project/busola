@@ -6,7 +6,6 @@ export function ServiceBindingList(instance) {
   const namespace = instance.metadata.namespace;
   const listParams = {
     hasDetailsView: true,
-    fixedPath: true,
     resourceUrl: `/apis/services.cloud.sap.com/v1/namespaces/${namespace}/servicebindings`,
     resourceType: 'servicebindings',
     namespace,

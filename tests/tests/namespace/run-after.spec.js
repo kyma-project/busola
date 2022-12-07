@@ -8,28 +8,27 @@ context('Clean up Namespace', () => {
     cy.loginAndSelectCluster();
   });
   it('Delete the Namespace (step 1)', () => {
-    cy.get('[data-testid=luigi-topnav-logo]').click();
+    cy.getLeftNav()
+      .contains('Namespaces')
+      .click();
 
-    cy.get('[data-testid=namespaces_namespaces]').click(); //we need to use force when others elements make menu not visible
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="search-input"]')
-      .type(Cypress.env('NAMESPACE_NAME'), {
+    cy.get('[role="search"] [aria-label="search-input"]').type(
+      Cypress.env('NAMESPACE_NAME'),
+      {
         force: true,
-      }); // use force to skip clicking (the table could re-render between the click and the typing)
+      },
+    ); // use force to skip clicking (the table could re-render between the click and the typing)
 
-    cy.getIframeBody()
-      .find('tbody tr [aria-label="Delete"]')
-      .click({ force: true });
+    cy.get('tbody tr [aria-label="Delete"]').click({ force: true });
 
-    cy.getIframeBody()
-      .contains('button', 'Delete')
+    cy.contains('button', 'Delete')
       .filter(':visible', { log: false })
       .click({ force: true });
   });
 
   it('Check if the Namespace is terminated (step 2)', { retries: 3 }, () => {
-    cy.getIframeBody()
-      .find('tbody tr [role="status"]')
+    cy.get('[role=row]')
+      .find('[role="status"]')
       .should('have.text', 'Terminating');
   });
 });
