@@ -29,13 +29,6 @@ export function RelatedCRDsList(resource) {
         title: t('custom-resource-definitions.subtitle.related-crds'),
         pagination: { itemsPerPage: 5 },
         hideCreateOption: true,
-        navigateFn: crd => {
-          LuigiClient.linkManager()
-            .fromContext('cluster')
-            .navigate(
-              '/customresourcedefinitions/details/' + crd.metadata.name,
-            );
-        },
       }}
     />
   );
