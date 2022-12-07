@@ -3,8 +3,7 @@ Cypress.Commands.add(
   { prevSubject: false },
   (monacoCount = 0) => {
     return cy
-      .getIframeBody()
-      .find('textarea[aria-roledescription="editor"]:visible')
+      .get('textarea[aria-roledescription="editor"]:visible')
       .eq(monacoCount);
   },
 );
