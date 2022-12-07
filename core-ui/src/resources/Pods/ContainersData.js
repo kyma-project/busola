@@ -13,12 +13,7 @@ ContainersData.propTypes = {
   containers: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default function ContainersData({
-  type,
-  containers,
-  statuses,
-  parentName,
-}) {
+export default function ContainersData({ type, containers, statuses }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
