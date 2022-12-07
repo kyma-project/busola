@@ -5,20 +5,11 @@ Cypress.Commands.add('createNamespace', namespaceName => {
     .contains('Namespaces')
     .click();
 
-  cy.getIframeBody()
-    .contains('button', 'Create Namespace')
-    .click();
+  cy.contains('button', 'Create Namespace').click();
 
-  cy.getIframeBody()
-    .find('input[ariaLabel="Namespace name"]:visible')
-    .type(namespaceName);
+  cy.get('input[ariaLabel="Namespace name"]:visible').type(namespaceName);
 
-  cy.getIframeBody()
-    .find('[role=dialog]')
-    .contains('button', 'Create')
-    .click();
+  cy.contains('[role=dialog] button', 'Create').click();
 
-  cy.getIframeBody()
-    .contains('h3', namespaceName)
-    .should('be.visible');
+  cy.contains('h3', namespaceName).should('be.visible');
 });
