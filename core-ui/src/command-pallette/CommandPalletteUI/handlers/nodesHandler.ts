@@ -1,4 +1,3 @@
-import { TFunction } from 'react-i18next';
 import { K8sResource } from 'types';
 import {
   CommandPaletteContext,
@@ -82,7 +81,7 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     return null;
   }
 
-  const { resourceCache, tokens, t } = context;
+  const { resourceCache, tokens } = context;
   const nodes = resourceCache['nodes'];
   if (typeof nodes !== 'object') {
     return [

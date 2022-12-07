@@ -1,7 +1,5 @@
 import React, { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import LuigiClient from '@luigi-project/client';
-import pluralize from 'pluralize';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
