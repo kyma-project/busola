@@ -12,39 +12,30 @@ context('Test Events', () => {
       .contains('Events')
       .click();
 
-    cy.getIframeBody()
-      .find('td a')
+    cy.get('td a')
       .first()
       .click({ force: true });
   });
 
   it('Check details', () => {
-    cy.getIframeBody()
-      .contains('Involved Object')
+    cy.contains('Involved Object')
       .next('.content')
       .should('not.be.empty');
 
-    cy.getIframeBody()
-      .contains('Source')
+    cy.contains('Source')
       .next('.content')
       .should('not.be.empty');
 
-    cy.getIframeBody()
-      .contains('Type')
+    cy.contains('Type')
       .next('.content')
       .should('not.be.empty');
 
-    cy.getIframeBody()
-      .contains('Count')
+    cy.contains('Count')
       .next('.content')
       .should('not.be.empty');
 
-    cy.getIframeBody()
-      .contains('Message')
-      .should('be.visible');
+    cy.contains('Message').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Reason')
-      .should('be.visible');
+    cy.contains('Reason').should('be.visible');
   });
 });

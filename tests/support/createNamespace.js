@@ -11,5 +11,5 @@ Cypress.Commands.add('createNamespace', namespaceName => {
 
   cy.contains('[role=dialog] button', 'Create').click();
 
-  cy.contains('h3', namespaceName).should('be.visible');
+  cy.contains('[role=row]', namespaceName).should('be.visible');
 });

@@ -17,16 +17,16 @@ export const useUrl: () => UrlGenerators = () => {
       ?.params?.namespace ?? '';
 
   const clusterUrl = (path: string, overrides: UrlOverrides = {}) => {
-    return `/cluster/${overrides.cluster ?? cluster}/${path}`;
+    return `/cluster/${overrides?.cluster ?? cluster}/${path}`;
   };
 
   const namespaceUrl = (path: string, overrides: UrlOverrides = {}) => {
-    return `/cluster/${overrides.cluster ??
-      cluster}/namespaces/${overrides.namespace ?? namespace}/${path}`;
+    return `/cluster/${overrides?.cluster ??
+      cluster}/namespaces/${overrides?.namespace ?? namespace}/${path}`;
   };
 
   const scopedUrl = (path: string, overrides: UrlOverrides = {}) => {
-    if (overrides.namespace ?? namespace) {
+    if (overrides?.namespace ?? namespace) {
       return namespaceUrl(path, overrides);
     } else {
       return clusterUrl(path, overrides);
@@ -34,10 +34,10 @@ export const useUrl: () => UrlGenerators = () => {
   };
 
   const resourceUrl = (resource: any, overrides: UrlOverrides = {}) => {
-    const resourceType = pluralize(resource.kind.toLowerCase());
-    const path = `${overrides.resourceType ?? resourceType}/${
-      resource.metadata.name
-    }`;
+    const resourceType = (
+      overrides.resourceType ?? pluralize(resource.kind)
+    ).toLowerCase();
+    const path = `${resourceType}/${resource.metadata.name}`;
     return scopedUrl(path, {
       namespace: resource.metadata.namespace,
       ...overrides,

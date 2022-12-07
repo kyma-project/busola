@@ -23,7 +23,6 @@ import { PersistentVolumeClaimCreate } from './PersistentVolumeClaimCreate';
 const RelatedVolumes = ({ labels }) => {
   const PVParams = {
     hasDetailsView: true,
-    fixedPath: true,
     resourceUrl: '/api/v1/persistentvolumes',
     resourceType: 'persistentVolumes',
     filter: pv => {
