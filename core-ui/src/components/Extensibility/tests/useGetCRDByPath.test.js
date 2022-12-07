@@ -1,14 +1,14 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { extensionsState } from 'state/navigation/extensionsAtom';
+import { render } from 'testing/reactTestingUtils';
 import { useGetCRbyPath } from '../useGetCRbyPath.js';
 
 let mockNamespaceId = 'namespaceId';
 let mockCrds = [];
 
-jest.mock('shared/contexts/MicrofrontendContext', () => ({
-  useMicrofrontendContext: () => ({
+jest.mock('react-router-dom', () => ({
+  useParams: () => ({
     namespaceId: mockNamespaceId,
-    customResources: mockCrds,
   }),
 }));
 
@@ -19,14 +19,16 @@ function TestComponent() {
 
 describe('useGetCRbyPath', () => {
   it('Returns nothing for an empty list', () => {
-    const { queryByTestId } = render(<TestComponent />);
+    const { queryByTestId } = render(<TestComponent />, {
+      initializeState: snapshot => snapshot.set(extensionsState, []),
+    });
     expect(queryByTestId('value')).toHaveTextContent('');
   });
 
   it('Returns first namespacematching crd', () => {
     delete window.location;
     window.location = {
-      pathname: `/namespaces/${mockNamespaceId}/path2`,
+      pathname: `namespaces/${mockNamespaceId}/path2`,
     };
 
     mockCrds = [
@@ -44,7 +46,11 @@ describe('useGetCRbyPath', () => {
       },
     ];
 
-    const { queryByTestId } = render(<TestComponent />);
+    const { queryByTestId } = render(<TestComponent />, {
+      initializeState: snapshot => {
+        snapshot.set(extensionsState, mockCrds);
+      },
+    });
     expect(queryByTestId('value')).toHaveTextContent(
       JSON.stringify(mockCrds[1]),
     );
@@ -54,7 +60,7 @@ describe('useGetCRbyPath', () => {
     mockNamespaceId = 'path1';
     delete window.location;
     window.location = {
-      pathname: `/namespaces/${mockNamespaceId}/path2`,
+      pathname: `namespaces/${mockNamespaceId}/path2`,
     };
 
     mockCrds = [
@@ -72,7 +78,11 @@ describe('useGetCRbyPath', () => {
       },
     ];
 
-    const { queryByTestId } = render(<TestComponent />);
+    const { queryByTestId } = render(<TestComponent />, {
+      initializeState: snapshot => {
+        snapshot.set(extensionsState, mockCrds);
+      },
+    });
     expect(queryByTestId('value')).toHaveTextContent(
       JSON.stringify(mockCrds[1]),
     );
@@ -82,7 +92,7 @@ describe('useGetCRbyPath', () => {
     mockNamespaceId = undefined;
     delete window.location;
     window.location = {
-      pathname: `/path2`,
+      pathname: `path2`,
     };
 
     mockCrds = [
@@ -99,7 +109,11 @@ describe('useGetCRbyPath', () => {
       },
     ];
 
-    const { queryByTestId } = render(<TestComponent />);
+    const { queryByTestId } = render(<TestComponent />, {
+      initializeState: snapshot => {
+        snapshot.set(extensionsState, mockCrds);
+      },
+    });
     expect(queryByTestId('value')).toHaveTextContent(
       JSON.stringify(mockCrds[1]),
     );
