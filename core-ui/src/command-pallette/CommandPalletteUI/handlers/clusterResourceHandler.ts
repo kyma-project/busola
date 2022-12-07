@@ -18,7 +18,7 @@ import {
   Result,
 } from '../types';
 import { K8sResource } from 'types';
-import { NavigateFunction } from 'react-router-dom';
+import { matchPath, NavigateFunction } from 'react-router-dom';
 
 function getAutocompleteEntries({
   tokens,
@@ -67,9 +67,6 @@ function makeListItem(
   const name = item.metadata.name;
   const { pathSegment, resourceType, category } = matchedNode;
 
-  // const detailsLink =
-  //   resourceType === 'namespaces' ? `/${name}/details` : `/details/${name}`;
-
   const resourceTypeText = t([
     `${resourceType}.title`,
     `command-palette.resource-names.${resourceType}`,
@@ -116,27 +113,33 @@ async function fetchClusterResources(context: CommandPaletteContext) {
 
 function sendNamespaceSwitchMessage(
   newNamespace: string,
-  currentNamespace: string | null,
+  activeClusterName: string,
   navigate: NavigateFunction,
 ) {
-  if (!currentNamespace) return;
-  const newPath = window.location.pathname.replace(
-    `/namespaces/${currentNamespace}`,
-    `/namespaces/${newNamespace}`,
+  const matchedRoute =
+    matchPath(
+      '/cluster/:cluster/namespaces/:namespaceId',
+      window.location.pathname,
+    ) ||
+    matchPath(
+      '/cluster/:cluster/namespaces/:namespaceId/:resourceType/*',
+      window.location.pathname,
+    );
+  if (!matchedRoute) return;
+
+  // @ts-ignore
+  const resourceType = matchedRoute.params.resourceType || '';
+
+  navigate(
+    `/cluster/${activeClusterName}/namespaces/${newNamespace}/${resourceType}`,
   );
-  navigate(newPath);
 }
 
 function makeSingleNamespaceLinks(
   namespace: K8sResource,
   context: CommandPaletteContext,
 ) {
-  const {
-    t,
-    activeClusterName,
-    navigate,
-    namespace: currentNamespace,
-  } = context;
+  const { t, activeClusterName, navigate } = context;
   const category = t('namespaces.title');
   const label = namespace.metadata.name;
   const name = namespace.metadata.name;
@@ -147,7 +150,7 @@ function makeSingleNamespaceLinks(
     category,
     query,
     onActivate: () =>
-      sendNamespaceSwitchMessage(name, currentNamespace, navigate),
+      sendNamespaceSwitchMessage(name, activeClusterName!, navigate),
     customActionText: t('command-palette.item-actions.switch'),
   };
 
@@ -161,7 +164,16 @@ function makeSingleNamespaceLinks(
     },
   };
 
-  return [switchContextNode, navigateToDetailsNode];
+  // don't rely on currentNamespace, as it defaults to "default"
+  const isAtNamespaceContext = !!matchPath(
+    '/cluster/:cluster/namespaces/:namespaceId/*',
+    window.location.pathname,
+  );
+  if (isAtNamespaceContext) {
+    return [switchContextNode, navigateToDetailsNode];
+  } else {
+    return [navigateToDetailsNode];
+  }
 }
 
 function createResults(context: CommandPaletteContext): Result[] {
