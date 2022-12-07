@@ -1,5 +1,5 @@
 import { RecoilValueReadOnly, selector } from 'recoil';
-import { configurationAtom } from '../configurationAtom';
+import { configurationAtom } from '../configuration/configurationAtom';
 import { predefinedCategories } from './categories';
 import { ConfigFeature, configFeaturesNames, NavNode } from '../types';
 import { getFetchFn } from '../utils/getFetchFn';

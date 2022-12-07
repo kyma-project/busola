@@ -9,7 +9,7 @@ import { createSecretTemplate, createPresets, getSecretDefs } from './helpers';
 
 import './SecretCreate.scss';
 import { useRecoilValue } from 'recoil';
-import { configurationAtom } from 'state/configurationAtom';
+import { configurationAtom } from 'state/configuration/configurationAtom';
 
 export function SecretCreate({
   namespace,

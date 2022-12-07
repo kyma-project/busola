@@ -7,7 +7,7 @@ import {
   useAddStyle,
 } from 'shared/components/ResourceGraph/getResourceGraphConfig';
 import { useRecoilValue } from 'recoil';
-import { configurationAtom } from 'state/configurationAtom';
+import { configurationAtom } from 'state/configuration/configurationAtom';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 
 export const usePrepareListProps = ({

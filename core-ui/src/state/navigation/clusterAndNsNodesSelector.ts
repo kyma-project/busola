@@ -3,7 +3,7 @@ import { isEmpty, partial } from 'lodash';
 import { resourceListSelector } from '../resourceList/resourceListSelector';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
 import { openapiPathIdListSelector } from '../openapi/openapiPathIdSelector';
-import { configurationAtom } from '../configurationAtom';
+import { configurationAtom } from '../configuration/configurationAtom';
 import { permissionSetsSelector } from '../permissionSetsSelector';
 import { NavNode, Scope } from '../types';
 import { shouldNodeBeVisible } from './filters/shouldNodeBeVisible';
