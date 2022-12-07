@@ -107,7 +107,7 @@ export function ResourceList({
       resources={value?.items}
       resourceUrl={resourceUrl}
       resourceUrlPrefix={resourceUrlPrefix}
-      resourceType={prettifyKind(kind)}
+      resourceType={pluralize(kind)}
       resourceTitle={prettifyKind(kind)}
       namespace={value?.namespace || namespaceId}
       isCompact
