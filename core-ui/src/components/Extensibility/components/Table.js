@@ -39,7 +39,7 @@ export function Table({
   schema,
   originalResource,
   scope,
-  arrayItems,
+  arrayItems = [],
   ...props
 }) {
   // cleanup jsonata results
