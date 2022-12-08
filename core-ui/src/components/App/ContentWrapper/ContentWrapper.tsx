@@ -1,7 +1,7 @@
 import './ContentWrapper.scss';
 
 type ContentWrapperProps = {
-  children: JSX.Element;
+  children: JSX.Element | JSX.Element[];
 };
 
 export const ContentWrapper = ({ children }: ContentWrapperProps) => {

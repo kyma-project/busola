@@ -31,6 +31,7 @@
   "devDependencies": {
     "@babel/core": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
+    "@types/didyoumean": "^1.2.0",
     "@types/js-yaml": "^4.0.5",
     "cli-color": "^1.4.0",
     "concurrently": "^5.0.0",

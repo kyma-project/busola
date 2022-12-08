@@ -34,9 +34,7 @@ context('Test resource upload', () => {
     // this is to address a Luigi race condition, can be removed together with Luigi
     cy.wait(500);
 
-    cy.getIframeBody()
-      .contains('Upload YAML')
-      .click();
+    cy.contains('Upload YAML').click();
 
     cy.wrap(loadValidResources(Cypress.env('NAMESPACE_NAME'))).then(
       resources => {
@@ -45,35 +43,23 @@ context('Test resource upload', () => {
       },
     );
 
-    cy.getIframeBody()
-      .contains('You will create 2 resources:')
-      .should('be.visible');
-    cy.getIframeBody()
-      .contains('Deployment echo-server-upload-yaml')
-      .should('be.visible');
-    cy.getIframeBody()
-      .contains('Application ' + APPLICATION_NAME)
-      .should('be.visible');
+    cy.contains('You will create 2 resources:').should('be.visible');
+    cy.contains('Deployment echo-server-upload-yaml').should('be.visible');
+    cy.contains('Application ' + APPLICATION_NAME).should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Submit')
-      .click();
+    cy.contains('Submit').click();
 
-    cy.getIframeBody()
-      .contains('2/2')
-      .should('be.visible');
+    cy.contains('2/2').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Close')
-      .should('be.visible');
+    cy.contains('Close').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Deployment echo-server-upload-yaml - Created')
-      .should('be.visible');
+    cy.contains('Deployment echo-server-upload-yaml - Created').should(
+      'be.visible',
+    );
 
-    cy.getIframeBody()
-      .contains('Application ' + APPLICATION_NAME + ' - Created')
-      .should('be.visible');
+    cy.contains('Application ' + APPLICATION_NAME + ' - Created').should(
+      'be.visible',
+    );
   });
 
   it('Upserts resources', () => {
@@ -85,17 +71,15 @@ context('Test resource upload', () => {
       },
     );
 
-    cy.getIframeBody()
-      .contains('Submit')
-      .click();
+    cy.contains('Submit').click();
 
-    cy.getIframeBody()
-      .contains('Deployment echo-server-upload-yaml-2 - Created')
-      .should('be.visible');
+    cy.contains('Deployment echo-server-upload-yaml-2 - Created').should(
+      'be.visible',
+    );
 
-    cy.getIframeBody()
-      .contains('Application ' + APPLICATION_NAME + ' - Updated')
-      .should('be.visible');
+    cy.contains('Application ' + APPLICATION_NAME + ' - Updated').should(
+      'be.visible',
+    );
   });
 
   it('Handles errors', () => {
@@ -108,35 +92,25 @@ context('Test resource upload', () => {
       },
     );
 
-    cy.getIframeBody()
-      .contains('Submit')
-      .click();
+    cy.contains('Submit').click();
 
-    cy.getIframeBody()
-      .contains('Deployment echo-server-upload-yaml - Error')
-      .should('be.visible');
+    cy.contains('Deployment echo-server-upload-yaml - Error').should(
+      'be.visible',
+    );
   });
 
   it('Cleanup', () => {
     // close
-    cy.getIframeBody().type('{esc}');
+    cy.get('body').type('{esc}');
 
-    cy.getIframeBody()
-      .find('[role=dialog]')
-      .should('not.exist');
+    cy.get('[role=dialog]').should('not.exist');
 
     cy.navigateTo('Integration', 'Applications');
 
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="open-search"]')
-      .type(APPLICATION_NAME);
+    cy.get('[role="search"] [aria-label="open-search"]').type(APPLICATION_NAME);
 
-    cy.getIframeBody()
-      .find('tbody tr [aria-label="Delete"]')
-      .click({ force: true });
+    cy.get('tbody tr [aria-label="Delete"]').click({ force: true });
 
-    cy.getIframeBody()
-      .contains('button', 'Delete')
-      .click();
+    cy.contains('button', 'Delete').click();
   });
 });

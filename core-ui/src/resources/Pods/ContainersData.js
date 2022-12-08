@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { LayoutPanel, Button } from 'fundamental-react';
 import './ContainersData.scss';
@@ -15,6 +15,7 @@ ContainersData.propTypes = {
 
 export default function ContainersData({ type, containers, statuses }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const ContainerComponent = ({ container, status }) => (
     <>
@@ -23,9 +24,9 @@ export default function ContainersData({ type, containers, statuses }) {
         <LayoutPanel.Actions>
           <Button
             aria-label={'view-logs-for-' + container.name}
-            onClick={() =>
-              LuigiClient.linkManager().navigate(`containers/${container.name}`)
-            }
+            onClick={() => {
+              navigate(`containers/${container.name}`, { replace: true });
+            }}
             iconBeforeText
           >
             {t('pods.buttons.view-logs')}

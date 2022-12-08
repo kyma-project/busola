@@ -7,7 +7,7 @@ import {
 } from './components/components';
 import { ResultsList } from './ResultsList/ResultsList';
 import { addHistoryEntry, getHistoryEntries } from './search-history';
-import { /*LOADING_INDICATOR,*/ useSearchResults } from './useSearchResults';
+import { useSearchResults } from './useSearchResults';
 import './CommandPaletteUI.scss';
 import { FormInput } from 'fundamental-react';
 import { K8sResource } from 'types';

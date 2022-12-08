@@ -1,12 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayoutPanel, Link } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
 import { isEqual } from 'lodash';
+import { Link } from 'react-router-dom';
 
 import { PersistentVolumeClaimStatus } from 'shared/components/PersistentVolumeClaimStatus';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
-import { navigateToClusterResourceDetails } from 'shared/hooks/navigate';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { Tokens } from 'shared/components/Tokens';
@@ -15,14 +15,14 @@ import { RelatedPods } from 'shared/components/RelatedPods';
 import { Selector } from 'shared/components/Selector/Selector';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import PersistentVolumesList from 'resources/PersistentVolumes/PersistentVolumeList';
+import { useUrl } from 'hooks/useUrl';
 
+import PersistentVolumesList from 'resources/PersistentVolumes/PersistentVolumeList';
 import { PersistentVolumeClaimCreate } from './PersistentVolumeClaimCreate';
 
 const RelatedVolumes = ({ labels }) => {
   const PVParams = {
     hasDetailsView: true,
-    fixedPath: true,
     resourceUrl: '/api/v1/persistentvolumes',
     resourceType: 'persistentVolumes',
     filter: pv => {
@@ -60,6 +60,7 @@ function PVCSelectorSpecification(pvc) {
 
 export const PVCConfiguration = pvc => {
   const { t } = useTranslation();
+  const { clusterUrl } = useUrl();
 
   const { data: storageClasses } = useGetList()(
     '/apis/storage.k8s.io/v1/storageclasses',
@@ -88,12 +89,8 @@ export const PVCConfiguration = pvc => {
           value={
             pvc.spec?.volumeName ? (
               <Link
-                onClick={() =>
-                  navigateToClusterResourceDetails(
-                    'persistentvolumes',
-                    pvc.spec?.volumeName,
-                  )
-                }
+                className="fd-link"
+                to={clusterUrl(`persistentvolumes/${pvc.spec?.volumeName}`)}
               >
                 {pvc.spec?.volumeName}
               </Link>
@@ -110,12 +107,8 @@ export const PVCConfiguration = pvc => {
               ({ metadata }) => metadata.name === pvc.spec?.storageClassName,
             ) ? (
               <Link
-                onClick={() =>
-                  navigateToClusterResourceDetails(
-                    'storageclasses',
-                    pvc.spec?.storageClassName,
-                  )
-                }
+                className="fd-link"
+                to={clusterUrl(`storageclasses/${pvc.spec?.storageClassName}`)}
               >
                 {pvc.spec?.storageClassName}
               </Link>

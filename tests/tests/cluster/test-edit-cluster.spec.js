@@ -12,59 +12,45 @@ context('Test edit cluster', () => {
   });
 
   it('Changes cluster name and adds description', () => {
-    cy.get('[data-testid=app-switcher]').click();
-    cy.get('[data-testid=clusters-overview]').click();
+    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
+    cy.contains('Clusters Overview').click();
 
-    cy.getIframeBody()
-      .find('.fd-table__body .fd-table__cell')
+    cy.get('.fd-table__body .fd-table__cell')
       .eq(0)
       .then(el => (originalName = el.text()));
 
-    cy.getIframeBody()
-      .find('button[data-testid="edit"]')
-      .click();
+    cy.get('button[data-testid="edit"]').click();
 
-    cy.getIframeBody()
-      .find('input[data-testid="cluster-description"]')
+    cy.get('input[data-testid="cluster-description"]')
       .click()
       .type(DESC);
 
-    cy.getIframeBody()
-      .find('input[date-testid="cluster-name"]')
+    cy.get('input[date-testid="cluster-name"]')
       .first()
       .type(`{selectall}{backspace}`)
       .type(TEMP_NAME);
 
-    cy.getIframeBody()
-      .contains('button', 'Update')
-      .click();
+    cy.contains('button', 'Update').click();
 
     cy.contains(TEMP_NAME)
       .should('be.visible')
       .click();
 
-    cy.get('[data-testid=app-switcher]').click();
-    cy.get('[data-testid=clusters-overview]').click();
+    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
+    cy.contains('Clusters Overview').click();
 
-    cy.getIframeBody()
-      .contains(DESC)
-      .should('be.visible');
+    cy.contains(DESC).should('be.visible');
   });
 
   it('Restores previous settings', () => {
-    cy.getIframeBody()
-      .find('button[data-testid="edit"]')
-      .click();
+    cy.get('button[data-testid="edit"]').click();
 
-    cy.getIframeBody()
-      .find('input[date-testid="cluster-name"]')
+    cy.get('input[date-testid="cluster-name"]')
       .first()
       .type(`{selectall}{backspace}`)
       .type(originalName);
 
-    cy.getIframeBody()
-      .contains('button', 'Update')
-      .click();
+    cy.contains('button', 'Update').click();
 
     cy.contains(originalName)
       .should('be.visible')

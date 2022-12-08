@@ -1,4 +1,3 @@
-import { TFunction } from 'react-i18next';
 import { K8sResource } from 'types';
 import {
   CommandPaletteContext,
@@ -6,7 +5,7 @@ import {
   LOADING_INDICATOR,
   Result,
 } from '../types';
-import { getSuggestionsForSingleResource } from './helpers';
+import { getSuggestionForSingleResource } from './helpers';
 
 const nodeResourceTypes = ['nodes', 'node', 'no'];
 
@@ -33,9 +32,9 @@ function getAutocompleteEntries(
   }
 }
 
-function getSuggestions(context: CommandPaletteContext) {
+function getSuggestion(context: CommandPaletteContext) {
   const { tokens, resourceCache } = context;
-  return getSuggestionsForSingleResource({
+  return getSuggestionForSingleResource({
     tokens,
     resources: resourceCache['nodes'] || [],
     resourceTypeNames: nodeResourceTypes,
@@ -44,18 +43,17 @@ function getSuggestions(context: CommandPaletteContext) {
 
 function makeListItem(
   item: K8sResource,
-  navigate: (path: string) => void,
-  t: TFunction<'translation', undefined>,
+  context: CommandPaletteContext,
 ): Result {
+  const { t, navigate, activeClusterName } = context;
   const name = item.metadata.name;
   return {
     label: name,
     category:
       t('clusters.overview.title-current-cluster') + ' > ' + t('nodes.title'),
     query: `node ${name}`,
-    onActivate: () => {
-      //todo
-    },
+    onActivate: () =>
+      navigate(`/cluster/${activeClusterName}/overview/nodes/${name}`),
   };
 }
 
@@ -83,11 +81,10 @@ function createResults(context: CommandPaletteContext): Result[] | null {
     return null;
   }
 
-  const { resourceCache, tokens, t } = context;
+  const { resourceCache, tokens } = context;
   const nodes = resourceCache['nodes'];
   if (typeof nodes !== 'object') {
     return [
-      // todo
       { type: LOADING_INDICATOR, label: '', query: '', onActivate: () => {} },
     ];
   }
@@ -98,19 +95,17 @@ function createResults(context: CommandPaletteContext): Result[] | null {
       item.metadata.name.includes(name),
     );
     if (matchedByName) {
-      return matchedByName.map(item =>
-        makeListItem(item, (t: string) => {}, t),
-      );
+      return matchedByName.map(item => makeListItem(item, context));
     }
     return null;
   } else {
-    return nodes.map(item => makeListItem(item, (t: string) => {}, t));
+    return nodes.map(item => makeListItem(item, context));
   }
 }
 
 export const nodesHandler: Handler = {
   getAutocompleteEntries,
-  getSuggestions,
+  getSuggestion,
   fetchResources: concernsNodes,
   createResults,
   getNavigationHelp: () => [{ name: 'nodes', aliases: ['no'] }],

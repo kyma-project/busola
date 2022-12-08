@@ -7,7 +7,6 @@ import {
   useAddStyle,
 } from 'shared/components/ResourceGraph/getResourceGraphConfig';
 import { useRecoilValue } from 'recoil';
-import { configurationAtom } from 'state/configuration/configurationAtom';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 
 export const usePrepareListProps = ({
@@ -56,8 +55,6 @@ export const usePrepareDetailsProps = ({
   const decodedResourceUrl = decodeURIComponent(resourceUrl);
   const decodedResourceName = decodeURIComponent(resourceName);
 
-  const configuration = useRecoilValue(configurationAtom);
-  const features = configuration?.features;
   const extensions = useRecoilValue(extensionsState);
   const addStyle = useAddStyle({ styleId: 'graph-styles' });
 
@@ -70,12 +67,7 @@ export const usePrepareDetailsProps = ({
     resourceName: decodedResourceName,
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
-    resourceGraphConfig: getResourceGraphConfig(
-      t,
-      features,
-      extensions,
-      addStyle,
-    ),
+    resourceGraphConfig: getResourceGraphConfig(extensions, addStyle),
     i18n,
   };
 };

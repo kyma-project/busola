@@ -1,8 +1,7 @@
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { fireEvent, render, waitFor } from 'testing/reactTestingUtils';
 import { useCreateResource } from '../useCreateResource';
 
 import { createPatch } from 'rfc6902';
-import { MicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
 import { ignoreConsoleErrors } from 'setupTests';
 
 const mockNotifySuccess = jest.fn();
@@ -35,11 +34,7 @@ const Testbed = ({ namespace = 'test-namespace', ...props }) => {
     return <button onClick={() => createResource()}>Act</button>;
   };
 
-  return (
-    <MicrofrontendContext.Provider value={{ namespaceId: namespace }}>
-      <Component />
-    </MicrofrontendContext.Provider>
-  );
+  return <Component />;
 };
 
 describe('useCreateResource', () => {

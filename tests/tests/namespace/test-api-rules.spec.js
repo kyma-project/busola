@@ -29,15 +29,14 @@ context('Test API Rules in the Function details view', () => {
   it('Go to details of the simple Function', () => {
     cy.navigateTo('Workloads', 'Functions');
 
-    cy.getIframeBody()
-      .contains('a', FUNCTION_NAME)
+    cy.contains('a', FUNCTION_NAME)
       .filter(':visible', { log: false })
       .first()
       .click({ force: true });
 
-    cy.getIframeBody()
-      .find('[role="status"]')
-      .contains('span', /running/i, { timeout: 60 * 300 });
+    cy.get('[role="status"]').contains('span', /running/i, {
+      timeout: 60 * 300,
+    });
   });
 
   it('Create an API Rule for the Function', () => {
@@ -49,57 +48,47 @@ context('Test API Rules in the Function details view', () => {
       .contains('API Rules')
       .click();
 
-    cy.getIframeBody()
-      .contains('Create API Rule')
-      .click();
+    cy.contains('Create API Rule').click();
 
     // Name
-    cy.getIframeBody()
-      .find('[ariaLabel="APIRule name"]:visible', { log: false })
-      .type(API_RULE_NAME);
+    cy.get('[ariaLabel="APIRule name"]:visible', { log: false }).type(
+      API_RULE_NAME,
+    );
 
     // Service
-    cy.getIframeBody()
-      .find('[aria-label="Choose Service"]:visible', { log: false })
+    cy.get('[aria-label="Choose Service"]:visible', { log: false })
       .first()
       .type(FUNCTION_NAME);
 
-    cy.getIframeBody()
-      .find('[aria-label="Choose Service"]:visible', { log: false })
+    cy.get('[aria-label="Choose Service"]:visible', { log: false })
       .first()
       .next()
       .find('[aria-label="Combobox input arrow"]:visible', { log: false })
       .click();
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.service.port"]:visible', { log: false })
+    cy.get('[data-testid="spec.service.port"]:visible', { log: false })
       .clear()
       .type(80);
 
     // Host
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
+    cy.get('[aria-label="Combobox input"]:visible', { log: false })
       .first()
       .type('*');
 
-    cy.getIframeBody()
-      .find('span', { log: false })
+    cy.get('span', { log: false })
       .contains(/^\*$/i)
       .first()
       .click();
 
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
+    cy.get('[aria-label="Combobox input"]:visible', { log: false })
       .first()
       .type('{home}{rightArrow}{backspace}');
 
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
+    cy.get('[aria-label="Combobox input"]:visible', { log: false })
       .first()
       .type(API_RULE_SUBDOMAIN);
 
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
+    cy.get('[aria-label="Combobox input"]:visible', { log: false })
       .first()
       .next()
       .find('[aria-label="Combobox input arrow"]:visible', { log: false })
@@ -108,171 +97,117 @@ context('Test API Rules in the Function details view', () => {
     // Rules
     // > Access Strategies
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible')
+    cy.get('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible')
       .clear()
       .type('oauth2_introspection');
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible', {
-        log: false,
-      })
+    cy.get('[data-testid="spec.rules.0.accessStrategies.0.handler"]:visible', {
+      log: false,
+    })
       .find('span')
       .find('[aria-label="Combobox input arrow"]:visible', { log: false })
       .click();
 
-    cy.getIframeBody()
-      .find('[data-testid="select-dropdown"]:visible')
-      .click();
+    cy.get('[data-testid="select-dropdown"]:visible').click();
 
-    cy.getIframeBody()
-      .find('[role="list"]')
+    cy.get('[role="list"]')
       .contains('required_scope')
       .click();
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter value"]:visible')
+    cy.get('[placeholder="Enter value"]:visible')
       .filterWithNoValue()
       .first()
       .type('read');
 
     // > Methods
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.0.methods.1"]:visible')
-      .type('POST');
+    cy.get('[data-testid="spec.rules.0.methods.1"]:visible').type('POST');
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.0.methods.1"]:visible', {
-        log: false,
-      })
+    cy.get('[data-testid="spec.rules.0.methods.1"]:visible', {
+      log: false,
+    })
       .find('span')
       .find('[aria-label="Combobox input arrow"]:visible', { log: false })
       .click();
 
-    cy.getIframeBody()
-      .find('[role=dialog]')
+    cy.get('[role=dialog]')
       .contains('button', 'Create')
       .click();
   });
 
   it('Check the API Rule details', () => {
-    cy.getIframeBody()
-      .contains(API_RULE_NAME)
-      .click();
+    cy.contains(API_RULE_NAME).click();
 
-    cy.getIframeBody()
-      .contains(API_RULE_DEFAULT_PATH)
-      .should('exist');
+    cy.contains(API_RULE_DEFAULT_PATH).should('exist');
 
-    cy.getIframeBody()
-      .contains('Rules #1', { timeout: 10000 })
-      .click();
+    cy.contains('Rules #1', { timeout: 10000 }).click();
 
-    cy.getIframeBody()
-      .contains('oauth2_introspection')
-      .should('exist');
+    cy.contains('oauth2_introspection').should('exist');
 
-    cy.getIframeBody()
-      .contains(API_RULE_PATH)
-      .should('not.exist');
+    cy.contains(API_RULE_PATH).should('not.exist');
 
-    cy.getIframeBody()
-      .contains('allow')
-      .should('not.exist');
+    cy.contains('allow').should('not.exist');
   });
 
   it('Edit the API Rule', () => {
-    cy.getIframeBody()
-      .contains('Edit')
-      .click();
+    cy.contains('Edit').click();
 
-    cy.getIframeBody().contains(API_RULE_NAME);
+    cy.contains(API_RULE_NAME);
 
     // Rules
-    cy.getIframeBody()
-      .find('[aria-label="expand Rules"]:visible', { log: false })
+    cy.get('[aria-label="expand Rules"]:visible', { log: false })
       .contains('Add')
       .click();
 
-    cy.getIframeBody()
-      .find('[aria-label="expand Rule"]:visible', { log: false })
+    cy.get('[aria-label="expand Rule"]:visible', { log: false })
       .first()
       .click();
 
     // > Access Strategies
-    cy.getIframeBody()
-      .find('[aria-label="expand Access Strategies"]:visible', { log: false })
+    cy.get('[aria-label="expand Access Strategies"]:visible', { log: false })
       .first()
       .scrollIntoView();
 
-    cy.getIframeBody()
-      .find('[data-testid="select-dropdown"]:visible')
+    cy.get('[data-testid="select-dropdown"]:visible')
       .scrollIntoView()
       .click();
 
-    cy.getIframeBody()
-      .find('[role="list"]')
+    cy.get('[role="list"]')
       .contains('required_scope')
       .click();
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter value"]:visible')
+    cy.get('[placeholder="Enter value"]:visible')
       .filterWithNoValue()
       .first()
       .type('write');
 
     // > Methods
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.1.methods.0"]:visible')
+    cy.get('[data-testid="spec.rules.1.methods.0"]:visible')
       .clear()
       .type('POST');
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.1.methods.0"]:visible', {
-        log: false,
-      })
-      .find('span')
-      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
-      .scrollIntoView()
-      .click();
-
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.1.path"]:visible')
+    cy.get('[data-testid="spec.rules.1.path"]:visible')
       .clear()
       .type(API_RULE_PATH);
 
-    cy.getIframeBody()
-      .find('[role=dialog]')
+    cy.get('[role=dialog]')
       .contains('button', 'Update')
       .click();
   });
 
   it('Check the edited API Rule details', () => {
-    cy.getIframeBody()
-      .contains(API_RULE_NAME)
-      .click();
+    cy.contains(API_RULE_NAME).click();
 
-    cy.getIframeBody()
-      .contains(API_RULE_DEFAULT_PATH)
-      .should('exist');
+    cy.contains(API_RULE_DEFAULT_PATH).should('exist');
 
-    cy.getIframeBody()
-      .contains('Rules #1', { timeout: 10000 })
-      .click();
+    cy.contains('Rules #1', { timeout: 10000 }).click();
 
-    cy.getIframeBody()
-      .contains('Rules #2', { timeout: 10000 })
-      .click();
+    cy.contains('Rules #2', { timeout: 10000 }).click();
 
-    cy.getIframeBody()
-      .contains(API_RULE_PATH)
-      .should('exist');
+    cy.contains(API_RULE_PATH).should('exist');
 
-    cy.getIframeBody()
-      .contains('allow')
-      .should('exist');
+    cy.contains('allow').should('exist');
   });
 
   it('Inspect list using slash shortcut', () => {
@@ -282,12 +217,8 @@ context('Test API Rules in the Function details view', () => {
 
     openSearchWithSlashShortcut();
 
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="open-search"]')
-      .type(API_RULE_NAME);
+    cy.get('[role="search"] [aria-label="open-search"]').type(API_RULE_NAME);
 
-    cy.getIframeBody()
-      .contains(API_RULE_NAME)
-      .should('be.visible');
+    cy.contains(API_RULE_NAME).should('be.visible');
   });
 });

@@ -17,70 +17,51 @@ context('Test Config Maps', () => {
   });
 
   it('Create a Config Map', () => {
+    cy.wait(500); // TODO
     cy.navigateTo('Configuration', 'Config Maps');
 
-    cy.getIframeBody()
-      .contains('Create Config Map')
-      .click();
+    cy.contains('Create Config Map').click();
 
-    cy.getIframeBody()
-      .find('[ariaLabel="ConfigMap name"]:visible')
+    cy.get('[ariaLabel="ConfigMap name"]:visible')
       .type(CONFIG_MAP_NAME)
       .click();
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter key"]:visible')
-      .type(ENTRY_KEY);
+    cy.get('[placeholder="Enter key"]:visible').type(ENTRY_KEY);
 
     cy.findMonaco()
       .first()
       .type(ENTRY_VALUE);
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Create')
       .click();
 
-    cy.url().should(
-      'match',
-      new RegExp(`/configmaps/details/${CONFIG_MAP_NAME}$`),
-    );
+    cy.url().should('match', new RegExp(`/configmaps/${CONFIG_MAP_NAME}$`));
   });
 
   it('Inspect the Config Map', () => {
-    cy.getIframeBody().contains(CONFIG_MAP_NAME);
+    cy.contains(CONFIG_MAP_NAME);
 
-    cy.getIframeBody()
-      .contains('.fd-layout-panel', ENTRY_KEY)
-      .contains(ENTRY_VALUE);
+    cy.contains('.fd-layout-panel', ENTRY_KEY).contains(ENTRY_VALUE);
   });
 
   it('Edit the Config MAp', () => {
-    cy.getIframeBody()
-      .contains('Edit')
-      .click();
+    cy.contains('Edit').click();
 
     // hide first entry so Cypress doesn't get confuused
-    cy.getIframeBody()
-      .find('[aria-label="expand config-map-key"]')
-      .click();
+    cy.get('[aria-label="expand config-map-key"]').click();
 
-    cy.getIframeBody()
-      .find('[placeholder="Enter key"]:visible')
-      .type(ENTRY_KEY2);
+    cy.get('[placeholder="Enter key"]:visible').type(ENTRY_KEY2);
 
     cy.findMonaco(1).type(ENTRY_VALUE2);
 
-    cy.getIframeBody()
-      .find('[role=dialog]')
+    cy.get('[role=dialog]')
       .contains('button', 'Update')
       .click();
   });
 
   it('Inspect the updated Config Map', () => {
-    cy.getIframeBody()
-      .contains('.fd-layout-panel', ENTRY_KEY2)
-      .contains(ENTRY_VALUE2);
+    cy.contains('.fd-layout-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
   });
 
   it('Inspect list', () => {
@@ -92,30 +73,22 @@ context('Test Config Maps', () => {
       .contains('Config Maps')
       .click();
 
-    cy.getIframeBody()
-      .contains('.fd-table__row', CONFIG_MAP_NAME)
+    cy.contains('.fd-table__row', CONFIG_MAP_NAME)
       .find('button[data-testid="clone"]')
       .click();
 
-    cy.getIframeBody()
-      .find('[ariaLabel="ConfigMap name"]:visible')
+    cy.get('[ariaLabel="ConfigMap name"]:visible')
       .type(CLONE_NAME)
       .click();
 
-    cy.getIframeBody()
-      .contains('button', /^Create$/)
-      .click();
+    cy.contains('button', /^Create$/).click();
   });
 
   it('Inspect the clone', () => {
-    cy.getIframeBody().contains(CLONE_NAME);
+    cy.contains(CLONE_NAME);
 
-    cy.getIframeBody()
-      .contains('.fd-layout-panel', ENTRY_KEY)
-      .contains(ENTRY_VALUE);
+    cy.contains('.fd-layout-panel', ENTRY_KEY).contains(ENTRY_VALUE);
 
-    cy.getIframeBody()
-      .contains('.fd-layout-panel', ENTRY_KEY2)
-      .contains(ENTRY_VALUE2);
+    cy.contains('.fd-layout-panel', ENTRY_KEY2).contains(ENTRY_VALUE2);
   });
 });

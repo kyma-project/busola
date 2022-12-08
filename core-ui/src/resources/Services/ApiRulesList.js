@@ -1,7 +1,5 @@
 import React, { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import LuigiClient from '@luigi-project/client';
-import pluralize from 'pluralize';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 
@@ -30,21 +28,6 @@ export function ApiRulesList({ serviceName, namespace }) {
     return mainService || ruleService;
   };
 
-  const navigateToApiRule = entry => {
-    const {
-      kind,
-      metadata: { name, namespace },
-    } = entry;
-
-    const namespacePart = namespace ? `namespaces/${namespace}/` : '';
-    const resourceTypePart =
-      extensibilityAPIRules.general.urlPath || pluralize(kind.toLowerCase());
-
-    LuigiClient.linkManager()
-      .fromContext('cluster')
-      .navigate(namespacePart + resourceTypePart + '/details/' + name);
-  };
-
   if (extensibilityAPIRules)
     return (
       <Suspense fallback={<Spinner />}>
@@ -57,7 +40,6 @@ export function ApiRulesList({ serviceName, namespace }) {
           showTitle
           disableCreate
           title={t('api-rules')}
-          navigateFn={navigateToApiRule}
         />
       </Suspense>
     );
@@ -66,7 +48,6 @@ export function ApiRulesList({ serviceName, namespace }) {
     <ResourcesList
       key="api-rule-services"
       hasDetailsView
-      fixedPath
       resourceUrl={url}
       title={t('api-rules')}
       resourceType={'apirules'}

@@ -8,22 +8,18 @@ context('Test Issuers', () => {
     cy.loginAndSelectCluster();
     cy.goToNamespaceDetails();
 
+    cy.wait(500); // TODO
     cy.navigateTo('Configuration', 'Secrets');
 
-    cy.getIframeBody()
-      .contains('Create Secret')
-      .click();
+    cy.contains('Create Secret').click();
 
-    cy.getIframeBody()
-      .find('[ariaLabel="Secret name"]:visible')
-      .type(SECRET_NAME);
+    cy.get('[ariaLabel="Secret name"]:visible').type(SECRET_NAME);
 
-    cy.getIframeBody()
-      .find('[role=dialog]')
+    cy.get('[role=dialog]')
       .contains('button', 'Create')
       .click();
 
-    cy.url().should('match', new RegExp(`/secrets/details/${SECRET_NAME}$`));
+    cy.url().should('match', new RegExp(`/secrets/${SECRET_NAME}$`));
   });
 
   it('Create an issuer', () => {
@@ -31,97 +27,68 @@ context('Test Issuers', () => {
       .contains('Issuers')
       .click();
 
-    cy.getIframeBody()
-      .contains('Create Issuer')
-      .click();
+    cy.contains('Create Issuer').click();
 
-    cy.getIframeBody()
-      .find('[ariaLabel="Issuer name"]:visible')
-      .type(ISSUER_NAME);
+    cy.get('[ariaLabel="Issuer name"]:visible').type(ISSUER_NAME);
 
-    cy.getIframeBody()
-      .contains('Select Issuer type')
+    cy.contains('Select Issuer type')
       .filter(':visible')
       .click();
 
-    cy.getIframeBody()
-      .contains('CA')
+    cy.contains('CA')
       .filter(':visible')
       .click();
 
-    cy.getIframeBody()
-      .find('[placeholder="Select Namespace"]:visible')
-      .type(Cypress.env('NAMESPACE_NAME'));
+    cy.get('[placeholder="Select Namespace"]:visible').type(
+      Cypress.env('NAMESPACE_NAME'),
+    );
 
-    cy.getIframeBody()
-      .contains('li', Cypress.env('NAMESPACE_NAME'))
-      .click();
+    cy.contains('li', Cypress.env('NAMESPACE_NAME')).click();
 
-    cy.getIframeBody()
-      .find('[placeholder="Select name"]:visible')
-      .type(SECRET_NAME);
+    cy.get('[placeholder="Select name"]:visible').type(SECRET_NAME);
 
-    cy.getIframeBody()
-      .contains('li', SECRET_NAME)
-      .click();
+    cy.contains('li', SECRET_NAME).click();
 
-    cy.getIframeBody()
-      .find('[role=dialog]')
+    cy.get('[role=dialog]')
       .contains('button', 'Create')
       .click();
 
-    cy.url().should('match', new RegExp(`/issuers/details/${ISSUER_NAME}$`));
+    cy.url().should('match', new RegExp(`/issuers/${ISSUER_NAME}$`));
   });
 
   it('Inspect issuer', () => {
-    cy.getIframeBody().contains(ISSUER_NAME);
+    cy.contains(ISSUER_NAME);
   });
 
   it('Edit an issuer', () => {
     //wait for the issuer to update to not have version conflicts
-    cy.getIframeBody()
-      .find('[role="status"]')
-      .should('not.have.text', 'Unknown');
+    cy.get('[role="status"]').should('not.have.text', 'Unknown');
 
-    cy.getIframeBody()
-      .contains('Edit')
-      .click();
+    cy.contains('Edit').click();
 
-    cy.getIframeBody()
-      .contains('CA')
-      .click();
+    cy.contains('CA').click();
 
-    cy.getIframeBody()
-      .contains('ACME')
-      .click();
+    cy.contains('ACME').click();
 
-    cy.getIframeBody()
-      .find('[placeholder="ACME Server URL"]:visible')
-      .type('server.com');
+    cy.get('[placeholder="ACME Server URL"]:visible').type('server.com');
 
-    cy.getIframeBody()
-      .find('[placeholder^="Email address"]:visible')
-      .type('mail@server.com');
+    cy.get('[placeholder^="Email address"]:visible').type('mail@server.com');
 
-    cy.getIframeBody()
-      .contains('Include Domains')
-      .click();
+    cy.contains('Include Domains').click();
 
-    cy.getIframeBody()
-      .find('[placeholder^="Domain"]:visible')
-      .type('other.server.com{enter}another.server.com');
+    cy.get('[placeholder^="Domain"]:visible').type(
+      'other.server.com{enter}another.server.com',
+    );
 
-    cy.getIframeBody()
-      .contains('Update')
-      .click();
+    cy.contains('Update').click();
   });
 
   it('Inspect updated issuer', () => {
-    cy.getIframeBody().contains(ISSUER_NAME);
-    cy.getIframeBody().contains('server.com');
-    cy.getIframeBody().contains('mail@server.com');
-    cy.getIframeBody().contains('other.server.com');
-    cy.getIframeBody().contains('another.server.com');
+    cy.contains(ISSUER_NAME);
+    cy.contains('server.com');
+    cy.contains('mail@server.com');
+    cy.contains('other.server.com');
+    cy.contains('another.server.com');
   });
 
   it('Inspect issuer list', () => {

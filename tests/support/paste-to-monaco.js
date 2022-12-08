@@ -3,8 +3,7 @@ Cypress.Commands.add(
   { prevSubject: false },
   (monacoCount = 0) => {
     return cy
-      .getIframeBody()
-      .find('textarea[aria-roledescription="editor"]:visible')
+      .get('textarea[aria-roledescription="editor"]:visible')
       .eq(monacoCount);
   },
 );
@@ -13,6 +12,17 @@ Cypress.Commands.add(
   'pasteToMonaco',
   { prevSubject: false },
   (content, monacoCount) => {
+    // Ignor Cypress issue with Monaco on CI
+    Cypress.on('uncaught:exception', err => {
+      if (
+        err.message.includes('Unexpected usage') ||
+        err.message.includes(
+          "Cannot read properties of undefined (reading 'uri')",
+        )
+      )
+        return false;
+    });
+
     cy.findMonaco(monacoCount)
       .focus()
       .clearInput()

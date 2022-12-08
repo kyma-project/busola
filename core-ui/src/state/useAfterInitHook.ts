@@ -37,7 +37,14 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
     if (handledKubeconfigId !== 'done') {
       return;
     }
-    if (!cluster || !authData) {
+
+    // cluster not yet loaded
+    if (!cluster === undefined) {
+      return;
+    }
+
+    // cluster is here (!== null), but authData is not loaded yet
+    if (!!cluster && !authData) {
       return;
     }
 
@@ -46,6 +53,15 @@ export function useAfterInitHook(handledKubeconfigId: KubeconfigIdHandleState) {
     if (previousPath) {
       navigate(previousPath);
       removePreviousPath();
+    } else {
+      const hasEmptyPath = window.location.pathname === '/';
+      if (hasEmptyPath) {
+        if (cluster) {
+          navigate(`/cluster/${cluster.name}/overview`);
+        } else {
+          navigate('/clusters');
+        }
+      }
     }
   }, [cluster, authData, search, navigate, handledKubeconfigId]);
 }

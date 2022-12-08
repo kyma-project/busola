@@ -43,30 +43,20 @@ context('Prepare funtions for testing', () => {
       .contains('Functions')
       .click();
 
-    cy.getIframeBody()
-      .contains(FUNCTION_NAME)
-      .click();
+    cy.contains(FUNCTION_NAME).click();
 
-    cy.getIframeBody()
-      .contains('button', 'Edit')
-      .click();
+    cy.contains('button', 'Edit').click();
 
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input arrow"]:visible')
+    cy.get('[aria-label="Combobox input arrow"]:visible')
       .eq(1)
       .click();
 
-    cy.getIframeBody()
-      .contains('Node.js 16')
-      .click();
+    cy.contains('Node.js 16').click();
 
-    cy.getIframeBody()
-      .find('[role=dialog]')
+    cy.get('[role=dialog]')
       .contains('button', 'Update')
       .click();
 
-    cy.getIframeBody()
-      .contains('Node.js 16')
-      .should('be.visible');
+    cy.contains('Node.js 16').should('be.visible');
   });
 });

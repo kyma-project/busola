@@ -1,24 +1,24 @@
 import { nonResourceHandler } from './nonResourceHandler';
-// import { clusterResourceHandler } from './clusterResourceHandler';
-// import { namespacedResourceHandler } from './namespacedResourceHandler';
+import { clusterResourceHandler } from './clusterResourceHandler';
+import { namespacedResourceHandler } from './namespacedResourceHandler';
 import { nodesHandler } from './nodesHandler';
-// import { logsHandler } from './logsHandler';
-// import { crdHandler } from './crdHandler';
+import { logsHandler } from './logsHandler';
+import { crdHandler } from './crdHandler';
 import { helmReleaseHandler } from './helmReleaseHandler';
 import { findCommonPrefix } from 'shared/utils/helpers';
-// import { crHandler } from './crHandler';
-// import { crListHandler } from './crListHandler';
+import { crHandler } from './crHandler';
+import { crListHandler } from './crListHandler';
 import { CommandPaletteContext, Handler, HelpEntries, Result } from '../types';
 
 const allHandlers: Handler[] = [
   nonResourceHandler,
-  // clusterResourceHandler,
-  // namespacedResourceHandler,
+  clusterResourceHandler,
+  namespacedResourceHandler,
   nodesHandler,
-  // logsHandler,
-  // crdHandler,
-  // crListHandler,
-  // crHandler,
+  logsHandler,
+  crdHandler,
+  crListHandler,
+  crHandler,
   helmReleaseHandler,
 ];
 
@@ -27,8 +27,8 @@ export function getSuggestions(context: CommandPaletteContext): string[] {
     return [];
   }
   const suggestions = allHandlers
-    .flatMap(handler => handler.getSuggestions(context))
-    .filter(Boolean);
+    .map(handler => handler.getSuggestion(context))
+    .filter(Boolean) as string[];
 
   // don't suggest anything if correct word is already here
   if (suggestions.includes(context.query)) {

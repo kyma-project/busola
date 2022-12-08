@@ -26,67 +26,53 @@ context('Test in-cluster eventing', () => {
   it('Go to details of the receiver Function', () => {
     cy.navigateTo('Workloads', 'Functions');
 
-    cy.getIframeBody()
-      .contains('a', FUNCTION_RECEIVER_NAME)
+    cy.contains('a', FUNCTION_RECEIVER_NAME)
       .filter(':visible', { log: false })
       .first()
       .click({ force: true });
 
-    cy.getIframeBody()
-      .find('[role="status"]')
-      .contains(/running/i, { timeout: 60 * 1000 });
+    cy.get('[role="status"]').contains(/running/i, { timeout: 60 * 1000 });
   });
 
   it('Create a Subscription', () => {
     cy.navigateTo('Configuration', 'Subscriptions');
 
-    cy.getIframeBody()
-      .contains('button', 'Create Subscription')
-      .click();
+    cy.contains('button', 'Create Subscription').click();
 
-    cy.getIframeBody()
-      .contains('Advanced')
-      .click();
+    cy.contains('Advanced').click();
 
-    cy.getIframeBody()
-      .find('[ariaLabel="Subscription name"]:visible')
+    cy.get('[ariaLabel="Subscription name"]:visible')
       .clear()
       .type(`${FUNCTION_RECEIVER_NAME}-subscription`);
 
-    cy.getIframeBody()
-      .contains('Choose Service for the sink')
-      .click();
+    cy.contains('Choose Service for the sink').click();
 
-    cy.getIframeBody()
-      .find('[role="option"]')
+    cy.get('[role="option"]')
       .contains(FUNCTION_RECEIVER_NAME)
       .click();
 
-    cy.getIframeBody()
-      .find(
-        '[placeholder="Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1"]',
-      )
+    cy.get(
+      '[placeholder="Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1"]',
+    )
       .clear()
       .type('sap.kyma.custom.nonexistingapp.order.created.v1');
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Create')
       .click();
   });
 
   it('Go to details of the publisher Function', () => {
-    cy.navigateTo('Workloads', 'Functions');
+    cy.getLeftNav()
+      .contains('Functions')
+      .click();
 
-    cy.getIframeBody()
-      .contains('a', API_RULE_AND_FUNCTION_NAME)
+    cy.contains('a', API_RULE_AND_FUNCTION_NAME)
       .filter(':visible', { log: false })
       .first()
       .click({ force: true });
 
-    cy.getIframeBody()
-      .find('[role="status"]')
-      .contains(/running/i, { timeout: 60 * 1000 });
+    cy.get('[role="status"]').contains(/running/i, { timeout: 60 * 1000 });
   });
 
   it('Create an API Rule for the publisher Function', () => {
@@ -98,8 +84,7 @@ context('Test in-cluster eventing', () => {
 
     cy.wait(500);
 
-    cy.getIframeBody()
-      .find('[role="status"]:visible')
+    cy.get('[role="status"]:visible')
       .first()
       .should('have.text', 'OK');
   });
@@ -108,16 +93,14 @@ context('Test in-cluster eventing', () => {
   it('Get Host value for the API Rule', () => {
     cy.checkApiRuleStatus(API_RULE_AND_FUNCTION_NAME);
 
-    cy.getIframeBody()
-      .find('tbody>tr')
-      .within($tr => {
-        cy.get(`a[href^="${API_RULE_HOST_EXPECTED_PREFIX}"]`)
-          .should('exist')
-          .then($link => {
-            apiRuleHost = $link.attr('href');
-            cy.log('api rule host set to ', apiRuleHost);
-          });
-      });
+    cy.get('tbody>tr').within($tr => {
+      cy.get(`a[href^="${API_RULE_HOST_EXPECTED_PREFIX}"]`)
+        .should('exist')
+        .then($link => {
+          apiRuleHost = $link.attr('href');
+          cy.log('api rule host set to ', apiRuleHost);
+        });
+    });
   });
 
   it('Make a request to the Function', () => {
@@ -137,33 +120,31 @@ context('Test in-cluster eventing', () => {
   });
 
   it('Check logs after triggering publisher function', () => {
-    cy.navigateTo('Workloads', 'Functions');
-
-    cy.getIframeBody()
-      .contains('a', API_RULE_AND_FUNCTION_NAME)
+    cy.getLeftNav()
+      .contains('Functions')
       .click();
 
-    cy.getIframeBody()
-      .contains(`${API_RULE_AND_FUNCTION_NAME}-`)
-      .then(element => {
-        const podName = element[0].textContent;
-        loadFile('kubeconfig.yaml').then(kubeconfig => {
-          const requestUrl = `/api/v1/namespaces/${Cypress.env(
-            'NAMESPACE_NAME',
-          )}/pods/${podName}/log?container=function`;
-          cy.request({
-            method: 'GET',
-            url: kubeconfig.clusters[0].cluster.server + requestUrl,
-            timeout: 10000,
-            headers: {
-              authorization: 'Bearer ' + kubeconfig.users[0].user.token,
-            },
-          }).then(response => {
-            // response.body is automatically serialized into JSON
-            expect(response.body).to.match(/^Payload/);
-          });
+    cy.contains('a', API_RULE_AND_FUNCTION_NAME).click();
+
+    cy.contains(`${API_RULE_AND_FUNCTION_NAME}-`).then(element => {
+      const podName = element[0].textContent;
+      loadFile('kubeconfig.yaml').then(kubeconfig => {
+        const requestUrl = `/api/v1/namespaces/${Cypress.env(
+          'NAMESPACE_NAME',
+        )}/pods/${podName}/log?container=function`;
+        cy.request({
+          method: 'GET',
+          url: kubeconfig.clusters[0].cluster.server + requestUrl,
+          timeout: 10000,
+          headers: {
+            authorization: 'Bearer ' + kubeconfig.users[0].user.token,
+          },
+        }).then(response => {
+          // response.body is automatically serialized into JSON
+          expect(response.body).to.match(/^Payload/);
         });
       });
+    });
   });
 
   it('Check logs for receiver function', () => {
@@ -171,124 +152,97 @@ context('Test in-cluster eventing', () => {
       .contains('Functions')
       .click();
 
-    cy.getIframeBody()
-      .contains('a', FUNCTION_RECEIVER_NAME)
-      .click();
+    cy.contains('a', FUNCTION_RECEIVER_NAME).click();
 
-    cy.getIframeBody()
-      .contains(`${FUNCTION_RECEIVER_NAME}-`)
-      .then(element => {
-        const podName = element[0].textContent;
-        loadFile('kubeconfig.yaml').then(kubeconfig => {
-          const requestUrl = `/api/v1/namespaces/${Cypress.env(
-            'NAMESPACE_NAME',
-          )}/pods/${podName}/log?container=function`;
-          cy.request({
-            method: 'GET',
-            url: kubeconfig.clusters[0].cluster.server + requestUrl,
-            timeout: 10000,
-            headers: {
-              authorization: 'Bearer ' + kubeconfig.users[0].user.token,
-            },
-          }).then(response => {
-            // response.body is automatically serialized into JSON
-            expect(response.body).to.match(/^Event received/);
-          });
+    cy.contains(`${FUNCTION_RECEIVER_NAME}-`).then(element => {
+      const podName = element[0].textContent;
+      loadFile('kubeconfig.yaml').then(kubeconfig => {
+        const requestUrl = `/api/v1/namespaces/${Cypress.env(
+          'NAMESPACE_NAME',
+        )}/pods/${podName}/log?container=function`;
+        cy.request({
+          method: 'GET',
+          url: kubeconfig.clusters[0].cluster.server + requestUrl,
+          timeout: 10000,
+          headers: {
+            authorization: 'Bearer ' + kubeconfig.users[0].user.token,
+          },
+        }).then(response => {
+          // response.body is automatically serialized into JSON
+          expect(response.body).to.match(/^Event received/);
         });
       });
+    });
   });
 
   it('Create Subscription', () => {
-    cy.navigateTo('Configuration', 'Subscriptions');
-
-    cy.getIframeBody()
-      .contains('Create Subscription')
+    cy.getLeftNav()
+      .contains('Subscriptions')
       .click();
 
-    cy.getIframeBody()
-      .find('[ariaLabel="Subscription name"]:visible')
+    cy.contains('Create Subscription').click();
+
+    cy.get('[ariaLabel="Subscription name"]:visible')
       .clear()
       .type(`${API_RULE_AND_FUNCTION_NAME}-subscription`);
 
-    cy.getIframeBody()
-      .contains('Choose Service for the sink')
-      .click();
+    cy.contains('Choose Service for the sink').click();
 
-    cy.getIframeBody()
-      .contains(API_RULE_AND_FUNCTION_NAME)
-      .click();
+    cy.contains(API_RULE_AND_FUNCTION_NAME).click();
 
-    cy.getIframeBody()
-      .find('[placeholder="Choose Application name"]:visible')
+    cy.get('[placeholder="Choose Application name"]:visible')
       .clear()
       .type(Cypress.env('APP_NAME'))
       .click();
 
-    cy.getIframeBody()
-      .find('[placeholder="For example, order.cancelled"]:visible')
+    cy.get('[placeholder="For example, order.cancelled"]:visible')
       .clear()
       .type('order.created');
 
-    cy.getIframeBody()
-      .find('[placeholder="For example, v1"]:visible')
+    cy.get('[placeholder="For example, v1"]:visible')
       .clear()
       .type('v1')
       .click();
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Create')
       .click();
   });
 
   it('Checking details', () => {
-    cy.getIframeBody()
-      .contains('in-cluster-eventing-publisher-subscription')
-      .should('be.visible');
+    cy.contains('in-cluster-eventing-publisher-subscription').should(
+      'be.visible',
+    );
 
-    cy.getIframeBody()
-      .contains('Subscription active')
-      .should('be.visible');
+    cy.contains('Subscription active').should('be.visible');
 
-    cy.getIframeBody()
-      .contains(/ready/i)
-      .should('be.visible');
+    cy.contains(/ready/i).should('be.visible');
   });
 
   it('Edit Subscription', () => {
-    cy.getIframeBody()
-      .contains('Edit')
-      .click();
+    cy.contains('Edit').click();
 
-    cy.getIframeBody()
-      .find(
-        '[placeholder="Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1"]',
-      )
+    cy.get(
+      '[placeholder="Enter the event type, for example, sap.kyma.custom.test-app.order.cancelled.v1"]',
+    )
       .clear()
       .type(`sap.kyma.custom.${Cypress.env('APP_NAME')}.order.canceled.v2`);
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Update')
       .click();
   });
 
   it('Checking updates', () => {
-    cy.getIframeBody()
-      .contains('in-cluster-eventing-publisher-subscription')
-      .should('be.visible');
+    cy.contains('in-cluster-eventing-publisher-subscription').should(
+      'be.visible',
+    );
 
-    cy.getIframeBody()
-      .contains('Subscription active')
-      .should('be.visible');
+    cy.contains('Subscription active').should('be.visible');
 
-    cy.getIframeBody()
-      .contains(/ready/i)
-      .should('be.visible');
+    cy.contains(/ready/i).should('be.visible');
 
-    cy.getIframeBody()
-      .contains('order.canceled.v2')
-      .should('be.visible');
+    cy.contains('order.canceled.v2').should('be.visible');
   });
 
   it('Inspect Subscription list', () => {

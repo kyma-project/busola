@@ -1,8 +1,7 @@
-import pluralize from 'pluralize';
 import { useRecoilValue } from 'recoil';
 import { useParams } from 'react-router-dom';
-
 import { clusterState } from 'state/clusterAtom';
+import pluralize from 'pluralize';
 import { extensionsState } from 'state/navigation/extensionsAtom';
 
 export const useGetCRbyPath = () => {

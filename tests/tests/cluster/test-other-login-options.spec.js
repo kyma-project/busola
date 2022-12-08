@@ -7,6 +7,20 @@ import jsyaml from 'js-yaml';
 context('Test other login options', () => {
   Cypress.skipAfterFail();
 
+  Cypress.on('uncaught:exception', err => {
+    // Ignor error from Monaco loading (Cypress issues)
+    if (
+      err.message.includes(
+        "TypeError: Cannot read properties of null (reading 'sendError')",
+      ) ||
+      err.message.includes(
+        "Uncaught NetworkError: Failed to execute 'importScripts' on 'WorkerGlobalScope': The script at",
+      )
+    ) {
+      return false;
+    }
+  });
+
   it('Kubeconfig and token separately', () => {
     cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
       const token = kubeconfig.users[0].user.token;
@@ -14,50 +28,36 @@ context('Test other login options', () => {
 
       cy.visit(`${config.clusterAddress}/clusters`);
 
-      cy.getIframeBody()
-        .contains('Connect cluster')
-        .click();
+      cy.contains('Connect cluster').click();
 
-      cy.getIframeBody()
-        .contains('Drag your file here or click to upload')
-        .attachFile(
-          {
-            fileContent: jsyaml.dump(kubeconfig),
-            filePath: 'kubeconfig.yaml',
-          },
-          {
-            subjectType: 'drag-n-drop',
-          },
-        );
+      cy.contains('Drag your file here or click to upload').attachFile(
+        {
+          fileContent: jsyaml.dump(kubeconfig),
+          filePath: 'kubeconfig.yaml',
+        },
+        {
+          subjectType: 'drag-n-drop',
+        },
+      );
 
-      cy.getIframeBody()
-        .contains('Next')
-        .click();
+      cy.contains('Next').click();
 
-      cy.getIframeBody()
-        .find('[role=alert]')
-        .contains("We couldn't find enough authentication information")
-        .should('be.visible');
+      cy.contains(
+        '[role=alert]',
+        "We couldn't find enough authentication information",
+      ).should('be.visible');
 
-      cy.getIframeBody()
-        .contains('Token')
+      cy.contains('Token')
         .parent()
         .next()
         .type(token);
 
-      cy.getIframeBody()
-        .contains('Next')
-        .click();
+      cy.contains('Next').click();
 
-      cy.getIframeBody()
-        .find('[role="dialog"]')
-        .contains('button', 'Connect cluster')
-        .click();
+      cy.contains('[role="dialog"] button', 'Connect cluster').click();
 
       cy.url().should('match', /overview$/);
-      cy.getIframeBody()
-        .find('thead')
-        .should('be.visible');
+      cy.contains('Cluster Details').should('be.visible');
     });
   });
 

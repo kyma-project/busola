@@ -16,13 +16,9 @@ context('Test Kyma version', () => {
     cy.setBusolaFeature('SHOW_KYMA_VERSION', false);
     cy.loginAndSelectCluster();
 
-    cy.getIframeBody()
-      .contains('Kubernetes:')
-      .should('exist');
+    cy.contains('Kubernetes:').should('exist');
 
-    cy.getIframeBody()
-      .contains('Kyma:')
-      .should('not.exist');
+    cy.contains('Kyma:').should('not.exist');
   });
 
   it('Enabled by ConfigMap', () => {
@@ -30,9 +26,7 @@ context('Test Kyma version', () => {
 
     cy.loginAndSelectCluster();
 
-    cy.getIframeBody()
-      .contains('Kyma:')
-      .should('exist');
+    cy.contains('Kyma:').should('exist');
   });
 
   it('Fails gracefully', () => {
@@ -40,12 +34,8 @@ context('Test Kyma version', () => {
     mockKymaSystemForbidden();
     cy.loginAndSelectCluster();
 
-    cy.getIframeBody()
-      .contains('Kubernetes:')
-      .should('exist');
+    cy.contains('Kubernetes:').should('exist');
 
-    cy.getIframeBody()
-      .contains('Kyma:')
-      .should('not.exist');
+    cy.contains('Kyma:').should('not.exist');
   });
 });

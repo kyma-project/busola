@@ -23,15 +23,11 @@ context('Test Pizzas', () => {
   });
 
   it('Creates the EXT pizza config', () => {
-    cy.getIframeBody().as('iframe');
-
     cy.getLeftNav()
       .contains('Cluster Details')
       .click();
 
-    cy.get('@iframe')
-      .contains('Upload YAML')
-      .click();
+    cy.contains('Upload YAML').click();
 
     cy.loadFiles(
       'examples/pizzas/configuration/pizzas-configmap.yaml',
@@ -43,12 +39,9 @@ context('Test Pizzas', () => {
       cy.pasteToMonaco(input);
     });
 
-    cy.get('@iframe')
-      .contains('Submit')
-      .click();
+    cy.contains('Submit').click();
 
-    cy.get('@iframe')
-      .find('.fd-dialog__body')
+    cy.get('.fd-dialog__body')
       .find('.sap-icon--message-success')
       .should('have.length', 4);
 
@@ -60,12 +53,9 @@ context('Test Pizzas', () => {
       cy.pasteToMonaco(input);
     });
 
-    cy.get('@iframe')
-      .contains('Submit')
-      .click();
+    cy.contains('Submit').click();
 
-    cy.get('@iframe')
-      .find('.fd-dialog__body')
+    cy.get('.fd-dialog__body')
       .find('.sap-icon--message-success')
       .should('have.length', 6);
   });
@@ -75,50 +65,34 @@ context('Test Pizzas', () => {
       fileName: 'kubeconfig-k3s.yaml',
       storage: 'Session storage',
     });
+    cy.contains('Namespaces').click();
+
+    cy.contains('a', 'pizzas').click();
+
     cy.getLeftNav()
-      .as('nav')
-      .contains('Namespaces')
-      .click();
-
-    cy.getIframeBody()
-      .as('iframe')
-      .contains('a', 'pizzas')
-      .click();
-
-    cy.get('@nav')
       .contains('Lunch')
       .click();
 
-    cy.get('@nav')
+    cy.getLeftNav()
       .contains('Pizza Orders')
       .click();
 
-    cy.get('@iframe').contains('DELIVERY');
-    cy.get('@iframe').contains('CASH');
-    cy.get('@iframe').contains('a', 'extensibility docs');
-    cy.get('@iframe')
-      .contains('a', 'margherita-order')
-      .should('be.visible');
+    cy.contains('DELIVERY');
+    cy.contains('CASH');
+    cy.contains('a', 'extensibility docs');
+    cy.contains('a', 'margherita-order').should('be.visible');
 
-    cy.get('@iframe')
-      .contains('a', 'diavola-order')
-      .click({ force: true });
+    cy.contains('a', 'diavola-order').click({ force: true });
 
-    cy.get('@iframe').contains('paymentMethod: CARD');
-    cy.get('@iframe').contains('realization=SELF-PICKUP');
-    cy.get('@iframe').contains('h3', 'Pizzas');
+    cy.contains('paymentMethod: CARD');
+    cy.contains('realization=SELF-PICKUP');
+    cy.contains('h3', 'Pizzas');
   });
 
   it('Edits a Pizza Order', () => {
-    cy.getIframeBody().as('iframe');
+    cy.contains('button:visible', 'Edit').click();
 
-    cy.get('@iframe')
-      .contains('button:visible', 'Edit')
-      .click();
-
-    cy.getIframeBody()
-      .find('.fd-dialog__content')
-      .as('form');
+    cy.get('.fd-dialog__content').as('form');
 
     cy.get('@form').contains('Name');
     cy.get('@form').contains('Labels');
@@ -141,51 +115,34 @@ context('Test Pizzas', () => {
       .contains('button:visible', 'Update')
       .click();
 
-    cy.get('@iframe')
-      .contains('span', /^READY$/i)
-      .should('not.exist');
+    cy.contains('span', /^READY$/i).should('not.exist');
 
-    cy.get('@iframe')
-      .contains('span', /^ERROR$/i)
-      .should('be.visible');
+    cy.contains('span', /^ERROR$/i).should('be.visible');
   });
 
   it('Displays the Pizzas list/detail views from the samples', () => {
-    cy.getIframeBody().as('iframe');
+    cy.contains('a', 'pizzas/diavola').click({ force: true });
 
-    cy.get('@iframe')
-      .contains('a', 'pizzas/diavola')
-      .click({ force: true });
+    cy.contains('Hot salami, Pickled jalapeños, Cheese').should('be.visible');
 
-    cy.get('@iframe')
-      .contains('Hot salami, Pickled jalapeños, Cheese')
-      .should('be.visible');
-
-    cy.get('@iframe')
-      .contains('Diavola is such a spicy pizza')
-      .should('be.visible');
+    cy.contains('Diavola is such a spicy pizza').should('be.visible');
 
     cy.getLeftNav()
       .contains(/^Pizzas$/)
       .click();
 
-    cy.get('@iframe')
-      .find('.fd-table__body')
+    cy.get('.fd-table__body')
       .find('tr')
       .should('have.length', 2);
 
-    cy.get('@iframe').contains('Margherita is a simple, vegetarian pizza.');
-    cy.get('@iframe').contains('Toppings price');
+    cy.contains('Margherita is a simple, vegetarian pizza.');
+    cy.contains('Toppings price');
   });
 
   it('Tests the Create Form', () => {
-    cy.getIframeBody()
-      .contains('Create Pizza')
-      .click();
+    cy.contains('Create Pizza').click();
 
-    cy.getIframeBody()
-      .find('.fd-dialog__content')
-      .as('form');
+    cy.get('.fd-dialog__content').as('form');
 
     cy.get('@form')
       .find('[data-testid="spec.description"]:visible')
@@ -213,8 +170,6 @@ context('Test Pizzas', () => {
       .contains('button', 'Create')
       .click();
 
-    cy.getIframeBody()
-      .contains('h3', PIZZA_NAME)
-      .should('be.visible');
+    cy.contains('h3', PIZZA_NAME).should('be.visible');
   });
 });
