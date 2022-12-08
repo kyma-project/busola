@@ -9,7 +9,7 @@ import { NavNode, Scope } from '../types';
 import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
 import { externalNodesSelector } from './externalNodesSelector';
 import { activeNamespaceIdState } from '../activeNamespaceIdAtom';
-import { configurationAtom } from '../configurationAtom';
+import { configurationAtom } from '../configuration/configurationAtom';
 import { extensionsState } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
 
