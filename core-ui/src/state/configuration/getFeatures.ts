@@ -1,4 +1,3 @@
-import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 import {
   ConfigFeature,
   ConfigFeatureList,
@@ -15,7 +14,6 @@ export async function getFeatures(rawFeatures: ConfigFeatureList | undefined) {
       rawFeatureConfig,
     );
   }
-  // lastResolvedFeatures = resolvedFeatures;
   return resolvedFeatures;
 }
 
@@ -29,23 +27,12 @@ export async function discoverFeature(
       return { isEnabled: false };
     }
 
-    // not active yet or disabled explicitly
-
-    // todo active
-    // if (!rawFeatureConfig.active || rawFeatureConfig.isEnabled === false) {
-    //   return rawFeatureConfig;
-    // }
-
     if (rawFeatureConfig.isEnabled === false) {
       return rawFeatureConfig;
     }
 
-    // assume feature is enabled by default
     let currentConfig = { ...rawFeatureConfig, isEnabled: true };
     for (const check of rawFeatureConfig.checks || []) {
-      if (!currentConfig.isEnabled) {
-        return currentConfig;
-      }
       const newPartialConfig = await check(featureName, currentConfig);
       currentConfig = { ...currentConfig, ...newPartialConfig };
     }

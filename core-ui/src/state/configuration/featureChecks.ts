@@ -65,7 +65,7 @@ export function service({
       const response = await fetchFn({
         relativeUrl: urlMutator(url),
       });
-      const serviceFound = await validator(response);
+      await validator(response);
       return { succeeded: true, serviceUrl: url };
     } catch (e) {
       console.error('service-check', url, e);
