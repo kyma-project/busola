@@ -2,7 +2,7 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: functions
-  namespace: lq
+  namespace: kube-public
   labels:
     app.kubernetes.io/name: functions
     busola.io/extension: resource
@@ -82,6 +82,7 @@ data:
                     source: baseDir
               - source: spec.env
                 widget: Table
+                name: code.env
                 children:
                   - source: $item.name
                     name: code.env.name
@@ -294,8 +295,8 @@ data:
       group: serverless.kyma-project.io
       version: v1alpha2
     name: Functions
-    category: LQ
-    urlPath: lq-functions
+    category: Workloads
+    urlPath: functions
     scope: namespace
     description: >-
       {{[Function](https://kyma-project.io/docs/kyma/latest/05-technical-reference/00-custom-resources/svls-01-function/#documentation-content/)}}
@@ -369,7 +370,6 @@ data:
       filter: $contains($item.spec.sink, $root.metadata.name)
   translations: |
     en: 
-      spec.env: dupa
       tabs.code: Code
       tabs.configuration: Configuration
       tabs.resources: Resources
