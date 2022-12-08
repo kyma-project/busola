@@ -14,7 +14,7 @@ import { ContextChooser } from './ContextChooser/ContextChooser';
 import { ChooseStorage } from './ChooseStorage';
 
 import { useClustersInfo } from 'state/utils/getClustersInfo';
-import { configurationAtom } from 'state/configurationAtom';
+import { configurationAtom } from 'state/configuration/configurationAtom';
 
 import './AddClusterWizard.scss';
 

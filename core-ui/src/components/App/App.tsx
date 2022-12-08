@@ -11,7 +11,7 @@ import { clusterState } from 'state/clusterAtom';
 import { languageAtom } from 'state/preferences/languageAtom';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useAuthHandler } from 'state/authDataAtom';
-import { useGetConfiguration } from 'state/configurationAtom';
+import { useGetConfiguration } from 'state/configuration/configurationAtom';
 import { useGetExtensions } from 'state/navigation/extensionsAtom';
 
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
