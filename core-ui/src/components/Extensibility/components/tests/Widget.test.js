@@ -82,11 +82,6 @@ describe('Widget', () => {
               visibility: '$contains($value, "test")',
             }}
           />
-        </TestWrapper>,
-      );
-
-      render(
-        <TestWrapper>
           <Widget
             value={resource}
             structure={{
