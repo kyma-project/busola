@@ -9,58 +9,49 @@ Cypress.Commands.add(
       .contains('API Rules')
       .click();
 
-    cy.getIframeBody()
-      .contains('Create API Rule')
+    cy.contains('Create API Rule')
       .should('be.visible')
       .click();
 
     // Name
-    cy.getIframeBody()
-      .find('[ariaLabel="APIRule name"]:visible', { log: false })
-      .type(ApiRuleName);
+    cy.get('[ariaLabel="APIRule name"]:visible', { log: false }).type(
+      ApiRuleName,
+    );
 
     // Service
-    cy.getIframeBody()
-      .find('[aria-label="Choose Service"]:visible', { log: false })
+    cy.get('[aria-label="Choose Service"]:visible', { log: false })
       .first()
       .type(ApiRuleName);
 
-    cy.getIframeBody()
-      .find('[aria-label="Choose Service"]:visible', { log: false })
+    cy.get('[aria-label="Choose Service"]:visible', { log: false })
       .first()
       .next()
       .find('[aria-label="Combobox input arrow"]:visible', { log: false })
       .click();
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.service.port"]:visible', { log: false })
+    cy.get('[data-testid="spec.service.port"]:visible', { log: false })
       .clear()
       .type(ApiPort);
 
     // Host
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
+    cy.get('[aria-label="Combobox input"]:visible', { log: false })
       .first()
       .type('*');
 
-    cy.getIframeBody()
-      .find('span', { log: false })
+    cy.get('span', { log: false })
       .contains(/^\*$/i)
       .first()
       .click();
 
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
+    cy.get('[aria-label="Combobox input"]:visible', { log: false })
       .first()
       .type('{home}{rightArrow}{backspace}');
 
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
+    cy.get('[aria-label="Combobox input"]:visible', { log: false })
       .first()
       .type(ApiRuleHostSubdomain);
 
-    cy.getIframeBody()
-      .find('[aria-label="Combobox input"]:visible', { log: false })
+    cy.get('[aria-label="Combobox input"]:visible', { log: false })
       .first()
       .next()
       .find('[aria-label="Combobox input arrow"]:visible', { log: false })
@@ -68,18 +59,14 @@ Cypress.Commands.add(
 
     // Rules
     // > Methods
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.0.methods.1"]:visible')
-      .type('POST');
+    cy.get('[data-testid="spec.rules.0.methods.1"]:visible').type('POST');
 
-    cy.getIframeBody()
-      .find('[data-testid="spec.rules.0.methods.1"]:visible', { log: false })
+    cy.get('[data-testid="spec.rules.0.methods.1"]:visible', { log: false })
       .find('span')
       .find('[aria-label="Combobox input arrow"]:visible', { log: false })
       .click();
 
-    cy.getIframeBody()
-      .find('[role=dialog]')
+    cy.get('[role=dialog]')
       .contains('button', 'Create')
       .click();
   },
@@ -94,15 +81,9 @@ Cypress.Commands.add('checkApiRuleStatus', ApiRuleName => {
     .contains('API Rules')
     .click({ force: true });
 
-  cy.getIframeBody()
-    .find('[aria-label="open-search"]')
-    .click();
+  cy.get('[aria-label="open-search"]').click();
 
-  cy.getIframeBody()
-    .find('[aria-label="search-input"]')
-    .type(ApiRuleName);
+  cy.get('[aria-label="search-input"]').type(ApiRuleName);
 
-  cy.getIframeBody()
-    .find('[role="status"]')
-    .should('have.text', 'OK');
+  cy.get('[role="status"]').should('have.text', 'OK');
 });

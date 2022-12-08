@@ -15,35 +15,28 @@ context('Test Certificates', () => {
   });
 
   it('Adds and displays a certificate', () => {
+    cy.wait(500); // TODO
     cy.navigateTo('Configuration', 'Certificates');
 
     cy.url().should('match', /certificates$/);
 
-    cy.getIframeBody()
-      .contains('Create Certificate')
+    cy.contains('Create Certificate')
       .click()
       .should('be.visible');
 
-    cy.getIframeBody()
-      .contains('Simple')
-      .should('be.visible');
+    cy.contains('Simple').should('be.visible');
 
-    cy.getIframeBody()
-      .find('input[data-cy="cert-name"]:visible')
-      .type(CERT_NAME);
+    cy.get('input[data-cy="cert-name"]:visible').type(CERT_NAME);
 
-    cy.getIframeBody()
-      .find('input[placeholder^="Certificate CN"]:visible')
-      .type(CERT_COMMON_NAME);
+    cy.get('input[placeholder^="Certificate CN"]:visible').type(
+      CERT_COMMON_NAME,
+    );
 
-    cy.getIframeBody()
-      .find('[role=dialog]')
+    cy.get('[role=dialog]')
       .contains('button', 'Create')
       .click();
 
-    cy.getIframeBody()
-      .contains('h3', CERT_NAME)
-      .should('be.visible');
+    cy.contains('h3', CERT_NAME).should('be.visible');
   });
 
   it('Edits a certificate', () => {
@@ -51,35 +44,23 @@ context('Test Certificates', () => {
       .contains('Certificates')
       .click();
 
-    cy.getIframeBody()
-      .contains('a', CERT_NAME)
-      .click();
+    cy.contains('a', CERT_NAME).click();
 
-    cy.getIframeBody()
-      .contains('button', 'Edit')
-      .click();
+    cy.contains('button', 'Edit').click();
 
-    cy.getIframeBody()
-      .contains('Annotations')
-      .click();
+    cy.contains('Annotations').click();
 
-    cy.getIframeBody()
-      .find('input[placeholder^="Enter key"]:visible')
-      .type(ANNOTATION_KEY);
+    cy.get('input[placeholder^="Enter key"]:visible').type(ANNOTATION_KEY);
 
-    cy.getIframeBody()
-      .find('input[placeholder^="Enter value"]:visible')
+    cy.get('input[placeholder^="Enter value"]:visible')
       .first()
       .type(ANNOTATION_VALUE);
 
-    cy.getIframeBody()
-      .find('[role=dialog]')
+    cy.get('[role=dialog]')
       .contains('button', 'Update')
       .click();
 
-    cy.getIframeBody()
-      .contains(`${ANNOTATION_KEY}=${ANNOTATION_VALUE}`)
-      .should('be.visible');
+    cy.contains(`${ANNOTATION_KEY}=${ANNOTATION_VALUE}`).should('be.visible');
   });
 
   it('Inspect a certificate list', () => {

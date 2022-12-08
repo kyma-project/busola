@@ -27,20 +27,11 @@ context('Test reduced permissions', () => {
   });
 
   it('Create Cluster Role with reduced permissions', () => {
-    cy.getLeftNav()
-      .contains('Configuration')
-      .click();
-    cy.getLeftNav()
-      .contains('Cluster Roles')
-      .click();
+    cy.navigateTo('Configuration', 'Cluster Roles');
 
-    cy.getIframeBody()
-      .contains('Create Cluster Role')
-      .type(CR_NAME);
+    cy.contains('Create Cluster Role').type(CR_NAME);
 
-    cy.getIframeBody()
-      .find('[ariaLabel="ClusterRole name"]:visible')
-      .type(CR_NAME);
+    cy.get('[ariaLabel="ClusterRole name"]:visible').type(CR_NAME);
 
     // api groups
     chooseComboboxOption(
@@ -53,9 +44,7 @@ context('Test reduced permissions', () => {
       'apps',
     );
 
-    cy.getIframeBody()
-      .find('[ariaLabel="Load"]:visible', { log: false })
-      .click();
+    cy.get('[ariaLabel="Load"]:visible', { log: false }).click();
 
     // resources
     chooseComboboxOption(
@@ -79,8 +68,7 @@ context('Test reduced permissions', () => {
       'list',
     );
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Create')
       .click();
   });
@@ -88,57 +76,39 @@ context('Test reduced permissions', () => {
   it('Create Service Account', () => {
     cy.goToNamespaceDetails();
 
+    cy.wait(500); // TODO
     cy.navigateTo('Configuration', 'Service Accounts');
 
-    cy.getIframeBody()
-      .contains('Create Service Account')
-      .click();
+    cy.contains('Create Service Account').click();
 
-    cy.getIframeBody()
-      .find('[ariaLabel="ServiceAccount name"]:visible')
-      .type(SA_NAME);
+    cy.get('[ariaLabel="ServiceAccount name"]:visible').type(SA_NAME);
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Create')
       .click();
   });
 
   it('Create a ClusterRoleBinding for SA and CR', () => {
-    cy.getLeftNav()
-      .contains('Back to Cluster Details')
-      .click();
+    cy.navigateTo('Back To Cluster Details', 'Cluster Role Bindings');
 
-    cy.navigateTo('Configuration', 'Cluster Role Bindings');
-
-    cy.getIframeBody()
-      .contains('Create Cluster Role Binding')
-      .click();
+    cy.contains('Create Cluster Role Binding').click();
 
     // subject type - select it first so the list starts loading
-    cy.getIframeBody()
-      .find('[role=dialog]')
+    cy.get('[role=dialog]')
       .contains('User')
       .click();
-    cy.getIframeBody()
-      .find('[role=list]')
+    cy.get('[role=list]')
       .contains('ServiceAccount')
       .click();
 
     // name
-    cy.getIframeBody()
-      .find('[ariaLabel="ClusterRoleBinding name"]:visible')
-      .type(CRB_NAME);
+    cy.get('[ariaLabel="ClusterRoleBinding name"]:visible').type(CRB_NAME);
 
     // role
-    cy.getIframeBody()
-      .find(
-        '[placeholder="Start typing to select ClusterRole from the list"]:visible',
-      )
-      .type(CR_NAME);
-    cy.getIframeBody()
-      .contains(new RegExp(CR_NAME))
-      .click();
+    cy.get(
+      '[placeholder="Start typing to select ClusterRole from the list"]:visible',
+    ).type(CR_NAME);
+    cy.contains(new RegExp(CR_NAME)).click();
 
     // service account namespace
     chooseComboboxOption(
@@ -149,8 +119,7 @@ context('Test reduced permissions', () => {
     // service account name
     chooseComboboxOption('[placeholder="Select name"]:visible', SA_NAME);
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Create')
       .click();
   });
@@ -159,17 +128,16 @@ context('Test reduced permissions', () => {
     cy.getLeftNav()
       .contains('Namespaces')
       .click();
+
     cy.goToNamespaceDetails();
 
-    cy.navigateTo('Configuration', 'Service Accounts');
-
-    cy.getIframeBody()
-      .contains(SA_NAME)
+    cy.getLeftNav()
+      .contains('Service Accounts')
       .click();
 
-    cy.getIframeBody()
-      .find('[aria-label="Download Kubeconfig"]')
-      .click();
+    cy.contains(SA_NAME).click();
+
+    cy.get('[aria-label="Download Kubeconfig"]').click();
 
     cy.wait(200);
 
@@ -219,7 +187,7 @@ context('Test reduced permissions', () => {
       .should('be.visible');
 
     cy.getLeftNav()
-      .contains('Back to Cluster Details')
+      .contains('Back To Cluster Details')
       .click();
 
     cy.getLeftNav()
@@ -228,13 +196,11 @@ context('Test reduced permissions', () => {
   });
 
   it('Cleanup', () => {
-    cy.get('[data-testid="app-switcher"]').click();
+    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
 
     // 2 results: "Clusters Overview" node and original cluster, take second
-    cy.get('#appSwitcherPopover:visible')
-      .find('li')
+    cy.get('[role=menuitem]:visible')
       .eq(1)
-      .find('[role="button"]')
       .click();
 
     // wait until original cluster loads
@@ -248,25 +214,27 @@ context('Test reduced permissions', () => {
     cy.getLeftNav()
       .contains('Configuration')
       .click();
+
     cy.getLeftNav()
       .contains('Cluster Role Bindings')
       .click();
+
     cy.deleteFromGenericList(CRB_NAME);
 
     // delete role
     cy.getLeftNav()
       .contains('Cluster Roles')
       .click();
+
     cy.deleteFromGenericList(CR_NAME);
 
     // remove cluster
-    cy.get('[data-testid="app-switcher"]').click();
+    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
+
     cy.contains('Clusters Overview').click();
 
     cy.deleteFromGenericList(SA_NAME, true, false);
 
-    cy.getIframeBody()
-      .contains(/No clusters found/)
-      .should('exist');
+    cy.contains(/No clusters found/).should('exist');
   });
 });
