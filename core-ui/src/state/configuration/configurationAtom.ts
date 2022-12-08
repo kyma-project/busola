@@ -2,20 +2,15 @@ import jsyaml from 'js-yaml';
 import { merge } from 'lodash';
 import { useEffect } from 'react';
 import { atom, RecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+
 import { clusterState } from '../clusterAtom';
-import { AuthDataState, authDataState } from '../authDataAtom';
+import { authDataState } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
-import { ConfigFeature, ConfigFeatureList } from '../types';
-import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
+import { ConfigFeatureList } from '../types';
+import { apiGroupState } from '..//discoverability/apiGroupsSelector';
 import { getPrometheusConfig } from './prometheusFeature';
-
 import { getFeatures } from './getFeatures';
-import {
-  ApiGroupState,
-  apiGroupState,
-} from 'state/discoverability/apiGroupsSelector';
-
-import { apiGroup, service } from './featureChecks';
+import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 
 type Configuration = {
   features?: ConfigFeatureList;

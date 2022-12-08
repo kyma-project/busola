@@ -4,17 +4,12 @@ import { ConfigFeature } from '../types';
 import { ApiGroupState } from '../discoverability/apiGroupsSelector';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
 
-const arrayCombine = (arrays: string[][]): string[][] => {
-  const _arrayCombine = (
-    arrs: string[][],
-    current: string[] = [],
-  ): string[][] => {
+const arrayCombine = (arrays: string[][]) => {
+  const _arrayCombine = (arrs: any[][], current: string[] = []): any[][] => {
     if (arrs.length === 1) {
-      return arrs[0]?.map((e: string) => [...current, e]);
+      return arrs[0]?.map(e => [...current, e]);
     } else {
-      return arrs[0]?.map((e: string) =>
-        _arrayCombine(arrs.slice(1), [...current, e]),
-      );
+      return arrs[0]?.map(e => _arrayCombine(arrs.slice(1), [...current, e]));
     }
   };
 
