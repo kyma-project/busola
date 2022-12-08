@@ -135,9 +135,8 @@ export const useGetConfiguration = () => {
       if (configs?.features) {
         configs.features.PROMETHEUS = getPrometheusConfig(auth, apis, fetchFn);
       }
-      setConfig(configs);
-      const x = await getFeatures(configs?.features);
-      console.log(x);
+      const updatedFeatures = await getFeatures(configs?.features);
+      setConfig({ ...configs, features: updatedFeatures });
     };
     setClusterConfig();
     // eslint-disable-next-line react-hooks/exhaustive-deps
