@@ -5,9 +5,9 @@ Cypress.Commands.add(
       .contains('Discovery and Network')
       .click();
 
-    // cy.getLeftNav()
-    //   .contains('API Rules')
-    //   .click();
+    cy.getLeftNav()
+      .contains('API Rules')
+      .click();
 
     cy.contains('Create API Rule')
       .should('be.visible')
