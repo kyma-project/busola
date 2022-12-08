@@ -3,6 +3,7 @@ import { useCreateResource } from '../useCreateResource';
 
 import { createPatch } from 'rfc6902';
 import { ignoreConsoleErrors } from 'setupTests';
+import { BrowserRouter } from 'react-router-dom';
 
 const mockNotifySuccess = jest.fn();
 const mockNotifyError = jest.fn();
@@ -52,7 +53,11 @@ describe('useCreateResource', () => {
   };
 
   it('Fires POST if initial resource name does not exist', async () => {
-    const { getByText } = render(<Testbed {...props} />);
+    const { getByText } = render(
+      <BrowserRouter>
+        <Testbed {...props} />
+      </BrowserRouter>,
+    );
 
     fireEvent.click(getByText('Act'));
 
@@ -76,7 +81,9 @@ describe('useCreateResource', () => {
   it('Fires PATCH if initial resource name exists', async () => {
     const initialResource = { metadata: { name: 'test-name' } };
     const { getByText } = render(
-      <Testbed {...props} initialResource={initialResource} />,
+      <BrowserRouter>
+        <Testbed {...props} initialResource={initialResource} />
+      </BrowserRouter>,
     );
 
     fireEvent.click(getByText('Act'));
@@ -100,10 +107,18 @@ describe('useCreateResource', () => {
 
   it('Runs callbacks', async () => {
     // default path: the same as pluralKind
-    const { getByText, rerender } = render(<Testbed {...props} />);
+    const { getByText, rerender } = render(
+      <BrowserRouter>
+        <Testbed {...props} />
+      </BrowserRouter>,
+    );
 
     // error
-    rerender(<Testbed {...props} />);
+    rerender(
+      <BrowserRouter>
+        <Testbed {...props} />
+      </BrowserRouter>,
+    );
 
     mockFetch.mockImplementationOnce(() => {
       throw Error('very specific error message');
