@@ -1,7 +1,6 @@
-import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
-import { Suspense } from 'react';
 import { render, waitFor } from 'testing/reactTestingUtils';
 import { Widget } from '../Widget';
+import { ExtensibilityTestWrapper } from './helpers';
 
 jest.mock('components/Extensibility/ExtensibilityCreate', () => null);
 
@@ -9,21 +8,13 @@ const resource = {
   test: 'test-value',
 };
 
-const TestWrapper = ({ children }) => (
-  <Suspense fallback="loading">
-    <DataSourcesContextProvider value={{}} dataSources={{}}>
-      {children}
-    </DataSourcesContextProvider>
-  </Suspense>
-);
-
 describe('Widget', () => {
   describe('structure.visible', () => {
     it('not set -> render component as usual', async () => {
       const { findByText } = render(
-        <TestWrapper>
+        <ExtensibilityTestWrapper>
           <Widget value={resource} structure={{ source: '$.test' }} />
-        </TestWrapper>,
+        </ExtensibilityTestWrapper>,
       );
 
       expect(await findByText('test-value'));
@@ -31,12 +22,12 @@ describe('Widget', () => {
 
     it('falsy (but not boolean "false") -> render component as usual', async () => {
       const { findByText } = render(
-        <TestWrapper>
+        <ExtensibilityTestWrapper>
           <Widget
             value={resource}
             structure={{ source: '$.test', visibility: null }}
           />
-        </TestWrapper>,
+        </ExtensibilityTestWrapper>,
       );
 
       expect(await findByText('test-value'));
@@ -44,12 +35,12 @@ describe('Widget', () => {
 
     it('Explicitly false -> hide component', async () => {
       const { queryByText } = render(
-        <TestWrapper>
+        <ExtensibilityTestWrapper>
           <Widget
             value={resource}
             structure={{ source: '$.test', visibility: false }}
           />
-        </TestWrapper>,
+        </ExtensibilityTestWrapper>,
       );
 
       await waitFor(() => {
@@ -62,19 +53,19 @@ describe('Widget', () => {
       console.warn = jest.fn();
 
       const { findByText } = render(
-        <TestWrapper>
+        <ExtensibilityTestWrapper>
           <Widget
             value={resource}
             structure={{ source: '$.test', visibility: '$undefinedMethod()' }}
           />
-        </TestWrapper>,
+        </ExtensibilityTestWrapper>,
       );
       expect(await findByText('extensibility.configuration-error'));
     });
 
     it('jsonata -> control visibility', async () => {
       const { queryByText } = render(
-        <TestWrapper>
+        <ExtensibilityTestWrapper>
           <Widget
             value={resource}
             structure={{
@@ -89,7 +80,7 @@ describe('Widget', () => {
               visibility: '$contains($value, "not-test")',
             }}
           />
-        </TestWrapper>,
+        </ExtensibilityTestWrapper>,
       );
 
       await waitFor(() => {

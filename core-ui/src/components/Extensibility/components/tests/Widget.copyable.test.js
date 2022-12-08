@@ -1,7 +1,6 @@
-import { fireEvent, render, act, waitFor } from 'testing/reactTestingUtils';
-import { DataSourcesContextProvider } from 'components/Extensibility/contexts/DataSources';
 import copyToClipboard from 'copy-to-clipboard';
-import { Suspense } from 'react';
+import { act, fireEvent, render, waitFor } from 'testing/reactTestingUtils';
+import { ExtensibilityTestWrapper } from './helpers';
 
 // those tests are in separate file as we need to mock the `widgets` collection from `./../index.js`...
 // ... which originals in turn are required in other `Widget.test.js`
@@ -16,14 +15,6 @@ jest.doMock('./../index', () => {
 
 jest.mock('copy-to-clipboard');
 
-const TestWrapper = ({ children }) => (
-  <Suspense fallback="loading">
-    <DataSourcesContextProvider value={{}} dataSources={{}}>
-      {children}
-    </DataSourcesContextProvider>
-  </Suspense>
-);
-
 // Widget needs to be imported in each test so that mocking './../index' works
 describe('Widget.copyable', () => {
   it('Render copy button', async () => {
@@ -32,7 +23,7 @@ describe('Widget.copyable', () => {
     CopyableMockWidget.inline = true;
 
     const { getByRole } = render(
-      <TestWrapper>
+      <ExtensibilityTestWrapper>
         <Widget
           structure={{
             source: '"test-value"',
@@ -40,14 +31,11 @@ describe('Widget.copyable', () => {
             copyable: true,
           }}
         />
-        ,
-      </TestWrapper>,
+      </ExtensibilityTestWrapper>,
     );
 
     await waitFor(async () => {
       await act(async () => {
-        await new Promise(setTimeout);
-
         // find copy button
         const button = getByRole('button');
 
@@ -70,14 +58,14 @@ describe('Widget.copyable', () => {
       CopyableMockWidget.copyable = widgetCopyable;
 
       const { queryByRole } = render(
-        <TestWrapper>
+        <ExtensibilityTestWrapper>
           <Widget
             structure={{
               widget: 'CopyableMockWidget',
               copyable: schemaCopyable,
             }}
           />
-        </TestWrapper>,
+        </ExtensibilityTestWrapper>,
       );
 
       expect(queryByRole('button')).not.toBeInTheDocument();
@@ -91,7 +79,7 @@ describe('Widget.copyable', () => {
     CopyableMockWidget.copyFunction = ({ value }) => 'this is ' + value;
 
     const { getByRole } = render(
-      <TestWrapper>
+      <ExtensibilityTestWrapper>
         <Widget
           structure={{
             source: '"test-value"',
@@ -99,13 +87,11 @@ describe('Widget.copyable', () => {
             copyable: true,
           }}
         />
-      </TestWrapper>,
+      </ExtensibilityTestWrapper>,
     );
 
     await waitFor(async () => {
       await act(async () => {
-        await new Promise(setTimeout);
-
         // find copy button
         const button = getByRole('button');
 
