@@ -9,46 +9,35 @@ context('Test Custom Resources', () => {
   });
 
   it('Check CR groups list', () => {
+    cy.wait(500); // TODO
     cy.navigateTo('Configuration', 'Custom Resources');
 
-    cy.getIframeBody()
-      .contains('h3', 'Custom Resources')
-      .should('be.visible');
+    cy.contains('h3', 'Custom Resources').should('be.visible');
 
-    cy.getIframeBody()
-      .find('[role="search"] [aria-label="open-search"]')
-      .type('serverless');
+    cy.get('[role="search"] [aria-label="open-search"]').type('serverless');
 
-    cy.getIframeBody()
-      .find('table')
-      .should('have.length', 1);
+    cy.get('table').should('have.length', 1);
 
-    cy.getIframeBody()
+    cy.get('[role=row]')
       .contains('Functions')
       .should('be.visible');
   });
 
   it('Check single CR list', () => {
-    cy.getIframeBody()
+    cy.get('[role=row]')
       .contains('Functions')
       .click();
 
-    cy.getIframeBody()
+    cy.get('[aria-label="title"]')
       .contains('Functions')
       .should('be.visible');
 
-    cy.getIframeBody()
-      .contains('in-cluster-eventing-receiver')
-      .should('be.visible');
+    cy.contains('in-cluster-eventing-receiver').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('in-cluster-eventing-publisher')
-      .should('be.visible');
+    cy.contains('in-cluster-eventing-publisher').should('be.visible');
 
-    cy.getIframeBody()
-      .contains('functions.serverless.kyma-project.io')
-      .click();
+    cy.contains('functions.serverless.kyma-project.io').click();
 
-    cy.url().should('match', /customresourcedefinitions/);
+    cy.url().should('match', /customresources/);
   });
 });
