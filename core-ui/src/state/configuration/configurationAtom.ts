@@ -116,7 +116,7 @@ const getPrometheusConfig = (
     ],
     namespaces: ['kyma-system'],
     serviceNames: ['monitoring-prometheus', 'prometheus'],
-    portNames: ['web', 'http-web'],
+    portNames: ['http-web'],
   };
 
   return prometheusDefault;
