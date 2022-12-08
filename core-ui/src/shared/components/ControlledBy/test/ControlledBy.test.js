@@ -1,5 +1,5 @@
-import { render } from '@testing-library/react';
-import { mount } from 'enzyme';
+import { render } from 'testing/reactTestingUtils';
+import { mount } from 'testing/enzymeUtils';
 import { ControlledBy, GoToDetailsLink } from '../ControlledBy';
 
 describe('ControlledBy', () => {
