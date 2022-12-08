@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { useUrl } from 'hooks/useUrl';
 
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { useUpsert } from 'shared/hooks/BackendAPI/useUpsert';
@@ -16,6 +17,8 @@ export function BusolaExtensionCreate({ formElementRef, onChange }) {
   const { t } = useTranslation();
   const notificationManager = useNotification();
   const upsert = useUpsert();
+  const { namespaceUrl } = useUrl();
+  const navigate = useNavigate();
 
   const { data: crds } = useGetList()(
     '/apis/apiextensions.k8s.io/v1/customresourcedefinitions',
@@ -42,11 +45,11 @@ export function BusolaExtensionCreate({ formElementRef, onChange }) {
           notificationManager.notifySuccess({
             content: t('extensibility.starter-modal.messages.success'),
           });
-          LuigiClient.linkManager()
-            .fromContext('cluster')
-            .navigate(
-              'namespaces/kube-public/configmaps/details/' + crd.metadata.name,
-            );
+          navigate(
+            namespaceUrl(`configmaps/${crd.metadata.name}`, {
+              namespace: 'kube-public',
+            }),
+          );
         };
 
         const configmap = createConfigmap(crd, state);

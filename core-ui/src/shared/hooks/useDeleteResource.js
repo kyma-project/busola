@@ -1,4 +1,3 @@
-import LuigiClient from '@luigi-project/client';
 import { Button, Checkbox, MessageBox, MessageStrip } from 'fundamental-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -58,7 +57,6 @@ export function useDeleteResource({
   };
 
   const closeDeleteDialog = () => {
-    LuigiClient.uxManager().removeBackdrop();
     setShowDeleteDialog(false);
   };
 
@@ -66,7 +64,6 @@ export function useDeleteResource({
     if (dontConfirmDelete) {
       performDelete(resource, resourceUrl, deleteFn);
     } else {
-      LuigiClient.uxManager().addBackdrop();
       setShowDeleteDialog(true);
     }
   };

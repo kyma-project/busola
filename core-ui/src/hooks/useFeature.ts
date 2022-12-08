@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil';
-import { configurationAtom } from 'state/configurationAtom';
+import { configurationAtom } from 'state/configuration/configurationAtom';
 import { ConfigFeature, ConfigFeaturesNames } from 'state/types';
 
 export function useFeature<T extends ConfigFeature>(

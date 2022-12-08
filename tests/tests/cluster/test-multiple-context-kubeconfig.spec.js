@@ -39,64 +39,47 @@ context('Test multiple context kubeconfig', () => {
     cy.wrap(loadMultipleContextKubeconfig()).then(kubeconfig => {
       cy.visit(`${config.clusterAddress}/clusters`);
 
-      cy.getIframeBody()
-        .contains('Connect cluster')
-        .click();
+      cy.contains('Connect cluster').click();
 
-      cy.getIframeBody()
-        .contains('Drag your file here or click to upload')
-        .attachFile(
-          {
-            fileContent: jsyaml.dump(kubeconfig),
-            filePath: 'kubeconfig.yaml',
-          },
-          {
-            subjectType: 'drag-n-drop',
-          },
-        );
+      cy.contains('Drag your file here or click to upload').attachFile(
+        {
+          fileContent: jsyaml.dump(kubeconfig),
+          filePath: 'kubeconfig.yaml',
+        },
+        {
+          subjectType: 'drag-n-drop',
+        },
+      );
 
-      cy.getIframeBody()
-        .contains('Next')
-        .click();
+      cy.contains('Next').click();
 
-      cy.getIframeBody()
-        .find('[role=combobox]')
-        .within(() => {
-          cy.contains(kubeconfig['current-context']).click();
-        });
+      cy.get('[role=combobox]').within(() => {
+        cy.contains(kubeconfig['current-context']).click();
+      });
 
-      cy.getIframeBody()
-        .find('[role=option]')
-        .within(() => {
-          cy.contains(kubeconfig.contexts[1].name);
-        });
+      cy.get('[role=option]').within(() => {
+        cy.contains(kubeconfig.contexts[1].name);
+      });
 
-      cy.getIframeBody()
-        .find('[role=option]')
-        .within(() => {
-          cy.contains('All contexts').click();
-        });
+      cy.get('[role=option]').within(() => {
+        cy.contains('All contexts').click();
+      });
 
-      cy.getIframeBody()
-        .contains('Next')
-        .click();
+      cy.contains('Next').click();
 
-      cy.getIframeBody()
-        .find('[role="dialog"]')
+      cy.get('[role="dialog"]')
         .contains('button', 'Connect cluster')
         .click();
 
-      cy.getIframeBody()
-        .contains('Cluster Details')
-        .should('exist');
+      cy.contains('Cluster Details').should('exist');
 
-      cy.get('[data-testid=luigi-topnav-title]')
+      cy.get('[aria-controls="fd-shellbar-product-popover"]')
         .contains(kubeconfig.contexts[0].name)
         .should('exist');
 
-      cy.get('[data-testid="app-switcher"]').click();
+      cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
 
-      cy.get('#appSwitcherPopover')
+      cy.get('[role=menuitem]:visible')
         .contains(kubeconfig.contexts[1].name)
         .click();
 
@@ -105,25 +88,21 @@ context('Test multiple context kubeconfig', () => {
         new RegExp(`${kubeconfig.contexts[1].name}/overview$`),
       );
 
-      cy.get('[data-testid=luigi-topnav-title]')
+      cy.get('[aria-controls="fd-shellbar-product-popover"]')
         .contains(kubeconfig.contexts[1].name)
         .should('exist');
 
-      cy.get('[data-testid="app-switcher"]').click();
+      cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
 
-      cy.get('#appSwitcherPopover')
+      cy.get('[role=menuitem]:visible')
         .contains('Clusters Overview')
         .click();
 
       cy.url().should('match', new RegExp(`/clusters$`));
 
-      cy.getIframeBody()
-        .contains(kubeconfig.contexts[0].name)
-        .should('exist');
+      cy.contains(kubeconfig.contexts[0].name).should('exist');
 
-      cy.getIframeBody()
-        .contains(kubeconfig.contexts[1].name)
-        .should('exist');
+      cy.contains(kubeconfig.contexts[1].name).should('exist');
     });
   });
 });

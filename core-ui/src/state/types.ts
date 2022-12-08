@@ -27,6 +27,7 @@ export const configFeaturesNames = {
   REACT_NAVIGATION: 'REACT_NAVIGATION',
   PROTECTED_RESOURCES: 'PROTECTED_RESOURCES',
   EXTERNAL_NODES: 'EXTERNAL_NODES',
+  PROMETHEUS: 'PROMETHEUS',
 } as const;
 
 export type ConfigFeatureList = {
