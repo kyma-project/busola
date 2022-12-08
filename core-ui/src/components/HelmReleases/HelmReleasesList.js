@@ -1,22 +1,23 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
 import { useTranslation, Trans } from 'react-i18next';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Labels } from 'shared/components/Labels/Labels';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { Link as ExternalLink } from 'shared/components/Link/Link';
-import { Link } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 import { decodeHelmRelease } from './decodeHelmRelease';
 import { findRecentRelease } from './findRecentRelease';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
 import { groupBy } from 'lodash';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { useUrl } from 'hooks/useUrl';
 
 function HelmReleasesList() {
   const { t } = useTranslation();
   const namespace = useRecoilValue(activeNamespaceIdState);
+  const { namespaceUrl } = useUrl();
 
   const { data, loading, error } = useGetList(
     s => s.type === 'helm.sh/release.v1',
@@ -33,9 +34,8 @@ function HelmReleasesList() {
 
   const rowRenderer = entry => [
     <Link
-      onClick={() =>
-        LuigiClient.linkManager().navigate('details/' + entry.releaseName)
-      }
+      className="fd-link"
+      to={namespaceUrl(`helm-releases/${entry.releaseName}`)}
     >
       {entry.releaseName}
     </Link>,
