@@ -21,9 +21,7 @@ context('Test login - kubeconfigID', () => {
       cy.visit(`${config.clusterAddress}/?kubeconfigID=tests`);
       cy.url().should('match', /overview$/);
 
-      cy.getIframeBody()
-        .contains('Session Storage')
-        .should('be.visible');
+      cy.contains('Session Storage').should('be.visible');
     });
   });
 
@@ -48,9 +46,7 @@ context('Test login - kubeconfigID', () => {
   it('Does not change storage for already added cluster', () => {
     cy.loginAndSelectCluster({ storage: 'Local storage' });
 
-    cy.getIframeBody()
-      .contains('Local Storage')
-      .should('be.visible');
+    cy.contains('Local Storage').should('be.visible');
 
     cy.wrap(loadFile('kubeconfig.yaml')).then(kubeconfig => {
       cy.intercept(
@@ -64,13 +60,9 @@ context('Test login - kubeconfigID', () => {
       cy.visit(`${config.clusterAddress}/?kubeconfigID=tests`);
       cy.url().should('match', /overview$/);
 
-      cy.getIframeBody()
-        .contains('Session Storage')
-        .should('not.exist');
+      cy.contains('Session Storage').should('not.exist');
 
-      cy.getIframeBody()
-        .contains('Local Storage')
-        .should('be.visible');
+      cy.contains('Local Storage').should('be.visible');
     });
   });
 
@@ -121,8 +113,7 @@ context('Test login - kubeconfigID', () => {
       );
       cy.visit(`${config.clusterAddress}/clusters`);
 
-      cy.getIframeBody()
-        .contains('Load default cluster')
+      cy.contains('Load default cluster')
         .should('be.visible')
         .click();
 

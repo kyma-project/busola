@@ -3,7 +3,7 @@ import { RecoilValueReadOnly, selector } from 'recoil';
 import { NavNode } from '../types';
 
 import { clusterAndNsNodesSelector } from './clusterAndNsNodesSelector';
-import { configurationAtom } from '../configurationAtom';
+import { configurationAtom } from '../configuration/configurationAtom';
 import { extensionsState } from './extensionsAtom';
 import { mapExtResourceToNavNode } from '../resourceList/mapExtResourceToNavNode';
 import { mergeInExtensibilityNav } from './sidebarNavigationNodesSelector';

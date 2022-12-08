@@ -19,10 +19,12 @@ interface ClusterWithName extends Cluster {
   name: string;
 }
 
-export type ActiveClusterState = ClusterWithName | null;
+// undefined - cluster is not yet loaded
+// null - no cluster choosen
+export type ActiveClusterState = ClusterWithName | null | undefined;
 
 const CLUSTER_NAME_STORAGE_KEY = 'busola.current-cluster-name';
-const defaultValue = null;
+const defaultValue = undefined;
 
 export const clusterState: RecoilState<ActiveClusterState> = atom<
   ActiveClusterState

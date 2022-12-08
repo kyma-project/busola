@@ -1,7 +1,7 @@
 import { selector, RecoilValue } from 'recoil';
 import { getFetchFn } from 'state/utils/getFetchFn';
 
-type ApiGroupState =
+export type ApiGroupState =
   | {
       name: string;
       preferredVersion: { groupVersion: string; version: string };

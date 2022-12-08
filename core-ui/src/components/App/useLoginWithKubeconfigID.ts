@@ -14,7 +14,7 @@ import { TFunction } from 'i18next';
 import { useFeature } from 'hooks/useFeature';
 import { ConfigFeature } from 'state/types';
 import { removePreviousPath } from 'state/useAfterInitHook';
-import { configurationAtom } from 'state/configurationAtom';
+import { configurationAtom } from 'state/configuration/configurationAtom';
 
 export interface KubeconfigIdFeature extends ConfigFeature {
   config: {

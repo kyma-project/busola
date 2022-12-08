@@ -30,9 +30,7 @@ context('Test Ingresses', () => {
   it('Create an Ingress', () => {
     cy.navigateTo('Discovery and Network', 'Ingress');
 
-    cy.getIframeBody()
-      .contains('Create Ingress')
-      .click();
+    cy.contains('Create Ingress').click();
 
     cy.wrap(loadIngress(NAME, Cypress.env('NAMESPACE_NAME'))).then(
       INGRESS_CONFIG => {
@@ -41,32 +39,23 @@ context('Test Ingresses', () => {
       },
     );
 
-    cy.getIframeBody()
-      .find('[role="dialog"]')
+    cy.get('[role="dialog"]')
       .contains('button', 'Create')
       .click();
   });
 
   it('Check Ingress details', () => {
-    cy.getIframeBody()
-      .contains(NAME)
-      .should('be.visible');
+    cy.contains(NAME).should('be.visible');
 
-    cy.getIframeBody()
+    cy.get('#content-wrap')
       .contains(/rules/i)
       .should('be.visible');
 
-    cy.getIframeBody()
-      .contains(/default backend/i)
-      .should('be.visible');
+    cy.contains(/default backend/i).should('be.visible');
 
-    cy.getIframeBody()
-      .contains(/paths/i)
-      .should('be.visible');
+    cy.contains(/paths/i).should('be.visible');
 
-    cy.getIframeBody()
-      .contains(/web:8080/i)
-      .should('be.visible');
+    cy.contains(/web:8080/i).should('be.visible');
   });
 
   it('Check Ingresses list', () => {
