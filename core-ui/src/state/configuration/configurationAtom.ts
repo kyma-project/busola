@@ -7,6 +7,7 @@ import { AuthDataState, authDataState } from '../authDataAtom';
 import { getFetchFn } from '../utils/getFetchFn';
 import { ConfigFeature, ConfigFeatureList } from '../types';
 import { FetchFn } from 'shared/hooks/BackendAPI/useFetch';
+import { getPrometheusConfig } from './prometheusFeature';
 
 import { getFeatures } from './getFeatures';
 import {
@@ -75,51 +76,6 @@ const getConfigs = async (fetchFn: FetchFn | undefined) => {
     console.warn('Cannot load cluster params: ', e);
     return null;
   }
-};
-
-function arrayCombine(arrays: any[]) {
-  const _arrayCombine = (arrs: any[], current: any = []) => {
-    if (arrs.length === 1) {
-      return arrs[0]?.map((e: any) => [...current, e]);
-    } else {
-      return arrs[0]?.map((e: any) =>
-        _arrayCombine(arrs.slice(1), [...current, e]),
-      );
-    }
-  };
-
-  return _arrayCombine(arrays).flat(arrays.length - 1);
-}
-
-const getPrometheusConfig = (
-  auth: AuthDataState,
-  apis: ApiGroupState,
-  fetchFn: FetchFn | undefined,
-): ConfigFeature => {
-  const prometheusDefault = {
-    checks: [
-      apiGroup({ group: 'monitoring.coreos.com', auth, apis }),
-      service({
-        fetchFn,
-        urlsGenerator: featureConfig => {
-          return arrayCombine([
-            featureConfig.namespaces,
-            featureConfig.serviceNames,
-            featureConfig.portNames,
-          ]).map(
-            ([namespace, serviceName, portName]: any[]) =>
-              `/api/v1/namespaces/${namespace}/services/${serviceName}:${portName}/proxy/api/v1`,
-          );
-        },
-        urlMutator: url => `${url}/status/runtimeinfo`,
-      }),
-    ],
-    namespaces: ['kyma-system'],
-    serviceNames: ['monitoring-prometheus', 'prometheus'],
-    portNames: ['http-web'],
-  };
-
-  return prometheusDefault;
 };
 
 export const useGetConfiguration = () => {
