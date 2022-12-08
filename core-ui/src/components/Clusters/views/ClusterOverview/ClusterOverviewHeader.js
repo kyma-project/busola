@@ -1,4 +1,3 @@
-import LuigiClient from '@luigi-project/client';
 import { Button } from 'fundamental-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -66,7 +65,6 @@ export function ClusterOverviewHeader() {
       glyph="add"
       onClick={() => {
         setShowAdd(true);
-        LuigiClient.uxManager().addBackdrop();
       }}
       iconBeforeText
     >
@@ -93,7 +91,6 @@ export function ClusterOverviewHeader() {
         show={showAdd}
         onCancel={() => {
           setShowAdd(false);
-          LuigiClient.uxManager().removeBackdrop();
         }}
       />
     </>
