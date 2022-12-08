@@ -4,4 +4,6 @@ export function chooseComboboxOption(selector, optionText) {
     .type(optionText);
 
   cy.contains(optionText).click();
+
+  return cy.end();
 }
