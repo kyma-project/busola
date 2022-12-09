@@ -64,9 +64,7 @@ export const Rules = ({ rules }) => {
           <p>
             {t('common.labels.name')}:{' '}
             <GoToDetailsLink
-              resource={pluralize(
-                backend.resource.kind.toString()?.toLowerCase(),
-              )}
+              kind={backend.resource.kind}
               name={backend.resource.name}
               noBrackets
             />
