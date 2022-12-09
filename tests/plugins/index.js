@@ -28,7 +28,7 @@ module.exports = (on, config) => {
     // invoke getter cy.task('dynamicSharedStore', { name: 'cancelTests' })
     dynamicSharedStore(property) {
       if (property.value !== undefined) {
-        dynamicSharedStore[property.name] = property.value;
+        return (dynamicSharedStore[property.name] = property.value);
       } else {
         return dynamicSharedStore[property.name];
       }
