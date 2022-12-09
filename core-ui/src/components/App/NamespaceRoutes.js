@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
+import { useTranslation } from 'react-i18next';
 
 import { languageAtom } from 'state/preferences/languageAtom';
 import { extensionsState } from 'state/navigation/extensionsAtom';
@@ -11,6 +12,7 @@ import { otherRoutesNamespaced } from 'resources/other';
 import { IncorrectPath } from './IncorrectPath';
 
 export default function NamespaceRoutes() {
+  const { t } = useTranslation();
   const language = useRecoilValue(languageAtom);
   const extensions = useRecoilValue(extensionsState);
 
@@ -21,7 +23,7 @@ export default function NamespaceRoutes() {
         element={
           <IncorrectPath
             to=""
-            message="The provided path does not exist. You will get redirected to the namespace overview."
+            message={t('components.incorrect-path.message.namespace')}
           />
         }
       />

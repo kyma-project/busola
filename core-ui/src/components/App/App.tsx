@@ -32,7 +32,7 @@ import './App.scss';
 import { useAfterInitHook } from 'state/useAfterInitHook';
 
 export default function App() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const language = useRecoilValue(languageAtom);
   const cluster = useRecoilValue(clusterState);
   const setNamespace = useSetRecoilState(activeNamespaceIdState);
@@ -72,7 +72,7 @@ export default function App() {
               element={
                 <IncorrectPath
                   to="clusters"
-                  message="The provided path does not exist. You will get redirected to the clusters list."
+                  message={t('components.incorrect-path.message.clusters')}
                 />
               }
             />

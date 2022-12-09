@@ -47,7 +47,7 @@ export default function ClusterRoutes() {
         element={
           <IncorrectPath
             to="overview"
-            message="The provided path does not exist. You will get redirected to the cluster overview."
+            message={t('components.incorrect-path.message.cluster')}
           />
         }
       />

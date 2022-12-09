@@ -2,13 +2,12 @@ import { Button, MessageBox } from 'fundamental-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-export function IncorrectPath({
-  to,
-  title = 'Incorrect path.',
-  message = 'The provided path does not exist. You will get redirected.',
-}) {
+export function IncorrectPath({ to, title = '', message = '' }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+  title = title || t('components.incorrect-path.title.default');
+  message = message || t('components.incorrect-path.message.default');
 
   return (
     <MessageBox
