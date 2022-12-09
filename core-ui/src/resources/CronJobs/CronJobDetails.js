@@ -1,21 +1,22 @@
 import React from 'react';
-import { Link } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { CronJobSchedule } from 'shared/components/CronJob/CronJobSchedule';
-import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
-import { navigateToFixedPathResourceDetails } from 'shared/hooks/navigate';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { EventsList } from 'shared/components/EventsList';
 import { filterByResource } from 'hooks/useMessageList';
 import { CronJobLastScheduleTime } from 'shared/components/CronJob/CronJobLastScheduleTime';
 import { PodTemplate } from 'shared/components/PodTemplate/PodTemplate';
+import { useUrl } from 'hooks/useUrl';
 
+import { CronJobConcurrencyPolicy } from './CronJobConcurrencyPolicy';
 import { CronJobCreate } from './CronJobCreate';
 import { CronJobJobs } from './CronJobJobs';
 
 export function CronJobDetails(props) {
   const { t } = useTranslation();
+  const { namespaceUrl } = useUrl();
   const customColumns = [
     {
       header: t('cron-jobs.schedule'),
@@ -47,9 +48,7 @@ export function CronJobDetails(props) {
         const jobName =
           resource.status.active[resource.status.active.length - 1].name;
         return (
-          <Link
-            onClick={() => navigateToFixedPathResourceDetails('jobs', jobName)}
-          >
+          <Link className="fd-link" to={namespaceUrl(`jobs/${jobName}`)}>
             {jobName}
           </Link>
         );
