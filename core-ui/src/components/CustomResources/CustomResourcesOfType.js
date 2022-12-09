@@ -9,7 +9,7 @@ import { CustomResources } from 'components/CustomResources/CustomResources';
 import { LayoutPanel } from 'fundamental-react';
 import { useUrl } from 'hooks/useUrl';
 
-export default function CustomResourcesOfType({ crdName, namespace }) {
+export default function CustomResourcesOfType({ crdName }) {
   const { t } = useTranslation();
   const { clusterUrl } = useUrl();
   const { data: crd, loading, error } = useGet(
@@ -51,7 +51,6 @@ export default function CustomResourcesOfType({ crdName, namespace }) {
         </PageHeader.Column>
       </PageHeader>
       <CustomResources
-        namespace={namespace}
         crd={crd}
         version={crd.spec.versions.find(v => v.served)}
         showTitle={false}

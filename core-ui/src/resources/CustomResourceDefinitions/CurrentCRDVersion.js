@@ -1,5 +1,4 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
 import { LayoutPanel } from 'fundamental-react';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
@@ -42,8 +41,6 @@ const AdditionalPrinterColumns = ({ additionalPrinterColumns }) => {
 export const CurrentCRDVersion = resource => {
   const { t } = useTranslation();
 
-  const namespace = LuigiClient.getContext().namespaceId;
-
   if (!resource) return null;
   const { versions } = resource.spec;
 
@@ -79,7 +76,6 @@ export const CurrentCRDVersion = resource => {
       <CustomResources
         crd={resource}
         version={storageVersion}
-        namespace={namespace}
         omitColumnsIds={
           resource.spec.scope !== 'Namespaced' ? ['namespace'] : []
         }
