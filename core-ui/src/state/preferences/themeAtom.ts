@@ -1,5 +1,5 @@
 import { atom, RecoilState, AtomEffect } from 'recoil';
-import { localStorageEffect, luigiMessageEffect } from '../utils/effects';
+import { localStorageEffect } from '../utils/effects';
 
 export type Theme = 'dark' | 'light' | 'light_dark' | 'hcw' | 'hcb';
 
@@ -41,9 +41,5 @@ export const addLinkEffect: AddLinkEffect = () => ({ onSet, setSelf }) => {
 export const themeState: RecoilState<Theme> = atom<Theme>({
   key: 'themeState',
   default: DEFAULT_THEME,
-  effects: [
-    localStorageEffect<Theme>(THEME_STORAGE_KEY),
-    luigiMessageEffect('busola.luigi-theme', 'name'),
-    addLinkEffect(),
-  ],
+  effects: [localStorageEffect<Theme>(THEME_STORAGE_KEY), addLinkEffect()],
 });

@@ -1,5 +1,5 @@
 import { atom, RecoilState } from 'recoil';
-import { localStorageEffect, luigiMessageEffect } from '../utils/effects';
+import { localStorageEffect } from '../utils/effects';
 
 type ShowHiddenNamespaces = boolean;
 
@@ -14,10 +14,6 @@ export const showHiddenNamespacesState: RecoilState<ShowHiddenNamespaces> = atom
   effects: [
     localStorageEffect<ShowHiddenNamespaces>(
       SHOW_HIDDEN_NAMESPACES_STORAGE_KEY,
-    ),
-    luigiMessageEffect<ShowHiddenNamespaces>(
-      'busola.showHiddenNamespaces',
-      'showHiddenNamespaces',
     ),
   ],
 });

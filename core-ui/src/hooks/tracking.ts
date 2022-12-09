@@ -1,12 +1,48 @@
 import { useEffect } from 'react';
-import LuigiClient from '@luigi-project/client';
 import { useLocation } from 'react-router-dom';
-import { useComponentDidMount } from 'shared/useComponentDidMount';
+import { v4 as uuid } from 'uuid';
 import { useRecoilValue } from 'recoil';
+
+import { useComponentDidMount } from 'shared/useComponentDidMount';
 import { clusterState } from 'state/clusterAtom';
 
-function sendTrackingRequest(body: any) {
-  LuigiClient.sendCustomMessage({ id: 'busola.tracking', body });
+export function getLoggingId() {
+  const STORAGE_KEY = 'busola.logging-id';
+
+  let loggingId = localStorage.getItem(STORAGE_KEY);
+  if (!loggingId) {
+    loggingId = uuid();
+    localStorage.setItem(STORAGE_KEY, loggingId ?? '');
+  }
+  return loggingId;
+}
+
+export async function sendTrackingRequest(body: any) {
+  /* TODO tracking (this is code from 'core' - to be checked and potentially converted)
+  if (process.env.IS_DOCKER) {
+    return;
+  }
+
+  if ((await getCurrentConfig()).features.TRACKING.isEnabled) {
+    body.metadata = { ...body.metadata, id: getLoggingId() };
+
+    let additionalOptions = {};
+    const ssoData = getSSOAuthData();
+    if (ssoData?.idToken) {
+      additionalOptions = {
+        headers: {
+          Authorization: `Bearer ${ssoData.idToken}`,
+        },
+      };
+    }
+
+    fetch(config.backendAddress + '/tracking', {
+      method: 'POST',
+      body: JSON.stringify(body),
+      ...additionalOptions,
+    }).catch(e => console.debug('Tracking call failed', e));
+  }
+  */
 }
 
 export function useAppTracking() {

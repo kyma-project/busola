@@ -1,4 +1,3 @@
-import { luigiMessageEffect } from './../utils/effects';
 import { atom, RecoilState } from 'recoil';
 import { localStorageEffect } from 'state/utils/effects';
 
@@ -10,8 +9,5 @@ const DEFAULT_LANGUAGE = 'en';
 export const languageAtom: RecoilState<Language> = atom<Language>({
   key: 'languageState',
   default: DEFAULT_LANGUAGE,
-  effects: [
-    localStorageEffect(LANGUAGE_STORAGE_KEY),
-    luigiMessageEffect('busola.luigi-language', 'language'),
-  ],
+  effects: [localStorageEffect(LANGUAGE_STORAGE_KEY)],
 });
