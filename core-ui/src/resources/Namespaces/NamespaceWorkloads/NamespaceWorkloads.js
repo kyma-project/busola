@@ -1,12 +1,13 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
+import { useTranslation } from 'react-i18next';
+import { navigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { LayoutPanel, Icon } from 'fundamental-react';
 import { CircleProgress } from 'shared/components/CircleProgress/CircleProgress';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { useTranslation } from 'react-i18next';
+import { useUrl } from 'hooks/useUrl';
 
 import {
   getHealthyStatusesCount,
@@ -14,12 +15,6 @@ import {
 } from './NamespaceWorkloadsHelpers';
 
 NamespaceWorkloads.propTypes = { namespace: PropTypes.string.isRequired };
-
-const navigateTo = path => () => {
-  LuigiClient.linkManager()
-    .fromContext('namespace')
-    .navigate(path);
-};
 
 const ResourceCircle = ({
   data,
@@ -76,6 +71,8 @@ const ResourceCircle = ({
 
 const PodsCircle = ({ namespace }) => {
   const { t } = useTranslation();
+  const { namespaceUrl } = useUrl();
+
   const { data, error, loading = true } = useGetList()(
     `/api/v1/namespaces/${namespace}/pods`,
     {
@@ -84,7 +81,7 @@ const PodsCircle = ({ namespace }) => {
   );
   return (
     <ResourceCircle
-      onClick={navigateTo('pods')}
+      onClick={() => navigate(namespaceUrl('pods'))}
       data={data}
       counter={getHealthyStatusesCount}
       loading={loading}
@@ -97,6 +94,7 @@ const PodsCircle = ({ namespace }) => {
 
 const DeploymentsCircle = ({ namespace }) => {
   const { t } = useTranslation();
+  const { namespaceUrl } = useUrl();
   const { data, error, loading = true } = useGetList()(
     `/apis/apps/v1/namespaces/${namespace}/deployments`,
     {
@@ -105,7 +103,7 @@ const DeploymentsCircle = ({ namespace }) => {
   );
   return (
     <ResourceCircle
-      onClick={navigateTo('deployments')}
+      onClick={() => navigate(namespaceUrl('deployments'))}
       data={data}
       counter={getHealthyReplicasCount}
       loading={loading}
