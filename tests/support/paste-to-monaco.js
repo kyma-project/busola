@@ -18,7 +18,8 @@ Cypress.Commands.add(
         err.message.includes('Unexpected usage') ||
         err.message.includes(
           "Cannot read properties of undefined (reading 'uri')",
-        )
+        ) ||
+        err.message.includes('ResizeObserver loop limit exceeded')
       )
         return false;
     });

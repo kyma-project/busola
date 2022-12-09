@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { LayoutPanel, Icon } from 'fundamental-react';
@@ -72,6 +72,7 @@ const ResourceCircle = ({
 const PodsCircle = ({ namespace }) => {
   const { t } = useTranslation();
   const { namespaceUrl } = useUrl();
+  const navigate = useNavigate();
 
   const { data, error, loading = true } = useGetList()(
     `/api/v1/namespaces/${namespace}/pods`,
@@ -94,6 +95,7 @@ const PodsCircle = ({ namespace }) => {
 
 const DeploymentsCircle = ({ namespace }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { namespaceUrl } = useUrl();
   const { data, error, loading = true } = useGetList()(
     `/apis/apps/v1/namespaces/${namespace}/deployments`,
