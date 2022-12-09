@@ -28,8 +28,7 @@ export default function CustomResourcesOfType({ crdName, namespace }) {
   const breadcrumbItems = [
     {
       name: t('custom-resources.title'),
-      fromContext: 'customresources',
-      path: '/',
+      url: clusterUrl('customresources'),
     },
     { name: '' },
   ];
