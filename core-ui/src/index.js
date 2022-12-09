@@ -10,7 +10,6 @@ import { savePreviousPath } from 'state/useAfterInitHook';
 
 import App from './components/App/App';
 
-import { Microfrontend } from 'shared/contexts/Microfrontend';
 import { Spinner } from 'shared/components/Spinner/Spinner';
 
 import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
@@ -50,16 +49,14 @@ i18next
 savePreviousPath();
 
 ReactDOM.render(
-  <Microfrontend env={process.env}>
-    <RecoilRoot>
-      <BrowserRouter>
-        <Suspense fallback={<Spinner />}>
-          <CommandPaletteProvider>
-            <App />
-          </CommandPaletteProvider>
-        </Suspense>
-      </BrowserRouter>
-    </RecoilRoot>
-  </Microfrontend>,
+  <RecoilRoot>
+    <BrowserRouter>
+      <Suspense fallback={<Spinner />}>
+        <CommandPaletteProvider>
+          <App />
+        </CommandPaletteProvider>
+      </Suspense>
+    </BrowserRouter>
+  </RecoilRoot>,
   document.getElementById('root'),
 );

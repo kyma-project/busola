@@ -13,6 +13,7 @@ import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 import { useAuthHandler } from 'state/authDataAtom';
 import { useGetConfiguration } from 'state/configuration/configurationAtom';
 import { useGetExtensions } from 'state/navigation/extensionsAtom';
+import { useGetExtensibilitySchemas } from 'state/extensibilitySchemasAtom';
 
 import { useLoginWithKubeconfigID } from 'components/App/useLoginWithKubeconfigID';
 import { useHandleResetEndpoint } from 'components/Clusters/shared';
@@ -47,6 +48,7 @@ export default function App() {
   useAuthHandler();
   useGetConfiguration();
   useGetExtensions();
+  useGetExtensibilitySchemas();
 
   useEffect(() => {
     i18n.changeLanguage(language);

@@ -7,7 +7,6 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { LayoutPanel, Link } from 'fundamental-react';
 import LuigiClient from '@luigi-project/client';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import pluralize from 'pluralize';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
 
