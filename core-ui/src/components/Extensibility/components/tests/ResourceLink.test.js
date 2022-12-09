@@ -1,4 +1,3 @@
-import { BrowserRouter } from 'react-router-dom';
 import { render } from 'testing/reactTestingUtils';
 import { ResourceLink } from '../ResourceLink';
 
@@ -23,9 +22,7 @@ describe('ResourceLink', () => {
 
   it('Renders placeholder for no value', async () => {
     const { findByText } = render(
-      <BrowserRouter>
-        <ResourceLink structure={{ placeholder: 'empty!' }} />
-      </BrowserRouter>,
+      <ResourceLink structure={{ placeholder: 'empty!' }} />,
     );
     expect(await findByText('extensibility::empty!'));
   });
@@ -37,16 +34,14 @@ describe('ResourceLink', () => {
       namespace: '$root.namespace',
     };
     const { getByText } = render(
-      <BrowserRouter>
-        <ResourceLink
-          value={value}
-          structure={{
-            source: '$root.name',
-            resource: res,
-          }}
-          originalResource={originalResource}
-        />
-      </BrowserRouter>,
+      <ResourceLink
+        value={value}
+        structure={{
+          source: '$root.name',
+          resource: res,
+        }}
+        originalResource={originalResource}
+      />,
     );
 
     const anchorElement = getByText(`extensibility::${value}`);
@@ -58,19 +53,17 @@ describe('ResourceLink', () => {
 
   it('Accepts config without namespace', () => {
     const { getByText } = render(
-      <BrowserRouter>
-        <ResourceLink
-          value={value}
-          structure={{
-            source: '$root.name',
-            resource: {
-              name: '$root.name',
-              kind: '$root.kind',
-            },
-          }}
-          originalResource={originalResource}
-        />
-      </BrowserRouter>,
+      <ResourceLink
+        value={value}
+        structure={{
+          source: '$root.name',
+          resource: {
+            name: '$root.name',
+            kind: '$root.kind',
+          },
+        }}
+        originalResource={originalResource}
+      />,
     );
 
     // no errors here
@@ -79,13 +72,11 @@ describe('ResourceLink', () => {
 
   it('Show error on invalid config', () => {
     const { queryByText } = render(
-      <BrowserRouter>
-        <ResourceLink
-          value={value}
-          structure={{ resource: { namespace: '$notExistingMethod()' } }}
-          originalResource={originalResource}
-        />
-      </BrowserRouter>,
+      <ResourceLink
+        value={value}
+        structure={{ resource: { namespace: '$notExistingMethod()' } }}
+        originalResource={originalResource}
+      />,
     );
 
     expect(

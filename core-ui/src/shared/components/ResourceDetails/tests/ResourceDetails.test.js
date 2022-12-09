@@ -20,7 +20,7 @@ jest.mock('shared/hooks/BackendAPI/useGet', () => ({
 
 describe('ResourceDetails', () => {
   describe('Columns', () => {
-    it('Renders basic column', async () => {
+    fit('Renders basic column', async () => {
       const { queryByText } = render(
         <Suspense fallback="loading">
           <ResourceDetails
@@ -34,7 +34,6 @@ describe('ResourceDetails', () => {
               },
             ]}
           />
-          ,
         </Suspense>,
       );
 
