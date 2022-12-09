@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, Button } from 'fundamental-react';
-import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 
 import { useNotification } from 'shared/contexts/NotificationContext';
@@ -52,9 +51,7 @@ export const ModalWithForm = ({
   const setOpenStatus = status => {
     if (status) {
       setTimeout(() => revalidate());
-      LuigiClient.uxManager().addBackdrop();
     } else {
-      LuigiClient.uxManager().removeBackdrop();
       if (customCloseAction) customCloseAction();
     }
     setOpen(status);

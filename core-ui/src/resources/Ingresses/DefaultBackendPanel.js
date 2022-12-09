@@ -6,7 +6,6 @@ import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import LuigiClient from '@luigi-project/client';
-import pluralize from 'pluralize';
 
 export const DefaultBackendPanel = ({ backend, namespace }) => {
   const { t } = useTranslation();

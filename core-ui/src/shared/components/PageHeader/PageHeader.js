@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { LayoutPanel, Breadcrumb } from 'fundamental-react';
-import LuigiClient from '@luigi-project/client';
 import { Link } from 'react-router-dom';
-
-import { useUrl } from 'hooks/useUrl';
 
 import './PageHeader.scss';
 
@@ -20,27 +17,6 @@ const Column = ({ title, children, columnSpan, image, style = {} }) => {
     </div>
   );
 };
-
-/*
-const performOnClick = item => {
-  if (!item.path) {
-    return null;
-  }
-
-  let linkManager = LuigiClient.linkManager();
-  if (!item.fromAbsolutePath) {
-    linkManager = item.fromContext
-      ? linkManager.fromContext(item.fromContext)
-      : linkManager.fromClosestContext();
-  }
-
-  if (!item.params) {
-    return linkManager.navigate(item.path);
-  }
-
-  return linkManager.withParams(item.params).navigate(item.path);
-};
-*/
 
 export const PageHeader = ({
   title,

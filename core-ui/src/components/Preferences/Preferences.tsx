@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useRecoilState } from 'recoil';
 
 import { useEventListener } from 'hooks/useEventListener';
-import { useCustomMessageListener } from 'hooks/useCustomMessageListener';
 import { Tab } from 'shared/components/Tabs/Tab';
 import { Tabs } from 'shared/components/Tabs/Tabs';
 import { VerticalTabs } from 'shared/components/VerticalTabs/VerticalTabs';
@@ -62,10 +61,6 @@ export function Preferences() {
   ];
 
   useEventListener('keydown', handleCloseWithEscape);
-
-  useCustomMessageListener('open-preferences', () => {
-    setModalOpen(true);
-  });
 
   return (
     <Dialog
