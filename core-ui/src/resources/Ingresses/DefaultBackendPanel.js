@@ -1,15 +1,16 @@
 import React from 'react';
-import { LayoutPanel, Link } from 'fundamental-react';
+import { LayoutPanel } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { GoToDetailsLink } from 'shared/components/ControlledBy/ControlledBy';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
-import LuigiClient from '@luigi-project/client';
+import { useUrl } from 'hooks/useUrl';
 
 export const DefaultBackendPanel = ({ backend, namespace }) => {
   const { t } = useTranslation();
-
+  const { namespaceUrl } = useUrl();
   const { data: services } = useGetList()(
     `/api/v1/namespaces/${namespace}/services`,
   );
@@ -30,11 +31,7 @@ export const DefaultBackendPanel = ({ backend, namespace }) => {
                     ({ metadata }) => metadata.name === backend?.service.name,
                   ) ? (
                     <Link
-                      onClick={() =>
-                        LuigiClient.linkManager()
-                          .fromContext('namespace')
-                          .navigate(`services/details/${backend?.service.name}`)
-                      }
+                      to={namespaceUrl(`services/${backend?.service.name}`)}
                     >
                       {backend?.service.name}
                     </Link>
