@@ -38,6 +38,6 @@ context('Test Custom Resources', () => {
 
     cy.contains('functions.serverless.kyma-project.io').click();
 
-    cy.url().should('match', /customresources/);
+    cy.url().should('match', /customresourcedefinitions/);
   });
 });
