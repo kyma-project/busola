@@ -99,20 +99,3 @@ export const clusterStorageEffect: ClusterStorageEffectFn = clusterStorageKey =>
     );
   });
 };
-
-type LuigiMessageEffect = <T>(
-  luigiMessageId: string,
-  newValueKey: string,
-) => AtomEffect<T>;
-
-export const luigiMessageEffect: LuigiMessageEffect = (
-  luigiMessageId,
-  newValueKey,
-) => ({ onSet }) => {
-  onSet(newValue => {
-    LuigiClient.sendCustomMessage({
-      id: luigiMessageId,
-      [newValueKey]: newValue,
-    });
-  });
-};

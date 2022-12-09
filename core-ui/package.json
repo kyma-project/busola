@@ -98,6 +98,7 @@
     "enzyme-to-json": "^3.4.0",
     "react-app-rewired": "^2.2.1",
     "react-scripts": "^5.0.0",
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "uuid": "^9.0.0"
   }
 }
