@@ -16,6 +16,7 @@ import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow'
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { useUrl } from 'hooks/useUrl';
 
 import {
   formatCurrentVersion,
@@ -34,6 +35,7 @@ export function BusolaExtensionDetails(props) {
   const { t } = useTranslation();
   const { extensibilitySchemas } = useMicrofrontendContext();
   const { namespace, name } = useParams();
+  const { clusterUrl } = useUrl();
 
   const resourceUrl = `/api/v1/namespaces/${namespace}/configmaps/${name}`;
 
@@ -223,8 +225,7 @@ export function BusolaExtensionDetails(props) {
       breadcrumbs={[
         {
           name: t('extensibility.title'),
-          path: '/',
-          fromContext: 'busolaextensions',
+          url: clusterUrl('busolaextensions'),
         },
         { name: '' },
       ]}

@@ -73,6 +73,8 @@ export interface UrlGenerators {
   clusterUrl: (path: string) => string;
   namespaceUrl: (path: string) => string;
   scopedUrl: (path: string) => string;
+  resourceListUrl: (path: string) => string;
+  resourceUrl: (path: string) => string;
 }
 
 export type NavNode = {

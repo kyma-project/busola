@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { LayoutPanel, Breadcrumb } from 'fundamental-react';
-import './PageHeader.scss';
 import LuigiClient from '@luigi-project/client';
+import { Link } from 'react-router-dom';
+
+import { useUrl } from 'hooks/useUrl';
+
+import './PageHeader.scss';
 
 const Column = ({ title, children, columnSpan, image, style = {} }) => {
   const styleComputed = { gridColumn: columnSpan, ...style };
@@ -16,6 +20,8 @@ const Column = ({ title, children, columnSpan, image, style = {} }) => {
     </div>
   );
 };
+
+/*
 const performOnClick = item => {
   if (!item.path) {
     return null;
@@ -34,6 +40,7 @@ const performOnClick = item => {
 
   return linkManager.withParams(item.params).navigate(item.path);
 };
+*/
 
 export const PageHeader = ({
   title,
@@ -51,13 +58,9 @@ export const PageHeader = ({
             <Breadcrumb>
               {breadcrumbItems.map(item => {
                 return (
-                  <Breadcrumb.Item
-                    aria-label="breadcrumb-item"
-                    key={item.name}
-                    name={item.name}
-                    url="#"
-                    onClick={item.onClick || (() => performOnClick(item))}
-                  />
+                  <Breadcrumb.Item aria-label="breadcrumb-item" key={item.name}>
+                    <Link to={item.url}>{item.name}</Link>
+                  </Breadcrumb.Item>
                 );
               })}
             </Breadcrumb>

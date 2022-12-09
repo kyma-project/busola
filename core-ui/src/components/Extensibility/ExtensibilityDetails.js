@@ -4,11 +4,12 @@ import pluralize from 'pluralize';
 import { usePrepareDetailsProps } from 'resources/helpers';
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { prettifyKind } from 'shared/utils/helpers';
-
 import { ExtensibilityErrBoundary } from 'components/Extensibility/ExtensibilityErrBoundary';
-import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useGetSchema } from 'hooks/useGetSchema';
+import { getExtensibilityPath } from 'components/Extensibility/helpers/getExtensibilityPath';
+import { useUrl } from 'hooks/useUrl';
 
+import { DataSourcesContextProvider } from './contexts/DataSources';
 import { useGetCRbyPath } from './useGetCRbyPath';
 import { Widget } from './components/Widget';
 import { ExtensibilityCreate } from './ExtensibilityCreate';
@@ -20,6 +21,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
 
   const { urlPath, resource, features } = resMetaData?.general ?? {};
   const { disableEdit, disableDelete } = features?.actions || {};
+  const { scopedUrl } = useUrl();
 
   const { schema } = useGetSchema({
     resource,
@@ -28,7 +30,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const jsonata = useJsonata({});
 
   const detailsProps = usePrepareDetailsProps({
-    resourceCustomType: urlPath,
+    resourceCustomType: getExtensibilityPath(resMetaData?.general),
     resourceType: pluralize(resource?.kind),
     resourceI18Key: 'name',
     apiGroup: resource?.group,
@@ -61,8 +63,7 @@ export const ExtensibilityDetailsCore = ({ resMetaData }) => {
   const breadcrumbs = [
     {
       name: resourceTitle,
-      path: '/',
-      fromContext: urlPath,
+      url: scopedUrl(getExtensibilityPath(resMetaData?.general)),
     },
     { name: '' },
   ];

@@ -20,7 +20,7 @@ function HelmReleasesDetails({ releaseName }) {
 
   const namespace = useRecoilValue(activeNamespaceIdState);
   const breadcrumbItems = [
-    { name: t('helm-releases.title'), path: '/' },
+    { name: t('helm-releases.title'), url: namespaceUrl('helm-releases') },
     { name: '' },
   ];
 

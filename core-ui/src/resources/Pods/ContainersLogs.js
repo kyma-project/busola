@@ -14,6 +14,7 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { SearchInput } from 'shared/components/GenericList/SearchInput';
 import { useTranslation } from 'react-i18next';
+import { useUrl } from 'hooks/useUrl';
 
 import './ContainersLogs.scss';
 
@@ -32,6 +33,7 @@ const ContainersLogs = ({ params }) => {
   const [logsToSave, setLogsToSave] = useState([]);
   const [sinceSeconds, setSinceSeconds] = useState(String(DEFAULT_TIMEFRAME));
   const selectedLogIndex = useRef(0);
+  const { namespaceUrl } = useUrl();
 
   const logTimeframeOptions = [
     { text: '1 hour', key: String(HOUR_IN_SECONDS) },
@@ -44,13 +46,11 @@ const ContainersLogs = ({ params }) => {
   const breadcrumbs = [
     {
       name: 'Pods',
-      path: '/',
-      fromContext: 'pods',
+      url: namespaceUrl('pods'),
     },
     {
       name: params.podName,
-      path: '/',
-      fromContext: 'pod',
+      url: namespaceUrl(`pods/${params.podName}`),
     },
     { name: '' },
   ];
