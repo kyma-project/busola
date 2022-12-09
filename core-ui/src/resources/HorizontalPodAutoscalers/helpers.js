@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from 'fundamental-react';
-import LuigiClient from '@luigi-project/client';
+import { Link } from 'react-router-dom';
 import pluralize from 'pluralize';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useTranslation } from 'react-i18next';
 import { Labels } from 'shared/components/Labels/Labels';
+import { useUrl } from 'hooks/useUrl';
 
 const metricsTargetParser = (mt, type) => {
   let value = null;
@@ -44,6 +44,7 @@ export const currentMetricsParser = metrics => {
 export const metricsParser = metrics => {
   return metrics.map(m => {
     const { t } = useTranslation();
+    const { namespaceUrl } = useUrl();
     const type = m.type.charAt(0).toLowerCase() + m.type.slice(1);
     let i18label = null;
     let name = null;
@@ -64,17 +65,12 @@ export const metricsParser = metrics => {
           <>
             {m[type].metric.name} {t('hpas.on')}{' '}
             <Link
-              className="fd-link"
               data-test-id="service-instance-name"
-              onClick={() =>
-                LuigiClient.linkManager()
-                  .fromContext('namespace')
-                  .navigate(
-                    `${pluralize(
-                      pluralize(m[type].describedObject.kind).toLowerCase(),
-                    )}/details/${m[type].describedObject.name}`,
-                  )
-              }
+              to={namespaceUrl(
+                `${pluralize(m[type].describedObject.kind).toLowerCase()}/${
+                  m[type].describedObject.name
+                }`,
+              )}
             >
               {pluralize(m[type].describedObject.kind).toLowerCase()}/
               {m[type].describedObject.name}
