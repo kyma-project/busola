@@ -1,6 +1,7 @@
 import { ReactElement, ReactNode } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { MutableSnapshot, RecoilRoot } from 'recoil';
+import { BrowserRouter } from 'react-router-dom';
 
 type CustomRenderOptions = Omit<RenderOptions, 'wrapper'> & {
   initializeState: (snapshot: MutableSnapshot) => void;
@@ -10,7 +11,7 @@ const customRender = (ui: ReactElement, options?: CustomRenderOptions) => {
   const AllTheProviders = ({ children }: { children: ReactNode }) => {
     return (
       <RecoilRoot initializeState={options?.initializeState}>
-        {children}
+        <BrowserRouter>{children}</BrowserRouter>
       </RecoilRoot>
     );
   };

@@ -7,6 +7,7 @@ let mockNamespaceId = 'namespaceId';
 let mockCrds = [];
 
 jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useParams: () => ({
     namespaceId: mockNamespaceId,
   }),
@@ -22,6 +23,7 @@ describe('useGetCRbyPath', () => {
     const { queryByTestId } = render(<TestComponent />, {
       initializeState: snapshot => snapshot.set(extensionsState, []),
     });
+
     expect(queryByTestId('value')).toHaveTextContent('');
   });
 

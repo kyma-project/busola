@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow } from 'testing/enzymeUtils';
 import { ControlledBy } from '../ControlledBy';
 import { ControlledBy as CB } from 'shared/components/ControlledBy/ControlledBy';
 

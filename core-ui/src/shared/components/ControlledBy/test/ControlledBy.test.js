@@ -1,6 +1,17 @@
-import { render } from '@testing-library/react';
-import { mount } from 'enzyme';
-import { ControlledBy, GoToDetailsLink } from '../ControlledBy';
+import { render } from 'testing/reactTestingUtils';
+import { ControlledBy } from '../ControlledBy';
+import pluralize from 'pluralize';
+
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
+  useMatch: () => {
+    return {
+      params: {
+        cluster: 'test-cluster',
+      },
+    };
+  },
+}));
 
 describe('ControlledBy', () => {
   it('Renders placeholders for no owners', () => {
@@ -13,43 +24,53 @@ describe('ControlledBy', () => {
 
   it('Renders owners - single', () => {
     const { queryByText } = render(
-      <ControlledBy ownerReferences={{ kind: 'ResourceKind1' }} />,
+      <ControlledBy
+        ownerReferences={{ kind: 'ResourceKind1', name: 'ResourceName1' }}
+      />,
     );
-    expect(queryByText('ResourceKind1')).toBeInTheDocument();
+
+    expect(queryByText(/ResourceKind1/)).toBeInTheDocument();
+    expect(queryByText(/ResourceName1/)).toBeInTheDocument();
   });
 
   it('Renders owners - array', () => {
     const { queryByText } = render(
       <ControlledBy
-        ownerReferences={[{ kind: 'ResourceKind1' }, { kind: 'ResourceKind2' }]}
-      />,
-    );
-    expect(queryByText('ResourceKind1')).toBeInTheDocument();
-    expect(queryByText('ResourceKind2')).toBeInTheDocument();
-  });
-
-  it('Renders owners - with kind', () => {
-    const component = mount(
-      <ControlledBy
         ownerReferences={[
-          {
-            kind: 'ResourceKind',
-            name: 'ResourceName',
-            apiVersion: 'ApiVersion',
-          },
+          { kind: 'ResourceKind1', name: 'ResourceName1' },
+          { kind: 'ResourceKind2', name: 'ResourceName2' },
         ]}
       />,
     );
+    expect(queryByText(/ResourceKind1/)).toBeInTheDocument();
+    expect(queryByText(/ResourceName1/)).toBeInTheDocument();
 
-    const detailsLink = component.find(GoToDetailsLink);
-    expect(detailsLink).toHaveLength(1);
-    expect(detailsLink.props().apiVersion).toBe('ApiVersion');
-    expect(detailsLink.props().name).toBe('ResourceName');
-    expect(detailsLink.props().resource).toBe('resourcekinds');
+    expect(queryByText(/ResourceKind2/)).toBeInTheDocument();
+    expect(queryByText(/ResourceName2/)).toBeInTheDocument();
   });
 
-  it('Renders owners - without kind', () => {
-    const component = mount(
+  it('Checks Link href attribute', () => {
+    const ownerReferences = {
+      kind: 'ClusterRole',
+      name: 'ResourceName',
+      apiVersion: 'ApiVersion',
+    };
+
+    const { getByText } = render(
+      <ControlledBy ownerReferences={ownerReferences} />,
+    );
+
+    const linkElement = getByText(/ResourceName/);
+    const hrefAttribute = linkElement.getAttribute('href');
+    expect(hrefAttribute).toBe(
+      `/cluster/test-cluster/${pluralize(ownerReferences.kind).toLowerCase()}/${
+        ownerReferences.name
+      }`,
+    );
+  });
+
+  it('Renders owners - without name', () => {
+    const { queryByText } = render(
       <ControlledBy
         ownerReferences={[
           {
@@ -62,7 +83,6 @@ describe('ControlledBy', () => {
       />,
     );
 
-    const detailsLink = component.find(GoToDetailsLink);
-    expect(detailsLink).toHaveLength(0);
+    expect(queryByText(/ResourceName/)).not.toBeInTheDocument();
   });
 });
