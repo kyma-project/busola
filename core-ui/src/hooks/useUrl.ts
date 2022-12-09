@@ -26,7 +26,7 @@ export const useUrl: () => UrlGenerators = () => {
   };
 
   const scopedUrl = (path: string, overrides: UrlOverrides = {}) => {
-    if (overrides.resourceType?.toLowerCase() === 'namespaces') {
+    if ((overrides.resourceType || '').toLowerCase() === 'namespaces') {
       return clusterUrl(path, overrides);
     } else if (overrides?.namespace ?? namespace) {
       return namespaceUrl(path, overrides);
@@ -36,7 +36,7 @@ export const useUrl: () => UrlGenerators = () => {
   };
 
   const resourcePath = (resource: any, overrides: UrlOverrides = {}) =>
-    (overrides.resourceType ?? pluralize(resource.kind)).toLowerCase();
+    (overrides.resourceType ?? pluralize(resource.kind || '')).toLowerCase();
 
   const resourceListUrl = (resource: any, overrides: UrlOverrides = {}) => {
     return scopedUrl(resourcePath(resource, overrides), {
