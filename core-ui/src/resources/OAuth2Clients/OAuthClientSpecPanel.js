@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { navigateToResource } from 'shared/hooks/navigate';
+import { LayoutPanel, FormItem, FormLabel } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 
-import { LayoutPanel, FormItem, FormLabel, Link } from 'fundamental-react';
+import { useGetList } from 'shared/hooks/BackendAPI/useGet';
 import { Tokens } from 'shared/components/Tokens';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { useUrl } from 'hooks/useUrl';
 
 import './OAuthClientSpecPanel.scss';
 
@@ -17,6 +18,7 @@ OAuthClientSpecPanel.propTypes = {
 
 export default function OAuthClientSpecPanel({ spec, namespace }) {
   const { t } = useTranslation();
+  const { resourceUrl } = useUrl();
 
   const { data: secrets } = useGetList()(
     `/api/v1/namespaces/${namespace}/secrets`,
@@ -84,7 +86,7 @@ export default function OAuthClientSpecPanel({ spec, namespace }) {
         <FormItem>
           <FormLabel>{t('oauth2-clients.labels.secret')}</FormLabel>
           {clientSecret ? (
-            <Link onClick={() => navigateToResource(clientSecret)}>
+            <Link className="fd-link" to={resourceUrl(clientSecret)}>
               {spec.secretName}
             </Link>
           ) : (

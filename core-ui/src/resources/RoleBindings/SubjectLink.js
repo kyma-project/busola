@@ -1,18 +1,16 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
-import { Link } from 'fundamental-react';
-
+import { Link } from 'react-router-dom';
+import { useUrl } from 'hooks/useUrl';
 export function SubjectLink({ subject }) {
-  const navigateToServiceAccount = () => {
-    const url = `namespaces/${subject.namespace}/serviceaccounts/details/${subject.name}`;
-    LuigiClient.linkManager()
-      .fromContext('cluster')
-      .navigate(url);
-  };
+  const { namespaceUrl } = useUrl();
+
+  const path = namespaceUrl(`serviceaccounts/${subject.name}`, {
+    namespace: subject.namespace,
+  });
 
   if (subject.kind === 'ServiceAccount') {
     return (
-      <Link className="fd-link" onClick={navigateToServiceAccount}>
+      <Link className="fd-link" to={path}>
         {subject.name}
       </Link>
     );

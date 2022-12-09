@@ -8,7 +8,7 @@ Busola is a web-based UI for managing resources within Kyma or any Kubernetes cl
 
 Busola project consists of the following UI projects:
 
-- [`Core`](./core) - The main frame
+- [`Core UI`](./core-ui) - The main frame
 - [`Backend`](./backend) - A kind of a proxy between Busola and the Kubernetes cluster
 - [`Tests`](./tests) - Acceptance and end-to-end tests
 
@@ -89,7 +89,7 @@ See the available Busola [feature flags](docs/features.md) for more information.
 
 ### Start all views
 
-Use the following command to run Busola with the [`core`](./core) and all other views locally:
+Use the following command to run Busola with the [`core-ui`](./core-ui) and all other views locally:
 
 ```bash
 npm run start
@@ -101,8 +101,7 @@ Once you started Busola locally, you can begin the development. All modules have
 
 The apps you started run at the following addresses:
 
-- `Core` - [http://localhost:8080](http://localhost:8080)
-- `Core-UI` - [http://localhost:8889](http://localhost:8889)
+- `Core-UI` - [http://localhost:8080](http://localhost:8080)
 - `Backend` - [http://localhost:3001](http://localhost:3001)
 
 ### Security countermeasures
@@ -131,7 +130,7 @@ For the information on how to run tests and configure them, go to the [`tests`](
 1. If you run Busola in Docker, you can mount your kubeconfig as a bind mount for Busola container. Execute the following command:
 
    ```bash
-   docker run --rm -it -p 3001:3001 -v <path to your kubeconfig>:/app/core/kubeconfig/<your kubeconfig file name> --pid=host --name busola eu.gcr.io/kyma-project/busola:latest
+   docker run --rm -it -p 3001:3001 -v <path to your kubeconfig>:/app/core-ui/kubeconfig/<your kubeconfig file name> --pid=host --name busola eu.gcr.io/kyma-project/busola:latest
    ```
 
 2. When you open Busola in your browser, go to `http://localhost:3001?kubeconfigID={YOUR_KUBECONFIG_FILE_NAME}`. Busola will try to download that file and add it for your Busola instance.

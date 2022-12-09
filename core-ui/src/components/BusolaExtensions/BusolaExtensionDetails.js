@@ -4,6 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { createPatch } from 'rfc6902';
 import { LayoutPanel, MessageStrip, Button } from 'fundamental-react';
 import { useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
@@ -15,7 +16,8 @@ import { useNotification } from 'shared/contexts/NotificationContext';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { ModalWithForm } from 'shared/components/ModalWithForm/ModalWithForm';
 import { ErrorBoundary } from 'shared/components/ErrorBoundary/ErrorBoundary';
-import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
+import { extensibilitySchemasState } from 'state/extensibilitySchemasAtom';
+import { useUrl } from 'hooks/useUrl';
 
 import {
   formatCurrentVersion,
@@ -32,8 +34,9 @@ import { EXTENSION_VERSION_LABEL } from './constants';
 
 export function BusolaExtensionDetails(props) {
   const { t } = useTranslation();
-  const { extensibilitySchemas } = useMicrofrontendContext();
+  const extensibilitySchemas = useRecoilValue(extensibilitySchemasState);
   const { namespace, name } = useParams();
+  const { clusterUrl } = useUrl();
 
   const resourceUrl = `/api/v1/namespaces/${namespace}/configmaps/${name}`;
 
@@ -223,8 +226,7 @@ export function BusolaExtensionDetails(props) {
       breadcrumbs={[
         {
           name: t('extensibility.title'),
-          path: '/',
-          fromContext: 'busolaextensions',
+          url: clusterUrl('busolaextensions'),
         },
         { name: '' },
       ]}

@@ -9,7 +9,6 @@ import { CRCreate } from 'resources/CustomResourceDefinitions/CRCreate';
 
 export function CustomResources({
   crd,
-  namespace,
   version,
   showTitle = true,
   omitColumnsIds,
@@ -18,10 +17,7 @@ export function CustomResources({
   const { group, names } = crd.spec;
   const name = names.plural;
   const customUrl = useCustomResourceUrl(crd);
-
-  const resourceUrl = namespace
-    ? `/apis/${group}/${version.name}/namespaces/${namespace}/${name}`
-    : `/apis/${group}/${version.name}/${name}`;
+  const resourceUrl = `/apis/${group}/${version.name}/${name}`;
 
   const getJsonPath = (resource, jsonPath) => {
     const value =
@@ -49,7 +45,6 @@ export function CustomResources({
     resourceUrl,
     title: pluralize(crd.spec.names.kind),
     resourceType: crd.spec.names.kind,
-    namespace,
     isCompact: true,
     showTitle,
     customColumns,

@@ -1,16 +1,18 @@
 import React from 'react';
 import jsyaml from 'js-yaml';
+import { useRecoilValue } from 'recoil';
+import { useTranslation } from 'react-i18next';
 
 import { ResourceDetails } from 'shared/components/ResourceDetails/ResourceDetails';
 import { useGet } from 'shared/hooks/BackendAPI/useGet';
 import { Spinner } from 'shared/components/Spinner/Spinner';
-import { useTranslation } from 'react-i18next';
 import { ReadonlyEditorPanel } from 'shared/components/ReadonlyEditorPanel';
-import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { useUrl } from 'hooks/useUrl';
 
 function CustomResource({ params }) {
   const { t } = useTranslation();
+  const { scopedUrl } = useUrl();
 
   const namespace = useRecoilValue(activeNamespaceIdState);
   const {
@@ -41,13 +43,11 @@ function CustomResource({ params }) {
   const breadcrumbs = [
     {
       name: t('custom-resources.title'),
-      path: '/',
-      fromContext: 'customresources',
+      url: scopedUrl('customresources'),
     },
     {
       name: customResourceDefinitionName,
-      path: '/',
-      fromContext: 'customresourcedefinition',
+      url: scopedUrl(`customresources/${customResourceDefinitionName}`),
     },
     { name: '' },
   ];

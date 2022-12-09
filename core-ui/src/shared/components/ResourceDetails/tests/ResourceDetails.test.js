@@ -18,10 +18,6 @@ jest.mock('shared/hooks/BackendAPI/useGet', () => ({
   },
 }));
 
-jest.mock('shared/contexts/MicrofrontendContext', () => ({
-  useMicrofrontendContext: () => ({ features: {} }),
-}));
-
 describe('ResourceDetails', () => {
   describe('Columns', () => {
     it('Renders basic column', async () => {

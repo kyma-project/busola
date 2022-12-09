@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import * as jp from 'jsonpath';
 import { cloneDeep } from 'lodash';
 import { Checkbox, FormFieldset } from 'fundamental-react';
-import LuigiClient from '@luigi-project/client';
 
 import * as Inputs from 'shared/ResourceForm/inputs';
 import { ResourceForm } from 'shared/ResourceForm';
@@ -16,6 +15,8 @@ import { createNamespaceTemplate } from './templates';
 import { LimitPresets, MemoryPresets } from './Presets';
 import { useSidecar } from 'shared/hooks/useSidecarInjection';
 import { CONFIG } from './config';
+import { useUrl } from 'hooks/useUrl';
+import { useNavigate } from 'react-router-dom';
 
 import './NamespaceCreate.scss';
 
@@ -35,6 +36,8 @@ export function NamespaceCreate({
   ...props
 }) {
   const { t } = useTranslation();
+  const { clusterUrl } = useUrl();
+  const navigate = useNavigate();
 
   const [namespace, setNamespace] = useState(
     initialNamespace ? cloneDeep(initialNamespace) : createNamespaceTemplate(),
@@ -120,7 +123,7 @@ export function NamespaceCreate({
 
   async function afterNamespaceCreated() {
     if (!initialNamespace) {
-      LuigiClient.linkManager().navigate(`${namespace.metadata?.name}/details`);
+      navigate(clusterUrl(`namespaces/${namespace.metadata?.name}`));
     }
 
     const additionalRequests = [];

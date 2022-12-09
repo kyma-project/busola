@@ -3,14 +3,16 @@ import { ReadableCreationTimestamp } from 'shared/components/ReadableCreationTim
 import { PageHeader } from 'shared/components/PageHeader/PageHeader';
 import { useTranslation } from 'react-i18next';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
+import { useUrl } from 'hooks/useUrl';
 
 export function NodeDetailsHeader({ nodeName, node, loading, error }) {
   const { t } = useTranslation();
+  const { clusterUrl } = useUrl();
+
   const breadcrumbs = [
     {
       name: t('node-details.name'),
-      path: '/overview',
-      fromContext: 'cluster',
+      url: clusterUrl('overview'),
     },
     { name: '' },
   ];

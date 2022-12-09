@@ -1,12 +1,13 @@
 import React from 'react';
-import LuigiClient from '@luigi-project/client';
 import { useTranslation } from 'react-i18next';
 import { GenericList } from 'shared/components/GenericList/GenericList';
-import { Link } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 import { HelmReleaseStatus } from './HelmReleaseStatus';
+import { useUrl } from 'hooks/useUrl';
 
 export function OtherReleaseVersions({ releaseSecret, secrets }) {
   const { t } = useTranslation();
+  const { namespaceUrl } = useUrl();
 
   secrets = secrets.filter(
     s => s.metadata.name !== releaseSecret.metadata.name,
@@ -23,11 +24,8 @@ export function OtherReleaseVersions({ releaseSecret, secrets }) {
 
   const rowRenderer = ({ metadata }) => [
     <Link
-      onClick={() =>
-        LuigiClient.linkManager()
-          .fromContext('namespace')
-          .navigate(`secrets/details/${metadata.name}`)
-      }
+      className="fd-link"
+      onClick={namespaceUrl(`secrets/${metadata.name}`)}
     >
       {metadata.name}
     </Link>,

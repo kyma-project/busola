@@ -41,6 +41,7 @@ function EditClusterComponent({
         {
           kubeconfig,
           config: { ...(config || {}), config },
+          contextName: resource?.kubeconfig?.['current-context'],
           currentContext: getContext(kubeconfig, contextName),
         },
         clustersInfo,
