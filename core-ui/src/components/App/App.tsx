@@ -26,11 +26,13 @@ import { useInitTheme } from './useInitTheme';
 import ClusterList from 'components/Clusters/views/ClusterList';
 import ClusterRoutes from './ClusterRoutes';
 
+import { IncorrectPath } from './IncorrectPath';
+
 import './App.scss';
 import { useAfterInitHook } from 'state/useAfterInitHook';
 
 export default function App() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const language = useRecoilValue(languageAtom);
   const cluster = useRecoilValue(clusterState);
   const setNamespace = useSetRecoilState(activeNamespaceIdState);
@@ -65,6 +67,15 @@ export default function App() {
         <Sidebar key={cluster?.name} />
         <ContentWrapper>
           <Routes key={cluster?.name}>
+            <Route
+              path="*"
+              element={
+                <IncorrectPath
+                  to="clusters"
+                  message={t('components.incorrect-path.message.clusters')}
+                />
+              }
+            />
             <Route path="clusters" element={<ClusterList />} />
             <Route
               path="cluster/:currentClusterName"

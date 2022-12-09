@@ -15,6 +15,7 @@ import { otherRoutes } from 'resources/other';
 import { resourceRoutes } from 'resources';
 import { createExtensibilityRoutes } from './ExtensibilityRoutes';
 import { extensionsState } from 'state/navigation/extensionsAtom';
+import { IncorrectPath } from './IncorrectPath';
 
 export default function ClusterRoutes() {
   let { currentClusterName } = useParams() || {};
@@ -41,6 +42,15 @@ export default function ClusterRoutes() {
 
   return (
     <Routes>
+      <Route
+        path="*"
+        element={
+          <IncorrectPath
+            to="overview"
+            message={t('components.incorrect-path.message.cluster')}
+          />
+        }
+      />
       {/*  overview route should stay static  */}
       <Route
         path="overview"

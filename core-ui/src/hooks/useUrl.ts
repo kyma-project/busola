@@ -40,17 +40,17 @@ export const useUrl: () => UrlGenerators = () => {
 
   const resourceListUrl = (resource: any, overrides: UrlOverrides = {}) => {
     return scopedUrl(resourcePath(resource, overrides), {
-      namespace: resource.metadata.namespace,
+      namespace: resource?.metadata?.namespace,
       ...overrides,
     });
   };
 
   const resourceUrl = (resource: any, overrides: UrlOverrides = {}) => {
     const path = `${resourcePath(resource, overrides)}/${
-      resource.metadata.name
+      resource?.metadata?.name
     }`;
     return scopedUrl(path, {
-      namespace: resource.metadata.namespace,
+      namespace: resource?.metadata?.namespace,
       ...overrides,
     });
   };
