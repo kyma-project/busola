@@ -4,25 +4,20 @@ import { GoToDetailsLink } from 'shared/components/ControlledBy/ControlledBy';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { GenericList } from 'shared/components/GenericList/GenericList';
 import { useGetList } from 'shared/hooks/BackendAPI/useGet';
-import { LayoutPanel, Link } from 'fundamental-react';
-import LuigiClient from '@luigi-project/client';
+import { LayoutPanel } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 import { LayoutPanelRow } from 'shared/components/LayoutPanelRow/LayoutPanelRow';
 import { useRecoilValue } from 'recoil';
 import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
+import { useUrl } from 'hooks/useUrl';
 
-const getPort = (serviceName, port, services) => {
+const Port = ({ serviceName, port, services }) => {
+  const { namespaceUrl } = useUrl();
+
   const serviceLink = services?.find(
     ({ metadata }) => metadata.name === serviceName,
   ) ? (
-    <Link
-      onClick={() =>
-        LuigiClient.linkManager()
-          .fromContext('namespace')
-          .navigate(`services/details/${serviceName}`)
-      }
-    >
-      {serviceName}
-    </Link>
+    <Link to={namespaceUrl(`services/${serviceName}`)}>{serviceName}</Link>
   ) : (
     <span>{serviceName || EMPTY_TEXT_PLACEHOLDER}</span>
   );
@@ -50,7 +45,13 @@ export const Rules = ({ rules }) => {
 
   const Backend = ({ backend, services }) => {
     if (backend.service) {
-      return getPort(backend?.service.name, backend?.service?.port, services);
+      return (
+        <Port
+          serviceName={backend?.service.name}
+          port={backend?.service?.port}
+          services={services}
+        />
+      );
     } else if (backend.resource) {
       return (
         <>
