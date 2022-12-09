@@ -1,105 +1,51 @@
-import React, { useEffect, useState } from 'react';
-import LuigiClient from '@luigi-project/client';
-import shortid from 'shortid';
+import React from 'react';
 import pluralize from 'pluralize';
-import { Link } from 'fundamental-react';
+import { Link } from 'react-router-dom';
 import './ControlledBy.scss';
 
-import {
-  navigateToCustomResourceDefinitionDetails,
-  navigateToClusterResourceDetails,
-  navigateToFixedPathResourceDetails,
-} from 'shared/hooks/navigate';
 import { EMPTY_TEXT_PLACEHOLDER } from 'shared/constants';
 import { useRecoilValue } from 'recoil';
-import { clusterState } from 'state/clusterAtom';
-import { activeNamespaceIdState } from 'state/activeNamespaceIdAtom';
-
-function pathExists(path) {
-  const pathId = shortid.generate();
-
-  return new Promise(resolve => {
-    LuigiClient.addCustomMessageListener(
-      'busola.pathExists.answer',
-      (msg, listenerId) => {
-        if (msg.pathId === pathId) {
-          resolve(msg.exists);
-          LuigiClient.removeCustomMessageListener(listenerId);
-        }
-      },
-    );
-
-    LuigiClient.sendCustomMessage({
-      id: 'busola.pathExists',
-      path,
-      pathId,
-    });
-  });
-}
+import { extensionsState } from 'state/navigation/extensionsAtom';
+import { resources } from 'resources';
+import { useUrl } from 'hooks/useUrl';
+import { getExtensibilityPath } from 'components/Extensibility/helpers/getExtensibilityPath';
 
 export const GoToDetailsLink = ({
-  resource,
+  kind,
   name,
   apiVersion,
   noBrackets = false,
 }) => {
-  const cluster = useRecoilValue(clusterState);
-  const namespaceId = useRecoilValue(activeNamespaceIdState);
-  const activeClusterName = cluster?.name;
-  const namespacedViewPath = `/cluster/${activeClusterName}/namespaces/${namespaceId}/${resource}/details/${name}`;
-  const clusterWideViewPath = `/cluster/${activeClusterName}/${resource}/details/${name}`;
+  const extensions = useRecoilValue(extensionsState);
+  const { namespaceUrl, clusterUrl } = useUrl();
 
-  const [viewPath, setViewPath] = useState(null);
+  let path = null;
+  const resource = resources.find(res => res.resourceType === pluralize(kind));
+  const extResource = extensions?.find(
+    cr => cr.general?.resource?.kind === kind,
+  );
 
-  useEffect(() => {
-    const checkIfPathExists = async () => {
-      if (await pathExists(namespacedViewPath)) {
-        setViewPath('namespace');
-      } else if (await pathExists(clusterWideViewPath)) {
-        setViewPath('cluster');
-      } else {
-        setViewPath('');
-      }
-    };
-    if (resource && !viewPath) {
-      checkIfPathExists();
+  if (resource) {
+    const partialPath = pluralize(kind || '')?.toLowerCase();
+    if (resource.namespaced) {
+      path = namespaceUrl(`${partialPath}/${name}`);
+    } else {
+      path = clusterUrl(`${partialPath}/${name}`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name, resource]);
+  } else if (extResource) {
+    const partialPath = getExtensibilityPath(extResource.general);
+    if (extResource.general.scope === 'namespace') {
+      path = namespaceUrl(`${partialPath}/${name}`);
+    } else {
+      path = clusterUrl(`${partialPath}/${name}`);
+    }
+  }
 
-  if (!resource || viewPath === null) return null;
-  if (viewPath === 'namespace') {
-    return (
-      <Link
-        className="fd-link"
-        onClick={_ => {
-          navigateToFixedPathResourceDetails(resource, name);
-        }}
-      >
-        {noBrackets ? name : `(${name})`}
-      </Link>
-    );
-  } else if (viewPath === 'cluster') {
-    return (
-      <Link
-        className="fd-link"
-        onClick={_ => {
-          navigateToClusterResourceDetails(resource, name);
-        }}
-      >
-        {noBrackets ? name : `(${name})`}
-      </Link>
-    );
-  } else if (apiVersion === 'apps/v1' || !apiVersion) {
+  if (!path) {
     return <>{noBrackets ? name : `(${name})`}</>;
   } else {
     return (
-      <Link
-        className="fd-link"
-        onClick={_ => {
-          navigateToCustomResourceDefinitionDetails(resource, apiVersion, name);
-        }}
-      >
+      <Link className="fd-link" to={path}>
         {noBrackets ? name : `(${name})`}
       </Link>
     );
@@ -118,7 +64,6 @@ export const ControlledBy = ({
     return placeholder;
 
   const OwnerRef = ({ owner, className }) => {
-    const resource = pluralize(owner.kind || '')?.toLowerCase();
     return (
       <div key={owner.name} className={className}>
         {owner.kind}
@@ -126,7 +71,7 @@ export const ControlledBy = ({
           <>
             &nbsp;
             <GoToDetailsLink
-              resource={resource}
+              kind={owner.kind}
               apiVersion={owner.apiVersion}
               name={owner.name}
             />

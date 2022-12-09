@@ -102,7 +102,7 @@ export function SubscriptionDetails(props) {
         return (
           <p>
             {t('services.name_singular')}&nbsp;
-            <GoToDetailsLink resource="services" name={serviceName} />
+            <GoToDetailsLink kind="Service" name={serviceName} />
           </p>
         );
       },
