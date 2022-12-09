@@ -26,6 +26,8 @@ import { useInitTheme } from './useInitTheme';
 import ClusterList from 'components/Clusters/views/ClusterList';
 import ClusterRoutes from './ClusterRoutes';
 
+import { IncorrectPath } from './IncorrectPath';
+
 import './App.scss';
 import { useAfterInitHook } from 'state/useAfterInitHook';
 
@@ -65,6 +67,15 @@ export default function App() {
         <Sidebar key={cluster?.name} />
         <ContentWrapper>
           <Routes key={cluster?.name}>
+            <Route
+              path="*"
+              element={
+                <IncorrectPath
+                  to="clusters"
+                  message="The provided path does not exist. You will get redirected to the clusters list."
+                />
+              }
+            />
             <Route path="clusters" element={<ClusterList />} />
             <Route
               path="cluster/:currentClusterName"
