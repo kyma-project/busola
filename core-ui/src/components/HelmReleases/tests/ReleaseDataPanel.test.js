@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render } from 'testing/reactTestingUtils';
 import { ReleaseDataPanel } from '../ReleaseDataPanel';
 
 describe('ReleaseDataPanel', () => {
