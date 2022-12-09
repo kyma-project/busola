@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { Link } from 'fundamental-react';
-import LuigiClient from '@luigi-project/client';
+import { Link } from 'react-router-dom';
 
+import { useUrl } from 'hooks/useUrl';
 import { ResourcesList } from 'shared/components/ResourcesList/ResourcesList';
 import { ControlledBy } from 'shared/components/ControlledBy/ControlledBy';
 import { Link as ReactSharedLink } from 'shared/components/Link/Link';
@@ -13,6 +13,7 @@ import PodRestarts from './PodRestarts';
 
 export function PodList(params) {
   const { showNodeName } = params;
+  const { clusterUrl } = useUrl();
   const { t } = useTranslation();
 
   let customColumns = [
@@ -45,11 +46,7 @@ export function PodList(params) {
         value: pod => (
           <Link
             className="fd-link"
-            onClick={() =>
-              LuigiClient.linkManager()
-                .fromContext('cluster')
-                .navigate(`overview/nodes/${pod.spec.nodeName}`)
-            }
+            to={clusterUrl(`overview/nodes/${pod.spec.nodeName}`)}
           >
             {pod.spec.nodeName}
           </Link>
