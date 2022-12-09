@@ -17,7 +17,7 @@ export const HPASubcomponent = props => {
     `/apis/autoscaling/v2beta2/namespaces/${namespaceId}/horizontalpodautoscalers`,
   );
   const [associatedHPA, setAssociatedHPA] = useState([]);
-  const { namespaceUrl } = useUrl();
+  const { resourceUrl } = useUrl();
 
   const {
     kind,
