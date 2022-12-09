@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 export function IncorrectPath({
   to,
-  title = 'Incorrect path',
+  title = 'Incorrect path.',
   message = 'The provided path does not exist. You will get redirected.',
 }) {
   const { t } = useTranslation();
