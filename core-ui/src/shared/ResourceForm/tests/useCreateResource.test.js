@@ -18,12 +18,6 @@ jest.mock('shared/hooks/BackendAPI/useFetch', () => ({
   useFetch: () => mockFetch,
 }));
 
-const mockNavigateToResourceAfterCreate = jest.fn();
-jest.mock('shared/hooks/navigate', () => ({
-  navigateToResourceAfterCreate: (...args) =>
-    mockNavigateToResourceAfterCreate(args),
-}));
-
 const consoleErrorMock = jest
   .spyOn(console, 'error')
   .mockImplementation(() => jest.fn());
@@ -94,7 +88,6 @@ describe('useCreateResource', () => {
       expect(mockNotifySuccess).toHaveBeenCalledWith({
         content: 'common.create-form.messages.patch-success',
       });
-      expect(mockNavigateToResourceAfterCreate).not.toHaveBeenCalled();
     });
   });
 
@@ -118,7 +111,6 @@ describe('useCreateResource', () => {
       expect(mockNotifyError).toHaveBeenCalledWith({
         content: 'common.create-form.messages.create-failure',
       });
-      expect(mockNavigateToResourceAfterCreate).not.toHaveBeenCalled();
     });
   });
 });
