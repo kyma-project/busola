@@ -1,18 +1,17 @@
-import { Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import { RecoilRoot } from 'recoil';
 import i18next from 'i18next';
+import yaml from 'js-yaml';
+import { Suspense } from 'react';
+import { RecoilRoot } from 'recoil';
 import { initReactI18next } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import i18nextBackend from 'i18next-http-backend';
-import yaml from 'js-yaml';
 import { savePreviousPath } from 'state/useAfterInitHook';
 
 import App from './components/App/App';
-
 import { Spinner } from 'shared/components/Spinner/Spinner';
-
 import { CommandPaletteProvider } from 'command-pallette/CommandPaletteProvider';
+import { NotificationProvider } from 'shared/contexts/NotificationContext';
 
 import './styles/reset.css';
 import './styles/sapIllus-Fills.css';
@@ -52,9 +51,11 @@ ReactDOM.render(
   <RecoilRoot>
     <BrowserRouter>
       <Suspense fallback={<Spinner />}>
-        <CommandPaletteProvider>
-          <App />
-        </CommandPaletteProvider>
+        <NotificationProvider>
+          <CommandPaletteProvider>
+            <App />
+          </CommandPaletteProvider>
+        </NotificationProvider>
       </Suspense>
     </BrowserRouter>
   </RecoilRoot>,
