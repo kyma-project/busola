@@ -11,29 +11,26 @@ data:
   details: |-
     header:
       - source: spec.type
-        type: string
-        name: Type
+        name: spec.type
       - source: 'status.state ? status.state : "UNKNOWN"'
         highlights:
           informative:
           - UNKNOWN
         type: string
-        name: Status
-        isSelected: true
+        name: status
         widget: Badge
         description: status.message
     body:
-      - name: columns.container
-        widget: Columns
+      - widget: Columns
         children:
-        - name: Included Domains
+        - name: included.domains 
           widget: Table
           showHeader: false
           source: spec.domains.include
           children:
             - source: $item
               search: true
-        - name: Excluded Domains
+        - name: excluded.domains
           widget: Table
           showHeader: false
           source: spec.domains.exclude
@@ -42,11 +39,9 @@ data:
               search: true
   form: |-
     - simple: true
-      name: Type
       path: spec.type
       widget: Text
-      placeholder: Choose Provider type
-      value: Choose Provider type
+      placeholder: provider.choose
       enum:
         - alicloud-dns
         - aws-route53
@@ -72,14 +67,14 @@ data:
       widget: SimpleList
       children:
         - []
-      placeholder: Domain that is allowed
+      placeholder: domain.allowed
       defaultExpanded: true
       required: true
     - path: spec.domains.exclude
       widget: SimpleList
       children:
         - []
-      placeholder: Domain that is forbidden
+      placeholder: domain.forbidden
   general: |-
     resource:
       kind: DNSProvider
@@ -90,17 +85,17 @@ data:
     urlPath: dnsproviders
     scope: namespace
     description: >-
-      {{[DNS Providers](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-01-own-domain)}}
+      {{[DNSProvider](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-01-own-domain)}}
       is used to specify and manage the configuration for the external DNS services.
   list: |-
-    - name: Type
+    - name: spec.type
       source: spec.type
     - source: 'status.state ? status.state : "UNKNOWN"'
       highlights:
         informative:
         - UNKNOWN
       type: string
-      name: Status
+      name: status
       isSelected: true
       widget: Badge
       description: status.message
@@ -127,6 +122,7 @@ data:
       metadata.annotations: Annotations
       metadata.labels: Labels
       metadata.creationTimestamp: Created at
+      provider.choose: Choose Provider type
       spec.type: Type
       spec.type.alicloud-dns: Alicloud DNS provider
       spec.type.aws-route53: AWS Route 53 provider
@@ -138,4 +134,9 @@ data:
       spec.type.netlify-dns: Netlify DNS provider
       spec.domains.include: Include Domains
       spec.domains.exclude: Exclude Domains
+      included.domains: Included Domains
+      excluded.domains: Excluded Domains
+      domain.allowed: Domain that is allowed
+      domain.forbidden: Domain that is forbidden
       spec.secretRef: Secret Reference
+      status: Status
