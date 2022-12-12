@@ -57,7 +57,9 @@ export function ResourceRenderer({
             } else return true;
           }}
           onSelect={(value, resources) => {
-            const resource = resources.find(r => r.metadata.name === value);
+            const resource = (resources || []).find(
+              r => r.metadata.name === value,
+            );
             if (provideVar && resource) setVar(`$.${provideVar}`, resource);
 
             onChange({
