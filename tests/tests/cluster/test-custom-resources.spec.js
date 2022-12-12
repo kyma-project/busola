@@ -37,8 +37,8 @@ context('Test Custom Resources', () => {
 
     cy.contains(/Create Application/i).should('be.visible');
 
-    cy.contains('applicationconnector.kyma-project.io').click();
-
     cy.url().should('match', /customresources/);
+    cy.contains('applicationconnector.kyma-project.io').click();
+    cy.url().should('match', /customresourcedefinitions/);
   });
 });
