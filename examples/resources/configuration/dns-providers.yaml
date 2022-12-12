@@ -42,21 +42,22 @@ data:
               search: true
   form: |-
     - simple: true
+      name: Type
       path: spec.type
       widget: Text
       placeholder: Choose Provider type
       value: Choose Provider type
       enum:
-        - Alicloud DNS provider
-        - AWS Route 53 provider
-        - Azure DNS provider
-        - Google CloudDNS provider
-        - Openstack Designate provider
-        - Cloudflare DNS provider
-        - Infoblox DNS provider
-        - Netlify DNS provider
+        - alicloud-dns
+        - aws-route53
+        - azure-dns
+        - google-clouddns
+        - openstack-designate
+        - cloudflare-dns
+        - infoblox-dns
+        - netlify-dns
       required: true
-    - name: Secret Reference
+    - name: spec.secretRef
       simple: true
       path: spec.secretRef
       widget: ResourceRef      
@@ -66,8 +67,7 @@ data:
         version: v1
       defaultExpanded: true
       required: true 
-    - name: Include Domains
-      path: spec.domains.include
+    - path: spec.domains.include
       simple: true
       widget: SimpleList
       children:
@@ -75,8 +75,7 @@ data:
       placeholder: Domain that is allowed
       defaultExpanded: true
       required: true
-    - name: Exclude Domains
-      path: spec.domains.exclude
+    - path: spec.domains.exclude
       widget: SimpleList
       children:
         - []
@@ -111,8 +110,10 @@ data:
       value: 
         metadata:
           name: ''
+          namespace: ''
           labels: {}
-          annotations: {}
+          annotations: 
+            dns.gardener.cloud/class: garden
         spec:
           domains:
             include: []
@@ -126,3 +127,15 @@ data:
       metadata.annotations: Annotations
       metadata.labels: Labels
       metadata.creationTimestamp: Created at
+      spec.type: Type
+      spec.type.alicloud-dns: Alicloud DNS provider
+      spec.type.aws-route53: AWS Route 53 provider
+      spec.type.azure-dns: Azure DNS provider
+      spec.type.google-clouddns: Google CloudDNS provider
+      spec.type.openstack-designate: Openstack Designate provider
+      spec.type.cloudflare-dns: Cloudflare DNS provider
+      spec.type.infoblox-dns: Infoblox DNS provider
+      spec.type.netlify-dns: Netlify DNS provider
+      spec.domains.include: Include Domains
+      spec.domains.exclude: Exclude Domains
+      spec.secretRef: Secret Reference
