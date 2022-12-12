@@ -1,5 +1,4 @@
 import { AtomEffect } from 'recoil';
-import LuigiClient from '@luigi-project/client';
 import { ClustersState } from '../clustersAtom';
 import { Cluster } from '../clusterAtom';
 import { ClusterStorage } from '../types';
