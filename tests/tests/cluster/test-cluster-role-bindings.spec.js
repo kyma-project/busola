@@ -46,7 +46,7 @@ context('Test Cluster Role Bindings', () => {
   it('Edit', () => {
     cy.contains('Edit').click();
 
-    cy.contains('[role="document"]', 'User').click();
+    cy.contains('[role="combobox"]', 'User').click();
 
     cy.contains('ServiceAccount').click();
 
