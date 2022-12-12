@@ -8,6 +8,7 @@ context('Test edit cluster', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.handleExceptions();
     cy.loginAndSelectCluster();
   });
 

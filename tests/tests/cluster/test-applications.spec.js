@@ -11,6 +11,7 @@ context('Test Applications', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.handleExceptions();
     cy.setBusolaFeature('EXTENSIBILITY', true);
     cy.mockExtensions([
       'examples/resources/applicationconnector/applications.yaml',

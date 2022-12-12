@@ -39,6 +39,10 @@ const requestData = {
 context('Test Cluster configuration', () => {
   Cypress.skipAfterFail();
 
+  before(() => {
+    cy.handleExceptions();
+  });
+
   it('Applies config from target cluster', () => {
     cy.intercept(requestData, configMock);
     cy.loginAndSelectCluster();

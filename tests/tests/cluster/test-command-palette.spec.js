@@ -18,6 +18,7 @@ context('Test Command Palette navigation', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    cy.handleExceptions();
     cy.loginAndSelectCluster();
   });
 

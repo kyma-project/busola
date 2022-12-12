@@ -8,10 +8,7 @@ context('Test Daemon Sets', () => {
   Cypress.skipAfterFail();
 
   before(() => {
-    Cypress.on('uncaught:exception', err => {
-      if (err.message.includes('ResizeObserver loop limit exceeded'))
-        return false;
-    });
+    cy.handleExceptions();
 
     cy.loginAndSelectCluster();
 
