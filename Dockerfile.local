@@ -19,7 +19,7 @@ COPY . /app
 
 RUN make resolve
 RUN make validate
-RUN make pull-licenses
+# RUN make pull-licenses
 
 # TODO: ENABLE IT BEFORE PUSHING TO MAIN
 RUN cd /app/core-ui && make build
@@ -40,15 +40,15 @@ COPY --from=builder /app/backend/certs.pem /app/certs.pem
 COPY --from=builder /app/backend/package* /app/
 
 # move out the packed extensions for further use
-RUN mv /app/core-ui/public/extensions/extensions.yaml /app/extensions.yaml
+RUN mv /app/core-ui/extensions/extensions.yaml /app/extensions.yaml
 
 RUN npm ci --only=production
 
 # use sessionStorage as default
 # enable OBSERVABILITY & SHOW_KYMA_VERSION for production
-RUN yq eval -i '.config.features.OBSERVABILITY.isEnabled = true' core-ui/public/defaultConfig.yaml
-RUN yq eval -i '.config.features.SHOW_KYMA_VERSION.isEnabled = true' core-ui/public/defaultConfig.yaml 
-RUN yq eval -i '.config.defaultStorage = "sessionStorage"' core-ui/public/defaultConfig.yaml 
+RUN yq eval -i '.config.features.OBSERVABILITY.isEnabled = true' core-ui/config/defaultConfig.yaml
+RUN yq eval -i '.config.features.SHOW_KYMA_VERSION.isEnabled = true' core-ui/config/defaultConfig.yaml 
+RUN yq eval -i '.config.defaultStorage = "sessionStorage"' core-ui/config/defaultConfig.yaml 
 
 EXPOSE 3001
 ENV NODE_ENV=production ADDRESS=0.0.0.0 IS_DOCKER=true
