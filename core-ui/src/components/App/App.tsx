@@ -76,6 +76,7 @@ export default function App() {
                 />
               }
             />
+            <Route path="/" />
             <Route path="clusters" element={<ClusterList />} />
             <Route
               path="cluster/:currentClusterName"
