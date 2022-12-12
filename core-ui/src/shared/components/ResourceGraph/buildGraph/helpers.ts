@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import pluralize from 'pluralize';
+import { cloneDeep } from 'lodash';
 import { NavNode } from 'state/types';
 import { K8sResource } from 'types';
 import { RelationResource, ResourceGraphConfig } from '../types';
@@ -86,7 +87,8 @@ export function findRelatedResources(
 
     for (const otherRelation of otherConfig?.relations || []) {
       if (otherRelation.resource.kind === originalResourceKind) {
-        let otherResource = structuredClone(config[otherKind]!.resource); // clone the resource since it's an immutable Recoil objects
+        let otherResource = cloneDeep(config[otherKind]!.resource); // clone the resource since it's an immutable Recoil objects
+
         if (otherRelation.resource.namespace !== undefined) {
           otherResource.namespace = null;
         }
