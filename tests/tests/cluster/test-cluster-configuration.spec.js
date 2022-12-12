@@ -38,6 +38,13 @@ const requestData = {
 
 context('Test Cluster configuration', () => {
   Cypress.skipAfterFail();
+  before(() => {
+    // Ignor Cypress issue with Monaco on CI
+    Cypress.on('uncaught:exception', err => {
+      if (err.message.includes('ResizeObserver loop limit exceeded'))
+        return false;
+    });
+  });
 
   it('Applies config from target cluster', () => {
     cy.intercept(requestData, configMock);

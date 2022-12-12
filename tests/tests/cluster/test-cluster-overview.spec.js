@@ -5,6 +5,12 @@ context('Test Cluster Overview', () => {
   Cypress.skipAfterFail();
 
   before(() => {
+    // Ignor Cypress issue with Monaco on CI
+    Cypress.on('uncaught:exception', err => {
+      if (err.message.includes('ResizeObserver loop limit exceeded'))
+        return false;
+    });
+
     cy.loginAndSelectCluster();
   });
 
