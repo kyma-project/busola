@@ -36,7 +36,6 @@ context('Test edit cluster', () => {
       .should('be.visible')
       .click();
 
-    cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
     cy.contains('Clusters Overview').click();
 
     cy.contains(DESC).should('be.visible');
