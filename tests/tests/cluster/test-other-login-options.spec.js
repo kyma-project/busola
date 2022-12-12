@@ -7,18 +7,8 @@ import jsyaml from 'js-yaml';
 context('Test other login options', () => {
   Cypress.skipAfterFail();
 
-  Cypress.on('uncaught:exception', err => {
-    // Ignor error from Monaco loading (Cypress issues)
-    if (
-      err.message.includes(
-        "TypeError: Cannot read properties of null (reading 'sendError')",
-      ) ||
-      err.message.includes(
-        "Uncaught NetworkError: Failed to execute 'importScripts' on 'WorkerGlobalScope': The script at",
-      )
-    ) {
-      return false;
-    }
+  before(() => {
+    cy.handleExceptions();
   });
 
   it('Kubeconfig and token separately', () => {

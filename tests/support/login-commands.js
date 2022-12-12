@@ -6,19 +6,7 @@ const USERNAME = Cypress.env('OIDC_USER');
 const PASSWORD = Cypress.env('OIDC_PASS');
 
 Cypress.Commands.add('loginAndSelectCluster', function(params) {
-  Cypress.on('uncaught:exception', err => {
-    // Ignor error from Monaco loading (Cypress issues)
-    if (
-      err.message.includes(
-        "TypeError: Cannot read properties of null (reading 'sendError')",
-      ) ||
-      err.message.includes(
-        "Uncaught NetworkError: Failed to execute 'importScripts' on 'WorkerGlobalScope': The script at",
-      )
-    ) {
-      return false;
-    }
-  });
+  cy.handleExceptions();
 
   const defaults = {
     fileName: 'kubeconfig.yaml',

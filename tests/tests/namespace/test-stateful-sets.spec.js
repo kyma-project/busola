@@ -5,8 +5,6 @@ context('Test Stateful Sets', () => {
 
   before(() => {
     // Ignor Cypress issue with Monaco on CI
-    cy.handleExceptions();
-
     cy.loginAndSelectCluster();
 
     cy.get('[aria-label="topnav-profile-btn"]').click();

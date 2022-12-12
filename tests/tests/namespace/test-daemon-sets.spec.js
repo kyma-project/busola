@@ -8,8 +8,6 @@ context('Test Daemon Sets', () => {
   Cypress.skipAfterFail();
 
   before(() => {
-    cy.handleExceptions();
-
     cy.loginAndSelectCluster();
 
     cy.get('[aria-label="topnav-profile-btn"]').click();

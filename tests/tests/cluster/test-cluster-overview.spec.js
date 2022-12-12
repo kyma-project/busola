@@ -5,7 +5,6 @@ context('Test Cluster Overview', () => {
   Cypress.skipAfterFail();
 
   before(() => {
-    cy.handleExceptions();
     cy.loginAndSelectCluster();
   });
 

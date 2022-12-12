@@ -1,3 +1,4 @@
+import './exceptions';
 import './commands';
 import './login-commands';
 import './navigate-to';
@@ -8,4 +9,3 @@ import './views/functions-view';
 import './createNamespace';
 import './loadFile';
 import './mockConfig';
-import './exceptions';
