@@ -53,7 +53,7 @@ export function Header() {
           <Logo />
         </>
       }
-      productTitle={cluster?.name}
+      productTitle={cluster?.contextName || cluster?.name}
       productMenu={clustersList}
       profile={{
         glyph: 'customer',
