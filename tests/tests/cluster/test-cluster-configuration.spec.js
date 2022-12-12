@@ -48,10 +48,11 @@ context('Test Cluster configuration', () => {
     cy.loginAndSelectCluster();
     cy.url().should('match', /overview$/);
 
+    // TODO: Bring back the overwritten message
     // cluster storage message should be visible
-    cy.contains(/The chosen storage type has been overwritten/).should(
-      'be.visible',
-    );
+    // cy.contains(/The chosen storage type has been overwritten/).should(
+    //   'be.visible',
+    // );
 
     // custom category should be added
     cy.contains('Category from target cluster').should('be.visible');
