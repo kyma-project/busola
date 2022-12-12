@@ -19,7 +19,7 @@ COPY . /app
 
 RUN make resolve
 RUN make validate
-# RUN make pull-licenses
+RUN make pull-licenses
 
 # TODO: ENABLE IT BEFORE PUSHING TO MAIN
 RUN cd /app/core-ui && make build
