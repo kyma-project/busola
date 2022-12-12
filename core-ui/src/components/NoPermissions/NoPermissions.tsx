@@ -6,6 +6,7 @@ import { addCluster } from 'components/Clusters/shared';
 import { useRecoilValue } from 'recoil';
 import { clusterState } from 'state/clusterAtom';
 import { useClustersInfo } from 'state/utils/getClustersInfo';
+import { cloneDeep } from 'lodash';
 
 function NoPermissions() {
   const { t } = useTranslation();
@@ -15,8 +16,7 @@ function NoPermissions() {
 
   const updateKubeconfig = () => {
     // make a copy since we cannot edit Recoil state value
-    const updatedCluster = structuredClone(cluster)!;
-
+    const updatedCluster = cloneDeep(cluster)!;
     const contextName = updatedCluster.kubeconfig['current-context'];
     const context =
       updatedCluster.kubeconfig.contexts?.find(
