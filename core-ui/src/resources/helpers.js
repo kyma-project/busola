@@ -45,26 +45,24 @@ export const usePrepareDetailsProps = ({
   apiVersion,
 }) => {
   const { resourceName, namespaceId } = useParams();
+  const encodedResourceName = encodeURIComponent(resourceName);
   const queryParams = new URLSearchParams(window.location.search);
   const { i18n, t } = useTranslation();
   const api = apiGroup ? `apis/${apiGroup}/${apiVersion}` : `api/${apiVersion}`;
   const resourceUrl = namespaceId
-    ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}/${resourceName}`
-    : `/${api}/${resourceType?.toLowerCase()}/${resourceName}`;
-
-  const decodedResourceUrl = decodeURIComponent(resourceUrl);
-  const decodedResourceName = decodeURIComponent(resourceName);
+    ? `/${api}/namespaces/${namespaceId}/${resourceType?.toLowerCase()}/${encodedResourceName}`
+    : `/${api}/${resourceType?.toLowerCase()}/${encodedResourceName}`;
 
   const extensions = useRecoilValue(extensionsState);
   const addStyle = useAddStyle({ styleId: 'graph-styles' });
 
   return {
-    resourceUrl: decodedResourceUrl,
+    resourceUrl: resourceUrl,
     resourceType: resourceCustomType || pluralize(resourceType || ''),
     resourceTitle: i18n.exists(resourceI18Key)
       ? t(resourceI18Key)
       : resourceI18Key,
-    resourceName: decodedResourceName,
+    resourceName: resourceName,
     namespace: namespaceId,
     readOnly: queryParams.get('readOnly') === 'true',
     resourceGraphConfig: getResourceGraphConfig(extensions, addStyle),

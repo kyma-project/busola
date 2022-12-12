@@ -7,7 +7,7 @@ Cypress.Commands.add('handleExceptions', () => {
       ) ||
       err.message.includes('ResizeObserver loop limit exceeded') ||
       err.message.includes(
-        "TypeError: Cannot read properties of null (reading 'sendError')",
+        "Cannot read properties of null (reading 'sendError')",
       ) ||
       err.message.includes(
         "Uncaught NetworkError: Failed to execute 'importScripts' on 'WorkerGlobalScope': The script at",

@@ -45,7 +45,9 @@ export function useCreateResource({
     if (!isEdit) {
       navigate(
         scopedUrl(
-          `${urlPath || pluralKind.toLowerCase()}/${resource.metadata.name}`,
+          `${urlPath || pluralKind.toLowerCase()}/${encodeURIComponent(
+            resource.metadata.name,
+          )}`,
         ),
       );
     }

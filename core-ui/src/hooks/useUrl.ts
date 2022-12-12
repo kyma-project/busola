@@ -46,9 +46,8 @@ export const useUrl: () => UrlGenerators = () => {
   };
 
   const resourceUrl = (resource: any, overrides: UrlOverrides = {}) => {
-    const path = `${resourcePath(resource, overrides)}/${
-      resource?.metadata?.name
-    }`;
+    const encodedName = encodeURIComponent(resource?.metadata?.name);
+    const path = `${resourcePath(resource, overrides)}/${encodedName}`;
     return scopedUrl(path, {
       namespace: resource?.metadata?.namespace,
       ...overrides,
