@@ -22,7 +22,7 @@ RUN make validate
 RUN make pull-licenses
 
 # TODO: ENABLE IT BEFORE PUSHING TO MAIN
-RUN cd /app/core-ui && make build
+RUN cd /app/core-ui && make build-docker
 RUN cd /app/backend && npm run build
 
 # ---- Serve ----
