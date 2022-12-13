@@ -61,7 +61,7 @@ context('Test Cluster configuration', () => {
     cy.getLeftNav()
       .contains('Cluster Details')
       .click();
-    cy.contains('SESSION STORAGE').should('be.visible');
+    cy.contains(/session storage/i).should('be.visible');
   });
 
   it('Test pagination', () => {
