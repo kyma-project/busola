@@ -172,7 +172,7 @@ context('Test reduced permissions', () => {
     cy.loginAndSelectCluster({
       fileName: 'sa-kubeconfig.yaml',
       expectedLocation: new RegExp(
-        `/namespaces/${Cypress.env('NAMESPACE_NAME')}/details`,
+        `/namespaces/${Cypress.env('NAMESPACE_NAME')}`,
       ),
     });
   });
