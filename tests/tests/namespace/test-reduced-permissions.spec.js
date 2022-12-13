@@ -201,6 +201,7 @@ context('Test reduced permissions', () => {
     // 2 results: "Clusters Overview" node and original cluster, take second
     cy.get('[role=menuitem]:visible')
       // .eq(1) // TODO uncomment after resolving "second added cluster isn't showing in top nav"
+      .first()
       .click();
 
     // wait until original cluster loads
