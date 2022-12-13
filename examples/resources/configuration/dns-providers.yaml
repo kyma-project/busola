@@ -94,9 +94,7 @@ data:
       highlights:
         informative:
         - UNKNOWN
-      type: string
       name: status
-      isSelected: true
       widget: Badge
       description: status.message
   presets: |-
@@ -104,19 +102,8 @@ data:
       default: true
       value: 
         metadata:
-          name: ''
-          namespace: ''
-          labels: {}
           annotations: 
             dns.gardener.cloud/class: garden
-        spec:
-          domains:
-            include: []
-            exclude: []
-          secretRef:
-            name: ''
-            namespace: ''
-          type: ''
   translations: |-
     en:
       metadata.annotations: Annotations
