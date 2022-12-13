@@ -1,5 +1,6 @@
 Cypress.Commands.add('handleExceptions', () => {
   Cypress.on('uncaught:exception', err => {
+    Cypress.log(err);
     if (
       err.message.includes('Unexpected usage') ||
       err.message.includes(

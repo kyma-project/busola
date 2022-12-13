@@ -10,6 +10,4 @@ Cypress.Commands.add('createNamespace', namespaceName => {
   cy.get('input[ariaLabel="Namespace name"]:visible').type(namespaceName);
 
   cy.contains('[role=dialog] button', 'Create').click();
-
-  cy.contains('[role=row]', namespaceName).should('be.visible');
 });
