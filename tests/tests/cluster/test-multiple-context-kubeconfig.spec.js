@@ -35,6 +35,10 @@ async function loadMultipleContextKubeconfig() {
 context('Test multiple context kubeconfig', () => {
   Cypress.skipAfterFail();
 
+  before(() => {
+    cy.handleExceptions();
+  });
+
   it('User can choose different context with the multiple context kubeconfig', () => {
     cy.handleExceptions();
 
@@ -94,7 +98,8 @@ context('Test multiple context kubeconfig', () => {
         .contains(kubeconfig.contexts[1].name)
         .should('exist');
 
-      cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
+      // uncomment line below after handling closing `productMenu` in Header.tsx
+      // cy.get('[aria-controls="fd-shellbar-product-popover"]').click();
 
       cy.get('[role=menuitem]:visible')
         .contains('Clusters Overview')
