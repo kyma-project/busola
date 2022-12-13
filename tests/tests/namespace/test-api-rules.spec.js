@@ -231,7 +231,7 @@ context('Test API Rules in the Function details view', () => {
 
     openSearchWithSlashShortcut();
 
-    cy.get('[role="search"] [aria-label="open-search"]').type(API_RULE_NAME);
+    cy.get('[role="search"] [aria-label="search-input"]').type(API_RULE_NAME);
 
     cy.contains(API_RULE_NAME).should('be.visible');
   });
