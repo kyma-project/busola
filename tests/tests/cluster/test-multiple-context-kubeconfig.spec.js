@@ -36,6 +36,8 @@ context('Test multiple context kubeconfig', () => {
   Cypress.skipAfterFail();
 
   it('User can choose different context with the multiple context kubeconfig', () => {
+    cy.handleExceptions();
+
     cy.wrap(loadMultipleContextKubeconfig()).then(kubeconfig => {
       cy.visit(`${config.clusterAddress}/clusters`);
 
