@@ -86,7 +86,7 @@ context('Test login - kubeconfigID', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '*assets/config/config.yaml*',
+        url: '/config/config.yaml*',
       },
       jsyaml.dump({
         config: {
@@ -118,6 +118,8 @@ context('Test login - kubeconfigID', () => {
         .click();
 
       cy.url().should('match', /overview$/);
+
+      cy.contains('Session Storage').should('be.visible');
     });
   });
 });

@@ -31,7 +31,7 @@ export default function ClusterRoutes() {
   useEffect(() => {
     if (cluster?.name === currentClusterName) return;
     const currentCluster = clusters?.[currentClusterName];
-    const kubeconfigId = search.get('kubeconfigId');
+    const kubeconfigId = search.get('kubeconfigID');
     if (!currentCluster && !kubeconfigId) {
       alert("Such cluster doesn't exist");
       navigate('/clusters');

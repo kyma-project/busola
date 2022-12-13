@@ -15,6 +15,7 @@ import { useFeature } from 'hooks/useFeature';
 import { ConfigFeature } from 'state/types';
 import { removePreviousPath } from 'state/useAfterInitHook';
 import { configurationAtom } from 'state/configuration/configurationAtom';
+import { ClusterStorage } from 'state/types';
 
 export interface KubeconfigIdFeature extends ConfigFeature {
   config: {
@@ -84,8 +85,8 @@ const loadKubeconfigIdCluster = async (
 
     // add the clusters
     kubeconfig.contexts.forEach(context => {
-      const previousStorageMethod =
-        clusters![context.name]?.config?.storage || '';
+      const previousStorageMethod: ClusterStorage =
+        clusters![context.name]?.config?.storage || 'sessionStorage';
 
       addByContext(
         {
@@ -134,7 +135,7 @@ export function useLoginWithKubeconfigID() {
       return;
     }
 
-    const kubeconfigId = search.get('kubeconfigId');
+    const kubeconfigId = search.get('kubeconfigID');
     if (!kubeconfigId || !kubeconfigIdFeature?.isEnabled) {
       setHandledKubeconfigId('done');
       return;
