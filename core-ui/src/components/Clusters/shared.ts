@@ -23,7 +23,7 @@ function addCurrentCluster(
 
   if (params.currentContext.namespace) {
     clustersInfo.navigate(
-      `/cluster/${params.contextName}/namespaces/${params.currentContext.namespace}/details`,
+      `/cluster/${params.contextName}/namespaces/${params.currentContext.namespace}`,
     );
   } else {
     clustersInfo.navigate(`/cluster/${params.contextName}`);
