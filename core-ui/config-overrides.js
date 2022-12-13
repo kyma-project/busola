@@ -1,6 +1,7 @@
 // this overrides configs of webpack and jest. See react-app-rewired documentation for details
 
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   webpack: function override(config, env) {
@@ -11,6 +12,12 @@ module.exports = {
     };
 
     config.resolve.extensions = [...config.resolve.extensions, '.ts', '.tsx'];
+    config.plugins = [
+      ...config.plugins,
+      new webpack.DefinePlugin({
+        'process.env.IS_DOCKER': env.IS_DOCKER,
+      }),
+    ];
 
     return config;
   },

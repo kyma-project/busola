@@ -36,38 +36,27 @@ test('Busola Lighthouse audit', async () => {
   });
 
   // add a cluster
-  await page
-    .frameLocator('iframe')
-    .locator('button:has-text("Connect cluster")')
-    .click();
+  await page.locator('button:has-text("Connect cluster")').click();
 
   await page
-    .frameLocator('iframe')
     .locator('input[type="file"]')
     .setInputFiles('./fixtures/kubeconfig.yaml');
 
-  await page
-    .frameLocator('iframe')
-    .locator('button:has-text("Next step")')
-    .click();
+  await page.locator('button:has-text("Next step")').click();
 
   await page
-    .frameLocator('iframe')
     .locator(
       'text=Local storage: Cluster data is persisted between browser reloads.',
     )
     .click();
 
   await page
-    .frameLocator('iframe')
     .locator(
       '[aria-label="Connect\\ cluster"] button:has-text("Connect cluster")',
     )
     .click();
 
-  await expect(
-    page.frameLocator('iframe').locator('text=Cluster Details'),
-  ).toBeVisible();
+  await expect(page.locator('h3:text("Cluster Details")')).toBeVisible();
 
   console.log('Running audit on cluster details...');
   await playAudit({

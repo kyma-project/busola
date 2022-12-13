@@ -48,6 +48,7 @@
   "scripts": {
     "start": "(cd ..; gulp copy-themes) && PORT=8080 BROWSER=none GENERATE_SOURCEMAP=false react-app-rewired start",
     "build": "(cd ..; gulp copy-themes) && INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build",
+    "build:docker": "(cd ..; gulp copy-themes) && INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false react-app-rewired build --env IS_DOCKER=true",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
