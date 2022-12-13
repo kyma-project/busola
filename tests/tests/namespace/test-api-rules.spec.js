@@ -42,7 +42,7 @@ context('Test API Rules in the Function details view', () => {
   // Remove eq(1) after fixing doubled catagories
   it('Create an API Rule for the Function', () => {
     cy.getLeftNav()
-      .contains('Discovery and Network')
+      .get('[title="Discovery and Network"')
       .eq(1)
       .click();
 
@@ -170,6 +170,18 @@ context('Test API Rules in the Function details view', () => {
       .first()
       .scrollIntoView();
 
+    cy.get('[data-testid="spec.rules.1.accessStrategies.0.handler"]:visible')
+      .find('input')
+      .clear()
+      .type('jwt');
+
+    cy.get('[data-testid="spec.rules.1.accessStrategies.0.handler"]:visible', {
+      log: false,
+    })
+      .find('span')
+      .find('[aria-label="Combobox input arrow"]:visible', { log: false })
+      .click();
+
     cy.get('[data-testid="select-dropdown"]:visible')
       .scrollIntoView()
       .click();
@@ -209,7 +221,7 @@ context('Test API Rules in the Function details view', () => {
 
     cy.contains(API_RULE_PATH).should('exist');
 
-    cy.contains('allow').should('exist');
+    cy.contains('jwt').should('exist');
   });
 
   it('Inspect list using slash shortcut', () => {
