@@ -1,4 +1,5 @@
 import React from 'react';
+import { fromJS } from 'immutable';
 
 import { getResourceUrl } from 'resources/Namespaces/YamlUpload/helpers';
 import { useMicrofrontendContext } from 'shared/contexts/MicrofrontendContext';
@@ -31,16 +32,9 @@ export function ResourceRenderer({
   });
 
   const { tFromStoreKeys, t: tExt } = useGetTranslation();
-  let schemaresource;
-
-  try {
-    schemaresource = schema.get('resource').toJS();
-  } catch (e) {
-    schemaresource = schema.get('resource');
-  }
 
   const { group, version, kind, scope = 'cluster', namespace = namespaceId } =
-    schemaresource || {};
+    fromJS(schema.get('resource')).toJS() || {};
   const provideVar = schema.get('provideVar');
 
   const url = getResourceUrl(
